@@ -32,6 +32,7 @@ function getDeselectHeaderAndRowsState() {
 
 const types = {
   selectRow: 'SELECT_ROW',
+  deselectRow: 'DESELECT_ROW',
   deselectRows: 'DESELECT_ROWS',
   toggleRow: 'TOGGLE_ROW',
   setSelectedRows: 'SET_SELECTED_ROWS',
@@ -48,7 +49,7 @@ const reducer = (state, { type, payload }) => {
     case types.deselectRow:
       return getDeselectRowsState(state, payload);
     case types.deselectRows:
-      return getDeselectRowsState(state, payload);
+      return getDeselectRowsState(state, ...payload);
     case types.toggleRow:
       return state.selectedRows.has(payload)
         ? getDeselectRowsState(state, [payload])

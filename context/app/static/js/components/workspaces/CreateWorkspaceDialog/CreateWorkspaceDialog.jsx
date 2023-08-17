@@ -21,18 +21,13 @@ function CreateWorkspaceDialog({
     defaultName,
   });
 
-  // eslint-disable-next-line no-underscore-dangle
-  const protectedHubmapIds = protectedRows.map((row) => row._source.hubmap_id).join(', ');
-  const { openSnackbar } = useSnackbarStore();
-  const { deselectRow } = useSelectableTableStore();
+  const protectedHubmapIds = protectedRows?.map((row) => row._source.hubmap_id).join(', ');
+  const { toastSuccess } = useSnackbarStore();
+  const { deselectRows } = useSelectableTableStore();
 
   const removeProtectedDatasets = () => {
-    protectedRows.forEach((row) => {
-      // eslint-disable-next-line no-underscore-dangle
-      deselectRow(row._id);
-    });
-
-    openSnackbar('Protected datasets successfully removed from selection.');
+    deselectRows(protectedRows.map((r) => r._id));
+    toastSuccess('Protected datasets successfully removed from selection.');
   };
 
   return (
@@ -40,6 +35,7 @@ function CreateWorkspaceDialog({
       <ButtonComponent
         onClick={() => {
           setDialogIsOpen(true);
+          rest?.onClick?.();
         }}
         {...rest}
       />
@@ -67,27 +63,28 @@ function CreateWorkspaceDialog({
                   control={control}
                   name="Protected Datasets"
                   errors={errors}
-                  // eslint-disable-next-line no-underscore-dangle
                   value={protectedHubmapIds}
                 />
-                <Button
-                  sx={{ marginTop: 1 }}
-                  variant="contained"
-                  color="primary"
-                  onClick={() => removeProtectedDatasets()}
-                >
+                <Button sx={{ marginTop: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
                   Remove Protected Datasets ({protectedRows.length})
                 </Button>
               </Box>
             )}
-            <WorkspaceField control={control} name="name" label="Name" errors={errors} />
+            <WorkspaceField
+              control={control}
+              name="workspace-name"
+              disabled={errorMessages.length > 0}
+              label="Name"
+              errors={errors}
+              autoFocus
+            />
           </Box>
         }
         actions={
           <>
             <Button onClick={handleClose}>Cancel</Button>
             <Button type="submit" form="create-workspace-form" disabled={errorMessages.length > 0}>
-              Submit
+              Launch
             </Button>
           </>
         }

@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
+import { SnackbarProvider, createStore } from 'js/shared-styles/snackbars';
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
 import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
 import { StylesProvider as MuiStylesProvider } from '@mui/styles';
@@ -58,11 +59,13 @@ function Providers({
           <SCThemeProvider theme={theme}>
             <AppContext.Provider value={appContext}>
               <FlaskDataContext.Provider value={flaskData}>
-                <ProtocolAPIContext.Provider value={protocolsContext}>
-                  <CssBaseline />
-                  <GlobalStyles />
-                  {children}
-                </ProtocolAPIContext.Provider>
+                <SnackbarProvider createStore={createStore}>
+                  <ProtocolAPIContext.Provider value={protocolsContext}>
+                    <CssBaseline />
+                    <GlobalStyles />
+                    {children}
+                  </ProtocolAPIContext.Provider>
+                </SnackbarProvider>
               </FlaskDataContext.Provider>
             </AppContext.Provider>
           </SCThemeProvider>
