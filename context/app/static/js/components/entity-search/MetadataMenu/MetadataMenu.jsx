@@ -38,6 +38,15 @@ function NotebookMenuItem(props) {
   );
 }
 
+const errorHelper = {
+  datasets: (rowCount) =>
+    `You have selected ${rowCount} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
+  protectedDataset: (rows) =>
+    `You have selected a protected dataset. Workspaces currently only supports published public datasets. Please unselect dataset ${rows[0]._source.hubmap_id} below.`,
+  protectedDatasets: (rows) =>
+    `You have selected ${rows.length} protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.`,
+};
+
 function MetadataMenu({ entityType, results }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
   const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
@@ -50,15 +59,15 @@ function MetadataMenu({ entityType, results }) {
   const errorMessages = [];
 
   if (selectedRows.size > 10) {
-    errorMessages.push(
-      `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
-    );
+    errorMessages.push(errorHelper.datasets(selectedRows.size));
   }
 
   if (containsProtectedDataset) {
-    errorMessages.push(
-      `You have selected ${protectedRows.length} protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.`,
-    );
+    if (protectedRows.length === 1) {
+      errorMessages.push(errorHelper.protectedDataset(protectedRows));
+    } else {
+      errorMessages.push(errorHelper.protectedDatasets(protectedRows));
+    }
   }
 
   return (
