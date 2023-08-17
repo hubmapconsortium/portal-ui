@@ -3,18 +3,13 @@ import { Document, Page } from 'react-pdf';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import LinearProgress from '@mui/material/LinearProgress';
 
 import { DocumentCallback, OnDocumentLoadSuccess } from 'react-pdf/dist/cjs/shared/types';
+
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
-import {
-  ModalContentWrapper,
-  StyledIconButton,
-  StyledCloseIcon,
-  ButtonWrapper,
-  Flex,
-  ErrorIcon,
-  StyledLinearProgress,
-} from './style';
+import { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ErrorIcon } from './style';
 
 type PDFViewerProps = {
   pdfUrl: string;
@@ -39,23 +34,23 @@ function PDFViewer({ pdfUrl }: PDFViewerProps) {
   return (
     <>
       {(!isProcessingPDF || open) && (
-        <ButtonWrapper>
+        <Box minWidth="125px">
           {/* We don't open the modal here because there may be an error processing the PDF. */}
           <Button type="button" onClick={() => setIsProcessingPDF(true)} variant="outlined">
             View PDF
           </Button>
-        </ButtonWrapper>
+        </Box>
       )}
       {isProcessingPDF && (
         <Document
           file={pdfUrl}
           onLoadSuccess={onDocumentLoadSuccess}
-          loading={<StyledLinearProgress />}
+          loading={<LinearProgress sx={{ maxWidth: '100px' }} />}
           error={
-            <Flex>
+            <Box display="flex">
               <ErrorIcon />
               <Typography>Failed to load</Typography>
-            </Flex>
+            </Box>
           }
         />
       )}
