@@ -53,10 +53,13 @@ function Publication({ publication, vignette_json }) {
 
   const hasDOI = doi_url !== undefined;
 
-  const detailContext = useMemo(() => ({
-    uuid,
-    hubmap_id,
-  }), [uuid, hubmap_id])
+  const detailContext = useMemo(
+    () => ({
+      uuid,
+      hubmap_id,
+    }),
+    [uuid, hubmap_id],
+  );
 
   return (
     <DetailContext.Provider value={detailContext}>
