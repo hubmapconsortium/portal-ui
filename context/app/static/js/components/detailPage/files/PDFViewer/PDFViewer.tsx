@@ -4,6 +4,7 @@ import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 
+import { DocumentCallback, OnDocumentLoadSuccess } from 'react-pdf/dist/cjs/shared/types';
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
 import {
   ModalContentWrapper,
@@ -15,16 +16,20 @@ import {
   StyledLinearProgress,
 } from './style';
 
-function PDFViewer({ pdfUrl }) {
+type PDFViewerProps = {
+  pdfUrl: string;
+};
+
+function PDFViewer({ pdfUrl }: PDFViewerProps) {
   const [currentPageNum, setCurrentPageNum] = useState(1);
   const [open, setOpen] = useState(false);
-  const [pdf, setPdf] = useState();
+  const [pdf, setPdf] = useState<DocumentCallback>();
   const [isProcessingPDF, setIsProcessingPDF] = useState(false);
 
-  function onDocumentLoadSuccess(pdfObj) {
+  const onDocumentLoadSuccess: OnDocumentLoadSuccess = (pdfObj) => {
     setOpen(true);
     setPdf(pdfObj);
-  }
+  };
 
   const handleClose = () => {
     setOpen(false);
