@@ -42,9 +42,9 @@ const errorHelper = {
   datasets: (rowCount) =>
     `You have selected ${rowCount} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
   protectedDataset: (rows) =>
-    `You have selected a protected dataset (${rows[0]._source.hubmap_id}). Workspaces currently only supports published public datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
+    `You have selected a protected dataset (${rows[0]._source.hubmap_id}). Workspaces currently only supports published public datasets. To remove the protected dataset from workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove this dataset.`,
   protectedDatasets: (rows) =>
-    `You have selected ${rows.length} protected datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
+    `You have selected ${rows.length} protected datasets. Workspaces currently only supports published public datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
 };
 
 function MetadataMenu({ entityType, results }) {
