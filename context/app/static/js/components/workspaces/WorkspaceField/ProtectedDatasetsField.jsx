@@ -1,5 +1,4 @@
 import React from 'react';
-import Box from '@mui/material/Box';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import InputAdornment from '@mui/material/InputAdornment';
@@ -21,34 +20,33 @@ function ProtectedDatasetsField({ control, label, errors, value, ...rest }) {
   });
 
   return (
-    <Box display="flex" alignItems="center">
-      <WorkspaceField
-        label={name}
-        name={name}
-        {...rest}
-        readOnly
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => handleCopyClick(field.value)}>
-                <ContentCopyIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
-          readOnly: true,
-        }}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            '& fieldset': {
-              borderColor: 'primary.main',
-            },
-            '&.Mui-focused fieldset': {
-              borderColor: 'primary.main',
-            },
+    <WorkspaceField
+      label={name}
+      name={name}
+      {...rest}
+      readOnly
+      InputProps={{
+        endAdornment: (
+          <InputAdornment position="end">
+            <IconButton onClick={() => handleCopyClick(field.value)}>
+              <ContentCopyIcon />
+            </IconButton>
+          </InputAdornment>
+        ),
+        readOnly: true,
+      }}
+      sx={{
+        '& .MuiOutlinedInput-root': {
+          '& fieldset': {
+            borderColor: 'primary.main',
           },
-        }}
-      />
-    </Box>
+          '&.Mui-focused fieldset': {
+            borderColor: 'primary.main',
+          },
+        },
+      }}
+    />
   );
 }
+
 export default ProtectedDatasetsField;
