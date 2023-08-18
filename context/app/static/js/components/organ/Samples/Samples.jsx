@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useRef } from 'react';
 import format from 'date-fns/format';
 
 import Table from '@mui/material/Table';
@@ -23,21 +23,31 @@ import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store'
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
 import { getDonorAgeString } from 'js/helpers/functions';
 
+import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
+import { useSortState } from 'js/hooks/useSortState';
+import { LinearProgress } from '@mui/material';
 import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
 
 const columns = [
-  { id: 'hubmap_id', label: 'Sample' },
-  { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
-  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex' },
-  { id: 'donor.mapped_metadata.race', label: 'Donor Race' },
-  { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
-  { id: 'last_modified_timestamp', label: 'Last Modified' },
+  { id: 'hubmap_id', label: 'Sample', sortTerm: 'hubmap_id.keyword' },
+  { id: 'donor.mapped_metadata.age_value', label: 'Donor Age', sortTerm: 'donor.mapped_metadata.age_value' },
+  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex', sortTerm: 'donor.mapped_metadata.sex.keyword' },
+  { id: 'donor.mapped_metadata.race', label: 'Donor Race', sortTerm: 'donor.mapped_metadata.race.keyword' },
+  {
+    id: 'descendant_counts.entity_type.Dataset',
+    label: 'Derived Dataset Count',
+    sortTerm: 'descendant_counts.entity_type.Dataset',
+  },
+  { id: 'last_modified_timestamp', label: 'Last Modified', sortTerm: 'last_modified_timestamp' },
 ];
+
+const columnMap = columns.reduce((acc, column) => ({ ...acc, [column.id]: column }), {});
 
 function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
+  const { sortState, sort } = useSortState();
   const query = useMemo(
     () => ({
       post_filter: {
@@ -60,11 +70,23 @@ function Samples({ organTerms }) {
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
       size: 10000,
+      sort:
+        sortState?.columnId && columnMap[sortState.columnId].sortTerm
+          ? [{ [columnMap[sortState.columnId].sortTerm]: sortState.direction }]
+          : undefined,
     }),
-    [organTerms],
+    [organTerms, sortState],
   );
 
-  const { searchHits } = useSearchHits(query);
+  const previousSearchHits = useRef([]);
+
+  const { searchHits, isLoading } = useSearchHits(query);
+
+  useEffect(() => {
+    previousSearchHits.current = searchHits;
+  }, [searchHits]);
+
+  const searchHitsToUse = isLoading ? previousSearchHits.current : searchHits;
 
   return (
     <SectionContainer>
@@ -72,7 +94,7 @@ function Samples({ organTerms }) {
         leftText={
           <div>
             <StyledSectionHeader>Samples</StyledSectionHeader>
-            <Typography variant="subtitle1">{searchHits.length} Samples</Typography>
+            <Typography variant="subtitle1">{searchHitsToUse.length} Samples</Typography>
           </div>
         }
         buttons={
@@ -90,23 +112,45 @@ function Samples({ organTerms }) {
       />
       <StyledTableContainer component={Paper}>
         <Table stickyHeader>
-          <TableHead>
+          <TableHead sx={{ position: 'relative' }}>
             <TableRow>
-              <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
+              <SelectableHeaderCell allTableRowKeys={searchHitsToUse.map((hit) => hit._id)} />
               {columns.map((column) => (
-                <HeaderCell key={column.id}>{column.label}</HeaderCell>
+                <HeaderCell key={column.id}>
+                  <Button
+                    variant="text"
+                    onClick={() => {
+                      sort(column.id);
+                    }}
+                    fullWidth
+                    disableTouchRipple
+                    sx={{ mx: -1, justifyContent: 'flex-start', whiteSpace: 'nowrap' }}
+                    endIcon={<OrderIcon order={sortState.columnId === column.id ? sortState.direction : undefined} />}
+                  >
+                    {column.label}
+                  </Button>
+                </HeaderCell>
               ))}
             </TableRow>
+            <LinearProgress
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                zIndex: 50,
+                width: '100%',
+                opacity: isLoading ? 1 : 0,
+                transition: 'opacity',
+              }}
+              variant="indeterminate"
+            />
           </TableHead>
           <TableBody>
-            {searchHits
+            {searchHitsToUse
               .map((hit) => {
-                /* eslint-disable no-underscore-dangle */
                 if (!hit._source.donor) {
                   // eslint-disable-next-line no-param-reassign
                   hit._source.donor = {};
                 }
-                /* eslint-enable */
                 return hit;
               })
               .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (
