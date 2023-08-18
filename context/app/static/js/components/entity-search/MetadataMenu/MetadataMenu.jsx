@@ -1,8 +1,7 @@
 import React from 'react';
 // import { trackEvent } from 'js/helpers/trackers';
 
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/SelectableTableProvider';
-import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
@@ -39,32 +38,40 @@ function NotebookMenuItem(props) {
   );
 }
 
+const errorHelper = {
+  datasets: (rowCount) =>
+    `You have selected ${rowCount} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
+  protectedDataset: (rows) =>
+    `You have selected a protected dataset (${rows[0]._source.hubmap_id}). Workspaces currently only supports published public datasets. To remove the protected dataset from workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove this dataset.`,
+  protectedDatasets: (rows) =>
+    `You have selected ${rows.length} protected datasets. Workspaces currently only supports published public datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
+};
+
 function MetadataMenu({ entityType, results }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
   const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
 
-  const { selectedRows } = useStore();
+  const { selectedRows } = useSelectableTableStore();
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
   const containsProtectedDataset = protectedRows.length > 0;
+
   const errorMessages = [];
 
   if (selectedRows.size > 10) {
-    errorMessages.push(
-      `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
-    );
+    errorMessages.push(errorHelper.datasets(selectedRows.size));
   }
 
   if (containsProtectedDataset) {
-    errorMessages.push(
-      'You have selected protected datasets. Workspaces currently only supports published public datasets. Please unselect protected datasets.',
-      // The commented out messaging is for version 2 when the protected datasets are displayed along with the error messages for Protected Datasets.
-      // 'You have selected protected datasets. Workspaces currently only supports published public datasets. Selected protected datasets are shown below.',
-    );
+    if (protectedRows.length === 1) {
+      errorMessages.push(errorHelper.protectedDataset(protectedRows));
+    } else {
+      errorMessages.push(errorHelper.protectedDatasets(protectedRows));
+    }
   }
 
   return (
-    <SelectableTableProvider>
+    <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
         <StyledMenuItem>
@@ -92,9 +99,10 @@ function MetadataMenu({ entityType, results }) {
           buttonComponent={NotebookMenuItem}
           errorMessages={errorMessages}
           results={results}
+          protectedRows={protectedRows}
         />
       </DropdownMenu>
-    </SelectableTableProvider>
+    </>
   );
 }
 

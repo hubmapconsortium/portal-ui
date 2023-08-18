@@ -1,1 +1,1 @@
-- Display error when more than 10 datasets are selected for workspaces. 
+- Added button in workspace dialog to deselect protected datasets.

@@ -3,11 +3,11 @@ import { useCallback } from 'react';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { useStore as useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
-import { useStore as useSelectedTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/hooks';
 
 function useMetadataMenu(lcPluralType) {
-  const { selectedRows: selectedHits } = useSelectedTableStore();
+  const { selectedRows: selectedHits } = useSelectableTableStore();
   const { closeMenu } = useDropdownMenuStore();
 
   const createAndLaunchWorkspace = useCreateAndLaunchWorkspace();
@@ -32,7 +32,7 @@ function useDatasetsAccessLevel(ids) {
         must: [getIDsQuery(ids), getTermClause('mapped_data_access_level.keyword', 'Protected')],
       },
     },
-    _source: ['mapped_data_access_level'],
+    _source: ['mapped_data_access_level', 'hubmap_id'],
     size: ids.length,
   };
   const { searchHits: datasets } = useSearchHits(query);

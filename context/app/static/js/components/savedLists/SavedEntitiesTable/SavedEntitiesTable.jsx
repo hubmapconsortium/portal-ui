@@ -20,7 +20,7 @@ import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-style
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
-import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import DeselectAllRowsButton from 'js/shared-styles/tables/DeselectAllRowsButton';
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import useSavedEntityData from 'js/hooks/useSavedEntityData';
@@ -35,7 +35,7 @@ const defaultColumns = [
 const source = ['hubmap_id', 'group_name', 'entity_type'];
 
 function SavedEntitiesTable({ savedEntities, deleteCallback, setShouldDisplaySaveAlert, isSavedListPage }) {
-  const { selectedRows, deselectHeaderAndRows } = useStore();
+  const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
 
   const columns = isSavedListPage
