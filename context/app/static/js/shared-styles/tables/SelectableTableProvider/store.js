@@ -51,9 +51,7 @@ const reducer = (state, { type, payload }) => {
     case types.deselectRows:
       return getDeselectRowsState(state, ...payload);
     case types.toggleRow:
-      return state.selectedRows.has(payload)
-        ? getDeselectRowsState(state, [payload])
-        : getSelectRowState(state, payload);
+      return state.selectedRows.has(payload) ? getDeselectRowsState(state, payload) : getSelectRowState(state, payload);
     case types.setSelectedRows:
       return getSetSelectedRowsState(payload);
     case types.deselectAllRows:
