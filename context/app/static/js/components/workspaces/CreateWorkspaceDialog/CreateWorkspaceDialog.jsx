@@ -75,6 +75,7 @@ function CreateWorkspaceDialog({
               name="workspace-name"
               disabled={errorMessages.length > 0}
               label="Name"
+              placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
               errors={errors}
               autoFocus
             />

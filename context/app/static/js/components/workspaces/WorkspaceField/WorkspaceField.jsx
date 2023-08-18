@@ -17,7 +17,6 @@ function WorkspaceField({ control, name, label, errors, value, ...rest }) {
       <TextField
         InputLabelProps={{ shrink: true }}
         label={label || name}
-        placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
         variant="outlined"
         fullWidth
         name={name}
