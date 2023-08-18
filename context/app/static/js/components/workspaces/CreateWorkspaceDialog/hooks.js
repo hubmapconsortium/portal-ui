@@ -5,7 +5,7 @@ import * as yup from 'yup';
 
 const schema = yup
   .object({
-    name: yup.string().required().max(150),
+    'workspace-name': yup.string().required().max(150),
   })
   .required();
 
@@ -30,7 +30,7 @@ function useCreateWorkspace({ handleCreateWorkspace, defaultName }) {
     setDialogIsOpen(false);
   }
 
-  function onSubmit({ name: workspaceName }) {
+  function onSubmit({ 'workspace-name': workspaceName }) {
     handleCreateWorkspace({ workspaceName });
     reset();
     handleClose();

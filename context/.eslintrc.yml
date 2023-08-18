@@ -34,6 +34,7 @@ settings:
 rules:
   camelcase: [0] # Preserving original name will make searching across codebase easier.
   no-console: ['error', { allow: ['warn', 'error'] }]
+  no-underscore-dangle: [2, { allow: ['_id', '_source'] }] # Allow underscore prefixes for ElasticSearch fields
   react/jsx-filename-extension: [0] # Imports don"t work if I change extension.
   import/extensions: [0] # Same as above; we can eventually remove these rules to convert to ESM
   react/sort-comp: [0] # Non-alphabetical groupings can make more sense.

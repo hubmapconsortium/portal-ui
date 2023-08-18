@@ -1,14 +1,9 @@
 import React from 'react';
 import { useController } from 'react-hook-form';
+import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import IconButton from '@mui/material/IconButton';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import InputAdornment from '@mui/material/InputAdornment';
 
-import { useSnackbarStore } from 'js/shared-styles/snackbars';
-
-function WorkspaceField({ control, name, label, errors, value }) {
-  const { openSnackbar } = useSnackbarStore();
+function WorkspaceField({ control, name, label, errors, value, ...rest }) {
   const { field } = useController({
     name,
     label,
@@ -17,14 +12,8 @@ function WorkspaceField({ control, name, label, errors, value }) {
     defaultValue: value,
   });
 
-  const handleCopyClick = () => {
-    navigator.clipboard.writeText(field.value).then(() => {
-      openSnackbar('Copied to clipboard.');
-    });
-  };
-
   return (
-    <div style={{ display: 'flex', alignItems: 'center' }}>
+    <Box display="flex" alignItems="center">
       <TextField
         InputLabelProps={{ shrink: true }}
         label={label || name}
@@ -35,35 +24,9 @@ function WorkspaceField({ control, name, label, errors, value }) {
         {...field}
         error={Object.keys(errors).length > 0}
         helperText={errors.name?.message || ''}
-        InputProps={
-          name === 'Protected Datasets'
-            ? {
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={handleCopyClick}>
-                      <ContentCopyIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-              }
-            : null
-        }
-        sx={
-          name === 'Protected Datasets'
-            ? {
-                '& .MuiOutlinedInput-root': {
-                  '& fieldset': {
-                    borderColor: 'primary.main',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: 'primary.main',
-                  },
-                },
-              }
-            : null
-        }
+        {...rest}
       />
-    </div>
+    </Box>
   );
 }
 export default WorkspaceField;

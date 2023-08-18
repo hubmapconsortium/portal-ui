@@ -19,6 +19,7 @@ function DialogModal({
   handleClose,
   DialogContentComponent,
   errorMessages,
+  protectedRows,
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;
@@ -31,13 +32,17 @@ function DialogModal({
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
-        {errorMessages && (
+        {errorMessages?.length > 0 && (
           <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
-            {errorMessages.map((errorMessage) => (
-              <Alert key={errorMessage} severity="error">
-                {errorMessage}
-              </Alert>
-            ))}
+            {errorMessages.map((errorMessage) => {
+              return (
+                <div key={errorMessage}>
+                  <Alert key={errorMessage} severity="error">
+                    {errorMessage}
+                  </Alert>
+                </div>
+              );
+            })}
           </Box>
         )}
         {secondaryText && (
