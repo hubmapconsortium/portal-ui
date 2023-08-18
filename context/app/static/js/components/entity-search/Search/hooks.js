@@ -40,10 +40,12 @@ const query = new CustomQuery({
   },
 });
 
-function useSearch() {
+function useSearch({ isTestSearch }) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
   const authHeader = getAuthHeader(groupsToken);
   const { fields, tileFields, facets, defaultFilters, entityType, numericFacetsProps, availableFields } = useStore();
+  // Persist selections on test search page for datasets only
+  const persistSelections = entityType === 'dataset' && isTestSearch;
 
   const defaultFilterValues = Object.values(defaultFilters);
 
@@ -96,6 +98,7 @@ function useSearch() {
     queryBody,
     elasticsearchEndpoint,
     groupsToken,
+    persistSelections,
   });
 
   return { results, entityType, allResultsUUIDs };
