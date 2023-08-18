@@ -71,6 +71,7 @@ overrides:
     rules:
       import/no-extraneous-dependencies: [0]
       '@typescript-eslint/no-var-requires': [0] # allow use of require in jest tests
+      jest/no-standalone-expect: ['error', { 'additionalTestBlockFunctions': ['test.each'] }] # Detect test.each as a test block function
       jest/expect-expect: ['error', { 'assertFunctionNames': ['expect*'] }] # allow expect calls to be contained within helper functions that start with expect
       '@typescript-eslint/no-empty-function': [0] # allow empty function placeholders in jest tests
   - files: ['**/*.stories.{js,jsx,ts,tsx}']

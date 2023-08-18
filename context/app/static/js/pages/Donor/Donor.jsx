@@ -38,7 +38,7 @@ function DonorDetail() {
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'derived', 'provenance', 'protocols', 'attribution'],
+    ['summary', 'metadata', 'derived-samples-and-datasets', 'provenance', 'protocols', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -71,7 +71,7 @@ function DonorDetail() {
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} hubmap_id={hubmap_id} />}
-        <DerivedEntitiesSection sectionId="derived" />
+        <DerivedEntitiesSection />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution
