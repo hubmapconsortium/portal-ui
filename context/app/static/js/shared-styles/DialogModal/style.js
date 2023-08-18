@@ -1,15 +1,16 @@
-import styled from 'styled-components';
+import { styled } from '@mui/styles';
 import Divider from '@mui/material/Divider';
 import DialogTitle from '@mui/material/DialogTitle';
 
-const StyledDialogTitle = styled(DialogTitle)`
-  margin-bottom: ${(props) => props.theme.spacing(1)};
-  padding: 16px 24px 0px 24px;
-`;
-const StyledDivider = styled(Divider)`
-  background-color: ${(props) => props.theme.palette.primary.main};
-  height: 1.5px;
-  margin-top: ${(props) => props.theme.spacing(1)};
-`;
+const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
+  marginBottom: theme.spacing(1),
+  padding: theme.spacing(2, 3, 0, 2),
+}));
+
+const StyledDivider = styled(Divider)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  height: '1.5px',
+  mt: theme.spacing(1),
+}));
 
 export { StyledDivider, StyledDialogTitle };
