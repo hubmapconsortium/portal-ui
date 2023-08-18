@@ -93,47 +93,40 @@ test('displays files and directories', () => {
   expectArrayOfStringsToExist(textInDocumentAfterOpenDirectory);
 });
 
-test('Displays correct files before and after display only QA files chip is clicked', () => {
-  render(<FilesBrowserTest />);
+test.each(
+  [
+    {
+      name: 'QA Files',
+      toggle: () => fileBrowser.toggleQaFilesOnly,
+      textInDocumentAfter: ['path1', 'path2', 'fake3.txt', 'fake1.txt'],
+      textNotInDocumentAfter: ['path3', 'fake4.txt', 'fake2.txt', 'fake5.txt'],
+    },
+    {
+      name: 'Data Products Files',
+      toggle: () => fileBrowser.toggleDataProductsOnly,
+      textInDocumentAfter: ['path3', 'fake5.txt', 'fake4.txt'],
+      textNotInDocumentAfter: ['path1', 'path2', 'fake3.txt', 'fake1.txt', 'fake2.txt'],
+    },
+  ],
+  'Displays correct files before and after display only $name chip is clicked',
+  ({ toggle, textInDocumentAfter, textNotInDocumentAfter }) => {
+    render(<FilesBrowserTest />);
 
-  // initial
-  expectArrayOfStringsToExist(defaultTextInDocument);
-  expectArrayOfStringsToNotExist(defaultTextNotInDocument);
+    // initial
+    expectArrayOfStringsToExist(defaultTextInDocument);
+    expectArrayOfStringsToNotExist(defaultTextNotInDocument);
 
-  userEvent.click(fileBrowser.toggleQaFilesOnly);
+    userEvent.click(toggle());
 
-  // after QA files chip clicked
-  const textInDocumentAfterQAFilesOnly = ['path1', 'path2', 'fake3.txt', 'fake1.txt'];
-  expectArrayOfStringsToExist(textInDocumentAfterQAFilesOnly);
+    // after chip is clicked
+    expectArrayOfStringsToExist(textInDocumentAfter);
 
-  const textNotInDocumentAfterQAFilesOnly = ['path3', 'fake4.txt', 'fake2.txt', 'fake5.txt'];
-  expectArrayOfStringsToNotExist(textNotInDocumentAfterQAFilesOnly);
+    expectArrayOfStringsToNotExist(textNotInDocumentAfter);
 
-  userEvent.click(fileBrowser.toggleQaFilesOnly);
+    userEvent.click(toggle());
 
-  // returns to all dirs closed
-  expectArrayOfStringsToExist(defaultTextInDocument);
-  expectArrayOfStringsToNotExist(defaultTextNotInDocument);
-});
-
-test('Displays correct files before and after display only data products files chip is clicked', () => {
-  render(<FilesBrowserTest />);
-
-  // initial
-  expectArrayOfStringsToExist(defaultTextInDocument);
-  expectArrayOfStringsToNotExist(defaultTextNotInDocument);
-
-  userEvent.click(fileBrowser.toggleDataProductsOnly);
-
-  // after data products files chip clicked
-  const textInDocumentAfterDataProductsOnly = ['path3', 'fake5.txt', 'fake4.txt'];
-  expectArrayOfStringsToExist(textInDocumentAfterDataProductsOnly);
-  const textNotInDocumentAfterDataProductsOnly = ['path1', 'path2', 'fake3.txt', 'fake1.txt', 'fake2.txt'];
-  expectArrayOfStringsToNotExist(textNotInDocumentAfterDataProductsOnly);
-
-  userEvent.click(fileBrowser.toggleDataProductsOnly);
-
-  // returns to all dirs closed
-  expectArrayOfStringsToExist(defaultTextInDocument);
-  expectArrayOfStringsToNotExist(defaultTextNotInDocument);
-});
+    // returns to all dirs closed
+    expectArrayOfStringsToExist(defaultTextInDocument);
+    expectArrayOfStringsToNotExist(defaultTextNotInDocument);
+  },
+);
