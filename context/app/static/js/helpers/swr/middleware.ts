@@ -39,13 +39,3 @@ const keepPreviousData: Middleware = (useSWRNext: SWRHook) => {
 };
 
 export { keepPreviousData };
-
-// Augment the SWRResponse interface to include our new properties.
-declare module 'swr' {
-  // The original SWR interface uses these types
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any, @typescript-eslint/no-unused-vars
-  export interface SWRResponse<Data = any, Error = any> {
-    isPreviousData: boolean;
-    clearPreviousData: () => void;
-  }
-}
