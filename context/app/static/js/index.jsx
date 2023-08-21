@@ -13,12 +13,10 @@ import { setJsonLD } from './schema.org';
 //   console.warn('Schema validation errors', validation_errors);
 // }
 
-const sentryEnvironment = sentryEnv;
-
 Sentry.init({
   dsn: sentryDsn,
-  environment: sentryEnvironment,
-  enabled: ['prod', 'prod-stage', 'local'].includes(sentryEnvironment),
+  environment: sentryEnv,
+  enabled: ['prod', 'prod-stage'].includes(sentryEnv),
   release: `portal-ui-react@${PACKAGE_VERSION}`,
 });
 
