@@ -100,6 +100,7 @@ def create_app(testing=False):
             'workspaces_token': session.get('workspaces_token'),
             'user_groups': session.get('user_groups'),
             'sentry_env': app.config['SENTRY_ENV'],
+            'sentry_dsn': app.config['SENTRY_DSN'],
         }
 
     @app.before_request

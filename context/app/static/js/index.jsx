@@ -16,7 +16,7 @@ import { setJsonLD } from './schema.org';
 const sentryEnvironment = sentryEnv;
 
 Sentry.init({
-  dsn: 'https://291ecc6dd41c7f9f94e5be5aefba35b2@o4505670253084672.ingest.sentry.io/4505709697892352',
+  dsn: sentryDsn,
   environment: sentryEnvironment,
   enabled: ['prod', 'prod-stage', 'local'].includes(sentryEnvironment),
   release: `portal-ui-react@${PACKAGE_VERSION}`,
