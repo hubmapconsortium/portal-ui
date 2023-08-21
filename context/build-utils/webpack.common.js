@@ -1,6 +1,5 @@
 const webpack = require('webpack');
 const { resolve } = require('path');
-const { sentryWebpackPlugin } = require('@sentry/webpack-plugin');
 
 const { alias } = require('./alias');
 const packageJSON = require('../package.json');
@@ -89,11 +88,6 @@ const config = {
       // update globals in eslintrc to fix undefined errors
       CDN_URL: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),
       PACKAGE_VERSION: JSON.stringify(packageJSON.version),
-    }),
-    sentryWebpackPlugin({
-      authToken: process.env.SENTRY_AUTH_TOKEN,
-      org: 'hidive',
-      project: 'portal-ui-react',
     }),
   ],
 };
