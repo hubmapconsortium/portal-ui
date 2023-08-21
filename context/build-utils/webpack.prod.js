@@ -7,7 +7,7 @@ const common = require('./webpack.common');
 
 const envConfig = {
   mode: 'production',
-  devtool: 'source-map',
+  devtool: 'cheap-source-map',
   output: {
     filename: '[name].[contenthash].js',
     chunkFilename: '[name].[contenthash].js',
