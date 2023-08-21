@@ -30,7 +30,9 @@ async function fetchPublicationsPanelData(...args) {
 function usePublicationsPanelList(publicationStatus) {
   const query = getPublicationsByStatusQuery(publicationStatus);
 
-  const { searchData: publicationPanelsProps, isLoading } = useSearchData(query, true, fetchPublicationsPanelData, []);
+  const { searchData: publicationPanelsProps, isLoading } = useSearchData(query, true, fetchPublicationsPanelData, {
+    fallbackData: [],
+  });
 
   return { publicationPanelsProps, isLoading };
 }
