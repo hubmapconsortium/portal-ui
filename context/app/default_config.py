@@ -48,4 +48,3 @@ class DefaultConfig(object):
 
     SENTRY_ENV = 'should-be-overridden'
     SENTRY_DSN = 'should-be-overridden'
-
