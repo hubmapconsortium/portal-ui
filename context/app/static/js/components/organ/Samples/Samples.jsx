@@ -1,5 +1,5 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useEffect, useMemo, useRef } from 'react';
+import React, { useMemo } from 'react';
 import format from 'date-fns/format';
 
 import Table from '@mui/material/Table';
@@ -26,6 +26,7 @@ import { getDonorAgeString } from 'js/helpers/functions';
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
 import { useSortState } from 'js/hooks/useSortState';
 import { LinearProgress } from '@mui/material';
+import { keepPreviousData } from 'js/helpers/swr';
 import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
 
@@ -74,15 +75,9 @@ function Samples({ organTerms }) {
     [organTerms, sort],
   );
 
-  const previousSearchHits = useRef([]);
-
-  const { searchHits, isLoading } = useSearchHits(query);
-
-  useEffect(() => {
-    previousSearchHits.current = searchHits;
-  }, [searchHits]);
-
-  const searchHitsToUse = isLoading ? previousSearchHits.current : searchHits;
+  const { searchHits, isLoading } = useSearchHits(query, {
+    use: [keepPreviousData],
+  });
 
   return (
     <SectionContainer>
@@ -90,7 +85,7 @@ function Samples({ organTerms }) {
         leftText={
           <div>
             <StyledSectionHeader>Samples</StyledSectionHeader>
-            <Typography variant="subtitle1">{searchHitsToUse.length} Samples</Typography>
+            <Typography variant="subtitle1">{searchHits.length} Samples</Typography>
           </div>
         }
         buttons={
@@ -110,7 +105,7 @@ function Samples({ organTerms }) {
         <Table stickyHeader>
           <TableHead sx={{ position: 'relative' }}>
             <TableRow>
-              <SelectableHeaderCell allTableRowKeys={searchHitsToUse.map((hit) => hit._id)} />
+              <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
               {columns.map((column) => (
                 <HeaderCell key={column.id}>
                   <Button
@@ -141,7 +136,7 @@ function Samples({ organTerms }) {
             />
           </TableHead>
           <TableBody>
-            {searchHitsToUse
+            {searchHits
               .map((hit) => {
                 if (!hit._source.donor) {
                   // eslint-disable-next-line no-param-reassign
