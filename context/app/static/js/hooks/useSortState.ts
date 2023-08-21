@@ -2,6 +2,7 @@ import { useCallback, useReducer } from 'react';
 
 type SortState = {
   columnId?: string;
+  columnSortName?: string;
   direction?: 'asc' | 'desc';
 };
 
@@ -16,6 +17,7 @@ type SortAction =
 
 const initialSortState: SortState = {
   columnId: undefined,
+  columnSortName: undefined,
   direction: undefined,
 } as SortState;
 
@@ -40,10 +42,24 @@ function sortReducer(state: SortState, action: SortAction): SortState {
   }
 }
 
-export const useSortState = () => {
+/**
+ * Hook to manage sort state for a table.
+ *
+ * @param columnNameMapping Mapping of column ID's to their sort values. If a column ID is not in the mapping, it will be used as is.
+ * @example
+ * ```
+ * {
+ *  'hubmap_id': 'hubmap_id.keyword',
+ *  'donor.mapped_metadata.race': 'donor.mapped_metadata.race.keyword'
+ * }
+ * ```
+ *
+ * @returns {object} An object containing the sort state, a sort array for use with the ES API, and functions to set and reset the sort state.
+ */
+export const useSortState = (columnNameMapping: Record<string, string>) => {
   const [sortState, dispatch] = useReducer(sortReducer, initialSortState);
 
-  const sort = useCallback((columnId: string) => {
+  const setSort = useCallback((columnId: string) => {
     dispatch({ type: 'sort', payload: columnId });
   }, []);
 
@@ -51,5 +67,12 @@ export const useSortState = () => {
     dispatch({ type: 'reset' });
   }, []);
 
-  return { sortState, sort, reset };
+  const columnName =
+    sortState.columnId && columnNameMapping[sortState.columnId]
+      ? columnNameMapping[sortState.columnId]
+      : sortState.columnId;
+
+  const sort = columnName ? [{ [columnName]: sortState.direction }] : [];
+
+  return { sortState, sort, setSort, reset };
 };

@@ -30,24 +30,23 @@ import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
 
 const columns = [
-  { id: 'hubmap_id', label: 'Sample', sortTerm: 'hubmap_id.keyword' },
-  { id: 'donor.mapped_metadata.age_value', label: 'Donor Age', sortTerm: 'donor.mapped_metadata.age_value' },
-  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex', sortTerm: 'donor.mapped_metadata.sex.keyword' },
-  { id: 'donor.mapped_metadata.race', label: 'Donor Race', sortTerm: 'donor.mapped_metadata.race.keyword' },
+  { id: 'hubmap_id', label: 'Sample', sort: 'hubmap_id.keyword' },
+  { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
+  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex', sort: 'donor.mapped_metadata.sex.keyword' },
+  { id: 'donor.mapped_metadata.race', label: 'Donor Race', sort: 'donor.mapped_metadata.race.keyword' },
   {
     id: 'descendant_counts.entity_type.Dataset',
     label: 'Derived Dataset Count',
-    sortTerm: 'descendant_counts.entity_type.Dataset',
   },
-  { id: 'last_modified_timestamp', label: 'Last Modified', sortTerm: 'last_modified_timestamp' },
+  { id: 'last_modified_timestamp', label: 'Last Modified' },
 ];
 
-const columnMap = columns.reduce((acc, column) => ({ ...acc, [column.id]: column }), {});
+const columnIdMap = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
 
 function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
-  const { sortState, sort } = useSortState();
+  const { sortState, setSort, sort } = useSortState(columnIdMap);
   const query = useMemo(
     () => ({
       post_filter: {
@@ -70,12 +69,9 @@ function Samples({ organTerms }) {
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
       size: 10000,
-      sort:
-        sortState?.columnId && columnMap[sortState.columnId].sortTerm
-          ? [{ [columnMap[sortState.columnId].sortTerm]: sortState.direction }]
-          : undefined,
+      sort,
     }),
-    [organTerms, sortState],
+    [organTerms, sort],
   );
 
   const previousSearchHits = useRef([]);
@@ -120,7 +116,7 @@ function Samples({ organTerms }) {
                   <Button
                     variant="text"
                     onClick={() => {
-                      sort(column.id);
+                      setSort(column.id);
                     }}
                     fullWidth
                     disableTouchRipple
