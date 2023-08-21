@@ -16,6 +16,7 @@ const useSearchkitSDK = ({
   elasticsearchEndpoint,
   groupsToken,
   queryBody,
+  persistSelections,
 }) => {
   const [results, setResponse] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -53,12 +54,14 @@ const useSearchkitSDK = ({
         // eslint-disable-next-line no-underscore-dangle
         const currentResultsUUIDS = allResults.hits.hits.map((hit) => hit._id);
 
-        // if the number of new results is larger, reset selections
-        if (currentResultsUUIDS.length > allResultsUUIDs.length) {
-          deselectHeaderAndRows();
-        } else {
-          // retain selections included in the new results
-          setSelectedRows(...[currentResultsUUIDS.filter((result) => selectedRows.has(result))]);
+        if (!persistSelections) {
+          // if the number of new results is larger, reset selections
+          if (currentResultsUUIDS.length > allResultsUUIDs.length) {
+            deselectHeaderAndRows();
+          } else {
+            // retain selections included in the new results
+            setSelectedRows(...[currentResultsUUIDS.filter((result) => selectedRows.has(result))]);
+          }
         }
 
         setAllResultsUUIDS(currentResultsUUIDS);

@@ -20,7 +20,7 @@ const createSkClient = () =>
   });
 
 function Search() {
-  const { results, allResultsUUIDs, entityType } = useSearch();
+  const { results, allResultsUUIDs, entityType } = useSearch({ isTestSearch: true });
 
   return (
     <>
