@@ -4,6 +4,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 import { useAppContext } from 'js/components/Contexts';
 import { InternalLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
+import DataProducts from 'js/components/detailPage/files/DataProducts';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
@@ -197,6 +198,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
           status={combinedStatus}
           mapped_data_access_level={mapped_data_access_level}
           mapped_external_group_name={mapped_external_group_name}
+          bottomFold={<DataProducts files={files} />}
         >
           <SummaryDataChildren
             data_types={data_types || []}
