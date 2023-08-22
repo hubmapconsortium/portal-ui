@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import * as Sentry from '@sentry/react';
+import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -30,14 +30,14 @@ function VisualizationFallback({ isPublicationPage, uuid, shouldDisplayHeader })
 
 function VisualizationErrorBoundary({ children, ...rest }) {
   return (
-    <Sentry.ErrorBoundary
+    <SentryErrorBoundary
       beforeCapture={(scope) => {
         scope.setTag('location', 'vitessce');
       }}
       fallback={VisualizationFallback({ ...rest })}
     >
       {children}
-    </Sentry.ErrorBoundary>
+    </SentryErrorBoundary>
   );
 }
 

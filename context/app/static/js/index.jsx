@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import * as Sentry from '@sentry/react';
+import { init as sentryInit } from '@sentry/react';
 
 import App from './components/App';
 import Iframe from './pages/Iframe';
@@ -13,7 +13,7 @@ import { setJsonLD } from './schema.org';
 //   console.warn('Schema validation errors', validation_errors);
 // }
 
-Sentry.init({
+sentryInit({
   dsn: sentryDsn,
   environment: sentryEnv,
   enabled: ['prod', 'prod-stage'].includes(sentryEnv),

@@ -1,6 +1,6 @@
 import React from 'react';
 import Error from 'js/pages/Error';
-import * as Sentry from '@sentry/react';
+import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react';
 
 function ErrorFallback({ error }) {
   return <Error isErrorBoundary errorBoundaryMessage={error.toString()} />;
@@ -8,14 +8,14 @@ function ErrorFallback({ error }) {
 
 function ErrorBoundary({ children }) {
   return (
-    <Sentry.ErrorBoundary
+    <SentryErrorBoundary
       beforeCapture={(scope) => {
         scope.setTag('location', 'main');
       }}
       fallback={ErrorFallback}
     >
       {children}
-    </Sentry.ErrorBoundary>
+    </SentryErrorBoundary>
   );
 }
 
