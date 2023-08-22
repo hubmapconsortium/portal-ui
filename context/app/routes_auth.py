@@ -6,7 +6,8 @@ from flask import (
     request, redirect, abort, session)
 import requests
 import globus_sdk
-from json import dumps
+from os import getcwd, path
+from json import dumps, load
 
 from .utils import make_blueprint
 
@@ -132,6 +133,15 @@ def login():
     user_email = user_info['email'] if 'email' in user_info else ''
 
     user_globus_groups = get_globus_groups(groups_token)
+
+    # TODO: This JSON file should be provided by `hubmap_commons`, but the updated
+    # version of commons (>= 2.1.5) has an incompatibility with the version of boto
+    # required by vitessce, while this file was last updated in 2.1.7.
+    # Once that is resolved, we can switch to the file in `hubmap_commons`.
+    with open(path.join(current_app.static_folder, 'data', 'globus-groups.json'), 'r') as globus_groups_file:
+        globus_groups = load(globus_groups_file)
+
+    print(globus_groups)
 
     if not has_globus_group(user_globus_groups, current_app.config['GROUP_ID']):
         # Globus institution login worked, but user does not have HuBMAP group!
