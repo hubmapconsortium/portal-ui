@@ -1,128 +1,115 @@
 import React from 'react';
 import { render, screen, appProviderEndpoints, appProviderToken } from 'test-utils/functions';
-// import userEvent from '@testing-library/user-event';
 
-import { DetailContext } from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/DetailContext';
+
+import { FilesContext } from '../FilesContext';
+
 import FileBrowserFile from './FileBrowserFile';
-import { FilesContext } from '../Files/context';
 
 const fakeOpenDUA = jest.fn();
 
 const uuid = 'fakeuuid';
 
-const detailContext = { uuid };
+const detailContext = { uuid: 'fakeuuid' };
 const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
 
-function FilesProviders({ children }) {
+const defaultFileObject = {
+  rel_path: 'fakepath',
+  edam_term: 'faketerm',
+  description: 'fakedescription',
+  file: 'fakefile',
+  size: 1000,
+};
+
+function RenderFileTest({ fileObjOverrides = {}, depth = 0 }) {
+  const completeFileObject = {
+    ...defaultFileObject,
+    ...fileObjOverrides,
+  };
   return (
     <DetailContext.Provider value={detailContext}>
-      <FilesContext.Provider value={filesContext}>{children}</FilesContext.Provider>
+      <FilesContext.Provider value={filesContext}>
+        <FileBrowserFile fileObj={completeFileObject} depth={depth} />
+      </FilesContext.Provider>
     </DetailContext.Provider>
   );
 }
 
-test('displays a link with correct href when dua is agreed to', () => {
-  const fileObj = {
-    rel_path: 'fakepath',
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    file: 'fakefile',
-    size: 1000,
-  };
+const file = {
+  get qaChip() {
+    return screen.queryByText('QA');
+  },
+  get dataProductChip() {
+    return screen.queryByText('Data Product');
+  },
+  get link() {
+    return screen.getByRole('link');
+  },
+  get container() {
+    return screen.getByTestId('file-indented-div');
+  },
+};
 
-  const depth = 0;
+describe('FileBrowserFile', () => {
+  it('displays a link with correct href when dua is agreed to', () => {
+    render(<RenderFileTest />);
 
-  render(
-    <FilesProviders>
-      <FileBrowserFile fileObj={fileObj} depth={depth} />
-    </FilesProviders>,
-  );
+    const refToTest = `${appProviderEndpoints.assetsEndpoint}/${uuid}/${defaultFileObject.rel_path}?token=${appProviderToken}`;
 
-  const refToTest = `${appProviderEndpoints.assetsEndpoint}/${uuid}/${fileObj.rel_path}?token=${appProviderToken}`;
+    expect(file.link).toHaveAttribute('href', refToTest);
+  });
 
-  expect(screen.getByRole('link')).toHaveAttribute('href', refToTest);
-});
+  it('has correct left margin', () => {
+    const depth = 3;
 
-test('has correct left margin', () => {
-  const fileObj = {
-    rel_path: 'fakepath',
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    file: 'fakefile',
-    size: 1000,
-  };
+    render(<RenderFileTest depth={depth} />);
 
-  const depth = 3;
+    // depth * indentation multiplier * 8px spacing unit
+    const expectedMargin = depth * 4 * 8;
+    expect(file.container).toHaveStyle(`margin-left: ${expectedMargin}px`);
+  });
 
-  render(
-    <FilesProviders>
-      <FileBrowserFile fileObj={fileObj} depth={depth} />
-    </FilesProviders>,
-  );
+  it('displays QA chip when is_qa_qc is true', () => {
+    render(<RenderFileTest fileObjOverrides={{ is_qa_qc: true }} />);
 
-  // depth * indentation multiplier * 8px spacing unit + 24px arrow icon offset
-  const expectedMargin = depth * 1.5 * 8 + 24;
-  expect(screen.getByTestId('file-indented-div')).toHaveStyle(`margin-left: ${expectedMargin}px`);
-});
+    expect(file.qaChip).toBeInTheDocument();
+  });
 
-test('displays QA chip when is_qa_qc is true', () => {
-  const fileObj = {
-    rel_path: 'fakepath',
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    file: 'fakefile',
-    is_qa_qc: true,
-    size: 1000,
-  };
+  it('does not display QA chip when is_qa_qc is not provided', () => {
+    render(<RenderFileTest />);
 
-  const depth = 0;
+    expect(file.qaChip).not.toBeInTheDocument();
+  });
 
-  render(
-    <FilesProviders>
-      <FileBrowserFile fileObj={fileObj} depth={depth} />
-    </FilesProviders>,
-  );
+  it('does not display QA chip when is_qa_qc is false', () => {
+    render(<RenderFileTest fileObjOverrides={{ is_qa_qc: false }} />);
 
-  expect(screen.getByText('QA')).toBeInTheDocument();
-});
+    expect(file.qaChip).not.toBeInTheDocument();
+  });
 
-test('does not display QA chip when is_qa_qc is not provided', () => {
-  const fileObj = {
-    rel_path: 'fakepath',
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    file: 'fakefile',
-    size: 1000,
-  };
+  it('displays Data Product chip when is_data_product is true', () => {
+    render(<RenderFileTest fileObjOverrides={{ is_data_product: true }} />);
 
-  const depth = 0;
+    expect(file.dataProductChip).toBeInTheDocument();
+  });
 
-  render(
-    <FilesProviders>
-      <FileBrowserFile fileObj={fileObj} depth={depth} />
-    </FilesProviders>,
-  );
+  it('does not display Data Product chip when is_data_product is false', () => {
+    render(<RenderFileTest fileObjOverrides={{ is_data_product: false }} />);
 
-  expect(screen.queryByText('QA')).not.toBeInTheDocument();
-});
+    expect(file.dataProductChip).not.toBeInTheDocument();
+  });
 
-test('does not display QA chip when is_qa_qc is false', () => {
-  const fileObj = {
-    rel_path: 'fakepath',
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    file: 'fakefile',
-    size: 1000,
-    is_qa_qc: false,
-  };
+  it('does not display Data Product chip when is_data_product is not provided', () => {
+    render(<RenderFileTest />);
 
-  const depth = 0;
+    expect(file.dataProductChip).not.toBeInTheDocument();
+  });
 
-  render(
-    <FilesProviders>
-      <FileBrowserFile fileObj={fileObj} depth={depth} />
-    </FilesProviders>,
-  );
+  it('displays "QA" and "Data Product" chips when is_qa_qc and is_data_product are true', () => {
+    render(<RenderFileTest fileObjOverrides={{ is_qa_qc: true, is_data_product: true }} />);
 
-  expect(screen.queryByText('QA')).not.toBeInTheDocument();
+    expect(file.qaChip).toBeInTheDocument();
+    expect(file.dataProductChip).toBeInTheDocument();
+  });
 });

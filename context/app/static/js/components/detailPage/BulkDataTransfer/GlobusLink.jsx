@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { useFilesContext } from 'js/components/detailPage/files/Files/context';
+import { useFilesContext } from 'js/components/detailPage/files/FilesContext';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import FilesConditionalLink from './FilesConditionalLink';
 import { LinkContainer } from './style';

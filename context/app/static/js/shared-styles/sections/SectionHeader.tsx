@@ -1,24 +1,27 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, { ComponentProps, PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from './LabelledSectionText/style';
 
-const StyledTypography = styled(Typography)`
-  margin-bottom: ${(props) => props.theme.spacing(1)};
-`;
+type TypographyProps = ComponentProps<typeof Typography<'h2'>>;
 
-function SectionHeader({ children, iconTooltipText, ...rest }) {
+type SectionHeaderProps = PropsWithChildren<
+  Partial<TypographyProps> & {
+    iconTooltipText?: string;
+  }
+>;
+
+function SectionHeader({ children, iconTooltipText, ...rest }: SectionHeaderProps) {
   return (
-    <StyledTypography variant="h4" component="h2" {...rest}>
+    <Typography variant="h4" component="h2" mb={1} {...rest}>
       {children}
       {iconTooltipText && (
         <SecondaryBackgroundTooltip title={iconTooltipText}>
           <StyledInfoIcon color="primary" />
         </SecondaryBackgroundTooltip>
       )}
-    </StyledTypography>
+    </Typography>
   );
 }
 

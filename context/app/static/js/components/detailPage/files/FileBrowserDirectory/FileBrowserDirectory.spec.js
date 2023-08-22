@@ -5,62 +5,65 @@ import { render, screen, fireEvent } from 'test-utils/functions';
 
 import FileBrowserDirectory from './FileBrowserDirectory';
 
-test('displays directory name', () => {
-  render(
-    <FileBrowserDirectory dirName="fakedir" depth={2}>
-      directory child
-    </FileBrowserDirectory>,
-  );
+const testDirName = 'fakeDir';
+const testChildren = 'directory child';
+const testDepth = 2;
 
-  expect(screen.getByText('fakedir')).toBeInTheDocument();
+function TestFileBrowserDirectory({ dirName = testDirName, depth = testDepth, children = testChildren }) {
+  return (
+    <FileBrowserDirectory dirName={dirName} depth={depth}>
+      {children}
+    </FileBrowserDirectory>
+  );
+}
+
+const directory = {
+  get node() {
+    return screen.getByText(testDirName);
+  },
+  get button() {
+    return screen.getByRole('button');
+  },
+  get childrenText() {
+    return screen.queryByText(testChildren);
+  },
+};
+
+test('displays directory name', () => {
+  render(<TestFileBrowserDirectory />);
+
+  expect(directory.node).toBeInTheDocument();
 });
 
 test('handles click', () => {
-  render(
-    <FileBrowserDirectory dirName="fakedir" depth={2}>
-      directory child
-    </FileBrowserDirectory>,
-  );
+  render(<TestFileBrowserDirectory />);
 
-  expect(screen.queryByText('directory child')).not.toBeInTheDocument();
-  userEvent.click(screen.getByRole('button'));
-  expect(screen.getByText('directory child')).toBeInTheDocument();
+  expect(directory.childrenText).not.toBeInTheDocument();
+  userEvent.click(directory.button);
+  expect(directory.childrenText).toBeInTheDocument();
 });
 
 test('handles key down', () => {
-  render(
-    <FileBrowserDirectory dirName="fakedir" depth={2}>
-      directory child
-    </FileBrowserDirectory>,
-  );
+  render(<TestFileBrowserDirectory />);
 
-  expect(screen.queryByText('directory child')).not.toBeInTheDocument();
-  fireEvent.keyDown(screen.getByRole('button'), { key: 'Enter', code: 'Enter', keyCode: 13 });
-  expect(screen.getByText('directory child')).toBeInTheDocument();
+  expect(directory.childrenText).not.toBeInTheDocument();
+  fireEvent.keyDown(directory.button, { key: 'Enter', code: 'Enter', keyCode: 13 });
+  expect(directory.childrenText).toBeInTheDocument();
 });
 
 test('has correct left padding', () => {
-  const depth = 2;
-  render(
-    <FileBrowserDirectory dirName="fakedir" depth={depth}>
-      directory child
-    </FileBrowserDirectory>,
-  );
+  render(<TestFileBrowserDirectory />);
 
-  // depth * indentation multiplier * 8px spacing unit + 40px base
-  const expectedPadding = depth * 1.5 * 8 + 40;
+  // depth * indentation multiplier * 8px spacing unit
+  const expectedMargin = testDepth * 4 * 8;
 
-  expect(screen.getByText('fakedir')).toHaveStyle(`padding-left: ${expectedPadding}px`);
+  expect(directory.node).toHaveStyle(`margin-left: ${expectedMargin}px`);
 });
 
 test('is keyboard focusable', () => {
-  render(
-    <FileBrowserDirectory dirName="fakedir" depth={2}>
-      directory child
-    </FileBrowserDirectory>,
-  );
+  render(<TestFileBrowserDirectory />);
 
   expect(document.body).toHaveFocus();
   userEvent.tab();
-  expect(screen.getByRole('button')).toHaveFocus();
+  expect(directory.button).toHaveFocus();
 });

@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import InsertDriveFileIcon from '@mui/icons-material/InsertDriveFileRounded';
 import InfoIcon from '@mui/icons-material/InfoRounded';
@@ -10,14 +10,6 @@ const StyledRow = styled(TableRow)`
   &:hover {
     background-color: ${(props) => props.theme.palette.hoverShadow.main};
   }
-`;
-
-// 24px the width of the directory arrow icon and is used to keep the file icon aligned with the directory icon
-const IndentedDiv = styled.div`
-  padding: 10px 40px;
-  margin-left: ${(props) => parseInt(props.theme.spacing(props.$depth * 1.5), 10) + 24}px;
-  display: flex;
-  align-items: center;
 `;
 
 const StyledFileIcon = styled(InsertDriveFileIcon)`
@@ -34,10 +26,13 @@ const StyledInfoIcon = styled(InfoIcon)`
   font-size: 1rem;
 `;
 
-const QaChip = styled(Chip)`
-  padding-left: 10px;
-  padding-right: 10px;
-  border-radius: 8px;
-`;
+const FileTypeChip = styled(Chip)(({ theme }) => ({
+  px: theme.spacing(2),
+  py: theme.spacing(1),
+  borderRadius: theme.spacing(1),
+  '&:not(:first-child)': {
+    marginLeft: theme.spacing(1),
+  },
+}));
 
-export { StyledRow, IndentedDiv, StyledFileIcon, FileSize, StyledInfoIcon, QaChip };
+export { StyledRow, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip };

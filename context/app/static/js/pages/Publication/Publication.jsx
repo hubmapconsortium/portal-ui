@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
@@ -10,6 +10,7 @@ import PublicationsDataSection from 'js/components/publications/PublicationsData
 import Files from 'js/components/detailPage/files/Files';
 import useEntityStore from 'js/stores/useEntityStore';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
+import { DetailContext } from 'js/components/detailPage/DetailContext';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -52,33 +53,43 @@ function Publication({ publication, vignette_json }) {
 
   const hasDOI = doi_url !== undefined;
 
+  const detailContext = useMemo(
+    () => ({
+      uuid,
+      hubmap_id,
+    }),
+    [uuid, hubmap_id],
+  );
+
   return (
-    <DetailLayout sectionOrder={sectionOrder}>
-      <PublicationSummary
-        {...publication}
-        status={combinedStatus}
-        hasDOI={hasDOI}
-        associatedCollectionUUID={associatedCollectionUUID}
-      />
-      <PublicationsDataSection
-        uuid={uuid}
-        datasetUUIDs={ancestor_ids}
-        associatedCollectionUUID={associatedCollectionUUID}
-      />
-      {shouldDisplaySection.visualizations && (
-        <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
-      )}
-      {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
-      {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />}
-      <ContributorsTable contributors={contributors} title="Authors" />
-      {shouldDisplaySection.provenance && (
-        <ProvSection
-          uuid={uuid}
-          assayMetadata={publication}
-          iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation."
+    <DetailContext.Provider value={detailContext}>
+      <DetailLayout sectionOrder={sectionOrder}>
+        <PublicationSummary
+          {...publication}
+          status={combinedStatus}
+          hasDOI={hasDOI}
+          associatedCollectionUUID={associatedCollectionUUID}
         />
-      )}
-    </DetailLayout>
+        <PublicationsDataSection
+          uuid={uuid}
+          datasetUUIDs={ancestor_ids}
+          associatedCollectionUUID={associatedCollectionUUID}
+        />
+        {shouldDisplaySection.visualizations && (
+          <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
+        )}
+        {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />}
+        <ContributorsTable contributors={contributors} title="Authors" />
+        {shouldDisplaySection.provenance && (
+          <ProvSection
+            uuid={uuid}
+            assayMetadata={publication}
+            iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation."
+          />
+        )}
+      </DetailLayout>
+    </DetailContext.Provider>
   );
 }
 

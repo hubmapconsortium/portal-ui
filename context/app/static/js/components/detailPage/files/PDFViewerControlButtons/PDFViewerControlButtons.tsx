@@ -5,7 +5,13 @@ import Typography from '@mui/material/Typography';
 
 import { CenteredFlex, StyledPaper, StyledIconButton, FlexButtonsWrapper } from './style';
 
-function PDFViewerControlButtons({ numPages, currentPageNum, setPageNum }) {
+type PDFViewerControlButtonsProps = {
+  numPages: number;
+  currentPageNum: number;
+  setPageNum: (newPageNumber: number) => void;
+};
+
+function PDFViewerControlButtons({ numPages, currentPageNum, setPageNum }: PDFViewerControlButtonsProps) {
   const atMaxPageNum = currentPageNum === numPages;
   const atMinPageNum = currentPageNum === 1;
 
