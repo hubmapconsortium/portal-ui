@@ -40,7 +40,13 @@ function useSearchData(
   return { searchData, isLoading };
 }
 
-function useSearchHits(query, { useDefaultQuery = false, fetcher = fetchSearchData, ...swrConfigRest }) {
+function useSearchHits(
+  query,
+  { useDefaultQuery = false, fetcher = fetchSearchData, ...swrConfigRest } = {
+    useDefaultQuery: false,
+    fetcher: fetchSearchData,
+  },
+) {
   const swrConfig = swrConfigRest || { fallbackData: {} };
   const { searchData, isLoading } = useSearchData(query, useDefaultQuery, fetcher ?? fetchSearchData, {
     ...swrConfig,
