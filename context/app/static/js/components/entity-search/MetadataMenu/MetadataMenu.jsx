@@ -38,13 +38,15 @@ function NotebookMenuItem(props) {
   );
 }
 
+// Selected rows are a Set, so we must use `.size` to avoid a needless conversion to an array
+// Protected rows are an array, so we can use `.length`
 const errorHelper = {
-  datasets: (rowCount) =>
-    `You have selected ${rowCount} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
-  protectedDataset: (rows) =>
-    `You have selected a protected dataset (${rows[0]._source.hubmap_id}). Workspaces currently only supports published public datasets. To remove the protected dataset from workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove this dataset.`,
-  protectedDatasets: (rows) =>
-    `You have selected ${rows.length} protected datasets. Workspaces currently only supports published public datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
+  datasets: (selectedRows) =>
+    `You have selected ${selectedRows.size} datasets. Workspaces currently only supports up to 10 datasets. Please unselect datasets.`,
+  protectedDataset: (protectedRows) =>
+    `You have selected a protected dataset (${protectedRows[0]._source.hubmap_id}). Workspaces currently only supports published public datasets. To remove the protected dataset from workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove this dataset.`,
+  protectedDatasets: (protectedRows) =>
+    `You have selected ${protectedRows.length} protected datasets. Workspaces currently only supports published public datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
 };
 
 function MetadataMenu({ entityType, results }) {
@@ -59,7 +61,7 @@ function MetadataMenu({ entityType, results }) {
   const errorMessages = [];
 
   if (selectedRows.size > 10) {
-    errorMessages.push(errorHelper.datasets(selectedRows.size));
+    errorMessages.push(errorHelper.datasets(selectedRows));
   }
 
   if (containsProtectedDataset) {
