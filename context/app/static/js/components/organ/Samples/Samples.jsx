@@ -69,7 +69,7 @@ function SampleHeaderCell({ column, setSort, sortState }) {
           left: 0,
           width: '100%',
           height: '100%',
-          ml: 1,
+          pl: 2,
         }}
         endIcon={<OrderIcon order={sortState.columnId === column.id ? sortState.direction : undefined} />}
       >
