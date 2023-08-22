@@ -19,7 +19,6 @@ function DialogModal({
   handleClose,
   DialogContentComponent,
   errorMessages,
-  protectedRows,
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;

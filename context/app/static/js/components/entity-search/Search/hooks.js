@@ -5,7 +5,7 @@ import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications
 import { useAppContext } from 'js/components/Contexts';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useStore } from 'js/components/entity-search/SearchWrapper/store';
-import { createSearchkitFacet, defaultFields } from 'js/components/entity-search/SearchWrapper/utils';
+import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
 
 import { buildSortPairs, getRangeProps } from './utils';
 
@@ -63,7 +63,6 @@ function useSearch({ isTestSearch }) {
       },
       hits: {
         fields: Object.values({
-          ...defaultFields,
           ...tileFields,
           ...fields,
         }).map(({ identifier }) => identifier),

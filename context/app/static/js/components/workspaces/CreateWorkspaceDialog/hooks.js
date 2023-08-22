@@ -3,6 +3,9 @@ import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { getIDsQuery, getTermClause } from 'js/helpers/queries';
+
 const schema = yup
   .object({
     'workspace-name': yup.string().required().max(150),
@@ -39,4 +42,18 @@ function useCreateWorkspace({ handleCreateWorkspace, defaultName }) {
   return { dialogIsOpen, setDialogIsOpen, handleClose, handleSubmit, control, errors, onSubmit };
 }
 
-export { useCreateWorkspace };
+function useDatasetsAccessLevel(ids) {
+  const query = {
+    query: {
+      bool: {
+        must: [getIDsQuery(ids), getTermClause('mapped_data_access_level.keyword', 'Protected')],
+      },
+    },
+    _source: ['mapped_data_access_level', 'hubmap_id'],
+    size: ids.length,
+  };
+  const { searchHits: datasets } = useSearchHits(query);
+  return { datasets };
+}
+
+export { useCreateWorkspace, useDatasetsAccessLevel };
