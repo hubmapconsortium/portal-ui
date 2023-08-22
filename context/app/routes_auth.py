@@ -8,7 +8,6 @@ import requests
 import globus_sdk
 from os import path
 from json import dumps, load
-import collections
 
 from .utils import make_blueprint
 
