@@ -25,7 +25,6 @@ import {
   SelectionButton,
   StyledDetailPageSection,
   StyledSectionHeader,
-  VitessceInfoSnackbar,
   bodyExpandedCSS,
   vitessceFixedHeight,
 } from './style';
@@ -36,27 +35,17 @@ function sniffBrowser() {
 }
 
 const FIREFOX_WARNING = 'If the performance of Vitessce in Firefox is not satisfactory, please use Chrome or Safari.';
+const localStorageFirefoxWarningKey = 'vitessce-firefox-warning';
 
 const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
   expandViz: state.expandViz,
   collapseViz: state.collapseViz,
   vizTheme: state.vizTheme,
-  vizEscSnackbarIsOpen: state.vizEscSnackbarIsOpen,
-  setVizEscSnackbarIsOpen: state.setVizEscSnackbarIsOpen,
   setVitessceState: state.setVitessceState,
-  onCopyUrlWarning: state.onCopyUrlWarning,
-  onCopyUrlSnackbarOpen: state.onCopyUrlSnackbarOpen,
-  setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
   setVizNotebookId: state.setVizNotebookId,
 });
-const sharedInfoSnackbarProps = {
-  anchorOrigin: {
-    vertical: 'top',
-    horizontal: 'center',
-  },
-  autoHideDuration: 4000,
-};
+
 function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true }) {
   const {
     vizIsFullscreen,
@@ -80,8 +69,9 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
 
   // Show a warning if the user is using Firefox.
   useEffect(() => {
-    if (sniffBrowser() === 'Firefox') {
+    if (sniffBrowser() === 'Firefox' && !localStorage.getItem(localStorageFirefoxWarningKey)) {
       toastError(FIREFOX_WARNING);
+      localStorage.setItem(localStorageFirefoxWarningKey, true);
     }
   }, [toastError]);
 
