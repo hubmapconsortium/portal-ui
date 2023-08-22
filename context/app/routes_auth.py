@@ -139,7 +139,8 @@ def login():
     # version of commons (>= 2.1.5) has an incompatibility with the version of boto
     # required by vitessce, while this file was last updated in 2.1.7.
     # Once that is resolved, we can switch to the file in `hubmap_commons`.
-    with open(path.join(current_app.static_folder, 'data', 'globus-groups.json'), 'r') as globus_groups_file:
+    globus_groups_path = path.join(current_app.static_folder, 'data', 'globus-groups.json')
+    with open(globus_groups_path, 'r') as globus_groups_file:
         globus_groups = load(globus_groups_file)
 
     permission_groups = {
