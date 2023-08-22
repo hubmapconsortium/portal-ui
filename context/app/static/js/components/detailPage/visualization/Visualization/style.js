@@ -1,6 +1,5 @@
 import styled, { css } from 'styled-components';
 import Button from '@mui/material/Button';
-import Snackbar from '@mui/material/Snackbar';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
@@ -33,20 +32,6 @@ const SelectionButton = styled(Button)`
   margin-left: ${(props) => props.theme.spacing(1)};
   color: white;
   border-radius: 3px;
-`;
-
-const VitessceInfoSnackbar = styled(Snackbar)`
-  top: ${totalHeightOffset + 10}px;
-  & > div {
-    background-color: ${(props) =>
-      props.$isWarning ? props.theme.palette.warning.main : 'dimgray'}; // TODO: Move to theme.
-    color: ${(props) => (props.$isWarning ? '#000000' : props.theme.palette.white.main)}; // TODO: Move to theme.
-  }
-`;
-
-const ErrorSnackbar = styled(Snackbar)`
-  position: absolute;
-  background-color: ${(props) => props.theme.palette.white.main};
 `;
 
 const ExpandableDiv = styled.div`
@@ -89,8 +74,6 @@ export {
   StyledSectionHeader,
   Flex,
   ExpandButton,
-  ErrorSnackbar,
-  VitessceInfoSnackbar,
   ExpandableDiv,
   SelectionButton,
   StyledDetailPageSection,

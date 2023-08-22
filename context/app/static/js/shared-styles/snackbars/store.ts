@@ -52,4 +52,12 @@ const createStore = () =>
     toastWarning: (message, key) => get().openSnackbar(message, 'warning', key),
   }));
 
-export { Provider as SnackbarProvider, useStore as useSnackbarStore, createStore };
+const useSnackbarActions = () => {
+  return useStore((store) => ({
+    toastError: store.toastError,
+    toastInfo: store.toastInfo,
+    toastWarning: store.toastWarning,
+  }));
+};
+
+export { Provider as SnackbarProvider, useStore as useSnackbarStore, createStore, useSnackbarActions };
