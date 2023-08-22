@@ -176,6 +176,9 @@ def login():
             key='last_login',
             value=datetime.now().isoformat(),
             expires=2**31 - 1)
+    else:
+        # If the user is not internal, we don't want the last_login cookie to be set
+        response.set_cookie(key='last_login', value='', expires=0)
 
     # Always set this cookie, even if the user is not internal, so that we can
     # more easily track engagement with the portal by institution
