@@ -3,11 +3,12 @@ from datetime import datetime
 
 from flask import (
     make_response, current_app, url_for,
-    request, redirect, abort, session)
+    request, redirect, session)
 import requests
 import globus_sdk
-from os import getcwd, path
+from os import path
 from json import dumps, load
+import collections
 
 from .utils import make_blueprint
 
@@ -141,17 +142,15 @@ def login():
     with open(path.join(current_app.static_folder, 'data', 'globus-groups.json'), 'r') as globus_groups_file:
         globus_groups = load(globus_groups_file)
 
-    print(globus_groups)
-
-    if not has_globus_group(user_globus_groups, current_app.config['GROUP_ID']):
-        # Globus institution login worked, but user does not have HuBMAP group!
-        log('7: 401')
-        abort(401)
-
     additional_groups = {
         'HuBMAP': current_app.config['GROUP_ID'],
         'Workspaces': current_app.config['WORKSPACES_GROUP_ID']
     }
+
+    # print('user_globus_groups', dumps(user_globus_groups, indent=2))
+    # print('globus_groups', dumps(globus_groups, indent=2))
+    print('intersection', collections.Counter(user_globus_groups)
+          & collections.Counter(globus_groups))
 
     session.update(
         groups_token=groups_token,
