@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from '@mui/material/Button';
 
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
@@ -40,24 +40,27 @@ export default function CreateWorkspaceWithDatasetsDialog({ ...rest }) {
   }
   const protectedHubmapIds = protectedRows?.map((row) => row._source.hubmap_id).join(', ');
 
-  const removeProtectedDatasets = () => {
+  const removeProtectedDatasets = useCallback(() => {
     deselectRows(protectedRows.map((r) => r._id));
     toastSuccess('Protected datasets successfully removed from selection.');
-  };
+  }, [deselectRows, protectedRows, toastSuccess]);
 
-  const renderAdditionalFields = ({ control, errors }) => {
-    if (protectedHubmapIds.length > 0) {
-      return (
-        <Box>
-          <WorkspaceField control={control} name="Protected Datasets" errors={errors} value={protectedHubmapIds} />
-          <Button sx={{ marginTop: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
-            Remove Protected Datasets ({protectedRows.length})
-          </Button>
-        </Box>
-      );
-    }
-    return null;
-  };
+  const renderAdditionalFields = useCallback(
+    ({ control, errors }) => {
+      if (protectedHubmapIds.length > 0) {
+        return (
+          <Box>
+            <WorkspaceField control={control} name="Protected Datasets" errors={errors} value={protectedHubmapIds} />
+            <Button sx={{ marginTop: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
+              Remove Protected Datasets ({protectedRows.length})
+            </Button>
+          </Box>
+        );
+      }
+      return null;
+    },
+    [protectedHubmapIds, protectedRows.length, removeProtectedDatasets],
+  );
 
   return (
     <CreateWorkspaceDialog errorMessages={errorMessages} renderAdditionalFields={renderAdditionalFields} {...rest} />
