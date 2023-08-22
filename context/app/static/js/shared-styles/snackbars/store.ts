@@ -57,6 +57,8 @@ const useSnackbarActions = () => {
     toastError: store.toastError,
     toastInfo: store.toastInfo,
     toastWarning: store.toastWarning,
+    toastSuccess: store.toastSuccess,
+    closeSnackbar: store.closeSnackbar,
   }));
 };
 
