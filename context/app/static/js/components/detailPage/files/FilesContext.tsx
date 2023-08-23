@@ -19,10 +19,6 @@ export const useFilesContext = () => useContext(FilesContext);
 export function FilesContextProvider({ children }: PropsWithChildren) {
   const { mapped_data_access_level } = useDetailContext();
 
-  if (!mapped_data_access_level) {
-    throw new Error('Data access level information was not found.');
-  }
-
   const localStorageKey = `has_agreed_to_${mapped_data_access_level}_DUA`;
   const [hasAgreedToDUA, agreeToDUA] = useState<boolean>(Boolean(localStorage.getItem(localStorageKey)));
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -39,7 +35,7 @@ export function FilesContextProvider({ children }: PropsWithChildren) {
     setDialogOpen(false);
   }, []);
 
-  const openDUA = useCallback((linkUrl) => {
+  const openDUA = useCallback((linkUrl: string) => {
     setDialogOpen(true);
     setUrlClickedBeforeDUA(linkUrl);
   }, []);
