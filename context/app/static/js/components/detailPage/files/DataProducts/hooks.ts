@@ -1,11 +1,13 @@
-import { useFlaskDataContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { useDetailContext } from 'js/components/detailPage/DetailContext';
+import { UnprocessedFile } from '../types';
 
 type PipelineInfo = {
   origin: string;
   name: string;
 };
 
-// Default fallback values in case no pipeline info is available
+// Default fallback values in case no pipeline info is available in metadata
 const defaultPipeline: PipelineInfo = {
   name: 'pipeline.cwl',
   origin: 'https://github.com/hubmapconsortium/ingest-pipeline.git',
@@ -18,6 +20,7 @@ const defaultPipeline: PipelineInfo = {
 function usePipelineInfo(): PipelineInfo {
   const { entity } = useFlaskDataContext();
   const dagList = entity.metadata.dag_provenance_list ?? [];
+  // Iterate over the list of DAGs and extract the latest origin and name
   const pipelineInfo = dagList.reduce<PipelineInfo>((acc, dag) => {
     if ('origin' in dag) {
       acc.origin = dag.origin;
@@ -30,4 +33,15 @@ function usePipelineInfo(): PipelineInfo {
   return pipelineInfo;
 }
 
-export { usePipelineInfo };
+/**
+ * Format a file's relative path into a link to the file on the assets server
+ * @param file An unprocessed file object from the flask context
+ * @returns A link to the file on the assets server
+ */
+function useFileLink(file: UnprocessedFile) {
+  const { assetsEndpoint } = useAppContext();
+  const { uuid } = useDetailContext();
+  return `${assetsEndpoint}/${uuid}/${file.rel_path}`;
+}
+
+export { usePipelineInfo, useFileLink };
