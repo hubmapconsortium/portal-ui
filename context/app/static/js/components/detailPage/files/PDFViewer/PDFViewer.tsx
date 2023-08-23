@@ -8,7 +8,6 @@ import LinearProgress from '@mui/material/LinearProgress';
 
 import { DocumentCallback, OnDocumentLoadSuccess } from 'react-pdf/dist/cjs/shared/types';
 
-import { DocumentCallback, OnDocumentLoadSuccess } from 'react-pdf/dist/cjs/shared/types';
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
 import { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ErrorIcon } from './style';
 
