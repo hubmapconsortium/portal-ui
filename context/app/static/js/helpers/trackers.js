@@ -21,7 +21,7 @@ function getSiteId(location) {
 function getUserType() {
   // `last_login` cookie is only set when internal users log in.
   // Default to `external` if the cookie is not set.
-  return readCookie('last_login') ? 'internal' : 'external';
+  return readCookie('last_login') && isAuthenticated ? 'internal' : 'external';
 }
 
 function getUserGroups() {
