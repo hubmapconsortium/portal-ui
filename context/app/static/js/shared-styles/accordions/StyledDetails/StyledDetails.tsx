@@ -10,6 +10,11 @@ function StyledDetails({ summary, children, summaryBackgroundColor = 'white' }: 
   const detailsRef = useRef<ElementRef<'details'>>(null);
   const summaryRef = useRef<ElementRef<'summary'>>(null);
   const onClick = useCallback((e: MouseEvent<HTMLDivElement>) => {
+    if (e.target !== summaryRef.current) {
+      // Only toggle the details element if the click was on the summary
+      // This allows for links / buttons to be used in the summary
+      return;
+    }
     if (detailsRef.current?.hasAttribute('open')) {
       e.preventDefault();
       detailsRef.current.classList.add('closing');
@@ -92,14 +97,14 @@ function StyledDetails({ summary, children, summaryBackgroundColor = 'white' }: 
         '&[open]': {
           // Rotate the arrow when the details element is open
           '& summary::after': {
-            transform: 'rotate(180deg)',
+            transform: 'rotate(180deg) translateY(0%)',
           },
           '& > *:not(summary)': {
             color: 'inherit',
           },
           // Rotate the arrow back as the details element is closing
           '&.closing > summary::after': {
-            transform: 'rotate(0deg) translateY(15%)',
+            transform: 'rotate(0deg) translateY(20%)',
           },
         },
       }}
@@ -112,7 +117,7 @@ function StyledDetails({ summary, children, summaryBackgroundColor = 'white' }: 
           backgroundColor: summaryBackgroundColor,
           display: 'block',
           '&::after': {
-            transform: 'translateY(15%)',
+            transform: 'translateY(20%)',
             content: '"⌃"',
             fontSize: '1rem',
             display: 'inline-block',
