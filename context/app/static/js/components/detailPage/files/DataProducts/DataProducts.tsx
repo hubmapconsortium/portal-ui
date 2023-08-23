@@ -28,7 +28,7 @@ export function DataProducts({ files }: DataProductsProps) {
 
   return (
     <FilesContextProvider>
-      <Paper sx={{ p: 2 }}>
+      <Paper sx={{ p: 2 }} data-testid="data-products-container">
         <Box display="flex" justifyContent="space-between" alignItems="start">
           <Box>
             <Typography component="h3" variant="h4" sx={{ mt: 0.25 }}>
