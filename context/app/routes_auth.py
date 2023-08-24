@@ -6,8 +6,8 @@ from flask import (
     request, redirect, session)
 import requests
 import globus_sdk
-from os import path
 from json import dumps, load
+from hubmap_commons.hm_auth import AuthCache
 
 from .utils import make_blueprint
 
@@ -134,12 +134,7 @@ def login():
 
     user_globus_groups = get_globus_groups(groups_token)
 
-    # TODO: This JSON file should be provided by `hubmap_commons`, but the updated
-    # version of commons (>= 2.1.5) has an incompatibility with the version of boto
-    # required by vitessce, while this file was last updated in 2.1.7.
-    # Once that is resolved, we can switch to the file in `hubmap_commons`.
-    globus_groups_path = path.join(current_app.static_folder, 'data', 'globus-groups.json')
-    with open(globus_groups_path, 'r') as globus_groups_file:
+    with open(AuthCache.groupJsonFilename) as globus_groups_file:
         globus_groups = load(globus_groups_file)
 
     permission_groups = {
