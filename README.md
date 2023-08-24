@@ -140,7 +140,7 @@ Every PR should be reviewed, and every PR should include a new `CHANGELOG-someth
 
 ### File and directory structure conventions
 
-<details><summary>For React</summary>
+<details><summary>![React.js Icon](https://skills.thijs.gg/icons?i=react&theme=light) React</summary>
 
 > **Note**  
 > **Any mentions of `.js`/`.jsx` in the following guidelines are interchangeable with `.ts`/`.tsx`. New features should ideally be developed in TypeScript.**
