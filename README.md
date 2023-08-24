@@ -4,7 +4,7 @@ This is a Flask app, using React on the front end and primarily Elasticsearch on
 wrapped in a Docker container for deployment using Docker Compose. The front end depends on AWS S3 and CloudFront for the hosting and delivery of images.
 It is deployed at [portal.hubmapconsortium.org](https://portal.hubmapconsortium.org/)
 
-The Data Portal depends on many [APIs](portal.hubmapconsortium.org/services),
+The Data Portal depends on many [APIs](https://portal.hubmapconsortium.org/services),
 and directly or indirectly, on many other HuBMAP repos.
 
 ```mermaid
@@ -18,7 +18,7 @@ graph LR
     top --> ccf-ui
     click ccf-ui href "https://github.com/hubmapconsortium/ccf-ui"
     top --> vitessce --> viv
-    click vitessce href "https://github.com/hubmapconsortium/vitessce"
+    click vitessce href "https://github.com/vitessce/vitessce"
     click viv href "https://github.com/hms-dbmi/viv"
     top --> portal-visualization --> vitessce-python
     click portal-visualization href "https://github.com/hubmapconsortium/portal-visualization"
@@ -125,7 +125,7 @@ Optional:
 ### Development
 
 After checking out the project, cd-ing into it, and setting up a Python 3.9 virtual environment,
-- Get `app.conf` from another developer and place it at `context/instance/app.conf`.
+- Get `app.conf` from [Confluence](https://hms-dbmi.atlassian.net/wiki/spaces/GL/pages/3045457929/app.conf) or from another developer and place it at `context/instance/app.conf`.
 - Run `etc/dev/dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
 
 You will see an warning about `Cannot find source file '../src/index.ts'`, but just ignore it; [Issue filed](https://github.com/hubmapconsortium/portal-ui/issues/1489).
@@ -133,11 +133,10 @@ You will see an warning about `Cannot find source file '../src/index.ts'`, but j
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
 
-Note: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for version 2.0 can be found [here](http://searchkit.github.io/searchkit/stable/).
+Note: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for version 2.0 can be found [here](https://github.com/searchkit/searchkit/tree/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs).
 
 ### Changelog files
-Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md`:
-These are concatenated by `etc/build/push.sh`.
+Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md` at the root of the repository. These are concatenated by `etc/build/push.sh`.
 
 ### File and directory structure conventions
 
