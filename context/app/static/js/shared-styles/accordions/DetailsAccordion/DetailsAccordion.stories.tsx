@@ -2,22 +2,22 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
 
-import { Link } from '@mui/material';
-import StyledDetails from './StyledDetails';
+import DetailsAccordion from './DetailsAccordion';
 
-type DetailsStoryProps = React.ComponentProps<typeof StyledDetails>;
+type DetailsStoryProps = React.ComponentProps<typeof DetailsAccordion>;
 
 function DetailsStory({ summary, children }: DetailsStoryProps) {
   return (
-    <Box height="50vh">
-      <StyledDetails summary={summary}>{children}</StyledDetails>
+    <Box height="10em">
+      <DetailsAccordion summary={summary}>{children}</DetailsAccordion>
     </Box>
   );
 }
 
 export default {
-  title: 'Accordions/StyledDetails',
+  title: 'Accordions/DetailsAccordion',
   component: DetailsStory,
   argTypes: {
     summary: { control: 'text' },
@@ -49,19 +49,15 @@ export const WithReactChild: Story = {
 export const WithReactSummary: Story = {
   args: {
     summary: (
-      <>
-        <Button variant="contained">Clicking me will not expand details</Button>,{' '}
-        <Link href="#default" onClick={(e) => e.preventDefault()}>
-          and neither will clicking on this link,
-        </Link>{' '}
-        but clicking elsewhere in the summary works
-      </>
+      <Typography variant="subtitle2" color="purple">
+        Who would build a labyrinth down here?
+      </Typography>
     ),
     children: (
       <blockquote>
         <p>Atta-boy! You finished my labyrinth and I&apos;m proud of you!</p>
         <footer>
-          - Director Avery Bullock, <cite>Game Night</cite>
+          - Deputy Director Avery Bullock, <cite>Game Night</cite>
         </footer>
       </blockquote>
     ),
