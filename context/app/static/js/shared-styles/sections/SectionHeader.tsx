@@ -1,5 +1,6 @@
 import React, { ComponentProps, PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from './LabelledSectionText/style';
@@ -14,14 +15,16 @@ type SectionHeaderProps = PropsWithChildren<
 
 function SectionHeader({ children, iconTooltipText, ...rest }: SectionHeaderProps) {
   return (
-    <Typography variant="h4" component="h2" mb={1} {...rest}>
-      {children}
+    <Box display="flex" alignItems="center" mb={1}>
+      <Typography variant="h4" component="h2" {...rest}>
+        {children}
+      </Typography>
       {iconTooltipText && (
         <SecondaryBackgroundTooltip title={iconTooltipText}>
           <StyledInfoIcon color="primary" />
         </SecondaryBackgroundTooltip>
       )}
-    </Typography>
+    </Box>
   );
 }
 
