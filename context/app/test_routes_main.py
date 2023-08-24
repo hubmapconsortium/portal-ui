@@ -168,10 +168,9 @@ paths = ['/organ', '/publications', '/collections', '/cells']
         ('/docs', '302 FOUND', 'https://software.docs.hubmapconsortium.org/'),
 
         *[(path, '200 OK') for path in paths],
-        *[(path + '/', '302 FOUND',
-            f'http://localhost{path}') for path in paths],
+        *[(path + '/', '302 FOUND', path) for path in paths],
         *[(path + '/?query=fake', '302 FOUND',
-            f'http://localhost{path}?query=fake') for path in paths],
+            f'{path}?query=fake') for path in paths],
     ],
     ids=lambda path_status: f'{path_status[0]} -> {path_status[1]} {"".join(path_status[2:])}'
 )
@@ -181,9 +180,4 @@ def test_truncate_and_redirect(client, path_status):
     response = client.get(path)
     assert response.status == status
     if response.status == '302 FOUND':
-        # As of Flask 2.1.0, response.location is a relative path
-        # (e.g. '/browse/donor/12345'), not a complete URL, so we
-        # should strip the schema/host from the request path.
-        relative_location = [location[0].split('http://localhost')[1]]
-
-        assert [response.location] == relative_location
+        assert [response.location] == location
