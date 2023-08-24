@@ -142,8 +142,11 @@ Every PR should be reviewed, and every PR should include a new `CHANGELOG-someth
 
 <details><summary>For React</summary>
 
+> :information_source: **Any mentions of `.js`/`.jsx` in the following guidelines are interchangeable with `.ts`/`.tsx`. New features should ideally be developed in TypeScript.**
+
 - Components with tests or styles should be placed in to their own directory.
-- Styles should follow the `style.*` pattern where the extension is js for styled components or css for stylesheets.
+- Styles should follow the `style.*` pattern where the extension is `js` for styled components or `css` for stylesheets.
+  - New styled components should use `styled` from `@mui/styles`.
 - Tests should follow the `*.spec.js` pattern...
 - and stories should follow the `*.stories.js` pattern. For both, the prefix is the name of the component.
 - Each component directory should have an `index.js` which exports the component as default.
