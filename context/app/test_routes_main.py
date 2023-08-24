@@ -181,4 +181,9 @@ def test_truncate_and_redirect(client, path_status):
     response = client.get(path)
     assert response.status == status
     if response.status == '302 FOUND':
-        assert [response.location] == location
+        # As of Flask 2.1.0, response.location is a relative path
+        # (e.g. '/browse/donor/12345'), not a complete URL, so we
+        # should strip the schema/host from the request path.
+        relative_location = [location[0].split('http://localhost')[1]]
+
+        assert [response.location] == relative_location
