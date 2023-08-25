@@ -1,4 +1,4 @@
 import LinkGroups, { LinksSectionProps } from './LinkGroups';
 
-export { LinksSectionProps };
+export type { LinksSectionProps };
 export default LinkGroups;

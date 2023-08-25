@@ -28,5 +28,5 @@ function LinkGroups({ groups, isIndented }: LinkGroupsProps) {
   ));
 }
 
-export { LinksSectionProps };
+export type { LinksSectionProps };
 export default LinkGroups;
