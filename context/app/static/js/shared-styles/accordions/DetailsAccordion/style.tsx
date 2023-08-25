@@ -3,7 +3,7 @@ import { styled } from '@mui/material/styles';
 import MuiAccordion, { AccordionProps } from '@mui/material/Accordion';
 import MuiAccordionSummary, { AccordionSummaryProps } from '@mui/material/AccordionSummary';
 import MuiAccordionDetails from '@mui/material/AccordionDetails';
-import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 const Accordion = styled((props: AccordionProps) => <MuiAccordion disableGutters elevation={0} square {...props} />)(
   () => ({
@@ -17,7 +17,7 @@ const Accordion = styled((props: AccordionProps) => <MuiAccordion disableGutters
 );
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
-  <MuiAccordionSummary expandIcon={<ExpandLess color="primary" />} {...props} />
+  <MuiAccordionSummary expandIcon={<ExpandMore color="primary" />} {...props} />
 ))(() => ({
   backgroundColor: 'transparent',
   flexDirection: 'row',

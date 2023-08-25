@@ -2,8 +2,8 @@ import React from 'react';
 
 import { Box, Typography } from '@mui/material';
 import { FileIcon } from 'js/shared-styles/icons';
-import DetailAccordion from 'js/shared-styles/accordions/DetailsAccordion/DetailsAccordion';
-import FilesConditionalLink from '../../BulkDataTransfer/FilesConditionalLink';
+import DetailAccordion from 'js/shared-styles/accordions/DetailsAccordion';
+import FilesConditionalLink from 'js/components/detailPage/BulkDataTransfer/FilesConditionalLink';
 
 import { UnprocessedFile } from '../types';
 import { useFilesContext } from '../FilesContext';
@@ -20,16 +20,17 @@ export function DataProduct({ file }: DataProductProps) {
   const link = useFileLink(file);
   const { openDUA, hasAgreedToDUA } = useFilesContext();
   return (
-    <Box key={file.rel_path} data-testid="data-product" sx={{ mt: 2, mb: 1 }}>
+    <Box key={file.rel_path} data-testid="data-product" sx={{ py: 1.5 }}>
       <Box display="flex">
-        <Box pl={4} pr={2}>
+        <Box px={2.5}>
           <FileIcon
             sx={(theme) => ({
               color: theme.palette.primary.main,
+              flexShrink: 0,
             })}
             // eslint-disable-next-line @typescript-eslint/ban-ts-comment
             // @ts-ignore - TODO: HMP-349 will let us set font sizes via `sx` or `fontSize` prop
-            $fontSize="2.5rem"
+            $fontSize="1.5rem"
           />
         </Box>
         <Box width="100%">
@@ -41,6 +42,7 @@ export function DataProduct({ file }: DataProductProps) {
                 href={link}
                 underline="none"
                 download
+                variant="subtitle1"
               >
                 {file.rel_path}
               </FilesConditionalLink>
@@ -62,12 +64,6 @@ export function DataProduct({ file }: DataProductProps) {
           </Typography>
           <DetailAccordion summary="Additional Details">
             <Box component="dl" my={0}>
-              <Typography variant="subtitle2" component="dt">
-                Description
-              </Typography>
-              <Typography variant="body2" component="dd">
-                {file.mapped_description} (Format: {file.edam_term})
-              </Typography>
               <Typography variant="subtitle2" component="dt">
                 Data Generation
               </Typography>

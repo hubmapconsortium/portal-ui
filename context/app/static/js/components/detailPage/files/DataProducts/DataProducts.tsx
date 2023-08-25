@@ -1,13 +1,17 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 
 import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 
-import { DownloadIcon } from '../../MetadataTable/style';
+import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { DownloadIcon } from 'js/components/detailPage/MetadataTable/style';
 
+import theme from 'js/theme';
 import { UnprocessedFile } from '../types';
 import { FilesContextProvider } from '../FilesContext';
 import { FileSize } from './FileSize';
@@ -28,30 +32,28 @@ export function DataProducts({ files }: DataProductsProps) {
 
   return (
     <FilesContextProvider>
-      <Paper sx={{ p: 2 }} data-testid="data-products-container">
-        <Box display="flex" justifyContent="space-between" alignItems="start">
-          <Box>
-            <Typography component="h3" variant="h4" sx={{ mt: 0.25 }}>
-              Data Products
-            </Typography>
-            <FileSize size={totalFileSize} variant="body2" />
+      <Paper sx={{ p: 2, borderTop: `1px solid ${theme.palette.outline}` }} data-testid="data-products-container">
+        <Box display="flex" justifyContent="space-between" alignItems="start" pb={2}>
+          <Box data-testid="data-products-title-and-size">
+            <Box display="flex" alignItems="center">
+              <Typography component="h3" variant="h4" display="inline-block">
+                Data Products
+              </Typography>
+              <SecondaryBackgroundTooltip title="Essential files of interest for this dataset.">
+                <StyledInfoIcon color="primary" />
+              </SecondaryBackgroundTooltip>
+            </Box>
+            <FileSize size={totalFileSize} variant="body1" color="secondary.secondary" />
           </Box>
-          <Button variant="contained" color="primary" endIcon={<DownloadIcon />} sx={{ borderRadius: '4px' }}>
+          <Button variant="contained" color="primary" startIcon={<DownloadIcon />} sx={{ borderRadius: '4px' }}>
             Download All
           </Button>
         </Box>
-        <Typography component="p" variant="body1" sx={{ my: 1 }}>
-          Data products are essential files of this dataset for performing independent review of dataset contents. They
-          include information about gene expression levels, RNA velocity, and other products of analysis.
-        </Typography>
-        <Box>
-          {dataProducts.map((file, idx) => (
-            <Fragment key={file.rel_path}>
-              <DataProduct file={file} />
-              {idx < dataProducts.length - 1 && <Divider />}
-            </Fragment>
+        <Stack divider={<Divider />}>
+          {dataProducts.map((file) => (
+            <DataProduct file={file} key={file.rel_path} />
           ))}
-        </Box>
+        </Stack>
       </Paper>
     </FilesContextProvider>
   );
