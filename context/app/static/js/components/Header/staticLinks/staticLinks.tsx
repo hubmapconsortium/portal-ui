@@ -1,8 +1,18 @@
 import React from 'react';
 
-import LinkGroups, { LinksSectionProps } from '../LinkGroups';
+import LinkGroups, { LinkGroupType } from '../LinkGroups';
 
-const groups = {
+interface LinksSectionProps {
+  isIndented: boolean;
+}
+
+function withLinkGroups(groups): LinkGroupType {
+  return function LinksSection({ isIndented }: LinksSectionProps) {
+    return <LinkGroups groups={groups} isIndented={isIndented} />;
+  };
+}
+
+const atlasGroups = {
   ccf: [
     {
       href: 'https://humanatlas.io',
@@ -65,8 +75,49 @@ const groups = {
   ],
 };
 
-function AtlasToolsLinks({ isIndented }: LinksSectionProps) {
-  return <LinkGroups groups={groups} isIndented={isIndented} />;
-}
+const AtlasToolsLinks = withLinkGroups(atlasGroups);
 
-export default AtlasToolsLinks;
+const otherGroups = {
+  other: [
+    {
+      href: '/collections',
+      label: 'Data Collections',
+    },
+    {
+      href: '/organ',
+      label: 'Organs',
+    },
+    {
+      href: '/publications',
+      label: 'Publications',
+    },
+    {
+      href: '/cells',
+      label: 'Molecular Data Queries - BETA',
+    },
+  ],
+};
+
+const OtherLinks = withLinkGroups(otherGroups);
+
+const previewLinks = [
+  'Multimodal Molecular Imaging Data',
+  'Multimodal Mass Spectrometry Imaging Data',
+  'Cell Type Annotations',
+].map((previewName) => ({
+  href: `/preview/${previewName.toLowerCase().replace(/\W+/g, '-')}`,
+  label: `Preview: ${previewName}`,
+}));
+
+const resourceGroups = {
+  docs: [
+    { href: 'https://software.docs.hubmapconsortium.org/technical', label: 'Technical Documentation' },
+    { href: 'https://software.docs.hubmapconsortium.org/faq', label: 'FAQ' },
+    { href: 'https://software.docs.hubmapconsortium.org/about', label: 'About' },
+  ],
+  previews: previewLinks,
+};
+
+const ResourceLinks = withLinkGroups(resourceGroups);
+
+export { AtlasToolsLinks, OtherLinks, ResourceLinks };

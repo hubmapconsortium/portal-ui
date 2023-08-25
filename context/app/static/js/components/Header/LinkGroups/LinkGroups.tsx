@@ -2,10 +2,6 @@ import React, { Fragment } from 'react';
 import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 
-interface LinksSectionProps {
-  isIndented: boolean;
-}
-
 interface LinkType {
   href: string;
   label: string;
@@ -32,5 +28,5 @@ function LinkGroups({ groups, isIndented }: LinkGroupsProps) {
   ));
 }
 
-export type { LinksSectionProps };
+export type { LinkGroupType };
 export default LinkGroups;
