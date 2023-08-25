@@ -1,42 +1,27 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import DropdownLink from '../DropdownLink';
-import { StyledDivider } from '../HeaderContent/style';
 
-function ResourceLinks({ isIndented }) {
-  return (
-    <>
-      <DropdownLink href="https://software.docs.hubmapconsortium.org/technical" isIndented={isIndented}>
-        Technical Documentation
-      </DropdownLink>
-      <DropdownLink href="https://software.docs.hubmapconsortium.org/faq" isIndented={isIndented}>
-        FAQ
-      </DropdownLink>
-      <DropdownLink href="https://software.docs.hubmapconsortium.org/about" isIndented={isIndented}>
-        About
-      </DropdownLink>
-      <StyledDivider />
-      {['Multimodal Molecular Imaging Data', 'Multimodal Mass Spectrometry Imaging Data', 'Cell Type Annotations'].map(
-        (previewName) => (
-          <DropdownLink
-            key={previewName}
-            href={`/preview/${previewName.toLowerCase().replace(/\W+/g, '-')}`}
-            isIndented={isIndented}
-          >
-            Preview: {previewName}
-          </DropdownLink>
-        ),
-      )}
-    </>
-  );
+import LinkGroups, { LinksSectionProps } from '../LinkGroups';
+
+const previewLinks = [
+  'Multimodal Molecular Imaging Data',
+  'Multimodal Mass Spectrometry Imaging Data',
+  'Cell Type Annotations',
+].map((previewName) => ({
+  href: `/preview/${previewName.toLowerCase().replace(/\W+/g, '-')}`,
+  label: `Preview: ${previewName}`,
+}));
+
+const groups = {
+  docs: [
+    { href: 'https://software.docs.hubmapconsortium.org/technical', label: 'Technical Documentation' },
+    { href: 'https://software.docs.hubmapconsortium.org/faq', label: 'FAQ' },
+    { href: 'https://software.docs.hubmapconsortium.org/about', label: 'About' },
+  ],
+  previews: previewLinks,
+};
+
+function ResourceLinks({ isIndented }: LinksSectionProps) {
+  return <LinkGroups groups={groups} isIndented={isIndented} />;
 }
-
-ResourceLinks.propTypes = {
-  isIndented: PropTypes.bool,
-};
-
-ResourceLinks.defaultProps = {
-  isIndented: false,
-};
 
 export default React.memo(ResourceLinks);
