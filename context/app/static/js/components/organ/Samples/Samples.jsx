@@ -15,7 +15,7 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { useSearchHits } from 'js/hooks/useSearchData';
+import { useScrollSearchHits } from 'js/hooks/useSearchData';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
@@ -104,13 +104,13 @@ function Samples({ organTerms }) {
         },
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
-      size: 10000,
+      size: 50,
       sort,
     }),
     [organTerms, sort],
   );
 
-  const { searchHits, isLoading } = useSearchHits(query, {
+  const { searchHits, isLoading, getNextHits } = useScrollSearchHits(query, {
     use: [keepPreviousData],
   });
 
@@ -181,6 +181,9 @@ function Samples({ organTerms }) {
                   <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
                 </TableRow>
               ))}
+            <button type="button" onClick={getNextHits}>
+              MORE!
+            </button>
           </TableBody>
         </Table>
       </StyledTableContainer>

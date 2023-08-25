@@ -72,7 +72,8 @@ export const useSortState = (columnNameMapping: Record<string, string>) => {
       ? columnNameMapping[sortState.columnId]
       : sortState.columnId;
 
-  const sort = columnName ? [{ [columnName]: sortState.direction }] : [];
+  // The doc _id is used as a tiebreaker which is necessary for search_after queries.
+  const sort = columnName ? [{ [columnName]: sortState.direction }, { _id: 'asc' }] : [];
 
   return { sortState, sort, setSort, reset };
 };

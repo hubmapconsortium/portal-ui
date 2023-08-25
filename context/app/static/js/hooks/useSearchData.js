@@ -1,4 +1,6 @@
+import { useMemo, useCallback } from 'react';
 import useSWR from 'swr';
+import useSWRInfinite from 'swr/infinite';
 import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 
@@ -55,5 +57,49 @@ function useSearchHits(
   return { searchHits, isLoading };
 }
 
-export { fetchSearchData, useSearchHits };
+// Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
+function getSearchAfterSort(hits) {
+  const { sort } = hits.slice(-1)[0];
+  return sort;
+}
+
+const withFetcherArgs =
+  (query, ...rest) =>
+  (pageIndex, previousPageData) => {
+    const previousPageHits = previousPageData?.hits?.hits ?? [];
+
+    if (previousPageData && !previousPageHits.length) return null;
+    // First page, we return the key array unmodified.
+    if (pageIndex === 0) return [query, ...rest];
+
+    // Subsequent pages, we add the search after param to the query.
+    const searchAfterSort = getSearchAfterSort(previousPageHits);
+    return [{ ...query, search_after: searchAfterSort }, ...rest];
+  };
+
+function useScrollSearchHits(
+  query,
+  useDefaultQuery = false,
+  fetcher = fetchSearchData,
+  swrConfig = {
+    fallbackData: [],
+  },
+) {
+  const { elasticsearchEndpoint, groupsToken } = useAppContext();
+
+  const getKey = useMemo(
+    () => withFetcherArgs(query, elasticsearchEndpoint, groupsToken, useDefaultQuery),
+    [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
+  );
+
+  const { data, error, isLoading, size, setSize } = useSWRInfinite(getKey, (args) => fetcher(...args), swrConfig);
+
+  const getNextHits = useCallback(() => setSize(size + 1), [size, setSize]);
+
+  const searchHits = data.length > 0 ? data.map((d) => d?.hits?.hits).flat() : [];
+
+  return { searchHits, error, isLoading, setSize, getNextHits };
+}
+
+export { fetchSearchData, useSearchHits, useScrollSearchHits };
 export default useSearchData;
