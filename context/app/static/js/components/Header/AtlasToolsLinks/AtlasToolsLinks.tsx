@@ -2,8 +2,8 @@ import React from 'react';
 
 import LinkGroups, { LinksSectionProps } from '../LinkGroups';
 
-const groups = [
-  [
+const groups = {
+  ccf: [
     {
       href: 'https://humanatlas.io',
       label: 'Human Reference Atlas (HRA) Portal',
@@ -21,13 +21,13 @@ const groups = [
       label: 'Registration User Interface (RUI)',
     },
   ],
-  [
+  azimuth: [
     {
       href: 'https://azimuth.hubmapconsortium.org/',
       label: 'Azimuth: Reference-based single cell mapping',
     },
   ],
-  [
+  hra: [
     {
       href: 'https://hubmapconsortium.github.io/hra-previews/pilots/pilot1.html',
       label: 'HRA Preview: ASCT+B Reporter Comparison',
@@ -57,13 +57,13 @@ const groups = [
       label: 'HRA Preview: Mesh-Level Collision Detection',
     },
   ],
-  [
+  avr: [
     {
       href: 'https://avr.hubmapconsortium.org',
       label: 'Antibody Validation Reports',
     },
   ],
-];
+};
 
 function AtlasToolsLinks({ isIndented }: LinksSectionProps) {
   return <LinkGroups groups={groups} isIndented={isIndented} />;

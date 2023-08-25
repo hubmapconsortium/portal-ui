@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 
@@ -11,20 +11,24 @@ interface LinkType {
   label: string;
 }
 
+interface LinkGroupType {
+  [key: string]: LinkType[];
+}
+
 interface LinkGroupsProps extends LinksSectionProps {
-  groups: LinkType[][];
+  groups: LinkGroupType;
 }
 
 function LinkGroups({ groups, isIndented }: LinkGroupsProps) {
-  return groups.map((group, i) => (
-    <>
+  return Object.entries(groups).map(([k, group], i) => (
+    <Fragment key={k}>
       {i !== 0 && <StyledDivider />}
       {group.map(({ href, label }) => (
         <DropdownLink href={href} isIndented={isIndented} key={href}>
           {label}
         </DropdownLink>
       ))}
-    </>
+    </Fragment>
   ));
 }
 

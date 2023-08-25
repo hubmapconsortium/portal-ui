@@ -2,8 +2,8 @@ import React from 'react';
 
 import LinkGroups, { LinksSectionProps } from '../LinkGroups';
 
-const groups = [
-  [
+const groups = {
+  other: [
     {
       href: '/collections',
       label: 'Data Collections',
@@ -21,7 +21,7 @@ const groups = [
       label: 'Molecular Data Queries - BETA',
     },
   ],
-];
+};
 
 function OtherLinks({ isIndented }: LinksSectionProps) {
   return <LinkGroups groups={groups} isIndented={isIndented} />;
