@@ -12,19 +12,28 @@ type DetailAccordionProps = React.PropsWithChildren<{
 }> &
   AccordionProps;
 
-function DetailAccordion({ summary, children, summaryProps, detailsProps, ...accordionProps }: DetailAccordionProps) {
-  // wrap summary in Typography if it's a string to apply basic styling
-  const wrappedSummary =
-    typeof summary === 'string' ? (
+/**
+ * Apply default styling to the passed summary prop
+ * @param props.summary The accordion summary
+ * @returns The accordion summary wrapped in default styles if the summary is a string
+ */
+function FormattedSummary({ summary }: Pick<DetailAccordionProps, 'summary'>) {
+  if (typeof summary === 'string') {
+    return (
       <Typography variant="body2" component="span" display="inline-block">
         {summary}
       </Typography>
-    ) : (
-      summary
     );
+  }
+  return summary;
+}
+
+function DetailAccordion({ summary, children, summaryProps, detailsProps, ...accordionProps }: DetailAccordionProps) {
   return (
     <Accordion {...accordionProps}>
-      <AccordionSummary {...summaryProps}>{wrappedSummary}</AccordionSummary>
+      <AccordionSummary {...summaryProps}>
+        <FormattedSummary summary={summary} />
+      </AccordionSummary>
       <AccordionDetails {...detailsProps}>{children}</AccordionDetails>
     </Accordion>
   );
