@@ -141,7 +141,7 @@ The webpack dev server proxies all requests outside of those for files in the pu
 Note: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for version 2.0 can be found [here](https://github.com/searchkit/searchkit/tree/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs).
 
 ### Changelog files
-Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md` at the root of the repository. These are concatenated by `etc/build/push.sh`.
+Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md` at the root of the repository. These are concatenated by `etc/build/push.sh` during deploy.
 
 ### File and directory structure conventions
 
@@ -153,8 +153,11 @@ Every PR should be reviewed, and every PR should include a new `CHANGELOG-someth
 - Components with tests or styles should be placed in to their own directory.
 - Styles should follow the `style.*` pattern where the extension is `js` for styled components or `css` for stylesheets.
   - New styled components should use `styled` from `@mui/styles`.
-- Tests should follow the `*.spec.js` pattern...
-- and stories should follow the `*.stories.js` pattern. For both, the prefix is the name of the component.
+- Supporting test files have specific naming conventions:
+  - Jest Tests should follow the `*.spec.js` pattern.
+  - Stories should follow the `*.stories.js` pattern.
+  - Cypress tests should follow the `*.cy.js` pattern.
+  - For all test files, the prefix is the name of the component.
 - Each component directory should have an `index.js` which exports the component as default.
 - Components which share a common domain can be placed in a directory within components named after the domain.
 
@@ -163,7 +166,7 @@ Every PR should be reviewed, and every PR should include a new `CHANGELOG-someth
 <details><summary>:framed_picture: Images</summary>
 
 Images should displayed using the `source srcset` attribute. You should prepare four versions of the image starting at its original size and at 75%, 50% and 25% the original image's size preserving its aspect ratio. If available, you should also provide a 2x resolution for higher density screens. 
-- For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as [ImgOptim](https://imageoptim.com/mac).
+- For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as [ImgOptim](https://imageoptim.com/mac) or [Online Image Compressor](https://imagecompressor.com/).
 
 Finally after processing, the images should be added to the S3 bucket, `portal-ui-images-s3-origin`,
 to be delivered by the cloudfront CDN.
@@ -177,10 +180,16 @@ For the homepage carousel, images should have a 16:9 aspect ratio, a width of at
 </details>
 
 ## Testing
-Python unit tests use Pytest, front end tests use Jest, an end-to-end tests use Cypress.
-Each suite is run separately on Gihub CI.
+Python unit tests use Pytest, front end tests use Jest, and end-to-end tests use Cypress.
+Each suite is run separately on GitHub CI.
 
 Load tests [are available](end-to-end/artillery/), but they are not run as part of CI.
+
+### Running tests locally without docker
+- **Jest**: `cd context; npm run test`
+- **Cypress**: `cd end-to-end; npm run cypress:open` 
+  - If using WSL2, see the WSL2-specific steps in the [end to end readme](./end-to-end/README.md).
+- **Pytest**: `cd context; pytest app --ignore app/api/vitessce_conf_builder`  
 
 ### Linting and pre-commit hooks
 CI lints the codebase, and to save time, we also lint in a pre-commit hook.
