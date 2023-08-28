@@ -197,8 +197,11 @@ If you want to bypass the hook, set `HUSKY_SKIP_HOOKS=1`.
 
 You can also lint and auto-correct from the command-line:
 ```
+cd context
 npm run lint
 npm run lint:fix
+EXCLUDE=node_modules,ingest-validation-tools,etc/dev/organ-utils
+autopep8 --in-place --aggressive -r . --exclude $EXCLUDE
 ```
 
 ### Storybook
