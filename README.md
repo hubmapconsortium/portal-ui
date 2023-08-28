@@ -187,8 +187,9 @@ Load tests [are available](end-to-end/artillery/), but they are not run as part 
 
 ### Running tests locally without docker
 - **Jest**: `cd context; npm run test`
-- **Cypress**: `cd end-to-end; npm run cypress:open` 
+- **Cypress**: With the application running, `cd end-to-end; npm run cypress:open` 
   - If using WSL2, see the WSL2-specific steps in the [end to end readme](./end-to-end/README.md).
+  - Note that the cypress tests (particularly for the publication page) are expected to be run with the `test` environment enabled in app.conf
 - **Pytest**: `cd context; pytest app --ignore app/api/vitessce_conf_builder`  
 
 ### Linting and pre-commit hooks
