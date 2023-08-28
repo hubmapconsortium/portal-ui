@@ -119,8 +119,12 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
   - ```nvm use `cat .nvmrc` ```
 
 Optional:
-- `VSCode`, with `eslint` and `prettier` plugins
+- `VS Code`, with [recommended extensions](./.vscode/extensions.json).
+  - While this is optional, it is worth noting that it is in use by the whole development team
+  - Using VS Code lets us share [default configuration settings](./.vscode/default.settings.json) and easily run scripts using [VS Code tasks](./.vscode/tasks.json).
 - `docker`
+  - Docker is necessary in order to create images for the [deploy process](https://hms-dbmi.atlassian.net/wiki/spaces/GL/pages/3009282049/Deployment)
+  - It is also used to run a local instance of the application when using the test scripts in the `./etc` directory
 
 ### Development
 
