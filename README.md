@@ -131,6 +131,7 @@ Optional:
 After checking out the project, cd-ing into it, and setting up a Python 3.9 virtual environment,
 - Get `app.conf` from [Confluence](https://hms-dbmi.atlassian.net/wiki/spaces/GL/pages/3045457929/app.conf) or from another developer and place it at `context/instance/app.conf`.
 - Run `etc/dev/dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
+  - If using VS Code, you can also use the `dev-start` task, which will launch these services in separate terminal windows.
 
 You will see an warning about `Cannot find source file '../src/index.ts'`, but just ignore it; [Issue filed](https://github.com/hubmapconsortium/portal-ui/issues/1489).
 
