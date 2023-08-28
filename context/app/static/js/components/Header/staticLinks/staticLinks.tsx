@@ -1,10 +1,6 @@
 import React from 'react';
 
-import LinkGroups, { LinkGroupType } from '../LinkGroups';
-
-interface LinksSectionProps {
-  isIndented: boolean;
-}
+import LinkGroups, { LinkGroupType, LinksSectionProps } from '../LinkGroups';
 
 function withLinkGroups(groups): LinkGroupType {
   return function LinksSection({ isIndented }: LinksSectionProps) {

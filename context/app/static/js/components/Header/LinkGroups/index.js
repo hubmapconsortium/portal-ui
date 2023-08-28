@@ -1,4 +1,4 @@
-import LinkGroups, { LinkGroupType } from './LinkGroups';
+import LinkGroups, { LinkGroupType, LinksSectionProps } from './LinkGroups';
 
-export type { LinkGroupType };
+export type { LinkGroupType, LinksSectionProps };
 export default LinkGroups;

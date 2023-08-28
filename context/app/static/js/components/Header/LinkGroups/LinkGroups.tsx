@@ -2,18 +2,18 @@ import React, { Fragment } from 'react';
 import DropdownLink from '../DropdownLink';
 import { StyledDivider } from '../HeaderContent/style';
 
-interface LinkType {
+type LinkType = {
   href: string;
   label: string;
+};
+
+type LinkGroupType = Record<string, LinkType[]>;
+
+interface LinksSectionProps {
+  isIndented: boolean;
 }
 
-interface LinkGroupType {
-  [key: string]: LinkType[];
-}
-
-interface LinkGroupsProps extends LinksSectionProps {
-  groups: LinkGroupType;
-}
+type LinkGroupsProps = LinksSectionProps & { groups: LinkGroupType };
 
 function LinkGroups({ groups, isIndented }: LinkGroupsProps) {
   return Object.entries(groups).map(([k, group], i) => (
@@ -28,5 +28,5 @@ function LinkGroups({ groups, isIndented }: LinkGroupsProps) {
   ));
 }
 
-export type { LinkGroupType };
+export type { LinkGroupType, LinksSectionProps };
 export default LinkGroups;
