@@ -14,7 +14,7 @@ import { UnprocessedFile } from '../types';
 import { FilesContextProvider } from '../FilesContext';
 import { FileSize } from './FileSize';
 import { DataProduct } from './DataProduct';
-import MultiFileDownloader from './MultiFileDownloader';
+import MultiFileDownloader from '../MultiFileDownloader';
 import { useFileLinks } from './hooks';
 import { DownloadAllButton } from './DownloadAllButton';
 
