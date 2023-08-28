@@ -45,9 +45,9 @@ export function DataProducts({ files }: DataProductsProps) {
             </Box>
             <FileSize size={totalFileSize} variant="body1" color="secondary.secondary" />
           </Box>
-          <Button variant="contained" color="primary" startIcon={<DownloadIcon />} sx={{ borderRadius: '4px' }}>
+          {/* <Button variant="contained" color="primary" startIcon={<DownloadIcon />} sx={{ borderRadius: '4px' }}>
             Download All
-          </Button>
+          </Button> */}
         </Box>
         <Stack divider={<Divider />}>
           {dataProducts.map((file) => (
