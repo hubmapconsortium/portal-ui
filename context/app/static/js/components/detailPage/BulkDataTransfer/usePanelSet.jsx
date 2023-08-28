@@ -3,7 +3,7 @@ import React from 'react';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
-import HelpLink variant="body2" from 'js/shared-styles/Links/HelpLink variant="body2"';
+import HelpLink from 'js/shared-styles/Links/HelpLink';
 import GlobusLink from './GlobusLink';
 import { useFetchProtectedFile } from './hooks';
 import { LoginButton } from './style';
@@ -43,8 +43,8 @@ const loginPanel = {
   status: 'error',
   children: (
     <>
-      Please <InternalLink href="/login">log in</InternalLink> for Globus access or email <HelpLink variant="body2" /> with the dataset
-      ID about the files you are trying to access.
+      Please <InternalLink href="/login">log in</InternalLink> for Globus access or email <HelpLink variant="body2" />{' '}
+      with the dataset ID about the files you are trying to access.
     </>
   ),
   addOns: (
@@ -119,8 +119,8 @@ const ACCESS_TO_PROTECTED_DATA = {
           You are authorized to access protected-access human sequence data through the Globus Research Data Management
           System. Please review and follow all{' '}
           <OutboundLink href="https://hubmapconsortium.org/policies/">policies</OutboundLink> related to the use of
-          these protected data. If you require additional help, email <HelpLink variant="body2" /> with the dataset ID and information
-          about the files you are trying to access.
+          these protected data. If you require additional help, email <HelpLink variant="body2" /> with the dataset ID
+          and information about the files you are trying to access.
         </>
       ),
     },
@@ -184,8 +184,8 @@ const ENTITY_API_ERROR = {
     tooltip: globusText.tooltip,
     children: (
       <>
-        The API failed to retrieve the link to Globus. Please report this issue to <HelpLink variant="body2" /> with the dataset ID and
-        information about the files you are trying to access.
+        The API failed to retrieve the link to Globus. Please report this issue to <HelpLink variant="body2" /> with the
+        dataset ID and information about the files you are trying to access.
       </>
     ),
   },
