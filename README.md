@@ -133,8 +133,6 @@ After checking out the project, cd-ing into it, and setting up a Python 3.9 virt
 - Run `etc/dev/dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
   - If using VS Code, you can also use the `dev-start` task, which will launch these services in separate terminal windows.
 
-You will see an warning about `Cannot find source file '../src/index.ts'`, but just ignore it; [Issue filed](https://github.com/hubmapconsortium/portal-ui/issues/1489).
-
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
 
