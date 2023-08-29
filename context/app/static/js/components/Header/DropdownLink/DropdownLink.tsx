@@ -11,7 +11,6 @@ type DropdownLinkProps = {
 function DropdownLink({ href, isIndented, children, ...rest }: PropsWithChildren<DropdownLinkProps>) {
   return (
     <MenuItem
-      $isIndented={isIndented}
       {...rest}
       sx={({ spacing, palette }) => ({
         color: palette.primary.main,
