@@ -1,6 +1,5 @@
 import React, { Fragment } from 'react';
 import DropdownLink from '../DropdownLink';
-import { StyledDivider } from '../HeaderContent/style';
 
 type LinkType = {
   href: string;
@@ -16,11 +15,16 @@ interface LinksSectionProps {
 type LinkGroupsProps = LinksSectionProps & { groups: LinkGroupType };
 
 function LinkGroups({ groups, isIndented }: LinkGroupsProps) {
-  return Object.entries(groups).map(([k, group], i) => (
+  return Object.entries(groups).map(([k, group], groupsIndex) => (
     <Fragment key={k}>
-      {i !== 0 && <StyledDivider />}
-      {group.map(({ href, label }) => (
-        <DropdownLink href={href} isIndented={isIndented} key={href}>
+      {group.map(({ href, label }, groupIndex) => (
+        <DropdownLink
+          href={href}
+          isIndented={isIndented}
+          key={href}
+          // Display a divider after the last link in each group, but not after the last group.
+          divider={groupIndex === group.length - 1 && groupsIndex !== Object.keys(groups).length - 1}
+        >
           {label}
         </DropdownLink>
       ))}

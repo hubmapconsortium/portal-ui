@@ -2,13 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Link from '@mui/material/Link';
 
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { StyledMenuItem } from './style';
 
-function DropdownLink({ isIndented, children, isOutboundLink, ...rest }) {
+function DropdownLink({ href, isIndented, children, ...rest }) {
   return (
-    <StyledMenuItem $isIndented={isIndented} {...rest} component={isOutboundLink ? OutboundLink : Link}>
-      {children}
+    <StyledMenuItem $isIndented={isIndented} {...rest}>
+      <Link href={href}>{children}</Link>
     </StyledMenuItem>
   );
 }
