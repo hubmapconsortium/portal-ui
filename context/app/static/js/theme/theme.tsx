@@ -48,7 +48,6 @@ declare module '@mui/material/styles' {
   export interface CommonColors {
     link: string;
     halfShadow: string;
-    transparentGray: string;
   }
   export interface Palette {
     black: BlackVariants;
@@ -86,7 +85,6 @@ const theme = createTheme({
     common: {
       link: blue,
       halfShadow: 'rgb(0, 0, 0, 0.54)',
-      transparentGray: 'rgba(144, 144, 144, 0.1)',
     },
     primary: {
       main: purple,
