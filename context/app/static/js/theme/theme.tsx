@@ -3,14 +3,97 @@ import { createTheme } from '@mui/material/styles';
 const purple = '#444A65';
 const blue = '#2A6FB8';
 
+interface ProvenanceColors {
+  highEmphasis: string;
+  step: string;
+  default: string;
+  input: string;
+  output: string;
+  group: string;
+  parameter: string;
+  inputFile: string;
+  global: string;
+}
+
+interface BlackVariants {
+  highEmphasis: string;
+  mediumEmphasis: string;
+  lowEmphasis: string;
+  hover: string;
+  focus: string;
+  dragged: string;
+}
+
+interface WhiteVariants {
+  main: string;
+  hover: string;
+  focus: string;
+}
+
+interface CaptionColors {
+  background: string;
+  link: string;
+}
+
+declare module '@mui/material/styles' {
+  export interface ZIndex {
+    tutorial: number;
+    dropdownOffset: number;
+    entityHeader: number;
+    dropdown: number;
+    visualization: number;
+    fileBrowserHeader: number;
+  }
+  export type ZIndexOptions = Partial<ZIndex>;
+  export interface CommonColors {
+    link: string;
+    halfShadow: string;
+    transparentGray: string;
+  }
+  export interface Palette {
+    black: BlackVariants;
+    white: WhiteVariants;
+    provenance: ProvenanceColors;
+    caption: CaptionColors;
+  }
+
+  export interface PaletteOptions {
+    black?: BlackVariants;
+    white?: WhiteVariants;
+    provenance?: ProvenanceColors;
+    caption?: CaptionColors;
+  }
+
+  export interface PaletteColor {
+    lowEmphasis?: string;
+    hover?: string;
+  }
+  export interface SimplePaletteColorOptions {
+    lowEmphasis?: string;
+    hover?: string;
+  }
+
+  export interface Theme {
+    palette: Palette;
+    zIndex: ZIndex;
+  }
+  export type ThemeOptions = Partial<Theme>;
+}
+
 // default HuBMAP color and font theme
 const theme = createTheme({
   palette: {
+    common: {
+      link: blue,
+      halfShadow: 'rgb(0, 0, 0, 0.54)',
+      transparentGray: 'rgba(144, 144, 144, 0.1)',
+    },
     primary: {
       main: purple,
       hover: 'brightness(108%)',
       light: '#696e83',
       dark: '#2f3346',
+      lowEmphasis: `${purple}26`, // 38% opacity
     },
     secondary: {
       main: '#636363',
@@ -32,38 +115,24 @@ const theme = createTheme({
       light: '#5f9ada',
       dark: '#265a92',
     },
-    link: {
-      main: blue,
-    },
     success: {
       main: '#6C8938', // '#9BC551'
       light: '#89a05f',
       dark: '#4b5f27',
     },
-    caption: {
-      background: '#EEEEFF',
-      link: '#3781D1',
-    },
     white: {
       main: '#fff',
       hover: 'brightness(96%)',
-    },
-    halfShadow: {
-      main: 'rgb(0, 0, 0, 0.54)',
+      focus: 'brightness(92%)',
     },
     action: {
+      active: '#9CB965',
       disabled: 'rgba(0,0,0, 0.38)',
-    },
-    hoverShadow: {
-      main: 'rgb(0, 0, 0, 0.08)',
-    },
-    transparentGray: {
-      main: 'rgba(144, 144, 144, 0.1)',
     },
     background: {
       default: '#fafafa',
     },
-    type: 'light',
+    mode: 'light',
   },
   typography: {
     fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif',
