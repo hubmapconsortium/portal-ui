@@ -136,7 +136,7 @@ After checking out the project, cd-ing into it, and setting up a Python 3.9 virt
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
 
-Note: Searchkit, our interface to Elasticsearch, has changed significantly in the lastest release. Documentation for version 2.0 can be found [here](https://github.com/searchkit/searchkit/tree/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs).
+Note: Searchkit, our interface to Elasticsearch, has changed significantly in the latest release. Documentation for version 2.0 can be found [here](https://github.com/searchkit/searchkit/tree/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs).
 
 ### Changelog files
 Every PR should be reviewed, and every PR should include a new `CHANGELOG-something.md` at the root of the repository. These are concatenated by `etc/build/push.sh` during deploy.
