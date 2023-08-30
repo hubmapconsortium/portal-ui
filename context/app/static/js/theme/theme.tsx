@@ -4,7 +4,6 @@ const purple = '#444A65';
 const blue = '#2A6FB8';
 
 interface ProvenanceColors {
-  highEmphasis: string;
   step: string;
   default: string;
   input: string;
@@ -130,6 +129,16 @@ const theme = createTheme({
       main: '#fff',
       hover: 'brightness(96%)',
       focus: 'brightness(92%)',
+    },
+    provenance: {
+      step: '#fff',
+      default: '#fff',
+      input: '#fff',
+      output: '#fff',
+      group: '#fff',
+      parameter: '#fff',
+      inputFile: '#fff',
+      global: '#fff',
     },
     action: {
       active: '#9CB965',
