@@ -118,6 +118,14 @@ const theme = createTheme({
       light: '#89a05f',
       dark: '#4b5f27',
     },
+    black: {
+      highEmphasis: '#000',
+      mediumEmphasis: 'rgba(0,0,0, 0.6)',
+      lowEmphasis: 'rgba(0,0,0, 0.38)',
+      hover: 'rgba(0,0,0, 0.04)',
+      focus: 'rgba(0,0,0, 0.12)',
+      dragged: 'rgba(0,0,0, 0.08)',
+    },
     white: {
       main: '#fff',
       hover: 'brightness(96%)',
