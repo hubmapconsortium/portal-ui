@@ -173,6 +173,14 @@ SVG files smaller than 5KB can be included in the repository in `context/app/sta
 The CDN responds with a `cache-control: max-age=1555200` header for all items,
 but can be overridden on a per image basis by setting the `cache-control` header for the object in S3.
 
+If an uploaded file replaces an existing one and uses the same file name, a CloudFront cache invalidation should be run, targeting the specific file(s) that have been updated.
+ - Log in to the AWS console and go to [distributions](https://us-east-1.console.aws.amazon.com/cloudfront/v3/home?region=us-east-1#/distributions)
+ - Select the distribution corresponding to the S3 server.
+ - Go to the `Invalidations` tab and click `Create Invalidation`.
+ - Enter the file names which should be invalidated in cache, with the full path; you can target multiple similar file names by using wildcards
+   - e.g. to invalidate all files in `/` starting with `publication-slide`, you would enter `/publication-slide*`, which would select all the different sizes of that image.
+ - After confirming that you are targeting only the intended files, click `Create Invalidation` again.
+
 For the homepage carousel, images should have a 16:9 aspect ratio, a width of at least 1400px, a title, a description, and, if desired, a url to be used for the 'Get Started' button.
 
 </details>
