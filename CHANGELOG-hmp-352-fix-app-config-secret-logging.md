@@ -1,0 +1,1 @@
+- Adjust app config logging to prevent logging secrets.
