@@ -43,7 +43,7 @@ export function DataProducts({ files }: DataProductsProps) {
                 <StyledInfoIcon color="primary" />
               </SecondaryBackgroundTooltip>
             </Box>
-            <FileSize size={totalFileSize} variant="body1" color="secondary.secondary" />
+            <FileSize size={totalFileSize} variant="body1" color="secondary.main" />
           </Box>
           {/* <Button variant="contained" color="primary" startIcon={<DownloadIcon />} sx={{ borderRadius: '4px' }}>
             Download All
