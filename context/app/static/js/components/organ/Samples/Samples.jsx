@@ -1,6 +1,8 @@
+/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-underscore-dangle */
 import React, { useMemo } from 'react';
 import format from 'date-fns/format';
+import { TableVirtuoso } from 'react-virtuoso';
 
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -79,6 +81,14 @@ function SampleHeaderCell({ column, setSort, sortState }) {
   );
 }
 
+const TableComponents = {
+  Scroller: React.forwardRef((props, ref) => <StyledTableContainer component={Paper} {...props} ref={ref} />),
+  Table: (props) => <Table {...props} style={{ borderCollapse: 'separate' }} stickyHeader />,
+  TableHead,
+  TableRow,
+  TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
+};
+
 function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
@@ -138,9 +148,12 @@ function Samples({ organTerms }) {
           </>
         }
       />
-      <StyledTableContainer component={Paper}>
-        <Table stickyHeader>
-          <TableHead sx={{ position: 'relative' }}>
+      <TableVirtuoso
+        style={{ height: 400 }}
+        data={searchHits}
+        components={TableComponents}
+        fixedHeaderContent={() => (
+          <>
             <TableRow>
               <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
               {columns.map((column) => (
@@ -158,37 +171,32 @@ function Samples({ organTerms }) {
               }}
               variant="indeterminate"
             />
-          </TableHead>
-          <TableBody>
-            {searchHits
-              .map((hit) => {
-                if (!hit._source.donor) {
-                  // eslint-disable-next-line no-param-reassign
-                  hit._source.donor = {};
-                }
-                return hit;
-              })
-              .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (
-                <TableRow key={uuid}>
-                  <SelectableRowCell rowKey={uuid} />
-                  <TableCell>
-                    <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
-                      {hubmap_id}
-                    </InternalLink>
-                  </TableCell>
-                  <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
-                  <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
-                  <TableCell>{donor?.mapped_metadata?.race}</TableCell>
-                  <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
-                  <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-                </TableRow>
-              ))}
-            <button type="button" onClick={getNextHits} disabled={isReachingEnd}>
-              MORE!
-            </button>
-          </TableBody>
-        </Table>
-      </StyledTableContainer>
+          </>
+        )}
+        itemContent={(
+          index,
+          { _id: uuid, _source: { hubmap_id, donor = {}, descendant_counts, last_modified_timestamp } },
+        ) => (
+          <>
+            <SelectableRowCell rowKey={uuid} />
+            <TableCell>
+              <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
+                {hubmap_id}
+              </InternalLink>
+            </TableCell>
+            <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
+            <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
+            <TableCell>{donor?.mapped_metadata?.race}</TableCell>
+            <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
+            <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
+            <TableCell>
+              <button type="button" onClick={getNextHits} disabled={isReachingEnd}>
+                MORE!
+              </button>
+            </TableCell>
+          </>
+        )}
+      />
     </SectionContainer>
   );
 }
