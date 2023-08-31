@@ -70,12 +70,27 @@ const withFetcherArgs =
 
     if (previousPageData && !previousPageHits.length) return null;
     // First page, we return the key array unmodified.
-    if (pageIndex === 0) return [query, ...rest];
+    if (pageIndex === 0) return [{ ...query, track_total_hits: true }, ...rest];
 
     // Subsequent pages, we add the search after param to the query.
     const searchAfterSort = getSearchAfterSort(previousPageHits);
     return [{ ...query, search_after: searchAfterSort }, ...rest];
   };
+
+const getHits = (d) => d?.hits;
+
+function getCombinedHits(data) {
+  const hasData = data.length > 0;
+
+  if (!hasData) {
+    return { totalHitsCount: undefined, searchHits: [] };
+  }
+
+  return {
+    totalHitsCount: getHits(data[0])?.total?.value,
+    searchHits: data.map((d) => getHits(d)?.hits).flat(),
+  };
+}
 
 function useScrollSearchHits(
   query,
@@ -96,9 +111,9 @@ function useScrollSearchHits(
 
   const getNextHits = useCallback(() => setSize(size + 1), [size, setSize]);
 
-  const searchHits = data.length > 0 ? data.map((d) => d?.hits?.hits).flat() : [];
+  const { searchHits, totalHitsCount } = getCombinedHits(data);
 
-  return { searchHits, error, isLoading, setSize, getNextHits };
+  return { searchHits, error, isLoading, setSize, getNextHits, totalHitsCount };
 }
 
 export { fetchSearchData, useSearchHits, useScrollSearchHits };

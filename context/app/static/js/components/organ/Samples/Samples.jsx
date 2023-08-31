@@ -110,7 +110,7 @@ function Samples({ organTerms }) {
     [organTerms, sort],
   );
 
-  const { searchHits, isLoading, getNextHits } = useScrollSearchHits(query, {
+  const { searchHits, isLoading, getNextHits, totalHitsCount } = useScrollSearchHits(query, {
     use: [keepPreviousData],
   });
 
@@ -120,7 +120,7 @@ function Samples({ organTerms }) {
         leftText={
           <div>
             <StyledSectionHeader>Samples</StyledSectionHeader>
-            <Typography variant="subtitle1">{searchHits.length} Samples</Typography>
+            <Typography variant="subtitle1">{totalHitsCount} Samples</Typography>
           </div>
         }
         buttons={
