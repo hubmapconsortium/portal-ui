@@ -83,6 +83,8 @@ function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
   const { sortState, setSort, sort } = useSortState(columnIdMap);
+
+  const pageSize = 50;
   const query = useMemo(
     () => ({
       post_filter: {
@@ -104,13 +106,13 @@ function Samples({ organTerms }) {
         },
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
-      size: 50,
+      size: pageSize,
       sort,
     }),
     [organTerms, sort],
   );
 
-  const { searchHits, isLoading, getNextHits, totalHitsCount } = useScrollSearchHits(query, {
+  const { searchHits, isLoading, getNextHits, totalHitsCount, isReachingEnd } = useScrollSearchHits(query, {
     use: [keepPreviousData],
   });
 
@@ -181,7 +183,7 @@ function Samples({ organTerms }) {
                   <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
                 </TableRow>
               ))}
-            <button type="button" onClick={getNextHits}>
+            <button type="button" onClick={getNextHits} disabled={isReachingEnd}>
               MORE!
             </button>
           </TableBody>

@@ -94,26 +94,32 @@ function getCombinedHits(data) {
 
 function useScrollSearchHits(
   query,
-  useDefaultQuery = false,
-  fetcher = fetchSearchData,
-  swrConfig = {
-    fallbackData: [],
+  { useDefaultQuery = false, fetcher = fetchSearchData, pageSize, ...swrConfigRest } = {
+    useDefaultQuery: false,
+    fetcher: fetchSearchData,
   },
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
+  const swrConfig = { fallbackData: [], ...swrConfigRest };
 
   const getKey = useMemo(
     () => withFetcherArgs(query, elasticsearchEndpoint, groupsToken, useDefaultQuery),
     [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
   );
 
-  const { data, error, isLoading, size, setSize } = useSWRInfinite(getKey, (args) => fetcher(...args), swrConfig);
+  const { data, error, isLoading, size, setSize } = useSWRInfinite(getKey, (args) => fetcher(...args), {
+    ...swrConfig,
+  });
 
   const getNextHits = useCallback(() => setSize(size + 1), [size, setSize]);
 
   const { searchHits, totalHitsCount } = getCombinedHits(data);
 
-  return { searchHits, error, isLoading, setSize, getNextHits, totalHitsCount };
+  const isEmpty = data?.[0]?.hits?.hits?.length === 0;
+
+  const isReachingEnd = isEmpty || searchHits.length === totalHitsCount;
+
+  return { searchHits, error, isLoading, setSize, getNextHits, totalHitsCount, isReachingEnd };
 }
 
 export { fetchSearchData, useSearchHits, useScrollSearchHits };
