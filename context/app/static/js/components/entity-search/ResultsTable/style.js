@@ -6,7 +6,7 @@ const StyledTableRow = styled(TableRow)`
   // What looks white is actually transparent and brightness() has no effect.
   background-color: ${(props) => props.theme.palette.white.main};
   :hover {
-    filter: ${(props) => props.theme.palette.white.hover};
+    background-color: ${(props) => props.theme.palette.white.hover};
   }
 `;
 

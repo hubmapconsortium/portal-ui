@@ -13,7 +13,7 @@ const StyledRow = styled(TableRow)`
       : css`
           cursor: pointer;
           &:hover {
-            filter: ${props.theme.palette.white.hover};
+            background-color: ${props.theme.palette.white.hover};
           }
         `}
 `;
