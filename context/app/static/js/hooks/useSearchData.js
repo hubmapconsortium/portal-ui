@@ -77,7 +77,9 @@ const withFetcherArgs =
     return [{ ...query, search_after: searchAfterSort }, ...rest];
   };
 
-const getHits = (d) => d?.hits;
+const getOuterHits = (d) => d?.hits;
+
+const getFirstPageHits = (d) => getOuterHits(d[0]);
 
 function getCombinedHits(data) {
   const hasData = data.length > 0;
@@ -87,8 +89,8 @@ function getCombinedHits(data) {
   }
 
   return {
-    totalHitsCount: getHits(data[0])?.total?.value,
-    searchHits: data.map((d) => getHits(d)?.hits).flat(),
+    totalHitsCount: getFirstPageHits(data)?.total?.value,
+    searchHits: data.map((d) => getOuterHits(d)?.hits).flat(),
   };
 }
 
@@ -115,7 +117,7 @@ function useScrollSearchHits(
 
   const { searchHits, totalHitsCount } = getCombinedHits(data);
 
-  const isEmpty = data?.[0]?.hits?.hits?.length === 0;
+  const isEmpty = getFirstPageHits(data)?.hits?.length === 0;
 
   const isReachingEnd = isEmpty || searchHits.length === totalHitsCount;
 
