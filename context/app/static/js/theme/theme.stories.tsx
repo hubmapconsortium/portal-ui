@@ -24,7 +24,7 @@ function hex2rgb(c: string) {
     const a = parseInt(color.slice(index, index + interval), 16);
     return `rgba(${r}, ${g}, ${b}, 0.${a})`;
   }
-  return `rgba(${r}, ${g}, ${b}, 1.00)`;
+  return `rgb(${r}, ${g}, ${b})`;
 }
 
 function rgb2hex(c: string) {
@@ -33,7 +33,7 @@ function rgb2hex(c: string) {
   const g = parseInt(rgb[1], 10).toString(16).padStart(2, '0');
   const b = parseInt(rgb[2], 10).toString(16).padStart(2, '0');
   if (Number.isNaN(parseInt(rgb[3], 16))) {
-    return `#${r}${g}${b}ff`;
+    return `#${r}${g}${b}`;
   }
   const a = parseInt(rgb[3], 10).toString(16).padStart(2, '0');
 
