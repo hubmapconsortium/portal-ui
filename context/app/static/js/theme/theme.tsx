@@ -150,6 +150,10 @@ const theme = createTheme({
     background: {
       default: '#fafafa',
     },
+    caption: {
+      background: '#EEEEFF',
+      link: '#3781D1',
+    },
   },
   typography: {
     fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif',
