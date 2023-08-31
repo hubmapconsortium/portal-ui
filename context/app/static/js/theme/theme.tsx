@@ -150,7 +150,6 @@ const theme = createTheme({
     background: {
       default: '#fafafa',
     },
-    mode: 'light',
   },
   typography: {
     fontFamily: 'Inter Variable, Helvetica, Arial, sans-serif',

@@ -8,7 +8,7 @@ const Flex = styled.div`
 
 const StyledInfoIcon = styled(InfoIcon)`
   margin-left: ${(props) => props.theme.spacing(0.5)};
-  font-size: 1.1rem;
+  font-size: 1.5rem;
 `;
 
 const StyledDiv = styled.div`
