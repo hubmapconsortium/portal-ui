@@ -1,0 +1,1 @@
+- Use reusable HelpLink component where the hubmap support email is referenced.

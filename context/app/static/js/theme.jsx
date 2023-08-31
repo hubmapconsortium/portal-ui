@@ -153,6 +153,11 @@ const theme = createTheme({
         },
       },
     },
+    MuiLink: {
+      defaultProps: {
+        underline: 'none',
+      },
+    },
   },
 });
 

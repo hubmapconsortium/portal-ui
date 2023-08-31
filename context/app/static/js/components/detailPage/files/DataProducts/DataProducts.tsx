@@ -44,7 +44,7 @@ function DataProducts({ files }: DataProductsProps) {
 
   return (
     <FilesContextProvider>
-      <Paper sx={{ p: 2, borderTop: `1px solid ${theme.palette.outline}` }} data-testid="data-products-container">
+      <Paper sx={{ p: 2, borderTop: `1px solid ${theme.palette.divider}` }} data-testid="data-products-container">
         <Box display="flex" justifyContent="space-between" alignItems="start" pb={2}>
           <Box data-testid="data-products-title-and-size">
             <Box display="flex" alignItems="center">

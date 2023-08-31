@@ -1,10 +1,14 @@
-import React from 'react';
-import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
+import React, { ComponentProps, PropsWithChildren } from 'react';
+import EmailIconLink from './iconLinks/EmailIconLink';
 
-function HelpLink(props) {
+type HelpLinkProps = PropsWithChildren<ComponentProps<typeof EmailIconLink>>;
+
+const helpEmail = 'help@hubmapconsortium.org';
+
+function HelpLink({ children, ...props }: HelpLinkProps) {
   return (
-    <EmailIconLink email="help@hubmapconsortium.org" {...props}>
-      help@hubmapconsortium.org
+    <EmailIconLink {...props} email={helpEmail}>
+      {children ?? helpEmail}
     </EmailIconLink>
   );
 }

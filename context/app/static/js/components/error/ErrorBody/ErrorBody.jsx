@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
+import HelpLink from 'js/shared-styles/Links/HelpLink';
 
 function LoginLink() {
   return <InternalLink href="/login">login</InternalLink>;
 }
 function HelpEmailLink() {
-  return <EmailIconLink email="help@hubmapconsortium.org">help@hubmapconsortium.org</EmailIconLink>;
+  return <HelpLink />;
 }
 
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
