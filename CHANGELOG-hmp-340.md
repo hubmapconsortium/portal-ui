@@ -1,0 +1,1 @@
+- Add "Download All" functionality to data products panel.
