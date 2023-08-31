@@ -15,9 +15,6 @@ interface ProvenanceColors {
 }
 
 interface BlackVariants {
-  highEmphasis: string;
-  mediumEmphasis: string;
-  lowEmphasis: string;
   hover: string;
   focus: string;
   dragged: string;
@@ -120,9 +117,6 @@ const theme = createTheme({
       dark: '#4b5f27',
     },
     black: {
-      highEmphasis: 'rgba(0,0,0, 0.87)',
-      mediumEmphasis: 'rgba(0,0,0, 0.6)',
-      lowEmphasis: 'rgba(0,0,0, 0.38)',
       hover: 'rgba(0,0,0, 0.04)',
       focus: 'rgba(0,0,0, 0.12)',
       dragged: 'rgba(0,0,0, 0.16)',
