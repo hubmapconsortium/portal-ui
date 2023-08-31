@@ -140,8 +140,8 @@ const theme = createTheme({
       output: '#D5EAC3',
       group: '#B0DA8B',
       parameter: '#CFDFF1',
-      inputFile: '#fff',
-      global: '#fff',
+      inputFile: '#E7E3F9',
+      global: '#FFB3B3',
     },
     action: {
       active: '#9CB965',
