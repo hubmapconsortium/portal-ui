@@ -89,7 +89,7 @@ const theme = createTheme({
     },
     primary: {
       main: purple,
-      hover: 'brightness(108%)',
+      hover: '#4f5675', // purple with 108% brightness applied
       light: '#696e83',
       dark: '#2f3346',
       lowEmphasis: `${purple}26`, // 38% opacity

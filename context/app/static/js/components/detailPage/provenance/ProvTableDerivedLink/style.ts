@@ -12,7 +12,7 @@ const LinkButton = styled('a')(({ theme }) => ({
   textAlign: 'center',
   '&:hover': {
     boxShadow: theme.shadows[8],
-    filter: theme.palette.primary.hover,
+    color: theme.palette.primary.hover,
   },
 }));
 
