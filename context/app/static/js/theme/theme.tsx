@@ -47,6 +47,7 @@ declare module '@mui/material/styles' {
   export interface CommonColors {
     link: string;
     halfShadow: string;
+    hoverShadow: string;
   }
   export interface Palette {
     black: BlackVariants;
@@ -84,6 +85,7 @@ const theme = createTheme({
     common: {
       link: blue,
       halfShadow: 'rgb(0, 0, 0, 0.54)',
+      hoverShadow: 'rgb(0, 0, 0, 0.08)',
     },
     primary: {
       main: purple,
@@ -113,30 +115,31 @@ const theme = createTheme({
       dark: '#265a92',
     },
     success: {
-      main: '#6C8938', // '#9BC551'
+      main: '#6C8938',
       light: '#89a05f',
       dark: '#4b5f27',
     },
     black: {
-      highEmphasis: '#000',
+      highEmphasis: 'rgba(0,0,0, 0.87)',
       mediumEmphasis: 'rgba(0,0,0, 0.6)',
       lowEmphasis: 'rgba(0,0,0, 0.38)',
       hover: 'rgba(0,0,0, 0.04)',
       focus: 'rgba(0,0,0, 0.12)',
-      dragged: 'rgba(0,0,0, 0.08)',
+      dragged: 'rgba(0,0,0, 0.16)',
     },
     white: {
       main: '#fff',
-      hover: 'brightness(96%)',
-      focus: 'brightness(92%)',
+      hover: '#FFFFFF0A', // 4% opacity
+      focus: '#FFFFFF1F', // 12% opacity
     },
+    divider: '#E0E0E0',
     provenance: {
-      step: '#fff',
-      default: '#fff',
-      input: '#fff',
-      output: '#fff',
-      group: '#fff',
-      parameter: '#fff',
+      step: '#B0C4DA',
+      default: '#E0E0E0',
+      input: '#CDC5F3',
+      output: '#D5EAC3',
+      group: '#B0DA8B',
+      parameter: '#CFDFF1',
       inputFile: '#fff',
       global: '#fff',
     },
