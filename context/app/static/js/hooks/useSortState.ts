@@ -2,7 +2,6 @@ import { useCallback, useReducer } from 'react';
 
 type SortState = {
   columnId?: string;
-  columnSortName?: string;
   direction?: 'asc' | 'desc';
 };
 
@@ -16,9 +15,8 @@ type SortAction =
     };
 
 const initialSortState: SortState = {
-  columnId: undefined,
-  columnSortName: undefined,
-  direction: undefined,
+  columnId: 'last_modified_timestamp',
+  direction: 'desc',
 } as SortState;
 
 function sortReducer(state: SortState, action: SortAction): SortState {
