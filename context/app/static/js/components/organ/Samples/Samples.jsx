@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo } from 'react';
+import React, { useMemo, useCallback } from 'react';
 import format from 'date-fns/format';
 import { TableVirtuoso } from 'react-virtuoso';
 
@@ -94,7 +94,7 @@ function Samples({ organTerms }) {
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
   const { sortState, setSort, sort } = useSortState(columnIdMap);
 
-  const pageSize = 50;
+  const pageSize = 25;
   const query = useMemo(
     () => ({
       post_filter: {
@@ -126,6 +126,13 @@ function Samples({ organTerms }) {
     use: [keepPreviousData],
   });
 
+  const loadMore = useCallback(() => {
+    if (isReachingEnd) {
+      return;
+    }
+    getNextHits();
+  }, [isReachingEnd, getNextHits]);
+
   return (
     <SectionContainer>
       <SpacedSectionButtonRow
@@ -151,6 +158,8 @@ function Samples({ organTerms }) {
       <TableVirtuoso
         style={{ height: 400 }}
         data={searchHits}
+        totalCount={totalHitsCount}
+        endReached={loadMore}
         components={TableComponents}
         fixedHeaderContent={() => (
           <>
@@ -189,11 +198,6 @@ function Samples({ organTerms }) {
             <TableCell>{donor?.mapped_metadata?.race}</TableCell>
             <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
             <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-            <TableCell>
-              <button type="button" onClick={getNextHits} disabled={isReachingEnd}>
-                MORE!
-              </button>
-            </TableCell>
           </>
         )}
       />
