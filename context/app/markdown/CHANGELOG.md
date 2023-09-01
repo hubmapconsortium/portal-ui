@@ -1,3 +1,19 @@
+## v0.78.0 - 2023-09-01
+
+- Add link to Antibody Validation Reports in atlas and tools menu.
+- Implement Data Products panel under dataset description.
+- Tag data products files in file browser view.
+- Enable filtering file browser to only data products.
+- Convert file browser to TypeScript.
+- Use reusable HelpLink component where the hubmap support email is referenced.
+- Fix Donor page table of contents link to derived samples and datasets section.
+- Fix display of selected genes in Molecular Data query search.
+- Add "Download All" functionality to data products panel.
+- Adjust app config logging to prevent logging secrets.
+- Update READMEs to reflect current practices.
+- Add sort headers to samples tables on organ pages.
+
+
 ## v0.77.0 - 2023-08-14
 
 - Fix Reference dataset link color on organ page.

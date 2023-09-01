@@ -15,7 +15,7 @@ function DerivedEntitiesSection() {
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId="derived-entities"
+      sectionId="derived-samples-and-datasets"
       headerComponent={
         <RelatedEntitiesSectionHeader
           header="Derived Samples and Datasets"

@@ -16,6 +16,7 @@ const theme = createTheme({
       main: '#636363',
       light: '#828282',
       dark: '#454545',
+      secondary: '#636363',
     },
     error: {
       main: '#DA348A',
@@ -63,6 +64,7 @@ const theme = createTheme({
     background: {
       default: '#fafafa',
     },
+    outline: '#E0E0E0',
     type: 'light',
   },
   typography: {
@@ -149,6 +151,11 @@ const theme = createTheme({
           lineHeight: 1.43,
           letterSpacing: '0.01071em',
         },
+      },
+    },
+    MuiLink: {
+      defaultProps: {
+        underline: 'none',
       },
     },
   },

@@ -8,7 +8,7 @@ import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
-import { DetailContext } from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/DetailContext';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 
@@ -38,7 +38,7 @@ function DonorDetail() {
   };
 
   const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'derived', 'provenance', 'protocols', 'attribution'],
+    ['summary', 'metadata', 'derived-samples-and-datasets', 'provenance', 'protocols', 'attribution'],
     shouldDisplaySection,
   );
 
@@ -71,7 +71,7 @@ function DonorDetail() {
           group_name={group_name}
         />
         {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} hubmap_id={hubmap_id} />}
-        <DerivedEntitiesSection sectionId="derived" />
+        <DerivedEntitiesSection />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         <Attribution
