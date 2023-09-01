@@ -101,6 +101,7 @@ def create_app(testing=False):
             'user_groups': session.get('user_groups'),
             'sentry_env': app.config['SENTRY_ENV'],
             'sentry_dsn': app.config['SENTRY_DSN'],
+            'faro_url': app.config['FARO_URL'],
         }
 
     @app.before_request
