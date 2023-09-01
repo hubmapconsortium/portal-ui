@@ -21,7 +21,7 @@ const enableTracking = ['prod', 'prod-stage'].includes(sentryEnv);
 sentryInit({
   dsn: sentryDsn,
   environment: sentryEnv,
-  enabled: ['prod', 'prod-stage'].includes(sentryEnv),
+  enabled: enableTracking,
   release,
 });
 
@@ -30,7 +30,7 @@ initializeFaro({
   app: {
     name: 'hubmap-data-portal',
     version: release,
-    environment: 'production',
+    environment: sentryEnv,
     paused: !enableTracking,
   },
   instrumentations: [
