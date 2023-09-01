@@ -23,7 +23,7 @@ globals:
   sentryEnv: readonly
   sentryDsn: readonly
   faroUrl: readonly
-  environment: readonly
+  sentryEnv: readonly
 env:
   browser: true
   node: true

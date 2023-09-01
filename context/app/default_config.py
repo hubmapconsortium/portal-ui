@@ -41,7 +41,6 @@ class DefaultConfig(object):
     SECRET_KEY = 'should-be-overridden'
     APP_CLIENT_ID = 'should-be-overridden'
     APP_CLIENT_SECRET = 'should-be-overridden'
-    APP_CLIENT_ENVIRONMENT = 'should-be-overridden'
 
     PROTOCOLS_IO_CLIENT_ID = 'should-be-overridden'
     PROTOCOLS_IO_CLIENT_SECRET = 'should-be-overridden'
@@ -50,3 +49,4 @@ class DefaultConfig(object):
     SENTRY_ENV = 'should-be-overridden'
     SENTRY_DSN = 'should-be-overridden'
     FARO_URL = 'should-be-overridden'
+    SENTRY_ENV = 'should-be-overridden'

@@ -2,7 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { init as sentryInit } from '@sentry/react';
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
-import { getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import { LogLevel, getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
 
 import App from './components/App';
 import Iframe from './pages/Iframe';
@@ -16,6 +16,7 @@ import { setJsonLD } from './schema.org';
 // }
 
 const release = `portal-ui-react@${PACKAGE_VERSION}`;
+const enableTracking = ['prod', 'prod-stage'].includes(sentryEnv);
 
 sentryInit({
   dsn: sentryDsn,
@@ -30,18 +31,20 @@ initializeFaro({
     name: 'hubmap-data-portal',
     version: release,
     environment: 'production',
+    paused: !enableTracking,
   },
   instrumentations: [
     // Mandatory, overwriting the instrumentations array would cause the default instrumentations to be omitted
-    ...getWebInstrumentations(),
+    ...getWebInstrumentations({
+      captureConsole: true,
+      capturePerformanceTimeline: true,
+      captureConsoleDisabledLevels: [LogLevel.INFO, LogLevel.DEBUG],
+    }),
 
     // Initialization of the tracing package.
     // This packages is optional because it increases the bundle size noticeably. Only add it if you want tracing data.
     new TracingInstrumentation(),
   ],
-  captureConsole: true,
-  capturePerformanceTimeline: true,
-  captureConsoleDisabledLevels: ['info', 'log', 'debug'],
 });
 
 ReactDOM.render(
