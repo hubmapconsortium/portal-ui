@@ -48,5 +48,4 @@ class DefaultConfig(object):
 
     SENTRY_ENV = 'should-be-overridden'
     SENTRY_DSN = 'should-be-overridden'
-    FARO_URL = 'should-be-overridden'
-    SENTRY_ENV = 'should-be-overridden'
+    FARO_COLLECTOR_URL = 'should-be-overridden'

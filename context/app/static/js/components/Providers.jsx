@@ -22,9 +22,9 @@ const generateClassName = createGenerateClassName({
 
 const swrConfig = {
   revalidateOnFocus: false,
-  onError: (err) => {
+  onError: (error) => {
     captureException(error);
-    faro.logError(err);
+    faro.logError(error);
   },
   onLoadingSlow: (key, config) => {
     // By default, this is triggered if a request takes longer than 3000ms.
