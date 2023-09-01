@@ -39,6 +39,9 @@ initializeFaro({
     // This packages is optional because it increases the bundle size noticeably. Only add it if you want tracing data.
     new TracingInstrumentation(),
   ],
+  captureConsole: true,
+  capturePerformanceTimeline: true,
+  captureConsoleDisabledLevels: ['info', 'log', 'debug'],
 });
 
 ReactDOM.render(
