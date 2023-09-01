@@ -102,6 +102,7 @@ def create_app(testing=False):
             'sentry_env': app.config['SENTRY_ENV'],
             'sentry_dsn': app.config['SENTRY_DSN'],
             'faro_url': app.config['FARO_URL'],
+            'environment': app.config['APP_CLIENT_ENVIRONMENT'],
         }
 
     @app.before_request
