@@ -1,4 +1,0 @@
-- Implement Data Products panel under dataset description.
-- Tag data products files in file browser view.
-- Enable filtering file browser to only data products.
-- Convert file browser to TypeScript.
