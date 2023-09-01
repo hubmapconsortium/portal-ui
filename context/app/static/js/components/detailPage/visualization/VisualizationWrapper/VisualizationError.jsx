@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react';
-import { faro } from '@grafana/faro-web-sdk'
+import { faro } from '@grafana/faro-web-sdk';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
