@@ -26,7 +26,7 @@ sentryInit({
 });
 
 initializeFaro({
-  url: faroUrl,
+  url: faroCollectorUrl,
   app: {
     name: 'hubmap-data-portal',
     version: release,

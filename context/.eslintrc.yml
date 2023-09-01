@@ -22,8 +22,7 @@ globals:
   userGroups: readonly
   sentryEnv: readonly
   sentryDsn: readonly
-  faroUrl: readonly
-  sentryEnv: readonly
+  faroCollectorUrl: readonly
 env:
   browser: true
   node: true
