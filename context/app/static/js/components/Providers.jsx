@@ -1,6 +1,8 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
 import { captureException } from '@sentry/react';
+import { faro } from '@grafana/faro-web-sdk';
+
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
 import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
 import { StylesProvider as MuiStylesProvider } from '@mui/styles';
@@ -20,8 +22,13 @@ const generateClassName = createGenerateClassName({
 
 const swrConfig = {
   revalidateOnFocus: false,
-  onError: (error) => {
+  onError: (err) => {
     captureException(error);
+    faro.logError(err);
+  },
+  onLoadingSlow: (key, config) => {
+    // By default, this is triggered if a request takes longer than 3000ms.
+    faro.logWarning(`Loading slow: ${key}`, { key, ...config });
   },
 };
 
