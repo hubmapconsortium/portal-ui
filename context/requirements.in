@@ -9,8 +9,6 @@ python-datauri>=0.2.8
 python-frontmatter>=0.5.0
 hubmap-api-py-client>=0.0.9
 hubmap-commons>=2.0.12
-# Specifying this version so a specific version of fsspec is specified after compiling reqs.
-fsspec>=2021.09.0
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
 https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.13.zip

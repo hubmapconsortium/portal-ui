@@ -26,7 +26,9 @@ RUN npm run build
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V}
 
 COPY requirements.txt /app
-RUN pip install -r /app/requirements.txt
+# Legacy resolver is used to avoid issues with a non-pinned subdependency which causes build failures in CI
+# https://github.com/hubmapconsortium/portal-ui/actions/runs/6087458665/job/16516023950
+RUN pip install -r /app/requirements.txt --use-deprecated=legacy-resolver
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path

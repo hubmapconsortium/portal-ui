@@ -1,1 +1,1 @@
-- Fix fsspec version to fix CI/docker image build.
+- Use legacy pip installer to fix docker build.
