@@ -1,0 +1,1 @@
+- Fix fsspec version to fix CI/docker image build.
