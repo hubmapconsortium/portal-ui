@@ -12,12 +12,13 @@ import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import TableContainer from '@mui/material/TableContainer';
 
-import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
+import { HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { useScrollSearchHits } from 'js/hooks/useSearchData';
+import useScrollSearchHits from 'js/hooks/useScrollSearchHits';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
@@ -82,7 +83,7 @@ function SampleHeaderCell({ column, setSort, sortState }) {
 }
 
 const TableComponents = {
-  Scroller: React.forwardRef((props, ref) => <StyledTableContainer component={Paper} {...props} ref={ref} />),
+  Scroller: React.forwardRef((props, ref) => <TableContainer component={Paper} {...props} ref={ref} />),
   Table: (props) => <Table {...props} style={{ borderCollapse: 'separate' }} stickyHeader />,
   TableHead,
   TableRow,
@@ -152,8 +153,8 @@ function Samples({ organTerms }) {
       <TableVirtuoso
         style={{ height: 400 }}
         data={searchHits}
-        totalCount={totalHitsCount}
         endReached={loadMore}
+        totalCount={totalHitsCount}
         components={TableComponents}
         fixedHeaderContent={() => (
           <>
