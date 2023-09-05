@@ -1,6 +1,6 @@
 /* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo, useCallback } from 'react';
+import React, { useMemo } from 'react';
 import format from 'date-fns/format';
 import { TableVirtuoso } from 'react-virtuoso';
 
@@ -122,16 +122,10 @@ function Samples({ organTerms }) {
     [organTerms, sort],
   );
 
-  const { searchHits, isLoading, getNextHits, totalHitsCount, isReachingEnd } = useScrollSearchHits(query, {
+  const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(query, {
+    pageSize,
     use: [keepPreviousData],
   });
-
-  const loadMore = useCallback(() => {
-    if (isReachingEnd) {
-      return;
-    }
-    getNextHits();
-  }, [isReachingEnd, getNextHits]);
 
   return (
     <SectionContainer>

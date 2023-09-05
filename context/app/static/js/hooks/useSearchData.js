@@ -113,15 +113,20 @@ function useScrollSearchHits(
     ...swrConfig,
   });
 
-  const getNextHits = useCallback(() => setSize(size + 1), [size, setSize]);
-
   const { searchHits, totalHitsCount } = getCombinedHits(data);
 
   const isEmpty = getFirstPageHits(data)?.hits?.length === 0;
 
   const isReachingEnd = isEmpty || searchHits.length === totalHitsCount;
 
-  return { searchHits, error, isLoading, setSize, getNextHits, totalHitsCount, isReachingEnd };
+  const loadMore = useCallback(() => {
+    if (isReachingEnd) {
+      return;
+    }
+    setSize(size + 1);
+  }, [size, setSize, isReachingEnd]);
+
+  return { searchHits, error, isLoading, setSize, loadMore, totalHitsCount, isReachingEnd };
 }
 
 export { fetchSearchData, useSearchHits, useScrollSearchHits };
