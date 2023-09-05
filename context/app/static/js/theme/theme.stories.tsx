@@ -8,6 +8,7 @@ type PaletteColorProps = {
   name: string;
 };
 
+// Extended version of https://stackoverflow.com/a/69353003
 function hex2rgb(c: string) {
   const color = c[0] === '#' ? c.substring(1) : c;
   // Handle shorthand hex colors; use floor to handle alpha hex values
@@ -21,8 +22,8 @@ function hex2rgb(c: string) {
   const g = parseInt(color.slice(index, (index += interval)), 16);
   const b = parseInt(color.slice(index, (index += interval)), 16);
   if (index !== color.length) {
-    const a = parseInt(color.slice(index, index + interval), 16);
-    return `rgba(${r}, ${g}, ${b}, 0.${a})`;
+    const a = (parseInt(color.slice(index), 16) / 255).toPrecision(2);
+    return `rgba(${r}, ${g}, ${b}, ${a})`;
   }
   return `rgb(${r}, ${g}, ${b})`;
 }
@@ -35,14 +36,45 @@ function rgb2hex(c: string) {
   if (Number.isNaN(parseInt(rgb[3], 16))) {
     return `#${r}${g}${b}`;
   }
-  const a = parseInt(rgb[3], 10).toString(16).padStart(2, '0');
+  const a = parseInt((parseFloat(rgb[3]) * 2.55).toFixed(0), 10)
+    .toString(16)
+    .padStart(2, '0');
 
   return `#${r}${g}${b}${a}`;
+}
+
+type PaletteHoverColorProps = {
+  color: string;
+  name: string;
+};
+
+function PaletteHoverColor({ color, name }: PaletteHoverColorProps) {
+  return (
+    <TableRow>
+      <TableCell>
+        <Box
+          width={theme.spacing(4)}
+          height={theme.spacing(4)}
+          bgcolor="#fff"
+          display="inline-block"
+          border="1px solid black"
+          flexShrink="none"
+        />
+      </TableCell>
+      <TableCell>{name}</TableCell>
+      <TableCell colSpan={2}>
+        <pre>{color}</pre>
+      </TableCell>
+    </TableRow>
+  );
 }
 
 function PaletteColor({ color, name }: PaletteColorProps) {
   if (typeof color === 'string') {
     // Normalize colors for ease of comparison
+    if (name.endsWith('hover')) {
+      return <PaletteHoverColor color={color} name={name} />;
+    }
     const rgbaColor = color.startsWith('rgb') ? color : hex2rgb(color);
     const hexColor = rgb2hex(rgbaColor);
     return (

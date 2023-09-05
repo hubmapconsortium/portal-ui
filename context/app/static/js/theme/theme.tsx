@@ -62,11 +62,11 @@ declare module '@mui/material/styles' {
 
   export interface PaletteColor {
     lowEmphasis?: string;
-    hover?: string;
+    hover?: string; // Note that this is a `filter` value, not a color
   }
   export interface SimplePaletteColorOptions {
     lowEmphasis?: string;
-    hover?: string;
+    hover?: string; // Note that this is a `filter` value, not a color
   }
 
   export interface Theme {
@@ -86,10 +86,10 @@ const theme = createTheme({
     },
     primary: {
       main: purple,
-      hover: '#4f5675', // purple with 108% brightness applied
+      hover: 'brightness(108%)',
       light: '#696e83',
       dark: '#2f3346',
-      lowEmphasis: `${purple}26`, // 38% opacity
+      lowEmphasis: `${purple}61`, // 38% opacity
     },
     secondary: {
       main: '#636363',
@@ -117,13 +117,13 @@ const theme = createTheme({
       dark: '#4b5f27',
     },
     black: {
-      hover: 'rgba(0,0,0, 0.04)',
+      hover: 'brightness(96%)',
       focus: 'rgba(0,0,0, 0.12)',
       dragged: 'rgba(0,0,0, 0.16)',
     },
     white: {
       main: '#fff',
-      hover: '#FFFFFF0A', // 4% opacity
+      hover: 'brightness(96%)',
       focus: '#FFFFFF1F', // 12% opacity
     },
     divider: '#E0E0E0',

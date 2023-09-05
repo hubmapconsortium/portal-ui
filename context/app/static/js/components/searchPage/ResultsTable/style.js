@@ -15,7 +15,7 @@ const StyledTableBody = styled(TableBody)`
   background-color: ${(props) => props.theme.palette.white.main};
 
   :hover {
-    background-color: ${(props) => props.theme.palette.white.hover};
+    filter: ${(props) => props.theme.palette.white.hover};
   }
 
   // Material would apply this on TD, but we override, so there is no internal border above the highlight.
