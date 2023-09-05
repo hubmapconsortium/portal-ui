@@ -158,13 +158,13 @@
     "test:watch": "jest --silent --watch",
     "test:coverage": "jest --silent --coverage",
     "test:clearCache": "jest --silent --clearCache",
-    "lint": "eslint -c .eslintrc.yml --ext .js,.jsx app/static/js/",
-    "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx --fix app/static/js/",
+    "lint": "eslint -c .eslintrc.yml --ext .js,.jsx,.ts,.tsx app/static/js/",
+    "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx,.ts,.tsx --fix app/static/js/",
     "storybook": "storybook dev -p 6006 -s app/static/storybook-public/",
     "build-storybook": "storybook build"
   },
   "lint-staged": {
-    "app/static/js/**/*.{js,jsx}": [
+    "app/static/js/**/*.{js,jsx,ts,tsx}": [
       "prettier --write",
       "eslint -c .eslintrc.yml"
     ]
