@@ -26,7 +26,7 @@ sentryInit({
 });
 
 initializeFaro({
-  url: faroCollectorUrl,
+  url: 'https://faro-collector-prod-us-east-0.grafana.net/collect/77a0efade67edd876ae6c63ebb2d825c',
   app: {
     name: 'hubmap-data-portal',
     version: release,
