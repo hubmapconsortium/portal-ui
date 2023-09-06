@@ -69,6 +69,10 @@ function PaletteHoverColor({ color, name }: PaletteHoverColorProps) {
   );
 }
 
+function castColor(color: unknown) {
+  return color as PaletteColorProps['color'];
+}
+
 function PaletteColor({ color, name }: PaletteColorProps) {
   if (typeof color === 'string') {
     // Normalize colors for ease of comparison
@@ -103,7 +107,7 @@ function PaletteColor({ color, name }: PaletteColorProps) {
     <>
       {Object.entries(color).map(([variant, variantColor]) => {
         const fullName = `${name}.${variant}`;
-        const paletteColor = variantColor as PaletteColorProps['color'];
+        const paletteColor = castColor(variantColor);
         return <PaletteColor key={variant} name={fullName} color={paletteColor} />;
       })}
     </>
@@ -126,9 +130,13 @@ function PaletteStory() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {Object.entries(theme.palette).map(([name, color]) =>
-            name !== 'mode' ? <PaletteColor key={name} name={name} color={color} /> : null,
-          )}
+          {Object.entries(theme.palette).map(([name, colorVariant]) => {
+            if (name === 'mode') {
+              return null;
+            }
+            const color = castColor(colorVariant);
+            return <PaletteColor key={name} name={name} color={color} />;
+          })}
         </TableBody>
       </Table>
     </>
