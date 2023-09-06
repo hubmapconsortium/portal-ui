@@ -7,7 +7,7 @@ import { FlexList, StyledIconButton } from './style';
 
 function SelectImageButton({ isSelectedImageIndex, onClick }) {
   return (
-    <StyledIconButton tabIndex="-1" onClick={onClick} disabled={isSelectedImageIndex}>
+    <StyledIconButton tabIndex={-1} onClick={onClick} disabled={isSelectedImageIndex}>
       {isSelectedImageIndex ? (
         <Brightness1RoundedIcon fontSize="small" />
       ) : (
@@ -29,7 +29,7 @@ function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelecte
   return (
     <FlexList aria-hidden="true">
       <li>
-        <StyledIconButton tabIndex="-1" color="primary" onClick={setPreviousSelectedImageIndex}>
+        <StyledIconButton tabIndex={-1} color="primary" onClick={setPreviousSelectedImageIndex}>
           <ChevronLeftRoundedIcon />
         </StyledIconButton>
       </li>
@@ -46,7 +46,7 @@ function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelecte
         ))}
 
       <li>
-        <StyledIconButton tabIndex="-1" color="primary" onClick={setNextSelectedImageIndex}>
+        <StyledIconButton tabIndex={-1} color="primary" onClick={setNextSelectedImageIndex}>
           <ChevronRightRoundedIcon />
         </StyledIconButton>
       </li>

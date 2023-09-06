@@ -4,8 +4,8 @@ import metadata from 'test-utils/fixtures/dataProductMetadata';
 import { render, screen } from 'test-utils/functions';
 
 import { FlaskDataContext } from 'js/components/Contexts';
-import { DataProducts } from './DataProducts';
-import { DetailContext } from '../../DetailContext';
+import { DetailContext } from 'js/components/detailPage/DetailContext';
+import DataProducts from './DataProducts';
 
 const files = {
   get all() {

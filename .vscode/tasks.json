@@ -160,9 +160,6 @@
             "label": "Storybook",
             "type": "npm",
             "script": "storybook",
-            "dependsOn": [
-                "npm install"
-            ],
             "options": {
                 "cwd": "${workspaceFolder}/context"
             },
@@ -189,6 +186,9 @@
                 "Storybook"
             ],
             "dependsOrder": "parallel",
+            "problemMatcher": [
+                "$eslint-stylish"
+            ]
         },
         {
             "label": "dev-start",
