@@ -3,14 +3,14 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { Box, Typography, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import theme from './theme';
 
-type PaletteColorProps = {
+interface PaletteColorProps {
   color: (typeof theme.palette)[keyof typeof theme.palette];
   name: string;
-};
+}
 
 // Extended version of https://stackoverflow.com/a/69353003
 function hex2rgb(c: string) {
-  const color = c[0] === '#' ? c.substring(1) : c;
+  const color = c.startsWith('#') ? c.substring(1) : c;
   // Handle shorthand hex colors; use floor to handle alpha hex values
   const interval = Math.floor(color.length / 3);
   if (interval === 0) {
@@ -43,10 +43,10 @@ function rgb2hex(c: string) {
   return `#${r}${g}${b}${a}`;
 }
 
-type PaletteHoverColorProps = {
+interface PaletteHoverColorProps {
   color: string;
   name: string;
-};
+}
 
 function PaletteHoverColor({ color, name }: PaletteHoverColorProps) {
   return (
