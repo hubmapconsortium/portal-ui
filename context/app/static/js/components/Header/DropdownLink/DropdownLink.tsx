@@ -2,10 +2,9 @@ import React, { PropsWithChildren } from 'react';
 import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
 import Link from '@mui/material/Link';
 
-interface DropdownLinkProps {
+interface DropdownLinkProps extends MenuItemProps {
   href: string;
   isIndented: boolean;
-  rest?: MenuItemProps;
 }
 
 function DropdownLink({ href, isIndented, children, ...rest }: PropsWithChildren<DropdownLinkProps>) {
