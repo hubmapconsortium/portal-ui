@@ -1,0 +1,1 @@
+- Fix some TypeScript issues in the SWR helpers.
