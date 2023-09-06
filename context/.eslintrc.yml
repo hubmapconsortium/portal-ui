@@ -4,7 +4,6 @@ extends:
   - airbnb
   - airbnb/hooks
   - prettier
-  - plugin:@typescript-eslint/recommended
   - plugin:prettier/recommended
   - plugin:import/errors
   - plugin:import/warnings
@@ -54,6 +53,12 @@ rules:
       ignoreRestSiblings: true # Allow unused variables when using destructuring to remove keys from an object
 
 overrides:
+  - files: ['**.{ts,tsx}']
+    extends:
+      - plugin:@typescript-eslint/recommended-type-checked
+      - plugin:@typescript-eslint/stylistic-type-checked
+    parserOptions:
+      project: ./tsconfig.json
   - files: ['**/*.spec.{js,jsx,ts,tsx}']
     plugins:
       - jest
