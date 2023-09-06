@@ -61,12 +61,11 @@ function FileBrowser({ files }: FileBrowserProps) {
   } = useFlaskDataContext();
 
   const fileTrees: Record<FileDisplayOption, FileTree> = useMemo(
-    () =>
-      ({
-        all: relativeFilePathsToTree(files),
-        'qa/qc': relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
-        'data products': relativeFilePathsToTree(files.filter((file) => file?.is_data_product)),
-      }),
+    () => ({
+      all: relativeFilePathsToTree(files),
+      'qa/qc': relativeFilePathsToTree(files.filter((file) => file?.is_qa_qc)),
+      'data products': relativeFilePathsToTree(files.filter((file) => file?.is_data_product)),
+    }),
     [files],
   );
 
@@ -91,8 +90,10 @@ function FileBrowser({ files }: FileBrowserProps) {
           <TableHead>
             <TableRow>
               <TableCell>Name</TableCell>
-              <TableCell padding="none" colSpan={2}>Type</TableCell>
-              <TableCell sx={{pl: 1}}>Size</TableCell>
+              <TableCell padding="none" colSpan={2}>
+                Type
+              </TableCell>
+              <TableCell sx={{ pl: 1 }}>Size</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
