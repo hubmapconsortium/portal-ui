@@ -28,8 +28,8 @@ function WorkspacesAuthenticated() {
           can be launched directly from this page.
         </Typography>
         <Typography>
-          Workspaces should not be used for long-running batch processes. Contact <HelpLink /> for information about
-          accessing HuBMAP compute resources.
+          Workspaces should not be used for long-running batch processes. <HelpLink>Contact us</HelpLink> for
+          information about accessing HuBMAP compute resources.
         </Typography>
       </StyledDescription>
       <WorkspacesList />

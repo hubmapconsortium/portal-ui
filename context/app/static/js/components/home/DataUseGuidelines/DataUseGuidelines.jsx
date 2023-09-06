@@ -60,7 +60,7 @@ const paragraphs = [
     key: 'help',
     component: (
       <>
-        Please direct any questions to <HelpLink iconFontSize="1.1rem" />.
+        Please <HelpLink iconFontSize="1.1rem"> contact us with any questions</HelpLink>.
       </>
     ),
   },

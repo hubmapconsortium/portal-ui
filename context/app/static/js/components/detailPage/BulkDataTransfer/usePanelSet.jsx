@@ -43,8 +43,8 @@ const loginPanel = {
   status: 'error',
   children: (
     <>
-      Please <InternalLink href="/login">log in</InternalLink> for Globus access or email <HelpLink variant="body2" />{' '}
-      with the dataset ID about the files you are trying to access.
+      Please <InternalLink href="/login">log in</InternalLink> for Globus access or <HelpLink variant="body2" /> with
+      the dataset ID about the files you are trying to access.
     </>
   ),
   addOns: (
@@ -60,7 +60,7 @@ const noDbGaPPanel = {
   children: (
     <>
       This dataset contains protected-access human sequence data. Data is not yet available through dbGaP, but will be
-      available soon. Please contact <HelpLink variant="body2" /> with any questions regarding this data.
+      available soon. Please <HelpLink variant="body2" /> with any questions regarding this data.
     </>
   ),
 };
@@ -100,7 +100,7 @@ const PUBLIC_DATA = {
       status: 'success',
       children: (
         <>
-          Files are available through the Globus Research Data Management System. If you require additional help, email{' '}
+          Files are available through the Globus Research Data Management System. If you require additional help,{' '}
           <HelpLink variant="body2" /> with the dataset ID and information about the files you are trying to access.
         </>
       ),
@@ -119,8 +119,8 @@ const ACCESS_TO_PROTECTED_DATA = {
           You are authorized to access protected-access human sequence data through the Globus Research Data Management
           System. Please review and follow all{' '}
           <OutboundLink href="https://hubmapconsortium.org/policies/">policies</OutboundLink> related to the use of
-          these protected data. If you require additional help, email <HelpLink variant="body2" /> with the dataset ID
-          and information about the files you are trying to access.
+          these protected data. If you require additional help, <HelpLink variant="body2" /> with the dataset ID and
+          information about the files you are trying to access.
         </>
       ),
     },
@@ -134,8 +134,7 @@ const NO_ACCESS_TO_PROTECTED_DATA = {
     children: (
       <div>
         These data are still being prepared, processed, or curated and will only be available to members of the team who
-        submitted the data. For additional help, email
-        <HelpLink variant="body2" />.
+        submitted the data. For additional help, <HelpLink variant="body2" />.
       </div>
     ),
   },
@@ -150,8 +149,8 @@ const NON_CONSORTIUM_MEMBERS = {
         <>
           This dataset contains protected-access human sequence data. If you are not a Consortium member, you must
           access these data through dbGaP if available. dbGaP authentication is required for downloading through these
-          links. View documentation on how to attain dbGaP access. For additional help, email
-          <HelpLink variant="body2" /> with the dataset ID and information about the files you are trying to access.
+          links. View documentation on how to attain dbGaP access. For additional help, <HelpLink variant="body2" />{' '}
+          with the dataset ID and information about the files you are trying to access.
         </>
       ),
     },
@@ -170,8 +169,7 @@ const DATASET_NOT_FINALIZED = {
     children: (
       <div>
         These data are still being prepared, processed, or curated and will only be available to members of the team who
-        submitted the data. For additional help, email
-        <HelpLink variant="body2" />.
+        submitted the data. For additional help, <HelpLink variant="body2" />.
       </div>
     ),
   },
@@ -184,8 +182,8 @@ const ENTITY_API_ERROR = {
     tooltip: globusText.tooltip,
     children: (
       <>
-        The API failed to retrieve the link to Globus. Please report this issue to <HelpLink variant="body2" /> with the
-        dataset ID and information about the files you are trying to access.
+        The API failed to retrieve the link to Globus. Please <HelpLink variant="body2"> report this issue</HelpLink>{' '}
+        with the dataset ID and information about the files you are trying to access.
       </>
     ),
   },

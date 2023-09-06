@@ -22,8 +22,8 @@ function WorkspacesContent() {
   if (!isWorkspacesUser) {
     return (
       <StyledDescription>
-        You must be a member of the allowed Globus group to access this feature. Email <HelpLink variant="body2" /> to
-        gain access.
+        You must be a member of the allowed Globus group to access this feature.{' '}
+        <HelpLink variant="body2">Contact us</HelpLink> to gain access.
       </StyledDescription>
     );
   }
