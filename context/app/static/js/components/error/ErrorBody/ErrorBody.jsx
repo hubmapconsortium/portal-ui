@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import HelpLink from 'js/shared-styles/Links/HelpLink';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 
 function LoginLink() {
   return <InternalLink href="/login">login</InternalLink>;
@@ -29,7 +29,7 @@ function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMainten
   if (errorCode === 403 && isAuthenticated) {
     return (
       <>
-        You may not have access to this resource. Please <HelpLink /> to request access.
+        You may not have access to this resource. Please <ContactUsLink /> to request access.
       </>
     );
   }
@@ -56,14 +56,14 @@ function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMainten
     }
     return (
       <>
-        If this page should exist, <HelpLink>submit a bug report</HelpLink>.
+        If this page should exist, <ContactUsLink>submit a bug report</ContactUsLink>.
       </>
     );
   }
 
   return (
     <>
-      If this problem persists, <HelpLink>submit a bug report</HelpLink>.
+      If this problem persists, <ContactUsLink>submit a bug report</ContactUsLink>.
     </>
   );
 }

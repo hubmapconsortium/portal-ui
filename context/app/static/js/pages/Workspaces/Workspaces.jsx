@@ -4,7 +4,7 @@ import { useAppContext } from 'js/components/Contexts';
 import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
 import { InternalLink } from 'js/shared-styles/Links';
 import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
-import HelpLink from 'js/shared-styles/Links/HelpLink';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { StyledDescription } from './style';
 
 function WorkspacesContent() {
@@ -23,7 +23,7 @@ function WorkspacesContent() {
     return (
       <StyledDescription>
         You must be a member of the allowed Globus group to access this feature.{' '}
-        <HelpLink variant="body2">Contact us</HelpLink> to gain access.
+        <ContactUsLink variant="body2">Contact us</ContactUsLink> to gain access.
       </StyledDescription>
     );
   }
