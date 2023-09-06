@@ -18,7 +18,7 @@ import { HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import useScrollSearchHits from 'js/hooks/useScrollSearchHits';
+import { useScrollSearchHits } from 'js/hooks/useSearchData';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
