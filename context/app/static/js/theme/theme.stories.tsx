@@ -101,9 +101,11 @@ function PaletteColor({ color, name }: PaletteColorProps) {
   }
   return (
     <>
-      {Object.entries(color).map(([variant, variantColor]) => (
-        <PaletteColor key={variant} name={`${name}.${variant}`} color={variantColor} />
-      ))}
+      {Object.entries(color).map(([variant, variantColor]) => {
+        const fullName = `${name}.${variant}`;
+        const paletteColor = variantColor as PaletteColorProps['color'];
+        return <PaletteColor key={variant} name={fullName} color={paletteColor} />;
+      })}
     </>
   );
 }
