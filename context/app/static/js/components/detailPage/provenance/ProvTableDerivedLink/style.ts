@@ -1,4 +1,5 @@
 import { styled } from '@mui/material/styles';
+import React from 'react';
 
 const LinkButton = styled('a')(({ theme }) => ({
   color: theme.palette.white.main,
@@ -14,6 +15,6 @@ const LinkButton = styled('a')(({ theme }) => ({
     boxShadow: theme.shadows[8],
     filter: theme.palette.primary.hover,
   },
-}));
+})) as React.ComponentType<'a'>;
 
 export { LinkButton };
