@@ -13,13 +13,17 @@ const appProviderEndpoints = {
 const isWorkspacesUser = false;
 const appProviderToken = 'fakeGroupsToken';
 
-const AllTheProviders = ({ children }) => {
+// Mock tracking helpers
+// eslint-disable-next-line no-undef
+jest.mock('js/helpers/trackers');
+
+function AllTheProviders({ children }) {
   return (
     <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken} isWorkspacesUser={isWorkspacesUser}>
       {children}
     </Providers>
   );
-};
+}
 
 const customRender = (ui, options) => render(ui, { wrapper: AllTheProviders, ...options });
 
