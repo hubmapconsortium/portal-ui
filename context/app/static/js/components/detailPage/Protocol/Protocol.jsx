@@ -34,11 +34,11 @@ function ProtocolLink({ url, index }) {
 
     if (isLoading && !error) {
       return (
-        <ProtocolMessage precedingText="Protocols are loading. If protocols take a significant time to load, please contact " />
+        <ProtocolMessage precedingText="Protocols are loading. If protocols take a significant time to load, please " />
       );
     }
 
-    return <ProtocolMessage precedingText="Failed to retrieve protocols. Please contact " />;
+    return <ProtocolMessage precedingText="Failed to retrieve protocols. Please " />;
   }
 
   return (
