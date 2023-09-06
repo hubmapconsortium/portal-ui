@@ -1,9 +1,9 @@
 import { SWRError } from './errors';
 
-type FetchOptionsType = {
+interface FetchOptionsType {
   requestInit?: RequestInit;
   expectedStatusCodes?: number[];
-};
+}
 
 type SingleFetchOptionsType = FetchOptionsType & {
   url: string;
@@ -31,7 +31,7 @@ export async function multiFetcher<T>({ urls, requestInit = {}, expectedStatusCo
     fetch(url, requestInit).then(async (response) => {
       if (!expectedStatusCodes.includes(response.status)) {
         const error = new SWRError(`The request to ${urls.join(', ')} failed.`, {
-          info: await response.json(),
+          info: (await response.json()) as object,
           status: response.status,
         });
         throw error;

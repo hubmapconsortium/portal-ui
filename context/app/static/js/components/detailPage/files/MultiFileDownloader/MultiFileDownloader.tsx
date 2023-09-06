@@ -2,9 +2,9 @@ import React from 'react';
 
 import Box from '@mui/material/Box';
 
-type MultiFileDownloaderProps = {
+interface MultiFileDownloaderProps {
   files: string[];
-};
+}
 
 /**
  * This helper component is used to download multiple files at once.

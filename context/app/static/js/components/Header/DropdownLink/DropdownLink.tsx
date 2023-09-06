@@ -2,11 +2,11 @@ import React, { PropsWithChildren } from 'react';
 import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
 import Link from '@mui/material/Link';
 
-type DropdownLinkProps = {
+interface DropdownLinkProps {
   href: string;
   isIndented: boolean;
   rest?: MenuItemProps;
-};
+}
 
 function DropdownLink({ href, isIndented, children, ...rest }: PropsWithChildren<DropdownLinkProps>) {
   return (

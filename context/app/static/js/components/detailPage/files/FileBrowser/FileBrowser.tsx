@@ -23,9 +23,9 @@ const filesStoreSelector = (state: FilesStore) => ({
   toggleDisplayOnlyDataProducts: state.toggleDisplayOnlyDataProducts,
 });
 
-type FileBrowserProps = {
+interface FileBrowserProps {
   files: UnprocessedFile[];
-};
+}
 
 type FileControlChipProps = Pick<ChipProps<'button'>, 'label' | 'onClick' | 'disabled'> & {
   selected: boolean;
