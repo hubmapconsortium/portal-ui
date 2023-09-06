@@ -95,7 +95,7 @@ function Samples({ organTerms }) {
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
   const { sortState, setSort, sort } = useSortState(columnIdMap);
 
-  const pageSize = 25;
+  const pageSize = 100;
   const query = useMemo(
     () => ({
       post_filter: {
