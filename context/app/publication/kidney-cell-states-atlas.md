@@ -3,7 +3,7 @@ is_public: True
 title: An atlas of healthy and injured cell states and niches in the human kidney
 authors:
   short: Blue B. Lake, Rajasree Menon, et al.
-  long: > 
+  long: >
     Blue B. Lake, Rajasree Menon, Seth Winfree, Qiwen Hu, Ricardo Melo
     Ferreira, Kian Kalhor, Daria Barwinska, Edgar A. Otto, Michael Ferkowicz, Dinh
     Diep, Nongluk Plongthongkum, Amanda Knoten, Sarah Urata, Abhijit S. Naik, Sean
@@ -48,14 +48,15 @@ vitessce_conf:
       'layers': [],
       'staticLayout':
         [
-          { 'component': 'description',
+          {
+            'component': 'description',
             'x': 0,
             'y': 0,
             'w': 12,
             'h': 4,
-            'props': { 'description': 'View #1 goes here' }
-           },
-        ]
+            'props': { 'description': 'View #1 goes here' },
+          },
+        ],
     },
     {
       'version': '0.1.0',
@@ -63,15 +64,17 @@ vitessce_conf:
       'layers': [],
       'staticLayout':
         [
-          { 'component': 'description',
+          {
+            'component': 'description',
             'x': 0,
             'y': 0,
             'w': 12,
             'h': 4,
-            'props': { 'description': 'View #2 goes here' }
-           },
-        ]
-    }
+            'props': { 'description': 'View #2 goes here' },
+          },
+        ],
+    },
   ]
 ---
+
 Free text **markdown** goes here.

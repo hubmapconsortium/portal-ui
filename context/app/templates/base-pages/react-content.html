@@ -1,9 +1,7 @@
-{% extends 'base-pages/base.html' %}
+{% extends 'base-pages/base.html' %} {% block body %}
+<div id="react-content"></div>
 
-{% block body %}
-  <div id="react-content"></div>
-
-  <script>
-    const flaskData = {{ flask_data | tojson }};
-  </script>
+<script>
+  const flaskData = {{ flask_data | tojson }};
+</script>
 {% endblock %}

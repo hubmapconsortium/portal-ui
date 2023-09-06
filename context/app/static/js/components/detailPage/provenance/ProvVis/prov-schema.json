@@ -24,7 +24,7 @@
   "additionalProperties": false,
   "required": ["prefix", "entity", "activity", "wasGeneratedBy", "used"],
   "properties": {
-    "prefix": { "$ref": "#/definitions/string_to_anything"},
+    "prefix": { "$ref": "#/definitions/string_to_anything" },
     "entity": { "$ref": "#/definitions/string_to_string_to_anything" },
     "activity": { "$ref": "#/definitions/string_to_string_to_anything" },
     "wasGeneratedBy": { "$ref": "#/definitions/string_to_string_to_anything" },

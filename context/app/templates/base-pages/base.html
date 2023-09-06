@@ -1,31 +1,29 @@
-<!doctype html>
+<!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" />
 
-  <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    {% block extra_stylesheets %}{% endblock %}
 
-  {% block extra_stylesheets %}{% endblock %}
+    <title>{% block title_text %}{{ title }}{% endblock %}{{' | HuBMAP' if not is_home_page}}</title>
+    <script>
+      const isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
+      const groupsToken = '{{ groups_token }}';
+      const userEmail = '{{ user_email }}';
+      const workspacesToken = '{{ workspaces_token }}';
+      const userGroups = {{ user_groups | tojson  }};
+    </script>
+  </head>
 
-  <title>{% block title_text %}{{ title }}{% endblock %}{{' | HuBMAP' if not is_home_page}}</title>
-  <script>
-    const isAuthenticated = {{ 'true' if is_authenticated else 'false' }};
-    const groupsToken = '{{ groups_token }}';
-    const userEmail = '{{ user_email }}';
-    const workspacesToken = '{{ workspaces_token }}';
-    const userGroups = {{ user_groups | tojson  }};
-  </script>
-</head>
+  <body>
+    {% block body %}{% endblock %}
 
-<body>
-  {% block body %}{% endblock %}
+    <script src="{{ static_url_for('static', filename='main.js') }}"></script>
+    <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
 
-  <script src="{{ static_url_for('static', filename='main.js') }}"></script>
-  <script src="{{ static_url_for('static', filename='vendors.js') }}"></script>
-
-  {% block extra_scripts %}{% endblock %}
-</body>
-
+    {% block extra_scripts %}{% endblock %}
+  </body>
 </html>

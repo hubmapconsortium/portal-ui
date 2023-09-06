@@ -1,23 +1,18 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>HuBMAP CCF Exploration User Interface (CCF-EUI)</title>
+    <base href="https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="icon" type="image/x-icon" href="favicon.ico" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet" />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="wc.js" async></script>
+  </head>
 
-<head>
-  <meta charset="utf-8">
-  <title>HuBMAP CCF Exploration User Interface (CCF-EUI)</title>
-  <base href="https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3/">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="favicon.ico">
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;display=swap" rel="stylesheet">
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons|Material+Icons+Outlined" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css">
-  <script src="wc.js" async></script>
-</head>
-
-<body class="mat-typography">
-  <ccf-eui
-    hubmap-token="{{ groups_token }}"
-    use-remote-api="true"
-  ></ccf-eui>
-</body>
-
+  <body class="mat-typography">
+    <ccf-eui hubmap-token="{{ groups_token }}" use-remote-api="true"></ccf-eui>
+  </body>
 </html>

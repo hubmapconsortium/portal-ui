@@ -1,14 +1,10 @@
-{% extends 'base-pages/base.html' %}
-
-{% block body %}
-  <div class="container-fluid main-content container-lg">
-    <div class="row p-2">
-      <div class="col">
-        {% block title %}{% endblock %}
-        <section>
-          {% block content %}{% endblock %}
-        </section>
-      </div>
+{% extends 'base-pages/base.html' %} {% block body %}
+<div class="container-fluid main-content container-lg">
+  <div class="row p-2">
+    <div class="col">
+      {% block title %}{% endblock %}
+      <section>{% block content %}{% endblock %}</section>
     </div>
   </div>
+</div>
 {% endblock %}
