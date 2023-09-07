@@ -1,10 +1,10 @@
-import {
-  sortTileViewStepTitle,
-  defaultSteps,
-  stepToAddIfViewMoreExists,
-} from "portal-ui/app/static/js/components/tutorials/SearchDatasetTutorial/config";
 import defaultSearch from "../../fixtures/dataset-search/default";
 import limitedDataTypesSearch from "../../fixtures/dataset-search/heart-only-5-or-less-data-types";
+
+import {
+  defaultSteps,
+  stepToAddIfViewMoreExists,
+} from "../../../../context/app/static/js/components/tutorials/SearchDatasetTutorial/config";
 
 function traverseSteps(steps) {
   cy.wrap(steps).each((step, i) => {
@@ -37,6 +37,7 @@ function assertTableView() {
   cy.findByTestId("search-results-table").should("exist");
   cy.findByTestId("search-tiles-sort-button").should("not.be.visible");
 }
+
 describe("dataset search tutorial", () => {
   context("macbook-size", () => {
     beforeEach(() => {
