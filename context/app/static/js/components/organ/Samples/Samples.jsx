@@ -18,7 +18,6 @@ import { HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { useScrollSearchHits } from 'js/hooks/useSearchData';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
@@ -27,9 +26,8 @@ import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog'
 import { getDonorAgeString } from 'js/helpers/functions';
 
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
-import { useSortState } from 'js/hooks/useSortState';
 import { LinearProgress } from '@mui/material';
-import { keepPreviousData } from 'js/helpers/swr';
+import useScrollTable from 'js/hooks/useScrollTable';
 import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
 
@@ -93,9 +91,7 @@ const TableComponents = {
 function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
-  const { sortState, setSort, sort } = useSortState(columnIdMap);
 
-  const pageSize = 100;
   const query = useMemo(
     () => ({
       post_filter: {
@@ -117,15 +113,15 @@ function Samples({ organTerms }) {
         },
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
-      size: pageSize,
-      sort,
+      size: 100,
     }),
-    [organTerms, sort],
+    [organTerms],
   );
 
-  const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(query, {
-    pageSize,
-    use: [keepPreviousData],
+  const { searchHits, isLoading, loadMore, totalHitsCount, sortState, setSort } = useScrollTable({
+    query,
+    columnNameMapping: columnIdMap,
+    initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
   });
 
   return (

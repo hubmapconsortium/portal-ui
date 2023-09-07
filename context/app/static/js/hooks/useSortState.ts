@@ -14,9 +14,9 @@ type SortAction =
       type: 'reset';
     };
 
-const initialSortState: SortState = {
-  columnId: 'last_modified_timestamp',
-  direction: 'desc',
+const defaultInitialSortState: SortState = {
+  columnId: undefined,
+  direction: undefined,
 } as SortState;
 
 function sortReducer(state: SortState, action: SortAction): SortState {
@@ -54,7 +54,10 @@ function sortReducer(state: SortState, action: SortAction): SortState {
  *
  * @returns {object} An object containing the sort state, a sort array for use with the ES API, and functions to set and reset the sort state.
  */
-export const useSortState = (columnNameMapping: Record<string, string>) => {
+export const useSortState = (
+  columnNameMapping: Record<string, string>,
+  initialSortState: sortState = defaultInitialSortState,
+) => {
   const [sortState, dispatch] = useReducer(sortReducer, initialSortState);
 
   const setSort = useCallback((columnId: string) => {
