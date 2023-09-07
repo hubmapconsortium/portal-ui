@@ -1,4 +1,3 @@
-/* eslint-disable react/no-unstable-nested-components */
 /* eslint-disable no-underscore-dangle */
 import React, { useMemo } from 'react';
 import format from 'date-fns/format';
@@ -146,6 +145,7 @@ function Samples({ organTerms }) {
           </>
         }
       />
+      {/* eslint-disable react/no-unstable-nested-components */}
       <TableVirtuoso
         style={{ height: 400 }}
         data={searchHits}
@@ -192,6 +192,7 @@ function Samples({ organTerms }) {
           </>
         )}
       />
+      {/* eslint-enable react/no-unstable-nested-components */}
     </SectionContainer>
   );
 }
