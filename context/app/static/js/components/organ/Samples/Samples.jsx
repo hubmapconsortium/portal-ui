@@ -51,7 +51,10 @@ function SampleHeaderCell({ column, setSort, sortState }) {
   // within the cell. The absolute button is the one that is visible and clickable, and takes up the full width of
   // the cell, which is guaranteed to be wide enough to contain the column label.
   return (
-    <HeaderCell key={column.id} sx={{ position: 'relative' }}>
+    <HeaderCell
+      key={column.id}
+      sx={({ palette }) => ({ position: 'relative', backgroundColor: palette.background.paper })}
+    >
       <Button sx={{ visibility: 'hidden', whiteSpace: 'nowrap', py: 0 }} fullWidth disabled>
         {column.label}
       </Button>
@@ -81,7 +84,7 @@ function SampleHeaderCell({ column, setSort, sortState }) {
 
 const TableComponents = {
   Scroller: React.forwardRef((props, ref) => <TableContainer component={Paper} {...props} ref={ref} />),
-  Table: (props) => <Table {...props} style={{ borderCollapse: 'separate' }} stickyHeader />,
+  Table: (props) => <Table {...props} style={{ borderCollapse: 'separate' }} />,
   TableHead,
   TableRow,
   TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
@@ -112,7 +115,7 @@ function Samples({ organTerms }) {
         },
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
-      size: 100,
+      size: 1000,
     }),
     [organTerms],
   );
@@ -148,6 +151,7 @@ function Samples({ organTerms }) {
       {/* eslint-disable react/no-unstable-nested-components */}
       <TableVirtuoso
         style={{ height: 400 }}
+        increaseViewportBy={{ top: 250, bottom: 500 }} // Reduces flickering. Potentially less necessary with React 18 https://github.com/petyosi/react-virtuoso/issues/914.
         data={searchHits}
         endReached={loadMore}
         totalCount={totalHitsCount}
@@ -155,7 +159,10 @@ function Samples({ organTerms }) {
         fixedHeaderContent={() => (
           <>
             <TableRow>
-              <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
+              <SelectableHeaderCell
+                allTableRowKeys={searchHits.map((hit) => hit._id)}
+                sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
+              />
               {columns.map((column) => (
                 <SampleHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
               ))}
