@@ -4,7 +4,7 @@
   "[javascript,javascriptreact,typescript,typescriptreact]": {
     "editor.defaultFormatter": "dbaeumer.vscode-eslint"
   },
-  "[yaml][md][json]": {
+  "[yaml][markdown][json]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
   "[python]": {
