@@ -1,38 +1,38 @@
-describe('portal-ui', () => {
-  context('macbook-size', () => {
+describe("portal-ui", () => {
+  context("macbook-size", () => {
     beforeEach(() => {
-      cy.viewport('macbook-15')
-    })
-    it('has nice 404', () => {
+      cy.viewport("macbook-15");
+    });
+    it("has nice 404", () => {
       // Homepage
-      cy.visit('/no-such-page', {failOnStatusCode: false});
-      cy.contains('Page Not Found');
-      cy.contains('If this page should exist, submit a bug report to help@hubmapconsortium.org.');
+      cy.visit("/no-such-page", { failOnStatusCode: false });
+      cy.contains("Page Not Found");
+      cy.contains("If this page should exist, submit a bug report.");
     });
 
-    it('handles click-through', () => {
+    it("handles click-through", () => {
       // Homepage
-      cy.visit('/');
-      cy.contains('Human BioMolecular Atlas Program');
-    
+      cy.visit("/");
+      cy.contains("Human BioMolecular Atlas Program");
+
       // Donors
-      cy.contains('Donors');
+      cy.contains("Donors");
       // Samples
-      cy.contains('Samples');
+      cy.contains("Samples");
       // Datasets
-      cy.contains('Datasets');
+      cy.contains("Datasets");
       // CCF-UI
-      cy.contains('Atlas & Tools');
+      cy.contains("Atlas & Tools");
       // Resources
-      cy.contains('Resources');
+      cy.contains("Resources");
 
       // Static pages are tested separately.
 
-      cy.findByTestId('user-profile-dropdown').contains('User Profile').click();
+      cy.findByTestId("user-profile-dropdown").contains("User Profile").click();
 
       // login
       // Don't click! We shouldn't depend on Globus in tests.
-      cy.findByTestId('login-link').contains('Log In')
+      cy.findByTestId("login-link").contains("Log In");
 
       // TODO: groups_token is now required for search results, so we can pass it
       // back to the client to make the Elasticsearch request. I don't want to go
