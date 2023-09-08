@@ -53,6 +53,7 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     <Autocomplete
       options={options}
       multiple
+      filterSelectedOptions
       getOptionLabel={(option) => option.full}
       isOptionEqualToValue={(option, value) => option.full === value}
       loading={loading.current}
