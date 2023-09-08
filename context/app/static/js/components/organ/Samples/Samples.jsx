@@ -120,7 +120,7 @@ function Samples({ organTerms }) {
     [organTerms],
   );
 
-  const { searchHits, isLoading, loadMore, totalHitsCount, sortState, setSort } = useScrollTable({
+  const { searchHits, allSearchIDs, isLoading, loadMore, totalHitsCount, sortState, setSort } = useScrollTable({
     query,
     columnNameMapping: columnIdMap,
     initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
@@ -160,7 +160,7 @@ function Samples({ organTerms }) {
           <>
             <TableRow>
               <SelectableHeaderCell
-                allTableRowKeys={searchHits.map((hit) => hit._id)}
+                allTableRowKeys={allSearchIDs}
                 sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
               />
               {columns.map((column) => (

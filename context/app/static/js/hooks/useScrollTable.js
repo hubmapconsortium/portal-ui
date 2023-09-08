@@ -1,5 +1,5 @@
 import { useSortState } from 'js/hooks/useSortState';
-import { useScrollSearchHits } from 'js/hooks/useSearchData';
+import { useScrollSearchHits, useAllSearchIDs } from 'js/hooks/useSearchData';
 import { keepPreviousData } from 'js/helpers/swr';
 
 function useScrollTable({ query, columnNameMapping, initialSortState }) {
@@ -7,12 +7,14 @@ function useScrollTable({ query, columnNameMapping, initialSortState }) {
 
   const queryWithSort = { ...query, sort };
 
+  const { allSearchIDs } = useAllSearchIDs(query, {});
+
   const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(queryWithSort, {
-    query: queryWithSort.size ?? 100,
+    pageSize: queryWithSort.size ?? 100,
     use: [keepPreviousData],
   });
 
-  return { searchHits, isLoading, loadMore, totalHitsCount, sortState, setSort };
+  return { searchHits, allSearchIDs, isLoading, loadMore, totalHitsCount, sortState, setSort };
 }
 
 export default useScrollTable;

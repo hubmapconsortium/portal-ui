@@ -57,6 +57,51 @@ function useSearchHits(
   return { searchHits, isLoading };
 }
 
+async function fetchAllIDs(...args) {
+  const results = await fetchSearchData(...args);
+  const hits = results?.hits?.hits ?? [];
+  // eslint-disable-next-line no-underscore-dangle
+  return hits.map((hit) => hit?._id);
+}
+
+function useAllSearchIDs(
+  query,
+  { useDefaultQuery = false, ...swrConfigRest } = {
+    useDefaultQuery: false,
+    fetcher: fetchSearchData,
+  },
+) {
+  const { elasticsearchEndpoint, groupsToken } = useAppContext();
+
+  const totalHitsQuery = { ...query, track_total_hits: true, size: 0, sort: [{ _id: 'asc' }] };
+
+  const { searchData } = useSearchData(totalHitsQuery, useDefaultQuery, fetchSearchData, {
+    fallbackData: {},
+    ...swrConfigRest,
+  });
+
+  const totalHitsCount = searchData?.hits?.total?.value;
+
+  const numberOfPagesToRequest = totalHitsCount ? Math.ceil(10000 / totalHitsCount) : undefined;
+
+  const getKey = useCallback(() => {
+    if (numberOfPagesToRequest === undefined) {
+      return null;
+    }
+
+    const idsQuery = { ...query, _source: false, sort: [{ _id: 'asc' }] };
+
+    return [idsQuery, elasticsearchEndpoint, groupsToken, useDefaultQuery, numberOfPagesToRequest];
+  }, [query, numberOfPagesToRequest, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
+
+  const { data } = useSWRInfinite(getKey, (args) => fetchAllIDs(...args), {
+    fallbackData: [],
+    ...swrConfigRest,
+  });
+
+  return { allSearchIDs: data.flat() };
+}
+
 // Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
 function getSearchAfterSort(hits) {
   const { sort } = hits.slice(-1)[0];
@@ -129,5 +174,5 @@ function useScrollSearchHits(
   return { searchHits, error, isLoading, setSize, loadMore, totalHitsCount, isReachingEnd };
 }
 
-export { fetchSearchData, useSearchHits, useScrollSearchHits };
+export { fetchSearchData, useSearchHits, useScrollSearchHits, useAllSearchIDs };
 export default useSearchData;
