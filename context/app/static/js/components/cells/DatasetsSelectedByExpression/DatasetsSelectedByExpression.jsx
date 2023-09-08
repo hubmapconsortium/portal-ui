@@ -49,7 +49,7 @@ function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
             MenuProps: {
               anchorOrigin: {
                 vertical: 'bottom',
-                horizontal: 'left',
+                horizontal: 'center',
               },
               getContentAnchorEl: null,
             },
