@@ -57,12 +57,19 @@ function useSearchHits(
   return { searchHits, isLoading };
 }
 
+function getTotalHitsCount(results) {
+  return results?.hits?.total?.value;
+}
+
 async function fetchAllIDs(...args) {
   const results = await fetchSearchData(...args);
   const hits = results?.hits?.hits ?? [];
   // eslint-disable-next-line no-underscore-dangle
   return hits.map((hit) => hit?._id);
 }
+
+// We do not want the query to revalidate when _source or sort change.
+const sharedIDsQueryClauses = { _source: false, sort: [{ _id: 'asc' }] };
 
 function useAllSearchIDs(
   query,
@@ -73,15 +80,17 @@ function useAllSearchIDs(
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
-  const totalHitsQuery = { ...query, track_total_hits: true, size: 0, sort: [{ _id: 'asc' }] };
+  const { searchData } = useSearchData(
+    { ...query, track_total_hits: true, size: 0, ...sharedIDsQueryClauses },
+    useDefaultQuery,
+    fetchSearchData,
+    {
+      fallbackData: {},
+      ...swrConfigRest,
+    },
+  );
 
-  const { searchData } = useSearchData(totalHitsQuery, useDefaultQuery, fetchSearchData, {
-    fallbackData: {},
-    ...swrConfigRest,
-  });
-
-  const totalHitsCount = searchData?.hits?.total?.value;
-
+  const totalHitsCount = getTotalHitsCount(searchData);
   const numberOfPagesToRequest = totalHitsCount ? Math.ceil(10000 / totalHitsCount) : undefined;
 
   const getKey = useCallback(() => {
@@ -89,9 +98,13 @@ function useAllSearchIDs(
       return null;
     }
 
-    const idsQuery = { ...query, _source: false, sort: [{ _id: 'asc' }] };
-
-    return [idsQuery, elasticsearchEndpoint, groupsToken, useDefaultQuery, numberOfPagesToRequest];
+    return [
+      { ...query, ...sharedIDsQueryClauses },
+      elasticsearchEndpoint,
+      groupsToken,
+      useDefaultQuery,
+      numberOfPagesToRequest,
+    ];
   }, [query, numberOfPagesToRequest, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
 
   const { data } = useSWRInfinite(getKey, (args) => fetchAllIDs(...args), {
@@ -122,20 +135,16 @@ const withFetcherArgs =
     return [{ ...query, search_after: searchAfterSort }, ...rest];
   };
 
-const getOuterHits = (d) => d?.hits;
-
-const getFirstPageHits = (d) => getOuterHits(d[0]);
-
-function getCombinedHits(data) {
-  const hasData = data.length > 0;
+function getCombinedHits(pagesResults) {
+  const hasData = pagesResults.length > 0;
 
   if (!hasData) {
     return { totalHitsCount: undefined, searchHits: [] };
   }
 
   return {
-    totalHitsCount: getFirstPageHits(data)?.total?.value,
-    searchHits: data.map((d) => getOuterHits(d)?.hits).flat(),
+    totalHitsCount: getTotalHitsCount(pagesResults[0]),
+    searchHits: pagesResults.map((d) => d?.hits?.hits).flat(),
   };
 }
 
@@ -147,7 +156,6 @@ function useScrollSearchHits(
   },
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
-  const swrConfig = { fallbackData: [], ...swrConfigRest };
 
   const getKey = useMemo(
     () => withFetcherArgs(query, elasticsearchEndpoint, groupsToken, useDefaultQuery),
@@ -155,14 +163,13 @@ function useScrollSearchHits(
   );
 
   const { data, error, isLoading, size, setSize } = useSWRInfinite(getKey, (args) => fetcher(...args), {
-    ...swrConfig,
+    fallbackData: [],
+    ...swrConfigRest,
   });
 
   const { searchHits, totalHitsCount } = getCombinedHits(data);
 
-  const isEmpty = getFirstPageHits(data)?.hits?.length === 0;
-
-  const isReachingEnd = isEmpty || searchHits.length === totalHitsCount;
+  const isReachingEnd = searchHits.length === 0 || searchHits.length === totalHitsCount;
 
   const loadMore = useCallback(() => {
     if (isReachingEnd) {
