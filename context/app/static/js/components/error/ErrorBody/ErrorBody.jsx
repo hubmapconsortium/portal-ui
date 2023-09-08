@@ -3,16 +3,11 @@ import PropTypes from 'prop-types';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import HelpLink from 'js/shared-styles/Links/HelpLink';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 
 function LoginLink() {
   return <InternalLink href="/login">login</InternalLink>;
 }
-function HelpEmailLink() {
-  return <HelpLink />;
-}
-
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
   if (isMaintenancePage) {
     return (
@@ -31,21 +26,10 @@ function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMainten
     );
   }
 
-  if (errorCode === 401) {
-    return (
-      <>
-        Could not confirm your Globus credentials. You may not have been added to the HuBMAP Group on Globus. Request
-        access at <HelpEmailLink />. Or, you may be logged into a different Globus account from the one in the HuBMAP
-        Group. Check <OutboundIconLink href="http://app.globus.org/">http://app.globus.org/</OutboundIconLink> details
-        details on account.
-      </>
-    );
-  }
-
   if (errorCode === 403 && isAuthenticated) {
     return (
       <>
-        You may not have access to this resource. Request access at <HelpEmailLink />.
+        You may not have access to this resource. Please <ContactUsLink /> to request access.
       </>
     );
   }
@@ -72,14 +56,14 @@ function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMainten
     }
     return (
       <>
-        If this page should exist, submit a bug report to <HelpEmailLink />.
+        If this page should exist, <ContactUsLink>submit a bug report</ContactUsLink>.
       </>
     );
   }
 
   return (
     <>
-      If this problem persists, submit a bug report to <HelpEmailLink />.
+      If this problem persists, <ContactUsLink>submit a bug report</ContactUsLink>.
     </>
   );
 }

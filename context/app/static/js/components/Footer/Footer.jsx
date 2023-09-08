@@ -6,7 +6,7 @@ import { InternalLink } from 'js/shared-styles/Links';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
-import HelpLink from 'js/shared-styles/Links/HelpLink';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
 function Footer({ isMaintenancePage }) {
@@ -33,7 +33,7 @@ function Footer({ isMaintenancePage }) {
                   </InternalLink>
                 </>
               )}
-              <HelpLink variant="body2">Submit Feedback</HelpLink>
+              <ContactUsLink variant="body2">Submit Feedback</ContactUsLink>
               <OutboundIconLink variant="body2" href="https://twitter.com/_hubmap">
                 HuBMAP on Twitter
               </OutboundIconLink>
