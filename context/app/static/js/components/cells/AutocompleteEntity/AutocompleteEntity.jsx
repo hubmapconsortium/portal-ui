@@ -54,7 +54,7 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
       options={options}
       multiple
       filterSelectedOptions
-      getOptionLabel={(option) => option.full}
+      getOptionLabel={(option) => (typeof option === 'string' ? option : option.full)}
       isOptionEqualToValue={(option, value) => option.full === value}
       loading={loading.current}
       renderOption={(props, option) => (
