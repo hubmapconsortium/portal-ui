@@ -2,20 +2,19 @@ name: 🪣  Misc CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request: {}
 
 jobs:
   build:
-
     # Available versions:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+      - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
 
-    - name: Run test script
-      run: etc/test/test-misc.sh
+      - name: Run test script
+        run: etc/test/test-misc.sh

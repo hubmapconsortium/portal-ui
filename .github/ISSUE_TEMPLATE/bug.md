@@ -1,10 +1,7 @@
 ---
 name: Bug
 about: Something isn't working
-title: ''
+title: ""
 labels: UI, bug
-assignees: ''
-
+assignees: ""
 ---
-
-

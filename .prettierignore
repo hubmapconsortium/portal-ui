@@ -1,2 +1,1 @@
-context/ingest-validation-tools/**/*.*
-context/app/organ/*.y*ml
+context/.eslintignore

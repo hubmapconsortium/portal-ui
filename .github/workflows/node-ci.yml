@@ -2,32 +2,31 @@ name: ⬡ Node CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request: {}
 
 jobs:
   build:
-
     # Available versions:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+      - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
 
-    - name: Set up Node
-      uses: actions/setup-node@v3
-      with:
-        node-version-file: '.nvmrc'
-        cache: 'npm'
-        cache-dependency-path: context/package-lock.json
-   
-    - run: npm --version
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          cache-dependency-path: context/package-lock.json
 
-    - name: Install node dependencies
-      run: npm ci --prefix context
+      - run: npm --version
 
-    - name: Run test script
-      run: etc/test/test-node.sh
+      - name: Install node dependencies
+        run: npm ci --prefix context
+
+      - name: Run test script
+        run: etc/test/test-node.sh
