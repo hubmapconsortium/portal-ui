@@ -30,8 +30,14 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
     const { target } = event;
     setSubstring(target.value);
 
+    // Keep already-selected options present in options list to prevent "invalid value" warning
+    const selectedOptions = cellVariableNames.map((name) => ({
+      match: name,
+      full: name,
+    }));
+
     if (target.value === '') {
-      setOptions([]);
+      setOptions(selectedOptions);
       return;
     }
 
@@ -42,7 +48,14 @@ function AutocompleteEntity({ targetEntity, setter, cellVariableNames, setCellVa
         substring: target.value,
       });
       loading.current = false;
-      setOptions(newOptions);
+      setOptions(
+        newOptions.reduce((acc, option) => {
+          if (!selectedOptions.some((existingOption) => existingOption.full === option.full)) {
+            acc.push(option);
+          }
+          return acc;
+        }, selectedOptions),
+      );
     } catch (e) {
       loading.current = false;
       console.warn(e.message);
