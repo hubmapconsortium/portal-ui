@@ -1,3 +1,8 @@
+## v0.79.2 - 2023-09-08
+
+- Revert matomo changes.
+
+
 ## v0.79.0 - 2023-09-08
 
  - Improve Matomo tracking specificity.
