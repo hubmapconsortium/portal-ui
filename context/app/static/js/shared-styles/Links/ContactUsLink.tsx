@@ -1,7 +1,7 @@
 import React, { ComponentProps, MouseEvent, PropsWithChildren } from 'react';
 import { trackLink } from 'js/helpers/trackers';
 import IconLink from './iconLinks/IconLink';
-import { EmailIcon } from '../icons';
+import { SupportIcon } from '../icons';
 
 type ContactUsLinkProps = PropsWithChildren<Omit<ComponentProps<typeof IconLink>, 'isOutbound' | 'href'>> & {
   iconFontSize?: string;
@@ -22,7 +22,7 @@ function ContactUsLink({ iconFontSize, children, ...props }: ContactUsLinkProps)
       iconOnLeft={false}
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      icon={<EmailIcon $fontSize={iconFontSize} />}
+      icon={<SupportIcon $fontSize={iconFontSize} />}
       {...props}
       onClick={(e: MouseEvent) => {
         getHelpEvent();
