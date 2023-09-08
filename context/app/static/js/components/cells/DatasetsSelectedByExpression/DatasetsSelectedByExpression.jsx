@@ -35,8 +35,6 @@ function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
       <AutocompleteEntity
         targetEntity={`${queryType}s`}
         setter={setCellVariableNames}
-        cellVariableNames={cellVariableNames}
-        setCellVariableNames={setCellVariableNames}
       />
       {queryType === 'gene' && (
         <StyledTextField
