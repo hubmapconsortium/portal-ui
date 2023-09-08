@@ -3,11 +3,10 @@ from datetime import datetime
 
 from flask import (
     make_response, current_app, url_for,
-    request, redirect, session)
+    request, redirect, abort, session)
 import requests
 import globus_sdk
-from json import dumps, load
-from hubmap_commons.hm_auth import AuthCache
+from json import dumps
 
 from .utils import make_blueprint
 
@@ -134,54 +133,33 @@ def login():
 
     user_globus_groups = get_globus_groups(groups_token)
 
-    with open(AuthCache.groupJsonFilename) as globus_groups_file:
-        globus_groups = load(globus_groups_file)
+    if not has_globus_group(user_globus_groups, current_app.config['GROUP_ID']):
+        # Globus institution login worked, but user does not have HuBMAP group!
+        log('7: 401')
+        abort(401)
 
-    permission_groups = {
+    additional_groups = {
         'HuBMAP': current_app.config['GROUP_ID'],
         'Workspaces': current_app.config['WORKSPACES_GROUP_ID']
     }
-
-    # Determine if the user belongs to any of the groups in the globus groups master list
-    user_internal_hubmap_groups = [
-        g for g in globus_groups if user_globus_groups and has_globus_group(
-            user_globus_groups, g.get('uuid'))]
-
-    # If user belongs to any internal hubmap groups, they are an internal user
-    is_internal_user = len(user_internal_hubmap_groups) > 0
-
-    user_permission_groups = [k for k, group_id in permission_groups.items(
-    ) if has_globus_group(user_globus_groups, group_id)]
 
     session.update(
         groups_token=groups_token,
         is_authenticated=True,
         user_email=user_email,
         workspaces_token=workspaces_token,
-        user_groups=user_permission_groups
+        user_groups=[k for k, group_id in additional_groups.items(
+        ) if has_globus_group(user_globus_groups, group_id)]
     )
 
     previous_url = unquote(request.cookies.get('urlBeforeLogin'))
     response = make_response(
         redirect(previous_url))
-
-    # Set cookies used in trackers.js:
-    if (is_internal_user):
-        response.set_cookie(
-            key='last_login',
-            value=datetime.now().isoformat(),
-            expires=2**31 - 1)
-    else:
-        # If the user is not internal, we don't want the last_login cookie to be set
-        response.set_cookie(key='last_login', value='', expires=0)
-
-    # Always set this cookie, even if the user is not internal, so that we can
-    # more easily track engagement with the portal by institution
-    # Using a pipe-delimited list of group names to avoid corruption from ascii encoding commas
-    user_groups = 'none' if not user_globus_groups else '|'.join(
-        g.get('name') for g in user_globus_groups)
-    response.set_cookie(key='user_groups', value=user_groups, expires=2**31 - 1)
-
+    # Cookie read in trackers.js:
+    response.set_cookie(
+        key='last_login',
+        value=datetime.now().isoformat(),
+        expires=2**31 - 1)
     log('7: redirect previous_url')
     return response
 
@@ -223,7 +201,4 @@ def logout():
     kwargs = {redirect_to_globus_param: True}
     response = make_response(
         redirect(url_for('routes_auth.logout', _external=True, **kwargs)))
-    # Reset cookies used in trackers.js:
-    response.set_cookie(key="last_login", value="", max_age=0)
-    response.set_cookie(key="user_groups", value="none", max_age=0)
     return response

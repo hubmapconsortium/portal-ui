@@ -19,25 +19,8 @@ function getSiteId(location) {
 }
 
 function getUserType() {
-  // `last_login` cookie is only set when internal users log in.
-  // Default to `external` if the cookie is not set.
-  return readCookie('last_login') && isAuthenticated ? 'internal' : 'external';
-}
-
-function getUserGroups() {
-  // Reads the user's groups from the cookie set in `routes_auth.py`.
-  // Default to `none` if the cookie is not set.
-  return readCookie('user_groups') || 'none';
-}
-
-/**
- * Read cookies set in `routes_auth.py` to determine user type and groups.
- * @returns {Array} An array of custom dimensions matching the configuration in Matomo
- */
-function getCustomDimensions() {
-  const userType = getUserType();
-  const userGroups = getUserGroups();
-  return [1 /* user_type */, userType, 2 /* user_groups */, userGroups];
+  // Set in routes_auth.py:
+  return readCookie('last_login') ? 'internal' : 'external';
 }
 
 const tracker = new MatomoTracker({
@@ -59,9 +42,7 @@ const tracker = new MatomoTracker({
   //   setSecureCookie: true,
   //   setRequestMethod: 'POST'
   // }
-  configurations: {
-    setCustomDimension: getCustomDimensions(),
-  },
+  configurations: { setCustomDimension: [1 /* user_type */, getUserType()] },
 });
 
 ReactGA.initialize('G-Q1QJYZHM1D', {
