@@ -243,13 +243,6 @@ const theme = createTheme({
         underline: 'none',
       },
     },
-    MuiSvgIcon: {
-      styleOverrides: {
-        root: {
-          fontSize: '1rem',
-        },
-      },
-    },
   },
 });
 
