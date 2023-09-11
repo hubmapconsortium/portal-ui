@@ -4,10 +4,10 @@ import FileBrowserDirectory from '../FileBrowserDirectory';
 import FileBrowserFile from '../FileBrowserFile';
 import { FileTree } from '../types';
 
-type FileBrowserNodeProps = {
+interface FileBrowserNodeProps {
   fileSubTree: FileTree;
   depth: number;
-};
+}
 
 function FileBrowserNode({ fileSubTree, depth }: FileBrowserNodeProps) {
   return (

@@ -18,9 +18,9 @@ import MultiFileDownloader from '../MultiFileDownloader';
 import { useFileLinks } from './hooks';
 import { DownloadAllButton } from './DownloadAllButton';
 
-type DataProductsProps = {
+interface DataProductsProps {
   files: UnprocessedFile[];
-};
+}
 
 function DataProducts({ files }: DataProductsProps) {
   const dataProducts = files.filter((file) => file.is_data_product);

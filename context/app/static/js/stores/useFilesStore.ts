@@ -2,11 +2,11 @@ import create from 'zustand';
 
 export type FileDisplayOption = 'all' | 'qa/qc' | 'data products';
 
-export type FilesStore = {
+export interface FilesStore {
   filesToDisplay: FileDisplayOption;
   toggleDisplayOnlyQaQc: () => void;
   toggleDisplayOnlyDataProducts: () => void;
-};
+}
 
 const useFilesStore = create<FilesStore>((set) => ({
   filesToDisplay: 'all',

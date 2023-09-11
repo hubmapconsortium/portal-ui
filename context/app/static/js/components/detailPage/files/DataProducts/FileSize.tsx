@@ -2,11 +2,11 @@ import React from 'react';
 import prettyBytes from 'pretty-bytes';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 
-type FileSizeProps = {
+interface FileSizeProps {
   size: number;
   variant?: TypographyProps['variant'];
   color?: TypographyProps['color'];
-};
+}
 
 export function FileSize({ size, variant = 'body2', color = 'black' }: FileSizeProps) {
   return (

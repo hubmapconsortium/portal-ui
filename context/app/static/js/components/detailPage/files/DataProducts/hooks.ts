@@ -5,10 +5,10 @@ import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import { getTokenParam } from 'js/helpers/functions';
 import { UnprocessedFile } from '../types';
 
-type PipelineInfo = {
+interface PipelineInfo {
   origin: string;
   name: string;
-};
+}
 
 // Default fallback values in case no pipeline info is available in metadata
 const defaultPipeline: PipelineInfo = {

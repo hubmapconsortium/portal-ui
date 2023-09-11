@@ -1,15 +1,13 @@
 ---
 name: Feedback
 about: Feedback reported by portal users via HuBMAP Help Desk
-title: ''
+title: ""
 labels: UI, triage, Feedback
 assignees: mccalluc, tsliaw
-
 ---
 
 ## Feedback
 
-__Help Desk Issue Tracker URL__:
+**Help Desk Issue Tracker URL**:
 
-__Message__:
-
+**Message**:

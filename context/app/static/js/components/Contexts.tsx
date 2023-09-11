@@ -10,7 +10,7 @@ type DagProvenanceType =
       name: string;
     };
 
-type FlaskDataContextType = {
+interface FlaskDataContextType {
   redirected_from: string;
   entity: {
     entity_type: string;
@@ -21,7 +21,7 @@ type FlaskDataContextType = {
     [key: string]: unknown;
   };
   [key: string]: unknown;
-};
+}
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');
 
@@ -35,11 +35,11 @@ export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataCo
  */
 export const useFlaskDataContext = () => useContext(FlaskDataContext);
 
-type AppContextType = {
+interface AppContextType {
   assetsEndpoint: string;
   groupsToken: string;
   [key: string]: unknown;
-};
+}
 
 export const AppContext = createContext<AppContextType>('AppContext');
 

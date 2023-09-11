@@ -1,7 +1,7 @@
-type SWRErrorInfo = {
+interface SWRErrorInfo {
   info: object;
   status: number;
-};
+}
 
 class SWRError extends Error {
   public info: object;
