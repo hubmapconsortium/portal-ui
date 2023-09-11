@@ -139,12 +139,12 @@ def login():
 
     log('7: HuBMAP globus groups')
     # Auth Helper cache must be initialized before we can call getHuBMAPGroupInfo()
-    if AuthHelper.isInitialized() == False:
+    if not AuthHelper.isInitialized():
         client_id = current_app.config['APP_CLIENT_ID']
         client_secret = current_app.config['APP_CLIENT_SECRET']
-        authcache = AuthHelper.create(client_id, client_secret)
+        AuthHelper.create(client_id, client_secret)
     else:
-        authcache = AuthHelper.instance()
+        AuthHelper.instance()
 
     globus_groups = AuthHelper.getHuBMAPGroupInfo().values()
 
