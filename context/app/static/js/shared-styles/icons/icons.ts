@@ -1,5 +1,4 @@
-import styled, { css } from 'styled-components';
-// NOTE: We are using the rounded icon variants consistently.
+// NOTE: We are using the Rounded icon variants consistently.
 import BubbleChartIcon from '@mui/icons-material/BubbleChartRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import PersonIcon from '@mui/icons-material/PersonRounded';
@@ -22,93 +21,47 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ContactSupportIcon from '@mui/icons-material/ContactSupportOutlined';
 
-const fontSizeStyle = css`
-  font-size: ${(props) => props.$fontSize || '1rem'};
-`;
+const CenterIcon = AccountBalanceIcon;
 
-const CenterIcon = styled(AccountBalanceIcon)`
-  ${fontSizeStyle};
-`;
+const CloseIcon = CloseRoundedIcon;
 
-const CloseIcon = styled(CloseRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const CollectionIcon = CollectionsBookmarkRoundedIcon;
 
-const CollectionIcon = styled(CollectionsBookmarkRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const DonorIcon = PersonIcon;
 
-const DonorIcon = styled(PersonIcon)`
-  ${fontSizeStyle};
-`;
+const SampleIcon = BubbleChartIcon;
 
-const SampleIcon = styled(BubbleChartIcon)`
-  ${fontSizeStyle};
-`;
+const DatasetIcon = TableChartIcon;
 
-const DatasetIcon = styled(TableChartIcon)`
-  ${fontSizeStyle};
-`;
+const PublicationIcon = DescriptionOutlinedIcon;
 
-const PublicationIcon = styled(DescriptionOutlinedIcon)`
-  ${fontSizeStyle}
-`;
+const ExternalLinkIcon = LaunchRoundedIcon;
 
-const ExternalLinkIcon = styled(LaunchRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const InfoIcon = InfoRoundedIcon;
 
-const InfoIcon = styled(InfoRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const SuccessIcon = CheckCircleRoundedIcon;
 
-const SuccessIcon = styled(CheckCircleRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const FileIcon = InsertDriveFileRoundedIcon;
 
-const FileIcon = styled(InsertDriveFileRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const ErrorIcon = ErrorRoundedIcon;
 
-const ErrorIcon = styled(ErrorRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const MoreIcon = MoreHorizRoundedIcon;
 
-const MoreIcon = styled(MoreHorizRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const DeleteIcon = DeleteRoundedIcon;
 
-const DeleteIcon = styled(DeleteRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const EditIcon = EditRoundedIcon;
 
-const EditIcon = styled(EditRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const EmailIcon = EmailRoundedIcon;
 
-const EmailIcon = styled(EmailRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const ListsIcon = ListAltRoundedIcon;
 
-const ListsIcon = styled(ListAltRoundedIcon)`
-  ${fontSizeStyle}
-`;
+const DownIcon = ArrowDropDownRoundedIcon;
 
-const DownIcon = styled(ArrowDropDownRoundedIcon)`
-  ${fontSizeStyle}
-`;
+const UpIcon = ArrowDropUpRoundedIcon;
 
-const UpIcon = styled(ArrowDropUpRoundedIcon)`
-  ${fontSizeStyle}
-`;
+const AddIcon = AddRoundedIcon;
 
-const AddIcon = styled(AddRoundedIcon)`
-  ${fontSizeStyle}
-`;
-
-const SupportIcon = styled(ContactSupportIcon)`
-  ${fontSizeStyle}
-`;
+const SupportIcon = ContactSupportIcon;
 
 export {
   CloseIcon,
