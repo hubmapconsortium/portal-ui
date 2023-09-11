@@ -73,14 +73,13 @@
         {
             "label": "Flask Server",
             "type": "shell",
-            "command": "python -m flask run",
+            "command": "python -m flask run --debug",
             "dependsOn": [
                 "Copy app configuration"
             ],
             "options": {
                 "cwd": "${workspaceFolder}/context",
                 "env": {
-                    "FLASK_ENV": "development",
                     "FLASK_APP": "app/main.py"
                 }
             },
@@ -96,7 +95,7 @@
                 "background": {
                     "activeOnStart": true,
                     "beginsPattern": "Serving Flask app",
-                    "endsPattern": "Debugger is active"
+                    "endsPattern": "Running on"
                 }
             }
         },
