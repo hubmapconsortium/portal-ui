@@ -74,6 +74,9 @@ declare module '@mui/material/styles' {
     zIndex: ZIndex;
   }
   export type ThemeOptions = Partial<Theme>;
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  interface DefaultTheme extends Theme {}
 }
 
 // default HuBMAP color and font theme
@@ -238,6 +241,13 @@ const theme = createTheme({
     MuiLink: {
       defaultProps: {
         underline: 'none',
+      },
+    },
+    MuiSvgIcon: {
+      styleOverrides: {
+        root: {
+          fontSize: '1rem',
+        },
       },
     },
   },
