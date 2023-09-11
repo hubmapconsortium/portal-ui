@@ -7,9 +7,7 @@ describe("portal-ui", () => {
       // Homepage
       cy.visit("/no-such-page", { failOnStatusCode: false });
       cy.contains("Page Not Found");
-      cy.contains(
-        "If this page should exist, submit a bug report to help@hubmapconsortium.org."
-      );
+      cy.contains("If this page should exist, submit a bug report.");
     });
 
     it("handles click-through", () => {

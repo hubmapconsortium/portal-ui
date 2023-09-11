@@ -1,3 +1,17 @@
+## v0.79.2 - 2023-09-08
+
+- Revert matomo changes.
+
+
+## v0.79.0 - 2023-09-08
+
+ - Improve Matomo tracking specificity.
+ 
+- Change email links to contact form links.
+- Use legacy pip installer to fix docker build.
+- Update lint scripts to include typescript files.
+
+
 ## v0.78.0 - 2023-09-01
 
 - Add link to Antibody Validation Reports in atlas and tools menu.

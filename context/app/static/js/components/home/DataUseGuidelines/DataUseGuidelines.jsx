@@ -1,7 +1,7 @@
 import React from 'react';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
-import HelpLink from 'js/shared-styles/Links/HelpLink';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { StyledPaper, StyledTypography } from './style';
 
 const paragraphs = [
@@ -60,7 +60,7 @@ const paragraphs = [
     key: 'help',
     component: (
       <>
-        Please direct any questions to <HelpLink iconFontSize="1.1rem" />.
+        Please <ContactUsLink iconFontSize="1.1rem"> contact us with any questions</ContactUsLink>.
       </>
     ),
   },
