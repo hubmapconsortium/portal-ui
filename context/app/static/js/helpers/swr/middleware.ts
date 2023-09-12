@@ -28,7 +28,7 @@ const keepPreviousData: Middleware = (useSWRNext: SWRHook) => {
     }, [swr.data]);
 
     // Fallback to previous data if the current data is undefined.
-    const dataOrPreviousData = swr.data === undefined ? previousDataRef.current : swr.data;
+    const dataOrPreviousData = swr.data ?? previousDataRef.current;
 
     // We must use `Object.assign` to avoid read-only error.
     // eslint-disable-next-line prefer-object-spread

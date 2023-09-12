@@ -18,9 +18,9 @@ import MultiFileDownloader from '../MultiFileDownloader';
 import { useFileLinks } from './hooks';
 import { DownloadAllButton } from './DownloadAllButton';
 
-type DataProductsProps = {
+interface DataProductsProps {
   files: UnprocessedFile[];
-};
+}
 
 function DataProducts({ files }: DataProductsProps) {
   const dataProducts = files.filter((file) => file.is_data_product);
@@ -55,7 +55,7 @@ function DataProducts({ files }: DataProductsProps) {
                 <StyledInfoIcon color="primary" />
               </SecondaryBackgroundTooltip>
             </Box>
-            <FileSize size={totalFileSize} variant="body1" color="secondary.secondary" />
+            <FileSize size={totalFileSize} variant="body1" color="secondary.main" />
           </Box>
           <DownloadAllButton onDownloadAll={onDownloadAll} disabled={downloadAllClicked} />
           {downloadAllClicked && <MultiFileDownloader files={downloadLinks} />}

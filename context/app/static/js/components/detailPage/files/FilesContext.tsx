@@ -8,10 +8,10 @@ import FileBrowserDUA from '../BulkDataTransfer/FileBrowserDUA';
 // it to run immediately instead of when the user clicked the agree button.
 type OnDUAAgree = string | { handleAgree: () => void };
 
-type FilesContextType = {
+interface FilesContextType {
   openDUA: (onAgree: OnDUAAgree) => void;
   hasAgreedToDUA: boolean;
-};
+}
 
 const FilesContext = createContext<FilesContextType>('FilesContext');
 

@@ -2,49 +2,48 @@ name: 🌲🔧 Cypress Maintenance CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request: {}
 
 jobs:
   build:
-
     # Available versions:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
-    
-    - name: Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version-file: '.python-version'
-        architecture: 'x64'
+      - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
 
-    - name: Set up Node
-      uses: actions/setup-node@v3
-      with:
-        node-version-file: '.nvmrc'
-        cache: 'npm'
-        cache-dependency-path: |
-          context/package-lock.json
-          end-to-end/package-lock.json
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version-file: ".python-version"
+          architecture: "x64"
 
-    - run: npm --version
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          cache-dependency-path: |
+            context/package-lock.json
+            end-to-end/package-lock.json
 
-    - name: Install maintenance build node dependencies
-      run: npm ci --prefix context
-   
-    - name: Install cypress node dependencies
-      run: npm ci --prefix end-to-end
+      - run: npm --version
 
-    - name: Set up git config to make dev-start.sh happy
-      run: git config --global submodule.recurse true
+      - name: Install maintenance build node dependencies
+        run: npm ci --prefix context
 
-    - name: Run test script
-      run: etc/test/test-cypress.sh maintenance
-      env:
-        GH_ACTIONS_BRANCH: ${{ github.ref }}
-        GH_ACTIONS: true
+      - name: Install cypress node dependencies
+        run: npm ci --prefix end-to-end
+
+      - name: Set up git config to make dev-start.sh happy
+        run: git config --global submodule.recurse true
+
+      - name: Run test script
+        run: etc/test/test-cypress.sh maintenance
+        env:
+          GH_ACTIONS_BRANCH: ${{ github.ref }}
+          GH_ACTIONS: true

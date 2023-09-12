@@ -12,9 +12,9 @@ import DownloadFileButton from './DownloadFileButton';
 import { FileSize } from './FileSize';
 import { PipelineInfo } from './PipelineInfo';
 
-type DataProductProps = {
+interface DataProductProps {
   file: UnprocessedFile;
-};
+}
 
 export function DataProduct({ file }: DataProductProps) {
   const link = useFileLink(file);

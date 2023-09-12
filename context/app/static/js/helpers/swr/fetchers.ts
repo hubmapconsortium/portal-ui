@@ -1,7 +1,16 @@
-type fetchOptionsType = {
-  urls: string;
+import { SWRError } from './errors';
+
+interface FetchOptionsType {
   requestInit?: RequestInit;
   expectedStatusCodes?: number[];
+}
+
+type SingleFetchOptionsType = FetchOptionsType & {
+  url: string;
+};
+
+type MultiFetchOptionsType = FetchOptionsType & {
+  urls: string[];
 };
 
 /**
@@ -17,13 +26,14 @@ type fetchOptionsType = {
  * @param fetchOptions.expectedStatusCodes - Optional array of status codes which reflect a succesful request
  */
 
-export async function multiFetcher<T>({ urls, requestInit = {}, expectedStatusCodes = [200] }: fetchOptionsType) {
+export async function multiFetcher<T>({ urls, requestInit = {}, expectedStatusCodes = [200] }: MultiFetchOptionsType) {
   const f = (url: string) =>
-    fetch(url, requestInit).then((response) => {
+    fetch(url, requestInit).then(async (response) => {
       if (!expectedStatusCodes.includes(response.status)) {
-        const error = new Error(`The request to ${urls.join(', ')} failed.`);
-        error.info = response.json();
-        error.status = response.status;
+        const error = new SWRError(`The request to ${urls.join(', ')} failed.`, {
+          info: (await response.json()) as object,
+          status: response.status,
+        });
         throw error;
       }
       return response.json();
@@ -39,14 +49,14 @@ export async function multiFetcher<T>({ urls, requestInit = {}, expectedStatusCo
  * SWR fetcher which accepts a single URL and returns the response as JSON.
  * A custom requestInit object can be passed to fetch as well.
  * @example // without requestInit
- * const { data } = useSWR({ urls, multiFetcher });
+ * const { data } = useSWR({ urls, fetcher });
  * @example // with requestInit
  * const { data } = useSWR({ urls, token }, ({ urls, token }) => multiFetcher({ urls, { headers: { Authorization: `Bearer ${token}` } } })
  * @param fetchOptions
- * @param fetchOptions.urls - Array of URLs to fetch
+ * @param fetchOptions.url - URL to fetch
  * @param fetchOptions.requestInit - Optional RequestInit object to pass to fetch
  * @param fetchOptions.expectedStatusCodes - Optional array of status codes which reflect a succesful request
  */
-export async function fetcher<T>({ url, requestInit = {}, expectedStatusCodes = [200] }: fetchOptionsType) {
+export async function fetcher<T>({ url, requestInit = {}, expectedStatusCodes = [200] }: SingleFetchOptionsType) {
   return multiFetcher({ urls: [url], requestInit, expectedStatusCodes }).then((data) => data[0]) as Promise<T>;
 }
