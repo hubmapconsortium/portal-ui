@@ -10,7 +10,7 @@ const StyledCancelIcon = styled(CancelIcon)`
 
 const SelectedFilterDiv = styled.div`
   background-color: white;
-  border: 1px solid ${(props) => props.theme.palette.hoverShadow.main};
+  border: 1px solid ${(props) => props.theme.palette.common.hoverShadow};
   border-radius: 8px;
   margin: 8px 8px 0 0;
   display: flex;

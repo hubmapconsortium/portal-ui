@@ -1,11 +1,11 @@
-export type VignetteFigure = {
+export interface VignetteFigure {
   file: string;
   name: string;
-};
+}
 
-export type PublicationVignette = {
+export interface PublicationVignette {
   name: string;
   description: string;
   figures?: VignetteFigure[];
   directory_name: string;
-};
+}

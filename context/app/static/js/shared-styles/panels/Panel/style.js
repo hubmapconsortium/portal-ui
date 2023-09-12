@@ -20,7 +20,7 @@ const PanelBox = styled.div`
   flex-direction: column;
 
   &:hover {
-    background-color: ${(props) => props.theme.palette.hoverShadow.main};
+    background-color: ${(props) => props.theme.palette.common.hoverShadow};
   }
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     flex-direction: row;

@@ -27,7 +27,6 @@
 - Update READMEs to reflect current practices.
 - Add sort headers to samples tables on organ pages.
 
-
 ## v0.77.0 - 2023-08-14
 
 - Fix Reference dataset link color on organ page.
@@ -37,17 +36,15 @@
 - Handle spaces and underscores sent as part of organ name
 - Upgrade portal-visualization to 0.0.13.
 
-
 ## v0.76.3 - 2023-08-10
 
-- Implemented new panel design when entity api for globus link returns an error. 
+- Implemented new panel design when entity api for globus link returns an error.
 - Fix maintenance page config
 - Remove underline from Visualize link.
 
-
 ## v0.76.2 - 2023-08-03
 
-- Update error message when user attempts to access deleted list. 
+- Update error message when user attempts to access deleted list.
 - Add missing Collections icon to header.
 - Fix various styles broken during MUI 5 upgrade.
 - Update desktop dropdown popper to use Popper v2 offset API.
@@ -55,15 +52,13 @@
 - Fix Diversity page title size.
 - Upgrade to Vitessce v3.1.1.
 
-
 ## v0.76.1 - 2023-08-02
 
-- Add icons to header of donor, sample, and dataset detail pages. 
-- Add icons to tab in "Derived Datasets" table. 
-- Add icons to headers of donor, sample, and dataset search pages. 
-- Replace h1 Typography with PageTitle styled component. 
+- Add icons to header of donor, sample, and dataset detail pages.
+- Add icons to tab in "Derived Datasets" table.
+- Add icons to headers of donor, sample, and dataset search pages.
+- Replace h1 Typography with PageTitle styled component.
 - Upgrade from Material UI v4 to Material UI v5.
-
 
 ## v0.76.0 - 2023-07-31
 
@@ -71,59 +66,50 @@
 - Fix bug in hook to request publication vignettes files.
 - Configure storybook to build with swc instead of babel and compile typescript.
 
-
 ## v0.75.8 - 2023-07-26
 
 - Display message when protocols.io requests fail in protocols section.
 
-
 ## v0.75.7 - 2023-07-26
 
-- Refactor props in Sample page to use context. 
+- Refactor props in Sample page to use context.
 - Add tooltips for donor, sample, and dataset pages.
 - Add arguments to dev-start script to skip installing dependencies.
 - Update DataCite links to use DataCite Commons.
 - Update sample and dataset organ links to visit specific organ page not organs landing page.
- - Add support for multiple comma-separated protocols.io links.
- - Improve parsing of protocols.io links.
- - Restore display of public protocols.io links.
+- Add support for multiple comma-separated protocols.io links.
+- Improve parsing of protocols.io links.
+- Restore display of public protocols.io links.
 - Reverse no-wrap styles causing table of contents to overflow.
-
 
 ## v0.75.6 - 2023-07-18
 
 - Disable auth header/token inclusion for unauthenticated users.
 
-
 ## v0.75.5 - 2023-07-17
 
 - Update bulk data transfer section tooltips.
-
 
 ## v0.75.4 - 2023-07-17
 
 - Fix bug causing the outbound link icon to not display in Globus links before the DUA has been agreed upon.
 - Fix dbGaP study link in bulk data transfer section.
 
-
 ## v0.75.3 - 2023-07-17
 
 - Create bulk data transfer section.
-- Add links to Globus, dbGap study, and SRA Experiment for dbGaP datasets. 
-
+- Add links to Globus, dbGap study, and SRA Experiment for dbGaP datasets.
 
 ## v0.75.2 - 2023-07-17
 
 - Fix links in collection page datasets table.
 - Restore display of publication status for preprints.
 
-
 ## v0.75.1 - 2023-07-14
 
 - Fix spacing of derived entities sections.
 - Fix publication tooltip errantly appearing on other pages
 - Remove 'Internet' from publication citations.
-
 
 ## v0.75.0 - 2023-07-14
 
@@ -134,11 +120,9 @@
 - Set max vertical height and enable vertical scrolling for provenance graph.
 - Set initial vertical scroll position in provenance graph to halfway.
 
-
 ## v0.74.2 - 2023-07-13
 
 - Add support for publications with associated collections.
-
 
 ## v0.74.1 - 2023-07-12
 
@@ -156,7 +140,6 @@
 - Fixed undefined count tooltips popping up for entity counts on homepage.
 - Upgraded React-PDF to speed up display of PDF attachments.
 
-
 ## v0.74.0 - 2023-07-06
 
 - Add messaging for fair data principles to homepage, vitessce, and the dataset file browser.
@@ -168,7 +151,6 @@
 - Update project ESLint configuration and dependencies.
 - Remove Babel.
 - Introduce TypeScript.
-
 
 ## v0.73.1 - 2023-06-28
 
@@ -183,32 +165,29 @@
 - Removed search feature from home page.
 - Added vertical padding to the count section.
 - Formatted 10k+ homepage entity counts to nearest thousands place. (10,500 -> 10.5k)
-- Added tooltip hover feature on count entities.  
- - Ensure that lineup pages' data all have necessary keys and report any incomplete metadata in console
+- Added tooltip hover feature on count entities.
+- Ensure that lineup pages' data all have necessary keys and report any incomplete metadata in console
 - Trim publication sub header characters to 100 max with trailing ellisis.
 - Bump `portal-visualization` to 0.0.12.
 - Remove publications and other dataset subtypes from dataset charts.
 - Remove globus link for lifted publication ancillary entities on publication pages.
 
-
 ## v0.73.0 - 2023-06-20
 
 - Fix donor metadata table display.
-- Set up template for Biomarkers Gene Page. 
+- Set up template for Biomarkers Gene Page.
 - Built gene data API.
-- Built gene id API. 
+- Built gene id API.
 - Rendered summary on summary section from gene data API.
 - Fix type error on donor pages with no derived samples.
 - Fix errors with query-portal-logs script.
 - Release and QA instructions have been migrated to Confluence.
 
-
 ## v0.72.4 - 2023-06-15
 
-- Built two custom hooks to call third party API in order to retrieve the common name to render it next to the gene symbol. 
+- Built two custom hooks to call third party API in order to retrieve the common name to render it next to the gene symbol.
 - Restore metadata table display
 - Add uids to places in which multiple Vitessce configurations are listed in a dropdown
-
 
 ## v0.72.3 - 2023-06-13
 
@@ -216,7 +195,6 @@
 - Pass flask data to Donor page components by context.
 - refactor AppContext to useAppContext from Context.js.
 - Use `origin_samples` field instead of `origin_sample` throughout.
-
 
 ## v0.72.0 - 2023-06-07
 
@@ -228,7 +206,6 @@
 - Fix provenance table sample sorting calculation
 - Remove semicolon in the collections component for datasets.
 - Upgrade google analytics to ga4.
-
 
 ## v0.71.0 - 2023-05-30
 
@@ -248,11 +225,9 @@
 - Start workspace jobs on workspaces page not loading page.
 - Update portal-visualization to 0.0.10.
 
-
 ## v0.69.1 - 2023-05-01
 
 - Replace toSorted which firefox does not support.
-
 
 ## v0.69.0 - 2023-04-28
 
@@ -264,18 +239,15 @@
 - Update workspaces logo color to reflect design.
 - Fix spacing on workspaces page to reflect design.
 
-
 ## v0.68.0 - 2023-04-14
 
 - Update prop name to fix missing collection page title.
 - Fix organ icon over on the homepage.
 - Add entire portal ui team to workspace allow list.
 
-
 ## v0.67.2 - 2023-03-27
 
 - Add details to summary on publication page.
-
 
 ## v0.67.1 - 2023-03-27
 
@@ -287,7 +259,6 @@
 - Add visualization vignettes section to publication page.
 - Bump Vitessce NPM package version from `^1.2.2` to `^2.0.3`
 
-
 ## v0.67.0 - 2023-03-24
 
 - Add cells page to header menu other links.
@@ -295,13 +266,11 @@
 - Fix bug when separating publications by publication status resulting in preprints not being listed.
 - Fix download visualization notebook button in vitessce section.
 
-
 ## v0.66.1 - 2023-03-23
 
 - Fix bug in cells ui caused by mismatched dataset versions from cells and search api.
 - Fix publications hook to handle support entities.
 - Decrease response size from search api request on publications landing page.
-
 
 ## v0.66.0 - 2023-03-21
 
@@ -317,11 +286,9 @@
 - Separate publications on publications page by status.
 - Add landing page for publications.
 
-
 ## v0.63.0 - 2023-02-09
 
 - Pass organs count to entity counts iframe.
-
 
 ## v0.62.0 - 2023-01-19
 
@@ -329,13 +296,11 @@
 - Fix organ page table of contents to reflect actual section names.
 - Update Vitessce homepage slide.
 
-
 ## v0.60.0 - 2022-12-20
 
 - Handle change in elasticsearch document from specimen_type and mapped_specimen_type to sample_category.
 - Added 4 more HRA previews
 - Updated the CCF Portal to the HRA Portal and it's new home, humanatlas.io
-
 
 ## v0.59.0 - 2022-12-13
 
@@ -347,12 +312,10 @@
 - Enable users to select search results in new search ui.
 - Add disclaimer to top of cells page.
 
-
 ## v0.57.0 - 2022-11-09
 
 - Fix path in ls command cell in workspace visualization notebook.
 - Updated the make_organ_dir.py logic to capture more HRA Reference Organs for display
-
 
 ## v0.56.1 - 2022-11-01
 
@@ -363,7 +326,6 @@
 - Launch dataset workspace notebook in new tab.
 - Add form to allow users to specify a new workspace name.
 - Pass job_types_id to workspace job start request.
-
 
 ## v0.56.0 - 2022-10-21
 
@@ -377,7 +339,6 @@
 - Add filters from url as facets if not included in default facets.
 - Synchronize url with search columns state in updated search.
 
-
 ## v0.54.0 - 2022-10-06
 
 - Fix workspace creation flow for dataset URLs with parameters.
@@ -390,7 +351,6 @@
 - Upgrade `vitessce` to 1.2.2.
 - Add `v3` to the types service, and at it to the Services page. No change to environment required.
 - Update workspaces messaging to better explain what's working, and what it should be used for.
-
 
 ## v0.53.2 - 2022-09-22
 
@@ -411,16 +371,13 @@
 - Update redeploy script with new user and deployment path.
 - Add an icon in the header title.
 
-
 ## v0.53.1 - 2022-09-11
 
 - Add a description for the `multimodal-mass-spectrometry-imaging-data` received from the data submitters.
 
-
 ## v0.53.0 - 2022-09-09
 
 - Fix homepage organ link.
-
 
 ## v0.52.0 - 2022-09-08
 
@@ -438,7 +395,6 @@
 - Fix bugs in TSV download and Lineup.
 - Make the UI reflect the underlying API more closely. UI should not be responsible for managing state.
 
-
 ## v0.51.1 - 2022-08-25
 
 - Adds an ugly button to access workspace.
@@ -449,7 +405,6 @@
 - When a user logs in, add a cookie, and check it during logging, to distinguish internal and external traffic.
 - Support workspace deletion.
 - For beta users, and link to workspaces in menu.
-
 
 ## v0.51.0 - 2022-08-18
 
@@ -462,7 +417,6 @@
 - Add reusabe link button component and use in workspaces.
 - Implement a "please-wait" page for workspaces which have not yet started.
 - Fix proptype errors.
-
 
 ## v0.50.1 - 2022-08-11
 
@@ -484,7 +438,6 @@
 - Users will not supply a name when creating workspaces from datasets.
 - Bring the Workspaces UI closer to spec.
 
-
 ## v0.50.0 - 2022-08-04
 
 - Add organ to the downloadable TSVs.
@@ -499,18 +452,16 @@
 - Log more details of the auth process.
 - Simplify the homepage description component.
 
-
 ## v0.49.0 - 2022-07-25
 
 - Add more fields to the downloadable TSV.
 - Bump lxml to resolve security warning.
 - Link from the Cells UI to the Dataset with gene pre-selected.
-- Add new logic to create notebooks, not just download them:  `.ipynb?name=new-notebook`
+- Add new logic to create notebooks, not just download them: `.ipynb?name=new-notebook`
 - In Cells UI, change from "substring" to something domain specific.
 - Address the `npm ci` slowdow.
 - Redesign organs page to use tiles.
 - Add organ tile story and consolidate entity tile stories.
-
 
 ## v0.48.0 - 2022-07-14
 
@@ -522,7 +473,6 @@
 - Add a little message to the service page explaining that entity api depends on uuid api.
 - Friendlier error if no workspace token.
 - Upgrade pytest and dependencies. (We were pinned to a dependancy that was self-vandalized.)
-
 
 ## v0.47.2 - 2022-06-29
 
@@ -536,14 +486,12 @@
 - Demonstrate how authorization for workspaces will work.
 - Provide what information we have on workspaces on the services page.
 
-
 ## v0.47.1 - 2022-06-27
 
 - Cells UI was hitting the Elasticsearch default of 10 results. Increase the limit.
 - Parameterize the docker build, so that it will also be in sync with the versions used in CI and in dev-start.sh.
 - Updated Vitessce version in notebook to match requirements.txt.
 - Check in language version files for python and node, and reference from the README and CI.
-
 
 ## v0.47.0 - 2022-06-22
 
@@ -556,7 +504,6 @@
 - Upgrade `portal-visualization` to 0.0.4 to fix validation issue for unpublished `zarr` stores.
 - The Workspaces websocket URL also needs to be provided by the environment: Update the template used when initializing new dev environments.
 
-
 ## v0.46.1 - 2022-06-15
 
 - Add search bar to filter rows in search revision configure search table.
@@ -565,7 +512,6 @@
 - Add url sync for search ui revision.
 - Only display view all button for select facets in search revision ui when additional aggs exist.
 - Upgrade `vitessce` (and dependents) to allow for using an alias for genes.
-
 
 ## v0.46.0 - 2022-06-07
 
@@ -588,7 +534,6 @@
 - Add pagination to search ui revision.
 - Update matomo init to reflect the new, paid, account.
 
-
 ## v0.44.0 - 2022-05-13
 
 - Enable users to configure facets for string type fields in search ui revision.
@@ -597,7 +542,6 @@
 - Use Matomo React integration.
 - Remove date fields from configure search table in search revision ui.
 - Remove vestigial meta tag and CSS import.
-
 
 ## v0.43.0 - 2022-05-05
 
@@ -608,7 +552,6 @@
 - Add donor and sample pages for search ui revision.
 - Sort fields in configure search table.
 - Add sorting for the results table in the search page revision.
-
 
 ## v0.42.0 - 2022-04-20
 
@@ -624,7 +567,6 @@
 - Add boolean facets to identify raw or derived entities.
 - Shorter summary of python dependencies.
 
-
 ## v0.41.1 - 2022-04-07
 
 - Make the links a darker shade of blue for accessibility.
@@ -634,14 +576,12 @@
 - Add list facet to search page revision.
 - Split CI into several parts: Each will run faster, and a single failure won't stop everything.
 
-
 ## v0.41.0 - 2022-03-31
 
 - Upgrade CCF so that it no longer relies on a Heroku server that will fail on initial requests because it's not warmed up.
 - Fix error for deleted portal-visualization submodule.
 - Pin werkzeug version to fix ci.
 - If search looks like "HBM...", put quotes around it.
-
 
 ## v0.40.1 - 2022-03-23
 
@@ -653,7 +593,6 @@
 - Tiny typo: `SearcHits` -> `SearchHits`
 - We were getting errors in the log because we tried to get visualizations for everything: Add a conditional to only do it for datasets.
 - Use a python package, rather than a git submodule, for `portal-visualization`.
-
 
 ## v0.40.0 - 2022-03-17
 
@@ -669,7 +608,6 @@
 - Change "onCLick" to "onClick".
 - Move visualization docs to submodule.
 
-
 ## v0.39.1 - 2022-03-10
 
 - If a publication date is available, use it in preference to the creation date.
@@ -681,7 +619,6 @@
 - Check notebook files into version control, rather than assembling them on the fly. Inputs are provided with `$`-templates.
 - In generated notebooks, wrap output in DataFrame to get a table.
 
-
 ## v0.39.0 - 2022-03-03
 
 - Add a contributors section to datasets.
@@ -692,12 +629,10 @@
 - Update and simplify the notebook generation code.
 - Submodules: In ingest-validation, update the IMS schema; In portal-visualization, add CellDIVE support, and change function signatures.
 
-
 ## v0.38.1 - 2022-02-24
 
 - Link from organ names to the organ list page.
 - Remove stray markdown files that got checked in after the docs submodule was removed. The redirects will now handle these routes.
-
 
 ## v0.38.0 - 2022-02-16
 
@@ -709,18 +644,15 @@
 - Upgrade vitessce-builders: Should handle Azimuth now.
 - Upgrade vitessce.
 
-
 ## v0.37.2 - 2022-02-09
 
 - Vitessce conf builder code no longer has access to the flask context, so details must be passed explicitly.
-
 
 ## v0.37.1 - 2022-02-04
 
 - Copy portal-visualization submodule in dockerfile.
 - Fix overlap when viewing Vitessce in fullscreen.
 - Display subheader when Vitessce is fullscreen on any page.
-
 
 ## v0.37.0 - 2022-02-03
 
@@ -734,14 +666,12 @@
 - Update the release protocol.
 - Pull visualization code into submodule.
 
-
 ## v0.36.1 - 2022-01-27
 
 - Add automated checking for security vulnerabilities in python and js.
 - Slightly gratuitous refactor in the flask internals.
 - Move move images to a cloudfront cdn with s3 origin.
 - Fix table of contents links for organ pages.
-
 
 ## v0.36.0 - 2022-01-20
 
@@ -752,7 +682,6 @@
 - Enable users to add samples to saved lists from samples table on organ pages.
 - Remove trailing '/' and 's' from path and redirect.
 
-
 ## v0.35.2 - 2022-01-13
 
 - Add consortium facet.
@@ -762,7 +691,6 @@
   If you are developing vitessce locally, it can be passed in as the `url` parameter.
 - If there is an error during vitessce conf generation, generate a valid conf that just has an error message.
 
-
 ## v0.35.1 - 2022-01-11
 
 - Do not include OME TIFFs that include `separate/` in their paths. This lets us handle the current MALDI-IMS structure.
@@ -771,7 +699,6 @@
 - Fix TSV download in the Docker environment.
 - Simplify Vitessce conf testing.
 
-
 ## v0.35.0 - 2022-01-04
 
 - In the metadata TSV download, add a second row with the field descriptions.
@@ -779,7 +706,6 @@
 - Organize vitessce builder classes into related groups.
 - `NullViewConfBuilder` does not need a separate invocation.
 - Refactor the vitessce conf tests for readability.
-
 
 ## v0.33.1 - 2021-12-14
 
@@ -795,19 +721,17 @@
 - Handle both dataset_uuid and uuid keys from revisions.
 - ES response structure has nested instances of `hits` as a key. Split our access across multiple lines of code so we can tell whether it's the inside or the outside that didn't match our expectations.
 
-
 ## v0.33.0 - 2021-12-06
 
 - Add a CI test to check that each capitalized directory contains an index file.
 - Configure lineup with column types.
 - Add details logging on Cells API wrapper.
-- Fix warning about invalid element nesting on markdown pages: `publication/*` and `docs/*`. 
+- Fix warning about invalid element nesting on markdown pages: `publication/*` and `docs/*`.
 - Refactor assay types bar chart.
 - Add assay types chart to organ pages.
 - Replace outline with filter hover on stacked bar charts.
 - Clean up formatting of publications page.
 - Remove chromatic Github Actions workflow.
-
 
 ## v0.32.1 - 2021-11-29
 
@@ -815,7 +739,6 @@
 - Display more information about the cells service.
 - Add descriptions to `donor.*` and `sample.*` metadata fields.
 - Fix react warnings on the publication page.
-
 
 ## v0.32.0 - 2021-11-22
 
@@ -826,16 +749,13 @@
 - Move `files/` under `detailPage/`, since it is only used here.
 - Upgrade Vitessce to 1.1.17
 
-
 ## v0.31.0 - 2021-11-17
 
 - Switch Globus authentication from Globus Nexus to Globus Groups.
 
-
 ## v0.30.2 - 2021-11-04
 
 - Fix checkbox facet alignment on search pages.
-
 
 ## v0.30.1 - 2021-11-04
 
@@ -849,7 +769,6 @@
 - Add analytics tracking for facet chips on search pages.
 - Update facet tracking to specify whether the facet was selected or unselected.
 
-
 ## v0.30.0 - 2021-10-26
 
 - Handle incorrect casing for HuBMAP ID browse routes.
@@ -859,13 +778,11 @@
 - Add dropdown to dataset page to enable users to traverse between dataset versions.
 - Fix dropdown hover and focus background color.
 
-
 ## v0.29.1 - 2021-10-19
 
 - Add info to the Organ page section headers.
 - Add donor and sample metadata.
 - Add "Organ" subtitle.
-
 
 ## v0.29.0 - 2021-10-14
 
@@ -882,17 +799,14 @@
 - Use partonomy in public search.
 - Simplify the organs script by pulling more information from the Azimuth github repo.
 
-
 ## v0.28.4 - 2021-10-06
 
 - Add loaders to cells page.
 - React warnings: Add missing key in repeated component, and remove required prop.
 
-
 ## v0.28.3 - 2021-09-30
 
 - Fix organ page request loop in samples table.
-
 
 ## v0.28.2 - 2021-09-30
 
@@ -902,7 +816,6 @@
 - Add a story for EntitiesTable.
 - Upgrade Vitessce to 1.1.15.
 
-
 ## v0.28.1 - 2021-09-28
 
 - Bump to ccf 2.3.5.
@@ -910,13 +823,11 @@
 - Rename "Lungs" to "Lung" in organ descriptions to match other organ names.
 - Add organ regen to push.sh, so we will get the latest changes from IU and NYGC with every release.
 
-
 ## v0.28.0 - 2021-09-24
 
 - Add reusable accordion steps component.
 - Update the organ pages, based on the new approach using Uberon IDs.
 - Put publication details in frontmatter.
-
 
 ## v0.27.2 - 2021-09-20
 
@@ -925,14 +836,12 @@
 - Add SlideSeq visualization option to RNASeq visualization class.
 - Add explicit `target` in SVG that is used in iframe.
 
-
 ## v0.27.1 - 2021-09-16
 
 - Replace `create_timestamp` instances that were missed earlier.
 - Exclude source maps from lineupjs when bundling to prevent console warnings.
 - Add provenance columns to TSV.
 - On search, a button to download the TSV.
-
 
 ## v0.27.0 - 2021-09-13
 
@@ -942,11 +851,9 @@
 - Organ URIs and descriptions added; organ-utils reworked to handle the new format.
 - Change "Previews" menu to "Resources".
 
-
 ## v0.26.2 - 2021-09-09
 
 - Fix `TSNE` -> `t-SNE` in portal.
-
 
 ## v0.26.1 - 2021-09-08
 
@@ -956,8 +863,7 @@
 - Add a page with the metadata loaded into LineUp.
 - Add note explaining the limitted scope of the publications page.
 - Move `SectionContainer` to `PaddedSectionContainer`.
-- Upgrade Vitessce to 1.1.14.  Gene expression sliders and automatic overplot correction have been added.
-
+- Upgrade Vitessce to 1.1.14. Gene expression sliders and automatic overplot correction have been added.
 
 ## v0.26.0 - 2021-09-01
 
@@ -967,11 +873,9 @@
 - Begin organ pages: Generate YAML from disparite sources of information.
 - Support query parameters on TSV downloads.
 
-
 ## v0.25.4 - 2021-08-25
 
 - Update SPRM viz to include new naming conventions + tsne.
-
 
 ## v0.25.3 - 2021-08-23
 
@@ -985,22 +889,18 @@
 - Tiny grammar fix.
 - Globus link for support datasets.
 
-
 ## v0.25.2 - 2021-08-19
 
 - Deprecated assays are not present in `iterAssays` so we need to use `getAssayType` for Vitessce conf generation.
-
 
 ## v0.25.1 - 2021-08-18
 
 - Add an endpoint for easy download of donor metadata.
 - Refactor `ApiClient` mocking with OO.
 
-
 ## v0.25.0 - 2021-08-17
 
 - Display datasets returned by cells gene expression query in rows with metadata.
-
 
 ## v0.24.4 - 2021-08-11
 
@@ -1010,12 +910,10 @@
 - In the python code, split the `/browse/*` routes to their own file, to keep things reasonable.
 - Upgrade Vitessce to 1.1.13 for performance boost and slight alteration to how RGB images are handled internally.
 
-
 ## v0.24.3 - 2021-08-10
 
 - Provide a fallback if `descendant_counts` is empty.
 - Stub out publication page.
-
 
 ## v0.24.2 - 2021-08-05
 
@@ -1027,24 +925,20 @@
 - Change donor diversity page's route from /vis to /diversity.
 - Move submodule stuff into script, instead of cluttering readme.
 
-
 ## v0.24.1 - 2021-08-03
 
 - Chart and table.
 - Resolve a 500 error that happens when an HBM redirect can't find a matching record.
 - Table with the race and sex of the donors.
 
-
 ## v0.24.0 - 2021-07-30
 
 - Fix twitter timeline bug causing it not to display.
-
 
 ## v0.23.2 - 2021-07-28
 
 - Fix more React warnings.
 - Table with the race and sex of the donors.
-
 
 ## v0.23.1 - 2021-07-22
 
@@ -1058,7 +952,6 @@
 - Remove unused props passed from login button to dropdown.
 - Upgrade to caniuse to silence warning.
 
-
 ## v0.23.0 - 2021-07-19
 
 - Refactor tutorial components and add to storybook.
@@ -1067,7 +960,6 @@
 - In the Cells Demo, demonstrate how multiple genes could be queried.
 - Fix missing whitespace in optional message.
 - Track dataset search tutorial events with google analytics.
-
 
 ## v0.22.1 - 2021-07-12
 
@@ -1078,7 +970,6 @@
 - Demo how constrained sliders will work.
 - Add and configure storybook.
 - Created a table about the donor's race.
-
 
 ## v0.22.0 - 2021-07-08
 
@@ -1091,26 +982,21 @@
 - Going forward, if a docs page is no longer needed, instead of just deleting it, replace `whatever.md` with `whatever.redirect`, and change the content to the new path.
 - Upgrade Flask, primarily to silence warnings during tests.
 
-
 ## v0.21.4 - 2021-06-30
 
 - Change the documention menu, at Jonathan's request.
-
 
 ## v0.21.3 - 2021-06-29
 
 - Upgrade marked, so processing conforms better to Github-flavored MD.
 
-
 ## v0.21.2 - 2021-06-29
 
 - All submodules now use the `main` branch.
 
-
 ## v0.21.1 - 2021-06-29
 
 - Manually update docs repo.
-
 
 ## v0.21.0 - 2021-06-28
 
@@ -1125,18 +1011,15 @@
 - Search gene and protein substrings.
 - Upgrade Vitessce to version 1.1.11 and adapt view confs for new 3D feature.
 
-
 ## v0.20.3 - 2021-06-17
 
 - Add an endpoint which serves a Jupyter notebook with the viewconf for a dataset.
 
-
 ## v0.20.2 - 2021-06-14
 
-- Change the title of the mobile menu. 
+- Change the title of the mobile menu.
 - Note developer prerequisites.
 - Update the README and manual QA instructions.
-
 
 ## v0.20.1 - 2021-06-09
 
@@ -1150,7 +1033,6 @@
 - Show derived samples in sample entity tiles.
 - Upgrade Vitessce to 1.1.10 (and python package as well).
 
-
 ## v0.20.0 - 2021-06-07
 
 - `ViewConf` to `ViewConfBuilder` to disambiguate the object from what it returns.
@@ -1161,7 +1043,6 @@
 - Link to parent datasets in support page alert.
 - Fix safari disabled button bug.
 
-
 ## v0.19.2 - 2021-06-03
 
 - Update to the latest cells client, and update the flask endpoints.
@@ -1170,12 +1051,10 @@
 - Tweak redeploy script; Hope this will make sure that the prod-stage instance gets the right config.
 - Show the URLs of the endpoints we hit on the status page.
 
-
 ## v0.19.1 - 2021-05-26
 
 - Fix new stitched `AnnData` SPRM viewconf.
 - Change home page bar chart title to hubmap datasets.
-
 
 ## v0.19.0 - 2021-05-24
 
@@ -1183,18 +1062,15 @@
 - List the derived samples and datasets on donor pages.
 - Fix changelog test for master build.
 
-
 ## v0.18.3 - 2021-05-17
 
 - Three JSON endpoints and three react forms for the main usecases.
 - Add a link to datacite on Collections.
 - If there is a problem generating vitessce conf, show an error in the UI.
 
-
 ## v0.18.2 - 2021-05-13
 
 - Add `git checkout main` to the deployment process for pulling new submodule repos.
-
 
 ## v0.18.1 - 2021-05-12
 
@@ -1209,7 +1085,6 @@
 - Replace homepage with new version.
 - Add an explanatory warning at the top of Support pages.
 
-
 ## v0.18.0 - 2021-05-10
 
 - Add a check on Cloudwatch to the deployment routine.
@@ -1217,7 +1092,6 @@
 - Upgrade to ssri-6.0.2.
 - Upgrade to underscore-1.13.1.
 - Upgrade Vitessce to 1.1.9.
-
 
 ## v0.17.4 - 2021-05-06
 
@@ -1228,14 +1102,12 @@
 - Handle a few more edge-cases with the new Support entities.
 - Stop using `everything`: Instead, use `all_text`, and highlight matches from `description`.
 
-
 ## v0.17.3 - 2021-05-03
 
 - Remove duplicate file.
 - Fix dev-start.sh warnings.
 - Fix a tiny bit of copy-and-paste in the my-lists code.
 - Show an icon in the tile for Support entities.
-
 
 ## v0.17.2 - 2021-04-28
 
@@ -1245,11 +1117,9 @@
 - Re-enable visualization for seqFISH.
 - Add docs on visualization processing to the portal.
 
-
 ## v0.17.1 - 2021-04-27
 
 - UI support for new Support entity type.
-
 
 ## v0.17.0 - 2021-04-26
 
@@ -1257,7 +1127,6 @@
 - In Collection, change label from "Creators" to "Contributors", to make this a better DOI landing page.
 - Fix height of twitter timeline in safari on new homepage.
 - Randomize intial carousel image.
-
 
 ## v0.16.3 - 2021-04-22
 
@@ -1271,30 +1140,25 @@
 - Fix prop-types error on Summary.
 - Upgrade vitessce to 1.1.8
 
-
 ## v0.16.2 - 2021-04-19
 
 - Fix vis-lifting bug on Samples.
 - Lift the visualization for image pyramids to the parent.
 - Add a banner on the details page if it is not the latest version.
 
-
 ## v0.16.1 - 2021-04-15
 
 - Supply metadata for webspiders, even when the donor is missing.
 - Help users who may be logged into the wrong globus account.
 
-
 ## v0.16.0 - 2021-04-12
 
 - Tweak dataset columns on Sample details.
-
 
 ## v0.15.4 - 2021-04-07
 
 - Add assay type horizontal bar chart to home page revision.
 - Bug fix: Donor metadata is now shown.
-
 
 ## v0.15.3 - 2021-04-05
 
@@ -1307,11 +1171,9 @@
 - Bump pyyaml from 5.3.1 to 5.4.
 - Bump y18n from 4.0.0 to 4.0.1.
 
-
 ## v0.15.2 - 2021-04-01
 
 - Replace ccf dropdown in header with 'Atlas & Tools' and add link to Azimuth.
-
 
 ## v0.15.1 - 2021-03-29
 
@@ -1320,7 +1182,6 @@
 - Add route for homepage revision work in progress.
 - Unnecessary auth headers for published zarr stores cause unecessary CORS preflight requests.
 
-
 ## v0.15.0 - 2021-03-26
 
 - Show create list dialog instead of save items to list dialog when no lists exist.
@@ -1328,21 +1189,18 @@
 - Distinguish the current page's node in provenance graph.
 - Replace tooltip for provenance graph nodes.
 
-
 ## v0.14.6 - 2021-03-25
 
 - Upgrade commons dependency.
-Wrap all Vitessce conf creation calls in try catch to return empty json as well as class instantiation.
+  Wrap all Vitessce conf creation calls in try catch to return empty json as well as class instantiation.
 - Add new sequencing conf generation for visualization of zarr-backed AnnDAta.
 - For versioning, "previous" will be spelled out in the API response. Fix dev search.
 - Upgrade Vitessce to 1.7.1.
-
 
 ## v0.14.5 - 2021-03-23
 
 - Return donor registration/creation nodes for donor page provenance graphs.
 - Fix a bug in the push.sh script: master is not being updated.
-
 
 ## v0.14.4 - 2021-03-23
 
@@ -1351,23 +1209,19 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Add additional testing for provenance graph.
 - Update provenance graph to not display donor registration node.
 
-
 ## v0.14.3 - 2021-03-19
 
 - Loosen a regex to avoid a hard-to-reproduce error.
 
-
 ## v0.14.2 - 2021-03-19
 
 - Update doc for IU again.
-
 
 ## v0.14.1 - 2021-03-18
 
 - Pull in CCF and ASCT+B docs that are needed for DOI.
 - Remove the ASCT+B preview, since it is in the other menu.
 - Add table for sample specific datasets on the sample page.
-
 
 ## v0.14.0 - 2021-03-15
 
@@ -1378,14 +1232,12 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Add linting which includes prettier check to test script.
 - Tidy up the example config.
 
-
 ## v0.13.2 - 2021-03-11
 
 - Dependabot version bump for ini.
 - Upgrade commons to 2.0.0.
 - Vitessce no longer errors if following a page anchor link.
 - Fix bug where no assay is found for Vitessce.
-
 
 ## v0.13.1 - 2021-03-08
 
@@ -1397,7 +1249,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Add prev and next to dev-search.
 - Rewrite Vitessce backend to use `vitessce-python` package.
 
-
 ## v0.13.0 - 2021-03-02
 
 - Replace CCF link with menu.
@@ -1407,7 +1258,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Add hubmap-commons to requirements.txt
 - Upgrade dependency to agree with commons.
 
-
 ## v0.12.3 - 2021-02-23
 
 - Fix eslint errors from description component export.
@@ -1415,7 +1265,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Refactor prov vis components to be declarative and access providers.
 - Fix saved entities table ui shift when selecting rows.
 - Add link to software.
-
 
 ## v0.12.2 - 2021-02-17
 
@@ -1425,11 +1274,9 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Disable save to list button when no lists are selected.
 - Track outbound links with Google Analytics.
 
-
 ## v0.12.1 - 2021-02-17
 
 - Disable saving collection entities.
-
 
 ## v0.12.0 - 2021-02-16
 
@@ -1441,24 +1288,20 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Track error boundary errors in Google Analytics.
 - Track web vitals and send to Google Analytics.
 
-
 ## v0.11.2 - 2021-02-10
 
 - Stub out a UI for the Cells API.
 - Enable users to store entities and lists of entities in local storage.
 - Add my lists page to interact with stored entities and lists.
 
-
 ## v0.11.1 - 2021-02-05
 
 - Add a link to the CCF JSON, and a new route to serve the JSON.
 - Pull new lightsheet docs.
 
-
 ## v0.11.0 - 2021-02-01
 
 - Let the ProvGraph work against either the new or old Prov API.
-
 
 ## v0.10.2 - 2021-01-27
 
@@ -1468,12 +1311,10 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Demo hierarchical facets with publication status.
 - Remove unused props from ProvTable.
 
-
 ## v0.10.1 - 2021-01-25
 
 - Link to collections DOI.
 - Change "Login" to "Member Login".
-
 
 ## v0.10.0 - 2021-01-19
 
@@ -1483,12 +1324,10 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Pin the Ubuntu version used by github CI.
 - Add a dev search facet to find spatially located datasets; Fix a bug in the facet for spatially located samples.
 
-
 ## v0.9.6 - 2021-01-11
 
 - Add cypress tests for dataset search tutorial.
 - Upgrade cypress.
-
 
 ## v0.9.5 - 2021-01-05
 
@@ -1504,16 +1343,13 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 
 - Skipped because of deployment snafu.
 
-
 ## v0.9.3 - 2020-12-16
 
 - Double UWSGI buffer size.
 
-
 ## v0.9.1 - 2020-12-11
 
 - Add interactive tutorial for dataset search page.
-
 
 ## v0.8.1 - 2020-12-07
 
@@ -1523,7 +1359,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Remove dev server from ci test script.
 - Remove vestigial config.py, and move list of entities types to routes_main.py.
 
-
 ## v0.8.0 - 2020-12-03
 
 - Lazy load vitessce share button in entity header to keep vitessce out of bundle entry points.
@@ -1531,7 +1366,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Set proxy http version for gzip in example nginx conf.
 - Simplify python routing code.
 - Centralize our CSS z-indexes, so we have global view of what overlays what.
-
 
 ## v0.7.3 - 2020-11-25
 
@@ -1542,7 +1376,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Try out github actions for ci.
 - Upgrade Vitessce to allow for shareable linkes, and add sharing functionality.
 
-
 ## v0.7.2 - 2020-11-23
 
 - Update CCF template to use the same analytics key as the rest of the site.
@@ -1550,7 +1383,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Fix spacing between description and dates in entity detail page.
 - Return collections page.
 - Add contacts table to collection page.
-
 
 ## v0.7.1 - 2020-11-16
 
@@ -1561,11 +1393,9 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Add styled-components babel plugin
 - Change table-height to land in the middle of a row.
 
-
 ## v0.6.4 - 2020-11-10
 
 - Try to diagnose and fix versioning bug.
-
 
 ## v0.6.3 - 2020-11-09
 
@@ -1573,11 +1403,9 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Split js bundle by route.
 - Drop our standalone file, and use package.json for versioning info.
 
-
 ## v0.6.2 - 2020-11-05
 
 - Update redeploy.sh to handle to stage environment.
-
 
 ## v0.6.1 - 2020-11-02
 
@@ -1585,7 +1413,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Change sort label for IDs from the entity type to HubMAP ID.
 - Facet the validation errors, to understand what part of the schema is being violated,
   and what part of the documents are in violation.
-
 
 ## v0.4.7 - 2020-10-28
 
@@ -1595,13 +1422,11 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Add tile view for search page.
 - On the status page, show where the API info comes from.
 
-
 ## v0.4.5 - 2020-10-26
 
 - Disable provenance table for salmon_rnaseq_snareseq data types.
 - Fix in ingest-api url on status page.
 - Update home page html title.
-
 
 ## v0.4.4 - 2020-10-21
 
@@ -1610,12 +1435,10 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Pad out short descriptions in JSON-LD metadata to meet minimum-length requirements.
 - Add service status page.
 
-
 ## v0.4.3 - 2020-10-14
 
 - Schema.org JSON-LD in header.
 - Add /search to the disallow list in robots.txt.
-
 
 ## v0.4.2 - 2020-10-09
 
@@ -1625,7 +1448,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Make links in markdown-based pages blue.
 - Fix proptypes error.
 - Standardize icon button sizes.
-
 
 ## v0.4.1 - 2020-10-05
 
@@ -1639,13 +1461,11 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Find documents with validation-errors on dev-search.
 - Bump version to v0.4.
 
-
 ## v0.3.3 - 2020-09-30
 
 - Add entity header for detail pages.
 - Change placement of visualization tile selector and close upon selection.
 - Upgrade lodash to fix security warning.
-
 
 ## v0.3.2 - 2020-09-28
 
@@ -1653,11 +1473,10 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Document maintenance build process.
 - Move existing pages from components to pages directory.
 - Reorganize provenance and visualization components.
-- Do not pass `endpoints` down down to `Routes`; There is now a context provider. 
+- Do not pass `endpoints` down down to `Routes`; There is now a context provider.
 - Only allow robots on the main production site, none of the other deployments.
 - Add a meta tag that will give Chuck access to Google Search Console.
 - Link to detail page in each row's HuBMAP ID cell not the entire row in search table.
-
 
 ## v0.3.1 - 2020-09-21
 
@@ -1668,12 +1487,10 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Redirect to previous page following login.
 - Change alerts to outlined variant and update their icons.
 
-
 ## v0.2.2 - 2020-09-16
 
 - Add elevation to header app bar.
 - Display user email dropdown in header when logged in.
-
 
 ## v0.2.1 - 2020-09-14
 
@@ -1686,7 +1503,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Fix bug where clicking a visualization theme switch button twice removes theme.
 - Grouped, folding search facets.
 - Style error boundary like other errors.
-
 
 ## v0.1.8 - 2020-09-09
 
@@ -1705,16 +1521,13 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Move description in metadata table to icon tooltip.
 - Update provenance analysis details to separate ingest and cwl pipelines.
 
-
 ## v0.1.7 - 2020-08-31
 
 - Fix search request loop bug for derived entities.
 
-
 ## v0.1.6 - 2020-08-31
 
 - Pull in FAQs.
-
 
 ## v0.1.5 - 2020-08-31
 
@@ -1725,7 +1538,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Update initial padding for FileBrowser to be vertically aligned with other entity detail sections.
 - Fix donor entity tile age to reflect changes to metadata field names.
 - Replace sample tissue location placeholder with link to ccf.
-
 
 ## v0.1.4 - 2020-08-28
 
@@ -1738,7 +1550,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Remove collections from navigation menus.
 - Add a margin at the bottom of the search page.
 
-
 ## v0.1.3 - 2020-08-26
 
 - Create react error pages.
@@ -1748,7 +1559,6 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - dev-start.sh now checks that submodules are being pulled.
 - Add hashes to webpack bundle filenames.
 
-
 ## v0.1.2 - 2020-08-24
 
 - Fix seq vitessce views.
@@ -1757,14 +1567,12 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Update donor search facets to reflect current strings.
 - Upgrade vitessce to 0.2.4, giving us auto-adjusting sliders.
 
-
 ## v0.1.1 - 2020-08-24
 
 - Fix "BioMedical" capitalization.
 - Fix provenance table request loop.
 - Simplify the README, and put the important parts at the top.
 - Increment the minor version number: Releases over the next two weeks will update the patch number.
-
 
 ## v0.0.56 - 2020-08-21
 
@@ -1774,11 +1582,9 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Get nexus token for search and dev search pages from flask.
 - Update donor search facets to reflect current strings.
 
-
 ## v0.0.55 - 2020-08-20
 
 - Fix issue where a null token was being used in requests when not logged in.
-
 
 ## v0.0.54 - 2020-08-19
 
@@ -1792,15 +1598,13 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Setup tracking page views with Google Analytics. (Older work, but we had missed the changelog.)
 - Replace "gender" with "sex" in the donor facets.
 
-
 ## v0.0.53 - 2020-08-17
 
 - Add tests and prop types for files components.
 - Move files components out of detail directory and into files directory within components.
-- Search is now aligned with title and header content. 
+- Search is now aligned with title and header content.
 - seqFISH data layout updated.
 - Show text search matches in context.
-
 
 ## v0.0.52 - 2020-08-12
 
@@ -1816,10 +1620,9 @@ Wrap all Vitessce conf creation calls in try catch to return empty json as well 
 - Add pre-commit hook to lint js files.
 - Filter for RUI in dev-search.
 - When Vitessce is full-window, and Safari is full-screen, pressing escape once will take Vitessce out of full-window,
-and pressing again will take Safari out of full-screen (which is Safari's default behavior for escape).
+  and pressing again will take Safari out of full-screen (which is Safari's default behavior for escape).
 - Add test for status icon component.
 - Make token cookie a session cookie.
-
 
 ## v0.0.51 - 2020-08-05
 
@@ -1829,17 +1632,15 @@ and pressing again will take Safari out of full-screen (which is Safari's defaul
 - Make webpack dev build logs less verbose.
 - Make webpack production build logs less verbose.
 
-
 ## v0.0.50 - 2020-08-03
 
 - Use mapped_data_access_level consistently.
 - Security update from dependabot.
 - Show only imaging SPRM when there are no cell segmentations.
 
-
 ## v0.0.49 - 2020-08-03
 
-Chuck neglected to merge the PR for v0.0.47, 
+Chuck neglected to merge the PR for v0.0.47,
 though the docker image and tag were made successfully.
 He then misdiagnosed the problem, and incremented the version number.
 
@@ -1861,7 +1662,6 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Added a snackbar to display warning messages from Vitessce
 - Fix wrapping in search results on Safari.
 
-
 ## v0.0.46 - 2020-07-28
 
 - Automatically open link in new window after agreeing to DUA.
@@ -1871,7 +1671,6 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Update DUA Typography.
 - Display latest protocol version in entity detail protocol section.
 - Tweak style of results table so it's more clear that the hole row is the result.
-
 
 ## v0.0.45 - 2020-07-27
 
@@ -1883,7 +1682,6 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - No longer run eslint as part of webpack: it was missing tests, and we're running eslint across everything outside webpack now.
 - Add more single cell assay support.
 - Add Jeff Spraggins' description to the preview of the Spraggins data.
-
 
 ## v0.0.44 - 2020-07-24
 
@@ -1897,14 +1695,12 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Use the rounded variants of all icons.
 - Upgrade Vitessce to 0.1.9.
 
-
 ## v0.0.43 - 2020-07-23
 
 - Add bottom section to entity tiles.
 - Fix and simplify entity tile color logic.
 - Updated version of vitessce-data in view config URLs for Satija showcase
-- Move entity tile into components directory and split into subcomponents. 
-
+- Move entity tile into components directory and split into subcomponents.
 
 ## v0.0.42 - 2020-07-22
 
@@ -1919,7 +1715,6 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Change "Showcase" to "Preview"
 - Add a generic image viewing vitessce configuration.
 
-
 ## v0.0.41 - 2020-07-20
 
 - Update homepage data use guidelines.
@@ -1927,9 +1722,8 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Get rid of the quick-start script.
 - Incorporate the ProvVis wrapper directly. This simplifies the build process.
 - Update globus link per 07/15/2020 design.
-- Upgrade lodash to fix potential vulnerabilities. 
+- Upgrade lodash to fix potential vulnerabilities.
 - Updated the styles for the .vitessce-container to make the Vitessce Please wait... modal visible
-
 
 ## v0.0.40 - 2020-07-15
 
@@ -1947,7 +1741,6 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Update submodules to latest master with each run of push.sh.
 - Add a docs page with links to constrained searches with and without metadata.
 
-
 ## v0.0.39 - 2020-07-13
 
 - Change documentation button in nav to a dropdown menu.
@@ -1956,7 +1749,6 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 
 - Updated the markdown content for the cell type annotation (spleen) showcase
 
-
 ## v0.0.38 - 2020-07-10
 
 - Put donor metadata facets on all search pages.
@@ -1964,7 +1756,6 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Fix entity tile duplication in the provenance table.
 - Sort entities in provenance table by create_timestamp.
 - Update ingest-validation-tools.
-
 
 ## v0.0.37 - 2020-07-08
 
@@ -1977,14 +1768,12 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Fix bugs in node click handling in ProvVis.
 - Changed layout of Showcase and Visualization control styling.
 
-
 ## v0.0.36 - 2020-07-06
 
 - Reorder search facets.
 - Fix safari/firefox sticky header issues in the collection creators table.
 - Fix documentation links, add title.
 - Changed the `Satija` showcase dropdown option strings to HuBMAP IDs rather than Globus IDs to improve readability.
-
 
 ## v0.0.35 - 2020-07-06
 
@@ -1994,7 +1783,6 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Add basis CSS for markdown content.
 - In search table, split array fields.
 - Remove stub doc pages and fix links.
-
 
 ## v0.0.34 - 2020-07-03
 
@@ -2011,8 +1799,7 @@ So: Changes below include work from v0.0.47, and there is no v0.0.48. Sorry!
 - Added a z-index of `5` to the `ShowcaseDropdown` styles to allow it to be rendered above the `Visualization` component.
 - Changed the `ShowcaseDropdown` arrow icon behavior (point down when closed, point up when open).
 - Upgrade Vitessce to `v1.0.8`.
-Update Vitessce to handle changing multiple sources from SPRM and Showcase.
-
+  Update Vitessce to handle changing multiple sources from SPRM and Showcase.
 
 ## v0.0.33 - 2020-07-01
 
@@ -2024,15 +1811,14 @@ Update Vitessce to handle changing multiple sources from SPRM and Showcase.
 - Fix bug in the proptypes for Search which was giving load-time error messages.
 - Update provvis node-hover UI.
 
-
 ## v0.0.32 - 2020-06-29
 
 -Add basic collections page to demonstrate api response.
+
 - Set intial bar chart data to empty array.
 - Upgrade Vitessce to 0.1.7 to fix Safari issues.
 - Update hover state for login button.
 - No login required on any page.
-
 
 ## v0.0.31 - 2020-06-25
 
@@ -2046,7 +1832,6 @@ Update Vitessce to handle changing multiple sources from SPRM and Showcase.
 - Update with the latest docs from the google drive.
 - Allow us to override searchkit SCSS variables.
 - Update submodule.
-
 
 ## v0.0.30 - 2020-06-23
 
@@ -2065,14 +1850,11 @@ Update Vitessce to handle changing multiple sources from SPRM and Showcase.
 - Fixed a bug on expansion of Vitessce due to `z-index` not being taken into account without `position: relative` as well.
 - Add "Welcome" so it's not just "| HuBMAP".
 
-
-
 ## v0.0.29 - 2020-06-18
 
 - Update home page per design.
 - Add infrastructure documentation.
 - Added a toggle to change the Vitessce theme from `"light"` to `"dark"`.
-
 
 ## v0.0.28 - 2020-06-17
 
@@ -2080,23 +1862,21 @@ Update Vitessce to handle changing multiple sources from SPRM and Showcase.
 - Fix JS OOM error during build.
 - Make Peter Kant's commitments explicit.
 
-
 ## v0.0.27 - 2020-06-16
 
 - Adds an "expand" button to expand the Vitessce component to the full window size.
 - Further configure jest and react-testing-library.
 - Add eslint plugins for jest-dom and testing-library.
-- Add mock service worker to mock responses. 
+- Add mock service worker to mock responses.
 - Take advantage of Elasticsearch index routing.
 - Add showcase page for Spraggins.
-
 
 ## v0.0.26 - 2020-06-14
 
 - Add the CCF page to python tests.
 - Fix bug in our template for the CCF.
 - Fix errors displaying Visualization in table of contents.
-- Enable free-text search. Caveats: 
+- Enable free-text search. Caveats:
   - Values represented with abbreviations will not be searchable until we have our own index up which expands them.
   - Only searching the column fields right now. Searching all fields could be done by:
     - Listing every single field in the config here.
@@ -2105,7 +1885,6 @@ Update Vitessce to handle changing multiple sources from SPRM and Showcase.
 - Provide hubmapPortalUrl to CCF.
 - Make VERSION a MD file: Easy to remember path, ("/VERSION") and it doesn't try to download the file. Downside: No URL to curl that just returns the VERSION without anything else... but we could add a raw MD handler, if needed.
 - Get doctests working in Python.
-
 
 ## v0.0.25 - 2020-06-09
 
@@ -2118,10 +1897,9 @@ Update Vitessce to handle changing multiple sources from SPRM and Showcase.
 - Insure that changelog is written with a NL between each concatenated file.
 - Refactor and fix minor issues in detail components.
 - Install and setup jest and react-testing-library.
-- Release branches were failing because there were not CHANGELOG-*.md.
+- Release branches were failing because there were not CHANGELOG-\*.md.
 - Include DOI and type in tab title.
 - Pull latest field descriptions.
-
 
 ## v0.0.24 - 2020-06-05
 

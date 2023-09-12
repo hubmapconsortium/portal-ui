@@ -14,7 +14,7 @@ const Accordion = styled((props: AccordionProps) => <MuiAccordion disableGutters
       display: 'none',
     },
   }),
-);
+) as typeof MuiAccordion;
 
 const AccordionSummary = styled((props: AccordionSummaryProps) => (
   <MuiAccordionSummary expandIcon={<ExpandMore color="primary" />} {...props} />
@@ -37,10 +37,10 @@ const AccordionSummary = styled((props: AccordionSummaryProps) => (
     flexGrow: 0,
     margin: 0,
   },
-}));
+})) as typeof MuiAccordionSummary;
 
 const AccordionDetails = styled(MuiAccordionDetails)(() => ({
   padding: 0,
-}));
+})) as typeof MuiAccordionDetails;
 
 export { Accordion, AccordionSummary, AccordionDetails };
