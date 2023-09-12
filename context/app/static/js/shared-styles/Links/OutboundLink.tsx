@@ -1,6 +1,8 @@
 import React from 'react';
+import { LinkProps } from '@mui/material/Link';
+
 import { trackLink } from 'js/helpers/trackers';
-import Link, { LinkProps } from '@mui/material/Link';
+import InternalLink from './InternalLink';
 
 function sendOutboundEvent(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) {
   trackLink((event.target as HTMLAnchorElement).href);
@@ -14,9 +16,9 @@ function OutboundLink({ children, onClick, ...props }: LinkProps) {
     sendOutboundEvent(event);
   }
   return (
-    <Link {...props} onClick={handleClick} rel="noopener noreferrer" target="_blank">
+    <InternalLink {...props} onClick={handleClick} rel="noopener noreferrer" target="_blank">
       {children}
-    </Link>
+    </InternalLink>
   );
 }
 

@@ -23,7 +23,7 @@ function IconLink({ children, icon, iconOnLeft, isOutbound, ...rest }: IconLinkP
         display: 'inline-flex',
         alignItems: 'center',
         flexDirection: iconOnLeft ? 'row-reverse' : 'row',
-        gap: 1,
+        gap: 0.5,
       }}
     >
       <span>{children}</span>
