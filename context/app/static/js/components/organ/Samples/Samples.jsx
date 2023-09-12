@@ -12,6 +12,7 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 import TableContainer from '@mui/material/TableContainer';
+import Box from '@mui/material/Box';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
@@ -84,11 +85,32 @@ function SampleHeaderCell({ column, setSort, sortState }) {
 
 const TableComponents = {
   Scroller: React.forwardRef((props, ref) => <TableContainer component={Paper} {...props} ref={ref} />),
-  Table: (props) => <Table {...props} style={{ borderCollapse: 'separate' }} />,
+  Table: (props) => <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />,
   TableHead,
   TableRow,
   TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
 };
+
+function rowContent(
+  index,
+  { _id: uuid, _source: { hubmap_id, donor = {}, descendant_counts, last_modified_timestamp } },
+) {
+  return (
+    <>
+      <SelectableRowCell rowKey={uuid} />
+      <TableCell>
+        <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
+          {hubmap_id}
+        </InternalLink>
+      </TableCell>
+      <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
+      <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
+      <TableCell>{donor?.mapped_metadata?.race}</TableCell>
+      <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
+      <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
+    </>
+  );
+}
 
 function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useStore();
@@ -149,56 +171,39 @@ function Samples({ organTerms }) {
         }
       />
       {/* eslint-disable react/no-unstable-nested-components */}
-      <TableVirtuoso
-        style={{ height: 400 }}
-        increaseViewportBy={{ top: 250, bottom: 500 }} // Reduces flickering. Potentially less necessary with React 18 https://github.com/petyosi/react-virtuoso/issues/914.
-        data={searchHits}
-        endReached={loadMore}
-        totalCount={totalHitsCount}
-        components={TableComponents}
-        fixedHeaderContent={() => (
-          <>
-            <TableRow>
-              <SelectableHeaderCell
-                allTableRowKeys={allSearchIDs}
-                sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
+      <Box sx={{ height: 400, width: '100%' }}>
+        <TableVirtuoso
+          data={searchHits}
+          endReached={loadMore}
+          totalCount={totalHitsCount}
+          components={TableComponents}
+          itemContent={rowContent}
+          fixedHeaderContent={() => (
+            <>
+              <TableRow>
+                <SelectableHeaderCell
+                  allTableRowKeys={allSearchIDs}
+                  sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
+                />
+                {columns.map((column) => (
+                  <SampleHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
+                ))}
+              </TableRow>
+              <LinearProgress
+                sx={{
+                  position: 'absolute',
+                  bottom: 0,
+                  zIndex: 50,
+                  width: '100%',
+                  opacity: isLoading ? 1 : 0,
+                  transition: 'opacity',
+                }}
+                variant="indeterminate"
               />
-              {columns.map((column) => (
-                <SampleHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
-              ))}
-            </TableRow>
-            <LinearProgress
-              sx={{
-                position: 'absolute',
-                bottom: 0,
-                zIndex: 50,
-                width: '100%',
-                opacity: isLoading ? 1 : 0,
-                transition: 'opacity',
-              }}
-              variant="indeterminate"
-            />
-          </>
-        )}
-        itemContent={(
-          index,
-          { _id: uuid, _source: { hubmap_id, donor = {}, descendant_counts, last_modified_timestamp } },
-        ) => (
-          <>
-            <SelectableRowCell rowKey={uuid} />
-            <TableCell>
-              <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
-                {hubmap_id}
-              </InternalLink>
-            </TableCell>
-            <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
-            <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
-            <TableCell>{donor?.mapped_metadata?.race}</TableCell>
-            <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
-            <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-          </>
-        )}
-      />
+            </>
+          )}
+        />
+      </Box>
       {/* eslint-enable react/no-unstable-nested-components */}
     </SectionContainer>
   );
