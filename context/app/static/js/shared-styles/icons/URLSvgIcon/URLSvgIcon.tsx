@@ -1,7 +1,12 @@
 import { Box } from '@mui/material';
 import React from 'react';
 
-function URLSvgIcon({ iconURL, ariaLabel, ...rest }) {
+interface URLSvgIconProps extends React.ComponentProps<typeof Box<'div'>> {
+  iconURL: string;
+  ariaLabel: string;
+}
+
+function URLSvgIcon({ iconURL, ariaLabel, ...rest }: URLSvgIconProps) {
   return (
     <Box
       sx={(theme) => ({
