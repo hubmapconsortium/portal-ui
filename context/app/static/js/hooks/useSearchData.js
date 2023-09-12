@@ -132,7 +132,7 @@ const withFetcherArgs =
 
     // Subsequent pages, we add the search after param to the query.
     const searchAfterSort = getSearchAfterSort(previousPageHits);
-    return [{ ...query, search_after: searchAfterSort }, ...rest];
+    return [{ ...query, track_total_hits: true, search_after: searchAfterSort }, ...rest];
   };
 
 function getCombinedHits(pagesResults) {
@@ -162,8 +162,10 @@ function useScrollSearchHits(
     [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
   );
 
-  const { data, error, isLoading, size, setSize } = useSWRInfinite(getKey, (args) => fetcher(...args), {
+  const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, (args) => fetcher(...args), {
     fallbackData: [],
+    revalidateAll: false,
+    revalidateFirstPage: false,
     ...swrConfigRest,
   });
 
@@ -172,11 +174,11 @@ function useScrollSearchHits(
   const isReachingEnd = searchHits.length === 0 || searchHits.length === totalHitsCount;
 
   const loadMore = useCallback(() => {
-    if (isReachingEnd) {
+    if (isReachingEnd || isLoading || isValidating) {
       return;
     }
     setSize(size + 1);
-  }, [size, setSize, isReachingEnd]);
+  }, [size, setSize, isReachingEnd, isLoading, isValidating]);
 
   return { searchHits, error, isLoading, setSize, loadMore, totalHitsCount, isReachingEnd };
 }
