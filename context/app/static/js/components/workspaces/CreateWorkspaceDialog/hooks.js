@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
-const schema = yup
+const schema = z
   .object({
-    name: yup.string().required().max(150),
+    name: z.string().max(150),
   })
   .required();
 
@@ -22,7 +22,7 @@ function useCreateWorkspace({ handleCreateWorkspace, defaultName }) {
       name: '' || defaultName,
     },
     mode: 'onChange',
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
   });
 
   function handleClose() {
