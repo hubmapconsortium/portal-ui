@@ -73,10 +73,9 @@ declare module '@mui/material/styles' {
     palette: Palette;
     zIndex: ZIndex;
   }
-  export type ThemeOptions = Partial<Theme>;
-
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  interface DefaultTheme extends Theme {}
+  export interface DefaultTheme extends Theme {}
+  export type ThemeOptions = Partial<Theme>;
 }
 
 // default HuBMAP color and font theme
