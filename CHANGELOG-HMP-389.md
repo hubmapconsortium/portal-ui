@@ -1,0 +1,1 @@
+- Prevent already-selected options from being suggested by autocomplete component.
