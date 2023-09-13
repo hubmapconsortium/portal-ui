@@ -1,9 +1,9 @@
 import { createContext, useContext } from 'react';
 
-type ProtocolAPIContextType = {
+interface ProtocolAPIContextType {
   clientId: string;
   clientAuthToken: string;
-};
+}
 
 export const ProtocolAPIContext = createContext<ProtocolAPIContextType | null>(null);
 

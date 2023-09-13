@@ -7,11 +7,9 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useAppContext } from 'js/components/Contexts';
 import Menu from '../Menu';
-import ResourceLinks from '../ResourceLinks';
 import Dropdown from '../Dropdown';
 import UserLinks from '../UserLinks';
-import AtlasToolsLinks from '../AtlasToolsLinks';
-import OtherLinks from '../OtherLinks';
+import { AtlasToolsLinks, OtherLinks, ResourceLinks } from '../staticLinks';
 import { Spacer, HeaderButton, FlexNoWrap, StyledSvgIcon } from './style';
 import HubmapLogo from '../HubmapLogo';
 

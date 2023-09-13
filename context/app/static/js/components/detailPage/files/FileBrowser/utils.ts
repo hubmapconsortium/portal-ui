@@ -1,7 +1,7 @@
 import { UnprocessedFile, FileTree, DatasetFile } from '../types';
 
 // Helper to generate an empty object typed as a FileTree
-const createEmptyTreeNode = () => ({} as FileTree);
+const createEmptyTreeNode = () => ({}) as FileTree;
 
 /**
  * Takes an array of objects each containing a file path and returns an object representing the directory structure in a tree like organization.

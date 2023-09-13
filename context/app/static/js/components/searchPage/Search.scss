@@ -1,121 +1,125 @@
-@import "~searchkit/theming/theme.scss";
+@import '~searchkit/theming/theme.scss';
 
-$primary-purple: #444A65;
+$primary-purple: #444a65;
 $secondary-gray: #636363;
 $text-primary: rgba(0, 0, 0, 0.87);
 
 .sk-layout__body {
-    margin: 16px 0px 32px 0px;
+  margin: 16px 0px 32px 0px;
 }
 
 .sk-selected-filters {
-    // Together with 8px margin on SelectedFilterDiv, gives 16px between elements
-    margin-top: 8px;
+  // Together with 8px margin on SelectedFilterDiv, gives 16px between elements
+  margin-top: 8px;
 }
 
 .sk-panel__header {
-    // We pull out the title prop and use it in the AccordionSummary.
-    // Easier to hide with CSS than change the rendering.
-    display: none;
+  // We pull out the title prop and use it in the AccordionSummary.
+  // Easier to hide with CSS than change the rendering.
+  display: none;
 }
 
-.sk-layout__filters, .sk-layout__results {
-    // We want it flush on left and right:
-    margin: 0px;
+.sk-layout__filters,
+.sk-layout__results {
+  // We want it flush on left and right:
+  margin: 0px;
 }
 
 .sk-layout__results {
-    box-shadow: none;
-    background-color: transparent;
-    display: flex;
-    flex-direction: column;
+  box-shadow: none;
+  background-color: transparent;
+  display: flex;
+  flex-direction: column;
 }
 
 .sk-results-list {
-    padding: 0px;
+  padding: 0px;
 }
 
 .sk-layout__filters {
-    height: fit-content;
-    height:-webkit-fit-content;
-    height:-ms-fit-content;
-    height:-moz-fit-content;
-    background-color: white;
+  height: fit-content;
+  height: -webkit-fit-content;
+  height: -ms-fit-content;
+  height: -moz-fit-content;
+  background-color: white;
 }
 
 .sk-layout__filters {
-    // Spacing between filters and results:
-    margin-right: 16px;
-    // theme shadows 1 matches table
-    box-shadow: 0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12);
+  // Spacing between filters and results:
+  margin-right: 16px;
+  // theme shadows 1 matches table
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14),
+    0px 1px 3px 0px rgba(0, 0, 0, 0.12);
 }
 
 .sk-item-list-option input.sk-item-list-option__checkbox {
-    margin: 0 4px 0 0;
+  margin: 0 4px 0 0;
 }
 
 .sk-item-list-option {
-    padding: 4px 0px 4px 0px;
-    line-height: 120%;
+  padding: 4px 0px 4px 0px;
+  line-height: 120%;
 }
 
-.sk-item-list-option__text, .sk-item-list-option__count {
-    // Same weight, even if .is-active:
-    font-weight: 200 !important;
-    color: #000;
+.sk-item-list-option__text,
+.sk-item-list-option__count {
+  // Same weight, even if .is-active:
+  font-weight: 200 !important;
+  color: #000;
 }
 
 .sk-refinement-list__view-more-action {
-    color: #3781D1;
+  color: #3781d1;
 }
 
 .sk-hierarchical-menu-list__root {
-    padding-left: 20px; // Aligns with the labels that are preceded by checkboxes.
+  padding-left: 20px; // Aligns with the labels that are preceded by checkboxes.
 }
 
 .sk-pagination-navigation {
-    margin: 0px;
+  margin: 0px;
 }
 
 .sk-pagination-navigation .sk-toggle-option:first-child,
 .sk-pagination-navigation .sk-toggle-option:last-child {
-    color: $primary-purple;
+  color: $primary-purple;
 }
 
 .sk-pagination-navigation .sk-toggle-option {
-    background-color: transparent;
+  background-color: transparent;
 }
 
 .sk-toggle-option.is-active {
-    background-color: $primary-purple;
-    border-color: $primary-purple;
+  background-color: $primary-purple;
+  border-color: $primary-purple;
 }
 
 .sk-pagination-navigation .sk-toggle-option:first-child.is-disabled,
 .sk-pagination-navigation .sk-toggle-option:last-child.is-disabled {
-    color: #ddd
+  color: #ddd;
 }
 
-.sk-search-box form{
-    border: 1px solid $secondary-gray;
-    border-radius: 8px;
+.sk-search-box form {
+  border: 1px solid $secondary-gray;
+  border-radius: 8px;
 }
 
 .sk-search-box {
-    background-color: white;
+  background-color: white;
 }
 
-.sk-search-box__icon{
-    opacity: 1;
+.sk-search-box__icon {
+  opacity: 1;
 }
 
-.sk-search-box__icon:before{
-    fill: $primary-purple;
-    background: url('~assets/svg/search-icon.svg') no-repeat top left;
+.sk-search-box__icon:before {
+  fill: $primary-purple;
+  background: url('~assets/svg/search-icon.svg') no-repeat top left;
 }
 
-.sk-search-box.is-focused, .sk-search-box {
-    input.sk-search-box__text {
+.sk-search-box.is-focused,
+.sk-search-box {
+  input.sk-search-box__text {
     color: $text-primary;
-    }
+  }
 }

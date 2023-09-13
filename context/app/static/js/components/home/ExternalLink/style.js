@@ -7,7 +7,7 @@ const Flex = styled.div`
   display: flex;
   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
   &:hover {
-    background-color: ${(props) => props.theme.palette.hoverShadow.main};
+    background-color: ${(props) => props.theme.palette.common.hoverShadow};
   }
 `;
 

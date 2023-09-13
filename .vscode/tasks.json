@@ -1,251 +1,250 @@
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "Init submodules",
-            "type": "shell",
-            "command": "git submodule init && git submodule update && git config submodule.recurse true",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "echo": false,
-                "reveal": "never",
-                "panel": "dedicated",
-                "close": true,
-            }
-        },
-        {
-            "label": "pip install",
-            "type": "shell",
-            "command": "pip install -r context/requirements.txt",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "focus": false,
-                "panel": "dedicated",
-            }
-        },
-        {
-            "label": "Copy app configuration",
-            "type": "shell",
-            "command": "etc/dev/copy-app-conf.sh",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "presentation": {
-                "panel": "dedicated",
-                "close": true,
-            }
-        },
-        {
-            "label": "npm install",
-            "type": "npm",
-            "script": "install",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "options": {
-                "cwd": "${workspaceFolder}/context",
-            },
-            "presentation": {
-                "panel": "dedicated",
-            }
-        },
-        {
-            "label": "Install dependencies",
-            "group": {
-                "kind": "build",
-                "isDefault": false
-            },
-            "dependsOn": [
-                "Init submodules",
-                "pip install",
-                "npm install"
-            ],
-            "dependsOrder": "parallel",
-        },
-        {
-            "label": "Flask Server",
-            "type": "shell",
-            "command": "python -m flask run",
-            "dependsOn": [
-                "Copy app configuration"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/context",
-                "env": {
-                    "FLASK_ENV": "development",
-                    "FLASK_APP": "app/main.py"
-                }
-            },
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "always"
-            },
-            "isBackground": true,
-            "problemMatcher": {
-                "pattern": {
-                    "regexp": "",
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "Serving Flask app",
-                    "endsPattern": "Debugger is active"
-                }
-            }
-        },
-        {
-            "label": "Flask Server (+ pip install)",
-            "dependsOn": [
-                "pip install",
-                "Flask Server"
-            ],
-            "dependsOrder": "sequence",
-        },
-        {
-            "label": "npm run lint",
-            "type": "npm",
-            "script": "lint",
-            "problemMatcher": [
-                "$eslint-stylish"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/context"
-            },
-            "presentation": {
-                "clear": true,
-                "panel": "dedicated",
-            }
-        },
-        {
-            "label": "React Dev Server",
-            "type": "npm",
-            "script": "dev-server",
-            "options": {
-                "cwd": "${workspaceFolder}/context"
-            },
-            "presentation": {
-                "panel": "dedicated",
-                "reveal": "always"
-            },
-            "isBackground": true,
-            "problemMatcher": [
-                {
-                    "pattern": {
-                        "regexp": "",
-                    },
-                    "background": {
-                        "activeOnStart": true,
-                        "beginsPattern": "portal-ui",
-                        "endsPattern": "compiled"
-                    }
-                }
-            ],
-        },
-        {
-            "label": "React Dev Server (+ lint)",
-            "dependsOn": [
-                "npm run lint",
-                "React Dev Server"
-            ],
-            "dependsOrder": "sequence",
-        },
-        {
-            "label": "Storybook",
-            "type": "npm",
-            "script": "storybook",
-            "dependsOn": [
-                "npm install"
-            ],
-            "options": {
-                "cwd": "${workspaceFolder}/context"
-            },
-            "presentation": {
-                "panel": "dedicated",
-            },
-            "isBackground": true,
-            "problemMatcher": {
-                "pattern": {
-                    "regexp": "",
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "storybook dev",
-                    "endsPattern": "react-webpack5 started"
-                }
-            }
-        },
-        {
-            "label": "dev-start (no install)",
-            "dependsOn": [
-                "Flask Server",
-                "React Dev Server (+ lint)",
-                "Storybook"
-            ],
-            "dependsOrder": "parallel",
-        },
-        {
-            "label": "dev-start",
-            "dependsOn": [
-                "Init submodules",
-                "Install dependencies",
-                "dev-start (no install)"
-            ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            },
-            "dependsOrder": "sequence",
-            "problemMatcher": [
-                "$eslint-stylish"
-            ]
-        },
-        {
-            "label": "dev-start (no storybook, no install)",
-            "dependsOn": [
-                "Flask Server",
-                "React Dev Server (+ lint)"
-            ],
-            "dependsOrder": "parallel",
-            "problemMatcher": [
-                "$eslint-stylish"
-            ]
-        },
-        {
-            "label": "dev-start (no storybook)",
-            "dependsOn": [
-                "Install dependencies",
-                "dev-start (no storybook, no install)"
-            ],
-            "dependsOrder": "sequence",
-            "problemMatcher": [
-                "$eslint-stylish"
-            ]
-        },
-        {
-            "label": "dev-start (no storybook, no install, no lint)",
-            "dependsOn": [
-                "Flask Server",
-                "React Dev Server"
-            ],
-            "dependsOrder": "parallel",
-            "problemMatcher": [
-                "$eslint-stylish"
-            ]
-        },
-        {
-            "label": "Kill project ports",
-            "type": "shell",
-            "options": {
-                "cwd": "${workspaceFolder}/context"
-            },
-            "command": "npx --yes kill-port 5000 5001 6006",
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Init submodules",
+      "type": "shell",
+      "command": "git submodule init && git submodule update && git config submodule.recurse true",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "echo": false,
+        "reveal": "never",
+        "panel": "dedicated",
+        "close": true
+      }
+    },
+    {
+      "label": "pip install",
+      "type": "shell",
+      "command": "pip install -r context/requirements.txt",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "focus": false,
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Copy app configuration",
+      "type": "shell",
+      "command": "etc/dev/copy-app-conf.sh",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "presentation": {
+        "panel": "dedicated",
+        "close": true
+      }
+    },
+    {
+      "label": "npm install",
+      "type": "npm",
+      "script": "install",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "options": {
+        "cwd": "${workspaceFolder}/context"
+      },
+      "presentation": {
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "Install dependencies",
+      "group": {
+        "kind": "build",
+        "isDefault": false
+      },
+      "dependsOn": [
+        "Init submodules",
+        "pip install",
+        "npm install"
+      ],
+      "dependsOrder": "parallel"
+    },
+    {
+      "label": "Flask Server",
+      "type": "shell",
+      "command": "python -m flask run --debug",
+      "dependsOn": [
+        "Copy app configuration"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/context",
+        "env": {
+          "FLASK_APP": "app/main.py"
         }
-    ]
+      },
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "always"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "",
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Serving Flask app",
+          "endsPattern": "Running on"
+        }
+      }
+    },
+    {
+      "label": "Flask Server (+ pip install)",
+      "dependsOn": [
+        "pip install",
+        "Flask Server"
+      ],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "npm run lint",
+      "type": "npm",
+      "script": "lint",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
+      "options": {
+        "cwd": "${workspaceFolder}/context"
+      },
+      "presentation": {
+        "clear": true,
+        "panel": "dedicated"
+      }
+    },
+    {
+      "label": "React Dev Server",
+      "type": "npm",
+      "script": "dev-server",
+      "options": {
+        "cwd": "${workspaceFolder}/context"
+      },
+      "presentation": {
+        "panel": "dedicated",
+        "reveal": "always"
+      },
+      "isBackground": true,
+      "problemMatcher": [
+        {
+          "pattern": {
+            "regexp": ""
+          },
+          "background": {
+            "activeOnStart": true,
+            "beginsPattern": "portal-ui",
+            "endsPattern": "compiled"
+          }
+        }
+      ]
+    },
+    {
+      "label": "React Dev Server (+ lint)",
+      "dependsOn": [
+        "npm run lint",
+        "React Dev Server"
+      ],
+      "dependsOrder": "sequence"
+    },
+    {
+      "label": "Storybook",
+      "type": "npm",
+      "script": "storybook",
+      "options": {
+        "cwd": "${workspaceFolder}/context"
+      },
+      "presentation": {
+        "panel": "dedicated"
+      },
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": ""
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "storybook dev",
+          "endsPattern": "react-webpack5 started"
+        }
+      }
+    },
+    {
+      "label": "dev-start (no install)",
+      "dependsOn": [
+        "Flask Server",
+        "React Dev Server (+ lint)",
+        "Storybook"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "dev-start",
+      "dependsOn": [
+        "Init submodules",
+        "Install dependencies",
+        "dev-start (no install)"
+      ],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "dependsOrder": "sequence",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "dev-start (no storybook, no install)",
+      "dependsOn": [
+        "Flask Server",
+        "React Dev Server (+ lint)"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "dev-start (no storybook)",
+      "dependsOn": [
+        "Install dependencies",
+        "dev-start (no storybook, no install)"
+      ],
+      "dependsOrder": "sequence",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "dev-start (no storybook, no install, no lint)",
+      "dependsOn": [
+        "Flask Server",
+        "React Dev Server"
+      ],
+      "dependsOrder": "parallel",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "Kill project ports",
+      "type": "shell",
+      "options": {
+        "cwd": "${workspaceFolder}/context"
+      },
+      "command": "npx --yes kill-port 5000 5001 6006"
+    }
+  ]
 }

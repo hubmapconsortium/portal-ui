@@ -5,11 +5,11 @@ import Typography from '@mui/material/Typography';
 
 import { CenteredFlex, StyledPaper, StyledIconButton, FlexButtonsWrapper } from './style';
 
-type PDFViewerControlButtonsProps = {
+interface PDFViewerControlButtonsProps {
   numPages: number;
   currentPageNum: number;
   setPageNum: (newPageNumber: number) => void;
-};
+}
 
 function PDFViewerControlButtons({ numPages, currentPageNum, setPageNum }: PDFViewerControlButtonsProps) {
   const atMaxPageNum = currentPageNum === numPages;

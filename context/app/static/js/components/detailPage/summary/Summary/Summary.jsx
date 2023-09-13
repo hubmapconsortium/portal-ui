@@ -17,6 +17,7 @@ function Summary({
   doi,
   collectionName,
   mapped_external_group_name,
+  bottomFold,
 }) {
   const {
     entity: { uuid, hubmap_id, entity_type, created_timestamp, last_modified_timestamp, description },
@@ -46,6 +47,7 @@ function Summary({
         doi={doi}
         collectionName={collectionName}
       />
+      {bottomFold}
     </DetailPageSection>
   );
 }

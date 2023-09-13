@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "0.77.0",
+  "version": "0.79.3",
   "dependencies": {
     "@datapunt/matomo-tracker-js": "^0.5.1",
     "@elastic/datemath": "^5.0.3",
@@ -96,9 +96,11 @@
     "@testing-library/react": "^10.2.0",
     "@testing-library/react-hooks": "^3.4.2",
     "@testing-library/user-event": "^12.1.1",
+    "@types/react": "^18.2.21",
+    "@types/react-dom": "^18.2.7",
     "@types/styled-components": "^5.1.26",
-    "@typescript-eslint/eslint-plugin": "^5.60.1",
-    "@typescript-eslint/parser": "^5.60.1",
+    "@typescript-eslint/eslint-plugin": "^6.6.0",
+    "@typescript-eslint/parser": "^6.6.0",
     "chromatic": "^5.9.2",
     "compression-webpack-plugin": "^10.0.0",
     "css-loader": "^3.4.2",
@@ -113,12 +115,15 @@
     "eslint-plugin-import": "^2.27.5",
     "eslint-plugin-jest": "^27.2.2",
     "eslint-plugin-jest-dom": "^5.0.1",
+    "eslint-plugin-json": "^3.1.0",
     "eslint-plugin-jsx-a11y": "^6.7.1",
-    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-markdown": "^3.0.1",
+    "eslint-plugin-prettier": "^5.0.0",
     "eslint-plugin-react": "^7.32.2",
     "eslint-plugin-react-hooks": "^4.6.0",
     "eslint-plugin-storybook": "^0.6.12",
     "eslint-plugin-testing-library": "^5.11.0",
+    "eslint-plugin-yml": "^1.8.0",
     "globals": "^13.20.0",
     "husky": "^4.3.8",
     "jest": "^26.6.3",
@@ -126,7 +131,7 @@
     "lint-staged": "^10.2.11",
     "msw": "^0.39.1",
     "msw-storybook-addon": "^1.8.0",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.3",
     "react-test-renderer": "^18.2.0",
     "sass-loader": "^8.0.2",
     "source-map-loader": "^0.2.4",
@@ -157,14 +162,13 @@
     "test:watch": "jest --silent --watch",
     "test:coverage": "jest --silent --coverage",
     "test:clearCache": "jest --silent --clearCache",
-    "lint": "eslint -c .eslintrc.yml --ext .js,.jsx app/static/js/",
-    "lint:fix": "eslint -c .eslintrc.yml --ext .js,.jsx --fix app/static/js/",
+    "lint": "eslint -c .eslintrc.yml ./app/static/js/ ",
+    "lint:fix": "eslint -c .eslintrc.yml ./app/static/js/ --fix",
     "storybook": "storybook dev -p 6006 -s app/static/storybook-public/",
     "build-storybook": "storybook build"
   },
   "lint-staged": {
-    "app/static/js/**/*.{js,jsx}": [
-      "prettier --write",
+    "app/static/js/**/*.{js,jsx,ts,tsx,y*ml,json,md}": [
       "eslint -c .eslintrc.yml"
     ]
   },

@@ -19,34 +19,22 @@
     "hubmap:act-4": { "prov:label": "act-4" }
   },
   "wasGeneratedBy": {
-    "_:1": { "prov:entity": "hubmap:ent-3",
-             "prov:activity": "hubmap:act-1" },
-    "_:2": { "prov:entity": "hubmap:ent-4",
-             "prov:activity": "hubmap:act-2" },
-    "_:3": { "prov:entity": "hubmap:ent-5",
-             "prov:activity": "hubmap:act-3" },
-    "_:4": { "prov:entity": "hubmap:ent-6",
-             "prov:activity": "hubmap:act-4" },
-    "_:5": { "prov:entity": "hubmap:ent-7",
-             "prov:activity": "hubmap:act-2" }
+    "_:1": { "prov:entity": "hubmap:ent-3", "prov:activity": "hubmap:act-1" },
+    "_:2": { "prov:entity": "hubmap:ent-4", "prov:activity": "hubmap:act-2" },
+    "_:3": { "prov:entity": "hubmap:ent-5", "prov:activity": "hubmap:act-3" },
+    "_:4": { "prov:entity": "hubmap:ent-6", "prov:activity": "hubmap:act-4" },
+    "_:5": { "prov:entity": "hubmap:ent-7", "prov:activity": "hubmap:act-2" }
   },
   "used": {
-    "_:5": { "prov:activity": "hubmap:act-1",
-             "prov:entity": "hubmap:ent-1" },
+    "_:5": { "prov:activity": "hubmap:act-1", "prov:entity": "hubmap:ent-1" },
 
-    "_:6": { "prov:activity": "hubmap:act-2",
-             "prov:entity": "hubmap:ent-1" },
-    "_:7": { "prov:activity": "hubmap:act-2",
-             "prov:entity": "hubmap:ent-2" },
+    "_:6": { "prov:activity": "hubmap:act-2", "prov:entity": "hubmap:ent-1" },
+    "_:7": { "prov:activity": "hubmap:act-2", "prov:entity": "hubmap:ent-2" },
 
-    "_:8": { "prov:activity": "hubmap:act-3",
-             "prov:entity": "hubmap:ent-3" },
+    "_:8": { "prov:activity": "hubmap:act-3", "prov:entity": "hubmap:ent-3" },
 
-    "_:9": { "prov:activity": "hubmap:act-4",
-             "prov:entity": "hubmap:ent-1" },
-    "_:10": { "prov:activity": "hubmap:act-4",
-              "prov:entity": "hubmap:ent-3" },
-    "_:11": { "prov:activity": "hubmap:act-4",
-              "prov:entity": "hubmap:ent-4" }
+    "_:9": { "prov:activity": "hubmap:act-4", "prov:entity": "hubmap:ent-1" },
+    "_:10": { "prov:activity": "hubmap:act-4", "prov:entity": "hubmap:ent-3" },
+    "_:11": { "prov:activity": "hubmap:act-4", "prov:entity": "hubmap:ent-4" }
   }
 }

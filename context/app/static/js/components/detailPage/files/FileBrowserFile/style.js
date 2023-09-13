@@ -8,7 +8,7 @@ import Chip from '@mui/material/Chip';
 const StyledRow = styled(TableRow)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
   &:hover {
-    background-color: ${(props) => props.theme.palette.hoverShadow.main};
+    background-color: ${(props) => props.theme.palette.common.hoverShadow};
   }
 `;
 

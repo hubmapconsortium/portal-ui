@@ -1,20 +1,20 @@
 config:
-  target: 'https://entity-api.stage.hubmapconsortium.org'
+  target: "https://entity-api.stage.hubmapconsortium.org"
   phases:
     - duration: 5 # seconds
       arrivalRate: "{{ $processEnvironment.RATE }}" # scenarios started per second
   processor: "./helper.js"
 scenarios:
   - flow:
-    - get:
-        url: "/entities/a11fe9d14122d4254acfefc9bf9faae4/provenance"
-        gzip: true
-        afterResponse: "printStatus"
-    - get:
-        url: "/entities/2510644405f4e7fd86d31af0001b840f/provenance"
-        gzip: true
-        afterResponse: "printStatus"
-    - get:
-        url: "/entities/9be76ec5639c4e2f18fcf734bea7b4e1/provenance"
-        gzip: true
-        afterResponse: "printStatus"
+      - get:
+          url: "/entities/a11fe9d14122d4254acfefc9bf9faae4/provenance"
+          gzip: true
+          afterResponse: "printStatus"
+      - get:
+          url: "/entities/2510644405f4e7fd86d31af0001b840f/provenance"
+          gzip: true
+          afterResponse: "printStatus"
+      - get:
+          url: "/entities/9be76ec5639c4e2f18fcf734bea7b4e1/provenance"
+          gzip: true
+          afterResponse: "printStatus"

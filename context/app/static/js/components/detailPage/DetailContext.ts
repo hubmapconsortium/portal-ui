@@ -1,11 +1,12 @@
 import { createContext, useContext } from 'js/helpers/context';
 
-type DetailContextType = {
+interface DetailContextType {
   uuid: string;
   hubmap_id: string;
-  // Currently only on Dataset pages
-  mapped_data_access_level?: string;
-};
+  // Currently set from real data on Dataset pages,
+  // defaults to `Public` on publication pages
+  mapped_data_access_level: string;
+}
 
 export const DetailContext = createContext<DetailContextType>('DetailContext');
 

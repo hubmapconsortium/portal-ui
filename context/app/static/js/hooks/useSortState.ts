@@ -1,14 +1,14 @@
 import { useCallback, useReducer } from 'react';
 
-type SortState = {
+interface SortState {
   columnId?: string;
   direction?: 'asc' | 'desc';
-};
+}
 
 type SortAction =
   | {
       type: 'sort';
-      payload: string;
+      payload: string | SortState;
     }
   | {
       type: 'reset';
@@ -33,7 +33,7 @@ function sortReducer(state: SortState, action: SortAction): SortState {
         direction: 'desc',
       } as SortState;
     case 'reset':
-      return initialSortState;
+      return action.payload as SortState;
     default:
       console.warn('Unrecognized action type', action);
       return state;
@@ -56,7 +56,7 @@ function sortReducer(state: SortState, action: SortAction): SortState {
  */
 export const useSortState = (
   columnNameMapping: Record<string, string>,
-  initialSortState: sortState = defaultInitialSortState,
+  initialSortState: SortState = defaultInitialSortState,
 ) => {
   const [sortState, dispatch] = useReducer(sortReducer, initialSortState);
 
@@ -65,8 +65,8 @@ export const useSortState = (
   }, []);
 
   const reset = useCallback(() => {
-    dispatch({ type: 'reset' });
-  }, []);
+    dispatch({ type: 'reset', payload: initialSortState });
+  }, [initialSortState]);
 
   const columnName =
     sortState.columnId && columnNameMapping[sortState.columnId]

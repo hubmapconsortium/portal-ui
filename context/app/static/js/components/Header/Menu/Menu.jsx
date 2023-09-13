@@ -10,9 +10,7 @@ import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUpRounded';
 import { WidePopper, WidePaper, DropdownMenuItem } from './style';
 import DropdownLink from '../DropdownLink';
 
-import OtherLinks from '../OtherLinks';
-import ResourceLinks from '../ResourceLinks';
-import AtlasToolsLinks from '../AtlasToolsLinks';
+import { AtlasToolsLinks, OtherLinks, ResourceLinks } from '../staticLinks';
 
 function DropdownContainer({ label, children }) {
   const [isOpen, toggle] = useReducer((v) => !v, false);
