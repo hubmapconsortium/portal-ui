@@ -78,9 +78,6 @@ function SampleHeaderCell({ column, setSort, sortState }) {
 }
 
 function SampleRow({ virtualRow, index, hits }) {
-  if (hits.length === 0) {
-    return null;
-  }
   const {
     _id: uuid,
     _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp },
