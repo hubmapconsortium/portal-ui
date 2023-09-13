@@ -128,12 +128,12 @@ function Samples({ organTerms }) {
         },
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
-      size: 1000,
+      size: 500,
     }),
     [organTerms],
   );
 
-  const { searchHits, allSearchIDs, isLoading, totalHitsCount, sortState, setSort } = useScrollTable({
+  const { searchHits, allSearchIDs, isLoading, loadMore, totalHitsCount, sortState, setSort } = useScrollTable({
     query,
     columnNameMapping: columnIdMap,
     initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
@@ -154,6 +154,20 @@ function Samples({ organTerms }) {
   const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
   const paddingBottom =
     virtualRows.length > 0 ? virtualizer.getTotalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
+
+  // called on scroll and possibly on mount to fetch more data as the user scrolls and reaches bottom of table
+  const fetchMoreOnBottomReached = React.useCallback(
+    (containerRefElement?: HTMLDivElement | null) => {
+      if (containerRefElement) {
+        const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+        // once the user has scrolled within 300px of the bottom of the table, fetch more data if there is any
+        if (scrollHeight - scrollTop - clientHeight < 300) {
+          loadMore();
+        }
+      }
+    },
+    [loadMore],
+  );
 
   return (
     <SectionContainer>
@@ -177,7 +191,7 @@ function Samples({ organTerms }) {
           </>
         }
       />
-      <StyledTableContainer component={Paper} ref={parentRef}>
+      <StyledTableContainer component={Paper} ref={parentRef} onScroll={(e) => fetchMoreOnBottomReached(e.target)}>
         <Table stickyHeader>
           <TableHead sx={{ position: 'relative' }}>
             <TableRow>
