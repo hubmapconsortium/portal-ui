@@ -18,7 +18,7 @@ function useScrollTable({ query, columnNameMapping, initialSortState }) {
   const virtualizer = useVirtualizer({
     count: searchHits.length,
     getScrollElement: () => tableContainerRef.current,
-    estimateSize: () => 52,
+    estimateSize: () => 52, // Roughly equivalent to size of the entity table rows prior to virtualization.
     overscan: 20,
   });
 
