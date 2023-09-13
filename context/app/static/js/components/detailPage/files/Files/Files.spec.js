@@ -108,15 +108,15 @@ test('handles DUA flow', async () => {
 
   render(<TestFiles />);
 
-  userEvent.click(files.targetFile.button);
+  await userEvent.click(files.targetFile.button);
   expect(files.duaCheckboxByLabel).toBeInTheDocument();
 
-  userEvent.click(files.duaDisagree);
+  await userEvent.click(files.duaDisagree);
   await waitForElementToBeRemoved(() => files.duaCheckboxLabel);
 
-  userEvent.click(files.targetFile.button);
-  userEvent.click(files.duaCheckbox);
-  userEvent.click(files.duaAgree);
+  await userEvent.click(files.targetFile.button);
+  await userEvent.click(files.duaCheckbox);
+  await userEvent.click(files.duaAgree);
 
   expect(open).toHaveBeenCalled();
 
