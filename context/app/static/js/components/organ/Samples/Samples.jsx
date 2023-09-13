@@ -1,7 +1,7 @@
 /* eslint-disable no-underscore-dangle */
-import React, { useMemo } from 'react';
+import React, { useMemo, useRef } from 'react';
 import format from 'date-fns/format';
-import { TableVirtuoso } from 'react-virtuoso';
+import { useVirtualizer } from '@tanstack/react-virtual';
 
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -11,10 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
-import TableContainer from '@mui/material/TableContainer';
-import Box from '@mui/material/Box';
 
-import { HeaderCell } from 'js/shared-styles/tables';
+import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -52,10 +50,7 @@ function SampleHeaderCell({ column, setSort, sortState }) {
   // within the cell. The absolute button is the one that is visible and clickable, and takes up the full width of
   // the cell, which is guaranteed to be wide enough to contain the column label.
   return (
-    <HeaderCell
-      key={column.id}
-      sx={({ palette }) => ({ position: 'relative', backgroundColor: palette.background.paper })}
-    >
+    <HeaderCell key={column.id} sx={({ palette }) => ({ backgroundColor: palette.background.paper })}>
       <Button sx={{ visibility: 'hidden', whiteSpace: 'nowrap', py: 0 }} fullWidth disabled>
         {column.label}
       </Button>
@@ -83,20 +78,16 @@ function SampleHeaderCell({ column, setSort, sortState }) {
   );
 }
 
-const TableComponents = {
-  Scroller: React.forwardRef((props, ref) => <TableContainer component={Paper} {...props} ref={ref} />),
-  Table: (props) => <Table {...props} sx={{ borderCollapse: 'separate', tableLayout: 'fixed' }} />,
-  TableHead,
-  TableRow,
-  TableBody: React.forwardRef((props, ref) => <TableBody {...props} ref={ref} />),
-};
-
-function rowContent(
-  index,
-  { _id: uuid, _source: { hubmap_id, donor = {}, descendant_counts, last_modified_timestamp } },
-) {
+function SampleRow({ virtualRow, index, hits }) {
+  if (hits.length === 0) {
+    return null;
+  }
+  const {
+    _id: uuid,
+    _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp },
+  } = hits[virtualRow.index];
   return (
-    <>
+    <TableRow sx={{ height: virtualRow.size }} data-testid={index}>
       <SelectableRowCell rowKey={uuid} />
       <TableCell>
         <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
@@ -108,7 +99,7 @@ function rowContent(
       <TableCell>{donor?.mapped_metadata?.race}</TableCell>
       <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
       <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-    </>
+    </TableRow>
   );
 }
 
@@ -142,11 +133,27 @@ function Samples({ organTerms }) {
     [organTerms],
   );
 
-  const { searchHits, allSearchIDs, isLoading, loadMore, totalHitsCount, sortState, setSort } = useScrollTable({
+  const { searchHits, allSearchIDs, isLoading, totalHitsCount, sortState, setSort } = useScrollTable({
     query,
     columnNameMapping: columnIdMap,
     initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
   });
+
+  const parentRef = useRef(null);
+
+  const virtualizer = useVirtualizer({
+    count: searchHits.length,
+    getScrollElement: () => parentRef.current,
+    estimateSize: () => 52,
+    overscan: 20,
+    debug: true,
+  });
+
+  const virtualRows = virtualizer.getVirtualItems();
+
+  const paddingTop = virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0;
+  const paddingBottom =
+    virtualRows.length > 0 ? virtualizer.getTotalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0;
 
   return (
     <SectionContainer>
@@ -170,41 +177,52 @@ function Samples({ organTerms }) {
           </>
         }
       />
-      {/* eslint-disable react/no-unstable-nested-components */}
-      <Box sx={{ height: 400, width: '100%' }}>
-        <TableVirtuoso
-          data={searchHits}
-          endReached={loadMore}
-          totalCount={totalHitsCount}
-          components={TableComponents}
-          itemContent={rowContent}
-          fixedHeaderContent={() => (
-            <>
-              <TableRow>
-                <SelectableHeaderCell
-                  allTableRowKeys={allSearchIDs}
-                  sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
-                />
-                {columns.map((column) => (
-                  <SampleHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
-                ))}
-              </TableRow>
-              <LinearProgress
-                sx={{
-                  position: 'absolute',
-                  bottom: 0,
-                  zIndex: 50,
-                  width: '100%',
-                  opacity: isLoading ? 1 : 0,
-                  transition: 'opacity',
-                }}
-                variant="indeterminate"
+      <StyledTableContainer component={Paper} ref={parentRef}>
+        <Table stickyHeader>
+          <TableHead sx={{ position: 'relative' }}>
+            <TableRow>
+              <SelectableHeaderCell
+                allTableRowKeys={allSearchIDs}
+                sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
               />
-            </>
-          )}
-        />
-      </Box>
-      {/* eslint-enable react/no-unstable-nested-components */}
+              {columns.map((column) => (
+                <SampleHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
+              ))}
+            </TableRow>
+            <LinearProgress
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                zIndex: 50,
+                width: '100%',
+                opacity: isLoading ? 1 : 0,
+                transition: 'opacity',
+              }}
+              variant="indeterminate"
+            />
+          </TableHead>
+          <TableBody>
+            {paddingTop > 0 && (
+              <tr>
+                <td style={{ height: `${paddingTop}px` }} aria-hidden="true" />
+              </tr>
+            )}
+            {virtualRows.map((virtualRow, index) => (
+              <SampleRow
+                virtualRow={virtualRow}
+                index={index}
+                key={searchHits[virtualRow.index]?._id}
+                hits={searchHits}
+              />
+            ))}
+            {paddingBottom > 0 && (
+              <tr>
+                <td style={{ height: `${paddingBottom}px` }} aria-hidden="true" />
+              </tr>
+            )}
+          </TableBody>
+        </Table>
+      </StyledTableContainer>
     </SectionContainer>
   );
 }
