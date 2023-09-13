@@ -15,10 +15,10 @@ const labelAndHelperTextProps: Record<string, Pick<TextFieldProps, 'label' | 'he
   proteins: { label: 'Protein', helperText: buildHelperText('proteins') },
 };
 
-type AutocompleteEntityProps = {
+interface AutocompleteEntityProps {
   targetEntity: string;
   setter: (value: string[]) => void;
-};
+}
 
 function AutocompleteEntity({ targetEntity, setter }: AutocompleteEntityProps) {
   const [substring, setSubstring] = useState('');
@@ -38,7 +38,7 @@ function AutocompleteEntity({ targetEntity, setter }: AutocompleteEntityProps) {
   const { data, isLoading } = useAutocompleteQuery({ targetEntity, substring });
 
   // Include currently selected options to avoid invalid value errors in console
-  const options = selectedOptions.concat(data || []);
+  const options = selectedOptions.concat(data ?? []);
 
   function handleChange({ target: { value } }: React.ChangeEvent<HTMLInputElement>) {
     setSubstring(value);
