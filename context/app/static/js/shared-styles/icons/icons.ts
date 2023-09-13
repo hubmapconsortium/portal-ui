@@ -21,7 +21,7 @@ import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ContactSupportIcon from '@mui/icons-material/ContactSupportOutlined';
 import { styled } from '@mui/material/styles';
-import { SvgIconProps } from '@mui/material/SvgIcon';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { ElementType } from 'react';
 
 // The "any" here mirrors the "any" in the original SvgIconProps definition.
@@ -30,51 +30,52 @@ type CustomIconProps<T extends ElementType<any>> = {
   fontSize?: string;
 } & SvgIconProps<T>;
 
-const iconStyles = ({ fontSize }: CustomIconProps<ElementType<'svg'>>) => ({
-  fontSize: fontSize ?? '1rem',
-});
+const withIconStyles = (Icon: typeof SvgIcon) =>
+  styled(Icon)(({ fontSize }: CustomIconProps<ElementType<'svg'>>) => ({
+    fontSize: fontSize ?? '1rem',
+  })) as typeof SvgIcon;
 
-const CenterIcon = styled(AccountBalanceIcon)(iconStyles) as typeof AccountBalanceIcon;
+const CenterIcon = withIconStyles(AccountBalanceIcon);
 
-const CloseIcon = styled(CloseRoundedIcon)(iconStyles) as typeof CloseRoundedIcon;
+const CloseIcon = withIconStyles(CloseRoundedIcon);
 
-const CollectionIcon = styled(CollectionsBookmarkRoundedIcon)(iconStyles) as typeof CollectionsBookmarkRoundedIcon;
+const CollectionIcon = withIconStyles(CollectionsBookmarkRoundedIcon);
 
-const DonorIcon = styled(PersonIcon)(iconStyles) as typeof PersonIcon;
+const DonorIcon = withIconStyles(PersonIcon);
 
-const SampleIcon = styled(BubbleChartIcon)(iconStyles) as typeof BubbleChartIcon;
+const SampleIcon = withIconStyles(BubbleChartIcon);
 
-const DatasetIcon = styled(TableChartIcon)(iconStyles) as typeof TableChartIcon;
+const DatasetIcon = withIconStyles(TableChartIcon);
 
-const PublicationIcon = styled(DescriptionOutlinedIcon)(iconStyles) as typeof DescriptionOutlinedIcon;
+const PublicationIcon = withIconStyles(DescriptionOutlinedIcon);
 
-const ExternalLinkIcon = styled(LaunchRoundedIcon)(iconStyles) as typeof LaunchRoundedIcon;
+const ExternalLinkIcon = withIconStyles(LaunchRoundedIcon);
 
-const InfoIcon = styled(InfoRoundedIcon)(iconStyles) as typeof InfoRoundedIcon;
+const InfoIcon = withIconStyles(InfoRoundedIcon);
 
-const SuccessIcon = styled(CheckCircleRoundedIcon)(iconStyles) as typeof CheckCircleRoundedIcon;
+const SuccessIcon = withIconStyles(CheckCircleRoundedIcon);
 
-const FileIcon = styled(InsertDriveFileRoundedIcon)(iconStyles) as typeof InsertDriveFileRoundedIcon;
+const FileIcon = withIconStyles(InsertDriveFileRoundedIcon);
 
-const ErrorIcon = styled(ErrorRoundedIcon)(iconStyles) as typeof ErrorRoundedIcon;
+const ErrorIcon = withIconStyles(ErrorRoundedIcon);
 
-const MoreIcon = styled(MoreHorizRoundedIcon)(iconStyles) as typeof MoreHorizRoundedIcon;
+const MoreIcon = withIconStyles(MoreHorizRoundedIcon);
 
-const DeleteIcon = styled(DeleteRoundedIcon)(iconStyles) as typeof DeleteRoundedIcon;
+const DeleteIcon = withIconStyles(DeleteRoundedIcon);
 
-const EditIcon = styled(EditRoundedIcon)(iconStyles) as typeof EditRoundedIcon;
+const EditIcon = withIconStyles(EditRoundedIcon);
 
-const EmailIcon = styled(EmailRoundedIcon)(iconStyles) as typeof EmailRoundedIcon;
+const EmailIcon = withIconStyles(EmailRoundedIcon);
 
-const ListsIcon = styled(ListAltRoundedIcon)(iconStyles) as typeof ListAltRoundedIcon;
+const ListsIcon = withIconStyles(ListAltRoundedIcon);
 
-const DownIcon = styled(ArrowDropDownRoundedIcon)(iconStyles) as typeof ArrowDropDownRoundedIcon;
+const DownIcon = withIconStyles(ArrowDropDownRoundedIcon);
 
-const UpIcon = styled(ArrowDropUpRoundedIcon)(iconStyles) as typeof ArrowDropUpRoundedIcon;
+const UpIcon = withIconStyles(ArrowDropUpRoundedIcon);
 
-const AddIcon = styled(AddRoundedIcon)(iconStyles) as typeof AddRoundedIcon;
+const AddIcon = withIconStyles(AddRoundedIcon);
 
-const SupportIcon = styled(ContactSupportIcon)(iconStyles) as typeof ContactSupportIcon;
+const SupportIcon = withIconStyles(ContactSupportIcon);
 
 export {
   CloseIcon,
