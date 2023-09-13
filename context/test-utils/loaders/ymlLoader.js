@@ -3,7 +3,7 @@ const yaml = require('js-yaml');
 
 module.exports = {
   process(src) {
-    const jsonObj = yaml.safeLoad(src, { json: true });
+    const jsonObj = yaml.load(src, { json: true });
     return `module.exports = ${JSON.stringify(jsonObj)};`;
   },
 };

@@ -14,7 +14,9 @@ module.exports = {
     'metadata-field-entities$': '<rootDir>/ingest-validation-tools/docs/field-entities.yaml',
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },
-  transformIgnorePatterns: ['node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel)/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes)/)',
+  ],
   transform: {
     '^.+\\.(t|j)sx?$': [
       '@swc/jest',
