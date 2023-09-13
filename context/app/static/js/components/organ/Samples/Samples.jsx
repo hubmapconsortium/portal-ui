@@ -124,7 +124,7 @@ function Samples({ organTerms }) {
         },
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
-      size: 25,
+      size: 500,
     }),
     [organTerms],
   );
