@@ -5,7 +5,7 @@ import { useSnackbarStore } from 'js/shared-styles/snackbars';
 export const useHandleCopyClick = () => {
   const { toastSuccess, toastError } = useSnackbarStore();
   return useCallback(
-    (value) => {
+    (value: string) => {
       navigator.clipboard
         .writeText(value)
         .then(() => {

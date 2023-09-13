@@ -3,8 +3,8 @@ import type { ReactNode } from 'react';
 
 export type Severity = AlertColor;
 
-export type SnackbarMessage = {
+export interface SnackbarMessage {
   message: ReactNode;
   severity: Severity;
   key: string | number;
-};
+}

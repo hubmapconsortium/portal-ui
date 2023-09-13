@@ -4,7 +4,7 @@ import createContext from 'zustand/context';
 
 import { Severity, SnackbarMessage } from './types';
 
-type SnackbarProviderState = {
+interface SnackbarProviderState {
   message?: SnackbarMessage;
   snackbarOpen: boolean;
   openSnackbar: (newMessage: ReactNode, severity?: Severity, key?: string | number) => void;
@@ -13,7 +13,7 @@ type SnackbarProviderState = {
   toastSuccess: (message: ReactNode, key?: string | number) => void;
   toastWarning: (message: ReactNode, key?: string | number) => void;
   toastError: (message: ReactNode, key?: string | number) => void;
-};
+}
 
 const { Provider, useStore } = createContext<SnackbarProviderState>();
 
