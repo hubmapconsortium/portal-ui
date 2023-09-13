@@ -11,7 +11,8 @@ const cellsServiceFetcher = async ({
   if (!substring) {
     return [];
   }
-  return cellsService.searchBySubstring({ targetEntity, substring });
+  // TODO: Convert cellsService to TS
+  return cellsService.searchBySubstring({ targetEntity, substring }) as Promise<AutocompleteQueryResponse>;
 };
 
 export function useAutocompleteQuery(queryKey: AutocompleteQueryKey) {
