@@ -1,3 +1,6 @@
+import { useRef, useCallback } from 'react';
+import { useVirtualizer } from '@tanstack/react-virtual';
+
 import { useSortState } from 'js/hooks/useSortState';
 import { useScrollSearchHits, useAllSearchIDs } from 'js/hooks/useSearchData';
 import { keepPreviousData } from 'js/helpers/swr';
@@ -13,7 +16,47 @@ function useScrollTable({ query, columnNameMapping, initialSortState }) {
     use: [keepPreviousData],
   });
 
-  return { searchHits, allSearchIDs, isLoading, loadMore, totalHitsCount, sortState, setSort };
+  const tableContainerRef = useRef(null);
+
+  const virtualizer = useVirtualizer({
+    count: searchHits.length,
+    getScrollElement: () => tableContainerRef.current,
+    estimateSize: () => 52,
+    overscan: 20,
+    debug: true,
+  });
+
+  const virtualRows = virtualizer.getVirtualItems();
+
+  const tableBodyPadding = {
+    top: virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0,
+    bottom: virtualRows.length > 0 ? virtualizer.getTotalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0,
+  };
+
+  const fetchMoreOnBottomReached = useCallback(
+    (containerRefElement) => {
+      if (containerRefElement) {
+        const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
+        if (scrollHeight - scrollTop - clientHeight < 300) {
+          loadMore();
+        }
+      }
+    },
+    [loadMore],
+  );
+
+  return {
+    searchHits,
+    allSearchIDs,
+    isLoading,
+    totalHitsCount,
+    sortState,
+    setSort,
+    fetchMoreOnBottomReached,
+    virtualRows,
+    tableBodyPadding,
+    tableContainerRef,
+  };
 }
 
 export default useScrollTable;
