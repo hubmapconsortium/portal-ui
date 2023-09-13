@@ -3,7 +3,6 @@ import { useVirtualizer } from '@tanstack/react-virtual';
 
 import { useSortState } from 'js/hooks/useSortState';
 import { useScrollSearchHits, useAllSearchIDs } from 'js/hooks/useSearchData';
-import { keepPreviousData } from 'js/helpers/swr';
 
 function useScrollTable({ query, columnNameMapping, initialSortState }) {
   const { allSearchIDs } = useAllSearchIDs(query, {});
@@ -12,9 +11,7 @@ function useScrollTable({ query, columnNameMapping, initialSortState }) {
 
   const queryWithSort = { ...query, sort };
 
-  const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(queryWithSort, {
-    use: [keepPreviousData],
-  });
+  const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(queryWithSort, {});
 
   const tableContainerRef = useRef(null);
 
@@ -23,7 +20,6 @@ function useScrollTable({ query, columnNameMapping, initialSortState }) {
     getScrollElement: () => tableContainerRef.current,
     estimateSize: () => 52,
     overscan: 20,
-    debug: true,
   });
 
   const virtualRows = virtualizer.getVirtualItems();

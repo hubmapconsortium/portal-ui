@@ -150,7 +150,7 @@ function getCombinedHits(pagesResults) {
 
 function useScrollSearchHits(
   query,
-  { useDefaultQuery = false, fetcher = fetchSearchData, pageSize, ...swrConfigRest } = {
+  { useDefaultQuery = false, fetcher = fetchSearchData, ...swrConfigRest } = {
     useDefaultQuery: false,
     fetcher: fetchSearchData,
   },
@@ -166,6 +166,7 @@ function useScrollSearchHits(
     fallbackData: [],
     revalidateAll: false,
     revalidateFirstPage: false,
+    keepPreviousData: true,
     ...swrConfigRest,
   });
 
