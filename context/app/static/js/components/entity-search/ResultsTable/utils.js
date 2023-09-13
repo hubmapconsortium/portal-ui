@@ -1,4 +1,4 @@
-import get from 'lodash/get';
+import { get } from 'js/helpers/nodash';
 
 const samplePaths = ['origin_samples', 'source_samples'];
 

@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
-// eslint-disable-next-line import/no-unresolved
-import debounce from 'lodash/debounce';
+import { debounce } from 'js/helpers/nodash';
 
 function useWindowSize() {
   function getDimensions() {
