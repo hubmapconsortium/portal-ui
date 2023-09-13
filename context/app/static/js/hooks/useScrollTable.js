@@ -24,6 +24,7 @@ function useScrollTable({ query, columnNameMapping, initialSortState }) {
 
   const virtualRows = virtualizer.getVirtualItems();
 
+  // Adapted from https://tanstack.com/table/v8/docs/examples/react/virtualized-infinite-scrolling.
   const tableBodyPadding = {
     top: virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0,
     bottom: virtualRows.length > 0 ? virtualizer.getTotalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0,
