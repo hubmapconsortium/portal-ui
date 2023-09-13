@@ -3,9 +3,9 @@ import userEvent from '@testing-library/user-event';
 import { render, screen } from 'test-utils/functions';
 
 import { FlaskDataContext } from 'js/components/Contexts';
-import { DetailContext } from 'js/components/detailPage/context';
+import { DetailContext } from 'js/components/detailPage/DetailContext';
 import FileBrowser from './FileBrowser';
-import { FilesContext } from '../Files/context';
+import { FilesContext } from '../FilesContext';
 
 const fakeOpenDUA = jest.fn();
 
@@ -15,127 +15,118 @@ const detailContext = { uuid };
 const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
 const flaskDataContext = { entity: { entity_type: 'Dataset' } };
 
-function FilesProviders({ children }) {
+const expectArrayOfStringsToExist = (arr) => arr.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+const expectArrayOfStringsToNotExist = (arr) =>
+  arr.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
+
+const sharedEntries = {
+  edam_term: 'faketerm',
+  description: 'fakedescription',
+  size: 1000,
+  type: 'faketype',
+};
+
+const testFiles = [
+  {
+    rel_path: 'path1/path2/fake1.txt',
+    ...sharedEntries,
+    is_qa_qc: true,
+  },
+  {
+    rel_path: 'path1/path2/fake2.txt',
+    ...sharedEntries,
+  },
+  {
+    rel_path: 'path1/fake3.txt',
+    ...sharedEntries,
+    is_qa_qc: true,
+  },
+  {
+    rel_path: 'path3/fake4.txt',
+    ...sharedEntries,
+    is_data_product: true,
+  },
+  {
+    rel_path: 'fake5.txt',
+    ...sharedEntries,
+    is_data_product: true,
+  },
+];
+
+function FilesBrowserTest() {
   return (
     <FlaskDataContext.Provider value={flaskDataContext}>
       <DetailContext.Provider value={detailContext}>
-        <FilesContext.Provider value={filesContext}>{children}</FilesContext.Provider>
+        <FilesContext.Provider value={filesContext}>
+          <FileBrowser files={testFiles} />
+        </FilesContext.Provider>
       </DetailContext.Provider>
     </FlaskDataContext.Provider>
   );
 }
 
-const expectArrayOfStringsToExist = (arr) => arr.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-const expectArrayOfStringsToNotExist = (arr) =>
-  arr.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
+const fileBrowser = {
+  get togglePath1Directory() {
+    return screen.getByRole('button', { name: 'path1' });
+  },
+  get toggleQaFilesOnly() {
+    return screen.getByRole('button', { name: 'Show QA Files' });
+  },
+  get toggleDataProductsOnly() {
+    return screen.getByRole('button', { name: 'Show Data Products Files' });
+  },
+};
+
+const defaultTextInDocument = ['path1', 'path3', 'fake5.txt'];
+const defaultTextNotInDocument = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
 
 test('displays files and directories', () => {
-  const sharedEntries = {
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    size: 1000,
-    type: 'faketype',
-  };
+  render(<FilesBrowserTest />);
 
-  const testFiles = [
-    {
-      rel_path: 'path1/path2/fake1.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'path1/path2/fake2.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'path1/fake3.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'path3/fake4.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'fake5.txt',
-      ...sharedEntries,
-    },
-  ];
+  expectArrayOfStringsToExist(defaultTextInDocument);
 
-  render(
-    <FilesProviders>
-      <FileBrowser files={testFiles} />
-    </FilesProviders>,
-  );
+  expectArrayOfStringsToNotExist(defaultTextNotInDocument);
 
-  const textInDocumentBeforeOpenDirectory = ['path1', 'path3', 'fake5.txt'];
-  expectArrayOfStringsToExist(textInDocumentBeforeOpenDirectory);
+  userEvent.click(fileBrowser.togglePath1Directory);
 
-  const textNotInDocumentBeforeOpenDirectory = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
-  expectArrayOfStringsToNotExist(textNotInDocumentBeforeOpenDirectory);
-
-  userEvent.click(screen.getByRole('button', { name: 'path1' }));
-
-  const textInDocumentAfterOpenDirectory = [...textInDocumentBeforeOpenDirectory, 'fake3.txt', 'path2'];
+  const textInDocumentAfterOpenDirectory = [...defaultTextInDocument, 'fake3.txt', 'path2'];
   expectArrayOfStringsToExist(textInDocumentAfterOpenDirectory);
 });
 
-test('Displays correct files before and after display only QA files chip is clicked', () => {
-  const sharedEntries = {
-    edam_term: 'faketerm',
-    description: 'fakedescription',
-    size: 1000,
-    type: 'faketype',
-  };
-
-  const testFiles = [
+test.each(
+  [
     {
-      rel_path: 'path1/path2/fake1.txt',
-      ...sharedEntries,
-      is_qa_qc: true,
+      name: 'QA Files',
+      toggle: () => fileBrowser.toggleQaFilesOnly,
+      textInDocumentAfter: ['path1', 'path2', 'fake3.txt', 'fake1.txt'],
+      textNotInDocumentAfter: ['path3', 'fake4.txt', 'fake2.txt', 'fake5.txt'],
     },
     {
-      rel_path: 'path1/path2/fake2.txt',
-      ...sharedEntries,
+      name: 'Data Products Files',
+      toggle: () => fileBrowser.toggleDataProductsOnly,
+      textInDocumentAfter: ['path3', 'fake5.txt', 'fake4.txt'],
+      textNotInDocumentAfter: ['path1', 'path2', 'fake3.txt', 'fake1.txt', 'fake2.txt'],
     },
-    {
-      rel_path: 'path1/fake3.txt',
-      ...sharedEntries,
-      is_qa_qc: true,
-    },
-    {
-      rel_path: 'path3/fake4.txt',
-      ...sharedEntries,
-    },
-    {
-      rel_path: 'fake5.txt',
-      ...sharedEntries,
-    },
-  ];
+  ],
+  'Displays correct files before and after display only $name chip is clicked',
+  ({ toggle, textInDocumentAfter, textNotInDocumentAfter }) => {
+    render(<FilesBrowserTest />);
 
-  render(
-    <FilesProviders>
-      <FileBrowser files={testFiles} />
-    </FilesProviders>,
-  );
+    // initial
+    expectArrayOfStringsToExist(defaultTextInDocument);
+    expectArrayOfStringsToNotExist(defaultTextNotInDocument);
 
-  // intial
-  const textInDocumentBeforeQAFilesOnly = ['path1', 'path3', 'fake5.txt'];
-  expectArrayOfStringsToExist(textInDocumentBeforeQAFilesOnly);
+    userEvent.click(toggle());
 
-  const textNotInDocumentBeforeQAFilesOnly = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
-  expectArrayOfStringsToNotExist(textNotInDocumentBeforeQAFilesOnly);
+    // after chip is clicked
+    expectArrayOfStringsToExist(textInDocumentAfter);
 
-  userEvent.click(screen.getByRole('button', { name: 'Show QA Files Only' }));
+    expectArrayOfStringsToNotExist(textNotInDocumentAfter);
 
-  // after QA files chip clicked
-  const textInDocumentAfterQAFilesOnly = ['path1', 'path2', 'fake1.txt', 'fake3.txt'];
-  expectArrayOfStringsToExist(textInDocumentAfterQAFilesOnly);
+    userEvent.click(toggle());
 
-  const textNotInDocumentAfterQAFilesOnly = ['path3', 'fake4.txt', 'fake2.txt', 'fake5.txt'];
-  expectArrayOfStringsToNotExist(textNotInDocumentAfterQAFilesOnly);
-
-  userEvent.click(screen.getByRole('button', { name: 'Show QA Files Only' }));
-
-  // returns to all dirs closed
-  expectArrayOfStringsToExist(textInDocumentBeforeQAFilesOnly);
-  expectArrayOfStringsToNotExist(textNotInDocumentBeforeQAFilesOnly);
-});
+    // returns to all dirs closed
+    expectArrayOfStringsToExist(defaultTextInDocument);
+    expectArrayOfStringsToNotExist(defaultTextNotInDocument);
+  },
+);

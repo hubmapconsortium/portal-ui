@@ -1,10 +1,10 @@
 import React from 'react';
 
-import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { useAppContext } from 'js/components/Contexts';
 import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
 import { InternalLink } from 'js/shared-styles/Links';
 import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { StyledDescription } from './style';
 
 function WorkspacesContent() {
@@ -22,11 +22,8 @@ function WorkspacesContent() {
   if (!isWorkspacesUser) {
     return (
       <StyledDescription>
-        You must be a member of the allowed Globus group to access this feature. Email{' '}
-        <EmailIconLink variant="body2" email="help@hubmapconsortium.org">
-          help@hubmapconsortium.org
-        </EmailIconLink>{' '}
-        to gain access.
+        You must be a member of the allowed Globus group to access this feature.{' '}
+        <ContactUsLink variant="body2">Contact us</ContactUsLink> to gain access.
       </StyledDescription>
     );
   }

@@ -1,10 +1,10 @@
 config:
-  target: 'https://assets.stage.hubmapconsortium.org'
+  target: "https://assets.stage.hubmapconsortium.org"
   phases:
     - duration: 5 # seconds
       arrivalRate: "{{ $processEnvironment.RATE }}" # scenarios started per second
   payload:
-    path: '../payloads/generated-assets-ranges.csv'
+    path: "../payloads/generated-assets-ranges.csv"
     order: sequence
     fields:
       - size
@@ -13,17 +13,15 @@ config:
   processor: "./helper.js"
 scenarios:
   - flow:
-    # Browser sends a pre-flight OPTIONS request for every byte-range GET request.
-    # There are lots of headers, but going to hope they don't really matter for timing.
-    - options:
-        url: "{{ path }}"
-        afterResponse: "printStatus"
-    - get:
-        url: "{{ path }}"
-        headers:
-          'Range': 'bytes={{ range }}'
-          'TE': 'Trailers'
-        gzip: true
-        afterResponse: "printStatus"
-
-        
+      # Browser sends a pre-flight OPTIONS request for every byte-range GET request.
+      # There are lots of headers, but going to hope they don't really matter for timing.
+      - options:
+          url: "{{ path }}"
+          afterResponse: "printStatus"
+      - get:
+          url: "{{ path }}"
+          headers:
+            "Range": "bytes={{ range }}"
+            "TE": "Trailers"
+          gzip: true
+          afterResponse: "printStatus"

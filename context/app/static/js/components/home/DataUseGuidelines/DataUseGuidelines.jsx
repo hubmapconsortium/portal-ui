@@ -1,7 +1,7 @@
 import React from 'react';
 
-import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { StyledPaper, StyledTypography } from './style';
 
 const paragraphs = [
@@ -60,10 +60,7 @@ const paragraphs = [
     key: 'help',
     component: (
       <>
-        Please direct any questions to{' '}
-        <EmailIconLink email="help@hubmapconsortium.org" iconFontSize="1.1rem">
-          help@hubmapconsortium.org
-        </EmailIconLink>
+        Please <ContactUsLink iconFontSize="1.1rem"> contact us with any questions</ContactUsLink>.
       </>
     ),
   },

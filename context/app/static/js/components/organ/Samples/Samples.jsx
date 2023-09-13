@@ -23,21 +23,66 @@ import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTable
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
 import { getDonorAgeString } from 'js/helpers/functions';
 
+import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
+import { useSortState } from 'js/hooks/useSortState';
+import { LinearProgress } from '@mui/material';
+import { keepPreviousData } from 'js/helpers/swr';
 import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
 
 const columns = [
-  { id: 'hubmap_id', label: 'Sample' },
+  { id: 'hubmap_id', label: 'Sample', sort: 'hubmap_id.keyword' },
   { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
-  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex' },
-  { id: 'donor.mapped_metadata.race', label: 'Donor Race' },
-  { id: 'descendant_counts.entity_type.Dataset', label: 'Derived Dataset Count' },
+  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex', sort: 'donor.mapped_metadata.sex.keyword' },
+  { id: 'donor.mapped_metadata.race', label: 'Donor Race', sort: 'donor.mapped_metadata.race.keyword' },
+  {
+    id: 'descendant_counts.entity_type.Dataset',
+    label: 'Derived Dataset Count',
+  },
   { id: 'last_modified_timestamp', label: 'Last Modified' },
 ];
+
+const columnIdMap = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
+
+function SampleHeaderCell({ column, setSort, sortState }) {
+  // This is a workaround to ensure the header cell control is accessible with consistent keyboard navigation
+  // and appearance. The header cell contains a disabled, hidden button that is the full width of the cell. This
+  // allows us to set the header cell to position: relative and create another button that is absolutely positioned
+  // within the cell. The absolute button is the one that is visible and clickable, and takes up the full width of
+  // the cell, which is guaranteed to be wide enough to contain the column label.
+  return (
+    <HeaderCell key={column.id} sx={{ position: 'relative' }}>
+      <Button sx={{ visibility: 'hidden', whiteSpace: 'nowrap', py: 0 }} fullWidth disabled>
+        {column.label}
+      </Button>
+      <Button
+        variant="text"
+        onClick={() => {
+          setSort(column.id);
+        }}
+        disableTouchRipple
+        sx={{
+          justifyContent: 'flex-start',
+          whiteSpace: 'nowrap',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          width: '100%',
+          height: '100%',
+          pl: 2,
+        }}
+        endIcon={<OrderIcon order={sortState.columnId === column.id ? sortState.direction : undefined} />}
+      >
+        {column.label}
+      </Button>
+    </HeaderCell>
+  );
+}
 
 function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
+  const { sortState, setSort, sort } = useSortState(columnIdMap);
   const query = useMemo(
     () => ({
       post_filter: {
@@ -60,11 +105,14 @@ function Samples({ organTerms }) {
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
       size: 10000,
+      sort,
     }),
-    [organTerms],
+    [organTerms, sort],
   );
 
-  const { searchHits } = useSearchHits(query);
+  const { searchHits, isLoading } = useSearchHits(query, {
+    use: [keepPreviousData],
+  });
 
   return (
     <SectionContainer>
@@ -90,23 +138,32 @@ function Samples({ organTerms }) {
       />
       <StyledTableContainer component={Paper}>
         <Table stickyHeader>
-          <TableHead>
+          <TableHead sx={{ position: 'relative' }}>
             <TableRow>
               <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
               {columns.map((column) => (
-                <HeaderCell key={column.id}>{column.label}</HeaderCell>
+                <SampleHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
               ))}
             </TableRow>
+            <LinearProgress
+              sx={{
+                position: 'absolute',
+                bottom: 0,
+                zIndex: 50,
+                width: '100%',
+                opacity: isLoading ? 1 : 0,
+                transition: 'opacity',
+              }}
+              variant="indeterminate"
+            />
           </TableHead>
           <TableBody>
             {searchHits
               .map((hit) => {
-                /* eslint-disable no-underscore-dangle */
                 if (!hit._source.donor) {
                   // eslint-disable-next-line no-param-reassign
                   hit._source.donor = {};
                 }
-                /* eslint-enable */
                 return hit;
               })
               .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (

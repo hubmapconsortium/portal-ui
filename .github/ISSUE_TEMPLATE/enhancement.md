@@ -1,10 +1,7 @@
 ---
 name: Enhancement
 about: New feature or enhancement
-title: ''
+title: ""
 labels: UI, enhancement
-assignees: ''
-
+assignees: ""
 ---
-
-

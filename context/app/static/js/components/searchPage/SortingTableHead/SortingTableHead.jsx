@@ -16,7 +16,7 @@ function getOrder(orderPair, selectedItems) {
   return match.length ? match[0].order : undefined;
 }
 
-function OrderIcon({ order }) {
+export function OrderIcon({ order }) {
   if (order === 'asc') return <ArrowUpOn />;
   if (order === 'desc') return <ArrowDownOn />;
   return <ArrowDownOff />;

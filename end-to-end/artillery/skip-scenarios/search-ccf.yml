@@ -1,15 +1,15 @@
 config:
-  target: 'https://search-api.stage.hubmapconsortium.org'
+  target: "https://search-api.stage.hubmapconsortium.org"
   phases:
     - duration: 5 # seconds
       arrivalRate: "{{ $processEnvironment.RATE }}" # scenarios started per second
   processor: "./helper.js"
 scenarios:
   - flow:
-    - post:
-        url: "/portal/search"
-        headers:
-          'Content-Type': application/json
-        body: "{{ $processEnvironment.CCF_QUERY }}"
-        gzip: true
-        afterResponse: "printStatus"
+      - post:
+          url: "/portal/search"
+          headers:
+            "Content-Type": application/json
+          body: "{{ $processEnvironment.CCF_QUERY }}"
+          gzip: true
+          afterResponse: "printStatus"

@@ -12,10 +12,20 @@ export function capitalizeString(s) {
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 
+export const NOT_CAPITALIZED_WORDS = ['of', 'to', 'and', 'the', 'a'];
+
+export function shouldCapitalizeString(s, idx = 1) {
+  const lowerCase = s.toLowerCase();
+  if (idx === 0) {
+    return true;
+  }
+  return NOT_CAPITALIZED_WORDS.indexOf(lowerCase) === -1;
+}
+
 export function capitalizeAndReplaceDashes(s) {
   return s
     .split('-')
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word, idx) => (shouldCapitalizeString(word, idx) ? capitalizeString(word) : word))
     .join(' ');
 }
 

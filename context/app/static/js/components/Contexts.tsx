@@ -2,10 +2,26 @@ import { useContext, createContext } from 'js/helpers/context';
 
 // TODO: Continue populating these types as we find more of the uses of the flask data and app contexts
 
-type FlaskDataContextType = {
+type DagProvenanceType =
+  | {
+      origin: string;
+    }
+  | {
+      name: string;
+    };
+
+interface FlaskDataContextType {
   redirected_from: string;
+  entity: {
+    entity_type: string;
+    metadata: {
+      dag_provenance_list: DagProvenanceType[];
+      [key: string]: unknown;
+    };
+    [key: string]: unknown;
+  };
   [key: string]: unknown;
-};
+}
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');
 
@@ -19,11 +35,11 @@ export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataCo
  */
 export const useFlaskDataContext = () => useContext(FlaskDataContext);
 
-type AppContextType = {
+interface AppContextType {
   assetsEndpoint: string;
   groupsToken: string;
   [key: string]: unknown;
-};
+}
 
 export const AppContext = createContext<AppContextType>('AppContext');
 

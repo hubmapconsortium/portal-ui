@@ -2,38 +2,37 @@ name: 🌲🔬 Cypress Portal CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request: {}
 
 jobs:
   build:
-
     # Available versions:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     runs-on: ubuntu-20.04
 
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: 'recursive'
+      - uses: actions/checkout@v2
+        with:
+          submodules: "recursive"
 
-    - name: Set up Node
-      uses: actions/setup-node@v3
-      with:
-        node-version-file: '.nvmrc'
-        cache: 'npm'
-        cache-dependency-path: end-to-end/package-lock.json
+      - name: Set up Node
+        uses: actions/setup-node@v3
+        with:
+          node-version-file: ".nvmrc"
+          cache: "npm"
+          cache-dependency-path: end-to-end/package-lock.json
 
-    - run: npm --version
+      - run: npm --version
 
-    - name: Install node dependencies
-      run: npm ci --prefix end-to-end
+      - name: Install node dependencies
+        run: npm ci --prefix end-to-end
 
-    - name: Set up git config to make dev-start.sh happy
-      run: git config --global submodule.recurse true
+      - name: Set up git config to make dev-start.sh happy
+        run: git config --global submodule.recurse true
 
-    - name: Run test script
-      run: etc/test/test-cypress.sh portal
-      env:
-        GH_ACTIONS_BRANCH: ${{ github.ref }}
-        GH_ACTIONS: true
+      - name: Run test script
+        run: etc/test/test-cypress.sh portal
+        env:
+          GH_ACTIONS_BRANCH: ${{ github.ref }}
+          GH_ACTIONS: true

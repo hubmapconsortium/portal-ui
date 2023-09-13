@@ -4,7 +4,6 @@ extends:
   - airbnb
   - airbnb/hooks
   - prettier
-  - plugin:@typescript-eslint/recommended
   - plugin:prettier/recommended
   - plugin:import/errors
   - plugin:import/warnings
@@ -30,11 +29,11 @@ settings:
     version: detect
   import/resolver:
     webpack:
-      config: './build-utils/webpack.common.js'
+      config: ./build-utils/webpack.common.js
 rules:
   camelcase: [0] # Preserving original name will make searching across codebase easier.
-  no-console: ['error', { allow: ['warn', 'error'] }]
   no-underscore-dangle: [2, { allow: ['_id', '_source'] }] # Allow underscore prefixes for ElasticSearch fields
+  no-console: [error, { allow: [warn, error] }]
   react/jsx-filename-extension: [0] # Imports don"t work if I change extension.
   import/extensions: [0] # Same as above; we can eventually remove these rules to convert to ESM
   react/sort-comp: [0] # Non-alphabetical groupings can make more sense.
@@ -51,11 +50,17 @@ rules:
   react/jsx-no-bind: [0] # We can revisit this later if we detect performance issues from unstable functions
   '@typescript-eslint/no-unused-vars':
     - 2 # Error on unmarked unused variables
-    - argsIgnorePattern: '^_' # Allow unused variables that start with _
+    - argsIgnorePattern: ^_ # Allow unused variables that start with _
       ignoreRestSiblings: true # Allow unused variables when using destructuring to remove keys from an object
 
 overrides:
-  - files: ['**/*.spec.{js,jsx,ts,tsx}']
+  - files: ['**.{ts,tsx}']
+    extends:
+      - plugin:@typescript-eslint/recommended-type-checked
+      - plugin:@typescript-eslint/stylistic-type-checked
+    parserOptions:
+      project: ./tsconfig.json
+  - files: ['**/*.spec.{js,jsx,ts,tsx}', '**/__mocks__/**/*.{js,jsx,ts,tsx}']
     plugins:
       - jest
     extends:
@@ -63,7 +68,7 @@ overrides:
       - plugin:jest-dom/recommended
       - plugin:testing-library/react
     settings:
-      'import/resolver':
+      import/resolver:
         jest:
           jestConfigFile: ./jest.config.js
     env:
@@ -72,7 +77,8 @@ overrides:
     rules:
       import/no-extraneous-dependencies: [0]
       '@typescript-eslint/no-var-requires': [0] # allow use of require in jest tests
-      jest/expect-expect: ['error', { 'assertFunctionNames': ['expect*'] }] # allow expect calls to be contained within helper functions that start with expect
+      jest/no-standalone-expect: [error, { additionalTestBlockFunctions: [test.each] }] # Detect test.each as a test block function
+      jest/expect-expect: [error, { assertFunctionNames: ['expect*'] }] # allow expect calls to be contained within helper functions that start with expect
       '@typescript-eslint/no-empty-function': [0] # allow empty function placeholders in jest tests
   - files: ['**/*.stories.{js,jsx,ts,tsx}']
     extends:
@@ -81,7 +87,7 @@ overrides:
       import/no-extraneous-dependencies: [0]
       '@typescript-eslint/no-empty-function': [0] # allow empty function placeholders in stories
       storybook/no-redundant-story-name: [0] # Some are needed for single story hoisting for multi word component names per comments - may need to be revisited/retested for the highlighted cases
-  - files: ['**/*.cy.{js,jsx,ts,tsx}']
+  - files: ['**/end-to-end/**/*.{js,jsx,ts,tsx}']
     plugins:
       - cypress
     extends:
@@ -100,3 +106,17 @@ overrides:
     rules:
       import/no-extraneous-dependencies: [0] # Allow devDependencies in test fixtures
       '@typescript-eslint/no-empty-function': [0] # allow empty function placeholders in test fixtures
+  - files: ['**/*.json']
+    plugins: [json]
+    extends: [plugin:json/recommended]
+  - files: ['**/*.md']
+    plugins: [markdown, prettier]
+    processor: markdown/markdown
+    extends: [plugin:markdown/recommended]
+    rules:
+      no-console: [0] # Allow console in markdown files
+      import/no-unresolved: [0] # Allow unresolved imports in markdown files
+      import/no-extraneous-dependencies: [0] # Allow devDependencies in markdown files
+  - files: ['**/*.{yml,yaml}']
+    parser: yaml-eslint-parser
+    extends: ['plugin:yml/standard', 'plugin:yml/prettier', prettier]

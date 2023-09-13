@@ -1,18 +1,18 @@
-import styled from 'styled-components';
+import { styled } from '@mui/styles';
 import TableContainer from '@mui/material/TableContainer';
 import TableCell from '@mui/material/TableCell';
 
-const StyledTableContainer = styled(TableContainer)`
-  max-height: 340px; // Height lands in the middle of a row, to show that div can scroll.
+const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
+  maxHeight: 340,
+  overflowY: 'auto',
+  '& .MuiTableCell-root': {
+    backgroundColor: theme.palette.white,
+  },
+}));
 
-  th {
-    background-color: #ffffff;
-  }
-`;
-
-const HeaderCell = styled(TableCell)`
-  font-size: ${(props) => props.theme.typography.subtitle2.fontSize};
-  font-weight: ${(props) => props.theme.typography.subtitle2.fontWeight};
-`;
+const HeaderCell = styled(TableCell)(({ theme }) => ({
+  fontSize: theme.typography.subtitle2.fontSize,
+  fontWeight: theme.typography.subtitle2.fontWeight,
+}));
 
 export { StyledTableContainer, HeaderCell };

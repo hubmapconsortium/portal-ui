@@ -7,7 +7,9 @@ import {
   getDonorAgeString,
   filterObjectByKeys,
   getOriginSamplesOrgan,
-} from './functions'; // replace 'yourModule' with your actual module name
+  NOT_CAPITALIZED_WORDS,
+  shouldCapitalizeString,
+} from './functions';
 
 test('isEmptyArrayOrObject', () => {
   expect(isEmptyArrayOrObject([])).toBeTruthy();
@@ -24,7 +26,26 @@ test('capitalizeString', () => {
 test('capitalizeAndReplaceDashes', () => {
   expect(capitalizeAndReplaceDashes('hello-world')).toEqual('Hello World');
   expect(capitalizeAndReplaceDashes('my-new-dog')).toEqual('My New Dog');
+  expect(
+    capitalizeAndReplaceDashes(
+      'a-very-long-string-to-test-capitalization-and-make-sure-the-title-case-works-correctly',
+    ),
+  ).toEqual('A Very Long String to Test Capitalization and Make Sure the Title Case Works Correctly');
 });
+
+test.each(NOT_CAPITALIZED_WORDS, 'capitalizeAndReplaceDashes capitalizes "%s" if it is the first word', (word) => {
+  expect(shouldCapitalizeString(word, 0)).toBeTruthy();
+  expect(capitalizeAndReplaceDashes(word)).toEqual(capitalizeString(word));
+});
+
+test.each(
+  NOT_CAPITALIZED_WORDS,
+  'capitalizeAndReplaceDashes does not capitalize "%s" if it is not the first word',
+  (word) => {
+    expect(shouldCapitalizeString(word, 1)).toBeFalsy();
+    expect(capitalizeAndReplaceDashes(`first-${word}`)).toEqual(`First ${word}`);
+  },
+);
 
 test('replaceUnderscore', () => {
   expect(replaceUnderscore('hello_world')).toEqual('hello world');

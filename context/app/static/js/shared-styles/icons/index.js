@@ -20,6 +20,7 @@ import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import ContactSupportIcon from '@mui/icons-material/ContactSupportOutlined';
 
 const fontSizeStyle = css`
   font-size: ${(props) => props.$fontSize || '1rem'};
@@ -105,6 +106,10 @@ const AddIcon = styled(AddRoundedIcon)`
   ${fontSizeStyle}
 `;
 
+const SupportIcon = styled(ContactSupportIcon)`
+  ${fontSizeStyle}
+`;
+
 export {
   CloseIcon,
   CollectionIcon,
@@ -126,4 +131,5 @@ export {
   DownIcon,
   UpIcon,
   AddIcon,
+  SupportIcon,
 };

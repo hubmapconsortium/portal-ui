@@ -1,29 +1,30 @@
-import styled from 'styled-components';
+import { styled } from '@mui/styles';
 import FolderIcon from '@mui/icons-material/FolderRounded';
 import FolderOpenIcon from '@mui/icons-material/FolderOpenRounded';
 import TableRow from '@mui/material/TableRow';
+import Box from '@mui/material/Box';
 
-const StyledTableRow = styled(TableRow)`
-  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
-  &:hover {
-    background-color: ${(props) => props.theme.palette.hoverShadow.main};
-  }
-  cursor: pointer;
-`;
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  '&:hover': {
+    backgroundColor: theme.palette.common.hoverShadow,
+  },
+  cursor: 'pointer',
+}));
 
-const Directory = styled.div`
-  padding: 10px 0px 10px ${(props) => parseInt(props.theme.spacing(props.$depth * 1.5), 10) + 40}px;
-  font-size: ${(props) => props.theme.typography.body1.fontSize};
-  display: flex;
-  align-items: center;
-`;
+const Directory = styled(Box)(({ theme }) => ({
+  padding: theme.spacing(1.25, 0, 1.25, 2),
+  fontSize: theme.typography.body1.fontSize,
+  display: 'flex',
+  alignItems: 'center',
+}));
 
-const StyledFolderIcon = styled(FolderIcon)`
-  margin-right: ${(props) => props.theme.spacing(1)};
-`;
+const iconMargin = ({ theme }) => ({
+  marginRight: theme.spacing(1),
+});
 
-const StyledFolderOpenIcon = styled(FolderOpenIcon)`
-  margin-right: ${(props) => props.theme.spacing(1)};
-`;
+const StyledFolderIcon = styled(FolderIcon)(iconMargin);
+
+const StyledFolderOpenIcon = styled(FolderOpenIcon)(iconMargin);
 
 export { StyledTableRow, Directory, StyledFolderOpenIcon, StyledFolderIcon };

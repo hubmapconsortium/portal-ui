@@ -6,7 +6,7 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolData';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import HelpLink from 'js/shared-styles/Links/HelpLink';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
@@ -17,7 +17,7 @@ function ProtocolMessage({ precedingText }) {
       {/* Extra `div` wrapper is necessary to prevent the email icon link from taking up the full width and breaking text. */}
       <div>
         {precedingText}
-        <HelpLink /> about this issue and mention the HuBMAP ID.
+        <ContactUsLink /> about this issue and mention the HuBMAP ID.
       </div>
     </SectionItem>
   );
@@ -34,11 +34,11 @@ function ProtocolLink({ url, index }) {
 
     if (isLoading && !error) {
       return (
-        <ProtocolMessage precedingText="Protocols are loading. If protocols take a significant time to load, please contact " />
+        <ProtocolMessage precedingText="Protocols are loading. If protocols take a significant time to load, please " />
       );
     }
 
-    return <ProtocolMessage precedingText="Failed to retrieve protocols. Please contact " />;
+    return <ProtocolMessage precedingText="Failed to retrieve protocols. Please " />;
   }
 
   return (
