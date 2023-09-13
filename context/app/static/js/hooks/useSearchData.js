@@ -1,6 +1,7 @@
-import { useMemo, useCallback } from 'react';
+import { useCallback } from 'react';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
+
 import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 
@@ -105,7 +106,7 @@ function useAllSearchIDs(
       useDefaultQuery,
       numberOfPagesToRequest,
     ];
-  }, [query, numberOfPagesToRequest, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
+  }, [query, elasticsearchEndpoint, groupsToken, useDefaultQuery, numberOfPagesToRequest]);
 
   const { data } = useSWRInfinite(getKey, (args) => fetchAllIDs(...args), {
     fallbackData: [],
@@ -120,20 +121,6 @@ function getSearchAfterSort(hits) {
   const { sort } = hits.slice(-1)[0];
   return sort;
 }
-
-const withFetcherArgs =
-  (query, ...rest) =>
-  (pageIndex, previousPageData) => {
-    const previousPageHits = previousPageData?.hits?.hits ?? [];
-
-    if (previousPageData && !previousPageHits.length) return null;
-    // First page, we return the key array unmodified.
-    if (pageIndex === 0) return [{ ...query, track_total_hits: true }, ...rest];
-
-    // Subsequent pages, we add the search after param to the query.
-    const searchAfterSort = getSearchAfterSort(previousPageHits);
-    return [{ ...query, track_total_hits: true, search_after: searchAfterSort }, ...rest];
-  };
 
 function getCombinedHits(pagesResults) {
   const hasData = pagesResults.length > 0;
@@ -157,8 +144,20 @@ function useScrollSearchHits(
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
-  const getKey = useMemo(
-    () => withFetcherArgs(query, elasticsearchEndpoint, groupsToken, useDefaultQuery),
+  const getKey = useCallback(
+    (pageIndex, previousPageData) => {
+      const sharedKeyItems = [elasticsearchEndpoint, groupsToken, useDefaultQuery];
+
+      const previousPageHits = previousPageData?.hits?.hits ?? [];
+
+      if (previousPageData && !previousPageHits.length) return null;
+      // First page, we return the key array unmodified.
+      if (pageIndex === 0) return [{ ...query, track_total_hits: true }, ...sharedKeyItems];
+
+      // Subsequent pages, we add the search after param to the query.
+      const searchAfterSort = getSearchAfterSort(previousPageHits);
+      return [{ ...query, track_total_hits: true, search_after: searchAfterSort }, ...sharedKeyItems];
+    },
     [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
   );
 
