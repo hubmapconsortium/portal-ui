@@ -2,6 +2,7 @@ import Paper from '@mui/material/Paper';
 import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
 import Bowser from 'bowser';
 import React, { useEffect, useState } from 'react';
+import { isFirefox } from 'react-device-detect';
 import { Vitessce } from 'vitessce';
 
 import packageInfo from 'package';
@@ -30,11 +31,6 @@ import {
   bodyExpandedCSS,
   vitessceFixedHeight,
 } from './style';
-
-function sniffBrowser() {
-  const { browser } = Bowser.parse(window.navigator.userAgent);
-  return browser.name;
-}
 
 const FIREFOX_WARNING = 'If the performance of Vitessce in Firefox is not satisfactory, please use Chrome or Safari.';
 
@@ -83,7 +79,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   }, [hasNotebook, vizIsFullscreen, setVizNotebookId, uuid]);
 
   const [vitessceErrors, setVitessceErrors] = useState([]);
-  const [isVisibleFirefoxWarning, setIsVisibleFirefoxWarning] = useState(sniffBrowser() === 'Firefox');
+  const [isVisibleFirefoxWarning, setIsVisibleFirefoxWarning] = useState(isFirefox);
 
   // Get the vitessce configuration from the url if available and set the selection if it is a multi-dataset.
   const { vitessceConfig, vitessceSelection, setVitessceSelection } = useVitessceConfig({
