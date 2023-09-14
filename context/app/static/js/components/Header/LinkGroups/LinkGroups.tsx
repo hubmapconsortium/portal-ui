@@ -1,10 +1,10 @@
 import React, { Fragment } from 'react';
 import DropdownLink from '../DropdownLink';
 
-type LinkType = {
+interface LinkType {
   href: string;
   label: string;
-};
+}
 
 type LinkGroupType = Record<string, LinkType[]>;
 

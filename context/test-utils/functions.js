@@ -13,13 +13,13 @@ const appProviderEndpoints = {
 const isWorkspacesUser = false;
 const appProviderToken = 'fakeGroupsToken';
 
-const AllTheProviders = ({ children }) => {
+function AllTheProviders({ children }) {
   return (
     <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken} isWorkspacesUser={isWorkspacesUser}>
       {children}
     </Providers>
   );
-};
+}
 
 const customRender = (ui, options) => render(ui, { wrapper: AllTheProviders, ...options });
 

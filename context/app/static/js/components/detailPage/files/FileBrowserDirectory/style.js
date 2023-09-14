@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
   '&:hover': {
-    backgroundColor: theme.palette.hoverShadow.main,
+    backgroundColor: theme.palette.common.hoverShadow,
   },
   cursor: 'pointer',
 }));

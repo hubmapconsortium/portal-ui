@@ -12,10 +12,10 @@ import { StyledRow, StyledFileIcon, FileSize, StyledInfoIcon, FileTypeChip } fro
 import { DatasetFile } from '../types';
 import { useFileLink } from '../DataProducts/hooks';
 
-type FileBrowserFileProps = {
+interface FileBrowserFileProps {
   fileObj: DatasetFile;
   depth: number;
-};
+}
 
 function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
   const { hasAgreedToDUA, openDUA } = useFilesContext();

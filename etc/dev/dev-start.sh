@@ -96,7 +96,7 @@ fi
 
 # Start subprocesses
 
-FLASK_ENV=development FLASK_APP="app/main.py" python -m flask run &
+FLASK_APP="app/main.py" python -m flask run --debug &
 
 npm run lint || die 'Try "npm run lint:fix"'
 npm run dev-server &

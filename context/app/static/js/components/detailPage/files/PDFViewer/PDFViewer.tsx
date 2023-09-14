@@ -11,9 +11,9 @@ import { DocumentCallback, OnDocumentLoadSuccess } from 'react-pdf/dist/cjs/shar
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
 import { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ErrorIcon } from './style';
 
-type PDFViewerProps = {
+interface PDFViewerProps {
   pdfUrl: string;
-};
+}
 
 function PDFViewer({ pdfUrl }: PDFViewerProps) {
   const [currentPageNum, setCurrentPageNum] = useState(1);

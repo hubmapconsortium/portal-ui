@@ -20,7 +20,7 @@ properties:
   search:
     # Array may be empty.
     type: array
-    items: 
+    items:
       type: string
   azimuth:
     type: object
@@ -29,7 +29,7 @@ properties:
         type: string
       applink:
         type: string
-        pattern: 'https://app.azimuth.hubmapconsortium.org/app/human-.+'
+        pattern: "https://app.azimuth.hubmapconsortium.org/app/human-.+"
       modalities:
         type: string
       nunit:

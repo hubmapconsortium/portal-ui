@@ -1,6 +1,3 @@
 {
-  "recommendations": [
-    "dbaeumer.vscode-eslint",
-    "ms-python.autopep8"
-  ]
+  "recommendations": ["dbaeumer.vscode-eslint", "ms-python.autopep8"]
 }
