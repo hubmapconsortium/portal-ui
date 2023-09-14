@@ -6,6 +6,10 @@
 
 - Version number skipped.
 
+## v0.79.1
+
+- Version number skipped.
+
 ## v0.79.0 - 2023-09-08
 
  - Improve Matomo tracking specificity.
