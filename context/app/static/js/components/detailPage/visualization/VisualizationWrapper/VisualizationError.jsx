@@ -1,14 +1,16 @@
 import React, { useCallback } from 'react';
 import { ErrorBoundary as SentryErrorBoundary } from '@sentry/react';
+import { faro } from '@grafana/faro-web-sdk';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import { StyledSectionHeader } from '../Visualization/style';
 import { VisualizationErrorBoundaryBackground } from './style';
 
 function VisualizationFallback({ isPublicationPage, uuid, shouldDisplayHeader }) {
   return useCallback(
-    ({ componentStack }) => {
+    ({ message, componentStack }) => {
       return (
         <DetailPageSection id={isPublicationPage ? `visualization-${uuid}` : 'visualization'}>
           <SpacedSectionButtonRow
@@ -16,10 +18,9 @@ function VisualizationFallback({ isPublicationPage, uuid, shouldDisplayHeader })
           />
           <VisualizationErrorBoundaryBackground>
             <div>The Vitessce visualization encountered an error. Please try again or contact support.</div>
-            <details>
-              <summary>Click to expand error details</summary>
-              <div>{componentStack}</div>
-            </details>
+            <DetailsAccordion summary="Click to expand error details">
+              {message} {componentStack}
+            </DetailsAccordion>
           </VisualizationErrorBoundaryBackground>
         </DetailPageSection>
       );
@@ -33,6 +34,9 @@ function VisualizationErrorBoundary({ children, ...rest }) {
     <SentryErrorBoundary
       beforeCapture={(scope) => {
         scope.setTag('location', 'vitessce');
+      }}
+      onError={(error) => {
+        faro.logError('VisualizationErrorBoundary', { error });
       }}
       fallback={VisualizationFallback({ ...rest })}
     >

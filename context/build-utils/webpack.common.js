@@ -1,8 +1,7 @@
-const webpack = require('webpack');
 const { resolve } = require('path');
 
 const { alias } = require('./alias');
-const packageJSON = require('../package.json');
+const { HuBMAPGlobals } = require('./webpack.plugins');
 
 const config = {
   entry: { main: './app/static/js/index.jsx' },
@@ -83,13 +82,7 @@ const config = {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      // update globals in eslintrc to fix undefined errors
-      CDN_URL: JSON.stringify('https://d3evp8qu4tjncp.cloudfront.net'),
-      PACKAGE_VERSION: JSON.stringify(packageJSON.version),
-    }),
-  ],
+  plugins: [HuBMAPGlobals],
 };
 
 module.exports = config;

@@ -1,5 +1,6 @@
 import MatomoTracker from '@datapunt/matomo-tracker-js';
 import ReactGA from 'react-ga4';
+import { faro } from '@grafana/faro-web-sdk';
 import { readCookie } from 'js/helpers/functions';
 
 function getSiteId(location) {
@@ -74,11 +75,13 @@ ReactGA.initialize('G-Q1QJYZHM1D', {
 function trackPageView(path) {
   tracker.trackPageView({ href: path });
   ReactGA.send({ hitType: 'pageview', page: path });
+  faro.api.pushEvent('pageview', { path });
 }
 
 function trackEvent(event) {
   tracker.trackEvent(event);
   ReactGA.event(event);
+  faro.api.pushEvent(event.category, event);
 }
 
 function trackLink(href, type) {
@@ -92,6 +95,7 @@ function trackLink(href, type) {
     label: href,
     nonInteraction: false,
   });
+  faro.api.pushEvent(type || 'Outbound Link Clicked', { href });
 }
 
 function trackSiteSearch(keyword) {
@@ -100,13 +104,14 @@ function trackSiteSearch(keyword) {
   });
   /*
   We currently call both trackEvent and trackSiteSearch:
-  while that is the case, we don't have to double track the even in GA.
+  while that is the case, we don't have to double track the event in GA/faro.
   
   ReactGA.event({
     // category: analyticsCategory,
     action: 'Free Text Search',
     label: keyword,
   });
+  faro.api.pushEvent('Free Text Search', { keyword });
   */
 }
 

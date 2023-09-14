@@ -1,9 +1,9 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { init as sentryInit } from '@sentry/react';
 
 import App from './components/App';
 import Iframe from './pages/Iframe';
+import initTrackers from './helpers/init-trackers';
 import { setJsonLD } from './schema.org';
 
 // TODO: Re-enable. https://github.com/hubmapconsortium/portal-ui/issues/1426
@@ -13,12 +13,7 @@ import { setJsonLD } from './schema.org';
 //   console.warn('Schema validation errors', validation_errors);
 // }
 
-sentryInit({
-  dsn: sentryDsn,
-  environment: sentryEnv,
-  enabled: ['prod', 'prod-stage'].includes(sentryEnv),
-  release: `portal-ui-react@${PACKAGE_VERSION}`,
-});
+initTrackers();
 
 ReactDOM.render(
   window.location.pathname.startsWith('/iframe/') ? (
