@@ -1,7 +1,10 @@
-## v0.79.2 - 2023-09-08
+## v0.79.3 - 2023-09-08
 
 - Revert matomo changes.
 
+## v0.79.2
+
+- Version number skipped.
 
 ## v0.79.0 - 2023-09-08
 
