@@ -34,7 +34,7 @@ echo "Version: $VERSION"
 
 ./grab-dependencies.sh
 
-git add .
+git add context/package*.json
 git commit -m "Version bump to $VERSION"
 
 if ls CHANGELOG-*.md; then
@@ -49,7 +49,7 @@ if ls CHANGELOG-*.md; then
   ) > CHANGELOG.md.new
   mv CHANGELOG.md.new context/app/markdown/CHANGELOG.md
   git rm CHANGELOG-*.md
-  git add .
+  git add context/app/markdown/CHANGELOG.md
   git commit -m 'Update CHANGELOG'
 fi
 
