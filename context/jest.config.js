@@ -43,4 +43,5 @@ module.exports = {
     ],
     '^.+\\.ya?ml$': '<rootDir>/test-utils/loaders/ymlLoader.js',
   },
+  testEnvironment: 'jsdom',
 };
