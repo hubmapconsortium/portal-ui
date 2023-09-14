@@ -1,1 +1,0 @@
-- Use legacy pip installer to fix docker build.

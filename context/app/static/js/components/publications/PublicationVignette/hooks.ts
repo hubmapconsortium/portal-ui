@@ -4,11 +4,11 @@ import { multiFetcher } from 'js/helpers/swr';
 import { fillUrls } from './utils';
 import { PublicationVignette } from '../types';
 
-type PublicationVignetteConfsInput = {
+interface PublicationVignetteConfsInput {
   uuid: string;
   vignette: PublicationVignette;
   vignetteDirName: string;
-};
+}
 
 export function usePublicationVignetteConfs({ uuid, vignetteDirName, vignette }: PublicationVignetteConfsInput) {
   const { assetsEndpoint, groupsToken } = useAppContext();

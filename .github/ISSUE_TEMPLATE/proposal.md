@@ -1,10 +1,7 @@
 ---
 name: Proposal
 about: Needs buy-in from Nils
-title: ''
+title: ""
 labels: UI, proposal
-assignees: ''
-
+assignees: ""
 ---
-
-

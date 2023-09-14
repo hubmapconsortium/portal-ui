@@ -1,10 +1,10 @@
 import { useCallback, useReducer } from 'react';
 
-type SortState = {
+interface SortState {
   columnId?: string;
   columnSortName?: string;
   direction?: 'asc' | 'desc';
-};
+}
 
 type SortAction =
   | {

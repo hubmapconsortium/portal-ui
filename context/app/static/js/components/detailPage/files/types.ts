@@ -1,4 +1,4 @@
-export type DatasetFile = {
+export interface DatasetFile {
   description: string;
   file: string;
   edam_term: string;
@@ -8,7 +8,7 @@ export type DatasetFile = {
   rel_path: string;
   size: number;
   type: string;
-};
+}
 
 export type UnprocessedFile = Omit<DatasetFile, 'file'>;
 

@@ -7,12 +7,13 @@ The services the portal relies on are [listed separately](/services).
 ## Git submodules
 
 ```
- 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab515)
+ 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab51)
 ```
 
 ## Python packages
 
 `requirements.in`:
+
 ```
 # Update requirements.txt if this file changes:
 # pip install pip-tools

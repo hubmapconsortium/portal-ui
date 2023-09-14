@@ -6,9 +6,9 @@ import { useFileLink } from './hooks';
 import { DownloadIcon } from '../../MetadataTable/style';
 import { useFilesContext } from '../FilesContext';
 
-type DownloadFileButtonProps = {
+interface DownloadFileButtonProps {
   file: UnprocessedFile;
-};
+}
 
 function DUADownloadButton({ file, children }: PropsWithChildren<DownloadFileButtonProps>) {
   const link = useFileLink(file);

@@ -9,10 +9,10 @@ import { CloseIcon } from 'js/shared-styles/icons';
 
 import { Alert } from './Alert';
 
-type RedirectAlertProps = {
+interface RedirectAlertProps {
   messageTemplate: (redirected_from: string) => string;
   severity?: 'info' | 'warning' | 'error' | 'success';
-};
+}
 
 const defaultMessageTemplate = (redirected_from: string) => `You were redirected from ${redirected_from}.`;
 

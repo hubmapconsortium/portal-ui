@@ -9,7 +9,7 @@ const StyledPaper = styled(Paper)`
   padding: 30px 40px 30px 40px;
 
   a {
-    color: ${(props) => props.theme.palette.link.main};
+    color: ${(props) => props.theme.palette.common.link};
   }
 
   img {

@@ -4,10 +4,10 @@ import Button from '@mui/material/Button';
 import { useFilesContext } from '../FilesContext';
 import { DownloadIcon } from '../../MetadataTable/style';
 
-type DownloadAllButtonProps = {
+interface DownloadAllButtonProps {
   onDownloadAll: () => void;
   disabled?: boolean;
-};
+}
 
 export function DownloadAllButton({ onDownloadAll, disabled }: DownloadAllButtonProps) {
   const { hasAgreedToDUA, openDUA } = useFilesContext();

@@ -9,9 +9,9 @@ import FileBrowser from '../FileBrowser';
 import { FilesContextProvider } from '../FilesContext';
 import { UnprocessedFile } from '../types';
 
-type FilesProps = {
+interface FilesProps {
   files: UnprocessedFile[];
-};
+}
 
 function Files({ files }: FilesProps) {
   return (
