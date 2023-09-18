@@ -1,5 +1,6 @@
 import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { LogLevel, getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
+import { ReactIntegration } from '@grafana/faro-react';
 
 /**
  * Initialize Faro trackers
@@ -7,7 +8,6 @@ import { LogLevel, getWebInstrumentations, initializeFaro } from '@grafana/faro-
  */
 function initTrackers() {
   const version = `portal-ui-react@${PACKAGE_VERSION}`;
-  // sentryEnv is globally defined in the index.html templates for both `maintenance` and non-maintenance pages
   const environment = sentryEnv;
   const paused = !['prod', 'prod-stage'].includes(environment);
 
@@ -24,12 +24,14 @@ function initTrackers() {
       ...getWebInstrumentations({
         captureConsole: true,
         capturePerformanceTimeline: true,
-        captureConsoleDisabledLevels: [LogLevel.INFO, LogLevel.DEBUG],
+        // Only capture errors and warnings in grafana
+        captureConsoleDisabledLevels: [LogLevel.INFO, LogLevel.DEBUG, LogLevel.LOG],
       }),
 
       // Initialization of the tracing package.
       // This packages is optional because it increases the bundle size noticeably. Only add it if you want tracing data.
       new TracingInstrumentation(),
+      new ReactIntegration(),
     ],
   });
 }

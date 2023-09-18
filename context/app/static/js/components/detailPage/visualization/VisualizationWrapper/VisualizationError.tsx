@@ -4,42 +4,36 @@ import { FaroErrorBoundary } from '@grafana/faro-react';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
-import { createContext, useContext } from 'js/helpers/context';
-import { StyledSectionHeader } from '../Visualization/style';
 import { VisualizationErrorBoundaryBackground } from './style';
+import { VizContainerStyleContext } from './ContainerStylingContext';
+import { StyledSectionHeader } from '../Visualization/style';
 
-interface VisualizationProps {
-  isPublicationPage: boolean;
-  uuid: string;
-  shouldDisplayHeader: boolean;
-}
-
-const FallbackContext = createContext<VisualizationProps>('VisualizationErrorBoundary');
-const useFallbackContext = () => useContext(FallbackContext);
-
-function VisualizationFallback({ message, stack }: Error) {
-  const { isPublicationPage, uuid, shouldDisplayHeader } = useFallbackContext();
+function VisualizationFallback(error: Error): JSX.Element {
+  // Since react error boundaries don't work with hooks, we need to use a context consumer to determine how to
+  // style the error message's container.
   return (
-    <DetailPageSection id={isPublicationPage ? `visualization-${uuid}` : 'visualization'}>
-      <SpacedSectionButtonRow
-        leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
-      />
-      <VisualizationErrorBoundaryBackground>
-        <div>The Vitessce visualization encountered an error. Please try again or contact support.</div>
-        <DetailsAccordion summary="Click to expand error details">
-          {message} {stack}
-        </DetailsAccordion>
-      </VisualizationErrorBoundaryBackground>
-    </DetailPageSection>
+    <VizContainerStyleContext.Consumer>
+      {({ isPublicationPage, uuid, shouldDisplayHeader }) => (
+        <DetailPageSection id={isPublicationPage ? `visualization-${uuid}` : 'visualization'}>
+          <SpacedSectionButtonRow
+            leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
+          />
+          <VisualizationErrorBoundaryBackground>
+            <div>The Vitessce visualization encountered an error. Please try again or contact support.</div>
+            <DetailsAccordion summary="Click to expand error details">
+              <div>{error?.name}</div>
+              <div>{error?.message}</div>
+              <div>{error?.stack}</div>
+            </DetailsAccordion>
+          </VisualizationErrorBoundaryBackground>
+        </DetailPageSection>
+      )}
+    </VizContainerStyleContext.Consumer>
   );
 }
 
-function VisualizationErrorBoundary({ children, ...rest }: PropsWithChildren<VisualizationProps>) {
-  return (
-    <FallbackContext.Provider value={rest}>
-      <FaroErrorBoundary fallback={VisualizationFallback}>{children}</FaroErrorBoundary>
-    </FallbackContext.Provider>
-  );
+function VisualizationErrorBoundary({ children }: PropsWithChildren) {
+  return <FaroErrorBoundary fallback={VisualizationFallback}>{children}</FaroErrorBoundary>;
 }
 
 export default VisualizationErrorBoundary;
