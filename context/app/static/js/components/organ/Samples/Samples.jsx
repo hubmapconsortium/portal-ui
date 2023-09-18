@@ -77,13 +77,15 @@ function SampleHeaderCell({ column, setSort, sortState }) {
   );
 }
 
-function SampleRow({ virtualRow, index, hits }) {
+const headerRowHeight = 60;
+
+function SampleRow({ virtualRow, hits }) {
   const {
     _id: uuid,
     _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp },
   } = hits[virtualRow.index];
   return (
-    <TableRow sx={{ height: virtualRow.size }} data-testid={index}>
+    <TableRow sx={{ height: virtualRow.size }}>
       <SelectableRowCell rowKey={uuid} />
       <TableCell>
         <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
@@ -175,7 +177,7 @@ function Samples({ organTerms }) {
       >
         <Table stickyHeader>
           <TableHead sx={{ position: 'relative' }}>
-            <TableRow>
+            <TableRow sx={{ height: headerRowHeight }}>
               <SelectableHeaderCell
                 allTableRowKeys={allSearchIDs}
                 sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
@@ -184,17 +186,23 @@ function Samples({ organTerms }) {
                 <SampleHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
               ))}
             </TableRow>
-            <LinearProgress
-              sx={{
-                position: 'absolute',
-                bottom: 0,
-                zIndex: 50,
-                width: '100%',
-                opacity: isLoading ? 1 : 0,
-                transition: 'opacity',
-              }}
-              variant="indeterminate"
-            />
+            <TableRow aria-hidden="true">
+              <TableCell
+                colSpan={columns.length + 1}
+                sx={{ top: headerRowHeight, border: 'none' }}
+                padding="none"
+                component="td"
+              >
+                <LinearProgress
+                  sx={{
+                    width: '100%',
+                    opacity: isLoading ? 1 : 0,
+                    transition: 'opacity',
+                  }}
+                  variant="indeterminate"
+                />
+              </TableCell>
+            </TableRow>
           </TableHead>
           <TableBody>
             {tableBodyPadding.top > 0 && (
@@ -202,13 +210,8 @@ function Samples({ organTerms }) {
                 <td style={{ height: `${tableBodyPadding.top}px` }} aria-hidden="true" />
               </tr>
             )}
-            {virtualRows.map((virtualRow, index) => (
-              <SampleRow
-                virtualRow={virtualRow}
-                index={index}
-                key={searchHits[virtualRow.index]?._id}
-                hits={searchHits}
-              />
+            {virtualRows.map((virtualRow) => (
+              <SampleRow virtualRow={virtualRow} key={searchHits[virtualRow.index]?._id} hits={searchHits} />
             ))}
             {tableBodyPadding.bottom > 0 && (
               <tr>
