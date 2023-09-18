@@ -126,7 +126,6 @@ const theme = createTheme({
       hover: 'brightness(96%)',
       focus: '#FFFFFF1F', // 12% opacity
     },
-    divider: '#E0E0E0',
     provenance: {
       step: '#B0C4DA',
       default: '#E0E0E0',
