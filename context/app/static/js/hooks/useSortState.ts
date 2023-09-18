@@ -12,6 +12,7 @@ type SortAction =
     }
   | {
       type: 'reset';
+      payload: SortState;
     };
 
 const defaultInitialSortState: SortState = {
@@ -33,7 +34,7 @@ function sortReducer(state: SortState, action: SortAction): SortState {
         direction: 'desc',
       } as SortState;
     case 'reset':
-      return action.payload as SortState;
+      return action.payload;
     default:
       console.warn('Unrecognized action type', action);
       return state;
