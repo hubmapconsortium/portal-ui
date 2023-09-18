@@ -1,0 +1,1 @@
+- Update homepage publication slide text to include Nature link.
