@@ -20,7 +20,6 @@ globals:
   workspacesToken: readonly
   userGroups: readonly
   sentryEnv: readonly
-  sentryDsn: readonly
 env:
   browser: true
   node: true
