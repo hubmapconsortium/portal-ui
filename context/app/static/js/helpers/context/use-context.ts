@@ -1,4 +1,4 @@
-import { useContext as useContextNative } from 'react';
+import React, { useContext as useContextNative } from 'react';
 
 /**
  * Type-safe `useContext` hook that throws if the context is undefined.
@@ -6,8 +6,8 @@ import { useContext as useContextNative } from 'react';
  * @returns The value of the context
  * @throws If the context is undefined
  */
-export function useContext<T>(context: React.Context<T | undefined>): T {
-  const contextValue = useContextNative(context);
+export function useContext<T>(context: React.Context<T | undefined> | React.Context<T>): T {
+  const contextValue = useContextNative(context as React.Context<T | undefined>);
   if (contextValue === undefined) {
     throw new Error(
       `useContext must be inside a Provider with a value${
