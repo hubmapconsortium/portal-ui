@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
-import { captureException } from '@sentry/react';
 import { faro } from '@grafana/faro-web-sdk';
 
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
@@ -23,7 +22,6 @@ const generateClassName = createGenerateClassName({
 const swrConfig = {
   revalidateOnFocus: false,
   onError: (error) => {
-    captureException(error);
     faro.logError(error);
   },
   onLoadingSlow: (key, config) => {
