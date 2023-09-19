@@ -9,7 +9,7 @@ import { ReactIntegration } from '@grafana/faro-react';
 function initTrackers() {
   const version = `portal-ui-react@${PACKAGE_VERSION}`;
   const environment = sentryEnv;
-  const paused = !['prod', 'prod-stage'].includes(environment);
+  const shouldReport = ['prod', 'prod-stage'].includes(environment);
 
   initializeFaro({
     url: 'https://faro-collector-prod-us-east-0.grafana.net/collect/77a0efade67edd876ae6c63ebb2d825c',
@@ -17,7 +17,12 @@ function initTrackers() {
       name: 'hubmap-data-portal',
       version,
       environment,
-      paused,
+    },
+    beforeSend(item) {
+      if (shouldReport) {
+        return item;
+      }
+      return null;
     },
     instrumentations: [
       // Mandatory, overwriting the instrumentations array would cause the default instrumentations to be omitted
