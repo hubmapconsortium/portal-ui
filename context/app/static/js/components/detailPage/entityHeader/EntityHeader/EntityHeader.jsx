@@ -1,5 +1,5 @@
 import React from 'react';
-import { useTransition, animated } from 'react-spring';
+import { animated, useSpring } from '@react-spring/web';
 
 import { useEntityStore, useVisualizationStore } from 'js/stores';
 import { iconButtonHeight } from 'js/shared-styles/buttons';
@@ -26,26 +26,25 @@ function Header() {
 
   const shouldDisplayHeader = !summaryInView || vizIsFullscreen;
 
-  const transitionConfig = vizIsFullscreen
-    ? {}
-    : {
-        from: { overflow: 'hidden', height: 0 },
-        enter: { height: entityHeaderHeight },
-        leave: { overflow: 'hidden', height: 0 },
-      };
-  const transitions = useTransition(shouldDisplayHeader, null, transitionConfig);
+  const styles = useSpring({
+    from: {
+      height: 0,
+      overflow: 'hidden',
+    },
+    to: {
+      height: shouldDisplayHeader ? entityHeaderHeight : 0,
+      overflow: 'hidden',
+    },
+  });
 
-  return transitions.map(
-    ({ item, key, props }) =>
-      item && (
-        <AnimatedPaper key={key} style={props} elevation={4} data-testid="entity-header">
-          <EntityHeaderContent
-            assayMetadata={assayMetadata}
-            shouldDisplayHeader={shouldDisplayHeader}
-            vizIsFullscreen={vizIsFullscreen}
-          />
-        </AnimatedPaper>
-      ),
+  return (
+    <AnimatedPaper style={styles} elevation={4} data-testid="entity-header">
+      <EntityHeaderContent
+        assayMetadata={assayMetadata}
+        shouldDisplayHeader={shouldDisplayHeader}
+        vizIsFullscreen={vizIsFullscreen}
+      />
+    </AnimatedPaper>
   );
 }
 export { entityHeaderHeight };
