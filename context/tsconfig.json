@@ -1,7 +1,11 @@
 {
   "compilerOptions": {
     "target": "ES2019",
-    "lib": ["dom", "dom.iterable", "esnext"],
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "module": "commonjs",
     "resolveJsonModule": true,
     "isolatedModules": true,
@@ -12,16 +16,21 @@
     "incremental": true,
     "jsx": "react",
     "allowJs": true,
-    "baseUrl": "./app/static/js",
+    "baseUrl": "./",
     "sourceMap": true,
     "noEmit": true,
     "paths": {
-      "js/*": ["./*"],
-      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
+      "js/*": [
+        "./app/static/js*"
+      ],
+      "@mui/styled-engine": [
+        "./node_modules/@mui/styled-engine-sc"
+      ]
     }
   },
-  "include": ["./app/"],
-  "exclude": ["node_modules"],
+  "exclude": [
+    "node_modules"
+  ],
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"
 }
