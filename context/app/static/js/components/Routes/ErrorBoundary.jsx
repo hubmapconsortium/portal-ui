@@ -1,6 +1,6 @@
 import React from 'react';
 import Error from 'js/pages/Error';
-import { FaroErrorBoundary } from '@grafana/faro-react';
+import { FaroErrorBoundary, faro } from '@grafana/faro-react';
 
 function ErrorFallback(error) {
   // The default error message here is not very helpful,
@@ -10,7 +10,18 @@ function ErrorFallback(error) {
 }
 
 function ErrorBoundary({ children }) {
-  return <FaroErrorBoundary fallback={ErrorFallback}>{children}</FaroErrorBoundary>;
+  return (
+    <FaroErrorBoundary
+      fallback={ErrorFallback}
+      beforeCapture={() =>
+        faro.api.setView({
+          name: 'Sitewide Error Boundary',
+        })
+      }
+    >
+      {children}
+    </FaroErrorBoundary>
+  );
 }
 
 export default ErrorBoundary;

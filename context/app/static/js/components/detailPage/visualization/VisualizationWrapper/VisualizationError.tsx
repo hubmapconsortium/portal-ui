@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { FaroErrorBoundary } from '@grafana/faro-react';
+import { FaroErrorBoundary, faro } from '@grafana/faro-react';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -33,7 +33,18 @@ function VisualizationFallback(error: Error): JSX.Element {
 }
 
 function VisualizationErrorBoundary({ children }: PropsWithChildren) {
-  return <FaroErrorBoundary fallback={VisualizationFallback}>{children}</FaroErrorBoundary>;
+  return (
+    <FaroErrorBoundary
+      fallback={VisualizationFallback}
+      beforeCapture={() =>
+        faro.api.setView({
+          name: 'Vitessce Visualization',
+        })
+      }
+    >
+      {children}
+    </FaroErrorBoundary>
+  );
 }
 
 export default VisualizationErrorBoundary;
