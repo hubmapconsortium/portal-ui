@@ -3,9 +3,6 @@
   "version": "0.79.3",
   "dependencies": {
     "@datapunt/matomo-tracker-js": "^0.5.1",
-    "@elastic/datemath": "^5.0.3",
-    "@elastic/eui": "^57.0.0",
-    "@emotion/react": "^11.9.0",
     "@fontsource-variable/inter": "^5.0.8",
     "@hms-dbmi-bgm/react-workflow-viz": "^0.1.9",
     "@hookform/resolvers": "^3.3.1",
@@ -15,7 +12,6 @@
     "@mui/styled-engine-sc": "^5.14.9",
     "@mui/styles": "^5.14.9",
     "@searchkit/client": "^3.0.0-canary.53",
-    "@searchkit/elastic-ui": "^3.0.0-canary.53",
     "@searchkit/sdk": "^3.0.0-canary.53",
     "@visx/axis": "^3.3.0",
     "@visx/event": "^3.3.0",
