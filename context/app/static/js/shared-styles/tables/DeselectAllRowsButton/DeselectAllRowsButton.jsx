@@ -1,10 +1,10 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
-import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 
 function DeselectAllRowsButton({ ...rest }) {
-  const { selectedRows, deselectHeaderAndRows } = useStore();
+  const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   return (
     <Button color="primary" onClick={deselectHeaderAndRows} {...rest}>
       Deselect All ({selectedRows.size})

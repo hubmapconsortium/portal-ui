@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from '@mui/material/Checkbox';
 
-import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { HeaderCell } from 'js/shared-styles/tables';
 
 function SelectableHeaderCell({ allTableRowKeys, disabled, ...rest }) {
-  const { toggleHeaderAndRows, headerRowIsSelected, tableLabel } = useStore();
+  const { toggleHeaderAndRows, headerRowIsSelected, tableLabel } = useSelectableTableStore();
 
   return (
     <HeaderCell padding="checkbox" {...rest}>

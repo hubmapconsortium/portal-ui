@@ -1,0 +1,3 @@
+- Add handling to prevent users from attempting to launch workspaces with more than 10 datasets.
+- Add handling to prevent users from attempting to launch workspaces with protected datasets.
+- Add button in workspace dialog to deselect protected datasets.

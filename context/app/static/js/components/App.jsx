@@ -1,6 +1,9 @@
 import React from 'react';
 import { pdfjs } from 'react-pdf';
 import marked from 'marked';
+
+import StyledSnackbar from 'js/shared-styles/snackbars';
+
 import Providers from './Providers';
 import Routes from './Routes';
 import Footer from './Footer';
@@ -61,6 +64,7 @@ function App(props) {
       )}
       <Routes flaskData={flaskData} />
       <Footer />
+      <StyledSnackbar />
     </Providers>
   );
 }

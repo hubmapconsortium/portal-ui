@@ -18,7 +18,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
-import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
 import { getDonorAgeString } from 'js/helpers/functions';
 
@@ -102,7 +102,7 @@ function SampleRow({ virtualRow, hits }) {
 }
 
 function Samples({ organTerms }) {
-  const { selectedRows, deselectHeaderAndRows } = useStore();
+  const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
 
   const query = useMemo(

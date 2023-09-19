@@ -3,9 +3,9 @@ import createContext from 'zustand/context';
 
 const { Provider, useStore } = createContext();
 
-function getDeselectRowState(state, key) {
+function getDeselectRowsState(state, ...keys) {
   const setCopy = new Set(state.selectedRows);
-  setCopy.delete(key);
+  keys.forEach((key) => setCopy.delete(key));
   return { selectedRows: setCopy };
 }
 
@@ -18,7 +18,7 @@ function getSetSelectedRowsState(keys) {
   return { selectedRows: new Set(keys) };
 }
 
-function getDeselectRowsState() {
+function getDeselectAllRowsState() {
   return { selectedRows: new Set() };
 }
 
@@ -27,12 +27,13 @@ function getSelectHeaderAndRowsState(keys) {
 }
 
 function getDeselectHeaderAndRowsState() {
-  return { headerRowIsSelected: false, ...getDeselectRowsState() };
+  return { headerRowIsSelected: false, ...getDeselectAllRowsState() };
 }
 
 const types = {
   selectRow: 'SELECT_ROW',
   deselectRow: 'DESELECT_ROW',
+  deselectRows: 'DESELECT_ROWS',
   toggleRow: 'TOGGLE_ROW',
   setSelectedRows: 'SET_SELECTED_ROWS',
   deselectAllRows: 'DESELECT_ALL_ROWS',
@@ -46,13 +47,15 @@ const reducer = (state, { type, payload }) => {
     case types.selectRow:
       return getSelectRowState(state, payload);
     case types.deselectRow:
-      return getDeselectRowState(state, payload);
+      return getDeselectRowsState(state, payload);
+    case types.deselectRows:
+      return getDeselectRowsState(state, ...payload);
     case types.toggleRow:
-      return state.selectedRows.has(payload) ? getDeselectRowState(state, payload) : getSelectRowState(state, payload);
+      return state.selectedRows.has(payload) ? getDeselectRowsState(state, payload) : getSelectRowState(state, payload);
     case types.setSelectedRows:
       return getSetSelectedRowsState(payload);
     case types.deselectAllRows:
-      return getDeselectRowsState();
+      return getDeselectAllRowsState();
     case types.selectHeaderAndRows:
       return getSelectHeaderAndRowsState(payload);
     case types.deselectHeaderAndRows:
@@ -72,6 +75,7 @@ const createStore = (tableLabel) =>
     dispatch: (args) => set((state) => reducer(state, args)),
     selectRow: (rowKey) => get().dispatch({ type: types.selectRow, payload: rowKey }),
     deselectRow: (rowKey) => get().dispatch({ type: types.deselectRow, payload: rowKey }),
+    deselectRows: (rowKeys) => get().dispatch({ type: types.deselectRows, payload: rowKeys }),
     toggleRow: (rowKey) => get().dispatch({ type: types.toggleRow, payload: rowKey }),
     setSelectedRows: (rowKeys) => get().dispatch({ type: types.setSelectedRows, payload: rowKeys }),
     deselectAllRows: () => get().dispatch({ type: types.deselectAllRows }),
@@ -80,4 +84,4 @@ const createStore = (tableLabel) =>
     toggleHeaderAndRows: (rowKeys) => get().dispatch({ type: types.toggleHeaderAndRows, payload: rowKeys }),
   }));
 
-export { Provider, useStore, createStore, reducer, types };
+export { Provider, useStore as useSelectableTableStore, createStore, reducer, types };

@@ -1,8 +1,7 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
-import { faro } from '@grafana/faro-web-sdk';
-
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
+import { faro } from '@grafana/faro-web-sdk';
 import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
 import { StylesProvider as MuiStylesProvider } from '@mui/styles';
 import createGenerateClassName from '@mui/styles/createGenerateClassName';
@@ -10,6 +9,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import GlobalStyles from 'js/components/globalStyles';
+import { SnackbarProvider, createStore } from 'js/shared-styles/snackbars';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
@@ -68,11 +68,13 @@ function Providers({
           <SCThemeProvider theme={theme}>
             <AppContext.Provider value={appContext}>
               <FlaskDataContext.Provider value={flaskData}>
-                <ProtocolAPIContext.Provider value={protocolsContext}>
-                  <CssBaseline />
-                  <GlobalStyles />
-                  {children}
-                </ProtocolAPIContext.Provider>
+                <SnackbarProvider createStore={createStore}>
+                  <ProtocolAPIContext.Provider value={protocolsContext}>
+                    <CssBaseline />
+                    <GlobalStyles />
+                    {children}
+                  </ProtocolAPIContext.Provider>
+                </SnackbarProvider>
               </FlaskDataContext.Provider>
             </AppContext.Provider>
           </SCThemeProvider>

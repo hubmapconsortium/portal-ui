@@ -4,7 +4,9 @@ import DialogActions from '@mui/material/DialogActions';
 import MUIDialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
+import { Alert } from 'js/shared-styles/alerts';
 import { StyledDivider, StyledDialogTitle } from './style';
 
 function DialogModal({
@@ -16,6 +18,7 @@ function DialogModal({
   isOpen,
   handleClose,
   DialogContentComponent,
+  errorMessages,
   ...props
 }) {
   const DialogContent = DialogContentComponent || MUIDialogContent;
@@ -28,6 +31,19 @@ function DialogModal({
         </Typography>
       </StyledDialogTitle>
       <DialogContent>
+        {errorMessages?.length > 0 && (
+          <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
+            {errorMessages.map((errorMessage) => {
+              return (
+                <div key={errorMessage}>
+                  <Alert key={errorMessage} severity="error">
+                    {errorMessage}
+                  </Alert>
+                </div>
+              );
+            })}
+          </Box>
+        )}
         {secondaryText && (
           <DialogContentText color="primary" variant="subtitle2">
             {secondaryText}

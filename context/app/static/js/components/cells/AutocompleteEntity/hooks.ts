@@ -11,7 +11,7 @@ const cellsServiceFetcher = async ({
   if (!substring) {
     return [];
   }
-  // TODO: Convert cellsService to TS
+  // TODO: Convert `CellsService` helper to TypeScript so we don't need to cast the response type
   return cellsService.searchBySubstring({ targetEntity, substring }) as Promise<AutocompleteQueryResponse>;
 };
 
