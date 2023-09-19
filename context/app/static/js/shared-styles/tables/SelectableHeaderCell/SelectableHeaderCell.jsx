@@ -5,11 +5,11 @@ import Checkbox from '@mui/material/Checkbox';
 import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import { HeaderCell } from 'js/shared-styles/tables';
 
-function SelectableHeaderCell({ allTableRowKeys, disabled }) {
+function SelectableHeaderCell({ allTableRowKeys, disabled, ...rest }) {
   const { toggleHeaderAndRows, headerRowIsSelected, tableLabel } = useStore();
 
   return (
-    <HeaderCell padding="checkbox">
+    <HeaderCell padding="checkbox" {...rest}>
       <Checkbox
         color="secondary"
         checked={headerRowIsSelected}

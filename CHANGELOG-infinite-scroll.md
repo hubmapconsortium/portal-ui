@@ -1,0 +1,1 @@
+- Use infinite scrolling for organ page samples table.
