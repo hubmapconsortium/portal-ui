@@ -1,1 +1,0 @@
-- Update shared icons and links to use TypeScript and MUI's styled utility.

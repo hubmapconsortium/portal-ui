@@ -1,3 +1,26 @@
+## v0.79.4 - 2023-09-19
+
+- Add handling to prevent users from attempting to launch workspaces with more than 10 datasets.
+- Add handling to prevent users from attempting to launch workspaces with protected datasets.
+- Add button in workspace dialog to deselect protected datasets.
+ - Improve Matomo tracking specificity.
+ 
+- Prevent already-selected options from being suggested by autocomplete component.
+- Update linting packages to be compatible with Typescript 5.1+.
+- Enable linting of JSON/Markdown/YAML files.
+- Update homepage publication slide text to include Nature link.
+- Update MUI Theme file to use TypeScript.
+- Add Faro web tracing to stage/production environments.
+- Add portal usage analytics link to site footer.
+- Fix lint issues from branch that was created before lint rule updates.
+- Improve push script specificity.
+- Use infinite scrolling for organ page samples table.
+- Update shared icons and links to use TypeScript and MUI's styled utility.
+- Remove erroneously added file.
+- Fix some TypeScript issues in the SWR helpers.
+- Fix bug referencing vitessce version when downloading visualization notebooks.
+
+
 ## v0.79.3 - 2023-09-08
 
 - Revert matomo changes.

@@ -1,1 +1,0 @@
-- Fix bug referencing vitessce version when downloading visualization notebooks.
