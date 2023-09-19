@@ -1,5 +1,4 @@
-import styled, { css } from 'styled-components';
-// NOTE: We are using the rounded icon variants consistently.
+// NOTE: We are using the Rounded icon variants consistently.
 import BubbleChartIcon from '@mui/icons-material/BubbleChartRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
 import PersonIcon from '@mui/icons-material/PersonRounded';
@@ -21,94 +20,62 @@ import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ContactSupportIcon from '@mui/icons-material/ContactSupportOutlined';
+import { styled } from '@mui/material/styles';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import { ElementType } from 'react';
 
-const fontSizeStyle = css`
-  font-size: ${(props) => props.$fontSize || '1rem'};
-`;
+// The "any" here mirrors the "any" in the original SvgIconProps definition.
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+type CustomIconProps<T extends ElementType<any>> = {
+  fontSize?: string;
+} & SvgIconProps<T>;
 
-const CenterIcon = styled(AccountBalanceIcon)`
-  ${fontSizeStyle};
-`;
+const withIconStyles = (Icon: typeof SvgIcon) =>
+  styled(Icon)(({ fontSize }: CustomIconProps<ElementType<'svg'>>) => ({
+    fontSize: fontSize ?? '1rem',
+  })) as typeof SvgIcon;
 
-const CloseIcon = styled(CloseRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const CenterIcon = withIconStyles(AccountBalanceIcon);
 
-const CollectionIcon = styled(CollectionsBookmarkRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const CloseIcon = withIconStyles(CloseRoundedIcon);
 
-const DonorIcon = styled(PersonIcon)`
-  ${fontSizeStyle};
-`;
+const CollectionIcon = withIconStyles(CollectionsBookmarkRoundedIcon);
 
-const SampleIcon = styled(BubbleChartIcon)`
-  ${fontSizeStyle};
-`;
+const DonorIcon = withIconStyles(PersonIcon);
 
-const DatasetIcon = styled(TableChartIcon)`
-  ${fontSizeStyle};
-`;
+const SampleIcon = withIconStyles(BubbleChartIcon);
 
-const PublicationIcon = styled(DescriptionOutlinedIcon)`
-  ${fontSizeStyle}
-`;
+const DatasetIcon = withIconStyles(TableChartIcon);
 
-const ExternalLinkIcon = styled(LaunchRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const PublicationIcon = withIconStyles(DescriptionOutlinedIcon);
 
-const InfoIcon = styled(InfoRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const ExternalLinkIcon = withIconStyles(LaunchRoundedIcon);
 
-const SuccessIcon = styled(CheckCircleRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const InfoIcon = withIconStyles(InfoRoundedIcon);
 
-const FileIcon = styled(InsertDriveFileRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const SuccessIcon = withIconStyles(CheckCircleRoundedIcon);
 
-const ErrorIcon = styled(ErrorRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const FileIcon = withIconStyles(InsertDriveFileRoundedIcon);
 
-const MoreIcon = styled(MoreHorizRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const ErrorIcon = withIconStyles(ErrorRoundedIcon);
 
-const DeleteIcon = styled(DeleteRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const MoreIcon = withIconStyles(MoreHorizRoundedIcon);
 
-const EditIcon = styled(EditRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const DeleteIcon = withIconStyles(DeleteRoundedIcon);
 
-const EmailIcon = styled(EmailRoundedIcon)`
-  ${fontSizeStyle};
-`;
+const EditIcon = withIconStyles(EditRoundedIcon);
 
-const ListsIcon = styled(ListAltRoundedIcon)`
-  ${fontSizeStyle}
-`;
+const EmailIcon = withIconStyles(EmailRoundedIcon);
 
-const DownIcon = styled(ArrowDropDownRoundedIcon)`
-  ${fontSizeStyle}
-`;
+const ListsIcon = withIconStyles(ListAltRoundedIcon);
 
-const UpIcon = styled(ArrowDropUpRoundedIcon)`
-  ${fontSizeStyle}
-`;
+const DownIcon = withIconStyles(ArrowDropDownRoundedIcon);
 
-const AddIcon = styled(AddRoundedIcon)`
-  ${fontSizeStyle}
-`;
+const UpIcon = withIconStyles(ArrowDropUpRoundedIcon);
 
-const SupportIcon = styled(ContactSupportIcon)`
-  ${fontSizeStyle}
-`;
+const AddIcon = withIconStyles(AddRoundedIcon);
+
+const SupportIcon = withIconStyles(ContactSupportIcon);
 
 export {
   CloseIcon,

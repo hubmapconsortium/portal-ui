@@ -1,9 +1,11 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { sendOutboundEvent } from './OutboundLink';
-import { StyledOpenInNewRoundedIcon } from './index';
+import StyledOpenInNewRoundedIcon from './StyledOpenInNewRoundedIcon';
 
-function OutboundLinkButton({ children, ...props }) {
+type OutboundLinkButtonProps = React.ComponentProps<typeof Button<'a'>>;
+
+function OutboundLinkButton({ children, ...props }: OutboundLinkButtonProps) {
   return (
     <Button
       {...props}
