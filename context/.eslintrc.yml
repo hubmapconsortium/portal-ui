@@ -9,13 +9,17 @@ extends:
   - plugin:import/warnings
 parser: '@typescript-eslint/parser'
 globals:
+  # Provided by webpack plugins
   CDN_URL: readonly
+  PACKAGE_VERSION: readonly
+  # Provided by flask server
   flaskData: readonly
   groupsToken: readonly
   isAuthenticated: readonly
   userEmail: readonly
   workspacesToken: readonly
   userGroups: readonly
+  sentryEnv: readonly
 env:
   browser: true
   node: true

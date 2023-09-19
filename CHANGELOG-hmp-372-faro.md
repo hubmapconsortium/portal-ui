@@ -1,0 +1,1 @@
+- Add Faro web tracing to stage/production environments.

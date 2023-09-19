@@ -15,7 +15,6 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { useSearchHits } from 'js/hooks/useSearchData';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
@@ -24,9 +23,8 @@ import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog'
 import { getDonorAgeString } from 'js/helpers/functions';
 
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
-import { useSortState } from 'js/hooks/useSortState';
 import { LinearProgress } from '@mui/material';
-import { keepPreviousData } from 'js/helpers/swr';
+import useScrollTable from 'js/hooks/useScrollTable';
 import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
 
@@ -51,7 +49,7 @@ function SampleHeaderCell({ column, setSort, sortState }) {
   // within the cell. The absolute button is the one that is visible and clickable, and takes up the full width of
   // the cell, which is guaranteed to be wide enough to contain the column label.
   return (
-    <HeaderCell key={column.id} sx={{ position: 'relative' }}>
+    <HeaderCell key={column.id} sx={({ palette }) => ({ backgroundColor: palette.background.paper })}>
       <Button sx={{ visibility: 'hidden', whiteSpace: 'nowrap', py: 0 }} fullWidth disabled>
         {column.label}
       </Button>
@@ -79,10 +77,34 @@ function SampleHeaderCell({ column, setSort, sortState }) {
   );
 }
 
+const headerRowHeight = 60;
+
+function SampleRow({ virtualRow, hits }) {
+  const {
+    _id: uuid,
+    _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp },
+  } = hits[virtualRow.index];
+  return (
+    <TableRow sx={{ height: virtualRow.size }}>
+      <SelectableRowCell rowKey={uuid} />
+      <TableCell>
+        <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
+          {hubmap_id}
+        </InternalLink>
+      </TableCell>
+      <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
+      <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
+      <TableCell>{donor?.mapped_metadata?.race}</TableCell>
+      <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
+      <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
+    </TableRow>
+  );
+}
+
 function Samples({ organTerms }) {
   const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
-  const { sortState, setSort, sort } = useSortState(columnIdMap);
+
   const query = useMemo(
     () => ({
       post_filter: {
@@ -104,14 +126,26 @@ function Samples({ organTerms }) {
         },
       },
       _source: [...columns.map((column) => column.id), 'donor.mapped_metadata.age_unit'],
-      size: 10000,
-      sort,
+      size: 500,
     }),
-    [organTerms, sort],
+    [organTerms],
   );
 
-  const { searchHits, isLoading } = useSearchHits(query, {
-    use: [keepPreviousData],
+  const {
+    searchHits,
+    allSearchIDs,
+    isLoading,
+    totalHitsCount,
+    sortState,
+    setSort,
+    fetchMoreOnBottomReached,
+    virtualRows,
+    tableBodyPadding,
+    tableContainerRef,
+  } = useScrollTable({
+    query,
+    columnNameMapping: columnIdMap,
+    initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
   });
 
   return (
@@ -120,7 +154,7 @@ function Samples({ organTerms }) {
         leftText={
           <div>
             <StyledSectionHeader>Samples</StyledSectionHeader>
-            <Typography variant="subtitle1">{searchHits.length} Samples</Typography>
+            <Typography variant="subtitle1">{totalHitsCount} Samples</Typography>
           </div>
         }
         buttons={
@@ -136,51 +170,54 @@ function Samples({ organTerms }) {
           </>
         }
       />
-      <StyledTableContainer component={Paper}>
+      <StyledTableContainer
+        component={Paper}
+        ref={tableContainerRef}
+        onScroll={(e) => fetchMoreOnBottomReached(e.target)}
+      >
         <Table stickyHeader>
           <TableHead sx={{ position: 'relative' }}>
-            <TableRow>
-              <SelectableHeaderCell allTableRowKeys={searchHits.map((hit) => hit._id)} />
+            <TableRow sx={{ height: headerRowHeight }}>
+              <SelectableHeaderCell
+                allTableRowKeys={allSearchIDs}
+                sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
+              />
               {columns.map((column) => (
                 <SampleHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
               ))}
             </TableRow>
-            <LinearProgress
-              sx={{
-                position: 'absolute',
-                bottom: 0,
-                zIndex: 50,
-                width: '100%',
-                opacity: isLoading ? 1 : 0,
-                transition: 'opacity',
-              }}
-              variant="indeterminate"
-            />
+            <TableRow aria-hidden="true">
+              <TableCell
+                colSpan={columns.length + 1}
+                sx={{ top: headerRowHeight, border: 'none' }}
+                padding="none"
+                component="td"
+              >
+                <LinearProgress
+                  sx={{
+                    width: '100%',
+                    opacity: isLoading ? 1 : 0,
+                    transition: 'opacity',
+                  }}
+                  variant="indeterminate"
+                />
+              </TableCell>
+            </TableRow>
           </TableHead>
           <TableBody>
-            {searchHits
-              .map((hit) => {
-                if (!hit._source.donor) {
-                  // eslint-disable-next-line no-param-reassign
-                  hit._source.donor = {};
-                }
-                return hit;
-              })
-              .map(({ _id: uuid, _source: { hubmap_id, donor, descendant_counts, last_modified_timestamp } }) => (
-                <TableRow key={uuid}>
-                  <SelectableRowCell rowKey={uuid} />
-                  <TableCell>
-                    <InternalLink href={`/browse/sample/${uuid}`} variant="body2">
-                      {hubmap_id}
-                    </InternalLink>
-                  </TableCell>
-                  <TableCell>{donor?.mapped_metadata && getDonorAgeString(donor.mapped_metadata)}</TableCell>
-                  <TableCell>{donor?.mapped_metadata?.sex}</TableCell>
-                  <TableCell>{donor?.mapped_metadata?.race}</TableCell>
-                  <TableCell>{descendant_counts?.entity_type?.Dataset || 0}</TableCell>
-                  <TableCell>{format(last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-                </TableRow>
-              ))}
+            {tableBodyPadding.top > 0 && (
+              <tr>
+                <td style={{ height: `${tableBodyPadding.top}px` }} aria-hidden="true" />
+              </tr>
+            )}
+            {virtualRows.map((virtualRow) => (
+              <SampleRow virtualRow={virtualRow} key={searchHits[virtualRow.index]?._id} hits={searchHits} />
+            ))}
+            {tableBodyPadding.bottom > 0 && (
+              <tr>
+                <td style={{ height: `${tableBodyPadding.bottom}px` }} aria-hidden="true" />
+              </tr>
+            )}
           </TableBody>
         </Table>
       </StyledTableContainer>

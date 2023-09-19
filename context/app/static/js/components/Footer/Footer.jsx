@@ -51,6 +51,9 @@ function Footer({ isMaintenancePage }) {
                   <InternalLink variant="body2" href="/apis">
                     APIs
                   </InternalLink>
+                  <OutboundLink variant="body2" href="https://lookerstudio.google.com/u/0/reporting/bceef6eb-c727-4b6f-ac00-364b280ae8c2/page/p_o7z46wg18c">
+                    Portal Usage Analytics
+                  </OutboundLink>
                 </>
               )}
             </FlexColumn>

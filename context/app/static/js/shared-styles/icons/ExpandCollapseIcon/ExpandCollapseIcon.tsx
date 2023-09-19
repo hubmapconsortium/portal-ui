@@ -1,9 +1,13 @@
 import React from 'react';
 
-import SvgIcon from '@mui/material/SvgIcon';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { UpIcon, DownIcon } from 'js/shared-styles/icons';
 
-function ExpandCollapseIcon({ isExpanded, ...rest }) {
+interface ExpandCollapseIconProps extends SvgIconProps {
+  isExpanded: boolean;
+}
+
+function ExpandCollapseIcon({ isExpanded, ...rest }: ExpandCollapseIconProps) {
   const iconProps = isExpanded
     ? {
         component: UpIcon,

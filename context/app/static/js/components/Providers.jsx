@@ -1,13 +1,15 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
-import { FlaskDataContext, AppContext } from 'js/components/Contexts';
-import { SnackbarProvider, createStore } from 'js/shared-styles/snackbars';
 import { ThemeProvider as SCThemeProvider } from 'styled-components';
+import { faro } from '@grafana/faro-web-sdk';
 import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
 import { StylesProvider as MuiStylesProvider } from '@mui/styles';
 import createGenerateClassName from '@mui/styles/createGenerateClassName';
 import CssBaseline from '@mui/material/CssBaseline';
+
+import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import GlobalStyles from 'js/components/globalStyles';
+import { SnackbarProvider, createStore } from 'js/shared-styles/snackbars';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
@@ -19,6 +21,13 @@ const generateClassName = createGenerateClassName({
 
 const swrConfig = {
   revalidateOnFocus: false,
+  onError: (error) => {
+    faro.logError(error);
+  },
+  onLoadingSlow: (key, config) => {
+    // By default, this is triggered if a request takes longer than 3000ms.
+    faro.logWarning(`Loading slow: ${key}`, { key, ...config });
+  },
 };
 
 function Providers({
