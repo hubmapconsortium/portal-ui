@@ -21,7 +21,7 @@
     "noEmit": true,
     "paths": {
       "js/*": [
-        "./app/static/js*"
+        "./app/static/js/*"
       ],
       "@mui/styled-engine": [
         "./node_modules/@mui/styled-engine-sc"
