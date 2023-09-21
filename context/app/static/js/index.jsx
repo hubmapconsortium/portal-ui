@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import App from './components/App';
 import Iframe from './pages/Iframe';
+import initTrackers from './helpers/init-trackers';
 import { setJsonLD } from './schema.org';
 
 // TODO: Re-enable. https://github.com/hubmapconsortium/portal-ui/issues/1426
@@ -11,6 +12,8 @@ import { setJsonLD } from './schema.org';
 // if (validation_errors && validation_errors.length) {
 //   console.warn('Schema validation errors', validation_errors);
 // }
+
+initTrackers();
 
 ReactDOM.render(
   window.location.pathname.startsWith('/iframe/') ? (

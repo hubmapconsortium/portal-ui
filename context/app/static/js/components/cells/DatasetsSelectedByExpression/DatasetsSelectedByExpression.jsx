@@ -32,12 +32,7 @@ function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
 
   return (
     <StyledDiv>
-      <AutocompleteEntity
-        targetEntity={`${queryType}s`}
-        setter={setCellVariableNames}
-        cellVariableNames={cellVariableNames}
-        setCellVariableNames={setCellVariableNames}
-      />
+      <AutocompleteEntity targetEntity={`${queryType}s`} setter={setCellVariableNames} />
       {queryType === 'gene' && (
         <StyledTextField
           id="modality-select"
@@ -51,7 +46,7 @@ function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
             MenuProps: {
               anchorOrigin: {
                 vertical: 'bottom',
-                horizontal: 'left',
+                horizontal: 'center',
               },
               getContentAnchorEl: null,
             },

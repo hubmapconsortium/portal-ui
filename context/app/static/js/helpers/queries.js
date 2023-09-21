@@ -11,6 +11,14 @@ export function getIDsQuery(ids) {
   };
 }
 
+export function getTermClause(term, value) {
+  return {
+    term: {
+      [term]: value,
+    },
+  };
+}
+
 export const excludeSupportEntitiesClause = {
   bool: {
     must_not: {

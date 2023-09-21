@@ -1,16 +1,16 @@
 import Paper from '@mui/material/Paper';
 import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
 import Bowser from 'bowser';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { Vitessce } from 'vitessce';
 
 import packageInfo from 'package';
 
-import { Alert } from 'js/shared-styles/alerts';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import VisualizationShareButton from '../VisualizationShareButton';
@@ -19,14 +19,12 @@ import VisualizationFooter from '../VisualizationFooter';
 
 import { useVitessceConfig } from './hooks';
 import {
-  ErrorSnackbar,
   ExpandButton,
   ExpandableDiv,
   Flex,
   SelectionButton,
   StyledDetailPageSection,
   StyledSectionHeader,
-  VitessceInfoSnackbar,
   bodyExpandedCSS,
   vitessceFixedHeight,
 } from './style';
@@ -37,42 +35,29 @@ function sniffBrowser() {
 }
 
 const FIREFOX_WARNING = 'If the performance of Vitessce in Firefox is not satisfactory, please use Chrome or Safari.';
+const localStorageFirefoxWarningKey = 'vitessce-firefox-warning';
 
 const visualizationStoreSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
   expandViz: state.expandViz,
   collapseViz: state.collapseViz,
   vizTheme: state.vizTheme,
-  vizEscSnackbarIsOpen: state.vizEscSnackbarIsOpen,
-  setVizEscSnackbarIsOpen: state.setVizEscSnackbarIsOpen,
   setVitessceState: state.setVitessceState,
-  onCopyUrlWarning: state.onCopyUrlWarning,
-  onCopyUrlSnackbarOpen: state.onCopyUrlSnackbarOpen,
-  setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
   setVizNotebookId: state.setVizNotebookId,
 });
-const sharedInfoSnackbarProps = {
-  anchorOrigin: {
-    vertical: 'top',
-    horizontal: 'center',
-  },
-  autoHideDuration: 4000,
-};
+
 function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true }) {
   const {
     vizIsFullscreen,
     expandViz,
     collapseViz,
     vizTheme,
-    vizEscSnackbarIsOpen,
-    setVizEscSnackbarIsOpen,
     setVitessceState,
     setVitessceStateDebounced,
-    onCopyUrlWarning,
-    onCopyUrlSnackbarOpen,
-    setOnCopyUrlSnackbarOpen,
     setVizNotebookId,
   } = useVisualizationStore(visualizationStoreSelector);
+
+  const { toastError, toastInfo } = useSnackbarActions();
 
   // Propagate UUID to the store if there is a notebook so we can display the download button when the visualization is expanded
   // Reruns every time vizIsFullscreen changes to ensure the proper notebook's UUID is used
@@ -82,27 +67,33 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
     }
   }, [hasNotebook, vizIsFullscreen, setVizNotebookId, uuid]);
 
-  const [vitessceErrors, setVitessceErrors] = useState([]);
-  const [isVisibleFirefoxWarning, setIsVisibleFirefoxWarning] = useState(sniffBrowser() === 'Firefox');
+  // Show a warning if the user is using Firefox.
+  useEffect(() => {
+    if (sniffBrowser() === 'Firefox' && !localStorage.getItem(localStorageFirefoxWarningKey)) {
+      toastError(FIREFOX_WARNING);
+      localStorage.setItem(localStorageFirefoxWarningKey, true);
+    }
+  }, [toastError]);
+
+  // Show instructions for exiting full screen mode when the user enters full screen mode.
+  useEffect(() => {
+    if (vizIsFullscreen) {
+      toastInfo('Press [esc] to exit full window.');
+    }
+  }, [vizIsFullscreen, toastInfo]);
 
   // Get the vitessce configuration from the url if available and set the selection if it is a multi-dataset.
   const { vitessceConfig, vitessceSelection, setVitessceSelection } = useVitessceConfig({
     vitData,
     setVitessceState,
-    setVitessceErrors,
   });
 
-  function removeError(message) {
-    setVitessceErrors((prev) => prev.filter((d) => d !== message));
-  }
-
   function addError(message) {
-    setVitessceErrors((prev) => (prev.includes(message) ? prev : [...prev, message]));
+    toastError(message);
   }
 
   function setSelectionAndClearErrors(itemAndIndex) {
     const { i } = itemAndIndex;
-    setVitessceErrors([]);
     setVitessceSelection(i);
   }
 
@@ -155,39 +146,6 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
         />
         <Paper>
           <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
-            <VitessceInfoSnackbar
-              {...sharedInfoSnackbarProps}
-              open={isVisibleFirefoxWarning}
-              onClose={() => setIsVisibleFirefoxWarning(false)}
-              message={FIREFOX_WARNING}
-            />
-            <VitessceInfoSnackbar
-              {...sharedInfoSnackbarProps}
-              open={vizEscSnackbarIsOpen}
-              onClose={() => setVizEscSnackbarIsOpen(false)}
-              message="Press [esc] to exit full window."
-            />
-            <VitessceInfoSnackbar
-              {...sharedInfoSnackbarProps}
-              open={onCopyUrlSnackbarOpen}
-              $isWarning={onCopyUrlWarning}
-              onClose={() => setOnCopyUrlSnackbarOpen(false)}
-              message={`Shareable URL copied to clipboard. ${onCopyUrlWarning}`}
-            />
-            {vitessceErrors.length > 0 && (
-              <ErrorSnackbar
-                anchorOrigin={{
-                  vertical: 'bottom',
-                  horizontal: 'right',
-                }}
-                open
-                key={vitessceErrors[0]}
-              >
-                <Alert severity="error" onClose={() => removeError(vitessceErrors[0])}>
-                  {vitessceErrors[0]}
-                </Alert>
-              </ErrorSnackbar>
-            )}
             {shouldMountVitessce && (
               <Vitessce
                 config={vitessceConfig[vitessceSelection] || vitessceConfig}
