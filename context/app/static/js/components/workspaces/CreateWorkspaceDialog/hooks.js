@@ -8,7 +8,7 @@ import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 
 const schema = z
   .object({
-    name: z.string().max(150),
+    'workspace-name': z.string().max(150),
   })
   .required();
 
