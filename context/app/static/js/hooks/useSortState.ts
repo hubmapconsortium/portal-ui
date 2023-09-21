@@ -2,22 +2,21 @@ import { useCallback, useReducer } from 'react';
 
 interface SortState {
   columnId?: string;
-  columnSortName?: string;
   direction?: 'asc' | 'desc';
 }
 
 type SortAction =
   | {
       type: 'sort';
-      payload: string;
+      payload: string | SortState;
     }
   | {
       type: 'reset';
+      payload: SortState;
     };
 
-const initialSortState: SortState = {
+const defaultInitialSortState: SortState = {
   columnId: undefined,
-  columnSortName: undefined,
   direction: undefined,
 } as SortState;
 
@@ -35,7 +34,7 @@ function sortReducer(state: SortState, action: SortAction): SortState {
         direction: 'desc',
       } as SortState;
     case 'reset':
-      return initialSortState;
+      return action.payload;
     default:
       console.warn('Unrecognized action type', action);
       return state;
@@ -56,7 +55,10 @@ function sortReducer(state: SortState, action: SortAction): SortState {
  *
  * @returns {object} An object containing the sort state, a sort array for use with the ES API, and functions to set and reset the sort state.
  */
-export const useSortState = (columnNameMapping: Record<string, string>) => {
+export const useSortState = (
+  columnNameMapping: Record<string, string>,
+  initialSortState: SortState = defaultInitialSortState,
+) => {
   const [sortState, dispatch] = useReducer(sortReducer, initialSortState);
 
   const setSort = useCallback((columnId: string) => {
@@ -64,15 +66,16 @@ export const useSortState = (columnNameMapping: Record<string, string>) => {
   }, []);
 
   const reset = useCallback(() => {
-    dispatch({ type: 'reset' });
-  }, []);
+    dispatch({ type: 'reset', payload: initialSortState });
+  }, [initialSortState]);
 
   const columnName =
     sortState.columnId && columnNameMapping[sortState.columnId]
       ? columnNameMapping[sortState.columnId]
       : sortState.columnId;
 
-  const sort = columnName ? [{ [columnName]: sortState.direction }] : [];
+  // The doc _id is used as a tiebreaker which is necessary for search_after queries.
+  const sort = columnName ? [{ [columnName]: sortState.direction }, { _id: 'asc' }] : [];
 
   return { sortState, sort, setSort, reset };
 };

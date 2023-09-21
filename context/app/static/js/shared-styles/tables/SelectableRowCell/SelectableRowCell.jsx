@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 
-import { useStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 
 function SelectableRowCell({ rowKey, disabled }) {
-  const { toggleRow, selectedRows, tableLabel } = useStore();
+  const { toggleRow, selectedRows, tableLabel } = useSelectableTableStore();
 
   return (
     <TableCell padding="checkbox">

@@ -1,5 +1,4 @@
-// eslint-disable-next-line import/no-extraneous-dependencies
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from 'test-utils/functions';
 
 import { useVitessceConfig } from './hooks';
 
@@ -10,7 +9,7 @@ describe('Run Vitessce Hooks Test', () => {
       hash: `#mock_url_to_be_ignored`,
     };
     const vitData = [{ name: 'conf1' }, { name: 'conf2' }];
-    const props = { vitData, setVitessceState: () => {}, setVitessceErrors: () => {} };
+    const props = { vitData, setVitessceState: () => {} };
     const { result } = renderHook(() => useVitessceConfig(props));
 
     expect(result.current.vitessceSelection).toEqual(0);
@@ -30,7 +29,7 @@ describe('Run Vitessce Hooks Test', () => {
       hash: `#vitessce_conf_=mock_is_called`,
     };
     const vitData = [{ name: 'conf1' }, { name: 'conf2' }];
-    const props = { vitData, setVitessceState: () => {}, setVitessceErrors: () => {} };
+    const props = { vitData, setVitessceState: () => {} };
     const { result } = renderHook(() => useVitessceConfig(props));
 
     expect(result.current.vitessceSelection).toEqual(0);
