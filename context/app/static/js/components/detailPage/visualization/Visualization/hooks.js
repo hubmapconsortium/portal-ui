@@ -1,9 +1,15 @@
 import { useState, useEffect } from 'react';
 import { decodeURLParamsToConf } from 'vitessce';
 
-export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors }) {
+import { useSnackbarStore } from 'js/shared-styles/snackbars';
+
+export function useVitessceConfig({ vitData, setVitessceState }) {
   const [vitessceSelection, setVitessceSelection] = useState(null);
   const [vitessceConfig, setVitessceConfig] = useState(null);
+
+  const { toastError } = useSnackbarStore((store) => ({
+    toastError: store.toastError,
+  }));
 
   useEffect(() => {
     function setVitessceDefaults(vData) {
@@ -24,7 +30,7 @@ export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors
         vitessceURLConf = fragment.length > 0 ? decodeURLParamsToConf(fragment) : null;
       } catch (err) {
         // If URL cannot be parsed, display error and show Vitessce.
-        setVitessceErrors(['View configuration from URL was not able to be parsed because it was likely truncated.']);
+        toastError('View configuration from URL was not able to be parsed.');
         setVitessceDefaults(vitData);
         return;
       }
@@ -41,6 +47,6 @@ export function useVitessceConfig({ vitData, setVitessceState, setVitessceErrors
       setVitessceSelection(initialSelectionFromUrl);
       setVitessceConfig(initializedVitDataFromUrl);
     }
-  }, [setVitessceState, vitData, setVitessceErrors]);
+  }, [setVitessceState, vitData, toastError]);
   return { vitessceConfig, vitessceSelection, setVitessceSelection };
 }

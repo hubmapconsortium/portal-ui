@@ -1,4 +1,4 @@
-import { useContext as useContextNative } from 'react';
+import React, { useContext as useContextNative } from 'react';
 
 /**
  * Type-safe `useContext` hook that throws if the context is undefined.

@@ -4,9 +4,9 @@ import React from 'react';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
-
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
+import { CreateWorkspaceWithDatasetsDialog } from 'js/components/workspaces/CreateWorkspaceDialog';
+
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
 import { useMetadataMenu } from './hooks';
 
@@ -37,7 +37,7 @@ function NotebookMenuItem(props) {
   );
 }
 
-function MetadataMenu({ entityType }) {
+function MetadataMenu({ entityType, results }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
   const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
@@ -66,7 +66,11 @@ function MetadataMenu({ entityType }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
-        <CreateWorkspaceDialog handleCreateWorkspace={createNotebook} buttonComponent={NotebookMenuItem} />
+        <CreateWorkspaceWithDatasetsDialog
+          handleCreateWorkspace={createNotebook}
+          buttonComponent={NotebookMenuItem}
+          results={results}
+        />
       </DropdownMenu>
     </>
   );

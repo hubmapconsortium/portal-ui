@@ -73,6 +73,9 @@ declare module '@mui/material/styles' {
     palette: Palette;
     zIndex: ZIndex;
   }
+  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+  export interface DefaultTheme extends Theme {}
+
   export type ThemeOptions = Partial<Theme>;
 }
 
@@ -126,7 +129,6 @@ const theme = createTheme({
       hover: 'brightness(96%)',
       focus: '#FFFFFF1F', // 12% opacity
     },
-    divider: '#E0E0E0',
     provenance: {
       step: '#B0C4DA',
       default: '#E0E0E0',

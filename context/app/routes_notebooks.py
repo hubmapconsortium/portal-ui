@@ -9,7 +9,7 @@ from requests import post
 import nbformat
 from nbformat.v4 import (new_notebook, new_markdown_cell, new_code_cell)
 
-import vitessce
+from importlib.metadata import version
 
 from .utils import make_blueprint, get_url_base_from_request, entity_types, get_client
 
@@ -105,7 +105,7 @@ def entity_notebook(entity_type, uuid):
         new_code_cell(
             '!pip uninstall community flask albumentations -y '
             '# Preinstalled on Colab; Causes version conflicts.\n'
-            f'!pip install vitessce[all]=={vitessce.__version__}'),
+            f'!pip install vitessce[all]=={version("vitessce")}'),
         *vitessce_conf.cells
     ]
 

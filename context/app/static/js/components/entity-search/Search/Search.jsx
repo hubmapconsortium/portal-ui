@@ -20,14 +20,15 @@ const createSkClient = () =>
   });
 
 function Search() {
-  const { results, allResultsUUIDs, entityType } = useSearch();
+  const { results, allResultsUUIDs, entityType } = useSearch({ isTestSearch: true });
+
   return (
     <>
       <Flex>
         <Grow>
           <SearchBar />
         </Grow>
-        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} />
+        <MetadataMenu allResultsUUIDs={allResultsUUIDs} entityType={entityType} results={results} />
         <SearchViewSwitch />
       </Flex>
       {results?.summary.appliedFilters && <FacetChips appliedFilters={results.summary.appliedFilters} />}
