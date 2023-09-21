@@ -17,16 +17,14 @@ function getHelpEvent() {
   trackLink(window.location.href, 'help_form');
 }
 
-function ContactUsLink({ iconFontSize, children, onClick, ...props }: ContactUsLinkProps) {
+function ContactUsLink({ iconFontSize: fontSize, children, onClick, ...props }: ContactUsLinkProps) {
   return (
     <IconLink
+      {...props}
       href={href}
       isOutbound
       iconOnLeft={false}
-      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-      // @ts-ignore
-      icon={<SupportIcon $fontSize={iconFontSize} />}
-      {...props}
+      icon={<SupportIcon sx={{ fontSize }} />}
       onClick={(e: MouseEvent) => {
         getHelpEvent();
         onClick?.(e);

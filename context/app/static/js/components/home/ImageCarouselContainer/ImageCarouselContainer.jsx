@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import CarouselImage from 'js/components/home/CarouselImage';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
 import ImageCarousel from '../ImageCarousel';
 import ImageCarouselControlButtons from '../ImageCarouselControlButtons';
@@ -13,7 +14,7 @@ const getCDNCarouselImageSrcSet = (key) => getCarouselImageSrcSet(key, CDN_URL);
 const slides = [
   {
     title: 'Discover the publications reporting the breakthroughs of  mapping the human body with HuBMAP data',
-    body: 'Explore publications authored by scientists in the consortium involving HuBMAP data. Additional publications will be coming in the future as the consortium continue to create mappings of the human body. View the press release reporting on these publications.',
+    body: <>Explore publications authored by scientists in the consortium involving HuBMAP data. Additional publications will be coming in the future as the consortium continue to create mappings of the human body. View the <OutboundIconLink href="https://www.nature.com/collections/aihihijabe/the-hubmap-website">2023 Nature collection</OutboundIconLink> reporting for these publications.</>,
     image: <CarouselImage {...getCDNCarouselImageSrcSet('publication')} alt="HuBMAP Publications" key="Publications" />,
     buttonHref: '/publications',
   },
