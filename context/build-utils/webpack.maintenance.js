@@ -2,6 +2,7 @@
 const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { alias } = require('./alias');
+const { HuBMAPGlobals } = require('./webpack.plugins');
 
 const maintenancePath = './app/static/js/maintenance/';
 
@@ -64,7 +65,10 @@ const config = {
       },
     ],
   },
-  plugins: [new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html`, favicon: './app/static/favicon.ico' })],
+  plugins: [
+    new HtmlWebpackPlugin({ template: `${maintenancePath}/index.html`, favicon: './app/static/favicon.ico' }),
+    HuBMAPGlobals,
+  ],
 };
 
 module.exports = config;

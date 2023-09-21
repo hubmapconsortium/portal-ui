@@ -45,3 +45,5 @@ class DefaultConfig(object):
     PROTOCOLS_IO_CLIENT_ID = 'should-be-overridden'
     PROTOCOLS_IO_CLIENT_SECRET = 'should-be-overridden'
     PROTOCOLS_IO_CLIENT_AUTH_TOKEN = 'should-be-overridden'
+
+    SENTRY_ENV = 'should-be-overridden'

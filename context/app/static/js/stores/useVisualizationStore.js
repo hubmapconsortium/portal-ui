@@ -28,8 +28,6 @@ const useVisualizationStore = create((set) => ({
   setVitessceStateDebounced: debounce((val) => set({ vitessceState: val }), 250, { trailing: true }),
   onCopyUrlWarning: '',
   setOnCopyUrlWarning: (val) => set({ onCopyUrlWarning: val }),
-  onCopyUrlSnackbarOpen: false,
-  setOnCopyUrlSnackbarOpen: (val) => set({ onCopyUrlSnackbarOpen: val }),
   vizNotebookId: null,
   setVizNotebookId: (val) => set({ vizNotebookId: val }),
 }));

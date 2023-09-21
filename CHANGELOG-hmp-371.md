@@ -1,1 +1,0 @@
-- Update MUI Theme file to use TypeScript.

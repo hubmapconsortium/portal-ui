@@ -27,10 +27,8 @@ export function DataProduct({ file }: DataProductProps) {
             sx={(theme) => ({
               color: theme.palette.primary.main,
               flexShrink: 0,
+              fontSize: '1.5rem',
             })}
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore - TODO: HMP-349 will let us set font sizes via `sx` or `fontSize` prop
-            $fontSize="1.5rem"
           />
         </Box>
         <Box width="100%">

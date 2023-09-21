@@ -12,6 +12,7 @@ import Link from '@mui/material/Link';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { copyToClipBoard, createEmailWithUrl } from './utils';
 import { DEFAULT_LONG_URL_WARNING } from './constants';
 
@@ -26,8 +27,18 @@ const visualizationStoreSelector = (state) => ({
 function VisualizationShareButton() {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
-  const { vitessceState, setOnCopyUrlWarning, setOnCopyUrlSnackbarOpen } =
-    useVisualizationStore(visualizationStoreSelector);
+  const { vitessceState } = useVisualizationStore(visualizationStoreSelector);
+  const { toastWarning, toastSuccess } = useSnackbarActions();
+  const onClick = () => {
+    let urlIsLong = false;
+    copyToClipBoard(vitessceState, () => {
+      urlIsLong = true;
+    });
+    const message = `Visualization URL copied to clipboard. ${urlIsLong ? DEFAULT_LONG_URL_WARNING : ''}`.trim();
+    const toast = urlIsLong ? toastWarning : toastSuccess;
+    toast(message);
+    toggle();
+  };
 
   return (
     <>
@@ -40,15 +51,7 @@ function VisualizationShareButton() {
         <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
           <ClickAwayListener onClickAway={toggle}>
             <MenuList id="preview-options">
-              <MenuItem
-                onClick={() => {
-                  copyToClipBoard(vitessceState, () => {
-                    setOnCopyUrlWarning(DEFAULT_LONG_URL_WARNING);
-                  });
-                  setOnCopyUrlSnackbarOpen(true);
-                  toggle();
-                }}
-              >
+              <MenuItem onClick={onClick}>
                 <StyledTypography variant="inherit">Copy Visualization Link</StyledTypography>
                 <ListItemIcon>
                   <StyledLinkIcon fontSize="small" />
