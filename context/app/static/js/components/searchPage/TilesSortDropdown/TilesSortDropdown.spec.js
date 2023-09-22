@@ -35,7 +35,7 @@ const items = [
   },
 ];
 
-test('should handle open and toggling new item', () => {
+test('should handle open and toggling new item', async () => {
   const mockToggle = jest.fn();
   const selectedItems = ['mapped_last_modified_timestamp.keyword_desc'];
 
@@ -47,8 +47,8 @@ test('should handle open and toggling new item', () => {
       analyticsCategory="this is required"
     />,
   );
-  userEvent.click(screen.getByText('Last Modified'));
-  userEvent.click(screen.getByText('Fake'));
+  await userEvent.click(screen.getByText('Last Modified'));
+  await userEvent.click(screen.getByText('Fake'));
 
   expect(mockToggle).toHaveBeenCalled();
   expect(mockToggle).toHaveBeenCalledWith('fake.keyword_asc');
@@ -66,8 +66,8 @@ test('should toggle descending order for last modified', async () => {
       analyticsCategory="this is required"
     />,
   );
-  userEvent.click(screen.getByText('Fake'));
-  userEvent.click(screen.getByText('Last Modified'));
+  await userEvent.click(screen.getByText('Fake'));
+  await userEvent.click(screen.getByText('Last Modified'));
 
   expect(mockToggle).toHaveBeenCalled();
   expect(mockToggle).toHaveBeenCalledWith('mapped_last_modified_timestamp.keyword_desc');

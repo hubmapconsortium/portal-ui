@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
-import 'intersection-observer';
 
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { FileIcon } from 'js/shared-styles/icons';

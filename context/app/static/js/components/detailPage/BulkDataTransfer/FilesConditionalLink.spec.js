@@ -28,7 +28,7 @@ test('the element is button when dua has not been agreed to', () => {
   expect(screen.queryByRole('link')).not.toBeInTheDocument();
 });
 
-test('the button has on click works', () => {
+test('the button has on click works', async () => {
   const mockOpenDUA = jest.fn();
   render(
     <FilesConditionalLink hasAgreedToDUA={null} openDUA={mockOpenDUA} href="fakeref">
@@ -36,6 +36,6 @@ test('the button has on click works', () => {
     </FilesConditionalLink>,
   );
   expect(mockOpenDUA).toHaveBeenCalledTimes(0);
-  userEvent.click(screen.getByRole('button'));
+  await userEvent.click(screen.getByRole('button'));
   expect(mockOpenDUA).toHaveBeenCalledTimes(1);
 });

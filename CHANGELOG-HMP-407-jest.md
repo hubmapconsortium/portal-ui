@@ -1,0 +1,1 @@
+- Update Jest and MockServiceWorker to latest versions.

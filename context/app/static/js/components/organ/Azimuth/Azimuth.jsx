@@ -1,5 +1,5 @@
 import React from 'react';
-import marked from 'marked';
+import ReactMarkdown from 'react-markdown';
 import Box from '@mui/material/Box';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -13,8 +13,6 @@ import { Flex, StyledInfoIcon } from '../style';
 import { StyledPaper } from './style';
 
 function Azimuth({ config }) {
-  const dataRefHtml = marked.parseInline(config.dataref);
-
   return (
     <>
       <SpacedSectionButtonRow
@@ -33,11 +31,9 @@ function Azimuth({ config }) {
         <LabelledSectionText label="Nuclei in reference">{config.nunit}</LabelledSectionText>
         {/* eslint-disable react/no-danger */}
         <LabelledSectionText label="Reference dataset">
-          <Box
-            component="span"
-            sx={(theme) => ({ '&>a': { color: theme.palette.info.main } })}
-            dangerouslySetInnerHTML={{ __html: dataRefHtml }}
-          />
+          <Box component="span" sx={(theme) => ({ '&>a': { color: theme.palette.info.main } })}>
+            <ReactMarkdown>{config.dataref}</ReactMarkdown>
+          </Box>
         </LabelledSectionText>
       </StyledPaper>
 
