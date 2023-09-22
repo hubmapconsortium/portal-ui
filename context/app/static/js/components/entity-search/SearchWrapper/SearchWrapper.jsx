@@ -11,7 +11,7 @@ import {
   getEntityTypeFilter,
   buildTileFields,
 } from './utils';
-import SearchConfigProvider from './provider';
+import SearchConfigProvider from './store';
 import { useNumericFacetsProps } from './hooks';
 
 function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
