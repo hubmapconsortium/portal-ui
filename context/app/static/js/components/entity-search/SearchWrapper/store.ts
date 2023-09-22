@@ -1,14 +1,7 @@
-/* eslint-disable no-param-reassign */
-import create from 'zustand';
-import createContext from 'zustand/context';
-import { produce } from 'immer';
-
 import { createImmer } from 'js/stores/middleware';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 import relatedEntityTypesMap from 'js/components/entity-search/SearchWrapper/relatedEntityTypesMap';
-
-const { Provider, useStore } = createContext();
 
 const createStore = ({
   initialFields,
