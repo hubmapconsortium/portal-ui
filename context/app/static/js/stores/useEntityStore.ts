@@ -1,9 +1,26 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 const savedAlertStatus = 'savedAlert';
 const editedAlertStatus = 'editedAlert';
 
-const useEntityStore = create((set) => ({
+interface EntityStoreState {
+  summaryComponentObserver: {
+    summaryInView: boolean;
+    summaryEntry: IntersectionObserverEntry | undefined;
+  };
+  assayMetadata: Record<string, unknown>;
+  shouldDisplaySavedOrEditedAlert: boolean;
+}
+
+interface EntityStoreActions {
+  setSummaryComponentObserver: (inView: boolean, entry: IntersectionObserverEntry) => void;
+  setAssayMetadata: (val: Record<string, unknown>) => void;
+  setShouldDisplaySavedOrEditedAlert: (val: boolean) => void;
+}
+
+export type EntityStore = EntityStoreState & EntityStoreActions;
+
+const useEntityStore = create<EntityStore>((set) => ({
   summaryComponentObserver: {
     summaryInView: true,
     summaryEntry: undefined,

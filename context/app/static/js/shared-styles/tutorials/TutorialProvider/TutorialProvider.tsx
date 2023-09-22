@@ -1,26 +1,31 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { ComponentProps, ComponentType, PropsWithChildren, useRef } from 'react';
 
-import { Provider, createStore } from './store';
+import { createContext, useContext } from 'js/helpers/context';
 
-function TutorialProvider({ children, tutorial_key }) {
-  return <Provider createStore={() => createStore(tutorial_key)}>{children}</Provider>;
+import { createStore} from './store';
+
+type TutorialContextType = ReturnType<typeof createStore>;
+
+const TutorialContext = createContext<TutorialContextType>('TutorialContext');
+
+interface TutorialProviderProps extends PropsWithChildren {
+  tutorial_key: string;
 }
 
-export const withTutorialProvider = (Component, tutorial_key) =>
-  function ComponentWithTutorialProvider({ ...props }) {
-    return (
-      <TutorialProvider tutorial_key={tutorial_key}>
-        <Component {...props} />
-      </TutorialProvider>
-    );
-  };
+export default function TutorialProvider({ children, tutorial_key }: TutorialProviderProps) {
+  const store = useRef(createStore(tutorial_key));
 
-TutorialProvider.propTypes = {
-  /**
-     Key used for tracking. Should match the name of the feature the tutorial is used for.
-    */
-  tutorial_key: PropTypes.string.isRequired,
-};
+  return <TutorialContext.Provider value={store.current}>{children}</TutorialContext.Provider>
+}
 
-export default TutorialProvider;
+export function withTutorialProvider<P extends React.JSX.IntrinsicAttributes>(
+  Component: ComponentType<P>, 
+  tutorial_key: string) {
+  return (props: ComponentProps<typeof Component>) => (
+    <TutorialProvider tutorial_key={tutorial_key}>
+      <Component {...props} />
+    </TutorialProvider>
+  );
+}
+
+export const useTutorial = () => useContext(TutorialContext);

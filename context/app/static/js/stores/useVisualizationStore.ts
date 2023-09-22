@@ -1,7 +1,30 @@
 import { debounce } from 'js/helpers/nodash';
-import create from 'zustand';
+import { create } from 'zustand';
 
-const useVisualizationStore = create((set) => ({
+type VizTheme = 'light' | 'dark';
+interface VisualizationStoreState {
+  vizIsFullscreen: boolean;
+  vizEscSnackbarIsOpen: boolean;
+  vizTheme: VizTheme;
+  vitessceState: unknown;
+  onCopyUrlWarning: string;
+  vizNotebookId: string | null;
+}
+
+interface VisualizationStoreActions {
+  setVizEscSnackbarIsOpen: (val: boolean) => void;
+  expandViz: () => void;
+  collapseViz: () => void;
+  setVizTheme: (theme: VizTheme) => void;
+  setVitessceState: (val: unknown) => void;
+  setVitessceStateDebounced: (val: unknown) => void;
+  setOnCopyUrlWarning: (val: string) => void;
+  setVizNotebookId: (val: string) => void;
+}
+
+type VisualizationStore = VisualizationStoreState & VisualizationStoreActions;
+
+const useVisualizationStore = create<VisualizationStore>((set) => ({
   vizIsFullscreen: false,
   vizEscSnackbarIsOpen: false,
   setVizEscSnackbarIsOpen: (val) => set({ vizEscSnackbarIsOpen: val }),
@@ -24,8 +47,7 @@ const useVisualizationStore = create((set) => ({
   },
   vitessceState: null,
   setVitessceState: (val) => set({ vitessceState: val }),
-  // TODO: change this debounce to use react 18 suspense transitions instead?
-  setVitessceStateDebounced: debounce((val) => set({ vitessceState: val }), 250, { trailing: true }),
+  setVitessceStateDebounced: debounce((val) => set({ vitessceState: val }), 250),
   onCopyUrlWarning: '',
   setOnCopyUrlWarning: (val) => set({ onCopyUrlWarning: val }),
   vizNotebookId: null,
