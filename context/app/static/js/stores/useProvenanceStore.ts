@@ -2,7 +2,7 @@
 
 import create from 'zustand';
 
-import immer from './immerMiddleware';
+import immer from './middleware';
 
 const useProvenanceStore = create(
   immer((set, get) => ({
