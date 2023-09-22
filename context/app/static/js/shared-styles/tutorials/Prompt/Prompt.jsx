@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 
-import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
+import { useStore } from 'js/shared-styles/tutorials/TutorialProvider';
 
 import {
   CenteredDiv,

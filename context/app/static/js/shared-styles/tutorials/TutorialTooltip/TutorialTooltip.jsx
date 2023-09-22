@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 
-import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
+import { useStore } from 'js/shared-styles/tutorials/TutorialProvider';
 import TooltipProgressButton from 'js/shared-styles/tutorials/TooltipProgressButton';
 import { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
 

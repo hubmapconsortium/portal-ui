@@ -1,4 +1,4 @@
-import produce from 'immer';
+import { produce } from 'immer';
 
 import { useSelectedItems } from 'js/components/entity-search/sidebar/ConfigureSearch/hooks';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
