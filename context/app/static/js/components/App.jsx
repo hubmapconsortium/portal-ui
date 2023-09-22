@@ -1,6 +1,6 @@
 import React from 'react';
 import { pdfjs } from 'react-pdf';
-import marked from 'marked';
+import ReactMarkdown from 'react-markdown';
 
 import StyledSnackbar from 'js/shared-styles/snackbars';
 
@@ -57,8 +57,7 @@ function App(props) {
       {globalAlertMd && (
         <FlexContainer>
           <StyledAlert severity="warning">
-            {/* eslint-disable-next-line react/no-danger */}
-            <div dangerouslySetInnerHTML={{ __html: marked.parseInline(globalAlertMd) }} />
+            <ReactMarkdown>{globalAlertMd}</ReactMarkdown>
           </StyledAlert>
         </FlexContainer>
       )}

@@ -1,6 +1,6 @@
 import Paper from '@mui/material/Paper';
 import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
-import Bowser from 'bowser';
+import { isFirefox } from 'react-device-detect';
 import React, { useEffect } from 'react';
 import { Vitessce } from 'vitessce';
 
@@ -28,11 +28,6 @@ import {
   bodyExpandedCSS,
   vitessceFixedHeight,
 } from './style';
-
-function sniffBrowser() {
-  const { browser } = Bowser.parse(window.navigator.userAgent);
-  return browser.name;
-}
 
 const FIREFOX_WARNING = 'If the performance of Vitessce in Firefox is not satisfactory, please use Chrome or Safari.';
 const localStorageFirefoxWarningKey = 'vitessce-firefox-warning';
@@ -69,7 +64,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
 
   // Show a warning if the user is using Firefox.
   useEffect(() => {
-    if (sniffBrowser() === 'Firefox' && !localStorage.getItem(localStorageFirefoxWarningKey)) {
+    if (isFirefox && !localStorage.getItem(localStorageFirefoxWarningKey)) {
       toastError(FIREFOX_WARNING);
       localStorage.setItem(localStorageFirefoxWarningKey, true);
     }

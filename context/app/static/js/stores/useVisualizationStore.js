@@ -1,4 +1,4 @@
-import { debounce } from 'lodash';
+import { debounce } from 'js/helpers/nodash';
 import create from 'zustand';
 
 const useVisualizationStore = create((set) => ({
