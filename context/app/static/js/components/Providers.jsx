@@ -9,7 +9,6 @@ import CssBaseline from '@mui/material/CssBaseline';
 
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import GlobalStyles from 'js/components/globalStyles';
-import { SnackbarProvider, createStore } from 'js/shared-styles/snackbars';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
@@ -30,7 +29,7 @@ const swrConfig = {
   },
 };
 
-function Providers({
+export default function Providers({
   endpoints,
   groupsToken,
   isAuthenticated,
@@ -68,13 +67,11 @@ function Providers({
           <SCThemeProvider theme={theme}>
             <AppContext.Provider value={appContext}>
               <FlaskDataContext.Provider value={flaskData}>
-                <SnackbarProvider createStore={createStore}>
-                  <ProtocolAPIContext.Provider value={protocolsContext}>
-                    <CssBaseline />
-                    <GlobalStyles />
-                    {children}
-                  </ProtocolAPIContext.Provider>
-                </SnackbarProvider>
+                <ProtocolAPIContext.Provider value={protocolsContext}>
+                  <CssBaseline />
+                  <GlobalStyles />
+                  {children}
+                </ProtocolAPIContext.Provider>
               </FlaskDataContext.Provider>
             </AppContext.Provider>
           </SCThemeProvider>
@@ -84,4 +81,4 @@ function Providers({
   );
 }
 
-export default Providers;
+
