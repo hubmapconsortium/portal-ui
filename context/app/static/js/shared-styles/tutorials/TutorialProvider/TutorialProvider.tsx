@@ -1,8 +1,9 @@
 import React, { ComponentProps, ComponentType, PropsWithChildren, useRef } from 'react';
 
-import { createContext, useContext } from 'js/helpers/context';
+import { createContext, useContext, } from 'js/helpers/context';
+import { useStore } from 'zustand';
 
-import { createStore} from './store';
+import { Selector, createStore} from './store';
 
 type TutorialContextType = ReturnType<typeof createStore>;
 
@@ -28,4 +29,7 @@ export function withTutorialProvider<P extends React.JSX.IntrinsicAttributes>(
   );
 }
 
-export const useTutorial = () => useContext(TutorialContext);
+export const useTutorial = (selector: Selector) => {
+  const store = useContext(TutorialContext);
+  return useStore(store, selector);
+}

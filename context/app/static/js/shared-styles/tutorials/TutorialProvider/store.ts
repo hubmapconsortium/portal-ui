@@ -80,3 +80,5 @@ export const createStore = (tutorial_key: string) => {
     },
   );
 };
+
+export type Selector = (state: TutorialStore) => unknown;
