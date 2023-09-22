@@ -44,6 +44,7 @@ rules:
   react/jsx-one-expression-per-line: [0] # Makes punctuation after tab awkward.
   react/prop-types: [0]
   react/forbid-prop-types: [0]
+  no-param-reassign: [2, { ignorePropertyModificationsFor: 'state' }] # Allow state mutations via immer
   react/require-default-props: [0] # Not necessary; we can specify default props in the component signature.
   import/prefer-default-export: [0] # Hit eslint error: SyntaxError: Unexpected token, expected {
   react/jsx-props-no-spreading: [0] # common pattern, but with TypeScript it"s pretty safe
