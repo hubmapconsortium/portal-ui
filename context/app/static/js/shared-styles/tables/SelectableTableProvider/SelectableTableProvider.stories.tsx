@@ -8,8 +8,10 @@ import Typography from '@mui/material/Typography';
 
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell/';
-import SelectableTableProviderComponent from './SelectableTableProvider';
-import { useSelectableTableStore } from './store';
+import SelectableTableProviderComponent, {
+  SelectableTableContextProviderProps,
+  useSelectableTableStore,
+} from './SelectableTableProvider';
 
 export default {
   title: 'Tables/SelectableTableProvider',
@@ -21,13 +23,14 @@ export default {
 export const rowKeys = ['A', 'B', 'C'];
 
 function ExampleTable() {
-  const { selectedRows } = useSelectableTableStore();
+  const { selectedRows } = useSelectableTableStore(({ selectedRows }) => ({ selectedRows }));
+
   return (
     <div>
       <Table>
         <TableHead>
           <TableRow>
-            <SelectableHeaderCell allTableRowKeys={rowKeys} />
+            <SelectableHeaderCell disabled={false} allTableRowKeys={rowKeys} />
             <TableCell>Key</TableCell>
           </TableRow>
         </TableHead>
@@ -40,12 +43,12 @@ function ExampleTable() {
           ))}
         </TableBody>
       </Table>
-      <Typography>You have selected rows {[...selectedRows].join(', ')}.</Typography>
+      <Typography>You have selected rows {[selectedRows].join(', ')}.</Typography>
     </div>
   );
 }
 
-export function SelectableTableProvider(args) {
+export function SelectableTableProvider(args: SelectableTableContextProviderProps) {
   return (
     <SelectableTableProviderComponent {...args}>
       <ExampleTable />

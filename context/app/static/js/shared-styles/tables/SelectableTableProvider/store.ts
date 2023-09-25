@@ -1,4 +1,4 @@
-import { createStoreImmer } from 'js/stores/middleware';
+import { createStoreImmer } from 'js/helpers/zustand';
 
 interface SelectableTableStoreState {
   selectedRows: Set<string>;

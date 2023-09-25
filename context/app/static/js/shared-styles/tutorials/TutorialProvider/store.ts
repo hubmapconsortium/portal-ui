@@ -1,5 +1,5 @@
 import { trackEvent } from 'js/helpers/trackers';
-import { createStoreImmerPersist } from 'js/stores/middleware';
+import { createStoreImmerPersist } from 'js/helpers/zustand';
 
 interface TutorialActions {
   incrementStep: () => void;
@@ -18,7 +18,7 @@ interface TutorialState {
   nextButtonIsDisabled: boolean;
 }
 
-type TutorialStore = TutorialState & TutorialActions;
+export type TutorialStore = TutorialState & TutorialActions;
 
 function trackTutorialEvent(state: TutorialState, action: string) {
   trackEvent({
@@ -80,5 +80,3 @@ export const createStore = (tutorial_key: string) => {
     },
   );
 };
-
-export type Selector = (state: TutorialStore) => unknown;

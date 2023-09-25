@@ -1,28 +1,27 @@
-/* eslint-disable no-param-reassign */
 import { v4 as uuidv4 } from 'uuid';
 
-import { createImmerPersist } from './middleware';
+import { createImmerPersist } from 'js/helpers/zustand';
 
-type SavedEntity = {
+interface SavedEntity {
   dateSaved?: number;
   dateAddedToList?: number;
-};
+}
 
-type SavedEntitiesList = {
+interface SavedEntitiesList {
   title: string;
   description: string;
   dateSaved: number;
   dateLastModified: number;
   savedEntities: Record<string, SavedEntity>;
-};
+}
 
-type SavedEntitiesState = {
+interface SavedEntitiesState {
   savedEntities: Record<string, SavedEntity>;
   savedLists: Record<string, SavedEntitiesList>;
   listsToBeDeleted: string[];
-};
+}
 
-type SavedEntitiesActions = {
+interface SavedEntitiesActions {
   saveEntity: (entityUUID: string) => void;
   deleteEntity: (entityUUID: string) => void;
   deleteEntities: (entityUUIDs: string[]) => void;
@@ -35,7 +34,7 @@ type SavedEntitiesActions = {
   deleteQueuedLists: () => void;
   deleteList: (listUUID: string) => void;
   editList: (list: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => void;
-};
+}
 
 type SavedEntitiesStore = SavedEntitiesState & SavedEntitiesActions;
 

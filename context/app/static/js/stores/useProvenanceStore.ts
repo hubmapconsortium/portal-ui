@@ -1,6 +1,4 @@
-/* eslint-disable no-param-reassign */
-
-import { createImmer } from './middleware';
+import { createImmer } from 'js/helpers/zustand';
 
 interface Target {
   step: string;

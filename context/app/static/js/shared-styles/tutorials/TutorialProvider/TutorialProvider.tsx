@@ -3,7 +3,8 @@ import React, { ComponentProps, ComponentType, PropsWithChildren, useRef } from 
 import { createContext, useContext } from 'js/helpers/context';
 import { useStore } from 'zustand';
 
-import { Selector, createStore } from './store';
+import { Selector } from 'js/helpers/zustand';
+import { TutorialStore, createStore } from './store';
 
 type TutorialContextType = ReturnType<typeof createStore>;
 
@@ -32,7 +33,6 @@ export function withTutorialProvider<P extends React.JSX.IntrinsicAttributes>(
   };
 }
 
-export const useTutorial = (selector: Selector) => {
-  const store = useContext(TutorialContext);
-  return useStore(store, selector);
+export const useTutorial = <U,>(selector: Selector<TutorialStore, U> = (state) => state as U) => {
+  return useStore(useContext(TutorialContext), selector);
 };
