@@ -1,4 +1,7 @@
-import SelectableTableProvider, { withSelectableTableProvider } from './SelectableTableProvider';
+import SelectableTableProvider, {
+  withSelectableTableProvider,
+  useSelectableTableStore,
+} from './SelectableTableProvider';
 
-export { withSelectableTableProvider };
+export { withSelectableTableProvider, useSelectableTableStore };
 export default SelectableTableProvider;

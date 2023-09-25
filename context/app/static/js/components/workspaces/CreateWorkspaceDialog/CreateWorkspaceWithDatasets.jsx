@@ -5,7 +5,7 @@ import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import Box from '@mui/material/Box';
 
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
 import CreateWorkspaceDialog from './CreateWorkspaceDialog';
 import { useDatasetsAccessLevel } from './hooks';

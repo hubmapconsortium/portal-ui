@@ -3,7 +3,7 @@ import { produce } from 'immer';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { useStore as useZustandStore } from 'zustand';
 
-import { createImmer } from 'js/helpers/zustand';
+import { Selector, createImmer } from 'js/helpers/zustand';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 import relatedEntityTypesMap from 'js/components/entity-search/SearchWrapper/relatedEntityTypesMap';
 import { createContext, useContext } from 'js/helpers/context';
@@ -126,8 +126,11 @@ interface SearchConfigProviderProps extends PropsWithChildren {
 }
 
 function SearchConfigProvider({ children, initialConfig }: SearchConfigProviderProps) {
-  const store = useRef(createStore(initialConfig)).current;
-  return <SearchConfigContext.Provider value={store}>{children}</SearchConfigContext.Provider>;
+  const store = useRef(createStore(initialConfig));
+  if (!store.current) {
+    store.current = createStore(initialConfig);
+  }
+  return <SearchConfigContext.Provider value={store.current}>{children}</SearchConfigContext.Provider>;
 }
 
 export const withSearchConfigProvider = <T extends JSX.IntrinsicAttributes>(
@@ -144,9 +147,9 @@ export const withSearchConfigProvider = <T extends JSX.IntrinsicAttributes>(
 
 export default SearchConfigProvider;
 
-const useStore = (selector: (store: SearchStore) => unknown) => {
+const useStore = () => {
   const store = useContext(SearchConfigContext);
-  return useZustandStore(store, selector);
+  return useZustandStore(store);
 };
 
 export { createStore, useStore };

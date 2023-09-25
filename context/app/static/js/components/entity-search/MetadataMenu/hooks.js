@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useStore as useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/hooks';
 
 function useMetadataMenu(lcPluralType) {

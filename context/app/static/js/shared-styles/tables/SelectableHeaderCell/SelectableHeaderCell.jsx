@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Checkbox from '@mui/material/Checkbox';
 
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { HeaderCell } from 'js/shared-styles/tables';
 
 function SelectableHeaderCell({ allTableRowKeys, disabled, ...rest }) {
