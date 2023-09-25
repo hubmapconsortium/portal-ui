@@ -1,87 +1,89 @@
-import create from 'zustand';
-import createContext from 'zustand/context';
+import { createStoreImmer } from 'js/stores/middleware';
 
-const { Provider, useStore } = createContext();
-
-function getDeselectRowsState(state, ...keys) {
-  const setCopy = new Set(state.selectedRows);
-  keys.forEach((key) => setCopy.delete(key));
-  return { selectedRows: setCopy };
+interface SelectableTableStoreState {
+  selectedRows: Set<string>;
+  headerRowIsSelected: boolean;
+  tableLabel: string;
 }
 
-function getSelectRowState(state, key) {
-  const setCopy = new Set(state.selectedRows);
-  return { selectedRows: setCopy.add(key) };
+interface SelectableTableStoreActions {
+  selectRow: (rowKey: string) => void;
+  deselectRow: (rowKey: string) => void;
+  deselectRows: (rowKeys: string[]) => void;
+  toggleRow: (rowKey: string) => void;
+  setSelectedRows: (rowKeys: string[]) => void;
+  deselectAllRows: () => void;
+  selectHeaderAndRows: (rowKeys: string[]) => void;
+  deselectHeaderAndRows: () => void;
+  toggleHeaderAndRows: (rowKeys: string[]) => void;
 }
 
-function getSetSelectedRowsState(keys) {
-  return { selectedRows: new Set(keys) };
-}
+export type SelectableTableStore = SelectableTableStoreState & SelectableTableStoreActions;
 
-function getDeselectAllRowsState() {
-  return { selectedRows: new Set() };
-}
-
-function getSelectHeaderAndRowsState(keys) {
-  return { headerRowIsSelected: true, ...getSetSelectedRowsState(keys) };
-}
-
-function getDeselectHeaderAndRowsState() {
-  return { headerRowIsSelected: false, ...getDeselectAllRowsState() };
-}
-
-const types = {
-  selectRow: 'SELECT_ROW',
-  deselectRow: 'DESELECT_ROW',
-  deselectRows: 'DESELECT_ROWS',
-  toggleRow: 'TOGGLE_ROW',
-  setSelectedRows: 'SET_SELECTED_ROWS',
-  deselectAllRows: 'DESELECT_ALL_ROWS',
-  selectHeaderAndRows: 'SELECT_HEADER_AND_ROWS',
-  deselectHeaderAndRows: 'DESELECT_HEADER_AND_ROWS',
-  toggleHeaderAndRows: 'TOGGLE_HEADER_AND_ROWS',
-};
-
-const reducer = (state, { type, payload }) => {
-  switch (type) {
-    case types.selectRow:
-      return getSelectRowState(state, payload);
-    case types.deselectRow:
-      return getDeselectRowsState(state, payload);
-    case types.deselectRows:
-      return getDeselectRowsState(state, ...payload);
-    case types.toggleRow:
-      return state.selectedRows.has(payload) ? getDeselectRowsState(state, payload) : getSelectRowState(state, payload);
-    case types.setSelectedRows:
-      return getSetSelectedRowsState(payload);
-    case types.deselectAllRows:
-      return getDeselectAllRowsState();
-    case types.selectHeaderAndRows:
-      return getSelectHeaderAndRowsState(payload);
-    case types.deselectHeaderAndRows:
-      return getDeselectHeaderAndRowsState();
-    case types.toggleHeaderAndRows:
-      return state.headerRowIsSelected ? getDeselectHeaderAndRowsState() : getSelectHeaderAndRowsState(payload);
-    default:
-      return state;
-  }
-};
-
-const createStore = (tableLabel) =>
-  create((set, get) => ({
+const createStore = (tableLabel: string) =>
+  createStoreImmer<SelectableTableStore>((set) => ({
+    tableLabel,
     selectedRows: new Set(),
     headerRowIsSelected: false,
-    tableLabel,
-    dispatch: (args) => set((state) => reducer(state, args)),
-    selectRow: (rowKey) => get().dispatch({ type: types.selectRow, payload: rowKey }),
-    deselectRow: (rowKey) => get().dispatch({ type: types.deselectRow, payload: rowKey }),
-    deselectRows: (rowKeys) => get().dispatch({ type: types.deselectRows, payload: rowKeys }),
-    toggleRow: (rowKey) => get().dispatch({ type: types.toggleRow, payload: rowKey }),
-    setSelectedRows: (rowKeys) => get().dispatch({ type: types.setSelectedRows, payload: rowKeys }),
-    deselectAllRows: () => get().dispatch({ type: types.deselectAllRows }),
-    selectHeaderAndRows: (rowKeys) => get().dispatch({ type: types.selectHeaderAndRows, payload: rowKeys }),
-    deselectHeaderAndRows: () => get().dispatch({ type: types.deselectHeaderAndRows }),
-    toggleHeaderAndRows: (rowKeys) => get().dispatch({ type: types.toggleHeaderAndRows, payload: rowKeys }),
+    selectRow: (rowKey) => {
+      set((state) => {
+        state.selectedRows.add(rowKey);
+      });
+    },
+    deselectRow: (rowKey) => {
+      set((state) => {
+        state.selectedRows.delete(rowKey);
+      });
+    },
+    deselectRows: (rowKeys) => {
+      set((state) => {
+        rowKeys.forEach((rowKey) => {
+          state.selectedRows.delete(rowKey);
+        });
+      });
+    },
+    toggleRow: (rowKey) => {
+      set((state) => {
+        if (state.selectedRows.has(rowKey)) {
+          state.selectedRows.delete(rowKey);
+        } else {
+          state.selectedRows.add(rowKey);
+        }
+      });
+    },
+    setSelectedRows: (rowKeys) => {
+      set((state) => {
+        state.selectedRows = new Set(rowKeys);
+      });
+    },
+    deselectAllRows: () => {
+      set((state) => {
+        state.selectedRows.clear();
+      });
+    },
+    selectHeaderAndRows: (rowKeys) => {
+      set((state) => {
+        state.headerRowIsSelected = true;
+        state.selectedRows = new Set(rowKeys);
+      });
+    },
+    deselectHeaderAndRows: () => {
+      set((state) => {
+        state.headerRowIsSelected = false;
+        state.selectedRows.clear();
+      });
+    },
+    toggleHeaderAndRows: (rowKeys) => {
+      set((state) => {
+        if (state.headerRowIsSelected) {
+          state.headerRowIsSelected = false;
+          state.selectedRows.clear();
+        } else {
+          state.headerRowIsSelected = true;
+          state.selectedRows = new Set(rowKeys);
+        }
+      });
+    },
   }));
 
-export { Provider, useStore as useSelectableTableStore, createStore, reducer, types };
+export { createStore };
