@@ -1,6 +1,7 @@
 import React from 'react';
 import { pdfjs } from 'react-pdf';
 import ReactMarkdown from 'react-markdown';
+import { enableMapSet } from 'immer';
 
 import StyledSnackbar from 'js/shared-styles/snackbars';
 
@@ -29,6 +30,9 @@ const workspacesUsers = [
   'ivlachos@bidmc.harvard.edu',
   'geremy.clair@pnnl.gov',
 ];
+
+// Enable use of Map and Set in immer
+enableMapSet();
 
 // Set up worker for react-pdf
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;

@@ -6,9 +6,9 @@ interface SelectableTableStoreState {
   tableLabel: string;
 }
 
-type InitialState = Partial<Omit<SelectableTableStoreState, 'tableLabel'>>;
+export type InitialSelectableTableState = Omit<SelectableTableStoreState, 'tableLabel'>;
 
-const defaultInitialState: InitialState = {
+const defaultInitialState: InitialSelectableTableState = {
   selectedRows: new Set(),
   headerRowIsSelected: false,
 };
@@ -27,13 +27,11 @@ interface SelectableTableStoreActions {
 
 export type SelectableTableStore = SelectableTableStoreState & SelectableTableStoreActions;
 
-const createStore = (tableLabel: string, initialState: InitialState = {}) =>
+const createStore = (tableLabel: string, initialState: Partial<InitialSelectableTableState> = {}) =>
   createStoreImmer<SelectableTableStore>((set) => ({
     ...defaultInitialState,
     ...initialState,
     tableLabel,
-    selectedRows: new Set(),
-    headerRowIsSelected: false,
     selectRow: (rowKey) => {
       set((state) => {
         state.selectedRows.add(rowKey);
