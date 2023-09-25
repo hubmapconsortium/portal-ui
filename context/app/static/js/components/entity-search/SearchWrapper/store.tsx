@@ -1,14 +1,12 @@
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, PropsWithChildren, useRef } from 'react';
 import { produce } from 'immer';
-//@ts-ignore - TODO: We will need to declare this as a module
 import metadataFieldtoEntityMap from 'metadata-field-entities';
 import { useStore as useZustandStore } from 'zustand';
 
-import { createImmer } from 'js/stores/middleware';
+import { createImmer } from 'js/helpers/zustand';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 import relatedEntityTypesMap from 'js/components/entity-search/SearchWrapper/relatedEntityTypesMap';
 import { createContext, useContext } from 'js/helpers/context';
-import { PropsWithChildren, useRef } from 'react';
 
 interface Field {
   fieldName: string;
@@ -28,7 +26,7 @@ interface Facet {
   [key: string]: unknown;
 }
 
-type SearchStoreState = {
+interface SearchStoreState {
   initialFields: Field[];
   initialFacets: unknown;
   tileFields: unknown;
@@ -38,16 +36,16 @@ type SearchStoreState = {
   entityType: 'donor' | 'sample' | 'dataset';
   numericFacetsProps: unknown;
   view: unknown;
-};
+}
 
-type SearchStoreActions = {
+interface SearchStoreActions {
   setFields: (selectedFields: Field[]) => void;
   setFacets: (selectedFacets: Record<string, Facet>) => void;
   addFacets: (selectedFacets: Record<string, Facet>) => void;
   setNumericFacetsProps: (numericFacets: unknown) => void;
   setFacetSize: ({ identifier, size }: Pick<Facet, 'identifier' | 'size'>) => void;
   setView: (view: unknown) => void;
-};
+}
 
 type SearchStore = SearchStoreState &
   SearchStoreActions & {
@@ -105,7 +103,7 @@ const createStore = ({
       }),
     availableFields: Object.entries(metadataFieldtoEntityMap).reduce(
       (acc, [fieldName, fieldEntityType]) => {
-        if (relatedEntityTypesMap[entityType].includes(fieldEntityType as string)) {
+        if (relatedEntityTypesMap[entityType].includes(fieldEntityType)) {
           return produce(acc, (draft) => {
             return {
               ...draft,
@@ -132,7 +130,10 @@ function SearchConfigProvider({ children, initialConfig }: SearchConfigProviderP
   return <SearchConfigContext.Provider value={store}>{children}</SearchConfigContext.Provider>;
 }
 
-export const withSearchConfigProvider = <T extends JSX.IntrinsicAttributes>(Component: React.ComponentType<T>, initialConfig: InitialSearchState) =>
+export const withSearchConfigProvider = <T extends JSX.IntrinsicAttributes>(
+  Component: React.ComponentType<T>,
+  initialConfig: InitialSearchState,
+) =>
   function ComponentWithSearchConfigProvider(props: ComponentProps<typeof Component>) {
     return (
       <SearchConfigProvider initialConfig={initialConfig}>
@@ -146,6 +147,6 @@ export default SearchConfigProvider;
 const useStore = (selector: (store: SearchStore) => unknown) => {
   const store = useContext(SearchConfigContext);
   return useZustandStore(store, selector);
-} 
+};
 
-export { createStore, useStore }
+export { createStore, useStore };
