@@ -19,15 +19,22 @@ console.warn = (...args) => {
 //   });
 // });
 
+const expectedErrorMessage = `
+Received invalid provenance data. The following categories of errors were found:
+Invalid input: 'prefix'
+Required: 'entity', 'activity', 'wasGeneratedBy', 'used'`.trim();
+
 describe('ProvData errors', () => {
   it('has expected error message', () => {
     let message;
+    let prov;
     try {
-      new ProvData({ prov: {} }); // eslint-disable-line no-new
+      prov = new ProvData({ prov: {} });
     } catch (e) {
       message = e.message;
     }
-    expect(message).toContain("should have required property 'prefix'");
+    expect(message).toStrictEqual(expectedErrorMessage);
+    expect(prov).toBeUndefined();
   });
 });
 

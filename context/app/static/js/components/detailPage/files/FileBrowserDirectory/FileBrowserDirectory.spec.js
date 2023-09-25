@@ -35,11 +35,11 @@ test('displays directory name', () => {
   expect(directory.node).toBeInTheDocument();
 });
 
-test('handles click', () => {
+test('handles click', async () => {
   render(<TestFileBrowserDirectory />);
 
   expect(directory.childrenText).not.toBeInTheDocument();
-  userEvent.click(directory.button);
+  await userEvent.click(directory.button);
   expect(directory.childrenText).toBeInTheDocument();
 });
 
@@ -60,10 +60,10 @@ test('has correct left padding', () => {
   expect(directory.node).toHaveStyle(`margin-left: ${expectedMargin}px`);
 });
 
-test('is keyboard focusable', () => {
+test('is keyboard focusable', async () => {
   render(<TestFileBrowserDirectory />);
 
   expect(document.body).toHaveFocus();
-  userEvent.tab();
+  await userEvent.tab();
   expect(directory.button).toHaveFocus();
 });

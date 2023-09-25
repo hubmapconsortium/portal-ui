@@ -1,7 +1,4 @@
-/* eslint-disable no-underscore-dangle */
-import Ajv from 'ajv';
-
-import schema from './prov-schema.json';
+import { provSchema } from './ProvSchema';
 
 function getCwlMeta(isReference) {
   return {
@@ -59,12 +56,28 @@ export default class ProvData {
     this.getNameForEntity = getNameForEntity;
     this.entity_type = entity_type;
 
-    const validate = new Ajv().compile(schema);
-    const valid = validate(prov);
-    if (!valid) {
-      const failureReason = JSON.stringify(validate.errors, null, 2);
-      throw new Error(failureReason);
+    const result = provSchema.safeParse(prov);
+    if (!result.success) {
+      const {
+        error: { issues },
+      } = result;
+
+      const categorizedErrors = issues.reduce((acc, { path, message: category }) => {
+        if (!acc[category]) {
+          acc[category] = [];
+        }
+        acc[category].push(path);
+        return acc;
+      }, {});
+
+      const formattedCategorizedErrors = Object.entries(categorizedErrors).reduce(
+        (acc, [category, paths]) => `${acc}\n${category}: ${paths.map((path) => `'${path.join('.')}'`).join(', ')}`,
+        'Received invalid provenance data. The following categories of errors were found:',
+      );
+
+      throw new Error(formattedCategorizedErrors);
     }
+
     this.prov = prov;
 
     this.activityByName = Object.fromEntries(
