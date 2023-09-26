@@ -21,5 +21,4 @@ function Step({ index, title, isRequired, children }: PropsWithChildren<StepProp
   );
 }
 
-export { StepProps };
 export default Step;

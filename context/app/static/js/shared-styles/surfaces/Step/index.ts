@@ -1,4 +1,3 @@
-import Step, { StepProps } from './Step';
+import Step from './Step';
 
-export { StepProps };
 export default Step;
