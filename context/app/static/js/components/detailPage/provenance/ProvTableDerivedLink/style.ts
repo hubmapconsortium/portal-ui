@@ -2,10 +2,10 @@ import { styled } from '@mui/material/styles';
 import React from 'react';
 
 const LinkButton = styled('a')(({ theme }) => ({
+  ...theme.typography.subtitle2,
   color: theme.palette.white.main,
   borderRadius: theme.spacing(0.5),
   backgroundColor: theme.palette.primary.main,
-  ...theme.typography.subtitle2,
   marginTop: theme.spacing(1),
   width: '175px',
   boxSizing: 'content-box',
