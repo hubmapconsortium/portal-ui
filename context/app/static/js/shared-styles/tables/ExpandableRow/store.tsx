@@ -34,6 +34,6 @@ function ExpandableRowProvider({
   return <ExpandableRowContext.Provider value={store.current}>{children}</ExpandableRowContext.Provider>;
 }
 
-export const useExpandableRowStore = () => useStore(useContext(ExpandableRowContext));
+const useExpandableRowStore = () => useStore(useContext(ExpandableRowContext));
 
-export { createStore, ExpandableRowProvider };
+export { createStore, ExpandableRowProvider, useExpandableRowStore };

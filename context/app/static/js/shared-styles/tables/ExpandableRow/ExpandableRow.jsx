@@ -4,11 +4,11 @@ import Collapse from '@mui/material/Collapse';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import ClickableRow from 'js/shared-styles/tables/ClickableRow';
-import { ExpandableRowProvider, useStore } from './store';
+import { ExpandableRowProvider, useExpandableRowStore } from './store';
 import { ExpandedRow, ExpandedCell, StyledExpandCollapseIcon } from './style';
 
 function ExpandableRowChild({ children, numCells, disabled, expandedContent, disabledTooltipTitle }) {
-  const { isExpanded, toggleIsExpanded } = useStore();
+  const { isExpanded, toggleIsExpanded } = useExpandableRowStore();
 
   return (
     <>

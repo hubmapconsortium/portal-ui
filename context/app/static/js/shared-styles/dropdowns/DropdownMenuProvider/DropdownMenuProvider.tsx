@@ -1,8 +1,9 @@
 import React, { PropsWithChildren, useRef } from 'react';
 import PropTypes from 'prop-types';
 
+import { useStore as useZustandStore } from 'zustand';
 import { createStore } from './store';
-import { createContext } from 'js/helpers/context';
+import { createContext, useContext } from 'js/helpers/context';
 
 type DropdownMenuContextType = ReturnType<typeof createStore>;
 
@@ -28,5 +29,7 @@ DropdownMenuProvider.propTypes = {
 DropdownMenuProvider.defaultProps = {
   isOpenToStart: false,
 };
+
+export const useDropdownMenuStore = () => useZustandStore(useContext(DropdownMenuContext));
 
 export default DropdownMenuProvider;

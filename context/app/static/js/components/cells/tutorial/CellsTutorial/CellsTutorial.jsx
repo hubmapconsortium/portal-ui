@@ -7,7 +7,7 @@ import Prompt from 'js/shared-styles/tutorials/Prompt';
 import { queryTypes } from 'js/components/cells/queryTypes';
 import { useStore as useCellsStore } from 'js/components/cells/store';
 import { useStore as useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider';
-import { useStore as useAccordionStepsStore } from 'js/shared-styles/accordions/AccordionSteps/store';
+import { useAccordionStepsStore } from 'js/shared-styles/accordions/AccordionSteps/provider';
 
 import { steps } from './config';
 

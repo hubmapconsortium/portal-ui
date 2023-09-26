@@ -1,6 +1,6 @@
 import { createStore } from 'zustand';
 
-interface AccordionStepsState {
+export interface AccordionStepsState {
   openStepIndex: number;
   completedStepsText: Record<number, string>;
   stepsLength: number;
