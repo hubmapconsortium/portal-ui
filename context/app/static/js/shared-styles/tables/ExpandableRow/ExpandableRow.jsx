@@ -4,7 +4,7 @@ import Collapse from '@mui/material/Collapse';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import ClickableRow from 'js/shared-styles/tables/ClickableRow';
-import { Provider, createStore, useStore } from './store';
+import { ExpandableRowProvider, useStore } from './store';
 import { ExpandedRow, ExpandedCell, StyledExpandCollapseIcon } from './style';
 
 function ExpandableRowChild({ children, numCells, disabled, expandedContent, disabledTooltipTitle }) {
@@ -37,9 +37,9 @@ function ExpandableRowChild({ children, numCells, disabled, expandedContent, dis
 
 function ExpandableRow({ isExpandedToStart, ...rest }) {
   return (
-    <Provider createStore={() => createStore(isExpandedToStart)}>
+    <ExpandableRowProvider isExpandedToStart={isExpandedToStart}>
       <ExpandableRowChild {...rest} />
-    </Provider>
+    </ExpandableRowProvider>
   );
 }
 
