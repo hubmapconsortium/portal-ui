@@ -16,7 +16,10 @@ export type SelectableTableContextProviderProps = PropsWithChildren<
 >;
 
 function SelectableTableProvider({ children, tableLabel, initialState }: SelectableTableContextProviderProps) {
-  const store = useRef(createStore(tableLabel, initialState));
+  const store = useRef<SelectableTableContextType>();
+  if (!store.current) {
+    store.current = createStore(tableLabel, initialState);
+  }
   return <SelectableTableContext.Provider value={store.current}>{children}</SelectableTableContext.Provider>;
 }
 
