@@ -1,8 +1,8 @@
 import React, { PropsWithChildren, useRef } from 'react';
 
 import { useStore as useZustandStore } from 'zustand';
-import { AccordionStepsState, createStore } from './store';
 import { createContext, useContext } from 'js/helpers/context';
+import { AccordionStepsState, createStore } from './store';
 
 type SearchConfigContextType = ReturnType<typeof createStore>;
 

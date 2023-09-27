@@ -2,8 +2,8 @@ import React, { PropsWithChildren, useRef } from 'react';
 import PropTypes from 'prop-types';
 
 import { useStore as useZustandStore } from 'zustand';
-import { createStore } from './store';
 import { createContext, useContext } from 'js/helpers/context';
+import { createStore } from './store';
 
 type DropdownMenuContextType = ReturnType<typeof createStore>;
 
