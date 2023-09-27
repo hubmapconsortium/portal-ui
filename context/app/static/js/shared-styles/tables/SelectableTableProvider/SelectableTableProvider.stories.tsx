@@ -21,9 +21,10 @@ export default {
 };
 
 export const rowKeys = ['A', 'B', 'C'];
+export const tableLabel = 'Example Table';
 
 function ExampleTable() {
-  const { selectedRows } = useSelectableTableStore(({ selectedRows }) => ({ selectedRows }));
+  const selectedRows = useSelectableTableStore((state) => state.selectedRows);
 
   return (
     <div>
@@ -56,7 +57,6 @@ export function SelectableTableProvider(args: SelectableTableContextProviderProp
   );
 }
 
-export const tableLabel = 'selectableTableExample';
 SelectableTableProvider.args = {
   tableLabel,
 };

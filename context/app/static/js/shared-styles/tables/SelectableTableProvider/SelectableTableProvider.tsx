@@ -1,7 +1,7 @@
 import React, { useRef, PropsWithChildren } from 'react';
 
-import { createContext, useContext } from 'js/helpers/context';
-import { useStore } from 'zustand';
+import { createContext } from 'js/helpers/context';
+import { createStoreContextHook } from 'js/helpers/zustand';
 import { createStore, type SelectableTableStore } from './store';
 
 type SelectableTableContextType = ReturnType<typeof createStore>;
@@ -35,10 +35,6 @@ export function withSelectableTableProvider<P extends React.JSX.IntrinsicAttribu
   };
 }
 
-export const useSelectableTableStore = <U,>(
-  selector: Parameters<typeof useStore<SelectableTableContextType, U>>[1],
-) => {
-  return useStore(useContext(SelectableTableContext), selector);
-};
+export const useSelectableTableStore = createStoreContextHook(SelectableTableContext);
 
 export default SelectableTableProvider;

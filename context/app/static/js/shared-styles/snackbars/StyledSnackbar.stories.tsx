@@ -2,7 +2,7 @@ import * as React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { SnackbarProvider, createStore, useSnackbarStore } from './store';
+import { useSnackbarStore } from './store';
 import { SnackbarMessage } from './types';
 import StyledSnackbar from './StyledSnackbar';
 
@@ -18,10 +18,8 @@ function SnackbarStory({ message, severity }: SnackbarMessage) {
 function SnackbarStoryWrapper(message: SnackbarMessage) {
   return (
     <Box height="50vh">
-      <SnackbarProvider createStore={createStore}>
-        <SnackbarStory {...message} />
-        <StyledSnackbar />
-      </SnackbarProvider>
+      <SnackbarStory {...message} />
+      <StyledSnackbar />
     </Box>
   );
 }

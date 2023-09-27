@@ -1,1 +1,1 @@
-export type Selector<S, U> = (state: S) => U;
+export type ExtractState<S> = S extends { getState: () => infer X } ? X : never;
