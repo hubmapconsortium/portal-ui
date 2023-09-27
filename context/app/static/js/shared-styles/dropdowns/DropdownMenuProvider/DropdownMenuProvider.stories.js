@@ -3,8 +3,7 @@ import MenuItem from '@mui/material/MenuItem';
 
 import DropdownMenuButton from 'js/shared-styles/dropdowns/DropdownMenuButton';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import DropdownMenuProviderComponent from './DropdownMenuProvider';
-import { useStore } from './store';
+import DropdownMenuProviderComponent, { useDropdownMenuStore } from './DropdownMenuProvider';
 
 export default {
   title: 'dropdowns/DropdownMenuProvider',
@@ -18,7 +17,7 @@ export const menuItemText = 'Menu Item';
 export const menuButtonText = 'Click to open';
 
 function ExampleMenuItem() {
-  const { closeMenu } = useStore();
+  const { closeMenu } = useDropdownMenuStore();
   return <MenuItem onClick={closeMenu}>{menuItemText}</MenuItem>;
 }
 

@@ -2,7 +2,6 @@ import React, { useRef, PropsWithChildren } from 'react';
 
 import { createContext, useContext } from 'js/helpers/context';
 import { useStore } from 'zustand';
-import { Selector } from 'js/helpers/zustand';
 import { createStore, type SelectableTableStore } from './store';
 
 type SelectableTableContextType = ReturnType<typeof createStore>;
@@ -26,18 +25,19 @@ function SelectableTableProvider({ children, tableLabel, initialState }: Selecta
 export function withSelectableTableProvider<P extends React.JSX.IntrinsicAttributes>(
   Component: React.ComponentType<P>,
   tableLabel: string,
-  initialState?: Exclude<SelectableTableStore, 'tableLabel'>,
 ) {
   return function ComponentWithSelectableTableProvider(props: React.ComponentProps<typeof Component>) {
     return (
-      <SelectableTableProvider tableLabel={tableLabel} initialState={initialState}>
+      <SelectableTableProvider tableLabel={tableLabel}>
         <Component {...props} />
       </SelectableTableProvider>
     );
   };
 }
 
-export const useSelectableTableStore = <U,>(selector: Selector<SelectableTableStore, U> = (state) => state as U) => {
+export const useSelectableTableStore = <U,>(
+  selector: Parameters<typeof useStore<SelectableTableContextType, U>>[1],
+) => {
   return useStore(useContext(SelectableTableContext), selector);
 };
 

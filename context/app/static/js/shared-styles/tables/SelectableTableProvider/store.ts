@@ -25,7 +25,7 @@ interface SelectableTableStoreActions {
   toggleHeaderAndRows: (rowKeys: string[]) => void;
 }
 
-export type SelectableTableStore = SelectableTableStoreState & SelectableTableStoreActions;
+export interface SelectableTableStore extends SelectableTableStoreState, SelectableTableStoreActions {}
 
 const createStore = (tableLabel: string, initialState: Partial<InitialSelectableTableState> = {}) =>
   createStoreImmer<SelectableTableStore>((set) => ({

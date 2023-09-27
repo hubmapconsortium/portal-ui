@@ -20,7 +20,7 @@ const appProviderToken = 'fakeGroupsToken';
 // eslint-disable-next-line no-undef
 jest.mock('js/helpers/trackers');
 
-function AllTheProviders({ children }) {
+export function AllTheProviders({ children }) {
   return (
     <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken} isWorkspacesUser={isWorkspacesUser}>
       {children}

@@ -6,11 +6,11 @@ import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
 
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function createSearchViewSwitch(labelIconPairs) {
   return function SearchViewSwitch() {
-    const { view, setView } = useStore();
+    const { view, setView } = useSearchConfigStore();
 
     function handleChangeView(v) {
       const validViews = labelIconPairs.map(({ label }) => label.toLowerCase());

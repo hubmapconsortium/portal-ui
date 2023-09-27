@@ -4,7 +4,7 @@ import { CustomQuery } from '@searchkit/sdk';
 import useSearchkitSDK from 'js/components/entity-search/searchkit-modifications/useSearchkitSDK';
 import { useAppContext } from 'js/components/Contexts';
 import { getAuthHeader } from 'js/helpers/functions';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 import { createSearchkitFacet } from 'js/components/entity-search/SearchWrapper/utils';
 
 import { buildSortPairs, getRangeProps } from './utils';
@@ -43,7 +43,8 @@ const query = new CustomQuery({
 function useSearch({ isTestSearch }) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
   const authHeader = getAuthHeader(groupsToken);
-  const { fields, tileFields, facets, defaultFilters, entityType, numericFacetsProps, availableFields } = useStore();
+  const { fields, tileFields, facets, defaultFilters, entityType, numericFacetsProps, availableFields } =
+    useSearchConfigStore();
   // Persist selections on test search page for datasets only
   const persistSelections = entityType === 'dataset' && isTestSearch;
 

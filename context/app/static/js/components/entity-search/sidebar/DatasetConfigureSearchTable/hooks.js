@@ -3,7 +3,7 @@ import { produce } from 'immer';
 import { useSelectedItems } from 'js/components/entity-search/sidebar/ConfigureSearch/hooks';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 import fieldsToAssayMap from 'metadata-field-assays';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 import { invertKeyToArrayMap as createDataTypesToFieldsMap } from './utils';
 
 const dataTypesToFieldsMap = createDataTypesToFieldsMap(fieldsToAssayMap);
@@ -24,7 +24,7 @@ function selectedItemsReducer(state, { type, payload }) {
 }
 
 function useGroupedFieldConfigs() {
-  const { availableFields } = useStore();
+  const { availableFields } = useSearchConfigStore();
 
   const groupedFieldConfigs = Object.entries(availableFields).reduce(
     (acc, [metadataFieldName, metadataFieldConfig]) => {

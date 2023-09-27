@@ -2,10 +2,10 @@ import React from 'react';
 import { useSearchkit, useSearchkitQueryValue } from '@searchkit/client';
 
 import SearchBarInput from 'js/shared-styles/inputs/SearchBar';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function SearchBar() {
-  const { entityType } = useStore();
+  const { entityType } = useSearchConfigStore();
 
   const [query, setQuery] = useSearchkitQueryValue();
   const api = useSearchkit();

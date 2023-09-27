@@ -60,4 +60,6 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
   );
 }
 
-export default withSelectableTableProvider(SearchWrapper);
+const SearchWrapperWithSelectableTable = withSelectableTableProvider(SearchWrapper);
+
+export default SearchWrapperWithSelectableTable;
