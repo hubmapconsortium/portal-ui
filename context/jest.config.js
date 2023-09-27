@@ -12,6 +12,7 @@ module.exports = {
     'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
     'metadata-field-types$': '<rootDir>/ingest-validation-tools/docs/field-types.yaml',
     'metadata-field-entities$': '<rootDir>/ingest-validation-tools/docs/field-entities.yaml',
+    'metadata-field-assays$': '<rootDir>/ingest-validation-tools/docs/field-assays.yaml',
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },
   transformIgnorePatterns: [
