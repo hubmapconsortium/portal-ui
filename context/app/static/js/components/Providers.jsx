@@ -21,12 +21,16 @@ const generateClassName = createGenerateClassName({
 
 const swrConfig = {
   revalidateOnFocus: false,
-  onError: (error) => {
-    faro.api.pushError(error);
+  onError: (error, key) => {
+    faro.api.pushError(error, {
+      context: { key, type: 'SWR Error' },
+    });
   },
-  onLoadingSlow: (key, config) => {
+  onLoadingSlow: (key) => {
     // By default, this is triggered if a request takes longer than 3000ms.
-    faro.api.pushEvent(`Slow-loading query: ${key}`, { key, ...config });
+    faro.api.pushError(new Error(`Slow-loading query: ${key}`), {
+      context: { key, type: 'SWR Slow Loading' },
+    });
   },
 };
 
