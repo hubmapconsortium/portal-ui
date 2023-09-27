@@ -1,0 +1,1 @@
+- Fix Faro logging function calls for query errors and slow loading warnings.

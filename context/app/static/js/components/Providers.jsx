@@ -22,11 +22,11 @@ const generateClassName = createGenerateClassName({
 const swrConfig = {
   revalidateOnFocus: false,
   onError: (error) => {
-    faro.logError(error);
+    faro.api.pushError(error);
   },
   onLoadingSlow: (key, config) => {
     // By default, this is triggered if a request takes longer than 3000ms.
-    faro.logWarning(`Loading slow: ${key}`, { key, ...config });
+    faro.api.pushEvent(`Slow-loading query: ${key}`, { key, ...config });
   },
 };
 
