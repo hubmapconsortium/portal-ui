@@ -1,1 +1,0 @@
-- Remove `marked` in favor of `react-markdown`.
