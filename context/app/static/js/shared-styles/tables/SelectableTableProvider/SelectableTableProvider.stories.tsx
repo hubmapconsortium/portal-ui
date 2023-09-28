@@ -18,6 +18,7 @@ export default {
 };
 
 export const rowKeys = ['A', 'B', 'C'];
+export const tableLabel = 'Example Table';
 
 function ExampleTable() {
   const selectedRows = useSelectableTableStore((state) => state.selectedRows);
@@ -53,8 +54,8 @@ export function SelectableTableProvider(args: Parameters<typeof SelectableTableP
 }
 
 SelectableTableProvider.args = {
-  // Note that this prop does not actually do anything in Storybook since it only provides the initial value for the store.
-  tableLabel: 'Example Table',
+  // Note that this prop does not actually do anything in Storybook since it only provides the initial value for the store; the store doesn't get reinitialized.
+  tableLabel,
 };
 
 SelectableTableProvider.storyName = 'SelectableTableProvider'; // needed for single story hoisting for multi word component names
