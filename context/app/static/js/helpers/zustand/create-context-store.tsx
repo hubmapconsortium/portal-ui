@@ -1,7 +1,7 @@
 import { useStoreWithEqualityFn } from 'zustand/traditional';
 import { shallow } from 'zustand/shallow';
 
-import React, { PropsWithChildren, type Context, type ReactNode, useRef } from 'react';
+import React, { PropsWithChildren, type Context, type ReactNode, useRef, RefObject } from 'react';
 import { type StoreApi } from 'zustand';
 
 import { useContext, createContext } from '../context';
@@ -36,9 +36,9 @@ export function createStoreContextHook<T, S extends StoreApi<T>>(storeContext: C
 }
 
 type CreateStoreContext<StoreType extends StoreApi<unknown>, CreateStoreArgs> = [
-  Context<StoreType | undefined>,
   (props: PropsWithChildren<CreateStoreArgs>) => ReactNode,
   CurriedUseStore<StoreType>,
+  Context<StoreType | undefined>,
 ];
 
 /**
@@ -55,6 +55,8 @@ export function createStoreContext<T, CreateStoreArgs>(
   type StoreType = StoreApi<T>;
   // Create a context for the passed `createStore` function's return type
   const StoreContext = createContext<StoreType>(displayName);
+  // Create a hook for the context
+  const hook = createStoreContextHook(StoreContext);
   // Create a provider component which creates the store and passes it to the context
   function Provider({ children, ...props }: PropsWithChildren<CreateStoreArgs>) {
     // Keep the store in a ref so it is only created once per instance of the provider
@@ -64,6 +66,39 @@ export function createStoreContext<T, CreateStoreArgs>(
     }
     return <StoreContext.Provider value={store.current}>{children}</StoreContext.Provider>;
   }
+  // Create a provider component which creates the store and passes it to the context
+  return [Provider, hook, StoreContext] as CreateStoreContext<StoreApi<T>, CreateStoreArgs>;
+}
+
+/**
+ * A lot less DRY than ideal, but this was the most straightforward
+ * way to make a variant which also instantiates a ref to a DOM element
+ * in case we have any further instances of this beyond the dropdown menu store.
+ *
+ * @param createStore The initializer function that creates the zustand store.
+ *                    Its first parameter is the expected props for the provider.
+ *                    The second parameter should accept the ref object.
+ * @param displayName The display name for the created context
+ * @returns A Context and Provider for the created store
+ */
+export function createStoreContextWithRef<T, CreateStoreArgs, RefType>(
+  createStore: (initialArgs: CreateStoreArgs, ref: RefObject<RefType>) => StoreApi<T>,
+  displayName: string,
+) {
+  type StoreType = StoreApi<T>;
+  // Create a context for the passed `createStore` function's return type
+  const StoreContext = createContext<StoreType>(displayName);
+  // Create a hook for the context
   const hook = createStoreContextHook(StoreContext);
-  return [StoreContext, Provider, hook] as CreateStoreContext<StoreApi<T>, CreateStoreArgs>;
+  // Create a provider component which creates the store and passes it to the context
+  function Provider({ children, ...props }: PropsWithChildren<CreateStoreArgs>) {
+    // Keep the store in a ref so it is only created once per instance of the provider
+    const store = useRef<StoreType>();
+    const ref = useRef<RefType>(null);
+    if (!store.current) {
+      store.current = createStore(props as CreateStoreArgs, ref);
+    }
+    return <StoreContext.Provider value={store.current}>{children}</StoreContext.Provider>;
+  }
+  return [Provider, hook, StoreContext] as CreateStoreContext<StoreApi<T>, CreateStoreArgs>;
 }
