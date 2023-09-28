@@ -8,10 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell/';
-import SelectableTableProviderComponent, {
-  SelectableTableContextProviderProps,
-  useSelectableTableStore,
-} from './SelectableTableProvider';
+import SelectableTableProviderComponent, { useSelectableTableStore } from './SelectableTableProvider';
 
 export default {
   title: 'Tables/SelectableTableProvider',
@@ -49,7 +46,7 @@ function ExampleTable() {
   );
 }
 
-export function SelectableTableProvider(args: SelectableTableContextProviderProps) {
+export function SelectableTableProvider(args: Parameters<typeof SelectableTableProviderComponent>[0]) {
   return (
     <SelectableTableProviderComponent {...args}>
       <ExampleTable />

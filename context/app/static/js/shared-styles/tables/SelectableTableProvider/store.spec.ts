@@ -7,8 +7,8 @@ const selectedState = { ...defaultState, selectedRows: new Set(['apple', 'pear']
 
 type StoreType = ReturnType<typeof createStore>;
 
-const setupStore = (initialState?: InitialSelectableTableState) => {
-  const render = renderHook(() => createStore('test', initialState)) as RenderHookResult<
+const setupStore = (initialState: InitialSelectableTableState = defaultState) => {
+  const render = renderHook(() => createStore({ tableLabel: 'test', ...initialState })) as RenderHookResult<
     StoreType,
     StoreType,
     Renderer<StoreType>

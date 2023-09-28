@@ -26,12 +26,11 @@ interface SelectableTableStoreActions {
 }
 
 export interface SelectableTableStore extends SelectableTableStoreState, SelectableTableStoreActions {}
-export interface CreateSelectableTableStoreInput {
+export interface CreateSelectableTableStoreInput extends Partial<InitialSelectableTableState> {
   tableLabel: string;
-  initialState?: Partial<InitialSelectableTableState>;
 }
 
-export const createStore = ({ tableLabel, initialState = {} }: CreateSelectableTableStoreInput) =>
+export const createStore = ({ tableLabel, ...initialState }: CreateSelectableTableStoreInput) =>
   createStoreImmer<SelectableTableStore>((set) => ({
     ...defaultInitialState,
     ...initialState,
