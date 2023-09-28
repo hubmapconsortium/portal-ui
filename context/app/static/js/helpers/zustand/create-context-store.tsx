@@ -35,6 +35,12 @@ export function createStoreContextHook<T, S extends StoreApi<T>>(storeContext: C
   return useCurriedZustandContext as CurriedUseStore<S>;
 }
 
+type CreateStoreContext<StoreType extends StoreApi<unknown>, CreateStoreArgs> = [
+  Context<StoreType | undefined>,
+  (props: PropsWithChildren<CreateStoreArgs>) => ReactNode,
+  CurriedUseStore<StoreType>,
+];
+
 /**
  * Helper function for creating a context and provider for a zustand store.
  *
@@ -42,14 +48,10 @@ export function createStoreContextHook<T, S extends StoreApi<T>>(storeContext: C
  * @param displayName The display name for the created context
  * @returns A Context and Provider for the created store
  */
-export function createStoreContext<T, StoreType extends StoreApi<T>, CreateStoreArgs>(
-  createStore: (args: CreateStoreArgs) => StoreType,
-  displayName: string,
-): [
-  Context<StoreType | undefined>,
-  (props: PropsWithChildren<CreateStoreArgs>) => ReactNode,
-  CurriedUseStore<StoreType>,
-] {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export function createStoreContext<T>(createStore: (...args: any[]) => StoreApi<T>, displayName: string) {
+  type StoreType = StoreApi<T>;
+  type CreateStoreArgs = Parameters<typeof createStore>[0];
   // Create a context for the passed `createStore` function's return type
   const StoreContext = createContext<StoreType>(displayName);
   // Create a provider component which creates the store and passes it to the context
@@ -57,10 +59,10 @@ export function createStoreContext<T, StoreType extends StoreApi<T>, CreateStore
     // Keep the store in a ref so it is only created once per instance of the provider
     const store = useRef<StoreType>();
     if (!store.current) {
-      store.current = createStore(props as CreateStoreArgs);
+      store.current = createStore(props);
     }
     return <StoreContext.Provider value={store.current}>{children}</StoreContext.Provider>;
   }
   const hook = createStoreContextHook(StoreContext);
-  return [StoreContext, Provider, hook];
+  return [StoreContext, Provider, hook] as CreateStoreContext<StoreApi<T>, CreateStoreArgs>;
 }
