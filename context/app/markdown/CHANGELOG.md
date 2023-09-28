@@ -1,3 +1,14 @@
+## v0.80.0 - 2023-09-27
+
+- Update Jest and MockServiceWorker to latest versions.
+- Update Human Reference Atlas slide text.
+- Fix color of text in derived datasets button.
+- Fix Faro logging function calls for query errors and slow loading warnings.
+- Replace `ajv`/`yup` validation with Zod.
+- Remove `marked` in favor of `react-markdown`.
+- Upgrade to Node 20.7.0.
+
+
 ## v0.79.4 - 2023-09-19
 
 - Add handling to prevent users from attempting to launch workspaces with more than 10 datasets.
