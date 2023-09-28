@@ -13,6 +13,8 @@ const StyledTypography = styled(Typography)`
 const ChartWrapper = styled.div`
   height: 350px;
   width: 100%;
+  display: flex;
+  flex-direction: column;
   margin-bottom: ${(props) => props.theme.spacing(1.5)};
 `;
 
