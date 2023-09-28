@@ -37,26 +37,30 @@ export function createStoreContextHook<T, S extends StoreApi<T>>(storeContext: C
 
 /**
  * Helper function for creating a context and provider for a zustand store.
+ *
  * @param createStore The `createStore` function that creates the zustand store. Its parameters are the expected props for the provider.
  * @param displayName The display name for the created context
  * @returns A Context and Provider for the created store
  */
-export function createStoreContext<T, S extends StoreApi<T>>(
-  createStore: (props: unknown) => S,
+export function createStoreContext<T, StoreType extends StoreApi<T>, CreateStoreArgs>(
+  createStore: (args: CreateStoreArgs) => StoreType,
   displayName: string,
-): [Context<S | undefined>, (props: PropsWithChildren<Parameters<typeof createStore>>) => ReactNode] {
+): [
+  Context<StoreType | undefined>,
+  (props: PropsWithChildren<CreateStoreArgs>) => ReactNode,
+  CurriedUseStore<StoreType>,
+] {
   // Create a context for the passed `createStore` function's return type
-  const StoreContext = createContext<S>(displayName);
-  // Alias the parameters of the `createStore` function to `P`
-  type P = Parameters<typeof createStore>;
+  const StoreContext = createContext<StoreType>(displayName);
   // Create a provider component which creates the store and passes it to the context
-  function Provider({ children, ...props }: PropsWithChildren<P>) {
+  function Provider({ children, ...props }: PropsWithChildren<CreateStoreArgs>) {
     // Keep the store in a ref so it is only created once per instance of the provider
-    const store = useRef<S>();
+    const store = useRef<StoreType>();
     if (!store.current) {
-      store.current = createStore(props);
+      store.current = createStore(props as CreateStoreArgs);
     }
     return <StoreContext.Provider value={store.current}>{children}</StoreContext.Provider>;
   }
-  return [StoreContext, Provider];
+  const hook = createStoreContextHook(StoreContext);
+  return [StoreContext, Provider, hook];
 }
