@@ -116,7 +116,7 @@ const createStore = ({
   }));
 };
 
-const [, SearchConfigProvider, useSearchConfigStore] = createStoreContext<SearchStore, InitialSearchState>(
+const [SearchConfigProvider, useSearchConfigStore] = createStoreContext<SearchStore, InitialSearchState>(
   createStore,
   'SearchConfigStore',
 );

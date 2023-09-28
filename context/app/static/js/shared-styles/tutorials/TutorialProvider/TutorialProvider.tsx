@@ -3,7 +3,7 @@ import React, { ComponentProps, ComponentType } from 'react';
 import { createStoreContext } from 'js/helpers/zustand';
 import { createStore, TutorialStore, CreateStoreInput } from './store';
 
-const [TutorialContext, TutorialProvider, useTutorialStore] = createStoreContext<TutorialStore, CreateStoreInput>(
+const [TutorialProvider, useTutorialStore, TutorialContext] = createStoreContext<TutorialStore, CreateStoreInput>(
   createStore,
   'Tutorial Store',
 );

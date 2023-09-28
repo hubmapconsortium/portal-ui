@@ -1,7 +1,6 @@
-import React, { PropsWithChildren, useRef } from 'react';
-import { createStore as createZustandStore, useStore } from 'zustand';
+import { createStore as createZustandStore } from 'zustand';
 
-import { createContext, useContext } from 'js/helpers/context';
+import { createStoreContext } from 'js/helpers/zustand';
 
 interface ExpandableRowState {
   isExpanded: boolean;
@@ -13,27 +12,19 @@ interface ExpandableRowActions {
 
 interface ExpandableRowStore extends ExpandableRowState, ExpandableRowActions {}
 
-const createStore = (isExpandedToStart = false) =>
+interface ExpandableRowStoreInput {
+  isExpandedToStart?: boolean;
+}
+
+const createStore = ({ isExpandedToStart }: ExpandableRowStoreInput) =>
   createZustandStore<ExpandableRowStore>((set) => ({
-    isExpanded: isExpandedToStart,
+    isExpanded: Boolean(isExpandedToStart),
     toggleIsExpanded: () => set((state) => ({ isExpanded: !state.isExpanded })),
   }));
 
-type ExpandableRowStoreType = ReturnType<typeof createStore>;
-
-const ExpandableRowContext = createContext<ExpandableRowStoreType>('ExpandableRowContext');
-
-function ExpandableRowProvider({
-  children,
-  isExpandedToStart = false,
-}: PropsWithChildren<{ isExpandedToStart?: boolean }>) {
-  const store = useRef<ExpandableRowStoreType>();
-  if (!store.current) {
-    store.current = createStore(isExpandedToStart);
-  }
-  return <ExpandableRowContext.Provider value={store.current}>{children}</ExpandableRowContext.Provider>;
-}
-
-const useExpandableRowStore = () => useStore(useContext(ExpandableRowContext));
+const [ExpandableRowProvider, useExpandableRowStore] = createStoreContext<ExpandableRowStore, ExpandableRowStoreInput>(
+  createStore,
+  'ExpandableRowStore',
+);
 
 export { createStore, ExpandableRowProvider, useExpandableRowStore };

@@ -12,9 +12,13 @@ interface DropdownMenuStoreActions {
   toggleMenu: () => void;
 }
 
-interface DropdownMenuStore extends DropdownMenuStoreState, DropdownMenuStoreActions {}
+export interface DropdownMenuStore extends DropdownMenuStoreState, DropdownMenuStoreActions {}
 
-const createStore = (isOpenToStart: boolean, menuRef: RefObject<HTMLDivElement>) =>
+export interface CreateDropdownMenuStore {
+  isOpenToStart: boolean;
+}
+
+const createStore = ({ isOpenToStart }: CreateDropdownMenuStore, menuRef: RefObject<HTMLDivElement>) =>
   createZustandStore<DropdownMenuStore>((set) => ({
     menuRef,
     menuIsOpen: isOpenToStart,

@@ -73,7 +73,7 @@ const createAccordionStepsStore = ({
     resetStore: () => set(defaultState),
   }));
 
-const [AccordionStepsContext, AccordionStepsProvider, useAccordionStepsStore] = createStoreContext(
+const [AccordionStepsProvider, useAccordionStepsStore, AccordionStepsContext] = createStoreContext(
   createAccordionStepsStore,
   'Accordion Steps',
 );
