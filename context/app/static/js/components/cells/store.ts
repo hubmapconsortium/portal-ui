@@ -33,7 +33,7 @@ interface CellsSearchActions {
   resetStore: () => void;
 }
 
-export type CellsSearchStore = CellsSearchState & CellsSearchActions;
+export interface CellsSearchStore extends CellsSearchState, CellsSearchActions {}
 
 export const useStore = create<CellsSearchStore>((set) => ({
   ...defaultState,

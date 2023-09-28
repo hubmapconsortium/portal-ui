@@ -4,7 +4,7 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 
-import { useAccordionStepsStore } from 'js/shared-styles/accordions/AccordionSteps/provider';
+import { useAccordionStepsStore } from 'js/shared-styles/accordions/AccordionSteps/store';
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
 function StepAccordion({ index, summaryHeading, content, id }) {

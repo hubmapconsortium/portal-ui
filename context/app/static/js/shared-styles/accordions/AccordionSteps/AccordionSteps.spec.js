@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import { render, screen, waitFor } from 'test-utils/functions';
 import { fireEvent } from '@testing-library/react';
-import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';
+import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 
 import AccordionSteps from './AccordionSteps';
 

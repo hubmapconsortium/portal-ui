@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen } from 'test-utils/functions';
 
 import StepAccordion from './StepAccordion';
-import { AccordionStepsProvider } from '../AccordionSteps/provider';
+import { AccordionStepsProvider } from '../AccordionSteps/store';
 
 test('should show success icon when step completed text is provided', async () => {
   render(

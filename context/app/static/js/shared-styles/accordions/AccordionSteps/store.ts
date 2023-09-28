@@ -1,3 +1,4 @@
+import { createStoreContext } from 'js/helpers/zustand';
 import { createStore } from 'zustand';
 
 export interface AccordionStepsState {
@@ -72,4 +73,14 @@ const createAccordionStepsStore = ({
     resetStore: () => set(defaultState),
   }));
 
-export { createAccordionStepsStore as createStore };
+const [AccordionStepsContext, AccordionStepsProvider, useAccordionStepsStore] = createStoreContext(
+  createAccordionStepsStore,
+  'Accordion Steps',
+);
+
+export {
+  createAccordionStepsStore as createStore,
+  AccordionStepsContext,
+  AccordionStepsProvider,
+  useAccordionStepsStore,
+};
