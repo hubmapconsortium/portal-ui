@@ -42,17 +42,15 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType, children }) {
 
   return (
     <SearchConfigProvider
-      initialConfig={{
-        initialFacets,
-        initialFields,
-        facets: initialFacets,
-        fields: initialFields,
-        defaultFilters,
-        entityType,
-        numericFacetsProps,
-        initialView: 'table',
-        tileFields,
-      }}
+      initialFacets={initialFacets}
+      initialFields={initialFields}
+      facets={initialFacets}
+      fields={initialFields}
+      defaultFilters={defaultFilters}
+      entityType={entityType}
+      numericFacetsProps={numericFacetsProps}
+      initialView="table"
+      tileFields={tileFields}
     >
       {children}
     </SearchConfigProvider>

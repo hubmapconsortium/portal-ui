@@ -1,12 +1,10 @@
-import React, { ComponentProps, PropsWithChildren, useRef } from 'react';
+import React, { ComponentProps } from 'react';
 import { produce } from 'immer';
 import metadataFieldtoEntityMap from 'metadata-field-entities';
-import { useStore as useZustandStore } from 'zustand';
 
-import { createStoreImmer } from 'js/helpers/zustand';
+import { createStoreContext, createStoreImmer } from 'js/helpers/zustand';
 import { createField } from 'js/components/entity-search/SearchWrapper/utils';
 import relatedEntityTypesMap from 'js/components/entity-search/SearchWrapper/relatedEntityTypesMap';
-import { createContext, useContext } from 'js/helpers/context';
 
 interface Field {
   fieldName: string;
@@ -66,8 +64,8 @@ const createStore = ({
   entityType,
   numericFacetsProps,
   initialView,
-}: InitialSearchState) =>
-  createStoreImmer<SearchStore>((set) => ({
+}: InitialSearchState) => {
+  return createStoreImmer<SearchStore>((set) => ({
     initialFields,
     initialFacets,
     defaultFilters,
@@ -116,22 +114,12 @@ const createStore = ({
       { ...fields, ...facets },
     ),
   }));
+};
 
-type SearchConfigContextType = ReturnType<typeof createStore>;
-
-const SearchConfigContext = createContext<SearchConfigContextType>('SearchConfigContext');
-
-interface SearchConfigProviderProps extends PropsWithChildren {
-  initialConfig: InitialSearchState;
-}
-
-function SearchConfigProvider({ children, initialConfig }: SearchConfigProviderProps) {
-  const store = useRef<SearchConfigContextType>();
-  if (!store.current) {
-    store.current = createStore(initialConfig);
-  }
-  return <SearchConfigContext.Provider value={store.current}>{children}</SearchConfigContext.Provider>;
-}
+const [, SearchConfigProvider, useSearchConfigStore] = createStoreContext<SearchStore, InitialSearchState>(
+  createStore,
+  'SearchConfigStore',
+);
 
 export const withSearchConfigProvider = <T extends JSX.IntrinsicAttributes>(
   Component: React.ComponentType<T>,
@@ -139,17 +127,12 @@ export const withSearchConfigProvider = <T extends JSX.IntrinsicAttributes>(
 ) =>
   function ComponentWithSearchConfigProvider(props: ComponentProps<typeof Component>) {
     return (
-      <SearchConfigProvider initialConfig={initialConfig}>
+      <SearchConfigProvider {...initialConfig}>
         <Component {...props} />
       </SearchConfigProvider>
     );
   };
 
 export default SearchConfigProvider;
-
-const useSearchConfigStore = () => {
-  const store = useContext(SearchConfigContext);
-  return useZustandStore(store);
-};
 
 export { createStore, useSearchConfigStore };

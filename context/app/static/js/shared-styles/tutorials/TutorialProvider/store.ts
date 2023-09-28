@@ -28,7 +28,7 @@ function trackTutorialEvent(state: TutorialState, action: string) {
   });
 }
 
-interface CreateStoreInput {
+export interface CreateStoreInput {
   tutorial_key: string;
 }
 

@@ -44,14 +44,15 @@ type CreateStoreContext<StoreType extends StoreApi<unknown>, CreateStoreArgs> = 
 /**
  * Helper function for creating a context and provider for a zustand store.
  *
- * @param createStore The `createStore` function that creates the zustand store. Its parameters are the expected props for the provider.
+ * @param createStore The initializer function that creates the zustand store. Its parameters are the expected props for the provider.
  * @param displayName The display name for the created context
  * @returns A Context and Provider for the created store
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function createStoreContext<T>(createStore: (...args: any[]) => StoreApi<T>, displayName: string) {
+export function createStoreContext<T, CreateStoreArgs>(
+  createStore: (initialArgs: CreateStoreArgs) => StoreApi<T>,
+  displayName: string,
+) {
   type StoreType = StoreApi<T>;
-  type CreateStoreArgs = Parameters<typeof createStore>[0];
   // Create a context for the passed `createStore` function's return type
   const StoreContext = createContext<StoreType>(displayName);
   // Create a provider component which creates the store and passes it to the context
@@ -59,7 +60,7 @@ export function createStoreContext<T>(createStore: (...args: any[]) => StoreApi<
     // Keep the store in a ref so it is only created once per instance of the provider
     const store = useRef<StoreType>();
     if (!store.current) {
-      store.current = createStore(props);
+      store.current = createStore(props as CreateStoreArgs);
     }
     return <StoreContext.Provider value={store.current}>{children}</StoreContext.Provider>;
   }

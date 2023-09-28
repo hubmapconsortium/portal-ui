@@ -1,4 +1,5 @@
-import { create, createStore, StateCreator } from 'zustand';
+import { create, StateCreator } from 'zustand';
+import { createStore } from 'zustand/vanilla';
 
 import { persist, PersistOptions } from 'zustand/middleware';
 import { immer } from 'zustand/middleware/immer';
