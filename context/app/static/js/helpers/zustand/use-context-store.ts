@@ -13,14 +13,14 @@ interface CurriedUseStore<T extends StoreApi<unknown>> {
   <U>(selector: (state: ExtractState<T>) => U, equalityFn?: (state: U, newState: U) => boolean): U;
 }
 
-export function createStoreContextHook<T>(storeContext: Context<StoreApi<T> | undefined>) {
+export function createStoreContextHook<T, S extends StoreApi<T>>(storeContext: Context<S | undefined>) {
   function useCurriedZustandContext<U>(selector: (state: T) => U): U;
   function useCurriedZustandContext<U>(
     selector: (state: T) => U = (state: T) => state as unknown as U,
     equalityFn: ((state: U, newState: U) => boolean) | undefined = shallow,
   ): U {
-    const store = useContext<StoreApi<T>>(storeContext);
+    const store = useContext<S>(storeContext);
     return useStoreWithEqualityFn(store, selector, equalityFn);
   }
-  return useCurriedZustandContext as CurriedUseStore<StoreApi<T>>;
+  return useCurriedZustandContext as CurriedUseStore<S>;
 }
