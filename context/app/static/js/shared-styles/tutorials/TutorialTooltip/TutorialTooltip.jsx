@@ -2,12 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 
-import { useStore } from 'js/shared-styles/tutorials/TutorialProvider';
+import { useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider';
 import TooltipProgressButton from 'js/shared-styles/tutorials/TooltipProgressButton';
 import { StyledPaper, Flex, FlexEnd, WhiteTypography, WhiteCloseRoundedIcon } from './style';
 
 function TutorialTooltip({ index, isLastStep, size, step: { title, content, contentIsComponent }, tooltipProps }) {
-  const { incrementStep, decrementStep, closeTutorial, nextButtonIsDisabled } = useStore();
+  const { incrementStep, decrementStep, closeTutorial, nextButtonIsDisabled } = useTutorialStore();
 
   return (
     <StyledPaper {...tooltipProps}>

@@ -1,27 +1,12 @@
-import React, { ComponentProps, ComponentType, PropsWithChildren, useRef } from 'react';
+import React, { ComponentProps, ComponentType } from 'react';
 
-import { createContext } from 'js/helpers/context';
+import { createStoreContext } from 'js/helpers/zustand';
+import { createStore, TutorialStore } from './store';
 
-import { createStoreContextHook } from 'js/helpers/zustand';
-import { createStore } from './store';
-
-type TutorialContextType = ReturnType<typeof createStore>;
-
-const TutorialContext = createContext<TutorialContextType>('TutorialContext');
-
-interface TutorialProviderProps extends PropsWithChildren {
-  tutorial_key: string;
-}
-
-export default function TutorialProvider({ children, tutorial_key }: TutorialProviderProps) {
-  const store = useRef<TutorialContextType>();
-
-  if (!store.current) {
-    store.current = createStore(tutorial_key);
-  }
-
-  return <TutorialContext.Provider value={store.current}>{children}</TutorialContext.Provider>;
-}
+const [TutorialContext, TutorialProvider, useTutorialStore] = createStoreContext<TutorialStore>(
+  createStore,
+  'Tutorial Store',
+);
 
 export function withTutorialProvider<P extends React.JSX.IntrinsicAttributes>(
   Component: ComponentType<P>,
@@ -36,4 +21,5 @@ export function withTutorialProvider<P extends React.JSX.IntrinsicAttributes>(
   };
 }
 
-export const useTutorial = createStoreContextHook(TutorialContext);
+export default TutorialProvider;
+export { useTutorialStore, TutorialContext };

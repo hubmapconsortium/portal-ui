@@ -1,4 +1,4 @@
-import TutorialProvider, { withTutorialProvider, useTutorial } from './TutorialProvider';
+import TutorialProvider, { withTutorialProvider, useTutorialStore } from './TutorialProvider';
 
-export { withTutorialProvider, useTutorial as useStore };
+export { withTutorialProvider, useTutorialStore };
 export default TutorialProvider;

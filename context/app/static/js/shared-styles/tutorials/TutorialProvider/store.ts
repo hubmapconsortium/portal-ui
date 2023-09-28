@@ -18,7 +18,7 @@ interface TutorialState {
   nextButtonIsDisabled: boolean;
 }
 
-export type TutorialStore = TutorialState & TutorialActions;
+export interface TutorialStore extends TutorialState, TutorialActions {}
 
 function trackTutorialEvent(state: TutorialState, action: string) {
   trackEvent({
@@ -28,7 +28,11 @@ function trackTutorialEvent(state: TutorialState, action: string) {
   });
 }
 
-export const createStore = (tutorial_key: string) => {
+interface CreateStoreInput {
+  tutorial_key: string;
+}
+
+export const createStore = ({ tutorial_key }: CreateStoreInput) => {
   return createStoreImmerPersist<TutorialStore>(
     (set, get) => ({
       tutorial_key: `${tutorial_key}_tutorial`,
