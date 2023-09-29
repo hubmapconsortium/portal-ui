@@ -207,6 +207,7 @@ const defaultSelectFacetSize = 5;
 
 function createSearchkitFacet({ field, identifier, label, type, ...rest }) {
   const Facet = typeToSearchKitFacetMap[type];
+
   return new Facet({
     field,
     identifier,
