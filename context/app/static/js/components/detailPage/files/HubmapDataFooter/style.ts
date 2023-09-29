@@ -1,4 +1,4 @@
-import { styled } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import { InfoIcon } from 'js/shared-styles/icons';
 
 const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({

@@ -1,17 +1,17 @@
-import { styled } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import CancelRoundedIcon from '@mui/icons-material/CancelRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import LinearProgress from '@mui/material/LinearProgress';
 
-const ModalContentWrapper = styled('div')(() => ({
+const ModalContentWrapper = styled('div')(({ theme: _theme }) => ({
   position: 'absolute',
   top: '50%',
   left: '50%',
   transform: 'translate(-50%, -50%)',
 }));
 
-const StyledIconButton = styled(IconButton)(() => ({
+const StyledIconButton = styled(IconButton)(({ theme: _theme }) => ({
   // mui uses padding for icon button sizes which causes buttons with different size icons to vary in size
   boxSizing: 'border-box',
   width: '30px',
