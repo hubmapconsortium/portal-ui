@@ -10,9 +10,6 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   },
 }));
 
-const HeaderCell = styled(TableCell)(({ theme }) => ({
-  fontSize: theme.typography.subtitle2.fontSize,
-  fontWeight: theme.typography.subtitle2.fontWeight,
-}));
+const HeaderCell = TableCell;
 
 export { StyledTableContainer, HeaderCell };
