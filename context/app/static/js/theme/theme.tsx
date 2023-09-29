@@ -256,9 +256,6 @@ const theme = createTheme({
           border: 'none',
           boxShadow: 'none',
         },
-        expanded: {
-          margin: 0,
-        },
       },
     },
     MuiAccordionSummary: {
@@ -269,10 +266,6 @@ const theme = createTheme({
           '&.Mui-expanded': {
             minHeight: 0,
           },
-        },
-        expanded: {
-          margin: 0,
-          minHeight: 0,
         },
         content: {
           '&.Mui-expanded': {
