@@ -12,9 +12,9 @@ const ChipWrapper = styled('div')(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const StyledTableContainer = styled(TableContainer)(({ theme: _theme }) => ({
+const StyledTableContainer = styled(TableContainer)({
   maxHeight: 600,
   overflowY: 'auto',
-}));
+});
 
 export { ChipWrapper, StyledTableContainer };
