@@ -1,8 +1,9 @@
-import { styled } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import FolderIcon from '@mui/icons-material/FolderRounded';
 import FolderOpenIcon from '@mui/icons-material/FolderOpenRounded';
 import TableRow from '@mui/material/TableRow';
 import Box from '@mui/material/Box';
+import SvgIcon from '@mui/material/SvgIcon';
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
@@ -19,12 +20,13 @@ const Directory = styled(Box)(({ theme }) => ({
   alignItems: 'center',
 }));
 
-const iconMargin = ({ theme }) => ({
-  marginRight: theme.spacing(1),
-});
+const withIconStyles = (Icon: typeof SvgIcon) =>
+  styled(Icon)(({ theme }) => ({
+    marginRight: theme.spacing(1),
+  })) as typeof SvgIcon;
 
-const StyledFolderIcon = styled(FolderIcon)(iconMargin);
+const StyledFolderIcon = withIconStyles(FolderIcon);
 
-const StyledFolderOpenIcon = styled(FolderOpenIcon)(iconMargin);
+const StyledFolderOpenIcon = withIconStyles(FolderOpenIcon);
 
 export { StyledTableRow, Directory, StyledFolderOpenIcon, StyledFolderIcon };
