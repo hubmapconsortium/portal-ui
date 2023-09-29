@@ -242,6 +242,45 @@ const theme = createTheme({
         underline: 'none',
       },
     },
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          '&:before': {
+            // remove default pseudoelement border
+            display: 'none',
+          },
+          '&.Mui-expanded': {
+            minHeight: 0,
+            margin: 0,
+          },
+          border: 'none',
+          boxShadow: 'none',
+        },
+        expanded: {
+          margin: 0,
+        },
+      },
+    },
+    MuiAccordionSummary: {
+      styleOverrides: {
+        root: {
+          margin: 0,
+          minHeight: 0,
+          '&.Mui-expanded': {
+            minHeight: 0,
+          },
+        },
+        expanded: {
+          margin: 0,
+          minHeight: 0,
+        },
+        content: {
+          '&.Mui-expanded': {
+            margin: 0,
+          },
+        },
+      },
+    },
   },
 });
 
