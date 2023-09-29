@@ -1,14 +1,13 @@
 import styled from 'styled-components';
 import AccordionDetails from '@mui/material/AccordionDetails';
-
-import { StyledAccordionSummary } from 'js/components/searchPage/filters/style';
+import AccordionSummary from '@mui/material/AccordionSummary';
 
 const InnerAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
   padding: 4px 10px 4px 16px;
 `;
 
-const InnerAccordionSummary = styled(StyledAccordionSummary)`
+const InnerAccordionSummary = styled(AccordionSummary)`
   justify-content: left;
   padding: 0px 16px 0px 16px;
   & > * {

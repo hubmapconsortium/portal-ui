@@ -1,18 +1,19 @@
 import React from 'react';
 
-import { StyledAccordion, StyledExpandMoreIcon } from 'js/components/searchPage/filters/style';
+import Accordion from '@mui/material/Accordion';
+import { StyledExpandMoreIcon } from 'js/components/searchPage/filters/style';
 import { InnerAccordionDetails, InnerAccordionSummary, StyledTypography } from './style';
 
 function FacetAccordion({ label, identifier, children }) {
   return (
-    <StyledAccordion key={identifier} defaultExpanded>
+    <Accordion key={identifier} defaultExpanded>
       <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
         <StyledTypography variant="subtitle2" color="textPrimary">
           {label}
         </StyledTypography>
       </InnerAccordionSummary>
       <InnerAccordionDetails id={identifier}>{children}</InnerAccordionDetails>
-    </StyledAccordion>
+    </Accordion>
   );
 }
 

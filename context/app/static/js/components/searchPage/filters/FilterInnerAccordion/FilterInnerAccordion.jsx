@@ -1,7 +1,8 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
+import Accordion from '@mui/material/Accordion';
 
-import { StyledAccordion, StyledExpandMoreIcon } from 'js/components/searchPage/filters/style';
+import { StyledExpandMoreIcon } from 'js/components/searchPage/filters/style';
 import { InnerAccordionDetails, InnerAccordionSummary } from './style';
 
 function InnerAccordionContainer({ title, children }) {
@@ -17,14 +18,14 @@ function InnerAccordionContainer({ title, children }) {
     return null;
   }
   return (
-    <StyledAccordion key={title} defaultExpanded>
+    <Accordion key={title} defaultExpanded>
       <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
         <Typography variant="subtitle2" color="textPrimary">
           {title}
         </Typography>
       </InnerAccordionSummary>
       <InnerAccordionDetails id={title.replace(/\s/g, '-')}>{children}</InnerAccordionDetails>
-    </StyledAccordion>
+    </Accordion>
   );
 }
 
