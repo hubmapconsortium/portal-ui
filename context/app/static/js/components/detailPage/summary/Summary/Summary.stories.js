@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { rest } from 'msw';
 import Typography from '@mui/material/Typography';
 
@@ -29,18 +29,14 @@ const donorSharedArgs = {
 };
 
 function WrapperTemplate({ children, ...args }) {
-  return (
-    <FlaskDataContext.Provider
-      // eslint-disable-next-line react/jsx-no-constructed-context-values
-      value={{
-        entity: {
-          ...args,
-        },
-      }}
-    >
-      {children}
-    </FlaskDataContext.Provider>
-  );
+  const value = useMemo(() => {
+    return {
+      entity: {
+        ...args,
+      },
+    };
+  }, [args]);
+  return <FlaskDataContext.Provider value={value}>{children}</FlaskDataContext.Provider>;
 }
 
 function ChildlessTemplate(args) {
