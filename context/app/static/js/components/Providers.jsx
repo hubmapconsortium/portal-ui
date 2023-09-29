@@ -56,7 +56,6 @@ export default function Providers({
   );
 
   return (
-    // injectFirst ensures styled-components takes priority over mui for styling
     <SWRConfig value={swrConfig}>
       <GlobalFonts />
       <MuiThemeProvider theme={theme}>
