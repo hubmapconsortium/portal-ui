@@ -14,6 +14,9 @@ const meta = {
     tags: {
       control: { type: 'object' },
     },
+    isSelected: {
+      control: { type: 'boolean' },
+    },
   },
 } satisfies Meta<typeof SelectableCard>;
 
@@ -24,6 +27,9 @@ export const Default: Story = {
     title: 'Squirtle',
     description: 'Squirtle is a small reptilian Pokémon that resembles a light-blue turtle.',
     tags: ['Type: Water', 'Gen: 1'],
+    isSelected: false,
+    selectItem: () => {},
+    cardKey: 'Squirtle',
   },
 };
 
