@@ -18,7 +18,7 @@ function InnerAccordionContainer({ title, children }) {
     return null;
   }
   return (
-    <Accordion key={title} defaultExpanded>
+    <Accordion key={title} defaultExpanded disableGutters variant="unstyled">
       <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
         <Typography variant="subtitle2" color="textPrimary">
           {title}
