@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { pdfjs } from 'react-pdf';
 import ReactMarkdown from 'react-markdown';
 import { enableMapSet } from 'immer';
@@ -47,28 +47,30 @@ function App(props) {
   const isHubmapUser = userGroups?.includes('HuBMAP');
 
   return (
-    <Providers
-      endpoints={endpoints}
-      groupsToken={groupsToken}
-      isAuthenticated={isAuthenticated}
-      userEmail={userEmail}
-      workspacesToken={workspacesToken}
-      isWorkspacesUser={isWorkspacesUser}
-      isHubmapUser={isHubmapUser}
-      flaskData={flaskData}
-    >
-      <Header />
-      {globalAlertMd && (
-        <FlexContainer>
-          <StyledAlert severity="warning">
-            <ReactMarkdown>{globalAlertMd}</ReactMarkdown>
-          </StyledAlert>
-        </FlexContainer>
-      )}
-      <Routes flaskData={flaskData} />
-      <Footer />
-      <StyledSnackbar />
-    </Providers>
+    <StrictMode>
+      <Providers
+        endpoints={endpoints}
+        groupsToken={groupsToken}
+        isAuthenticated={isAuthenticated}
+        userEmail={userEmail}
+        workspacesToken={workspacesToken}
+        isWorkspacesUser={isWorkspacesUser}
+        isHubmapUser={isHubmapUser}
+        flaskData={flaskData}
+      >
+        <Header />
+        {globalAlertMd && (
+          <FlexContainer>
+            <StyledAlert severity="warning">
+              <ReactMarkdown>{globalAlertMd}</ReactMarkdown>
+            </StyledAlert>
+          </FlexContainer>
+        )}
+        <Routes flaskData={flaskData} />
+        <Footer />
+        <StyledSnackbar />
+      </Providers>
+    </StrictMode>
   );
 }
 export default App;
