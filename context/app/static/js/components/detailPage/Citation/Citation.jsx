@@ -22,6 +22,7 @@ function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi
       iconTooltipText="Citation is provided in NLM format. If DataCite page is available, click button to view alternate ways to cite."
       className={className}
       bottomSpacing={1}
+      childContainerComponent="div"
     >
       <Typography variant="body1">
         {citation} Available from: <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>
