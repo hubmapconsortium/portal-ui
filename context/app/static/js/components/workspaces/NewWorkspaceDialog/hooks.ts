@@ -54,4 +54,4 @@ function useWorkspaceTemplateTags() {
   return { templates };
 }
 
-export { useWorkspaceTemplates, useWorkspaceTemplateTags };
+export { useWorkspaceTemplates, useWorkspaceTemplateTags, TemplateTypes };

@@ -5,15 +5,19 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
+import Typography from '@mui/material/Typography';
+
 import Step from 'shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import { Typography } from '@mui/material';
-import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
+import { useSelectItems } from 'js/hooks/useSelectItems';
+import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates } from './hooks';
 
 function NewWorkspaceDialog() {
   const { templates } = useWorkspaceTemplates();
+
+  const { selectedItems: selectedTemplates, toggleItem: toggleTemplate } = useSelectItems([]);
+
   return (
     <Dialog
       open
@@ -68,13 +72,7 @@ function NewWorkspaceDialog() {
               If you have ideas about additional templates to include in the future, please <ContactUsLink /> .
             </Typography>
           </Paper>
-          <Grid container spacing={1}>
-            {Object.values(templates).map(({ title, description, tags }) => (
-              <Grid item xs={4}>
-                <SelectableCard title={title} description={description} tags={tags} />
-              </Grid>
-            ))}
-          </Grid>
+          <TemplateGrid templates={templates} selectedTemplates={selectedTemplates} toggleTemplate={toggleTemplate} />
         </Step>
       </DialogContent>
       <DialogActions>
