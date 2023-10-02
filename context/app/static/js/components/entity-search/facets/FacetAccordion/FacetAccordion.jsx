@@ -6,7 +6,7 @@ import { InnerAccordionDetails, InnerAccordionSummary, StyledTypography } from '
 
 function FacetAccordion({ label, identifier, children }) {
   return (
-    <Accordion key={identifier} defaultExpanded>
+    <Accordion key={identifier} defaultExpanded disableGutters variant="unstyled">
       <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
         <StyledTypography variant="subtitle2" color="textPrimary">
           {label}

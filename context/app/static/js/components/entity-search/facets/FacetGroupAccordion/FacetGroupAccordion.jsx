@@ -6,7 +6,7 @@ import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails } from './
 
 function FacetGroupAccordion({ label, defaultExpanded, children }) {
   return (
-    <OuterAccordion defaultExpanded={defaultExpanded}>
+    <OuterAccordion defaultExpanded={defaultExpanded} variant="unstyled" disableGutters>
       <OuterAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
         <Typography variant="subtitle2" color="secondary">
           {label}
