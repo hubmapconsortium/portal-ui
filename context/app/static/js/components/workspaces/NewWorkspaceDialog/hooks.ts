@@ -2,6 +2,7 @@ import useSWR from 'swr';
 
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
+import type { SWRResponse } from 'swr';
 
 interface TemplateTypes {
   title: string;
@@ -17,23 +18,40 @@ interface TemplatesResponse {
   data: Record<string, TemplateTypes>;
 }
 
-function useWorkspaceTemplates() {
-  const { workspacesToken } = useAppContext();
+function useTemplatesAPI(templatesURL) {
+  const { groupsToken } = useAppContext();
 
-  const { data } = useSWR<TemplatesResponse>(
-    ['https://user-templates-api.dev.hubmapconsortium.org/templates/jupyter_lab/', workspacesToken],
+  const result = useSWR(
+    [templatesURL, groupsToken],
     ([url, token]: string[]) =>
       fetcher({
         url,
         requestInit: {
-          headers: { 'UWS-Authorization': `Token ${token}` },
+          headers: { Authorization: `Bearer ${token}` },
         },
       }),
     { fallbackData: {} },
   );
 
-  const templates = data?.data ?? {};
+  return result;
+}
 
+function useWorkspaceTemplates() {
+  const result: SWRResponse<TemplatesResponse> = useTemplatesAPI(
+    'https://user-templates-api.dev.hubmapconsortium.org/templates/jupyter_lab/',
+  );
+
+  const templates = result?.data?.data ?? {};
   return { templates };
 }
-export { useWorkspaceTemplates };
+
+function useWorkspaceTemplateTags() {
+  const result: SWRResponse<TemplatesResponse> = useTemplatesAPI(
+    'https://user-templates-api.dev.hubmapconsortium.org/tags/',
+  );
+
+  const templates = result?.data?.data ?? {};
+  return { templates };
+}
+
+export { useWorkspaceTemplates, useWorkspaceTemplateTags };
