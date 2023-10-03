@@ -36,10 +36,11 @@ function useTemplatesAPI(templatesURL) {
   return result;
 }
 
-function useWorkspaceTemplates() {
-  const result: SWRResponse<TemplatesResponse> = useTemplatesAPI(
-    'https://user-templates-api.dev.hubmapconsortium.org/templates/jupyter_lab/',
-  );
+function useWorkspaceTemplates(tags: string[] = []) {
+  const queryParams = tags.map((tag, i) => `${i === 0 ? '' : '&'}tags=${encodeURIComponent(tag)}`).join('');
+
+  const url = `https://user-templates-api.dev.hubmapconsortium.org/templates/jupyter_lab/?${queryParams}`;
+  const result: SWRResponse<TemplatesResponse> = useTemplatesAPI(url);
 
   const templates = result?.data?.data ?? {};
   return { templates };

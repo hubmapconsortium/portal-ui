@@ -6,15 +6,21 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 
 import Step from 'shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates } from './hooks';
 
+const recommendedTags = ['visualization', 'api'];
+
 function NewWorkspaceDialog() {
-  const { templates } = useWorkspaceTemplates();
+  const { selectedItems: selectedTags, toggleItem: toggleTag } = useSelectItems([]);
+
+  const { templates } = useWorkspaceTemplates([...selectedTags]);
 
   const { selectedItems: selectedTemplates, toggleItem: toggleTemplate } = useSelectItems([]);
 
@@ -72,6 +78,12 @@ function NewWorkspaceDialog() {
               If you have ideas about additional templates to include in the future, please <ContactUsLink /> .
             </Typography>
           </Paper>
+          <Typography variant="subtitle2">Recommended Tags</Typography>
+          <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
+            {recommendedTags.map((tag) => (
+              <SelectableChip isSelected={selectedTags.has(tag)} label={tag} onClick={() => toggleTag(tag)} key={tag} />
+            ))}
+          </Stack>
           <TemplateGrid templates={templates} selectedTemplates={selectedTemplates} toggleTemplate={toggleTemplate} />
         </Step>
       </DialogContent>
