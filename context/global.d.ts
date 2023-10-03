@@ -26,5 +26,7 @@ declare module 'metadata-field-assays' {
 declare namespace JSX {
   interface IntrinsicElements {
     'ccf-organ-info': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    'ccf-body-ui-wc': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+    'ccf-body-ui': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
   }
 }
