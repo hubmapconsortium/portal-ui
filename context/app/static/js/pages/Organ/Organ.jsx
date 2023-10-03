@@ -4,10 +4,11 @@ import Typography from '@mui/material/Typography';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 
-import Azimuth from 'js/components/organ/Azimuth';
+// import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
-import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
+// TODO: Revert this import change after components are merged together
+import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas/HumanReferenceAtlasv2';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
@@ -60,7 +61,9 @@ function Organ({ organ }) {
         )}
         {shouldDisplaySection[referenceId] && (
           <Section id={referenceId}>
-            <Azimuth config={organ.azimuth} />
+            {/* Vitessce's luma gl version is incompatible, (patch version mismatch)
+                pending dependency bump and new version */}
+            {/* <Azimuth config={organ.azimuth} /> */}
           </Section>
         )}
         {shouldDisplaySection[assaysId] && (

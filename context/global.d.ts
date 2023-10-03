@@ -22,3 +22,9 @@ declare module 'metadata-field-assays' {
   const data: Record<string, string[]>;
   export default data;
 }
+
+declare namespace JSX {
+  interface IntrinsicElements {
+    'ccf-organ-info': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
+  }
+}
