@@ -51,8 +51,8 @@ function useWorkspaceTemplateTags() {
     'https://user-templates-api.dev.hubmapconsortium.org/tags/',
   );
 
-  const templates = result?.data?.data ?? {};
-  return { templates };
+  const tags = result?.data?.data ?? {};
+  return { tags };
 }
 
 export { useWorkspaceTemplates, useWorkspaceTemplateTags, TemplateTypes };

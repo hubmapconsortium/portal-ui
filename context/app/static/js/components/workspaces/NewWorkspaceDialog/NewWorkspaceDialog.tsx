@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -7,22 +7,34 @@ import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-
+import Chip, { ChipProps } from '@mui/material/Chip';
 import Step from 'shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useSelectItems } from 'js/hooks/useSelectItems';
+import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import TemplateGrid from '../TemplateGrid';
-import { useWorkspaceTemplates } from './hooks';
+import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
+
+interface TagTypes extends ChipProps {
+  option: string;
+}
+
+function TagComponent({ option, ...rest }: TagTypes) {
+  return <Chip label={option} {...rest} />;
+}
 
 const recommendedTags = ['visualization', 'api'];
 
 function NewWorkspaceDialog() {
-  const { selectedItems: selectedTags, toggleItem: toggleTag } = useSelectItems([]);
+  const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
+  const [selectedTags, setSelectedTags] = useState([]);
 
-  const { templates } = useWorkspaceTemplates([...selectedTags]);
+  const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
   const { selectedItems: selectedTemplates, toggleItem: toggleTemplate } = useSelectItems([]);
+
+  const { tags } = useWorkspaceTemplateTags();
 
   return (
     <Dialog
@@ -78,10 +90,26 @@ function NewWorkspaceDialog() {
               If you have ideas about additional templates to include in the future, please <ContactUsLink /> .
             </Typography>
           </Paper>
+          <MultiAutocomplete
+            value={selectedTags}
+            options={Object.keys(tags).filter((tag) => !recommendedTags.includes(tag))}
+            multiple
+            filterSelectedOptions
+            isOptionEqualToValue={(option, value) => option === value}
+            tagComponent={TagComponent}
+            onChange={(_, value: string[]) => {
+              setSelectedTags(value);
+            }}
+          />
           <Typography variant="subtitle2">Recommended Tags</Typography>
           <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
             {recommendedTags.map((tag) => (
-              <SelectableChip isSelected={selectedTags.has(tag)} label={tag} onClick={() => toggleTag(tag)} key={tag} />
+              <SelectableChip
+                isSelected={selectedRecommendedTags.has(tag)}
+                label={tag}
+                onClick={() => toggleTag(tag)}
+                key={tag}
+              />
             ))}
           </Stack>
           <TemplateGrid templates={templates} selectedTemplates={selectedTemplates} toggleTemplate={toggleTemplate} />
