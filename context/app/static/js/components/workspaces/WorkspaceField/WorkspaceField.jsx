@@ -22,7 +22,7 @@ function WorkspaceField({ control, name, label, errors, value, ...rest }) {
         name={name}
         {...field}
         error={Object.keys(errors).length > 0}
-        helperText={errors.name?.message || ''}
+        helperText={errors?.[name]?.message || ''}
         {...rest}
       />
     </Box>
