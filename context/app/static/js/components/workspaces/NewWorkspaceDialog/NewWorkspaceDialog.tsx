@@ -90,9 +90,12 @@ function NewWorkspaceDialog() {
               If you have ideas about additional templates to include in the future, please <ContactUsLink /> .
             </Typography>
           </Paper>
+          <Typography variant="subtitle1">Filter workspace templates by tags</Typography>
           <MultiAutocomplete
             value={selectedTags}
-            options={Object.keys(tags).filter((tag) => !recommendedTags.includes(tag))}
+            options={Object.keys(tags)
+              .filter((tag) => !recommendedTags.includes(tag))
+              .sort((a, b) => a.localeCompare(b))}
             multiple
             filterSelectedOptions
             isOptionEqualToValue={(option, value) => option === value}
