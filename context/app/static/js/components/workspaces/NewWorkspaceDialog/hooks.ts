@@ -1,8 +1,8 @@
 import useSWR from 'swr';
+import type { SWRResponse } from 'swr';
 
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
-import type { SWRResponse } from 'swr';
 
 interface TemplateTypes {
   title: string;
