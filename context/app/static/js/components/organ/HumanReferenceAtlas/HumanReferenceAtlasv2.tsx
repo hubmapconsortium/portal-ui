@@ -5,7 +5,7 @@ import Paper from '@mui/material/Paper';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-// import reactifyWc from 'reactify-wc';
+import reactifyWc from 'reactify-wc';
 
 import { Typography } from '@mui/material';
 import { Flex, StyledInfoIcon } from '../style';
@@ -25,6 +25,7 @@ const HRABodyStyles = 'https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3.7/b
 
 const logEvent = (e: unknown) => console.log(e);
 // const CCFOrgan = reactifyWc('ccf-organ-info');
+const CCFBody = reactifyWc('ccf-body-ui-wc');
 
 function HumanReferenceAtlas({ uberonIri }: HumanReferenceAtlasProps) {
   useScript(HRABodyScript);
@@ -42,19 +43,7 @@ function HumanReferenceAtlas({ uberonIri }: HumanReferenceAtlasProps) {
       bodyUI.highlightID = '8cdf44a106338aada6da04c71eeb767e';
       bodyUI.zoomToID = 'http://purl.org/ccf/latest/ccf.owl#VHFColon';
 
-      bodyUI.addEventListener('onMouseEnter', (id) => {
-        console.log('onMouseEnter', id);
-      });
-
-      bodyUI.addEventListener('onMouseLeave', (id) => {
-        console.log('onMouseLeave', id);
-      });
-
-      bodyUI.addEventListener('onClick', (id) => {
-        console.log('onClick', id);
-      });
-
-      console.log('Body UI WC loaded:', bodyUI);
+      console.log('Body UI WC loaded:', bodyUI, bodyUI.data);
     };
     setUpBodyUi();
   }, []);
@@ -68,7 +57,7 @@ function HumanReferenceAtlas({ uberonIri }: HumanReferenceAtlasProps) {
       </Flex>
       <Paper>
         <Typography>
-          <ccf-body-ui-wc />
+          <CCFBody data={sampleData} onClick={logEvent} on-MouseEnter={logEvent} on-MouseLeave={logEvent} />
         </Typography>
         {/* <ccf-organ-info
           organ-iri={uberonIri}
