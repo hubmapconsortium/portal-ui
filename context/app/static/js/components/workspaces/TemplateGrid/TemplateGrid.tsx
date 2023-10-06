@@ -12,7 +12,7 @@ interface Props {
 
 function TemplateGrid({ templates, selectedTemplates, toggleTemplate }: Props) {
   return (
-    <Grid container spacing={1}>
+    <Grid container spacing={1} alignItems="stretch">
       {Object.entries(templates).map(([templateKey, { title, description, tags }]) => (
         <Grid item xs={4}>
           <SelectableCard
@@ -22,6 +22,7 @@ function TemplateGrid({ templates, selectedTemplates, toggleTemplate }: Props) {
             isSelected={selectedTemplates.has(templateKey)}
             selectItem={toggleTemplate}
             cardKey={templateKey}
+            sx={{ height: '100%', minHeight: 225 }}
           />
         </Grid>
       ))}

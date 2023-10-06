@@ -5,6 +5,7 @@ import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Checkbox from '@mui/material/Checkbox';
+import { SxProps, Theme } from '@mui/material/styles';
 
 interface SelectableCardProps {
   title: string;
@@ -13,18 +14,19 @@ interface SelectableCardProps {
   isSelected: boolean;
   selectItem: (itemKey: string) => void;
   cardKey: string;
+  sx?: SxProps<Theme> | SxProps<Theme>[];
 }
 
-function SelectableCard({ title, description, tags, isSelected, selectItem, cardKey }: SelectableCardProps) {
+function SelectableCard({ title, description, tags, isSelected, selectItem, cardKey, sx = [] }: SelectableCardProps) {
   return (
-    <Card sx={{ minWidth: 275 }}>
-      <CardContent>
+    <Card sx={[{ minWidth: 275 }, ...(Array.isArray(sx) ? sx : [sx])]}>
+      <CardContent component={Stack} direction="column" sx={{ height: '100%' }}>
         <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
           <Typography variant="subtitle1">{title}</Typography>
           <Checkbox checked={isSelected} onChange={() => selectItem(cardKey)} />
         </Stack>
         <Typography gutterBottom>{description}</Typography>
-        <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
+        <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" sx={{ marginTop: 'auto' }}>
           {tags.map((tag) => (
             <Chip label={tag} sx={{ borderRadius: 8 }} />
           ))}
