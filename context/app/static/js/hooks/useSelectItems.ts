@@ -22,7 +22,7 @@ function selectReducer(state: SelectedItems, action: SelectAction): SelectedItem
       }
       return new Set([...state]);
     case 'setSelectedItems':
-      return new Set([action.payload]);
+      return new Set(action.payload);
     default:
       console.warn('Unrecognized action type', action);
       return state;

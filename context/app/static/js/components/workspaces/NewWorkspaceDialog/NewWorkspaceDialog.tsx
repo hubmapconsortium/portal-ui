@@ -45,7 +45,11 @@ function NewWorkspaceDialog() {
 
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
-  const { selectedItems: selectedTemplates, toggleItem: toggleTemplate } = useSelectItems([]);
+  const {
+    selectedItems: selectedTemplates,
+    toggleItem: toggleTemplate,
+    setSelectedItems: setSelectedTemplates,
+  } = useSelectItems([]);
 
   const { tags } = useWorkspaceTemplateTags();
 
@@ -198,6 +202,7 @@ function NewWorkspaceDialog() {
                 templates={templates}
                 selectedTemplates={selectedTemplates}
                 toggleTemplate={toggleTemplate}
+                setSelectedTemplates={setSelectedTemplates}
               />
             </Stack>
           </Step>
