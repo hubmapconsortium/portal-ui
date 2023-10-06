@@ -38,6 +38,7 @@ export const useFlaskDataContext = () => useContext(FlaskDataContext);
 interface AppContextType {
   assetsEndpoint: string;
   groupsToken: string;
+  workspacesToken: string;
   [key: string]: unknown;
 }
 
