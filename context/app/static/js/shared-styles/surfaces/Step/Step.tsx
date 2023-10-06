@@ -11,10 +11,15 @@ interface StepProps {
 function Step({ index, title, isRequired, children }: PropsWithChildren<StepProps>) {
   return (
     <>
-      <Paper sx={({ palette, spacing }) => ({ backgroundColor: palette.secondary.main, padding: spacing(2) })}>
+      <Paper
+        sx={({ palette, spacing }) => ({
+          backgroundColor: palette.secondary[isRequired ? 'main' : 'light'],
+          padding: spacing(2),
+        })}
+      >
         <Typography variant="subtitle2" sx={({ palette }) => ({ color: palette.secondary.contrastText })}>{`${
           index + 1
-        } ${title} (${isRequired ? 'Required' : 'Optional'})`}</Typography>
+        }. ${title} (${isRequired ? 'Required' : 'Optional'})`}</Typography>
       </Paper>
       <Paper sx={({ spacing }) => ({ padding: spacing(2) })}>{children}</Paper>
     </>
