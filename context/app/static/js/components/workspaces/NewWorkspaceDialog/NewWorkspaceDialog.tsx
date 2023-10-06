@@ -18,8 +18,8 @@ import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import TemplateGrid from '../TemplateGrid';
-import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
-import { useCreateWorkspace } from '../CreateWorkspaceDialog/hooks';
+import { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks } from './hooks';
+import { useCreateWorkspace } from './copiedHooks';
 import useProtectedDatasetsForm from './useProtectedDatasetsForm';
 
 interface ProtectedDatasetsTypes {
@@ -27,6 +27,7 @@ interface ProtectedDatasetsTypes {
   protectedHubmapIds: string[];
   removeProtectedDatasets: () => void;
   protectedRows: string[];
+  selectedRows: Set<string>;
 }
 interface TagTypes extends ChipProps {
   option: string;
@@ -48,13 +49,15 @@ function NewWorkspaceDialog() {
 
   const { tags } = useWorkspaceTemplateTags();
 
+  const createTemplateNotebooks = useTemplateNotebooks();
+
   const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
     // eslint-disable-next-line @typescript-eslint/no-empty-function
-    handleCreateWorkspace: () => {},
-    defaultName: 'ABC123',
+    handleCreateWorkspace: createTemplateNotebooks,
+    defaultName: '',
   });
 
-  const { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows } =
+  const { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows } =
     useProtectedDatasetsForm() as ProtectedDatasetsTypes;
 
   return (
@@ -123,7 +126,7 @@ function NewWorkspaceDialog() {
               </Typography>
             </Paper>
           </Step>
-          <Step title="Configure Workspace" isRequired index={0}>
+          <Step title="Configure Workspace" isRequired index={1}>
             <Box
               id="create-workspace-form"
               component="form"
@@ -133,7 +136,9 @@ function NewWorkspaceDialog() {
                 marginTop: 1,
               }}
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              onSubmit={handleSubmit(onSubmit)}
+              onSubmit={handleSubmit((formData) =>
+                onSubmit(formData, { templateKeys: [...selectedTemplates], uuids: [...selectedRows] }),
+              )}
             >
               <WorkspaceField
                 control={control}
@@ -148,7 +153,7 @@ function NewWorkspaceDialog() {
               />
             </Box>
           </Step>
-          <Step title="Select Templates" index={0}>
+          <Step title="Select Templates" index={2}>
             <Paper sx={{ p: 2, mb: 2 }}>
               <Typography sx={{ mb: 2 }}>
                 Templates can be selected for your workspace for potential workflows revolving around data assays,
@@ -160,31 +165,41 @@ function NewWorkspaceDialog() {
               </Typography>
             </Paper>
             <Typography variant="subtitle1">Filter workspace templates by tags</Typography>
-            <MultiAutocomplete
-              value={selectedTags}
-              options={Object.keys(tags)
-                .filter((tag) => !recommendedTags.includes(tag))
-                .sort((a, b) => a.localeCompare(b))}
-              multiple
-              filterSelectedOptions
-              isOptionEqualToValue={(option, value) => option === value}
-              tagComponent={TagComponent}
-              onChange={(_, value: string[]) => {
-                setSelectedTags(value);
-              }}
-            />
-            <Typography variant="subtitle2">Recommended Tags</Typography>
-            <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
-              {recommendedTags.map((tag) => (
-                <SelectableChip
-                  isSelected={selectedRecommendedTags.has(tag)}
-                  label={tag}
-                  onClick={() => toggleTag(tag)}
-                  key={tag}
-                />
-              ))}
+            <Stack spacing={1}>
+              <MultiAutocomplete
+                value={selectedTags}
+                options={Object.keys(tags)
+                  .filter((tag) => !recommendedTags.includes(tag))
+                  .sort((a, b) => a.localeCompare(b))}
+                multiple
+                filterSelectedOptions
+                isOptionEqualToValue={(option, value) => option === value}
+                tagComponent={TagComponent}
+                onChange={(_, value: string[]) => {
+                  setSelectedTags(value);
+                }}
+              />
+              <Box>
+                <Typography variant="subtitle2" gutterBottom>
+                  Recommended Tags
+                </Typography>
+                <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
+                  {recommendedTags.map((tag) => (
+                    <SelectableChip
+                      isSelected={selectedRecommendedTags.has(tag)}
+                      label={tag}
+                      onClick={() => toggleTag(tag)}
+                      key={tag}
+                    />
+                  ))}
+                </Stack>
+              </Box>
+              <TemplateGrid
+                templates={templates}
+                selectedTemplates={selectedTemplates}
+                toggleTemplate={toggleTemplate}
+              />
             </Stack>
-            <TemplateGrid templates={templates} selectedTemplates={selectedTemplates} toggleTemplate={toggleTemplate} />
           </Step>
         </DialogContent>
         <DialogActions>

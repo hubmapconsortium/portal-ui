@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 
-import { useDatasetsAccessLevel } from '../CreateWorkspaceDialog/hooks';
+import { useDatasetsAccessLevel } from './copiedHooks';
 
 // Selected rows are a Set, so we must use `.size` to avoid a needless conversion to an array
 // Protected rows are an array, so we can use `.length`
@@ -40,7 +40,7 @@ function useProtectedDatasetsForm() {
     toastSuccess('Protected datasets successfully removed from selection.');
   }, [deselectRows, protectedRows, toastSuccess]);
 
-  return { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows };
+  return { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows };
 }
 
 export default useProtectedDatasetsForm;
