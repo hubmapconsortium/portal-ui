@@ -73,6 +73,4 @@ function useCreateAndLaunchWorkspace() {
   };
 }
 
-function useCreateNotebook({})
-
 export { useWorkspacesList, useCreateAndLaunchWorkspace };
