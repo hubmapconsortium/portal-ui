@@ -28,6 +28,8 @@ function Results({
           title: 'Table',
           listComponent: (
             <ResultsTable
+              tableLabel={type}
+              selectable={type === 'dataset'}
               resultFields={tableResultFields}
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}

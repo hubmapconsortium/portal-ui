@@ -1,14 +1,17 @@
 import React from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import MenuItem from '@mui/material/MenuItem';
+import Link from '@mui/material/Link';
 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
-import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { Link } from '@mui/material';
+import { useAppContext } from 'js/components/Contexts';
+import { CreateWorkspaceWithDatasetsDialog } from 'js/components/workspaces/CreateWorkspaceDialog';
+import { useMetadataMenu } from 'js/components/entity-search/MetadataMenu/hooks';
+
 import { StyledDropdownMenuButton, StyledInfoIcon } from './style';
 
 async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analyticsCategory }) {
@@ -23,17 +26,30 @@ async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analytics
   closeMenu();
 }
 
+function WorkspaceMenuItem(props) {
+  const { isWorkspacesUser } = useAppContext();
+  return (
+    <MenuItem {...props} disabled={!isWorkspacesUser}>
+      Workspace
+      <SecondaryBackgroundTooltip
+        title="Create a new HuBMAP workspace and load the load the notebook into it."
+        placement="bottom-start"
+      >
+        <StyledInfoIcon color="primary" />
+      </SecondaryBackgroundTooltip>
+    </MenuItem>
+  );
+}
+
 function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
-  const { closeMenu } = useDropdownMenuStore();
+  const { createNotebook, selectedHits, closeMenu } = useMetadataMenu(lcPluralType);
+
+  const { isWorkspacesUser } = useAppContext();
 
   const menuID = 'metadata-menu';
-
-  // TODO: Uncomment when workspaces UI is ready.
-  // const { isAuthenticated } = useContext(AppContext);
-  // const workspacesDisabled = !isAuthenticated;
 
   return (
     <>
@@ -80,22 +96,9 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
-        {/* TODO: Uncomment when workspace UI is ready.
-        <MenuItem
-          disabled={workspacesDisabled}
-          onClick={() => {
-            // eslint-disable-next-line no-console
-            console.log('TODO');
-          }}
-        >
-          Workspace
-          <SecondaryBackgroundTooltip
-            title="Create a new HuBMAP workspace and load the load the notebook into it."
-            placement="bottom-start"
-          >
-            <StyledInfoIcon color="primary" />
-          </SecondaryBackgroundTooltip>
-        </MenuItem> */}
+        {isWorkspacesUser && (
+          <CreateWorkspaceWithDatasetsDialog buttonComponent={WorkspaceMenuItem} createNotebook={createNotebook} />
+        )}
       </DropdownMenu>
     </>
   );
