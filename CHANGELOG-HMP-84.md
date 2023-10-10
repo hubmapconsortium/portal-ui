@@ -1,0 +1,1 @@
+- Added selection and workspace launching to main search page.

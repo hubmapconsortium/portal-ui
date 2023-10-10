@@ -45,7 +45,7 @@ function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
-  const { createNotebook, selectedHits, closeMenu } = useMetadataMenu(lcPluralType);
+  const { createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
 
   const { isWorkspacesUser } = useAppContext();
 
@@ -97,7 +97,10 @@ function MetadataMenu({ type, analyticsCategory }) {
           </SecondaryBackgroundTooltip>
         </MenuItem>
         {isWorkspacesUser && (
-          <CreateWorkspaceWithDatasetsDialog buttonComponent={WorkspaceMenuItem} createNotebook={createNotebook} />
+          <CreateWorkspaceWithDatasetsDialog
+            buttonComponent={WorkspaceMenuItem}
+            handleCreateWorkspace={createNotebook}
+          />
         )}
       </DropdownMenu>
     </>
