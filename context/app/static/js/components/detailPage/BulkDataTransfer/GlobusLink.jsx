@@ -1,6 +1,7 @@
 import React from 'react';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { useFlaskDataContext } from 'js/components/Contexts';
@@ -42,23 +43,20 @@ function GlobusLink({ uuid, isSupport = false }) {
   }
 
   return (
-    <>
-      <Divider />
-      <LinkContainer>
-        <WrapperComponent isSupport={isSupport}>
-          <FilesConditionalLink
-            href={responseUrl}
-            hasAgreedToDUA={hasAgreedToDUA}
-            openDUA={() => openDUA(responseUrl)}
-            variant="subtitle2"
-            hasIcon
-          >
-            {hubmap_id}
-            {' Globus'}
-          </FilesConditionalLink>
-        </WrapperComponent>
-      </LinkContainer>
-    </>
+    <LinkContainer>
+      <WrapperComponent isSupport={isSupport}>
+        <FilesConditionalLink
+          href={responseUrl}
+          hasAgreedToDUA={hasAgreedToDUA}
+          openDUA={() => openDUA(responseUrl)}
+          variant="subtitle2"
+          hasIcon
+        >
+          {hubmap_id}
+          {' Globus'}
+        </FilesConditionalLink>
+      </WrapperComponent>
+    </LinkContainer>
   );
 }
 
@@ -69,10 +67,10 @@ function GlobusLinkContainer() {
   } = useFlaskDataContext();
 
   return (
-    <>
-      <GlobusLink uuid={uuid} />
-      {vis_lifted_uuid && <GlobusLink uuid={vis_lifted_uuid} isSupport />}
-    </>
+    <Stack key={uuid} divider={<Divider />}>
+      <GlobusLink uuid={uuid} key={uuid} />
+      {vis_lifted_uuid && <GlobusLink uuid={vis_lifted_uuid} key={vis_lifted_uuid} isSupport />}
+    </Stack>
   );
 }
 

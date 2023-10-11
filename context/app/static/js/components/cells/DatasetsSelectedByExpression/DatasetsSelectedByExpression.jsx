@@ -48,7 +48,6 @@ function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
                 vertical: 'bottom',
                 horizontal: 'center',
               },
-              getContentAnchorEl: null,
             },
           }}
           helperText="Genomic modality refers to Gene Expression (RNA) or DNA Accessibility (ATAC)."

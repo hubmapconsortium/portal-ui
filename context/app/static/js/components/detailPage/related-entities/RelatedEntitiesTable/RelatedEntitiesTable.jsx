@@ -31,8 +31,8 @@ function RelatedEntitiesTable({ columns, entities, entityType }) {
       ))}
       tableRows={entities.map(({ _source }) => (
         <TableRow key={_source.hubmap_id} data-testid={`${entityType}-row`}>
-          {allColumns.map(({ renderColumnCell }) => (
-            <TableCell>{renderColumnCell(_source)}</TableCell>
+          {allColumns.map(({ id, renderColumnCell }) => (
+            <TableCell key={id}>{renderColumnCell(_source)}</TableCell>
           ))}
         </TableRow>
       ))}
