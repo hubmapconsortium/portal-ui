@@ -4,21 +4,25 @@ import { SortingSelector } from 'searchkit';
 
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import { InternalLink } from 'js/shared-styles/Links';
+import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { getByPath } from './utils';
 import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';
-import SortingTableHead from '../SortingTableHead';
+import SortingTableHead, { withSelectable } from '../SortingTableHead';
 
-function ResultsTable({ hits, resultFields, detailsUrlPrefix, idField, sortOptions, analyticsCategory }) {
+function ResultsTable({ hits, resultFields, detailsUrlPrefix, idField, sortOptions, analyticsCategory, selectable }) {
+  const SortingHead = selectable ? withSelectable(SortingTableHead, hits) : SortingTableHead;
   /* eslint-disable no-underscore-dangle, react/no-danger, jsx-a11y/control-has-associated-label */
   return (
     <StyledTable data-testid="search-results-table">
       <SortingSelector
+        hits={hits}
         options={sortOptions}
-        listComponent={withAnalyticsCategory(SortingTableHead, analyticsCategory)}
+        listComponent={withAnalyticsCategory(SortingHead, analyticsCategory)}
       />
       {hits.map((hit) => (
         <StyledTableBody key={hit._id}>
           <StyledTableRow className={'highlight' in hit && 'before-highlight'}>
+            {selectable && <SelectableRowCell rowKey={hit._id} />}
             {resultFields.map((field) => (
               <StyledTableCell key={field.id}>
                 {field.id === 'hubmap_id' ? (
