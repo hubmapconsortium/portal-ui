@@ -4,6 +4,7 @@ import { ViewSwitcherHits } from 'searchkit'; // eslint-disable-line import/no-d
 
 import { customHighlight } from 'js/components/searchPage/config';
 
+import { useAppContext } from 'js/components/Contexts';
 import ResultsTable from '../ResultsTable';
 import ResultsTiles from '../ResultsTiles';
 import ResultsCCF from '../ResultsCCF';
@@ -18,6 +19,7 @@ function Results({
   type,
   analyticsCategory,
 }) {
+  const { isWorkspacesUser } = useAppContext();
   // one of the sort components must stay mounted to preserve sort history between views.
   return (
     <ViewSwitcherHits
@@ -29,7 +31,7 @@ function Results({
           listComponent: (
             <ResultsTable
               tableLabel={type}
-              selectable={type === 'dataset'}
+              selectable={type === 'dataset' && isWorkspacesUser}
               resultFields={tableResultFields}
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
