@@ -16,7 +16,6 @@ function URLSvgIcon({ iconURL, ariaLabel, ...rest }: URLSvgIconProps) {
         width: theme.spacing(3),
         height: theme.spacing(3),
       })}
-      iconURL={iconURL}
       role="img"
       aria-label={ariaLabel}
       {...rest}

@@ -6,7 +6,7 @@ import { OuterAccordion, OuterAccordionSummary, OuterAccordionDetails } from './
 
 function FilterOuterAccordion({ title, isFirst, innerAccordions }) {
   return (
-    <OuterAccordion defaultExpanded={isFirst}>
+    <OuterAccordion variant="unstyled" defaultExpanded={isFirst} disableGutters>
       <OuterAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
         <Typography variant="subtitle2" color="secondary">
           {title}

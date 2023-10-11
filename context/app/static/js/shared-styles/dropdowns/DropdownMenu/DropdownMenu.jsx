@@ -11,7 +11,6 @@ function DropdownMenu({ children, id, ...rest }) {
       anchorEl={menuRef.current}
       open={menuIsOpen}
       onClose={closeMenu}
-      getContentAnchorEl={null}
       anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
       id={id}
       {...rest}

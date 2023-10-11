@@ -1,4 +1,4 @@
-import { styled } from '@mui/styles';
+import { styled } from '@mui/material/styles';
 import TableContainer from '@mui/material/TableContainer';
 
 const ChipWrapper = styled('div')(({ theme }) => ({
@@ -12,9 +12,9 @@ const ChipWrapper = styled('div')(({ theme }) => ({
   gap: theme.spacing(1),
 }));
 
-const StyledTableContainer = styled(TableContainer)(() => ({
+const StyledTableContainer = styled(TableContainer)({
   maxHeight: 600,
   overflowY: 'auto',
-}));
+});
 
 export { ChipWrapper, StyledTableContainer };
