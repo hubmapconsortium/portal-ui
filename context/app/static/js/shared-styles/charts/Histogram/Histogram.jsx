@@ -58,7 +58,7 @@ function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxi
               const barHeight = yScale(0) - yScale(d.length);
               const barX = xScale(d.x0) + 1;
               const barY = yScale(d.length);
-              return <Bar x={barX} y={barY} width={barWidth} height={barHeight} fill={barColor} />;
+              return <Bar key={d} x={barX} y={barY} width={barWidth} height={barHeight} fill={barColor} />;
             })}
             <AxisLeft
               hideTicks

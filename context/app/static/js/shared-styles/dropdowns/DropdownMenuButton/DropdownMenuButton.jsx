@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 
-import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
+import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
 import { StyledUpIcon, StyledDownIcon } from './style';
 
 function DropdownMenuButton({ children, menuID, ...rest }) {
-  const { menuRef, menuIsOpen, openMenu } = useStore();
+  const { menuRef, menuIsOpen, openMenu } = useDropdownMenuStore();
 
   return (
     <Button

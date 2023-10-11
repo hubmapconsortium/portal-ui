@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import DialogModal from 'js/shared-styles/DialogModal';
 import DonorSampleConfigureSearchTable from 'js/components/entity-search/sidebar/DonorSampleConfigureSearchTable';
 import DatasetConfigureSearchTable from 'js/components/entity-search/sidebar/DatasetConfigureSearchTable';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 import { useConfigureSearch } from './hooks';
 import { StyledPaper, StyledDialogContent } from './style';
 
@@ -30,7 +30,7 @@ function ConfigureSearch() {
     resetSelections,
   } = useConfigureSearch();
 
-  const { entityType } = useStore();
+  const { entityType } = useSearchConfigStore();
 
   const configureSearchTableProps = {
     selectedFields,

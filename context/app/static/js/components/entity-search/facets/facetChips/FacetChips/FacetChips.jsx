@@ -2,7 +2,7 @@ import React from 'react';
 
 import RangeFacetChip from 'js/components/entity-search/facets/facetChips/RangeFacetChip';
 import SelectFacetChip from 'js/components/entity-search/facets/facetChips/SelectFacetChip';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 
 const filterTypeToComponentMap = {
   ValueSelectedFilter: SelectFacetChip,
@@ -10,7 +10,7 @@ const filterTypeToComponentMap = {
 };
 
 function FacetChips({ appliedFilters }) {
-  const { defaultFilters } = useStore();
+  const { defaultFilters } = useSearchConfigStore();
 
   return appliedFilters.reduce((acc, filter) => {
     if (filter.id in defaultFilters) {

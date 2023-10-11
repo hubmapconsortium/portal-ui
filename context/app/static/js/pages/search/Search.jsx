@@ -76,16 +76,6 @@ function Search({ title }) {
     defaultQuery: getDefaultQuery(),
   };
 
-  const wrappedSearch = (
-    <SearchWrapper
-      {...searchProps}
-      resultsComponent={Results}
-      analyticsCategory={`${title} Search Page Interactions`}
-      elasticsearchEndpoint={elasticsearchEndpoint}
-      groupsToken={groupsToken}
-    />
-  );
-
   return (
     <>
       <SearchHeader component="h1" variant="h2">
@@ -100,7 +90,13 @@ function Search({ title }) {
           <SearchNote label={note.label} />
         </LookupEntity>
       ))}
-      {wrappedSearch}
+      <SearchWrapper
+        {...searchProps}
+        resultsComponent={Results}
+        analyticsCategory={`${title} Search Page Interactions`}
+        elasticsearchEndpoint={elasticsearchEndpoint}
+        groupsToken={groupsToken}
+      />
     </>
   );
 }

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { StrictMode } from 'react';
 import { pdfjs } from 'react-pdf';
 import ReactMarkdown from 'react-markdown';
+import { enableMapSet } from 'immer';
 
 import StyledSnackbar from 'js/shared-styles/snackbars';
 
@@ -30,6 +31,9 @@ const workspacesUsers = [
   'geremy.clair@pnnl.gov',
 ];
 
+// Enable use of Map and Set in immer
+enableMapSet();
+
 // Set up worker for react-pdf
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`;
 
@@ -43,28 +47,30 @@ function App(props) {
   const isHubmapUser = userGroups?.includes('HuBMAP');
 
   return (
-    <Providers
-      endpoints={endpoints}
-      groupsToken={groupsToken}
-      isAuthenticated={isAuthenticated}
-      userEmail={userEmail}
-      workspacesToken={workspacesToken}
-      isWorkspacesUser={isWorkspacesUser}
-      isHubmapUser={isHubmapUser}
-      flaskData={flaskData}
-    >
-      <Header />
-      {globalAlertMd && (
-        <FlexContainer>
-          <StyledAlert severity="warning">
-            <ReactMarkdown>{globalAlertMd}</ReactMarkdown>
-          </StyledAlert>
-        </FlexContainer>
-      )}
-      <Routes flaskData={flaskData} />
-      <Footer />
-      <StyledSnackbar />
-    </Providers>
+    <StrictMode>
+      <Providers
+        endpoints={endpoints}
+        groupsToken={groupsToken}
+        isAuthenticated={isAuthenticated}
+        userEmail={userEmail}
+        workspacesToken={workspacesToken}
+        isWorkspacesUser={isWorkspacesUser}
+        isHubmapUser={isHubmapUser}
+        flaskData={flaskData}
+      >
+        <Header />
+        {globalAlertMd && (
+          <FlexContainer>
+            <StyledAlert severity="warning">
+              <ReactMarkdown>{globalAlertMd}</ReactMarkdown>
+            </StyledAlert>
+          </FlexContainer>
+        )}
+        <Routes flaskData={flaskData} />
+        <Footer />
+        <StyledSnackbar />
+      </Providers>
+    </StrictMode>
   );
 }
 export default App;

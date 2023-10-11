@@ -6,7 +6,7 @@ import useSearchViewStore from 'js/stores/useSearchViewStore';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
-import { useStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider/store';
+import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { Link } from '@mui/material';
 import { StyledDropdownMenuButton, StyledInfoIcon } from './style';
@@ -27,7 +27,7 @@ function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
-  const { closeMenu } = useStore();
+  const { closeMenu } = useDropdownMenuStore();
 
   const menuID = 'metadata-menu';
 

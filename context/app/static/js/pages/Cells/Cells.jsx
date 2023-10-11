@@ -10,7 +10,7 @@ import CellsResults from 'js/components/cells/CellsResults';
 import CellsTutorial from 'js/components/cells/tutorial/CellsTutorial';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
-import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';
+import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 
 function Cells() {
   // Refs for the step actions used to traverse forwards in the tutorial.

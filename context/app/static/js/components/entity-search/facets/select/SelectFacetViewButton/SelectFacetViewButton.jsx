@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Button from '@mui/material/Button';
 
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 import { defaultSelectFacetSize } from 'js/components/entity-search/SearchWrapper/utils';
 
 const sharedButtonProps = {
@@ -11,7 +11,7 @@ const sharedButtonProps = {
 };
 
 function SelectFacetViewButton({ identifier, sumOtherDocCount }) {
-  const { setFacetSize } = useStore();
+  const { setFacetSize } = useSearchConfigStore();
   const [isViewingAll, setIsViewingAll] = useState(false);
 
   function handleViewAll() {

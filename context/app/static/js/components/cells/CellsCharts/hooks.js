@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import CellsService from 'js/components/cells/CellsService';
 import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
-import { useStore as useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
+import { useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider';
 
 async function fetchCellsChartsData({ uuid, cellVariableName, minExpression }) {
   const cs = new CellsService();

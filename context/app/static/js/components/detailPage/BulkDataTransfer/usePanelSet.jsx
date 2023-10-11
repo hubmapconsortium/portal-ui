@@ -107,7 +107,7 @@ const PUBLIC_DATA = {
       ),
     },
   ],
-  links: [<GlobusLink />],
+  links: [<GlobusLink key="globus-public" />],
 };
 
 const ACCESS_TO_PROTECTED_DATA = {
@@ -126,7 +126,7 @@ const ACCESS_TO_PROTECTED_DATA = {
       ),
     },
   ],
-  links: [<GlobusLink />],
+  links: [<GlobusLink key="globus-protected" />],
 };
 
 const NO_ACCESS_TO_PROTECTED_DATA = {

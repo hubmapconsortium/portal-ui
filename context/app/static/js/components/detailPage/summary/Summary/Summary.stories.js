@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { rest } from 'msw';
 import Typography from '@mui/material/Typography';
 
 import { Citation } from 'js/components/detailPage/Citation/Citation.stories';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
+
+import { FlaskDataContext } from 'js/components/Contexts';
 import Summary from './Summary';
 
 export default {
@@ -26,8 +28,23 @@ const donorSharedArgs = {
   entity_type: 'Donor',
 };
 
+function WrapperTemplate({ children, ...args }) {
+  const value = useMemo(() => {
+    return {
+      entity: {
+        ...args,
+      },
+    };
+  }, [args]);
+  return <FlaskDataContext.Provider value={value}>{children}</FlaskDataContext.Provider>;
+}
+
 function ChildlessTemplate(args) {
-  return <Summary {...args} />;
+  return (
+    <WrapperTemplate {...args}>
+      <Summary {...args} />
+    </WrapperTemplate>
+  );
 }
 export const DonorDefault = ChildlessTemplate.bind({});
 DonorDefault.args = {
@@ -47,12 +64,14 @@ const sampleSharedArgs = {
 
 function SampleTemplate(args) {
   return (
-    <Summary {...args}>
-      <SummaryItem>Fake Organ Type</SummaryItem>
-      <Typography variant="h6" component="p">
-        Fake Sample Category
-      </Typography>
-    </Summary>
+    <WrapperTemplate {...args}>
+      <Summary {...args}>
+        <SummaryItem>Fake Organ Type</SummaryItem>
+        <Typography variant="h6" component="p">
+          Fake Sample Category
+        </Typography>
+      </Summary>
+    </WrapperTemplate>
   );
 }
 
@@ -69,12 +88,14 @@ SampleWithDescription.args = {
 
 function DatasetTemplate(args) {
   return (
-    <Summary {...args}>
-      <SummaryItem>Fake Data Type</SummaryItem>
-      <Typography variant="h6" component="p">
-        Fake Organ Type
-      </Typography>
-    </Summary>
+    <WrapperTemplate {...args}>
+      <Summary {...args}>
+        <SummaryItem>Fake Data Type</SummaryItem>
+        <Typography variant="h6" component="p">
+          Fake Organ Type
+        </Typography>
+      </Summary>
+    </WrapperTemplate>
   );
 }
 

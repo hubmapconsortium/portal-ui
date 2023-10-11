@@ -3,6 +3,9 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import Providers from 'js/components/Providers';
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 const appProviderEndpoints = {
   elasticsearchEndpoint: 'fakeElasticsearchEndpoint',
@@ -17,7 +20,7 @@ const appProviderToken = 'fakeGroupsToken';
 // eslint-disable-next-line no-undef
 jest.mock('js/helpers/trackers');
 
-function AllTheProviders({ children }) {
+export function AllTheProviders({ children }) {
   return (
     <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken} isWorkspacesUser={isWorkspacesUser}>
       {children}

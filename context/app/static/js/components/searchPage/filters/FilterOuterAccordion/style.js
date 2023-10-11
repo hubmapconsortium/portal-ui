@@ -1,13 +1,13 @@
 import styled from 'styled-components';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
 
-import { StyledAccordion, StyledAccordionSummary } from 'js/components/searchPage/filters/style';
-
-const OuterAccordion = styled(StyledAccordion)`
+const OuterAccordion = styled(Accordion)`
   border-bottom: 1px solid ${(props) => props.theme.palette.divider};
 `;
 
-const OuterAccordionSummary = styled(StyledAccordionSummary)`
+const OuterAccordionSummary = styled(AccordionSummary)`
   & > * {
     padding: 0;
     margin: 0;

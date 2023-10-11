@@ -8,7 +8,7 @@ import TableBody from '@mui/material/TableBody';
 import Paper from '@mui/material/Paper';
 
 import metadataFieldDescriptions from 'metadata-field-descriptions';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 import { NoWrapIconTooltipCell, StyledIconTooltipCell, StyledTableContainer } from './style';
 import { useTableHeadHeight } from './hooks';
 
@@ -19,7 +19,7 @@ function ConfigureSearchTable({
   handleToggleFacet,
   filteredFields,
 }) {
-  const { numericFacetsProps } = useStore();
+  const { numericFacetsProps } = useSearchConfigStore();
 
   const { tableHeadRef, tableHeadHeight } = useTableHeadHeight();
   return (

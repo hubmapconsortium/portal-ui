@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import PropTypes from 'prop-types';
 
-import { useStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
+import { useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider';
 
 import {
   CenteredDiv,
@@ -16,7 +16,7 @@ import {
 } from './style';
 
 function Prompt({ headerText, descriptionText, buttonText, buttonIsDisabled }) {
-  const { runTutorial, isTutorialPromptOpen, closePrompt } = useStore();
+  const { runTutorial, isTutorialPromptOpen, closePrompt } = useTutorialStore();
 
   return (
     isTutorialPromptOpen && (

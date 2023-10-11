@@ -5,8 +5,7 @@ import Joyride, { STATUS, ACTIONS, LIFECYCLE } from 'react-joyride';
 import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
 import TutorialTooltip from 'js/shared-styles/tutorials/TutorialTooltip';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
-import { useStore as useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider/store';
-import { withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
+import { useTutorialStore, withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
 import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from './config';
 
 const viewMoreSelector = '#Data-Type div.sk-refinement-list__view-more-action';

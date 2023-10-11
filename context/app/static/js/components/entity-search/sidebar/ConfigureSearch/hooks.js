@@ -1,6 +1,6 @@
 import { useReducer, useState } from 'react';
 
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function selectedFieldReducer(state, { type, payload }) {
   const tempState = { ...state };
@@ -37,7 +37,7 @@ function useSelectedItems(reducer, initialItems) {
 
 function useConfigureSearch() {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
-  const { setFields, setFacets, fields, facets } = useStore();
+  const { setFields, setFacets, fields, facets } = useSearchConfigStore();
   const {
     selectedItems: selectedFields,
     handleToggleItem: handleToggleField,
