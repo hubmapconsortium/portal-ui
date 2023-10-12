@@ -9,7 +9,7 @@ import { startJob } from '../utils';
 interface WorkspaceAPIResponse {
   message: string;
   success: true | false;
-  data: unkown;
+  data: unknown;
 }
 
 interface UserTemplatesTypes {
@@ -98,7 +98,7 @@ function useTemplateNotebooks() {
         },
       });
 
-      const s = await fetcher<CreateWorkspaceResponse>({
+      const workspace = await fetcher<CreateWorkspaceResponse>({
         url: 'https://workspaces.api.hubmapconsortium.org/workspaces/',
         requestInit: {
           method: 'POST',
@@ -120,7 +120,7 @@ function useTemplateNotebooks() {
           headers: { 'UWS-Authorization': `Token ${workspacesToken}` },
         },
       });
-      const workspaceId = s?.data?.workspace?.id;
+      const workspaceId = workspace?.data?.workspace?.id;
 
       if (workspaceId) {
         await startJob({ workspaceId, workspacesEndpoint, workspacesToken });
