@@ -39,6 +39,8 @@ interface AppContextType {
   assetsEndpoint: string;
   groupsToken: string;
   workspacesToken: string;
+  workspacesEndpoint: string;
+  userTemplatesEndpoint: string;
   [key: string]: unknown;
 }
 

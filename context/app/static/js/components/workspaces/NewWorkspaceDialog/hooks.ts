@@ -72,9 +72,11 @@ function useUserTemplatesAPI({ templatesURL, f = fetcher }: UserTemplatesTypes) 
 }
 
 function useWorkspaceTemplates(tags: string[] = []) {
+  const { userTemplatesEndpoint } = useAppContext();
+
   const queryParams = tags.map((tag, i) => `${i === 0 ? '' : '&'}tags=${encodeURIComponent(tag)}`).join('');
 
-  const url = `https://user-templates-api.dev.hubmapconsortium.org/templates/jupyter_lab/?${queryParams}`;
+  const url = `${userTemplatesEndpoint}/templates/jupyter_lab/?${queryParams}`;
   const result: SWRResponse<TemplatesResponse> = useUserTemplatesAPI({ templatesURL: url });
 
   const templates = result?.data?.data ?? {};
@@ -82,15 +84,13 @@ function useWorkspaceTemplates(tags: string[] = []) {
 }
 
 function useTemplateNotebooks() {
-  const { groupsToken, workspacesToken, workspacesEndpoint } = useAppContext();
+  const { groupsToken, workspacesToken, workspacesEndpoint, userTemplatesEndpoint } = useAppContext();
 
   const createTemplateNotebooks = useCallback(
     async ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => {
-      const urls = templateKeys.map(
-        (key) => `https://user-templates-api.dev.hubmapconsortium.org/templates/jupyter_lab/${key}`,
-      );
+      const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}templates/jupyter_lab/${key}`);
       const createdTemplates = await multiFetcher<CreateTemplatesResponse>({
-        urls,
+        templateUrls,
         requestInit: {
           method: 'POST',
           body: JSON.stringify({ uuids }),
@@ -99,7 +99,7 @@ function useTemplateNotebooks() {
       });
 
       const workspace = await fetcher<CreateWorkspaceResponse>({
-        url: 'https://workspaces.api.hubmapconsortium.org/workspaces/',
+        url: `${workspacesEndpoint}/workspaces/`,
         requestInit: {
           method: 'POST',
           body: JSON.stringify({
@@ -130,15 +130,17 @@ function useTemplateNotebooks() {
         );
       }
     },
-    [groupsToken, workspacesToken, workspacesEndpoint],
+    [groupsToken, workspacesToken, workspacesEndpoint, userTemplatesEndpoint],
   );
 
   return createTemplateNotebooks;
 }
 
 function useWorkspaceTemplateTags() {
+  const { userTemplatesEndpoint } = useAppContext();
+
   const result: SWRResponse<TemplatesResponse> = useUserTemplatesAPI({
-    templatesURL: 'https://user-templates-api.dev.hubmapconsortium.org/tags/',
+    templatesURL: `${userTemplatesEndpoint}tags/`,
   });
 
   const tags = result?.data?.data ?? {};
