@@ -140,7 +140,7 @@ function useWorkspaceTemplateTags() {
   const { userTemplatesEndpoint } = useAppContext();
 
   const result: SWRResponse<TemplatesResponse> = useUserTemplatesAPI({
-    templatesURL: `${userTemplatesEndpoint}tags/`,
+    templatesURL: `${userTemplatesEndpoint}/tags/`,
   });
 
   const tags = result?.data?.data ?? {};
