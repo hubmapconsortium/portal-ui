@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 
-const schema = yup
+const schema = z
   .object({
-    'workspace-name': yup.string().required().max(150),
+    'workspace-name': z.string().max(150),
   })
   .required();
 
@@ -25,7 +25,7 @@ function useCreateWorkspace({ handleCreateWorkspace, defaultName }) {
       name: '' || defaultName,
     },
     mode: 'onChange',
-    resolver: yupResolver(schema),
+    resolver: zodResolver(schema),
   });
 
   function handleClose() {
