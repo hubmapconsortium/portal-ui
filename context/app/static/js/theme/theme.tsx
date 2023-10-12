@@ -31,6 +31,11 @@ interface CaptionColors {
   link: string;
 }
 
+interface ContainerColors {
+  primary: string;
+  secondary: string;
+}
+
 declare module '@mui/material/styles' {
   export interface ZIndex {
     tutorial: number;
@@ -51,13 +56,16 @@ declare module '@mui/material/styles' {
     white: WhiteVariants;
     provenance: ProvenanceColors;
     caption: CaptionColors;
+    container: ContainerColors;
+    containerText: ContainerColors;
   }
-
   export interface PaletteOptions {
     black?: BlackVariants;
     white?: WhiteVariants;
     provenance?: ProvenanceColors;
     caption?: CaptionColors;
+    container?: ContainerColors;
+    containerText?: ContainerColors;
   }
 
   export interface PaletteColor {
@@ -86,6 +94,14 @@ const theme = createTheme({
       link: blue,
       halfShadow: 'rgb(0, 0, 0, 0.54)',
       hoverShadow: 'rgb(0, 0, 0, 0.08)',
+    },
+    container: {
+      primary: '#C5C7CF',
+      secondary: '#EFEFEF',
+    },
+    containerText: {
+      primary: '#252938',
+      secondary: '#363636',
     },
     primary: {
       main: purple,
@@ -118,6 +134,11 @@ const theme = createTheme({
       main: '#6C8938',
       light: '#89a05f',
       dark: '#4b5f27',
+    },
+    text: {
+      primary: 'rgb(0,0,0, 0.87)',
+      secondary: 'rgb(0,0,0, 0.6)',
+      disabled: 'rgb(0,0,0, 0.38)',
     },
     black: {
       hover: 'brightness(96%)',
