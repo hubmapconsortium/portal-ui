@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
 import { useDatasetsAccessLevel } from './copiedHooks';
 
