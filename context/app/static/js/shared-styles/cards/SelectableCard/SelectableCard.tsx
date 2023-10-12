@@ -2,10 +2,10 @@ import React from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
-import Typography from '@mui/material/Typography';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Checkbox from '@mui/material/Checkbox';
-import { SxProps, Theme } from '@mui/material/styles';
+import { SxProps, Theme, styled } from '@mui/material/styles';
 
 interface SelectableCardProps {
   title: string;
@@ -17,18 +17,39 @@ interface SelectableCardProps {
   sx?: SxProps<Theme> | SxProps<Theme>[];
 }
 
+interface SelectableCardTextProps extends TypographyProps {
+  $colorVariant: 'primary' | 'secondary';
+}
+
+const SelectableCardText = styled(Typography)<SelectableCardTextProps>(({ theme, $colorVariant }) => ({
+  color: theme.palette.containerText[$colorVariant],
+})) as typeof Typography;
+
 function SelectableCard({ title, description, tags, isSelected, selectItem, cardKey, sx = [] }: SelectableCardProps) {
+  const colorVariant = isSelected ? 'primary' : 'secondary';
   return (
-    <Card sx={[{ minWidth: 275 }, ...(Array.isArray(sx) ? sx : [sx])]}>
+    <Card
+      sx={[
+        ({ palette }) => ({
+          minWidth: 275,
+          backgroundColor: palette.container[colorVariant],
+        }),
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
       <CardContent component={Stack} direction="column" sx={{ height: '100%' }}>
         <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
-          <Typography variant="subtitle1">{title}</Typography>
+          <SelectableCardText variant="subtitle1" $colorVariant={colorVariant}>
+            {title}
+          </SelectableCardText>
           <Checkbox checked={isSelected} onChange={() => selectItem(cardKey)} />
         </Stack>
-        <Typography gutterBottom>{description}</Typography>
+        <SelectableCardText gutterBottom $colorVariant={colorVariant}>
+          {description}
+        </SelectableCardText>
         <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" sx={{ marginTop: 'auto' }}>
           {tags.map((tag) => (
-            <Chip label={tag} sx={{ borderRadius: 8 }} />
+            <Chip label={tag} sx={{ borderRadius: 8, backgroundColor: 'white.main' }} />
           ))}
         </Stack>
       </CardContent>
