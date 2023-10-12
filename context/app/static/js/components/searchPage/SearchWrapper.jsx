@@ -7,6 +7,7 @@ import { SearchkitManager, SearchkitProvider, LayoutResults, NoHits, LayoutBody 
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import Filters from 'js/components/searchPage/filters/Filters';
 import { fetchSearchData } from 'js/hooks/useSearchData';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import PaginationWrapper from './PaginationWrapper';
 import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
@@ -91,7 +92,7 @@ function SearchWrapper({
 
   return (
     <SearchkitProvider searchkit={searchkit}>
-      <>
+      <SelectableTableProvider tableLabel={type}>
         <SearchBarLayout
           type={type}
           queryFields={queryFields}
@@ -118,7 +119,7 @@ function SearchWrapper({
             <PaginationWrapper />
           </LayoutResults>
         </LayoutBody>
-      </>
+      </SelectableTableProvider>
     </SearchkitProvider>
   );
 }

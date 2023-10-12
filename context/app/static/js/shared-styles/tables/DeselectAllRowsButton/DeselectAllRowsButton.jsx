@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
 function DeselectAllRowsButton({ ...rest }) {
   const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();

@@ -1,10 +1,10 @@
 import React from 'react';
 
 import ConfigureSearchTableWrapper from 'js/components/entity-search/sidebar/ConfigureSearchTableWrapper';
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function DonorSampleConfigureSearchTable(props) {
-  const { availableFields } = useStore();
+  const { availableFields } = useSearchConfigStore();
 
   return <ConfigureSearchTableWrapper {...props} availableFields={availableFields} />;
 }

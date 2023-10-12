@@ -1,8 +1,8 @@
 import React from 'react';
 
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/SelectableTableProvider';
 import SearchWrapper from 'js/components/entity-search/SearchWrapper';
 import { createDatasetFacet, buildDatasetFields } from 'js/components/entity-search/SearchWrapper/utils';
+import Search from 'js/components/entity-search/Search';
 
 const { tableFields } = buildDatasetFields();
 
@@ -17,9 +17,9 @@ const facets = Object.assign(
 
 function DatasetSearch() {
   return (
-    <SelectableTableProvider>
-      <SearchWrapper uniqueFacets={facets} uniqueFields={tableFields} entityType="dataset" />
-    </SelectableTableProvider>
+    <SearchWrapper uniqueFacets={facets} uniqueFields={tableFields} entityType="dataset">
+      <Search />
+    </SearchWrapper>
   );
 }
 

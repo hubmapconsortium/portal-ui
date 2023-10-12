@@ -12,9 +12,12 @@ module.exports = {
     'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
     'metadata-field-types$': '<rootDir>/ingest-validation-tools/docs/field-types.yaml',
     'metadata-field-entities$': '<rootDir>/ingest-validation-tools/docs/field-entities.yaml',
+    'metadata-field-assays$': '<rootDir>/ingest-validation-tools/docs/field-assays.yaml',
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },
-  transformIgnorePatterns: ['node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel)/)'],
+  transformIgnorePatterns: [
+    'node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes)/)',
+  ],
   transform: {
     '^.+\\.(t|j)sx?$': [
       '@swc/jest',
@@ -41,4 +44,5 @@ module.exports = {
     ],
     '^.+\\.ya?ml$': '<rootDir>/test-utils/loaders/ymlLoader.js',
   },
+  testEnvironment: 'jsdom',
 };

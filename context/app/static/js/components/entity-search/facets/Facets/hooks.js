@@ -1,7 +1,7 @@
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 
 function useGroupedFacets(resultsFacets) {
-  const { facets } = useStore();
+  const { facets } = useSearchConfigStore();
 
   return resultsFacets.reduce((acc, facet) => {
     if (!(facet.identifier in facets)) {

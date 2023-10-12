@@ -1,6 +1,6 @@
 // Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-client/src/withSearchkitRouting.tsx
 // Modified to handle custom route state
-import { useStore } from 'js/components/entity-search/SearchWrapper/store';
+import { useSearchConfigStore } from 'js/components/entity-search/SearchWrapper/store';
 /* eslint-disable radix */
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useEffect } from 'react';
@@ -95,7 +95,7 @@ export default function withSearchkitRouting(
   const withSearchkitRouting = (props) => {
     const searchkitVariables = useSearchkitVariables();
     const api = useSearchkit();
-    const { fields, setFields, availableFields, addFacets } = useStore();
+    const { fields, setFields, availableFields, addFacets } = useSearchConfigStore();
 
     const fieldNames = Object.keys(fields);
     useEffect(() => {

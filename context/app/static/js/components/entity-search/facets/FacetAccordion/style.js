@@ -1,15 +1,14 @@
 import styled from 'styled-components';
 import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import Typography from '@mui/material/Typography';
-
-import { StyledAccordionSummary } from 'js/components/searchPage/filters/style';
 
 const InnerAccordionDetails = styled(AccordionDetails)`
   flex-direction: column;
   padding: 4px 10px 4px 16px;
 `;
 
-const InnerAccordionSummary = styled(StyledAccordionSummary)`
+const InnerAccordionSummary = styled(AccordionSummary)`
   justify-content: left;
   padding: ${(props) => `0px ${props.theme.spacing(2)}`};
   & > * {

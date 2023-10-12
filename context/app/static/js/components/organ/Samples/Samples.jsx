@@ -15,10 +15,9 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
+import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
 import { getDonorAgeString } from 'js/helpers/functions';
 

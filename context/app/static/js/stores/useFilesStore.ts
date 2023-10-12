@@ -1,4 +1,4 @@
-import create from 'zustand';
+import { create } from 'zustand';
 
 export type FileDisplayOption = 'all' | 'qa/qc' | 'data products';
 

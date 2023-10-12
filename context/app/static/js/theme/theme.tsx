@@ -87,6 +87,12 @@ declare module '@mui/material/styles' {
   export type ThemeOptions = Partial<Theme>;
 }
 
+declare module '@mui/material' {
+  export interface PaperPropsVariantOverrides {
+    unstyled: true;
+  }
+}
+
 // default HuBMAP color and font theme
 const theme = createTheme({
   palette: {
@@ -262,6 +268,40 @@ const theme = createTheme({
       defaultProps: {
         underline: 'none',
       },
+    },
+    MuiAccordion: {
+      variants: [
+        {
+          props: { variant: 'unstyled' },
+          style: {
+            margin: 0,
+            border: 'none',
+            boxShadow: 'none',
+            '& .MuiAccordionSummary-root': {
+              minHeight: 0,
+              margin: 0,
+              border: 'none',
+              boxShadow: 'none',
+              '&.Mui-expanded': {
+                minHeight: 0,
+                margin: 0,
+              },
+              '&:before': {
+                // remove default pseudoelement border
+                display: 'none',
+              },
+            },
+            '&.Mui-expanded': {
+              minHeight: 0,
+              margin: 0,
+            },
+            '&:before': {
+              // remove default pseudoelement border
+              display: 'none',
+            },
+          },
+        },
+      ],
     },
   },
 });

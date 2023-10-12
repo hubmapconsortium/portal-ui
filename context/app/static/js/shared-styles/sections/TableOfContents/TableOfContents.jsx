@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import List from '@mui/material/List';
-import { useSpring, animated } from 'react-spring';
+import { useSpring, animated } from '@react-spring/web';
 
 import useEntityStore from 'js/stores/useEntityStore';
 import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
@@ -122,34 +121,29 @@ function TableOfContents({ items }) {
 
   const { summaryInView } = useEntityStore(entityStoreSelector);
   const initialHeightOffset = headerHeight + 16;
-  const initialProps = { top: `${initialHeightOffset}px` };
-  const [stickyNavAnimationProps, set] = useSpring(() => initialProps);
-  set(summaryInView ? initialProps : { top: `${initialHeightOffset + entityHeaderHeight}px` });
+  const top = summaryInView ? `${initialHeightOffset}px` : `${initialHeightOffset + entityHeaderHeight}px`;
+  const stickyNavAnimationProps = useSpring({ top });
+
+  if (!items || items.length === 0) {
+    return null;
+  }
 
   return (
     <TableContainer data-testid="table-of-contents">
       <AnimatedNav style={stickyNavAnimationProps}>
-        {items.length > 0 ? (
-          <>
-            <TableTitle variant="h5" component="h3">
-              Sections
-            </TableTitle>
-            <List component="ul">
-              {items.map((item) => (
-                <li key={item.text}>
-                  <ItemLink item={item} currentSection={currentSection} handleClick={handleClick} />
-                </li>
-              ))}
-            </List>
-          </>
-        ) : null}
+        <TableTitle variant="h5" component="h3">
+          Sections
+        </TableTitle>
+        <List component="ul">
+          {items.map((item) => (
+            <li key={item.text}>
+              <ItemLink item={item} currentSection={currentSection} handleClick={handleClick} />
+            </li>
+          ))}
+        </List>
       </AnimatedNav>
     </TableContainer>
   );
 }
-
-TableOfContents.propTypes = {
-  items: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)).isRequired,
-};
 
 export default TableOfContents;

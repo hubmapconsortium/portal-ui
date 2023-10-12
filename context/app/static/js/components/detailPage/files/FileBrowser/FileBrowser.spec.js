@@ -80,14 +80,14 @@ const fileBrowser = {
 const defaultTextInDocument = ['path1', 'path3', 'fake5.txt'];
 const defaultTextNotInDocument = ['path2', 'fake1.txt', 'fake2.txt', 'fake3.txt', 'fake4.txt'];
 
-test('displays files and directories', () => {
+test('displays files and directories', async () => {
   render(<FilesBrowserTest />);
 
   expectArrayOfStringsToExist(defaultTextInDocument);
 
   expectArrayOfStringsToNotExist(defaultTextNotInDocument);
 
-  userEvent.click(fileBrowser.togglePath1Directory);
+  await userEvent.click(fileBrowser.togglePath1Directory);
 
   const textInDocumentAfterOpenDirectory = [...defaultTextInDocument, 'fake3.txt', 'path2'];
   expectArrayOfStringsToExist(textInDocumentAfterOpenDirectory);
@@ -109,21 +109,21 @@ test.each(
     },
   ],
   'Displays correct files before and after display only $name chip is clicked',
-  ({ toggle, textInDocumentAfter, textNotInDocumentAfter }) => {
+  async ({ toggle, textInDocumentAfter, textNotInDocumentAfter }) => {
     render(<FilesBrowserTest />);
 
     // initial
     expectArrayOfStringsToExist(defaultTextInDocument);
     expectArrayOfStringsToNotExist(defaultTextNotInDocument);
 
-    userEvent.click(toggle());
+    await userEvent.click(toggle());
 
     // after chip is clicked
     expectArrayOfStringsToExist(textInDocumentAfter);
 
     expectArrayOfStringsToNotExist(textNotInDocumentAfter);
 
-    userEvent.click(toggle());
+    await userEvent.click(toggle());
 
     // returns to all dirs closed
     expectArrayOfStringsToExist(defaultTextInDocument);

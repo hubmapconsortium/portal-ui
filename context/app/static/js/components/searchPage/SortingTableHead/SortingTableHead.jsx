@@ -4,6 +4,7 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import { trackEvent } from 'js/helpers/trackers';
 
+import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import { getSortPairs } from '../utils';
 import { ArrowUpOn, ArrowDownOn, ArrowDownOff, StyledHeaderCell } from './style';
 
@@ -27,11 +28,13 @@ OrderIcon.propTypes = {
   order: PropTypes.oneOf(['asc', 'desc']),
 };
 
-function SortingTableHead({ items, toggleItem, selectedItems, analyticsCategory }) {
+function SortingTableHead({ items, hits, toggleItem, selectedItems, analyticsCategory, selectable }) {
   const pairs = getSortPairs(items);
+
   return (
     <TableHead>
       <TableRow>
+        {selectable && <SelectableHeaderCell allTableRowKeys={hits.map((result) => result._id)} />}
         {pairs.map((pair) => {
           const order = getOrder(pair, selectedItems);
           return (
@@ -56,6 +59,12 @@ function SortingTableHead({ items, toggleItem, selectedItems, analyticsCategory 
   );
 }
 
+function withSelectable(Component, hits) {
+  return function SelectableComponent(props) {
+    return <Component {...props} hits={hits} selectable />;
+  };
+}
+
 SortingTableHead.propTypes = {
   items: PropTypes.arrayOf(PropTypes.object).isRequired,
   toggleItem: PropTypes.func.isRequired,
@@ -63,4 +72,7 @@ SortingTableHead.propTypes = {
 };
 
 export default SortingTableHead;
-export { getOrder }; // For tests
+export {
+  getOrder, // For tests
+  withSelectable, // To work around SearchKit not allowing us to pass additional props
+}; //

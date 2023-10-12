@@ -3,7 +3,7 @@ import Searchkit from '@searchkit/sdk';
 import useDeepCompareEffect from 'use-deep-compare-effect';
 import RequestTransporter from 'js/components/entity-search/searchkit-modifications/RequestTransporter';
 import { fetchSearchData } from 'js/hooks/useSearchData';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider/store';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
 // Copied from https://github.com/searchkit/searchkit/blob/6d11b204520009a705fe207535bd4f18d083d361/packages/searchkit-sdk/src/react-hooks/index.ts
 // Modified to handle initial filters, get page size from config, use our custom transformer, and send a follow-up request to fetch IDs for all hits.

@@ -4,11 +4,11 @@ import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 
-import { useStore } from 'js/shared-styles/accordions/AccordionSteps/store';
+import { useAccordionStepsStore } from 'js/shared-styles/accordions/AccordionSteps/store';
 import { AccordionSummaryHeading, AccordionText, Flex, StyledAccordionSummary, SuccessIcon } from './style';
 
 function StepAccordion({ index, summaryHeading, content, id }) {
-  const { completeStep, expandStep, openStepIndex, completedStepsText } = useStore();
+  const { completeStep, expandStep, openStepIndex, completedStepsText } = useAccordionStepsStore();
   // memoize to avoid rerenders
   const handleCompleteStep = useMemo(() => {
     return (text) => completeStep(index, text);

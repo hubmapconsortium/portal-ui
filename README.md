@@ -154,7 +154,7 @@ Every PR should be reviewed, and every PR should include a new `CHANGELOG-someth
 
 - Components with tests or styles should be placed in to their own directory.
 - Styles should follow the `style.*` pattern where the extension is `js` for styled components or `css` for stylesheets.
-  - New styled components should use `styled` from `@mui/styles`.
+  - New styled components should use `styled` from `@mui/material/styles`.
 - Supporting test files have specific naming conventions:
   - Jest Tests should follow the `*.spec.js` pattern.
   - Stories should follow the `*.stories.js` pattern.

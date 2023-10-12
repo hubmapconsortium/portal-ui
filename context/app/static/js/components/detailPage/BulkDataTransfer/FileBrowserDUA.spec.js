@@ -115,24 +115,24 @@ test('displays correct text for when access level is not protected or consortium
   expect(duaModal.duaText.public).toBeInTheDocument();
 });
 
-test('handles agree flow', () => {
+test('handles agree flow', async () => {
   const mockAgree = jest.fn();
   render(<TestFileBrowserDUA handleAgree={mockAgree} />);
 
   expect(duaModal.checkbox.byLabel).not.toBeChecked();
   expect(duaModal.buttons.agree).toBeDisabled();
-  userEvent.click(duaModal.checkbox.byRole);
+  await userEvent.click(duaModal.checkbox.byRole);
   expect(duaModal.checkbox.byLabel).toBeChecked();
   expect(duaModal.buttons.agree).toBeEnabled();
-  userEvent.click(duaModal.buttons.agree);
+  await userEvent.click(duaModal.buttons.agree);
   expect(mockAgree).toHaveBeenCalledTimes(1);
 });
 
-test('calls handleClose when disagree button is clicked', () => {
+test('calls handleClose when disagree button is clicked', async () => {
   const mockClose = jest.fn();
   render(<TestFileBrowserDUA handleClose={mockClose} />);
 
   expect(mockClose).toHaveBeenCalledTimes(0);
-  userEvent.click(duaModal.buttons.disagree);
+  await userEvent.click(duaModal.buttons.disagree);
   expect(mockClose).toHaveBeenCalledTimes(1);
 });

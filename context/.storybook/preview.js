@@ -2,6 +2,9 @@ import React from 'react';
 
 import Providers from '../app/static/js/components/Providers';
 import { initialize, mswDecorator } from 'msw-storybook-addon';
+import { enableMapSet } from 'immer';
+
+enableMapSet();
 
 const allowConditions = [(url) => String(url).endsWith('thumbnail.jpg')];
 initialize({

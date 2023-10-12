@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Search from 'js/components/entity-search/Search';
 import { getDefaultFilters } from 'js/components/entity-search/searchkit-modifications/getDefaultFilters';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import {
@@ -11,10 +10,10 @@ import {
   getEntityTypeFilter,
   buildTileFields,
 } from './utils';
-import SearchConfigProvider from './provider';
+import SearchConfigProvider from './store';
 import { useNumericFacetsProps } from './hooks';
 
-function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
+function SearchWrapper({ uniqueFacets, uniqueFields, entityType, children }) {
   const { tableFields: donorFacets } = buildDonorFields(entityType);
 
   const initialFacets = {
@@ -43,21 +42,21 @@ function SearchWrapper({ uniqueFacets, uniqueFields, entityType }) {
 
   return (
     <SearchConfigProvider
-      initialConfig={{
-        initialFacets,
-        initialFields,
-        facets: initialFacets,
-        fields: initialFields,
-        defaultFilters,
-        entityType,
-        numericFacetsProps,
-        initialView: 'table',
-        tileFields,
-      }}
+      initialFacets={initialFacets}
+      initialFields={initialFields}
+      facets={initialFacets}
+      fields={initialFields}
+      defaultFilters={defaultFilters}
+      entityType={entityType}
+      numericFacetsProps={numericFacetsProps}
+      initialView="table"
+      tileFields={tileFields}
     >
-      <Search />
+      {children}
     </SearchConfigProvider>
   );
 }
 
-export default withSelectableTableProvider(SearchWrapper);
+const SearchWrapperWithSelectableTable = withSelectableTableProvider(SearchWrapper);
+
+export default SearchWrapperWithSelectableTable;

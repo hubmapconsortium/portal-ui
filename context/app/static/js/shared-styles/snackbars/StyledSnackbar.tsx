@@ -8,7 +8,11 @@ const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(props, ref) 
 });
 
 export default function StyledSnackbar() {
-  const { message, snackbarOpen, closeSnackbar } = useSnackbarStore();
+  const { message, snackbarOpen, closeSnackbar } = useSnackbarStore((state) => ({
+    message: state.message,
+    snackbarOpen: state.snackbarOpen,
+    closeSnackbar: state.closeSnackbar,
+  }));
 
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {

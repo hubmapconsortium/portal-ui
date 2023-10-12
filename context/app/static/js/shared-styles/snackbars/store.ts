@@ -1,6 +1,5 @@
 import { ReactNode } from 'react';
-import create from 'zustand';
-import createContext from 'zustand/context';
+import { create } from 'zustand';
 
 import { Severity, SnackbarMessage } from './types';
 
@@ -15,8 +14,6 @@ interface SnackbarProviderState {
   toastError: (message: ReactNode, key?: string | number) => void;
 }
 
-const { Provider, useStore } = createContext<SnackbarProviderState>();
-
 const formatMessage = (
   newMessage: ReactNode,
   severity: Severity = 'info',
@@ -30,27 +27,26 @@ const formatMessage = (
   return message;
 };
 
-const createStore = () =>
-  create<SnackbarProviderState>((set, get) => ({
-    message: undefined,
-    snackbarOpen: false,
-    openSnackbar: (newMessage, severity = 'info', key = new Date().getTime()) => {
-      set({
-        snackbarOpen: true,
-        message: formatMessage(newMessage, severity, key),
-      });
-    },
-    closeSnackbar: () => {
-      set({
-        snackbarOpen: false,
-        message: undefined,
-      });
-    },
-    toastInfo: (message, key) => get().openSnackbar(message, 'info', key),
-    toastSuccess: (message, key) => get().openSnackbar(message, 'success', key),
-    toastError: (message, key) => get().openSnackbar(message, 'error', key),
-    toastWarning: (message, key) => get().openSnackbar(message, 'warning', key),
-  }));
+const useStore = create<SnackbarProviderState>((set, get) => ({
+  message: undefined,
+  snackbarOpen: false,
+  openSnackbar: (newMessage, severity = 'info', key = new Date().getTime()) => {
+    set({
+      snackbarOpen: true,
+      message: formatMessage(newMessage, severity, key),
+    });
+  },
+  closeSnackbar: () => {
+    set({
+      snackbarOpen: false,
+      message: undefined,
+    });
+  },
+  toastInfo: (message, key) => get().openSnackbar(message, 'info', key),
+  toastSuccess: (message, key) => get().openSnackbar(message, 'success', key),
+  toastError: (message, key) => get().openSnackbar(message, 'error', key),
+  toastWarning: (message, key) => get().openSnackbar(message, 'warning', key),
+}));
 
 const useSnackbarActions = () => {
   return useStore((store) => ({
@@ -62,4 +58,4 @@ const useSnackbarActions = () => {
   }));
 };
 
-export { Provider as SnackbarProvider, useStore as useSnackbarStore, createStore, useSnackbarActions };
+export { useStore as useSnackbarStore, useSnackbarActions };

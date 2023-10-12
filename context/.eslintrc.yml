@@ -44,6 +44,7 @@ rules:
   react/jsx-one-expression-per-line: [0] # Makes punctuation after tab awkward.
   react/prop-types: [0]
   react/forbid-prop-types: [0]
+  no-param-reassign: [2, { ignorePropertyModificationsFor: ['state'] }] # Allow state mutations via immer
   react/require-default-props: [0] # Not necessary; we can specify default props in the component signature.
   import/prefer-default-export: [0] # Hit eslint error: SyntaxError: Unexpected token, expected {
   react/jsx-props-no-spreading: [0] # common pattern, but with TypeScript it"s pretty safe
@@ -110,6 +111,7 @@ overrides:
     rules:
       import/no-extraneous-dependencies: [0] # Allow devDependencies in test fixtures
       '@typescript-eslint/no-empty-function': [0] # allow empty function placeholders in test fixtures
+      '@typescript-eslint/no-unsafe-return': [0] # allow less type-safe code usage in tests
   - files: ['**/*.json']
     plugins: [json]
     extends: [plugin:json/recommended]

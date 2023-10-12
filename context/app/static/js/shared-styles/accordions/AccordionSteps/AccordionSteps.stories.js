@@ -2,7 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 
 import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
-import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/provider';
+import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import AccordionStepsComponent from 'js/shared-styles/accordions/AccordionSteps';
 
 export default {
