@@ -24,7 +24,7 @@ const requiredVariants = {
   },
 };
 
-function Step({ index, title, isRequired, children }: PropsWithChildren<StepProps>) {
+function Step({ index, title, isRequired = false, children }: PropsWithChildren<StepProps>) {
   const { color, text } = requiredVariants[isRequired] as RequiredVariant;
   return (
     <>
