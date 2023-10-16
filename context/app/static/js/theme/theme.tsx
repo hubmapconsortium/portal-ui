@@ -32,8 +32,8 @@ interface CaptionColors {
 }
 
 interface ContainerColors {
-  primary: string;
-  secondary: string;
+  main: string;
+  contrastText: string;
 }
 
 declare module '@mui/material/styles' {
@@ -56,16 +56,16 @@ declare module '@mui/material/styles' {
     white: WhiteVariants;
     provenance: ProvenanceColors;
     caption: CaptionColors;
-    container: ContainerColors;
-    containerText: ContainerColors;
+    secondaryContainer: ContainerColors;
+    primaryContainer: ContainerColors;
   }
   export interface PaletteOptions {
     black?: BlackVariants;
     white?: WhiteVariants;
     provenance?: ProvenanceColors;
     caption?: CaptionColors;
-    container?: ContainerColors;
-    containerText?: ContainerColors;
+    secondaryContainer?: ContainerColors;
+    primaryContainer?: ContainerColors;
   }
 
   export interface PaletteColor {
@@ -101,13 +101,13 @@ const theme = createTheme({
       halfShadow: 'rgb(0, 0, 0, 0.54)',
       hoverShadow: 'rgb(0, 0, 0, 0.08)',
     },
-    container: {
-      primary: '#C5C7CF',
-      secondary: '#EFEFEF',
+    primaryContainer: {
+      main: '#C5C7CF',
+      contrastText: '#252938',
     },
-    containerText: {
-      primary: '#252938',
-      secondary: '#363636',
+    secondaryContainer: {
+      main: '#EFEFEF',
+      contrastText: '#363636',
     },
     primary: {
       main: purple,

@@ -8,20 +8,37 @@ interface StepProps {
   isRequired: boolean;
 }
 
+interface RequiredVariant {
+  text: string;
+  color: string;
+}
+
+const requiredVariants = {
+  true: {
+    text: 'Required',
+    color: 'secondary',
+  },
+  false: {
+    text: 'Optional',
+    color: 'secondaryContainer',
+  },
+};
+
 function Step({ index, title, isRequired, children }: PropsWithChildren<StepProps>) {
+  const { color, text } = requiredVariants[isRequired] as RequiredVariant;
   return (
     <>
       <Paper
-        sx={({ palette, spacing }) => ({
-          backgroundColor: palette.secondary[isRequired ? 'main' : 'light'],
-          padding: spacing(2),
-        })}
+        sx={{
+          backgroundColor: `${color}.main`,
+          p: 2,
+        }}
       >
-        <Typography variant="subtitle2" sx={({ palette }) => ({ color: palette.secondary.contrastText })}>{`${
+        <Typography variant="subtitle2" sx={{ color: `${color}.contrastText` }}>{`${
           index + 1
-        }. ${title} (${isRequired ? 'Required' : 'Optional'})`}</Typography>
+        }. ${title} (${text})`}</Typography>
       </Paper>
-      <Paper sx={({ spacing }) => ({ padding: spacing(2) })}>{children}</Paper>
+      <Paper sx={{ p: 2 }}>{children}</Paper>
     </>
   );
 }

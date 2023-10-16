@@ -18,22 +18,22 @@ interface SelectableCardProps {
 }
 
 interface SelectableCardTextProps extends TypographyProps {
-  $colorVariant: 'primary' | 'secondary';
+  $colorVariant: 'primaryContainer' | 'secondaryContainer';
 }
 
 const SelectableCardText = styled(Typography)<SelectableCardTextProps>(({ theme, $colorVariant }) => ({
-  color: theme.palette.containerText[$colorVariant],
+  color: theme.palette[$colorVariant].contrastText,
 })) as typeof Typography;
 
 function SelectableCard({ title, description, tags, isSelected, selectItem, cardKey, sx = [] }: SelectableCardProps) {
-  const colorVariant = isSelected ? 'primary' : 'secondary';
+  const colorVariant = isSelected ? 'primaryContainer' : 'secondaryContainer';
   return (
     <Card
       sx={[
-        ({ palette }) => ({
+        {
           minWidth: 275,
-          backgroundColor: palette.container[colorVariant],
-        }),
+          backgroundColor: `${colorVariant}.main`,
+        },
         ...(Array.isArray(sx) ? sx : [sx]),
       ]}
     >
