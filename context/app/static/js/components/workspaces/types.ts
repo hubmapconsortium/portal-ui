@@ -36,4 +36,4 @@ interface CreateWorkspaceData {
 
 type CreateWorkspaceResponse = WorkspaceAPIResponse<CreateWorkspaceData>;
 
-export { TemplatesResponse, CreateTemplatesResponse, CreateWorkspaceResponse };
+export { TemplatesResponse, CreateTemplatesResponse, CreateWorkspaceResponse, TemplateTypes };

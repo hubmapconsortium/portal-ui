@@ -6,7 +6,7 @@ import Box from '@mui/material/Box';
 
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { TemplateTypes } from '../NewWorkspaceDialog/hooks';
+import { TemplateTypes } from '../types';
 
 interface TemplateGridProps {
   templates: TemplateTypes[];
