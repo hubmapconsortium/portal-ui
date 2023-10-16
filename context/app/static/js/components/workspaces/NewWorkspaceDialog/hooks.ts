@@ -5,7 +5,7 @@ import type { SWRResponse } from 'swr';
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { startJob } from '../utils';
-import { TemplatesResponse, CreateTemplatesResponse, CreateWorkspaceResponse, TemplateTypes } from '../types';
+import { TemplatesResponse, CreateTemplatesResponse, CreateWorkspaceResponse } from '../types';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -117,4 +117,4 @@ function useWorkspaceTemplateTags() {
   return { tags };
 }
 
-export { useWorkspaceTemplates, useWorkspaceTemplateTags, TemplateTypes, useTemplateNotebooks };
+export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks };
