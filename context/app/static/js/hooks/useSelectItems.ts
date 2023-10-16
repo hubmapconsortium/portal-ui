@@ -4,7 +4,11 @@ type SelectedItems = Set<string>;
 
 type SelectAction =
   | {
-      type: 'toggleItem';
+      type: 'addItem';
+      payload: string;
+    }
+  | {
+      type: 'removeItem';
       payload: string;
     }
   | {
@@ -14,12 +18,11 @@ type SelectAction =
 
 function selectReducer(state: SelectedItems, action: SelectAction): SelectedItems {
   switch (action.type) {
-    case 'toggleItem':
-      if (state.has(action.payload)) {
-        state.delete(action.payload);
-      } else {
-        state.add(action.payload);
-      }
+    case 'addItem':
+      state.add(action.payload);
+      return new Set([...state]);
+    case 'removeItem':
+      state.delete(action.payload);
       return new Set([...state]);
     case 'setSelectedItems':
       return new Set(action.payload);
@@ -32,9 +35,16 @@ function selectReducer(state: SelectedItems, action: SelectAction): SelectedItem
 export const useSelectItems = (initalSelectedItems: string[] = []) => {
   const [selectedItems, dispatch] = useReducer(selectReducer, new Set<string>(initalSelectedItems));
 
-  const toggleItem = useCallback((itemKey: string) => {
-    dispatch({ type: 'toggleItem', payload: itemKey });
-  }, []);
+  const toggleItem = useCallback(
+    (itemKey: string) => {
+      if (selectedItems.has(itemKey)) {
+        dispatch({ type: 'removeItem', payload: itemKey });
+      } else {
+        dispatch({ type: 'addItem', payload: itemKey });
+      }
+    },
+    [selectedItems],
+  );
 
   const setSelectedItems = useCallback((itemKeys: string[]) => {
     dispatch({ type: 'setSelectedItems', payload: itemKeys });

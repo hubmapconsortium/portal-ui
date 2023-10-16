@@ -42,6 +42,7 @@ function TemplateGrid({ templates, selectedTemplates, toggleTemplate, setSelecte
               selectItem={toggleTemplate}
               cardKey={templateKey}
               sx={{ height: '100%', minHeight: 225 }}
+              key={templateKey}
             />
           </Grid>
         ))}
