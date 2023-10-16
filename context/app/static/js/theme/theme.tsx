@@ -141,11 +141,6 @@ const theme = createTheme({
       light: '#89a05f',
       dark: '#4b5f27',
     },
-    text: {
-      primary: 'rgb(0,0,0, 0.87)',
-      secondary: 'rgb(0,0,0, 0.6)',
-      disabled: 'rgb(0,0,0, 0.38)',
-    },
     black: {
       hover: 'brightness(96%)',
       focus: 'rgba(0,0,0, 0.12)',
