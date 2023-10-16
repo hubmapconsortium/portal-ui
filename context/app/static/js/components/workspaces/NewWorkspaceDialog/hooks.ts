@@ -5,52 +5,17 @@ import type { SWRResponse } from 'swr';
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { startJob } from '../utils';
-
-interface WorkspaceAPIResponse {
-  message: string;
-  success: true | false;
-  data: unknown;
-}
+import { TemplatesResponse, CreateTemplatesResponse, CreateWorkspaceResponse, TemplateTypes } from '../types';
 
 interface UserTemplatesTypes {
   templatesURL: string;
   f?: typeof fetcher | typeof multiFetcher;
 }
 
-interface TemplateTypes {
-  title: string;
-  description: string;
-  tags: string[];
-  is_multi_dataset_template: bool;
-  template_format: string;
-}
-
-interface TemplatesResponse extends WorkspaceAPIResponse {
-  data: Record<string, TemplateTypes>;
-}
-
 interface CreateTemplateNotebooksTypes {
   templateKeys: string[];
   uuids: string[];
   workspaceName: string;
-}
-
-interface CreateTemplateData {
-  template: string;
-}
-
-interface CreateTemplatesResponse extends WorkspaceAPIResponse {
-  data: CreateTemplateData;
-}
-
-interface CreateWorkspaceData {
-  workspace: {
-    id: number;
-  };
-}
-
-interface CreateWorkspaceResponse extends WorkspaceAPIResponse {
-  data: CreateWorkspaceData;
 }
 
 function useUserTemplatesAPI({ templatesURL, f = fetcher }: UserTemplatesTypes) {
@@ -97,6 +62,11 @@ function useTemplateNotebooks() {
           headers: { Authorization: `Bearer ${groupsToken}` },
         },
       });
+
+      if (createdTemplates.some((t) => !t.success)) {
+        // TODO: Log error and display toast.
+        return;
+      }
 
       const workspace = await fetcher<CreateWorkspaceResponse>({
         url: `${workspacesEndpoint}/workspaces/`,
