@@ -7,7 +7,7 @@ import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { CreateWorkspaceWithDatasetsDialog } from 'js/components/workspaces/CreateWorkspaceDialog';
 
-import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
+import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
 import { useMetadataMenu } from './hooks';
 
@@ -72,7 +72,7 @@ function MetadataMenu({ entityType, results }) {
           buttonComponent={NotebookMenuItem}
           results={results}
         />
-        <NewWorkspaceDialog />
+        <NewWorkspaceDialogFromSelections />
       </DropdownMenu>
     </>
   );

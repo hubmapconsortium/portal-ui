@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, PropsWithChildren } from 'react';
+import { UseFormReturn } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -17,19 +18,10 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
-import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
+
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks } from './hooks';
-import { useCreateWorkspace } from './copiedHooks';
-import useProtectedDatasetsForm from './useProtectedDatasetsForm';
 
-interface ProtectedDatasetsTypes {
-  errorMessages: string[];
-  protectedHubmapIds: string[];
-  removeProtectedDatasets: () => void;
-  protectedRows: string[];
-  selectedRows: Set<string>;
-}
 interface TagTypes extends ChipProps {
   option: string;
 }
@@ -38,9 +30,31 @@ function TagComponent({ option, ...rest }: TagTypes) {
   return <Chip label={option} {...rest} />;
 }
 
+type ReactHookFormProps = Pick<UseFormReturn, 'handleSubmit' | 'control' | 'errors'>;
+
+interface NewWorkspaceDialogProps {
+  datasetUUIDs: Set<string>;
+  errorMessages: string[];
+  dialogIsOpen: boolean;
+  setDialogIsOpen: (boolean) => void;
+  handleClose: () => void;
+  onSubmit: (fn) => void;
+}
+
 const recommendedTags = ['visualization', 'api'];
 
-function NewWorkspaceDialog() {
+function NewWorkspaceDialog({
+  datasetUUIDs,
+  errorMessages = [],
+  dialogIsOpen,
+  setDialogIsOpen,
+  handleClose,
+  handleSubmit,
+  control,
+  errors,
+  onSubmit,
+  children,
+}: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState([]);
 
@@ -56,15 +70,6 @@ function NewWorkspaceDialog() {
 
   const createTemplateNotebooks = useTemplateNotebooks();
 
-  const { dialogIsOpen, setDialogIsOpen, handleSubmit, handleClose, control, errors, onSubmit } = useCreateWorkspace({
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    handleCreateWorkspace: createTemplateNotebooks,
-    defaultName: '',
-  });
-
-  const { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows } =
-    useProtectedDatasetsForm() as ProtectedDatasetsTypes;
-
   return (
     <>
       <MenuItem
@@ -76,7 +81,7 @@ function NewWorkspaceDialog() {
       </MenuItem>
       <Dialog
         open={dialogIsOpen}
-        onClose={() => setDialogIsOpen(false)}
+        onClose={handleClose}
         scroll="paper"
         aria-labelledby="scroll-dialog-title"
         aria-describedby="scroll-dialog-description"
@@ -101,21 +106,7 @@ function NewWorkspaceDialog() {
         </Box>
         <DialogContent dividers>
           <Step title="Edit Datasets Selection" index={0}>
-            {protectedHubmapIds.length > 0 && (
-              <Box>
-                <ErrorMessages errorMessages={errorMessages} />
-                <WorkspaceField
-                  control={control}
-                  name="Protected Datasets"
-                  errors={errors}
-                  value={protectedHubmapIds}
-                  error
-                />
-                <Button sx={{ marginTop: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
-                  Remove Protected Datasets ({protectedRows.length})
-                </Button>
-              </Box>
-            )}
+            {children}
             <Paper sx={{ p: 2 }}>
               <Typography sx={{ mb: 2 }}>
                 To remove a dataset, select the dataset and press the delete button. If all datasets are removed, an
@@ -140,8 +131,14 @@ function NewWorkspaceDialog() {
                 marginTop: 1,
               }}
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              onSubmit={handleSubmit((formData) =>
-                onSubmit(formData, { templateKeys: [...selectedTemplates], uuids: [...selectedRows] }),
+              onSubmit={handleSubmit(({ 'workspace-name': workspaceName }: { 'workspace-name': string }) =>
+                onSubmit(() =>
+                  createTemplateNotebooks({
+                    workspaceName,
+                    templateKeys: [...selectedTemplates],
+                    uuids: [...datasetUUIDs],
+                  }),
+                ),
               )}
             >
               <WorkspaceField

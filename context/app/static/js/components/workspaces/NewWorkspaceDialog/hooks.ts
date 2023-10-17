@@ -53,9 +53,9 @@ function useTemplateNotebooks() {
 
   const createTemplateNotebooks = useCallback(
     async ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => {
-      const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}templates/jupyter_lab/${key}`);
+      const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}/templates/jupyter_lab/${key}`);
       const createdTemplates = await multiFetcher<CreateTemplatesResponse>({
-        templateUrls,
+        urls: templateUrls,
         requestInit: {
           method: 'POST',
           body: JSON.stringify({ uuids }),
