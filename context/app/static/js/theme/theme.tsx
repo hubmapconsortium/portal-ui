@@ -83,6 +83,10 @@ declare module '@mui/material' {
   export interface PaperPropsVariantOverrides {
     unstyled: true;
   }
+
+  export interface ButtonPropsVariantOverrides {
+    elevated: true;
+  }
 }
 
 // default HuBMAP color and font theme
@@ -247,6 +251,19 @@ const theme = createTheme({
       defaultProps: {
         underline: 'none',
       },
+    },
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'elevated' },
+          style: {
+            boxShadow:
+              '0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 0px 2px 0px rgba(0, 0, 0, 0.14)',
+            borderRadius: '8px',
+            fontWeight: 300,
+          },
+        },
+      ],
     },
     MuiAccordion: {
       variants: [
