@@ -6,13 +6,17 @@ import { z } from 'zod';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 
+interface UseCreateWorkspaceTypes {
+  defaultName?: string;
+}
+
 const schema = z
   .object({
     'workspace-name': z.string().max(150),
   })
   .required();
 
-function useCreateWorkspace({ handleCreateWorkspace, defaultName }) {
+function useCreateWorkspace({ defaultName }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   const {
@@ -33,8 +37,8 @@ function useCreateWorkspace({ handleCreateWorkspace, defaultName }) {
     setDialogIsOpen(false);
   }
 
-  function onSubmit({ 'workspace-name': workspaceName }, { templateKeys, uuids }) {
-    handleCreateWorkspace({ workspaceName, templateKeys, uuids });
+  function onSubmit(submitCallback: () => void) {
+    submitCallback();
     reset();
     handleClose();
   }
@@ -42,7 +46,13 @@ function useCreateWorkspace({ handleCreateWorkspace, defaultName }) {
   return { dialogIsOpen, setDialogIsOpen, handleClose, handleSubmit, control, errors, onSubmit };
 }
 
-function useDatasetsAccessLevel(ids) {
+interface DatasetAccessLevelHits {
+  mapped_data_access_level: 'Public' | 'Protected';
+  hubmap_id: string;
+  [key: string]: unknown;
+}
+
+function useDatasetsAccessLevel(ids: string[]) {
   const query = {
     query: {
       bool: {
@@ -52,7 +62,7 @@ function useDatasetsAccessLevel(ids) {
     _source: ['mapped_data_access_level', 'hubmap_id'],
     size: ids.length,
   };
-  const { searchHits: datasets } = useSearchHits(query);
+  const { searchHits: datasets } = useSearchHits(query) as { searchHits: DatasetAccessLevelHits[] };
   return { datasets };
 }
 
