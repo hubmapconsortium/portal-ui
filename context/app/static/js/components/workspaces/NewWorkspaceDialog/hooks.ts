@@ -5,17 +5,16 @@ import type { SWRResponse } from 'swr';
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { startJob } from '../utils';
-import { TemplatesResponse, CreateTemplatesResponse, CreateWorkspaceResponse } from '../types';
+import {
+  TemplatesResponse,
+  CreateTemplatesResponse,
+  CreateWorkspaceResponse,
+  CreateTemplateNotebooksTypes,
+} from '../types';
 
 interface UserTemplatesTypes {
   templatesURL: string;
   f?: typeof fetcher | typeof multiFetcher;
-}
-
-interface CreateTemplateNotebooksTypes {
-  templateKeys: string[];
-  uuids: string[];
-  workspaceName: string;
 }
 
 function useUserTemplatesAPI({ templatesURL, f = fetcher }: UserTemplatesTypes) {

@@ -1,4 +1,4 @@
-import React, { useState, PropsWithChildren } from 'react';
+import React, { useState, PropsWithChildren, useCallback } from 'react';
 import { UseFormReturn } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -20,7 +20,7 @@ import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 
 import TemplateGrid from '../TemplateGrid';
-import { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks } from './hooks';
+import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 
 interface TagTypes extends ChipProps {
   option: string;
@@ -68,7 +68,16 @@ function NewWorkspaceDialog({
 
   const { tags } = useWorkspaceTemplateTags();
 
-  const createTemplateNotebooks = useTemplateNotebooks();
+  const submit = useCallback(
+    ({ 'workspace-name': workspaceName }: { 'workspace-name': string }) => {
+      onSubmit({
+        workspaceName,
+        templateKeys: [...selectedTemplates],
+        uuids: [...datasetUUIDs],
+      });
+    },
+    [datasetUUIDs, selectedTemplates, onSubmit],
+  );
 
   return (
     <>
@@ -131,15 +140,7 @@ function NewWorkspaceDialog({
                 marginTop: 1,
               }}
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              onSubmit={handleSubmit(({ 'workspace-name': workspaceName }: { 'workspace-name': string }) =>
-                onSubmit(() =>
-                  createTemplateNotebooks({
-                    workspaceName,
-                    templateKeys: [...selectedTemplates],
-                    uuids: [...datasetUUIDs],
-                  }),
-                ),
-              )}
+              onSubmit={handleSubmit(submit)}
             >
               <WorkspaceField
                 control={control}

@@ -5,6 +5,8 @@ import { z } from 'zod';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
+import { CreateTemplateNotebooksTypes } from '../types';
+import { useTemplateNotebooks } from './hooks';
 
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
@@ -18,6 +20,7 @@ const schema = z
 
 function useCreateWorkspace({ defaultName }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+  const createTemplateNotebooks = useTemplateNotebooks();
 
   const {
     handleSubmit,
@@ -37,8 +40,8 @@ function useCreateWorkspace({ defaultName }: UseCreateWorkspaceTypes) {
     setDialogIsOpen(false);
   }
 
-  function onSubmit(submitCallback: () => void) {
-    submitCallback();
+  async function onSubmit({ templateKeys, uuids, workspaceName }: CreateTemplateNotebooksTypes) {
+    await createTemplateNotebooks({ templateKeys, uuids, workspaceName });
     reset();
     handleClose();
   }
