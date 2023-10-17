@@ -6,7 +6,7 @@ import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import useProtectedDatasetsForm from 'js/components/workspaces/NewWorkspaceDialog/useProtectedDatasetsForm';
-import { useCreateWorkspace } from './copiedHooks';
+import { useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 
 interface ProtectedDatasetsTypes {
   errorMessages: string[];
@@ -20,7 +20,7 @@ function NewWorkspaceDialogFromSelections() {
   const { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows } =
     useProtectedDatasetsForm() as ProtectedDatasetsTypes;
 
-  const { control, errors, ...rest } = useCreateWorkspace({});
+  const { control, errors, ...rest } = useCreateWorkspaceForm({});
 
   return (
     <NewWorkspaceDialog datasetUUIDs={selectedRows} control={control} errors={errors} {...rest}>

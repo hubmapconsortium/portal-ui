@@ -18,7 +18,7 @@ const schema = z
   })
   .required();
 
-function useCreateWorkspace({ defaultName }: UseCreateWorkspaceTypes) {
+function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
 
@@ -69,4 +69,4 @@ function useDatasetsAccessLevel(ids: string[]) {
   return { datasets };
 }
 
-export { useCreateWorkspace, useDatasetsAccessLevel };
+export { useCreateWorkspaceForm, useDatasetsAccessLevel };

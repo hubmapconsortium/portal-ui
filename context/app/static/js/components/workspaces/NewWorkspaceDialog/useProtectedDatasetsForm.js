@@ -3,7 +3,7 @@ import { useCallback } from 'react';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
-import { useDatasetsAccessLevel } from './copiedHooks';
+import { useDatasetsAccessLevel } from './useCreateWorkspaceForm';
 
 // Selected rows are a Set, so we must use `.size` to avoid a needless conversion to an array
 // Protected rows are an array, so we can use `.length`
