@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
-import useSWR from 'swr';
-import type { SWRResponse } from 'swr';
+import useSWR, { SWRConfiguration } from 'swr';
 
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
@@ -10,29 +9,28 @@ import {
   CreateTemplatesResponse,
   CreateWorkspaceResponse,
   CreateTemplateNotebooksTypes,
+  TemplateTagsResponse,
 } from '../types';
 
 interface UserTemplatesTypes {
   templatesURL: string;
-  f?: typeof fetcher | typeof multiFetcher;
+  config?: Partial<SWRConfiguration>;
 }
 
-function useUserTemplatesAPI({ templatesURL, f = fetcher }: UserTemplatesTypes) {
+function useUserTemplatesAPI<T>({ templatesURL, config = { fallbackData: {} } }: UserTemplatesTypes) {
   const { groupsToken } = useAppContext();
 
-  const result = useSWR(
+  return useSWR<T>(
     [templatesURL, groupsToken],
     ([url, token]: string[]) =>
-      f({
+      fetcher({
         url,
         requestInit: {
           headers: { Authorization: `Bearer ${token}` },
         },
       }),
-    { fallbackData: {} },
+    { ...config },
   );
-
-  return result;
 }
 
 function useWorkspaceTemplates(tags: string[] = []) {
@@ -41,7 +39,7 @@ function useWorkspaceTemplates(tags: string[] = []) {
   const queryParams = tags.map((tag, i) => `${i === 0 ? '' : '&'}tags=${encodeURIComponent(tag)}`).join('');
 
   const url = `${userTemplatesEndpoint}/templates/jupyter_lab/?${queryParams}`;
-  const result: SWRResponse<TemplatesResponse> = useUserTemplatesAPI({ templatesURL: url });
+  const result = useUserTemplatesAPI<TemplatesResponse>({ templatesURL: url });
 
   const templates = result?.data?.data ?? {};
   return { templates };
@@ -108,7 +106,7 @@ function useTemplateNotebooks() {
 function useWorkspaceTemplateTags() {
   const { userTemplatesEndpoint } = useAppContext();
 
-  const result: SWRResponse<TemplatesResponse> = useUserTemplatesAPI({
+  const result = useUserTemplatesAPI<TemplateTagsResponse>({
     templatesURL: `${userTemplatesEndpoint}/tags/`,
   });
 

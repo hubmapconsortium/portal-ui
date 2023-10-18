@@ -6,10 +6,10 @@ import Box from '@mui/material/Box';
 
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { TemplateTypes } from '../types';
+import { TemplatesTypes } from '../types';
 
 interface TemplateGridProps {
-  templates: TemplateTypes[];
+  templates: TemplatesTypes;
   selectedTemplates: Set<string>;
   toggleTemplate: (templateKey: string) => void;
   setSelectedTemplates: (templateKeys: string[]) => void;

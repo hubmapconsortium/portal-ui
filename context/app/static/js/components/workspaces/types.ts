@@ -16,11 +16,13 @@ interface TemplateTypes {
   title: string;
   description: string;
   tags: string[];
-  is_multi_dataset_template: bool;
+  is_multi_dataset_template: boolean;
   template_format: string;
 }
 
-type TemplatesResponse = WorkspaceAPIResponse<Record<string, TemplateTypes>>;
+type TemplatesTypes = Record<string, TemplateTypes>;
+
+type TemplatesResponse = WorkspaceAPIResponse<TemplateTypes>;
 
 interface CreateTemplateData {
   template: string;
@@ -42,10 +44,16 @@ interface CreateTemplateNotebooksTypes {
   workspaceName: string;
 }
 
-export {
+type TemplateTags = Record<string, string>;
+
+type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
+
+export type {
+  WorkspaceAPIResponse,
   TemplatesResponse,
   CreateTemplatesResponse,
   CreateWorkspaceResponse,
-  TemplateTypes,
+  TemplatesTypes,
   CreateTemplateNotebooksTypes,
+  TemplateTagsResponse,
 };

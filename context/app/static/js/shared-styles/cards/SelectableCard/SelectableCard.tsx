@@ -5,7 +5,8 @@ import Chip from '@mui/material/Chip';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Checkbox from '@mui/material/Checkbox';
-import { SxProps, Theme, styled } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
+import { SystemStyleObject } from '@mui/system';
 
 interface SelectableCardProps {
   title: string;
@@ -14,7 +15,7 @@ interface SelectableCardProps {
   isSelected: boolean;
   selectItem: (itemKey: string) => void;
   cardKey: string;
-  sx?: SxProps<Theme> | SxProps<Theme>[];
+  sx?: SystemStyleObject | SystemStyleObject[];
 }
 
 interface SelectableCardTextProps extends TypographyProps {
@@ -23,9 +24,17 @@ interface SelectableCardTextProps extends TypographyProps {
 
 const SelectableCardText = styled(Typography)<SelectableCardTextProps>(({ theme, $colorVariant }) => ({
   color: theme.palette[$colorVariant].contrastText,
-})) as typeof Typography;
+}));
 
-function SelectableCard({ title, description, tags, isSelected, selectItem, cardKey, sx = [] }: SelectableCardProps) {
+function SelectableCard({
+  title,
+  description,
+  tags = [],
+  isSelected,
+  selectItem,
+  cardKey,
+  sx = [],
+}: SelectableCardProps) {
   const colorVariant = isSelected ? 'primaryContainer' : 'secondaryContainer';
   return (
     <Card
@@ -47,11 +56,14 @@ function SelectableCard({ title, description, tags, isSelected, selectItem, card
         <SelectableCardText gutterBottom $colorVariant={colorVariant}>
           {description}
         </SelectableCardText>
-        <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" sx={{ marginTop: 'auto' }}>
-          {tags.map((tag) => (
-            <Chip label={tag} sx={{ borderRadius: 8, backgroundColor: 'white.main' }} />
-          ))}
-        </Stack>
+
+        {tags.length > 0 && (
+          <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" sx={{ marginTop: 'auto' }}>
+            {tags.map((tag) => (
+              <Chip label={tag} sx={{ borderRadius: 8, backgroundColor: 'white.main' }} />
+            ))}
+          </Stack>
+        )}
       </CardContent>
     </Card>
   );

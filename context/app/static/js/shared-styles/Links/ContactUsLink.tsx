@@ -3,7 +3,10 @@ import { trackLink } from 'js/helpers/trackers';
 import IconLink from './iconLinks/IconLink';
 import { SupportIcon } from '../icons';
 
-type OmittedIconLinkProps = Omit<ComponentProps<typeof IconLink>, 'isOutbound' | 'href' | 'onClick'>;
+type OmittedIconLinkProps = Omit<
+  ComponentProps<typeof IconLink>,
+  'isOutbound' | 'href' | 'onClick' | 'children' | 'icon'
+>;
 
 interface ContactUsLinkProps extends PropsWithChildren<OmittedIconLinkProps> {
   iconFontSize?: string;
