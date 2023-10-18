@@ -3,13 +3,14 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 import Description from 'js/shared-styles/sections/Description';
-import { DeleteIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
 import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
-import CreateWorkspaceButton from 'js/components/workspaces/CreateWorkspaceButton';
+import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import AddRounded from '@mui/icons-material/AddRounded';
+import Stack from '@mui/material/Stack';
 import { useWorkspacesList } from './hooks';
-import { StyledButton } from './style';
+import WorkspaceButton from './WorkspaceButton';
 
 function WorkspacesList() {
   const { workspacesList, handleCreateWorkspace } = useWorkspacesList();
@@ -23,17 +24,20 @@ function WorkspacesList() {
           </Typography>
         }
         buttons={
-          <>
-            <StyledButton
+          <Stack direction="row" gap={1}>
+            <WorkspaceButton
               onClick={() => {
                 // eslint-disable-next-line no-alert
                 alert('TODO: Support deletion of multiple datasets');
               }}
+              tooltip="Delete selected workspaces"
             >
-              <DeleteIcon color="primary" />
-            </StyledButton>
-            <CreateWorkspaceButton handleCreateWorkspace={handleCreateWorkspace} />
-          </>
+              <DeleteRounded />
+            </WorkspaceButton>
+            <WorkspaceButton onClick={handleCreateWorkspace} tooltip="Create workspace">
+              <AddRounded />
+            </WorkspaceButton>
+          </Stack>
         }
       />
       <Paper>
