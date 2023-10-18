@@ -12,7 +12,7 @@ import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import MenuItem from '@mui/material/MenuItem';
 
-import Step from 'shared-styles/surfaces/Step';
+import Step from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useSelectItems } from 'js/hooks/useSelectItems';
@@ -21,6 +21,7 @@ import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
+import { CreateTemplateNotebooksTypes } from '../types';
 
 interface TagTypes extends ChipProps {
   option: string;
@@ -29,16 +30,21 @@ interface TagTypes extends ChipProps {
 function TagComponent({ option, ...rest }: TagTypes) {
   return <Chip label={option} {...rest} />;
 }
+interface CreateWorkspaceFormSubmit {
+  ['workspace-name']: string;
+}
 
-type ReactHookFormProps = Pick<UseFormReturn, 'handleSubmit' | 'control' | 'errors'>;
+type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormSubmit>, 'handleSubmit' | 'control'> & {
+  errors: Pick<UseFormReturn['formState'], 'errors'>;
+};
 
 interface NewWorkspaceDialogProps {
   datasetUUIDs: Set<string>;
   errorMessages: string[];
   dialogIsOpen: boolean;
-  setDialogIsOpen: (boolean) => void;
+  setDialogIsOpen: (isOpen: boolean) => void;
   handleClose: () => void;
-  onSubmit: (fn) => void;
+  onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
 }
 
 const recommendedTags = ['visualization', 'api'];
@@ -69,7 +75,7 @@ function NewWorkspaceDialog({
   const { tags } = useWorkspaceTemplateTags();
 
   const submit = useCallback(
-    ({ 'workspace-name': workspaceName }: { 'workspace-name': string }) => {
+    ({ 'workspace-name': workspaceName }: CreateWorkspaceFormSubmit) => {
       onSubmit({
         workspaceName,
         templateKeys: [...selectedTemplates],
@@ -175,7 +181,7 @@ function NewWorkspaceDialog({
                   .sort((a, b) => a.localeCompare(b))}
                 multiple
                 filterSelectedOptions
-                isOptionEqualToValue={(option, value) => option === value}
+                isOptionEqualToValue={(option: string, value: string) => option === value}
                 tagComponent={TagComponent}
                 onChange={(_, value: string[]) => {
                   setSelectedTags(value);
