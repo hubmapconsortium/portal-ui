@@ -195,6 +195,16 @@ async function locationIfJobRunning({ workspaceId, setMessage, setDead, workspac
   return null;
 }
 
+/**
+ * Creates a formatted link to the passed workspace's notebook
+ * @typedef {import('./types').Workspace} Workspace
+ * @param {Workspace} workspace The workspace to link to
+ * @returns {string}
+ */
+function getWorkspaceLink(workspace) {
+  return `/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(workspace.path)}`;
+}
+
 export {
   createWorkspaceAndNotebook,
   deleteWorkspace,
@@ -203,4 +213,5 @@ export {
   condenseJobs,
   locationIfJobRunning,
   startJob,
+  getWorkspaceLink,
 };

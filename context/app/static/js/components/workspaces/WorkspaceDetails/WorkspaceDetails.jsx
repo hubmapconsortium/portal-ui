@@ -1,35 +1,27 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 import JobStatus from 'js/components/workspaces/JobStatus';
-import { condenseJobs } from 'js/components/workspaces/utils';
-import { InternalLink } from 'js/shared-styles/Links';
+import { condenseJobs, getWorkspaceLink } from 'js/components/workspaces/utils';
+import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 
 const typographyVariant = 'subtitle1';
 
 function WorkspaceDetails({ workspace, handleStartWorkspace }) {
   const job = condenseJobs(workspace.jobs);
+  const link = getWorkspaceLink(workspace);
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        flexDirection: 'column',
-      }}
-    >
-      <InternalLink
-        href={`/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(workspace.path)}`}
-        variant={typographyVariant}
-        onClick={() => handleStartWorkspace(workspace.id)}
-      >
+    <Stack direction="column">
+      <OutboundLink href={link} variant={typographyVariant} onClick={() => handleStartWorkspace(workspace.id)}>
         {workspace.name}
-      </InternalLink>
+      </OutboundLink>
       <Typography variant="body2">
         <JobStatus job={job} />
         &nbsp;|&nbsp; Created {workspace.datetime_created.slice(0, 10)}
       </Typography>
-    </Box>
+    </Stack>
   );
 }
 

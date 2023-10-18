@@ -10,6 +10,7 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 import { useWorkspacesList } from './hooks';
 import { MergedWorkspace } from './types';
+import { getWorkspaceLink } from './utils';
 
 interface WorkspaceListItemProps {
   workspace: MergedWorkspace;
@@ -19,12 +20,13 @@ interface WorkspaceListItemProps {
 
 type WorkspaceButtonProps = Pick<WorkspaceListItemProps, 'workspace'>;
 
-// TODO: Convert the actual hook to TS
+// TODO: Convert `hooks.js` and `utils.js` to TypeScript
 interface UseWorkspacesList {
   handleStartWorkspace: (workspaceId: number) => Promise<void>;
   handleDeleteWorkspace: (workspaceId: number) => Promise<void>;
   handleStopWorkspace: (workspaceId: number) => Promise<void>;
 }
+const typedGetWorkspaceLink = getWorkspaceLink as (workspace: MergedWorkspace) => string;
 
 function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
   const { handleStartWorkspace, handleStopWorkspace } = useWorkspacesList() as UseWorkspacesList;
@@ -43,7 +45,6 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
         variant="elevated"
         size="small"
         disabled={workspace.jobs.length === 0}
-        sx={{ height: '32px' }}
         onClick={() => {
           handleStopWorkspace(workspace.id).catch((err) => {
             toastError(`Error stopping ${workspace.name}.`);
@@ -59,8 +60,10 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
     <Button
       type="button"
       variant="elevated"
+      href={typedGetWorkspaceLink(workspace)}
       size="small"
-      sx={{ height: '32px' }}
+      rel="noopener noreferrer"
+      target="_blank"
       onClick={() => {
         handleStartWorkspace(workspace.id).catch((err) => {
           toastError(`Error starting ${workspace.name}.`);
