@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 interface StepProps {
   index: number;
   title: string;
-  isRequired: boolean;
+  isRequired?: boolean;
 }
 
 interface RequiredVariant {
@@ -25,7 +25,7 @@ const requiredVariants = {
 };
 
 function Step({ index, title, isRequired = false, children }: PropsWithChildren<StepProps>) {
-  const { color, text } = requiredVariants[isRequired] as RequiredVariant;
+  const { color, text } = requiredVariants[isRequired.toString() as 'true' | 'false'] as RequiredVariant;
   return (
     <>
       <Paper
