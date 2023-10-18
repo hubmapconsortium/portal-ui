@@ -1,17 +1,23 @@
 import React from 'react';
+import Button from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Stack from '@mui/material/Stack';
 
 import { PanelWrapper } from 'js/shared-styles/panels';
 
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import Button from '@mui/material/Button';
 
 import { useWorkspacesList } from './hooks';
 import { MergedWorkspace } from './types';
 
 interface WorkspaceListItemProps {
   workspace: MergedWorkspace;
+  toggleItem: (workspaceId: number) => void;
+  selected: boolean;
 }
+
+type WorkspaceButtonProps = Pick<WorkspaceListItemProps, 'workspace'>;
 
 // TODO: Convert the actual hook to TS
 interface UseWorkspacesList {
@@ -20,7 +26,7 @@ interface UseWorkspacesList {
   handleStopWorkspace: (workspaceId: number) => Promise<void>;
 }
 
-function WorkspaceListItemButtons({ workspace }: WorkspaceListItemProps) {
+function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
   const { handleStartWorkspace, handleStopWorkspace } = useWorkspacesList() as UseWorkspacesList;
   const { toastError } = useSnackbarActions();
   if (workspace.status === 'deleting') {
@@ -67,11 +73,18 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceListItemProps) {
   );
 }
 
-function WorkspaceListItem({ workspace }: WorkspaceListItemProps) {
+function WorkspaceListItem({ workspace, toggleItem, selected }: WorkspaceListItemProps) {
   const { handleStartWorkspace } = useWorkspacesList() as UseWorkspacesList;
   return (
     <PanelWrapper key={workspace.id}>
-      <WorkspaceDetails workspace={workspace} handleStartWorkspace={handleStartWorkspace} />
+      <Stack direction="row" spacing={2}>
+        <Checkbox
+          aria-label={`Select ${workspace.name} for deletion`}
+          checked={selected}
+          onChange={() => toggleItem(workspace.id)}
+        />
+        <WorkspaceDetails workspace={workspace} handleStartWorkspace={handleStartWorkspace} />
+      </Stack>
       <WorkspaceListItemButtons workspace={workspace} />
     </PanelWrapper>
   );
