@@ -1,20 +1,19 @@
-import React, { useState } from 'react';
+import React, { useState, ElementType } from 'react';
 
 import Autocomplete, { AutocompleteProps } from '@mui/material/Autocomplete';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
-import { InputLabelProps as inputLabelProps } from '@mui/material/InputLabel';
 
-interface MultiAutocompleteTypes extends AutocompleteProps {
-  tagComponent: React.ReactNode;
-  renderInputProps: TextFieldProps;
+interface MultiAutocompleteTypes<Value> extends Omit<AutocompleteProps<Value, true, false, false>, 'renderInput'> {
+  tagComponent: ElementType;
+  renderInputProps?: TextFieldProps<'outlined'>;
 }
 
-interface RenderInputTypes {
-  InputLabelProps: inputLabelProps;
-  textFieldProps: TextFieldProps;
-}
-
-function MultiAutocomplete({ renderInputProps, tagComponent: TagComponent, ...rest }): MultiAutocompleteTypes {
+function MultiAutocomplete<Value>({
+  renderInputProps,
+  tagComponent: TagComponent,
+  options,
+  ...rest
+}: MultiAutocompleteTypes<Value>) {
   const [substring, setSubstring] = useState('');
 
   function handleChange({ target: { value } }: React.ChangeEvent<HTMLInputElement>) {
@@ -23,25 +22,27 @@ function MultiAutocomplete({ renderInputProps, tagComponent: TagComponent, ...re
 
   return (
     <Autocomplete
+      options={options}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
           return <TagComponent option={option} {...getTagProps({ index })} key={option} />;
         })
       }
-      renderInput={({ InputLabelProps, ...textFieldProps }: RenderInputTypes) => (
+      {...rest}
+      renderInput={({ InputLabelProps, ...textFieldProps }) => (
         <TextField
           InputLabelProps={{ shrink: true, ...InputLabelProps }}
           value={substring}
-          name="substring"
           variant="outlined"
+          name="substring"
           onChange={handleChange}
           onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
             e.stopPropagation();
           }}
           {...textFieldProps}
+          {...renderInputProps}
         />
       )}
-      {...rest}
     />
   );
 }
