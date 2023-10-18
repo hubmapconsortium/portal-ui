@@ -81,7 +81,10 @@ function trackPageView(path) {
 function trackEvent(event) {
   tracker.trackEvent(event);
   ReactGA.event(event);
-  faro.api.pushEvent(event.category, event);
+  // Convert all event values to strings to avoid errors in faro.
+  // https://github.com/grafana/faro-web-sdk/issues/269
+  const faroSafeEvent = Object.fromEntries(Object.entries(event).map(([key, value]) => [key, `${value}`]));
+  faro.api.pushEvent(event.category, faroSafeEvent);
 }
 
 function trackLink(href, type) {
