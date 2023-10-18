@@ -62,7 +62,7 @@ function NewWorkspaceDialog({
   children,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
-  const [selectedTags, setSelectedTags] = useState([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
