@@ -9,7 +9,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { useAppContext } from 'js/components/Contexts';
-import { CreateWorkspaceWithDatasetsDialog } from 'js/components/workspaces/CreateWorkspaceDialog';
+import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { useMetadataMenu } from 'js/components/entity-search/MetadataMenu/hooks';
 
 import { StyledDropdownMenuButton, StyledInfoIcon } from './style';
@@ -26,26 +26,11 @@ async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analytics
   closeMenu();
 }
 
-function WorkspaceMenuItem(props) {
-  const { isWorkspacesUser } = useAppContext();
-  return (
-    <MenuItem {...props} disabled={!isWorkspacesUser}>
-      Workspace
-      <SecondaryBackgroundTooltip
-        title="Create a new HuBMAP workspace and load the load the notebook into it."
-        placement="bottom-start"
-      >
-        <StyledInfoIcon color="primary" />
-      </SecondaryBackgroundTooltip>
-    </MenuItem>
-  );
-}
-
 function MetadataMenu({ type, analyticsCategory }) {
   const lcPluralType = `${type.toLowerCase()}s`;
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
-  const { createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
+  const { closeMenu } = useMetadataMenu();
 
   const { isWorkspacesUser } = useAppContext();
 
@@ -96,12 +81,7 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
-        {isWorkspacesUser && (
-          <CreateWorkspaceWithDatasetsDialog
-            buttonComponent={WorkspaceMenuItem}
-            handleCreateWorkspace={createNotebook}
-          />
-        )}
+        {isWorkspacesUser && <NewWorkspaceDialogFromSelections />}
       </DropdownMenu>
     </>
   );
