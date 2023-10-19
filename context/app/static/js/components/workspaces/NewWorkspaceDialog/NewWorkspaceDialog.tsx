@@ -85,10 +85,10 @@ function NewWorkspaceDialog({
       trackEvent({
         category: 'Workspace Creation',
         action: 'Create Workspace',
-        templates: [...selectedTemplates],
-        templateCount: selectedTemplates.size,
-        datasets: [...datasetUUIDs],
-        datasetCount: datasetUUIDs.size,
+        templates: [...selectedTemplates].map(String).toString(),
+        templateCount: String(selectedTemplates.size),
+        datasets: [...datasetUUIDs].map(String).toString(),
+        datasetCount: String(datasetUUIDs.size),
       });
     },
     [datasetUUIDs, selectedTemplates, onSubmit],
