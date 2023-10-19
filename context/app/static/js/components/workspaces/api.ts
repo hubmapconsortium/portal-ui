@@ -148,6 +148,11 @@ export function useStopWorkspace() {
 
   const stopWorkspace = useCallback(
     async (workspaceId: number) => {
+      trackEvent({
+        category: 'Workspace Action',
+        action: 'Stop Workspace',
+        value: workspaceId,
+      });
       await Promise.all(jobs.filter((j) => j.workspace_id === workspaceId).map((j) => stopJob(j.id)));
     },
     [jobs, stopJob],
@@ -160,6 +165,11 @@ async function fetchDeleteWorkspace(
   _key: string,
   { arg: { workspaceId, headers, url } }: { arg: { headers: HeadersInit; workspaceId: number; url: string } },
 ) {
+  trackEvent({
+    category: 'Workspace Action',
+    action: 'Delete Workspace',
+    value: workspaceId,
+  });
   const response = await fetch(url, {
     method: 'DELETE',
     headers,
@@ -214,6 +224,11 @@ async function startJob(
   _key: string,
   { arg: { workspaceId, jobDetails, jobType, url, headers } }: { arg: WorkspaceActionArgs },
 ) {
+  trackEvent({
+    category: 'Workspace Action',
+    action: 'Start Workspace',
+    value: { workspaceId, jobDetails, jobType },
+  });
   const result = fetch(url, {
     method: 'PUT',
     headers,
@@ -267,6 +282,11 @@ async function createWorkspaceAndNotebook(
   _key: string,
   { arg: { body, url } }: { arg: CreateWorkspaceAndNotebookArgs },
 ) {
+  trackEvent({
+    category: 'Workspace Creation',
+    action: 'Create Workspace',
+    value: body,
+  });
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),
@@ -287,12 +307,6 @@ export function useCreateWorkspace() {
   const { trigger, isMutating } = useSWRMutation('create-workspace', createWorkspaceAndNotebook);
   const createWorkspace = useCallback(
     async (path: string, body: unknown) => {
-      trackEvent({
-        category: 'Workspace Creation',
-        action: 'Create Workspace',
-        value: body,
-        path,
-      });
       return trigger({
         url: api.createWorkspace(path),
         body,
