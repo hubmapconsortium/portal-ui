@@ -19,6 +19,7 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 
+import { trackEvent } from 'js/helpers/trackers';
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateTemplateNotebooksTypes } from '../types';
@@ -80,6 +81,14 @@ function NewWorkspaceDialog({
         workspaceName,
         templateKeys: [...selectedTemplates],
         uuids: [...datasetUUIDs],
+      });
+      trackEvent({
+        category: 'Workspace Creation',
+        action: 'Create Workspace',
+        templates: [...selectedTemplates],
+        templateCount: selectedTemplates.size,
+        datasets: [...datasetUUIDs],
+        datasetCount: datasetUUIDs.size,
       });
     },
     [datasetUUIDs, selectedTemplates, onSubmit],
