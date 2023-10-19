@@ -3,6 +3,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { useCallback } from 'react';
 
+import { trackEvent } from 'js/helpers/trackers';
 import { useAppContext } from '../Contexts';
 import { Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
 import { getWorkspaceHeaders } from './utils';
@@ -286,6 +287,12 @@ export function useCreateWorkspace() {
   const { trigger, isMutating } = useSWRMutation('create-workspace', createWorkspaceAndNotebook);
   const createWorkspace = useCallback(
     async (path: string, body: unknown) => {
+      trackEvent({
+        category: 'Workspace Creation',
+        action: 'Create Workspace',
+        value: body,
+        path,
+      });
       return trigger({
         url: api.createWorkspace(path),
         body,
