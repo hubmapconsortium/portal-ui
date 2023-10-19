@@ -1,4 +1,4 @@
-import React, { useState, PropsWithChildren, useCallback } from 'react';
+import React, { useState, PropsWithChildren, useCallback, ElementType } from 'react';
 import { UseFormReturn, FieldErrors } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -10,7 +10,6 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 
 import Step from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
@@ -43,6 +42,7 @@ interface NewWorkspaceDialogProps {
   setDialogIsOpen: (isOpen: boolean) => void;
   handleClose: () => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
+  buttonComponent: ElementType;
 }
 
 const recommendedTags = ['visualization', 'api'];
@@ -57,6 +57,7 @@ function NewWorkspaceDialog({
   control,
   errors,
   onSubmit,
+  buttonComponent: ButtonComponent,
   children,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
@@ -87,13 +88,11 @@ function NewWorkspaceDialog({
 
   return (
     <>
-      <MenuItem
+      <ButtonComponent
         onClick={() => {
           setDialogIsOpen(true);
         }}
-      >
-        Launch Workspace
-      </MenuItem>
+      />
       <Dialog
         open={dialogIsOpen}
         onClose={handleClose}
