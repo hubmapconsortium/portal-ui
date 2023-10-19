@@ -2,6 +2,8 @@ import { TracingInstrumentation } from '@grafana/faro-web-tracing';
 import { LogLevel, getWebInstrumentations, initializeFaro } from '@grafana/faro-web-sdk';
 import { ReactIntegration } from '@grafana/faro-react';
 
+import { getUserGroups, getUserType } from './trackers';
+
 /**
  * Initialize Faro trackers
  * This function should be used in the main `index.jsx` before the app is rendered.
@@ -23,6 +25,13 @@ function initTrackers() {
         return item;
       }
       return null;
+    },
+    user: {
+      email: userEmail,
+      attributes: {
+        userType: getUserType(),
+        userGroups: getUserGroups(),
+      },
     },
     instrumentations: [
       // Mandatory, overwriting the instrumentations array would cause the default instrumentations to be omitted

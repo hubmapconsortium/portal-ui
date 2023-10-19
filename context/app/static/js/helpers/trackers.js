@@ -19,13 +19,13 @@ function getSiteId(location) {
   }
 }
 
-function getUserType() {
+export function getUserType() {
   // `last_login` cookie is only set when internal users log in.
   // Default to `external` if the cookie is not set.
   return readCookie('last_login') ? 'internal' : 'external';
 }
 
-function getUserGroups() {
+export function getUserGroups() {
   // Reads the user's groups from the cookie set in `routes_auth.py`.
   // Default to `none` if the cookie is not set.
   return readCookie('user_groups') || 'none';
