@@ -8,6 +8,12 @@ import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { CreateTemplateNotebooksTypes } from '../types';
 import { useTemplateNotebooks } from './hooks';
 
+interface CreateWorkspaceFormTypes {
+  'workspace-name': string;
+  'protected-datasets': undefined;
+  templates: string[];
+}
+
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
 }
@@ -90,4 +96,4 @@ function useDatasetsAccessLevel(ids: string[]) {
   return { datasets };
 }
 
-export { useCreateWorkspaceForm, useDatasetsAccessLevel };
+export { useCreateWorkspaceForm, useDatasetsAccessLevel, type CreateWorkspaceFormTypes };

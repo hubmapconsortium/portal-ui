@@ -10,7 +10,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { TemplatesTypes } from '../types';
-import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/types';
+import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 
 interface TemplateGridProps {
   templates: TemplatesTypes;

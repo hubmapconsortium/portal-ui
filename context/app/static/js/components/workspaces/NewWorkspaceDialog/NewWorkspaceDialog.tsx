@@ -19,7 +19,7 @@ import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
-import { CreateWorkspaceFormTypes } from './types';
+import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
 
 interface TagTypes extends ChipProps {
