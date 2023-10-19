@@ -39,7 +39,7 @@ export default function CreateWorkspaceWithDatasetsDialog({ ...rest }) {
       trackEvent({
         category: 'Workspace Creation',
         action: 'Too many datasets selected',
-        value: selectedRows.size(),
+        value: selectedRows.size,
       });
     }
   }
