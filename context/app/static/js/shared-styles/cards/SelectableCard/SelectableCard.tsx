@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
@@ -13,7 +13,7 @@ interface SelectableCardProps {
   description: string;
   tags?: string[];
   isSelected: boolean;
-  selectItem: (itemKey: string) => void;
+  selectItem: (e: ChangeEvent<HTMLInputElement>) => void;
   cardKey: string;
   sx?: SystemStyleObject | SystemStyleObject[];
 }
@@ -51,16 +51,15 @@ function SelectableCard({
           <SelectableCardText variant="subtitle1" $colorVariant={colorVariant}>
             {title}
           </SelectableCardText>
-          <Checkbox checked={isSelected} onChange={() => selectItem(cardKey)} />
+          <Checkbox checked={isSelected} onChange={(e) => selectItem(e)} value={cardKey} />
         </Stack>
         <SelectableCardText gutterBottom $colorVariant={colorVariant}>
           {description}
         </SelectableCardText>
-
         {tags.length > 0 && (
           <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" sx={{ marginTop: 'auto' }}>
             {tags.map((tag) => (
-              <Chip label={tag} sx={{ borderRadius: 8, backgroundColor: 'white.main' }} />
+              <Chip label={tag} sx={{ borderRadius: 8, backgroundColor: 'white.main' }} key={tag} />
             ))}
           </Stack>
         )}

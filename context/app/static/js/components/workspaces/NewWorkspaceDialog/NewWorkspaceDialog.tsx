@@ -17,7 +17,6 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
-
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './types';
@@ -65,25 +64,19 @@ function NewWorkspaceDialog({
 
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
-  const {
-    selectedItems: selectedTemplates,
-    toggleItem: toggleTemplate,
-    setSelectedItems: setSelectedTemplates,
-  } = useSelectItems([]);
-
   const { tags } = useWorkspaceTemplateTags();
 
   const submit = useCallback(
-    ({ 'workspace-name': workspaceName }: CreateWorkspaceFormTypes) => {
+    ({ 'workspace-name': workspaceName, templates: templateKeys }: CreateWorkspaceFormTypes) => {
       if (workspaceName) {
         onSubmit({
           workspaceName,
-          templateKeys: [...selectedTemplates],
+          templateKeys,
           uuids: [...datasetUUIDs],
         });
       }
     },
-    [datasetUUIDs, selectedTemplates, onSubmit],
+    [datasetUUIDs, onSubmit],
   );
 
   return (
@@ -200,12 +193,7 @@ function NewWorkspaceDialog({
                   ))}
                 </Stack>
               </Box>
-              <TemplateGrid
-                templates={templates}
-                selectedTemplates={selectedTemplates}
-                toggleTemplate={toggleTemplate}
-                setSelectedTemplates={setSelectedTemplates}
-              />
+              <TemplateGrid templates={templates} control={control} />
             </Stack>
           </Step>
         </DialogContent>
