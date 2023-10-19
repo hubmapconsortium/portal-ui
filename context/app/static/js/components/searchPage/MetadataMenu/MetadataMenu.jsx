@@ -63,24 +63,6 @@ function MetadataMenu({ type, analyticsCategory }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </MenuItem>
-        <MenuItem
-          onClick={() =>
-            fetchAndDownload({
-              urlPath: `/notebooks/entities/${lcPluralType}.ipynb`,
-              allResultsUUIDs,
-              closeMenu,
-              analyticsCategory,
-            })
-          }
-        >
-          Notebook
-          <SecondaryBackgroundTooltip
-            title="Download a Notebook which demonstrates how to programmatically access metadata."
-            placement="bottom-start"
-          >
-            <StyledInfoIcon color="primary" />
-          </SecondaryBackgroundTooltip>
-        </MenuItem>
         {isWorkspacesUser && <NewWorkspaceDialogFromSelections />}
       </DropdownMenu>
     </>
