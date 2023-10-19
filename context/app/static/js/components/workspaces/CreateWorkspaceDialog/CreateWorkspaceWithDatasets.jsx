@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useRef } from 'react';
 import Button from '@mui/material/Button';
 
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
+import { trackEvent } from 'js/helpers/trackers';
 import CreateWorkspaceDialog from './CreateWorkspaceDialog';
 import { useDatasetsAccessLevel } from './hooks';
 
@@ -24,6 +25,8 @@ const errorHelper = {
 export default function CreateWorkspaceWithDatasetsDialog({ ...rest }) {
   const { selectedRows, deselectRows } = useSelectableTableStore();
   const { toastSuccess } = useSnackbarActions();
+  const reportedProtectedRows = useRef(false);
+  const reportedTooManyRows = useRef(false);
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
   const containsProtectedDataset = protectedRows.length > 0;
 
@@ -31,18 +34,39 @@ export default function CreateWorkspaceWithDatasetsDialog({ ...rest }) {
 
   if (selectedRows.size > 10) {
     errorMessages.push(errorHelper.datasets(selectedRows));
+    if (!reportedTooManyRows.current) {
+      reportedTooManyRows.current = true;
+      trackEvent({
+        category: 'Workspace Creation',
+        action: 'Too many datasets selected',
+        value: selectedRows.size(),
+      });
+    }
   }
 
   if (containsProtectedDataset) {
     const protectedRowsError =
       protectedRows.length === 1 ? errorHelper.protectedDataset : errorHelper.protectedDatasets;
     errorMessages.push(protectedRowsError(protectedRows));
+    if (!reportedProtectedRows.current) {
+      reportedTooManyRows.current = true;
+      trackEvent({
+        category: 'Workspace Creation',
+        action: 'Protected datasets selected',
+        value: protectedRows.map((r) => r._id),
+      });
+    }
   }
   const protectedHubmapIds = protectedRows?.map((row) => row._source.hubmap_id).join(', ');
 
   const removeProtectedDatasets = useCallback(() => {
     deselectRows(protectedRows.map((r) => r._id));
     toastSuccess('Protected datasets successfully removed from selection.');
+    trackEvent({
+      category: 'Workspace Creation',
+      action: 'Protected datasets removed',
+      value: protectedRows.map((r) => r._id),
+    });
   }, [deselectRows, protectedRows, toastSuccess]);
 
   const renderAdditionalFields = useCallback(
