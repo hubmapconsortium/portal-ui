@@ -55,7 +55,7 @@ function useWorkspacesPleaseWait(workspaceId) {
     }
   }
 
-  useInterval(setLocationOrRetry, 5000);
+  useInterval(setLocationOrRetry, 1000);
 
   return { message };
 }
