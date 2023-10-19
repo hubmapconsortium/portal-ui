@@ -35,7 +35,7 @@ function useWorkspacesList() {
   const { data: workspacesList, mutate } = useSWR(
     ['workspaces', workspacesToken],
     ([, token]) => fetchWorkspaces(workspacesEndpoint, token),
-    { fallbackData: [] },
+    { fallbackData: [], revalidateOnFocus: true },
   );
 
   async function handleDeleteWorkspace(workspaceId) {
