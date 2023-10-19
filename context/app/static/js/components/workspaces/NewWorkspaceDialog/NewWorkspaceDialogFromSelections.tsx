@@ -7,34 +7,33 @@ import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import useProtectedDatasetsForm from 'js/components/workspaces/NewWorkspaceDialog/useProtectedDatasetsForm';
 import { useCreateWorkspaceForm } from './useCreateWorkspaceForm';
-
-interface ProtectedDatasetsTypes {
-  errorMessages: string[];
-  protectedHubmapIds: string[];
-  removeProtectedDatasets: () => void;
-  protectedRows: string[];
-  selectedRows: Set<string>;
-}
+import { CreateWorkspaceFormTypes } from './types';
 
 function NewWorkspaceDialogFromSelections() {
   const { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows } =
-    useProtectedDatasetsForm() as ProtectedDatasetsTypes;
+    useProtectedDatasetsForm();
 
   const { control, errors, ...rest } = useCreateWorkspaceForm({});
 
   return (
-    <NewWorkspaceDialog datasetUUIDs={selectedRows} control={control} errors={errors} {...rest}>
+    <NewWorkspaceDialog
+      datasetUUIDs={selectedRows}
+      control={control}
+      errors={errors}
+      errorMessages={errorMessages}
+      {...rest}
+    >
       {protectedHubmapIds.length > 0 && (
         <Box>
           <ErrorMessages errorMessages={errorMessages} />
-          <WorkspaceField
+          <WorkspaceField<CreateWorkspaceFormTypes>
             control={control}
-            name="Protected Datasets"
-            errors={errors}
+            name="protected-datasets"
+            label="Protected Datasets"
             value={protectedHubmapIds}
             error
           />
-          <Button sx={{ marginTop: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
+          <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
             Remove Protected Datasets ({protectedRows.length})
           </Button>
         </Box>

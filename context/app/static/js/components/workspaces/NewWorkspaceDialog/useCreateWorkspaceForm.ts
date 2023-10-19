@@ -15,8 +15,10 @@ interface UseCreateWorkspaceTypes {
 const schema = z
   .object({
     'workspace-name': z.string().max(150),
+    'protected-datasets': z.string(),
   })
-  .required();
+  .partial()
+  .required({ 'workspace-name': true });
 
 function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -29,7 +31,8 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      name: '' || defaultName,
+      'workspace-name': defaultName ?? undefined,
+      'protected-datasets': undefined,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),

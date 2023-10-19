@@ -1,5 +1,5 @@
 import React, { useState, PropsWithChildren, useCallback } from 'react';
-import { UseFormReturn } from 'react-hook-form';
+import { UseFormReturn, FieldErrors } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -21,6 +21,7 @@ import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
+import { CreateWorkspaceFormTypes } from './types';
 import { CreateTemplateNotebooksTypes } from '../types';
 
 interface TagTypes extends ChipProps {
@@ -30,12 +31,9 @@ interface TagTypes extends ChipProps {
 function TagComponent({ option, ...rest }: TagTypes) {
   return <Chip label={option} {...rest} />;
 }
-interface CreateWorkspaceFormSubmit {
-  ['workspace-name']: string;
-}
 
-type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormSubmit>, 'handleSubmit' | 'control'> & {
-  errors: Pick<UseFormReturn['formState'], 'errors'>;
+type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormTypes>, 'handleSubmit' | 'control'> & {
+  errors: FieldErrors<CreateWorkspaceFormTypes>;
 };
 
 interface NewWorkspaceDialogProps {
@@ -75,12 +73,14 @@ function NewWorkspaceDialog({
   const { tags } = useWorkspaceTemplateTags();
 
   const submit = useCallback(
-    ({ 'workspace-name': workspaceName }: CreateWorkspaceFormSubmit) => {
-      onSubmit({
-        workspaceName,
-        templateKeys: [...selectedTemplates],
-        uuids: [...datasetUUIDs],
-      });
+    ({ 'workspace-name': workspaceName }: CreateWorkspaceFormTypes) => {
+      if (workspaceName) {
+        onSubmit({
+          workspaceName,
+          templateKeys: [...selectedTemplates],
+          uuids: [...datasetUUIDs],
+        });
+      }
     },
     [datasetUUIDs, selectedTemplates, onSubmit],
   );
@@ -148,12 +148,11 @@ function NewWorkspaceDialog({
               // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onSubmit={handleSubmit(submit)}
             >
-              <WorkspaceField
+              <WorkspaceField<CreateWorkspaceFormTypes>
                 control={control}
                 name="workspace-name"
                 label="Name"
                 placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
-                errors={errors}
                 autoFocus
                 onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                   e.stopPropagation();
@@ -174,14 +173,14 @@ function NewWorkspaceDialog({
             </Paper>
             <Typography variant="subtitle1">Filter workspace templates by tags</Typography>
             <Stack spacing={1}>
-              <MultiAutocomplete
+              <MultiAutocomplete<string>
                 value={selectedTags}
                 options={Object.keys(tags)
                   .filter((tag) => !recommendedTags.includes(tag))
                   .sort((a, b) => a.localeCompare(b))}
                 multiple
                 filterSelectedOptions
-                isOptionEqualToValue={(option: string, value: string) => option === value}
+                isOptionEqualToValue={(option, value) => option === value}
                 tagComponent={TagComponent}
                 onChange={(_, value: string[]) => {
                   setSelectedTags(value);
