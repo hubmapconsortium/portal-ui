@@ -8,6 +8,7 @@ import { useController, UseControllerProps } from 'react-hook-form';
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSelectItems } from 'js/hooks/useSelectItems';
+import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { TemplatesTypes } from '../types';
 import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/types';
 
@@ -17,10 +18,12 @@ interface TemplateGridProps {
 
 type ControllerProps = Pick<UseControllerProps<CreateWorkspaceFormTypes>, 'control'>;
 
+const inputName = 'templates';
+
 function TemplateGrid({ templates, control }: TemplateGridProps & ControllerProps) {
-  const { field } = useController({
+  const { field, fieldState } = useController({
     control,
-    name: 'templates',
+    name: inputName,
   });
   const { selectedItems: selectedTemplates, setSelectedItems: setSelectedTemplates } = useSelectItems(field.value);
 
@@ -45,8 +48,11 @@ function TemplateGrid({ templates, control }: TemplateGridProps & ControllerProp
     [updateTemplates, selectedTemplates],
   );
 
+  const errorMessage = fieldState?.error?.message;
+
   return (
     <Box>
+      {errorMessage && <ErrorMessages errorMessages={[errorMessage]} />}
       <SpacedSectionButtonRow
         leftText={<Typography variant="subtitle1">{selectedTemplates.size} Templates Selected</Typography>}
         buttons={

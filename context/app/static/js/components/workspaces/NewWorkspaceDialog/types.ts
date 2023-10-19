@@ -1,5 +1,5 @@
 interface CreateWorkspaceFormTypes {
-  'workspace-name': string | undefined;
+  'workspace-name': string;
   'protected-datasets': undefined;
   templates: string[];
 }

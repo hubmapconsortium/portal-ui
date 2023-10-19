@@ -12,11 +12,27 @@ interface UseCreateWorkspaceTypes {
   defaultName?: string;
 }
 
+function withCustomMessage(message: string): z.ZodErrorMap {
+  return function tooSmallErrorMap(issue, ctx) {
+    if (issue.code === z.ZodIssueCode.too_small) {
+      return { message };
+    }
+    return { message: ctx.defaultError };
+  };
+}
+
 const schema = z
   .object({
-    'workspace-name': z.string().max(150),
+    'workspace-name': z
+      .string({ errorMap: withCustomMessage('A workspace name is required. Please enter a workspace name.') })
+      .min(1)
+      .max(150),
     'protected-datasets': z.string(),
-    templates: z.array(z.string()).nonempty(),
+    templates: z
+      .array(z.string(), {
+        errorMap: withCustomMessage('At least one template must be selected. Please select a template.'),
+      })
+      .nonempty(),
   })
   .partial()
   .required({ 'workspace-name': true, templates: true });
@@ -32,7 +48,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     formState: { errors },
   } = useForm({
     defaultValues: {
-      'workspace-name': defaultName ?? undefined,
+      'workspace-name': defaultName ?? '',
       'protected-datasets': undefined,
       templates: [],
     },
