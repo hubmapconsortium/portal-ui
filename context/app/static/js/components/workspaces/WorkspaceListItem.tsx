@@ -2,6 +2,7 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/material/Stack';
+import styled from '@mui/material/styles/styled';
 
 import { PanelWrapper } from 'js/shared-styles/panels';
 
@@ -28,19 +29,24 @@ interface UseWorkspacesList {
 }
 const typedGetWorkspaceLink = getWorkspaceLink as (workspace: MergedWorkspace) => string;
 
+const StyledButton = styled(Button)(({ theme }) => ({
+  fontWeight: 300,
+  borderRadius: theme.spacing(1),
+})) as typeof Button;
+
 function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
   const { handleStartWorkspace, handleStopWorkspace } = useWorkspacesList() as UseWorkspacesList;
   const { toastError } = useSnackbarActions();
   if (workspace.status === 'deleting') {
     return (
-      <Button type="button" disabled variant="elevated" size="small">
+      <StyledButton type="button" disabled variant="elevated" size="small">
         Deleting...
-      </Button>
+      </StyledButton>
     );
   }
   if (workspace.jobs.length > 0) {
     return (
-      <Button
+      <StyledButton
         type="button"
         variant="elevated"
         size="small"
@@ -53,11 +59,11 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
         }}
       >
         Stop Jobs
-      </Button>
+      </StyledButton>
     );
   }
   return (
-    <Button
+    <StyledButton
       type="button"
       variant="elevated"
       href={typedGetWorkspaceLink(workspace)}
@@ -72,7 +78,7 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
       }}
     >
       Launch Workspace
-    </Button>
+    </StyledButton>
   );
 }
 
