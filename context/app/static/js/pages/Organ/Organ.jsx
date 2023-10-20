@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 
-// import Azimuth from 'js/components/organ/Azimuth';
+import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
 // TODO: Revert this import change after components are merged together
@@ -61,9 +61,7 @@ function Organ({ organ }) {
         )}
         {shouldDisplaySection[referenceId] && (
           <Section id={referenceId}>
-            {/* Vitessce's luma gl version is incompatible, (patch version mismatch)
-                pending dependency bump and new version */}
-            {/* <Azimuth config={organ.azimuth} /> */}
+            <Azimuth config={organ.azimuth} />
           </Section>
         )}
         {shouldDisplaySection[assaysId] && (
