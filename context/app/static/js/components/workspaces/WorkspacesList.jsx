@@ -28,7 +28,7 @@ function WorkspacesList() {
     try {
       await Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(workspaceId)));
     } catch (e) {
-      toastError('Error deleting workspaces');
+      toastError('Error deleting workspaces.');
       console.error(e);
     } finally {
       isDeleting.current = false;
