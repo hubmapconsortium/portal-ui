@@ -1,4 +1,4 @@
-import SortingTableHead, { getOrder } from './SortingTableHead';
+import SortingTableHead, { getOrder, withSelectable } from './SortingTableHead';
 
 export default SortingTableHead;
-export { getOrder };
+export { getOrder, withSelectable };
