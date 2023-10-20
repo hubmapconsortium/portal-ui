@@ -23,7 +23,7 @@ function WorkspacesList() {
   const isDeleting = useRef(false);
 
   const handleDeleteSelected = async () => {
-    const workspaceIds = Array.from(selectedItems);
+    const workspaceIds = [...selectedItems];
     isDeleting.current = true;
     try {
       await Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(workspaceId)));
