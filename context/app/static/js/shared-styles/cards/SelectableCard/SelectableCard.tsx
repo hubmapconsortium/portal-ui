@@ -1,12 +1,10 @@
 import React, { ChangeEvent } from 'react';
-import Card from '@mui/material/Card';
 import CardContent from '@mui/material/CardContent';
 import Chip from '@mui/material/Chip';
-import Typography, { TypographyProps } from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Checkbox from '@mui/material/Checkbox';
-import { styled } from '@mui/material/styles';
-import { SystemStyleObject } from '@mui/system';
+
+import { StyledCard, SelectableCardText } from './styles';
 
 interface SelectableCardProps {
   title: string;
@@ -15,16 +13,7 @@ interface SelectableCardProps {
   isSelected: boolean;
   selectItem: (e: ChangeEvent<HTMLInputElement>) => void;
   cardKey: string;
-  sx?: SystemStyleObject | SystemStyleObject[];
 }
-
-interface SelectableCardTextProps extends TypographyProps {
-  $colorVariant: 'primaryContainer' | 'secondaryContainer';
-}
-
-const SelectableCardText = styled(Typography)<SelectableCardTextProps>(({ theme, $colorVariant }) => ({
-  color: theme.palette[$colorVariant].contrastText,
-}));
 
 function SelectableCard({
   title,
@@ -33,21 +22,13 @@ function SelectableCard({
   isSelected,
   selectItem,
   cardKey,
-  sx = [],
+  ...rest
 }: SelectableCardProps) {
   const colorVariant = isSelected ? 'primaryContainer' : 'secondaryContainer';
   return (
-    <Card
-      sx={[
-        {
-          minWidth: 275,
-          backgroundColor: `${colorVariant}.main`,
-        },
-        ...(Array.isArray(sx) ? sx : [sx]),
-      ]}
-    >
+    <StyledCard $colorVariant={colorVariant} {...rest}>
       <CardContent component={Stack} direction="column" sx={{ height: '100%' }}>
-        <Stack direction="row" sx={{ justifyContent: 'space-between', alignItems: 'center' }}>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
           <SelectableCardText variant="subtitle1" $colorVariant={colorVariant}>
             {title}
           </SelectableCardText>
@@ -64,7 +45,7 @@ function SelectableCard({
           </Stack>
         )}
       </CardContent>
-    </Card>
+    </StyledCard>
   );
 }
 
