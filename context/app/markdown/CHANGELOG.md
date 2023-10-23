@@ -1,3 +1,13 @@
+## v0.82.0 - 2023-10-23
+
+- Upgrade to Zustand v4.
+- Upgrade to Immer v10.
+- Remove legacy `mui/styles` theming engine.
+- Restore magnifying glass icon to search bars.
+- Added selection and workspace launching to main search page for users with Workspaces access.
+- Update `cryptography` package to 41.0.4.
+
+
 ## v0.80.0 - 2023-09-27
 
 - Update Jest and MockServiceWorker to latest versions.
