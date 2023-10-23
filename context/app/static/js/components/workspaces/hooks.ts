@@ -2,8 +2,9 @@ import useSWR from 'swr';
 
 import { useAppContext } from 'js/components/Contexts';
 import { mergeJobsIntoWorkspaces, createWorkspaceAndNotebook, deleteWorkspace, stopJobs, startJob } from './utils';
+import { Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
 
-async function fetchWorkspaces(workspacesEndpoint, workspacesToken) {
+async function fetchWorkspaces(workspacesEndpoint: string, workspacesToken: string) {
   const fetchOpts = {
     method: 'GET',
     headers: {
@@ -23,8 +24,13 @@ async function fetchWorkspaces(workspacesEndpoint, workspacesToken) {
 
   // This is could be parallelized too...
   // but since it's not network-bound, little benefit.
-  const workspaceResults = await workspacesResponse.json();
-  const jobsResults = await jobsResponse.json();
+  const workspaceResults = (await workspacesResponse.json()) as WorkspaceAPIResponse<{ workspaces: Workspace[] }>;
+  const jobsResults = (await jobsResponse.json()) as WorkspaceAPIResponse<{ jobs: WorkspaceJob[] }>;
+
+  if (!workspaceResults.success || !jobsResults.success) {
+    console.error('Workspaces API failed. Workspaces:', workspaceResults, 'Jobs:', jobsResults);
+    return [];
+  }
 
   return mergeJobsIntoWorkspaces(jobsResults.data.jobs, workspaceResults.data.workspaces);
 }
@@ -34,28 +40,28 @@ function useWorkspacesList() {
 
   const { data: workspacesList, mutate } = useSWR(
     ['workspaces', workspacesToken],
-    ([, token]) => fetchWorkspaces(workspacesEndpoint, token),
+    ([, token]: [string, string]) => fetchWorkspaces(workspacesEndpoint, token),
     { fallbackData: [], revalidateOnFocus: true },
   );
 
-  async function handleDeleteWorkspace(workspaceId) {
+  async function handleDeleteWorkspace(workspaceId: number) {
     await deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken });
-    mutate();
+    await mutate();
   }
 
-  async function handleStopWorkspace(workspaceId) {
+  async function handleStopWorkspace(workspaceId: number) {
     await stopJobs({ workspaceId, workspacesEndpoint, workspacesToken });
-    mutate();
+    await mutate();
   }
 
-  async function handleCreateWorkspace({ workspaceName }) {
+  async function handleCreateWorkspace({ workspaceName }: { workspaceName: string }) {
     await createWorkspaceAndNotebook({ path: 'blank.ipynb', body: { workspace_name: workspaceName } });
-    mutate();
+    await mutate();
   }
 
-  async function handleStartWorkspace(workspaceId) {
+  async function handleStartWorkspace(workspaceId: number) {
     await startJob({ workspaceId, workspacesEndpoint, workspacesToken });
-    mutate();
+    await mutate();
   }
 
   return { workspacesList, handleDeleteWorkspace, handleCreateWorkspace, handleStopWorkspace, handleStartWorkspace };
@@ -63,7 +69,7 @@ function useWorkspacesList() {
 
 function useCreateAndLaunchWorkspace() {
   const { workspacesEndpoint, workspacesToken } = useAppContext();
-  return async function createAndLaunchWorkspace({ path, body }) {
+  return async function createAndLaunchWorkspace({ path, body }: { path: string; body: unknown }) {
     const { workspace_id, notebook_path } = await createWorkspaceAndNotebook({ path, body });
     await startJob({ workspaceId: workspace_id, workspacesEndpoint, workspacesToken });
 

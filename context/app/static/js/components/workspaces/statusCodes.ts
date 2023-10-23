@@ -1,6 +1,8 @@
 // Workspaces:
 
-const workspaceStatuses = {
+export type WorkspaceStatus = 'active' | 'idle' | 'deleting' | 'error';
+
+const workspaceStatuses: Record<WorkspaceStatus, { isDone: boolean }> = {
   active: {
     isDone: false,
   },
@@ -15,7 +17,6 @@ const workspaceStatuses = {
   },
 };
 
-type WorkspaceStatus = keyof typeof workspaceStatuses;
 const expectedWorkspaceStatuses = Object.keys(workspaceStatuses);
 
 function isWorkspaceStatus(status: string): status is WorkspaceStatus {
@@ -31,25 +32,37 @@ function validateWorkspaceStatus(status: string): status is WorkspaceStatus {
 
 // Jobs:
 
-const jobStatuses = {
+export type JobStatus = 'pending' | 'running' | 'stopping' | 'complete' | 'failed';
+const ACTIVE = 'Active' as const;
+const ACTIVATING = 'Activating' as const;
+const INACTIVE = 'Inactive' as const;
+export type JobStatusDisplayName = typeof ACTIVE | typeof ACTIVATING | typeof INACTIVE;
+
+const JOB_DISPLAY_NAMES = [ACTIVE, ACTIVATING, INACTIVE];
+
+const jobStatuses: Record<JobStatus, { isDone: boolean; displayName: JobStatusDisplayName }> = {
   pending: {
     isDone: false,
+    displayName: ACTIVATING,
   },
   running: {
     isDone: false,
+    displayName: ACTIVE,
   },
   stopping: {
     isDone: true,
+    displayName: INACTIVE,
   },
   complete: {
     isDone: true,
+    displayName: INACTIVE,
   },
   failed: {
     isDone: true,
+    displayName: INACTIVE,
   },
 };
 
-type JobStatus = keyof typeof jobStatuses;
 const expectedJobStatuses = Object.keys(jobStatuses);
 
 function isJobStatus(status: string): status is JobStatus {
@@ -63,4 +76,25 @@ function validateJobStatus(status: string): status is JobStatus {
   return true;
 }
 
-export { jobStatuses, validateJobStatus, workspaceStatuses, validateWorkspaceStatus };
+function getJobStatusDisplayName(status: JobStatus) {
+  return jobStatuses[status].displayName;
+}
+
+function getJobStatusIsDone(status: JobStatus) {
+  return jobStatuses[status].isDone;
+}
+
+export {
+  jobStatuses,
+  validateJobStatus,
+  workspaceStatuses,
+  validateWorkspaceStatus,
+  isWorkspaceStatus,
+  isJobStatus,
+  getJobStatusIsDone,
+  getJobStatusDisplayName,
+  ACTIVE,
+  ACTIVATING,
+  INACTIVE,
+  JOB_DISPLAY_NAMES,
+};
