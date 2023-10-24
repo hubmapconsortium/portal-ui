@@ -28,6 +28,7 @@ import {
   bodyExpandedCSS,
   vitessceFixedHeight,
 } from './style';
+import { VisualizationTracker } from '../VisualizationTracker/VisualizationTracker';
 
 const FIREFOX_WARNING = 'If the performance of Vitessce in Firefox is not satisfactory, please use Chrome or Safari.';
 const localStorageFirefoxWarningKey = 'vitessce-firefox-warning';
@@ -39,6 +40,7 @@ const visualizationStoreSelector = (state) => ({
   vizTheme: state.vizTheme,
   setVitessceState: state.setVitessceState,
   setVizNotebookId: state.setVizNotebookId,
+  setVitessceStateDebounced: state.setVitessceStateDebounced,
 });
 
 function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true }) {
@@ -107,8 +109,11 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   const isMultiDataset = Array.isArray(vitessceConfig);
   const version = packageInfo.dependencies.vitessce.replace('^', '');
 
+  if (!vitessceConfig) {
+    return null;
+  }
+
   return (
-    vitessceConfig &&
     // Don't render multi-datasets unless they have a selection from the list of options in vitessceConfig.
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
       <StyledDetailPageSection id="visualization" $vizIsFullscreen={vizIsFullscreen}>
@@ -142,13 +147,15 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
         <Paper>
           <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme}>
             {shouldMountVitessce && (
-              <Vitessce
-                config={vitessceConfig[vitessceSelection] || vitessceConfig}
-                theme={vizTheme}
-                onConfigChange={setVitessceStateDebounced}
-                height={vizIsFullscreen ? null : vitessceFixedHeight}
-                onWarn={addError}
-              />
+              <VisualizationTracker>
+                <Vitessce
+                  config={vitessceConfig[vitessceSelection] || vitessceConfig}
+                  theme={vizTheme}
+                  onConfigChange={setVitessceStateDebounced}
+                  height={vizIsFullscreen ? null : vitessceFixedHeight}
+                  onWarn={addError}
+                />
+              </VisualizationTracker>
             )}
           </ExpandableDiv>
         </Paper>
