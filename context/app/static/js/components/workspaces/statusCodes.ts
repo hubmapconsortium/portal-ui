@@ -66,6 +66,7 @@ const jobStatuses: Record<JobStatus, { isDone: boolean; displayName: JobStatusDi
 const expectedJobStatuses = Object.keys(jobStatuses);
 
 function isJobStatus(status: string): status is JobStatus {
+  console.log(expectedJobStatuses, status);
   return expectedJobStatuses.includes(status);
 }
 
@@ -77,6 +78,7 @@ function validateJobStatus(status: string): status is JobStatus {
 }
 
 function getJobStatusDisplayName(status: JobStatus) {
+  validateJobStatus(status);
   return jobStatuses[status].displayName;
 }
 
