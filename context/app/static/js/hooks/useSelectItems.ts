@@ -17,13 +17,14 @@ type SelectAction =
     };
 
 function selectReducer(state: SelectedItems, action: SelectAction): SelectedItems {
+  const temp = new Set([...state]);
   switch (action.type) {
     case 'addItem':
-      state.add(action.payload);
-      return new Set([...state]);
+      temp.add(action.payload);
+      return new Set([...temp]);
     case 'removeItem':
-      state.delete(action.payload);
-      return new Set([...state]);
+      temp.delete(action.payload);
+      return new Set([...temp]);
     case 'setSelectedItems':
       return new Set(action.payload);
     default:
