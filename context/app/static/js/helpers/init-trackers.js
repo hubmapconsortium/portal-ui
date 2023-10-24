@@ -27,7 +27,6 @@ function initTrackers() {
       return null;
     },
     user: {
-      email: userEmail,
       attributes: {
         userType: getUserType(),
         userGroups: getUserGroups(),
