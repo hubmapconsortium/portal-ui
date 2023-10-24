@@ -305,7 +305,7 @@ export function useCreateAndLaunchWorkspace() {
   const createAndLaunchWorkspace = useCallback(
     async ({ path, body }: { path: string; body: unknown }) => {
       const { workspace_id, notebook_path } = await createWorkspace(path, body);
-      const job = await startWorkspace(workspace_id);
+      await startWorkspace(workspace_id);
 
       if (workspace_id && notebook_path) {
         window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
