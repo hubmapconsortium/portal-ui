@@ -1,82 +1,65 @@
-import useSWR from 'swr';
-
-import { useAppContext } from 'js/components/Contexts';
-import { mergeJobsIntoWorkspaces, createWorkspaceAndNotebook, deleteWorkspace, stopJobs, startJob } from './utils';
-import { Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
-
-async function fetchWorkspaces(workspacesEndpoint: string, workspacesToken: string) {
-  const fetchOpts = {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-      'UWS-Authorization': `Token ${workspacesToken}`,
-    },
-  };
-
-  const [workspacesResponse, jobsResponse] = await Promise.all([
-    fetch(`${workspacesEndpoint}/workspaces`, fetchOpts),
-    fetch(`${workspacesEndpoint}/jobs`, fetchOpts),
-  ]);
-
-  if (!workspacesResponse.ok || !jobsResponse.ok) {
-    console.error('Workspaces API failed. Workspaces:', workspacesResponse, 'Jobs:', jobsResponse);
-  }
-
-  // This is could be parallelized too...
-  // but since it's not network-bound, little benefit.
-  const workspaceResults = (await workspacesResponse.json()) as WorkspaceAPIResponse<{ workspaces: Workspace[] }>;
-  const jobsResults = (await jobsResponse.json()) as WorkspaceAPIResponse<{ jobs: WorkspaceJob[] }>;
-
-  if (!workspaceResults.success || !jobsResults.success) {
-    console.error('Workspaces API failed. Workspaces:', workspaceResults, 'Jobs:', jobsResults);
-    return [];
-  }
-
-  return mergeJobsIntoWorkspaces(jobsResults.data.jobs, workspaceResults.data.workspaces);
-}
+import { useCallback, useMemo } from 'react';
+import { mergeJobsIntoWorkspaces } from './utils';
+import {
+  useCreateAndLaunchWorkspace,
+  useDeleteWorkspace,
+  useStopWorkspace,
+  useStartWorkspace,
+  useWorkspaces,
+  useJobs,
+} from './api';
+import { MergedWorkspace } from './types';
 
 function useWorkspacesList() {
-  const { workspacesEndpoint, workspacesToken } = useAppContext();
+  const { workspaces, isLoading: workspacesLoading, mutate: mutateWorkspaces } = useWorkspaces();
+  const { jobs, isLoading: jobsLoading, mutate: mutateJobs } = useJobs();
+  const isLoading = workspacesLoading || jobsLoading;
+  const mutate = useCallback(async () => {
+    await Promise.all([mutateWorkspaces(), mutateJobs()]);
+  }, [mutateWorkspaces, mutateJobs]);
 
-  const { data: workspacesList, mutate } = useSWR(
-    ['workspaces', workspacesToken],
-    ([, token]: [string, string]) => fetchWorkspaces(workspacesEndpoint, token),
-    { fallbackData: [], revalidateOnFocus: true },
+  const workspacesList: MergedWorkspace[] = useMemo(
+    () => (jobs?.length && workspaces?.length ? mergeJobsIntoWorkspaces(jobs, workspaces) : []),
+    [jobs, workspaces],
   );
 
+  const { deleteWorkspace, isDeleting } = useDeleteWorkspace();
+  const { stopWorkspace, isStoppingWorkspace } = useStopWorkspace();
+  const { createAndLaunchWorkspace, isCreatingWorkspace } = useCreateAndLaunchWorkspace();
+  const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
+
   async function handleDeleteWorkspace(workspaceId: number) {
-    await deleteWorkspace({ workspaceId, workspacesEndpoint, workspacesToken });
+    await deleteWorkspace(workspaceId);
     await mutate();
   }
 
   async function handleStopWorkspace(workspaceId: number) {
-    await stopJobs({ workspaceId, workspacesEndpoint, workspacesToken });
+    await stopWorkspace(workspaceId);
     await mutate();
   }
 
   async function handleCreateWorkspace({ workspaceName }: { workspaceName: string }) {
-    await createWorkspaceAndNotebook({ path: 'blank.ipynb', body: { workspace_name: workspaceName } });
+    await createAndLaunchWorkspace({ path: 'blank.ipynb', body: { workspace_name: workspaceName } });
     await mutate();
   }
 
   async function handleStartWorkspace(workspaceId: number) {
-    await startJob({ workspaceId, workspacesEndpoint, workspacesToken });
+    await startWorkspace(workspaceId);
     await mutate();
   }
 
-  return { workspacesList, handleDeleteWorkspace, handleCreateWorkspace, handleStopWorkspace, handleStartWorkspace };
-}
-
-function useCreateAndLaunchWorkspace() {
-  const { workspacesEndpoint, workspacesToken } = useAppContext();
-  return async function createAndLaunchWorkspace({ path, body }: { path: string; body: unknown }) {
-    const { workspace_id, notebook_path } = await createWorkspaceAndNotebook({ path, body });
-    await startJob({ workspaceId: workspace_id, workspacesEndpoint, workspacesToken });
-
-    if (workspace_id && notebook_path) {
-      window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
-    }
+  return {
+    workspacesList,
+    handleDeleteWorkspace,
+    handleCreateWorkspace,
+    handleStopWorkspace,
+    handleStartWorkspace,
+    isLoading,
+    isDeleting,
+    isStoppingWorkspace,
+    isCreatingWorkspace,
+    isStartingWorkspace,
   };
 }
 
-export { useWorkspacesList, useCreateAndLaunchWorkspace };
+export { useWorkspacesList };

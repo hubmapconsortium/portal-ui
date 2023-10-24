@@ -2,13 +2,13 @@ import { useCallback } from 'react';
 
 import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/hooks';
+import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/api';
 
 function useMetadataMenu(lcPluralType) {
   const { selectedRows: selectedHits } = useSelectableTableStore();
   const { closeMenu } = useDropdownMenuStore();
 
-  const createAndLaunchWorkspace = useCreateAndLaunchWorkspace();
+  const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
 
   const createNotebook = useCallback(
     async ({ workspaceName }) => {

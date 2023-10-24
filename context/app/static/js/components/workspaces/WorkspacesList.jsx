@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -15,24 +15,17 @@ import { useWorkspacesList } from './hooks';
 import WorkspaceButton from './WorkspaceButton';
 
 function WorkspacesList() {
-  const { workspacesList, handleCreateWorkspace, handleDeleteWorkspace } = useWorkspacesList();
+  const { workspacesList, handleCreateWorkspace, handleDeleteWorkspace, isDeleting } = useWorkspacesList();
 
   const { selectedItems, toggleItem } = useSelectItems();
   const { toastError } = useSnackbarActions();
 
-  const isDeleting = useRef(false);
-
-  const handleDeleteSelected = async () => {
+  const handleDeleteSelected = () => {
     const workspaceIds = [...selectedItems];
-    isDeleting.current = true;
-    try {
-      await Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(workspaceId)));
-    } catch (e) {
-      toastError('Error deleting workspaces.');
+    Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(workspaceId))).catch((e) => {
+      toastError(`Error deleting workspace: ${e.message}`);
       console.error(e);
-    } finally {
-      isDeleting.current = false;
-    }
+    });
   };
 
   return (
@@ -47,7 +40,7 @@ function WorkspacesList() {
           <Stack direction="row" gap={1}>
             <WorkspaceButton
               onClick={handleDeleteSelected}
-              disabled={selectedItems.size === 0 || isDeleting.current}
+              disabled={selectedItems.size === 0 || isDeleting}
               tooltip="Delete selected workspaces"
             >
               <DeleteRounded />
