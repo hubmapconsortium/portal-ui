@@ -1,8 +1,10 @@
 import React from 'react';
-// eslint-disable-next-line
 import { render, screen } from 'test-utils/functions';
 
 import Search from './Search';
+
+const spyFunc = jest.fn();
+Object.defineProperty(document, 'querySelector', { value: spyFunc });
 
 test('Search error if missing entity_type param', () => {
   const originalConsoleError = console.error;
