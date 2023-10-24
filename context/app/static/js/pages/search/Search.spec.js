@@ -25,6 +25,8 @@ test('Search works with entity_type param', () => {
     value: location,
   });
 
+  Object.assign(document, 'querySelector', () => {});
+
   render(<Search elasticsearchEndpoint="not-used" title="TITLE" />);
   const expectedStrings = ['TITLE', 'Donor Metadata', 'Affiliation'];
   expectedStrings.forEach((s) => expect(screen.getByText(s)).toBeInTheDocument());
