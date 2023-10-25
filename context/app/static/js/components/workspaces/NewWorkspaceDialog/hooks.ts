@@ -71,7 +71,7 @@ function useTemplateNotebooks() {
         return;
       }
 
-      const templatePath = templateKeys[0];
+      const templatePath = `${templateKeys[0]}.ipynb`;
 
       // Don't include symlinks if no datasets are selected.
       const symlinks =
