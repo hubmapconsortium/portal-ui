@@ -78,7 +78,8 @@ function trackPageView(path) {
   faro.api.pushEvent('pageview', { path });
 }
 
-const makeFaroSafe = (obj) => Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, `${value}`]));
+const makeFaroSafe = (obj) =>
+  Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, `${JSON.stringify(value)}`]));
 
 function trackEvent(event) {
   tracker.trackEvent(event);
