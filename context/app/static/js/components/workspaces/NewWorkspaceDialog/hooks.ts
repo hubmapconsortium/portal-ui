@@ -4,6 +4,7 @@ import useSWR, { SWRConfiguration } from 'swr';
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { trackEvent } from 'js/helpers/trackers';
 import {
   TemplatesResponse,
   CreateTemplatesResponse,
@@ -70,6 +71,12 @@ function useTemplateNotebooks() {
         toastError(error);
         return;
       }
+
+      trackEvent({
+        category: 'Workspace Action',
+        action: 'Create Templates',
+        value: { templateKeys, templateCount: templateKeys.length, uuids },
+      });
 
       const templatePath = `${templateKeys[0]}.ipynb`;
 
