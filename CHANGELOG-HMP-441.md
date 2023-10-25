@@ -1,0 +1,1 @@
+- Add hook to check if user has any running workspaces.
