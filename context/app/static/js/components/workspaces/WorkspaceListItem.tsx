@@ -21,12 +21,6 @@ interface WorkspaceListItemProps {
 
 type WorkspaceButtonProps = Pick<WorkspaceListItemProps, 'workspace'>;
 
-// TODO: Convert `hooks.js` and `utils.js` to TypeScript
-interface UseWorkspacesList {
-  handleStartWorkspace: (workspaceId: number) => Promise<void>;
-  handleDeleteWorkspace: (workspaceId: number) => Promise<void>;
-  handleStopWorkspace: (workspaceId: number) => Promise<void>;
-}
 const typedGetWorkspaceLink = getWorkspaceLink as (workspace: MergedWorkspace) => string;
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -35,7 +29,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 })) as typeof Button;
 
 function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
-  const { handleStartWorkspace, handleStopWorkspace } = useWorkspacesList() as UseWorkspacesList;
+  const { handleStartWorkspace, handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const { toastError } = useSnackbarActions();
   if (workspace.status === 'deleting') {
     return (
@@ -44,13 +38,14 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
       </StyledButton>
     );
   }
+  const runningJobs = workspace.jobs.filter((job) => job.status === 'running');
   if (workspace.jobs.length > 0) {
     return (
       <StyledButton
         type="button"
         variant="elevated"
         size="small"
-        disabled={workspace.jobs.length === 0}
+        disabled={runningJobs.length === 0 || isStoppingWorkspace}
         onClick={() => {
           handleStopWorkspace(workspace.id).catch((err) => {
             toastError(`Error stopping ${workspace.name}.`);
