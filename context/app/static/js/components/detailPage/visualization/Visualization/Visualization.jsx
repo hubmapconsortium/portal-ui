@@ -16,6 +16,7 @@ import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import VisualizationShareButton from '../VisualizationShareButton';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import VisualizationFooter from '../VisualizationFooter';
+import VisualizationTracker from '../VisualizationTracker';
 
 import { useVitessceConfig } from './hooks';
 import {
@@ -28,7 +29,6 @@ import {
   bodyExpandedCSS,
   vitessceFixedHeight,
 } from './style';
-import { VisualizationTracker } from '../VisualizationTracker/VisualizationTracker';
 
 const FIREFOX_WARNING = 'If the performance of Vitessce in Firefox is not satisfactory, please use Chrome or Safari.';
 const localStorageFirefoxWarningKey = 'vitessce-firefox-warning';
