@@ -3,7 +3,6 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
-import AddRounded from '@mui/icons-material/AddRounded';
 
 import Description from 'js/shared-styles/sections/Description';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -13,9 +12,10 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useWorkspacesList } from './hooks';
 import WorkspaceButton from './WorkspaceButton';
+import NewWorkspaceDialogFromWorkspaceList from './NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 
 function WorkspacesList() {
-  const { workspacesList, handleCreateWorkspace, handleDeleteWorkspace, isDeleting } = useWorkspacesList();
+  const { workspacesList, handleDeleteWorkspace, isDeleting } = useWorkspacesList();
 
   const { selectedItems, toggleItem } = useSelectItems();
   const { toastError } = useSnackbarActions();
@@ -45,9 +45,7 @@ function WorkspacesList() {
             >
               <DeleteRounded />
             </WorkspaceButton>
-            <WorkspaceButton onClick={handleCreateWorkspace} tooltip="Create workspace">
-              <AddRounded />
-            </WorkspaceButton>
+            <NewWorkspaceDialogFromWorkspaceList />
           </Stack>
         }
       />

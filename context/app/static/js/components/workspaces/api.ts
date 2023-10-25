@@ -25,8 +25,11 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   delete(workspaceId: number): string {
     return `${workspacesEndpoint}/workspaces/${workspaceId}`;
   },
-  createWorkspace(path: string): string {
+  createWorkspaceFromNotebookPath(path: string): string {
     return `/notebooks/${path}`;
+  },
+  get createWorkspaceFromTemplates(): string {
+    return `${workspacesEndpoint}/workspaces/`;
   },
   startWorkspace(workspaceId: number): string {
     return `${workspacesEndpoint}/workspaces/${workspaceId}/start`;
@@ -264,14 +267,12 @@ interface CreateWorkspaceAndNotebookResponse {
 
 async function createWorkspaceAndNotebook(
   _key: string,
-  { arg: { body, url } }: { arg: CreateWorkspaceAndNotebookArgs },
+  { arg: { body, url, headers } }: { arg: CreateWorkspaceAndNotebookArgs },
 ) {
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
   });
   if (!response.ok) {
     console.error('Create workspace failed', response);
@@ -287,7 +288,7 @@ export function useCreateWorkspace() {
   const createWorkspace = useCallback(
     async (path: string, body: unknown) => {
       return trigger({
-        url: api.createWorkspace(path),
+        url: api.createWorkspaceFromNotebookPath(path),
         body,
         headers,
       });
@@ -295,23 +296,40 @@ export function useCreateWorkspace() {
     [trigger, api, headers],
   );
 
-  return { createWorkspace, isCreatingWorkspace: isMutating };
+  const createWorkspaceFromTemplates = useCallback(
+    (body: unknown) => {
+      return trigger({
+        url: api.createWorkspaceFromTemplates,
+        body,
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { createWorkspace, createWorkspaceFromTemplates, isCreatingWorkspace: isMutating };
 }
 
 export function useCreateAndLaunchWorkspace() {
-  const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
+  const { createWorkspace, createWorkspaceFromTemplates, isCreatingWorkspace } = useCreateWorkspace();
   const { startWorkspace } = useStartWorkspace();
 
   const createAndLaunchWorkspace = useCallback(
-    async ({ path, body }: { path: string; body: unknown }) => {
-      const { workspace_id, notebook_path } = await createWorkspace(path, body);
+    async ({ path, body, templatePath }: { path?: string; body: unknown; templatePath?: string }) => {
+      // `path` should be defined if the user is creating a workspace from a notebook. (legacy dialog)
+      // `templatePath` should be defined if the user is creating a workspace from template(s). (new dialog)
+      // Once we remove the legacy dialog, we can remove the `path` check.
+      const promise = path ? createWorkspace(path, body) : createWorkspaceFromTemplates(body);
+      const { workspace_id, notebook_path } = await promise;
       await startWorkspace(workspace_id);
 
-      if (workspace_id && notebook_path) {
-        window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
+      const pathToUse = templatePath ?? notebook_path;
+
+      if (workspace_id && pathToUse) {
+        window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(pathToUse)}`, '_blank');
       }
     },
-    [createWorkspace, startWorkspace],
+    [createWorkspace, createWorkspaceFromTemplates, startWorkspace],
   );
 
   return { createAndLaunchWorkspace, isCreatingWorkspace };
