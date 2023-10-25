@@ -73,4 +73,9 @@ function useCreateAndLaunchWorkspace() {
   };
 }
 
-export { useWorkspacesList, useCreateAndLaunchWorkspace };
+function useHasRunningWorkspace() {
+  const { workspacesList } = useWorkspacesList();
+  return workspacesList.some((workspace) => workspace.jobs.some((job) => job.status === 'running'));
+}
+
+export { useWorkspacesList, useCreateAndLaunchWorkspace, useHasRunningWorkspace };
