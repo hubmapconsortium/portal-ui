@@ -31,6 +31,11 @@ interface CaptionColors {
   link: string;
 }
 
+interface ContainerColors {
+  main: string;
+  contrastText: string;
+}
+
 declare module '@mui/material/styles' {
   export interface ZIndex {
     tutorial: number;
@@ -51,13 +56,16 @@ declare module '@mui/material/styles' {
     white: WhiteVariants;
     provenance: ProvenanceColors;
     caption: CaptionColors;
+    secondaryContainer: ContainerColors;
+    primaryContainer: ContainerColors;
   }
-
   export interface PaletteOptions {
     black?: BlackVariants;
     white?: WhiteVariants;
     provenance?: ProvenanceColors;
     caption?: CaptionColors;
+    secondaryContainer?: ContainerColors;
+    primaryContainer?: ContainerColors;
   }
 
   export interface PaletteColor {
@@ -92,6 +100,14 @@ const theme = createTheme({
       link: blue,
       halfShadow: 'rgb(0, 0, 0, 0.54)',
       hoverShadow: 'rgb(0, 0, 0, 0.08)',
+    },
+    primaryContainer: {
+      main: '#C5C7CF',
+      contrastText: '#252938',
+    },
+    secondaryContainer: {
+      main: '#EFEFEF',
+      contrastText: '#363636',
     },
     primary: {
       main: purple,
