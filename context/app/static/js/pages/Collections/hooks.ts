@@ -1,19 +1,16 @@
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
-import { useAppContext } from 'js/components/Contexts';
 import { buildCollectionsPanelsProps } from './utils';
 import { CollectionSearchHits } from './types';
 
-const query = { ...getAllCollectionsQuery, _source: ['uuid', 'title', 'hubmap_id', 'datasets.hubmap_id'] };
-
-const mustHaveDOIClause = { query: { exists: { field: 'doi_url' } } };
+const query = {
+  ...getAllCollectionsQuery,
+  query: { exists: { field: 'doi_url' } },
+  _source: ['uuid', 'title', 'hubmap_id', 'datasets.hubmap_id'],
+};
 
 function useCollections() {
-  const { isHubmapUser } = useAppContext();
-
-  const { searchHits: collectionsData } = useSearchHits(
-    isHubmapUser ? query : { ...query, ...mustHaveDOIClause },
-  ) as CollectionSearchHits;
+  const { searchHits: collectionsData } = useSearchHits(query) as CollectionSearchHits;
   return buildCollectionsPanelsProps(collectionsData);
 }
 
