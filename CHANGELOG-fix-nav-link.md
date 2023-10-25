@@ -1,0 +1,1 @@
+- Fix bug in header navigation menu items requiring you to click on the item's text.
