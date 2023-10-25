@@ -26,8 +26,11 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   delete(workspaceId: number): string {
     return `${workspacesEndpoint}/workspaces/${workspaceId}`;
   },
-  createWorkspace(path: string): string {
+  createWorkspaceFromNotebookPath(path: string): string {
     return `/notebooks/${path}`;
+  },
+  get createWorkspaceFromTemplates(): string {
+    return `${workspacesEndpoint}/workspaces/`;
   },
   startWorkspace(workspaceId: number): string {
     return `${workspacesEndpoint}/workspaces/${workspaceId}/start`;
@@ -269,19 +272,11 @@ export function useStartWorkspace() {
   return { startWorkspace, isStartingWorkspace: isMutating };
 }
 
-interface CreateWorkspaceAndNotebookArgs extends APIAction {
+interface CreateWorkspaceArgs extends APIAction {
   body: unknown;
 }
 
-interface CreateWorkspaceAndNotebookResponse {
-  workspace_id: number;
-  notebook_path: string;
-}
-
-async function createWorkspaceAndNotebook(
-  _key: string,
-  { arg: { body, url } }: { arg: CreateWorkspaceAndNotebookArgs },
-) {
+async function createWorkspaceFetcher(_key: string, { arg: { body, url, headers } }: { arg: CreateWorkspaceArgs }) {
   trackEvent({
     category: 'Workspace Creation',
     action: 'Create Workspace',
@@ -290,25 +285,27 @@ async function createWorkspaceAndNotebook(
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),
-    headers: {
-      'Content-Type': 'application/json',
-    },
+    headers,
   });
   if (!response.ok) {
     console.error('Create workspace failed', response);
   }
-  const { workspace_id, notebook_path } = (await response.json()) as CreateWorkspaceAndNotebookResponse;
-  return { workspace_id, notebook_path };
+  const responseJson = (await response.json()) as WorkspaceAPIResponse<{ workspace: Workspace }>;
+  if (!responseJson.success) {
+    throw new Error(`Failed to create workspace: ${responseJson.message}`);
+  }
+  return responseJson.data.workspace;
 }
 
 export function useCreateWorkspace() {
   const api = useWorkspacesApiURLs();
   const headers = useWorkspaceHeaders();
-  const { trigger, isMutating } = useSWRMutation('create-workspace', createWorkspaceAndNotebook);
+  const { trigger, isMutating } = useSWRMutation('create-workspace', createWorkspaceFetcher);
+
   const createWorkspace = useCallback(
-    async (path: string, body: unknown) => {
+    (body: unknown) => {
       return trigger({
-        url: api.createWorkspace(path),
+        url: api.createWorkspaceFromTemplates,
         body,
         headers,
       });
@@ -324,12 +321,13 @@ export function useCreateAndLaunchWorkspace() {
   const { startWorkspace } = useStartWorkspace();
 
   const createAndLaunchWorkspace = useCallback(
-    async ({ path, body }: { path: string; body: unknown }) => {
-      const { workspace_id, notebook_path } = await createWorkspace(path, body);
-      await startWorkspace(workspace_id);
+    async ({ body, templatePath }: { body: unknown; templatePath: string }) => {
+      const workspace = await createWorkspace(body);
 
-      if (workspace_id && notebook_path) {
-        window.open(`/workspaces/${workspace_id}?notebook_path=${encodeURIComponent(notebook_path)}`, '_blank');
+      await startWorkspace(workspace.id);
+
+      if (workspace.id) {
+        window.open(`/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(templatePath)}`, '_blank');
       }
     },
     [createWorkspace, startWorkspace],
