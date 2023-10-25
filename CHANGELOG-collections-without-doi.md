@@ -1,0 +1,1 @@
+- Only show collections with DOIs to non-HuBMAP users on collections landing page.
