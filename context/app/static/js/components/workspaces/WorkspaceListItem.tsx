@@ -9,6 +9,7 @@ import { PanelWrapper } from 'js/shared-styles/panels';
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useWorkspacesList } from './hooks';
 import { MergedWorkspace } from './types';
 import { getWorkspaceLink } from './utils';
@@ -79,14 +80,25 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
 
 function WorkspaceListItem({ workspace, toggleItem, selected }: WorkspaceListItemProps) {
   const { handleStartWorkspace } = useWorkspacesList();
+
+  const isRunning = workspace.jobs.some((j) => j.status === 'running');
+
+  const tooltip = isRunning ? 'Stop all jobs before deleting' : 'Delete workspace';
+
   return (
     <PanelWrapper key={workspace.id}>
       <Stack direction="row" spacing={2}>
-        <Checkbox
-          aria-label={`Select ${workspace.name} for deletion`}
-          checked={selected}
-          onChange={() => toggleItem(workspace.id)}
-        />
+        <SecondaryBackgroundTooltip title={tooltip}>
+          <span>
+            <Checkbox
+              aria-label={`Select ${workspace.name} for deletion`}
+              checked={selected}
+              onChange={() => toggleItem(workspace.id)}
+              disabled={isRunning}
+            />
+          </span>
+        </SecondaryBackgroundTooltip>
+
         <WorkspaceDetails workspace={workspace} handleStartWorkspace={handleStartWorkspace} />
       </Stack>
       <WorkspaceListItemButtons workspace={workspace} />
