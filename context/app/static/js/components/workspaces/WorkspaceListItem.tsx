@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/material/Stack';
@@ -84,6 +84,13 @@ function WorkspaceListItem({ workspace, toggleItem, selected }: WorkspaceListIte
   const isRunning = workspace.jobs.some((j) => j.status === 'running');
 
   const tooltip = isRunning ? 'Stop all jobs before deleting' : 'Delete workspace';
+
+  // Deselect the workspace if the user starts it after selecting it for deletion
+  useEffect(() => {
+    if (isRunning && selected) {
+      toggleItem(workspace.id);
+    }
+  }, [isRunning, selected, toggleItem, workspace.id]);
 
   return (
     <PanelWrapper key={workspace.id}>
