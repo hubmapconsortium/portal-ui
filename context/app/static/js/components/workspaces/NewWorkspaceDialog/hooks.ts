@@ -73,15 +73,6 @@ function useTemplateNotebooks() {
 
       const templatePath = `${templateKeys[0]}.ipynb`;
 
-      // Don't include symlinks if no datasets are selected.
-      const symlinks =
-        uuids.length > 0
-          ? uuids.map((uuid) => ({
-              name: `datasets/${uuid}`,
-              dataset_uuid: uuid,
-            }))
-          : undefined;
-
       await createAndLaunchWorkspace({
         templatePath,
         body: {
@@ -93,7 +84,10 @@ function useTemplateNotebooks() {
               name: `${templateKey}.ipynb`,
               content: createdTemplates[i]?.data?.template,
             })),
-            symlinks,
+            symlinks: uuids.map((uuid) => ({
+              name: `datasets/${uuid}`,
+              dataset_uuid: uuid,
+            })),
           },
         },
       });
