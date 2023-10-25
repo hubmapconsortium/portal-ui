@@ -5,8 +5,9 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
-import { CreateWorkspaceWithDatasetsDialog } from 'js/components/workspaces/CreateWorkspaceDialog';
+import { useAppContext } from 'js/components/Contexts';
 
+import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
 import { useMetadataMenu } from './hooks';
 
@@ -23,24 +24,12 @@ async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
   closeMenu();
 }
 
-function NotebookMenuItem(props) {
-  return (
-    <StyledMenuItem {...props}>
-      Notebook
-      <SecondaryBackgroundTooltip
-        title="Download a Notebook which demonstrates how to programmatically access metadata."
-        placement="bottom-start"
-      >
-        <StyledInfoIcon color="primary" />
-      </SecondaryBackgroundTooltip>
-    </StyledMenuItem>
-  );
-}
-
-function MetadataMenu({ entityType, results }) {
+function MetadataMenu({ entityType }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
-  const { selectedHits, createNotebook, closeMenu } = useMetadataMenu(lcPluralType);
+  const { selectedHits, closeMenu } = useMetadataMenu(lcPluralType);
   const menuID = 'metadata-menu';
+
+  const { isWorkspacesUser } = useAppContext();
 
   return (
     <>
@@ -66,11 +55,7 @@ function MetadataMenu({ entityType, results }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
-        <CreateWorkspaceWithDatasetsDialog
-          handleCreateWorkspace={createNotebook}
-          buttonComponent={NotebookMenuItem}
-          results={results}
-        />
+        {isWorkspacesUser && <NewWorkspaceDialogFromSelections />}
       </DropdownMenu>
     </>
   );

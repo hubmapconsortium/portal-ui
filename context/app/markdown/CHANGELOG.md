@@ -1,3 +1,10 @@
+## v0.82.1 - 2023-10-25
+
+- Fix overflow in chart legends.
+- Only show collections with DOIs to non-HuBMAP users on collections landing page.
+- Fix bug in header navigation menu items requiring you to click on the item's text.
+
+
 ## v0.82.0 - 2023-10-23
 
 - Upgrade to Zustand v4.

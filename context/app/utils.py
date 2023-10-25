@@ -32,6 +32,7 @@ def get_default_flask_data():
             'entityEndpoint': current_app.config['ENTITY_API_BASE'],
             'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
             'workspacesEndpoint': current_app.config['WORKSPACES_ENDPOINT'],
+            'userTemplatesEndpoint': current_app.config['USER_TEMPLATES_ENDPOINT'],
             'workspacesWsEndpoint': current_app.config['WORKSPACES_WS_ENDPOINT'],
             'protocolsClientId': current_app.config['PROTOCOLS_IO_CLIENT_ID'],
             'protocolsClientToken': current_app.config['PROTOCOLS_IO_CLIENT_AUTH_TOKEN'],
