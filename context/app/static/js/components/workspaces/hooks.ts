@@ -1,13 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { mergeJobsIntoWorkspaces } from './utils';
-import {
-  useCreateAndLaunchWorkspace,
-  useDeleteWorkspace,
-  useStopWorkspace,
-  useStartWorkspace,
-  useWorkspaces,
-  useJobs,
-} from './api';
+import { useDeleteWorkspace, useStopWorkspace, useStartWorkspace, useWorkspaces, useJobs } from './api';
 import { MergedWorkspace } from './types';
 
 function useWorkspacesList() {
@@ -25,7 +18,6 @@ function useWorkspacesList() {
 
   const { deleteWorkspace, isDeleting } = useDeleteWorkspace();
   const { stopWorkspace, isStoppingWorkspace } = useStopWorkspace();
-  const { createAndLaunchWorkspace, isCreatingWorkspace } = useCreateAndLaunchWorkspace();
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
 
   async function handleDeleteWorkspace(workspaceId: number) {
@@ -38,11 +30,6 @@ function useWorkspacesList() {
     await mutate();
   }
 
-  async function handleCreateWorkspace({ workspaceName }: { workspaceName: string }) {
-    await createAndLaunchWorkspace({ path: 'blank.ipynb', body: { workspace_name: workspaceName } });
-    await mutate();
-  }
-
   async function handleStartWorkspace(workspaceId: number) {
     await startWorkspace(workspaceId);
     await mutate();
@@ -51,13 +38,11 @@ function useWorkspacesList() {
   return {
     workspacesList,
     handleDeleteWorkspace,
-    handleCreateWorkspace,
     handleStopWorkspace,
     handleStartWorkspace,
     isLoading,
     isDeleting,
     isStoppingWorkspace,
-    isCreatingWorkspace,
     isStartingWorkspace,
   };
 }

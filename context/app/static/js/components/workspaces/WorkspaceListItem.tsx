@@ -78,7 +78,7 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
 }
 
 function WorkspaceListItem({ workspace, toggleItem, selected }: WorkspaceListItemProps) {
-  const { handleStartWorkspace } = useWorkspacesList() as UseWorkspacesList;
+  const { handleStartWorkspace } = useWorkspacesList();
   return (
     <PanelWrapper key={workspace.id}>
       <Stack direction="row" spacing={2}>
