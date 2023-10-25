@@ -1,1 +1,0 @@
-- Fix overflow in chart legends.
