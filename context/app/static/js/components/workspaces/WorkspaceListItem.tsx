@@ -13,6 +13,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useWorkspacesList } from './hooks';
 import { MergedWorkspace } from './types';
 import { getWorkspaceLink } from './utils';
+import { jobStatuses } from './statusCodes';
 
 interface WorkspaceListItemProps {
   workspace: MergedWorkspace;
@@ -39,7 +40,7 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
       </StyledButton>
     );
   }
-  const runningJobs = workspace.jobs.filter((job) => job.status === 'running');
+  const runningJobs = workspace.jobs.filter((job) => !jobStatuses[job.status].isDone);
   if (workspace.jobs.length > 0) {
     return (
       <StyledButton
@@ -81,7 +82,7 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
 function WorkspaceListItem({ workspace, toggleItem, selected }: WorkspaceListItemProps) {
   const { handleStartWorkspace } = useWorkspacesList();
 
-  const isRunning = workspace.jobs.some((j) => j.status === 'running');
+  const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
 
   const tooltip = isRunning ? 'Stop all jobs before deleting' : 'Delete workspace';
 
