@@ -5,7 +5,7 @@ import { CollectionSearchHits } from './types';
 
 const query = {
   ...getAllCollectionsQuery,
-  query: { exists: { field: 'doi_url' } },
+  query: { bool: { must: [{ exists: { field: 'doi_url' } }, { exists: { field: 'registered_doi' } }] } },
   _source: ['uuid', 'title', 'hubmap_id', 'datasets.hubmap_id'],
 };
 
