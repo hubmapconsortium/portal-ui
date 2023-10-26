@@ -25,6 +25,7 @@ const PanelWrapper = styled.div`
   @media (min-width: ${(props) => props.theme.breakpoints.values.md}px) {
     flex-direction: row;
     justify-content: space-between;
+    align-items: center;
   }
 `;
 

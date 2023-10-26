@@ -59,7 +59,7 @@ function Description({ blocks }: { blocks: (string | ReactElement)[] }) {
   return (
     <Stack gap={2} sx={{ p: 2 }} component={Paper} direction="column">
       {blocks.map((block) => (
-        <Typography>{block}</Typography>
+        <Typography key={String(block)}>{block}</Typography>
       ))}
     </Stack>
   );
@@ -78,8 +78,8 @@ type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormTypes>, 'handleS
 };
 
 interface NewWorkspaceDialogProps {
-  datasetUUIDs: Set<string>;
-  errorMessages: string[];
+  datasetUUIDs?: Set<string>;
+  errorMessages?: string[];
   dialogIsOpen: boolean;
   handleClose: () => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
@@ -88,7 +88,7 @@ interface NewWorkspaceDialogProps {
 const recommendedTags = ['visualization', 'api'];
 
 function NewWorkspaceDialog({
-  datasetUUIDs,
+  datasetUUIDs = new Set(),
   errorMessages = [],
   dialogIsOpen,
   handleClose,

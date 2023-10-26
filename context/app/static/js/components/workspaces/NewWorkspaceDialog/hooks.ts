@@ -3,14 +3,15 @@ import useSWR, { SWRConfiguration } from 'swr';
 
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
-import { startJob } from '../utils';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { trackEvent } from 'js/helpers/trackers';
 import {
   TemplatesResponse,
   CreateTemplatesResponse,
-  CreateWorkspaceResponse,
   CreateTemplateNotebooksTypes,
   TemplateTagsResponse,
 } from '../types';
+import { useCreateAndLaunchWorkspace } from '../api';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -46,11 +47,16 @@ function useWorkspaceTemplates(tags: string[] = []) {
 }
 
 function useTemplateNotebooks() {
-  const { groupsToken, workspacesToken, workspacesEndpoint, userTemplatesEndpoint } = useAppContext();
+  const { groupsToken, userTemplatesEndpoint } = useAppContext();
+
+  const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
+
+  const { toastError } = useSnackbarActions();
 
   const createTemplateNotebooks = useCallback(
     async ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => {
       const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}/templates/jupyter_lab/${key}`);
+
       const createdTemplates = await multiFetcher<CreateTemplatesResponse>({
         urls: templateUrls,
         requestInit: {
@@ -61,43 +67,39 @@ function useTemplateNotebooks() {
       });
 
       if (createdTemplates.some((t) => !t.success)) {
-        // TODO: Log error and display toast.
+        const error = createdTemplates.reduce((acc, t) => acc.concat(t.message), '');
+        toastError(error);
         return;
       }
 
-      const workspace = await fetcher<CreateWorkspaceResponse>({
-        url: `${workspacesEndpoint}/workspaces/`,
-        requestInit: {
-          method: 'POST',
-          body: JSON.stringify({
-            name: workspaceName,
-            description: workspaceName,
-            workspace_details: {
-              globus_groups_token: groupsToken,
-              files: templateKeys.map((templateKey, i) => ({
-                name: `${templateKey}.ipynb`,
-                content: createdTemplates[i]?.data?.template,
-              })),
-              symlinks: uuids.map((uuid) => ({
-                name: `datasets/${uuid}`,
-                dataset_uuid: uuid,
-              })),
-            },
-          }),
-          headers: { 'UWS-Authorization': `Token ${workspacesToken}` },
+      trackEvent({
+        category: 'Workspace Action',
+        action: 'Create Templates',
+        value: { templateKeys, templateCount: templateKeys.length, uuids },
+      });
+
+      const templatePath = `${templateKeys[0]}.ipynb`;
+
+      await createAndLaunchWorkspace({
+        templatePath,
+        body: {
+          name: workspaceName,
+          description: workspaceName,
+          workspace_details: {
+            globus_groups_token: groupsToken,
+            files: templateKeys.map((templateKey, i) => ({
+              name: `${templateKey}.ipynb`,
+              content: createdTemplates[i]?.data?.template,
+            })),
+            symlinks: uuids.map((uuid) => ({
+              name: `datasets/${uuid}`,
+              dataset_uuid: uuid,
+            })),
+          },
         },
       });
-      const workspaceId = workspace?.data?.workspace?.id;
-
-      if (workspaceId) {
-        await startJob({ workspaceId, workspacesEndpoint, workspacesToken });
-        window.open(
-          `/workspaces/${workspaceId}?notebook_path=${encodeURIComponent(`${templateKeys[0]}.ipynb`)}`,
-          '_blank',
-        );
-      }
     },
-    [groupsToken, workspacesToken, workspacesEndpoint, userTemplatesEndpoint],
+    [groupsToken, createAndLaunchWorkspace, userTemplatesEndpoint, toastError],
   );
 
   return createTemplateNotebooks;
