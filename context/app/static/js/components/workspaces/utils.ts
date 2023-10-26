@@ -201,4 +201,11 @@ function getWorkspaceLink(workspace: Workspace) {
   return `/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(workspace.path)}`;
 }
 
-export { mergeJobsIntoWorkspaces, condenseJobs, locationIfJobRunning, getWorkspaceLink, getWorkspaceHeaders };
+export {
+  mergeJobsIntoWorkspaces,
+  condenseJobs,
+  locationIfJobRunning,
+  getWorkspaceLink,
+  getWorkspaceHeaders,
+  getWorkspaceJob,
+};

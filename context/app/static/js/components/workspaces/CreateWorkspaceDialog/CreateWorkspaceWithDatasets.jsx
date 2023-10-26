@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
+import { trackEvent } from 'js/helpers/trackers';
 import CreateWorkspaceDialog from './CreateWorkspaceDialog';
 import { useDatasetsAccessLevel } from './hooks';
 
@@ -43,6 +44,11 @@ export default function CreateWorkspaceWithDatasetsDialog({ ...rest }) {
   const removeProtectedDatasets = useCallback(() => {
     deselectRows(protectedRows.map((r) => r._id));
     toastSuccess('Protected datasets successfully removed from selection.');
+    trackEvent({
+      category: 'Workspace Creation',
+      action: 'Protected datasets removed',
+      value: protectedRows.map((r) => r._id),
+    });
   }, [deselectRows, protectedRows, toastSuccess]);
 
   const renderAdditionalFields = useCallback(

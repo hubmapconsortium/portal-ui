@@ -1,7 +1,8 @@
-import { useCallback } from 'react';
+import { useCallback, useRef } from 'react';
 
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
+import { trackEvent } from 'js/helpers/trackers';
 
 import { useDatasetsAccessLevel } from './useCreateWorkspaceForm';
 
@@ -22,16 +23,35 @@ function useProtectedDatasetsForm() {
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
   const containsProtectedDataset = protectedRows.length > 0;
 
+  const reportedProtectedRows = useRef(false);
+  const reportedTooManyRows = useRef(false);
+
   const errorMessages = [];
 
   if (selectedRows.size > 10) {
     errorMessages.push(errorHelper.datasets(selectedRows));
+    if (!reportedTooManyRows.current) {
+      reportedTooManyRows.current = true;
+      trackEvent({
+        category: 'Workspace Creation',
+        action: 'Too many datasets selected',
+        value: selectedRows.size,
+      });
+    }
   }
 
   if (containsProtectedDataset) {
     const protectedRowsError =
       protectedRows.length === 1 ? errorHelper.protectedDataset : errorHelper.protectedDatasets;
     errorMessages.push(protectedRowsError(protectedRows));
+    if (!reportedProtectedRows.current) {
+      reportedProtectedRows.current = true;
+      trackEvent({
+        category: 'Workspace Creation',
+        action: 'Protected datasets selected',
+        value: protectedRows.length,
+      });
+    }
   }
   const protectedHubmapIds = protectedRows?.map((row) => row._source.hubmap_id).join(', ');
 

@@ -3,6 +3,7 @@ import useSWRMutation from 'swr/mutation';
 
 import { useCallback } from 'react';
 
+import { trackEvent } from 'js/helpers/trackers';
 import { useAppContext } from '../Contexts';
 import { Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
 import { getWorkspaceHeaders } from './utils';
@@ -150,6 +151,11 @@ export function useStopWorkspace() {
 
   const stopWorkspace = useCallback(
     async (workspaceId: number) => {
+      trackEvent({
+        category: 'Workspace Action',
+        action: 'Stop Workspace',
+        value: workspaceId,
+      });
       await Promise.all(jobs.filter((j) => j.workspace_id === workspaceId).map((j) => stopJob(j.id)));
     },
     [jobs, stopJob],
@@ -162,6 +168,11 @@ async function fetchDeleteWorkspace(
   _key: string,
   { arg: { workspaceId, headers, url } }: { arg: { headers: HeadersInit; workspaceId: number; url: string } },
 ) {
+  trackEvent({
+    category: 'Workspace Action',
+    action: 'Delete Workspace',
+    value: workspaceId,
+  });
   const response = await fetch(url, {
     method: 'DELETE',
     headers,
@@ -216,6 +227,11 @@ async function startJob(
   _key: string,
   { arg: { workspaceId, jobDetails, jobType, url, headers } }: { arg: WorkspaceActionArgs },
 ) {
+  trackEvent({
+    category: 'Workspace Action',
+    action: 'Start Workspace',
+    value: { workspaceId, jobDetails, jobType },
+  });
   const result = fetch(url, {
     method: 'PUT',
     headers,
@@ -256,11 +272,38 @@ export function useStartWorkspace() {
   return { startWorkspace, isStartingWorkspace: isMutating };
 }
 
+interface CreateWorkspaceBody {
+  name: string;
+  description: string;
+  workspace_details: {
+    globus_groups_token: string;
+    files: {
+      name: string;
+      content?: string;
+    }[];
+    symlinks: {
+      name: string;
+      dataset_uuid: string;
+    }[];
+  };
+}
+
 interface CreateWorkspaceArgs extends APIAction {
-  body: unknown;
+  body: CreateWorkspaceBody;
 }
 
 async function createWorkspaceFetcher(_key: string, { arg: { body, url, headers } }: { arg: CreateWorkspaceArgs }) {
+  trackEvent({
+    category: 'Workspace Creation',
+    action: 'Create Workspace',
+    value: {
+      name: body.name,
+      description: body.description,
+      globus_groups_token: body.workspace_details.globus_groups_token,
+      files: body.workspace_details.files.map((f) => f.name),
+      symlinks: body.workspace_details.symlinks.map((s) => s.name),
+    },
+  });
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),
@@ -282,7 +325,7 @@ export function useCreateWorkspace() {
   const { trigger, isMutating } = useSWRMutation('create-workspace', createWorkspaceFetcher);
 
   const createWorkspace = useCallback(
-    (body: unknown) => {
+    (body: CreateWorkspaceBody) => {
       return trigger({
         url: api.createWorkspaceFromTemplates,
         body,
@@ -300,7 +343,7 @@ export function useCreateAndLaunchWorkspace() {
   const { startWorkspace } = useStartWorkspace();
 
   const createAndLaunchWorkspace = useCallback(
-    async ({ body, templatePath }: { body: unknown; templatePath: string }) => {
+    async ({ body, templatePath }: { body: CreateWorkspaceBody; templatePath: string }) => {
       const workspace = await createWorkspace(body);
 
       await startWorkspace(workspace.id);
