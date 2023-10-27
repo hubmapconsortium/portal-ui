@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
-import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/hooks';
+import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/api';
 
 function useDatasetWorkspace({ entity_type, uuid }) {
-  const createAndLaunchWorkspace = useCreateAndLaunchWorkspace();
+  const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
 
   return useCallback(
     async ({ workspaceName }) => {

@@ -1,25 +1,32 @@
 import React from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import DeleteRounded from '@mui/icons-material/DeleteRounded';
 
 import Description from 'js/shared-styles/sections/Description';
-import { DeleteIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { PanelWrapper } from 'js/shared-styles/panels';
 
-import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
-import CreateWorkspaceButton from 'js/components/workspaces/CreateWorkspaceButton';
+import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
+import { useSelectItems } from 'js/hooks/useSelectItems';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useWorkspacesList } from './hooks';
-import { StyledButton } from './style';
+import WorkspaceButton from './WorkspaceButton';
+import NewWorkspaceDialogFromWorkspaceList from './NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 
 function WorkspacesList() {
-  const {
-    workspacesList,
-    handleDeleteWorkspace: handleDelete,
-    handleCreateWorkspace,
-    handleStopWorkspace: handleStop,
-    handleStartWorkspace,
-  } = useWorkspacesList();
+  const { workspacesList, handleDeleteWorkspace, isDeleting } = useWorkspacesList();
+
+  const { selectedItems, toggleItem } = useSelectItems();
+  const { toastError } = useSnackbarActions();
+
+  const handleDeleteSelected = () => {
+    const workspaceIds = [...selectedItems];
+    Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(workspaceId))).catch((e) => {
+      toastError(`Error deleting workspace: ${e.message}`);
+      console.error(e);
+    });
+  };
 
   return (
     <>
@@ -30,17 +37,16 @@ function WorkspacesList() {
           </Typography>
         }
         buttons={
-          <>
-            <StyledButton
-              onClick={() => {
-                // eslint-disable-next-line no-alert
-                alert('TODO: Support deletion of multiple datasets');
-              }}
+          <Stack direction="row" gap={1}>
+            <WorkspaceButton
+              onClick={handleDeleteSelected}
+              disabled={selectedItems.size === 0 || isDeleting}
+              tooltip="Delete selected workspaces"
             >
-              <DeleteIcon color="primary" />
-            </StyledButton>
-            <CreateWorkspaceButton handleCreateWorkspace={handleCreateWorkspace} />
-          </>
+              <DeleteRounded />
+            </WorkspaceButton>
+            <NewWorkspaceDialogFromWorkspaceList />
+          </Stack>
         }
       />
       <Paper>
@@ -49,30 +55,12 @@ function WorkspacesList() {
         ) : (
           workspacesList.map((workspace) => (
             /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
-            <PanelWrapper key={workspace.id}>
-              <WorkspaceDetails workspace={workspace} handleStartWorkspace={handleStartWorkspace} />
-              <div>
-                Created {workspace.datetime_created.slice(0, 10)}
-                <button
-                  type="submit"
-                  disabled={workspace.jobs.length > 0 || workspace.status === 'deleting'}
-                  onClick={() => {
-                    handleDelete(workspace.id);
-                  }}
-                >
-                  Delete Workspace
-                </button>
-                <button
-                  type="submit"
-                  disabled={workspace.jobs.length === 0}
-                  onClick={() => {
-                    handleStop(workspace.id);
-                  }}
-                >
-                  Stop Jobs
-                </button>
-              </div>
-            </PanelWrapper>
+            <WorkspaceListItem
+              workspace={workspace}
+              key={workspace.id}
+              toggleItem={toggleItem}
+              selected={selectedItems.has(workspace.id)}
+            />
           ))
         )}
       </Paper>

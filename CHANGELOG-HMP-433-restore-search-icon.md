@@ -1,1 +1,0 @@
-- Restore magnifying glass icon to search bars.

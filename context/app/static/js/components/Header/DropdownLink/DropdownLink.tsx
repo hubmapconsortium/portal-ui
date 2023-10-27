@@ -1,6 +1,5 @@
 import React, { PropsWithChildren } from 'react';
 import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
-import Link from '@mui/material/Link';
 
 interface DropdownLinkProps extends MenuItemProps {
   href: string;
@@ -10,13 +9,15 @@ interface DropdownLinkProps extends MenuItemProps {
 function DropdownLink({ href, isIndented, children, ...rest }: PropsWithChildren<DropdownLinkProps>) {
   return (
     <MenuItem
-      {...rest}
       sx={({ spacing, palette }) => ({
         color: palette.primary.main,
         paddingLeft: isIndented ? spacing(5) : spacing(2),
       })}
+      component="a"
+      href={href}
+      {...rest}
     >
-      <Link href={href}>{children}</Link>
+      {children}
     </MenuItem>
   );
 }

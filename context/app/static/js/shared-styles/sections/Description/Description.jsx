@@ -7,7 +7,9 @@ function Description({ padding, children, ...props }) {
   return (
     <StyledPaper $padding={padding} {...props}>
       <StyledInfoIcon color="primary" />
-      <Typography variant="body1">{children}</Typography>
+      <Typography variant="body1" component="div">
+        {children}
+      </Typography>
     </StyledPaper>
   );
 }

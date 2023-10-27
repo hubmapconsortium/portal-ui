@@ -1,1 +1,0 @@
-- Added selection and workspace launching to main search page for users with Workspaces access.
