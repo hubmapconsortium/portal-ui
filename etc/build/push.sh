@@ -35,6 +35,7 @@ echo "Version: $VERSION"
 ./grab-dependencies.sh
 
 git add context/package*.json
+git add context/app/markdown/dependencies.md
 git commit -m "Version bump to $VERSION"
 
 if ls CHANGELOG-*.md; then
