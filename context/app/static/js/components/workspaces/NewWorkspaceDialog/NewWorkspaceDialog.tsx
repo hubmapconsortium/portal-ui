@@ -21,6 +21,7 @@ import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
+import { useLaunchWorkspaceStore } from '../LaunchWorkspaceDialog/store';
 
 function ContactPrompt() {
   return (
@@ -101,6 +102,8 @@ function NewWorkspaceDialog({
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
+  const { isOpen: isLaunchWorkspaceDialogOpen } = useLaunchWorkspaceStore();
+
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
   const { tags } = useWorkspaceTemplateTags();
@@ -118,7 +121,7 @@ function NewWorkspaceDialog({
 
   return (
     <Dialog
-      open={dialogIsOpen}
+      open={dialogIsOpen && !isLaunchWorkspaceDialogOpen}
       onClose={handleClose}
       scroll="paper"
       aria-labelledby="create-workspace-dialog-title"

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { mergeJobsIntoWorkspaces } from './utils';
+import { getWorkspaceLink, mergeJobsIntoWorkspaces } from './utils';
 import {
   useDeleteWorkspace,
   useStopWorkspace,
@@ -76,28 +76,47 @@ function useLaunchWorkspace(workspace?: Workspace) {
 
   const { open, setWorkspace } = useLaunchWorkspaceStore();
 
+  const startAndOpenWorkspace = useCallback(
+    async (ws: Workspace, templatePath?: string) => {
+      await startWorkspace(ws.id);
+      await mutate();
+      window.open(getWorkspaceLink(ws, templatePath), '_blank');
+    },
+    [mutate, startWorkspace],
+  );
+
   const launchWorkspace = useCallback(
-    async (ws: Workspace) => {
+    async (ws: Workspace, templatePath?: string) => {
+      if (runningWorkspace && ws.id === runningWorkspace.id) {
+        window.open(getWorkspaceLink(ws, templatePath), '_blank');
+        return;
+      }
       if (runningWorkspace) {
         open();
         setWorkspace(ws);
         throw new Error('Another workspace is already running');
       } else {
-        await startWorkspace(ws.id);
-        await mutate();
+        await startAndOpenWorkspace(ws, templatePath);
       }
     },
-    [mutate, open, runningWorkspace, setWorkspace, startWorkspace],
+    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
   );
 
   const handleLaunchWorkspace = useCallback(async () => {
     if (workspace) {
-      return launchWorkspace(workspace);
+      try {
+        return await launchWorkspace(workspace);
+      } catch (err: unknown) {
+        if ((err as Error)?.message === 'Another workspace is already running') {
+          return undefined;
+        }
+        console.error(err);
+      }
     }
     return Promise.reject(new Error('No workspace to launch'));
   }, [workspace, launchWorkspace]);
 
-  return { handleLaunchWorkspace, launchWorkspace };
+  return { handleLaunchWorkspace, launchWorkspace, startAndOpenWorkspace };
 }
 
 export function useCreateAndLaunchWorkspace() {
@@ -113,8 +132,7 @@ export function useCreateAndLaunchWorkspace() {
       }
 
       try {
-        await launchWorkspace(workspace);
-        window.open(`/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(templatePath)}`, '_blank');
+        await launchWorkspace(workspace, templatePath);
       } catch (err: unknown) {
         if ((err as Error)?.message === 'Another workspace is already running') {
           return;

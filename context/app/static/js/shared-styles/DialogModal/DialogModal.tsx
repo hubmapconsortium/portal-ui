@@ -47,8 +47,8 @@ function DialogModal({
         </StyledDialogTitle>
 
         {withCloseButton && (
-          <IconButton onClick={handleClose} color="primary">
-            <CloseIcon sx={{ width: '36px', height: '36px' }} />
+          <IconButton onClick={handleClose} color="primary" sx={{ width: '36px', height: '36px' }}>
+            <CloseIcon />
           </IconButton>
         )}
       </Stack>

@@ -4,19 +4,35 @@ import Stack from '@mui/material/Stack';
 
 import JobStatus from 'js/components/workspaces/JobStatus';
 import { condenseJobs, getWorkspaceLink } from 'js/components/workspaces/utils';
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
+import InternalLink from 'js/shared-styles/Links/InternalLink';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { useLaunchWorkspace } from '../hooks';
 
 const typographyVariant = 'subtitle1';
 
-function WorkspaceDetails({ workspace, handleStartWorkspace }) {
+function WorkspaceDetails({ workspace }) {
   const job = condenseJobs(workspace.jobs);
-  const link = getWorkspaceLink(workspace);
+  const { handleLaunchWorkspace } = useLaunchWorkspace(workspace);
+  const { toastError } = useSnackbarActions();
+
+  const clickHandler = React.useCallback(
+    (e) => {
+      e.preventDefault();
+      try {
+        handleLaunchWorkspace();
+      } catch (err) {
+        toastError('Error launching workspace');
+        console.error(err);
+      }
+    },
+    [handleLaunchWorkspace, toastError],
+  );
 
   return (
     <Stack direction="column">
-      <OutboundLink href={link} variant={typographyVariant} onClick={() => handleStartWorkspace(workspace.id)}>
+      <InternalLink href={getWorkspaceLink(workspace)} variant={typographyVariant} onClick={clickHandler}>
         {workspace.name}
-      </OutboundLink>
+      </InternalLink>
       <Typography variant="body2">
         <JobStatus job={job} />
         &nbsp;|&nbsp; Created {workspace.datetime_created.slice(0, 10)}
