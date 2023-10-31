@@ -41,14 +41,14 @@ function DialogModal({
 
   return (
     <Dialog {...props} open={isOpen} onClose={handleClose} fullWidth>
-      <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1} pt={2} pl={3} pr={2}>
         <StyledDialogTitle variant="h3" component="h2">
           {title}
         </StyledDialogTitle>
 
         {withCloseButton && (
-          <IconButton onClick={handleClose} color="primary" sx={{ width: '36px', height: '36px' }}>
-            <CloseIcon />
+          <IconButton onClick={handleClose} color="primary" size="large">
+            <CloseIcon sx={{ width: '36px', height: '36px' }} />
           </IconButton>
         )}
       </Stack>

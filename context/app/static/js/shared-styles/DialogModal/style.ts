@@ -4,7 +4,7 @@ import DialogTitle from '@mui/material/DialogTitle';
 
 const StyledDialogTitle = styled(DialogTitle)(({ theme }) => ({
   marginBottom: theme.spacing(1),
-  padding: theme.spacing(2, 3, 0, 3),
+  padding: 0,
 })) as typeof DialogTitle;
 
 const StyledDivider = styled(Divider)(({ theme }) => ({
