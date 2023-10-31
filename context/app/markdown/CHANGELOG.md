@@ -1,4 +1,4 @@
-## v0.82.2 - 2023-10-31
+## v0.82.3 - 2023-10-31
 
 - Implement workspace usability metric tracking.
 - Add hook to check if user has any running workspaces.
