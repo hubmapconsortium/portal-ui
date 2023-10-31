@@ -1,13 +1,28 @@
 import React from 'react';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
-import MUIDialogContent from '@mui/material/DialogContent';
+import MUIDialogContent, { DialogContentProps } from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import { Alert } from 'js/shared-styles/alerts';
+import { IconButton } from '@mui/material';
+import Stack from '@mui/system/Stack';
 import { StyledDivider, StyledDialogTitle } from './style';
+import { CloseIcon } from '../icons';
+
+interface DialogModalProps extends Omit<React.ComponentProps<typeof Dialog>, 'content' | 'open'> {
+  title: string;
+  errorMessages?: string[];
+  warning?: React.ReactNode;
+  secondaryText?: React.ReactNode;
+  actions?: React.ReactNode;
+  isOpen: boolean;
+  content?: React.ReactNode;
+  handleClose: () => void;
+  DialogContentComponent?: React.ComponentType<DialogContentProps>;
+  withCloseButton?: boolean;
+}
 
 function DialogModal({
   title,
@@ -18,20 +33,27 @@ function DialogModal({
   isOpen,
   handleClose,
   DialogContentComponent,
-  errorMessages,
+  errorMessages = [],
+  withCloseButton,
   ...props
-}) {
-  const DialogContent = DialogContentComponent || MUIDialogContent;
+}: DialogModalProps) {
+  const DialogContent = DialogContentComponent ?? MUIDialogContent;
 
   return (
-    <Dialog open={isOpen} onClose={handleClose} fullWidth {...props}>
-      <StyledDialogTitle disableTypography>
-        <Typography variant="h3" component="h2">
+    <Dialog {...props} open={isOpen} onClose={handleClose} fullWidth>
+      <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1}>
+        <StyledDialogTitle variant="h3" component="h2">
           {title}
-        </Typography>
-      </StyledDialogTitle>
+        </StyledDialogTitle>
+
+        {withCloseButton && (
+          <IconButton onClick={handleClose} color="primary">
+            <CloseIcon sx={{ width: '36px', height: '36px' }} />
+          </IconButton>
+        )}
+      </Stack>
       <DialogContent>
-        {errorMessages?.length > 0 && (
+        {errorMessages.length > 0 && (
           <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
             {errorMessages.map((errorMessage) => {
               return (
