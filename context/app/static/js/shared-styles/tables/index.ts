@@ -8,7 +8,7 @@ const StyledTableContainer = styled(TableContainer)(({ theme }) => ({
   '& .MuiTableCell-root': {
     backgroundColor: theme.palette.white,
   },
-}));
+})) as typeof TableContainer;
 
 const HeaderCell = TableCell;
 
