@@ -1,0 +1,1 @@
+- Further constrain collections on landing page to only show collections with both a registered doi and doi url.
