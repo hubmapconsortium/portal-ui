@@ -1,3 +1,14 @@
+## v0.82.2 - 2023-10-31
+
+- Implement workspace usability metric tracking.
+- Add hook to check if user has any running workspaces.
+- Update workspace landing page styling.
+- Add docker logging to AWS CloudWatch.
+- Fix push script to once again stage changes to dependencies markdown.
+- Further constrain collections on landing page to only show collections with both a registered doi and doi url.
+- Add dialog to launch workspaces from user templates.
+
+
 ## v0.82.1 - 2023-10-25
 
 - Fix overflow in chart legends.

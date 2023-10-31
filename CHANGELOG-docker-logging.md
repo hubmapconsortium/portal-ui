@@ -1,1 +1,0 @@
-- Add docker logging to AWS CloudWatch.

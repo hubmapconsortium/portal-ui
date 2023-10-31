@@ -1,1 +1,0 @@
-- Add dialog to launch workspaces from user templates.
