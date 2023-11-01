@@ -8,8 +8,8 @@ const [SelectableTableProvider, useSelectableTableStore] = createStoreContext<
   CreateSelectableTableStoreInput
 >(createStore, 'Selectable Table Store');
 
-export function withSelectableTableProvider<P extends React.JSX.IntrinsicAttributes>(
-  Component: React.ComponentType<P>,
+export function withSelectableTableProvider<P>(
+  Component: React.ComponentType<P extends JSX.IntrinsicAttributes ? P : never>,
   tableLabel: string,
 ) {
   return function ComponentWithSelectableTableProvider(props: React.ComponentProps<typeof Component>) {

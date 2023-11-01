@@ -120,4 +120,4 @@ function Samples({ organTerms }: OrganSamplesProps) {
     </SectionContainer>
   );
 }
-export default withSelectableTableProvider<OrganSamplesProps>(Samples, 'organ-samples');
+export default withSelectableTableProvider(Samples, 'organ-samples');
