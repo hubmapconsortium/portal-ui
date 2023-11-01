@@ -8,6 +8,9 @@
 - Further constrain collections on landing page to only show collections with both a registered doi and doi url.
 - Add dialog to launch workspaces from user templates.
 
+## v0.82.2
+
+- Version number skipped.
 
 ## v0.82.1 - 2023-10-25
 
