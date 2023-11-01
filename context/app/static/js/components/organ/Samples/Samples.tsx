@@ -11,34 +11,9 @@ import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
 import { getDonorAgeString } from 'js/helpers/functions';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
+import { SampleDocument } from 'js/typings/search';
 import { StyledSectionHeader } from './style';
 import { getSearchURL } from '../utils';
-
-interface EntityDocument {
-  uuid: string;
-  hubmap_id: string;
-  last_modified_timestamp: number;
-}
-
-interface DonorMappedMetadata {
-  age_value: number;
-  age_unit: string;
-  sex: string;
-  race: string;
-}
-
-interface DonorDocument extends EntityDocument {
-  mapped_metadata?: DonorMappedMetadata;
-}
-
-interface DescendantCounts {
-  entity_type: { Dataset?: number; Sample?: number };
-}
-
-interface SampleDocument extends EntityDocument {
-  donor: DonorDocument;
-  descendant_counts: DescendantCounts;
-}
 
 interface CellContentProps {
   hit: SampleDocument;
