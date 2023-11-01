@@ -18,19 +18,20 @@ import { LinearProgress } from '@mui/material';
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
 
-interface Column {
+interface Column<Doc> {
   label: string;
   id: string;
   sort?: string;
+  cellContent: ComponentType<{ hit: SearchHit<Doc> }>;
 }
 
-interface EntityHeaderCellTypes {
-  column: Column;
+interface EntityHeaderCellTypes<Doc> {
+  column: Column<Doc>;
   setSort: (columnId: string) => void;
   sortState: SortState;
 }
 
-function EntityHeaderCell({ column, setSort, sortState }: EntityHeaderCellTypes) {
+function EntityHeaderCell<Doc>({ column, setSort, sortState }: EntityHeaderCellTypes<Doc>) {
   // This is a workaround to ensure the header cell control is accessible with consistent keyboard navigation
   // and appearance. The header cell contains a disabled, hidden button that is the full width of the cell. This
   // allows us to set the header cell to position: relative and create another button that is absolutely positioned
@@ -67,13 +68,12 @@ function EntityHeaderCell({ column, setSort, sortState }: EntityHeaderCellTypes)
 
 const headerRowHeight = 60;
 
-interface EntityTableProps<Doc> {
+interface EntityTableType<Doc> {
   query: SearchRequest;
-  rowCells: ComponentType<{ hit: SearchHit<Doc> }>;
-  columns: Column[];
+  columns: Column<Doc>[];
 }
 
-function EntityTable<Doc>({ query, rowCells: RowCells, columns }: EntityTableProps<Doc>) {
+function EntityTable<Doc>({ query, columns }: EntityTableType<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
 
   const {
@@ -137,7 +137,9 @@ function EntityTable<Doc>({ query, rowCells: RowCells, columns }: EntityTablePro
           {virtualRows.map((virtualRow) => (
             <TableRow sx={{ height: virtualRow.size }} key={searchHits[virtualRow.index]?._id}>
               <SelectableRowCell rowKey={searchHits[virtualRow.index]?._id} />
-              <RowCells hit={searchHits[virtualRow.index]} />
+              {columns.map(({ cellContent: CellContent, id }) => (
+                <CellContent hit={searchHits[virtualRow.index]} key={id} />
+              ))}
             </TableRow>
           ))}
           {tableBodyPadding.bottom > 0 && (
