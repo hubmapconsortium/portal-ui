@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Typography from '@mui/material/Typography';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import Summary from 'js/components/genes/Summary';
 import GenePageProvider from 'js/components/genes/GenePageContext';
@@ -25,7 +24,7 @@ function Genes({ geneSymbol }: Props) {
   return (
     <GenePageProvider geneSymbol={geneSymbol}>
       <DetailLayout sectionOrder={sectionOrder}>
-        <SummaryTitle iconTooltipText='Basic unit of heredity made up of sequences of DNA'>Gene</SummaryTitle>
+        <SummaryTitle iconTooltipText="Basic unit of heredity made up of sequences of DNA">Gene</SummaryTitle>
         <GenePageTitle />
         <Summary />
       </DetailLayout>
