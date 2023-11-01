@@ -5,8 +5,7 @@ import Stack from '@mui/material/Stack';
 
 import PageTitle from 'js/shared-styles/pages/PageTitle';
 
-import { useGeneDetails } from './hooks';
-import { useGenePageContext } from './GenePageContext';
+import { useGeneDetails, useGenePageContext } from './hooks';
 
 function GeneSymbol() {
   const { geneSymbol } = useGenePageContext();

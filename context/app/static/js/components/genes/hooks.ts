@@ -78,4 +78,5 @@ const useGeneList = (page: number) => {
   );
 };
 
-export { useGeneDetails, useGeneList };
+// Re-export `useGenePageContext` for convenience
+export { useGeneDetails, useGeneList, useGenePageContext };
