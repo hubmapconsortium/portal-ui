@@ -6,7 +6,7 @@ import { EntitiesTabTypes } from './types';
 import { StyledTabs, StyledTabPanel } from './style';
 
 interface EntitiesTablesProps<Doc> {
-  isSelectable: boolean;
+  isSelectable?: boolean;
   initialTabIndex?: number;
   entities: EntitiesTabTypes<Doc>[];
 }
