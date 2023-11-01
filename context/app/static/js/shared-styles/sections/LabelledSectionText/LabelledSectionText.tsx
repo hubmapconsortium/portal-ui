@@ -1,23 +1,31 @@
-/* eslint-disable react/no-array-index-key */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { StyledDiv, Flex, StyledInfoIcon } from './style';
+import { TextContainer, StyledInfoIcon } from './style';
+
+interface LabelledSectionTextProps extends PropsWithChildren {
+  label: string;
+  iconTooltipText?: string;
+  bottomSpacing?: number;
+  className?: string;
+  childContainerComponent?: React.ElementType | React.ComponentType;
+  ['data-testid']?: string;
+}
 
 function LabelledSectionText({
   children,
   label,
   iconTooltipText,
-  bottomSpacing,
+  bottomSpacing = 0,
   className,
   childContainerComponent = 'p',
   ...props // mainly for data-testid
-}) {
+}: LabelledSectionTextProps) {
   return (
-    <StyledDiv className={className} $bottomSpacing={bottomSpacing} {...props}>
-      <Flex>
+    <TextContainer $bottomSpacing={bottomSpacing} className={className} {...props}>
+      <Stack direction="row" alignItems='center'>
         <Typography variant="subtitle2" component="h3" color="primary">
           {label}
         </Typography>
@@ -26,25 +34,13 @@ function LabelledSectionText({
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         )}
-      </Flex>
+      </Stack>
       <Typography component={childContainerComponent} variant="body1">
         {children}
       </Typography>
-    </StyledDiv>
+    </TextContainer>
   );
 }
 
-LabelledSectionText.propTypes = {
-  label: PropTypes.string.isRequired,
-  iconTooltipText: PropTypes.string,
-  bottomSpacing: PropTypes.number,
-  childContainerComponent: PropTypes.elementType,
-};
-
-LabelledSectionText.defaultProps = {
-  iconTooltipText: undefined,
-  bottomSpacing: undefined,
-  childContainerComponent: undefined,
-};
 
 export default LabelledSectionText;
