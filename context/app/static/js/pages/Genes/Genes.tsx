@@ -1,11 +1,10 @@
 import React from 'react';
 
 import Typography from '@mui/material/Typography';
-import PageTitle from 'js/shared-styles/pages/PageTitle';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import Summary from 'js/components/genes/Summary';
 import GenePageProvider from 'js/components/genes/GenePageContext';
-import { useGeneDetails } from './hooks';
+import GenePageTitle from 'js/components/genes/GenePageTitle';
 
 const summaryId = 'Summary';
 
@@ -14,8 +13,6 @@ interface Props {
 }
 
 function Genes({ geneSymbol }: Props) {
-  const { data: geneData, isLoading } = useGeneDetails(geneSymbol);
-
   const shouldDisplaySection = {
     [summaryId]: true,
   };
@@ -24,17 +21,13 @@ function Genes({ geneSymbol }: Props) {
     .filter(([, shouldDisplay]) => shouldDisplay)
     .map(([sectionName]) => sectionName);
 
-  if (isLoading || !geneData) {
-    return null;
-  }
-
   return (
     <GenePageProvider geneSymbol={geneSymbol}>
       <DetailLayout sectionOrder={sectionOrder}>
         <Typography variant="subtitle1" component="h2" color="primary">
           Gene
         </Typography>
-        <PageTitle>{`${geneSymbol.toUpperCase()} (${geneData.approved_name})`}</PageTitle>
+        <GenePageTitle />
         <Summary />
       </DetailLayout>
     </GenePageProvider>

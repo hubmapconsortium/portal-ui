@@ -1,11 +1,15 @@
 import React from 'react';
-import { useGeneDetails } from 'js/pages/Genes/hooks';
+
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import hasKey from 'js/helpers/hasKey';
-import { useGenePageContext } from '../GenePageContext';
+import { capitalizeString } from 'js/helpers/functions';
+
+import { Skeleton } from '@mui/material';
+import { useGeneDetails } from '../hooks';
 import { ReferenceList } from './styles';
 
-// Map reference sources to display names, default to the original source name if not found
+// Map reference sources to display names
+// default to capitalizing the original source name if not found
 const referenceMap = new Proxy<Record<string, string>>(
   {
     entrez: 'Entrez',
@@ -15,20 +19,36 @@ const referenceMap = new Proxy<Record<string, string>>(
     ensembl: 'Ensembl',
   },
   {
-    get: (target: object, prop: string) => (hasKey(target, prop) ? target[prop] : String(prop)),
+    get: (target: object, prop: string) => (hasKey(target, prop) ? target[prop] : capitalizeString(prop)),
   },
 );
 
-function KnownReferences() {
-  const { geneSymbol } = useGenePageContext();
-  const { data } = useGeneDetails(geneSymbol);
+function ReferenceListContents() {
+  const { data } = useGeneDetails();
+  if (!data) {
+    return (
+      <>
+        <Skeleton width={100} />
+        <Skeleton width={120} />
+        <Skeleton width={80} />
+      </>
+    );
+  }
   return (
-    <ReferenceList>
-      {data?.references?.map(({ url, source }) => (
+    <>
+      {data.references.map(({ url, source }) => (
         <dd key={source}>
           <OutboundIconLink href={url}>{referenceMap[source]}</OutboundIconLink>
         </dd>
       ))}
+    </>
+  );
+}
+
+function KnownReferences() {
+  return (
+    <ReferenceList>
+      <ReferenceListContents />
     </ReferenceList>
   );
 }

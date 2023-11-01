@@ -1,7 +1,8 @@
+import { useMemo } from 'react';
 import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr';
-import { useMemo } from 'react';
+import { useGenePageContext } from './GenePageContext';
 
 const GeneApiURLs = {
   detailURL(geneId: string) {
@@ -52,8 +53,11 @@ interface GeneDetail extends BasicGeneInfo {
 
 type GeneDetailResponse = [GeneDetail];
 
-const useGeneDetails = (geneId: string) => {
-  const { data, ...swr } = useSWR<GeneDetailResponse>(GeneApiURLs.detailURL(geneId), (url: string) => fetcher({ url }));
+const useGeneDetails = () => {
+  const { geneSymbol } = useGenePageContext();
+  const { data, ...swr } = useSWR<GeneDetailResponse>(GeneApiURLs.detailURL(geneSymbol), (url: string) =>
+    fetcher({ url }),
+  );
   return { data: data?.[0], ...swr };
 };
 
