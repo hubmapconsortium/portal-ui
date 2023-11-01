@@ -1,5 +1,5 @@
-import React, { ComponentType } from 'react';
-import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import React, { ComponentType, ElementType } from 'react';
+import { SearchRequest, SearchHit } from '@elastic/elasticsearch/lib/api/types';
 
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -22,7 +22,7 @@ interface Column<Doc> {
   label: string;
   id: string;
   sort?: string;
-  cellContent: ComponentType<{ hit: SearchHit<Doc> }>;
+  cellContent: ComponentType<{ hit: SearchHit<Doc> }> | ElementType;
 }
 
 interface EntityHeaderCellTypes<Doc> {
@@ -134,14 +134,22 @@ function EntityTable<Doc>({ query, columns }: EntityTableType<Doc>) {
               <td style={{ height: `${tableBodyPadding.top}px` }} aria-hidden="true" />
             </tr>
           )}
-          {virtualRows.map((virtualRow) => (
-            <TableRow sx={{ height: virtualRow.size }} key={searchHits[virtualRow.index]?._id}>
-              <SelectableRowCell rowKey={searchHits[virtualRow.index]?._id} />
-              {columns.map(({ cellContent: CellContent, id }) => (
-                <CellContent hit={searchHits[virtualRow.index]} key={id} />
-              ))}
-            </TableRow>
-          ))}
+          {virtualRows.map((virtualRow) => {
+            const hit = searchHits[virtualRow.index];
+            if (hit) {
+              return (
+                <TableRow sx={{ height: virtualRow.size }} key={hit?._id}>
+                  <SelectableRowCell rowKey={hit?._id} />
+                  {columns.map(({ cellContent: CellContent, id }) => (
+                    <TableCell key={id}>
+                      <CellContent hit={hit._source} />
+                    </TableCell>
+                  ))}
+                </TableRow>
+              );
+            }
+            return null;
+          })}
           {tableBodyPadding.bottom > 0 && (
             <tr>
               <td style={{ height: `${tableBodyPadding.bottom}px` }} aria-hidden="true" />

@@ -1,5 +1,5 @@
-import React, { useState, ComponentType } from 'react';
-import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import React, { useState, ComponentType, ElementType } from 'react';
+import { SearchRequest, SearchHit } from '@elastic/elasticsearch/lib/api/types';
 
 import { Tab } from 'js/shared-styles/tabs';
 import EntityTable from './EntityTable';
@@ -9,7 +9,7 @@ interface Column<Doc> {
   label: string;
   id: string;
   sort?: string;
-  cellContent: ComponentType<{ hit: SearchHit<Doc> }>;
+  cellContent: ComponentType<{ hit: SearchHit<Doc> }> | ElementType;
 }
 
 interface EntityTableType<Doc> {
@@ -18,12 +18,12 @@ interface EntityTableType<Doc> {
   tabLabel: string;
 }
 
-interface Props<Doc> {
-  initialTabIndex: number;
+interface EntitiesTablesProps<Doc> {
+  initialTabIndex?: number;
   entities: EntityTableType<Doc>[];
 }
 
-function EntitiesTables<Doc>({ initialTabIndex, entities }: Props<Doc>) {
+function EntitiesTables<Doc>({ initialTabIndex = 0, entities }: EntitiesTablesProps<Doc>) {
   const [openTabIndex, setOpenTabIndex] = useState(initialTabIndex);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -38,7 +38,7 @@ function EntitiesTables<Doc>({ initialTabIndex, entities }: Props<Doc>) {
       </StyledTabs>
       {entities.map(({ query, columns, tabLabel }, i) => (
         <StyledTabPanel value={openTabIndex} index={i} key={`${tabLabel}-table`}>
-          <EntityTable query={query} columns={columns} />
+          <EntityTable<Doc> query={query} columns={columns} />
         </StyledTabPanel>
       ))}
     </>
