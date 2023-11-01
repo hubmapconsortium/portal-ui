@@ -5,6 +5,7 @@ import DetailLayout from 'js/components/detailPage/DetailLayout';
 import Summary from 'js/components/genes/Summary';
 import GenePageProvider from 'js/components/genes/GenePageContext';
 import GenePageTitle from 'js/components/genes/GenePageTitle';
+import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 
 const summaryId = 'Summary';
 
@@ -24,9 +25,7 @@ function Genes({ geneSymbol }: Props) {
   return (
     <GenePageProvider geneSymbol={geneSymbol}>
       <DetailLayout sectionOrder={sectionOrder}>
-        <Typography variant="subtitle1" component="h2" color="primary">
-          Gene
-        </Typography>
+        <SummaryTitle iconTooltipText='Basic unit of heredity made up of sequences of DNA'>Gene</SummaryTitle>
         <GenePageTitle />
         <Summary />
       </DetailLayout>

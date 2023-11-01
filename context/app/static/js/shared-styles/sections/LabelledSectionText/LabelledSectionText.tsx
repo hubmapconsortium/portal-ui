@@ -2,8 +2,8 @@ import React, { PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { TextContainer, StyledInfoIcon } from './style';
+import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
+import { TextContainer } from './style';
 
 interface LabelledSectionTextProps extends PropsWithChildren {
   label: string;
@@ -25,15 +25,11 @@ function LabelledSectionText({
 }: LabelledSectionTextProps) {
   return (
     <TextContainer $bottomSpacing={bottomSpacing} className={className} {...props}>
-      <Stack direction="row" alignItems='center'>
+      <Stack direction="row" alignItems="center">
         <Typography variant="subtitle2" component="h3" color="primary">
           {label}
         </Typography>
-        {iconTooltipText && (
-          <SecondaryBackgroundTooltip title={iconTooltipText}>
-            <StyledInfoIcon color="primary" />
-          </SecondaryBackgroundTooltip>
-        )}
+        <InfoTooltipIcon iconTooltipText={iconTooltipText} />
       </Stack>
       <Typography component={childContainerComponent} variant="body1">
         {children}
@@ -41,6 +37,5 @@ function LabelledSectionText({
     </TextContainer>
   );
 }
-
 
 export default LabelledSectionText;
