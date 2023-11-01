@@ -2,7 +2,6 @@
 import React, { useMemo } from 'react';
 import format from 'date-fns/format';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionContainer from 'js/shared-styles/sections/SectionContainer';
@@ -102,7 +101,6 @@ function Samples({ organTerms }: OrganSamplesProps) {
         leftText={
           <div>
             <StyledSectionHeader>Samples</StyledSectionHeader>
-            <Typography variant="subtitle1">{0} Samples</Typography>
           </div>
         }
         buttons={

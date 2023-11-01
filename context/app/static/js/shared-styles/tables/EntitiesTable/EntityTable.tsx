@@ -1,5 +1,4 @@
-import React, { ComponentType, ElementType } from 'react';
-import { SearchRequest, SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import React from 'react';
 
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -8,22 +7,15 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
+import { LinearProgress } from '@mui/material';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
-
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
-import { LinearProgress } from '@mui/material';
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
-
-interface Column<Doc> {
-  label: string;
-  id: string;
-  sort?: string;
-  cellContent: ComponentType<{ hit: SearchHit<Doc> }> | ElementType;
-}
+import { Column, EntitiesTabTypes } from './types';
 
 interface EntityHeaderCellTypes<Doc> {
   column: Column<Doc>;
@@ -66,14 +58,13 @@ function EntityHeaderCell<Doc>({ column, setSort, sortState }: EntityHeaderCellT
   );
 }
 
-const headerRowHeight = 60;
-
-interface EntityTableType<Doc> {
-  query: SearchRequest;
-  columns: Column<Doc>[];
+interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns'> {
+  isSelectable: boolean;
 }
 
-function EntityTable<Doc>({ query, columns }: EntityTableType<Doc>) {
+const headerRowHeight = 60;
+
+function EntityTable<Doc>({ query, columns, isSelectable = true }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
 
   const {
@@ -101,11 +92,13 @@ function EntityTable<Doc>({ query, columns }: EntityTableType<Doc>) {
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>
           <TableRow sx={{ height: headerRowHeight }}>
-            <SelectableHeaderCell
-              allTableRowKeys={allSearchIDs}
-              disabled={false}
-              sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
-            />
+            {isSelectable && (
+              <SelectableHeaderCell
+                allTableRowKeys={allSearchIDs}
+                disabled={false}
+                sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
+              />
+            )}
             {columns.map((column) => (
               <EntityHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
             ))}
@@ -139,7 +132,7 @@ function EntityTable<Doc>({ query, columns }: EntityTableType<Doc>) {
             if (hit) {
               return (
                 <TableRow sx={{ height: virtualRow.size }} key={hit?._id}>
-                  <SelectableRowCell rowKey={hit?._id} />
+                  {isSelectable && <SelectableRowCell rowKey={hit?._id} />}
                   {columns.map(({ cellContent: CellContent, id }) => (
                     <TableCell key={id}>
                       <CellContent hit={hit._source} />

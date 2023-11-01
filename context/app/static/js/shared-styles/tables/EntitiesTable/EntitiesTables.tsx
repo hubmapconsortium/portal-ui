@@ -1,29 +1,17 @@
-import React, { useState, ComponentType, ElementType } from 'react';
-import { SearchRequest, SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import React, { useState } from 'react';
 
 import { Tab } from 'js/shared-styles/tabs';
 import EntityTable from './EntityTable';
+import { EntitiesTabTypes } from './types';
 import { StyledTabs, StyledTabPanel } from './style';
 
-interface Column<Doc> {
-  label: string;
-  id: string;
-  sort?: string;
-  cellContent: ComponentType<{ hit: SearchHit<Doc> }> | ElementType;
-}
-
-interface EntityTableType<Doc> {
-  query: SearchRequest;
-  columns: Column<Doc>[];
-  tabLabel: string;
-}
-
 interface EntitiesTablesProps<Doc> {
+  isSelectable: boolean;
   initialTabIndex?: number;
-  entities: EntityTableType<Doc>[];
+  entities: EntitiesTabTypes<Doc>[];
 }
 
-function EntitiesTables<Doc>({ initialTabIndex = 0, entities }: EntitiesTablesProps<Doc>) {
+function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entities }: EntitiesTablesProps<Doc>) {
   const [openTabIndex, setOpenTabIndex] = useState(initialTabIndex);
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -38,7 +26,7 @@ function EntitiesTables<Doc>({ initialTabIndex = 0, entities }: EntitiesTablesPr
       </StyledTabs>
       {entities.map(({ query, columns, tabLabel }, i) => (
         <StyledTabPanel value={openTabIndex} index={i} key={`${tabLabel}-table`}>
-          <EntityTable<Doc> query={query} columns={columns} />
+          <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} />
         </StyledTabPanel>
       ))}
     </>
