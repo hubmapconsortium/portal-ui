@@ -7,8 +7,12 @@ import { capitalizeString } from 'js/helpers/functions';
 import { StyledTextField } from './style';
 import { useQuerySelect } from './hooks';
 
-function QuerySelect({ completeStep, setParametersButtonRef }) {
-  const { selectedQueryType, handleSelect, handleButtonClick } = useQuerySelect(completeStep);
+interface QuerySelectProps {
+  setParametersButtonRef: React.RefObject<HTMLButtonElement>;
+}
+
+function QuerySelect({ setParametersButtonRef }: QuerySelectProps) {
+  const { selectedQueryType, handleSelect, handleButtonClick } = useQuerySelect();
   return (
     <div>
       <StyledTextField
