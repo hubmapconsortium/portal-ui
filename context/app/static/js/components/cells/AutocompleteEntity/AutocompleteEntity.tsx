@@ -81,14 +81,24 @@ function AutocompleteEntity({ targetEntity, setter, defaultValue }: Autocomplete
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
           const tagProps = getTagProps({ index });
-          // Removing default values (e.g. genes whose pages are being viewed)
-          // is not allowed; removing the `onDelete` prop hides the delete icon
+          // Removing onDelete removes the delete icon
           const optionIsDefault = defaultValue && option.full === defaultValue;
-          const onDelete = optionIsDefault ? undefined : tagProps.onDelete;
-          return <Chip label={option.full} {...tagProps} onDelete={onDelete} key={option.full} />;
+          return (
+            <Chip
+              label={option.full}
+              {...tagProps}
+              onDelete={optionIsDefault ? undefined : tagProps.onDelete}
+              key={option.full}
+            />
+          );
         })
       }
       onChange={(_, value) => {
+        if (defaultValue && !value.map((match) => match.full).includes(defaultValue)) {
+          // If default value is set and not included in selected options, add it
+          setSelectedOptions([...makeInitialValue(defaultValue), ...value]);
+          return;
+        }
         setSelectedOptions(value);
       }}
       renderInput={({ InputLabelProps, ...params }) => (
