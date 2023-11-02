@@ -11,5 +11,5 @@ export interface Column<Doc> {
 export interface EntitiesTabTypes<Doc> {
   query: SearchRequest;
   columns: Column<Doc>[];
-  tabLabel: string;
+  entityTypeLabel: 'Donor' | 'Sample' | 'Dataset';
 }

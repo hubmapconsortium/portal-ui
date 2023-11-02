@@ -2,30 +2,39 @@ import { useCallback } from 'react';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
 
+import { fetcher as fetch, multiFetcher as multiFetch } from 'js/helpers/swr';
 import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 
-async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
+function buildSearchRequestInit({ query, groupsToken, useDefaultQuery }) {
   const authHeader = getAuthHeader(groupsToken);
-  const response = await fetch(elasticsearchEndpoint, {
+
+  return {
     method: 'POST',
     body: JSON.stringify(useDefaultQuery ? addRestrictionsToQuery(query) : query),
     headers: {
       'Content-Type': 'application/json',
       ...authHeader,
     },
-  });
+  };
+}
 
-  if (!response.ok) {
-    console.error('Search API failed', response);
-    return undefined;
-  }
-  const results = await response.json();
-  return results;
+async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
+  return fetch({
+    url: elasticsearchEndpoint,
+    requestInit: buildSearchRequestInit({ query, groupsToken, useDefaultQuery }),
+  });
+}
+
+async function multiFetchSearchData(queries, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
+  return multiFetch({
+    urls: [elasticsearchEndpoint],
+    requestInits: queries.map((query) => buildSearchRequestInit({ query, groupsToken, useDefaultQuery })),
+  });
 }
 
 function useSearchData(
-  query,
+  queries,
   useDefaultQuery = false,
   fetcher = fetchSearchData,
   swrConfig = {
@@ -35,7 +44,7 @@ function useSearchData(
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
   const { data: searchData, isLoading } = useSWR(
-    [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
+    [queries, elasticsearchEndpoint, groupsToken, useDefaultQuery],
     (args) => fetcher(...args),
     swrConfig,
   );
@@ -183,5 +192,25 @@ function useScrollSearchHits(
   return { searchHits, error, isLoading, setSize, loadMore, totalHitsCount, isReachingEnd };
 }
 
-export { fetchSearchData, useSearchHits, useScrollSearchHits, useAllSearchIDs };
+function useSearchTotalHitsCounts(
+  queries,
+  { useDefaultQuery = false, fetcher = multiFetchSearchData } = {
+    useDefaultQuery: false,
+    fetcher: multiFetchSearchData,
+  },
+) {
+  const swrConfig = { fallbackData: [] };
+  const { searchData, isLoading } = useSearchData(
+    queries.map((query) => ({ ...query, _source: false, size: 0, track_total_hits: true })),
+    useDefaultQuery,
+    fetcher ?? multiFetchSearchData,
+    {
+      ...swrConfig,
+    },
+  );
+
+  return { totalHitsCounts: searchData.map((d) => getTotalHitsCount(d)), isLoading };
+}
+
+export { fetchSearchData, useSearchHits, useScrollSearchHits, useAllSearchIDs, useSearchTotalHitsCounts };
 export default useSearchData;

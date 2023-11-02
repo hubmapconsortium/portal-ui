@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 
 import { Tab } from 'js/shared-styles/tabs';
+import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { StyledTabs, StyledTabPanel } from './style';
@@ -13,19 +14,25 @@ interface EntitiesTablesProps<Doc> {
 
 function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entities }: EntitiesTablesProps<Doc>) {
   const [openTabIndex, setOpenTabIndex] = useState(initialTabIndex);
+  const { totalHitsCounts } = useSearchTotalHitsCounts(entities.map(({ query }) => query)) as {
+    totalHitsCounts: number[];
+  };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
     setOpenTabIndex(newValue);
   };
+
   return (
     <>
-      <StyledTabs value={openTabIndex} onChange={handleTabChange} aria-label="Published and preprint publications">
-        {entities.map(({ tabLabel }, i) => {
-          return <Tab label={tabLabel} index={i} key={`${tabLabel}-tab`} />;
+      <StyledTabs value={openTabIndex} onChange={handleTabChange} aria-label="Entities Tables">
+        {entities.map(({ entityTypeLabel }, i) => {
+          return (
+            <Tab label={`${entityTypeLabel}s (${totalHitsCounts[i] ?? 0})`} index={i} key={`${entityTypeLabel}-tab`} />
+          );
         })}
       </StyledTabs>
-      {entities.map(({ query, columns, tabLabel }, i) => (
-        <StyledTabPanel value={openTabIndex} index={i} key={`${tabLabel}-table`}>
+      {entities.map(({ query, columns, entityTypeLabel }, i) => (
+        <StyledTabPanel value={openTabIndex} index={i} key={`${entityTypeLabel}-table`}>
           <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} />
         </StyledTabPanel>
       ))}
