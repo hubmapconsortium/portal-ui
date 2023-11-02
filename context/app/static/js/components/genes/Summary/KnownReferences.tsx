@@ -37,9 +37,9 @@ function ReferenceListContents() {
   return (
     <>
       {data.references.map(({ url, source }) => (
-        <dd key={source}>
+        <li key={source}>
           <OutboundIconLink href={url}>{referenceMap[source]}</OutboundIconLink>
-        </dd>
+        </li>
       ))}
     </>
   );

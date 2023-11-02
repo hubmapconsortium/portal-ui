@@ -9,7 +9,11 @@ import { useGeneDetails, useGenePageContext } from './hooks';
 
 function GeneSymbol() {
   const { geneSymbol } = useGenePageContext();
-  return <>{geneSymbol.toUpperCase()}</>;
+  const { data } = useGeneDetails();
+  if (!data) {
+    return geneSymbol.toUpperCase();
+  }
+  return data.approved_symbol;
 }
 
 function GeneName() {

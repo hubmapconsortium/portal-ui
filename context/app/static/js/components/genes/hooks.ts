@@ -3,14 +3,21 @@ import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr';
 import { useGenePageContext } from './GenePageContext';
+import { useAppContext } from '../Contexts';
 
-const GeneApiURLs = {
-  detailURL(geneId: string) {
-    return `https://ontology.api.hubmapconsortium.org/gene/${geneId}`;
-  },
-  get list() {
-    return 'https://ontology.api.hubmapconsortium.org/genes';
-  },
+const useGeneApiURLs = () => {
+  const { ubkgEndpoint } = useAppContext();
+  return useMemo(
+    () => ({
+      detailURL(geneId: string) {
+        return `${ubkgEndpoint}/gene/${geneId}`;
+      },
+      get list() {
+        return `${ubkgEndpoint}/genes`;
+      },
+    }),
+    [ubkgEndpoint],
+  );
 };
 
 interface BasicGeneInfo {
@@ -55,7 +62,7 @@ type GeneDetailResponse = [GeneDetail];
 
 const useGeneDetails = () => {
   const { geneSymbol } = useGenePageContext();
-  const { data, ...swr } = useSWR<GeneDetailResponse>(GeneApiURLs.detailURL(geneSymbol), (url: string) =>
+  const { data, ...swr } = useSWR<GeneDetailResponse>(useGeneApiURLs().detailURL(geneSymbol), (url: string) =>
     fetcher({ url }),
   );
   return { data: data?.[0], ...swr };
@@ -73,7 +80,7 @@ const useGeneList = (page: number) => {
     }),
     [page],
   );
-  return useSWR<GeneListResponse>([GeneApiURLs.list, query], ([url, body]: [string, object]) =>
+  return useSWR<GeneListResponse>([useGeneApiURLs().list, query], ([url, body]: [string, object]) =>
     fetcher({ url, requestInit: { body: JSON.stringify(body) } }),
   );
 };
