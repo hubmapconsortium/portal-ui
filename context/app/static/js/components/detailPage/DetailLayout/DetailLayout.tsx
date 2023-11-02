@@ -1,5 +1,4 @@
 import React, { PropsWithChildren } from 'react';
-import PropTypes from 'prop-types';
 
 import useEntityStore, { savedAlertStatus, editedAlertStatus, EntityStore } from 'js/stores/useEntityStore';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
@@ -51,10 +50,5 @@ function DetailLayout({ sectionOrder, children }: DetailLayoutProps) {
     </>
   );
 }
-
-DetailLayout.propTypes = {
-  sectionOrder: PropTypes.arrayOf(PropTypes.string).isRequired,
-  children: PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.element, PropTypes.bool])).isRequired,
-};
 
 export default DetailLayout;
