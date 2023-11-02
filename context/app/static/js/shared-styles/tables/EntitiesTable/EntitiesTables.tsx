@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 
 import { Tab } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { StyledTabs, StyledTabPanel } from './style';
@@ -22,6 +23,7 @@ function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entitie
   const [openTabIndex, setOpenTabIndex] = useState(initialTabIndex);
   const { totalHitsCounts } = useSearchTotalHitsCounts(entities.map(({ query }) => query)) as {
     totalHitsCounts: number[];
+    isLoading: boolean;
   };
 
   const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -31,19 +33,22 @@ function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entitie
   return (
     <>
       <StyledTabs value={openTabIndex} onChange={handleTabChange} aria-label="Entities Tables">
-        {entities.map(({ entityTypeLabel }, i) => {
+        {entities.map(({ entityType }, i) => {
+          const Icon = entityIconMap?.[entityType];
           return (
             <Tab
-              label={`${entityTypeLabel}s (${totalHitsCounts[i] ?? 0})`}
+              label={`${entityType}s (${totalHitsCounts[i] ?? 0})`}
               index={i}
-              key={`${entityTypeLabel}-tab`}
+              key={`${entityType}-tab`}
+              icon={Icon ? <Icon sx={{ fontSize: '1.5rem' }} /> : undefined}
+              iconPosition="start"
               {...(entities.length === 1 && singleTabProps)}
             />
           );
         })}
       </StyledTabs>
-      {entities.map(({ query, columns, entityTypeLabel }, i) => (
-        <StyledTabPanel value={openTabIndex} index={i} key={`${entityTypeLabel}-table`}>
+      {entities.map(({ query, columns, entityType }, i) => (
+        <StyledTabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
           <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} />
         </StyledTabPanel>
       ))}

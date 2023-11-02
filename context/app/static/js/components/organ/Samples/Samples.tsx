@@ -115,7 +115,7 @@ function Samples({ organTerms }: OrganSamplesProps) {
           </>
         }
       />
-      <EntitiesTables<SampleDocument> entities={[{ query, columns, entityTypeLabel: 'Sample' }]} />
+      <EntitiesTables<SampleDocument> entities={[{ query, columns, entityType: 'Sample' }]} />
     </SectionContainer>
   );
 }
