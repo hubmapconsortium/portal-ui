@@ -11,10 +11,42 @@ import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
 import { StyledDiv, StyledTextField } from './style';
 import { useDatasetsSelectedByExpression } from './hooks';
 
-function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
+function GenomicModality() {
+  const { genomicModality, handleSelectModality, queryType } = useDatasetsSelectedByExpression();
+  if (queryType !== 'gene') {
+    return null;
+  }
+  return (
+    <StyledTextField
+      id="modality-select"
+      label="Genomic Modality"
+      value={genomicModality}
+      onChange={handleSelectModality}
+      variant="outlined"
+      select
+      fullWidth
+      SelectProps={{
+        MenuProps: {
+          anchorOrigin: {
+            vertical: 'bottom',
+            horizontal: 'center',
+          },
+        },
+      }}
+      helperText="Genomic modality refers to Gene Expression (RNA) or DNA Accessibility (ATAC)."
+    >
+      <MenuItem value="rna">Gene Expression (RNA)</MenuItem>
+      <MenuItem value="atac">DNA Accessibility (ATAC)</MenuItem>
+    </StyledTextField>
+  );
+}
+
+interface DatasetsSelectedByExpressionProps {
+  runQueryButtonRef: React.RefObject<HTMLButtonElement>;
+}
+
+function DatasetsSelectedByExpression({ runQueryButtonRef }: DatasetsSelectedByExpressionProps) {
   const {
-    genomicModality,
-    handleSelectModality,
     handleSubmit,
     message,
     queryType,
@@ -24,38 +56,14 @@ function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
     setMinCellPercentage,
     cellVariableNames,
     setCellVariableNames,
-  } = useDatasetsSelectedByExpression({
-    completeStep,
-  });
+  } = useDatasetsSelectedByExpression();
 
-  const queryMeasurement = queryTypes[queryType].measurement;
+  const queryMeasurement = queryTypes[queryType as keyof typeof queryTypes].measurement;
 
   return (
     <StyledDiv>
       <AutocompleteEntity targetEntity={`${queryType}s`} setter={setCellVariableNames} />
-      {queryType === 'gene' && (
-        <StyledTextField
-          id="modality-select"
-          label="Genomic Modality"
-          value={genomicModality}
-          onChange={handleSelectModality}
-          variant="outlined"
-          select
-          fullWidth
-          SelectProps={{
-            MenuProps: {
-              anchorOrigin: {
-                vertical: 'bottom',
-                horizontal: 'center',
-              },
-            },
-          }}
-          helperText="Genomic modality refers to Gene Expression (RNA) or DNA Accessibility (ATAC)."
-        >
-          <MenuItem value="rna">Gene Expression (RNA)</MenuItem>
-          <MenuItem value="atac">DNA Accessibility (ATAC)</MenuItem>
-        </StyledTextField>
-      )}
+      <GenomicModality />
       <div>
         <LogSlider
           label={`Minimum ${queryMeasurement}`}
@@ -63,7 +71,7 @@ function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
           value={minExpressionLog}
           minLog={-4}
           maxLog={5}
-          onChange={(e, val) => setMinExpressionLog(val)}
+          onChange={(e, val) => setMinExpressionLog(val as number)}
           id="min-measurement"
         />
       </div>
@@ -75,7 +83,11 @@ function DatasetsSelectedByExpression({ completeStep, runQueryButtonRef }) {
           min={0}
           max={10}
           marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m || '>0' }))}
-          onChange={(e, val) => setMinCellPercentage(val)}
+          // using a type assertion below because the MUI type definition for onChange is incorrect
+          // Since there can be multiple values for a slider, onChange's value can be an array
+          // However, unlike other cases where this is the case, the type definition for onChange is
+          // not written in a way where the `onChange` type is inferred from the `value` type 
+          onChange={(_e, val) => setMinCellPercentage(val as number)}
           id="min-cell-percentage"
         />
       </div>

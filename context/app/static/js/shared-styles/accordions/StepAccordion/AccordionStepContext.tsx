@@ -1,9 +1,10 @@
 import { createContext, useContext } from 'js/helpers/context';
-import React, { useCallback, PropsWithChildren, useMemo } from 'react';
+import React, { useCallback, PropsWithChildren, useMemo, ReactElement } from 'react';
+import {} from 'react-markdown/lib/react-markdown';
 import { useAccordionStepsStore } from '../AccordionSteps/store';
 
 interface AccordionStepContextType {
-  completeStep: (text: string) => void;
+  completeStep: (text: string | ReactElement) => void;
 }
 
 const AccordionStepContext = createContext<AccordionStepContextType>('Accordion Step Context');
@@ -17,7 +18,7 @@ export default function AccordionStepProvider({ children, index }: AccordionStep
   const { completeStep } = useAccordionStepsStore();
 
   const handleCompleteStep = useCallback(
-    (text: string) => {
+    (text: string | ReactElement) => {
       completeStep(index, text);
     },
     [completeStep, index],

@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import CellsService from 'js/components/cells/CellsService';
 import { useAppContext } from 'js/components/Contexts';
 import { fetchSearchData } from 'js/hooks/useSearchData';
-import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
-import { useStore } from 'js/components/cells/store';
+import useCellsChartLoadingStore, { CellsChartLoadingStore } from 'js/stores/useCellsChartLoadingStore';
+import { useStore, CellsSearchStore } from 'js/components/cells/store';
+import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
-const chartsStoreSelector = (state) => state.resetFetchedUUIDs;
+const chartsStoreSelector = (state: CellsChartLoadingStore) => state.resetFetchedUUIDs;
 
-const cellsStoreSelector = (state) => ({
+const cellsStoreSelector = (state: CellsSearchStore) => ({
   setResults: state.setResults,
   minExpressionLog: state.minExpressionLog,
   setMinExpressionLog: state.setMinExpressionLog,
@@ -19,7 +21,7 @@ const cellsStoreSelector = (state) => ({
   setIsLoading: state.setIsLoading,
 });
 
-function getSearchQuery(cellsResults) {
+function getSearchQuery(cellsResults: { uuid: string }[]) {
   return {
     size: 10000,
     post_filter: {
@@ -49,16 +51,19 @@ function getSearchQuery(cellsResults) {
   };
 }
 
-function buildHitsMap(hits) {
-  return hits.reduce((acc, hit) => {
-    // eslint-disable-next-line no-underscore-dangle
-    acc[hit._id] = hit;
-    return acc;
-  }, {});
+function buildHitsMap(hits: { _id: string }[]) {
+  return hits.reduce(
+    (acc, hit) => {
+      acc[hit._id] = hit;
+      return acc;
+    },
+    {} as Record<string, { _id: string }>,
+  );
 }
 
-function useDatasetsSelectedByExpression({ completeStep }) {
-  const [message, setMessage] = useState(null);
+function useDatasetsSelectedByExpression() {
+  const { completeStep } = useAccordionStep();
+  const [message, setMessage] = useState<string | null>(null);
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
   const [genomicModality, setGenomicModality] = useState('rna');
   const resetFetchedUUIDs = useCellsChartLoadingStore(chartsStoreSelector);
@@ -75,7 +80,9 @@ function useDatasetsSelectedByExpression({ completeStep }) {
     setIsLoading,
   } = useStore(cellsStoreSelector);
 
-  function handleSelectModality(event) {
+  const { toastError } = useSnackbarActions();
+
+  function handleSelectModality(event: React.ChangeEvent<HTMLInputElement>) {
     setGenomicModality(event.target.value);
   }
 
@@ -88,10 +95,8 @@ function useDatasetsSelectedByExpression({ completeStep }) {
       cellVariableNames,
       minExpression: 10 ** minExpressionLog,
       minCellPercentage,
+      modality: queryType === 'gene' ? genomicModality : undefined,
     };
-    if (queryType === 'gene') {
-      queryParams.modality = genomicModality;
-    }
     try {
       completeStep(
         <>
@@ -99,28 +104,38 @@ function useDatasetsSelectedByExpression({ completeStep }) {
           Percentage
         </>,
       );
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       const serviceResults = await new CellsService().getDatasets(queryParams);
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
       const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
 
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       const hitsMap = buildHitsMap(searchResults.hits.hits);
       setResults(
-        serviceResults.reduce((acc, { uuid }) => {
-          // The cells api returns all versions of a matching dataset and the search-api query will only return the most recent version.
-          if (uuid in hitsMap) {
-            acc.push(hitsMap[uuid]);
-          }
-          return acc;
-        }, []),
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
+        serviceResults.reduce(
+          (acc: { _id: string }[], { uuid }: { uuid: string }) => {
+            // The cells api returns all versions of a matching dataset and the search-api query will only return the most recent version.
+            if (uuid in hitsMap) {
+              acc.push(hitsMap[uuid]);
+            }
+            return acc;
+          },
+          [] as { _id: string }[],
+        ),
       );
       setIsLoading(false);
     } catch (e) {
-      setMessage(e.message);
-      // TODO: The message is displayed in this component...
-      // but after the user submits their data, the component collapses,
-      // so the message is hidden, and the user just sees the please wait.
-      // Not sure what the best long term solution is, but this unblocks Nils.
-      // eslint-disable-next-line no-alert
-      alert(e.message);
+      if (e instanceof Error) {
+        toastError(e.message);
+        setMessage(e.message);
+        // TODO: The message is displayed in this component...
+        // but after the user submits their data, the component collapses,
+        // so the message is hidden, and the user just sees the please wait.
+        // Not sure what the best long term solution is, but this unblocks Nils.
+        // eslint-disable-next-line no-alert
+        // alert(e.message);
+      }
     }
   }
 

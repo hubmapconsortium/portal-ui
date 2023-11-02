@@ -4,7 +4,7 @@ import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import React from 'react';
 
-function BiomarkerQuery() {
+export default function BiomarkerQuery() {
   const runQueryButtonRef = React.useRef<HTMLButtonElement>(null);
   const steps = [
     {

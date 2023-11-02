@@ -1,6 +1,7 @@
 import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 import { queryTypes } from 'js/components/cells/queryTypes';
 import { capitalizeString } from 'js/helpers/functions';

@@ -9,6 +9,7 @@ import { animated } from '@react-spring/web';
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
 import { initialHeight } from 'js/components/cells/CellsResults/style';
 import { useExpandSpring } from 'js/hooks/useExpand';
+import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -22,7 +23,8 @@ const columns = [
   { id: 'expand', label: '' },
 ];
 
-function DatasetsTable({ datasets, minExpression, cellVariableName, completeStep, queryType }) {
+function DatasetsTable({ datasets, minExpression, cellVariableName, queryType }) {
+  const { completeStep } = useAccordionStep();
   useEffect(() => {
     completeStep(`${datasets.length} Datasets Matching Query Parameters`);
   }, [completeStep, datasets]);

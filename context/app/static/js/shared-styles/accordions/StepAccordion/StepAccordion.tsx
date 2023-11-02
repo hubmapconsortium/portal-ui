@@ -1,14 +1,15 @@
-import React, { useCallback } from 'react';
+import React, { forwardRef, useCallback } from 'react';
 import Accordion from '@mui/material/Accordion';
 import Stack from '@mui/material/Stack';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
+import Box from '@mui/material/Box';
 
 import { useAccordionStepsStore } from 'js/shared-styles/accordions/AccordionSteps/store';
 import { AccordionSummaryHeading, AccordionText,  StyledAccordionSummary, SuccessIcon } from './style';
 import AccordionStepProvider from './AccordionStepContext';
 
 interface CompletedStepTextProps {
-  completedStepText?: string;
+  completedStepText?: React.ReactNode;
   isExpanded: boolean;
   index: number;
 }
@@ -34,7 +35,7 @@ interface StepAccordionProps {
   id: string;
 }
 
-function StepAccordion({ index, summaryHeading, content, id }: StepAccordionProps) {
+const StepAccordion = forwardRef(function StepAccordion({ index, summaryHeading, content, id }: StepAccordionProps, ref: React.Ref<HTMLDivElement>) {
   const { expandStep, openStepIndex, completedStepsText } = useAccordionStepsStore();
 
   const onChange = useCallback(() => {
@@ -52,6 +53,7 @@ function StepAccordion({ index, summaryHeading, content, id }: StepAccordionProp
       disabled={disabled}
       expanded={isExpanded}
       id={id}
+      ref={ref}
     >
       <StyledAccordionSummary
         expandIcon={<ArrowDropUpRoundedIcon />}
@@ -65,10 +67,12 @@ function StepAccordion({ index, summaryHeading, content, id }: StepAccordionProp
         <CompletedStepText completedStepText={completedStepsText[index]} isExpanded={isExpanded} index={index} />
       </StyledAccordionSummary>
       <AccordionStepProvider index={index}>
-        {content}
+        <Box pt={1} px={2} pb={2}>
+          {content}
+        </Box>
       </AccordionStepProvider>
     </Accordion>
   );
-}
+})
 
 export default StepAccordion;
