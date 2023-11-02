@@ -43,9 +43,10 @@ function GenomicModality() {
 
 interface DatasetsSelectedByExpressionProps {
   runQueryButtonRef: React.RefObject<HTMLButtonElement>;
+  defaultEntity?: string;
 }
 
-function DatasetsSelectedByExpression({ runQueryButtonRef }: DatasetsSelectedByExpressionProps) {
+function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: DatasetsSelectedByExpressionProps) {
   const {
     handleSubmit,
     message,
@@ -58,11 +59,11 @@ function DatasetsSelectedByExpression({ runQueryButtonRef }: DatasetsSelectedByE
     setCellVariableNames,
   } = useDatasetsSelectedByExpression();
 
-  const queryMeasurement = queryTypes[queryType as keyof typeof queryTypes].measurement;
+  const queryMeasurement = queryTypes[queryType].measurement;
 
   return (
     <StyledDiv>
-      <AutocompleteEntity targetEntity={`${queryType}s`} setter={setCellVariableNames} />
+      <AutocompleteEntity targetEntity={`${queryType}s`} setter={setCellVariableNames} defaultValue={defaultEntity} />
       <GenomicModality />
       <div>
         <LogSlider
@@ -86,14 +87,18 @@ function DatasetsSelectedByExpression({ runQueryButtonRef }: DatasetsSelectedByE
           // using a type assertion below because the MUI type definition for onChange is incorrect
           // Since there can be multiple values for a slider, onChange's value can be an array
           // However, unlike other cases where this is the case, the type definition for onChange is
-          // not written in a way where the `onChange` type is inferred from the `value` type 
+          // not written in a way where the `onChange` type is inferred from the `value` type
           onChange={(_e, val) => setMinCellPercentage(val as number)}
           id="min-cell-percentage"
         />
       </div>
       <div>
         <Button
-          onClick={handleSubmit}
+          onClick={() => {
+            handleSubmit().catch(() => {
+              /* do nothing since handleSubmit has its own error handling */
+            });
+          }}
           disabled={cellVariableNames.length === 0}
           variant="contained"
           color="primary"

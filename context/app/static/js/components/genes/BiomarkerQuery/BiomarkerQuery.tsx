@@ -1,24 +1,42 @@
 import CellsResults from 'js/components/cells/CellsResults';
 import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
+import { DetailPageSection } from 'js/components/detailPage/style';
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
-import React from 'react';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import React, { useMemo } from 'react';
+import { useGeneDetails, useGenePageContext } from '../hooks';
 
 export default function BiomarkerQuery() {
+  const { geneSymbol } = useGenePageContext();
+  const { data } = useGeneDetails();
   const runQueryButtonRef = React.useRef<HTMLButtonElement>(null);
-  const steps = [
-    {
-      heading: '1. Parameters',
-      content: <DatasetsSelectedByExpression runQueryButtonRef={runQueryButtonRef} />,
-    },
-    {
-      heading: '2. Results',
-      content: <CellsResults />,
-    },
-  ];
+  const steps = useMemo(() => {
+    return [
+      {
+        heading: '1. Parameters',
+        content: (
+          <DatasetsSelectedByExpression
+            runQueryButtonRef={runQueryButtonRef}
+            defaultEntity={data?.approved_symbol ?? geneSymbol.toUpperCase()}
+          />
+        ),
+      },
+      {
+        heading: '2. Results',
+        content: <CellsResults />,
+      },
+    ];
+  }, [geneSymbol, data?.approved_symbol]);
+
   return (
-    <AccordionStepsProvider stepsLength={steps.length}>
-      <AccordionSteps id="biomarker-query-steps" steps={steps} />
-    </AccordionStepsProvider>
+    <DetailPageSection id="biomarker-query">
+      <SectionHeader iconTooltipText="Query HuBMAP datasets for biomarker(s) data">
+        Datasets: Biomarker Query
+      </SectionHeader>
+      <AccordionStepsProvider stepsLength={steps.length}>
+        <AccordionSteps id="biomarker-query-steps" steps={steps} />
+      </AccordionStepsProvider>
+    </DetailPageSection>
   );
 }

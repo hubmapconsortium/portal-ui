@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import CellsService from 'js/components/cells/CellsService';
 import { useAppContext } from 'js/components/Contexts';
 import { fetchSearchData } from 'js/hooks/useSearchData';
@@ -86,7 +86,7 @@ function useDatasetsSelectedByExpression() {
     setGenomicModality(event.target.value);
   }
 
-  async function handleSubmit() {
+  const handleSubmit = useCallback(async () => {
     setIsLoading(true);
     setResults([]);
     resetFetchedUUIDs();
@@ -137,7 +137,20 @@ function useDatasetsSelectedByExpression() {
         // alert(e.message);
       }
     }
-  }
+  }, [
+    cellVariableNames,
+    completeStep,
+    elasticsearchEndpoint,
+    genomicModality,
+    groupsToken,
+    minCellPercentage,
+    minExpressionLog,
+    queryType,
+    resetFetchedUUIDs,
+    setIsLoading,
+    setResults,
+    toastError,
+  ]);
 
   return {
     genomicModality,

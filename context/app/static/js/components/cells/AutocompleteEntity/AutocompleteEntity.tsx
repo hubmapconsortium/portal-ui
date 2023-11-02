@@ -18,22 +18,40 @@ const labelAndHelperTextProps: Record<string, Pick<TextFieldProps, 'label' | 'he
 interface AutocompleteEntityProps {
   targetEntity: string;
   setter: (value: string[]) => void;
+  defaultValue?: string;
 }
 
-function AutocompleteEntity({ targetEntity, setter }: AutocompleteEntityProps) {
+function wrapString(str?: string, match: string | undefined = str) {
+  if (!str) {
+    return null;
+  }
+  if (!match) {
+    return null;
+  }
+  const matchIndex = str.toLowerCase().indexOf(match.toLowerCase());
+  const pre = str.slice(0, matchIndex);
+  const post = str.slice(matchIndex + match.length);
+  return { full: str, pre, match, post };
+}
+
+function makeInitialValue(str?: string): AutocompleteQueryResponse {
+  return str ? ([wrapString(str)].filter(Boolean) as AutocompleteQueryResponse) : [];
+}
+
+function AutocompleteEntity({ targetEntity, setter, defaultValue }: AutocompleteEntityProps) {
   const [substring, setSubstring] = useState('');
-  const [selectedOptions, setSelectedOptions] = useState<AutocompleteQueryResponse>([]);
+  const [selectedOptions, setSelectedOptions] = useState<AutocompleteQueryResponse>(makeInitialValue(defaultValue));
 
   useEffect(() => {
     // Unwrap selected options and pass to setter to keep values in sync
     setter(selectedOptions.map((match) => match.full));
   }, [selectedOptions, setter]);
 
+  // If default value or target entity changes, reset selected options and substring to default value
   useEffect(() => {
-    // Reset selected options and substring when target entity changes
     setSubstring('');
-    setSelectedOptions([]);
-  }, [targetEntity]);
+    setSelectedOptions(makeInitialValue(defaultValue));
+  }, [defaultValue, targetEntity]);
 
   const { data, isLoading } = useAutocompleteQuery({ targetEntity, substring });
 
@@ -62,7 +80,12 @@ function AutocompleteEntity({ targetEntity, setter }: AutocompleteEntityProps) {
       )}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
-          return <Chip label={option.full} {...getTagProps({ index })} key={option.full} />;
+          const tagProps = getTagProps({ index });
+          // Removing default values (e.g. genes whose pages are being viewed)
+          // is not allowed; removing the `onDelete` prop hides the delete icon
+          const optionIsDefault = defaultValue && option.full === defaultValue;
+          const onDelete = optionIsDefault ? undefined : tagProps.onDelete;
+          return <Chip label={option.full} {...tagProps} onDelete={onDelete} key={option.full} />;
         })
       }
       onChange={(_, value) => {
