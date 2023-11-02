@@ -41,7 +41,6 @@ const columns = [
     sort: 'donor.mapped_metadata.sex.keyword',
     cellContent: ({ hit: { donor } }: CellContentProps) => donor?.mapped_metadata?.sex,
   },
-
   {
     id: 'donor.mapped_metadata.race',
     label: 'Donor Race',

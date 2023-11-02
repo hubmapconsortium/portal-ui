@@ -12,6 +12,12 @@ interface EntitiesTablesProps<Doc> {
   entities: EntitiesTabTypes<Doc>[];
 }
 
+const singleTabProps = {
+  'aria-disabled': true,
+  disableRipple: true,
+  sx: { cursor: 'default' },
+};
+
 function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entities }: EntitiesTablesProps<Doc>) {
   const [openTabIndex, setOpenTabIndex] = useState(initialTabIndex);
   const { totalHitsCounts } = useSearchTotalHitsCounts(entities.map(({ query }) => query)) as {
@@ -27,7 +33,12 @@ function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entitie
       <StyledTabs value={openTabIndex} onChange={handleTabChange} aria-label="Entities Tables">
         {entities.map(({ entityTypeLabel }, i) => {
           return (
-            <Tab label={`${entityTypeLabel}s (${totalHitsCounts[i] ?? 0})`} index={i} key={`${entityTypeLabel}-tab`} />
+            <Tab
+              label={`${entityTypeLabel}s (${totalHitsCounts[i] ?? 0})`}
+              index={i}
+              key={`${entityTypeLabel}-tab`}
+              {...(entities.length === 1 && singleTabProps)}
+            />
           );
         })}
       </StyledTabs>
