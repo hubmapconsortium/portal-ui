@@ -51,7 +51,7 @@ function Cells() {
           .
         </Typography>
       </SectionPaper>
-      <AccordionSteps id="cells-steps" steps={steps} isFirstStepOpen />
+      <AccordionSteps id="cells-steps" steps={steps} />
     </AccordionStepsProvider>
   );
 }

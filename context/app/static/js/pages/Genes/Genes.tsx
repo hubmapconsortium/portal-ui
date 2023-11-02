@@ -12,7 +12,7 @@ interface Props {
   geneSymbol: string;
 }
 
-function Genes({ geneSymbol }: Props) {
+function GeneDetails({ geneSymbol }: Props) {
   const shouldDisplaySection = {
     [summaryId]: true,
   };
@@ -32,4 +32,4 @@ function Genes({ geneSymbol }: Props) {
   );
 }
 
-export default Genes;
+export default GeneDetails;

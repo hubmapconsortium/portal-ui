@@ -18,7 +18,7 @@ export default function BiomarkerQuery() {
   ];
   return (
     <AccordionStepsProvider stepsLength={steps.length}>
-      <AccordionSteps id="cells-steps" steps={steps} isFirstStepOpen />
+      <AccordionSteps id="biomarker-query-steps" steps={steps} />
     </AccordionStepsProvider>
   );
 }
