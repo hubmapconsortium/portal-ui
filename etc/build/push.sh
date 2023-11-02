@@ -3,6 +3,8 @@ set -o errexit
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
+docker info >/dev/null 2>&1 || die 'Docker daemon is not running.'
+
 git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout main
 git pull
