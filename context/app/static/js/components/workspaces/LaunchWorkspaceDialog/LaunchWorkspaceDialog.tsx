@@ -1,7 +1,11 @@
 import React from 'react';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+
 import DialogModal from 'js/shared-styles/DialogModal';
-import { Button, Stack } from '@mui/material';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+
 import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
 import { useLaunchWorkspaceStore } from './store';
 
@@ -50,11 +54,13 @@ function LaunchWorkspaceDialog() {
       title={`Launch ${workspaceName}`}
       content={
         <Stack direction="column" gap={4}>
-          <div>{runningWorkspaceName} is currently running. You can only run one workspace at a time.</div>
-          <div>
-            To launch this workspace, jobs in {runningWorkspaceName} will be stopped. Make sure to save all progress
-            before launching this workspace.
-          </div>
+          <Typography variant="body1">
+            {runningWorkspaceName} is currently running. You can only run one workspace at a time.
+          </Typography>
+          <Typography variant="body1">
+            To launch this workspace, jobs in the workspace {runningWorkspaceName} will be stopped. Make sure to save
+            all progress before launching this workspace.
+          </Typography>
         </Stack>
       }
       isOpen={isOpen}
