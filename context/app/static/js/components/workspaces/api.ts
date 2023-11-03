@@ -6,7 +6,7 @@ import { useCallback } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import { useAppContext } from '../Contexts';
 import { Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
-import { getWorkspaceHeaders } from './utils';
+import { getWorkspaceHeaders, isRunningJob } from './utils';
 
 /**
  * Generates API URLs for various workspaces API actions
@@ -156,7 +156,9 @@ export function useStopWorkspace() {
         action: 'Stop Workspace',
         value: workspaceId,
       });
-      await Promise.all(jobs.filter((j) => j.workspace_id === workspaceId).map((j) => stopJob(j.id)));
+      await Promise.all(
+        jobs.filter((j) => j.workspace_id === workspaceId && isRunningJob(j)).map((j) => stopJob(j.id)),
+      );
     },
     [jobs, stopJob],
   );
@@ -272,7 +274,7 @@ export function useStartWorkspace() {
   return { startWorkspace, isStartingWorkspace: isMutating };
 }
 
-interface CreateWorkspaceBody {
+export interface CreateWorkspaceBody {
   name: string;
   description: string;
   workspace_details: {
@@ -288,7 +290,7 @@ interface CreateWorkspaceBody {
   };
 }
 
-interface CreateWorkspaceArgs extends APIAction {
+export interface CreateWorkspaceArgs extends APIAction {
   body: CreateWorkspaceBody;
 }
 
@@ -336,24 +338,4 @@ export function useCreateWorkspace() {
   );
 
   return { createWorkspace, isCreatingWorkspace: isMutating };
-}
-
-export function useCreateAndLaunchWorkspace() {
-  const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
-  const { startWorkspace } = useStartWorkspace();
-
-  const createAndLaunchWorkspace = useCallback(
-    async ({ body, templatePath }: { body: CreateWorkspaceBody; templatePath: string }) => {
-      const workspace = await createWorkspace(body);
-
-      await startWorkspace(workspace.id);
-
-      if (workspace.id) {
-        window.open(`/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(templatePath)}`, '_blank');
-      }
-    },
-    [createWorkspace, startWorkspace],
-  );
-
-  return { createAndLaunchWorkspace, isCreatingWorkspace };
 }

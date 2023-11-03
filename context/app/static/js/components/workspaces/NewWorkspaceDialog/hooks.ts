@@ -11,7 +11,7 @@ import {
   CreateTemplateNotebooksTypes,
   TemplateTagsResponse,
 } from '../types';
-import { useCreateAndLaunchWorkspace } from '../api';
+import { useCreateAndLaunchWorkspace } from '../hooks';
 
 interface UserTemplatesTypes {
   templatesURL: string;
