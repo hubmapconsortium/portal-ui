@@ -5,6 +5,8 @@ import { fetcher } from 'js/helpers/swr';
 import { useGenePageContext } from './GenePageContext';
 import { useAppContext } from '../Contexts';
 
+import { GeneDetail, GeneListResponse, OrganInfo } from './types';
+
 const useGeneApiURLs = () => {
   const { ubkgEndpoint } = useAppContext();
   return useMemo(
@@ -17,48 +19,13 @@ const useGeneApiURLs = () => {
         // return `${ubkgEndpoint}/genes-info`;
         return `${ubkgEndpoint}/genes`;
       },
+      organDetails(organName: string) {
+        return `/organ/${organName}.json`;
+      },
     }),
     [ubkgEndpoint],
   );
 };
-
-interface BasicGeneInfo {
-  approved_name: string;
-  approved_symbol: string;
-  summary: string;
-}
-
-interface GeneListResponse {
-  description: string;
-  page: number;
-  total_pages: number;
-  starts_with: string;
-  gene_count: number;
-  genes: BasicGeneInfo[];
-}
-
-interface GeneDetail extends BasicGeneInfo {
-  alias_names: string[];
-  alias_symbols: string[];
-  cell_types: {
-    definition: string;
-    id: string;
-    name: string;
-    organs: {
-      id: string;
-      source: string;
-      name: string;
-    }[];
-    sources: string[];
-  };
-  previous_symbols: string[];
-  previous_names: string[];
-  references: {
-    id: string;
-    source: string;
-    url: string;
-  }[];
-}
 
 type GeneDetailResponse = [GeneDetail];
 
@@ -68,6 +35,21 @@ const useGeneDetails = () => {
     fetcher({ url }),
   );
   return { data: data?.[0], ...swr };
+};
+
+const useGeneOrgans = () => {
+  const { data } = useGeneDetails();
+  const organs = useMemo(() => {
+    const record: Record<string, OrganInfo> = {};
+    data?.cell_types.forEach((cellType) => {
+      cellType.organs.forEach((organ) => {
+        if (organ.source !== 'UBERON') return;
+        record[organ.name] = organ;
+      });
+    });
+    return record;
+  }, [data]);
+  return organs;
 };
 
 const genesperpage = 10;
@@ -88,4 +70,4 @@ const useGeneList = (page: number) => {
 };
 
 // Re-export `useGenePageContext` for convenience
-export { useGeneDetails, useGeneList, useGenePageContext };
+export { useGeneDetails, useGeneList, useGenePageContext, useGeneOrgans };
