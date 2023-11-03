@@ -22,6 +22,7 @@ import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
 import { useLaunchWorkspaceStore } from '../LaunchWorkspaceDialog/store';
+import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 
 function ContactPrompt() {
   return (
@@ -139,6 +140,7 @@ function NewWorkspaceDialog({
         <Step title={text.datasets.title} index={0}>
           {children}
           <Description blocks={text.datasets.description} />
+          {datasetUUIDs.size > 0 && <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} />}
         </Step>
         <Step title={text.configure.title} isRequired index={1}>
           <Box

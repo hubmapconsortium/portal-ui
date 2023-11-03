@@ -23,3 +23,8 @@ export interface SampleDocument extends EntityDocument {
   donor: DonorDocument;
   descendant_counts: DescendantCounts;
 }
+
+export interface DatasetDocument extends EntityDocument {
+  donor: DonorDocument;
+  descendant_counts: DescendantCounts;
+}
