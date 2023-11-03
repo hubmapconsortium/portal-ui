@@ -1,0 +1,1 @@
+- Update gene detail summary implementation.

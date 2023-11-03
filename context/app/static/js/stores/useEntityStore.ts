@@ -9,13 +9,13 @@ interface EntityStoreState {
     summaryEntry: IntersectionObserverEntry | undefined;
   };
   assayMetadata: Record<string, unknown>;
-  shouldDisplaySavedOrEditedAlert: boolean;
+  shouldDisplaySavedOrEditedAlert: string | false;
 }
 
 interface EntityStoreActions {
   setSummaryComponentObserver: (inView: boolean, entry: IntersectionObserverEntry) => void;
   setAssayMetadata: (val: Record<string, unknown>) => void;
-  setShouldDisplaySavedOrEditedAlert: (val: boolean) => void;
+  setShouldDisplaySavedOrEditedAlert: (val: string | false) => void;
 }
 
 export type EntityStore = EntityStoreState & EntityStoreActions;

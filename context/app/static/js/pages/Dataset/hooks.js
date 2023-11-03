@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/api';
+import { useCreateAndLaunchWorkspace } from 'js/components/workspaces/hooks';
 
 function useDatasetWorkspace({ entity_type, uuid }) {
   const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();

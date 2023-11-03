@@ -1,0 +1,2 @@
+- Update CHANGELOG entry to match Docker tag for v0.82.3.
+- Update push.sh to exit early if prerequisite is not met.

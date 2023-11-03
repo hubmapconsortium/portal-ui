@@ -41,6 +41,7 @@ interface AppContextType {
   workspacesToken: string;
   workspacesEndpoint: string;
   userTemplatesEndpoint: string;
+  ubkgEndpoint: string;
   [key: string]: unknown;
 }
 
