@@ -1,45 +1,15 @@
 import React from 'react';
 
 import Button from '@mui/material/Button';
-import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 
 import LogSlider from 'js/shared-styles/inputs/LogSlider';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
 import { queryTypes } from 'js/components/cells/queryTypes';
 import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
-import { StyledDiv, StyledTextField } from './style';
+import { StyledDiv } from './style';
 import { useDatasetsSelectedByExpression } from './hooks';
-
-function GenomicModality() {
-  const { genomicModality, handleSelectModality, queryType } = useDatasetsSelectedByExpression();
-  if (queryType !== 'gene') {
-    return null;
-  }
-  return (
-    <StyledTextField
-      id="modality-select"
-      label="Genomic Modality"
-      value={genomicModality}
-      onChange={handleSelectModality}
-      variant="outlined"
-      select
-      fullWidth
-      SelectProps={{
-        MenuProps: {
-          anchorOrigin: {
-            vertical: 'bottom',
-            horizontal: 'center',
-          },
-        },
-      }}
-      helperText="Genomic modality refers to Gene Expression (RNA) or DNA Accessibility (ATAC)."
-    >
-      <MenuItem value="rna">Gene Expression (RNA)</MenuItem>
-      <MenuItem value="atac">DNA Accessibility (ATAC)</MenuItem>
-    </StyledTextField>
-  );
-}
+import GenomicModality from './GenomicModality';
 
 interface DatasetsSelectedByExpressionProps {
   runQueryButtonRef: React.RefObject<HTMLButtonElement>;
