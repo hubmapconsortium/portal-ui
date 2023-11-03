@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 
-import { Tab } from 'js/shared-styles/tabs';
+import { Tab, Tabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
-import { StyledTabs, StyledTabPanel } from './style';
+import { StyledTabPanel } from './style';
 
 interface EntitiesTablesProps<Doc> {
   isSelectable?: boolean;
@@ -32,7 +32,7 @@ function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entitie
 
   return (
     <>
-      <StyledTabs value={openTabIndex} onChange={handleTabChange} aria-label="Entities Tables">
+      <Tabs value={openTabIndex} onChange={handleTabChange} aria-label="Entities Tables">
         {entities.map(({ entityType }, i) => {
           const Icon = entityIconMap?.[entityType];
           return (
@@ -46,7 +46,7 @@ function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entitie
             />
           );
         })}
-      </StyledTabs>
+      </Tabs>
       {entities.map(({ query, columns, entityType }, i) => (
         <StyledTabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
           <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} />

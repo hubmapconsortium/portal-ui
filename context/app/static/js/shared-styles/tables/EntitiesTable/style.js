@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { TabPanel, Tabs } from 'js/shared-styles/tabs';
+import { TabPanel } from 'js/shared-styles/tabs';
 
 const StyledDiv = styled.div`
   height: 100%;
@@ -15,8 +15,4 @@ const StyledTabPanel = styled(TabPanel)`
   min-height: 0px; // flex overflow fix
 `;
 
-const StyledTabs = styled(Tabs)`
-  flex: none;
-`;
-
-export { StyledDiv, StyledTabPanel, StyledTabs };
+export { StyledDiv, StyledTabPanel };

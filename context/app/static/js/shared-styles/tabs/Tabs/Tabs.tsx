@@ -10,6 +10,7 @@ function Tabs({ children, ...props }: TabsProps) {
         color: 'primaryContainer.contrastText',
         backgroundColor: 'primaryContainer.main',
         borderRadius: '4px 4px 0px 0px',
+        flex: 'none',
       }}
       {...props}
     >
