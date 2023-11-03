@@ -1,6 +1,5 @@
 import { createContext, useContext } from 'js/helpers/context';
 import React, { useCallback, PropsWithChildren, useMemo, ReactElement } from 'react';
-import {} from 'react-markdown/lib/react-markdown';
 import { useAccordionStepsStore } from '../AccordionSteps/store';
 
 interface AccordionStepContextType {

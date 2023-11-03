@@ -26,7 +26,7 @@ export default function BiomarkerQuery() {
       {
         heading: '2. Results',
         content: (
-          <TutorialProvider>
+          <TutorialProvider tutorial_key="cells">
             <CellsResults />
           </TutorialProvider>
         ),
