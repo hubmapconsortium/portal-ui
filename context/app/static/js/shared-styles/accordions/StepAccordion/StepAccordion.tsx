@@ -5,7 +5,7 @@ import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import Box from '@mui/material/Box';
 
 import { useAccordionStepsStore } from 'js/shared-styles/accordions/AccordionSteps/store';
-import { AccordionSummaryHeading, AccordionText,  StyledAccordionSummary, SuccessIcon } from './style';
+import { AccordionSummaryHeading, AccordionText, StyledAccordionSummary, SuccessIcon } from './style';
 import AccordionStepProvider from './AccordionStepContext';
 
 interface CompletedStepTextProps {
@@ -19,7 +19,7 @@ function CompletedStepText({ completedStepText, isExpanded, index }: CompletedSt
     return null;
   }
   return (
-    <Stack flexBasis='80%' direction='row' justifyContent='space-between'>
+    <Stack flexBasis="80%" direction="row" justifyContent="space-between">
       <AccordionText variant="body2" $isExpanded={isExpanded}>
         {completedStepText}
       </AccordionText>
@@ -35,7 +35,10 @@ interface StepAccordionProps {
   id: string;
 }
 
-const StepAccordion = forwardRef(function StepAccordion({ index, summaryHeading, content, id }: StepAccordionProps, ref: React.Ref<HTMLDivElement>) {
+const StepAccordion = forwardRef(function StepAccordion(
+  { index, summaryHeading, content, id }: StepAccordionProps,
+  ref: React.Ref<HTMLDivElement>,
+) {
   const { expandStep, openStepIndex, completedStepsText } = useAccordionStepsStore();
 
   const onChange = useCallback(() => {
@@ -48,13 +51,7 @@ const StepAccordion = forwardRef(function StepAccordion({ index, summaryHeading,
   const disabled = index > Object.keys(completedStepsText).length;
 
   return (
-    <Accordion
-      onChange={onChange}
-      disabled={disabled}
-      expanded={isExpanded}
-      id={id}
-      ref={ref}
-    >
+    <Accordion onChange={onChange} disabled={disabled} expanded={isExpanded} id={id} ref={ref}>
       <StyledAccordionSummary
         expandIcon={<ArrowDropUpRoundedIcon />}
         $isExpanded={isExpanded}
@@ -73,6 +70,6 @@ const StepAccordion = forwardRef(function StepAccordion({ index, summaryHeading,
       </AccordionStepProvider>
     </Accordion>
   );
-})
+});
 
 export default StepAccordion;
