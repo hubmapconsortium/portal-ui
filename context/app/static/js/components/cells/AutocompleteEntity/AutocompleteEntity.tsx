@@ -21,7 +21,10 @@ interface AutocompleteEntityProps {
   defaultValue?: string;
 }
 
-function wrapString(str?: string, match: string | undefined = str) {
+function stringToAutocompleteObject(
+  str?: string,
+  match: string | undefined = str,
+): AutocompleteQueryResponse[number] | null {
   if (!str) {
     return null;
   }
@@ -34,13 +37,19 @@ function wrapString(str?: string, match: string | undefined = str) {
   return { full: str, pre, match, post };
 }
 
-function makeInitialValue(str?: string): AutocompleteQueryResponse {
-  return str ? ([wrapString(str)].filter(Boolean) as AutocompleteQueryResponse) : [];
+/**
+ * Creates an autocomplete object and wraps it in a list if a string is passed.
+ * Else returns an empty list
+ * @param str The default/initial value for the autocomplete, if any
+ * @returns A list of autocomplete objects
+ */
+function createInitialValue(str?: string): AutocompleteQueryResponse {
+  return str ? ([stringToAutocompleteObject(str)].filter(Boolean) as AutocompleteQueryResponse) : [];
 }
 
 function AutocompleteEntity({ targetEntity, setter, defaultValue }: AutocompleteEntityProps) {
   const [substring, setSubstring] = useState('');
-  const [selectedOptions, setSelectedOptions] = useState<AutocompleteQueryResponse>(makeInitialValue(defaultValue));
+  const [selectedOptions, setSelectedOptions] = useState<AutocompleteQueryResponse>(createInitialValue(defaultValue));
 
   useEffect(() => {
     // Unwrap selected options and pass to setter to keep values in sync
@@ -50,7 +59,7 @@ function AutocompleteEntity({ targetEntity, setter, defaultValue }: Autocomplete
   // If default value or target entity changes, reset selected options and substring to default value
   useEffect(() => {
     setSubstring('');
-    setSelectedOptions(makeInitialValue(defaultValue));
+    setSelectedOptions(createInitialValue(defaultValue));
   }, [defaultValue, targetEntity]);
 
   const { data, isLoading } = useAutocompleteQuery({ targetEntity, substring });
@@ -96,7 +105,7 @@ function AutocompleteEntity({ targetEntity, setter, defaultValue }: Autocomplete
       onChange={(_, value) => {
         if (defaultValue && !value.map((match) => match.full).includes(defaultValue)) {
           // If default value is set and not included in selected options, add it
-          setSelectedOptions([...makeInitialValue(defaultValue), ...value]);
+          setSelectedOptions([...createInitialValue(defaultValue), ...value]);
           return;
         }
         setSelectedOptions(value);
