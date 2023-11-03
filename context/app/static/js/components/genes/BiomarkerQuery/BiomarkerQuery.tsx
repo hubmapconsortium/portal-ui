@@ -5,6 +5,7 @@ import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import React, { useMemo } from 'react';
+import TutorialProvider from 'js/shared-styles/tutorials/TutorialProvider';
 import { useGeneDetails, useGenePageContext } from '../hooks';
 
 export default function BiomarkerQuery() {
@@ -24,7 +25,11 @@ export default function BiomarkerQuery() {
       },
       {
         heading: '2. Results',
-        content: <CellsResults />,
+        content: (
+          <TutorialProvider>
+            <CellsResults />
+          </TutorialProvider>
+        ),
       },
     ];
   }, [geneSymbol, data?.approved_symbol]);
