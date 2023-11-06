@@ -1,37 +1,14 @@
 /* eslint-disable no-underscore-dangle */
 import React, { useMemo } from 'react';
-import format from 'date-fns/format';
 import Box from '@mui/material/Box';
 
-import { InternalLink } from 'js/shared-styles/Links';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { DatasetDocument } from 'js/typings/search';
 import { getIDsQuery } from 'js/helpers/queries';
+import { hubmapID, lastModifiedTimestamp, assayTypes, status, organ } from 'js/shared-styles/tables/columns';
 
-interface CellContentProps {
-  hit: DatasetDocument;
-}
-
-const columns = [
-  {
-    id: 'hubmap_id',
-    label: 'HuBMAP ID',
-    sort: 'hubmap_id.keyword',
-    cellContent: ({ hit: { uuid, hubmap_id } }: CellContentProps) => (
-      <InternalLink href={`/browse/dataset/${uuid}`} variant="body2">
-        {hubmap_id}
-      </InternalLink>
-    ),
-  },
-  {
-    id: 'last_modified_timestamp',
-    label: 'Last Modified',
-    cellContent: ({ hit: { last_modified_timestamp } }: CellContentProps) =>
-      format(last_modified_timestamp, 'yyyy-MM-dd'),
-  },
-];
-
+const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
 }
@@ -43,7 +20,15 @@ function WorkspaceDatasetsTable({ datasetsUUIDs }: WorkspaceDatasetsTableProps) 
         ...getIDsQuery(datasetsUUIDs),
       },
       size: 500,
-      _source: ['hubmap_id', 'uuid', 'last_modified_timestamp'],
+      _source: [
+        'hubmap_id',
+        'origin_samples_unique_mapped_organs',
+        'mapped_status',
+        'mapped_data_types',
+        'mapped_data_access_level',
+        'uuid',
+        'last_modified_timestamp',
+      ],
     }),
     [datasetsUUIDs],
   );
