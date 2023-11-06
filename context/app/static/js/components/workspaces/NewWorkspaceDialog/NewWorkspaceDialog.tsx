@@ -138,9 +138,11 @@ function NewWorkspaceDialog({
       </Box>
       <DialogContent dividers>
         <Step title={text.datasets.title} index={0}>
-          {children}
-          <Description blocks={text.datasets.description} />
-          {datasetUUIDs.size > 0 && <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} />}
+          <Stack spacing={1}>
+            {children}
+            <Description blocks={text.datasets.description} />
+            {datasetUUIDs.size > 0 && <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} />}
+          </Stack>
         </Step>
         <Step title={text.configure.title} isRequired index={1}>
           <Box
