@@ -1,1 +1,1 @@
-- Add tables to show selected datasets in create workspace dialogs.
+- Add table to show selected datasets in create workspace dialogs.
