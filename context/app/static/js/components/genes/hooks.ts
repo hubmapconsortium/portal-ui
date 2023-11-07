@@ -2,10 +2,20 @@ import { useMemo } from 'react';
 import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr';
+import { useOrgansDatasetCounts } from 'js/pages/Organs/hooks';
 import { useGenePageContext } from './GenePageContext';
 import { useAppContext } from '../Contexts';
 
-import { GeneDetail, GeneListResponse, OrganInfo } from './types';
+import { GeneDetail, GeneListResponse } from './types';
+import { OrganFile, OrganFileWithDescendants } from '../organ/types';
+
+// TODO: Convert js/pages/Organs/hooks to TS
+const useTypedOrgansDatasetCounts = (organs: Record<string, OrganFile>) => {
+  return useOrgansDatasetCounts(organs) as {
+    organsWithDatasetCounts: Record<string, OrganFileWithDescendants>;
+    isLoading: boolean;
+  };
+};
 
 const useGeneApiURLs = () => {
   const { ubkgEndpoint } = useAppContext();
@@ -41,34 +51,39 @@ const useGeneDetails = () => {
 };
 
 const useGeneOrgans = () => {
-  const { data } = useGeneDetails();
+  const { data: geneData, ...genes } = useGeneDetails();
   const organsToFetch = useMemo(() => {
     return (
-      data?.cell_types
+      geneData?.cell_types
         .flatMap((cellType) => cellType.organs)
         .filter((o) => o.id)
         .map(({ name }) => name) ?? []
     );
-  }, [data]);
-  const organs = useSWR([useGeneApiURLs().organList, organsToFetch], ([url, organList]) =>
-    fetcher({
-      url,
-      requestInit: {
-        method: 'POST',
-        headers: {
-          'Content-type': 'application/json',
-          Accept: 'application/json',
-        },
-        body: JSON.stringify({ organs: organList }),
-      },
-    }),
-  );
-  console.log(organs);
+  }, [geneData]);
 
-  return organs;
+  const { data, ...organs } = useSWR<Record<string, OrganFile>, unknown, [url: string, organList: string[]]>(
+    [useGeneApiURLs().organList, organsToFetch],
+    ([url, organList]) =>
+      fetcher({
+        url,
+        requestInit: {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({ organs: organList }),
+        },
+      }),
+  );
+
+  const { organsWithDatasetCounts, isLoading } = useTypedOrgansDatasetCounts(data ?? {});
+
+  return { ...organs, data: organsWithDatasetCounts, isLoading: isLoading || organs.isLoading || genes.isLoading };
 };
 
 const starts_with = undefined;
+const genesperpage = 10;
 
 const useGeneList = (page: number) => {
   const query = useMemo(

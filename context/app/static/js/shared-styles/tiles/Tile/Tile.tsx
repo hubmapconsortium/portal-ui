@@ -1,10 +1,11 @@
 import React, { PropsWithChildren } from 'react';
 
-import { StyledPaper,  FlexGrow, TruncatedTypography, TileFooter, StyledDivider } from './style';
 import Stack from '@mui/material/Stack';
+import { StyledPaper, FlexGrow, TruncatedTypography, TileFooter, StyledDivider } from './style';
 
 interface TileProps {
   href?: string;
+  onClick?: () => void;
   icon: React.ReactNode;
   invertColors?: boolean;
   bodyContent: React.ReactNode;
@@ -12,10 +13,10 @@ interface TileProps {
   tileWidth: number;
 }
 
-function Tile({ href, icon, invertColors = false, bodyContent, footerContent, tileWidth }: TileProps) {
+function Tile({ href, icon, invertColors = false, bodyContent, footerContent, tileWidth, onClick }: TileProps) {
   const tile = (
-    <StyledPaper $invertColors={invertColors} $tileWidth={tileWidth}>
-      <Stack p={1} boxSizing='content-box' direction='row'>
+    <StyledPaper $invertColors={invertColors} $tileWidth={tileWidth} onClick={onClick}>
+      <Stack p={1} boxSizing="content-box" direction="row">
         {icon}
         <FlexGrow>{bodyContent}</FlexGrow>
       </Stack>

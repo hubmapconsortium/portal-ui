@@ -1,21 +1,24 @@
-import { Box } from '@mui/material';
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
 import React from 'react';
 
-interface URLSvgIconProps extends React.ComponentProps<typeof Box<'div'>> {
+interface URLSvgIconProps extends React.ComponentProps<typeof Box> {
   iconURL: string;
   ariaLabel: string;
+  invertColors?: boolean;
 }
 
-function URLSvgIcon({ iconURL, ariaLabel, ...rest }: URLSvgIconProps) {
+function URLSvgIcon({ iconURL, ariaLabel, invertColors, ...rest }: URLSvgIconProps) {
+  const { palette, spacing } = useTheme();
   return (
     <Box
-      sx={(theme) => ({
+      sx={{
         maskImage: `url(${iconURL})`,
-        backgroundColor: theme.palette.primary.main,
+        backgroundColor: invertColors ? palette.white.main : palette.primary.main,
         maskRepeat: 'no-repeat',
-        width: theme.spacing(3),
-        height: theme.spacing(3),
-      })}
+        width: spacing(3),
+        height: spacing(3),
+      }}
       role="img"
       aria-label={ariaLabel}
       {...rest}

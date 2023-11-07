@@ -1,10 +1,10 @@
 import React, { useState, useMemo, PropsWithChildren } from 'react';
 import { createContext, useContext } from 'js/helpers/context';
-import { OrganInfo } from '../types';
+import { OrganFile } from 'js/components/organ/types';
 
 interface SelectedOrganContext {
-  selectedOrgan: OrganInfo | null;
-  setSelectedOrgan: (organ: OrganInfo) => void;
+  selectedOrgan: OrganFile | null;
+  setSelectedOrgan: (organ: OrganFile) => void;
 }
 
 const SelectedOrganContext = createContext<SelectedOrganContext>('Selected Organ Context');
@@ -14,7 +14,7 @@ export function useSelectedOrganContext() {
 }
 
 export default function SelectedOrganContextProvider({ children }: PropsWithChildren) {
-  const [selectedOrgan, setSelectedOrgan] = useState<OrganInfo | null>(null);
+  const [selectedOrgan, setSelectedOrgan] = useState<OrganFile | null>(null);
 
   const value = useMemo(() => {
     return { selectedOrgan, setSelectedOrgan };
