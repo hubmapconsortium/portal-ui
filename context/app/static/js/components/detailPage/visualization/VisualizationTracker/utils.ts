@@ -1,4 +1,6 @@
 import hasKey from 'js/helpers/hasKey';
+import { MutableRefObject } from 'react';
+import { trackEvent } from 'js/helpers/trackers';
 import { VitessceInteraction } from './types';
 
 /**
@@ -98,3 +100,60 @@ export const mouseButtonMap = new Proxy(knownButtonMap, {
     return hasKey(target, key) ? target[key] : `Unknown (${String(key)})`;
   },
 });
+
+// Fire event 5 seconds after last interaction with the visualization
+const INTERACTION_TIMEOUT_INTERVAL = 5000;
+
+export function fireVitessceEvent(ref: MutableRefObject<VitessceInteraction>) {
+  if (ref.current.length > 0) {
+    trackEvent({
+      category: 'Visualization',
+      action: 'Interaction',
+      value: stringifyVitessceInteraction(ref.current),
+    });
+    // Clear the interaction object after logging event
+    ref.current = [];
+  }
+}
+
+export function pushVitessceEvent(
+  interactionRef: MutableRefObject<VitessceInteraction>,
+  interaction: VitessceInteraction[number],
+  timeoutRef: MutableRefObject<number | null>,
+) {
+  interactionRef.current.push(interaction);
+  timeoutRef.current = window.setTimeout(() => {
+    fireVitessceEvent(interactionRef);
+  }, INTERACTION_TIMEOUT_INTERVAL);
+}
+
+export function handleKeyPress(
+  key: string,
+  interactionRef: MutableRefObject<VitessceInteraction>,
+  target: string,
+): VitessceInteraction[number] {
+  const lastInteraction = getLastInteraction(interactionRef.current);
+  switch (key) {
+    case 'Tab': {
+      return ['TabFocus', target];
+    }
+    // Treat enter/space as a click
+    case 'Enter':
+    case 'Space':
+      return ['Click', target, key];
+    default: {
+      if (lastInteraction) {
+        const [lastAction, lastTarget] = lastInteraction;
+        // If the last action was a keypress on the same target, append the key to the recorded value
+        // This means the user is likely typing in a text field
+        if (lastAction === 'Keypress' && lastTarget === target) {
+          const interaction = interactionRef.current.pop();
+          if (!interaction || interaction.length !== 3) throw new Error('Invalid keypress interaction');
+          interaction[2] = `${interaction[2]}${key}`;
+          return interaction;
+        }
+      }
+      return ['Keypress', target, key];
+    }
+  }
+}
