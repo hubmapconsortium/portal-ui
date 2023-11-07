@@ -104,15 +104,13 @@ function useDatasetsSelectedByExpression() {
           Percentage
         </>,
       );
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      // TODO: Convert the CellsService/fetchSearchData/buildHitsMap to use typescript
+      /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
       const serviceResults = await new CellsService().getDatasets(queryParams);
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
       const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
 
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access
       const hitsMap = buildHitsMap(searchResults.hits.hits);
       setResults(
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call
         serviceResults.reduce(
           (acc: { _id: string }[], { uuid }: { uuid: string }) => {
             // The cells api returns all versions of a matching dataset and the search-api query will only return the most recent version.
@@ -124,6 +122,7 @@ function useDatasetsSelectedByExpression() {
           [] as { _id: string }[],
         ),
       );
+      /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
       setIsLoading(false);
     } catch (e) {
       if (e instanceof Error) {
