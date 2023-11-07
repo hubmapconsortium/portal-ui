@@ -64,6 +64,8 @@ def redirect_to_organ_from_search(name, organs):
 @blueprint.route('/organ/<name>')
 def organ_details_view(name):
     organ = get_organ_details(name)
+    if (organ.keys().__len__() == 0):
+        return redirect_to_organ_from_search(name, get_organs())
     flask_data = {
         **get_default_flask_data(),
         'organ': organ
@@ -80,7 +82,7 @@ def get_organ_details(name):
     organs = get_organs()
     normalized_name = name.lower().strip().replace(' ', '-').replace('_', '-')
     if normalized_name not in organs:
-        return redirect_to_organ_from_search(name, organs)
+        return {}
     filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(normalized_name)}.yaml'
     organ = safe_load(filename.read_text())
     return organ
@@ -92,5 +94,6 @@ def get_organ_list():
     organs = {}
     for organ in organs_to_get:
         org = get_organ_details(organ)
-        organs[organ] = org
+        if (org.keys().__len__() > 0):
+            organs[organ] = org
     return organs
