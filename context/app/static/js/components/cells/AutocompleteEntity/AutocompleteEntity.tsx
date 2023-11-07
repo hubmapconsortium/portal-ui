@@ -5,6 +5,7 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 import { useAutocompleteQuery } from './hooks';
 import { AutocompleteQueryResponse } from './types';
+import { createInitialValue } from './utils';
 
 function buildHelperText(entity: string): string {
   return `Multiple ${entity} are allowed and only 'AND' queries are supported.`;
@@ -19,32 +20,6 @@ interface AutocompleteEntityProps {
   targetEntity: string;
   setter: (value: string[]) => void;
   defaultValue?: string;
-}
-
-function stringToAutocompleteObject(
-  str?: string,
-  match: string | undefined = str,
-): AutocompleteQueryResponse[number] | null {
-  if (!str) {
-    return null;
-  }
-  if (!match) {
-    return null;
-  }
-  const matchIndex = str.toLowerCase().indexOf(match.toLowerCase());
-  const pre = str.slice(0, matchIndex);
-  const post = str.slice(matchIndex + match.length);
-  return { full: str, pre, match, post };
-}
-
-/**
- * Creates an autocomplete object and wraps it in a list if a string is passed.
- * Else returns an empty list
- * @param str The default/initial value for the autocomplete, if any
- * @returns A list of autocomplete objects
- */
-function createInitialValue(str?: string): AutocompleteQueryResponse {
-  return str ? ([stringToAutocompleteObject(str)].filter(Boolean) as AutocompleteQueryResponse) : [];
 }
 
 function AutocompleteEntity({ targetEntity, setter, defaultValue }: AutocompleteEntityProps) {
