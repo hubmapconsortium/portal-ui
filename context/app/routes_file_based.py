@@ -84,3 +84,15 @@ def get_organ_details(name):
     filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(normalized_name)}.yaml'
     organ = safe_load(filename.read_text())
     return organ
+
+
+@blueprint.route('/organs.json', methods=['POST'])
+def get_organ_list():
+    organs_to_get = request.json.get('organs')
+    print(organs_to_get)
+    organs = {}
+    for organ in organs_to_get:
+        org = get_organ_details(organ)
+        print(org)
+        organs[organ] = org
+    return organs

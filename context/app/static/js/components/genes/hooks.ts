@@ -22,6 +22,9 @@ const useGeneApiURLs = () => {
       organDetails(organName: string) {
         return `/organ/${organName}.json`;
       },
+      get organList() {
+        return `/organs.json`;
+      },
     }),
     [ubkgEndpoint],
   );
@@ -39,20 +42,32 @@ const useGeneDetails = () => {
 
 const useGeneOrgans = () => {
   const { data } = useGeneDetails();
-  const organs = useMemo(() => {
-    const record: Record<string, OrganInfo> = {};
-    data?.cell_types.forEach((cellType) => {
-      cellType.organs.forEach((organ) => {
-        if (organ.source !== 'UBERON') return;
-        record[organ.name] = organ;
-      });
-    });
-    return record;
+  const organsToFetch = useMemo(() => {
+    return (
+      data?.cell_types
+        .flatMap((cellType) => cellType.organs)
+        .filter((o) => o.id)
+        .map(({ name }) => name) ?? []
+    );
   }, [data]);
+  const organs = useSWR([useGeneApiURLs().organList, organsToFetch], ([url, organList]) =>
+    fetcher({
+      url,
+      requestInit: {
+        method: 'POST',
+        headers: {
+          'Content-type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({ organs: organList }),
+      },
+    }),
+  );
+  console.log(organs);
+
   return organs;
 };
 
-const genesperpage = 10;
 const starts_with = undefined;
 
 const useGeneList = (page: number) => {

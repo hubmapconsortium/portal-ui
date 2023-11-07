@@ -5,10 +5,12 @@ import Summary from 'js/components/genes/Summary';
 import GenePageProvider from 'js/components/genes/GenePageContext';
 import GenePageTitle from 'js/components/genes/GenePageTitle';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
-import BiomarkerQuery from 'js/components/genes/BiomarkerQuery/BiomarkerQuery';
+import BiomarkerQuery from 'js/components/genes/BiomarkerQuery';
+import Azimuth from 'js/components/genes/Azimuth';
 
 const summaryId = 'summary';
 const biomarkerQueryId = 'biomarker-query';
+const azimuthId = 'azimuth-organ-reference-dataset';
 
 interface Props {
   geneSymbol: string;
@@ -18,6 +20,7 @@ function GeneDetails({ geneSymbol }: Props) {
   const shouldDisplaySection = {
     [summaryId]: true,
     [biomarkerQueryId]: true,
+    [azimuthId]: true,
   };
 
   const sectionOrder = Object.entries(shouldDisplaySection)
@@ -31,6 +34,7 @@ function GeneDetails({ geneSymbol }: Props) {
         <GenePageTitle />
         <Summary />
         <BiomarkerQuery />
+        <Azimuth />
       </DetailLayout>
     </GenePageProvider>
   );
