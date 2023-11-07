@@ -130,3 +130,6 @@ context/app/static/js/maintenance/public
 
 #log errors
 portal-logs-errors/
+
+# Ignore docker compose env file
+compose/.env
