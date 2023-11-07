@@ -89,10 +89,8 @@ def get_organ_details(name):
 @blueprint.route('/organs.json', methods=['POST'])
 def get_organ_list():
     organs_to_get = request.json.get('organs')
-    print(organs_to_get)
     organs = {}
     for organ in organs_to_get:
         org = get_organ_details(organ)
-        print(org)
         organs[organ] = org
     return organs
