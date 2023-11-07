@@ -17,6 +17,7 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
@@ -109,6 +110,8 @@ function NewWorkspaceDialog({
 
   const { tags } = useWorkspaceTemplateTags();
 
+  const { deselectRows } = useSelectableTableStore();
+
   const submit = useCallback(
     ({ 'workspace-name': workspaceName, templates: templateKeys }: CreateWorkspaceFormTypes) => {
       onSubmit({
@@ -141,7 +144,9 @@ function NewWorkspaceDialog({
           <Stack spacing={1}>
             {children}
             <Description blocks={text.datasets.description} />
-            {datasetUUIDs.size > 0 && <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} />}
+            {datasetUUIDs.size > 0 && (
+              <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} removeDatasets={deselectRows} />
+            )}
           </Stack>
         </Step>
         <Step title={text.configure.title} isRequired index={1}>

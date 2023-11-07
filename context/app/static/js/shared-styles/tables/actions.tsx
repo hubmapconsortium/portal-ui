@@ -1,13 +1,26 @@
 import React, { useCallback, useState } from 'react';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { styled } from '@mui/material/styles';
 import { SearchResponse } from '@elastic/elasticsearch/lib/api/types';
+import { TooltipIconButton, TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
+
 import { useAppContext } from 'js/components/Contexts';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { fetchSearchData } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
+import { DeleteIcon } from 'js/shared-styles/icons';
 import { useSnackbarActions } from '../snackbars';
+
+const TableIconButton = styled(TooltipIconButton)(({ theme }) => ({
+  backgroundColor: theme.palette.white.main,
+  color: theme.palette.primary.main,
+  borderRadius: theme.spacing(1),
+  svg: {
+    fontSize: '1.25rem',
+  },
+  border: `1px solid ${theme.palette.divider}`,
+}));
 
 export function Copy() {
   const [isLoading, setLoading] = useState(false);
@@ -38,8 +51,22 @@ export function Copy() {
   }, [handleCopyClick, toastError, selectedRows, elasticsearchEndpoint, groupsToken]);
 
   return (
-    <WhiteBackgroundIconButton disabled={selectedRows.size === 0 || isLoading} onClick={handleClick}>
+    <TableIconButton
+      disabled={selectedRows.size === 0 || isLoading}
+      onClick={handleClick}
+      tooltip="Copy HuBMAP IDs to clipboard."
+    >
       <ContentCopyIcon />
-    </WhiteBackgroundIconButton>
+    </TableIconButton>
+  );
+}
+
+type DeleteProps = Omit<TooltipButtonProps, 'tooltip'> & Partial<Pick<TooltipButtonProps, 'tooltip'>>;
+
+export function Delete(props: DeleteProps) {
+  return (
+    <TableIconButton tooltip="Remove selected rows." {...props}>
+      <DeleteIcon />
+    </TableIconButton>
   );
 }

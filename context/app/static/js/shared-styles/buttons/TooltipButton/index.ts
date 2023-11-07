@@ -1,5 +1,5 @@
 import TooltipButton from './TooltipButton';
 
-import TooltipIconButton from './TooltipIconButton';
+import TooltipIconButton, { TooltipButtonProps } from './TooltipIconButton';
 
-export { TooltipButton, TooltipIconButton };
+export { TooltipButton, TooltipIconButton, type TooltipButtonProps };
