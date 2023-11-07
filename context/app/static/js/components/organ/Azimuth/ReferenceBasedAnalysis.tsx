@@ -1,10 +1,10 @@
 import React from 'react';
 import ReactMarkdown from 'react-markdown';
 import Box from '@mui/material/Box';
+import { useTheme } from '@mui/material/styles';
 
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 
-import { useTheme } from '@mui/material';
 import { StyledPaper } from './style';
 
 interface ReferenceBasedAnalysisProps {
