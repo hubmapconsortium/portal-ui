@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { ComponentType } from 'react';
 import format from 'date-fns/format';
 
-import { EntityDocument, DatasetDocument, SampleDocument } from 'js/typings/search';
+import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from 'js/typings/search';
 import { InternalLink } from 'js/shared-styles/Links';
+import { getDonorAgeString } from 'js/helpers/functions';
 
 interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
@@ -49,7 +50,7 @@ function StatusCell({ hit: { mapped_status, mapped_data_access_level } }: CellCo
 }
 
 export const status = {
-  id: 'status',
+  id: 'mapped_status',
   label: 'Status',
   sort: 'mapped_status.keyword',
   cellContent: StatusCell,
@@ -66,4 +67,50 @@ export const organ = {
   label: 'Organ',
   sort: 'origin_samples.mapped_organ.keyword',
   cellContent: OrganCell,
+};
+
+function withParentDonor(Component: ComponentType<{ hit: DonorDocument }>) {
+  return function D({ hit: { donor } }: CellContentProps<SampleDocument | DatasetDocument>) {
+    return <Component hit={donor} />;
+  };
+}
+
+function DonorAge({ hit: { mapped_metadata } }: CellContentProps<DonorDocument>) {
+  return mapped_metadata && getDonorAgeString(mapped_metadata);
+}
+
+export const parentDonorAge = {
+  id: 'donor.mapped_metadata.age_value',
+  label: 'Donor Age',
+  sort: 'donor.mapped_metadata.age_value',
+  cellContent: withParentDonor(DonorAge),
+};
+
+function DonorSex({ hit: { mapped_metadata } }: CellContentProps<DonorDocument>) {
+  return mapped_metadata?.sex;
+}
+
+export const parentDonorSex = {
+  id: 'donor.mapped_metadata.sex',
+  label: 'Donor Sex',
+  sort: 'donor.mapped_metadata.sex.keyword',
+  cellContent: withParentDonor(DonorSex),
+};
+
+function DonorRace({ hit: { mapped_metadata } }: CellContentProps<DonorDocument>) {
+  return mapped_metadata?.race;
+}
+
+export const parentDonorRace = {
+  id: 'donor.mapped_metadata.race',
+  label: 'Donor Race',
+  sort: 'donor.mapped_metadata.race.keyword',
+  cellContent: withParentDonor(DonorRace),
+};
+
+export const datasetDescendants = {
+  id: 'descendant_counts.entity_type.Dataset',
+  label: 'Derived Dataset Count',
+  cellContent: ({ hit: { descendant_counts } }: CellContentProps<EntityDocument>) =>
+    descendant_counts?.entity_type?.Dataset ?? 0,
 };

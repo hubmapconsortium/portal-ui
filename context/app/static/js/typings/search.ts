@@ -17,7 +17,7 @@ export interface DonorMappedMetadata {
 }
 
 export interface DonorDocument extends EntityDocument {
-  mapped_metadata?: DonorMappedMetadata;
+  mapped_metadata: DonorMappedMetadata;
 }
 
 interface SampleDatasetSharedFields {
