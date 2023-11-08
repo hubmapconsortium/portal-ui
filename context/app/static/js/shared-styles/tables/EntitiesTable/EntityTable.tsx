@@ -105,7 +105,7 @@ function EntityTable<Doc>({ query, columns, isSelectable = true }: EntityTablePr
           </TableRow>
           <TableRow aria-hidden="true">
             <TableCell
-              colSpan={columns.length + 1}
+              colSpan={columns.length + (isSelectable ? 1 : 0)}
               sx={{ top: headerRowHeight, border: 'none' }}
               padding="none"
               component="td"
