@@ -30,7 +30,8 @@
   },
   "exclude": [
     "node_modules",
-    "**/*.bundle.js"
+    "**/*.bundle.js",
+    "@storybook/types/dist"
   ],
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"
