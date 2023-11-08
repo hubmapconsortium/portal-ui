@@ -58,6 +58,14 @@ function EntityHeaderCell<Doc>({ column, setSort, sortState }: EntityHeaderCellT
   );
 }
 
+function TablePaddingRow({ padding }: { padding: number }) {
+  return (
+    <tr>
+      <td style={{ height: `${padding}px` }} aria-hidden="true" />
+    </tr>
+  );
+}
+
 interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns'> {
   isSelectable: boolean;
 }
@@ -122,11 +130,7 @@ function EntityTable<Doc>({ query, columns, isSelectable = true }: EntityTablePr
           </TableRow>
         </TableHead>
         <TableBody>
-          {tableBodyPadding.top > 0 && (
-            <tr>
-              <td style={{ height: `${tableBodyPadding.top}px` }} aria-hidden="true" />
-            </tr>
-          )}
+          {tableBodyPadding.top > 0 && <TablePaddingRow padding={tableBodyPadding.top} />}
           {virtualRows.map((virtualRow) => {
             const hit = searchHits[virtualRow.index];
             if (hit) {
@@ -143,11 +147,7 @@ function EntityTable<Doc>({ query, columns, isSelectable = true }: EntityTablePr
             }
             return null;
           })}
-          {tableBodyPadding.bottom > 0 && (
-            <tr>
-              <td style={{ height: `${tableBodyPadding.bottom}px` }} aria-hidden="true" />
-            </tr>
-          )}
+          {tableBodyPadding.bottom > 0 && <TablePaddingRow padding={tableBodyPadding.bottom} />}
         </TableBody>
       </Table>
     </StyledTableContainer>
