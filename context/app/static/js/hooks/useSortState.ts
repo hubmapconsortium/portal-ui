@@ -8,7 +8,7 @@ interface SortState {
 type SortAction =
   | {
       type: 'sort';
-      payload: string | SortState;
+      payload: string;
     }
   | {
       type: 'reset';
