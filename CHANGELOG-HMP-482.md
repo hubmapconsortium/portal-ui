@@ -1,0 +1,1 @@
+- Removed spaces from tracked event names.
