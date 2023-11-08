@@ -1,16 +1,14 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
-import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper/VisualizationWrapper';
-import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 
 import { Flex, StyledInfoIcon } from '../style';
-import { StyledPaper } from './style';
+import ReferenceBasedAnalysis from './ReferenceBasedAnalysis';
 
 function Azimuth({ config }) {
   return (
@@ -26,21 +24,11 @@ function Azimuth({ config }) {
         }
         buttons={<OutboundLinkButton href={config.applink}>Open Azimuth App</OutboundLinkButton>}
       />
-      <StyledPaper>
-        <LabelledSectionText label="Modalities">{config.modalities}</LabelledSectionText>
-        <LabelledSectionText label="Nuclei in reference">{config.nunit}</LabelledSectionText>
-        {/* eslint-disable react/no-danger */}
-        <LabelledSectionText label="Reference dataset">
-          <Box component="span" sx={(theme) => ({ '&>a': { color: theme.palette.info.main } })}>
-            <ReactMarkdown>{config.dataref}</ReactMarkdown>
-          </Box>
-        </LabelledSectionText>
-      </StyledPaper>
+      <Stack dir="column" gap={1}>
+        <ReferenceBasedAnalysis {...config} />
 
-      {/* TODO: Refactor so "Visualization" is not included... */}
-      {/* TODO: ... and then remove the <br> as well. */}
-      <br />
-      <VisualizationWrapper vitData={config.vitessce_conf} shouldDisplayHeader={false} />
+        <VisualizationWrapper vitData={config.vitessce_conf} shouldDisplayHeader={false} />
+      </Stack>
     </>
   );
 }

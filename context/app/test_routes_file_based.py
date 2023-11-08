@@ -27,3 +27,30 @@ def client():
 def test_organ(client, name, status):
     response = client.get(f'/organ/{name}')
     assert response.status == status
+
+
+@pytest.mark.parametrize(
+    'name,expected',
+    [('kidney', 'Kidney'),
+     ('small-intestine', 'Small Intestine'),
+     ('placenta', 'Placenta'),
+     ('blood-vasculature', 'Blood Vasculature'),
+     ('blah', None)]
+)
+def test_get_organ_details(client, name, expected):
+    response = client.get(f'/organ/{name}.json')
+    if expected is not None:
+        assert response.json.get('name') == expected
+    else:
+        assert response.json == {}
+
+
+@pytest.mark.parametrize(
+    'organs,expected',
+    [(['kidney'], ['kidney']),
+     (['kidney', 'blah'], ['kidney']),
+     (['kidney', 'heart', 'blah'], ['heart', 'kidney'])]
+)
+def test_get_organ_list(client, organs, expected):
+    response = client.post('/organs.json', json={'organs': organs})
+    assert list(response.json.keys()) == expected
