@@ -1,0 +1,1 @@
+- Alphabetize data types facets on search page.
