@@ -6,7 +6,7 @@ import Checkbox from '@mui/material/Checkbox';
 
 import { StyledCard, SelectableCardText } from './styles';
 
-interface SelectableCardProps {
+interface SelectableCardProps extends React.ComponentProps<typeof StyledCard> {
   title: string;
   description: string;
   tags?: string[];
