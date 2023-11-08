@@ -79,8 +79,6 @@ function WorkspaceListItemButtons({ workspace }: WorkspaceButtonProps) {
 }
 
 function WorkspaceListItem({ workspace, toggleItem, selected }: WorkspaceListItemProps) {
-  const { handleStartWorkspace } = useWorkspacesList();
-
   const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
 
   const tooltip = isRunning ? 'Stop all jobs before deleting' : 'Delete workspace';
@@ -106,7 +104,7 @@ function WorkspaceListItem({ workspace, toggleItem, selected }: WorkspaceListIte
           </span>
         </SecondaryBackgroundTooltip>
 
-        <WorkspaceDetails workspace={workspace} handleStartWorkspace={handleStartWorkspace} />
+        <WorkspaceDetails workspace={workspace} />
       </Stack>
       <WorkspaceListItemButtons workspace={workspace} />
     </PanelWrapper>
