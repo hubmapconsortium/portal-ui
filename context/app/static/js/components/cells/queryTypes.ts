@@ -9,4 +9,8 @@ const queryTypes: Record<QueryType, QueryTypeObj> = {
   protein: { value: 'protein', measurement: 'Abundance' },
 };
 
-export { queryTypes };
+const isQueryType = (value: string): value is QueryType => {
+  return Object.keys(queryTypes).includes(value);
+};
+
+export { queryTypes, isQueryType };
