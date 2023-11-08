@@ -14,7 +14,7 @@ import { Copy, Delete } from 'js/shared-styles/tables/actions';
 const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
-  removeDatasets: (ids: string[]) => void;
+  removeDatasets?: (ids: string[]) => void;
 }
 
 function WorkspaceDatasetsTable({ datasetsUUIDs, removeDatasets }: WorkspaceDatasetsTableProps) {
@@ -43,11 +43,13 @@ function WorkspaceDatasetsTable({ datasetsUUIDs, removeDatasets }: WorkspaceData
         buttons={
           <Stack direction="row" gap={1}>
             <Copy />
-            <Delete
-              onClick={() => removeDatasets([...selectedRows])}
-              tooltip="Remove selected datasets."
-              disabled={selectedRows.size === 0}
-            />
+            {removeDatasets && (
+              <Delete
+                onClick={() => removeDatasets([...selectedRows])}
+                tooltip="Remove selected datasets."
+                disabled={selectedRows.size === 0}
+              />
+            )}
           </Stack>
         }
       />
