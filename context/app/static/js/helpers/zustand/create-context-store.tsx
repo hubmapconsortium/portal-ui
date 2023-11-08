@@ -29,7 +29,7 @@ export function createStoreContextHook<T, S extends StoreApi<T>>(storeContext: C
     selector: (state: T) => U = (state: T) => state as unknown as U,
     equalityFn: ((state: U, newState: U) => boolean) | undefined = shallow,
   ): U {
-    const store = useContext<S>(storeContext);
+    const store = useContext<S | undefined>(storeContext);
     return useStoreWithEqualityFn(store, selector, equalityFn);
   }
   return useCurriedZustandContext as CurriedUseStore<S>;
