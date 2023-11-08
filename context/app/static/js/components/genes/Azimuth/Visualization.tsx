@@ -1,12 +1,24 @@
 import React from 'react';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
-import ReferenceBasedAnalysis from 'js/components/organ/Azimuth/ReferenceBasedAnalysis';
+import ReferenceBasedAnalysis, {
+  ReferenceBasedAnalysisSkeleton,
+} from 'js/components/organ/Azimuth/ReferenceBasedAnalysis';
 import Stack from '@mui/material/Stack';
+import { VisualizationSuspenseFallback } from 'js/components/detailPage/visualization/VisualizationWrapper/VisualizationSuspenseFallback';
 import { useSelectedOrganContext } from './SelectedOrganContext';
+
+function VisualizationSkeleton() {
+  return (
+    <Stack dir="column" gap={1}>
+      <ReferenceBasedAnalysisSkeleton />
+      <VisualizationSuspenseFallback />
+    </Stack>
+  );
+}
 
 export function AzimuthVisualization() {
   const { selectedOrgan } = useSelectedOrganContext();
-  if (!selectedOrgan?.azimuth) return null;
+  if (!selectedOrgan?.azimuth) return <VisualizationSkeleton />;
   const { azimuth } = selectedOrgan;
   return (
     <Stack dir="column" gap={1}>

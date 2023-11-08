@@ -51,7 +51,7 @@ const useGeneDetails = () => {
 };
 
 const useGeneOrgans = () => {
-  const { data: geneData, ...genes } = useGeneDetails();
+  const { data: geneData } = useGeneDetails();
   const organsToFetch = useMemo(() => {
     return (
       geneData?.cell_types
@@ -77,9 +77,22 @@ const useGeneOrgans = () => {
       }),
   );
 
-  const { organsWithDatasetCounts, isLoading } = useTypedOrgansDatasetCounts(data ?? {});
+  const organsWithAzimuth = useMemo(() => {
+    if (!data) return {};
+    return Object.fromEntries(
+      Object.entries(data).filter(([_organName, organ]) => {
+        return organ?.azimuth;
+      }),
+    );
+  }, [data]);
 
-  return { ...organs, data: organsWithDatasetCounts, isLoading: isLoading || organs.isLoading || genes.isLoading };
+  const { organsWithDatasetCounts, isLoading: isLoadingDatasetCounts } = useTypedOrgansDatasetCounts(organsWithAzimuth);
+
+  return {
+    ...organs,
+    data: organsWithDatasetCounts,
+    isLoadingDatasetCounts,
+  };
 };
 
 const starts_with = undefined;

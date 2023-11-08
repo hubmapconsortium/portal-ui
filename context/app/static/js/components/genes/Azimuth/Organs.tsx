@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React from 'react';
 import OrganTile from 'js/components/organ/OrganTile';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
@@ -18,31 +18,17 @@ function OrganTileSkeleton() {
 }
 
 export default function GeneOrgans() {
-  const { data } = useGeneOrgans();
+  const { data, isLoading } = useGeneOrgans();
   const { selectedOrgan, setSelectedOrgan } = useSelectedOrganContext();
-  const organsWithAzimuth = useMemo(() => {
-    if (!data) return null;
-    return Object.entries(data).reduce(
-      (acc, [name, organ]) => {
-        if (organ.azimuth) {
-          acc[name] = organ;
-        }
-        return acc;
-      },
-      {} as typeof data,
-    );
-  }, [data]);
+  if (!data || isLoading) return <OrganTileSkeleton />;
 
-  useEffect(() => {
-    if (organsWithAzimuth) {
-      setSelectedOrgan(organsWithAzimuth[Object.keys(organsWithAzimuth)[0]]);
-    }
-  }, [organsWithAzimuth, setSelectedOrgan]);
-  if (!organsWithAzimuth) return <OrganTileSkeleton />;
+  if (!selectedOrgan && data) {
+    setSelectedOrgan(data[Object.keys(data)[0]]);
+  }
 
   return (
     <Stack direction="row" gap={4} py={1}>
-      {Object.entries(organsWithAzimuth).map(([name, organ]) => (
+      {Object.entries(data).map(([name, organ]) => (
         <OrganTile
           key={name}
           organ={organ}
