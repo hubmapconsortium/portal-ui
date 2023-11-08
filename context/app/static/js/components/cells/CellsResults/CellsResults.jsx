@@ -14,7 +14,7 @@ const cellsStoreSelector = (state) => ({
   queryType: state.queryType,
 });
 
-function CellsResults({ completeStep }) {
+function CellsResults() {
   const { isLoading, results, minExpressionLog, cellVariableNames, queryType } = useStore(cellsStoreSelector);
 
   if (isLoading) {
@@ -39,7 +39,6 @@ function CellsResults({ completeStep }) {
       minExpression={10 ** minExpressionLog}
       cellVariableName={cellVariableNames[0]}
       queryType={queryType}
-      completeStep={completeStep}
     />
   );
 }

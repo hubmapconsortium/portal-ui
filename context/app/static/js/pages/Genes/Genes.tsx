@@ -5,16 +5,19 @@ import Summary from 'js/components/genes/Summary';
 import GenePageProvider from 'js/components/genes/GenePageContext';
 import GenePageTitle from 'js/components/genes/GenePageTitle';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
+import BiomarkerQuery from 'js/components/genes/BiomarkerQuery/BiomarkerQuery';
 
-const summaryId = 'Summary';
+const summaryId = 'summary';
+const biomarkerQueryId = 'biomarker-query';
 
 interface Props {
   geneSymbol: string;
 }
 
-function Genes({ geneSymbol }: Props) {
+function GeneDetails({ geneSymbol }: Props) {
   const shouldDisplaySection = {
     [summaryId]: true,
+    [biomarkerQueryId]: true,
   };
 
   const sectionOrder = Object.entries(shouldDisplaySection)
@@ -27,9 +30,10 @@ function Genes({ geneSymbol }: Props) {
         <SummaryTitle iconTooltipText="Basic unit of heredity made up of sequences of DNA">Gene</SummaryTitle>
         <GenePageTitle />
         <Summary />
+        <BiomarkerQuery />
       </DetailLayout>
     </GenePageProvider>
   );
 }
 
-export default Genes;
+export default GeneDetails;

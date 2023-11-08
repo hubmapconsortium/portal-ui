@@ -1,3 +1,3 @@
-import Genes from './Genes';
+import GeneDetails from './Genes';
 
-export default Genes;
+export default GeneDetails;

@@ -1,15 +1,21 @@
 import React from 'react';
-import MUISLider from '@mui/material/Slider';
+import MUISlider, { SliderProps as MUISliderProps } from '@mui/material/Slider';
 import FormHelperText from '@mui/material/FormHelperText';
 
 import { StyledFormLabel } from './style';
 
-function Slider({ min, max, value, onChange, id, label, helperText, ...rest }) {
+interface SliderProps extends MUISliderProps {
+  label: string;
+  id: string;
+  helperText?: string;
+}
+
+function Slider({ min, max, value, onChange, id, label, helperText, ...rest }: SliderProps) {
   return (
     <>
       <StyledFormLabel id={id}>{label}</StyledFormLabel>
       {helperText && <FormHelperText>{helperText}</FormHelperText>}
-      <MUISLider
+      <MUISlider
         min={min}
         max={max}
         value={value}

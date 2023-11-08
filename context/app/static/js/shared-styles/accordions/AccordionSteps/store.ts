@@ -1,17 +1,19 @@
+import { ReactElement } from 'react';
+
 import { createStoreContext } from 'js/helpers/zustand';
 import { createStore } from 'zustand';
 
 export interface AccordionStepsState {
   openStepIndex: number;
-  completedStepsText: Record<number, string>;
+  completedStepsText: Record<number, string | ReactElement>;
   stepsLength: number;
 }
 
 interface AccordionStepsActions {
   setOpenStepIndex: (stepIndex: number) => void;
   expandStep: (stepIndex: number) => void;
-  setCompletedStepsText: (completedStepsText: Record<number, string>) => void;
-  completeStep: (stepIndex: number, completedStepText: string) => void;
+  setCompletedStepsText: (completedStepsText: Record<number, string | ReactElement>) => void;
+  completeStep: (stepIndex: number, completedStepText: string | ReactElement) => void;
   resetStore: () => void;
 }
 
@@ -40,7 +42,7 @@ function handleCompleteStep({
   payload: { stepIndex, completedStepText },
   state,
 }: {
-  payload: { stepIndex: number; completedStepText: string };
+  payload: { stepIndex: number; completedStepText: string | ReactElement };
   state: AccordionStepsState;
 }) {
   const previousStepIndexes = [...Array(stepIndex).keys()];

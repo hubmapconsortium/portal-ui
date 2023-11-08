@@ -1,0 +1,1 @@
+- Add Biomarker Query section to gene detail page.

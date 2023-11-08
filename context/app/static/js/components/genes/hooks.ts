@@ -10,9 +10,11 @@ const useGeneApiURLs = () => {
   return useMemo(
     () => ({
       detailURL(geneId: string) {
-        return `${ubkgEndpoint}/gene/${geneId}`;
+        // return `${ubkgEndpoint}/genes/${geneId.toUpperCase()}`;
+        return `${ubkgEndpoint}/gene/${geneId.toUpperCase()}`;
       },
       get list() {
+        // return `${ubkgEndpoint}/genes-info`;
         return `${ubkgEndpoint}/genes`;
       },
     }),
