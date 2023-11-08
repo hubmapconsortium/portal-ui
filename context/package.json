@@ -131,6 +131,7 @@
     "style-loader": "^3.3.3",
     "swc-loader": "^0.2.3",
     "ts-jest": "^29.1.1",
+    "tsc-files": "^1.1.4",
     "typescript": "^5.2.2",
     "url-loader": "^4.1.1",
     "webpack": "^5.88.2",
@@ -164,6 +165,9 @@
   "lint-staged": {
     "app/static/js/**/*.{js,jsx,ts,tsx,y*ml,json,md}": [
       "eslint -c .eslintrc.yml"
+    ],
+    "**/*.{ts,tsx}": [
+      "tsc-files --noEmit"
     ]
   },
   "husky": {

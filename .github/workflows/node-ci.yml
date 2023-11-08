@@ -30,3 +30,6 @@ jobs:
 
       - name: Run test script
         run: etc/test/test-node.sh
+
+      - name: Run type check
+        run: npx tsc --noEmit --project context/tsconfig.json
