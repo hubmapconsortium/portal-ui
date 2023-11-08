@@ -75,8 +75,8 @@ function withParentDonor(Component: ComponentType<{ hit: DonorDocument }>) {
   };
 }
 
-function DonorAge({ hit: { mapped_metadata } }: CellContentProps<DonorDocument>) {
-  return mapped_metadata && getDonorAgeString(mapped_metadata);
+function DonorAge({ hit }: CellContentProps<DonorDocument>) {
+  return hit?.mapped_metadata && getDonorAgeString(hit?.mapped_metadata);
 }
 
 export const parentDonorAge = {
@@ -86,8 +86,8 @@ export const parentDonorAge = {
   cellContent: withParentDonor(DonorAge),
 };
 
-function DonorSex({ hit: { mapped_metadata } }: CellContentProps<DonorDocument>) {
-  return mapped_metadata?.sex;
+function DonorSex({ hit }: CellContentProps<DonorDocument>) {
+  return hit?.mapped_metadata?.sex;
 }
 
 export const parentDonorSex = {
@@ -97,8 +97,8 @@ export const parentDonorSex = {
   cellContent: withParentDonor(DonorSex),
 };
 
-function DonorRace({ hit: { mapped_metadata } }: CellContentProps<DonorDocument>) {
-  return mapped_metadata?.race;
+function DonorRace({ hit }: CellContentProps<DonorDocument>) {
+  return hit?.mapped_metadata?.race;
 }
 
 export const parentDonorRace = {
