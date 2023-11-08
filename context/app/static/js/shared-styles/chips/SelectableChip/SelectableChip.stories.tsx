@@ -5,7 +5,7 @@ const meta = {
   title: 'Chips/SelectableChip',
   component: SelectableChip,
   args: {
-    onDelete: undefined,
+    onClick: undefined,
   },
   argTypes: {
     label: {
@@ -17,7 +17,7 @@ const meta = {
   },
 } satisfies Meta<typeof SelectableChip>;
 
-type Story = StoryObj<typeof SelectableCard>;
+type Story = StoryObj<typeof SelectableChip>;
 
 export const Selected: Story = {
   args: {
