@@ -23,10 +23,8 @@ function ChartWrapper({ children, chartTitle, margin, colorScale, dropdown }) {
         )}
         {children}
       </Box>
-      <Stack sx={{ height: `calc(100% - ${margin.bottom}px)` }}>
-        {dropdown && (
-          <Box sx={{ marginTop: `${margin.top}px`, marginBottom: 1, maxWidth: 175, minWidth: 0 }}>{dropdown}</Box>
-        )}
+      <Stack sx={{ paddingTop: `${margin.top}px`, height: `calc(100% - ${margin.bottom}px)` }}>
+        {dropdown && <Box sx={{ marginBottom: 1, maxWidth: 175, minWidth: 0 }}>{dropdown}</Box>}
         <Box sx={{ flex: 1, overflowY: 'auto' }}>
           <LegendOrdinal
             scale={colorScale}
