@@ -1,6 +1,4 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { PropsWithChildren } from 'react';
-import useTrackMount from 'js/hooks/useTrackMount';
 import { useVisualizationTracker } from './hooks';
 
 type VisualizationTrackerProps = PropsWithChildren;
