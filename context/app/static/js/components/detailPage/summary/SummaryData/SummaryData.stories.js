@@ -45,7 +45,7 @@ export function WithChildren(args) {
   return (
     <SummaryData {...args}>
       {getArrayRange(8).map((n) => (
-        <SummaryItem>Child {n}</SummaryItem>
+        <SummaryItem key={n}>Child {n}</SummaryItem>
       ))}{' '}
     </SummaryData>
   );
