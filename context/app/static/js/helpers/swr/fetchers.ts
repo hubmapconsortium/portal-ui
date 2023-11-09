@@ -1,16 +1,17 @@
 import { SWRError } from './errors';
 
 interface FetchOptionsType {
-  requestInit?: RequestInit;
   expectedStatusCodes?: number[];
 }
 
 type SingleFetchOptionsType = FetchOptionsType & {
+  requestInit?: RequestInit;
   url: string;
 };
 
 type MultiFetchOptionsType = FetchOptionsType & {
   urls: string[];
+  requestInits?: RequestInit[];
 };
 
 /**
@@ -26,8 +27,12 @@ type MultiFetchOptionsType = FetchOptionsType & {
  * @param fetchOptions.expectedStatusCodes - Optional array of status codes which reflect a succesful request
  */
 
-export async function multiFetcher<T>({ urls, requestInit = {}, expectedStatusCodes = [200] }: MultiFetchOptionsType) {
-  const f = (url: string) =>
+export async function multiFetcher<T>({
+  urls,
+  requestInits = [{}],
+  expectedStatusCodes = [200],
+}: MultiFetchOptionsType) {
+  const f = (url: string, requestInit: RequestInit) =>
     fetch(url, requestInit).then(async (response) => {
       if (!expectedStatusCodes.includes(response.status)) {
         const error = new SWRError(`The request to ${urls.join(', ')} failed.`, {
@@ -42,7 +47,9 @@ export async function multiFetcher<T>({ urls, requestInit = {}, expectedStatusCo
   if (urls.length === 0) {
     return Promise.resolve([] as T[]);
   }
-  return Promise.all(urls.map((url) => f(url))) as Promise<T[]>;
+  return Promise.all(
+    urls.map((url, i) => f(url, requestInits.length === 1 ? requestInits[0] : requestInits[i])),
+  ) as Promise<T[]>;
 }
 
 /**
@@ -58,5 +65,7 @@ export async function multiFetcher<T>({ urls, requestInit = {}, expectedStatusCo
  * @param fetchOptions.expectedStatusCodes - Optional array of status codes which reflect a succesful request
  */
 export async function fetcher<T>({ url, requestInit = {}, expectedStatusCodes = [200] }: SingleFetchOptionsType) {
-  return multiFetcher({ urls: [url], requestInit, expectedStatusCodes }).then((data) => data[0]) as Promise<T>;
+  return multiFetcher({ urls: [url], requestInits: [requestInit], expectedStatusCodes }).then(
+    (data) => data[0],
+  ) as Promise<T>;
 }

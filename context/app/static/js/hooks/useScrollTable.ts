@@ -1,17 +1,38 @@
-import { useRef, useCallback } from 'react';
+import { useRef, useCallback, UIEvent } from 'react';
 import { useVirtualizer } from '@tanstack/react-virtual';
+import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 
-import { useSortState } from 'js/hooks/useSortState';
+import { useSortState, ColumnNameMapping, SortState } from 'js/hooks/useSortState';
 import { useScrollSearchHits, useAllSearchIDs } from 'js/hooks/useSearchData';
 
-function useScrollTable({ query, columnNameMapping, initialSortState }) {
-  const { allSearchIDs } = useAllSearchIDs(query, {});
+interface AllSearchIDsTypes {
+  allSearchIDs: string[];
+}
+
+interface ScrollTableTypes {
+  query: SearchRequest;
+  columnNameMapping: ColumnNameMapping;
+  initialSortState: SortState;
+}
+
+interface UseScrollSearchHitsTypes<Document> {
+  searchHits: SearchHit<Document>[];
+  isLoading: boolean;
+  loadMore: () => void;
+  totalHitsCount: number;
+}
+
+function useScrollTable<Document>({ query, columnNameMapping, initialSortState }: ScrollTableTypes) {
+  const { allSearchIDs } = useAllSearchIDs(query) as AllSearchIDsTypes;
 
   const { sortState, setSort, sort } = useSortState(columnNameMapping, initialSortState);
 
   const queryWithSort = { ...query, sort };
 
-  const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(queryWithSort, {});
+  const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(
+    queryWithSort,
+    {},
+  ) as UseScrollSearchHitsTypes<Document>;
 
   const tableContainerRef = useRef(null);
 
@@ -27,11 +48,11 @@ function useScrollTable({ query, columnNameMapping, initialSortState }) {
   // Adapted from https://tanstack.com/table/v8/docs/examples/react/virtualized-infinite-scrolling.
   const tableBodyPadding = {
     top: virtualRows.length > 0 ? virtualRows?.[0]?.start || 0 : 0,
-    bottom: virtualRows.length > 0 ? virtualizer.getTotalSize - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0,
+    bottom: virtualRows.length > 0 ? virtualizer.getTotalSize() - (virtualRows?.[virtualRows.length - 1]?.end || 0) : 0,
   };
 
   const fetchMoreOnBottomReached = useCallback(
-    (containerRefElement) => {
+    ({ currentTarget: containerRefElement }: UIEvent<HTMLElement>) => {
       if (containerRefElement) {
         const { scrollHeight, scrollTop, clientHeight } = containerRefElement;
         if (scrollHeight - scrollTop - clientHeight < 300) {

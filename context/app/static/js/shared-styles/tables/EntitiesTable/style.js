@@ -1,4 +1,5 @@
 import styled from 'styled-components';
+import { TabPanel } from 'js/shared-styles/tabs';
 
 const StyledDiv = styled.div`
   height: 100%;
@@ -8,4 +9,10 @@ const StyledDiv = styled.div`
   max-height: 340px; // Cuts off the last row partially to cue users to scroll.
 `;
 
-export { StyledDiv };
+const StyledTabPanel = styled(TabPanel)`
+  ${(props) => props.value === props.index && `flex-grow: 1`};
+  display: flex;
+  min-height: 0px; // flex overflow fix
+`;
+
+export { StyledDiv, StyledTabPanel };

@@ -1,15 +1,19 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Checkbox from '@mui/material/Checkbox';
+import TableCell, { TableCellProps } from '@mui/material/TableCell';
 
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import { HeaderCell } from 'js/shared-styles/tables';
 
-function SelectableHeaderCell({ allTableRowKeys, disabled, ...rest }) {
+interface SelectableHeaderCellProps extends TableCellProps {
+  allTableRowKeys: string[];
+  disabled: boolean;
+}
+
+function SelectableHeaderCell({ allTableRowKeys, disabled = false, ...rest }: SelectableHeaderCellProps) {
   const { toggleHeaderAndRows, headerRowIsSelected, tableLabel } = useSelectableTableStore();
 
   return (
-    <HeaderCell padding="checkbox" {...rest}>
+    <TableCell padding="checkbox" {...rest}>
       <Checkbox
         color="secondary"
         checked={headerRowIsSelected}
@@ -17,20 +21,8 @@ function SelectableHeaderCell({ allTableRowKeys, disabled, ...rest }) {
         disabled={disabled || allTableRowKeys.length === 0}
         onChange={() => toggleHeaderAndRows(allTableRowKeys)}
       />
-    </HeaderCell>
+    </TableCell>
   );
 }
-
-SelectableHeaderCell.propTypes = {
-  /**
-   Unique keys for all rows in the table.
-  */
-  allTableRowKeys: PropTypes.arrayOf(PropTypes.string).isRequired,
-  disabled: PropTypes.bool,
-};
-
-SelectableHeaderCell.defaultProps = {
-  disabled: false,
-};
 
 export default SelectableHeaderCell;

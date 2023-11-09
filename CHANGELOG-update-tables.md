@@ -1,0 +1,1 @@
+- Create a reusable table with updated design.
