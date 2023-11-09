@@ -11,10 +11,10 @@ test('should return correct srcset', () => {
   );
   expect(getCarouselImageSrcSet('cat', 'http://example.com/animals', 'webp')).toEqual(
     [
-      'http://example.com/animals/cat-slide-320w.webp',
-      'http://example.com/animals/cat-slide-640w.webp',
-      'http://example.com/animals/cat-slide-1280w.webp',
-      'http://example.com/animals/cat-slide-1392w.webp',
+      'http://example.com/animals/cat-slide-320w.webp 320w',
+      'http://example.com/animals/cat-slide-640w.webp 640w',
+      'http://example.com/animals/cat-slide-1280w.webp 1280w',
+      'http://example.com/animals/cat-slide-1392w.webp 1392w',
     ].join(', '),
   );
 });
