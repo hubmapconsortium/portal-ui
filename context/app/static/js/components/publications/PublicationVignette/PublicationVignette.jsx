@@ -1,9 +1,9 @@
 import React from 'react';
-import ReactMarkdown from 'react-markdown';
 
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import useStickyToggle from 'js/hooks/useStickyToggle';
 
+import MarkdownRenderer from 'js/components/Markdown/MarkdownRenderer';
 import { usePublicationVignetteConfs } from './hooks';
 
 function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
@@ -19,7 +19,7 @@ function PublicationVignette({ vignette, vignetteDirName, uuid, mounted }) {
 
   return (
     <>
-      <ReactMarkdown>{vignette.description}</ReactMarkdown>
+      <MarkdownRenderer>{vignette.description}</MarkdownRenderer>
       {vitessceConfs && (
         <VisualizationWrapper
           vitData={vitessceConfs.length === 1 ? vitessceConfs[0] : vitessceConfs}
