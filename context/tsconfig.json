@@ -29,7 +29,9 @@
     }
   },
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "**/*.bundle.js",
+    "@storybook/types/dist"
   ],
   "$schema": "https://json.schemastore.org/tsconfig",
   "display": "Recommended"

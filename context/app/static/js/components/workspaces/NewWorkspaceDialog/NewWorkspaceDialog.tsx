@@ -53,7 +53,7 @@ const text = {
     title: 'Select Templates',
     description: [
       'Templates can be selected for your workspace for potential workflows revolving around data assays, visualization, QA or other purposes. Multiple templates can be selected. If you are unsure of which templates to launch, the “Select All” button selects all templates.',
-      <ContactPrompt />,
+      <ContactPrompt key="configure-workspace-contact" />,
     ],
   },
 };

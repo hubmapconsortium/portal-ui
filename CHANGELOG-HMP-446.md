@@ -1,0 +1,1 @@
+- Introduce type checking to precommit and continuous integration scripts and fix reported type issues.

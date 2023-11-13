@@ -29,7 +29,7 @@ function Template(args) {
 export const Default = Template.bind({});
 Default.args = {
   buttons: ['Right', 'Aligned', 'Buttons'].map((buttonText) => (
-    <Button variant="contained" color="primary">
+    <Button variant="contained" color="primary" key={buttonText}>
       {buttonText}
     </Button>
   )),
@@ -39,7 +39,7 @@ Default.args = {
 export const WithoutLeftText = Template.bind({});
 WithoutLeftText.args = {
   buttons: ['Right', 'Aligned', 'Buttons'].map((buttonText) => (
-    <Button variant="contained" color="primary">
+    <Button variant="contained" color="primary" key={buttonText}>
       {buttonText}
     </Button>
   )),

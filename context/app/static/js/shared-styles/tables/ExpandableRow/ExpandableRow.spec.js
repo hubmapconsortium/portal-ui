@@ -10,7 +10,7 @@ test('should handle user expanding row', async () => {
   render(
     <ExpandableRow numCells={4} expandedContent={<div>123</div>}>
       {cellsText.map((cellText) => (
-        <ExpandableRowCell>{cellText}</ExpandableRowCell>
+        <ExpandableRowCell key={cellText}>{cellText}</ExpandableRowCell>
       ))}
     </ExpandableRow>,
   );
