@@ -22,12 +22,10 @@ const useGeneApiURLs = () => {
   return useMemo(
     () => ({
       detailURL(geneId: string) {
-        // return `${ubkgEndpoint}/genes/${geneId.toUpperCase()}`;
-        return `${ubkgEndpoint}/gene/${geneId.toUpperCase()}`;
+        return `${ubkgEndpoint}/genes/${geneId.toUpperCase()}`;
       },
       get list() {
-        // return `${ubkgEndpoint}/genes-info`;
-        return `${ubkgEndpoint}/genes`;
+        return `${ubkgEndpoint}/genes-info`;
       },
       organDetails(organName: string) {
         return `/organ/${organName}.json`;

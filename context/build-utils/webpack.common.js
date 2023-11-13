@@ -23,12 +23,6 @@ const config = {
   },
   resolve: {
     extensions: ['.js', '.jsx', '.ts', '.tsx', '.css', '.woff', '.woff2', '.svg', '.yaml', '.yml', '.json'],
-    fallback: {
-      // Now necessary because webpack 5 doesn't include these polyfills by default
-      timers: require.resolve('timers-browserify'),
-      stream: require.resolve('stream-browserify'),
-      buffer: require.resolve('buffer'),
-    },
     alias,
   },
   module: {
