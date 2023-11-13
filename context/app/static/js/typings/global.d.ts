@@ -1,3 +1,15 @@
+// Variables provided via webpack plugins
+declare const CDN_URL: string;
+declare const PACKAGE_VERSION: string;
+// Variables provided via Flask
+declare const flaskData: object;
+declare const groupsToken: string;
+declare const isAuthenticated: boolean;
+declare const userEmail: string;
+declare const workspacesToken: string;
+declare const userGroups: string[];
+declare const sentryEnv: string;
+
 declare module '*.yaml' {
   const data: unknown;
   export default data;

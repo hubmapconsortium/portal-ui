@@ -1,0 +1,1 @@
+- Converted homepage images to webp to decrease load times.

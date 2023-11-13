@@ -17,11 +17,13 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
+
 import TemplateGrid from '../TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
 import { useLaunchWorkspaceStore } from '../LaunchWorkspaceDialog/store';
+import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 
 function ContactPrompt() {
   return (
@@ -83,6 +85,7 @@ interface NewWorkspaceDialogProps {
   errorMessages?: string[];
   dialogIsOpen: boolean;
   handleClose: () => void;
+  removeDatasets?: (datasetUUIDs: string[]) => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
 }
 
@@ -97,6 +100,7 @@ function NewWorkspaceDialog({
   control,
   errors,
   onSubmit,
+  removeDatasets,
   children,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
@@ -137,8 +141,13 @@ function NewWorkspaceDialog({
       </Box>
       <DialogContent dividers>
         <Step title={text.datasets.title} index={0}>
-          {children}
-          <Description blocks={text.datasets.description} />
+          <Stack spacing={1}>
+            {children}
+            <Description blocks={text.datasets.description} />
+            {datasetUUIDs.size > 0 && (
+              <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} removeDatasets={removeDatasets} />
+            )}
+          </Stack>
         </Step>
         <Step title={text.configure.title} isRequired index={1}>
           <Box

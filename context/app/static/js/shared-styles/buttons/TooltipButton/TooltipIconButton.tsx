@@ -2,7 +2,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import React from 'react';
 
-interface TooltipButtonProps extends IconButtonProps {
+export interface TooltipButtonProps extends IconButtonProps {
   tooltip: React.ReactNode;
 }
 

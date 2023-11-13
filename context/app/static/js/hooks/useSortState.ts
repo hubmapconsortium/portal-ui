@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from 'react';
 
-interface SortState {
+export interface SortState {
   columnId?: string;
   direction?: 'asc' | 'desc';
 }
@@ -41,6 +41,8 @@ function sortReducer(state: SortState, action: SortAction): SortState {
   }
 }
 
+export type ColumnNameMapping = Record<string, string>;
+
 /**
  * Hook to manage sort state for a table.
  *
@@ -56,7 +58,7 @@ function sortReducer(state: SortState, action: SortAction): SortState {
  * @returns {object} An object containing the sort state, a sort array for use with the ES API, and functions to set and reset the sort state.
  */
 export const useSortState = (
-  columnNameMapping: Record<string, string>,
+  columnNameMapping: ColumnNameMapping,
   initialSortState: SortState = defaultInitialSortState,
 ) => {
   const [sortState, dispatch] = useReducer(sortReducer, initialSortState);

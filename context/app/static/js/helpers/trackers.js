@@ -87,7 +87,8 @@ function trackEvent(event) {
   // Convert all event values to strings to avoid errors in faro.
   // https://github.com/grafana/faro-web-sdk/issues/269
   const faroSafeEvent = makeFaroSafe(event);
-  faro.api.pushEvent(event.category, faroSafeEvent);
+  const category = faroSafeEvent.category.replace(/ /g, '_');
+  faro.api.pushEvent(category, faroSafeEvent);
 }
 
 function trackMeasurement(type, values, context = undefined) {
