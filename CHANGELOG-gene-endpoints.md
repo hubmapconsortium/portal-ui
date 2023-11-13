@@ -1,0 +1,1 @@
+- Updated UBKG endpoints to point to `genes` and `genes-info`.
