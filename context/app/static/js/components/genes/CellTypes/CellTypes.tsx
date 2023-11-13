@@ -7,15 +7,13 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
-import { TableContainer } from '@mui/material';
-import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { StyledTableContainer } from 'js/shared-styles/tables';
+import { LineClamp } from 'js/shared-styles/text';
 import { cellTypes } from '../constants';
 import { useGeneDetails } from '../hooks';
 
@@ -56,7 +54,9 @@ export default function CellTypes() {
               data?.cell_types.map((cellType) => (
                 <TableRow key={cellType.id}>
                   <TableCell>{cellType.name}</TableCell>
-                  <TableCell>{cellType.definition}</TableCell>
+                  <TableCell>
+                    <LineClamp lines={2}>{cellType.definition}</LineClamp>
+                  </TableCell>
                   <TableCell>{cellType.organs.map((o) => o.name).join(',\u00A0') || <>&mdash;</>}</TableCell>
                   {/* <TableCell>
                     <Button startIcon={<entityIconMap.Dataset />} variant="outlined" sx={{ borderRadius: '4px' }}>
