@@ -1,1 +1,0 @@
-- Prevent unnecessary calls to workspaces API by users without permissions.

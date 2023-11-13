@@ -1,1 +1,0 @@
-- Fix alignment of bar chart legends.

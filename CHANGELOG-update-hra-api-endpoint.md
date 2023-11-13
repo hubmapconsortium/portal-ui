@@ -1,1 +1,0 @@
-- Updated the HRA API endpoint to point to the HuBMAP-only version
