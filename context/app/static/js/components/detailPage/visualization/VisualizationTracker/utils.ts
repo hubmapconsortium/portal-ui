@@ -37,10 +37,10 @@ export function getNearestIdentifier(target: HTMLElement | null): string | null 
     // Remove excessive whitespace from the title
     return target.title.replace(/\s+/g, ' ');
   }
-  for (const component of visualizationComponents) {
-    if ('innerText' in target && target.innerText.includes(component)) return component;
-  }
-  return getNearestIdentifier(target.parentElement);
+  return (
+    visualizationComponents.find((component) => 'innerText' in target && target.innerText.includes(component)) ??
+    getNearestIdentifier(target.parentElement)
+  );
 }
 
 /**
