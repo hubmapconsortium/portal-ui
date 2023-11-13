@@ -50,6 +50,11 @@ export function useWorkspaceHeaders(): HeadersInit {
   return getWorkspaceHeaders(workspacesToken);
 }
 
+export function useHasWorkspaceAccess() {
+  const { workspacesToken } = useAppContext();
+  return Boolean(workspacesToken);
+}
+
 interface APIAction {
   url: string;
   headers?: HeadersInit;
@@ -110,9 +115,10 @@ async function fetchJobs(url: string, headers: APIAction['headers']) {
 export function useJobs() {
   const apiURLs = useWorkspacesApiURLs();
   const headers = useWorkspaceHeaders();
-  const { data, isLoading, ...rest } = useSWR([apiURLs.jobs, headers], ([url, head]) => fetchJobs(url, head), {
-    revalidateOnFocus: true,
-  });
+  const hasAccess = useHasWorkspaceAccess();
+  const { data, isLoading, ...rest } = useSWR(hasAccess ? [apiURLs.jobs, headers] : null, ([url, head]) =>
+    fetchJobs(url, head),
+  );
   const jobs = data?.data?.jobs ?? [];
   return { jobs, isLoading, ...rest };
 }
@@ -134,12 +140,11 @@ async function fetchWorkspaces(url: string, headers: APIAction['headers']) {
 export function useWorkspaces() {
   const apiURLs = useWorkspacesApiURLs();
   const headers = useWorkspaceHeaders();
+  const hasAccess = useHasWorkspaceAccess();
   const { data, isLoading, ...rest } = useSWR(
-    [apiURLs.workspaces, headers],
+    hasAccess ? [apiURLs.workspaces, headers] : null,
     ([url, head]) => fetchWorkspaces(url, head),
-    {
-      revalidateOnFocus: true,
-    },
+    { revalidateOnFocus: hasAccess },
   );
   const workspaces = data?.data?.workspaces ?? [];
   return { workspaces, isLoading, ...rest };
@@ -216,7 +221,8 @@ async function fetchJobTypes(jobTypesEndpoint: string): Promise<Record<string, {
 
 export function useJobTypes() {
   const api = useWorkspacesApiURLs();
-  return useSWR(api.jobTypes, fetchJobTypes);
+  const hasAccess = useHasWorkspaceAccess();
+  return useSWR(hasAccess ? api.jobTypes : null, fetchJobTypes);
 }
 
 interface WorkspaceActionArgs extends APIAction {

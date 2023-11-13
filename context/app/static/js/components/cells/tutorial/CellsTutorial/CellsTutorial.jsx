@@ -1,6 +1,6 @@
-import React, { useContext } from 'react';
-import { ThemeContext } from 'styled-components';
+import React from 'react';
 import Joyride, { ACTIONS, LIFECYCLE } from 'react-joyride';
+import { useTheme } from '@mui/material/styles';
 
 import TutorialTooltip from 'js/shared-styles/tutorials/TutorialTooltip';
 import Prompt from 'js/shared-styles/tutorials/Prompt';
@@ -19,7 +19,7 @@ const cellsStoreSelector = (state) => ({
 });
 
 function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
-  const themeContext = useContext(ThemeContext);
+  const themeContext = useTheme();
   const {
     setQueryType,
     setSelectedQueryType,

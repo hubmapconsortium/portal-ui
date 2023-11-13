@@ -2,61 +2,41 @@ import { useMemo } from 'react';
 import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr';
+import { useOrgansDatasetCounts } from 'js/pages/Organs/hooks';
 import { useGenePageContext } from './GenePageContext';
 import { useAppContext } from '../Contexts';
+
+import { GeneDetail, GeneListResponse } from './types';
+import { OrganFile, OrganFileWithDescendants } from '../organ/types';
+
+// TODO: Convert js/pages/Organs/hooks to TS
+const useTypedOrgansDatasetCounts = (organs: Record<string, OrganFile>) => {
+  return useOrgansDatasetCounts(organs) as {
+    organsWithDatasetCounts: Record<string, OrganFileWithDescendants>;
+    isLoading: boolean;
+  };
+};
 
 const useGeneApiURLs = () => {
   const { ubkgEndpoint } = useAppContext();
   return useMemo(
     () => ({
       detailURL(geneId: string) {
-        return `${ubkgEndpoint}/gene/${geneId}`;
+        return `${ubkgEndpoint}/genes/${geneId.toUpperCase()}`;
       },
       get list() {
-        return `${ubkgEndpoint}/genes`;
+        return `${ubkgEndpoint}/genes-info`;
+      },
+      organDetails(organName: string) {
+        return `/organ/${organName}.json`;
+      },
+      get organList() {
+        return `/organs.json`;
       },
     }),
     [ubkgEndpoint],
   );
 };
-
-interface BasicGeneInfo {
-  approved_name: string;
-  approved_symbol: string;
-  summary: string;
-}
-
-interface GeneListResponse {
-  description: string;
-  page: number;
-  total_pages: number;
-  starts_with: string;
-  gene_count: number;
-  genes: BasicGeneInfo[];
-}
-
-interface GeneDetail extends BasicGeneInfo {
-  alias_names: string[];
-  alias_symbols: string[];
-  cell_types: {
-    definition: string;
-    id: string;
-    name: string;
-    organs: {
-      id: string;
-      source: string;
-      name: string;
-    }[];
-    sources: string[];
-  };
-  previous_symbols: string[];
-  previous_names: string[];
-  references: {
-    id: string;
-    source: string;
-    url: string;
-  }[];
-}
 
 type GeneDetailResponse = [GeneDetail];
 
@@ -68,8 +48,53 @@ const useGeneDetails = () => {
   return { data: data?.[0], ...swr };
 };
 
-const genesperpage = 10;
+const useGeneOrgans = () => {
+  const { data: geneData } = useGeneDetails();
+  const organsToFetch = useMemo(() => {
+    return (
+      geneData?.cell_types
+        .flatMap((cellType) => cellType.organs)
+        .filter((o) => o.id)
+        .map(({ name }) => name) ?? []
+    );
+  }, [geneData]);
+
+  const { data, ...organs } = useSWR<Record<string, OrganFile>, unknown, [url: string, organList: string[]]>(
+    [useGeneApiURLs().organList, organsToFetch],
+    ([url, organList]) =>
+      fetcher({
+        url,
+        requestInit: {
+          method: 'POST',
+          headers: {
+            'Content-type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({ organs: organList }),
+        },
+      }),
+  );
+
+  const organsWithAzimuth = useMemo(() => {
+    if (!data) return {};
+    return Object.fromEntries(
+      Object.entries(data).filter(([_organName, organ]) => {
+        return organ?.azimuth;
+      }),
+    );
+  }, [data]);
+
+  const { organsWithDatasetCounts, isLoading: isLoadingDatasetCounts } = useTypedOrgansDatasetCounts(organsWithAzimuth);
+
+  return {
+    ...organs,
+    data: organsWithDatasetCounts,
+    isLoadingDatasetCounts,
+  };
+};
+
 const starts_with = undefined;
+const genesperpage = 10;
 
 const useGeneList = (page: number) => {
   const query = useMemo(
@@ -86,4 +111,4 @@ const useGeneList = (page: number) => {
 };
 
 // Re-export `useGenePageContext` for convenience
-export { useGeneDetails, useGeneList, useGenePageContext };
+export { useGeneDetails, useGeneList, useGenePageContext, useGeneOrgans };

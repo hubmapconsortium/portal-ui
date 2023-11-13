@@ -51,6 +51,10 @@ declare module '@mui/material/styles' {
     halfShadow: string;
     hoverShadow: string;
   }
+
+  export interface TypeAction {
+    activeTab: string;
+  }
   export interface Palette {
     black: BlackVariants;
     white: WhiteVariants;
@@ -58,6 +62,7 @@ declare module '@mui/material/styles' {
     caption: CaptionColors;
     secondaryContainer: ContainerColors;
     primaryContainer: ContainerColors;
+    action: TypeAction;
   }
   export interface PaletteOptions {
     black?: BlackVariants;
@@ -166,7 +171,7 @@ const theme = createTheme({
       global: '#FFB3B3',
     },
     action: {
-      active: '#9CB965',
+      activeTab: '#9CB965',
       disabled: 'rgba(0,0,0, 0.38)',
     },
     background: {

@@ -5,6 +5,7 @@ import { fireEvent } from '@testing-library/react';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 
 import AccordionSteps from './AccordionSteps';
+import { useAccordionStep } from '../StepAccordion';
 
 function AccordionStepsWithProvider({ steps, ...rest }) {
   return (
@@ -25,8 +26,9 @@ function getAccordionStepText(stepIndex) {
 const step0 = getAccordionStepText(0);
 const step1 = getAccordionStepText(1);
 
-function ExampleContent({ completeStep, stepIndex }) {
+function ExampleContent({ stepIndex }) {
   const { contentButton, completed } = getAccordionStepText(stepIndex);
+  const { completeStep } = useAccordionStep();
   return <Button onClick={() => completeStep(completed)}>{contentButton}</Button>;
 }
 
@@ -111,7 +113,8 @@ test('future steps completed text are reset upon completion', async () => {
   expect(screen.queryByText(step1.completed)).not.toBeInTheDocument();
 });
 
-function ContentWithUseEffect({ completeStep, spyFunction }) {
+function ContentWithUseEffect({ spyFunction }) {
+  const { completeStep } = useAccordionStep();
   useEffect(() => {
     completeStep('Completed');
     spyFunction();

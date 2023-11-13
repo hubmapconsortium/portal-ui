@@ -5,6 +5,7 @@ import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 import { useAutocompleteQuery } from './hooks';
 import { AutocompleteQueryResponse } from './types';
+import { createInitialValue } from './utils';
 
 function buildHelperText(entity: string): string {
   return `Multiple ${entity} are allowed and only 'AND' queries are supported.`;
@@ -18,22 +19,23 @@ const labelAndHelperTextProps: Record<string, Pick<TextFieldProps, 'label' | 'he
 interface AutocompleteEntityProps {
   targetEntity: string;
   setter: (value: string[]) => void;
+  defaultValue?: string;
 }
 
-function AutocompleteEntity({ targetEntity, setter }: AutocompleteEntityProps) {
+function AutocompleteEntity({ targetEntity, setter, defaultValue }: AutocompleteEntityProps) {
   const [substring, setSubstring] = useState('');
-  const [selectedOptions, setSelectedOptions] = useState<AutocompleteQueryResponse>([]);
+  const [selectedOptions, setSelectedOptions] = useState<AutocompleteQueryResponse>(createInitialValue(defaultValue));
 
   useEffect(() => {
     // Unwrap selected options and pass to setter to keep values in sync
     setter(selectedOptions.map((match) => match.full));
   }, [selectedOptions, setter]);
 
+  // If default value or target entity changes, reset selected options and substring to default value
   useEffect(() => {
-    // Reset selected options and substring when target entity changes
     setSubstring('');
-    setSelectedOptions([]);
-  }, [targetEntity]);
+    setSelectedOptions(createInitialValue(defaultValue));
+  }, [defaultValue, targetEntity]);
 
   const { data, isLoading } = useAutocompleteQuery({ targetEntity, substring });
 
@@ -62,10 +64,25 @@ function AutocompleteEntity({ targetEntity, setter }: AutocompleteEntityProps) {
       )}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
-          return <Chip label={option.full} {...getTagProps({ index })} key={option.full} />;
+          const tagProps = getTagProps({ index });
+          // Removing onDelete removes the delete icon
+          const optionIsDefault = defaultValue && option.full === defaultValue;
+          return (
+            <Chip
+              label={option.full}
+              {...tagProps}
+              onDelete={optionIsDefault ? undefined : tagProps.onDelete}
+              key={option.full}
+            />
+          );
         })
       }
       onChange={(_, value) => {
+        if (defaultValue && !value.map((match) => match.full).includes(defaultValue)) {
+          // If default value is set and not included in selected options, add it
+          setSelectedOptions([...createInitialValue(defaultValue), ...value]);
+          return;
+        }
         setSelectedOptions(value);
       }}
       renderInput={({ InputLabelProps, ...params }) => (

@@ -76,10 +76,15 @@ const sampleConfig = {
   },
 };
 
+const alphabeticSort = {
+  orderKey: '_term',
+  orderDirection: 'asc',
+}
+
 const datasetConfig = {
   filters: {
     'Dataset Metadata': [
-      listFilter('mapped_data_types', 'Data Type'),
+      listFilter('mapped_data_types', 'Data Type', alphabeticSort),
       listFilter('origin_samples.mapped_organ', 'Organ'),
       listFilter('source_samples.sample_category', 'Sample Category'),
       hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),

@@ -21,7 +21,10 @@ export function hierarchicalFilter(ids, name) {
   return def;
 }
 
-export function listFilter(id, name, translations) {
+// `rest` is an object with keys corresponding to additional props of the
+// Searchkit RefinementList
+// https://github.com/searchkit/searchkit/blob/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs/docs/components/navigation/refinement-list.md
+export function listFilter(id, name, rest) {
   const def = {
     type: 'AccordionListFilter',
     props: {
@@ -30,11 +33,9 @@ export function listFilter(id, name, translations) {
       field: `${id}.keyword`,
       operator: 'OR',
       size: 5,
+      ...rest,
     },
   };
-  if (translations) {
-    def.props.translations = translations;
-  }
   return def;
 }
 

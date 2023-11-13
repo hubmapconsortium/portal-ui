@@ -59,11 +59,13 @@ function useTemplateNotebooks() {
 
       const createdTemplates = await multiFetcher<CreateTemplatesResponse>({
         urls: templateUrls,
-        requestInit: {
-          method: 'POST',
-          body: JSON.stringify({ uuids }),
-          headers: { Authorization: `Bearer ${groupsToken}` },
-        },
+        requestInits: [
+          {
+            method: 'POST',
+            body: JSON.stringify({ uuids }),
+            headers: { Authorization: `Bearer ${groupsToken}` },
+          },
+        ],
       });
 
       if (createdTemplates.some((t) => !t.success)) {
