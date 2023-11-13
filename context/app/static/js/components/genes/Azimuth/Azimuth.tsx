@@ -11,13 +11,13 @@ import GeneOrgans from './Organs';
 import SelectedOrganContextProvider from './SelectedOrganContext';
 import { AzimuthVisualization } from './Visualization';
 
+import { azimuth } from '../constants';
+
 export default function GenesAzimuth() {
   return (
     <SelectedOrganContextProvider>
-      <DetailPageSection id="azimuth">
-        <SectionHeader iconTooltipText="Analysis provided by Azimuth that uses an annotated reference dataset to automate the processing, analysis and interpretation of a single-cell RNA-seq experiment.">
-          Azimuth Organ Reference Dataset
-        </SectionHeader>
+      <DetailPageSection id={azimuth.id}>
+        <SectionHeader iconTooltipText={azimuth.tooltip}>{azimuth.title}</SectionHeader>
         <SectionPaper>
           <Stack direction="row" gap={1}>
             <StyledInfoIcon color="primary" />
