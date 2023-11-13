@@ -19,8 +19,8 @@ function Switch({ organs_count }) {
       return (
         <ccf-organ-info
           organ-iri={iri}
-          use-remote-api="false"
-          data-sources='["https://ccf-api.hubmapconsortium.org/v1/hubmap/rui_locations.jsonld"]'
+          use-remote-api="true"
+          remote-api-endpoint="https://apps.humanatlas.io/hubmap-hra-api/v1"
         />
       );
     default:
