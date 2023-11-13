@@ -1,0 +1,1 @@
+- Added basic cell types table reference to gene page.
