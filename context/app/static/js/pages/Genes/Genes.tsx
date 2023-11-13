@@ -16,7 +16,7 @@ const { summary, biomarkerQuery, azimuth, cellTypes } = pageSectionIDs;
 const shouldDisplaySection = {
   [summary]: true,
   [biomarkerQuery]: true,
-  [azimuth]: false, // TODO: Toggle back on
+  [azimuth]: true,
   [cellTypes]: true,
 };
 
@@ -34,10 +34,10 @@ function GeneDetails({ geneSymbol }: Props) {
       <DetailLayout sectionOrder={sectionOrder}>
         <SummaryTitle iconTooltipText="Basic unit of heredity made up of sequences of DNA">Gene</SummaryTitle>
         <GenePageTitle />
-        <Summary />
-        <BiomarkerQuery />
-        {shouldDisplaySection.azimuth && <Azimuth />}
-        <CellTypes />
+        {shouldDisplaySection[summary] && <Summary />}
+        {shouldDisplaySection[biomarkerQuery] && <BiomarkerQuery />}
+        {shouldDisplaySection[azimuth] && <Azimuth />}
+        {shouldDisplaySection[cellTypes] && <CellTypes />}
       </DetailLayout>
     </GenePageProvider>
   );
