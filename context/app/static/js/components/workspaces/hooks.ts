@@ -58,7 +58,9 @@ function useWorkspacesList() {
 
 function useRunningWorkspace() {
   const { workspacesList } = useWorkspacesList();
-  return workspacesList.find((workspace) => workspace.jobs.some((job) => job.status === 'running'));
+  return workspacesList.find((workspace) =>
+    workspace.jobs.some((job) => job.status === 'running' || job.status === 'pending'),
+  );
 }
 
 function useHasRunningWorkspace() {
