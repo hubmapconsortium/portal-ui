@@ -7,6 +7,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import React, { useMemo } from 'react';
 import TutorialProvider from 'js/shared-styles/tutorials/TutorialProvider';
 import { useGeneDetails, useGenePageContext } from '../hooks';
+import { biomarkerQuery } from '../constants';
 
 export default function BiomarkerQuery() {
   const { geneSymbol } = useGenePageContext();
@@ -35,10 +36,8 @@ export default function BiomarkerQuery() {
   }, [geneSymbol, data?.approved_symbol]);
 
   return (
-    <DetailPageSection id="biomarker-query">
-      <SectionHeader iconTooltipText="Query HuBMAP datasets for biomarker(s) data">
-        Datasets: Biomarker Query
-      </SectionHeader>
+    <DetailPageSection id={biomarkerQuery.id}>
+      <SectionHeader iconTooltipText={biomarkerQuery.tooltip}>{biomarkerQuery.title}</SectionHeader>
       <AccordionStepsProvider stepsLength={steps.length}>
         <AccordionSteps id="biomarker-query-steps" steps={steps} />
       </AccordionStepsProvider>

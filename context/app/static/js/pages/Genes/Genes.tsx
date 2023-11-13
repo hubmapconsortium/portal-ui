@@ -8,25 +8,27 @@ import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import BiomarkerQuery from 'js/components/genes/BiomarkerQuery';
 import Azimuth from 'js/components/genes/Azimuth';
 
-const summaryId = 'summary';
-const biomarkerQueryId = 'biomarker-query';
-const azimuthId = 'azimuth-organ-reference-dataset';
+import { pageSectionIDs } from 'js/components/genes/constants';
+import CellTypes from 'js/components/genes/CellTypes/CellTypes';
+
+const { summary, biomarkerQuery, azimuth, cellTypes } = pageSectionIDs;
+
+const shouldDisplaySection = {
+  [summary]: true,
+  [biomarkerQuery]: true,
+  [azimuth]: false, // TODO: Toggle back on
+  [cellTypes]: true,
+};
+
+const sectionOrder = Object.entries(shouldDisplaySection)
+  .filter(([, shouldDisplay]) => shouldDisplay)
+  .map(([sectionName]) => sectionName);
 
 interface Props {
   geneSymbol: string;
 }
 
 function GeneDetails({ geneSymbol }: Props) {
-  const shouldDisplaySection = {
-    [summaryId]: true,
-    [biomarkerQueryId]: true,
-    [azimuthId]: true,
-  };
-
-  const sectionOrder = Object.entries(shouldDisplaySection)
-    .filter(([, shouldDisplay]) => shouldDisplay)
-    .map(([sectionName]) => sectionName);
-
   return (
     <GenePageProvider geneSymbol={geneSymbol}>
       <DetailLayout sectionOrder={sectionOrder}>
@@ -34,7 +36,8 @@ function GeneDetails({ geneSymbol }: Props) {
         <GenePageTitle />
         <Summary />
         <BiomarkerQuery />
-        <Azimuth />
+        {shouldDisplaySection.azimuth && <Azimuth />}
+        <CellTypes />
       </DetailLayout>
     </GenePageProvider>
   );
