@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { getWorkspaceLink, mergeJobsIntoWorkspaces } from './utils';
+import { getWorkspaceStartLink, mergeJobsIntoWorkspaces } from './utils';
 import {
   useDeleteWorkspace,
   useStopWorkspace,
@@ -80,7 +80,7 @@ function useLaunchWorkspace(workspace?: Workspace) {
     async (ws: Workspace, templatePath?: string) => {
       await startWorkspace(ws.id);
       await mutate();
-      window.open(getWorkspaceLink(ws, templatePath), '_blank');
+      window.open(getWorkspaceStartLink(ws, templatePath), '_blank');
     },
     [mutate, startWorkspace],
   );
@@ -88,7 +88,7 @@ function useLaunchWorkspace(workspace?: Workspace) {
   const launchWorkspace = useCallback(
     async (ws: Workspace, templatePath?: string) => {
       if (runningWorkspace && ws.id === runningWorkspace.id) {
-        window.open(getWorkspaceLink(ws, templatePath), '_blank');
+        window.open(getWorkspaceStartLink(ws, templatePath), '_blank');
         return;
       }
       if (runningWorkspace) {

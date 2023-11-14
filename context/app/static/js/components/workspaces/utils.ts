@@ -197,8 +197,12 @@ async function locationIfJobRunning({
   return null;
 }
 
-function getWorkspaceLink(workspace: Workspace, templatePath?: string) {
-  return `/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(templatePath ?? workspace.path)}`;
+function getWorkspaceStartLink(workspace: Workspace, templatePath?: string) {
+  return `/workspaces/start/${workspace.id}?notebook_path=${encodeURIComponent(templatePath ?? workspace.path)}`;
+}
+
+function getWorkspaceLink(workspace: Workspace) {
+  return `/workspaces/${workspace.id}`;
 }
 
 function isRunningWorkspace(workspace: MergedWorkspace) {
@@ -213,6 +217,7 @@ export {
   mergeJobsIntoWorkspaces,
   condenseJobs,
   locationIfJobRunning,
+  getWorkspaceStartLink,
   getWorkspaceLink,
   getWorkspaceHeaders,
   getWorkspaceJob,
