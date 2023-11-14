@@ -178,3 +178,13 @@ export function getOriginSamplesOrgan(entity: { origin_samples: { mapped_organ: 
   // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
   return entity?.origin_samples?.[0]?.mapped_organ;
 }
+
+// Compress and decompress UUID lists to/from strings.
+// This decreases length by 40% and allows us to pass UUID lists as query params.
+export function compressUUIDList(uuidList: string[]): string {
+  return uuidList.map(btoa).join(',');
+}
+
+export function decompressUUIDList(uuidListStr: string): string[] {
+  return uuidListStr.split(',').map(atob);
+}

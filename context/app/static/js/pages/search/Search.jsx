@@ -5,7 +5,7 @@ import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial
 import { useAppContext } from 'js/components/Contexts';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import LookupEntity from 'js/helpers/LookupEntity';
-import { combineQueryClauses, getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
+import { combineQueryClauses, decompressUUIDList, getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
 import { listFilter } from 'js/components/searchPage/utils';
@@ -56,7 +56,7 @@ function Search({ title }) {
   const resultFields = resultFieldsByType[type];
 
   let defaultQuery = getDefaultQuery();
-  const uuids = searchParams.get('uuid').split(',');
+  const uuids = decompressUUIDList(searchParams.get('uuid'));
   if (uuids.length > 0) {
     defaultQuery = combineQueryClauses([
       defaultQuery,
