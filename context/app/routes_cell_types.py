@@ -25,5 +25,5 @@ def get_datasets_with_cell_type(cl_id):
             where="cell_type", has=[cl_id]).get_list()
         datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
         return json.dumps(datasets)
-    except:
+    except Exception as _:
         return json.dumps([])
