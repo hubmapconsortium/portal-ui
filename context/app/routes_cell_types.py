@@ -1,4 +1,4 @@
-from flask import json
+from flask import json, current_app
 from hubmap_api_py_client import Client
 
 from .utils import make_blueprint
@@ -25,5 +25,6 @@ def get_datasets_with_cell_type(cl_id):
             where="cell_type", has=[cl_id]).get_list()
         datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
         return json.dumps(datasets)
-    except Exception as _:
+    except Exception as err:
+        current_app.logger.info(f'Datasets not found for cell type {cl_id}. {err}')
         return json.dumps([])
