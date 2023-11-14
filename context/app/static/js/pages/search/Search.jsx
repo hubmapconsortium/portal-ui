@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { useAppContext } from 'js/components/Contexts';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import LookupEntity from 'js/helpers/LookupEntity';
 import { combineQueryClauses, decompressUUIDList, getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
@@ -13,11 +12,6 @@ import SearchNote from 'js/components/searchPage/SearchNote';
 import Results from 'js/components/searchPage/Results';
 import { SearchHeader, StyledSvgIcon, SearchEntityHeader } from './style';
 
-const paramNotes = [
-  { urlSearchParam: 'ancestor_ids[0]', label: 'Derived from' },
-  { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
-  { urlSearchParam: 'cell_type', label: 'Contains' },
-];
 function Search({ title }) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
@@ -50,13 +44,13 @@ function Search({ title }) {
     );
   }
 
-  const notesToDisplay = paramNotes.filter((note) => searchParams.has(note.urlSearchParam));
 
   const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
 
   let defaultQuery = getDefaultQuery();
-  const uuids = decompressUUIDList(searchParams.get('uuid'));
+  const uuidParam = searchParams.get('uuid');
+  const uuids = uuidParam ? decompressUUIDList(uuidParam) : [];
   if (uuids.length > 0) {
     defaultQuery = combineQueryClauses([
       defaultQuery,
@@ -101,11 +95,7 @@ function Search({ title }) {
         </SearchEntityHeader>
       </SearchHeader>
       {type === 'dataset' && <SearchDatasetTutorial />}
-      {notesToDisplay.map((note) => (
-        <LookupEntity uuid={searchParams.get(note.urlSearchParam)} key={note.urlSearchParam}>
-          <SearchNote label={note.label} />
-        </LookupEntity>
-      ))}
+      <SearchNote params={searchParams} />
       <SearchWrapper
         {...searchProps}
         resultsComponent={Results}
