@@ -86,6 +86,7 @@ function Search({ title }) {
           uuid={searchParams.get(note.urlSearchParam)}
           elasticsearchEndpoint={elasticsearchEndpoint}
           groupsToken={groupsToken}
+          key={note.label}
         >
           <SearchNote label={note.label} />
         </LookupEntity>

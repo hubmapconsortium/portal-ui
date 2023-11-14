@@ -5,7 +5,7 @@ import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial
 import { useAppContext } from 'js/components/Contexts';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import LookupEntity from 'js/helpers/LookupEntity';
-import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
+import { combineQueryClauses, getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
 import { listFilter } from 'js/components/searchPage/utils';
@@ -13,6 +13,11 @@ import SearchNote from 'js/components/searchPage/SearchNote';
 import Results from 'js/components/searchPage/Results';
 import { SearchHeader, StyledSvgIcon, SearchEntityHeader } from './style';
 
+const paramNotes = [
+  { urlSearchParam: 'ancestor_ids[0]', label: 'Derived from' },
+  { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
+  { urlSearchParam: 'cell_type', label: 'Contains' },
+];
 function Search({ title }) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
@@ -45,13 +50,24 @@ function Search({ title }) {
     );
   }
 
-  const notesToDisplay = [
-    { urlSearchParam: 'ancestor_ids[0]', label: 'Derived from' },
-    { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
-  ].filter((note) => searchParams.has(note.urlSearchParam));
+  const notesToDisplay = paramNotes.filter((note) => searchParams.has(note.urlSearchParam));
 
   const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
+
+  let defaultQuery = getDefaultQuery();
+  const uuids = searchParams.get('uuid').split(',');
+  if (uuids.length > 0) {
+    defaultQuery = combineQueryClauses([
+      defaultQuery,
+      {
+        ids: {
+          values: uuids,
+        },
+      },
+    ]);
+  }
+
   const searchProps = {
     // The default behavior is to add a "_search" path.
     // We don't want that.
@@ -73,7 +89,7 @@ function Search({ title }) {
     queryFields: ['all_text', ...fieldsToHighlight],
     isLoggedIn: Boolean(groupsToken),
     apiUrl: elasticsearchEndpoint,
-    defaultQuery: getDefaultQuery(),
+    defaultQuery,
   };
 
   return (
