@@ -40,7 +40,7 @@ function Search({ title }) {
       `Unexpected URL param "${typeParam}=${type}"; Should be one of {${Object.keys(resultFieldsByType).join(', ')}}`,
     );
   }
- 
+
   const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
   const searchProps = {

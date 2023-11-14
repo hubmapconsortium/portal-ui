@@ -4,7 +4,7 @@ import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
 
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { compressUUIDList } from 'js/helpers/functions';
+import { compressStringList } from 'js/helpers/compress';
 import { useCellTypeDatasets } from './hooks';
 
 interface Props {
@@ -22,7 +22,7 @@ export default function ViewDatasets({ id, name }: Props) {
   }
   const url = new URL('/search', window.location.origin);
   url.searchParams.append('entity_type[0]', 'Dataset');
-  url.searchParams.append('uuid', compressUUIDList(data));
+  url.searchParams.append('uuid', compressStringList(data));
   url.searchParams.append('cell_type', name);
 
   return (
