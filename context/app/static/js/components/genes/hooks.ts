@@ -3,6 +3,7 @@ import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr';
 import { useOrgansDatasetCounts } from 'js/pages/Organs/hooks';
+import { SWRError } from 'js/helpers/swr/errors';
 import { useGenePageContext } from './GenePageContext';
 import { useAppContext } from '../Contexts';
 
@@ -42,9 +43,20 @@ type GeneDetailResponse = [GeneDetail];
 
 const useGeneDetails = () => {
   const { geneSymbol } = useGenePageContext();
-  const { data, ...swr } = useSWR<GeneDetailResponse>(useGeneApiURLs().detailURL(geneSymbol), (url: string) =>
-    fetcher({ url }),
+  const { data, error, ...swr } = useSWR<GeneDetailResponse, SWRError>(
+    useGeneApiURLs().detailURL(geneSymbol),
+    (url: string) =>
+      fetcher({
+        url,
+        errorMessages: {
+          404: `The gene ${geneSymbol} was not found.`,
+        },
+      }),
   );
+  // Throw an error if the gene is not found
+  if (error) {
+    throw error;
+  }
   return { data: data?.[0], ...swr };
 };
 
@@ -92,7 +104,6 @@ const useGeneOrgans = () => {
     isLoadingDatasetCounts,
   };
 };
-
 const starts_with = undefined;
 const genesperpage = 10;
 
