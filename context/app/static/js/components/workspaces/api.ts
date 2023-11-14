@@ -23,14 +23,14 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   get jobs(): string {
     return `${workspacesEndpoint}/jobs`;
   },
-  delete(workspaceId: number): string {
-    return `${workspacesEndpoint}/workspaces/${workspaceId}`;
-  },
   createWorkspaceFromNotebookPath(path: string): string {
     return `/notebooks/${path}`;
   },
   get createWorkspaceFromTemplates(): string {
     return `${workspacesEndpoint}/workspaces/`;
+  },
+  workspace(workspaceId: number): string {
+    return `${workspacesEndpoint}/workspaces/${workspaceId}`;
   },
   startWorkspace(workspaceId: number): string {
     return `${workspacesEndpoint}/workspaces/${workspaceId}/start`;
@@ -137,17 +137,28 @@ async function fetchWorkspaces(url: string, headers: APIAction['headers']) {
   return result;
 }
 
-export function useWorkspaces() {
-  const apiURLs = useWorkspacesApiURLs();
+function useFetchWorkspaces(workspaceURL: string) {
   const headers = useWorkspaceHeaders();
   const hasAccess = useHasWorkspaceAccess();
   const { data, isLoading, ...rest } = useSWR(
-    hasAccess ? [apiURLs.workspaces, headers] : null,
+    hasAccess ? [workspaceURL, headers] : null,
     ([url, head]) => fetchWorkspaces(url, head),
     { revalidateOnFocus: hasAccess },
   );
   const workspaces = data?.data?.workspaces ?? [];
   return { workspaces, isLoading, ...rest };
+}
+
+export function useWorkspaces() {
+  const apiURLs = useWorkspacesApiURLs();
+  return useFetchWorkspaces(apiURLs.workspaces);
+}
+
+export function useWorkspace(workspaceId: number) {
+  const apiURLs = useWorkspacesApiURLs();
+  const { workspaces, ...rest } = useFetchWorkspaces(apiURLs.workspace(workspaceId));
+  const workspace = workspaces[0] ?? {};
+  return { workspace, ...rest };
 }
 
 export function useStopWorkspace() {
@@ -198,7 +209,7 @@ export function useDeleteWorkspace() {
     async (workspaceId: number) => {
       await trigger({
         workspaceId,
-        url: api.delete(workspaceId),
+        url: api.workspace(workspaceId),
         headers,
       });
     },

@@ -1,12 +1,14 @@
 import { JobStatus, JobStatusDisplayName, WorkspaceStatus } from './statusCodes';
 
+interface Symlink {
+  name: string;
+  dataset_uuid?: string;
+}
 interface WorkspaceDetail {
   files: {
     name: string;
   }[];
-  symlinks: {
-    name: string;
-  }[];
+  symlinks: Symlink[];
 }
 
 interface WorkspaceDetails {
