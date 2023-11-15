@@ -4,18 +4,22 @@ interface Symlink {
   name: string;
   dataset_uuid?: string;
 }
-interface WorkspaceDetail {
+interface CurrentWorkspaceDetail {
   files: {
     name: string;
   }[];
   symlinks: Symlink[];
 }
 
+interface RequestWorkspaceDetail {
+  files: string[];
+  symlinks: Symlink[];
+  globus_groups_token: string;
+}
+
 interface WorkspaceDetails {
-  current_workspace_details: WorkspaceDetail;
-  request_workspace_details: WorkspaceDetail & {
-    globus_groups_token: string;
-  };
+  current_workspace_details: CurrentWorkspaceDetail;
+  request_workspace_details: RequestWorkspaceDetail;
 }
 
 export interface Workspace {
@@ -93,7 +97,7 @@ interface TemplateTypes {
 
 type TemplatesTypes = Record<string, TemplateTypes>;
 
-type TemplatesResponse = WorkspaceAPIResponse<TemplateTypes>;
+type TemplatesResponse = WorkspaceAPIResponse<TemplatesTypes>;
 
 interface CreateTemplateData {
   template: string;
