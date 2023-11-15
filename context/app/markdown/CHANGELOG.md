@@ -1,3 +1,27 @@
+## v0.83.0 - 2023-11-13
+
+- Add tracking to interactions with vitessce visualizations.
+- Introduce type checking to precommit and continuous integration scripts and fix reported type issues.
+- Add constraints to prevent multiple workspaces from being launched at once.
+- Add Biomarker Query section to gene detail page.
+- Added basic cell types table reference to gene page.
+- Update gene detail summary implementation.
+- Removed spaces from tracked event names.
+- Fix alignment of bar chart legends.
+- Fix HTML rendering inside markdown sections.
+- Updated UBKG endpoints to point to `genes` and `genes-info`.
+- Removed unnecessary polyfill dependencies.
+- Alphabetize data types facets on search page.
+- Converted homepage images to webp to decrease load times.
+- Add Azimuth dataset visualizations to gene detail pages.
+- Prevent unnecessary calls to workspaces API by users without permissions.
+- Updated the HRA API endpoint to point to the HuBMAP-only version
+- Update CHANGELOG entry to match Docker tag for v0.82.3.
+- Update push.sh to exit early if prerequisite is not met.
+- Create a reusable table with updated design.
+- Add table to show selected datasets in create workspace dialogs.
+
+
 ## v0.82.3 - 2023-10-31
 
 - Implement workspace usability metric tracking.

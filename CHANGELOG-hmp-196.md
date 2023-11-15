@@ -1,1 +1,0 @@
-- Removed unnecessary polyfill dependencies.
