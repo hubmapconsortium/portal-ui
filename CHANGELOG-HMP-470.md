@@ -1,0 +1,1 @@
+- Limit metadata download to selected UUIDs if user has made a selection in the search page.

@@ -12,10 +12,11 @@ import { useAppContext } from 'js/components/Contexts';
 import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { useMetadataMenu } from 'js/components/entity-search/MetadataMenu/hooks';
 
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { StyledDropdownMenuButton, StyledInfoIcon } from './style';
 
-async function fetchAndDownload({ urlPath, allResultsUUIDs, closeMenu, analyticsCategory }) {
-  await postAndDownloadFile({ url: urlPath, body: { uuids: allResultsUUIDs } });
+async function fetchAndDownload({ urlPath, uuids, closeMenu, analyticsCategory }) {
+  await postAndDownloadFile({ url: urlPath, body: { uuids } });
 
   trackEvent({
     category: analyticsCategory,
@@ -31,6 +32,8 @@ function MetadataMenu({ type, analyticsCategory }) {
   const allResultsUUIDs = useSearchViewStore((state) => state.allResultsUUIDs);
 
   const { closeMenu } = useMetadataMenu();
+
+  const selectedRows = useSelectableTableStore((state) => state.selectedRows);
 
   const { isWorkspacesUser } = useAppContext();
 
@@ -52,7 +55,7 @@ function MetadataMenu({ type, analyticsCategory }) {
           onClick={() =>
             fetchAndDownload({
               urlPath: `/metadata/v0/${lcPluralType}.tsv`,
-              allResultsUUIDs,
+              uuids: selectedRows.size > 0 ? [...selectedRows] : allResultsUUIDs,
               closeMenu,
               analyticsCategory,
             })
