@@ -1,33 +1,18 @@
 import React from 'react';
-// import { trackEvent } from 'js/helpers/trackers';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { useAppContext } from 'js/components/Contexts';
 
 import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { StyledDropdownMenuButton, StyledLink, StyledInfoIcon, StyledMenuItem } from './style';
-import { useMetadataMenu } from './hooks';
+import { DownloadTSVItem } from './DownloadTSVItem';
 
-async function fetchAndDownload({ urlPath, selectedHits, closeMenu }) {
-  await postAndDownloadFile({ url: urlPath, body: { uuids: [...selectedHits] } });
-
-  /*
-  trackEvent({
-    category: analyticsCategory,
-    action: `Download ${mime}`,
-    label: urlPath.split('/').pop(),
-  });
-  */
-  closeMenu();
-}
+const menuID = 'metadata-menu';
 
 function MetadataMenu({ entityType }) {
   const lcPluralType = `${entityType.toLowerCase()}s`;
-  const { selectedHits, closeMenu } = useMetadataMenu(lcPluralType);
-  const menuID = 'metadata-menu';
 
   const { isWorkspacesUser } = useAppContext();
 
@@ -41,20 +26,7 @@ function MetadataMenu({ entityType }) {
             <StyledInfoIcon color="primary" />
           </SecondaryBackgroundTooltip>
         </StyledMenuItem>
-        <StyledMenuItem
-          onClick={() =>
-            fetchAndDownload({
-              urlPath: `/metadata/v0/${lcPluralType}.tsv`,
-              selectedHits,
-              closeMenu,
-            })
-          }
-        >
-          Download
-          <SecondaryBackgroundTooltip title="Download a TSV of the table metadata." placement="bottom-start">
-            <StyledInfoIcon color="primary" />
-          </SecondaryBackgroundTooltip>
-        </StyledMenuItem>
+        <DownloadTSVItem lcPluralType={lcPluralType} />
         {isWorkspacesUser && <NewWorkspaceDialogFromSelections />}
       </DropdownMenu>
     </>
