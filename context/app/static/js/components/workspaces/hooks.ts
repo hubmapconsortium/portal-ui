@@ -1,4 +1,5 @@
 import { useCallback, useMemo } from 'react';
+import { KeyedMutator } from 'swr';
 import { getWorkspaceStartLink, mergeJobsIntoWorkspaces } from './utils';
 import {
   useDeleteWorkspace,
@@ -8,12 +9,18 @@ import {
   useJobs,
   useCreateWorkspace,
   CreateWorkspaceBody,
+  useWorkspace,
 } from './api';
 import { MergedWorkspace, Workspace } from './types';
 import { useLaunchWorkspaceStore } from './LaunchWorkspaceDialog/store';
 
-function useWorkspacesList() {
-  const { workspaces, isLoading: workspacesLoading, mutate: mutateWorkspaces } = useWorkspaces();
+interface UseWorkspacesListTypes<T> {
+  workspaces: Workspace[];
+  workspacesLoading: boolean;
+  mutateWorkspaces: KeyedMutator<T>;
+}
+
+function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspaces }: UseWorkspacesListTypes<T>) {
   const { jobs, isLoading: jobsLoading, mutate: mutateJobs } = useJobs();
   const isLoading = workspacesLoading || jobsLoading;
   const mutate = useCallback(async () => {
@@ -54,6 +61,28 @@ function useWorkspacesList() {
     isStoppingWorkspace,
     isStartingWorkspace,
   };
+}
+
+function useWorkspacesList() {
+  const { workspaces, isLoading: workspacesLoading, mutate: mutateWorkspaces } = useWorkspaces();
+  return useWorkspacesActions({
+    workspaces,
+    workspacesLoading,
+    mutateWorkspaces,
+  });
+}
+
+function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
+  const { workspace, isLoading: workspacesLoading, mutate: mutateWorkspaces } = useWorkspace(workspaceId);
+  const { workspacesList, ...rest } = useWorkspacesActions({
+    workspaces: Object.keys(workspace).length > 0 ? [workspace] : [],
+    workspacesLoading,
+    mutateWorkspaces,
+  });
+
+  const mergedWorkspace = workspacesList[0] ?? {};
+
+  return { workspace: mergedWorkspace, ...rest };
 }
 
 function useRunningWorkspace() {
@@ -146,4 +175,4 @@ export function useCreateAndLaunchWorkspace() {
   return { createAndLaunchWorkspace, isCreatingWorkspace };
 }
 
-export { useWorkspacesList, useHasRunningWorkspace, useRunningWorkspace, useLaunchWorkspace };
+export { useWorkspacesList, useHasRunningWorkspace, useRunningWorkspace, useLaunchWorkspace, useWorkspaceDetail };

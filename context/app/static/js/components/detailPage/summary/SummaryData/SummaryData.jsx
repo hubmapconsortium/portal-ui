@@ -27,6 +27,7 @@ function SummaryData({
   entityCanBeSaved,
   children,
   mapped_external_group_name,
+  showJsonButton = true,
 }) {
   const isPublication = publicationEntityTypes.includes(entity_type);
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
@@ -58,11 +59,13 @@ function SummaryData({
               </>
             )}
             <FlexEnd>
-              <SecondaryBackgroundTooltip title="View JSON">
-                <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
-                  <FileIcon color="primary" />
-                </JsonButton>
-              </SecondaryBackgroundTooltip>
+              {showJsonButton && (
+                <SecondaryBackgroundTooltip title="View JSON">
+                  <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
+                    <FileIcon color="primary" />
+                  </JsonButton>
+                </SecondaryBackgroundTooltip>
+              )}
               {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
               {datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
