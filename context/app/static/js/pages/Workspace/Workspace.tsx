@@ -3,7 +3,7 @@ import format from 'date-fns/format';
 import Stack from '@mui/material/Stack';
 
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
-import { type Workspace } from 'js/components/workspaces/types';
+import { MergedWorkspace } from 'js/components/workspaces/types';
 import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
@@ -12,13 +12,14 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import { condenseJobs } from 'js/components/workspaces/utils';
 import JobStatus from 'js/components/workspaces/JobStatus';
-import { useWorkspaceDetail } from 'js/components/workspaces/hooks';
+import { useWorkspaceDetail, useSessionWarning } from 'js/components/workspaces/hooks';
+import { Alert } from 'js/shared-styles/alerts';
 
 interface Props {
   workspaceId: number;
 }
 
-function getWorkspaceDatasetUUIDs(workspace: Workspace) {
+function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace) {
   const symlinks = workspace?.workspace_details?.request_workspace_details?.symlinks ?? [];
   return symlinks.reduce<string[]>(
     (acc, symlink) => (symlink?.dataset_uuid ? [...acc, symlink.dataset_uuid] : acc),
@@ -26,7 +27,7 @@ function getWorkspaceDatasetUUIDs(workspace: Workspace) {
   );
 }
 
-function useMatchingWorkspaceTemplates(workspace: Workspace) {
+function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
   const workspaceFiles = workspace?.workspace_details?.request_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();
 
@@ -45,6 +46,8 @@ function WorkspacePage({ workspaceId }: Props) {
   const { workspace, isLoading } = useWorkspaceDetail({ workspaceId });
   const workspaceTemplates = useMatchingWorkspaceTemplates(workspace);
 
+  const sessionWarning = useSessionWarning([workspace]);
+
   if (isLoading || Object.keys(workspace).length === 0) {
     return null;
   }
@@ -54,6 +57,7 @@ function WorkspacePage({ workspaceId }: Props) {
 
   return (
     <Stack gap={6}>
+      {sessionWarning && <Alert severity="info">{sessionWarning}</Alert>}
       <div>
         <SummaryData
           title={workspace.name}

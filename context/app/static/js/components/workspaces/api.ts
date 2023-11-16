@@ -143,7 +143,7 @@ function useFetchWorkspaces(workspaceURL: string) {
   const { data, isLoading, ...rest } = useSWR(
     hasAccess ? [workspaceURL, headers] : null,
     ([url, head]) => fetchWorkspaces(url, head),
-    { revalidateOnFocus: hasAccess },
+    { revalidateOnFocus: hasAccess, refreshInterval: 1000 * 60 },
   );
   const workspaces = data?.data?.workspaces ?? [];
   return { workspaces, isLoading, ...rest };

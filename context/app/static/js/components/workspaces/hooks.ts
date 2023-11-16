@@ -1,6 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { KeyedMutator } from 'swr';
-import { getWorkspaceStartLink, mergeJobsIntoWorkspaces } from './utils';
+import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob } from './utils';
 import {
   useDeleteWorkspace,
   useStopWorkspace,
@@ -175,4 +175,33 @@ export function useCreateAndLaunchWorkspace() {
   return { createAndLaunchWorkspace, isCreatingWorkspace };
 }
 
-export { useWorkspacesList, useHasRunningWorkspace, useRunningWorkspace, useLaunchWorkspace, useWorkspaceDetail };
+function getWorkspaceTimeLeft(workspace: MergedWorkspace) {
+  return findBestJob(workspace?.jobs ?? [])?.job_details?.current_job_details?.time_left;
+}
+
+function useSessionWarning(workspaces: MergedWorkspace[]) {
+  const matchedWorkspace = workspaces.find((workspace) => getWorkspaceTimeLeft(workspace));
+
+  if (!matchedWorkspace) {
+    return false;
+  }
+
+  const timeLeft = getWorkspaceTimeLeft(matchedWorkspace);
+
+  if (!timeLeft) {
+    return false;
+  }
+
+  return `${matchedWorkspace.name} is currently running. You have ${Math.floor(
+    timeLeft / 60,
+  )} minutes left in your session. Renewing your session time will stop all jobs running in your workspace.`;
+}
+
+export {
+  useWorkspacesList,
+  useHasRunningWorkspace,
+  useRunningWorkspace,
+  useLaunchWorkspace,
+  useWorkspaceDetail,
+  useSessionWarning,
+};

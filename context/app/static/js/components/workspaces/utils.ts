@@ -117,11 +117,11 @@ function getJobMessage(job: JobDetails): string {
 }
 
 /**
- * Finds the best job to use for a workspace based on its status
- * @param jobs A list of jobs to extract the best job from
- * @returns A digest of the best job to use for a workspace which includes the status, whether a new job can be created, and the URL and message if the job is active/activating
+ * Find the job with the highest status.
+ * @param jobs A list of jobs to extract the best job from.
+ * @returns The job with the highest status.
  */
-function condenseJobs(jobs: WorkspaceJob[]): CondensedJob {
+function findBestJob(jobs: WorkspaceJob[]) {
   const displayStatusJobs = jobs.map((job) => ({
     ...job,
     status: getJobStatusDisplayName(job.status),
@@ -130,6 +130,17 @@ function condenseJobs(jobs: WorkspaceJob[]): CondensedJob {
   const bestJob = JOB_DISPLAY_NAMES.map((status) => displayStatusJobs.find((job) => job.status === status)).find(
     (job) => job,
   ); // Trivial .find() to just take the job with highest status.
+
+  return bestJob;
+}
+
+/**
+ * Finds the job with the highest status and returns a digest.
+ * @param jobs A list of jobs to extract the best job from.
+ * @returns A digest of the best job to use for a workspace which includes the status, whether a new job can be created, and the URL and message if the job is active/activating
+ */
+function condenseJobs(jobs: WorkspaceJob[]): CondensedJob {
+  const bestJob = findBestJob(jobs);
 
   const status = bestJob?.status;
   switch (status) {
@@ -215,6 +226,7 @@ function isRunningJob(job: WorkspaceJob) {
 
 export {
   mergeJobsIntoWorkspaces,
+  findBestJob,
   condenseJobs,
   locationIfJobRunning,
   getWorkspaceStartLink,
