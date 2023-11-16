@@ -19,6 +19,7 @@ import WorkspaceLaunchStopButton from 'js/components/workspaces/WorkspaceLaunchS
 import Typography from '@mui/material/Typography';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 
 interface WorkspacePageProps {
   workspaceId: number;
@@ -53,7 +54,7 @@ function LaunchStopButton(props: ButtonProps) {
   return <Button {...props} variant="contained" />;
 }
 
-function WorkspacePage({ workspaceId }: WorkspacePageProps) {
+function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
   const { workspace, isLoading, handleStopWorkspace, isStoppingWorkspace } = useWorkspaceDetail({ workspaceId });
   const workspaceTemplates = useMatchingWorkspaceTemplates(workspace);
 
@@ -113,6 +114,14 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
         <TemplateGrid templates={workspaceTemplates} />
       </Box>
     </Stack>
+  );
+}
+
+function WorkspacePage({ workspaceId }: WorkspacePageProps) {
+  return (
+    <WorkspacesAuthGuard>
+      <WorkspaceContent workspaceId={workspaceId} />
+    </WorkspacesAuthGuard>
   );
 }
 
