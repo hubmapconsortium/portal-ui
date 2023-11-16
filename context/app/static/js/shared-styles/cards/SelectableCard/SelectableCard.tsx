@@ -32,7 +32,7 @@ function SelectableCard({
           <SelectableCardText variant="subtitle1" $colorVariant={colorVariant}>
             {title}
           </SelectableCardText>
-          {selectItem && <Checkbox checked={isSelected} onChange={(e) => selectItem(e)} value={cardKey} />}
+          {selectItem && <Checkbox checked={isSelected} onChange={selectItem} value={cardKey} />}
         </Stack>
         <SelectableCardText gutterBottom $colorVariant={colorVariant}>
           {description}
