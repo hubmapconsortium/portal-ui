@@ -30,12 +30,24 @@ def _get_api_json_error(status, message):
     })
 
 
+def _extract_uuids_and_constraints(all_args, use_list=False):
+    constraints = _drop_dict_keys(all_args, ['uuids'])
+    if (use_list):
+        uuids = request.args.getlist('uuids')
+    else:
+        uuids = request.args.get('uuids')
+        if uuids:
+            uuids = uuids.split(',')
+        else:
+            uuids = None
+    return uuids, constraints
+
+
 @blueprint.route('/metadata/v0/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_tsv(entity_type):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
-        constraints = _drop_dict_keys(all_args, ['uuids'])
-        uuids = request.args.getlist('uuids')
+        uuids, constraints = _extract_uuids_and_constraints(all_args, use_list=True)
     else:
         if request.args:
             return _get_api_json_error(400, 'POST only accepts a JSON body.')
@@ -59,8 +71,10 @@ def entities_tsv(entity_type):
 
 @blueprint.route('/lineup/<entity_type>')
 def lineup(entity_type):
-    entities = _get_entities(entity_type, request.args.to_dict(
-        flat=False))
+    all_args = request.args.to_dict(flat=False)
+    uuids, constraints = _extract_uuids_and_constraints(all_args)
+
+    entities = _get_entities(entity_type, constraints, uuids)
     entities.sort(key=lambda e: e['uuid'])
     flask_data = {
         **get_default_flask_data(),

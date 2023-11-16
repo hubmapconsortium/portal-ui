@@ -5,7 +5,8 @@ import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { useAppContext } from 'js/components/Contexts';
 import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { DownloadTSVItem } from 'js/components/entity-search/MetadataMenu/DownloadTSVItem';
-import { StyledDropdownMenuButton, StyledMenuItem } from 'js/components/entity-search/MetadataMenu/style';
+import { StyledDropdownMenuButton } from 'js/components/entity-search/MetadataMenu/style';
+import LineupMenuItem from 'js/components/entity-search/MetadataMenu/LineupMenuItem';
 
 const menuID = 'metadata-menu';
 
@@ -24,9 +25,7 @@ function MetadataMenu({ type, analyticsCategory }: MetadataMenuProps) {
     <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
-        <StyledMenuItem href={`/lineup/${lcPluralType}`} tooltip="Visualize all available metadata in Lineup">
-          Visualize
-        </StyledMenuItem>
+        <LineupMenuItem lcPluralType={lcPluralType} />
         <DownloadTSVItem lcPluralType={lcPluralType} analyticsCategory={analyticsCategory} />
         {isWorkspacesUser && isDatasetSearch && <NewWorkspaceDialogFromSelections />}
       </DropdownMenu>
