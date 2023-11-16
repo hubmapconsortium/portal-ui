@@ -18,7 +18,11 @@ export function DownloadTSVItem({ lcPluralType, analyticsCategory }: DownloadTSV
   };
 
   return (
-    <StyledMenuItem onClick={handleClick} isLoading={isMutating} tooltip="Download a TSV of the table metadata.">
+    <StyledMenuItem
+      onClick={handleClick}
+      isLoading={isMutating}
+      tooltip={`Download a TSV file of your selection. If no selection exists, all ${lcPluralType} will be downloaded.`}
+    >
       Download
     </StyledMenuItem>
   );

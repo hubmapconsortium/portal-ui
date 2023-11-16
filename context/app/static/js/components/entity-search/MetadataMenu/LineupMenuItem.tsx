@@ -13,7 +13,10 @@ export default function LineupMenuItem({ lcPluralType }: LineupMenuItemProps) {
     href += `?uuids=${Array.from(selectedHits).join(',')}`;
   }
   return (
-    <StyledMenuItem href={href} tooltip="Visualize all available metadata in Lineup.">
+    <StyledMenuItem
+      href={href}
+      tooltip={`Visualize selected ${lcPluralType}' metadata in Lineup. If no selection exists, all ${lcPluralType} will be included in the visualization.`}
+    >
       Visualize
     </StyledMenuItem>
   );
