@@ -90,7 +90,7 @@ export function tableToDelimitedString(rows: object[], colNames: string[], d: st
   return str;
 }
 
-export function createDownloadUrl(fileStr: string, fileType: string) {
+export function createDownloadUrl(fileStr: string | Blob, fileType: string) {
   return window.URL.createObjectURL(new Blob([fileStr], { type: fileType }));
 }
 
