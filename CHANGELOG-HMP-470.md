@@ -1,1 +1,2 @@
-- Limit metadata download to selected UUIDs if user has made a selection in the search page.
+- Enable selection of entities on all search pages.
+- Limit scope of visualized and downloaded metadata to selected entities when user has made a selection in the search page.
