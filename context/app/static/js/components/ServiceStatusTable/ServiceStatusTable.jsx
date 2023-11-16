@@ -39,6 +39,7 @@ function ServiceStatusTable({
   gatewayEndpoint,
   workspacesEndpoint,
   typeServiceEndpoint,
+  ubkgEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
@@ -103,6 +104,12 @@ function ServiceStatusTable({
           response: gatewayStatus.workspaces_api,
           endpointUrl: workspacesEndpoint,
           githubUrl: 'https://github.com/hubmapconsortium/user_workspaces_server',
+        }),
+        buildServiceStatus({
+          apiName: 'ontology-api',
+          response: gatewayStatus.ontology_api,
+          endpointUrl: ubkgEndpoint,
+          githubUrl: 'https://github.com/x-atlas-consortia/hs-ontology-api',
         }),
       ]
     : [];

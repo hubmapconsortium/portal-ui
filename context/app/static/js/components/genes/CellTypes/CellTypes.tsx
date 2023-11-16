@@ -16,18 +16,19 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import { LineClamp } from 'js/shared-styles/text';
 import { cellTypes } from '../constants';
 import { useGeneDetails } from '../hooks';
+import ViewDatasets from './ViewDatasets';
 
-const columnLabels = ['Cell Types', 'Description', 'Organs'];
+const columnLabels = ['Cell Types', 'Description', 'Organs', ''];
 
-function TableSkeleton() {
+export function TableSkeleton({ numberOfCols = columnLabels.length }: { numberOfCols?: number }) {
   return (
     <>
       <TableRow>
-        <TableCell colSpan={columnLabels.length}>
+        <TableCell colSpan={numberOfCols}>
           <LinearProgress />
         </TableCell>
       </TableRow>
-      <LoadingTableRows numberOfRows={3} numberOfCols={columnLabels.length} />
+      <LoadingTableRows numberOfRows={3} numberOfCols={numberOfCols} />
     </>
   );
 }
@@ -58,11 +59,9 @@ export default function CellTypes() {
                     <LineClamp lines={2}>{cellType.definition}</LineClamp>
                   </TableCell>
                   <TableCell>{cellType.organs.map((o) => o.name).join(',\u00A0') || <>&mdash;</>}</TableCell>
-                  {/* <TableCell>
-                    <Button startIcon={<entityIconMap.Dataset />} variant="outlined" sx={{ borderRadius: '4px' }}>
-                      View&nbsp;Datasets
-                    </Button>
-                  </TableCell> */}
+                  <TableCell>
+                    <ViewDatasets id={cellType.id} name={cellType.name} />
+                  </TableCell>
                 </TableRow>
               ))
             )}

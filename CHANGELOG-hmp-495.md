@@ -1,0 +1,3 @@
+- Added ontology API to status page.
+- Added View Datasets button to cell types table on gene pages for types that exist in HuBMAP datasets.
+- Added handling for invalid gene name lookups.
