@@ -2,6 +2,7 @@ import React from 'react';
 import format from 'date-fns/format';
 import Stack from '@mui/material/Stack';
 import Button, { ButtonProps } from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { MergedWorkspace } from 'js/components/workspaces/types';
@@ -16,8 +17,10 @@ import { useWorkspaceDetail, useSessionWarning } from 'js/components/workspaces/
 import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceLaunchStopButton from 'js/components/workspaces/WorkspaceLaunchStopButton';
 import { Typography } from '@mui/material';
+import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
-interface Props {
+interface WorkspacePageProps {
   workspaceId: number;
 }
 
@@ -48,7 +51,7 @@ function LaunchStopButton(props: ButtonProps) {
   return <Button {...props} variant="contained" />;
 }
 
-function WorkspacePage({ workspaceId }: Props) {
+function WorkspacePage({ workspaceId }: WorkspacePageProps) {
   const { workspace, isLoading, handleStopWorkspace, isStoppingWorkspace } = useWorkspaceDetail({ workspaceId });
   const workspaceTemplates = useMatchingWorkspaceTemplates(workspace);
 
@@ -62,9 +65,9 @@ function WorkspacePage({ workspaceId }: Props) {
   const workspaceDatasetUUIDs = getWorkspaceDatasetUUIDs(workspace);
 
   return (
-    <Stack gap={6}>
+    <Stack gap={6} sx={{ marginBottom: 5 }}>
       {sessionWarning && <Alert severity="info">{sessionWarning}</Alert>}
-      <div>
+      <Box>
         <SummaryData
           title={workspace.name}
           entity_type="Workspace"
@@ -83,7 +86,7 @@ function WorkspacePage({ workspaceId }: Props) {
             />
           }
         >
-          <Typography>
+          <Typography variant="subtitle1" component="p">
             <JobStatus job={job} />
           </Typography>
         </SummaryData>
@@ -92,9 +95,21 @@ function WorkspacePage({ workspaceId }: Props) {
             {format(new Date(workspace.datetime_created), 'yyyy-MM-dd')}
           </LabelledSectionText>
         </SectionPaper>
-      </div>
-      {workspaceDatasetUUIDs.length > 0 && <WorkspaceDatasetsTable datasetsUUIDs={workspaceDatasetUUIDs} />}
-      <TemplateGrid templates={workspaceTemplates} />
+      </Box>
+      {workspaceDatasetUUIDs.length > 0 && (
+        <WorkspaceDatasetsTable
+          datasetsUUIDs={workspaceDatasetUUIDs}
+          label={<SectionHeader> Datasets</SectionHeader>}
+        />
+      )}
+      <Box>
+        <SpacedSectionButtonRow
+          leftText={
+            <SectionHeader iconTooltipText="Templates that are currently in this workspace."> Templates</SectionHeader>
+          }
+        />
+        <TemplateGrid templates={workspaceTemplates} />
+      </Box>
     </Stack>
   );
 }
