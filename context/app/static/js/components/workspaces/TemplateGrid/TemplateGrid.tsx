@@ -12,7 +12,7 @@ interface TemplateGridProps {
 
 function TemplateGrid({ templates, selectItem, selectedTemplates = new Set([]) }: TemplateGridProps) {
   return (
-    <Grid container spacing={1} alignItems="stretch">
+    <Grid container spacing={2} alignItems="stretch">
       {Object.entries(templates).map(([templateKey, { title, description, tags }]) => (
         <Grid item xs={4} key={templateKey}>
           <SelectableCard
