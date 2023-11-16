@@ -25,6 +25,7 @@ def please_wait(workspace_id):
         title='Please Wait'
     )
 
+
 @blueprint.route('/workspaces/<workspace_id>')
 def workspace_detail(workspace_id):
     flask_data = {**get_default_flask_data()}
