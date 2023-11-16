@@ -19,7 +19,7 @@ function HumanReferenceAtlas({ uberonIri }) {
       </Flex>
       <Paper>
         <iframe
-          style={{ border: 'none' }}
+          style={{ border: 'none', width: '100%' }}
           title="Organ Info"
           src={`/iframe/organ?iri=${uberonIri}`}
           height="604"
