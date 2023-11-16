@@ -16,7 +16,7 @@ import JobStatus from 'js/components/workspaces/JobStatus';
 import { useWorkspaceDetail, useSessionWarning } from 'js/components/workspaces/hooks';
 import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceLaunchStopButton from 'js/components/workspaces/WorkspaceLaunchStopButton';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
