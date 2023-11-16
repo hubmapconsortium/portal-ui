@@ -1,0 +1,1 @@
+- Add workspace detail page.
