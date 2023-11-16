@@ -1,6 +1,5 @@
 import React from 'react';
 import { styled } from '@mui/material/styles';
-import Link from '@mui/material/Link';
 import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
 
 import { InfoIcon } from 'js/shared-styles/icons';
@@ -25,8 +24,8 @@ interface StyledMenuItemProps extends MenuItemProps {
 }
 
 const StyledMenuItem = styled(({ tooltip, isLoading, children, href, ...props }: StyledMenuItemProps) => {
-  const item = (
-    <MenuItem {...props}>
+  return (
+    <MenuItem {...props} {...(href ? { href, component: 'a' } : {})}>
       <Stack direction="column" width="100%">
         <Stack direction="row" alignItems="center" justifyContent="space-between">
           <span>{children}</span>
@@ -40,14 +39,6 @@ const StyledMenuItem = styled(({ tooltip, isLoading, children, href, ...props }:
       </Stack>
     </MenuItem>
   );
-  if (href) {
-    return (
-      <Link underline="none" href={href}>
-        {item}
-      </Link>
-    );
-  }
-  return item;
 })({
   width: '100%',
   color: 'black',
