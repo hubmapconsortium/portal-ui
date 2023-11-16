@@ -25,6 +25,7 @@ interface WorkspacePageProps {
 }
 
 function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace) {
+  // TODO: Use current_workspace_details once data inconsistencies are resolved.
   const symlinks = workspace?.workspace_details?.request_workspace_details?.symlinks ?? [];
   return symlinks.reduce<string[]>(
     (acc, symlink) => (symlink?.dataset_uuid ? [...acc, symlink.dataset_uuid] : acc),
@@ -33,6 +34,7 @@ function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace) {
 }
 
 function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
+  // TODO: Use current_workspace_details once data inconsistencies are resolved.
   const workspaceFiles = workspace?.workspace_details?.request_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();
 
