@@ -1,6 +1,7 @@
 import React from 'react';
 import format from 'date-fns/format';
 import Stack from '@mui/material/Stack';
+import Button, { ButtonProps } from '@mui/material/Button';
 
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { MergedWorkspace } from 'js/components/workspaces/types';
@@ -9,11 +10,12 @@ import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import { condenseJobs } from 'js/components/workspaces/utils';
 import JobStatus from 'js/components/workspaces/JobStatus';
 import { useWorkspaceDetail, useSessionWarning } from 'js/components/workspaces/hooks';
 import { Alert } from 'js/shared-styles/alerts';
+import WorkspaceLaunchStopButton from 'js/components/workspaces/WorkspaceLaunchStopButton';
+import { Typography } from '@mui/material';
 
 interface Props {
   workspaceId: number;
@@ -42,8 +44,12 @@ function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
   return matchingTemplates;
 }
 
+function LaunchStopButton(props: ButtonProps) {
+  return <Button {...props} variant="contained" />;
+}
+
 function WorkspacePage({ workspaceId }: Props) {
-  const { workspace, isLoading } = useWorkspaceDetail({ workspaceId });
+  const { workspace, isLoading, handleStopWorkspace, isStoppingWorkspace } = useWorkspaceDetail({ workspaceId });
   const workspaceTemplates = useMatchingWorkspaceTemplates(workspace);
 
   const sessionWarning = useSessionWarning([workspace]);
@@ -68,10 +74,18 @@ function WorkspacePage({ workspaceId }: Props) {
           uuid=""
           status=""
           mapped_data_access_level=""
+          otherButtons={
+            <WorkspaceLaunchStopButton
+              workspace={workspace}
+              button={LaunchStopButton}
+              handleStopWorkspace={handleStopWorkspace}
+              isStoppingWorkspace={isStoppingWorkspace}
+            />
+          }
         >
-          <SummaryItem>
+          <Typography>
             <JobStatus job={job} />
-          </SummaryItem>
+          </Typography>
         </SummaryData>
         <SectionPaper>
           <LabelledSectionText label="Creation Date">

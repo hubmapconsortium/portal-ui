@@ -28,6 +28,7 @@ function SummaryData({
   children,
   mapped_external_group_name,
   showJsonButton = true,
+  otherButtons,
 }) {
   const isPublication = publicationEntityTypes.includes(entity_type);
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
@@ -69,6 +70,7 @@ function SummaryData({
               {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
               {datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
+            {otherButtons}
           </FlexEnd>
         }
       />
