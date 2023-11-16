@@ -13,7 +13,7 @@ function Workspaces() {
     <>
       <WorkspacesTitle />
       <WorkspacesAuthGuard>
-      <WorkspacesAuthenticated />;
+        <WorkspacesAuthenticated />
       </WorkspacesAuthGuard>
     </>
   );
