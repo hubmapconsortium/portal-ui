@@ -18,7 +18,7 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 
-import TemplateGrid from '../TemplateGrid';
+import SelectableTemplateGrid from '../SelectableTemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
@@ -207,7 +207,7 @@ function NewWorkspaceDialog({
                 ))}
               </Stack>
             </Box>
-            <TemplateGrid templates={templates} control={control} />
+            <SelectableTemplateGrid templates={templates} control={control} />
           </Stack>
         </Step>
       </DialogContent>

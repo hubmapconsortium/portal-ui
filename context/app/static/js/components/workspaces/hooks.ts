@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import { getWorkspaceLink, mergeJobsIntoWorkspaces } from './utils';
+import { KeyedMutator } from 'swr';
+import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob } from './utils';
 import {
   useDeleteWorkspace,
   useStopWorkspace,
@@ -8,12 +9,18 @@ import {
   useJobs,
   useCreateWorkspace,
   CreateWorkspaceBody,
+  useWorkspace,
 } from './api';
 import { MergedWorkspace, Workspace } from './types';
 import { useLaunchWorkspaceStore } from './LaunchWorkspaceDialog/store';
 
-function useWorkspacesList() {
-  const { workspaces, isLoading: workspacesLoading, mutate: mutateWorkspaces } = useWorkspaces();
+interface UseWorkspacesListTypes<T> {
+  workspaces: Workspace[];
+  workspacesLoading: boolean;
+  mutateWorkspaces: KeyedMutator<T>;
+}
+
+function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspaces }: UseWorkspacesListTypes<T>) {
   const { jobs, isLoading: jobsLoading, mutate: mutateJobs } = useJobs();
   const isLoading = workspacesLoading || jobsLoading;
   const mutate = useCallback(async () => {
@@ -56,6 +63,28 @@ function useWorkspacesList() {
   };
 }
 
+function useWorkspacesList() {
+  const { workspaces, isLoading: workspacesLoading, mutate: mutateWorkspaces } = useWorkspaces();
+  return useWorkspacesActions({
+    workspaces,
+    workspacesLoading,
+    mutateWorkspaces,
+  });
+}
+
+function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
+  const { workspace, isLoading: workspacesLoading, mutate: mutateWorkspaces } = useWorkspace(workspaceId);
+  const { workspacesList, ...rest } = useWorkspacesActions({
+    workspaces: Object.keys(workspace).length > 0 ? [workspace] : [],
+    workspacesLoading,
+    mutateWorkspaces,
+  });
+
+  const mergedWorkspace = workspacesList[0] ?? {};
+
+  return { workspace: mergedWorkspace, ...rest };
+}
+
 function useRunningWorkspace() {
   const { workspacesList } = useWorkspacesList();
   return workspacesList.find((workspace) =>
@@ -82,7 +111,7 @@ function useLaunchWorkspace(workspace?: Workspace) {
     async (ws: Workspace, templatePath?: string) => {
       await startWorkspace(ws.id);
       await mutate();
-      window.open(getWorkspaceLink(ws, templatePath), '_blank');
+      window.open(getWorkspaceStartLink(ws, templatePath), '_blank');
     },
     [mutate, startWorkspace],
   );
@@ -90,7 +119,7 @@ function useLaunchWorkspace(workspace?: Workspace) {
   const launchWorkspace = useCallback(
     async (ws: Workspace, templatePath?: string) => {
       if (runningWorkspace && ws.id === runningWorkspace.id) {
-        window.open(getWorkspaceLink(ws, templatePath), '_blank');
+        window.open(getWorkspaceStartLink(ws, templatePath), '_blank');
         return;
       }
       if (runningWorkspace) {
@@ -148,4 +177,34 @@ export function useCreateAndLaunchWorkspace() {
   return { createAndLaunchWorkspace, isCreatingWorkspace };
 }
 
-export { useWorkspacesList, useHasRunningWorkspace, useRunningWorkspace, useLaunchWorkspace };
+function getWorkspaceTimeLeft(workspace: MergedWorkspace) {
+  return findBestJob(workspace?.jobs ?? [])?.job_details?.current_job_details?.time_left;
+}
+type FoundPair = [MergedWorkspace, number];
+
+function useSessionWarning(workspaces: MergedWorkspace[]) {
+  const result = workspaces.reduce<FoundPair | undefined>((acc, ws) => {
+    if (acc) return acc; // Avoids extra calls to `getWorkspaceTimeLeft` after workspace has been found since we can't break a .reduce()
+    const time = getWorkspaceTimeLeft(ws);
+    return time ? [ws, time] : acc; // If a time is found, return the workspace with time, otherwise continue iteration
+  }, undefined);
+
+  if (!result) {
+    return false;
+  }
+
+  const [matchedWorkspace, timeLeft] = result;
+
+  return `${matchedWorkspace.name} is currently running. You have ${Math.floor(
+    timeLeft / 60,
+  )} minutes left in your session. Renewing your session time will stop all jobs running in your workspace.`;
+}
+
+export {
+  useWorkspacesList,
+  useHasRunningWorkspace,
+  useRunningWorkspace,
+  useLaunchWorkspace,
+  useWorkspaceDetail,
+  useSessionWarning,
+};
