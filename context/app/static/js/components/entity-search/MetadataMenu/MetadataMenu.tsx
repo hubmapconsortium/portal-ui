@@ -19,6 +19,8 @@ function MetadataMenu({ entityType }: MetadataMenuProps) {
 
   const { isWorkspacesUser } = useAppContext();
 
+  const isDatasetSearch = entityType.toLowerCase() === 'dataset';
+
   return (
     <>
       <StyledDropdownMenuButton menuID={menuID}>Metadata</StyledDropdownMenuButton>
@@ -27,7 +29,7 @@ function MetadataMenu({ entityType }: MetadataMenuProps) {
           Visualize
         </StyledMenuItem>
         <DownloadTSVItem lcPluralType={lcPluralType} />
-        {isWorkspacesUser && <NewWorkspaceDialogFromSelections />}
+        {isWorkspacesUser && isDatasetSearch && <NewWorkspaceDialogFromSelections />}
       </DropdownMenu>
     </>
   );

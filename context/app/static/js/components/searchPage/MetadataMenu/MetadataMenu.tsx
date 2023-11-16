@@ -18,6 +18,7 @@ function MetadataMenu({ type, analyticsCategory }: MetadataMenuProps) {
   const lcPluralType = `${type.toLowerCase()}s`;
 
   const { isWorkspacesUser } = useAppContext();
+  const isDatasetSearch = type.toLowerCase() === 'dataset';
 
   return (
     <>
@@ -27,7 +28,7 @@ function MetadataMenu({ type, analyticsCategory }: MetadataMenuProps) {
           Visualize
         </StyledMenuItem>
         <DownloadTSVItem lcPluralType={lcPluralType} analyticsCategory={analyticsCategory} />
-        {isWorkspacesUser && <NewWorkspaceDialogFromSelections />}
+        {isWorkspacesUser && isDatasetSearch && <NewWorkspaceDialogFromSelections />}
       </DropdownMenu>
     </>
   );

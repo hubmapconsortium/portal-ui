@@ -19,7 +19,6 @@ function Results({
   type,
   analyticsCategory,
 }) {
-  const { isWorkspacesUser } = useAppContext();
   // one of the sort components must stay mounted to preserve sort history between views.
   return (
     <ViewSwitcherHits
@@ -31,7 +30,7 @@ function Results({
           listComponent: (
             <ResultsTable
               tableLabel={type}
-              selectable={type === 'dataset' && isWorkspacesUser}
+              selectable
               resultFields={tableResultFields}
               detailsUrlPrefix={detailsUrlPrefix}
               idField={idField}
