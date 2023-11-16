@@ -181,15 +181,17 @@ function getWorkspaceTimeLeft(workspace: MergedWorkspace) {
 type FoundPair = [MergedWorkspace, number];
 
 function useSessionWarning(workspaces: MergedWorkspace[]) {
-  const [matchedWorkspace, timeLeft] = workspaces.reduce<FoundPair | undefined>((acc, ws) => {
-  	if (acc) return acc; // Avoids extra calls to `getWorkspaceTimeLeft` after workspace has been found since we can't break a .reduce() 
+  const result = workspaces.reduce<FoundPair | undefined>((acc, ws) => {
+    if (acc) return acc; // Avoids extra calls to `getWorkspaceTimeLeft` after workspace has been found since we can't break a .reduce()
     const time = getWorkspaceTimeLeft(ws);
-    return time ? [ws, time]: acc; // If a time is found, return the workspace with time, otherwise continue iteration
+    return time ? [ws, time] : acc; // If a time is found, return the workspace with time, otherwise continue iteration
   }, undefined);
-  
-  if (!matchedWorkspace || !timeLeft) {
-  	return false;
+
+  if (!result) {
+    return false;
   }
+
+  const [matchedWorkspace, timeLeft] = result;
 
   return `${matchedWorkspace.name} is currently running. You have ${Math.floor(
     timeLeft / 60,
