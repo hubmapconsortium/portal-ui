@@ -1,1 +1,3 @@
 - Add workspace detail page.
+- Increase gap between templates in template grid.
+- Remove tsc-files from our pre-commit type checks as it was not using the project's tsconfig.
