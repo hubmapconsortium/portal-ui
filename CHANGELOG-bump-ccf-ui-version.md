@@ -1,1 +1,0 @@
-- Bumped CCF-UI version to latest 3.x release for the organ-info pages

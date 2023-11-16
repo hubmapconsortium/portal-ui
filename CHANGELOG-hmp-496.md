@@ -1,1 +1,0 @@
-- Prevent launch of additional workspaces while a launch is already in progress.

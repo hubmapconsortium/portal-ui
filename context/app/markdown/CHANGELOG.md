@@ -1,3 +1,18 @@
+## v0.83.1 - 2023-11-16
+
+- Enable selection of entities on all search pages.
+- Limit scope of visualized and downloaded metadata to selected entities when user has made a selection in the search page.
+- Bumped CCF-UI version to latest 3.x release for the organ-info pages
+- Added ontology API to status page.
+- Added View Datasets button to cell types table on gene pages for types that exist in HuBMAP datasets.
+- Added handling for invalid gene name lookups.
+- Prevent launch of additional workspaces while a launch is already in progress.
+- Add authentication guard to workspace page.
+- Add workspace detail page.
+- Increase gap between templates in template grid.
+- Remove tsc-files from our pre-commit type checks as it was not using the project's tsconfig.
+
+
 ## v0.83.0 - 2023-11-13
 
 - Add tracking to interactions with vitessce visualizations.
