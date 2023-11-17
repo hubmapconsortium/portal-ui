@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-import Alert from '@mui/material/Alert';
+import { styled } from '@mui/material/styles';
+import Alert, { AlertProps } from '@mui/material/Alert';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 
-function OutlinedAlert(props) {
+function OutlinedAlert(props: AlertProps) {
   return (
     <Alert
       {...props}
@@ -21,11 +21,15 @@ function OutlinedAlert(props) {
   );
 }
 
-const StyledAlert = styled(OutlinedAlert)`
-  :not(svg) {
-    color: ${(props) => props.theme.palette.text.primary};
-  }
-  margin-bottom: ${(props) => props.$marginBottom || 0}px;
-`;
+interface StyledAlertProps extends AlertProps {
+  $marginBottom?: number;
+}
+
+const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBottom }) => ({
+  ':not(svg)': {
+    color: theme.palette.text.primary,
+  },
+  marginBottom: $marginBottom ?? 0,
+}));
 
 export { StyledAlert as Alert };
