@@ -4,6 +4,7 @@ import useSWRMutation from 'swr/mutation';
 import { useCallback } from 'react';
 
 import { trackEvent } from 'js/helpers/trackers';
+import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from '../Contexts';
 import { Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
@@ -128,21 +129,23 @@ export function useWorkspaceJobs(workspaceId: number) {
   return { jobs: jobs.filter((j) => j.workspace_id === workspaceId), isLoading };
 }
 
-async function fetchWorkspaces(url: string, headers: APIAction['headers']) {
-  const response = await fetch(url, { headers });
-  const result = (await response.json()) as WorkspaceAPIResponse<{ workspaces: Workspace[] }>;
-  if (!result.success) {
-    throw Error(`Failed to get workspaces: ${result.message ?? 'Unknown Error'}`);
-  }
-  return result;
-}
-
-function useFetchWorkspaces(workspaceURL: string) {
+function useFetchWorkspaces(workspaceId?: number) {
   const headers = useWorkspaceHeaders();
   const hasAccess = useHasWorkspaceAccess();
+  const urls = useWorkspacesApiURLs();
+  const workspaceUrl = workspaceId ? urls.workspace(workspaceId) : urls.workspaces;
   const { data, isLoading, ...rest } = useSWR(
-    hasAccess ? [workspaceURL, headers] : null,
-    ([url, head]) => fetchWorkspaces(url, head),
+    hasAccess ? [workspaceUrl, headers] : null,
+    ([url, head]) =>
+      fetcher<WorkspaceAPIResponse<{ workspaces: Workspace[] }>>({
+        url,
+        requestInit: { headers: head },
+        errorMessages: {
+          404: workspaceId
+            ? `No workspace with ID ${workspaceId} found.`
+            : 'No workspaces found with specified parameters.',
+        },
+      }),
     { revalidateOnFocus: hasAccess, refreshInterval: 1000 * 60 },
   );
   const workspaces = data?.data?.workspaces ?? [];
@@ -150,13 +153,14 @@ function useFetchWorkspaces(workspaceURL: string) {
 }
 
 export function useWorkspaces() {
-  const apiURLs = useWorkspacesApiURLs();
-  return useFetchWorkspaces(apiURLs.workspaces);
+  return useFetchWorkspaces();
 }
 
 export function useWorkspace(workspaceId: number) {
-  const apiURLs = useWorkspacesApiURLs();
-  const { workspaces, ...rest } = useFetchWorkspaces(apiURLs.workspace(workspaceId));
+  const { workspaces, ...rest } = useFetchWorkspaces(workspaceId);
+  if (rest.error) {
+    throw rest.error;
+  }
   const workspace = workspaces[0] ?? {};
   return { workspace, ...rest };
 }
