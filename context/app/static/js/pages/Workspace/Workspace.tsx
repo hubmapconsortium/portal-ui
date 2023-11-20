@@ -13,13 +13,13 @@ import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { condenseJobs } from 'js/components/workspaces/utils';
 import JobStatus from 'js/components/workspaces/JobStatus';
-import { useWorkspaceDetail, useSessionWarning } from 'js/components/workspaces/hooks';
-import { Alert } from 'js/shared-styles/alerts';
+import { useWorkspaceDetail } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButton from 'js/components/workspaces/WorkspaceLaunchStopButton';
 import Typography from '@mui/material/Typography';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
+import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 
 interface WorkspacePageProps {
   workspaceId: number;
@@ -58,8 +58,6 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
   const { workspace, isLoading, handleStopWorkspace, isStoppingWorkspace } = useWorkspaceDetail({ workspaceId });
   const workspaceTemplates = useMatchingWorkspaceTemplates(workspace);
 
-  const sessionWarning = useSessionWarning([workspace]);
-
   if (isLoading || Object.keys(workspace).length === 0) {
     return null;
   }
@@ -69,7 +67,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
 
   return (
     <Stack gap={6} sx={{ marginBottom: 5 }}>
-      {sessionWarning && <Alert severity="info">{sessionWarning}</Alert>}
+      <WorkspaceSessionWarning workspaces={[workspace]} />
       <Box>
         <SummaryData
           title={workspace.name}
