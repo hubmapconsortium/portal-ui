@@ -161,7 +161,7 @@ function NewWorkspaceDialog({
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={handleSubmit(submit)}
           >
-            <WorkspaceField<CreateWorkspaceFormTypes>
+            <WorkspaceField
               control={control}
               name="workspace-name"
               label="Name"
