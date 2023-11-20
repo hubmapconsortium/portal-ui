@@ -1,1 +1,0 @@
-- Add handling for workspace API requests with no results.

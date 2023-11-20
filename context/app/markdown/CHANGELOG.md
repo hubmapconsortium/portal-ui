@@ -1,3 +1,12 @@
+## v0.84.0 - 2023-11-20
+
+- Prevent duplicate workspace creation via rapid submission of launch new workspace form.
+- Add handling for workspace API requests with no results.
+- Do not display workspace templates with designated `is_hidden` bool.
+- Add a prompt to renew workspace sessions to the top of the workspaces screen.
+- Handle workspace files which can be either strings or objects.
+
+
 ## v0.83.1 - 2023-11-16
 
 - Enable selection of entities on all search pages.

@@ -1,1 +1,0 @@
-- Handle workspace files which can be either strings or objects.
