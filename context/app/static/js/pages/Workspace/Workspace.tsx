@@ -11,7 +11,7 @@ import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { condenseJobs } from 'js/components/workspaces/utils';
+import { condenseJobs, getWorkspaceFileName } from 'js/components/workspaces/utils';
 import JobStatus from 'js/components/workspaces/JobStatus';
 import { useWorkspaceDetail, useSessionWarning } from 'js/components/workspaces/hooks';
 import { Alert } from 'js/shared-styles/alerts';
@@ -39,8 +39,8 @@ function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
   const workspaceFiles = workspace?.workspace_details?.request_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();
 
-  const matchingTemplates = workspaceFiles.reduce((acc, fileName) => {
-    const templateName = fileName.split('.').shift();
+  const matchingTemplates = workspaceFiles.reduce((acc, file) => {
+    const templateName = getWorkspaceFileName(file).split('.').shift();
     if (templateName && templateName in templates) {
       return { ...acc, [templateName]: templates[templateName] };
     }

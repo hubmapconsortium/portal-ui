@@ -1,19 +1,16 @@
 import { JobStatus, JobStatusDisplayName, WorkspaceStatus } from './statusCodes';
 
+type WorkspaceFile = string | { name: string };
 interface Symlink {
   name: string;
   dataset_uuid?: string;
 }
 interface CurrentWorkspaceDetail {
-  files: {
-    name: string;
-  }[];
+  files: WorkspaceFile[];
   symlinks: Symlink[];
 }
 
-interface RequestWorkspaceDetail {
-  files: string[];
-  symlinks: Symlink[];
+interface RequestWorkspaceDetail extends CurrentWorkspaceDetail {
   globus_groups_token: string;
 }
 
@@ -124,6 +121,7 @@ type TemplateTags = Record<string, string>;
 type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
 export type {
+  WorkspaceFile,
   WorkspaceAPIResponse,
   TemplatesResponse,
   CreateTemplatesResponse,
