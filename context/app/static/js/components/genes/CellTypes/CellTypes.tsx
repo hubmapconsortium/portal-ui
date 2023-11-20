@@ -38,10 +38,10 @@ function OrgansCell({ organs }: { organs: { name: string }[] }) {
   const contents = !organs ? (
     <>&mdash;</>
   ) : (
-    organs.map((o, idx) => (
-      <Fragment key={o.name}>
-        <InternalLink href={`/organ/${o.name}`}>{o.name}</InternalLink>
-        {idx < organs.length - 1 && ', '}
+    organs.map(({ name }, i) => (
+      <Fragment key={name}>
+        <InternalLink href={`/organ/${name}`}>{name}</InternalLink>
+        {i < organs.length - 1 && ', '}
       </Fragment>
     ))
   );
