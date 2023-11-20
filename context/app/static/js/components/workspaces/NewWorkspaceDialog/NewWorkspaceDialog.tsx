@@ -179,7 +179,7 @@ function NewWorkspaceDialog({
             Filter workspace templates by tags
           </Typography>
           <Stack spacing={1}>
-            <MultiAutocomplete<string>
+            <MultiAutocomplete
               value={selectedTags}
               options={Object.keys(tags)
                 .filter((tag) => !recommendedTags.includes(tag))
@@ -216,7 +216,7 @@ function NewWorkspaceDialog({
         <Button
           type="submit"
           form="create-workspace-form"
-          disabled={Object.keys(errors).length > 0 || errorMessages.length > 0 || selectedTags.length === 0}
+          disabled={Object.keys(errors).length > 0 || errorMessages.length > 0}
         >
           Launch Workspace
         </Button>
