@@ -93,6 +93,7 @@ interface TemplateTypes {
   tags: string[];
   is_multi_dataset_template: boolean;
   template_format: string;
+  is_hidden: boolean;
 }
 
 type TemplatesTypes = Record<string, TemplateTypes>;
