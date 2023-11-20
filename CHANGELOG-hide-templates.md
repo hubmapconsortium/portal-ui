@@ -1,0 +1,1 @@
+- Do not display workspace templates with designated `is_hidden` bool.
