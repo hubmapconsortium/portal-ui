@@ -12,7 +12,7 @@ import {
   JobStatusDisplayName,
 } from './statusCodes';
 
-import type { MergedWorkspace, Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
+import type { MergedWorkspace, Workspace, WorkspaceAPIResponse, WorkspaceJob, WorkspaceFile } from './types';
 
 interface WorkspaceActionArgs {
   workspaceId: number;
@@ -45,13 +45,32 @@ function getWorkspaceHeaders(workspacesToken: string) {
 }
 
 /**
+ * Gets the name of a workspace file as a string
+ * @param file A workspace file. Currently this is inconsistent between an object with a name entry and a string.
+ * @returns The workspace file as a string
+ */
+function getWorkspaceFileName(file: WorkspaceFile) {
+  if (typeof file === 'string') {
+    return file;
+  }
+
+  return file.name;
+}
+
+/**
  * Gets the path of the notebook for a workspace
  * @param workspace The workspace to get the notebook path for
  * @returns The path of the notebook for the workspace
  */
 function getNotebookPath(workspace: Workspace) {
   const { files } = workspace.workspace_details.current_workspace_details;
-  return (files || []).find(({ name }) => name.endsWith('.ipynb'))?.name ?? '';
+  return (files || []).reduce<string>((acc, file) => {
+    const path = getWorkspaceFileName(file);
+    if (path.endsWith('.ipynb') && acc.length === 0) {
+      return path;
+    }
+    return acc;
+  }, '');
 }
 
 /**
@@ -229,6 +248,7 @@ export {
   findBestJob,
   condenseJobs,
   locationIfJobRunning,
+  getWorkspaceFileName,
   getWorkspaceStartLink,
   getWorkspaceLink,
   getWorkspaceHeaders,
