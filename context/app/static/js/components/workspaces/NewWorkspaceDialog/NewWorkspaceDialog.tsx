@@ -216,7 +216,7 @@ function NewWorkspaceDialog({
         <Button
           type="submit"
           form="create-workspace-form"
-          disabled={Object.keys(errors).length > 0 || errorMessages.length > 0}
+          disabled={Object.keys(errors).length > 0 || errorMessages.length > 0 || selectedTags.length === 0}
         >
           Launch Workspace
         </Button>
