@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -14,6 +14,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 import { LineClamp } from 'js/shared-styles/text';
+import { InternalLink } from 'js/shared-styles/Links';
 import { cellTypes } from '../constants';
 import { useGeneDetails } from '../hooks';
 import ViewDatasets from './ViewDatasets';
@@ -31,6 +32,21 @@ export function TableSkeleton({ numberOfCols = columnLabels.length }: { numberOf
       <LoadingTableRows numberOfRows={3} numberOfCols={numberOfCols} />
     </>
   );
+}
+
+function OrgansCell({ organs }: { organs: { name: string }[] }) {
+  const contents = !organs ? (
+    <>&mdash;</>
+  ) : (
+    organs.map((o, idx) => (
+      <Fragment key={o.name}>
+        <InternalLink href={`/organ/${o.name}`}>{o.name}</InternalLink>
+        {idx < organs.length - 1 && ', '}
+      </Fragment>
+    ))
+  );
+
+  return <TableCell sx={{ whiteSpace: 'nowrap' }}>{contents}</TableCell>;
 }
 
 export default function CellTypes() {
@@ -58,7 +74,7 @@ export default function CellTypes() {
                   <TableCell>
                     <LineClamp lines={2}>{cellType.definition}</LineClamp>
                   </TableCell>
-                  <TableCell>{cellType.organs.map((o) => o.name).join(',\u00A0') || <>&mdash;</>}</TableCell>
+                  <OrgansCell organs={cellType.organs} />
                   <TableCell>
                     <ViewDatasets id={cellType.id} name={cellType.name} />
                   </TableCell>
