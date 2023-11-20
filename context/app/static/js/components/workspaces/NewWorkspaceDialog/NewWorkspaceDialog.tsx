@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import Step from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
@@ -87,6 +88,7 @@ interface NewWorkspaceDialogProps {
   handleClose: () => void;
   removeDatasets?: (datasetUUIDs: string[]) => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
+  isSubmitting?: boolean;
 }
 
 const recommendedTags = ['visualization', 'api'];
@@ -102,6 +104,7 @@ function NewWorkspaceDialog({
   onSubmit,
   removeDatasets,
   children,
+  isSubmitting,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -213,13 +216,14 @@ function NewWorkspaceDialog({
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button
+        <LoadingButton
+          loading={isSubmitting}
           type="submit"
           form="create-workspace-form"
           disabled={Object.keys(errors).length > 0 || errorMessages.length > 0}
         >
           Launch Workspace
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );

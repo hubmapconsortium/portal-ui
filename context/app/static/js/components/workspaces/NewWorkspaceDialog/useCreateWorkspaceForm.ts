@@ -74,7 +74,16 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     handleClose();
   }
 
-  return { dialogIsOpen, setDialogIsOpen, handleClose, handleSubmit, control, errors, onSubmit };
+  return {
+    dialogIsOpen,
+    setDialogIsOpen,
+    handleClose,
+    handleSubmit,
+    control,
+    errors,
+    onSubmit,
+    isSubmitting: isSubmitting || isSubmitted,
+  };
 }
 
 interface DatasetAccessLevelHits {
