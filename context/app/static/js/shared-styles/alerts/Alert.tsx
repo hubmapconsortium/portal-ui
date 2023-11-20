@@ -29,6 +29,9 @@ const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBot
   ':not(svg)': {
     color: theme.palette.text.primary,
   },
+  '& .MuiAlert-action': {
+    padding: 0,
+  },
   marginBottom: $marginBottom ?? 0,
 }));
 
