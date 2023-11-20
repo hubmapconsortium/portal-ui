@@ -21,7 +21,7 @@ interface UseWorkspacesListTypes {
 }
 
 /**
- * Returns a function that will mutate workspaces, jobs, and optionally a workspace
+ * Returns a function that will mutate workspaces, jobs, and optionally a single workspace's details
  *
  * @param mutateWorkspace The mutate function for a single workspace
  * @returns A function that will revalidate workspaces, jobs, and optionally a workspace
