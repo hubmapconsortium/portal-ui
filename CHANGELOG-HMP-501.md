@@ -1,0 +1,1 @@
+- Add links to organ pages from gene detail page's cell types list.
