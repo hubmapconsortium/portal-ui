@@ -1,5 +1,6 @@
 import { JobStatus, JobStatusDisplayName, WorkspaceStatus } from './statusCodes';
 
+// Once workspaces API issues are resolved. We expect the workspaces API to consistently return an object.
 type WorkspaceFile = string | { name: string };
 interface Symlink {
   name: string;
