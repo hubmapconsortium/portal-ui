@@ -15,9 +15,10 @@ import {
 import { MergedWorkspace, Workspace } from './types';
 import { useLaunchWorkspaceStore } from './LaunchWorkspaceDialog/store';
 
-interface UseWorkspacesListTypes {
+interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
   workspacesLoading: boolean;
+  mutateWorkspace?: KeyedMutator<T>;
 }
 
 /**
@@ -36,10 +37,10 @@ function useMutateWorkspacesAndJobs<T>(mutateWorkspace?: KeyedMutator<T>) {
   return mutate;
 }
 
-function useWorkspacesActions({ workspaces, workspacesLoading }: UseWorkspacesListTypes) {
+function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspace }: UseWorkspacesListTypes<T>) {
   const { jobs, isLoading: jobsLoading } = useJobs();
   const isLoading = workspacesLoading || jobsLoading;
-  const mutate = useMutateWorkspacesAndJobs();
+  const mutate = useMutateWorkspacesAndJobs(mutateWorkspace);
 
   const workspacesList: MergedWorkspace[] = useMemo(
     () => (jobs?.length && workspaces?.length ? mergeJobsIntoWorkspaces(jobs, workspaces) : []),
