@@ -1,2 +1,0 @@
-- Fix bug with workspace creation locking after unsuccessful submit.
-- Fix errors launching workspace when another workspace is running.

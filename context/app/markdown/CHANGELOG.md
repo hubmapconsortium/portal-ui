@@ -1,3 +1,11 @@
+## v0.84.1 - 2023-11-21
+
+- Add links to organ pages from gene detail page's cell types list.
+- Allow reopening closed workspace tabs without needing to relaunch the entire session.
+- Fix bug with workspace creation locking after unsuccessful submit.
+- Fix errors launching workspace when another workspace is running.
+
+
 ## v0.84.0 - 2023-11-20
 
 - Prevent duplicate workspace creation via rapid submission of launch new workspace form.

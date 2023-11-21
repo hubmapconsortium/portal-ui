@@ -1,1 +1,0 @@
-- Allow reopening closed workspace tabs without needing to relaunch the entire session.
