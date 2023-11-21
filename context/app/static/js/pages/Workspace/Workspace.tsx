@@ -14,7 +14,7 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { condenseJobs, getWorkspaceFileName } from 'js/components/workspaces/utils';
 import JobStatus from 'js/components/workspaces/JobStatus';
 import { useWorkspaceDetail } from 'js/components/workspaces/hooks';
-import WorkspaceLaunchStopButton from 'js/components/workspaces/WorkspaceLaunchStopButton';
+import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import Typography from '@mui/material/Typography';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -51,7 +51,8 @@ function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
 }
 
 function LaunchStopButton(props: ButtonProps) {
-  return <Button {...props} variant="contained" />;
+  const variant = props?.children?.toString() === 'Stop Jobs' ? 'outlined' : 'contained';
+  return <Button {...props} variant={variant} />;
 }
 
 function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
@@ -79,7 +80,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           status=""
           mapped_data_access_level=""
           otherButtons={
-            <WorkspaceLaunchStopButton
+            <WorkspaceLaunchStopButtons
               workspace={workspace}
               button={LaunchStopButton}
               handleStopWorkspace={handleStopWorkspace}
