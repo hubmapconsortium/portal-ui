@@ -64,7 +64,9 @@ function getWorkspaceFileName(file: WorkspaceFile) {
  */
 function getNotebookPath(workspace: Workspace) {
   const { files } = workspace.workspace_details.current_workspace_details;
-  return (files || []).reduce<string>((acc, file) => {
+  const { files: requestFiles } = workspace.workspace_details.request_workspace_details;
+  const combinedFiles = files.concat(requestFiles);
+  return (combinedFiles || []).reduce<string>((acc, file) => {
     const path = getWorkspaceFileName(file);
     if (path.endsWith('.ipynb') && acc.length === 0) {
       return path;
