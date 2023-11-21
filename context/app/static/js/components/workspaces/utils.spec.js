@@ -4,6 +4,18 @@ const workspace_details = {
   current_workspace_details: {
     files: [{ name: 'workspace.ipynb' }],
   },
+  request_workspace_details: {
+    files: [],
+  },
+};
+
+const workspace_details_request = {
+  current_workspace_details: {
+    files: [],
+  },
+  request_workspace_details: {
+    files: [{ name: 'workspace.ipynb' }],
+  },
 };
 
 describe('mergeJobsIntoWorkspaces', () => {
@@ -51,6 +63,7 @@ describe('mergeJobsIntoWorkspaces', () => {
         status: 'active',
         workspace_details: {
           current_workspace_details: {}, // Response currently not guaranteed to have "files" key.
+          request_workspace_details: {},
         },
       },
       {
@@ -59,6 +72,9 @@ describe('mergeJobsIntoWorkspaces', () => {
         workspace_details: {
           current_workspace_details: {
             files: [], // too few
+          },
+          request_workspace_details: {
+            ...workspace_details.request_workspace_details,
           },
         },
       },
@@ -69,6 +85,9 @@ describe('mergeJobsIntoWorkspaces', () => {
           current_workspace_details: {
             files: [{ name: 'workspace1.ipynb' }, { name: 'workspace2.ipynb' }], // too many... take first
           },
+          request_workspace_details: {
+            ...workspace_details.request_workspace_details,
+          },
         },
       },
       {
@@ -76,10 +95,21 @@ describe('mergeJobsIntoWorkspaces', () => {
         status: 'active',
         workspace_details, // just right!
       },
+      {
+        id: 3,
+        status: 'active',
+        workspace_details: workspace_details_request, // works when `request_workspace_details` has entry and `current_workspace_details` does not
+      },
     ];
     const jobs = [];
     const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
-    expect(mergedWorkspaces.map((ws) => ws.path)).toEqual(['', '', 'workspace1.ipynb', 'workspace.ipynb']);
+    expect(mergedWorkspaces.map((ws) => ws.path)).toEqual([
+      '',
+      '',
+      'workspace1.ipynb',
+      'workspace.ipynb',
+      'workspace.ipynb',
+    ]);
   });
 });
 
