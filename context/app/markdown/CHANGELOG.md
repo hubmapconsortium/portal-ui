@@ -1,3 +1,8 @@
+## v0.84.2 - 2023-11-21
+
+- Fix workspace launch error message display logic.
+
+
 ## v0.84.1 - 2023-11-21
 
 - Add links to organ pages from gene detail page's cell types list.
