@@ -65,10 +65,31 @@ def get_samples_with_cell_type(cl_id):
 def get_organs_with_cell_type(cl_id):
     client = get_cells_client()
     try:
+        # Get list of organs containing cell type
         organs = client.select_organs(
             where="cell_type", has=[cl_id]).get_list()
-        organs = list(map(lambda x: x['uuid'], organs._get(organs.__len__(), 0)))
+        organs = list(map(lambda x: x['grouping_name'], organs._get(organs.__len__(), 0)))
+        cells_of_type = client.select_cells(
+            where="cell_type", has=[cl_id])
+        # Get counts of cell types in each organ
+        for i, organ in enumerate(organs):
+            organ_counts = client.select_cells(
+                where="organ", has=[organ])
+            total_cells = organ_counts.__len__()
+            celltype_cells = organ_counts & cells_of_type
+            celltype_cells = celltype_cells.__len__()
+            organs[i] = {
+                'organ': organ,
+                'total_cells': total_cells,
+                'celltype_cells': celltype_cells,
+            }
+
         return json.dumps(organs)
     except Exception as err:
         current_app.logger.info(f'Organs not found for cell type {cl_id}. {err}')
         return json.dumps([])
+
+
+def _get_full_result_list(result_list):
+    results = result_list._get(result_list.__len__(), 0)
+    return results
