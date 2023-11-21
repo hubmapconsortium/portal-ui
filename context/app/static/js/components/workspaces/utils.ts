@@ -58,6 +58,17 @@ function getWorkspaceFileName(file: WorkspaceFile) {
 }
 
 /**
+ * Prepends a slash to a file name if it doesn't already have one
+ * @param fileName The file name to format
+ */
+function formatFileName(fileName: string) {
+  if (fileName.startsWith('/')) {
+    return fileName;
+  }
+  return `/${fileName}`;
+}
+
+/**
  * Gets the path of the notebook for a workspace
  * @param workspace The workspace to get the notebook path for
  * @returns The path of the notebook for the workspace
@@ -65,7 +76,13 @@ function getWorkspaceFileName(file: WorkspaceFile) {
 function getNotebookPath(workspace: Workspace) {
   const { files = [] } = workspace.workspace_details.current_workspace_details;
   const { files: requestFiles = [] } = workspace.workspace_details.request_workspace_details;
-  const combinedFiles = files.concat(requestFiles);
+  const combinedFiles = files.concat(requestFiles).map((file) => {
+    const fileName = getWorkspaceFileName(file);
+    if (typeof file === 'string') {
+      return formatFileName(fileName);
+    }
+    return { ...file, name: formatFileName(fileName) };
+  });
   return combinedFiles.reduce<string>((acc, file) => {
     const path = getWorkspaceFileName(file);
     if (path.endsWith('.ipynb') && acc.length === 0) {

@@ -28,7 +28,7 @@ describe('mergeJobsIntoWorkspaces', () => {
         id: 1,
         other_ws_info: true,
         status: 'active',
-        path: 'workspace.ipynb',
+        path: '/workspace.ipynb',
         jobs,
         workspace_details,
       },
@@ -45,8 +45,8 @@ describe('mergeJobsIntoWorkspaces', () => {
     const jobs = [];
     const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
     expect(mergedWorkspaces).toEqual([
-      { id: 1, status: 'active', jobs: [], path: 'workspace.ipynb', workspace_details },
-      { id: 2, status: 'idle', jobs: [], path: 'workspace.ipynb', workspace_details },
+      { id: 1, status: 'active', jobs: [], path: '/workspace.ipynb', workspace_details },
+      { id: 2, status: 'idle', jobs: [], path: '/workspace.ipynb', workspace_details },
     ]);
   });
 
@@ -106,9 +106,9 @@ describe('mergeJobsIntoWorkspaces', () => {
     expect(mergedWorkspaces.map((ws) => ws.path)).toEqual([
       '',
       '',
-      'workspace1.ipynb',
-      'workspace.ipynb',
-      'workspace.ipynb',
+      '/workspace1.ipynb',
+      '/workspace.ipynb',
+      '/workspace.ipynb',
     ]);
   });
 });
