@@ -51,7 +51,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting, isSubmitted },
+    formState: { errors, isSubmitting, isSubmitSuccessful },
   } = useForm({
     defaultValues: {
       'workspace-name': defaultName ?? '',
@@ -68,7 +68,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
   }
 
   async function onSubmit({ templateKeys, uuids, workspaceName }: CreateTemplateNotebooksTypes) {
-    if (isSubmitting || isSubmitted) return;
+    if (isSubmitting || isSubmitSuccessful) return;
     await createTemplateNotebooks({ templateKeys, uuids, workspaceName });
     reset();
     handleClose();
@@ -82,7 +82,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     control,
     errors,
     onSubmit,
-    isSubmitting: isSubmitting || isSubmitted,
+    isSubmitting: isSubmitting || isSubmitSuccessful,
   };
 }
 
