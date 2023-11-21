@@ -33,9 +33,9 @@ function NewWorkspaceDialogFromSelections() {
         removeDatasets={deselectRows}
         {...rest}
       >
+        <ErrorMessages errorMessages={errorMessages} />
         {protectedHubmapIds.length > 0 && (
           <Box>
-            <ErrorMessages errorMessages={errorMessages} />
             <WorkspaceField
               control={control}
               name="protected-datasets"

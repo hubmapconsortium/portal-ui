@@ -1,0 +1,1 @@
+- Fix workspace launch error message display logic.
