@@ -7,7 +7,7 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import { PanelWrapper } from 'js/shared-styles/panels';
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import WorkspaceLaunchStopButton from './WorkspaceLaunchStopButton';
+import WorkspaceLaunchStopButtons from './WorkspaceLaunchStopButtons';
 import { MergedWorkspace } from './types';
 import { jobStatuses } from './statusCodes';
 import { useWorkspacesList } from './hooks';
@@ -56,7 +56,7 @@ function WorkspaceListItem({ workspace, toggleItem, selected }: WorkspaceListIte
 
         <WorkspaceDetails workspace={workspace} />
       </Stack>
-      <WorkspaceLaunchStopButton
+      <WorkspaceLaunchStopButtons
         workspace={workspace}
         button={LaunchStopButton}
         handleStopWorkspace={handleStopWorkspace}
