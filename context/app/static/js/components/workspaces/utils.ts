@@ -228,12 +228,8 @@ async function locationIfJobRunning({
 }
 
 function getWorkspaceStartLink(workspace: Workspace, templatePath?: string) {
-  const { request_workspace_details, current_workspace_details } = workspace.workspace_details;
-  const workspaceFile = current_workspace_details.files.at(0) ?? request_workspace_details.files.at(0);
-  const fileName = typeof workspaceFile === 'string' ? workspaceFile : workspaceFile?.name;
-  return `/workspaces/start/${workspace.id}?notebook_path=${encodeURIComponent(
-    templatePath ?? fileName ?? workspace.path,
-  )}`;
+  const path = getNotebookPath(workspace);
+  return `/workspaces/start/${workspace.id}?notebook_path=${encodeURIComponent(templatePath ?? path)}`;
 }
 
 function getWorkspaceLink(workspace: Workspace) {
