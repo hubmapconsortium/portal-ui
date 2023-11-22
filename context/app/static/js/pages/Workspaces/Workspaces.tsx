@@ -9,7 +9,7 @@ import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWa
 function Workspaces() {
   return (
     <Stack spacing={2} direction="column">
-      <WorkspaceSessionWarning />
+      <WorkspaceSessionWarning link />
       <WorkspacesTitle />
       <WorkspacesAuthGuard>
         <WorkspacesAuthenticated />

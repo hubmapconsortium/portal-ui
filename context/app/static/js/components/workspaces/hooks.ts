@@ -206,7 +206,7 @@ function useSessionWarning(workspaces: MergedWorkspace[]) {
 
   const [matchedWorkspace, timeLeft] = result;
 
-  const warning = `${matchedWorkspace.name} is currently running. You have ${Math.floor(
+  const warning = `is currently running. You have ${Math.floor(
     timeLeft / 60,
   )} minutes left in your session. Renewing your session time will stop all jobs running in your workspace.`;
 
