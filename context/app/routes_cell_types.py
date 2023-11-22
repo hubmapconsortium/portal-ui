@@ -2,7 +2,7 @@ from flask import json, current_app
 from hubmap_api_py_client import Client
 from requests import post
 
-from .utils import make_blueprint
+from .utils import make_blueprint, get_client
 
 
 def get_cells_client():
@@ -50,11 +50,28 @@ def cell_types_list():
 
 @blueprint.route('/cell-types/<cl_id>/samples.json', methods=['GET'])
 def get_samples_with_cell_type(cl_id):
-    client = get_cells_client()
+    datasets = json.loads(get_datasets_with_cell_type(cl_id))
+    client = get_client()
     try:
-        samples = client.select_samples(
-            where="cell_type", has=[cl_id]).get_list()
-        samples = list(map(lambda x: x['uuid'], samples._get(samples.__len__(), 0)))
+        query_override = {
+            "bool": {
+                "must": {
+                    "terms": {
+                        "descendant_ids": datasets
+                    }
+                }
+            }
+        }
+        fields = ['uuid', 'hubmap_id', 'origin_samples_unique_mapped_organs',
+                  'sample_category', 'last_modified_timestamp']
+        samples = client.get_entities(plural_lc_entity_type='samples',
+                                      query_override=query_override, non_metadata_fields=fields)
+        samples = [{'uuid': sample['uuid'],
+                    'hubmap_id': sample['hubmap_id'],
+                    'organ': sample['origin_samples_unique_mapped_organs'],
+                    'sample_category': sample['sample_category'],
+                    'last_modified_timestamp': sample['last_modified_timestamp']
+                    } for sample in samples]
         return json.dumps(samples)
     except Exception as err:
         current_app.logger.info(f'Samples not found for cell type {cl_id}. {err}')
@@ -88,8 +105,3 @@ def get_organs_with_cell_type(cl_id):
     except Exception as err:
         current_app.logger.info(f'Organs not found for cell type {cl_id}. {err}')
         return json.dumps([])
-
-
-def _get_full_result_list(result_list):
-    results = result_list._get(result_list.__len__(), 0)
-    return results
