@@ -159,7 +159,8 @@
     "lint:fix": "eslint -c .eslintrc.yml ./app/static/js/ --fix",
     "storybook": "storybook dev -p 6006 -s app/static/storybook-public/",
     "build-storybook": "storybook build",
-    "tsc": "tsc --noEmit"
+    "tsc": "tsc --noEmit",
+    "clean": "rm -rf ./app/static/public"
   },
   "lint-staged": {
     "app/static/js/**/*.{js,jsx,ts,tsx,y*ml,json,md}": [
