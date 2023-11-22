@@ -33,31 +33,33 @@ function NewWorkspaceDialogFromSelections() {
         removeDatasets={deselectRows}
         {...rest}
       >
-        {protectedHubmapIds.length > 0 && (
-          <Box>
-            <ErrorMessages errorMessages={errorMessages} />
-            <WorkspaceField
-              control={control}
-              name="protected-datasets"
-              label="Protected Datasets"
-              value={protectedHubmapIds}
-              error
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => handleCopyClick(protectedHubmapIds)}>
-                      <ContentCopyIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                readOnly: true,
-              }}
-            />
-            <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
-              Remove Protected Datasets ({protectedRows.length})
-            </Button>
-          </Box>
-        )}
+        <Box>
+          <ErrorMessages errorMessages={errorMessages} />
+          {protectedHubmapIds.length > 0 && (
+            <>
+              <WorkspaceField
+                control={control}
+                name="protected-datasets"
+                label="Protected Datasets"
+                value={protectedHubmapIds}
+                error
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => handleCopyClick(protectedHubmapIds)}>
+                        <ContentCopyIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  readOnly: true,
+                }}
+              />
+              <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
+                Remove Protected Datasets ({protectedRows.length})
+              </Button>
+            </>
+          )}
+        </Box>
       </NewWorkspaceDialog>
     </>
   );

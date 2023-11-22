@@ -28,7 +28,6 @@ export interface Workspace {
   disk_space: number;
   datetime_created: string;
   workspace_details: WorkspaceDetails;
-  path: string;
 }
 
 interface WorkspaceJobDetail {
@@ -69,6 +68,7 @@ export interface WorkspaceJobWithDisplayStatus extends Omit<WorkspaceJob, 'statu
 
 export interface MergedWorkspace extends Workspace {
   jobs: WorkspaceJob[];
+  path: string;
 }
 
 interface WorkspaceAPIFailure {

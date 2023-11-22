@@ -2,6 +2,7 @@ import React from 'react';
 import { Alert } from 'js/shared-styles/alerts';
 import Button from '@mui/material/Button';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { InternalLink } from 'js/shared-styles/Links';
 import { useRefreshSession, useSessionWarning, useWorkspacesList } from './hooks';
 import { MergedWorkspace } from './types';
 
@@ -28,8 +29,9 @@ function RefreshSession({ workspace }: RefreshSessionProps) {
 
 interface WorkspaceSessionWarningProps {
   workspaces?: MergedWorkspace[];
+  link?: boolean;
 }
-export default function WorkspaceSessionWarning({ workspaces }: WorkspaceSessionWarningProps) {
+export default function WorkspaceSessionWarning({ workspaces, link }: WorkspaceSessionWarningProps) {
   const { workspacesList } = useWorkspacesList();
   const sessionWarning = useSessionWarning(workspaces ?? workspacesList);
 
@@ -37,9 +39,15 @@ export default function WorkspaceSessionWarning({ workspaces }: WorkspaceSession
 
   const { warning, matchedWorkspace } = sessionWarning;
 
+  const formattedWorkspaceName = link ? (
+    <InternalLink href={`/workspaces/${matchedWorkspace.id}`}>{matchedWorkspace.name}</InternalLink>
+  ) : (
+    matchedWorkspace.name
+  );
+
   return (
     <Alert severity="info" action={<RefreshSession workspace={matchedWorkspace} />}>
-      {warning}
+      {formattedWorkspaceName} {warning}
     </Alert>
   );
 }

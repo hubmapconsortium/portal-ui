@@ -1,0 +1,1 @@
+- Add link to currently running workspace from session time notification if not currently on the workspace's page.
