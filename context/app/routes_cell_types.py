@@ -1,8 +1,8 @@
-from flask import json, current_app
+from flask import json, current_app, render_template
 from hubmap_api_py_client import Client
 from requests import post
 
-from .utils import make_blueprint, get_client
+from .utils import make_blueprint, get_client, get_default_flask_data
 
 
 def get_cells_client():
@@ -20,17 +20,12 @@ def get_cells_client():
 blueprint = make_blueprint(__name__)
 
 
-@blueprint.route('/cell-types/<cl_id>/datasets.json', methods=['GET'])
-def get_datasets_with_cell_type(cl_id):
-    client = get_cells_client()
-    try:
-        datasets = client.select_datasets(
-            where="cell_type", has=[cl_id]).get_list()
-        datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
-        return json.dumps(datasets)
-    except Exception as err:
-        current_app.logger.info(f'Datasets not found for cell type {cl_id}. {err}')
-        return json.dumps([])
+@blueprint.route('/cell-types/<cl_id>')
+def cell_types_detail_view(cl_id):
+    return render_template(
+        'base-pages/react-content.html',
+        title='Cell Type Details',
+        flask_data={**get_default_flask_data(), 'cell_type': cl_id})
 
 
 # Fetches list of all cell types
@@ -46,6 +41,19 @@ def cell_types_list():
         'limit': 500}).json()['results']
     celltype_list = list(map(lambda x: x['grouping_name'], celltype_list))
     return celltype_list
+
+
+@blueprint.route('/cell-types/<cl_id>/datasets.json', methods=['GET'])
+def get_datasets_with_cell_type(cl_id):
+    client = get_cells_client()
+    try:
+        datasets = client.select_datasets(
+            where="cell_type", has=[cl_id]).get_list()
+        datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
+        return json.dumps(datasets)
+    except Exception as err:
+        current_app.logger.info(f'Datasets not found for cell type {cl_id}. {err}')
+        return json.dumps([])
 
 
 @blueprint.route('/cell-types/<cl_id>/samples.json', methods=['GET'])
@@ -99,6 +107,7 @@ def get_organs_with_cell_type(cl_id):
                 'organ': organ,
                 'total_cells': total_cells,
                 'celltype_cells': celltype_cells,
+                'other_cells': total_cells - celltype_cells
             }
 
         return json.dumps(organs)
