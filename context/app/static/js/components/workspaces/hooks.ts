@@ -11,6 +11,8 @@ import {
   useCreateWorkspace,
   CreateWorkspaceBody,
   useWorkspace,
+  useUpdateWorkspace,
+  UpdateWorkspaceBody,
 } from './api';
 import { MergedWorkspace, Workspace } from './types';
 import { useLaunchWorkspaceStore } from './LaunchWorkspaceDialog/store';
@@ -232,6 +234,23 @@ function useRefreshSession(workspace: MergedWorkspace) {
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
 }
 
+function useHandleUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
+  const { mutate: mutateWorkspace } = useWorkspace(workspaceId);
+  const { updateWorkspace } = useUpdateWorkspace({ workspaceId });
+  const { toastSuccess } = useSnackbarActions();
+
+  const handleUpdateWorkspace = useCallback(
+    async (body: UpdateWorkspaceBody) => {
+      await updateWorkspace(body);
+      await mutateWorkspace();
+      toastSuccess('Workspace updated.');
+    },
+    [updateWorkspace, mutateWorkspace, toastSuccess],
+  );
+
+  return { handleUpdateWorkspace };
+}
+
 export {
   useWorkspacesList,
   useHasRunningWorkspace,
@@ -240,4 +259,5 @@ export {
   useWorkspaceDetail,
   useSessionWarning,
   useRefreshSession,
+  useHandleUpdateWorkspace,
 };

@@ -360,3 +360,54 @@ export function useCreateWorkspace() {
 
   return { createWorkspace, isCreatingWorkspace: isMutating };
 }
+
+export type UpdateWorkspaceBody = Partial<CreateWorkspaceBody>;
+
+export interface UpdateWorkspaceArgs extends APIAction {
+  body: UpdateWorkspaceBody;
+}
+
+async function updateWorkspaceFetcher(_key: string, { arg: { body, url, headers } }: { arg: UpdateWorkspaceArgs }) {
+  trackEvent({
+    category: 'Workspace Update',
+    action: 'Update Workspace',
+    value: {
+      name: body.name,
+      description: body.description,
+      globus_groups_token: body?.workspace_details?.globus_groups_token,
+      files: body?.workspace_details?.files.map((f) => f.name),
+      symlinks: body?.workspace_details?.symlinks.map((s) => s.name),
+    },
+  });
+  const response = await fetch(url, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+    headers,
+  });
+  if (!response.ok) {
+    console.error('Update workspace failed', response);
+  }
+  const responseJson = (await response.json()) as WorkspaceAPIResponse<{ workspace: Workspace }>;
+  if (!responseJson.success) {
+    throw new Error(`Failed to update workspace: ${responseJson.message}`);
+  }
+}
+
+export function useUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+  const { trigger, isMutating } = useSWRMutation('update-workspace', updateWorkspaceFetcher);
+
+  const updateWorkspace = useCallback(
+    (body: UpdateWorkspaceBody) => {
+      return trigger({
+        url: api.workspace(workspaceId),
+        body,
+        headers,
+      });
+    },
+    [trigger, api, headers, workspaceId],
+  );
+
+  return { updateWorkspace, isUpdatingWorkspace: isMutating };
+}
