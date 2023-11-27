@@ -72,6 +72,7 @@ function useEditWorkspaceForm({ defaultName, workspaceId }: UseEditWorkspaceName
     control,
     errors,
     onSubmit,
+    reset,
     isSubmitting: isSubmitting || isSubmitSuccessful,
   };
 }

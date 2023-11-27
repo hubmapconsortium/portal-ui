@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -15,7 +15,7 @@ function EditWorkspaceNameDialog() {
   const workspaceName = workspace?.name ?? '';
   const workspaceId = workspace?.id ?? 0;
 
-  const { onSubmit, control, handleSubmit, isSubmitting, errors } = useEditWorkspaceForm({
+  const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
     defaultName: workspaceName,
     workspaceId,
   });
@@ -28,6 +28,8 @@ function EditWorkspaceNameDialog() {
     },
     [onSubmit],
   );
+
+  useEffect(() => reset(), [isOpen, reset]);
 
   return (
     <DialogModal
