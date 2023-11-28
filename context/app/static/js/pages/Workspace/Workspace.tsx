@@ -1,5 +1,6 @@
 import React from 'react';
 import format from 'date-fns/format';
+import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button, { ButtonProps } from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -15,11 +16,13 @@ import { condenseJobs, getWorkspaceFileName } from 'js/components/workspaces/uti
 import JobStatus from 'js/components/workspaces/JobStatus';
 import { useWorkspaceDetail } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
-import Typography from '@mui/material/Typography';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
+import { useEditWorkspaceNameStore } from 'js/components/workspaces/EditWorkspaceNameDialog/store';
+import { EditIcon } from 'js/shared-styles/icons';
+import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 
 interface WorkspacePageProps {
   workspaceId: number;
@@ -55,6 +58,24 @@ function LaunchStopButton(props: ButtonProps) {
   return <Button {...props} variant={variant} />;
 }
 
+function UpdateNameButton({ workspace }: { workspace: MergedWorkspace }) {
+  const { open, setWorkspace } = useEditWorkspaceNameStore();
+  return (
+    <WorkspacesUpdateButton
+      workspace={workspace}
+      onClick={() => {
+        setWorkspace(workspace);
+        open();
+      }}
+      sx={(theme) => ({
+        marginRight: theme.spacing(1),
+      })}
+    >
+      <EditIcon sx={{ fontSize: '1.25rem' }} />
+    </WorkspacesUpdateButton>
+  );
+}
+
 function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
   const { workspace, isLoading, handleStopWorkspace, isStoppingWorkspace } = useWorkspaceDetail({ workspaceId });
   const workspaceTemplates = useMatchingWorkspaceTemplates(workspace);
@@ -80,12 +101,15 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           status=""
           mapped_data_access_level=""
           otherButtons={
-            <WorkspaceLaunchStopButtons
-              workspace={workspace}
-              button={LaunchStopButton}
-              handleStopWorkspace={handleStopWorkspace}
-              isStoppingWorkspace={isStoppingWorkspace}
-            />
+            <>
+              <UpdateNameButton workspace={workspace} />
+              <WorkspaceLaunchStopButtons
+                workspace={workspace}
+                button={LaunchStopButton}
+                handleStopWorkspace={handleStopWorkspace}
+                isStoppingWorkspace={isStoppingWorkspace}
+              />
+            </>
           }
         >
           <Typography variant="subtitle1" component="p">
