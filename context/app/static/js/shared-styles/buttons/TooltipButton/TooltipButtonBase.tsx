@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ElementType } from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 
@@ -14,10 +14,7 @@ type TooltipButtonBaseProps =
       tooltip: React.ReactNode;
     } & ButtonProps);
 
-type WrapperButtonProps = { buttonComponent: typeof IconButton | typeof Button } & Omit<
-  TooltipButtonBaseProps,
-  'tooltip' | 'isIconButton'
->;
+type WrapperButtonProps = { buttonComponent: ElementType } & Omit<TooltipButtonBaseProps, 'tooltip' | 'isIconButton'>;
 
 const WrappedButton = React.forwardRef(
   (
@@ -25,20 +22,26 @@ const WrappedButton = React.forwardRef(
     ref: React.Ref<HTMLButtonElement>,
   ) => {
     if (disabled) {
+      const { onMouseLeave, onMouseEnter, onMouseMove, onMouseOver, ...restProps } = props;
+      const eventProps = {
+        onMouseLeave,
+        onMouseEnter,
+        onMouseMove,
+        onMouseOver,
+      };
       return (
-        // TODO: Use Button Component.
-        <span ref={ref}>
-          <IconButton {...props} disabled>
+        <span ref={ref} {...eventProps}>
+          <ButtonComponent {...restProps} disabled>
             {children}
-          </IconButton>
+          </ButtonComponent>
         </span>
       );
     }
 
     return (
-      <IconButton {...props} ref={ref}>
+      <ButtonComponent {...props} ref={ref}>
         {children}
-      </IconButton>
+      </ButtonComponent>
     );
   },
 );
