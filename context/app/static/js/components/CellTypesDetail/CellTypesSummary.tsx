@@ -12,7 +12,6 @@ export default function CellTypesSummary() {
         </LabelledSectionText>
         <LabelledSectionText
           label="Known References"
-          bottomSpacing={1}
           childContainerComponent="div"
           iconTooltipText="References from established databases."
         >
