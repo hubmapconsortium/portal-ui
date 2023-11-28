@@ -1,6 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { KeyedMutator } from 'swr';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob } from './utils';
 import {
   useDeleteWorkspace,
@@ -15,7 +16,6 @@ import {
   UpdateWorkspaceBody,
 } from './api';
 import { MergedWorkspace, Workspace } from './types';
-import { useLaunchWorkspaceStore } from './LaunchWorkspaceDialog/store';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];

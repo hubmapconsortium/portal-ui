@@ -19,11 +19,11 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 
+import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import SelectableTemplateGrid from '../SelectableTemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
-import { useLaunchWorkspaceStore } from '../LaunchWorkspaceDialog/store';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 
 function ContactPrompt() {

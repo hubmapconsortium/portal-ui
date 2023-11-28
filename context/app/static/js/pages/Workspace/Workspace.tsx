@@ -20,7 +20,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
-import { useEditWorkspaceNameStore } from 'js/components/workspaces/EditWorkspaceNameDialog/store';
+import { useEditWorkspaceNameStore } from 'js/stores/useWorkspaceModalStore';
 import { EditIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 

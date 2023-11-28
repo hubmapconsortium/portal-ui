@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import DialogModal from 'js/shared-styles/DialogModal';
-import { useEditWorkspaceNameStore } from './store';
+import { useEditWorkspaceNameStore } from 'js/stores/useWorkspaceModalStore';
 
 import { useEditWorkspaceForm, EditWorkspaceFormTypes } from './hooks';
 import WorkspaceField from '../WorkspaceField/WorkspaceField';
