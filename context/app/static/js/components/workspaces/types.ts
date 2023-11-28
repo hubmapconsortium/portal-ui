@@ -85,6 +85,8 @@ interface WorkspaceAPISuccess<Data> {
 
 type WorkspaceAPIResponse<Data> = WorkspaceAPIFailure | WorkspaceAPISuccess<Data>;
 
+type WorkspaceAPIResponseWithoutData = Omit<WorkspaceAPIResponse<undefined>, 'data'>;
+
 interface TemplateTypes {
   title: string;
   description: string;
@@ -125,6 +127,7 @@ type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 export type {
   WorkspaceFile,
   WorkspaceAPIResponse,
+  WorkspaceAPIResponseWithoutData,
   TemplatesResponse,
   CreateTemplatesResponse,
   CreateWorkspaceResponse,

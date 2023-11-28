@@ -6,7 +6,7 @@ import { useCallback } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from '../Contexts';
-import { Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
+import { Workspace, WorkspaceAPIResponse, WorkspaceAPIResponseWithoutData, WorkspaceJob } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
 /**
@@ -387,7 +387,7 @@ async function updateWorkspaceFetcher(_key: string, { arg: { body, url, headers 
   if (!response.ok) {
     console.error('Update workspace failed', response);
   }
-  const responseJson = (await response.json()) as WorkspaceAPIResponse<{ workspace: Workspace }>;
+  const responseJson = (await response.json()) as WorkspaceAPIResponseWithoutData;
   if (!responseJson.success) {
     throw new Error(`Failed to update workspace: ${responseJson.message}`);
   }
