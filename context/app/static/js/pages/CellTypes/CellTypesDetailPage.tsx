@@ -38,10 +38,10 @@ function CellTypes({ cellId }: Props) {
           </Stack>
         </SummaryTitle>
         <PageTitle>{cellId}</PageTitle>
-        <CellTypesSummary />
-        <CellTypesVisualization />
-        <CellTypesBiomarkersTable />
-        <CellTypesEntitiesTables />
+        {shouldDisplaySection.summary && <CellTypesSummary />}
+        {shouldDisplaySection.visualization && <CellTypesVisualization />}
+        {shouldDisplaySection.biomarkers && <CellTypesBiomarkersTable />}
+        {shouldDisplaySection.organs && <CellTypesEntitiesTables />}
       </DetailLayout>
     </CellTypesProvider>
   );
