@@ -1,21 +1,30 @@
 import React, { useCallback } from 'react';
 import { BarStack } from '@visx/shape';
-import { AxisBottom, AxisLeft } from '@visx/axis';
+import { AxisBottom, AxisLeft, TickRendererProps } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import Typography from '@mui/material/Typography';
 import { Text } from '@visx/text';
 
-import { useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
+import { OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
 import { trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts//VerticalChartGridRowsGroup';
+import {  PositionScale } from '@visx/shape/lib/types';
+import { WithParentSizeProps, WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
 
-function TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave }) {
+type FormattedValue = TickRendererProps['formattedValue'];
+
+interface TickComponentWithHandlersProps {
+  handleMouseEnter: ({key}: {key: FormattedValue}) => React.MouseEventHandler<SVGTextElement>;
+  handleMouseLeave: React.MouseEventHandler<SVGTextElement> | undefined
+}
+
+function TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave }: TickComponentWithHandlersProps) {
   // use a callback to avoid creating a new component on every render
   return useCallback(
-    ({ formattedValue, ...tickProps }) => {
+    ({ formattedValue, ...tickProps }: TickRendererProps) => {
       return (
-        <Text onMouseEnter={handleMouseEnter({ key: formattedValue })} onMouseLeave={handleMouseLeave} {...tickProps}>
+        <Text onMouseEnter={handleMouseEnter({key: formattedValue})} onMouseLeave={handleMouseLeave} {...tickProps}>
           {trimStringWithMiddleEllipsis(formattedValue)}
         </Text>
       );
@@ -24,12 +33,58 @@ function TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave }) {
   );
 }
 
-function VerticalStackedBarChart({
-  parentWidth,
-  parentHeight,
+// Set the default range for the x scale, assuming it is linear
+function defaultXScaleRange(scale: PositionScale, max: number) {
+  if ('rangeRound' in scale) {
+    scale.rangeRound([0, max]);
+  } else {
+    scale.range([0, max]);
+  }
+}
+
+function defaultYScaleRange(scale: PositionScale, max: number) {
+  if ('rangeRound' in scale) {
+    scale.rangeRound([max, 0]);
+  } else {
+    scale.range([max, 0]);
+  }
+}
+
+function hasBarData<Datum>(tooltipData: TooltipData<Datum>): tooltipData is TooltipData<Datum> & {key: string, bar: {data: Datum & {[key: string]: React.ReactNode}}} {
+  if (tooltipData.bar && tooltipData.key && 
+      tooltipData.bar.data && typeof tooltipData.bar.data === 'object' && 
+      tooltipData.key in tooltipData.bar.data) {
+    return true;
+  }
+  return false;
+}
+
+type TooltipData<Datum> = {key: FormattedValue, bar?: {data: Datum | Record<string, unknown>}} 
+
+interface VerticalStackedBarChartProps<Datum, XAxisKey extends string> extends WithParentSizeProps, WithParentSizeProvidedProps {
+  visxData: Datum[];
+  yScale: PositionScale;
+  xScale: PositionScale;
+  setXScaleRange?: (scale: PositionScale, max: number) => void;
+  setYScaleRange?: (scale: PositionScale, max: number) => void;
+  colorScale: OrdinalScale;
+  getX: (d: Datum) => XAxisKey;
+  keys: (keyof Datum extends string ? keyof Datum : never)[];
+  margin: Record<'top' | 'right' | 'bottom' | 'left', number>;
+  xAxisLabel: string;
+  yAxisLabel: string;
+  TooltipContent?: React.ComponentType<{tooltipData: TooltipData<Datum>}>;
+  xAxisTickLabels: XAxisKey[];
+}
+
+function VerticalStackedBarChart<Datum, XAxisKey extends string = string>({
+  parentWidth = 0,
+  parentHeight = 0,
   visxData,
   yScale,
   xScale,
+  setXScaleRange = defaultXScaleRange,
+  setYScaleRange = defaultYScaleRange,
   colorScale,
   getX,
   keys,
@@ -38,7 +93,7 @@ function VerticalStackedBarChart({
   yAxisLabel,
   TooltipContent,
   xAxisTickLabels,
-}) {
+}: VerticalStackedBarChartProps<Datum, XAxisKey>) {
   const tickLabelSize = 11;
 
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
@@ -49,8 +104,8 @@ function VerticalStackedBarChart({
     parentHeight,
   });
 
-  yScale.rangeRound([yHeight, 0]);
-  xScale.rangeRound([0, xWidth]);
+  setXScaleRange(xScale, xWidth);
+  setYScaleRange(yScale, yHeight);
 
   const {
     tooltipData,
@@ -61,7 +116,7 @@ function VerticalStackedBarChart({
     TooltipInPortal,
     handleMouseEnter,
     handleMouseLeave,
-  } = useChartTooltip();
+  } = useChartTooltip<TooltipData<Datum>>();
 
   return (
     <>
@@ -83,6 +138,7 @@ function VerticalStackedBarChart({
                     (bar) =>
                       bar.width > 0 && (
                         <StackedBar
+                          key={bar.key}
                           direction="vertical"
                           bar={bar}
                           hoverProps={{
@@ -134,14 +190,14 @@ function VerticalStackedBarChart({
           </>
         </VerticalChartGridRowsGroup>
       </svg>
-      {tooltipOpen && (
+      {tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
           {TooltipContent ? (
             <TooltipContent tooltipData={tooltipData} />
           ) : (
             <>
               <Typography>{tooltipData.key}</Typography>
-              {'bar' in tooltipData && (
+              {hasBarData(tooltipData) && (
                 <Typography variant="h6" component="p" color="textPrimary">
                   {tooltipData.bar.data[tooltipData.key]}
                 </Typography>
