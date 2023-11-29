@@ -4,6 +4,7 @@ import { z } from 'zod';
 
 import { useEditWorkspaceNameStore } from 'js/stores/useWorkspaceModalStore';
 import { useHandleUpdateWorkspace } from '../hooks';
+import { workspaceNameField } from '../workspaceFormFields';
 
 interface EditWorkspaceFormTypes {
   'workspace-name': string;
@@ -18,21 +19,9 @@ interface SubmitEditWorkspaceNameTypes {
   workspaceName: string;
 }
 
-function withCustomMessage(message: string): z.ZodErrorMap {
-  return function tooSmallErrorMap(issue, ctx) {
-    if (issue.code === z.ZodIssueCode.too_small) {
-      return { message };
-    }
-    return { message: ctx.defaultError };
-  };
-}
-
 const schema = z
   .object({
-    'workspace-name': z
-      .string({ errorMap: withCustomMessage('A workspace name is required. Please enter a workspace name.') })
-      .min(1)
-      .max(150),
+    ...workspaceNameField,
   })
   .partial()
   .required({ 'workspace-name': true });
