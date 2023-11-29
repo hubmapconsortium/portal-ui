@@ -16,11 +16,21 @@ def index():
     )
 
 
-@blueprint.route('/workspaces/<workspace_id>')
+@blueprint.route('/workspaces/start/<workspace_id>')
 def please_wait(workspace_id):
     flask_data = {**get_default_flask_data()}
     return render_template(
         'base-pages/react-content.html',
         flask_data=flask_data,
         title='Please Wait'
+    )
+
+
+@blueprint.route('/workspaces/<workspace_id>')
+def workspace_detail(workspace_id):
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html',
+        flask_data=flask_data,
+        title='Workspace'
     )

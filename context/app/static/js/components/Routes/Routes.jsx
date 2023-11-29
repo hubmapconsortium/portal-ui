@@ -31,6 +31,7 @@ const DonorSearch = lazy(() => import('js/pages/entity-search/DonorSearch'));
 const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
+const Workspace = lazy(() => import('js/pages/Workspace'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 const GeneDetails = lazy(() => import('js/pages/Genes'));
 const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
@@ -251,11 +252,20 @@ function Routes({ flaskData }) {
     );
   }
 
-  if (urlPath.startsWith('/workspaces/')) {
+  if (urlPath.startsWith('/workspaces/start/')) {
     const workspaceId = urlPath.split('/').pop();
     return (
       <Route>
         <WorkspacePleaseWait workspaceId={workspaceId} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/workspaces/')) {
+    const workspaceId = urlPath.split('/').pop();
+    return (
+      <Route>
+        <Workspace workspaceId={workspaceId} />
       </Route>
     );
   }

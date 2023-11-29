@@ -12,7 +12,7 @@ import {
   JobStatusDisplayName,
 } from './statusCodes';
 
-import type { MergedWorkspace, Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
+import type { MergedWorkspace, Workspace, WorkspaceAPIResponse, WorkspaceJob, WorkspaceFile } from './types';
 
 interface WorkspaceActionArgs {
   workspaceId: number;
@@ -45,13 +45,51 @@ function getWorkspaceHeaders(workspacesToken: string) {
 }
 
 /**
+ * Gets the name of a workspace file as a string
+ * @param file A workspace file. Currently this is inconsistent between an object with a name entry and a string.
+ * @returns The workspace file as a string
+ */
+function getWorkspaceFileName(file: WorkspaceFile) {
+  if (typeof file === 'string') {
+    return file;
+  }
+
+  return file.name;
+}
+
+/**
+ * Prepends a slash to a file name if it doesn't already have one
+ * @param fileName The file name to format
+ */
+function formatFileName(fileName: string) {
+  if (fileName.startsWith('/')) {
+    return fileName;
+  }
+  return `/${fileName}`;
+}
+
+/**
  * Gets the path of the notebook for a workspace
  * @param workspace The workspace to get the notebook path for
  * @returns The path of the notebook for the workspace
  */
 function getNotebookPath(workspace: Workspace) {
-  const { files } = workspace.workspace_details.current_workspace_details;
-  return (files || []).find(({ name }) => name.endsWith('.ipynb'))?.name ?? '';
+  const { files = [] } = workspace.workspace_details.current_workspace_details;
+  const { files: requestFiles = [] } = workspace.workspace_details.request_workspace_details;
+  const combinedFiles = files.concat(requestFiles).map((file) => {
+    const fileName = getWorkspaceFileName(file);
+    if (typeof file === 'string') {
+      return formatFileName(fileName);
+    }
+    return { ...file, name: formatFileName(fileName) };
+  });
+  return combinedFiles.reduce<string>((acc, file) => {
+    const path = getWorkspaceFileName(file);
+    if (path.endsWith('.ipynb') && acc.length === 0) {
+      return path;
+    }
+    return acc;
+  }, '');
 }
 
 /**
@@ -117,11 +155,11 @@ function getJobMessage(job: JobDetails): string {
 }
 
 /**
- * Finds the best job to use for a workspace based on its status
- * @param jobs A list of jobs to extract the best job from
- * @returns A digest of the best job to use for a workspace which includes the status, whether a new job can be created, and the URL and message if the job is active/activating
+ * Find the job with the highest status.
+ * @param jobs A list of jobs to extract the best job from.
+ * @returns The job with the highest status.
  */
-function condenseJobs(jobs: WorkspaceJob[]): CondensedJob {
+function findBestJob(jobs: WorkspaceJob[]) {
   const displayStatusJobs = jobs.map((job) => ({
     ...job,
     status: getJobStatusDisplayName(job.status),
@@ -130,6 +168,17 @@ function condenseJobs(jobs: WorkspaceJob[]): CondensedJob {
   const bestJob = JOB_DISPLAY_NAMES.map((status) => displayStatusJobs.find((job) => job.status === status)).find(
     (job) => job,
   ); // Trivial .find() to just take the job with highest status.
+
+  return bestJob;
+}
+
+/**
+ * Finds the job with the highest status and returns a digest.
+ * @param jobs A list of jobs to extract the best job from.
+ * @returns A digest of the best job to use for a workspace which includes the status, whether a new job can be created, and the URL and message if the job is active/activating
+ */
+function condenseJobs(jobs: WorkspaceJob[]): CondensedJob {
+  const bestJob = findBestJob(jobs);
 
   const status = bestJob?.status;
   switch (status) {
@@ -197,8 +246,13 @@ async function locationIfJobRunning({
   return null;
 }
 
-function getWorkspaceLink(workspace: Workspace, templatePath?: string) {
-  return `/workspaces/${workspace.id}?notebook_path=${encodeURIComponent(templatePath ?? workspace.path)}`;
+function getWorkspaceStartLink(workspace: Workspace, templatePath?: string) {
+  const path = getNotebookPath(workspace);
+  return `/workspaces/start/${workspace.id}?notebook_path=${encodeURIComponent(templatePath ?? path)}`;
+}
+
+function getWorkspaceLink(workspace: Workspace) {
+  return `/workspaces/${workspace.id}`;
 }
 
 function isRunningWorkspace(workspace: MergedWorkspace) {
@@ -211,8 +265,11 @@ function isRunningJob(job: WorkspaceJob) {
 
 export {
   mergeJobsIntoWorkspaces,
+  findBestJob,
   condenseJobs,
   locationIfJobRunning,
+  getWorkspaceFileName,
+  getWorkspaceStartLink,
   getWorkspaceLink,
   getWorkspaceHeaders,
   getWorkspaceJob,

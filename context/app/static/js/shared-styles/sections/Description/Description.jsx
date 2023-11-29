@@ -3,9 +3,9 @@ import Typography from '@mui/material/Typography';
 
 import { StyledPaper, StyledInfoIcon } from './style';
 
-function Description({ padding, children, ...props }) {
+function Description({ children, ...props }) {
   return (
-    <StyledPaper $padding={padding} {...props}>
+    <StyledPaper {...props}>
       <StyledInfoIcon color="primary" />
       <Typography variant="body1" component="div">
         {children}

@@ -34,3 +34,8 @@ declare module 'metadata-field-assays' {
   const data: Record<string, string[]>;
   export default data;
 }
+
+declare module '*.svg' {
+  const ReactComponent: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
+  export { ReactComponent };
+}

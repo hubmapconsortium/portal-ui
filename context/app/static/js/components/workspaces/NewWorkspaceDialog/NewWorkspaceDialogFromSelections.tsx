@@ -12,7 +12,7 @@ import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import useProtectedDatasetsForm from 'js/components/workspaces/NewWorkspaceDialog/useProtectedDatasetsForm';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import { useCreateWorkspaceForm, CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
+import { useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 
 function NewWorkspaceDialogFromSelections() {
   const { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows } =
@@ -33,31 +33,33 @@ function NewWorkspaceDialogFromSelections() {
         removeDatasets={deselectRows}
         {...rest}
       >
-        {protectedHubmapIds.length > 0 && (
-          <Box>
-            <ErrorMessages errorMessages={errorMessages} />
-            <WorkspaceField<CreateWorkspaceFormTypes>
-              control={control}
-              name="protected-datasets"
-              label="Protected Datasets"
-              value={protectedHubmapIds}
-              error
-              InputProps={{
-                endAdornment: (
-                  <InputAdornment position="end">
-                    <IconButton onClick={() => handleCopyClick(protectedHubmapIds)}>
-                      <ContentCopyIcon />
-                    </IconButton>
-                  </InputAdornment>
-                ),
-                readOnly: true,
-              }}
-            />
-            <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
-              Remove Protected Datasets ({protectedRows.length})
-            </Button>
-          </Box>
-        )}
+        <Box>
+          <ErrorMessages errorMessages={errorMessages} />
+          {protectedHubmapIds.length > 0 && (
+            <>
+              <WorkspaceField
+                control={control}
+                name="protected-datasets"
+                label="Protected Datasets"
+                value={protectedHubmapIds}
+                error
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <IconButton onClick={() => handleCopyClick(protectedHubmapIds)}>
+                        <ContentCopyIcon />
+                      </IconButton>
+                    </InputAdornment>
+                  ),
+                  readOnly: true,
+                }}
+              />
+              <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
+                Remove Protected Datasets ({protectedRows.length})
+              </Button>
+            </>
+          )}
+        </Box>
       </NewWorkspaceDialog>
     </>
   );

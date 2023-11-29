@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
+import LoadingButton from '@mui/lab/LoadingButton';
 
 import Step from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
@@ -18,7 +19,7 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 
-import TemplateGrid from '../TemplateGrid';
+import SelectableTemplateGrid from '../SelectableTemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
@@ -87,6 +88,7 @@ interface NewWorkspaceDialogProps {
   handleClose: () => void;
   removeDatasets?: (datasetUUIDs: string[]) => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
+  isSubmitting?: boolean;
 }
 
 const recommendedTags = ['visualization', 'api'];
@@ -102,6 +104,7 @@ function NewWorkspaceDialog({
   onSubmit,
   removeDatasets,
   children,
+  isSubmitting,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -161,7 +164,7 @@ function NewWorkspaceDialog({
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={handleSubmit(submit)}
           >
-            <WorkspaceField<CreateWorkspaceFormTypes>
+            <WorkspaceField
               control={control}
               name="workspace-name"
               label="Name"
@@ -179,7 +182,7 @@ function NewWorkspaceDialog({
             Filter workspace templates by tags
           </Typography>
           <Stack spacing={1}>
-            <MultiAutocomplete<string>
+            <MultiAutocomplete
               value={selectedTags}
               options={Object.keys(tags)
                 .filter((tag) => !recommendedTags.includes(tag))
@@ -207,19 +210,20 @@ function NewWorkspaceDialog({
                 ))}
               </Stack>
             </Box>
-            <TemplateGrid templates={templates} control={control} />
+            <SelectableTemplateGrid templates={templates} control={control} />
           </Stack>
         </Step>
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button
+        <LoadingButton
+          loading={isSubmitting}
           type="submit"
           form="create-workspace-form"
           disabled={Object.keys(errors).length > 0 || errorMessages.length > 0}
         >
           Launch Workspace
-        </Button>
+        </LoadingButton>
       </DialogActions>
     </Dialog>
   );

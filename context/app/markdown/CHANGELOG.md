@@ -1,3 +1,40 @@
+## v0.84.2 - 2023-11-21
+
+- Fix workspace launch error message display logic.
+
+
+## v0.84.1 - 2023-11-21
+
+- Add links to organ pages from gene detail page's cell types list.
+- Allow reopening closed workspace tabs without needing to relaunch the entire session.
+- Fix bug with workspace creation locking after unsuccessful submit.
+- Fix errors launching workspace when another workspace is running.
+
+
+## v0.84.0 - 2023-11-20
+
+- Prevent duplicate workspace creation via rapid submission of launch new workspace form.
+- Add handling for workspace API requests with no results.
+- Do not display workspace templates with designated `is_hidden` bool.
+- Add a prompt to renew workspace sessions to the top of the workspaces screen.
+- Handle workspace files which can be either strings or objects.
+
+
+## v0.83.1 - 2023-11-16
+
+- Enable selection of entities on all search pages.
+- Limit scope of visualized and downloaded metadata to selected entities when user has made a selection in the search page.
+- Bumped CCF-UI version to latest 3.x release for the organ-info pages
+- Added ontology API to status page.
+- Added View Datasets button to cell types table on gene pages for types that exist in HuBMAP datasets.
+- Added handling for invalid gene name lookups.
+- Prevent launch of additional workspaces while a launch is already in progress.
+- Add authentication guard to workspace page.
+- Add workspace detail page.
+- Increase gap between templates in template grid.
+- Remove tsc-files from our pre-commit type checks as it was not using the project's tsconfig.
+
+
 ## v0.83.0 - 2023-11-13
 
 - Add tracking to interactions with vitessce visualizations.

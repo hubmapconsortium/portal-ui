@@ -7,7 +7,7 @@ The services the portal relies on are [listed separately](/services).
 ## Git submodules
 
 ```
- 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab51)
+ 79cab515ee56184a824c6755ff25fc6e2d1a3a65 context/ingest-validation-tools (v0.0.13-23-g79cab515)
 ```
 
 ## Python packages
@@ -77,6 +77,7 @@ lxml>=4.9.1
 "fast-deep-equal": "^3.1.3",
 "immer": "^10.0.2",
 "lineupjsx": "^4.6.0",
+"lz-string": "^1.5.0",
 "nuka-carousel": "^6.0.3",
 "pretty-bytes": "^6.1.1",
 "prop-types": "^15.7.2",

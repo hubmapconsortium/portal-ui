@@ -1,19 +1,23 @@
 import { JobStatus, JobStatusDisplayName, WorkspaceStatus } from './statusCodes';
 
-interface WorkspaceDetail {
-  files: {
-    name: string;
-  }[];
-  symlinks: {
-    name: string;
-  }[];
+// Once workspaces API issues are resolved. We expect the workspaces API to consistently return an object.
+type WorkspaceFile = string | { name: string };
+interface Symlink {
+  name: string;
+  dataset_uuid?: string;
+}
+interface CurrentWorkspaceDetail {
+  files: WorkspaceFile[];
+  symlinks: Symlink[];
+}
+
+interface RequestWorkspaceDetail extends CurrentWorkspaceDetail {
+  globus_groups_token: string;
 }
 
 interface WorkspaceDetails {
-  current_workspace_details: WorkspaceDetail;
-  request_workspace_details: WorkspaceDetail & {
-    globus_groups_token: string;
-  };
+  current_workspace_details: CurrentWorkspaceDetail;
+  request_workspace_details: RequestWorkspaceDetail;
 }
 
 export interface Workspace {
@@ -24,7 +28,6 @@ export interface Workspace {
   disk_space: number;
   datetime_created: string;
   workspace_details: WorkspaceDetails;
-  path: string;
 }
 
 interface WorkspaceJobDetail {
@@ -65,6 +68,7 @@ export interface WorkspaceJobWithDisplayStatus extends Omit<WorkspaceJob, 'statu
 
 export interface MergedWorkspace extends Workspace {
   jobs: WorkspaceJob[];
+  path: string;
 }
 
 interface WorkspaceAPIFailure {
@@ -87,11 +91,12 @@ interface TemplateTypes {
   tags: string[];
   is_multi_dataset_template: boolean;
   template_format: string;
+  is_hidden: boolean;
 }
 
 type TemplatesTypes = Record<string, TemplateTypes>;
 
-type TemplatesResponse = WorkspaceAPIResponse<TemplateTypes>;
+type TemplatesResponse = WorkspaceAPIResponse<TemplatesTypes>;
 
 interface CreateTemplateData {
   template: string;
@@ -118,6 +123,7 @@ type TemplateTags = Record<string, string>;
 type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
 export type {
+  WorkspaceFile,
   WorkspaceAPIResponse,
   TemplatesResponse,
   CreateTemplatesResponse,

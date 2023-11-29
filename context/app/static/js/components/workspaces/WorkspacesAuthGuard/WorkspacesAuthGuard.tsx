@@ -1,13 +1,16 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
+import { styled } from '@mui/material/styles';
 
 import { useAppContext } from 'js/components/Contexts';
-import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
+import Description from 'js/shared-styles/sections/Description';
 import { InternalLink } from 'js/shared-styles/Links';
-import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import { StyledDescription } from './style';
 
-function WorkspacesContent() {
+const StyledDescription = styled(Description)(({ theme }) => ({
+  padding: theme.spacing(2.5),
+}));
+
+function WorkspacesAuthGuard({ children }: { children: ReactNode }) {
   const { isAuthenticated, isWorkspacesUser } = useAppContext();
 
   if (!isAuthenticated) {
@@ -28,16 +31,7 @@ function WorkspacesContent() {
     );
   }
 
-  return <WorkspacesAuthenticated />;
+  return children;
 }
 
-function Workspaces() {
-  return (
-    <>
-      <WorkspacesTitle />
-      <WorkspacesContent />
-    </>
-  );
-}
-
-export default Workspaces;
+export default WorkspacesAuthGuard;

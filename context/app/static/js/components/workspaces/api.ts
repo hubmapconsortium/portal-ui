@@ -4,6 +4,7 @@ import useSWRMutation from 'swr/mutation';
 import { useCallback } from 'react';
 
 import { trackEvent } from 'js/helpers/trackers';
+import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from '../Contexts';
 import { Workspace, WorkspaceAPIResponse, WorkspaceJob } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
@@ -23,14 +24,14 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   get jobs(): string {
     return `${workspacesEndpoint}/jobs`;
   },
-  delete(workspaceId: number): string {
-    return `${workspacesEndpoint}/workspaces/${workspaceId}`;
-  },
   createWorkspaceFromNotebookPath(path: string): string {
     return `/notebooks/${path}`;
   },
   get createWorkspaceFromTemplates(): string {
     return `${workspacesEndpoint}/workspaces/`;
+  },
+  workspace(workspaceId: number): string {
+    return `${workspacesEndpoint}/workspaces/${workspaceId}`;
   },
   startWorkspace(workspaceId: number): string {
     return `${workspacesEndpoint}/workspaces/${workspaceId}/start`;
@@ -128,26 +129,40 @@ export function useWorkspaceJobs(workspaceId: number) {
   return { jobs: jobs.filter((j) => j.workspace_id === workspaceId), isLoading };
 }
 
-async function fetchWorkspaces(url: string, headers: APIAction['headers']) {
-  const response = await fetch(url, { headers });
-  const result = (await response.json()) as WorkspaceAPIResponse<{ workspaces: Workspace[] }>;
-  if (!result.success) {
-    throw Error(`Failed to get workspaces: ${result.message ?? 'Unknown Error'}`);
-  }
-  return result;
-}
-
-export function useWorkspaces() {
-  const apiURLs = useWorkspacesApiURLs();
+function useFetchWorkspaces(workspaceId?: number) {
   const headers = useWorkspaceHeaders();
   const hasAccess = useHasWorkspaceAccess();
+  const urls = useWorkspacesApiURLs();
+  const workspaceUrl = workspaceId ? urls.workspace(workspaceId) : urls.workspaces;
   const { data, isLoading, ...rest } = useSWR(
-    hasAccess ? [apiURLs.workspaces, headers] : null,
-    ([url, head]) => fetchWorkspaces(url, head),
-    { revalidateOnFocus: hasAccess },
+    hasAccess ? [workspaceUrl, headers] : null,
+    ([url, head]) =>
+      fetcher<WorkspaceAPIResponse<{ workspaces: Workspace[] }>>({
+        url,
+        requestInit: { headers: head },
+        errorMessages: {
+          404: workspaceId
+            ? `No workspace with ID ${workspaceId} found.`
+            : 'No workspaces found with specified parameters.',
+        },
+      }),
+    { revalidateOnFocus: hasAccess, refreshInterval: 1000 * 60 },
   );
   const workspaces = data?.data?.workspaces ?? [];
   return { workspaces, isLoading, ...rest };
+}
+
+export function useWorkspaces() {
+  return useFetchWorkspaces();
+}
+
+export function useWorkspace(workspaceId: number) {
+  const { workspaces, ...rest } = useFetchWorkspaces(workspaceId);
+  if (rest.error) {
+    throw rest.error;
+  }
+  const workspace = workspaces[0] ?? {};
+  return { workspace, ...rest };
 }
 
 export function useStopWorkspace() {
@@ -198,7 +213,7 @@ export function useDeleteWorkspace() {
     async (workspaceId: number) => {
       await trigger({
         workspaceId,
-        url: api.delete(workspaceId),
+        url: api.workspace(workspaceId),
         headers,
       });
     },

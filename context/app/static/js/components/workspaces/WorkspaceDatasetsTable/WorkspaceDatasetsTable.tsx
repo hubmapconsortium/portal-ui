@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, ReactNode } from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
@@ -14,9 +14,10 @@ const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
+  label?: ReactNode;
 }
 
-function WorkspaceDatasetsTable({ datasetsUUIDs, removeDatasets }: WorkspaceDatasetsTableProps) {
+function WorkspaceDatasetsTable({ datasetsUUIDs, removeDatasets, label }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
     () => ({
@@ -39,6 +40,7 @@ function WorkspaceDatasetsTable({ datasetsUUIDs, removeDatasets }: WorkspaceData
   return (
     <Box>
       <SpacedSectionButtonRow
+        leftText={label}
         buttons={
           <Stack direction="row" gap={1}>
             <Copy />

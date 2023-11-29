@@ -1,6 +1,5 @@
 import { useCallback } from 'react';
 import useSWR, { SWRConfiguration } from 'swr';
-
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
@@ -10,6 +9,7 @@ import {
   CreateTemplatesResponse,
   CreateTemplateNotebooksTypes,
   TemplateTagsResponse,
+  TemplatesTypes,
 } from '../types';
 import { useCreateAndLaunchWorkspace } from '../hooks';
 
@@ -43,7 +43,14 @@ function useWorkspaceTemplates(tags: string[] = []) {
   const result = useUserTemplatesAPI<TemplatesResponse>({ templatesURL: url });
 
   const templates = result?.data?.data ?? {};
-  return { templates };
+
+  const filteredTemplates = Object.fromEntries(
+    Object.entries(templates).filter(([, template]) => !template?.is_hidden),
+  ) as TemplatesTypes;
+
+  return {
+    templates: filteredTemplates,
+  };
 }
 
 function useTemplateNotebooks() {
