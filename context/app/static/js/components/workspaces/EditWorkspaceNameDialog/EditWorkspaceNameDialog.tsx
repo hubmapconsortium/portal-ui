@@ -10,11 +10,17 @@ import { useEditWorkspaceNameStore } from 'js/stores/useWorkspaceModalStore';
 import { useEditWorkspaceForm, EditWorkspaceFormTypes } from './hooks';
 import WorkspaceField from '../WorkspaceField/WorkspaceField';
 
-function EditWorkspaceNameDialog() {
-  const { isOpen, close, workspace } = useEditWorkspaceNameStore();
-  const workspaceName = workspace?.name ?? '';
-  const workspaceId = workspace?.id ?? 0;
-
+function Dialog({
+  workspaceName,
+  workspaceId,
+  isOpen,
+  close,
+}: {
+  workspaceName: string;
+  workspaceId: number;
+  isOpen: boolean;
+  close: () => void;
+}) {
   const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
     defaultName: workspaceName,
     workspaceId,
@@ -78,6 +84,18 @@ function EditWorkspaceNameDialog() {
       withCloseButton
     />
   );
+}
+
+function EditWorkspaceNameDialog() {
+  const { isOpen, close, workspace } = useEditWorkspaceNameStore();
+  const workspaceName = workspace?.name;
+  const workspaceId = workspace?.id;
+
+  if (!(workspaceName && workspaceId)) {
+    return null;
+  }
+
+  return <Dialog workspaceName={workspaceName} workspaceId={workspaceId} isOpen={isOpen} close={close} />;
 }
 
 export default EditWorkspaceNameDialog;
