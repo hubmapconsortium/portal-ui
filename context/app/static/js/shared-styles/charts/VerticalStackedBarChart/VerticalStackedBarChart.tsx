@@ -6,13 +6,13 @@ import Typography from '@mui/material/Typography';
 import { Text } from '@visx/text';
 
 import { OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
-import { trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
-import VerticalChartGridRowsGroup from 'js/shared-styles/charts//VerticalChartGridRowsGroup';
+import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGridRowsGroup';
 import {  PositionScale } from '@visx/shape/lib/types';
 import { WithParentSizeProps, WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
+import { FormattedValue, TooltipData, tooltipHasBarData } from '../types';
+import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
 
-type FormattedValue = TickRendererProps['formattedValue'];
 
 interface TickComponentWithHandlersProps {
   handleMouseEnter: ({key}: {key: FormattedValue}) => React.MouseEventHandler<SVGTextElement>;
@@ -32,34 +32,6 @@ function TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave }: TickC
     [handleMouseEnter, handleMouseLeave],
   );
 }
-
-// Set the default range for the x scale, assuming it is linear
-function defaultXScaleRange(scale: PositionScale, max: number) {
-  if ('rangeRound' in scale) {
-    scale.rangeRound([0, max]);
-  } else {
-    scale.range([0, max]);
-  }
-}
-
-function defaultYScaleRange(scale: PositionScale, max: number) {
-  if ('rangeRound' in scale) {
-    scale.rangeRound([max, 0]);
-  } else {
-    scale.range([max, 0]);
-  }
-}
-
-function hasBarData<Datum>(tooltipData: TooltipData<Datum>): tooltipData is TooltipData<Datum> & {key: string, bar: {data: Datum & {[key: string]: React.ReactNode}}} {
-  if (tooltipData.bar && tooltipData.key && 
-      tooltipData.bar.data && typeof tooltipData.bar.data === 'object' && 
-      tooltipData.key in tooltipData.bar.data) {
-    return true;
-  }
-  return false;
-}
-
-type TooltipData<Datum> = {key: FormattedValue, bar?: {data: Datum | Record<string, unknown>}} 
 
 interface VerticalStackedBarChartProps<Datum, XAxisKey extends string> extends WithParentSizeProps, WithParentSizeProvidedProps {
   visxData: Datum[];
@@ -197,7 +169,7 @@ function VerticalStackedBarChart<Datum, XAxisKey extends string = string>({
           ) : (
             <>
               <Typography>{tooltipData.key}</Typography>
-              {hasBarData(tooltipData) && (
+              {tooltipHasBarData(tooltipData) && (
                 <Typography variant="h6" component="p" color="textPrimary">
                   {tooltipData.bar.data[tooltipData.key]}
                 </Typography>

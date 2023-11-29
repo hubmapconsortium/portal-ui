@@ -5,7 +5,16 @@ import { getStringWidth } from '@visx/text';
 import { useTheme } from '@mui/material/styles';
 
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
-import { scaleBand, scaleLinear, scaleLog, scaleOrdinal } from '@visx/scale';
+import {
+  BandScaleConfig,
+  LinearScaleConfig,
+  LogScaleConfig,
+  OrdinalScaleConfig,
+  scaleBand,
+  scaleLinear,
+  scaleLog,
+  scaleOrdinal,
+} from '@visx/scale';
 
 function useChartTooltip<T>() {
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip<T>();
@@ -88,44 +97,32 @@ function useVerticalChart({
   return { xWidth, yHeight, updatedMargin, longestLabelSize };
 }
 
-function useLinearScale(data: number[], range: [number, number]) {
-  const domain = useMemo(() => [Math.min(...data, 0), Math.max(...data)], [data]);
+function useLinearScale(data: number[], config: Omit<LinearScaleConfig, 'type'> = {}) {
   return useMemo(() => {
+    const domain = [Math.min(...data, 0), Math.max(...data)];
     return scaleLinear({
+      ...config,
       domain,
-      range,
     });
-  }, [domain, range]);
+  }, [data, config]);
 }
 
-function useLogScale(data: number[], range: [number, number]) {
-  const domain = useMemo(() => [Math.min(...data, 0), Math.max(...data)], [data]);
+function useLogScale(data: number[], config: Omit<LogScaleConfig, 'type'> = {}) {
   return useMemo(() => {
+    const domain = [Math.min(...data, 1), Math.max(...data)];
     return scaleLog({
+      ...config,
       domain,
-      range,
     });
-  }, [domain, range]);
+  }, [data, config]);
 }
 
-function useBandScale(data: string[], range: [number, number]) {
-  const domain = useMemo(() => data, [data]);
-  return useMemo(() => {
-    return scaleBand({
-      domain,
-      range,
-    });
-  }, [domain, range]);
+function useBandScale(domain: string[], config: Omit<BandScaleConfig, 'type'> = {}) {
+  return useMemo(() => scaleBand({ ...config, domain }), [domain, config]);
 }
 
-function useOrdinalScale(data: string[], range: [string, string]) {
-  const domain = useMemo(() => data, [data]);
-  return useMemo(() => {
-    return scaleOrdinal({
-      domain,
-      range,
-    });
-  }, [domain, range]);
+function useOrdinalScale(domain: string[], config: Omit<OrdinalScaleConfig<string, string>, 'type'> = {}) {
+  return useMemo(() => scaleOrdinal<string, string>({ ...config, domain }), [domain, config]);
 }
 
 export type OrdinalScale = ReturnType<typeof useOrdinalScale>;
