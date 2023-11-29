@@ -6,7 +6,7 @@ import LoadingButton from '@mui/lab/LoadingButton';
 
 import DialogModal from 'js/shared-styles/DialogModal';
 import { useEditWorkspaceNameStore } from 'js/stores/useWorkspaceModalStore';
-
+import Step from 'js/shared-styles/surfaces/Step';
 import { useEditWorkspaceForm, EditWorkspaceFormTypes } from './hooks';
 import WorkspaceField from '../WorkspaceField/WorkspaceField';
 
@@ -44,24 +44,21 @@ function Dialog({
         <Box
           id="edit-workspace-form"
           component="form"
-          sx={{
-            display: 'grid',
-            gap: 2,
-            marginTop: 1,
-          }}
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={handleSubmit(submit)}
         >
-          <WorkspaceField
-            control={control}
-            name="workspace-name"
-            label="Name"
-            placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
-            autoFocus
-            onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              e.stopPropagation();
-            }}
-          />
+          <Step title="Rename Workspace">
+            <WorkspaceField
+              control={control}
+              name="workspace-name"
+              label="Name"
+              placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
+              autoFocus
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                e.stopPropagation();
+              }}
+            />
+          </Step>
         </Box>
       }
       isOpen={isOpen}

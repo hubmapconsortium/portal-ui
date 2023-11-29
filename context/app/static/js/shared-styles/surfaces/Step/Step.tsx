@@ -3,7 +3,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
 interface StepProps {
-  index: number;
+  index?: number;
   title: string;
   isRequired?: boolean;
 }
@@ -34,9 +34,10 @@ function Step({ index, title, isRequired = false, children }: PropsWithChildren<
           p: 2,
         }}
       >
-        <Typography variant="subtitle2" sx={{ color: `${color}.contrastText` }}>{`${
-          index + 1
-        }. ${title} (${text})`}</Typography>
+        <Typography variant="subtitle2" sx={{ color: `${color}.contrastText` }}>
+          {index !== undefined && `${index + 1}. `}
+          {`${title} (${text})`}
+        </Typography>
       </Paper>
       <Paper sx={{ p: 2 }}>{children}</Paper>
     </>
