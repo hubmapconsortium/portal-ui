@@ -133,5 +133,6 @@ export type {
   CreateWorkspaceResponse,
   TemplatesTypes,
   CreateTemplateNotebooksTypes,
+  TemplateTags,
   TemplateTagsResponse,
 };

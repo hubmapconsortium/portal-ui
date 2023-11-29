@@ -1,6 +1,7 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, ReactElement } from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 
 interface StepProps {
   index?: number;
@@ -24,6 +25,15 @@ const requiredVariants = {
   },
 };
 
+function StepDescription({ blocks }: { blocks: (string | ReactElement)[] }) {
+  return (
+    <Stack gap={2} sx={{ p: 2 }} component={Paper} direction="column">
+      {blocks.map((block) => (
+        <Typography key={String(block)}>{block}</Typography>
+      ))}
+    </Stack>
+  );
+}
 function Step({ index, title, isRequired = false, children }: PropsWithChildren<StepProps>) {
   const { color, text } = requiredVariants[isRequired.toString() as 'true' | 'false'] as RequiredVariant;
   return (
@@ -44,4 +54,5 @@ function Step({ index, title, isRequired = false, children }: PropsWithChildren<
   );
 }
 
+export { StepDescription };
 export default Step;

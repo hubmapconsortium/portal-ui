@@ -1,6 +1,6 @@
 import { useCallback, useReducer } from 'react';
 
-type SelectedItems = Set<string>;
+export type SelectedItems = Set<string>;
 
 type SelectAction =
   | {
