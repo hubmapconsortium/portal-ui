@@ -20,8 +20,8 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
-import { useEditWorkspaceNameStore } from 'js/stores/useWorkspaceModalStore';
-import { EditIcon } from 'js/shared-styles/icons';
+import { useEditWorkspaceNameStore, useEditWorkspaceTemplatesStore } from 'js/stores/useWorkspaceModalStore';
+import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 
 interface WorkspacePageProps {
@@ -72,6 +72,21 @@ function UpdateNameButton({ workspace }: { workspace: MergedWorkspace }) {
       })}
     >
       <EditIcon sx={{ fontSize: '1.25rem' }} />
+    </WorkspacesUpdateButton>
+  );
+}
+
+function UpdateTemplatesButton({ workspace }: { workspace: MergedWorkspace }) {
+  const { open, setWorkspace } = useEditWorkspaceTemplatesStore();
+  return (
+    <WorkspacesUpdateButton
+      workspace={workspace}
+      onClick={() => {
+        setWorkspace(workspace);
+        open();
+      }}
+    >
+      <AddIcon sx={{ fontSize: '1.25rem' }} />
     </WorkspacesUpdateButton>
   );
 }
@@ -133,6 +148,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           leftText={
             <SectionHeader iconTooltipText="Templates that are currently in this workspace."> Templates</SectionHeader>
           }
+          buttons={<UpdateTemplatesButton workspace={workspace} />}
         />
         <TemplateGrid templates={workspaceTemplates} />
       </Box>

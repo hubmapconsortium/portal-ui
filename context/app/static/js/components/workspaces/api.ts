@@ -361,7 +361,21 @@ export function useCreateWorkspace() {
   return { createWorkspace, isCreatingWorkspace: isMutating };
 }
 
-export type UpdateWorkspaceBody = Partial<CreateWorkspaceBody>;
+export interface UpdateWorkspaceBody {
+  name?: string;
+  description?: string;
+  workspace_details?: {
+    globus_groups_token?: string;
+    files?: {
+      name: string;
+      content?: string;
+    }[];
+    symlinks?: {
+      name: string;
+      dataset_uuid: string;
+    }[];
+  };
+}
 
 export interface UpdateWorkspaceArgs extends APIAction {
   body: UpdateWorkspaceBody;
@@ -372,11 +386,11 @@ async function updateWorkspaceFetcher(_key: string, { arg: { body, url, headers 
     category: 'Workspace Update',
     action: 'Update Workspace',
     value: {
-      name: body.name,
-      description: body.description,
+      name: body?.name,
+      description: body?.description,
       globus_groups_token: body?.workspace_details?.globus_groups_token,
-      files: body?.workspace_details?.files.map((f) => f.name),
-      symlinks: body?.workspace_details?.symlinks.map((s) => s.name),
+      files: body?.workspace_details?.files?.map((f) => f.name),
+      symlinks: body?.workspace_details?.symlinks?.map((s) => s.name),
     },
   });
   const response = await fetch(url, {

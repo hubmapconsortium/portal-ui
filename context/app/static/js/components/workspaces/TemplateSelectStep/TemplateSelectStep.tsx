@@ -11,8 +11,9 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import SelectableTemplateGrid from '../SelectableTemplateGrid';
-import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 import { TemplateTags, TemplatesTypes } from '../types';
+import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
+import { EditTemplatesFormTypes } from '../EditWorkspaceTemplatesDialog/hooks';
 
 function ContactPrompt() {
   return (
@@ -37,10 +38,10 @@ function TagComponent({ option, ...rest }: TagTypes) {
 
 const recommendedTags = ['visualization', 'api'];
 
-interface Props {
+interface TemplateSelectProps {
   title: string;
-  stepIndex: number;
-  control: Control<CreateWorkspaceFormTypes>;
+  stepIndex?: number;
+  control: Control<CreateWorkspaceFormTypes | EditTemplatesFormTypes>;
   selectedRecommendedTags: SelectedItems;
   toggleTag: (itemKey: string) => void;
   selectedTags: string[];
@@ -59,7 +60,7 @@ function TemplateSelectStep({
   setSelectedTags,
   tags,
   templates,
-}: Props) {
+}: TemplateSelectProps) {
   return (
     <Step title={title} index={stepIndex}>
       <StepDescription blocks={description} />

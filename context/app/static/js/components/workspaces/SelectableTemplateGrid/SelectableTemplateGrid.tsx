@@ -2,22 +2,24 @@ import React, { useCallback, ChangeEvent } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { useController, UseControllerProps } from 'react-hook-form';
+import { useController, Control } from 'react-hook-form';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { TemplatesTypes } from '../types';
-import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 import TemplateGrid from '../TemplateGrid';
+import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
+import { EditTemplatesFormTypes } from '../EditWorkspaceTemplatesDialog/hooks';
 
 interface TemplateGridProps {
   templates: TemplatesTypes;
 }
 
-type ControllerProps = Pick<UseControllerProps<CreateWorkspaceFormTypes>, 'control'>;
-
 const inputName = 'templates';
+interface ControllerProps {
+  control: Control<CreateWorkspaceFormTypes | EditTemplatesFormTypes>;
+}
 
 function SelectableTemplateGrid({ templates, control }: TemplateGridProps & ControllerProps) {
   const { field, fieldState } = useController({

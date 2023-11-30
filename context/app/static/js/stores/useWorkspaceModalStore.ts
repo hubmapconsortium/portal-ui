@@ -21,3 +21,4 @@ const storeDefinition = (set: StoreApi<WorkspaceStore>['setState']) => ({
 
 export const useEditWorkspaceNameStore = create<WorkspaceStore>(storeDefinition);
 export const useLaunchWorkspaceStore = create<WorkspaceStore>(storeDefinition);
+export const useEditWorkspaceTemplatesStore = create<WorkspaceStore>(storeDefinition);

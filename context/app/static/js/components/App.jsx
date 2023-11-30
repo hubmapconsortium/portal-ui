@@ -13,6 +13,7 @@ import { StyledAlert, FlexContainer } from './style';
 import 'js/components/searchPage/Search.scss';
 import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
 import EditWorkspaceNameDialog from './workspaces/EditWorkspaceNameDialog';
+import EditWorkspaceTemplatesDialog from './workspaces/EditWorkspaceTemplatesDialog';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
 
 // TODO: Delete this when workspaces are publicly released.
@@ -76,6 +77,7 @@ function App(props) {
             improved on by using a global modal stack with portals. */}
         <LaunchWorkspaceDialog />
         <EditWorkspaceNameDialog />
+        <EditWorkspaceTemplatesDialog />
       </Providers>
     </StrictMode>
   );
