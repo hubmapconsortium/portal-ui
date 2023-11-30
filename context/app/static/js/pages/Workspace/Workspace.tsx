@@ -43,6 +43,7 @@ function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
   const { templates } = useWorkspaceTemplates();
 
   const matchingTemplates = workspaceFiles.reduce((acc, file) => {
+    // match the filename without extension given a file path.
     const regex = /[\w-]+?(?=\.)/;
     const fileNameMatch = getWorkspaceFileName(file).match(regex);
     const templateName = fileNameMatch ? fileNameMatch[0] : '';
