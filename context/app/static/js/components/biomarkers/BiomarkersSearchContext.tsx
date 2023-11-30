@@ -10,8 +10,8 @@ interface BiomarkersSearchStateContext {
 
 interface BiomarkersSearchActionsContext {
   setSearch: Dispatch<React.SetStateAction<string>>;
-  filterByGenes: () => void;
-  filterByProteins: () => void;
+  toggleFilterByGenes: () => void;
+  toggleFilterByProteins: () => void;
 }
 
 const BiomarkersSearchStateContext = createContext<BiomarkersSearchStateContext>('BiomarkersSearchContext');
@@ -32,8 +32,8 @@ function BiomarkersSearchProvider({ children }: PropsWithChildren) {
   const searchActions = useMemo(
     () => ({
       setSearch,
-      filterByGenes: () => setFilterType('gene'),
-      filterByProteins: () => setFilterType('protein'),
+      toggleFilterByGenes: () => setFilterType((c) => (c === 'gene' ? undefined : 'gene')),
+      toggleFilterByProteins: () => setFilterType((c) => (c === 'protein' ? undefined : 'protein')),
     }),
     [],
   );

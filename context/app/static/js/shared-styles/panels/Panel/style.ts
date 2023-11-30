@@ -16,17 +16,18 @@ const overflowCss: CSSObject = {
 
 interface PanelBoxProps extends BoxProps {
   noPadding?: boolean;
+  noHover?: boolean;
 }
 
 const PanelBox = styled(Box, {
-  shouldForwardProp: (prop) => prop !== 'noPadding',
-})<PanelBoxProps>(({ theme, noPadding }) => ({
+  shouldForwardProp: (prop) => prop !== 'noPadding' && prop !== 'noHover',
+})<PanelBoxProps>(({ theme, noPadding, noHover }) => ({
   ...panelBorderStyles(theme),
   padding: noPadding ? 0 : theme.spacing(2, 3),
   display: 'flex',
   flexDirection: 'column',
   '&:hover': {
-    backgroundColor: theme.palette.common.hoverShadow,
+    backgroundColor: !noHover && theme.palette.common.hoverShadow,
   },
   [theme.breakpoints.up('md')]: {
     flexDirection: 'row',

@@ -11,6 +11,7 @@ interface BasicPanelProps {
 
 interface CustomPanelProps extends PropsWithChildren {
   noPadding?: boolean;
+  noHover?: boolean;
   key: string;
 }
 
@@ -22,8 +23,7 @@ function isCustomPanel(props: PanelProps): props is CustomPanelProps {
 
 function Panel(props: PanelProps) {
   if (isCustomPanel(props)) {
-    const { children, noPadding } = props;
-    return <PanelBox noPadding={noPadding}>{children}</PanelBox>;
+    return <PanelBox {...props}/>;
   }
 
   const { title, href, secondaryText, rightText } = props;

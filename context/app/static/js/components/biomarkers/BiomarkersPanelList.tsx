@@ -57,6 +57,11 @@ export default function BiomarkersPanelList() {
     }
     const propsList: PanelProps[] = [
       {
+        key: 'filters',
+        noHover: true,
+        children: <BiomarkerPanel.Filters />,
+      },
+      {
         key: 'header',
         noPadding: true,
         children: <BiomarkerPanel.Header />,

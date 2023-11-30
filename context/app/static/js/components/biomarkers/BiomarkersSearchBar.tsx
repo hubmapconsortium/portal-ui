@@ -8,5 +8,12 @@ const searchbarPlaceholder =
 export default function BiomarkersSearchBar() {
   const { search } = useBiomarkersSearchState();
   const { setSearch } = useBiomarkersSearchActions();
-  return <SearchBar placeholder={searchbarPlaceholder} value={search} onChange={(e) => setSearch(e.target.value)} />;
+  return (
+    <SearchBar
+      sx={{ mb: 2, width: '100%' }}
+      placeholder={searchbarPlaceholder}
+      value={search}
+      onChange={(e) => setSearch(e.target.value)}
+    />
+  );
 }

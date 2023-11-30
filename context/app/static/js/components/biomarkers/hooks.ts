@@ -10,6 +10,8 @@ export function useResultsList() {
 
   const hasMore = data?.[0]?.pagination?.page !== data?.[0]?.pagination?.total_pages;
 
+  // TODO: Once proteins are added to the API, we'll need to add them here as well
+
   return { genesList, hasMore, ...rest };
 }
 
