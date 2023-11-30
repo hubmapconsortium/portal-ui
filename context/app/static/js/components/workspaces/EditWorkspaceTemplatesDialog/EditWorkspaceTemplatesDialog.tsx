@@ -1,10 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import Button from '@mui/material/Button';
-import Stack from '@mui/material/Stack';
-import LoadingButton from '@mui/lab/LoadingButton';
-import Box from '@mui/material/Box';
 
-import DialogModal from 'js/shared-styles/DialogModal';
 import { useEditWorkspaceTemplatesStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
@@ -12,6 +7,7 @@ import { useMatchingWorkspaceTemplates } from 'js/pages/Workspace/Workspace';
 import TemplateSelectStep from '../TemplateSelectStep';
 import { useEditWorkspaceForm, EditTemplatesFormTypes } from './hooks';
 import { MergedWorkspace } from '../types';
+import EditWorkspaceDialog from '../EditWorkspaceDialog';
 
 function Dialog({ workspace, isOpen, close }: { workspace: MergedWorkspace; isOpen: boolean; close: () => void }) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
@@ -23,7 +19,7 @@ function Dialog({ workspace, isOpen, close }: { workspace: MergedWorkspace; isOp
 
   const templatesInWorkspace = useMatchingWorkspaceTemplates(workspace);
 
-  const { onSubmit, control, handleSubmit, isSubmitting, errors } = useEditWorkspaceForm({
+  const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
     workspaceId,
   });
 
@@ -38,48 +34,28 @@ function Dialog({ workspace, isOpen, close }: { workspace: MergedWorkspace; isOp
   );
 
   return (
-    <DialogModal
-      title="Edit Workspace Name"
-      maxWidth="lg"
-      content={
-        <Box
-          id="edit-workspace-templates-form"
-          component="form"
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onSubmit={handleSubmit(submit)}
-        >
-          <TemplateSelectStep
-            title="Add Templates"
-            control={control}
-            toggleTag={toggleTag}
-            tags={tags}
-            selectedRecommendedTags={selectedRecommendedTags}
-            selectedTags={selectedTags}
-            setSelectedTags={setSelectedTags}
-            templates={templates}
-            disabledTemplates={templatesInWorkspace}
-          />
-        </Box>
-      }
+    <EditWorkspaceDialog
+      title="Add Templates"
       isOpen={isOpen}
-      handleClose={close}
-      actions={
-        <Stack direction="row" spacing={2} alignItems="end">
-          <Button type="button" onClick={close}>
-            Cancel
-          </Button>
-          <LoadingButton
-            loading={isSubmitting}
-            type="submit"
-            form="edit-workspace-templates-form"
-            disabled={Object.keys(errors).length > 0}
-          >
-            Save
-          </LoadingButton>
-        </Stack>
-      }
-      withCloseButton
-    />
+      close={close}
+      reset={reset}
+      handleSubmit={handleSubmit}
+      onSubmit={submit}
+      errors={errors}
+      isSubmitting={isSubmitting}
+    >
+      <TemplateSelectStep
+        title="Add Templates"
+        control={control}
+        toggleTag={toggleTag}
+        tags={tags}
+        selectedRecommendedTags={selectedRecommendedTags}
+        selectedTags={selectedTags}
+        setSelectedTags={setSelectedTags}
+        templates={templates}
+        disabledTemplates={templatesInWorkspace}
+      />
+    </EditWorkspaceDialog>
   );
 }
 

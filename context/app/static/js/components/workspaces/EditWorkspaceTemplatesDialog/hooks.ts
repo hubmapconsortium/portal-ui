@@ -2,7 +2,6 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { useEditWorkspaceTemplatesStore } from 'js/stores/useWorkspaceModalStore';
 import { useHandleUpdateWorkspace, useCreateTemplates } from '../hooks';
 import { templatesField } from '../workspaceFormFields';
 
@@ -28,7 +27,6 @@ const schema = z
 
 function useEditWorkspaceForm({ workspaceId }: UseEditTemplatesFormTypes) {
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
-  const { close } = useEditWorkspaceTemplatesStore();
   const { createTemplates } = useCreateTemplates();
 
   const {
@@ -44,25 +42,16 @@ function useEditWorkspaceForm({ workspaceId }: UseEditTemplatesFormTypes) {
     resolver: zodResolver(schema),
   });
 
-  function handleClose() {
-    close();
-    reset();
-  }
-
   async function onSubmit({ templateKeys, uuids }: SubmitEditTemplatesTypes) {
-    if (isSubmitting || isSubmitSuccessful) return;
     const templatesDetails = await createTemplates({ templateKeys, uuids });
     await handleUpdateWorkspace({
       workspace_details: {
         files: templatesDetails,
       },
     });
-    reset();
-    handleClose();
   }
 
   return {
-    handleClose,
     handleSubmit,
     control,
     errors,
