@@ -1,17 +1,10 @@
 import { useCallback } from 'react';
 import useSWR, { SWRConfiguration } from 'swr';
 import { useAppContext } from 'js/components/Contexts';
-import { fetcher, multiFetcher } from 'js/helpers/swr';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
-import {
-  TemplatesResponse,
-  CreateTemplatesResponse,
-  CreateTemplateNotebooksTypes,
-  TemplateTagsResponse,
-  TemplatesTypes,
-} from '../types';
-import { useCreateAndLaunchWorkspace } from '../hooks';
+import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
+import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -54,40 +47,21 @@ function useWorkspaceTemplates(tags: string[] = []) {
 }
 
 function useTemplateNotebooks() {
-  const { groupsToken, userTemplatesEndpoint } = useAppContext();
+  const { groupsToken } = useAppContext();
 
   const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
-
-  const { toastError } = useSnackbarActions();
+  const { createTemplates } = useCreateTemplates();
 
   const createTemplateNotebooks = useCallback(
     async ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => {
-      const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}/templates/jupyter_lab/${key}`);
-
-      const createdTemplates = await multiFetcher<CreateTemplatesResponse>({
-        urls: templateUrls,
-        requestInits: [
-          {
-            method: 'POST',
-            body: JSON.stringify({ uuids }),
-            headers: { Authorization: `Bearer ${groupsToken}` },
-          },
-        ],
-      });
-
-      if (createdTemplates.some((t) => !t.success)) {
-        const error = createdTemplates.reduce((acc, t) => acc.concat(t.message), '');
-        toastError(error);
-        return;
-      }
-
+      const templatesDetails = await createTemplates({ templateKeys, uuids });
       trackEvent({
         category: 'Workspace Action',
         action: 'Create Templates',
         value: { templateKeys, templateCount: templateKeys.length, uuids },
       });
 
-      const templatePath = `${templateKeys[0]}.ipynb`;
+      const templatePath = templatesDetails[0].name;
 
       await createAndLaunchWorkspace({
         templatePath,
@@ -96,10 +70,7 @@ function useTemplateNotebooks() {
           description: workspaceName,
           workspace_details: {
             globus_groups_token: groupsToken,
-            files: templateKeys.map((templateKey, i) => ({
-              name: `${templateKey}.ipynb`,
-              content: createdTemplates[i]?.data?.template,
-            })),
+            files: templatesDetails,
             symlinks: uuids.map((uuid) => ({
               name: `datasets/${uuid}`,
               dataset_uuid: uuid,
@@ -108,7 +79,7 @@ function useTemplateNotebooks() {
         },
       });
     },
-    [groupsToken, createAndLaunchWorkspace, userTemplatesEndpoint, toastError],
+    [groupsToken, createAndLaunchWorkspace, createTemplates],
   );
 
   return createTemplateNotebooks;

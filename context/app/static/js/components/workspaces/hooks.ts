@@ -2,6 +2,8 @@ import { useCallback, useMemo } from 'react';
 import { KeyedMutator } from 'swr';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useAppContext } from 'js/components/Contexts';
+import { multiFetcher } from 'js/helpers/swr';
 import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob } from './utils';
 import {
   useDeleteWorkspace,
@@ -15,7 +17,7 @@ import {
   useUpdateWorkspace,
   UpdateWorkspaceBody,
 } from './api';
-import { MergedWorkspace, Workspace } from './types';
+import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -255,6 +257,38 @@ function useHandleUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
   return { handleUpdateWorkspace };
 }
 
+function useCreateTemplates() {
+  const { userTemplatesEndpoint } = useAppContext();
+  const { toastError } = useSnackbarActions();
+
+  const createTemplates = useCallback(
+    async ({ templateKeys, uuids }: { templateKeys: string[]; uuids: string[] }) => {
+      const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}/templates/jupyter_lab/${key}`);
+      const createdTemplates = await multiFetcher<CreateTemplatesResponse>({
+        urls: templateUrls,
+        requestInits: [
+          {
+            method: 'POST',
+            body: JSON.stringify({ uuids }),
+            headers: { Authorization: `Bearer ${groupsToken}` },
+          },
+        ],
+      });
+      if (createdTemplates.some((t) => !t.success)) {
+        const error = createdTemplates.reduce((acc, t) => acc.concat(t.message), '');
+        toastError(error);
+      }
+      return templateKeys.map((templateKey, i) => ({
+        name: `${templateKey}.ipynb`,
+        content: createdTemplates[i]?.data?.template,
+      }));
+    },
+    [toastError, userTemplatesEndpoint],
+  );
+
+  return { createTemplates };
+}
+
 export {
   useWorkspacesList,
   useHasRunningWorkspace,
@@ -264,4 +298,5 @@ export {
   useSessionWarning,
   useRefreshSession,
   useHandleUpdateWorkspace,
+  useCreateTemplates,
 };
