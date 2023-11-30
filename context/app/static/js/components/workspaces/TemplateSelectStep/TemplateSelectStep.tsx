@@ -48,6 +48,7 @@ interface TemplateSelectProps {
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   tags: TemplateTags;
   templates: TemplatesTypes;
+  disabledTemplates?: TemplatesTypes;
 }
 
 function TemplateSelectStep({
@@ -60,6 +61,7 @@ function TemplateSelectStep({
   setSelectedTags,
   tags,
   templates,
+  disabledTemplates,
 }: TemplateSelectProps) {
   return (
     <Step title={title} index={stepIndex}>
@@ -96,7 +98,7 @@ function TemplateSelectStep({
             ))}
           </Stack>
         </Box>
-        <SelectableTemplateGrid templates={templates} control={control} />
+        <SelectableTemplateGrid templates={templates} disabledTemplates={disabledTemplates} control={control} />
       </Stack>
     </Step>
   );

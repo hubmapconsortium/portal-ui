@@ -13,6 +13,7 @@ import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/useCreateWorkspa
 import { EditTemplatesFormTypes } from '../EditWorkspaceTemplatesDialog/hooks';
 
 interface TemplateGridProps {
+  disabledTemplates?: TemplatesTypes;
   templates: TemplatesTypes;
 }
 
@@ -21,7 +22,7 @@ interface ControllerProps {
   control: Control<CreateWorkspaceFormTypes | EditTemplatesFormTypes>;
 }
 
-function SelectableTemplateGrid({ templates, control }: TemplateGridProps & ControllerProps) {
+function SelectableTemplateGrid({ templates, disabledTemplates, control }: TemplateGridProps & ControllerProps) {
   const { field, fieldState } = useController({
     control,
     name: inputName,
@@ -67,7 +68,12 @@ function SelectableTemplateGrid({ templates, control }: TemplateGridProps & Cont
           </>
         }
       />
-      <TemplateGrid templates={templates} selectItem={selectItem} selectedTemplates={selectedTemplates} />
+      <TemplateGrid
+        templates={templates}
+        selectItem={selectItem}
+        selectedTemplates={selectedTemplates}
+        disabledTemplates={disabledTemplates}
+      />
     </Box>
   );
 }

@@ -37,7 +37,7 @@ function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace) {
   );
 }
 
-function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
+export function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
   // TODO: Use current_workspace_details once data inconsistencies are resolved.
   const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();

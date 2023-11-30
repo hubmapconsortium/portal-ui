@@ -13,6 +13,7 @@ interface SelectableCardProps extends React.ComponentProps<typeof StyledCard> {
   isSelected?: boolean;
   selectItem?: (e: ChangeEvent<HTMLInputElement>) => void;
   cardKey: string;
+  disabled?: boolean;
 }
 
 function SelectableCard({
@@ -22,6 +23,7 @@ function SelectableCard({
   isSelected = false,
   selectItem,
   cardKey,
+  disabled,
   ...rest
 }: SelectableCardProps) {
   const colorVariant = isSelected ? 'primaryContainer' : 'secondaryContainer';
@@ -32,7 +34,7 @@ function SelectableCard({
           <SelectableCardText variant="subtitle1" $colorVariant={colorVariant}>
             {title}
           </SelectableCardText>
-          {selectItem && <Checkbox checked={isSelected} onChange={selectItem} value={cardKey} />}
+          {selectItem && <Checkbox checked={isSelected} onChange={selectItem} value={cardKey} disabled={disabled} />}
         </Stack>
         <SelectableCardText gutterBottom $colorVariant={colorVariant}>
           {description}
