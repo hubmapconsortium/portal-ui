@@ -23,7 +23,7 @@ function isCustomPanel(props: PanelProps): props is CustomPanelProps {
 
 function Panel(props: PanelProps) {
   if (isCustomPanel(props)) {
-    return <PanelBox {...props}/>;
+    return <PanelBox {...props} />;
   }
 
   const { title, href, secondaryText, rightText } = props;
