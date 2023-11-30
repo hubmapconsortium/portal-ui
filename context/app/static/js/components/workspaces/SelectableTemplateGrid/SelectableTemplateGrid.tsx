@@ -22,6 +22,15 @@ interface ControllerProps {
   control: Control<CreateWorkspaceFormTypes | EditTemplatesFormTypes>;
 }
 
+function getActiveTemplates({ templates, disabledTemplates = {} }: TemplateGridProps) {
+  return Object.keys(templates).reduce<string[]>((acc, templateKey) => {
+    if (templateKey in disabledTemplates) {
+      return acc;
+    }
+    return [...acc, templateKey];
+  }, []);
+}
+
 function SelectableTemplateGrid({ templates, disabledTemplates, control }: TemplateGridProps & ControllerProps) {
   const { field, fieldState } = useController({
     control,
@@ -62,7 +71,11 @@ function SelectableTemplateGrid({ templates, disabledTemplates, control }: Templ
             <Button disabled={selectedTemplates.size === 0} sx={{ mr: 1 }} onClick={() => updateTemplates([])}>
               Deselect All
             </Button>
-            <Button color="primary" variant="contained" onClick={() => updateTemplates(Object.keys(templates))}>
+            <Button
+              color="primary"
+              variant="contained"
+              onClick={() => updateTemplates(getActiveTemplates({ templates, disabledTemplates }))}
+            >
               Select All
             </Button>
           </>
