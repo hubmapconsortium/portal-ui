@@ -39,11 +39,13 @@ function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace) {
 
 function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
   // TODO: Use current_workspace_details once data inconsistencies are resolved.
-  const workspaceFiles = workspace?.workspace_details?.request_workspace_details?.files ?? [];
+  const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();
 
   const matchingTemplates = workspaceFiles.reduce((acc, file) => {
-    const templateName = getWorkspaceFileName(file).split('.').shift();
+    const regex = /[\w-]+?(?=\.)/;
+    const fileNameMatch = getWorkspaceFileName(file).match(regex);
+    const templateName = fileNameMatch ? fileNameMatch[0] : '';
     if (templateName && templateName in templates) {
       return { ...acc, [templateName]: templates[templateName] };
     }

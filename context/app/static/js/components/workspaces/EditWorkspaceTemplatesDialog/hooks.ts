@@ -2,7 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { useEditWorkspaceNameStore } from 'js/stores/useWorkspaceModalStore';
+import { useEditWorkspaceTemplatesStore } from 'js/stores/useWorkspaceModalStore';
 import { useHandleUpdateWorkspace, useCreateTemplates } from '../hooks';
 import { templatesField } from '../workspaceFormFields';
 
@@ -28,7 +28,7 @@ const schema = z
 
 function useEditWorkspaceForm({ workspaceId }: UseEditTemplatesFormTypes) {
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
-  const { close } = useEditWorkspaceNameStore();
+  const { close } = useEditWorkspaceTemplatesStore();
   const { createTemplates } = useCreateTemplates();
 
   const {
