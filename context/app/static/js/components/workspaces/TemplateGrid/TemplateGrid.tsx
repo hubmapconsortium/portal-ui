@@ -31,6 +31,7 @@ function TemplateGrid({
             sx={{ height: '100%', minHeight: 225 }}
             key={templateKey}
             disabled={templateKey in disabledTemplates}
+            tooltip={templateKey in disabledTemplates ? 'This template is already in your workspace.' : undefined}
           />
         </Grid>
       ))}
