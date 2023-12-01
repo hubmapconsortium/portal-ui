@@ -1,4 +1,4 @@
-import React, { useCallback, PropsWithChildren } from 'react';
+import React, { useCallback, PropsWithChildren, BaseSyntheticEvent } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -31,13 +31,16 @@ function EditWorkspaceDialog<T extends FieldValues>({
   isSubmitting,
 }: EditWorkspaceDialogTypes<T> & FormProps<T>) {
   const submit = useCallback(
-    async (fieldsValues: T) => {
-      if (isSubmitting) return;
-      await onSubmit(fieldsValues);
-      reset();
-      close();
+    async (e: BaseSyntheticEvent) => {
+      try {
+        if (isSubmitting) return;
+        await handleSubmit(onSubmit)(e);
+      } finally {
+        reset();
+        close();
+      }
     },
-    [onSubmit, reset, close, isSubmitting],
+    [onSubmit, reset, close, isSubmitting, handleSubmit],
   );
 
   return (
@@ -49,7 +52,7 @@ function EditWorkspaceDialog<T extends FieldValues>({
           id={formId}
           component="form"
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onSubmit={handleSubmit(submit)}
+          onSubmit={submit}
         >
           {children}
         </Box>
