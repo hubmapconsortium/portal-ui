@@ -117,8 +117,6 @@ function VerticalStackedBarChart<
                           key={`${bar.key}-${bar.index}`}
                           direction="vertical"
                           bar={bar}
-                          xScale={xScale}
-                          yScale={yScale}
                           hoverProps={{
                             onMouseEnter: handleMouseEnter(bar),
                             onMouseLeave: handleMouseLeave,

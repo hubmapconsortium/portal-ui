@@ -13,16 +13,17 @@ import { DetailPageSection } from '../detailPage/style';
 
 // Define the keys for the stack
 type GraphKey = keyof Pick<CellTypeOrgan, 'other_cells' | 'celltype_cells'>;
-const keys = ['other_cells', 'celltype_cells'] as GraphKey[];
+const keys = ['celltype_cells', 'other_cells'] as GraphKey[];
 const keyLabels: Record<GraphKey, string> = {
-  other_cells: 'Other Cells',
   celltype_cells: 'Cell Type Cells',
+  other_cells: 'Other Cells',
 };
 
 const margin = { top: 20, right: 20, bottom: 100, left: 60 };
 
 function getX(d: unknown): string {
-  return (d as CellTypeOrgan).organ;
+  const data = d as CellTypeOrgan;
+  return data.organ;
 }
 
 function getXScaleRange(max: number): [number, number] {
@@ -38,11 +39,7 @@ export default function CellTypesVisualization() {
   const sortedOrgans = [...organs].sort((a, b) => b.total_cells - a.total_cells);
 
   const xScale = useBandScale(sortedOrgans.map((d) => d.organ));
-  const yScale = useLogScale(
-    sortedOrgans.map((d) => d.total_cells, {
-      nice: true,
-    }),
-  );
+  const yScale = useLogScale(sortedOrgans.map((d) => d.total_cells));
   const colorScale = useOrdinalScale(keys, { range: ['#89A05F', '#4B5F27'] });
 
   // Only show ticks for powers of 10

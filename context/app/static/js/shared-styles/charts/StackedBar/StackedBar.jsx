@@ -3,20 +3,18 @@ import PropTypes from 'prop-types';
 
 import { StyledRect } from './style';
 
-function StackedBar({ direction, bar, hoverProps, yScale, xScale }) {
+function StackedBar({ direction, bar, hoverProps }) {
   const maxBarThickness = 65;
 
   // props are inversed for vertical and horizontal charts
   const propMap = {
     horizontal: {
-      scale: xScale,
       length: 'width',
       thickness: 'height',
       discreteAxis: 'x',
       categoricalAxis: 'y',
     },
     vertical: {
-      scale: yScale,
       length: 'height',
       thickness: 'width',
       discreteAxis: 'y',
@@ -39,7 +37,6 @@ function StackedBar({ direction, bar, hoverProps, yScale, xScale }) {
       $showHover={Object.keys(hoverProps).length > 0}
       {...hoverProps}
       data-key={bar.key}
-      data-value={bar.value}
     />
   );
 }
