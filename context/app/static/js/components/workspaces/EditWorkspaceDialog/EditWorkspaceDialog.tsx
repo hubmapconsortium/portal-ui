@@ -42,7 +42,8 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
           reset();
           close();
         })
-        .catch(() => {
+        .catch((error) => {
+          console.error(error);
           toastError('Failed to update workspace.');
         });
     },
