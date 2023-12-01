@@ -2,11 +2,11 @@ import React from 'react';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 
-type SelectableChipProps = Pick<ChipProps<'button'>, 'label' | 'onClick' | 'disabled'> & {
+type SelectableChipProps = Pick<ChipProps<'button'>, 'label' | 'onClick' | 'disabled' | 'sx'> & {
   isSelected: boolean;
 };
 
-function SelectableChip({ label, onClick, disabled, isSelected, ...rest }: SelectableChipProps) {
+function SelectableChip({ label, onClick, disabled, isSelected, sx, ...rest }: SelectableChipProps) {
   return (
     <Chip
       label={label}
@@ -18,6 +18,7 @@ function SelectableChip({ label, onClick, disabled, isSelected, ...rest }: Selec
       icon={isSelected ? <CheckRoundedIcon /> : undefined}
       variant={isSelected ? 'filled' : 'outlined'}
       sx={{
+        ...sx,
         px: isSelected ? 0 : 1.5,
       }}
       {...rest}

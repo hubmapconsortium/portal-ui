@@ -4,6 +4,7 @@ import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useOrgansDatasetCounts } from 'js/pages/Organs/hooks';
 import { SWRError } from 'js/helpers/swr/errors';
+import useSWRInfinite from 'swr/infinite';
 import { useGenePageContext } from './GenePageContext';
 import { useAppContext } from '../Contexts';
 
@@ -104,21 +105,29 @@ const useGeneOrgans = () => {
     isLoadingDatasetCounts,
   };
 };
-const starts_with = undefined;
-const genesperpage = 10;
 
-const useGeneList = (page: number) => {
+const useGeneList = (starts_with: string) => {
+  const apiUrls = useGeneApiURLs();
   const query = useMemo(
     () => ({
-      page,
-      genesperpage,
+      genesperpage: '10',
       starts_with,
     }),
-    [page],
+    [starts_with],
   );
-  return useSWR<GeneListResponse>([useGeneApiURLs().list, query], ([url, body]: [string, object]) =>
-    fetcher({ url, requestInit: { body: JSON.stringify(body) } }),
-  );
+  const getKey = (pageIndex: number, previousPageData: GeneListResponse | null) => {
+    if (
+      previousPageData &&
+      previousPageData.pagination.page === previousPageData.pagination.total_pages &&
+      starts_with === previousPageData.pagination.starts_with
+    )
+      return null;
+    return `${apiUrls.list}?${new URLSearchParams({ ...query, page: String(pageIndex + 1) }).toString()}`;
+  };
+  return useSWRInfinite<GeneListResponse>(getKey, (url: string) => fetcher({ url }), {
+    revalidateAll: false,
+    revalidateFirstPage: false,
+  });
 };
 
 // Re-export `useGenePageContext` for convenience
