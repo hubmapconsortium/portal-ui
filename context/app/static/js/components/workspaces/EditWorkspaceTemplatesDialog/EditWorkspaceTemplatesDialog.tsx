@@ -1,15 +1,22 @@
 import React, { useState, useCallback } from 'react';
 
-import { useEditWorkspaceTemplatesStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import TemplateSelectStep from '../TemplateSelectStep';
 import { useEditWorkspaceForm, EditTemplatesFormTypes } from './hooks';
 import { Workspace } from '../types';
-import EditWorkspaceDialog from '../EditWorkspaceDialog';
+import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { useWorkspaceDetail } from '../hooks';
 
-function Dialog({ workspace, isOpen, close }: { workspace: Workspace; isOpen: boolean; close: () => void }) {
+function EditWorkspaceTemplatesDialog({
+  workspace,
+  isOpen,
+  close,
+}: {
+  workspace: Workspace;
+  isOpen: boolean;
+  close: () => void;
+}) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
@@ -33,7 +40,7 @@ function Dialog({ workspace, isOpen, close }: { workspace: Workspace; isOpen: bo
   );
 
   return (
-    <EditWorkspaceDialog
+    <EditWorkspaceDialogContent
       title="Add Templates"
       isOpen={isOpen}
       close={close}
@@ -54,18 +61,8 @@ function Dialog({ workspace, isOpen, close }: { workspace: Workspace; isOpen: bo
         templates={templates}
         disabledTemplates={workspaceTemplates}
       />
-    </EditWorkspaceDialog>
+    </EditWorkspaceDialogContent>
   );
-}
-
-function EditWorkspaceTemplatesDialog() {
-  const { isOpen, close, workspace } = useEditWorkspaceTemplatesStore();
-
-  if (!workspace) {
-    return null;
-  }
-
-  return <Dialog workspace={workspace} isOpen={isOpen} close={close} />;
 }
 
 export default EditWorkspaceTemplatesDialog;

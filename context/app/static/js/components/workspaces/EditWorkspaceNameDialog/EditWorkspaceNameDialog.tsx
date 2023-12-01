@@ -1,13 +1,20 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback } from 'react';
 
-import { useEditWorkspaceNameStore } from 'js/stores/useWorkspaceModalStore';
 import Step from 'js/shared-styles/surfaces/Step';
 import { useEditWorkspaceForm, EditWorkspaceFormTypes } from './hooks';
 import WorkspaceField from '../WorkspaceField/WorkspaceField';
-import EditWorkspaceDialog from '../EditWorkspaceDialog';
+import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
 
-function Dialog({ workspace, isOpen, close }: { workspace: Workspace; isOpen: boolean; close: () => void }) {
+function EditWorkspaceNameDialog({
+  workspace,
+  isOpen,
+  close,
+}: {
+  workspace: Workspace;
+  isOpen: boolean;
+  close: () => void;
+}) {
   const workspaceName = workspace.name;
   const workspaceId = workspace.id;
   const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
@@ -24,10 +31,8 @@ function Dialog({ workspace, isOpen, close }: { workspace: Workspace; isOpen: bo
     [onSubmit],
   );
 
-  useEffect(() => reset(), [isOpen, reset]);
-
   return (
-    <EditWorkspaceDialog
+    <EditWorkspaceDialogContent
       title="Edit Workspace Name"
       isOpen={isOpen}
       close={close}
@@ -49,18 +54,8 @@ function Dialog({ workspace, isOpen, close }: { workspace: Workspace; isOpen: bo
           }}
         />
       </Step>
-    </EditWorkspaceDialog>
+    </EditWorkspaceDialogContent>
   );
-}
-
-function EditWorkspaceNameDialog() {
-  const { isOpen, close, workspace } = useEditWorkspaceNameStore();
-
-  if (!workspace) {
-    return null;
-  }
-
-  return <Dialog workspace={workspace} isOpen={isOpen} close={close} />;
 }
 
 export default EditWorkspaceNameDialog;

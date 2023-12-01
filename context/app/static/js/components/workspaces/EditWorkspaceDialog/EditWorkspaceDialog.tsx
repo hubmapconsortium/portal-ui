@@ -3,9 +3,12 @@ import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Box from '@mui/material/Box';
+import { UseFormReturn, FormState, FieldValues } from 'react-hook-form';
 
 import DialogModal from 'js/shared-styles/DialogModal';
-import { UseFormReturn, FormState, FieldValues } from 'react-hook-form';
+import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import EditWorkspaceTemplatesDialog from '../EditWorkspaceTemplatesDialog';
+import EditWorkspaceNameDialog from '../EditWorkspaceNameDialog';
 
 const formId = 'edit-workspace-form';
 
@@ -19,7 +22,7 @@ interface EditWorkspaceDialogTypes<T extends FieldValues> extends PropsWithChild
   onSubmit: (fieldValues: T) => Promise<void>;
 }
 
-function EditWorkspaceDialog<T extends FieldValues>({
+function EditWorkspaceDialogContent<T extends FieldValues>({
   title,
   isOpen,
   close,
@@ -74,4 +77,22 @@ function EditWorkspaceDialog<T extends FieldValues>({
   );
 }
 
+function EditWorkspaceDialog() {
+  const { isOpen, close, workspace, dialogType } = useEditWorkspaceStore();
+
+  if (!workspace) {
+    return null;
+  }
+  if (dialogType === 'UPDATE_NAME') {
+    return <EditWorkspaceNameDialog workspace={workspace} isOpen={isOpen} close={close} />;
+  }
+
+  if (dialogType === 'UPDATE_TEMPLATES') {
+    return <EditWorkspaceTemplatesDialog workspace={workspace} isOpen={isOpen} close={close} />;
+  }
+
+  return null;
+}
+
+export { EditWorkspaceDialogContent };
 export default EditWorkspaceDialog;

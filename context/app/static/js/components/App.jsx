@@ -12,8 +12,7 @@ import { StyledAlert, FlexContainer } from './style';
 // Importing Search styles here so the CSS import order is correct.
 import 'js/components/searchPage/Search.scss';
 import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
-import EditWorkspaceNameDialog from './workspaces/EditWorkspaceNameDialog';
-import EditWorkspaceTemplatesDialog from './workspaces/EditWorkspaceTemplatesDialog';
+import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
 
 // TODO: Delete this when workspaces are publicly released.
@@ -76,8 +75,7 @@ function App(props) {
             they are launchable from many places. In the future, this should be
             improved on by using a global modal stack with portals. */}
         <LaunchWorkspaceDialog />
-        <EditWorkspaceNameDialog />
-        <EditWorkspaceTemplatesDialog />
+        <EditWorkspaceDialog />
       </Providers>
     </StrictMode>
   );

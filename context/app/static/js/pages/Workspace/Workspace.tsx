@@ -6,7 +6,6 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import Box from '@mui/material/Box';
 
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
-import { MergedWorkspace } from 'js/components/workspaces/types';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
@@ -19,7 +18,6 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
-import { useEditWorkspaceNameStore, useEditWorkspaceTemplatesStore } from 'js/stores/useWorkspaceModalStore';
 import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 
@@ -30,39 +28,6 @@ interface WorkspacePageProps {
 function LaunchStopButton(props: ButtonProps) {
   const variant = props?.children?.toString() === 'Stop Jobs' ? 'outlined' : 'contained';
   return <Button {...props} variant={variant} />;
-}
-
-function UpdateNameButton({ workspace }: { workspace: MergedWorkspace }) {
-  const { open, setWorkspace } = useEditWorkspaceNameStore();
-  return (
-    <WorkspacesUpdateButton
-      workspace={workspace}
-      onClick={() => {
-        setWorkspace(workspace);
-        open();
-      }}
-      sx={(theme) => ({
-        marginRight: theme.spacing(1),
-      })}
-    >
-      <EditIcon sx={{ fontSize: '1.25rem' }} />
-    </WorkspacesUpdateButton>
-  );
-}
-
-function UpdateTemplatesButton({ workspace }: { workspace: MergedWorkspace }) {
-  const { open, setWorkspace } = useEditWorkspaceTemplatesStore();
-  return (
-    <WorkspacesUpdateButton
-      workspace={workspace}
-      onClick={() => {
-        setWorkspace(workspace);
-        open();
-      }}
-    >
-      <AddIcon sx={{ fontSize: '1.25rem' }} />
-    </WorkspacesUpdateButton>
-  );
 }
 
 function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
@@ -90,7 +55,15 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           mapped_data_access_level=""
           otherButtons={
             <>
-              <UpdateNameButton workspace={workspace} />
+              <WorkspacesUpdateButton
+                workspace={workspace}
+                dialogType="UPDATE_NAME"
+                sx={(theme) => ({
+                  marginRight: theme.spacing(1),
+                })}
+              >
+                <EditIcon />
+              </WorkspacesUpdateButton>
               <WorkspaceLaunchStopButtons
                 workspace={workspace}
                 button={LaunchStopButton}
@@ -118,7 +91,11 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           leftText={
             <SectionHeader iconTooltipText="Templates that are currently in this workspace."> Templates</SectionHeader>
           }
-          buttons={<UpdateTemplatesButton workspace={workspace} />}
+          buttons={
+            <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES">
+              <AddIcon />
+            </WorkspacesUpdateButton>
+          }
         />
         <TemplateGrid templates={workspaceTemplates} />
       </Box>
