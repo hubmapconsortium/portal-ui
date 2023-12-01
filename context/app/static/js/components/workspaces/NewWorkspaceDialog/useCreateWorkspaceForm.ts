@@ -9,10 +9,12 @@ import { CreateTemplateNotebooksTypes } from '../types';
 import { useTemplateNotebooks } from './hooks';
 import { workspaceNameField, protectedDatasetsField, templatesField } from '../workspaceFormFields';
 
-interface CreateWorkspaceFormTypes {
+export interface FormWithTemplates {
+  templates: string[];
+}
+interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
   'protected-datasets': undefined;
-  templates: string[];
 }
 
 interface UseCreateWorkspaceTypes {

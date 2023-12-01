@@ -4,10 +4,9 @@ import { z } from 'zod';
 
 import { useHandleUpdateWorkspace, useCreateTemplates } from '../hooks';
 import { templatesField } from '../workspaceFormFields';
+import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 
-interface EditTemplatesFormTypes {
-  templates: string[];
-}
+type EditTemplatesFormTypes = FormWithTemplates;
 
 interface UseEditTemplatesFormTypes {
   workspaceId: number;
@@ -34,7 +33,7 @@ function useEditWorkspaceForm({ workspaceId }: UseEditTemplatesFormTypes) {
     control,
     reset,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-  } = useForm({
+  } = useForm<EditTemplatesFormTypes>({
     defaultValues: {
       templates: [],
     },
