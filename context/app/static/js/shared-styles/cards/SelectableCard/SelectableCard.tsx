@@ -44,7 +44,7 @@ function SelectableCard({
             {description}
           </SelectableCardText>
           {tags.length > 0 && (
-            <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" sx={{ marginTop: 'auto' }}>
+            <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap" mt="auto">
               {tags.map((tag) => (
                 <Chip label={tag} sx={{ borderRadius: 8, backgroundColor: 'white.main' }} key={tag} />
               ))}
