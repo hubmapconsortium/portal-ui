@@ -2,9 +2,13 @@ import { useCallback } from 'react';
 import { useGeneList } from '../genes/hooks';
 import { useBiomarkersSearchState } from './BiomarkersSearchContext';
 
-export function useResultsList() {
+function useCurrentGenesList() {
   const { search } = useBiomarkersSearchState();
-  const { data, ...rest } = useGeneList(search);
+  return useGeneList(search);
+}
+
+export function useResultsList() {
+  const { data, ...rest } = useCurrentGenesList();
 
   const genesList = data?.flatMap((page) => page.genes) ?? [];
 
@@ -18,7 +22,7 @@ export function useResultsList() {
 }
 
 export function useViewMore() {
-  const { size, setSize, isLoading, isValidating } = useResultsList();
+  const { size, setSize, isLoading, isValidating } = useCurrentGenesList();
   return useCallback(async () => {
     if (isLoading || isValidating) return;
     await setSize(size + 1);
