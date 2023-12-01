@@ -13,14 +13,23 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useBiomarkersSearchActions, useBiomarkersSearchState } from './BiomarkersSearchContext';
 
+const mobileStackProps: Partial<StackProps> = {
+  height: 'unset',
+  direction: 'column',
+  spacing: 2,
+  py: 2,
+};
+
+const desktopStackProps: Partial<StackProps> = {
+  height: 52,
+  direction: 'row',
+  spacing: 4,
+  py: 0,
+};
+
 function StackTemplate(props: React.ComponentProps<typeof Stack>) {
   const isMobile = useIsMobile();
-  const responsiveProps: Partial<StackProps> = {
-    height: isMobile ? 'unset' : 52,
-    direction: isMobile ? 'column' : 'row',
-    spacing: isMobile ? 2 : 4,
-    py: isMobile ? 2 : 0,
-  };
+  const responsiveProps = isMobile ? mobileStackProps : desktopStackProps;
   return <Stack px={2} useFlexGap width="100%" {...responsiveProps} {...props} />;
 }
 
