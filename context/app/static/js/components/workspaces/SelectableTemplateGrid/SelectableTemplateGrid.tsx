@@ -2,24 +2,23 @@ import React, { useCallback, ChangeEvent } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
-import { useController, Control } from 'react-hook-form';
+import { useController, Control, Path } from 'react-hook-form';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { TemplatesTypes } from '../types';
 import TemplateGrid from '../TemplateGrid';
-import { CreateWorkspaceFormTypes } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
-import { EditTemplatesFormTypes } from '../EditWorkspaceTemplatesDialog/hooks';
+import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 
 interface TemplateGridProps {
   disabledTemplates?: TemplatesTypes;
   templates: TemplatesTypes;
 }
 
-const inputName = 'templates';
-interface ControllerProps {
-  control: Control<CreateWorkspaceFormTypes | EditTemplatesFormTypes>;
+const inputName = 'templates' as const;
+interface ControllerProps<FormType extends FormWithTemplates> {
+  control: Control<FormType>;
 }
 
 function getActiveTemplates({ templates, disabledTemplates = {} }: TemplateGridProps) {
@@ -31,12 +30,18 @@ function getActiveTemplates({ templates, disabledTemplates = {} }: TemplateGridP
   }, []);
 }
 
-function SelectableTemplateGrid({ templates, disabledTemplates, control }: TemplateGridProps & ControllerProps) {
-  const { field, fieldState } = useController({
+function SelectableTemplateGrid<FormType extends FormWithTemplates>({
+  templates,
+  disabledTemplates,
+  control,
+}: TemplateGridProps & ControllerProps<FormType>) {
+  const { field, fieldState } = useController<FormType>({
     control,
-    name: inputName,
+    name: inputName as Path<FormType>,
   });
-  const { selectedItems: selectedTemplates, setSelectedItems: setSelectedTemplates } = useSelectItems(field.value);
+  const { selectedItems: selectedTemplates, setSelectedItems: setSelectedTemplates } = useSelectItems(
+    field.value satisfies FormType[typeof inputName],
+  );
 
   const updateTemplates = useCallback(
     (templateKeys: string[]) => {
