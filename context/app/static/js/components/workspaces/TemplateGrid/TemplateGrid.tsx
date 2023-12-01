@@ -8,9 +8,15 @@ interface TemplateGridProps {
   templates: TemplatesTypes;
   selectItem?: (e: ChangeEvent<HTMLInputElement>) => void;
   selectedTemplates?: Set<string>;
+  disabledTemplates?: TemplatesTypes;
 }
 
-function TemplateGrid({ templates, selectItem, selectedTemplates = new Set([]) }: TemplateGridProps) {
+function TemplateGrid({
+  templates,
+  selectItem,
+  selectedTemplates = new Set([]),
+  disabledTemplates = {},
+}: TemplateGridProps) {
   return (
     <Grid container spacing={2} alignItems="stretch">
       {Object.entries(templates).map(([templateKey, { title, description, tags }]) => (
@@ -19,11 +25,13 @@ function TemplateGrid({ templates, selectItem, selectedTemplates = new Set([]) }
             title={title}
             description={description}
             tags={tags}
-            isSelected={selectedTemplates.has(templateKey)}
+            isSelected={selectedTemplates.has(templateKey) || templateKey in disabledTemplates}
             selectItem={selectItem}
             cardKey={templateKey}
             sx={{ height: '100%', minHeight: 225 }}
             key={templateKey}
+            disabled={templateKey in disabledTemplates}
+            tooltip={templateKey in disabledTemplates ? 'This template is already in your workspace.' : undefined}
           />
         </Grid>
       ))}
