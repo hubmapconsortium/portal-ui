@@ -1,21 +1,16 @@
-import Button, { ButtonProps } from '@mui/material/Button';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { ButtonProps } from '@mui/material/Button';
 import React from 'react';
+import TooltipButtonBase from './TooltipButtonBase';
 
 interface TooltipButtonProps extends ButtonProps {
   tooltip: React.ReactNode;
 }
 
-function TooltipButton(
-  { tooltip, children, component, ...props }: TooltipButtonProps,
-  ref: React.Ref<HTMLButtonElement>,
-) {
+function TooltipButton({ children, ...props }: TooltipButtonProps, ref: React.Ref<HTMLButtonElement>) {
   return (
-    <SecondaryBackgroundTooltip describeChild title={tooltip}>
-      <Button {...props} ref={ref}>
-        {children}
-      </Button>
-    </SecondaryBackgroundTooltip>
+    <TooltipButtonBase {...props} ref={ref} isIconButton={false}>
+      {children}
+    </TooltipButtonBase>
   );
 }
 

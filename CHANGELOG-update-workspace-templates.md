@@ -1,0 +1,1 @@
+- Add dialogs to workspace detail page to update workspace name and templates.

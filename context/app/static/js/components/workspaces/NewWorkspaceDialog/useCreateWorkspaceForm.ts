@@ -7,39 +7,22 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { CreateTemplateNotebooksTypes } from '../types';
 import { useTemplateNotebooks } from './hooks';
+import { workspaceNameField, protectedDatasetsField, templatesField } from '../workspaceFormFields';
 
-interface CreateWorkspaceFormTypes {
+export interface FormWithTemplates {
+  templates: string[];
+}
+interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
   'protected-datasets': undefined;
-  templates: string[];
 }
 
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
 }
 
-function withCustomMessage(message: string): z.ZodErrorMap {
-  return function tooSmallErrorMap(issue, ctx) {
-    if (issue.code === z.ZodIssueCode.too_small) {
-      return { message };
-    }
-    return { message: ctx.defaultError };
-  };
-}
-
 const schema = z
-  .object({
-    'workspace-name': z
-      .string({ errorMap: withCustomMessage('A workspace name is required. Please enter a workspace name.') })
-      .min(1)
-      .max(150),
-    'protected-datasets': z.string(),
-    templates: z
-      .array(z.string(), {
-        errorMap: withCustomMessage('At least one template must be selected. Please select a template.'),
-      })
-      .nonempty(),
-  })
+  .object({ ...workspaceNameField, ...protectedDatasetsField, ...templatesField })
   .partial()
   .required({ 'workspace-name': true, templates: true });
 

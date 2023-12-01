@@ -1,38 +1,23 @@
-import React, { useState, PropsWithChildren, useCallback, ReactElement } from 'react';
+import React, { useState, PropsWithChildren, useCallback } from 'react';
 import { UseFormReturn, FieldErrors } from 'react-hook-form';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
-import Paper from '@mui/material/Paper';
 import Box from '@mui/material/Box';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 
-import Step from 'js/shared-styles/surfaces/Step';
-import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import SelectableChip from 'js/shared-styles/chips/SelectableChip';
-import { useSelectItems } from 'js/hooks/useSelectItems';
-import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
+import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
-
-import SelectableTemplateGrid from '../SelectableTemplateGrid';
+import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useSelectItems } from 'js/hooks/useSelectItems';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
-import { useLaunchWorkspaceStore } from '../LaunchWorkspaceDialog/store';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
-
-function ContactPrompt() {
-  return (
-    <>
-      If you have ideas about additional templates to include in the future, please <ContactUsLink /> .
-    </>
-  );
-}
+import TemplateSelectStep from '../TemplateSelectStep';
 
 const text = {
   overview: {
@@ -52,30 +37,8 @@ const text = {
   configure: { title: 'Configure Workspace' },
   templates: {
     title: 'Select Templates',
-    description: [
-      'Templates can be selected for your workspace for potential workflows revolving around data assays, visualization, QA or other purposes. Multiple templates can be selected. If you are unsure of which templates to launch, the “Select All” button selects all templates.',
-      <ContactPrompt key="configure-workspace-contact" />,
-    ],
   },
 };
-
-function Description({ blocks }: { blocks: (string | ReactElement)[] }) {
-  return (
-    <Stack gap={2} sx={{ p: 2 }} component={Paper} direction="column">
-      {blocks.map((block) => (
-        <Typography key={String(block)}>{block}</Typography>
-      ))}
-    </Stack>
-  );
-}
-
-interface TagTypes extends ChipProps {
-  option: string;
-}
-
-function TagComponent({ option, ...rest }: TagTypes) {
-  return <Chip label={option} {...rest} />;
-}
 
 type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormTypes>, 'handleSubmit' | 'control'> & {
   errors: FieldErrors<CreateWorkspaceFormTypes>;
@@ -90,8 +53,6 @@ interface NewWorkspaceDialogProps {
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
   isSubmitting?: boolean;
 }
-
-const recommendedTags = ['visualization', 'api'];
 
 function NewWorkspaceDialog({
   datasetUUIDs = new Set(),
@@ -139,14 +100,14 @@ function NewWorkspaceDialog({
           {text.overview.title}
         </DialogTitle>
         <Box sx={{ px: 3 }}>
-          <Description blocks={text.overview.description} />
+          <StepDescription blocks={text.overview.description} />
         </Box>
       </Box>
       <DialogContent dividers>
         <Step title={text.datasets.title} index={0}>
           <Stack spacing={1}>
             {children}
-            <Description blocks={text.datasets.description} />
+            <StepDescription blocks={text.datasets.description} />
             {datasetUUIDs.size > 0 && (
               <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} removeDatasets={removeDatasets} />
             )}
@@ -176,43 +137,17 @@ function NewWorkspaceDialog({
             />
           </Box>
         </Step>
-        <Step title={text.templates.title} index={2}>
-          <Description blocks={text.templates.description} />
-          <Typography sx={{ mt: 2 }} variant="subtitle1">
-            Filter workspace templates by tags
-          </Typography>
-          <Stack spacing={1}>
-            <MultiAutocomplete
-              value={selectedTags}
-              options={Object.keys(tags)
-                .filter((tag) => !recommendedTags.includes(tag))
-                .sort((a, b) => a.localeCompare(b))}
-              multiple
-              filterSelectedOptions
-              isOptionEqualToValue={(option, value) => option === value}
-              tagComponent={TagComponent}
-              onChange={(_, value: string[]) => {
-                setSelectedTags(value);
-              }}
-            />
-            <Box>
-              <Typography variant="subtitle2" gutterBottom>
-                Recommended Tags
-              </Typography>
-              <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
-                {recommendedTags.map((tag) => (
-                  <SelectableChip
-                    isSelected={selectedRecommendedTags.has(tag)}
-                    label={tag}
-                    onClick={() => toggleTag(tag)}
-                    key={tag}
-                  />
-                ))}
-              </Stack>
-            </Box>
-            <SelectableTemplateGrid templates={templates} control={control} />
-          </Stack>
-        </Step>
+        <TemplateSelectStep
+          title={text.templates.title}
+          stepIndex={2}
+          control={control}
+          toggleTag={toggleTag}
+          tags={tags}
+          selectedRecommendedTags={selectedRecommendedTags}
+          selectedTags={selectedTags}
+          setSelectedTags={setSelectedTags}
+          templates={templates}
+        />
       </DialogContent>
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
