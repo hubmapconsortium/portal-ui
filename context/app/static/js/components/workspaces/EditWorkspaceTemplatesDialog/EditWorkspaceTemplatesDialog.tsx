@@ -8,15 +8,7 @@ import { Workspace } from '../types';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { useWorkspaceDetail } from '../hooks';
 
-function EditWorkspaceTemplatesDialog({
-  workspace,
-  isOpen,
-  close,
-}: {
-  workspace: Workspace;
-  isOpen: boolean;
-  close: () => void;
-}) {
+function EditWorkspaceTemplatesDialog({ workspace }: { workspace: Workspace }) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
@@ -42,8 +34,6 @@ function EditWorkspaceTemplatesDialog({
   return (
     <EditWorkspaceDialogContent
       title="Add Templates"
-      isOpen={isOpen}
-      close={close}
       reset={reset}
       handleSubmit={handleSubmit}
       onSubmit={submit}

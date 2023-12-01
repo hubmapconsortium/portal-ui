@@ -6,15 +6,7 @@ import WorkspaceField from '../WorkspaceField/WorkspaceField';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
 
-function EditWorkspaceNameDialog({
-  workspace,
-  isOpen,
-  close,
-}: {
-  workspace: Workspace;
-  isOpen: boolean;
-  close: () => void;
-}) {
+function EditWorkspaceNameDialog({ workspace }: { workspace: Workspace }) {
   const workspaceName = workspace.name;
   const workspaceId = workspace.id;
   const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
@@ -34,8 +26,6 @@ function EditWorkspaceNameDialog({
   return (
     <EditWorkspaceDialogContent
       title="Edit Workspace Name"
-      isOpen={isOpen}
-      close={close}
       reset={reset}
       handleSubmit={handleSubmit}
       onSubmit={submit}

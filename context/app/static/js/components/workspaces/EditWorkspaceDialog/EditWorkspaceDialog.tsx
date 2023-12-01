@@ -2,7 +2,6 @@ import React, { useCallback, PropsWithChildren, BaseSyntheticEvent } from 'react
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
-import Box from '@mui/material/Box';
 import { UseFormReturn, FormState, FieldValues } from 'react-hook-form';
 
 import DialogModal from 'js/shared-styles/DialogModal';
@@ -16,16 +15,12 @@ type FormProps<T extends FieldValues> = Pick<UseFormReturn<T>, 'reset' | 'handle
 
 interface EditWorkspaceDialogTypes<T extends FieldValues> extends PropsWithChildren {
   title: string;
-  isOpen: boolean;
-  close: () => void;
   isSubmitting: boolean;
   onSubmit: (fieldValues: T) => Promise<void>;
 }
 
 function EditWorkspaceDialogContent<T extends FieldValues>({
   title,
-  isOpen,
-  close,
   reset,
   children,
   onSubmit,
@@ -33,6 +28,8 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
   errors,
   isSubmitting,
 }: EditWorkspaceDialogTypes<T> & FormProps<T>) {
+  const { isOpen, close } = useEditWorkspaceStore();
+
   const submit = useCallback(
     async (e: BaseSyntheticEvent) => {
       try {
@@ -51,14 +48,13 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
       title={title}
       maxWidth="lg"
       content={
-        <Box
+        <form
           id={formId}
-          component="form"
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           onSubmit={submit}
         >
           {children}
-        </Box>
+        </form>
       }
       isOpen={isOpen}
       handleClose={close}
@@ -78,17 +74,17 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
 }
 
 function EditWorkspaceDialog() {
-  const { isOpen, close, workspace, dialogType } = useEditWorkspaceStore();
+  const { workspace, dialogType } = useEditWorkspaceStore();
 
   if (!workspace) {
     return null;
   }
   if (dialogType === 'UPDATE_NAME') {
-    return <EditWorkspaceNameDialog workspace={workspace} isOpen={isOpen} close={close} />;
+    return <EditWorkspaceNameDialog workspace={workspace} />;
   }
 
   if (dialogType === 'UPDATE_TEMPLATES') {
-    return <EditWorkspaceTemplatesDialog workspace={workspace} isOpen={isOpen} close={close} />;
+    return <EditWorkspaceTemplatesDialog workspace={workspace} />;
   }
 
   return null;
