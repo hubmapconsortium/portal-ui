@@ -107,10 +107,10 @@ function useLinearScale(data: number[], config: Omit<LinearScaleConfig, 'type'> 
   }, [data, config]);
 }
 
-function useLogScale(data: number[], config: Omit<LogScaleConfig, 'type'> = {}) {
+function useLogScale(data: number[], config: Omit<LogScaleConfig<number>, 'type'> = {}) {
   return useMemo(() => {
     const domain = [Math.min(...data, 1), Math.max(...data)];
-    return scaleLog({
+    return scaleLog<number>({
       ...config,
       domain,
     });
