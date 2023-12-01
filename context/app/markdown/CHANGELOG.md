@@ -1,3 +1,11 @@
+## v0.85.0 - 2023-12-01
+
+- Added biomarkers landing page.
+- Add link to currently running workspace from session time notification if not currently on the workspace's page.
+- Fix matomo user group tracking.
+- Add dialogs to workspace detail page to update workspace name and templates.
+
+
 ## v0.84.2 - 2023-11-21
 
 - Fix workspace launch error message display logic.
