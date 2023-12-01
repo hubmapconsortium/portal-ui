@@ -92,16 +92,19 @@ function useWorkspacesList() {
 }
 
 function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, never> = {}) {
-  // TODO: Use current_workspace_details once data inconsistencies are resolved.
-  const symlinks = workspace?.workspace_details?.request_workspace_details?.symlinks ?? [];
-  return symlinks.reduce<string[]>(
-    (acc, symlink) => (symlink?.dataset_uuid ? [...acc, symlink.dataset_uuid] : acc),
-    [],
-  );
+  // TODO: Update to use dataset IDs once workspace API makes them available
+  const symlinks = workspace?.workspace_details?.current_workspace_details?.symlinks ?? [];
+  return symlinks.reduce<string[]>((acc, symlink) => {
+    const uuid = getWorkspaceFileName(symlink).split('/').pop();
+    if (uuid) {
+      return [...acc, uuid];
+    }
+    return acc;
+  }, []);
 }
 
 function useMatchingWorkspaceTemplates(workspace: MergedWorkspace | Record<string, never> = {}) {
-  // TODO: Use current_workspace_details once data inconsistencies are resolved.
+  // TODO: Update to use template IDs once workspace API makes them available
   const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();
 

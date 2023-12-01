@@ -23,7 +23,7 @@ function EditWorkspaceTemplatesDialog({
   const { tags } = useWorkspaceTemplateTags();
 
   const workspaceId = workspace.id;
-  const { workspaceTemplates } = useWorkspaceDetail({ workspaceId });
+  const { workspaceTemplates, workspaceDatasets } = useWorkspaceDetail({ workspaceId });
 
   const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
     workspaceId,
@@ -33,10 +33,10 @@ function EditWorkspaceTemplatesDialog({
     async ({ templates: templateKeys }: EditTemplatesFormTypes) => {
       await onSubmit({
         templateKeys,
-        uuids: [],
+        uuids: workspaceDatasets,
       });
     },
-    [onSubmit],
+    [onSubmit, workspaceDatasets],
   );
 
   return (
