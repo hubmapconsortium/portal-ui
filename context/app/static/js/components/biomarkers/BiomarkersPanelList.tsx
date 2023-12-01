@@ -66,11 +66,10 @@ export default function BiomarkersPanelList() {
         noPadding: true,
         children: <BiomarkerPanel.Header />,
       },
-    ];
-    propsList.push(
       ...genesList.map(({ approved_name, approved_symbol, summary }) => ({
         key: approved_symbol,
         noPadding: true,
+        noHover: false,
         children: (
           <BiomarkerPanel.Item
             name={`${approved_name} (${approved_symbol})`}
@@ -80,12 +79,12 @@ export default function BiomarkersPanelList() {
           />
         ),
       })),
-    );
-    propsList.push({
-      key: 'view-more',
-      noPadding: true,
-      children: <ViewMoreButton />,
-    });
+      {
+        key: 'view-more',
+        noPadding: true,
+        children: <ViewMoreButton />,
+      },
+    ];
     return propsList;
   }, [genesList, isLoading]);
 
