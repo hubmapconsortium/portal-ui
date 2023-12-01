@@ -7,12 +7,11 @@ import Box from '@mui/material/Box';
 
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { MergedWorkspace } from 'js/components/workspaces/types';
-import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { condenseJobs, getWorkspaceFileName } from 'js/components/workspaces/utils';
+import { condenseJobs } from 'js/components/workspaces/utils';
 import JobStatus from 'js/components/workspaces/JobStatus';
 import { useWorkspaceDetail } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
@@ -26,34 +25,6 @@ import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateBut
 
 interface WorkspacePageProps {
   workspaceId: number;
-}
-
-function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace) {
-  // TODO: Use current_workspace_details once data inconsistencies are resolved.
-  const symlinks = workspace?.workspace_details?.request_workspace_details?.symlinks ?? [];
-  return symlinks.reduce<string[]>(
-    (acc, symlink) => (symlink?.dataset_uuid ? [...acc, symlink.dataset_uuid] : acc),
-    [],
-  );
-}
-
-export function useMatchingWorkspaceTemplates(workspace: MergedWorkspace) {
-  // TODO: Use current_workspace_details once data inconsistencies are resolved.
-  const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
-  const { templates } = useWorkspaceTemplates();
-
-  const matchingTemplates = workspaceFiles.reduce((acc, file) => {
-    // match the filename without extension given a file path.
-    const regex = /[\w-]+?(?=\.)/;
-    const fileNameMatch = getWorkspaceFileName(file).match(regex);
-    const templateName = fileNameMatch ? fileNameMatch[0] : '';
-    if (templateName && templateName in templates) {
-      return { ...acc, [templateName]: templates[templateName] };
-    }
-    return acc;
-  }, {});
-
-  return matchingTemplates;
 }
 
 function LaunchStopButton(props: ButtonProps) {
@@ -95,15 +66,14 @@ function UpdateTemplatesButton({ workspace }: { workspace: MergedWorkspace }) {
 }
 
 function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
-  const { workspace, isLoading, handleStopWorkspace, isStoppingWorkspace } = useWorkspaceDetail({ workspaceId });
-  const workspaceTemplates = useMatchingWorkspaceTemplates(workspace);
+  const { workspace, workspaceTemplates, workspaceDatasets, isLoading, handleStopWorkspace, isStoppingWorkspace } =
+    useWorkspaceDetail({ workspaceId });
 
   if (isLoading || Object.keys(workspace).length === 0) {
     return null;
   }
 
   const job = condenseJobs(workspace.jobs);
-  const workspaceDatasetUUIDs = getWorkspaceDatasetUUIDs(workspace);
 
   return (
     <Stack gap={6} sx={{ marginBottom: 5 }}>
@@ -140,11 +110,8 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           </LabelledSectionText>
         </SectionPaper>
       </Box>
-      {workspaceDatasetUUIDs.length > 0 && (
-        <WorkspaceDatasetsTable
-          datasetsUUIDs={workspaceDatasetUUIDs}
-          label={<SectionHeader> Datasets</SectionHeader>}
-        />
+      {workspaceDatasets.length > 0 && (
+        <WorkspaceDatasetsTable datasetsUUIDs={workspaceDatasets} label={<SectionHeader> Datasets</SectionHeader>} />
       )}
       <Box>
         <SpacedSectionButtonRow

@@ -5,18 +5,11 @@ import Step from 'js/shared-styles/surfaces/Step';
 import { useEditWorkspaceForm, EditWorkspaceFormTypes } from './hooks';
 import WorkspaceField from '../WorkspaceField/WorkspaceField';
 import EditWorkspaceDialog from '../EditWorkspaceDialog';
+import { Workspace } from '../types';
 
-function Dialog({
-  workspaceName,
-  workspaceId,
-  isOpen,
-  close,
-}: {
-  workspaceName: string;
-  workspaceId: number;
-  isOpen: boolean;
-  close: () => void;
-}) {
+function Dialog({ workspace, isOpen, close }: { workspace: Workspace; isOpen: boolean; close: () => void }) {
+  const workspaceName = workspace.name;
+  const workspaceId = workspace.id;
   const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
     defaultName: workspaceName,
     workspaceId,
@@ -62,14 +55,12 @@ function Dialog({
 
 function EditWorkspaceNameDialog() {
   const { isOpen, close, workspace } = useEditWorkspaceNameStore();
-  const workspaceName = workspace?.name;
-  const workspaceId = workspace?.id;
 
-  if (!(workspaceName && workspaceId)) {
+  if (!workspace) {
     return null;
   }
 
-  return <Dialog workspaceName={workspaceName} workspaceId={workspaceId} isOpen={isOpen} close={close} />;
+  return <Dialog workspace={workspace} isOpen={isOpen} close={close} />;
 }
 
 export default EditWorkspaceNameDialog;

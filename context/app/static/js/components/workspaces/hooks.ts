@@ -4,7 +4,7 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
 import { multiFetcher } from 'js/helpers/swr';
-import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob } from './utils';
+import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob, getWorkspaceFileName } from './utils';
 import {
   useDeleteWorkspace,
   useStopWorkspace,
@@ -18,6 +18,7 @@ import {
   UpdateWorkspaceBody,
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
+import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -90,6 +91,34 @@ function useWorkspacesList() {
   });
 }
 
+function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, never> = {}) {
+  // TODO: Use current_workspace_details once data inconsistencies are resolved.
+  const symlinks = workspace?.workspace_details?.request_workspace_details?.symlinks ?? [];
+  return symlinks.reduce<string[]>(
+    (acc, symlink) => (symlink?.dataset_uuid ? [...acc, symlink.dataset_uuid] : acc),
+    [],
+  );
+}
+
+function useMatchingWorkspaceTemplates(workspace: MergedWorkspace | Record<string, never> = {}) {
+  // TODO: Use current_workspace_details once data inconsistencies are resolved.
+  const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
+  const { templates } = useWorkspaceTemplates();
+
+  const matchingTemplates = workspaceFiles.reduce((acc, file) => {
+    // match the filename without extension given a file path.
+    const regex = /[\w-]+?(?=\.)/;
+    const fileNameMatch = getWorkspaceFileName(file).match(regex);
+    const templateName = fileNameMatch ? fileNameMatch[0] : '';
+    if (templateName && templateName in templates) {
+      return { ...acc, [templateName]: templates[templateName] };
+    }
+    return acc;
+  }, {});
+
+  return matchingTemplates;
+}
+
 function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
   const { workspace, isLoading: workspacesLoading } = useWorkspace(workspaceId);
   const { workspacesList, ...rest } = useWorkspacesActions({
@@ -99,7 +128,14 @@ function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
 
   const mergedWorkspace = workspacesList[0] ?? {};
 
-  return { workspace: mergedWorkspace, ...rest };
+  const workspaceTemplates = useMatchingWorkspaceTemplates(mergedWorkspace);
+
+  return {
+    workspace: mergedWorkspace,
+    workspaceDatasets: getWorkspaceDatasetUUIDs(mergedWorkspace),
+    workspaceTemplates,
+    ...rest,
+  };
 }
 
 function useRunningWorkspace() {

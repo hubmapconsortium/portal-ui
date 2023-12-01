@@ -3,21 +3,20 @@ import React, { useState, useCallback } from 'react';
 import { useEditWorkspaceTemplatesStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
-import { useMatchingWorkspaceTemplates } from 'js/pages/Workspace/Workspace';
 import TemplateSelectStep from '../TemplateSelectStep';
 import { useEditWorkspaceForm, EditTemplatesFormTypes } from './hooks';
-import { MergedWorkspace } from '../types';
+import { Workspace } from '../types';
 import EditWorkspaceDialog from '../EditWorkspaceDialog';
+import { useWorkspaceDetail } from '../hooks';
 
-function Dialog({ workspace, isOpen, close }: { workspace: MergedWorkspace; isOpen: boolean; close: () => void }) {
+function Dialog({ workspace, isOpen, close }: { workspace: Workspace; isOpen: boolean; close: () => void }) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
   const { tags } = useWorkspaceTemplateTags();
 
   const workspaceId = workspace.id;
-
-  const templatesInWorkspace = useMatchingWorkspaceTemplates(workspace);
+  const { workspaceTemplates } = useWorkspaceDetail({ workspaceId });
 
   const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
     workspaceId,
@@ -53,7 +52,7 @@ function Dialog({ workspace, isOpen, close }: { workspace: MergedWorkspace; isOp
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}
         templates={templates}
-        disabledTemplates={templatesInWorkspace}
+        disabledTemplates={workspaceTemplates}
       />
     </EditWorkspaceDialog>
   );
