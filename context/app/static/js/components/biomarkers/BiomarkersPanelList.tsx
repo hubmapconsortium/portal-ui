@@ -23,7 +23,7 @@ function ViewMoreButton() {
   const handleViewMore = useCallback(() => {
     viewMore().catch((error: unknown) => {
       console.error(error);
-      toastError('Failed to load more biomarkers');
+      toastError('Failed to load more biomarkers.');
     });
   }, [toastError, viewMore]);
 
