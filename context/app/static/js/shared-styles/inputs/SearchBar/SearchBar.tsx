@@ -1,11 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import InputAdornment from '@mui/material/InputAdornment';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
+import { TextFieldProps } from '@mui/material/TextField';
 
 import { StyledTextField } from './style';
 
-function SearchBar({ onChange, ...rest }) {
+type SearchBarProps = TextFieldProps;
+
+function SearchBar({ onChange, ...rest }: SearchBarProps) {
   return (
     <StyledTextField
       variant="outlined"
@@ -24,7 +26,4 @@ function SearchBar({ onChange, ...rest }) {
   );
 }
 
-SearchBar.propTypes = {
-  onChange: PropTypes.func.isRequired,
-};
 export default SearchBar;

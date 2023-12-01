@@ -91,6 +91,10 @@ const otherGroups = {
       href: '/cells',
       label: 'Molecular Data Queries - BETA',
     },
+    {
+      href: '/biomarkers',
+      label: 'Biomarkers - BETA',
+    },
   ],
 };
 

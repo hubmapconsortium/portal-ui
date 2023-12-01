@@ -26,6 +26,15 @@ def cells_ui():
     )
 
 
+@blueprint.route('/biomarkers')
+def biomarkers_ui():
+    return render_template(
+        'base-pages/react-content.html',
+        title='Biomarkers',
+        flask_data={**get_default_flask_data()}
+    )
+
+
 def _get_client(app):
     return Client(app.config['XMODALITY_ENDPOINT'] + '/api/')
 

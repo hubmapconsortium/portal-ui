@@ -1,17 +1,26 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
 
 import PageTitle from 'js/shared-styles/pages/PageTitle';
 import { PageWrapper, StyledDescription } from './style';
 
-function PanelListLandingPage({ title, subtitle, description, children }) {
+interface PanelListLandingPageProps extends PropsWithChildren {
+  title: string;
+  subtitle?: string;
+  description: React.ReactNode;
+  noIcon?: boolean;
+}
+
+function PanelListLandingPage({ title, subtitle, description, children, noIcon }: PanelListLandingPageProps) {
   return (
     <PageWrapper>
       <PageTitle data-testid="landing-page-title">{title}</PageTitle>
       <Typography variant="subtitle1" color="primary" data-testid="landing-page-subtitle">
         {subtitle}
       </Typography>
-      <StyledDescription data-testid="landing-page-description">{description}</StyledDescription>
+      <StyledDescription noIcon={noIcon} data-testid="landing-page-description">
+        {description}
+      </StyledDescription>
       {children}
     </PageWrapper>
   );
