@@ -278,19 +278,17 @@ function useRefreshSession(workspace: MergedWorkspace) {
 function useHandleUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
   const { mutate: mutateWorkspace } = useWorkspace(workspaceId);
   const { updateWorkspace } = useUpdateWorkspace({ workspaceId });
-  const { toastSuccess, toastError } = useSnackbarActions();
 
   const handleUpdateWorkspace = useCallback(
     async (body: UpdateWorkspaceBody) => {
       try {
         await updateWorkspace(body);
         await mutateWorkspace();
-        toastSuccess('Workspace successfully updated.');
       } catch (e) {
-        toastError('Failed to update workspace.');
+        console.error(e);
       }
     },
-    [updateWorkspace, mutateWorkspace, toastSuccess, toastError],
+    [updateWorkspace, mutateWorkspace],
   );
 
   return { handleUpdateWorkspace };

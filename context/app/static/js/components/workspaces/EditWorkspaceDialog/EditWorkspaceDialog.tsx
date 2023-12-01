@@ -6,6 +6,7 @@ import { UseFormReturn, FormState, FieldValues } from 'react-hook-form';
 
 import DialogModal from 'js/shared-styles/DialogModal';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import EditWorkspaceTemplatesDialog from '../EditWorkspaceTemplatesDialog';
 import EditWorkspaceNameDialog from '../EditWorkspaceNameDialog';
 
@@ -29,18 +30,23 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
   isSubmitting,
 }: EditWorkspaceDialogTypes<T> & FormProps<T>) {
   const { isOpen, close } = useEditWorkspaceStore();
+  const { toastSuccess, toastError } = useSnackbarActions();
 
   const submit = useCallback(
-    async (e: BaseSyntheticEvent) => {
-      try {
-        if (isSubmitting) return;
-        await handleSubmit(onSubmit)(e);
-      } finally {
-        reset();
-        close();
-      }
+    (e: BaseSyntheticEvent) => {
+      if (isSubmitting) return;
+
+      handleSubmit(onSubmit)(e)
+        .then(() => {
+          toastSuccess('Workspace successfully updated.');
+          reset();
+          close();
+        })
+        .catch(() => {
+          toastError('Failed to update workspace.');
+        });
     },
-    [onSubmit, reset, close, isSubmitting, handleSubmit],
+    [onSubmit, reset, close, isSubmitting, handleSubmit, toastError, toastSuccess],
   );
 
   return (
@@ -48,11 +54,7 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
       title={title}
       maxWidth="lg"
       content={
-        <form
-          id={formId}
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          onSubmit={submit}
-        >
+        <form id={formId} onSubmit={submit}>
           {children}
         </form>
       }
