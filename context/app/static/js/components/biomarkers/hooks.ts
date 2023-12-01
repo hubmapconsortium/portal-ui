@@ -8,7 +8,9 @@ export function useResultsList() {
 
   const genesList = data?.flatMap((page) => page.genes) ?? [];
 
-  const hasMore = data?.[0]?.pagination?.page !== data?.[0]?.pagination?.total_pages;
+  const { pagination } = data?.at(-1) ?? {};
+
+  const hasMore = pagination?.page !== pagination?.total_pages;
 
   // TODO: Once proteins are added to the API, we'll need to add them here as well
 
