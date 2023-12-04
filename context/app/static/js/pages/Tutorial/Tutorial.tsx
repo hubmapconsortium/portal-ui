@@ -1,5 +1,6 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
+import { styled } from '@mui/material/styles';
 
 import PageTitle from 'js/shared-styles/pages/PageTitle';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
@@ -18,13 +19,19 @@ const tutorials = {
   },
 };
 
+const StyledIframe = styled('iframe')({
+  border: 'none',
+  width: '100%',
+  aspectRatio: '3 / 1.75',
+});
+
 function Tutorial({ tutorialName }: TutorialProps) {
   const { title, description, iframeLink } = tutorials[tutorialName];
   return (
     <Stack spacing={2}>
       <PageTitle>{title}</PageTitle>
       <SectionPaper>{description}</SectionPaper>
-      <iframe src={iframeLink} title={title} style={{ border: 'none', width: '100%', aspectRatio: '3 / 2' }} />
+      <StyledIframe src={iframeLink} title={title} />
     </Stack>
   );
 }
