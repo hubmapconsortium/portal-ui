@@ -22,13 +22,11 @@ export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
   };
 }
 
-const facetsToAlphabetize = ['Data Type'];
-
-export function getFilter(type, title) {
+export function getFilter(type, shouldAlphabetize) {
   switch (type) {
     case 'AccordionListFilter':
       return {
-        Filter: facetsToAlphabetize.includes(title) ? AlphabetizedRefinementListFilter : RefinementListFilter,
+        Filter: shouldAlphabetize ? AlphabetizedRefinementListFilter : RefinementListFilter,
         itemComponent: CheckboxFilterItem,
       };
     case 'AccordionRangeFilter':
@@ -43,7 +41,8 @@ export function getFilter(type, title) {
 }
 
 function AccordionFilter({ type, title, analyticsCategory, ...rest }) {
-  const { Filter, itemComponent } = getFilter(type, title);
+  const shouldAlphabetize = type === 'AccordionListFilter' && rest?.orderKey === '_term';
+  const { Filter, itemComponent } = getFilter(type, shouldAlphabetize);
   const item = itemComponent ? { itemComponent: withAnalyticsEvent(itemComponent, title, analyticsCategory) } : {};
   return <Filter containerComponent={FilterInnerAccordion} title={title} {...rest} {...item} />;
 }
