@@ -35,6 +35,8 @@ const Workspace = lazy(() => import('js/pages/Workspace'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 const GeneDetails = lazy(() => import('js/pages/Genes'));
 const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
+const Tutorials = lazy(() => import('js/pages/Tutorials'));
+
 function Routes({ flaskData }) {
   const {
     entity,
@@ -294,6 +296,24 @@ function Routes({ flaskData }) {
     return (
       <Route>
         <Biomarkers />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/tutorials')) {
+    /*
+    if (tutorialName) {
+      return (
+        <Route>
+          <Tutorial tutorialName={tutorialName} />
+        </Route>
+      );
+    }
+    */
+
+    return (
+      <Route>
+        <Tutorials />
       </Route>
     );
   }
