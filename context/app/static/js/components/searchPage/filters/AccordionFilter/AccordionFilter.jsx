@@ -22,7 +22,7 @@ export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
   };
 }
 
-export function getFilter(type, shouldAlphabetize) {
+export function getFilter(type, shouldAlphabetize = false) {
   switch (type) {
     case 'AccordionListFilter':
       return {
