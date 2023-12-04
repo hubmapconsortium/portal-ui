@@ -11,11 +11,11 @@ import AlphabetizedRefinementListFilter from './AlphabetizedRefinementListFilter
 jest.mock('js/helpers/trackers');
 
 test.each([
-  ['AccordionListFilter', { Filter: RefinementListFilter, itemComponent: CheckboxFilterItem }],
+  ['AccordionListFilter', { Filter: RefinementListFilter, itemComponent: CheckboxFilterItem }, false],
   ['AccordionListFilter', { Filter: AlphabetizedRefinementListFilter, itemComponent: CheckboxFilterItem }, true],
-  ['AccordionRangeFilter', { Filter: RangeFilter }],
-  ['AccordionCheckboxFilter', { Filter: CheckboxFilter, itemComponent: CheckboxFilterItem }],
-  ['AccordionHierarchicalMenuFilter', { Filter: HierarchicalMenuFilter, itemComponent: HierarchicalFilterItem }],
+  ['AccordionRangeFilter', { Filter: RangeFilter }, false],
+  ['AccordionCheckboxFilter', { Filter: CheckboxFilter, itemComponent: CheckboxFilterItem }, false],
+  ['AccordionHierarchicalMenuFilter', { Filter: HierarchicalMenuFilter, itemComponent: HierarchicalFilterItem }, false],
 ])('getFilter given %s returns correct filter', (filterName, expectedFilter, alphabetize) => {
   expect(getFilter(filterName, alphabetize)).toStrictEqual(expectedFilter);
 });
