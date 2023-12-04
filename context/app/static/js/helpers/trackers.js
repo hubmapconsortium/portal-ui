@@ -38,7 +38,10 @@ export function getUserGroups() {
 function getCustomDimensions() {
   const userType = getUserType();
   const userGroups = getUserGroups();
-  return [1 /* user_type */, userType, 2 /* user_groups */, userGroups];
+  return [
+    [1 /* user_type */, userType],
+    [2 /* user_groups */, userGroups],
+  ];
 }
 
 const tracker = new MatomoTracker({

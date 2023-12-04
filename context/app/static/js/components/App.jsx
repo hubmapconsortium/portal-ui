@@ -12,6 +12,7 @@ import { StyledAlert, FlexContainer } from './style';
 // Importing Search styles here so the CSS import order is correct.
 import 'js/components/searchPage/Search.scss';
 import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
+import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
 
 // TODO: Delete this when workspaces are publicly released.
@@ -70,10 +71,11 @@ function App(props) {
         <Routes flaskData={flaskData} />
         <Footer />
         <StyledSnackbar />
-        {/* This dialog is placed at the root of the application because 
-            it is launchable from many places. In the future, this should be
+        {/* These dialogs are placed at the root of the application because 
+            they are launchable from many places. In the future, this should be
             improved on by using a global modal stack with portals. */}
         <LaunchWorkspaceDialog />
+        <EditWorkspaceDialog />
       </Providers>
     </StrictMode>
   );

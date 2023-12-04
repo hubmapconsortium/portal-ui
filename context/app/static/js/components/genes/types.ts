@@ -5,12 +5,14 @@ export interface BasicGeneInfo {
 }
 
 export interface GeneListResponse {
-  description: string;
-  page: number;
-  total_pages: number;
-  starts_with: string;
-  gene_count: number;
   genes: BasicGeneInfo[];
+  pagination: {
+    items_per_page: number;
+    page: number;
+    total_pages: number;
+    starts_with: string;
+    item_count: number;
+  };
 }
 
 export interface OrganInfo {

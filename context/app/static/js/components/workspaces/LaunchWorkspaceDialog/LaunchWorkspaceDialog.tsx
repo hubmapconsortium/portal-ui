@@ -6,8 +6,8 @@ import Typography from '@mui/material/Typography';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
+import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
-import { useLaunchWorkspaceStore } from './store';
 
 function LaunchWorkspaceDialog() {
   const runningWorkspace = useRunningWorkspace();

@@ -13,7 +13,7 @@ function Collections() {
   return (
     <PanelListLandingPage
       title="Collections"
-      subtitle={panelsProps.length > 0 && `${panelsProps.length} Collections`}
+      subtitle={panelsProps.length > 0 ? `${panelsProps.length} Collections` : undefined}
       description={description}
     >
       <PanelList panelsProps={panelsProps} />

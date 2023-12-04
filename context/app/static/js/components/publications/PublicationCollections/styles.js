@@ -9,7 +9,7 @@ const StyledSectionPaper = styled(SectionPaper)`
     css`
       margin-top: ${props.theme.spacing(3)};
     `}
-  ${panelBorderStyles}
+  ${(props) => panelBorderStyles(props.theme)}
 `;
 
 export { StyledSectionPaper };

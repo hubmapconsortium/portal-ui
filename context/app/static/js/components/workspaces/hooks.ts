@@ -1,7 +1,10 @@
 import { useCallback, useMemo } from 'react';
 import { KeyedMutator } from 'swr';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob } from './utils';
+import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useAppContext } from 'js/components/Contexts';
+import { multiFetcher } from 'js/helpers/swr';
+import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob, getWorkspaceFileName } from './utils';
 import {
   useDeleteWorkspace,
   useStopWorkspace,
@@ -11,9 +14,11 @@ import {
   useCreateWorkspace,
   CreateWorkspaceBody,
   useWorkspace,
+  useUpdateWorkspace,
+  UpdateWorkspaceBody,
 } from './api';
-import { MergedWorkspace, Workspace } from './types';
-import { useLaunchWorkspaceStore } from './LaunchWorkspaceDialog/store';
+import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
+import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -86,6 +91,37 @@ function useWorkspacesList() {
   });
 }
 
+function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, never> = {}) {
+  // TODO: Update to use dataset IDs once workspace API makes them available
+  const symlinks = workspace?.workspace_details?.current_workspace_details?.symlinks ?? [];
+  return symlinks.reduce<string[]>((acc, symlink) => {
+    const uuid = getWorkspaceFileName(symlink).split('/').pop();
+    if (uuid) {
+      return [...acc, uuid];
+    }
+    return acc;
+  }, []);
+}
+
+function useMatchingWorkspaceTemplates(workspace: MergedWorkspace | Record<string, never> = {}) {
+  // TODO: Update to use template IDs once workspace API makes them available
+  const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
+  const { templates } = useWorkspaceTemplates();
+
+  const matchingTemplates = workspaceFiles.reduce((acc, file) => {
+    // match the filename without extension given a file path.
+    const regex = /[\w-]+?(?=\.)/;
+    const fileNameMatch = getWorkspaceFileName(file).match(regex);
+    const templateName = fileNameMatch ? fileNameMatch[0] : '';
+    if (templateName && templateName in templates) {
+      return { ...acc, [templateName]: templates[templateName] };
+    }
+    return acc;
+  }, {});
+
+  return matchingTemplates;
+}
+
 function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
   const { workspace, isLoading: workspacesLoading } = useWorkspace(workspaceId);
   const { workspacesList, ...rest } = useWorkspacesActions({
@@ -95,7 +131,14 @@ function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
 
   const mergedWorkspace = workspacesList[0] ?? {};
 
-  return { workspace: mergedWorkspace, ...rest };
+  const workspaceTemplates = useMatchingWorkspaceTemplates(mergedWorkspace);
+
+  return {
+    workspace: mergedWorkspace,
+    workspaceDatasets: getWorkspaceDatasetUUIDs(mergedWorkspace),
+    workspaceTemplates,
+    ...rest,
+  };
 }
 
 function useRunningWorkspace() {
@@ -232,6 +275,57 @@ function useRefreshSession(workspace: MergedWorkspace) {
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
 }
 
+function useHandleUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
+  const { mutate: mutateWorkspace } = useWorkspace(workspaceId);
+  const { updateWorkspace } = useUpdateWorkspace({ workspaceId });
+
+  const handleUpdateWorkspace = useCallback(
+    async (body: UpdateWorkspaceBody) => {
+      try {
+        await updateWorkspace(body);
+        await mutateWorkspace();
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [updateWorkspace, mutateWorkspace],
+  );
+
+  return { handleUpdateWorkspace };
+}
+
+function useCreateTemplates() {
+  const { userTemplatesEndpoint } = useAppContext();
+  const { toastError } = useSnackbarActions();
+
+  const createTemplates = useCallback(
+    async ({ templateKeys, uuids }: { templateKeys: string[]; uuids: string[] }) => {
+      const templateUrls = templateKeys.map((key) => `${userTemplatesEndpoint}/templates/jupyter_lab/${key}`);
+      const createdTemplates = await multiFetcher<CreateTemplatesResponse>({
+        urls: templateUrls,
+        requestInits: [
+          {
+            method: 'POST',
+            body: JSON.stringify({ uuids }),
+            headers: { Authorization: `Bearer ${groupsToken}` },
+          },
+        ],
+      });
+      if (createdTemplates.some((t) => !t.success)) {
+        const error = createdTemplates.reduce((acc, t) => acc.concat(t.message), '');
+        toastError(error);
+      }
+      return templateKeys.map((templateKey, i) => ({
+        name: `${templateKey}.ipynb`,
+        content: createdTemplates[i]?.data?.template,
+      }));
+    },
+    [toastError, userTemplatesEndpoint],
+  );
+
+  return { createTemplates };
+}
+
 export {
   useWorkspacesList,
   useHasRunningWorkspace,
@@ -240,4 +334,6 @@ export {
   useWorkspaceDetail,
   useSessionWarning,
   useRefreshSession,
+  useHandleUpdateWorkspace,
+  useCreateTemplates,
 };

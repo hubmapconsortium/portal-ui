@@ -3,10 +3,10 @@ import Typography from '@mui/material/Typography';
 
 import { StyledPaper, StyledInfoIcon } from './style';
 
-function Description({ children, ...props }) {
+function Description({ children, noIcon, ...props }) {
   return (
     <StyledPaper {...props}>
-      <StyledInfoIcon color="primary" />
+      {!noIcon && <StyledInfoIcon color="primary" />}
       <Typography variant="body1" component="div">
         {children}
       </Typography>

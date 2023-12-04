@@ -33,7 +33,8 @@ const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'))
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
 const Workspace = lazy(() => import('js/pages/Workspace'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
-const Genes = lazy(() => import('js/pages/Genes'));
+const GeneDetails = lazy(() => import('js/pages/Genes'));
+const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
 const CellTypes = lazy(() => import('js/pages/CellTypes'));
 
 function Routes({ flaskData }) {
@@ -295,7 +296,15 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/genes/')) {
     return (
       <Route>
-        <Genes geneSymbol={geneSymbol} />
+        <GeneDetails geneSymbol={geneSymbol} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/biomarkers')) {
+    return (
+      <Route>
+        <Biomarkers />
       </Route>
     );
   }
