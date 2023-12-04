@@ -1,3 +1,9 @@
+## v0.85.1 - 2023-12-04
+
+- Add tutorials landing page.
+- Add workspaces tutorial.
+
+
 ## v0.85.0 - 2023-12-01
 
 - Added biomarkers landing page.
