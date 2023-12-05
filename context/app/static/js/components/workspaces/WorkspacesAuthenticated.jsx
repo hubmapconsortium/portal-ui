@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useAppContext } from 'js/components/Contexts';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import { LinkPrompt } from 'js/shared-styles/tutorials/Prompt';
 import WorkspacesList from './WorkspacesList';
 
 import { StyledDescription } from './style';
@@ -17,6 +18,12 @@ function WorkspacesAuthenticated() {
 
   return (
     <>
+      <LinkPrompt
+        headerText="Getting Started"
+        descriptionText="Get a tutorial of how to explore workspaces to analyze HuBMAP data."
+        buttonText="Navigate to the Workspace Tutorial"
+        buttonHref="/tutorials/workspaces"
+      />
       <StyledDescription>
         <Typography gutterBottom>
           HuBMAP Workspaces are in{' '}

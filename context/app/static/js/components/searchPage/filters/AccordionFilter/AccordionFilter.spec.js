@@ -6,16 +6,18 @@ import { trackEvent } from 'js/helpers/trackers';
 import HierarchicalFilterItem from 'js/components/searchPage/filters/HierarchicalFilterItem';
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import AccordionFilter, { withAnalyticsEvent, getFilter } from './AccordionFilter';
+import AlphabetizedRefinementListFilter from './AlphabetizedRefinementListFilter';
 
 jest.mock('js/helpers/trackers');
 
 test.each([
-  ['AccordionListFilter', { Filter: RefinementListFilter, itemComponent: CheckboxFilterItem }],
-  ['AccordionRangeFilter', { Filter: RangeFilter }],
-  ['AccordionCheckboxFilter', { Filter: CheckboxFilter, itemComponent: CheckboxFilterItem }],
-  ['AccordionHierarchicalMenuFilter', { Filter: HierarchicalMenuFilter, itemComponent: HierarchicalFilterItem }],
-])('getFilter given %s returns correct filter', (filterName, expectedFilter) => {
-  expect(getFilter(filterName)).toStrictEqual(expectedFilter);
+  ['AccordionListFilter', { Filter: RefinementListFilter, itemComponent: CheckboxFilterItem }, false],
+  ['AccordionListFilter', { Filter: AlphabetizedRefinementListFilter, itemComponent: CheckboxFilterItem }, true],
+  ['AccordionRangeFilter', { Filter: RangeFilter }, false],
+  ['AccordionCheckboxFilter', { Filter: CheckboxFilter, itemComponent: CheckboxFilterItem }, false],
+  ['AccordionHierarchicalMenuFilter', { Filter: HierarchicalMenuFilter, itemComponent: HierarchicalFilterItem }, false],
+])('getFilter given %s returns correct filter', (filterName, expectedFilter, alphabetize) => {
+  expect(getFilter(filterName, alphabetize)).toStrictEqual(expectedFilter);
 });
 
 test('should throw with unexpected filter name', () => {
