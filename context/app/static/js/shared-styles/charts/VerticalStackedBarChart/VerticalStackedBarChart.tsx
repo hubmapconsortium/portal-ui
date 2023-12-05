@@ -9,7 +9,8 @@ import { OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-style
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGridRowsGroup';
 import { WithParentSizeProps, WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
-import { AnyD3Scale } from '@visx/scale';
+import { AnyD3Scale, ScaleInput } from '@visx/scale';
+import { Accessor, SeriesPoint } from '@visx/shape/lib/types';
 import { FormattedValue, TooltipData, tooltipHasBarData } from '../types';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
 
@@ -33,7 +34,7 @@ function TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave }: TickC
 }
 
 interface VerticalStackedBarChartProps<
-  Datum,
+  Datum extends Record<string, unknown>,
   XAxisKey extends string,
   YAxisKey extends string,
   XAxisScale extends AnyD3Scale,
@@ -53,10 +54,16 @@ interface VerticalStackedBarChartProps<
   yAxisLabel: string;
   TooltipContent?: React.ComponentType<{ tooltipData: TooltipData<Datum> }>;
   xAxisTickLabels: XAxisKey[];
+  // barHeight = yScale(y0(bar)) - yScale(y1(bar))
+  // y = yScale(y1(bar))
+  // Mainly used to support log scales, where y0 must be > 0
+  y1?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
+  y0?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
+  getTickValues?: (yScale: YAxisScale) => number[];
 }
 
 function VerticalStackedBarChart<
-  Datum,
+  Datum extends Record<string, unknown>,
   XAxisKey extends string,
   YAxisKey extends string,
   XAxisScale extends AnyD3Scale,
@@ -77,6 +84,9 @@ function VerticalStackedBarChart<
   yAxisLabel,
   TooltipContent,
   xAxisTickLabels,
+  y0,
+  y1,
+  getTickValues,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
   const tickLabelSize = 11;
 
@@ -105,9 +115,25 @@ function VerticalStackedBarChart<
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
-        <VerticalChartGridRowsGroup margin={updatedMargin} yScale={yScale} xWidth={xWidth}>
+        <VerticalChartGridRowsGroup
+          getTickValues={getTickValues}
+          margin={updatedMargin}
+          yScale={yScale}
+          xWidth={xWidth}
+        >
           <>
-            <BarStack data={visxData} keys={keys} x={getX} xScale={xScale} yScale={yScale} color={colorScale}>
+            <BarStack
+              height={yHeight}
+              width={xWidth}
+              data={visxData}
+              keys={keys}
+              x={getX}
+              xScale={xScale}
+              yScale={yScale}
+              color={colorScale}
+              y1={y1}
+              y0={y0}
+            >
               {(barStacks) => {
                 return barStacks.map((barStack) =>
                   barStack.bars.map(
@@ -139,7 +165,10 @@ function VerticalStackedBarChart<
                 dy: '0.33em',
               })}
               labelProps={{
-                fontSize: 12,
+                fontSize: 14,
+                color: 'black',
+                fontWeight: 500,
+                fontFamily: 'Inter Variable',
               }}
             />
             <AxisBottom
@@ -159,8 +188,10 @@ function VerticalStackedBarChart<
               })}
               tickComponent={TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave })}
               labelProps={{
-                fontSize: 12,
-                textAnchor: 'middle',
+                fontSize: 14,
+                color: 'black',
+                fontWeight: 500,
+                fontFamily: 'Inter Variable',
               }}
             />
           </>
@@ -186,4 +217,5 @@ function VerticalStackedBarChart<
   );
 }
 
-export default withParentSize(VerticalStackedBarChart);
+// `as unknown as typeof VerticalStackedBarChart` allows us to use `withParentSize` without losing the generic types
+export default withParentSize(VerticalStackedBarChart) as unknown as typeof VerticalStackedBarChart;

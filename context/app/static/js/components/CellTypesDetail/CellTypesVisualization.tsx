@@ -8,6 +8,7 @@ import Description from 'js/shared-styles/sections/Description';
 
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
+import Box from '@mui/material/Box';
 import { CellTypeOrgan, useCellTypeOrgans } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
@@ -36,29 +37,24 @@ function getYScaleRange(max: number): [number, number] {
 
 export default function CellTypesVisualization() {
   const { data: organs = [] } = useCellTypeOrgans();
-  const sortedOrgans = [...organs].sort((a, b) => b.total_cells - a.total_cells);
+  const sortedOrgans = [...organs].sort((a, b) => b.celltype_cells - a.celltype_cells);
 
   const xScale = useBandScale(sortedOrgans.map((d) => d.organ));
-  const yScale = useLogScale(sortedOrgans.map((d) => d.total_cells));
-  const colorScale = useOrdinalScale(keys, { range: ['#89A05F', '#4B5F27'] });
-
-  // Only show ticks for powers of 10
-  // const rowTickValues = yScale.ticks(5).filter((d) => Number.isInteger(Math.log10(d)));
-
-  // const axisLabelProps: TickLabelProps<string> = {
-  //   fontSize: 14,
-  //   color: 'black',
-  //   fontWeight: 500,
-  //   fontFamily: 'Inter Variable',
-  // };
+  const yScale = useLogScale(
+    sortedOrgans.map((d) => d.total_cells),
+    {
+      nice: true,
+    },
+  );
+  const colorScale = useOrdinalScale(keys, { range: ['#4B5F27', '#D1DAC1'] });
 
   const organLabels = sortedOrgans.map((d) => d.organ);
 
   return (
     <DetailPageSection>
-      <SectionHeader>Visualization</SectionHeader>
+      <SectionHeader>Distribution Across Organs</SectionHeader>
       <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
-      <div style={{ height: 500 }}>
+      <Stack direction="row" height={500}>
         <VerticalStackedBarChart
           initialHeight={500}
           visxData={sortedOrgans}
@@ -70,32 +66,33 @@ export default function CellTypesVisualization() {
           keys={keys}
           margin={margin}
           getX={getX}
-          xAxisLabel="Organ"
+          xAxisLabel="Organs"
           yAxisLabel="Cell Count"
           xAxisTickLabels={organLabels}
+          y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
+          getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
         />
-      </div>
-
-      <Stack direction="column" spacing={0.5} p={2}>
-        <Typography variant="body1" component="label">
-          Cell Types
-        </Typography>
-        <LegendOrdinal scale={colorScale} labelFormat={(label) => keyLabels[label as GraphKey]}>
-          {(labels) => (
-            <>
-              {labels.map((label) => (
-                <LegendItem key={`legend-quantile-${label.text}`}>
-                  <svg width={15} height={15} style={{ borderRadius: 4 }}>
-                    <rect fill={label.value} width={15} height={15} />
-                  </svg>
-                  <LegendLabel align="left" margin="0 0 0 4px">
-                    {label.text}
-                  </LegendLabel>
-                </LegendItem>
-              ))}
-            </>
-          )}
-        </LegendOrdinal>
+        <Stack direction="column" spacing={0.5} p={2}>
+          <Typography variant="body1" component="label">
+            Cell Types
+          </Typography>
+          <LegendOrdinal scale={colorScale} labelFormat={(label) => keyLabels[label as GraphKey]}>
+            {(labels) => (
+              <Stack spacing={0.5} useFlexGap direction="column">
+                {labels.map((label) => (
+                  <Box whiteSpace="nowrap" component={LegendItem} key={`legend-quantile-${label.text}`}>
+                    <svg width={15} height={15} style={{ borderRadius: 4 }}>
+                      <rect fill={label.value} width={15} height={15} />
+                    </svg>
+                    <LegendLabel align="left" margin="0 0 0 4px">
+                      {label.text}
+                    </LegendLabel>
+                  </Box>
+                ))}
+              </Stack>
+            )}
+          </LegendOrdinal>
+        </Stack>
       </Stack>
     </DetailPageSection>
   );
