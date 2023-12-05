@@ -34,7 +34,7 @@ function TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave }: TickC
 }
 
 interface VerticalStackedBarChartProps<
-  Datum extends Record<string, unknown>,
+  Datum,
   XAxisKey extends string,
   YAxisKey extends string,
   XAxisScale extends AnyD3Scale,
@@ -63,7 +63,7 @@ interface VerticalStackedBarChartProps<
 }
 
 function VerticalStackedBarChart<
-  Datum extends Record<string, unknown>,
+  Datum,
   XAxisKey extends string,
   YAxisKey extends string,
   XAxisScale extends AnyD3Scale,

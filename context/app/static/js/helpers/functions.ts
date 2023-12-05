@@ -8,7 +8,10 @@ export function isEmptyArrayOrObject(val: object | unknown[]) {
   return false;
 }
 
-export function capitalizeString(s: string) {
+export function capitalizeString(s?: string) {
+  if (!s) {
+    return '';
+  }
   return s.charAt(0).toUpperCase() + s.slice(1);
 }
 

@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -8,17 +9,13 @@ import Description from 'js/shared-styles/sections/Description';
 
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
-import Box from '@mui/material/Box';
-import { CellTypeOrgan, useCellTypeOrgans } from './hooks';
+import { TooltipData } from 'js/shared-styles/charts/types';
+import { CellTypeOrgan, useCellTypeInfo, useCellTypeName, useCellTypeOrgans } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
 // Define the keys for the stack
 type GraphKey = keyof Pick<CellTypeOrgan, 'other_cells' | 'celltype_cells'>;
 const keys = ['celltype_cells', 'other_cells'] as GraphKey[];
-const keyLabels: Record<GraphKey, string> = {
-  celltype_cells: 'Cell Type Cells',
-  other_cells: 'Other Cells',
-};
 
 const margin = { top: 20, right: 20, bottom: 100, left: 60 };
 
@@ -35,8 +32,37 @@ function getYScaleRange(max: number): [number, number] {
   return [max, 1];
 }
 
+function CellTypesVisualizationTooltip({ tooltipData }: { tooltipData: TooltipData<CellTypeOrgan> }) {
+  const data = tooltipData.bar?.data;
+  const currentKey = tooltipData.key as GraphKey;
+  const totalCells = data?.total_cells ?? 0;
+  const currentKeyCount = data?.[currentKey] ?? 0;
+  const currentKeyPercentage = ((currentKeyCount / totalCells) * 100).toFixed(2);
+
+  const cellTypeName = useCellTypeName();
+  const tooltipLabel = currentKey === 'celltype_cells' ? cellTypeName : 'Other Cells';
+  return (
+    <Stack spacing={1} p={1}>
+      <Typography variant="subtitle1" component="div" color="gray">
+        {data?.organ ?? currentKey}
+      </Typography>
+      {data && (
+        <>
+          <Typography variant="body1" component="div" color="gray">
+            {tooltipLabel} (Total Cell Count: {totalCells.toLocaleString()})
+          </Typography>
+          <Typography variant="h2" component="div" color="black">
+            {`${currentKeyCount.toLocaleString()} (${currentKeyPercentage}%)`}
+          </Typography>
+        </>
+      )}
+    </Stack>
+  );
+}
+
 export default function CellTypesVisualization() {
   const { data: organs = [] } = useCellTypeOrgans();
+  const { data: cellType } = useCellTypeInfo();
   const sortedOrgans = [...organs].sort((a, b) => b.celltype_cells - a.celltype_cells);
 
   const xScale = useBandScale(sortedOrgans.map((d) => d.organ));
@@ -49,6 +75,13 @@ export default function CellTypesVisualization() {
   const colorScale = useOrdinalScale(keys, { range: ['#4B5F27', '#D1DAC1'] });
 
   const organLabels = sortedOrgans.map((d) => d.organ);
+
+  const keyLabels: Record<GraphKey, string> = useMemo(() => {
+    return {
+      celltype_cells: cellType?.cell_type.name ?? 'Cell Type',
+      other_cells: 'Other Cells',
+    };
+  }, [cellType?.cell_type.name]);
 
   return (
     <DetailPageSection>
@@ -71,6 +104,7 @@ export default function CellTypesVisualization() {
           xAxisTickLabels={organLabels}
           y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
           getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
+          TooltipContent={CellTypesVisualizationTooltip}
         />
         <Stack direction="column" spacing={0.5} p={2}>
           <Typography variant="body1" component="label">
@@ -80,7 +114,7 @@ export default function CellTypesVisualization() {
             {(labels) => (
               <Stack spacing={0.5} useFlexGap direction="column">
                 {labels.map((label) => (
-                  <Box whiteSpace="nowrap" component={LegendItem} key={`legend-quantile-${label.text}`}>
+                  <Box component={LegendItem} alignItems="start" key={`legend-quantile-${label.text}`}>
                     <svg width={15} height={15} style={{ borderRadius: 4 }}>
                       <rect fill={label.value} width={15} height={15} />
                     </svg>

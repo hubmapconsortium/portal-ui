@@ -3,7 +3,7 @@ import { TickRendererProps } from '@visx/axis/lib/types';
 export type FormattedValue = TickRendererProps['formattedValue'];
 export interface TooltipData<Datum> {
   key: FormattedValue;
-  bar?: { data: Datum | Record<string, unknown> };
+  bar?: { data: Datum };
 }
 export function tooltipHasBarData<Datum>(
   tooltipData: TooltipData<Datum>,

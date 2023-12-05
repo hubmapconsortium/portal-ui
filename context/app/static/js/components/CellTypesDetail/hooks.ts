@@ -1,6 +1,7 @@
 import { fetcher } from 'js/helpers/swr';
 import useSWR from 'swr';
 import { useCellTypesContext } from './CellTypesContext';
+import { useAppContext } from '../Contexts';
 
 export const useCellTypeDatasets = () => {
   const { cellId } = useCellTypesContext();
@@ -37,4 +38,45 @@ export const useCellTypeOrgans = () => {
   const { cellId } = useCellTypesContext();
   const swr = useSWR<CellTypeOrgans>(`/cell-types/${cellId}/organs.json`, (url: string) => fetcher({ url }));
   return swr;
+};
+
+interface CellTypeBiomarkerInfo {
+  biomarker_type: string;
+  entry: {
+    id: string;
+    name: string;
+    symbol: string;
+    vocabulary: string;
+  };
+  reference: string;
+}
+
+interface CellTypeInfoResponse {
+  biomarkers: CellTypeBiomarkerInfo[];
+  cell_type: {
+    cl_id: string;
+    definition: string;
+    name: string;
+  };
+  organs: {
+    id: string;
+    name: string;
+    source: string;
+  };
+}
+
+export const useCellTypeInfo = () => {
+  const { cellId } = useCellTypesContext();
+  const { ubkgEndpoint } = useAppContext();
+  const cellIdWithoutPrefix = cellId.replace('CL:', '');
+  const { data, ...swr } = useSWR<[CellTypeInfoResponse]>(
+    `${ubkgEndpoint}/celltypes/${cellIdWithoutPrefix}`,
+    (url: string) => fetcher({ url }),
+  );
+  return { ...swr, data: data?.[0] };
+};
+
+export const useCellTypeName = () => {
+  const { data } = useCellTypeInfo();
+  return data?.cell_type.name;
 };
