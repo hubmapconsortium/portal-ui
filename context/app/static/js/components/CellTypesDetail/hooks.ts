@@ -33,14 +33,8 @@ export interface CellTypeOrgan {
 
 type CellTypeOrgans = CellTypeOrgan[];
 
-const mockData = [
-  { celltype_cells: 179, organ: 'Heart', other_cells: 72932, total_cells: 73111 },
-  { celltype_cells: 507, organ: 'Kidney', other_cells: 1368507, total_cells: 1369014 },
-];
-
 export const useCellTypeOrgans = () => {
   const { cellId } = useCellTypesContext();
   const swr = useSWR<CellTypeOrgans>(`/cell-types/${cellId}/organs.json`, (url: string) => fetcher({ url }));
-  // return swr;
-  return { ...swr, data: mockData };
+  return swr;
 };
