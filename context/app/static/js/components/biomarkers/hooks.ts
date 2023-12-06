@@ -4,7 +4,7 @@ import { useBiomarkersSearchState } from './BiomarkersSearchContext';
 
 function useCurrentGenesList() {
   const { search } = useBiomarkersSearchState();
-  return useGeneList(search);
+  return useGeneList(search.toUpperCase());
 }
 
 export function useResultsList() {
