@@ -10,7 +10,7 @@ import Description from 'js/shared-styles/sections/Description';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import { TooltipData } from 'js/shared-styles/charts/types';
-import { CellTypeOrgan, useCellTypeInfo, useCellTypeName, useCellTypeOrgans } from './hooks';
+import { CellTypeOrgan, useCellTypeName, useCellTypeOrgans } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
 // Define the keys for the stack
@@ -62,7 +62,7 @@ function CellTypesVisualizationTooltip({ tooltipData }: { tooltipData: TooltipDa
 
 export default function CellTypesVisualization() {
   const { data: organs = [] } = useCellTypeOrgans();
-  const { data: cellType } = useCellTypeInfo();
+  const name = useCellTypeName();
   const sortedOrgans = [...organs].sort((a, b) => b.celltype_cells - a.celltype_cells);
 
   const xScale = useBandScale(sortedOrgans.map((d) => d.organ));
@@ -78,13 +78,13 @@ export default function CellTypesVisualization() {
 
   const keyLabels: Record<GraphKey, string> = useMemo(() => {
     return {
-      celltype_cells: cellType?.cell_type.name ?? 'Cell Type',
+      celltype_cells: name ?? 'Cell Type',
       other_cells: 'Other Cells',
     };
-  }, [cellType?.cell_type.name]);
+  }, [name]);
 
   return (
-    <DetailPageSection>
+    <DetailPageSection id="distribution-across-organs">
       <SectionHeader>Distribution Across Organs</SectionHeader>
       <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
       <Stack direction="row" height={500}>

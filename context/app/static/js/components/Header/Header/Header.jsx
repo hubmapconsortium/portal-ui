@@ -20,7 +20,8 @@ function Header() {
     (summaryEntry &&
       window.location.pathname.startsWith('/browse') &&
       !window.location.pathname.startsWith('/browse/collection')) ||
-    vizIsFullscreen;
+    vizIsFullscreen ||
+    window.location.pathname.startsWith('/cell-types');
 
   return (
     <>

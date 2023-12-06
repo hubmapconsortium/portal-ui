@@ -55,7 +55,7 @@ export default function CellTypesBiomarkersTable() {
   const { openTabIndex, handleTabChange } = useTabs();
 
   return (
-    <DetailPageSection>
+    <DetailPageSection id="biomarkers">
       <SectionHeader>Biomarkers</SectionHeader>
       <Stack direction="column" spacing={2}>
         <Description>

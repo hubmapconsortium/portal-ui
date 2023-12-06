@@ -10,7 +10,7 @@ import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 
-type EntityType = 'Donor' | 'Sample' | 'Dataset' | 'Publication';
+type EntityType = 'Donor' | 'Sample' | 'Dataset' | 'Publication' | 'CellType';
 interface AssayMetadata {
   sex: string;
   race: string[];
@@ -23,8 +23,10 @@ interface AssayMetadata {
   publication_venue: string;
   hubmap_id: string;
   entity_type: EntityType;
+  name: string;
+  reference_link: React.ReactNode;
 }
-type EntityToFieldsType = Record<EntityType, Record<string, (assayMetadata: AssayMetadata) => string>>;
+type EntityToFieldsType = Record<EntityType, Record<string, (assayMetadata: AssayMetadata) => React.ReactNode>>;
 
 const entityToFieldsMap: EntityToFieldsType = {
   Donor: {
@@ -43,6 +45,10 @@ const entityToFieldsMap: EntityToFieldsType = {
   Publication: {
     title: ({ title }) => title,
     'publication venue': ({ publication_venue }) => publication_venue,
+  },
+  CellType: {
+    name: ({ name }) => name,
+    reference_link: ({ reference_link }) => reference_link,
   },
 };
 
@@ -75,7 +81,10 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
           <EntityHeaderItem text={hubmap_id} />
           {entity_type in entityToFieldsMap
             ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
-                <EntityHeaderItem text={fn(assayMetadata) || `undefined ${label}`} key={label} />
+                <EntityHeaderItem
+                  text={React.isValidElement(fn) ? fn : fn(assayMetadata) ?? `undefined ${label}`}
+                  key={label}
+                />
               ))
             : null}
         </>
