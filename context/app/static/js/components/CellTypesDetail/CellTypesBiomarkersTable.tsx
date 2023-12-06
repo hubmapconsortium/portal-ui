@@ -9,6 +9,7 @@ import { Tab, Tabs, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import { TableBody, TableCell, TableRow } from '@mui/material';
+import { StyledTableContainer } from 'js/shared-styles/tables';
 import { CellTypeBiomarkerInfo, useCellTypeBiomarkers } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
@@ -33,19 +34,21 @@ function BiomarkerTableRow({ biomarker, type }: { biomarker: CellTypeBiomarkerIn
 function BiomarkerTable({ tableKey }: BiomarkerTableProps) {
   const data = useCellTypeBiomarkers()[tableKey];
   return (
-    <Table>
-      <TableHead>
-        <TableCell>Name</TableCell>
-        <TableCell>Description</TableCell>
-        <TableCell>Type</TableCell>
-        <TableCell aria-label="View Datasets" />
-      </TableHead>
-      <TableBody>
-        {data.map((biomarker) => (
-          <BiomarkerTableRow biomarker={biomarker} type={tableKey} key={biomarker.entry.id} />
-        ))}
-      </TableBody>
-    </Table>
+    <StyledTableContainer>
+      <Table stickyHeader>
+        <TableHead>
+          <TableCell>Name</TableCell>
+          <TableCell>Description</TableCell>
+          <TableCell>Type</TableCell>
+          <TableCell aria-label="View Datasets" />
+        </TableHead>
+        <TableBody>
+          {data.map((biomarker) => (
+            <BiomarkerTableRow biomarker={biomarker} type={tableKey} key={biomarker.entry.id} />
+          ))}
+        </TableBody>
+      </Table>
+    </StyledTableContainer>
   );
 }
 
