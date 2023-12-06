@@ -19,7 +19,7 @@ interface Props {
 
 const shouldDisplaySection = {
   summary: true,
-  visualization: true,
+  'distribution-across-organs': true,
   biomarkers: true,
   organs: true,
 };
@@ -39,7 +39,7 @@ function CellTypes({ cellId }: Props) {
         </SummaryTitle>
         <CellTypesTitle />
         {shouldDisplaySection.summary && <CellTypesSummary />}
-        {shouldDisplaySection.visualization && <CellTypesVisualization />}
+        {shouldDisplaySection['distribution-across-organs'] && <CellTypesVisualization />}
         {shouldDisplaySection.biomarkers && <CellTypesBiomarkersTable />}
         {shouldDisplaySection.organs && <CellTypesEntitiesTables />}
       </DetailLayout>

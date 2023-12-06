@@ -1,5 +1,8 @@
 import { fetcher } from 'js/helpers/swr';
 import useSWR from 'swr';
+import { useMemo, useState } from 'react';
+import { useEventCallback } from '@mui/material/utils';
+import { SelectChangeEvent } from '@mui/material/Select';
 import { useCellTypesContext } from './CellTypesContext';
 import { useAppContext } from '../Contexts';
 
@@ -40,7 +43,7 @@ export const useCellTypeOrgans = () => {
   return swr;
 };
 
-interface CellTypeBiomarkerInfo {
+export interface CellTypeBiomarkerInfo {
   biomarker_type: string;
   entry: {
     id: string;
@@ -79,4 +82,40 @@ export const useCellTypeInfo = () => {
 export const useCellTypeName = () => {
   const { data } = useCellTypeInfo();
   return data?.cell_type.name;
+};
+
+export const useCellTypeBiomarkers = () => {
+  const { data } = useCellTypeInfo();
+
+  const sources = useMemo(() => {
+    const biomarkers = data?.biomarkers ?? [];
+    return biomarkers
+      .map((biomarker) => biomarker.reference)
+      .filter((value, index, self) => self.indexOf(value) === index);
+  }, [data?.biomarkers]);
+  const [selectedSource, setSelectedSource] = useState(sources[0] ?? '');
+  if (!selectedSource && sources.length > 0) {
+    setSelectedSource(sources[0]);
+  }
+
+  const [genes, proteins] = useMemo(() => {
+    const genesForSource: CellTypeBiomarkerInfo[] = [];
+    const proteinsForSource: CellTypeBiomarkerInfo[] = [];
+    data?.biomarkers
+      .filter((biomarker) => biomarker.reference === selectedSource)
+      .forEach((biomarker) => {
+        if (biomarker.biomarker_type === 'gene') {
+          genesForSource.push(biomarker);
+        } else {
+          proteinsForSource.push(biomarker);
+        }
+      });
+    return [genesForSource, proteinsForSource];
+  }, [data?.biomarkers, selectedSource]);
+
+  const handleSourceSelection = useEventCallback((event: SelectChangeEvent<string>) => {
+    setSelectedSource(event.target.value);
+  });
+
+  return { genes, proteins, sources, selectedSource, handleSourceSelection };
 };
