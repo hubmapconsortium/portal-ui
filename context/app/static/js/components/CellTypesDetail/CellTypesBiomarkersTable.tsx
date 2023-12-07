@@ -10,6 +10,7 @@ import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import { TableBody, TableCell, TableRow } from '@mui/material';
 import { StyledTableContainer } from 'js/shared-styles/tables';
+import { InternalLink } from 'js/shared-styles/Links';
 import { CellTypeBiomarkerInfo, useCellTypeBiomarkers } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
@@ -22,7 +23,9 @@ function BiomarkerTableRow({ biomarker, type }: { biomarker: CellTypeBiomarkerIn
   return (
     <TableRow>
       <TableCell>
-        {entry.name} ({entry.symbol})
+        <InternalLink href={`/${type}/${entry.symbol}`}>
+          {entry.name} ({entry.symbol})
+        </InternalLink>
       </TableCell>
       <TableCell>TODO</TableCell>
       <TableCell>{type}</TableCell>
