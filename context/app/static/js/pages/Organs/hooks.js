@@ -20,13 +20,15 @@ function buildOrganToCountMap(aggsBuckets) {
 }
 
 function addSearchTermsCount(search, organToCountMap) {
-  return search.reduce((sum, searchTerm) => sum + organToCountMap[searchTerm], 0);
+  const s = search.reduce((sum, searchTerm) => sum + (organToCountMap[searchTerm] ?? 0), 0);
+  return s;
 }
 
 function addDatasetCountsToOrgans(organs, aggsBuckets) {
   const organToCountMap = buildOrganToCountMap(aggsBuckets);
-  return Object.entries(organs).reduce((acc, [k, { search }]) => {
-    acc[k] = { ...acc[k], descendantCounts: { Dataset: addSearchTermsCount(search, organToCountMap) } };
+  return Object.entries(organs).reduce((acc, [k, { name, search }]) => {
+    const searchWithName = [...search, name].filter((v, i, a) => a.indexOf(v) === i);
+    acc[k] = { ...acc[k], descendantCounts: { Dataset: addSearchTermsCount(searchWithName, organToCountMap) } };
     return acc;
   }, organs);
 }
