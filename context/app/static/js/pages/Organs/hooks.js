@@ -20,8 +20,7 @@ function buildOrganToCountMap(aggsBuckets) {
 }
 
 function addSearchTermsCount(search, organToCountMap) {
-  const s = search.reduce((sum, searchTerm) => sum + (organToCountMap[searchTerm] ?? 0), 0);
-  return s;
+  return search.reduce((sum, searchTerm) => sum + (organToCountMap[searchTerm] ?? 0), 0);
 }
 
 function addDatasetCountsToOrgans(organs, aggsBuckets) {
