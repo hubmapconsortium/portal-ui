@@ -17,7 +17,7 @@ import { DetailPageSection } from '../detailPage/style';
 type GraphKey = keyof Pick<CellTypeOrgan, 'other_cells' | 'celltype_cells'>;
 const keys = ['celltype_cells', 'other_cells'] as GraphKey[];
 
-const margin = { top: 20, right: 20, bottom: 100, left: 60 };
+const margin = { top: 16, right: 32, bottom: 80, left: 80 };
 
 function getX(d: unknown): string {
   const data = d as CellTypeOrgan;
@@ -87,9 +87,9 @@ export default function CellTypesVisualization() {
     <DetailPageSection id="distribution-across-organs">
       <SectionHeader>Distribution Across Organs</SectionHeader>
       <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
-      <Stack direction="row" height={500}>
+      <Stack direction="row" height={640}>
         <VerticalStackedBarChart
-          initialHeight={500}
+          initialHeight={640}
           visxData={sortedOrgans}
           yScale={yScale}
           xScale={xScale}
