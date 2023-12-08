@@ -3,15 +3,15 @@ import React from 'react';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 
-import CellTypesProvider from 'js/components/CellTypesDetail/CellTypesContext';
-import CellTypesVisualization from 'js/components/CellTypesDetail/CellTypesVisualization';
-import CellTypesSummary from 'js/components/CellTypesDetail/CellTypesSummary';
-import CellTypesEntitiesTables from 'js/components/CellTypesDetail/CellTypesEntitiesTables';
-import CellTypesBiomarkersTable from 'js/components/CellTypesDetail/CellTypesBiomarkersTable';
+import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
+import CellTypesVisualization from 'js/components/cell-types/CellTypesVisualization';
+import CellTypesSummary from 'js/components/cell-types/CellTypesSummary';
+import CellTypesEntitiesTables from 'js/components/cell-types/CellTypesEntitiesTables';
+import CellTypesBiomarkersTable from 'js/components/cell-types/CellTypesBiomarkersTable';
 import { StyledSvgIcon } from 'js/components/detailPage/entityHeader/EntityHeaderContent/style';
 import ScatterPlot from '@mui/icons-material/ScatterPlot';
 import Stack from '@mui/material/Stack';
-import CellTypesTitle from 'js/components/CellTypesDetail/CellTypesTitle';
+import CellTypesTitle from 'js/components/cell-types/CellTypesTitle';
 
 interface Props {
   cellId: string;
