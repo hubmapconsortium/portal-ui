@@ -12,7 +12,6 @@ import TableCell from '@mui/material/TableCell';
 import format from 'date-fns/format';
 import { InternalLink } from 'js/shared-styles/Links';
 import { Stack } from '@mui/material';
-import Tile from 'js/shared-styles/tiles/Tile';
 import { DetailPageSection } from '../detailPage/style';
 import { useCellTypeSamples, useCellTypeDatasets, useCellTypeOrgans } from './hooks';
 
