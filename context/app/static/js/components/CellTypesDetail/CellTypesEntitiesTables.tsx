@@ -1,5 +1,5 @@
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import React from 'react';
+import React, { Fragment } from 'react';
 import Description from 'js/shared-styles/sections/Description';
 import { useTabs } from 'js/shared-styles/tabs';
 import { StyledTableContainer } from 'js/shared-styles/tables';
@@ -11,7 +11,8 @@ import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
 import format from 'date-fns/format';
 import { InternalLink } from 'js/shared-styles/Links';
-import { Stack } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
 import { DetailPageSection } from '../detailPage/style';
 import { useCellTypeSamples, useCellTypeDatasets, useCellTypeOrgans } from './hooks';
 
@@ -37,7 +38,7 @@ export default function CellTypesEntitiesTables() {
         <Tab index={1} label={`Datasets (${datasets?.length ?? 0})`} />
       </Tabs>
       <TabPanel index={0} value={openTabIndex}>
-        <StyledTableContainer>
+        <StyledTableContainer component={Paper}>
           <Table stickyHeader>
             <TableHead>
               <TableRow>
@@ -63,13 +64,14 @@ export default function CellTypesEntitiesTables() {
         </StyledTableContainer>
       </TabPanel>
       <TabPanel index={1} value={openTabIndex}>
-        <Stack direction="column">
-          {datasets?.map((dataset) => (
-            <InternalLink key={dataset} href={`/browse/dataset/${dataset}`}>
-              {dataset}
-            </InternalLink>
+        <StyledTableContainer component={Paper}>
+          {datasets?.map((dataset, idx) => (
+            <Fragment key={dataset}>
+              <InternalLink href={`/browse/dataset/${dataset}`}>{dataset}</InternalLink>
+              {idx !== datasets.length - 1 && <br />}
+            </Fragment>
           ))}
-        </Stack>
+        </StyledTableContainer>
       </TabPanel>
     </DetailPageSection>
   );
