@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
+
 import { DetailPageSection } from 'js/components/detailPage/style';
+
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
-import { useEntityStore } from 'js/stores';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+
+import useEntityStore from 'js/stores/useEntityStore';
+
 import { useCellTypeInfo } from './hooks';
 import { useCellTypesContext } from './CellTypesContext';
 

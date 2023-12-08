@@ -1,8 +1,11 @@
-import { fetcher } from 'js/helpers/swr';
-import useSWR from 'swr';
 import { useMemo, useState } from 'react';
+
+import useSWR from 'swr';
 import { useEventCallback } from '@mui/material/utils';
 import { SelectChangeEvent } from '@mui/material/Select';
+
+import { fetcher } from 'js/helpers/swr';
+
 import { useCellTypesContext } from './CellTypesContext';
 import { useAppContext } from '../Contexts';
 

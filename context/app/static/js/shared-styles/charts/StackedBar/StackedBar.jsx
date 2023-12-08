@@ -36,7 +36,6 @@ function StackedBar({ direction, bar, hoverProps }) {
       {...dimensionsAndPlacementProps}
       $showHover={Object.keys(hoverProps).length > 0}
       {...hoverProps}
-      data-key={bar.key}
     />
   );
 }

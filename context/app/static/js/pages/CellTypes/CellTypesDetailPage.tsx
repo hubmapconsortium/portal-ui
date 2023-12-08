@@ -1,5 +1,8 @@
 import React from 'react';
 
+import ScatterPlot from '@mui/icons-material/ScatterPlot';
+import Stack from '@mui/material/Stack';
+
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 
@@ -9,8 +12,7 @@ import CellTypesSummary from 'js/components/cell-types/CellTypesSummary';
 import CellTypesEntitiesTables from 'js/components/cell-types/CellTypesEntitiesTables';
 import CellTypesBiomarkersTable from 'js/components/cell-types/CellTypesBiomarkersTable';
 import { StyledSvgIcon } from 'js/components/detailPage/entityHeader/EntityHeaderContent/style';
-import ScatterPlot from '@mui/icons-material/ScatterPlot';
-import Stack from '@mui/material/Stack';
+
 import CellTypesTitle from 'js/components/cell-types/CellTypesTitle';
 
 interface Props {

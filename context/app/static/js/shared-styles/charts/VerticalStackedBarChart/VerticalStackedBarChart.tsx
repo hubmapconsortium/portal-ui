@@ -4,15 +4,16 @@ import { AxisBottom, AxisLeft, TickRendererProps } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import Typography from '@mui/material/Typography';
 import { Text } from '@visx/text';
+import type { WithParentSizeProps, WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
+import type { AnyD3Scale, ScaleInput } from '@visx/scale';
+import type { Accessor, SeriesPoint } from '@visx/shape/lib/types';
 
-import { OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
+import { type OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGridRowsGroup';
-import { WithParentSizeProps, WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
-import { AnyD3Scale, ScaleInput } from '@visx/scale';
-import { Accessor, SeriesPoint } from '@visx/shape/lib/types';
-import { FormattedValue, TooltipData, tooltipHasBarData } from '../types';
+
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
+import { type FormattedValue, type TooltipData, tooltipHasBarData } from '../types';
 
 interface TickComponentWithHandlersProps {
   handleMouseEnter: ({ key }: { key: FormattedValue }) => React.MouseEventHandler<SVGTextElement>;

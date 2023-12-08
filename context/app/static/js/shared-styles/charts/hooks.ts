@@ -2,9 +2,6 @@ import { MouseEvent, useMemo } from 'react';
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
 import { getStringWidth } from '@visx/text';
-import { useTheme } from '@mui/material/styles';
-
-import { getChartDimensions } from 'js/shared-styles/charts/utils';
 import {
   BandScaleConfig,
   LinearScaleConfig,
@@ -15,6 +12,9 @@ import {
   scaleLog,
   scaleOrdinal,
 } from '@visx/scale';
+import { useTheme } from '@mui/material/styles';
+
+import { getChartDimensions } from 'js/shared-styles/charts/utils';
 
 function useChartTooltip<T>() {
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip<T>();
