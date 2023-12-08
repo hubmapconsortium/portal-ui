@@ -1,3 +1,9 @@
+## v0.85.2 - 2023-12-06
+
+- Adjust biomarker search input to ensure gene symbols are matched against.
+- Make lexicographically sorted search facets display in case insensitive alphabetical order.
+
+
 ## v0.85.1 - 2023-12-04
 
 - Add tutorials landing page.

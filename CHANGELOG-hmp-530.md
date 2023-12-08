@@ -1,1 +1,0 @@
-- Make lexicographically sorted search facets display in case insensitive alphabetical order.
