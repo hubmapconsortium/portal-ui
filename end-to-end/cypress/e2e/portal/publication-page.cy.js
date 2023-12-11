@@ -1,5 +1,4 @@
-// TODO: This will need to be updated when TEST is overwritten with prod data.
-const publicationId = "0bac279e054856ca1b98a2bfb28bb011";
+const publicationId = "2ced91fd6d543e79af90313e52ada57d";
 const title =
   "Vitessce: integrative visualization of multimodal and spatially-resolved single-cell data";
 
@@ -9,7 +8,7 @@ describe("Publication page", () => {
       cy.viewport("macbook-15");
       cy.intercept(
         {
-          hostname: "hubmapconsortium.org",
+          hostname: "assets.hubmapconsortium.org",
           url: new RegExp(`.*${publicationId}\/data.*`),
         },
         (res) => res.destroy()
