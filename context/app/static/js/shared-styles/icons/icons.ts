@@ -15,7 +15,7 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import ListAltRoundedIcon from '@mui/icons-material/ListAltRounded';
-import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
+import ArrowDropDownRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';

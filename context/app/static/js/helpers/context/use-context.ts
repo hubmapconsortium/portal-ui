@@ -6,6 +6,7 @@ import React, { useContext as useContextNative } from 'react';
  * @returns The value of the context
  * @throws If the context is undefined
  */
+export function useContext<T>(context: React.Context<T>): NonNullable<T>;
 export function useContext<T>(context: React.Context<T | undefined>): T {
   const contextValue = useContextNative(context);
   if (contextValue === undefined) {

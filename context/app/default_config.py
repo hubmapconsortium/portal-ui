@@ -37,6 +37,8 @@ class DefaultConfig(object):
     XMODALITY_ENDPOINT = 'should-be-overridden'
     WORKSPACES_ENDPOINT = 'should-be-overridden'
     WORKSPACES_WS_ENDPOINT = 'should-be-overridden'
+    USER_TEMPLATES_ENDPOINT = 'should-be-overriden'
+    UBKG_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'
     APP_CLIENT_ID = 'should-be-overridden'

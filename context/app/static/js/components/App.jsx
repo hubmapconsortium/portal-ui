@@ -1,6 +1,5 @@
 import React, { StrictMode } from 'react';
 import { pdfjs } from 'react-pdf';
-import ReactMarkdown from 'react-markdown';
 import { enableMapSet } from 'immer';
 
 import StyledSnackbar from 'js/shared-styles/snackbars';
@@ -12,6 +11,9 @@ import Header from './Header';
 import { StyledAlert, FlexContainer } from './style';
 // Importing Search styles here so the CSS import order is correct.
 import 'js/components/searchPage/Search.scss';
+import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
+import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
+import MarkdownRenderer from './Markdown/MarkdownRenderer';
 
 // TODO: Delete this when workspaces are publicly released.
 // If we stay in limbo for a long time, this configuration could be moved out of code.
@@ -62,13 +64,18 @@ function App(props) {
         {globalAlertMd && (
           <FlexContainer>
             <StyledAlert severity="warning">
-              <ReactMarkdown>{globalAlertMd}</ReactMarkdown>
+              <MarkdownRenderer>{globalAlertMd}</MarkdownRenderer>
             </StyledAlert>
           </FlexContainer>
         )}
         <Routes flaskData={flaskData} />
         <Footer />
         <StyledSnackbar />
+        {/* These dialogs are placed at the root of the application because 
+            they are launchable from many places. In the future, this should be
+            improved on by using a global modal stack with portals. */}
+        <LaunchWorkspaceDialog />
+        <EditWorkspaceDialog />
       </Providers>
     </StrictMode>
   );

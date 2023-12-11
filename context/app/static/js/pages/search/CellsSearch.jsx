@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { useAppContext } from 'js/components/Contexts';
-import LookupEntity from 'js/helpers/LookupEntity';
 import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
@@ -42,11 +41,6 @@ function Search({ title }) {
     );
   }
 
-  const notesToDisplay = [
-    { urlSearchParam: 'ancestor_ids[0]', label: 'Derived from' },
-    { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
-  ].filter((note) => searchParams.has(note.urlSearchParam));
-
   const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
   const searchProps = {
@@ -81,15 +75,7 @@ function Search({ title }) {
         <b>[Preview]</b> {title}
       </SearchHeader>
       {type === 'dataset' && <SearchDatasetTutorial />}
-      {notesToDisplay.map((note) => (
-        <LookupEntity
-          uuid={searchParams.get(note.urlSearchParam)}
-          elasticsearchEndpoint={elasticsearchEndpoint}
-          groupsToken={groupsToken}
-        >
-          <SearchNote label={note.label} />
-        </LookupEntity>
-      ))}
+      <SearchNote params={searchParams} />
       {wrappedSearch}
     </>
   );

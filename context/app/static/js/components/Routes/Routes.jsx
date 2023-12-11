@@ -31,8 +31,12 @@ const DonorSearch = lazy(() => import('js/pages/entity-search/DonorSearch'));
 const SampleSearch = lazy(() => import('js/pages/entity-search/SampleSearch'));
 const DatasetSearch = lazy(() => import('js/pages/entity-search/DatasetSearch'));
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
+const Workspace = lazy(() => import('js/pages/Workspace'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
-const Genes = lazy(() => import('js/pages/Genes'));
+const GeneDetails = lazy(() => import('js/pages/Genes'));
+const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
+const Tutorials = lazy(() => import('js/pages/Tutorials'));
+const Tutorial = lazy(() => import('js/pages/Tutorial'));
 
 function Routes({ flaskData }) {
   const {
@@ -50,6 +54,7 @@ function Routes({ flaskData }) {
     organ,
     vignette_json,
     geneSymbol,
+    tutorialName,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -251,11 +256,20 @@ function Routes({ flaskData }) {
     );
   }
 
-  if (urlPath.startsWith('/workspaces/')) {
+  if (urlPath.startsWith('/workspaces/start/')) {
     const workspaceId = urlPath.split('/').pop();
     return (
       <Route>
         <WorkspacePleaseWait workspaceId={workspaceId} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/workspaces/')) {
+    const workspaceId = urlPath.split('/').pop();
+    return (
+      <Route>
+        <Workspace workspaceId={workspaceId} />
       </Route>
     );
   }
@@ -275,7 +289,31 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/genes/')) {
     return (
       <Route>
-        <Genes geneSymbol={geneSymbol} />
+        <GeneDetails geneSymbol={geneSymbol} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/biomarkers')) {
+    return (
+      <Route>
+        <Biomarkers />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/tutorials')) {
+    if (tutorialName) {
+      return (
+        <Route>
+          <Tutorial tutorialName={tutorialName} />
+        </Route>
+      );
+    }
+
+    return (
+      <Route>
+        <Tutorials />
       </Route>
     );
   }

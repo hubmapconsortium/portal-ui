@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { queryTypes } from 'js/components/cells/queryTypes';
+import { QueryType, queryTypes } from 'js/components/cells/queryTypes';
 
 interface CellsSearchState {
   results: unknown[];
@@ -8,8 +8,8 @@ interface CellsSearchState {
   minExpressionLog: number;
   minCellPercentage: number;
   cellVariableNames: string[];
-  queryType: string;
-  selectedQueryType: string;
+  queryType: QueryType;
+  selectedQueryType: QueryType;
 }
 
 const defaultState: CellsSearchState = {
@@ -28,8 +28,8 @@ interface CellsSearchActions {
   setMinExpressionLog: (minExpressionLog: number) => void;
   setMinCellPercentage: (minCellPercentage: number) => void;
   setCellVariableNames: (cellVariableNames: string[]) => void;
-  setQueryType: (queryType: string) => void;
-  setSelectedQueryType: (selectedQueryType: string) => void;
+  setQueryType: (queryType: QueryType) => void;
+  setSelectedQueryType: (selectedQueryType: QueryType) => void;
   resetStore: () => void;
 }
 

@@ -4,7 +4,7 @@ import Paper from '@mui/material/Paper';
 
 const StyledPaper = styled(Paper)`
   display: flex;
-  padding: ${(props) => props?.$padding || '30px 40px'};
+  padding: 30px 40px;
 `;
 
 const StyledInfoIcon = styled(InfoIcon)`

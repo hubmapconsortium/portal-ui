@@ -4,6 +4,8 @@ import { render, screen } from 'test-utils/functions';
 
 import Search from './Search';
 
+jest.mock('searchkit/lib/core/accessors/HitsAccessor');
+
 test('Search error if missing entity_type param', () => {
   const originalConsoleError = console.error;
   console.error = jest.fn();

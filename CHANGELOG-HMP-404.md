@@ -1,2 +1,0 @@
-- Upgrade to Zustand v4.
-- Upgrade to Immer v10.

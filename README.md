@@ -171,6 +171,8 @@ Images should displayed using the `source srcset` attribute. You should prepare 
 
 - For example, to resize images using Mac's Preview you can visit the 'Tools' menu and select 'Adjust Size', from there you can change the image's width while making sure 'Scale Proportionally' and 'Resample Image' are checked. Once ready, each version of the image should be processed with an image optimizer such as [ImgOptim](https://imageoptim.com/mac) or [Online Image Compressor](https://imagecompressor.com/).
 
+Homepage images should also be provided in `.webp` format; a [batch conversion script is provided](./etc/dev/convert-to-webp.sh) to aid this process.
+
 Finally after processing, the images should be added to the S3 bucket, `portal-ui-images-s3-origin`,
 to be delivered by the cloudfront CDN.
 SVG files larger than 5KB should also be stored in S3 and delivered by the CDN.

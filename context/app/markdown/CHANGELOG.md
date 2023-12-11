@@ -1,3 +1,115 @@
+## v0.85.2 - 2023-12-06
+
+- Adjust biomarker search input to ensure gene symbols are matched against.
+- Make lexicographically sorted search facets display in case insensitive alphabetical order.
+
+
+## v0.85.1 - 2023-12-04
+
+- Add tutorials landing page.
+- Add workspaces tutorial.
+
+
+## v0.85.0 - 2023-12-01
+
+- Added biomarkers landing page.
+- Add link to currently running workspace from session time notification if not currently on the workspace's page.
+- Fix matomo user group tracking.
+- Add dialogs to workspace detail page to update workspace name and templates.
+
+
+## v0.84.2 - 2023-11-21
+
+- Fix workspace launch error message display logic.
+
+
+## v0.84.1 - 2023-11-21
+
+- Add links to organ pages from gene detail page's cell types list.
+- Allow reopening closed workspace tabs without needing to relaunch the entire session.
+- Fix bug with workspace creation locking after unsuccessful submit.
+- Fix errors launching workspace when another workspace is running.
+
+
+## v0.84.0 - 2023-11-20
+
+- Prevent duplicate workspace creation via rapid submission of launch new workspace form.
+- Add handling for workspace API requests with no results.
+- Do not display workspace templates with designated `is_hidden` bool.
+- Add a prompt to renew workspace sessions to the top of the workspaces screen.
+- Handle workspace files which can be either strings or objects.
+
+
+## v0.83.1 - 2023-11-16
+
+- Enable selection of entities on all search pages.
+- Limit scope of visualized and downloaded metadata to selected entities when user has made a selection in the search page.
+- Bumped CCF-UI version to latest 3.x release for the organ-info pages
+- Added ontology API to status page.
+- Added View Datasets button to cell types table on gene pages for types that exist in HuBMAP datasets.
+- Added handling for invalid gene name lookups.
+- Prevent launch of additional workspaces while a launch is already in progress.
+- Add authentication guard to workspace page.
+- Add workspace detail page.
+- Increase gap between templates in template grid.
+- Remove tsc-files from our pre-commit type checks as it was not using the project's tsconfig.
+
+
+## v0.83.0 - 2023-11-13
+
+- Add tracking to interactions with vitessce visualizations.
+- Introduce type checking to precommit and continuous integration scripts and fix reported type issues.
+- Add constraints to prevent multiple workspaces from being launched at once.
+- Add Biomarker Query section to gene detail page.
+- Added basic cell types table reference to gene page.
+- Update gene detail summary implementation.
+- Removed spaces from tracked event names.
+- Fix alignment of bar chart legends.
+- Fix HTML rendering inside markdown sections.
+- Updated UBKG endpoints to point to `genes` and `genes-info`.
+- Removed unnecessary polyfill dependencies.
+- Alphabetize data types facets on search page.
+- Converted homepage images to webp to decrease load times.
+- Add Azimuth dataset visualizations to gene detail pages.
+- Prevent unnecessary calls to workspaces API by users without permissions.
+- Updated the HRA API endpoint to point to the HuBMAP-only version
+- Update CHANGELOG entry to match Docker tag for v0.82.3.
+- Update push.sh to exit early if prerequisite is not met.
+- Create a reusable table with updated design.
+- Add table to show selected datasets in create workspace dialogs.
+
+
+## v0.82.3 - 2023-10-31
+
+- Implement workspace usability metric tracking.
+- Add hook to check if user has any running workspaces.
+- Update workspace landing page styling.
+- Add docker logging to AWS CloudWatch.
+- Fix push script to once again stage changes to dependencies markdown.
+- Further constrain collections on landing page to only show collections with both a registered doi and doi url.
+- Add dialog to launch workspaces from user templates.
+
+## v0.82.2
+
+- Version number skipped.
+
+## v0.82.1 - 2023-10-25
+
+- Fix overflow in chart legends.
+- Only show collections with DOIs to non-HuBMAP users on collections landing page.
+- Fix bug in header navigation menu items requiring you to click on the item's text.
+
+
+## v0.82.0 - 2023-10-23
+
+- Upgrade to Zustand v4.
+- Upgrade to Immer v10.
+- Remove legacy `mui/styles` theming engine.
+- Restore magnifying glass icon to search bars.
+- Added selection and workspace launching to main search page for users with Workspaces access.
+- Update `cryptography` package to 41.0.4.
+
+
 ## v0.80.0 - 2023-09-27
 
 - Update Jest and MockServiceWorker to latest versions.

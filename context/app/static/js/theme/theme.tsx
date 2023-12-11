@@ -31,6 +31,11 @@ interface CaptionColors {
   link: string;
 }
 
+interface ContainerColors {
+  main: string;
+  contrastText: string;
+}
+
 declare module '@mui/material/styles' {
   export interface ZIndex {
     tutorial: number;
@@ -46,18 +51,26 @@ declare module '@mui/material/styles' {
     halfShadow: string;
     hoverShadow: string;
   }
+
+  export interface TypeAction {
+    activeTab: string;
+  }
   export interface Palette {
     black: BlackVariants;
     white: WhiteVariants;
     provenance: ProvenanceColors;
     caption: CaptionColors;
+    secondaryContainer: ContainerColors;
+    primaryContainer: ContainerColors;
+    action: TypeAction;
   }
-
   export interface PaletteOptions {
     black?: BlackVariants;
     white?: WhiteVariants;
     provenance?: ProvenanceColors;
     caption?: CaptionColors;
+    secondaryContainer?: ContainerColors;
+    primaryContainer?: ContainerColors;
   }
 
   export interface PaletteColor {
@@ -83,6 +96,10 @@ declare module '@mui/material' {
   export interface PaperPropsVariantOverrides {
     unstyled: true;
   }
+
+  export interface ButtonPropsVariantOverrides {
+    elevated: true;
+  }
 }
 
 // default HuBMAP color and font theme
@@ -92,6 +109,14 @@ const theme = createTheme({
       link: blue,
       halfShadow: 'rgb(0, 0, 0, 0.54)',
       hoverShadow: 'rgb(0, 0, 0, 0.08)',
+    },
+    primaryContainer: {
+      main: '#C5C7CF',
+      contrastText: '#252938',
+    },
+    secondaryContainer: {
+      main: '#EFEFEF',
+      contrastText: '#363636',
     },
     primary: {
       main: purple,
@@ -146,7 +171,7 @@ const theme = createTheme({
       global: '#FFB3B3',
     },
     action: {
-      active: '#9CB965',
+      activeTab: '#9CB965',
       disabled: 'rgba(0,0,0, 0.38)',
     },
     background: {
@@ -247,6 +272,17 @@ const theme = createTheme({
       defaultProps: {
         underline: 'none',
       },
+    },
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'elevated' },
+          style: {
+            boxShadow:
+              '0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 0px 2px 0px rgba(0, 0, 0, 0.14)',
+          },
+        },
+      ],
     },
     MuiAccordion: {
       variants: [

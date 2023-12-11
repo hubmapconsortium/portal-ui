@@ -19,13 +19,13 @@ function getSiteId(location) {
   }
 }
 
-function getUserType() {
+export function getUserType() {
   // `last_login` cookie is only set when internal users log in.
   // Default to `external` if the cookie is not set.
   return readCookie('last_login') ? 'internal' : 'external';
 }
 
-function getUserGroups() {
+export function getUserGroups() {
   // Reads the user's groups from the cookie set in `routes_auth.py`.
   // Default to `none` if the cookie is not set.
   return readCookie('user_groups') || 'none';
@@ -38,7 +38,10 @@ function getUserGroups() {
 function getCustomDimensions() {
   const userType = getUserType();
   const userGroups = getUserGroups();
-  return [1 /* user_type */, userType, 2 /* user_groups */, userGroups];
+  return [
+    [1 /* user_type */, userType],
+    [2 /* user_groups */, userGroups],
+  ];
 }
 
 const tracker = new MatomoTracker({
@@ -78,10 +81,21 @@ function trackPageView(path) {
   faro.api.pushEvent('pageview', { path });
 }
 
+const makeFaroSafe = (obj) =>
+  Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, `${JSON.stringify(value)}`]));
+
 function trackEvent(event) {
   tracker.trackEvent(event);
   ReactGA.event(event);
-  faro.api.pushEvent(event.category, event);
+  // Convert all event values to strings to avoid errors in faro.
+  // https://github.com/grafana/faro-web-sdk/issues/269
+  const faroSafeEvent = makeFaroSafe(event);
+  const category = faroSafeEvent.category.replace(/ /g, '_');
+  faro.api.pushEvent(category, faroSafeEvent);
+}
+
+function trackMeasurement(type, values, context = undefined) {
+  faro.api.pushMeasurement({ type, values, context: context ? makeFaroSafe(context) : undefined });
 }
 
 function trackLink(href, type) {
@@ -115,4 +129,4 @@ function trackSiteSearch(keyword) {
   */
 }
 
-export { trackPageView, trackEvent, trackLink, trackSiteSearch };
+export { trackPageView, trackEvent, trackMeasurement, trackLink, trackSiteSearch };

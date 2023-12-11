@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { useAppContext } from 'js/components/Contexts';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import LookupEntity from 'js/helpers/LookupEntity';
-import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
+import { combineQueryClauses, getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
+import { decompressStringList } from 'js/helpers/compress';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
 import { listFilter } from 'js/components/searchPage/utils';
@@ -45,13 +45,23 @@ function Search({ title }) {
     );
   }
 
-  const notesToDisplay = [
-    { urlSearchParam: 'ancestor_ids[0]', label: 'Derived from' },
-    { urlSearchParam: 'descendant_ids[0]', label: 'Ancestor of' },
-  ].filter((note) => searchParams.has(note.urlSearchParam));
-
   const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
+
+  let defaultQuery = getDefaultQuery();
+  const uuidParam = searchParams.get('uuid');
+  const uuids = uuidParam ? decompressStringList(uuidParam) : [];
+  if (uuids.length > 0) {
+    defaultQuery = combineQueryClauses([
+      defaultQuery,
+      {
+        ids: {
+          values: uuids,
+        },
+      },
+    ]);
+  }
+
   const searchProps = {
     // The default behavior is to add a "_search" path.
     // We don't want that.
@@ -73,7 +83,7 @@ function Search({ title }) {
     queryFields: ['all_text', ...fieldsToHighlight],
     isLoggedIn: Boolean(groupsToken),
     apiUrl: elasticsearchEndpoint,
-    defaultQuery: getDefaultQuery(),
+    defaultQuery,
   };
 
   return (
@@ -85,11 +95,7 @@ function Search({ title }) {
         </SearchEntityHeader>
       </SearchHeader>
       {type === 'dataset' && <SearchDatasetTutorial />}
-      {notesToDisplay.map((note) => (
-        <LookupEntity uuid={searchParams.get(note.urlSearchParam)} key={note.urlSearchParam}>
-          <SearchNote label={note.label} />
-        </LookupEntity>
-      ))}
+      <SearchNote params={searchParams} />
       <SearchWrapper
         {...searchProps}
         resultsComponent={Results}

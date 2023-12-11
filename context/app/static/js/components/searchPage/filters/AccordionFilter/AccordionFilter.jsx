@@ -5,6 +5,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import FilterInnerAccordion from 'js/components/searchPage/filters/FilterInnerAccordion';
 import HierarchicalFilterItem from 'js/components/searchPage/filters/HierarchicalFilterItem';
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
+import AlphabetizedRefinementListFilter from './AlphabetizedRefinementListFilter';
 
 export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
   return function UpdatedItemComponent({ onClick: originalOnClick, label, active, ...rest }) {
@@ -21,10 +22,13 @@ export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
   };
 }
 
-export function getFilter(type) {
+export function getFilter(type, shouldAlphabetize = false) {
   switch (type) {
     case 'AccordionListFilter':
-      return { Filter: RefinementListFilter, itemComponent: CheckboxFilterItem };
+      return {
+        Filter: shouldAlphabetize ? AlphabetizedRefinementListFilter : RefinementListFilter,
+        itemComponent: CheckboxFilterItem,
+      };
     case 'AccordionRangeFilter':
       return { Filter: RangeFilter };
     case 'AccordionCheckboxFilter':
@@ -37,7 +41,8 @@ export function getFilter(type) {
 }
 
 function AccordionFilter({ type, title, analyticsCategory, ...rest }) {
-  const { Filter, itemComponent } = getFilter(type);
+  const shouldAlphabetize = type === 'AccordionListFilter' && rest?.orderKey === '_term';
+  const { Filter, itemComponent } = getFilter(type, shouldAlphabetize);
   const item = itemComponent ? { itemComponent: withAnalyticsEvent(itemComponent, title, analyticsCategory) } : {};
   return <Filter containerComponent={FilterInnerAccordion} title={title} {...rest} {...item} />;
 }
