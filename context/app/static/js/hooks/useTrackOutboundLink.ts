@@ -7,14 +7,15 @@ function sendOutboundEvent(event: React.MouseEvent<HTMLElement, MouseEvent>) {
 }
 
 function useTrackOutboundLink(onClick?: React.MouseEventHandler<HTMLElement>) {
-  return useCallback(() => {
-    return function handleClick(event: React.MouseEvent<HTMLElement, MouseEvent>) {
+  return useCallback(
+    (event: React.MouseEvent<HTMLElement, MouseEvent>) => {
       if (onClick) {
         onClick(event);
       }
       sendOutboundEvent(event);
-    };
-  }, [onClick]);
+    },
+    [onClick],
+  );
 }
 
 export { useTrackOutboundLink };
