@@ -30,7 +30,11 @@ const atlasGroups = {
   azimuth: [
     {
       href: 'https://azimuth.hubmapconsortium.org/',
-      label: 'Azimuth: Reference-based single cell mapping',
+      label: 'Azimuth: Reference-based Single Cell Mapping',
+    },
+    {
+      href: 'http://fusion.hubmapconsortium.org',
+      label: 'FUSION: FTU State Identification',
     },
   ],
   hra: [

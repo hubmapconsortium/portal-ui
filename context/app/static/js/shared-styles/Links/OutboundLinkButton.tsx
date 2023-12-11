@@ -1,11 +1,13 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import { sendOutboundEvent } from './OutboundLink';
+
+import { useTrackOutboundLink } from 'js/hooks/useTrackOutboundLink';
 import StyledOpenInNewRoundedIcon from './StyledOpenInNewRoundedIcon';
 
 type OutboundLinkButtonProps = React.ComponentProps<typeof Button<'a'>>;
 
 function OutboundLinkButton({ children, ...props }: OutboundLinkButtonProps) {
+  const handleClick = useTrackOutboundLink();
   return (
     <Button
       {...props}
@@ -14,7 +16,7 @@ function OutboundLinkButton({ children, ...props }: OutboundLinkButtonProps) {
       component="a"
       target="_blank"
       rel="noopener noreferrer"
-      onClick={sendOutboundEvent}
+      onClick={handleClick}
     >
       {children} <StyledOpenInNewRoundedIcon />
     </Button>
