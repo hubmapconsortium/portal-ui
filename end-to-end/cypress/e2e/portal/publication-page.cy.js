@@ -8,7 +8,7 @@ describe("Publication page", () => {
       cy.viewport("macbook-15");
       cy.intercept(
         {
-          hostname: "assets.hubmapconsortium.org",
+          hostname: "hubmapconsortium.org",
           url: new RegExp(`.*${publicationId}\/data.*`),
         },
         (res) => res.destroy()
