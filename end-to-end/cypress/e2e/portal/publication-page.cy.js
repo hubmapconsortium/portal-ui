@@ -1,5 +1,4 @@
-// TODO: This will need to be updated when TEST is overwritten with prod data.
-const publicationId = "0bac279e054856ca1b98a2bfb28bb011";
+const publicationId = "2ced91fd6d543e79af90313e52ada57d";
 const title =
   "Vitessce: integrative visualization of multimodal and spatially-resolved single-cell data";
 
@@ -10,7 +9,7 @@ describe("Publication page", () => {
       cy.intercept(
         {
           hostname: "hubmapconsortium.org",
-          url: new RegExp(`.*${publicationId}\/data.*`),
+          url: new RegExp(`${publicationId}\/data.*`),
         },
         (res) => res.destroy()
       ).then(() => {
@@ -52,10 +51,12 @@ describe("Publication page", () => {
         .and("contain", "Preprint");
     });
     it("has a table of contents with links to the summary, data, visualizations, bulk data transfer, authors, and provenance sections", () => {
+      
       cy.findByTestId("table-of-contents")
         .should("contain", "Summary")
         .and("contain", "Data")
-        .and("contain", "Visualizations")
+        // TODO - re-enable when data is restored, see HMP-538
+        // .and("contain", "Visualizations")
         .and("contain", "Bulk Data Transfer")
         .and("contain", "Authors")
         .and("contain", "Provenance");
@@ -162,11 +163,12 @@ describe("Publication page", () => {
         .and("contain", title);
     });
 
-    it("has six vignettes", () => {
+    // TODO: Reenable once data is restored, see HMP-538
+    xit("has six vignettes", () => {
       cy.findAllByTestId("vignette").should("have.length", 6);
     });
 
-    it("has the first vignette expanded by default", () => {
+    xit("has the first vignette expanded by default", () => {
       cy.findByTestId("vignette-0-button").should(
         "have.attr",
         "aria-expanded",
@@ -183,7 +185,7 @@ describe("Publication page", () => {
       });
     });
 
-    it("expands other vignettes when they're clicked", () => {
+    xit("expands other vignettes when they're clicked", () => {
       ["1", "2", "3", "4", "5"].forEach((i) => {
         // Force it to allow clicking while the button is animating since this is a bit flaky
         // Once we switch to `createRoot` this action should be performant enough to remove the { force: true }
