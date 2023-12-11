@@ -16,12 +16,10 @@ interface HumanReferenceAtlasProps {
 // Currently using staging site
 const HRAOrganScript = 'https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3/organ-info/wc.js';
 const HRAOrganStyles = 'https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3/organ-info/styles.css';
-const HRAFonts = 'https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&amp;display=swap';
 
 function HumanReferenceAtlas({ uberonIri }: HumanReferenceAtlasProps) {
   useScript(HRAOrganScript);
   useLink(HRAOrganStyles);
-  useLink(HRAFonts);
   return (
     <>
       <Flex>
