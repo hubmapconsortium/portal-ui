@@ -7,8 +7,7 @@ import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
-// TODO: Revert this import change after components are merged together
-import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas/HumanReferenceAtlasv2';
+import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
