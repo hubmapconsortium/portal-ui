@@ -6,20 +6,14 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
+import CCFOrganInfo from 'js/components/HRA/CCFOrganInfo';
 import { Flex, StyledInfoIcon } from '../style';
-import { useLink, useScript } from './hooks';
 
 interface HumanReferenceAtlasProps {
   uberonIri: string;
 }
 
-// Currently using staging site
-const HRAOrganScript = 'https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3/organ-info/wc.js';
-const HRAOrganStyles = 'https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3/organ-info/styles.css';
-
 function HumanReferenceAtlas({ uberonIri }: HumanReferenceAtlasProps) {
-  useScript(HRAOrganScript);
-  useLink(HRAOrganStyles);
   return (
     <>
       <Flex>
@@ -29,11 +23,7 @@ function HumanReferenceAtlas({ uberonIri }: HumanReferenceAtlasProps) {
         </SecondaryBackgroundTooltip>
       </Flex>
       <Paper>
-        <ccf-organ-info
-          organ-iri={uberonIri}
-          use-remote-api="false"
-          data-sources='["https://ccf-api.hubmapconsortium.org/v1/hubmap/rui_locations.jsonld"]'
-        />
+        <CCFOrganInfo uberonIri={uberonIri} />
       </Paper>
     </>
   );
