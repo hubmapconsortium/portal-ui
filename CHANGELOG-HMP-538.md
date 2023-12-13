@@ -1,0 +1,1 @@
+- Restore disabled cypress tests.
