@@ -210,7 +210,8 @@ class ApiClient():
         # Otherwise, just try to visualize the data for the entity itself:
         else:
             try:
-                def get_assaytype(uuid):
+                def get_assaytype(entity):
+                    uuid = entity.get('uuid')
                     # TODO: Replace with an environment variable
                     return requests.get("https://ingest-api.dev.hubmapconsortium.org/assaytype/" + uuid,
                                         headers=self._get_headers()).json()
