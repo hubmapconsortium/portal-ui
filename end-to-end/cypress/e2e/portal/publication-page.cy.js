@@ -1,5 +1,4 @@
-// TODO: This will need to be updated when TEST is overwritten with prod data.
-const publicationId = "0bac279e054856ca1b98a2bfb28bb011";
+const publicationId = "2ced91fd6d543e79af90313e52ada57d";
 const title =
   "Vitessce: integrative visualization of multimodal and spatially-resolved single-cell data";
 
@@ -10,7 +9,7 @@ describe("Publication page", () => {
       cy.intercept(
         {
           hostname: "hubmapconsortium.org",
-          url: new RegExp(`.*${publicationId}\/data.*`),
+          url: new RegExp(`${publicationId}\/data.*`),
         },
         (res) => res.destroy()
       ).then(() => {
@@ -52,6 +51,7 @@ describe("Publication page", () => {
         .and("contain", "Preprint");
     });
     it("has a table of contents with links to the summary, data, visualizations, bulk data transfer, authors, and provenance sections", () => {
+      
       cy.findByTestId("table-of-contents")
         .should("contain", "Summary")
         .and("contain", "Data")
