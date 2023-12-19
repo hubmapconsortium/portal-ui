@@ -1,3 +1,12 @@
+## v0.85.3 - 2023-12-14
+
+- Restore disabled cypress tests.
+- Fix mapping of organ counts on organ page.
+- Add link to FUSION in atlas and tools links.
+- Add utm_source query param to FUSION link for tracking.
+- Updated target publication for cypress tests.
+
+
 ## v0.85.2 - 2023-12-06
 
 - Adjust biomarker search input to ensure gene symbols are matched against.

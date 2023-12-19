@@ -55,8 +55,7 @@ describe("Publication page", () => {
       cy.findByTestId("table-of-contents")
         .should("contain", "Summary")
         .and("contain", "Data")
-        // TODO - re-enable when data is restored, see HMP-538
-        // .and("contain", "Visualizations")
+        .and("contain", "Visualizations")
         .and("contain", "Bulk Data Transfer")
         .and("contain", "Authors")
         .and("contain", "Provenance");
@@ -163,12 +162,11 @@ describe("Publication page", () => {
         .and("contain", title);
     });
 
-    // TODO: Reenable once data is restored, see HMP-538
-    xit("has six vignettes", () => {
+    it("has six vignettes", () => {
       cy.findAllByTestId("vignette").should("have.length", 6);
     });
 
-    xit("has the first vignette expanded by default", () => {
+    it("has the first vignette expanded by default", () => {
       cy.findByTestId("vignette-0-button").should(
         "have.attr",
         "aria-expanded",
@@ -185,7 +183,7 @@ describe("Publication page", () => {
       });
     });
 
-    xit("expands other vignettes when they're clicked", () => {
+    it("expands other vignettes when they're clicked", () => {
       ["1", "2", "3", "4", "5"].forEach((i) => {
         // Force it to allow clicking while the button is animating since this is a bit flaky
         // Once we switch to `createRoot` this action should be performant enough to remove the { force: true }
