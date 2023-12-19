@@ -6,9 +6,14 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
+import CCFOrganInfo from 'js/components/HRA/CCFOrganInfo';
 import { Flex, StyledInfoIcon } from '../style';
 
-function HumanReferenceAtlas({ uberonIri }) {
+interface HumanReferenceAtlasProps {
+  uberonIri: string;
+}
+
+function HumanReferenceAtlas({ uberonIri }: HumanReferenceAtlasProps) {
   return (
     <>
       <Flex>
@@ -18,14 +23,7 @@ function HumanReferenceAtlas({ uberonIri }) {
         </SecondaryBackgroundTooltip>
       </Flex>
       <Paper>
-        <iframe
-          style={{ border: 'none', width: '100%' }}
-          title="Organ Info"
-          src={`/iframe/organ?iri=${uberonIri}`}
-          height="604"
-          width="916"
-          scrolling="no"
-        />
+        <CCFOrganInfo uberonIri={uberonIri} />
       </Paper>
     </>
   );
