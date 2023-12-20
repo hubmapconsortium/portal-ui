@@ -1,6 +1,11 @@
 import React from 'react';
 import { OutboundLink } from 'js/shared-styles/Links';
+import LinearProgress from '@mui/material/LinearProgress';
 
+/**
+ * Default message to fall back to if loading the maintenance message fails.
+ * @returns
+ */
 export default function MaintenanceFallbackMessage() {
   return (
     <>
@@ -8,4 +13,12 @@ export default function MaintenanceFallbackMessage() {
       <OutboundLink href="https://hubmapconsortium.org/">HuBMAP Consortium</OutboundLink> website.
     </>
   );
+}
+
+/**
+ * Loading spinner to fall back to while loading the maintenance message.
+ * @returns
+ */
+export function MaintenanceFallbackLoader() {
+  return <LinearProgress variant="indeterminate" />;
 }

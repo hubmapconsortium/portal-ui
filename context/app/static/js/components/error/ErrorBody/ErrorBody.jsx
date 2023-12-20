@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import MaintenanceFallbackMessage from './MaintenanceFallbackMessage';
+import { MaintenanceFallbackLoader } from './MaintenanceFallbackMessage';
 
 const MaintenanceErrorDisplay = lazy(() => import('./MaintenanceErrorDisplay'));
 
@@ -13,7 +13,7 @@ function LoginLink() {
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
   if (isMaintenancePage) {
     return (
-      <Suspense fallback={<MaintenanceFallbackMessage />}>
+      <Suspense fallback={<MaintenanceFallbackLoader />}>
         <MaintenanceErrorDisplay />
       </Suspense>
     );
