@@ -9,9 +9,25 @@ const help = {
 };
 const login = { url: '/login', name: 'login' };
 
+jest.mock('react', () => {
+  const ReactMock = jest.requireActual('react');
+  ReactMock.Suspense = ({ children }) => children;
+  ReactMock.lazy = jest.fn().mockImplementation(
+    () =>
+      function MockedMaintenanceMessage() {
+        return (
+          <div>
+            This is test data <a href="https://hubmapconsortium.org/">HuBMAP Consortium</a>
+          </div>
+        );
+      },
+  );
+  return ReactMock;
+});
+
 test('maintenance page', () => {
   render(<ErrorBody isMaintenancePage />);
-  expect(screen.getByText('While the portal is under maintenance', { exact: false })).toBeInTheDocument();
+  expect(screen.getByText('This is test data')).toBeInTheDocument();
   expect(screen.getByRole('link', { name: 'HuBMAP Consortium' })).toHaveAttribute(
     'href',
     'https://hubmapconsortium.org/',
