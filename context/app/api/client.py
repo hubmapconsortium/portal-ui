@@ -192,7 +192,6 @@ class ApiClient():
 
             if metadata.get('files'):
                 derived_entity['files'] = metadata.get('files', [])
-                print(entity.get('uuid') + " has derived entity " + derived_entity.get('uuid'))
                 vitessce_conf = self.get_vitessce_conf_cells_and_lifted_uuid(
                     derived_entity, marker=marker, wrap_error=wrap_error).vitessce_conf
                 vis_lifted_uuid = derived_entity['uuid']
