@@ -210,9 +210,8 @@ class ApiClient():
             try:
                 def get_assaytype(entity):
                     uuid = entity.get('uuid')
-                    # TODO: Replace with an environment variable
-                    return requests.get("https://ingest-api.dev.hubmapconsortium.org/assaytype/" + uuid,
-                                        headers=self._get_headers()).json()
+                    url = f"{current_app.config['SOFT_ASSAY_ENDPOINT']}/{uuid}"
+                    return requests.get(url, headers=self._get_headers()).json()
                 Builder = get_view_config_builder(entity, get_assaytype)
                 builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
                 vitessce_conf = builder.get_conf_cells(marker=marker)
