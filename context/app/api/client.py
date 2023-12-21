@@ -6,7 +6,6 @@ from flask import abort, current_app
 import requests
 import json
 from werkzeug.exceptions import HTTPException
-from hubmap_commons.type_client import TypeClient
 
 from .client_utils import files_from_response
 from portal_visualization.builder_factory import get_view_config_builder
