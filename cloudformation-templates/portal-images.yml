@@ -30,9 +30,11 @@ Resources:
           AllowedMethods:
             - "HEAD"
             - "GET"
+            - "OPTIONS"
           CachedMethods:
             - "HEAD"
             - "GET"
+            - "OPTIONS"
           Compress: false
           ForwardedValues:
             Cookies:
@@ -68,6 +70,23 @@ Resources:
     Properties:
       ResponseHeadersPolicyConfig:
         Name: !Sub "${AWS::StackName}-response-headers-policy"
+        CorsConfig:
+          AccessControlAllowCredentials: false
+          AccessControlAllowHeaders:
+            Items:
+              - "*"
+          AccessControlAllowMethods: 
+            Items: 
+              - GET
+              - HEAD
+              - OPTIONS
+          AccessControlAllowOrigins: 
+            Items:
+              - "*"
+          AccessControlExposeHeaders: 
+            Items: 
+              - '*'
+          OriginOverride: false
         CustomHeadersConfig:
           Items:
             - Header: "Cache-Control"
