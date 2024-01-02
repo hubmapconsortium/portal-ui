@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { lazy, Suspense } from 'react';
 import PropTypes from 'prop-types';
 
 import { InternalLink } from 'js/shared-styles/Links';
-import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import { MaintenanceFallbackLoader } from './MaintenanceFallbackMessage';
+
+const MaintenanceErrorDisplay = lazy(() => import('./MaintenanceErrorDisplay'));
 
 function LoginLink() {
   return <InternalLink href="/login">login</InternalLink>;
@@ -11,10 +13,9 @@ function LoginLink() {
 function ErrorBody({ errorCode, urlPath, isAuthenticated, isGlobus401, isMaintenancePage }) {
   if (isMaintenancePage) {
     return (
-      <>
-        While the portal is under maintenance, visit the{' '}
-        <OutboundLink href="https://hubmapconsortium.org/">HuBMAP Consortium</OutboundLink> website.
-      </>
+      <Suspense fallback={<MaintenanceFallbackLoader />}>
+        <MaintenanceErrorDisplay />
+      </Suspense>
     );
   }
 
