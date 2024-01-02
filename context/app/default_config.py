@@ -24,11 +24,6 @@ class DefaultConfig(object):
     PORTAL_INDEX_PATH = f'/{version}/portal/search'
     CCF_INDEX_PATH = f'{version}/entities/search'
 
-    # TODO: The soft assay endpoint is not live on prod yet and thus does not vary
-    # between environments. Once it is live this default should be changed to
-    # 'should-be-overridden'.
-    SOFT_ASSAY_ENDPOINT = 'https://ingest-api.dev.hubmapconsortium.org/assaytype'
-
     # Everything else should be overridden in app.conf:
 
     ENTITY_API_BASE = 'should-be-overridden'
@@ -44,6 +39,7 @@ class DefaultConfig(object):
     WORKSPACES_WS_ENDPOINT = 'should-be-overridden'
     USER_TEMPLATES_ENDPOINT = 'should-be-overriden'
     UBKG_ENDPOINT = 'should-be-overridden'
+    SOFT_ASSAY_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'
     APP_CLIENT_ID = 'should-be-overridden'
