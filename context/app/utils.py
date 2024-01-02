@@ -26,8 +26,6 @@ def get_default_flask_data():
             'gatewayEndpoint': current_app.config['GATEWAY_ENDPOINT'],
             'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
-            'typeServiceEndpoint': current_app.config['TYPE_SERVICE_ENDPOINT']
-            + current_app.config['TYPE_SERVICE_PATH'],
             'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
             'entityEndpoint': current_app.config['ENTITY_API_BASE'],
             'xmodalityEndpoint': current_app.config['XMODALITY_ENDPOINT'],
@@ -37,6 +35,7 @@ def get_default_flask_data():
             'protocolsClientId': current_app.config['PROTOCOLS_IO_CLIENT_ID'],
             'protocolsClientToken': current_app.config['PROTOCOLS_IO_CLIENT_AUTH_TOKEN'],
             'ubkgEndpoint': current_app.config['UBKG_ENDPOINT'],
+            'softAssayEndpoint': current_app.config['SOFT_ASSAY_ENDPOINT'],
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
