@@ -30,8 +30,8 @@ def get_parser():
         help='Under the Search API endpoint, the particular index to use')
     parser.add_argument(
         '--types_url',
-        default='https://search.api.hubmapconsortium.org',
-        help='Type Service endpoint')
+        default='https://ingest.api.hubmapconsortium.org/assaytype',
+        help='Soft Assay endpoint')
     parser.add_argument(
         '--assets_url',
         default='https://assets.hubmapconsortium.org',
