@@ -39,6 +39,7 @@ function ServiceStatusTable({
   gatewayEndpoint,
   workspacesEndpoint,
   ubkgEndpoint,
+  softAssayEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
@@ -72,6 +73,7 @@ function ServiceStatusTable({
           apiName: 'ingest-api',
           response: gatewayStatus.ingest_api,
           noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
+          endpointUrl: softAssayEndpoint.split('/assaytype')[0],
         }),
         {
           apiName: 'portal-ui',
