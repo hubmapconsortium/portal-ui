@@ -73,7 +73,7 @@
     {
       "label": "Flask Server",
       "type": "shell",
-      "command": "python -m flask run --debug",
+      "command": "${command:python.interpreterPath} -m flask run --debug",
       "dependsOn": [
         "Copy app configuration"
       ],
