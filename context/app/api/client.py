@@ -6,7 +6,6 @@ from flask import abort, current_app
 import requests
 import json
 from werkzeug.exceptions import HTTPException
-from hubmap_commons.type_client import TypeClient
 
 from .client_utils import files_from_response
 from portal_visualization.builder_factory import get_view_config_builder
@@ -70,11 +69,15 @@ class ApiClient():
         self.url_base = url_base
         self.groups_token = groups_token
 
+    def _get_headers(self):
+        headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
+        return headers
+
     def _request(self, url, body_json=None):
         '''
         Makes request to HuBMAP APIs behind API Gateway (Search, Entity, UUID).
         '''
-        headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
+        headers = self._get_headers()
         response = _handle_request(url, headers, body_json)
         status = response.status_code
         # HuBMAP APIs will redirect to s3 if the response payload over 10 MB.
@@ -205,12 +208,11 @@ class ApiClient():
         # Otherwise, just try to visualize the data for the entity itself:
         else:
             try:
-                def get_assay(name):
-                    type_client = TypeClient(
-                        current_app.config["TYPE_SERVICE_ENDPOINT"]
-                        + current_app.config["TYPE_SERVICE_PATH"])
-                    return type_client.getAssayType(name)
-                Builder = get_view_config_builder(entity=entity, get_assay=get_assay)
+                def get_assaytype(entity):
+                    uuid = entity.get('uuid')
+                    url = f"{current_app.config['SOFT_ASSAY_ENDPOINT']}/{uuid}"
+                    return requests.get(url, headers=self._get_headers()).json()
+                Builder = get_view_config_builder(entity, get_assaytype)
                 builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
                 vitessce_conf = builder.get_conf_cells(marker=marker)
             except Exception as e:
