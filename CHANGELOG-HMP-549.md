@@ -1,2 +1,0 @@
-- Update portal-visualization to 0.1.0.
-- Remove vitessce conf generation usage of TypeClient.
