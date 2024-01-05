@@ -11,6 +11,14 @@ const visualizationSelector = (state) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
+const pathsWithEntityHeader = ['/browse', '/cell-types', '/genes'];
+
+const exceptionPaths = ['/browse/collection'];
+
+function locationStartsWithPath(path) {
+  return window.location.pathname.startsWith(path);
+}
+
 function Header() {
   const anchorRef = useRef(null);
   const { summaryInView, summaryEntry } = useEntityStore(entityStoreSelector);
@@ -18,10 +26,9 @@ function Header() {
 
   const displayEntityHeader =
     (summaryEntry &&
-      window.location.pathname.startsWith('/browse') &&
-      !window.location.pathname.startsWith('/browse/collection')) ||
-    vizIsFullscreen ||
-    window.location.pathname.startsWith('/cell-types');
+      pathsWithEntityHeader.some(locationStartsWithPath) &&
+      !exceptionPaths.some(locationStartsWithPath)) ||
+    vizIsFullscreen;
 
   return (
     <>

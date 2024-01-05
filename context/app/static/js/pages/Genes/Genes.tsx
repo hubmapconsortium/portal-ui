@@ -32,7 +32,9 @@ function GeneDetails({ geneSymbol }: Props) {
   return (
     <GenePageProvider geneSymbol={geneSymbol}>
       <DetailLayout sectionOrder={sectionOrder}>
-        <SummaryTitle iconTooltipText="Basic unit of heredity made up of sequences of DNA">Gene</SummaryTitle>
+        <SummaryTitle iconTooltipText="Basic unit of heredity made up of sequences of DNA" entityIcon="Gene">
+          Gene
+        </SummaryTitle>
         <GenePageTitle />
         {shouldDisplaySection[summary] && <Summary />}
         {shouldDisplaySection[cellTypes] && <CellTypes />}

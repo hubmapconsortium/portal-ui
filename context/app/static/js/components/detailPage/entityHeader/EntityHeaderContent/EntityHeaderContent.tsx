@@ -10,7 +10,8 @@ import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 
-type EntityType = 'Donor' | 'Sample' | 'Dataset' | 'Publication' | 'CellType';
+type EntityType = Exclude<keyof typeof entityIconMap, 'Support' | 'Collection' | 'Workspace'>;
+
 interface AssayMetadata {
   sex: string;
   race: string[];
@@ -50,11 +51,13 @@ const entityToFieldsMap: EntityToFieldsType = {
     name: ({ name }) => name,
     reference_link: ({ reference_link }) => reference_link,
   },
+  Gene: {
+    name: ({ name }) => name,
+  },
 };
 
 const AnimatedFlexContainer = animated(FlexContainer);
 
-// TODO: Once we convert zustand to typescript, we can remove this type assertion
 const vizNotebookIdSelector: (state: { vizNotebookId: string | null }) => string | null = (state) =>
   state.vizNotebookId;
 
