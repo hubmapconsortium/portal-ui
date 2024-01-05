@@ -38,8 +38,8 @@ function ServiceStatusTable({
   entityEndpoint,
   gatewayEndpoint,
   workspacesEndpoint,
-  typeServiceEndpoint,
   ubkgEndpoint,
+  softAssayEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
@@ -73,6 +73,7 @@ function ServiceStatusTable({
           apiName: 'ingest-api',
           response: gatewayStatus.ingest_api,
           noteFunction: (api) => `Neo4j: ${api.neo4j_connection}`,
+          endpointUrl: softAssayEndpoint.split('/assaytype')[0],
         }),
         {
           apiName: 'portal-ui',
@@ -86,13 +87,6 @@ function ServiceStatusTable({
           endpointUrl: elasticsearchEndpoint,
           response: gatewayStatus.search_api,
           noteFunction: (api) => `ES: ${api.elasticsearch_connection}; ES Status: ${api.elasticsearch_status}`,
-        }),
-        buildServiceStatus({
-          apiName: 'type-api',
-          githubUrl: 'https://github.com/dbmi-pitt/search-adaptor',
-          endpointUrl: typeServiceEndpoint,
-          response: gatewayStatus.search_api,
-          noteFunction: () => 'Included in search-api for historical reasons.',
         }),
         buildServiceStatus({
           apiName: 'uuid-api',

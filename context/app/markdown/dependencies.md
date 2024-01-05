@@ -31,7 +31,7 @@ hubmap-commons>=2.1.10
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.0.13.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.1.0.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -92,6 +92,7 @@ lxml>=4.9.1
 "react-joyride": "^2.2.1",
 "react-markdown": "^8.0.7",
 "react-pdf": "^7.3.3",
+"reactify-wc": "^4.0.0",
 "rehype-raw": "^7.0.0",
 "sass": "^1.66.1",
 "searchkit": "^2.4.1-alpha.4",
@@ -102,7 +103,7 @@ lxml>=4.9.1
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
-"vitessce": "^3.2.1",
+"vitessce": "^3.3.2",
 "web-vitals": "^3.4.0",
 "zod": "^3.22.3",
 "zustand": "^4.4.1"

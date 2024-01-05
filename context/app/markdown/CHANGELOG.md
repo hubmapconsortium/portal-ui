@@ -1,3 +1,11 @@
+## v0.87.0 - 2024-01-04
+
+- Update portal-visualization to 0.1.0.
+- Remove vitessce conf generation usage of TypeClient.
+- Improve approach to embedding HRA Organ UI.
+- Add support for dynamic maintenance messages.
+
+
 ## v0.85.3 - 2023-12-14
 
 - Restore disabled cypress tests.

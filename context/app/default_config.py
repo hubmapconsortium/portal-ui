@@ -20,7 +20,6 @@ class DefaultConfig(object):
 
     # These app-wide configurations do not vary between environments:
 
-    TYPE_SERVICE_PATH = f'/{version}'
     PORTAL_INDEX_PATH = f'/{version}/portal/search'
     CCF_INDEX_PATH = f'{version}/entities/search'
 
@@ -32,13 +31,13 @@ class DefaultConfig(object):
 
     GATEWAY_ENDPOINT = 'should-be-overridden'
     ELASTICSEARCH_ENDPOINT = 'should-be-overridden'
-    TYPE_SERVICE_ENDPOINT = 'should-be-overridden'
     ASSETS_ENDPOINT = 'should-be-overridden'
     XMODALITY_ENDPOINT = 'should-be-overridden'
     WORKSPACES_ENDPOINT = 'should-be-overridden'
     WORKSPACES_WS_ENDPOINT = 'should-be-overridden'
     USER_TEMPLATES_ENDPOINT = 'should-be-overriden'
     UBKG_ENDPOINT = 'should-be-overridden'
+    SOFT_ASSAY_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'
     APP_CLIENT_ID = 'should-be-overridden'
