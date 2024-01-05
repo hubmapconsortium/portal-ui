@@ -11,13 +11,13 @@ import GeneOrgans from './Organs';
 import SelectedOrganContextProvider from './SelectedOrganContext';
 import { AzimuthVisualization } from './Visualization';
 
-import { azimuth } from '../constants';
+import { organs } from '../constants';
 
 export default function GenesAzimuth() {
   return (
     <SelectedOrganContextProvider>
-      <DetailPageSection id={azimuth.id}>
-        <SectionHeader iconTooltipText={azimuth.tooltip}>{azimuth.title}</SectionHeader>
+      <DetailPageSection id={organs.id}>
+        <SectionHeader>{organs.title}</SectionHeader>
         <SectionPaper>
           <Stack direction="row" gap={1}>
             <StyledInfoIcon color="primary" />
