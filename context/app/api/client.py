@@ -210,7 +210,10 @@ class ApiClient():
             try:
                 def get_assaytype(entity):
                     uuid = entity.get('uuid')
-                    url = f"{current_app.config['SOFT_ASSAY_ENDPOINT']}/{uuid}"
+                    endpoint = current_app.config["SOFT_ASSAY_ENDPOINT"]
+                    path = current_app.config["SOFT_ASSAY_ENDPOINT_PATH"]
+
+                    url = f"{endpoint}/{path}/{uuid}"
                     headers = self._get_headers()
                     try:
                         request = requests.get(url, headers=headers)
