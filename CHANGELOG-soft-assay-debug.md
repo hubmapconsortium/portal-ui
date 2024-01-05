@@ -1,1 +1,2 @@
 - Add logging to troubleshoot soft assay lookups.
+- Revise soft assay URL logic to be consistent with other suffixed API endpoints.
