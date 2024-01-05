@@ -210,8 +210,30 @@ class ApiClient():
             try:
                 def get_assaytype(entity):
                     uuid = entity.get('uuid')
-                    url = f"{current_app.config['SOFT_ASSAY_ENDPOINT']}/{uuid}"
-                    return requests.get(url, headers=self._get_headers()).json()
+                    endpoint = current_app.config["SOFT_ASSAY_ENDPOINT"]
+                    path = current_app.config["SOFT_ASSAY_ENDPOINT_PATH"]
+
+                    url = f"{endpoint}/{path}/{uuid}"
+                    headers = self._get_headers()
+                    try:
+                        response = requests.get(url, headers=headers)
+                        return response.json()
+                    except Exception as e:
+                        # Redact Authorization header from logs
+                        cleaned_headers = headers
+                        if 'Authorization' in headers:
+                            cleaned_headers['Authorization'] = 'REDACTED'
+                        status = response.status_code if response else None
+                        current_app.logger.error({
+                            'source': 'get_assaytype',
+                            'url': url,
+                            'headers': cleaned_headers,
+                            'status': status,
+                            'error': str(e)
+                        })
+                        current_app.logger.error(
+                            f'Fetching assaytype threw error: {traceback.format_exc()}')
+                        raise e
                 Builder = get_view_config_builder(entity, get_assaytype)
                 builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
                 vitessce_conf = builder.get_conf_cells(marker=marker)

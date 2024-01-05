@@ -22,6 +22,7 @@ class DefaultConfig(object):
 
     PORTAL_INDEX_PATH = f'/{version}/portal/search'
     CCF_INDEX_PATH = f'{version}/entities/search'
+    SOFT_ASSAY_ENDPOINT_PATH = 'assaytype'
 
     # Everything else should be overridden in app.conf:
 
