@@ -211,7 +211,17 @@ class ApiClient():
                 def get_assaytype(entity):
                     uuid = entity.get('uuid')
                     url = f"{current_app.config['SOFT_ASSAY_ENDPOINT']}/{uuid}"
-                    return requests.get(url, headers=self._get_headers()).json()
+                    headers = self._get_headers()
+                    try:
+                        request = requests.get(url, headers=headers)
+                        return request.json()
+                    except Exception as e:
+                        current_app.logger.error(
+                            f'Failed to fetch from {url} with headers {headers}: {e}'
+                        )
+                        current_app.logger.error(
+                            f'Fetching assaytype threw error: {traceback.format_exc()}')
+                        raise e
                 Builder = get_view_config_builder(entity, get_assaytype)
                 builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
                 vitessce_conf = builder.get_conf_cells(marker=marker)

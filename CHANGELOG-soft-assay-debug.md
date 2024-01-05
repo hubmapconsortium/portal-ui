@@ -1,0 +1,1 @@
+- Add logging to troubleshoot soft assay lookups.
