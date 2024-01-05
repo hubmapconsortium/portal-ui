@@ -216,12 +216,21 @@ class ApiClient():
                     url = f"{endpoint}/{path}/{uuid}"
                     headers = self._get_headers()
                     try:
-                        request = requests.get(url, headers=headers)
-                        return request.json()
+                        response = requests.get(url, headers=headers)
+                        return response.json()
                     except Exception as e:
-                        current_app.logger.error(
-                            f'Failed to fetch from {url} with headers {headers}: {e}'
-                        )
+                        # Redact Authorization header from logs
+                        cleaned_headers = headers
+                        if 'Authorization' in headers:
+                            headers['Authorization'] = 'REDACTED'
+                        status = response.status_code if response else None
+                        current_app.logger.error({
+                            'source': 'get_assaytype',
+                            'url': url,
+                            'headers': cleaned_headers,
+                            'status': status,
+                            'error': str(e)
+                        })
                         current_app.logger.error(
                             f'Fetching assaytype threw error: {traceback.format_exc()}')
                         raise e
