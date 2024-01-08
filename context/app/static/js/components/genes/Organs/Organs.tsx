@@ -22,6 +22,8 @@ export default function GeneOrgans() {
   const { selectedOrgan, setSelectedOrgan } = useSelectedOrganContext();
   if (!data || isLoading) return <OrganTileSkeleton />;
 
+  if ((!isLoading && !data) || Object.keys(data).length === 0) return null;
+
   if (!selectedOrgan && data) {
     setSelectedOrgan(data[Object.keys(data)[0]]);
   }

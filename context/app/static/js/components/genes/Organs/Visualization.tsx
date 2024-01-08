@@ -18,6 +18,7 @@ function VisualizationSkeleton() {
 
 export function AzimuthVisualization() {
   const { selectedOrgan } = useSelectedOrganContext();
+  if (!selectedOrgan) return null;
   if (!selectedOrgan?.azimuth) return <VisualizationSkeleton />;
   const { azimuth } = selectedOrgan;
   return (
