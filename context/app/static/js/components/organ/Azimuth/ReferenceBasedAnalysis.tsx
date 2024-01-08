@@ -16,8 +16,8 @@ export default function ReferenceBasedAnalysis({ modalities, nunit, dataref }: R
   return (
     <StyledPaper>
       <LabelledSectionText label="Modalities">{modalities}</LabelledSectionText>
-      <LabelledSectionText label="Nuclei in reference">{nunit}</LabelledSectionText>
-      <LabelledSectionText label="Reference dataset">
+      <LabelledSectionText label="Cells in Reference">{nunit}</LabelledSectionText>
+      <LabelledSectionText label="Reference Dataset">
         <MarkdownRenderer components={{ p: React.Fragment }}>{dataref}</MarkdownRenderer>
       </LabelledSectionText>
     </StyledPaper>
