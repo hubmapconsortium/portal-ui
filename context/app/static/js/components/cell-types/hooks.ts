@@ -1,92 +1,55 @@
 import { useMemo, useState } from 'react';
 
-import useSWR from 'swr';
 import { useEventCallback } from '@mui/material/utils';
 import { SelectChangeEvent } from '@mui/material/Select';
 
-import { fetcher } from 'js/helpers/swr';
-
+import { useCellTypeOntologyDetail, CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
+import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
 import { useCellTypesContext } from './CellTypesContext';
-import { useAppContext } from '../Contexts';
+
+export const useCellTypeDetails = () => {
+  const { cellId } = useCellTypesContext();
+  return useFeatureDetails('cell-types', cellId);
+};
 
 export const useCellTypeDatasets = () => {
-  const { cellId } = useCellTypesContext();
-  const swr = useSWR<string[]>(`/cell-types/${cellId}/datasets.json`, (url: string) => fetcher({ url }));
-  return swr;
+  const { data } = useCellTypeDetails();
+  return data?.datasets ?? [];
 };
-
-interface CellTypeSample {
-  hubmap_id: string;
-  last_modified_timestamp: number;
-  organ: string[];
-  sample_category: string;
-  uuid: string;
-}
-
-type CellTypeSamples = CellTypeSample[];
 
 export const useCellTypeSamples = () => {
-  const { cellId } = useCellTypesContext();
-  const swr = useSWR<CellTypeSamples>(`/cell-types/${cellId}/samples.json`, (url: string) => fetcher({ url }));
-  return swr;
+  const { data } = useCellTypeDetails();
+  return data?.samples ?? [];
 };
-
-export interface CellTypeOrgan {
-  celltype_cells: number;
-  organ: string;
-  total_cells: number;
-  other_cells: number;
-}
-
-type CellTypeOrgans = CellTypeOrgan[];
 
 export const useCellTypeOrgans = () => {
-  const { cellId } = useCellTypesContext();
-  const swr = useSWR<CellTypeOrgans>(`/cell-types/${cellId}/organs.json`, (url: string) => fetcher({ url }));
-  return swr;
+  const { data } = useCellTypeDetails();
+  return data?.organs ?? [];
 };
 
-export interface CellTypeBiomarkerInfo {
-  biomarker_type: string;
-  entry: {
-    id: string;
-    name: string;
-    symbol: string;
-    vocabulary: string;
-  };
-  reference: string;
-}
-
-interface CellTypeInfoResponse {
-  biomarkers: CellTypeBiomarkerInfo[];
-  cell_type: {
-    cl_id: string;
-    definition: string;
-    name: string;
-  };
-  organs: {
-    id: string;
-    name: string;
-    source: string;
-  };
-}
-
+/**
+ * Helper function for fetching the current page's cell type info from the UBKG.
+ * @returns {CellTypeInfoResponse} The cell type info for the current page.
+ */
 export const useCellTypeInfo = () => {
   const { cellId } = useCellTypesContext();
-  const { ubkgEndpoint } = useAppContext();
   const cellIdWithoutPrefix = cellId.replace('CL:', '');
-  const { data, ...swr } = useSWR<[CellTypeInfoResponse]>(
-    `${ubkgEndpoint}/celltypes/${cellIdWithoutPrefix}`,
-    (url: string) => fetcher({ url }),
-  );
-  return { ...swr, data: data?.[0] };
+  return useCellTypeOntologyDetail(cellIdWithoutPrefix);
 };
 
+/**
+ * Helper function for fetching the current page's cell type name from the UBKG.
+ * @returns {string} The cell type name for the current page.
+ */
 export const useCellTypeName = () => {
   const { data } = useCellTypeInfo();
   return data?.cell_type.name;
 };
 
+/**
+ * Helper function for fetching the current cell type's biomarker info from the UBKG.
+ * @returns {string} The cell type definition for the current page.
+ */
 export const useCellTypeBiomarkers = () => {
   const { data } = useCellTypeInfo();
 
