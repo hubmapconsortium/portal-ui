@@ -26,7 +26,6 @@ function Azimuth({ config }) {
       />
       <Stack dir="column" gap={1}>
         <ReferenceBasedAnalysis {...config} />
-
         <VisualizationWrapper vitData={config.vitessce_conf} shouldDisplayHeader={false} />
       </Stack>
     </>

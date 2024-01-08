@@ -8,9 +8,8 @@ import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/st
 import { DetailPageSection } from 'js/components/detailPage/style';
 
 import { OutboundLink } from 'js/shared-styles/Links';
-import GeneOrgans from './Organs';
+import GeneOrgans from './OrgansAccordion';
 import SelectedOrganContextProvider from './SelectedOrganContext';
-import { AzimuthVisualization } from './Visualization';
 
 import { organs } from '../constants';
 
@@ -30,7 +29,6 @@ export default function GenesAzimuth() {
           </Stack>
         </SectionPaper>
         <GeneOrgans />
-        <AzimuthVisualization />
       </DetailPageSection>
     </SelectedOrganContextProvider>
   );

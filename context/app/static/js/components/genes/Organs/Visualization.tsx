@@ -5,7 +5,7 @@ import ReferenceBasedAnalysis, {
 } from 'js/components/organ/Azimuth/ReferenceBasedAnalysis';
 import Stack from '@mui/material/Stack';
 import { VisualizationSuspenseFallback } from 'js/components/detailPage/visualization/VisualizationWrapper/VisualizationSuspenseFallback';
-import { useSelectedOrganContext } from './SelectedOrganContext';
+import { OrganFile } from 'js/components/organ/types';
 
 function VisualizationSkeleton() {
   return (
@@ -16,17 +16,20 @@ function VisualizationSkeleton() {
   );
 }
 
-export function AzimuthVisualization() {
-  const { selectedOrgan } = useSelectedOrganContext();
-  if (!selectedOrgan) return null;
-  if (!selectedOrgan?.azimuth) return <VisualizationSkeleton />;
-  const { azimuth } = selectedOrgan;
+interface AzimuthVisualizationProps {
+  organ: OrganFile;
+}
+
+export function AzimuthVisualization({ organ }: AzimuthVisualizationProps) {
+  if (!organ) return null;
+  if (!organ?.azimuth) return <VisualizationSkeleton />;
+  const { azimuth } = organ;
   return (
     <Stack dir="column" gap={1}>
       <ReferenceBasedAnalysis modalities={azimuth.modalities} nunit={azimuth.nunit} dataref={azimuth.dataref} />
       <VisualizationWrapper
-        vitData={selectedOrgan.azimuth.vitessce_conf}
-        uuid={selectedOrgan.azimuth.title}
+        vitData={azimuth.vitessce_conf}
+        uuid={azimuth.title}
         hasBeenMounted
         hasNotebook={false}
         isPublicationPage={false}

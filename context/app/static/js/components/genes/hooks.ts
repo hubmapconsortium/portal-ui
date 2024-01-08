@@ -47,7 +47,7 @@ const useGeneDetails = () => {
   const { data, error, ...swr } = useSWR<GeneDetailResponse, SWRError>(
     useGeneApiURLs().detailURL(geneSymbol),
     (url: string) =>
-      fetcher({
+      fetcher<GeneDetailResponse>({
         url,
         errorMessages: {
           404: `The gene ${geneSymbol} was not found.`,
