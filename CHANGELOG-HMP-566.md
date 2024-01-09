@@ -1,2 +1,0 @@
-- Add portal analytics link to maintenance page footer.
-- Fix consistency of external link icon logic.
