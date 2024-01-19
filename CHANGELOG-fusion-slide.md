@@ -1,0 +1,1 @@
+- Add fusion slide to homepage carousel and enable carousel autoplay until a user navigates the slides.

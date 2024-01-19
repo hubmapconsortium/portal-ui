@@ -10,6 +10,12 @@ import { Flex, CallToActionWrapper } from './style';
 
 const slides = [
   {
+    title: 'Identify structural correlations with spatially aggregated omics through FUSION',
+    body: 'Interrogate paired spatial omics and histology whole slide images through a large variety of interactive tools. Upload your own data to extract rich annotations of functional tissue units with associated morphometric and molecular information.',
+    image: <CarouselImage imageKey="fusion" alt="FUSION" key="FUSION" />,
+    buttonHref: 'http://fusion.hubmapconsortium.org?utm_source=hubmap',
+  },
+  {
     title: 'Discover the publications reporting the breakthroughs of  mapping the human body with HuBMAP data',
     body: (
       <>
@@ -53,6 +59,8 @@ function ImageCarouselContainer() {
     disableRandomImage ? 0 : Math.floor(Math.random() * slides.length),
   );
 
+  const [autoplay, setAutoplay] = useState(true);
+
   const { title, body, buttonHref } = slides[selectedImageIndex];
   return (
     <Flex>
@@ -62,12 +70,15 @@ function ImageCarouselContainer() {
           selectedImageIndex={selectedImageIndex}
           setSelectedImageIndex={setSelectedImageIndex}
           numImages={slides.length}
+          setAutoplay={setAutoplay}
         />
       </CallToActionWrapper>
       <ImageCarousel
         selectedImageIndex={selectedImageIndex}
         setSelectedImageIndex={setSelectedImageIndex}
         images={slides.map((slide) => slide.image)}
+        autoplay={autoplay}
+        setAutoplay={setAutoplay}
       />
     </Flex>
   );
