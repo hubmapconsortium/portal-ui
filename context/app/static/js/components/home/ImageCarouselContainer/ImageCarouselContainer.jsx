@@ -10,8 +10,8 @@ import { Flex, CallToActionWrapper } from './style';
 
 const slides = [
   {
-    title: 'Identify structural correlations with spatially aggregated -omics through FUSION',
-    body: 'Interrogate paired spatial -omics and histology whole slide images through a large variety of interactive tools. Upload your own data to extract rich annotations of functional tissue units with associated morphometric and molecular information.',
+    title: 'Identify structural correlations with spatially aggregated omics through FUSION',
+    body: 'Interrogate paired spatial omics and histology whole slide images through a large variety of interactive tools. Upload your own data to extract rich annotations of functional tissue units with associated morphometric and molecular information.',
     image: <CarouselImage imageKey="fusion" alt="FUSION" key="FUSION" />,
     buttonHref: 'http://fusion.hubmapconsortium.org?utm_source=hubmap',
   },
