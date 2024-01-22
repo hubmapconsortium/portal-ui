@@ -1,1 +1,0 @@
-- Fix alignment of icon links.

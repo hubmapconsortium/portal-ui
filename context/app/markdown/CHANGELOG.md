@@ -1,3 +1,9 @@
+## v0.88.0 - 2024-01-22
+
+- Add fusion slide to homepage carousel and enable carousel autoplay until a user navigates the slides.
+- Fix alignment of icon links.
+
+
 ## v0.87.1 - 2024-01-09
 
 - Add portal analytics link to maintenance page footer.
