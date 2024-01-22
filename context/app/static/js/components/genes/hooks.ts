@@ -8,6 +8,7 @@ import { useOrgansDatasetCounts } from 'js/pages/Organs/hooks';
 import { useGeneOntologyDetail } from 'js/hooks/useUBKG';
 import { SWRError } from 'js/helpers/swr/errors';
 import { useOrgansAPI } from 'js/hooks/useOrgansApi';
+import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
 import { useGenePageContext } from './GenePageContext';
 
 import { OrganFile, OrganFileWithDescendants } from '../organ/types';
@@ -22,7 +23,12 @@ const useTypedOrgansDatasetCounts = (organs: Record<string, OrganFile>) => {
 
 const useGeneDetails = () => {
   const { geneSymbol } = useGenePageContext();
-  return useGeneOntologyDetail(geneSymbol);
+  const crossModality = useFeatureDetails('genes', geneSymbol);
+  const ontology = useGeneOntologyDetail(geneSymbol);
+  return {
+    ...ontology,
+    crossModality,
+  };
 };
 
 const useGeneOrgans = () => {
@@ -70,5 +76,4 @@ const useGeneOrgans = () => {
   };
 };
 
-// Re-export `useGenePageContext` for convenience
 export { useGeneDetails, useGenePageContext, useGeneOrgans };

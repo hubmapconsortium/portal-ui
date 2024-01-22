@@ -11,7 +11,8 @@ import TableHead from '@mui/material/TableHead';
 import { FormControl, InputLabel, Paper, TableBody, TableCell, TableRow } from '@mui/material';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
-import { CellTypeBiomarkerInfo, useCellTypeBiomarkers } from './hooks';
+import { CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
+import { useCellTypeBiomarkers } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
 interface BiomarkerTableProps {

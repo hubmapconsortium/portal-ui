@@ -10,17 +10,18 @@ import Description from 'js/shared-styles/sections/Description';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import { TooltipData } from 'js/shared-styles/charts/types';
-import { CellTypeOrgan, useCellTypeName, useCellTypeOrgans } from './hooks';
+import { FeatureOrgan } from 'js/hooks/useCrossModalityApi';
+import { useCellTypeDetails, useCellTypeName } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
 // Define the keys for the stack
-type GraphKey = keyof Pick<CellTypeOrgan, 'other_cells' | 'celltype_cells'>;
-const keys = ['celltype_cells', 'other_cells'] as GraphKey[];
+type GraphKey = keyof Pick<FeatureOrgan, 'other_cells' | 'feature_cells'>;
+const keys = ['feature_cells', 'other_cells'] as GraphKey[];
 
 const margin = { top: 16, right: 32, bottom: 80, left: 80 };
 
 function getX(d: unknown): string {
-  const data = d as CellTypeOrgan;
+  const data = d as FeatureOrgan;
   return data.organ;
 }
 
@@ -32,7 +33,7 @@ function getYScaleRange(max: number): [number, number] {
   return [max, 1];
 }
 
-function CellTypesVisualizationTooltip({ tooltipData }: { tooltipData: TooltipData<CellTypeOrgan> }) {
+function CellTypesVisualizationTooltip({ tooltipData }: { tooltipData: TooltipData<FeatureOrgan> }) {
   const data = tooltipData.bar?.data;
   const currentKey = tooltipData.key as GraphKey;
   const totalCells = data?.total_cells ?? 0;
@@ -40,7 +41,7 @@ function CellTypesVisualizationTooltip({ tooltipData }: { tooltipData: TooltipDa
   const currentKeyPercentage = ((currentKeyCount / totalCells) * 100).toFixed(2);
 
   const cellTypeName = useCellTypeName();
-  const tooltipLabel = currentKey === 'celltype_cells' ? cellTypeName : 'Other Cells';
+  const tooltipLabel = currentKey === 'feature_cells' ? cellTypeName : 'Other Cells';
   return (
     <Stack spacing={1} p={1}>
       <Typography variant="subtitle1" component="div" color="gray">
@@ -61,9 +62,9 @@ function CellTypesVisualizationTooltip({ tooltipData }: { tooltipData: TooltipDa
 }
 
 export default function CellTypesVisualization() {
-  const { data: organs = [] } = useCellTypeOrgans();
+  const { organs } = useCellTypeDetails();
   const name = useCellTypeName();
-  const sortedOrgans = [...organs].sort((a, b) => b.celltype_cells - a.celltype_cells);
+  const sortedOrgans = [...organs].sort((a, b) => b.feature_cells - a.feature_cells);
 
   const xScale = useBandScale(sortedOrgans.map((d) => d.organ));
   const yScale = useLogScale(
@@ -78,7 +79,7 @@ export default function CellTypesVisualization() {
 
   const keyLabels: Record<GraphKey, string> = useMemo(() => {
     return {
-      celltype_cells: name ?? 'Cell Type',
+      feature_cells: name ?? 'Cell Type',
       other_cells: 'Other Cells',
     };
   }, [name]);

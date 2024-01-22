@@ -7,24 +7,19 @@ import { useCellTypeOntologyDetail, CellTypeBiomarkerInfo } from 'js/hooks/useUB
 import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
 import { useCellTypesContext } from './CellTypesContext';
 
+/**
+ * Helper function for fetching the current cell type's details from the cross-modality API.
+ * @returns The datasets, samples, and organs available in HuBMAP for the current cell type.
+ */
 export const useCellTypeDetails = () => {
   const { cellId } = useCellTypesContext();
-  return useFeatureDetails('cell-types', cellId);
-};
+  const { data, ...rest } = useFeatureDetails('cell-types', cellId);
 
-export const useCellTypeDatasets = () => {
-  const { data } = useCellTypeDetails();
-  return data?.datasets ?? [];
-};
+  const datasets = data?.datasets ?? [];
+  const samples = data?.samples ?? [];
+  const organs = data?.organs ?? [];
 
-export const useCellTypeSamples = () => {
-  const { data } = useCellTypeDetails();
-  return data?.samples ?? [];
-};
-
-export const useCellTypeOrgans = () => {
-  const { data } = useCellTypeDetails();
-  return data?.organs ?? [];
+  return { datasets, samples, organs, ...rest };
 };
 
 /**

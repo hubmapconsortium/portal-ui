@@ -14,12 +14,10 @@ import { InternalLink } from 'js/shared-styles/Links';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import { DetailPageSection } from '../detailPage/style';
-import { useCellTypeSamples, useCellTypeDatasets, useCellTypeOrgans } from './hooks';
+import { useCellTypeDetails } from './hooks';
 
 export default function CellTypesEntitiesTables() {
-  const { data: datasets } = useCellTypeDatasets();
-  const { data: samples } = useCellTypeSamples();
-  const { data: organs } = useCellTypeOrgans();
+  const { datasets, samples, organs } = useCellTypeDetails();
 
   const { openTabIndex, handleTabChange } = useTabs();
   return (
