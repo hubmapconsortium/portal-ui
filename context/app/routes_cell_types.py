@@ -65,7 +65,7 @@ def get_feature_details(feature, id):
         return json.dumps({
             'datasets': datasets,
             'samples': _get_samples_for_datasets(datasets),
-            'organs': _get_organs_with_feature(feature, id)
+            'organs': _get_organs(client, feature, id)
         })
 
     except Exception as err:
@@ -76,13 +76,33 @@ def get_feature_details(feature, id):
 # Fetches a list of dataset UUIDs for a given feature
 def _get_datasets(client, feature, id):
     try:
-        datasets = client.select_datasets(
-            where=feature, has=[id]).get_list()
-        datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
-        return datasets
+        if feature == 'cell_type':
+            return _get_datasets_for_cell_type(client, id)
+        elif feature == 'genes':
+            return _get_datasets_for_gene(client, id)
+        elif feature == 'proteins':
+            # TODO - not yet implemented
+            # return _get_datasets_for_protein(client, id)
+            return []
     except Exception as err:
         current_app.logger.info(f'Datasets not found for {feature} {id}. {err}')
         return []
+
+
+# Fetches a list of datasets containing a given cell type
+def _get_datasets_for_cell_type(client, id):
+    datasets = client.select_datasets(
+        where="cell_type", has=[id]).get_list()
+    datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
+    return datasets
+
+
+# Fetches a list of datasets containing a given gene
+def _get_datasets_for_gene(client, id):
+    datasets = client.select_datasets(
+        where="gene", has=[f'{id} > 0'], genomic_modality='rna', min_cell_percentage=0.1).get_list()
+    datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
+    return datasets
 
 
 # Fetches a list of samples corresponding to a given list of dataset UUIDs
@@ -111,19 +131,23 @@ def _get_samples_for_datasets(datasets):
         return samples
     except Exception as err:
         current_app.logger.info(f'Samples not found for {datasets}. {err}')
-        return json.dumps([])
+        return []
 
 
 # Fetches a list of organs containing a given feature
-def _get_organs_with_feature(feature, id):
-    client = get_cells_client()
+def _get_organs(client, feature, feature_id):
     try:
         # Get list of organs containing cell type
-        organs = client.select_organs(
-            where=feature, has=[id]).get_list()
-        organs = list(map(lambda x: x['grouping_name'], organs._get(organs.__len__(), 0)))
-        cells_of_type = client.select_cells(
-            where=feature, has=[id])
+        if feature == 'cell_type':
+            organs = _get_organs_for_cell_type(client, feature_id)
+            cells_of_type = _get_cells_of_type(client, feature_id)
+        elif feature == 'gene':
+            organs = _get_organs_for_gene(client, feature_id)
+            cells_of_type = _get_cells_containing_gene(client, feature_id)
+        elif feature == 'protein':
+            # TODO - not yet implemented
+            # return _get_organs_for_protein(client, id)
+            return []
         # Get counts of cell types in each organ
         for i, organ in enumerate(organs):
             organ_counts = client.select_cells(
@@ -138,7 +162,55 @@ def _get_organs_with_feature(feature, id):
                 'other_cells': total_cells - feature_cells
             }
 
-        return json.dumps(organs)
+        return organs
     except Exception as err:
-        current_app.logger.info(f'Organs not found for cell type {id}. {err}')
-        return json.dumps([])
+        current_app.logger.info(f'Organs not found for {feature} {feature_id}. {err}')
+        return []
+
+
+def _get_organs_for_cell_type(client, cl_id):
+    organs = client.select_organs(
+        where="cell_type", has=[cl_id]).get_list()
+    organs = list(map(lambda x: x['grouping_name'], organs._get(organs.__len__(), 0)))
+    return organs
+
+
+# Fetches a list of organs containing a given gene
+def _get_organs_for_gene(client, gene_symbol):
+    try:
+        organs_with_gene_atac = client.select_organs(
+            where='gene', has=[gene_symbol], genomic_modality='atac', p_value=0.05)
+    except Exception as err:
+        current_app.logger.info(
+            f'Organs not found for gene {gene_symbol} with ATAC modality. {err}')
+        organs_with_gene_atac = []
+    try:
+        organs_with_gene_rna = client.select_organs(
+            where='gene', has=[gene_symbol], genomic_modality='rna', p_value=0.05)
+    except Exception as err:
+        current_app.logger.info(
+            f'Organs not found for gene {gene_symbol} with RNA modality. {err}')
+        organs_with_gene_rna = []
+    if not organs_with_gene_atac and not organs_with_gene_rna:
+        return []
+    organs_with_gene = organs_with_gene_atac | organs_with_gene_rna
+    organs_with_gene = list(
+        map(lambda x: x['grouping_name'], organs_with_gene._get(organs_with_gene.__len__(), 0)))
+    return organs_with_gene
+
+
+# Fetches all cells of a given type
+def _get_cells_of_type(client, cl_id):
+    cells_of_type = client.select_cells(
+        where="cell_type", has=[cl_id])
+    return cells_of_type
+
+
+# Fetches all cells containing a given gene
+def _get_cells_containing_gene(client, gene_symbol):
+    cells_of_type_rna = client.select_cells(
+        where='gene', has=[f'{gene_symbol} > 0'], genomic_modality='rna')
+    cells_of_type_atac = client.select_cells(
+        where='gene', has=[f'{gene_symbol} > 0'], genomic_modality='atac')
+    cells_of_type = cells_of_type_rna | cells_of_type_atac
+    return cells_of_type
