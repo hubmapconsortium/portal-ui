@@ -1,0 +1,2 @@
+- Remove timeout from searchkit searches.
+- Update faro version.
