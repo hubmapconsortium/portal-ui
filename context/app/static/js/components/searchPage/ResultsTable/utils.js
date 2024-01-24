@@ -7,6 +7,10 @@ function getByPath(hitSource, field) {
     return field.translations[fieldValue];
   }
 
+  if (typeof fieldValue === 'boolean') {
+    return String(fieldValue);
+  }
+
   if (Array.isArray(fieldValue)) {
     return fieldValue.join(' / ');
   }
