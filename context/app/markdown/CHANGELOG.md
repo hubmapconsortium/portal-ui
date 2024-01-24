@@ -1,3 +1,17 @@
+## v0.88.0 - 2024-01-22
+
+- Add fusion slide to homepage carousel and enable carousel autoplay until a user navigates the slides.
+- Fix alignment of icon links.
+
+
+## v0.87.1 - 2024-01-09
+
+- Add portal analytics link to maintenance page footer.
+- Fix consistency of external link icon logic.
+- Add logging to troubleshoot soft assay lookups.
+- Revise soft assay URL logic to be consistent with other suffixed API endpoints.
+
+
 ## v0.87.0 - 2024-01-04
 
 - Update portal-visualization to 0.1.0.

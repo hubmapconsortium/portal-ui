@@ -41,7 +41,7 @@ function SearchWrapper({
     .map((field) => field.id)
     .concat(idField);
   const searchkit = useMemo(
-    () => new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath }),
+    () => new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath, timeout: 0 }),
     [apiUrl, httpHeaders, searchUrlPath],
   );
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));

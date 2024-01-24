@@ -17,12 +17,14 @@ function SelectImageButton({ isSelectedImageIndex, onClick }) {
   );
 }
 
-function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelectedImageIndex }) {
+function ImageCarouselControlButtons({ numImages, selectedImageIndex, setSelectedImageIndex, setAutoplay }) {
   function setNextSelectedImageIndex() {
+    setAutoplay(false);
     setSelectedImageIndex((selectedImageIndex + 1) % numImages);
   }
 
   function setPreviousSelectedImageIndex() {
+    setAutoplay(false);
     setSelectedImageIndex((selectedImageIndex - 1 + numImages) % numImages); // In JS, "%" is remainder, not modulus.
   }
 
