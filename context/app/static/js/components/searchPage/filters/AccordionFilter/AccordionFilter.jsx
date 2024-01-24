@@ -7,7 +7,7 @@ import HierarchicalFilterItem from 'js/components/searchPage/filters/Hierarchica
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import AlphabetizedRefinementListFilter from './AlphabetizedRefinementListFilter';
 
-export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
+export function withAnalyticsEvent(ItemComponent, title, analyticsCategory, configItemProps) {
   return function UpdatedItemComponent({ onClick: originalOnClick, label, active, ...rest }) {
     const facetAction = active ? 'Unselect' : 'Select';
     function updatedOnClick() {
@@ -18,7 +18,15 @@ export function withAnalyticsEvent(ItemComponent, title, analyticsCategory) {
       });
       originalOnClick();
     }
-    return <ItemComponent onClick={updatedOnClick} label={label} active={active} {...rest} />;
+    return (
+      <ItemComponent
+        onClick={updatedOnClick}
+        label={label}
+        active={active}
+        {...rest}
+        configItemProps={configItemProps}
+      />
+    );
   };
 }
 
@@ -40,10 +48,12 @@ export function getFilter(type, shouldAlphabetize = false) {
   }
 }
 
-function AccordionFilter({ type, title, analyticsCategory, ...rest }) {
+function AccordionFilter({ type, title, analyticsCategory, itemProps, ...rest }) {
   const shouldAlphabetize = type === 'AccordionListFilter' && rest?.orderKey === '_term';
   const { Filter, itemComponent } = getFilter(type, shouldAlphabetize);
-  const item = itemComponent ? { itemComponent: withAnalyticsEvent(itemComponent, title, analyticsCategory) } : {};
+  const item = itemComponent
+    ? { itemComponent: withAnalyticsEvent(itemComponent, title, analyticsCategory, itemProps) }
+    : {};
   return <Filter containerComponent={FilterInnerAccordion} title={title} {...rest} {...item} />;
 }
 
