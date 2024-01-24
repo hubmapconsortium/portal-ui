@@ -7,6 +7,8 @@ import TableCell from '@mui/material/TableCell';
 const StyledTable = styled(Table)`
   background-color: white;
   box-shadow: ${(props) => props.theme.shadows[1]};
+  overflow-x: auto;
+  display: block;
 `;
 
 const StyledTableBody = styled(TableBody)`
