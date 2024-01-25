@@ -14,7 +14,6 @@ import VisualizationWrapper from 'js/components/detailPage/visualization/Visuali
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
-import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
@@ -32,6 +31,7 @@ import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialo
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
+import useTrackID from 'js/hooks/useTrackID';
 import { useDatasetWorkspace } from './hooks';
 
 function NotebookButton(props) {
@@ -155,7 +155,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     shouldDisplaySection,
   );
 
-  useSendUUIDEvent(entity_type, uuid);
+  useTrackID({ entity_type, hubmap_id });
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
 
