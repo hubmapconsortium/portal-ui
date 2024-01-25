@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+
 import { useFlaskDataContext } from 'js/components/Contexts';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -6,11 +7,11 @@ import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
 import useEntityStore from 'js/stores/useEntityStore';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
+import useTrackID from 'js/hooks/useTrackID';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -54,7 +55,7 @@ function DonorDetail() {
     });
   }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata, group_name]);
 
-  useSendUUIDEvent(entity_type, uuid);
+  useTrackID({ entity_type, hubmap_id });
 
   const detailContext = useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid]);
 

@@ -1,15 +1,21 @@
 import { useEffect } from 'react';
+
 import { trackEvent } from 'js/helpers/trackers';
 
-function useSendUUIDEvent(entity_type, uuid) {
+interface UseTrackIDTypes {
+  entity_type: string;
+  hubmap_id: string;
+}
+
+function useTrackID({ entity_type, hubmap_id }: UseTrackIDTypes) {
   useEffect(() => {
     trackEvent({
       category: entity_type,
       action: 'Visited',
-      label: uuid,
+      label: hubmap_id,
       nonInteraction: true, // not triggered by user interaction
     });
-  }, [entity_type, uuid]);
+  }, [entity_type, hubmap_id]);
 }
 
-export default useSendUUIDEvent;
+export default useTrackID;
