@@ -85,7 +85,8 @@ const makeFaroSafe = (obj) =>
   Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, `${JSON.stringify(value)}`]));
 
 function trackEvent(event) {
-  tracker.trackEvent(event);
+  const name = event?.label ?? {};
+  tracker.trackEvent({ ...event, ...name });
   ReactGA.event(event);
   // Convert all event values to strings to avoid errors in faro.
   // https://github.com/grafana/faro-web-sdk/issues/269
