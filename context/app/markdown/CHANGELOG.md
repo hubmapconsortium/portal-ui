@@ -19,7 +19,6 @@
 - Improve approach to embedding HRA Organ UI.
 - Add support for dynamic maintenance messages.
 - Update Node version used in GitHub Actions workflow.
-- Update Node version used in GitHub Actions workflow.
 
 
 ## v0.85.3 - 2023-12-14
