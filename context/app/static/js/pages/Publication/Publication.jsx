@@ -11,6 +11,7 @@ import Files from 'js/components/detailPage/files/Files';
 import useEntityStore from 'js/stores/useEntityStore';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
+import useTrackID from 'js/hooks/useTrackID';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -34,6 +35,8 @@ function Publication({ publication, vignette_json }) {
   useEffect(() => {
     setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
   }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata]);
+
+  useTrackID({ entity_type, hubmap_id });
 
   const associatedCollectionUUID = associated_collection?.uuid;
 
