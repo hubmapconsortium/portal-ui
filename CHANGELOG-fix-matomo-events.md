@@ -1,2 +1,0 @@
-- Fix matomo event tracking to provide name field where applicable.
-- Track entity page visits by HuBMAP ID not UUID.

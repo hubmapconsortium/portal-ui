@@ -1,3 +1,11 @@
+## v0.88.1 - 2024-01-25
+
+- Remove timeout from searchkit searches.
+- Update faro version.
+- Fix matomo event tracking to provide name field where applicable.
+- Track entity page visits by HuBMAP ID not UUID.
+
+
 ## v0.88.0 - 2024-01-22
 
 - Add fusion slide to homepage carousel and enable carousel autoplay until a user navigates the slides.
