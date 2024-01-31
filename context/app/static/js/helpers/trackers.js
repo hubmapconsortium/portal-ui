@@ -101,14 +101,19 @@ function buildLabelFields(event, id) {
   return { label: labelWithID, name: labelWithID };
 }
 
-function trackEvent(event, id) {
+function formatEvent(event, id) {
   // Convert all event values to strings to avoid errors in faro and matomo.
   // https://github.com/grafana/faro-web-sdk/issues/269
-  const safeEvent = stringifyEventValues({ ...event, ...buildLabelFields(event, id) });
-  tracker.trackEvent(safeEvent);
-  ReactGA.event(safeEvent);
-  const category = safeEvent.category.replace(/ /g, '_');
-  faro.api.pushEvent(category, safeEvent);
+  const safeEvent = stringifyEventValues(event);
+  return { ...safeEvent, ...buildLabelFields(safeEvent, id) };
+}
+
+function trackEvent(event, id) {
+  const formattedEvent = formatEvent(event, id);
+  tracker.trackEvent(formattedEvent);
+  ReactGA.event(formattedEvent);
+  const category = formattedEvent.category.replace(/ /g, '_');
+  faro.api.pushEvent(category, formattedEvent);
 }
 
 function trackMeasurement(type, values, context = undefined) {
