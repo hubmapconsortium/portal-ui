@@ -81,22 +81,38 @@ function trackPageView(path) {
   faro.api.pushEvent('pageview', { path });
 }
 
-const makeFaroSafe = (obj) =>
+const stringifyEventValues = (obj) =>
   Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, `${JSON.stringify(value)}`]));
 
-function trackEvent(event) {
-  const name = event?.label ? { name: event.label } : {};
-  tracker.trackEvent({ ...event, ...name });
-  ReactGA.event(event);
-  // Convert all event values to strings to avoid errors in faro.
+function buildLabelFields(event, id) {
+  const { label } = event;
+
+  if (!id) {
+    return {};
+  }
+
+  const wrappedID = `<${id}>`;
+
+  if (!label) {
+    return { label: wrappedID, name: wrappedID };
+  }
+
+  const labelWithID = `${wrappedID} ${label}`;
+  return { label: labelWithID, name: labelWithID };
+}
+
+function trackEvent(event, id) {
+  // Convert all event values to strings to avoid errors in faro and matomo.
   // https://github.com/grafana/faro-web-sdk/issues/269
-  const faroSafeEvent = makeFaroSafe(event);
-  const category = faroSafeEvent.category.replace(/ /g, '_');
-  faro.api.pushEvent(category, faroSafeEvent);
+  const safeEvent = stringifyEventValues({ ...event, ...buildLabelFields(event, id) });
+  tracker.trackEvent(safeEvent);
+  ReactGA.event(safeEvent);
+  const category = safeEvent.category.replace(/ /g, '_');
+  faro.api.pushEvent(category, safeEvent);
 }
 
 function trackMeasurement(type, values, context = undefined) {
-  faro.api.pushMeasurement({ type, values, context: context ? makeFaroSafe(context) : undefined });
+  faro.api.pushMeasurement({ type, values, context: context ? stringifyEventValues(context) : undefined });
 }
 
 function trackLink(href, type) {
