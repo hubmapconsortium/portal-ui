@@ -2,6 +2,8 @@ from flask import json, current_app, render_template
 from hubmap_api_py_client import Client
 from requests import post
 
+from .routes_file_based import _get_organ_list
+
 from .utils import make_blueprint, get_client, get_default_flask_data
 
 
@@ -56,52 +58,58 @@ def feature_name(feature):
 
 
 # Handles detail page lookups for cell types, proteins, and genes
-@blueprint.route('/x-modality/<feature>/<id>.json', methods=['GET'])
-def get_feature_details(feature, id):
+@blueprint.route('/x-modality/<feature>/<feature_id>.json', methods=['GET'])
+def get_feature_details(feature, feature_id):
     client = get_cells_client()
     feature = feature_name(feature)
     try:
-        datasets = _get_datasets(client, feature, id) or []
+        print('Fetching datasets for ' + feature)
+        datasets = _get_datasets(client, feature, feature_id)
+        print(f'Fetched {len(datasets)} datasets for {feature} {feature_id}')
         return json.dumps({
             'datasets': datasets,
             'samples': _get_samples_for_datasets(datasets),
-            'organs': _get_organs(client, feature, id)
+            'organs': _get_organs(client, feature, feature_id)
         })
 
     except Exception as err:
-        current_app.logger.info(f'Datasets not found for {feature} {id}. {err}')
+        current_app.logger.info(f'Datasets not found for {feature} {feature_id}. {err}')
         return json.dumps([])
 
 
 # Fetches a list of dataset UUIDs for a given feature
-def _get_datasets(client, feature, id):
+def _get_datasets(client, feature, feature_id):
     try:
         if feature == 'cell_type':
-            return _get_datasets_for_cell_type(client, id)
-        elif feature == 'genes':
-            return _get_datasets_for_gene(client, id)
-        elif feature == 'proteins':
+            return _get_datasets_for_cell_type(client, feature_id)
+        elif feature == 'gene':
+            return _get_datasets_for_gene(client, feature_id)
+        elif feature == 'protein':
             # TODO - not yet implemented
-            # return _get_datasets_for_protein(client, id)
+            # return _get_datasets_for_protein(client, feature_id)
             return []
     except Exception as err:
-        current_app.logger.info(f'Datasets not found for {feature} {id}. {err}')
+        current_app.logger.info(f'Datasets not found for {feature} {feature_id}. {err}')
         return []
 
 
 # Fetches a list of datasets containing a given cell type
-def _get_datasets_for_cell_type(client, id):
+def _get_datasets_for_cell_type(client, feature_id):
     datasets = client.select_datasets(
-        where="cell_type", has=[id]).get_list()
+        where="cell_type", has=[feature_id]).get_list()
     datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
     return datasets
 
 
 # Fetches a list of datasets containing a given gene
-def _get_datasets_for_gene(client, id):
-    datasets = client.select_datasets(
-        where="gene", has=[f'{id} > 0'], genomic_modality='rna', min_cell_percentage=0.1).get_list()
-    datasets = list(map(lambda x: x['uuid'], datasets._get(datasets.__len__(), 0)))
+def _get_datasets_for_gene(client, gene_symbol):
+    rna_datasets = client.select_datasets(
+        where="gene", has=[f'{gene_symbol} > 0.1'], genomic_modality='rna', min_cell_percentage=1.0)
+    atac_datasets = client.select_datasets(
+        where="gene", has=[f'{gene_symbol} > 0.1'], genomic_modality='atac', min_cell_percentage=1.0)
+    datasets = rna_datasets | atac_datasets
+    datasets = _unwrap_result_set(datasets)
+    datasets = list(map(lambda x: x['uuid'], datasets))
     return datasets
 
 
@@ -141,28 +149,27 @@ def _get_organs(client, feature, feature_id):
         if feature == 'cell_type':
             organs = _get_organs_for_cell_type(client, feature_id)
             cells_of_type = _get_cells_of_type(client, feature_id)
+            # Get counts of cell types in each organ
+            for i, organ in enumerate(organs):
+                organ_counts = client.select_cells(
+                    where="organ", has=[organ])
+                total_cells = len(organ_counts)
+                feature_cells = organ_counts & cells_of_type
+                feature_cells = len(feature_cells)
+                organs[i] = {
+                    'organ': organ,
+                    'total_cells': total_cells,
+                    'feature_cells': feature_cells,
+                    'other_cells': total_cells - feature_cells
+                }
+            return organs
         elif feature == 'gene':
             organs = _get_organs_for_gene(client, feature_id)
-            cells_of_type = _get_cells_containing_gene(client, feature_id)
+            return organs
         elif feature == 'protein':
             # TODO - not yet implemented
             # return _get_organs_for_protein(client, id)
             return []
-        # Get counts of cell types in each organ
-        for i, organ in enumerate(organs):
-            organ_counts = client.select_cells(
-                where="organ", has=[organ])
-            total_cells = organ_counts.__len__()
-            feature_cells = organ_counts & cells_of_type
-            feature_cells = feature_cells.__len__()
-            organs[i] = {
-                'organ': organ,
-                'total_cells': total_cells,
-                'feature_cells': feature_cells,
-                'other_cells': total_cells - feature_cells
-            }
-
-        return organs
     except Exception as err:
         current_app.logger.info(f'Organs not found for {feature} {feature_id}. {err}')
         return []
@@ -170,33 +177,31 @@ def _get_organs(client, feature, feature_id):
 
 def _get_organs_for_cell_type(client, cl_id):
     organs = client.select_organs(
-        where="cell_type", has=[cl_id]).get_list()
-    organs = list(map(lambda x: x['grouping_name'], organs._get(organs.__len__(), 0)))
+        where="cell_type", has=[cl_id])
+    organs = _unwrap_result_set(organs)
+    organs = list(map(lambda x: x['grouping_name'], organs))
     return organs
 
 
 # Fetches a list of organs containing a given gene
 def _get_organs_for_gene(client, gene_symbol):
-    try:
-        organs_with_gene_atac = client.select_organs(
-            where='gene', has=[gene_symbol], genomic_modality='atac', p_value=0.05)
-    except Exception as err:
-        current_app.logger.info(
-            f'Organs not found for gene {gene_symbol} with ATAC modality. {err}')
-        organs_with_gene_atac = []
-    try:
-        organs_with_gene_rna = client.select_organs(
-            where='gene', has=[gene_symbol], genomic_modality='rna', p_value=0.05)
-    except Exception as err:
-        current_app.logger.info(
-            f'Organs not found for gene {gene_symbol} with RNA modality. {err}')
-        organs_with_gene_rna = []
+    def request_organs_with_modality(modality):
+        try:
+            return client.select_organs(
+                where='gene', has=[gene_symbol], genomic_modality=modality, p_value=0.05)
+        except Exception as err:
+            current_app.logger.info(
+                f'Organs not found for gene {gene_symbol} with {modality} modality. {err}')
+            return []
+    organs_with_gene_atac, organs_with_gene_rna = request_organs_with_modality(
+        'atac'), request_organs_with_modality('rna')
     if not organs_with_gene_atac and not organs_with_gene_rna:
         return []
+    # Combine results from both modalities
     organs_with_gene = organs_with_gene_atac | organs_with_gene_rna
-    organs_with_gene = list(
-        map(lambda x: x['grouping_name'], organs_with_gene._get(organs_with_gene.__len__(), 0)))
-    return organs_with_gene
+    organs_with_gene = _unwrap_result_set(organs_with_gene)
+    organs_with_gene = list(map(lambda x: x['grouping_name'], organs_with_gene))
+    return _get_organ_list(organs_with_gene)
 
 
 # Fetches all cells of a given type
@@ -206,11 +211,8 @@ def _get_cells_of_type(client, cl_id):
     return cells_of_type
 
 
-# Fetches all cells containing a given gene
-def _get_cells_containing_gene(client, gene_symbol):
-    cells_of_type_rna = client.select_cells(
-        where='gene', has=[f'{gene_symbol} > 0'], genomic_modality='rna')
-    cells_of_type_atac = client.select_cells(
-        where='gene', has=[f'{gene_symbol} > 0'], genomic_modality='atac')
-    cells_of_type = cells_of_type_rna | cells_of_type_atac
-    return cells_of_type
+# Converts a resultset to a list
+def _unwrap_result_set(result_set):
+    length = len(result_set)
+    result_list = result_set.get_list()._get(length, 0)
+    return result_list
