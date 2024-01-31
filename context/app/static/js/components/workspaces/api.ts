@@ -171,11 +171,13 @@ export function useStopWorkspace() {
 
   const stopWorkspace = useCallback(
     async (workspaceId: number) => {
-      trackEvent({
-        category: 'Workspace Action',
-        action: 'Stop Workspace',
-        value: workspaceId,
-      });
+      trackEvent(
+        {
+          category: 'Workspace Action',
+          action: 'Stop Workspace',
+        },
+        workspaceId,
+      );
       await Promise.all(
         jobs.filter((j) => j.workspace_id === workspaceId && isRunningJob(j)).map((j) => stopJob(j.id)),
       );
@@ -190,11 +192,13 @@ async function fetchDeleteWorkspace(
   _key: string,
   { arg: { workspaceId, headers, url } }: { arg: { headers: HeadersInit; workspaceId: number; url: string } },
 ) {
-  trackEvent({
-    category: 'Workspace Action',
-    action: 'Delete Workspace',
-    value: workspaceId,
-  });
+  trackEvent(
+    {
+      category: 'Workspace Action',
+      action: 'Delete Workspace',
+    },
+    workspaceId,
+  );
   const response = await fetch(url, {
     method: 'DELETE',
     headers,
@@ -250,11 +254,13 @@ async function startJob(
   _key: string,
   { arg: { workspaceId, jobDetails, jobType, url, headers } }: { arg: WorkspaceActionArgs },
 ) {
-  trackEvent({
-    category: 'Workspace Action',
-    action: 'Start Workspace',
-    value: { workspaceId, jobDetails, jobType },
-  });
+  trackEvent(
+    {
+      category: 'Workspace Action',
+      action: 'Start Workspace',
+    },
+    workspaceId,
+  );
   const result = fetch(url, {
     method: 'PUT',
     headers,
@@ -319,10 +325,8 @@ async function createWorkspaceFetcher(_key: string, { arg: { body, url, headers 
   trackEvent({
     category: 'Workspace Creation',
     action: 'Create Workspace',
-    value: {
+    label: {
       name: body.name,
-      description: body.description,
-      globus_groups_token: body.workspace_details.globus_groups_token,
       files: body.workspace_details.files.map((f) => f.name),
       symlinks: body.workspace_details.symlinks.map((s) => s.name),
     },
@@ -379,20 +383,25 @@ export interface UpdateWorkspaceBody {
 
 export interface UpdateWorkspaceArgs extends APIAction {
   body: UpdateWorkspaceBody;
+  workspaceId: number;
 }
 
-async function updateWorkspaceFetcher(_key: string, { arg: { body, url, headers } }: { arg: UpdateWorkspaceArgs }) {
-  trackEvent({
-    category: 'Workspace Update',
-    action: 'Update Workspace',
-    value: {
-      name: body?.name,
-      description: body?.description,
-      globus_groups_token: body?.workspace_details?.globus_groups_token,
-      files: body?.workspace_details?.files?.map((f) => f.name),
-      symlinks: body?.workspace_details?.symlinks?.map((s) => s.name),
+async function updateWorkspaceFetcher(
+  _key: string,
+  { arg: { body, url, headers, workspaceId } }: { arg: UpdateWorkspaceArgs },
+) {
+  trackEvent(
+    {
+      category: 'Workspace Update',
+      action: 'Update Workspace',
+      value: {
+        name: body?.name,
+        files: body?.workspace_details?.files?.map((f) => f.name),
+        symlinks: body?.workspace_details?.symlinks?.map((s) => s.name),
+      },
     },
-  });
+    workspaceId,
+  );
   const response = await fetch(url, {
     method: 'PUT',
     body: JSON.stringify(body),
@@ -418,6 +427,7 @@ export function useUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
         url: api.workspace(workspaceId),
         body,
         headers,
+        workspaceId,
       });
     },
     [trigger, api, headers, workspaceId],

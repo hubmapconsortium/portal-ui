@@ -47,7 +47,7 @@ export default function CreateWorkspaceWithDatasetsDialog({ ...rest }) {
     trackEvent({
       category: 'Workspace Creation',
       action: 'Protected datasets removed',
-      value: protectedRows.map((r) => r._id),
+      label: protectedRows.map((r) => r._id),
     });
   }, [deselectRows, protectedRows, toastSuccess]);
 

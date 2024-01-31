@@ -58,7 +58,7 @@ function useTemplateNotebooks() {
       trackEvent({
         category: 'Workspace Action',
         action: 'Create Templates',
-        value: { templateKeys, templateCount: templateKeys.length, uuids },
+        label: { templateKeys, templateCount: templateKeys.length, uuids },
       });
 
       const templatePath = templatesDetails[0].name;
