@@ -82,23 +82,29 @@ function trackPageView(path) {
 }
 
 const stringifyEventValues = (obj) =>
-  Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, `${JSON.stringify(value)}`]));
+  Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, typeof value === 'string' ? value : `${JSON.stringify(value)}`]),
+  );
 
-function buildLabelFields(event, id) {
+function prependIDToLabel(event, id) {
   const { label } = event;
 
   if (!id) {
-    return {};
+    return label;
   }
 
   const wrappedID = `<${id}>`;
 
   if (!label) {
-    return { label: wrappedID, name: wrappedID };
+    return wrappedID;
   }
 
-  const labelWithID = `${wrappedID} ${label}`;
-  return { label: labelWithID, name: labelWithID };
+  return `${wrappedID} ${label}`;
+}
+
+function buildLabelFields(event, id) {
+  const label = prependIDToLabel(event, id);
+  return label ? { label, name: label } : {};
 }
 
 function formatEvent(event, id) {
@@ -151,4 +157,4 @@ function trackSiteSearch(keyword) {
   */
 }
 
-export { trackPageView, trackEvent, trackMeasurement, trackLink, trackSiteSearch };
+export { trackPageView, formatEvent, trackEvent, trackMeasurement, trackLink, trackSiteSearch };
