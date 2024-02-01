@@ -11,6 +11,7 @@ import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
 import { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, SummaryDataHeader } from './style';
+import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -32,6 +33,8 @@ function SummaryData({
 }) {
   const isPublication = publicationEntityTypes.includes(entity_type);
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
+
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   return (
     <>
@@ -62,7 +65,12 @@ function SummaryData({
             <FlexEnd>
               {showJsonButton && (
                 <SecondaryBackgroundTooltip title="View JSON">
-                  <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
+                  <JsonButton
+                    href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
+                    target="_blank"
+                    component="a"
+                    onClick={() => trackEntityPageEvent({ action: 'View JSON' })}
+                  >
                     <FileIcon color="primary" />
                   </JsonButton>
                 </SecondaryBackgroundTooltip>
