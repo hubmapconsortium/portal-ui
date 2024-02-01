@@ -10,12 +10,12 @@ function getOutboundLinkComponent(hasIcon) {
   }
   return OutboundLink;
 }
-function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, fileName, hasIcon = false, ...rest }) {
+function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, fileName, hasIcon = false, onClick, ...rest }) {
   const Link = getOutboundLinkComponent(hasIcon);
 
   if (hasAgreedToDUA) {
     return (
-      <Link href={href} {...rest}>
+      <Link href={href} onClick={onClick} {...rest}>
         {fileName}
       </Link>
     );
@@ -24,6 +24,7 @@ function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, fileName, hasIcon
   return (
     <Link
       onClick={() => {
+        onClick();
         openDUA();
       }}
       component="button"
