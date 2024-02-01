@@ -14,6 +14,7 @@ import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions'
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import { DetailPageSection } from 'js/components/detailPage/style';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from './style';
 
 function getDescription(field) {
@@ -55,6 +56,8 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
     entity: { entity_type },
   } = useFlaskDataContext();
 
+  const trackEntityPageEvent = useTrackEntityPageEvent();
+
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
@@ -78,7 +81,11 @@ function MetadataTable({ metadata: tableData = {}, hubmap_id }) {
           Metadata
         </SectionHeader>
         <SecondaryBackgroundTooltip title="Download">
-          <StyledWhiteBackgroundIconButton href={downloadUrl} download={`${hubmap_id}.tsv`}>
+          <StyledWhiteBackgroundIconButton
+            href={downloadUrl}
+            onClick={() => trackEntityPageEvent({ action: `Metadata / Download Metadata` })}
+            download={`${hubmap_id}.tsv`}
+          >
             <DownloadIcon color="primary" />
           </StyledWhiteBackgroundIconButton>
         </SecondaryBackgroundTooltip>
