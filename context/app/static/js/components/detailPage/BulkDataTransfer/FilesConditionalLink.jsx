@@ -10,13 +10,13 @@ function getOutboundLinkComponent(hasIcon) {
   }
   return OutboundLink;
 }
-function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, children, hasIcon = false, ...rest }) {
+function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, fileName, hasIcon = false, ...rest }) {
   const Link = getOutboundLinkComponent(hasIcon);
 
   if (hasAgreedToDUA) {
     return (
       <Link href={href} {...rest}>
-        {children}
+        {fileName}
       </Link>
     );
   }
@@ -30,7 +30,7 @@ function FilesConditionalLink({ hasAgreedToDUA, openDUA, href, children, hasIcon
       underline="none"
       {...rest}
     >
-      {children}
+      {fileName}
     </Link>
   );
 }

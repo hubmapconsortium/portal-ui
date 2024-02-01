@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import BulkDataTransferPanel from './BulkDataTransferPanel';
 import Link from './Link';
 import NoAccess from './NoAccess';
@@ -25,6 +26,8 @@ function BulkDataTransferPanels() {
     return <NoAccess {...panelsToUse.error} />;
   }
 
+  const trackEntityPageEvent = useTrackEntityPageEvent;
+
   return (
     <>
       {panelsToUse.panels.length > 0 &&
@@ -32,7 +35,16 @@ function BulkDataTransferPanels() {
       {panelsToUse.links.length > 0 && (
         <Paper>
           {panelsToUse.links.map((link) =>
-            React.isValidElement(link) ? link : <Link {...link} key={link.key} url={linkTitleUrlMap[link.key]} />,
+            React.isValidElement(link) ? (
+              link
+            ) : (
+              <Link
+                {...link}
+                key={link.key}
+                url={linkTitleUrlMap[link.key]}
+                onClick={() => trackEntityPageEvent({ action: 'Bulk Data Transfer / Panel Link', label: link.key })}
+              />
+            ),
           )}
         </Paper>
       )}

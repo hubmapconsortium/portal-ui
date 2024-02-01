@@ -5,6 +5,7 @@ import Box from '@mui/material/Box';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useFilesContext } from '../FilesContext';
 import FilesConditionalLink from '../../BulkDataTransfer/FilesConditionalLink';
 import PDFViewer from '../PDFViewer';
@@ -19,7 +20,7 @@ interface FileBrowserFileProps {
 
 function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
   const { hasAgreedToDUA, openDUA } = useFilesContext();
-
+  const trackEntityPageEvent = useTrackEntityPageEvent();
   const fileUrl = useFileLink(fileObj);
 
   const chipLabels = useMemo(() => {
@@ -49,9 +50,11 @@ function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
             openDUA={() => openDUA(fileUrl)}
             variant="body1"
             download
-          >
-            {fileObj.file}
-          </FilesConditionalLink>
+            fileName={fileObj.file}
+            onClick={() =>
+              trackEntityPageEvent({ action: 'File Browser / Download File Link', label: fileObj.rel_path })
+            }
+          />
           {fileObj.description && (
             <SecondaryBackgroundTooltip title={`${fileObj.description} (Format: ${fileObj.edam_term})`}>
               <StyledInfoIcon color="primary" />
