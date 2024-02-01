@@ -10,17 +10,19 @@ interface ReferenceBasedAnalysisProps {
   modalities: string;
   nunit: string;
   dataref: string;
+  wrapped?: boolean;
 }
 
-export default function ReferenceBasedAnalysis({ modalities, nunit, dataref }: ReferenceBasedAnalysisProps) {
+export default function ReferenceBasedAnalysis({ modalities, nunit, dataref, wrapped }: ReferenceBasedAnalysisProps) {
+  const Wrapper = wrapped ? StyledPaper : React.Fragment;
   return (
-    <StyledPaper>
+    <Wrapper>
       <LabelledSectionText label="Modalities">{modalities}</LabelledSectionText>
       <LabelledSectionText label="Cells in Reference">{nunit}</LabelledSectionText>
       <LabelledSectionText label="Reference Dataset">
         <MarkdownRenderer components={{ p: React.Fragment }}>{dataref}</MarkdownRenderer>
       </LabelledSectionText>
-    </StyledPaper>
+    </Wrapper>
   );
 }
 

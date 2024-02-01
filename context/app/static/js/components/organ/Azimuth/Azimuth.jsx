@@ -25,7 +25,7 @@ function Azimuth({ config }) {
         buttons={<OutboundLinkButton href={config.applink}>Open Azimuth App</OutboundLinkButton>}
       />
       <Stack dir="column" gap={1}>
-        <ReferenceBasedAnalysis {...config} />
+        <ReferenceBasedAnalysis {...config} wrapped />
         <VisualizationWrapper vitData={config.vitessce_conf} shouldDisplayHeader={false} />
       </Stack>
     </>
