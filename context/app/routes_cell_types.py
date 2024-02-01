@@ -66,8 +66,9 @@ def get_feature_details(feature, feature_id):
         datasets = _get_datasets(client, feature, feature_id)
         additional = {}
         if (feature == 'gene'):
-            # Skip for now, bugs with the API
-            additional['cell_types'] = []  # _get_cell_types_for_gene(client, feature_id, datasets)
+            # Skip for now due to bugs with the API
+            # additional['cell_types'] = _get_cell_types_for_gene(client, feature_id, datasets)
+            additional['cell_types'] = []
         return json.dumps({
             'datasets': datasets,
             'samples': _get_samples_for_datasets(datasets),
@@ -106,11 +107,18 @@ def _get_datasets_for_cell_type(client, feature_id):
 
 # Fetches a list of datasets containing a given gene
 def _get_datasets_for_gene(client, gene_symbol):
-    rna_datasets = client.select_datasets(
-        where="gene", has=[f'{gene_symbol} > 0.1'], genomic_modality='rna', min_cell_percentage=1.0)
-    atac_datasets = client.select_datasets(
-        where="gene", has=[f'{gene_symbol} > 0.1'], genomic_modality='atac', min_cell_percentage=1.0)
-    datasets = rna_datasets | atac_datasets
+    def get_datasets_for_modality(modality):
+        try:
+            return client.select_datasets(
+                where="gene", has=[f'{gene_symbol} > 0.1'],
+                genomic_modality=modality, min_cell_percentage=1.0)
+        except Exception as err:
+            current_app.logger.info(
+                f'Datasets not found for gene {gene_symbol} with {modality} modality. {err}')
+            return []
+    rna_datasets = get_datasets_for_modality('rna')
+    atac_datasets = get_datasets_for_modality('atac')
+    datasets = _combine_results(rna_datasets, atac_datasets)
     datasets = _unwrap_result_set(datasets)
     datasets = list(map(lambda x: x['uuid'], datasets))
     return datasets
@@ -201,7 +209,7 @@ def _get_organs_for_gene(client, gene_symbol):
     if not organs_with_gene_atac and not organs_with_gene_rna:
         return []
     # Combine results from both modalities
-    organs_with_gene = organs_with_gene_atac | organs_with_gene_rna
+    organs_with_gene = _combine_results(organs_with_gene_atac, organs_with_gene_rna)
     organs_with_gene = _unwrap_result_set(organs_with_gene)
     organs_with_gene = list(map(lambda x: x['grouping_name'], organs_with_gene))
     return _get_organ_list(organs_with_gene)
@@ -239,3 +247,12 @@ def _unwrap_result_set(result_set):
     length = len(result_set)
     result_list = result_set.get_list()._get(length, 0)
     return result_list
+
+
+# Combines results from multiple modalities
+def _combine_results(modality1, modality2):
+    if not modality1:
+        return modality2
+    if not modality2:
+        return modality1
+    return modality1 | modality2
