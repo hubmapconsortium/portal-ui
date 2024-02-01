@@ -62,7 +62,7 @@ function SampleDetail() {
 
   useTrackID({ entity_type, hubmap_id });
 
-  const detailContext = useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid]);
+  const detailContext = useMemo(() => ({ hubmap_id, uuid, entity_type }), [hubmap_id, uuid, entity_type]);
 
   return (
     <DetailContext.Provider value={detailContext}>

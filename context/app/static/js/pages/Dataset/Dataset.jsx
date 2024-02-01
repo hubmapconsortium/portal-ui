@@ -164,8 +164,8 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
   }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, setAssayMetadata]);
 
   const detailContextValue = useMemo(
-    () => ({ hubmap_id, uuid, mapped_data_access_level }),
-    [hubmap_id, mapped_data_access_level, uuid],
+    () => ({ hubmap_id, uuid, entity_type, mapped_data_access_level }),
+    [hubmap_id, entity_type, mapped_data_access_level, uuid],
   );
 
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
