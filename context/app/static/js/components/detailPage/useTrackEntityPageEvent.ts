@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { trackEvent } from 'js/helpers/trackers';
-import { useDetailContext } from 'js/components/detailPage/DetailContext';
+import { useFlaskDataContext } from '../Contexts';
 
 interface TrackingEventType {
   action: string;
@@ -10,7 +10,9 @@ interface TrackingEventType {
 }
 
 function useTrackEntityPageEvent() {
-  const { hubmap_id, entity_type } = useDetailContext();
+  const {
+    entity: { hubmap_id, entity_type },
+  } = useFlaskDataContext();
 
   return useCallback(
     (event: TrackingEventType) => {
