@@ -20,17 +20,38 @@ const appProviderToken = 'fakeGroupsToken';
 // eslint-disable-next-line no-undef
 jest.mock('js/helpers/trackers');
 
-export function AllTheProviders({ children }) {
+export function AllTheProviders({
+  children,
+  flaskData = {
+    entity: {
+      hubmap_id: 'HBM123.ABC',
+      entity_type: 'Entity',
+    },
+  },
+}) {
   return (
-    <Providers endpoints={appProviderEndpoints} groupsToken={appProviderToken} isWorkspacesUser={isWorkspacesUser}>
+    <Providers
+      endpoints={appProviderEndpoints}
+      groupsToken={appProviderToken}
+      isWorkspacesUser={isWorkspacesUser}
+      flaskData={flaskData}
+    >
       {children}
     </Providers>
   );
 }
 
-const customRender = (ui, options) => render(ui, { wrapper: AllTheProviders, ...options });
+const customRender = (ui, options) =>
+  render(ui, {
+    wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
+    ...options,
+  });
 
-const customRenderHook = (callback, options) => renderHook(callback, { wrapper: AllTheProviders, ...options });
+const customRenderHook = (callback, options) =>
+  renderHook(callback, {
+    wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
+    ...options,
+  });
 
 // re-export everything
 export * from '@testing-library/react';
