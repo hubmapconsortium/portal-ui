@@ -12,7 +12,7 @@ function getUniqueNewSteps(steps, newSteps) {
 
 const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
 
-function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }) {
+function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity, trackEntityPageEvent }) {
   const { elasticsearchEndpoint, entityEndpoint, groupsToken } = useAppContext();
   const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
   const [newSteps, setNewSteps] = useState([]);
@@ -34,6 +34,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
   }, [immediateDescendantsProvData, steps, getNameForActivity, getNameForEntity]);
   function handleShowDescendants() {
     addDescendantSteps(newSteps);
+    trackEntityPageEvent({ action: 'Provenance / Graph / View Derived' });
   }
   return (
     <OptDisabledButton

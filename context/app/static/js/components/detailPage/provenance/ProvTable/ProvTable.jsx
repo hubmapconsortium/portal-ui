@@ -4,6 +4,7 @@ import Typography from '@mui/material/Typography';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
@@ -25,6 +26,7 @@ function ProvTable() {
   );
 
   const descendantEntityCounts = assayMetadata.descendant_counts.entity_type || {};
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   return (
     <FlexContainer>
@@ -50,9 +52,14 @@ function ProvTable() {
                     }
                     isFirstTile={j === 0}
                     isLastTile={j === type.length - 1}
+                    onClick={() =>
+                      trackEntityPageEvent({ action: 'Provenance / Table / Select Card', label: item.hubmap_id })
+                    }
                   />
                 ))}
-            {descendantEntityCounts?.[type] && <ProvTableDerivedLink uuid={uuid} type={type} />}
+            {descendantEntityCounts?.[type] && (
+              <ProvTableDerivedLink uuid={uuid} type={type} trackEntityPageEvent={trackEntityPageEvent} />
+            )}
           </FlexColumn>
         </TableColumn>
       ))}

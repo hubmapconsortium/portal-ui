@@ -7,10 +7,9 @@ import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/ut
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import { DownIcon } from './style';
 
-function ProvTableTile({ uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile, isLastTile }) {
+function ProvTableTile({ uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile, isLastTile, ...rest }) {
   const [descendantCounts, setDescendantCounts] = useState({});
   const [descendantCountsToDisplay, setDescendantCountsToDisplay] = useState({});
-
   // mapped fields are not included in ancestor object
   const entityData = useEntityData(uuid);
 
@@ -32,6 +31,7 @@ function ProvTableTile({ uuid, entity_type, id, isCurrentEntity, isSampleSibling
           invertColors={isCurrentEntity}
           entityData={entityData}
           descendantCounts={descendantCountsToDisplay}
+          {...rest}
         />
       )}
       {isLastTile && entity_type !== 'Donor' && descendantCounts?.[entity_type] > 0 && (

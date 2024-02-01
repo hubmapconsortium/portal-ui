@@ -5,6 +5,7 @@ import SectionItem from 'js/components/detailPage/SectionItem';
 import { InternalLink } from 'js/shared-styles/Links';
 import ShowDerivedEntitiesButton from 'js/components/detailPage/provenance/ShowDerivedEntitiesButton';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import ProvVis from '../ProvVis';
 import { StyledPaper, Flex, StyledTypography, StyledDiv, maxGraphHeight } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
@@ -14,6 +15,8 @@ const hasRenderedSelector = (state) => state.hasRendered;
 
 function DetailPanel({ node, timeKey, uuid, typeKey, idKey, getNameForActivity, getNameForEntity }) {
   const { prov } = node.meta;
+
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   const typeEl =
     typeKey in prov ? (
@@ -25,7 +28,10 @@ function DetailPanel({ node, timeKey, uuid, typeKey, idKey, getNameForActivity, 
   const idEl =
     typeKey in prov && entityTypes.includes(prov[typeKey]) ? (
       <SectionItem label="ID" ml>
-        <InternalLink href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}>
+        <InternalLink
+          href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}
+          onClick={() => trackEntityPageEvent({ action: 'Provenance / Graph / Link', label: prov[idKey] })}
+        >
           {prov[idKey]}
         </InternalLink>
       </SectionItem>
@@ -43,6 +49,7 @@ function DetailPanel({ node, timeKey, uuid, typeKey, idKey, getNameForActivity, 
           id={prov[idKey]}
           getNameForActivity={getNameForActivity}
           getNameForEntity={getNameForEntity}
+          trackEntityPageEvent={trackEntityPageEvent}
         />
       </SectionItem>
     ) : null;
