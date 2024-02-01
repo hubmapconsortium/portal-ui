@@ -15,7 +15,7 @@ const { summary, biomarkerQuery, organs, cellTypes } = pageSectionIDs;
 
 const shouldDisplaySection = {
   [summary]: true,
-  [cellTypes]: true,
+  [cellTypes]: false,
   [organs]: true,
   [biomarkerQuery]: true,
 };

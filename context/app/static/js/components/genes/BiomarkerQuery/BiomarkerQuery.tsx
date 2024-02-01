@@ -6,12 +6,12 @@ import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSte
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import React, { useMemo } from 'react';
 import TutorialProvider from 'js/shared-styles/tutorials/TutorialProvider';
-import { useGeneDetails, useGenePageContext } from '../hooks';
+import { useGeneOntology, useGenePageContext } from '../hooks';
 import { biomarkerQuery } from '../constants';
 
 export default function BiomarkerQuery() {
   const { geneSymbol } = useGenePageContext();
-  const { data } = useGeneDetails();
+  const { data } = useGeneOntology();
   const runQueryButtonRef = React.useRef<HTMLButtonElement>(null);
   const steps = useMemo(() => {
     return [

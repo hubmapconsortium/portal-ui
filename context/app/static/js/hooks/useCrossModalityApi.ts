@@ -1,3 +1,4 @@
+import { OrganFile } from 'js/components/organ/types';
 import { fetcher } from 'js/helpers/swr';
 import { SWRError } from 'js/helpers/swr/errors';
 import useSWR from 'swr';
@@ -23,20 +24,26 @@ export interface FeatureSample {
 type FeatureSamples = FeatureSample[];
 
 /**
- * Organ info for the current feature.
+ * Organ info for the cell bar graph is provided as a list of objects with the following properties:
  */
-export interface FeatureOrgan {
+export interface CellTypeOrgan {
   feature_cells: number;
   organ: string;
   total_cells: number;
   other_cells: number;
 }
-type FeatureOrgans = FeatureOrgan[];
 
-export interface FeatureResponse {
+/**
+ * Organ info for the gene page is provided as a map of organ names to their corresponding organ file.
+ */
+export type GeneOrgan = Record<string, OrganFile>;
+
+export type FeatureOrgans<F extends Feature = Feature> = F extends 'cell-types' ? CellTypeOrgan[] : GeneOrgan;
+
+export interface FeatureResponse<F extends Feature> {
   datasets: FeatureDatasets;
   samples: FeatureSamples;
-  organs: FeatureOrgans;
+  organs: FeatureOrgans<F>;
 }
 
 export const useCrossModalityAPI = () => ({
@@ -45,11 +52,11 @@ export const useCrossModalityAPI = () => ({
   },
 });
 
-export const useFeatureDetails = (feature: Feature, id: string) => {
-  const { data, ...rest } = useSWR<FeatureResponse, SWRError, string>(
+export const useFeatureDetails = <F extends Feature>(feature: F, id: string) => {
+  const { data, ...rest } = useSWR<FeatureResponse<F>, SWRError, string>(
     useCrossModalityAPI().featureDetails(feature, id),
     (url) =>
-      fetcher<FeatureResponse>({
+      fetcher<FeatureResponse<F>>({
         url,
         requestInit: {
           headers: {

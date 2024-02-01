@@ -63,13 +63,16 @@ def get_feature_details(feature, feature_id):
     client = get_cells_client()
     feature = feature_name(feature)
     try:
-        print('Fetching datasets for ' + feature)
         datasets = _get_datasets(client, feature, feature_id)
-        print(f'Fetched {len(datasets)} datasets for {feature} {feature_id}')
+        additional = {}
+        if (feature == 'gene'):
+            # Skip for now, bugs with the API
+            additional['cell_types'] = []  # _get_cell_types_for_gene(client, feature_id, datasets)
         return json.dumps({
             'datasets': datasets,
             'samples': _get_samples_for_datasets(datasets),
-            'organs': _get_organs(client, feature, feature_id)
+            'organs': _get_organs(client, feature, feature_id),
+            **additional  # Additional data for specific features
         })
 
     except Exception as err:
@@ -202,6 +205,26 @@ def _get_organs_for_gene(client, gene_symbol):
     organs_with_gene = _unwrap_result_set(organs_with_gene)
     organs_with_gene = list(map(lambda x: x['grouping_name'], organs_with_gene))
     return _get_organ_list(organs_with_gene)
+
+
+# Fetches a list of cell types expressing a given gene
+def _get_cell_types_for_gene(client, gene_symbol, datasets):
+    if not datasets:
+        return []
+    try:
+        # Get cells in passed list of datasets that express gene
+        cells = client.select_cells(where="dataset", has=datasets)
+        print("Cells with gene in current datasets subset: ", len(cells))
+        cells = cells.get_list(values_included=[gene_symbol])
+        print("After get_list", len(cells))
+        cells = cells._get(cells.__len__(), 0)
+        print("After unwrap", cells)
+        cells = list(set(cells))
+        print('Cell types for gene', gene_symbol, ':', cells)
+        return cells
+    except Exception as err:
+        current_app.logger.info(f'Cell types not found for gene {gene_symbol}. {err}')
+        return []
 
 
 # Fetches all cells of a given type

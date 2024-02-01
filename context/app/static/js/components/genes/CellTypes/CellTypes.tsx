@@ -16,7 +16,7 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import { LineClamp } from 'js/shared-styles/text';
 import { InternalLink } from 'js/shared-styles/Links';
 import { cellTypes } from '../constants';
-import { useGeneDetails } from '../hooks';
+import { useGeneEntities, useGeneOntology } from '../hooks';
 import ViewDatasets from './ViewDatasets';
 import { CellTypeInfo } from '../types';
 
@@ -70,7 +70,7 @@ function CellTypesRow({ cellType }: { cellType: CellTypeInfo }) {
 }
 
 function CellTypesTable() {
-  const { data, isLoading } = useGeneDetails();
+  const { data, isLoading } = useGeneEntities();
 
   if (!isLoading && data?.cell_types.length === 0) {
     return 'No cell types found.';

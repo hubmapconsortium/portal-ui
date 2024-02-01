@@ -5,7 +5,7 @@ import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 
 import Skeleton from '@mui/material/Skeleton';
 import useEntityStore from 'js/stores/useEntityStore';
-import { useGeneDetails } from '../hooks';
+import { useGeneOntology } from '../hooks';
 import KnownReferences from './KnownReferences';
 
 function SummarySkeleton() {
@@ -19,7 +19,7 @@ function SummarySkeleton() {
 }
 
 function Summary() {
-  const { data } = useGeneDetails();
+  const { data } = useGeneOntology();
 
   const setAssayMetadata = useEntityStore((s) => s.setAssayMetadata);
 
