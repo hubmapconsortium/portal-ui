@@ -16,7 +16,7 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import { LineClamp } from 'js/shared-styles/text';
 import { InternalLink } from 'js/shared-styles/Links';
 import { cellTypes } from '../constants';
-import { useGeneEntities, useGeneOntology } from '../hooks';
+import { useGeneEntities } from '../hooks';
 import ViewDatasets from './ViewDatasets';
 import { CellTypeInfo } from '../types';
 

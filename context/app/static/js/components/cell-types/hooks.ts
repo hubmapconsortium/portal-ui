@@ -15,11 +15,7 @@ export const useCellTypeDetails = () => {
   const { cellId } = useCellTypesContext();
   const { data, ...rest } = useFeatureDetails('cell-types', cellId);
 
-  const datasets = data?.datasets ?? [];
-  const samples = data?.samples ?? [];
-  const organs = data?.organs ?? [];
-
-  return { datasets, samples, organs, ...rest };
+  return { ...data, ...rest };
 };
 
 /**

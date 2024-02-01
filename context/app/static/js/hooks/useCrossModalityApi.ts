@@ -1,3 +1,4 @@
+import { CellTypeInfo } from 'js/components/genes/types';
 import { OrganFile } from 'js/components/organ/types';
 import { fetcher } from 'js/helpers/swr';
 import { SWRError } from 'js/helpers/swr/errors';
@@ -40,11 +41,11 @@ export type GeneOrgan = Record<string, OrganFile>;
 
 export type FeatureOrgans<F extends Feature = Feature> = F extends 'cell-types' ? CellTypeOrgan[] : GeneOrgan;
 
-export interface FeatureResponse<F extends Feature> {
+export type FeatureResponse<F extends Feature> = {
   datasets: FeatureDatasets;
   samples: FeatureSamples;
   organs: FeatureOrgans<F>;
-}
+} & (F extends 'genes' ? { cell_types: CellTypeInfo[] } : unknown);
 
 export const useCrossModalityAPI = () => ({
   featureDetails(feature: Feature, id: string) {
