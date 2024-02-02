@@ -14,6 +14,8 @@ function BulkDataTransferPanels() {
     entity: { dbgap_study_url, dbgap_sra_experiment_url },
   } = useFlaskDataContext();
 
+  const trackEntityPageEvent = useTrackEntityPageEvent();
+
   const panelsToUse = usePanelSet();
 
   // Assign dynamic URL's to each type of link
@@ -25,8 +27,6 @@ function BulkDataTransferPanels() {
   if (panelsToUse.error) {
     return <NoAccess {...panelsToUse.error} />;
   }
-
-  const trackEntityPageEvent = useTrackEntityPageEvent;
 
   return (
     <>
