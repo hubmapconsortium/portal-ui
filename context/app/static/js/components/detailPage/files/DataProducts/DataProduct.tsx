@@ -37,7 +37,7 @@ export function DataProduct({ file }: DataProductProps) {
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={0.5}>
             <div>
               <FilesConditionalLink
-                openDUA={openDUA}
+                openDUA={() => openDUA(link)}
                 hasAgreedToDUA={hasAgreedToDUA}
                 href={link}
                 underline="none"
