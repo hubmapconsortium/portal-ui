@@ -57,9 +57,7 @@ function ProvTable() {
                     }
                   />
                 ))}
-            {descendantEntityCounts?.[type] && (
-              <ProvTableDerivedLink uuid={uuid} type={type} trackEntityPageEvent={trackEntityPageEvent} />
-            )}
+            {descendantEntityCounts?.[type] && <ProvTableDerivedLink uuid={uuid} type={type} />}
           </FlexColumn>
         </TableColumn>
       ))}

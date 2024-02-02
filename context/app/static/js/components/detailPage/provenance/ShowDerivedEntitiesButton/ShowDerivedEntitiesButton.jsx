@@ -3,6 +3,7 @@ import { useAppContext } from 'js/components/Contexts';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import ProvData from '../ProvVis/ProvData';
 
 function getUniqueNewSteps(steps, newSteps) {
@@ -12,10 +13,12 @@ function getUniqueNewSteps(steps, newSteps) {
 
 const useProvenanceStoreSelector = (state) => ({ steps: state.steps, addDescendantSteps: state.addDescendantSteps });
 
-function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity, trackEntityPageEvent }) {
+function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity }) {
   const { elasticsearchEndpoint, entityEndpoint, groupsToken } = useAppContext();
   const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
   const [newSteps, setNewSteps] = useState([]);
+
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   const { immediateDescendantsProvData } = useImmediateDescendantProv(
     id,

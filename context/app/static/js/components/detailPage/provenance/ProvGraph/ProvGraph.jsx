@@ -49,7 +49,6 @@ function DetailPanel({ node, timeKey, uuid, typeKey, idKey, getNameForActivity, 
           id={prov[idKey]}
           getNameForActivity={getNameForActivity}
           getNameForEntity={getNameForEntity}
-          trackEntityPageEvent={trackEntityPageEvent}
         />
       </SectionItem>
     ) : null;
