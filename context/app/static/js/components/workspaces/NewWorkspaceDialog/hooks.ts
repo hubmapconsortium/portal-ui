@@ -56,7 +56,7 @@ function useTemplateNotebooks() {
     async ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => {
       const templatesDetails = await createTemplates({ templateKeys, uuids });
       trackEvent({
-        category: 'Workspace Action',
+        category: 'Workspaces',
         action: 'Create Templates',
         label: { templateKeys, templateCount: templateKeys.length, uuids },
       });
