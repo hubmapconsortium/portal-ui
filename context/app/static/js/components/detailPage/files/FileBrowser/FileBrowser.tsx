@@ -11,6 +11,7 @@ import HubmapDataFooter from 'js/components/detailPage/files/HubmapDataFooter';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import useFilesStore, { FileDisplayOption, FilesStore } from 'js/stores/useFilesStore';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { relativeFilePathsToTree } from './utils';
 import FileBrowserNode from '../FileBrowserNode';
 import { ChipWrapper } from './style';
@@ -49,19 +50,27 @@ function FileBrowser({ files }: FileBrowserProps) {
     [files],
   );
 
+  const trackEntityPageEvent = useTrackEntityPageEvent();
+
   return (
     <>
       <TableContainer sx={{ maxHeight: 600, overflowY: 'auto' }} component={Paper}>
         <ChipWrapper>
           <SelectableChip
             label="Show QA Files"
-            onClick={toggleDisplayOnlyQaQc}
+            onClick={() => {
+              toggleDisplayOnlyQaQc();
+              trackEntityPageEvent({ action: 'File Browser / Toggle Show QA QC Files' });
+            }}
             isSelected={displayOnlyQaQc}
             disabled={Object.keys(fileTrees['qa/qc']).length === 0}
           />
           <SelectableChip
             label="Show Data Products Files"
-            onClick={toggleDisplayOnlyDataProducts}
+            onClick={() => {
+              toggleDisplayOnlyDataProducts();
+              trackEntityPageEvent({ action: 'File Browser / Toggle Show Data Products Files' });
+            }}
             isSelected={displayOnlyDataProducts}
             disabled={Object.keys(fileTrees['data products']).length === 0}
           />

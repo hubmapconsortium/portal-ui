@@ -12,6 +12,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import VisualizationShareButton from '../VisualizationShareButton';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
@@ -55,6 +56,8 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   } = useVisualizationStore(visualizationStoreSelector);
 
   const { toastError, toastInfo } = useSnackbarActions();
+
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   // Propagate UUID to the store if there is a notebook so we can display the download button when the visualization is expanded
   // Reruns every time vizIsFullscreen changes to ensure the proper notebook's UUID is used
@@ -125,7 +128,14 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-                <ExpandButton size="small" onClick={expandViz} variant="contained">
+                <ExpandButton
+                  size="small"
+                  onClick={() => {
+                    expandViz();
+                    trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
+                  }}
+                  variant="contained"
+                >
                   <FullscreenRoundedIcon color="primary" />
                 </ExpandButton>
               </SecondaryBackgroundTooltip>

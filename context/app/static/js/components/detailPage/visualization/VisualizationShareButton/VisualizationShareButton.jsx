@@ -13,6 +13,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { copyToClipBoard, createEmailWithUrl } from './utils';
 import { DEFAULT_LONG_URL_WARNING } from './constants';
 
@@ -29,8 +30,12 @@ function VisualizationShareButton() {
   const anchorRef = useRef(null);
   const { vitessceState } = useVisualizationStore(visualizationStoreSelector);
   const { toastWarning, toastSuccess } = useSnackbarActions();
+
+  const trackEntityPageEvent = useTrackEntityPageEvent();
+
   const onClick = () => {
     let urlIsLong = false;
+    trackEntityPageEvent({ action: 'Vitessce / Share Visualization' });
     copyToClipBoard(vitessceState, () => {
       urlIsLong = true;
     });

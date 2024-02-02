@@ -10,7 +10,7 @@ import Files from './Files';
 
 const testUuid = 'fakeuuid';
 const mapped_data_access_level = 'fakeaccess';
-
+const hubmap_id = 'HBMABC.123';
 const globusUrlResponse = {
   url: 'fakeglobusurl',
 };
@@ -55,12 +55,13 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-const flaskDataContext = { entity: { entity_type: 'Dataset' } };
+const flaskDataContext = { entity: { entity_type: 'Dataset', hubmap_id } };
 function TestFiles({ files = testFiles, uuid = testUuid }) {
   const detailContext = useMemo(
     () => ({
       uuid,
       mapped_data_access_level,
+      hubmap_id,
     }),
     [uuid],
   );

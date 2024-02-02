@@ -32,6 +32,7 @@ import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useDatasetWorkspace } from './hooks';
 
 function NotebookButton(props) {
@@ -56,11 +57,16 @@ function SummaryDataChildren({
 }) {
   const { isWorkspacesUser } = useAppContext();
   const createDatasetWorkspace = useDatasetWorkspace({ entity_type, uuid });
-
+  const trackEntityPageEvent = useTrackEntityPageEvent();
   return (
     <>
       <SummaryItem>
-        <InternalLink variant="h6" href="https://software.docs.hubmapconsortium.org/assays" underline="none">
+        <InternalLink
+          variant="h6"
+          href="https://software.docs.hubmapconsortium.org/assays"
+          underline="none"
+          onClick={() => trackEntityPageEvent({ action: 'Assay Documentation Navigation', label: mapped_data_types })}
+        >
           {mapped_data_types}
         </InternalLink>
       </SummaryItem>

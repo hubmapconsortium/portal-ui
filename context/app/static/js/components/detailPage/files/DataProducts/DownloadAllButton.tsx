@@ -3,6 +3,7 @@ import React, { useCallback } from 'react';
 import Button from '@mui/material/Button';
 import { useFilesContext } from '../FilesContext';
 import { DownloadIcon } from '../../MetadataTable/style';
+import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 
 interface DownloadAllButtonProps {
   onDownloadAll: () => void;
@@ -11,7 +12,7 @@ interface DownloadAllButtonProps {
 
 export function DownloadAllButton({ onDownloadAll, disabled }: DownloadAllButtonProps) {
   const { hasAgreedToDUA, openDUA } = useFilesContext();
-
+  const trackEntityPageEvent = useTrackEntityPageEvent();
   // On click of download all button,
   // - mount MultiFileDownloader component with download iframes
   // - disable download all button
@@ -20,9 +21,10 @@ export function DownloadAllButton({ onDownloadAll, disabled }: DownloadAllButton
     if (!hasAgreedToDUA) {
       openDUA({ handleAgree: onDownloadAll });
     } else {
+      trackEntityPageEvent({ action: 'Data Products / Download All' });
       onDownloadAll();
     }
-  }, [hasAgreedToDUA, onDownloadAll, openDUA]);
+  }, [hasAgreedToDUA, onDownloadAll, openDUA, trackEntityPageEvent]);
 
   return (
     <Button
