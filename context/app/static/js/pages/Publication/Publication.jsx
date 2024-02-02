@@ -60,11 +60,10 @@ function Publication({ publication, vignette_json }) {
     () => ({
       uuid,
       hubmap_id,
-      entity_type,
       // Default to `Public` for publication page DUA
       mapped_data_access_level: 'Public',
     }),
-    [uuid, hubmap_id, entity_type],
+    [uuid, hubmap_id],
   );
 
   return (
