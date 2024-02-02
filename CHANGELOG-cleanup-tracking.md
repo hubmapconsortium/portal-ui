@@ -1,0 +1,3 @@
+- Add IDs to tracking event labels where applicable.
+- Stringify objects sent in Matomo events.
+- Remove web vitals tracking in Matomo.

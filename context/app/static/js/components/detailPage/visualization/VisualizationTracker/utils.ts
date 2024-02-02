@@ -109,7 +109,7 @@ export function fireVitessceEvent(ref: MutableRefObject<VitessceInteraction>) {
     trackEvent({
       category: 'Visualization',
       action: 'Interaction',
-      value: stringifyVitessceInteraction(ref.current),
+      label: stringifyVitessceInteraction(ref.current),
     });
     // Clear the interaction object after logging event
     ref.current = [];
