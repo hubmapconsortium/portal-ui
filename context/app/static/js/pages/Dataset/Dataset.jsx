@@ -26,14 +26,14 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 // TODO use this context for components other than FileBrowser
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import { getSectionOrder, getCombinedDatasetStatus } from 'js/components/detailPage/utils';
-import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { useDatasetWorkspace } from './hooks';
+import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
+import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 
 function NotebookButton(props) {
   return (
@@ -51,12 +51,11 @@ function SummaryDataChildren({
   doi_url,
   registered_doi,
   hasNotebook,
-  entity_type,
   hubmap_id,
   uuid,
 }) {
   const { isWorkspacesUser } = useAppContext();
-  const createDatasetWorkspace = useDatasetWorkspace({ entity_type, uuid });
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
   const trackEntityPageEvent = useTrackEntityPageEvent();
   return (
     <>
@@ -81,12 +80,10 @@ function SummaryDataChildren({
         </OutboundIconLink>
       )}
       {isWorkspacesUser && (
-        <CreateWorkspaceDialog
-          handleCreateWorkspace={createDatasetWorkspace}
-          buttonComponent={NotebookButton}
-          disabled={!hasNotebook}
-          defaultName={`${hubmap_id} Workspace`}
-        />
+        <>
+          <NotebookButton onClick={() => setDialogIsOpen(true)} disabled={!hasNotebook} />
+          <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+        </>
       )}
     </>
   );
@@ -213,7 +210,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
             registered_doi={registered_doi}
             doi_url={doi_url}
             hasNotebook={hasNotebook}
-            entity_type={entity_type}
             uuid={uuid}
             hubmap_id={hubmap_id}
           />
