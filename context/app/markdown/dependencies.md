@@ -104,7 +104,6 @@ lxml>=4.9.1
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
 "vitessce": "^3.3.2",
-"web-vitals": "^3.4.0",
 "zod": "^3.22.3",
 "zustand": "^4.4.1"
 }
