@@ -1,3 +1,10 @@
+## v0.89.0 - 2024-02-05
+
+- Add IDs to tracking event labels where applicable.
+- Stringify objects sent in Matomo events.
+- Remove web vitals tracking in Matomo.
+
+
 ## v0.88.1 - 2024-01-25
 
 - Remove timeout from searchkit searches.
