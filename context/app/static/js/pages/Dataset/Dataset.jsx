@@ -21,27 +21,29 @@ import { DetailPageAlert } from 'js/components/detailPage/style';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 
 import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 // TODO use this context for components other than FileBrowser
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import { getSectionOrder, getCombinedDatasetStatus } from 'js/components/detailPage/utils';
-import CreateWorkspaceDialog from 'js/components/workspaces/CreateWorkspaceDialog';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { useDatasetWorkspace } from './hooks';
+import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
+import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 
-function NotebookButton(props) {
+function NotebookButton({ disabled, ...props }) {
   return (
-    <SecondaryBackgroundTooltip title="Launch a new workspace in Jupyter notebook.">
-      <WhiteBackgroundIconButton color="primary" {...props}>
-        <SvgIcon component={WorkspacesIcon} />
-      </WhiteBackgroundIconButton>
-    </SecondaryBackgroundTooltip>
+    <TooltipIconButton
+      color="primary"
+      disabled={disabled}
+      {...props}
+      tooltip={disabled ? 'Protected datasets are not available in Workspaces.' : 'Launch a new workspace.'}
+    >
+      <SvgIcon component={WorkspacesIcon} />
+    </TooltipIconButton>
   );
 }
 
@@ -50,13 +52,12 @@ function SummaryDataChildren({
   origin_sample,
   doi_url,
   registered_doi,
-  hasNotebook,
-  entity_type,
   hubmap_id,
   uuid,
+  mapped_data_access_level,
 }) {
   const { isWorkspacesUser } = useAppContext();
-  const createDatasetWorkspace = useDatasetWorkspace({ entity_type, uuid });
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
   const trackEntityPageEvent = useTrackEntityPageEvent();
   return (
     <>
@@ -81,12 +82,10 @@ function SummaryDataChildren({
         </OutboundIconLink>
       )}
       {isWorkspacesUser && (
-        <CreateWorkspaceDialog
-          handleCreateWorkspace={createDatasetWorkspace}
-          buttonComponent={NotebookButton}
-          disabled={!hasNotebook}
-          defaultName={`${hubmap_id} Workspace`}
-        />
+        <>
+          <NotebookButton onClick={() => setDialogIsOpen(true)} disabled={mapped_data_access_level === 'Protected'} />
+          <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+        </>
       )}
     </>
   );
@@ -212,10 +211,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
             origin_sample={origin_sample}
             registered_doi={registered_doi}
             doi_url={doi_url}
-            hasNotebook={hasNotebook}
-            entity_type={entity_type}
             uuid={uuid}
             hubmap_id={hubmap_id}
+            mapped_data_access_level={mapped_data_access_level}
           />
         </Summary>
         {shouldDisplaySection.visualization && (
