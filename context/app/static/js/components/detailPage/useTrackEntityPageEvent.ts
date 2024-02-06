@@ -14,12 +14,10 @@ function useTrackEntityPageEvent() {
   const { hubmap_id, entity_type } = entity;
   return useCallback(
     (event: TrackingEventType) => {
-      if (!(hubmap_id || entity_type)) {
-        trackEvent(event);
-      }
+      const category = entity_type ? `${entity_type} Page` : 'Detail Page';
       trackEvent(
         {
-          category: `${entity_type} Page`,
+          category,
           ...event,
         },
         hubmap_id,
