@@ -1,0 +1,1 @@
+- Fix entity page event tracker to handle undefined entity in flask context.
