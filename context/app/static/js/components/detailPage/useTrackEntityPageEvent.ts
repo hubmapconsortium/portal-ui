@@ -16,6 +16,9 @@ function useTrackEntityPageEvent() {
 
   return useCallback(
     (event: TrackingEventType) => {
+      if (!(hubmap_id || entity_type)) {
+        trackEvent(event);
+      }
       trackEvent(
         {
           category: `${entity_type} Page`,
