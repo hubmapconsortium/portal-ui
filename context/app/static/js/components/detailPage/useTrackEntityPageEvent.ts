@@ -10,15 +10,14 @@ interface TrackingEventType {
 }
 
 function useTrackEntityPageEvent() {
-  const {
-    entity: { hubmap_id, entity_type },
-  } = useFlaskDataContext();
-
+  const { entity = { hubmap_id: undefined, entity_type: undefined } } = useFlaskDataContext();
+  const { hubmap_id, entity_type } = entity;
   return useCallback(
     (event: TrackingEventType) => {
+      const category = entity_type ? `${entity_type} Page` : 'Detail Page';
       trackEvent(
         {
-          category: `${entity_type} Page`,
+          category,
           ...event,
         },
         hubmap_id,
