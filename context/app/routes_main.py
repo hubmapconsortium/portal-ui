@@ -158,19 +158,6 @@ def iframe_page(path):
     )
 
 
-@blueprint.route('/genes/<gene_symbol>')
-def genes(gene_symbol):
-    flask_data = {
-        **get_default_flask_data(),
-        'geneSymbol': gene_symbol
-    }
-    return render_template(
-        'base-pages/react-content.html',
-        title=gene_symbol,
-        flask_data=flask_data
-    )
-
-
 @blueprint.route('/tutorials')
 def tutorials():
     flask_data = {
