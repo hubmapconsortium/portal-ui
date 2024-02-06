@@ -289,8 +289,8 @@ async def _get_cell_types_for_gene(client, gene_symbol, datasets):
         # Convert sets to lists for JSON serialization
         for cell_type in cell_types:
             converted_cell_types[cell_type] = {
-                'datasets': [*(cell_types[cell_type]['datasets']),],
-                'organs': [*(cell_types[cell_type]['organs']),]
+                'datasets': [*(cell_types[cell_type]['datasets']), ],
+                'organs': [*(cell_types[cell_type]['organs']), ]
             }
 
         return converted_cell_types
