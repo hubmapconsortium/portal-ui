@@ -25,11 +25,12 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }) {
 
   useEffect(() => {
     function setVitessceDefaults(vData) {
-      const initialVData = Array.isArray(vData) ? vData[0] : vData;
-      const vc = handleMarkerGene(initialVData, markerGene);
-      setVitessceState(vc);
+      const vDataWithMarkerGene = Array.isArray(vData)
+        ? vData.map((v) => handleMarkerGene(v, markerGene))
+        : handleMarkerGene(vData, markerGene);
+      setVitessceState(Array.isArray(vData) ? vDataWithMarkerGene[0] : vDataWithMarkerGene);
       setVitessceSelection(0);
-      setVitessceConfig(vc);
+      setVitessceConfig(vDataWithMarkerGene);
     }
 
     if (setVitessceState && vitData) {
