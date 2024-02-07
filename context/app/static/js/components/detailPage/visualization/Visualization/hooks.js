@@ -1,9 +1,21 @@
 import { useState, useEffect } from 'react';
-import { decodeURLParamsToConf } from 'vitessce';
+import { decodeURLParamsToConf, VitessceConfig, CoordinationType as ct } from 'vitessce';
 
 import { useSnackbarStore } from 'js/shared-styles/snackbars';
 
-export function useVitessceConfig({ vitData, setVitessceState }) {
+function handleMarkerGene(vData, markerGene) {
+  if (vData && vData.layout && markerGene) {
+    const vc = VitessceConfig.fromJSON(vData);
+    const [featureSelection, obsColorEncoding] = vc.addCoordination(ct.FEATURE_SELECTION, ct.OBS_COLOR_ENCODING);
+    vc.config.layout.forEach((v) => v.useCoordination(featureSelection, obsColorEncoding));
+    featureSelection.setValue([markerGene]);
+    obsColorEncoding.setValue('geneSelection');
+    return vc.toJSON();
+  }
+  return vData;
+}
+
+export function useVitessceConfig({ vitData, setVitessceState, markerGene }) {
   const [vitessceSelection, setVitessceSelection] = useState(null);
   const [vitessceConfig, setVitessceConfig] = useState(null);
 
@@ -13,9 +25,11 @@ export function useVitessceConfig({ vitData, setVitessceState }) {
 
   useEffect(() => {
     function setVitessceDefaults(vData) {
-      setVitessceState(Array.isArray(vData) ? vData[0] : vData);
+      const initialVData = Array.isArray(vData) ? vData[0] : vData;
+      const vc = handleMarkerGene(initialVData, markerGene);
+      setVitessceState(vc);
       setVitessceSelection(0);
-      setVitessceConfig(vData);
+      setVitessceConfig(vc);
     }
 
     if (setVitessceState && vitData) {
@@ -47,6 +61,6 @@ export function useVitessceConfig({ vitData, setVitessceState }) {
       setVitessceSelection(initialSelectionFromUrl);
       setVitessceConfig(initializedVitDataFromUrl);
     }
-  }, [setVitessceState, vitData, toastError]);
+  }, [setVitessceState, vitData, toastError, markerGene]);
   return { vitessceConfig, vitessceSelection, setVitessceSelection };
 }

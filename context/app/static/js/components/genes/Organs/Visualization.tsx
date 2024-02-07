@@ -6,12 +6,14 @@ import { OrganFile } from 'js/components/organ/types';
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import { Typography } from '@mui/material';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
+import { useGenePageContext } from '../hooks';
 
 interface AzimuthVisualizationProps {
   organ: OrganFile;
 }
 
 export function AzimuthVisualization({ organ }: AzimuthVisualizationProps) {
+  const { geneSymbol } = useGenePageContext();
   if (!organ) return null;
   if (!organ?.azimuth) {
     return <DetailPageAlert severity="info">No Azimuth reference-based analysis available.</DetailPageAlert>;
@@ -33,6 +35,7 @@ export function AzimuthVisualization({ organ }: AzimuthVisualizationProps) {
         hasNotebook={false}
         isPublicationPage={false}
         shouldDisplayHeader={false}
+        markerGene={geneSymbol}
       />
     </Stack>
   );
