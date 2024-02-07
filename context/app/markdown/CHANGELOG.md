@@ -1,3 +1,9 @@
+## v0.89.1 - 2024-02-07
+
+- Fix entity page event tracker to handle undefined entity in flask context.
+- Fix create workspace button from dataset detail pages.
+
+
 ## v0.89.0 - 2024-02-05
 
 - Add IDs to tracking event labels where applicable.

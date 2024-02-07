@@ -1,1 +1,0 @@
-- Fix create workspace button from dataset detail pages.
