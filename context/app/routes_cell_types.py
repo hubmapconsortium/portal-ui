@@ -9,15 +9,18 @@ from .routes_file_based import _get_organ_list
 from .utils import make_blueprint, get_client, get_default_flask_data
 
 
+cells_client_env = 'dev'
+
+
 def get_cells_client():
     # TODO: Since the `cell_type` lookup does not currently exist
-    # outside of the test environment, this is currently hardcoded
-    # to use the test endpoint.
+    # outside of the dev environment, this is currently hardcoded
+    # to use the dev endpoint.
     #
     # Once the `cell_type` lookup is available in the production
     # environment, these routes can be moved to `routes_cells`,
     # and this file can be deleted/removed from main.py.
-    client = Client('https://cells.dev.hubmapconsortium.org/api/')
+    client = Client(f'https://cells.${cells_client_env}.hubmapconsortium.org/api/')
     return client
 
 # NOTE: This file makes heavy use of async/await and asyncio.gather
@@ -57,10 +60,10 @@ def genes_detail_view(gene_symbol):
 @blueprint.route('/cell-types/list.json')
 def cell_types_list():
     celltype_token_post = post(
-        'https://cells.test.hubmapconsortium.org/api/celltype/',
+        f'https://cells.{cells_client_env}.hubmapconsortium.org/api/celltype/',
         {}).json()
     celltype_token = celltype_token_post['results'][0]['query_handle']
-    celltype_list = post('https://cells.test.hubmapconsortium.org/api/celltypeevaluation/', {
+    celltype_list = post(f'https://cells.{cells_client_env}.hubmapconsortium.org/api/celltypeevaluation/', {
         'key': celltype_token,
         'set_type': 'cell_type',
         'limit': 500}).json()['results']
@@ -137,22 +140,35 @@ async def _get_datasets_for_gene(client, gene_symbol):
 async def _get_organs_for_cell_type(client, cell_type):
     # Fetches set of organs containing a given cell type
     def _get_organs_for_cell_type():
-        organs = client.select_organs(
-            where="cell_type", has=[cell_type])
-        organs = _unwrap_result_set(organs)
-        organs = list(map(lambda x: x['grouping_name'], organs))
-        return organs
+        try:
+            organs = client.select_organs(
+                where="cell_type", has=[cell_type])
+            organs = _unwrap_result_set(organs)
+            organs = list(map(lambda x: x['grouping_name'], organs))
+            return organs
+        except Exception as err:
+            current_app.logger.info(
+                f'Organs not found for cell type {cell_type}. {err}')
+            return None
 
     # Fetches all cells of a given type
     def _get_cells_of_type():
-        cells_of_type = client.select_cells(
-            where="cell_type", has=[cell_type])
-        return cells_of_type
+        try:
+            cells_of_type = client.select_cells(
+                where="cell_type", has=[cell_type])
+            return cells_of_type
+        except Exception as err:
+            current_app.logger.info(
+                f'Cells not found for cell type {cell_type}. {err}')
+            return None
 
     # Make above calls in parallel
     organs, cells_of_type = await gather(
         to_thread(_get_organs_for_cell_type),
         to_thread(_get_cells_of_type))
+
+    if not cells_of_type or not organs:
+        return []
 
     # Get cell counts for each organ
     def get_cell_counts(organ):
@@ -302,6 +318,8 @@ async def _get_cell_types_for_gene(client, gene_symbol, datasets):
 
 # Converts a resultset to a list
 def _unwrap_result_set(result_set):
+    if not result_set:
+        return []
     length = len(result_set)
     result_list = result_set.get_list()._get(length, 0)
     return result_list
@@ -309,6 +327,8 @@ def _unwrap_result_set(result_set):
 
 # Combines results from multiple modalities
 def _combine_results(modality1, modality2):
+    if not modality1 and not modality2:
+        return None
     if not modality1:
         return modality2
     if not modality2:
