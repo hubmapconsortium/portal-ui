@@ -4,7 +4,7 @@ import { decodeURLParamsToConf, VitessceConfig, CoordinationType as ct } from 'v
 import { useSnackbarStore } from 'js/shared-styles/snackbars';
 
 function handleMarkerGene(vData, markerGene) {
-  if (vData && vData.layout && markerGene) {
+  if (vData?.layout && markerGene) {
     const vc = VitessceConfig.fromJSON(vData);
     const [featureSelection, obsColorEncoding] = vc.addCoordination(ct.FEATURE_SELECTION, ct.OBS_COLOR_ENCODING);
     vc.config.layout.forEach((v) => v.useCoordination(featureSelection, obsColorEncoding));
