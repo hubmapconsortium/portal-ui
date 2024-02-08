@@ -1,25 +1,43 @@
 import React from 'react';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import Description from 'js/shared-styles/sections/Description';
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import Stack from '@mui/material/Stack';
-import { useTabs } from 'js/shared-styles/tabs';
-import { Tab, Tabs, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
-import { FormControl, InputLabel, Paper, TableBody, TableCell, TableRow } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import Paper from '@mui/material/Paper';
+import TableBody from '@mui/material/TableBody';
+import TableCell from '@mui/material/TableCell';
+import TableRow from '@mui/material/TableRow';
+import { capitalize } from '@mui/material/utils';
+
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import Description from 'js/shared-styles/sections/Description';
+import { useTabs } from 'js/shared-styles/tabs';
+import { Tab, Tabs, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import { CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
-import { useCellTypeBiomarkers } from './hooks';
-import { DetailPageSection } from '../detailPage/style';
 
+import { DetailPageSection } from '../detailPage/style';
+import { useCellTypeBiomarkers } from './hooks';
+
+const tableKeys = ['genes', 'proteins'] as const;
+type TableKey = (typeof tableKeys)[number];
 interface BiomarkerTableProps {
-  tableKey: 'genes' | 'proteins';
+  tableKey: TableKey;
 }
 
-function BiomarkerTableRow({ biomarker, type }: { biomarker: CellTypeBiomarkerInfo; type: 'genes' | 'proteins' }) {
+function otherTableKey(tableKey: TableKey): TableKey {
+  const otherKey = tableKeys.find((key) => key !== tableKey);
+  if (!otherKey) {
+    throw new Error(`Could not find other table key for ${tableKey}. This should never happen.`);
+  }
+  return otherKey;
+}
+
+function BiomarkerTableRow({ biomarker, type }: { biomarker: CellTypeBiomarkerInfo; type: TableKey }) {
   const { entry } = biomarker;
   return (
     <TableRow>
@@ -57,7 +75,7 @@ function BiomarkerTable({ tableKey }: BiomarkerTableProps) {
 }
 
 export default function CellTypesBiomarkersTable() {
-  const { genes, proteins, sources, selectedSource, handleSourceSelection } = useCellTypeBiomarkers();
+  const { sources, selectedSource, handleSourceSelection, ...biomarkers } = useCellTypeBiomarkers();
 
   const { openTabIndex, handleTabChange } = useTabs();
 
@@ -83,25 +101,21 @@ export default function CellTypesBiomarkersTable() {
         </FormControl>
         <div>
           <Tabs value={openTabIndex} onChange={handleTabChange}>
-            <Tab
-              label={`Genes (${genes.length})`}
-              index={0}
-              isSingleTab={proteins.length === 0}
-              disabled={genes.length === 0}
-            />
-            <Tab
-              label={`Proteins (${proteins.length})`}
-              index={1}
-              isSingleTab={genes.length === 0}
-              disabled={proteins.length === 0}
-            />
+            {tableKeys.map((key, index) => (
+              <Tab
+                label={`${capitalize(key)} (${biomarkers[key].length})`}
+                index={index}
+                key={key}
+                disabled={biomarkers[key].length === 0}
+                isSingleTab={biomarkers[otherTableKey(key)].length === 0}
+              />
+            ))}
           </Tabs>
-          <TabPanel value={openTabIndex} index={0}>
-            <BiomarkerTable tableKey="genes" />
-          </TabPanel>
-          <TabPanel value={openTabIndex} index={1}>
-            <BiomarkerTable tableKey="proteins" />
-          </TabPanel>
+          {tableKeys.map((key, index) => (
+            <TabPanel value={openTabIndex} index={index} key={key}>
+              <BiomarkerTable tableKey={key} />
+            </TabPanel>
+          ))}
         </div>
       </Stack>
     </DetailPageSection>
