@@ -81,21 +81,49 @@ function trackPageView(path) {
   faro.api.pushEvent('pageview', { path });
 }
 
-const makeFaroSafe = (obj) =>
-  Object.fromEntries(Object.entries(obj).map(([key, value]) => [key, `${JSON.stringify(value)}`]));
+const stringifyEventValues = (obj) =>
+  Object.fromEntries(
+    Object.entries(obj).map(([key, value]) => [key, typeof value === 'string' ? value : `${JSON.stringify(value)}`]),
+  );
 
-function trackEvent(event) {
-  tracker.trackEvent(event);
-  ReactGA.event(event);
-  // Convert all event values to strings to avoid errors in faro.
+function prependIDToLabel(event, id) {
+  const { label } = event;
+
+  if (!id) {
+    return label;
+  }
+
+  const wrappedID = `<${id}>`;
+
+  if (!label) {
+    return wrappedID;
+  }
+
+  return `${wrappedID} ${label}`;
+}
+
+function buildLabelFields(event, id) {
+  const label = prependIDToLabel(event, id);
+  return label ? { label, name: label } : {};
+}
+
+function formatEvent(event, id) {
+  // Convert all event values to strings to avoid errors in faro and matomo.
   // https://github.com/grafana/faro-web-sdk/issues/269
-  const faroSafeEvent = makeFaroSafe(event);
-  const category = faroSafeEvent.category.replace(/ /g, '_');
-  faro.api.pushEvent(category, faroSafeEvent);
+  const safeEvent = stringifyEventValues(event);
+  return { ...safeEvent, ...buildLabelFields(safeEvent, id) };
+}
+
+function trackEvent(event, id) {
+  const formattedEvent = formatEvent(event, id);
+  tracker.trackEvent(formattedEvent);
+  ReactGA.event(formattedEvent);
+  const category = formattedEvent.category.replace(/ /g, '_');
+  faro.api.pushEvent(category, formattedEvent);
 }
 
 function trackMeasurement(type, values, context = undefined) {
-  faro.api.pushMeasurement({ type, values, context: context ? makeFaroSafe(context) : undefined });
+  faro.api.pushMeasurement({ type, values, context: context ? stringifyEventValues(context) : undefined });
 }
 
 function trackLink(href, type) {
@@ -129,4 +157,4 @@ function trackSiteSearch(keyword) {
   */
 }
 
-export { trackPageView, trackEvent, trackMeasurement, trackLink, trackSiteSearch };
+export { trackPageView, formatEvent, trackEvent, trackMeasurement, trackLink, trackSiteSearch };

@@ -1,3 +1,24 @@
+## v0.89.1 - 2024-02-07
+
+- Fix entity page event tracker to handle undefined entity in flask context.
+- Fix create workspace button from dataset detail pages.
+
+
+## v0.89.0 - 2024-02-05
+
+- Add IDs to tracking event labels where applicable.
+- Stringify objects sent in Matomo events.
+- Remove web vitals tracking in Matomo.
+
+
+## v0.88.1 - 2024-01-25
+
+- Remove timeout from searchkit searches.
+- Update faro version.
+- Fix matomo event tracking to provide name field where applicable.
+- Track entity page visits by HuBMAP ID not UUID.
+
+
 ## v0.88.0 - 2024-01-22
 
 - Add fusion slide to homepage carousel and enable carousel autoplay until a user navigates the slides.
@@ -18,6 +39,7 @@
 - Remove vitessce conf generation usage of TypeClient.
 - Improve approach to embedding HRA Organ UI.
 - Add support for dynamic maintenance messages.
+- Update Node version used in GitHub Actions workflow.
 
 
 ## v0.85.3 - 2023-12-14

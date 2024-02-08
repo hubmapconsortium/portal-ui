@@ -45,9 +45,9 @@ lxml>=4.9.1
 "@datapunt/matomo-tracker-js": "^0.5.1",
 "@elastic/elasticsearch": "^8.10.0",
 "@fontsource-variable/inter": "^5.0.8",
-"@grafana/faro-react": "^1.2.0",
-"@grafana/faro-web-sdk": "^1.2.0",
-"@grafana/faro-web-tracing": "^1.2.0",
+"@grafana/faro-react": "^1.3.6",
+"@grafana/faro-web-sdk": "^1.3.6",
+"@grafana/faro-web-tracing": "^1.3.6",
 "@hms-dbmi-bgm/react-workflow-viz": "^0.1.9",
 "@hookform/resolvers": "^3.3.1",
 "@mui/icons-material": "^5.14.9",
@@ -104,7 +104,6 @@ lxml>=4.9.1
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
 "vitessce": "^3.3.2",
-"web-vitals": "^3.4.0",
 "zod": "^3.22.3",
 "zustand": "^4.4.1"
 }

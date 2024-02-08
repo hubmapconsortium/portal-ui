@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import BulkDataTransferPanel from './BulkDataTransferPanel';
 import Link from './Link';
 import NoAccess from './NoAccess';
@@ -12,6 +13,8 @@ function BulkDataTransferPanels() {
   const {
     entity: { dbgap_study_url, dbgap_sra_experiment_url },
   } = useFlaskDataContext();
+
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   const panelsToUse = usePanelSet();
 
@@ -32,7 +35,16 @@ function BulkDataTransferPanels() {
       {panelsToUse.links.length > 0 && (
         <Paper>
           {panelsToUse.links.map((link) =>
-            React.isValidElement(link) ? link : <Link {...link} key={link.key} url={linkTitleUrlMap[link.key]} />,
+            React.isValidElement(link) ? (
+              link
+            ) : (
+              <Link
+                {...link}
+                key={link.key}
+                url={linkTitleUrlMap[link.key]}
+                onClick={() => trackEntityPageEvent({ action: 'Bulk Data Transfer / Panel Link', label: link.key })}
+              />
+            ),
           )}
         </Paper>
       )}

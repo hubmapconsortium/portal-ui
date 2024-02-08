@@ -2,16 +2,10 @@ import styled from 'styled-components';
 import Typography from '@mui/material/Typography';
 import SvgIcon from '@mui/material/SvgIcon';
 
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-
 const FlexEnd = styled.div`
   display: flex;
   flex-wrap: wrap;
   align-items: flex-end;
-`;
-
-const JsonButton = styled(WhiteBackgroundIconButton)`
-  height: 36px;
 `;
 
 const StyledTypography = styled(Typography)`
@@ -29,4 +23,4 @@ const SummaryDataHeader = styled.div`
   margin-bottom: ${(props) => props.theme.spacing(1)};
 `;
 
-export { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, SummaryDataHeader };
+export { FlexEnd, StyledTypography, StyledSvgIcon, SummaryDataHeader };

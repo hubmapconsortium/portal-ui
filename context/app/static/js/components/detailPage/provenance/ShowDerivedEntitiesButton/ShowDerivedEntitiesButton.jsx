@@ -3,6 +3,7 @@ import { useAppContext } from 'js/components/Contexts';
 import useImmediateDescendantProv from 'js/hooks/useImmediateDescendantProv';
 import useProvenanceStore from 'js/stores/useProvenanceStore';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import ProvData from '../ProvVis/ProvData';
 
 function getUniqueNewSteps(steps, newSteps) {
@@ -16,6 +17,8 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
   const { elasticsearchEndpoint, entityEndpoint, groupsToken } = useAppContext();
   const { steps, addDescendantSteps } = useProvenanceStore(useProvenanceStoreSelector);
   const [newSteps, setNewSteps] = useState([]);
+
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   const { immediateDescendantsProvData } = useImmediateDescendantProv(
     id,
@@ -34,6 +37,7 @@ function ShowDerivedEntitiesButton({ id, getNameForActivity, getNameForEntity })
   }, [immediateDescendantsProvData, steps, getNameForActivity, getNameForEntity]);
   function handleShowDescendants() {
     addDescendantSteps(newSteps);
+    trackEntityPageEvent({ action: 'Provenance / Graph / View Derived' });
   }
   return (
     <OptDisabledButton

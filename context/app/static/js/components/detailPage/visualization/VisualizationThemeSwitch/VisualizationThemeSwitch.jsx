@@ -5,6 +5,7 @@ import Brightness2Icon from '@mui/icons-material/Brightness2Rounded';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { StyledToggleButtonGroup } from './style';
 
 const visualizationStoreSelector = (state) => ({
@@ -14,9 +15,18 @@ const visualizationStoreSelector = (state) => ({
 
 function VisualizationThemeSwitch() {
   const { vizTheme, setVizTheme } = useVisualizationStore(visualizationStoreSelector);
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   return (
-    <StyledToggleButtonGroup value={vizTheme} exclusive onChange={(e, theme) => setVizTheme(theme)} size="small">
+    <StyledToggleButtonGroup
+      value={vizTheme}
+      exclusive
+      onChange={(e, theme) => {
+        trackEntityPageEvent({ action: `Vitessce / Toggle ${theme} Theme` });
+        setVizTheme(theme);
+      }}
+      size="small"
+    >
       <TooltipToggleButton
         tooltipComponent={SecondaryBackgroundTooltip}
         tooltipTitle="Switch to Light Theme"

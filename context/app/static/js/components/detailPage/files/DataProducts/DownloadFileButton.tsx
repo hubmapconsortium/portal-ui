@@ -1,6 +1,7 @@
 import { IconButton, IconButtonProps } from '@mui/material';
 import React, { PropsWithChildren } from 'react';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { useTrackEntityPageEvent } from 'js/components/detailPage//useTrackEntityPageEvent';
 import { UnprocessedFile } from '../types';
 import { useFileLink } from './hooks';
 import { DownloadIcon } from '../../MetadataTable/style';
@@ -13,6 +14,7 @@ interface DownloadFileButtonProps {
 function DUADownloadButton({ file, children }: PropsWithChildren<DownloadFileButtonProps>) {
   const link = useFileLink(file);
   const { hasAgreedToDUA, openDUA } = useFilesContext();
+  const trackEntityPageEvent = useTrackEntityPageEvent();
   const sharedProps = {
     size: 'small',
     color: 'primary',
@@ -20,7 +22,12 @@ function DUADownloadButton({ file, children }: PropsWithChildren<DownloadFileBut
   } satisfies Partial<IconButtonProps>;
   if (hasAgreedToDUA) {
     return (
-      <IconButton {...sharedProps} download href={link}>
+      <IconButton
+        {...sharedProps}
+        download
+        href={link}
+        onClick={() => trackEntityPageEvent({ action: 'Data Products / Download File Button', label: file.rel_path })}
+      >
         {children}
       </IconButton>
     );

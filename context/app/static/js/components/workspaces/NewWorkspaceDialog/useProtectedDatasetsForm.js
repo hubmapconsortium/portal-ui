@@ -33,8 +33,8 @@ function useProtectedDatasetsForm() {
     if (!reportedTooManyRows.current) {
       reportedTooManyRows.current = true;
       trackEvent({
-        category: 'Workspace Creation',
-        action: 'Too many datasets selected',
+        category: 'Workspaces',
+        action: 'Create Workspace / Too many datasets selected',
         value: selectedRows.size,
       });
     }
@@ -47,8 +47,8 @@ function useProtectedDatasetsForm() {
     if (!reportedProtectedRows.current) {
       reportedProtectedRows.current = true;
       trackEvent({
-        category: 'Workspace Creation',
-        action: 'Protected datasets selected',
+        category: 'Workspaces',
+        action: 'Create Workspace / Protected datasets selected',
         value: protectedRows.length,
       });
     }

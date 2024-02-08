@@ -5,6 +5,7 @@ import { FileIcon } from 'js/shared-styles/icons';
 import DetailAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import FilesConditionalLink from 'js/components/detailPage/BulkDataTransfer/FilesConditionalLink';
 
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { UnprocessedFile } from '../types';
 import { useFilesContext } from '../FilesContext';
 import { useFileLink } from './hooks';
@@ -19,6 +20,7 @@ interface DataProductProps {
 export function DataProduct({ file }: DataProductProps) {
   const link = useFileLink(file);
   const { openDUA, hasAgreedToDUA } = useFilesContext();
+  const trackEntityPageEvent = useTrackEntityPageEvent();
   return (
     <Box key={file.rel_path} data-testid="data-product" sx={{ py: 1.5 }}>
       <Box display="flex">
@@ -35,15 +37,17 @@ export function DataProduct({ file }: DataProductProps) {
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={0.5}>
             <div>
               <FilesConditionalLink
-                openDUA={openDUA}
+                openDUA={() => openDUA(link)}
                 hasAgreedToDUA={hasAgreedToDUA}
                 href={link}
                 underline="none"
                 download
                 variant="subtitle1"
-              >
-                {file.rel_path}
-              </FilesConditionalLink>
+                fileName={file.rel_path}
+                onClick={() =>
+                  trackEntityPageEvent({ action: 'Data Products / Download File Link', label: file.rel_path })
+                }
+              />
               <FileSize size={file.size} />
             </div>
             <DownloadFileButton file={file} />

@@ -2,6 +2,7 @@ import { createContext, useContext } from 'js/helpers/context';
 import React, { PropsWithChildren, useCallback, useMemo, useState } from 'react';
 import { useDetailContext } from '../DetailContext';
 import FileBrowserDUA from '../BulkDataTransfer/FileBrowserDUA';
+import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
 // Either a URL to open in a new tab or a function to call when the user agrees to the DUA
 // This function needs to be wrapped in an object because passing a raw function was causing
@@ -24,6 +25,8 @@ export const useFilesContext = () => useContext(FilesContext);
 export function FilesContextProvider({ children }: PropsWithChildren) {
   const { mapped_data_access_level } = useDetailContext();
 
+  const trackEntityPageEvent = useTrackEntityPageEvent();
+
   const localStorageKey = `has_agreed_to_${mapped_data_access_level}_DUA`;
   const [hasAgreedToDUA, agreeToDUA] = useState<boolean>(Boolean(localStorage.getItem(localStorageKey)));
   const [isDialogOpen, setDialogOpen] = useState(false);
@@ -32,22 +35,28 @@ export function FilesContextProvider({ children }: PropsWithChildren) {
   const handleDUAAgree = useCallback(() => {
     agreeToDUA(true);
     localStorage.setItem(localStorageKey, 'true');
+    trackEntityPageEvent({ action: 'Agree File DUA', label: localStorageKey });
     setDialogOpen(false);
+
     if (typeof onDUAAgree === 'string') {
       window.open(onDUAAgree, '_blank');
     } else {
       onDUAAgree.handleAgree();
     }
-  }, [agreeToDUA, localStorageKey, setDialogOpen, onDUAAgree]);
+  }, [agreeToDUA, localStorageKey, setDialogOpen, onDUAAgree, trackEntityPageEvent]);
 
   const handleDUAClose = useCallback(() => {
     setDialogOpen(false);
   }, []);
 
-  const openDUA = useCallback((onAgree: OnDUAAgree) => {
-    setDialogOpen(true);
-    setOnDUAAgree(onAgree);
-  }, []);
+  const openDUA = useCallback(
+    (onAgree: OnDUAAgree) => {
+      trackEntityPageEvent({ action: 'Open File DUA' });
+      setDialogOpen(true);
+      setOnDUAAgree(onAgree);
+    },
+    [trackEntityPageEvent],
+  );
 
   const filesContext = useMemo(() => ({ openDUA, hasAgreedToDUA }), [openDUA, hasAgreedToDUA]);
 

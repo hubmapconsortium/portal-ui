@@ -3,14 +3,13 @@ import PropTypes from 'prop-types';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { FileIcon } from 'js/shared-styles/icons';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { FlexEnd, JsonButton, StyledTypography, StyledSvgIcon, SummaryDataHeader } from './style';
+import { FlexEnd, StyledTypography, StyledSvgIcon, SummaryDataHeader } from './style';
+import SummaryJSONButton from '../SummaryJSONButton';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -60,13 +59,7 @@ function SummaryData({
               </>
             )}
             <FlexEnd>
-              {showJsonButton && (
-                <SecondaryBackgroundTooltip title="View JSON">
-                  <JsonButton href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`} target="_blank" component="a">
-                    <FileIcon color="primary" />
-                  </JsonButton>
-                </SecondaryBackgroundTooltip>
-              )}
+              {showJsonButton && <SummaryJSONButton entity_type={entity_type} uuid={uuid} />}
               {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
               {datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>

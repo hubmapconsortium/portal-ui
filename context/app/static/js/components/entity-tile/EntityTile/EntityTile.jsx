@@ -10,7 +10,7 @@ import { StyledIcon } from './style';
 
 const tileWidth = 310;
 
-function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendantCounts }) {
+function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendantCounts, ...rest }) {
   return (
     <Tile
       href={`/browse/${entity_type.toLowerCase()}/${uuid}`}
@@ -27,6 +27,7 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
         />
       }
       tileWidth={tileWidth}
+      {...rest}
     />
   );
 }

@@ -5,7 +5,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import Summary from 'js/components/detailPage/summary/Summary';
 import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasetsTable';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
-import useSendUUIDEvent from 'js/components/detailPage/useSendUUIDEvent';
+import useTrackID from 'js/hooks/useTrackID';
 
 function Collection({ collection: collectionData }) {
   const {
@@ -24,7 +24,7 @@ function Collection({ collection: collectionData }) {
 
   const doi = new URL(doi_url).pathname.slice(1);
 
-  useSendUUIDEvent(entity_type, collectionData);
+  useTrackID({ entity_type, hubmap_id });
 
   return (
     <div>

@@ -10,6 +10,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import FilesConditionalLink from './FilesConditionalLink';
 import { LinkContainer } from './style';
 import { useFetchProtectedFile } from './hooks';
+import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
 function WrapperComponent({ isSupport, children }) {
   if (isSupport) {
@@ -37,6 +38,7 @@ function GlobusLink({ uuid, isSupport = false }) {
 
   const { status, responseUrl } = useFetchProtectedFile(uuid);
   const { hasAgreedToDUA, openDUA } = useFilesContext();
+  const trackEntityPageEvent = useTrackEntityPageEvent();
 
   if (!status) {
     return <DetailSectionPaper>Loading...</DetailSectionPaper>;
@@ -51,10 +53,9 @@ function GlobusLink({ uuid, isSupport = false }) {
           openDUA={() => openDUA(responseUrl)}
           variant="subtitle2"
           hasIcon
-        >
-          {hubmap_id}
-          {' Globus'}
-        </FilesConditionalLink>
+          fileName={`${hubmap_id} ${'Globus'}`}
+          onClick={() => trackEntityPageEvent({ action: 'Bulk Data Transfer / Globus Navigation' })}
+        />
       </WrapperComponent>
     </LinkContainer>
   );
