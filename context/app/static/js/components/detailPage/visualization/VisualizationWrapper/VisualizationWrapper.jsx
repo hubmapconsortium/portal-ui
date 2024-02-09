@@ -6,7 +6,15 @@ import { VisualizationSuspenseFallback } from './VisualizationSuspenseFallback';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
-function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader, hasBeenMounted, isPublicationPage }) {
+function VisualizationWrapper({
+  vitData,
+  uuid,
+  hasNotebook,
+  shouldDisplayHeader,
+  hasBeenMounted,
+  isPublicationPage,
+  markerGene,
+}) {
   const containerStyles = useMemo(
     () => ({
       shouldDisplayHeader,
@@ -25,6 +33,7 @@ function VisualizationWrapper({ vitData, uuid, hasNotebook, shouldDisplayHeader,
             hasNotebook={hasNotebook}
             shouldDisplayHeader={shouldDisplayHeader}
             shouldMountVitessce={hasBeenMounted}
+            markerGene={markerGene}
           />
         </Suspense>
       </VisualizationErrorBoundary>

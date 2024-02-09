@@ -44,7 +44,7 @@ const visualizationStoreSelector = (state) => ({
   setVitessceStateDebounced: state.setVitessceStateDebounced,
 });
 
-function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true }) {
+function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true, markerGene }) {
   const {
     vizIsFullscreen,
     expandViz,
@@ -86,11 +86,8 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   const { vitessceConfig, vitessceSelection, setVitessceSelection } = useVitessceConfig({
     vitData,
     setVitessceState,
+    markerGene,
   });
-
-  function addError(message) {
-    toastError(message);
-  }
 
   function setSelectionAndClearErrors(itemAndIndex) {
     const { i } = itemAndIndex;
@@ -163,7 +160,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
                   theme={vizTheme}
                   onConfigChange={setVitessceStateDebounced}
                   height={vizIsFullscreen ? null : vitessceFixedHeight}
-                  onWarn={addError}
+                  onWarn={toastError}
                 />
               </VisualizationTracker>
             )}
