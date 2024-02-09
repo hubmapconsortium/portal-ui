@@ -10,6 +10,9 @@ from .utils import make_blueprint, get_client, get_default_flask_data
 
 
 cells_client_env = 'dev'
+cells_url = f'https://cells.{cells_client_env}.hubmapconsortium.org/api'
+celltype_url = f'{cells_url}/celltype/'
+celltype_eval_url = f'{cells_url}/celltypeevaluation/'
 
 
 def get_cells_client():
@@ -59,11 +62,9 @@ def genes_detail_view(gene_symbol):
 # Fetches list of all cell types
 @blueprint.route('/cell-types/list.json')
 def cell_types_list():
-    celltype_token_post = post(
-        f'https://cells.{cells_client_env}.hubmapconsortium.org/api/celltype/',
-        {}).json()
+    celltype_token_post = post(celltype_url, {}).json()
     celltype_token = celltype_token_post['results'][0]['query_handle']
-    celltype_list = post(f'https://cells.{cells_client_env}.hubmapconsortium.org/api/celltypeevaluation/', {
+    celltype_list = post(celltype_eval_url, {
         'key': celltype_token,
         'set_type': 'cell_type',
         'limit': 500}).json()['results']
