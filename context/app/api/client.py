@@ -178,7 +178,7 @@ class ApiClient():
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
         vis_lifted_uuid = None  # default
-        image_pyramid_descendants = self.get_descendant_to_lift('image_pyramid', entity["uuid"])
+        image_pyramid_descendants = self.get_descendant_to_lift(entity["uuid"])
 
         # First, try "vis-lifting": Display image pyramids on their parent entity pages.
         if image_pyramid_descendants:
@@ -256,7 +256,7 @@ class ApiClient():
 
         return _handle_request(url, headers).text
 
-    def get_descendant_to_lift(self, data_type, uuid):
+    def get_descendant_to_lift(self, uuid):
         '''
         Given the data type of the descendant and a uuid,
         returns the doc of the most recent descendant
@@ -268,7 +268,7 @@ class ApiClient():
                     "must": [
                         {
                             "term": {
-                                "data_types": data_type
+                                "vitessce-hints": "is_support"
                             }
                         },
                         {
@@ -312,8 +312,7 @@ class ApiClient():
         '''
         publication_json = {}
         publication_ancillary_uuid = None
-        publication_ancillary_descendant = self.get_descendant_to_lift('publication_ancillary',
-                                                                       entity["uuid"])
+        publication_ancillary_descendant = self.get_descendant_to_lift(entity["uuid"])
         if publication_ancillary_descendant:
             publication_ancillary_uuid = publication_ancillary_descendant["uuid"]
             publication_json_path = (f"{current_app.config['ASSETS_ENDPOINT']}/"
