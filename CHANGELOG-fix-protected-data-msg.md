@@ -1,1 +1,1 @@
--- Update bulk data transfer message for consortium members who do not have protected data access who are attempting to access protected data.
+- Update bulk data transfer message for consortium members who do not have protected data access who are attempting to access protected data.
