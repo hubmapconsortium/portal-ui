@@ -202,7 +202,7 @@ class ApiClient():
                         {entity["uuid"]}: {error}')
                 vitessce_conf = _create_vitessce_error(error)
 
-        elif not entity.get('files') or not entity.get('data_types'):
+        elif not entity.get('files'):
             vitessce_conf = ConfCells(None, None)
 
         # Otherwise, just try to visualize the data for the entity itself:
