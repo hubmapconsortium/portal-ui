@@ -1,1 +1,0 @@
-- Fix bug in which new datasets without deprecated `data_types` field were not displaying visualizations correctly.

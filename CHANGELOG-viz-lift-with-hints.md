@@ -1,1 +1,0 @@
-- Determine support entity to 'viz-lift' by presence of `is_support` in `vitessce-hints`.
