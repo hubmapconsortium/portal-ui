@@ -79,7 +79,7 @@ def test_get_descendant_to_lift(app, mocker):
     mocker.patch('requests.post', side_effect=mock_es_post)
     with app.app_context():
         api_client = ApiClient()
-        descendant = api_client.get_descendant_to_lift('image_pyramid', 'uuid123')
+        descendant = api_client.get_descendant_to_lift('uuid123')
     assert descendant == mock_hit_source
 
 
@@ -106,5 +106,5 @@ def test_get_descendant_to_lift_error(app, mocker):
     mocker.patch('requests.post', side_effect=mock_es_post_no_hits)
     with app.app_context():
         api_client = ApiClient()
-        descendant = api_client.get_descendant_to_lift('image_pyramid', 'uuid123')
+        descendant = api_client.get_descendant_to_lift('uuid123')
     assert descendant is None
