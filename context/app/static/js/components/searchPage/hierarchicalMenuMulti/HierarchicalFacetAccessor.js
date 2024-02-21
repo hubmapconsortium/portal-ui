@@ -32,10 +32,13 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
 
   uuids;
 
+  childToParentMap;
+
   constructor(key, options) {
     super(key);
     this.options = options;
     this.computeUuids();
+    this.childToParentMap = {};
   }
 
   computeUuids() {
@@ -61,6 +64,10 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
     }
 
     const childBuckets = buildChildBuckets(parentBuckets, childField);
+
+    this.childToParentMap = childBuckets.reduce((map, { key, parentKey }) => {
+      return { ...map, [key]: parentKey };
+    }, {});
     return convertBucketsKeys(childBuckets);
   }
 
@@ -85,7 +92,7 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
         name: this.options.title,
         value: this.translate(f),
         remove: () => {
-          this.state = this.state.remove(i, f);
+          this.state = this.state.remove(i, { key: f, parentKey: this.childToParentMap?.[f] });
         },
       }));
 
