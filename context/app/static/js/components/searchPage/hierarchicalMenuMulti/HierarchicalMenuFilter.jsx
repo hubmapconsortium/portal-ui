@@ -1,39 +1,33 @@
 /* eslint-disable consistent-return */
 /* eslint-disable import/no-extraneous-dependencies */
-import * as React from 'react';
-import * as PropTypes from 'prop-types';
+import React from 'react';
+import PropTypes from 'prop-types';
 
 import Box from '@mui/material/Box';
 import { SearchkitComponent, renderComponent, RenderComponentPropType, Panel } from 'searchkit';
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import { HierarchicalFacetAccessor } from './HierarchicalFacetAccessor';
 
-const defaults = require('lodash/defaults');
-const map = require('lodash/map');
-const identity = require('lodash/identity');
-
 export class HierarchicalMenuFilter extends SearchkitComponent {
   static accessor;
 
   static defaultProps = {
-    countFormatter: identity,
+    countFormatter: (n) => n,
     size: 20,
     containerComponent: Panel,
   };
 
-  static propTypes = defaults(
-    {
-      id: PropTypes.string.isRequired,
-      fields: PropTypes.arrayOf(PropTypes.string).isRequired,
-      title: PropTypes.string.isRequired,
-      orderKey: PropTypes.string,
-      orderDirection: PropTypes.oneOf(['asc', 'desc']),
-      countFormatter: PropTypes.func,
-      containerComponent: RenderComponentPropType,
-      itemComponent: RenderComponentPropType,
-    },
-    SearchkitComponent.propTypes,
-  );
+  static propTypes = {
+    ...SearchkitComponent.propTypes,
+    id: PropTypes.string.isRequired,
+    fields: PropTypes.arrayOf(PropTypes.string).isRequired,
+    title: PropTypes.string.isRequired,
+    orderKey: PropTypes.string,
+    orderDirection: PropTypes.oneOf(['asc', 'desc']),
+    countFormatter: PropTypes.func,
+    containerComponent: RenderComponentPropType,
+    itemComponent: RenderComponentPropType,
+  };
 
   defineAccessor() {
     const { id, title, fields, size, orderKey, orderDirection } = this.props;
@@ -91,7 +85,7 @@ export class HierarchicalMenuFilter extends SearchkitComponent {
       return null;
     }
     const buckets = this.accessor.getBuckets(level).filter((bucket) => bucket.parentKey === parentKey);
-    return <Box sx={{ ml: level }}>{map(buckets, this.renderOption.bind(this, level))}</Box>;
+    return <Box sx={{ ml: level }}>{buckets.map((bucket) => this.renderOption.bind(this, level, bucket)())}</Box>;
   }
 
   render() {

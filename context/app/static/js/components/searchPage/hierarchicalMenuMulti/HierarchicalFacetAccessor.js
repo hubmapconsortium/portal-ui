@@ -3,10 +3,7 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { TermQuery, FilterBucket, BoolShould, FilterBasedAccessor } from 'searchkit';
 
-import { LevelState, isParentLevel } from './LevelState';
-
-const map = require('lodash/map');
-const each = require('lodash/each');
+import { LevelState, isParentLevel, PARENT_LEVEL, CHILD_LEVEL } from './LevelState';
 
 function convertBucketsKeys(buckets) {
   return buckets.map((item) => {
@@ -42,7 +39,7 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
   }
 
   computeUuids() {
-    this.uuids = map(this.options.fields, (field) => this.uuid + field);
+    this.uuids = this.options.fields.map((field) => this.uuid + field);
   }
 
   onResetFilters() {
@@ -50,23 +47,21 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
   }
 
   getBuckets(level) {
-    if (level > 1) {
+    if (level > CHILD_LEVEL) {
       return [];
     }
-    const isChildLevel = !isParentLevel(level);
-
     const { fields } = this.options;
-
     const parentField = fields[0];
     const childField = fields[1];
 
     const parentBuckets = this.getAggregations([this.options.id, parentField, 'buckets'], []);
-    if (isChildLevel) {
-      const childBuckets = buildChildBuckets(parentBuckets, childField);
-      return convertBucketsKeys(childBuckets);
+
+    if (isParentLevel(level)) {
+      return convertBucketsKeys(buildParentBuckets(parentBuckets, childField));
     }
 
-    return convertBucketsKeys(buildParentBuckets(parentBuckets, childField));
+    const childBuckets = buildChildBuckets(parentBuckets, childField);
+    return convertBucketsKeys(childBuckets);
   }
 
   getOrder() {
@@ -77,20 +72,20 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
   }
 
   buildSharedQuery(query) {
-    each(this.options.fields, (field, i) => {
+    this.options.fields.forEach((field, i) => {
       const filters = this.state.getLevel(i);
-      const filterTerms = map(filters, TermQuery.bind(null, field));
+      const filterTerms = filters.map((f) => TermQuery.bind(null, field, f)());
 
       if (filterTerms.length > 0) {
         query = query.addFilter(this.uuids[i], filterTerms.length > 1 ? BoolShould(filterTerms) : filterTerms[0]);
       }
 
-      const selectedFilters = map(filters, (filter) => ({
+      const selectedFilters = filters.map((f) => ({
         id: this.options.id,
         name: this.options.title,
-        value: this.translate(filter),
+        value: this.translate(f),
         remove: () => {
-          this.state = this.state.remove(i, filter);
+          this.state = this.state.remove(i, f);
         },
       }));
 
@@ -102,14 +97,14 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
 
   buildOwnQuery(query) {
     const subAggs = {
-      [this.options.fields[0]]: {
+      [this.options.fields[PARENT_LEVEL]]: {
         terms: {
-          field: this.options.fields[0],
+          field: this.options.fields[PARENT_LEVEL],
         },
         aggs: {
-          [this.options.fields[1]]: {
+          [this.options.fields[CHILD_LEVEL]]: {
             terms: {
-              field: this.options.fields[1],
+              field: this.options.fields[CHILD_LEVEL],
             },
           },
         },

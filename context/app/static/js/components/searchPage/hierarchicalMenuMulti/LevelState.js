@@ -2,10 +2,11 @@
 import { State } from 'searchkit';
 import { produce } from 'immer';
 
-const MAX_LEAF_LEVEL = 1;
+export const PARENT_LEVEL = 0;
+export const CHILD_LEVEL = 1;
 
 export function isParentLevel(level) {
-  return level === 0;
+  return level === PARENT_LEVEL;
 }
 export class LevelState extends State {
   static value;
@@ -50,7 +51,7 @@ export class LevelState extends State {
   }
 
   isLeafLevel(level) {
-    return level === MAX_LEAF_LEVEL || this.getLevel(0).length === 0;
+    return level === CHILD_LEVEL || this.getLevel(1).length === 0;
   }
 
   getLevel(level) {
