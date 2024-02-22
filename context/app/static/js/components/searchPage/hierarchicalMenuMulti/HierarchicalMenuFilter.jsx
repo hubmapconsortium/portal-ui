@@ -1,10 +1,9 @@
 /* eslint-disable consistent-return */
-/* eslint-disable import/no-extraneous-dependencies */
 import React from 'react';
 import PropTypes from 'prop-types';
-
 import Box from '@mui/material/Box';
 import { SearchkitComponent, renderComponent, RenderComponentPropType, Panel } from 'searchkit';
+
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import { HierarchicalFacetAccessor } from './HierarchicalFacetAccessor';
 

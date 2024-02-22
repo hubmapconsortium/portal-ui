@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 import { State } from 'searchkit';
 import { produce } from 'immer';
 

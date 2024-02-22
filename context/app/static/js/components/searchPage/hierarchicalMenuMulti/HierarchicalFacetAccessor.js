@@ -1,6 +1,5 @@
 /* eslint-disable no-param-reassign */
 /* eslint-disable consistent-return */
-/* eslint-disable import/no-extraneous-dependencies */
 import { TermQuery, FilterBucket, BoolShould, FilterBasedAccessor } from 'searchkit';
 
 import { LevelState, isParentLevel, PARENT_LEVEL, CHILD_LEVEL } from './LevelState';
