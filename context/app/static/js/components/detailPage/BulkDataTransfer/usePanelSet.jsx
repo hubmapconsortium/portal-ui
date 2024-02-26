@@ -134,8 +134,8 @@ const NO_ACCESS_TO_PROTECTED_DATA = {
     status: 'warning',
     children: (
       <div>
-        These data are still being prepared, processed, or curated and will only be available to members of the team who
-        submitted the data. For additional help, <ContactUsLink variant="body2" />.
+        This dataset contains protected-access human sequence data. Please ask the PI of your HuBMAP award to{' '}
+        <ContactUsLink variant="body2" /> and submit a ticket to get you access to protected HuBMAP data through Globus.
       </div>
     ),
   },

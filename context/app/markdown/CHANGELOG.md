@@ -1,3 +1,10 @@
+## v0.90.0 - 2024-02-15
+
+- Fix bug in which new datasets without deprecated `data_types` field were not displaying visualizations correctly.
+- Update bulk data transfer message for consortium members who do not have protected data access who are attempting to access protected data.
+- Determine support entity to 'viz-lift' by presence of `is_support` in `vitessce-hints`.
+
+
 ## v0.89.1 - 2024-02-07
 
 - Fix entity page event tracker to handle undefined entity in flask context.
