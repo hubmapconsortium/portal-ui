@@ -204,7 +204,7 @@ export const usePanelSet = () => {
   const hasNoAccess = globusURLStatus === 403;
   const isNonConsortium = !isHubmapUser;
 
-  if (accessType === 'Public') {
+  if (accessType !== 'Protected') {
     return getGlobusPanel({ status: globusURLStatus, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
   }
 
