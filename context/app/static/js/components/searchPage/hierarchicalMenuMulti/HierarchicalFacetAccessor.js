@@ -11,17 +11,43 @@ function convertBucketsKeys(buckets) {
   });
 }
 
-function buildChildBuckets(parentBuckets, childField) {
-  return parentBuckets.reduce((acc, parentBucket) => {
-    const childBuckets = parentBucket[childField]?.buckets;
-    childBuckets.forEach((childBucket) => acc.push({ ...childBucket, parentKey: parentBucket.key }));
+function buildChildBuckets({ aggregations, childField, selectedState }) {
+  const aggsBuckets = aggregations.reduce(
+    (acc, parentBucket) => {
+      const childBuckets = parentBucket[childField]?.buckets.map((b) => ({ ...b, parentKey: parentBucket.key }));
+      acc.keys = new Set([...acc.keys, ...childBuckets.map((b) => b.key)]);
+      acc.buckets = [...acc.buckets, ...childBuckets];
+      return acc;
+    },
+    {
+      keys: new Set([]),
+      buckets: [],
+    },
+  );
 
+  const selectedBuckets = Object.entries(selectedState).reduce((acc, [parentKey, childKeys]) => {
+    childKeys.forEach((childKey) => {
+      if (!aggsBuckets.keys.has(childKey)) {
+        acc.push({ key: childKey, parentKey, doc_count: 0 });
+      }
+    });
     return acc;
   }, []);
+
+  return [...aggsBuckets.buckets, ...selectedBuckets];
 }
 
-function buildParentBuckets(parentBuckets, childField) {
-  return parentBuckets.map((bucket) => ({ ...bucket, childField }));
+function buildParentBuckets({ aggregations, childField, selectedState }) {
+  const aggsBuckets = aggregations.reduce((acc, parentBucket) => {
+    acc[parentBucket.key] = { ...parentBucket, childField };
+    return acc;
+  }, {});
+
+  const selectedBuckets = Object.keys(selectedState)
+    .filter((key) => aggsBuckets?.[key] === undefined)
+    .map((key) => ({ key, childField, doc_count: 0 }));
+
+  return [...Object.values(aggsBuckets), ...selectedBuckets];
 }
 
 export class HierarchicalFacetAccessor extends FilterBasedAccessor {
@@ -31,13 +57,10 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
 
   uuids;
 
-  childToParentMap;
-
   constructor(key, options) {
     super(key);
     this.options = options;
     this.computeUuids();
-    this.childToParentMap = {};
   }
 
   computeUuids() {
@@ -53,20 +76,19 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
       return [];
     }
     const { fields } = this.options;
-    const parentField = fields[0];
-    const childField = fields[1];
+    const parentField = fields[PARENT_LEVEL];
+    const childField = fields[CHILD_LEVEL];
 
-    const parentBuckets = this.getAggregations([this.options.id, parentField, 'buckets'], []);
+    const aggregations = this.getAggregations([this.options.id, parentField, 'buckets'], []);
+
+    const selectedState = this.state.getValue();
 
     if (isParentLevel(level)) {
-      return convertBucketsKeys(buildParentBuckets(parentBuckets, childField));
+      return convertBucketsKeys(buildParentBuckets({ aggregations, childField, selectedState }));
     }
 
-    const childBuckets = buildChildBuckets(parentBuckets, childField);
+    const childBuckets = buildChildBuckets({ aggregations, childField, selectedState });
 
-    this.childToParentMap = childBuckets.reduce((map, { key, parentKey }) => {
-      return { ...map, [key]: parentKey };
-    }, {});
     return convertBucketsKeys(childBuckets);
   }
 
@@ -80,22 +102,24 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
   buildSharedQuery(query) {
     this.options.fields.forEach((field, i) => {
       const filters = this.state.getLevel(i);
-      const filterTerms = filters.map((f) => TermQuery.bind(null, field, f)());
+      const filterTerms = filters.map((f) => TermQuery.bind(null, field, f.key)());
 
       if (filterTerms.length > 0) {
         query = query.addFilter(this.uuids[i], filterTerms.length > 1 ? BoolShould(filterTerms) : filterTerms[0]);
       }
 
-      const selectedFilters = filters.map((f) => ({
-        id: this.options.id,
-        name: this.options.title,
-        value: this.translate(f),
-        remove: () => {
-          this.state = this.state.remove(i, { key: f, parentKey: this.childToParentMap?.[f] });
-        },
-      }));
+      if (i === CHILD_LEVEL) {
+        const selectedFilters = filters.map((f) => ({
+          id: this.options.id,
+          name: this.options.title,
+          value: this.translate(f.key),
+          remove: () => {
+            this.state = this.state.remove(i, f);
+          },
+        }));
 
-      query = query.addSelectedFilters(selectedFilters);
+        query = query.addSelectedFilters(selectedFilters);
+      }
     });
 
     return query;

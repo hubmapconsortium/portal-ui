@@ -41,6 +41,14 @@ export class LevelState extends State {
         }),
       );
     }
+    if (this.value[val.parentKey].length === 1) {
+      return this.create(
+        produce(this.value, (draft) => {
+          delete draft[val.parentKey];
+        }),
+      );
+    }
+
     return this.create(
       produce(this.value, (draft) => {
         const index = draft[val.parentKey].indexOf(val.key);
@@ -55,10 +63,18 @@ export class LevelState extends State {
 
   getLevel(level) {
     if (isParentLevel(level)) {
-      return Object.keys(this.getValue());
+      return Object.keys(this.getValue()).map((key) => ({ key }));
     }
 
-    return Object.values(this.getValue()).flat();
+    return Object.entries(this.getValue()).reduce((acc, [parentKey, childKeys]) => {
+      return [
+        ...acc,
+        ...childKeys.map((key) => ({
+          key,
+          parentKey,
+        })),
+      ];
+    }, []);
   }
 
   levelHasFilters(level) {
