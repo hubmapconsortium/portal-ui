@@ -5,7 +5,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import FilterInnerAccordion from 'js/components/searchPage/filters/FilterInnerAccordion';
 import HierarchicalFilterItem from 'js/components/searchPage/filters/HierarchicalFilterItem';
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
-import { HierarchicalMenuFilter } from '../../hierarchicalMenuMulti/HierarchicalMenuFilter';
+import HierarchicalMenuFilter from 'js/components/searchPage/HierarchicalMenuFilter';
 import AlphabetizedRefinementListFilter from './AlphabetizedRefinementListFilter';
 
 export function withAnalyticsEvent(ItemComponent, title, analyticsCategory, configItemProps) {
