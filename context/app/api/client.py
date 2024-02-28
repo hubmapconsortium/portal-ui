@@ -272,7 +272,7 @@ class ApiClient():
                     "must": [
                         {
                             "term": {
-                                "vitessce-hints": "is_support"
+                                "vitessce-hints": "is_image"
                             }
                         },
                         {
