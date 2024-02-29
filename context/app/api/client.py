@@ -260,19 +260,20 @@ class ApiClient():
 
         return _handle_request(url, headers).text
 
-    def get_descendant_to_lift(self, uuid):
+    def get_descendant_to_lift(self, uuid, is_publication=False):
         '''
         Given the data type of the descendant and a uuid,
         returns the doc of the most recent descendant
         that is in QA or Published status.
         '''
+        hints = "is_support" if is_publication else "is_image"
         query = {
             "query": {
                 "bool": {
                     "must": [
                         {
                             "term": {
-                                "vitessce-hints": "is_image"
+                                "vitessce-hints": hints
                             }
                         },
                         {
@@ -316,7 +317,9 @@ class ApiClient():
         '''
         publication_json = {}
         publication_ancillary_uuid = None
-        publication_ancillary_descendant = self.get_descendant_to_lift(entity["uuid"])
+        publication_ancillary_descendant = self.get_descendant_to_lift(
+            entity["uuid"], is_publication=True)
+        print(publication_ancillary_descendant)
         if publication_ancillary_descendant:
             publication_ancillary_uuid = publication_ancillary_descendant["uuid"]
             publication_json_path = (f"{current_app.config['ASSETS_ENDPOINT']}/"
