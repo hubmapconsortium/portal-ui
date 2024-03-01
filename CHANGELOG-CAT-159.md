@@ -1,0 +1,2 @@
+- Add support for Visium datasets.
+- Fix visualizations for image pyramid datasets.
