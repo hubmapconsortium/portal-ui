@@ -173,7 +173,8 @@ class ApiClient():
             body_json=query)
         return files_from_response(response_json)
 
-    def get_vitessce_conf_cells_and_lifted_uuid(self, entity, marker=None, wrap_error=True, parent=None):
+    def get_vitessce_conf_cells_and_lifted_uuid(
+            self, entity, marker=None, wrap_error=True, parent=None):
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
