@@ -5,11 +5,11 @@ import Stack from '@mui/material/Stack';
 
 import PageTitle from 'js/shared-styles/pages/PageTitle';
 
-import { useGeneDetails, useGenePageContext } from './hooks';
+import { useGeneOntology, useGenePageContext } from './hooks';
 
 function GeneSymbol() {
   const { geneSymbol } = useGenePageContext();
-  const { data } = useGeneDetails();
+  const { data } = useGeneOntology();
   if (!data) {
     return geneSymbol.toUpperCase();
   }
@@ -17,7 +17,7 @@ function GeneSymbol() {
 }
 
 function GeneName() {
-  const { data } = useGeneDetails();
+  const { data } = useGeneOntology();
   if (!data) {
     return <Skeleton variant="rounded" width={160} sx={{ display: 'inline-block' }} />;
   }

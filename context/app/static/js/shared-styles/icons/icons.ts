@@ -19,7 +19,7 @@ import ArrowDropDownRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
-import ContactSupportIcon from '@mui/icons-material/ContactSupportOutlined';
+import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
 import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { ElementType } from 'react';

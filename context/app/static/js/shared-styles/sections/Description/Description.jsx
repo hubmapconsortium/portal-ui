@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 
 import { StyledPaper, StyledInfoIcon } from './style';
 
-function Description({ children, noIcon, ...props }) {
+function Description({ children, noIcon = false, ...props }) {
   return (
     <StyledPaper {...props}>
       {!noIcon && <StyledInfoIcon color="primary" />}

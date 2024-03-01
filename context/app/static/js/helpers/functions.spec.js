@@ -67,6 +67,10 @@ test('filterObjectByKeys', () => {
 });
 
 test('getOriginSamplesOrgan', () => {
-  const entity = { origin_samples: [{ mapped_organ: 'heart' }] };
+  const entity = { origin_samples_unique_mapped_organs: ['heart'] };
   expect(getOriginSamplesOrgan(entity)).toEqual('heart');
+  entity.origin_samples_unique_mapped_organs = ['heart', 'liver'];
+  expect(getOriginSamplesOrgan(entity)).toEqual('heart, liver');
+  entity.origin_samples_unique_mapped_organs = [];
+  expect(getOriginSamplesOrgan(entity)).toEqual('');
 });

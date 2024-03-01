@@ -103,6 +103,10 @@ anndata==0.8.0 \
 asciitree==0.3.3 \
     --hash=sha256:4aa4b9b649f85e3fcb343363d97564aa1fb62e249677f2e18a96765145cc0f6e
     # via zarr
+asgiref==3.7.2 \
+    --hash=sha256:89b2ef2247e3b562a16eef663bc0e2e703ec6468e2fa8a5cd61cd449786d4f6e \
+    --hash=sha256:9e0ce3aa93a819ba5b45120216b23878cf6e8525eb3848653452b4192b92afed
+    # via flask
 async-timeout==4.0.2 \
     --hash=sha256:2163e1640ddb52b7a8c80d0a67a08587e5d245cc9c553a74a847056bc2976b15 \
     --hash=sha256:8ca1e4fcf50d07413d66d1a5e416e42cfdf5851c981d679a09851a6853383b3c
@@ -308,7 +312,7 @@ fasteners==0.17.3 \
     --hash=sha256:a9a42a208573d4074c77d041447336cf4e3c1389a256fd3e113ef59cf29b7980 \
     --hash=sha256:cae0772df265923e71435cc5057840138f4e8b6302f888a567d06ed8e1cbca03
     # via zarr
-flask==2.3.3 \
+flask[async]==2.3.3 \
     --hash=sha256:09c347a92aa7ff4a8e7f3206795f30d826654baf38b873d0744cd571ca609efc \
     --hash=sha256:f69fcd559dc907ed196ab9df0e48471709175e696d6e698dd4dbe940f96ce66b
     # via
@@ -1425,6 +1429,7 @@ typing-extensions==4.1.1 \
     --hash=sha256:1a9462dcc3347a79b1f1c0271fbe79e844580bb598bafa1ed208b94da3cdcd42 \
     --hash=sha256:21c85e0fe4b9a155d0799430b0ad741cdce7e359660ccbd8b530613e8df88ce2
     # via
+    #   asgiref
     #   black
     #   globus-sdk
 umap-learn==0.5.3 \

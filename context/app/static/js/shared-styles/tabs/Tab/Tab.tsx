@@ -10,3 +10,4 @@ function Tab({ index, ...props }: TabProps) {
 }
 
 export default Tab;
+export type { TabProps };
