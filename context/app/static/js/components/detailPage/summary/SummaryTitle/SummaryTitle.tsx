@@ -5,14 +5,16 @@ import { useInView } from 'react-intersection-observer';
 import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { Stack } from '@mui/material';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
 const entityStoreSelector = (state: EntityStore) => state.setSummaryComponentObserver;
 
 interface SummaryTitleProps extends PropsWithChildren {
   iconTooltipText?: string;
+  entityIcon?: keyof typeof entityIconMap;
 }
 
-function SummaryTitle({ children, iconTooltipText }: SummaryTitleProps) {
+function SummaryTitle({ children, iconTooltipText, entityIcon }: SummaryTitleProps) {
   const setSummaryComponentObserver = useEntityStore(entityStoreSelector);
 
   const { ref, inView, entry } = useInView({
@@ -20,6 +22,8 @@ function SummaryTitle({ children, iconTooltipText }: SummaryTitleProps) {
     threshold: 0,
     initialInView: true,
   });
+
+  const Icon = entityIcon ? entityIconMap[entityIcon] : null;
 
   useEffect(() => {
     if (entry) {
@@ -29,6 +33,7 @@ function SummaryTitle({ children, iconTooltipText }: SummaryTitleProps) {
 
   return (
     <Stack direction="row" alignItems="center">
+      {Icon && <Icon color="primary" />}
       <Typography variant="subtitle1" component="h1" color="primary" ref={ref}>
         {children}
       </Typography>

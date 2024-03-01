@@ -5,7 +5,7 @@ import hasKey from 'js/helpers/hasKey';
 import { capitalizeString } from 'js/helpers/functions';
 
 import { Skeleton } from '@mui/material';
-import { useGeneDetails } from '../hooks';
+import { useGeneOntology } from '../hooks';
 import { ReferenceList } from './styles';
 
 // Map reference sources to display names
@@ -24,7 +24,7 @@ const referenceMap = new Proxy<Record<string, string>>(
 );
 
 function ReferenceListContents() {
-  const { data } = useGeneDetails();
+  const { data } = useGeneOntology();
   if (!data) {
     return (
       <>

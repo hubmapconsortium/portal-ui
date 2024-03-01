@@ -35,6 +35,7 @@ const Workspace = lazy(() => import('js/pages/Workspace'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 const GeneDetails = lazy(() => import('js/pages/Genes'));
 const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
+const CellTypes = lazy(() => import('js/pages/CellTypes'));
 const Tutorials = lazy(() => import('js/pages/Tutorials'));
 const Tutorial = lazy(() => import('js/pages/Tutorial'));
 
@@ -54,6 +55,7 @@ function Routes({ flaskData }) {
     organ,
     vignette_json,
     geneSymbol,
+    cell_type: cellId,
     tutorialName,
   } = flaskData;
   const urlPath = window.location.pathname;
@@ -286,6 +288,14 @@ function Routes({ flaskData }) {
     throw Error('Intentional client-side-error');
   }
 
+  if (urlPath.startsWith('/cell-types/')) {
+    return (
+      <Route>
+        <CellTypes cellId={cellId} />
+      </Route>
+    );
+  }
+
   if (urlPath.startsWith('/genes/')) {
     return (
       <Route>
@@ -347,6 +357,7 @@ Routes.propTypes = {
     vignette_json: PropTypes.object,
     geneSymbol: PropTypes.string,
     redirected_from: PropTypes.string,
+    cell_type: PropTypes.string,
   }),
 };
 

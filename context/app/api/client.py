@@ -107,14 +107,14 @@ class ApiClient():
     def get_entities(self,
                      plural_lc_entity_type=None,
                      non_metadata_fields=[],
-                     constraints={}, uuids=[]):
+                     constraints={}, uuids=[], query_override=None):
         entity_type = plural_lc_entity_type[:-1].capitalize()
         query = {
             "size": 10000,  # Default ES limit,
             "post_filter": {
                 "term": {"entity_type.keyword": entity_type}
             },
-            "query": _make_query(constraints, uuids),
+            "query": query_override or _make_query(constraints, uuids),
             "_source": {
                 "include": [*non_metadata_fields, 'mapped_metadata', 'metadata'],
                 "exclude": ['*.files']

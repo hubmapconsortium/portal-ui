@@ -16,8 +16,9 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import { LineClamp } from 'js/shared-styles/text';
 import { InternalLink } from 'js/shared-styles/Links';
 import { cellTypes } from '../constants';
-import { useGeneDetails } from '../hooks';
+import { useGeneEntities } from '../hooks';
 import ViewDatasets from './ViewDatasets';
+import { CellTypeInfo } from '../types';
 
 const columnLabels = ['Cell Types', 'Description', 'Organs', ''];
 
@@ -34,9 +35,13 @@ export function TableSkeleton({ numberOfCols = columnLabels.length }: { numberOf
   );
 }
 
+function EmptyCellFallback() {
+  return <>&mdash;</>;
+}
+
 function OrgansCell({ organs }: { organs: { name: string }[] }) {
   const contents = !organs ? (
-    <>&mdash;</>
+    <EmptyCellFallback />
   ) : (
     organs.map(({ name }, i) => (
       <Fragment key={name}>
@@ -49,41 +54,55 @@ function OrgansCell({ organs }: { organs: { name: string }[] }) {
   return <TableCell sx={{ whiteSpace: 'nowrap' }}>{contents}</TableCell>;
 }
 
-export default function CellTypes() {
-  const { data, isLoading } = useGeneDetails();
+function CellTypesRow({ cellType }: { cellType: CellTypeInfo }) {
+  return (
+    <TableRow>
+      <TableCell>{cellType.name}</TableCell>
+      <TableCell>
+        <LineClamp lines={2}>{cellType.definition}</LineClamp>
+      </TableCell>
+      <OrgansCell organs={cellType.organs} />
+      <TableCell>
+        <ViewDatasets id={cellType.id} name={cellType.name} />
+      </TableCell>
+    </TableRow>
+  );
+}
 
+function CellTypesTable() {
+  const { data, isLoading } = useGeneEntities();
+
+  if (!isLoading && data?.cell_types.length === 0) {
+    return 'No cell types found.';
+  }
+
+  return (
+    <StyledTableContainer component={Paper}>
+      <Table stickyHeader>
+        <TableHead>
+          <TableRow>
+            {columnLabels.map((label) => (
+              <TableCell key={label}>{label}</TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {isLoading ? (
+            <TableSkeleton />
+          ) : (
+            data?.cell_types.map((cellType) => <CellTypesRow key={cellType.id} cellType={cellType} />)
+          )}
+        </TableBody>
+      </Table>
+    </StyledTableContainer>
+  );
+}
+
+export default function CellTypes() {
   return (
     <DetailPageSection id={cellTypes.id}>
       <SectionHeader iconTooltipText={cellTypes.tooltip}>{cellTypes.title}</SectionHeader>
-      <StyledTableContainer component={Paper}>
-        <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              {columnLabels.map((label) => (
-                <TableCell key={label}>{label}</TableCell>
-              ))}
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {isLoading ? (
-              <TableSkeleton />
-            ) : (
-              data?.cell_types.map((cellType) => (
-                <TableRow key={cellType.id}>
-                  <TableCell>{cellType.name}</TableCell>
-                  <TableCell>
-                    <LineClamp lines={2}>{cellType.definition}</LineClamp>
-                  </TableCell>
-                  <OrgansCell organs={cellType.organs} />
-                  <TableCell>
-                    <ViewDatasets id={cellType.id} name={cellType.name} />
-                  </TableCell>
-                </TableRow>
-              ))
-            )}
-          </TableBody>
-        </Table>
-      </StyledTableContainer>
+      <CellTypesTable />
     </DetailPageSection>
   );
 }

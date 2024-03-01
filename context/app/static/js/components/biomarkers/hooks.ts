@@ -1,10 +1,10 @@
 import { useCallback } from 'react';
-import { useGeneList } from '../genes/hooks';
+import { useGeneOntologyList } from 'js/hooks/useUBKG';
 import { useBiomarkersSearchState } from './BiomarkersSearchContext';
 
 function useCurrentGenesList() {
   const { search } = useBiomarkersSearchState();
-  return useGeneList(search.toUpperCase());
+  return useGeneOntologyList(search.toUpperCase());
 }
 
 export function useResultsList() {

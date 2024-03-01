@@ -6,18 +6,18 @@ import GenePageProvider from 'js/components/genes/GenePageContext';
 import GenePageTitle from 'js/components/genes/GenePageTitle';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import BiomarkerQuery from 'js/components/genes/BiomarkerQuery';
-import Azimuth from 'js/components/genes/Azimuth';
+import Organs from 'js/components/genes/Organs';
 
 import { pageSectionIDs } from 'js/components/genes/constants';
 import CellTypes from 'js/components/genes/CellTypes/CellTypes';
 
-const { summary, biomarkerQuery, azimuth, cellTypes } = pageSectionIDs;
+const { summary, biomarkerQuery, organs, cellTypes } = pageSectionIDs;
 
 const shouldDisplaySection = {
   [summary]: true,
+  [cellTypes]: false,
+  [organs]: true,
   [biomarkerQuery]: true,
-  [azimuth]: true,
-  [cellTypes]: true,
 };
 
 const sectionOrder = Object.entries(shouldDisplaySection)
@@ -32,12 +32,12 @@ function GeneDetails({ geneSymbol }: Props) {
   return (
     <GenePageProvider geneSymbol={geneSymbol}>
       <DetailLayout sectionOrder={sectionOrder}>
-        <SummaryTitle iconTooltipText="Basic unit of heredity made up of sequences of DNA">Gene</SummaryTitle>
+        <SummaryTitle entityIcon="Gene">Gene</SummaryTitle>
         <GenePageTitle />
         {shouldDisplaySection[summary] && <Summary />}
-        {shouldDisplaySection[biomarkerQuery] && <BiomarkerQuery />}
-        {shouldDisplaySection[azimuth] && <Azimuth />}
         {shouldDisplaySection[cellTypes] && <CellTypes />}
+        {shouldDisplaySection[organs] && <Organs />}
+        {shouldDisplaySection[biomarkerQuery] && <BiomarkerQuery />}
       </DetailLayout>
     </GenePageProvider>
   );
