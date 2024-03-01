@@ -1,13 +1,71 @@
 /* eslint-disable consistent-return */
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import PropTypes from 'prop-types';
-import Box from '@mui/material/Box';
-import { SearchkitComponent, renderComponent, RenderComponentPropType, Panel } from 'searchkit';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import IconButton from '@mui/material/IconButton';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+import { SearchkitComponent, RenderComponentPropType, Panel } from 'searchkit';
+import { styled } from '@mui/material/styles';
 
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import { HierarchicalFacetAccessor } from './HierarchicalFacetAccessor';
+import { CHILD_LEVEL, PARENT_LEVEL } from './LevelState';
+
+const StyledSummary = styled(AccordionSummary)({
+  margin: 0,
+  padding: 0,
+  '& > div': {
+    padding: 0,
+    margin: 0,
+  },
+});
+
+function ParentAccordion({ parent, childBuckets, render }) {
+  const [expanded, setExpanded] = useState(false);
+  const toggleExpanded = useCallback(() => {
+    setExpanded((prev) => !prev);
+  }, [setExpanded]);
+
+  return (
+    <Accordion
+      sx={{
+        boxShadow: 'none',
+        '&:before': {
+          display: 'none',
+        },
+      }}
+      disableGutters
+      expanded={expanded}
+      slotProps={{ transition: { unmountOnExit: true } }}
+    >
+      <StyledSummary
+        expandIcon={
+          <IconButton aria-label="delete" onClick={toggleExpanded} size="small" color="primary">
+            <ExpandMoreIcon sx={{ fontSize: '1rem' }} color="inherit" />
+          </IconButton>
+        }
+      >
+        {render(PARENT_LEVEL, parent)}
+      </StyledSummary>
+      <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
+        {childBuckets.length > 0 &&
+          childBuckets.map((bucket) => render(CHILD_LEVEL, { ...bucket, parentKey: parent.key }))}
+      </AccordionDetails>
+    </Accordion>
+  );
+}
 
 export class HierarchicalMenuFilter extends SearchkitComponent {
+  constructor(props) {
+    super(props);
+
+    this.renderOption = this.renderOption.bind(this);
+    this.addFilter = this.addFilter.bind(this);
+  }
+
   static accessor;
 
   static defaultProps = {
@@ -46,7 +104,7 @@ export class HierarchicalMenuFilter extends SearchkitComponent {
     this.searchkit.performSearch();
   }
 
-  getIsIndeterminate(level, active, option) {
+  getIsIndeterminate({ level, active, option }) {
     if (level !== 0 || !active) {
       return false;
     }
@@ -56,48 +114,47 @@ export class HierarchicalMenuFilter extends SearchkitComponent {
     return !childBuckets.every((bucket) => this.accessor.state.contains(1, bucket));
   }
 
-  renderOption(level, option) {
+  renderOption = (level, option) => {
     const { countFormatter } = this.props;
+
     const active = this.accessor.state.contains(level, option);
+
     return (
-      <div key={option.key}>
-        {renderComponent(CheckboxFilterItem, {
-          active,
-          itemKey: option.key,
-          showCount: true,
-          onClick: this.addFilter.bind(this, option, level),
-          label: this.translate(option.key),
-          count: countFormatter(option.doc_count),
-          indeterminate: this.getIsIndeterminate(level, active, option),
-        })}
-        {(() => {
-          if (this.accessor.resultsState.contains(level, option)) {
-            return this.renderOptions(level + 1, option.key);
-          }
-        })()}
-      </div>
+      <CheckboxFilterItem
+        key={option.key}
+        active={active}
+        itemKey={option.key}
+        showCount
+        onClick={() => this.addFilter(option, level)}
+        label={this.translate(option.key)}
+        count={countFormatter(option.doc_count)}
+        indeterminate={this.getIsIndeterminate({ level, active, option })}
+      />
     );
+  };
+
+  renderParent(option) {
+    const childBuckets = this.accessor.getBuckets(CHILD_LEVEL).filter((bucket) => bucket.parentKey === option.key);
+    const active = this.accessor.state.contains(PARENT_LEVEL, option);
+    return <ParentAccordion parent={option} childBuckets={childBuckets} render={this.renderOption} active={active} />;
   }
 
-  renderOptions(level, parentKey) {
-    if (parentKey && !this.accessor.state.getValue()?.[parentKey]) {
-      return null;
-    }
-    const buckets = this.accessor.getBuckets(level).filter((bucket) => bucket.parentKey === parentKey);
-    return <Box sx={{ ml: level }}>{buckets.map((bucket) => this.renderOption.bind(this, level, bucket)())}</Box>;
+  renderOptions() {
+    const parentBuckets = this.accessor.getBuckets(PARENT_LEVEL);
+    return <>{parentBuckets.map((bucket) => this.renderParent(bucket))}</>;
   }
 
   render() {
     if (!this.accessor) return null;
-    const { id, title, containerComponent } = this.props;
-    return renderComponent(
-      containerComponent,
-      {
-        title,
-        className: id ? `filter--${id}` : undefined,
-        disabled: this.accessor.getBuckets(0).length === 0,
-      },
-      <>{this.renderOptions(0)}</>,
+    const { id, title, containerComponent: ContainerComponent } = this.props;
+    return (
+      <ContainerComponent
+        title={title}
+        className={id ? `filter--${id}` : undefined}
+        disabled={this.accessor.getBuckets(0).length === 0}
+      >
+        {this.renderOptions()}
+      </ContainerComponent>
     );
   }
 }

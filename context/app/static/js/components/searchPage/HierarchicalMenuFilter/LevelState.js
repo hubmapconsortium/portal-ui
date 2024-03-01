@@ -16,12 +16,13 @@ export class LevelState extends State {
 
   add(level, val) {
     if (isParentLevel(level)) {
-      return this.create({ ...this.value, [val.key]: val[val.childField].buckets.map((b) => b.key) });
+      return this.create({ ...this.getValue(), [val.key]: val[val.childField].buckets.map((b) => b.key) });
     }
 
     return this.create(
-      produce(this.value, (draft) => {
-        draft[val.parentKey] = [...draft[val.parentKey], val.key];
+      produce(this.getValue(), (draft) => {
+        const copy = draft?.[val.parentKey] ?? [];
+        draft[val.parentKey] = [...copy, val.key];
       }),
     );
   }
@@ -30,7 +31,8 @@ export class LevelState extends State {
     if (isParentLevel(level)) {
       return val.key in this.getValue();
     }
-    return this.getValue()[val.parentKey].includes(val.key);
+    const parentBuckets = this.getValue()?.[val.parentKey] ?? [];
+    return parentBuckets.includes(val.key);
   }
 
   remove(level, val) {
