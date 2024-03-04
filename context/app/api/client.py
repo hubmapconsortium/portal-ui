@@ -322,7 +322,6 @@ class ApiClient():
         publication_ancillary_uuid = None
         publication_ancillary_descendant = self.get_descendant_to_lift(
             entity["uuid"], is_publication=True)
-        print(publication_ancillary_descendant)
         if publication_ancillary_descendant:
             publication_ancillary_uuid = publication_ancillary_descendant["uuid"]
             publication_json_path = (f"{current_app.config['ASSETS_ENDPOINT']}/"
