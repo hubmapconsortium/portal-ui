@@ -54,6 +54,7 @@ describe("dataset search tutorial", () => {
         }
       );
       cy.visit("/search?entity_type[0]=Dataset");
+      cy.wait(10000);
       cy.findByText("Begin the Dataset Search Tutorial").click();
       const stepsCopy = [...defaultSteps];
       stepsCopy.splice(1, 0, stepToAddIfViewMoreExists);
