@@ -3,11 +3,13 @@ import { TermQuery, FilterBucket, BoolShould, FilterBasedAccessor } from 'search
 import { produce } from 'immer';
 import { LevelState, PARENT_LEVEL, CHILD_LEVEL } from './LevelState';
 
-function buildBuckets({ aggregations, childField, selectedState }) {
+export function buildBuckets({ aggregations, childField, selectedState }) {
   const buckets = aggregations.reduce((acc, parentBucket) => {
     acc[parentBucket.key] = {
       ...parentBucket,
-      buckets: parentBucket?.[childField]?.buckets,
+      buckets: Object.fromEntries(
+        parentBucket?.[childField].buckets.map((b) => [b.key, { ...b, parentKey: parentBucket.key }]),
+      ),
     };
     return acc;
   }, {});
@@ -15,12 +17,12 @@ function buildBuckets({ aggregations, childField, selectedState }) {
   const bucketsWithSelectedState = Object.entries(selectedState).reduce((acc, [parentKey, childKeys]) => {
     return produce(acc, (draft) => {
       if (!draft?.[parentKey]) {
-        draft[parentKey] = { buckets: [], doc_count: 0 };
+        draft[parentKey] = { key: parentKey, buckets: {}, doc_count: 0 };
       }
-      const bucketSet = new Set(draft[parentKey].buckets.map((b) => b.key));
+
       childKeys.forEach((childKey) => {
-        if (!bucketSet.has(childKey)) {
-          draft[parentKey].buckets.push({ key: childKey, doc_count: 0 });
+        if (!draft[parentKey].buckets?.[childKey]) {
+          draft[parentKey].buckets[childKey] = { key: childKey, doc_count: 0, parentKey };
         }
       });
       return draft;

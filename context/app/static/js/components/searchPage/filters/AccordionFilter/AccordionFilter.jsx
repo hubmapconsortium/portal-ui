@@ -3,7 +3,6 @@ import { RefinementListFilter, RangeFilter, CheckboxFilter } from 'searchkit';
 import { trackEvent } from 'js/helpers/trackers';
 
 import FilterInnerAccordion from 'js/components/searchPage/filters/FilterInnerAccordion';
-import HierarchicalFilterItem from 'js/components/searchPage/filters/HierarchicalFilterItem';
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import HierarchicalMenuFilter from 'js/components/searchPage/HierarchicalMenuFilter';
 import AlphabetizedRefinementListFilter from './AlphabetizedRefinementListFilter';
@@ -43,7 +42,7 @@ export function getFilter(type, shouldAlphabetize = false) {
     case 'AccordionCheckboxFilter':
       return { Filter: CheckboxFilter, itemComponent: CheckboxFilterItem };
     case 'AccordionHierarchicalMenuFilter':
-      return { Filter: HierarchicalMenuFilter, itemComponent: HierarchicalFilterItem };
+      return { Filter: HierarchicalMenuFilter };
     default:
       throw new Error(`"${type}" does not exist`);
   }

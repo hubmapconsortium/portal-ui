@@ -16,7 +16,7 @@ export class LevelState extends State {
 
   add(level, val) {
     if (isParentLevel(level)) {
-      return this.create({ ...this.getValue(), [val.key]: val.buckets.map((b) => b.key) });
+      return this.create({ ...this.getValue(), [val.key]: Object.keys(val.buckets) });
     }
 
     return this.create(

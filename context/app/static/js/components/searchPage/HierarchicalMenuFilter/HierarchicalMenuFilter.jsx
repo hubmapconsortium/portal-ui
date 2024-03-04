@@ -29,6 +29,7 @@ function ParentAccordion({ parent, childBuckets, render }) {
     setExpanded((prev) => !prev);
   }, [setExpanded]);
 
+  const buckets = Object.values(childBuckets);
   return (
     <Accordion
       sx={{
@@ -51,8 +52,7 @@ function ParentAccordion({ parent, childBuckets, render }) {
         {render(PARENT_LEVEL, parent)}
       </StyledSummary>
       <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
-        {childBuckets.length > 0 &&
-          childBuckets.map((bucket) => render(CHILD_LEVEL, { ...bucket, parentKey: parent.key }))}
+        {buckets.length > 0 && buckets.map((bucket) => render(CHILD_LEVEL, bucket))}
       </AccordionDetails>
     </Accordion>
   );
@@ -110,7 +110,7 @@ export class HierarchicalMenuFilter extends SearchkitComponent {
     }
 
     const childBuckets = this.accessor.getBuckets()[option.key].buckets;
-    return !childBuckets.every((bucket) => this.accessor.state.contains(1, { ...bucket, parentKey: option.key }));
+    return !Object.values(childBuckets).every((bucket) => this.accessor.state.contains(1, bucket));
   }
 
   renderOption = (level, option) => {
