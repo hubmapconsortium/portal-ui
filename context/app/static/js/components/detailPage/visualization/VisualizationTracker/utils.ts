@@ -94,34 +94,3 @@ export const mouseButtonMap = new Proxy(knownButtonMap, {
     return hasKey(target, key) ? target[key] : `Unknown (${String(key)})`;
   },
 });
-
-// export function handleKeyPress(
-//   key: string,
-//   interactionRef: MutableRefObject<VitessceInteraction>,
-//   target: string,
-// ): VitessceInteraction[number] {
-//   const lastInteraction = getLastInteraction(interactionRef.current);
-//   switch (key) {
-//     case 'Tab': {
-//       return ['TabFocus', target];
-//     }
-//     // Treat enter/space as a click
-//     case 'Enter':
-//     case 'Space':
-//       return ['Click', target, key];
-//     default: {
-//       if (lastInteraction) {
-//         const [lastAction, lastTarget] = lastInteraction;
-//         // If the last action was a keypress on the same target, append the key to the recorded value
-//         // This means the user is likely typing in a text field
-//         if (lastAction === 'Keypress' && lastTarget === target) {
-//           const interaction = interactionRef.current.pop();
-//           if (!interaction || interaction.length !== 3) throw new Error('Invalid keypress interaction');
-//           interaction[2] = `${interaction[2]}${key}`;
-//           return interaction;
-//         }
-//       }
-//       return ['Keypress', target, key];
-//     }
-//   }
-// }
