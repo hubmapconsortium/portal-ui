@@ -91,22 +91,22 @@ const datasetConfig = {
     'Dataset Metadata': [
       hierarchicalFilter(['raw_dataset_type', 'assay_display_name'], 'Dataset Type', alphabeticSort),
       listFilter('origin_samples.mapped_organ', 'Organ'),
-      listFilter('source_samples.sample_category', 'Sample Category'),
       listFilter('analyte_class', 'Analyte Class', {}, { labelTransformations: [capitalizeString]}),
+      listFilter('source_samples.sample_category', 'Sample Category'),
       hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
-      listFilter('mapped_consortium', 'Consortium'),
       
     ],
     'Dataset Processing': [
       listFilter('processing', 'Dataset Category', {}, { labelTransformations: [capitalizeString]}),
+      listFilter('pipeline', 'Pipeline'),
+      boolListFilter('visualization', 'Visualization Available', {}, { labelTransformations: [capitalizeString]}),
       listFilter('processing_type', 'Processing Type', {}, { labelTransformations: [(label) => mapLabel({label, map: {
         hubmap: 'HuBMAP',
       }}), capitalizeString]}),
-      boolListFilter('visualization', 'Visualization', {}, { labelTransformations: [capitalizeString]}),
-      listFilter('pipeline', 'Pipeline'),
+      listFilter('assay_modality', 'Assay Modalities', {}, { labelTransformations: [capitalizeString]}),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
-    Affiliation: affiliationFilters,
+    Affiliation: [listFilter('mapped_consortium', 'Consortium'),    ...affiliationFilters],
   },
   fields: {
     table: [
