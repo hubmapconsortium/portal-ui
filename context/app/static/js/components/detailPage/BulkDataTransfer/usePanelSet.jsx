@@ -165,18 +165,6 @@ const NON_CONSORTIUM_MEMBERS_NO_DBGAP = {
   links: [],
 };
 
-const DATASET_NOT_FINALIZED = {
-  error: {
-    status: 'warning',
-    children: (
-      <div>
-        These data are still being prepared, processed, or curated and will only be available to members of the team who
-        submitted the data. For additional help, <ContactUsLink variant="body2" />.
-      </div>
-    ),
-  },
-};
-
 const ENTITY_API_ERROR = {
   error: {
     status: 'error',
@@ -208,17 +196,15 @@ export const usePanelSet = () => {
   const { isAuthenticated, isHubmapUser } = useAppContext();
 
   const {
-    entity: { dbgap_study_url, mapped_data_access_level: accessType, mapped_status: status, uuid },
+    entity: { dbgap_study_url, mapped_data_access_level: accessType, uuid },
   } = useFlaskDataContext();
 
   const hasDbGaPStudyURL = Boolean(dbgap_study_url);
   const { status: globusURLStatus, isLoading: globusURLIsLoading } = useFetchProtectedFile(uuid);
   const hasNoAccess = globusURLStatus === 403;
   const isNonConsortium = !isHubmapUser;
-  const unfinalizedStatuses = ['New', 'Error', 'QA', 'Processing', 'Invalid'];
-  const isNotFinalized = unfinalizedStatuses.includes(status);
 
-  if (accessType === 'Public') {
+  if (accessType !== 'Protected') {
     return getGlobusPanel({ status: globusURLStatus, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
   }
 
@@ -234,11 +220,6 @@ export const usePanelSet = () => {
     // If file is protected and request against the file returns 403, user has no access to protected data
     if (hasNoAccess) {
       return NO_ACCESS_TO_PROTECTED_DATA;
-    }
-
-    // If dataset status is `New`, `Error`, `QA`, `Processing`, then data is not yet available
-    if (isNotFinalized) {
-      return DATASET_NOT_FINALIZED;
     }
 
     return getGlobusPanel({ status: globusURLStatus, panel: ACCESS_TO_PROTECTED_DATA, isLoading: globusURLIsLoading });
