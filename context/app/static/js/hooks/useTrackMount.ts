@@ -7,7 +7,7 @@ import { trackEvent } from 'js/helpers/trackers';
  * @param category
  * @param action
  */
-export default function useTrackMount(category: string, action: string) {
+export default function useTrackMount(category: string, action: string, name = '') {
   // Track the mount event once per page
   const hasTrackedMount = useRef(false);
 
@@ -17,7 +17,8 @@ export default function useTrackMount(category: string, action: string) {
       trackEvent({
         category,
         action,
+        name,
       });
     }
-  }, [action, category]);
+  }, [action, category, name]);
 }

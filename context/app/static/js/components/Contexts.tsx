@@ -13,6 +13,7 @@ type DagProvenanceType =
 interface FlaskDataContextType {
   redirected_from: string;
   entity: {
+    hubmap_id: string;
     entity_type: string;
     metadata: {
       dag_provenance_list: DagProvenanceType[];
@@ -21,6 +22,7 @@ interface FlaskDataContextType {
     [key: string]: unknown;
   };
   [key: string]: unknown;
+  title: string; // preview page title
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');
