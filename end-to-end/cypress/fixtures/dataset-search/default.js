@@ -6,168 +6,192 @@ const response = {
     total: 5,
   },
   aggregations: {
-    ancestor_ids15: {
+    analyte_class6: {
+      "analyte_class.keyword": {
+        buckets: [
+          {
+            doc_count: 88,
+            key: "lipids",
+          },
+          {
+            doc_count: 1,
+            key: "protein",
+          },
+        ],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+      "analyte_class.keyword_count": {
+        value: 2,
+      },
+      doc_count: 89,
+    },
+    ancestor_ids21: {
       "ancestor_ids.keyword": {
         buckets: [
           {
-            doc_count: 161,
-            key: "1628b6f7eb615862322d6274a6bc9fa0",
+            doc_count: 5,
+            key: "3c3c49c7d38960fc1f8275dcf4e412f9",
           },
           {
-            doc_count: 125,
-            key: "0e1c2d399477b244ac006eb58918ec0c",
+            doc_count: 4,
+            key: "0f1c5d398e6c05fe85d617989216970f",
           },
           {
-            doc_count: 125,
-            key: "4397fcd072ac96299992b47da1dbae64",
+            doc_count: 4,
+            key: "8e90c3bfa86c1a363dbcfe39d18f38b6",
           },
           {
-            doc_count: 110,
-            key: "909b44eb01033314b357a3692b583387",
+            doc_count: 4,
+            key: "96a667104f92a38f5d4f97c38d94e738",
           },
           {
-            doc_count: 110,
-            key: "d3ad6409d2ad37ef7dbcc90ccc199f68",
+            doc_count: 4,
+            key: "aa97d20b4a8f3c1198826091bc5455d9",
           },
         ],
-        doc_count_error_upper_bound: 57,
-        sum_other_doc_count: 9734,
+        doc_count_error_upper_bound: 7,
+        sum_other_doc_count: 334,
       },
       "ancestor_ids.keyword_count": {
-        value: 2848,
+        value: 160,
       },
-      doc_count: 2206,
+      doc_count: 89,
     },
-    created_by_user_displayname14: {
+    assay_modality13: {
+      "assay_modality.keyword": {
+        buckets: [
+          {
+            doc_count: 89,
+            key: "single",
+          },
+        ],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+      "assay_modality.keyword_count": {
+        value: 1,
+      },
+      doc_count: 89,
+    },
+    created_by_user_displayname20: {
       "created_by_user_displayname.keyword": {
         buckets: [
           {
-            doc_count: 1059,
+            doc_count: 63,
             key: "HuBMAP Process",
           },
           {
-            doc_count: 382,
-            key: "Joel Welling",
-          },
-          {
-            doc_count: 180,
-            key: "Daniel Cotter",
-          },
-          {
-            doc_count: 132,
-            key: "Juan Puerto",
-          },
-          {
-            doc_count: 101,
-            key: "Blue Lake",
+            doc_count: 26,
+            key: "Jeff Spraggins",
           },
         ],
-        doc_count_error_upper_bound: 6,
-        sum_other_doc_count: 352,
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
       },
       "created_by_user_displayname.keyword_count": {
-        value: 22,
+        value: 2,
       },
-      doc_count: 2206,
+      doc_count: 89,
     },
-    descendant_ids17: {
+    descendant_ids23: {
       "descendant_ids.keyword": {
         buckets: [
           {
-            doc_count: 27,
-            key: "0ceef5e22255ddcfbaa018ed321d703f",
+            doc_count: 1,
+            key: "00a7a9e47679522ca3d9c5526d0b00f5",
           },
           {
-            doc_count: 27,
-            key: "88da2b6fb3f32e4236c892ec98a75467",
+            doc_count: 1,
+            key: "0358be865f6a315183b56b1d4baf8958",
           },
           {
-            doc_count: 27,
-            key: "eb975811a1a3005622c4da37d948117e",
+            doc_count: 1,
+            key: "05572abdbe128ad075f879a4d0f6aa1f",
           },
           {
-            doc_count: 21,
-            key: "6501730e10d3b95b8db217c245b4ddfa",
+            doc_count: 1,
+            key: "097c38b80001579be52be92c2930e7ba",
           },
           {
-            doc_count: 21,
-            key: "aea510e37bc0f1287735f963cff7f671",
+            doc_count: 1,
+            key: "0aec1326f47254fd3bdddfd74bfd17f8",
           },
         ],
-        doc_count_error_upper_bound: 17,
-        sum_other_doc_count: 2696,
+        doc_count_error_upper_bound: 4,
+        sum_other_doc_count: 137,
       },
       "descendant_ids.keyword_count": {
-        value: 1871,
+        value: 142,
       },
-      doc_count: 2206,
+      doc_count: 89,
     },
-    "donor.mapped_metadata.age_value10": {
-      doc_count: 2206,
+    "donor.mapped_metadata.age_value15": {
+      doc_count: 87,
       "donor.mapped_metadata.age_value": {
         buckets: [
           {
-            doc_count: 32,
+            doc_count: 0,
             key: 0,
           },
           {
-            doc_count: 2,
+            doc_count: 0,
             key: 5,
           },
           {
-            doc_count: 43,
+            doc_count: 0,
             key: 10,
           },
           {
-            doc_count: 87,
+            doc_count: 0,
             key: 15,
           },
           {
-            doc_count: 290,
+            doc_count: 2,
             key: 20,
           },
           {
-            doc_count: 169,
+            doc_count: 0,
             key: 25,
           },
           {
-            doc_count: 102,
+            doc_count: 2,
             key: 30,
           },
           {
-            doc_count: 372,
+            doc_count: 0,
             key: 35,
           },
           {
-            doc_count: 77,
+            doc_count: 8,
             key: 40,
           },
           {
-            doc_count: 80,
+            doc_count: 6,
             key: 45,
           },
           {
-            doc_count: 139,
+            doc_count: 6,
             key: 50,
           },
           {
-            doc_count: 220,
+            doc_count: 25,
             key: 55,
           },
           {
-            doc_count: 86,
+            doc_count: 10,
             key: 60,
           },
           {
-            doc_count: 299,
+            doc_count: 14,
             key: 65,
           },
           {
-            doc_count: 21,
+            doc_count: 4,
             key: 70,
           },
           {
-            doc_count: 187,
+            doc_count: 10,
             key: 75,
           },
           {
@@ -193,8 +217,8 @@ const response = {
         ],
       },
     },
-    "donor.mapped_metadata.body_mass_index_value12": {
-      doc_count: 2017,
+    "donor.mapped_metadata.body_mass_index_value17": {
+      doc_count: 81,
       "donor.mapped_metadata.body_mass_index_value": {
         buckets: [
           {
@@ -218,99 +242,87 @@ const response = {
             key: 12,
           },
           {
-            doc_count: 6,
+            doc_count: 0,
             key: 15,
           },
           {
-            doc_count: 250,
+            doc_count: 0,
             key: 18,
           },
           {
-            doc_count: 357,
+            doc_count: 16,
             key: 21,
           },
           {
-            doc_count: 160,
+            doc_count: 12,
             key: 24,
           },
           {
-            doc_count: 489,
+            doc_count: 14,
             key: 27,
           },
           {
-            doc_count: 392,
+            doc_count: 15,
             key: 30,
           },
           {
-            doc_count: 222,
+            doc_count: 10,
             key: 33,
           },
           {
-            doc_count: 69,
+            doc_count: 4,
             key: 36,
           },
           {
-            doc_count: 25,
+            doc_count: 6,
             key: 39,
           },
           {
-            doc_count: 16,
+            doc_count: 2,
             key: 42,
           },
           {
-            doc_count: 20,
+            doc_count: 2,
             key: 45,
           },
           {
-            doc_count: 11,
+            doc_count: 0,
             key: 48,
           },
         ],
       },
     },
-    "donor.mapped_metadata.race11": {
-      doc_count: 2206,
+    "donor.mapped_metadata.race16": {
+      doc_count: 89,
       "donor.mapped_metadata.race.keyword": {
         buckets: [
           {
-            doc_count: 1520,
+            doc_count: 83,
             key: "White",
           },
           {
-            doc_count: 551,
+            doc_count: 4,
             key: "Black or African American",
-          },
-          {
-            doc_count: 97,
-            key: "Unknown",
-          },
-          {
-            doc_count: 31,
-            key: "Asian",
-          },
-          {
-            doc_count: 18,
-            key: "Hispanic",
           },
         ],
         doc_count_error_upper_bound: 0,
-        sum_other_doc_count: 7,
+        sum_other_doc_count: 0,
       },
       "donor.mapped_metadata.race.keyword_count": {
-        value: 7,
+        value: 2,
       },
     },
-    "donor.mapped_metadata.sex9": {
-      doc_count: 2206,
+    "donor.mapped_metadata.sex14": {
+      doc_count: 89,
       "donor.mapped_metadata.sex.keyword": {
         buckets: [
           {
-            doc_count: 1169,
-            key: "Male",
+            doc_count: 44,
+            key: "Female",
           },
           {
-            doc_count: 1029,
-            key: "Female",
+            doc_count: 43,
+            key: "Male",
           },
         ],
         doc_count_error_upper_bound: 0,
@@ -320,204 +332,439 @@ const response = {
         value: 2,
       },
     },
-    entity_type16: {
-      doc_count: 4605,
+    entity_type22: {
+      doc_count: 89,
       "entity_type.keyword": {
         buckets: [
           {
-            doc_count: 2206,
+            doc_count: 89,
             key: "Dataset",
-          },
-          {
-            doc_count: 1843,
-            key: "Sample",
-          },
-          {
-            doc_count: 315,
-            key: "Support",
-          },
-          {
-            doc_count: 214,
-            key: "Donor",
-          },
-          {
-            doc_count: 18,
-            key: "Collection",
           },
         ],
         doc_count_error_upper_bound: 0,
-        sum_other_doc_count: 9,
+        sum_other_doc_count: 0,
       },
       "entity_type.keyword_count": {
-        value: 6,
+        value: 1,
       },
     },
-    group_name13: {
-      doc_count: 2206,
+    group_name19: {
+      doc_count: 89,
       "group_name.keyword": {
         buckets: [
           {
-            doc_count: 716,
-            key: "Stanford TMC",
-          },
-          {
-            doc_count: 546,
-            key: "University of California San Diego TMC",
-          },
-          {
-            doc_count: 297,
+            doc_count: 88,
             key: "Vanderbilt TMC",
           },
           {
-            doc_count: 211,
-            key: "Stanford RTI",
-          },
-          {
-            doc_count: 192,
-            key: "University of Florida TMC",
+            doc_count: 1,
+            key: "TTD - Pacific Northwest National Laboratory",
           },
         ],
         doc_count_error_upper_bound: 0,
-        sum_other_doc_count: 244,
+        sum_other_doc_count: 0,
       },
       "group_name.keyword_count": {
-        value: 14,
+        value: 2,
       },
     },
-    mapped_consortium8: {
-      doc_count: 2206,
+    mapped_consortium18: {
+      doc_count: 89,
       "mapped_consortium.keyword": {
         buckets: [
           {
-            doc_count: 2196,
+            doc_count: 89,
             key: "HuBMAP",
-          },
-          {
-            doc_count: 10,
-            key: "Human Cell Atlas",
           },
         ],
         doc_count_error_upper_bound: 0,
         sum_other_doc_count: 0,
       },
       "mapped_consortium.keyword_count": {
-        value: 2,
-      },
-    },
-    mapped_data_types4: {
-      doc_count: 2206,
-      "mapped_data_types.keyword": {
-        buckets: [
-          {
-            doc_count: 102,
-            key: "Autofluorescence Microscopy",
-          },
-          {
-            doc_count: 16,
-            key: "Bulk ATAC-seq",
-          },
-          {
-            doc_count: 8,
-            key: "Bulk ATAC-seq [BWA + MACS2]",
-          },
-          {
-            doc_count: 8,
-            key: "Bulk RNA-seq",
-          },
-          {
-            doc_count: 8,
-            key: "Bulk RNA-seq [Salmon]",
-          },
-        ],
-        doc_count_error_upper_bound: 0,
-        sum_other_doc_count: 2064,
-      },
-      "mapped_data_types.keyword_count": {
-        value: 43,
+        value: 1,
       },
     },
     "mapped_status-mapped_data_access_level": {
-      doc_count: 2206,
+      doc_count: 89,
       "mapped_status.keyword": {
-        doc_count: 2206,
-        "mapped_status.keyword": {
-          buckets: [
-            {
-              doc_count: 2206,
-              key: "Published",
-            },
-          ],
-          doc_count_error_upper_bound: 0,
-          sum_other_doc_count: 0,
-        },
-      },
-    },
-    "origin_samples.mapped_organ5": {
-      doc_count: 2206,
-      "origin_samples.mapped_organ.keyword": {
         buckets: [
           {
-            doc_count: 423,
-            key: "Kidney (Left)",
-          },
-          {
-            doc_count: 368,
-            key: "Kidney (Right)",
-          },
-          {
-            doc_count: 367,
-            key: "Small Intestine",
-          },
-          {
-            doc_count: 359,
-            key: "Large Intestine",
-          },
-          {
-            doc_count: 211,
-            key: "Uterus",
+            doc_count: 89,
+            key: "Published",
+            "mapped_data_access_level.keyword": {
+              buckets: [
+                {
+                  doc_count: 89,
+                  key: "Public",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
           },
         ],
         doc_count_error_upper_bound: 0,
-        sum_other_doc_count: 482,
-      },
-      "origin_samples.mapped_organ.keyword_count": {
-        value: 17,
+        sum_other_doc_count: 0,
       },
     },
-    "source_samples.sample_category6": {
-      doc_count: 2206,
+    "origin_samples.mapped_organ5": {
+      doc_count: 89,
+      "origin_samples.mapped_organ.keyword": {
+        buckets: [
+          {
+            doc_count: 55,
+            key: "Kidney (Left)",
+          },
+          {
+            doc_count: 34,
+            key: "Kidney (Right)",
+          },
+        ],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+      "origin_samples.mapped_organ.keyword_count": {
+        value: 2,
+      },
+    },
+    pipeline10: {
+      doc_count: 89,
+      "pipeline.keyword": {
+        buckets: [],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+      "pipeline.keyword_count": {
+        value: 0,
+      },
+    },
+    processing9: {
+      doc_count: 89,
+      "processing.keyword": {
+        buckets: [
+          {
+            doc_count: 89,
+            key: "raw",
+          },
+        ],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+      "processing.keyword_count": {
+        value: 1,
+      },
+    },
+    processing_type12: {
+      doc_count: 89,
+      "processing_type.keyword": {
+        buckets: [],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+      "processing_type.keyword_count": {
+        value: 0,
+      },
+    },
+    "raw_dataset_type-assay_display_name": {
+      doc_count: 2080,
+      "raw_dataset_type.keyword": {
+        buckets: [
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 173,
+                  key: "snRNA-seq [Salmon]",
+                },
+                {
+                  doc_count: 157,
+                  key: "snRNAseq (SNARE-seq2)",
+                },
+                {
+                  doc_count: 155,
+                  key: "snRNA-seq (10x Genomics v3)",
+                },
+                {
+                  doc_count: 36,
+                  key: "scRNA-seq (10x Genomics) [Salmon]",
+                },
+                {
+                  doc_count: 32,
+                  key: "scRNA-seq (10x Genomics v3)",
+                },
+                {
+                  doc_count: 27,
+                  key: "snRNA-seq (SNARE-seq2) [Salmon]",
+                },
+                {
+                  doc_count: 12,
+                  key: "sciRNA-seq [Salmon]",
+                },
+                {
+                  doc_count: 11,
+                  key: "sciRNA-seq",
+                },
+                {
+                  doc_count: 8,
+                  key: "Bulk RNA-seq",
+                },
+                {
+                  doc_count: 8,
+                  key: "Bulk RNA-seq [Salmon]",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 5,
+            },
+            doc_count: 624,
+            key: "RNAseq",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 176,
+                  key: "snATACseq (SNARE-seq2)",
+                },
+                {
+                  doc_count: 68,
+                  key: "snATAC-seq",
+                },
+                {
+                  doc_count: 67,
+                  key: "snATAC-seq [SnapATAC]",
+                },
+                {
+                  doc_count: 21,
+                  key: "sciATAC-seq",
+                },
+                {
+                  doc_count: 21,
+                  key: "sciATAC-seq [SnapATAC]",
+                },
+                {
+                  doc_count: 18,
+                  key: "snATAC-seq (SNARE-seq2) [SnapATAC]",
+                },
+                {
+                  doc_count: 16,
+                  key: "Bulk ATAC-seq",
+                },
+                {
+                  doc_count: 8,
+                  key: "Bulk ATAC-seq [BWA + MACS2]",
+                },
+                {
+                  doc_count: 4,
+                  key: "snATAC-seq (SNARE-seq2) [Lab Processed]",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 399,
+            key: "ATACseq",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 202,
+                  key: "LC-MS",
+                },
+                {
+                  doc_count: 18,
+                  key: "LC-MS Bottom Up",
+                },
+                {
+                  doc_count: 18,
+                  key: "Label-free LC-MS/MS",
+                },
+                {
+                  doc_count: 11,
+                  key: "LC-MS Top Down",
+                },
+                {
+                  doc_count: 8,
+                  key: "MS",
+                },
+                {
+                  doc_count: 2,
+                  key: "TMT LC-MS",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 259,
+            key: "LC-MS",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 127,
+                  key: "CODEX",
+                },
+                {
+                  doc_count: 126,
+                  key: "CODEX [Cytokit + SPRM]",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 253,
+            key: "CODEX",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 211,
+                  key: "Multiplex Ion Beam Imaging",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 211,
+            key: "MIBI",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 89,
+                  key: "MALDI IMS",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 89,
+            key: "MALDI",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 42,
+                  key: "Slide-seq",
+                },
+                {
+                  doc_count: 42,
+                  key: "Slide-seq [Salmon]",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 84,
+            key: "Slide-seq",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 46,
+                  key: "PAS Stained Microscopy",
+                },
+                {
+                  doc_count: 1,
+                  key: "sciRNA-seq",
+                },
+                {
+                  doc_count: 1,
+                  key: "snRNAseq (SNARE-seq2)",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 48,
+            key: "Histology",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 34,
+                  key: "Autofluorescence Microscopy",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 34,
+            key: "Auto-fluorescence",
+          },
+          {
+            "assay_display_name.keyword": {
+              buckets: [
+                {
+                  doc_count: 9,
+                  key: "seqFISH",
+                },
+                {
+                  doc_count: 9,
+                  key: "seqFISH [Lab Processed]",
+                },
+              ],
+              doc_count_error_upper_bound: 0,
+              sum_other_doc_count: 0,
+            },
+            doc_count: 18,
+            key: "seqFish",
+          },
+        ],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 61,
+      },
+    },
+    "source_samples.sample_category7": {
+      doc_count: 89,
       "source_samples.sample_category.keyword": {
         buckets: [
           {
-            doc_count: 1262,
+            doc_count: 88,
             key: "section",
           },
           {
-            doc_count: 878,
+            doc_count: 1,
             key: "block",
-          },
-          {
-            doc_count: 62,
-            key: "suspension",
-          },
-          {
-            doc_count: 4,
-            key: "organ",
           },
         ],
         doc_count_error_upper_bound: 0,
         sum_other_doc_count: 0,
       },
       "source_samples.sample_category.keyword_count": {
-        value: 4,
+        value: 2,
+      },
+    },
+    visualization11: {
+      doc_count: 89,
+      visualization: {
+        buckets: [
+          {
+            doc_count: 89,
+            key: 0,
+            key_as_string: "false",
+          },
+        ],
+        doc_count_error_upper_bound: 0,
+        sum_other_doc_count: 0,
+      },
+      visualization_count: {
+        value: 1,
       },
     },
   },
   hits: {
     hits: [
       {
-        _id: "ef021aa2ee54036281322c248ffe7498",
-        _index: "hm_prod_public_portal",
+        _id: "3bc3ad124014a632d558255626bf38c9",
+        _index: "hm_dev_public_portal",
         _score: null,
         _source: {
           descendant_counts: {
@@ -526,50 +773,24 @@ const response = {
             },
           },
           group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM978.CGGC.988",
-          last_modified_timestamp: 1709319988425,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:28",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Left)",
-            },
-          ],
-          uuid: "ef021aa2ee54036281322c248ffe7498",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:06:28"],
-      },
-      {
-        _id: "e2b8528c5ef37b55b2cc5076db873d0d",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM964.CZLM.657",
-          last_modified_timestamp: 1709319985466,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:25",
+          hubmap_id: "HBM799.DZFZ.778",
+          last_modified_timestamp: 1692633305360,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:55:05",
           mapped_status: "Published",
           origin_samples: [
             {
               mapped_organ: "Kidney (Right)",
             },
           ],
-          uuid: "e2b8528c5ef37b55b2cc5076db873d0d",
+          uuid: "3bc3ad124014a632d558255626bf38c9",
         },
         _type: "_doc",
-        sort: ["2024-03-01 19:06:25"],
+        sort: ["2023-08-21 15:55:05"],
       },
       {
-        _id: "05473e0ef355dc349f32dd3e6bce828d",
-        _index: "hm_prod_public_portal",
+        _id: "b062b82bc2b5af072db4a3af191ec019",
+        _index: "hm_dev_public_portal",
         _score: null,
         _source: {
           descendant_counts: {
@@ -578,102 +799,24 @@ const response = {
             },
           },
           group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM947.VKMP.764",
-          last_modified_timestamp: 1709319982532,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:22",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Left)",
-            },
-          ],
-          uuid: "05473e0ef355dc349f32dd3e6bce828d",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:06:22"],
-      },
-      {
-        _id: "29030bd1d340fece52eca13654bc6de2",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM939.TZWB.238",
-          last_modified_timestamp: 1709319979669,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:19",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Left)",
-            },
-          ],
-          uuid: "29030bd1d340fece52eca13654bc6de2",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:06:19"],
-      },
-      {
-        _id: "71642e4c4a9cc12f59f3317b4a19adc9",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM846.FTPG.677",
-          last_modified_timestamp: 1709319976785,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:16",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Left)",
-            },
-          ],
-          uuid: "71642e4c4a9cc12f59f3317b4a19adc9",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:06:16"],
-      },
-      {
-        _id: "6b7db054a42b28697824dffec804aac9",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM837.XGBD.427",
-          last_modified_timestamp: 1709319973965,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:13",
+          hubmap_id: "HBM644.HLRW.739",
+          last_modified_timestamp: 1692633302380,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:55:02",
           mapped_status: "Published",
           origin_samples: [
             {
               mapped_organ: "Kidney (Right)",
             },
           ],
-          uuid: "6b7db054a42b28697824dffec804aac9",
+          uuid: "b062b82bc2b5af072db4a3af191ec019",
         },
         _type: "_doc",
-        sort: ["2024-03-01 19:06:13"],
+        sort: ["2023-08-21 15:55:02"],
       },
       {
-        _id: "0dc53cf7e5500c177c12de7c1e662f37",
-        _index: "hm_prod_public_portal",
+        _id: "18088e0f3778230bd23812725ada7091",
+        _index: "hm_dev_public_portal",
         _score: null,
         _source: {
           descendant_counts: {
@@ -682,76 +825,24 @@ const response = {
             },
           },
           group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM759.LQKN.226",
-          last_modified_timestamp: 1709319971053,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:11",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Right)",
-            },
-          ],
-          uuid: "0dc53cf7e5500c177c12de7c1e662f37",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:06:11"],
-      },
-      {
-        _id: "7305f4e3c4e91039c8c3da5075fe49ee",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM654.GRHB.837",
-          last_modified_timestamp: 1709319968028,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:08",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Right)",
-            },
-          ],
-          uuid: "7305f4e3c4e91039c8c3da5075fe49ee",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:06:08"],
-      },
-      {
-        _id: "4862b7e59f5d41544e8aed51fb844fc0",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM593.DVGN.469",
-          last_modified_timestamp: 1709319965067,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:05",
+          hubmap_id: "HBM349.DTWT.383",
+          last_modified_timestamp: 1692633299044,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:59",
           mapped_status: "Published",
           origin_samples: [
             {
               mapped_organ: "Kidney (Left)",
             },
           ],
-          uuid: "4862b7e59f5d41544e8aed51fb844fc0",
+          uuid: "18088e0f3778230bd23812725ada7091",
         },
         _type: "_doc",
-        sort: ["2024-03-01 19:06:05"],
+        sort: ["2023-08-21 15:54:59"],
       },
       {
-        _id: "7718ad35fe468b3f5453a41c3517e715",
-        _index: "hm_prod_public_portal",
+        _id: "c8ad223f01b45b25e0dcb07c48a42762",
+        _index: "hm_dev_public_portal",
         _score: null,
         _source: {
           descendant_counts: {
@@ -760,24 +851,24 @@ const response = {
             },
           },
           group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM538.XVLP.889",
-          last_modified_timestamp: 1709319961968,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:06:01",
+          hubmap_id: "HBM472.NWBK.884",
+          last_modified_timestamp: 1692633295873,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:55",
           mapped_status: "Published",
           origin_samples: [
             {
               mapped_organ: "Kidney (Left)",
             },
           ],
-          uuid: "7718ad35fe468b3f5453a41c3517e715",
+          uuid: "c8ad223f01b45b25e0dcb07c48a42762",
         },
         _type: "_doc",
-        sort: ["2024-03-01 19:06:01"],
+        sort: ["2023-08-21 15:54:55"],
       },
       {
-        _id: "3d7dcf330f063c3dbf95bfc9344b9b5c",
-        _index: "hm_prod_public_portal",
+        _id: "12ef2bc519d442d4685ee956ccd18ccc",
+        _index: "hm_dev_public_portal",
         _score: null,
         _source: {
           descendant_counts: {
@@ -786,24 +877,50 @@ const response = {
             },
           },
           group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM535.BDNV.724",
-          last_modified_timestamp: 1709319959036,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:05:59",
+          hubmap_id: "HBM554.PGRJ.942",
+          last_modified_timestamp: 1692633292965,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:52",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Right)",
+            },
+          ],
+          uuid: "12ef2bc519d442d4685ee956ccd18ccc",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:52"],
+      },
+      {
+        _id: "d1dcab2df80590d8cd8770948abaf976",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM545.ZDPS.746",
+          last_modified_timestamp: 1692633290041,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:50",
           mapped_status: "Published",
           origin_samples: [
             {
               mapped_organ: "Kidney (Left)",
             },
           ],
-          uuid: "3d7dcf330f063c3dbf95bfc9344b9b5c",
+          uuid: "d1dcab2df80590d8cd8770948abaf976",
         },
         _type: "_doc",
-        sort: ["2024-03-01 19:05:59"],
+        sort: ["2023-08-21 15:54:50"],
       },
       {
-        _id: "631ce2367da6ad5a1d5fc520f975c12e",
-        _index: "hm_prod_public_portal",
+        _id: "546b59bd62a6c58307d439009ef76cbe",
+        _index: "hm_dev_public_portal",
         _score: null,
         _source: {
           descendant_counts: {
@@ -812,128 +929,24 @@ const response = {
             },
           },
           group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM486.KPCH.364",
-          last_modified_timestamp: 1709319955875,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:05:55",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Right)",
-            },
-          ],
-          uuid: "631ce2367da6ad5a1d5fc520f975c12e",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:05:55"],
-      },
-      {
-        _id: "c6826367fb97432151a1b035e0104ed8",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM337.ZVPK.369",
-          last_modified_timestamp: 1709319952705,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:05:52",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Right)",
-            },
-          ],
-          uuid: "c6826367fb97432151a1b035e0104ed8",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:05:52"],
-      },
-      {
-        _id: "9a2e171e15c07ca825ce72307e96316f",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM297.RSTP.985",
-          last_modified_timestamp: 1709319949794,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:05:49",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Right)",
-            },
-          ],
-          uuid: "9a2e171e15c07ca825ce72307e96316f",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:05:49"],
-      },
-      {
-        _id: "9ea18d6339027da765da855f63016f79",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM987.NCDW.845",
-          last_modified_timestamp: 1709319947057,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:05:47",
-          mapped_status: "Published",
-          origin_samples: [
-            {
-              mapped_organ: "Kidney (Right)",
-            },
-          ],
-          uuid: "9ea18d6339027da765da855f63016f79",
-        },
-        _type: "_doc",
-        sort: ["2024-03-01 19:05:47"],
-      },
-      {
-        _id: "cc795c343b816390cd739993360a81b3",
-        _index: "hm_prod_public_portal",
-        _score: null,
-        _source: {
-          descendant_counts: {
-            entity_type: {
-              Dataset: 1,
-            },
-          },
-          group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM957.LDNV.942",
-          last_modified_timestamp: 1709319944098,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:05:44",
+          hubmap_id: "HBM758.SQVJ.597",
+          last_modified_timestamp: 1692633287052,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:47",
           mapped_status: "Published",
           origin_samples: [
             {
               mapped_organ: "Kidney (Left)",
             },
           ],
-          uuid: "cc795c343b816390cd739993360a81b3",
+          uuid: "546b59bd62a6c58307d439009ef76cbe",
         },
         _type: "_doc",
-        sort: ["2024-03-01 19:05:44"],
+        sort: ["2023-08-21 15:54:47"],
       },
       {
-        _id: "242928390eea3978f3c4592165de7290",
-        _index: "hm_prod_public_portal",
+        _id: "65737bdc1a83b6a697430e1f6055748c",
+        _index: "hm_dev_public_portal",
         _score: null,
         _source: {
           descendant_counts: {
@@ -942,24 +955,24 @@ const response = {
             },
           },
           group_name: "Vanderbilt TMC",
-          hubmap_id: "HBM884.QGXZ.934",
-          last_modified_timestamp: 1709319941310,
-          mapped_data_types: ["PAS Stained Microscopy"],
-          mapped_last_modified_timestamp: "2024-03-01 19:05:41",
+          hubmap_id: "HBM494.CRGT.577",
+          last_modified_timestamp: 1692633283949,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:43",
           mapped_status: "Published",
           origin_samples: [
             {
-              mapped_organ: "Kidney (Left)",
+              mapped_organ: "Kidney (Right)",
             },
           ],
-          uuid: "242928390eea3978f3c4592165de7290",
+          uuid: "65737bdc1a83b6a697430e1f6055748c",
         },
         _type: "_doc",
-        sort: ["2024-03-01 19:05:41"],
+        sort: ["2023-08-21 15:54:43"],
       },
       {
-        _id: "ab181e8ef53fcf893acb838c893befbf",
-        _index: "hm_prod_public_portal",
+        _id: "4b1b34e27bccb2c3543d379d80c9f936",
+        _index: "hm_dev_public_portal",
         _score: null,
         _source: {
           descendant_counts: {
@@ -967,31 +980,265 @@ const response = {
               Dataset: 1,
             },
           },
-          group_name: "TTD - Penn State University and Columbia University",
-          hubmap_id: "HBM875.FTTV.999",
-          last_modified_timestamp: 1709319938569,
-          mapped_data_types: ["DESI"],
-          mapped_last_modified_timestamp: "2024-03-01 19:05:38",
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM337.XRWN.985",
+          last_modified_timestamp: 1692633280853,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:40",
           mapped_status: "Published",
           origin_samples: [
             {
-              mapped_organ: "Liver",
+              mapped_organ: "Kidney (Left)",
             },
           ],
-          uuid: "ab181e8ef53fcf893acb838c893befbf",
+          uuid: "4b1b34e27bccb2c3543d379d80c9f936",
         },
         _type: "_doc",
-        sort: ["2024-03-01 19:05:38"],
+        sort: ["2023-08-21 15:54:40"],
+      },
+      {
+        _id: "36d35a69e89330633ce6b05b4ad98e97",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM975.BJRS.622",
+          last_modified_timestamp: 1692633277925,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:37",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Right)",
+            },
+          ],
+          uuid: "36d35a69e89330633ce6b05b4ad98e97",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:37"],
+      },
+      {
+        _id: "3276a898aa3ee5afbaf3368e1c9eb996",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM826.XDBN.955",
+          last_modified_timestamp: 1692633274922,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:34",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Left)",
+            },
+          ],
+          uuid: "3276a898aa3ee5afbaf3368e1c9eb996",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:34"],
+      },
+      {
+        _id: "a94f80ab8dc2a4e40c030e27e46e3b77",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM544.VSBJ.293",
+          last_modified_timestamp: 1692633271325,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:31",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Right)",
+            },
+          ],
+          uuid: "a94f80ab8dc2a4e40c030e27e46e3b77",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:31"],
+      },
+      {
+        _id: "0066713ca95c03c52cb40f90ce8bbdb8",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM493.VRQM.643",
+          last_modified_timestamp: 1692633268686,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:28",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Left)",
+            },
+          ],
+          uuid: "0066713ca95c03c52cb40f90ce8bbdb8",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:28"],
+      },
+      {
+        _id: "fad77594f6ee5c43f0da2d864ac26e02",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM862.DKNM.597",
+          last_modified_timestamp: 1692633265662,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:25",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Left)",
+            },
+          ],
+          uuid: "fad77594f6ee5c43f0da2d864ac26e02",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:25"],
+      },
+      {
+        _id: "05e7b4e244631a85240ee968a584a7b4",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM229.MHGL.765",
+          last_modified_timestamp: 1692633262629,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:22",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Left)",
+            },
+          ],
+          uuid: "05e7b4e244631a85240ee968a584a7b4",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:22"],
+      },
+      {
+        _id: "2fdbf2be6b297eb1951b11db5b79cadb",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM777.STQB.672",
+          last_modified_timestamp: 1692633259740,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:19",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Left)",
+            },
+          ],
+          uuid: "2fdbf2be6b297eb1951b11db5b79cadb",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:19"],
+      },
+      {
+        _id: "4fd44a84d70deb0be8a80ff6add2e4cf",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM632.SGXL.444",
+          last_modified_timestamp: 1692633256773,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:16",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Left)",
+            },
+          ],
+          uuid: "4fd44a84d70deb0be8a80ff6add2e4cf",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:16"],
+      },
+      {
+        _id: "3aaa0b6d2fac29e1a9785414699a2f04",
+        _index: "hm_dev_public_portal",
+        _score: null,
+        _source: {
+          descendant_counts: {
+            entity_type: {
+              Dataset: 1,
+            },
+          },
+          group_name: "Vanderbilt TMC",
+          hubmap_id: "HBM959.MGHL.844",
+          last_modified_timestamp: 1692633253758,
+          mapped_data_types: ["MALDI IMS"],
+          mapped_last_modified_timestamp: "2023-08-21 15:54:13",
+          mapped_status: "Published",
+          origin_samples: [
+            {
+              mapped_organ: "Kidney (Left)",
+            },
+          ],
+          uuid: "3aaa0b6d2fac29e1a9785414699a2f04",
+        },
+        _type: "_doc",
+        sort: ["2023-08-21 15:54:13"],
       },
     ],
     max_score: null,
     total: {
       relation: "eq",
-      value: 2206,
+      value: 89,
     },
   },
   timed_out: false,
-  took: 26,
+  took: 34,
 };
 
 export default response;
