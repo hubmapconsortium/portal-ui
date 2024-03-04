@@ -21,7 +21,7 @@ case $1 in
     ;;
 
   portal)
-    CYPRESS_ARGS=' --headed --browser chrome --spec ./cypress/e2e/portal/*.cy.js'
+    CYPRESS_ARGS='--spec ./cypress/e2e/portal/*.cy.js'
     etc/dev/docker.sh 5001  # Needs to match port in cypress.json.
     server_up 5001  # Without this, Cypress gets an undefined content-type and immediately fails.
     ;;
