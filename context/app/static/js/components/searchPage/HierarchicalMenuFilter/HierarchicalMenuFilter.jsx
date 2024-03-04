@@ -30,6 +30,8 @@ function ParentAccordion({ parent, childBuckets, render }) {
   }, [setExpanded]);
 
   const buckets = Object.values(childBuckets);
+
+  const hasBuckets = buckets.length > 0;
   return (
     <Accordion
       sx={{
@@ -44,7 +46,7 @@ function ParentAccordion({ parent, childBuckets, render }) {
     >
       <StyledSummary
         expandIcon={
-          <IconButton aria-label="delete" onClick={toggleExpanded} size="small" color="primary">
+          <IconButton aria-label="delete" onClick={toggleExpanded} size="small" color="primary" disabled={!hasBuckets}>
             <ExpandMoreIcon sx={{ fontSize: '1rem' }} color="inherit" />
           </IconButton>
         }
@@ -52,7 +54,7 @@ function ParentAccordion({ parent, childBuckets, render }) {
         {render(PARENT_LEVEL, parent)}
       </StyledSummary>
       <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
-        {buckets.length > 0 && buckets.map((bucket) => render(CHILD_LEVEL, bucket))}
+        {hasBuckets && buckets.map((bucket) => render(CHILD_LEVEL, bucket))}
       </AccordionDetails>
     </Accordion>
   );
