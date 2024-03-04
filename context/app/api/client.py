@@ -173,7 +173,8 @@ class ApiClient():
             body_json=query)
         return files_from_response(response_json)
 
-    def get_vitessce_conf_cells_and_lifted_uuid(self, entity, marker=None, wrap_error=True):
+    def get_vitessce_conf_cells_and_lifted_uuid(
+            self, entity, marker=None, wrap_error=True, parent=None):
         '''
         Returns a dataclass with vitessce_conf and is_lifted.
         '''
@@ -192,7 +193,9 @@ class ApiClient():
             if metadata.get('files'):
                 derived_entity['files'] = metadata.get('files', [])
                 vitessce_conf = self.get_vitessce_conf_cells_and_lifted_uuid(
-                    derived_entity, marker=marker, wrap_error=wrap_error).vitessce_conf
+                    derived_entity,
+                    marker=marker,
+                    wrap_error=wrap_error, parent=entity).vitessce_conf
                 vis_lifted_uuid = derived_entity['uuid']
             else:  # no files
                 error = f'Related image entity {derived_entity["uuid"]} \
@@ -208,33 +211,7 @@ class ApiClient():
         # Otherwise, just try to visualize the data for the entity itself:
         else:
             try:
-                def get_assaytype(entity):
-                    uuid = entity.get('uuid')
-                    endpoint = current_app.config["SOFT_ASSAY_ENDPOINT"]
-                    path = current_app.config["SOFT_ASSAY_ENDPOINT_PATH"]
-
-                    url = f"{endpoint}/{path}/{uuid}"
-                    headers = self._get_headers()
-                    try:
-                        response = requests.get(url, headers=headers)
-                        return response.json()
-                    except Exception as e:
-                        # Redact Authorization header from logs
-                        cleaned_headers = headers
-                        if 'Authorization' in headers:
-                            cleaned_headers['Authorization'] = 'REDACTED'
-                        status = response.status_code if response else None
-                        current_app.logger.error({
-                            'source': 'get_assaytype',
-                            'url': url,
-                            'headers': cleaned_headers,
-                            'status': status,
-                            'error': str(e)
-                        })
-                        current_app.logger.error(
-                            f'Fetching assaytype threw error: {traceback.format_exc()}')
-                        raise e
-                Builder = get_view_config_builder(entity, get_assaytype)
+                Builder = get_view_config_builder(entity, self._get_assaytype(), parent)
                 builder = Builder(entity, self.groups_token, current_app.config["ASSETS_ENDPOINT"])
                 vitessce_conf = builder.get_conf_cells(marker=marker)
             except Exception as e:
@@ -248,6 +225,36 @@ class ApiClient():
             vitessce_conf=vitessce_conf,
             vis_lifted_uuid=vis_lifted_uuid)
 
+    # Helper to create a function that fetches assaytype from the API with current headers
+    def _get_assaytype(self):
+        def get_assaytype(entity):
+            uuid = entity.get('uuid')
+            endpoint = current_app.config["SOFT_ASSAY_ENDPOINT"]
+            path = current_app.config["SOFT_ASSAY_ENDPOINT_PATH"]
+
+            url = f"{endpoint}/{path}/{uuid}"
+            headers = self._get_headers()
+            try:
+                response = requests.get(url, headers=headers)
+                return response.json()
+            except Exception as e:
+                # Redact Authorization header from logs
+                cleaned_headers = headers
+                if 'Authorization' in headers:
+                    cleaned_headers['Authorization'] = 'REDACTED'
+                status = response.status_code if response else None
+                current_app.logger.error({
+                    'source': 'get_assaytype',
+                    'url': url,
+                    'headers': cleaned_headers,
+                    'status': status,
+                    'error': str(e)
+                })
+                current_app.logger.error(
+                    f'Fetching assaytype threw error: {traceback.format_exc()}')
+                raise e
+        return get_assaytype
+
     def _file_request(self, url):
         headers = {'Authorization': 'Bearer ' + self.groups_token} if self.groups_token else {}
 
@@ -256,19 +263,20 @@ class ApiClient():
 
         return _handle_request(url, headers).text
 
-    def get_descendant_to_lift(self, uuid):
+    def get_descendant_to_lift(self, uuid, is_publication=False):
         '''
         Given the data type of the descendant and a uuid,
         returns the doc of the most recent descendant
         that is in QA or Published status.
         '''
+        hints = "is_support" if is_publication else "is_image"
         query = {
             "query": {
                 "bool": {
                     "must": [
                         {
                             "term": {
-                                "vitessce-hints": "is_support"
+                                "vitessce-hints": hints
                             }
                         },
                         {
@@ -312,7 +320,8 @@ class ApiClient():
         '''
         publication_json = {}
         publication_ancillary_uuid = None
-        publication_ancillary_descendant = self.get_descendant_to_lift(entity["uuid"])
+        publication_ancillary_descendant = self.get_descendant_to_lift(
+            entity["uuid"], is_publication=True)
         if publication_ancillary_descendant:
             publication_ancillary_uuid = publication_ancillary_descendant["uuid"]
             publication_json_path = (f"{current_app.config['ASSETS_ENDPOINT']}/"
