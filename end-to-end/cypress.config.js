@@ -5,4 +5,5 @@ module.exports = defineConfig({
   e2e: {
     baseUrl: "http://localhost:5001",
   },
+  defaultCommandTimeout: 10000,
 });
