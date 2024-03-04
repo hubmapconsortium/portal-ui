@@ -45,14 +45,6 @@ describe("dataset search tutorial", () => {
     });
 
     it("traverses the steps", () => {
-      cy.intercept(
-        "POST",
-        "https://search*.hubmapconsortium.org/*/portal/search",
-        {
-          statusCode: 200,
-          body: defaultSearch,
-        }
-      );
       cy.visit("/search?entity_type[0]=Dataset");
       cy.findByText("Begin the Dataset Search Tutorial").click();
       const stepsCopy = [...defaultSteps];
