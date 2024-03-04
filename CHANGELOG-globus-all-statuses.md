@@ -1,1 +1,0 @@
-- Show Globus link for datasets regardless of their status.

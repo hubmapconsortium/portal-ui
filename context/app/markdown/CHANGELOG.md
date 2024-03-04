@@ -1,3 +1,11 @@
+## v0.91.0 - 2024-03-04
+
+- Add support for Visium datasets.
+- Fix visualizations for image pyramid datasets.
+- Add detail page for cell types present in HuBMAP.
+- Show Globus link for datasets regardless of their status.
+
+
 ## v0.90.0 - 2024-02-15
 
 - Fix bug in which new datasets without deprecated `data_types` field were not displaying visualizations correctly.
