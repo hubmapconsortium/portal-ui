@@ -1,53 +1,32 @@
 /* eslint-disable no-param-reassign */
-/* eslint-disable consistent-return */
 import { TermQuery, FilterBucket, BoolShould, FilterBasedAccessor } from 'searchkit';
+import { produce } from 'immer';
+import { LevelState, PARENT_LEVEL, CHILD_LEVEL } from './LevelState';
 
-import { LevelState, isParentLevel, PARENT_LEVEL, CHILD_LEVEL } from './LevelState';
-
-function convertBucketsKeys(buckets) {
-  return buckets.map((item) => {
-    item.key = String(item.key);
-    return item;
-  });
-}
-
-function buildChildBuckets({ aggregations, childField, selectedState }) {
-  const aggsBuckets = aggregations.reduce(
-    (acc, parentBucket) => {
-      const childBuckets = parentBucket[childField]?.buckets.map((b) => ({ ...b, parentKey: parentBucket.key }));
-      acc.keys = new Set([...acc.keys, ...childBuckets.map((b) => b.key)]);
-      acc.buckets = [...acc.buckets, ...childBuckets];
-      return acc;
-    },
-    {
-      keys: new Set([]),
-      buckets: [],
-    },
-  );
-
-  const selectedBuckets = Object.entries(selectedState).reduce((acc, [parentKey, childKeys]) => {
-    childKeys.forEach((childKey) => {
-      if (!aggsBuckets.keys.has(childKey)) {
-        acc.push({ key: childKey, parentKey, doc_count: 0 });
-      }
-    });
-    return acc;
-  }, []);
-
-  return [...aggsBuckets.buckets, ...selectedBuckets];
-}
-
-function buildParentBuckets({ aggregations, childField, selectedState }) {
-  const aggsBuckets = aggregations.reduce((acc, parentBucket) => {
-    acc[parentBucket.key] = { ...parentBucket, childField };
+function buildBuckets({ aggregations, childField, selectedState }) {
+  const buckets = aggregations.reduce((acc, parentBucket) => {
+    acc[parentBucket.key] = {
+      ...parentBucket,
+      buckets: parentBucket?.[childField]?.buckets,
+    };
     return acc;
   }, {});
 
-  const selectedBuckets = Object.keys(selectedState)
-    .filter((key) => aggsBuckets?.[key] === undefined)
-    .map((key) => ({ key, childField, doc_count: 0 }));
-
-  return [...Object.values(aggsBuckets), ...selectedBuckets];
+  const bucketsWithSelectedState = Object.entries(selectedState).reduce((acc, [parentKey, childKeys]) => {
+    return produce(acc, (draft) => {
+      if (!draft?.[parentKey]) {
+        draft[parentKey] = { buckets: [], doc_count: 0 };
+      }
+      const bucketSet = new Set(draft[parentKey].buckets.map((b) => b.key));
+      childKeys.forEach((childKey) => {
+        if (!bucketSet.has(childKey)) {
+          draft[parentKey].buckets.push({ key: childKey, doc_count: 0 });
+        }
+      });
+      return draft;
+    });
+  }, buckets);
+  return bucketsWithSelectedState;
 }
 
 export class HierarchicalFacetAccessor extends FilterBasedAccessor {
@@ -71,27 +50,18 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
     this.resetState();
   }
 
-  getBuckets(level) {
-    if (level > CHILD_LEVEL) {
-      return [];
-    }
+  getBuckets() {
     const { fields } = this.options;
     const parentField = fields[PARENT_LEVEL];
     const childField = fields[CHILD_LEVEL];
 
     const aggregations = this.getAggregations([this.options.id, parentField, 'buckets'], []);
-
     const selectedState = this.state.getValue();
 
-    if (isParentLevel(level)) {
-      return convertBucketsKeys(buildParentBuckets({ aggregations, childField, selectedState }));
-    }
-
-    const childBuckets = buildChildBuckets({ aggregations, childField, selectedState });
-
-    return convertBucketsKeys(childBuckets);
+    return buildBuckets({ aggregations, childField, selectedState });
   }
 
+  /* eslint-disable consistent-return */
   getOrder() {
     if (this.options.orderKey) {
       const orderDirection = this.options.orderDirection || 'asc';

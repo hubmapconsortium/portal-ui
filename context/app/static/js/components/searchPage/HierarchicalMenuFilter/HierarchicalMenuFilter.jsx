@@ -109,9 +109,8 @@ export class HierarchicalMenuFilter extends SearchkitComponent {
       return false;
     }
 
-    const childBuckets = this.accessor.getBuckets(1).filter((bucket) => bucket.parentKey === option.key);
-
-    return !childBuckets.every((bucket) => this.accessor.state.contains(1, bucket));
+    const childBuckets = this.accessor.getBuckets()[option.key].buckets;
+    return !childBuckets.every((bucket) => this.accessor.state.contains(1, { ...bucket, parentKey: option.key }));
   }
 
   renderOption = (level, option) => {
@@ -133,15 +132,15 @@ export class HierarchicalMenuFilter extends SearchkitComponent {
     );
   };
 
-  renderParent(option) {
-    const childBuckets = this.accessor.getBuckets(CHILD_LEVEL).filter((bucket) => bucket.parentKey === option.key);
-    const active = this.accessor.state.contains(PARENT_LEVEL, option);
-    return <ParentAccordion parent={option} childBuckets={childBuckets} render={this.renderOption} active={active} />;
-  }
-
-  renderOptions() {
-    const parentBuckets = this.accessor.getBuckets(PARENT_LEVEL);
-    return <>{parentBuckets.map((bucket) => this.renderParent(bucket))}</>;
+  renderBuckets() {
+    const buckets = this.accessor.getBuckets();
+    return (
+      <div>
+        {Object.values(buckets).map((parent) => (
+          <ParentAccordion parent={parent} childBuckets={parent.buckets} render={this.renderOption} key={parent.key} />
+        ))}
+      </div>
+    );
   }
 
   render() {
@@ -151,9 +150,9 @@ export class HierarchicalMenuFilter extends SearchkitComponent {
       <ContainerComponent
         title={title}
         className={id ? `filter--${id}` : undefined}
-        disabled={this.accessor.getBuckets(0).length === 0}
+        disabled={Object.keys(this.accessor.getBuckets(0)).length === 0}
       >
-        {this.renderOptions()}
+        {this.renderBuckets()}
       </ContainerComponent>
     );
   }
