@@ -8,8 +8,6 @@ import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { useTutorialStore, withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
 import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from './config';
 
-const viewMoreSelector = '#Data-Type div.sk-refinement-list__view-more-action';
-
 const searchViewStoreSelector = (state) => ({
   searchView: state.searchView,
   setSearchView: state.setSearchView,
@@ -58,7 +56,7 @@ function SearchDatasetTutorial() {
 
   React.useEffect(() => {
     if (isTutorialRunning) {
-      const element = document.querySelector(viewMoreSelector);
+      const element = document.querySelector(stepToAddIfViewMoreExists.target);
       if (element) {
         const defaultStepsCopy = [...defaultSteps];
         defaultStepsCopy.splice(1, 0, stepToAddIfViewMoreExists);

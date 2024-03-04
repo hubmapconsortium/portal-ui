@@ -1,5 +1,5 @@
 import defaultSearch from "../../fixtures/dataset-search/default";
-import limitedDataTypesSearch from "../../fixtures/dataset-search/heart-only-5-or-less-data-types";
+import limitedDataTypesSearch from "../../fixtures/dataset-search/fewer-than-5-organs";
 
 import {
   defaultSteps,
@@ -45,6 +45,14 @@ describe("dataset search tutorial", () => {
     });
 
     it("traverses the steps", () => {
+      cy.intercept(
+        "POST",
+        "https://search*.hubmapconsortium.org/*/portal/search",
+        {
+          statusCode: 200,
+          body: defaultSearch,
+        }
+      );
       cy.visit("/search?entity_type[0]=Dataset");
       cy.findByText("Begin the Dataset Search Tutorial").click();
       const stepsCopy = [...defaultSteps];

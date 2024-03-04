@@ -37,7 +37,7 @@ const defaultSteps = [
 ];
 
 const stepToAddIfViewMoreExists = {
-  target: '#Data-Type div.sk-refinement-list__view-more-action',
+  target: '#Organ > div.sk-refinement-list__view-more-action',
   content: 'Clicking the "View All" button will display the entire list of filters in the selected category.',
   disableBeacon: true,
   title: 'View More Filters',
