@@ -6,4 +6,7 @@ module.exports = defineConfig({
     baseUrl: "http://localhost:5001",
   },
   defaultCommandTimeout: 10000,
+  reporterOptions: {
+    fullTrace: true,
+  }
 });
