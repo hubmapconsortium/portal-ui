@@ -8,6 +8,7 @@ import {
 
 function traverseSteps(steps) {
   cy.wrap(steps).each((step, i) => {
+    cy.wait(5000)
     cy.findByText(step.content).should("exist");
     cy.findByText(`${step.title} (${i + 1}/${steps.length})`).should("exist");
     if (i < steps.length - 1) {
