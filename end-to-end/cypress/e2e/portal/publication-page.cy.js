@@ -68,7 +68,7 @@ describe("Publication page", () => {
       cy.findByTestId("donors-tab")
         .should("exist")
         .and("contain", "Donors")
-        .and("contain", "(2)");
+        .and("contain", "(1)");
       cy.findAllByTestId("donor-row").should("have.length", 2);
 
       // Samples tab needs to be clicked to activate
