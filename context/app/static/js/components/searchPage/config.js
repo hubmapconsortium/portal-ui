@@ -103,7 +103,7 @@ const datasetConfig = {
         hubmap: 'HuBMAP',
       }}), capitalizeString]}),
       listFilter('assay_modality', 'Assay Modalities', {}, { labelTransformations: [capitalizeString]}),
-      boolListFilter('is_component', 'Is Component', {}, { labelTransformations: [capitalizeString]}), 
+      boolListFilter('is_component', 'Component Dataset', {}, { labelTransformations: [capitalizeString]}), 
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: [listFilter('mapped_consortium', 'Consortium'),    ...affiliationFilters],
