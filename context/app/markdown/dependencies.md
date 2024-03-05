@@ -18,6 +18,7 @@ The services the portal relies on are [listed separately](/services).
 # pip install pip-tools
 # pip-compile context/requirements.in --generate-hashes --allow-unsafe --output-file context/requirements.txt
 Flask>=2.3.3
+Flask[async]>=2.3.3
 globus-sdk>=3.9.0
 requests>=2.27.1
 pyyaml>=5.4
@@ -31,7 +32,7 @@ hubmap-commons>=2.1.10
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.1.0.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.0.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -60,14 +61,14 @@ lxml>=4.9.1
 "@searchkit/client": "^3.0.0-canary.53",
 "@searchkit/sdk": "^3.0.0-canary.53",
 "@tanstack/react-virtual": "^3.0.0-beta.60",
-"@visx/axis": "^3.3.0",
+"@visx/axis": "^3.5.0",
 "@visx/event": "^3.3.0",
-"@visx/grid": "^3.3.0",
+"@visx/grid": "^3.5.0",
 "@visx/group": "^3.3.0",
-"@visx/legend": "^3.3.0",
+"@visx/legend": "^3.5.0",
 "@visx/responsive": "^3.3.0",
-"@visx/scale": "^3.3.0",
-"@visx/shape": "^3.3.0",
+"@visx/scale": "^3.5.0",
+"@visx/shape": "^3.5.0",
 "@visx/text": "^3.3.0",
 "@visx/tooltip": "^3.3.0",
 "chart.js": "^3.5.0",
@@ -103,7 +104,7 @@ lxml>=4.9.1
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
-"vitessce": "^3.3.2",
+"vitessce": "^3.3.6",
 "zod": "^3.22.3",
 "zustand": "^4.4.1"
 }

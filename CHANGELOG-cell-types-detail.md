@@ -1,1 +1,0 @@
-- Add detail page for cell types present in HuBMAP.
