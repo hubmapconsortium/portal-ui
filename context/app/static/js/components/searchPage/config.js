@@ -84,7 +84,7 @@ const alphabeticSort = {
 const datasetConfig = {
   filters: {
     'Dataset Metadata': [
-      listFilter('mapped_data_types', 'Data Type', alphabeticSort),
+      hierarchicalFilter(['dataset_type', 'mapped_data_types'], 'Dataset Type', alphabeticSort),
       listFilter('origin_samples.mapped_organ', 'Organ'),
       listFilter('source_samples.sample_category', 'Sample Category'),
       hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),

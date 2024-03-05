@@ -9,13 +9,14 @@ export function field(id, name, translations) {
   return def;
 }
 
-export function hierarchicalFilter(ids, name) {
+export function hierarchicalFilter(ids, name, rest) {
   const def = {
     type: 'AccordionHierarchicalMenuFilter',
     props: {
       fields: ids.map((id) => `${id}.keyword`),
       title: name,
       id: ids.join('-'),
+      ...rest,
     },
   };
   return def;
