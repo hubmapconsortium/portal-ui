@@ -21,6 +21,13 @@ const StyledSummary = styled(AccordionSummary)({
   },
 });
 
+function buildExpandTooltip({ expanded, disabled }) {
+  if (disabled) {
+    return undefined;
+  }
+
+  return expanded ? 'View Less' : 'View More';
+}
 function ParentAccordion({ parent, childBuckets, render }) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = useCallback(() => {
@@ -30,6 +37,7 @@ function ParentAccordion({ parent, childBuckets, render }) {
   const buckets = Object.values(childBuckets);
 
   const hasBuckets = buckets.length > 0;
+
   return (
     <Accordion
       sx={{
@@ -50,7 +58,7 @@ function ParentAccordion({ parent, childBuckets, render }) {
             size="small"
             color="primary"
             disabled={!hasBuckets}
-            tooltip={hasBuckets ? 'View More' : undefined}
+            tooltip={buildExpandTooltip({ expanded, disabled: !hasBuckets })}
             placement="right"
           >
             <ExpandMoreIcon sx={{ fontSize: '1rem' }} color="inherit" />
