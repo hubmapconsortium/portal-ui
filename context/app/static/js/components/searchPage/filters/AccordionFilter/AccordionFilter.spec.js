@@ -15,7 +15,7 @@ test.each([
   ['AccordionListFilter', { Filter: AlphabetizedRefinementListFilter, itemComponent: CheckboxFilterItem }, true],
   ['AccordionRangeFilter', { Filter: RangeFilter }, false],
   ['AccordionCheckboxFilter', { Filter: CheckboxFilter, itemComponent: CheckboxFilterItem }, false],
-  ['AccordionHierarchicalMenuFilter', { Filter: HierarchicalMenuFilter }, false],
+  ['AccordionHierarchicalMenuFilter', { Filter: HierarchicalMenuFilter, itemComponent: CheckboxFilterItem }, false],
 ])('getFilter given %s returns correct filter', (filterName, expectedFilter, alphabetize) => {
   expect(getFilter(filterName, alphabetize)).toStrictEqual(expectedFilter);
 });
