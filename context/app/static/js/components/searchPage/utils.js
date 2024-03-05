@@ -9,13 +9,15 @@ export function field(id, name, translations) {
   return def;
 }
 
-export function hierarchicalFilter(ids, name) {
+export function hierarchicalFilter(ids, name, filterProps) {
   const def = {
     type: 'AccordionHierarchicalMenuFilter',
     props: {
       fields: ids.map((id) => `${id}.keyword`),
       title: name,
       id: ids.join('-'),
+      size: 10000,
+      ...filterProps,
     },
   };
   return def;
@@ -24,7 +26,7 @@ export function hierarchicalFilter(ids, name) {
 // `rest` is an object with keys corresponding to additional props of the
 // Searchkit RefinementList
 // https://github.com/searchkit/searchkit/blob/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs/docs/components/navigation/refinement-list.md
-export function listFilter(id, name, rest) {
+export function listFilter(id, name, filterProps = {}, itemProps = {}) {
   const def = {
     type: 'AccordionListFilter',
     props: {
@@ -33,9 +35,16 @@ export function listFilter(id, name, rest) {
       field: `${id}.keyword`,
       operator: 'OR',
       size: 5,
-      ...rest,
+      ...filterProps,
     },
+    itemProps,
   };
+  return def;
+}
+
+export function boolListFilter(id, name, filterProps = {}, itemProps = {}) {
+  const def = listFilter(id, name, filterProps, itemProps);
+  def.props.field = id;
   return def;
 }
 

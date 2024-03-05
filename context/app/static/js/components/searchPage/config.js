@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line import/named
-import { listFilter, rangeFilter, field, hierarchicalFilter } from './utils';
+import { capitalizeString } from 'js/helpers/functions';
+import { listFilter, rangeFilter, field, hierarchicalFilter, boolListFilter } from './utils';
 
 const bmiField = 'body_mass_index_value';
 const ageField = 'age_value';
@@ -81,14 +82,28 @@ const alphabeticSort = {
   orderDirection: 'asc',
 }
 
+function mapLabel({label, map}){
+  return map?.[label] ? map[label]: label;
+}
+
 const datasetConfig = {
   filters: {
     'Dataset Metadata': [
-      listFilter('mapped_data_types', 'Data Type', alphabeticSort),
+      hierarchicalFilter(['raw_dataset_type', 'assay_display_name'], 'Dataset Type', alphabeticSort),
       listFilter('origin_samples.mapped_organ', 'Organ'),
       listFilter('source_samples.sample_category', 'Sample Category'),
+      listFilter('analyte_class', 'Analyte Class', {}, { labelTransformations: [capitalizeString]}),
       hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
       listFilter('mapped_consortium', 'Consortium'),
+      
+    ],
+    'Dataset Processing': [
+      listFilter('processing', 'Dataset Category', {}, { labelTransformations: [capitalizeString]}),
+      listFilter('processing_type', 'Processing Type', {}, { labelTransformations: [(label) => mapLabel({label, map: {
+        hubmap: 'HuBMAP',
+      }}), capitalizeString]}),
+      boolListFilter('visualization', 'Visualization', {}, { labelTransformations: [capitalizeString]}),
+      listFilter('pipeline', 'Pipeline'),
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: affiliationFilters,

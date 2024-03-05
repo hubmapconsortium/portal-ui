@@ -11,6 +11,7 @@ function Filters({ filters, analyticsCategory }) {
         <AccordionFilter
           type={def.type}
           {...def.props}
+          itemProps={def?.itemProps}
           key={`title-${def.props.title}`}
           analyticsCategory={analyticsCategory}
         />
