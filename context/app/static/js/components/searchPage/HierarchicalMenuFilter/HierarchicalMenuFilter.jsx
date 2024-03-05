@@ -10,7 +10,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { SearchkitComponent, RenderComponentPropType, Panel } from 'searchkit';
 import { styled } from '@mui/material/styles';
 
-import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import { HierarchicalFacetAccessor } from './HierarchicalFacetAccessor';
 import { CHILD_LEVEL, PARENT_LEVEL } from './LevelState';
 
@@ -116,12 +115,12 @@ export class HierarchicalMenuFilter extends SearchkitComponent {
   }
 
   renderOption = (level, option) => {
-    const { countFormatter } = this.props;
+    const { countFormatter, itemComponent: ItemComponent } = this.props;
 
     const active = this.accessor.state.contains(level, option);
 
     return (
-      <CheckboxFilterItem
+      <ItemComponent
         key={option.key}
         active={active}
         itemKey={option.key}

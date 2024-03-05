@@ -3,12 +3,17 @@ import { TermQuery, FilterBucket, BoolShould, FilterBasedAccessor } from 'search
 import { produce } from 'immer';
 import { LevelState, PARENT_LEVEL, CHILD_LEVEL } from './LevelState';
 
+function getKeyField({ key_as_string, key }) {
+  return key_as_string ?? key;
+}
+
 export function buildBuckets({ aggregations, childField, selectedState }) {
   const buckets = aggregations.reduce((acc, parentBucket) => {
-    acc[parentBucket.key] = {
+    const parentKey = getKeyField(parentBucket);
+    acc[parentKey] = {
       ...parentBucket,
       buckets: Object.fromEntries(
-        parentBucket?.[childField].buckets.map((b) => [b.key, { ...b, parentKey: parentBucket.key }]),
+        parentBucket?.[childField].buckets.map((b) => [getKeyField(b), { ...b, key: getKeyField(b), parentKey }]),
       ),
     };
     return acc;

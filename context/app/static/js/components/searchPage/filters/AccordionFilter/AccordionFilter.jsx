@@ -42,7 +42,7 @@ export function getFilter(type, shouldAlphabetize = false) {
     case 'AccordionCheckboxFilter':
       return { Filter: CheckboxFilter, itemComponent: CheckboxFilterItem };
     case 'AccordionHierarchicalMenuFilter':
-      return { Filter: HierarchicalMenuFilter };
+      return { Filter: HierarchicalMenuFilter, itemComponent: CheckboxFilterItem };
     default:
       throw new Error(`"${type}" does not exist`);
   }

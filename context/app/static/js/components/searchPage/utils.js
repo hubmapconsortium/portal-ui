@@ -9,16 +9,18 @@ export function field(id, name, translations) {
   return def;
 }
 
-export function hierarchicalFilter(ids, name, filterProps) {
+export function hierarchicalFilter({ fields, name, filterProps = {}, itemProps = {} }) {
+  const ids = [fields.parent.id, fields.child.id];
   const def = {
     type: 'AccordionHierarchicalMenuFilter',
     props: {
-      fields: ids.map((id) => `${id}.keyword`),
+      fields: ids,
       title: name,
       id: ids.join('-'),
       size: 10000,
       ...filterProps,
     },
+    itemProps,
   };
   return def;
 }

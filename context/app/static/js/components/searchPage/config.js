@@ -89,12 +89,11 @@ function mapLabel({label, map}){
 const datasetConfig = {
   filters: {
     'Dataset Metadata': [
-      hierarchicalFilter(['raw_dataset_type', 'assay_display_name'], 'Dataset Type', alphabeticSort),
+      hierarchicalFilter({fields: {parent: {id: 'raw_dataset_type.keyword'}, child: {id: 'assay_display_name.keyword'}}, name: 'Dataset Type', filterProps: alphabeticSort}),
       listFilter('origin_samples.mapped_organ', 'Organ'),
       listFilter('analyte_class', 'Analyte Class', {}, { labelTransformations: [capitalizeString]}),
       listFilter('source_samples.sample_category', 'Sample Category'),
-      hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
-      
+      hierarchicalFilter({fields: {parent: {id: 'mapped_status.keyword'}, child: {id: 'mapped_data_access_level.keyword'}}, name: 'Status'}),      
     ],
     'Dataset Processing': [
       listFilter('processing', 'Dataset Category', {}, { labelTransformations: [capitalizeString]}),
@@ -104,6 +103,7 @@ const datasetConfig = {
         hubmap: 'HuBMAP',
       }}), capitalizeString]}),
       listFilter('assay_modality', 'Assay Modalities', {}, { labelTransformations: [capitalizeString]}),
+      boolListFilter('is_component', 'Is Component', {}, { labelTransformations: [capitalizeString]}), 
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
     Affiliation: [listFilter('mapped_consortium', 'Consortium'),    ...affiliationFilters],
