@@ -4,12 +4,11 @@ import PropTypes from 'prop-types';
 import Accordion from '@mui/material/Accordion';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import IconButton from '@mui/material/IconButton';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-
 import { SearchkitComponent, RenderComponentPropType, Panel } from 'searchkit';
 import { styled } from '@mui/material/styles';
 
+import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { HierarchicalFacetAccessor } from './HierarchicalFacetAccessor';
 import { CHILD_LEVEL, PARENT_LEVEL } from './LevelState';
 
@@ -45,9 +44,17 @@ function ParentAccordion({ parent, childBuckets, render }) {
     >
       <StyledSummary
         expandIcon={
-          <IconButton aria-label="delete" onClick={toggleExpanded} size="small" color="primary" disabled={!hasBuckets}>
+          <TooltipIconButton
+            aria-label="delete"
+            onClick={toggleExpanded}
+            size="small"
+            color="primary"
+            disabled={!hasBuckets}
+            tooltip={hasBuckets ? 'View More' : undefined}
+            placement="right"
+          >
             <ExpandMoreIcon sx={{ fontSize: '1rem' }} color="inherit" />
-          </IconButton>
+          </TooltipIconButton>
         }
       >
         {render(PARENT_LEVEL, parent)}
