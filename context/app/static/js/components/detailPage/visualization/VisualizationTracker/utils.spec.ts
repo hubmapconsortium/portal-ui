@@ -1,70 +1,4 @@
-import { VitessceInteraction } from './types';
-import { stringifyVitessceInteraction, getLastInteraction, mouseButtonMap, handleKeyPress } from './utils';
-
-const testInteractions: Record<string, VitessceInteraction> = {
-  get empty() {
-    return [] as VitessceInteraction;
-  },
-  get single() {
-    return [['click', 'heatmap', 'cell']] as VitessceInteraction;
-  },
-  get multiple() {
-    return [
-      ['click', 'heatmap', 'cell'],
-      ['hover', 'scatterplot', 'gene'],
-      ['click', 'scatterplot', 'cell'],
-      ['click', 'gene', 'BRCA1'],
-    ] as VitessceInteraction;
-  },
-  get multipleWithSameTarget() {
-    return [
-      ['click', 'heatmap', 'cell'],
-      ['hover', 'scatterplot', 'gene'],
-      ['click', 'scatterplot', 'cell'],
-      ['click', 'gene', 'BRCA1'],
-      ['hover', 'scatterplot', 'gene'],
-      ['click', 'scatterplot', 'cell'],
-      ['click', 'gene', 'BRCA1'],
-    ] as VitessceInteraction;
-  },
-};
-
-describe('stringifyVitessceInteraction', () => {
-  it('should stringify an empty interaction to an empty string', () => {
-    const expected = '';
-    expect(stringifyVitessceInteraction(testInteractions.empty)).toEqual(expected);
-  });
-  it('should stringify a single interaction', () => {
-    const expected = 'click heatmap cell';
-    expect(stringifyVitessceInteraction(testInteractions.single)).toEqual(expected);
-  });
-  it('should stringify a list of interactions', () => {
-    const expected = 'click heatmap cell > hover scatterplot gene > click scatterplot cell > click gene BRCA1';
-    expect(stringifyVitessceInteraction(testInteractions.multiple)).toEqual(expected);
-  });
-  it('should stringify a list of interactions with multiple events on the same target', () => {
-    const expected =
-      'click heatmap cell > hover scatterplot gene > click scatterplot cell > click gene BRCA1 > hover scatterplot gene > click scatterplot cell > click gene BRCA1';
-    expect(stringifyVitessceInteraction(testInteractions.multipleWithSameTarget)).toEqual(expected);
-  });
-});
-
-describe('getLastInteraction', () => {
-  it('should return null for an empty interaction', () => {
-    expect(getLastInteraction(testInteractions.empty)).toBeNull();
-  });
-  it('should return the last interaction for a single interaction', () => {
-    expect(getLastInteraction(testInteractions.single)).toEqual(testInteractions.single[0]);
-  });
-  it('should return the last interaction for a list of interactions', () => {
-    expect(getLastInteraction(testInteractions.multiple)).toEqual(
-      testInteractions.multiple[testInteractions.multiple.length - 1],
-    );
-    expect(getLastInteraction(testInteractions.multipleWithSameTarget)).toEqual(
-      testInteractions.multipleWithSameTarget[testInteractions.multipleWithSameTarget.length - 1],
-    );
-  });
-});
+import { mouseButtonMap, formatEventCategoryAndLabel } from './utils';
 
 describe('mouseButtonMap', () => {
   it('should return the correct mouse button name for known buttons', () => {
@@ -79,26 +13,11 @@ describe('mouseButtonMap', () => {
   });
 });
 
-describe('handleKeyPress', () => {
-  it.each`
-    key        | expected
-    ${'Tab'}   | ${['TabFocus', 'heatmap']}
-    ${'Space'} | ${['Click', 'heatmap', 'Space']}
-    ${'Enter'} | ${['Click', 'heatmap', 'Enter']}
-  `(
-    "should return the correct interaction for key '$key'",
-    ({ key, expected }: { key: string; expected: VitessceInteraction[number] }) => {
-      expect(handleKeyPress(key, { current: testInteractions.empty }, 'heatmap')).toEqual(expected);
-    },
-  );
-  it('should append to the last interaction if the user is typing', () => {
-    const interactionRef = { current: testInteractions.single };
-    const expected = [...testInteractions.single, ['Keypress', 'heatmap', 'A']];
-
-    interactionRef.current.push(handleKeyPress('A', interactionRef, 'heatmap'));
-    expect(interactionRef.current).toEqual(expected);
-    const expected2 = [...testInteractions.single, ['Keypress', 'heatmap', 'AB']];
-    interactionRef.current.push(handleKeyPress('B', interactionRef, 'heatmap'));
-    expect(interactionRef.current).toEqual(expected2);
+describe('formatEventCategoryAndLabel', () => {
+  it('should return the correct category and label', () => {
+    expect(formatEventCategoryAndLabel('category', 'label')).toEqual({
+      category: 'Visualization - category',
+      label: 'label',
+    });
   });
 });

@@ -1,90 +1,98 @@
-import React, { useCallback, useRef } from 'react';
+import React, { useMemo, useRef } from 'react';
 import useTrackMount from 'js/hooks/useTrackMount';
-import { VitessceInteraction } from './types';
-import {
-  getLastInteraction,
-  getNearestIdentifier,
-  handleKeyPress,
-  modifierKeys,
-  mouseButtonMap,
-  pushVitessceEvent,
-} from './utils';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import { useEventCallback } from '@mui/material';
+import { trackEvent } from 'js/helpers/trackers';
+import { formatEventCategoryAndLabel, getNearestIdentifier, modifierKeys, mouseButtonMap } from './utils';
 
-type FocusAndMouseHandler = React.MouseEventHandler<HTMLSpanElement> & React.FocusEventHandler<HTMLSpanElement>;
+export function useVitessceEventMetadata() {
+  const location = window.location.href;
+  const flaskData = useFlaskDataContext();
 
-export const useVisualizationTracker = () => {
+  // Handle preview pages
+  if (location.includes('preview')) {
+    const { title } = flaskData;
+    return formatEventCategoryAndLabel('Preview', title);
+  }
+  // Handle dataset/publication pages
+  if (location.includes('browse')) {
+    const {
+      entity: { hubmap_id, entity_type },
+    } = flaskData;
+    return formatEventCategoryAndLabel(entity_type, hubmap_id);
+  }
+  // Handle biological entity pages
+  if (location.includes('organ') || location.includes('genes') || location.includes('cell-type')) {
+    const urlSegments = location.split('/');
+    const entityName = urlSegments[urlSegments.length - 1];
+    const entityType = urlSegments[urlSegments.length - 2];
+    return formatEventCategoryAndLabel(entityType, entityName);
+  }
+
+  return formatEventCategoryAndLabel('Unknown', location);
+}
+
+export function useVisualizationTracker() {
+  const { category, label } = useVitessceEventMetadata();
   // Track when the visualization is first mounted
-  useTrackMount('Visualization', 'Vitessce Mounted');
-  // Create an object to track Vitessce interactions
-  // This list is populated with a summary of every interaction a user has with the visualization
-  const vitessceInteraction = useRef<VitessceInteraction>([]);
-
-  // This timeout is used to send the interaction object to the event log after a period of inactivity
-  const interactionTimeout = useRef<number | null>(null);
-
-  // This helper is also defined as a ref to avoid re-rendering/dependency array inclusion.
-  // The `push` function is used to add an interaction to the interaction object
-  // and queue up/reset the timeout to send the interaction object to the event log
-  // and clear the interaction object.
-  const push = useRef((event: VitessceInteraction[number]) => {
-    pushVitessceEvent(vitessceInteraction, event, interactionTimeout);
+  useTrackMount(category, 'Vitessce Mounted', label);
+  const trackVitessceAction = useEventCallback((action) => {
+    const event = { category, action, label };
+    trackEvent(event);
   });
+
+  // This set is used to track which targets have been hovered over
+  // To avoid sending duplicate hover events
+  const hoveredTargets = useRef<Set<string>>(new Set());
 
   // The ref for the span used to wrap the visualization
   const wrapper = useRef<HTMLSpanElement>(null);
+  const typingTimeout = useRef<number | null>(null);
 
-  const trackEnter: FocusAndMouseHandler = useCallback((e) => {
+  const trackClick: React.MouseEventHandler<HTMLSpanElement> = useEventCallback((e) => {
     const target = getNearestIdentifier(e.target as HTMLElement);
     if (!target) return;
-    push.current(['Enter', target]);
-  }, []);
+    const mouseButton = mouseButtonMap[e.button];
+    trackVitessceAction(`${mouseButton} Click ${target}`);
+  });
 
-  const trackLeave: FocusAndMouseHandler = useCallback((e) => {
+  const trackMouseMove: React.MouseEventHandler<HTMLSpanElement> = useEventCallback((e) => {
     const target = getNearestIdentifier(e.target as HTMLElement);
-    if (!target) return;
-    push.current(['Leave', target]);
-  }, []);
+    if (!target || hoveredTargets.current.has(target)) return;
+    hoveredTargets.current.add(target);
+    trackVitessceAction(`Hover ${target}`);
+  });
 
-  const trackClick: React.MouseEventHandler<HTMLSpanElement> = useCallback((e) => {
-    const target = getNearestIdentifier(e.target as HTMLElement);
-    if (!target) return;
-    push.current(['Click', target, mouseButtonMap[e.button]]);
-  }, []);
-
-  const trackMouseMove: React.MouseEventHandler<HTMLSpanElement> = useCallback((e) => {
-    const target = getNearestIdentifier(e.target as HTMLElement);
-    if (!target) return;
-
-    // Deduplicate hover events to prevent spamming the event log
-    const lastInteraction = getLastInteraction(vitessceInteraction.current);
-    if (lastInteraction) {
-      const [lastAction, lastTarget] = lastInteraction;
-      if (lastAction === 'Hover' && lastTarget === target) return;
-    }
-
-    push.current(['Hover', target]);
-  }, []);
-
-  const trackKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = useCallback((e) => {
+  const trackKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = useEventCallback((e) => {
     const target = getNearestIdentifier(e.target as HTMLElement);
     const key = e.key === ' ' ? 'Space' : e.key;
     if (!target || modifierKeys.includes(key)) return;
-    push.current(handleKeyPress(key, vitessceInteraction, target));
-  }, []);
+    if (typingTimeout.current) {
+      clearTimeout(typingTimeout.current);
+    }
+    typingTimeout.current = window.setTimeout(() => {
+      trackVitessceAction(`Type ${(e.target as HTMLInputElement).value}, ${target}`);
+    }, 5000);
+  });
 
-  const trackWheel: React.WheelEventHandler<HTMLSpanElement> = useCallback((e) => {
-    push.current(['Zoom', getNearestIdentifier(e.target as HTMLElement) ?? 'Unknown']);
-  }, []);
+  const trackWheel: React.WheelEventHandler<HTMLSpanElement> = useEventCallback((e) => {
+    const target = getNearestIdentifier(e.target as HTMLElement);
+    if (!target) return;
+    if (e.deltaY === 0) return;
+    const direction = e.deltaY > 0 ? 'Out' : 'In';
+    trackVitessceAction(`Zoom ${direction} ${target}`);
+  });
 
-  return {
-    ref: wrapper,
-    props: {
-      onMouseEnter: trackEnter,
-      onMouseLeave: trackLeave,
-      onClick: trackClick,
-      onMouseMove: trackMouseMove,
-      onKeyDown: trackKeyDown,
-      onWheel: trackWheel,
-    },
-  };
-};
+  return useMemo(
+    () => ({
+      ref: wrapper,
+      props: {
+        onClick: trackClick,
+        onMouseMove: trackMouseMove,
+        onKeyDown: trackKeyDown,
+        onWheel: trackWheel,
+      },
+    }),
+    [wrapper, trackClick, trackMouseMove, trackKeyDown, trackWheel],
+  );
+}
