@@ -109,8 +109,8 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
           field: this.options.fields[level],
           size: this.options.size,
           order: this.getOrder(),
-          ...options,
         },
+        ...options,
       },
     };
   }
