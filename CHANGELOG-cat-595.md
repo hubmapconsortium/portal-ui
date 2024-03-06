@@ -1,0 +1,1 @@
+- Add support for new contributors schema to contributors table.
