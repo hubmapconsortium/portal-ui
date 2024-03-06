@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { ComponentProps } from 'react';
 import TableCell, { TableCellProps } from '@mui/material/TableCell';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
