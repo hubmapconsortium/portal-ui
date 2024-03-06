@@ -1,6 +1,7 @@
 /* eslint-disable prettier/prettier */
 // eslint-disable-next-line import/named
-import { listFilter, rangeFilter, field, hierarchicalFilter } from './utils';
+import { capitalizeString } from 'js/helpers/functions';
+import { listFilter, rangeFilter, field, hierarchicalFilter, boolListFilter } from './utils';
 
 const bmiField = 'body_mass_index_value';
 const ageField = 'age_value';
@@ -81,17 +82,31 @@ const alphabeticSort = {
   orderDirection: 'asc',
 }
 
+function mapLabel({label, map}){
+  return map?.[label] ? map[label]: label;
+}
+
 const datasetConfig = {
   filters: {
     'Dataset Metadata': [
-      listFilter('mapped_data_types', 'Data Type', alphabeticSort),
+      hierarchicalFilter({fields: {parent: {id: 'raw_dataset_type.keyword'}, child: {id: 'assay_display_name.keyword'}}, name: 'Dataset Type', filterProps: alphabeticSort}),
       listFilter('origin_samples.mapped_organ', 'Organ'),
+      listFilter('analyte_class', 'Analyte Class', {}, { labelTransformations: [capitalizeString]}),
       listFilter('source_samples.sample_category', 'Sample Category'),
-      hierarchicalFilter(['mapped_status', 'mapped_data_access_level'], 'Status'),
-      listFilter('mapped_consortium', 'Consortium'),
+      hierarchicalFilter({fields: {parent: {id: 'mapped_status.keyword'}, child: {id: 'mapped_data_access_level.keyword'}}, name: 'Status'}),      
+    ],
+    'Dataset Processing': [
+      listFilter('processing', 'Dataset Category', {}, { labelTransformations: [capitalizeString]}),
+      listFilter('pipeline', 'Pipeline'),
+      boolListFilter('visualization', 'Visualization Available', {}, { labelTransformations: [capitalizeString]}),
+      listFilter('processing_type', 'Processing Type', {}, { labelTransformations: [(label) => mapLabel({label, map: {
+        hubmap: 'HuBMAP',
+      }}), capitalizeString]}),
+      listFilter('assay_modality', 'Assay Modalities', {}, { labelTransformations: [capitalizeString]}),
+      boolListFilter('is_component', 'Component Dataset', {}, { labelTransformations: [capitalizeString]}), 
     ],
     'Donor Metadata': makeDonorMetadataFilters(false),
-    Affiliation: affiliationFilters,
+    Affiliation: [listFilter('mapped_consortium', 'Consortium'),    ...affiliationFilters],
   },
   fields: {
     table: [

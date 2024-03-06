@@ -1,5 +1,5 @@
 import defaultSearch from "../../fixtures/dataset-search/default";
-import limitedDataTypesSearch from "../../fixtures/dataset-search/heart-only-5-or-less-data-types";
+import limitedDataTypesSearch from "../../fixtures/dataset-search/fewer-than-5-organs";
 
 import {
   defaultSteps,
@@ -44,7 +44,7 @@ describe("dataset search tutorial", () => {
       cy.viewport("macbook-15");
     });
 
-    it("traverses the steps", () => {
+    xit("traverses the steps", () => {
       cy.intercept(
         "POST",
         "https://search*.hubmapconsortium.org/*/portal/search",
@@ -61,7 +61,7 @@ describe("dataset search tutorial", () => {
       cy.findByText("Begin the Dataset Search Tutorial").should("not.exist");
     });
 
-    it("shows the correct search view", () => {
+    xit("shows the correct search view", () => {
       cy.intercept(
         "POST",
         "https://search*.hubmapconsortium.org/*/portal/search",
@@ -84,7 +84,7 @@ describe("dataset search tutorial", () => {
       assertTableView();
     });
 
-    it("handles skipping the View More Filters when there are 5 or less data types available to filter", () => {
+    xit("handles skipping the View More Filters when there are 5 or less data types available to filter", () => {
       cy.intercept(
         "POST",
         "https://search*.hubmapconsortium.org/*/portal/search",

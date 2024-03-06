@@ -1,10 +1,11 @@
 import React, { ElementType } from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
+import { TooltipProps } from '@mui/material/Tooltip';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
-type TooltipButtonBaseProps =
+type TooltipButtonBaseProps = (
   | ({
       isIconButton: true;
       tooltip: React.ReactNode;
@@ -12,7 +13,9 @@ type TooltipButtonBaseProps =
   | ({
       isIconButton: false;
       tooltip: React.ReactNode;
-    } & ButtonProps);
+    } & ButtonProps)
+) &
+  Pick<TooltipProps, 'placement'>;
 
 type WrapperButtonProps = { buttonComponent: ElementType } & Omit<TooltipButtonBaseProps, 'tooltip' | 'isIconButton'>;
 
@@ -47,11 +50,11 @@ const WrappedButton = React.forwardRef(
 );
 
 function TooltipButtonBase(
-  { tooltip, children, component, isIconButton, ...props }: TooltipButtonBaseProps,
+  { tooltip, placement, children, component, isIconButton, ...props }: TooltipButtonBaseProps,
   ref: React.Ref<HTMLButtonElement>,
 ) {
   return (
-    <SecondaryBackgroundTooltip describeChild title={tooltip}>
+    <SecondaryBackgroundTooltip describeChild title={tooltip} placement={placement}>
       <WrappedButton {...props} buttonComponent={isIconButton ? IconButton : Button} ref={ref}>
         {children}
       </WrappedButton>
