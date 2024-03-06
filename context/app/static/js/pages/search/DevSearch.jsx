@@ -4,7 +4,13 @@ import { ExistsQuery, BoolMustNot, TermQuery } from 'searchkit';
 import { Alert } from 'js/shared-styles/alerts';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
-import { field, listFilter, checkboxFilter, hierarchicalFilter } from 'js/components/searchPage/utils';
+import {
+  field,
+  listFilter,
+  checkboxFilter,
+  hierarchicalFilter,
+  legacyHierarchicalFilter,
+} from 'js/components/searchPage/utils';
 import { fieldsToHighlight } from 'js/components/searchPage/config';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
 import DevResults from 'js/components/searchPage/DevResults';
@@ -43,7 +49,7 @@ function DevSearch() {
         listFilter('entity_type', 'Entity Type'),
         listFilter('mapper_metadata.version', 'Mapper Version'),
         listFilter('index_version', 'Index Version'),
-        hierarchicalFilter(
+        legacyHierarchicalFilter(
           [...Array(5).keys()].map((i) => `anatomy_${i + 1}`),
           'Anatomy',
         ),
@@ -55,12 +61,27 @@ function DevSearch() {
         listFilter('metadata.metadata.assay_type', 'assay_type'),
         checkboxFilter('is_derived', 'Is derived?', TermQuery('ancestors.entity_type', 'dataset')),
         checkboxFilter('is_raw', 'Is raw?', BoolMustNot(TermQuery('ancestors.entity_type', 'dataset'))),
-        hierarchicalFilter(['metadata.metadata.analyte_class', 'mapped_data_types'], 'By analyte'),
-        hierarchicalFilter(['metadata.metadata.assay_category', 'mapped_data_types'], 'By category'),
+        hierarchicalFilter({
+          fields: {
+            parent: { id: 'metadata.metadata.analyte_class.keyword' },
+            child: { id: 'mapped_data_types.keyword' },
+          },
+          name: 'By analyte',
+        }),
+        hierarchicalFilter({
+          fields: {
+            parent: { id: 'metadata.metadata.assay_category.keyword' },
+            child: { id: 'mapped_data_types.keyword' },
+          },
+          name: 'By category',
+        }),
       ],
       'File Descriptions': [
         listFilter('files.description', 'Flat'),
-        hierarchicalFilter(['mapped_data_types', 'files.description'], 'By Assay'),
+        hierarchicalFilter({
+          fields: { parent: { id: 'mapped_data_types.keyword' }, child: { id: 'files.description.keyword' } },
+          name: 'By Assay',
+        }),
       ],
       'Validation Errors': [
         listFilter('mapper_metadata.validation_errors.absolute_path', 'Document Path'),
