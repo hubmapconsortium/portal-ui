@@ -102,20 +102,29 @@ export class HierarchicalFacetAccessor extends FilterBasedAccessor {
     return query;
   }
 
-  buildOwnQuery(query) {
-    const subAggs = {
-      [this.options.fields[PARENT_LEVEL]]: {
+  buildAggsClause({ level, options }) {
+    return {
+      [this.options.fields[level]]: {
         terms: {
-          field: this.options.fields[PARENT_LEVEL],
-        },
-        aggs: {
-          [this.options.fields[CHILD_LEVEL]]: {
-            terms: {
-              field: this.options.fields[CHILD_LEVEL],
-            },
-          },
+          field: this.options.fields[level],
+          size: this.options.size,
+          order: this.getOrder(),
+          ...options,
         },
       },
+    };
+  }
+
+  buildOwnQuery(query) {
+    const subAggs = {
+      ...this.buildAggsClause({
+        level: PARENT_LEVEL,
+        options: {
+          aggs: {
+            ...this.buildAggsClause({ level: CHILD_LEVEL }),
+          },
+        },
+      }),
     };
     return query.setAggs(FilterBucket(this.options.id, query.getFiltersWithoutKeys(this.uuids), subAggs));
   }
