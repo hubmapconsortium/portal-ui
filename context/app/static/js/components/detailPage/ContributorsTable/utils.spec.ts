@@ -21,8 +21,8 @@ const cedarContributor: CEDARContributor = {
   is_principal_investigator: 'No',
   last_name: 'Doe',
   metadata_schema_id: '94dae6f8-0756-4ab0-a47b-138e446a9501',
-  middle_name_or_initial: '',
-  orcid: '',
+  middle_name_or_initial: 'B.',
+  orcid: '0000-0000-0000-0000',
 };
 
 const normalizedContributor: Contributor = {
