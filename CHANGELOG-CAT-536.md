@@ -1,3 +1,0 @@
-- Add tracking to Vitessce download links.
-- Revise Vitessce event tracking from digest approach to individual actions.
-- Revise Vitessce event tracking categories to indicate where the config is.

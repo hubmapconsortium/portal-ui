@@ -1,3 +1,11 @@
+## v0.91.1 - 2024-03-06
+
+- Add tracking to Vitessce download links.
+- Revise Vitessce event tracking from digest approach to individual actions.
+- Revise Vitessce event tracking categories to indicate where the config is.
+- Add assay related facets to dataset search page to improve navigation.
+
+
 ## v0.91.0 - 2024-03-04
 
 - Add support for Visium datasets.
