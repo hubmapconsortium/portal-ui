@@ -3,45 +3,41 @@ import useTrackMount from 'js/hooks/useTrackMount';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
-import { getNearestIdentifier, modifierKeys, mouseButtonMap } from './utils';
+import { formatEventCategoryAndLabel, getNearestIdentifier, modifierKeys, mouseButtonMap } from './utils';
 
 export function useVitessceEventMetadata() {
   const location = window.location.href;
   const flaskData = useFlaskDataContext();
 
-  let category = 'Unknown';
-  let name = location; // Fall back to the full URL if we can't find a better name
-
   // Handle preview pages
   if (location.includes('preview')) {
     const { title } = flaskData;
-    category = 'Preview';
-    name = title;
+    return formatEventCategoryAndLabel('Preview', title);
   }
   // Handle dataset/publication pages
-  else if (location.includes('browse')) {
+  if (location.includes('browse')) {
     const {
       entity: { hubmap_id, entity_type },
     } = flaskData;
-    category = entity_type;
-    name = hubmap_id;
+    return formatEventCategoryAndLabel(entity_type, hubmap_id);
   }
   // Handle biological entity pages
-  else if (location.includes('organ') || location.includes('genes') || location.includes('cell-type')) {
+  if (location.includes('organ') || location.includes('genes') || location.includes('cell-type')) {
     const urlSegments = location.split('/');
-    name = urlSegments[urlSegments.length - 1];
-    category = urlSegments[urlSegments.length - 2];
+    const entityName = urlSegments[urlSegments.length - 1];
+    const entityType = urlSegments[urlSegments.length - 2];
+    return formatEventCategoryAndLabel(entityType, entityName);
   }
 
-  return { category: `Visualization - ${category}`, name };
+  return formatEventCategoryAndLabel('Unknown', location);
 }
 
 export function useVisualizationTracker() {
-  const { category, name } = useVitessceEventMetadata();
+  const { category, label } = useVitessceEventMetadata();
   // Track when the visualization is first mounted
-  useTrackMount(category, 'Vitessce Mounted', name);
+  useTrackMount(category, 'Vitessce Mounted', label);
   const trackVitessceAction = useEventCallback((action) => {
-    const event = { category, action, name };
+    const event = { category, action, label };
     trackEvent(event);
   });
 

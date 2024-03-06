@@ -94,3 +94,16 @@ export const mouseButtonMap = new Proxy(knownButtonMap, {
     return hasKey(target, key) ? target[key] : `Unknown (${String(key)})`;
   },
 });
+
+/**
+ * Helper function for `useVisualizationTracker` to format the category and label for an event.
+ * @param category
+ * @param label
+ * @returns
+ */
+export const formatEventCategoryAndLabel = (category: string, label: string) => {
+  return {
+    category: `Visualization - ${category}`,
+    label,
+  };
+};
