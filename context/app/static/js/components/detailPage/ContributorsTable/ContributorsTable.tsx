@@ -1,5 +1,4 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { useMemo } from 'react';
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -13,12 +12,23 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
+import { ContributorAPIResponse, normalizeContributor } from './utils';
 
-function ContributorsTable({ title, contributors = [], iconTooltipText }) {
+interface ContributorsTableProps {
+  title: string;
+  contributors: ContributorAPIResponse[];
+  iconTooltipText?: string;
+}
+
+function ContributorsTable({ title, contributors = [], iconTooltipText }: ContributorsTableProps) {
   const columns = [
     { id: 'name', label: 'Name' },
     { id: 'affiliation', label: 'Affiliation' },
   ];
+
+  const normalizedContributors = useMemo(() => {
+    return contributors.map(normalizeContributor);
+  }, [contributors]);
 
   return (
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
@@ -37,7 +47,6 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }) {
                   </HeaderCell>
                 ))}
                 <IconTooltipCell
-                  component={HeaderCell}
                   tooltipTitle="Open Researcher and Contributor ID"
                   data-testid={`${title.toLowerCase()}-orcid-header`}
                 >
@@ -46,14 +55,14 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }) {
               </TableRow>
             </TableHead>
             <TableBody>
-              {contributors.map(({ orcid_id, name, affiliation }) => (
-                <TableRow key={orcid_id} data-testid="contributor-row">
-                  <TableCell>{name}</TableCell>
+              {normalizedContributors.map(({ orcid, displayName, affiliation }) => (
+                <TableRow key={orcid} data-testid="contributor-row">
+                  <TableCell>{displayName}</TableCell>
                   <TableCell>{affiliation}</TableCell>
                   <TableCell>
-                    {orcid_id && (
-                      <OutboundIconLink href={`https://orcid.org/${orcid_id}`} variant="body2">
-                        {orcid_id}
+                    {orcid && (
+                      <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
+                        {orcid}
                       </OutboundIconLink>
                     )}
                   </TableCell>
@@ -66,10 +75,5 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }) {
     </DetailPageSection>
   );
 }
-
-ContributorsTable.propTypes = {
-  title: PropTypes.string.isRequired,
-  contributors: PropTypes.arrayOf(PropTypes.object).isRequired,
-};
 
 export default ContributorsTable;
