@@ -72,7 +72,7 @@ const sampleConfig = {
       field('origin_samples.mapped_organ', 'Organ'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
-    tile: sharedTileFields,
+    tile: [...sharedTileFields, field('origin_samples_unique_mapped_organs', 'Organ')],
     ccf: [],
   },
 };
