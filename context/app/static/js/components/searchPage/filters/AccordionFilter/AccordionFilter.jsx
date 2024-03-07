@@ -1,11 +1,17 @@
 import React from 'react';
-import { RefinementListFilter, RangeFilter, CheckboxFilter } from 'searchkit';
+import {
+  RefinementListFilter,
+  RangeFilter,
+  CheckboxFilter,
+  HierarchicalMenuFilter as LegacyHierarchicalMenuFilter,
+} from 'searchkit';
 import { trackEvent } from 'js/helpers/trackers';
 
 import FilterInnerAccordion from 'js/components/searchPage/filters/FilterInnerAccordion';
 import CheckboxFilterItem from 'js/components/searchPage/filters/CheckboxFilterItem';
 import HierarchicalMenuFilter from 'js/components/searchPage/HierarchicalMenuFilter';
 import AlphabetizedRefinementListFilter from './AlphabetizedRefinementListFilter';
+import HierarchicalFilterItem from '../HierarchicalFilterItem';
 
 export function withAnalyticsEvent(ItemComponent, title, analyticsCategory, configItemProps) {
   return function UpdatedItemComponent({ onClick: originalOnClick, label, active, ...rest }) {
@@ -43,6 +49,8 @@ export function getFilter(type, shouldAlphabetize = false) {
       return { Filter: CheckboxFilter, itemComponent: CheckboxFilterItem };
     case 'AccordionHierarchicalMenuFilter':
       return { Filter: HierarchicalMenuFilter, itemComponent: CheckboxFilterItem };
+    case 'LegacyHierarchicalMenuFilter':
+      return { Filter: LegacyHierarchicalMenuFilter, itemComponent: HierarchicalFilterItem };
     default:
       throw new Error(`"${type}" does not exist`);
   }
