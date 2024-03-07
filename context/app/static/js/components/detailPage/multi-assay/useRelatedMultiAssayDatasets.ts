@@ -93,15 +93,12 @@ function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 
   return processing;
 }
 
-function buildRelatedDatasets({ uuid, entities }: { uuid: string; entities: MultiAssayEntity[] }) {
-  return entities.reduce<Record<string, MultiAssayEntity[]>>(
+function buildRelatedDatasets({ entities }: { entities: MultiAssayEntity[] }) {
+  return entities.reduce<Record<'component' | 'raw' | 'processed', MultiAssayEntity[]>>(
     (acc, curr) => {
       return produce(acc, (draft) => {
-        if (curr.uuid !== uuid || curr.assay_modality === 'multiple') {
-          const multiAssayType = getMultiAssayType({ processing: curr.processing, is_component: curr.is_component });
-          if (!draft[multiAssayType]) {
-            draft[multiAssayType] = [];
-          }
+        const multiAssayType = getMultiAssayType({ processing: curr.processing, is_component: curr.is_component });
+        if (draft[multiAssayType]) {
           draft[multiAssayType].push(curr);
         }
       });
@@ -131,7 +128,6 @@ function useRelatedMultiAssayDatasets() {
 
   return {
     datasets: buildRelatedDatasets({
-      uuid,
       entities: [primary, ...primaryDescendantHits.map((hit) => hit?._source)].filter((e) => e !== undefined),
     }),
     isLoading: isLoadingPrimary || isLoadingDescendants,
