@@ -5,6 +5,7 @@ from datetime import datetime
 from asyncio import gather, to_thread
 
 from .routes_file_based import _get_organ_list
+from .routes_cells import _get_client
 
 from .utils import make_blueprint, get_client, get_default_flask_data
 
@@ -14,17 +15,6 @@ cells_url = f'https://cells.{cells_client_env}.hubmapconsortium.org/api'
 celltype_url = f'{cells_url}/celltype/'
 celltype_eval_url = f'{cells_url}/celltypeevaluation/'
 
-
-def get_cells_client():
-    # TODO: Since the `cell_type` lookup does not currently exist
-    # outside of the dev environment, this is currently hardcoded
-    # to use the dev endpoint.
-    #
-    # Once the `cell_type` lookup is available in the production
-    # environment, these routes can be moved to `routes_cells`,
-    # and this file can be deleted/removed from main.py.
-    client = Client(f'https://cells.${cells_client_env}.hubmapconsortium.org/api/')
-    return client
 
 # NOTE: This file makes heavy use of async/await and asyncio.gather
 # The purpose of this is to make independent API calls in parallel,
@@ -75,7 +65,7 @@ def cell_types_list():
 # Handles detail page lookups for cell types, proteins, and genes
 @blueprint.route('/x-modality/<feature>/<feature_id>.json', methods=['GET'])
 async def get_feature_details(feature, feature_id):
-    client = get_cells_client()
+    client = _get_client(current_app)
     feature = _feature_name(feature)
     if feature == 'cell_type':
         datasets, organs = await gather(
