@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import React from 'react';
 import Stack from '@mui/material/Stack';
-import SectionItem from 'js/components/detailPage/SectionItem';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
+
 import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import useRelatedMultiAssayDatasets from '../useRelatedMultiAssayDatasets';
