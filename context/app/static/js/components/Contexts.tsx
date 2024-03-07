@@ -13,7 +13,11 @@ type DagProvenanceType =
 interface FlaskDataContextType {
   redirected_from: string;
   entity: {
+    assay_display_name: string;
     entity_type: string;
+    is_component?: boolean;
+    processing: 'raw' | 'processed';
+    uuid: string;
     metadata: {
       dag_provenance_list: DagProvenanceType[];
       [key: string]: unknown;

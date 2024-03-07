@@ -1,5 +1,7 @@
-import { useSearchHits } from 'js/hooks/useSearchData';
 import { produce } from 'immer';
+
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { useFlaskDataContext } from 'js/components/Contexts';
 
 function getPrimaryMultiAssay(uuid: string) {
   return {
@@ -68,14 +70,16 @@ interface Hit<Doc extends Record<string, unknown>> {
 
 interface Hits<Doc extends Record<string, unknown>> {
   searchHits: Hit<Doc>[];
+  isLoading: boolean;
 }
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-type MultiAssayEntity = {
+export type MultiAssayEntity = {
   uuid: string;
+  assay_modality: 'single' | 'multiple';
   hubmap_id: string;
   assay_display_name: string;
-  is_component: boolean;
+  is_component?: boolean;
   processing: 'raw' | 'processed';
 };
 
@@ -90,32 +94,48 @@ function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 
 }
 
 function buildRelatedDatasets({ uuid, entities }: { uuid: string; entities: MultiAssayEntity[] }) {
-  return entities.reduce<Record<string, MultiAssayEntity[]>>((acc, curr) => {
-    return produce(acc, (draft) => {
-      if (curr.uuid !== uuid) {
-        const multiAssayType = getMultiAssayType({ processing: curr.processing, is_component: curr.is_component });
-        if (!draft[multiAssayType]) {
-          draft[multiAssayType] = [];
+  return entities.reduce<Record<string, MultiAssayEntity[]>>(
+    (acc, curr) => {
+      return produce(acc, (draft) => {
+        if (curr.uuid !== uuid || curr.assay_modality === 'multiple') {
+          const multiAssayType = getMultiAssayType({ processing: curr.processing, is_component: curr.is_component });
+          if (!draft[multiAssayType]) {
+            draft[multiAssayType] = [];
+          }
+          draft[multiAssayType].push(curr);
         }
-        draft[multiAssayType].push(curr);
-      }
-    });
-  }, {});
+      });
+    },
+    { component: [], raw: [], processed: [] },
+  );
 }
 
-function useRelatedMultiAssayDatasets(uuid: string, primaryEntity?: MultiAssayEntity) {
-  const { searchHits: primaryHits } = useSearchHits(getPrimaryMultiAssay(uuid)) as MultiAssayHits;
+function useRelatedMultiAssayDatasets() {
+  const { entity } = useFlaskDataContext();
 
-  const primary = primaryHits[0]?._source ?? primaryEntity;
+  const { uuid } = entity;
+  const isPrimary = getMultiAssayType(entity) === 'raw';
 
-  const { searchHits: primaryDescendantHits } = useSearchHits(getPrimaryDescendants(primary ? primary.uuid : ''), {
-    shouldFetch: Boolean(primary),
+  const { searchHits: primaryHits, isLoading: isLoadingPrimary } = useSearchHits(getPrimaryMultiAssay(uuid), {
+    shouldFetch: !isPrimary,
   }) as MultiAssayHits;
 
-  return buildRelatedDatasets({
-    uuid,
-    entities: [primary, ...primaryDescendantHits.map((hit) => hit?._source)].filter((e) => e !== undefined),
-  });
+  const primary = primaryHits[0]?._source ?? entity;
+
+  const { searchHits: primaryDescendantHits, isLoading: isLoadingDescendants } = useSearchHits(
+    getPrimaryDescendants(primary ? primary.uuid : ''),
+    {
+      shouldFetch: Boolean(primary),
+    },
+  ) as MultiAssayHits;
+
+  return {
+    datasets: buildRelatedDatasets({
+      uuid,
+      entities: [primary, ...primaryDescendantHits.map((hit) => hit?._source)].filter((e) => e !== undefined),
+    }),
+    isLoading: isLoadingPrimary || isLoadingDescendants,
+  };
 }
 
 export default useRelatedMultiAssayDatasets;
