@@ -80,4 +80,6 @@ const normalizeCEDARContributor = (contributor: CEDARContributor): Contributor =
 };
 
 export const normalizeContributor = (contributor: ContributorAPIResponse): Contributor =>
-  'version' in contributor ? normalizeLegacyContributor(contributor) : normalizeCEDARContributor(contributor);
+  'metadata_schema_id' in contributor
+    ? normalizeCEDARContributor(contributor)
+    : normalizeLegacyContributor(contributor);

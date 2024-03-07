@@ -1,0 +1,1 @@
+- Support display of legacy contact information which does not have `version` field available.
