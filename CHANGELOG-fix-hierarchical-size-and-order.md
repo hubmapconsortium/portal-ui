@@ -1,0 +1,1 @@
+- Fix size and order of hierarchical search facets.
