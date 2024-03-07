@@ -10,9 +10,13 @@ import { Stack } from '@mui/material';
 import useRelatedMultiAssayDatasets from '../useRelatedMultiAssayDatasets';
 
 function ComponentAlert() {
-  const { datasets } = useRelatedMultiAssayDatasets();
+  const { datasets, isLoading } = useRelatedMultiAssayDatasets();
 
   const primary = datasets.raw[0] ?? {};
+
+  if (!isLoading && !primary) {
+    return null;
+  }
 
   return (
     <DetailPageAlert
