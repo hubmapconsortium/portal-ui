@@ -1,3 +1,10 @@
+## v0.91.2 - 2024-03-07
+
+- Add support for new contributors schema to contributors table.
+- Fix hierarchical facets on dev search.
+- Fix size and order of hierarchical search facets.
+
+
 ## v0.91.1 - 2024-03-06
 
 - Add tracking to Vitessce download links.
