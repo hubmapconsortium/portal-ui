@@ -1,7 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import MetadataTable from 'js/components/detailPage/MetadataTable';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
@@ -12,6 +11,7 @@ import { DetailContext } from 'js/components/detailPage/DetailContext';
 import { getSectionOrder } from 'js/components/detailPage/utils';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 import useTrackID from 'js/hooks/useTrackID';
+import MetadataSection from 'js/components/detailPage/MetadataSection';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -71,7 +71,7 @@ function DonorDetail() {
           description={description}
           group_name={group_name}
         />
-        {shouldDisplaySection.metadata && <MetadataTable metadata={mapped_metadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && <MetadataSection metadata={mapped_metadata} hubmap_id={hubmap_id} />}
         <DerivedEntitiesSection />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}

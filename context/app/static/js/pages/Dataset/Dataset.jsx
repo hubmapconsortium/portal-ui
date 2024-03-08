@@ -9,7 +9,6 @@ import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
-import MetadataTable from 'js/components/detailPage/MetadataTable';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
@@ -35,6 +34,7 @@ import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDia
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
+import MetadataSection from 'js/components/detailPage/MetadataSection';
 
 function NotebookButton({ disabled, ...props }) {
   return (
@@ -231,13 +231,16 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         )}
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && (
+          <MetadataSection metadata={combineMetadata} assay_modality={assay_modality} />
+        )}
         {shouldDisplaySection.files && (
           <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         )}
         {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer visLiftedUUID={visLiftedUUID} />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}

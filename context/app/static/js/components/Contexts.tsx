@@ -18,6 +18,8 @@ interface FlaskDataContextType {
     is_component?: boolean;
     processing: 'raw' | 'processed';
     uuid: string;
+    hubmap_id: string;
+    assay_modality: 'single' | 'multiple';
     metadata: {
       dag_provenance_list: DagProvenanceType[];
       [key: string]: unknown;

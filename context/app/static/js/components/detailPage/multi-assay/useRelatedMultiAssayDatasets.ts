@@ -37,7 +37,7 @@ function getPrimaryMultiAssay(uuid: string) {
         ],
       },
     },
-    _source: ['uuid', 'hubmap_id', 'assay_display_name', 'processing', 'is_component'],
+    _source: ['uuid', 'hubmap_id', 'assay_display_name', 'processing', 'is_component', 'metadata'],
   };
 }
 
@@ -60,7 +60,7 @@ function getPrimaryDescendants(uuid: string) {
         ],
       },
     },
-    _source: ['uuid', 'hubmap_id', 'assay_display_name', 'processing', 'is_component'],
+    _source: ['uuid', 'hubmap_id', 'assay_display_name', 'processing', 'is_component', 'metadata'],
   };
 }
 
@@ -81,6 +81,9 @@ export type MultiAssayEntity = {
   assay_display_name: string;
   is_component?: boolean;
   processing: 'raw' | 'processed';
+  metadata: {
+    metadata: Record<string, string>;
+  };
 };
 
 type MultiAssayHits = Hits<MultiAssayEntity>;
