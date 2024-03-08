@@ -1,1 +1,3 @@
 - Remove unused import.
+- Update GitHub action checkout from v2 to v4
+- Update GitHub action setup-node from v3 to v4 
