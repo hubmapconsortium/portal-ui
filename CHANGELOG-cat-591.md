@@ -1,1 +1,0 @@
-- Fix tile view of search pages.

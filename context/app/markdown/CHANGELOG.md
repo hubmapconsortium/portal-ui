@@ -1,3 +1,10 @@
+## v0.92.0 - 2024-03-08
+
+- Fix tile view of search pages.
+- Support display of legacy contact information which does not have `version` field available.
+- Point genes page cells API client at same environment as the rest of the application.
+
+
 ## v0.91.2 - 2024-03-07
 
 - Add support for new contributors schema to contributors table.

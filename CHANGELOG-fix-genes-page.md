@@ -1,1 +1,0 @@
-- Point genes page cells API client at same environment as the rest of the application.
