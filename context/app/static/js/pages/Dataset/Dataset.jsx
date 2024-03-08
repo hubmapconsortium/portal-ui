@@ -33,6 +33,8 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
+import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
+import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 
 function NotebookButton({ disabled, ...props }) {
   return (
@@ -120,6 +122,8 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     registered_doi,
     doi_url,
     contributors,
+    is_component,
+    assay_modality,
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
@@ -191,6 +195,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         </DetailPageAlert>
       )}
       {entity_type === 'Support' && <SupportAlert uuid={uuid} />}
+      {is_component && <ComponentAlert />}
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           title={hubmap_id}
@@ -203,7 +208,12 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
           status={combinedStatus}
           mapped_data_access_level={mapped_data_access_level}
           mapped_external_group_name={mapped_external_group_name}
-          bottomFold={<DataProducts files={files} />}
+          bottomFold={
+            <>
+              <MultiAssayRelationship assay_modality={assay_modality} />
+              <DataProducts files={files} />
+            </>
+          }
         >
           <SummaryDataChildren
             data_types={data_types || []}
