@@ -52,9 +52,12 @@ interface TableRows {
   description: string | undefined;
 }
 
-type MetadataWrapperProps = PropsWithChildren<{ allTableRows: TableRows[] }>;
+type MetadataWrapperProps = PropsWithChildren<{
+  allTableRows: TableRows[];
+  buildTooltip: (entity_type: string) => string;
+}>;
 
-function MetadataWrapper({ allTableRows, children }: MetadataWrapperProps) {
+function MetadataWrapper({ allTableRows, buildTooltip, children }: MetadataWrapperProps) {
   const {
     entity: { entity_type, hubmap_id },
   } = useFlaskDataContext();
@@ -78,9 +81,7 @@ function MetadataWrapper({ allTableRows, children }: MetadataWrapperProps) {
   return (
     <DetailPageSection id="metadata">
       <Flex>
-        <SectionHeader iconTooltipText={`Data provided for the given ${entity_type?.toLowerCase()}.`}>
-          Metadata
-        </SectionHeader>
+        <SectionHeader iconTooltipText={buildTooltip(entity_type)}>Metadata</SectionHeader>
         <SecondaryBackgroundTooltip title="Download">
           <a href={downloadUrl} download={`${hubmap_id}.tsv`}>
             <StyledWhiteBackgroundIconButton
@@ -96,6 +97,9 @@ function MetadataWrapper({ allTableRows, children }: MetadataWrapperProps) {
   );
 }
 
+const buildMultiAssayTooltip = (entity_type: string) =>
+  `Data provided for all ${entity_type.toLowerCase()}s involved in the multi-assay.`;
+
 function MultiAssayMetadata() {
   const { datasets } = useRelatedMultiAssayDatasets();
 
@@ -110,17 +114,19 @@ function MultiAssayMetadata() {
   );
 
   return (
-    <MetadataWrapper allTableRows={tableRows}>
+    <MetadataWrapper allTableRows={tableRows} buildTooltip={buildMultiAssayTooltip}>
       <MultiAssayMetadataTabs datasets={datasetsWithMetadata} />
     </MetadataWrapper>
   );
 }
 
+const buildMetadataTooltip = (entity_type: string) => `Data provided for the given ${entity_type?.toLowerCase()}.`;
+
 function Metadata({ metadata }: { metadata: Record<string, string> }) {
   const tableRows = tableDataToRows(metadata);
 
   return (
-    <MetadataWrapper allTableRows={tableRows}>
+    <MetadataWrapper allTableRows={tableRows} buildTooltip={buildMetadataTooltip}>
       <MetadataTable metadata={metadata} />
     </MetadataWrapper>
   );
