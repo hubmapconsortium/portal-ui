@@ -1,7 +1,7 @@
 import { produce } from 'immer';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { useFlaskDataContext } from 'js/components/Contexts';
+import { useFlaskDataContext, Dataset } from 'js/components/Contexts';
 
 function getPrimaryMultiAssay(uuid: string) {
   return {
@@ -37,7 +37,7 @@ function getPrimaryMultiAssay(uuid: string) {
         ],
       },
     },
-    _source: ['uuid', 'hubmap_id', 'assay_display_name', 'processing', 'is_component', 'metadata'],
+    _source: ['uuid', 'hubmap_id', 'entity_type', 'assay_display_name', 'processing', 'is_component', 'metadata'],
   };
 }
 
@@ -60,7 +60,7 @@ function getPrimaryDescendants(uuid: string) {
         ],
       },
     },
-    _source: ['uuid', 'hubmap_id', 'assay_display_name', 'processing', 'is_component', 'metadata'],
+    _source: ['uuid', 'hubmap_id', 'entity_type', 'assay_display_name', 'processing', 'is_component', 'metadata'],
   };
 }
 
@@ -73,18 +73,10 @@ interface Hits<Doc extends Record<string, unknown>> {
   isLoading: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
-export type MultiAssayEntity = {
-  uuid: string;
-  assay_modality: 'single' | 'multiple';
-  hubmap_id: string;
-  assay_display_name: string;
-  is_component?: boolean;
-  processing: 'raw' | 'processed';
-  metadata: {
-    metadata: Record<string, string>;
-  };
-};
+export type MultiAssayEntity = Pick<
+  Dataset,
+  'uuid' | 'hubmap_id' | 'entity_type' | 'assay_display_name' | 'processing' | 'is_component' | 'metadata'
+>;
 
 type MultiAssayHits = Hits<MultiAssayEntity>;
 

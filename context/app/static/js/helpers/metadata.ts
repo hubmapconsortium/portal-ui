@@ -24,20 +24,22 @@ const paths: Record<EntityType, Partial<Record<EntityType, string>>> = {
   },
 };
 
+type OnlyEntityTypeRequired<E> = Partial<E> & { entity_type: string };
+
 type MetadataTypes =
   | {
       currentEntityType: DonorEntityType;
-      currentEntity: Donor;
+      currentEntity: OnlyEntityTypeRequired<Donor>;
       targetEntityType: DonorEntityType;
     }
   | {
       currentEntityType: SampleEntityType;
-      currentEntity: Sample;
+      currentEntity: OnlyEntityTypeRequired<Sample>;
       targetEntityType: DonorEntityType | SampleEntityType;
     }
   | {
       currentEntityType: DatasetEntityType;
-      currentEntity: Dataset;
+      currentEntity: OnlyEntityTypeRequired<Dataset>;
       targetEntityType: DonorEntityType | DatasetEntityType;
     };
 
@@ -48,7 +50,7 @@ function getMetadataPath({
   return paths?.[currentEntityType]?.[targetEntityType];
 }
 
-function getMetadata({ targetEntityType, currentEntity }: MetadataTypes) {
+function getMetadata({ targetEntityType, currentEntity }: Pick<MetadataTypes, 'currentEntity' | 'targetEntityType'>) {
   const path = getMetadataPath({ currentEntityType: currentEntity.entity_type, targetEntityType });
 
   if (!path) {
@@ -58,7 +60,7 @@ function getMetadata({ targetEntityType, currentEntity }: MetadataTypes) {
   return get(currentEntity, path, {});
 }
 
-function hasMetadata(args: MetadataTypes) {
+function hasMetadata(args: Pick<MetadataTypes, 'currentEntity' | 'targetEntityType'>) {
   return Object.keys(getMetadata(args)).length > 0;
 }
 

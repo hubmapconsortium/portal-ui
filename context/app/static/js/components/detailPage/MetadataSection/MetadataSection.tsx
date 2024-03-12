@@ -7,6 +7,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
+import { getMetadata, hasMetadata } from 'js/helpers/metadata';
 import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MultiAssayMetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import MetadataTable from '../MetadataTable';
@@ -112,18 +113,30 @@ const buildMultiAssayTooltip = (entity_type: string) =>
 
 function MultiAssayMetadata() {
   const datasetsWithMetadata = useRelatedMultiAssayMetadata();
-
   const { data: fieldDescriptions } = useMetadataFieldDescriptions();
 
-  const datasetsWithTableRows = datasetsWithMetadata
-    .filter((dataset) => dataset?.metadata?.metadata)
-    .map((dataset) => ({ ...dataset, tableRows: buildTableData(dataset.metadata.metadata, fieldDescriptions) }));
+  const {
+    entity: { donor },
+  } = useFlaskDataContext();
 
-  const allTableRows = datasetsWithTableRows.map((d) => d.tableRows).flat();
+  const entities = [donor, ...datasetsWithMetadata]
+    .filter((e) => hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }))
+    .map((e) => ({
+      uuid: e.uuid,
+      label: e.entity_type === 'Donor' ? 'Donor' : e.assay_display_name,
+      tableRows: buildTableData(
+        getMetadata({
+          targetEntityType: e.entity_type,
+          currentEntity: e,
+        }),
+        fieldDescriptions,
+      ),
+    }));
+  const allTableRows = entities.map((d) => d.tableRows).flat();
 
   return (
     <MetadataWrapper allTableRows={allTableRows} buildTooltip={buildMultiAssayTooltip}>
-      <MultiAssayMetadataTabs datasets={datasetsWithTableRows} />
+      <MultiAssayMetadataTabs datasets={entities} />
     </MetadataWrapper>
   );
 }

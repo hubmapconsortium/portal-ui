@@ -18,7 +18,7 @@ function getIconProps(isCurrentEntity: boolean) {
     : { icon: undefined };
 }
 
-type MultiAssayEntityWithTableRows = MultiAssayEntity & { tableRows: TableRows };
+type MultiAssayEntityWithTableRows = Pick<MultiAssayEntity, 'uuid'> & { tableRows: TableRows; label: string };
 
 function MultiAssayMetadataTabs({ datasets }: { datasets: MultiAssayEntityWithTableRows[] }) {
   const { openTabIndex, handleTabChange } = useTabs();
@@ -30,20 +30,14 @@ function MultiAssayMetadataTabs({ datasets }: { datasets: MultiAssayEntityWithTa
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange}>
-        {datasets.map(({ assay_display_name, uuid }, index) => {
+        {datasets.map(({ label, uuid }, index) => {
           const isCurrentEntity = currentEntityUUID === uuid;
           return (
             <SecondaryBackgroundTooltip
               title={isCurrentEntity ? "This is the current dataset's metadata." : undefined}
               key={uuid}
             >
-              <Tab
-                label={assay_display_name}
-                key={uuid}
-                index={index}
-                {...getIconProps(isCurrentEntity)}
-                iconPosition="end"
-              />
+              <Tab label={label} key={uuid} index={index} {...getIconProps(isCurrentEntity)} iconPosition="end" />
             </SecondaryBackgroundTooltip>
           );
         })}
