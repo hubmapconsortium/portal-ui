@@ -137,4 +137,13 @@ function useRelatedMultiAssayDatasets() {
   };
 }
 
+function useRelatedMultiAssayMetadata() {
+  const { datasets } = useRelatedMultiAssayDatasets();
+
+  return Object.values(datasets)
+    .flat()
+    .filter((d) => d?.metadata?.metadata);
+}
+
+export { useRelatedMultiAssayMetadata };
 export default useRelatedMultiAssayDatasets;

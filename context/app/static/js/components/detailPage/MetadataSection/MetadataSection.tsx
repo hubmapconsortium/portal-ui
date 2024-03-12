@@ -10,7 +10,7 @@ import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MultiAssayMetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import MetadataTable from '../MetadataTable';
-import useRelatedMultiAssayDatasets from '../multi-assay/useRelatedMultiAssayDatasets';
+import { useRelatedMultiAssayMetadata } from '../multi-assay/useRelatedMultiAssayDatasets';
 
 function getDescription(field: string) {
   const [prefix, stem] = field.split('.');
@@ -101,11 +101,7 @@ const buildMultiAssayTooltip = (entity_type: string) =>
   `Data provided for all ${entity_type.toLowerCase()}s involved in the multi-assay.`;
 
 function MultiAssayMetadata() {
-  const { datasets } = useRelatedMultiAssayDatasets();
-
-  const datasetsWithMetadata = Object.values(datasets)
-    .flat()
-    .filter((d) => d?.metadata?.metadata);
+  const datasetsWithMetadata = useRelatedMultiAssayMetadata();
 
   const tableRows = tableDataToRows(
     datasetsWithMetadata.reduce((acc, curr) => {
