@@ -1,5 +1,4 @@
 from flask import json, current_app, render_template
-from hubmap_api_py_client import Client
 from requests import post
 from datetime import datetime
 from asyncio import gather, to_thread
