@@ -141,7 +141,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     provenance: entity_type !== 'Support',
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
-    metadata: Boolean(Object.keys(combinedMetadata).length),
+    metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
     files: Boolean(files?.length),
     bulkDataTransfer: true,
     collections: Boolean(collectionsData.length),
