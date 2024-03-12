@@ -10,22 +10,39 @@ type DagProvenanceType =
       name: string;
     };
 
-interface FlaskDataContextType {
-  redirected_from: string;
-  entity: {
-    assay_display_name: string;
-    entity_type: string;
-    is_component?: boolean;
-    processing: 'raw' | 'processed';
-    uuid: string;
-    hubmap_id: string;
-    assay_modality: 'single' | 'multiple';
-    metadata: {
-      dag_provenance_list: DagProvenanceType[];
-      [key: string]: unknown;
-    };
+export interface Entity {
+  entity_type: string;
+  uuid: string;
+  hubmap_id: string;
+  [key: string]: unknown;
+}
+
+export interface Donor extends Entity {
+  entity_type: 'Donor';
+  mapped_metadata?: Record<string, string>;
+}
+
+export interface Sample extends Entity {
+  entity_type: 'Sample';
+  metadata?: Record<string, string>;
+}
+
+export interface Dataset extends Entity {
+  entity_type: 'Dataset';
+  processing: 'raw' | 'processed';
+  assay_display_name: string;
+  is_component?: boolean;
+  assay_modality: 'single' | 'multiple';
+  donor: Donor;
+  metadata: {
+    dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;
   };
+}
+
+interface FlaskDataContextType {
+  redirected_from: string;
+  entity: Dataset; // Update to handle different entities.
   [key: string]: unknown;
 }
 
