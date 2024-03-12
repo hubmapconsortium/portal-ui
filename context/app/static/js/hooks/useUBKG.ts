@@ -230,6 +230,8 @@ interface MetadataFieldDescription {
 
 type MetadataFieldDescriptions = MetadataFieldDescription[];
 
+type MetadataFieldDescriptionMap = Record<string, string>;
+
 function findBestDescription(descriptions: Description[]) {
   if (descriptions.length === 0) {
     return undefined;
@@ -239,12 +241,12 @@ function findBestDescription(descriptions: Description[]) {
   return (cedarDescription ?? descriptions[0]).description;
 }
 
-function buildFieldsMap(fields: MetadataFieldDescriptions | undefined) {
+function buildFieldsMap(fields: MetadataFieldDescriptions) {
   if (!fields) {
     return {};
   }
 
-  const fieldsMap = fields.reduce<Record<string, string>>((acc, { name, descriptions }) => {
+  const fieldsMap = fields.reduce<MetadataFieldDescriptionMap>((acc, { name, descriptions }) => {
     const description = findBestDescription(descriptions);
 
     if (description) {
@@ -262,11 +264,15 @@ async function fetchDescriptions(url: string) {
 }
 
 export const useMetadataFieldDescriptions = () => {
-  const { data, ...swr } = useSWR(useUbkg().fieldDescriptions, (url: string) => fetchDescriptions(url), {
-    fallbackData: undefined,
-  });
+  const { data, ...swr } = useSWR<MetadataFieldDescriptionMap | Record<string, never>>(
+    useUbkg().fieldDescriptions,
+    (url: string) => fetchDescriptions(url),
+    {
+      fallbackData: {},
+    },
+  );
 
-  return { data, ...swr };
+  return { data: data ?? {}, ...swr };
 };
 
 // TODO:

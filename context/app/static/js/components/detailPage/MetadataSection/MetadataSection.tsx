@@ -6,31 +6,32 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
-import metadataFieldDescriptions from 'metadata-field-descriptions';
+import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MultiAssayMetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import MetadataTable from '../MetadataTable';
 import { useRelatedMultiAssayMetadata } from '../multi-assay/useRelatedMultiAssayDatasets';
 
-function getDescription(field: string) {
+function getDescription(field: string, metadataFieldDescriptions: Record<string, string> | Record<string, never>) {
   const [prefix, stem] = field.split('.');
   if (!stem) {
-    return metadataFieldDescriptions[field];
+    return metadataFieldDescriptions?.[field];
   }
-  const description = metadataFieldDescriptions[stem];
+  const description = metadataFieldDescriptions?.[stem];
   if (!description) {
     return undefined;
   }
   if (prefix === 'donor') {
-    return `For the original donor: ${metadataFieldDescriptions[stem]}`;
+    return `For the original donor: ${metadataFieldDescriptions?.[stem]}`;
   }
   if (prefix === 'sample') {
-    return `For the original sample: ${metadataFieldDescriptions[stem]}`;
+    return `For the original sample: ${metadataFieldDescriptions?.[stem]}`;
   }
   throw new Error(`Unrecognized metadata field prefix: ${prefix}`);
 }
 
-function tableDataToRows(tableData: Record<string, string>) {
+function useTableData(tableData: Record<string, string>) {
+  const { data: fieldDescriptions } = useMetadataFieldDescriptions();
   return (
     Object.entries(tableData)
       // Filter out nested objects, like nested "metadata" for Samples...
@@ -41,7 +42,7 @@ function tableDataToRows(tableData: Record<string, string>) {
       .map((entry) => ({
         key: entry[0],
         value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-        description: getDescription(entry[0]),
+        description: getDescription(entry[0], fieldDescriptions),
       }))
   );
 }
@@ -103,7 +104,7 @@ const buildMultiAssayTooltip = (entity_type: string) =>
 function MultiAssayMetadata() {
   const datasetsWithMetadata = useRelatedMultiAssayMetadata();
 
-  const tableRows = tableDataToRows(
+  const tableRows = useTableData(
     datasetsWithMetadata.reduce((acc, curr) => {
       return { ...acc, ...curr.metadata?.metadata };
     }, {}),
@@ -119,7 +120,7 @@ function MultiAssayMetadata() {
 const buildMetadataTooltip = (entity_type: string) => `Data provided for the given ${entity_type?.toLowerCase()}.`;
 
 function Metadata({ metadata }: { metadata: Record<string, string> }) {
-  const tableRows = tableDataToRows(metadata);
+  const tableRows = useTableData(metadata);
 
   return (
     <MetadataWrapper allTableRows={tableRows} buildTooltip={buildMetadataTooltip}>

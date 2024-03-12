@@ -6,26 +6,31 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 
-import metadataFieldDescriptions from 'metadata-field-descriptions';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
+import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 
-function getDescription(field) {
+function getDescription(field, metadataFieldDescriptions) {
   const [prefix, stem] = field.split('.');
   if (!stem) {
-    return metadataFieldDescriptions[field];
+    return metadataFieldDescriptions?.[field];
   }
-  const description = metadataFieldDescriptions[stem];
+  const description = metadataFieldDescriptions?.[stem];
   if (!description) {
     return undefined;
   }
   if (prefix === 'donor') {
-    return `For the original donor: ${metadataFieldDescriptions[stem]}`;
+    return `For the original donor: ${metadataFieldDescriptions?.[stem]}`;
   }
   if (prefix === 'sample') {
-    return `For the original sample: ${metadataFieldDescriptions[stem]}`;
+    return `For the original sample: ${metadataFieldDescriptions?.[stem]}`;
   }
   throw new Error(`Unrecognized metadata field prefix: ${prefix}`);
+}
+
+function useDescription(field) {
+  const { data } = useMetadataFieldDescriptions();
+  return getDescription(field, data);
 }
 
 function tableDataToRows(tableData) {
@@ -39,7 +44,7 @@ function tableDataToRows(tableData) {
       .map((entry) => ({
         key: entry[0],
         value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-        description: getDescription(entry[0]),
+        description: useDescription(entry[0]),
       }))
   );
 }
