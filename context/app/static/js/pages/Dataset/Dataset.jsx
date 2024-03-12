@@ -201,6 +201,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
           title={hubmap_id}
           uuid={uuid}
           entity_type={entity_type}
+          entityTypeDisplay={is_component ? 'Component Dataset' : 'Dataset'}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           published_timestamp={published_timestamp}
