@@ -1,6 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
 import { useTrackOutboundLink } from 'js/hooks/useTrackOutboundLink';
+import { useExternalUrlProps } from 'js/hooks/useIsExternalUrl';
 
 interface DropdownLinkProps extends MenuItemProps {
   href: string;
@@ -9,6 +10,7 @@ interface DropdownLinkProps extends MenuItemProps {
 
 function DropdownLink({ href, isIndented, children, onClick, ...rest }: PropsWithChildren<DropdownLinkProps>) {
   const handleClick = useTrackOutboundLink(onClick);
+  const outboundProps = useExternalUrlProps(href);
   return (
     <MenuItem
       sx={({ spacing, palette }) => ({
@@ -18,6 +20,7 @@ function DropdownLink({ href, isIndented, children, onClick, ...rest }: PropsWit
       component="a"
       href={href}
       onClick={handleClick}
+      {...outboundProps}
       {...rest}
     >
       {children}
