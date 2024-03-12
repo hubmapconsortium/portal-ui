@@ -8,6 +8,7 @@ import MetadataTable from 'js/components/detailPage/MetadataTable';
 import { SuccessIcon } from 'js/shared-styles/icons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { MultiAssayEntity } from '../useRelatedMultiAssayDatasets';
+import { TableRows } from '../../MetadataSection/MetadataSection';
 
 function getIconProps(isCurrentEntity: boolean) {
   return isCurrentEntity
@@ -17,7 +18,9 @@ function getIconProps(isCurrentEntity: boolean) {
     : { icon: undefined };
 }
 
-function MultiAssayMetadataTabs({ datasets }: { datasets: MultiAssayEntity[] }) {
+type MultiAssayEntityWithTableRows = MultiAssayEntity & { tableRows: TableRows };
+
+function MultiAssayMetadataTabs({ datasets }: { datasets: MultiAssayEntityWithTableRows[] }) {
   const { openTabIndex, handleTabChange } = useTabs();
 
   const {
@@ -45,9 +48,9 @@ function MultiAssayMetadataTabs({ datasets }: { datasets: MultiAssayEntity[] }) 
           );
         })}
       </Tabs>
-      {datasets.map(({ uuid, metadata: { metadata } }, index) => (
+      {datasets.map(({ uuid, tableRows }, index) => (
         <TabPanel value={openTabIndex} index={index} key={uuid}>
-          <MetadataTable metadata={metadata} />
+          <MetadataTable tableRows={tableRows} />
         </TabPanel>
       ))}
     </Box>

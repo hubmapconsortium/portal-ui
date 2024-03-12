@@ -8,54 +8,12 @@ import TableRow from '@mui/material/TableRow';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
-import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 
-function getDescription(field, metadataFieldDescriptions) {
-  const [prefix, stem] = field.split('.');
-  if (!stem) {
-    return metadataFieldDescriptions?.[field];
-  }
-  const description = metadataFieldDescriptions?.[stem];
-  if (!description) {
-    return undefined;
-  }
-  if (prefix === 'donor') {
-    return `For the original donor: ${metadataFieldDescriptions?.[stem]}`;
-  }
-  if (prefix === 'sample') {
-    return `For the original sample: ${metadataFieldDescriptions?.[stem]}`;
-  }
-  throw new Error(`Unrecognized metadata field prefix: ${prefix}`);
-}
-
-function useDescription(field) {
-  const { data } = useMetadataFieldDescriptions();
-  return getDescription(field, data);
-}
-
-function tableDataToRows(tableData) {
-  return (
-    Object.entries(tableData)
-      // Filter out nested objects, like nested "metadata" for Samples...
-      // but allow arrays. Remember, in JS: typeof [] === 'object'
-      .filter((entry) => typeof entry[1] !== 'object' || Array.isArray(entry[1]))
-      // Filter out fields from TSV that aren't really metadata:
-      .filter((entry) => !['contributors_path', 'antibodies_path', 'version'].includes(entry[0]))
-      .map((entry) => ({
-        key: entry[0],
-        value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-        description: useDescription(entry[0]),
-      }))
-  );
-}
-
-function MetadataTable({ metadata: tableData = {} }) {
+function MetadataTable({ tableRows = [] }) {
   const columns = [
     { id: 'key', label: 'Key' },
     { id: 'value', label: 'Value' },
   ];
-
-  const tableRows = tableDataToRows(tableData);
 
   return (
     <Paper sx={{ width: '100%' }}>
@@ -83,4 +41,3 @@ function MetadataTable({ metadata: tableData = {} }) {
 }
 
 export default MetadataTable;
-export { tableDataToRows, getDescription };

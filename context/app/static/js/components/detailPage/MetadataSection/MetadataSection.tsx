@@ -30,8 +30,10 @@ function getDescription(field: string, metadataFieldDescriptions: Record<string,
   throw new Error(`Unrecognized metadata field prefix: ${prefix}`);
 }
 
-function useTableData(tableData: Record<string, string>) {
-  const { data: fieldDescriptions } = useMetadataFieldDescriptions();
+function buildTableData(
+  tableData: Record<string, string>,
+  metadataFieldDescriptions: Record<string, string> | Record<string, never>,
+) {
   return (
     Object.entries(tableData)
       // Filter out nested objects, like nested "metadata" for Samples...
@@ -42,19 +44,26 @@ function useTableData(tableData: Record<string, string>) {
       .map((entry) => ({
         key: entry[0],
         value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-        description: getDescription(entry[0], fieldDescriptions),
+        description: getDescription(entry[0], metadataFieldDescriptions),
       }))
   );
 }
 
-interface TableRows {
+function useTableData(tableData: Record<string, string>) {
+  const { data: fieldDescriptions } = useMetadataFieldDescriptions();
+  return buildTableData(tableData, fieldDescriptions);
+}
+
+interface TableRow {
   key: string;
   value: string;
   description: string | undefined;
 }
 
+export type TableRows = TableRow[];
+
 type MetadataWrapperProps = PropsWithChildren<{
-  allTableRows: TableRows[];
+  allTableRows: TableRows;
   buildTooltip: (entity_type: string) => string;
 }>;
 
@@ -104,15 +113,17 @@ const buildMultiAssayTooltip = (entity_type: string) =>
 function MultiAssayMetadata() {
   const datasetsWithMetadata = useRelatedMultiAssayMetadata();
 
-  const tableRows = useTableData(
-    datasetsWithMetadata.reduce((acc, curr) => {
-      return { ...acc, ...curr.metadata?.metadata };
-    }, {}),
-  );
+  const { data: fieldDescriptions } = useMetadataFieldDescriptions();
+
+  const datasetsWithTableRows = datasetsWithMetadata
+    .filter((dataset) => dataset?.metadata?.metadata)
+    .map((dataset) => ({ ...dataset, tableRows: buildTableData(dataset.metadata.metadata, fieldDescriptions) }));
+
+  const allTableRows = datasetsWithTableRows.map((d) => d.tableRows).flat();
 
   return (
-    <MetadataWrapper allTableRows={tableRows} buildTooltip={buildMultiAssayTooltip}>
-      <MultiAssayMetadataTabs datasets={datasetsWithMetadata} />
+    <MetadataWrapper allTableRows={allTableRows} buildTooltip={buildMultiAssayTooltip}>
+      <MultiAssayMetadataTabs datasets={datasetsWithTableRows} />
     </MetadataWrapper>
   );
 }
@@ -124,7 +135,7 @@ function Metadata({ metadata }: { metadata: Record<string, string> }) {
 
   return (
     <MetadataWrapper allTableRows={tableRows} buildTooltip={buildMetadataTooltip}>
-      <MetadataTable metadata={metadata} />
+      <MetadataTable tableRows={tableRows} />
     </MetadataWrapper>
   );
 }
