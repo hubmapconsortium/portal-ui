@@ -35,6 +35,7 @@ import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
+import useDatasetLabel from './getDatasetLabel';
 
 function NotebookButton({ disabled, ...props }) {
   return (
@@ -177,6 +178,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     [hubmap_id, mapped_data_access_level, uuid],
   );
 
+  const datasetLabel = useDatasetLabel();
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
     <DetailContext.Provider value={detailContextValue}>
@@ -201,7 +203,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
           title={hubmap_id}
           uuid={uuid}
           entity_type={entity_type}
-          entityTypeDisplay={is_component ? 'Component Dataset' : 'Dataset'}
+          entityTypeDisplay={datasetLabel}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           published_timestamp={published_timestamp}
