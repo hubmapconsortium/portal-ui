@@ -50,7 +50,9 @@ function getMetadataPath({
   return paths?.[currentEntityType]?.[targetEntityType];
 }
 
-function getMetadata({ targetEntityType, currentEntity }: Pick<MetadataTypes, 'currentEntity' | 'targetEntityType'>) {
+type GetMetadataTypes = Pick<MetadataTypes, 'currentEntity' | 'targetEntityType'>;
+
+function getMetadata({ targetEntityType, currentEntity }: GetMetadataTypes) {
   const path = getMetadataPath({ currentEntityType: currentEntity.entity_type, targetEntityType });
 
   if (!path) {
@@ -60,7 +62,7 @@ function getMetadata({ targetEntityType, currentEntity }: Pick<MetadataTypes, 'c
   return get(currentEntity, path, {});
 }
 
-function hasMetadata(args: Pick<MetadataTypes, 'currentEntity' | 'targetEntityType'>) {
+function hasMetadata(args: GetMetadataTypes) {
   return Object.keys(getMetadata(args)).length > 0;
 }
 
