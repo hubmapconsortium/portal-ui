@@ -44,6 +44,7 @@ interface FlaskDataContextType {
   redirected_from: string;
   entity: Dataset; // Update to handle different entities.
   [key: string]: unknown;
+  title: string; // preview page title
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');

@@ -25,6 +25,19 @@ export function hierarchicalFilter({ fields, name, filterProps = {}, itemProps =
   return def;
 }
 
+export function legacyHierarchicalFilter(ids, name) {
+  const def = {
+    type: 'LegacyHierarchicalMenuFilter',
+    props: {
+      fields: ids.map((id) => `${id}.keyword`),
+      title: name,
+      id: ids.join('-'),
+      size: 10000,
+    },
+  };
+  return def;
+}
+
 // `rest` is an object with keys corresponding to additional props of the
 // Searchkit RefinementList
 // https://github.com/searchkit/searchkit/blob/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs/docs/components/navigation/refinement-list.md

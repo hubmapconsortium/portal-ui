@@ -1,3 +1,25 @@
+## v0.92.0 - 2024-03-08
+
+- Fix tile view of search pages.
+- Support display of legacy contact information which does not have `version` field available.
+- Point genes page cells API client at same environment as the rest of the application.
+
+
+## v0.91.2 - 2024-03-07
+
+- Add support for new contributors schema to contributors table.
+- Fix hierarchical facets on dev search.
+- Fix size and order of hierarchical search facets.
+
+
+## v0.91.1 - 2024-03-06
+
+- Add tracking to Vitessce download links.
+- Revise Vitessce event tracking from digest approach to individual actions.
+- Revise Vitessce event tracking categories to indicate where the config is.
+- Add assay related facets to dataset search page to improve navigation.
+
+
 ## v0.91.0 - 2024-03-04
 
 - Add support for Visium datasets.

@@ -72,7 +72,7 @@ const sampleConfig = {
       field('origin_samples.mapped_organ', 'Organ'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
-    tile: sharedTileFields,
+    tile: [...sharedTileFields, field('origin_samples_unique_mapped_organs', 'Organ')],
     ccf: [],
   },
 };
@@ -117,7 +117,7 @@ const datasetConfig = {
       field('mapped_status', 'Status'),
       field('mapped_last_modified_timestamp', 'Last Modified'),
     ],
-    tile: [...sharedTileFields, field('thumbnail_file.file_uuid', 'Thumbnail UUID')],
+    tile: [...sharedTileFields, field('origin_samples_unique_mapped_organs', 'Organ'), field('thumbnail_file.file_uuid', 'Thumbnail UUID')],
     ccf: [],
   },
 };
