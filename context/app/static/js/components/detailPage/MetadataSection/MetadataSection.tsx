@@ -136,7 +136,7 @@ function MultiAssayMetadata() {
 
   return (
     <MetadataWrapper allTableRows={allTableRows} buildTooltip={buildMultiAssayTooltip}>
-      <MultiAssayMetadataTabs datasets={entities} />
+      <MultiAssayMetadataTabs entities={entities} />
     </MetadataWrapper>
   );
 }
