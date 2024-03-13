@@ -14,6 +14,7 @@ export interface Entity {
   entity_type: string;
   uuid: string;
   hubmap_id: string;
+  last_modified_timestamp: number;
   [key: string]: unknown;
 }
 
@@ -24,6 +25,7 @@ export interface Donor extends Entity {
 
 export interface Sample extends Entity {
   entity_type: 'Sample';
+  mapped_organ: string;
   metadata?: Record<string, string>;
 }
 
@@ -38,6 +40,9 @@ export interface Dataset extends Entity {
     dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;
   };
+  origin_samples: Sample[];
+  origin_samples_unique_mapped_organs: string[];
+  descendant_counts: Record<string, Record<string, number>>;
 }
 
 interface FlaskDataContextType {
