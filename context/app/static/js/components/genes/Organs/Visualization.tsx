@@ -21,7 +21,7 @@ export function AzimuthVisualization({ organ }: AzimuthVisualizationProps) {
   const { azimuth } = organ;
   return (
     <Stack dir="column" gap={1}>
-      <Stack direction="row" gap={0.5} justifyItems="items-center">
+      <Stack direction="row" gap={0.5} justifyItems="items-center" alignItems="center">
         <Typography variant="subtitle1" display="flex">
           Azimuth Overview
         </Typography>
