@@ -14,7 +14,10 @@ import MetadataTable from '../MetadataTable';
 import { useRelatedMultiAssayMetadata } from '../multi-assay/useRelatedMultiAssayDatasets';
 import { Columns, defaultTSVColumns } from './columns';
 
-function getDescription(field: string, metadataFieldDescriptions: Record<string, string> | Record<string, never>) {
+export function getDescription(
+  field: string,
+  metadataFieldDescriptions: Record<string, string> | Record<string, never>,
+) {
   const [prefix, stem] = field.split('.');
   if (!stem) {
     return metadataFieldDescriptions?.[field];
@@ -32,7 +35,7 @@ function getDescription(field: string, metadataFieldDescriptions: Record<string,
   throw new Error(`Unrecognized metadata field prefix: ${prefix}`);
 }
 
-function buildTableData(
+export function buildTableData(
   tableData: Record<string, string>,
   metadataFieldDescriptions: Record<string, string> | Record<string, never>,
   extraValues: Record<string, string> = {},
