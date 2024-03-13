@@ -4,9 +4,11 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { styled } from '@mui/material/styles';
+import Icon from '@mui/material/Icon';
 
 import EntityTile from 'js/components/entity-tile/EntityTile';
 import { useFlaskDataContext } from 'js/components/Contexts';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import useRelatedMultiAssayDatasets, { MultiAssayEntity } from '../useRelatedMultiAssayDatasets';
 
 function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; title: string }) {
@@ -19,7 +21,10 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
   }
   return (
     <>
-      <Typography variant="h5">{title}</Typography>
+      <Stack direction="row" alignItems="center" spacing={1}>
+        <Icon component={entityIconMap.Dataset} color="primary" fontSize="inherit" sx={{ fontSize: '1.5rem' }} />
+        <Typography variant="h5">{title}</Typography>
+      </Stack>
       <Stack direction="row" justifyContent="center" spacing={1}>
         {datasets?.map(
           ({ uuid, entity_type, hubmap_id, assay_display_name, descendant_counts, last_modified_timestamp }) => (
@@ -39,6 +44,7 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
             />
           ),
         )}
+        s
       </Stack>
     </>
   );
