@@ -12,6 +12,7 @@ import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from '../Metadata
 import MultiAssayMetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import MetadataTable from '../MetadataTable';
 import { useRelatedMultiAssayMetadata } from '../multi-assay/useRelatedMultiAssayDatasets';
+import { Columns, defaultTSVColumns } from './columns';
 
 function getDescription(field: string, metadataFieldDescriptions: Record<string, string> | Record<string, never>) {
   const [prefix, stem] = field.split('.');
@@ -34,6 +35,7 @@ function getDescription(field: string, metadataFieldDescriptions: Record<string,
 function buildTableData(
   tableData: Record<string, string>,
   metadataFieldDescriptions: Record<string, string> | Record<string, never>,
+  extraValues: Record<string, string> = {},
 ) {
   return (
     Object.entries(tableData)
@@ -43,6 +45,7 @@ function buildTableData(
       // Filter out fields from TSV that aren't really metadata:
       .filter((entry) => !['contributors_path', 'antibodies_path', 'version'].includes(entry[0]))
       .map((entry) => ({
+        ...extraValues,
         key: entry[0],
         value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
         description: getDescription(entry[0], metadataFieldDescriptions),
@@ -65,25 +68,26 @@ export type TableRows = TableRow[];
 
 type MetadataWrapperProps = PropsWithChildren<{
   allTableRows: TableRows;
+  tsvColumns?: Columns;
   buildTooltip: (entity_type: string) => string;
 }>;
 
-function MetadataWrapper({ allTableRows, buildTooltip, children }: MetadataWrapperProps) {
+function MetadataWrapper({
+  allTableRows,
+  buildTooltip,
+  tsvColumns = defaultTSVColumns,
+  children,
+}: MetadataWrapperProps) {
   const {
     entity: { entity_type, hubmap_id },
   } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
-  const columns = [
-    { id: 'key', label: 'Key' },
-    { id: 'value', label: 'Value' },
-  ];
-
   const downloadUrl = createDownloadUrl(
     tableToDelimitedString(
       allTableRows,
-      columns.map((col) => col.label),
+      tsvColumns.map((col) => col.label),
       '\t',
     ),
     'text/tab-separated-values',
@@ -121,21 +125,30 @@ function MultiAssayMetadata() {
 
   const entities = [donor, ...datasetsWithMetadata]
     .filter((e) => hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }))
-    .map((e) => ({
-      uuid: e.uuid,
-      label: e.entity_type === 'Donor' ? 'Donor' : e.assay_display_name,
-      tableRows: buildTableData(
-        getMetadata({
-          targetEntityType: e.entity_type,
-          currentEntity: e,
-        }),
-        fieldDescriptions,
-      ),
-    }));
+    .map((e) => {
+      const label = e.entity_type === 'Donor' ? 'Donor' : e.assay_display_name;
+      return {
+        uuid: e.uuid,
+        label,
+        tableRows: buildTableData(
+          getMetadata({
+            targetEntityType: e.entity_type,
+            currentEntity: e,
+          }),
+          fieldDescriptions,
+          { hubmap_id: e.hubmap_id, label },
+        ),
+      };
+    });
+
   const allTableRows = entities.map((d) => d.tableRows).flat();
 
   return (
-    <MetadataWrapper allTableRows={allTableRows} buildTooltip={buildMultiAssayTooltip}>
+    <MetadataWrapper
+      allTableRows={allTableRows}
+      buildTooltip={buildMultiAssayTooltip}
+      tsvColumns={[{ id: 'hubmap_id', label: 'HuBMAP ID' }, { id: 'label', label: 'Entity' }, ...defaultTSVColumns]}
+    >
       <MultiAssayMetadataTabs entities={entities} />
     </MetadataWrapper>
   );
