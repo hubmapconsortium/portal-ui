@@ -39,24 +39,12 @@ const atlasGroups = {
   ],
   hra: [
     {
-      href: 'https://hubmapconsortium.github.io/hra-previews/pilots/pilot1.html',
-      label: 'HRA Preview: ASCT+B Reporter Comparison',
-    },
-    {
       href: 'https://hubmapconsortium.github.io/hra-previews/pilots/pilot2.html',
       label: 'HRA Preview: Vasculature CCF Visualization',
     },
     {
       href: 'https://hubmapconsortium.github.io/hra-previews/pilots/pilot3.html',
       label: 'HRA Preview: HRA vs. Experimental Data',
-    },
-    {
-      href: 'https://hubmapconsortium.github.io/hra-previews/pilots/pilot4.html',
-      label: 'HRA Preview: Scrollytelling Series',
-    },
-    {
-      href: 'https://hubmapconsortium.github.io/hra-previews/pilots/pilot5.html',
-      label: 'HRA Preview: Tabula Sapiens Comparisons',
     },
     {
       href: 'https://hubmapconsortium.github.io/hra-previews/pilots/pilot6.html',
