@@ -3,6 +3,18 @@ import { produce } from 'immer';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useFlaskDataContext, Dataset } from 'js/components/Contexts';
 
+const source = [
+  'uuid',
+  'hubmap_id',
+  'entity_type',
+  'assay_display_name',
+  'processing',
+  'is_component',
+  'metadata',
+  'descendant_counts',
+  'last_modified_timestamp',
+];
+
 function getPrimaryMultiAssay(uuid: string) {
   return {
     size: 1,
@@ -37,7 +49,7 @@ function getPrimaryMultiAssay(uuid: string) {
         ],
       },
     },
-    _source: ['uuid', 'hubmap_id', 'entity_type', 'assay_display_name', 'processing', 'is_component', 'metadata'],
+    _source: source,
   };
 }
 
@@ -60,7 +72,7 @@ function getPrimaryDescendants(uuid: string) {
         ],
       },
     },
-    _source: ['uuid', 'hubmap_id', 'entity_type', 'assay_display_name', 'processing', 'is_component', 'metadata'],
+    _source: source,
   };
 }
 
@@ -75,7 +87,15 @@ interface Hits<Doc extends Record<string, unknown>> {
 
 export type MultiAssayEntity = Pick<
   Dataset,
-  'uuid' | 'hubmap_id' | 'entity_type' | 'assay_display_name' | 'processing' | 'is_component' | 'metadata'
+  | 'uuid'
+  | 'hubmap_id'
+  | 'entity_type'
+  | 'assay_display_name'
+  | 'processing'
+  | 'is_component'
+  | 'metadata'
+  | 'descendant_counts'
+  | 'last_modified_timestamp'
 >;
 
 type MultiAssayHits = Hits<MultiAssayEntity>;
@@ -88,8 +108,10 @@ function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 
   return processing;
 }
 
+export type RelatedMultiAssayDatasets = Record<'component' | 'raw' | 'processed', MultiAssayEntity[]>;
+
 function buildRelatedDatasets({ entities }: { entities: MultiAssayEntity[] }) {
-  return entities.reduce<Record<'component' | 'raw' | 'processed', MultiAssayEntity[]>>(
+  return entities.reduce<RelatedMultiAssayDatasets>(
     (acc, curr) => {
       return produce(acc, (draft) => {
         const multiAssayType = getMultiAssayType({ processing: curr.processing, is_component: curr.is_component });
