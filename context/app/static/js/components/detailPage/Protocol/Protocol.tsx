@@ -21,7 +21,12 @@ interface ProtocolMessageProps {
 }
 
 function ProtocolMessage({ isLoading, isError }: ProtocolMessageProps) {
-  const precedingText = isLoading ? loadingText : isError ? errorText : '';
+  let precedingText = '';
+  if (isLoading) {
+    precedingText = loadingText;
+  } else if (isError) {
+    precedingText = errorText;
+  }
   return (
     <SectionItem>
       {/* Extra `div` wrapper is necessary to prevent the email icon link from taking up the full width and breaking text. */}
@@ -41,7 +46,7 @@ interface ProtocolLinkProps {
 function ProtocolLink({ url, index }: ProtocolLinkProps) {
   const { isLoading, data, error } = useProtocolData(url);
 
-  const trackEntityPageEvent = useTrackEntityPageEvent()
+  const trackEntityPageEvent = useTrackEntityPageEvent();
   const hubmapId = useFlaskDataContext().entity.hubmap_id;
 
   if (isLoading) {
@@ -58,9 +63,11 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
 
   return (
     <SectionItem label={data?.payload?.title}>
-      <OutboundIconLink 
-        onClick={() => trackEntityPageEvent({action: 'Protocols / Protocol Link Navigation', label: hubmapId})} 
-        href={data?.payload?.url}>{data?.payload?.url}
+      <OutboundIconLink
+        onClick={() => trackEntityPageEvent({ action: 'Protocols / Protocol Link Navigation', label: hubmapId })}
+        href={data?.payload?.url}
+      >
+        {data?.payload?.url}
       </OutboundIconLink>
     </SectionItem>
   );

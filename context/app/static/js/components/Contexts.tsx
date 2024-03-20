@@ -44,6 +44,7 @@ interface AppContextType {
   workspacesEndpoint: string;
   userTemplatesEndpoint: string;
   ubkgEndpoint: string;
+  protocolsClientToken: string;
   [key: string]: unknown;
 }
 
