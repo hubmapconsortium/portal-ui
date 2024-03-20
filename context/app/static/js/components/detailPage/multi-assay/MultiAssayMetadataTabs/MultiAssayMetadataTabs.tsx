@@ -18,29 +18,37 @@ function getIconProps(isCurrentEntity: boolean) {
     : { icon: undefined };
 }
 
+interface MultiAssayEntityTabProps {
+  label: string;
+  uuid: string;
+  index: number;
+}
+
+function MultiAssayEntityTab({ label, uuid, index }: MultiAssayEntityTabProps) {
+  const {
+    entity: { uuid: currentEntityUUID },
+  } = useFlaskDataContext();
+  const isCurrentEntity = currentEntityUUID === uuid;
+
+  const iconProps = getIconProps(isCurrentEntity);
+  return (
+    <SecondaryBackgroundTooltip title={isCurrentEntity ? "This is the current dataset's metadata." : undefined}>
+      <Tab label={label} key={uuid} index={index} {...iconProps} iconPosition="end" />
+    </SecondaryBackgroundTooltip>
+  );
+}
+
 type MultiAssayEntityWithTableRows = Pick<MultiAssayEntity, 'uuid'> & { tableRows: TableRows; label: string };
 
 function MultiAssayMetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] }) {
   const { openTabIndex, handleTabChange } = useTabs();
 
-  const {
-    entity: { uuid: currentEntityUUID },
-  } = useFlaskDataContext();
-
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange}>
-        {entities.map(({ label, uuid }, index) => {
-          const isCurrentEntity = currentEntityUUID === uuid;
-          return (
-            <SecondaryBackgroundTooltip
-              title={isCurrentEntity ? "This is the current dataset's metadata." : undefined}
-              key={uuid}
-            >
-              <Tab label={label} key={uuid} index={index} {...getIconProps(isCurrentEntity)} iconPosition="end" />
-            </SecondaryBackgroundTooltip>
-          );
-        })}
+        {entities.map(({ label, uuid }, index) => (
+          <MultiAssayEntityTab label={label} uuid={uuid} index={index} key={uuid} />
+        ))}
       </Tabs>
       {entities.map(({ uuid, tableRows }, index) => (
         <TabPanel value={openTabIndex} index={index} key={uuid}>
