@@ -3,8 +3,9 @@ import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
+import { SWRError } from 'js/helpers/swr/errors';
 
-export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
+export function useFormattedProtocolUrls(protocolUrls: string, lastVersion: number) {
   return useMemo(() => {
     if (protocolUrls.length === 0) {
       return [];
@@ -32,10 +33,19 @@ export function useFormattedProtocolUrls(protocolUrls, lastVersion) {
   }, [protocolUrls, lastVersion]);
 }
 
-function useProtocolData(protocolUrl) {
+interface ProtocolData {
+  payload: {
+    title: string;
+    url: string;
+  };
+}
+
+function useProtocolData(protocolUrl: string) {
   const { protocolsClientToken } = useAppContext();
-  const result = useSWR([protocolUrl, protocolsClientToken], ([url, token]) =>
-    fetcher({ url, requestInit: { headers: { Authorization: `Bearer ${token}` } } }),
+  const result = useSWR<ProtocolData, SWRError, [string, string]>(
+    [protocolUrl, protocolsClientToken],
+    ([url, token]: string[]) =>
+      fetcher<ProtocolData>({ url, requestInit: { headers: { Authorization: `Bearer ${token}` } } }),
   );
   return result;
 }

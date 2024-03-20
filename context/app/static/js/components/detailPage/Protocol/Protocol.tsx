@@ -10,45 +10,71 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
+import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
-function ProtocolMessage({ precedingText }) {
+const loadingText = 'Protocols are loading. If protocols take a significant time to load, please ';
+const errorText = 'Failed to retrieve protocols. Please ';
+
+interface ProtocolMessageProps {
+  isLoading?: boolean;
+  isError?: boolean;
+}
+
+function ProtocolMessage({ isLoading, isError }: ProtocolMessageProps) {
   return (
     <SectionItem>
       {/* Extra `div` wrapper is necessary to prevent the email icon link from taking up the full width and breaking text. */}
       <div>
-        {precedingText}
+        {isLoading && loadingText}
+        {isError && errorText}
         <ContactUsLink /> about this issue and mention the HuBMAP ID.
       </div>
     </SectionItem>
   );
 }
 
-function ProtocolLink({ url, index }) {
+interface ProtocolLinkProps {
+  url: string;
+  index: number;
+}
+
+function ProtocolLink({ url, index }: ProtocolLinkProps) {
   const { isLoading, data, error } = useProtocolData(url);
 
-  if (error || isLoading || !data) {
+  const trackEntityPageEvent = useTrackEntityPageEvent();
+  const hubmapId = useFlaskDataContext().entity.hubmap_id;
+
+  if (isLoading) {
     if (index !== 0) {
       // Only show loading message for first protocol link
       return null;
     }
+    return <ProtocolMessage isLoading />;
+  }
 
-    if (isLoading && !error) {
-      return (
-        <ProtocolMessage precedingText="Protocols are loading. If protocols take a significant time to load, please " />
-      );
-    }
-
-    return <ProtocolMessage precedingText="Failed to retrieve protocols. Please " />;
+  if (error) {
+    return <ProtocolMessage isError />;
   }
 
   return (
     <SectionItem label={data?.payload?.title}>
-      <OutboundIconLink href={data?.payload?.url}>{data?.payload?.url}</OutboundIconLink>
+      {data?.payload && (
+        <OutboundIconLink
+          onClick={() => trackEntityPageEvent({ action: 'Protocols / Protocol Link Navigation', label: hubmapId })}
+          href={data.payload.url}
+        >
+          {data.payload.url}
+        </OutboundIconLink>
+      )}
     </SectionItem>
   );
 }
 
-function Protocol({ protocol_url }) {
+interface ProtocolProps {
+  protocol_url: string;
+}
+
+function Protocol({ protocol_url }: ProtocolProps) {
   const {
     entity: { entity_type },
   } = useFlaskDataContext();
