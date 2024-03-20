@@ -22,7 +22,7 @@ function ComponentAlert() {
     <DetailPageAlert
       severity="info"
       sx={{
-        'div:nth-child(2)': {
+        '.MuiAlert-message': {
           flexGrow: 1,
         },
       }}
