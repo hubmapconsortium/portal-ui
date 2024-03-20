@@ -58,12 +58,14 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
 
   return (
     <SectionItem label={data?.payload?.title}>
-      <OutboundIconLink
-        onClick={() => trackEntityPageEvent({ action: 'Protocols / Protocol Link Navigation', label: hubmapId })}
-        href={data?.payload?.url}
-      >
-        {data?.payload?.url}
-      </OutboundIconLink>
+      {data?.payload && (
+        <OutboundIconLink
+          onClick={() => trackEntityPageEvent({ action: 'Protocols / Protocol Link Navigation', label: hubmapId })}
+          href={data.payload.url}
+        >
+          {data.payload.url}
+        </OutboundIconLink>
+      )}
     </SectionItem>
   );
 }
