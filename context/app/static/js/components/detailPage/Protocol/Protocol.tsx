@@ -10,6 +10,7 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
+import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
 const loadingText = 'Protocols are loading. If protocols take a significant time to load, please ';
 const errorText = 'Failed to retrieve protocols. Please ';
@@ -40,6 +41,9 @@ interface ProtocolLinkProps {
 function ProtocolLink({ url, index }: ProtocolLinkProps) {
   const { isLoading, data, error } = useProtocolData(url);
 
+  const trackEntityPageEvent = useTrackEntityPageEvent()
+  const hubmapId = useFlaskDataContext().entity.hubmap_id;
+
   if (isLoading) {
     if (index !== 0) {
       // Only show loading message for first protocol link
@@ -54,7 +58,10 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
 
   return (
     <SectionItem label={data?.payload?.title}>
-      <OutboundIconLink href={data?.payload?.url}>{data?.payload?.url}</OutboundIconLink>
+      <OutboundIconLink 
+        onClick={() => trackEntityPageEvent({action: 'Protocols / Protocol Link Navigation', label: hubmapId})} 
+        href={data?.payload?.url}>{data?.payload?.url}
+      </OutboundIconLink>
     </SectionItem>
   );
 }
