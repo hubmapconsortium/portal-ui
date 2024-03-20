@@ -2,7 +2,7 @@ import { Donor, Sample, Dataset } from 'js/components/Contexts';
 import { get } from './nodash';
 
 const donorMetadataPath = 'mapped_metadata';
-const sampleMetdataPath = 'metadata';
+const sampleMetadataPath = 'metadata';
 
 type DonorEntityType = 'Donor';
 type SampleEntityType = 'Sample';
@@ -16,7 +16,7 @@ const paths: Record<EntityType, Partial<Record<EntityType, string>>> = {
   },
   Sample: {
     Donor: `donor.${donorMetadataPath}`,
-    Sample: sampleMetdataPath,
+    Sample: sampleMetadataPath,
   },
   Dataset: {
     Donor: `donor.${donorMetadataPath}`,
