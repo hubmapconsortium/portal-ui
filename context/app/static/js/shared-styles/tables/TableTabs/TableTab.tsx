@@ -10,7 +10,9 @@ const SingleTableTab = styled((props: TabProps) => <Tab aria-disabled disableRip
   cursor: 'default',
 });
 
-export default function TableTab({ isSingleTab = false, ...props }: TableTabProps) {
+function TableTab({ isSingleTab = false, ...props }: TableTabProps, ref: React.Ref<HTMLDivElement>) {
   const TabComponent = isSingleTab ? SingleTableTab : Tab;
-  return <TabComponent {...props} />;
+  return <TabComponent {...props} ref={ref} />;
 }
+
+export default React.forwardRef(TableTab);

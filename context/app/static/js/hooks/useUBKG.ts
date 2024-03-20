@@ -31,6 +31,9 @@ const useUbkg = () => {
       get cellTypeList() {
         return `${ubkgEndpoint}/celltypes-info`;
       },
+      get fieldDescriptions() {
+        return `${ubkgEndpoint}/field-descriptions`;
+      },
     }),
     [ubkgEndpoint],
   );
@@ -212,6 +215,64 @@ export const useCellTypeOntologyDetail = (cellTypeId: string) => {
     throw error;
   }
   return { data: data?.[0], ...swr };
+};
+
+interface Description {
+  // HMFIELD refers to legacy metadata.
+  source: 'HMFIELD' | 'CEDAR';
+  description: string;
+}
+interface MetadataFieldDescription {
+  code_ids: string[][];
+  name: string;
+  descriptions: Description[];
+}
+
+type MetadataFieldDescriptions = MetadataFieldDescription[];
+
+type MetadataFieldDescriptionMap = Record<string, string>;
+
+function findBestDescription(descriptions: Description[]) {
+  if (descriptions.length === 0) {
+    return undefined;
+  }
+  const cedarDescription = descriptions.find((description) => description?.source === 'CEDAR');
+
+  return (cedarDescription ?? descriptions[0]).description;
+}
+
+function buildFieldsMap(fields: MetadataFieldDescriptions) {
+  if (!fields) {
+    return {};
+  }
+
+  const fieldsMap = fields.reduce<MetadataFieldDescriptionMap>((acc, { name, descriptions }) => {
+    const description = findBestDescription(descriptions);
+
+    if (description) {
+      return { ...acc, [name]: description };
+    }
+    return acc;
+  }, {});
+
+  return fieldsMap;
+}
+
+async function fetchDescriptions(url: string) {
+  const data = await fetcher<MetadataFieldDescriptions>({ url });
+  return buildFieldsMap(data);
+}
+
+export const useMetadataFieldDescriptions = () => {
+  const { data, ...swr } = useSWR<MetadataFieldDescriptionMap | Record<string, never>>(
+    useUbkg().fieldDescriptions,
+    (url: string) => fetchDescriptions(url),
+    {
+      fallbackData: {},
+    },
+  );
+
+  return { data: data ?? {}, ...swr };
 };
 
 // TODO:

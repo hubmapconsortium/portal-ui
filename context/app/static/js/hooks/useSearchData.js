@@ -40,11 +40,12 @@ function useSearchData(
   swrConfig = {
     fallbackData: {},
   },
+  shouldFetch = true,
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
   const { data: searchData, isLoading } = useSWR(
-    [queries, elasticsearchEndpoint, groupsToken, useDefaultQuery],
+    shouldFetch ? [queries, elasticsearchEndpoint, groupsToken, useDefaultQuery] : null,
     (args) => fetcher(...args),
     swrConfig,
   );
@@ -54,15 +55,21 @@ function useSearchData(
 
 function useSearchHits(
   query,
-  { useDefaultQuery = false, fetcher = fetchSearchData, ...swrConfigRest } = {
+  { useDefaultQuery = false, fetcher = fetchSearchData, shouldFetch = true, ...swrConfigRest } = {
     useDefaultQuery: false,
     fetcher: fetchSearchData,
   },
 ) {
   const swrConfig = swrConfigRest || { fallbackData: {} };
-  const { searchData, isLoading } = useSearchData(query, useDefaultQuery, fetcher ?? fetchSearchData, {
-    ...swrConfig,
-  });
+  const { searchData, isLoading } = useSearchData(
+    query,
+    useDefaultQuery,
+    fetcher ?? fetchSearchData,
+    {
+      ...swrConfig,
+    },
+    shouldFetch,
+  );
   const searchHits = searchData?.hits?.hits || [];
   return { searchHits, isLoading };
 }

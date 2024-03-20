@@ -7,7 +7,7 @@ import Section, { baseOffset } from 'js/shared-styles/sections/Section';
 // Using the `typeof MUIAlert` workaround here to avoid converting
 // all of the `Alert` components to TS for now.
 const DetailPageAlert = styled(Alert as typeof MUIAlert)(({ theme }) => ({
-  mb: theme.spacing(2),
+  marginBottom: theme.spacing(2),
 })) as typeof MUIAlert;
 
 const DetailPageSection = styled(Section)({

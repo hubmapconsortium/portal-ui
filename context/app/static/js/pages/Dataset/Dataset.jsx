@@ -9,7 +9,6 @@ import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
-import MetadataTable from 'js/components/detailPage/MetadataTable';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
@@ -33,6 +32,10 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
+import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
+import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
+import MetadataSection from 'js/components/detailPage/MetadataSection';
+import useDatasetLabel from './getDatasetLabel';
 
 function NotebookButton({ disabled, ...props }) {
   return (
@@ -120,6 +123,8 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     registered_doi,
     doi_url,
     contributors,
+    is_component,
+    assay_modality,
   } = assayMetadata;
   const isLatest = !('next_revision_uuid' in assayMetadata);
 
@@ -137,7 +142,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     provenance: entity_type !== 'Support',
     visualization: Boolean(vitData),
     protocols: Boolean(protocol_url),
-    metadata: Boolean(Object.keys(combinedMetadata).length),
+    metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
     files: Boolean(files?.length),
     bulkDataTransfer: true,
     collections: Boolean(collectionsData.length),
@@ -173,6 +178,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
     [hubmap_id, mapped_data_access_level, uuid],
   );
 
+  const datasetLabel = useDatasetLabel();
   // TODO: When all environments are clean, data_types array fallbacks shouldn't be needed.
   return (
     <DetailContext.Provider value={detailContextValue}>
@@ -191,11 +197,13 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         </DetailPageAlert>
       )}
       {entity_type === 'Support' && <SupportAlert uuid={uuid} />}
+      {is_component && <ComponentAlert />}
       <DetailLayout sectionOrder={sectionOrder}>
         <Summary
           title={hubmap_id}
           uuid={uuid}
           entity_type={entity_type}
+          entityTypeDisplay={datasetLabel}
           created_timestamp={created_timestamp}
           last_modified_timestamp={last_modified_timestamp}
           published_timestamp={published_timestamp}
@@ -203,7 +211,12 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
           status={combinedStatus}
           mapped_data_access_level={mapped_data_access_level}
           mapped_external_group_name={mapped_external_group_name}
-          bottomFold={<DataProducts files={files} />}
+          bottomFold={
+            <>
+              <MultiAssayRelationship assay_modality={assay_modality} />
+              <DataProducts files={files} />
+            </>
+          }
         >
           <SummaryDataChildren
             data_types={data_types || []}
@@ -221,13 +234,16 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook, visLiftedUUID }) {
         )}
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={assayMetadata} />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && (
+          <MetadataSection metadata={combineMetadata} assay_modality={assay_modality} />
+        )}
         {shouldDisplaySection.files && (
           <Files files={files} uuid={uuid} hubmap_id={hubmap_id} visLiftedUUID={visLiftedUUID} />
         )}
         {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer visLiftedUUID={visLiftedUUID} />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}
