@@ -24,7 +24,8 @@ interface MultiAssayEntityTabProps {
   index: number;
 }
 
-function MultiAssayEntityTab({ label, uuid, index }: MultiAssayEntityTabProps) {
+function MultiAssayEntityTab({ label, uuid, index, ...props }: MultiAssayEntityTabProps) {
+  // Props spreading neccesary as Tabs passes props to its children.
   const {
     entity: { uuid: currentEntityUUID },
   } = useFlaskDataContext();
@@ -33,7 +34,7 @@ function MultiAssayEntityTab({ label, uuid, index }: MultiAssayEntityTabProps) {
   const iconProps = getIconProps(isCurrentEntity);
   return (
     <SecondaryBackgroundTooltip title={isCurrentEntity ? "This is the current dataset's metadata." : undefined}>
-      <Tab label={label} key={uuid} index={index} {...iconProps} iconPosition="end" />
+      <Tab label={label} key={uuid} index={index} {...iconProps} iconPosition="end" {...props} />
     </SecondaryBackgroundTooltip>
   );
 }
