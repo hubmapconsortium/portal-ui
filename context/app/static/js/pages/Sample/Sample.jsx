@@ -9,7 +9,6 @@ import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import MetadataTable from 'js/components/detailPage/MetadataTable';
 import SampleTissue from 'js/components/detailPage/SampleTissue';
 import useEntityStore from 'js/stores/useEntityStore';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
@@ -19,6 +18,7 @@ import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/Der
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import useTrackID from 'js/hooks/useTrackID';
+import MetadataSection from 'js/components/detailPage/MetadataSection';
 
 const entityStoreSelector = (state) => state.setAssayMetadata;
 
@@ -81,7 +81,7 @@ function SampleDetail() {
         <SampleTissue />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataTable metadata={combinedMetadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && <MetadataSection metadata={combinedMetadata} hubmap_id={hubmap_id} />}
         <Attribution />
       </DetailLayout>
     </DetailContext.Provider>

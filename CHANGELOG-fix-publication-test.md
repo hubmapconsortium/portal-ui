@@ -1,0 +1,1 @@
+- Fix broken publication cypress test.

@@ -10,6 +10,7 @@ function Summary({
   status,
   children,
   mapped_data_access_level,
+  entityTypeDisplay,
   entityCanBeSaved,
   contributors,
   citationTitle,
@@ -27,6 +28,7 @@ function Summary({
     <DetailPageSection id="summary">
       <SummaryData
         title={hubmap_id}
+        entityTypeDisplay={entityTypeDisplay}
         entity_type={entity_type}
         uuid={uuid}
         status={status}

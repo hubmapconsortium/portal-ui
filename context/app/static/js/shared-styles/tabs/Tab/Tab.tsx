@@ -5,9 +5,9 @@ interface TabProps extends MUITabProps {
   index: number;
 }
 
-function Tab({ index, ...props }: TabProps) {
-  return <MUITab id={`tab-${index}`} aria-controls={`tabpanel-${index}`} {...props} />;
+function Tab({ index, ...props }: TabProps, ref: React.Ref<HTMLDivElement>) {
+  return <MUITab id={`tab-${index}`} aria-controls={`tabpanel-${index}`} {...props} ref={ref} />;
 }
 
-export default Tab;
+export default React.forwardRef(Tab);
 export type { TabProps };

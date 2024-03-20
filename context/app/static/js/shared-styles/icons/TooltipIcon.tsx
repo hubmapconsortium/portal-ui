@@ -5,7 +5,7 @@ import { SecondaryBackgroundTooltip } from '../tooltips';
 
 const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({
   marginLeft: theme.spacing(0.5),
-  fontSize: '1.5rem',
+  fontSize: '1rem',
 }));
 
 interface TooltipIconProps {
