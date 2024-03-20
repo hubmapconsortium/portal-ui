@@ -4,6 +4,7 @@ import Button from '@mui/material/Button';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 
 const tooltipTexts = {
   Donor: 'Samples and datasets derived from this donor.',
@@ -13,8 +14,10 @@ const tooltipTexts = {
 
 function RelatedEntitiesSectionHeader({ header, searchPageHref }) {
   const {
-    entity: { entity_type },
+    entity: { entity_type, uuid },
   } = useFlaskDataContext();
+
+  const track = useTrackEntityPageEvent();
 
   return (
     <SpacedSectionButtonRow
@@ -25,6 +28,12 @@ function RelatedEntitiesSectionHeader({ header, searchPageHref }) {
           color="primary"
           component="a"
           href={searchPageHref}
+          onClick={() =>
+            track({
+              action: `Derived Datasets Navigation / Navigate to Derived Datasets Search Page`,
+              label: uuid,
+            })
+          }
           data-testid="view-related-data-button"
         >
           View Data on Search Page
