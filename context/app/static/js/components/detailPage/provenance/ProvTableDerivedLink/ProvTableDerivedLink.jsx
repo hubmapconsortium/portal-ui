@@ -8,7 +8,7 @@ function ProvTableDerivedLink({ uuid, type }) {
   return (
     <LinkButton
       href={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${type}`}
-      onClick={() => trackEntityPageEvent({ action: 'Provenance / Table / View Derived' })}
+      onClick={() => trackEntityPageEvent({ action: `Provenance / Table / View Derived ${type}s`, label: uuid })}
     >
       View Derived {type}s
     </LinkButton>
