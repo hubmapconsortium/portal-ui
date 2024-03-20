@@ -21,17 +21,12 @@ interface ProtocolMessageProps {
 }
 
 function ProtocolMessage({ isLoading, isError }: ProtocolMessageProps) {
-  let precedingText = '';
-  if (isLoading) {
-    precedingText = loadingText;
-  } else if (isError) {
-    precedingText = errorText;
-  }
   return (
     <SectionItem>
       {/* Extra `div` wrapper is necessary to prevent the email icon link from taking up the full width and breaking text. */}
       <div>
-        {precedingText}
+        {isLoading && loadingText}
+        {isError && errorText}
         <ContactUsLink /> about this issue and mention the HuBMAP ID.
       </div>
     </SectionItem>
