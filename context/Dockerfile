@@ -30,7 +30,6 @@ FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V}
 # https://stackoverflow.com/questions/77490435/attributeerror-cython-sources
 # May be removed after upgrading to PyYaml 6
 # https://github.com/yaml/pyyaml/issues/724
-ARG PIP_CONSTRAINT="cython<3"
 
 COPY requirements.txt /app
 # Legacy resolver is used to avoid issues with a non-pinned subdependency which causes build failures in CI
