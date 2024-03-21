@@ -1,0 +1,1 @@
+- Use cython<3 at build time to address: "AttributeError: cython_sources" 
