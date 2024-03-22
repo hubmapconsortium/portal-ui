@@ -3,7 +3,7 @@ set -o errexit
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
-IMAGE_NAME=hubmap/portal-ui
+IMAGE_NAME=portal-ui:amd64
 CONTAINER_NAME=hubmap-portal-ui
 CONF_PATH=context/instance/app.conf
 PORT=$1

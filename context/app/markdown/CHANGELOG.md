@@ -1,19 +1,3 @@
-## v0.93.0 - 2024-03-22
-
-- Explicitly set container architecture to amd64.
-- Remove stale previews from tools.
-- Add tracking for various donor and sample page events.
-- Remove unused import.
-- Update GitHub action checkout from v2 to v4.
-- Update GitHub action setup-node from v3 to v4 .
-- Update GitHub action codeql from v2 to v4 .
-- Update GitHub action setup-python from v4 to v5 .
-- Fix broken publication cypress test.
-- Update dataset detail page for multi-assay datasets.
-- Add multi-assay provenance display on dataset detail pages.
-- Use cython<3 at build time to address: "AttributeError: cython_sources".
-
-
 ## v0.92.0 - 2024-03-08
 
 - Fix tile view of search pages.
