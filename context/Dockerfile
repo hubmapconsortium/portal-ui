@@ -1,7 +1,7 @@
 ARG NODE_V
 ARG PYTHON_MINOR_V
 
-FROM node:${NODE_V}-alpine as builder
+FROM amd64/node:${NODE_V}-alpine as builder
 
 WORKDIR /work
 RUN apk add --no-cache git

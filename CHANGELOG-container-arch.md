@@ -1,0 +1,1 @@
+- Explicitly set container architecture to amd64.
