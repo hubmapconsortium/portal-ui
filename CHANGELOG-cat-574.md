@@ -1,1 +1,0 @@
-- Remove stale previews from tools.
