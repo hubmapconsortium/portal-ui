@@ -3,15 +3,22 @@ set -o errexit
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
-IMAGE_NAME=hubmap/portal-ui
 CONTAINER_NAME=hubmap-portal-ui
 CONF_PATH=context/instance/app.conf
 PORT=$1
 
-[ "$PORT" = 5000 ] || [ "$PORT" = 5001 ] || die "Usage: $0 PORT
+[ "$PORT" = 5000 ] || [ "$PORT" = 5001 ] || die "Usage: $0 PORT [IMAGE_NAME]
 Requires port; On localhost must be 5000 or 5001 to match Globus whitelist."
 [ -e "$CONF_PATH" ] || die "No $CONF_PATH
 Copy example-app.conf and fill in blanks."
+
+# Check if the optional IMAGE_NAME argument is provided
+if [ -z "$2" ]; then
+    # Set a default value for the second argument
+    IMAGE_NAME=hubmap/portal-ui
+else
+    IMAGE_NAME="$2"
+fi
 
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
