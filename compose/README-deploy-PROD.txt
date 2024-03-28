@@ -1,4 +1,4 @@
-To depoly to production follow the following:
+To deploy to production follow the following:
 
   - on production server, as "hive" user, cd to this directory
   
