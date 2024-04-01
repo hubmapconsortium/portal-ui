@@ -20,7 +20,7 @@ export default function ReferenceBasedAnalysis({ modalities, nunit, dataref, wra
       <LabelledSectionText label="Modalities">{modalities}</LabelledSectionText>
       <LabelledSectionText label="Cells in Reference">{nunit}</LabelledSectionText>
       <LabelledSectionText label="Reference Dataset">
-        <MarkdownRenderer components={{ p: React.Fragment }}>{dataref}</MarkdownRenderer>
+        <MarkdownRenderer components={{ p: ({key, children}) => <React.Fragment key={key}>{children}</React.Fragment> }}>{dataref}</MarkdownRenderer>
       </LabelledSectionText>
     </Wrapper>
   );

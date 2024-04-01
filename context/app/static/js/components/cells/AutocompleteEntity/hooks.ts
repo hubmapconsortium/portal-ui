@@ -16,5 +16,5 @@ const cellsServiceFetcher = async ({
 };
 
 export function useAutocompleteQuery(queryKey: AutocompleteQueryKey) {
-  return useSWR<AutocompleteQueryResponse, Error>(queryKey, cellsServiceFetcher);
+  return useSWR(queryKey, cellsServiceFetcher);
 }
