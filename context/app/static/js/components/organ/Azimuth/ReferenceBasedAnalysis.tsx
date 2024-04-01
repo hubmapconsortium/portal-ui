@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { ClassAttributes, HTMLAttributes } from 'react';
 
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 
 import Skeleton from '@mui/material/Skeleton';
 import MarkdownRenderer from 'js/components/Markdown/MarkdownRenderer';
+import { ExtraProps } from 'react-markdown';
 import { StyledPaper } from './style';
 
 interface ReferenceBasedAnalysisProps {
@@ -13,6 +14,13 @@ interface ReferenceBasedAnalysisProps {
   wrapped?: boolean;
 }
 
+function MarkdownParagraph({
+  key,
+  children,
+}: ClassAttributes<HTMLParagraphElement> & HTMLAttributes<HTMLParagraphElement> & ExtraProps) {
+  return <React.Fragment key={key}>{children}</React.Fragment>;
+}
+
 export default function ReferenceBasedAnalysis({ modalities, nunit, dataref, wrapped }: ReferenceBasedAnalysisProps) {
   const Wrapper = wrapped ? StyledPaper : React.Fragment;
   return (
@@ -20,7 +28,7 @@ export default function ReferenceBasedAnalysis({ modalities, nunit, dataref, wra
       <LabelledSectionText label="Modalities">{modalities}</LabelledSectionText>
       <LabelledSectionText label="Cells in Reference">{nunit}</LabelledSectionText>
       <LabelledSectionText label="Reference Dataset">
-        <MarkdownRenderer components={{ p: ({key, children}) => <React.Fragment key={key}>{children}</React.Fragment> }}>{dataref}</MarkdownRenderer>
+        <MarkdownRenderer components={{ p: MarkdownParagraph }}>{dataref}</MarkdownRenderer>
       </LabelledSectionText>
     </Wrapper>
   );

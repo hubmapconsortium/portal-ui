@@ -1,23 +1,22 @@
-import React, { DetailedReactHTMLElement } from 'react';
-import ReactMarkdown from 'react-markdown';
+import React, { AnchorHTMLAttributes } from 'react';
+import ReactMarkdown, { Options } from 'react-markdown';
 import rehypeRaw from 'rehype-raw';
 import { InternalLink } from 'js/shared-styles/Links';
-import { Options } from 'react-markdown';
 
-export default function MarkdownRenderer({
-  children,
-  rehypePlugins = [],
-  components = {},
-  ...rest
-}: Options) {
+function MarkdownLink({ href, children, ...rest }: AnchorHTMLAttributes<HTMLAnchorElement>) {
+  return (
+    <InternalLink href={href} {...rest}>
+      {children}
+    </InternalLink>
+  );
+}
+
+export default function MarkdownRenderer({ children, rehypePlugins = [], components = {}, ...rest }: Options) {
   return (
     <ReactMarkdown
-      rehypePlugins={[
-        rehypeRaw as NonNullable<Options['rehypePlugins']>[number],
-        ...(rehypePlugins || []),
-      ]}
+      rehypePlugins={[rehypeRaw as NonNullable<Options['rehypePlugins']>[number], ...(rehypePlugins ?? [])]}
       components={{
-        a: ({ href, children }) => <InternalLink href={href as string}>{children}</InternalLink>,
+        a: MarkdownLink,
         ...components,
       }}
       {...rest}

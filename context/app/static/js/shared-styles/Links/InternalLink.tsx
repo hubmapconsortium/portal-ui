@@ -1,9 +1,8 @@
-import React, { AnchorHTMLAttributes, DetailedHTMLProps } from 'react';
+import React from 'react';
 import Link, { LinkProps } from '@mui/material/Link';
 import { styled } from '@mui/material/styles';
 
-
-interface Props extends LinkProps<'a'> {}
+type Props = LinkProps<'a'>;
 
 const StyledLink = styled(Link)<{ component: 'a' }>(({ theme }) => ({
   color: theme.palette.common.link,
