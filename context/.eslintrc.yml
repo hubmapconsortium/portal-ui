@@ -119,7 +119,7 @@ overrides:
   - files: ['**/*.md']
     plugins: [markdown, prettier]
     processor: markdown/markdown
-    extends: [plugin:markdown/recommended]
+    extends: [plugin:markdown/recommended-legacy]
     rules:
       no-console: [0] # Allow console in markdown files
       import/no-unresolved: [0] # Allow unresolved imports in markdown files
