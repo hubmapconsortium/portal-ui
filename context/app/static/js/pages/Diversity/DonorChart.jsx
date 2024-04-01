@@ -1,5 +1,6 @@
 import React from 'react';
-import { Bar, Chart } from 'react-chartjs-2';
+import { Chart as ChartJS, defaults, LinearScale, CategoryScale, BarElement } from 'chart.js';
+import { Bar } from 'react-chartjs-2';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
 
@@ -8,7 +9,8 @@ import useSearchData from 'js/hooks/useSearchData';
 import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
 import { getKeyValues, getAgeLabels, makeCompositeQuery, makeHistogramSource, makeTermSource } from './utils';
 
-Chart.defaults.font.size = 18;
+ChartJS.register(LinearScale, CategoryScale, BarElement);
+defaults.font.size = 18;
 
 function ucFirst(str) {
   return `${str[0].toUpperCase()}${str.slice(1)}`;
@@ -64,7 +66,7 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
 
   const options = {
     scales: {
-      yAxes: {
+      y: {
         title: {
           text: '# of Donors',
           display: true,
@@ -73,7 +75,7 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
           beginAtZero: true,
         },
       },
-      xAxes: {
+      x: {
         title: {
           text: xAxisLabel,
           display: true,
