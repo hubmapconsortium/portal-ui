@@ -17,8 +17,14 @@ const isWorkspacesUser = false;
 const appProviderToken = 'fakeGroupsToken';
 
 // Mock tracking helpers
-// eslint-disable-next-line no-undef
 jest.mock('js/helpers/trackers');
+jest.mock('@grafana/faro-web-sdk', () => ({
+  faro: {
+    api: {
+      pushError: jest.fn(),
+    }
+  }
+}));
 
 export function AllTheProviders({
   children,
