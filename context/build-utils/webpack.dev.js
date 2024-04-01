@@ -22,11 +22,12 @@ const envConfig = {
       // overlay: false,
     },
     // Proxy all requests to flask server except for files in static/public/
-    proxy: {
-      '!(/static/public//**/**.*)': {
+    proxy: [
+      {
+        context: ['**', '!/static/public/**'],
         target: 'http://localhost:5000/',
-      },
-    },
+      }
+    ]
   },
 };
 
