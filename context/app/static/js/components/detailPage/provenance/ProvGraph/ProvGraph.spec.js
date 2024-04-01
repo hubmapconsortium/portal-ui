@@ -1,6 +1,6 @@
 import React from 'react';
 import { fireEvent, waitFor } from '@testing-library/react';
-import { http, HttpResponse } from 'msw';
+import { rest } from 'msw';
 import { setupServer } from 'msw/node';
 
 // eslint-disable-next-line
@@ -18,7 +18,7 @@ document.getElementsByClassName = () => [
 ];
 
 const server = setupServer(
-  http.post(`/${appProviderEndpoints.elasticsearchEndpoint}`, () => {
+  rest.post(`/${appProviderEndpoints.elasticsearchEndpoint}`, (req, res, ctx) => {
     const descendantData = {
       hits: {
         hits: [
@@ -37,18 +37,18 @@ const server = setupServer(
         ],
       },
     };
-    return HttpResponse.json(descendantData);
+    return res(ctx.json(descendantData), ctx.status(200));
   }),
-  http.get(
+  rest.get(
     `/${appProviderEndpoints.entityEndpoint}/entities/${sampleDescendantsProv[0].uuid}/provenance`,
-    () => {
-      return HttpResponse.json(sampleDescendantsProv[0].prov);
+    (req, res, ctx) => {
+      return res(ctx.json(sampleDescendantsProv[0].prov), ctx.status(200));
     },
   ),
-  http.get(
+  rest.get(
     `/${appProviderEndpoints.entityEndpoint}/entities/${sampleDescendantsProv[1].uuid}/provenance`,
-    () => {
-      return HttpResponse.json(sampleDescendantsProv[1].prov);
+    (req, res, ctx) => {
+      return res(ctx.json(sampleDescendantsProv[1].prov), ctx.status(200));
     },
   ),
 );
