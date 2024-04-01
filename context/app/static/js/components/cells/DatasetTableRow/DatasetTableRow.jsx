@@ -1,5 +1,5 @@
 import React from 'react';
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';

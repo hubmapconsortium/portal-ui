@@ -1,4 +1,4 @@
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 
 const descendantCountsCol = {
   id: 'descendant_counts.entity_type.Dataset',
