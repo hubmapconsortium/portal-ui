@@ -1,7 +1,6 @@
 module.exports = {
   restoreMocks: true,
   testPathIgnorePatterns: ['jest.config.js', '/cypress/'],
-  setupFiles: ['<rootDir>/test-utils/setupTestsBeforeEnv.js'],
   setupFilesAfterEnv: ['<rootDir>/test-utils/setupTests.js'],
   moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
   moduleNameMapper: {
@@ -46,8 +45,4 @@ module.exports = {
     '^.+\\.ya?ml$': '<rootDir>/test-utils/loaders/ymlLoader.js',
   },
   testEnvironment: 'jsdom',
-  testEnvironmentOptions: {
-    // https://mswjs.io/docs/migrations/1.x-to-2.x#cannot-find-module-mswnode-jsdom
-    customExportConditions: [''],
-  },
 };
