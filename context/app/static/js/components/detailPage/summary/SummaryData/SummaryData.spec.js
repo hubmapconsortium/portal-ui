@@ -16,7 +16,7 @@ const versionResponse = [
 
 const server = setupServer(
   rest.get(`/${appProviderEndpoints.entityEndpoint}/datasets/${testUUID}/revisions`, (req, res, ctx) => {
-    return res(ctx.json(versionResponse, ctx.status(200)));
+    return res(ctx.json(versionResponse), ctx.status(200));
   }),
 );
 
