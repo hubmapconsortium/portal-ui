@@ -15,9 +15,10 @@ interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
   label?: ReactNode;
+  disabledIDs?: Set<string>;
 }
 
-function WorkspaceDatasetsTable({ datasetsUUIDs, removeDatasets, label }: WorkspaceDatasetsTableProps) {
+function WorkspaceDatasetsTable({ datasetsUUIDs, disabledIDs, removeDatasets, label }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
     () => ({
@@ -54,7 +55,10 @@ function WorkspaceDatasetsTable({ datasetsUUIDs, removeDatasets, label }: Worksp
           </Stack>
         }
       />
-      <EntitiesTables<DatasetDocument> entities={[{ query, columns, entityType: 'Dataset' }]} />
+      <EntitiesTables<DatasetDocument>
+        entities={[{ query, columns, entityType: 'Dataset' }]}
+        disabledIDs={disabledIDs}
+      />
     </Box>
   );
 }

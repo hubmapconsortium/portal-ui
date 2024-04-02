@@ -68,11 +68,12 @@ function TablePaddingRow({ padding }: { padding: number }) {
 
 interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns'> {
   isSelectable: boolean;
+  disabledIDs?: Set<string>;
 }
 
 const headerRowHeight = 60;
 
-function EntityTable<Doc>({ query, columns, isSelectable = true }: EntityTableProps<Doc>) {
+function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
 
   const {
@@ -103,6 +104,7 @@ function EntityTable<Doc>({ query, columns, isSelectable = true }: EntityTablePr
             {isSelectable && (
               <SelectableHeaderCell
                 allTableRowKeys={allSearchIDs}
+                disabledTableRowKeys={disabledIDs}
                 disabled={false}
                 sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
               />
@@ -136,7 +138,7 @@ function EntityTable<Doc>({ query, columns, isSelectable = true }: EntityTablePr
             if (hit) {
               return (
                 <TableRow sx={{ height: virtualRow.size }} key={hit?._id}>
-                  {isSelectable && <SelectableRowCell rowKey={hit?._id} />}
+                  {isSelectable && <SelectableRowCell rowKey={hit?._id} disabled={disabledIDs?.has(hit?._id)} />}
                   {columns.map(({ cellContent: CellContent, id }) => (
                     <TableCell key={id}>
                       <CellContent hit={hit._source} />
