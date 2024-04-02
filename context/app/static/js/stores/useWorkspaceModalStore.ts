@@ -1,7 +1,7 @@
 import { create, StoreApi } from 'zustand';
 import { Workspace } from 'js/components/workspaces/types';
 
-export type DialogType = 'UPDATE_TEMPLATES' | 'UPDATE_NAME' | null;
+export type DialogType = 'UPDATE_TEMPLATES' | 'UPDATE_NAME' | 'ADD_DATASETS' | null;
 
 interface WorkspaceStore {
   isOpen: boolean;

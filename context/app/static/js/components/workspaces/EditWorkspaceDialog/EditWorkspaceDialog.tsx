@@ -9,6 +9,7 @@ import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import EditWorkspaceTemplatesDialog from '../EditWorkspaceTemplatesDialog';
 import EditWorkspaceNameDialog from '../EditWorkspaceNameDialog';
+import AddDatasetsDialog from '../AddDatasetsDialog';
 
 const formId = 'edit-workspace-form';
 
@@ -88,6 +89,10 @@ function EditWorkspaceDialog() {
 
   if (dialogType === 'UPDATE_TEMPLATES') {
     return <EditWorkspaceTemplatesDialog workspace={workspace} />;
+  }
+
+  if (dialogType === 'ADD_DATASETS') {
+    return <AddDatasetsDialog workspace={workspace} />;
   }
 
   return null;
