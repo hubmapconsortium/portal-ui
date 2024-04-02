@@ -26,4 +26,12 @@ const templatesField = {
     .nonempty(),
 };
 
-export { workspaceNameField, protectedDatasetsField, templatesField };
+const datasetsField = {
+  datasets: z
+    .array(z.string(), {
+      errorMap: withCustomMessage('At least one dataset must be selected. Please select a datasets.'),
+    })
+    .nonempty(),
+};
+
+export { workspaceNameField, protectedDatasetsField, templatesField, datasetsField };

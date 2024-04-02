@@ -1,7 +1,10 @@
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { Dataset } from 'js/components/Contexts';
+import { Dataset, useAppContext } from 'js/components/Contexts';
 
 import { useForm } from 'react-hook-form';
+import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+import { datasetsField } from '../workspaceFormFields';
 
 import { useHandleUpdateWorkspace } from '../hooks';
 
@@ -65,21 +68,38 @@ interface SubmitAddDatasetsTypes {
   datasetUUIDs: string[];
 }
 
+export interface AddDatasetsFormTypes {
+  datasets: string[];
+}
+
+const schema = z
+  .object({
+    ...datasetsField,
+  })
+  .partial()
+  .required({ datasets: true });
+
 function useAddWorkspaceDatasets({ workspaceId }: UseAddWorkspaceDatasetsTypes) {
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
+  const { groupsToken } = useAppContext();
 
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors, isSubmitting, isSubmitSuccessful },
-  } = useForm({
+  } = useForm<AddDatasetsFormTypes>({
+    defaultValues: {
+      datasets: [],
+    },
     mode: 'onChange',
+    resolver: zodResolver(schema),
   });
 
   async function onSubmit({ datasetUUIDs }: SubmitAddDatasetsTypes) {
     await handleUpdateWorkspace({
       workspace_details: {
+        globus_groups_token: groupsToken,
         symlinks: datasetUUIDs.map((uuid) => ({
           name: `datasets/${uuid}`,
           dataset_uuid: uuid,

@@ -5,11 +5,13 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
+import { useController } from 'react-hook-form';
 
 import Step from 'js/shared-styles/surfaces/Step';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { Typography } from '@mui/material';
 import { InternalLink } from 'js/shared-styles/Links';
+import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
 import { SearchAheadHit, useAddWorkspaceDatasets, useSearchAhead } from './hooks';
@@ -43,19 +45,42 @@ const title = 'Add Datasets';
 function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = React.useState<SearchAheadHit | null>(null);
-  const { selectedItems, addItem } = useSelectItems([]);
 
   const workspaceId = workspace.id;
 
-  const { onSubmit, handleSubmit, isSubmitting, errors, reset } = useAddWorkspaceDatasets({
+  const { onSubmit, handleSubmit, isSubmitting, control, errors, reset } = useAddWorkspaceDatasets({
     workspaceId,
   });
 
-  const submit = useCallback(async () => {
-    await onSubmit({
-      datasetUUIDs: [...selectedItems],
-    });
-  }, [onSubmit, selectedItems]);
+  const { field, fieldState } = useController({
+    control,
+    name: 'datasets',
+  });
+  const errorMessage = fieldState?.error?.message;
+
+  const { selectedItems, addItem } = useSelectItems(field.value);
+
+  const addDataset = useCallback(
+    (e: React.SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
+      const datasetsCopy = selectedItems;
+      const uuid = newValue?._source?.uuid;
+      if (uuid) {
+        setValue(newValue);
+        addItem(uuid);
+        field.onChange([...datasetsCopy, uuid]);
+      }
+    },
+    [field, addItem, selectedItems],
+  );
+
+  const submit = useCallback(
+    async ({ datasets }: { datasets: string[] }) => {
+      await onSubmit({
+        datasetUUIDs: datasets,
+      });
+    },
+    [onSubmit],
+  );
 
   const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM' });
 
@@ -76,12 +101,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
           <SearchPagePrompt />
           <Autocomplete
             value={value}
-            onChange={(event: React.SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
-              if (newValue?._source?.uuid) {
-                addItem(newValue?._source?.uuid);
-                setValue(newValue);
-              }
-            }}
+            onChange={addDataset}
             inputValue={inputValue}
             onInputChange={(event, newInputValue) => {
               setInputValue(newInputValue);
@@ -107,6 +127,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
               />
             )}
           />
+          {errorMessage && <ErrorMessages errorMessages={[errorMessage]} />}
 
           <WorkspaceDatasetsTable
             datasetsUUIDs={[...workspaceDatasets, ...selectedItems]}
