@@ -84,7 +84,21 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         </SectionPaper>
       </Box>
       {workspaceDatasets.length > 0 && (
-        <WorkspaceDatasetsTable datasetsUUIDs={workspaceDatasets} label={<SectionHeader> Datasets</SectionHeader>} />
+        <WorkspaceDatasetsTable
+          datasetsUUIDs={workspaceDatasets}
+          label={<SectionHeader> Datasets</SectionHeader>}
+          additionalButtons={
+            <WorkspacesUpdateButton
+              workspace={workspace}
+              dialogType="ADD_DATASETS"
+              sx={(theme) => ({
+                marginRight: theme.spacing(1),
+              })}
+            >
+              <AddIcon />
+            </WorkspacesUpdateButton>
+          }
+        />
       )}
       <Box>
         <SpacedSectionButtonRow

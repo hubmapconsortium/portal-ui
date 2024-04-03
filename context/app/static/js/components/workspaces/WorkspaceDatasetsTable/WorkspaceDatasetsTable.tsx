@@ -16,9 +16,16 @@ interface WorkspaceDatasetsTableProps {
   removeDatasets?: (ids: string[]) => void;
   label?: ReactNode;
   disabledIDs?: Set<string>;
+  additionalButtons?: ReactNode;
 }
 
-function WorkspaceDatasetsTable({ datasetsUUIDs, disabledIDs, removeDatasets, label }: WorkspaceDatasetsTableProps) {
+function WorkspaceDatasetsTable({
+  datasetsUUIDs,
+  disabledIDs,
+  removeDatasets,
+  label,
+  additionalButtons,
+}: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
     () => ({
@@ -52,6 +59,7 @@ function WorkspaceDatasetsTable({ datasetsUUIDs, disabledIDs, removeDatasets, la
                 disabled={selectedRows.size === 0}
               />
             )}
+            {additionalButtons}
           </Stack>
         }
       />
