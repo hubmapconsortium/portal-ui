@@ -85,7 +85,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     isSubmitting,
     errors,
     reset,
-    resetState,
+    resetAutocompleteState,
     addDataset,
     removeDatasets,
     searchHits,
@@ -98,7 +98,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     <EditWorkspaceDialogContent
       title={title}
       reset={reset}
-      resetState={resetState}
+      resetState={resetAutocompleteState}
       handleSubmit={handleSubmit}
       onSubmit={submit}
       errors={errors}

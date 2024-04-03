@@ -122,51 +122,102 @@ function useAddWorkspaceDatasetsForm() {
 const tooManyDatasetsMessage =
   'Workspaces can currently only contain 10 datasets. Datasets can no longer be added to this workspace unless datasets are removed.';
 
-function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
+function useDatasetsAutocomplete({
+  workspaceId,
+  initialDatasetsUUIDS = [],
+  updateDatasetsFormState,
+}: {
+  workspaceId: number;
+  initialDatasetsUUIDS?: string[];
+  updateDatasetsFormState?: (datasetUUIDS: string[]) => void;
+}) {
   const [inputValue, setInputValue] = useState('');
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
 
+  const {
+    selectedItems: selectedDatasets,
+    addItem: selectDataset,
+    setSelectedItems: setSelectedDatasets,
+  } = useSelectItems(initialDatasetsUUIDS);
+
+  const addDataset = useCallback(
+    (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
+      const datasetsCopy = selectedDatasets;
+      const uuid = newValue?._source?.uuid;
+      if (uuid) {
+        setAutocompleteValue(newValue);
+        selectDataset(uuid);
+        if (updateDatasetsFormState) {
+          updateDatasetsFormState([...datasetsCopy, uuid]);
+        }
+      }
+    },
+    [selectDataset, selectedDatasets, updateDatasetsFormState],
+  );
+
+  const removeDatasets = useCallback(
+    (uuids: string[]) => {
+      const datasetsCopy = selectedDatasets;
+      uuids.forEach((uuid) => datasetsCopy.delete(uuid));
+
+      const updatedDatasetsArray = [...datasetsCopy];
+      setSelectedDatasets(updatedDatasetsArray);
+      if (updateDatasetsFormState) {
+        updateDatasetsFormState(updatedDatasetsArray);
+      }
+    },
+    [setSelectedDatasets, selectedDatasets, updateDatasetsFormState],
+  );
+
+  const resetAutocompleteState = useCallback(() => {
+    setInputValue('');
+    setAutocompleteValue(null);
+    setSelectedDatasets([]);
+  }, [setSelectedDatasets, setInputValue, setAutocompleteValue]);
+
+  const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
+  const allDatasets = [...workspaceDatasets, ...selectedDatasets];
+  const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });
+
+  return {
+    inputValue,
+    setInputValue,
+    autocompleteValue,
+    selectedDatasets,
+    addDataset,
+    removeDatasets,
+    resetAutocompleteState,
+    workspaceDatasets,
+    allDatasets,
+    searchHits,
+  };
+}
+
+function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
   const workspaceId = workspace.id;
 
   const { handleSubmit, isSubmitting, control, errors, reset } = useAddWorkspaceDatasetsForm();
-
   const { field, fieldState } = useController({
     control,
     name: 'datasets',
   });
 
-  const { selectedItems, addItem, setSelectedItems } = useSelectItems(field.value);
-
-  const resetState = useCallback(() => {
-    setInputValue('');
-    setAutocompleteValue(null);
-    setSelectedItems([]);
-  }, [setSelectedItems, setInputValue, setAutocompleteValue]);
-
-  const addDataset = useCallback(
-    (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
-      const datasetsCopy = selectedItems;
-      const uuid = newValue?._source?.uuid;
-      if (uuid) {
-        setAutocompleteValue(newValue);
-        addItem(uuid);
-        field.onChange([...datasetsCopy, uuid]);
-      }
-    },
-    [field, addItem, selectedItems],
-  );
-
-  const removeDatasets = useCallback(
-    (uuids: string[]) => {
-      const datasetsCopy = selectedItems;
-      uuids.forEach((uuid) => datasetsCopy.delete(uuid));
-
-      const updatedDatasetsArray = [...datasetsCopy];
-      setSelectedItems(updatedDatasetsArray);
-      field.onChange(updatedDatasetsArray);
-    },
-    [setSelectedItems, field, selectedItems],
-  );
+  const {
+    inputValue,
+    setInputValue,
+    autocompleteValue,
+    selectedDatasets,
+    addDataset,
+    removeDatasets,
+    workspaceDatasets,
+    allDatasets,
+    searchHits,
+    resetAutocompleteState,
+  } = useDatasetsAutocomplete({
+    workspaceId,
+    initialDatasetsUUIDS: field.value,
+    updateDatasetsFormState: field.onChange,
+  });
 
   const updateWorkspaceDatasets = useUpdateWorkspaceDatasets({ workspaceId });
 
@@ -179,13 +230,8 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     [updateWorkspaceDatasets],
   );
 
-  const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
-
-  const allDatasets = [...workspaceDatasets, ...selectedItems];
-  const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });
-
   const errorMessage = fieldState?.error?.message;
-  const tooManyDatasetsSelected = selectedItems.size + workspaceDatasets.length > MAX_NUMBER_OF_WORKSPACE_DATASETS;
+  const tooManyDatasetsSelected = selectedDatasets.size + workspaceDatasets.length > MAX_NUMBER_OF_WORKSPACE_DATASETS;
 
   const errorMessages = [];
 
@@ -205,7 +251,7 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     isSubmitting,
     errors,
     reset,
-    resetState,
+    resetAutocompleteState,
     addDataset,
     removeDatasets,
     searchHits,
