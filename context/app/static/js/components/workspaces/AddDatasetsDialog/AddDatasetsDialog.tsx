@@ -58,7 +58,13 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
   });
   const errorMessage = fieldState?.error?.message;
 
-  const { selectedItems, addItem } = useSelectItems(field.value);
+  const { selectedItems, addItem, setSelectedItems } = useSelectItems(field.value);
+
+  const resetState = useCallback(() => {
+    setInputValue('');
+    setValue(null);
+    setSelectedItems([]);
+  }, [setSelectedItems, setInputValue]);
 
   const addDataset = useCallback(
     (e: React.SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
@@ -90,6 +96,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     <EditWorkspaceDialogContent
       title={title}
       reset={reset}
+      resetState={resetState}
       handleSubmit={handleSubmit}
       onSubmit={submit}
       errors={errors}

@@ -19,11 +19,13 @@ interface EditWorkspaceDialogTypes<T extends FieldValues> extends PropsWithChild
   title: string;
   isSubmitting: boolean;
   onSubmit: (fieldValues: T) => Promise<void>;
+  resetState?: () => void;
 }
 
 function EditWorkspaceDialogContent<T extends FieldValues>({
   title,
   reset,
+  resetState,
   children,
   onSubmit,
   handleSubmit,
@@ -41,6 +43,9 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
         .then(() => {
           toastSuccess('Workspace successfully updated.');
           reset();
+          if (resetState) {
+            resetState();
+          }
           close();
         })
         .catch((error) => {
@@ -48,7 +53,7 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
           toastError('Failed to update workspace.');
         });
     },
-    [onSubmit, reset, close, isSubmitting, handleSubmit, toastError, toastSuccess],
+    [onSubmit, reset, close, isSubmitting, handleSubmit, toastError, toastSuccess, resetState],
   );
 
   return (
