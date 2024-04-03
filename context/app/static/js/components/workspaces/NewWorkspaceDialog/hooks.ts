@@ -5,6 +5,7 @@ import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
 import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
+import { buildDatasetSymlinks } from '../utils';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -71,10 +72,7 @@ function useTemplateNotebooks() {
           workspace_details: {
             globus_groups_token: groupsToken,
             files: templatesDetails,
-            symlinks: uuids.map((uuid) => ({
-              name: `datasets/${uuid}`,
-              dataset_uuid: uuid,
-            })),
+            symlinks: buildDatasetSymlinks({ datasetUUIDs: uuids }),
           },
         },
       });

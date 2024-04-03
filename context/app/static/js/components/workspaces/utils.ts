@@ -263,6 +263,13 @@ function isRunningJob(job: WorkspaceJob) {
   return job.status === 'running' || job.status === 'pending';
 }
 
+function buildDatasetSymlinks({ datasetUUIDs }: { datasetUUIDs: string[] }) {
+  return datasetUUIDs.map((uuid) => ({
+    name: `datasets/${uuid}`,
+    dataset_uuid: uuid,
+  }));
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -275,4 +282,5 @@ export {
   getWorkspaceJob,
   isRunningWorkspace,
   isRunningJob,
+  buildDatasetSymlinks,
 };

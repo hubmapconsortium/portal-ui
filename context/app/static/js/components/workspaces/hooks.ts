@@ -4,7 +4,13 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
 import { multiFetcher } from 'js/helpers/swr';
-import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob, getWorkspaceFileName } from './utils';
+import {
+  getWorkspaceStartLink,
+  mergeJobsIntoWorkspaces,
+  findBestJob,
+  getWorkspaceFileName,
+  buildDatasetSymlinks,
+} from './utils';
 import {
   useDeleteWorkspace,
   useStopWorkspace,
@@ -326,6 +332,23 @@ function useCreateTemplates() {
   return { createTemplates };
 }
 
+function useUpdateWorkspaceDatasets({ workspaceId }: { workspaceId: number }) {
+  const { groupsToken } = useAppContext();
+  const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
+
+  return useCallback(
+    async ({ datasetUUIDs }: { datasetUUIDs: string[] }) => {
+      await handleUpdateWorkspace({
+        workspace_details: {
+          globus_groups_token: groupsToken,
+          symlinks: buildDatasetSymlinks({ datasetUUIDs }),
+        },
+      });
+    },
+    [handleUpdateWorkspace, groupsToken],
+  );
+}
+
 export {
   useWorkspacesList,
   useHasRunningWorkspace,
@@ -336,4 +359,5 @@ export {
   useRefreshSession,
   useHandleUpdateWorkspace,
   useCreateTemplates,
+  useUpdateWorkspaceDatasets,
 };

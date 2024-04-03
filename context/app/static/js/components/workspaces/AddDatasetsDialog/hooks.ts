@@ -4,10 +4,10 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { Dataset, useAppContext } from 'js/components/Contexts';
+import { Dataset } from 'js/components/Contexts';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { Workspace } from '../types';
-import { useWorkspaceDetail, useHandleUpdateWorkspace } from '../hooks';
+import { useWorkspaceDetail, useUpdateWorkspaceDatasets } from '../hooks';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 import { datasetsField } from '../workspaceFormFields';
 
@@ -85,14 +85,6 @@ function useSearchAhead({ value, valuePrefix = '', uuidsToExclude = [] }: BuildI
   return useSearchHits(buildIDPrefixQuery({ value, valuePrefix, uuidsToExclude })) as SearchAheadHits;
 }
 
-interface UseAddWorkspaceDatasetsTypes {
-  workspaceId: number;
-}
-
-interface SubmitAddDatasetsTypes {
-  datasetUUIDs: string[];
-}
-
 export interface AddDatasetsFormTypes {
   datasets: string[];
 }
@@ -104,10 +96,7 @@ const schema = z
   .partial()
   .required({ datasets: true });
 
-function useAddWorkspaceDatasetsForm({ workspaceId }: UseAddWorkspaceDatasetsTypes) {
-  const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
-  const { groupsToken } = useAppContext();
-
+function useAddWorkspaceDatasetsForm() {
   const {
     handleSubmit,
     control,
@@ -121,23 +110,10 @@ function useAddWorkspaceDatasetsForm({ workspaceId }: UseAddWorkspaceDatasetsTyp
     resolver: zodResolver(schema),
   });
 
-  async function onSubmit({ datasetUUIDs }: SubmitAddDatasetsTypes) {
-    await handleUpdateWorkspace({
-      workspace_details: {
-        globus_groups_token: groupsToken,
-        symlinks: datasetUUIDs.map((uuid) => ({
-          name: `datasets/${uuid}`,
-          dataset_uuid: uuid,
-        })),
-      },
-    });
-  }
-
   return {
     handleSubmit,
     control,
     errors,
-    onSubmit,
     reset,
     isSubmitting: isSubmitting || isSubmitSuccessful,
   };
@@ -152,9 +128,7 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
 
   const workspaceId = workspace.id;
 
-  const { onSubmit, handleSubmit, isSubmitting, control, errors, reset } = useAddWorkspaceDatasetsForm({
-    workspaceId,
-  });
+  const { handleSubmit, isSubmitting, control, errors, reset } = useAddWorkspaceDatasetsForm();
 
   const { field, fieldState } = useController({
     control,
@@ -194,13 +168,15 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     [setSelectedItems, field, selectedItems],
   );
 
+  const updateWorkspaceDatasets = useUpdateWorkspaceDatasets({ workspaceId });
+
   const submit = useCallback(
     async ({ datasets }: { datasets: string[] }) => {
-      await onSubmit({
+      await updateWorkspaceDatasets({
         datasetUUIDs: datasets,
       });
     },
-    [onSubmit],
+    [updateWorkspaceDatasets],
   );
 
   const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
