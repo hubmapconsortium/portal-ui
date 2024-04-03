@@ -1,23 +1,19 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
-import { useController } from 'react-hook-form';
 
 import Step from 'js/shared-styles/surfaces/Step';
-import { useSelectItems } from 'js/hooks/useSelectItems';
 import { Typography } from '@mui/material';
 import { InternalLink } from 'js/shared-styles/Links';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
-import { SearchAheadHit, useAddWorkspaceDatasets, useSearchAhead } from './hooks';
+import { SearchAheadHit, useAddDatasetsDialog } from './hooks';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
-import { useWorkspaceDetail } from '../hooks';
-import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
 const searchPageRoute = '/search?entity_type[0]=Dataset';
 
@@ -78,81 +74,25 @@ function HubmapIDTextField(params: AutocompleteRenderInputParams) {
 }
 
 const title = 'Add Datasets';
-const tooManyDatasetsMessage =
-  'Workspaces can currently only contain 10 datasets. Datasets can no longer be added to this workspace unless datasets are removed.';
 
 function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
-  const [inputValue, setInputValue] = useState('');
-  const [value, setValue] = React.useState<SearchAheadHit | null>(null);
-
-  const workspaceId = workspace.id;
-
-  const { onSubmit, handleSubmit, isSubmitting, control, errors, reset } = useAddWorkspaceDatasets({
-    workspaceId,
-  });
-
-  const { field, fieldState } = useController({
-    control,
-    name: 'datasets',
-  });
-
-  const { selectedItems, addItem, setSelectedItems } = useSelectItems(field.value);
-
-  const resetState = useCallback(() => {
-    setInputValue('');
-    setValue(null);
-    setSelectedItems([]);
-  }, [setSelectedItems, setInputValue]);
-
-  const addDataset = useCallback(
-    (e: React.SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
-      const datasetsCopy = selectedItems;
-      const uuid = newValue?._source?.uuid;
-      if (uuid) {
-        setValue(newValue);
-        addItem(uuid);
-        field.onChange([...datasetsCopy, uuid]);
-      }
-    },
-    [field, addItem, selectedItems],
-  );
-
-  const submit = useCallback(
-    async ({ datasets }: { datasets: string[] }) => {
-      await onSubmit({
-        datasetUUIDs: datasets,
-      });
-    },
-    [onSubmit],
-  );
-
-  const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
-
-  const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: workspaceDatasets });
-
-  const errorMessage = fieldState?.error?.message;
-  const tooManyDatasetsSelected = selectedItems.size + workspaceDatasets.length > MAX_NUMBER_OF_WORKSPACE_DATASETS;
-
-  const errorMessages = [];
-
-  if (tooManyDatasetsSelected) {
-    errorMessages.push(tooManyDatasetsMessage);
-  }
-  if (errorMessage) {
-    errorMessages.push(errorMessage);
-  }
-
-  const removeDatasets = useCallback(
-    (uuids: string[]) => {
-      const datasetsCopy = selectedItems;
-      uuids.forEach((uuid) => datasetsCopy.delete(uuid));
-
-      const updatedDatasetsArray = [...datasetsCopy];
-      setSelectedItems(updatedDatasetsArray);
-      field.onChange(updatedDatasetsArray);
-    },
-    [setSelectedItems, field, selectedItems],
-  );
+  const {
+    autocompleteValue,
+    inputValue,
+    setInputValue,
+    submit,
+    handleSubmit,
+    isSubmitting,
+    errors,
+    reset,
+    resetState,
+    addDataset,
+    removeDatasets,
+    searchHits,
+    workspaceDatasets,
+    allDatasets,
+    errorMessages,
+  } = useAddDatasetsDialog({ workspace });
 
   return (
     <EditWorkspaceDialogContent
@@ -170,7 +110,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
           {errorMessages.length > 0 && <ErrorMessages errorMessages={errorMessages} />}
           <SearchPagePrompt />
           <Autocomplete
-            value={value}
+            value={autocompleteValue}
             onChange={addDataset}
             inputValue={inputValue}
             onInputChange={(event, newInputValue) => {
@@ -184,7 +124,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
             renderInput={HubmapIDTextField}
           />
           <WorkspaceDatasetsTable
-            datasetsUUIDs={[...workspaceDatasets, ...selectedItems]}
+            datasetsUUIDs={allDatasets}
             label="Datasets"
             disabledIDs={new Set(workspaceDatasets)}
             removeDatasets={removeDatasets}

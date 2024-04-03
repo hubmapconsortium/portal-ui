@@ -1,12 +1,15 @@
-import { useSearchHits } from 'js/hooks/useSearchData';
-import { Dataset, useAppContext } from 'js/components/Contexts';
-
-import { useForm } from 'react-hook-form';
+import { useCallback, useState, SyntheticEvent } from 'react';
+import { useForm, useController } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
-import { datasetsField } from '../workspaceFormFields';
 
-import { useHandleUpdateWorkspace } from '../hooks';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { Dataset, useAppContext } from 'js/components/Contexts';
+import { useSelectItems } from 'js/hooks/useSelectItems';
+import { Workspace } from '../types';
+import { useWorkspaceDetail, useHandleUpdateWorkspace } from '../hooks';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
+import { datasetsField } from '../workspaceFormFields';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -101,7 +104,7 @@ const schema = z
   .partial()
   .required({ datasets: true });
 
-function useAddWorkspaceDatasets({ workspaceId }: UseAddWorkspaceDatasetsTypes) {
+function useAddWorkspaceDatasetsForm({ workspaceId }: UseAddWorkspaceDatasetsTypes) {
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
   const { groupsToken } = useAppContext();
 
@@ -140,4 +143,100 @@ function useAddWorkspaceDatasets({ workspaceId }: UseAddWorkspaceDatasetsTypes) 
   };
 }
 
-export { useSearchAhead, type SearchAheadHit, useAddWorkspaceDatasets };
+const tooManyDatasetsMessage =
+  'Workspaces can currently only contain 10 datasets. Datasets can no longer be added to this workspace unless datasets are removed.';
+
+function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
+  const [inputValue, setInputValue] = useState('');
+  const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
+
+  const workspaceId = workspace.id;
+
+  const { onSubmit, handleSubmit, isSubmitting, control, errors, reset } = useAddWorkspaceDatasetsForm({
+    workspaceId,
+  });
+
+  const { field, fieldState } = useController({
+    control,
+    name: 'datasets',
+  });
+
+  const { selectedItems, addItem, setSelectedItems } = useSelectItems(field.value);
+
+  const resetState = useCallback(() => {
+    setInputValue('');
+    setAutocompleteValue(null);
+    setSelectedItems([]);
+  }, [setSelectedItems, setInputValue, setAutocompleteValue]);
+
+  const addDataset = useCallback(
+    (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
+      const datasetsCopy = selectedItems;
+      const uuid = newValue?._source?.uuid;
+      if (uuid) {
+        setAutocompleteValue(newValue);
+        addItem(uuid);
+        field.onChange([...datasetsCopy, uuid]);
+      }
+    },
+    [field, addItem, selectedItems],
+  );
+
+  const removeDatasets = useCallback(
+    (uuids: string[]) => {
+      const datasetsCopy = selectedItems;
+      uuids.forEach((uuid) => datasetsCopy.delete(uuid));
+
+      const updatedDatasetsArray = [...datasetsCopy];
+      setSelectedItems(updatedDatasetsArray);
+      field.onChange(updatedDatasetsArray);
+    },
+    [setSelectedItems, field, selectedItems],
+  );
+
+  const submit = useCallback(
+    async ({ datasets }: { datasets: string[] }) => {
+      await onSubmit({
+        datasetUUIDs: datasets,
+      });
+    },
+    [onSubmit],
+  );
+
+  const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
+
+  const allDatasets = [...workspaceDatasets, ...selectedItems];
+  const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });
+
+  const errorMessage = fieldState?.error?.message;
+  const tooManyDatasetsSelected = selectedItems.size + workspaceDatasets.length > MAX_NUMBER_OF_WORKSPACE_DATASETS;
+
+  const errorMessages = [];
+
+  if (tooManyDatasetsSelected) {
+    errorMessages.push(tooManyDatasetsMessage);
+  }
+  if (errorMessage) {
+    errorMessages.push(errorMessage);
+  }
+
+  return {
+    autocompleteValue,
+    inputValue,
+    setInputValue,
+    submit,
+    handleSubmit,
+    isSubmitting,
+    errors,
+    reset,
+    resetState,
+    addDataset,
+    removeDatasets,
+    searchHits,
+    workspaceDatasets,
+    allDatasets,
+    errorMessages,
+  };
+}
+
+export { type SearchAheadHit, useAddDatasetsDialog };
