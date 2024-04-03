@@ -11,9 +11,10 @@ import { useHandleUpdateWorkspace } from '../hooks';
 interface BuildIDPrefixQueryType {
   value: string;
   valuePrefix?: string;
+  uuidsToExclude?: string[];
 }
 
-function buildIDPrefixQuery({ value, valuePrefix = '' }: BuildIDPrefixQueryType) {
+function buildIDPrefixQuery({ value, valuePrefix = '', uuidsToExclude = [] }: BuildIDPrefixQueryType) {
   return {
     query: {
       bool: {
@@ -31,6 +32,24 @@ function buildIDPrefixQuery({ value, valuePrefix = '' }: BuildIDPrefixQueryType)
               entity_type: {
                 value: 'dataset',
               },
+            },
+          },
+          {
+            term: {
+              mapped_data_access_level: {
+                value: 'public',
+              },
+            },
+          },
+          {
+            bool: {
+              must_not: [
+                {
+                  ids: {
+                    values: uuidsToExclude,
+                  },
+                },
+              ],
             },
           },
         ],
@@ -56,8 +75,8 @@ type SearchAheadDoc = Pick<Dataset, 'hubmap_id' | 'uuid'>;
 type SearchAheadHit = Hit<SearchAheadDoc>;
 type SearchAheadHits = Hits<SearchAheadDoc>;
 
-function useSearchAhead({ value, valuePrefix = '' }: BuildIDPrefixQueryType) {
-  return useSearchHits(buildIDPrefixQuery({ value, valuePrefix })) as SearchAheadHits;
+function useSearchAhead({ value, valuePrefix = '', uuidsToExclude = [] }: BuildIDPrefixQueryType) {
+  return useSearchHits(buildIDPrefixQuery({ value, valuePrefix, uuidsToExclude })) as SearchAheadHits;
 }
 
 interface UseAddWorkspaceDatasetsTypes {

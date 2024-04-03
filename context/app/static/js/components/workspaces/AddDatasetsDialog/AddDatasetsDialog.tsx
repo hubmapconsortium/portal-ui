@@ -90,8 +90,9 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     [onSubmit],
   );
 
-  const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM' });
   const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
+
+  const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: workspaceDatasets });
 
   const errorMessage = fieldState?.error?.message;
   const tooManyDatasetsSelected = selectedItems.size + workspaceDatasets.length > MAX_NUMBER_OF_WORKSPACE_DATASETS;
