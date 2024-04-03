@@ -17,6 +17,7 @@ import { Workspace } from '../types';
 import { SearchAheadHit, useAddWorkspaceDatasets, useSearchAhead } from './hooks';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import { useWorkspaceDetail } from '../hooks';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
 const searchPageRoute = '/search?entity_type[0]=Dataset';
 
@@ -41,6 +42,8 @@ function SearchPagePrompt() {
 }
 
 const title = 'Add Datasets';
+const tooManyDatasetsMessage =
+  'Workspaces can currently only contain 10 datasets. Datasets can no longer be added to this workspace unless datasets are removed.';
 
 function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
   const [inputValue, setInputValue] = useState('');
@@ -56,7 +59,6 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     control,
     name: 'datasets',
   });
-  const errorMessage = fieldState?.error?.message;
 
   const { selectedItems, addItem, setSelectedItems } = useSelectItems(field.value);
 
@@ -89,8 +91,31 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
   );
 
   const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM' });
-
   const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
+
+  const errorMessage = fieldState?.error?.message;
+  const tooManyDatasetsSelected = selectedItems.size + workspaceDatasets.length > MAX_NUMBER_OF_WORKSPACE_DATASETS;
+
+  const errorMessages = [];
+
+  if (tooManyDatasetsSelected) {
+    errorMessages.push(tooManyDatasetsMessage);
+  }
+  if (errorMessage) {
+    errorMessages.push(errorMessage);
+  }
+
+  const removeDatasets = useCallback(
+    (uuids: string[]) => {
+      const datasetsCopy = selectedItems;
+      uuids.forEach((uuid) => datasetsCopy.delete(uuid));
+
+      const updatedDatasetsArray = [...datasetsCopy];
+      setSelectedItems(updatedDatasetsArray);
+      field.onChange(updatedDatasetsArray);
+    },
+    [setSelectedItems, field, selectedItems],
+  );
 
   return (
     <EditWorkspaceDialogContent
@@ -101,10 +126,11 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
       onSubmit={submit}
       errors={errors}
       isSubmitting={isSubmitting}
+      disabled={errorMessages.length > 0}
     >
-      <input type="hidden" name="topic" value="something" />
       <Step title={title}>
         <Stack spacing={3}>
+          {errorMessages.length > 0 && <ErrorMessages errorMessages={errorMessages} />}
           <SearchPagePrompt />
           <Autocomplete
             value={value}
@@ -134,12 +160,11 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
               />
             )}
           />
-          {errorMessage && <ErrorMessages errorMessages={[errorMessage]} />}
-
           <WorkspaceDatasetsTable
             datasetsUUIDs={[...workspaceDatasets, ...selectedItems]}
             label="Datasets"
             disabledIDs={new Set(workspaceDatasets)}
+            removeDatasets={removeDatasets}
           />
         </Stack>
       </Step>

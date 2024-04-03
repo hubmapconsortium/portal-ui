@@ -9,6 +9,8 @@ import { useAppContext } from '../Contexts';
 import { Workspace, WorkspaceAPIResponse, WorkspaceAPIResponseWithoutData, WorkspaceJob } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
+export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 10;
+
 /**
  * Generates API URLs for various workspaces API actions
  * @param workspacesEndpoint endpoint to use as the base for API URLs

@@ -1,4 +1,4 @@
-import React, { useCallback, PropsWithChildren, BaseSyntheticEvent } from 'react';
+import React, { useCallback, PropsWithChildren } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -20,6 +20,7 @@ interface EditWorkspaceDialogTypes<T extends FieldValues> extends PropsWithChild
   isSubmitting: boolean;
   onSubmit: (fieldValues: T) => Promise<void>;
   resetState?: () => void;
+  disabled?: boolean;
 }
 
 function EditWorkspaceDialogContent<T extends FieldValues>({
@@ -31,15 +32,14 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
   handleSubmit,
   errors,
   isSubmitting,
+  disabled,
 }: EditWorkspaceDialogTypes<T> & FormProps<T>) {
   const { isOpen, close } = useEditWorkspaceStore();
   const { toastSuccess, toastError } = useSnackbarActions();
 
   const submit = useCallback(
-    (e: BaseSyntheticEvent) => {
-      if (isSubmitting) return;
-
-      handleSubmit(onSubmit)(e)
+    (fieldValues: T) => {
+      onSubmit(fieldValues)
         .then(() => {
           toastSuccess('Workspace successfully updated.');
           reset();
@@ -53,7 +53,7 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
           toastError('Failed to update workspace.');
         });
     },
-    [onSubmit, reset, close, isSubmitting, handleSubmit, toastError, toastSuccess, resetState],
+    [close, onSubmit, reset, resetState, toastError, toastSuccess],
   );
 
   return (
@@ -61,7 +61,8 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
       title={title}
       maxWidth="lg"
       content={
-        <form id={formId} onSubmit={submit}>
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        <form id={formId} onSubmit={handleSubmit(submit)}>
           {children}
         </form>
       }
@@ -72,7 +73,12 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
           <Button type="button" onClick={close} disabled={isSubmitting}>
             Cancel
           </Button>
-          <LoadingButton loading={isSubmitting} type="submit" form={formId} disabled={Object.keys(errors).length > 0}>
+          <LoadingButton
+            loading={isSubmitting}
+            type="submit"
+            form={formId}
+            disabled={disabled ?? Object.keys(errors).length > 0}
+          >
             Save
           </LoadingButton>
         </Stack>

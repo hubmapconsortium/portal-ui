@@ -29,7 +29,7 @@ const templatesField = {
 const datasetsField = {
   datasets: z
     .array(z.string(), {
-      errorMap: withCustomMessage('At least one dataset must be selected. Please select a datasets.'),
+      errorMap: withCustomMessage('At least one dataset must be selected. Please select a dataset.'),
     })
     .nonempty(),
 };
