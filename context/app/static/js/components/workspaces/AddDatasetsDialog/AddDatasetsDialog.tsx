@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
-import Autocomplete from '@mui/material/Autocomplete';
+import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
 import InputAdornment from '@mui/material/InputAdornment';
 import { useController } from 'react-hook-form';
 
@@ -38,6 +38,42 @@ function SearchPagePrompt() {
         </Button>
       </div>
     </Stack>
+  );
+}
+
+function DatasetOption(props: React.HTMLAttributes<HTMLLIElement>, option: SearchAheadHit) {
+  const {
+    _source: { hubmap_id, assay_display_name, origin_samples_unique_mapped_organs },
+  } = option;
+  return (
+    <li {...props}>
+      <div>
+        <Typography variant="subtitle1">{hubmap_id}</Typography>
+        <Typography variant="body2">
+          {[origin_samples_unique_mapped_organs, assay_display_name].filter((f) => f !== undefined).join(' | ')}
+        </Typography>
+      </div>
+    </li>
+  );
+}
+
+function HubmapIDTextField(params: AutocompleteRenderInputParams) {
+  const { InputProps } = params;
+  return (
+    <TextField
+      {...params}
+      label="Enter HuBMAP ID"
+      helperText="HuBMAP IDs follow the pattern HBM123.ABCD.456. Only one dataset can be added at a time."
+      InputProps={{
+        ...InputProps,
+        startAdornment: (
+          <>
+            <InputAdornment position="start">HBM</InputAdornment>
+            {InputProps.startAdornment}
+          </>
+        ),
+      }}
+    />
   );
 }
 
@@ -143,23 +179,9 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
             filterOptions={(x) => x}
             options={searchHits}
             getOptionLabel={(hit: SearchAheadHit) => hit?._source?.hubmap_id}
+            renderOption={DatasetOption}
             fullWidth
-            renderInput={(params) => (
-              <TextField
-                {...params}
-                label="Enter HuBMAP ID"
-                helperText="HuBMAP IDs follow the pattern HBM123.ABCD.456. Only one dataset can be added at a time."
-                InputProps={{
-                  ...params.InputProps,
-                  startAdornment: (
-                    <>
-                      <InputAdornment position="start">HBM</InputAdornment>
-                      {params.InputProps.startAdornment}
-                    </>
-                  ),
-                }}
-              />
-            )}
+            renderInput={HubmapIDTextField}
           />
           <WorkspaceDatasetsTable
             datasetsUUIDs={[...workspaceDatasets, ...selectedItems]}

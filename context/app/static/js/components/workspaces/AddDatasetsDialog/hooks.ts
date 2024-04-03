@@ -55,7 +55,7 @@ function buildIDPrefixQuery({ value, valuePrefix = '', uuidsToExclude = [] }: Bu
         ],
       },
     },
-    _source: ['hubmap_id', 'uuid'],
+    _source: ['hubmap_id', 'uuid', 'assay_display_name', 'origin_samples_unique_mapped_organs'],
     size: 10,
     sort: 'hubmap_id.keyword',
   };
@@ -70,7 +70,10 @@ interface Hits<Doc extends Record<string, unknown>> {
   isLoading: boolean;
 }
 
-type SearchAheadDoc = Pick<Dataset, 'hubmap_id' | 'uuid'>;
+type SearchAheadDoc = Pick<
+  Dataset,
+  'hubmap_id' | 'uuid' | 'origin_samples_unique_mapped_organs' | 'assay_display_name'
+>;
 
 type SearchAheadHit = Hit<SearchAheadDoc>;
 type SearchAheadHits = Hits<SearchAheadDoc>;
