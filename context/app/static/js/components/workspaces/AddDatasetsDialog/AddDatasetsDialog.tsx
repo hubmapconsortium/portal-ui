@@ -125,7 +125,6 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
           />
           <WorkspaceDatasetsTable
             datasetsUUIDs={allDatasets}
-            label="Datasets"
             disabledIDs={new Set(workspaceDatasets)}
             removeDatasets={removeDatasets}
           />
