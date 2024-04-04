@@ -193,6 +193,8 @@ function useDatasetsAutocomplete({
   };
 }
 
+export type UseDatasetsAutocompleteReturnType = ReturnType<typeof useDatasetsAutocomplete>;
+
 function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
   const workspaceId = workspace.id;
 

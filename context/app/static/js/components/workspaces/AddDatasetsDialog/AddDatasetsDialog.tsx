@@ -2,18 +2,15 @@ import React from 'react';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autocomplete';
-import InputAdornment from '@mui/material/InputAdornment';
+import Typography from '@mui/material/Typography';
 
 import Step from 'js/shared-styles/surfaces/Step';
-import { Typography } from '@mui/material';
 import { InternalLink } from 'js/shared-styles/Links';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
-import { SearchAheadHit, useAddDatasetsDialog } from './hooks';
-import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
+import AddDatasetsTable from '../AddDatasetsTable';
+import { useAddDatasetsDialog } from './hooks';
 
 const searchPageRoute = '/search?entity_type[0]=Dataset';
 
@@ -37,62 +34,11 @@ function SearchPagePrompt() {
   );
 }
 
-function DatasetOption(props: React.HTMLAttributes<HTMLLIElement>, option: SearchAheadHit) {
-  const {
-    _source: { hubmap_id, assay_display_name, origin_samples_unique_mapped_organs },
-  } = option;
-  return (
-    <li {...props}>
-      <div>
-        <Typography variant="subtitle1">{hubmap_id}</Typography>
-        <Typography variant="body2">
-          {[origin_samples_unique_mapped_organs, assay_display_name].filter((f) => f !== undefined).join(' | ')}
-        </Typography>
-      </div>
-    </li>
-  );
-}
-
-function HubmapIDTextField(params: AutocompleteRenderInputParams) {
-  const { InputProps } = params;
-  return (
-    <TextField
-      {...params}
-      label="Enter HuBMAP ID"
-      helperText="HuBMAP IDs follow the pattern HBM123.ABCD.456. Only one dataset can be added at a time."
-      InputProps={{
-        ...InputProps,
-        startAdornment: (
-          <>
-            <InputAdornment position="start">HBM</InputAdornment>
-            {InputProps.startAdornment}
-          </>
-        ),
-      }}
-    />
-  );
-}
-
 const title = 'Add Datasets';
 
 function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
-  const {
-    autocompleteValue,
-    inputValue,
-    setInputValue,
-    submit,
-    handleSubmit,
-    isSubmitting,
-    errors,
-    reset,
-    resetAutocompleteState,
-    addDataset,
-    removeDatasets,
-    searchHits,
-    workspaceDatasets,
-    allDatasets,
-    errorMessages,
-  } = useAddDatasetsDialog({ workspace });
+  const { submit, handleSubmit, isSubmitting, errors, reset, resetAutocompleteState, errorMessages, ...rest } =
+    useAddDatasetsDialog({ workspace });
 
   return (
     <EditWorkspaceDialogContent
@@ -109,25 +55,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
         <Stack spacing={3}>
           {errorMessages.length > 0 && <ErrorMessages errorMessages={errorMessages} />}
           <SearchPagePrompt />
-          <Autocomplete
-            value={autocompleteValue}
-            onChange={addDataset}
-            inputValue={inputValue}
-            onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
-            filterOptions={(x) => x}
-            options={searchHits}
-            getOptionLabel={(hit: SearchAheadHit) => hit?._source?.hubmap_id}
-            renderOption={DatasetOption}
-            fullWidth
-            renderInput={HubmapIDTextField}
-          />
-          <WorkspaceDatasetsTable
-            datasetsUUIDs={allDatasets}
-            disabledIDs={new Set(workspaceDatasets)}
-            removeDatasets={removeDatasets}
-          />
+          <AddDatasetsTable {...rest} />
         </Stack>
       </Step>
     </EditWorkspaceDialogContent>
