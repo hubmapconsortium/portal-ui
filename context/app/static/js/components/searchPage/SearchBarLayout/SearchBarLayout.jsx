@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle, SimpleQueryString } from 'searchkit';
 
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
+import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
 import MetadataMenu from '../MetadataMenu';
 import TilesSortDropdown from '../TilesSortDropdown';
@@ -31,6 +32,7 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
             analyticsCategory={analyticsCategory}
           />
           {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
+          {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
           <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
         </CenteredDiv>
       </Flex>
