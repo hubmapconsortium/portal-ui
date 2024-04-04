@@ -5,7 +5,7 @@ import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autoc
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
 
-import { UseDatasetsAutocompleteReturnType, SearchAheadHit } from '../AddDatasetsDialog/hooks';
+import { UseDatasetsAutocompleteReturnType, SearchAheadHit } from './hooks';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 
 function DatasetOption(props: React.HTMLAttributes<HTMLLIElement>, option: SearchAheadHit) {
