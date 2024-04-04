@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import Checkbox from '@mui/material/Checkbox';
 
 import Description from 'js/shared-styles/sections/Description';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -60,6 +61,7 @@ function WorkspacesList() {
               key={workspace.id}
               toggleItem={toggleItem}
               selected={selectedItems.has(workspace.id)}
+              ToggleComponent={Checkbox}
             />
           ))
         )}
