@@ -34,4 +34,10 @@ const datasetsField = {
     .nonempty(),
 };
 
-export { workspaceNameField, protectedDatasetsField, templatesField, datasetsField };
+const workspaceIdField = {
+  workspaceId: z.number({
+    required_error: 'At least one workspace must be selected. Please select a workspace.',
+  }),
+};
+
+export { workspaceNameField, protectedDatasetsField, templatesField, datasetsField, workspaceIdField };
