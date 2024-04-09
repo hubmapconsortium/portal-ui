@@ -90,7 +90,6 @@ function useDatasetsAutocomplete({
 }) {
   const [inputValue, setInputValue] = useState('');
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
-
   const {
     selectedItems: selectedDatasets,
     addItem: selectDataset,
@@ -129,8 +128,8 @@ function useDatasetsAutocomplete({
   const resetAutocompleteState = useCallback(() => {
     setInputValue('');
     setAutocompleteValue(null);
-    setSelectedDatasets([]);
-  }, [setSelectedDatasets, setInputValue, setAutocompleteValue]);
+    setSelectedDatasets(initialDatasetsUUIDS);
+  }, [setSelectedDatasets, setInputValue, setAutocompleteValue, initialDatasetsUUIDS]);
 
   const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];
@@ -147,6 +146,7 @@ function useDatasetsAutocomplete({
     workspaceDatasets,
     allDatasets,
     searchHits,
+    setSelectedDatasets,
   };
 }
 

@@ -53,7 +53,7 @@ function AddDatasetsTable({
   workspaceDatasets,
   allDatasets,
   searchHits,
-}: Omit<UseDatasetsAutocompleteReturnType, 'selectedDatasets' | 'resetAutocompleteState'>) {
+}: Omit<UseDatasetsAutocompleteReturnType, 'selectedDatasets' | 'resetAutocompleteState' | 'setSelectedDatasets'>) {
   return (
     <Stack spacing={3}>
       <Autocomplete

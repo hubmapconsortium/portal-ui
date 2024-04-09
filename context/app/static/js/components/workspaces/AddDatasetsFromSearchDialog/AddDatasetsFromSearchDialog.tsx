@@ -49,7 +49,9 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
     selectedWorkspace,
     setSelectedWorkspace,
     ...rest
-  } = useAddDatasetsFromSearchDialog({ initialDatasetUUIDs: [], initialWorkspaceId: inititialWorkspace.id });
+  } = useAddDatasetsFromSearchDialog({
+    initialWorkspaceId: inititialWorkspace.id,
+  });
 
   return (
     <EditWorkspaceDialogContent

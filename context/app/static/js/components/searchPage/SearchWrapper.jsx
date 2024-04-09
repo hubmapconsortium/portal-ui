@@ -13,6 +13,7 @@ import SearchBarLayout from './SearchBarLayout';
 import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import { NoResults, SearchError } from './noHitsComponents';
+import { WorkspaceSearchDialogs } from '../workspaces/WorkspacesDropdownMenu';
 
 const setSearchHitsCountSelector = (state) => state.setSearchHitsCount;
 const setAllResultsUUIDsSelector = (state) => state.setAllResultsUUIDs;
@@ -119,6 +120,7 @@ function SearchWrapper({
             <PaginationWrapper />
           </LayoutResults>
         </LayoutBody>
+        <WorkspaceSearchDialogs />
       </SelectableTableProvider>
     </SearchkitProvider>
   );
