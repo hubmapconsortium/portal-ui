@@ -1,6 +1,7 @@
 import { produce } from 'immer';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
+import { Hits } from 'js/hooks/useSearchData2';
 import { useFlaskDataContext, Dataset } from 'js/components/Contexts';
 
 const source = [
@@ -74,15 +75,6 @@ function getPrimaryDescendants(uuid: string) {
     },
     _source: source,
   };
-}
-
-interface Hit<Doc extends Record<string, unknown>> {
-  _source: Doc;
-}
-
-interface Hits<Doc extends Record<string, unknown>> {
-  searchHits: Hit<Doc>[];
-  isLoading: boolean;
 }
 
 export type MultiAssayEntity = Pick<
