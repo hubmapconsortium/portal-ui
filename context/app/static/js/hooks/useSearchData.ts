@@ -1,17 +1,56 @@
-import { useCallback } from 'react';
-import useSWR from 'swr';
-import useSWRInfinite from 'swr/infinite';
+import { useCallback, useMemo } from 'react';
+import useSWR, { SWRConfiguration } from 'swr';
+import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 
 import { fetcher as fetch, multiFetcher as multiFetch } from 'js/helpers/swr';
 import { getAuthHeader, addRestrictionsToQuery } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 
-function buildSearchRequestInit({ query, groupsToken, useDefaultQuery }) {
-  const authHeader = getAuthHeader(groupsToken);
+import { AggregationsAggregate, SearchRequest, SearchResponseBody } from '@elastic/elasticsearch/lib/api/types';
+import { SWRError } from 'js/helpers/swr/errors';
 
+export interface Hit<Doc extends object | Record<string, unknown>> {
+  _source: Doc;
+}
+
+export interface Hits<Doc extends object | Record<string, unknown>> {
+  searchHits: Hit<Doc>[];
+  isLoading: boolean;
+}
+
+interface UseSearchDataConfig extends SWRConfiguration {
+  useDefaultQuery?: boolean;
+  shouldFetch?: boolean;
+}
+
+interface BuildSearchRequestInitArgs {
+  body: SearchRequest;
+  authHeader: HeadersInit;
+}
+
+/**
+ * Builds the auth header for the request
+ * @returns The auth header if logged in, an empty object otherwise
+ */
+function useAuthHeader() {
+  const { groupsToken } = useAppContext();
+  return useMemo(() => getAuthHeader(groupsToken), [groupsToken]);
+}
+
+/**
+ * Util function to create the request body for the search request
+ * @param arg.query The search request
+ * @param arg.useDefaultQuery Whether to apply the default query restrictions
+ * @returns The request body
+ */
+function createSearchRequestBody({ query, useDefaultQuery }: { query: SearchRequest; useDefaultQuery: boolean }) {
+  return useDefaultQuery ? addRestrictionsToQuery(query) : query;
+}
+
+function buildSearchRequestInit({ body, authHeader }: BuildSearchRequestInitArgs): RequestInit {
   return {
     method: 'POST',
-    body: JSON.stringify(useDefaultQuery ? addRestrictionsToQuery(query) : query),
+    body: JSON.stringify(body),
     headers: {
       'Content-Type': 'application/json',
       ...authHeader,
@@ -19,93 +58,146 @@ function buildSearchRequestInit({ query, groupsToken, useDefaultQuery }) {
   };
 }
 
-async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
-  return fetch({
-    url: elasticsearchEndpoint,
-    requestInit: buildSearchRequestInit({ query, groupsToken, useDefaultQuery }),
-  });
+interface RequestInitArgs {
+  query: SearchRequest;
+  useDefaultQuery: boolean;
+}
+function useRequestInit({ query, useDefaultQuery }: RequestInitArgs) {
+  const authHeader = useAuthHeader();
+  return useMemo(() => {
+    const body = createSearchRequestBody({ query, useDefaultQuery });
+    return buildSearchRequestInit({ body, authHeader });
+  }, [query, useDefaultQuery, authHeader]);
 }
 
-async function multiFetchSearchData(queries, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
-  return multiFetch({
-    urls: [elasticsearchEndpoint],
-    requestInits: queries.map((query) => buildSearchRequestInit({ query, groupsToken, useDefaultQuery })),
-  });
+interface UseSearchDataConfig extends SWRConfiguration {
+  useDefaultQuery?: boolean;
+  shouldFetch?: boolean;
 }
 
-function useSearchData(
-  queries,
-  useDefaultQuery = false,
-  fetcher = fetchSearchData,
-  swrConfig = {
-    fallbackData: {},
-  },
-  shouldFetch = true,
-) {
-  const { elasticsearchEndpoint, groupsToken } = useAppContext();
+interface UseSearchDataArgs {
+  query: SearchRequest;
+  config?: UseSearchDataConfig;
+}
 
-  const { data: searchData, isLoading } = useSWR(
-    shouldFetch ? [queries, elasticsearchEndpoint, groupsToken, useDefaultQuery] : null,
-    (args) => fetcher(...args),
+interface UseSearchData<Documents, Aggs = Record<string, AggregationsAggregate>> {
+  searchData: SearchResponseBody<Documents, Aggs> | undefined;
+  isLoading: boolean;
+}
+
+const defaultConfig = {
+  useDefaultQuery: false,
+  fetcher: fetch,
+  fallbackData: {},
+};
+
+export default function useSearchData<Documents, Aggs>({
+  query,
+  config: { useDefaultQuery = false, fetcher = fetch, ...swrConfig } = defaultConfig,
+}: UseSearchDataArgs): UseSearchData<Documents, Aggs> {
+  const requestInit = useRequestInit({ query, useDefaultQuery });
+
+  const { data: searchData, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>(
+    { query, requestInit },
+    fetcher,
     swrConfig,
   );
 
   return { searchData, isLoading };
 }
 
-function useSearchHits(
+export function useSearchHits({
   query,
-  { useDefaultQuery = false, fetcher = fetchSearchData, shouldFetch = true, ...swrConfigRest } = {
-    useDefaultQuery: false,
-    fetcher: fetchSearchData,
-  },
-) {
-  const swrConfig = swrConfigRest || { fallbackData: {} };
-  const { searchData, isLoading } = useSearchData(
-    query,
-    useDefaultQuery,
-    fetcher ?? fetchSearchData,
-    {
-      ...swrConfig,
-    },
-    shouldFetch,
-  );
-  const searchHits = searchData?.hits?.hits || [];
+  config: { useDefaultQuery = false, fetcher = fetch, ...swrConfig } = defaultConfig,
+}: UseSearchDataArgs) {
+  const { searchData, isLoading } = useSearchData({ query, config: { useDefaultQuery, fetcher, ...swrConfig } });
+  const searchHits = searchData?.hits?.hits ?? [];
   return { searchHits, isLoading };
 }
 
-function getTotalHitsCount(results) {
-  return results?.hits?.total?.value;
+// Multisearch code below
+
+type PluralQuery<T extends { query: SearchRequest }> = Omit<T, 'query'> & { queries: SearchRequest[] };
+
+function useRequestInits({ queries, useDefaultQuery }: PluralQuery<RequestInitArgs>): RequestInit[] {
+  const authHeader = useAuthHeader();
+  const inits = useMemo<RequestInit[]>(
+    () =>
+      queries.map((query) => {
+        const body = createSearchRequestBody({ query, useDefaultQuery });
+        return buildSearchRequestInit({ body, authHeader });
+      }),
+    [queries, useDefaultQuery, authHeader],
+  );
+  return inits;
 }
 
-async function fetchAllIDs(...args) {
-  const results = await fetchSearchData(...args);
-  const hits = results?.hits?.hits ?? [];
-  // eslint-disable-next-line no-underscore-dangle
-  return hits.map((hit) => hit?._id);
+type UseMultiSearchDataArgs = PluralQuery<UseSearchDataArgs>;
+
+const defaultMultiFetchConfig = {
+  useDefaultQuery: false,
+  fetcher: multiFetch,
+  fallbackData: [],
+};
+
+interface UseMultiSearchData<Documents, Aggs = Record<string, AggregationsAggregate>> {
+  searchData: SearchResponseBody<Documents, Aggs>[] | undefined;
+  isLoading: boolean;
+}
+export function useMultiSearchData<Documents, Aggs>({
+  queries,
+  config: { useDefaultQuery = false, fetcher = multiFetch, ...swrConfig } = defaultMultiFetchConfig,
+}: UseMultiSearchDataArgs): UseMultiSearchData<Documents, Aggs> {
+  const requestInits = useRequestInits({ queries, useDefaultQuery });
+
+  const { data: searchData, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>[]>(
+    { queries, requestInits },
+    fetcher,
+    swrConfig,
+  );
+
+  return { searchData, isLoading };
+}
+
+// Infinite search code below
+
+function getTotalHitsCount(results?: SearchResponseBody<unknown, unknown>) {
+  const total = results?.hits?.total;
+  if (typeof total === 'number') {
+    return total;
+  }
+  return total?.value;
+}
+
+function extractIDs(results?: SearchResponseBody<unknown, unknown>) {
+  return results?.hits?.hits?.map((hit) => hit._id);
+}
+
+async function fetchAllIDs(...args: Parameters<typeof fetch>) {
+  const results = await fetch<SearchResponseBody<unknown, unknown>>(...args);
+  return extractIDs(results);
 }
 
 // We do not want the query to revalidate when _source or sort change.
 const sharedIDsQueryClauses = { _source: false, sort: [{ _id: 'asc' }] };
 
-function useAllSearchIDs(
-  query,
-  { useDefaultQuery = false, ...swrConfigRest } = {
+export function useAllSearchIDs(
+  query: SearchRequest,
+  { useDefaultQuery = false, fetcher = fetch, ...swrConfigRest }: UseSearchDataConfig = {
     useDefaultQuery: false,
-    fetcher: fetchSearchData,
+    fetcher: fetch,
   },
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
-  const { searchData } = useSearchData(
-    { ...query, track_total_hits: true, size: 0, ...sharedIDsQueryClauses },
-    useDefaultQuery,
-    fetchSearchData,
-    {
-      fallbackData: {},
+  const { searchData } = useSearchData({
+    query: { ...query, track_total_hits: true, size: 0, ...sharedIDsQueryClauses },
+    config: {
+      useDefaultQuery,
+      fetcher,
       ...swrConfigRest,
     },
-  );
+  });
 
   const totalHitsCount = getTotalHitsCount(searchData);
   const numberOfPagesToRequest = totalHitsCount ? Math.ceil(10000 / totalHitsCount) : undefined;
@@ -124,21 +216,21 @@ function useAllSearchIDs(
     ];
   }, [query, elasticsearchEndpoint, groupsToken, useDefaultQuery, numberOfPagesToRequest]);
 
-  const { data } = useSWRInfinite(getKey, (args) => fetchAllIDs(...args), {
+  const { data } = useSWRInfinite(getKey, fetchAllIDs, {
     fallbackData: [],
     ...swrConfigRest,
   });
 
-  return { allSearchIDs: data.flat() };
+  return { allSearchIDs: data?.flat() ?? [], totalHitsCount };
 }
 
 // Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
-function getSearchAfterSort(hits) {
+function getSearchAfterSort(hits: SearchResponseBody<unknown, unknown>['hits']['hits']) {
   const { sort } = hits.slice(-1)[0];
   return sort;
 }
 
-function getCombinedHits(pagesResults) {
+function getCombinedHits(pagesResults: SearchResponseBody<unknown, unknown>[]) {
   const hasData = pagesResults.length > 0;
 
   if (!hasData) {
@@ -151,17 +243,17 @@ function getCombinedHits(pagesResults) {
   };
 }
 
-function useScrollSearchHits(
-  query,
-  { useDefaultQuery = false, fetcher = fetchSearchData, ...swrConfigRest } = {
+export function useScrollSearchHits(
+  query: SearchRequest,
+  { useDefaultQuery = false, fetcher = fetch, ...swrConfigRest }: UseSearchDataConfig = {
     useDefaultQuery: false,
-    fetcher: fetchSearchData,
+    fetcher: fetch,
   },
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
-  const getKey = useCallback(
-    (pageIndex, previousPageData) => {
+  const getKey: SWRInfiniteKeyLoader = useCallback(
+    (pageIndex: number, previousPageData: SearchResponseBody) => {
       const sharedKeyItems = [elasticsearchEndpoint, groupsToken, useDefaultQuery];
 
       const previousPageHits = previousPageData?.hits?.hits ?? [];
@@ -177,15 +269,19 @@ function useScrollSearchHits(
     [query, elasticsearchEndpoint, groupsToken, useDefaultQuery],
   );
 
-  const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite(getKey, (args) => fetcher(...args), {
-    fallbackData: [],
-    revalidateAll: false,
-    revalidateFirstPage: false,
-    keepPreviousData: true,
-    ...swrConfigRest,
-  });
+  const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<SearchResponseBody, SWRError>(
+    getKey,
+    fetcher,
+    {
+      fallbackData: [],
+      revalidateAll: false,
+      revalidateFirstPage: false,
+      keepPreviousData: true,
+      ...swrConfigRest,
+    },
+  );
 
-  const { searchHits, totalHitsCount } = getCombinedHits(data);
+  const { searchHits, totalHitsCount } = getCombinedHits(data ?? []);
 
   const isReachingEnd = searchHits.length === 0 || searchHits.length === totalHitsCount;
 
@@ -193,31 +289,28 @@ function useScrollSearchHits(
     if (isReachingEnd || isLoading || isValidating) {
       return;
     }
-    setSize(size + 1);
+    setSize(size + 1).catch(console.error);
   }, [size, setSize, isReachingEnd, isLoading, isValidating]);
 
   return { searchHits, error, isLoading, setSize, loadMore, totalHitsCount, isReachingEnd };
 }
 
-function useSearchTotalHitsCounts(
-  queries,
-  { useDefaultQuery = false, fetcher = multiFetchSearchData } = {
+export function useSearchTotalHitsCounts(
+  queries: SearchRequest[],
+  { useDefaultQuery = false, fetcher = multiFetch }: UseSearchDataConfig = {
     useDefaultQuery: false,
-    fetcher: multiFetchSearchData,
+    fetcher: multiFetch,
   },
 ) {
   const swrConfig = { fallbackData: [] };
-  const { searchData, isLoading } = useSearchData(
-    queries.map((query) => ({ ...query, _source: false, size: 0, track_total_hits: true })),
-    useDefaultQuery,
-    fetcher ?? multiFetchSearchData,
-    {
+  const { searchData, isLoading } = useMultiSearchData({
+    queries: queries.map((query) => ({ ...query, _source: false, size: 0, track_total_hits: true })),
+    config: {
+      useDefaultQuery,
+      fetcher,
       ...swrConfig,
     },
-  );
+  });
 
-  return { totalHitsCounts: searchData.map((d) => getTotalHitsCount(d)), isLoading };
+  return { totalHitsCounts: searchData?.map((d) => getTotalHitsCount(d)), isLoading };
 }
-
-export { fetchSearchData, useSearchHits, useScrollSearchHits, useAllSearchIDs, useSearchTotalHitsCounts };
-export default useSearchData;
