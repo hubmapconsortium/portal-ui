@@ -1,7 +1,6 @@
 import { produce } from 'immer';
 
-import { useSearchHits } from 'js/hooks/useSearchData';
-import { Hits } from 'js/hooks/useSearchData2';
+import { useSearchHits, Hits } from 'js/hooks/useSearchData';
 import { useFlaskDataContext, Dataset } from 'js/components/Contexts';
 
 const source = [
