@@ -69,10 +69,8 @@ interface RequestInitArgs {
 }
 function useRequestInit({ query, useDefaultQuery }: RequestInitArgs) {
   const authHeader = useAuthHeader();
-  return useMemo(() => {
-    const body = createSearchRequestBody({ query, useDefaultQuery });
-    return buildSearchRequestInit({ body, authHeader });
-  }, [query, useDefaultQuery, authHeader]);
+  const body = createSearchRequestBody({ query, useDefaultQuery });
+  return buildSearchRequestInit({ body, authHeader });
 }
 
 interface UseSearchDataConfig extends SWRConfiguration {
@@ -91,7 +89,7 @@ interface UseHitsData<Documents> {
 }
 
 const defaultConfig = {
-  useDefaultQuery: false,
+  useDefaultQuery: true,
   fetcher: fetch,
   fallbackData: {},
 };
@@ -148,7 +146,7 @@ function useRequestInits({ queries, useDefaultQuery }: PluralQuery<RequestInitAr
 }
 
 const defaultMultiFetchConfig = {
-  useDefaultQuery: false,
+  useDefaultQuery: true,
   fetcher: multiFetch,
   fallbackData: [],
 };
@@ -159,7 +157,11 @@ interface UseMultiSearchData<Documents, Aggs = Record<string, AggregationsAggreg
 }
 export function useMultiSearchData<Documents, Aggs>(
   queries: SearchRequest[],
-  { useDefaultQuery = false, fetcher = multiFetch, ...swrConfig }: UseSearchDataConfig = defaultMultiFetchConfig,
+  {
+    useDefaultQuery = defaultMultiFetchConfig.useDefaultQuery,
+    fetcher = defaultMultiFetchConfig.fetcher,
+    ...swrConfig
+  }: UseSearchDataConfig = defaultMultiFetchConfig,
 ): UseMultiSearchData<Documents, Aggs> {
   const requestInits = useRequestInits({ queries, useDefaultQuery });
   const { elasticsearchEndpoint } = useAppContext();
@@ -197,10 +199,11 @@ const sharedIDsQueryClauses = { _source: false, sort: [{ _id: 'asc' }] };
 
 export function useAllSearchIDs(
   query: SearchRequest,
-  { useDefaultQuery = false, fetcher = fetch, ...swrConfigRest }: UseSearchDataConfig = {
-    useDefaultQuery: false,
-    fetcher: fetch,
-  },
+  {
+    useDefaultQuery = defaultConfig.useDefaultQuery,
+    fetcher = defaultConfig.fetcher,
+    ...swrConfigRest
+  }: UseSearchDataConfig = defaultConfig,
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 

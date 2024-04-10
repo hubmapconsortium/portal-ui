@@ -77,7 +77,7 @@ export const useSortState = (
       : sortState.columnId;
 
   // The doc _id is used as a tiebreaker which is necessary for search_after queries.
-  // TODO: Update types to improve s
+  // TODO: Update types to improve compatibility with ES sort types/avoid requiring a type assertion
   const sort = columnName ? [{ [columnName]: sortState.direction }, { _id: 'asc' }] : [];
 
   return { sortState, sort, setSort, reset };
