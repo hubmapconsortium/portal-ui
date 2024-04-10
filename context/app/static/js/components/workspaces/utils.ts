@@ -259,6 +259,10 @@ function isRunningWorkspace(workspace: MergedWorkspace) {
   return workspace.jobs.some((job) => job.status === 'running' || job.status === 'pending');
 }
 
+function findRunningWorkspace(workspaces: MergedWorkspace[]) {
+  return workspaces.find((workspace) => isRunningWorkspace(workspace));
+}
+
 function isRunningJob(job: WorkspaceJob) {
   return job.status === 'running' || job.status === 'pending';
 }
@@ -281,6 +285,7 @@ export {
   getWorkspaceHeaders,
   getWorkspaceJob,
   isRunningWorkspace,
+  findRunningWorkspace,
   isRunningJob,
   buildDatasetSymlinks,
 };

@@ -1,11 +1,12 @@
 import React, { ElementType } from 'react';
-import { ButtonProps } from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { useLaunchWorkspace } from 'js/components/workspaces/hooks';
-import { isRunningWorkspace } from 'js/components/workspaces/utils';
-
+import { useLaunchWorkspace, useWorkspacesList } from 'js/components/workspaces/hooks';
+import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
+import { Alert } from 'js/shared-styles/alerts';
 import { MergedWorkspace } from '../types';
 
 interface WorkspaceButtonProps {
@@ -18,7 +19,7 @@ interface WorkspaceButtonProps {
 function StopWorkspaceButton({
   workspace,
   handleStopWorkspace,
-  button: Button,
+  button: ButtonComponent,
   isStoppingWorkspace,
 }: WorkspaceButtonProps) {
   const { toastError } = useSnackbarActions();
@@ -27,10 +28,9 @@ function StopWorkspaceButton({
     return null;
   }
   return (
-    <Button
+    <ButtonComponent
       type="button"
       disabled={isStoppingWorkspace}
-      variant="outlined"
       onClick={() => {
         handleStopWorkspace(workspace.id).catch((err) => {
           toastError(`Error stopping ${workspace.name}.`);
@@ -39,19 +39,56 @@ function StopWorkspaceButton({
       }}
     >
       Stop Jobs
-    </Button>
+    </ButtonComponent>
+  );
+}
+
+function StopWorkspaceAlertButton(props: ButtonProps) {
+  return <Button {...props}>Stop Jobs</Button>;
+}
+
+function StopWorkspaceAlert() {
+  const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
+  const runningWorkspace = findRunningWorkspace(workspacesList);
+
+  if (!runningWorkspace) {
+    return null;
+  }
+
+  return (
+    <Alert
+      severity="warning"
+      sx={{
+        '.MuiAlert-message': {
+          flexGrow: 1,
+        },
+        alignItems: 'center',
+      }}
+    >
+      <Stack direction="row" justifyContent="space-between" alignItems="center">
+        <Typography variant="body2">
+          {runningWorkspace.name} is running. Stop jobs before editing that workspace.
+        </Typography>
+        <StopWorkspaceButton
+          handleStopWorkspace={handleStopWorkspace}
+          isStoppingWorkspace={isStoppingWorkspace}
+          workspace={runningWorkspace}
+          button={StopWorkspaceAlertButton}
+        />
+      </Stack>
+    </Alert>
   );
 }
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const { workspace, button: Button } = props;
+  const { workspace, button: ButtonComponent } = props;
   const { handleLaunchWorkspace } = useLaunchWorkspace(workspace);
   const { toastError } = useSnackbarActions();
   if (workspace.status === 'deleting') {
     return (
-      <Button type="button" disabled size="small">
+      <ButtonComponent type="button" disabled size="small">
         Deleting...
-      </Button>
+      </ButtonComponent>
     );
   }
   return (
@@ -75,4 +112,5 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
   );
 }
 
+export { StopWorkspaceAlert };
 export default WorkspaceLaunchStopButtons;

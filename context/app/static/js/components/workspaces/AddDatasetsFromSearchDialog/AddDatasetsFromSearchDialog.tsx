@@ -5,12 +5,14 @@ import Box from '@mui/material/Box';
 
 import Step from 'js/shared-styles/surfaces/Step';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
+import { Alert } from 'js/shared-styles/alerts';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { useAddDatasetsFromSearchDialog } from './hooks';
 import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { MergedWorkspace } from '../types';
+import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
 
 function WorkspacesList({
   toggleItem,
@@ -65,6 +67,11 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
       disabled={errorMessages.length > 0}
     >
       <Step title="Select Workspace to Edit" index={0}>
+        <Alert severity="info" sx={{ mb: 2 }}>
+          Only one workspace can be selected at a time for editing. Workspaces that are running cannot be edited until
+          all jobs are stopped.
+        </Alert>
+        <StopWorkspaceAlert />
         <Stack spacing={3}>
           <WorkspacesList
             selectedWorkspace={selectedWorkspace}
