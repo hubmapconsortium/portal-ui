@@ -85,7 +85,7 @@ function useDatasetsAccessLevel(ids: string[]) {
     _source: ['mapped_data_access_level', 'hubmap_id'],
     size: ids.length,
   };
-  const { searchHits: datasets } = useSearchHits(query) as { searchHits: DatasetAccessLevelHits[] };
+  const { searchHits: datasets } = useSearchHits<DatasetAccessLevelHits>(query);
   return { datasets };
 }
 

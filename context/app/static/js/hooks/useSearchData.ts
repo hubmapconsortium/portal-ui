@@ -81,12 +81,12 @@ interface UseSearchDataConfig extends SWRConfiguration {
 }
 
 interface UseSearchData<Documents, Aggs = Record<string, AggregationsAggregate>> {
-  searchData: SearchResponseBody<Documents, Aggs> | undefined;
+  searchData: SearchResponseBody<Documents, Aggs>;
   isLoading: boolean;
 }
 
 interface UseHitsData<Documents> {
-  searchHits: SearchHit<Documents>[] | undefined;
+  searchHits: NonNullable<Required<SearchHit<Documents>>[]>;
   isLoading: boolean;
 }
 
@@ -106,13 +106,10 @@ export default function useSearchData<Documents, Aggs>(
 ): UseSearchData<Documents, Aggs> {
   const requestInit = useRequestInit({ query, useDefaultQuery });
 
-  const { data: searchData, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>(
-    { query, requestInit },
-    fetcher,
-    swrConfig,
-  );
+  const { data, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>({ query, requestInit }, fetcher, swrConfig);
 
-  return { searchData, isLoading };
+  // The data is guaranteed to be defined because we provide a fallbackData
+  return { searchData: data!, isLoading };
 }
 
 export function useSearchHits<Documents>(
@@ -124,7 +121,7 @@ export function useSearchHits<Documents>(
   }: UseSearchDataConfig | undefined = defaultConfig,
 ): UseHitsData<Documents> {
   const { searchData, isLoading } = useSearchData(query, { useDefaultQuery, fetcher, ...swrConfig });
-  const searchHits = (searchData?.hits?.hits ?? []) as SearchHit<Documents>[];
+  const searchHits = (searchData?.hits?.hits ?? []) as Required<SearchHit<Documents>>[];
   return { searchHits, isLoading };
 }
 
@@ -324,4 +321,13 @@ export function useSearchTotalHitsCounts(
   );
 
   return { totalHitsCounts: searchData?.map((d) => getTotalHitsCount(d)), isLoading };
+}
+
+// Misc utils
+
+// Legacy adapter for `useSearchkitSDK.js`
+export function fetchSearchData<Documents, Aggs>(query: SearchRequest, url: string, token: string) {
+  const body = createSearchRequestBody({ query, useDefaultQuery: false });
+  const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
+  return fetch<SearchResponseBody<Documents, Aggs>>({ url, requestInit });
 }

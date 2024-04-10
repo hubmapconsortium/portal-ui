@@ -1,7 +1,7 @@
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
 import { buildCollectionsPanelsProps } from './utils';
-import { CollectionSearchHits } from './types';
+import { CollectionHit } from './types';
 
 const query = {
   ...getAllCollectionsQuery,
@@ -10,7 +10,7 @@ const query = {
 };
 
 function useCollections() {
-  const { searchHits: collectionsData } = useSearchHits(query) as CollectionSearchHits;
+  const { searchHits: collectionsData } = useSearchHits<CollectionHit>(query);
   return buildCollectionsPanelsProps(collectionsData);
 }
 

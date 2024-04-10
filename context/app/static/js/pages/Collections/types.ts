@@ -14,4 +14,4 @@ interface CollectionSearchHits {
   searchHits: CollectionHit[];
 }
 
-export type { CollectionSearchHits, CollectionHit };
+export type { CollectionSearchHits, CollectionHit, Collection };

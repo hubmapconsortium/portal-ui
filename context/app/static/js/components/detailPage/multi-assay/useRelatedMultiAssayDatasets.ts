@@ -1,6 +1,6 @@
 import { produce } from 'immer';
 
-import { useSearchHits, Hits } from 'js/hooks/useSearchData';
+import { useSearchHits } from 'js/hooks/useSearchData';
 import { useFlaskDataContext, Dataset } from 'js/components/Contexts';
 
 const source = [
@@ -89,8 +89,6 @@ export type MultiAssayEntity = Pick<
   | 'last_modified_timestamp'
 >;
 
-type MultiAssayHits = Hits<MultiAssayEntity>;
-
 function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 'processing' | 'is_component'>) {
   if (is_component) {
     return 'component';
@@ -121,22 +119,27 @@ function useRelatedMultiAssayDatasets() {
   const { uuid } = entity;
   const isPrimary = getMultiAssayType(entity) === 'raw';
 
-  const { searchHits: primaryHits, isLoading: isLoadingPrimary } = useSearchHits(getPrimaryMultiAssay(uuid), {
-    shouldFetch: !isPrimary,
-  }) as MultiAssayHits;
+  const { searchHits: primaryHits, isLoading: isLoadingPrimary } = useSearchHits<MultiAssayEntity>(
+    getPrimaryMultiAssay(uuid),
+    {
+      shouldFetch: !isPrimary,
+    },
+  );
 
-  const primary = primaryHits[0]?._source ?? entity;
+  const primary = primaryHits?.[0]?._source ?? entity;
 
-  const { searchHits: primaryDescendantHits, isLoading: isLoadingDescendants } = useSearchHits(
+  const { searchHits: primaryDescendantHits, isLoading: isLoadingDescendants } = useSearchHits<MultiAssayEntity>(
     getPrimaryDescendants(primary ? primary.uuid : ''),
     {
       shouldFetch: Boolean(primary),
     },
-  ) as MultiAssayHits;
+  );
+
+  const entities = [primary, ...(primaryDescendantHits ?? []).map((hit) => hit?._source)].filter(Boolean);
 
   return {
     datasets: buildRelatedDatasets({
-      entities: [primary, ...primaryDescendantHits.map((hit) => hit?._source)].filter((e) => e !== undefined),
+      entities,
     }),
     isLoading: isLoadingPrimary || isLoadingDescendants,
   };
