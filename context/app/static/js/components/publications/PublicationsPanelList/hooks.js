@@ -1,4 +1,4 @@
-import useSearchData, { fetchSearchData } from 'js/hooks/useSearchData';
+import useSearchData from 'js/hooks/useSearchData';
 import { fetcher } from 'js/helpers/swr';
 import { buildPublicationPanelProps } from './utils';
 
