@@ -1,1 +1,0 @@
-- Correct a typo which caused the metadata table to not display.
