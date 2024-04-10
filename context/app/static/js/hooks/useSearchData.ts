@@ -105,8 +105,13 @@ export default function useSearchData<Documents, Aggs>(
   }: UseSearchDataConfig | undefined = defaultConfig,
 ): UseSearchData<Documents, Aggs> {
   const requestInit = useRequestInit({ query, useDefaultQuery });
+  const { elasticsearchEndpoint } = useAppContext();
 
-  const { data, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>({ query, requestInit }, fetcher, swrConfig);
+  const { data, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>(
+    { query, requestInit, url: elasticsearchEndpoint },
+    fetcher,
+    swrConfig,
+  );
 
   // The data is guaranteed to be defined because we provide a fallbackData
   return { searchData: data!, isLoading };
@@ -157,9 +162,10 @@ export function useMultiSearchData<Documents, Aggs>(
   { useDefaultQuery = false, fetcher = multiFetch, ...swrConfig }: UseSearchDataConfig = defaultMultiFetchConfig,
 ): UseMultiSearchData<Documents, Aggs> {
   const requestInits = useRequestInits({ queries, useDefaultQuery });
+  const { elasticsearchEndpoint } = useAppContext();
 
   const { data: searchData, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>[]>(
-    { queries, requestInits },
+    { queries, requestInits, url: elasticsearchEndpoint },
     fetcher,
     swrConfig,
   );
