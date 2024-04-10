@@ -1,3 +1,8 @@
+## v0.94.1 - 2024-04-10
+
+- Remove extra "s" on provenance tables.
+
+
 ## v0.94.0 - 2024-04-10
 
 - Add optional parameter to dev docker.sh to allow for alternate image name.
