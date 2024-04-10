@@ -1,7 +1,8 @@
+import { CollectionHit } from './types';
 import { buildCollectionsPanelsProps } from './utils';
 
 test('should return the props require for the panel list', () => {
-  const collections = [
+  const collections: CollectionHit[] = [
     {
       _source: {
         uuid: 'abc123',
