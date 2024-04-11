@@ -44,7 +44,6 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
             />
           ),
         )}
-        s
       </Stack>
     </>
   );
