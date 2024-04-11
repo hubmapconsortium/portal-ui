@@ -13,7 +13,7 @@ export interface FormWithTemplates {
 }
 interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
-  'protected-datasets': undefined;
+  'protected-datasets': string;
 }
 
 interface UseCreateWorkspaceTypes {
@@ -37,7 +37,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
   } = useForm({
     defaultValues: {
       'workspace-name': defaultName ?? '',
-      'protected-datasets': undefined,
+      'protected-datasets': '',
       templates: [],
     },
     mode: 'onChange',

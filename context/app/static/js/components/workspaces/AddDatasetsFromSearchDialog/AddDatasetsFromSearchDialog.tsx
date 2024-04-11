@@ -13,6 +13,7 @@ import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { MergedWorkspace } from '../types';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
+import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 
 function WorkspacesList({
   toggleItem,
@@ -50,6 +51,10 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
     errorMessages,
     selectedWorkspace,
     setSelectedWorkspace,
+    control,
+    protectedHubmapIds,
+    removeProtectedDatasets,
+    protectedRows,
     ...rest
   } = useAddDatasetsFromSearchDialog({
     initialWorkspaceId: inititialWorkspace.id,
@@ -82,6 +87,12 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
       <Step title="Add Datasets" index={1}>
         <Stack spacing={3}>
           {errorMessages.length > 0 && <ErrorMessages errorMessages={errorMessages} />}
+          <RemoveProtectedDatasetsFormField
+            control={control}
+            protectedHubmapIds={protectedHubmapIds}
+            removeProtectedDatasets={removeProtectedDatasets}
+            protectedRows={protectedRows}
+          />
           <AddDatasetsTable {...rest} />
         </Stack>
       </Step>

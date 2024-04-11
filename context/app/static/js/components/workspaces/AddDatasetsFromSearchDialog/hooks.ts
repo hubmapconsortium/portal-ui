@@ -8,6 +8,7 @@ import { useUpdateWorkspaceDatasets } from '../hooks';
 import {
   datasetsField as datasetsFieldSchema,
   workspaceIdField as workspaceIdFieldSchema,
+  protectedDatasetsField,
 } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
 import { useProtectedDatasetsForm, useTooManyDatasetsErrors } from '../formHooks';
@@ -15,12 +16,14 @@ import { useProtectedDatasetsForm, useTooManyDatasetsErrors } from '../formHooks
 export interface AddDatasetsFromSearchFormTypes {
   datasets: string[];
   workspaceId: number;
+  protectedDatasets: string;
 }
 
 const schema = z
   .object({
     ...datasetsFieldSchema,
     ...workspaceIdFieldSchema,
+    ...protectedDatasetsField,
   })
   .required({ datasets: true, workspaceId: true });
 
@@ -41,6 +44,7 @@ function useAddWorkspaceDatasetsFromSearchForm({
     defaultValues: {
       datasets: initialDatasetUUIDs,
       workspaceId: initialWorkspaceId,
+      protectedDatasets: undefined,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -56,7 +60,11 @@ function useAddWorkspaceDatasetsFromSearchForm({
   };
 }
 function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspaceId: number }) {
-  const { selectedRows, errorMessages: protectedDatasetsErrorMessages } = useProtectedDatasetsForm();
+  const {
+    selectedRows,
+    errorMessages: protectedDatasetsErrorMessages,
+    ...restProtectedDatasets
+  } = useProtectedDatasetsForm();
   const datasetsFromSearch = useMemo(() => [...selectedRows], [selectedRows]);
 
   const { handleSubmit, isSubmitting, control, errors, reset, setValue } = useAddWorkspaceDatasetsFromSearchForm({
@@ -123,6 +131,7 @@ function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspa
   }
 
   return {
+    control,
     autocompleteValue,
     inputValue,
     setInputValue,
@@ -140,6 +149,7 @@ function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspa
     errorMessages,
     selectedWorkspace,
     setSelectedWorkspace,
+    ...restProtectedDatasets,
   };
 }
 
