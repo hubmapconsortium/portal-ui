@@ -1,3 +1,5 @@
+import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+
 export function isEmptyArrayOrObject(val: object | unknown[]) {
   if (val.constructor.name === 'Object') {
     return Object.keys(val).length === 0;
@@ -52,7 +54,7 @@ export function getTokenParam(groupsToken: string) {
   return groupsToken ? `?token=${groupsToken}` : '';
 }
 
-export function getAuthHeader(groupsToken: string) {
+export function getAuthHeader(groupsToken: string): HeadersInit {
   return groupsToken
     ? {
         Authorization: `Bearer ${groupsToken}`,
@@ -117,12 +119,7 @@ export function combineQueryClauses(queries: object | object[]) {
   };
 }
 
-interface QueryObject {
-  query?: object;
-  [key: string]: unknown;
-}
-
-export function addRestrictionsToQuery({ query, ...rest }: QueryObject) {
+export function addRestrictionsToQuery({ query, ...rest }: SearchRequest): SearchRequest {
   const defaultQuery = getDefaultQuery();
   const queries = query ? [query, defaultQuery] : [defaultQuery];
 

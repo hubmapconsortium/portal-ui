@@ -1,3 +1,5 @@
+import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+
 interface Collection {
   uuid: string;
   title: string;
@@ -5,13 +7,6 @@ interface Collection {
   datasets: { hubmap_id: string }[];
 }
 
-interface CollectionHit {
-  _source: Collection;
-}
+type CollectionHit = Pick<Required<SearchHit<Collection>>, '_source'>;
 
-interface CollectionSearchHits {
-  isLoading: boolean;
-  searchHits: CollectionHit[];
-}
-
-export type { CollectionSearchHits, CollectionHit };
+export type { Collection, CollectionHit };

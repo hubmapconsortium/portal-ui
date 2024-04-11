@@ -41,7 +41,7 @@ function useNumericFieldsStats(entityType) {
   const query = useMemo(() => getNumericFieldStatsQuery(entityType), [entityType]);
   const {
     searchData: { aggregations: fieldsStats },
-  } = useSearchData(query, false);
+  } = useSearchData(query);
 
   return fieldsStats || {};
 }

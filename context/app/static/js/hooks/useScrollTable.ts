@@ -27,7 +27,7 @@ function useScrollTable<Document>({ query, columnNameMapping, initialSortState }
 
   const { sortState, setSort, sort } = useSortState(columnNameMapping, initialSortState);
 
-  const queryWithSort = { ...query, sort };
+  const queryWithSort = { ...query, sort } as SearchRequest;
 
   const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(
     queryWithSort,
