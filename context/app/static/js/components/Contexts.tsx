@@ -2,7 +2,7 @@ import { useContext, createContext } from 'js/helpers/context';
 
 // TODO: Continue populating these types as we find more of the uses of the flask data and app contexts
 
-type DagProvenanceType =
+export type DagProvenanceType =
   | {
       origin: string;
     }

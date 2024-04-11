@@ -60,7 +60,7 @@ function DataProducts({ files }: DataProductsProps) {
           <DownloadAllButton onDownloadAll={onDownloadAll} disabled={downloadAllClicked} />
           {downloadAllClicked && <MultiFileDownloader files={downloadLinks} />}
         </Box>
-        <Stack divider={<Divider />}>
+        <Stack divider={<Divider />} maxHeight="35rem" overflow="auto">
           {dataProducts.map((file) => (
             <DataProduct file={file} key={file.rel_path} />
           ))}
