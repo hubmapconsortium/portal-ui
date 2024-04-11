@@ -17,10 +17,10 @@ const defaultPipeline: PipelineInfo = {
 };
 
 // Values that should not be displayed as pipeline info
-const originBlacklist = ['https://github.com/hubmapconsortium/portal-containers'];
+const originDenylist = ['https://github.com/hubmapconsortium/portal-containers'];
 
 // Undescriptive pipeline names which should be replaced with GitHub repo names
-const nameBlacklist = ['pipeline.cwl'];
+const nameDenylist = ['pipeline.cwl'];
 
 function getGithubRepoName(origin: string) {
   const match = origin.match(/github.com\/([^/]+)\/([^/]+)(\/|$)/);
@@ -37,17 +37,16 @@ function getGithubRepoName(origin: string) {
 function usePipelineInfo(): PipelineInfo {
   const { entity } = useFlaskDataContext();
   const dagList = entity.metadata.dag_provenance_list ?? [];
-  console.log({ dagList });
   // Iterate over the list of DAGs and extract the latest origin and name
   const pipelineInfo = dagList.reduce<PipelineInfo>((acc, dag) => {
     if ('origin' in dag) {
-      if (originBlacklist.includes(dag.origin)) {
+      if (originDenylist.includes(dag.origin)) {
         return acc;
       }
       acc.origin = dag.origin;
     }
     if ('name' in dag) {
-      if (nameBlacklist.includes(dag.name)) {
+      if (nameDenylist.includes(dag.name)) {
         acc.name = getGithubRepoName(acc.origin);
       } else {
         acc.name = dag.name;
