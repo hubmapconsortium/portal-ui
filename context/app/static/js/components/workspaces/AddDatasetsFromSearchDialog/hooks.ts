@@ -3,15 +3,14 @@ import { useForm, useController } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useUpdateWorkspaceDatasets } from '../hooks';
-import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 import {
   datasetsField as datasetsFieldSchema,
   workspaceIdField as workspaceIdFieldSchema,
 } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
+import { useProtectedDatasetsForm, useTooManyDatasetsErrors } from '../formHooks';
 
 export interface AddDatasetsFromSearchFormTypes {
   datasets: string[];
@@ -56,13 +55,8 @@ function useAddWorkspaceDatasetsFromSearchForm({
     isSubmitting: isSubmitting || isSubmitSuccessful,
   };
 }
-
-const tooManyDatasetsMessage =
-  'Workspaces can currently only contain 10 datasets. Datasets can no longer be added to this workspace unless datasets are removed.';
-
 function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspaceId: number }) {
-  const { selectedRows } = useSelectableTableStore();
-
+  const { selectedRows, errorMessages: protectedDatasetsErrorMessages } = useProtectedDatasetsForm();
   const datasetsFromSearch = useMemo(() => [...selectedRows], [selectedRows]);
 
   const { handleSubmit, isSubmitting, control, errors, reset, setValue } = useAddWorkspaceDatasetsFromSearchForm({
@@ -117,16 +111,15 @@ function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspa
   }, [datasetsFromSearch, setValue, setSelectedDatasets, isOpen]);
   const [selectedWorkspace, setSelectedWorkspace] = useState(workspaceIdField.value);
 
-  const errorMessage = datasetsFieldState?.error?.message;
-  const tooManyDatasetsSelected = selectedDatasets.size + workspaceDatasets.length > MAX_NUMBER_OF_WORKSPACE_DATASETS;
+  const datasetErrorMessage = datasetsFieldState?.error?.message;
+  const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({
+    numWorkspaceDatasets: selectedDatasets.size + workspaceDatasets.length,
+  });
 
-  const errorMessages = [];
+  const errorMessages = [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages];
 
-  if (tooManyDatasetsSelected) {
-    errorMessages.push(tooManyDatasetsMessage);
-  }
-  if (errorMessage) {
-    errorMessages.push(errorMessage);
+  if (datasetErrorMessage) {
+    errorMessages.push(datasetErrorMessage);
   }
 
   return {

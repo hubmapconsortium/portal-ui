@@ -16,7 +16,7 @@ const workspaceNameField = {
     .max(150),
 };
 
-const protectedDatasetsField = { 'protected-datasets': z.string() };
+const protectedDatasetsField = { 'protected-datasets': z.string().length(0) };
 
 const templatesField = {
   templates: z

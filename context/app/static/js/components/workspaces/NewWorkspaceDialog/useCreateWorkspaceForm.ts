@@ -3,11 +3,10 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { useSearchHits } from 'js/hooks/useSearchData';
-import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { CreateTemplateNotebooksTypes } from '../types';
 import { useTemplateNotebooks } from './hooks';
 import { workspaceNameField, protectedDatasetsField, templatesField } from '../workspaceFormFields';
+import { useProtectedDatasetsForm, useTooManyDatasetsErrors } from '../formHooks';
 
 export interface FormWithTemplates {
   templates: string[];
@@ -69,24 +68,11 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
   };
 }
 
-interface DatasetAccessLevelHits {
-  mapped_data_access_level: 'Public' | 'Protected';
-  hubmap_id: string;
-  [key: string]: unknown;
+function useCreateWorkspaceDatasets() {
+  const { errorMessages: protectedDatasetsErrorMessages, selectedRows, ...rest } = useProtectedDatasetsForm();
+  const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({ numWorkspaceDatasets: selectedRows.size });
+
+  return { errorMessages: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages], selectedRows, ...rest };
 }
 
-function useDatasetsAccessLevel(ids: string[]) {
-  const query = {
-    query: {
-      bool: {
-        must: [getIDsQuery(ids), getTermClause('mapped_data_access_level.keyword', 'Protected')],
-      },
-    },
-    _source: ['mapped_data_access_level', 'hubmap_id'],
-    size: ids.length,
-  };
-  const { searchHits: datasets } = useSearchHits(query) as { searchHits: DatasetAccessLevelHits[] };
-  return { datasets };
-}
-
-export { useCreateWorkspaceForm, useDatasetsAccessLevel, type CreateWorkspaceFormTypes };
+export { useCreateWorkspaceForm, useCreateWorkspaceDatasets, type CreateWorkspaceFormTypes };

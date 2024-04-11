@@ -5,9 +5,9 @@ import { z } from 'zod';
 
 import { Workspace } from '../types';
 import { useUpdateWorkspaceDatasets } from '../hooks';
-import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 import { datasetsField } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
+import { useTooManyDatasetsErrors } from '../formHooks';
 
 export interface AddDatasetsFormTypes {
   datasets: string[];
@@ -42,10 +42,6 @@ function useAddWorkspaceDatasetsForm() {
     isSubmitting: isSubmitting || isSubmitSuccessful,
   };
 }
-
-const tooManyDatasetsMessage =
-  'Workspaces can currently only contain 10 datasets. Datasets can no longer be added to this workspace unless datasets are removed.';
-
 function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
   const workspaceId = workspace.id;
 
@@ -84,13 +80,11 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
   );
 
   const errorMessage = fieldState?.error?.message;
-  const tooManyDatasetsSelected = selectedDatasets.size + workspaceDatasets.length > MAX_NUMBER_OF_WORKSPACE_DATASETS;
+  const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({
+    numWorkspaceDatasets: selectedDatasets.size + workspaceDatasets.length,
+  });
+  const errorMessages = [...tooManyDatasetsErrorMessages];
 
-  const errorMessages = [];
-
-  if (tooManyDatasetsSelected) {
-    errorMessages.push(tooManyDatasetsMessage);
-  }
   if (errorMessage) {
     errorMessages.push(errorMessage);
   }
