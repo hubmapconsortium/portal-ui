@@ -113,6 +113,14 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
     return null;
   }
 
+  const handleWarning = (message) => {
+    // Suppress the "Node not found" message that appears when no zarr file was found
+    if (message.includes('Node not found')) {
+      return;
+    }
+    toastError(message);
+  };
+
   return (
     // Don't render multi-datasets unless they have a selection from the list of options in vitessceConfig.
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
@@ -160,7 +168,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
                   theme={vizTheme}
                   onConfigChange={setVitessceStateDebounced}
                   height={vizIsFullscreen ? null : vitessceFixedHeight}
-                  onWarn={toastError}
+                  onWarn={handleWarning}
                 />
               </VisualizationTracker>
             )}
