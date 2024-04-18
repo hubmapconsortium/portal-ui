@@ -1,0 +1,2 @@
+cd context
+npm run pre-commit
