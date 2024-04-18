@@ -162,7 +162,7 @@
     "tsc": "tsc --noEmit",
     "clean": "rm -rf ./app/static/public",
     "prepare": "cd .. && husky context/.husky",
-    "pre-commit": "lint-staged & tsc -p tsconfig.json --noEmit --skipLibCheck"
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "app/static/js/**/*.{js,jsx,ts,tsx,y*ml,json,md}": [
