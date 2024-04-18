@@ -33,9 +33,9 @@ function validateWorkspaceStatus(status: string): status is WorkspaceStatus {
 // Jobs:
 
 export type JobStatus = 'pending' | 'running' | 'stopping' | 'complete' | 'failed';
-const ACTIVE = 'Active' as const;
-const ACTIVATING = 'Activating' as const;
-const INACTIVE = 'Inactive' as const;
+const ACTIVE = 'Active';
+const ACTIVATING = 'Activating';
+const INACTIVE = 'Inactive';
 export type JobStatusDisplayName = typeof ACTIVE | typeof ACTIVATING | typeof INACTIVE;
 
 const JOB_DISPLAY_NAMES = [ACTIVE, ACTIVATING, INACTIVE];
