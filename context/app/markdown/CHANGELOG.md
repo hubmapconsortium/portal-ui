@@ -1,3 +1,13 @@
+## v0.94.2 - 2024-04-18
+
+- Added handling for visualizations of multiomic data.
+- Improve usefulness of data products section by ensuring correct pipeline is linked as the source instead of portal containers and using GitHub repo names as a fallback for `pipeline.cwl`.
+- Improve usability of data products section for datasets with many products by enabling scrolling.
+- Bump Node to v20.12.0.
+- Update various front-end dependencies.
+- Migrate husky configuration to v9.
+
+
 ## v0.94.1 - 2024-04-10
 
 - Remove extra "s" on provenance tables.
