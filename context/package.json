@@ -160,17 +160,14 @@
     "storybook": "storybook dev -p 6006 -s app/static/storybook-public/",
     "build-storybook": "storybook build",
     "tsc": "tsc --noEmit",
-    "clean": "rm -rf ./app/static/public"
+    "clean": "rm -rf ./app/static/public",
+    "prepare": "cd .. && husky context/.husky",
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "app/static/js/**/*.{js,jsx,ts,tsx,y*ml,json,md}": [
       "eslint -c .eslintrc.yml"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged & tsc -p tsconfig.json --noEmit --skipLibCheck"
-    }
   },
   "msw": {
     "workerDirectory": "app/static/storybook-public"

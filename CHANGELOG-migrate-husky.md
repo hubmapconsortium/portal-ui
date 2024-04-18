@@ -1,0 +1,1 @@
+- Migrate husky configuration to v9.
