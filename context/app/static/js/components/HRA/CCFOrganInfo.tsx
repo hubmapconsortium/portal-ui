@@ -48,7 +48,7 @@ function CCFOrganInfo({
     <OrganInfo
       organ-iri={uberonIri}
       use-remote-api={remoteApi}
-      remote-api-endpoint={defaultRemoteApiEndpoint}
+      remote-api-endpoint={remoteApiEndpoint}
       nodeClick={onNodeClick}
       sexChange={onSexChange}
       sideChange={onSideChange}
