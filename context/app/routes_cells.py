@@ -1,4 +1,5 @@
 from itertools import islice, groupby
+from posixpath import dirname
 import time
 
 from flask import render_template, current_app, request
@@ -15,6 +16,9 @@ from collections import defaultdict
 from dataclasses import dataclass
 
 from functools import cache
+
+from csv import DictReader
+
 
 blueprint = make_blueprint(__name__)
 
@@ -82,13 +86,19 @@ def _get_protein_ids(app):
 @cache
 def _get_cell_ids(app):
     client = _get_client(app)
-    cell_label_ids = tuple([cell["grouping_name"]
-                           for cell in client.select_cell_types().get_list()])
-    return cell_label_ids
+    cell_label_ids = [cell["grouping_name"] for cell in client.select_celltypes().get_list()]
+    with open(f'{dirname(__file__)}/all_labels.csv') as f:
+        # Read in each row as a dictionary and store them in a list
+        all_labels = DictReader(f, delimiter=',', fieldnames=[
+                                'Organ_Level', 'A_L', 'A_ID', 'Label', 'CL_ID', 'CL_Match'])
+        all_labels = list(all_labels)
+        # Filter labels to only include the ones that are in the cell_label_ids
+        all_labels = tuple([label for label in all_labels if label['CL_ID'] in cell_label_ids])
+
+    return all_labels
 
 
 @timeit
-@cache
 def _first_n_matches(strings, substring, n):
     '''
     >>> strings = [f'fake{n}' for n in range(200)]
@@ -286,6 +296,26 @@ def proteins_by_substring():
 
 
 @timeit
+@blueprint.route('/cells/cell-types-by-substring.json', methods=['POST'])
+def cell_types_by_substring():
+    substring = request.args.get('substring')
+    cell_types = _get_cell_ids(current_app)
+    results = []
+    # Enable lookups by CLID or Label name
+    if substring.startswith('CL:'):
+        # Do initial lookup by CLID
+        clids = [result['full'] for result in _first_n_matches(
+            [cell['CL_ID'] for cell in cell_types], substring, 10)]
+        # Match the found CLIDs with their corresponding labels
+        labels = [translate_clid(clid) for clid in clids]
+        # Format results as expected by the frontend
+        results = [{'full': l, 'pre': l, 'match': '', 'post': ''} for l in labels]
+    else:
+        results = _first_n_matches([cell['Label'] for cell in cell_types], substring, 10)
+    return {'results': results}
+
+
+@timeit
 @blueprint.route('/cells/datasets-selected-by-<target_entity>.json', methods=['POST'])
 def datasets_selected_by_level(target_entity):
     cell_variable_names = request.args.getlist('cell_variable_name')
@@ -385,3 +415,12 @@ def cells_in_dataset_clusters():
                 cells=_get_cluster_cells(cells=cells_list,
                                          cell_variable_name=cell_variable_name,
                                          min_expression=float(min_expression)))}
+
+
+@cache
+def translate_clid(clid):
+    cell_labels = _get_cell_ids(current_app)
+    for cell in cell_labels:
+        if cell['CL_ID'] == clid:
+            return cell['Label']
+    raise KeyError(f'CLID {clid} not found in cell_labels')
