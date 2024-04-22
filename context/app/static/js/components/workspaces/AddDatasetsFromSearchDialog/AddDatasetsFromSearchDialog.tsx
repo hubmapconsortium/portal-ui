@@ -50,7 +50,7 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
     resetAutocompleteState,
     errorMessages,
     selectedWorkspace,
-    setSelectedWorkspace,
+    selectWorkspace,
     control,
     protectedHubmapIds,
     removeProtectedDatasets,
@@ -78,10 +78,7 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
         </Alert>
         <StopWorkspaceAlert />
         <Stack spacing={3}>
-          <WorkspacesList
-            selectedWorkspace={selectedWorkspace}
-            toggleItem={(workspaceId: number) => setSelectedWorkspace(workspaceId)}
-          />
+          <WorkspacesList selectedWorkspace={selectedWorkspace} toggleItem={selectWorkspace} />
         </Stack>
       </Step>
       <Step title="Add Datasets" index={1}>

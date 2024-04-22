@@ -10,7 +10,7 @@ import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
 import { Dataset } from '../Contexts';
 
-type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level'>>[];
+type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>>[];
 
 function useDatasetsAccessLevel(ids: string[]) {
   const query = {
@@ -19,7 +19,7 @@ function useDatasetsAccessLevel(ids: string[]) {
         must: [getIDsQuery(ids), getTermClause('mapped_data_access_level.keyword', 'Protected')],
       },
     },
-    _source: ['mapped_data_access_level', 'hubmap_id'],
+    _source: ['mapped_data_access_level', 'hubmap_id', 'uuid'],
     size: ids.length,
   };
   const { searchHits: datasets } = useSearchHits(query) as { searchHits: DatasetAccessLevelHits };
