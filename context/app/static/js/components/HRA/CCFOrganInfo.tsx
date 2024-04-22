@@ -8,7 +8,7 @@ import { HRAEvent } from './types';
 
 interface CCFOrganInfoProps {
   uberonIri: string;
-  dataSources?: string;
+  remoteApiEndpoint?: string;
   remoteApi?: string;
   onNodeClick?: (event: HRAEvent) => void;
   onSexChange?: (event: HRAEvent) => void;
