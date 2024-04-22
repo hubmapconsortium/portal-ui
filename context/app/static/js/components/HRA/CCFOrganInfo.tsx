@@ -24,7 +24,7 @@ interface RawOrganProps {
   sideChange?: (event: HRAEvent) => void;
 }
 
-const defaultDataSources = '["https://ccf-api.hubmapconsortium.org/v1/hubmap/rui_locations.jsonld"]';
+const defaultRemoteApiEndpoint = 'https://apps.humanatlas.io/hubmap-hra-api/v1';
 
 const HRAOrganScript = 'https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3/organ-info/wc.js';
 const HRAOrganStyles = 'https://cdn.jsdelivr.net/gh/hubmapconsortium/ccf-ui@3/organ-info/styles.css';
@@ -35,8 +35,8 @@ const OrganInfo = reactifyWc('ccf-organ-info', {
 
 function CCFOrganInfo({
   uberonIri,
-  dataSources = defaultDataSources,
-  remoteApi = 'false',
+  remoteApiEndpoint = defaultRemoteApiEndpoint,
+  remoteApi = 'true',
   onNodeClick,
   onSexChange,
   onSideChange,
@@ -48,7 +48,7 @@ function CCFOrganInfo({
     <OrganInfo
       organ-iri={uberonIri}
       use-remote-api={remoteApi}
-      data-sources={dataSources}
+      remote-api-endpoint={defaultRemoteApiEndpoint}
       nodeClick={onNodeClick}
       sexChange={onSexChange}
       sideChange={onSideChange}
