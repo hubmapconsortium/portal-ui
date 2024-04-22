@@ -14,6 +14,8 @@ from collections import defaultdict
 
 from dataclasses import dataclass
 
+from functools import cache
+
 blueprint = make_blueprint(__name__)
 
 
@@ -39,10 +41,6 @@ def _get_client(app):
     return Client(app.config['XMODALITY_ENDPOINT'] + '/api/')
 
 
-# TODO: In python 3.9, functools.cache would be better.
-gene_symbols = None
-
-
 def timeit(f):
     def timed(*args, **kwargs):
         limit = 20
@@ -65,27 +63,32 @@ def timeit(f):
 
 
 @timeit
+@cache
 def _get_gene_symbols(app):
     client = _get_client(app)
-    global gene_symbols
-    if gene_symbols is None:
-        gene_symbols = [gene["gene_symbol"] for gene in client.select_genes().get_list()]
+    gene_symbols = tuple([gene["gene_symbol"] for gene in client.select_genes().get_list()])
     return gene_symbols
 
 
-protein_ids = None
-
-
 @timeit
+@cache
 def _get_protein_ids(app):
     client = _get_client(app)
-    global protein_ids
-    if protein_ids is None:
-        protein_ids = [protein["protein_id"] for protein in client.select_proteins().get_list()]
+    protein_ids = tuple([protein["protein_id"] for protein in client.select_proteins().get_list()])
     return protein_ids
 
 
 @timeit
+@cache
+def _get_cell_ids(app):
+    client = _get_client(app)
+    cell_label_ids = tuple([cell["grouping_name"]
+                           for cell in client.select_cell_types().get_list()])
+    return cell_label_ids
+
+
+@timeit
+@cache
 def _first_n_matches(strings, substring, n):
     '''
     >>> strings = [f'fake{n}' for n in range(200)]
