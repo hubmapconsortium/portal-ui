@@ -17,7 +17,7 @@ interface CCFOrganInfoProps {
 
 interface RawOrganProps {
   'organ-iri': string;
-  'data-sources': string;
+  'remote-api-endpoint': string;
   'use-remote-api': string;
   nodeClick?: (event: HRAEvent) => void;
   sexChange?: (event: HRAEvent) => void;
