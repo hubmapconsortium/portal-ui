@@ -3,6 +3,7 @@ from posixpath import dirname
 import time
 
 from flask import render_template, current_app, request
+# from asyncio import gather, to_thread
 
 from hubmap_api_py_client import Client
 from hubmap_api_py_client.errors import ClientError
@@ -66,6 +67,16 @@ def timeit(f):
     return timed
 
 
+# @timeit
+# async def preload_cells_api(app):
+#     # Preload the gene symbols, protein IDs, and cell IDs on server startup
+#     # so that they are immediately available when the user starts typing.
+
+#     await gather(to_thread(_get_gene_symbols, app),
+#                  to_thread(_get_protein_ids, app),
+#                  to_thread(_get_cell_ids, app))
+
+
 @timeit
 @cache
 def _get_gene_symbols(app):
@@ -94,6 +105,24 @@ def _get_cell_ids(app):
         all_labels = list(all_labels)
         # Filter labels to only include the ones that are in the cell_label_ids
         all_labels = tuple([label for label in all_labels if label['CL_ID'] in cell_label_ids])
+        # Add the CL_ID to the label
+        for label in all_labels:
+            label['Lookup_Label'] = f'{label["Label"]} ({label["CL_ID"]})'
+        # Remove any duplicate labels for the same CLID
+        # while keeping  the one with the shortest name
+        # since the input for the cells API only uses the CLID, having these variants
+        # as separate options is unnecessary and confusing to the user
+        labels_to_remove = []
+        for label in all_labels:
+            duplicate_clids = [l for l in all_labels if l['CL_ID']
+                               == label['CL_ID']]
+            if len(duplicate_clids) > 1:
+                duplicate_clids = sorted(
+                    duplicate_clids, key=lambda x: len(x['Label']))
+                for l in duplicate_clids[1:]:
+                    # Azimuth ID's are unique, so we can use them to remove the duplicates
+                    labels_to_remove.append(l["A_ID"])
+        all_labels = [label for label in all_labels if label["A_ID"] not in labels_to_remove]
 
     return all_labels
 
@@ -270,7 +299,18 @@ def _get_matched_cell_counts_per_cluster(cells):
     grouper = itemgetter(*group_keys)
     clusters = defaultdict(lambda: [])
     for key, grp in groupby(sorted(cells, key=grouper), grouper):
+        is_annotation = key[0] == ''
         grp_list = list(grp)
+        # Re-format the annotation cluster set
+        if (is_annotation):
+            cluster_name = 'Annotation'
+            key = (cluster_name, translate_clid(key[1]), key[2])
+            grp_list = [{
+                'cluster_name': 'Annotation',
+                'cluster_number': translate_clid(item['cluster_number']),
+                'modality': item['modality'],
+                'meets_minimum_expression': item['meets_minimum_expression']
+            } for item in grp_list]
         cluster = dict(zip(group_keys, key))
         matched_count = [item['meets_minimum_expression'] for item in grp_list].count(True)
         cluster.update({
@@ -300,18 +340,7 @@ def proteins_by_substring():
 def cell_types_by_substring():
     substring = request.args.get('substring')
     cell_types = _get_cell_ids(current_app)
-    results = []
-    # Enable lookups by CLID or Label name
-    if substring.startswith('CL:'):
-        # Do initial lookup by CLID
-        clids = [result['full'] for result in _first_n_matches(
-            [cell['CL_ID'] for cell in cell_types], substring, 10)]
-        # Match the found CLIDs with their corresponding labels
-        labels = [translate_clid(clid) for clid in clids]
-        # Format results as expected by the frontend
-        results = [{'full': l, 'pre': l, 'match': '', 'post': ''} for l in labels]
-    else:
-        results = _first_n_matches([cell['Label'] for cell in cell_types], substring, 10)
+    results = _first_n_matches([cell['Lookup_Label'] for cell in cell_types], substring, 10)
     return {'results': results}
 
 
@@ -417,10 +446,9 @@ def cells_in_dataset_clusters():
                                          min_expression=float(min_expression)))}
 
 
-@cache
+# Utility function to translate CLIDs to the Label
 def translate_clid(clid):
-    cell_labels = _get_cell_ids(current_app)
-    for cell in cell_labels:
+    cell_ids = _get_cell_ids(current_app)
+    for cell in cell_ids:
         if cell['CL_ID'] == clid:
             return cell['Label']
-    raise KeyError(f'CLID {clid} not found in cell_labels')

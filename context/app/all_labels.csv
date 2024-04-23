@@ -1,0 +1,128 @@
+heart_celltype.l2,Adipocyte,AZ:0000001,fat cell,CL:0000136,skos:exactMatch
+heart_celltype.l2,Arterial Endothelial,AZ:0000002,endothelial cell of artery,CL:1000413,skos:exactMatch
+heart_celltype.l2,Atrial Cardiomyocyte,AZ:0000003,regular atrial cardiac myocyte,CL:0002129,skos:exactMatch
+heart_celltype.l2,B,AZ:0000004,B cell,CL:0000236,skos:exactMatch
+heart_celltype.l2,Capillary Endothelial,AZ:0000005,capillary endothelial cell,CL:0002144,skos:exactMatch
+heart_celltype.l2,Endocardial,AZ:0000006,endocardial cell,CL:0002350,skos:exactMatch
+heart_celltype.l2,Endothelial,AZ:0000007,endothelial cell,CL:0000115,skos:exactMatch
+heart_celltype.l2,Fibroblast,AZ:0000008,fibroblast,CL:0000057,skos:exactMatch
+heart_celltype.l2,ILC,AZ:0000009,innate lymphoid cell,CL:0001065,skos:exactMatch
+heart_celltype.l2,Lymphatic Endothelial,AZ:0000010,endothelial cell of lymphatic vessel,CL:0002138,skos:exactMatch
+heart_celltype.l2,Macrophage,AZ:0000011,macrophage,CL:0000235,skos:exactMatch
+heart_celltype.l2,Mast,AZ:0000012,mast cell,CL:0000097,skos:exactMatch
+heart_celltype.l2,Mesothelial,AZ:0000013,mesothelial cell,CL:0000077,skos:exactMatch
+heart_celltype.l2,Monocyte/cDC,AZ:0000014,myeloid cell,CL:0000763,skos:narrowMatch
+heart_celltype.l2,Neuronal,AZ:0000015,Schwann cell,CL:0002573,skos:exactMatch
+heart_celltype.l2,NK,AZ:0000016,natural killer cell,CL:0000623,skos:exactMatch
+heart_celltype.l2,Pericyte,AZ:0000017,pericyte,CL:0000669,skos:exactMatch
+heart_celltype.l2,Smooth Muscle,AZ:0000018,smooth muscle cell,CL:0000192,skos:exactMatch
+heart_celltype.l2,T,AZ:0000019,T cell,CL:0000084,skos:exactMatch
+heart_celltype.l2,Venous Endothelial,AZ:0000020,endothelial cell of venule,CL:1000414,skos:exactMatch
+heart_celltype.l2,Ventricular Cardiomycoyte,AZ:0000021,regular ventricular cardiac myocyte,CL:0002131,skos:exactMatch
+kidney_annotation.l3,Afferent / Efferent Arteriole Endothelial,AZ:0000022,endothelial cell of arteriole,CL:1000412,skos:exactMatch
+kidney_annotation.l3,Ascending Thin Limb,AZ:0000023,kidney loop of Henle thin ascending limb epithelial cell,CL:1001107,skos:exactMatch
+kidney_annotation.l3,Ascending Vasa Recta Endothelial,AZ:0000024,vasa recta ascending limb cell,CL:1001131,skos:exactMatch
+kidney_annotation.l3,B,AZ:0000025,B cell,CL:0000236,skos:exactMatch
+kidney_annotation.l3,Classical Dendritic,AZ:0000026,conventional dendritic cell,CL:0000990,skos:exactMatch
+kidney_annotation.l3,Connecting Tubule,AZ:0000027,kidney connecting tubule epithelial cell,CL:1000768,skos:exactMatch
+kidney_annotation.l3,Connecting Tubule Intercalated Type A,AZ:0000028,kidney connecting tubule alpha-intercalated cell,CL:4030020,skos:exactMatch
+kidney_annotation.l3,Connecting Tubule Principal,AZ:0000029,kidney connecting tubule principal cell,CL:4030018,skos:exactMatch
+kidney_annotation.l3,Cortical Collecting Duct Intercalated Type A,AZ:0000030,kidney cortex collecting duct intercalated cell,CL:1000715,skos:exactMatch
+kidney_annotation.l3,Cortical Collecting Duct Principal,AZ:0000031,kidney cortex collecting duct principal cell,CL:1000714,skos:exactMatch
+kidney_annotation.l3,Cortical Thick Ascending Limb,AZ:0000032,kidney loop of Henle cortical thick ascending limb epithelial cell,CL:1001109,skos:exactMatch
+kidney_annotation.l3,Cortical Vascular Smooth Muscle / Pericyte,AZ:0000033,renal interstitial pericyte,CL:1001318,skos:exactMatch
+kidney_annotation.l3,Cycling Mononuclear Phagocyte,AZ:0000034,mononuclear phagocyte,CL:0000113,skos:exactMatch
+kidney_annotation.l3,Descending Thin Limb Type 1,AZ:0000035,kidney loop of Henle short descending thin limb epithelial cell,CL:4030012,skos:exactMatch
+kidney_annotation.l3,Descending Thin Limb Type 2,AZ:0000036,kidney loop of Henle long descending thin limb outer medulla epithelial cell,CL:4030013,skos:exactMatch
+kidney_annotation.l3,Descending Thin Limb Type 3,AZ:0000037,kidney loop of Henle long descending thin limb inner medulla epithelial cell,CL:4030014,skos:exactMatch
+kidney_annotation.l3,Descending Vasa Recta Endothelial,AZ:0000038,vasa recta descending limb cell,CL:1001285,skos:exactMatch
+kidney_annotation.l3,Distal Convoluted Tubule Type 1,AZ:0000039,epithelial cell of early distal convoluted tubule,CL:4030016,skos:exactMatch
+kidney_annotation.l3,Distal Convoluted Tubule Type 2,AZ:0000040,epithelial cell of late distal convoluted tubule,CL:4030017,skos:exactMatch
+kidney_annotation.l3,Fibroblast,AZ:0000041,kidney interstitial fibroblast,CL:0000057,skos:exactMatch
+kidney_annotation.l3,Glomerular Capillary Endothelial,AZ:0000042,glomerular capillary endothelial cell,CL:1001005,skos:exactMatch
+kidney_annotation.l3,Inner Medullary Collecting Duct,AZ:0000043,kidney inner medulla collecting duct principal cell,CL:1000718,skos:exactMatch
+kidney_annotation.l3,Intercalated Type B,AZ:0000044,renal beta-intercalated cell,CL:0002201,skos:exactMatch
+kidney_annotation.l3,Lymphatic Endothelial,AZ:0000045,endothelial cell of lymphatic vessel,CL:0002138,skos:exactMatch
+kidney_annotation.l3,M2 Macrophage,AZ:0000046,kidney resident macrophage,CL:1000698,skos:exactMatch
+kidney_annotation.l3,Macula Densa,AZ:0000047,macula densa epithelial cell,CL:1000850,skos:exactMatch
+kidney_annotation.l3,Mast,AZ:0000048,mast cell,CL:0000097,skos:exactMatch
+kidney_annotation.l3,Medullary Fibroblast,AZ:0000049,renal medullary fibroblast,CL:4030022,skos:exactMatch
+kidney_annotation.l3,Medullary Thick Ascending Limb,AZ:0000050,kidney loop of Henle medullary thick ascending limb epithelial cell,CL:1001108,skos:exactMatch
+kidney_annotation.l3,Mesangial,AZ:0000051,mesangial cell,CL:0000650,skos:exactMatch
+kidney_annotation.l3,Monocyte-derived,AZ:0000052,monocyte-derived dendritic cell,CL:0011031,skos:exactMatch
+kidney_annotation.l3,Natural Killer T,AZ:0000053,mature NK T cell,CL:0000814,skos:exactMatch
+kidney_annotation.l3,Neutrophil,AZ:0000054,neutrophil,CL:0000775,skos:exactMatch
+kidney_annotation.l3,Non-classical monocyte,AZ:0000055,non-classical monocyte,CL:0000875,skos:exactMatch
+kidney_annotation.l3,Outer Medullary Collecting Duct Intercalated Type A,AZ:0000056,kidney outer medulla collecting duct intercalated cell,CL:1000717,skos:exactMatch
+kidney_annotation.l3,Outer Medullary Collecting Duct Principal,AZ:0000057,kidney outer medulla collecting duct principal cell,CL:1000716,skos:exactMatch
+kidney_annotation.l3,Papillary Tip Epithelial,AZ:0000058,papillary tips cell,CL:1000597,skos:exactMatch
+kidney_annotation.l3,Parietal Epithelial,AZ:0000059,parietal epithelial cell,CL:1000452,skos:exactMatch
+kidney_annotation.l3,Peritubular Capilary Endothelial,AZ:0000060,peritubular capillary endothelial cell,CL:1001033,skos:exactMatch
+kidney_annotation.l3,Plasma,AZ:0000061,plasma cell,CL:0000786,skos:exactMatch
+kidney_annotation.l3,Plasmacytoid Dendritic,AZ:0000062,"plasmacytoid dendritic cell, human",CL:0000784,skos:exactMatch
+kidney_annotation.l3,Podocyte,AZ:0000063,podocyte,CL:0000653,skos:exactMatch
+kidney_annotation.l3,Proximal Tubule Epithelial Segment 1,AZ:0000064,epithelial cell of proximal tubule segment 1,CL:4030009,skos:exactMatch
+kidney_annotation.l3,Proximal Tubule Epithelial Segment 2,AZ:0000065,epithelial cell of proximal tubule segment 2,CL:4030010,skos:exactMatch
+kidney_annotation.l3,Proximal Tubule Epithelial Segment 3,AZ:0000066,epithelial cell of proximal tubule segment 3,CL:4030011,skos:exactMatch
+kidney_annotation.l3,Renin-positive Juxtaglomerular Granular,AZ:0000067,kidney granular cell,CL:0000648,skos:exactMatch
+kidney_annotation.l3,Schwann / Neural,AZ:0000068,Schwann cell,CL:0002573,skos:exactMatch
+kidney_annotation.l3,T,AZ:0000069,T cell,CL:0000084,skos:exactMatch
+kidney_annotation.l3,Vascular Smooth Muscle / Pericyte,AZ:0000070,renal interstitial pericyte,CL:1001318,skos:exactMatch
+lung_ann_finest_level,Adventitial fibroblasts,AZ:0000071,fibroblast of lung:adventitial,CL:0002553,skos:narrowMatch
+lung_ann_finest_level,Alveolar fibroblasts,AZ:0000072,fibroblast of lung:alveolar,CL:0002553,skos:narrowMatch
+lung_ann_finest_level,Alveolar macrophages,AZ:0000073,alveolar macrophage,CL:0000583,skos:exactMatch
+lung_ann_finest_level,Alveolar Mφ CCL3+,AZ:0000074,alveolar macrophage:CCL3-positive,CL:0000583,skos:narrowMatch
+lung_ann_finest_level,Alveolar Mφ MT-positive,AZ:0000075,alveolar macrophage:MT-positive,CL:0000583,skos:narrowMatch
+lung_ann_finest_level,Alveolar Mφ proliferating,AZ:0000076,alveolar macrophage:proliferating,CL:0000583,skos:narrowMatch
+lung_ann_finest_level,AT1,AZ:0000077,alveolar type 1 fibroblast cell,CL:4028004,skos:exactMatch
+lung_ann_finest_level,AT2,AZ:0000078,alveolar type 2 fibroblast cell,CL:4028006,skos:exactMatch
+lung_ann_finest_level,AT2 proliferating,AZ:0000079,alveolar type 2 fibroblast cell:proliferating,CL:4028006,skos:narrowMatch
+lung_ann_finest_level,B cells,AZ:0000080,B cell,CL:0000236,skos:exactMatch
+lung_ann_finest_level,Basal resting,AZ:0000081,respiratory basal cell,CL:0002633,skos:exactMatch
+lung_ann_finest_level,CD4 T cells,AZ:0000082,CD4-positive helper T cell,CL:0000492,skos:exactMatch
+lung_ann_finest_level,CD8 T cells,AZ:0000083,"effector memory CD8-positive, alpha-beta T cell",CL:0000913,skos:exactMatch
+lung_ann_finest_level,Classical monocytes,AZ:0000084,monocyte,CL:0000576,skos:exactMatch
+lung_ann_finest_level,Club (nasal),AZ:0000085,club cell:nasal,CL:0000158,skos:narrowMatch
+lung_ann_finest_level,Club (non-nasal),AZ:0000086,club cell:non-nasal,CL:0000158,skos:narrowMatch
+lung_ann_finest_level,DC1,AZ:0000087,CD141-positive myeloid dendritic cell,CL:0002394,skos:exactMatch
+lung_ann_finest_level,DC2,AZ:0000088,CD1c-positive myeloid dendritic cell,CL:0002399,skos:exactMatch
+lung_ann_finest_level,Deuterosomal,AZ:0000089,multi-ciliated epithelial cell:deuterosomal,CL:0005012,skos:narrowMatch
+lung_ann_finest_level,EC aerocyte capillary,AZ:0000090,capillary endothelial cell:aerocyte,CL:0002144,skos:narrowMatch
+lung_ann_finest_level,EC arterial,AZ:0000091,endothelial cell of artery,CL:1000413,skos:exactMatch
+lung_ann_finest_level,EC general capillary,AZ:0000092,capillary endothelial cell,CL:0002144,skos:exactMatch
+lung_ann_finest_level,EC venous pulmonary,AZ:0000093,endothelial cell of venule:pulmonary,CL:1000414,skos:narrowMatch
+lung_ann_finest_level,EC venous systemic,AZ:0000094,endothelial cell of venule,CL:1000414,skos:exactMatch
+lung_ann_finest_level,Fibromyocytes,AZ:0000095,fibroblast of lung:fibromyocyte,CL:0002553,skos:narrowMatch
+lung_ann_finest_level,Goblet (bronchial),AZ:0000096,tracheobronchial goblet cell,CL:0019003,skos:exactMatch
+lung_ann_finest_level,Goblet (nasal),AZ:0000097,nasal mucosa goblet cell,CL:0002480,skos:exactMatch
+lung_ann_finest_level,Goblet (subsegmental),AZ:0000098,lung goblet cell,CL:1000143,skos:exactMatch
+lung_ann_finest_level,Interstitial Mφ perivascular,AZ:0000099,tissue-resident macrophage,CL:0000864,skos:exactMatch
+lung_ann_finest_level,Ionocyte,AZ:0000100,ionocyte,CL:0005006,skos:exactMatch
+lung_ann_finest_level,Lymphatic EC differentiating,AZ:0000101,endothelial cell of lymphatic vessel:differentiating,CL:0002138,skos:narrowMatch
+lung_ann_finest_level,Lymphatic EC mature,AZ:0000102,endothelial cell of lymphatic vessel:mature,CL:0002138,skos:narrowMatch
+lung_ann_finest_level,Lymphatic EC proliferating,AZ:0000103,endothelial cell of lymphatic vessel:proliferating,CL:0002138,skos:narrowMatch
+lung_ann_finest_level,Mast cells,AZ:0000104,mast cell,CL:0000097,skos:exactMatch
+lung_ann_finest_level,Mesothelium,AZ:0000105,mesothelial cell of pleura,CL:1000491,skos:exactMatch
+lung_ann_finest_level,Migratory DCs,AZ:0000106,dendritic cell:migratory,CL:0000451,skos:narrowMatch
+lung_ann_finest_level,Monocyte derived Mφ,AZ:0000107,lung macrophage:monocyte derived,CL:1001603,skos:narrowMatch
+lung_ann_finest_level,Multiciliated (nasal),AZ:0000108,multi-ciliated epithelial cell:nasal,CL:0005012,skos:narrowMatch
+lung_ann_finest_level,Multiciliated (non-nasal),AZ:0000109,multi-ciliated epithelial cell:non-nasal,CL:0005012,skos:narrowMatch
+lung_ann_finest_level,Myofibroblasts,AZ:0000110,myofibroblast cell,CL:0000186,skos:exactMatch
+lung_ann_finest_level,Neuroendocrine,AZ:0000111,neuroendocrine cell,CL:0000165,skos:exactMatch
+lung_ann_finest_level,NK cells,AZ:0000112,natural killer cell,CL:0000623,skos:exactMatch
+lung_ann_finest_level,Non classical monocytes,AZ:0000113,non-classical monocyte,CL:0000875,skos:exactMatch
+lung_ann_finest_level,Peribronchial fibroblasts,AZ:0000114,pulmonary interstitial fibroblast,CL:0002241,skos:exactMatch
+lung_ann_finest_level,Pericytes,AZ:0000115,lung pericyte,CL:0009089,skos:exactMatch
+lung_ann_finest_level,Plasma cells,AZ:0000116,plasma cell,CL:0000786,skos:exactMatch
+lung_ann_finest_level,Plasmacytoid DCs,AZ:0000117,"plasmacytoid dendritic cell, human",CL:0001058,skos:exactMatch
+lung_ann_finest_level,SM activated stress response,AZ:0000118,serous secreting cell:activated,CL:0000313,skos:narrowMatch
+lung_ann_finest_level,SMG duct,AZ:0000119,duct epithelial cell,CL:0000068,skos:exactMatch
+lung_ann_finest_level,SMG mucous,AZ:0000120,mucous neck cell,CL:0000651,skos:exactMatch
+lung_ann_finest_level,SMG serous (bronchial),AZ:0000121,serous secreting cell:bronchial,CL:0000313,skos:narrowMatch
+lung_ann_finest_level,SMG serous (nasal),AZ:0000122,serous secreting cell:nasal,CL:0000313,skos:narrowMatch
+lung_ann_finest_level,Smooth muscle,AZ:0000123,smooth muscle cell,CL:0000192,skos:exactMatch
+lung_ann_finest_level,Subpleural fibroblasts,AZ:0000124,mesothelial fibroblast,CL:4023054,skos:exactMatch
+lung_ann_finest_level,Suprabasal,AZ:0000125,respiratory basal cell,CL:0002633,skos:exactMatch
+lung_ann_finest_level,T cells proliferating,AZ:0000126,T cell:proliferating,CL:0000084,skos:narrowMatch
+lung_ann_finest_level,Transitional Club AT2,AZ:0000127,club cell:transitional alveolar type 2 fibroblast,CL:0000158,skos:narrowMatch
+lung_ann_finest_level,Tuft,AZ:0000128,intestinal tuft cell,CL:0019032,skos:exactMatch
