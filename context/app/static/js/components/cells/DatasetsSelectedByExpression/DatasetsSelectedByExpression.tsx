@@ -16,24 +16,12 @@ interface DatasetsSelectedByExpressionProps {
   defaultEntity?: string;
 }
 
-function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: DatasetsSelectedByExpressionProps) {
-  const {
-    handleSubmit,
-    message,
-    queryType,
-    minExpressionLog,
-    setMinExpressionLog,
-    minCellPercentage,
-    setMinCellPercentage,
-    cellVariableNames,
-    setCellVariableNames,
-  } = useDatasetsSelectedByExpression();
-
+function BiomarkerParameters() {
+  const { queryType, minExpressionLog, setMinExpressionLog, minCellPercentage, setMinCellPercentage } =
+    useDatasetsSelectedByExpression();
   const queryMeasurement = queryTypes[queryType].measurement;
-
   return (
-    <StyledDiv>
-      <AutocompleteEntity targetEntity={`${queryType}s`} setter={setCellVariableNames} defaultValue={defaultEntity} />
+    <>
       <GenomicModality />
       <div>
         <LogSlider
@@ -62,6 +50,20 @@ function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: Data
           id="min-cell-percentage"
         />
       </div>
+    </>
+  );
+}
+
+function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: DatasetsSelectedByExpressionProps) {
+  const { message, queryType, setCellVariableNames, handleSubmit, cellVariableNames } =
+    useDatasetsSelectedByExpression();
+
+  const isBiomarker = queryType !== 'cell-type';
+
+  return (
+    <StyledDiv>
+      <AutocompleteEntity targetEntity={queryType} setter={setCellVariableNames} defaultValue={defaultEntity} />
+      {isBiomarker && <BiomarkerParameters />}
       <div>
         <Button
           onClick={() => {

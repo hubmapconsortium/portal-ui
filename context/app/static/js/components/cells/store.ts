@@ -9,17 +9,15 @@ interface CellsSearchState {
   minCellPercentage: number;
   cellVariableNames: string[];
   queryType: QueryType;
-  selectedQueryType: QueryType;
 }
 
 const defaultState: CellsSearchState = {
   results: [],
   isLoading: true,
   minExpressionLog: 1,
-  minCellPercentage: 10,
+  minCellPercentage: 5,
   cellVariableNames: [],
   queryType: queryTypes.gene.value,
-  selectedQueryType: queryTypes.gene.value,
 };
 
 interface CellsSearchActions {
@@ -29,7 +27,6 @@ interface CellsSearchActions {
   setMinCellPercentage: (minCellPercentage: number) => void;
   setCellVariableNames: (cellVariableNames: string[]) => void;
   setQueryType: (queryType: QueryType) => void;
-  setSelectedQueryType: (selectedQueryType: QueryType) => void;
   resetStore: () => void;
 }
 
@@ -43,6 +40,5 @@ export const useStore = create<CellsSearchStore>((set) => ({
   setMinCellPercentage: (minCellPercentage: number) => set({ minCellPercentage }),
   setCellVariableNames: (cellVariableNames: string[]) => set({ cellVariableNames }),
   setQueryType: (queryType) => set({ queryType }),
-  setSelectedQueryType: (selectedQueryType) => set({ selectedQueryType }),
   resetStore: () => set({ ...defaultState }),
 }));
