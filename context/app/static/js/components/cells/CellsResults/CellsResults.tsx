@@ -3,10 +3,10 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 
 import DatasetsTable from 'js/components/cells/DatasetsTable';
-import { useStore } from 'js/components/cells/store';
+import { useStore, CellsSearchStore } from 'js/components/cells/store';
 import { CenteredFlex, FullWidthAlert } from './style';
 
-const cellsStoreSelector = (state) => ({
+const cellsStoreSelector = (state: CellsSearchStore) => ({
   isLoading: state.isLoading,
   results: state.results,
   minExpressionLog: state.minExpressionLog,
