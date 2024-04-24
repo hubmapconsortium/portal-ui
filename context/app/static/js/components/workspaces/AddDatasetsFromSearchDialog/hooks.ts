@@ -81,7 +81,7 @@ function useAddDatasetsFromSearchDialog() {
     name: 'datasets',
   });
 
-  const { field: workspaceIdField } = useController({
+  const { field: workspaceIdField, fieldState: workspaceIdFieldState } = useController({
     control,
     name: 'workspaceId',
   });
@@ -142,16 +142,25 @@ function useAddDatasetsFromSearchDialog() {
     [setValue],
   );
 
-  const datasetErrorMessage = datasetsFieldState?.error?.message;
+  const datasetsFieldErrorMessage = datasetsFieldState?.error?.message;
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({
     numWorkspaceDatasets: selectedDatasets.size + workspaceDatasets.length,
   });
 
-  const errorMessages = [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages];
+  const datasetsErrorMessages = [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages];
 
-  if (datasetErrorMessage) {
-    errorMessages.push(datasetErrorMessage);
+  if (datasetsFieldErrorMessage) {
+    datasetsErrorMessages.push(datasetsFieldErrorMessage);
   }
+
+  const workspaceIdErrorMessages = [];
+
+  const workspaceIdFieldErrorMessage = workspaceIdFieldState?.error?.message;
+
+  if (workspaceIdFieldErrorMessage) {
+    workspaceIdErrorMessages.push(workspaceIdFieldErrorMessage);
+  }
+
   return {
     control,
     autocompleteValue,
@@ -168,7 +177,8 @@ function useAddDatasetsFromSearchDialog() {
     searchHits,
     workspaceDatasets,
     allDatasets,
-    errorMessages,
+    datasetsErrorMessages,
+    workspaceIdErrorMessages,
     selectedWorkspace: workspaceIdField.value,
     selectWorkspace,
     protectedHubmapIds,

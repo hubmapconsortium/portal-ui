@@ -21,7 +21,11 @@ import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormFiel
 function SelectWorkspaceStep({
   selectedWorkspace,
   selectWorkspace,
-}: Pick<ReturnType<typeof useAddDatasetsFromSearchDialog>, 'selectedWorkspace' | 'selectWorkspace'>) {
+  workspaceIdErrorMessages,
+}: Pick<
+  ReturnType<typeof useAddDatasetsFromSearchDialog>,
+  'selectedWorkspace' | 'selectWorkspace' | 'workspaceIdErrorMessages'
+>) {
   const { completeStep } = useAccordionStep();
 
   const { workspacesList } = useWorkspacesList();
@@ -35,6 +39,8 @@ function SelectWorkspaceStep({
         jobs are stopped.
       </Alert>
       <StopWorkspaceAlert />
+      {workspaceIdErrorMessages.length > 0 && <ErrorMessages errorMessages={workspaceIdErrorMessages} />}
+
       <Stack spacing={3} component={Paper}>
         <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
           {workspacesList.map((workspace) => (
@@ -68,7 +74,8 @@ function AddDatasetsFromSearchDialog() {
     errors,
     reset,
     resetAutocompleteState,
-    errorMessages,
+    datasetsErrorMessages,
+    workspaceIdErrorMessages,
     selectedWorkspace,
     selectWorkspace,
     control,
@@ -87,7 +94,7 @@ function AddDatasetsFromSearchDialog() {
       onSubmit={submit}
       errors={errors}
       isSubmitting={isSubmitting}
-      disabled={errorMessages.length > 0}
+      disabled={Boolean(datasetsErrorMessages.length || workspaceIdErrorMessages.length)}
     >
       <AccordionStepsProvider stepsLength={2}>
         <AccordionSteps
@@ -95,7 +102,13 @@ function AddDatasetsFromSearchDialog() {
           steps={[
             {
               heading: 'Select Workspace to Edit',
-              content: <SelectWorkspaceStep selectedWorkspace={selectedWorkspace} selectWorkspace={selectWorkspace} />,
+              content: (
+                <SelectWorkspaceStep
+                  selectedWorkspace={selectedWorkspace}
+                  selectWorkspace={selectWorkspace}
+                  workspaceIdErrorMessages={workspaceIdErrorMessages}
+                />
+              ),
             },
             {
               heading: 'Add Datasets',
@@ -105,7 +118,7 @@ function AddDatasetsFromSearchDialog() {
                     Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be
                     selected for deletion.
                   </Alert>
-                  {errorMessages.length > 0 && <ErrorMessages errorMessages={errorMessages} />}
+                  {datasetsErrorMessages.length > 0 && <ErrorMessages errorMessages={datasetsErrorMessages} />}
                   <RemoveProtectedDatasetsFormField
                     control={control}
                     protectedHubmapIds={protectedHubmapIds}
