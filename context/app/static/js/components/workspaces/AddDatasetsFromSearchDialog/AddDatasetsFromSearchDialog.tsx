@@ -101,6 +101,10 @@ function AddDatasetsFromSearchDialog() {
               heading: 'Add Datasets',
               content: (
                 <Stack spacing={3}>
+                  <Alert severity="info">
+                    Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be
+                    selected for deletion.
+                  </Alert>
                   {errorMessages.length > 0 && <ErrorMessages errorMessages={errorMessages} />}
                   <RemoveProtectedDatasetsFormField
                     control={control}
