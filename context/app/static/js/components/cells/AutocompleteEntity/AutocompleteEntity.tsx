@@ -10,13 +10,13 @@ import { QueryType, queryTypes } from '../queryTypes';
 import { PreserveWhiteSpaceListItem } from './styles';
 
 function buildHelperText(entity: string): string {
-  return `Multiple ${entity} are allowed and only 'AND' queries are supported.`;
+  return `Multiple ${entity} are allowed and only 'OR' queries are supported.`;
 }
 
 const labelAndHelperTextProps: Record<QueryType, Pick<TextFieldProps, 'label' | 'helperText'>> = {
   gene: { label: 'Gene Symbol', helperText: buildHelperText('gene symbols') },
   protein: { label: 'Protein', helperText: buildHelperText('proteins') },
-  'cell-type': { label: 'Cell Type', helperText: 'Select a cell type to query.' },
+  'cell-type': { label: 'Cell Type', helperText: buildHelperText('cell types') },
 };
 interface AutocompleteEntityProps<T extends QueryType> {
   targetEntity: T;
