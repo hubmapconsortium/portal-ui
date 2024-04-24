@@ -11,8 +11,7 @@ const cellsServiceFetcher = async ({
   if (!substring) {
     return [];
   }
-  // TODO: Convert `CellsService` helper to TypeScript so we don't need to cast the response type
-  return cellsService.searchBySubstring({ targetEntity, substring }) as Promise<AutocompleteQueryResponse>;
+  return cellsService.searchBySubstring({ targetEntity, substring });
 };
 
 export function useAutocompleteQuery(queryKey: AutocompleteQueryKey) {

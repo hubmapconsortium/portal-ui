@@ -39,7 +39,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, setter, default
     setSelectedOptions(createInitialValue(defaultValue));
   }, [defaultValue, targetEntity]);
 
-  const { data, isLoading } = useAutocompleteQuery({ targetEntity: `${targetEntity}s`, substring });
+  const { data, isLoading } = useAutocompleteQuery({ targetEntity, substring });
 
   // Include currently selected options to avoid invalid value errors in console
   const options = selectedOptions.concat(data ?? []);
