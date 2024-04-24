@@ -2,10 +2,14 @@ import React from 'react';
 import Stack from '@mui/material/Stack';
 import Radio from '@mui/material/Radio';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
 
-import Step from 'js/shared-styles/surfaces/Step';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { Alert } from 'js/shared-styles/alerts';
+import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
+import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
+import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { useAddDatasetsFromSearchDialog } from './hooks';
@@ -15,25 +19,39 @@ import { MergedWorkspace } from '../types';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 
-function WorkspacesList({
-  toggleItem,
+function SelectWorkspaceStep({
   selectedWorkspace,
-}: {
-  toggleItem: (workspaceId: number) => void;
-  selectedWorkspace: number;
-}) {
+  selectWorkspace,
+}: Pick<ReturnType<typeof useAddDatasetsFromSearchDialog>, 'selectedWorkspace' | 'selectWorkspace'>) {
+  const { completeStep } = useAccordionStep();
+
   const { workspacesList } = useWorkspacesList();
+
+  const selectedWorkspaceDetails = workspacesList.find((workspace) => workspace.id === selectedWorkspace);
+
   return (
-    <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
-      {workspacesList.map((workspace) => (
-        <WorkspaceListItem
-          workspace={workspace}
-          key={workspace.id}
-          toggleItem={toggleItem}
-          selected={workspace.id === selectedWorkspace}
-          ToggleComponent={Radio}
-        />
-      ))}
+    <Box>
+      <Alert severity="info" sx={{ mb: 2 }}>
+        Only one workspace can be selected at a time for editing. Workspaces that are running cannot be edited until all
+        jobs are stopped.
+      </Alert>
+      <StopWorkspaceAlert />
+      <Stack spacing={3} component={Paper}>
+        <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
+          {workspacesList.map((workspace) => (
+            <WorkspaceListItem
+              workspace={workspace}
+              key={workspace.id}
+              toggleItem={selectWorkspace}
+              selected={workspace.id === selectedWorkspace}
+              ToggleComponent={Radio}
+            />
+          ))}
+        </Box>
+      </Stack>
+      <Button variant="contained" onClick={() => completeStep(selectedWorkspaceDetails?.name ?? '')} sx={{ mt: 2 }}>
+        Select Workspace
+      </Button>
     </Box>
   );
 }
@@ -71,28 +89,32 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
       isSubmitting={isSubmitting}
       disabled={errorMessages.length > 0}
     >
-      <Step title="Select Workspace to Edit" index={0}>
-        <Alert severity="info" sx={{ mb: 2 }}>
-          Only one workspace can be selected at a time for editing. Workspaces that are running cannot be edited until
-          all jobs are stopped.
-        </Alert>
-        <StopWorkspaceAlert />
-        <Stack spacing={3}>
-          <WorkspacesList selectedWorkspace={selectedWorkspace} toggleItem={selectWorkspace} />
-        </Stack>
-      </Step>
-      <Step title="Add Datasets" index={1}>
-        <Stack spacing={3}>
-          {errorMessages.length > 0 && <ErrorMessages errorMessages={errorMessages} />}
-          <RemoveProtectedDatasetsFormField
-            control={control}
-            protectedHubmapIds={protectedHubmapIds}
-            removeProtectedDatasets={removeProtectedDatasets}
-            protectedRows={protectedRows}
-          />
-          <AddDatasetsTable {...rest} />
-        </Stack>
-      </Step>
+      <AccordionStepsProvider stepsLength={2}>
+        <AccordionSteps
+          id="add-datasets-to-workspace-steps"
+          steps={[
+            {
+              heading: 'Select Workspace to Edit',
+              content: <SelectWorkspaceStep selectedWorkspace={selectedWorkspace} selectWorkspace={selectWorkspace} />,
+            },
+            {
+              heading: 'Add Datasets',
+              content: (
+                <Stack spacing={3}>
+                  {errorMessages.length > 0 && <ErrorMessages errorMessages={errorMessages} />}
+                  <RemoveProtectedDatasetsFormField
+                    control={control}
+                    protectedHubmapIds={protectedHubmapIds}
+                    removeProtectedDatasets={removeProtectedDatasets}
+                    protectedRows={protectedRows}
+                  />
+                  <AddDatasetsTable {...rest} />
+                </Stack>
+              ),
+            },
+          ]}
+        />
+      </AccordionStepsProvider>
     </EditWorkspaceDialogContent>
   );
 }
