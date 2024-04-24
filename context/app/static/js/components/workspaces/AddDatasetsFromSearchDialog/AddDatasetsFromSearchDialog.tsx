@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import Radio from '@mui/material/Radio';
 import Box from '@mui/material/Box';
@@ -66,6 +66,47 @@ function SelectWorkspaceStep({
   );
 }
 
+function AddDatasetsStep({
+  control,
+  protectedHubmapIds,
+  protectedRows,
+  removeProtectedDatasets,
+  datasetsErrorMessages,
+  ...rest
+}: Pick<
+  ReturnType<typeof useAddDatasetsFromSearchDialog>,
+  | 'control'
+  | 'protectedHubmapIds'
+  | 'protectedRows'
+  | 'removeProtectedDatasets'
+  | 'datasetsErrorMessages'
+  | 'inputValue'
+  | 'setInputValue'
+  | 'autocompleteValue'
+  | 'addDataset'
+  | 'removeDatasets'
+  | 'workspaceDatasets'
+  | 'allDatasets'
+  | 'searchHits'
+>) {
+  return (
+    <Stack spacing={3}>
+      <Alert severity="info">
+        Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be selected
+        for deletion.
+      </Alert>
+      {datasetsErrorMessages.length > 0 && <ErrorMessages errorMessages={datasetsErrorMessages} />}
+      <RemoveProtectedDatasetsFormField
+        control={control}
+        protectedHubmapIds={protectedHubmapIds}
+        removeProtectedDatasets={removeProtectedDatasets}
+        protectedRows={protectedRows}
+      />
+      <AddDatasetsTable {...rest} />
+    </Stack>
+  );
+}
+
 function AddDatasetsFromSearchDialog() {
   const {
     submit,
@@ -78,12 +119,27 @@ function AddDatasetsFromSearchDialog() {
     workspaceIdErrorMessages,
     selectedWorkspace,
     selectWorkspace,
-    control,
-    protectedHubmapIds,
-    removeProtectedDatasets,
-    protectedRows,
     ...rest
   } = useAddDatasetsFromSearchDialog();
+
+  const steps = useMemo(() => {
+    return [
+      {
+        heading: '1. Select Workspace to Edit',
+        content: (
+          <SelectWorkspaceStep
+            selectedWorkspace={selectedWorkspace}
+            selectWorkspace={selectWorkspace}
+            workspaceIdErrorMessages={workspaceIdErrorMessages}
+          />
+        ),
+      },
+      {
+        heading: '2. Add Datasets',
+        content: <AddDatasetsStep datasetsErrorMessages={datasetsErrorMessages} {...rest} />,
+      },
+    ];
+  }, [selectedWorkspace, selectWorkspace, workspaceIdErrorMessages, datasetsErrorMessages, rest]);
 
   return (
     <EditWorkspaceDialogContent
@@ -97,40 +153,7 @@ function AddDatasetsFromSearchDialog() {
       disabled={Boolean(datasetsErrorMessages.length || workspaceIdErrorMessages.length)}
     >
       <AccordionStepsProvider stepsLength={2}>
-        <AccordionSteps
-          id="add-datasets-to-workspace-steps"
-          steps={[
-            {
-              heading: 'Select Workspace to Edit',
-              content: (
-                <SelectWorkspaceStep
-                  selectedWorkspace={selectedWorkspace}
-                  selectWorkspace={selectWorkspace}
-                  workspaceIdErrorMessages={workspaceIdErrorMessages}
-                />
-              ),
-            },
-            {
-              heading: 'Add Datasets',
-              content: (
-                <Stack spacing={3}>
-                  <Alert severity="info">
-                    Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be
-                    selected for deletion.
-                  </Alert>
-                  {datasetsErrorMessages.length > 0 && <ErrorMessages errorMessages={datasetsErrorMessages} />}
-                  <RemoveProtectedDatasetsFormField
-                    control={control}
-                    protectedHubmapIds={protectedHubmapIds}
-                    removeProtectedDatasets={removeProtectedDatasets}
-                    protectedRows={protectedRows}
-                  />
-                  <AddDatasetsTable {...rest} />
-                </Stack>
-              ),
-            },
-          ]}
-        />
+        <AccordionSteps id="add-datasets-to-workspace-steps" steps={steps} />
       </AccordionStepsProvider>
     </EditWorkspaceDialogContent>
   );
