@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { useForm, useController } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -29,11 +29,9 @@ const schema = z
 
 function useAddWorkspaceDatasetsFromSearchForm({
   initialDatasetUUIDs,
-  initialWorkspaceId,
   initialProtectedDatasets,
 }: {
   initialDatasetUUIDs: string[];
-  initialWorkspaceId: number;
   initialProtectedDatasets: string;
 }) {
   const {
@@ -45,7 +43,7 @@ function useAddWorkspaceDatasetsFromSearchForm({
   } = useForm<AddDatasetsFromSearchFormTypes>({
     defaultValues: {
       datasets: initialDatasetUUIDs,
-      workspaceId: initialWorkspaceId,
+      workspaceId: undefined,
       'protected-datasets': initialProtectedDatasets,
     },
     mode: 'onChange',
@@ -61,7 +59,7 @@ function useAddWorkspaceDatasetsFromSearchForm({
     isSubmitting: isSubmitting || isSubmitSuccessful,
   };
 }
-function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspaceId: number }) {
+function useAddDatasetsFromSearchDialog() {
   const {
     selectedRows,
     errorMessages: protectedDatasetsErrorMessages,
@@ -74,7 +72,6 @@ function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspa
   const datasetsFromSearch = useMemo(() => [...selectedRows], [selectedRows]);
 
   const { handleSubmit, isSubmitting, control, errors, reset, setValue } = useAddWorkspaceDatasetsFromSearchForm({
-    initialWorkspaceId,
     initialDatasetUUIDs: datasetsFromSearch,
     initialProtectedDatasets: protectedHubmapIds,
   });
@@ -106,6 +103,7 @@ function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspa
     initialDatasetsUUIDS: datasetsField.value,
     updateDatasetsFormState: datasetsField.onChange,
   });
+
   const updateWorkspaceDatasets = useUpdateWorkspaceDatasets({ workspaceId: workspaceIdField.value });
 
   const removeProtectedDatasets = useCallback(() => {
@@ -136,11 +134,12 @@ function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspa
       hasOpened.current = true;
     }
   }, [datasetsFromSearch, setValue, setSelectedDatasets, isOpen, protectedHubmapIds]);
-  const [selectedWorkspace, setSelectedWorkspace] = useState(workspaceIdField.value);
 
   const selectWorkspace = useCallback(
-    (workspaceId: number) => setSelectedWorkspace(workspaceId),
-    [setSelectedWorkspace],
+    (workspaceId: number) => {
+      setValue('workspaceId', workspaceId);
+    },
+    [setValue],
   );
 
   const datasetErrorMessage = datasetsFieldState?.error?.message;
@@ -170,7 +169,7 @@ function useAddDatasetsFromSearchDialog({ initialWorkspaceId }: { initialWorkspa
     workspaceDatasets,
     allDatasets,
     errorMessages,
-    selectedWorkspace,
+    selectedWorkspace: workspaceIdField.value,
     selectWorkspace,
     protectedHubmapIds,
     protectedRows,

@@ -15,7 +15,6 @@ import AddDatasetsTable from '../AddDatasetsTable';
 import { useAddDatasetsFromSearchDialog } from './hooks';
 import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
-import { MergedWorkspace } from '../types';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 
@@ -49,16 +48,19 @@ function SelectWorkspaceStep({
           ))}
         </Box>
       </Stack>
-      <Button variant="contained" onClick={() => completeStep(selectedWorkspaceDetails?.name ?? '')} sx={{ mt: 2 }}>
+      <Button
+        variant="contained"
+        onClick={() => completeStep(selectedWorkspaceDetails?.name ?? '')}
+        sx={{ mt: 2 }}
+        disabled={!selectedWorkspace}
+      >
         Select Workspace
       </Button>
     </Box>
   );
 }
 
-function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: MergedWorkspace[] }) {
-  const inititialWorkspace = workspacesList[0];
-
+function AddDatasetsFromSearchDialog() {
   const {
     submit,
     handleSubmit,
@@ -74,9 +76,7 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
     removeProtectedDatasets,
     protectedRows,
     ...rest
-  } = useAddDatasetsFromSearchDialog({
-    initialWorkspaceId: inititialWorkspace.id,
-  });
+  } = useAddDatasetsFromSearchDialog();
 
   return (
     <EditWorkspaceDialogContent
@@ -120,12 +120,12 @@ function AddDatasetsFromSearchDialog({ workspacesList }: { workspacesList: Merge
 }
 
 function J() {
-  const { workspacesList, isLoading } = useWorkspacesList();
+  const { isLoading } = useWorkspacesList();
   if (isLoading) {
     return null;
   }
 
-  return <AddDatasetsFromSearchDialog workspacesList={workspacesList} />;
+  return <AddDatasetsFromSearchDialog />;
 }
 
 export default J;
