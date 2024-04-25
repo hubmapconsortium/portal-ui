@@ -6,11 +6,13 @@ import useCellsChartLoadingStore, { CellsChartLoadingStore } from 'js/stores/use
 import { useStore, CellsSearchStore } from 'js/components/cells/store';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { QueryType } from '../queryTypes';
 
 const chartsStoreSelector = (state: CellsChartLoadingStore) => state.resetFetchedUUIDs;
 
 const cellsStoreSelector = (state: CellsSearchStore) => ({
   setResults: state.setResults,
+  setResultCounts: state.setResultCounts,
   minExpressionLog: state.minExpressionLog,
   setMinExpressionLog: state.setMinExpressionLog,
   minCellPercentage: state.minCellPercentage,
@@ -61,6 +63,22 @@ function buildHitsMap(hits: { _id: string }[]) {
   );
 }
 
+function createStepText(
+  queryType: QueryType,
+  cellVariableNames: string[],
+  minExpressionLog: number,
+  minCellPercentage: number,
+) {
+  if (queryType === 'cell-type') {
+    return cellVariableNames.join(', ');
+  }
+  return (
+    <>
+      {cellVariableNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
+    </>
+  );
+}
+
 function useDatasetsSelectedByExpression() {
   const { completeStep } = useAccordionStep();
   const [message, setMessage] = useState<string | null>(null);
@@ -78,6 +96,7 @@ function useDatasetsSelectedByExpression() {
     setCellVariableNames,
     queryType,
     setIsLoading,
+    setResultCounts,
   } = useStore(cellsStoreSelector);
 
   const { toastError } = useSnackbarActions();
@@ -98,20 +117,17 @@ function useDatasetsSelectedByExpression() {
       modality: queryType === 'gene' ? genomicModality : undefined,
     };
     try {
-      completeStep(
-        <>
-          {cellVariableNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
-          Percentage
-        </>,
-      );
-      // TODO: Convert the CellsService/fetchSearchData/buildHitsMap to use typescript
+      completeStep(createStepText(queryType, cellVariableNames, minExpressionLog, minCellPercentage));
       /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
       const serviceResults = await new CellsService().getDatasets(queryParams);
-      const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
+      const datasets = 'list' in serviceResults ? serviceResults.list : serviceResults;
+
+      const searchResults = await fetchSearchData(getSearchQuery(datasets), elasticsearchEndpoint, groupsToken);
 
       const hitsMap = buildHitsMap(searchResults.hits.hits);
+
       setResults(
-        serviceResults.reduce(
+        datasets.reduce(
           (acc: { _id: string }[], { uuid }: { uuid: string }) => {
             // The cells api returns all versions of a matching dataset and the search-api query will only return the most recent version.
             if (uuid in hitsMap) {
@@ -123,11 +139,15 @@ function useDatasetsSelectedByExpression() {
         ),
       );
       /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+      if ('list' in serviceResults) {
+        setResultCounts(serviceResults);
+      }
       setIsLoading(false);
     } catch (e) {
       if (e instanceof Error) {
         toastError(e.message);
         setMessage(e.message);
+        setIsLoading(false);
         // TODO: The message is displayed in this component...
         // but after the user submits their data, the component collapses,
         // so the message is hidden, and the user just sees the please wait.
@@ -137,6 +157,7 @@ function useDatasetsSelectedByExpression() {
       }
     }
   }, [
+    setResultCounts,
     cellVariableNames,
     completeStep,
     elasticsearchEndpoint,

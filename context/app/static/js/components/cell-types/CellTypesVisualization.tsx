@@ -61,8 +61,11 @@ function CellTypesVisualizationTooltip({ tooltipData }: { tooltipData: TooltipDa
   );
 }
 
-export default function CellTypesVisualization() {
-  const { organs = [] } = useCellTypeDetails();
+interface CellTypesGraphProps {
+  organs: CellTypeOrgan[];
+}
+
+export function CellTypeOrgansGraph({ organs }: CellTypesGraphProps) {
   const name = useCellTypeName();
   const sortedOrgans = [...organs].sort((a, b) => b.feature_cells - a.feature_cells);
 
@@ -85,49 +88,57 @@ export default function CellTypesVisualization() {
   }, [name]);
 
   return (
+    <Stack direction="row" height={640}>
+      <VerticalStackedBarChart
+        visxData={sortedOrgans}
+        yScale={yScale}
+        xScale={xScale}
+        getXScaleRange={getXScaleRange}
+        getYScaleRange={getYScaleRange}
+        colorScale={colorScale}
+        keys={keys}
+        margin={margin}
+        getX={getX}
+        xAxisLabel="Organs"
+        yAxisLabel="Cell Count"
+        xAxisTickLabels={organLabels}
+        y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
+        getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
+        TooltipContent={CellTypesVisualizationTooltip}
+      />
+      <Stack direction="column" spacing={0.5} p={2}>
+        <Typography variant="body1" component="label">
+          Cell Types
+        </Typography>
+        <LegendOrdinal scale={colorScale} labelFormat={(label) => keyLabels[label as GraphKey]}>
+          {(labels) => (
+            <Stack spacing={0.5} useFlexGap direction="column">
+              {labels.map((label) => (
+                <Box component={LegendItem} alignItems="start" key={`legend-quantile-${label.text}`}>
+                  <svg width={15} height={15} style={{ borderRadius: 4 }}>
+                    <rect fill={label.value} width={15} height={15} />
+                  </svg>
+                  <LegendLabel align="left" margin="0 0 0 4px">
+                    {label.text}
+                  </LegendLabel>
+                </Box>
+              ))}
+            </Stack>
+          )}
+        </LegendOrdinal>
+      </Stack>
+    </Stack>
+  );
+}
+
+export default function CellTypesVisualization() {
+  const { organs = [] } = useCellTypeDetails();
+
+  return (
     <DetailPageSection id="distribution-across-organs">
       <SectionHeader>Distribution Across Organs</SectionHeader>
       <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
-      <Stack direction="row" height={640}>
-        <VerticalStackedBarChart
-          visxData={sortedOrgans}
-          yScale={yScale}
-          xScale={xScale}
-          getXScaleRange={getXScaleRange}
-          getYScaleRange={getYScaleRange}
-          colorScale={colorScale}
-          keys={keys}
-          margin={margin}
-          getX={getX}
-          xAxisLabel="Organs"
-          yAxisLabel="Cell Count"
-          xAxisTickLabels={organLabels}
-          y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
-          getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
-          TooltipContent={CellTypesVisualizationTooltip}
-        />
-        <Stack direction="column" spacing={0.5} p={2}>
-          <Typography variant="body1" component="label">
-            Cell Types
-          </Typography>
-          <LegendOrdinal scale={colorScale} labelFormat={(label) => keyLabels[label as GraphKey]}>
-            {(labels) => (
-              <Stack spacing={0.5} useFlexGap direction="column">
-                {labels.map((label) => (
-                  <Box component={LegendItem} alignItems="start" key={`legend-quantile-${label.text}`}>
-                    <svg width={15} height={15} style={{ borderRadius: 4 }}>
-                      <rect fill={label.value} width={15} height={15} />
-                    </svg>
-                    <LegendLabel align="left" margin="0 0 0 4px">
-                      {label.text}
-                    </LegendLabel>
-                  </Box>
-                ))}
-              </Stack>
-            )}
-          </LegendOrdinal>
-        </Stack>
-      </Stack>
+      <CellTypeOrgansGraph organs={organs} />
     </DetailPageSection>
   );
 }

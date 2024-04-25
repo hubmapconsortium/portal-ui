@@ -2,8 +2,11 @@ import { create } from 'zustand';
 
 import { QueryType, queryTypes } from 'js/components/cells/queryTypes';
 
+export type ResultCounts = Record<'matching' | 'total', number>;
+
 interface CellsSearchState {
   results: unknown[];
+  resultCounts?: ResultCounts;
   isLoading: boolean;
   minExpressionLog: number;
   minCellPercentage: number;
@@ -13,6 +16,7 @@ interface CellsSearchState {
 
 const defaultState: CellsSearchState = {
   results: [],
+  resultCounts: undefined,
   isLoading: true,
   minExpressionLog: 1,
   minCellPercentage: 5,
@@ -22,6 +26,7 @@ const defaultState: CellsSearchState = {
 
 interface CellsSearchActions {
   setResults: (results: unknown[]) => void;
+  setResultCounts: (resultsCounts: ResultCounts) => void;
   setIsLoading: (isLoading: boolean) => void;
   setMinExpressionLog: (minExpressionLog: number) => void;
   setMinCellPercentage: (minCellPercentage: number) => void;
@@ -35,6 +40,7 @@ export interface CellsSearchStore extends CellsSearchState, CellsSearchActions {
 export const useStore = create<CellsSearchStore>((set) => ({
   ...defaultState,
   setResults: (results: unknown[]) => set({ results }),
+  setResultCounts: (resultCounts: ResultCounts | undefined) => set({ resultCounts }),
   setIsLoading: (isLoading: boolean) => set({ isLoading }),
   setMinExpressionLog: (minExpressionLog: number) => set({ minExpressionLog }),
   setMinCellPercentage: (minCellPercentage: number) => set({ minCellPercentage }),

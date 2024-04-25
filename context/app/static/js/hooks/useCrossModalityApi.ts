@@ -66,6 +66,10 @@ export const useFeatureDetails = <F extends Feature>(feature: F, id: string) => 
           },
         },
       }),
+    {
+      revalidateOnFocus: false,
+      revalidateOnReconnect: false,
+    },
   );
   return { data, ...rest };
 };

@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import DatasetsTable from 'js/components/cells/DatasetsTable';
 import { useStore, CellsSearchStore } from 'js/components/cells/store';
 import { CenteredFlex, FullWidthAlert } from './style';
+import CellTypeResults from '../CellTypeResults';
 
 const cellsStoreSelector = (state: CellsSearchStore) => ({
   isLoading: state.isLoading,
@@ -26,13 +27,18 @@ function CellsResults() {
     );
   }
 
-  if (!results.length) {
+  if (!results) {
     return (
       <FullWidthAlert severity="info">
         No results found matching your search. Edit query parameters by returning to the previous step.
       </FullWidthAlert>
     );
   }
+
+  if (queryType === 'cell-type') {
+    return <CellTypeResults />;
+  }
+
   return (
     <DatasetsTable
       datasets={results}

@@ -93,36 +93,42 @@ def _get_protein_ids(app):
     return protein_ids
 
 
+@cache
+def _get_all_labels():
+    with open(f'{dirname(__file__)}/all_labels.csv') as f:
+        # Read in each row as a dictionary and store them in a list
+        all_labels = DictReader(f, delimiter=',', fieldnames=[
+                                'Organ_Level', 'A_L', 'A_ID', 'Label', 'CL_ID', 'CL_Match'])
+        all_labels = tuple(all_labels)
+    return all_labels
+
+
 @timeit
 @cache
 def _get_cell_ids(app):
     client = _get_client(app)
     cell_label_ids = [cell["grouping_name"] for cell in client.select_celltypes().get_list()]
-    with open(f'{dirname(__file__)}/all_labels.csv') as f:
-        # Read in each row as a dictionary and store them in a list
-        all_labels = DictReader(f, delimiter=',', fieldnames=[
-                                'Organ_Level', 'A_L', 'A_ID', 'Label', 'CL_ID', 'CL_Match'])
-        all_labels = list(all_labels)
-        # Filter labels to only include the ones that are in the cell_label_ids
-        all_labels = tuple([label for label in all_labels if label['CL_ID'] in cell_label_ids])
-        # Add the CL_ID to the label
-        for label in all_labels:
-            label['Lookup_Label'] = f'{label["Label"]} ({label["CL_ID"]})'
-        # Remove any duplicate labels for the same CLID
-        # while keeping  the one with the shortest name
-        # since the input for the cells API only uses the CLID, having these variants
-        # as separate options is unnecessary and confusing to the user
-        labels_to_remove = []
-        for label in all_labels:
-            duplicate_clids = [l for l in all_labels if l['CL_ID']
-                               == label['CL_ID']]
-            if len(duplicate_clids) > 1:
-                duplicate_clids = sorted(
-                    duplicate_clids, key=lambda x: len(x['Label']))
-                for l in duplicate_clids[1:]:
-                    # Azimuth ID's are unique, so we can use them to remove the duplicates
-                    labels_to_remove.append(l["A_ID"])
-        all_labels = [label for label in all_labels if label["A_ID"] not in labels_to_remove]
+    all_labels = _get_all_labels()
+    # Filter labels to only include the ones that are in the cell_label_ids
+    all_labels = tuple([label for label in all_labels if label['CL_ID'] in cell_label_ids])
+    # Add the CL_ID to the label
+    for label in all_labels:
+        label['Lookup_Label'] = f'{label["Label"]} ({label["CL_ID"]})'
+    # Remove any duplicate labels for the same CLID
+    # while keeping  the one with the shortest name
+    # since the input for the cells API only uses the CLID, having these variants
+    # as separate options is unnecessary and confusing to the user
+    labels_to_remove = []
+    for label in all_labels:
+        duplicate_clids = [l for l in all_labels if l['CL_ID']
+                           == label['CL_ID']]
+        if len(duplicate_clids) > 1:
+            duplicate_clids = sorted(
+                duplicate_clids, key=lambda x: len(x['Label']))
+            for l in duplicate_clids[1:]:
+                # Azimuth ID's are unique, so we can use them to remove the duplicates
+                labels_to_remove.append(l["A_ID"])
+    all_labels = [label for label in all_labels if label["A_ID"] not in labels_to_remove]
 
     return all_labels
 
@@ -355,13 +361,28 @@ def datasets_selected_by_level(target_entity):
     client = _get_client(current_app)
 
     try:
-        dataset_set = client.select_datasets(
-            where=target_entity,
-            has=[f'{name} > {min_expression}'
-                 for name in cell_variable_names],
-            genomic_modality=modality,
-            min_cell_percentage=min_cell_percentage
-        )
+        if target_entity == 'cell-type':
+            dataset_set = client.select_datasets(
+                where="cell_type",
+                has=[translate_label(name) for name in cell_variable_names]
+            )
+            matched_datasets = dataset_set.get_list()
+            total_datasets = len(client.select_datasets())
+            results = {
+                'matching': len(matched_datasets),
+                'total': total_datasets,
+                'list': list(matched_datasets)
+            }
+
+        else:
+            dataset_set = client.select_datasets(
+                where=target_entity,
+                has=[f'{name} > {min_expression}'
+                     for name in cell_variable_names],
+                genomic_modality=modality,
+                min_cell_percentage=min_cell_percentage
+            )
+            results = list(dataset_set.get_list())
     except ClientError as e:
         # TODO: We want to distinguish the expected errors
         # (like 4xx: "ABALON not present in rna index")
@@ -371,7 +392,7 @@ def datasets_selected_by_level(target_entity):
         # In the long run, we don't want to expose internal error messages in the UI.
         # https://github.com/hubmapconsortium/hubmap-api-py-client/issues/75
         return {'message': str(e)}
-    return {'results': list(dataset_set.get_list())}
+    return {'results': results}
 
 
 @timeit
@@ -446,9 +467,37 @@ def cells_in_dataset_clusters():
                                          min_expression=float(min_expression)))}
 
 
-# Utility function to translate CLIDs to the Label
+@timeit
+@blueprint.route('/cells/all-names-for-cell-type.json', methods=['POST'])
+def get_all_names_for_cell_type():
+    label = request.args.get('cell_type')
+    clid = translate_label(label)
+
+    return {'results': _get_all_names_for_clid(clid)}
+
+
+@cache
 def translate_clid(clid):
+    # Utility function to translate CLIDs to the Label
     cell_ids = _get_cell_ids(current_app)
     for cell in cell_ids:
         if cell['CL_ID'] == clid:
             return cell['Label']
+
+
+@cache
+def translate_label(label):
+    # Utility function to translate Labels to the CLID
+    cell_ids = _get_cell_ids(current_app)
+    for cell in cell_ids:
+        if cell['Label'] == label or cell['Lookup_Label'] == label:
+            return cell['CL_ID']
+
+
+@cache
+def _get_all_names_for_clid(clid):
+    # Utility function to get all the unique cell names for a given CLID
+    cell_ids = _get_all_labels()
+    labels = [cell['Label'] for cell in cell_ids if cell['CL_ID'] == clid]
+    # Deduplicate any exact matches and sort alphabetically
+    return tuple(sorted(list(set(labels))))

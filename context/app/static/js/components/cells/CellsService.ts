@@ -5,14 +5,14 @@
 
 import { AutocompleteQueryResponse } from './AutocompleteEntity/types';
 import { QueryType } from './queryTypes';
+import { ResultCounts } from './store';
 
 interface SearchBySubstringProps {
   targetEntity: QueryType;
   substring: string;
 }
-
-interface GetDatasetsProps {
-  type: QueryType;
+export interface GetDatasetsProps<T extends QueryType> {
+  type: T;
   cellVariableNames: string[];
   minExpression: string | number;
   minCellPercentage: string | number;
@@ -38,8 +38,16 @@ interface GetClusterCellMatchesInDatasetProps {
 
 interface DatasetsSelectedByExpressionResponse {
   uuid: string;
-  // TODO: Add more fields
+  // TODO: Add more fields if they exist
 }
+
+interface DatasetsSelectedByCellTypeResponse extends ResultCounts {
+  list: DatasetsSelectedByExpressionResponse[];
+}
+
+type GetDatasetsResponse<T extends QueryType> = T extends 'cell-type'
+  ? DatasetsSelectedByCellTypeResponse
+  : DatasetsSelectedByExpressionResponse[];
 
 class CellsService {
   async fetchAndParse<T>(url: string): Promise<T> {
@@ -65,22 +73,23 @@ class CellsService {
     );
   }
 
-  async getDatasets(props: GetDatasetsProps) {
+  async getDatasets<T extends QueryType>(props: GetDatasetsProps<T>): Promise<GetDatasetsResponse<T>> {
     const { type, cellVariableNames, minExpression, minCellPercentage, modality } = props;
     const urlParams = new URLSearchParams();
 
     cellVariableNames.forEach((cellVariableName) => {
       urlParams.append('cell_variable_name', cellVariableName);
     });
-    urlParams.append('min_expression', String(minExpression));
-    urlParams.append('min_cell_percentage', String(minCellPercentage));
-    if (modality) {
-      urlParams.append('modality', modality);
+
+    if (type !== 'cell-type') {
+      urlParams.append('min_expression', String(minExpression));
+      urlParams.append('min_cell_percentage', String(minCellPercentage));
+      if (modality) {
+        urlParams.append('modality', modality);
+      }
     }
 
-    return this.fetchAndParse<DatasetsSelectedByExpressionResponse[]>(
-      `/cells/datasets-selected-by-${type}.json?${urlParams.toString()}`,
-    );
+    return this.fetchAndParse(`/cells/datasets-selected-by-${type}.json?${urlParams.toString()}`);
   }
 
   async getCellPercentagesForDatasets(props: GetCellPercentagesForDatasetsProps) {
@@ -126,6 +135,10 @@ class CellsService {
 
   async getClusterCellMatchesInDataset(props: GetClusterCellMatchesInDatasetProps) {
     return this.fetchAndParse(this.getClusterCellMatchesInDatasetURL(props));
+  }
+
+  async getAllNamesForCellType(cellType: string) {
+    return this.fetchAndParse<string[]>(`/cells/all-names-for-cell-type.json?cell_type=${cellType}`);
   }
 }
 
