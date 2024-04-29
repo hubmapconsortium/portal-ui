@@ -7,7 +7,15 @@ import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
 import { useCellsChartsData } from './hooks';
 import { ChartWrapper, StyledTypography, PaddedDiv } from './style';
 
-function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpanded }) {
+interface CellsChartsProps {
+  uuid: string;
+  cellVariableName: string;
+  minExpression: number;
+  queryType: string;
+  isExpanded?: boolean;
+}
+
+function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpanded = false }: CellsChartsProps) {
   const { isLoading, diagnosticInfo, cellsData } = useCellsChartsData({
     uuid,
     cellVariableName,

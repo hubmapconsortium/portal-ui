@@ -5,21 +5,33 @@ import { InternalLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import CellsCharts from 'js/components/cells/CellsCharts';
-import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
+import useCellsChartLoadingStore, { CellsChartLoadingStore } from 'js/stores/useCellsChartLoadingStore';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
+import { CellsResultsDataset, DonorMappedMetadata } from '../types';
 
-const storeSelector = (state) => ({ loadingUUID: state.loadingUUID, fetchedUUIDs: state.fetchedUUIDs });
+const storeSelector = (state: CellsChartLoadingStore) => ({
+  loadingUUID: state.loadingUUID,
+  fetchedUUIDs: state.fetchedUUIDs,
+});
 
-function UnitValueCell({ unit, value }) {
+interface UnitValueCellProps {
+  unit: string;
+  value: string;
+}
+function UnitValueCell({ unit, value }: UnitValueCellProps) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;
 }
 
-function MetadataCells({ donor: { mapped_metadata } }) {
+function MetadataCells({ donor: { mapped_metadata } }: Pick<CellsResultsDataset, 'donor'>) {
   if (mapped_metadata) {
     return (
       <>
         {['age', 'body_mass_index'].map((base) => (
-          <UnitValueCell value={mapped_metadata[`${base}_value`]} unit={mapped_metadata[`${base}_unit`]} key={base} />
+          <UnitValueCell
+            value={mapped_metadata[`${base}_value` as keyof DonorMappedMetadata] as string}
+            unit={mapped_metadata[`${base}_unit` as keyof DonorMappedMetadata] as string}
+            key={base}
+          />
         ))}
         <ExpandableRowCell>{mapped_metadata.sex}</ExpandableRowCell>
         <ExpandableRowCell>{mapped_metadata.race.join(', ')}</ExpandableRowCell>
@@ -37,7 +49,23 @@ function MetadataCells({ donor: { mapped_metadata } }) {
   );
 }
 
-function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression, queryType, isExpandedToStart }) {
+interface DatasetTableRowProps {
+  datasetMetadata: CellsResultsDataset;
+  numCells: number;
+  cellVariableName: string;
+  minExpression: number;
+  queryType: string;
+  isExpandedToStart: boolean;
+}
+
+function DatasetTableRow({
+  datasetMetadata,
+  numCells,
+  cellVariableName,
+  minExpression,
+  queryType,
+  isExpandedToStart,
+}: DatasetTableRowProps) {
   const { hubmap_id, uuid, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
 
   const { loadingUUID, fetchedUUIDs } = useCellsChartLoadingStore(storeSelector);

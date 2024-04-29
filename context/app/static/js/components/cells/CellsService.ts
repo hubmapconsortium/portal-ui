@@ -49,6 +49,24 @@ type GetDatasetsResponse<T extends QueryType> = T extends 'cell-type'
   ? DatasetsSelectedByCellTypeResponse
   : DatasetsSelectedByExpressionResponse[];
 
+interface CellExpressionInDataset {
+  cell_id: string;
+  cell_type: string;
+  clusters: string[];
+  dataset: string;
+  modality: string;
+  organ: string;
+  values: Record<string, number>;
+}
+
+interface ClusterCellMatch {
+  cluster_name: string;
+  cluster_number: string;
+  matched: number;
+  modality: string;
+  unmatched: number;
+}
+
 class CellsService {
   async fetchAndParse<T>(url: string): Promise<T> {
     const response = await fetch(url, { method: 'POST' });
@@ -116,11 +134,11 @@ class CellsService {
   }
 
   async getCellExpressionInDataset(props: GetCellExpressionInDatasetProps) {
-    return this.fetchAndParse(this.getCellExpressionInDatasetURL(props));
+    return this.fetchAndParse<CellExpressionInDataset[]>(this.getCellExpressionInDatasetURL(props));
   }
 
   async getAllIndexedUUIDs() {
-    return this.fetchAndParse(`/cells/all-indexed-uuids.json`);
+    return this.fetchAndParse<string[]>(`/cells/all-indexed-uuids.json`);
   }
 
   getClusterCellMatchesInDatasetURL({ uuid, cellVariableName, minExpression }: GetClusterCellMatchesInDatasetProps) {
@@ -134,7 +152,7 @@ class CellsService {
   }
 
   async getClusterCellMatchesInDataset(props: GetClusterCellMatchesInDatasetProps) {
-    return this.fetchAndParse(this.getClusterCellMatchesInDatasetURL(props));
+    return this.fetchAndParse<Record<string, ClusterCellMatch>>(this.getClusterCellMatchesInDatasetURL(props));
   }
 
   async getAllNamesForCellType(cellType: string) {

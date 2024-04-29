@@ -6,7 +6,7 @@ interface CellsChartLoadingStoreState {
 }
 
 interface CellsChartLoadingStoreActions {
-  setLoadingUUID: (uuid: string) => void;
+  setLoadingUUID: (uuid: string | null) => void;
   addFetchedUUID: (uuid: string) => void;
   resetFetchedUUIDs: () => void;
 }

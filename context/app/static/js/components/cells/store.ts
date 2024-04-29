@@ -1,11 +1,12 @@
 import { create } from 'zustand';
 
 import { QueryType, queryTypes } from 'js/components/cells/queryTypes';
+import { WrappedCellsResultsDataset } from './types';
 
 export type ResultCounts = Record<'matching' | 'total', number>;
 
 interface CellsSearchState {
-  results: unknown[];
+  results: WrappedCellsResultsDataset[];
   resultCounts?: ResultCounts;
   isLoading: boolean;
   minExpressionLog: number;
@@ -25,7 +26,7 @@ const defaultState: CellsSearchState = {
 };
 
 interface CellsSearchActions {
-  setResults: (results: unknown[]) => void;
+  setResults: (results: WrappedCellsResultsDataset[]) => void;
   setResultCounts: (resultsCounts: ResultCounts) => void;
   setIsLoading: (isLoading: boolean) => void;
   setMinExpressionLog: (minExpressionLog: number) => void;
@@ -39,7 +40,7 @@ export interface CellsSearchStore extends CellsSearchState, CellsSearchActions {
 
 export const useStore = create<CellsSearchStore>((set) => ({
   ...defaultState,
-  setResults: (results: unknown[]) => set({ results }),
+  setResults: (results: WrappedCellsResultsDataset[]) => set({ results }),
   setResultCounts: (resultCounts: ResultCounts | undefined) => set({ resultCounts }),
   setIsLoading: (isLoading: boolean) => set({ isLoading }),
   setMinExpressionLog: (minExpressionLog: number) => set({ minExpressionLog }),
