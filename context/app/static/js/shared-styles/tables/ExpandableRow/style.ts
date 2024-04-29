@@ -11,7 +11,7 @@ interface ExpandableComponentProps {
 interface ExpandableRowProps extends ExpandableComponentProps, TableRowProps {}
 
 const ExpandedRow = styled(TableRow)<ExpandableRowProps>(({ $isExpanded }: ExpandableComponentProps) => ({
-  visibility: !$isExpanded ? undefined : 'hidden',
+  visibility: $isExpanded ? undefined : 'hidden',
 }));
 
 interface ExpandableCellProps extends ExpandableComponentProps, TableCellProps {}
