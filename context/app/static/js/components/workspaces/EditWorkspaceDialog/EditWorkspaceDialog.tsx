@@ -37,23 +37,27 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
   const { isOpen, close } = useEditWorkspaceStore();
   const { toastSuccess, toastError } = useSnackbarActions();
 
+  const handleClose = useCallback(() => {
+    reset();
+    if (resetState) {
+      resetState();
+    }
+    close();
+  }, [close, resetState, reset]);
+
   const submit = useCallback(
     (fieldValues: T) => {
       onSubmit(fieldValues)
         .then(() => {
           toastSuccess('Workspace successfully updated.');
-          reset();
-          if (resetState) {
-            resetState();
-          }
-          close();
+          handleClose();
         })
         .catch((error) => {
           console.error(error);
           toastError('Failed to update workspace.');
         });
     },
-    [close, onSubmit, reset, resetState, toastError, toastSuccess],
+    [onSubmit, handleClose, toastError, toastSuccess],
   );
 
   return (
@@ -67,10 +71,10 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
         </form>
       }
       isOpen={isOpen}
-      handleClose={close}
+      handleClose={handleClose}
       actions={
         <Stack direction="row" spacing={2} alignItems="end">
-          <Button type="button" onClick={close} disabled={isSubmitting}>
+          <Button type="button" onClick={handleClose} disabled={isSubmitting}>
             Cancel
           </Button>
           <LoadingButton

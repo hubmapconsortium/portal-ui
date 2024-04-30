@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Radio from '@mui/material/Radio';
 import Box from '@mui/material/Box';
@@ -19,18 +19,15 @@ import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 
 function SelectWorkspaceStep({
-  selectedWorkspace,
   selectWorkspace,
   workspaceIdErrorMessages,
-}: Pick<
-  ReturnType<typeof useAddDatasetsFromSearchDialog>,
-  'selectedWorkspace' | 'selectWorkspace' | 'workspaceIdErrorMessages'
->) {
+}: Pick<ReturnType<typeof useAddDatasetsFromSearchDialog>, 'selectWorkspace' | 'workspaceIdErrorMessages'>) {
   const { completeStep } = useAccordionStep();
 
   const { workspacesList } = useWorkspacesList();
+  const [toggledWorkspace, toggleWorkspace] = useState<number | undefined>(undefined);
 
-  const selectedWorkspaceDetails = workspacesList.find((workspace) => workspace.id === selectedWorkspace);
+  const selectedWorkspaceDetails = workspacesList.find((workspace) => workspace.id === toggledWorkspace);
 
   return (
     <Box>
@@ -47,8 +44,8 @@ function SelectWorkspaceStep({
             <WorkspaceListItem
               workspace={workspace}
               key={workspace.id}
-              toggleItem={selectWorkspace}
-              selected={workspace.id === selectedWorkspace}
+              toggleItem={toggleWorkspace}
+              selected={workspace.id === toggledWorkspace}
               ToggleComponent={Radio}
             />
           ))}
@@ -56,9 +53,14 @@ function SelectWorkspaceStep({
       </Stack>
       <Button
         variant="contained"
-        onClick={() => completeStep(selectedWorkspaceDetails?.name ?? '')}
+        onClick={() => {
+          if (toggledWorkspace) {
+            completeStep(selectedWorkspaceDetails?.name ?? '');
+            selectWorkspace(toggledWorkspace);
+          }
+        }}
         sx={{ mt: 2 }}
-        disabled={!selectedWorkspace}
+        disabled={!toggledWorkspace}
       >
         Select Workspace
       </Button>
@@ -107,7 +109,7 @@ function AddDatasetsStep({
   );
 }
 
-function AddDatasetsFromSearchDialog() {
+function AddDatasetsFromSearchDialogForm() {
   const {
     submit,
     handleSubmit,
@@ -117,7 +119,6 @@ function AddDatasetsFromSearchDialog() {
     resetAutocompleteState,
     datasetsErrorMessages,
     workspaceIdErrorMessages,
-    selectedWorkspace,
     selectWorkspace,
     ...rest
   } = useAddDatasetsFromSearchDialog();
@@ -127,11 +128,7 @@ function AddDatasetsFromSearchDialog() {
       {
         heading: '1. Select Workspace to Edit',
         content: (
-          <SelectWorkspaceStep
-            selectedWorkspace={selectedWorkspace}
-            selectWorkspace={selectWorkspace}
-            workspaceIdErrorMessages={workspaceIdErrorMessages}
-          />
+          <SelectWorkspaceStep selectWorkspace={selectWorkspace} workspaceIdErrorMessages={workspaceIdErrorMessages} />
         ),
       },
       {
@@ -139,7 +136,7 @@ function AddDatasetsFromSearchDialog() {
         content: <AddDatasetsStep datasetsErrorMessages={datasetsErrorMessages} {...rest} />,
       },
     ];
-  }, [selectedWorkspace, selectWorkspace, workspaceIdErrorMessages, datasetsErrorMessages, rest]);
+  }, [selectWorkspace, workspaceIdErrorMessages, datasetsErrorMessages, rest]);
 
   return (
     <EditWorkspaceDialogContent
@@ -159,13 +156,13 @@ function AddDatasetsFromSearchDialog() {
   );
 }
 
-function J() {
+function AddDatasetsFromSearchDialog() {
   const { isLoading } = useWorkspacesList();
   if (isLoading) {
     return null;
   }
 
-  return <AddDatasetsFromSearchDialog />;
+  return <AddDatasetsFromSearchDialogForm />;
 }
 
-export default J;
+export default AddDatasetsFromSearchDialog;

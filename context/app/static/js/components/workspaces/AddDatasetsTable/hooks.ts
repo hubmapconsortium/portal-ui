@@ -2,7 +2,6 @@ import { useState, SyntheticEvent, useCallback } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/Contexts';
-import { useSelectItems } from 'js/hooks/useSelectItems';
 import { useWorkspaceDetail } from '../hooks';
 
 interface BuildIDPrefixQueryType {
@@ -81,55 +80,40 @@ function useSearchAhead({ value, valuePrefix = '', uuidsToExclude = [] }: BuildI
 
 function useDatasetsAutocomplete({
   workspaceId,
-  initialDatasetsUUIDS = [],
+  selectedDatasets = [],
   updateDatasetsFormState,
 }: {
   workspaceId: number;
-  initialDatasetsUUIDS?: string[];
-  updateDatasetsFormState?: (datasetUUIDS: string[]) => void;
+  selectedDatasets: string[];
+  updateDatasetsFormState: (datasetUUIDS: string[]) => void;
 }) {
   const [inputValue, setInputValue] = useState('');
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
-  const {
-    selectedItems: selectedDatasets,
-    addItem: selectDataset,
-    setSelectedItems: setSelectedDatasets,
-  } = useSelectItems(initialDatasetsUUIDS);
 
   const addDataset = useCallback(
     (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
-      const datasetsCopy = selectedDatasets;
       const uuid = newValue?._source?.uuid;
       if (uuid) {
         setAutocompleteValue(newValue);
-        selectDataset(uuid);
-        if (updateDatasetsFormState) {
-          updateDatasetsFormState([...datasetsCopy, uuid]);
-        }
+        updateDatasetsFormState([...selectedDatasets, uuid]);
       }
     },
-    [selectDataset, selectedDatasets, updateDatasetsFormState],
+    [selectedDatasets, updateDatasetsFormState],
   );
 
   const removeDatasets = useCallback(
     (uuids: string[]) => {
-      const datasetsCopy = selectedDatasets;
-      uuids.forEach((uuid) => datasetsCopy.delete(uuid));
-
-      const updatedDatasetsArray = [...datasetsCopy];
-      setSelectedDatasets(updatedDatasetsArray);
-      if (updateDatasetsFormState) {
-        updateDatasetsFormState(updatedDatasetsArray);
-      }
+      const selectedDatasetsSet = new Set(selectedDatasets);
+      uuids.forEach((uuid) => selectedDatasetsSet.delete(uuid));
+      updateDatasetsFormState([...selectedDatasetsSet]);
     },
-    [setSelectedDatasets, selectedDatasets, updateDatasetsFormState],
+    [selectedDatasets, updateDatasetsFormState],
   );
 
   const resetAutocompleteState = useCallback(() => {
     setInputValue('');
     setAutocompleteValue(null);
-    setSelectedDatasets(initialDatasetsUUIDS);
-  }, [setSelectedDatasets, setInputValue, setAutocompleteValue, initialDatasetsUUIDS]);
+  }, [setInputValue, setAutocompleteValue]);
 
   const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];
@@ -146,7 +130,6 @@ function useDatasetsAutocomplete({
     workspaceDatasets,
     allDatasets,
     searchHits,
-    setSelectedDatasets,
   };
 }
 

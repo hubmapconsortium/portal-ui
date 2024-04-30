@@ -55,7 +55,6 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     inputValue,
     setInputValue,
     autocompleteValue,
-    selectedDatasets,
     addDataset,
     removeDatasets,
     workspaceDatasets,
@@ -64,7 +63,7 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     resetAutocompleteState,
   } = useDatasetsAutocomplete({
     workspaceId,
-    initialDatasetsUUIDS: field.value,
+    selectedDatasets: field.value,
     updateDatasetsFormState: field.onChange,
   });
 
@@ -81,7 +80,7 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
 
   const errorMessage = fieldState?.error?.message;
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({
-    numWorkspaceDatasets: selectedDatasets.size + workspaceDatasets.length,
+    numWorkspaceDatasets: field.value.length + workspaceDatasets.length,
   });
   const errorMessages = [...tooManyDatasetsErrorMessages];
 
