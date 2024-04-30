@@ -13,6 +13,8 @@ interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
   handleStopWorkspace: (workspaceId: number) => Promise<void>;
   isStoppingWorkspace: boolean;
+  disableLaunch?: boolean;
+  disableStop?: boolean;
   button: ElementType<ButtonProps>;
 }
 
@@ -21,7 +23,7 @@ function StopWorkspaceButton({
   handleStopWorkspace,
   button: ButtonComponent,
   isStoppingWorkspace,
-}: WorkspaceButtonProps) {
+}: Omit<WorkspaceButtonProps, 'disableLaunch' | 'disableStop'>) {
   const { toastError } = useSnackbarActions();
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
   if (!currentWorkspaceIsRunning) {
@@ -81,7 +83,7 @@ function StopWorkspaceAlert() {
 }
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const { workspace, button: ButtonComponent } = props;
+  const { workspace, button: ButtonComponent, disableLaunch = false, disableStop = false } = props;
   const { handleLaunchWorkspace } = useLaunchWorkspace(workspace);
   const { toastError } = useSnackbarActions();
   if (workspace.status === 'deleting') {
@@ -93,21 +95,23 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
   }
   return (
     <Stack direction="row" spacing={2}>
-      <StopWorkspaceButton {...props} />
-      <Button
-        type="button"
-        onClick={() => {
-          handleLaunchWorkspace().catch((err: Error) => {
-            if (err.message.includes('already running')) {
-              return;
-            }
-            toastError(`Error launching ${workspace.name}.`);
-            console.error(err);
-          });
-        }}
-      >
-        Launch Workspace
-      </Button>
+      {!disableStop && <StopWorkspaceButton {...props} />}
+      {!disableLaunch && (
+        <Button
+          type="button"
+          onClick={() => {
+            handleLaunchWorkspace().catch((err: Error) => {
+              if (err.message.includes('already running')) {
+                return;
+              }
+              toastError(`Error launching ${workspace.name}.`);
+              console.error(err);
+            });
+          }}
+        >
+          Launch Workspace
+        </Button>
+      )}
     </Stack>
   );
 }

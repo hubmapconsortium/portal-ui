@@ -31,13 +31,14 @@ function SelectWorkspaceStep({
 
   return (
     <Box>
-      <Alert severity="info" sx={{ mb: 2 }}>
-        Only one workspace can be selected at a time for editing. Workspaces that are running cannot be edited until all
-        jobs are stopped.
-      </Alert>
-      <StopWorkspaceAlert />
-      {workspaceIdErrorMessages.length > 0 && <ErrorMessages errorMessages={workspaceIdErrorMessages} />}
-
+      <Stack spacing={2} sx={{ mb: 2 }}>
+        <Alert severity="info">
+          Only one workspace can be selected at a time for editing. Workspaces that are running cannot be edited until
+          all jobs are stopped.
+        </Alert>
+        <StopWorkspaceAlert />
+        {workspaceIdErrorMessages.length > 0 && <ErrorMessages errorMessages={workspaceIdErrorMessages} />}
+      </Stack>
       <Stack spacing={3} component={Paper}>
         <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
           {workspacesList.map((workspace) => (
@@ -47,6 +48,7 @@ function SelectWorkspaceStep({
               toggleItem={toggleWorkspace}
               selected={workspace.id === toggledWorkspace}
               ToggleComponent={Radio}
+              disableLaunch
             />
           ))}
         </Box>

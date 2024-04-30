@@ -18,6 +18,8 @@ interface WorkspaceListItemProps {
   toggleItem: (workspaceId: number) => void;
   ToggleComponent: typeof Checkbox | typeof Radio;
   selected: boolean;
+  disableStop?: boolean;
+  disableLaunch?: boolean;
 }
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -29,7 +31,14 @@ function LaunchStopButton(props: ButtonProps) {
   return <StyledButton {...props} variant="elevated" size="small" />;
 }
 
-function WorkspaceListItem({ workspace, toggleItem, selected, ToggleComponent }: WorkspaceListItemProps) {
+function WorkspaceListItem({
+  workspace,
+  toggleItem,
+  selected,
+  ToggleComponent,
+  disableLaunch = false,
+  disableStop = false,
+}: WorkspaceListItemProps) {
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
 
@@ -62,6 +71,8 @@ function WorkspaceListItem({ workspace, toggleItem, selected, ToggleComponent }:
         button={LaunchStopButton}
         handleStopWorkspace={handleStopWorkspace}
         isStoppingWorkspace={isStoppingWorkspace}
+        disableLaunch={disableLaunch}
+        disableStop={disableStop}
       />
     </PanelWrapper>
   );
