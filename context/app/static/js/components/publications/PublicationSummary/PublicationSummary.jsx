@@ -1,6 +1,6 @@
 import React from 'react';
 
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';

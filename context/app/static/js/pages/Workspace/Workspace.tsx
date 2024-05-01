@@ -1,5 +1,5 @@
 import React from 'react';
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button, { ButtonProps } from '@mui/material/Button';

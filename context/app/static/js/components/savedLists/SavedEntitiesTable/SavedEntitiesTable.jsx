@@ -9,7 +9,7 @@ import TableCell from '@mui/material/TableCell';
 import DeleteRoundedIcon from '@mui/icons-material/DeleteRounded';
 import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';

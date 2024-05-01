@@ -232,6 +232,8 @@ and after it has started, visit [localhost:6006](http://localhost:6006).
 
 The build, tag, deploy, and QA procedures are [detailed here](https://hms-dbmi.atlassian.net/wiki/spaces/GL/pages/3009282049/Deployment).
 
+Instructions for Production are provided [here](compose/README-deploy-PROD.txt).
+
 ### Understanding the build
 
 <details><summary>Webpack</summary>

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 
-import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { DagProvenanceType, useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import { getTokenParam } from 'js/helpers/functions';
 import { UnprocessedFile } from '../types';
@@ -16,6 +16,37 @@ const defaultPipeline: PipelineInfo = {
   origin: 'https://github.com/hubmapconsortium/ingest-pipeline.git',
 };
 
+// Values that should not be displayed as pipeline info
+const originDenylist = ['https://github.com/hubmapconsortium/portal-containers'];
+
+// Undescriptive pipeline names which should be replaced with GitHub repo names
+const nameDenylist = ['pipeline.cwl'];
+
+export function getGithubRepoName(origin: string) {
+  const match = origin.match(/github.com\/([^/]+)\/([^/]+)(\/|$)/);
+  if (match) {
+    return match[2];
+  }
+  return origin;
+}
+
+export function processDagList(acc: PipelineInfo, dag: DagProvenanceType) {
+  if ('origin' in dag) {
+    if (originDenylist.includes(dag.origin)) {
+      return acc;
+    }
+    acc.origin = dag.origin;
+  }
+  if ('name' in dag) {
+    if (nameDenylist.includes(dag.name)) {
+      acc.name = getGithubRepoName(acc.origin);
+    } else {
+      acc.name = dag.name;
+    }
+  }
+  return acc;
+}
+
 /**
  * Extract the latest origin and name from the entity data in the flask context
  * @returns {Object} { origin (pipeline URL), name (pipeline name, if specified)}
@@ -24,15 +55,7 @@ function usePipelineInfo(): PipelineInfo {
   const { entity } = useFlaskDataContext();
   const dagList = entity.metadata.dag_provenance_list ?? [];
   // Iterate over the list of DAGs and extract the latest origin and name
-  const pipelineInfo = dagList.reduce<PipelineInfo>((acc, dag) => {
-    if ('origin' in dag) {
-      acc.origin = dag.origin;
-    }
-    if ('name' in dag) {
-      acc.name = dag.name;
-    }
-    return acc;
-  }, defaultPipeline);
+  const pipelineInfo = dagList.reduce<PipelineInfo>(processDagList, defaultPipeline);
   return pipelineInfo;
 }
 

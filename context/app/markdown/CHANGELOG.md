@@ -1,12 +1,35 @@
+## v0.94.2 - 2024-04-18
+
+- Added handling for visualizations of multiomic data.
+- Improve usefulness of data products section by ensuring correct pipeline is linked as the source instead of portal containers and using GitHub repo names as a fallback for `pipeline.cwl`.
+- Improve usability of data products section for datasets with many products by enabling scrolling.
+- Bump Node to v20.12.0.
+- Update various front-end dependencies.
+- Migrate husky configuration to v9.
+
+
+## v0.94.1 - 2024-04-10
+
+- Remove extra "s" on provenance tables.
+
+
+## v0.94.0 - 2024-04-10
+
+- Add optional parameter to dev docker.sh to allow for alternate image name.
+-  
+- Correct a typo which caused the metadata table to not display.
+- Document Production deployment instructions.
+
+
 ## v0.93.1 - 2024-03-22
 
 - Remove stale previews from tools.
 - Add tracking for various donor and sample page events.
 - Remove unused import.
 - Update GitHub action checkout from v2 to v4.
-- Update GitHub action setup-node from v3 to v4 .
-- Update GitHub action codeql from v2 to v4 .
-- Update GitHub action setup-python from v4 to v5 .
+- Update GitHub action setup-node from v3 to v4.
+- Update GitHub action codeql from v2 to v4.
+- Update GitHub action setup-python from v4 to v5.
 - Fix broken publication cypress test.
 - Update dataset detail page for multi-assay datasets.
 - Add multi-assay provenance display on dataset detail pages.

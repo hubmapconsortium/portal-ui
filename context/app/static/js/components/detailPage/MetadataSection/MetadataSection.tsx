@@ -101,7 +101,7 @@ function MetadataWrapper({
       <Flex>
         <SectionHeader iconTooltipText={buildTooltip(entity_type)}>Metadata</SectionHeader>
         <SecondaryBackgroundTooltip title="Download">
-          <a href={downloadUrl} download={`${hubmap_id}.tsv`}>
+          <a href={downloadUrl} download={`${hubmap_id}.tsv`} aria-label="Download TSV of selected items' metadata">
             <StyledWhiteBackgroundIconButton
               onClick={() => trackEntityPageEvent({ action: `Metadata / Download Metadata` })}
             >

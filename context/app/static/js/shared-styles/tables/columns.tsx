@@ -1,5 +1,5 @@
 import React, { ComponentType } from 'react';
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 
 import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from 'js/typings/search';
 import { InternalLink } from 'js/shared-styles/Links';

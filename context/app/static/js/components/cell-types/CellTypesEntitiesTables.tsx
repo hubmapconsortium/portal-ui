@@ -9,7 +9,7 @@ import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import TableCell from '@mui/material/TableCell';
-import format from 'date-fns/format';
+import { format } from 'date-fns/format';
 import { InternalLink } from 'js/shared-styles/Links';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';

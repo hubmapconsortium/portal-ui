@@ -16,7 +16,7 @@ interface TemplateGridProps {
   templates: TemplatesTypes;
 }
 
-const inputName = 'templates' as const;
+const inputName = 'templates';
 interface ControllerProps<FormType extends FormWithTemplates> {
   control: Control<FormType>;
 }

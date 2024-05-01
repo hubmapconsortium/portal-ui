@@ -90,7 +90,6 @@ export default function CellTypesVisualization() {
       <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
       <Stack direction="row" height={640}>
         <VerticalStackedBarChart
-          initialHeight={640}
           visxData={sortedOrgans}
           yScale={yScale}
           xScale={xScale}
