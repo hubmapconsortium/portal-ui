@@ -128,11 +128,13 @@ function useAddDatasetsFromSearchDialog() {
 
   const submit = useCallback(
     async ({ datasets }: { datasets: string[] }) => {
+      const workspaceDatasetsSet = new Set(workspaceDatasets);
+      const newDatasets = datasets.filter((uuid) => !workspaceDatasetsSet.has(uuid));
       await updateWorkspaceDatasets({
-        datasetUUIDs: datasets,
+        datasetUUIDs: newDatasets,
       });
     },
-    [updateWorkspaceDatasets],
+    [updateWorkspaceDatasets, workspaceDatasets],
   );
 
   const { isOpen } = useEditWorkspaceStore();
