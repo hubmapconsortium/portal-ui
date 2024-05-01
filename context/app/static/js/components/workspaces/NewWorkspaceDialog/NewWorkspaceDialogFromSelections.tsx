@@ -1,10 +1,12 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
+import SvgIcon from '@mui/material/SvgIcon';
 
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
+import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 
@@ -16,7 +18,10 @@ function NewWorkspaceDialogFromSelections() {
 
   return (
     <>
-      <MenuItem onClick={() => setDialogIsOpen(true)}>Create New Workspace</MenuItem>
+      <MenuItem onClick={() => setDialogIsOpen(true)}>
+        <SvgIcon component={WorkspacesIcon} sx={{ mr: 1, fontSize: '1.25rem' }} />
+        Create New Workspace
+      </MenuItem>
       <NewWorkspaceDialog
         datasetUUIDs={selectedRows}
         control={control}
