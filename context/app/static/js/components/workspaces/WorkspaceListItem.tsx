@@ -42,7 +42,7 @@ function WorkspaceListItem({
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
 
-  const tooltip = isRunning ?? 'Stop all jobs before selecting';
+  const tooltip = isRunning ? 'Stop all jobs before selecting.' : undefined;
 
   // Deselect the workspace if the user starts it after selecting it for deletion
   useEffect(() => {
