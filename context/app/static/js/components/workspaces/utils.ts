@@ -1,3 +1,4 @@
+import { DEFAULT_JOB_TYPE } from './constants';
 import {
   jobStatuses,
   validateJobStatus,
@@ -274,6 +275,10 @@ function buildDatasetSymlinks({ datasetUUIDs }: { datasetUUIDs: string[] }) {
   }));
 }
 
+function getDefaultJobType({ workspace }: { workspace: Workspace }) {
+  return workspace?.default_job_type ?? DEFAULT_JOB_TYPE;
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -288,4 +293,5 @@ export {
   findRunningWorkspace,
   isRunningJob,
   buildDatasetSymlinks,
+  getDefaultJobType,
 };

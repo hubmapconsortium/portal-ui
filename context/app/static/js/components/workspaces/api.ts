@@ -6,7 +6,13 @@ import { useCallback } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from '../Contexts';
-import { Workspace, WorkspaceAPIResponse, WorkspaceAPIResponseWithoutData, WorkspaceJob } from './types';
+import {
+  Workspace,
+  WorkspaceAPIResponse,
+  WorkspaceAPIResponseWithoutData,
+  WorkspaceJob,
+  WorkspaceJobType,
+} from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
 export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 10;
@@ -229,10 +235,10 @@ export function useDeleteWorkspace() {
   return { deleteWorkspace, isDeleting: isMutating };
 }
 
-async function fetchJobTypes(jobTypesEndpoint: string): Promise<Record<string, { id: number }> | undefined> {
+async function fetchJobTypes(jobTypesEndpoint: string): Promise<Record<string, WorkspaceJobType> | undefined> {
   const response = fetch(jobTypesEndpoint);
   const { data, success, message } = (await (await response).json()) as WorkspaceAPIResponse<{
-    job_types: Record<string, { id: number }>;
+    job_types: Record<string, WorkspaceJobType>;
   }>;
   if (!success) {
     throw new Error(`Failed to get job types: ${message}`);
@@ -277,28 +283,20 @@ async function startJob(
 }
 
 export function useStartWorkspace() {
-  const { data, isLoading: loadingJobTypes } = useJobTypes();
   const api = useWorkspacesApiURLs();
   const headers = useWorkspaceHeaders();
   const { trigger, isMutating } = useSWRMutation('start-workspace', startJob);
   const startWorkspace = useCallback(
-    async (workspaceId: number) => {
-      if (!data || loadingJobTypes) {
-        return undefined;
-      }
-      if (!data.jupyter_lab) {
-        console.error('Failed to get jupyter lab job type');
-        return undefined;
-      }
+    async ({ workspaceId, jobTypeId }: { workspaceId: number; jobTypeId: string }) => {
       return trigger({
         url: api.startWorkspace(workspaceId),
         jobDetails: {},
         headers,
-        jobType: data.jupyter_lab.id,
+        jobType: jobTypeId,
         workspaceId,
       });
     },
-    [data, loadingJobTypes, trigger, api, headers],
+    [trigger, api, headers],
   );
   return { startWorkspace, isStartingWorkspace: isMutating };
 }
@@ -306,6 +304,7 @@ export function useStartWorkspace() {
 export interface CreateWorkspaceBody {
   name: string;
   description: string;
+  default_job_type: string;
   workspace_details: {
     globus_groups_token: string;
     files: {

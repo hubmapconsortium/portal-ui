@@ -10,6 +10,7 @@ import {
   findBestJob,
   getWorkspaceFileName,
   buildDatasetSymlinks,
+  getDefaultJobType,
 } from './utils';
 import {
   useDeleteWorkspace,
@@ -72,8 +73,8 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
     await mutate();
   }
 
-  async function handleStartWorkspace(workspaceId: number) {
-    await startWorkspace(workspaceId);
+  async function handleStartWorkspace({ workspaceId, jobTypeId }: { workspaceId: number; jobTypeId: string }) {
+    await startWorkspace({ workspaceId, jobTypeId });
     await mutate();
   }
 
@@ -158,7 +159,7 @@ function useHasRunningWorkspace() {
   return Boolean(useRunningWorkspace());
 }
 
-function useLaunchWorkspace(workspace?: Workspace) {
+function useLaunchWorkspace() {
   const { startWorkspace } = useStartWorkspace();
   const { mutate: mutateWorkspaces } = useWorkspaces();
   const runningWorkspace = useRunningWorkspace();
@@ -167,46 +168,48 @@ function useLaunchWorkspace(workspace?: Workspace) {
   const { open, setWorkspace } = useLaunchWorkspaceStore();
 
   const startAndOpenWorkspace = useCallback(
-    async (ws: Workspace, templatePath?: string) => {
-      await startWorkspace(ws.id);
+    async ({
+      workspace,
+      jobTypeId,
+      templatePath,
+    }: {
+      workspace: Workspace;
+      jobTypeId: string;
+      templatePath?: string;
+    }) => {
+      await startWorkspace({ workspaceId: workspace.id, jobTypeId });
       await mutate();
-      window.open(getWorkspaceStartLink(ws, templatePath), '_blank');
+      window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
     },
     [mutate, startWorkspace],
   );
 
   const launchWorkspace = useCallback(
-    async (ws: Workspace, templatePath?: string) => {
-      if (runningWorkspace && ws.id === runningWorkspace.id) {
-        window.open(getWorkspaceStartLink(ws, templatePath), '_blank');
+    async ({
+      workspace,
+      jobTypeId,
+      templatePath,
+    }: {
+      workspace: Workspace;
+      jobTypeId: string;
+      templatePath?: string;
+    }) => {
+      if (runningWorkspace && workspace.id === runningWorkspace.id) {
+        window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
         return;
       }
       if (runningWorkspace) {
         open();
-        setWorkspace(ws);
+        setWorkspace(workspace);
         throw new Error('Another workspace is already running');
       } else {
-        await startAndOpenWorkspace(ws, templatePath);
+        await startAndOpenWorkspace({ workspace, jobTypeId, templatePath });
       }
     },
     [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
   );
 
-  const handleLaunchWorkspace = useCallback(async () => {
-    if (workspace) {
-      try {
-        return await launchWorkspace(workspace);
-      } catch (err: unknown) {
-        if ((err as Error)?.message === 'Another workspace is already running') {
-          return undefined;
-        }
-        console.error(err);
-      }
-    }
-    return Promise.reject(new Error('No workspace to launch'));
-  }, [workspace, launchWorkspace]);
-
-  return { handleLaunchWorkspace, launchWorkspace, startAndOpenWorkspace };
+  return { launchWorkspace, startAndOpenWorkspace };
 }
 
 export function useCreateAndLaunchWorkspace() {
@@ -222,7 +225,7 @@ export function useCreateAndLaunchWorkspace() {
       }
 
       try {
-        await launchWorkspace(workspace, templatePath);
+        await launchWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
       } catch (err: unknown) {
         if ((err as Error)?.message === 'Another workspace is already running') {
           return;
@@ -273,10 +276,10 @@ function useRefreshSession(workspace: MergedWorkspace) {
   const { toastSuccess } = useSnackbarActions();
   const refreshSession = useCallback(async () => {
     await stopWorkspace(workspace.id);
-    await startWorkspace(workspace.id);
+    await startWorkspace({ workspaceId: workspace.id, jobTypeId: getDefaultJobType({ workspace }) });
     await mutate();
     toastSuccess('Session time for workspace successfully renewed');
-  }, [mutate, startWorkspace, stopWorkspace, toastSuccess, workspace.id]);
+  }, [mutate, startWorkspace, stopWorkspace, toastSuccess, workspace]);
 
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
 }
