@@ -1,5 +1,6 @@
 import React from 'react';
 import Radio from '@mui/material/Radio';
+import Box from '@mui/material/Box';
 import RadioGroup from '@mui/material/RadioGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
@@ -22,8 +23,13 @@ function WorkspaceJobTypeField<FormType extends FieldValues>({ control, name }: 
   }
 
   return (
-    <>
-      <FormLabel id="workspace-environment">Select Environment</FormLabel>
+    <Box>
+      <FormLabel
+        id="workspace-environment"
+        sx={(theme) => ({ ...theme.typography.subtitle2, color: theme.palette.text.primary })}
+      >
+        Select Environment
+      </FormLabel>
       <RadioGroup
         aria-labelledby="workspace-environment"
         name="workspace-environment-radio-buttons"
@@ -34,7 +40,7 @@ function WorkspaceJobTypeField<FormType extends FieldValues>({ control, name }: 
           <FormControlLabel value={id} control={<Radio />} label={jobTypeName} key={id} />
         ))}
       </RadioGroup>
-    </>
+    </Box>
   );
 }
 

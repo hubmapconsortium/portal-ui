@@ -4,6 +4,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import DialogModal from 'js/shared-styles/DialogModal';
 
+import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import { useLaunchWorkspaceDialog } from './hooks';
 
@@ -19,20 +20,25 @@ function LaunchWorkspaceDialog() {
   return (
     <DialogModal
       title={`Launch ${workspaceName}`}
+      maxWidth="md"
       content={
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(submit)}>
           <Stack direction="column" gap={4}>
             {isRunningWorkspace && (
-              <>
-                <Typography>
-                  {runningWorkspaceName} is currently running. You can only run one workspace at a time.
-                </Typography>
-                <Typography>
-                  To launch this workspace, jobs in the workspace {runningWorkspaceName} will be stopped. Make sure to
-                  save all progress before launching this workspace.
-                </Typography>
-              </>
+              <Alert
+                severity="warning"
+                sx={{
+                  '.MuiAlert-message': {
+                    flexGrow: 1,
+                  },
+                  alignItems: 'center',
+                }}
+              >
+                {runningWorkspaceName} is currently running. You can only run one workspace at a time. To launch this
+                workspace, jobs in the workspace {runningWorkspaceName} will be stopped. Make sure to save all progress
+                before launching this workspace.
+              </Alert>
             )}
             <Typography>
               All workspaces are launched with Python support, with the option to add support for R . Workspaces with
