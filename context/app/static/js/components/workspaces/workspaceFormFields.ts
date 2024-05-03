@@ -40,4 +40,17 @@ const workspaceIdField = {
   }),
 };
 
-export { workspaceNameField, protectedDatasetsField, templatesField, datasetsField, workspaceIdField };
+const workspaceJobTypeIdField = {
+  workspaceJobTypeId: z.string({
+    errorMap: withCustomMessage('A workspace environment is required. Please select a workspace environment.'),
+  }),
+};
+
+export {
+  workspaceNameField,
+  protectedDatasetsField,
+  templatesField,
+  datasetsField,
+  workspaceIdField,
+  workspaceJobTypeIdField,
+};
