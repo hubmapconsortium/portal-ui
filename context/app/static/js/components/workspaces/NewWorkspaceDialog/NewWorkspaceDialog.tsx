@@ -18,6 +18,7 @@ import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
+import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 
 const text = {
   overview: {
@@ -34,7 +35,13 @@ const text = {
       'To add more datasets to a workspace, you must navigate to the dataset search page, select datasets of interests and follow steps to launch a workspace from the search page. As a reminder, once you navigate away from this page, all selected datasets will be lost so take note of any HuBMAP IDs of interest, or copy IDs to your clipboard by selecting datasets in the table below and pressing the copy button. You can also save datasets to the “My Lists” feature.',
     ],
   },
-  configure: { title: 'Configure Workspace' },
+  configure: {
+    title: 'Configure Workspace',
+    description: [
+      'All workspaces are launched with Python support, with the option to add support for R. Workspaces with added R support may experience longer load times.',
+    ],
+  },
+
   templates: {
     title: 'Select Templates',
   },
@@ -77,11 +84,12 @@ function NewWorkspaceDialog({
   const { tags } = useWorkspaceTemplateTags();
 
   const submit = useCallback(
-    ({ 'workspace-name': workspaceName, templates: templateKeys }: CreateWorkspaceFormTypes) => {
+    ({ 'workspace-name': workspaceName, templates: templateKeys, workspaceJobTypeId }: CreateWorkspaceFormTypes) => {
       onSubmit({
         workspaceName,
         templateKeys,
         uuids: [...datasetUUIDs],
+        workspaceJobTypeId,
       });
     },
     [datasetUUIDs, onSubmit],
@@ -135,6 +143,8 @@ function NewWorkspaceDialog({
                 e.stopPropagation();
               }}
             />
+            <StepDescription blocks={text.configure.description} />
+            <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
           </Box>
         </Step>
         <TemplateSelectStep
