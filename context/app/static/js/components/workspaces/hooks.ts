@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { KeyedMutator } from 'swr';
+import { KeyedMutator, useSWRConfig } from 'swr';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
@@ -23,6 +23,8 @@ import {
   useWorkspace,
   useUpdateWorkspace,
   UpdateWorkspaceBody,
+  useWorkspacesApiURLs,
+  useBuildWorkspacesSWRKey,
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
@@ -47,6 +49,19 @@ function useMutateWorkspacesAndJobs<T>(mutateWorkspace?: KeyedMutator<T>) {
   }, [mutateWorkspaces, mutateJobs, mutateWorkspace]);
 
   return mutate;
+}
+
+function useGlobalMutateWorkspace() {
+  const { buildKey } = useBuildWorkspacesSWRKey();
+  const urls = useWorkspacesApiURLs();
+  const { mutate } = useSWRConfig();
+
+  return useCallback(
+    async (workspaceId: number) => {
+      await mutate(buildKey({ url: urls.workspace(workspaceId) }));
+    },
+    [buildKey, urls, mutate],
+  );
 }
 
 function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspace }: UseWorkspacesListTypes<T>) {
@@ -159,14 +174,35 @@ function useHasRunningWorkspace() {
   return Boolean(useRunningWorkspace());
 }
 
+function useHandleUpdateWorkspace() {
+  const { updateWorkspace } = useUpdateWorkspace();
+  const mutateWorkspacesAndJobs = useMutateWorkspacesAndJobs();
+  const globalMutateWorkspace = useGlobalMutateWorkspace();
+
+  const handleUpdateWorkspace = useCallback(
+    async ({ body, workspaceId }: { body: UpdateWorkspaceBody; workspaceId: number }) => {
+      try {
+        await updateWorkspace({ body, workspaceId });
+        await mutateWorkspacesAndJobs();
+        await globalMutateWorkspace(workspaceId);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [updateWorkspace, mutateWorkspacesAndJobs, globalMutateWorkspace],
+  );
+
+  return { handleUpdateWorkspace };
+}
+
 function useLaunchWorkspace() {
   const { startWorkspace } = useStartWorkspace();
-  const { mutate: mutateWorkspaces } = useWorkspaces();
   const runningWorkspace = useRunningWorkspace();
-  const mutate = useMutateWorkspacesAndJobs(mutateWorkspaces);
-
+  const mutateWorkspacesAndJobs = useMutateWorkspacesAndJobs();
+  const globalMutateWorkspace = useGlobalMutateWorkspace();
   const { open, setWorkspace } = useLaunchWorkspaceStore();
 
+  const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
   const startAndOpenWorkspace = useCallback(
     async ({
       workspace,
@@ -177,11 +213,15 @@ function useLaunchWorkspace() {
       jobTypeId: string;
       templatePath?: string;
     }) => {
+      if (workspace?.default_job_type !== jobTypeId) {
+        await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
+      }
       await startWorkspace({ workspaceId: workspace.id, jobTypeId });
-      await mutate();
+      await mutateWorkspacesAndJobs();
+      await globalMutateWorkspace(workspace.id);
       window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
     },
-    [mutate, startWorkspace],
+    [mutateWorkspacesAndJobs, startWorkspace, globalMutateWorkspace, handleUpdateWorkspace],
   );
 
   const launchWorkspace = useCallback(
@@ -284,25 +324,6 @@ function useRefreshSession(workspace: MergedWorkspace) {
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
 }
 
-function useHandleUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
-  const { mutate: mutateWorkspace } = useWorkspace(workspaceId);
-  const { updateWorkspace } = useUpdateWorkspace({ workspaceId });
-
-  const handleUpdateWorkspace = useCallback(
-    async (body: UpdateWorkspaceBody) => {
-      try {
-        await updateWorkspace(body);
-        await mutateWorkspace();
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [updateWorkspace, mutateWorkspace],
-  );
-
-  return { handleUpdateWorkspace };
-}
-
 function useCreateTemplates() {
   const { userTemplatesEndpoint } = useAppContext();
   const { toastError } = useSnackbarActions();
@@ -337,18 +358,21 @@ function useCreateTemplates() {
 
 function useUpdateWorkspaceDatasets({ workspaceId }: { workspaceId: number }) {
   const { groupsToken } = useAppContext();
-  const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
+  const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
 
   return useCallback(
     async ({ datasetUUIDs }: { datasetUUIDs: string[] }) => {
       await handleUpdateWorkspace({
-        workspace_details: {
-          globus_groups_token: groupsToken,
-          symlinks: buildDatasetSymlinks({ datasetUUIDs }),
+        workspaceId,
+        body: {
+          workspace_details: {
+            globus_groups_token: groupsToken,
+            symlinks: buildDatasetSymlinks({ datasetUUIDs }),
+          },
         },
       });
     },
-    [handleUpdateWorkspace, groupsToken],
+    [handleUpdateWorkspace, groupsToken, workspaceId],
   );
 }
 
