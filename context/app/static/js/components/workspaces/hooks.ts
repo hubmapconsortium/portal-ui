@@ -219,14 +219,15 @@ function useLaunchWorkspace() {
         window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
         return;
       }
-      if (isNewJobType) {
-        await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
-      }
 
       await startWorkspace({ workspaceId: workspace.id, jobTypeId });
       await mutateWorkspacesAndJobs();
       await globalMutateWorkspace(workspace.id);
       window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
+
+      if (isNewJobType) {
+        await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
+      }
     },
     [mutateWorkspacesAndJobs, startWorkspace, globalMutateWorkspace, handleUpdateWorkspace, runningWorkspace],
   );
