@@ -7,7 +7,6 @@ import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { workspaceJobTypeIdField } from '../workspaceFormFields';
 import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
-import { MergedWorkspace, Workspace } from '../types';
 import { DEFAULT_JOB_TYPE } from '../constants';
 
 export interface LaunchWorkspaceFormTypes {
@@ -80,19 +79,6 @@ function useLaunchWorkspaceDialog() {
     close();
   }, [close, reset]);
 
-  const handleStopAndLaunch = useCallback(
-    async ({ jobTypeId, ws, runningWs }: { jobTypeId: string; ws: Workspace; runningWs: MergedWorkspace }) => {
-      try {
-        await handleStopWorkspace(runningWs.id);
-        await startAndOpenWorkspace({ workspace: ws, jobTypeId });
-      } catch (e) {
-        toastError('Failed to stop workspace. Please try again.');
-        console.error(e);
-      }
-    },
-    [startAndOpenWorkspace, toastError, handleStopWorkspace],
-  );
-
   const submit = useCallback(
     async ({ workspaceJobTypeId }: LaunchWorkspaceFormTypes) => {
       if (!workspace) {
@@ -104,13 +90,25 @@ function useLaunchWorkspaceDialog() {
         runningWorkspace &&
         (!runningWorkspaceIsCurrentWorkpace || workspace?.default_job_type !== workspaceJobTypeId)
       ) {
-        await handleStopAndLaunch({ jobTypeId: workspaceJobTypeId, ws: workspace, runningWs: runningWorkspace });
-        return;
+        try {
+          await handleStopWorkspace(runningWorkspace.id);
+        } catch (e) {
+          toastError('Failed to stop workspace. Please try again.');
+          console.error(e);
+          return;
+        }
       }
 
       await startAndOpenWorkspace({ jobTypeId: workspaceJobTypeId, workspace });
     },
-    [workspace, runningWorkspace, handleStopAndLaunch, startAndOpenWorkspace, runningWorkspaceIsCurrentWorkpace],
+    [
+      workspace,
+      runningWorkspace,
+      startAndOpenWorkspace,
+      runningWorkspaceIsCurrentWorkpace,
+      handleStopWorkspace,
+      toastError,
+    ],
   );
 
   return {
