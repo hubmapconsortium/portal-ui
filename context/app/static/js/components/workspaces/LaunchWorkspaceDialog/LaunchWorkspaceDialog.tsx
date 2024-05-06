@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import DialogModal from 'js/shared-styles/DialogModal';
+import LoadingButton from '@mui/lab/LoadingButton';
 
+import DialogModal from 'js/shared-styles/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import { useLaunchWorkspaceDialog } from './hooks';
@@ -11,11 +12,26 @@ import { useLaunchWorkspaceDialog } from './hooks';
 const formId = 'launch-workspace-form';
 
 function LaunchWorkspaceDialog() {
-  const { isRunningWorkspace, runningWorkspace, control, handleSubmit, submit, isOpen, close, workspace } =
-    useLaunchWorkspaceDialog();
+  const {
+    isRunningWorkspace,
+    runningWorkspace,
+    control,
+    handleSubmit,
+    submit,
+    isOpen,
+    reset,
+    close,
+    workspace,
+    isSubmitting,
+  } = useLaunchWorkspaceDialog();
 
   const workspaceName = workspace?.name;
   const runningWorkspaceName = runningWorkspace?.name;
+
+  const handleClose = useCallback(() => {
+    reset();
+    close();
+  }, [close, reset]);
 
   return (
     <DialogModal
@@ -53,15 +69,15 @@ function LaunchWorkspaceDialog() {
         </form>
       }
       isOpen={isOpen}
-      handleClose={close}
+      handleClose={handleClose}
       actions={
         <Stack direction="row" spacing={2} alignItems="end">
-          <Button type="button" onClick={close}>
+          <Button type="button" onClick={handleClose} disabled={isSubmitting}>
             Cancel
           </Button>
-          <Button type="submit" form={formId}>
+          <LoadingButton type="submit" form={formId} loading={isSubmitting}>
             Launch
-          </Button>
+          </LoadingButton>
         </Stack>
       }
       withCloseButton

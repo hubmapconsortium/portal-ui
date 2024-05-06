@@ -53,7 +53,7 @@ function useLaunchWorkspaceDialog() {
 
   const { toastError } = useSnackbarActions();
 
-  const { control, handleSubmit } = useLaunchWorkspaceForm();
+  const { control, handleSubmit, isSubmitting } = useLaunchWorkspaceForm();
 
   const handleLaunch = useCallback(
     ({ jobTypeId, ws }: { jobTypeId: string; ws: Workspace }) => {
@@ -115,7 +115,18 @@ function useLaunchWorkspaceDialog() {
     [workspace, runningWorkspace, handleLaunch, handleStopAndLaunch],
   );
 
-  return { isRunningWorkspace, runningWorkspace, control, isOpen, close, workspace, submit, handleSubmit };
+  return {
+    isRunningWorkspace,
+    runningWorkspace,
+    control,
+    isOpen,
+    reset,
+    close,
+    workspace,
+    submit,
+    handleSubmit,
+    isSubmitting,
+  };
 }
 
 export { useLaunchWorkspaceDialog };
