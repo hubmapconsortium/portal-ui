@@ -39,12 +39,13 @@ function Cells() {
       <PageTitle color="primary">Datasets: Molecular Data Queries (BETA)</PageTitle>
       <Stack component={SectionPaper} direction="column" spacing={2}>
         <Typography>
-          Retrieve datasets based on the abundance of transcriptomic, epigenomic, and proteomic biomarkers across cells.
+          Retrieve datasets based on the abundance of transcriptomic, epigenomic, and proteomic biomarkers across cells,
+          or cell types across organs/datasets.
         </Typography>
         <Typography>
           For example, you can retrieve a list of datasets where normalized transcript abundance for the UMOD
           (uromodulin) gene is above a user-defined cut off, e.g., 1, in at least 5% of all cells. This query will
-          return a list of kidney datasets.{' '}
+          return a list of kidney datasets.
         </Typography>
         <Typography>
           To begin your search, select a query type (&quot;Gene&quot; for transcriptomic and epigenomic measurements,
