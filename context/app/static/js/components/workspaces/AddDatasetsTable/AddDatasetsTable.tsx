@@ -56,7 +56,7 @@ function AddDatasetsTable({
 }: Omit<UseDatasetsAutocompleteReturnType, 'selectedDatasets' | 'resetAutocompleteState' | 'setSelectedDatasets'>) {
   return (
     // The padding top offsets the textfield label.
-    <Stack spacing={3} sx={{ pt: 1 }}>
+    <Stack spacing={3} pt={1}>
       <Autocomplete
         value={autocompleteValue}
         onChange={addDataset}
