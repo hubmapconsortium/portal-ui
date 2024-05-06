@@ -1,3 +1,11 @@
+## v0.96.0 - 2024-05-06
+
+- Bump portal-visualization to v0.2.2 to support revised 10X columns.
+- Add dialog on workspace detail pages to add datasets to the workspace.
+- Add dialog on the search page to add datasets to the workspace.
+- Add job type support, including R, for workspaces.
+
+
 ## v0.95.0 - 2024-05-01
 
 - Updated the HRA Organ Info web component options in CCFOrganInfo.tsx to improve performance
