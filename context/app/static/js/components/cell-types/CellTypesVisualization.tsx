@@ -11,12 +11,15 @@ import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarC
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { CellTypeOrgan } from 'js/hooks/useCrossModalityApi';
+import { Skeleton } from '@mui/material';
 import { useCellTypeDetails, useCellTypeName } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
 // Define the keys for the stack
-type GraphKey = keyof Pick<CellTypeOrgan, 'other_cells' | 'feature_cells'>;
-const keys = ['feature_cells', 'other_cells'] as GraphKey[];
+// TODO: Based on Nils's feedback, we are currently not including `other_cells`
+// since that does not delineate between other labeled cells and uncategorized cells.
+type GraphKey = keyof Pick<CellTypeOrgan, /* 'other_cells' | */ 'feature_cells'>;
+const keys = ['feature_cells' /* 'other_cells' */] as GraphKey[];
 
 const margin = { top: 16, right: 32, bottom: 80, left: 80 };
 
@@ -65,6 +68,8 @@ interface CellTypesGraphProps {
   organs: CellTypeOrgan[];
 }
 
+const defaultHeight = 640;
+
 export function CellTypeOrgansGraph({ organs }: CellTypesGraphProps) {
   const name = useCellTypeName();
   const sortedOrgans = [...organs].sort((a, b) => b.feature_cells - a.feature_cells);
@@ -83,51 +88,84 @@ export function CellTypeOrgansGraph({ organs }: CellTypesGraphProps) {
   const keyLabels: Record<GraphKey, string> = useMemo(() => {
     return {
       feature_cells: name ?? 'Cell Type',
-      other_cells: 'Other Cells',
+      // other_cells: 'Other Cells',
     };
   }, [name]);
 
-  return (
-    <Stack direction="row" height={640}>
-      <VerticalStackedBarChart
-        visxData={sortedOrgans}
-        yScale={yScale}
-        xScale={xScale}
-        getXScaleRange={getXScaleRange}
-        getYScaleRange={getYScaleRange}
-        colorScale={colorScale}
-        keys={keys}
-        margin={margin}
-        getX={getX}
-        xAxisLabel="Organs"
-        yAxisLabel="Cell Count"
-        xAxisTickLabels={organLabels}
-        y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
-        getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
-        TooltipContent={CellTypesVisualizationTooltip}
-      />
-      <Stack direction="column" spacing={0.5} p={2}>
-        <Typography variant="body1" component="label">
-          Cell Types
-        </Typography>
-        <LegendOrdinal scale={colorScale} labelFormat={(label) => keyLabels[label as GraphKey]}>
-          {(labels) => (
-            <Stack spacing={0.5} useFlexGap direction="column">
-              {labels.map((label) => (
-                <Box component={LegendItem} alignItems="start" key={`legend-quantile-${label.text}`}>
-                  <svg width={15} height={15} style={{ borderRadius: 4 }}>
-                    <rect fill={label.value} width={15} height={15} />
-                  </svg>
-                  <LegendLabel align="left" margin="0 0 0 4px">
-                    {label.text}
-                  </LegendLabel>
-                </Box>
-              ))}
-            </Stack>
-          )}
-        </LegendOrdinal>
+  if (organs.length === 0) {
+    return <Skeleton height={defaultHeight} />;
+  }
+
+  const chart = (
+    <VerticalStackedBarChart
+      visxData={sortedOrgans}
+      yScale={yScale}
+      xScale={xScale}
+      getXScaleRange={getXScaleRange}
+      getYScaleRange={getYScaleRange}
+      colorScale={colorScale}
+      keys={keys}
+      margin={margin}
+      getX={getX}
+      xAxisLabel="Organs"
+      yAxisLabel="Cell Count"
+      xAxisTickLabels={organLabels}
+      y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
+      getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
+      TooltipContent={CellTypesVisualizationTooltip}
+    />
+  );
+
+  // Show legend only if there are multiple keys
+  if (keys.length > 1) {
+    return (
+      <Stack direction="row" height={defaultHeight}>
+        <VerticalStackedBarChart
+          visxData={sortedOrgans}
+          yScale={yScale}
+          xScale={xScale}
+          getXScaleRange={getXScaleRange}
+          getYScaleRange={getYScaleRange}
+          colorScale={colorScale}
+          keys={keys}
+          margin={margin}
+          getX={getX}
+          xAxisLabel="Organs"
+          yAxisLabel="Cell Count"
+          xAxisTickLabels={organLabels}
+          y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
+          getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
+          TooltipContent={CellTypesVisualizationTooltip}
+        />
+        {/* TODO: Pull legend out into its own component */}
+        <Stack direction="column" spacing={0.5} p={2}>
+          <Typography variant="body1" component="label">
+            Cell Types
+          </Typography>
+          <LegendOrdinal scale={colorScale} labelFormat={(label) => keyLabels[label as GraphKey]}>
+            {(labels) => (
+              <Stack spacing={0.5} useFlexGap direction="column">
+                {labels.map((label) => (
+                  <Box component={LegendItem} alignItems="start" key={`legend-quantile-${label.text}`}>
+                    <svg width={15} height={15} style={{ borderRadius: 4 }}>
+                      <rect fill={label.value} width={15} height={15} />
+                    </svg>
+                    <LegendLabel align="left" margin="0 0 0 4px">
+                      {label.text}
+                    </LegendLabel>
+                  </Box>
+                ))}
+              </Stack>
+            )}
+          </LegendOrdinal>
+        </Stack>
       </Stack>
-    </Stack>
+    );
+  }
+  return (
+    <Box height={defaultHeight} maxHeight={defaultHeight} width="100%">
+      {chart}
+    </Box>
   );
 }
 

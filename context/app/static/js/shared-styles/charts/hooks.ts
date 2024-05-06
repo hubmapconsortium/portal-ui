@@ -14,7 +14,7 @@ import {
 } from '@visx/scale';
 import { useTheme } from '@mui/material/styles';
 
-import { getChartDimensions } from 'js/shared-styles/charts/utils';
+import { getChartDimensions, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 
 function useChartTooltip<T>() {
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip<T>();
@@ -63,7 +63,11 @@ function useLongestLabelSize({ labels, labelFontSize = 11 }: { labels: string[];
     () =>
       Math.max(
         ...labels.map(
-          (d) => getStringWidth(d, { fontSize: `${labelFontSize}px`, fontFamily: theme.typography.fontFamily }) ?? 0,
+          (d) =>
+            getStringWidth(trimStringWithMiddleEllipsis(d), {
+              fontSize: `${labelFontSize}px`,
+              fontFamily: theme.typography.fontFamily,
+            }) ?? 0,
         ),
       ),
     [labelFontSize, labels, theme.typography.fontFamily],

@@ -1,20 +1,25 @@
 import React from 'react';
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
+
 import { CellTypeOrgansGraph } from 'js/components/cell-types/CellTypesVisualization';
 import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
-import { Typography } from '@mui/material';
+
+import { Tab, TabPanel, Tabs } from 'js/shared-styles/tables/TableTabs';
+import { useTabs } from 'js/shared-styles/tabs';
 import { useStore } from '../store';
 import { DisambiguationTextbox } from './DisambiguationTextbox';
 import { useCellTypeOrgans } from './hooks';
 import { extractCLID } from './utils';
-// import DatasetsTable from '../DatasetsTable';
+import DatasetsTable from '../DatasetsTable';
+import CellTypesChart from '../CellsCharts/CellTypesCharts';
 
 function CellTypeResult({ cellType }: { cellType: string }) {
-  const { organs = [], error, isLoading } = useCellTypeOrgans(cellType);
+  const { organs = [], error } = useCellTypeOrgans(cellType);
 
-  if (error ?? isLoading) {
-    if (error) {
-      console.error(error);
-    }
+  if (error) {
+    console.error(error);
     return null;
   }
 
@@ -26,11 +31,12 @@ function CellTypeResult({ cellType }: { cellType: string }) {
   }
 
   return (
-    <CellTypesProvider cellId={clid}>
-      <Typography variant="h4">{cellType}</Typography>
-      <DisambiguationTextbox cellName={cellType} />
-      <CellTypeOrgansGraph organs={organs} />
-    </CellTypesProvider>
+    <Box height={640} width="100%">
+      <CellTypesProvider cellId={clid}>
+        <DisambiguationTextbox cellName={cellType} />
+        <CellTypeOrgansGraph organs={organs} />
+      </CellTypesProvider>
+    </Box>
   );
 }
 
@@ -42,24 +48,35 @@ function CellTypeResults() {
 
   const { results, resultCounts, cellVariableNames } = useStore();
 
+  const { openTabIndex, handleTabChange } = useTabs();
+
   if (!results || !resultCounts) {
-    return null;
+    return <Skeleton height={40} width="100%" />;
   }
 
   return (
     <div>
       <div>
-        <h3>Cell Type Results</h3>
         <p>
           {resultCounts.matching} out of {resultCounts.total} datasets match the query.
         </p>
       </div>
       <div>
-        {cellVariableNames.map((cellTypeName) => (
-          <CellTypeResult key={cellTypeName} cellType={cellTypeName} />
+        <Typography variant="h3">Cell Type Distribution Across Organs</Typography>
+        <Tabs value={openTabIndex} onChange={handleTabChange}>
+          {cellVariableNames.map((cellTypeName, index) => (
+            <Tab key={cellTypeName} index={index} label={cellTypeName} />
+          ))}
+        </Tabs>
+        {cellVariableNames.map((cellTypeName, index) => (
+          <TabPanel value={openTabIndex} index={index} key={cellTypeName}>
+            <CellTypeResult key={cellTypeName} cellType={cellTypeName} />
+          </TabPanel>
         ))}
       </div>
-      <div>{/* <DatasetsTable datasets={results} /> */}</div>
+      <div>
+        <DatasetsTable datasets={results} expandedContent={CellTypesChart} />
+      </div>
     </div>
   );
 }

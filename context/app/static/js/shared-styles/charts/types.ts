@@ -19,3 +19,5 @@ export function tooltipHasBarData<Datum>(
   }
   return false;
 }
+
+export type TooltipComponentType<T> = React.ComponentType<{ tooltipData: TooltipData<T> }>;

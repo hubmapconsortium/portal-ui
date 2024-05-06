@@ -11,6 +11,8 @@ import { initialHeight } from 'js/components/cells/CellsResults/style';
 import { useExpandSpring } from 'js/hooks/useExpand';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { WrappedCellsResultsDataset } from '../types';
+import CellsCharts from '../CellsCharts';
+import { DatasetCellsChartsProps } from '../CellsCharts/types';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -26,12 +28,10 @@ const columns = [
 
 interface DatasetsTableProps {
   datasets: WrappedCellsResultsDataset[];
-  minExpression: number;
-  cellVariableName: string;
-  queryType: string;
+  expandedContent?: React.ComponentType<DatasetCellsChartsProps>;
 }
 
-function DatasetsTable({ datasets, minExpression, cellVariableName, queryType }: DatasetsTableProps) {
+function DatasetsTable({ datasets, expandedContent = CellsCharts }: DatasetsTableProps) {
   const { completeStep } = useAccordionStep();
   useEffect(() => {
     completeStep(`${datasets.length} Datasets Matching Query Parameters`);
@@ -55,11 +55,9 @@ function DatasetsTable({ datasets, minExpression, cellVariableName, queryType }:
             <DatasetTableRow
               datasetMetadata={_source}
               numCells={columns.length}
-              key={_source.hubmap_id}
-              minExpression={minExpression}
-              cellVariableName={cellVariableName}
-              queryType={queryType}
               isExpandedToStart={i === 0}
+              key={_source.hubmap_id}
+              expandedContent={expandedContent}
             />
           ))}
         </TableBody>

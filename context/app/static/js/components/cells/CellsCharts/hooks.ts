@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
-import CellsService from 'js/components/cells/CellsService';
+import CellsService, { CellExpressionInDataset } from 'js/components/cells/CellsService';
 import useCellsChartLoadingStore, { CellsChartLoadingStore } from 'js/stores/useCellsChartLoadingStore';
 import { useTutorialStore } from 'js/shared-styles/tutorials/TutorialProvider';
+import useSWR from 'swr';
+import { fetcher } from 'js/helpers/swr';
+import { useExpandableRowStore } from 'js/shared-styles/tables/ExpandableRow/store';
+import { extractCLID } from '../CellTypeResults/utils';
 
 interface CellsChartsDataProps {
   uuid: string;
@@ -39,12 +43,10 @@ interface DiagnosticInfo {
   timeWaiting: number;
 }
 
-interface UseCellsChartsDataProps extends CellsChartsDataProps {
-  isExpanded: boolean;
-}
-
-function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded }: UseCellsChartsDataProps) {
+function useCellsChartsData({ uuid, cellVariableName, minExpression }: CellsChartsDataProps) {
   const { loadingUUID, setLoadingUUID, addFetchedUUID, fetchedUUIDs } = useCellsChartLoadingStore(storeSelector);
+
+  const { isExpanded } = useExpandableRowStore();
   const { isTutorialRunning, setNextButtonIsDisabled } = useTutorialStore();
 
   const [diagnosticInfo, setDiagnosticInfo] = useState<DiagnosticInfo>();
@@ -96,4 +98,23 @@ function useCellsChartsData({ uuid, cellVariableName, minExpression, isExpanded 
   return { isLoading, diagnosticInfo, cellsData };
 }
 
-export { useCellsChartsData };
+type UseCellTypesChartsDataProps = Pick<CellsChartsDataProps, 'uuid'> & {
+  cellVariableNames: string[];
+};
+
+function useCellTypesChartsData({ uuid, cellVariableNames: cellNames }: UseCellTypesChartsDataProps) {
+  const cellVariableNames = cellNames.map(extractCLID).filter((clid) => clid) as string[];
+  const { isExpanded } = useExpandableRowStore();
+  const { data, ...rest } = useSWR<{ results: CellExpressionInDataset[] }, string | null>(
+    isExpanded ? new CellsService().getCellExpressionInDatasetURL({ uuid, cellVariableNames }) : null,
+    (url: string) => fetcher({ url, requestInit: { method: 'POST' } }),
+    {
+      revalidateIfStale: false,
+      revalidateOnFocus: false,
+    },
+  );
+
+  return { expressionData: data, ...rest };
+}
+
+export { useCellsChartsData, useCellTypesChartsData };

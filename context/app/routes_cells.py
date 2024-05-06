@@ -429,7 +429,9 @@ def cell_expression_in_dataset():
 
     cells = client.select_cells(where='dataset', has=[uuid])
     # list() will call iterator behind the scenes.
-    return {'results': list(cells.get_list(values_included=cell_variable_names))}
+    results = list(cells.get_list(values_included=cell_variable_names))
+    results = [{**x, 'cell_type': translate_clid(x['cell_type'])} for x in results]
+    return {'results': results}
 
 
 @timeit

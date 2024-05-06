@@ -2,25 +2,26 @@ import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
 
 import DatasetClusterChart from 'js/components/cells/DatasetClusterChart';
+import { useStore, CellsSearchStore } from 'js/components/cells/store';
 import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
 import { useCellsChartsData } from './hooks';
 import { ChartWrapper, StyledTypography, PaddedDiv } from './style';
+import { DatasetCellsChartsProps } from './types';
 
-interface CellsChartsProps {
-  uuid: string;
-  cellVariableName: string;
-  minExpression: number;
-  queryType: string;
-  isExpanded?: boolean;
-}
+const cellsStoreSelector = (state: CellsSearchStore) => ({
+  minExpressionLog: state.minExpressionLog,
+  cellVariableNames: state.cellVariableNames,
+  queryType: state.queryType,
+});
 
-function CellsCharts({ uuid, cellVariableName, minExpression, queryType, isExpanded = false }: CellsChartsProps) {
+function CellsCharts({ uuid }: DatasetCellsChartsProps) {
+  const { minExpressionLog, cellVariableNames, queryType } = useStore(cellsStoreSelector);
+
   const { isLoading, diagnosticInfo, cellsData } = useCellsChartsData({
     uuid,
-    cellVariableName,
-    minExpression,
-    isExpanded,
+    cellVariableName: cellVariableNames[0],
+    minExpression: minExpressionLog,
   });
 
   const expressionData = 'expressionData' in cellsData ? cellsData.expressionData : {};

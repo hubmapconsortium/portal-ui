@@ -49,7 +49,7 @@ type GetDatasetsResponse<T extends QueryType> = T extends 'cell-type'
   ? DatasetsSelectedByCellTypeResponse
   : DatasetsSelectedByExpressionResponse[];
 
-interface CellExpressionInDataset {
+export interface CellExpressionInDataset {
   cell_id: string;
   cell_type: string;
   clusters: string[];
@@ -127,8 +127,8 @@ class CellsService {
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    cellVariableNames.forEach((name) => {
-      urlParams.append('cell_variable_names', name);
+    cellVariableNames.forEach((name, idx) => {
+      urlParams.append(`cell_variable_names[${idx}]`, name);
     });
     return `/cells/cell-expression-in-dataset.json?${urlParams.toString()}`;
   }

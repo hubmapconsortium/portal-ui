@@ -16,7 +16,7 @@ const cellsStoreSelector = (state: CellsSearchStore) => ({
 });
 
 function CellsResults() {
-  const { isLoading, results, minExpressionLog, cellVariableNames, queryType } = useStore(cellsStoreSelector);
+  const { isLoading, results, queryType } = useStore(cellsStoreSelector);
 
   if (isLoading) {
     return (
@@ -39,14 +39,7 @@ function CellsResults() {
     return <CellTypeResults />;
   }
 
-  return (
-    <DatasetsTable
-      datasets={results}
-      minExpression={10 ** minExpressionLog}
-      cellVariableName={cellVariableNames[0]}
-      queryType={queryType}
-    />
-  );
+  return <DatasetsTable datasets={results} />;
 }
 
 export default CellsResults;
