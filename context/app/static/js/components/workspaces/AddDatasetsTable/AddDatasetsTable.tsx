@@ -17,7 +17,7 @@ function DatasetOption(props: React.HTMLAttributes<HTMLLIElement>, option: Searc
       <div>
         <Typography variant="subtitle1">{hubmap_id}</Typography>
         <Typography variant="body2">
-          {[origin_samples_unique_mapped_organs, assay_display_name].filter((f) => f !== undefined).join(' | ')}
+          {[origin_samples_unique_mapped_organs, assay_display_name].filter(Boolean).join(' | ')}
         </Typography>
       </div>
     </li>
