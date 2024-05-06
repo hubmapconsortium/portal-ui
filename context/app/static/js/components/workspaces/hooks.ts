@@ -213,15 +213,22 @@ function useLaunchWorkspace() {
       jobTypeId: string;
       templatePath?: string;
     }) => {
-      if (workspace?.default_job_type !== jobTypeId) {
+      const isNewJobType = workspace?.default_job_type !== jobTypeId;
+
+      if (runningWorkspace && workspace.id === runningWorkspace.id && !isNewJobType) {
+        window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
+        return;
+      }
+      if (isNewJobType) {
         await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
       }
+
       await startWorkspace({ workspaceId: workspace.id, jobTypeId });
       await mutateWorkspacesAndJobs();
       await globalMutateWorkspace(workspace.id);
       window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
     },
-    [mutateWorkspacesAndJobs, startWorkspace, globalMutateWorkspace, handleUpdateWorkspace],
+    [mutateWorkspacesAndJobs, startWorkspace, globalMutateWorkspace, handleUpdateWorkspace, runningWorkspace],
   );
 
   const launchWorkspace = useCallback(
@@ -234,10 +241,6 @@ function useLaunchWorkspace() {
       jobTypeId: string;
       templatePath?: string;
     }) => {
-      if (runningWorkspace && workspace.id === runningWorkspace.id) {
-        window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
-        return;
-      }
       if (runningWorkspace) {
         open();
         setWorkspace(workspace);

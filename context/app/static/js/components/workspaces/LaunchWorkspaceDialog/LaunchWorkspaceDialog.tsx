@@ -4,44 +4,52 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
-import { useLaunchWorkspaceDialog } from './hooks';
+import { useLaunchWorkspaceDialog, LaunchWorkspaceFormTypes } from './hooks';
 
 const formId = 'launch-workspace-form';
 
 function LaunchWorkspaceDialog() {
   const {
-    isRunningWorkspace,
-    runningWorkspace,
+    runningWorkspaceName,
+    runningWorkspaceIsCurrentWorkpace,
     control,
     handleSubmit,
     submit,
     isOpen,
-    reset,
-    close,
+    handleClose,
     workspace,
     isSubmitting,
   } = useLaunchWorkspaceDialog();
 
   const workspaceName = workspace?.name;
-  const runningWorkspaceName = runningWorkspace?.name;
+  const { toastError } = useSnackbarActions();
 
-  const handleClose = useCallback(() => {
-    reset();
-    close();
-  }, [close, reset]);
-
+  const onSubmit = useCallback(
+    ({ workspaceJobTypeId }: LaunchWorkspaceFormTypes) => {
+      submit({ workspaceJobTypeId })
+        .then(() => {
+          handleClose();
+        })
+        .catch((e) => {
+          toastError('Failed to launch workspace. Please try again.');
+          console.error(e);
+        });
+    },
+    [submit, handleClose, toastError],
+  );
   return (
     <DialogModal
       title={`Launch ${workspaceName}`}
       maxWidth="md"
       content={
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        <form id={formId} onSubmit={handleSubmit(submit)}>
+        <form id={formId} onSubmit={handleSubmit(onSubmit)}>
           <Stack direction="column" gap={4}>
-            {isRunningWorkspace && (
+            {runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace && (
               <Alert
                 severity="warning"
                 sx={{
