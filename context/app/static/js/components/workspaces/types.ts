@@ -26,6 +26,7 @@ export interface Workspace {
   status: WorkspaceStatus;
   description: string;
   disk_space: number;
+  default_job_type?: string;
   datetime_created: string;
   workspace_details: WorkspaceDetails;
 }
@@ -47,6 +48,11 @@ interface WorkspaceJobDetail {
 interface WorkspaceJobDetails {
   current_job_details: WorkspaceJobDetail;
   request_job_details: WorkspaceJobDetail;
+}
+
+export interface WorkspaceJobType {
+  id: string;
+  name: string;
 }
 
 export interface WorkspaceJob {
@@ -118,6 +124,7 @@ interface CreateTemplateNotebooksTypes {
   templateKeys: string[];
   uuids: string[];
   workspaceName: string;
+  workspaceJobTypeId: string;
 }
 
 type TemplateTags = Record<string, string>;

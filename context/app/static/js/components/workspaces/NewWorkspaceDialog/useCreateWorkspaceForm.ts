@@ -5,8 +5,14 @@ import { z } from 'zod';
 
 import { CreateTemplateNotebooksTypes } from '../types';
 import { useTemplateNotebooks } from './hooks';
-import { workspaceNameField, protectedDatasetsField, templatesField } from '../workspaceFormFields';
+import {
+  workspaceNameField,
+  protectedDatasetsField,
+  templatesField,
+  workspaceJobTypeIdField,
+} from '../workspaceFormFields';
 import { useProtectedDatasetsForm, useTooManyDatasetsErrors } from '../formHooks';
+import { DEFAULT_JOB_TYPE } from '../constants';
 
 export interface FormWithTemplates {
   templates: string[];
@@ -14,6 +20,7 @@ export interface FormWithTemplates {
 interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
   'protected-datasets': string;
+  workspaceJobTypeId: string;
 }
 
 interface UseCreateWorkspaceTypes {
@@ -21,7 +28,7 @@ interface UseCreateWorkspaceTypes {
 }
 
 const schema = z
-  .object({ ...workspaceNameField, ...protectedDatasetsField, ...templatesField })
+  .object({ ...workspaceNameField, ...protectedDatasetsField, ...templatesField, ...workspaceJobTypeIdField })
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
@@ -39,6 +46,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
       'workspace-name': defaultName ?? '',
       'protected-datasets': '',
       templates: [],
+      workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -49,9 +57,9 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     setDialogIsOpen(false);
   }
 
-  async function onSubmit({ templateKeys, uuids, workspaceName }: CreateTemplateNotebooksTypes) {
+  async function onSubmit({ templateKeys, uuids, workspaceName, workspaceJobTypeId }: CreateTemplateNotebooksTypes) {
     if (isSubmitting || isSubmitSuccessful) return;
-    await createTemplateNotebooks({ templateKeys, uuids, workspaceName });
+    await createTemplateNotebooks({ templateKeys, uuids, workspaceName, workspaceJobTypeId });
     reset();
     handleClose();
   }

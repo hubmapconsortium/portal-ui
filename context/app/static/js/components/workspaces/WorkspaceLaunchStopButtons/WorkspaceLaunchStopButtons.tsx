@@ -4,8 +4,9 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { useLaunchWorkspace, useWorkspacesList } from 'js/components/workspaces/hooks';
+import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
+import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { Alert } from 'js/shared-styles/alerts';
 import { MergedWorkspace } from '../types';
 
@@ -84,8 +85,7 @@ function StopWorkspaceAlert() {
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
   const { workspace, button: ButtonComponent, disableLaunch = false, disableStop = false } = props;
-  const { handleLaunchWorkspace } = useLaunchWorkspace(workspace);
-  const { toastError } = useSnackbarActions();
+  const { open, setWorkspace } = useLaunchWorkspaceStore();
   if (workspace.status === 'deleting') {
     return (
       <ButtonComponent type="button" disabled size="small">
@@ -100,13 +100,8 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
         <Button
           type="button"
           onClick={() => {
-            handleLaunchWorkspace().catch((err: Error) => {
-              if (err.message.includes('already running')) {
-                return;
-              }
-              toastError(`Error launching ${workspace.name}.`);
-              console.error(err);
-            });
+            setWorkspace(workspace);
+            open();
           }}
         >
           Launch Workspace

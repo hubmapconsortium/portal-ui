@@ -6,7 +6,13 @@ import { useCallback } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from '../Contexts';
-import { Workspace, WorkspaceAPIResponse, WorkspaceAPIResponseWithoutData, WorkspaceJob } from './types';
+import {
+  Workspace,
+  WorkspaceAPIResponse,
+  WorkspaceAPIResponseWithoutData,
+  WorkspaceJob,
+  WorkspaceJobType,
+} from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
 export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 10;
@@ -56,6 +62,24 @@ export function useWorkspaceHeaders(): HeadersInit {
 export function useHasWorkspaceAccess() {
   const { workspacesToken } = useAppContext();
   return Boolean(workspacesToken);
+}
+
+export function useBuildWorkspacesSWRKey(): {
+  buildKey: ({ url }: { url: string }) => [string, HeadersInit] | null;
+  hasAccess: boolean;
+} {
+  const hasAccess = useHasWorkspaceAccess();
+  const headers = useWorkspaceHeaders();
+
+  return {
+    buildKey: useCallback(
+      ({ url }: { url: string }) => {
+        return hasAccess ? [url, headers] : null;
+      },
+      [hasAccess, headers],
+    ),
+    hasAccess,
+  };
 }
 
 interface APIAction {
@@ -117,11 +141,13 @@ async function fetchJobs(url: string, headers: APIAction['headers']) {
 
 export function useJobs() {
   const apiURLs = useWorkspacesApiURLs();
-  const headers = useWorkspaceHeaders();
-  const hasAccess = useHasWorkspaceAccess();
-  const { data, isLoading, ...rest } = useSWR(hasAccess ? [apiURLs.jobs, headers] : null, ([url, head]) =>
-    fetchJobs(url, head),
-  );
+
+  const { buildKey, hasAccess } = useBuildWorkspacesSWRKey();
+
+  const { data, isLoading, ...rest } = useSWR(buildKey({ url: apiURLs.jobs }), ([url, head]) => fetchJobs(url, head), {
+    revalidateOnFocus: hasAccess,
+    refreshInterval: 1000 * 60,
+  });
   const jobs = data?.data?.jobs ?? [];
   return { jobs, isLoading, ...rest };
 }
@@ -132,12 +158,12 @@ export function useWorkspaceJobs(workspaceId: number) {
 }
 
 function useFetchWorkspaces(workspaceId?: number) {
-  const headers = useWorkspaceHeaders();
-  const hasAccess = useHasWorkspaceAccess();
   const urls = useWorkspacesApiURLs();
   const workspaceUrl = workspaceId ? urls.workspace(workspaceId) : urls.workspaces;
+  const { buildKey, hasAccess } = useBuildWorkspacesSWRKey();
+
   const { data, isLoading, ...rest } = useSWR(
-    hasAccess ? [workspaceUrl, headers] : null,
+    buildKey({ url: workspaceUrl }),
     ([url, head]) =>
       fetcher<WorkspaceAPIResponse<{ workspaces: Workspace[] }>>({
         url,
@@ -229,10 +255,10 @@ export function useDeleteWorkspace() {
   return { deleteWorkspace, isDeleting: isMutating };
 }
 
-async function fetchJobTypes(jobTypesEndpoint: string): Promise<Record<string, { id: number }> | undefined> {
+async function fetchJobTypes(jobTypesEndpoint: string): Promise<Record<string, WorkspaceJobType> | undefined> {
   const response = fetch(jobTypesEndpoint);
   const { data, success, message } = (await (await response).json()) as WorkspaceAPIResponse<{
-    job_types: Record<string, { id: number }>;
+    job_types: Record<string, WorkspaceJobType>;
   }>;
   if (!success) {
     throw new Error(`Failed to get job types: ${message}`);
@@ -277,28 +303,20 @@ async function startJob(
 }
 
 export function useStartWorkspace() {
-  const { data, isLoading: loadingJobTypes } = useJobTypes();
   const api = useWorkspacesApiURLs();
   const headers = useWorkspaceHeaders();
   const { trigger, isMutating } = useSWRMutation('start-workspace', startJob);
   const startWorkspace = useCallback(
-    async (workspaceId: number) => {
-      if (!data || loadingJobTypes) {
-        return undefined;
-      }
-      if (!data.jupyter_lab) {
-        console.error('Failed to get jupyter lab job type');
-        return undefined;
-      }
+    async ({ workspaceId, jobTypeId }: { workspaceId: number; jobTypeId: string }) => {
       return trigger({
         url: api.startWorkspace(workspaceId),
         jobDetails: {},
         headers,
-        jobType: data.jupyter_lab.id,
+        jobType: jobTypeId,
         workspaceId,
       });
     },
-    [data, loadingJobTypes, trigger, api, headers],
+    [trigger, api, headers],
   );
   return { startWorkspace, isStartingWorkspace: isMutating };
 }
@@ -306,6 +324,7 @@ export function useStartWorkspace() {
 export interface CreateWorkspaceBody {
   name: string;
   description: string;
+  default_job_type: string;
   workspace_details: {
     globus_groups_token: string;
     files: {
@@ -370,6 +389,7 @@ export function useCreateWorkspace() {
 export interface UpdateWorkspaceBody {
   name?: string;
   description?: string;
+  default_job_type?: string;
   workspace_details?: {
     globus_groups_token?: string;
     files?: {
@@ -418,13 +438,13 @@ async function updateWorkspaceFetcher(
   }
 }
 
-export function useUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
+export function useUpdateWorkspace() {
   const api = useWorkspacesApiURLs();
   const headers = useWorkspaceHeaders();
   const { trigger, isMutating } = useSWRMutation('update-workspace', updateWorkspaceFetcher);
 
   const updateWorkspace = useCallback(
-    (body: UpdateWorkspaceBody) => {
+    ({ body, workspaceId }: { body: UpdateWorkspaceBody; workspaceId: number }) => {
       return trigger({
         url: api.workspace(workspaceId),
         body,
@@ -432,7 +452,7 @@ export function useUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
         workspaceId,
       });
     },
-    [trigger, api, headers, workspaceId],
+    [trigger, api, headers],
   );
 
   return { updateWorkspace, isUpdatingWorkspace: isMutating };
