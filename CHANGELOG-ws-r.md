@@ -1,0 +1,1 @@
+- Add job type support, including R, for workspaces.
