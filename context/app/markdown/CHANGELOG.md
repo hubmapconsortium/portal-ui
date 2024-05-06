@@ -1,3 +1,8 @@
+## v0.95.0 - 2024-05-01
+
+- Updated the HRA Organ Info web component options in CCFOrganInfo.tsx to improve performance
+
+
 ## v0.94.2 - 2024-04-18
 
 - Added handling for visualizations of multiomic data.
