@@ -36,6 +36,7 @@ export interface Dataset extends Entity {
   is_component?: boolean;
   assay_modality: 'single' | 'multiple';
   donor: Donor;
+  mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   metadata: {
     dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;

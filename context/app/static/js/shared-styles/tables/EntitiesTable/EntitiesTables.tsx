@@ -11,9 +11,15 @@ interface EntitiesTablesProps<Doc> {
   isSelectable?: boolean;
   initialTabIndex?: number;
   entities: EntitiesTabTypes<Doc>[];
+  disabledIDs?: Set<string>;
 }
 
-function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entities }: EntitiesTablesProps<Doc>) {
+function EntitiesTables<Doc>({
+  isSelectable = true,
+  initialTabIndex = 0,
+  entities,
+  disabledIDs,
+}: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
   const { totalHitsCounts } = useSearchTotalHitsCounts(entities.map(({ query }) => query)) as {
@@ -40,7 +46,7 @@ function EntitiesTables<Doc>({ isSelectable = true, initialTabIndex = 0, entitie
       </Tabs>
       {entities.map(({ query, columns, entityType }, i) => (
         <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
-          <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} />
+          <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} disabledIDs={disabledIDs} />
         </TabPanel>
       ))}
     </>
