@@ -7,7 +7,6 @@ import Checkbox from '@mui/material/Checkbox';
 
 import Description from 'js/shared-styles/sections/Description';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-
 import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
@@ -50,7 +49,8 @@ function WorkspacesList() {
           </Stack>
         }
       />
-      <Paper>
+      {/* Instructed to show 5.5 workspace list items before scrolling. */}
+      <Paper sx={{ maxHeight: '435px', overflowY: 'auto' }}>
         {Object.keys(workspacesList).length === 0 ? (
           <Description padding="20px">No workspaces created yet.</Description>
         ) : (
