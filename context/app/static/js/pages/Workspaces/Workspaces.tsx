@@ -5,12 +5,25 @@ import WorkspacesTitle from 'js/components/workspaces/WorkspacesTitle';
 import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenticated';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
+import { LinkPrompt } from 'js/shared-styles/tutorials/Prompt';
+
+function WorkspacesTutorialPrompt() {
+  return (
+    <LinkPrompt
+      headerText="Getting Started"
+      descriptionText="Get a tutorial of how to explore workspaces to analyze HuBMAP data."
+      buttonText="Navigate to the Workspace Tutorial"
+      buttonHref="/tutorials/workspaces"
+    />
+  );
+}
 
 function Workspaces() {
   return (
     <Stack spacing={2} direction="column">
       <WorkspaceSessionWarning link />
       <WorkspacesTitle />
+      <WorkspacesTutorialPrompt />
       <WorkspacesAuthGuard>
         <WorkspacesAuthenticated />
       </WorkspacesAuthGuard>
