@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -26,7 +27,7 @@ const schema = z
   .required({ 'workspace-name': true });
 
 function useEditWorkspaceForm({ defaultName, workspaceId }: UseEditWorkspaceNameFormTypes) {
-  const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
+  const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
 
   const {
     handleSubmit,
@@ -41,9 +42,12 @@ function useEditWorkspaceForm({ defaultName, workspaceId }: UseEditWorkspaceName
     resolver: zodResolver(schema),
   });
 
-  async function onSubmit({ workspaceName }: SubmitEditWorkspaceNameTypes) {
-    await handleUpdateWorkspace({ name: workspaceName });
-  }
+  const onSubmit = useCallback(
+    async ({ workspaceName }: SubmitEditWorkspaceNameTypes) => {
+      await handleUpdateWorkspace({ body: { name: workspaceName }, workspaceId });
+    },
+    [handleUpdateWorkspace, workspaceId],
+  );
 
   return {
     handleSubmit,

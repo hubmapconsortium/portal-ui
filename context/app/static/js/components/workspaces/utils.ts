@@ -1,3 +1,4 @@
+import { DEFAULT_JOB_TYPE } from './constants';
 import {
   jobStatuses,
   validateJobStatus,
@@ -259,8 +260,23 @@ function isRunningWorkspace(workspace: MergedWorkspace) {
   return workspace.jobs.some((job) => job.status === 'running' || job.status === 'pending');
 }
 
+function findRunningWorkspace(workspaces: MergedWorkspace[]) {
+  return workspaces.find((workspace) => isRunningWorkspace(workspace));
+}
+
 function isRunningJob(job: WorkspaceJob) {
   return job.status === 'running' || job.status === 'pending';
+}
+
+function buildDatasetSymlinks({ datasetUUIDs }: { datasetUUIDs: string[] }) {
+  return datasetUUIDs.map((uuid) => ({
+    name: `datasets/${uuid}`,
+    dataset_uuid: uuid,
+  }));
+}
+
+function getDefaultJobType({ workspace }: { workspace: Workspace }) {
+  return workspace?.default_job_type ?? DEFAULT_JOB_TYPE;
 }
 
 export {
@@ -274,5 +290,8 @@ export {
   getWorkspaceHeaders,
   getWorkspaceJob,
   isRunningWorkspace,
+  findRunningWorkspace,
   isRunningJob,
+  buildDatasetSymlinks,
+  getDefaultJobType,
 };

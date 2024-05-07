@@ -20,11 +20,16 @@ const UpdateIconButton = styled(TooltipIconButton)(({ theme }) => ({
 type WorkspacesUpdateButtonProps = {
   workspace: MergedWorkspace;
   dialogType: DialogType;
+  tooltip?: string;
 } & Omit<TooltipButtonProps, 'tooltip'>;
 
-function WorkspacesUpdateButton({ workspace, dialogType, children, ...rest }: WorkspacesUpdateButtonProps) {
+function WorkspacesUpdateButton({ workspace, dialogType, tooltip, children, ...rest }: WorkspacesUpdateButtonProps) {
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
   const { open, setWorkspace, setDialogType } = useEditWorkspaceStore();
+
+  const updatedTooltip = currentWorkspaceIsRunning
+    ? 'Workspace cannot be edited while it is running. Stop jobs before editing.'
+    : tooltip;
 
   return (
     <UpdateIconButton
@@ -35,9 +40,7 @@ function WorkspacesUpdateButton({ workspace, dialogType, children, ...rest }: Wo
         setDialogType(dialogType);
         open();
       }}
-      tooltip={
-        currentWorkspaceIsRunning ? 'Workspace cannot be edited while it is running. Stop jobs before editing.' : null
-      }
+      tooltip={updatedTooltip}
     >
       {children}
     </UpdateIconButton>

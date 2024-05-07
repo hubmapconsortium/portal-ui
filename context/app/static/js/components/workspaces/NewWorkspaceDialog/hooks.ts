@@ -5,6 +5,7 @@ import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
 import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
+import { buildDatasetSymlinks } from '../utils';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -53,7 +54,7 @@ function useTemplateNotebooks() {
   const { createTemplates } = useCreateTemplates();
 
   const createTemplateNotebooks = useCallback(
-    async ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => {
+    async ({ workspaceName, templateKeys, uuids, workspaceJobTypeId }: CreateTemplateNotebooksTypes) => {
       const templatesDetails = await createTemplates({ templateKeys, uuids });
       trackEvent({
         category: 'Workspaces',
@@ -68,13 +69,11 @@ function useTemplateNotebooks() {
         body: {
           name: workspaceName,
           description: workspaceName,
+          default_job_type: workspaceJobTypeId,
           workspace_details: {
             globus_groups_token: groupsToken,
             files: templatesDetails,
-            symlinks: uuids.map((uuid) => ({
-              name: `datasets/${uuid}`,
-              dataset_uuid: uuid,
-            })),
+            symlinks: buildDatasetSymlinks({ datasetUUIDs: uuids }),
           },
         },
       });

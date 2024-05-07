@@ -46,6 +46,13 @@ export const useSelectItems = (initalSelectedItems: string[] = []) => {
     },
     [selectedItems],
   );
+  const addItem = useCallback((itemKey: string) => {
+    dispatch({ type: 'addItem', payload: itemKey });
+  }, []);
+
+  const removeItem = useCallback((itemKey: string) => {
+    dispatch({ type: 'removeItem', payload: itemKey });
+  }, []);
 
   const setSelectedItems = useCallback((itemKeys: string[]) => {
     dispatch({ type: 'setSelectedItems', payload: itemKeys });
@@ -55,5 +62,5 @@ export const useSelectItems = (initalSelectedItems: string[] = []) => {
     dispatch({ type: 'setSelectedItems', payload: [] });
   }, []);
 
-  return { selectedItems, toggleItem, setSelectedItems, clearSelectedItems };
+  return { selectedItems, toggleItem, addItem, removeItem, setSelectedItems, clearSelectedItems };
 };
