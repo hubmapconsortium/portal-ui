@@ -2,6 +2,7 @@ import React from 'react';
 
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import LogSlider from 'js/shared-styles/inputs/LogSlider';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
@@ -64,7 +65,7 @@ function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: Data
     <StyledDiv>
       <AutocompleteEntity targetEntity={queryType} setter={setCellVariableNames} defaultValue={defaultEntity} />
       {isBiomarker && <BiomarkerParameters />}
-      <div>
+      <Box mt={2}>
         <Button
           onClick={() => {
             handleSubmit().catch(() => {
@@ -79,7 +80,7 @@ function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: Data
         >
           Run Query
         </Button>
-      </div>
+      </Box>
       <Typography>{message}</Typography>
     </StyledDiv>
   );
