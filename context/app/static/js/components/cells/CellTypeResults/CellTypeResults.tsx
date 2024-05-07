@@ -2,6 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 import { CellTypeOrgansGraph } from 'js/components/cell-types/CellTypesVisualization';
 import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
@@ -31,7 +32,7 @@ function CellTypeResult({ cellType }: { cellType: string }) {
   }
 
   return (
-    <Box height={640} width="100%">
+    <Box width="100%">
       <CellTypesProvider cellId={clid}>
         <DisambiguationTextbox cellName={cellType} />
         <CellTypeOrgansGraph organs={organs} />
@@ -57,11 +58,6 @@ function CellTypeResults() {
   return (
     <div>
       <div>
-        <p>
-          {resultCounts.matching} out of {resultCounts.total} datasets match the query.
-        </p>
-      </div>
-      <div>
         <Typography variant="h3">Cell Type Distribution Across Organs</Typography>
         <Tabs value={openTabIndex} onChange={handleTabChange}>
           {cellVariableNames.map((cellTypeName, index) => (
@@ -74,8 +70,14 @@ function CellTypeResults() {
           </TabPanel>
         ))}
       </div>
+      <Divider sx={{ my: 2 }} />
       <div>
-        <DatasetsTable datasets={results} expandedContent={CellTypesChart} />
+        <Typography variant="h3">Relevant Datasets</Typography>
+        <DatasetsTable
+          stepText={`${resultCounts.matching} out of ${resultCounts.total} indexed datasets match the query.`}
+          datasets={results}
+          expandedContent={CellTypesChart}
+        />
       </div>
     </div>
   );

@@ -11,9 +11,19 @@ import { useVerticalChart } from 'js/shared-styles/charts/hooks';
 
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts//VerticalChartGridRowsGroup';
 
-function Histogram({ parentWidth, parentHeight, visxData, margin, barColor, xAxisLabel, yAxisLabel, chartTitle }) {
+function Histogram({
+  parentWidth,
+  parentHeight,
+  visxData,
+  margin,
+  barColor,
+  xAxisLabel,
+  yAxisLabel,
+  chartTitle,
+  binMapFunction = (d) => d,
+}) {
   const binFunc = bin();
-  const chartData = binFunc(visxData);
+  const chartData = binFunc(visxData.map(binMapFunction));
 
   const tickLabelSize = 11;
 

@@ -73,8 +73,8 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
         >
           {keys.map((key) => {
             const { value } = data[key];
-            const barWidth = xScale.bandwidth();
-            const barX = xScale(key);
+            const barWidth = xScale.bandwidth() / 2;
+            const barX = (xScale(key) ?? 0) + barWidth / 2;
             const barY = yScale(value) as number;
             const barHeight = yHeight - barY;
             const fill = colorScale(highlightedKeys?.includes(key) ? 'matched' : 'unmatched');

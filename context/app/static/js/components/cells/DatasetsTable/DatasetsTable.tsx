@@ -29,13 +29,18 @@ const columns = [
 interface DatasetsTableProps {
   datasets: WrappedCellsResultsDataset[];
   expandedContent?: React.ComponentType<DatasetCellsChartsProps>;
+  stepText?: string;
 }
 
-function DatasetsTable({ datasets, expandedContent = CellsCharts }: DatasetsTableProps) {
+function DatasetsTable({
+  datasets,
+  expandedContent = CellsCharts,
+  stepText = `${datasets.length} Datasets Matching Query Parameters`,
+}: DatasetsTableProps) {
   const { completeStep } = useAccordionStep();
   useEffect(() => {
-    completeStep(`${datasets.length} Datasets Matching Query Parameters`);
-  }, [completeStep, datasets]);
+    completeStep(stepText);
+  }, [completeStep, stepText]);
   const heightRef = useRef<HTMLTableElement>(null);
 
   const props = useExpandSpring(heightRef, initialHeight, datasets?.length > 0);

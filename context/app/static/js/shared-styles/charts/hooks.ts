@@ -64,7 +64,7 @@ function useLongestLabelSize({ labels, labelFontSize = 11 }: { labels: string[];
       Math.max(
         ...labels.map(
           (d) =>
-            getStringWidth(trimStringWithMiddleEllipsis(d), {
+            getStringWidth(trimStringWithMiddleEllipsis(`${d}`), {
               fontSize: `${labelFontSize}px`,
               fontFamily: theme.typography.fontFamily,
             }) ?? 0,

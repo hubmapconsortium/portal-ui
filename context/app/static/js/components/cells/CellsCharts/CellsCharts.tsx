@@ -24,8 +24,8 @@ function CellsCharts({ uuid }: DatasetCellsChartsProps) {
     minExpression: minExpressionLog,
   });
 
-  const expressionData = 'expressionData' in cellsData ? cellsData.expressionData : {};
-  const clusterData = 'clusterData' in cellsData ? cellsData.clusterData : {};
+  const expressionData = cellsData?.expressionData ?? [];
+  const clusterData = cellsData?.clusterData ?? {};
 
   if (!(isLoading || Object.keys(cellsData).length > 0)) {
     return null;
@@ -36,7 +36,11 @@ function CellsCharts({ uuid }: DatasetCellsChartsProps) {
       <div>
         <ChartWrapper>
           <ChartLoader isLoading={isLoading}>
-            <CellExpressionHistogram queryType={queryType} expressionData={expressionData} />
+            <CellExpressionHistogram
+              queryType={queryType}
+              expressionData={expressionData}
+              cellVariableName={cellVariableNames[0]}
+            />
           </ChartLoader>
         </ChartWrapper>
         <ChartWrapper>

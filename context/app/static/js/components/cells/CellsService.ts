@@ -95,10 +95,6 @@ class CellsService {
     const { type, cellVariableNames, minExpression, minCellPercentage, modality } = props;
     const urlParams = new URLSearchParams();
 
-    cellVariableNames.forEach((cellVariableName) => {
-      urlParams.append('cell_variable_name', cellVariableName);
-    });
-
     if (type !== 'cell-type') {
       urlParams.append('min_expression', String(minExpression));
       urlParams.append('min_cell_percentage', String(minCellPercentage));
@@ -106,6 +102,10 @@ class CellsService {
         urlParams.append('modality', modality);
       }
     }
+
+    cellVariableNames.forEach((cellVariableName) => {
+      urlParams.append('cell_variable_name', cellVariableName);
+    });
 
     return this.fetchAndParse(`/cells/datasets-selected-by-${type}.json?${urlParams.toString()}`);
   }
@@ -127,9 +127,22 @@ class CellsService {
     const urlParams = new URLSearchParams();
 
     urlParams.append('uuid', uuid);
-    cellVariableNames.forEach((name, idx) => {
-      urlParams.append(`cell_variable_names[${idx}]`, name);
-    });
+    if (cellVariableNames.length === 0) {
+      throw Error('At least one cell variable name must be provided');
+    }
+
+    if (cellVariableNames[0].startsWith('CL:')) {
+      // For some reason, the cell type lookups need to be manually indexed here
+      // but applying the same logic to the gene/protein lookups makes the API return no expression values
+      cellVariableNames.forEach((cellVariableName, idx) => {
+        urlParams.append(`cell_variable_names[${idx}]`, cellVariableName);
+      });
+    } else {
+      cellVariableNames.forEach((name) => {
+        urlParams.append(`cell_variable_names`, name);
+      });
+    }
+
     return `/cells/cell-expression-in-dataset.json?${urlParams.toString()}`;
   }
 

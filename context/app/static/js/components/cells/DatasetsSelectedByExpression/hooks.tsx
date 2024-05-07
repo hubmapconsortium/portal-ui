@@ -2,15 +2,12 @@ import React, { useCallback, useState } from 'react';
 import CellsService from 'js/components/cells/CellsService';
 import { useAppContext } from 'js/components/Contexts';
 import { fetchSearchData } from 'js/hooks/useSearchData';
-import useCellsChartLoadingStore, { CellsChartLoadingStore } from 'js/stores/useCellsChartLoadingStore';
 import { useStore, CellsSearchStore } from 'js/components/cells/store';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { QueryType } from '../queryTypes';
 import { CellsResultsDataset, WrappedCellsResultsDataset } from '../types';
-
-const chartsStoreSelector = (state: CellsChartLoadingStore) => state.resetFetchedUUIDs;
 
 const cellsStoreSelector = (state: CellsSearchStore) => ({
   setResults: state.setResults,
@@ -86,7 +83,6 @@ function useDatasetsSelectedByExpression() {
   const [message, setMessage] = useState<string | null>(null);
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
   const [genomicModality, setGenomicModality] = useState('rna');
-  const resetFetchedUUIDs = useCellsChartLoadingStore(chartsStoreSelector);
 
   const {
     setResults,
@@ -110,7 +106,6 @@ function useDatasetsSelectedByExpression() {
   const handleSubmit = useCallback(async () => {
     setIsLoading(true);
     setResults([]);
-    resetFetchedUUIDs();
     const queryParams = {
       type: queryType,
       cellVariableNames,
@@ -165,7 +160,6 @@ function useDatasetsSelectedByExpression() {
     minCellPercentage,
     minExpressionLog,
     queryType,
-    resetFetchedUUIDs,
     setIsLoading,
     setResults,
     toastError,

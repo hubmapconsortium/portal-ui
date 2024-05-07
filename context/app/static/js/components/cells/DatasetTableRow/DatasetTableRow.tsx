@@ -4,16 +4,10 @@ import { format } from 'date-fns/format';
 import { InternalLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
-import useCellsChartLoadingStore, { CellsChartLoadingStore } from 'js/stores/useCellsChartLoadingStore';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
 import { CellsResultsDataset } from '../types';
 import { useStore } from '../store';
 import { DatasetCellsChartsProps } from '../CellsCharts/types';
-
-const storeSelector = (state: CellsChartLoadingStore) => ({
-  loadingUUID: state.loadingUUID,
-  fetchedUUIDs: state.fetchedUUIDs,
-});
 
 interface UnitValueCellProps {
   unit: string;
@@ -68,15 +62,12 @@ function DatasetTableRow({
 }: DatasetTableRowProps) {
   const { hubmap_id, uuid, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
 
-  const { loadingUUID, fetchedUUIDs } = useCellsChartLoadingStore(storeSelector);
-
   const datasetUrl = useDatasetURL(uuid);
 
   return (
     <ExpandableRow
       numCells={numCells}
       expandedContent={<ExpandedContent {...datasetMetadata} />}
-      disabled={!(fetchedUUIDs.has(uuid) || loadingUUID === uuid || !loadingUUID)}
       disabledTooltipTitle="No additional results can be expanded while detailed data are being retrieved."
       isExpandedToStart={isExpandedToStart}
     >
