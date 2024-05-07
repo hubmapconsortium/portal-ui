@@ -32,8 +32,13 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
   TooltipContent,
 }: BarChartProps<T, K, D>) {
   const keys = (Object.keys(data) as K[]).sort((a, b) => {
-    // if one of the highlighted keys is in the data, move it to the front
-    if (highlightedKeys?.includes(a)) return -1;
+    // if one of the highlighted keys is in the data, move it to the front;
+    // if both are included, sort alphabetically
+    const includesA = highlightedKeys?.includes(a);
+    const includesB = highlightedKeys?.includes(b);
+    if (includesA && includesB) return a.localeCompare(b);
+    if (includesA) return -1;
+    if (includesB) return 1;
     return a.localeCompare(b);
   });
   const values = Object.values(data).map((v) => (v as T).value);

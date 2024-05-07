@@ -35,6 +35,9 @@ function CellTypeResult({ cellType }: { cellType: string }) {
     <Box width="100%">
       <CellTypesProvider cellId={clid}>
         <DisambiguationTextbox cellName={cellType} />
+        <Typography variant="h3" textAlign="center">
+          Cell Type Distribution Across Organs
+        </Typography>
         <CellTypeOrgansGraph organs={organs} />
       </CellTypesProvider>
     </Box>
@@ -58,7 +61,6 @@ function CellTypeResults() {
   return (
     <div>
       <div>
-        <Typography variant="h3">Cell Type Distribution Across Organs</Typography>
         <Tabs value={openTabIndex} onChange={handleTabChange}>
           {cellVariableNames.map((cellTypeName, index) => (
             <Tab key={cellTypeName} index={index} label={cellTypeName} />

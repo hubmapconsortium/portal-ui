@@ -19,7 +19,7 @@ export function DisambiguationTextbox({ cellName }: DisambiguationTextboxProps) 
   }
 
   return (
-    <Alert severity="info" $marginTop={8}>
+    <Alert severity="info" $marginTop={8} $marginBottom={8}>
       <AlertTitle>
         The selected cell type ({cellName}) corresponds to the following terms in Azimuth annotations:
       </AlertTitle>
