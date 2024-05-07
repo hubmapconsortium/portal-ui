@@ -20,7 +20,7 @@ function WorkspacesTutorialPrompt() {
 
 function Workspaces() {
   return (
-    <Stack spacing={2} direction="column">
+    <Stack spacing={2} direction="column" mb={2}>
       <WorkspaceSessionWarning link />
       <WorkspacesTitle />
       <WorkspacesTutorialPrompt />
