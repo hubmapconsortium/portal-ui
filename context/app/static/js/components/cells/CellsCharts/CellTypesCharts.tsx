@@ -4,13 +4,19 @@ import BarChart from 'js/shared-styles/charts/BarChart';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader';
 import Box from '@mui/material/Box';
 import { TooltipData } from 'js/shared-styles/charts/types';
+import { createContext, useContext } from 'js/helpers/context';
 import { DatasetCellsChartsProps } from './types';
 import { useCellTypesChartsData } from './hooks';
 import { useStore } from '../store';
 import { extractLabel } from '../CellTypeResults/utils';
 import { PaddedDiv } from './style';
 
+const TotalCellsContext = createContext<number>('Total Cells');
+const useTotalCells = () => useContext(TotalCellsContext);
+
 function CellTypesChartTooltip({ tooltipData }: { tooltipData: TooltipData<{ value: number }> }) {
+  const totalCells = useTotalCells();
+
   if (!tooltipData.bar) {
     return tooltipData.key;
   }
@@ -18,7 +24,7 @@ function CellTypesChartTooltip({ tooltipData }: { tooltipData: TooltipData<{ val
   const count = tooltipData.bar.data.value;
   return (
     <>
-      {cellType} ({count} cells)
+      {cellType} ({count} cells, {((count / totalCells) * 100).toFixed(2)}%)
     </>
   );
 }
@@ -55,26 +61,30 @@ function CellTypesChart({ uuid }: DatasetCellsChartsProps) {
       {} as Record<string, { value: number }>,
     ) ?? {};
 
+  const totalCells = Object.values(cellTypeCounts).reduce((acc, count) => acc + count.value, 0);
+
   return (
     <PaddedDiv>
       <Box height="600px">
-        <ChartLoader isLoading={isLoading}>
-          <BarChart
-            data={cellTypeCounts}
-            highlightedKeys={cellNames}
-            yAxisLabel="Count"
-            xAxisLabel="Cell Type"
-            margin={
-              {
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 80,
-              } as const
-            }
-            TooltipContent={CellTypesChartTooltip}
-          />
-        </ChartLoader>
+        <TotalCellsContext.Provider value={totalCells}>
+          <ChartLoader isLoading={isLoading}>
+            <BarChart
+              data={cellTypeCounts}
+              highlightedKeys={cellNames}
+              yAxisLabel="Count"
+              xAxisLabel="Cell Type"
+              margin={
+                {
+                  top: 20,
+                  right: 20,
+                  bottom: 20,
+                  left: 80,
+                } as const
+              }
+              TooltipContent={CellTypesChartTooltip}
+            />
+          </ChartLoader>
+        </TotalCellsContext.Provider>
         {/* {cellTypeCounts &&
         Object.entries(cellTypeCounts).map(([clid, count]) => (
           <div key={clid}>
