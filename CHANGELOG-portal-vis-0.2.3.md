@@ -1,1 +1,0 @@
-- Update to portal-visualization v0.2.3.
