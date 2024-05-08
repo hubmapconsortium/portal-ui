@@ -31,16 +31,18 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
   xAxisLabel,
   TooltipContent,
 }: BarChartProps<T, K, D>) {
-  const keys = (Object.keys(data) as K[]).sort((a, b) => {
-    // if one of the highlighted keys is in the data, move it to the front;
-    // if both are included, sort alphabetically
-    const includesA = highlightedKeys?.includes(a);
-    const includesB = highlightedKeys?.includes(b);
-    if (includesA && includesB) return a.localeCompare(b);
-    if (includesA) return -1;
-    if (includesB) return 1;
-    return a.localeCompare(b);
-  });
+  const keys: K[] = (Object.entries(data) as [K, T][])
+    .sort(([aKey, aValue], [bKey, bValue]) => {
+      // if one of the highlighted keys is in the data, move it to the front;
+      // if both are included, sort by value
+      const includesA = highlightedKeys?.includes(aKey);
+      const includesB = highlightedKeys?.includes(bKey);
+      if (includesA && includesB) return bValue.value - aValue.value;
+      if (includesA) return -1;
+      if (includesB) return 1;
+      return bValue.value - aValue.value;
+    })
+    .map(([key]) => key);
   const values = Object.values(data).map((v) => (v as T).value);
   const tickLabelSize = 11;
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
