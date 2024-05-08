@@ -112,6 +112,12 @@ def create_app(testing=False):
                 is_authenticated=False,
                 workspaces_token='',
                 user_groups=[])
+
+    # Preload the cells api data for the molecular data queries on server start
+    @app.before_request
+    def run_on_start():
+        routes_cells.preload_cells_api(app)
+
     return app
 
 

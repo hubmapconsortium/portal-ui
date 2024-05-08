@@ -67,14 +67,15 @@ def timeit(f):
     return timed
 
 
-# @timeit
-# async def preload_cells_api(app):
-#     # Preload the gene symbols, protein IDs, and cell IDs on server startup
-#     # so that they are immediately available when the user starts typing.
+@timeit
+def preload_cells_api(app):
+    # Preload the gene symbols, protein IDs, and cell IDs on server startup
+    # so that they are immediately available when the user starts typing.
 
-#     await gather(to_thread(_get_gene_symbols, app),
-#                  to_thread(_get_protein_ids, app),
-#                  to_thread(_get_cell_ids, app))
+    funcs = [_get_gene_symbols, _get_protein_ids, _get_cell_ids]
+
+    for func in funcs:
+        func(app)
 
 
 @timeit
