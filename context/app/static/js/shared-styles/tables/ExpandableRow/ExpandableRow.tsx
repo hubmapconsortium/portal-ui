@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Collapse from '@mui/material/Collapse';
 
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
@@ -7,7 +7,20 @@ import ClickableRow from 'js/shared-styles/tables/ClickableRow';
 import { ExpandableRowProvider, useExpandableRowStore } from './store';
 import { ExpandedRow, ExpandedCell, StyledExpandCollapseIcon } from './style';
 
-function ExpandableRowChild({ children, numCells, disabled, expandedContent, disabledTooltipTitle }) {
+interface ExpandableRowChildProps extends PropsWithChildren {
+  numCells: number;
+  disabled?: boolean;
+  expandedContent: React.ReactElement;
+  disabledTooltipTitle: string;
+}
+
+function ExpandableRowChild({
+  children,
+  numCells,
+  disabled,
+  expandedContent,
+  disabledTooltipTitle,
+}: ExpandableRowChildProps) {
   const { isExpanded, toggleIsExpanded } = useExpandableRowStore();
 
   return (
@@ -35,7 +48,11 @@ function ExpandableRowChild({ children, numCells, disabled, expandedContent, dis
   );
 }
 
-function ExpandableRow({ isExpandedToStart, ...rest }) {
+interface ExpandableRowProps extends ExpandableRowChildProps {
+  isExpandedToStart?: boolean;
+}
+
+function ExpandableRow({ isExpandedToStart, ...rest }: ExpandableRowProps) {
   return (
     <ExpandableRowProvider isExpandedToStart={isExpandedToStart}>
       <ExpandableRowChild {...rest} />

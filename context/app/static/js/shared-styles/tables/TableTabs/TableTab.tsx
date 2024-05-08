@@ -15,4 +15,6 @@ function TableTab({ isSingleTab = false, ...props }: TableTabProps, ref: React.R
   return <TabComponent {...props} ref={ref} />;
 }
 
-export default React.forwardRef(TableTab);
+export default React.forwardRef(TableTab) as React.ForwardRefExoticComponent<
+  TableTabProps & React.RefAttributes<HTMLDivElement>
+>;

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -15,8 +16,10 @@ import { useCellTypeDetails, useCellTypeName } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
 // Define the keys for the stack
-type GraphKey = keyof Pick<CellTypeOrgan, 'other_cells' | 'feature_cells'>;
-const keys = ['feature_cells', 'other_cells'] as GraphKey[];
+// TODO: Based on Nils's feedback, we are currently not including `other_cells`
+// since that does not delineate between other labeled cells and uncategorized cells.
+type GraphKey = keyof Pick<CellTypeOrgan, /* 'other_cells' | */ 'feature_cells'>;
+const keys = ['feature_cells' /* 'other_cells' */] as GraphKey[];
 
 const margin = { top: 16, right: 32, bottom: 80, left: 80 };
 
@@ -61,8 +64,14 @@ function CellTypesVisualizationTooltip({ tooltipData }: { tooltipData: TooltipDa
   );
 }
 
-export default function CellTypesVisualization() {
-  const { organs = [] } = useCellTypeDetails();
+interface CellTypesGraphProps {
+  organs: CellTypeOrgan[];
+}
+
+// This value was taken from the designs for the cell types detail page
+const defaultHeight = 640;
+
+export function CellTypeOrgansGraph({ organs }: CellTypesGraphProps) {
   const name = useCellTypeName();
   const sortedOrgans = [...organs].sort((a, b) => b.feature_cells - a.feature_cells);
 
@@ -80,15 +89,38 @@ export default function CellTypesVisualization() {
   const keyLabels: Record<GraphKey, string> = useMemo(() => {
     return {
       feature_cells: name ?? 'Cell Type',
-      other_cells: 'Other Cells',
+      // other_cells: 'Other Cells',
     };
   }, [name]);
 
-  return (
-    <DetailPageSection id="distribution-across-organs">
-      <SectionHeader>Distribution Across Organs</SectionHeader>
-      <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
-      <Stack direction="row" height={640}>
+  if (organs.length === 0) {
+    return <Skeleton height={defaultHeight} />;
+  }
+
+  const chart = (
+    <VerticalStackedBarChart
+      visxData={sortedOrgans}
+      yScale={yScale}
+      xScale={xScale}
+      getXScaleRange={getXScaleRange}
+      getYScaleRange={getYScaleRange}
+      colorScale={colorScale}
+      keys={keys}
+      margin={margin}
+      getX={getX}
+      xAxisLabel="Organs"
+      yAxisLabel="Cell Count"
+      xAxisTickLabels={organLabels}
+      y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
+      getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
+      TooltipContent={CellTypesVisualizationTooltip}
+    />
+  );
+
+  // Show legend only if there are multiple keys
+  if (keys.length > 1) {
+    return (
+      <Stack direction="row" height={defaultHeight}>
         <VerticalStackedBarChart
           visxData={sortedOrgans}
           yScale={yScale}
@@ -106,6 +138,7 @@ export default function CellTypesVisualization() {
           getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
           TooltipContent={CellTypesVisualizationTooltip}
         />
+        {/* TODO: Pull legend out into its own component */}
         <Stack direction="column" spacing={0.5} p={2}>
           <Typography variant="body1" component="label">
             Cell Types
@@ -128,6 +161,23 @@ export default function CellTypesVisualization() {
           </LegendOrdinal>
         </Stack>
       </Stack>
+    );
+  }
+  return (
+    <Box height={defaultHeight} maxHeight={defaultHeight} width="100%">
+      {chart}
+    </Box>
+  );
+}
+
+export default function CellTypesVisualization() {
+  const { organs = [] } = useCellTypeDetails();
+
+  return (
+    <DetailPageSection id="distribution-across-organs">
+      <SectionHeader>Distribution Across Organs</SectionHeader>
+      <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
+      <CellTypeOrgansGraph organs={organs} />
     </DetailPageSection>
   );
 }

@@ -1,5 +1,7 @@
+import { QueryType } from '../queryTypes';
+
 export interface AutocompleteQueryKey {
-  targetEntity: string;
+  targetEntity: QueryType;
   substring: string;
 }
 

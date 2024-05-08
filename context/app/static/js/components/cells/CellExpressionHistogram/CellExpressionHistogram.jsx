@@ -5,7 +5,7 @@ import Histogram from 'js/shared-styles/charts/Histogram';
 import { capitalizeString } from 'js/helpers/functions';
 import { queryTypes } from 'js/components/cells/queryTypes';
 
-function CellExpressionHistogram({ expressionData, queryType }) {
+function CellExpressionHistogram({ expressionData, queryType, cellVariableName }) {
   const theme = useTheme();
 
   const queryMeasurement = queryTypes[queryType].measurement;
@@ -23,6 +23,7 @@ function CellExpressionHistogram({ expressionData, queryType }) {
       xAxisLabel={queryMeasurement}
       yAxisLabel="Frequency"
       chartTitle={`${capitalizeString(queryType)} ${queryMeasurement} Distribution`}
+      binMapFunction={(d) => d.values[cellVariableName]}
     />
   );
 }

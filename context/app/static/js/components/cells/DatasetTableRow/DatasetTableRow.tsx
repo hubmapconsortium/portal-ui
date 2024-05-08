@@ -4,21 +4,24 @@ import { format } from 'date-fns/format';
 import { InternalLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
-import CellsCharts from 'js/components/cells/CellsCharts';
-import useCellsChartLoadingStore from 'js/stores/useCellsChartLoadingStore';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
+import { CellsResultsDataset } from '../types';
+import { useStore } from '../store';
+import { DatasetCellsChartsProps } from '../CellsCharts/types';
 
-const storeSelector = (state) => ({ loadingUUID: state.loadingUUID, fetchedUUIDs: state.fetchedUUIDs });
-
-function UnitValueCell({ unit, value }) {
+interface UnitValueCellProps {
+  unit: string;
+  value: string;
+}
+function UnitValueCell({ unit, value }: UnitValueCellProps) {
   return <ExpandableRowCell>{`${value} ${unit}`}</ExpandableRowCell>;
 }
 
-function MetadataCells({ donor: { mapped_metadata } }) {
+function MetadataCells({ donor: { mapped_metadata } }: Pick<CellsResultsDataset, 'donor'>) {
   if (mapped_metadata) {
     return (
       <>
-        {['age', 'body_mass_index'].map((base) => (
+        {(['age', 'body_mass_index'] as const).map((base) => (
           <UnitValueCell value={mapped_metadata[`${base}_value`]} unit={mapped_metadata[`${base}_unit`]} key={base} />
         ))}
         <ExpandableRowCell>{mapped_metadata.sex}</ExpandableRowCell>
@@ -29,36 +32,47 @@ function MetadataCells({ donor: { mapped_metadata } }) {
 
   return (
     <>
-      <ExpandableRowCell />
-      <ExpandableRowCell />
-      <ExpandableRowCell />
-      <ExpandableRowCell />
+      {['age', 'body_mass_index', 'sex', 'race'].map((field) => (
+        <ExpandableRowCell key={field} />
+      ))}
     </>
   );
 }
 
-function DatasetTableRow({ datasetMetadata, numCells, cellVariableName, minExpression, queryType, isExpandedToStart }) {
+interface DatasetTableRowProps {
+  datasetMetadata: CellsResultsDataset;
+  numCells: number;
+  isExpandedToStart: boolean;
+  expandedContent: React.ComponentType<DatasetCellsChartsProps>;
+}
+
+function useDatasetURL(uuid: string) {
+  const [queryType, cellVariableName] = useStore((state) => [state.queryType, state.cellVariableNames[0]]);
+  if (queryType !== 'gene') {
+    return `/browse/dataset/${uuid}`;
+  }
+  return `/cells/${uuid}?marker=${cellVariableName}`;
+}
+
+function DatasetTableRow({
+  datasetMetadata,
+  numCells,
+  isExpandedToStart,
+  expandedContent: ExpandedContent,
+}: DatasetTableRowProps) {
   const { hubmap_id, uuid, mapped_data_types, donor, last_modified_timestamp } = datasetMetadata;
 
-  const { loadingUUID, fetchedUUIDs } = useCellsChartLoadingStore(storeSelector);
+  const datasetUrl = useDatasetURL(uuid);
 
   return (
     <ExpandableRow
       numCells={numCells}
-      expandedContent={
-        <CellsCharts
-          uuid={uuid}
-          cellVariableName={cellVariableName}
-          minExpression={minExpression}
-          queryType={queryType}
-        />
-      }
-      disabled={!(fetchedUUIDs.has(uuid) || loadingUUID === uuid || !loadingUUID)}
+      expandedContent={<ExpandedContent {...datasetMetadata} />}
       disabledTooltipTitle="No additional results can be expanded while detailed data are being retrieved."
       isExpandedToStart={isExpandedToStart}
     >
       <ExpandableRowCell>
-        <InternalLink href={`/browse/dataset/${uuid}?marker=${cellVariableName}`} target="_blank">
+        <InternalLink href={datasetUrl} target="_blank">
           {hubmap_id}
         </InternalLink>
       </ExpandableRowCell>

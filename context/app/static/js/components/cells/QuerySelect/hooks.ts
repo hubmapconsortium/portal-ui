@@ -1,34 +1,32 @@
 import { useStore, CellsSearchStore } from 'js/components/cells/store';
-import { capitalizeString } from 'js/helpers/functions';
 
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { ChangeEvent } from 'react';
-import { isQueryType } from '../queryTypes';
+import { queryTypes, isQueryType } from '../queryTypes';
 
 const cellsStoreSelector = (state: CellsSearchStore) => ({
   setQueryType: state.setQueryType,
-  selectedQueryType: state.selectedQueryType,
-  setSelectedQueryType: state.setSelectedQueryType,
+  queryType: state.queryType,
 });
 
 function useQuerySelect() {
   const { completeStep } = useAccordionStep();
 
-  const { setQueryType, selectedQueryType, setSelectedQueryType } = useStore(cellsStoreSelector);
+  const { setQueryType, queryType } = useStore(cellsStoreSelector);
 
   function handleSelect(event: ChangeEvent<HTMLInputElement>) {
     const { value } = event.target;
     if (isQueryType(value)) {
-      setSelectedQueryType(value);
+      setQueryType(value);
     }
   }
 
   function handleButtonClick() {
-    completeStep(`${capitalizeString(selectedQueryType)} Query`);
-    setQueryType(selectedQueryType);
+    completeStep(`${queryTypes[queryType].label} Query`);
+    setQueryType(queryType);
   }
 
-  return { selectedQueryType, handleSelect, handleButtonClick };
+  return { queryType, handleSelect, handleButtonClick };
 }
 
 export { useQuerySelect };
