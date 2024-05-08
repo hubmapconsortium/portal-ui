@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -11,7 +12,6 @@ import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarC
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { CellTypeOrgan } from 'js/hooks/useCrossModalityApi';
-import { Skeleton } from '@mui/material';
 import { useCellTypeDetails, useCellTypeName } from './hooks';
 import { DetailPageSection } from '../detailPage/style';
 
