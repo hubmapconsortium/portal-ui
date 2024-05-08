@@ -115,8 +115,9 @@ def create_app(testing=False):
 
     # Preload the cells api data for the molecular data queries on server start
     @app.before_request
-    def run_on_start():
-        routes_cells.preload_cells_api(app)
+    def preload_cells():
+        if not testing:
+            routes_cells.preload_cells_api(app)
 
     return app
 
