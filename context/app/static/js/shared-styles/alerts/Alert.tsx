@@ -26,6 +26,7 @@ interface StyledAlertProps extends AlertProps {
   $marginTop?: number;
 }
 
+// TODO: Figure out why `sx` doesn't work with this component. https://hms-dbmi.atlassian.net/browse/CAT-650
 const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBottom, $marginTop }) => ({
   ':not(svg)': {
     color: theme.palette.text.primary,

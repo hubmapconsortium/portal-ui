@@ -68,6 +68,7 @@ interface CellTypesGraphProps {
   organs: CellTypeOrgan[];
 }
 
+// This value was taken from the designs for the cell types detail page
 const defaultHeight = 640;
 
 export function CellTypeOrgansGraph({ organs }: CellTypesGraphProps) {
