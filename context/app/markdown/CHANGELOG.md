@@ -1,3 +1,9 @@
+## v0.96.1 - 2024-05-08
+
+- Update to portal-visualization v0.2.3.
+- Update language on workspaces landing page.
+
+
 ## v0.96.0 - 2024-05-06
 
 - Bump portal-visualization to v0.2.2 to support revised 10X columns.
