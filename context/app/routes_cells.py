@@ -96,6 +96,7 @@ def _get_protein_ids(app):
 
 @cache
 def _get_all_labels():
+    # all_labels.csv is sourced from https://github.com/hubmapconsortium/azimuth-annotate/blob/main/data/all_labels.csv
     with open(f'{dirname(__file__)}/all_labels.csv') as f:
         # Read in each row as a dictionary and store them in a list
         all_labels = DictReader(f, delimiter=',', fieldnames=[
