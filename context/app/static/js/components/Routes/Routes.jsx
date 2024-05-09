@@ -259,10 +259,10 @@ function Routes({ flaskData }) {
   }
 
   if (urlPath.startsWith('/workspaces/start/')) {
-    const workspaceId = urlPath.split('/').pop();
+    const workspaceId = parseInt(urlPath.split('/').pop(), 10);
     return (
       <Route>
-        <WorkspacePleaseWait workspaceId={parseInt(workspaceId, 10)} />
+        <WorkspacePleaseWait workspaceId={workspaceId} />
       </Route>
     );
   }

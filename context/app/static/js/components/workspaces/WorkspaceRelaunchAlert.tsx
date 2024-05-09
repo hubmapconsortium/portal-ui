@@ -22,14 +22,15 @@ function WorkspaceRelaunchAlert({ workspaceId }: { workspaceId: number }) {
   const { open, setWorkspace } = useLaunchWorkspaceStore();
   const [showAlert, setShowAlert] = useState(true);
 
-  const openLaunch = useCallback(() => {
-    setWorkspace(workspace);
-    open();
-  }, [open, setWorkspace, workspace]);
-
   const closeAlert = useCallback(() => {
     setShowAlert(false);
   }, [setShowAlert]);
+
+  const openLaunch = useCallback(() => {
+    setWorkspace(workspace);
+    open();
+    closeAlert();
+  }, [open, setWorkspace, workspace, closeAlert]);
 
   if (!showAlert) {
     return null;
