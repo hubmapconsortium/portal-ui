@@ -1,10 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { BarStack } from '@visx/shape';
-import { AxisBottom, AxisLeft, TickRendererProps } from '@visx/axis';
+import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
 import Typography from '@mui/material/Typography';
-import { Text } from '@visx/text';
-import type { WithParentSizeProps, WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
+import type { WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
 import type { AnyD3Scale, ScaleInput } from '@visx/scale';
 import type { Accessor, SeriesPoint } from '@visx/shape/lib/types';
 
@@ -13,26 +12,8 @@ import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGridRowsGroup';
 
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
-import { type FormattedValue, type TooltipData, tooltipHasBarData } from '../types';
-
-interface TickComponentWithHandlersProps {
-  handleMouseEnter: ({ key }: { key: FormattedValue }) => React.MouseEventHandler<SVGTextElement>;
-  handleMouseLeave: React.MouseEventHandler<SVGTextElement> | undefined;
-}
-
-function TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave }: TickComponentWithHandlersProps) {
-  // use a callback to avoid creating a new component on every render
-  return useCallback(
-    ({ formattedValue, ...tickProps }: TickRendererProps) => {
-      return (
-        <Text onMouseEnter={handleMouseEnter({ key: formattedValue })} onMouseLeave={handleMouseLeave} {...tickProps}>
-          {trimStringWithMiddleEllipsis(formattedValue)}
-        </Text>
-      );
-    },
-    [handleMouseEnter, handleMouseLeave],
-  );
-}
+import { type TooltipData, tooltipHasBarData } from '../types';
+import TickComponent from '../TickComponent';
 
 interface VerticalStackedBarChartProps<
   Datum,
@@ -40,8 +21,7 @@ interface VerticalStackedBarChartProps<
   YAxisKey extends string,
   XAxisScale extends AnyD3Scale,
   YAxisScale extends AnyD3Scale,
-> extends WithParentSizeProps,
-    WithParentSizeProvidedProps {
+> extends WithParentSizeProvidedProps {
   visxData: Datum[];
   xScale: XAxisScale;
   getXScaleRange?: (max: number) => [number, number];
@@ -187,7 +167,7 @@ function VerticalStackedBarChart<
                 textAnchor: 'end',
                 angle: -90,
               })}
-              tickComponent={TickComponentWithHandlers({ handleMouseEnter, handleMouseLeave })}
+              tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave })}
               labelProps={{
                 fontSize: 14,
                 color: 'black',

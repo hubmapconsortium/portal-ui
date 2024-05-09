@@ -112,6 +112,15 @@ def create_app(testing=False):
                 is_authenticated=False,
                 workspaces_token='',
                 user_groups=[])
+
+    # TODO: This breaks cypress tests; the caching will still occur on first lookup
+    # TODO: Investigate how to work around the cypress issue.
+    # Preload the cells api data for the molecular data queries on server start
+    # @app.before_request
+    # def preload_cells():
+    #     if not testing:
+    #         routes_cells.preload_cells_api(app)
+
     return app
 
 

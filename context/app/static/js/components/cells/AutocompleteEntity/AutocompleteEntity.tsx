@@ -6,23 +6,25 @@ import Chip from '@mui/material/Chip';
 import { useAutocompleteQuery } from './hooks';
 import { AutocompleteQueryResponse } from './types';
 import { createInitialValue } from './utils';
+import { QueryType, queryTypes } from '../queryTypes';
+import { PreserveWhiteSpaceListItem } from './styles';
 
 function buildHelperText(entity: string): string {
-  return `Multiple ${entity} are allowed and only 'AND' queries are supported.`;
+  return `Multiple ${entity} are allowed and only 'OR' queries are supported.`;
 }
 
-const labelAndHelperTextProps: Record<string, Pick<TextFieldProps, 'label' | 'helperText'>> = {
-  genes: { label: 'Gene Symbol', helperText: buildHelperText('gene symbols') },
-  proteins: { label: 'Protein', helperText: buildHelperText('proteins') },
+const labelAndHelperTextProps: Record<QueryType, Pick<TextFieldProps, 'label' | 'helperText'>> = {
+  gene: { label: 'Gene Symbol', helperText: buildHelperText('gene symbols') },
+  protein: { label: 'Protein', helperText: buildHelperText('proteins') },
+  'cell-type': { label: 'Cell Type', helperText: buildHelperText('cell types') },
 };
-
-interface AutocompleteEntityProps {
-  targetEntity: string;
+interface AutocompleteEntityProps<T extends QueryType> {
+  targetEntity: T;
   setter: (value: string[]) => void;
   defaultValue?: string;
 }
 
-function AutocompleteEntity({ targetEntity, setter, defaultValue }: AutocompleteEntityProps) {
+function AutocompleteEntity<T extends QueryType>({ targetEntity, setter, defaultValue }: AutocompleteEntityProps<T>) {
   const [substring, setSubstring] = useState('');
   const [selectedOptions, setSelectedOptions] = useState<AutocompleteQueryResponse>(createInitialValue(defaultValue));
 
@@ -56,11 +58,11 @@ function AutocompleteEntity({ targetEntity, setter, defaultValue }: Autocomplete
       isOptionEqualToValue={(option, value) => option.full === value.full}
       loading={isLoading}
       renderOption={(props, option) => (
-        <li {...props}>
-          {option.pre}
+        <PreserveWhiteSpaceListItem {...props}>
+          <span>{option.pre}</span>
           <b>{option.match}</b>
-          {option.post}
-        </li>
+          <span>{option.post}</span>
+        </PreserveWhiteSpaceListItem>
       )}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
@@ -89,7 +91,7 @@ function AutocompleteEntity({ targetEntity, setter, defaultValue }: Autocomplete
         <TextField
           InputLabelProps={{ shrink: true, ...InputLabelProps }}
           {...labelAndHelperTextProps[targetEntity]}
-          placeholder={`Select ${targetEntity} to query`}
+          placeholder={`Select ${queryTypes[targetEntity].label.toLowerCase()} to query`}
           value={substring}
           name="substring"
           variant="outlined"

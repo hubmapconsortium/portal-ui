@@ -3,10 +3,11 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Typography from '@mui/material/Typography';
 
 import DatasetsTable from 'js/components/cells/DatasetsTable';
-import { useStore } from 'js/components/cells/store';
+import { useStore, CellsSearchStore } from 'js/components/cells/store';
 import { CenteredFlex, FullWidthAlert } from './style';
+import CellTypeResults from '../CellTypeResults';
 
-const cellsStoreSelector = (state) => ({
+const cellsStoreSelector = (state: CellsSearchStore) => ({
   isLoading: state.isLoading,
   results: state.results,
   minExpressionLog: state.minExpressionLog,
@@ -15,7 +16,7 @@ const cellsStoreSelector = (state) => ({
 });
 
 function CellsResults() {
-  const { isLoading, results, minExpressionLog, cellVariableNames, queryType } = useStore(cellsStoreSelector);
+  const { isLoading, results, queryType } = useStore(cellsStoreSelector);
 
   if (isLoading) {
     return (
@@ -26,21 +27,19 @@ function CellsResults() {
     );
   }
 
-  if (!results.length) {
+  if (!results) {
     return (
       <FullWidthAlert severity="info">
         No results found matching your search. Edit query parameters by returning to the previous step.
       </FullWidthAlert>
     );
   }
-  return (
-    <DatasetsTable
-      datasets={results}
-      minExpression={10 ** minExpressionLog}
-      cellVariableName={cellVariableNames[0]}
-      queryType={queryType}
-    />
-  );
+
+  if (queryType === 'cell-type') {
+    return <CellTypeResults />;
+  }
+
+  return <DatasetsTable datasets={results} />;
 }
 
 export default CellsResults;

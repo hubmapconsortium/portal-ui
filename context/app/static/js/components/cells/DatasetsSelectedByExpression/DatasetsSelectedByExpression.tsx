@@ -2,6 +2,7 @@ import React from 'react';
 
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 
 import LogSlider from 'js/shared-styles/inputs/LogSlider';
 import AutocompleteEntity from 'js/components/cells/AutocompleteEntity';
@@ -16,24 +17,12 @@ interface DatasetsSelectedByExpressionProps {
   defaultEntity?: string;
 }
 
-function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: DatasetsSelectedByExpressionProps) {
-  const {
-    handleSubmit,
-    message,
-    queryType,
-    minExpressionLog,
-    setMinExpressionLog,
-    minCellPercentage,
-    setMinCellPercentage,
-    cellVariableNames,
-    setCellVariableNames,
-  } = useDatasetsSelectedByExpression();
-
+function BiomarkerParameters() {
+  const { queryType, minExpressionLog, setMinExpressionLog, minCellPercentage, setMinCellPercentage } =
+    useDatasetsSelectedByExpression();
   const queryMeasurement = queryTypes[queryType].measurement;
-
   return (
-    <StyledDiv>
-      <AutocompleteEntity targetEntity={`${queryType}s`} setter={setCellVariableNames} defaultValue={defaultEntity} />
+    <>
       <GenomicModality />
       <div>
         <LogSlider
@@ -62,7 +51,21 @@ function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: Data
           id="min-cell-percentage"
         />
       </div>
-      <div>
+    </>
+  );
+}
+
+function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: DatasetsSelectedByExpressionProps) {
+  const { message, queryType, setCellVariableNames, handleSubmit, cellVariableNames } =
+    useDatasetsSelectedByExpression();
+
+  const isBiomarker = queryType !== 'cell-type';
+
+  return (
+    <StyledDiv>
+      <AutocompleteEntity targetEntity={queryType} setter={setCellVariableNames} defaultValue={defaultEntity} />
+      {isBiomarker && <BiomarkerParameters />}
+      <Box mt={2}>
         <Button
           onClick={() => {
             handleSubmit().catch(() => {
@@ -77,7 +80,7 @@ function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: Data
         >
           Run Query
         </Button>
-      </div>
+      </Box>
       <Typography>{message}</Typography>
     </StyledDiv>
   );
