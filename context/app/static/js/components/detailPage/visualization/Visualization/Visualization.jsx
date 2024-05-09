@@ -109,6 +109,22 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
   const isMultiDataset = Array.isArray(vitessceConfig);
   const version = packageInfo.dependencies.vitessce.replace('^', '');
 
+  useEffect(() => {
+    // Force the canvas to not scroll when the user scrolls the page.
+    // This is a workaround to an issue with the Three.js spatial view where it is
+    // scrolling on the portal page but works as expected in the vitessce preview.
+    const canvasScrollFix = (e) => {
+      if (e.target.tagName === 'CANVAS') {
+        e.preventDefault();
+      }
+    };
+    // The passive option is set to false so that the browser does not ignore the preventDefault call.
+    document.addEventListener('wheel', canvasScrollFix, { passive: false });
+    return () => {
+      document.removeEventListener('wheel', canvasScrollFix);
+    };
+  }, []);
+
   if (!vitessceConfig) {
     return null;
   }
