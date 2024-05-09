@@ -93,6 +93,7 @@ const otherGroups = {
 const OtherLinks = withLinkGroups(otherGroups);
 
 const previewLinks = [
+  '3D Maps',
   'Multimodal Molecular Imaging Data',
   'Multimodal Mass Spectrometry Imaging Data',
   'Cell Type Annotations',
