@@ -1,5 +1,5 @@
 ---
-title: 3D Visualization of the Adult Human Kidney Using Light Sheet Fluorescence Microscopy (provided by Jain Lab)
+title: 3D Visualization of the Adult Human Kidney Using Light Sheet Fluorescence Microscopy
 group_name: Washington University in St. Louis
 created_by_user_displayname: Sanjay Jain
 created_by_user_email: sanjayjain@wustl.edu
@@ -205,7 +205,7 @@ or
 - Contributor_Display_Name
 -->
 
-- Liam Mclaughlin
+- Liam McLaughlin
 - Bo Zhang
 - Amanda Knoten
 - Sanjay Jain
