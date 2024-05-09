@@ -4,6 +4,9 @@ import { useAppContext } from 'js/components/Contexts';
 import { getWorkspaceJob } from 'js/components/workspaces/utils';
 import useInterval from 'js/hooks/useInterval';
 import { trackMeasurement } from 'js/helpers/trackers';
+import { useWorkspacesList } from 'js/components/workspaces/hooks';
+
+const ACTIVATING_STATUS = 'Activating';
 
 function useWorkspacesPleaseWait(workspaceId) {
   const [message, setMessage] = useState();
@@ -11,6 +14,8 @@ function useWorkspacesPleaseWait(workspaceId) {
   const { workspacesEndpoint, workspacesToken } = useAppContext();
   const loadingStartTime = useRef(new Date().getTime());
   const firstRunningResponseTime = useRef();
+  const [jobStatus, setJobStatus] = useState();
+  const { handleStopWorkspace } = useWorkspacesList();
 
   async function setLocationOrRetry() {
     if (dead) {
@@ -23,9 +28,12 @@ function useWorkspacesPleaseWait(workspaceId) {
       workspacesEndpoint,
       workspacesToken,
     });
+
     if (!jobLocation) {
       return;
     }
+    const { status } = jobLocation;
+    setJobStatus(status);
     if (jobLocation.status === 'Active') {
       // Track first time we see the job is running to measure time job is pending and jupyter startup time
       if (!firstRunningResponseTime.current) {
@@ -53,11 +61,23 @@ function useWorkspacesPleaseWait(workspaceId) {
       const jupyterUrl = `${urlBase}/tree/${workspacePath}?${urlQuery}`;
       document.location = jupyterUrl;
     }
+
+    if (status === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime.current > 5 * 60 * 1000) {
+      try {
+        await handleStopWorkspace(workspaceId);
+        document.location = `/workspaces/?failed_workspace_id=${encodeURIComponent(workspaceId)}`;
+      } catch (e) {
+        console.error(e);
+      }
+    }
   }
 
   useInterval(setLocationOrRetry, 1000);
 
-  return { message };
+  return {
+    message,
+    isPending30s: jobStatus === ACTIVATING_STATUS && new Date().getTime() - loadingStartTime.current > 30 * 1000,
+  };
 }
 
 export default useWorkspacesPleaseWait;
