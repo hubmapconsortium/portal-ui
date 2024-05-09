@@ -262,7 +262,7 @@ function Routes({ flaskData }) {
     const workspaceId = urlPath.split('/').pop();
     return (
       <Route>
-        <WorkspacePleaseWait workspaceId={workspaceId} />
+        <WorkspacePleaseWait workspaceId={parseInt(workspaceId, 10)} />
       </Route>
     );
   }
