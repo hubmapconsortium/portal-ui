@@ -1,3 +1,8 @@
+## v0.96.4 - 2024-05-09
+
+- Bump Vitessce to v3.4.5.
+
+
 ## v0.96.3 - 2024-05-09
 
 - Implemented iterations to 3D tissue maps preview page.
