@@ -1,2 +1,0 @@
-- Add 3D spatial data preview.
-- Update Vitessce to 3.4.2.

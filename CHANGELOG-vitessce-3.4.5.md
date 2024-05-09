@@ -1,0 +1,1 @@
+- Bump Vitessce to v3.4.5.

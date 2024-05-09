@@ -465,9 +465,8 @@ h5py==3.9.0 \
     # via
     #   anndata
     #   scanpy
-hubmap-api-py-client==0.0.9 \
-    --hash=sha256:8af6df46374ed838d3aeb5fb7298d7212145eb0f8dca01c095147fb05e304ee2 \
-    --hash=sha256:9a4601d8d3df9c56d6803cee2678844589808bd9df71657ac459a2559c0a3ccd
+hubmap-api-py-client==0.0.11 \
+    --hash=sha256:65576f80fb449688027cabd43cd7f130e52fa8f43c4e823a579b6111085203e1
     # via -r context/requirements.in
 hubmap-commons==2.1.10 \
     --hash=sha256:38c83d9d05457a22ba0a5ccad2001887917d9729ffcfb605395b59c46bfafdba \
