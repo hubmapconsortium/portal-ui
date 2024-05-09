@@ -12,13 +12,15 @@ function UserLinks({ isAuthenticated, userEmail }) {
   const { isWorkspacesUser } = useAppContext();
 
   const userType = getUserType();
+
+  const isOnboardableToWorkspaces = isWorkspacesUser || userType === 'internal';
   return (
     <Dropdown
       title={<TruncatedSpan>{isAuthenticated ? userEmail || 'User' : 'User Profile'}</TruncatedSpan>}
       data-testid="user-profile-dropdown"
     >
       <DropdownLink href="/my-lists">My Lists</DropdownLink>
-      {(isWorkspacesUser || userType === 'internal') && <DropdownLink href="/workspaces">My Workspaces</DropdownLink>}
+      {isOnboardableToWorkspaces && <DropdownLink href="/workspaces">My Workspaces</DropdownLink>}
       <StyledDivider />
       {isAuthenticated ? (
         <WarningDropdownLink href="/logout">Log Out</WarningDropdownLink>
