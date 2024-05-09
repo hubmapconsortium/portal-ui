@@ -7,12 +7,18 @@ import useWorkspacesPleaseWait from './hooks';
 import { FlexColumn, CenteredFlexItem, StyledAlert } from './style';
 
 function WorkspacePleaseWait({ workspaceId }) {
-  const { message } = useWorkspacesPleaseWait(workspaceId);
+  const { message, isPending30s } = useWorkspacesPleaseWait(workspaceId);
 
   return (
     <FlexColumn>
       <div>
-        <StyledAlert severity="info">Workspaces are loading. Workspaces can take a few minutes to load.</StyledAlert>
+        {!isPending30s && <StyledAlert severity="info">Your workspace is currently launching.</StyledAlert>}
+        {isPending30s && (
+          <StyledAlert severity="warning">
+            Due to high demand, there is currently a wait to launch your workspace. If your workspace does not launch
+            within 5 minutes, please try again later.
+          </StyledAlert>
+        )}
         <WorkspacesTitle />
       </div>
       <CenteredFlexItem>
