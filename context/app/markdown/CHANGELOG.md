@@ -1,3 +1,8 @@
+## v0.96.3 - 2024-05-09
+
+- Implemented iterations to 3D tissue maps preview page.
+
+
 ## v0.96.2 - 2024-05-09
 
 - Added support for querying datasets by cell type in Molecular Data view.
