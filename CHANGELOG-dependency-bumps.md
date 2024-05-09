@@ -1,2 +1,0 @@
-- Bump Node to v20.12.0.
-- Update various front-end dependencies.

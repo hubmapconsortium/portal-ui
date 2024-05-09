@@ -1,2 +1,0 @@
-- Improve usefulness of data products section by ensuring correct pipeline is linked as the source instead of portal containers and using GitHub repo names as a fallback for `pipeline.cwl`.
-- Improve usability of data products section for datasets with many products by enabling scrolling.
