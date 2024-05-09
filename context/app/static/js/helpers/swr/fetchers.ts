@@ -49,6 +49,7 @@ export async function multiFetcher<T>({
         const error = new SWRError(message, {
           info: errorBody,
           status: response.status,
+          url,
         });
         throw error;
       }
