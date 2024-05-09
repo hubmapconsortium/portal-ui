@@ -1,3 +1,13 @@
+## v0.96.2 - 2024-05-09
+
+- Added support for querying datasets by cell type in Molecular Data view.
+- Fix error handling while creating new workspaces.
+- Add 3D spatial data preview.
+- Update Vitessce to 3.4.2.
+- Update alerts displayed on workspace loading page. Add logic to return users to workspace landing page in the case of unexpectedly long wait times.
+- Update workspace access to allow users in HuBMAP Read globus group to access workspace features while in consortium beta.
+
+
 ## v0.96.1 - 2024-05-08
 
 - Update to portal-visualization v0.2.3.

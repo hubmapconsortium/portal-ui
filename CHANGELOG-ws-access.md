@@ -1,1 +1,0 @@
-- Update workspace access to allow users in HuBMAP Read globus group to access workspace features while in consortium beta.

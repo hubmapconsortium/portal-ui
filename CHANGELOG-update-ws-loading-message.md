@@ -1,1 +1,0 @@
-- Update alerts displayed on workspace loading page. Add logic to return users to workspace landing page in the case of unexpectedly long wait times.
