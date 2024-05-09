@@ -104,7 +104,7 @@ lxml>=4.9.1
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
-"vitessce": "^3.3.12",
+"vitessce": "^3.4.2",
 "zod": "^3.22.4",
 "zustand": "^4.5.2"
 }
