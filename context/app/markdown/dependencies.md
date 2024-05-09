@@ -24,7 +24,7 @@ requests>=2.27.1
 pyyaml>=5.4
 python-datauri>=0.2.8
 python-frontmatter>=0.5.0
-hubmap-api-py-client>=0.0.9
+hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.10
 # As of 2023-08-24, this is the version of boto3 which is compatible with both the 
 # portal-visualization->vitessce->ome-zarr dependency on aiobotocore~=2.5
@@ -104,7 +104,7 @@ lxml>=4.9.1
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
-"vitessce": "^3.4.2",
+"vitessce": "^3.4.3",
 "zod": "^3.22.4",
 "zustand": "^4.5.2"
 }
