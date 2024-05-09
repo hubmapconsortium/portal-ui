@@ -1,8 +1,11 @@
 import { useCallback } from 'react';
 import useSWR, { SWRConfiguration } from 'swr';
+
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { SWRError } from 'js/helpers/swr/errors';
 import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
 import { buildDatasetSymlinks } from '../utils';
@@ -53,14 +56,37 @@ function useTemplateNotebooks() {
   const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
   const { createTemplates } = useCreateTemplates();
 
+  const { toastError } = useSnackbarActions();
+
+  const { templates } = useWorkspaceTemplates();
+
   const createTemplateNotebooks = useCallback(
     async ({ workspaceName, templateKeys, uuids, workspaceJobTypeId }: CreateTemplateNotebooksTypes) => {
-      const templatesDetails = await createTemplates({ templateKeys, uuids });
-      trackEvent({
-        category: 'Workspaces',
-        action: 'Create Templates',
-        label: { templateKeys, templateCount: templateKeys.length, uuids },
-      });
+      let templatesDetails: {
+        name: string;
+        content: string | undefined;
+      }[] = [];
+
+      try {
+        templatesDetails = await createTemplates({ templateKeys, uuids });
+        trackEvent({
+          category: 'Workspaces',
+          action: 'Create Templates',
+          label: { templateKeys, templateCount: templateKeys.length, uuids },
+        });
+      } catch (e) {
+        if (e instanceof SWRError) {
+          const { url } = e;
+          const templateKey = url.split('/').pop();
+
+          if (templateKey && templates?.[templateKey]) {
+            toastError(`There are issues with creating ${templates?.[templateKey].title}. Failed to create workspace.`);
+            return;
+          }
+        }
+        toastError(`There are issues with creating the selected templates. Failed to create workspace.`);
+        return;
+      }
 
       const templatePath = templatesDetails[0].name;
 
@@ -78,7 +104,7 @@ function useTemplateNotebooks() {
         },
       });
     },
-    [groupsToken, createAndLaunchWorkspace, createTemplates],
+    [groupsToken, createAndLaunchWorkspace, createTemplates, toastError, templates],
   );
 
   return createTemplateNotebooks;

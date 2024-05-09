@@ -1,0 +1,1 @@
+- Fix error handling while creating new workspaces.

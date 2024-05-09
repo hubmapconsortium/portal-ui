@@ -203,6 +203,7 @@ function useLaunchWorkspace() {
   const { open, setWorkspace } = useLaunchWorkspaceStore();
 
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
+
   const startAndOpenWorkspace = useCallback(
     async ({
       workspace,
@@ -232,7 +233,7 @@ function useLaunchWorkspace() {
     [mutateWorkspacesAndJobs, startWorkspace, globalMutateWorkspace, handleUpdateWorkspace, runningWorkspace],
   );
 
-  const launchWorkspace = useCallback(
+  const startNewWorkspace = useCallback(
     async ({
       workspace,
       jobTypeId,
@@ -245,7 +246,6 @@ function useLaunchWorkspace() {
       if (runningWorkspace) {
         open();
         setWorkspace(workspace);
-        throw new Error('Another workspace is already running');
       } else {
         await startAndOpenWorkspace({ workspace, jobTypeId, templatePath });
       }
@@ -253,31 +253,33 @@ function useLaunchWorkspace() {
     [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
   );
 
-  return { launchWorkspace, startAndOpenWorkspace };
+  return { startNewWorkspace, startAndOpenWorkspace };
 }
 
 export function useCreateAndLaunchWorkspace() {
   const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
-  const { launchWorkspace } = useLaunchWorkspace();
+  const { startNewWorkspace } = useLaunchWorkspace();
+  const { toastError, toastSuccess } = useSnackbarActions();
 
   const createAndLaunchWorkspace = useCallback(
     async ({ body, templatePath }: { body: CreateWorkspaceBody; templatePath: string }) => {
-      const workspace = await createWorkspace(body);
-
-      if (!workspace.id) {
-        throw new Error('Failed to create workspace');
-      }
+      let workspace: Workspace;
 
       try {
-        await launchWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
-      } catch (err: unknown) {
-        if ((err as Error)?.message === 'Another workspace is already running') {
-          return;
-        }
-        console.error(err);
+        workspace = await createWorkspace(body);
+      } catch (e) {
+        toastError('Failed to create workspace.');
+        return;
+      }
+      toastSuccess('Workspace successfully created.');
+
+      try {
+        await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
+      } catch (e) {
+        toastError('Workspace failed to launch.');
       }
     },
-    [createWorkspace, launchWorkspace],
+    [createWorkspace, startNewWorkspace, toastError, toastSuccess],
   );
 
   return { createAndLaunchWorkspace, isCreatingWorkspace };
@@ -330,7 +332,6 @@ function useRefreshSession(workspace: MergedWorkspace) {
 
 function useCreateTemplates() {
   const { userTemplatesEndpoint } = useAppContext();
-  const { toastError } = useSnackbarActions();
 
   const createTemplates = useCallback(
     async ({ templateKeys, uuids }: { templateKeys: string[]; uuids: string[] }) => {
@@ -345,16 +346,12 @@ function useCreateTemplates() {
           },
         ],
       });
-      if (createdTemplates.some((t) => !t.success)) {
-        const error = createdTemplates.reduce((acc, t) => acc.concat(t.message), '');
-        toastError(error);
-      }
       return templateKeys.map((templateKey, i) => ({
         name: `${templateKey}.ipynb`,
         content: createdTemplates[i]?.data?.template,
       }));
     },
-    [toastError, userTemplatesEndpoint],
+    [userTemplatesEndpoint],
   );
 
   return { createTemplates };
