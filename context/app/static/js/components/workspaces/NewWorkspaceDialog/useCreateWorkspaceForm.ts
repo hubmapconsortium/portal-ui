@@ -3,18 +3,24 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { useSearchHits } from 'js/hooks/useSearchData';
-import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { CreateTemplateNotebooksTypes } from '../types';
 import { useTemplateNotebooks } from './hooks';
-import { workspaceNameField, protectedDatasetsField, templatesField } from '../workspaceFormFields';
+import {
+  workspaceNameField,
+  protectedDatasetsField,
+  templatesField,
+  workspaceJobTypeIdField,
+} from '../workspaceFormFields';
+import { useProtectedDatasetsForm, useTooManyDatasetsErrors } from '../formHooks';
+import { DEFAULT_JOB_TYPE } from '../constants';
 
 export interface FormWithTemplates {
   templates: string[];
 }
 interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
-  'protected-datasets': undefined;
+  'protected-datasets': string;
+  workspaceJobTypeId: string;
 }
 
 interface UseCreateWorkspaceTypes {
@@ -22,7 +28,7 @@ interface UseCreateWorkspaceTypes {
 }
 
 const schema = z
-  .object({ ...workspaceNameField, ...protectedDatasetsField, ...templatesField })
+  .object({ ...workspaceNameField, ...protectedDatasetsField, ...templatesField, ...workspaceJobTypeIdField })
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
@@ -38,8 +44,9 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
   } = useForm({
     defaultValues: {
       'workspace-name': defaultName ?? '',
-      'protected-datasets': undefined,
+      'protected-datasets': '',
       templates: [],
+      workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -50,9 +57,9 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     setDialogIsOpen(false);
   }
 
-  async function onSubmit({ templateKeys, uuids, workspaceName }: CreateTemplateNotebooksTypes) {
+  async function onSubmit({ templateKeys, uuids, workspaceName, workspaceJobTypeId }: CreateTemplateNotebooksTypes) {
     if (isSubmitting || isSubmitSuccessful) return;
-    await createTemplateNotebooks({ templateKeys, uuids, workspaceName });
+    await createTemplateNotebooks({ templateKeys, uuids, workspaceName, workspaceJobTypeId });
     reset();
     handleClose();
   }
@@ -69,24 +76,11 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
   };
 }
 
-interface DatasetAccessLevelHits {
-  mapped_data_access_level: 'Public' | 'Protected';
-  hubmap_id: string;
-  [key: string]: unknown;
+function useCreateWorkspaceDatasets() {
+  const { errorMessages: protectedDatasetsErrorMessages, selectedRows, ...rest } = useProtectedDatasetsForm();
+  const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({ numWorkspaceDatasets: selectedRows.size });
+
+  return { errorMessages: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages], selectedRows, ...rest };
 }
 
-function useDatasetsAccessLevel(ids: string[]) {
-  const query = {
-    query: {
-      bool: {
-        must: [getIDsQuery(ids), getTermClause('mapped_data_access_level.keyword', 'Protected')],
-      },
-    },
-    _source: ['mapped_data_access_level', 'hubmap_id'],
-    size: ids.length,
-  };
-  const { searchHits: datasets } = useSearchHits<DatasetAccessLevelHits>(query);
-  return { datasets };
-}
-
-export { useCreateWorkspaceForm, useDatasetsAccessLevel, type CreateWorkspaceFormTypes };
+export { useCreateWorkspaceForm, useCreateWorkspaceDatasets, type CreateWorkspaceFormTypes };

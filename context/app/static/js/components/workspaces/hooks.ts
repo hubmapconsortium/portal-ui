@@ -1,10 +1,17 @@
 import { useCallback, useMemo } from 'react';
-import { KeyedMutator } from 'swr';
+import { KeyedMutator, useSWRConfig } from 'swr';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
 import { multiFetcher } from 'js/helpers/swr';
-import { getWorkspaceStartLink, mergeJobsIntoWorkspaces, findBestJob, getWorkspaceFileName } from './utils';
+import {
+  getWorkspaceStartLink,
+  mergeJobsIntoWorkspaces,
+  findBestJob,
+  getWorkspaceFileName,
+  buildDatasetSymlinks,
+  getDefaultJobType,
+} from './utils';
 import {
   useDeleteWorkspace,
   useStopWorkspace,
@@ -16,6 +23,8 @@ import {
   useWorkspace,
   useUpdateWorkspace,
   UpdateWorkspaceBody,
+  useWorkspacesApiURLs,
+  useBuildWorkspacesSWRKey,
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
@@ -42,6 +51,19 @@ function useMutateWorkspacesAndJobs<T>(mutateWorkspace?: KeyedMutator<T>) {
   return mutate;
 }
 
+function useGlobalMutateWorkspace() {
+  const { buildKey } = useBuildWorkspacesSWRKey();
+  const urls = useWorkspacesApiURLs();
+  const { mutate } = useSWRConfig();
+
+  return useCallback(
+    async (workspaceId: number) => {
+      await mutate(buildKey({ url: urls.workspace(workspaceId) }));
+    },
+    [buildKey, urls, mutate],
+  );
+}
+
 function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspace }: UseWorkspacesListTypes<T>) {
   const { jobs, isLoading: jobsLoading } = useJobs();
   const isLoading = workspacesLoading || jobsLoading;
@@ -66,8 +88,8 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
     await mutate();
   }
 
-  async function handleStartWorkspace(workspaceId: number) {
-    await startWorkspace(workspaceId);
+  async function handleStartWorkspace({ workspaceId, jobTypeId }: { workspaceId: number; jobTypeId: string }) {
+    await startWorkspace({ workspaceId, jobTypeId });
     await mutate();
   }
 
@@ -152,79 +174,112 @@ function useHasRunningWorkspace() {
   return Boolean(useRunningWorkspace());
 }
 
-function useLaunchWorkspace(workspace?: Workspace) {
-  const { startWorkspace } = useStartWorkspace();
-  const { mutate: mutateWorkspaces } = useWorkspaces();
-  const runningWorkspace = useRunningWorkspace();
-  const mutate = useMutateWorkspacesAndJobs(mutateWorkspaces);
+function useHandleUpdateWorkspace() {
+  const { updateWorkspace } = useUpdateWorkspace();
+  const mutateWorkspacesAndJobs = useMutateWorkspacesAndJobs();
+  const globalMutateWorkspace = useGlobalMutateWorkspace();
 
-  const { open, setWorkspace } = useLaunchWorkspaceStore();
-
-  const startAndOpenWorkspace = useCallback(
-    async (ws: Workspace, templatePath?: string) => {
-      await startWorkspace(ws.id);
-      await mutate();
-      window.open(getWorkspaceStartLink(ws, templatePath), '_blank');
+  const handleUpdateWorkspace = useCallback(
+    async ({ body, workspaceId }: { body: UpdateWorkspaceBody; workspaceId: number }) => {
+      try {
+        await updateWorkspace({ body, workspaceId });
+        await mutateWorkspacesAndJobs();
+        await globalMutateWorkspace(workspaceId);
+      } catch (e) {
+        console.error(e);
+      }
     },
-    [mutate, startWorkspace],
+    [updateWorkspace, mutateWorkspacesAndJobs, globalMutateWorkspace],
   );
 
-  const launchWorkspace = useCallback(
-    async (ws: Workspace, templatePath?: string) => {
-      if (runningWorkspace && ws.id === runningWorkspace.id) {
-        window.open(getWorkspaceStartLink(ws, templatePath), '_blank');
+  return { handleUpdateWorkspace };
+}
+
+function useLaunchWorkspace() {
+  const { startWorkspace } = useStartWorkspace();
+  const runningWorkspace = useRunningWorkspace();
+  const mutateWorkspacesAndJobs = useMutateWorkspacesAndJobs();
+  const globalMutateWorkspace = useGlobalMutateWorkspace();
+  const { open, setWorkspace } = useLaunchWorkspaceStore();
+
+  const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
+
+  const startAndOpenWorkspace = useCallback(
+    async ({
+      workspace,
+      jobTypeId,
+      templatePath,
+    }: {
+      workspace: Workspace;
+      jobTypeId: string;
+      templatePath?: string;
+    }) => {
+      const isNewJobType = workspace?.default_job_type !== jobTypeId;
+
+      if (runningWorkspace && workspace.id === runningWorkspace.id && !isNewJobType) {
+        window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
         return;
       }
+
+      await startWorkspace({ workspaceId: workspace.id, jobTypeId });
+      await mutateWorkspacesAndJobs();
+      await globalMutateWorkspace(workspace.id);
+      window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
+
+      if (isNewJobType) {
+        await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
+      }
+    },
+    [mutateWorkspacesAndJobs, startWorkspace, globalMutateWorkspace, handleUpdateWorkspace, runningWorkspace],
+  );
+
+  const startNewWorkspace = useCallback(
+    async ({
+      workspace,
+      jobTypeId,
+      templatePath,
+    }: {
+      workspace: Workspace;
+      jobTypeId: string;
+      templatePath?: string;
+    }) => {
       if (runningWorkspace) {
         open();
-        setWorkspace(ws);
-        throw new Error('Another workspace is already running');
+        setWorkspace(workspace);
       } else {
-        await startAndOpenWorkspace(ws, templatePath);
+        await startAndOpenWorkspace({ workspace, jobTypeId, templatePath });
       }
     },
     [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
   );
 
-  const handleLaunchWorkspace = useCallback(async () => {
-    if (workspace) {
-      try {
-        return await launchWorkspace(workspace);
-      } catch (err: unknown) {
-        if ((err as Error)?.message === 'Another workspace is already running') {
-          return undefined;
-        }
-        console.error(err);
-      }
-    }
-    return Promise.reject(new Error('No workspace to launch'));
-  }, [workspace, launchWorkspace]);
-
-  return { handleLaunchWorkspace, launchWorkspace, startAndOpenWorkspace };
+  return { startNewWorkspace, startAndOpenWorkspace };
 }
 
 export function useCreateAndLaunchWorkspace() {
   const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
-  const { launchWorkspace } = useLaunchWorkspace();
+  const { startNewWorkspace } = useLaunchWorkspace();
+  const { toastError, toastSuccess } = useSnackbarActions();
 
   const createAndLaunchWorkspace = useCallback(
     async ({ body, templatePath }: { body: CreateWorkspaceBody; templatePath: string }) => {
-      const workspace = await createWorkspace(body);
-
-      if (!workspace.id) {
-        throw new Error('Failed to create workspace');
-      }
+      let workspace: Workspace;
 
       try {
-        await launchWorkspace(workspace, templatePath);
-      } catch (err: unknown) {
-        if ((err as Error)?.message === 'Another workspace is already running') {
-          return;
-        }
-        console.error(err);
+        workspace = await createWorkspace(body);
+      } catch (e) {
+        toastError('Failed to create workspace.');
+        return;
+      }
+      toastSuccess('Workspace successfully created.');
+
+      try {
+        await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
+      } catch (e) {
+        toastError('Workspace failed to launch.');
       }
     },
-    [createWorkspace, launchWorkspace],
+    [createWorkspace, startNewWorkspace, toastError, toastSuccess],
   );
 
   return { createAndLaunchWorkspace, isCreatingWorkspace };
@@ -267,36 +322,16 @@ function useRefreshSession(workspace: MergedWorkspace) {
   const { toastSuccess } = useSnackbarActions();
   const refreshSession = useCallback(async () => {
     await stopWorkspace(workspace.id);
-    await startWorkspace(workspace.id);
+    await startWorkspace({ workspaceId: workspace.id, jobTypeId: getDefaultJobType({ workspace }) });
     await mutate();
     toastSuccess('Session time for workspace successfully renewed');
-  }, [mutate, startWorkspace, stopWorkspace, toastSuccess, workspace.id]);
+  }, [mutate, startWorkspace, stopWorkspace, toastSuccess, workspace]);
 
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
 }
 
-function useHandleUpdateWorkspace({ workspaceId }: { workspaceId: number }) {
-  const { mutate: mutateWorkspace } = useWorkspace(workspaceId);
-  const { updateWorkspace } = useUpdateWorkspace({ workspaceId });
-
-  const handleUpdateWorkspace = useCallback(
-    async (body: UpdateWorkspaceBody) => {
-      try {
-        await updateWorkspace(body);
-        await mutateWorkspace();
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [updateWorkspace, mutateWorkspace],
-  );
-
-  return { handleUpdateWorkspace };
-}
-
 function useCreateTemplates() {
   const { userTemplatesEndpoint } = useAppContext();
-  const { toastError } = useSnackbarActions();
 
   const createTemplates = useCallback(
     async ({ templateKeys, uuids }: { templateKeys: string[]; uuids: string[] }) => {
@@ -311,19 +346,35 @@ function useCreateTemplates() {
           },
         ],
       });
-      if (createdTemplates.some((t) => !t.success)) {
-        const error = createdTemplates.reduce((acc, t) => acc.concat(t.message), '');
-        toastError(error);
-      }
       return templateKeys.map((templateKey, i) => ({
         name: `${templateKey}.ipynb`,
         content: createdTemplates[i]?.data?.template,
       }));
     },
-    [toastError, userTemplatesEndpoint],
+    [userTemplatesEndpoint],
   );
 
   return { createTemplates };
+}
+
+function useUpdateWorkspaceDatasets({ workspaceId }: { workspaceId: number }) {
+  const { groupsToken } = useAppContext();
+  const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
+
+  return useCallback(
+    async ({ datasetUUIDs }: { datasetUUIDs: string[] }) => {
+      await handleUpdateWorkspace({
+        workspaceId,
+        body: {
+          workspace_details: {
+            globus_groups_token: groupsToken,
+            symlinks: buildDatasetSymlinks({ datasetUUIDs }),
+          },
+        },
+      });
+    },
+    [handleUpdateWorkspace, groupsToken, workspaceId],
+  );
 }
 
 export {
@@ -336,4 +387,5 @@ export {
   useRefreshSession,
   useHandleUpdateWorkspace,
   useCreateTemplates,
+  useUpdateWorkspaceDatasets,
 };

@@ -1,3 +1,32 @@
+## v0.96.1 - 2024-05-08
+
+- Update to portal-visualization v0.2.3.
+- Update language on workspaces landing page.
+
+
+## v0.96.0 - 2024-05-06
+
+- Bump portal-visualization to v0.2.2 to support revised 10X columns.
+- Add dialog on workspace detail pages to add datasets to the workspace.
+- Add dialog on the search page to add datasets to the workspace.
+- Add job type support, including R, for workspaces.
+
+
+## v0.95.0 - 2024-05-01
+
+- Updated the HRA Organ Info web component options in CCFOrganInfo.tsx to improve performance
+
+
+## v0.94.2 - 2024-04-18
+
+- Added handling for visualizations of multiomic data.
+- Improve usefulness of data products section by ensuring correct pipeline is linked as the source instead of portal containers and using GitHub repo names as a fallback for `pipeline.cwl`.
+- Improve usability of data products section for datasets with many products by enabling scrolling.
+- Bump Node to v20.12.0.
+- Update various front-end dependencies.
+- Migrate husky configuration to v9.
+
+
 ## v0.94.1 - 2024-04-10
 
 - Remove extra "s" on provenance tables.

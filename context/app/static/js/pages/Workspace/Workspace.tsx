@@ -21,6 +21,13 @@ import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWa
 import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 
+const tooltips = {
+  name: 'Edit workspace name.',
+  datasets: 'Add datasets to this workspace.',
+  templates: 'Add templates to this workspace.',
+  currentTemplates: 'Templates that are currently in this workspace.',
+};
+
 interface WorkspacePageProps {
   workspaceId: number;
 }
@@ -61,6 +68,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                 sx={(theme) => ({
                   marginRight: theme.spacing(1),
                 })}
+                tooltip={tooltips.name}
               >
                 <EditIcon />
               </WorkspacesUpdateButton>
@@ -84,15 +92,28 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         </SectionPaper>
       </Box>
       {workspaceDatasets.length > 0 && (
-        <WorkspaceDatasetsTable datasetsUUIDs={workspaceDatasets} label={<SectionHeader> Datasets</SectionHeader>} />
+        <WorkspaceDatasetsTable
+          datasetsUUIDs={workspaceDatasets}
+          label={<SectionHeader> Datasets</SectionHeader>}
+          additionalButtons={
+            <WorkspacesUpdateButton
+              workspace={workspace}
+              dialogType="ADD_DATASETS"
+              sx={(theme) => ({
+                marginRight: theme.spacing(1),
+              })}
+              tooltip={tooltips.datasets}
+            >
+              <AddIcon />
+            </WorkspacesUpdateButton>
+          }
+        />
       )}
       <Box>
         <SpacedSectionButtonRow
-          leftText={
-            <SectionHeader iconTooltipText="Templates that are currently in this workspace."> Templates</SectionHeader>
-          }
+          leftText={<SectionHeader iconTooltipText={tooltips.currentTemplates}>Templates</SectionHeader>}
           buttons={
-            <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES">
+            <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES" tooltip={tooltips.templates}>
               <AddIcon />
             </WorkspacesUpdateButton>
           }

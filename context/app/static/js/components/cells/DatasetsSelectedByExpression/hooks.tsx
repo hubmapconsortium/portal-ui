@@ -2,15 +2,16 @@ import React, { useCallback, useState } from 'react';
 import CellsService from 'js/components/cells/CellsService';
 import { useAppContext } from 'js/components/Contexts';
 import { fetchSearchData } from 'js/hooks/useSearchData';
-import useCellsChartLoadingStore, { CellsChartLoadingStore } from 'js/stores/useCellsChartLoadingStore';
 import { useStore, CellsSearchStore } from 'js/components/cells/store';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-
-const chartsStoreSelector = (state: CellsChartLoadingStore) => state.resetFetchedUUIDs;
+import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import { QueryType } from '../queryTypes';
+import { CellsResultsDataset, WrappedCellsResultsDataset } from '../types';
 
 const cellsStoreSelector = (state: CellsSearchStore) => ({
   setResults: state.setResults,
+  setResultCounts: state.setResultCounts,
   minExpressionLog: state.minExpressionLog,
   setMinExpressionLog: state.setMinExpressionLog,
   minCellPercentage: state.minCellPercentage,
@@ -51,13 +52,29 @@ function getSearchQuery(cellsResults: { uuid: string }[]) {
   };
 }
 
-function buildHitsMap(hits: { _id: string }[]) {
+function buildHitsMap<T>(hits: SearchHit<T>[]) {
   return hits.reduce(
     (acc, hit) => {
       acc[hit._id] = hit;
       return acc;
     },
-    {} as Record<string, { _id: string }>,
+    {} as Record<string, SearchHit<T>>,
+  );
+}
+
+function createStepText(
+  queryType: QueryType,
+  cellVariableNames: string[],
+  minExpressionLog: number,
+  minCellPercentage: number,
+) {
+  if (queryType === 'cell-type') {
+    return cellVariableNames.join(', ');
+  }
+  return (
+    <>
+      {cellVariableNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
+    </>
   );
 }
 
@@ -66,7 +83,6 @@ function useDatasetsSelectedByExpression() {
   const [message, setMessage] = useState<string | null>(null);
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
   const [genomicModality, setGenomicModality] = useState('rna');
-  const resetFetchedUUIDs = useCellsChartLoadingStore(chartsStoreSelector);
 
   const {
     setResults,
@@ -78,6 +94,7 @@ function useDatasetsSelectedByExpression() {
     setCellVariableNames,
     queryType,
     setIsLoading,
+    setResultCounts,
   } = useStore(cellsStoreSelector);
 
   const { toastError } = useSnackbarActions();
@@ -89,7 +106,6 @@ function useDatasetsSelectedByExpression() {
   const handleSubmit = useCallback(async () => {
     setIsLoading(true);
     setResults([]);
-    resetFetchedUUIDs();
     const queryParams = {
       type: queryType,
       cellVariableNames,
@@ -98,36 +114,38 @@ function useDatasetsSelectedByExpression() {
       modality: queryType === 'gene' ? genomicModality : undefined,
     };
     try {
-      completeStep(
-        <>
-          {cellVariableNames.join(', ')} | Expression Level 10<sup>{minExpressionLog}</sup> | {minCellPercentage}% Cell
-          Percentage
-        </>,
-      );
-      // TODO: Convert the CellsService/fetchSearchData/buildHitsMap to use typescript
+      completeStep(createStepText(queryType, cellVariableNames, minExpressionLog, minCellPercentage));
       /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
       const serviceResults = await new CellsService().getDatasets(queryParams);
-      const searchResults = await fetchSearchData(getSearchQuery(serviceResults), elasticsearchEndpoint, groupsToken);
+      const datasets = 'list' in serviceResults ? serviceResults.list : serviceResults;
 
-      const hitsMap = buildHitsMap(searchResults.hits.hits);
+      const searchResults = await fetchSearchData<CellsResultsDataset, unknown>(
+        getSearchQuery(datasets),
+        elasticsearchEndpoint,
+        groupsToken,
+      );
+
+      const hitsMap = buildHitsMap<CellsResultsDataset>(searchResults.hits.hits);
+
       setResults(
-        serviceResults.reduce(
-          (acc: { _id: string }[], { uuid }: { uuid: string }) => {
-            // The cells api returns all versions of a matching dataset and the search-api query will only return the most recent version.
-            if (uuid in hitsMap) {
-              acc.push(hitsMap[uuid]);
-            }
-            return acc;
-          },
-          [] as { _id: string }[],
-        ),
+        datasets.reduce((acc, { uuid }: { uuid: string }) => {
+          // The cells api returns all versions of a matching dataset and the search-api query will only return the most recent version.
+          if (uuid in hitsMap && hitsMap[uuid]._source !== undefined) {
+            acc.push(hitsMap[uuid] as WrappedCellsResultsDataset);
+          }
+          return acc;
+        }, [] as WrappedCellsResultsDataset[]),
       );
       /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+      if ('list' in serviceResults) {
+        setResultCounts(serviceResults);
+      }
       setIsLoading(false);
     } catch (e) {
       if (e instanceof Error) {
         toastError(e.message);
         setMessage(e.message);
+        setIsLoading(false);
         // TODO: The message is displayed in this component...
         // but after the user submits their data, the component collapses,
         // so the message is hidden, and the user just sees the please wait.
@@ -137,6 +155,7 @@ function useDatasetsSelectedByExpression() {
       }
     }
   }, [
+    setResultCounts,
     cellVariableNames,
     completeStep,
     elasticsearchEndpoint,
@@ -145,7 +164,6 @@ function useDatasetsSelectedByExpression() {
     minCellPercentage,
     minExpressionLog,
     queryType,
-    resetFetchedUUIDs,
     setIsLoading,
     setResults,
     toastError,

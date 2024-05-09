@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "0.94.1",
+  "version": "0.96.1",
   "dependencies": {
     "@datapunt/matomo-tracker-js": "^0.5.1",
     "@elastic/elasticsearch": "^8.13.0",
@@ -63,7 +63,7 @@
     "use-deep-compare-effect": "^1.8.1",
     "use-resize-observer": "^9.1.0",
     "uuid": "^9.0.1",
-    "vitessce": "^3.3.12",
+    "vitessce": "^3.4.2",
     "zod": "^3.22.4",
     "zustand": "^4.5.2"
   },
@@ -160,17 +160,14 @@
     "storybook": "storybook dev -p 6006 -s app/static/storybook-public/",
     "build-storybook": "storybook build",
     "tsc": "tsc --noEmit",
-    "clean": "rm -rf ./app/static/public"
+    "clean": "rm -rf ./app/static/public",
+    "prepare": "cd .. && husky context/.husky",
+    "pre-commit": "lint-staged"
   },
   "lint-staged": {
     "app/static/js/**/*.{js,jsx,ts,tsx,y*ml,json,md}": [
       "eslint -c .eslintrc.yml"
     ]
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged & tsc -p tsconfig.json --noEmit --skipLibCheck"
-    }
   },
   "msw": {
     "workerDirectory": "app/static/storybook-public"

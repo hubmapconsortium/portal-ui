@@ -2,6 +2,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
+import { useCallback } from 'react';
 import { useHandleUpdateWorkspace, useCreateTemplates } from '../hooks';
 import { templatesField } from '../workspaceFormFields';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
@@ -25,7 +26,7 @@ const schema = z
   .required({ templates: true });
 
 function useEditWorkspaceForm({ workspaceId }: UseEditTemplatesFormTypes) {
-  const { handleUpdateWorkspace } = useHandleUpdateWorkspace({ workspaceId });
+  const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
   const { createTemplates } = useCreateTemplates();
 
   const {
@@ -41,14 +42,20 @@ function useEditWorkspaceForm({ workspaceId }: UseEditTemplatesFormTypes) {
     resolver: zodResolver(schema),
   });
 
-  async function onSubmit({ templateKeys, uuids }: SubmitEditTemplatesTypes) {
-    const templatesDetails = await createTemplates({ templateKeys, uuids });
-    await handleUpdateWorkspace({
-      workspace_details: {
-        files: templatesDetails,
-      },
-    });
-  }
+  const onSubmit = useCallback(
+    async ({ templateKeys, uuids }: SubmitEditTemplatesTypes) => {
+      const templatesDetails = await createTemplates({ templateKeys, uuids });
+      await handleUpdateWorkspace({
+        workspaceId,
+        body: {
+          workspace_details: {
+            files: templatesDetails,
+          },
+        },
+      });
+    },
+    [createTemplates, handleUpdateWorkspace, workspaceId],
+  );
 
   return {
     handleSubmit,

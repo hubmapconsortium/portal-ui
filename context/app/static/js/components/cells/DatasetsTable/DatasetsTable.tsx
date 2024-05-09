@@ -10,6 +10,9 @@ import DatasetTableRow from 'js/components/cells/DatasetTableRow';
 import { initialHeight } from 'js/components/cells/CellsResults/style';
 import { useExpandSpring } from 'js/hooks/useExpand';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
+import { WrappedCellsResultsDataset } from '../types';
+import CellsCharts from '../CellsCharts';
+import { DatasetCellsChartsProps } from '../CellsCharts/types';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -23,12 +26,22 @@ const columns = [
   { id: 'expand', label: '' },
 ];
 
-function DatasetsTable({ datasets, minExpression, cellVariableName, queryType }) {
+interface DatasetsTableProps {
+  datasets: WrappedCellsResultsDataset[];
+  expandedContent?: React.ComponentType<DatasetCellsChartsProps>;
+  stepText?: string;
+}
+
+function DatasetsTable({
+  datasets,
+  expandedContent = CellsCharts,
+  stepText = `${datasets.length} Datasets Matching Query Parameters`,
+}: DatasetsTableProps) {
   const { completeStep } = useAccordionStep();
   useEffect(() => {
-    completeStep(`${datasets.length} Datasets Matching Query Parameters`);
-  }, [completeStep, datasets]);
-  const heightRef = useRef(null);
+    completeStep(stepText);
+  }, [completeStep, stepText]);
+  const heightRef = useRef<HTMLTableElement>(null);
 
   const props = useExpandSpring(heightRef, initialHeight, datasets?.length > 0);
 
@@ -47,11 +60,9 @@ function DatasetsTable({ datasets, minExpression, cellVariableName, queryType })
             <DatasetTableRow
               datasetMetadata={_source}
               numCells={columns.length}
-              key={_source.hubmap_id}
-              minExpression={minExpression}
-              cellVariableName={cellVariableName}
-              queryType={queryType}
               isExpandedToStart={i === 0}
+              key={_source.hubmap_id}
+              expandedContent={expandedContent}
             />
           ))}
         </TableBody>

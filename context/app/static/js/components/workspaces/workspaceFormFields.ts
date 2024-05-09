@@ -26,4 +26,31 @@ const templatesField = {
     .nonempty(),
 };
 
-export { workspaceNameField, protectedDatasetsField, templatesField };
+const datasetsField = {
+  datasets: z
+    .array(z.string(), {
+      errorMap: withCustomMessage('At least one dataset must be selected. Please select a dataset.'),
+    })
+    .nonempty(),
+};
+
+const workspaceIdField = {
+  workspaceId: z.number({
+    required_error: 'At least one workspace must be selected. Please select a workspace.',
+  }),
+};
+
+const workspaceJobTypeIdField = {
+  workspaceJobTypeId: z.string({
+    errorMap: withCustomMessage('A workspace environment is required. Please select a workspace environment.'),
+  }),
+};
+
+export {
+  workspaceNameField,
+  protectedDatasetsField,
+  templatesField,
+  datasetsField,
+  workspaceIdField,
+  workspaceJobTypeIdField,
+};

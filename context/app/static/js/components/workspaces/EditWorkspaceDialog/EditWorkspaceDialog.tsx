@@ -1,4 +1,4 @@
-import React, { useCallback, PropsWithChildren, BaseSyntheticEvent } from 'react';
+import React, { useCallback, PropsWithChildren } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
@@ -9,6 +9,7 @@ import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import EditWorkspaceTemplatesDialog from '../EditWorkspaceTemplatesDialog';
 import EditWorkspaceNameDialog from '../EditWorkspaceNameDialog';
+import AddDatasetsDialog from '../AddDatasetsDialog';
 
 const formId = 'edit-workspace-form';
 
@@ -18,36 +19,45 @@ interface EditWorkspaceDialogTypes<T extends FieldValues> extends PropsWithChild
   title: string;
   isSubmitting: boolean;
   onSubmit: (fieldValues: T) => Promise<void>;
+  resetState?: () => void;
+  disabled?: boolean;
 }
 
 function EditWorkspaceDialogContent<T extends FieldValues>({
   title,
   reset,
+  resetState,
   children,
   onSubmit,
   handleSubmit,
   errors,
   isSubmitting,
+  disabled,
 }: EditWorkspaceDialogTypes<T> & FormProps<T>) {
   const { isOpen, close } = useEditWorkspaceStore();
   const { toastSuccess, toastError } = useSnackbarActions();
 
-  const submit = useCallback(
-    (e: BaseSyntheticEvent) => {
-      if (isSubmitting) return;
+  const handleClose = useCallback(() => {
+    reset();
+    if (resetState) {
+      resetState();
+    }
+    close();
+  }, [close, resetState, reset]);
 
-      handleSubmit(onSubmit)(e)
+  const submit = useCallback(
+    (fieldValues: T) => {
+      onSubmit(fieldValues)
         .then(() => {
           toastSuccess('Workspace successfully updated.');
-          reset();
-          close();
+          handleClose();
         })
         .catch((error) => {
           console.error(error);
           toastError('Failed to update workspace.');
         });
     },
-    [onSubmit, reset, close, isSubmitting, handleSubmit, toastError, toastSuccess],
+    [onSubmit, handleClose, toastError, toastSuccess],
   );
 
   return (
@@ -55,18 +65,24 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
       title={title}
       maxWidth="lg"
       content={
-        <form id={formId} onSubmit={submit}>
+        // eslint-disable-next-line @typescript-eslint/no-misused-promises
+        <form id={formId} onSubmit={handleSubmit(submit)}>
           {children}
         </form>
       }
       isOpen={isOpen}
-      handleClose={close}
+      handleClose={handleClose}
       actions={
         <Stack direction="row" spacing={2} alignItems="end">
-          <Button type="button" onClick={close} disabled={isSubmitting}>
+          <Button type="button" onClick={handleClose} disabled={isSubmitting}>
             Cancel
           </Button>
-          <LoadingButton loading={isSubmitting} type="submit" form={formId} disabled={Object.keys(errors).length > 0}>
+          <LoadingButton
+            loading={isSubmitting}
+            type="submit"
+            form={formId}
+            disabled={disabled ?? Object.keys(errors).length > 0}
+          >
             Save
           </LoadingButton>
         </Stack>
@@ -88,6 +104,10 @@ function EditWorkspaceDialog() {
 
   if (dialogType === 'UPDATE_TEMPLATES') {
     return <EditWorkspaceTemplatesDialog workspace={workspace} />;
+  }
+
+  if (dialogType === 'ADD_DATASETS') {
+    return <AddDatasetsDialog workspace={workspace} />;
   }
 
   return null;

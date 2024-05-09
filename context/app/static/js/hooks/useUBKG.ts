@@ -209,6 +209,9 @@ export const useCellTypeOntologyDetail = (cellTypeId: string) => {
           404: `The cell type ${cellTypeId} was not found.`,
         },
       }),
+    {
+      revalidateOnFocus: false,
+    },
   );
   // Throw an error if the cell type is not found
   if (error) {

@@ -13,19 +13,13 @@ import { steps } from './config';
 
 const cellsStoreSelector = (state) => ({
   setQueryType: state.setQueryType,
-  setSelectedQueryType: state.setSelectedQueryType,
   setCellVariableNames: state.setCellVariableNames,
   resetStore: state.resetStore,
 });
 
 function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
   const themeContext = useTheme();
-  const {
-    setQueryType,
-    setSelectedQueryType,
-    setCellVariableNames,
-    resetStore: resetCellsStore,
-  } = useCellsStore(cellsStoreSelector);
+  const { setQueryType, setCellVariableNames, resetStore: resetCellsStore } = useCellsStore(cellsStoreSelector);
   const { tutorialStep, isTutorialRunning, setNextButtonIsDisabled } = useTutorialStore();
 
   const { setOpenStepIndex, resetStore: resetAccordionStepsStore } = useAccordionStepsStore();
@@ -42,7 +36,6 @@ function CellsTutorial({ setParametersButtonRef, runQueryButtonRef }) {
       resetCellsStore();
       setOpenStepIndex(0);
       setQueryType(queryTypes.gene.value);
-      setSelectedQueryType(queryTypes.gene.value);
     }
 
     if (action === ACTIONS.NEXT && lifecycle === LIFECYCLE.COMPLETE && title === 'Select a Query Type') {
