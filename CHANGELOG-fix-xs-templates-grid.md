@@ -1,1 +1,0 @@
-- Fix workspace templates grid layout on small screens.

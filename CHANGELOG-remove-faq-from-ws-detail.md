@@ -1,1 +1,0 @@
-- Fix bug where workspaces FAQ was erroneously displayed on workspace detail page.

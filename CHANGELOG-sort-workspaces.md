@@ -1,1 +1,0 @@
-- Sort workspaces when displayed as a list. The active workspace is first followed by the remaining workspaces sorted by name.
