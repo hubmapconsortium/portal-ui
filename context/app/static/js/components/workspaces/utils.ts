@@ -127,7 +127,7 @@ function mergeJobsIntoWorkspaces(jobs: WorkspaceJob[], workspaces: Workspace[]):
       path: getNotebookPath(workspace),
     }))
     .sort((a, b) => {
-      // Put the active workspace first.
+      // The active workspace is first followed by the remaining workspaces sorted by name.
       if (a.status === 'active' && b.status !== 'active') {
         return -1;
       }
@@ -135,7 +135,6 @@ function mergeJobsIntoWorkspaces(jobs: WorkspaceJob[], workspaces: Workspace[]):
         return 1;
       }
 
-      // Sort by name after.
       return a.name.localeCompare(b.name);
     });
 
