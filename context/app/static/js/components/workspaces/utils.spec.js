@@ -20,12 +20,13 @@ const workspace_details_request = {
 
 describe('mergeJobsIntoWorkspaces', () => {
   test('it should merge jobs into workspaces', () => {
-    const workspaces = [{ id: 1, other_ws_info: true, status: 'active', workspace_details }];
+    const workspaces = [{ id: 1, other_ws_info: true, status: 'active', workspace_details, name: 'ws1' }];
     const jobs = [{ id: 42, workspace_id: 1, other_job_info: true, status: 'running' }];
     const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
     expect(mergedWorkspaces).toEqual([
       {
         id: 1,
+        name: 'ws1',
         other_ws_info: true,
         status: 'active',
         path: '/workspace.ipynb',
@@ -37,16 +38,31 @@ describe('mergeJobsIntoWorkspaces', () => {
 
   test('it should filter out workspaces that are not "active" or "idle"', () => {
     const workspaces = [
-      { id: 1, status: 'active', workspace_details },
-      { id: 2, status: 'idle', workspace_details },
-      { id: 3, status: 'deleting', workspace_details },
-      { id: 4, status: 'error', workspace_details },
+      { id: 1, status: 'active', workspace_details, name: 'a' },
+      { id: 2, status: 'idle', workspace_details, name: 'b' },
+      { id: 3, status: 'deleting', workspace_details, name: 'c' },
+      { id: 4, status: 'error', workspace_details, name: 'd' },
     ];
     const jobs = [];
     const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
     expect(mergedWorkspaces).toEqual([
-      { id: 1, status: 'active', jobs: [], path: '/workspace.ipynb', workspace_details },
-      { id: 2, status: 'idle', jobs: [], path: '/workspace.ipynb', workspace_details },
+      { id: 1, status: 'active', name: 'a', jobs: [], path: '/workspace.ipynb', workspace_details },
+      { id: 2, status: 'idle', name: 'b', jobs: [], path: '/workspace.ipynb', workspace_details },
+    ]);
+  });
+
+  test('it should return the active workspace first then sort by name', () => {
+    const workspaces = [
+      { id: 1, status: 'idle', workspace_details, name: 'a' },
+      { id: 1, status: 'active', workspace_details, name: 'b' },
+      { id: 3, status: 'idle', workspace_details, name: 'c' },
+    ];
+    const jobs = [];
+    const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
+    expect(mergedWorkspaces).toEqual([
+      { id: 1, status: 'active', name: 'b', jobs: [], path: '/workspace.ipynb', workspace_details },
+      { id: 2, status: 'idle', name: 'a', jobs: [], path: '/workspace.ipynb', workspace_details },
+      { id: 2, status: 'idle', name: 'c', jobs: [], path: '/workspace.ipynb', workspace_details },
     ]);
   });
 
@@ -60,6 +76,7 @@ describe('mergeJobsIntoWorkspaces', () => {
     const workspaces = [
       {
         id: -1,
+        name: 'a',
         status: 'active',
         workspace_details: {
           current_workspace_details: {}, // Response currently not guaranteed to have "files" key.
@@ -68,6 +85,7 @@ describe('mergeJobsIntoWorkspaces', () => {
       },
       {
         id: 0,
+        name: 'b',
         status: 'active',
         workspace_details: {
           current_workspace_details: {
@@ -80,6 +98,7 @@ describe('mergeJobsIntoWorkspaces', () => {
       },
       {
         id: 2,
+        name: 'c',
         status: 'active',
         workspace_details: {
           current_workspace_details: {
@@ -92,11 +111,13 @@ describe('mergeJobsIntoWorkspaces', () => {
       },
       {
         id: 1,
+        name: 'd',
         status: 'active',
         workspace_details, // just right!
       },
       {
         id: 3,
+        name: 'e',
         status: 'active',
         workspace_details: workspace_details_request, // works when `request_workspace_details` has entry and `current_workspace_details` does not
       },
