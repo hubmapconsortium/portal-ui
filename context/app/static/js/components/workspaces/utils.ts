@@ -120,11 +120,24 @@ function mergeJobsIntoWorkspaces(jobs: WorkspaceJob[], workspaces: Workspace[]):
     wsIdToJobs[workspace_id].push(job);
   });
 
-  const mergedWorkspaces: MergedWorkspace[] = activeWorkspaces.map((workspace) => ({
-    ...workspace,
-    jobs: wsIdToJobs?.[workspace.id] || [],
-    path: getNotebookPath(workspace),
-  }));
+  const mergedWorkspaces: MergedWorkspace[] = activeWorkspaces
+    .map((workspace) => ({
+      ...workspace,
+      jobs: wsIdToJobs?.[workspace.id] || [],
+      path: getNotebookPath(workspace),
+    }))
+    .sort((a, b) => {
+      // Put the active workspace first.
+      if (a.status === 'active' && b.status !== 'active') {
+        return -1;
+      }
+      if (b.status === 'active' && a.status !== 'active') {
+        return 1;
+      }
+
+      // Sort by name after.
+      return a.name.localeCompare(b.name);
+    });
 
   return mergedWorkspaces;
 }
