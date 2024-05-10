@@ -54,15 +54,15 @@ describe('mergeJobsIntoWorkspaces', () => {
   test('it should return the active workspace first then sort by name', () => {
     const workspaces = [
       { id: 1, status: 'idle', workspace_details, name: 'a' },
-      { id: 1, status: 'active', workspace_details, name: 'b' },
+      { id: 2, status: 'active', workspace_details, name: 'b' },
       { id: 3, status: 'idle', workspace_details, name: 'c' },
     ];
     const jobs = [];
     const mergedWorkspaces = mergeJobsIntoWorkspaces(jobs, workspaces);
     expect(mergedWorkspaces).toEqual([
-      { id: 1, status: 'active', name: 'b', jobs: [], path: '/workspace.ipynb', workspace_details },
-      { id: 2, status: 'idle', name: 'a', jobs: [], path: '/workspace.ipynb', workspace_details },
-      { id: 2, status: 'idle', name: 'c', jobs: [], path: '/workspace.ipynb', workspace_details },
+      { id: 2, status: 'active', name: 'b', jobs: [], path: '/workspace.ipynb', workspace_details },
+      { id: 1, status: 'idle', name: 'a', jobs: [], path: '/workspace.ipynb', workspace_details },
+      { id: 3, status: 'idle', name: 'c', jobs: [], path: '/workspace.ipynb', workspace_details },
     ]);
   });
 
