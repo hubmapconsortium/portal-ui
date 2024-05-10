@@ -71,7 +71,10 @@ function useCellTypesChartsData({ uuid, cellVariableNames: cellNames }: UseCellT
   const cellVariableNames = cellNames.map(extractCLID).filter((clid) => clid) as string[];
   const { isExpanded } = useExpandableRowStore();
   const { data, ...rest } = useSWR<{ results: CellExpressionInDataset[] }, string | null>(
-    isExpanded ? new CellsService().getCellExpressionInDatasetURL({ uuid, cellVariableNames }) : null,
+    () =>
+      isExpanded && cellVariableNames.length > 0
+        ? new CellsService().getCellExpressionInDatasetURL({ uuid, cellVariableNames })
+        : null,
     (url: string) => fetcher({ url, requestInit: { method: 'POST' } }),
     {
       revalidateIfStale: false,
