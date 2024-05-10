@@ -1,0 +1,1 @@
+- Fix hard crash on removing all cell types from query.
