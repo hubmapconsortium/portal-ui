@@ -1,3 +1,11 @@
+## v0.96.5 - 2024-05-10
+
+- Fix hard crash on removing all cell types from query.
+- Fix workspace templates grid layout on small screens.
+- Fix bug where workspaces FAQ was erroneously displayed on workspace detail page.
+- Sort workspaces when displayed as a list. The active workspace is first followed by the remaining workspaces sorted by name.
+
+
 ## v0.96.4 - 2024-05-09
 
 - Bump Vitessce to v3.4.5.

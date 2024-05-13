@@ -1,11 +1,11 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
+import Stack, { StackProps } from '@mui/material/Stack';
 
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { TextContainer } from './style';
 
-interface LabelledSectionTextProps extends PropsWithChildren {
+interface LabelledSectionTextProps extends StackProps {
   label: string;
   iconTooltipText?: string;
   bottomSpacing?: number;

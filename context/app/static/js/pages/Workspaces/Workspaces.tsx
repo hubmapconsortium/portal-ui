@@ -6,6 +6,7 @@ import WorkspacesAuthenticated from 'js/components/workspaces/WorkspacesAuthenti
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import WorkspaceRelaunchAlert from 'js/components/workspaces/WorkspaceRelaunchAlert';
+import { TextItems } from 'js/components/workspaces/workspaceMessaging';
 
 import { LinkPrompt } from 'js/shared-styles/tutorials/Prompt';
 
@@ -28,6 +29,7 @@ function Workspaces() {
       <WorkspacesTitle />
       <WorkspacesTutorialPrompt />
       <WorkspacesAuthGuard>
+        <TextItems textKey="access" />
         <WorkspacesAuthenticated />
       </WorkspacesAuthGuard>
     </Stack>
