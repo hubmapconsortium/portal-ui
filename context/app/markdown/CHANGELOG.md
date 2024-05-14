@@ -1,3 +1,8 @@
+## v0.96.6 - 2024-05-14
+
+- Fix undefined source in searchkit initial request.
+
+
 ## v0.96.5 - 2024-05-10
 
 - Fix hard crash on removing all cell types from query.
