@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
+import Box from '@mui/material/Box';
+import Container from '@mui/material/Container';
 
 import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import ImageCarouselContainer from 'js/components/home/ImageCarouselContainer';
@@ -9,15 +11,9 @@ import HuBMAPDescription from 'js/components/home/HuBMAPDescription';
 import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
 import ExternalLinks from 'js/components/home/ExternalLinks';
+import RecentEntities from 'js/components/home/RecentEntities';
 
-import {
-  GridAreaContainer,
-  LowerContainerGrid,
-  GridArea,
-  SectionHeader,
-  OffsetDatasetsHeader,
-  UpperGrid,
-} from './style';
+import { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader, UpperGrid } from './style';
 
 function Home({ organsCount }) {
   const theme = useTheme();
@@ -32,38 +28,39 @@ function Home({ organsCount }) {
   return (
     <>
       <UpperGrid>
-        <GridAreaContainer maxWidth="lg" $gridAreaTitle="title">
+        <Container maxWidth="lg" gridArea="title">
           <Title />
           <HuBMAPDescription />
-        </GridAreaContainer>
-        <GridAreaContainer maxWidth="lg" $gridAreaTitle="carousel">
+        </Container>
+        <Container maxWidth="lg" gridArea="carousel">
           <ImageCarouselContainer />
-        </GridAreaContainer>
-        <GridArea $gridAreaTitle="counts">
+        </Container>
+        <Box gridArea="counts">
           <EntityCounts organsCount={organsCount} />
-        </GridArea>
+        </Box>
       </UpperGrid>
       <LowerContainerGrid maxWidth="lg">
         {isLargerThanMd && (
-          <GridArea $gridAreaTitle="bar-chart">
+          <Box gridArea="bar-chart">
             <OffsetDatasetsHeader variant="h4" component="h3" id="hubmap-datasets" ref={scrollToBarChart}>
               HuBMAP Datasets
             </OffsetDatasetsHeader>
             <HuBMAPDatasetsChart />
-          </GridArea>
+          </Box>
         )}
-        <GridArea $gridAreaTitle="guidelines">
+        <RecentEntities />
+        <Box gridArea="guidelines">
           <SectionHeader variant="h4" component="h3">
             Data Use Guidelines
           </SectionHeader>
           <DataUseGuidelines />
-        </GridArea>
-        <GridArea $gridAreaTitle="external-links">
+        </Box>
+        <Box gridArea="external-links">
           <SectionHeader variant="h4" component="h3">
             External Links
           </SectionHeader>
           <ExternalLinks />
-        </GridArea>
+        </Box>
       </LowerContainerGrid>
     </>
   );

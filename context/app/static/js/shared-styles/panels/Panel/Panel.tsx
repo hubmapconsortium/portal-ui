@@ -1,12 +1,18 @@
 import React, { PropsWithChildren } from 'react';
 
+import Stack from '@mui/material/Stack';
+
 import { PanelBox, LeftTextWrapper, TruncatedLink, TruncatedText, RightTextWrapper } from './style';
 
 interface BasicPanelProps {
   title: string;
   href: string;
+  icon?: React.ReactNode;
   secondaryText?: React.ReactNode;
   rightText?: React.ReactNode;
+  noPadding?: boolean;
+  noHover?: boolean;
+  small?: boolean;
 }
 
 interface CustomPanelProps extends PropsWithChildren {
@@ -26,17 +32,22 @@ function Panel(props: PanelProps) {
     return <PanelBox {...props} />;
   }
 
-  const { title, href, secondaryText, rightText } = props;
+  const { title, href, secondaryText, rightText, icon, small, ...panelBoxProps } = props;
+
+  const titleTextVariant = small ? 'subtitle2' : 'subtitle1';
   return (
-    <PanelBox>
-      <LeftTextWrapper>
-        <TruncatedLink variant="subtitle1" href={href} data-testid="panel-title">
-          {title}
-        </TruncatedLink>
-        <TruncatedText variant="body2" color="secondary" data-testid="panel-secondary">
-          {secondaryText}
-        </TruncatedText>
-      </LeftTextWrapper>
+    <PanelBox {...panelBoxProps}>
+      <Stack spacing={2} direction="row" alignItems="center" maxWidth="100%">
+        {icon}
+        <LeftTextWrapper>
+          <TruncatedLink variant={titleTextVariant} href={href} data-testid="panel-title">
+            {title}
+          </TruncatedLink>
+          <TruncatedText variant="body2" color="secondary" data-testid="panel-secondary">
+            {secondaryText}
+          </TruncatedText>
+        </LeftTextWrapper>
+      </Stack>
       <RightTextWrapper data-testid="panel-right-text">{rightText}</RightTextWrapper>
     </PanelBox>
   );

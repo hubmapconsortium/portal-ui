@@ -26,6 +26,7 @@ const PanelBox = styled(Box, {
   padding: noPadding ? 0 : theme.spacing(2, 3),
   display: 'flex',
   flexDirection: 'column',
+  maxWidth: 'calc(100vw - 32px)',
   '&:hover': {
     backgroundColor: !noHover && theme.palette.common.hoverShadow,
   },
@@ -39,6 +40,7 @@ const LeftTextWrapper = styled(Box)(({ theme }) => ({
   whitespace: 'nowrap',
   minWidth: 0, // needed to handle overflow
   marginRight: theme.spacing(1),
+  flexGrow: 1,
 }));
 
 const TruncatedText = styled(Typography)(overflowCss);

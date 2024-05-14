@@ -27,7 +27,7 @@ const cedarContributor: CEDARContributor = {
 
 const normalizedContributor: Contributor = {
   affiliation: 'University of California, San Francisco',
-  displayName: 'John B. Doe',
+  name: 'John B. Doe',
   email: 'N/A',
   firstName: 'John',
   isContact: true,

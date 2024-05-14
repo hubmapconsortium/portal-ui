@@ -1,4 +1,6 @@
-export const recentPublicationsQuery = {
+import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+
+export const recentPublicationsQuery: SearchRequest = {
   query: {
     bool: {
       must: [
@@ -57,7 +59,7 @@ export const recentPublicationsQuery = {
 };
 
 // Fetches the most recent datasets with a visualization
-export const recentDatasetsQuery = {
+export const recentDatasetsQuery: SearchRequest = {
   size: 0,
   query: {
     bool: {
@@ -83,9 +85,18 @@ export const recentDatasetsQuery = {
         latest_datasets: {
           top_hits: {
             _source: {
-              includes: ['uuid', 'group_name', 'last_modified_timestamp', 'dataset_type', 'visualization'],
+              includes: [
+                'uuid',
+                'title',
+                'hubmap_id',
+                'group_name',
+                'last_modified_timestamp',
+                'dataset_type',
+                'visualization',
+                'origin_samples_unique_mapped_organs',
+              ],
             },
-            size: 1,
+            size: 5, // Include more than one dataset per type to account for logged out case where less than 6 total datasets may be returned
           },
         },
       },
