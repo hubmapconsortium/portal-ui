@@ -26,8 +26,6 @@ function SearchWrapper({
   idField,
   resultFields,
   hitsPerPage,
-  httpHeaders,
-  searchUrlPath,
   queryFields,
   type,
   isLoggedIn,
@@ -45,12 +43,9 @@ function SearchWrapper({
   const searchkit = useMemo(
     () =>
       new SearchkitManager(apiUrl, {
-        httpHeaders,
-        searchUrlPath,
-        timeout: 0,
         transport: new SearchTransport(elasticsearchEndpoint, groupsToken),
       }),
-    [apiUrl, httpHeaders, searchUrlPath, elasticsearchEndpoint, groupsToken],
+    [apiUrl, elasticsearchEndpoint, groupsToken],
   );
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
@@ -162,9 +157,7 @@ SearchWrapper.propTypes = {
     ),
   }).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
-  httpHeaders: PropTypes.objectOf(PropTypes.string),
 
-  searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   type: PropTypes.string,
   isLoggedIn: PropTypes.bool,
@@ -172,8 +165,6 @@ SearchWrapper.propTypes = {
 };
 
 SearchWrapper.defaultProps = {
-  searchUrlPath: '_search',
-  httpHeaders: {},
   isLoggedIn: false,
   type: undefined,
 };

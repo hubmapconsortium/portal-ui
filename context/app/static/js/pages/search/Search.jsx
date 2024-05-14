@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { useAppContext } from 'js/components/Contexts';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { combineQueryClauses, getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
+import { combineQueryClauses, getDefaultQuery } from 'js/helpers/functions';
 import { decompressStringList } from 'js/helpers/compress';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
@@ -45,7 +45,6 @@ function Search({ title }) {
     );
   }
 
-  const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
 
   let defaultQuery = getDefaultQuery();
@@ -63,11 +62,6 @@ function Search({ title }) {
   }
 
   const searchProps = {
-    // The default behavior is to add a "_search" path.
-    // We don't want that.
-    searchUrlPath: '',
-    // Pass Globus token:
-    httpHeaders,
     // Prefix for details links:
     detailsUrlPrefix: `/browse/${type || 'dataset'}/`,
     // Search results field which will be appended to detailsUrlPrefix:
