@@ -1,0 +1,1 @@
+- Handle redirect to s3 for search-api requests > 10MB.
