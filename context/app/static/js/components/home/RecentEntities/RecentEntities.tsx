@@ -26,7 +26,7 @@ function DatasetPanel({
   return (
     <Panel
       title={title}
-      href={`/browse/datasets/${uuid}`}
+      href={`/browse/dataset/${uuid}`}
       secondaryText={`${hubmap_id} | ${group_name} | ${format(last_modified_timestamp, 'yyyy-MM-dd')}`}
       small
       icon={<URLSvgIcon iconURL={iconUrl!} ariaLabel="Dataset containing {organ}" flexShrink={0} />}
