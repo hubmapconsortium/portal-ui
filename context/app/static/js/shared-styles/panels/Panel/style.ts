@@ -26,7 +26,7 @@ const PanelBox = styled(Box, {
   padding: noPadding ? 0 : theme.spacing(2, 3),
   display: 'flex',
   flexDirection: 'column',
-  maxWidth: 'calc(100vw - 32px)',
+  maxWidth: 'calc(100vw - 48px)',
   '&:hover': {
     backgroundColor: !noHover && theme.palette.common.hoverShadow,
   },
