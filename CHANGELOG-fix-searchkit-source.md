@@ -1,0 +1,1 @@
+- Fix undefined source in searchkit initial request.
