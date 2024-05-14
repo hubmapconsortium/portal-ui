@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "0.96.5",
+  "version": "0.96.6",
   "dependencies": {
     "@datapunt/matomo-tracker-js": "^0.5.1",
     "@elastic/elasticsearch": "^8.13.0",
