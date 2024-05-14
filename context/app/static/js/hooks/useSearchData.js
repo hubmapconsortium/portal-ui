@@ -20,10 +20,20 @@ function buildSearchRequestInit({ query, groupsToken, useDefaultQuery }) {
 }
 
 async function fetchSearchData(query, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
-  return fetch({
+  const searchResponse = await fetch({
     url: elasticsearchEndpoint,
     requestInit: buildSearchRequestInit({ query, groupsToken, useDefaultQuery }),
+    expectedStatusCodes: [200, 303],
+    returnResponse: true,
   });
+
+  if (searchResponse.status === 303) {
+    const s3URL = await searchResponse.text();
+    return fetch({
+      url: s3URL,
+    });
+  }
+  return searchResponse.json();
 }
 
 async function multiFetchSearchData(queries, elasticsearchEndpoint, groupsToken, useDefaultQuery = true) {
