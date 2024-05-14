@@ -47,6 +47,13 @@ function SearchWrapper({
   );
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
+  // _source and _size seem to only be updated after searchkit's ViewSwitcherHits mounts and updates. This ensures these values are correct on initial search.
+  searchkit.setQueryProcessor((query) => {
+    query._source = resultFieldIds;
+    query.size = hitsPerPage;
+    return query;
+  });
+
   const setSearchHitsCount = useSearchViewStore(setSearchHitsCountSelector);
   const setAllResultsUUIDs = useSearchViewStore(setAllResultsUUIDsSelector);
 
