@@ -14,6 +14,7 @@ import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import { NoResults, SearchError } from './noHitsComponents';
 import { WorkspaceSearchDialogs } from '../workspaces/WorkspacesDropdownMenu';
+import { SearchTransport } from './SearchTransport';
 
 const setSearchHitsCountSelector = (state) => state.setSearchHitsCount;
 const setAllResultsUUIDsSelector = (state) => state.setAllResultsUUIDs;
@@ -42,8 +43,14 @@ function SearchWrapper({
     .map((field) => field.id)
     .concat(idField);
   const searchkit = useMemo(
-    () => new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath, timeout: 0 }),
-    [apiUrl, httpHeaders, searchUrlPath],
+    () =>
+      new SearchkitManager(apiUrl, {
+        httpHeaders,
+        searchUrlPath,
+        timeout: 0,
+        transport: new SearchTransport(elasticsearchEndpoint, groupsToken),
+      }),
+    [apiUrl, httpHeaders, searchUrlPath, elasticsearchEndpoint, groupsToken],
   );
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
