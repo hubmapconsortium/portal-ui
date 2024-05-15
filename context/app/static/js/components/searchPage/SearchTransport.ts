@@ -1,4 +1,4 @@
-// Adapted from https://github.com/searchkit/searchkit/blob/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit/src/core/transport/AxiosESTransport.ts.
+// Adapted from https://github.com/searchkit/searchkit/blob/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit/src/core/transport/AxiosESTransport.ts
 import { ESTransport } from 'searchkit';
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 
