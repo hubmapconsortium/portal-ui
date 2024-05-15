@@ -12,7 +12,7 @@ import { useWorkspaces } from '../workspaces/api';
 
 function NonWorkspacesUserView() {
   return (
-    <Alert severity="error">
+    <Alert severity="warning">
       Workspaces are currently in beta testing. You must have access to the beta testing group in order to access this
       feature. <ContactUsLink>Contact us</ContactUsLink> for additional information about accessing this feature.
     </Alert>
@@ -45,8 +45,10 @@ export function MyWorkspaces() {
   const { isWorkspacesUser } = useAppContext();
   return (
     <DetailPageSection id="workspaces">
-      <Typography variant="h2">My Workspaces</Typography>
-      {isWorkspacesUser ? <MainView /> : <NonWorkspacesUserView />}
+      <Stack spacing={1}>
+        <Typography variant="h2">My Workspaces</Typography>
+        {isWorkspacesUser ? <MainView /> : <NonWorkspacesUserView />}
+      </Stack>
     </DetailPageSection>
   );
 }

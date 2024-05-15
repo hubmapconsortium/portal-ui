@@ -1,3 +1,4 @@
+import { readCookie } from 'js/helpers/functions';
 import { fetcher } from 'js/helpers/swr';
 import { SWRError } from 'js/helpers/swr/errors';
 import useSWRImmutable from 'swr/immutable';
@@ -20,9 +21,10 @@ interface GlobusGroupInfo {
   tmc_prefix: string;
 }
 
-export function useGlobusGroups() {
-  const { data, error } = useSWRImmutable<GlobusGroupInfo[], SWRError>(globusGroupsURL, (url: string) =>
-    fetcher<GlobusGroupInfo[]>({ url }),
+export function useGlobusGroups(shouldRequest = true) {
+  const { data, error } = useSWRImmutable<GlobusGroupInfo[], SWRError>(
+    shouldRequest ? globusGroupsURL : null,
+    (url: string) => fetcher<GlobusGroupInfo[]>({ url }),
   );
 
   return {
@@ -30,4 +32,40 @@ export function useGlobusGroups() {
     error,
     isLoading: !data && !error,
   };
+}
+
+export function useCurrentUserGlobusGroups() {
+  const groupsCookie = readCookie('user_groups');
+  const { data: allGlobusGroups = [] } = useGlobusGroups(isAuthenticated);
+  if (!groupsCookie) {
+    return [
+      {
+        key: 'External',
+        name: 'External User',
+        description: 'You are not part of any HuBMAP access groups.',
+      },
+    ];
+  }
+
+  const groups = groupsCookie.split('|');
+
+  const currentUserGroups = allGlobusGroups
+    ?.filter((group) => groups.includes(group.name))
+    .map((g) => ({
+      key: g.name,
+      name: g.displayname,
+      description: g.description,
+    }));
+
+  const nonHubmapGroups = groups.filter((group) => !currentUserGroups.find((g) => g.key === group));
+
+  if (nonHubmapGroups.length > 0) {
+    currentUserGroups.push({
+      key: 'Other',
+      name: 'Other Groups',
+      description: `You are also part of the following groups: ${nonHubmapGroups.join(', ')}`,
+    });
+  }
+
+  return currentUserGroups;
 }

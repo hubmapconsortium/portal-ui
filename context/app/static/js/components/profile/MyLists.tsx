@@ -9,7 +9,7 @@ import { DetailPageSection } from '../detailPage/style';
 
 export function MyLists() {
   const savedListCount = useSavedEntitiesStore((s) => Object.keys(s.savedLists).length);
-  const buttonText = savedListCount === 0 ? 'Create a List' : `Manage Lists (${savedListCount})`;
+  const buttonText = savedListCount === 0 ? 'Create List' : `Manage Lists (${savedListCount})`;
   return (
     <DetailPageSection id="my-lists">
       <Typography variant="h2">My Lists</Typography>
