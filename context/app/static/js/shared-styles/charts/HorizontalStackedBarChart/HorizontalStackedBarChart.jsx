@@ -10,8 +10,9 @@ import Typography from '@mui/material/Typography';
 import { useChartTooltip, useLongestLabelSize } from 'js/shared-styles/charts/hooks';
 import { getChartDimensions } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
+import { TICK_LABEL_SIZE } from '../constants';
 
-function AssayTypeBarChart({
+function HorizontalStackedBarChart({
   parentWidth,
   parentHeight,
   visxData,
@@ -24,8 +25,7 @@ function AssayTypeBarChart({
   dataTypes,
   showTooltipAndHover,
 }) {
-  const tickLabelSize = 11;
-  const longestLabelSize = useLongestLabelSize({ labels: dataTypes, labelFontSize: tickLabelSize });
+  const longestLabelSize = useLongestLabelSize({ labels: dataTypes, labelFontSize: TICK_LABEL_SIZE });
   const updatedMargin = { ...margin, left: longestLabelSize + 10 };
 
   const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
@@ -101,7 +101,7 @@ function AssayTypeBarChart({
             numTicks={Object.keys(visxData).length}
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: tickLabelSize,
+              fontSize: TICK_LABEL_SIZE,
               textAnchor: 'end',
               dy: '0.33em',
             })}
@@ -114,7 +114,7 @@ function AssayTypeBarChart({
             tickStroke="black"
             tickLabelProps={() => ({
               fill: 'black',
-              fontSize: tickLabelSize,
+              fontSize: TICK_LABEL_SIZE,
               textAnchor: 'middle',
             })}
           />
@@ -135,12 +135,12 @@ function AssayTypeBarChart({
   );
 }
 
-AssayTypeBarChart.propTypes = {
+HorizontalStackedBarChart.propTypes = {
   showTooltipAndHover: PropTypes.bool,
 };
 
-AssayTypeBarChart.defaultProps = {
+HorizontalStackedBarChart.defaultProps = {
   showTooltipAndHover: true,
 };
 
-export default withParentSize(AssayTypeBarChart);
+export default withParentSize(HorizontalStackedBarChart);

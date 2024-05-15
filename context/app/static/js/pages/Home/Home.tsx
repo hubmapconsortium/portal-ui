@@ -2,7 +2,6 @@ import React, { useCallback } from 'react';
 import { useTheme } from '@mui/material/styles';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
-import Container from '@mui/material/Container';
 
 import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
 import ImageCarouselContainer from 'js/components/home/ImageCarouselContainer';
@@ -12,14 +11,19 @@ import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
 import ExternalLinks from 'js/components/home/ExternalLinks';
 import RecentEntities from 'js/components/home/RecentEntities';
+import ExploreTools from 'js/components/home/ExploreTools';
 
-import { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader, UpperGrid } from './style';
+import { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader, UpperGrid, GridAreaContainer } from './style';
 
-function Home({ organsCount }) {
+interface HomeProps {
+  organsCount: number;
+}
+
+function Home({ organsCount }: HomeProps) {
   const theme = useTheme();
   const isLargerThanMd = useMediaQuery(theme.breakpoints.up('md'));
 
-  const scrollToBarChart = useCallback((node) => {
+  const scrollToBarChart = useCallback((node: HTMLElement | null) => {
     if (node !== null && document.location.hash === '#hubmap-datasets') {
       node.scrollIntoView({ behavior: 'auto', block: 'start' });
     }
@@ -28,13 +32,13 @@ function Home({ organsCount }) {
   return (
     <>
       <UpperGrid>
-        <Container maxWidth="lg" gridArea="title">
+        <GridAreaContainer maxWidth="lg" $gridArea="title">
           <Title />
           <HuBMAPDescription />
-        </Container>
-        <Container maxWidth="lg" gridArea="carousel">
+        </GridAreaContainer>
+        <GridAreaContainer maxWidth="lg" $gridArea="carousel">
           <ImageCarouselContainer />
-        </Container>
+        </GridAreaContainer>
         <Box gridArea="counts">
           <EntityCounts organsCount={organsCount} />
         </Box>
@@ -49,6 +53,12 @@ function Home({ organsCount }) {
           </Box>
         )}
         <RecentEntities />
+        <Box gridArea="explore-tools">
+          <SectionHeader variant="h4" component="h3">
+            Explore Tools and Resources for Powerful Data Visualization & Analysis
+          </SectionHeader>
+          <ExploreTools />
+        </Box>
         <Box gridArea="guidelines">
           <SectionHeader variant="h4" component="h3">
             Data Use Guidelines

@@ -14,6 +14,7 @@ import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGri
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
 import { type TooltipData, tooltipHasBarData } from '../types';
 import TickComponent from '../TickComponent';
+import { TICK_LABEL_SIZE } from '../constants';
 
 interface VerticalStackedBarChartProps<
   Datum,
@@ -69,11 +70,9 @@ function VerticalStackedBarChart<
   y1,
   getTickValues,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
-  const tickLabelSize = 11;
-
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
-    tickLabelSize,
+    tickLabelSize: TICK_LABEL_SIZE,
     xAxisTickLabels: xAxisTickLabels.map((label) => trimStringWithMiddleEllipsis(label)),
     parentWidth,
     parentHeight,
@@ -163,7 +162,7 @@ function VerticalStackedBarChart<
               labelOffset={longestLabelSize}
               tickLabelProps={() => ({
                 fill: 'black',
-                fontSize: tickLabelSize,
+                fontSize: TICK_LABEL_SIZE,
                 textAnchor: 'end',
                 angle: -90,
               })}

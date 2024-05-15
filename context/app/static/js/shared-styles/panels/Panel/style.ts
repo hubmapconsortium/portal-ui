@@ -52,8 +52,11 @@ const TruncatedLink = styled(InternalLink)({
 
 const RightTextWrapper = styled(Box)(({ theme }) => ({
   flexShrink: 0,
-  paddingLeft: theme.spacing(0.5),
   fontSize: theme.typography.body2.fontSize,
+  [theme.breakpoints.up('md')]: {
+    paddingLeft: theme.spacing(0.5),
+  },
+  minWidth: 0, // needed to handle overflow
 }));
 
 export { PanelBox, LeftTextWrapper, TruncatedText, TruncatedLink, RightTextWrapper, panelBorderStyles };

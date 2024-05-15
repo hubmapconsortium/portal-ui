@@ -2,15 +2,15 @@ import React, { useMemo } from 'react';
 import useSearchData from 'js/hooks/useSearchData';
 
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
-import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/';
-import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/AssayTypeBarChart/hooks';
+import HorizontalStackedBarChart from 'js/shared-styles/charts/HorizontalStackedBarChart';
+import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
 import {
   getAssayTypesCompositeAggsQuery,
   getDocCountScale,
   getColorScale,
   getDataTypeScale,
-} from 'js/shared-styles/charts/AssayTypeBarChart/utils';
-import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
+} from 'js/shared-styles/charts/HorizontalStackedBarChart/utils';
+import { ChartArea } from 'js/shared-styles/charts/HorizontalStackedBarChart/style';
 import { combineQueryClauses } from 'js/helpers/functions';
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 
@@ -62,10 +62,10 @@ function OrganDatasetsChart({ search }) {
     <ChartArea>
       {search.length > 1 ? (
         <ChartWrapper margin={margin} colorScale={colorScale}>
-          <AssayTypeBarChart {...sharedProps} />
+          <HorizontalStackedBarChart {...sharedProps} />
         </ChartWrapper>
       ) : (
-        <AssayTypeBarChart {...sharedProps} showTooltipAndHover={false} />
+        <HorizontalStackedBarChart {...sharedProps} showTooltipAndHover={false} />
       )}
     </ChartArea>
   );

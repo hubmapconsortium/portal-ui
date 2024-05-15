@@ -1,5 +1,4 @@
 import { produce } from 'immer';
-/* eslint-disable no-param-reassign */
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 
 function formatAssayData(assayDataBuckets, colorKey) {

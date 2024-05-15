@@ -3,15 +3,15 @@ import React from 'react';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import useSearchData from 'js/hooks/useSearchData';
 import { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
-import AssayTypeBarChart from 'js/shared-styles/charts/AssayTypeBarChart/';
-import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/AssayTypeBarChart/hooks';
+import HorizontalStackedBarChart from 'js/shared-styles/charts/HorizontalStackedBarChart';
+import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
 import {
   getAssayTypesCompositeAggsQuery,
   getColorScale,
   getDataTypeScale,
   getDocCountScale,
-} from 'js/shared-styles/charts/AssayTypeBarChart/utils';
-import { ChartArea } from 'js/shared-styles/charts/AssayTypeBarChart/style';
+} from 'js/shared-styles/charts/HorizontalStackedBarChart/utils';
+import { ChartArea } from 'js/shared-styles/charts/HorizontalStackedBarChart/style';
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import HuBMAPDatasetsChartDropdown from '../HuBMAPDatasetsChartDropdown';
 
@@ -94,7 +94,7 @@ function HuBMAPDatasetsChart() {
           />
         }
       >
-        <AssayTypeBarChart
+        <HorizontalStackedBarChart
           visxData={visxData[selectedColorDataIndex]}
           docCountScale={docCountScale}
           colorScale={colorScale}
