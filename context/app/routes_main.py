@@ -181,3 +181,15 @@ def tutorial_detail(tutorial_name):
         title=tutorial_name,
         flask_data=flask_data
     )
+
+
+@blueprint.route('/profile')
+def profile():
+    # We could fetch the globus groups info here, but
+    # the auth helper doesn't currently provide group descriptions
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html',
+        title='Profile',
+        flask_data=flask_data
+    )
