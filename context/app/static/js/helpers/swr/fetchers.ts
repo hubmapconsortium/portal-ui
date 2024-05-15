@@ -3,6 +3,7 @@ import { SWRError } from './errors';
 interface FetchOptionsType {
   expectedStatusCodes?: number[];
   errorMessages?: Record<number, string>;
+  returnResponse?: boolean;
 }
 
 type SingleFetchOptionsType = FetchOptionsType & {
@@ -14,6 +15,37 @@ type MultiFetchOptionsType = FetchOptionsType & {
   urls: string[];
   requestInits?: RequestInit[];
 };
+
+async function f({
+  url,
+  requestInit = {},
+  expectedStatusCodes = [200],
+  errorMessages = {},
+  returnResponse = false,
+}: SingleFetchOptionsType) {
+  return fetch(url, requestInit).then(async (response) => {
+    if (!expectedStatusCodes.includes(response.status)) {
+      const rawText = await response.text();
+      let errorBody: Record<string, unknown> = { error: rawText };
+      try {
+        errorBody = JSON.parse(rawText) as Record<string, unknown>;
+      } catch (e) {
+        // Ignore and use the raw text instead since error was not returned as json
+      }
+      const message = errorMessages[response.status] ?? `The request to ${url} failed.`;
+      const error = new SWRError(message, {
+        info: errorBody,
+        status: response.status,
+        url,
+      });
+      throw error;
+    }
+    if (returnResponse) {
+      return response;
+    }
+    return response.json();
+  });
+}
 
 /**
  * SWR fetcher which accepts an array of URLs and returns the responses as JSON
@@ -34,33 +66,21 @@ export async function multiFetcher<T>({
   requestInits = [{}],
   expectedStatusCodes = [200],
   errorMessages = {},
+  returnResponse = false,
 }: MultiFetchOptionsType) {
-  const f = (url: string, requestInit: RequestInit) =>
-    fetch(url, requestInit).then(async (response) => {
-      if (!expectedStatusCodes.includes(response.status)) {
-        const rawText = await response.text();
-        let errorBody: Record<string, unknown> = { error: rawText };
-        try {
-          errorBody = JSON.parse(rawText) as Record<string, unknown>;
-        } catch (e) {
-          // Ignore and use the raw text instead since error was not returned as json
-        }
-        const message = errorMessages[response.status] ?? `The request to ${url} failed.`;
-        const error = new SWRError(message, {
-          info: errorBody,
-          status: response.status,
-          url,
-        });
-        throw error;
-      }
-      return response.json();
-    });
-
   if (urls.length === 0) {
     return Promise.resolve([] as T[]);
   }
   return Promise.all(
-    urls.map((url, i) => f(url, requestInits.length === 1 ? requestInits[0] : requestInits[i])),
+    urls.map((url, i) =>
+      f({
+        url,
+        requestInit: requestInits.length === 1 ? requestInits[0] : requestInits[i],
+        expectedStatusCodes,
+        errorMessages,
+        returnResponse,
+      }),
+    ),
   ) as Promise<T[]>;
 }
 
@@ -82,8 +102,13 @@ export async function fetcher<T>({
   requestInit = {},
   expectedStatusCodes = [200],
   errorMessages = {},
+  returnResponse = false,
 }: SingleFetchOptionsType) {
-  return multiFetcher({ urls: [url], requestInits: [requestInit], expectedStatusCodes, errorMessages }).then(
-    (data) => data[0],
-  ) as Promise<T>;
+  return multiFetcher({
+    urls: [url],
+    requestInits: [requestInit],
+    expectedStatusCodes,
+    errorMessages,
+    returnResponse,
+  }).then((data) => data[0]) as Promise<T>;
 }
