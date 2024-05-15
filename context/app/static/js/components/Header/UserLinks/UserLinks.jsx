@@ -19,6 +19,7 @@ function UserLinks({ isAuthenticated, userEmail }) {
       title={<TruncatedSpan>{isAuthenticated ? userEmail || 'User' : 'User Profile'}</TruncatedSpan>}
       data-testid="user-profile-dropdown"
     >
+      {isAuthenticated && <DropdownLink href="/profile">My Profile</DropdownLink>}
       <DropdownLink href="/my-lists">My Lists</DropdownLink>
       {isOnboardableToWorkspaces && <DropdownLink href="/workspaces">My Workspaces</DropdownLink>}
       <StyledDivider />
