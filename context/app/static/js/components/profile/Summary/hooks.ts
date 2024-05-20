@@ -4,8 +4,7 @@ import { SWRError } from 'js/helpers/swr/errors';
 import useSWRImmutable from 'swr/immutable';
 
 // The globus auth helper from hubmap_commons omits the group descriptions, so we need to fetch the full list of groups from the repo.
-const globusGroupsURL =
-  'https://raw.githubusercontent.com/hubmapconsortium/commons/main/hubmap_commons/21f293b0-globus-groups.json';
+const globusGroupsURL = '/api/globus-groups.json';
 
 interface GlobusGroupInfo {
   description: string;

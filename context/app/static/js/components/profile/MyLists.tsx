@@ -19,7 +19,7 @@ export function MyLists() {
             Your lists are currently stored on local storage and are not transferable between devices. To manage your
             lists, navigate to your <InternalLink href="/my-lists">lists</InternalLink>.
           </Typography>
-          <Button variant="contained" color="primary" component={InternalLink} href="/my-lists">
+          <Button variant="contained" color="primary" href="/my-lists">
             {buttonText}
           </Button>
         </Stack>
