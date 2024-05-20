@@ -1,6 +1,6 @@
 # Update requirements.txt if this file changes:
 # pip install pip-tools
-# pip-compile context/requirements.in --generate-hashes --allow-unsafe --output-file context/requirements.txt
+# pip-compile --allow-unsafe --generate-hashes --output-file=context/requirements.txt context/requirements.in
 Flask>=2.3.3
 Flask[async]>=2.3.3
 globus-sdk>=3.9.0
