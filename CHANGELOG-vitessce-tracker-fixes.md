@@ -1,0 +1,2 @@
+- Update vitessce tracker to report scrolling and zooming appropriately based on the target component.
+- Update 

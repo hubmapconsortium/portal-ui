@@ -80,7 +80,9 @@ export function useVisualizationTracker() {
     if (!target) return;
     if (e.deltaY === 0) return;
     const direction = e.deltaY > 0 ? 'Out' : 'In';
-    trackVitessceAction(`Zoom ${direction} ${target}`);
+    // If the target is a canvas, the user is likely zooming; otherwise, scroll
+    const action = (e.target as HTMLElement).tagName === 'CANVAS' ? 'Zoom' : 'Scroll';
+    trackVitessceAction(`${action} ${direction} ${target}`);
   });
 
   return useMemo(
