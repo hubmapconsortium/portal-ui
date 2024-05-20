@@ -468,9 +468,9 @@ h5py==3.9.0 \
 hubmap-api-py-client==0.0.11 \
     --hash=sha256:65576f80fb449688027cabd43cd7f130e52fa8f43c4e823a579b6111085203e1
     # via -r context/requirements.in
-hubmap-commons==2.1.10 \
-    --hash=sha256:38c83d9d05457a22ba0a5ccad2001887917d9729ffcfb605395b59c46bfafdba \
-    --hash=sha256:571d8dbd881982453bb36e1b88de9f5bf52d7c9345e5689cc3a625c64241e0f6
+hubmap-commons==2.1.14 \
+    --hash=sha256:4a4f90d40946f735618a323a491dabce1188bc26877669d2067ed636528dff9b \
+    --hash=sha256:be988a12f1e9a932b62b4dd129595557f02ff51d8a0763a2304aa893ec217732
     # via
     #   -r context/requirements.in
     #   portal-visualization

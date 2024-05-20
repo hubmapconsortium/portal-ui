@@ -73,6 +73,10 @@ interface AppContextType {
   userTemplatesEndpoint: string;
   ubkgEndpoint: string;
   protocolsClientToken: string;
+  isAuthenticated: boolean;
+  isWorkspacesUser: boolean;
+  isHubmapUser: boolean;
+  userEmail: string;
   [key: string]: unknown;
 }
 
