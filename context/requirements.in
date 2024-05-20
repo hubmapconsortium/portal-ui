@@ -1,6 +1,6 @@
 # Update requirements.txt if this file changes:
 # pip install pip-tools
-# pip-compile context/requirements.in --generate-hashes --allow-unsafe --output-file context/requirements.txt
+# pip-compile --allow-unsafe --generate-hashes --output-file=context/requirements.txt context/requirements.in
 Flask>=2.3.3
 Flask[async]>=2.3.3
 globus-sdk>=3.9.0
@@ -16,7 +16,7 @@ hubmap-commons>=2.1.14
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.3.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.4.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.

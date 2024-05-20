@@ -1186,8 +1186,8 @@ platformdirs==2.5.1 \
     --hash=sha256:7535e70dfa32e84d4b34996ea99c5e432fa29a708d0f4e394bbcb2a8faa4f16d \
     --hash=sha256:bcae7cab893c2d310a711b70b24efb93334febe65f8de776ee320b517471e227
     # via black
-portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.3.zip \
-    --hash=sha256:c9210acb1ed1b58cfc18a0b5d69ab62d0f533359e3c47b782caab870e1706de7
+portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.4.zip \
+    --hash=sha256:b09fdb301d1121ecd5f05ee1acb4d4c7bc2300aaba76cadbb3f841a078dd517d
     # via -r context/requirements.in
 property==2.2 \
     --hash=sha256:d25e4da4e415408b9eb39b6521c088e4e2b8a9e2f9f96fb2d91680e97207ea19
