@@ -22,6 +22,8 @@ class DefaultConfig(object):
 
     PORTAL_INDEX_PATH = f'/{version}/portal/search'
     CCF_INDEX_PATH = f'{version}/entities/search'
+    GLOBUS_GROUPS_URL = 'https://raw.githubusercontent.com' + \
+        '/hubmapconsortium/commons/main/hubmap_commons/21f293b0-globus-groups.json'
     SOFT_ASSAY_ENDPOINT_PATH = 'assaytype'
 
     # Everything else should be overridden in app.conf:
