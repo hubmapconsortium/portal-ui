@@ -336,6 +336,12 @@ class ApiClient():
         return PublicationJSONLiftedUUID(
             publication_json=publication_json,
             vis_lifted_uuid=publication_ancillary_uuid)
+    
+    def _get_ubkg(self, path):
+        return self._request(f"{current_app.config['UBKG_ENDPOINT']}/{path}")
+
+    def get_metadata_descriptions(self):
+        return self._get_ubkg('field-descriptions')
 
 
 def _make_query(constraints, uuids):
