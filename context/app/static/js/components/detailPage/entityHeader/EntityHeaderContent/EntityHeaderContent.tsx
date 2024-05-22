@@ -10,7 +10,7 @@ import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 
-type EntityType = Exclude<keyof typeof entityIconMap, 'Support' | 'Collection' | 'Workspace'>;
+type EntityType = Exclude<keyof typeof entityIconMap, 'Support' | 'Collection' | 'Workspace' | 'VerifiedUser'>;
 
 interface AssayMetadata {
   sex: string;

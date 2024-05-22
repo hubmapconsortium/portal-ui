@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from 'react';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { Alert } from 'js/shared-styles/alerts';
+import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
@@ -73,11 +73,7 @@ const text = {
 };
 
 function LogInAlert() {
-  return (
-    <Alert severity="info" action={<Button href="/login">Log in</Button>}>
-      You must be logged in to access workspaces. Access to workspaces is restricted to HuBMAP members at present.
-    </Alert>
-  );
+  return <LoginAlert featureName="workspaces" />;
 }
 
 function AccessAlert() {

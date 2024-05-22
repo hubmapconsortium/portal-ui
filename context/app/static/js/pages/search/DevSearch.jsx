@@ -2,7 +2,6 @@ import React from 'react';
 import { ExistsQuery, BoolMustNot, TermQuery } from 'searchkit';
 
 import { Alert } from 'js/shared-styles/alerts';
-import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 import {
   field,
@@ -18,14 +17,8 @@ import { SearchHeader } from './style';
 
 function DevSearch() {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
-  const httpHeaders = getAuthHeader(groupsToken);
 
   const searchProps = {
-    // The default behavior is to add a "_search" path.
-    // We don't want that.
-    searchUrlPath: '',
-    // Pass Globus token:
-    httpHeaders,
     // Prefix for details links: (Entities which are not datasets will redirect.)
     detailsUrlPrefix: '/browse/dataset/',
     // Search results field which will be appended to detailsUrlPrefix:

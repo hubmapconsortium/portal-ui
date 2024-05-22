@@ -32,7 +32,7 @@ function SummaryTitle({ children, iconTooltipText, entityIcon }: SummaryTitlePro
   }, [setSummaryComponentObserver, entry, inView]);
 
   return (
-    <Stack direction="row" alignItems="center">
+    <Stack direction="row" alignItems="center" gap={1}>
       {Icon && <Icon color="primary" />}
       <Typography variant="subtitle1" component="h1" color="primary" ref={ref}>
         {children}

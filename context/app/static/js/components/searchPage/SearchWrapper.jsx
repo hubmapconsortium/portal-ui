@@ -14,6 +14,7 @@ import { resultFieldsToSortOptions } from './utils';
 import { StyledSideBar } from './style';
 import { NoResults, SearchError } from './noHitsComponents';
 import { WorkspaceSearchDialogs } from '../workspaces/WorkspacesDropdownMenu';
+import { SearchTransport } from './SearchTransport';
 
 const setSearchHitsCountSelector = (state) => state.setSearchHitsCount;
 const setAllResultsUUIDsSelector = (state) => state.setAllResultsUUIDs;
@@ -25,8 +26,6 @@ function SearchWrapper({
   idField,
   resultFields,
   hitsPerPage,
-  httpHeaders,
-  searchUrlPath,
   queryFields,
   type,
   isLoggedIn,
@@ -42,8 +41,11 @@ function SearchWrapper({
     .map((field) => field.id)
     .concat(idField);
   const searchkit = useMemo(
-    () => new SearchkitManager(apiUrl, { httpHeaders, searchUrlPath, timeout: 0 }),
-    [apiUrl, httpHeaders, searchUrlPath],
+    () =>
+      new SearchkitManager(apiUrl, {
+        transport: new SearchTransport(elasticsearchEndpoint, groupsToken),
+      }),
+    [apiUrl, elasticsearchEndpoint, groupsToken],
   );
   searchkit.addDefaultQuery((query) => query.addQuery(defaultQuery));
 
@@ -162,9 +164,7 @@ SearchWrapper.propTypes = {
     ),
   }).isRequired,
   hitsPerPage: PropTypes.number.isRequired,
-  httpHeaders: PropTypes.objectOf(PropTypes.string),
 
-  searchUrlPath: PropTypes.string,
   queryFields: PropTypes.arrayOf(PropTypes.string).isRequired,
   type: PropTypes.string,
   isLoggedIn: PropTypes.bool,
@@ -172,8 +172,6 @@ SearchWrapper.propTypes = {
 };
 
 SearchWrapper.defaultProps = {
-  searchUrlPath: '_search',
-  httpHeaders: {},
   isLoggedIn: false,
   type: undefined,
 };
