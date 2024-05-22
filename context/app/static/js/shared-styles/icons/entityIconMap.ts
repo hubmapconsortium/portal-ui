@@ -1,7 +1,7 @@
 import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import ScatterPlot from '@mui/icons-material/ScatterPlot';
 import { ReactComponent as GeneIcon } from 'assets/svg/gene.svg';
-import { DatasetIcon, SampleIcon, DonorIcon, PublicationIcon, CollectionIcon } from './icons';
+import { DatasetIcon, SampleIcon, DonorIcon, PublicationIcon, CollectionIcon, VerifiedIcon } from './icons';
 
 export const entityIconMap = {
   Donor: DonorIcon,
@@ -13,4 +13,5 @@ export const entityIconMap = {
   Workspace: WorkspacesIcon,
   CellType: ScatterPlot,
   Gene: GeneIcon,
+  VerifiedUser: VerifiedIcon,
 };

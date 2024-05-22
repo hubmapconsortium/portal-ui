@@ -335,8 +335,22 @@ export function useSearchTotalHitsCounts(
 // Misc utils
 
 // Legacy adapter for `useSearchkitSDK.js`
-export function fetchSearchData<Documents, Aggs>(query: SearchRequest, url: string, token: string) {
+export async function fetchSearchData<Documents, Aggs>(query: SearchRequest, url: string, token: string) {
   const body = createSearchRequestBody({ query, useDefaultQuery: false });
   const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
-  return fetch<SearchResponseBody<Documents, Aggs>>({ url, requestInit });
+  const searchResponse = await fetch<SearchResponseBody<Documents, Aggs> & Response>({
+    url,
+    requestInit,
+    expectedStatusCodes: [200, 303],
+    returnResponse: true,
+  });
+
+  if (searchResponse?.status === 303) {
+    const s3URL = await searchResponse.text();
+    return fetch({
+      url: s3URL,
+    });
+  }
+
+  return searchResponse.json();
 }

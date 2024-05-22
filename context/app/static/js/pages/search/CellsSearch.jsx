@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 import SearchDatasetTutorial from 'js/components/tutorials/SearchDatasetTutorial';
 import { useAppContext } from 'js/components/Contexts';
-import { getAuthHeader, getDefaultQuery } from 'js/helpers/functions';
+import { getDefaultQuery } from 'js/helpers/functions';
 import SearchWrapper from 'js/components/searchPage/SearchWrapper';
 import { donorConfig, sampleConfig, datasetConfig, fieldsToHighlight } from 'js/components/searchPage/config';
 import { listFilter } from 'js/components/searchPage/utils';
@@ -41,14 +41,8 @@ function Search({ title }) {
     );
   }
 
-  const httpHeaders = getAuthHeader(groupsToken);
   const resultFields = resultFieldsByType[type];
   const searchProps = {
-    // The default behavior is to add a "_search" path.
-    // We don't want that.
-    searchUrlPath: '',
-    // Pass Globus token:
-    httpHeaders,
     // Prefix for details links:
     detailsUrlPrefix: `/browse/${type || 'dataset'}/`,
     // Search results field which will be appended to detailsUrlPrefix:
@@ -64,6 +58,7 @@ function Search({ title }) {
     queryFields: ['all_text', ...fieldsToHighlight],
     isLoggedIn: Boolean(groupsToken),
     apiUrl: elasticsearchEndpoint,
+    groupsToken,
     defaultQuery: getDefaultQuery(),
   };
 

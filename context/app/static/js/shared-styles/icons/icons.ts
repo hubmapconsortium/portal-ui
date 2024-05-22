@@ -20,6 +20,7 @@ import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
 import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
+import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { ElementType } from 'react';
@@ -77,6 +78,8 @@ const AddIcon = withIconStyles(AddRoundedIcon);
 
 const SupportIcon = withIconStyles(ContactSupportIcon);
 
+const VerifiedIcon = withIconStyles(VerifiedUserRounded);
+
 export {
   CloseIcon,
   CollectionIcon,
@@ -99,4 +102,5 @@ export {
   UpIcon,
   AddIcon,
   SupportIcon,
+  VerifiedIcon,
 };
