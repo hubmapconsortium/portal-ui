@@ -1,9 +1,6 @@
 from io import StringIO
 from csv import DictWriter
-from pathlib import Path
 from datetime import datetime
-
-from yaml import safe_load
 
 from flask import Response, abort, request, render_template, jsonify
 
