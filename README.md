@@ -24,8 +24,6 @@ graph LR
     top --> portal-visualization --> vitessce-python
     click portal-visualization href "https://github.com/hubmapconsortium/portal-visualization"
     click vitessce-python href "https://github.com/vitessce/vitessce-python"
-    top --> valid[ingest-validation-tools]
-    click valid href "https://github.com/hubmapconsortium/ingest-validation-tools"
     top --> cells-sdk --> cells-api --> pipe
     click cells-sdk href "https://github.com/hubmapconsortium/cells-api-py-client"
     click cells-api href "https://github.com/hubmapconsortium/cross_modality_query"
@@ -219,7 +217,7 @@ You can also lint and auto-correct from the command-line:
 cd context
 npm run lint
 npm run lint:fix
-EXCLUDE=node_modules,ingest-validation-tools,etc/dev/organ-utils
+EXCLUDE=node_modules,etc/dev/organ-utils
 autopep8 --in-place --aggressive -r . --exclude $EXCLUDE
 ```
 
@@ -264,11 +262,7 @@ Here's a [simple demonstration](compose/) of how that works.
 
 ## Related projects and dependencies
 
-### Search and Metadata
-
-The metadata that we have for each dataset ultimately comes from the data providers,
-but the fields they supply are determined by the schemas in [`ingest-validation-tools`](https://github.com/hubmapconsortium/ingest-validation-tools#readme).
-That repo is also included as a submodule here, and human-readable field descriptions are pulled from it.
+### Search
 
 The portal team contributes code to a [subdirectory within `search-api`](https://github.com/hubmapconsortium/search-api/tree/main/src/elasticsearch/addl_index_transformations)
 to clean up the raw Neo4J export and provide us with clean, usable facets.
