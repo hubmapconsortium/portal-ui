@@ -1,2 +1,2 @@
-- Replace dependencies ingest-validation-tools yaml files with data from ontology api.
+- Replace dependencies on ingest-validation-tools yaml files with data from ontology api.
 - Remove ingest-validatio-tools as a git submodule.
