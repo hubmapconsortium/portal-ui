@@ -2,9 +2,9 @@ import React from 'react';
 
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { DownloadTSVItem } from 'js/components/entity-search/MetadataMenu/DownloadTSVItem';
-import { StyledDropdownMenuButton } from 'js/components/entity-search/MetadataMenu/style';
-import LineupMenuItem from 'js/components/entity-search/MetadataMenu/LineupMenuItem';
+import { StyledDropdownMenuButton } from './style';
+import LineupMenuItem from './LineupMenuItem';
+import { DownloadTSVItem } from './DownloadTSVItem';
 
 const menuID = 'metadata-menu';
 

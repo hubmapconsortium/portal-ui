@@ -1,5 +1,4 @@
-import { paths } from 'js/components/entity-search/SearchWrapper/metadataDocumentPaths';
-import { getFieldFromHitFields } from './utils';
+import { getFieldFromHitFields, paths } from './utils';
 
 const datasetSamplePath = paths.dataset.sample;
 
