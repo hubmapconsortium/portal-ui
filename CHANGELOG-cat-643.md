@@ -1,1 +1,0 @@
-- Bump portal-visualization to 0.2.4 to improve genomic profile visualizations.

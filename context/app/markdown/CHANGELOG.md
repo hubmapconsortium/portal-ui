@@ -1,3 +1,13 @@
+## v0.97.0 - 2024-05-23
+
+- Add user profile page.
+- Fix unexpected visualizations on unprocessed datasets.
+- Bump portal-visualization to 0.2.4 to improve genomic profile visualizations.
+- Handle redirect to s3 for search-api requests > 10MB.
+- Update vitessce tracker to report scrolling and zooming appropriately based on the target component.
+- Update vitessce tracker to appropriately report theme selection actions.
+
+
 ## v0.96.6 - 2024-05-14
 
 - Fix undefined source in searchkit initial request.
