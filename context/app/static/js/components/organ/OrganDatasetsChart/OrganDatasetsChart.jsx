@@ -5,7 +5,7 @@ import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import HorizontalStackedBarChart from 'js/shared-styles/charts/HorizontalStackedBarChart';
 import { useChartPalette, useAssayTypeBarChartData } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
 import {
-  getAssayTypesCompositeAggsQuery,
+  getOrganTypesCompositeAggsQuery,
   getDocCountScale,
   getColorScale,
   getDataTypeScale,
@@ -14,7 +14,7 @@ import { ChartArea } from 'js/shared-styles/charts/HorizontalStackedBarChart/sty
 import { combineQueryClauses } from 'js/helpers/functions';
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 
-const assayOrganTypesQuery = getAssayTypesCompositeAggsQuery('origin_samples.mapped_organ.keyword', 'organ_type');
+const assayOrganTypesQuery = getOrganTypesCompositeAggsQuery('origin_samples.mapped_organ.keyword', 'organ_type');
 
 function OrganDatasetsChart({ search }) {
   const updatedQuery = useMemo(

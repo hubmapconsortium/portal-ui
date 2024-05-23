@@ -1,24 +1,36 @@
 import { produce } from 'immer';
-import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
+import { scaleLinear, scaleOrdinal, scaleBand, StringLike } from '@visx/scale';
 
-function formatAssayData(assayDataBuckets, colorKey) {
+interface AssayDataBucket {
+  key: {
+    mapped_data_type: string;
+    [key: string]: string | number;
+  };
+  doc_count: number;
+}
+
+type Summable = Record<string, number>;
+
+function formatAssayData(assayDataBuckets: AssayDataBucket[], colorKey: string): Summable[] {
   const formattedData = assayDataBuckets.reduce((acc, d) => {
     const snakeCaseDataType = d.key.mapped_data_type.replace(/ /g, '_');
     // TODO: Get datasets to display from index, instead of depending on patterns in names.
     // The first step is having a hierarchy for assay types:
     // https://github.com/hubmapconsortium/portal-ui/issues/1688
-    return produce(acc, (draft) => {
+    return produce<Record<string, object>>(acc, (draft) => {
       if (!(snakeCaseDataType in draft)) {
         draft[snakeCaseDataType] = {};
       }
+      /* @ts-expect-error this will need to be cleaned up anyway */
       draft[snakeCaseDataType].mapped_data_type = d.key.mapped_data_type;
+      /* @ts-expect-error this will need to be cleaned up anyway */
       draft[snakeCaseDataType][d.key[colorKey]] = d.doc_count;
     });
   }, {});
   return Object.values(formattedData);
 }
 
-function addSumProperty(formattedData) {
+function addSumProperty(formattedData: Summable[]) {
   return formattedData.map((d) => {
     return produce(d, (draft) => {
       draft.sum = Object.entries(d).reduce((acc, [k, v]) => {
@@ -31,28 +43,28 @@ function addSumProperty(formattedData) {
   });
 }
 
-function sortBySumAscending(list) {
+function sortBySumAscending(list: Summable[]) {
   list.sort((a, b) => a.sum - b.sum);
 }
 
-function getAssayTypeBarChartData(rawData, colorKey) {
+function getAssayTypeBarChartData(rawData: AssayDataBucket[], colorKey: string) {
   const formattedData = addSumProperty(formatAssayData(rawData, colorKey));
   sortBySumAscending(formattedData);
   const maxSumDocCount = Math.max(...formattedData.map((d) => d.sum));
   return { formattedData, maxSumDocCount };
 }
 
-function getAssayTypesCompositeAggsQuery(esAggsKey, aggsKeyToReturn) {
+function getOrganTypesCompositeAggsQuery(esAggsKey: string, aggsKeyToReturn: string) {
   return {
     size: 0,
     aggs: {
-      mapped_data_types: {
+      organs: {
         composite: {
           sources: [
             {
-              mapped_data_type: {
+              organ: {
                 terms: {
-                  field: 'mapped_data_types.keyword',
+                  field: 'origin_samples.mapped_organ.keyword',
                 },
               },
             },
@@ -71,21 +83,21 @@ function getAssayTypesCompositeAggsQuery(esAggsKey, aggsKeyToReturn) {
   };
 }
 
-function getDocCountScale(maxDocCount) {
+function getDocCountScale(maxDocCount: number) {
   return scaleLinear({
     domain: [0, maxDocCount * 1.05],
     nice: true,
   });
 }
 
-function getColorScale(colorsValues, colors) {
+function getColorScale(colorsValues: string[], colors: string[]) {
   return scaleOrdinal({
     domain: colorsValues,
     range: colors,
   });
 }
 
-function getDataTypeScale(dataTypes) {
+function getDataTypeScale(dataTypes: StringLike[]) {
   return scaleBand({
     domain: dataTypes,
     padding: 0.2,
@@ -96,7 +108,7 @@ export {
   addSumProperty,
   sortBySumAscending,
   getAssayTypeBarChartData,
-  getAssayTypesCompositeAggsQuery,
+  getOrganTypesCompositeAggsQuery,
   getDocCountScale,
   getColorScale,
   getDataTypeScale,

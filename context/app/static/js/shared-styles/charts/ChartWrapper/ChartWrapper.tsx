@@ -1,12 +1,20 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { LegendOrdinal } from '@visx/legend';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
 import { TitleWrapper } from 'js/shared-styles/charts/style';
+import { OrdinalScale } from '../hooks';
 
-function ChartWrapper({ children, chartTitle, margin, colorScale, dropdown }) {
+interface ChartWrapperProps extends PropsWithChildren {
+  chartTitle?: string;
+  margin: Record<'top' | 'right' | 'bottom' | 'left', number>;
+  colorScale: OrdinalScale;
+  dropdown?: React.ReactNode;
+}
+
+function ChartWrapper({ children, chartTitle, margin, colorScale, dropdown }: ChartWrapperProps) {
   return (
     <Stack
       direction="row"
