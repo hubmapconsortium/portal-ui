@@ -229,7 +229,7 @@ interface Description {
 }
 
 type XSDType = 'string' | 'float' | 'anyURI' | 'int' | 'integer' | 'decimal' | 'boolean' | 'dateTime' | 'date' | 'long';
-
+type HMFIELDType = 'string' | 'number' | 'integer' | 'boolean' | 'datetime' | 'date';
 type MetadataType =
   | {
       mapping_source: 'HMFIELD' | 'CEDAR';
@@ -238,12 +238,12 @@ type MetadataType =
     }
   | {
       mapping_source: 'HMFIELD';
-      type: 'string' | 'number' | 'integer' | 'boolean' | 'datetime' | 'date';
+      type: HMFIELDType;
       type_source: 'HMFIELD';
     };
 
-interface MetadataField {
-  code_ids: string[][];
+export interface MetadataField {
+  code_ids: string[];
   name: string;
 }
 
@@ -255,7 +255,7 @@ interface MetadataFieldType extends MetadataField {
   types: MetadataType[];
 }
 
-function buildFieldsMap<T extends MetadataField>({
+export function buildFieldsMap<T extends MetadataField>({
   fields,
   getValue,
 }: {
@@ -277,7 +277,7 @@ function buildFieldsMap<T extends MetadataField>({
   return fieldsMap;
 }
 
-function mapCEDARTypetoHMFIELD(type: XSDType) {
+export function mapXSDTypetoHMFIELD(type: string) {
   switch (type) {
     case 'anyURI':
       return 'string';
@@ -294,20 +294,10 @@ function mapCEDARTypetoHMFIELD(type: XSDType) {
   }
 }
 
-function findBestType(types: MetadataType[]) {
-  const HMFIELDType = types.find((t) => t?.type_source === 'HMFIELD');
+export function findBestType(types: MetadataType[]) {
+  const hmtype = types.find((t) => t?.type_source === 'HMFIELD');
 
-  if (HMFIELDType) {
-    return HMFIELDType.type;
-  }
-
-  const CEDARType = types[0];
-
-  if (CEDARType.type_source === 'XSD') {
-    return mapCEDARTypetoHMFIELD(CEDARType.type);
-  }
-
-  return types[0].type;
+  return hmtype?.type ?? mapXSDTypetoHMFIELD(types[0].type);
 }
 
 async function fetchFieldTypes(url: string) {
@@ -327,7 +317,7 @@ export const useMetadataFieldTypes = () => {
   return { data: data ?? {}, ...swr };
 };
 
-function findBestDescription(descriptions: Description[]) {
+export function findBestDescription(descriptions: Description[]) {
   const cedarDescription = descriptions.find((description) => description?.source === 'CEDAR');
 
   return (cedarDescription ?? descriptions[0]).description;
