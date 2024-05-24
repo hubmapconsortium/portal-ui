@@ -35,6 +35,7 @@ const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
 const CellTypes = lazy(() => import('js/pages/CellTypes'));
 const Tutorials = lazy(() => import('js/pages/Tutorials'));
 const Tutorial = lazy(() => import('js/pages/Tutorial'));
+const Profile = lazy(() => import('js/pages/Profile'));
 
 function Routes({ flaskData }) {
   const {
@@ -249,6 +250,14 @@ function Routes({ flaskData }) {
     );
   }
 
+  if (urlPath === '/profile') {
+    return (
+      <Route>
+        <Profile />
+      </Route>
+    );
+  }
+
   if (urlPath.startsWith('/lineup/')) {
     return (
       <Route>
@@ -331,6 +340,7 @@ Routes.propTypes = {
     geneSymbol: PropTypes.string,
     redirected_from: PropTypes.string,
     cell_type: PropTypes.string,
+    globusGroups: PropTypes.object,
   }),
 };
 

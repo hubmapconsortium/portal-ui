@@ -1,8 +1,11 @@
+from functools import cache
 from io import StringIO
 from csv import DictWriter
 from datetime import datetime
 
-from flask import Response, abort, request, render_template, jsonify
+import requests
+
+from flask import Response, abort, request, render_template, jsonify, current_app
 
 from .utils import make_blueprint, get_client, get_default_flask_data
 
@@ -195,3 +198,12 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     tsv_lines = tsv.split('\n')
     tsv_lines[1] = '#' + tsv_lines[1]
     return '\n'.join(tsv_lines)
+
+
+@cache
+@blueprint.route('/api/globus-groups.json')
+def get_globus_groups():
+    # The globus auth helper from hubmap_commons omits the group descriptions,
+    # so we need to fetch the full list of groups from the repo.
+    groups = requests.get(current_app.config['GLOBUS_GROUPS_URL']).json()
+    return groups

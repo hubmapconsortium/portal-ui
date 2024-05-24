@@ -269,16 +269,24 @@ class ApiClient():
         returns the doc of the most recent descendant
         that is in QA or Published status.
         '''
-        hints = "is_support" if is_publication else "is_image"
+
+        hints = [{
+            "term": {
+                "vitessce-hints": "is_support"
+            }
+        }]
+        if not is_publication:
+            hints.append({
+                "term": {
+                    "vitessce-hints": "is_image"
+                }
+            })
+
         query = {
             "query": {
                 "bool": {
                     "must": [
-                        {
-                            "term": {
-                                "vitessce-hints": hints
-                            }
-                        },
+                        *hints,
                         {
                             "term": {
                                 "ancestor_ids": uuid

@@ -21,7 +21,12 @@ function VisualizationThemeSwitch() {
     <StyledToggleButtonGroup
       value={vizTheme}
       exclusive
-      onChange={(e, theme) => {
+      onChange={(_, theme) => {
+        // No theme arg means the user clicked on the already active theme.
+        if (!theme) {
+          trackEntityPageEvent({ action: 'Vitessce / Selected Already Active Theme' });
+          return;
+        }
         trackEntityPageEvent({ action: `Vitessce / Toggle ${theme} Theme` });
         setVizTheme(theme);
       }}

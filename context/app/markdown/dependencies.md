@@ -10,7 +10,7 @@ The services the portal relies on are [listed separately](/services).
 ```
 # Update requirements.txt if this file changes:
 # pip install pip-tools
-# pip-compile context/requirements.in --generate-hashes --allow-unsafe --output-file context/requirements.txt
+# pip-compile --allow-unsafe --generate-hashes --output-file=context/requirements.txt context/requirements.in
 Flask>=2.3.3
 Flask[async]>=2.3.3
 globus-sdk>=3.9.0
@@ -19,14 +19,14 @@ pyyaml>=5.4
 python-datauri>=0.2.8
 python-frontmatter>=0.5.0
 hubmap-api-py-client>=0.0.11
-hubmap-commons>=2.1.10
+hubmap-commons>=2.1.14
 # As of 2023-08-24, this is the version of boto3 which is compatible with both the 
 # portal-visualization->vitessce->ome-zarr dependency on aiobotocore~=2.5
 # and the hubmap-commons dependency on boto3>=1.24.47
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.3.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.4.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
