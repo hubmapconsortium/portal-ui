@@ -1,5 +1,4 @@
 **/public/
-**/ingest-validation-tools/**/*.*
 **/app/organ/*.y*ml
 **/app/templates/**/*.html
 **/app/static/js/maintenance/*.html

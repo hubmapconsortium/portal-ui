@@ -1,11 +1,9 @@
 from functools import cache
 from io import StringIO
 from csv import DictWriter
-from pathlib import Path
 from datetime import datetime
 
 import requests
-from yaml import safe_load
 
 from flask import Response, abort, request, render_template, jsonify, current_app
 
@@ -45,6 +43,18 @@ def _extract_uuids_and_constraints(all_args, use_list=False):
     return uuids, constraints
 
 
+def _get_recent_description(descriptions):
+    cedar_descriptions = [d for d in descriptions if d['source'] == "CEDAR"]
+    return (cedar_descriptions if cedar_descriptions else descriptions)[0]['description']
+
+
+@blueprint.route('/metadata/descriptions', methods=['GET'])
+def metadata_descriptions():
+    client = get_client()
+    field_descriptions = client.get_metadata_descriptions()
+    return {d['name']: _get_recent_description(d['descriptions']) for d in field_descriptions}
+
+
 @blueprint.route('/metadata/v0/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_tsv(entity_type):
     if request.method == 'GET':
@@ -60,9 +70,7 @@ def entities_tsv(entity_type):
         uuids = body.get('uuids')
     entities = _get_entities(entity_type, constraints, uuids)
 
-    descriptions_path = Path(__name__).parent.parent / \
-        'ingest-validation-tools/docs/field-descriptions.yaml'
-    descriptions_dict = safe_load(descriptions_path.read_text())
+    descriptions_dict = metadata_descriptions()
     tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
 
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')

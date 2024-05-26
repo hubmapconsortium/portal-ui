@@ -6,7 +6,7 @@ set -o errexit
 copy_conf
 
 start flake8
-EXCLUDE=node_modules,ingest-validation-tools,etc/dev/organ-utils
+EXCLUDE=node_modules,etc/dev/organ-utils
 # The organ-utils script uses the walrus operator (:=).
 # Latest pycodestyle does support that syntax,
 # but latest flake8 doesn't support the latest pycodestyle,

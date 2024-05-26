@@ -1,4 +1,5 @@
 import React from 'react';
+
 import { StyledMenuItem } from './style';
 import { useMetadataMenu } from './hooks';
 

@@ -9,10 +9,6 @@ module.exports = {
     '^.+\\.(css|scss)$': '<rootDir>/test-utils/__mocks__/style.js',
     '^js/(.*)$': '<rootDir>/app/static/js/$1',
     '^test-utils/(.*)$': '<rootDir>/test-utils/$1',
-    'metadata-field-descriptions$': '<rootDir>/ingest-validation-tools/docs/field-descriptions.yaml',
-    'metadata-field-types$': '<rootDir>/ingest-validation-tools/docs/field-types.yaml',
-    'metadata-field-entities$': '<rootDir>/ingest-validation-tools/docs/field-entities.yaml',
-    'metadata-field-assays$': '<rootDir>/ingest-validation-tools/docs/field-assays.yaml',
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },
   transformIgnorePatterns: [
