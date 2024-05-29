@@ -121,23 +121,7 @@ export function CellTypeOrgansGraph({ organs }: CellTypesGraphProps) {
   if (keys.length > 1) {
     return (
       <Stack direction="row" height={defaultHeight}>
-        <VerticalStackedBarChart
-          visxData={sortedOrgans}
-          yScale={yScale}
-          xScale={xScale}
-          getXScaleRange={getXScaleRange}
-          getYScaleRange={getYScaleRange}
-          colorScale={colorScale}
-          keys={keys}
-          margin={margin}
-          getX={getX}
-          xAxisLabel="Organs"
-          yAxisLabel="Cell Count"
-          xAxisTickLabels={organLabels}
-          y0={(d) => Math.max(d[0], 1)} // Ensure that y0 is always > 0
-          getTickValues={(y) => y.ticks(5).filter((d) => Number.isInteger(Math.log10(d)))}
-          TooltipContent={CellTypesVisualizationTooltip}
-        />
+        {chart}
         {/* TODO: Pull legend out into its own component */}
         <Stack direction="column" spacing={0.5} p={2}>
           <Typography variant="body1" component="label">

@@ -5,27 +5,41 @@ import { getOrganTypesCompositeAggsQuery } from 'js/shared-styles/charts/Horizon
 
 const organTypesQuery = {
   size: 0,
+  query: includeOnlyDatasetsClause,
   aggs: {
     organ_types: { terms: { field: 'origin_samples.mapped_organ.keyword', size: 10000 } },
   },
 };
 
-const techniquesQuery: SearchRequest = {
+interface OrganTypesQueryAggs {
+  organ_types: {
+    buckets: {
+      doc_count: number;
+      key: string;
+    }[];
+  };
+}
+
+const assayTypeQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggsQuery('dataset_type.keyword', 'dataset_type'),
+  ...getOrganTypesCompositeAggsQuery('raw_dataset_type.keyword', 'assay_type'),
 };
 const donorSexQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
   ...getOrganTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex'),
 };
-const molecularEntityQuery: SearchRequest = {
+const analyteClassQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggsQuery('analyte_class.keyword', 'molecular_entity'),
+  ...getOrganTypesCompositeAggsQuery('analyte_class.keyword', 'analyte_class'),
 };
 const processingStatusQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
   ...getOrganTypesCompositeAggsQuery('processing.keyword', 'processing_status'),
 };
+// const donorAgeQuery: SearchRequest = {
+//   query: includeOnlyDatasetsClause,
+//   ...getOrganTypesCompositeAggsQuery('donor.mapped_metadata.age', 'donor_age'),
+// };
 
 // const filterOutDataTypesWithBracket = (bucket) => !bucket.key.dataset_type.includes('[');
 
@@ -38,39 +52,43 @@ interface QueryAggs<T> {
   };
 }
 
-interface TechniquesQueryKey {
-  dataset_type: string;
+interface AssaysQueryKey {
+  assay_type: string;
 }
 
 interface DonorSexQueryKey {
   donor_sex: string;
 }
 
-interface MolecularEntityQueryKey {
-  molecular_entity: string;
+interface AnalyteClassQueryKey {
+  analyte_class: string;
 }
 
 interface ProcessingStatusQueryKey {
   processing_status: string;
 }
 
-type TechniquesQueryAggs = QueryAggs<TechniquesQueryKey>;
+type AssaysQueryAggs = QueryAggs<AssaysQueryKey>;
 
 type DonorSexQueryAggs = QueryAggs<DonorSexQueryKey>;
 
-type MolecularEntityQueryAggs = QueryAggs<MolecularEntityQueryKey>;
+type AnalyteClassQueryAggs = QueryAggs<AnalyteClassQueryKey>;
 
 type ProcessingStatusQueryAggs = QueryAggs<ProcessingStatusQueryKey>;
 
-export { organTypesQuery, techniquesQuery, donorSexQuery, molecularEntityQuery, processingStatusQuery };
+type HomepageQueryKeys = AssaysQueryKey | DonorSexQueryKey | AnalyteClassQueryKey | ProcessingStatusQueryKey;
+
+export { organTypesQuery, assayTypeQuery, donorSexQuery, analyteClassQuery, processingStatusQuery };
 export type {
-  TechniquesQueryAggs,
+  OrganTypesQueryAggs,
+  AssaysQueryAggs,
   DonorSexQueryAggs,
-  MolecularEntityQueryAggs,
+  AnalyteClassQueryAggs,
   ProcessingStatusQueryAggs,
   QueryAggs,
-  TechniquesQueryKey,
+  AssaysQueryKey,
   DonorSexQueryKey,
-  MolecularEntityQueryKey,
+  AnalyteClassQueryKey,
   ProcessingStatusQueryKey,
+  HomepageQueryKeys,
 };

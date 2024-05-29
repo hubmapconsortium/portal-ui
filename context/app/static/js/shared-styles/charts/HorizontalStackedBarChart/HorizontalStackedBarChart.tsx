@@ -5,52 +5,40 @@ import { Group } from '@visx/group';
 import { AxisTop, AxisLeft } from '@visx/axis';
 import { WithParentSizeProvidedProps, withParentSize } from '@visx/responsive';
 import { GridColumns } from '@visx/grid';
-import { AnyD3Scale } from '@visx/scale';
-// import type { Accessor, SeriesPoint } from '@visx/shape/lib/types';
+import { AnyD3Scale, ScaleInput } from '@visx/scale';
+import { Accessor, SeriesPoint } from '@visx/shape/lib/types';
 
-import { OrdinalScale, useChartTooltip, useLongestLabelSize } from 'js/shared-styles/charts/hooks';
-import { getChartDimensions, defaultXScaleRange, defaultYScaleRange } from 'js/shared-styles/charts/utils';
+import { OrdinalScale, useChartTooltip, useHorizontalChart } from 'js/shared-styles/charts/hooks';
+import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import { TICK_LABEL_SIZE } from '../constants';
 import { TooltipData, tooltipHasBarData } from '../types';
 
-interface HorizontalStackedBarChartProps<
-  Datum,
-  XAxisKey extends string,
-  YAxisKey extends string,
-  XAxisScale extends AnyD3Scale,
-  YAxisScale extends AnyD3Scale,
-> extends WithParentSizeProvidedProps {
+interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>
+  extends WithParentSizeProvidedProps {
   visxData: Datum[];
   xScale: XAxisScale;
   getXScaleRange?: (max: number) => [number, number];
   yScale: YAxisScale;
   getYScaleRange?: (max: number) => [number, number];
   colorScale: OrdinalScale;
-  getY: (d: Datum) => YAxisKey;
-  keys: XAxisKey[];
+  getY: (d: Datum) => string;
+  keys: string[];
   margin: Record<'top' | 'right' | 'bottom' | 'left', number>;
   xAxisLabel: string;
   yAxisLabel: string;
   TooltipContent?: React.ComponentType<{ tooltipData: TooltipData<Datum> }>;
-  yAxisTickLabels: YAxisKey[];
+  yAxisTickLabels: string[];
   // barHeight = yScale(y0(bar)) - yScale(y1(bar))
   // x = xScale(x1(bar))
-  // Mainly used to support log scales, where y0 must be > 0
-  // x1?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
-  // x0?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
+  // Mainly used to support log scales, where x0 must be > 0
+  x1?: Accessor<SeriesPoint<Datum>, ScaleInput<XAxisScale>>;
+  x0?: Accessor<SeriesPoint<Datum>, ScaleInput<XAxisScale>>;
   // getTickValues?: (yScale: YAxisScale) => number[];
-  showTooltipAndHover: boolean;
-  colorFacetName: string;
+  showTooltipAndHover?: boolean;
 }
 
-function HorizontalStackedBarChart<
-  Datum,
-  XAxisKey extends string,
-  YAxisKey extends string,
-  XAxisScale extends AnyD3Scale,
-  YAxisScale extends AnyD3Scale,
->({
+function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>({
   parentWidth = 0,
   parentHeight = 500,
   visxData,
@@ -66,16 +54,18 @@ function HorizontalStackedBarChart<
   yAxisLabel = '',
   TooltipContent,
   yAxisTickLabels,
-  // x0,
-  // x1,
+  x0,
+  x1,
   // getTickValues,
   showTooltipAndHover = true,
-  colorFacetName, // TODO: Remove this prop
-}: HorizontalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
-  const longestLabelSize = useLongestLabelSize({ labels: yAxisTickLabels, labelFontSize: TICK_LABEL_SIZE });
-  const updatedMargin = { ...margin, left: longestLabelSize + 10 };
-
-  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
+}: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
+  const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
+    margin,
+    tickLabelSize: TICK_LABEL_SIZE,
+    yAxisTickLabels: yAxisTickLabels.map((label) => trimStringWithMiddleEllipsis(label)),
+    parentWidth,
+    parentHeight,
+  });
 
   yScale.range(getYScaleRange(yHeight));
   xScale.range(getXScaleRange(xWidth));
@@ -91,13 +81,17 @@ function HorizontalStackedBarChart<
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
 
+  if (visxData.length === 0) {
+    return null;
+  }
+
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
         <GridColumns
           top={updatedMargin.top}
           left={updatedMargin.left}
-          scale={yScale}
+          scale={xScale}
           height={yHeight}
           stroke="black"
           opacity={0.38}
@@ -111,32 +105,25 @@ function HorizontalStackedBarChart<
             xScale={xScale}
             yScale={yScale}
             color={colorScale}
+            x0={x0}
+            x1={x1}
           >
             {(barStacks) => {
               return barStacks.map((barStack) =>
                 barStack.bars.map(
                   (bar) =>
                     bar.width > 0 && (
-                      <a
-                        href={`/search?entity_type[0]=Dataset&mapped_data_types[0]=${encodeURIComponent(
-                          // @ts-expect-error mapped_data_type is not a key of Datum (TODO: fix this in the future)
-                          // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-                          bar.bar.data.mapped_data_type,
-                        )}&${colorFacetName}[0]=${encodeURIComponent(bar.key)}`}
-                        key={`barstack-horizontal-${barStack.index}-${bar.index}`}
-                        target="_parent"
-                      >
-                        {/* Make target explicit because html base target doesn't apply inside SVG. */}
-                        <StackedBar
-                          direction="horizontal"
-                          bar={bar}
-                          hoverProps={
-                            showTooltipAndHover
-                              ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
-                              : undefined
-                          }
-                        />
-                      </a>
+                      <StackedBar
+                        key={`${bar.key}-${bar.index}`}
+                        direction="horizontal"
+                        bar={bar}
+                        href={`/search?entity_type[0]=Dataset&dataset_type[0]=${barStack.key}`}
+                        hoverProps={
+                          showTooltipAndHover
+                            ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
+                            : undefined
+                        }
+                      />
                     ),
                 ),
               );
@@ -146,8 +133,9 @@ function HorizontalStackedBarChart<
             hideTicks
             scale={yScale}
             stroke="black"
-            numTicks={Object.keys(visxData).length}
+            numTicks={yAxisTickLabels.length}
             label={yAxisLabel}
+            labelOffset={longestLabelSize + 10}
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: TICK_LABEL_SIZE,
@@ -202,4 +190,4 @@ function HorizontalStackedBarChart<
   );
 }
 
-export default withParentSize(HorizontalStackedBarChart);
+export default withParentSize(HorizontalStackedBarChart) as typeof HorizontalStackedBarChart;

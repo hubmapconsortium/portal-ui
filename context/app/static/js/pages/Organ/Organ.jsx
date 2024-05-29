@@ -9,7 +9,8 @@ import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
 import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
-import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
+// TODO: Reenable when DatasetsBarChart is updated
+// import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
 
 import { FlexRow, Content } from './style';
@@ -66,7 +67,7 @@ function Organ({ organ }) {
         {shouldDisplaySection[assaysId] && (
           <Section id={assaysId}>
             <Assays organTerms={organ.search} />
-            <DatasetsBarChart name={organ.name} search={organ.search} />
+            {/* <DatasetsBarChart name={organ.name} search={organ.search} /> */}
           </Section>
         )}
         {shouldDisplaySection[samplesId] && (
