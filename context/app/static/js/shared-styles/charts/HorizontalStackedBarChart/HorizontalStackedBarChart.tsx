@@ -6,7 +6,7 @@ import { AxisTop, AxisLeft } from '@visx/axis';
 import { WithParentSizeProvidedProps, withParentSize } from '@visx/responsive';
 import { GridColumns } from '@visx/grid';
 import { AnyD3Scale, ScaleInput } from '@visx/scale';
-import { Accessor, SeriesPoint } from '@visx/shape/lib/types';
+import { Accessor, BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
 
 import { OrdinalScale, useChartTooltip, useHorizontalChart } from 'js/shared-styles/charts/hooks';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
@@ -36,6 +36,12 @@ interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, Y
   x0?: Accessor<SeriesPoint<Datum>, ScaleInput<XAxisScale>>;
   // getTickValues?: (yScale: YAxisScale) => number[];
   showTooltipAndHover?: boolean;
+  getBarHref?: (
+    d: Omit<BarGroupBar<string>, 'key' | 'value'> & {
+      bar: SeriesPoint<Datum>;
+      key: string;
+    },
+  ) => string;
 }
 
 function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>({
@@ -58,6 +64,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   x1,
   // getTickValues,
   showTooltipAndHover = true,
+  getBarHref,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
     margin,
@@ -117,7 +124,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                         key={`${bar.key}-${bar.index}`}
                         direction="horizontal"
                         bar={bar}
-                        href={`/search?entity_type[0]=Dataset&dataset_type[0]=${barStack.key}`}
+                        href={getBarHref?.(bar)}
                         hoverProps={
                           showTooltipAndHover
                             ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
@@ -158,8 +165,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
           />
         </Group>
       </svg>
-
-      {tooltipOpen && tooltipData && (
+      {showTooltipAndHover && tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
           {TooltipContent ? (
             <TooltipContent tooltipData={tooltipData} />
@@ -175,17 +181,6 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
           )}
         </TooltipInPortal>
       )}
-      {/* {showTooltipAndHover && tooltipOpen && (
-        <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          <Typography variant="subtitle2" color="secondary">
-            {tooltipData.bar.data.mapped_data_type}
-          </Typography>
-          <Typography>{tooltipData.key}</Typography>
-          <Typography variant="h3" component="p" color="textPrimary">
-            {tooltipData.bar.data[tooltipData.key]}
-          </Typography>
-        </TooltipInPortal>
-      )} */}
     </>
   );
 }

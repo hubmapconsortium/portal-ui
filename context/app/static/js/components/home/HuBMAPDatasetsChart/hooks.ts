@@ -1,6 +1,12 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 import useSearchData from 'js/hooks/useSearchData';
-import { organTypesQuery, type OrganTypesQueryAggs, type QueryAggs } from './queries';
+import {
+  DatasetTypeMapQueryAggs,
+  datasetTypeMapQuery,
+  organTypesQuery,
+  type OrganTypesQueryAggs,
+  type QueryAggs,
+} from './queries';
 
 export type AggregatedDatum = {
   organ: string | number; // Actually just a string, but the union with Record below is necessary for TS to infer the type correctly
@@ -69,4 +75,22 @@ export function useSearchDataRange() {
   const max = buckets.reduce((acc, bucket) => Math.max(acc, bucket.doc_count), 0);
 
   return [0, max];
+}
+
+export function useDatasetTypeMap() {
+  const { searchData: datasetTypeMapData } = useSearchData<unknown, DatasetTypeMapQueryAggs>(datasetTypeMapQuery);
+  if (!datasetTypeMapData?.aggregations) {
+    return {};
+  }
+  const { dataset_type_map } = datasetTypeMapData.aggregations;
+  const { buckets: rawDatasetTypes } = dataset_type_map.raw_dataset_type;
+  const datasetTypeMap = rawDatasetTypes.reduce(
+    (acc, bucket) => {
+      const assayDisplayNames = bucket.assay_display_name.buckets.map((b) => b.key);
+      acc[bucket.key] = assayDisplayNames;
+      return acc;
+    },
+    {} as Record<string, string[]>,
+  );
+  return datasetTypeMap;
 }
