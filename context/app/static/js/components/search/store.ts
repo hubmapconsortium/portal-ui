@@ -7,10 +7,14 @@ interface SortField {
   direction: 'asc' | 'desc';
 }
 
+interface SourceField {
+  label: string;
+}
+
 export interface SearchStoreState {
   terms: Record<string, Set<string>>;
   sortField: SortField;
-  sourceFields: Set<string>;
+  sourceFields: Record<string, SourceField>;
   size: number;
   endpoint: string;
   swrConfig: SWRConfiguration;

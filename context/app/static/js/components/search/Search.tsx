@@ -7,6 +7,8 @@ import { fetcher } from 'js/helpers/swr';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 import { SearchStoreProvider, useSearchStore, SearchStoreState } from './store';
+import { HitDoc } from './types';
+import { ResultsTable } from './Results';
 
 function useAuthHeader() {
   const { groupsToken } = useAppContext();
@@ -39,7 +41,7 @@ function buildQuery({ terms, size, sourceFields, sortField }: Omit<SearchStoreSt
   const query = esb
     .requestBodySearch()
     .size(size)
-    .source(sourceFields.size ? [...sourceFields] : false)
+    .source(Object.keys(sourceFields).length ? Object.keys(sourceFields) : false)
     .sort(esb.sort(sortField.field, sortField.direction));
 
   Object.entries(terms).forEach(([field, values]) => query.postFilter(esb.termsQuery(field, [...values])));
@@ -47,13 +49,13 @@ function buildQuery({ terms, size, sourceFields, sortField }: Omit<SearchStoreSt
   return query.toJSON();
 }
 
-function useSearch<Document, Aggs>() {
+export function useSearch<Aggs>() {
   const { endpoint, swrConfig, ...rest }: SearchStoreState = useSearchStore();
 
   const query = buildQuery({ ...rest });
 
   const requestInit = useRequestInit({ body: query });
-  const { data, isLoading } = useSWR<SearchResponseBody<Document, Aggs>>(
+  const { data, isLoading } = useSWR<SearchResponseBody<HitDoc, Aggs>>(
     { requestInit, url: endpoint },
     fetcher,
     swrConfig,
@@ -62,11 +64,7 @@ function useSearch<Document, Aggs>() {
 }
 
 function Search() {
-  const { data, isLoading } = useSearch();
-
-  // eslint-disable-next-line no-console
-  console.log(data, isLoading);
-  return null;
+  return <ResultsTable />;
 }
 
 function SearchWrapper() {
@@ -79,7 +77,14 @@ function SearchWrapper() {
         swrConfig: {},
         terms: { 'entity_type.keyword': new Set(['Dataset']) },
         sortField: { field: 'last_modified_timestamp', direction: 'desc' },
-        sourceFields: new Set([]),
+        sourceFields: {
+          hubmap_id: { label: 'HuBMAP ID' },
+          group_name: { label: 'Group' },
+          assay_display_name: { label: 'Data Types' },
+          'origin_samples.mapped_organ': { label: 'Organ' },
+          mapped_status: { label: 'Status' },
+          last_modified_timestamp: { label: 'Last Modified' },
+        },
         size: 10,
       }}
     >
