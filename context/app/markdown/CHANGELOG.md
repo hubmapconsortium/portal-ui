@@ -1,3 +1,9 @@
+## v0.97.1 - 2024-05-30
+
+- Replace dependencies on ingest-validation-tools yaml files with data from ontology api.
+- Remove ingest-validation-tools as a git submodule.
+
+
 ## v0.97.0 - 2024-05-23
 
 - Add user profile page.
