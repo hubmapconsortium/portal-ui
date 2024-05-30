@@ -10,6 +10,7 @@ import Skeleton from '@mui/material/Skeleton';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import Typography from '@mui/material/Typography';
 import { AnyD3Scale } from '@visx/scale';
+import { getSearchURL } from 'js/components/organ/utils';
 import HuBMAPDatasetsChartDropdown from '../HuBMAPDatasetsChartDropdown';
 import {
   assayTypeQuery,
@@ -59,10 +60,6 @@ interface ColorOption {
   getBarHref?: ComponentProps<typeof HorizontalStackedBarChart<AggregatedDatum, AnyD3Scale, AnyD3Scale>>['getBarHref'];
 }
 
-function getHrefRoot(organ: string | number) {
-  return `/search?entity_type[0]=Dataset&origin_samples.mapped_organ[0]=${organ}`;
-}
-
 function HuBMAPDatasetsChart() {
   const colors = useChartPalette();
   const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
@@ -86,14 +83,13 @@ function HuBMAPDatasetsChart() {
       dropdownLabel: 'Assay Type',
       keys: getKeysFromAggregatedData(assayBuckets),
       getBarHref: (d) => {
-        const { organ } = d.bar.data;
-        const assayType = d.key;
-        // Dataset type links need to include all the subtypes
-        const mappedDatasetTypes = datasetTypeMap[assayType] ?? [];
-        const href = mappedDatasetTypes.reduce((acc, datasetType, idx) => {
-          return `${acc}&raw_dataset_type_keyword-assay_display_name_keyword[${assayType}][${idx}]=${datasetType}`;
-        }, getHrefRoot(organ));
-        return href;
+        const organTerms = [String(d.bar.data.organ)];
+        return getSearchURL({
+          entityType: 'Dataset',
+          organTerms,
+          assay: d.key,
+          assayTypeMap: datasetTypeMap,
+        });
       },
     },
     {
@@ -102,10 +98,12 @@ function HuBMAPDatasetsChart() {
       dropdownLabel: 'Donor Sex',
       keys: getKeysFromAggregatedData(donorSexBuckets),
       getBarHref: (d) => {
-        const { organ } = d.bar.data;
-        const donorSex = d.key;
-        const href = `/search?entity_type[0]=Dataset&origin_samples.mapped_organ[0]=${organ}&donor.mapped_metadata.sex[0]=${donorSex}`;
-        return href;
+        const organTerms = [String(d.bar.data.organ)];
+        return getSearchURL({
+          entityType: 'Dataset',
+          organTerms,
+          donorSex: d.key,
+        });
       },
     },
     {
@@ -114,10 +112,12 @@ function HuBMAPDatasetsChart() {
       dropdownLabel: 'Donor Race',
       keys: getKeysFromAggregatedData(donorRaceBuckets),
       getBarHref: (d) => {
-        const { organ } = d.bar.data;
-        const donorRace = d.key;
-        const href = `/search?entity_type[0]=Dataset&origin_samples.mapped_organ[0]=${organ}&donor.mapped_metadata.race[0]=${donorRace}`;
-        return href;
+        const organTerms = [String(d.bar.data.organ)];
+        return getSearchURL({
+          entityType: 'Dataset',
+          organTerms,
+          donorRace: d.key,
+        });
       },
     },
     {
@@ -126,10 +126,12 @@ function HuBMAPDatasetsChart() {
       dropdownLabel: 'Analyte Class',
       keys: getKeysFromAggregatedData(analyteClassBuckets),
       getBarHref: (d) => {
-        const { organ } = d.bar.data;
-        const analyteClass = d.key;
-        const href = `/search?entity_type[0]=Dataset&origin_samples.mapped_organ[0]=${organ}&analyte_class[0]=${analyteClass}`;
-        return href;
+        const organTerms = [String(d.bar.data.organ)];
+        return getSearchURL({
+          entityType: 'Dataset',
+          organTerms,
+          donorSex: d.key,
+        });
       },
     },
     {
@@ -138,10 +140,12 @@ function HuBMAPDatasetsChart() {
       dropdownLabel: 'Processing Status',
       keys: getKeysFromAggregatedData(processingStatusBuckets),
       getBarHref: (d) => {
-        const { organ } = d.bar.data;
-        const processingStatus = d.key;
-        const href = `search?entity_type[0]=Dataset&origin_samples.mapped_organ[0]=${organ}&processing_status[0]=${processingStatus}`;
-        return href;
+        const organTerms = [String(d.bar.data.organ)];
+        return getSearchURL({
+          entityType: 'Dataset',
+          organTerms,
+          processingStatus: d.key,
+        });
       },
     },
   ];

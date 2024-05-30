@@ -48,6 +48,7 @@ const TruncatedText = styled(Typography)(overflowCss);
 const TruncatedLink = styled(InternalLink)({
   ...overflowCss,
   display: 'block', // text-overflow only applies to block elements
+  maxWidth: 'fit-content',
 });
 
 const RightTextWrapper = styled(Box)(({ theme }) => ({

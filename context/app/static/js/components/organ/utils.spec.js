@@ -12,12 +12,19 @@ test('construct search url w/o assay', () => {
 });
 
 test('construct search url w/ assay', () => {
-  const searchURL = getSearchURL({ entityType: 'Whatever', organTerms: ['Nose'], assay: ['something FISH'] });
+  const searchURL = getSearchURL({
+    entityType: 'Whatever',
+    organTerms: ['Nose'],
+    assay: ['something FISH'],
+    assayTypeMap: { 'something FISH': ['abc', 'def', 'ghi'] },
+  });
   const [path, query] = searchURL.split('?');
   expect(path).toEqual('/search');
   expect(decodeURI(query).split('&')).toEqual([
     'entity_type[0]=Whatever',
     'origin_samples.mapped_organ[0]=Nose',
-    'mapped_data_types[0]=something+FISH',
+    'raw_dataset_type_keyword-assay_display_name_keyword[something+FISH][0]=abc',
+    'raw_dataset_type_keyword-assay_display_name_keyword[something+FISH][1]=def',
+    'raw_dataset_type_keyword-assay_display_name_keyword[something+FISH][2]=ghi',
   ]);
 });
