@@ -4,6 +4,12 @@ The portal has many dependencies:
 Git submodules and Python and NodeJS packages are summarized here;
 The services the portal relies on are [listed separately](/services).
 
+## Git submodules
+
+```
+
+```
+
 ## Python packages
 
 `requirements.in`:
