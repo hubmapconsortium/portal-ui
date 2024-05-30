@@ -12,7 +12,7 @@ def client():
 
 @pytest.mark.parametrize(
     'name,status',
-    [('Kidney (Left)', '302 FOUND'),
+    [('Kidney (Left)', '200 OK'),  # We now strip the (Left) part
      ('Small Intestine', '200 OK'),
      ('kidney', '200 OK'),
      ('small-intestine', '200 OK'),
