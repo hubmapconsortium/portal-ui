@@ -51,7 +51,9 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href }: StackedBa
     [categoricalAxis]: bar[categoricalAxis] + Math.max(0, bar[thickness] - maxBarThickness) / 2,
   };
 
-  const rect = <StyledRect fill={bar.color} {...mappedProps} $showHover={Boolean(hoverProps)} {...hoverProps} />;
+  const rect = (
+    <StyledRect fill={bar.color} {...mappedProps} $showHover={Boolean(hoverProps) || Boolean(href)} {...hoverProps} />
+  );
   if (href) {
     return (
       <a href={href} target="_parent">
