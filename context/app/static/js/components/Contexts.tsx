@@ -66,6 +66,7 @@ export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataCo
 export const useFlaskDataContext = () => useContext(FlaskDataContext);
 
 interface AppContextType {
+  elasticsearchEndpoint: string;
   assetsEndpoint: string;
   groupsToken: string;
   workspacesToken: string;
