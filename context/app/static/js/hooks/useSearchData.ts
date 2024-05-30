@@ -238,7 +238,7 @@ export function useAllSearchIDs(
     ...swrConfigRest,
   });
 
-  return { allSearchIDs: data?.flat() ?? [], totalHitsCount };
+  return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount };
 }
 
 // Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.

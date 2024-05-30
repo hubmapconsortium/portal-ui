@@ -9,19 +9,23 @@ import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
 import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
-// TODO: Reenable when DatasetsBarChart is updated
-// import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
+import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
 
+import { OrganFile } from 'js/components/organ/types';
 import { FlexRow, Content } from './style';
 
-function Organ({ organ }) {
-  const summaryId = 'Summary';
-  const hraId = 'Human Reference Atlas';
-  const referenceId = 'Reference-Based Analysis';
-  const assaysId = 'Assays';
-  const samplesId = 'Samples';
+interface OrganProps {
+  organ: OrganFile;
+}
 
+const summaryId = 'Summary';
+const hraId = 'Human Reference Atlas';
+const referenceId = 'Reference-Based Analysis';
+const assaysId = 'Assays';
+const samplesId = 'Samples';
+
+function Organ({ organ }: OrganProps) {
   const shouldDisplaySearch = organ.search.length > 0;
 
   const shouldDisplaySection = {
@@ -67,7 +71,7 @@ function Organ({ organ }) {
         {shouldDisplaySection[assaysId] && (
           <Section id={assaysId}>
             <Assays organTerms={organ.search} />
-            {/* <DatasetsBarChart name={organ.name} search={organ.search} /> */}
+            <DatasetsBarChart search={organ.search} />
           </Section>
         )}
         {shouldDisplaySection[samplesId] && (
