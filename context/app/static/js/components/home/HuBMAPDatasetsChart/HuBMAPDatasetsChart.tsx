@@ -34,7 +34,8 @@ import {
   useSearchDataRange,
 } from './hooks';
 
-const margin = { top: 40, right: 50, bottom: 64, left: 100 };
+// Margins in figma are 32 pixels everywhere except the bottom
+const margin = { top: 32, right: 32, bottom: 64, left: 32 };
 
 const getOrgan = (d: AggregatedDatum) => d.organ as string;
 
