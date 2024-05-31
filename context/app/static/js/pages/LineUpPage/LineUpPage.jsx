@@ -9,7 +9,7 @@ import 'lineupjsx/build/LineUpJSx.css';
 import Paper from '@mui/material/Paper';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import metadataFieldTypes from 'metadata-field-types';
+import { useMetadataFieldTypes } from 'js/hooks/useUBKG';
 
 function LineUpPage({ entities }) {
   const { dataKeys, normalizedEntities } = useMemo(() => {
@@ -54,6 +54,12 @@ function LineUpPage({ entities }) {
     'library_adapter_sequence',
     'library_id',
   ]);
+
+  const { data: metadataFieldTypes } = useMetadataFieldTypes();
+
+  if (Object.keys(metadataFieldTypes).length === 0) {
+    return null;
+  }
 
   const columns = dataKeys.map((key) => {
     if (metadataFieldTypes[key] === 'number' || metadataFieldTypes[key] === 'integer') {
