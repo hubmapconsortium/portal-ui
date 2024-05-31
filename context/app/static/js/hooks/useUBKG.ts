@@ -34,6 +34,9 @@ const useUbkg = () => {
       get fieldDescriptions() {
         return `${ubkgEndpoint}/field-descriptions`;
       },
+      get fieldTypes() {
+        return `${ubkgEndpoint}/field-types`;
+      },
     }),
     [ubkgEndpoint],
   );
@@ -219,41 +222,54 @@ export const useCellTypeOntologyDetail = (cellTypeId: string) => {
   }
   return { data: data?.[0], ...swr };
 };
-
 interface Description {
   // HMFIELD refers to legacy metadata.
   source: 'HMFIELD' | 'CEDAR';
   description: string;
 }
-interface MetadataFieldDescription {
-  code_ids: string[][];
+
+type XSDType = 'string' | 'float' | 'anyURI' | 'int' | 'integer' | 'decimal' | 'boolean' | 'dateTime' | 'date' | 'long';
+type HMFIELDType = 'string' | 'number' | 'integer' | 'boolean' | 'datetime' | 'date';
+type MetadataType =
+  | {
+      mapping_source: 'HMFIELD' | 'CEDAR';
+      type: XSDType;
+      type_source: 'XSD';
+    }
+  | {
+      mapping_source: 'HMFIELD';
+      type: HMFIELDType;
+      type_source: 'HMFIELD';
+    };
+
+export interface MetadataField {
+  code_ids: string[];
   name: string;
+}
+
+interface MetadataFieldDescription extends MetadataField {
   descriptions: Description[];
 }
 
-type MetadataFieldDescriptions = MetadataFieldDescription[];
-
-type MetadataFieldDescriptionMap = Record<string, string>;
-
-function findBestDescription(descriptions: Description[]) {
-  if (descriptions.length === 0) {
-    return undefined;
-  }
-  const cedarDescription = descriptions.find((description) => description?.source === 'CEDAR');
-
-  return (cedarDescription ?? descriptions[0]).description;
+interface MetadataFieldType extends MetadataField {
+  types: MetadataType[];
 }
 
-function buildFieldsMap(fields: MetadataFieldDescriptions) {
+export function buildFieldsMap<T extends MetadataField>({
+  fields,
+  getValue,
+}: {
+  fields: T[];
+  getValue: (field: T) => string;
+}) {
   if (!fields) {
     return {};
   }
 
-  const fieldsMap = fields.reduce<MetadataFieldDescriptionMap>((acc, { name, descriptions }) => {
-    const description = findBestDescription(descriptions);
-
-    if (description) {
-      return { ...acc, [name]: description };
+  const fieldsMap = fields.reduce<Record<string, string>>((acc, field) => {
+    const value = getValue(field);
+    if (value) {
+      return { ...acc, [field.name]: value };
     }
     return acc;
   }, {});
@@ -261,13 +277,69 @@ function buildFieldsMap(fields: MetadataFieldDescriptions) {
   return fieldsMap;
 }
 
-async function fetchDescriptions(url: string) {
-  const data = await fetcher<MetadataFieldDescriptions>({ url });
-  return buildFieldsMap(data);
+export function mapXSDTypetoHMFIELD(type: string) {
+  switch (type) {
+    case 'anyURI':
+      return 'string';
+    case 'float':
+    case 'decimal':
+    case 'long':
+      return 'number';
+    case 'int':
+      return 'integer';
+    case 'dateTime':
+      return 'datetime';
+    default:
+      return type;
+  }
 }
 
-export const useMetadataFieldDescriptions = () => {
-  const { data, ...swr } = useSWR<MetadataFieldDescriptionMap | Record<string, never>>(
+export function findBestType(types: MetadataType[]) {
+  const hmtype = types.find((t) => t?.type_source === 'HMFIELD');
+
+  return hmtype?.type ?? mapXSDTypetoHMFIELD(types[0].type);
+}
+
+async function fetchFieldTypes(url: string) {
+  const data = await fetcher<MetadataFieldType[]>({ url });
+  return buildFieldsMap({ fields: data, getValue: (f) => findBestType(f.types) });
+}
+
+export const useMetadataFieldTypes = () => {
+  const { data, ...swr } = useSWR<Record<string, string> | Record<string, never>>(
+    useUbkg().fieldTypes,
+    (url: string) => fetchFieldTypes(url),
+    {
+      fallbackData: {},
+    },
+  );
+
+  return { data: data ?? {}, ...swr };
+};
+
+export function findBestDescription(descriptions: Description[]) {
+  const cedarDescription = descriptions.find((description) => description?.source === 'CEDAR');
+
+  return (cedarDescription ?? descriptions[0]).description;
+}
+
+async function fetchDescriptions(url: string) {
+  const data = await fetcher<MetadataFieldDescription[]>({ url });
+  return buildFieldsMap<MetadataFieldDescription>({
+    fields: data,
+    getValue: (f) => {
+      const descriptions = f?.descriptions;
+      if (descriptions) {
+        return findBestDescription(descriptions);
+      }
+      return '';
+    },
+  });
+}
+
+// Since both flask and js depend on manipulated field descriptions, get them from flask for now in the hook below. Keeping this here for future use.
+export const useMFD = () => {
+  const { data, ...swr } = useSWR<Record<string, string> | Record<string, never>>(
     useUbkg().fieldDescriptions,
     (url: string) => fetchDescriptions(url),
     {
@@ -278,7 +350,10 @@ export const useMetadataFieldDescriptions = () => {
   return { data: data ?? {}, ...swr };
 };
 
-// TODO:
-// export const useCellTypeList = (starts_with: string)
-// export const useProteinDetail = (proteinId: string)
-// export const useProteinList = (starts_with: string)
+export const useMetadataFieldDescriptions = () => {
+  const { data, ...swr } = useSWR<Record<string, string>>('/metadata/descriptions', (url: string) => fetcher({ url }), {
+    fallbackData: {},
+  });
+
+  return { data: data ?? {}, ...swr };
+};

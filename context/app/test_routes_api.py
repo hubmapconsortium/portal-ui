@@ -24,6 +24,23 @@ mock_es = {
     }
 }
 
+mock_ontology_descriptions = [
+    {
+        'name': 'age_unit',
+        'descriptions': [{
+            'description': 'Unit for age measurement.',
+            'source': 'HMFIELD'
+        }]
+    },
+    {
+        'name': 'age_value',
+        'descriptions': [{
+            'description': 'The time elapsed since birth.',
+            'source': 'HMFIELD'
+        }]
+    }
+]
+
 tab = '\t'
 extra_fields = [
     'created_by_user_displayname', 'created_by_user_email', 'created_timestamp',
@@ -49,6 +66,20 @@ def mock_es_post(path, **kwargs):
     return MockResponse()
 
 
+def mock_es_get(path, **kwargs):
+    class MockResponse():
+        def __init__(self):
+            self.status_code = 0  # _request requires a status code
+            self.text = 'Logger call requires this'
+
+        def json(self):
+            return mock_ontology_descriptions
+
+        def raise_for_status(self):
+            pass
+    return MockResponse()
+
+
 def tsv_assertions(response):
     assert response.status == '200 OK'
     assert response.get_data(as_text=True) == mock_tsv
@@ -60,12 +91,14 @@ def tsv_assertions(response):
 
 def test_tsv_get(client, mocker):
     mocker.patch('requests.post', side_effect=mock_es_post)
+    mocker.patch('requests.get', side_effect=mock_es_get)
     response = client.get('/metadata/v0/donors.tsv')
     tsv_assertions(response)
 
 
 def test_tsv_post(client, mocker):
     mocker.patch('requests.post', side_effect=mock_es_post)
+    mocker.patch('requests.get', side_effect=mock_es_get)
     response = client.post('/metadata/v0/donors.tsv', json={'uuids': []})
     tsv_assertions(response)
 

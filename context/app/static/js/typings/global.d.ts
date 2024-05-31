@@ -15,26 +15,6 @@ declare module '*.yaml' {
   export default data;
 }
 
-declare module 'metadata-field-entities' {
-  const data: Record<string, string>;
-  export default data;
-}
-
-declare module 'metadata-field-descriptions' {
-  const data: Record<string, string>;
-  export default data;
-}
-
-declare module 'metadata-field-types' {
-  const data: Record<string, string>;
-  export default data;
-}
-
-declare module 'metadata-field-assays' {
-  const data: Record<string, string[]>;
-  export default data;
-}
-
 declare module '*.svg' {
   const ReactComponent: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
   export { ReactComponent };

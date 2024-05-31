@@ -17,7 +17,6 @@ COPY tsconfig.json tsconfig.json
 COPY .swcrc .swcrc
 COPY build-utils build-utils
 COPY app app
-COPY ingest-validation-tools ingest-validation-tools
 # portal-visualization is python-only, and not needed for the npm build.
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
