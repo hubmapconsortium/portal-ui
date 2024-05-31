@@ -25,13 +25,12 @@ const PanelBox = styled(Box, {
   ...panelBorderStyles(theme),
   padding: noPadding ? 0 : theme.spacing(2, 3),
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
   maxWidth: 'calc(100vw - 48px)',
   '&:hover': {
     backgroundColor: !noHover && theme.palette.common.hoverShadow,
   },
   [theme.breakpoints.up('md')]: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
   },
 }));
@@ -54,6 +53,9 @@ const TruncatedLink = styled(InternalLink)({
 const RightTextWrapper = styled(Box)(({ theme }) => ({
   flexShrink: 0,
   fontSize: theme.typography.body2.fontSize,
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
   [theme.breakpoints.up('md')]: {
     paddingLeft: theme.spacing(0.5),
   },
