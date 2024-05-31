@@ -66,10 +66,6 @@ const config = {
         type: 'asset/inline',
       },
       {
-        test: /\.ya?ml$/,
-        use: 'yaml-loader',
-      },
-      {
         test: /\.mjs$/,
         include: /node_modules/,
         type: 'javascript/auto',
