@@ -4,15 +4,10 @@ The portal has many dependencies:
 Git submodules and Python and NodeJS packages are summarized here;
 The services the portal relies on are [listed separately](/services).
 
-## Git submodules
-
-```
-
-```
-
 ## Python packages
 
 `requirements.in`:
+
 ```
 # Update requirements.txt if this file changes:
 # pip install pip-tools
@@ -26,7 +21,7 @@ python-datauri>=0.2.8
 python-frontmatter>=0.5.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.14
-# As of 2023-08-24, this is the version of boto3 which is compatible with both the 
+# As of 2023-08-24, this is the version of boto3 which is compatible with both the
 # portal-visualization->vitessce->ome-zarr dependency on aiobotocore~=2.5
 # and the hubmap-commons dependency on boto3>=1.24.47
 boto3==1.28.17
@@ -109,3 +104,7 @@ lxml>=4.9.1
 "zustand": "^4.5.2"
 }
 ```
+
+## Git submodules
+
+The portal UI does not currently depend on any git submodules.
