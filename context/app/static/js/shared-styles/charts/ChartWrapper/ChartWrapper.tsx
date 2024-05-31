@@ -39,7 +39,7 @@ function ChartWrapper({ children, chartTitle, margin, colorScale, dropdown, allK
             scale={colorScale}
             labelMargin="0 15px 0 0"
             shapeStyle={() => ({
-              borderRadius: '3px',
+              borderRadius: '4px',
             })}
           />
         </Box>

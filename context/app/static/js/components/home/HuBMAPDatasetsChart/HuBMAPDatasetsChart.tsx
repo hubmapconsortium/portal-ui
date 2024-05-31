@@ -1,4 +1,5 @@
 import React, { ComponentProps } from 'react';
+import Paper from '@mui/material/Paper';
 
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import { useSelectedDropdownIndex } from 'js/shared-styles/dropdowns/DropdownListbox';
@@ -33,7 +34,7 @@ import {
   useSearchDataRange,
 } from './hooks';
 
-const margin = { top: 40, right: 50, bottom: 100, left: 100 };
+const margin = { top: 40, right: 50, bottom: 64, left: 100 };
 
 const getOrgan = (d: AggregatedDatum) => d.organ as string;
 
@@ -162,36 +163,39 @@ function HuBMAPDatasetsChart() {
   if (!selectedColor.data.length || !organOrder) return <Skeleton height="500px" />;
 
   return (
-    <ChartArea>
-      <ChartWrapper
-        margin={margin}
-        colorScale={colorScale}
-        allKeysScale={allKeysScale}
-        dropdown={
-          <HuBMAPDatasetsChartDropdown
-            colorDataOptions={colorOptions.map((c) => c.dropdownLabel)}
-            selectedColorDataIndex={selectedColorDataIndex}
-            setSelectedColorDataIndex={setSelectedColorDataIndex}
-          />
-        }
-      >
-        <HorizontalStackedBarChart<AggregatedDatum, typeof xScale, typeof yScale>
-          visxData={selectedColor.data}
-          xScale={xScale}
-          yScale={yScale}
-          yAxisTickLabels={organOrder}
-          keys={selectedColor.keys}
+    <Paper sx={{ pr: 4 }}>
+      <ChartArea>
+        <ChartWrapper
           margin={margin}
           colorScale={colorScale}
-          getY={getOrgan}
-          xAxisLabel=""
-          yAxisLabel="Organ"
-          showTooltipAndHover
-          TooltipContent={HuBMAPDatasetsChartTooltip}
-          getBarHref={selectedColor.getBarHref}
-        />
-      </ChartWrapper>
-    </ChartArea>
+          allKeysScale={allKeysScale}
+          dropdown={
+            <HuBMAPDatasetsChartDropdown
+              colorDataOptions={colorOptions.map((c) => c.dropdownLabel)}
+              selectedColorDataIndex={selectedColorDataIndex}
+              setSelectedColorDataIndex={setSelectedColorDataIndex}
+            />
+          }
+        >
+          <HorizontalStackedBarChart<AggregatedDatum, typeof xScale, typeof yScale>
+            visxData={selectedColor.data}
+            xScale={xScale}
+            yScale={yScale}
+            yAxisTickLabels={organOrder}
+            keys={selectedColor.keys}
+            margin={margin}
+            colorScale={colorScale}
+            xAxisLabel="Number of Datasets"
+            yAxisLabel="Organ"
+            srOnlyLabels
+            getY={getOrgan}
+            showTooltipAndHover
+            TooltipContent={HuBMAPDatasetsChartTooltip}
+            getBarHref={selectedColor.getBarHref}
+          />
+        </ChartWrapper>
+      </ChartArea>
+    </Paper>
   );
 }
 

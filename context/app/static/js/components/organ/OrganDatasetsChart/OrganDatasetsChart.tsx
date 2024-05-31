@@ -71,7 +71,8 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
       yAxisTickLabels={formattedOrganDatasetTypeData.map((d) => d.datasetType)}
       getY={(d) => d.datasetType}
       yAxisLabel="Assay Type"
-      xAxisLabel=""
+      xAxisLabel="Number of Datasets"
+      srOnlyLabels
       showTooltipAndHover={hasMultipleSearchTerms}
       getBarHref={(d) =>
         getSearchURL({

@@ -11,8 +11,21 @@ import { Accessor, BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
 import { OrdinalScale, useChartTooltip, useHorizontalChart } from 'js/shared-styles/charts/hooks';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
+import { TextProps } from '@visx/text';
 import { TICK_LABEL_SIZE } from '../constants';
 import { TooltipData, tooltipHasBarData } from '../types';
+
+const srOnlyLabelStyles: Partial<TextProps> = {
+  style: {
+    clip: 'rect(0 0 0 0)',
+    clipPath: 'inset(50%)',
+    height: '1px',
+    overflow: 'hidden',
+    position: 'absolute',
+    whiteSpace: 'nowrap',
+    width: '1px',
+  },
+};
 
 interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>
   extends WithParentSizeProvidedProps {
@@ -27,6 +40,7 @@ interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, Y
   margin: Record<'top' | 'right' | 'bottom' | 'left', number>;
   xAxisLabel: string;
   yAxisLabel: string;
+  srOnlyLabels?: boolean;
   TooltipContent?: React.ComponentType<{ tooltipData: TooltipData<Datum> }>;
   yAxisTickLabels: string[];
   // barHeight = yScale(y0(bar)) - yScale(y1(bar))
@@ -65,6 +79,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   // getTickValues,
   showTooltipAndHover = true,
   getBarHref,
+  srOnlyLabels,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
     margin,
@@ -91,6 +106,8 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   if (visxData.length === 0) {
     return null;
   }
+
+  const axisLabelProps = srOnlyLabels ? srOnlyLabelStyles : undefined;
 
   return (
     <>
@@ -142,6 +159,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
             stroke="black"
             numTicks={yAxisTickLabels.length}
             label={yAxisLabel}
+            labelProps={axisLabelProps}
             labelOffset={longestLabelSize + 10}
             tickLabelProps={() => ({
               fill: 'black',
@@ -157,6 +175,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
             stroke="black"
             tickStroke="black"
             label={xAxisLabel}
+            labelProps={axisLabelProps}
             tickLabelProps={() => ({
               fill: 'black',
               fontSize: TICK_LABEL_SIZE,
