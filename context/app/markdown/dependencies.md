@@ -1,7 +1,7 @@
 # Dependencies
 
 The portal has many dependencies:
-Git submodules and Python and NodeJS packages are summarized here;
+Python and NodeJS packages are summarized here;
 The services the portal relies on are [listed separately](/services).
 
 ## Python packages
@@ -104,7 +104,3 @@ lxml>=4.9.1
 "zustand": "^4.5.2"
 }
 ```
-
-## Git submodules
-
-The portal UI does not currently depend on any git submodules.
