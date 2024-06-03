@@ -1,13 +1,21 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Tile from 'js/shared-styles/tiles/Tile';
 import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
 import { Flex, StyledDiv, BodyWrapper } from './style';
+import { EntityData } from '../EntityTile/types';
 
 const thumbnailDimension = 80;
-function EntityTileBody({ entity_type, id, entityData, invertColors }) {
+
+interface EntityTileBodyProps {
+  entity_type: string;
+  id: string;
+  invertColors?: boolean;
+  entityData: EntityData;
+}
+
+function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTileBodyProps) {
   const { thumbnail_file } = entityData;
   return (
     <BodyWrapper $thumbnailDimension={thumbnailDimension}>
@@ -19,13 +27,13 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }) {
         {entity_type === 'Donor' && 'mapped_metadata' in entityData && (
           <>
             <Flex>
-              <Tile.Text>{entityData.mapped_metadata.sex}</Tile.Text>
+              <Tile.Text>{entityData.mapped_metadata?.sex}</Tile.Text>
               <Tile.Divider invertColors={invertColors} />
               <Tile.Text>
-                {entityData.mapped_metadata.age_value} {entityData.mapped_metadata.age_unit}
+                {entityData.mapped_metadata?.age_value} {entityData.mapped_metadata?.age_unit}
               </Tile.Text>
             </Flex>
-            <Tile.Text>{entityData.mapped_metadata.race.join(', ')}</Tile.Text>
+            <Tile.Text>{entityData.mapped_metadata?.race.join(', ')}</Tile.Text>
           </>
         )}
       </StyledDiv>
@@ -40,17 +48,5 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }) {
     </BodyWrapper>
   );
 }
-
-EntityTileBody.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  entityData: PropTypes.object.isRequired,
-  entity_type: PropTypes.string.isRequired,
-  id: PropTypes.string.isRequired,
-  invertColors: PropTypes.bool,
-};
-
-EntityTileBody.defaultProps = {
-  invertColors: false,
-};
 
 export default EntityTileBody;

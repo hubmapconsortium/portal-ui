@@ -26,6 +26,7 @@ export interface Donor extends Entity {
 export interface Sample extends Entity {
   entity_type: 'Sample';
   mapped_organ: string;
+  organ: string;
   metadata?: Record<string, string>;
 }
 
