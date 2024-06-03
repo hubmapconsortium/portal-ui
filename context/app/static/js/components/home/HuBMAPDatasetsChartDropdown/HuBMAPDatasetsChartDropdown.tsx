@@ -4,7 +4,17 @@ import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { SelectionButton } from './style';
 
-function HuBMAPDatasetsChartDropdown({ colorDataOptions, selectedColorDataIndex, setSelectedColorDataIndex }) {
+interface DatasetsChartDropdownProps {
+  colorDataOptions: string[];
+  selectedColorDataIndex: number;
+  setSelectedColorDataIndex: ({ i }: { i: number }) => void;
+}
+
+function HuBMAPDatasetsChartDropdown({
+  colorDataOptions,
+  selectedColorDataIndex,
+  setSelectedColorDataIndex,
+}: DatasetsChartDropdownProps) {
   return (
     <DropdownListbox
       id="bar-fill-dropdown"
@@ -13,8 +23,9 @@ function HuBMAPDatasetsChartDropdown({ colorDataOptions, selectedColorDataIndex,
       selectedOptionIndex={selectedColorDataIndex}
       options={colorDataOptions}
       selectOnClick={setSelectedColorDataIndex}
-      getOptionLabel={(v) => v.name}
-      buttonProps={{ variant: 'outlined', color: 'primary' }}
+      // TODO: improve this when DropdownListbox is converted to TypeScript
+      getOptionLabel={(v) => v as string}
+      buttonProps={{ variant: 'outlined', color: 'primary', fullWidth: true }}
     />
   );
 }

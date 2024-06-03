@@ -29,7 +29,7 @@ function DatasetPanel({
       href={`/browse/dataset/${uuid}`}
       secondaryText={`${hubmap_id} | ${group_name} | ${format(last_modified_timestamp, 'yyyy-MM-dd')}`}
       small
-      icon={<URLSvgIcon iconURL={iconUrl!} ariaLabel="Dataset containing {organ}" flexShrink={0} />}
+      icon={<URLSvgIcon iconURL={iconUrl!} ariaLabel={`Dataset containing ${organ}`} display="inline-block" />}
     />
   );
 }

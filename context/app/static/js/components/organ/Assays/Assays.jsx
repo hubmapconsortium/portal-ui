@@ -12,11 +12,14 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useSearchData from 'js/hooks/useSearchData';
 import { HeaderCell } from 'js/shared-styles/tables';
+import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 
 import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
 import { getSearchURL } from '../utils';
 
 function Assays({ organTerms }) {
+  const assayTypeMap = useDatasetTypeMap();
+
   const query = useMemo(
     () => ({
       size: 0,
@@ -41,8 +44,8 @@ function Assays({ organTerms }) {
             },
           },
           aggs: {
-            'mapped_data_types.keyword': { terms: { field: 'mapped_data_types.keyword', size: 100 } },
-            'mapped_data_types.keyword_count': { cardinality: { field: 'mapped_data_types.keyword' } },
+            'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 100 } },
+            'assay_display_name.keyword_count': { cardinality: { field: 'assay_display_name.keyword' } },
           },
         },
       },
@@ -52,7 +55,7 @@ function Assays({ organTerms }) {
 
   const { searchData } = useSearchData(query);
   const buckets = searchData.aggregations
-    ? searchData.aggregations.mapped_data_types['mapped_data_types.keyword'].buckets
+    ? searchData.aggregations.mapped_data_types['assay_display_name.keyword'].buckets
     : [];
 
   return (
@@ -90,7 +93,7 @@ function Assays({ organTerms }) {
             <TableRow key={bucket.key}>
               <TableCell>
                 <InternalLink
-                  href={getSearchURL({ entityType: 'Dataset', organTerms, assay: bucket.key })}
+                  href={getSearchURL({ entityType: 'Dataset', organTerms, mappedAssay: bucket.key, assayTypeMap })}
                   variant="body2"
                 >
                   {bucket.key}

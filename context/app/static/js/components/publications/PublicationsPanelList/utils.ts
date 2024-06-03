@@ -40,7 +40,7 @@ function buildPublicationPanelProps(
   }: PublicationHit,
   noRightText?: boolean,
 ) {
-  const dateText = `${publication_status ? 'Published' : 'Preprint Date'} ${publication_date}`;
+  const dateText = `${publication_status ? 'Published' : 'Preprint Date'}: ${publication_date}`;
   return {
     key: uuid,
     href: `/browse/publication/${uuid}`,

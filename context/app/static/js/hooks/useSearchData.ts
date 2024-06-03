@@ -94,6 +94,31 @@ const defaultConfig = {
   fallbackData: {},
 };
 
+// Legacy adapter for `useSearchkitSDK.js` and array-based keys
+export async function fetchSearchData<Documents, Aggs>(
+  query: SearchRequest,
+  url: string,
+  token: string,
+): Promise<SearchResponseBody<Documents, Aggs>> {
+  const body = createSearchRequestBody({ query, useDefaultQuery: false });
+  const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
+  const searchResponse = await fetch<SearchResponseBody<Documents, Aggs> & Response>({
+    url,
+    requestInit,
+    expectedStatusCodes: [200, 303],
+    returnResponse: true,
+  });
+
+  if (searchResponse?.status === 303) {
+    const s3URL = await searchResponse.text();
+    return fetch({
+      url: s3URL,
+    });
+  }
+
+  return searchResponse.json() as Promise<SearchResponseBody<Documents, Aggs>>;
+}
+
 export default function useSearchData<Documents, Aggs>(
   query: SearchRequest,
   {
@@ -189,8 +214,8 @@ function extractIDs(results?: SearchResponseBody<unknown, unknown>) {
   return results?.hits?.hits?.map((hit) => hit._id);
 }
 
-async function fetchAllIDs(...args: Parameters<typeof fetch>) {
-  const results = await fetch<SearchResponseBody<unknown, unknown>>(...args);
+async function fetchAllIDs(...args: Parameters<typeof fetchSearchData>) {
+  const results = await fetchSearchData(...args);
   return extractIDs(results);
 }
 
@@ -233,12 +258,14 @@ export function useAllSearchIDs(
     ];
   }, [query, elasticsearchEndpoint, groupsToken, useDefaultQuery, numberOfPagesToRequest]);
 
-  const { data } = useSWRInfinite(getKey, fetchAllIDs, {
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
+  // @ts-expect-error - revisit to make these keys more type safe
+  const { data } = useSWRInfinite(getKey, (args) => fetchAllIDs(...args), {
     fallbackData: [],
     ...swrConfigRest,
   });
 
-  return { allSearchIDs: data?.flat() ?? [], totalHitsCount };
+  return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount };
 }
 
 // Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
@@ -262,7 +289,7 @@ function getCombinedHits(pagesResults: SearchResponseBody<unknown, unknown>[]) {
 
 export function useScrollSearchHits(
   query: SearchRequest,
-  { useDefaultQuery = false, fetcher = fetch, ...swrConfigRest }: UseSearchDataConfig = {
+  { useDefaultQuery = false, fetcher = fetchSearchData, ...swrConfigRest }: UseSearchDataConfig = {
     useDefaultQuery: false,
     fetcher: fetch,
   },
@@ -288,7 +315,9 @@ export function useScrollSearchHits(
 
   const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<SearchResponseBody, SWRError>(
     getKey,
-    fetcher,
+    // TODO: revisit to fix types/make keys more type-safe
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
+    (args) => fetcher(...args),
     {
       fallbackData: [],
       revalidateAll: false,
@@ -330,27 +359,4 @@ export function useSearchTotalHitsCounts(
   );
 
   return { totalHitsCounts: searchData?.map((d) => getTotalHitsCount(d)), isLoading };
-}
-
-// Misc utils
-
-// Legacy adapter for `useSearchkitSDK.js`
-export async function fetchSearchData<Documents, Aggs>(query: SearchRequest, url: string, token: string) {
-  const body = createSearchRequestBody({ query, useDefaultQuery: false });
-  const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
-  const searchResponse = await fetch<SearchResponseBody<Documents, Aggs> & Response>({
-    url,
-    requestInit,
-    expectedStatusCodes: [200, 303],
-    returnResponse: true,
-  });
-
-  if (searchResponse?.status === 303) {
-    const s3URL = await searchResponse.text();
-    return fetch({
-      url: s3URL,
-    });
-  }
-
-  return searchResponse.json();
 }
