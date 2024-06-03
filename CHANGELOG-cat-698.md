@@ -1,0 +1,1 @@
+- Remove "other groups" from profile pages.
