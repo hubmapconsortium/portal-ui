@@ -73,11 +73,6 @@ done
 set -o errexit
 trap 'jobs -p | xargs kill' EXIT
 
-# Install
-git submodule init
-git submodule update
-git config submodule.recurse true # So 'git pull' will update submodules.
-
 CONTEXT=context
 
 if [ "$NO_PIP" -lt 1 ] ; then 

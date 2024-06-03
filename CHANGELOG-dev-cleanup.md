@@ -1,0 +1,1 @@
+- Remove YAML-loading dependencies and remaining references to IVT submodule.
