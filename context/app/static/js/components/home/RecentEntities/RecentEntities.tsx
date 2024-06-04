@@ -21,15 +21,15 @@ function DatasetPanel({
   entity: { title, uuid, hubmap_id, group_name, last_modified_timestamp, origin_samples_unique_mapped_organs: organs },
 }: EntityPanelProps<RecentDataset>) {
   const organ = organs.length ? organs[0] : '';
-  const { data } = useOrgan(organ);
-  const iconUrl = data?.icon;
+  const data = useOrgan(organ);
+  const iconUrl = data?.data?.icon ?? '';
   return (
     <Panel
       title={title}
       href={`/browse/dataset/${uuid}`}
       secondaryText={`${hubmap_id} | ${group_name} | ${format(last_modified_timestamp, 'yyyy-MM-dd')}`}
       small
-      icon={<URLSvgIcon iconURL={iconUrl!} ariaLabel={`Dataset containing ${organ}`} display="inline-block" />}
+      icon={<URLSvgIcon iconURL={iconUrl} ariaLabel={`Dataset containing ${organ}`} display="inline-block" />}
     />
   );
 }
@@ -41,7 +41,7 @@ function RecentDatasets() {
   }
   return (
     <EntityList
-      entityName="Datasets"
+      entityName="Dataset"
       entities={recentDatasets}
       entityComponent={DatasetPanel}
       viewAllLink="/search?entity_type[0]=Dataset"
@@ -62,7 +62,7 @@ function RecentPublications() {
   }
   return (
     <EntityList
-      entityName="Publications"
+      entityName="Publication"
       entities={recentPublications}
       entityComponent={PublicationPanel}
       viewAllLink="/publications"
