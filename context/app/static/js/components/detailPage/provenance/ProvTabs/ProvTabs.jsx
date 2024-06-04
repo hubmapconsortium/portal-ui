@@ -50,7 +50,7 @@ function ProvTabs({ provData }) {
     <Paper>
       <Tabs value={open} onChange={handleChange} aria-label="Provenance Tabs">
         {Object.values(filteredTabs).map(({ label, index, 'data-testid': dataTestID }) => (
-          <Tab label={label} index={index} data-testid={dataTestID} key="label" />
+          <Tab label={label} index={index} data-testid={dataTestID} key={label} />
         ))}
       </Tabs>
       {filteredTabs?.multi && (

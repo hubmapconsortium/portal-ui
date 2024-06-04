@@ -29,7 +29,7 @@ function ProvTableTile({
   const entityData = useEntityData(uuid) as Entity;
 
   useEffect(() => {
-    if (entityData?.descendant_counts.entity_type) {
+    if (entityData?.descendant_counts) {
       setDescendantCounts(entityData.descendant_counts.entity_type);
       setDescendantCountsToDisplay(getTileDescendantCounts(entityData, entity_type));
     }
