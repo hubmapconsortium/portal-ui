@@ -56,15 +56,5 @@ export function useCurrentUserGlobusGroups() {
       description: g.description,
     }));
 
-  const nonHubmapGroups = groups.filter((group) => !currentUserGroups.find((g) => g.key === group));
-
-  if (nonHubmapGroups.length > 0) {
-    currentUserGroups.push({
-      key: 'Other',
-      name: 'Other Groups',
-      description: `You are also part of the following groups: ${nonHubmapGroups.join(', ')}`,
-    });
-  }
-
   return currentUserGroups;
 }
