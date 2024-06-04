@@ -35,7 +35,7 @@ function getFieldFromHitFields(hitFields: HitDoc, identifier: string): HitValues
   if (matchedSamplePath.length > 0) {
     // source_samples and origin_samples are arrays and must be handled accordingly.
     // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
-    return get(hitFields, [matchedSamplePath, '0', ...identifier.split('.').slice(1)].join(''));
+    return get(hitFields, [matchedSamplePath, '0', ...identifier.split('.').slice(1)].join('.'));
   }
 
   return get(hitFields, identifier);
