@@ -1,5 +1,7 @@
 import React from 'react';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
+import TableRow from '@mui/material/TableRow';
+import TableHead from '@mui/material/TableHead';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { getByPath } from './utils';
@@ -7,6 +9,7 @@ import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from '.
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import { HitDoc } from '../types';
+import SortingTableHead from './SortingTableHead';
 
 function ResultCell({ hit, field }: { field: string; hit: SearchHit<HitDoc> }) {
   const source = hit?._source;
@@ -36,6 +39,13 @@ function ResultsTable() {
 
   return (
     <StyledTable data-testid="search-results-table">
+      <TableHead>
+        <TableRow>
+          {Object.entries(sourceFields).map(([field, { label }]) => (
+            <SortingTableHead key={field} field={field} label={label} />
+          ))}
+        </TableRow>
+      </TableHead>
       {hits.map((hit) => (
         <StyledTableBody key={hit._id}>
           <StyledTableRow>

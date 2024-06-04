@@ -3,6 +3,10 @@ import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
+import ArrowUpward from '@mui/icons-material/ArrowUpwardRounded';
+import ArrowDownward from '@mui/icons-material/ArrowDownwardRounded';
+
+import { HeaderCell } from 'js/shared-styles/tables';
 
 const StyledTable = styled(Table)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
@@ -56,4 +60,36 @@ const StyledTableCell = styled(TableCell)({
   },
 });
 
-export { StyledTable, StyledTableRow, StyledTableBody, StyledTableCell };
+const sharedArrowStyles = {
+  verticalAlign: 'text-top',
+  fontSize: '1.1rem',
+};
+
+const ArrowUpOn = styled(ArrowUpward)({
+  ...sharedArrowStyles,
+});
+
+const ArrowDownOn = styled(ArrowDownward)({
+  ...sharedArrowStyles,
+});
+
+const ArrowDownOff = styled(ArrowDownward)({
+  ...sharedArrowStyles,
+  opacity: '12%',
+});
+
+const StyledHeaderCell = styled(HeaderCell)({
+  cursor: 'pointer',
+  whiteSpace: 'nowrap',
+});
+
+export {
+  StyledTable,
+  StyledTableRow,
+  StyledTableBody,
+  StyledTableCell,
+  ArrowUpOn,
+  ArrowDownOn,
+  ArrowDownOff,
+  StyledHeaderCell,
+};

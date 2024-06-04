@@ -20,9 +20,20 @@ export interface SearchStoreState {
   swrConfig: SWRConfiguration;
 }
 
+export interface SearchStoreActions {
+  setSortField: (sortField: SortField) => void;
+}
+
+export interface SearchStore extends SearchStoreState, SearchStoreActions {}
+
 export const createStore = ({ initialState }: { initialState: SearchStoreState }) =>
-  createStoreImmer<SearchStoreState>(() => ({
+  createStoreImmer<SearchStore>((set) => ({
     ...initialState,
+    setSortField: (sortField) => {
+      set((state) => {
+        state.sortField = sortField;
+      });
+    },
   }));
 
 const [SearchStoreProvider, useSearchStore, SearchStoreContext] = createStoreContext(createStore, 'Search');
