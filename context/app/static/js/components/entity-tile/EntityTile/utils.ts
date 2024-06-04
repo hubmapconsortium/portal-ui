@@ -10,7 +10,9 @@ function filterDescendantCountsByType(descendant_counts: DescendantCounts['entit
 }
 
 function getTileDescendantCounts(source: object, type: string) {
-  const defaultDescendantCounts = ['Donor', 'Sample'].includes(type) ? { Sample: 0, Dataset: 0 } : { Dataset: 0 };
+  const defaultDescendantCounts: Record<string, number> = ['Donor', 'Sample'].includes(type)
+    ? { Sample: 0, Dataset: 0 }
+    : { Dataset: 0 };
   if ('descendant_counts' in source === false) return defaultDescendantCounts;
   const counts = source.descendant_counts as DescendantCounts;
   return { ...defaultDescendantCounts, ...filterDescendantCountsByType(counts.entity_type, type) };

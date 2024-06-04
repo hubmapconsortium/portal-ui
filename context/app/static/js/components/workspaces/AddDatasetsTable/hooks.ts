@@ -1,7 +1,7 @@
 import { useState, SyntheticEvent, useCallback } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { Dataset } from 'js/components/Contexts';
+import { Dataset } from 'js/components/types';
 import { useWorkspaceDetail } from '../hooks';
 
 interface BuildIDPrefixQueryType {

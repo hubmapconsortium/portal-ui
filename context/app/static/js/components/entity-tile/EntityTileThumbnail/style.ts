@@ -1,3 +1,4 @@
+import { ComponentType, ImgHTMLAttributes } from 'react';
 import { styled } from '@mui/material/styles';
 
 interface LetterboxedThumbnailProps {
@@ -14,6 +15,6 @@ const LetterboxedThumbnail = styled('img')<LetterboxedThumbnailProps>(
     backgroundColor: 'black',
     display: !$shouldDisplayImage ? 'none' : 'block',
   }),
-);
+) as ComponentType<LetterboxedThumbnailProps & ImgHTMLAttributes<'img'>>;
 
 export { LetterboxedThumbnail };

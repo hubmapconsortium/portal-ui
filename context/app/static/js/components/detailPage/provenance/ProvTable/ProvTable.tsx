@@ -1,13 +1,18 @@
-/* eslint-disable react/no-array-index-key */
 import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
+import { DataEntityType, Entity } from 'js/components/types';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
+
+type ProvEntityType = 'Donor' | 'Sample' | 'Dataset';
+function isProvEntityType(type: string): type is ProvEntityType {
+  return ['Donor', 'Sample', 'Dataset'].includes(type);
+}
 
 function ProvTable() {
   // Make a new list rather modifying old one in place: Caused duplication in UI.
@@ -17,23 +22,26 @@ function ProvTable() {
 
   const ancestorsAndSelfByType = ancestorsAndSelf.reduce(
     (acc, entity) => {
-      if (acc?.[entity.entity_type]) {
-        acc[entity.entity_type].push(entity);
+      const entityType: DataEntityType = entity.entity_type;
+      if (isProvEntityType(entityType)) {
+        acc[entityType].push(entity);
       }
       return acc;
     },
-    { Donor: [], Sample: [], Dataset: [] },
+    { Donor: [], Sample: [], Dataset: [] } as Record<ProvEntityType, Entity[]>,
   );
 
   const descendantEntityCounts = assayMetadata.descendant_counts.entity_type || {};
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
+  const entries = Object.entries(ancestorsAndSelfByType);
+
   return (
     <FlexContainer>
-      {Object.entries(ancestorsAndSelfByType).map(([type, entities]) => (
+      {entries.map(([type, entities]) => (
         <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
           <ProvTableEntityHeader>
-            <StyledSvgIcon component={entityIconMap[type]} color="primary" />
+            <StyledSvgIcon as={entityIconMap[type as DataEntityType]} color="primary" />
             <Typography variant="h5">{type}s</Typography>
           </ProvTableEntityHeader>
           <FlexColumn>

@@ -1,16 +1,18 @@
-import { Donor, Sample, Dataset } from 'js/components/Contexts';
+import {
+  Donor,
+  Sample,
+  Dataset,
+  DataEntityType,
+  DatasetEntityType,
+  DonorEntityType,
+  SampleEntityType,
+} from 'js/components/types';
 import { get } from './nodash';
 
 const donorMetadataPath = 'mapped_metadata';
 const sampleMetadataPath = 'metadata';
 
-type DonorEntityType = 'Donor';
-type SampleEntityType = 'Sample';
-type DatasetEntityType = 'Dataset';
-
-type EntityType = DonorEntityType | SampleEntityType | DatasetEntityType;
-
-const paths: Record<EntityType, Partial<Record<EntityType, string>>> = {
+const paths: Record<DataEntityType, Partial<Record<DataEntityType, string>>> = {
   Donor: {
     Donor: donorMetadataPath,
   },

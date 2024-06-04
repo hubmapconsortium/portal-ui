@@ -1,21 +1,22 @@
-import React, { ComponentType } from 'react';
+import React, { ComponentProps, ComponentType } from 'react';
 
 import Tile from 'js/shared-styles/tiles/Tile/';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { Entity } from 'js/components/types';
 import EntityTileFooter from '../EntityTileFooter/index';
 import EntityTileBody from '../EntityTileBody/index';
 import { StyledIcon } from './style';
-import { EntityData } from './types';
 
 const tileWidth = 310;
 
-interface EntityTileProps {
+interface EntityTileProps
+  extends Omit<ComponentProps<typeof Tile>, 'icon' | 'bodyContent' | 'footerContent' | 'tileWidth'> {
   uuid: string;
   entity_type: string;
   id: string;
   invertColors?: boolean;
-  entityData: EntityData;
+  entityData: Partial<Entity>;
   descendantCounts: Record<string, number>;
 }
 

@@ -1,20 +1,35 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
+import React, { useState, useEffect, ComponentProps } from 'react';
 
 import useEntityData from 'js/hooks/useEntityData';
 import EntityTile from 'js/components/entity-tile/EntityTile';
 import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
+import { Entity } from 'js/components/types';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import { DownIcon } from './style';
 
-function ProvTableTile({ uuid, entity_type, id, isCurrentEntity, isSampleSibling, isFirstTile, isLastTile, ...rest }) {
-  const [descendantCounts, setDescendantCounts] = useState({});
-  const [descendantCountsToDisplay, setDescendantCountsToDisplay] = useState({});
+interface ProvTableTileProps extends Omit<ComponentProps<typeof EntityTile>, 'entityData' | 'descendantCounts'> {
+  isCurrentEntity: boolean;
+  isSampleSibling: boolean;
+  isFirstTile: boolean;
+  isLastTile: boolean;
+}
+
+function ProvTableTile({
+  uuid,
+  entity_type,
+  isCurrentEntity,
+  isSampleSibling,
+  isFirstTile,
+  isLastTile,
+  ...rest
+}: ProvTableTileProps) {
+  const [descendantCounts, setDescendantCounts] = useState<Record<string, number>>({});
+  const [descendantCountsToDisplay, setDescendantCountsToDisplay] = useState<Record<string, number>>({});
   // mapped fields are not included in ancestor object
-  const entityData = useEntityData(uuid);
+  const entityData = useEntityData(uuid) as Entity;
 
   useEffect(() => {
-    if (entityData?.descendant_counts) {
+    if (entityData?.descendant_counts.entity_type) {
       setDescendantCounts(entityData.descendant_counts.entity_type);
       setDescendantCountsToDisplay(getTileDescendantCounts(entityData, entity_type));
     }
@@ -27,7 +42,6 @@ function ProvTableTile({ uuid, entity_type, id, isCurrentEntity, isSampleSibling
         <EntityTile
           uuid={uuid}
           entity_type={entity_type}
-          id={id}
           invertColors={isCurrentEntity}
           entityData={entityData}
           descendantCounts={descendantCountsToDisplay}
@@ -40,13 +54,4 @@ function ProvTableTile({ uuid, entity_type, id, isCurrentEntity, isSampleSibling
     </>
   );
 }
-
-ProvTableTile.propTypes = {
-  uuid: PropTypes.string.isRequired,
-  entity_type: PropTypes.string.isRequired,
-  isCurrentEntity: PropTypes.bool.isRequired,
-  isSampleSibling: PropTypes.bool.isRequired,
-  isFirstTile: PropTypes.bool.isRequired,
-};
-
 export default ProvTableTile;

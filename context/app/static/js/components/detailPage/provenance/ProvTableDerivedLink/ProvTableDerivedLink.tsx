@@ -3,7 +3,12 @@ import React from 'react';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { LinkButton } from './style';
 
-function ProvTableDerivedLink({ uuid, type }) {
+interface ProvTableDerivedLinkProps {
+  uuid: string;
+  type: string;
+}
+
+function ProvTableDerivedLink({ uuid, type }: ProvTableDerivedLinkProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
   return (
     <LinkButton
