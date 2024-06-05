@@ -1,18 +1,17 @@
 export type DonorEntityType = 'Donor';
 export type SampleEntityType = 'Sample';
 export type DatasetEntityType = 'Dataset';
-export type DataEntityType = DonorEntityType | SampleEntityType | DatasetEntityType;
-export type CellTypeEntityType = 'CellType';
-export type GeneEntityType = 'Gene';
-export type VerifiedUserEntityType = 'VerifiedUser';
-export type ExternalEntityType = CellTypeEntityType | GeneEntityType | VerifiedUserEntityType;
-export type WorkspaceEntityType = 'Workspace';
 export type SupportEntityType = 'Support';
 export type CollectionEntityType = 'Collection';
 export type PublicationEntityType = 'Publication';
-export type InternalEntityType = WorkspaceEntityType | SupportEntityType | PublicationEntityType | CollectionEntityType;
 
-export type AllEntityTypes = DataEntityType | ExternalEntityType | InternalEntityType;
+export type ESEntityType =
+  | DonorEntityType
+  | SampleEntityType
+  | DatasetEntityType
+  | SupportEntityType
+  | CollectionEntityType
+  | PublicationEntityType;
 
 export type DagProvenanceType =
   | {
@@ -23,7 +22,7 @@ export type DagProvenanceType =
     };
 
 export interface Entity {
-  entity_type: DataEntityType;
+  entity_type: ESEntityType;
   uuid: string;
   hubmap_id: string;
   last_modified_timestamp: number;
@@ -72,7 +71,19 @@ export interface Dataset extends Entity {
   };
 }
 
-function checkEntityType(entity: Entity, entityType: DataEntityType): boolean {
+export interface Collection extends Entity {
+  entity_type: 'Collection';
+}
+
+export interface Publication extends Entity {
+  entity_type: 'Publication';
+}
+
+export interface Support extends Entity {
+  entity_type: 'Support';
+}
+
+function checkEntityType(entity: Entity, entityType: ESEntityType): boolean {
   return entity.entity_type === entityType;
 }
 
@@ -86,4 +97,16 @@ export function isSample(entity: unknown): entity is Sample {
 
 export function isDonor(entity: unknown): entity is Donor {
   return checkEntityType(entity as Entity, 'Donor');
+}
+
+export function isCollection(entity: unknown): entity is Collection {
+  return checkEntityType(entity as Entity, 'Collection');
+}
+
+export function isPublication(entity: unknown): entity is Publication {
+  return checkEntityType(entity as Entity, 'Publication');
+}
+
+export function isSupport(entity: unknown): entity is Support {
+  return checkEntityType(entity as Entity, 'Support');
 }

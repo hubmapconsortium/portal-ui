@@ -3,7 +3,7 @@ import React, { ComponentProps, ComponentType } from 'react';
 import Tile from 'js/shared-styles/tiles/Tile/';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { DataEntityType, Entity } from 'js/components/types';
+import { ESEntityType, Entity } from 'js/components/types';
 import EntityTileFooter from '../EntityTileFooter/index';
 import EntityTileBody from '../EntityTileBody/index';
 import { StyledIcon } from './style';
@@ -21,7 +21,7 @@ interface EntityTileProps
 }
 
 function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendantCounts, ...rest }: EntityTileProps) {
-  const icon: ComponentType = entity_type in entityIconMap ? entityIconMap[entity_type as DataEntityType] : DatasetIcon;
+  const icon: ComponentType = entity_type in entityIconMap ? entityIconMap[entity_type as ESEntityType] : DatasetIcon;
   return (
     <Tile
       href={`/browse/${entity_type.toLowerCase()}/${uuid}`}

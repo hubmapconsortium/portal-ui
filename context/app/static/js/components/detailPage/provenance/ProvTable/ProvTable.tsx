@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { DataEntityType, Entity } from 'js/components/types';
+import { ESEntityType, Entity } from 'js/components/types';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { Button } from '@mui/material';
@@ -31,7 +31,7 @@ function ProvEntityColumn({ type, entities, currentEntityUUID, descendantEntityC
   return (
     <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
       <ProvTableEntityHeader>
-        <StyledSvgIcon as={entityIconMap[type as DataEntityType]} color="primary" />
+        <StyledSvgIcon as={entityIconMap[type as ESEntityType]} color="primary" />
         <Typography variant="h5">{type}s</Typography>
       </ProvTableEntityHeader>
       <FlexColumn>
@@ -89,7 +89,7 @@ function ProvTable() {
 
   const ancestorsAndSelfByType = ancestorsAndSelf.reduce(
     (acc, entity) => {
-      const entityType: DataEntityType = entity.entity_type;
+      const entityType: ESEntityType = entity.entity_type;
       if (isProvEntityType(entityType)) {
         acc[entityType].push(entity);
       }
