@@ -39,6 +39,8 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
                 origin_samples,
                 origin_samples_unique_mapped_organs,
                 last_modified_timestamp,
+                entity_type,
+                descendant_counts,
               }}
               descendantCounts={descendant_counts?.entity_type ?? { Dataset: 0 }}
             />
