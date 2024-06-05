@@ -129,13 +129,15 @@ function useRelatedMultiAssayDatasets() {
   const { entity } = useFlaskDataContext();
 
   const { uuid } = entity;
-  if (!isDataset(entity)) {
-    throw new Error(`Expected entity to be a dataset, but it was ${entity.entity_type}`);
+
+  const entityIsDataset = isDataset(entity);
+  if (!entityIsDataset) {
+    console.error(`Expected entity to be a dataset, but it was a ${entity.entity_type}`);
   }
-  const isPrimary = getMultiAssayType(entity) === 'raw';
+  const isPrimary = entityIsDataset ? getMultiAssayType(entity) === 'raw' : false;
 
   const { searchHits: primaryHits, isLoading: isLoadingPrimary } = useSearchHits(getPrimaryMultiAssay(uuid), {
-    shouldFetch: !isPrimary,
+    shouldFetch: !isPrimary && entityIsDataset,
   }) as MultiAssayHits;
 
   const primary = primaryHits[0]?._source ?? entity;
@@ -143,9 +145,16 @@ function useRelatedMultiAssayDatasets() {
   const { searchHits: primaryDescendantHits, isLoading: isLoadingDescendants } = useSearchHits(
     getPrimaryDescendants(primary ? primary.uuid : ''),
     {
-      shouldFetch: Boolean(primary),
+      shouldFetch: Boolean(primary) && entityIsDataset,
     },
   ) as MultiAssayHits;
+
+  if (!entityIsDataset) {
+    return {
+      datasets: {} as RelatedMultiAssayDatasets,
+      isLoading: false,
+    };
+  }
 
   return {
     datasets: buildRelatedDatasets({
