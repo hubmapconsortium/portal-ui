@@ -1,13 +1,99 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import { Typography } from '@mui/material';
+import Grid from '@mui/material/Unstable_Grid2';
+import { useTheme } from '@mui/material/styles';
+import { ToolsCard } from './ToolsCard';
+import { CardGridContextProvider } from './CardGridContext';
+import { ToolDescription } from './ToolDescription';
 
-// TODO
+const cards = [
+  {
+    title: 'Analyze data in Workspaces',
+    expandedContent: (
+      <ToolDescription
+        subtitle="Load datasets into an interactive JupyterLab Python and R analysis environment."
+        checklistItems={[
+          'No need to download data.',
+          'Use the provided code templates to get started with HuBMAP data.',
+          'The Workspaces feature is available once you sign in.',
+        ]}
+        ctaText="Sign in"
+        ctaLink="/sign-in"
+      />
+    ),
+  },
+  {
+    title: 'Visualize data in Vitessce',
+    expandedContent: (
+      <ToolDescription
+        subtitle="Explore spatial and single-cell multi-modal datasets with interactive components."
+        checklistItems={[
+          'Scatterplots',
+          'Heatmaps',
+          'Spatial Views',
+          'Genome Browser Tracks',
+          'Various Statistical Plots',
+        ]}
+      />
+    ),
+  },
+  {
+    title: 'Explore biomarkers and cell types',
+    expandedContent: (
+      <ToolDescription
+        subtitle="Discover new insights about genes, proteins or cell type related to HuBMAP data."
+        checklistItems={['Transcriptomic', 'Epigenomic', 'Proteomic', 'Cell Types']}
+        ctaText="Advanced Query"
+        ctaLink="/cells"
+      />
+    ),
+  },
+];
+
+function makeGridTemplateColumns(expandedCardIndex: number | null) {
+  if (expandedCardIndex === null) {
+    return '1fr 1fr 1fr';
+  }
+  const expandedColSize = '4fr';
+  const otherColSize = '1fr';
+
+  return cards.reduce((acc, _, idx) => `${acc} ${idx === expandedCardIndex ? expandedColSize : otherColSize}`, '');
+}
+
 export default function ExploreTools() {
+  const theme = useTheme();
+  const [expandedCardIndex, setExpandedCardIndex] = useState<number | null>(null);
+
+  const gridTemplateColumns = makeGridTemplateColumns(expandedCardIndex);
+
+  const resetExpandedCardIndex = () => setExpandedCardIndex(null);
   return (
-    <>
-      <Typography>Workspaces Placeholder</Typography>
-      <Typography>Vitessce Placeholder</Typography>
-    </>
+    <CardGridContextProvider
+      expandedCardIndex={expandedCardIndex}
+      setExpandedCardIndex={setExpandedCardIndex}
+      cardCount={cards.length}
+    >
+      <Grid
+        display="grid"
+        spacing={2}
+        columnGap={2}
+        rowGap={2}
+        gridTemplateColumns={{ xs: '1fr', md: gridTemplateColumns }}
+        style={{
+          transition: theme.transitions.create('all', {
+            easing: theme.transitions.easing.easeIn,
+            duration: theme.transitions.duration.shorter,
+          }),
+        }}
+        onMouseLeave={resetExpandedCardIndex}
+        onBlur={(e) => {
+          if (!e.currentTarget.contains(e.relatedTarget as Node)) resetExpandedCardIndex();
+        }}
+      >
+        {cards.map((card, index) => (
+          <ToolsCard key={card.title} index={index} {...card} />
+        ))}
+      </Grid>
+    </CardGridContextProvider>
   );
 }
