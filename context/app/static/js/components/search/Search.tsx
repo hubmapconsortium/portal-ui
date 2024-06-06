@@ -9,6 +9,7 @@ import { useAppContext } from 'js/components/Contexts';
 import { SearchStoreProvider, useSearchStore, SearchStoreState } from './store';
 import { HitDoc } from './types';
 import { ResultsTable } from './Results';
+import { getPortalESField } from './buildTypesMap';
 
 function useAuthHeader() {
   const { groupsToken } = useAppContext();
@@ -42,7 +43,7 @@ function buildQuery({ terms, size, sourceFields, sortField }: Omit<SearchStoreSt
     .requestBodySearch()
     .size(size)
     .source(Object.keys(sourceFields).length ? Object.keys(sourceFields) : false)
-    .sort(esb.sort(sortField.field, sortField.direction));
+    .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
 
   Object.entries(terms).forEach(([field, values]) => query.postFilter(esb.termsQuery(field, [...values])));
 
