@@ -2,14 +2,68 @@ import React from 'react';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
+import IconButton from '@mui/material/IconButton';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { getByPath } from './utils';
-import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell } from './style';
+import {
+  StyledTable,
+  StyledTableBody,
+  StyledTableRow,
+  StyledTableCell,
+  ArrowUpOn,
+  ArrowDownOn,
+  ArrowDownOff,
+  StyledHeaderCell,
+} from './style';
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import { HitDoc } from '../types';
-import SortingTableHead from './SortingTableHead';
+
+type SortDirection = 'asc' | 'desc';
+
+export function OrderIcon({
+  direction,
+  isCurrentSortField,
+}: {
+  direction: SortDirection;
+  isCurrentSortField: boolean;
+}) {
+  if (!isCurrentSortField) return <ArrowDownOff />;
+  if (direction === 'asc') return <ArrowUpOn />;
+  if (direction === 'desc') return <ArrowDownOn />;
+}
+
+export function getSortOrder({
+  direction,
+  isCurrentSortField,
+}: {
+  direction: SortDirection;
+  isCurrentSortField: boolean;
+}) {
+  if (!isCurrentSortField) {
+    return 'desc';
+  }
+
+  return direction === 'desc' ? 'asc' : 'desc';
+}
+
+function SortHeaderCell({ field, label }: { field: string; label: string }) {
+  const { sortField, setSortField } = useSearchStore();
+
+  const { direction, field: currentSortField } = sortField;
+
+  const isCurrentSortField = field === currentSortField;
+
+  return (
+    <StyledHeaderCell>
+      {label}
+      <IconButton onClick={() => setSortField({ direction: getSortOrder({ direction, isCurrentSortField }), field })}>
+        <OrderIcon direction={direction} isCurrentSortField={isCurrentSortField} />
+      </IconButton>
+    </StyledHeaderCell>
+  );
+}
 
 function ResultCell({ hit, field }: { field: string; hit: SearchHit<HitDoc> }) {
   const source = hit?._source;
@@ -42,7 +96,7 @@ function ResultsTable() {
       <TableHead>
         <TableRow>
           {Object.entries(sourceFields).map(([field, { label }]) => (
-            <SortingTableHead key={field} field={field} label={label} />
+            <SortHeaderCell key={field} field={field} label={label} />
           ))}
         </TableRow>
       </TableHead>
