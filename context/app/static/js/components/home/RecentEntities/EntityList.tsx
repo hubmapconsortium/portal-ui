@@ -38,7 +38,7 @@ export function EntityList<T extends { uuid: string }>({
         ))}
         <Box p={2} display="flex" justifyContent="center">
           <Button component={Link} variant="outlined" href={viewAllLink}>
-            View All {entityName}
+            View All {pluralEntityName}
           </Button>
         </Box>
       </Paper>
