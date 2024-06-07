@@ -78,11 +78,11 @@ export default function ExploreTools() {
         spacing={2}
         columnGap={2}
         rowGap={2}
-        gridTemplateColumns={{ xs: '1fr', md: gridTemplateColumns }}
+        gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr 1fr', md: gridTemplateColumns }}
         style={{
           transition: theme.transitions.create('all', {
             easing: theme.transitions.easing.easeIn,
-            duration: theme.transitions.duration.shorter,
+            duration: theme.transitions.duration.shortest,
           }),
         }}
         onMouseLeave={resetExpandedCardIndex}

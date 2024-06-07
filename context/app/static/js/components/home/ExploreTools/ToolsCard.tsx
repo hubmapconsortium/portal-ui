@@ -34,7 +34,7 @@ export function ToolsCard({ title, expandedContent: description, index }: ToolsC
     duration: 200,
     from: { maxHeight: 0, opacity: 0, width: 0 },
     enter: { maxHeight: 'auto', opacity: 1, width: 'fit-content' },
-    // leave: { maxHeight: 0, opacity: 0, width: 0 },
+    leave: { maxHeight: 0, opacity: 0, width: 0 },
   });
   const justifyContent = isDesktop ? getFlexAlignment(index, cardCount) : 'stretch';
 
@@ -42,8 +42,8 @@ export function ToolsCard({ title, expandedContent: description, index }: ToolsC
   return (
     <Grid overflow="none" display="flex" justifyContent={justifyContent}>
       <Paper tabIndex={0} onFocus={setIsExpanded} onMouseOver={setIsExpanded} sx={{ overflow: 'hidden' }}>
-        <Stack direction="row">
-          <StyledImg src={`https://picsum.photos/id/${titleSeed}/375/520`} alt="Alt text for test" />
+        <Stack direction={{ xs: 'column', md: 'row' }}>
+          <StyledImg src={`https://picsum.photos/id/${titleSeed}/375/520`} width="auto" alt="Alt text for test" />
           {transition((style, isOpen) => {
             if (!isOpen || !isDesktop) {
               return null;
@@ -51,7 +51,7 @@ export function ToolsCard({ title, expandedContent: description, index }: ToolsC
             return <animated.div style={style}>{wrappedDescription}</animated.div>;
           })}
         </Stack>
-        <Typography variant="h5" noWrap py={2} pl={1}>
+        <Typography variant="h5" noWrap={isDesktop} py={2} pl={1}>
           {title}
         </Typography>
         {!isDesktop && wrappedDescription}
