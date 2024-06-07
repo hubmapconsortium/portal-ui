@@ -18,7 +18,7 @@ const cards = [
           'The Workspaces feature is available once you sign in.',
         ]}
         ctaText="Sign in"
-        ctaLink="/sign-in"
+        ctaLink="/login"
       />
     ),
   },
