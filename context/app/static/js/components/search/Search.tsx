@@ -1,7 +1,12 @@
 import React, { useMemo } from 'react';
 import useSWR from 'swr';
-import { SearchRequest, SearchResponseBody } from '@elastic/elasticsearch/lib/api/types';
+import {
+  SearchRequest,
+  SearchResponseBody,
+  AggregationsTermsAggregateBase,
+} from '@elastic/elasticsearch/lib/api/types';
 import esb from 'elastic-builder';
+import Stack from '@mui/material/Stack';
 
 import { fetcher } from 'js/helpers/swr';
 import { getAuthHeader } from 'js/helpers/functions';
@@ -10,6 +15,7 @@ import { SearchStoreProvider, useSearchStore, SearchStoreState } from './store';
 import { HitDoc } from './types';
 import { ResultsTable } from './Results';
 import { getPortalESField } from './buildTypesMap';
+import Facets from './Facets/Facets';
 
 function useAuthHeader() {
   const { groupsToken } = useAppContext();
@@ -45,18 +51,24 @@ function buildQuery({ terms, size, sourceFields, sortField }: Omit<SearchStoreSt
     .source(Object.keys(sourceFields).length ? Object.keys(sourceFields) : false)
     .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
 
-  Object.entries(terms).forEach(([field, values]) => query.postFilter(esb.termsQuery(field, [...values])));
+  Object.entries(terms).forEach(([field, values]) => {
+    const portalField = getPortalESField(field);
+    query.postFilter(esb.termsQuery(portalField, [...values]));
+    query.agg(esb.termsAggregation(field, portalField));
+  });
 
   return query.toJSON();
 }
 
-export function useSearch<Aggs>() {
+type Aggregations = Record<string, AggregationsTermsAggregateBase<{ key: string; doc_count: number }>>;
+
+export function useSearch() {
   const { endpoint, swrConfig, ...rest }: SearchStoreState = useSearchStore();
 
   const query = buildQuery({ ...rest });
 
   const requestInit = useRequestInit({ body: query });
-  const { data, isLoading } = useSWR<SearchResponseBody<HitDoc, Aggs>>(
+  const { data, isLoading } = useSWR<SearchResponseBody<HitDoc, Aggregations>>(
     { requestInit, url: endpoint },
     fetcher,
     swrConfig,
@@ -65,7 +77,12 @@ export function useSearch<Aggs>() {
 }
 
 function Search() {
-  return <ResultsTable />;
+  return (
+    <Stack direction="row" spacing={2}>
+      <Facets />
+      <ResultsTable />;
+    </Stack>
+  );
 }
 
 function SearchWrapper() {
@@ -76,7 +93,7 @@ function SearchWrapper() {
       initialState={{
         endpoint: elasticsearchEndpoint,
         swrConfig: {},
-        terms: { 'entity_type.keyword': new Set(['Dataset']) },
+        terms: { entity_type: new Set(['Dataset']) },
         sortField: { field: 'last_modified_timestamp', direction: 'desc' },
         sourceFields: {
           hubmap_id: { label: 'HuBMAP ID' },

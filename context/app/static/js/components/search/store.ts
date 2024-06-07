@@ -22,6 +22,7 @@ export interface SearchStoreState {
 
 export interface SearchStoreActions {
   setSortField: (sortField: SortField) => void;
+  filterTerm: ({ term, value }: { term: string; value: string }) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -32,6 +33,19 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     setSortField: (sortField) => {
       set((state) => {
         state.sortField = sortField;
+      });
+    },
+    filterTerm: ({ term, value }) => {
+      set((state) => {
+        const termSet = state?.terms?.[term];
+        if (!termSet) {
+          return;
+        }
+        if (termSet.has(value)) {
+          termSet.delete(value);
+        } else {
+          termSet.add(value);
+        }
       });
     },
   }));
