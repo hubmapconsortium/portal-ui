@@ -66,9 +66,6 @@ function Home({ organsCount }: HomeProps) {
           <DataUseGuidelines />
         </Box>
         <Box gridArea="external-links">
-          <SectionHeader variant="h4" component="h3">
-            External Links
-          </SectionHeader>
           <ExternalLinks />
         </Box>
       </LowerContainerGrid>
