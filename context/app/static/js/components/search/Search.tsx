@@ -44,7 +44,7 @@ function useRequestInit({ body }: { body: SearchRequest }) {
   return buildSearchRequestInit({ body, authHeader });
 }
 
-function buildQuery({ terms, size, sourceFields, sortField }: Omit<SearchStoreState, 'endpoint' | 'swrConfig'>) {
+function buildQuery({ terms, termz, size, sourceFields, sortField }: Omit<SearchStoreState, 'endpoint' | 'swrConfig'>) {
   const query = esb
     .requestBodySearch()
     .size(size)
@@ -57,10 +57,33 @@ function buildQuery({ terms, size, sourceFields, sortField }: Omit<SearchStoreSt
     query.agg(esb.termsAggregation(field, portalField));
   });
 
+  Object.entries(termz).forEach(([field, { values, childTerm }]) => {
+    if (!childTerm) {
+      return;
+    }
+    const { field: childField, values: childValues } = childTerm;
+    const parentPortalField = getPortalESField(field);
+    const childPortalField = getPortalESField(childField);
+
+    if (values.size) {
+      query.postFilter(esb.termsQuery(parentPortalField, [...values]));
+      query.postFilter(esb.termsQuery(childPortalField, [...childValues]));
+    }
+    query.agg(esb.termsAggregation(field, parentPortalField).agg(esb.termsAggregation(childField, childPortalField)));
+  });
+
   return query.toJSON();
 }
 
-type Aggregations = Record<string, AggregationsTermsAggregateBase<{ key: string; doc_count: number }>>;
+interface Bucket {
+  key: string;
+  doc_count: number;
+}
+
+type Aggregations = Record<
+  string,
+  AggregationsTermsAggregateBase<Bucket & Partial<Record<string, AggregationsTermsAggregateBase<Bucket>>>>
+>;
 
 export function useSearch() {
   const { endpoint, swrConfig, ...rest }: SearchStoreState = useSearchStore();
@@ -94,6 +117,9 @@ function SearchWrapper() {
         endpoint: elasticsearchEndpoint,
         swrConfig: {},
         terms: { entity_type: new Set(['Dataset']) },
+        termz: {
+          dataset_type: { values: new Set([]), childTerm: { field: 'assay_display_name', values: new Set([]) } },
+        },
         sortField: { field: 'last_modified_timestamp', direction: 'desc' },
         sourceFields: {
           hubmap_id: { label: 'HuBMAP ID' },

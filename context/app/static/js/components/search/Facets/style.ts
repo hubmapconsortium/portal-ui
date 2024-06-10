@@ -68,6 +68,15 @@ const FormLabelText = styled(Typography)({
   marginRight: '2px',
 });
 
+const HierarchicalAccordionSummary = styled(AccordionSummary)({
+  margin: 0,
+  padding: 0,
+  '& > div': {
+    padding: 0,
+    margin: 0,
+  },
+});
+
 export {
   StyledCheckBoxBlankIcon,
   StyledCheckBoxIcon,
@@ -78,4 +87,5 @@ export {
   StyledExpandMoreIcon,
   StyledStack,
   FormLabelText,
+  HierarchicalAccordionSummary,
 };
