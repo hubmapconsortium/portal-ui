@@ -18,7 +18,7 @@ function RelatedResources() {
         img={<img src={`${CDN_URL}/v2/nih_common_fund.png`} height={56} width={56} alt="NIH Logo" />}
         linkHref="https://commonfund.nih.gov/hubmap/"
         linkText="Common Fund"
-        description="Learn more about the NIH Common Fund, a component of the NIH budget which is managed by the Office of Stategic Coordination/Division of Program Coordination, Planning and Strategic Coordination."
+        description="Learn about the NIH Common Fund, a funding entity that supports scientific programs that catalyze discovery across biomedical and behavioral research."
       />
       <ExternalLink
         img={<img src={`${CDN_URL}/v2/protocols.io.png`} height={56} width={56} alt="Protocols.io Logo" />}
