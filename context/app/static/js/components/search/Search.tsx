@@ -7,7 +7,7 @@ import Box from '@mui/material/Box';
 import { useAppContext } from 'js/components/Contexts';
 import { SearchStoreProvider, useSearchStore, SearchStoreState } from './store';
 import { HitDoc } from './types';
-import { ResultsTable } from './Results';
+import Results from './Results';
 import { getPortalESField } from './buildTypesMap';
 import Facets from './Facets/Facets';
 import SearchBar from './SearchBar';
@@ -79,13 +79,15 @@ export function useSearch() {
 
 function Search() {
   return (
-    <Box>
+    <Stack direction="column" spacing={2} mb={2}>
       <SearchBar />
       <Stack direction="row" spacing={2}>
         <Facets />
-        <ResultsTable />
+        <Box flexGrow={1}>
+          <Results />
+        </Box>
       </Stack>
-    </Box>
+    </Stack>
   );
 }
 
