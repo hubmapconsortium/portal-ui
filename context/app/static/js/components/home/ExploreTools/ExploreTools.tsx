@@ -6,6 +6,7 @@ import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { ToolsCard } from './ToolsCard';
 import { CardGridContextProvider } from './CardGridContext';
 import { ToolDescription } from './ToolDescription';
+import { makeGridTemplateColumns } from './utils';
 
 const workspaceCTAAuthenticated = {
   ctaText: 'View Your Workspaces',
@@ -64,21 +65,11 @@ const cards = [
   },
 ];
 
-function makeGridTemplateColumns(expandedCardIndex: number | null) {
-  if (expandedCardIndex === null) {
-    return '1fr 1fr 1fr';
-  }
-  const expandedColSize = '3fr';
-  const otherColSize = '1fr';
-
-  return cards.reduce((acc, _, idx) => `${acc} ${idx === expandedCardIndex ? expandedColSize : otherColSize}`, '');
-}
-
 export default function ExploreTools() {
   const theme = useTheme();
   const [expandedCardIndex, setExpandedCardIndex] = useState<number | null>(null);
 
-  const gridTemplateColumns = makeGridTemplateColumns(expandedCardIndex);
+  const gridTemplateColumns = makeGridTemplateColumns(cards, expandedCardIndex);
 
   const resetExpandedCardIndex = () => setExpandedCardIndex(null);
   return (
