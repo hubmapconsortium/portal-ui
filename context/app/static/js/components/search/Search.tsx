@@ -29,7 +29,7 @@ function buildQuery({
     .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
 
   if (search.length) {
-    query.query(esb.simpleQueryStringQuery(search).fields(searchFields));
+    query.query(esb.simpleQueryStringQuery(search).fields(searchFields)).highlight(esb.highlight(searchFields));
   }
 
   Object.entries(terms).forEach(([field, values]) => {

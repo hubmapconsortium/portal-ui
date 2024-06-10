@@ -13,41 +13,50 @@ const StyledTable = styled(Table)(({ theme }) => ({
   boxShadow: theme.shadows[1],
 }));
 
-const StyledTableBody = styled(TableBody)(({ theme }) => ({
-  // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
-  // What looks white is actually transparent and brightness() has no effect.
-  backgroundColor: theme.palette.white.main,
-
-  '&:hover': {
-    filter: theme.palette.white.hover,
-  },
-
-  // Material would apply this on TD, but we override, so there is no internal border above the highlight.
-  border: `1px solid ${theme.palette.divider}`,
-
+const StyledTableBody = styled(TableBody)({
   borderLeft: 'none',
   borderRight: 'none',
-}));
+});
 
 const interPadding = `${16 * 0.6}px`;
 const sidePadding = '64px';
 
-const StyledTableRow = styled(TableRow)(({ theme }) => ({
-  border: 0,
+const StyledTableRow = styled(TableRow)<{ $beforeHighlight?: boolean; $highlight?: boolean }>(
+  ({ theme, $beforeHighlight, $highlight }) => ({
+    border: `1px solid ${theme.palette.divider}`,
 
-  '&.before-highlight td': {
-    paddingBottom: 0,
-  },
-  '&.highlight td': {
-    paddingTop: interPadding,
-    paddingLeft: sidePadding,
-    paddingRight: sidePadding,
-    '& p': {
-      color: theme.palette.common.halfShadow,
-      margin: 0,
+    // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
+    // What looks white is actually transparent and brightness() has no effect.
+    backgroundColor: theme.palette.white.main,
+
+    '&:hover': {
+      filter: theme.palette.white.hover,
     },
-  },
-}));
+    ...($beforeHighlight && {
+      borderBottom: 'none',
+      td: {
+        paddingBottom: 0,
+      },
+      '&:hover + tr': {
+        filter: theme.palette.white.hover,
+      },
+      ':has(+ &:hover)': {
+        filter: theme.palette.white.hover,
+      },
+    }),
+
+    ...($highlight && {
+      borderTop: 'none',
+      td: {
+        paddingTop: interPadding,
+        paddingLeft: sidePadding,
+        paddingRight: sidePadding,
+        color: theme.palette.common.halfShadow,
+        margin: 0,
+      },
+    }),
+  }),
+);
 
 const StyledTableCell = styled(TableCell)({
   // Borders handled by tbody.

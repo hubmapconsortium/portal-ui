@@ -6,6 +6,8 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import DOMPurify from 'isomorphic-dompurify';
+import parse from 'html-react-parser';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { getByPath } from './utils';
@@ -84,6 +86,15 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<HitDoc> }) {
   );
 }
 
+function HighlightRow({ colSpan, highlight }: { colSpan: number } & Required<Pick<SearchHit, 'highlight'>>) {
+  const sanitizedHighlight = DOMPurify.sanitize(Object.values(highlight).join(' ... '));
+  return (
+    <StyledTableRow $highlight>
+      <StyledTableCell colSpan={colSpan}>{parse(sanitizedHighlight)}</StyledTableCell>
+    </StyledTableRow>
+  );
+}
+
 function ResultsTable() {
   const { searchHits: hits, loadMore, totalHitsCount } = useSearch();
   const { sourceFields } = useSearchStore();
@@ -103,15 +114,18 @@ function ResultsTable() {
             ))}
           </TableRow>
         </TableHead>
-        {hits.map((hit) => (
-          <StyledTableBody key={hit._id}>
-            <StyledTableRow>
-              {Object.keys(sourceFields).map((field) => (
-                <ResultCell hit={hit} field={field} key={field} />
-              ))}
-            </StyledTableRow>
-          </StyledTableBody>
-        ))}
+        <StyledTableBody>
+          {hits.map((hit) => (
+            <React.Fragment key={hit._id}>
+              <StyledTableRow $beforeHighlight={Boolean(hit?.highlight)}>
+                {Object.keys(sourceFields).map((field) => (
+                  <ResultCell hit={hit} field={field} key={field} />
+                ))}
+              </StyledTableRow>
+              {hit?.highlight && <HighlightRow colSpan={Object.keys(sourceFields).length} highlight={hit.highlight} />}
+            </React.Fragment>
+          ))}
+        </StyledTableBody>
       </StyledTable>
       <Button variant="contained" color="primary" onClick={loadMore} fullWidth>
         See More Search Results
