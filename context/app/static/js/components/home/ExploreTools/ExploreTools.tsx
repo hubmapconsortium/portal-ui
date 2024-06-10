@@ -9,6 +9,7 @@ import { ToolDescription } from './ToolDescription';
 const cards = [
   {
     title: 'Analyze data in Workspaces',
+    src: `${CDN_URL}/v2/explore-tools/workspaces.png`,
     expandedContent: (
       <ToolDescription
         subtitle="Load datasets into an interactive JupyterLab Python and R analysis environment."
@@ -24,6 +25,7 @@ const cards = [
   },
   {
     title: 'Visualize data in Vitessce',
+    src: `${CDN_URL}/v2/explore-tools/vitessce.png`,
     expandedContent: (
       <ToolDescription
         subtitle="Explore spatial and single-cell multi-modal datasets with interactive components."
@@ -39,6 +41,7 @@ const cards = [
   },
   {
     title: 'Explore biomarkers and cell types',
+    src: `${CDN_URL}/v2/explore-tools/mcquery.png`,
     expandedContent: (
       <ToolDescription
         subtitle="Discover new insights about genes, proteins or cell type related to HuBMAP data."
@@ -54,7 +57,7 @@ function makeGridTemplateColumns(expandedCardIndex: number | null) {
   if (expandedCardIndex === null) {
     return '1fr 1fr 1fr';
   }
-  const expandedColSize = '4fr';
+  const expandedColSize = '3fr';
   const otherColSize = '1fr';
 
   return cards.reduce((acc, _, idx) => `${acc} ${idx === expandedCardIndex ? expandedColSize : otherColSize}`, '');

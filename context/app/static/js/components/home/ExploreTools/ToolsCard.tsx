@@ -9,6 +9,7 @@ import { StyledImg } from './styles';
 interface ToolsCardProps {
   title: string;
   index: number;
+  src: string;
   expandedContent?: React.ReactNode;
 }
 
@@ -24,8 +25,7 @@ function getFlexAlignment(index: number, cardCount: number) {
   return 'center';
 }
 
-export function ToolsCard({ title, expandedContent: description, index }: ToolsCardProps) {
-  const titleSeed = title.length + title.charCodeAt(0);
+export function ToolsCard({ title, expandedContent: description, index, src }: ToolsCardProps) {
   const { expandedCardIndex, setExpandedCardIndex, cardCount } = useCardGridContext();
   const isDesktop = useIsDesktop();
   const isExpanded = expandedCardIndex === index;
@@ -43,7 +43,7 @@ export function ToolsCard({ title, expandedContent: description, index }: ToolsC
     <Grid overflow="none" display="flex" justifyContent={justifyContent}>
       <Paper tabIndex={0} onFocus={setIsExpanded} onMouseOver={setIsExpanded} sx={{ overflow: 'hidden' }}>
         <Stack direction={{ xs: 'column', md: 'row' }}>
-          <StyledImg src={`https://picsum.photos/id/${titleSeed}/375/520`} width="auto" alt="Alt text for test" />
+          <StyledImg src={src} height="520" width="auto" alt="Alt text for test" />
           {transition((style, isOpen) => {
             if (!isOpen || !isDesktop) {
               return null;
