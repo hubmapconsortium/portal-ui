@@ -12,8 +12,8 @@ export function Facets() {
       {Object.keys(terms).map((term) => (
         <TermFacet field={term} key={term} />
       ))}
-      {Object.entries(termz).map(([parentField, { childTerm }]) => {
-        return <HierarchicalTermFacet parentField={parentField} key={parentField} childField={childTerm?.field} />;
+      {Object.entries(termz).map(([parentField, { childField }]) => {
+        return <HierarchicalTermFacet parentField={parentField} key={parentField} childField={childField} />;
       })}
     </Paper>
   );

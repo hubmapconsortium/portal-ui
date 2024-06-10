@@ -11,19 +11,14 @@ interface SourceField {
   label: string;
 }
 
-interface ChildTerm {
-  values: Set<string>;
-  field: string;
-}
-
-interface Term {
-  values: Set<string>;
-  childTerm: ChildTerm;
+interface HierarchicalTerm {
+  values: Record<string, Set<string>>;
+  childField: string;
 }
 
 export interface SearchStoreState {
   terms: Record<string, Set<string>>;
-  termz: Record<string, Term>;
+  termz: Record<string, HierarchicalTerm>;
   sortField: SortField;
   sourceFields: Record<string, SourceField>;
   size: number;
@@ -43,7 +38,15 @@ export interface SearchStoreActions {
     value: string;
     childValues: string[];
   }) => void;
-  filterHierarchicalChildTerm: ({ parentTerm, value }: { parentTerm: string; value: string }) => void;
+  filterHierarchicalChildTerm: ({
+    parentTerm,
+    parentValue,
+    value,
+  }: {
+    parentTerm: string;
+    parentValue: string;
+    value: string;
+  }) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -77,24 +80,16 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
           return;
         }
 
-        const { values, childTerm } = termState;
+        const { values } = termState;
 
-        if (values.has(value)) {
-          values.delete(value);
-
-          if (childTerm) {
-            childTerm.values = new Set([]);
-          }
+        if (value in values) {
+          delete values[value];
         } else {
-          values.add(value);
-
-          if (childTerm) {
-            childTerm.values = new Set(childValues);
-          }
+          values[value] = new Set(childValues);
         }
       });
     },
-    filterHierarchicalChildTerm: ({ parentTerm, value }) => {
+    filterHierarchicalChildTerm: ({ parentTerm, parentValue, value }) => {
       set((state) => {
         const termState = state?.termz?.[parentTerm];
 
@@ -102,7 +97,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
           return;
         }
 
-        const childValues = termState?.childTerm?.values;
+        const childValues = termState?.values?.[parentValue];
 
         if (!childValues) {
           return;
@@ -110,6 +105,9 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
 
         if (childValues.has(value)) {
           childValues.delete(value);
+          if (childValues.size === 0) {
+            delete termState.values[parentValue];
+          }
         } else {
           childValues.add(value);
         }

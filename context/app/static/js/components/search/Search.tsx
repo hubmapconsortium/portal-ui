@@ -57,17 +57,20 @@ function buildQuery({ terms, termz, size, sourceFields, sortField }: Omit<Search
     query.agg(esb.termsAggregation(field, portalField));
   });
 
-  Object.entries(termz).forEach(([field, { values, childTerm }]) => {
-    if (!childTerm) {
+  Object.entries(termz).forEach(([field, { values, childField }]) => {
+    if (!childField) {
       return;
     }
-    const { field: childField, values: childValues } = childTerm;
     const parentPortalField = getPortalESField(field);
     const childPortalField = getPortalESField(childField);
 
-    if (values.size) {
-      query.postFilter(esb.termsQuery(parentPortalField, [...values]));
-      query.postFilter(esb.termsQuery(childPortalField, [...childValues]));
+    if (Object.keys(values).length) {
+      query.postFilter(esb.termsQuery(parentPortalField, Object.keys(values)));
+
+      const childValues = Object.values(values)
+        .map((v) => [...v])
+        .flat();
+      query.postFilter(esb.termsQuery(childPortalField, childValues));
     }
     query.agg(esb.termsAggregation(field, parentPortalField).agg(esb.termsAggregation(childField, childPortalField)));
   });
@@ -118,7 +121,7 @@ function SearchWrapper() {
         swrConfig: {},
         terms: { entity_type: new Set(['Dataset']) },
         termz: {
-          dataset_type: { values: new Set([]), childTerm: { field: 'assay_display_name', values: new Set([]) } },
+          dataset_type: { values: {}, childField: 'assay_display_name' },
         },
         sortField: { field: 'last_modified_timestamp', direction: 'desc' },
         sourceFields: {

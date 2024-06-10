@@ -127,17 +127,42 @@ export function HierarchicalFacetParent({ childValues, field, label, ...rest }: 
   );
 }
 
+export function HierarchicalFacetChild({ parentValue, field, label, ...rest }: TermFacet & { parentValue: string }) {
+  const { filterHierarchicalChildTerm } = useSearchStore();
+
+  return (
+    <CheckboxFilterItem
+      onClick={() => filterHierarchicalChildTerm({ parentTerm: field, value: label, parentValue })}
+      label={label}
+      {...rest}
+    />
+  );
+}
+
 export function HierarchicalTermFacetItem({
   field,
   label,
   childBuckets,
+  parentField,
   childField,
   ...rest
-}: TermFacet & { childField: string; childBuckets?: AggregationsBuckets<{ key: string; doc_count: number }> }) {
+}: TermFacet & {
+  parentField: string;
+  childField: string;
+  childBuckets?: AggregationsBuckets<{ key: string; doc_count: number }>;
+}) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = useCallback(() => {
     setExpanded((prev) => !prev);
   }, [setExpanded]);
+
+  const {
+    termz: {
+      [parentField]: {
+        values: { [label]: childState },
+      },
+    },
+  } = useSearchStore();
 
   if (!childBuckets || !Array.isArray(childBuckets)) {
     return null;
@@ -175,8 +200,15 @@ export function HierarchicalTermFacetItem({
         <HierarchicalFacetParent childValues={childValues} label={label} field={field} {...rest} />
       </HierarchicalAccordionSummary>
       <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
-        {childValues.map((v) => (
-          <div key={v}>{v}</div>
+        {childBuckets.map(({ key, doc_count }) => (
+          <HierarchicalFacetChild
+            field={field}
+            label={key}
+            key={key}
+            count={doc_count}
+            parentValue={label}
+            active={childState?.has(key)}
+          />
         ))}
       </AccordionDetails>
     </Accordion>
@@ -205,9 +237,10 @@ export function HierarchicalTermFacet({ parentField, childField }: { parentField
           label={bucket.key}
           count={bucket.doc_count}
           key={bucket.key}
-          active={values.has(bucket.key)}
+          active={bucket.key in values}
           field={parentField}
           childField={childField}
+          parentField={parentField}
           childBuckets={bucket[childField]?.buckets}
         />
       ))}
