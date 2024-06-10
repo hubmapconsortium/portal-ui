@@ -34,7 +34,9 @@ function buildQuery({
 
   Object.entries(terms).forEach(([field, values]) => {
     const portalField = getPortalESField(field);
-    query.postFilter(esb.termsQuery(portalField, [...values]));
+    if (values.size) {
+      query.postFilter(esb.termsQuery(portalField, [...values]));
+    }
     query.agg(esb.termsAggregation(field, portalField));
   });
 
@@ -77,6 +79,51 @@ export function useSearch() {
   return useScrollSearchHits<HitDoc, Aggregations>({ query, endpoint, swrConfig });
 }
 
+interface HierarchicalTerm {
+  field: string;
+  childField: string;
+}
+
+interface Facets {
+  terms?: string[];
+  hierarchicalTerms?: HierarchicalTerm[];
+}
+
+function buildTerms({ terms }: Required<Pick<Facets, 'terms'>>) {
+  return terms.reduce<Record<string, Set<string>>>((acc, curr) => {
+    const copy = acc;
+    copy[curr] = new Set([]);
+    return copy;
+  }, {});
+}
+
+function buildHierachicalTerms({ hierarchicalTerms }: Required<Pick<Facets, 'hierarchicalTerms'>>) {
+  return hierarchicalTerms.reduce<Record<string, { values: Record<string, never>; childField: string }>>(
+    (acc, curr) => {
+      const copy = acc;
+      copy[curr.field] = { values: {}, childField: curr.childField };
+      return copy;
+    },
+    {},
+  );
+}
+
+type SearchConfig = Pick<
+  SearchStoreState,
+  'searchFields' | 'sourceFields' | 'endpoint' | 'swrConfig' | 'sortField' | 'size'
+> & {
+  facets: Facets;
+};
+
+function buildInitialSearchState({ facets: { terms = [], hierarchicalTerms = [] }, ...rest }: SearchConfig) {
+  return {
+    search: '',
+    terms: buildTerms({ terms }),
+    termz: buildHierachicalTerms({ hierarchicalTerms }),
+    ...rest,
+  };
+}
+
 function Search() {
   return (
     <Stack direction="column" spacing={2} mb={2}>
@@ -91,35 +138,39 @@ function Search() {
   );
 }
 
-function SearchWrapper() {
+const c = {
+  swrConfig: {},
+  search: '',
+  searchFields: ['all_text', 'description'],
+  // TODO: figure out how to make assertion unnecessary.
+  sortField: { field: 'last_modified_timestamp', direction: 'desc' as const },
+  sourceFields: {
+    hubmap_id: { label: 'HuBMAP ID' },
+    group_name: { label: 'Group' },
+    assay_display_name: { label: 'Data Types' },
+    'origin_samples.mapped_organ': { label: 'Organ' },
+    mapped_status: { label: 'Status' },
+    last_modified_timestamp: { label: 'Last Modified' },
+  },
+  facets: {
+    terms: ['entity_type'],
+    hierarchicalTerms: [{ field: 'dataset_type', childField: 'assay_display_name' }],
+  },
+  size: 10,
+};
+
+function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint'> }) {
   const { elasticsearchEndpoint } = useAppContext();
 
   return (
-    <SearchStoreProvider
-      initialState={{
-        search: '',
-        searchFields: ['all_text', 'description'],
-        endpoint: elasticsearchEndpoint,
-        swrConfig: {},
-        terms: { entity_type: new Set(['Dataset']) },
-        termz: {
-          dataset_type: { values: {}, childField: 'assay_display_name' },
-        },
-        sortField: { field: 'last_modified_timestamp', direction: 'desc' },
-        sourceFields: {
-          hubmap_id: { label: 'HuBMAP ID' },
-          group_name: { label: 'Group' },
-          assay_display_name: { label: 'Data Types' },
-          'origin_samples.mapped_organ': { label: 'Organ' },
-          mapped_status: { label: 'Status' },
-          last_modified_timestamp: { label: 'Last Modified' },
-        },
-        size: 10,
-      }}
-    >
+    <SearchStoreProvider initialState={buildInitialSearchState({ ...config, endpoint: elasticsearchEndpoint })}>
       <Search />
     </SearchStoreProvider>
   );
 }
 
-export default SearchWrapper;
+function DatasetsSearch() {
+  return <SearchWrapper config={c} />;
+}
+
+export default DatasetsSearch;
