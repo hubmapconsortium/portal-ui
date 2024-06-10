@@ -116,9 +116,11 @@ function ResultsTable() {
       <Button variant="contained" color="primary" onClick={loadMore} fullWidth>
         See More Search Results
       </Button>
-      <Typography variant="caption" color="secondary" textAlign="right">
-        {hits.length} Results Shown | {totalHitsCount} Total Results
-      </Typography>
+      <Box mt={2}>
+        <Typography variant="caption" color="secondary" textAlign="right" component="p">
+          {hits.length} Results Shown | {totalHitsCount} Total Results
+        </Typography>
+      </Box>
     </Box>
   );
 }
