@@ -7,9 +7,10 @@ interface ToolDescriptionProps {
   checklistItems: string[];
   ctaText?: string;
   ctaLink?: string;
+  ctaIcon?: React.ReactNode;
 }
 
-export function ToolDescription({ subtitle, checklistItems, ctaText, ctaLink }: ToolDescriptionProps) {
+export function ToolDescription({ subtitle, checklistItems, ctaText, ctaLink, ctaIcon }: ToolDescriptionProps) {
   return (
     <>
       <Typography variant="subtitle1">{subtitle}</Typography>
@@ -21,7 +22,7 @@ export function ToolDescription({ subtitle, checklistItems, ctaText, ctaLink }: 
         ))}
       </CheckList>
       {ctaText && ctaLink && (
-        <Button href={ctaLink} variant="outlined">
+        <Button href={ctaLink} startIcon={ctaIcon} variant="outlined">
           {ctaText}
         </Button>
       )}

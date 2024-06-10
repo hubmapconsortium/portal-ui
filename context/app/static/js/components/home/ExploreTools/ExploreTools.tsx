@@ -2,9 +2,21 @@ import React, { useState } from 'react';
 
 import Grid from '@mui/material/Unstable_Grid2';
 import { useTheme } from '@mui/material/styles';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { ToolsCard } from './ToolsCard';
 import { CardGridContextProvider } from './CardGridContext';
 import { ToolDescription } from './ToolDescription';
+
+const workspaceCTAAuthenticated = {
+  ctaText: 'View Your Workspaces',
+  ctaLink: '/workspaces',
+  ctaIcon: <entityIconMap.Workspace />,
+};
+
+const workspaceCTAGuest = {
+  ctaText: 'Sign in',
+  ctaLink: '/login',
+};
 
 const cards = [
   {
@@ -18,8 +30,7 @@ const cards = [
           'Use the provided code templates to get started with HuBMAP data.',
           'The Workspaces feature is available once you sign in.',
         ]}
-        ctaText="Sign in"
-        ctaLink="/login"
+        {...(isAuthenticated ? workspaceCTAAuthenticated : workspaceCTAGuest)}
       />
     ),
   },
