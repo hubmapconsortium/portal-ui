@@ -1,16 +1,20 @@
-import { Paper, Typography, Stack, Box } from '@mui/material';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
+
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Unstable_Grid2';
-import { useIsDesktop } from 'js/hooks/media-queries';
+
 import { animated, useTransition } from '@react-spring/web';
+
+import { useIsDesktop } from 'js/hooks/media-queries';
 import { useCardGridContext } from './CardGridContext';
 import { StyledImg } from './styles';
 
-interface ToolsCardProps {
+interface ToolsCardProps extends PropsWithChildren {
   title: string;
   index: number;
   src: string;
-  expandedContent?: React.ReactNode;
 }
 
 function getFlexAlignment(index: number, cardCount: number) {
@@ -25,7 +29,7 @@ function getFlexAlignment(index: number, cardCount: number) {
   return 'center';
 }
 
-export function ToolsCard({ title, expandedContent: description, index, src }: ToolsCardProps) {
+export function ToolsCard({ title, children: description, index, src }: ToolsCardProps) {
   const { expandedCardIndex, setExpandedCardIndex, cardCount } = useCardGridContext();
   const isDesktop = useIsDesktop();
   const isExpanded = expandedCardIndex === index;
@@ -38,7 +42,6 @@ export function ToolsCard({ title, expandedContent: description, index, src }: T
   });
   const justifyContent = isDesktop ? getFlexAlignment(index, cardCount) : 'stretch';
 
-  const wrappedDescription = <Box p={2}>{description}</Box>;
   return (
     <Grid overflow="none" display="flex" justifyContent={justifyContent}>
       <Paper tabIndex={0} onFocus={setIsExpanded} onMouseOver={setIsExpanded} sx={{ overflow: 'hidden' }}>
@@ -48,13 +51,13 @@ export function ToolsCard({ title, expandedContent: description, index, src }: T
             if (!isOpen || !isDesktop) {
               return null;
             }
-            return <animated.div style={style}>{wrappedDescription}</animated.div>;
+            return <animated.div style={style}>{description}</animated.div>;
           })}
         </Stack>
         <Typography variant="h5" noWrap={isDesktop} py={2} pl={1}>
           {title}
         </Typography>
-        {!isDesktop && wrappedDescription}
+        {!isDesktop && description}
       </Paper>
     </Grid>
   );

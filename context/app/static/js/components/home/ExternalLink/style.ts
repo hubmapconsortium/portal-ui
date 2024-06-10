@@ -1,8 +1,7 @@
+import Stack from '@mui/material/Stack';
 import { styled } from '@mui/material/styles';
 
-const Flex = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
+const ExternalLinkContainer = styled(Stack)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.common.hoverShadow}`,
   backgroundColor: theme.palette.common.white,
   '&:hover': {
@@ -10,14 +9,10 @@ const Flex = styled('div')(({ theme }) => ({
   },
 }));
 
-const ImageWrapper = styled('div')(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
-  flexShrink: 0,
+const ImageWrapper = styled(Stack)(({ theme }) => ({
   width: 'fit-content',
   height: 'fit-content',
   padding: theme.spacing(1.5, 2, 2.5),
 }));
 
-export { Flex, ImageWrapper };
+export { ExternalLinkContainer, ImageWrapper };

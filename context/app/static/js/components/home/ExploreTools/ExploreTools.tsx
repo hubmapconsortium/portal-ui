@@ -23,7 +23,7 @@ const cards = [
   {
     title: 'Analyze data in Workspaces',
     src: `${CDN_URL}/v2/explore-tools/workspaces.png`,
-    expandedContent: (
+    children: (
       <ToolDescription
         subtitle="Load datasets into an interactive JupyterLab Python and R analysis environment."
         checklistItems={[
@@ -38,7 +38,7 @@ const cards = [
   {
     title: 'Visualize data in Vitessce',
     src: `${CDN_URL}/v2/explore-tools/vitessce.png`,
-    expandedContent: (
+    children: (
       <ToolDescription
         subtitle="Explore spatial and single-cell multi-modal datasets with interactive components."
         checklistItems={[
@@ -54,7 +54,7 @@ const cards = [
   {
     title: 'Explore biomarkers and cell types',
     src: `${CDN_URL}/v2/explore-tools/mcquery.png`,
-    expandedContent: (
+    children: (
       <ToolDescription
         subtitle="Discover new insights about genes, proteins or cell type related to HuBMAP data."
         checklistItems={['Transcriptomic', 'Epigenomic', 'Proteomic', 'Cell Types']}

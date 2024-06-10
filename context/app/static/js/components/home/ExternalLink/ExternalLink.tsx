@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { Flex, ImageWrapper } from './style';
+import { ExternalLinkContainer, ImageWrapper } from './style';
 
 interface ExternalLinkProps {
   img: React.ReactNode;
@@ -13,15 +13,17 @@ interface ExternalLinkProps {
 
 function ExternalLink({ img, linkText, linkHref, description }: ExternalLinkProps) {
   return (
-    <Flex>
-      <ImageWrapper>{img}</ImageWrapper>
+    <ExternalLinkContainer alignItems="center" direction="row">
+      <ImageWrapper justifyContent="center" flexShrink={0}>
+        {img}
+      </ImageWrapper>
       <div>
         <OutboundIconLink href={linkHref} variant="subtitle1">
           {linkText}
         </OutboundIconLink>
         <Typography variant="body2">{description}</Typography>
       </div>
-    </Flex>
+    </ExternalLinkContainer>
   );
 }
 

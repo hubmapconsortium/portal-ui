@@ -42,7 +42,7 @@ export function EntityList<T extends { uuid: string }>({
             variant="outlined"
             sx={(theme) => ({
               border: `1px solid ${theme.palette.primary.lowEmphasis}`,
-              borderRadius: `0.25rem`,
+              borderRadius: '0.25rem',
             })}
             href={viewAllLink}
             startIcon={<Icon />}
