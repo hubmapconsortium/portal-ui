@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 
-import { DagProvenanceType, useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { DagProvenanceType, isDataset } from 'js/components/types';
 import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import { getTokenParam } from 'js/helpers/functions';
 import { UnprocessedFile } from '../types';
@@ -53,6 +54,9 @@ export function processDagList(acc: PipelineInfo, dag: DagProvenanceType) {
  */
 function usePipelineInfo(): PipelineInfo {
   const { entity } = useFlaskDataContext();
+  if (!isDataset(entity)) {
+    return defaultPipeline;
+  }
   const dagList = entity.metadata.dag_provenance_list ?? [];
   // Iterate over the list of DAGs and extract the latest origin and name
   const pipelineInfo = dagList.reduce<PipelineInfo>(processDagList, defaultPipeline);

@@ -1,9 +1,26 @@
 import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
 import ScatterPlot from '@mui/icons-material/ScatterPlot';
 import { ReactComponent as GeneIcon } from 'assets/svg/gene.svg';
+import { ESEntityType } from 'js/components/types';
 import { DatasetIcon, SampleIcon, DonorIcon, PublicationIcon, CollectionIcon, VerifiedIcon } from './icons';
 
-export const entityIconMap = {
+type MUIIcon = typeof DonorIcon;
+type SVGIcon = typeof WorkspacesIcon;
+
+type CellTypeEntityType = 'CellType';
+type GeneEntityType = 'Gene';
+type UBKGEntityType = CellTypeEntityType | GeneEntityType;
+
+type VerifiedUserEntityType = 'VerifiedUser';
+type GlobusEntityType = VerifiedUserEntityType;
+
+type WorkspaceEntityType = 'Workspace';
+
+type WorkspaceAPIEntityType = WorkspaceEntityType;
+
+type AllEntityTypes = ESEntityType | UBKGEntityType | WorkspaceAPIEntityType | GlobusEntityType;
+
+export const entityIconMap: Record<AllEntityTypes, MUIIcon | SVGIcon> = {
   Donor: DonorIcon,
   Sample: SampleIcon,
   Dataset: DatasetIcon,

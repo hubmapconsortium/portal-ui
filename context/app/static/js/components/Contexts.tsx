@@ -1,54 +1,11 @@
 import { useContext, createContext } from 'js/helpers/context';
+import { Entity } from './types';
 
 // TODO: Continue populating these types as we find more of the uses of the flask data and app contexts
 
-export type DagProvenanceType =
-  | {
-      origin: string;
-    }
-  | {
-      name: string;
-    };
-
-export interface Entity {
-  entity_type: string;
-  uuid: string;
-  hubmap_id: string;
-  last_modified_timestamp: number;
-  [key: string]: unknown;
-}
-
-export interface Donor extends Entity {
-  entity_type: 'Donor';
-  mapped_metadata?: Record<string, string>;
-}
-
-export interface Sample extends Entity {
-  entity_type: 'Sample';
-  mapped_organ: string;
-  metadata?: Record<string, string>;
-}
-
-export interface Dataset extends Entity {
-  entity_type: 'Dataset';
-  processing: 'raw' | 'processed';
-  assay_display_name: string;
-  is_component?: boolean;
-  assay_modality: 'single' | 'multiple';
-  donor: Donor;
-  mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
-  metadata: {
-    dag_provenance_list: DagProvenanceType[];
-    [key: string]: unknown;
-  };
-  origin_samples: Sample[];
-  origin_samples_unique_mapped_organs: string[];
-  descendant_counts: Record<string, Record<string, number>>;
-}
-
 interface FlaskDataContextType {
   redirected_from: string;
-  entity: Dataset; // Update to handle different entities.
+  entity: Entity; // Update to handle different entities.
   [key: string]: unknown;
   title: string; // preview page title
 }
