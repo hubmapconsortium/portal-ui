@@ -17,6 +17,8 @@ interface HierarchicalTerm {
 }
 
 export interface SearchStoreState {
+  search: string;
+  searchFields: string[];
   terms: Record<string, Set<string>>;
   termz: Record<string, HierarchicalTerm>;
   sortField: SortField;
@@ -27,6 +29,7 @@ export interface SearchStoreState {
 }
 
 export interface SearchStoreActions {
+  setSearch: (search: string) => void;
   setSortField: (sortField: SortField) => void;
   filterTerm: ({ term, value }: { term: string; value: string }) => void;
   filterHierarchicalParentTerm: ({
@@ -54,6 +57,11 @@ export interface SearchStore extends SearchStoreState, SearchStoreActions {}
 export const createStore = ({ initialState }: { initialState: SearchStoreState }) =>
   createStoreImmer<SearchStore>((set) => ({
     ...initialState,
+    setSearch: (search) => {
+      set((state) => {
+        state.search = search;
+      });
+    },
     setSortField: (sortField) => {
       set((state) => {
         state.sortField = sortField;

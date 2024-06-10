@@ -7,6 +7,7 @@ import {
 } from '@elastic/elasticsearch/lib/api/types';
 import esb from 'elastic-builder';
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 
 import { fetcher } from 'js/helpers/swr';
 import { getAuthHeader } from 'js/helpers/functions';
@@ -16,6 +17,7 @@ import { HitDoc } from './types';
 import { ResultsTable } from './Results';
 import { getPortalESField } from './buildTypesMap';
 import Facets from './Facets/Facets';
+import SearchBar from './SearchBar';
 
 function useAuthHeader() {
   const { groupsToken } = useAppContext();
@@ -44,12 +46,24 @@ function useRequestInit({ body }: { body: SearchRequest }) {
   return buildSearchRequestInit({ body, authHeader });
 }
 
-function buildQuery({ terms, termz, size, sourceFields, sortField }: Omit<SearchStoreState, 'endpoint' | 'swrConfig'>) {
+function buildQuery({
+  terms,
+  termz,
+  size,
+  search,
+  searchFields,
+  sourceFields,
+  sortField,
+}: Omit<SearchStoreState, 'endpoint' | 'swrConfig'>) {
   const query = esb
     .requestBodySearch()
     .size(size)
     .source(Object.keys(sourceFields).length ? Object.keys(sourceFields) : false)
     .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
+
+  if (search.length) {
+    query.query(esb.simpleQueryStringQuery(search).fields(searchFields));
+  }
 
   Object.entries(terms).forEach(([field, values]) => {
     const portalField = getPortalESField(field);
@@ -104,10 +118,13 @@ export function useSearch() {
 
 function Search() {
   return (
-    <Stack direction="row" spacing={2}>
-      <Facets />
-      <ResultsTable />;
-    </Stack>
+    <Box>
+      <SearchBar />
+      <Stack direction="row" spacing={2}>
+        <Facets />
+        <ResultsTable />
+      </Stack>
+    </Box>
   );
 }
 
@@ -117,6 +134,8 @@ function SearchWrapper() {
   return (
     <SearchStoreProvider
       initialState={{
+        search: '',
+        searchFields: ['all_text', 'description'],
         endpoint: elasticsearchEndpoint,
         swrConfig: {},
         terms: { entity_type: new Set(['Dataset']) },
