@@ -197,7 +197,13 @@ export function HierarchicalTermFacetItem({
           </TooltipIconButton>
         }
       >
-        <HierarchicalFacetParent childValues={childValues} label={label} field={field} {...rest} />
+        <HierarchicalFacetParent
+          childValues={childValues}
+          label={label}
+          field={field}
+          {...rest}
+          indeterminate={childState?.size > 0 && !childValues.every((v) => childState?.has(v))}
+        />
       </HierarchicalAccordionSummary>
       <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
         {childBuckets.map(({ key, doc_count }) => (
