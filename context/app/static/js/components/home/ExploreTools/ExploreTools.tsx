@@ -23,45 +23,27 @@ const cards = [
   {
     title: 'Analyze data in Workspaces',
     src: `${CDN_URL}/v2/explore-tools/workspaces.png`,
-    children: (
-      <ToolDescription
-        subtitle="Load datasets into an interactive JupyterLab Python and R analysis environment."
-        checklistItems={[
-          'No need to download data.',
-          'Use the provided code templates to get started with HuBMAP data.',
-          'The Workspaces feature is available once you sign in.',
-        ]}
-        {...(isAuthenticated ? workspaceCTAAuthenticated : workspaceCTAGuest)}
-      />
-    ),
+    subtitle: 'Load datasets into an interactive JupyterLab Python and R analysis environment.',
+    checklistItems: [
+      'No need to download data.',
+      'Use the provided code templates to get started with HuBMAP data.',
+      'The Workspaces feature is available once you sign in.',
+    ],
+    ...(isAuthenticated ? workspaceCTAAuthenticated : workspaceCTAGuest),
   },
   {
     title: 'Visualize data in Vitessce',
     src: `${CDN_URL}/v2/explore-tools/vitessce.png`,
-    children: (
-      <ToolDescription
-        subtitle="Explore spatial and single-cell multi-modal datasets with interactive components."
-        checklistItems={[
-          'Scatterplots',
-          'Heatmaps',
-          'Spatial Views',
-          'Genome Browser Tracks',
-          'Various Statistical Plots',
-        ]}
-      />
-    ),
+    subtitle: 'Explore spatial and single-cell multi-modal datasets with interactive components.',
+    checklistItems: ['Scatterplots', 'Heatmaps', 'Spatial Views', 'Genome Browser Tracks', 'Various Statistical Plots'],
   },
   {
     title: 'Explore biomarkers and cell types',
     src: `${CDN_URL}/v2/explore-tools/mcquery.png`,
-    children: (
-      <ToolDescription
-        subtitle="Discover new insights about genes, proteins or cell type related to HuBMAP data."
-        checklistItems={['Transcriptomic', 'Epigenomic', 'Proteomic', 'Cell Types']}
-        ctaText="Advanced Query"
-        ctaLink="/cells"
-      />
-    ),
+    subtitle: 'Discover new insights about genes, proteins or cell type related to HuBMAP data.',
+    checklistItems: ['Transcriptomic', 'Epigenomic', 'Proteomic', 'Cell Types'],
+    ctaText: 'Advanced Query',
+    ctaLink: '/cells',
   },
 ];
 
@@ -95,8 +77,10 @@ export default function ExploreTools() {
           if (!e.currentTarget.contains(e.relatedTarget as Node)) resetExpandedCardIndex();
         }}
       >
-        {cards.map((card, index) => (
-          <ToolsCard key={card.title} index={index} {...card} />
+        {cards.map(({ title, src, ...card }, index) => (
+          <ToolsCard key={title} title={title} src={src} index={index}>
+            <ToolDescription {...card} />
+          </ToolsCard>
         ))}
       </Grid>
     </CardGridContextProvider>
