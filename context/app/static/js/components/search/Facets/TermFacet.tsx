@@ -81,12 +81,12 @@ export function TermFacetItem({ label, field, ...rest }: TermFacet) {
 }
 
 export function TermFacet({ field }: { field: string }) {
-  const { data } = useSearch();
+  const { aggregations } = useSearch();
   const {
     terms: { [field]: term },
   } = useSearchStore();
 
-  const aggBuckets = data?.aggregations?.[field]?.buckets;
+  const aggBuckets = aggregations?.[field]?.buckets;
 
   if (!aggBuckets || !Array.isArray(aggBuckets)) {
     return null;
@@ -216,7 +216,7 @@ export function HierarchicalTermFacetItem({
 }
 
 export function HierarchicalTermFacet({ parentField, childField }: { parentField: string; childField: string }) {
-  const { data } = useSearch();
+  const { aggregations } = useSearch();
 
   const {
     termz: {
@@ -224,7 +224,11 @@ export function HierarchicalTermFacet({ parentField, childField }: { parentField
     },
   } = useSearchStore();
 
-  const parentBuckets = data?.aggregations?.[parentField]?.buckets;
+  if (!aggregations) {
+    return null;
+  }
+
+  const parentBuckets = aggregations?.[parentField]?.buckets;
 
   if (!parentBuckets || !Array.isArray(parentBuckets)) {
     return null;

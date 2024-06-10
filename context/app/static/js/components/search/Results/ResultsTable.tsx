@@ -3,6 +3,9 @@ import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { getByPath } from './utils';
@@ -82,9 +85,8 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<HitDoc> }) {
 }
 
 function ResultsTable() {
-  const { data } = useSearch();
+  const { searchHits: hits, loadMore, totalHitsCount } = useSearch();
   const { sourceFields } = useSearchStore();
-  const hits = data?.hits?.hits;
 
   // TODO: Loading State
   if (!hits) {
@@ -92,24 +94,32 @@ function ResultsTable() {
   }
 
   return (
-    <StyledTable data-testid="search-results-table">
-      <TableHead>
-        <TableRow>
-          {Object.entries(sourceFields).map(([field, { label }]) => (
-            <SortHeaderCell key={field} field={field} label={label} />
-          ))}
-        </TableRow>
-      </TableHead>
-      {hits.map((hit) => (
-        <StyledTableBody key={hit._id}>
-          <StyledTableRow>
-            {Object.keys(sourceFields).map((field) => (
-              <ResultCell hit={hit} field={field} key={field} />
+    <Box>
+      <StyledTable data-testid="search-results-table">
+        <TableHead>
+          <TableRow>
+            {Object.entries(sourceFields).map(([field, { label }]) => (
+              <SortHeaderCell key={field} field={field} label={label} />
             ))}
-          </StyledTableRow>
-        </StyledTableBody>
-      ))}
-    </StyledTable>
+          </TableRow>
+        </TableHead>
+        {hits.map((hit) => (
+          <StyledTableBody key={hit._id}>
+            <StyledTableRow>
+              {Object.keys(sourceFields).map((field) => (
+                <ResultCell hit={hit} field={field} key={field} />
+              ))}
+            </StyledTableRow>
+          </StyledTableBody>
+        ))}
+      </StyledTable>
+      <Button variant="contained" color="primary" onClick={loadMore} fullWidth>
+        See More Search Results
+      </Button>
+      <Typography variant="caption" color="secondary" textAlign="right">
+        {hits.length} Results Shown | {totalHitsCount} Total Results
+      </Typography>
+    </Box>
   );
 }
 

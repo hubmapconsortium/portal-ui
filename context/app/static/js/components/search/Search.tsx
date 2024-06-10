@@ -1,16 +1,9 @@
-import React, { useMemo } from 'react';
-import useSWR from 'swr';
-import {
-  SearchRequest,
-  SearchResponseBody,
-  AggregationsTermsAggregateBase,
-} from '@elastic/elasticsearch/lib/api/types';
+import React from 'react';
+import { AggregationsTermsAggregateBase } from '@elastic/elasticsearch/lib/api/types';
 import esb from 'elastic-builder';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-import { fetcher } from 'js/helpers/swr';
-import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 import { SearchStoreProvider, useSearchStore, SearchStoreState } from './store';
 import { HitDoc } from './types';
@@ -18,33 +11,7 @@ import { ResultsTable } from './Results';
 import { getPortalESField } from './buildTypesMap';
 import Facets from './Facets/Facets';
 import SearchBar from './SearchBar';
-
-function useAuthHeader() {
-  const { groupsToken } = useAppContext();
-  return useMemo(() => getAuthHeader(groupsToken), [groupsToken]);
-}
-
-interface BuildSearchRequestInitArgs {
-  body: SearchRequest;
-  authHeader: { Authorization?: string };
-}
-
-function buildSearchRequestInit({ body, authHeader }: BuildSearchRequestInitArgs): RequestInit {
-  return {
-    method: 'POST',
-    body: JSON.stringify(body),
-    headers: {
-      'Content-Type': 'application/json',
-      ...(authHeader ?? {}),
-    },
-  };
-}
-
-function useRequestInit({ body }: { body: SearchRequest }) {
-  const authHeader = useAuthHeader();
-
-  return buildSearchRequestInit({ body, authHeader });
-}
+import { useScrollSearchHits } from './useScrollSearchHits';
 
 function buildQuery({
   terms,
@@ -107,13 +74,7 @@ export function useSearch() {
 
   const query = buildQuery({ ...rest });
 
-  const requestInit = useRequestInit({ body: query });
-  const { data, isLoading } = useSWR<SearchResponseBody<HitDoc, Aggregations>>(
-    { requestInit, url: endpoint },
-    fetcher,
-    swrConfig,
-  );
-  return { data, isLoading };
+  return useScrollSearchHits<HitDoc, Aggregations>({ query, endpoint, swrConfig });
 }
 
 function Search() {
