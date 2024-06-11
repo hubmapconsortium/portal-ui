@@ -72,7 +72,7 @@ type Aggregations = Record<
 >;
 
 export function useSearch() {
-  const { endpoint, swrConfig, ...rest }: SearchStoreState = useSearchStore();
+  const { endpoint, swrConfig = {}, ...rest }: SearchStoreState = useSearchStore();
 
   const query = buildQuery({ ...rest });
 
@@ -115,11 +115,16 @@ type SearchConfig = Pick<
   facets: Facets;
 };
 
-function buildInitialSearchState({ facets: { terms = [], hierarchicalTerms = [] }, ...rest }: SearchConfig) {
+function buildInitialSearchState({
+  facets: { terms = [], hierarchicalTerms = [] },
+  swrConfig = {},
+  ...rest
+}: SearchConfig) {
   return {
     search: '',
     terms: buildTerms({ terms }),
     termz: buildHierachicalTerms({ hierarchicalTerms }),
+    swrConfig,
     ...rest,
   };
 }
@@ -139,8 +144,6 @@ function Search() {
 }
 
 const c = {
-  swrConfig: {},
-  search: '',
   searchFields: ['all_text', 'description'],
   // TODO: figure out how to make assertion unnecessary.
   sortField: { field: 'last_modified_timestamp', direction: 'desc' as const },

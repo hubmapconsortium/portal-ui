@@ -21,7 +21,7 @@ export interface SearchStoreState {
   sourceFields: string[];
   size: number;
   endpoint: string;
-  swrConfig: SWRConfiguration;
+  swrConfig?: SWRConfiguration;
 }
 
 export interface SearchStoreActions {
