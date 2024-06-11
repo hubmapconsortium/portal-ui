@@ -7,10 +7,6 @@ interface SortField {
   direction: 'asc' | 'desc';
 }
 
-interface SourceField {
-  label: string;
-}
-
 interface HierarchicalTerm {
   values: Record<string, Set<string>>;
   childField: string;
@@ -22,7 +18,7 @@ export interface SearchStoreState {
   terms: Record<string, Set<string>>;
   termz: Record<string, HierarchicalTerm>;
   sortField: SortField;
-  sourceFields: Record<string, SourceField>;
+  sourceFields: string[];
   size: number;
   endpoint: string;
   swrConfig: SWRConfiguration;

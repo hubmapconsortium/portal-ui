@@ -24,6 +24,7 @@ import {
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import { HitDoc } from '../types';
+import { getFieldLabel } from '../labelMap';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -109,8 +110,8 @@ function ResultsTable() {
       <StyledTable data-testid="search-results-table">
         <TableHead>
           <TableRow>
-            {Object.entries(sourceFields).map(([field, { label }]) => (
-              <SortHeaderCell key={field} field={field} label={label} />
+            {sourceFields.map((field) => (
+              <SortHeaderCell key={field} field={field} label={getFieldLabel(field)} />
             ))}
           </TableRow>
         </TableHead>
@@ -118,11 +119,11 @@ function ResultsTable() {
           {hits.map((hit) => (
             <React.Fragment key={hit._id}>
               <StyledTableRow $beforeHighlight={Boolean(hit?.highlight)}>
-                {Object.keys(sourceFields).map((field) => (
+                {sourceFields.map((field) => (
                   <ResultCell hit={hit} field={field} key={field} />
                 ))}
               </StyledTableRow>
-              {hit?.highlight && <HighlightRow colSpan={Object.keys(sourceFields).length} highlight={hit.highlight} />}
+              {hit?.highlight && <HighlightRow colSpan={sourceFields.length} highlight={hit.highlight} />}
             </React.Fragment>
           ))}
         </StyledTableBody>

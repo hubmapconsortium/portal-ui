@@ -25,7 +25,7 @@ function buildQuery({
   const query = esb
     .requestBodySearch()
     .size(size)
-    .source(Object.keys(sourceFields).length ? Object.keys(sourceFields) : false)
+    .source(sourceFields.length ? sourceFields : false)
     .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
 
   if (search.length) {
@@ -144,14 +144,14 @@ const c = {
   searchFields: ['all_text', 'description'],
   // TODO: figure out how to make assertion unnecessary.
   sortField: { field: 'last_modified_timestamp', direction: 'desc' as const },
-  sourceFields: {
-    hubmap_id: { label: 'HuBMAP ID' },
-    group_name: { label: 'Group' },
-    assay_display_name: { label: 'Data Types' },
-    'origin_samples.mapped_organ': { label: 'Organ' },
-    mapped_status: { label: 'Status' },
-    last_modified_timestamp: { label: 'Last Modified' },
-  },
+  sourceFields: [
+    'hubmap_id',
+    'group_name',
+    'assay_display_name',
+    'origin_samples.mapped_organ',
+    'mapped_status',
+    'last_modified_timestamp',
+  ],
   facets: {
     terms: ['entity_type'],
     hierarchicalTerms: [{ field: 'dataset_type', childField: 'assay_display_name' }],
