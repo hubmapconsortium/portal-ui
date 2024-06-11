@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import Container from '@mui/material/Container';
 import SvgIcon from '@mui/material/SvgIcon';
-import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
+import URLSvgIcon, { OrganIcon } from 'js/shared-styles/icons/URLSvgIcon';
 
 const Background = styled.div`
   background-color: #cfd3e2;
@@ -25,4 +25,9 @@ const StyledURLSvgIcon = styled(URLSvgIcon)`
   width: ${iconSize};
 `;
 
-export { Background, FlexContainer, StyledSvgIcon, StyledURLSvgIcon };
+const StyledOrganIcon = styled(OrganIcon)`
+  height: ${iconSize};
+  width: ${iconSize};
+`;
+
+export { Background, FlexContainer, StyledSvgIcon, StyledOrganIcon, StyledURLSvgIcon };

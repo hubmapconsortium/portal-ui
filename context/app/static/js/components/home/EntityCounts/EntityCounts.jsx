@@ -3,7 +3,7 @@ import React from 'react';
 import EntityCount from 'js/components/home/EntityCount';
 import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon } from 'js/shared-styles/icons';
 import { useEntityCounts } from './hooks';
-import { Background, FlexContainer, StyledSvgIcon, StyledURLSvgIcon } from './style';
+import { Background, FlexContainer, StyledSvgIcon, StyledOrganIcon } from './style';
 
 const entities = [
   {
@@ -34,17 +34,7 @@ function EntityCounts({ organsCount }) {
             href={`/search?entity_type[0]=${entity_type}`}
           />
         ))}
-        <EntityCount
-          icon={
-            <StyledURLSvgIcon
-              iconURL="https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-kidney.svg"
-              ariaLabel="Organs Icon"
-            />
-          }
-          count={organsCount}
-          label="Organs"
-          href="/organ"
-        />
+        <EntityCount icon={<StyledOrganIcon />} count={organsCount} label="Organs" href="/organ" />
         <EntityCount
           icon={<StyledSvgIcon component={CollectionIcon} color="primary" />}
           count={entityCounts?.Collection}

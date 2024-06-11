@@ -1,3 +1,4 @@
+import { grey } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 const purple = '#444A65';
@@ -87,9 +88,16 @@ declare module '@mui/material/styles' {
     zIndex: ZIndex;
   }
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme extends Theme {}
+  export interface DefaultTheme extends Theme { }
 
   export type ThemeOptions = Partial<Theme>;
+}
+
+declare module '@mui/material/SvgIcon' {
+  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
+  export interface SvgIconPropsSizeOverrides {
+    [key: `${number}rem`]: true;
+  }
 }
 
 declare module '@mui/material' {
@@ -99,6 +107,14 @@ declare module '@mui/material' {
 
   export interface ButtonPropsVariantOverrides {
     elevated: true;
+  }
+
+  export interface ChipPropsVariantOverrides {
+    elevated: true;
+  }
+
+  export interface ChipOwnProps {
+    borderRadius?: 'halfRound';
   }
 }
 
@@ -280,6 +296,27 @@ const theme = createTheme({
           style: {
             boxShadow:
               '0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 0px 2px 0px rgba(0, 0, 0, 0.14)',
+          },
+        },
+      ],
+    },
+    MuiChip: {
+      variants: [
+        {
+          props: { variant: 'elevated' },
+          style: {
+            backgroundColor: 'white',
+            '&:hover': {
+              backgroundColor: grey[100],
+            },
+            boxShadow:
+              '0px 1px 3px 0px rgba(0, 0, 0, 0.20), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 0px 2px 0px rgba(0, 0, 0, 0.14)',
+          },
+        },
+        {
+          props: { borderRadius: 'halfRound' },
+          style: {
+            borderRadius: '4px',
           },
         },
       ],
