@@ -8,7 +8,7 @@ import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
-import { Dataset } from '../Contexts';
+import { Dataset } from '../types';
 
 type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>>[];
 

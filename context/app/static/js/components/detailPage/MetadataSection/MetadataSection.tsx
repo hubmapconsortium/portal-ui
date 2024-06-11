@@ -8,6 +8,7 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { getMetadata, hasMetadata } from 'js/helpers/metadata';
+import { isDataset } from 'js/components/types';
 import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MultiAssayMetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import MetadataTable from '../MetadataTable';
@@ -122,14 +123,18 @@ function MultiAssayMetadata() {
   const datasetsWithMetadata = useRelatedMultiAssayMetadata();
   const { data: fieldDescriptions } = useMetadataFieldDescriptions();
 
-  const {
-    entity: { donor },
-  } = useFlaskDataContext();
+  const { entity } = useFlaskDataContext();
+
+  if (!isDataset(entity)) {
+    throw new Error(`Expected entity to be a dataset, got ${entity.entity_type}`);
+  }
+
+  const { donor } = entity;
 
   const entities = [donor, ...datasetsWithMetadata]
     .filter((e) => hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }))
     .map((e) => {
-      const label = e.entity_type === 'Donor' ? 'Donor' : e.assay_display_name;
+      const label = isDataset(e) ? e.assay_display_name : e.entity_type;
       return {
         uuid: e.uuid,
         label,
