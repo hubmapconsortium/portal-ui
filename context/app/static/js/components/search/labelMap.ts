@@ -6,6 +6,8 @@ const labelMap: Record<string, string> = {
   mapped_status: 'Status',
   dataset_type: 'Dataset Type',
   last_modified_timestamp: 'Last Modified',
+  age_value: 'Donor Age',
+  entity_type: 'Entity Type',
 };
 
 export function getFieldLabel(field: string) {

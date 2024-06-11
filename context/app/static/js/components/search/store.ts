@@ -12,11 +12,18 @@ interface HierarchicalTerm {
   childField: string;
 }
 
+interface Range {
+  min: number;
+  max: number;
+  values: { min: number; max: number };
+}
+
 export interface SearchStoreState {
   search: string;
   searchFields: string[];
   terms: Record<string, Set<string>>;
   hierarchicalTerms: Record<string, HierarchicalTerm>;
+  ranges: Record<string, Range>;
   sortField: SortField;
   sourceFields: string[];
   size: number;
@@ -46,6 +53,7 @@ export interface SearchStoreActions {
     parentValue: string;
     value: string;
   }) => void;
+  filterRange: ({ field, min, max }: { field: string; min: number; max: number }) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -115,6 +123,16 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         } else {
           childValues.add(value);
         }
+      });
+    },
+    filterRange: ({ field, min, max }) => {
+      set((state) => {
+        const range = state?.ranges[field];
+
+        if (!range) {
+          return;
+        }
+        range.values = { min, max };
       });
     },
   }));

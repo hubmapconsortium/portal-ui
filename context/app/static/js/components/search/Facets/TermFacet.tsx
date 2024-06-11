@@ -19,6 +19,7 @@ import {
   HierarchicalAccordionSummary,
 } from './style';
 import FacetAccordion from './FacetAccordion';
+import { getFieldLabel } from '../labelMap';
 
 interface CheckboxItem {
   label: string;
@@ -93,7 +94,7 @@ export function TermFacet({ field }: { field: string }) {
   }
 
   return (
-    <FacetAccordion title={field} position="inner">
+    <FacetAccordion title={getFieldLabel(field)} position="inner">
       {aggBuckets.map((bucket) => (
         <TermFacetItem
           label={bucket.key}
@@ -241,7 +242,7 @@ export function HierarchicalTermFacet({ parentField, childField }: { parentField
   }
 
   return (
-    <FacetAccordion title={parentField} position="inner">
+    <FacetAccordion title={getFieldLabel(parentField)} position="inner">
       {parentBuckets.map((bucket) => (
         <HierarchicalTermFacetItem
           label={bucket.key}

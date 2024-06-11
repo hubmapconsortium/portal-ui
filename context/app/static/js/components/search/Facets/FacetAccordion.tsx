@@ -10,8 +10,8 @@ function FacetAccordion({
   children,
 }: PropsWithChildren<{ title: string; position: 'inner' | 'outer' }>) {
   return (
-    <Accordion key={title} defaultExpanded disableGutters variant="unstyled">
-      <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />}>
+    <Accordion key={title} defaultExpanded disableGutters variant="unstyled" sx={{ width: '100%' }}>
+      <InnerAccordionSummary expandIcon={<StyledExpandMoreIcon />} sx={{ width: '100%' }}>
         <Typography variant="subtitle2" color={position === 'inner' ? 'textPrimary' : 'secondary'}>
           {title}
         </Typography>

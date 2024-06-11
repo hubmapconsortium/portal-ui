@@ -16,6 +16,7 @@ import { useScrollSearchHits } from './useScrollSearchHits';
 function buildQuery({
   terms,
   hierarchicalTerms,
+  ranges,
   size,
   search,
   searchFields,
@@ -38,6 +39,16 @@ function buildQuery({
       query.postFilter(esb.termsQuery(portalField, [...values]));
     }
     query.agg(esb.termsAggregation(field, portalField));
+  });
+
+  Object.entries(ranges).forEach(([field, { values, min, max }]) => {
+    const portalField = getPortalESField(field);
+
+    if (values.min !== min || values.max !== max) {
+      query.postFilter(esb.rangeQuery(portalField).gte(values.min).lte(values.max));
+    }
+    const interval = Math.ceil((max - min) / 20);
+    query.agg(esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max));
   });
 
   Object.entries(hierarchicalTerms).forEach(([field, { values, childField }]) => {
@@ -79,14 +90,21 @@ export function useSearch() {
   return useScrollSearchHits<HitDoc, Aggregations>({ query, endpoint, swrConfig });
 }
 
-interface HierarchicalTerm {
+interface HierarchicalTermConfig {
   field: string;
   childField: string;
 }
 
+interface RangeConfig {
+  field: string;
+  min: number;
+  max: number;
+}
+
 interface Facets {
   terms?: string[];
-  hierarchicalTerms?: HierarchicalTerm[];
+  hierarchicalTerms?: HierarchicalTermConfig[];
+  ranges: RangeConfig[];
 }
 
 function buildTerms({ terms }: Required<Pick<Facets, 'terms'>>) {
@@ -108,6 +126,18 @@ function buildHierachicalTerms({ hierarchicalTerms }: Required<Pick<Facets, 'hie
   );
 }
 
+function buildRanges({ ranges }: Required<Pick<Facets, 'ranges'>>) {
+  return ranges.reduce<Record<string, { values: { min: number; max: number }; min: number; max: number }>>(
+    (acc, curr) => {
+      const copy = acc;
+      const { min, max } = curr;
+      copy[curr.field] = { values: { min, max }, min, max };
+      return copy;
+    },
+    {},
+  );
+}
+
 type SearchConfig = Pick<
   SearchStoreState,
   'searchFields' | 'sourceFields' | 'endpoint' | 'swrConfig' | 'sortField' | 'size'
@@ -116,7 +146,7 @@ type SearchConfig = Pick<
 };
 
 function buildInitialSearchState({
-  facets: { terms = [], hierarchicalTerms = [] },
+  facets: { terms = [], hierarchicalTerms = [], ranges = [] },
   swrConfig = {},
   ...rest
 }: SearchConfig) {
@@ -124,6 +154,7 @@ function buildInitialSearchState({
     search: '',
     terms: buildTerms({ terms }),
     hierarchicalTerms: buildHierachicalTerms({ hierarchicalTerms }),
+    ranges: buildRanges({ ranges }),
     swrConfig,
     ...rest,
   };
@@ -158,6 +189,7 @@ const c = {
   facets: {
     terms: ['entity_type'],
     hierarchicalTerms: [{ field: 'dataset_type', childField: 'assay_display_name' }],
+    ranges: [{ field: 'donor.mapped_metadata.age_value', min: 0, max: 100 }],
   },
   size: 10,
 };
