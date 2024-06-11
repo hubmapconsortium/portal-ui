@@ -157,7 +157,7 @@ export function HierarchicalTermFacetItem({
   }, [setExpanded]);
 
   const {
-    termz: {
+    hierarchicalTerms: {
       [parentField]: {
         values: { [label]: childState },
       },
@@ -225,7 +225,7 @@ export function HierarchicalTermFacet({ parentField, childField }: { parentField
   const { aggregations } = useSearch();
 
   const {
-    termz: {
+    hierarchicalTerms: {
       [parentField]: { values },
     },
   } = useSearchStore();

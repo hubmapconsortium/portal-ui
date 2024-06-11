@@ -15,7 +15,7 @@ import { useScrollSearchHits } from './useScrollSearchHits';
 
 function buildQuery({
   terms,
-  termz,
+  hierarchicalTerms,
   size,
   search,
   searchFields,
@@ -40,7 +40,7 @@ function buildQuery({
     query.agg(esb.termsAggregation(field, portalField));
   });
 
-  Object.entries(termz).forEach(([field, { values, childField }]) => {
+  Object.entries(hierarchicalTerms).forEach(([field, { values, childField }]) => {
     if (!childField) {
       return;
     }
@@ -123,7 +123,7 @@ function buildInitialSearchState({
   return {
     search: '',
     terms: buildTerms({ terms }),
-    termz: buildHierachicalTerms({ hierarchicalTerms }),
+    hierarchicalTerms: buildHierachicalTerms({ hierarchicalTerms }),
     swrConfig,
     ...rest,
   };

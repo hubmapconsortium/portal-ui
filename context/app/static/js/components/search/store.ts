@@ -16,7 +16,7 @@ export interface SearchStoreState {
   search: string;
   searchFields: string[];
   terms: Record<string, Set<string>>;
-  termz: Record<string, HierarchicalTerm>;
+  hierarchicalTerms: Record<string, HierarchicalTerm>;
   sortField: SortField;
   sourceFields: string[];
   size: number;
@@ -78,7 +78,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     },
     filterHierarchicalParentTerm: ({ term, value, childValues }) => {
       set((state) => {
-        const termState = state?.termz?.[term];
+        const termState = state?.hierarchicalTerms?.[term];
 
         if (!termState) {
           return;
@@ -95,7 +95,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     },
     filterHierarchicalChildTerm: ({ parentTerm, parentValue, value }) => {
       set((state) => {
-        const termState = state?.termz?.[parentTerm];
+        const termState = state?.hierarchicalTerms?.[parentTerm];
 
         if (!termState) {
           return;
