@@ -55,7 +55,7 @@ function Home({ organsCount }: HomeProps) {
         <RecentEntities />
         <Box gridArea="explore-tools">
           <SectionHeader variant="h4" component="h3">
-            Explore Tools and Resources for Powerful Data Visualization & Analysis
+            Explore Tools and Resources for Data Visualization & Analysis
           </SectionHeader>
           <ExploreTools />
         </Box>
@@ -66,9 +66,6 @@ function Home({ organsCount }: HomeProps) {
           <DataUseGuidelines />
         </Box>
         <Box gridArea="external-links">
-          <SectionHeader variant="h4" component="h3">
-            External Links
-          </SectionHeader>
           <ExternalLinks />
         </Box>
       </LowerContainerGrid>

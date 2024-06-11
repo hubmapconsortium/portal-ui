@@ -37,8 +37,17 @@ export function EntityList<T extends { uuid: string }>({
           <EntityComponent key={entity.uuid} entity={entity} />
         ))}
         <Box p={2} display="flex" justifyContent="center">
-          <Button component={Link} variant="outlined" href={viewAllLink}>
-            View All {entityName}
+          <Button
+            component={Link}
+            variant="outlined"
+            sx={(theme) => ({
+              border: `1px solid ${theme.palette.primary.lowEmphasis}`,
+              borderRadius: '0.25rem',
+            })}
+            href={viewAllLink}
+            startIcon={<Icon />}
+          >
+            View All {pluralEntityName}
           </Button>
         </Box>
       </Paper>
