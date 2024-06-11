@@ -1,5 +1,4 @@
-import React from 'react';
-import { useDebouncedCallback } from 'use-debounce';
+import React, { SyntheticEvent, useCallback, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 
 import Slider from '@mui/material/Slider';
@@ -30,12 +29,28 @@ function RangeFacet({ field }: { field: string }) {
   } = useSearchStore();
   const theme = useTheme();
 
-  const debouncedCallback = useDebouncedCallback((value: number | number[]) => {
-    if (!Array.isArray(value)) {
-      return;
-    }
-    filterRange({ field, min: value[0], max: value[1] });
-  }, 400);
+  const [selectedValues, setSelectedValues] = useState<number[]>([values.min, values.max]);
+
+  const handleChange = useCallback(
+    (_: Event, value: number | number[]) => {
+      if (!Array.isArray(value)) {
+        return;
+      }
+      setSelectedValues(value);
+    },
+    [setSelectedValues],
+  );
+
+  const handleCommittedChange = useCallback(
+    (_: Event | SyntheticEvent, value: number | number[]) => {
+      if (!Array.isArray(value)) {
+        return;
+      }
+
+      filterRange({ field, min: value[0], max: value[1] });
+    },
+    [filterRange, field],
+  );
 
   const aggBuckets = aggregations?.[field]?.buckets;
 
@@ -69,13 +84,12 @@ function RangeFacet({ field }: { field: string }) {
           size="small"
           getAriaLabel={(index) => (index === 0 ? 'Minimum value' : 'Maximum value')}
           id={field}
-          value={[values.min, values.max]}
+          value={[selectedValues[0], selectedValues[1]]}
           min={min}
           max={max}
           valueLabelDisplay="auto"
-          onChange={(_, value) => {
-            debouncedCallback(value);
-          }}
+          onChange={handleChange}
+          onChangeCommitted={handleCommittedChange}
           marks={[
             { value: min, label: min },
             { value: max, label: max },
