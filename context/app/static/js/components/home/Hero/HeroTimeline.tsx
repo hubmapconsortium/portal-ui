@@ -27,7 +27,15 @@ export default function HeroTimeline({ index }: HeroTimelineProps) {
     }
   }, [activeTab, index, isDesktop]);
   return (
-    <HeroPanelContainer ref={ref} onFocus={onFocus} $index={index} $activeSlide={activeTab}>
+    <HeroPanelContainer
+      ref={ref}
+      onFocus={onFocus}
+      $index={index}
+      $activeSlide={activeTab}
+      role="tabpanel"
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+    >
       <Typography variant="h4" px={2} py={1} zIndex={2} bgcolor="#FBEEEB" position="sticky" top={0}>
         Latest Changes
       </Typography>

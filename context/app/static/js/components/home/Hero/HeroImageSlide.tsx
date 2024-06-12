@@ -6,7 +6,14 @@ import { useHeroTabContext } from './HeroTabsContext';
 export function HeroImageSlide({ title, index }: { title: string; index: number }) {
   const { activeTab } = useHeroTabContext();
   return (
-    <HeroPanelContainer $index={index} $activeSlide={activeTab} $isImage>
+    <HeroPanelContainer
+      $index={index}
+      $activeSlide={activeTab}
+      $isImage
+      role="tabpanel"
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+    >
       <PlaceholderImage
         title={title}
         alt={title}

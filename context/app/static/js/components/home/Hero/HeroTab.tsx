@@ -58,6 +58,10 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
         onFocus={handleInteraction}
         bgcolor={bgColor}
         tabIndex={0}
+        role="tab"
+        aria-selected={activeTab === index}
+        aria-controls={`tabpanel-${index}`}
+        id={`tab-${index}`}
       >
         <Hidden mdUp>
           <Content {...props} />
