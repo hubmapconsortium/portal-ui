@@ -88,9 +88,7 @@ declare module '@mui/material/styles' {
     zIndex: ZIndex;
   }
   // eslint-disable-next-line @typescript-eslint/no-empty-interface
-  export interface DefaultTheme extends Theme { }
-
-  export type ThemeOptions = Partial<Theme>;
+  export interface DefaultTheme extends Theme {}
 }
 
 declare module '@mui/material/SvgIcon' {
