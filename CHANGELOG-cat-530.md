@@ -1,1 +1,0 @@
-- Fix entity table icon colors.
