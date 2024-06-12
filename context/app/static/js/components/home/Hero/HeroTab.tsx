@@ -3,6 +3,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { InternalLink } from 'js/shared-styles/Links';
 import React, { ReactElement } from 'react';
+import { HeroTabContainer } from './styles';
+import { useHeroTabContext } from './HeroTabsContext';
 
 interface HeroTabActionProps {
   title: string;
@@ -28,6 +30,7 @@ interface HeroTabProps {
   isCurrent?: boolean;
   activeBgColor?: string;
   actions?: HeroTabActionProps[];
+  index: number;
 }
 
 export default function HeroTab({
@@ -37,16 +40,25 @@ export default function HeroTab({
   isCurrent,
   actions,
   activeBgColor = '#F0F3EB',
+  index
 }: HeroTabProps) {
+  const { activeTab, setActiveTab } = useHeroTabContext();
+  const handleInteraction = () => {
+    setActiveTab(index);
+  }
+
   const bgColor = isCurrent ? activeBgColor : '#FFFFFF';
+
   return (
-    <Stack bgcolor={bgColor} p={2} spacing={1}>
-      <Stack direction="row" spacing={1}>
-        {icon}
-        <Typography variant="h5">{title}</Typography>
+    <HeroTabContainer $index={index} onClick={handleInteraction} onMouseEnter={handleInteraction} bgcolor={bgColor} >
+      <Stack p={2} spacing={1}>
+        <Stack direction="row" spacing={1}>
+          {icon}
+          <Typography variant="h5">{title}</Typography>
+        </Stack>
+        <Typography variant="body1">{description}</Typography>
+        {actions?.map((action) => <HeroTabAction key={action.title} {...action} />)}
       </Stack>
-      <Typography variant="body1">{description}</Typography>
-      {actions?.map((action) => <HeroTabAction key={action.title} {...action} />)}
-    </Stack>
+    </HeroTabContainer>
   );
 }
