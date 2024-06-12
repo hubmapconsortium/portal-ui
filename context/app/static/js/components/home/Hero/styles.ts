@@ -3,67 +3,72 @@ import { styled } from '@mui/material/styles';
 
 interface HeroGridContainerProps extends BoxProps {
   $activeSlide: number;
-  $index: number;
 }
 
-export const HeroGridContainer = styled(Box)<HeroGridContainerProps>(({ theme, $activeSlide }) => ({
+export const HeroGridContainer = styled(Box)<HeroGridContainerProps>(({ theme }) => ({
   display: 'grid',
   width: '100%',
   // On mobile, the grid is a single column containing all the tabs
   [theme.breakpoints.down('md')]: {
     gridTemplateColumns: '1fr',
-    gridTemplateRows: 'repeat(4, auto max-content)',
+    gridTemplateRows: 'auto',
     gridTemplateAreas: `
-      'panel0'
       'tab0'
-      'panel1'
       'tab1'
-      'panel2'
       'tab2'
-      'panel3'
-      'tab3'
-      `,
+      'tab3'`,
   },
-  // On desktop, the grid has the panel on top and the tabs below
+  // On desktop, the grid has a carousel panel on top and the tabs below
   [theme.breakpoints.up('md')]: {
     maxHeight: '36rem',
     width: '100%',
     position: 'relative',
+    overflow: 'hidden',
 
     gridTemplateColumns: 'repeat(4, 1fr)',
-    gridTemplateRows: 'auto',
+    gridTemplateRows: 'auto auto',
     gridTemplateAreas: `
-      '${Array.from({ length: 4 })
-        .map(() => `panel${$activeSlide}`)
-        .join(' ')}'
+      'panel panel panel panel'
       'tab0 tab1 tab2 tab3'
     `,
-    '& > :not(:first-child)': {
-      borderRight: `1px solid ${theme.palette.grey[200]}`,
-      '&:last-child': {
-        borderRight: '0px solid transparent',
-      },
-    },
+    transition: theme.transitions.create('grid-template-columns', {
+      easing: theme.transitions.easing.easeIn,
+      duration: theme.transitions.duration.shortest,
+    }),
   },
 }));
 
 interface HeroSubContainerProps extends BoxProps {
   $index: number;
   $activeSlide: number;
+  $isImage?: boolean;
 }
 
-export const HeroTabContainer = styled(Box)<HeroSubContainerProps>(({ $index }: HeroSubContainerProps) => ({
+export const HeroTabContainer = styled(Box)<HeroSubContainerProps>(({ $index, $activeSlide, theme, ...props }) => ({
   gridArea: `tab${$index}`,
+
+  [theme.breakpoints.up('md')]: {
+    backgroundColor: $activeSlide === $index ? props.bgcolor : theme.palette.common.white,
+    ':not(:last-child)': {
+      borderRight: `1px solid ${theme.palette.grey[200]}`,
+    },
+  },
 }));
 
-export const HeroPanelContainer = styled(Box)<HeroSubContainerProps>(({ theme, $index, $activeSlide }) => ({
-  gridArea: `panel${$index}`,
-  aspectRatio: '32/9',
-  width: '100%',
+export const HeroPanelContainer = styled(Box)<HeroSubContainerProps>(({ theme, $index, $activeSlide, $isImage }) => ({
   position: 'relative',
+
   [theme.breakpoints.up('md')]: {
+    gridArea: `panel`,
+    width: '100%',
     maxHeight: '22.5rem',
-    display: $activeSlide === $index ? 'block' : 'none',
-    overflow: 'auto',
+    opacity: $activeSlide === $index ? 1 : 0,
+    speak: $activeSlide === $index ? 'auto' : 'none',
+    left: $activeSlide === $index ? 0 : `${$activeSlide - $index}00%`,
+    overflowY: !$isImage ? 'auto' : 'hidden',
+    transition: theme.transitions.create(['max-width', 'opacity', 'left'], {
+      easing: theme.transitions.easing.easeInOut,
+      duration: theme.transitions.duration.shortest,
+    }),
   },
 }));

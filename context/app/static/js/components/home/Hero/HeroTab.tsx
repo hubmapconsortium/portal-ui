@@ -2,7 +2,8 @@ import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { InternalLink } from 'js/shared-styles/Links';
-import React, { ReactElement } from 'react';
+import React, { ComponentType, ReactElement } from 'react';
+import Hidden from '@mui/material/Hidden';
 import { HeroTabContainer } from './styles';
 import { useHeroTabContext } from './HeroTabsContext';
 
@@ -18,47 +19,58 @@ function HeroTabAction({ title, icon, onClick, href }: HeroTabActionProps) {
     <Chip borderRadius="halfRound" sx={{ px: 1 }} variant="elevated" icon={icon} label={title} onClick={onClick} />
   );
   if (href) {
-    return <InternalLink href={href}>{chip}</InternalLink>;
+    return (
+      <InternalLink sx={{ maxWidth: 'fit-content' }} href={href}>
+        {chip}
+      </InternalLink>
+    );
   }
   return chip;
 }
-
-interface HeroTabProps {
+export interface HeroTabProps {
   title: string;
   description: string;
   icon: ReactElement;
   isCurrent?: boolean;
-  activeBgColor?: string;
+  bgColor?: string;
   actions?: HeroTabActionProps[];
   index: number;
+  content: ComponentType<Pick<HeroTabProps, 'title' | 'index'>>;
 }
 
-export default function HeroTab({
-  title,
-  description,
-  icon,
-  isCurrent,
-  actions,
-  activeBgColor = '#F0F3EB',
-  index
-}: HeroTabProps) {
+export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
+  const { title, description, icon, actions, bgColor, index } = props;
   const { activeTab, setActiveTab } = useHeroTabContext();
   const handleInteraction = () => {
     setActiveTab(index);
-  }
-
-  const bgColor = isCurrent ? activeBgColor : '#FFFFFF';
+  };
 
   return (
-    <HeroTabContainer $index={index} onClick={handleInteraction} onMouseEnter={handleInteraction} bgcolor={bgColor} >
-      <Stack p={2} spacing={1}>
-        <Stack direction="row" spacing={1}>
-          {icon}
-          <Typography variant="h5">{title}</Typography>
+    <>
+      <Hidden mdDown>
+        <Content {...props} />
+      </Hidden>
+      <HeroTabContainer
+        $index={index}
+        $activeSlide={activeTab}
+        onClick={handleInteraction}
+        onMouseEnter={handleInteraction}
+        onFocus={handleInteraction}
+        bgcolor={bgColor}
+        tabIndex={0}
+      >
+        <Hidden mdUp>
+          <Content {...props} />
+        </Hidden>
+        <Stack p={2} spacing={1}>
+          <Stack direction="row" spacing={1}>
+            {icon}
+            <Typography variant="h5">{title}</Typography>
+          </Stack>
+          <Typography variant="body1">{description}</Typography>
+          {actions?.map((action) => <HeroTabAction key={action.title} {...action} />)}
         </Stack>
-        <Typography variant="body1">{description}</Typography>
-        {actions?.map((action) => <HeroTabAction key={action.title} {...action} />)}
-      </Stack>
-    </HeroTabContainer>
+      </HeroTabContainer>
+    </>
   );
 }
