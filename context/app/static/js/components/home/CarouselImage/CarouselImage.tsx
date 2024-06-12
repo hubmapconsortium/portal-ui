@@ -2,9 +2,10 @@ import React from 'react';
 import { useTheme } from '@mui/material/styles';
 
 import { routeContainerMaxWidth, routeContainerPadding } from 'js/components/Routes/Route/style';
-import { callToActionMdOrLargerWidth } from 'js/components/home/ImageCarouselContainer/style';
 import { StyledImage } from './style';
 import { getCarouselImageSrcSet } from './utils';
+
+const callToActionMdOrLargerWidth = 400;
 
 // Responsive images: https://developer.mozilla.org/en-US/docs/Learn/HTML/Multimedia_and_embedding/Responsive_images
 // Setting height and width: https://www.smashingmagazine.com/2020/03/setting-height-width-images-important-again/
