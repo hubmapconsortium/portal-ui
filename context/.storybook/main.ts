@@ -20,17 +20,19 @@ const config: StorybookConfig = {
     // exclude svgs from the default file loader
     config.module?.rules?.forEach((rule) => {
       if (
+        // Typescript really wants us to make sure rule is an object
         typeof rule === 'object' &&
         rule != null &&
         'test' in rule &&
         rule.test instanceof RegExp &&
+        // Here's the actual check
         rule.test.test('.svg')
       ) {
         rule.exclude = /\.svg$/;
       }
     });
 
-    // merge aliases and svgr loader into the storybook webpack config
+    // add aliases and svgr loader
     return merge(config, {
       module: {
         rules: [
