@@ -16,14 +16,31 @@ const config: StorybookConfig = {
     '@storybook/addon-webpack5-compiler-swc',
   ],
 
-  webpackFinal: async (config, { configType }) => {
+  webpackFinal: async (config) => {
+    // exclude svgs from the default file loader
+    config.module?.rules?.forEach((rule) => {
+      if (
+        typeof rule === 'object' &&
+        rule != null &&
+        'test' in rule &&
+        rule.test instanceof RegExp &&
+        rule.test.test('.svg')
+      ) {
+        rule.exclude = /\.svg$/;
+      }
+    });
+
     // merge aliases and svgr loader into the storybook webpack config
     return merge(config, {
       module: {
         rules: [
           {
             test: /\.svg$/,
-            use: ['@svgr/webpack', 'url-loader'],
+            use: [
+              {
+                loader: '@svgr/webpack',
+              },
+            ],
           },
         ],
       },

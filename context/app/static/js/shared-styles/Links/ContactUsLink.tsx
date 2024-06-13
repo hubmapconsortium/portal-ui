@@ -22,8 +22,8 @@ function getHelpEvent() {
   trackLink(window.location.href, 'help_form');
 }
 
-function ContactUsLink({ iconFontSize: fontSize, children, onClick, ...props }: ContactUsLinkProps) {
-  const fallback = props.capitalize ? capitalizeText : defaultText;
+function ContactUsLink({ iconFontSize: fontSize, capitalize, children, onClick, ...props }: ContactUsLinkProps) {
+  const fallback = capitalize ? capitalizeText : defaultText;
   return (
     <IconLink
       {...props}

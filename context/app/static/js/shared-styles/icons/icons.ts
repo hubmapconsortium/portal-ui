@@ -23,7 +23,7 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
 import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { ReactComponent as SearchIconSVG } from 'assets/svg/search-icon.svg';
+import SearchIconSVG from 'assets/svg/search-icon.svg';
 import { ElementType } from 'react';
 import { BarChartRounded, LightbulbOutlined } from '@mui/icons-material';
 import GetAppRounded from '@mui/icons-material/GetAppRounded';

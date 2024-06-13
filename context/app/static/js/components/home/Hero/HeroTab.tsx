@@ -56,6 +56,7 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
         onClick={handleInteraction}
         onMouseEnter={handleInteraction}
         onFocus={handleInteraction}
+        onTouchEnd={handleInteraction}
         bgcolor={bgColor}
         tabIndex={0}
         role="tab"
