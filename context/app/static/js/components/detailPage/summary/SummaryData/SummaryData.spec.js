@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, appProviderEndpoints } from 'test-utils/functions';
-import { rest } from 'msw';
+import { http } from 'msw';
 import { setupServer } from 'msw/node';
 
 import SummaryData from './SummaryData';
@@ -15,7 +15,7 @@ const versionResponse = [
 ];
 
 const server = setupServer(
-  rest.get(`/${appProviderEndpoints.entityEndpoint}/datasets/${testUUID}/revisions`, (req, res, ctx) => {
+  http.get(`/${appProviderEndpoints.entityEndpoint}/datasets/${testUUID}/revisions`, (req, res, ctx) => {
     return res(ctx.json(versionResponse), ctx.status(200));
   }),
 );

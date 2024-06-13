@@ -21,7 +21,6 @@ initialize({
 });
 
 export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
   controls: {
     matchers: {
       color: /(background|color)$/i,
@@ -35,9 +34,10 @@ const mockGroupsToken = '';
 
 export const decorators = [
   (Story) => (
-    <Providers endpoints={mockEndpoints} groupsToken={mockGroupsToken}>
+    <Providers endpoints={mockEndpoints} groupsToken={mockGroupsToken} isAuthenticated={false} userEmail={'undefined'} workspacesToken={'undefined'} isWorkspacesUser={false} isHubmapUser={false} flaskData={undefined}>
       <Story />
     </Providers>
   ),
   mswDecorator,
 ];
+export const tags = ['autodocs'];

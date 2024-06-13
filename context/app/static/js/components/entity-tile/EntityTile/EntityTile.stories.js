@@ -1,5 +1,5 @@
 import React from 'react';
-import { rest } from 'msw';
+import { http } from 'msw';
 
 import EntityTile from './EntityTile';
 
@@ -93,7 +93,7 @@ ImageNotFound.args = datasetArgs;
 ImageNotFound.parameters = {
   msw: {
     handlers: [
-      rest.get(
+      http.get(
         'https://assets.hubmapconsortium.org/ffff0185e2163e03da79489140fee0d1/thumbnail.jpg',
         (req, res, ctx) => {
           return res(ctx.status(404));
