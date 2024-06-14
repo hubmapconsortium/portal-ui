@@ -4,9 +4,9 @@
   "description": "This segregates the test-only dependencies from those required for the build.",
   "main": "index.js",
   "devDependencies": {
-    "@testing-library/cypress": "^9.0.0",
+    "@testing-library/cypress": "^10.0.2",
     "artillery": "^1.6.1",
-    "cypress": "^12.13.0"
+    "cypress": "^13.11.0"
   },
   "scripts": {
     "cypress:open": "cypress open",
