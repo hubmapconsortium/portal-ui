@@ -3,6 +3,7 @@ import Paper from '@mui/material/Paper';
 import { DownloadIcon, LightbulbIcon, SearchIcon, VisualizationIcon } from 'js/shared-styles/icons';
 import { OrganIcon } from 'js/shared-styles/icons/URLSvgIcon';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import theme from 'js/theme/theme';
 import HeroTimeline from './HeroTimeline';
 import HeroTab, { HeroTabProps } from './HeroTab';
 import { HeroImageSlide } from './HeroImageSlide';
@@ -14,7 +15,7 @@ const heroTabs = [
     title: 'Discover',
     description:
       'Find data with our faceted search or explore by biological entities of organs, molecules or cell types.',
-    icon: <SearchIcon color="success" fontSize="1.5rem" />,
+    icon: <SearchIcon color={theme.palette.success.main} fontSize="1.5rem" />,
     actions: [
       {
         title: 'Explore organs',
@@ -34,7 +35,7 @@ const heroTabs = [
     title: 'Visualize',
     description:
       'Explore spatial and single-cell data through powerful visualizations to gain deeper insights for your research.',
-    icon: <VisualizationIcon color="primary" fontSize="1.5rem" />,
+    icon: <VisualizationIcon color="error" fontSize="1.5rem" />,
     actions: [
       {
         title: 'Visualize data with Workspaces',
