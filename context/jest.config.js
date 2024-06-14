@@ -1,4 +1,5 @@
-module.exports = {
+/** @type {import('jest').Config} */
+const config = {
   restoreMocks: true,
   testPathIgnorePatterns: ['jest.config.js', '/cypress/'],
   setupFilesAfterEnv: ['<rootDir>/test-utils/setupTests.js'],
@@ -40,9 +41,10 @@ module.exports = {
     ],
   },
   testEnvironment: 'jsdom',
-
   testEnvironmentOptions: {
     // fix for `Cannot find module 'msw/node'`
     customExportConditions: [''],
   },
 };
+
+module.exports = config;
