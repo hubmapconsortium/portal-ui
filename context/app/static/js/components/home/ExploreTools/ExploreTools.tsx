@@ -22,7 +22,7 @@ const workspaceCTAGuest = {
 const cards = [
   {
     title: 'Analyze data in Workspaces',
-    src: `${CDN_URL}/v2/explore-tools/workspaces.png`,
+    src: `${CDN_URL}/v2/explore-tools/tools_workspaces.png`,
     subtitle: 'Load datasets into an interactive JupyterLab Python and R analysis environment.',
     checklistItems: [
       'No need to download data.',
@@ -33,13 +33,13 @@ const cards = [
   },
   {
     title: 'Visualize data in Vitessce',
-    src: `${CDN_URL}/v2/explore-tools/vitessce.png`,
+    src: `${CDN_URL}/v2/explore-tools/tools_vitessce.png`,
     subtitle: 'Explore spatial and single-cell multi-modal datasets with interactive components.',
     checklistItems: ['Scatterplots', 'Heatmaps', 'Spatial Views', 'Genome Browser Tracks', 'Various Statistical Plots'],
   },
   {
     title: 'Explore biomarkers and cell types',
-    src: `${CDN_URL}/v2/explore-tools/mcquery.png`,
+    src: `${CDN_URL}/v2/explore-tools/tools_mcquery.png`,
     subtitle: 'Discover new insights about genes, proteins or cell type related to HuBMAP data.',
     checklistItems: ['Transcriptomic', 'Epigenomic', 'Proteomic', 'Cell Types'],
     ctaText: 'Advanced Query',
