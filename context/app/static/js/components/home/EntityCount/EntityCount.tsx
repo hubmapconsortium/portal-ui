@@ -6,9 +6,17 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { FlexLink, StyledDiv } from './style';
 import { formatCount } from './utils';
 
-function EntityCount({ icon, count, label, href }) {
+interface EntityCountProps {
+  icon: React.ReactNode;
+  count: number;
+  label: string;
+  href: string;
+}
+
+function EntityCount({ icon, count, label, href }: EntityCountProps) {
+  const title = count ? `${count} ${label}` : '';
   return (
-    <SecondaryBackgroundTooltip title={count ? `${count} ${label}` : ''} placement="bottom">
+    <SecondaryBackgroundTooltip title={title} placement="bottom" disabled={!count || count < 10000}>
       <FlexLink href={href}>
         <StyledDiv>{icon}</StyledDiv>
         <div>
