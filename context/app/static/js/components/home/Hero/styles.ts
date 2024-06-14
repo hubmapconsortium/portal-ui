@@ -68,7 +68,7 @@ export const HeroPanelContainer = styled(Box)<HeroSubContainerProps>(({ theme, $
     overflowY: !$isImage ? 'auto' : 'hidden',
     transition: theme.transitions.create(['max-width', 'opacity', 'left'], {
       easing: theme.transitions.easing.easeInOut,
-      duration: theme.transitions.duration.shortest,
+      duration: theme.transitions.duration.shorter,
     }),
   },
 }));

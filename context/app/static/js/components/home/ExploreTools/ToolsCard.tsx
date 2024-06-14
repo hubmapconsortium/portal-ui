@@ -54,7 +54,7 @@ export function ToolsCard({ title, children: description, index, src }: ToolsCar
             return <animated.div style={style}>{description}</animated.div>;
           })}
         </Stack>
-        <Typography variant="h5" noWrap={isDesktop} py={2} pl={1}>
+        <Typography variant="subtitle1" noWrap={isDesktop} py={2} pl={1}>
           {title}
         </Typography>
         {!isDesktop && description}

@@ -38,7 +38,7 @@ const cards = [
     checklistItems: ['Scatterplots', 'Heatmaps', 'Spatial Views', 'Genome Browser Tracks', 'Various Statistical Plots'],
   },
   {
-    title: 'Explore biomarkers and cell types',
+    title: 'Explore biomarkers & cell types',
     src: `${CDN_URL}/v2/explore-tools/tools_mcquery.png`,
     subtitle: 'Discover new insights about genes, proteins or cell type related to HuBMAP data.',
     checklistItems: ['Transcriptomic', 'Epigenomic', 'Proteomic', 'Cell Types'],

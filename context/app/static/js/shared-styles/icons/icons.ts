@@ -18,7 +18,7 @@ import ListAltRoundedIcon from '@mui/icons-material/ListAltRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionRounded';
 import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
 import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';

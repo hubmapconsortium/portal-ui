@@ -15,8 +15,8 @@ interface ExternalLinkPropsAdapter {
 
 const relatedResources: ExternalLinkPropsAdapter[] = [
   {
-    linkText: 'HuBMAP Consortium',
-    src: `${CDN_URL}/v2/hubmap_consortium.png`,
+    linkText: 'Consortium Website',
+    src: `${CDN_URL}/v2/relevant-resources/hubmap_consortium.png`,
     alt: 'HuBMAP Consortium Logo',
     linkHref: 'https://hubmapconsortium.org/',
     description:
@@ -24,22 +24,22 @@ const relatedResources: ExternalLinkPropsAdapter[] = [
   },
   {
     linkText: 'Common Fund',
-    src: `${CDN_URL}/v2/nih_common_fund.png`,
+    src: `${CDN_URL}/v2/relevant-resources/nih_common_fund.png`,
     alt: 'NIH Logo',
     linkHref: 'https://commonfund.nih.gov/hubmap/',
     description:
       'Learn about the NIH Common Fund, a funding entity that supports scientific programs that catalyze discovery across biomedical and behavioral research.',
   },
   {
-    linkText: 'HuBMAP Protocols',
-    src: `${CDN_URL}/v2/protocols.io.png`,
+    linkText: 'Protocols',
+    src: `${CDN_URL}/v2/relevant-resources/protocols.png`,
     alt: 'Protocols.io Logo',
     linkHref: 'https://www.protocols.io/workspaces/human-biomolecular-atlas-program-hubmap-method-development/',
     description: 'View the HuBMAP Consortium’s protocols in protocols.io.',
   },
   {
-    linkText: 'HuBMAP Publications',
-    src: `${CDN_URL}/v2/google_scholar.png`,
+    linkText: 'Publications',
+    src: `${CDN_URL}/v2/relevant-resources/google_scholar.png`,
     alt: 'Google Scholar Logo',
     linkHref: 'https://scholar.google.com/citations?user=CtGSN80AAAAJ',
     description:
@@ -50,7 +50,7 @@ const relatedResources: ExternalLinkPropsAdapter[] = [
 const relatedTools: ExternalLinkPropsAdapter[] = [
   {
     linkText: 'Human Reference Atlas',
-    src: `${CDN_URL}/v2/hra_icon.png`,
+    src: `${CDN_URL}/v2/relevant-tools/hra_icon.png`,
     alt: 'Human Reference Atlas Logo',
     linkHref: 'https://humanatlas.io/',
     description:
@@ -58,7 +58,7 @@ const relatedTools: ExternalLinkPropsAdapter[] = [
   },
   {
     linkText: 'Azimuth',
-    src: `${CDN_URL}/v2/azimuth.png`,
+    src: `${CDN_URL}/v2/relevant-tools/azimuth.png`,
     alt: 'A miniature scatterplot visualization.',
     linkHref: 'https://azimuth.hubmapconsortium.org/',
     description:
@@ -66,22 +66,22 @@ const relatedTools: ExternalLinkPropsAdapter[] = [
   },
   {
     linkText: 'FUSION',
-    src: `${CDN_URL}/v2/fusion_icon.png`,
+    src: `${CDN_URL}/v2/relevant-tools/fusion.png`,
     alt: 'FUSION Logo',
     linkHref: 'http://fusion.hubmapconsortium.org/?utm_source=hubmap',
     description: 'Functional Unit State Identification and Navigation with WSI.',
   },
   {
     linkText: 'Antibody Validation Reports',
-    src: `${CDN_URL}/v2/antibody_validation_reports.png`,
+    src: `${CDN_URL}/v2/relevant-tools/antibody_validation_reports.png`,
     alt: 'Antibody Validation Reports Logo',
     linkHref: 'https://avr.hubmapconsortium.org/',
     description:
       'Provide antibody details for multiplex imaging assays and capture data requested by journals for manuscript submission.',
   },
   {
-    linkText: 'HuBMAP Data Submission',
-    src: `${CDN_URL}/v2/hubmap_consortium.png`,
+    linkText: 'Data Submission',
+    src: `${CDN_URL}/v2/relevant-resources/hubmap_consortium.png`,
     alt: 'HuBMAP Consortium Logo',
     linkHref: 'https://ingest.hubmapconsortium.org/',
     description:
