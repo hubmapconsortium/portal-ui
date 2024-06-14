@@ -20,7 +20,11 @@ const entities = [
   },
 ];
 
-function EntityCounts({ organsCount }) {
+interface EntityCountsProps {
+  organsCount: number;
+}
+
+function EntityCounts({ organsCount }: EntityCountsProps) {
   const entityCounts = useEntityCounts();
   return (
     <Background>
@@ -28,15 +32,22 @@ function EntityCounts({ organsCount }) {
         {entities.map(({ icon, entity_type }) => (
           <EntityCount
             key={entity_type}
-            icon={<StyledSvgIcon component={icon} color="primary" />}
+            icon={
+              <StyledSvgIcon as={icon} color="primary" aria-label={`Number of unique ${entity_type.toLowerCase()}s`} />
+            }
             count={entityCounts?.[entity_type]}
             label={`${entity_type}s`}
             href={`/search?entity_type[0]=${entity_type}`}
           />
         ))}
-        <EntityCount icon={<StyledOrganIcon />} count={organsCount} label="Organs" href="/organ" />
         <EntityCount
-          icon={<StyledSvgIcon component={CollectionIcon} color="primary" />}
+          icon={<StyledOrganIcon ariaLabel="Number of unique organs" />}
+          count={organsCount}
+          label="Organs"
+          href="/organ"
+        />
+        <EntityCount
+          icon={<StyledSvgIcon as={CollectionIcon} aria-label="Number of curated data collections" color="primary" />}
           count={entityCounts?.Collection}
           label="Collections"
           href="/collections"
