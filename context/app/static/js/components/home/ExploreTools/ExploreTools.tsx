@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 
 import Grid from '@mui/material/Unstable_Grid2';
-import { useTheme } from '@mui/material/styles';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import theme from 'js/theme/theme';
+import { VisualizationIcon } from 'js/shared-styles/icons';
 import { ToolsCard } from './ToolsCard';
 import { CardGridContextProvider } from './CardGridContext';
 import { ToolDescription } from './ToolDescription';
@@ -22,6 +23,7 @@ const workspaceCTAGuest = {
 const cards = [
   {
     title: 'Analyze data in Workspaces',
+    icon: <entityIconMap.Workspace color="info" fontSize="1.5rem" />,
     src: `${CDN_URL}/v2/explore-tools/tools_workspaces.png`,
     subtitle: 'Load datasets into an interactive JupyterLab Python and R analysis environment.',
     checklistItems: [
@@ -33,12 +35,14 @@ const cards = [
   },
   {
     title: 'Visualize data in Vitessce',
+    icon: <VisualizationIcon color="error" fontSize="1.5rem" />,
     src: `${CDN_URL}/v2/explore-tools/tools_vitessce.png`,
     subtitle: 'Explore spatial and single-cell multi-modal datasets with interactive components.',
     checklistItems: ['Scatterplots', 'Heatmaps', 'Spatial Views', 'Genome Browser Tracks', 'Various Statistical Plots'],
   },
   {
     title: 'Explore biomarkers & cell types',
+    icon: <entityIconMap.Gene color="success" fontSize="1.5rem" />,
     src: `${CDN_URL}/v2/explore-tools/tools_mcquery.png`,
     subtitle: 'Discover new insights about genes, proteins or cell type related to HuBMAP data.',
     checklistItems: ['Transcriptomic', 'Epigenomic', 'Proteomic', 'Cell Types'],
@@ -48,7 +52,6 @@ const cards = [
 ];
 
 export default function ExploreTools() {
-  const theme = useTheme();
   const [expandedCardIndex, setExpandedCardIndex] = useState<number | null>(null);
 
   const gridTemplateColumns = makeGridTemplateColumns(cards, expandedCardIndex);
@@ -65,7 +68,7 @@ export default function ExploreTools() {
         spacing={2}
         columnGap={2}
         rowGap={2}
-        gridTemplateColumns={{ xs: '1fr', sm: '1fr 1fr 1fr', md: gridTemplateColumns }}
+        gridTemplateColumns={{ xs: '1fr', md: gridTemplateColumns }}
         style={{
           transition: theme.transitions.create('all', {
             easing: theme.transitions.easing.easeIn,
@@ -77,8 +80,8 @@ export default function ExploreTools() {
           if (!e.currentTarget.contains(e.relatedTarget as Node)) resetExpandedCardIndex();
         }}
       >
-        {cards.map(({ title, src, ...card }, index) => (
-          <ToolsCard key={title} title={title} src={src} index={index}>
+        {cards.map(({ title, icon, src, ...card }, index) => (
+          <ToolsCard key={title} title={title} icon={icon} src={src} index={index}>
             <ToolDescription {...card} />
           </ToolsCard>
         ))}
