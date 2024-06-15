@@ -4,8 +4,7 @@ import Timeline from 'js/shared-styles/Timeline';
 
 import Typography from '@mui/material/Typography';
 
-import Box from '@mui/material/Box';
-import { useIsDesktop } from 'js/hooks/media-queries';
+import { useIsDesktop, useIsMobile } from 'js/hooks/media-queries';
 import { HOME_TIMELINE_ITEMS } from './const';
 import { HeroPanelContainer } from './styles';
 import { useHeroTabContext } from './HeroTabsContext';
@@ -14,11 +13,12 @@ interface HeroTimelineProps {
   index: number;
 }
 
-export default function HeroTimeline({ index }: HeroTimelineProps) {
+export default function HeroTimelineSlide({ index }: HeroTimelineProps) {
   const { activeTab, setActiveTab } = useHeroTabContext();
   const ref = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
   const onFocus = () => setActiveTab(index);
+  const isMobile = useIsMobile();
 
   // Reset scroll position when switching tabs
   useEffect(() => {
@@ -35,13 +35,14 @@ export default function HeroTimeline({ index }: HeroTimelineProps) {
       role="tabpanel"
       id={`tabpanel-${index}`}
       aria-labelledby={`tab-${index}`}
+      sx={{
+        background: 'white',
+      }}
     >
       <Typography variant="h4" px={2} py={1} zIndex={2} bgcolor="#FBEEEB" position="sticky" top={0}>
         Latest Changes
       </Typography>
-      <Box sx={{ backgroundColor: 'white' }}>
-        <Timeline data={HOME_TIMELINE_ITEMS} />
-      </Box>
+      <Timeline data={HOME_TIMELINE_ITEMS} expandable={isMobile} />
     </HeroPanelContainer>
   );
 }

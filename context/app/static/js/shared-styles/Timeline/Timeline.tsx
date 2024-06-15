@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import MuiTimeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
@@ -9,12 +9,19 @@ import TimelineDot from '@mui/lab/TimelineDot';
 import Typography from '@mui/material/Typography';
 import { TimelineData } from './types';
 import { InternalLink } from '../Links';
+import { DownIcon } from '../icons';
 
 interface TimelineProps {
   data: TimelineData[];
+  expandable?: boolean;
 }
 
-export default function Timeline({ data }: TimelineProps) {
+export default function Timeline({ data, expandable }: TimelineProps) {
+  const [expanded, setExpanded] = useState<boolean>(false);
+  const handleExpand = () => setExpanded(!expanded);
+  const isExpanded = expanded || !expandable;
+  const isExpandable = expandable && data.length > 3;
+  const itemsToRender = !isExpandable || isExpanded ? data : data.slice(0, 3);
   return (
     <MuiTimeline
       position="right"
@@ -26,7 +33,7 @@ export default function Timeline({ data }: TimelineProps) {
         },
       }}
     >
-      {data.map((item, idx) => (
+      {itemsToRender.map((item, idx) => (
         <TimelineItem key={item.title}>
           <TimelineOppositeContent variant="body2">{item.date}</TimelineOppositeContent>
           <TimelineSeparator>
@@ -43,6 +50,26 @@ export default function Timeline({ data }: TimelineProps) {
           </TimelineContent>
         </TimelineItem>
       ))}
+      {isExpandable && !isExpanded && (
+        <TimelineItem
+          onClick={handleExpand}
+          onKeyDown={(e) => (e.key === 'Enter' ? handleExpand() : undefined)}
+          sx={{ cursor: 'pointer', flexDirection: 'row', alignItems: 'center', minHeight: 0 }}
+          tabIndex={0}
+        >
+          <TimelineOppositeContent />
+          <TimelineSeparator>
+            <TimelineDot color="primary" sx={{ my: 0 }}>
+              <DownIcon fontSize="1.5rem" />
+            </TimelineDot>
+          </TimelineSeparator>
+          <TimelineContent>
+            <Typography variant="subtitle2" onClick={handleExpand}>
+              Show More
+            </Typography>
+          </TimelineContent>
+        </TimelineItem>
+      )}
     </MuiTimeline>
   );
 }

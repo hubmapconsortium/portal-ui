@@ -12,13 +12,13 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     date: 'May 2024',
     img: <entityIconMap.CellType />,
   },
-  {
-    title: 'Multi-Assay Datasets now available',
-    titleHref: '/search?entity_type[0]=Dataset', // TODO: update this to the correct link
-    description: 'Visualize and download data from multi-assay datasets of 10x Multiome and Visium (no probes).',
-    date: 'May 2024',
-    img: <entityIconMap.Dataset fontSize="1.5rem" />,
-  },
+  // {
+  //   title: 'Multi-Assay Datasets now available',
+  //   titleHref: '/search?entity_type[0]=Dataset', // TODO: update this to the correct link
+  //   description: 'Visualize and download data from multi-assay datasets of 10x Multiome and Visium (no probes).',
+  //   date: 'May 2024',
+  //   img: <entityIconMap.Dataset fontSize="1.5rem" />,
+  // },
   {
     title: 'Dataset Search reorganized',
     titleHref: '/search?entity_type[0]=Dataset',
@@ -48,3 +48,30 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     img: <entityIconMap.Gene />,
   },
 ];
+
+export type HeroSlideTitle = 'Discover' | 'Visualize' | 'Download';
+
+export function isSlideTitle(s: string): s is HeroSlideTitle {
+  return ['Discover', 'Visualize', 'Download'].includes(s);
+}
+
+interface HeroImage {
+  imageBase: string;
+  imageAlt: string;
+}
+
+const heroImageBaseDir = 'v2/hero/hero_';
+export const HERO_IMAGE_SLIDES: Record<HeroSlideTitle, HeroImage> = {
+  Discover: {
+    imageBase: `${heroImageBaseDir}discover`,
+    imageAlt: 'Overlaid screenshots of tools for browsing data',
+  },
+  Visualize: {
+    imageBase: `${heroImageBaseDir}visualize`,
+    imageAlt: 'Screenshot of a Vitessce visualization with spatial segmentation data and an embedding plot',
+  },
+  Download: {
+    imageBase: `${heroImageBaseDir}download`,
+    imageAlt: 'Screenshots of tools for downloading scientific data underlying HuBMAP datasets',
+  },
+};

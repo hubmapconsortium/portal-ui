@@ -20,13 +20,12 @@ export const HeroGridContainer = styled(Box)<HeroGridContainerProps>(({ theme })
   },
   // On desktop, the grid has a carousel panel on top and the tabs below
   [theme.breakpoints.up('md')]: {
-    maxHeight: '36rem',
     width: '100%',
     position: 'relative',
     overflow: 'hidden',
 
     gridTemplateColumns: 'repeat(4, 1fr)',
-    gridTemplateRows: 'auto auto',
+    gridTemplateRows: 'auto minmax(0, 1fr)',
     gridTemplateAreas: `
       'panel panel panel panel'
       'tab0 tab1 tab2 tab3'
@@ -57,11 +56,11 @@ export const HeroTabContainer = styled(Box)<HeroSubContainerProps>(({ $index, $a
 
 export const HeroPanelContainer = styled(Box)<HeroSubContainerProps>(({ theme, $index, $activeSlide, $isImage }) => ({
   position: 'relative',
+  aspectRatio: '32 / 9',
 
   [theme.breakpoints.up('md')]: {
     gridArea: `panel`,
     width: '100%',
-    maxHeight: '22.5rem',
     opacity: $activeSlide === $index ? 1 : 0,
     speak: $activeSlide === $index ? 'auto' : 'none',
     left: $activeSlide === $index ? 0 : `${$activeSlide - $index}00%`,
@@ -70,5 +69,13 @@ export const HeroPanelContainer = styled(Box)<HeroSubContainerProps>(({ theme, $
       easing: theme.transitions.easing.easeInOut,
       duration: theme.transitions.duration.shorter,
     }),
+    borderBottom: `1px solid ${theme.palette.grey[200]}`,
+  },
+}));
+
+export const StyledImage = styled('img')(({ theme }) => ({
+  [theme.breakpoints.up('md')]: {
+    maxWidth: '100%',
+    height: 'auto',
   },
 }));

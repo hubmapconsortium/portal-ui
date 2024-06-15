@@ -4,7 +4,7 @@ import { DownloadIcon, LightbulbIcon, SearchIcon, VisualizationIcon } from 'js/s
 import { OrganIcon } from 'js/shared-styles/icons/URLSvgIcon';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import theme from 'js/theme/theme';
-import HeroTimeline from './HeroTimeline';
+import HeroTimelineSlide from './HeroTimelineSlide';
 import HeroTab, { HeroTabProps } from './HeroTab';
 import { HeroImageSlide } from './HeroImageSlide';
 import { HeroGridContainer } from './styles';
@@ -66,7 +66,7 @@ const heroTabs = [
     description: 'Stay up to date with the latest HuBMAP Data Portal developments.',
     icon: <LightbulbIcon color="warning" fontSize="1.5rem" />,
     bgColor: '#FBEEEB', // warning-90 in figma
-    content: HeroTimeline,
+    content: HeroTimelineSlide,
   },
 ] satisfies Partial<HeroTabProps>[];
 
