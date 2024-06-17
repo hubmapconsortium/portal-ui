@@ -104,9 +104,9 @@ const previewLinks = [
 
 const resourceGroups = {
   docs: [
-    { href: 'https://software.docs.hubmapconsortium.org/technical', label: 'Technical Documentation' },
-    { href: 'https://software.docs.hubmapconsortium.org/faq', label: 'FAQ' },
-    { href: 'https://software.docs.hubmapconsortium.org/about', label: 'About' },
+    { href: 'https://docs.hubmapconsortium.org/technical', label: 'Technical Documentation' },
+    { href: 'https://docs.hubmapconsortium.org/faq', label: 'FAQ' },
+    { href: 'https://docs.hubmapconsortium.org/about', label: 'About' },
   ],
   previews: previewLinks,
 };

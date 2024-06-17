@@ -1,1 +1,0 @@
-- Make long samples sections in the provenance table view expandable.
