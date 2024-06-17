@@ -3,6 +3,7 @@ import { SearchIcon } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import React from 'react';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   {
@@ -12,13 +13,18 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     date: 'May 2024',
     img: <entityIconMap.CellType />,
   },
-  // {
-  //   title: 'Multi-Assay Datasets now available',
-  //   titleHref: '/search?entity_type[0]=Dataset', // TODO: update this to the correct link
-  //   description: 'Visualize and download data from multi-assay datasets of 10x Multiome and Visium (no probes).',
-  //   date: 'May 2024',
-  //   img: <entityIconMap.Dataset fontSize="1.5rem" />,
-  // },
+  {
+    title: 'MUSIC Datasets now available',
+    titleHref: '/search?raw_dataset_type_keyword-assay_display_name_keyword[MUSIC][0]=MUSIC&entity_type[0]=Dataset',
+    description: (
+      <>
+        Download data from <OutboundIconLink href="https://github.com/gersteinlab/MUSIC">MUSIC</OutboundIconLink>{' '}
+        analyses of ChIP-Seq experiments.
+      </>
+    ),
+    date: 'May 2024',
+    img: <entityIconMap.Dataset fontSize="1.5rem" />,
+  },
   {
     title: 'Dataset Search reorganized',
     titleHref:
