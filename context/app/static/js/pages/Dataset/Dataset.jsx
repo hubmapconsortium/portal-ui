@@ -67,7 +67,7 @@ function SummaryDataChildren({
       <SummaryItem>
         <InternalLink
           variant="h6"
-          href="https://software.docs.hubmapconsortium.org/assays"
+          href="https://docs.hubmapconsortium.org/assays"
           underline="none"
           onClick={() => trackEntityPageEvent({ action: 'Assay Documentation Navigation', label: mapped_data_types })}
         >

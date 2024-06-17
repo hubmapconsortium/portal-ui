@@ -1,3 +1,13 @@
+## v0.98.0 - 2024-06-12
+
+- Make long samples sections in the provenance table view expandable.
+- Fix entity table icon colors.
+- Remove inaccurate data product generation info.
+- Remove "other groups" from profile pages.
+- Restore Donor Diversity chart legends.
+- Remove YAML-loading dependencies and remaining references to IVT submodule.
+
+
 ## v0.97.1 - 2024-05-30
 
 - Replace dependencies on ingest-validation-tools yaml files with data from ontology api.
