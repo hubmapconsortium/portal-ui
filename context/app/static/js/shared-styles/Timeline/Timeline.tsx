@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import MuiTimeline from '@mui/lab/Timeline';
 import TimelineItem from '@mui/lab/TimelineItem';
 import TimelineSeparator from '@mui/lab/TimelineSeparator';
@@ -10,6 +10,7 @@ import Typography from '@mui/material/Typography';
 import { TimelineData } from './types';
 import { InternalLink } from '../Links';
 import { DownIcon } from '../icons';
+import { useExpandableItems } from './hooks';
 
 interface TimelineProps {
   data: TimelineData[];
@@ -17,11 +18,7 @@ interface TimelineProps {
 }
 
 export default function Timeline({ data, expandable }: TimelineProps) {
-  const [expanded, setExpanded] = useState<boolean>(false);
-  const handleExpand = () => setExpanded(!expanded);
-  const isExpanded = expanded || !expandable;
-  const isExpandable = expandable && data.length > 3;
-  const itemsToRender = !isExpandable || isExpanded ? data : data.slice(0, 3);
+  const { itemsToRender, isExpandable, isExpanded, handleExpand } = useExpandableItems(data, expandable);
   return (
     <MuiTimeline
       position="right"

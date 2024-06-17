@@ -1,9 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
-import React from 'react';
-import { render } from '@testing-library/react';
+import React, { PropsWithChildren } from 'react';
+import { render, RenderOptions } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import Providers from 'js/components/Providers';
 import { enableMapSet } from 'immer';
+import { RenderHookOptions } from '@testing-library/react-hooks/lib/types';
 
 enableMapSet();
 
@@ -22,9 +22,13 @@ jest.mock('@grafana/faro-web-sdk', () => ({
   faro: {
     api: {
       pushError: jest.fn(),
-    }
-  }
+    },
+  },
 }));
+
+interface AllTheProvidersProps extends PropsWithChildren {
+  flaskData?: unknown;
+}
 
 export function AllTheProviders({
   children,
@@ -34,27 +38,35 @@ export function AllTheProviders({
       entity_type: 'Entity',
     },
   },
-}) {
+}: AllTheProvidersProps) {
   return (
     <Providers
       endpoints={appProviderEndpoints}
       groupsToken={appProviderToken}
       isWorkspacesUser={isWorkspacesUser}
       flaskData={flaskData}
+      isAuthenticated={false}
+      userEmail={undefined}
+      workspacesToken={undefined}
+      isHubmapUser={undefined}
     >
       {children}
     </Providers>
   );
 }
 
-const customRender = (ui, options) =>
+const customRender = (ui: React.ReactNode, options?: Exclude<RenderOptions, 'wrapper'> & { flaskData?: unknown }) =>
   render(ui, {
     wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
     ...options,
   });
 
-const customRenderHook = (callback, options) =>
+const customRenderHook = <TProps, TResult>(
+  callback: (props: TProps) => TResult,
+  options?: Partial<RenderHookOptions<TProps>> & { flaskData?: unknown },
+) =>
   renderHook(callback, {
+    // @ts-expect-error - TS is causing issues with the wrapper prop type
     wrapper: ({ children }) => <AllTheProviders flaskData={options?.flaskData}>{children}</AllTheProviders>,
     ...options,
   });
