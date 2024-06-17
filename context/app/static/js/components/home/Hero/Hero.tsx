@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { DownloadIcon, LightbulbIcon, SearchIcon, VisualizationIcon } from 'js/shared-styles/icons';
-import { OrganIcon } from 'js/shared-styles/icons/URLSvgIcon';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import theme from 'js/theme/theme';
 import HeroTimelineSlide from './HeroTimelineSlide';
@@ -18,8 +17,8 @@ const heroTabs = [
     icon: <SearchIcon color={theme.palette.success.main} fontSize="1.5rem" />,
     actions: [
       {
-        title: 'Explore organs',
-        icon: <OrganIcon ariaLabel="View organ pages" />,
+        title: 'Explore datasets',
+        icon: <entityIconMap.Dataset fontSize="1.5rem" />,
         href: '/organ',
       },
       {
@@ -54,7 +53,7 @@ const heroTabs = [
     actions: [
       {
         title: 'Find datasets to download',
-        icon: <entityIconMap.Dataset />,
+        icon: <entityIconMap.Dataset fontSize="1.5rem" />,
         href: '/search?entity_type[0]=Dataset',
       },
     ],
