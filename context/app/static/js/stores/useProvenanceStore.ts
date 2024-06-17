@@ -1,16 +1,5 @@
 import { createImmer } from 'js/helpers/zustand';
-
-interface Target {
-  step: string;
-  name: string;
-}
-
-interface Step {
-  name: string;
-  inputs: Step[];
-  outputs: Step[];
-  target: Target[];
-}
+import { Step } from 'js/components/detailPage/provenance/types';
 
 interface ProvenanceStoreState {
   uuid: string;

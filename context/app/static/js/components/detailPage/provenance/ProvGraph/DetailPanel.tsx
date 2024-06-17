@@ -7,7 +7,7 @@ import ShowDerivedEntitiesButton from 'js/components/detailPage/provenance/ShowD
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { StyledPaper, StyledTypography } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
-import { ProvData } from './types';
+import { ProvData } from '../types';
 
 interface DetailPanelProps {
   prov: Record<string, string>;
