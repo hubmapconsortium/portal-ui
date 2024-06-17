@@ -13,4 +13,5 @@ export const CheckList = styled('ul')(({ theme }) => ({
 
 export const StyledImg = styled('img')({
   aspectRatio: '3 / 4',
+  maxHeight: '520px',
 });

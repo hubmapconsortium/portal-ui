@@ -17,6 +17,7 @@ interface ToolsCardProps extends PropsWithChildren {
   index: number;
   src: string;
   icon?: React.ReactNode;
+  alt: string;
 }
 
 function getFlexAlignment(index: number, cardCount: number) {
@@ -31,7 +32,7 @@ function getFlexAlignment(index: number, cardCount: number) {
   return 'center';
 }
 
-export function ToolsCard({ title, children: description, index, src, icon }: ToolsCardProps) {
+export function ToolsCard({ title, children: description, index, src, icon, alt }: ToolsCardProps) {
   const { expandedCardIndex, setExpandedCardIndex, cardCount } = useCardGridContext();
   const isDesktop = useIsDesktop();
   const isMobile = useIsMobile();
@@ -50,7 +51,7 @@ export function ToolsCard({ title, children: description, index, src, icon }: To
     <Grid overflow="none" display="flex" justifyContent={justifyContent}>
       <Paper tabIndex={0} onFocus={setIsExpanded} onMouseOver={setIsExpanded} sx={{ overflow: 'hidden' }}>
         <Stack direction={{ xs: 'column', sm: 'row' }}>
-          <StyledImg src={src} height="520" width="auto" alt="Alt text for test" />
+          <StyledImg src={src} alt={alt} width="auto" />
           {transition((style, isOpen) => {
             if (!isOpen || isMobile) {
               return null;
