@@ -21,7 +21,8 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   // },
   {
     title: 'Dataset Search reorganized',
-    titleHref: '/search?entity_type[0]=Dataset',
+    titleHref:
+      '/search?processing[0]=processed&processing[1]=raw&pipeline[0]=Salmon&pipeline[1]=Cytokit %2B SPRM&pipeline[2]=SnapATAC&visualization[0]=true&entity_type[0]=Dataset',
     description:
       'Added visualization, dataset category and pipeline filters to dataset search page. Dataset assay filter is now hierarchical to improve grouping of similar experiments.',
     date: 'March 2024',
