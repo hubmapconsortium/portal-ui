@@ -6,17 +6,19 @@ import ProvVis from '../ProvVis';
 import { StyledDiv, maxGraphHeight } from './style';
 import '@hms-dbmi-bgm/react-workflow-viz/dist/react-workflow-viz.min.css';
 import DetailPanel from './DetailPanel';
-import { ProvData, ProvNode } from './types';
+import { ProvData, ProvNode } from '../types';
 
 const setUUIDSelector = (state: ProvenanceStore) => state.setUUID;
 const hasRenderedSelector = (state: ProvenanceStore) => state.hasRendered;
 
-const getNameForActivity = (idKey: string) => (id: string, prov: ProvData) => {
+const getNameForActivity = (idKey: string) => (id: string, prov?: ProvData) => {
+  if (!prov) return id;
   const activity = prov.activity[id];
   return `${activity['hubmap:creation_action']} - ${activity[idKey]}`;
 };
 
-const getNameForEntity = (typeKey: string, idKey: string) => (id: string, prov: ProvData) => {
+const getNameForEntity = (typeKey: string, idKey: string) => (id: string, prov?: ProvData) => {
+  if (!prov) return id;
   const entity = prov.entity[id];
   // NOTE: The initial entity node was not included in the sample data;
   // Fallback to ID, if needed. https://github.com/hubmapconsortium/prov-vis/issues/15

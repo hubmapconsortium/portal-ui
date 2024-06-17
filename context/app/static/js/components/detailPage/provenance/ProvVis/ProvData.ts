@@ -1,5 +1,5 @@
 import { provSchema } from './ProvSchema';
-import type { ProvData as ProvDataType } from '../ProvGraph/types';
+import type { CWLInput, CWLOutput, ProvData as ProvDataType, Step } from '../types';
 
 function getCwlMeta(isReference: boolean) {
   return {
@@ -7,14 +7,6 @@ function getCwlMeta(isReference: boolean) {
     in_path: true,
     type: isReference ? 'reference file' : 'data file',
   };
-}
-
-interface CWLInput {
-  name: string;
-  source: { name: string; for_file: string; step?: string }[];
-  run_data: { file: { '@id': string }[] };
-  meta: Record<string, unknown>;
-  prov: unknown;
 }
 
 // export only to test.
@@ -45,14 +37,6 @@ export function makeCwlInput(name: string, steps: unknown[], extras: unknown, is
   };
 }
 
-interface CWLOutput {
-  name: string;
-  target: { step: unknown; name: string }[];
-  run_data: { file: { '@id': string }[] };
-  meta: Record<string, unknown>;
-  prov: unknown;
-}
-
 // export only to test.
 export function makeCwlOutput(name: string, steps: unknown[], extras: unknown, isReference = false): CWLOutput {
   const id = name;
@@ -66,13 +50,6 @@ export function makeCwlOutput(name: string, steps: unknown[], extras: unknown, i
     // Domain-specific extras go here:
     prov: extras,
   };
-}
-
-interface CWLStep {
-  name: string;
-  inputs: CWLInput[];
-  outputs: CWLOutput[];
-  prov: Record<string, unknown>;
 }
 
 interface ProvDataConstructorProps {
@@ -178,7 +155,7 @@ export default class ProvData {
     return this.getActivityNames(entityName, 'used');
   }
 
-  makeCwlStep(activityId: string): CWLStep {
+  makeCwlStep(activityId: string): Step {
     const activityName = this.getNameForActivity(activityId, this.prov);
     const inputs = this.getParentEntityNames(activityName).map((entityName) =>
       makeCwlInput(entityName, this.getParentActivityNames(entityName), this.entityByName[entityName]),
@@ -207,6 +184,6 @@ export default class ProvData {
         acc.push(this.makeCwlStep(activityId));
       }
       return acc;
-    }, [] as CWLStep[]);
+    }, [] as Step[]);
   }
 }
