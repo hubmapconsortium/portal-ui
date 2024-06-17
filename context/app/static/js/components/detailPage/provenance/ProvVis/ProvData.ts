@@ -1,6 +1,7 @@
 import { provSchema } from './ProvSchema';
+import type { ProvData as ProvDataType } from '../ProvGraph/types';
 
-function getCwlMeta(isReference) {
+function getCwlMeta(isReference: boolean) {
   return {
     global: true,
     in_path: true,
@@ -8,20 +9,29 @@ function getCwlMeta(isReference) {
   };
 }
 
+interface CWLInput {
+  name: string;
+  source: { name: string; for_file: string; step?: string }[];
+  run_data: { file: { '@id': string }[] };
+  meta: Record<string, unknown>;
+  prov: unknown;
+}
+
 // export only to test.
-export function makeCwlInput(name, steps, extras, isReference) {
+export function makeCwlInput(name: string, steps: unknown[], extras: unknown, isReference = false): CWLInput {
   const id = name;
-  const source = [
+  const source: CWLInput['source'] = [
     {
       name,
       for_file: id,
+      step: undefined,
     },
   ];
   if (steps) {
     if (steps.length > 1) {
       throw new Error('Limited to 1 step');
     } else if (steps.length === 1) {
-      [source[0].step] = steps;
+      [source[0].step] = steps as unknown as string;
     }
   }
   return {
@@ -35,8 +45,16 @@ export function makeCwlInput(name, steps, extras, isReference) {
   };
 }
 
+interface CWLOutput {
+  name: string;
+  target: { step: unknown; name: string }[];
+  run_data: { file: { '@id': string }[] };
+  meta: Record<string, unknown>;
+  prov: unknown;
+}
+
 // export only to test.
-export function makeCwlOutput(name, steps, extras, isReference) {
+export function makeCwlOutput(name: string, steps: unknown[], extras: unknown, isReference = false): CWLOutput {
   const id = name;
   return {
     name,
@@ -50,8 +68,39 @@ export function makeCwlOutput(name, steps, extras, isReference) {
   };
 }
 
+interface CWLStep {
+  name: string;
+  inputs: CWLInput[];
+  outputs: CWLOutput[];
+  prov: Record<string, unknown>;
+}
+
+interface ProvDataConstructorProps {
+  prov: ProvDataType;
+  entity_type: string;
+  getNameForActivity?: (id: string, prov?: ProvDataType) => string;
+  getNameForEntity?: (id: string, prov?: ProvDataType) => string;
+}
+
 export default class ProvData {
-  constructor({ prov, entity_type, getNameForActivity = (id) => id, getNameForEntity = (id) => id }) {
+  getNameForEntity: (id: string, prov?: ProvDataType) => string;
+
+  getNameForActivity: (id: string, prov?: ProvDataType) => string;
+
+  entity_type: string;
+
+  prov: ProvDataType;
+
+  activityByName: Record<string, Record<string, string>>;
+
+  entityByName: Record<string, Record<string, string>>;
+
+  constructor({
+    prov,
+    entity_type,
+    getNameForActivity = (id) => id,
+    getNameForEntity = (id) => id,
+  }: ProvDataConstructorProps) {
     this.getNameForActivity = getNameForActivity;
     this.getNameForEntity = getNameForEntity;
     this.entity_type = entity_type;
@@ -62,13 +111,16 @@ export default class ProvData {
         error: { issues },
       } = result;
 
-      const categorizedErrors = issues.reduce((acc, { path, message: category }) => {
-        if (!acc[category]) {
-          acc[category] = [];
-        }
-        acc[category].push(path);
-        return acc;
-      }, {});
+      const categorizedErrors = issues.reduce(
+        (acc, { path, message: category }) => {
+          if (!acc[category]) {
+            acc[category] = [];
+          }
+          acc[category].push(path);
+          return acc;
+        },
+        {} as Record<string, (string | number)[][]>,
+      );
 
       const formattedCategorizedErrors = Object.entries(categorizedErrors).reduce(
         (acc, [category, paths]) => `${acc}\n${category}: ${paths.map((path) => `'${path.join('.')}'`).join(', ')}`,
@@ -92,35 +144,41 @@ export default class ProvData {
     );
   }
 
-  getEntityNames(activityName, relation) {
+  getEntityNames(activityName: string, relation: keyof ProvDataType) {
     return Object.values(this.prov[relation])
       .filter((pair) => this.getNameForActivity(pair['prov:activity'], this.prov) === activityName)
       .map((pair) => this.getNameForEntity(pair['prov:entity'], this.prov));
   }
 
-  getParentEntityNames(activityName) {
+  getParentEntityNames(activityName: string) {
     return this.getEntityNames(activityName, 'used');
   }
 
-  getChildEntityNames(activityName) {
+  getChildEntityNames(activityName: string) {
     return this.getEntityNames(activityName, 'wasGeneratedBy');
   }
 
-  getActivityNames(entityName, relation) {
-    return Object.values(this.prov[relation])
+  getActivityNames(entityName: string, relation: keyof ProvDataType) {
+    if (!this.prov[relation]) {
+      return [];
+    }
+
+    const provRelation = this.prov[relation];
+
+    return Object.values(provRelation)
       .filter((pair) => this.getNameForEntity(pair['prov:entity'], this.prov) === entityName)
       .map((pair) => this.getNameForActivity(pair['prov:activity'], this.prov));
   }
 
-  getParentActivityNames(entityName) {
+  getParentActivityNames(entityName: string) {
     return this.getActivityNames(entityName, 'wasGeneratedBy');
   }
 
-  getChildActivityNames(entityName) {
+  getChildActivityNames(entityName: string) {
     return this.getActivityNames(entityName, 'used');
   }
 
-  makeCwlStep(activityId) {
+  makeCwlStep(activityId: string): CWLStep {
     const activityName = this.getNameForActivity(activityId, this.prov);
     const inputs = this.getParentEntityNames(activityName).map((entityName) =>
       makeCwlInput(entityName, this.getParentActivityNames(entityName), this.entityByName[entityName]),
@@ -149,6 +207,6 @@ export default class ProvData {
         acc.push(this.makeCwlStep(activityId));
       }
       return acc;
-    }, []);
+    }, [] as CWLStep[]);
   }
 }

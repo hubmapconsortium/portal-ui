@@ -27,7 +27,7 @@ interface ProvenanceStoreActions {
   addDescendantSteps: (descendantSteps: Step[]) => void;
 }
 
-type ProvenanceStore = ProvenanceStoreState & ProvenanceStoreActions;
+export type ProvenanceStore = ProvenanceStoreState & ProvenanceStoreActions;
 
 const useProvenanceStore = createImmer<ProvenanceStore>((set, get) => ({
   uuid: '',
