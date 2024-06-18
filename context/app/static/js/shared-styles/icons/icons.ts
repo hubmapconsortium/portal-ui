@@ -18,7 +18,7 @@ import ListAltRoundedIcon from '@mui/icons-material/ListAltRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionRounded';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
 import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';
@@ -51,7 +51,7 @@ const SampleIcon = withIconStyles(BubbleChartIcon);
 
 const DatasetIcon = withIconStyles(TableChartIcon);
 
-const PublicationIcon = withIconStyles(DescriptionOutlinedIcon);
+const PublicationIcon = withIconStyles(DescriptionRoundedIcon);
 
 const ExternalLinkIcon = withIconStyles(LaunchRoundedIcon);
 

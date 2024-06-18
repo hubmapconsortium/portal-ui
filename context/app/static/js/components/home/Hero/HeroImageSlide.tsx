@@ -23,7 +23,6 @@ export function HeroImageSlide({ index, title }: HeroImageSlideProps) {
 
   const { imageBase, imageAlt } = HERO_IMAGE_SLIDES[title];
   const maxImageWidth = isDesktop ? routeContainerMaxWidth : window.innerWidth - routeContainerPadding;
-  // const maxImageHeight = isDesktop ? 360 : (maxImageWidth * 9) / 32;
   const maxImageHeight = (maxImageWidth * 9) / 32;
   const mdBreakpoint = theme.breakpoints.values.md;
   const sizes = `(max-width: ${mdBreakpoint}px) calc(100vw - ${routeContainerPadding}px), max(${maxImageWidth}px, calc(100vw - ${routeContainerPadding}px))`;
