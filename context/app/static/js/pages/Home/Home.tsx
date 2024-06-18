@@ -4,15 +4,14 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import Box from '@mui/material/Box';
 
 import HuBMAPDatasetsChart from 'js/components/home/HuBMAPDatasetsChart';
-import ImageCarouselContainer from 'js/components/home/ImageCarouselContainer';
 import Title from 'js/components/home/Title';
-import HuBMAPDescription from 'js/components/home/HuBMAPDescription';
 import EntityCounts from 'js/components/home/EntityCounts';
 import DataUseGuidelines from 'js/components/home/DataUseGuidelines';
 import ExternalLinks from 'js/components/home/ExternalLinks';
 import RecentEntities from 'js/components/home/RecentEntities';
 import ExploreTools from 'js/components/home/ExploreTools';
 
+import Hero from 'js/components/home/Hero';
 import { LowerContainerGrid, SectionHeader, OffsetDatasetsHeader, UpperGrid, GridAreaContainer } from './style';
 
 interface HomeProps {
@@ -34,10 +33,9 @@ function Home({ organsCount }: HomeProps) {
       <UpperGrid>
         <GridAreaContainer maxWidth="lg" $gridArea="title">
           <Title />
-          <HuBMAPDescription />
         </GridAreaContainer>
         <GridAreaContainer maxWidth="lg" $gridArea="carousel">
-          <ImageCarouselContainer />
+          <Hero />
         </GridAreaContainer>
         <Box gridArea="counts">
           <EntityCounts organsCount={organsCount} />

@@ -1,7 +1,7 @@
 import Box from '@mui/material/Box';
 import React from 'react';
 
-interface URLSvgIconProps extends React.ComponentProps<typeof Box> {
+export interface URLSvgIconProps extends React.ComponentProps<typeof Box> {
   iconURL: string;
   ariaLabel: string;
   invertColors?: boolean;

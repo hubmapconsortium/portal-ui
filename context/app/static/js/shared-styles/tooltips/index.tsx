@@ -1,7 +1,14 @@
 import React from 'react';
 import Tooltip, { TooltipProps } from '@mui/material/Tooltip';
 
-function SecondaryBackgroundTooltip({ children, ...rest }: TooltipProps) {
+interface SecondaryBackgroundTooltipProps extends TooltipProps {
+  disabled?: boolean;
+}
+
+function SecondaryBackgroundTooltip({ disabled, children, ...rest }: SecondaryBackgroundTooltipProps) {
+  if (disabled) {
+    return children;
+  }
   return (
     <Tooltip
       PopperProps={{

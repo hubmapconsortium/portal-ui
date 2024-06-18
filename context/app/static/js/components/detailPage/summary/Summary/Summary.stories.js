@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { rest } from 'msw';
+import { http } from 'msw';
 import Typography from '@mui/material/Typography';
 
 import { Citation } from 'js/components/detailPage/Citation/Citation.stories';
@@ -112,7 +112,7 @@ DatasetDefault.args = {
 DatasetDefault.parameters = {
   msw: {
     handlers: [
-      rest.get('http://localhost:6006/undefined/datasets/fakeuuid/revisions', (req, res, ctx) => {
+      http.get('http://localhost:6006/undefined/datasets/fakeuuid/revisions', (req, res, ctx) => {
         return res(ctx.json([{ revision_number: 1, uuid: 'fakeuuid' }]));
       }),
     ],

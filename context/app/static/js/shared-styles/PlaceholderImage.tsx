@@ -11,7 +11,7 @@ interface PlaceholderImageProps extends React.HTMLAttributes<HTMLImageElement> {
 // An image is consistently selected based on the title prop
 
 function PlaceholderImage({ title, width = 390, height = 520, alt = 'Test', ...rest }: PlaceholderImageProps) {
-  const titleSeed = title.length + title.charCodeAt(0);
+  const titleSeed = title.length + title.charCodeAt(0) + title.charCodeAt(title.length - 1);
   return <img src={`https://picsum.photos/id/${titleSeed}/${width}/${height}`} {...rest} alt={alt} />;
 }
 

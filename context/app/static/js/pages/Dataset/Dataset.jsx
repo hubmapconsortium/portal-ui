@@ -19,7 +19,7 @@ import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 
-import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 // TODO use this context for components other than FileBrowser
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import { getSectionOrder, getCombinedDatasetStatus } from 'js/components/detailPage/utils';

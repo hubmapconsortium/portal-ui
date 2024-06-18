@@ -8,7 +8,7 @@ import { useAppContext } from 'js/components/Contexts';
 import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { StyledDropdownMenuButton } from 'js/components/searchPage/MetadataMenu/style';
 import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { AddIcon } from 'js/shared-styles/icons';
 import AddDatasetsFromSearchDialog from '../AddDatasetsFromSearchDialog';
 
