@@ -14,7 +14,9 @@ declare module '@hms-dbmi-bgm/react-workflow-viz' {
     innerMargin?: { top: number; right: number; bottom: number; left: number };
     pathArrows?: boolean;
     columnSpacing?: number;
+    columnSpacingType?: string;
     rowSpacing?: number;
+    rowSpacingType?: string;
     nodeTitle?: (node: ProvNode) => string;
   }
 

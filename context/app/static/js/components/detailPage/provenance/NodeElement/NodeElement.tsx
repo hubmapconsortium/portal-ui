@@ -19,7 +19,7 @@ interface NodeElementProps {
 }
 
 function NodeElement({ node, title, columnWidth }: NodeElementProps) {
-  const style = node.nodeType === 'input' || node.nodeType === 'output' ? { width: columnWidth ?? 100 } : undefined;
+  const style = ['input', 'output'].includes(node.nodeType) ? { width: columnWidth ?? 100 } : undefined;
 
   const displayTitle = title ?? node.title ?? node.name;
 
