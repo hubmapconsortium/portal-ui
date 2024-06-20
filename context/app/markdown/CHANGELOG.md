@@ -1,3 +1,9 @@
+## v0.99.1 - 2024-06-20
+
+- Implement homepage tools section.
+- Implement homepage redesign.
+
+
 ## v0.99.0 - 2024-06-20
 
 - HuBMAP documentation site URL changed from https://software.docs.hubmapconsortium.org to https://docs.hubmapconsortium.org.

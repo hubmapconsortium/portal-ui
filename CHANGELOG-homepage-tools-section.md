@@ -1,1 +1,0 @@
-- Implement homepage tools section.
