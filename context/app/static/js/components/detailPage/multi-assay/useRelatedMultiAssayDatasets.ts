@@ -77,15 +77,6 @@ function getPrimaryDescendants(uuid: string) {
   };
 }
 
-interface Hit<Doc extends Record<string, unknown>> {
-  _source: Doc;
-}
-
-interface Hits<Doc extends Record<string, unknown>> {
-  searchHits: Hit<Doc>[];
-  isLoading: boolean;
-}
-
 export type MultiAssayEntity = Pick<
   Dataset,
   | 'uuid'
@@ -98,8 +89,6 @@ export type MultiAssayEntity = Pick<
   | 'descendant_counts'
   | 'last_modified_timestamp'
 >;
-
-type MultiAssayHits = Hits<MultiAssayEntity>;
 
 function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 'processing' | 'is_component'>) {
   if (is_component) {
@@ -136,18 +125,23 @@ function useRelatedMultiAssayDatasets() {
   }
   const isPrimary = entityIsDataset ? getMultiAssayType(entity) === 'raw' : false;
 
-  const { searchHits: primaryHits, isLoading: isLoadingPrimary } = useSearchHits(getPrimaryMultiAssay(uuid), {
-    shouldFetch: !isPrimary && entityIsDataset,
-  }) as MultiAssayHits;
+  const { searchHits: primaryHits, isLoading: isLoadingPrimary } = useSearchHits<MultiAssayEntity>(
+    getPrimaryMultiAssay(uuid),
+    {
+      shouldFetch: !isPrimary && entityIsDataset,
+    },
+  );
 
-  const primary = primaryHits[0]?._source ?? entity;
+  const primary = primaryHits?.[0]?._source ?? entity;
 
-  const { searchHits: primaryDescendantHits, isLoading: isLoadingDescendants } = useSearchHits(
+  const { searchHits: primaryDescendantHits, isLoading: isLoadingDescendants } = useSearchHits<MultiAssayEntity>(
     getPrimaryDescendants(primary ? primary.uuid : ''),
     {
       shouldFetch: Boolean(primary) && entityIsDataset,
     },
-  ) as MultiAssayHits;
+  );
+
+  const entities = [primary, ...(primaryDescendantHits ?? []).map((hit) => hit?._source)].filter(Boolean);
 
   if (!entityIsDataset) {
     return {
@@ -158,7 +152,7 @@ function useRelatedMultiAssayDatasets() {
 
   return {
     datasets: buildRelatedDatasets({
-      entities: [primary, ...primaryDescendantHits.map((hit) => hit?._source)].filter((e) => e !== undefined),
+      entities,
     }),
     isLoading: isLoadingPrimary || isLoadingDescendants,
   };

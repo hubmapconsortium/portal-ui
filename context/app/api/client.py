@@ -242,7 +242,10 @@ class ApiClient():
                 cleaned_headers = headers
                 if 'Authorization' in headers:
                     cleaned_headers['Authorization'] = 'REDACTED'
-                status = response.status_code if response else None
+                if response:
+                    status = response.status_code
+                else:
+                    status = None
                 current_app.logger.error({
                     'source': 'get_assaytype',
                     'url': url,

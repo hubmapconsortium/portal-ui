@@ -1,5 +1,5 @@
 import React from 'react';
-import { rest } from 'msw';
+import { http } from 'msw';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import { getArrayRange } from 'js/helpers/functions';
 import SummaryData from './SummaryData';
@@ -10,7 +10,7 @@ export default {
   parameters: {
     msw: {
       handlers: [
-        rest.get('http://localhost:6006/undefined/datasets/fakeuuid/revisions', (req, res, ctx) => {
+        http.get('http://localhost:6006/undefined/datasets/fakeuuid/revisions', (req, res, ctx) => {
           return res(ctx.json([{ revision_number: 1, uuid: 'fakeuuid' }]));
         }),
       ],

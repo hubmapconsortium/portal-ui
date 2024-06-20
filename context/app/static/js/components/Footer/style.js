@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Container from '@mui/material/Container';
-import { ReactComponent as Logo } from 'assets/svg/hubmap-logo.svg';
+import Logo from 'assets/svg/hubmap-logo.svg';
 
 const FlexContainer = styled(Container)`
   margin-top: ${(props) => props.theme.spacing(4)};

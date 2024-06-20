@@ -25,12 +25,12 @@ const PanelBox = styled(Box, {
   ...panelBorderStyles(theme),
   padding: noPadding ? 0 : theme.spacing(2, 3),
   display: 'flex',
-  flexDirection: 'column',
+  flexDirection: 'row',
+  maxWidth: 'calc(100vw - 48px)',
   '&:hover': {
     backgroundColor: !noHover && theme.palette.common.hoverShadow,
   },
   [theme.breakpoints.up('md')]: {
-    flexDirection: 'row',
     justifyContent: 'space-between',
   },
 }));
@@ -39,6 +39,7 @@ const LeftTextWrapper = styled(Box)(({ theme }) => ({
   whitespace: 'nowrap',
   minWidth: 0, // needed to handle overflow
   marginRight: theme.spacing(1),
+  flexGrow: 1,
 }));
 
 const TruncatedText = styled(Typography)(overflowCss);
@@ -46,12 +47,19 @@ const TruncatedText = styled(Typography)(overflowCss);
 const TruncatedLink = styled(InternalLink)({
   ...overflowCss,
   display: 'block', // text-overflow only applies to block elements
+  maxWidth: 'fit-content',
 });
 
 const RightTextWrapper = styled(Box)(({ theme }) => ({
   flexShrink: 0,
-  paddingLeft: theme.spacing(0.5),
   fontSize: theme.typography.body2.fontSize,
+  [theme.breakpoints.down('md')]: {
+    display: 'none',
+  },
+  [theme.breakpoints.up('md')]: {
+    paddingLeft: theme.spacing(0.5),
+  },
+  minWidth: 0, // needed to handle overflow
 }));
 
 export { PanelBox, LeftTextWrapper, TruncatedText, TruncatedLink, RightTextWrapper, panelBorderStyles };

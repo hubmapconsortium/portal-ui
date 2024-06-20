@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitForElementToBeRemoved, appProviderEndpoints } from 'test-utils/functions';
-import { rest } from 'msw';
+import { http } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { FlaskDataContext } from 'js/components/Contexts';
@@ -16,7 +16,7 @@ const globusUrlResponse = {
 };
 
 const server = setupServer(
-  rest.get(`/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${testUuid}`, (req, res, ctx) => {
+  http.get(`/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${testUuid}`, (req, res, ctx) => {
     return res(ctx.json(globusUrlResponse), ctx.status(200));
   }),
 );

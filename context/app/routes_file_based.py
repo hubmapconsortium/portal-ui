@@ -80,7 +80,10 @@ def organ_details_view(name):
 @blueprint.route('/organ/<name>.json')
 def get_organ_details(name):
     organs = get_organs()
-    normalized_name = name.lower().strip().replace(' ', '-').replace('_', '-')
+    # Remove all spaces, underscores, and any text in parentheses
+    normalized_name = name.lower().strip()
+    normalized_name = normalized_name.split('(')[0].strip().replace(
+        ' ', '-').replace('_', '-')
     if normalized_name not in organs:
         return {}
     filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(normalized_name)}.yaml'

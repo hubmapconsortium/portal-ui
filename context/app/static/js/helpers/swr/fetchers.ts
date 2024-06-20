@@ -1,17 +1,17 @@
 import { SWRError } from './errors';
 
-interface FetchOptionsType {
+export interface FetchOptionsType {
   expectedStatusCodes?: number[];
   errorMessages?: Record<number, string>;
   returnResponse?: boolean;
 }
 
-type SingleFetchOptionsType = FetchOptionsType & {
+export type SingleFetchOptionsType = FetchOptionsType & {
   requestInit?: RequestInit;
   url: string;
 };
 
-type MultiFetchOptionsType = FetchOptionsType & {
+export type MultiFetchOptionsType = FetchOptionsType & {
   urls: string[];
   requestInits?: RequestInit[];
 };

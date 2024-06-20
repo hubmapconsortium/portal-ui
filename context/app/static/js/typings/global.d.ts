@@ -10,14 +10,9 @@ declare const workspacesToken: string;
 declare const userGroups: string[];
 declare const sentryEnv: string;
 
-declare module '*.yaml' {
-  const data: unknown;
-  export default data;
-}
-
 declare module '*.svg' {
   const ReactComponent: React.FunctionComponent<React.SVGAttributes<SVGElement>>;
-  export { ReactComponent };
+  export default ReactComponent;
 }
 
 declare namespace JSX {

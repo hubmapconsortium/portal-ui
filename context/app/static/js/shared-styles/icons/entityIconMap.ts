@@ -1,6 +1,6 @@
-import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import ScatterPlot from '@mui/icons-material/ScatterPlot';
-import { ReactComponent as GeneIcon } from 'assets/svg/gene.svg';
+import GeneIcon from 'assets/svg/gene.svg';
 import { ESEntityType } from 'js/components/types';
 import { DatasetIcon, SampleIcon, DonorIcon, PublicationIcon, CollectionIcon, VerifiedIcon } from './icons';
 
