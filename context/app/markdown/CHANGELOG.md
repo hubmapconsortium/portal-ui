@@ -1,3 +1,9 @@
+## v0.99.0 - 2024-06-20
+
+- HuBMAP documentation site URL changed from https://software.docs.hubmapconsortium.org to https://docs.hubmapconsortium.org.
+
+
+
 ## v0.98.0 - 2024-06-12
 
 - Make long samples sections in the provenance table view expandable.
