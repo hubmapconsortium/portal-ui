@@ -87,7 +87,7 @@ const noGlobusAccessWhileLoggedInPanel = {
     <>
       This dataset contains protected-access human sequence data. If you are not a consortium member, you must access
       these data through dbGaP if available. For additional help, <ContactUsLink variant="body2" /> with the dataset ID
-      and information about
+      and information about the files you are trying to access.
     </>
   ),
 };
