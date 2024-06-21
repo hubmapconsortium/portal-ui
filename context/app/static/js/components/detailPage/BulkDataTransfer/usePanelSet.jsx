@@ -80,13 +80,25 @@ const dbGaPPanel = {
   ),
 };
 
+const noGlobusAccessWhileLoggedInPanel = {
+  ...globusText,
+  status: 'error',
+  children: (
+    <>
+      This dataset contains protected-access human sequence data. If you are not a consortium member, you must access
+      these data through dbGaP if available. For additional help, <ContactUsLink variant="body2" /> with the dataset ID
+      and information about
+    </>
+  ),
+};
+
 const PROTECTED_DATA_NOT_LOGGED_IN = {
   panels: [loginPanel, dbGaPPanel],
   links: [dbGaPLink, sraExperimentLink],
 };
 
-const PROTECTED_DATA_LOGGED_IN = {
-  panels: [loginPanel, dbGaPPanel],
+const PROTECTED_DATA_LOGGED_IN_NO_GLOBUS_ACCESS = {
+  panels: [noGlobusAccessWhileLoggedInPanel, dbGaPPanel],
   links: [dbGaPLink, sraExperimentLink],
 };
 
@@ -223,7 +235,7 @@ export const usePanelSet = () => {
     // If file is protected and request against the file returns 403, user has no access to protected data
     if (hasNoAccess) {
       if (hasDbGaPStudyURL) {
-        return PROTECTED_DATA_LOGGED_IN;
+        return PROTECTED_DATA_LOGGED_IN_NO_GLOBUS_ACCESS;
       }
       return NO_ACCESS_TO_PROTECTED_DATA;
     }
