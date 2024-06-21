@@ -65,25 +65,28 @@ const noDbGaPPanel = {
   ),
 };
 
-const PROTECTED_DATA = {
-  panels: [
-    loginPanel,
-    {
-      ...dbGaPText,
-      status: 'success',
-      children: (
-        <>
-          This dataset contains protected-access human sequence data. If you are not a Consortium member, you must
-          access these data through dbGaP if available. dbGaP authentication is required for downloading through these
-          links. View{' '}
-          <OutboundLink href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title">
-            documentation
-          </OutboundLink>{' '}
-          on how to attain dbGaP access.
-        </>
-      ),
-    },
-  ],
+const dbGaPPanel = {
+  ...dbGaPText,
+  status: 'success',
+  children: (
+    <>
+      This dataset contains protected-access human sequence data. If you are not a Consortium member, you must access
+      these data through dbGaP if available. dbGaP authentication is required for downloading through these links. View{' '}
+      <OutboundLink href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title">
+        documentation
+      </OutboundLink>{' '}
+      on how to attain dbGaP access.
+    </>
+  ),
+};
+
+const PROTECTED_DATA_NOT_LOGGED_IN = {
+  panels: [loginPanel, dbGaPPanel],
+  links: [dbGaPLink, sraExperimentLink],
+};
+
+const PROTECTED_DATA_LOGGED_IN = {
+  panels: [loginPanel, dbGaPPanel],
   links: [dbGaPLink, sraExperimentLink],
 };
 
@@ -219,6 +222,9 @@ export const usePanelSet = () => {
 
     // If file is protected and request against the file returns 403, user has no access to protected data
     if (hasNoAccess) {
+      if (hasDbGaPStudyURL) {
+        return PROTECTED_DATA_LOGGED_IN;
+      }
       return NO_ACCESS_TO_PROTECTED_DATA;
     }
 
@@ -227,7 +233,7 @@ export const usePanelSet = () => {
 
   // Unauthenticated cases
   if (hasDbGaPStudyURL) {
-    return PROTECTED_DATA;
+    return PROTECTED_DATA_NOT_LOGGED_IN;
   }
 
   return PROTECTED_DATA_NO_DBGAP;
