@@ -3,6 +3,7 @@ import { AggregationsTermsAggregateBase } from '@elastic/elasticsearch/lib/api/t
 import esb from 'elastic-builder';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import { produce } from 'immer';
 
 import { useAppContext } from 'js/components/Contexts';
 import { SearchStoreProvider, useSearchStore, SearchStoreState } from './store';
@@ -12,6 +13,13 @@ import { getPortalESField } from './buildTypesMap';
 import Facets from './Facets/Facets';
 import SearchBar from './SearchBar';
 import { useScrollSearchHits } from './useScrollSearchHits';
+
+const initialFieldClauses = { aggs: [], filters: [] };
+
+interface FieldClauses {
+  aggs: esb.Aggregation[];
+  filters: esb.Query[];
+}
 
 function buildQuery({
   terms,
@@ -33,41 +41,60 @@ function buildQuery({
     query.query(esb.simpleQueryStringQuery(search).fields(searchFields)).highlight(esb.highlight(searchFields));
   }
 
-  Object.entries(terms).forEach(([field, values]) => {
-    const portalField = getPortalESField(field);
-    if (values.size) {
-      query.postFilter(esb.termsQuery(portalField, [...values]));
-    }
-    query.agg(esb.termsAggregation(field, portalField));
-  });
+  const termClauses = Object.entries(terms).reduce<FieldClauses>((acc, [field, values]) => {
+    return produce(acc, (draft) => {
+      const portalField = getPortalESField(field);
+      if (values.size) {
+        draft.filters.push(esb.termsQuery(portalField, [...values]));
+      }
+      draft.aggs.push(esb.termsAggregation(field, portalField));
+    });
+  }, initialFieldClauses);
 
-  Object.entries(ranges).forEach(([field, { values, min, max }]) => {
-    const portalField = getPortalESField(field);
+  const rangeClauses = Object.entries(ranges).reduce<FieldClauses>((acc, [field, { values, min, max }]) => {
+    return produce(acc, (draft) => {
+      const portalField = getPortalESField(field);
 
-    if (values.min !== min || values.max !== max) {
-      query.postFilter(esb.rangeQuery(portalField).gte(values.min).lte(values.max));
-    }
-    const interval = Math.ceil((max - min) / 20);
-    query.agg(esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max));
-  });
+      if (values.min !== min || values.max !== max) {
+        draft.filters.push(esb.rangeQuery(portalField).gte(values.min).lte(values.max));
+      }
+      const interval = Math.ceil((max - min) / 20);
+      draft.aggs.push(esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max));
+    });
+  }, initialFieldClauses);
 
-  Object.entries(hierarchicalTerms).forEach(([field, { values, childField }]) => {
-    if (!childField) {
-      return;
-    }
-    const parentPortalField = getPortalESField(field);
-    const childPortalField = getPortalESField(childField);
+  const hierarchicalClauses = Object.entries(hierarchicalTerms).reduce<FieldClauses>(
+    (acc, [field, { values, childField }]) => {
+      return produce(acc, (draft) => {
+        if (!childField) {
+          return acc;
+        }
+        const parentPortalField = getPortalESField(field);
+        const childPortalField = getPortalESField(childField);
 
-    if (Object.keys(values).length) {
-      query.postFilter(esb.termsQuery(parentPortalField, Object.keys(values)));
+        if (Object.keys(values).length) {
+          draft.filters.push(esb.termsQuery(parentPortalField, Object.keys(values)));
 
-      const childValues = Object.values(values)
-        .map((v) => [...v])
-        .flat();
-      query.postFilter(esb.termsQuery(childPortalField, childValues));
-    }
-    query.agg(esb.termsAggregation(field, parentPortalField).agg(esb.termsAggregation(childField, childPortalField)));
-  });
+          const childValues = Object.values(values)
+            .map((v) => [...v])
+            .flat();
+          draft.filters.push(esb.termsQuery(childPortalField, childValues));
+        }
+
+        draft.aggs.push(
+          esb.termsAggregation(field, parentPortalField).agg(esb.termsAggregation(childField, childPortalField)),
+        );
+        return draft;
+      });
+    },
+    initialFieldClauses,
+  );
+
+  query.aggs([...termClauses.aggs, ...rangeClauses.aggs, ...hierarchicalClauses.aggs]);
+
+  query.postFilter(
+    esb.boolQuery().must([...termClauses.filters, ...rangeClauses.filters, ...hierarchicalClauses.filters]),
+  );
 
   return query.toJSON();
 }
