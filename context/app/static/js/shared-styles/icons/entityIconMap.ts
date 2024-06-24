@@ -20,7 +20,11 @@ type WorkspaceAPIEntityType = WorkspaceEntityType;
 
 type AllEntityTypes = ESEntityType | UBKGEntityType | WorkspaceAPIEntityType | GlobusEntityType;
 
-export const entityIconMap: Record<AllEntityTypes, MUIIcon | SVGIcon> = {
+type SVGIcons = 'Workspace' | 'Gene';
+
+type MUIIcons = Exclude<AllEntityTypes, SVGIcons>;
+
+export const entityIconMap: Record<MUIIcons, MUIIcon> & Record<SVGIcons, SVGIcon> = {
   Donor: DonorIcon,
   Sample: SampleIcon,
   Dataset: DatasetIcon,
