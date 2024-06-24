@@ -52,7 +52,7 @@ function RangeFacet({ field }: { field: string }) {
     [filterRange, field],
   );
 
-  const aggBuckets = aggregations?.[field]?.buckets;
+  const aggBuckets = aggregations?.[field]?.[field]?.buckets;
 
   if (!aggBuckets || !Array.isArray(aggBuckets)) {
     return null;

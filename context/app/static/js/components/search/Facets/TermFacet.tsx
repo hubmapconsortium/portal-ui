@@ -87,7 +87,7 @@ export function TermFacet({ field }: { field: string }) {
     terms: { [field]: term },
   } = useSearchStore();
 
-  const aggBuckets = aggregations?.[field]?.buckets;
+  const aggBuckets = aggregations?.[field]?.[field]?.buckets;
 
   if (!aggBuckets || !Array.isArray(aggBuckets)) {
     return null;
@@ -235,7 +235,7 @@ export function HierarchicalTermFacet({ parentField, childField }: { parentField
     return null;
   }
 
-  const parentBuckets = aggregations?.[parentField]?.buckets;
+  const parentBuckets = aggregations?.[parentField]?.[parentField]?.buckets;
 
   if (!parentBuckets || !Array.isArray(parentBuckets)) {
     return null;

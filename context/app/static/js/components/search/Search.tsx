@@ -14,12 +14,7 @@ import Facets from './Facets/Facets';
 import SearchBar from './SearchBar';
 import { useScrollSearchHits } from './useScrollSearchHits';
 
-const initialFieldClauses = { aggs: [], filters: [] };
-
-interface FieldClauses {
-  aggs: esb.Aggregation[];
-  filters: esb.Query[];
-}
+type Filters = Record<string, esb.Query>;
 
 function buildQuery({
   terms,
@@ -41,29 +36,29 @@ function buildQuery({
     query.query(esb.simpleQueryStringQuery(search).fields(searchFields)).highlight(esb.highlight(searchFields));
   }
 
-  const termClauses = Object.entries(terms).reduce<FieldClauses>((acc, [field, values]) => {
+  const termFilters = Object.entries(terms).reduce<Filters>((acc, [field, values]) => {
     return produce(acc, (draft) => {
       const portalField = getPortalESField(field);
       if (values.size) {
-        draft.filters.push(esb.termsQuery(portalField, [...values]));
+        draft[portalField] = esb.termsQuery(portalField, [...values]);
       }
-      draft.aggs.push(esb.termsAggregation(field, portalField));
+      // draft.aggs.push(esb.termsAggregation(field, portalField));
     });
-  }, initialFieldClauses);
+  }, {});
 
-  const rangeClauses = Object.entries(ranges).reduce<FieldClauses>((acc, [field, { values, min, max }]) => {
+  const rangeFilters = Object.entries(ranges).reduce<Filters>((acc, [field, { values, min, max }]) => {
     return produce(acc, (draft) => {
       const portalField = getPortalESField(field);
 
       if (values.min !== min || values.max !== max) {
-        draft.filters.push(esb.rangeQuery(portalField).gte(values.min).lte(values.max));
+        draft[portalField] = esb.rangeQuery(portalField).gte(values.min).lte(values.max);
       }
-      const interval = Math.ceil((max - min) / 20);
-      draft.aggs.push(esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max));
+      // const interval = Math.ceil((max - min) / 20);
+      // draft.aggs.push(esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max));
     });
-  }, initialFieldClauses);
+  }, {});
 
-  const hierarchicalClauses = Object.entries(hierarchicalTerms).reduce<FieldClauses>(
+  const hierarchicalFilters = Object.entries(hierarchicalTerms).reduce<Filters>(
     (acc, [field, { values, childField }]) => {
       return produce(acc, (draft) => {
         if (!childField) {
@@ -73,40 +68,94 @@ function buildQuery({
         const childPortalField = getPortalESField(childField);
 
         if (Object.keys(values).length) {
-          draft.filters.push(esb.termsQuery(parentPortalField, Object.keys(values)));
+          draft[parentPortalField] = esb.termsQuery(parentPortalField, Object.keys(values));
 
           const childValues = Object.values(values)
             .map((v) => [...v])
             .flat();
-          draft.filters.push(esb.termsQuery(childPortalField, childValues));
+          draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
         }
 
+        /*
         draft.aggs.push(
           esb.termsAggregation(field, parentPortalField).agg(esb.termsAggregation(childField, childPortalField)),
         );
+        */
         return draft;
       });
     },
-    initialFieldClauses,
+    {},
   );
 
-  query.aggs([...termClauses.aggs, ...rangeClauses.aggs, ...hierarchicalClauses.aggs]);
+  const allFilters = { ...termFilters, ...rangeFilters, ...hierarchicalFilters };
 
-  query.postFilter(
-    esb.boolQuery().must([...termClauses.filters, ...rangeClauses.filters, ...hierarchicalClauses.filters]),
-  );
+  query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
+
+  Object.keys(terms).forEach((field) => {
+    const portalField = getPortalESField(field);
+
+    const { [portalField]: pf, ...allOtherFilters } = allFilters;
+    const otherFiltersQuery = Object.keys(allOtherFilters).length
+      ? esb.boolQuery().must(Object.values(allOtherFilters))
+      : esb.boolQuery().must([]);
+
+    query.agg(esb.filterAggregation(field, otherFiltersQuery).agg(esb.termsAggregation(field, portalField)));
+  });
+
+  Object.entries(ranges).forEach(([field, { min, max }]) => {
+    const portalField = getPortalESField(field);
+
+    const interval = Math.ceil((max - min) / 20);
+
+    const { [portalField]: pf, ...allOtherFilters } = allFilters;
+    const otherFiltersQuery = Object.keys(allOtherFilters).length
+      ? esb.boolQuery().must(Object.values(allOtherFilters))
+      : esb.boolQuery().must([]);
+
+    query.agg(
+      esb
+        .filterAggregation(field, otherFiltersQuery)
+        .agg(esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max)),
+    );
+  });
+
+  Object.entries(hierarchicalTerms).forEach(([field, { childField }]) => {
+    if (!childField) {
+      return;
+    }
+    const parentPortalField = getPortalESField(field);
+    const childPortalField = getPortalESField(childField);
+
+    const { [parentPortalField]: pf, [childPortalField]: cf, ...allOtherFilters } = allFilters;
+    const otherFiltersQuery = Object.keys(allOtherFilters).length
+      ? esb.boolQuery().must(Object.values(allOtherFilters))
+      : esb.boolQuery().must([]);
+
+    query.agg(
+      esb
+        .filterAggregation(field, otherFiltersQuery)
+        .agg(esb.termsAggregation(field, parentPortalField).agg(esb.termsAggregation(childField, childPortalField))),
+    );
+  });
 
   return query.toJSON();
 }
 
-interface Bucket {
+interface OuterBucket {
+  doc_count: number;
+}
+interface InnerBucket {
   key: string;
   doc_count: number;
 }
 
 type Aggregations = Record<
   string,
-  AggregationsTermsAggregateBase<Bucket & Partial<Record<string, AggregationsTermsAggregateBase<Bucket>>>>
+  OuterBucket &
+    Record<
+      string,
+      AggregationsTermsAggregateBase<InnerBucket & Partial<Record<string, AggregationsTermsAggregateBase<InnerBucket>>>>
+    >
 >;
 
 export function useSearch() {
