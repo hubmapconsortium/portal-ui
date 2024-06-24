@@ -19,7 +19,7 @@ const heroTabs = [
       {
         title: 'Explore datasets',
         icon: <entityIconMap.Dataset fontSize="1.5rem" />,
-        href: '/organ',
+        href: '/search?entity_type[0]=Dataset',
       },
       {
         title: 'Explore molecules/cell types',
