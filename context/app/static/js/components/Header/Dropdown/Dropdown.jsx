@@ -9,7 +9,7 @@ import MenuList from '@mui/material/MenuList';
 
 import { OffsetPopper } from './style';
 
-function Dropdown({ title, children, menuListId, ...rest }) {
+function Dropdown({ title, children, menuListId, hideArrow, ...rest }) {
   const [open, toggle] = useReducer((v) => !v, false);
   const anchorRef = useRef(null);
 
@@ -17,7 +17,7 @@ function Dropdown({ title, children, menuListId, ...rest }) {
     <>
       <Button ref={anchorRef} onClick={toggle} style={{ color: 'white' }} {...rest}>
         {title}
-        {open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        {!hideArrow && (open ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />)}
       </Button>
       <OffsetPopper
         open={open}

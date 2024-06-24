@@ -24,6 +24,7 @@ import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import SearchIconSVG from 'assets/svg/search-icon.svg';
+import DatabaseIcon from 'assets/svg/database.svg';
 import { ElementType } from 'react';
 import { BarChartRounded, LightbulbOutlined } from '@mui/icons-material';
 import GetAppRounded from '@mui/icons-material/GetAppRounded';
@@ -118,4 +119,5 @@ export {
   VisualizationIcon,
   DownloadIcon,
   LightbulbIcon,
+  DatabaseIcon,
 };

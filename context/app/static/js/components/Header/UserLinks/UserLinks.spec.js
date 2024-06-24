@@ -1,6 +1,5 @@
 import React from 'react';
-import { render, screen } from 'test-utils/functions';
-import { fireEvent } from '@testing-library/react';
+import { render, screen, fireEvent } from 'test-utils/functions';
 
 import UserLinks from './UserLinks';
 
