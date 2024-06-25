@@ -7,7 +7,11 @@ import { itemIsProps } from './utils';
 export default function DrawerSection({ title, items, hideTitle = false, titleProps }: DrawerSectionProps) {
   return (
     <DrawerList disablePadding>
-      {!hideTitle && <StyledListSubheader {...titleProps}>{title}</StyledListSubheader>}
+      {!hideTitle && (
+        <StyledListSubheader disableSticky {...titleProps}>
+          {title}
+        </StyledListSubheader>
+      )}
       {items.map((item) => {
         if (itemIsProps(item)) {
           return <DrawerItem key={item.label} {...item} />;

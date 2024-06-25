@@ -6,13 +6,12 @@ import { FixedHeightAppBar } from './style';
 
 interface HeaderAppBarProps extends PropsWithChildren {
   elevation: number;
-  anchorRef: React.RefObject<HTMLDivElement>;
   shouldConstrainWidth: boolean;
 }
 
-function HeaderAppBar({ children, elevation, anchorRef, shouldConstrainWidth }: HeaderAppBarProps) {
+function HeaderAppBar({ children, elevation, shouldConstrainWidth }: HeaderAppBarProps) {
   return (
-    <FixedHeightAppBar position="sticky" ref={anchorRef} elevation={elevation}>
+    <FixedHeightAppBar position="sticky" elevation={elevation}>
       <Container maxWidth={shouldConstrainWidth ? 'lg' : false}>
         <Toolbar disableGutters>{children}</Toolbar>
       </Container>

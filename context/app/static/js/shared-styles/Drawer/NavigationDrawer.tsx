@@ -2,6 +2,8 @@ import React from 'react';
 
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
+import { IconButton } from '@mui/material';
+import CloseRounded from '@mui/icons-material/CloseRounded';
 import { DrawerSection, NavigationDrawerProps } from './types';
 import { DrawerTitle, StyledDrawer } from './styles';
 import DrawerSectionComponent from './DrawerSection';
@@ -14,7 +16,12 @@ export default function NavigationDrawer({ title, direction, sections, onClose, 
   return (
     <StyledDrawer open={open} anchor={direction} onClose={onClose}>
       <Stack gap={2} useFlexGap>
-        <DrawerTitle>{title}</DrawerTitle>
+        <DrawerTitle>
+          {title}
+          <IconButton aria-label="Close" onClick={onClose}>
+            <CloseRounded />
+          </IconButton>
+        </DrawerTitle>
         {sectionsWithDividers.map((section) => {
           if (sectionIsProps(section)) {
             return <DrawerSectionComponent key={getKeyFromSection(section)} {...section} />;

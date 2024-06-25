@@ -16,11 +16,24 @@ export const StyledDrawer = styled(Drawer)(({ theme, anchor }) => ({
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%',
+    },
   },
 }));
 
 export function DrawerTitle(props: TypographyProps) {
-  return <Typography variant="h3" color="primary" {...props} />;
+  return (
+    <Typography
+      variant="h3"
+      color="primary"
+      display="flex"
+      flexDirection="row"
+      alignItems="center"
+      justifyContent="space-between"
+      {...props}
+    />
+  );
 }
 
 export const DrawerList = List;
@@ -58,6 +71,9 @@ export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
   },
   '& .MuiListItemText-secondary': {
     ...theme.typography.body2,
+    [theme.breakpoints.down('sm')]: {
+      display: 'none',
+    },
   },
 }));
 

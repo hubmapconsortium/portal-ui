@@ -1,18 +1,16 @@
 import React from 'react';
 
-import { useIsDesktop } from 'js/hooks/media-queries';
+import { useIsMobile } from 'js/hooks/media-queries';
 
-import Menu from '../Menu';
-import UserLinks from '../UserLinks';
-import { Spacer, FlexNoWrap } from './style';
+import { Spacer } from './style';
 import HubmapLogo from '../HubmapLogo';
-import ToolsAndApplicationLinks from '../ToolsAndApplications';
-import DataLinks from '../DataLinks';
-import ResourcesLinks from '../ResourcesLinks';
-
-interface HeaderContentProps {
-  anchorRef: React.RefObject<HTMLDivElement>;
-}
+import {
+  ToolsAndApplicationLinks,
+  UserLinks,
+  DataLinks,
+  ResourcesLinks,
+  MobileMenu,
+} from '../HeaderNavigationDrawer/instances';
 
 function HubmapLogoLink() {
   return (
@@ -22,22 +20,19 @@ function HubmapLogoLink() {
   );
 }
 
-function MobileHeader({ anchorRef }: HeaderContentProps) {
+function MobileHeader() {
   return (
     <>
-      <Menu anchorRef={anchorRef} />
+      <MobileMenu />
       <HubmapLogoLink />
+      <Spacer />
+      <ToolsAndApplicationLinks />
+      <UserLinks />
     </>
   );
 }
 
-function HeaderContent({ anchorRef }: HeaderContentProps) {
-  const shouldDisplayMenu = !useIsDesktop();
-
-  if (shouldDisplayMenu) {
-    return <MobileHeader anchorRef={anchorRef} />;
-  }
-
+function DesktopHeader() {
   return (
     <>
       <HubmapLogoLink />
@@ -48,6 +43,15 @@ function HeaderContent({ anchorRef }: HeaderContentProps) {
       <UserLinks />
     </>
   );
+}
+
+function HeaderContent() {
+  const isMobile = useIsMobile();
+  if (isMobile) {
+    return <MobileHeader />;
+  }
+
+  return <DesktopHeader />;
 }
 
 export default HeaderContent;
