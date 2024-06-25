@@ -244,32 +244,34 @@ export const toolsAndAppsLinks: DrawerSection[] = [
   },
 ];
 
-export const userLinks: DrawerSection[] = [
-  {
-    title: 'Your Profile',
-    hideTitle: true,
-    items: [
-      {
-        href: '/profile',
-        label: 'Profile',
-        description: 'Find information about your profile',
-        icon: <UserIcon color="primary" />,
-      },
-      {
-        href: '/my-lists',
-        label: 'My Lists',
-        description: 'Find your bookmarks and lists',
-        icon: <entityIconMap.Collection color="primary" />,
-      },
-      {
-        href: '/my-workspaces',
-        label: 'My Workspaces',
-        description: 'Find your workspaces',
-        icon: <entityIconMap.Workspace color="primary" />,
-      },
-    ],
-  },
-  <AuthButton key="auth-button" isAuthenticated={isAuthenticated} />,
-];
+export const userLinks: (isAuthenticated: boolean) => DrawerSection[] = (isAuthenticated) => {
+  return [
+    {
+      title: 'Your Profile',
+      hideTitle: true,
+      items: [
+        {
+          href: '/profile',
+          label: 'Profile',
+          description: 'Find information about your profile',
+          icon: <UserIcon color="primary" />,
+        },
+        {
+          href: '/my-lists',
+          label: 'My Lists',
+          description: 'Find your bookmarks and lists',
+          icon: <entityIconMap.Collection color="primary" />,
+        },
+        {
+          href: '/my-workspaces',
+          label: 'My Workspaces',
+          description: 'Find your workspaces',
+          icon: <entityIconMap.Workspace color="primary" />,
+        },
+      ],
+    },
+    <AuthButton key="auth-button" isAuthenticated={isAuthenticated} />,
+  ];
+};
 
 export const mobileMenuLinks = dataLinks.concat(<DrawerTitle>Resources</DrawerTitle>, toolsAndAppsLinks);
