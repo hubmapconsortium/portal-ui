@@ -1,3 +1,6 @@
+import { ListSubheaderProps } from '@mui/material';
+import React from 'react';
+
 export interface DrawerItemProps {
   href: string;
   label: string;
@@ -8,7 +11,8 @@ export interface DrawerItemProps {
 export interface DrawerSectionProps {
   title: string;
   hideTitle?: boolean;
-  items: DrawerItemProps[];
+  titleProps?: Partial<ListSubheaderProps>;
+  items: (DrawerItemProps | React.ReactNode)[];
 }
 
 export type DrawerSection = DrawerSectionProps | React.ReactNode;

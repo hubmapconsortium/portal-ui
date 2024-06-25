@@ -27,6 +27,7 @@ import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { BarChartRounded, LightbulbOutlined } from '@mui/icons-material';
 import GetAppRounded from '@mui/icons-material/GetAppRounded';
+import ScatterPlot from '@mui/icons-material/ScatterPlot';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -98,6 +99,8 @@ const DownloadIcon = withIconStyles(GetAppRounded);
 
 const LightbulbIcon = withIconStyles(LightbulbOutlined);
 
+const CellTypeIcon = withIconStyles(ScatterPlot);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -145,4 +148,5 @@ export {
   OrganIcon,
   EUIIcon,
   AsctBIcon,
+  CellTypeIcon,
 };

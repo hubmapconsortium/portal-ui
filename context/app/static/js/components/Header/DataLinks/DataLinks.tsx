@@ -1,11 +1,13 @@
 import React from 'react';
 
 import NavigationDrawer, { useDrawerState, type DrawerSection } from 'js/shared-styles/Drawer';
-import { DatabaseIcon, OrganIcon, SearchIcon } from 'js/shared-styles/icons';
+import { DatabaseIcon, OrganIcon, SearchIcon, SupportIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import Button from '@mui/material/Button';
+import { contactUsUrl } from 'js/shared-styles/Links/ContactUsLink';
 import HeaderButton from '../HeaderButton/HeaderButton';
 
-const links: DrawerSection[] = [
+const dataLinks: DrawerSection[] = [
   {
     title: 'Datasets',
     items: [
@@ -39,13 +41,13 @@ const links: DrawerSection[] = [
         href: '/biomarkers',
         icon: <entityIconMap.Gene color="primary" />,
       },
-      {
-        label: 'Cell Types',
-        description:
-          'Explore cell types and discover information on associated organs, defining biomarkers and datasets with annotated cell types',
-        href: '/cell-types',
-        icon: <entityIconMap.CellType color="primary" />,
-      },
+      // {
+      //   label: 'Cell Types',
+      //   description:
+      //     'Explore cell types and discover information on associated organs, defining biomarkers and datasets with annotated cell types',
+      //   href: '/cell-types',
+      //   icon: <entityIconMap.CellType color="primary" />,
+      // },
     ],
   },
   {
@@ -82,6 +84,22 @@ const links: DrawerSection[] = [
       },
     ],
   },
+  {
+    title: "Can't find what you're looking for?",
+    titleProps: { sx: { color: 'common.link' } },
+    items: [
+      <Button
+        key="contact-support"
+        // sx={{ border: (theme) => theme.palette.grey[200] }}
+        startIcon={<SupportIcon />}
+        href={contactUsUrl}
+        variant="outlined"
+        fullWidth
+      >
+        Contact Support
+      </Button>,
+    ],
+  },
 ];
 
 export default function DataLinks() {
@@ -90,7 +108,7 @@ export default function DataLinks() {
   return (
     <>
       <HeaderButton title={title} onClick={toggle} icon={<DatabaseIcon />} />
-      <NavigationDrawer title={title} direction="left" sections={links} onClose={onClose} open={open} />
+      <NavigationDrawer title={title} direction="left" sections={dataLinks} onClose={onClose} open={open} />
     </>
   );
 }

@@ -42,6 +42,7 @@ export const DrawerListItemIcon = styled(ListItemIcon)(({ theme }) => ({
 export const StyledListSubheader = styled(ListSubheader)(({ theme }) => ({
   color: theme.palette.primary.main,
   fontWeight: theme.typography.fontWeightMedium,
+  paddingLeft: 0,
 }));
 
 export const StyledListItemText = styled(ListItemText)(({ theme }) => ({

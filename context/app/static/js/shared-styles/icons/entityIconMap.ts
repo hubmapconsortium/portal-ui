@@ -1,4 +1,3 @@
-import ScatterPlot from '@mui/icons-material/ScatterPlot';
 import { ESEntityType } from 'js/components/types';
 import {
   DatasetIcon,
@@ -9,6 +8,7 @@ import {
   VerifiedIcon,
   GeneIcon,
   WorkspacesIcon,
+  CellTypeIcon,
 } from './icons';
 
 type MUIIcon = typeof DonorIcon;
@@ -34,7 +34,7 @@ export const entityIconMap: Record<AllEntityTypes, MUIIcon> = {
   Publication: PublicationIcon,
   Collection: CollectionIcon,
   Workspace: WorkspacesIcon,
-  CellType: ScatterPlot,
+  CellType: CellTypeIcon,
   Gene: GeneIcon,
   VerifiedUser: VerifiedIcon,
 };

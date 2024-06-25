@@ -1,8 +1,13 @@
 import { isValidElement } from 'react';
-import { DrawerSection, DrawerSectionProps } from './types';
+import { DrawerItemProps, DrawerSection, DrawerSectionProps } from './types';
 
 export function sectionIsProps(section: unknown): section is DrawerSectionProps {
   if (isValidElement(section)) return false;
+  return true;
+}
+
+export function itemIsProps(item: unknown): item is DrawerItemProps {
+  if (isValidElement(item)) return false;
   return true;
 }
 
