@@ -9,9 +9,9 @@ import Typography, { TypographyProps } from '@mui/material/Typography';
 import React from 'react';
 import Divider, { DividerProps } from '@mui/material/Divider';
 
-export const StyledDrawer = styled(Drawer)(({ theme }) => ({
+export const StyledDrawer = styled(Drawer)(({ theme, anchor }) => ({
   '& .MuiDrawer-paper': {
-    borderRadius: theme.spacing(2),
+    borderRadius: anchor === 'left' ? theme.spacing(0, 2, 2, 0) : theme.spacing(2, 0, 0, 2),
     maxWidth: theme.breakpoints.values.sm,
     padding: theme.spacing(2),
     display: 'flex',
