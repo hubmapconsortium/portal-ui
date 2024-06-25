@@ -25,9 +25,13 @@ export function DrawerTitle(props: TypographyProps) {
 
 export const DrawerList = List;
 
-export const DrawerListItem = styled(ListItem)({
+export const DrawerListItem = styled(ListItem)(({ theme }) => ({
   marginY: 0,
-});
+  '&:hover': {
+    backgroundColor: '#F0F3EB', // success-90 in figma
+    borderRadius: theme.spacing(1),
+  },
+}));
 
 export const DrawerListItemIcon = styled(ListItemIcon)(({ theme }) => ({
   width: theme.spacing(6),
@@ -48,6 +52,9 @@ export const StyledListSubheader = styled(ListSubheader)(({ theme }) => ({
 export const StyledListItemText = styled(ListItemText)(({ theme }) => ({
   '& .MuiListItemText-primary': {
     ...theme.typography.subtitle2,
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(0.5),
   },
   '& .MuiListItemText-secondary': {
     ...theme.typography.body2,
