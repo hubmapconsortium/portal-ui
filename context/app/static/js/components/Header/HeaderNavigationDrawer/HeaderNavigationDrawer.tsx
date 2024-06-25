@@ -20,7 +20,13 @@ export default function HeaderNavigationDrawer({
   const { open, toggle, onClose } = useDrawerState();
   return (
     <>
-      <HeaderButton title={title} altOnlyTitle={altOnlyTitle} onClick={toggle} icon={icon} />
+      <HeaderButton
+        data-testid={`${encodeURI(title)}-dropdown`}
+        title={title}
+        altOnlyTitle={altOnlyTitle}
+        onClick={toggle}
+        icon={icon}
+      />
       <NavigationDrawer title={title} direction={direction} sections={sections} onClose={onClose} open={open} />
     </>
   );

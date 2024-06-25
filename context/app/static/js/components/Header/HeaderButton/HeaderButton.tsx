@@ -11,9 +11,13 @@ interface HeaderButtonProps {
   onClick: () => void;
   icon: React.ReactNode;
   tooltip?: string;
+  'data-testid'?: string;
 }
 
-function HeaderButton({ title, onClick, altOnlyTitle, icon, tooltip }: HeaderButtonProps, ref: Ref<HTMLButtonElement>) {
+function HeaderButton(
+  { title, onClick, altOnlyTitle, icon, tooltip, 'data-testid': testId }: HeaderButtonProps,
+  ref: Ref<HTMLButtonElement>,
+) {
   const isMobile = useIsMobile();
   const showTitle = !isMobile && !altOnlyTitle;
 
@@ -22,6 +26,7 @@ function HeaderButton({ title, onClick, altOnlyTitle, icon, tooltip }: HeaderBut
     ref,
     onClick,
     style: { color: 'white' },
+    'data-testid': testId,
   };
 
   const button = showTitle ? (
