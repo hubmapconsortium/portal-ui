@@ -1,9 +1,8 @@
 import React from 'react';
 
 import NavigationDrawer, { useDrawerState, type DrawerSection } from 'js/shared-styles/Drawer';
-import { DatabaseIcon, SearchIcon } from 'js/shared-styles/icons';
+import { DatabaseIcon, OrganIcon, SearchIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { OrganIcon } from 'js/shared-styles/icons/URLSvgIcon';
 import HeaderButton from '../HeaderButton/HeaderButton';
 
 const links: DrawerSection[] = [
@@ -32,7 +31,7 @@ const links: DrawerSection[] = [
         description:
           'Explore an organ through spatial visualizations, reference-based analysis and other relevant data',
         href: '/organ',
-        icon: <OrganIcon ariaLabel="Organ Icon" />,
+        icon: <OrganIcon />,
       },
       {
         label: 'Biomarkers (Beta)',

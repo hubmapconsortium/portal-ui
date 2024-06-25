@@ -23,17 +23,14 @@ export function DrawerTitle(props: TypographyProps) {
   return <Typography variant="h3" color="primary" {...props} />;
 }
 
-export const DrawerList = styled(List)(({ theme }) => ({
-  marginY: theme.spacing(-2),
-  paddingY: 0,
-}));
+export const DrawerList = List;
 
 export const DrawerListItem = styled(ListItem)({
   marginY: 0,
 });
 
 export const DrawerListItemIcon = styled(ListItemIcon)(({ theme }) => ({
-  width: theme.spacing(3),
+  width: theme.spacing(6),
   position: 'relative',
   '& > *': {
     padding: theme.spacing(1),

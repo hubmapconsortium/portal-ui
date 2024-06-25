@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { DownloadIcon, LightbulbIcon, SearchIcon, VisualizationIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import theme from 'js/theme/theme';
 import HeroTimelineSlide from './HeroTimelineSlide';
 import HeroTab, { HeroTabProps } from './HeroTab';
 import { HeroImageSlide } from './HeroImageSlide';
@@ -14,7 +13,7 @@ const heroTabs = [
     title: 'Discover',
     description:
       'Find data with our faceted search or explore by biological entities of organs, molecules or cell types.',
-    icon: <SearchIcon color={theme.palette.success.main} fontSize="1.5rem" />,
+    icon: <SearchIcon color="success" fontSize="1.5rem" />,
     actions: [
       {
         title: 'Explore datasets',
