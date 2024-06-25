@@ -23,7 +23,7 @@ const workspaceCTAGuest = {
 const cards = [
   {
     title: 'Analyze data in Workspaces',
-    icon: <entityIconMap.Workspace color="info" fontSize="1.5rem" />,
+    icon: <entityIconMap.Workspace color={theme.palette.info.main} fontSize="1.5rem" />,
     src: `${CDN_URL}/v2/explore-tools/tools_workspaces.png`,
     alt: 'A screenshot of a remote Jupyter and RStudio environment.',
     subtitle: 'Load datasets into an interactive JupyterLab Python and R analysis environment.',
@@ -44,7 +44,7 @@ const cards = [
   },
   {
     title: 'Explore biomarkers & cell types',
-    icon: <entityIconMap.Gene color="success" fontSize="1.5rem" />,
+    icon: <entityIconMap.Gene color={theme.palette.success.main} fontSize="1.5rem" />,
     src: `${CDN_URL}/v2/explore-tools/tools_mcquery.png`,
     alt: 'A screenshot of the results of a lookup for cells that match a specific gene expression pattern.',
     subtitle: 'Discover new insights about genes, proteins or cell type related to HuBMAP data.',
