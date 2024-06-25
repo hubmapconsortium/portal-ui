@@ -1,25 +1,30 @@
 import React from 'react';
-import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 
-import { useSearchStore } from '../store';
 import { TermFacet, HierarchicalTermFacet } from './TermFacet';
 import RangeFacet from './RangeFacet';
+import { FacetGroups } from '../Search';
+import { FACETS } from '../store';
+import FacetAccordion from './FacetAccordion';
 
-export function Facets() {
-  const { terms, hierarchicalTerms, ranges } = useSearchStore();
-
+export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
-    <Paper sx={{ maxWidth: 246, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
-      {Object.keys(terms).map((term) => (
-        <TermFacet field={term} key={term} />
+    <Box sx={{ maxWidth: 246, display: 'flex', alignItems: 'center', flexDirection: 'column' }}>
+      {Object.entries(facetGroups).map(([k, v]) => (
+        <FacetAccordion title={k} position="outer" key={k}>
+          {v.map((f) => {
+            if (f.type === FACETS.hierarchical) {
+              return <HierarchicalTermFacet {...f} key={f.field} />;
+            }
+            if (f.type === FACETS.range) {
+              return <RangeFacet {...f} key={f.field} />;
+            }
+
+            return <TermFacet {...f} key={f.field} />;
+          })}
+        </FacetAccordion>
       ))}
-      {Object.entries(hierarchicalTerms).map(([parentField, { childField }]) => {
-        return <HierarchicalTermFacet parentField={parentField} key={parentField} childField={childField} />;
-      })}
-      {Object.keys(ranges).map((field) => {
-        return <RangeFacet key={field} field={field} />;
-      })}
-    </Paper>
+    </Box>
   );
 }
 

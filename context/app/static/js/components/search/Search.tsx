@@ -6,7 +6,16 @@ import Box from '@mui/material/Box';
 import { produce } from 'immer';
 
 import { useAppContext } from 'js/components/Contexts';
-import { SearchStoreProvider, useSearchStore, SearchStoreState } from './store';
+import {
+  SearchStoreProvider,
+  useSearchStore,
+  SearchStoreState,
+  FacetsState,
+  HierarchicalTermConfig,
+  TermConfig,
+  RangeConfig,
+  FACETS,
+} from './store';
 import { HitDoc } from './types';
 import Results from './Results';
 import { getPortalESField } from './buildTypesMap';
@@ -60,7 +69,7 @@ function buildQuery({
     query.query(esb.simpleQueryStringQuery(search).fields(searchFields)).highlight(esb.highlight(searchFields));
   }
 
-  const termFilters = Object.entries(terms).reduce<Filters>((acc, [field, values]) => {
+  const termFilters = Object.entries(terms).reduce<Filters>((acc, [field, { values }]) => {
     return produce(acc, (draft) => {
       const portalField = getPortalESField(field);
       if (values.size) {
@@ -181,51 +190,32 @@ export function useSearch() {
   return useScrollSearchHits<HitDoc, Aggregations>({ query, endpoint, swrConfig });
 }
 
-interface HierarchicalTermConfig {
-  field: string;
-  childField: string;
-}
+type FacetOption = TermConfig | HierarchicalTermConfig | RangeConfig;
 
-interface RangeConfig {
-  field: string;
-  min: number;
-  max: number;
-}
+export type FacetGroups = Record<string, FacetOption[]>;
 
-interface Facets {
-  terms?: string[];
-  hierarchicalTerms?: HierarchicalTermConfig[];
-  ranges: RangeConfig[];
-}
+function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
+  const allFacets = Object.values(facetGroups).flat();
 
-function buildTerms({ terms }: Required<Pick<Facets, 'terms'>>) {
-  return terms.reduce<Record<string, Set<string>>>((acc, curr) => {
-    const copy = acc;
-    copy[curr] = new Set([]);
-    return copy;
-  }, {});
-}
-
-function buildHierachicalTerms({ hierarchicalTerms }: Required<Pick<Facets, 'hierarchicalTerms'>>) {
-  return hierarchicalTerms.reduce<Record<string, { values: Record<string, never>; childField: string }>>(
+  return allFacets.reduce<FacetsState>(
     (acc, curr) => {
-      const copy = acc;
-      copy[curr.field] = { values: {}, childField: curr.childField };
-      return copy;
-    },
-    {},
-  );
-}
+      return produce(acc, (draft) => {
+        if (curr.type === FACETS.term) {
+          draft.terms[curr.field] = { ...curr, values: new Set([]) };
+        }
 
-function buildRanges({ ranges }: Required<Pick<Facets, 'ranges'>>) {
-  return ranges.reduce<Record<string, { values: { min: number; max: number }; min: number; max: number }>>(
-    (acc, curr) => {
-      const copy = acc;
-      const { min, max } = curr;
-      copy[curr.field] = { values: { min, max }, min, max };
-      return copy;
+        if (curr.type === FACETS.hierarchical) {
+          draft.hierarchicalTerms[curr.field] = { ...curr, values: {} };
+        }
+
+        if (curr.type === FACETS.range) {
+          draft.ranges[curr.field] = { ...curr, values: { min: curr.min, max: curr.max } };
+        }
+
+        return draft;
+      });
     },
-    {},
+    { terms: {}, hierarchicalTerms: {}, ranges: {} },
   );
 }
 
@@ -233,30 +223,89 @@ type SearchConfig = Pick<
   SearchStoreState,
   'searchFields' | 'sourceFields' | 'endpoint' | 'swrConfig' | 'sortField' | 'size'
 > & {
-  facets: Facets;
+  facets: FacetGroups;
 };
 
-function buildInitialSearchState({
-  facets: { terms = [], hierarchicalTerms = [], ranges = [] },
-  swrConfig = {},
-  ...rest
-}: SearchConfig) {
+function buildInitialSearchState({ facets, swrConfig = {}, ...rest }: SearchConfig) {
   return {
     search: '',
-    terms: buildTerms({ terms }),
-    hierarchicalTerms: buildHierachicalTerms({ hierarchicalTerms }),
-    ranges: buildRanges({ ranges }),
+    ...buildFacets({ facetGroups: facets }),
     swrConfig,
     ...rest,
   };
 }
+
+const facetConfigs = {
+  dataset_type: { field: 'dataset_type', childField: 'assay_display_name', type: FACETS.hierarchical },
+  mapped_status: { field: 'mapped_status', childField: 'mapped_data_access_level', type: FACETS.hierarchical },
+  'donor.mapped_metadata.age_value': { field: 'donor.mapped_metadata.age_value', min: 0, max: 100, type: FACETS.range },
+  'donor.mapped_metadata.body_mass_index_value': {
+    field: 'donor.mapped_metadata.body_mass_index_value',
+    min: 0,
+    max: 50,
+    type: FACETS.range,
+  },
+};
+
+const facetGroups: FacetGroups = {
+  'Dataset Metadata': [
+    facetConfigs.dataset_type,
+    {
+      field: 'origin_samples_unique_mapped_organs',
+      type: FACETS.term,
+    },
+    {
+      field: 'analyte_class',
+      type: FACETS.term,
+    },
+    {
+      field: 'source_samples.sample_category',
+      type: FACETS.term,
+    },
+    facetConfigs.mapped_status,
+  ],
+  'Dataset Processing': [
+    {
+      field: 'processing',
+      type: FACETS.term,
+    },
+    {
+      field: 'pipeline',
+      type: FACETS.term,
+    },
+    {
+      field: 'visualization',
+      type: FACETS.term,
+    },
+    {
+      field: 'processing_type',
+      type: FACETS.term,
+    },
+    {
+      field: 'assay_modality',
+      type: FACETS.term,
+    },
+  ],
+  'Donor Metadata': [
+    {
+      field: 'donor.mapped_metadata.sex',
+      type: FACETS.term,
+    },
+    facetConfigs['donor.mapped_metadata.age_value'],
+    {
+      field: 'donor.mapped_metadata.race',
+      type: FACETS.term,
+    },
+    facetConfigs['donor.mapped_metadata.body_mass_index_value'],
+  ],
+};
 
 function Search() {
   return (
     <Stack direction="column" spacing={2} mb={2}>
       <SearchBar />
       <Stack direction="row" spacing={2}>
-        <Facets />
+        <Facets facetGroups={facetGroups} />
         <Box flexGrow={1}>
           <Results />
         </Box>
@@ -265,7 +314,7 @@ function Search() {
   );
 }
 
-const c = {
+const searchConfig = {
   searchFields: ['all_text', 'description'],
   // TODO: figure out how to make assertion unnecessary.
   sortField: { field: 'last_modified_timestamp', direction: 'desc' as const },
@@ -277,11 +326,7 @@ const c = {
     'mapped_status',
     'last_modified_timestamp',
   ],
-  facets: {
-    terms: ['entity_type'],
-    hierarchicalTerms: [{ field: 'dataset_type', childField: 'assay_display_name' }],
-    ranges: [{ field: 'donor.mapped_metadata.age_value', min: 0, max: 100 }],
-  },
+  facets: facetGroups,
   size: 10,
 };
 
@@ -296,7 +341,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint'> }) {
 }
 
 function DatasetsSearch() {
-  return <SearchWrapper config={c} />;
+  return <SearchWrapper config={searchConfig} />;
 }
 
 export default DatasetsSearch;

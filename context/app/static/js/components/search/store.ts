@@ -7,23 +7,53 @@ interface SortField {
   direction: 'asc' | 'desc';
 }
 
-interface HierarchicalTerm {
-  values: Record<string, Set<string>>;
-  childField: string;
+export const FACETS = {
+  hierarchical: 'HIERARCHICAL',
+  term: 'TERM',
+  range: 'RANGE',
+} as const;
+
+export interface FacetConfig {
+  field: string;
+  type: (typeof FACETS)[keyof typeof FACETS];
 }
 
-interface Range {
+export interface TermConfig extends FacetConfig {
+  type: typeof FACETS.term;
+}
+
+export interface HierarchicalTermConfig extends FacetConfig {
+  childField: string;
+  type: typeof FACETS.hierarchical;
+}
+
+export interface RangeConfig extends FacetConfig {
   min: number;
   max: number;
+  type: typeof FACETS.range;
+}
+
+export interface Term extends TermConfig {
+  values: Set<string>;
+}
+
+export interface HierarchicalTerm extends HierarchicalTermConfig {
+  values: Record<string, Set<string>>;
+}
+
+interface Range extends RangeConfig {
   values: { min: number; max: number };
 }
 
-export interface SearchStoreState {
-  search: string;
-  searchFields: string[];
-  terms: Record<string, Set<string>>;
+export interface FacetsState {
+  terms: Record<string, Term>;
   hierarchicalTerms: Record<string, HierarchicalTerm>;
   ranges: Record<string, Range>;
+}
+
+export interface SearchStoreState extends FacetsState {
+  search: string;
+  searchFields: string[];
   sortField: SortField;
   sourceFields: string[];
   size: number;
@@ -73,7 +103,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     },
     filterTerm: ({ term, value }) => {
       set((state) => {
-        const termSet = state?.terms?.[term];
+        const termSet = state?.terms?.[term].values;
         if (!termSet) {
           return;
         }

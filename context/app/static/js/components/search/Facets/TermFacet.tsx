@@ -100,7 +100,7 @@ export function TermFacet({ field }: { field: string }) {
           label={bucket.key}
           count={bucket.doc_count}
           key={bucket.key}
-          active={term.has(bucket.key)}
+          active={term.values.has(bucket.key)}
           field={field}
         />
       ))}
@@ -222,7 +222,7 @@ export function HierarchicalTermFacetItem({
   );
 }
 
-export function HierarchicalTermFacet({ parentField, childField }: { parentField: string; childField: string }) {
+export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
   const { aggregations } = useSearch();
 
   const {

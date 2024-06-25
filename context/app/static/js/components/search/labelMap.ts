@@ -6,8 +6,19 @@ const labelMap: Record<string, string> = {
   mapped_status: 'Status',
   dataset_type: 'Dataset Type',
   last_modified_timestamp: 'Last Modified',
-  age_value: 'Donor Age',
   entity_type: 'Entity Type',
+  origin_samples_unique_mapped_organs: 'Organ',
+  analyte_class: 'Analyte Class',
+  sample_category: 'Sample Category',
+  processing: 'Processing',
+  pipeline: 'Pipeline',
+  visualization: 'Visualization',
+  processing_type: 'Processing Type',
+  assay_modality: 'Assay Modalities',
+  sex: 'Donor Sex',
+  age_value: 'Donor Age',
+  race: 'Donor Race',
+  body_mass_index_value: 'Donor BMI',
 };
 
 export function getFieldLabel(field: string) {

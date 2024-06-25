@@ -16,7 +16,7 @@ const InnerAccordionDetails = styled(AccordionDetails)({
 
 const InnerAccordionSummary = styled(AccordionSummary)({
   justifyContent: 'left',
-  padding: '0px 16px 0px 16px',
+  padding: '0px 16px',
   '& > *': {
     flexGrow: 'unset',
     padding: 0,
