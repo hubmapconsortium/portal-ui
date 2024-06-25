@@ -3,6 +3,7 @@ import React from 'react';
 import NavigationDrawer, { useDrawerState, type DrawerSection } from 'js/shared-styles/Drawer';
 import { InfoIcon } from 'js/shared-styles/icons';
 import { DeveloperBoardRounded, PreviewRounded } from '@mui/icons-material';
+import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import HeaderButton from '../HeaderButton/HeaderButton';
 
 const links: DrawerSection[] = [
@@ -12,7 +13,7 @@ const links: DrawerSection[] = [
       {
         label: 'Tutorials',
         description: 'Learn more about how to explore the data portal',
-        icon: <InfoIcon />,
+        icon: <InfoIcon color="primary" />,
         href: '/tutorials',
       },
     ],
@@ -23,13 +24,13 @@ const links: DrawerSection[] = [
       {
         label: 'Consortium FAQ',
         description: 'Explore frequently asked question about the HuBMAP Consortium',
-        icon: <InfoIcon />,
+        icon: <ExternalImageIcon icon="hubmapConsortium" />,
         href: '/consortium-faq', // TODO: Get the correct URL
       },
       {
         label: 'About HuBMAP',
         description: 'Learn more about the HuBMAP Consortium',
-        icon: <InfoIcon />,
+        icon: <ExternalImageIcon icon="hubmapConsortium" />,
         href: '/consortium-faq', // TODO: Get the correct URL and icon
       },
     ],
@@ -40,7 +41,7 @@ const links: DrawerSection[] = [
       {
         label: 'Technical Documentation',
         description: 'Learn more about how to explore the data portal',
-        icon: <DeveloperBoardRounded />,
+        icon: <DeveloperBoardRounded color="primary" />,
         href: '/tutorials',
       },
     ],
@@ -51,26 +52,26 @@ const links: DrawerSection[] = [
       {
         label: '3D Tissue Maps',
         description: 'View a 3D tissue map of a LSFM dataset of a kidney',
-        icon: <PreviewRounded />,
-        href: '/tutorials',
+        icon: <PreviewRounded color="primary" />,
+        href: '/preview/3d-tissue-maps',
       },
       {
         label: 'Multimodal Molecular Imaging Data',
         description: 'Visualize multimodal molecular imaging data of IMS and MxIF of the kidney',
-        icon: <PreviewRounded />,
-        href: '/tutorials',
+        icon: <PreviewRounded color="primary" />,
+        href: '/preview/multimodal-molecular-imaging-data',
       },
       {
         label: 'Multimodal Mass Spectrometry Imaging Data',
         description: 'Visualize a 2D/3D preview of multimodal mass spectrometry imaging data of the liver',
-        icon: <PreviewRounded />,
-        href: '/tutorials',
+        icon: <PreviewRounded color="primary" />,
+        href: '/preview/multimodal-mass-spectrometry-imaging-data',
       },
       {
         label: 'Cell Type Annotations',
         description: 'Preview sample cell annotations from Cell Ontology of scRNA-seq datasets ',
-        icon: <PreviewRounded />,
-        href: '/tutorials',
+        icon: <PreviewRounded color="primary" />,
+        href: '/preview/cell-type-annotations',
       },
     ],
   },

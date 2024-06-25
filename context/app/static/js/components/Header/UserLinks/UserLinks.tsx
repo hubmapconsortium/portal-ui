@@ -30,19 +30,19 @@ const userLinkSections: DrawerSection[] = [
         href: '/profile',
         label: 'Profile',
         description: 'Find information about your profile',
-        icon: <PersonRounded />,
+        icon: <PersonRounded color="primary" />,
       },
       {
         href: '/my-lists',
         label: 'My Lists',
         description: 'Find your bookmarks and lists',
-        icon: <entityIconMap.Collection />,
+        icon: <entityIconMap.Collection color="primary" />,
       },
       {
         href: '/my-workspaces',
         label: 'My Workspaces',
         description: 'Find your workspaces',
-        icon: <entityIconMap.Workspace />, // TODO: Fix styles
+        icon: <entityIconMap.Workspace color="primary" />,
       },
     ],
   },

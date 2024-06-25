@@ -2,6 +2,8 @@ import React from 'react';
 
 import NavigationDrawer, { useDrawerState, type DrawerSection } from 'js/shared-styles/Drawer';
 import AppsRounded from '@mui/icons-material/AppsRounded';
+import { AsctBIcon, EUIIcon } from 'js/shared-styles/icons';
+import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import HeaderButton from '../HeaderButton/HeaderButton';
 
 const links: DrawerSection[] = [
@@ -13,7 +15,7 @@ const links: DrawerSection[] = [
         description:
           'Explore, visualize and download consortium-generated spatial and single cell data for the human body',
         href: '/',
-        icon: <AppsRounded />, // TODO
+        icon: <ExternalImageIcon icon="dataPortal" />,
       },
     ],
   },
@@ -25,19 +27,19 @@ const links: DrawerSection[] = [
         description:
           'Navigate a comprehensive, high-resolution, three-dimensional atlas of all the cells in the healthy human body',
         href: 'https://humanatlas.io/',
-        icon: <AppsRounded />, // TODO
+        icon: <ExternalImageIcon icon="hra" />,
       },
       {
         label: 'Exploration User Interface (EUI)',
         description: 'Explore and validate spatially registered tissue blocks and cell-type populations',
         href: '/ccf-eui',
-        icon: <AppsRounded />, // TODO
+        icon: <EUIIcon />,
       },
       {
         label: 'ASCT+B Reporter',
         description: 'Explore and compare ASCT+B tables and construct OMAP tables',
         href: 'https://hubmapconsortium.github.io/ccf-asct-reporter/',
-        icon: <AppsRounded />, // TODO
+        icon: <AsctBIcon />,
       },
     ],
   },
@@ -49,21 +51,21 @@ const links: DrawerSection[] = [
         description:
           'View annotated, reference datasets to automate the processing, analysis, and interpretation of a new single-cell RNA-seq or ATAC-seq experiment',
         href: 'https://azimuth.hubmapconsortium.org/',
-        icon: <AppsRounded />, // TODO
+        icon: <ExternalImageIcon icon="azimuth" />,
       },
       {
         label: 'FUSION',
         description:
           'Interact with spatial transcriptomics data integrated with histopathology, driven by artificial intelligence',
         href: 'http://fusion.hubmapconsortium.org/?utm_source=hubmap',
-        icon: <AppsRounded />, // TODO
+        icon: <ExternalImageIcon icon="fusion" />,
       },
       {
         label: 'Antibody Validation Reports',
         description:
           'Provide antibody details for multiplex imaging assays and capture data requested by journals for manuscript submission',
         href: 'https://avr.hubmapconsortium.org/',
-        icon: <AppsRounded />, // TODO
+        icon: <ExternalImageIcon icon="avr" />,
       },
     ],
   },

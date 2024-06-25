@@ -34,6 +34,8 @@ import SearchIconSVG from 'assets/svg/search-icon.svg';
 import WorkspacesIconSVG from 'assets/svg/workspaces.svg';
 import GeneIconSVG from 'assets/svg/gene.svg';
 import OrganSVG from 'assets/svg/organ.svg';
+import EuiSVG from 'assets/svg/eui.svg';
+import AsctBSVG from 'assets/svg/asct+b.svg';
 
 // The "any" here mirrors the "any" in the original SvgIconProps definition.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -106,6 +108,10 @@ const WorkspacesIcon = withIconStyles(createSvgIcon(<WorkspacesIconSVG />, 'Work
 
 const OrganIcon = withIconStyles(createSvgIcon(<OrganSVG />, 'Organ'));
 
+const EUIIcon = withIconStyles(createSvgIcon(<EuiSVG />, 'EUI'));
+
+const AsctBIcon = withIconStyles(createSvgIcon(<AsctBSVG />, 'ASCT+B'));
+
 export {
   CloseIcon,
   CollectionIcon,
@@ -137,4 +143,6 @@ export {
   GeneIcon,
   WorkspacesIcon,
   OrganIcon,
+  EUIIcon,
+  AsctBIcon,
 };
