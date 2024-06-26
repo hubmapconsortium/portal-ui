@@ -303,7 +303,7 @@ const facetGroups: FacetGroups = {
 
 function Search() {
   return (
-    <Stack direction="column" spacing={2} mb={2}>
+    <Stack direction="column" spacing={1} mb={2}>
       <SearchBar />
       <FilterChips />
       <Stack direction="row" spacing={2}>
