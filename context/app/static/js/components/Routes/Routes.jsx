@@ -11,7 +11,7 @@ const Dataset = lazy(() => import('js/pages/Dataset'));
 const Sample = lazy(() => import('js/pages/Sample'));
 const Collection = lazy(() => import('js/pages/Collection'));
 const Home = lazy(() => import('js/pages/Home/Home'));
-const Search = lazy(() => import('js/pages/search/Search'));
+const Search = lazy(() => import('js/components/search'));
 const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
 const Diversity = lazy(() => import('js/pages/Diversity'));
