@@ -22,6 +22,7 @@ import { getPortalESField } from './buildTypesMap';
 import Facets from './Facets/Facets';
 import SearchBar from './SearchBar';
 import { useScrollSearchHits } from './useScrollSearchHits';
+import FilterChips from './Facets/FilterChips';
 
 type Filters = Record<string, esb.Query>;
 
@@ -304,6 +305,7 @@ function Search() {
   return (
     <Stack direction="column" spacing={2} mb={2}>
       <SearchBar />
+      <FilterChips />
       <Stack direction="row" spacing={2}>
         <Facets facetGroups={facetGroups} />
         <Box flexGrow={1}>

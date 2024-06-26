@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useCallback, useState } from 'react';
+import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react';
 import { useTheme } from '@mui/material/styles';
 
 import Slider from '@mui/material/Slider';
@@ -29,7 +29,12 @@ function RangeFacet({ field }: { field: string }) {
   } = useSearchStore();
   const theme = useTheme();
 
-  const [selectedValues, setSelectedValues] = useState<number[]>([values.min, values.max]);
+  const [selectedValues, setSelectedValues] = useState<number[]>([min, max]);
+
+  // Reset slider position when filter chip is deleted.
+  useEffect(() => {
+    setSelectedValues([values.min, values.max]);
+  }, [values, setSelectedValues]);
 
   const handleChange = useCallback(
     (_: Event, value: number | number[]) => {
