@@ -4,6 +4,12 @@ The portal has many dependencies:
 Git submodules and Python and NodeJS packages are summarized here;
 The services the portal relies on are [listed separately](/services).
 
+## Git submodules
+
+```
+
+```
+
 ## Python packages
 
 `requirements.in`:
@@ -73,7 +79,6 @@ lxml>=4.9.1
 "immer": "^10.0.4",
 "lineupjsx": "^4.6.0",
 "lz-string": "^1.5.0",
-"nuka-carousel": "^7.0.0",
 "pretty-bytes": "^6.1.1",
 "prop-types": "^15.8.1",
 "qs": "^6.12.0",

@@ -1,7 +1,8 @@
 import { produce } from 'immer';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { useFlaskDataContext, Dataset } from 'js/components/Contexts';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import { Dataset, isDataset } from 'js/components/types';
 
 const source = [
   'uuid',
@@ -76,15 +77,6 @@ function getPrimaryDescendants(uuid: string) {
   };
 }
 
-interface Hit<Doc extends Record<string, unknown>> {
-  _source: Doc;
-}
-
-interface Hits<Doc extends Record<string, unknown>> {
-  searchHits: Hit<Doc>[];
-  isLoading: boolean;
-}
-
 export type MultiAssayEntity = Pick<
   Dataset,
   | 'uuid'
@@ -97,8 +89,6 @@ export type MultiAssayEntity = Pick<
   | 'descendant_counts'
   | 'last_modified_timestamp'
 >;
-
-type MultiAssayHits = Hits<MultiAssayEntity>;
 
 function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 'processing' | 'is_component'>) {
   if (is_component) {
@@ -128,24 +118,41 @@ function useRelatedMultiAssayDatasets() {
   const { entity } = useFlaskDataContext();
 
   const { uuid } = entity;
-  const isPrimary = getMultiAssayType(entity) === 'raw';
 
-  const { searchHits: primaryHits, isLoading: isLoadingPrimary } = useSearchHits(getPrimaryMultiAssay(uuid), {
-    shouldFetch: !isPrimary,
-  }) as MultiAssayHits;
+  const entityIsDataset = isDataset(entity);
+  if (!entityIsDataset) {
+    console.error(`Expected entity to be a dataset, but it was a ${entity.entity_type}`);
+  }
+  const isPrimary = entityIsDataset ? getMultiAssayType(entity) === 'raw' : false;
 
-  const primary = primaryHits[0]?._source ?? entity;
+  const { searchHits: primaryHits, isLoading: isLoadingPrimary } = useSearchHits<MultiAssayEntity>(
+    getPrimaryMultiAssay(uuid),
+    {
+      shouldFetch: !isPrimary && entityIsDataset,
+    },
+  );
 
-  const { searchHits: primaryDescendantHits, isLoading: isLoadingDescendants } = useSearchHits(
+  const primary = primaryHits?.[0]?._source ?? entity;
+
+  const { searchHits: primaryDescendantHits, isLoading: isLoadingDescendants } = useSearchHits<MultiAssayEntity>(
     getPrimaryDescendants(primary ? primary.uuid : ''),
     {
-      shouldFetch: Boolean(primary),
+      shouldFetch: Boolean(primary) && entityIsDataset,
     },
-  ) as MultiAssayHits;
+  );
+
+  const entities = [primary, ...(primaryDescendantHits ?? []).map((hit) => hit?._source)].filter(Boolean);
+
+  if (!entityIsDataset) {
+    return {
+      datasets: {} as RelatedMultiAssayDatasets,
+      isLoading: false,
+    };
+  }
 
   return {
     datasets: buildRelatedDatasets({
-      entities: [primary, ...primaryDescendantHits.map((hit) => hit?._source)].filter((e) => e !== undefined),
+      entities,
     }),
     isLoading: isLoadingPrimary || isLoadingDescendants,
   };

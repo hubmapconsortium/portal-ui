@@ -1,5 +1,5 @@
 import React from 'react';
-import { Chart as ChartJS, defaults, LinearScale, CategoryScale, BarElement } from 'chart.js';
+import { Chart as ChartJS, defaults, LinearScale, CategoryScale, BarElement, Legend } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import Typography from '@mui/material/Typography';
 import { useTheme } from '@mui/material/styles';
@@ -95,7 +95,7 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
         </DescriptionPaper>
       )}
       <ChartPaper>
-        <Bar data={graphdata} options={options} />
+        <Bar data={graphdata} options={options} plugins={[Legend]} />
       </ChartPaper>
     </>
   );

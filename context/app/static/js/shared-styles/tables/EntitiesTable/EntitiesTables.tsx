@@ -37,7 +37,7 @@ function EntitiesTables<Doc>({
               label={`${entityType}s (${totalHitsCounts[i] ?? 0})`}
               key={`${entityType}-tab`}
               index={i}
-              icon={Icon ? <Icon sx={{ fontSize: '1.5rem' }} /> : undefined}
+              icon={Icon ? <Icon sx={{ fontSize: '1.5rem', color: 'primary' }} /> : undefined}
               iconPosition="start"
               isSingleTab={entities.length === 0}
             />

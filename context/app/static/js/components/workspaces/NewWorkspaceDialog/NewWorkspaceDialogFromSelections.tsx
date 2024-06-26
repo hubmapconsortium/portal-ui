@@ -6,7 +6,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import { ReactComponent as WorkspacesIcon } from 'assets/svg/workspaces.svg';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 

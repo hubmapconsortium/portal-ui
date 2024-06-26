@@ -119,7 +119,11 @@ function useDatasetsSelectedByExpression() {
       const serviceResults = await new CellsService().getDatasets(queryParams);
       const datasets = 'list' in serviceResults ? serviceResults.list : serviceResults;
 
-      const searchResults = await fetchSearchData(getSearchQuery(datasets), elasticsearchEndpoint, groupsToken);
+      const searchResults = await fetchSearchData<CellsResultsDataset, unknown>(
+        getSearchQuery(datasets),
+        elasticsearchEndpoint,
+        groupsToken,
+      );
 
       const hitsMap = buildHitsMap<CellsResultsDataset>(searchResults.hits.hits);
 

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
@@ -12,7 +12,8 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { ContributorAPIResponse, normalizeContributor } from './utils';
+import { ContributorAPIResponse } from './utils';
+import { useNormalizedContributors } from './hooks';
 
 interface ContributorsTableProps {
   title: string;
@@ -26,9 +27,7 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }: Contri
     { id: 'affiliation', label: 'Affiliation' },
   ];
 
-  const normalizedContributors = useMemo(() => {
-    return contributors.map(normalizeContributor);
-  }, [contributors]);
+  const normalizedContributors = useNormalizedContributors(contributors);
 
   return (
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
@@ -55,7 +54,7 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }: Contri
               </TableRow>
             </TableHead>
             <TableBody>
-              {normalizedContributors.map(({ orcid, displayName, affiliation }) => (
+              {normalizedContributors.map(({ orcid, name: displayName, affiliation }) => (
                 <TableRow key={orcid} data-testid="contributor-row">
                   <TableCell>{displayName}</TableCell>
                   <TableCell>{affiliation}</TableCell>

@@ -1,4 +1,5 @@
-import useSearchData, { fetchSearchData } from 'js/hooks/useSearchData';
+import useSearchData from 'js/hooks/useSearchData';
+import { fetcher } from 'js/helpers/swr';
 import { buildPublicationPanelProps } from './utils';
 
 const getPublicationsByStatusQuery = (publicationStatus) => ({
@@ -22,15 +23,17 @@ const getPublicationsByStatusQuery = (publicationStatus) => ({
   _source: ['uuid', 'title', 'contributors', 'publication_status', 'publication_venue', 'publication_date'],
 });
 
-async function fetchPublicationsPanelData(...args) {
-  const results = await fetchSearchData(...args);
+async function fetchPublicationsPanelData(args) {
+  const results = await fetcher(args);
   return results?.hits?.hits.map((publicationHit) => buildPublicationPanelProps(publicationHit));
 }
 
 function usePublicationsPanelList(publicationStatus) {
   const query = getPublicationsByStatusQuery(publicationStatus);
 
-  const { searchData: publicationPanelsProps, isLoading } = useSearchData(query, true, fetchPublicationsPanelData, {
+  const { searchData: publicationPanelsProps, isLoading } = useSearchData(query, {
+    useDefaultQuery: true,
+    fetcher: fetchPublicationsPanelData,
     fallbackData: [],
   });
 

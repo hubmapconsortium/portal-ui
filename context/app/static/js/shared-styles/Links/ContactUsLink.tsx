@@ -11,16 +11,19 @@ type OmittedIconLinkProps = Omit<
 interface ContactUsLinkProps extends PropsWithChildren<OmittedIconLinkProps> {
   iconFontSize?: string;
   onClick?: (e: MouseEvent) => void;
+  capitalize?: boolean;
 }
 
 const href = 'https://hubmapconsortium.org/contact-form/';
 const defaultText = 'contact us';
+const capitalizeText = 'Contact us';
 
 function getHelpEvent() {
   trackLink(window.location.href, 'help_form');
 }
 
-function ContactUsLink({ iconFontSize: fontSize, children, onClick, ...props }: ContactUsLinkProps) {
+function ContactUsLink({ iconFontSize: fontSize, capitalize, children, onClick, ...props }: ContactUsLinkProps) {
+  const fallback = capitalize ? capitalizeText : defaultText;
   return (
     <IconLink
       {...props}
@@ -33,7 +36,7 @@ function ContactUsLink({ iconFontSize: fontSize, children, onClick, ...props }: 
         onClick?.(e);
       }}
     >
-      {children ?? defaultText}
+      {children ?? fallback}
     </IconLink>
   );
 }

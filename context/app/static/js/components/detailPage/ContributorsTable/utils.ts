@@ -39,7 +39,7 @@ export interface Contributor {
   firstName: string;
   lastName: string;
   middleNameOrInitial: string;
-  displayName: string;
+  name: string;
   email: string;
   isContact: boolean;
   isOperator: boolean;
@@ -52,7 +52,7 @@ const humanBooleanToBoolean = (humanBoolean: LegacyBoolean | CEDARBoolean): bool
 
 const normalizeLegacyContributor = (contributor: LegacyContributor): Contributor => ({
   affiliation: contributor.affiliation,
-  displayName: contributor.name,
+  name: contributor.name,
   email: 'N/A',
   firstName: contributor.first_name,
   isContact: humanBooleanToBoolean(contributor.is_contact),
@@ -67,7 +67,7 @@ const normalizeCEDARContributor = (contributor: CEDARContributor): Contributor =
   // In the future, if more iterations are made on the contributor version, add handling based on the schema ID here.
   return {
     affiliation: contributor.affiliation,
-    displayName: contributor.display_name,
+    name: contributor.display_name,
     email: contributor.email,
     firstName: contributor.first_name,
     isContact: humanBooleanToBoolean(contributor.is_contact),

@@ -15,7 +15,7 @@ function useAuthHeader() {
 
 interface BuildSearchRequestInitArgs {
   body: SearchRequest;
-  authHeader: { Authorization?: string };
+  authHeader: HeadersInit;
 }
 
 function buildSearchRequestInit({ body, authHeader }: BuildSearchRequestInitArgs): RequestInit {

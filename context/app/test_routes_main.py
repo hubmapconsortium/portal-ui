@@ -165,7 +165,7 @@ paths = ['/organ', '/publications', '/collections', '/cells']
     'path_status',
     [
         ('/', '200 OK'),
-        ('/docs', '302 FOUND', 'https://software.docs.hubmapconsortium.org/'),
+        ('/docs', '302 FOUND', 'https://docs.hubmapconsortium.org/'),
 
         *[(path, '200 OK') for path in paths],
         *[(path + '/', '302 FOUND', path) for path in paths],

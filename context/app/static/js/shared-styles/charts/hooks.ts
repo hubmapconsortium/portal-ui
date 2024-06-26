@@ -76,13 +76,16 @@ function useLongestLabelSize({ labels, labelFontSize = 11 }: { labels: string[];
   return longestLabelSize;
 }
 
-interface UseVerticalChartProps {
+interface UseChartProps {
   margin: { top: number; right: number; bottom: number; left: number };
   tickLabelSize: number;
-  xAxisTickLabels: string[];
   parentWidth: number;
   parentHeight: number;
 }
+interface UseVerticalChartProps extends UseChartProps {
+  xAxisTickLabels: string[];
+}
+
 function useVerticalChart({
   margin,
   tickLabelSize,
@@ -95,6 +98,28 @@ function useVerticalChart({
     labelFontSize: tickLabelSize,
   });
   const updatedMargin = { ...margin, bottom: Math.max(margin.bottom, longestLabelSize + 40) };
+
+  const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
+
+  return { xWidth, yHeight, updatedMargin, longestLabelSize };
+}
+
+interface UseHorizontalChartProps extends UseChartProps {
+  yAxisTickLabels: string[];
+}
+
+function useHorizontalChart({
+  margin,
+  tickLabelSize,
+  yAxisTickLabels,
+  parentWidth,
+  parentHeight,
+}: UseHorizontalChartProps) {
+  const longestLabelSize = useLongestLabelSize({
+    labels: yAxisTickLabels,
+    labelFontSize: tickLabelSize,
+  });
+  const updatedMargin = { ...margin, left: Math.max(margin.left, longestLabelSize + 40) };
 
   const { xWidth, yHeight } = getChartDimensions(parentWidth, parentHeight, updatedMargin);
 
@@ -135,6 +160,7 @@ export {
   useChartTooltip,
   useLongestLabelSize,
   useVerticalChart,
+  useHorizontalChart,
   useLinearScale,
   useLogScale,
   useBandScale,

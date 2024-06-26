@@ -59,15 +59,11 @@ const config = {
       },
       {
         test: /\.svg$/,
-        use: ['@svgr/webpack', 'url-loader'],
+        use: [{ loader: '@svgr/webpack' }],
       },
       {
         test: /\.(png|jpg|gif)$/,
         type: 'asset/inline',
-      },
-      {
-        test: /\.ya?ml$/,
-        use: 'yaml-loader',
       },
       {
         test: /\.mjs$/,

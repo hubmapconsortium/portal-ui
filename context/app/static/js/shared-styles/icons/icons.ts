@@ -18,12 +18,15 @@ import ListAltRoundedIcon from '@mui/icons-material/ListAltRounded';
 import ArrowDropDownRoundedIcon from '@mui/icons-material/ExpandMoreRounded';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
-import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined';
+import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
 import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import SearchIconSVG from 'assets/svg/search-icon.svg';
 import { ElementType } from 'react';
+import { BarChartRounded, LightbulbOutlined } from '@mui/icons-material';
+import GetAppRounded from '@mui/icons-material/GetAppRounded';
 
 // The "any" here mirrors the "any" in the original SvgIconProps definition.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -48,7 +51,7 @@ const SampleIcon = withIconStyles(BubbleChartIcon);
 
 const DatasetIcon = withIconStyles(TableChartIcon);
 
-const PublicationIcon = withIconStyles(DescriptionOutlinedIcon);
+const PublicationIcon = withIconStyles(DescriptionRoundedIcon);
 
 const ExternalLinkIcon = withIconStyles(LaunchRoundedIcon);
 
@@ -80,6 +83,14 @@ const SupportIcon = withIconStyles(ContactSupportIcon);
 
 const VerifiedIcon = withIconStyles(VerifiedUserRounded);
 
+const VisualizationIcon = withIconStyles(BarChartRounded);
+
+const DownloadIcon = withIconStyles(GetAppRounded);
+
+const SearchIcon = SearchIconSVG;
+
+const LightbulbIcon = withIconStyles(LightbulbOutlined);
+
 export {
   CloseIcon,
   CollectionIcon,
@@ -103,4 +114,8 @@ export {
   AddIcon,
   SupportIcon,
   VerifiedIcon,
+  SearchIcon,
+  VisualizationIcon,
+  DownloadIcon,
+  LightbulbIcon,
 };
