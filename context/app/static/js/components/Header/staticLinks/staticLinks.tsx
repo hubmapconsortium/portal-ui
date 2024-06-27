@@ -263,7 +263,7 @@ export const userLinks: (isAuthenticated: boolean) => DrawerSection[] = (isAuthe
           icon: <entityIconMap.Collection color="primary" />,
         },
         {
-          href: '/my-workspaces',
+          href: '/workspaces',
           label: 'My Workspaces',
           description: 'Find your workspaces',
           icon: <entityIconMap.Workspace color="primary" />,
