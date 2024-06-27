@@ -24,6 +24,7 @@ import { useScrollSearchHits } from './useScrollSearchHits';
 import FilterChips from './Facets/FilterChips';
 import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
+import { TilesSortSelect } from './Results/ResultsTiles';
 
 type Filters = Record<string, esb.Query>;
 
@@ -305,12 +306,14 @@ const facetGroups: FacetGroups = {
 };
 
 function Search() {
+  const { view } = useSearchStore();
   return (
     <Stack direction="column" spacing={1} mb={2}>
       <Stack direction="row" spacing={1}>
         <Box flexGrow={1}>
           <SearchBar />
         </Box>
+        {view === 'tile' && <TilesSortSelect />}
         <DefaultSearchViewSwitch />
       </Stack>
       <FilterChips />

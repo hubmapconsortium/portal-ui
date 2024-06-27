@@ -2,7 +2,7 @@ import { createStoreImmer, createStoreContext } from 'js/helpers/zustand';
 
 import { SWRConfiguration } from 'swr';
 
-interface SortField {
+export interface SortField {
   field: string;
   direction: 'asc' | 'desc';
 }
