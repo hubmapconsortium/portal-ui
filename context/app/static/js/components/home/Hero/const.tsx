@@ -5,13 +5,17 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import React from 'react';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
+const timelineIconProps = {
+  fontSize: '1.5rem',
+} as const;
+
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   {
     title: 'Molecular & Cellular Query Updated',
     titleHref: '/cells',
     description: 'Search datasets by cell type name or Cell Ontology ID.',
     date: 'May 2024',
-    img: <entityIconMap.CellType fontSize="1.5rem" />,
+    img: <entityIconMap.CellType {...timelineIconProps} />,
   },
   {
     title: 'MUSIC Datasets now available',
@@ -23,7 +27,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
       </>
     ),
     date: 'May 2024',
-    img: <entityIconMap.Dataset fontSize="1.5rem" />,
+    img: <entityIconMap.Dataset {...timelineIconProps} />,
   },
   {
     title: 'Dataset Search reorganized',
@@ -32,7 +36,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     description:
       'Added visualization, dataset category and pipeline filters to dataset search page. Dataset assay filter is now hierarchical to improve grouping of similar experiments.',
     date: 'March 2024',
-    img: <SearchIcon fontSize="1.5rem" />,
+    img: <SearchIcon {...timelineIconProps} />,
   },
   {
     title: 'Workspace Beta announced',
@@ -43,7 +47,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
         use this feature. <ContactUsLink capitalize /> if interested.
       </>
     ),
-    img: <entityIconMap.Workspace fontSize="1.5rem" />,
+    img: <entityIconMap.Workspace {...timelineIconProps} />,
     date: 'December 2023',
   },
   {
@@ -52,7 +56,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     description:
       'Beta of biomarkers page is now available to all public users. Gene information is currently available, and protein information is in development.',
     date: 'December 2023',
-    img: <entityIconMap.Gene fontSize="1.5rem" />,
+    img: <entityIconMap.Gene {...timelineIconProps} />,
   },
 ];
 

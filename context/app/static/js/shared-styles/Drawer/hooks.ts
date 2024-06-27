@@ -1,11 +1,11 @@
-import { useMemo, useState } from 'react';
+import { useMemo, useCallback, useState } from 'react';
 
 export function useDrawerState() {
   const [open, setOpen] = useState(false);
 
   const toggle = useMemo(() => () => setOpen((prev) => !prev), []);
-  const onOpen = useMemo(() => () => setOpen(true), []);
-  const onClose = useMemo(() => () => setOpen(false), []);
+  const onOpen = useCallback(() => setOpen(true), []);
+  const onClose = useCallback(() => setOpen(false), []);
 
   return {
     open,
