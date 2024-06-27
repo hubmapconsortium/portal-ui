@@ -1,13 +1,18 @@
 import React from 'react';
 import { AggregationsTermsAggregateBase } from '@elastic/elasticsearch/lib/api/types';
 import esb from 'elastic-builder';
+import { produce } from 'immer';
+import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import { produce } from 'immer';
+import Typography from '@mui/material/Typography';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 
 import { useAppContext } from 'js/components/Contexts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+
 import {
   SearchStoreProvider,
   useSearchStore,
@@ -308,25 +313,60 @@ const facetGroups: FacetGroups = {
   ],
 };
 
-function Search() {
-  const { view } = useSearchStore();
+const EntityIcon = styled(SvgIcon)<SvgIconProps>({
+  fontSize: '2.5rem',
+});
+
+interface TypeProps {
+  type: keyof Pick<typeof entityIconMap, 'Dataset' | 'Donor' | 'Sample'>;
+}
+
+function Header({ type }: TypeProps) {
   return (
-    <Stack direction="column" spacing={1} mb={2}>
-      <Stack direction="row" spacing={1}>
-        <Box flexGrow={1}>
-          <SearchBar />
-        </Box>
-        <MetadataMenu type="Dataset" />
-        <WorkspacesDropdownMenu type="Dataset" />
-        {view === 'tile' && <TilesSortSelect />}
-        <DefaultSearchViewSwitch />
-      </Stack>
-      <FilterChips />
-      <Stack direction="row" spacing={2}>
-        <Facets facetGroups={facetGroups} />
-        <Box flexGrow={1}>
-          <Results />
-        </Box>
+    <Stack direction="row" spacing={1} alignItems="center">
+      <EntityIcon component={entityIconMap[type]} color="primary" />
+      <Typography component="h1" variant="h2">
+        {type}s
+      </Typography>
+    </Stack>
+  );
+}
+
+function Bar({ type }: TypeProps) {
+  const { view } = useSearchStore();
+
+  return (
+    <Stack direction="row" spacing={1}>
+      <Box flexGrow={1}>
+        <SearchBar />
+      </Box>
+      <MetadataMenu type={type} />
+      <WorkspacesDropdownMenu type={type} />
+      {view === 'tile' && <TilesSortSelect />}
+      <DefaultSearchViewSwitch />
+    </Stack>
+  );
+}
+
+function Body() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Facets facetGroups={facetGroups} />
+      <Box flexGrow={1}>
+        <Results />
+      </Box>
+    </Stack>
+  );
+}
+
+function Search({ type }: TypeProps) {
+  return (
+    <Stack spacing={2}>
+      <Header type={type} />
+      <Stack direction="column" spacing={1} mb={2}>
+        <Bar type={type} />
+        <FilterChips />
+        <Body />
       </Stack>
     </Stack>
   );
@@ -363,10 +403,12 @@ const searchConfig = {
 function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint'> }) {
   const { elasticsearchEndpoint } = useAppContext();
 
+  const type = 'Dataset';
+
   return (
-    <SelectableTableProvider tableLabel="Dataset">
+    <SelectableTableProvider tableLabel={type}>
       <SearchStoreProvider initialState={buildInitialSearchState({ ...config, endpoint: elasticsearchEndpoint })}>
-        <Search />
+        <Search type={type} />
       </SearchStoreProvider>
     </SelectableTableProvider>
   );
