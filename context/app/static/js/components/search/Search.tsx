@@ -232,7 +232,7 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
 
 type SearchConfig = Pick<
   SearchStoreState,
-  'searchFields' | 'sourceFields' | 'endpoint' | 'swrConfig' | 'sortField' | 'size'
+  'searchFields' | 'sourceFields' | 'endpoint' | 'swrConfig' | 'sortField' | 'size' | 'type'
 > & {
   facets: FacetGroups;
 };
@@ -247,71 +247,6 @@ function buildInitialSearchState({ facets, sourceFields, swrConfig = {}, ...rest
     ...rest,
   };
 }
-
-const facetConfigs = {
-  dataset_type: { field: 'dataset_type', childField: 'assay_display_name', type: FACETS.hierarchical },
-  mapped_status: { field: 'mapped_status', childField: 'mapped_data_access_level', type: FACETS.hierarchical },
-  'donor.mapped_metadata.age_value': { field: 'donor.mapped_metadata.age_value', min: 0, max: 100, type: FACETS.range },
-  'donor.mapped_metadata.body_mass_index_value': {
-    field: 'donor.mapped_metadata.body_mass_index_value',
-    min: 0,
-    max: 50,
-    type: FACETS.range,
-  },
-};
-
-const facetGroups: FacetGroups = {
-  'Dataset Metadata': [
-    facetConfigs.dataset_type,
-    {
-      field: 'origin_samples_unique_mapped_organs',
-      type: FACETS.term,
-    },
-    {
-      field: 'analyte_class',
-      type: FACETS.term,
-    },
-    {
-      field: 'source_samples.sample_category',
-      type: FACETS.term,
-    },
-    facetConfigs.mapped_status,
-  ],
-  'Dataset Processing': [
-    {
-      field: 'processing',
-      type: FACETS.term,
-    },
-    {
-      field: 'pipeline',
-      type: FACETS.term,
-    },
-    {
-      field: 'visualization',
-      type: FACETS.term,
-    },
-    {
-      field: 'processing_type',
-      type: FACETS.term,
-    },
-    {
-      field: 'assay_modality',
-      type: FACETS.term,
-    },
-  ],
-  'Donor Metadata': [
-    {
-      field: 'donor.mapped_metadata.sex',
-      type: FACETS.term,
-    },
-    facetConfigs['donor.mapped_metadata.age_value'],
-    {
-      field: 'donor.mapped_metadata.race',
-      type: FACETS.term,
-    },
-    facetConfigs['donor.mapped_metadata.body_mass_index_value'],
-  ],
-};
 
 const EntityIcon = styled(SvgIcon)<SvgIconProps>({
   fontSize: '2.5rem',
@@ -348,7 +283,7 @@ function Bar({ type }: TypeProps) {
   );
 }
 
-function Body() {
+function Body({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
     <Stack direction="row" spacing={2}>
       <Facets facetGroups={facetGroups} />
@@ -359,63 +294,31 @@ function Body() {
   );
 }
 
-function Search({ type }: TypeProps) {
+function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
   return (
     <Stack spacing={2}>
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <Bar type={type} />
         <FilterChips />
-        <Body />
+        <Body facetGroups={facetGroups} />
       </Stack>
     </Stack>
   );
 }
 
-const searchConfig = {
-  searchFields: ['all_text', 'description'],
-  // TODO: figure out how to make assertion unnecessary.
-  sortField: { field: 'last_modified_timestamp', direction: 'desc' as const },
-  sourceFields: {
-    table: [
-      'hubmap_id',
-      'group_name',
-      'assay_display_name',
-      'origin_samples_unique_mapped_organs',
-      'mapped_status',
-      'last_modified_timestamp',
-    ],
-    tile: [
-      'hubmap_id',
-      'uuid',
-      'last_modified_timestamp',
-      'entity_type',
-      'mapped_data_types',
-      'descendant_counts.entity_type',
-      'thumbnail_file.file_uuid',
-      'origin_samples_unique_mapped_organs',
-    ],
-  },
-  facets: facetGroups,
-  size: 18,
-};
-
 function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint'> }) {
   const { elasticsearchEndpoint } = useAppContext();
 
-  const type = 'Dataset';
+  const { type, facets } = config;
 
   return (
     <SelectableTableProvider tableLabel={type}>
       <SearchStoreProvider initialState={buildInitialSearchState({ ...config, endpoint: elasticsearchEndpoint })}>
-        <Search type={type} />
+        <Search type={type} facetGroups={facets} />
       </SearchStoreProvider>
     </SelectableTableProvider>
   );
 }
 
-function DatasetsSearch() {
-  return <SearchWrapper config={searchConfig} />;
-}
-
-export default DatasetsSearch;
+export default SearchWrapper;

@@ -42,28 +42,13 @@ def ccf_eui():
     )
 
 
-@blueprint.route('/search')
-@blueprint.route('/cells-search')
-def search():
-    entity_type = request.args.get('entity_type[0]')
-    title = f'{entity_type}s' if entity_type else 'Search'
-    flask_data = {
-        **get_default_flask_data(),
-        'title': title,
-    }
-    return render_template(
-        'base-pages/react-content.html',
-        title=title,
-        flask_data=flask_data,
-    )
-
-
-@blueprint.route('/test-search/<type>')
+@blueprint.route('/search/<type>')
 def test_search(type):
     if type not in ['donors', 'samples', 'datasets']:
         abort(404)
-    title = f'{type.capitalize()} Test Search'
+    title = f'{type.capitalize()} Search'
     flask_data = {
+        'type': type,
         **get_default_flask_data(),
         'title': title,
     }

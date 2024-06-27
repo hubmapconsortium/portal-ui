@@ -62,6 +62,7 @@ export interface SearchStoreState extends FacetsState {
   size: number;
   endpoint: string;
   swrConfig?: SWRConfiguration;
+  type: 'Donor' | 'Sample' | 'Dataset';
 }
 
 export interface SearchStoreActions {
