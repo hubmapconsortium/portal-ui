@@ -83,30 +83,32 @@ export interface Support extends Entity {
   entity_type: 'Support';
 }
 
-function checkEntityType(entity: Entity, entityType: ESEntityType): boolean {
+export type EntityWithType = Partial<Entity> & Required<Pick<Entity, 'entity_type'>>;
+
+function checkEntityType(entity: EntityWithType, entityType: ESEntityType): boolean {
   return entity.entity_type === entityType;
 }
 
-export function isDataset(entity: unknown): entity is Dataset {
-  return checkEntityType(entity as Entity, 'Dataset');
+export function isDataset(entity: EntityWithType): entity is Dataset {
+  return checkEntityType(entity, 'Dataset');
 }
 
-export function isSample(entity: unknown): entity is Sample {
-  return checkEntityType(entity as Entity, 'Sample');
+export function isSample(entity: EntityWithType): entity is Sample {
+  return checkEntityType(entity, 'Sample');
 }
 
-export function isDonor(entity: unknown): entity is Donor {
-  return checkEntityType(entity as Entity, 'Donor');
+export function isDonor(entity: EntityWithType): entity is Donor {
+  return checkEntityType(entity, 'Donor');
 }
 
-export function isCollection(entity: unknown): entity is Collection {
-  return checkEntityType(entity as Entity, 'Collection');
+export function isCollection(entity: EntityWithType): entity is Collection {
+  return checkEntityType(entity, 'Collection');
 }
 
-export function isPublication(entity: unknown): entity is Publication {
-  return checkEntityType(entity as Entity, 'Publication');
+export function isPublication(entity: EntityWithType): entity is Publication {
+  return checkEntityType(entity, 'Publication');
 }
 
-export function isSupport(entity: unknown): entity is Support {
-  return checkEntityType(entity as Entity, 'Support');
+export function isSupport(entity: EntityWithType): entity is Support {
+  return checkEntityType(entity, 'Support');
 }
