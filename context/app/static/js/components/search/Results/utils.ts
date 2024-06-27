@@ -1,5 +1,5 @@
 import { get } from 'js/helpers/nodash';
-import { HitDoc, HitValues } from '../types';
+import { Entity } from 'js/components/types';
 
 const donorMetadataPath = 'mapped_metadata';
 const sampleMetdataPath = 'metadata';
@@ -30,18 +30,19 @@ function matchSamplePath(fieldIdentifier: string) {
   }, '');
 }
 
-function getFieldFromHitFields(hitFields: HitDoc, identifier: string): HitValues {
+// TODO: Return type should be a union of Entity leaf types.
+function getFieldFromHitFields(hitFields: Partial<Entity>, identifier: string) {
   const matchedSamplePath = matchSamplePath(identifier);
   if (matchedSamplePath.length > 0) {
     // source_samples and origin_samples are arrays and must be handled accordingly.
     // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
-    return get(hitFields, [matchedSamplePath, '0', ...identifier.split('.').slice(1)].join('.'));
+    return get(hitFields, [matchedSamplePath, '0', ...identifier.split('.').slice(1)].join('.'), '');
   }
 
-  return get(hitFields, identifier);
+  return get(hitFields, identifier, '');
 }
 
-function getByPath(hitSource: HitDoc, field: string) {
+function getByPath(hitSource: Partial<Entity>, field: string) {
   const fieldValue = getFieldFromHitFields(hitSource, field);
 
   if (Array.isArray(fieldValue)) {

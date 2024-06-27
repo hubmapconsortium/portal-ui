@@ -16,13 +16,14 @@ import {
   RangeConfig,
   FACETS,
 } from './store';
-import { HitDoc } from './types';
 import Results from './Results';
 import { getPortalESField } from './buildTypesMap';
 import Facets from './Facets/Facets';
 import SearchBar from './SearchBar';
 import { useScrollSearchHits } from './useScrollSearchHits';
 import FilterChips from './Facets/FilterChips';
+import { Entity } from '../types';
+import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 
 type Filters = Record<string, esb.Query>;
 
@@ -63,7 +64,7 @@ function buildQuery({
   const query = esb
     .requestBodySearch()
     .size(size)
-    .source(sourceFields.length ? sourceFields : false)
+    .source([...new Set(Object.values(sourceFields).flat())])
     .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
 
   if (search.length) {
@@ -188,7 +189,7 @@ export function useSearch() {
 
   const query = buildQuery({ ...rest });
 
-  return useScrollSearchHits<HitDoc, Aggregations>({ query, endpoint, swrConfig });
+  return useScrollSearchHits<Partial<Entity>, Aggregations>({ query, endpoint, swrConfig });
 }
 
 type FacetOption = TermConfig | HierarchicalTermConfig | RangeConfig;
@@ -227,11 +228,13 @@ type SearchConfig = Pick<
   facets: FacetGroups;
 };
 
-function buildInitialSearchState({ facets, swrConfig = {}, ...rest }: SearchConfig) {
+function buildInitialSearchState({ facets, sourceFields, swrConfig = {}, ...rest }: SearchConfig) {
   return {
     search: '',
     ...buildFacets({ facetGroups: facets }),
     swrConfig,
+    sourceFields,
+    view: Object.keys(sourceFields)[0],
     ...rest,
   };
 }
@@ -304,7 +307,12 @@ const facetGroups: FacetGroups = {
 function Search() {
   return (
     <Stack direction="column" spacing={1} mb={2}>
-      <SearchBar />
+      <Stack direction="row" spacing={1}>
+        <Box flexGrow={1}>
+          <SearchBar />
+        </Box>
+        <DefaultSearchViewSwitch />
+      </Stack>
       <FilterChips />
       <Stack direction="row" spacing={2}>
         <Facets facetGroups={facetGroups} />
@@ -320,16 +328,26 @@ const searchConfig = {
   searchFields: ['all_text', 'description'],
   // TODO: figure out how to make assertion unnecessary.
   sortField: { field: 'last_modified_timestamp', direction: 'desc' as const },
-  sourceFields: [
-    'hubmap_id',
-    'group_name',
-    'assay_display_name',
-    'origin_samples.mapped_organ',
-    'mapped_status',
-    'last_modified_timestamp',
-  ],
+  sourceFields: {
+    table: [
+      'hubmap_id',
+      'group_name',
+      'assay_display_name',
+      'origin_samples_unique_mapped_organs',
+      'mapped_status',
+      'last_modified_timestamp',
+    ],
+    tile: [
+      'hubmap_id',
+      'uuid',
+      'last_modified_timestamp',
+      'descendant_counts.entity_type',
+      'thumbnail_file.file_uuid',
+      'origin_samples_unique_mapped_organs',
+    ],
+  },
   facets: facetGroups,
-  size: 10,
+  size: 18,
 };
 
 function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint'> }) {

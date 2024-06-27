@@ -4,6 +4,8 @@ import { useAppContext } from 'js/components/Contexts';
 import { Alert } from 'js/shared-styles/alerts';
 import { useSearch } from '../Search';
 import ResultsTable from './ResultsTable';
+import ResultsTiles from './ResultsTiles';
+import { useSearchStore } from '../store';
 
 function NoResults() {
   const { isAuthenticated } = useAppContext();
@@ -16,8 +18,14 @@ function Results() {
     searchHits: { length },
   } = useSearch();
 
+  const { view } = useSearchStore();
+
   if (!length) {
     return <NoResults />;
+  }
+
+  if (view === 'tile') {
+    return <ResultsTiles />;
   }
 
   return <ResultsTable />;

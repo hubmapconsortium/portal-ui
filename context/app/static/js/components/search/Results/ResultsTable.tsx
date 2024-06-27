@@ -4,12 +4,11 @@ import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import DOMPurify from 'isomorphic-dompurify';
 import parse from 'html-react-parser';
 
 import { InternalLink } from 'js/shared-styles/Links';
+import { Entity } from 'js/components/types';
 import { getByPath } from './utils';
 import {
   StyledTable,
@@ -23,8 +22,8 @@ import {
 } from './style';
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
-import { HitDoc } from '../types';
 import { getFieldLabel } from '../labelMap';
+import ViewMoreResults from './ViewMoreResults';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -71,7 +70,7 @@ function SortHeaderCell({ field, label }: { field: string; label: string }) {
   );
 }
 
-function ResultCell({ hit, field }: { field: string; hit: SearchHit<HitDoc> }) {
+function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Entity>> }) {
   const source = hit?._source;
 
   if (!source) {
@@ -97,8 +96,10 @@ function HighlightRow({ colSpan, highlight }: { colSpan: number } & Required<Pic
 }
 
 function ResultsTable() {
-  const { searchHits: hits, loadMore, totalHitsCount } = useSearch();
-  const { sourceFields } = useSearchStore();
+  const { searchHits: hits } = useSearch();
+  const {
+    sourceFields: { table: tableFields },
+  } = useSearchStore();
 
   // TODO: Loading State
   if (!hits) {
@@ -110,7 +111,7 @@ function ResultsTable() {
       <StyledTable data-testid="search-results-table">
         <TableHead>
           <TableRow>
-            {sourceFields.map((field) => (
+            {tableFields.map((field) => (
               <SortHeaderCell key={field} field={field} label={getFieldLabel(field)} />
             ))}
           </TableRow>
@@ -119,23 +120,16 @@ function ResultsTable() {
           {hits.map((hit) => (
             <React.Fragment key={hit._id}>
               <StyledTableRow $beforeHighlight={Boolean(hit?.highlight)}>
-                {sourceFields.map((field) => (
+                {tableFields.map((field) => (
                   <ResultCell hit={hit} field={field} key={field} />
                 ))}
               </StyledTableRow>
-              {hit?.highlight && <HighlightRow colSpan={sourceFields.length} highlight={hit.highlight} />}
+              {hit?.highlight && <HighlightRow colSpan={tableFields.length} highlight={hit.highlight} />}
             </React.Fragment>
           ))}
         </StyledTableBody>
       </StyledTable>
-      <Button variant="contained" color="primary" onClick={loadMore} fullWidth>
-        See More Search Results
-      </Button>
-      <Box mt={2}>
-        <Typography variant="caption" color="secondary" textAlign="right" component="p">
-          {hits.length} Results Shown | {totalHitsCount} Total Results
-        </Typography>
-      </Box>
+      <ViewMoreResults />
     </Box>
   );
 }

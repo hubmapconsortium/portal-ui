@@ -51,11 +51,14 @@ export interface FacetsState {
   ranges: Record<string, Range>;
 }
 
+type SourceFields = Record<string, string[]>;
+
 export interface SearchStoreState extends FacetsState {
   search: string;
   searchFields: string[];
   sortField: SortField;
-  sourceFields: string[];
+  sourceFields: SourceFields;
+  view: string;
   size: number;
   endpoint: string;
   swrConfig?: SWRConfiguration;
@@ -63,6 +66,7 @@ export interface SearchStoreState extends FacetsState {
 
 export interface SearchStoreActions {
   setSearch: (search: string) => void;
+  setView: (view: string) => void;
   setSortField: (sortField: SortField) => void;
   filterTerm: ({ term, value }: { term: string; value: string }) => void;
   filterHierarchicalParentTerm: ({
@@ -94,6 +98,11 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     setSearch: (search) => {
       set((state) => {
         state.search = search;
+      });
+    },
+    setView: (view) => {
+      set((state) => {
+        state.view = view;
       });
     },
     setSortField: (sortField) => {
