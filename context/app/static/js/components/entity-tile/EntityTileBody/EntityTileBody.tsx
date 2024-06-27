@@ -3,7 +3,7 @@ import React from 'react';
 import Tile from 'js/shared-styles/tiles/Tile';
 import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
-import { Entity, isDataset, isDonor, isSample } from 'js/components/types';
+import { EntityWithType, isDataset, isDonor, isSample } from 'js/components/types';
 import { Flex, StyledDiv, BodyWrapper } from './style';
 
 const thumbnailDimension = 80;
@@ -12,7 +12,7 @@ interface EntityTileBodyProps {
   entity_type: string;
   id: string;
   invertColors?: boolean;
-  entityData: Partial<Entity>;
+  entityData: EntityWithType;
 }
 
 function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTileBodyProps) {
