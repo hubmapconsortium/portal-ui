@@ -76,14 +76,14 @@ function TilesSortSelect() {
 }
 
 function Tile({ hit }: { hit: SearchHit<Partial<Entity>> }) {
-  if (!(hit?._source?.hubmap_id && hit?._source.uuid)) {
+  if (!(hit?._source?.hubmap_id && hit?._source.uuid && hit?._source?.entity_type)) {
     return null;
   }
 
   return (
     <EntityTile
       key={hit?._source?.uuid}
-      entity_type={capitalizeString(hit?._source?.entity_type)}
+      entity_type={hit?._source?.entity_type}
       uuid={hit?._source?.uuid}
       id={hit?._source?.hubmap_id}
       entityData={hit?._source}
