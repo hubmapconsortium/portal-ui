@@ -1,3 +1,11 @@
+## v0.99.2 - 2024-06-27
+
+- Implement updated header/navigation components.
+- Fix "explore datasets" link on updated homepage.
+- Fix icon colors in tools section.
+- Fix broken entity tiles.
+
+
 ## v0.99.1 - 2024-06-20
 
 - Implement homepage tools section.

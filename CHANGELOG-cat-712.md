@@ -1,1 +1,0 @@
-- Fix "explore datasets" link on updated homepage.
