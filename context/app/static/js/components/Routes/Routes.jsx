@@ -12,7 +12,6 @@ const Sample = lazy(() => import('js/pages/Sample'));
 const Collection = lazy(() => import('js/pages/Collection'));
 const Home = lazy(() => import('js/pages/Home/Home'));
 const Search = lazy(() => import('js/components/search'));
-const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
 const Diversity = lazy(() => import('js/pages/Diversity'));
 const Preview = lazy(() => import('js/pages/Preview'));
@@ -124,14 +123,6 @@ function Routes({ flaskData }) {
     return (
       <Route>
         <Search title={title} />
-      </Route>
-    );
-  }
-
-  if (urlPath.startsWith('/cells-search')) {
-    return (
-      <Route>
-        <CellsSearch title={title} />
       </Route>
     );
   }
