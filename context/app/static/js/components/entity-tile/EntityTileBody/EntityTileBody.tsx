@@ -20,7 +20,7 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTil
     <BodyWrapper $thumbnailDimension={thumbnailDimension}>
       <StyledDiv>
         <Tile.Title>{id}</Tile.Title>
-        {'origin_samples' in entityData && (isSample(entityData) || isDataset(entityData)) && (
+        {'origin_samples_unique_mapped_organs' in entityData && (isSample(entityData) || isDataset(entityData)) && (
           <Tile.Text>{getOriginSamplesOrgan(entityData)}</Tile.Text>
         )}
         {'sample_category' in entityData && isSample(entityData) && <Tile.Text>{entityData.sample_category}</Tile.Text>}
