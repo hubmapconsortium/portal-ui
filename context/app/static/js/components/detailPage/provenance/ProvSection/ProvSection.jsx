@@ -14,7 +14,8 @@ function ProvSection() {
     entity: { uuid, entity_type },
   } = useFlaskDataContext();
   const { groupsToken, entityEndpoint } = useAppContext();
-  const { provData, isLoading } = useProvData(uuid, entityEndpoint, groupsToken);
+  // Load combined provenance data for datasets only for now
+  const { provData, isLoading } = useProvData(uuid, entity_type === 'Dataset');
 
   if (isLoading) {
     return (
