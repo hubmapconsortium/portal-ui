@@ -6,6 +6,8 @@ import Box from '@mui/material/Box';
 import { produce } from 'immer';
 
 import { useAppContext } from 'js/components/Contexts';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
+import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
 import {
   SearchStoreProvider,
   useSearchStore,
@@ -25,6 +27,7 @@ import FilterChips from './Facets/FilterChips';
 import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import { TilesSortSelect } from './Results/ResultsTiles';
+import MetadataMenu from '../searchPage/MetadataMenu';
 
 type Filters = Record<string, esb.Query>;
 
@@ -313,6 +316,8 @@ function Search() {
         <Box flexGrow={1}>
           <SearchBar />
         </Box>
+        <MetadataMenu type="Dataset" />
+        <WorkspacesDropdownMenu type="Dataset" />
         {view === 'tile' && <TilesSortSelect />}
         <DefaultSearchViewSwitch />
       </Stack>
@@ -344,6 +349,8 @@ const searchConfig = {
       'hubmap_id',
       'uuid',
       'last_modified_timestamp',
+      'entity_type',
+      'mapped_data_types',
       'descendant_counts.entity_type',
       'thumbnail_file.file_uuid',
       'origin_samples_unique_mapped_organs',
@@ -357,9 +364,11 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint'> }) {
   const { elasticsearchEndpoint } = useAppContext();
 
   return (
-    <SearchStoreProvider initialState={buildInitialSearchState({ ...config, endpoint: elasticsearchEndpoint })}>
-      <Search />
-    </SearchStoreProvider>
+    <SelectableTableProvider tableLabel="Dataset">
+      <SearchStoreProvider initialState={buildInitialSearchState({ ...config, endpoint: elasticsearchEndpoint })}>
+        <Search />
+      </SearchStoreProvider>
+    </SelectableTableProvider>
   );
 }
 

@@ -9,6 +9,8 @@ import parse from 'html-react-parser';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { Entity } from 'js/components/types';
+import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
+import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { getByPath } from './utils';
 import {
   StyledTable,
@@ -102,7 +104,7 @@ function ResultsTable() {
   } = useSearchStore();
 
   // TODO: Loading State
-  if (!hits) {
+  if (!hits.length) {
     return null;
   }
 
@@ -111,6 +113,7 @@ function ResultsTable() {
       <StyledTable data-testid="search-results-table">
         <TableHead>
           <TableRow>
+            <SelectableHeaderCell allTableRowKeys={hits.map((h) => h._id)} disabled={false} />
             {tableFields.map((field) => (
               <SortHeaderCell key={field} field={field} label={getFieldLabel(field)} />
             ))}
@@ -120,11 +123,12 @@ function ResultsTable() {
           {hits.map((hit) => (
             <React.Fragment key={hit._id}>
               <StyledTableRow $beforeHighlight={Boolean(hit?.highlight)}>
+                <SelectableRowCell rowKey={hit._id} />
                 {tableFields.map((field) => (
                   <ResultCell hit={hit} field={field} key={field} />
                 ))}
               </StyledTableRow>
-              {hit?.highlight && <HighlightRow colSpan={tableFields.length} highlight={hit.highlight} />}
+              {hit?.highlight && <HighlightRow colSpan={tableFields.length + 1} highlight={hit.highlight} />}
             </React.Fragment>
           ))}
         </StyledTableBody>
