@@ -19,7 +19,7 @@ const paths = {
   },
 };
 
-const samplePaths = ['origin_samples', 'source_samples'];
+const samplePaths = ['origin_samples.', 'source_samples.'];
 
 function matchSamplePath(fieldIdentifier: string) {
   return samplePaths.reduce((matchedPath, path) => {
