@@ -29,8 +29,8 @@ export const parameters = {
   },
 };
 
-const mockEndpoints = { assetsEndpoint: 'https://assets.hubmapconsortium.org' };
-const mockGroupsToken = '';
+export const mockEndpoints = { assetsEndpoint: 'https://assets.hubmapconsortium.org' };
+export const mockGroupsToken = '';
 
 export const decorators = [
   (Story) => (

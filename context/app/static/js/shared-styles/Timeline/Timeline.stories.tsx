@@ -11,7 +11,7 @@ function TimelineStory({ data }: TimelineProps) {
 }
 
 const meta = {
-  title: 'Timeline',
+  title: 'Timeline/Timeline',
   component: TimelineStory,
 } satisfies Meta<typeof TimelineStory>;
 

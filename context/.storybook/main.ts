@@ -1,6 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-webpack5';
 import { merge } from 'webpack-merge';
 import { alias } from '../build-utils/alias';
+import { HuBMAPGlobals } from '../build-utils/webpack.plugins';
 import path from 'path';
 
 const prodConfigPath = path.resolve(__dirname, '../build-utils/webpack.prod.js');
@@ -49,6 +50,7 @@ const config: StorybookConfig = {
       resolve: {
         alias: alias,
       },
+      plugins: [HuBMAPGlobals],
     });
   },
 

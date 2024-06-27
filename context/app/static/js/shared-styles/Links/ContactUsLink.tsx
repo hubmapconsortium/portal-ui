@@ -14,7 +14,7 @@ interface ContactUsLinkProps extends PropsWithChildren<OmittedIconLinkProps> {
   capitalize?: boolean;
 }
 
-const href = 'https://hubmapconsortium.org/contact-form/';
+export const contactUsUrl = 'https://hubmapconsortium.org/contact-form/';
 const defaultText = 'contact us';
 const capitalizeText = 'Contact us';
 
@@ -27,7 +27,7 @@ function ContactUsLink({ iconFontSize: fontSize, capitalize, children, onClick, 
   return (
     <IconLink
       {...props}
-      href={href}
+      href={contactUsUrl}
       isOutbound
       iconOnLeft={false}
       icon={<SupportIcon sx={{ fontSize }} />}

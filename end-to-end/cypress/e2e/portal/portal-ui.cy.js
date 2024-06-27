@@ -13,26 +13,18 @@ describe("portal-ui", () => {
     it("handles click-through", () => {
       // Homepage
       cy.visit("/");
-      cy.contains("Human BioMolecular Atlas Program");
+      cy.contains("Human BioMolecular Atlas Program Data Portal");
 
-      // Donors
-      cy.contains("Donors");
-      // Samples
-      cy.contains("Samples");
-      // Datasets
-      cy.contains("Datasets");
-      // CCF-UI
-      cy.contains("Atlas & Tools");
-      // Resources
+      cy.contains("Data");
       cy.contains("Resources");
 
       // Static pages are tested separately.
 
-      cy.findByTestId("user-profile-dropdown").contains("User Profile").click();
+      cy.findByTestId(`${encodeURI("Your Profile")}-dropdown`).click();
 
       // login
       // Don't click! We shouldn't depend on Globus in tests.
-      cy.findByTestId("login-link").contains("Log In");
+      cy.findByTestId("auth-button").contains("Log In");
 
       // TODO: groups_token is now required for search results, so we can pass it
       // back to the client to make the Elasticsearch request. I don't want to go
