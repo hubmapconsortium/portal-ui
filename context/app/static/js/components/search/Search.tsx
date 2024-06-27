@@ -69,6 +69,7 @@ function buildQuery({
   searchFields,
   sourceFields,
   sortField,
+  defaultQuery,
 }: Omit<SearchStoreState, 'endpoint' | 'swrConfig'>) {
   const query = esb
     .requestBodySearch()
@@ -76,8 +77,14 @@ function buildQuery({
     .source([...new Set(Object.values(sourceFields).flat())])
     .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
 
-  if (search.length) {
-    query.query(esb.simpleQueryStringQuery(search).fields(searchFields)).highlight(esb.highlight(searchFields));
+  const hasTextQuery = search.length > 0;
+
+  const freeTextQueries = hasTextQuery ? [esb.simpleQueryStringQuery(search).fields(searchFields)] : [];
+  const defaultQueries = defaultQuery ? [defaultQuery] : [];
+  query.query(esb.boolQuery().must([...defaultQueries, ...freeTextQueries]));
+
+  if (hasTextQuery) {
+    query.highlight(esb.highlight(searchFields));
   }
 
   const termFilters = Object.entries(terms).reduce<Filters>((acc, [field, { values }]) => {
@@ -232,7 +239,7 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
 
 type SearchConfig = Pick<
   SearchStoreState,
-  'searchFields' | 'sourceFields' | 'endpoint' | 'swrConfig' | 'sortField' | 'size' | 'type'
+  'searchFields' | 'sourceFields' | 'endpoint' | 'swrConfig' | 'sortField' | 'size' | 'type' | 'defaultQuery'
 > & {
   facets: FacetGroups;
 };

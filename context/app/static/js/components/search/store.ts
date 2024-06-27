@@ -1,3 +1,4 @@
+import esb from 'elastic-builder';
 import { createStoreImmer, createStoreContext } from 'js/helpers/zustand';
 
 import { SWRConfiguration } from 'swr';
@@ -54,6 +55,7 @@ export interface FacetsState {
 type SourceFields = Record<string, string[]>;
 
 export interface SearchStoreState extends FacetsState {
+  defaultQuery?: esb.Query;
   search: string;
   searchFields: string[];
   sortField: SortField;

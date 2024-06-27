@@ -1,8 +1,10 @@
 import React from 'react';
+import esb from 'elastic-builder';
 
 import Search from 'js/components/search';
 import { FACETS } from 'js/components/search/store';
 import { EntityWithType, isDonor } from 'js/components/types';
+import { getPortalESField } from 'js/components/search/buildTypesMap';
 
 const sharedConfig = {
   searchFields: ['all_text', 'description'],
@@ -36,8 +38,19 @@ function makeDonorMetadataFilters(e: EntityWithType) {
   ];
 }
 
+function buildDefaultQuery(type: 'Dataset' | 'Donor' | 'Sample') {
+  return {
+    defaultQuery: esb
+      .boolQuery()
+      .must([
+        esb.termsQuery(getPortalESField('entity_type'), [type]),
+        esb.boolQuery().mustNot([esb.existsQuery('next_revision_uuid'), esb.existsQuery('sub_status')]),
+      ]),
+  };
+}
+
 const donorFacetGroups = {
-  'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Dataset' }),
+  'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Donor' }),
   Affiliation: sharedAffiliationFilters,
 };
 
@@ -56,6 +69,7 @@ const donorConfig = {
     tile: [...sharedTileFields, 'mapped_metadata.age_unit'],
   },
   facets: donorFacetGroups,
+  ...buildDefaultQuery('Donor'),
   // TODO: figure out how to make assertion unnecessary.
   type: 'Donor' as const,
 };
@@ -71,7 +85,7 @@ const sampleFacetGroups = {
       type: FACETS.term,
     },
   ],
-  'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Dataset' }),
+  'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Sample' }),
   Affiliation: sharedAffiliationFilters,
 };
 
@@ -88,6 +102,7 @@ const sampleConfig = {
     tile: [...sharedTileFields, 'origin_samples_unique_mapped_organs'],
   },
   facets: sampleFacetGroups,
+  ...buildDefaultQuery('Sample'),
   // TODO: figure out how to make assertion unnecessary.
   type: 'Sample' as const,
 };
@@ -149,6 +164,7 @@ const datasetConfig = {
     tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
   },
   facets: datasetFacetGroups,
+  ...buildDefaultQuery('Dataset'),
   // TODO: figure out how to make assertion unnecessary.
   type: 'Dataset' as const,
 };
