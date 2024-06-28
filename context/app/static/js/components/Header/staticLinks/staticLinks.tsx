@@ -54,7 +54,7 @@ export const resourceLinks: DrawerSection[] = [
     items: [
       {
         label: 'Technical Documentation',
-        description: 'Learn more about how to explore the data portal.',
+        description: 'Browse documentation about the development of HuBMAP resources.',
         icon: <DeveloperBoardRounded color="primary" />,
         href: 'https://docs.hubmapconsortium.org/faq',
       },
@@ -205,7 +205,7 @@ export const toolsAndAppsLinks: DrawerSection[] = [
       {
         label: 'Exploration User Interface (EUI)',
         description: 'Explore and validate spatially registered tissue blocks and cell-type populations.',
-        href: '/ccf-eui',
+        href: 'https://apps.humanatlas.io/eui/',
         icon: <EUIIcon />,
       },
       {
