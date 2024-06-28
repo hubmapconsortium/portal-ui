@@ -3,8 +3,9 @@ import React from 'react';
 import { DatabaseIcon, InfoIcon } from 'js/shared-styles/icons';
 import AppsRounded from '@mui/icons-material/AppsRounded';
 import MenuRounded from '@mui/icons-material/MenuRounded';
-import PersonRounded from '@mui/icons-material/PersonRounded';
 import { useAppContext } from 'js/components/Contexts';
+
+import UserIcon from '../UserIcon';
 import HeaderNavigationDrawer from './HeaderNavigationDrawer';
 import { dataLinks, resourceLinks, toolsAndAppsLinks, userLinks, mobileMenuLinks } from '../staticLinks';
 
@@ -34,7 +35,7 @@ export function UserLinks() {
     <HeaderNavigationDrawer
       title="Your Profile"
       sections={userLinks(isAuthenticated)}
-      icon={<PersonRounded />}
+      icon={<UserIcon />}
       direction="right"
       altOnlyTitle
     />
