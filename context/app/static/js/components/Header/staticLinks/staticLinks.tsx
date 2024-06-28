@@ -13,6 +13,7 @@ import {
   SearchIcon,
   SupportIcon,
   DonorIcon as UserIcon,
+  VerifiedIcon,
 } from 'js/shared-styles/icons';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -244,18 +245,31 @@ export const toolsAndAppsLinks: DrawerSection[] = [
   },
 ];
 
-export const userLinks: (isAuthenticated: boolean) => DrawerSection[] = (isAuthenticated) => {
+export const userLinks: (isAuthenticated: boolean, isHubmapUser: boolean, userEmail: string) => DrawerSection[] = (
+  isAuthenticated,
+  isHubmapUser,
+  userEmail,
+) => {
+  const profileLabel = isAuthenticated ? userEmail : 'My Profile';
+  const profileDescription = isHubmapUser
+    ? 'Verified HuBMAP member. Find information about your profile.'
+    : 'Find information about your profile.';
+  const ProfileIcon = isHubmapUser ? VerifiedIcon : UserIcon;
   return [
     {
-      title: 'Your Profile',
-      hideTitle: true,
+      title: 'Account',
       items: [
         {
           href: '/profile',
-          label: 'Profile',
-          description: 'Find information about your profile.',
-          icon: <UserIcon color="primary" />,
+          label: profileLabel,
+          description: profileDescription,
+          icon: <ProfileIcon color="primary" />,
         },
+      ],
+    },
+    {
+      title: 'Personal Space',
+      items: [
         {
           href: '/my-lists',
           label: 'My Lists',

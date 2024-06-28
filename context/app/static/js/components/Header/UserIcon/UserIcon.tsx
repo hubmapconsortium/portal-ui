@@ -19,8 +19,8 @@ export default function UserIcon() {
   return (
     <Avatar
       sx={{
-        width: '30px',
-        height: '30px',
+        width: '24px',
+        height: '24px',
         bgcolor: '#c5c7cf', // primary-container
         color: (theme) => theme.palette.common.black,
       }}

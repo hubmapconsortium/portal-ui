@@ -30,11 +30,11 @@ export function ToolsAndApplicationLinks() {
 }
 
 export function UserLinks() {
-  const { isAuthenticated } = useAppContext();
+  const { isAuthenticated, isHubmapUser, userEmail } = useAppContext();
   return (
     <HeaderNavigationDrawer
       title="Your Profile"
-      sections={userLinks(isAuthenticated)}
+      sections={userLinks(isAuthenticated, isHubmapUser, userEmail)}
       icon={<UserIcon />}
       direction="right"
       altOnlyTitle
