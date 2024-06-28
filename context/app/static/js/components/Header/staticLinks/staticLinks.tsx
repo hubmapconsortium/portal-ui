@@ -54,7 +54,7 @@ export const resourceLinks: DrawerSection[] = [
     items: [
       {
         label: 'Technical Documentation',
-        description: 'Learn more about how to explore the data portal',
+        description: 'Learn more about how to explore the data portal.',
         icon: <DeveloperBoardRounded color="primary" />,
         href: 'https://docs.hubmapconsortium.org/faq',
       },
