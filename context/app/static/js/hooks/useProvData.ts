@@ -24,11 +24,11 @@ const getAncestorsQuery = (uuid: string) => ({
             descendant_ids: uuid,
           },
         },
-        // {
-        //   terms: {
-        //     'mapped_status.keyword': ['QA', 'Published'],
-        //   },
-        // },
+        {
+          terms: {
+            'mapped_status.keyword': ['QA', 'Published'],
+          },
+        },
         {
           bool: {
             must_not: {
@@ -79,11 +79,11 @@ const getDescendantsQuery = (uuid: string | string[]): SearchRequest => ({
             ancestor_ids: uuid,
           },
         },
-        // {
-        //   terms: {
-        //     'mapped_status.keyword': ['QA', 'Published'],
-        //   },
-        // },
+        {
+          terms: {
+            'mapped_status.keyword': ['QA', 'Published'],
+          },
+        },
       ],
     },
   },
@@ -92,10 +92,6 @@ const getDescendantsQuery = (uuid: string | string[]): SearchRequest => ({
   },
   size: 10000,
 });
-
-function createProvDataURL(uuid: string, entityEndpoint: string) {
-  return `${entityEndpoint}/entities/${uuid}/provenance`;
-}
 
 /**
  * Fetcher for legacy provenance data
@@ -158,11 +154,26 @@ async function getCombinedProvData(
   if (descendantProvenance.length === 1) {
     return descendantProvenance[0];
   }
-  // TODO: combine the provenance data
-  // For now, just return the first one
-  return descendantProvenance[0];
+  const [first, ...rest] = descendantProvenance;
+  const combinedProvenance = rest.reduce((acc, curr) => {
+    acc.entity = { ...acc.entity, ...curr.entity };
+    acc.activity = { ...acc.activity, ...curr.activity };
+    return acc;
+  }, first);
+  console.log({ descendantProvenance, combinedProvenance });
+  return combinedProvenance;
 }
 
+function createProvDataURL(uuid: string, entityEndpoint: string) {
+  return `${entityEndpoint}/entities/${uuid}/provenance`;
+}
+
+/**
+ * Fetches provenance data for an entity
+ * @param uuid UUID of the entity to fetch
+ * @param combined Whether to fetch combined provenance data for the entity's tree
+ * @returns Provenance data and loading state
+ */
 function useProvData(uuid: string, combined = false) {
   const { entityEndpoint, groupsToken, elasticsearchEndpoint } = useAppContext();
 

@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import { PaddedBox } from './style';
 
-function TabPanel({ children, value, index, pad, ...props }) {
+interface TabPanelProps extends PropsWithChildren {
+  value: number;
+  index: number;
+  pad?: boolean;
+}
+
+function TabPanel({ children, value, index, pad, ...props }: TabPanelProps) {
   return (
     <PaddedBox
       $pad={pad}
