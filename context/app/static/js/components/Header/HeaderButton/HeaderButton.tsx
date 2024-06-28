@@ -1,9 +1,8 @@
 import React, { forwardRef, Ref } from 'react';
 
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { StyledHeaderButton, StyledHeaderIconButton } from './styles';
 
 interface HeaderButtonProps {
   title: string;
@@ -25,16 +24,15 @@ function HeaderButton(
     'aria-label': title,
     ref,
     onClick,
-    style: { color: 'white' },
     'data-testid': testId,
   };
 
   const button = showTitle ? (
-    <Button startIcon={icon} {...commonProps}>
+    <StyledHeaderButton startIcon={icon} {...commonProps}>
       {title}
-    </Button>
+    </StyledHeaderButton>
   ) : (
-    <IconButton {...commonProps}>{icon}</IconButton>
+    <StyledHeaderIconButton {...commonProps}>{icon}</StyledHeaderIconButton>
   );
 
   if (tooltip) {
