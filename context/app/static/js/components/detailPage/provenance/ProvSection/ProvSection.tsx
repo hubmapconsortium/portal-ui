@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
@@ -13,7 +13,6 @@ function ProvSection() {
   const {
     entity: { uuid, entity_type },
   } = useFlaskDataContext();
-  const { groupsToken, entityEndpoint } = useAppContext();
   // Load combined provenance data for datasets only for now
   const { provData, isLoading } = useProvData(uuid, entity_type === 'Dataset');
 

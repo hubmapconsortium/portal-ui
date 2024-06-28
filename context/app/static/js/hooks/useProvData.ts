@@ -24,11 +24,11 @@ const getAncestorsQuery = (uuid: string) => ({
             descendant_ids: uuid,
           },
         },
-        {
-          terms: {
-            'mapped_status.keyword': ['QA', 'Published'],
-          },
-        },
+        // {
+        //   terms: {
+        //     'mapped_status.keyword': ['QA', 'Published'],
+        //   },
+        // },
         {
           bool: {
             must_not: {
@@ -79,11 +79,11 @@ const getDescendantsQuery = (uuid: string | string[]): SearchRequest => ({
             ancestor_ids: uuid,
           },
         },
-        {
-          terms: {
-            'mapped_status.keyword': ['QA', 'Published'],
-          },
-        },
+        // {
+        //   terms: {
+        //     'mapped_status.keyword': ['QA', 'Published'],
+        //   },
+        // },
       ],
     },
   },
