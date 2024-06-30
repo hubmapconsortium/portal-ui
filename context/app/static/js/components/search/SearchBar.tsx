@@ -4,9 +4,9 @@ import SearchBarComponent from 'js/shared-styles/inputs/SearchBar';
 import { useSearchStore } from './store';
 
 function SearchBar() {
-  const { setSearch } = useSearchStore();
+  const { setSearch, search } = useSearchStore();
 
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState(search);
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

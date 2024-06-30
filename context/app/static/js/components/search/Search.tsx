@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AggregationsTermsAggregateBase } from '@elastic/elasticsearch/lib/api/types';
 import esb from 'elastic-builder';
 import { produce } from 'immer';
@@ -7,7 +7,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-
+import { parse } from 'qs';
+import merge from 'deepmerge';
 import { useAppContext } from 'js/components/Contexts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
@@ -22,6 +23,13 @@ import {
   TermConfig,
   RangeConfig,
   FACETS,
+  rangeHasValues,
+  termHasValues,
+  hierarchicalTermHasValues,
+  convertState,
+  SearchURLState,
+  Term,
+  HierarchicalTerm,
 } from './store';
 import Results from './Results';
 import { getPortalESField } from './buildTypesMap';
@@ -81,53 +89,54 @@ function buildQuery({
 
   const freeTextQueries = hasTextQuery ? [esb.simpleQueryStringQuery(search).fields(searchFields)] : [];
   const defaultQueries = defaultQuery ? [defaultQuery] : [];
+
   query.query(esb.boolQuery().must([...defaultQueries, ...freeTextQueries]));
 
   if (hasTextQuery) {
     query.highlight(esb.highlight(searchFields));
   }
 
-  const termFilters = Object.entries(terms).reduce<Filters>((acc, [field, { values }]) => {
+  const termFilters = Object.entries(terms).reduce<Filters>((acc, [field, term]) => {
     return produce(acc, (draft) => {
+      const { values } = term;
       const portalField = getPortalESField(field);
-      if (values.size) {
+      if (termHasValues(term)) {
         draft[portalField] = esb.termsQuery(portalField, [...values]);
       }
     });
   }, {});
 
-  const rangeFilters = Object.entries(ranges).reduce<Filters>((acc, [field, { values, min, max }]) => {
+  const rangeFilters = Object.entries(ranges).reduce<Filters>((acc, [field, range]) => {
     return produce(acc, (draft) => {
+      const { values } = range;
       const portalField = getPortalESField(field);
 
-      if (values.min !== min || values.max !== max) {
+      if (rangeHasValues(range)) {
         draft[portalField] = esb.rangeQuery(portalField).gte(values.min).lte(values.max);
       }
     });
   }, {});
 
-  const hierarchicalFilters = Object.entries(hierarchicalTerms).reduce<Filters>(
-    (acc, [field, { values, childField }]) => {
-      return produce(acc, (draft) => {
-        if (!childField) {
-          return acc;
-        }
-        const parentPortalField = getPortalESField(field);
-        const childPortalField = getPortalESField(childField);
+  const hierarchicalFilters = Object.entries(hierarchicalTerms).reduce<Filters>((acc, [field, hierarchicalTerm]) => {
+    return produce(acc, (draft) => {
+      const { values, childField } = hierarchicalTerm;
+      if (!childField) {
+        return acc;
+      }
+      const parentPortalField = getPortalESField(field);
+      const childPortalField = getPortalESField(childField);
 
-        if (Object.keys(values).length) {
-          draft[parentPortalField] = esb.termsQuery(parentPortalField, Object.keys(values));
+      if (hierarchicalTermHasValues(hierarchicalTerm)) {
+        draft[parentPortalField] = esb.termsQuery(parentPortalField, Object.keys(values));
 
-          const childValues = Object.values(values)
-            .map((v) => [...v])
-            .flat();
-          draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
-        }
-        return draft;
-      });
-    },
-    {},
-  );
+        const childValues = Object.values(values)
+          .map((v) => [...v])
+          .flat();
+        draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
+      }
+      return draft;
+    });
+  }, {});
 
   const allFilters = { ...termFilters, ...rangeFilters, ...hierarchicalFilters };
 
@@ -202,7 +211,6 @@ type Aggregations = Record<
 
 export function useSearch() {
   const { endpoint, swrConfig = {}, ...rest }: SearchStoreState = useSearchStore();
-
   const query = buildQuery({ ...rest });
 
   return useScrollSearchHits<Partial<Entity>, Aggregations>({ query, endpoint, swrConfig });
@@ -314,14 +322,73 @@ function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups })
   );
 }
 
+const mergeTerms = (termState: Record<string, Term>, termURLState: Record<string, Term<string[]>>) => {
+  return Object.entries(termState).reduce<Record<string, Term>>((acc, [k, v]) => {
+    return produce(acc, (draft) => {
+      const urlStateValues = termURLState?.[k]?.values ?? [];
+      draft[k] = { ...v, values: new Set([...v.values, ...urlStateValues]) };
+    });
+  }, {});
+};
+
+const mergeHierarchicalTerms = (
+  termState: Record<string, HierarchicalTerm>,
+  termURLState: Record<string, HierarchicalTerm<string[]>>,
+) => {
+  return { ...termState, ...termURLState };
+};
+
+const options = {
+  customMerge: (key: string) => {
+    if (key === 'terms') {
+      return mergeTerms;
+    }
+    if (key === 'hierarchicalTerms') {
+      return mergeHierarchicalTerms;
+    }
+    return undefined;
+  },
+};
+
+function useInitialURLState() {
+  const [hasLoadedURLState, setHasLoadedURLState] = useState(false);
+  const [initialUrlState, setInitialUrlState] = useState<Partial<SearchStoreState>>({ terms: {} });
+
+  useEffect(() => {
+    const searchParams: Partial<SearchURLState> = parse(window.location.search, { ignoreQueryPrefix: true });
+
+    if (Object.keys(searchParams).length) {
+      setInitialUrlState(convertState(searchParams));
+    }
+    setHasLoadedURLState(true);
+  }, []);
+
+  return { initialUrlState, hasLoadedURLState };
+}
+
 function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint'> }) {
   const { elasticsearchEndpoint } = useAppContext();
-
   const { type, facets } = config;
+
+  const { search, sortField, terms, hierarchicalTerms, ranges, ...rest } = buildInitialSearchState({
+    ...config,
+    endpoint: elasticsearchEndpoint,
+  });
+
+  const { initialUrlState, hasLoadedURLState } = useInitialURLState();
+
+  if (!hasLoadedURLState) {
+    return null;
+  }
+
+  const initialState = {
+    ...merge({ search, sortField, terms, hierarchicalTerms, ranges }, initialUrlState, options),
+    ...rest,
+  };
 
   return (
     <SelectableTableProvider tableLabel={type}>
-      <SearchStoreProvider initialState={buildInitialSearchState({ ...config, endpoint: elasticsearchEndpoint })}>
+      <SearchStoreProvider initialState={initialState}>
         <Search type={type} facetGroups={facets} />
       </SearchStoreProvider>
     </SelectableTableProvider>

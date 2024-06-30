@@ -1,4 +1,6 @@
 import esb from 'elastic-builder';
+import { produce } from 'immer';
+import { stringify } from 'qs';
 import { createStoreImmer, createStoreContext } from 'js/helpers/zustand';
 
 import { SWRConfiguration } from 'swr';
@@ -34,27 +36,27 @@ export interface RangeConfig extends FacetConfig {
   type: typeof FACETS.range;
 }
 
-export interface Term extends TermConfig {
-  values: Set<string>;
+export interface Term<V = Set<string>> extends TermConfig {
+  values: V;
 }
 
-export interface HierarchicalTerm extends HierarchicalTermConfig {
-  values: Record<string, Set<string>>;
+export interface HierarchicalTerm<V = Set<string>> extends HierarchicalTermConfig {
+  values: Record<string, V>;
 }
 
 interface Range extends RangeConfig {
   values: { min: number; max: number };
 }
 
-export interface FacetsState {
-  terms: Record<string, Term>;
-  hierarchicalTerms: Record<string, HierarchicalTerm>;
+export interface FacetsState<V = Set<string>> {
+  terms: Record<string, Term<V>>;
+  hierarchicalTerms: Record<string, HierarchicalTerm<V>>;
   ranges: Record<string, Range>;
 }
 
 type SourceFields = Record<string, string[]>;
 
-export interface SearchStoreState extends FacetsState {
+export interface SearchState<V> extends FacetsState<V> {
   defaultQuery?: esb.Query;
   search: string;
   searchFields: string[];
@@ -66,6 +68,9 @@ export interface SearchStoreState extends FacetsState {
   swrConfig?: SWRConfiguration;
   type: 'Donor' | 'Sample' | 'Dataset';
 }
+
+export type SearchStoreState = SearchState<Set<string>>;
+export type SearchURLState = Partial<SearchState<string[]>>;
 
 export interface SearchStoreActions {
   setSearch: (search: string) => void;
@@ -95,12 +100,79 @@ export interface SearchStoreActions {
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
 
+export function termHasValues({ values }: Term) {
+  return values.size;
+}
+
+export function hierarchicalTermHasValues({ values }: HierarchicalTerm) {
+  return Object.keys(values).length;
+}
+
+export function rangeHasValues({ values, min, max }: Range) {
+  return values.min !== min || values.max !== max;
+}
+
+export function convertState(state: SearchURLState) {
+  const { terms = {}, hierarchicalTerms = {} } = state;
+
+  const t = Object.entries(terms).reduce<Record<string, Term>>((acc, [k, v]) => {
+    return produce(acc, (draft) => {
+      draft[k] = { ...v, values: new Set(v.values) };
+    });
+  }, {});
+
+  const h = Object.entries(hierarchicalTerms).reduce<Record<string, HierarchicalTerm>>((acc, [k, v]) => {
+    return produce(acc, (draft) => {
+      draft[k] = {
+        ...v,
+        values: Object.entries(v.values).reduce<Record<string, Set<string>>>((childAcc, [childKey, childValues]) => {
+          return produce(childAcc, (childDraft) => {
+            childDraft[childKey] = new Set(childValues);
+          });
+        }, {}),
+      };
+    });
+  }, {});
+
+  return { ...state, terms: t, hierarchicalTerms: h };
+}
+
+function replaceURLSearchParams(state: SearchStoreState) {
+  const { search, sortField, terms, hierarchicalTerms, ranges } = state;
+
+  const termsWithValues = Object.fromEntries(Object.entries(terms).filter(([_k, v]) => termHasValues(v)));
+  const hierarchicalTermsWithValues = Object.fromEntries(
+    Object.entries(hierarchicalTerms).filter(([_k, v]) => hierarchicalTermHasValues(v)),
+  );
+  const rangesWithValues = Object.fromEntries(Object.entries(ranges).filter(([_k, v]) => rangeHasValues(v)));
+
+  const urlState = {
+    search,
+    sortField,
+    terms: termsWithValues,
+    hierarchicalTerms: hierarchicalTermsWithValues,
+    ranges: rangesWithValues,
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  const urlStateWithArrays: URLSearchParams = JSON.parse(
+    JSON.stringify(urlState, (_key, value: unknown) => (value instanceof Set ? [...value] : value)),
+  );
+
+  const urlCopy = new URL(String(window.location));
+  urlCopy.search = stringify(urlStateWithArrays);
+
+  // eslint-disable-next-line no-restricted-globals
+  history.pushState(null, '', urlCopy);
+}
+
 export const createStore = ({ initialState }: { initialState: SearchStoreState }) =>
   createStoreImmer<SearchStore>((set) => ({
     ...initialState,
     setSearch: (search) => {
       set((state) => {
         state.search = search;
+        replaceURLSearchParams(state);
       });
     },
     setView: (view) => {
@@ -111,6 +183,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     setSortField: (sortField) => {
       set((state) => {
         state.sortField = sortField;
+        replaceURLSearchParams(state);
       });
     },
     filterTerm: ({ term, value }) => {
@@ -124,6 +197,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         } else {
           termSet.add(value);
         }
+        replaceURLSearchParams(state);
       });
     },
     filterHierarchicalParentTerm: ({ term, value, childValues }) => {
@@ -141,6 +215,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         } else {
           values[value] = new Set(childValues);
         }
+        replaceURLSearchParams(state);
       });
     },
     filterHierarchicalChildTerm: ({ parentTerm, parentValue, value }) => {
@@ -165,6 +240,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         } else {
           childValues.add(value);
         }
+        replaceURLSearchParams(state);
       });
     },
     filterRange: ({ field, min, max }) => {
@@ -175,6 +251,7 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
           return;
         }
         range.values = { min, max };
+        replaceURLSearchParams(state);
       });
     },
   }));
