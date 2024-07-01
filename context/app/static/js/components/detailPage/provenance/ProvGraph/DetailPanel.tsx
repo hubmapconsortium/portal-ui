@@ -24,28 +24,25 @@ interface DetailPanelProps {
 const entityTypes = ['Donor', 'Sample', 'Dataset', 'Support'];
 
 function Type({ prov, typeKey }: Pick<DetailPanelProps, 'prov' | 'typeKey'>) {
-  return typeKey in prov ? (
-    <SectionItem label="Type">{prov[typeKey]}</SectionItem>
-  ) : (
-    <SectionItem label="Type">{prov['prov:type']}</SectionItem>
-  );
+  const content = typeKey in prov ? prov[typeKey] : prov['prov:type'];
+  return <SectionItem label="Type">{content}</SectionItem>;
 }
 
 function ID({ prov, idKey, typeKey }: Pick<DetailPanelProps, 'prov' | 'idKey' | 'typeKey'>) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
-  if (typeKey in prov && entityTypes.includes(prov[typeKey])) {
-    return (
-      <SectionItem label="ID" ml>
-        <InternalLink
-          href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}
-          onClick={() => trackEntityPageEvent({ action: 'Provenance / Graph / Link', label: prov[idKey] })}
-        >
-          {prov[idKey]}
-        </InternalLink>
-      </SectionItem>
-    );
+  if (!(typeKey in prov) || !entityTypes.includes(prov[typeKey])) {
+    return null;
   }
-  return null;
+  return (
+    <SectionItem label="ID" ml>
+      <InternalLink
+        href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}
+        onClick={() => trackEntityPageEvent({ action: 'Provenance / Graph / Link', label: prov[idKey] })}
+      >
+        {prov[idKey]}
+      </InternalLink>
+    </SectionItem>
+  );
 }
 
 function Created({ prov, timeKey }: Pick<DetailPanelProps, 'prov' | 'timeKey'>) {
