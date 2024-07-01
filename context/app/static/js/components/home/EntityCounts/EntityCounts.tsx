@@ -1,9 +1,9 @@
 import React from 'react';
 
 import EntityCount from 'js/components/home/EntityCount';
-import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon } from 'js/shared-styles/icons';
+import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon, OrganIcon } from 'js/shared-styles/icons';
 import { useEntityCounts } from './hooks';
-import { Background, FlexContainer, StyledSvgIcon, StyledOrganIcon } from './style';
+import { Background, FlexContainer, StyledSvgIcon } from './style';
 
 const entities = [
   {
@@ -41,7 +41,7 @@ function EntityCounts({ organsCount }: EntityCountsProps) {
           />
         ))}
         <EntityCount
-          icon={<StyledOrganIcon ariaLabel="Number of unique organs" />}
+          icon={<StyledSvgIcon as={OrganIcon} color="primary" aria-label="Number of unique organs" />}
           count={organsCount}
           label="Organs"
           href="/organ"

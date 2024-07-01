@@ -1,3 +1,5 @@
+import React, { ElementType } from 'react';
+
 // NOTE: We are using the Rounded icon variants consistently.
 import BubbleChartIcon from '@mui/icons-material/BubbleChartRounded';
 import CloseRoundedIcon from '@mui/icons-material/CloseRounded';
@@ -23,10 +25,18 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
 import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import SearchIconSVG from 'assets/svg/search-icon.svg';
-import { ElementType } from 'react';
 import { BarChartRounded, LightbulbOutlined } from '@mui/icons-material';
 import GetAppRounded from '@mui/icons-material/GetAppRounded';
+import ScatterPlot from '@mui/icons-material/ScatterPlot';
+
+import { createSvgIcon } from '@mui/material/utils';
+import DatabaseIconSVG from 'assets/svg/database.svg';
+import SearchIconSVG from 'assets/svg/search-icon.svg';
+import WorkspacesIconSVG from 'assets/svg/workspaces.svg';
+import GeneIconSVG from 'assets/svg/gene.svg';
+import OrganSVG from 'assets/svg/organ.svg';
+import EuiSVG from 'assets/svg/eui.svg';
+import AsctBSVG from 'assets/svg/asct+b.svg';
 
 // The "any" here mirrors the "any" in the original SvgIconProps definition.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -87,9 +97,23 @@ const VisualizationIcon = withIconStyles(BarChartRounded);
 
 const DownloadIcon = withIconStyles(GetAppRounded);
 
-const SearchIcon = SearchIconSVG;
-
 const LightbulbIcon = withIconStyles(LightbulbOutlined);
+
+const CellTypeIcon = withIconStyles(ScatterPlot);
+
+const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
+
+const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
+
+const GeneIcon = withIconStyles(createSvgIcon(<GeneIconSVG />, 'Gene'));
+
+const WorkspacesIcon = withIconStyles(createSvgIcon(<WorkspacesIconSVG />, 'Workspaces'));
+
+const OrganIcon = withIconStyles(createSvgIcon(<OrganSVG />, 'Organ'));
+
+const EUIIcon = withIconStyles(createSvgIcon(<EuiSVG />, 'EUI'));
+
+const AsctBIcon = withIconStyles(createSvgIcon(<AsctBSVG />, 'ASCT+B'));
 
 export {
   CloseIcon,
@@ -114,8 +138,15 @@ export {
   AddIcon,
   SupportIcon,
   VerifiedIcon,
-  SearchIcon,
   VisualizationIcon,
   DownloadIcon,
   LightbulbIcon,
+  SearchIcon,
+  DatabaseIcon,
+  GeneIcon,
+  WorkspacesIcon,
+  OrganIcon,
+  EUIIcon,
+  AsctBIcon,
+  CellTypeIcon,
 };

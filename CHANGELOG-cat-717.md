@@ -1,1 +1,0 @@
-- Fix icon colors in tools section.
