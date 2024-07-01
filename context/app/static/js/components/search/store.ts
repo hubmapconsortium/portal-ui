@@ -241,14 +241,16 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
 
         if (childValues.has(value)) {
           childValues.delete(value);
-          if (childValues.size === 0) {
-            delete filter.values[parentValue];
-          }
         } else {
           childValues.add(value);
         }
 
-        filter.values[parentValue] = childValues;
+        if (childValues.size === 0) {
+          delete filter.values[parentValue];
+        } else {
+          filter.values[parentValue] = childValues;
+        }
+
         replaceURLSearchParams(state);
       });
     },
