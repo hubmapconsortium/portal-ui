@@ -12,6 +12,7 @@ import EntityTile, { tileWidth } from 'js/components/entity-tile/EntityTile';
 import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
 import { capitalizeString } from 'js/helpers/functions';
 import TileGrid from 'js/shared-styles/tiles/TileGrid';
+import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import ViewMoreResults from './ViewMoreResults';
 import { useSearchStore } from '../store';
@@ -22,14 +23,21 @@ function TilesSortSelect() {
     sortField,
     setSortField,
     sourceFields: { table: tableFields },
+    analyticsCategory,
   } = useSearchStore();
 
   const handleChange = useCallback(
     (event: SelectChangeEvent) => {
       const selectedField = event.target.value;
-      setSortField({ field: selectedField, direction: selectedField === 'last_modified_timestamp' ? 'desc' : 'asc' });
+      const direction = selectedField === 'last_modified_timestamp' ? 'desc' : 'asc';
+      setSortField({ field: selectedField, direction });
+      trackEvent({
+        category: analyticsCategory,
+        action: `Sort Tile View`,
+        label: `${selectedField} ${direction}`,
+      });
     },
-    [setSortField],
+    [setSortField, analyticsCategory],
   );
 
   return (

@@ -7,6 +7,7 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { AggregationsBuckets } from '@elastic/elasticsearch/lib/api/types';
 
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
+import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import {
@@ -24,6 +25,7 @@ import { getFieldLabel } from '../labelMap';
 interface CheckboxItem {
   label: string;
   count: number;
+  title: string;
   active: boolean;
   onClick: () => void;
   indeterminate?: boolean;
@@ -31,7 +33,7 @@ interface CheckboxItem {
 
 type LabelTransformations = ((label: string) => string)[];
 
-interface TermLabelCount extends Omit<CheckboxItem, 'field' | 'indeterminate' | 'onClick'> {
+interface TermLabelCount extends Omit<CheckboxItem, 'field' | 'indeterminate' | 'onClick' | 'title'> {
   labelTransformations?: LabelTransformations;
 }
 
@@ -51,7 +53,20 @@ export function TermLabelAndCount({ label, count, active, labelTransformations =
   );
 }
 
-function CheckboxFilterItem({ active, label, count, onClick, indeterminate = false }: CheckboxItem) {
+function CheckboxFilterItem({ active, label, title, count, onClick, indeterminate = false }: CheckboxItem) {
+  const { analyticsCategory } = useSearchStore();
+
+  const handleClick = useCallback(() => {
+    onClick();
+
+    const facetAction = active ? 'Unselect' : 'Select';
+    trackEvent({
+      category: analyticsCategory,
+      action: `${facetAction} Facet`,
+      label: `${title}: ${label}`,
+    });
+  }, [active, analyticsCategory, title, label, onClick]);
+
   return (
     <StyledFormControlLabel
       control={
@@ -63,7 +78,7 @@ function CheckboxFilterItem({ active, label, count, onClick, indeterminate = fal
           color="primary"
           icon={<StyledCheckBoxBlankIcon />}
           checkedIcon={<StyledCheckBoxIcon />}
-          onClick={onClick}
+          onClick={handleClick}
         />
       }
       label={<TermLabelAndCount label={label} count={count} active={active} />}
@@ -78,7 +93,11 @@ interface TermFacet extends Omit<CheckboxItem, 'onClick'> {
 export function TermFacetItem({ label, field, ...rest }: TermFacet) {
   const { filterTerm } = useSearchStore();
 
-  return <CheckboxFilterItem onClick={() => filterTerm({ term: field, value: label })} label={label} {...rest} />;
+  const handleClick = useCallback(() => {
+    filterTerm({ term: field, value: label });
+  }, [filterTerm, field, label]);
+
+  return <CheckboxFilterItem onClick={handleClick} label={label} {...rest} />;
 }
 
 export function TermFacet({ field }: { field: string }) {
@@ -93,8 +112,9 @@ export function TermFacet({ field }: { field: string }) {
     return null;
   }
 
+  const title = getFieldLabel(field);
   return (
-    <FacetAccordion title={getFieldLabel(field)} position="inner">
+    <FacetAccordion title={title} position="inner">
       {aggBuckets.map((bucket) => (
         <TermFacetItem
           label={bucket.key}
@@ -102,6 +122,7 @@ export function TermFacet({ field }: { field: string }) {
           key={bucket.key}
           active={term.values.has(bucket.key)}
           field={field}
+          title={title}
         />
       ))}
     </FacetAccordion>
@@ -146,6 +167,7 @@ export function HierarchicalTermFacetItem({
   childBuckets,
   parentField,
   childField,
+  title,
   ...rest
 }: TermFacet & {
   parentField: string;
@@ -202,6 +224,7 @@ export function HierarchicalTermFacetItem({
           childValues={childValues}
           label={label}
           field={field}
+          title={title}
           {...rest}
           indeterminate={childState?.size > 0 && !childValues.every((v) => childState?.has(v))}
         />
@@ -215,6 +238,7 @@ export function HierarchicalTermFacetItem({
             count={doc_count}
             parentValue={label}
             active={childState?.has(key)}
+            title={title}
           />
         ))}
       </AccordionDetails>
@@ -241,8 +265,10 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
     return null;
   }
 
+  const title = getFieldLabel(parentField);
+
   return (
-    <FacetAccordion title={getFieldLabel(parentField)} position="inner">
+    <FacetAccordion title={title} position="inner">
       {parentBuckets.map((bucket) => (
         <HierarchicalTermFacetItem
           label={bucket.key}
@@ -253,6 +279,7 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
           childField={childField}
           parentField={parentField}
           childBuckets={bucket[childField]?.buckets}
+          title={title}
         />
       ))}
     </FacetAccordion>

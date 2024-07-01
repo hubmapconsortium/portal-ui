@@ -67,6 +67,7 @@ export interface SearchState<V> extends FacetsState<V> {
   endpoint: string;
   swrConfig?: SWRConfiguration;
   type: 'Donor' | 'Sample' | 'Dataset';
+  analyticsCategory: string;
 }
 
 export type SearchStoreState = SearchState<Set<string>>;

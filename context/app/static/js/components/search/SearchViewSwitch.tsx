@@ -6,16 +6,22 @@ import { Button, SvgIcon } from '@mui/material';
 
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { trackEvent } from 'js/helpers/trackers';
 import { useSearchStore } from './store';
 
 function SearchViewSwitch({ views }: { views: { label: string; icon: typeof SvgIcon }[] }) {
-  const { view, setView } = useSearchStore();
+  const { view, setView, analyticsCategory } = useSearchStore();
 
   const handleChange = useCallback(
     (event: React.MouseEvent<HTMLElement>, v: string) => {
+      trackEvent({
+        category: analyticsCategory,
+        action: `Switch Search View`,
+        label: `${v}`,
+      });
       setView(v);
     },
-    [setView],
+    [setView, analyticsCategory],
   );
 
   return (

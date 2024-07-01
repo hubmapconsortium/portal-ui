@@ -247,7 +247,15 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
 
 type SearchConfig = Pick<
   SearchStoreState,
-  'searchFields' | 'sourceFields' | 'endpoint' | 'swrConfig' | 'sortField' | 'size' | 'type' | 'defaultQuery'
+  | 'searchFields'
+  | 'sourceFields'
+  | 'endpoint'
+  | 'swrConfig'
+  | 'sortField'
+  | 'size'
+  | 'type'
+  | 'defaultQuery'
+  | 'analyticsCategory'
 > & {
   facets: FacetGroups;
 };
@@ -366,13 +374,14 @@ function useInitialURLState() {
   return { initialUrlState, hasLoadedURLState };
 }
 
-function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint'> }) {
+function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'analyticsCategory'> }) {
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
   const { search, sortField, terms, hierarchicalTerms, ranges, ...rest } = buildInitialSearchState({
     ...config,
     endpoint: elasticsearchEndpoint,
+    analyticsCategory: `${type}s Search Page Interactions`,
   });
 
   const { initialUrlState, hasLoadedURLState } = useInitialURLState();

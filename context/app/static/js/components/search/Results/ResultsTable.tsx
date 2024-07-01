@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
@@ -11,6 +11,7 @@ import { InternalLink } from 'js/shared-styles/Links';
 import { Entity } from 'js/components/types';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
+import { trackEvent } from 'js/helpers/trackers';
 import { getByPath } from './utils';
 import {
   StyledTable,
@@ -56,16 +57,26 @@ export function getSortOrder({
 }
 
 function SortHeaderCell({ field, label }: { field: string; label: string }) {
-  const { sortField, setSortField } = useSearchStore();
+  const { sortField, setSortField, analyticsCategory } = useSearchStore();
 
   const { direction, field: currentSortField } = sortField;
 
   const isCurrentSortField = field === currentSortField;
 
+  const handleClick = useCallback(() => {
+    const newSortDirection = getSortOrder({ direction, isCurrentSortField });
+    setSortField({ direction: newSortDirection, field });
+    trackEvent({
+      category: analyticsCategory,
+      action: `Sort Table View`,
+      label: `${label} ${newSortDirection}}`,
+    });
+  }, [analyticsCategory, direction, field, isCurrentSortField, label, setSortField]);
+
   return (
     <StyledHeaderCell>
       {label}
-      <IconButton onClick={() => setSortField({ direction: getSortOrder({ direction, isCurrentSortField }), field })}>
+      <IconButton onClick={handleClick}>
         <OrderIcon direction={direction} isCurrentSortField={isCurrentSortField} />
       </IconButton>
     </StyledHeaderCell>

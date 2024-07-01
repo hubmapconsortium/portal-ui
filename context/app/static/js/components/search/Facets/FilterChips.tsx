@@ -1,12 +1,24 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
+import { trackEvent } from 'js/helpers/trackers';
 import { useSearchStore } from '../store';
 import { getFieldLabel } from '../labelMap';
 
-function FilterChip(props: ChipProps) {
-  return <Chip variant="outlined" color="primary" {...props} />;
+function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () => void }) {
+  const { analyticsCategory } = useSearchStore();
+
+  const handleDelete = useCallback(() => {
+    onDelete();
+    trackEvent({
+      category: analyticsCategory,
+      action: 'Unselect Facet Chip',
+      label,
+    });
+  }, [onDelete, label, analyticsCategory]);
+
+  return <Chip variant="outlined" color="primary" label={label} onDelete={handleDelete} {...props} />;
 }
 
 function FilterChips() {
