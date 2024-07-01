@@ -4,6 +4,8 @@ export interface ProvData {
   prefix: Record<string, Record<string, string>>;
   used: Record<string, Record<string, string>>;
   wasGeneratedBy: Record<string, Record<string, string>>;
+  agent: Record<string, Record<string, string>>;
+  actedOnBehalfOf: Record<string, Record<string, string>>;
 }
 
 export interface ProvNode {

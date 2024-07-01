@@ -94,6 +94,15 @@ const getDescendantsQuery = (uuid: string | string[]): SearchRequest => ({
 });
 
 /**
+ * Formats the URL for fetching provenance data
+ * @param uuid the UUID of the entity
+ * @param entityEndpoint the base URL of the entities API endpoint
+ * @returns the URL for fetching provenance data
+ */
+function createProvDataURL(uuid: string, entityEndpoint: string) {
+  return `${entityEndpoint}/entities/${uuid}/provenance`;
+}
+/**
  * Fetcher for legacy provenance data
  * This only fetches the ancestors of the entity
  * @param uuid UUID of the entity to fetch
@@ -109,6 +118,22 @@ async function getProvData(uuid: string, entityEndpoint: string, groupsToken: st
     throw new Error('Prov API failed to load data');
   }
   return response.json() as Promise<ProvData>;
+}
+
+function nonDestructiveMerge<T extends Record<string, unknown>>(a: T, b: T, keyMod: string): T {
+  const merged = { ...a } as Record<string, unknown>;
+  Object.entries(b).forEach(([key, value]) => {
+    if (merged[key]) {
+      // Confirm that properties are actually different
+      if (JSON.stringify(merged[key]) === JSON.stringify(value)) {
+        return;
+      }
+      merged[`${key}-${keyMod}`] = value;
+    } else {
+      merged[key] = value;
+    }
+  });
+  return merged as T;
 }
 
 /**
@@ -155,17 +180,21 @@ async function getCombinedProvData(
     return descendantProvenance[0];
   }
   const [first, ...rest] = descendantProvenance;
-  const combinedProvenance = rest.reduce((acc, curr) => {
-    acc.entity = { ...acc.entity, ...curr.entity };
-    acc.activity = { ...acc.activity, ...curr.activity };
-    return acc;
-  }, first);
-  console.log({ descendantProvenance, combinedProvenance });
+  const [, ...restIds] = descendantIds;
+  const combinedProvenance = rest.reduce(
+    (acc, curr, idx) => {
+      const currentId = restIds[idx];
+      acc.entity = nonDestructiveMerge(acc.entity, curr.entity, currentId);
+      acc.activity = nonDestructiveMerge(acc.activity, curr.activity, currentId);
+      acc.agent = nonDestructiveMerge(acc.agent, curr.agent, currentId);
+      acc.wasGeneratedBy = nonDestructiveMerge(acc.wasGeneratedBy, curr.wasGeneratedBy, currentId);
+      acc.used = nonDestructiveMerge(acc.used, curr.used, currentId);
+      acc.actedOnBehalfOf = nonDestructiveMerge(acc.actedOnBehalfOf, curr.actedOnBehalfOf, currentId);
+      return acc;
+    },
+    { ...first }, // using spread operator to avoid mutating the original object
+  );
   return combinedProvenance;
-}
-
-function createProvDataURL(uuid: string, entityEndpoint: string) {
-  return `${entityEndpoint}/entities/${uuid}/provenance`;
 }
 
 /**

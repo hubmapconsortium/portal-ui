@@ -157,7 +157,8 @@ export default class ProvData {
 
   makeCwlStep(activityId: string): Step {
     const activityName = this.getNameForActivity(activityId, this.prov);
-    const inputs = this.getParentEntityNames(activityName).map((entityName) =>
+    const parents = this.getParentEntityNames(activityName);
+    const inputs = parents.map((entityName) =>
       makeCwlInput(entityName, this.getParentActivityNames(entityName), this.entityByName[entityName]),
     );
     const outputs = this.getChildEntityNames(activityName).map((entityName) =>
