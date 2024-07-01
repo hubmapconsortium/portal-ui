@@ -1,11 +1,11 @@
 import React, { PropsWithChildren } from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import useProvData from 'js/hooks/useProvData';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import { Skeleton } from '@mui/material';
+import Skeleton from '@mui/material/Skeleton';
+import useProvData from '../hooks';
 import ProvTabs from '../ProvTabs';
 
 const provenanceTooltipText = `The provenance shows the sequence of events and actions that led to this page creation.`;

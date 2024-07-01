@@ -3,7 +3,7 @@ import { useAppContext } from 'js/components/Contexts';
 import useSWR from 'swr';
 import { ProvData } from 'js/components/detailPage/provenance/types';
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
-import { fetchSearchData } from './useSearchData';
+import { fetchSearchData } from 'js/hooks/useSearchData';
 
 const getAncestorsQuery = (uuid: string) => ({
   query: {
