@@ -6,6 +6,7 @@ import IconButton from '@mui/material/IconButton';
 import Box from '@mui/material/Box';
 import DOMPurify from 'isomorphic-dompurify';
 import parse from 'html-react-parser';
+import { format } from 'date-fns/format';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { Entity } from 'js/components/types';
@@ -83,6 +84,17 @@ function SortHeaderCell({ field, label }: { field: string; label: string }) {
   );
 }
 
+function CellContent({ field, fieldValue }: { field: string; fieldValue: string }) {
+  switch (field) {
+    case 'hubmap_id':
+      return <InternalLink href={`/browse/${fieldValue}`}>{fieldValue}</InternalLink>;
+    case 'last_modified_timestamp':
+      return format(fieldValue, 'yyyy-MM-dd');
+    default:
+      return fieldValue;
+  }
+}
+
 function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Entity>> }) {
   const source = hit?._source;
 
@@ -94,7 +106,7 @@ function ResultCell({ hit, field }: { field: string; hit: SearchHit<Partial<Enti
 
   return (
     <StyledTableCell key={field}>
-      {field === 'hubmap_id' ? <InternalLink href={`/browse/${fieldValue}`}>{fieldValue}</InternalLink> : fieldValue}
+      <CellContent field={field} fieldValue={fieldValue} />
     </StyledTableCell>
   );
 }
