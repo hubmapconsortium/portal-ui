@@ -16,13 +16,14 @@ function SearchBar() {
 
       const category = 'Free Text Search';
 
-      trackSiteSearch(input, category);
-      // TODO: Remove trackEvent, eventually?
-      trackEvent({
-        category: analyticsCategory,
-        action: category,
-        label: input,
-      });
+      if (input) {
+        trackSiteSearch(input, category);
+        trackEvent({
+          category: analyticsCategory,
+          action: category,
+          label: input,
+        });
+      }
     },
     [analyticsCategory, input, setSearch],
   );

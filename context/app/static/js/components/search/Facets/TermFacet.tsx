@@ -9,7 +9,7 @@ import { AggregationsBuckets } from '@elastic/elasticsearch/lib/api/types';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
-import { useSearchStore } from '../store';
+import { isTermFilter, useSearchStore, TermValues, isHierarchicalFilter } from '../store';
 import {
   StyledCheckBoxBlankIcon,
   StyledCheckBoxIcon,
@@ -53,7 +53,7 @@ export function TermLabelAndCount({ label, count, active, labelTransformations =
   );
 }
 
-function CheckboxFilterItem({ active, label, title, count, onClick, indeterminate = false }: CheckboxItem) {
+function CheckboxFilterItem({ active = false, label, title, count, onClick, indeterminate = false }: CheckboxItem) {
   const { analyticsCategory } = useSearchStore();
 
   const handleClick = useCallback(() => {
@@ -100,11 +100,8 @@ export function TermFacetItem({ label, field, ...rest }: TermFacet) {
   return <CheckboxFilterItem onClick={handleClick} label={label} {...rest} />;
 }
 
-export function TermFacet({ field }: { field: string }) {
+function TermFacetContent({ filter, field }: { filter: TermValues; field: string }) {
   const { aggregations } = useSearch();
-  const {
-    terms: { [field]: term },
-  } = useSearchStore();
 
   const aggBuckets = aggregations?.[field]?.[field]?.buckets;
 
@@ -120,13 +117,25 @@ export function TermFacet({ field }: { field: string }) {
           label={bucket.key}
           count={bucket.doc_count}
           key={bucket.key}
-          active={term.values.has(bucket.key)}
+          active={filter.values.has(bucket.key)}
           field={field}
           title={title}
         />
       ))}
     </FacetAccordion>
   );
+}
+
+export function TermFacet({ field }: { field: string }) {
+  const {
+    filters: { [field]: filter },
+  } = useSearchStore();
+
+  if (!isTermFilter(filter)) {
+    return null;
+  }
+
+  return <TermFacetContent field={field} filter={filter} />;
 }
 
 function buildExpandTooltip({ expanded, disabled }: { expanded: boolean; disabled: boolean }) {
@@ -180,16 +189,16 @@ export function HierarchicalTermFacetItem({
   }, [setExpanded]);
 
   const {
-    hierarchicalTerms: {
-      [parentField]: {
-        values: { [label]: childState },
-      },
-    },
+    filters: { [parentField]: filter },
   } = useSearchStore();
 
-  if (!childBuckets || !Array.isArray(childBuckets)) {
+  if (!childBuckets || !Array.isArray(childBuckets) || !isHierarchicalFilter(filter)) {
     return null;
   }
+
+  const {
+    values: { [label]: childState },
+  } = filter;
 
   const hasChildBuckets = childBuckets?.length;
   const childValues = childBuckets.map((b) => b.key);
@@ -250,14 +259,14 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
   const { aggregations } = useSearch();
 
   const {
-    hierarchicalTerms: {
-      [parentField]: { values },
-    },
+    filters: { [parentField]: filter },
   } = useSearchStore();
 
-  if (!aggregations) {
+  if (!aggregations || !isHierarchicalFilter(filter)) {
     return null;
   }
+
+  const { values } = filter;
 
   const parentBuckets = aggregations?.[parentField]?.[parentField]?.buckets;
 

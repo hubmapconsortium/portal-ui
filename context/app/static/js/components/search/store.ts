@@ -1,5 +1,4 @@
 import esb from 'elastic-builder';
-import { produce } from 'immer';
 import { stringify } from 'qs';
 import { createStoreImmer, createStoreContext } from 'js/helpers/zustand';
 
@@ -25,8 +24,18 @@ export interface TermConfig extends FacetConfig {
   type: typeof FACETS.term;
 }
 
+export interface TermValues<V = Set<string>> {
+  values: V;
+  type: typeof FACETS.term;
+}
+
 export interface HierarchicalTermConfig extends FacetConfig {
   childField: string;
+  type: typeof FACETS.hierarchical;
+}
+
+export interface HierarchichalTermValues<V = Set<string>> {
+  values: Record<string, V>;
   type: typeof FACETS.hierarchical;
 }
 
@@ -36,27 +45,25 @@ export interface RangeConfig extends FacetConfig {
   type: typeof FACETS.range;
 }
 
-export interface Term<V = Set<string>> extends TermConfig {
-  values: V;
+export interface RangeValues {
+  values: {
+    min: number;
+    max: number;
+  };
+  type: typeof FACETS.range;
 }
 
-export interface HierarchicalTerm<V = Set<string>> extends HierarchicalTermConfig {
-  values: Record<string, V>;
-}
+type Filter<V = Set<string>> = TermValues<V> | HierarchichalTermValues<V> | RangeValues;
+type Facet = TermConfig | HierarchicalTermConfig | RangeConfig;
 
-interface Range extends RangeConfig {
-  values: { min: number; max: number };
-}
-
-export interface FacetsState<V = Set<string>> {
-  terms: Record<string, Term<V>>;
-  hierarchicalTerms: Record<string, HierarchicalTerm<V>>;
-  ranges: Record<string, Range>;
-}
+export type FiltersType<V = Set<string>> = Record<string, Filter<V>>;
+export type FacetsType = Record<string, Facet>;
 
 type SourceFields = Record<string, string[]>;
 
-export interface SearchState<V> extends FacetsState<V> {
+export interface SearchState<V> {
+  filters: FiltersType<V>;
+  facets: FacetsType;
   defaultQuery?: esb.Query;
   search: string;
   searchFields: string[];
@@ -101,58 +108,57 @@ export interface SearchStoreActions {
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
 
-export function termHasValues({ values }: Term) {
-  return values.size;
+export function isTermFilter<V = Set<string>>(filter: Filter<V>): filter is TermValues<V> {
+  return filter.type === 'TERM';
 }
 
-export function hierarchicalTermHasValues({ values }: HierarchicalTerm) {
-  return Object.keys(values).length;
+export function isTermFacet(facet: Facet): facet is TermConfig {
+  return facet.type === 'TERM';
 }
 
-export function rangeHasValues({ values, min, max }: Range) {
-  return values.min !== min || values.max !== max;
+export function isRangeFilter<V = Set<string>>(filter: Filter<V>): filter is RangeValues {
+  return filter.type === 'RANGE';
 }
 
-export function convertState(state: SearchURLState) {
-  const { terms = {}, hierarchicalTerms = {} } = state;
+export function isRangeFacet(facet: Facet): facet is RangeConfig {
+  return facet.type === 'RANGE';
+}
 
-  const t = Object.entries(terms).reduce<Record<string, Term>>((acc, [k, v]) => {
-    return produce(acc, (draft) => {
-      draft[k] = { ...v, values: new Set(v.values) };
-    });
-  }, {});
+export function isHierarchicalFilter<V = Set<string>>(filter: Filter<V>): filter is HierarchichalTermValues<V> {
+  return filter.type === 'HIERARCHICAL';
+}
 
-  const h = Object.entries(hierarchicalTerms).reduce<Record<string, HierarchicalTerm>>((acc, [k, v]) => {
-    return produce(acc, (draft) => {
-      draft[k] = {
-        ...v,
-        values: Object.entries(v.values).reduce<Record<string, Set<string>>>((childAcc, [childKey, childValues]) => {
-          return produce(childAcc, (childDraft) => {
-            childDraft[childKey] = new Set(childValues);
-          });
-        }, {}),
-      };
-    });
-  }, {});
+export function isHierarchicalFacet(facet: Facet): facet is HierarchicalTermConfig {
+  return facet.type === 'HIERARCHICAL';
+}
 
-  return { ...state, terms: t, hierarchicalTerms: h };
+export function filterHasValues({ filter, facet }: { filter: Filter; facet: Facet }) {
+  if (isTermFilter(filter)) {
+    return filter.values.size;
+  }
+
+  if (isHierarchicalFilter(filter)) {
+    return Object.keys(filter.values).length;
+  }
+
+  if (isRangeFilter(filter) && isRangeFacet(facet)) {
+    return filter.values.min !== facet.min || filter.values.max !== facet.max;
+  }
+
+  return false;
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
-  const { search, sortField, terms, hierarchicalTerms, ranges } = state;
+  const { search, sortField, filters, facets } = state;
 
-  const termsWithValues = Object.fromEntries(Object.entries(terms).filter(([_k, v]) => termHasValues(v)));
-  const hierarchicalTermsWithValues = Object.fromEntries(
-    Object.entries(hierarchicalTerms).filter(([_k, v]) => hierarchicalTermHasValues(v)),
+  const filtersWithValues = Object.fromEntries(
+    Object.entries(filters).filter(([k, v]) => filterHasValues({ filter: v, facet: facets[k] })),
   );
-  const rangesWithValues = Object.fromEntries(Object.entries(ranges).filter(([_k, v]) => rangeHasValues(v)));
 
   const urlState = {
     search,
     sortField,
-    terms: termsWithValues,
-    hierarchicalTerms: hierarchicalTermsWithValues,
-    ranges: rangesWithValues,
+    filters: filtersWithValues,
   };
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
@@ -189,27 +195,29 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     },
     filterTerm: ({ term, value }) => {
       set((state) => {
-        const termSet = state?.terms?.[term].values;
-        if (!termSet) {
+        const filter = state?.filters?.[term];
+
+        if (!isTermFilter(filter)) {
           return;
         }
-        if (termSet.has(value)) {
-          termSet.delete(value);
+        const { values } = filter;
+
+        if (values.has(value)) {
+          values.delete(value);
         } else {
-          termSet.add(value);
+          values.add(value);
         }
         replaceURLSearchParams(state);
       });
     },
     filterHierarchicalParentTerm: ({ term, value, childValues }) => {
       set((state) => {
-        const termState = state?.hierarchicalTerms?.[term];
+        const filter = state?.filters?.[term];
 
-        if (!termState) {
+        if (!isHierarchicalFilter(filter)) {
           return;
         }
-
-        const { values } = termState;
+        const { values } = filter;
 
         if (value in values) {
           delete values[value];
@@ -221,37 +229,38 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
     },
     filterHierarchicalChildTerm: ({ parentTerm, parentValue, value }) => {
       set((state) => {
-        const termState = state?.hierarchicalTerms?.[parentTerm];
+        const filter = state?.filters?.[parentTerm];
 
-        if (!termState) {
+        if (!isHierarchicalFilter(filter)) {
           return;
         }
 
-        const childValues = termState?.values?.[parentValue];
+        const { values } = filter;
 
-        if (!childValues) {
-          return;
-        }
+        const childValues = values[parentValue] ?? new Set([]);
 
         if (childValues.has(value)) {
           childValues.delete(value);
           if (childValues.size === 0) {
-            delete termState.values[parentValue];
+            delete filter.values[parentValue];
           }
         } else {
           childValues.add(value);
         }
+
+        filter.values[parentValue] = childValues;
         replaceURLSearchParams(state);
       });
     },
     filterRange: ({ field, min, max }) => {
       set((state) => {
-        const range = state?.ranges[field];
+        const filter = state?.filters[field];
 
-        if (!range) {
+        if (!isRangeFilter(filter)) {
           return;
         }
-        range.values = { min, max };
+
+        filter.values = { min, max };
         replaceURLSearchParams(state);
       });
     },

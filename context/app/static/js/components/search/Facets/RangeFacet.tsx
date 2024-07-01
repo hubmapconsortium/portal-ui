@@ -5,7 +5,7 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import { useSearch } from '../Search';
-import { useSearchStore } from '../store';
+import { RangeConfig, RangeValues, isRangeFacet, isRangeFilter, useSearchStore } from '../store';
 import FacetAccordion from './FacetAccordion';
 import { getFieldLabel } from '../labelMap';
 
@@ -19,15 +19,13 @@ function buildBins({ buckets }: { buckets: HistogramBucket[] }) {
   return buckets.map((b) => ({ ...b, height: b.doc_count / maxCount }));
 }
 
-function RangeFacet({ field }: { field: string }) {
+function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: string; facet: RangeConfig }) {
   const { aggregations } = useSearch();
-  const {
-    ranges: {
-      [field]: { min, max, values },
-    },
-    filterRange,
-  } = useSearchStore();
+  const { filterRange } = useSearchStore();
   const theme = useTheme();
+
+  const { values } = filter;
+  const { min, max } = facet;
 
   const [selectedValues, setSelectedValues] = useState<number[]>([min, max]);
 
@@ -111,4 +109,17 @@ function RangeFacet({ field }: { field: string }) {
   );
 }
 
-export default RangeFacet;
+function FacetGuard({ field }: { field: string }) {
+  const {
+    filters: { [field]: filter },
+    facets: { [field]: facet },
+  } = useSearchStore();
+
+  if (!isRangeFilter(filter) || !isRangeFacet(facet)) {
+    return null;
+  }
+
+  return <RangeFacet field={field} facet={facet} filter={filter} />;
+}
+
+export default FacetGuard;

@@ -18,18 +18,18 @@ import {
   SearchStoreProvider,
   useSearchStore,
   SearchStoreState,
-  FacetsState,
   HierarchicalTermConfig,
   TermConfig,
   RangeConfig,
   FACETS,
-  rangeHasValues,
-  termHasValues,
-  hierarchicalTermHasValues,
-  convertState,
+  filterHasValues,
   SearchURLState,
-  Term,
-  HierarchicalTerm,
+  FiltersType,
+  FacetsType,
+  isTermFilter,
+  isRangeFilter,
+  isHierarchicalFilter,
+  isHierarchicalFacet,
 } from './store';
 import Results from './Results';
 import { getPortalESField } from './buildTypesMap';
@@ -42,9 +42,9 @@ import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import { TilesSortSelect } from './Results/ResultsTiles';
 import MetadataMenu from '../searchPage/MetadataMenu';
 
-type Filters = Record<string, esb.Query>;
-
 const maxAggSize = 10000;
+
+type FilterClauses = Record<string, esb.Query>;
 
 function buildFilterAggregation({
   field,
@@ -55,7 +55,7 @@ function buildFilterAggregation({
   field: string;
   portalFields: string[];
   aggregation: esb.Aggregation;
-  filters: Filters;
+  filters: FilterClauses;
 }) {
   portalFields.forEach((f) => {
     if (f in filters) {
@@ -71,11 +71,10 @@ function buildFilterAggregation({
 }
 
 function buildQuery({
-  terms,
-  hierarchicalTerms,
-  ranges,
-  size,
+  filters,
+  facets,
   search,
+  size,
   searchFields,
   sourceFields,
   sortField,
@@ -98,98 +97,89 @@ function buildQuery({
     query.highlight(esb.highlight(searchFields));
   }
 
-  const termFilters = Object.entries(terms).reduce<Filters>((acc, [field, term]) => {
+  const allFilters = Object.entries(filters).reduce<FilterClauses>((acc, [field, filter]) => {
     return produce(acc, (draft) => {
-      const { values } = term;
       const portalField = getPortalESField(field);
-      if (termHasValues(term)) {
-        draft[portalField] = esb.termsQuery(portalField, [...values]);
+      const facetConfig = facets[field];
+
+      if (isTermFilter(filter)) {
+        if (filterHasValues({ filter, facet: facetConfig })) {
+          draft[portalField] = esb.termsQuery(portalField, [...filter.values]);
+        }
+      }
+
+      if (isRangeFilter(filter)) {
+        if (filterHasValues({ filter, facet: facetConfig })) {
+          draft[portalField] = esb.rangeQuery(portalField).gte(filter.values.min).lte(filter.values.max);
+        }
+      }
+
+      if (isHierarchicalFilter(filter) && isHierarchicalFacet(facetConfig)) {
+        if (filterHasValues({ filter, facet: facetConfig })) {
+          const childPortalField = getPortalESField(facetConfig.childField);
+
+          draft[portalField] = esb.termsQuery(portalField, Object.keys(filter.values));
+
+          const childValues = Object.values(filter.values)
+            .map((v) => [...v])
+            .flat();
+          draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
+        }
       }
     });
   }, {});
 
-  const rangeFilters = Object.entries(ranges).reduce<Filters>((acc, [field, range]) => {
-    return produce(acc, (draft) => {
-      const { values } = range;
-      const portalField = getPortalESField(field);
+  query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
 
-      if (rangeHasValues(range)) {
-        draft[portalField] = esb.rangeQuery(portalField).gte(values.min).lte(values.max);
-      }
-    });
-  }, {});
+  Object.values(facets).forEach((filter) => {
+    const { field } = filter;
+    const portalField = getPortalESField(field);
 
-  const hierarchicalFilters = Object.entries(hierarchicalTerms).reduce<Filters>((acc, [field, hierarchicalTerm]) => {
-    return produce(acc, (draft) => {
-      const { values, childField } = hierarchicalTerm;
+    if (filter.type === 'TERM') {
+      query.agg(
+        buildFilterAggregation({
+          portalFields: [portalField],
+          aggregation: esb.termsAggregation(field, portalField).size(maxAggSize),
+          filters: { ...allFilters },
+          field,
+        }),
+      );
+    }
+
+    if (filter.type === 'RANGE') {
+      const { min, max } = filter;
+      const interval = Math.ceil((max - min) / 20);
+
+      query.agg(
+        buildFilterAggregation({
+          portalFields: [portalField],
+          aggregation: esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max),
+          filters: { ...allFilters },
+          field,
+        }),
+      );
+    }
+
+    if (filter.type === 'HIERARCHICAL') {
+      const { childField } = filter;
       if (!childField) {
-        return acc;
+        return;
       }
       const parentPortalField = getPortalESField(field);
       const childPortalField = getPortalESField(childField);
 
-      if (hierarchicalTermHasValues(hierarchicalTerm)) {
-        draft[parentPortalField] = esb.termsQuery(parentPortalField, Object.keys(values));
-
-        const childValues = Object.values(values)
-          .map((v) => [...v])
-          .flat();
-        draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
-      }
-      return draft;
-    });
-  }, {});
-
-  const allFilters = { ...termFilters, ...rangeFilters, ...hierarchicalFilters };
-
-  query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
-
-  Object.keys(terms).forEach((field) => {
-    const portalField = getPortalESField(field);
-
-    const filterAggregation = buildFilterAggregation({
-      field,
-      portalFields: [portalField],
-      aggregation: esb.termsAggregation(field, portalField).size(maxAggSize),
-      filters: allFilters,
-    });
-
-    query.agg(filterAggregation);
-  });
-
-  Object.entries(ranges).forEach(([field, { min, max }]) => {
-    const portalField = getPortalESField(field);
-
-    const interval = Math.ceil((max - min) / 20);
-
-    const filterAggregation = buildFilterAggregation({
-      field,
-      portalFields: [portalField],
-      aggregation: esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max),
-      filters: allFilters,
-    });
-
-    query.agg(filterAggregation);
-  });
-
-  Object.entries(hierarchicalTerms).forEach(([field, { childField }]) => {
-    if (!childField) {
-      return;
+      query.agg(
+        buildFilterAggregation({
+          portalFields: [parentPortalField, childPortalField],
+          aggregation: esb
+            .termsAggregation(field, parentPortalField)
+            .size(maxAggSize)
+            .agg(esb.termsAggregation(childField, childPortalField).size(maxAggSize)),
+          filters: { ...allFilters },
+          field,
+        }),
+      );
     }
-    const parentPortalField = getPortalESField(field);
-    const childPortalField = getPortalESField(childField);
-
-    const filterAggregation = buildFilterAggregation({
-      field,
-      portalFields: [parentPortalField, childPortalField],
-      aggregation: esb
-        .termsAggregation(field, parentPortalField)
-        .size(maxAggSize)
-        .agg(esb.termsAggregation(childField, childPortalField).size(maxAggSize)),
-      filters: allFilters,
-    });
-
-    query.agg(filterAggregation);
   });
 
   return query.toJSON();
@@ -226,25 +216,26 @@ export type FacetGroups = Record<string, FacetOption[]>;
 function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
   const allFacets = Object.values(facetGroups).flat();
 
-  return allFacets.reduce<FacetsState>(
+  return allFacets.reduce<{ filters: FiltersType; facets: FacetsType }>(
     (acc, curr) => {
       return produce(acc, (draft) => {
         if (curr.type === FACETS.term) {
-          draft.terms[curr.field] = { ...curr, values: new Set([]) };
+          draft.filters[curr.field] = { values: new Set([]), type: curr.type };
         }
 
         if (curr.type === FACETS.hierarchical) {
-          draft.hierarchicalTerms[curr.field] = { ...curr, values: {} };
+          draft.filters[curr.field] = { values: {}, type: curr.type };
         }
 
         if (curr.type === FACETS.range) {
-          draft.ranges[curr.field] = { ...curr, values: { min: curr.min, max: curr.max } };
+          draft.filters[curr.field] = { values: { min: curr.min, max: curr.max }, type: curr.type };
         }
 
+        draft.facets[curr.field] = curr;
         return draft;
       });
     },
-    { terms: {}, hierarchicalTerms: {}, ranges: {} },
+    { filters: {}, facets: {} },
   );
 }
 
@@ -333,29 +324,47 @@ function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups })
   );
 }
 
-const mergeTerms = (termState: Record<string, Term>, termURLState: Record<string, Term<string[]>>) => {
-  return Object.entries(termState).reduce<Record<string, Term>>((acc, [k, v]) => {
+const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<string[]>) => {
+  const z = Object.entries(filterState).reduce<FiltersType>((acc, [k, v]) => {
     return produce(acc, (draft) => {
-      const urlStateValues = termURLState?.[k]?.values ?? [];
-      draft[k] = { ...v, values: new Set([...v.values, ...urlStateValues]) };
+      const URLStateFilter = filterURLState?.[k];
+
+      if (isTermFilter(v)) {
+        const urlStateValues = URLStateFilter && isTermFilter<string[]>(URLStateFilter) ? URLStateFilter.values : [];
+        draft[k] = { ...v, values: new Set([...v.values, ...urlStateValues]) };
+      }
+
+      if (isHierarchicalFilter(v)) {
+        const urlStateValues =
+          URLStateFilter && isHierarchicalFilter<string[]>(URLStateFilter) ? URLStateFilter.values : {};
+        draft[k] = {
+          ...v,
+          values: Object.fromEntries(
+            Object.entries(urlStateValues).map(([parentValue, childValues]) => [
+              parentValue,
+              new Set([...childValues, ...urlStateValues[parentValue]]),
+            ]),
+          ),
+        };
+      }
+
+      if (isRangeFilter(v)) {
+        draft[k] = {
+          ...v,
+          values: URLStateFilter && isRangeFilter<string[]>(URLStateFilter) ? URLStateFilter?.values : v.values,
+        };
+      }
+
+      return draft;
     });
   }, {});
-};
-
-const mergeHierarchicalTerms = (
-  termState: Record<string, HierarchicalTerm>,
-  termURLState: Record<string, HierarchicalTerm<string[]>>,
-) => {
-  return { ...termState, ...termURLState };
+  return z;
 };
 
 const options = {
   customMerge: (key: string) => {
-    if (key === 'terms') {
-      return mergeTerms;
-    }
-    if (key === 'hierarchicalTerms') {
-      return mergeHierarchicalTerms;
+    if (key === 'filters') {
+      return mergeFilters;
     }
     return undefined;
   },
@@ -363,13 +372,13 @@ const options = {
 
 function useInitialURLState() {
   const [hasLoadedURLState, setHasLoadedURLState] = useState(false);
-  const [initialUrlState, setInitialUrlState] = useState<Partial<SearchStoreState>>({ terms: {} });
+  const [initialUrlState, setInitialUrlState] = useState<Partial<SearchURLState>>({ filters: {} });
 
   useEffect(() => {
     const searchParams: Partial<SearchURLState> = parse(window.location.search, { ignoreQueryPrefix: true });
 
     if (Object.keys(searchParams).length) {
-      setInitialUrlState(convertState(searchParams));
+      setInitialUrlState({ filters: {}, ...searchParams });
     }
     setHasLoadedURLState(true);
   }, []);
@@ -381,7 +390,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   const { elasticsearchEndpoint } = useAppContext();
   const { type, facets } = config;
 
-  const { search, sortField, terms, hierarchicalTerms, ranges, ...rest } = buildInitialSearchState({
+  const { search, sortField, filters, ...rest } = buildInitialSearchState({
     ...config,
     endpoint: elasticsearchEndpoint,
     analyticsCategory: `${type}s Search Page Interactions`,
@@ -394,7 +403,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   }
 
   const initialState = {
-    ...merge({ search, sortField, terms, hierarchicalTerms, ranges }, initialUrlState, options),
+    ...merge({ search, sortField, filters }, initialUrlState, options),
     ...rest,
   };
 

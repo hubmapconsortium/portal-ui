@@ -4,7 +4,7 @@ import Box from '@mui/material/Box';
 import { TermFacet, HierarchicalTermFacet } from './TermFacet';
 import RangeFacet from './RangeFacet';
 import { FacetGroups } from '../Search';
-import { FACETS } from '../store';
+import { isHierarchicalFacet, isRangeFacet, isTermFacet } from '../store';
 import FacetAccordion from './FacetAccordion';
 
 export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
@@ -13,14 +13,18 @@ export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
       {Object.entries(facetGroups).map(([k, v]) => (
         <FacetAccordion title={k} position="outer" key={k}>
           {v.map((f) => {
-            if (f.type === FACETS.hierarchical) {
+            if (isHierarchicalFacet(f)) {
               return <HierarchicalTermFacet {...f} key={f.field} />;
             }
-            if (f.type === FACETS.range) {
+            if (isRangeFacet(f)) {
               return <RangeFacet {...f} key={f.field} />;
             }
 
-            return <TermFacet {...f} key={f.field} />;
+            if (isTermFacet(f)) {
+              return <TermFacet {...f} key={f.field} />;
+            }
+
+            return null;
           })}
         </FacetAccordion>
       ))}

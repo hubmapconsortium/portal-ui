@@ -3,7 +3,17 @@ import Chip, { ChipProps } from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
 import { trackEvent } from 'js/helpers/trackers';
-import { useSearchStore } from '../store';
+import {
+  HierarchichalTermValues,
+  RangeValues,
+  TermValues,
+  isHierarchicalFacet,
+  isHierarchicalFilter,
+  isRangeFacet,
+  isRangeFilter,
+  isTermFilter,
+  useSearchStore,
+} from '../store';
 import { getFieldLabel } from '../labelMap';
 
 function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () => void }) {
@@ -22,44 +32,49 @@ function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () =>
 }
 
 function FilterChips() {
-  const { terms, filterTerm, ranges, filterRange, hierarchicalTerms, filterHierarchicalChildTerm } = useSearchStore();
+  const { filters, facets, filterTerm, filterRange, filterHierarchicalChildTerm } = useSearchStore();
 
   return (
     <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-      {Object.values(terms).map((term) =>
-        [...term.values].map((v) => (
-          <FilterChip
-            label={`${getFieldLabel(term.field)}: ${v}`}
-            key={v}
-            onDelete={() => filterTerm({ term: term.field, value: v })}
-          />
-        )),
-      )}
-      {Object.values(ranges).map(({ field, values, min, max }) => {
-        if (values.min === min && values.max === max) {
-          return null;
-        }
-        return (
-          <FilterChip
-            label={`${getFieldLabel(field)}: ${values.min} - ${values.max}`}
-            key={field}
-            onDelete={() => filterRange({ field, min, max })}
-          />
-        );
-      })}
-      {Object.values(hierarchicalTerms).map((term) =>
-        Object.entries(term.values).map(([parent, children]) => {
-          return [...children].map((child) => (
+      {Object.entries(filters).map(([field, v]: [string, RangeValues | HierarchichalTermValues | TermValues]) => {
+        if (isTermFilter(v)) {
+          return [...v.values].map((val) => (
             <FilterChip
-              label={`${getFieldLabel(term.field)}: ${child}`}
-              key={child}
-              onDelete={() =>
-                filterHierarchicalChildTerm({ parentTerm: term.field, parentValue: parent, value: child })
-              }
+              label={`${getFieldLabel(field)}: ${val}`}
+              key={val}
+              onDelete={() => filterTerm({ term: field, value: val })}
             />
           ));
-        }),
-      )}
+        }
+        const facetConfig = facets[field];
+
+        if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
+          const { min, max } = facetConfig;
+          if (v.values.min === min && v.values.max === max) {
+            return null;
+          }
+          return (
+            <FilterChip
+              label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
+              key={field}
+              onDelete={() => filterRange({ field, min, max })}
+            />
+          );
+        }
+
+        if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
+          return Object.entries(v.values).map(([parent, children]) => {
+            return [...children].map((child) => (
+              <FilterChip
+                label={`${getFieldLabel(field)}: ${child}`}
+                key={child}
+                onDelete={() => filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: child })}
+              />
+            ));
+          });
+        }
+        return null;
+      })}
     </Stack>
   );
 }
