@@ -24,9 +24,11 @@ function ViewMoreResults() {
 
   return (
     <>
-      <Button variant="contained" color="primary" onClick={handleClick} fullWidth>
-        See More Search Results
-      </Button>
+      {hits.length !== totalHitsCount && (
+        <Button variant="contained" color="primary" onClick={handleClick} fullWidth>
+          See More Search Results
+        </Button>
+      )}
       <Box mt={2}>
         <Typography variant="caption" color="secondary" textAlign="right" component="p">
           {resultsShown}
