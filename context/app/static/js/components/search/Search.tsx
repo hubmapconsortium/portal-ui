@@ -44,6 +44,8 @@ import MetadataMenu from '../searchPage/MetadataMenu';
 
 type Filters = Record<string, esb.Query>;
 
+const maxAggSize = 10000;
+
 function buildFilterAggregation({
   field,
   portalFields,
@@ -148,7 +150,7 @@ function buildQuery({
     const filterAggregation = buildFilterAggregation({
       field,
       portalFields: [portalField],
-      aggregation: esb.termsAggregation(field, portalField),
+      aggregation: esb.termsAggregation(field, portalField).size(maxAggSize),
       filters: allFilters,
     });
 
@@ -182,7 +184,8 @@ function buildQuery({
       portalFields: [parentPortalField, childPortalField],
       aggregation: esb
         .termsAggregation(field, parentPortalField)
-        .agg(esb.termsAggregation(childField, childPortalField)),
+        .size(maxAggSize)
+        .agg(esb.termsAggregation(childField, childPortalField).size(maxAggSize)),
       filters: allFilters,
     });
 
