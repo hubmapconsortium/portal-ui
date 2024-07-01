@@ -4,12 +4,13 @@ import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/Indeterminate
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import Button from '@mui/material/Button';
 import { AggregationsBuckets } from '@elastic/elasticsearch/lib/api/types';
 
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
-import { isTermFilter, useSearchStore, TermValues, isHierarchicalFilter } from '../store';
+import { isTermFilter, useSearchStore, TermValues, isHierarchicalFilter, isTermFacet } from '../store';
 import {
   StyledCheckBoxBlankIcon,
   StyledCheckBoxIcon,
@@ -100,10 +101,40 @@ export function TermFacetItem({ label, field, ...rest }: TermFacet) {
   return <CheckboxFilterItem onClick={handleClick} label={label} {...rest} />;
 }
 
+const smallAggSize = 5;
+const maxAggSize = 10000;
+
+function FacetSizeButton({ field, hasMoreBuckets }: { field: string; hasMoreBuckets: boolean }) {
+  const { setTermSize, facets } = useSearchStore();
+
+  const facet = facets?.[field];
+
+  if (!isTermFacet(facet)) {
+    return null;
+  }
+
+  if (facet?.size === smallAggSize && !hasMoreBuckets) {
+    return null;
+  }
+
+  return (
+    <Button
+      variant="text"
+      onClick={() => setTermSize({ term: field, size: hasMoreBuckets ? maxAggSize : smallAggSize })}
+      size="small"
+      sx={(theme) => ({ fontSize: theme.typography.caption.fontSize })}
+    >
+      {hasMoreBuckets ? 'View More' : 'View Less'}
+    </Button>
+  );
+}
+
 function TermFacetContent({ filter, field }: { filter: TermValues; field: string }) {
   const { aggregations } = useSearch();
 
-  const aggBuckets = aggregations?.[field]?.[field]?.buckets;
+  const innerAggregations = aggregations?.[field]?.[field];
+  const aggBuckets = innerAggregations?.buckets;
+  const hasMoreBuckets = Boolean(innerAggregations?.sum_other_doc_count);
 
   if (!aggBuckets || !Array.isArray(aggBuckets)) {
     return null;
@@ -122,6 +153,7 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
           title={title}
         />
       ))}
+      <FacetSizeButton field={field} hasMoreBuckets={hasMoreBuckets} />
     </FacetAccordion>
   );
 }

@@ -22,6 +22,7 @@ export interface FacetConfig {
 
 export interface TermConfig extends FacetConfig {
   type: typeof FACETS.term;
+  size?: number;
 }
 
 export interface TermValues<V = Set<string>> {
@@ -84,6 +85,7 @@ export interface SearchStoreActions {
   setSearch: (search: string) => void;
   setView: (view: string) => void;
   setSortField: (sortField: SortField) => void;
+  setTermSize: ({ term, size }: { term: string; size: number }) => void;
   filterTerm: ({ term, value }: { term: string; value: string }) => void;
   filterHierarchicalParentTerm: ({
     term,
@@ -191,6 +193,17 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
       set((state) => {
         state.sortField = sortField;
         replaceURLSearchParams(state);
+      });
+    },
+    setTermSize: ({ term, size }) => {
+      set((state) => {
+        const facet = state?.facets?.[term];
+
+        if (!isTermFacet(facet)) {
+          return;
+        }
+
+        facet.size = size;
       });
     },
     filterTerm: ({ term, value }) => {

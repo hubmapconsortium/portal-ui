@@ -30,6 +30,8 @@ import {
   isRangeFilter,
   isHierarchicalFilter,
   isHierarchicalFacet,
+  isTermFacet,
+  isRangeFacet,
 } from './store';
 import Results from './Results';
 import { getPortalESField } from './buildTypesMap';
@@ -131,23 +133,24 @@ function buildQuery({
 
   query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
 
-  Object.values(facets).forEach((filter) => {
-    const { field } = filter;
+  Object.values(facets).forEach((facet) => {
+    const { field } = facet;
     const portalField = getPortalESField(field);
 
-    if (filter.type === 'TERM') {
+    if (isTermFacet(facet)) {
+      const { size: facetSize } = facet;
       query.agg(
         buildFilterAggregation({
           portalFields: [portalField],
-          aggregation: esb.termsAggregation(field, portalField).size(maxAggSize),
+          aggregation: esb.termsAggregation(field, portalField).size(facetSize ?? maxAggSize),
           filters: { ...allFilters },
           field,
         }),
       );
     }
 
-    if (filter.type === 'RANGE') {
-      const { min, max } = filter;
+    if (isRangeFacet(facet)) {
+      const { min, max } = facet;
       const interval = Math.ceil((max - min) / 20);
 
       query.agg(
@@ -160,8 +163,8 @@ function buildQuery({
       );
     }
 
-    if (filter.type === 'HIERARCHICAL') {
-      const { childField } = filter;
+    if (isHierarchicalFacet(facet)) {
+      const { childField } = facet;
       if (!childField) {
         return;
       }
@@ -187,10 +190,10 @@ function buildQuery({
 
 interface OuterBucket {
   doc_count: number;
+  sum_other_doc_count?: number;
 }
-interface InnerBucket {
+interface InnerBucket extends OuterBucket {
   key: string;
-  doc_count: number;
 }
 
 type Aggregations = Record<
@@ -221,17 +224,19 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
       return produce(acc, (draft) => {
         if (curr.type === FACETS.term) {
           draft.filters[curr.field] = { values: new Set([]), type: curr.type };
+          draft.facets[curr.field] = { ...curr, size: 5 };
         }
 
         if (curr.type === FACETS.hierarchical) {
           draft.filters[curr.field] = { values: {}, type: curr.type };
+          draft.facets[curr.field] = curr;
         }
 
         if (curr.type === FACETS.range) {
           draft.filters[curr.field] = { values: { min: curr.min, max: curr.max }, type: curr.type };
+          draft.facets[curr.field] = curr;
         }
 
-        draft.facets[curr.field] = curr;
         return draft;
       });
     },
