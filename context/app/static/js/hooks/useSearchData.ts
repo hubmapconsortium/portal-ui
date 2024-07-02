@@ -100,7 +100,7 @@ export async function fetchSearchData<Documents, Aggs>(
   url: string,
   token: string,
 ): Promise<SearchResponseBody<Documents, Aggs>> {
-  const body = createSearchRequestBody({ query, useDefaultQuery: false });
+  const body = createSearchRequestBody({ query, useDefaultQuery: true });
   const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
   const searchResponse = await fetch<SearchResponseBody<Documents, Aggs> & Response>({
     url,

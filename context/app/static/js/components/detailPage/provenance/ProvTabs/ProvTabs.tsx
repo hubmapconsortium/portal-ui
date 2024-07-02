@@ -9,6 +9,7 @@ import ProvTable from '../ProvTable';
 import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import { hasDataTypes } from './utils';
 import { filterTabsToDisplay } from './filterTabsToDisplay';
+import { ProvData } from '../types';
 
 const availableTabDetails = {
   multi: { label: 'Multi-Assay', 'data-testid': 'multi-prov-tab' },
@@ -17,9 +18,13 @@ const availableTabDetails = {
   dag: { label: 'Analysis Details', 'data-testid': 'prov-dag-tab' },
 };
 
-function ProvTabs({ provData }) {
+interface ProvTabsProps {
+  provData: ProvData;
+}
+
+function ProvTabs({ provData }: ProvTabsProps) {
   const {
-    entity: { uuid, metadata, entity_type, ancestors, data_types, assay_modality },
+    entity: { uuid, metadata, entity_type, data_types, assay_modality },
   } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
@@ -41,7 +46,7 @@ function ProvTabs({ provData }) {
 
   const filteredTabs = filterTabsToDisplay({ availableTabDetails, tabsToDisplay });
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (event: unknown, newValue: number) => {
     trackEntityPageEvent({ action: `Provenance / ${filteredTabs[Object.keys(filteredTabs)[newValue]].label} Tab` });
     setOpen(newValue);
   };
@@ -59,16 +64,16 @@ function ProvTabs({ provData }) {
         </TabPanel>
       )}
       {filteredTabs?.table && (
-        <TabPanel value={open} index={filteredTabs.table.index} pad={1}>
-          <ProvTable uuid={uuid} ancestors={ancestors} />
+        <TabPanel value={open} index={filteredTabs.table.index} pad>
+          <ProvTable />
         </TabPanel>
       )}
       <TabPanel value={open} index={filteredTabs.graph.index}>
         <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
       </TabPanel>
       {filteredTabs?.dag && (
-        <TabPanel value={open} index={filteredTabs.dag.index} pad={1}>
-          <ProvAnalysisDetails dagListData={metadata.dag_provenance_list} dagData={metadata.dag_provenance} />
+        <TabPanel value={open} index={filteredTabs.dag.index} pad>
+          <ProvAnalysisDetails dagListData={metadata.dag_provenance_list} />
         </TabPanel>
       )}
     </Paper>

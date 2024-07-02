@@ -1,9 +1,13 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
+import { DagProvenanceType } from 'js/components/types';
 import ProvAnalysisDetailsList from '../ProvAnalysisDetailsList';
 
-function ProvAnalysisDetails({ dagListData }) {
+interface ProvAnalysisDetailsProps {
+  dagListData: DagProvenanceType[];
+}
+
+function ProvAnalysisDetails({ dagListData }: ProvAnalysisDetailsProps) {
   const ingestPipelines = dagListData.filter((pipeline) => !('name' in pipeline));
   const cwlPipelines = dagListData.filter((pipeline) => 'name' in pipeline);
 
@@ -14,15 +18,5 @@ function ProvAnalysisDetails({ dagListData }) {
     </div>
   );
 }
-
-ProvAnalysisDetails.propTypes = {
-  dagListData: PropTypes.arrayOf(
-    PropTypes.shape({
-      hash: PropTypes.string,
-      name: PropTypes.string,
-      origin: PropTypes.string,
-    }),
-  ).isRequired,
-};
 
 export default ProvAnalysisDetails;
