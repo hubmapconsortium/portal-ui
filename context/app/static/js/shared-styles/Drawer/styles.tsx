@@ -8,6 +8,7 @@ import ListSubheader from '@mui/material/ListSubheader';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import React from 'react';
 import Divider, { DividerProps } from '@mui/material/Divider';
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 
 export const StyledDrawer = styled(Drawer)(({ theme, anchor }) => ({
   '& .MuiDrawer-paper': {
@@ -18,6 +19,7 @@ export const StyledDrawer = styled(Drawer)(({ theme, anchor }) => ({
     flexDirection: 'column',
     [theme.breakpoints.down('sm')]: {
       width: '100%',
+      top: headerHeight,
     },
   },
 }));
