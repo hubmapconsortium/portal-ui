@@ -12,7 +12,7 @@ import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper'
 
 type EntityType = Exclude<keyof typeof entityIconMap, 'Support' | 'Collection' | 'Workspace' | 'VerifiedUser'>;
 
-interface AssayMetadata {
+export interface AssayMetadata {
   sex: string;
   race: string[];
   age_value: string;
@@ -27,7 +27,10 @@ interface AssayMetadata {
   name: string;
   reference_link: React.ReactNode;
 }
-type EntityToFieldsType = Record<EntityType, Record<string, (assayMetadata: AssayMetadata) => React.ReactNode>>;
+type EntityToFieldsType = Record<
+  EntityType,
+  Record<string, (assayMetadata: Partial<AssayMetadata>) => React.ReactNode>
+>;
 
 const entityToFieldsMap: EntityToFieldsType = {
   Donor: {
@@ -62,7 +65,7 @@ const vizNotebookIdSelector: (state: { vizNotebookId: string | null }) => string
   state.vizNotebookId;
 
 interface EntityHeaderContentProps {
-  assayMetadata: AssayMetadata;
+  assayMetadata: Partial<AssayMetadata>;
   shouldDisplayHeader: boolean;
   vizIsFullscreen: boolean;
 }

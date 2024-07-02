@@ -1,17 +1,19 @@
 import React from 'react';
 import { animated, useSpring } from '@react-spring/web';
 
-import { useEntityStore, useVisualizationStore } from 'js/stores';
+import { useEntityStore, type EntityStore } from 'js/stores/useEntityStore';
+import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
 import { iconButtonHeight } from 'js/shared-styles/buttons';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 
 const AnimatedPaper = animated(StyledPaper);
-const entityStoreSelector = (state) => ({
+
+const entityStoreSelector = (state: EntityStore) => ({
   assayMetadata: state.assayMetadata,
   summaryComponentObserver: state.summaryComponentObserver,
 });
-const visualizationSelector = (state) => ({
+const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
