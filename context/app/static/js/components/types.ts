@@ -55,6 +55,7 @@ export interface Sample extends Entity {
   organ: string;
   metadata?: Record<string, string>;
   origin_samples_unique_mapped_organs: string[];
+  origin_samples: Sample[];
 }
 
 export interface Dataset extends Entity {

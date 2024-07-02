@@ -10,9 +10,14 @@ const tooltipTexts = {
   Donor: 'Samples and datasets derived from this donor.',
   Sample: 'Datasets derived from this sample.',
   Dataset: 'These datasets include those that have additional processing, such as visualizations.',
-};
+} as const;
 
-function RelatedEntitiesSectionHeader({ header, searchPageHref }) {
+interface RelatedEntitiesSectionHeaderProps {
+  header: string;
+  searchPageHref: string;
+}
+
+function RelatedEntitiesSectionHeader({ header, searchPageHref }: RelatedEntitiesSectionHeaderProps) {
   const {
     entity: { entity_type, uuid },
   } = useFlaskDataContext();
@@ -21,7 +26,9 @@ function RelatedEntitiesSectionHeader({ header, searchPageHref }) {
 
   return (
     <SpacedSectionButtonRow
-      leftText={<SectionHeader iconTooltipText={tooltipTexts[entity_type]}>{header}</SectionHeader>}
+      leftText={
+        <SectionHeader iconTooltipText={tooltipTexts[entity_type as keyof typeof tooltipTexts]}>{header}</SectionHeader>
+      }
       buttons={
         <Button
           variant="contained"

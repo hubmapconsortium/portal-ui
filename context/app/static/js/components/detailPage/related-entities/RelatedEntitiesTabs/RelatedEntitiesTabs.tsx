@@ -3,10 +3,31 @@ import React from 'react';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
 import { Tab } from 'js/shared-styles/tabs';
+import { ESEntityType, PartialEntity } from 'js/components/types';
 import { StyledTabs, StyledTabPanel, StyledAlert, StyledSvgIcon } from './style';
+import { RelatedEntitiesColumn } from '../RelatedEntitiesTable/RelatedEntitiesTable';
 
-function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, renderWarningMessage }) {
-  const handleChange = (event, newIndex) => {
+interface RelatedEntitiesTabProps {
+  entities: {
+    tabLabel: string;
+    data: { _source: PartialEntity }[];
+    entityType: ESEntityType;
+    columns: RelatedEntitiesColumn[];
+  }[];
+  openIndex: number;
+  setOpenIndex: (index: number) => void;
+  ariaLabel: string;
+  renderWarningMessage: (entityType: string) => string;
+}
+
+function RelatedEntitiesTabs({
+  entities,
+  openIndex,
+  setOpenIndex,
+  ariaLabel,
+  renderWarningMessage,
+}: RelatedEntitiesTabProps) {
+  const handleChange = (_: unknown, newIndex: number) => {
     setOpenIndex(newIndex);
   };
 
@@ -19,7 +40,7 @@ function RelatedEntitiesTabs({ entities, openIndex, setOpenIndex, ariaLabel, ren
             index={i}
             key={entity.tabLabel}
             data-testid={`${entity.tabLabel.toLowerCase()}-tab`}
-            icon={<StyledSvgIcon component={entityIconMap[entity.entityType]} color="primary" />}
+            icon={<StyledSvgIcon as={entityIconMap[entity.entityType]} color="primary" />}
             iconPosition="start"
           />
         ))}

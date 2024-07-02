@@ -5,7 +5,11 @@ import Typography from '@mui/material/Typography';
 
 import { DetailPageAlert } from 'js/components/detailPage/style';
 
-function SupportAlert({ uuid }) {
+interface SupportAlertProps {
+  uuid: string;
+}
+
+function SupportAlert({ uuid }: SupportAlertProps) {
   // There should usually be only one parent, but this is more robust, and we want to keep it simple.
   return (
     <DetailPageAlert severity="warning">

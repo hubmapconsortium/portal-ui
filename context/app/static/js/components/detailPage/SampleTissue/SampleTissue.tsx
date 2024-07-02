@@ -5,13 +5,16 @@ import { InternalLink } from 'js/shared-styles/Links';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
+import { isSample } from 'js/components/types';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
 
 function SampleTissue() {
-  const {
-    entity: { uuid, sample_category, origin_samples, rui_location },
-  } = useFlaskDataContext();
+  const { entity } = useFlaskDataContext();
+
+  if (!isSample(entity)) return null;
+
+  const { uuid, sample_category, origin_samples, rui_location } = entity;
 
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;
@@ -26,11 +29,11 @@ function SampleTissue() {
             {mapped_organ || 'Organ Type not defined'}
           </InternalLink>
         </SectionItem>
-        <SectionItem label="Sample Category" ml={1} flexBasis="25%">
+        <SectionItem label="Sample Category" ml flexBasis="25%">
           {sample_category || 'Sample Category not defined'}
         </SectionItem>
         {hasRUI && (
-          <SectionItem label="Tissue Location" ml={1}>
+          <SectionItem label="Tissue Location" ml>
             <>
               The{' '}
               <InternalLink href={`/browse/sample/${uuid}.rui.json`} target="_blank" rel="noopener noreferrer">

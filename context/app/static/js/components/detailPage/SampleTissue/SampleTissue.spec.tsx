@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
-import { FlaskDataContext } from 'js/components/Contexts';
+import { FlaskDataContext, FlaskDataContextType } from 'js/components/Contexts';
 import SampleTissue from './SampleTissue';
 
 function expectLabelsPresent() {
@@ -16,8 +16,9 @@ test('text displays properly from Flask Context', () => {
       sample_category: 'Fake Sample Category',
       origin_samples: [{ mapped_organ: 'Fake Organ' }],
       rui_location: 'Fake RUI Location',
+      entity_type: 'Sample',
     },
-  };
+  } as unknown as FlaskDataContextType;
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>
@@ -39,8 +40,9 @@ test('displays label not defined when values are undefined', () => {
       sample_category: undefined,
       origin_samples: [{ mapped_organ: undefined }],
       rui_location: false,
+      entity_type: 'Sample',
     },
-  };
+  } as unknown as FlaskDataContextType;
 
   render(
     <FlaskDataContext.Provider value={flaskDataContext}>

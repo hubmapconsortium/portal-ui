@@ -4,7 +4,12 @@ import CircularProgress from '@mui/material/CircularProgress';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { StyledCenteredLoaderWrapper, RelatedEntitiesPaper } from './style';
 
-function Wrapper({ sectionId, children }) {
+interface WrapperProps {
+  sectionId?: string;
+  children: React.ReactNode;
+}
+
+function Wrapper({ sectionId, children }: WrapperProps) {
   if (sectionId) {
     return <DetailPageSection id={sectionId}>{children}</DetailPageSection>;
   }
@@ -12,7 +17,17 @@ function Wrapper({ sectionId, children }) {
   return children;
 }
 
-function RelatedEntitiesSectionWrapper({ isLoading, sectionId, children, headerComponent }) {
+interface RelatedEntitiesSectionWrapperProps extends WrapperProps {
+  isLoading: boolean;
+  headerComponent: React.ReactNode;
+}
+
+function RelatedEntitiesSectionWrapper({
+  isLoading,
+  sectionId,
+  children,
+  headerComponent,
+}: RelatedEntitiesSectionWrapperProps) {
   if (isLoading) {
     <StyledCenteredLoaderWrapper>
       <CircularProgress />
