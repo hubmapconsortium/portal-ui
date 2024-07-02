@@ -32,6 +32,7 @@ export interface Entity {
   group_name: string;
   created_by_user_displayname: string;
   created_by_user_email: string;
+  mapped_status: string;
   [key: string]: unknown;
 }
 
@@ -49,7 +50,7 @@ export interface Donor extends Entity {
 
 export interface Sample extends Entity {
   entity_type: 'Sample';
-  sample_category?: string;
+  sample_category: string;
   mapped_organ: string;
   organ: string;
   metadata?: Record<string, string>;

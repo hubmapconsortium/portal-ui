@@ -5,8 +5,13 @@ import PanelList from 'js/shared-styles/panels/PanelList';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
+import { CollectionHit } from 'js/pages/Collections/types';
 
-function CollectionsSection({ collectionsData }) {
+interface CollectionsSectionProps {
+  collectionsData: CollectionHit[];
+}
+
+function CollectionsSection({ collectionsData }: CollectionsSectionProps) {
   const panelsProps = buildCollectionsPanelsProps(collectionsData);
 
   const {
