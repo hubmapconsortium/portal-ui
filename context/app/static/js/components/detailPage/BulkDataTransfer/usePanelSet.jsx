@@ -4,6 +4,7 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import GlobusLink from './GlobusLink';
 import { useFetchProtectedFile } from './hooks';
 import { LoginButton } from './style';
@@ -13,6 +14,8 @@ const dbGaPText = {
   tooltip:
     'The database of Genotypes and Phenotypes archives and distributes data and results from studies that have investigated the interaction of genotype and phenotype in humans.',
 };
+
+const dbGaPTooltip = <InfoTooltipIcon iconTooltipText="Database of Genotypes and Phenotypes" noMargin />;
 
 const globusText = {
   title: 'HuBMAP Consortium Members: Globus Access',
@@ -59,32 +62,49 @@ const noDbGaPPanel = {
   status: 'error',
   children: (
     <>
-      This dataset contains protected-access human sequence data. Data is not yet available through dbGaP, but will be
-      available soon. Please <ContactUsLink variant="body2" /> with any questions regarding this data.
+      This dataset contains protected-access human sequence data. Data is not yet available through dbGaP {dbGaPTooltip}
+      , but will be available soon. Please <ContactUsLink variant="body2" /> with any questions regarding this data.
     </>
   ),
 };
 
-const PROTECTED_DATA = {
-  panels: [
-    loginPanel,
-    {
-      ...dbGaPText,
-      status: 'success',
-      children: (
-        <>
-          This dataset contains protected-access human sequence data. If you are not a Consortium member, you must
-          access these data through dbGaP if available. dbGaP authentication is required for downloading through these
-          links. View{' '}
-          <OutboundLink href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title">
-            documentation
-          </OutboundLink>{' '}
-          on how to attain dbGaP access.
-        </>
-      ),
-    },
-  ],
+const dbGaPPanel = {
+  ...dbGaPText,
+  status: 'success',
+  children: (
+    <>
+      This dataset contains protected-access human sequence data. If you are not a Consortium member, you must access
+      these data through dbGaP {dbGaPTooltip} if available. dbGaP authentication is required for downloading through
+      these links. View{' '}
+      <OutboundLink href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title">
+        documentation
+      </OutboundLink>{' '}
+      on how to attain dbGaP access.
+    </>
+  ),
+};
+
+const noGlobusAccessWhileLoggedInPanel = {
+  ...globusText,
+  status: 'error',
+  children: (
+    <>
+      This dataset includes protected-access human sequence data. To obtain access, please request the PI of your HuBMAP
+      award to contact us and submit a ticket to get you access to this data through Globus. While dbGaP {dbGaPTooltip}{' '}
+      is available, Globus offers comprehensive data for approved HuBMAP members. For additional help,{' '}
+      <ContactUsLink variant="body2" /> with the dataset ID and information about the files you are trying to access.
+    </>
+  ),
+};
+
+const PROTECTED_DATA_NOT_LOGGED_IN = {
+  panels: [loginPanel, dbGaPPanel],
   links: [dbGaPLink, sraExperimentLink],
+};
+
+const PROTECTED_DATA_LOGGED_IN_NO_GLOBUS_ACCESS = {
+  panels: [noGlobusAccessWhileLoggedInPanel],
+  links: [],
 };
 
 const PROTECTED_DATA_NO_DBGAP = {
@@ -219,6 +239,9 @@ export const usePanelSet = () => {
 
     // If file is protected and request against the file returns 403, user has no access to protected data
     if (hasNoAccess) {
+      if (hasDbGaPStudyURL) {
+        return PROTECTED_DATA_LOGGED_IN_NO_GLOBUS_ACCESS;
+      }
       return NO_ACCESS_TO_PROTECTED_DATA;
     }
 
@@ -227,7 +250,7 @@ export const usePanelSet = () => {
 
   // Unauthenticated cases
   if (hasDbGaPStudyURL) {
-    return PROTECTED_DATA;
+    return PROTECTED_DATA_NOT_LOGGED_IN;
   }
 
   return PROTECTED_DATA_NO_DBGAP;
