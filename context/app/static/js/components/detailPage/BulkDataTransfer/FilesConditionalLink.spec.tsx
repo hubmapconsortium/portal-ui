@@ -8,13 +8,7 @@ const fakeOpenDUA = jest.fn();
 
 test('the element is a link when dua has been agreed to', () => {
   render(
-    <FilesConditionalLink
-      hasAgreedToDUA="fake"
-      openDUA={fakeOpenDUA}
-      href="fakeref"
-      fileName="file.txt"
-      onClick={() => {}}
-    />,
+    <FilesConditionalLink hasAgreedToDUA openDUA={fakeOpenDUA} href="fakeref" fileName="file.txt" onClick={() => {}} />,
   );
   expect(screen.getByRole('link')).toHaveAttribute('href', `fakeref`);
   expect(screen.getByRole('link')).toHaveTextContent('file.txt');
@@ -22,15 +16,7 @@ test('the element is a link when dua has been agreed to', () => {
 });
 
 test('the element is button when dua has not been agreed to', () => {
-  render(
-    <FilesConditionalLink
-      hasAgreedToDUA={null}
-      openDUA={fakeOpenDUA}
-      href="fakeref"
-      fileName="file.txt"
-      onClick={() => {}}
-    />,
-  );
+  render(<FilesConditionalLink openDUA={fakeOpenDUA} href="fakeref" fileName="file.txt" onClick={() => {}} />);
   expect(screen.getByRole('button')).toBeInTheDocument();
   expect(screen.getByRole('button')).toHaveTextContent('file.txt');
   expect(screen.queryByRole('link')).not.toBeInTheDocument();
@@ -38,15 +24,7 @@ test('the element is button when dua has not been agreed to', () => {
 
 test('the button has on click works', async () => {
   const mockOpenDUA = jest.fn();
-  render(
-    <FilesConditionalLink
-      hasAgreedToDUA={null}
-      openDUA={mockOpenDUA}
-      href="fakeref"
-      fileName="file.txt"
-      onClick={() => {}}
-    />,
-  );
+  render(<FilesConditionalLink openDUA={mockOpenDUA} href="fakeref" fileName="file.txt" onClick={() => {}} />);
   expect(mockOpenDUA).toHaveBeenCalledTimes(0);
   await userEvent.click(screen.getByRole('button'));
   expect(mockOpenDUA).toHaveBeenCalledTimes(1);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Divider from '@mui/material/Divider';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -12,7 +12,11 @@ import { LinkContainer } from './style';
 import { useFetchProtectedFile } from './hooks';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
-function WrapperComponent({ isSupport, children }) {
+interface WrapperComponentProps extends PropsWithChildren {
+  isSupport: boolean;
+}
+
+function WrapperComponent({ isSupport, children }: WrapperComponentProps) {
   if (isSupport) {
     return (
       <SecondaryBackgroundTooltip title="Data generated for visualization of this dataset are also available on Globus.">
@@ -31,7 +35,12 @@ function WrapperComponent({ isSupport, children }) {
   return children;
 }
 
-function GlobusLink({ uuid, isSupport = false }) {
+interface GlobusLinkProps {
+  uuid: string;
+  isSupport?: boolean;
+}
+
+function GlobusLink({ uuid, isSupport = false }: GlobusLinkProps) {
   const {
     entity: { hubmap_id },
   } = useFlaskDataContext();
@@ -50,7 +59,7 @@ function GlobusLink({ uuid, isSupport = false }) {
         <FilesConditionalLink
           href={responseUrl}
           hasAgreedToDUA={hasAgreedToDUA}
-          openDUA={() => openDUA(responseUrl)}
+          openDUA={() => (responseUrl ? openDUA(responseUrl) : undefined)}
           variant="subtitle2"
           hasIcon
           fileName={`${hubmap_id} ${'Globus'}`}

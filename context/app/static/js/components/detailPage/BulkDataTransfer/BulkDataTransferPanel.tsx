@@ -8,14 +8,23 @@ import { Header, ContentText, GreenCheckCircleIcon, StyledBlockIcon } from './st
 const statusIcons = {
   success: <GreenCheckCircleIcon fontSize="small" />,
   error: <StyledBlockIcon color="error" fontSize="small" />,
-};
+} as const;
 
-function BulkDataTransferPanel({ title, status, tooltip, children, addOns }) {
+interface BulkDataTransferPanelProps {
+  title: string;
+  status?: 'success' | 'error';
+  tooltip: string;
+  children: React.ReactNode;
+  addOns?: React.ReactNode;
+}
+
+function BulkDataTransferPanel({ title, status, tooltip, children, addOns }: BulkDataTransferPanelProps) {
+  const statusIcon = status ? statusIcons[status] : null;
   return (
     <DetailSectionPaper>
       <Header variant="h5">
         {title}
-        {status ? statusIcons[status] : null}
+        {status ? statusIcon : null}
         <SecondaryBackgroundTooltip title={tooltip}>
           <InfoIcon fontSize="small" color="primary" />
         </SecondaryBackgroundTooltip>

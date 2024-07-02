@@ -29,6 +29,9 @@ export interface Entity {
   created_timestamp: number;
   ancestors: Entity[];
   descendant_counts: { entity_type: Record<string, number> };
+  group_name: string;
+  created_by_user_displayname: string;
+  created_by_user_email: string;
   [key: string]: unknown;
 }
 
@@ -69,6 +72,8 @@ export interface Dataset extends Entity {
   thumbnail_file?: {
     file_uuid: string;
   };
+  dbgap_study_url: string;
+  dbgap_sra_experiment_url: string;
 }
 
 export interface Collection extends Entity {

@@ -3,7 +3,12 @@ import useSWR from 'swr';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 
-const fetcher = async ([entityEndpoint, uuid, groupsToken]) => {
+interface FetchProtectedFileResponse {
+  status?: number;
+  responseUrl?: string;
+}
+
+const fetcher = async ([entityEndpoint, uuid, groupsToken]: [string, string, string]) => {
   const requestHeaders = getAuthHeader(groupsToken);
   const response = await fetch(`${entityEndpoint}/entities/dataset/globus-url/${uuid}`, {
     headers: requestHeaders,
@@ -20,15 +25,19 @@ const fetcher = async ([entityEndpoint, uuid, groupsToken]) => {
     responseUrl = await response.text();
   }
 
-  return { status: response.status, responseUrl };
+  return { status: response.status, responseUrl } as FetchProtectedFileResponse;
 };
 
-export const useFetchProtectedFile = (uuid) => {
+export const useFetchProtectedFile = (uuid: string) => {
   const { entityEndpoint, groupsToken } = useAppContext();
 
-  const { data: result, isLoading } = useSWR([entityEndpoint, uuid, groupsToken], fetcher, {
-    fallbackData: { status: undefined, responseUrl: undefined },
-  });
+  const { data: result, isLoading } = useSWR<FetchProtectedFileResponse, unknown, [string, string, string]>(
+    [entityEndpoint, uuid, groupsToken],
+    fetcher,
+    {
+      fallbackData: { status: undefined, responseUrl: undefined },
+    },
+  );
 
   return { ...result, isLoading };
 };

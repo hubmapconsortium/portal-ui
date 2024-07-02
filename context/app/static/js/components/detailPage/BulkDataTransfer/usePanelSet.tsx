@@ -22,7 +22,15 @@ const globusText = {
 const sraExpTooltip =
   'SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.';
 
-const dbGaPLink = {
+interface LinkPanel {
+  title: string;
+  tooltip: string;
+  description: string;
+  outboundLink: string;
+  key: 'dbGaP' | 'SRA Experiment';
+}
+
+const dbGaPLink: LinkPanel = {
   title: 'dbGaP Study',
   tooltip: dbGaPText.tooltip,
   description: 'Navigate to the "Bioproject" or "Sequencing Read Archive" links to access the datasets.',
@@ -30,7 +38,7 @@ const dbGaPLink = {
   key: 'dbGaP',
 };
 
-const sraExperimentLink = {
+const sraExperimentLink: LinkPanel = {
   title: 'SRA Experiment',
   tooltip: sraExpTooltip,
   description: 'Select the "Run" link on the page to download the dataset information.',
@@ -38,7 +46,18 @@ const sraExperimentLink = {
   key: 'SRA Experiment',
 };
 
-const loginPanel = {
+interface GlobusPanel {
+  title: string;
+  tooltip: string;
+  description?: string;
+  outboundLink?: string;
+  key?: string;
+  status: 'success' | 'error';
+  children: React.ReactNode;
+  addOns?: React.ReactNode;
+}
+
+const loginPanel: GlobusPanel = {
   ...globusText,
   status: 'error',
   children: (
@@ -54,7 +73,7 @@ const loginPanel = {
   ),
 };
 
-const noDbGaPPanel = {
+const noDbGaPPanel: GlobusPanel = {
   ...dbGaPText,
   status: 'error',
   children: (
@@ -65,7 +84,23 @@ const noDbGaPPanel = {
   ),
 };
 
-const PROTECTED_DATA = {
+interface SuccessPanelSet {
+  panels: GlobusPanel[];
+  links: LinkPanel[] | React.ReactNode[];
+}
+
+interface ErrorPanelSet {
+  error: {
+    status: 'error' | 'warning';
+    title?: string;
+    tooltip?: string;
+    children: React.ReactNode;
+  };
+}
+
+type PanelSet = SuccessPanelSet | ErrorPanelSet;
+
+const PROTECTED_DATA: SuccessPanelSet = {
   panels: [
     loginPanel,
     {
@@ -87,12 +122,12 @@ const PROTECTED_DATA = {
   links: [dbGaPLink, sraExperimentLink],
 };
 
-const PROTECTED_DATA_NO_DBGAP = {
+const PROTECTED_DATA_NO_DBGAP: SuccessPanelSet = {
   panels: [loginPanel, noDbGaPPanel],
   links: [],
 };
 
-const PUBLIC_DATA = {
+const PUBLIC_DATA: SuccessPanelSet = {
   panels: [
     {
       title: 'HuBMAP Globus Access',
@@ -110,7 +145,7 @@ const PUBLIC_DATA = {
   links: [<GlobusLink key="globus-public" />],
 };
 
-const ACCESS_TO_PROTECTED_DATA = {
+const ACCESS_TO_PROTECTED_DATA: SuccessPanelSet = {
   panels: [
     {
       ...globusText,
@@ -129,7 +164,7 @@ const ACCESS_TO_PROTECTED_DATA = {
   links: [<GlobusLink key="globus-protected" />],
 };
 
-const NO_ACCESS_TO_PROTECTED_DATA = {
+const NO_ACCESS_TO_PROTECTED_DATA: ErrorPanelSet = {
   error: {
     status: 'warning',
     children: (
@@ -141,7 +176,7 @@ const NO_ACCESS_TO_PROTECTED_DATA = {
   },
 };
 
-const NON_CONSORTIUM_MEMBERS = {
+const NON_CONSORTIUM_MEMBERS: SuccessPanelSet = {
   panels: [
     {
       ...dbGaPText,
@@ -160,12 +195,12 @@ const NON_CONSORTIUM_MEMBERS = {
   links: [dbGaPLink, sraExperimentLink],
 };
 
-const NON_CONSORTIUM_MEMBERS_NO_DBGAP = {
+const NON_CONSORTIUM_MEMBERS_NO_DBGAP: SuccessPanelSet = {
   panels: [noDbGaPPanel],
   links: [],
 };
 
-const ENTITY_API_ERROR = {
+const ENTITY_API_ERROR: ErrorPanelSet = {
   error: {
     status: 'error',
     title: 'HuBMAP Globus Access',
@@ -180,7 +215,13 @@ const ENTITY_API_ERROR = {
   },
 };
 
-function getGlobusPanel({ status, panel, isLoading }) {
+interface GetGlobusPanelProps {
+  status?: number;
+  panel: PanelSet;
+  isLoading: boolean;
+}
+
+function getGlobusPanel({ status, panel, isLoading }: GetGlobusPanelProps) {
   if (isLoading) {
     return panel;
   }
@@ -192,7 +233,7 @@ function getGlobusPanel({ status, panel, isLoading }) {
   return panel;
 }
 
-export const usePanelSet = () => {
+export const usePanelSet: () => PanelSet = () => {
   const { isAuthenticated, isHubmapUser } = useAppContext();
 
   const {

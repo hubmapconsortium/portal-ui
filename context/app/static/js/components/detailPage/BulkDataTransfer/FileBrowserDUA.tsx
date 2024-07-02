@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import PropTypes from 'prop-types';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
@@ -13,7 +12,14 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { getDUAText } from './utils';
 import { ObliqueSpan, StyledHeader, StyledDiv } from './style';
 
-function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_level }) {
+interface FileBrowserDUAProps {
+  isOpen: boolean;
+  handleAgree: () => void;
+  handleClose: () => void;
+  mapped_data_access_level: string;
+}
+
+function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_level }: FileBrowserDUAProps) {
   const [isChecked, check] = useState(false);
 
   const { title, appropriateUse } = getDUAText(mapped_data_access_level);
@@ -27,18 +33,13 @@ function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_l
     >
       <DialogContent>
         <StyledDiv id="alert-dialog-description">
-          <StyledHeader id="alert-dialog-title" variant="h2" component="h1">
+          <StyledHeader id="alert-dialog-title" variant="h2">
             {'HuBMAP '} <ObliqueSpan>{`${title} Data`}</ObliqueSpan> {' Usage'}
           </StyledHeader>
 
-          <StyledHeader variant="h4" component="h2">
-            Appropriate Use
-          </StyledHeader>
+          <StyledHeader variant="h4">Appropriate Use</StyledHeader>
           <Typography variant="body1">{appropriateUse}</Typography>
-
-          <StyledHeader variant="h4" component="h2">
-            Acknowledgement
-          </StyledHeader>
+          <StyledHeader variant="h4">Acknowledgement</StyledHeader>
           <Typography variant="body1">
             Investigators using HuBMAP data in publications or presentations are requested to cite The Human Body at
             Cellular Resolution: the NIH Human BioMolecular Atlas Program (doi:
@@ -49,9 +50,7 @@ function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_l
             .”
           </Typography>
 
-          <StyledHeader variant="h4" component="h2">
-            Data Sharing Policy
-          </StyledHeader>
+          <StyledHeader variant="h4">Data Sharing Policy</StyledHeader>
           <Typography variant="body1">
             The HuBMAP Data Sharing Policy can be found at{' '}
             <OutboundLink href="https://hubmapconsortium.org/policies/">
@@ -84,12 +83,5 @@ function FileBrowserDUA({ isOpen, handleAgree, handleClose, mapped_data_access_l
     </Dialog>
   );
 }
-
-FileBrowserDUA.propTypes = {
-  isOpen: PropTypes.bool.isRequired,
-  handleAgree: PropTypes.func.isRequired,
-  handleClose: PropTypes.func.isRequired,
-  mapped_data_access_level: PropTypes.string.isRequired,
-};
 
 export default FileBrowserDUA;

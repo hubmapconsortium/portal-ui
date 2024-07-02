@@ -14,6 +14,7 @@ test('text displays properly', () => {
   };
 
   render(
+    // @ts-expect-error only used fields are being passed in the value here
     <FlaskDataContext.Provider value={flaskDataContext}>
       <Attribution />
     </FlaskDataContext.Provider>,

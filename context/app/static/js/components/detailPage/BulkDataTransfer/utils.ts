@@ -1,4 +1,4 @@
-function getDUAText(mapped_data_access_level) {
+function getDUAText(mapped_data_access_level: string) {
   switch (mapped_data_access_level) {
     case 'Protected':
       return {

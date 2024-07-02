@@ -9,6 +9,10 @@ import Link from './Link';
 import NoAccess from './NoAccess';
 import { usePanelSet } from './usePanelSet';
 
+function isReactNode(value: unknown): value is React.ReactNode {
+  return typeof value === 'object' && value !== null && React.isValidElement(value);
+}
+
 function BulkDataTransferPanels() {
   const {
     entity: { dbgap_study_url, dbgap_sra_experiment_url },
@@ -20,11 +24,11 @@ function BulkDataTransferPanels() {
 
   // Assign dynamic URL's to each type of link
   const linkTitleUrlMap = {
-    dbGaP: dbgap_study_url,
-    'SRA Experiment': dbgap_sra_experiment_url,
-  };
+    dbGaP: dbgap_study_url as string,
+    'SRA Experiment': dbgap_sra_experiment_url as string,
+  } as const;
 
-  if (panelsToUse.error) {
+  if ('error' in panelsToUse) {
     return <NoAccess {...panelsToUse.error} />;
   }
 
@@ -35,11 +39,11 @@ function BulkDataTransferPanels() {
       {panelsToUse.links.length > 0 && (
         <Paper>
           {panelsToUse.links.map((link) =>
-            React.isValidElement(link) ? (
+            isReactNode(link) ? (
               link
             ) : (
               <Link
-                {...link}
+                {...(link as { key: string; title: string })}
                 key={link.key}
                 url={linkTitleUrlMap[link.key]}
                 onClick={() => trackEntityPageEvent({ action: 'Bulk Data Transfer / Panel Link', label: link.key })}
