@@ -1,11 +1,15 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 
-function buildNLMCitation({ contributors, citationTitle, created_timestamp }) {
+interface Contributor {
+  last_name: string;
+  first_name: string;
+}
+
+function buildNLMCitation(contributors: Contributor[], citationTitle: string, created_timestamp: number) {
   const joinedContributors = contributors
     .map(({ last_name, first_name }) => `${last_name} ${first_name[0]}`)
     .join(', ');
@@ -13,8 +17,17 @@ function buildNLMCitation({ contributors, citationTitle, created_timestamp }) {
   return `${joinedContributors}. ${citationTitle} [Internet]. HuBMAP Consortium; ${year}.`;
 }
 
-function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi, className }) {
-  const citation = buildNLMCitation({ contributors, citationTitle, created_timestamp });
+interface CitationProps {
+  contributors: Contributor[];
+  citationTitle: string;
+  created_timestamp: number;
+  doi_url: string;
+  doi: string;
+  className?: string;
+}
+
+function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi, className }: CitationProps) {
+  const citation = buildNLMCitation(contributors, citationTitle, created_timestamp);
 
   return (
     <LabelledSectionText
@@ -31,15 +44,6 @@ function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi
     </LabelledSectionText>
   );
 }
-
-Citation.propTypes = {
-  // eslint-disable-next-line react/forbid-prop-types
-  contributors: PropTypes.array.isRequired,
-  citationTitle: PropTypes.string.isRequired,
-  created_timestamp: PropTypes.number.isRequired,
-  doi_url: PropTypes.string.isRequired,
-  doi: PropTypes.string.isRequired,
-};
 
 export default Citation;
 export { buildNLMCitation };

@@ -7,7 +7,15 @@ export default {
   component: CitationComponent,
 };
 
-export function Citation(args) {
+interface CitationArgs {
+  contributors: { last_name: string; first_name: string }[];
+  citationTitle: string;
+  created_timestamp: number;
+  doi: string;
+  doi_url: string;
+}
+
+export function Citation(args: CitationArgs) {
   return <CitationComponent {...args} />;
 }
 Citation.args = {
