@@ -6,13 +6,7 @@ import { DetailContext } from 'js/components/detailPage/DetailContext';
 import { FilesContext } from '../FilesContext';
 
 import FileBrowserFile from './FileBrowserFile';
-
-const fakeOpenDUA = jest.fn();
-
-const uuid = 'fakeuuid';
-
-const detailContext = { uuid: 'fakeuuid' };
-const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
+import { detailContext, filesContext, uuid } from '../file-fixtures.spec';
 
 const defaultFileObject = {
   rel_path: 'fakepath',
@@ -20,6 +14,9 @@ const defaultFileObject = {
   description: 'fakedescription',
   file: 'fakefile',
   size: 1000,
+  is_qa_qc: false,
+  mapped_description: 'fakemappeddescription',
+  type: 'faketype',
 };
 
 function RenderFileTest({ fileObjOverrides = {}, depth = 0 }) {

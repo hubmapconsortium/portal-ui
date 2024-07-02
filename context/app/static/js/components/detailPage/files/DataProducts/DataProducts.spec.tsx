@@ -6,6 +6,7 @@ import { render, screen } from 'test-utils/functions';
 import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import DataProducts from './DataProducts';
+import { flaskDataContext } from '../file-fixtures.spec';
 
 const files = {
   get all() {
@@ -34,11 +35,11 @@ const detailContext = {
   mapped_data_access_level: 'test-mapped-data-access-level',
 };
 
-const flaskDataContext = { entity: { entity_type: 'Dataset', metadata } };
+const flaskDataContextEdited = { ...flaskDataContext, entity: { ...flaskDataContext.entity, metadata } };
 
 function TestDataProducts({ files: passedFiles = files.all }) {
   return (
-    <FlaskDataContext.Provider value={flaskDataContext}>
+    <FlaskDataContext.Provider value={flaskDataContextEdited}>
       <DetailContext.Provider value={detailContext}>
         <DataProducts files={passedFiles} />
       </DetailContext.Provider>

@@ -6,52 +6,12 @@ import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import FileBrowser from './FileBrowser';
 import { FilesContext } from '../FilesContext';
+import { detailContext, filesContext, flaskDataContext, testFiles } from '../file-fixtures.spec';
 
-const fakeOpenDUA = jest.fn();
-
-const uuid = 'fakeuuid';
-
-const detailContext = { uuid };
-const filesContext = { openDUA: fakeOpenDUA, hasAgreedToDUA: 'fakedua' };
-const flaskDataContext = { entity: { entity_type: 'Dataset' } };
-
-const expectArrayOfStringsToExist = (arr) => arr.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-const expectArrayOfStringsToNotExist = (arr) =>
+const expectArrayOfStringsToExist = (arr: string[]) =>
+  arr.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+const expectArrayOfStringsToNotExist = (arr: string[]) =>
   arr.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
-
-const sharedEntries = {
-  edam_term: 'faketerm',
-  description: 'fakedescription',
-  size: 1000,
-  type: 'faketype',
-};
-
-const testFiles = [
-  {
-    rel_path: 'path1/path2/fake1.txt',
-    ...sharedEntries,
-    is_qa_qc: true,
-  },
-  {
-    rel_path: 'path1/path2/fake2.txt',
-    ...sharedEntries,
-  },
-  {
-    rel_path: 'path1/fake3.txt',
-    ...sharedEntries,
-    is_qa_qc: true,
-  },
-  {
-    rel_path: 'path3/fake4.txt',
-    ...sharedEntries,
-    is_data_product: true,
-  },
-  {
-    rel_path: 'fake5.txt',
-    ...sharedEntries,
-    is_data_product: true,
-  },
-];
 
 function FilesBrowserTest() {
   return (
@@ -93,23 +53,29 @@ test('displays files and directories', async () => {
   expectArrayOfStringsToExist(textInDocumentAfterOpenDirectory);
 });
 
-test.each(
-  [
-    {
-      name: 'QA Files',
-      toggle: () => fileBrowser.toggleQaFilesOnly,
-      textInDocumentAfter: ['path1', 'path2', 'fake3.txt', 'fake1.txt'],
-      textNotInDocumentAfter: ['path3', 'fake4.txt', 'fake2.txt', 'fake5.txt'],
-    },
-    {
-      name: 'Data Products Files',
-      toggle: () => fileBrowser.toggleDataProductsOnly,
-      textInDocumentAfter: ['path3', 'fake5.txt', 'fake4.txt'],
-      textNotInDocumentAfter: ['path1', 'path2', 'fake3.txt', 'fake1.txt', 'fake2.txt'],
-    },
-  ],
+interface TestParams {
+  name: string;
+  toggle: () => HTMLElement;
+  textInDocumentAfter: string[];
+  textNotInDocumentAfter: string[];
+}
+
+test.each<TestParams>([
+  {
+    name: 'QA Files',
+    toggle: () => fileBrowser.toggleQaFilesOnly,
+    textInDocumentAfter: ['path1', 'path2', 'fake3.txt', 'fake1.txt'],
+    textNotInDocumentAfter: ['path3', 'fake4.txt', 'fake2.txt', 'fake5.txt'],
+  },
+  {
+    name: 'Data Products Files',
+    toggle: () => fileBrowser.toggleDataProductsOnly,
+    textInDocumentAfter: ['path3', 'fake5.txt', 'fake4.txt'],
+    textNotInDocumentAfter: ['path1', 'path2', 'fake3.txt', 'fake1.txt', 'fake2.txt'],
+  },
+])(
   'Displays correct files before and after display only $name chip is clicked',
-  async ({ toggle, textInDocumentAfter, textNotInDocumentAfter }) => {
+  async ({ toggle, textInDocumentAfter, textNotInDocumentAfter }: TestParams) => {
     render(<FilesBrowserTest />);
 
     // initial

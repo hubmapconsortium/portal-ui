@@ -1,70 +1,30 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import userEvent from '@testing-library/user-event';
 import { render, screen, waitForElementToBeRemoved, appProviderEndpoints } from 'test-utils/functions';
-import { http } from 'msw';
+import { DefaultBodyType, http, PathParams, HttpResponse, RequestHandler } from 'msw';
 import { setupServer } from 'msw/node';
 
 import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import Files from './Files';
+import { detailContext, flaskDataContext, testFiles, uuid as testUuid } from '../file-fixtures.spec';
 
-const testUuid = 'fakeuuid';
-const mapped_data_access_level = 'fakeaccess';
-const hubmap_id = 'HBMABC.123';
-const globusUrlResponse = {
-  url: 'fakeglobusurl',
-};
-
-const server = setupServer(
-  http.get(`/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${testUuid}`, (req, res, ctx) => {
-    return res(ctx.json(globusUrlResponse), ctx.status(200));
-  }),
+const globusHandler: RequestHandler = http.get<PathParams, DefaultBodyType, { url: string }>(
+  `/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${testUuid}`,
+  () => {
+    return HttpResponse.json({
+      url: 'fakeglobusurl',
+    });
+  },
 );
 
-const sharedEntries = {
-  edam_term: 'faketerm',
-  description: 'fakedescription',
-  size: 1000,
-  type: 'faketype',
-};
-
-const testFiles = [
-  {
-    rel_path: 'path1/path2/fake1.txt',
-    ...sharedEntries,
-  },
-  {
-    rel_path: 'path1/path2/fake2.txt',
-    ...sharedEntries,
-  },
-  {
-    rel_path: 'path1/fake3.txt',
-    ...sharedEntries,
-  },
-  {
-    rel_path: 'path3/fake4.txt',
-    ...sharedEntries,
-  },
-  {
-    rel_path: 'fake5.txt',
-    ...sharedEntries,
-  },
-];
+const server = setupServer(globusHandler);
 
 beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-const flaskDataContext = { entity: { entity_type: 'Dataset', hubmap_id } };
-function TestFiles({ files = testFiles, uuid = testUuid }) {
-  const detailContext = useMemo(
-    () => ({
-      uuid,
-      mapped_data_access_level,
-      hubmap_id,
-    }),
-    [uuid],
-  );
+function TestFiles({ files = testFiles }) {
   return (
     <FlaskDataContext.Provider value={flaskDataContext}>
       <DetailContext.Provider value={detailContext}>
@@ -124,7 +84,7 @@ test('handles DUA flow', async () => {
   await files.targetFile.link;
 });
 
-test('does not display file browser when files prop is undefined', async () => {
+test('does not display file browser when files prop is undefined', () => {
   render(<TestFiles files={[]} />);
 
   expect(files.browser).not.toBeInTheDocument();

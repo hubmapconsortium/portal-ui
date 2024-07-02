@@ -1,6 +1,8 @@
 // Metadata object taken from dataset 277152f17b5a2f308820ab4d85c5a426 on test
 // Contains the files and dag list used for the data products specs
 
+import { UnprocessedFile } from 'js/components/detailPage/files/types';
+
 const metadata = {
   dag_provenance_list: [
     {
@@ -675,7 +677,7 @@ const metadata = {
       size: 634729,
       type: 'unknown',
     },
-  ],
+  ] as UnprocessedFile[],
 };
 
 export default metadata;

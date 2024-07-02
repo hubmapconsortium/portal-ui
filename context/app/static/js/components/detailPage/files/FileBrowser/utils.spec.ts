@@ -1,3 +1,4 @@
+import { UnprocessedFile } from '../types';
 import { relativeFilePathsToTree } from './utils';
 
 test('returns object with required keys', () => {
@@ -32,7 +33,7 @@ test('returns object with required keys', () => {
     'path3/': { files: [{ file: 'fake4.txt', rel_path: 'path3/fake4.txt' }] },
     files: [{ file: 'fake5.txt', rel_path: 'fake5.txt' }],
   };
-  expect(relativeFilePathsToTree(testFiles)).toStrictEqual(expectedTree);
+  expect(relativeFilePathsToTree(testFiles as UnprocessedFile[])).toStrictEqual(expectedTree);
 });
 
 test('retains extra entries for each file object', () => {
@@ -70,5 +71,5 @@ test('retains extra entries for each file object', () => {
     'path3/': { files: [{ file: 'fake4.txt', rel_path: 'path3/fake4.txt', b: { c: 2 } }] },
     files: [{ file: 'fake5.txt', rel_path: 'fake5.txt', d: [4, 5, 6] }],
   };
-  expect(relativeFilePathsToTree(testFiles)).toStrictEqual(expectedTree);
+  expect(relativeFilePathsToTree(testFiles as UnprocessedFile[])).toStrictEqual(expectedTree);
 });

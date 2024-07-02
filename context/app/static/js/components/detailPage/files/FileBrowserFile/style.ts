@@ -5,26 +5,26 @@ import InfoIcon from '@mui/icons-material/InfoRounded';
 import TableRow from '@mui/material/TableRow';
 import Chip from '@mui/material/Chip';
 
-const StyledRow = styled(TableRow)`
-  border-bottom: 1px solid ${(props) => props.theme.palette.divider};
-  &:hover {
-    background-color: ${(props) => props.theme.palette.common.hoverShadow};
-  }
-`;
+const StyledRow = styled(TableRow)(({ theme }) => ({
+  borderBottom: `1px solid ${theme.palette.divider}`,
+  '&:hover': {
+    backgroundColor: theme.palette.common.hoverShadow,
+  },
+}));
 
-const StyledFileIcon = styled(InsertDriveFileIcon)`
-  margin-right: ${(props) => props.theme.spacing(1)};
-  font-size: ${(props) => props.theme.typography.body1.fontSize}px;
-`;
+const StyledFileIcon = styled(InsertDriveFileIcon)(({ theme }) => ({
+  marginRight: theme.spacing(1),
+  fontSize: theme.typography.body1.fontSize,
+}));
 
-const FileSize = styled(Typography)`
-  margin-left: ${(props) => props.theme.spacing(1)};
-`;
+const FileSize = styled(Typography)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+}));
 
-const StyledInfoIcon = styled(InfoIcon)`
-  margin-left: ${(props) => props.theme.spacing(1)};
-  font-size: 1rem;
-`;
+const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+  fontSize: '1rem',
+}));
 
 const FileTypeChip = styled(Chip)(({ theme }) => ({
   px: theme.spacing(2),
