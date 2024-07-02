@@ -1,8 +1,8 @@
 # Update requirements.txt if this file changes:
 # pip install pip-tools
 # pip-compile --allow-unsafe --generate-hashes --output-file=context/requirements.txt context/requirements.in
-Flask>=2.3.3
-Flask[async]>=2.3.3
+Flask>=3.0.3
+Flask[async]>=3.0.3
 globus-sdk>=3.9.0
 requests>=2.32.3
 pyyaml>=6.0.1
