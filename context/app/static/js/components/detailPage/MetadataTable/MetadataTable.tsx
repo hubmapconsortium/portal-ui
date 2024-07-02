@@ -10,7 +10,13 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import { defaultColumns } from '../MetadataSection/columns';
 
-function MetadataTable({ tableRows = [], columns = defaultColumns }) {
+interface MetadataTableRow {
+  key: string;
+  value: string;
+  description?: string;
+}
+
+function MetadataTable({ tableRows = [] as MetadataTableRow[], columns = defaultColumns }) {
   return (
     <Paper sx={{ width: '100%' }}>
       <StyledTableContainer>

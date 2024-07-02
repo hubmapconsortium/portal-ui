@@ -37,7 +37,7 @@ export function getDescription(
 }
 
 export function buildTableData(
-  tableData: Record<string, string>,
+  tableData: Record<string, string | object | unknown[]>,
   metadataFieldDescriptions: Record<string, string> | Record<string, never>,
   extraValues: Record<string, string> = {},
 ) {
@@ -51,6 +51,7 @@ export function buildTableData(
       .map((entry) => ({
         ...extraValues,
         key: entry[0],
+        // eslint-disable-next-line @typescript-eslint/no-base-to-string
         value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
         description: getDescription(entry[0], metadataFieldDescriptions),
       }))
