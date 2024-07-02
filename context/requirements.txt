@@ -1560,9 +1560,9 @@ vitessce==3.2.6 \
     --hash=sha256:19cbbc009513cf4119de3b095d1dc64b27ae26e6ce76949d9efe9f6070e63c67 \
     --hash=sha256:259c145a56536a70b581c81dd04428a5a0a7e373a24eef193b7cfe9eae09a1e2
     # via portal-visualization
-werkzeug==2.3.7 \
-    --hash=sha256:2b8c0e447b4b9dbcc85dd97b6eeb4dcbaf6c8b6c3be0bd654e25553e0a2157d8 \
-    --hash=sha256:effc12dba7f3bd72e605ce49807bbe692bd729c3bb122a3b91747a6ae77df528
+werkzeug==3.0.1 \
+    --hash=sha256:507e811ecea72b18a404947aded4b3390e1db8f826b494d76550ef45bb3b1dcc \
+    --hash=sha256:90a285dc0e42ad56b34e696398b8122ee4c681833fb35b8334a095d82c56da10
     # via flask
 wrapt==1.15.0 \
     --hash=sha256:02fce1852f755f44f95af51f69d22e45080102e9d00258053b79367d07af39c0 \
