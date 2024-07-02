@@ -35,6 +35,8 @@ export interface Entity {
   [key: string]: unknown;
 }
 
+export type PartialEntity = Partial<Entity> & Pick<Entity, 'entity_type' | 'uuid' | 'hubmap_id'>;
+
 export interface Donor extends Entity {
   entity_type: 'Donor';
   mapped_metadata?: {
