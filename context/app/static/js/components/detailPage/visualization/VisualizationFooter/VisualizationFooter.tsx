@@ -2,8 +2,10 @@ import React from 'react';
 
 import HubmapDataFooter from 'js/components/detailPage/files/HubmapDataFooter';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import { getVitessceVersion } from './utils';
 
-function VisualizationFooter({ version }) {
+function VisualizationFooter() {
+  const version = getVitessceVersion();
   return (
     <HubmapDataFooter
       items={[

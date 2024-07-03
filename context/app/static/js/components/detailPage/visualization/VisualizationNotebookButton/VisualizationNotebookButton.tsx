@@ -1,22 +1,21 @@
 import React from 'react';
 import GetAppRoundedIcon from '@mui/icons-material/GetAppRounded';
-import styled from 'styled-components';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-
-// TODO: Would it be ok to create visualization/style.js and put this there,
-// so all the buttons would use it?
-// Individual buttons padding on the left and right seems fragile, if they get rearranged.
-const StyledSecondaryBackgroundTooltip = styled(SecondaryBackgroundTooltip)`
-  margin: 0 ${(props) => props.theme.spacing(1)};
-`;
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { StyledSecondaryBackgroundTooltip } from './style';
 
 const title = 'Download Jupyter Notebook';
-function VisualizationNotebookButton({ uuid }) {
+
+interface VisualizationNotebookButtonProps {
+  uuid: string;
+}
+
+function VisualizationNotebookButton({ uuid }: VisualizationNotebookButtonProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
+  const { toastError } = useSnackbarActions();
 
   return (
     <StyledSecondaryBackgroundTooltip title={title}>
@@ -26,7 +25,13 @@ function VisualizationNotebookButton({ uuid }) {
           postAndDownloadFile({
             url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
             body: {},
-          });
+          })
+            .then(() => {
+              // Do nothing
+            })
+            .catch(() => {
+              toastError('Failed to download Jupyter Notebook');
+            });
         }}
       >
         <GetAppRoundedIcon color="primary" />

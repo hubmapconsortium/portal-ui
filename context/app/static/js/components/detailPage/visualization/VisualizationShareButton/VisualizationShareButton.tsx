@@ -10,7 +10,7 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import Link from '@mui/material/Link';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import useVisualizationStore from 'js/stores/useVisualizationStore';
+import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
@@ -19,10 +19,8 @@ import { DEFAULT_LONG_URL_WARNING } from './constants';
 
 import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
 
-const visualizationStoreSelector = (state) => ({
+const visualizationStoreSelector = (state: VisualizationStore) => ({
   vitessceState: state.vitessceState,
-  setOnCopyUrlWarning: state.setOnCopyUrlWarning,
-  setOnCopyUrlSnackbarOpen: state.setOnCopyUrlSnackbarOpen,
 });
 
 function VisualizationShareButton() {
@@ -36,7 +34,7 @@ function VisualizationShareButton() {
   const onClick = () => {
     let urlIsLong = false;
     trackEntityPageEvent({ action: 'Vitessce / Share Visualization' });
-    copyToClipBoard(vitessceState, () => {
+    copyToClipBoard(vitessceState as object, () => {
       urlIsLong = true;
     });
     const message = `Visualization URL copied to clipboard. ${urlIsLong ? DEFAULT_LONG_URL_WARNING : ''}`.trim();
@@ -64,7 +62,7 @@ function VisualizationShareButton() {
               </MenuItem>
               <MenuItem
                 onClick={() => {
-                  createEmailWithUrl(vitessceState);
+                  createEmailWithUrl(vitessceState as object);
                   toggle();
                 }}
                 component={Link}

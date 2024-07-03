@@ -6,15 +6,25 @@ import { VisualizationSuspenseFallback } from './VisualizationSuspenseFallback';
 
 const Visualization = React.lazy(() => import('../Visualization'));
 
+interface VisualizationWrapperProps {
+  vitData: object | object[];
+  uuid: string;
+  hasNotebook: boolean;
+  shouldDisplayHeader: boolean;
+  hasBeenMounted: boolean;
+  isPublicationPage: boolean;
+  markerGene?: string;
+}
+
 function VisualizationWrapper({
   vitData,
   uuid,
   hasNotebook,
-  shouldDisplayHeader,
+  shouldDisplayHeader = true,
   hasBeenMounted,
   isPublicationPage,
   markerGene,
-}) {
+}: VisualizationWrapperProps) {
   const containerStyles = useMemo(
     () => ({
       shouldDisplayHeader,
@@ -40,9 +50,5 @@ function VisualizationWrapper({
     </VizContainerStyleContext.Provider>
   );
 }
-
-VisualizationWrapper.defaultProps = {
-  shouldDisplayHeader: true,
-};
 
 export default VisualizationWrapper;

@@ -1,7 +1,7 @@
 import { encodeConfInUrl } from 'vitessce';
 import { DEFAULT_LONG_URL_WARNING, DEFAULT_EMAIL_MESSAGE } from './constants';
 
-const getUrl = (conf, onOverMaximumUrlLength) => {
+const getUrl = (conf: object, onOverMaximumUrlLength: () => void) => {
   const baseUrl = window.location.href.split('#')[0];
   const fragment = encodeConfInUrl({
     conf,
@@ -11,7 +11,7 @@ const getUrl = (conf, onOverMaximumUrlLength) => {
   return url;
 };
 
-const copyToClipBoard = (conf, onOverMaximumUrlLength) => {
+const copyToClipBoard = (conf: object, onOverMaximumUrlLength: () => void) => {
   const dummy = document.createElement('input');
   document.body.appendChild(dummy);
   const url = getUrl(conf, onOverMaximumUrlLength);
@@ -21,7 +21,7 @@ const copyToClipBoard = (conf, onOverMaximumUrlLength) => {
   document.body.removeChild(dummy);
 };
 
-const createEmailWithUrl = (conf) => {
+const createEmailWithUrl = (conf: object) => {
   let longUrlWarning = '';
   const onOverMaximumUrlLength = () => {
     longUrlWarning = DEFAULT_LONG_URL_WARNING;

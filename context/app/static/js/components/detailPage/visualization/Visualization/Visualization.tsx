@@ -1,29 +1,27 @@
 import Paper from '@mui/material/Paper';
 import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
-import { isFirefox } from 'react-device-detect';
+
 import React, { useEffect } from 'react';
 import { Vitessce } from 'vitessce';
-
-import packageInfo from 'package';
 
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import useVisualizationStore from 'js/stores/useVisualizationStore';
+import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+import Stack from '@mui/material/Stack';
 import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import VisualizationShareButton from '../VisualizationShareButton';
 import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
 import VisualizationFooter from '../VisualizationFooter';
 import VisualizationTracker from '../VisualizationTracker';
 
-import { useVitessceConfig } from './hooks';
+import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
 import {
   ExpandButton,
   ExpandableDiv,
-  Flex,
   SelectionButton,
   StyledDetailPageSection,
   StyledSectionHeader,
@@ -31,10 +29,7 @@ import {
   vitessceFixedHeight,
 } from './style';
 
-const FIREFOX_WARNING = 'If the performance of Vitessce in Firefox is not satisfactory, please use Chrome or Safari.';
-const localStorageFirefoxWarningKey = 'vitessce-firefox-warning';
-
-const visualizationStoreSelector = (state) => ({
+const visualizationStoreSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: state.vizIsFullscreen,
   expandViz: state.expandViz,
   collapseViz: state.collapseViz,
@@ -44,17 +39,32 @@ const visualizationStoreSelector = (state) => ({
   setVitessceStateDebounced: state.setVitessceStateDebounced,
 });
 
-function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, shouldMountVitessce = true, markerGene }) {
-  const {
-    vizIsFullscreen,
-    expandViz,
-    collapseViz,
-    vizTheme,
-    setVitessceState,
-    setVitessceStateDebounced,
-    setVizNotebookId,
-  } = useVisualizationStore(visualizationStoreSelector);
+interface VisualizationProps {
+  vitData: object | object[];
+  uuid: string;
+  hasNotebook: boolean;
+  shouldDisplayHeader: boolean;
+  shouldMountVitessce?: boolean;
+  markerGene?: string;
+}
 
+function Visualization({
+  vitData,
+  uuid,
+  hasNotebook,
+  shouldDisplayHeader,
+  shouldMountVitessce = true,
+  markerGene,
+}: VisualizationProps) {
+  const { vizIsFullscreen, expandViz, vizTheme, setVitessceState, setVitessceStateDebounced, setVizNotebookId } =
+    useVisualizationStore(visualizationStoreSelector);
+
+  // Add event listeners to the document to handle the full screen mode.
+  useCollapseViz();
+  // Show a warning to Firefox users that Vitessce may be slower in Firefox.
+  useFirefoxWarning();
+  //
+  useCanvasScrollFix();
   const { toastError, toastInfo } = useSnackbarActions();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
@@ -66,14 +76,6 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
       setVizNotebookId(uuid);
     }
   }, [hasNotebook, vizIsFullscreen, setVizNotebookId, uuid]);
-
-  // Show a warning if the user is using Firefox.
-  useEffect(() => {
-    if (isFirefox && !localStorage.getItem(localStorageFirefoxWarningKey)) {
-      toastError(FIREFOX_WARNING);
-      localStorage.setItem(localStorageFirefoxWarningKey, true);
-    }
-  }, [toastError]);
 
   // Show instructions for exiting full screen mode when the user enters full screen mode.
   useEffect(() => {
@@ -89,47 +91,17 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
     markerGene,
   });
 
-  function setSelectionAndClearErrors(itemAndIndex) {
-    const { i } = itemAndIndex;
+  function setSelectionAndClearErrors({ i }: { i: number }) {
     setVitessceSelection(i);
   }
 
-  useEffect(() => {
-    function onKeydown(event) {
-      if (event.key === 'Escape') {
-        collapseViz();
-      }
-    }
-    window.addEventListener('keydown', onKeydown);
-    return () => {
-      window.removeEventListener('keydown', onKeydown);
-    };
-  }, [collapseViz]);
-
   const isMultiDataset = Array.isArray(vitessceConfig);
-  const version = packageInfo.dependencies.vitessce.replace('^', '');
-
-  useEffect(() => {
-    // Force the canvas to not scroll when the user scrolls the page.
-    // This is a workaround to an issue with the Three.js spatial view where it is
-    // scrolling on the portal page but works as expected in the vitessce preview.
-    const canvasScrollFix = (e) => {
-      if (e.target.tagName === 'CANVAS') {
-        e.preventDefault();
-      }
-    };
-    // The passive option is set to false so that the browser does not ignore the preventDefault call.
-    document.addEventListener('wheel', canvasScrollFix, { passive: false });
-    return () => {
-      document.removeEventListener('wheel', canvasScrollFix);
-    };
-  }, []);
 
   if (!vitessceConfig) {
     return null;
   }
 
-  const handleWarning = (message) => {
+  const handleWarning = (message: string) => {
     // Suppress the "Node not found" message that appears when no zarr file was found
     if (message.includes('Node not found')) {
       return;
@@ -144,7 +116,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
         <SpacedSectionButtonRow
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
-            <Flex>
+            <Stack direction="row">
               {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
@@ -160,19 +132,19 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
                   <FullscreenRoundedIcon color="primary" />
                 </ExpandButton>
               </SecondaryBackgroundTooltip>
-              {isMultiDataset && (
+              {isMultiDataset && vitessceSelection != null && (
                 <DropdownListbox
                   buttonComponent={SelectionButton}
                   optionComponent={DropdownListboxOption}
                   selectedOptionIndex={vitessceSelection}
-                  options={vitessceConfig}
+                  options={vitessceConfig as { name: string }[]}
                   selectOnClick={setSelectionAndClearErrors}
                   getOptionLabel={(v) => v.name}
                   buttonProps={{ color: 'primary' }}
                   id="visualization-data"
                 />
               )}
-            </Flex>
+            </Stack>
           }
         />
         <Paper>
@@ -180,7 +152,8 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
             {shouldMountVitessce && (
               <VisualizationTracker>
                 <Vitessce
-                  config={vitessceConfig[vitessceSelection] || vitessceConfig}
+                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+                  config={isMultiDataset ? vitessceConfig[vitessceSelection!] : vitessceConfig}
                   theme={vizTheme}
                   onConfigChange={setVitessceStateDebounced}
                   height={vizIsFullscreen ? null : vitessceFixedHeight}
@@ -190,7 +163,7 @@ function Visualization({ vitData, uuid, hasNotebook, shouldDisplayHeader, should
             )}
           </ExpandableDiv>
         </Paper>
-        <VisualizationFooter version={version} />
+        <VisualizationFooter />
         <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </StyledDetailPageSection>
     )

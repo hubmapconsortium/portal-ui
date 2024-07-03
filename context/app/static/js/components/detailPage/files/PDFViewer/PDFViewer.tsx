@@ -6,8 +6,6 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import LinearProgress from '@mui/material/LinearProgress';
 
-import { DocumentCallback, OnDocumentLoadSuccess } from 'react-pdf/dist/cjs/shared/types';
-
 import PDFViewerControlButtons from '../PDFViewerControlButtons';
 import { ModalContentWrapper, StyledIconButton, StyledCloseIcon, ErrorIcon } from './style';
 
@@ -15,16 +13,16 @@ interface PDFViewerProps {
   pdfUrl: string;
 }
 
+// React-PDF's PDF file interface is not exported, this is a minimal version of it.
+interface PDFFile {
+  numPages: number;
+}
+
 function PDFViewer({ pdfUrl }: PDFViewerProps) {
   const [currentPageNum, setCurrentPageNum] = useState(1);
   const [open, setOpen] = useState(false);
-  const [pdf, setPdf] = useState<DocumentCallback>();
+  const [pdf, setPdf] = useState<PDFFile>();
   const [isProcessingPDF, setIsProcessingPDF] = useState(false);
-
-  const onDocumentLoadSuccess: OnDocumentLoadSuccess = (pdfObj) => {
-    setOpen(true);
-    setPdf(pdfObj);
-  };
 
   const handleClose = () => {
     setOpen(false);
@@ -44,7 +42,10 @@ function PDFViewer({ pdfUrl }: PDFViewerProps) {
       {isProcessingPDF && (
         <Document
           file={pdfUrl}
-          onLoadSuccess={onDocumentLoadSuccess}
+          onLoadSuccess={(pdfObj) => {
+            setOpen(true);
+            setPdf(pdfObj);
+          }}
           loading={<LinearProgress sx={{ maxWidth: '100px' }} />}
           error={
             <Box display="flex">
