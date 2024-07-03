@@ -3,26 +3,9 @@ import { useAppContext } from 'js/components/Contexts';
 import useSWR from 'swr';
 import { ProvData } from 'js/components/detailPage/provenance/types';
 import { fetchSearchData } from 'js/hooks/useSearchData';
+import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { getAncestorsQuery, getDescendantsQuery } from './queries';
 import { createProvDataURL, nonDestructiveMerge } from './utils';
-
-/**
- * Fetcher for legacy provenance data
- * This only fetches the ancestors of the entity
- * @param uuid UUID of the entity to fetch
- * @param entityEndpoint Base URL of the entities API endpoint
- * @param groupsToken Auth token for the request
- * @returns Provenance data
- */
-async function getProvData(uuid: string, entityEndpoint: string, groupsToken: string): Promise<ProvData> {
-  const headers = getAuthHeader(groupsToken);
-  const url = createProvDataURL(uuid, entityEndpoint);
-  const response = await fetch(url, { headers });
-  if (!response.ok) {
-    throw new Error('Prov API failed to load data');
-  }
-  return response.json() as Promise<ProvData>;
-}
 
 /**
  * Fetcher for unified provenance data
@@ -60,9 +43,10 @@ async function getCombinedProvData(
 
   const descendantIds = descendants.hits.hits.map((hit) => hit._id);
 
-  const descendantProvenance = await Promise.all(
-    descendantIds.map((id) => getProvData(id, entityEndpoint, groupsToken)),
-  );
+  const descendantProvenance = await multiFetcher<ProvData>({
+    urls: descendantIds.map((id) => createProvDataURL(id, entityEndpoint)),
+    requestInits: [{ headers: getAuthHeader(groupsToken) }],
+  });
 
   if (descendantProvenance.length === 1) {
     return descendantProvenance[0];
@@ -100,7 +84,10 @@ function useProvData(uuid: string, combined = false) {
     ([idToFetch, authToken, useCombinedFetcher]) =>
       useCombinedFetcher
         ? getCombinedProvData(idToFetch, entityEndpoint, authToken, elasticsearchEndpoint)
-        : getProvData(idToFetch, entityEndpoint, authToken),
+        : fetcher({
+            url: createProvDataURL(idToFetch, entityEndpoint),
+            requestInit: { headers: getAuthHeader(authToken) },
+          }),
   );
 
   return { provData, isLoading };
