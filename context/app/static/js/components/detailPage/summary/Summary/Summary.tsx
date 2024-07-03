@@ -1,9 +1,23 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { PropsWithChildren } from 'react';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
+
+interface SummaryProps extends PropsWithChildren {
+  published_timestamp?: number;
+  status: string;
+  mapped_data_access_level: string;
+  entityTypeDisplay?: string;
+  entityCanBeSaved?: boolean;
+  contributors?: { last_name: string; first_name: string }[];
+  citationTitle?: string;
+  doi_url?: string;
+  doi?: string;
+  collectionName?: string;
+  mapped_external_group_name?: string;
+  bottomFold?: React.ReactNode;
+}
 
 function Summary({
   published_timestamp,
@@ -19,7 +33,7 @@ function Summary({
   collectionName,
   mapped_external_group_name,
   bottomFold,
-}) {
+}: SummaryProps) {
   const {
     entity: { uuid, hubmap_id, entity_type, created_timestamp, last_modified_timestamp, description },
   } = useFlaskDataContext();
@@ -31,8 +45,8 @@ function Summary({
         entityTypeDisplay={entityTypeDisplay}
         entity_type={entity_type}
         uuid={uuid}
-        status={status}
-        mapped_data_access_level={mapped_data_access_level}
+        status={status ?? 'Undefined'}
+        mapped_data_access_level={mapped_data_access_level ?? 'Undefined'}
         entityCanBeSaved={entityCanBeSaved}
         mapped_external_group_name={mapped_external_group_name}
       >
@@ -53,21 +67,5 @@ function Summary({
     </DetailPageSection>
   );
 }
-
-Summary.propTypes = {
-  status: PropTypes.string,
-  mapped_data_access_level: PropTypes.string,
-  entityCanBeSaved: PropTypes.bool,
-  collectionName: PropTypes.string,
-  mapped_external_group_name: PropTypes.string,
-};
-
-Summary.defaultProps = {
-  status: '',
-  mapped_data_access_level: '',
-  entityCanBeSaved: true,
-  collectionName: '',
-  mapped_external_group_name: undefined,
-};
 
 export default Summary;

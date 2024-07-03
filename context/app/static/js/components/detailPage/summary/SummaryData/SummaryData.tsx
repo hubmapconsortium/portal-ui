@@ -1,13 +1,13 @@
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { PropsWithChildren } from 'react';
 import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 
-import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
+import { ESEntityType } from 'js/components/types';
 import { FlexEnd, StyledTypography, StyledSvgIcon, SummaryDataHeader } from './style';
 import SummaryJSONButton from '../SummaryJSONButton';
 
@@ -16,6 +16,19 @@ const publicationEntityTypes = ['Publication', 'Preprint'];
 
 const entitiesWithStatus = datasetEntityTypes.concat(...publicationEntityTypes);
 
+interface SummaryDataProps extends PropsWithChildren {
+  entity_type: AllEntityTypes;
+  entityTypeDisplay?: string;
+  uuid: string;
+  status: string;
+  mapped_data_access_level: string;
+  title?: string;
+  entityCanBeSaved?: boolean;
+  mapped_external_group_name?: string;
+  showJsonButton?: boolean;
+  otherButtons?: React.ReactNode;
+}
+
 function SummaryData({
   entity_type,
   entityTypeDisplay,
@@ -23,12 +36,12 @@ function SummaryData({
   status,
   mapped_data_access_level,
   title,
-  entityCanBeSaved,
+  entityCanBeSaved = true,
   children,
   mapped_external_group_name,
   showJsonButton = true,
   otherButtons,
-}) {
+}: SummaryDataProps) {
   const isPublication = publicationEntityTypes.includes(entity_type);
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
 
@@ -36,7 +49,7 @@ function SummaryData({
     <>
       <SummaryTitle data-testid="entity-type">
         <SummaryDataHeader>
-          <StyledSvgIcon component={entityIconMap[entity_type]} color="primary" />
+          <StyledSvgIcon as={entityIconMap[entity_type]} color="primary" />
           {entityTypeDisplay ?? entity_type}
         </SummaryDataHeader>
       </SummaryTitle>
@@ -60,7 +73,7 @@ function SummaryData({
             )}
             <FlexEnd>
               {showJsonButton && <SummaryJSONButton entity_type={entity_type} uuid={uuid} />}
-              {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
+              {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type as ESEntityType} />}
               {datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
             {otherButtons}
@@ -70,20 +83,5 @@ function SummaryData({
     </>
   );
 }
-
-SummaryData.propTypes = {
-  title: PropTypes.string.isRequired,
-  entity_type: PropTypes.string.isRequired,
-  uuid: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
-  mapped_data_access_level: PropTypes.string.isRequired,
-  entityCanBeSaved: PropTypes.bool,
-  mapped_external_group_name: PropTypes.string,
-};
-
-SummaryData.defaultProps = {
-  entityCanBeSaved: true,
-  mapped_external_group_name: undefined,
-};
 
 export default SummaryData;

@@ -23,6 +23,7 @@ export type DagProvenanceType =
 
 export interface Entity {
   entity_type: ESEntityType;
+  description: string;
   uuid: string;
   hubmap_id: string;
   last_modified_timestamp: number;
@@ -33,6 +34,8 @@ export interface Entity {
   created_by_user_displayname: string;
   created_by_user_email: string;
   mapped_status: string;
+  mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
+  status: string;
   [key: string]: unknown;
 }
 
