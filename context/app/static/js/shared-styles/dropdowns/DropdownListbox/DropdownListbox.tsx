@@ -1,5 +1,4 @@
 import React, { useState, useRef } from 'react';
-import PropTypes from 'prop-types';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUpRounded';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
@@ -7,7 +6,18 @@ import MenuList from '@mui/material/MenuList';
 
 import { StyledPopper, StyledPaper } from './style';
 
-function DropdownListbox({
+interface DropdownListboxProps<T> {
+  selectedOptionIndex: number;
+  buttonComponent: React.ElementType;
+  optionComponent: React.ElementType;
+  buttonProps?: Record<string, unknown>;
+  options: T[];
+  selectOnClick: ({ option, i }: { option: T; i: number }) => void;
+  getOptionLabel: (option: T) => React.ReactNode;
+  id: string;
+}
+
+function DropdownListbox<T>({
   selectedOptionIndex,
   buttonComponent: SelectionButton,
   optionComponent: Option,
@@ -16,12 +26,12 @@ function DropdownListbox({
   selectOnClick,
   getOptionLabel,
   id,
-}) {
+}: DropdownListboxProps<T>) {
   const anchorRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  function selectOption(option) {
-    selectOnClick(option);
+  function selectOption(selectedItem: { option: T; i: number }) {
+    selectOnClick(selectedItem);
     setIsOpen(false);
   }
 
@@ -37,7 +47,7 @@ function DropdownListbox({
         onClick={() => setIsOpen(true)}
         {...buttonProps}
       >
-        {getOptionLabel(options[selectedOptionIndex], selectedOptionIndex)}
+        {getOptionLabel(options[selectedOptionIndex])}
         {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
       </SelectionButton>
       <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
@@ -52,7 +62,7 @@ function DropdownListbox({
                   selected={selectedOptionIndex === i}
                   aria-selected={selectedOptionIndex === i}
                 >
-                  {getOptionLabel(option, i)}
+                  {getOptionLabel(option)}
                 </Option>
               ))}
             </MenuList>
@@ -62,22 +72,5 @@ function DropdownListbox({
     </>
   );
 }
-
-DropdownListbox.propTypes = {
-  selectedOptionIndex: PropTypes.number.isRequired,
-  buttonComponent: PropTypes.elementType.isRequired,
-  optionComponent: PropTypes.elementType.isRequired,
-  /* eslint-disable react/forbid-prop-types */
-  buttonProps: PropTypes.object,
-  options: PropTypes.array.isRequired,
-  /* eslint-enable react/forbid-prop-types */
-  selectOnClick: PropTypes.func.isRequired,
-  getOptionLabel: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
-};
-
-DropdownListbox.defaultProps = {
-  buttonProps: {},
-};
 
 export default DropdownListbox;
