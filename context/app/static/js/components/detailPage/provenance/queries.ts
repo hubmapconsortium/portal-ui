@@ -54,9 +54,7 @@ export const getAncestorsQuery = (uuid: string) => ({
       ],
     },
   },
-  _source: {
-    includes: ['uuid'],
-  },
+  _source: false,
   size: 10000,
 });
 
@@ -82,8 +80,6 @@ export const getDescendantsQuery = (uuid: string | string[]): SearchRequest => (
       ],
     },
   },
-  _source: {
-    includes: ['uuid'],
-  },
+  _source: false,
   size: 10000,
 });
