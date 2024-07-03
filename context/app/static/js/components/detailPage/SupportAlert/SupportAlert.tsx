@@ -7,9 +7,13 @@ import { DetailPageAlert } from 'js/components/detailPage/style';
 
 interface SupportAlertProps {
   uuid: string;
+  isSupport: boolean;
 }
 
-function SupportAlert({ uuid }: SupportAlertProps) {
+function SupportAlert({ uuid, isSupport }: SupportAlertProps) {
+  if (!isSupport) {
+    return null;
+  }
   // There should usually be only one parent, but this is more robust, and we want to keep it simple.
   return (
     <DetailPageAlert severity="warning">

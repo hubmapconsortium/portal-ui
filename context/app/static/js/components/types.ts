@@ -1,3 +1,6 @@
+import { ContributorAPIResponse } from './detailPage/ContributorsTable/utils';
+import { UnprocessedFile } from './detailPage/files/types';
+
 export type DonorEntityType = 'Donor';
 export type SampleEntityType = 'Sample';
 export type DatasetEntityType = 'Dataset';
@@ -29,6 +32,8 @@ export interface Entity {
   last_modified_timestamp: number;
   created_timestamp: number;
   ancestors: Entity[];
+  // eslint-disable-next-line no-use-before-define -- Donor is defined later in the file and extends Entity
+  donor: Donor;
   descendant_counts: { entity_type: Record<string, number> };
   group_name: string;
   created_by_user_displayname: string;
@@ -81,6 +86,14 @@ export interface Dataset extends Entity {
   };
   dbgap_study_url: string;
   dbgap_sra_experiment_url: string;
+  files: UnprocessedFile[];
+  contributors: ContributorAPIResponse[];
+  sub_status: string;
+  protocol_url: string;
+  registered_doi: string;
+  doi_url: string;
+  published_timestamp: number;
+  mapped_external_group_name?: string;
 }
 
 export interface Collection extends Entity {
@@ -93,6 +106,14 @@ export interface Publication extends Entity {
 
 export interface Support extends Entity {
   entity_type: 'Support';
+  origin_samples: Sample[];
+  files: UnprocessedFile[];
+  contributors: ContributorAPIResponse[];
+  published_timestamp: number;
+  assay_modality: 'single' | 'multiple';
+  created_timestamp: number;
+  last_modified_timestamp: number;
+  mapped_data_types: string[];
 }
 
 export type EntityWithType = Partial<Entity> & Required<Pick<Entity, 'entity_type'>>;

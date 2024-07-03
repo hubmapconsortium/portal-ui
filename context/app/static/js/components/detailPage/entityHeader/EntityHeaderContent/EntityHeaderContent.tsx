@@ -4,13 +4,16 @@ import { animated, useSpring } from '@react-spring/web';
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
 import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationNotebookButton';
-import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 
-type EntityType = Exclude<keyof typeof entityIconMap, 'Support' | 'Collection' | 'Workspace' | 'VerifiedUser'>;
+type EntityTypesWithIcons = Exclude<
+  keyof typeof entityIconMap,
+  'Support' | 'Collection' | 'Workspace' | 'VerifiedUser'
+>;
 
 export interface AssayMetadata {
   sex: string;
@@ -23,14 +26,18 @@ export interface AssayMetadata {
   title: string;
   publication_venue: string;
   hubmap_id: string;
-  entity_type: EntityType;
+  entity_type: AllEntityTypes;
   name: string;
   reference_link: React.ReactNode;
 }
 type EntityToFieldsType = Record<
-  EntityType,
+  EntityTypesWithIcons,
   Record<string, (assayMetadata: Partial<AssayMetadata>) => React.ReactNode>
 >;
+
+const entityTypeHasIcon = (entityType: string): entityType is EntityTypesWithIcons => {
+  return entityType in entityIconMap;
+};
 
 const entityToFieldsMap: EntityToFieldsType = {
   Donor: {
@@ -85,7 +92,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
         <>
           <StyledSvgIcon component={entityIconMap[entity_type]} />
           <EntityHeaderItem text={hubmap_id} />
-          {entity_type in entityToFieldsMap
+          {entityTypeHasIcon(entity_type)
             ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
                 <EntityHeaderItem
                   text={React.isValidElement(fn) ? fn : fn(assayMetadata) ?? `undefined ${label}`}

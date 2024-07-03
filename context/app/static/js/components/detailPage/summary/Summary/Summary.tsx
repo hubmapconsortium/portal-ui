@@ -45,8 +45,8 @@ function Summary({
         entityTypeDisplay={entityTypeDisplay}
         entity_type={entity_type}
         uuid={uuid}
-        status={status ?? 'Undefined'}
-        mapped_data_access_level={mapped_data_access_level ?? 'Undefined'}
+        status={status ?? 'Missing status'}
+        mapped_data_access_level={mapped_data_access_level ?? 'Missing access level'}
         entityCanBeSaved={entityCanBeSaved}
         mapped_external_group_name={mapped_external_group_name}
       >

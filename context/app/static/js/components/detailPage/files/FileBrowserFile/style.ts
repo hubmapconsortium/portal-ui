@@ -14,7 +14,7 @@ const StyledRow = styled(TableRow)(({ theme }) => ({
 
 const StyledFileIcon = styled(InsertDriveFileIcon)(({ theme }) => ({
   marginRight: theme.spacing(1),
-  fontSize: theme.typography.body1.fontSize,
+  fontSize: '1.5rem',
 }));
 
 const FileSize = styled(Typography)(({ theme }) => ({

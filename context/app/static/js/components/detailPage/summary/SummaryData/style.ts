@@ -5,7 +5,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 const FlexEnd = styled('div')({
   display: 'flex',
   flexWrap: 'wrap',
-  alignItems: 'flex-end',
+  alignItems: 'center',
 });
 
 const StyledTypography = styled(Typography)(({ theme }) => ({

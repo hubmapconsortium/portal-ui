@@ -4,25 +4,26 @@ import VisualizationErrorBoundary from './VisualizationError';
 import { VizContainerStyleContext } from './ContainerStylingContext';
 import { VisualizationSuspenseFallback } from './VisualizationSuspenseFallback';
 
+// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const Visualization = React.lazy(() => import('../Visualization'));
 
 interface VisualizationWrapperProps {
   vitData: object | object[];
   uuid: string;
-  hasNotebook: boolean;
-  shouldDisplayHeader: boolean;
-  hasBeenMounted: boolean;
-  isPublicationPage: boolean;
+  hasNotebook?: boolean;
+  shouldDisplayHeader?: boolean;
+  hasBeenMounted?: boolean;
+  isPublicationPage?: boolean;
   markerGene?: string;
 }
 
 function VisualizationWrapper({
   vitData,
   uuid,
-  hasNotebook,
+  hasNotebook = false,
   shouldDisplayHeader = true,
   hasBeenMounted,
-  isPublicationPage,
+  isPublicationPage = false,
   markerGene,
 }: VisualizationWrapperProps) {
   const containerStyles = useMemo(
