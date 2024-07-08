@@ -1,3 +1,8 @@
+## v0.100.0 - 2024-07-08
+
+- Fix minor nav issues found during QA.
+
+
 ## v0.99.2 - 2024-06-27
 
 - Implement updated header/navigation components.
