@@ -1,3 +1,10 @@
+## v0.100.1 - 2024-07-10
+
+- Convert detail page components to TypeScript.
+- Convert dataset detail page to TypeScript.
+- Fix pip install issues in dev environments.
+
+
 ## v0.100.0 - 2024-07-08
 
 - Fix minor nav issues found during QA.

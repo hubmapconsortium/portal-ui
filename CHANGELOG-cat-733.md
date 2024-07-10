@@ -1,2 +1,0 @@
-- Convert detail page components to TypeScript.
-- Convert dataset detail page to TypeScript.
