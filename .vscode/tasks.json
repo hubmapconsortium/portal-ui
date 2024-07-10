@@ -4,7 +4,7 @@
     {
       "label": "pip install",
       "type": "shell",
-      "command": "PIP_CONSTRAINT=context/constraint.txt pip install -r context/requirements.txt --use-deprecated=legacy-resolver",
+      "command": "PIP_CONSTRAINT=context/constraints.txt pip install -r context/requirements.txt --use-deprecated=legacy-resolver",
       "group": {
         "kind": "build",
         "isDefault": false
