@@ -76,7 +76,7 @@ trap 'jobs -p | xargs kill' EXIT
 CONTEXT=context
 
 if [ "$NO_PIP" -lt 1 ] ; then 
-  pip install -r $CONTEXT/requirements.txt > /dev/null
+  PIP_CONSTRAINT=$CONTEXT/constraint.txt pip install -r $CONTEXT/requirements.txt > /dev/null --use-deprecated=legacy-resolver
 fi
 
 etc/dev/copy-app-conf.sh

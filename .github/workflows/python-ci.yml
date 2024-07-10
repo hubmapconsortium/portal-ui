@@ -25,10 +25,10 @@ jobs:
           cache-dependency-path: "context/requirements*.txt"
 
       - name: Install python main dependencies
-        run: pip install -r context/requirements.txt --use-deprecated=legacy-resolver
+        run: PIP_CONSTRAINT=/tmp/constraint.txt pip install -r context/requirements.txt --use-deprecated=legacy-resolver
 
       - name: Install python dev dependencies
-        run: pip install -r context/requirements-dev.txt --use-deprecated=legacy-resolver
+        run: PIP_CONSTRAINT=/tmp/constraint.txt pip install -r context/requirements-dev.txt --use-deprecated=legacy-resolver
 
       - name: Run test script
         run: etc/test/test-python.sh
