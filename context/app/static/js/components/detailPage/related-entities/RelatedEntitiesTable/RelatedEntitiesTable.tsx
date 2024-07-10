@@ -6,6 +6,7 @@ import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { HeaderCell } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+import { PartialEntity } from 'js/components/types';
 
 interface ColumnCellProps {
   hubmap_id: string;
@@ -13,15 +14,15 @@ interface ColumnCellProps {
   uuid: string;
 }
 
-interface Column {
+export interface RelatedEntitiesColumn {
   label: string;
   id: string;
-  renderColumnCell: (_source: ColumnCellProps) => React.ReactNode;
+  renderColumnCell: (_source: PartialEntity) => React.ReactNode;
 }
 
 interface RelatedEntitiesTableProps {
-  columns: Column[];
-  entities: { _source: ColumnCellProps }[];
+  columns: RelatedEntitiesColumn[];
+  entities: { _source: PartialEntity }[];
   entityType: string;
 }
 

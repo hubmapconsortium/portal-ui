@@ -23,8 +23,7 @@ function HuBMAPDatasetsChartDropdown({
       selectedOptionIndex={selectedColorDataIndex}
       options={colorDataOptions}
       selectOnClick={setSelectedColorDataIndex}
-      // TODO: improve this when DropdownListbox is converted to TypeScript
-      getOptionLabel={(v) => v as string}
+      getOptionLabel={(v) => v}
       buttonProps={{ variant: 'outlined', color: 'primary', fullWidth: true }}
     />
   );
