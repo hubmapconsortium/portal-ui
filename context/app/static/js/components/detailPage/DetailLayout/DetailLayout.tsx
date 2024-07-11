@@ -1,9 +1,12 @@
 import React, { PropsWithChildren } from 'react';
+import { createPortal } from 'react-dom';
+import Stack from '@mui/material/Stack';
 
 import useEntityStore, { savedAlertStatus, editedAlertStatus, EntityStore } from 'js/stores/useEntityStore';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-import { Content, FlexRow, StyledAlert } from './style';
+import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
+import { StyledAlert } from './style';
 
 const entityStoreSelector = (state: EntityStore) => ({
   shouldDisplaySavedOrEditedAlert: state.shouldDisplaySavedOrEditedAlert,
@@ -12,6 +15,20 @@ const entityStoreSelector = (state: EntityStore) => ({
 
 interface DetailLayoutProps extends PropsWithChildren {
   sectionOrder: string[];
+}
+
+function TableOfContentsPortal({ items }: { items: { text: string; hash: string }[] }) {
+  const element = document.getElementById(leftRouteBoundaryID);
+
+  if (!element) {
+    return null;
+  }
+  return createPortal(
+    <Stack alignItems="end" alignSelf="flex-start" sx={{ height: '100%' }}>
+      <TableOfContents items={items} />
+    </Stack>,
+    element,
+  );
 }
 
 function DetailAlert() {
@@ -43,10 +60,8 @@ function DetailLayout({ sectionOrder, children }: DetailLayoutProps) {
   return (
     <>
       <DetailAlert />
-      <FlexRow>
-        <TableOfContents items={[...sections.values()]} />
-        <Content>{children}</Content>
-      </FlexRow>
+      <TableOfContentsPortal items={[...sections.values()]} />
+      {children}
     </>
   );
 }

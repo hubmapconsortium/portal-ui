@@ -17,11 +17,11 @@ function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{
   return (
     <Suspense fallback={<RouteLoader />}>
       <Stack direction="row">
-        <Box id={leftRouteBoundaryID} flexGrow={disableWidthConstraint ? 0 : 1} />
+        <Box id={leftRouteBoundaryID} flex={disableWidthConstraint ? 0 : 1} sx={{ width: 0 }} />
         <StyledContainer {...constrainWidthProps} component="div">
           {children}
         </StyledContainer>
-        <Box id={rightRouteBoundaryID} flexGrow={disableWidthConstraint ? 0 : 1} />
+        <Box id={rightRouteBoundaryID} flex={disableWidthConstraint ? 0 : 1} sx={{ width: 0 }} />
       </Stack>
     </Suspense>
   );

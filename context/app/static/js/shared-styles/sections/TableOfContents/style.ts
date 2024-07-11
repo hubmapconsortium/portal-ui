@@ -3,8 +3,8 @@ import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
 const TableContainer = styled('div')({
-  marginRight: '30px',
-  width: '120px',
+  marginRight: '8px',
+  height: '100%',
 });
 
 const StickyNav = styled('nav')({
