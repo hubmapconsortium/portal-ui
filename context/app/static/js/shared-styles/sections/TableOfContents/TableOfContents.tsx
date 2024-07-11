@@ -2,16 +2,31 @@ import React, { useState } from 'react';
 import List from '@mui/material/List';
 import { useSpring, animated } from '@react-spring/web';
 
-import useEntityStore from 'js/stores/useEntityStore';
+import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
-const AnimatedNav = animated(StickyNav);
-const entityStoreSelector = (state) => state.summaryComponentObserver;
+interface Item {
+  text: string;
+  hash: string;
+}
 
-function ItemLink({ item, currentSection, handleClick }) {
+type Items = Item[];
+
+const AnimatedNav = animated(StickyNav);
+const entityStoreSelector = (state: EntityStore) => state.summaryComponentObserver;
+
+function ItemLink({
+  item,
+  currentSection,
+  handleClick,
+}: {
+  item: Item;
+  currentSection: string;
+  handleClick: (hash: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+}) {
   return (
     <StyledItemLink
       display="block"
@@ -26,19 +41,11 @@ function ItemLink({ item, currentSection, handleClick }) {
   );
 }
 
-function getItemsClient(headings) {
-  const itemsWithNode = [];
-
-  headings.forEach((item) => {
-    itemsWithNode.push({
-      ...item,
-      node: document.getElementById(item.hash),
-    });
-  });
-  return itemsWithNode;
+function getItemsClient(items: Items) {
+  return items.map((item) => ({ ...item, node: document.getElementById(item.hash) }));
 }
 
-function useThrottledOnScroll(callback, delay) {
+function useThrottledOnScroll(callback: (() => void) | null, delay: number) {
   const throttledCallback = React.useMemo(() => (callback ? throttle(callback, delay) : null), [callback, delay]);
 
   React.useEffect(() => {
@@ -53,16 +60,21 @@ function useThrottledOnScroll(callback, delay) {
   }, [throttledCallback]);
 }
 
-function TableOfContents({ items }) {
+function TableOfContents({ items }: { items: Items }) {
   const [currentSection, setCurrentSection] = useState(items[0].hash);
 
-  const itemsWithNodeRef = React.useRef([]);
+  const itemsWithNodeRef = React.useRef<
+    (Item & {
+      node: HTMLElement | null;
+    })[]
+  >([]);
+
   React.useEffect(() => {
     itemsWithNodeRef.current = getItemsClient(items);
   }, [items]);
 
   const clickedRef = React.useRef(false);
-  const unsetClickedRef = React.useRef(null);
+  const unsetClickedRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
   const findActiveIndex = React.useCallback(() => {
     // Don't set the active index based on scroll if a link was just clicked
@@ -89,7 +101,7 @@ function TableOfContents({ items }) {
 
   useThrottledOnScroll(items.length > 0 ? findActiveIndex : null, 200);
 
-  const handleClick = (hash) => (event) => {
+  const handleClick = (hash: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
     if (
       event.defaultPrevented ||
       event.button !== 0 ||
@@ -114,7 +126,9 @@ function TableOfContents({ items }) {
 
   React.useEffect(
     () => () => {
-      clearTimeout(unsetClickedRef.current);
+      if (unsetClickedRef.current) {
+        clearTimeout(unsetClickedRef.current);
+      }
     },
     [],
   );
@@ -131,9 +145,7 @@ function TableOfContents({ items }) {
   return (
     <TableContainer data-testid="table-of-contents">
       <AnimatedNav style={stickyNavAnimationProps}>
-        <TableTitle variant="h5" component="h3">
-          Sections
-        </TableTitle>
+        <TableTitle variant="h5">Sections</TableTitle>
         <List component="ul">
           {items.map((item) => (
             <li key={item.text}>
