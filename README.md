@@ -109,7 +109,8 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
     - [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands): `conda create -n portal python=$(cat .python-version)`
   - pyenv:
     - `brew install pyenv`
-    - `brew install pyenv-virtualenv`
+    - `brew install pyenv-virtualenv` 
+  - cd into portal-ui (or provide full path to /portal-ui/.python-version file)
     - `` pyenv install `cat .python-version`  ``
     - `` pyenv virtualenv `cat .python-version` portal ``
     - `pyenv activate portal`
