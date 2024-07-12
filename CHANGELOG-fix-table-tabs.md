@@ -1,0 +1,1 @@
+Fix styling on related entities table tabs.
