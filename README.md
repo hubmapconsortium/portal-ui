@@ -110,7 +110,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
   - pyenv:
     - `brew install pyenv`
     - `brew install pyenv-virtualenv` 
-  - cd into portal-ui (or provide full path to /portal-ui/.python-version file)
+    - cd into portal-ui (or provide full path to /portal-ui/.python-version file)
     - `` pyenv install `cat .python-version`  ``
     - `` pyenv virtualenv `cat .python-version` portal ``
     - `pyenv activate portal`
