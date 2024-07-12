@@ -18,7 +18,11 @@ function DataCaptionWithTooltip() {
   );
 }
 
-function HubmapDataFooter({ items = [] }) {
+interface HubmapDataFooterProps {
+  items?: unknown[];
+}
+
+function HubmapDataFooter({ items = [] }: HubmapDataFooterProps) {
   return (
     <SectionFooter
       items={[

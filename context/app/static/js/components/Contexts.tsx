@@ -3,11 +3,12 @@ import { Entity } from './types';
 
 // TODO: Continue populating these types as we find more of the uses of the flask data and app contexts
 
-interface FlaskDataContextType {
+export interface FlaskDataContextType {
   redirected_from: string;
   entity: Entity; // Update to handle different entities.
   [key: string]: unknown;
   title: string; // preview page title
+  vis_lifted_uuid?: string;
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');
@@ -24,6 +25,7 @@ export const useFlaskDataContext = () => useContext(FlaskDataContext);
 
 interface AppContextType {
   assetsEndpoint: string;
+  entityEndpoint: string;
   elasticsearchEndpoint: string;
   groupsToken: string;
   workspacesToken: string;
