@@ -34,9 +34,6 @@ function Footer({ isMaintenancePage }) {
                 </>
               )}
               <ContactUsLink variant="body2">Submit Feedback</ContactUsLink>
-              <OutboundIconLink variant="body2" href="https://twitter.com/_hubmap">
-                HuBMAP on Twitter
-              </OutboundIconLink>
             </FlexColumn>
             <FlexColumn $mr={1}>
               <Typography variant="subtitle2">Software</Typography>
@@ -69,7 +66,7 @@ function Footer({ isMaintenancePage }) {
                 Data Sharing Policy
               </OutboundLink>
               {!isMaintenancePage && (
-                  <OutboundLink href="https://docs.hubmapconsortium.org/about#citation" variant="body2">
+                <OutboundLink href="https://docs.hubmapconsortium.org/about#citation" variant="body2">
                   Citing HuBMAP
                 </OutboundLink>
               )}
