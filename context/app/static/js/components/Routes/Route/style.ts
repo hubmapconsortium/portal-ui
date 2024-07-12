@@ -5,10 +5,9 @@ const StyledContainer = styled(Container)(({ theme }) => ({
   marginTop: theme.spacing(2),
   backgroundColor: theme.palette.background.default,
   flexGrow: 1,
+  flexShrink: 1,
   flexDirection: 'column',
   display: 'flex',
-  marginLeft: 0,
-  marginRight: 0,
 })) as typeof Container;
 
 // max width for a lg container

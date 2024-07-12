@@ -3,25 +3,39 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { ContainerProps } from '@mui/material/Container';
 
+import { useIsDesktop } from 'js/hooks/media-queries';
 import RouteLoader from '../RouteLoader';
 import { StyledContainer } from './style';
 
 export const leftRouteBoundaryID = 'left-route-boundary';
 export const rightRouteBoundaryID = 'right-route-boundary';
 
+function RouteBoundary({
+  id,
+  showBoundary,
+}: {
+  id: typeof leftRouteBoundaryID | typeof rightRouteBoundaryID;
+  showBoundary: boolean;
+}) {
+  return <Box id={id} flex="1 0" sx={{ padding: 1, ...(!showBoundary && { display: 'none' }) }} />;
+}
+
 function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{ disableWidthConstraint: boolean }>) {
   const constrainWidthProps: Partial<ContainerProps> = disableWidthConstraint
     ? { maxWidth: false, disableGutters: true }
     : { maxWidth: 'lg' };
 
+  const isDesktop = useIsDesktop();
+  const shouldShowBoundaries = !disableWidthConstraint && isDesktop;
+
   return (
     <Suspense fallback={<RouteLoader />}>
-      <Stack direction="row">
-        <Box id={leftRouteBoundaryID} flex={disableWidthConstraint ? 0 : 1} sx={{ width: 0 }} />
+      <Stack direction="row" sx={{ width: '100%' }}>
+        <RouteBoundary id={leftRouteBoundaryID} showBoundary={shouldShowBoundaries} />
         <StyledContainer {...constrainWidthProps} component="div">
           {children}
         </StyledContainer>
-        <Box id={rightRouteBoundaryID} flex={disableWidthConstraint ? 0 : 1} sx={{ width: 0 }} />
+        <RouteBoundary id={rightRouteBoundaryID} showBoundary={shouldShowBoundaries} />
       </Stack>
     </Suspense>
   );
