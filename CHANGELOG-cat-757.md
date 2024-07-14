@@ -1,0 +1,1 @@
+- Fix incorrect URL structure in gene search results.
