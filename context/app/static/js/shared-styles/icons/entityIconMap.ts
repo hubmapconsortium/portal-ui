@@ -24,7 +24,7 @@ type WorkspaceEntityType = 'Workspace';
 
 type WorkspaceAPIEntityType = WorkspaceEntityType;
 
-type AllEntityTypes = ESEntityType | UBKGEntityType | WorkspaceAPIEntityType | GlobusEntityType;
+export type AllEntityTypes = ESEntityType | UBKGEntityType | WorkspaceAPIEntityType | GlobusEntityType;
 
 export const entityIconMap: Record<AllEntityTypes, MUIIcon> = {
   Donor: DonorIcon,
