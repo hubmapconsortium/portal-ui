@@ -42,7 +42,11 @@ function Header() {
 
   return (
     <AnimatedPaper style={styles} elevation={4} data-testid="entity-header">
-      <EntityHeaderContent assayMetadata={assayMetadata} shouldDisplayHeader={shouldDisplayHeader} vizIsFullscreen={vizIsFullscreen} />
+      <EntityHeaderContent
+        assayMetadata={assayMetadata}
+        shouldDisplayHeader={shouldDisplayHeader}
+        vizIsFullscreen={vizIsFullscreen}
+      />
     </AnimatedPaper>
   );
 }
