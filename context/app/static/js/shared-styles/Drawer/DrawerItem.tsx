@@ -11,7 +11,7 @@ function formatPrimaryText(label: string, href: string): [React.ReactNode, typeo
     label
   ) : (
     <>
-      {label} <ExternalLinkIcon fontSize="1rem" />
+      {label} <ExternalLinkIcon color="info" fontSize="1rem" />
     </>
   );
   return [primaryText, LinkComponent];

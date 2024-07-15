@@ -6,11 +6,12 @@
       "dom.iterable",
       "esnext"
     ],
-    "module": "commonjs",
+    "module": "preserve",
     "resolveJsonModule": true,
     "isolatedModules": true,
     "strict": true,
     "esModuleInterop": true,
+    "moduleResolution": "bundler",
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "incremental": true,
