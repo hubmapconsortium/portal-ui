@@ -51,7 +51,7 @@ function useDatasetURL(uuid: string) {
   if (queryType !== 'gene') {
     return `/browse/dataset/${uuid}`;
   }
-  return `/cells/${uuid}?marker=${cellVariableName}`;
+  return `/browse/dataset/${uuid}?marker=${cellVariableName}`;
 }
 
 function DatasetTableRow({

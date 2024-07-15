@@ -7,6 +7,6 @@ export function getSectionOrder(
   );
 }
 
-export function getCombinedDatasetStatus({ sub_status, status }: { sub_status: unknown; status: unknown }) {
-  return sub_status || status;
+export function getCombinedDatasetStatus({ sub_status, status }: { sub_status?: string; status: string }) {
+  return sub_status ?? status;
 }

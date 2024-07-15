@@ -1,3 +1,23 @@
+## v0.100.1 - 2024-07-10
+
+- Convert detail page components to TypeScript.
+- Convert dataset detail page to TypeScript.
+- Fix pip install issues in dev environments.
+
+
+## v0.100.0 - 2024-07-08
+
+- Fix minor nav issues found during QA.
+
+
+## v0.99.2 - 2024-06-27
+
+- Implement updated header/navigation components.
+- Fix "explore datasets" link on updated homepage.
+- Fix icon colors in tools section.
+- Fix broken entity tiles.
+
+
 ## v0.99.1 - 2024-06-20
 
 - Implement homepage tools section.

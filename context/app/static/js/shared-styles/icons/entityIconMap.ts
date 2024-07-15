@@ -1,11 +1,17 @@
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
-import ScatterPlot from '@mui/icons-material/ScatterPlot';
-import GeneIcon from 'assets/svg/gene.svg';
 import { ESEntityType } from 'js/components/types';
-import { DatasetIcon, SampleIcon, DonorIcon, PublicationIcon, CollectionIcon, VerifiedIcon } from './icons';
+import {
+  DatasetIcon,
+  SampleIcon,
+  DonorIcon,
+  PublicationIcon,
+  CollectionIcon,
+  VerifiedIcon,
+  GeneIcon,
+  WorkspacesIcon,
+  CellTypeIcon,
+} from './icons';
 
 type MUIIcon = typeof DonorIcon;
-type SVGIcon = typeof WorkspacesIcon;
 
 type CellTypeEntityType = 'CellType';
 type GeneEntityType = 'Gene';
@@ -18,9 +24,9 @@ type WorkspaceEntityType = 'Workspace';
 
 type WorkspaceAPIEntityType = WorkspaceEntityType;
 
-type AllEntityTypes = ESEntityType | UBKGEntityType | WorkspaceAPIEntityType | GlobusEntityType;
+export type AllEntityTypes = ESEntityType | UBKGEntityType | WorkspaceAPIEntityType | GlobusEntityType;
 
-export const entityIconMap: Record<AllEntityTypes, MUIIcon | SVGIcon> = {
+export const entityIconMap: Record<AllEntityTypes, MUIIcon> = {
   Donor: DonorIcon,
   Sample: SampleIcon,
   Dataset: DatasetIcon,
@@ -28,7 +34,7 @@ export const entityIconMap: Record<AllEntityTypes, MUIIcon | SVGIcon> = {
   Publication: PublicationIcon,
   Collection: CollectionIcon,
   Workspace: WorkspacesIcon,
-  CellType: ScatterPlot,
+  CellType: CellTypeIcon,
   Gene: GeneIcon,
   VerifiedUser: VerifiedIcon,
 };
