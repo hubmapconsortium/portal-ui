@@ -9,12 +9,10 @@ import EntityHeaderContent from '../EntityHeaderContent';
 
 const AnimatedPaper = animated(StyledPaper);
 
-const entityStoreSelector = (state: EntityStore) => {
-  return {
-    assayMetadata: state.assayMetadata,
-    summaryComponentObserver: state.summaryComponentObserver,
-  };
-};
+const entityStoreSelector = (state: EntityStore) => ({
+  assayMetadata: state.assayMetadata,
+  summaryComponentObserver: state.summaryComponentObserver,
+});
 
 const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: state.vizIsFullscreen,
