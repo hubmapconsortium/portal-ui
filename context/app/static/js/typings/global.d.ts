@@ -22,3 +22,7 @@ declare namespace JSX {
     'ccf-body-ui': React.DetailedHTMLProps<React.HTMLAttributes<HTMLElement>, HTMLElement>;
   }
 }
+
+declare module 'package' {
+  export const dependencies: Record<string, string>;
+}

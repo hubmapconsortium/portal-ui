@@ -36,7 +36,7 @@ interface SavedEntitiesActions {
   editList: (list: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => void;
 }
 
-type SavedEntitiesStore = SavedEntitiesState & SavedEntitiesActions;
+export type SavedEntitiesStore = SavedEntitiesState & SavedEntitiesActions;
 
 const useSavedEntitiesStore = createImmerPersist<SavedEntitiesStore>(
   (set, get) => ({
