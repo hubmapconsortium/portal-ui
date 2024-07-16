@@ -182,10 +182,21 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     bulkDataTransfer: true,
     contributors: Boolean(contributors && (contributors as unknown[]).length),
   };
+
   const sectionOrder = getSectionOrder(
     ['summary', 'metadata', 'files', 'bulk-data-transfer', 'contributors', 'attribution'],
     shouldDisplaySection,
   );
+
+  const setAssayMetadata = useEntityStore(entityStoreSelector);
+
+  useEffect(() => {
+    setAssayMetadata({
+      hubmap_id,
+      entity_type,
+      mapped_data_types,
+    });
+  }, [entity_type, hubmap_id, mapped_data_types, setAssayMetadata]);
 
   const datasetLabel = useDatasetLabel();
 
@@ -306,6 +317,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
 
   const metadataSectionProps =
     assay_modality === 'multiple' ? { assay_modality } : { metadata: combinedMetadata, assay_modality };
+
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
       <OldVersionAlert uuid={uuid} isLatest={isLatest} />
@@ -355,6 +367,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
 function DetailPageWrapper({ assayMetadata, ...props }: EntityDetailProps<Entity>) {
   const { entity_type, hubmap_id } = assayMetadata;
   useTrackID({ entity_type, hubmap_id });
+
   if (isDataset(assayMetadata)) {
     return <DatasetDetail assayMetadata={assayMetadata} {...props} />;
   }

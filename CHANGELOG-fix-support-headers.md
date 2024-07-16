@@ -1,0 +1,1 @@
+Fix headers on support entity detail pages.
