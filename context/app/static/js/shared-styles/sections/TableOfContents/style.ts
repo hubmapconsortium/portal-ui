@@ -19,19 +19,23 @@ const border = {
   borderLeft: '3px solid #c4c4c4', // TODO: Move to theme.
 };
 
-const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean }>(({ theme, $isCurrentSection }) => ({
-  fontSize: theme.typography.body1.fontSize,
-  lineHeight: 1.25,
-  paddingBottom: theme.spacing(0.5),
-  paddingLeft: theme.spacing(0.5),
-  borderLeft: '3px solid transparent',
-  marginBottom: theme.spacing(0.5),
+const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boolean }>(
+  ({ theme, $isCurrentSection, $isNested }) => ({
+    fontSize: theme.typography.body1.fontSize,
+    lineHeight: 1.25,
+    paddingBottom: theme.spacing(0.5),
+    paddingLeft: theme.spacing(0.5),
+    borderLeft: '3px solid transparent',
 
-  '&:hover': border,
-  ...($isCurrentSection && {
-    color: theme.palette.info.main,
-    ...border, // TODO: Move to theme.
+    ...($isNested && {
+      marginLeft: theme.spacing(1),
+    }),
+    '&:hover': border,
+    ...($isCurrentSection && {
+      color: theme.palette.info.main,
+      ...border, // TODO: Move to theme.
+    }),
   }),
-}));
+);
 
 export { TableContainer, StickyNav, TableTitle, StyledItemLink };

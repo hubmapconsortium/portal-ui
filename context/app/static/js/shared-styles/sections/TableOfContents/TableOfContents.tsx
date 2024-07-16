@@ -8,25 +8,31 @@ import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
-interface Item {
+export interface Item {
   text: string;
   hash: string;
 }
 
-type Items = Item[];
+export interface TableOfContentsItem extends Item {
+  items?: Item[];
+}
+
+export interface TableOfContentsItemWithNode extends TableOfContentsItem {
+  node: ReturnType<typeof document.getElementById>;
+}
+
+export type TableOfContentsItems<I = TableOfContentsItem> = I[];
 
 const AnimatedNav = animated(StickyNav);
 const entityStoreSelector = (state: EntityStore) => state.summaryComponentObserver;
 
-function ItemLink({
-  item,
-  currentSection,
-  handleClick,
-}: {
-  item: Item;
+interface LinkProps {
   currentSection: string;
   handleClick: (hash: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
-}) {
+  isNested?: boolean;
+}
+
+function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkProps & { item: TableOfContentsItem }) {
   return (
     <StyledItemLink
       display="block"
@@ -35,14 +41,50 @@ function ItemLink({
       underline="none"
       onClick={handleClick(item.hash)}
       $isCurrentSection={currentSection === item.hash}
+      $isNested={isNested}
     >
       {item.text}
     </StyledItemLink>
   );
 }
 
-function getItemsClient(items: Items) {
-  return items.map((item) => ({ ...item, node: document.getElementById(item.hash) }));
+function SubItemLinks({ items, ...rest }: LinkProps & { items?: Item[] }) {
+  if (!items) {
+    return null;
+  }
+
+  return (
+    <List component="ul">
+      <li>
+        {items.map((subItem) => (
+          <ItemLink item={subItem} key={subItem.text} isNested {...rest} />
+        ))}
+      </li>
+    </List>
+  );
+}
+
+function ItemLinks({
+  item,
+  ...rest
+}: LinkProps & {
+  item: TableOfContentsItem;
+}) {
+  return (
+    <li>
+      <ItemLink item={item} {...rest} />
+      <SubItemLinks items={item?.items} {...rest} />
+    </li>
+  );
+}
+
+function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<TableOfContentsItemWithNode> {
+  return items.map((item) => ({
+    text: item.text,
+    hash: item.hash,
+    node: document.getElementById(item.hash),
+    ...(item?.items && { items: getItemsClient(item.items) }),
+  }));
 }
 
 function useThrottledOnScroll(callback: (() => void) | null, delay: number) {
@@ -60,11 +102,11 @@ function useThrottledOnScroll(callback: (() => void) | null, delay: number) {
   }, [throttledCallback]);
 }
 
-function TableOfContents({ items }: { items: Items }) {
+function TableOfContents({ items }: { items: TableOfContentsItems }) {
   const [currentSection, setCurrentSection] = useState(items[0].hash);
 
   const itemsWithNodeRef = React.useRef<
-    (Item & {
+    (TableOfContentsItem & {
       node: HTMLElement | null;
     })[]
   >([]);
@@ -148,9 +190,7 @@ function TableOfContents({ items }: { items: Items }) {
         <TableTitle variant="h5">Sections</TableTitle>
         <List component="ul">
           {items.map((item) => (
-            <li key={item.text}>
-              <ItemLink item={item} currentSection={currentSection} handleClick={handleClick} />
-            </li>
+            <ItemLinks item={item} currentSection={currentSection} handleClick={handleClick} key={item.text} />
           ))}
         </List>
       </AnimatedNav>
