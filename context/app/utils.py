@@ -1,8 +1,8 @@
 from urllib.parse import urlparse
 from flask import (current_app, request, session, Blueprint)
 
-from .api.client import ApiClient
-from .api.mock_client import MockApiClient
+from portal_visualization.client import ApiClient
+from portal_visualization.mock_client import MockApiClient
 from os.path import dirname
 from pathlib import Path
 
