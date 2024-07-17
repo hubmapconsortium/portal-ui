@@ -32,7 +32,7 @@ const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boo
     ...($isCurrentSection
       ? {
           color: theme.palette.info.main,
-          borderColor: theme.palette.success.main,
+          borderColor: theme.palette.success.light,
         }
       : { borderColor: 'transparent', ':hover': { borderColor: theme.palette.provenance.default } }),
   }),

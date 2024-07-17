@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import List from '@mui/material/List';
+import SvgIcon from '@mui/material/SvgIcon';
+import IconButton from '@mui/material/IconButton';
+import ExpandMore from '@mui/icons-material/ExpandMore';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import Collapse from '@mui/material/Collapse';
+import ListItem from '@mui/material/ListItem';
+
 import { useSpring, animated } from '@react-spring/web';
 
 import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
@@ -8,13 +15,11 @@ import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { throttle } from 'js/helpers/functions';
 import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
 
-export interface Item {
+export interface TableOfContentsItem {
   text: string;
   hash: string;
-}
-
-export interface TableOfContentsItem extends Item {
-  items?: Item[];
+  icon?: typeof SvgIcon;
+  items?: TableOfContentsItem[];
 }
 
 export interface TableOfContentsItemWithNode extends TableOfContentsItem {
@@ -33,48 +38,65 @@ interface LinkProps {
 }
 
 function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkProps & { item: TableOfContentsItem }) {
+  const { icon: Icon } = item;
+
   return (
     <StyledItemLink
-      display="block"
+      display="flex"
+      alignItems="center"
+      gap={0.5}
       color={currentSection === item.hash ? 'textPrimary' : 'textSecondary'}
       href={`#${item.hash}`}
-      underline="none"
       onClick={handleClick(item.hash)}
       $isCurrentSection={currentSection === item.hash}
       $isNested={isNested}
     >
+      {Icon && <Icon sx={{ fontSize: '1rem' }} color="primary" />}
       {item.text}
     </StyledItemLink>
   );
 }
 
-function SubItemLinks({ items, ...rest }: LinkProps & { items?: Item[] }) {
-  if (!items) {
-    return null;
-  }
-
-  return (
-    <List component="ul">
-      <li>
-        {items.map((subItem) => (
-          <ItemLink item={subItem} key={subItem.text} isNested {...rest} />
-        ))}
-      </li>
-    </List>
-  );
-}
-
 function ItemLinks({
   item,
+  level = 0,
   ...rest
 }: LinkProps & {
+  level: number;
   item: TableOfContentsItem;
 }) {
+  const [open, setOpen] = useState(false);
+
+  const { items: subItems } = item;
+
   return (
-    <li>
-      <ItemLink item={item} {...rest} />
-      <SubItemLinks items={item?.items} {...rest} />
-    </li>
+    <>
+      <ListItem
+        sx={(theme) => ({
+          display: 'flex',
+          justifyContent: 'space-between',
+          pl: level * 1,
+          ...(level > 0 && { backgroundColor: theme.palette.secondaryContainer.main }),
+        })}
+        disableGutters
+      >
+        <ItemLink item={item} {...rest} />
+        {subItems && (
+          <IconButton size="small" onClick={() => setOpen((value) => !value)} color="primary">
+            {open ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
+          </IconButton>
+        )}
+      </ListItem>
+      {subItems && (
+        <Collapse in={open} timeout="auto" unmountOnExit>
+          <List disablePadding sx={level === 1 ? { marginBottom: 1 } : {}}>
+            {subItems.map((subItem) => (
+              <ItemLinks item={{ ...subItem }} key={subItem.text} {...rest} level={level + 1} />
+            ))}
+          </List>
+        </Collapse>
+      )}
+    </>
   );
 }
 
@@ -83,6 +105,7 @@ function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<Table
     text: item.text,
     hash: item.hash,
     node: document.getElementById(item.hash),
+    icon: item.icon,
     ...(item?.items && { items: getItemsClient(item.items) }),
   }));
 }
@@ -187,10 +210,16 @@ function TableOfContents({ items }: { items: TableOfContentsItems }) {
   return (
     <TableContainer data-testid="table-of-contents">
       <AnimatedNav style={stickyNavAnimationProps}>
-        <TableTitle variant="h5">Sections</TableTitle>
+        <TableTitle variant="h5">Contents</TableTitle>
         <List component="ul">
           {items.map((item) => (
-            <ItemLinks item={item} currentSection={currentSection} handleClick={handleClick} key={item.text} />
+            <ItemLinks
+              item={item}
+              currentSection={currentSection}
+              handleClick={handleClick}
+              key={item.text}
+              level={0}
+            />
           ))}
         </List>
       </AnimatedNav>
