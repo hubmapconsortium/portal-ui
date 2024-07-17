@@ -1,1 +1,0 @@
-- Display dbGaP link to logged in users if one is available and logged in user does not have access to Globus.
