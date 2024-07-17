@@ -16,7 +16,7 @@ const TableTitle = styled(Typography)({
 });
 
 const border = {
-  borderLeft: '3px solid #c4c4c4', // TODO: Move to theme.
+  borderLeft: '3px solid', // TODO: Move to theme.
 };
 
 const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boolean }>(
@@ -25,16 +25,16 @@ const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boo
     lineHeight: 1.25,
     paddingBottom: theme.spacing(0.5),
     paddingLeft: theme.spacing(0.5),
-    borderLeft: '3px solid transparent',
-
+    ...border,
     ...($isNested && {
       marginLeft: theme.spacing(1),
     }),
-    '&:hover': border,
-    ...($isCurrentSection && {
-      color: theme.palette.info.main,
-      ...border, // TODO: Move to theme.
-    }),
+    ...($isCurrentSection
+      ? {
+          color: theme.palette.info.main,
+          borderColor: theme.palette.success.main,
+        }
+      : { borderColor: 'transparent', ':hover': { borderColor: theme.palette.provenance.default } }),
   }),
 );
 
