@@ -1,3 +1,4 @@
+import SvgIcon from '@mui/material/SvgIcon';
 import {
   AnalysisDetailsIcon,
   AttributionIcon,
@@ -11,14 +12,14 @@ import {
   VisualizationIcon,
 } from './icons';
 
-export const sectionIconMap = {
+export const sectionIconMap: Record<string, typeof SvgIcon> = {
   summary: SummaryIcon,
   metadata: MetadataIcon,
   processed: ProcessedDataIcon,
   visualization: VisualizationIcon,
   files: FileIcon,
   analysis: AnalysisDetailsIcon,
-  data: BulkDataIcon,
+  'bulk-data-transfer': BulkDataIcon,
   provenance: ProvenanceIcon,
   collections: CollectionIcon,
   attribution: AttributionIcon,
