@@ -17,7 +17,7 @@ function RouteBoundary({
   id: typeof leftRouteBoundaryID | typeof rightRouteBoundaryID;
   showBoundary: boolean;
 }) {
-  return <Box id={id} flex="1 0" sx={{ padding: 1, ...(!showBoundary && { display: 'none' }) }} />;
+  return <Box id={id} flex="1 0" sx={{ padding: 2, ...(!showBoundary && { display: 'none' }) }} />;
 }
 
 function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{ disableWidthConstraint: boolean }>) {
