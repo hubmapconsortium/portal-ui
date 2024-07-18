@@ -15,7 +15,7 @@ import {
 export const sectionIconMap: Record<string, typeof SvgIcon> = {
   summary: SummaryIcon,
   metadata: MetadataIcon,
-  processed: ProcessedDataIcon,
+  'processed-data': ProcessedDataIcon,
   visualization: VisualizationIcon,
   files: FileIcon,
   analysis: AnalysisDetailsIcon,
