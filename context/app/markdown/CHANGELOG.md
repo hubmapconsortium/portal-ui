@@ -1,3 +1,14 @@
+## v0.101.0 - 2024-07-17
+
+- Updated back-end dependencies.
+- Display dbGaP link to logged in users if one is available and logged in user does not have access to Globus.
+- Fix incorrect URL structure in gene search results.
+Fix headers on support entity detail pages.
+Fix styling on related entities table tabs.
+- Fixed the count in the Samples table header
+- Removed twitter link from the footer.
+
+
 ## v0.100.1 - 2024-07-10
 
 - Convert detail page components to TypeScript.
