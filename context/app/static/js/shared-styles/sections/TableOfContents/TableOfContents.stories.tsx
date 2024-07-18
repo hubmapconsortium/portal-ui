@@ -8,6 +8,7 @@ import TableOfContents, { TableOfContentsItems } from './TableOfContents';
 
 interface HeaderStoryComponent {
   items: TableOfContentsItems;
+  isLoading: boolean;
 }
 
 const storyItems = [
@@ -35,10 +36,10 @@ const storyItems = [
   { text: 'Bulbasaur', hash: 'Bulbasaur', icon: DownloadIcon },
 ];
 
-function ToCStoryComponent({ items }: HeaderStoryComponent) {
+function ToCStoryComponent({ items, isLoading }: HeaderStoryComponent) {
   return (
     <Stack direction="row">
-      <TableOfContents items={items} />
+      <TableOfContents items={items} isLoading={isLoading} />
       <Stack>
         {items
           .map((item) => [item, ...(item.items ?? [])])
@@ -63,6 +64,14 @@ type Story = StoryObj<typeof TableOfContents>;
 export const Default: Story = {
   args: {
     items: storyItems,
+    isLoading: false,
+  },
+};
+
+export const Loading: Story = {
+  args: {
+    items: storyItems,
+    isLoading: true,
   },
 };
 

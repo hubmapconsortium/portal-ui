@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import useEntityStore, { savedAlertStatus, editedAlertStatus, EntityStore } from 'js/stores/useEntityStore';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
+import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/TableOfContents';
 import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
 import { useProcessedDatasetsSections } from 'js/pages/Dataset/hooks';
 import { StyledAlert } from './style';
@@ -18,7 +19,7 @@ interface DetailLayoutProps extends PropsWithChildren {
   sectionOrder: string[];
 }
 
-function TableOfContentsPortal({ items }: { items: { text: string; hash: string }[] }) {
+function TableOfContentsPortal({ items, isLoading = false }: { items: TableOfContentsItems; isLoading: boolean }) {
   const element = document.getElementById(leftRouteBoundaryID);
 
   if (!element) {
@@ -26,7 +27,7 @@ function TableOfContentsPortal({ items }: { items: { text: string; hash: string 
   }
   return createPortal(
     <Stack alignItems="end" alignSelf="flex-start" sx={{ height: '100%' }}>
-      <TableOfContents items={items} />
+      <TableOfContents items={items} isLoading={isLoading} />
     </Stack>,
     element,
   );
@@ -58,12 +59,12 @@ function DetailLayout({ sectionOrder, children }: DetailLayoutProps) {
   // section hash must match section id in each component
   const sections = getSections(sectionOrder);
 
-  const { sections: processedDatasetSections } = useProcessedDatasetsSections();
+  const { sections: processedDatasetSections, isLoading } = useProcessedDatasetsSections();
 
   return (
     <>
       <DetailAlert />
-      <TableOfContentsPortal items={[...sections, ...processedDatasetSections]} />
+      <TableOfContentsPortal items={[...sections, ...processedDatasetSections]} isLoading={isLoading} />
       {children}
     </>
   );

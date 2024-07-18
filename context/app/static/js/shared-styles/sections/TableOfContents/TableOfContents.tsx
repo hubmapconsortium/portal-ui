@@ -6,6 +6,8 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExpandLess from '@mui/icons-material/ExpandLess';
 import Collapse from '@mui/material/Collapse';
 import ListItem from '@mui/material/ListItem';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 
 import { useSpring, animated } from '@react-spring/web';
 
@@ -125,7 +127,16 @@ function useThrottledOnScroll(callback: (() => void) | null, delay: number) {
   }, [throttledCallback]);
 }
 
-function TableOfContents({ items }: { items: TableOfContentsItems }) {
+function ItemSkeleton() {
+  return (
+    <Stack direction="row" spacing={1} alignItems="center" sx={({ spacing }) => ({ margin: `${spacing(2)} 0px` })}>
+      <Skeleton variant="circular" width={16} height={16} />
+      <Skeleton variant="text" sx={{ fontSize: '1rem' }} width={150} />
+    </Stack>
+  );
+}
+
+function TableOfContents({ items, isLoading = false }: { items: TableOfContentsItems; isLoading?: boolean }) {
   const [currentSection, setCurrentSection] = useState(items[0].hash);
 
   const itemsWithNodeRef = React.useRef<
@@ -211,17 +222,27 @@ function TableOfContents({ items }: { items: TableOfContentsItems }) {
     <TableContainer data-testid="table-of-contents">
       <AnimatedNav style={stickyNavAnimationProps}>
         <TableTitle variant="h5">Contents</TableTitle>
-        <List component="ul">
-          {items.map((item) => (
-            <ItemLinks
-              item={item}
-              currentSection={currentSection}
-              handleClick={handleClick}
-              key={item.text}
-              level={0}
-            />
-          ))}
-        </List>
+        {isLoading ? (
+          <>
+            <ItemSkeleton />
+            <ItemSkeleton />
+            <ItemSkeleton />
+            <ItemSkeleton />
+            <ItemSkeleton />
+          </>
+        ) : (
+          <List component="ul">
+            {items.map((item) => (
+              <ItemLinks
+                item={item}
+                currentSection={currentSection}
+                handleClick={handleClick}
+                key={item.text}
+                level={0}
+              />
+            ))}
+          </List>
+        )}
       </AnimatedNav>
     </TableContainer>
   );
