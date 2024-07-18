@@ -2,21 +2,21 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
-const TableContainer = styled('div')({
-  marginRight: '8px',
+const TableContainer = styled('div')(({ theme }) => ({
+  marginRight: theme.spacing(1),
   height: '100%',
-});
+}));
 
 const StickyNav = styled('nav')({
   position: 'sticky',
 });
 
-const TableTitle = styled(Typography)({
-  marginLeft: '7px',
-});
+const TableTitle = styled(Typography)(({ theme }) => ({
+  marginLeft: theme.spacing(1),
+}));
 
 const border = {
-  borderLeft: '3px solid', // TODO: Move to theme.
+  borderLeft: '3px solid',
 };
 
 const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boolean }>(
@@ -34,7 +34,7 @@ const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boo
           color: theme.palette.info.main,
           borderColor: theme.palette.success.light,
         }
-      : { borderColor: 'transparent', ':hover': { borderColor: theme.palette.provenance.default } }),
+      : { borderColor: 'transparent', ':hover': { borderColor: theme.palette.secondary.light } }),
   }),
 );
 
