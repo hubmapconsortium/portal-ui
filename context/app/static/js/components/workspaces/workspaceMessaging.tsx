@@ -1,6 +1,4 @@
-import React, { PropsWithChildren } from 'react';
-import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
+import React, { PropsWithChildren, useState } from 'react';
 
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
@@ -8,6 +6,22 @@ import { Alert } from 'js/shared-styles/alerts';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
+import SelectableChip from 'js/shared-styles/chips/SelectableChip';
+import { InfoIcon } from 'js/shared-styles/icons';
+
+import { useSelectItems } from 'js/hooks/useSelectItems';
+
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import styled from '@mui/system/styled';
+import Chip, { ChipProps } from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/system/Box';
+
+import TemplateGrid from './TemplateGrid';
+import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './NewWorkspaceDialog/hooks';
+import { LoginButton } from '../detailPage/BulkDataTransfer/style';
 
 function ContactUsForAccess() {
   return (
@@ -19,11 +33,27 @@ function ContactUsForAccess() {
 
 const workspacesDescription = {
   title: 'What are workspaces?',
-  body: 'Workspaces provides a lightweight exploration platform tailored for researchers to easily access HuBMAP data and perform analyses directly within the portal. Effortlessly upload dataset files to a Jupyter notebook using provided templates to get started on analyzing HuBMAP data. ',
+  body: 'Workspaces enable lightweight exploration of public HuBMAP data and user-provided data using Python and R in a Jupyter Lab environment hosted by HuBMAP at no cost to community members.',
+};
+
+const workspacesSupportInfo = {
+  title: 'What do workspaces currently support?',
+  body: 'Workspaces launch with Python support by default, with the option to add support for R upon launch. Please note that workspaces with added R support may experience longer load times.',
+};
+
+const workspacesQuestionsSuggestions = {
+  title: 'Questions/Suggestions',
+  body: (
+    <>
+      Please be aware that certain limitations currently exist on this platform due to its simplified exploration
+      design. If you have any questions or suggestions about workspaces, contact us through the{' '}
+      <ContactUsLink> HuBMAP Help Desk. </ContactUsLink>
+    </>
+  ),
 };
 
 const text = {
-  unauthenticated: [workspacesDescription],
+  unauthenticated: [workspacesDescription, workspacesSupportInfo, workspacesQuestionsSuggestions],
   noAccess: [
     workspacesDescription,
     {
@@ -52,23 +82,8 @@ const text = {
         </>
       ),
     },
-    {
-      title: 'What do workspaces currently support?',
-      body: 'Workspaces launch with Python support by default, with the option to add support for R upon launch. Please note that workspaces with added R support may experience longer load times.',
-    },
-    {
-      title: 'Questions/Suggestions',
-      body: (
-        <>
-          Please be aware that certain limitations currently exist on this platform due to its simplified exploration
-          design. If you have any questions or suggestions about workspaces, submit feedback at the HuBMAP{' '}
-          <InternalLink href="https://hubmapconsortium.slack.com/archives/C056RMNB1C6">
-            #workspaces-feedback
-          </InternalLink>{' '}
-          Slack channel, or <ContactUsLink /> through the help desk.
-        </>
-      ),
-    },
+    workspacesSupportInfo,
+    workspacesQuestionsSuggestions,
   ],
 };
 
@@ -84,17 +99,98 @@ function AccessAlert() {
     </Alert>
   );
 }
+
+interface TagTypes extends ChipProps {
+  option: string;
+}
+
+function TagComponent({ option, ...rest }: TagTypes) {
+  return <Chip label={option} {...rest} />;
+}
+
+function TemplateGridComponent() {
+  const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
+  const [selectedTags, setSelectedTags] = useState<string[]>([]);
+
+  const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
+  const { tags } = useWorkspaceTemplateTags();
+
+  const recommendedTags = ['visualization', 'api'];
+
+  const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({
+    marginRight: theme.spacing(2),
+  }));
+
+  return (
+    <Stack pt={2}>
+      <Typography component="h3" variant="h4">
+        Workspace Templates
+      </Typography>
+      <Stack component={Paper} p={2} mt={1} spacing={2}>
+        <Stack flexDirection="row">
+          <StyledInfoIcon color="primary" fontSize="large" />
+          Here are workspace templates available to help you start analyzing HuBMAP data. They are categorized by tags,
+          which can help you filter templates based on your interests. To view more details on a template, please log
+          in.
+        </Stack>
+        <div>
+          <LoginButton href="/login" variant="contained" color="primary">
+            Log In
+          </LoginButton>
+        </div>
+      </Stack>
+      <Typography sx={{ mt: 2 }} variant="subtitle2">
+        Workspace Template Tags
+      </Typography>
+      <Stack spacing={1}>
+        <MultiAutocomplete
+          value={selectedTags}
+          options={Object.keys(tags)
+            .filter((tag) => !recommendedTags.includes(tag))
+            .sort((a, b) => a.localeCompare(b))}
+          multiple
+          filterSelectedOptions
+          isOptionEqualToValue={(option, value) => option === value}
+          tagComponent={TagComponent}
+          onChange={(_, value: string[]) => {
+            setSelectedTags(value);
+          }}
+        />
+        <Box>
+          <Typography variant="subtitle2" gutterBottom>
+            Recommended Tags
+          </Typography>
+          <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
+            {recommendedTags.map((tag) => (
+              <SelectableChip
+                isSelected={selectedRecommendedTags.has(tag)}
+                label={tag}
+                onClick={() => toggleTag(tag)}
+                key={tag}
+              />
+            ))}
+            <TemplateGrid templates={templates} />
+          </Stack>
+        </Box>
+      </Stack>
+    </Stack>
+  );
+}
+
 function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typeof text }>) {
   return (
-    <Stack component={Paper} p={2} spacing={2}>
-      {children}
-      <Stack spacing={1}>
-        {text[textKey].map(({ title, body }) => (
-          <LabelledSectionText label={title} key={title} spacing={2}>
-            {body}
-          </LabelledSectionText>
-        ))}
+    <Stack>
+      <Stack component={Paper} p={2} spacing={2}>
+        {children}
+        <Stack spacing={1}>
+          {text[textKey].map(({ title, body }) => (
+            <LabelledSectionText label={title} key={title} spacing={2}>
+              {body}
+            </LabelledSectionText>
+          ))}
+        </Stack>
       </Stack>
+      {!isAuthenticated && <TemplateGridComponent />}
     </Stack>
   );
 }
