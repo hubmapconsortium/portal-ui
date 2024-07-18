@@ -67,7 +67,7 @@ function ItemLinks({
   level: number;
   item: TableOfContentsItem;
 }) {
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState(true);
 
   const { items: subItems } = item;
 
