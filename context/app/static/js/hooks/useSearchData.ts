@@ -123,6 +123,7 @@ export default function useSearchData<Documents, Aggs>(
   query: SearchRequest,
   {
     useDefaultQuery = defaultConfig.useDefaultQuery,
+    shouldFetch = true,
     fetcher = defaultConfig.fetcher,
     ...swrConfig
   }: UseSearchDataConfig | undefined = defaultConfig,
@@ -131,7 +132,7 @@ export default function useSearchData<Documents, Aggs>(
   const { elasticsearchEndpoint } = useAppContext();
 
   const { data, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>(
-    { query, requestInit, url: elasticsearchEndpoint },
+    shouldFetch ? { query, requestInit, url: elasticsearchEndpoint } : null,
     fetcher,
     swrConfig,
   );
@@ -144,11 +145,12 @@ export function useSearchHits<Documents>(
   query: SearchRequest,
   {
     useDefaultQuery = defaultConfig.useDefaultQuery,
+    shouldFetch = true,
     fetcher = defaultConfig.fetcher,
     ...swrConfig
   }: UseSearchDataConfig | undefined = defaultConfig,
 ): UseHitsData<Documents> {
-  const { searchData, isLoading } = useSearchData(query, { useDefaultQuery, fetcher, ...swrConfig });
+  const { searchData, isLoading } = useSearchData(query, { useDefaultQuery, shouldFetch, fetcher, ...swrConfig });
   const searchHits = (searchData?.hits?.hits ?? []) as Required<SearchHit<Documents>>[];
   return { searchHits, isLoading };
 }

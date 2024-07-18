@@ -6,6 +6,7 @@ import useEntityStore, { savedAlertStatus, editedAlertStatus, EntityStore } from
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
+import { useProcessedDatasetsSections } from 'js/pages/Dataset/hooks';
 import { StyledAlert } from './style';
 
 const entityStoreSelector = (state: EntityStore) => ({
@@ -55,12 +56,14 @@ function DetailAlert() {
 
 function DetailLayout({ sectionOrder, children }: DetailLayoutProps) {
   // section hash must match section id in each component
-  const sections = new Map(getSections(sectionOrder));
+  const sections = getSections(sectionOrder);
+
+  const { sections: processedDatasetSections } = useProcessedDatasetsSections();
 
   return (
     <>
       <DetailAlert />
-      <TableOfContentsPortal items={[...sections.values()]} />
+      <TableOfContentsPortal items={[...sections, ...processedDatasetSections]} />
       {children}
     </>
   );

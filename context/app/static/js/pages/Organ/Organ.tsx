@@ -39,11 +39,11 @@ function Organ({ organ }: OrganProps) {
   const sectionOrder = Object.entries(shouldDisplaySection)
     .filter(([, shouldDisplay]) => shouldDisplay)
     .map(([sectionName]) => sectionName);
-  const sections = new Map(getSections(sectionOrder));
+  const sections = getSections(sectionOrder);
 
   return (
     <FlexRow>
-      <TableOfContents items={[...sections.values()]} />
+      <TableOfContents items={sections} />
       <Content>
         <Typography variant="subtitle1" component="h1" color="primary">
           Organ
