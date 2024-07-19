@@ -6,8 +6,6 @@ import { Alert } from 'js/shared-styles/alerts';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
-import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { InfoIcon } from 'js/shared-styles/icons';
 
 import { useSelectItems } from 'js/hooks/useSelectItems';
@@ -15,13 +13,12 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import styled from '@mui/system/styled';
-import Chip, { ChipProps } from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/system/Box';
 
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './NewWorkspaceDialog/hooks';
 import { LoginButton } from '../detailPage/BulkDataTransfer/style';
+import TemplateTagsAutocomplete from './TemplateTagsAutocomplete/TemplateTagsAutocomplete';
 
 function ContactUsForAccess() {
   return (
@@ -100,18 +97,9 @@ function AccessAlert() {
   );
 }
 
-interface TagTypes extends ChipProps {
-  option: string;
-}
-
-function TagComponent({ option, ...rest }: TagTypes) {
-  return <Chip label={option} {...rest} />;
-}
-
 function TemplateGridComponent() {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
   const { tags } = useWorkspaceTemplateTags();
 
@@ -143,35 +131,15 @@ function TemplateGridComponent() {
         Workspace Template Tags
       </Typography>
       <Stack spacing={1}>
-        <MultiAutocomplete
-          value={selectedTags}
-          options={Object.keys(tags)
-            .filter((tag) => !recommendedTags.includes(tag))
-            .sort((a, b) => a.localeCompare(b))}
-          multiple
-          filterSelectedOptions
-          isOptionEqualToValue={(option, value) => option === value}
-          tagComponent={TagComponent}
-          onChange={(_, value: string[]) => {
-            setSelectedTags(value);
-          }}
+        <TemplateTagsAutocomplete
+          selectedTags={selectedTags}
+          recommendedTags={recommendedTags}
+          tags={tags}
+          toggleTag={toggleTag}
+          setSelectedTags={setSelectedTags}
+          selectedRecommendedTags={selectedRecommendedTags}
         />
-        <Box>
-          <Typography variant="subtitle2" gutterBottom>
-            Recommended Tags
-          </Typography>
-          <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
-            {recommendedTags.map((tag) => (
-              <SelectableChip
-                isSelected={selectedRecommendedTags.has(tag)}
-                label={tag}
-                onClick={() => toggleTag(tag)}
-                key={tag}
-              />
-            ))}
-            <TemplateGrid templates={templates} />
-          </Stack>
-        </Box>
+        <TemplateGrid templates={templates} />
       </Stack>
     </Stack>
   );
