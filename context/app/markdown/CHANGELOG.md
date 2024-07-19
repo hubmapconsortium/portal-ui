@@ -1,7 +1,7 @@
 ## v0.101.1 - 2024-07-19
 
-- Updated the status icons and colors with the provided mui icons
-Update messaging on My Workspace landing page for users who are not logged in.
+- Updated the status icons and colors with the provided mui icons.
+- Update messaging on My Workspace landing page for users who are not logged in.
 
 
 ## v0.101.0 - 2024-07-17
