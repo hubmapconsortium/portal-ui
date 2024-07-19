@@ -1,5 +1,10 @@
 import React, { PropsWithChildren, useState } from 'react';
 
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { Alert } from 'js/shared-styles/alerts';
@@ -7,12 +12,7 @@ import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { InfoIcon } from 'js/shared-styles/icons';
-
 import { useSelectItems } from 'js/hooks/useSelectItems';
-
-import Stack from '@mui/material/Stack';
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
@@ -117,11 +117,11 @@ function TemplateGridPreview() {
             please <InternalLink href="/login">log in</InternalLink>.
           </Typography>
         </Stack>
-        <div>
+        <Box>
           <LoginButton href="/login" variant="contained" color="primary">
             Log In
           </LoginButton>
-        </div>
+        </Box>
       </Stack>
       <Typography variant="subtitle2">Workspace Template Tags</Typography>
       <Stack spacing={1}>
