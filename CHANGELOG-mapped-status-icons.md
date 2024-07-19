@@ -1,1 +1,0 @@
-- Updated the status icons and colors with the provided mui icons
