@@ -7,12 +7,11 @@ import Typography from '@mui/material/Typography';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import { SelectedItems } from 'js/hooks/useSelectItems';
-import { TemplateTags } from '../types';
+import { useWorkspaceTemplateTags } from '../NewWorkspaceDialog/hooks';
 
 interface TemplateTagsAutocompleteProps {
   selectedTags: string[];
   recommendedTags: string[];
-  tags: TemplateTags;
   toggleTag: (itemKey: string) => void;
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedRecommendedTags: SelectedItems;
@@ -29,11 +28,12 @@ function TagComponent({ option, ...rest }: TagTypes) {
 function TemplateTagsAutocomplete({
   selectedTags,
   recommendedTags,
-  tags,
   toggleTag,
   setSelectedTags,
   selectedRecommendedTags,
 }: TemplateTagsAutocompleteProps) {
+  const { tags } = useWorkspaceTemplateTags();
+
   return (
     <Stack spacing={1}>
       <MultiAutocomplete

@@ -16,7 +16,7 @@ import styled from '@mui/system/styled';
 import Typography from '@mui/material/Typography';
 
 import TemplateGrid from './TemplateGrid';
-import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './NewWorkspaceDialog/hooks';
+import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 import { LoginButton } from '../detailPage/BulkDataTransfer/style';
 import TemplateTagsAutocomplete from './TemplateTagsAutocomplete/TemplateTagsAutocomplete';
 
@@ -101,7 +101,6 @@ function TemplateGridComponent() {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
-  const { tags } = useWorkspaceTemplateTags();
 
   const recommendedTags = ['visualization', 'api'];
 
@@ -134,7 +133,6 @@ function TemplateGridComponent() {
         <TemplateTagsAutocomplete
           selectedTags={selectedTags}
           recommendedTags={recommendedTags}
-          tags={tags}
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}

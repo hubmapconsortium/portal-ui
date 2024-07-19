@@ -7,7 +7,7 @@ import { SelectedItems } from 'js/hooks/useSelectItems';
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import SelectableTemplateGrid from '../SelectableTemplateGrid';
-import { TemplateTags, TemplatesTypes } from '../types';
+import { TemplatesTypes } from '../types';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 import TemplateTagsAutocomplete from '../TemplateTagsAutocomplete';
 
@@ -34,7 +34,6 @@ interface TemplateSelectProps<FormType extends FormWithTemplates> {
   toggleTag: (itemKey: string) => void;
   selectedTags: string[];
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
-  tags: TemplateTags;
   templates: TemplatesTypes;
   disabledTemplates?: TemplatesTypes;
 }
@@ -47,7 +46,6 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
   toggleTag,
   selectedTags,
   setSelectedTags,
-  tags,
   templates,
   disabledTemplates,
 }: TemplateSelectProps<FormType>) {
@@ -61,7 +59,6 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
         <TemplateTagsAutocomplete
           selectedTags={selectedTags}
           recommendedTags={recommendedTags}
-          tags={tags}
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}
