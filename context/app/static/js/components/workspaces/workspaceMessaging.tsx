@@ -12,7 +12,6 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
-import styled from '@mui/system/styled';
 import Typography from '@mui/material/Typography';
 
 import TemplateGrid from './TemplateGrid';
@@ -97,28 +96,26 @@ function AccessAlert() {
   );
 }
 
-function TemplateGridComponent() {
+function TemplateGridPreview() {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
   const recommendedTags = ['visualization', 'api'];
 
-  const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({
-    marginRight: theme.spacing(2),
-  }));
-
   return (
-    <Stack pt={2}>
+    <Stack pt={2} spacing={2}>
       <Typography component="h3" variant="h4">
         Workspace Templates
       </Typography>
-      <Stack component={Paper} p={2} mt={1} spacing={2}>
-        <Stack flexDirection="row">
-          <StyledInfoIcon color="primary" fontSize="large" />
-          Here are workspace templates available to help you start analyzing HuBMAP data. They are categorized by tags,
-          which can help you filter templates based on your interests. To view more details on a template, please log
-          in.
+      <Stack component={Paper} p={2} spacing={2}>
+        <Stack direction="row" spacing={2}>
+          <InfoIcon color="primary" fontSize="1.5rem" />
+          <Typography>
+            Here are workspace templates available to help you start analyzing HuBMAP data. They are categorized by
+            tags, which can help you filter templates based on your interests. To view more details on a template,
+            please <InternalLink href="/login">log in</InternalLink>.
+          </Typography>
         </Stack>
         <div>
           <LoginButton href="/login" variant="contained" color="primary">
@@ -126,9 +123,7 @@ function TemplateGridComponent() {
           </LoginButton>
         </div>
       </Stack>
-      <Typography sx={{ mt: 2 }} variant="subtitle2">
-        Workspace Template Tags
-      </Typography>
+      <Typography variant="subtitle2">Workspace Template Tags</Typography>
       <Stack spacing={1}>
         <TemplateTagsAutocomplete
           selectedTags={selectedTags}
@@ -156,7 +151,7 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
           ))}
         </Stack>
       </Stack>
-      {!isAuthenticated && <TemplateGridComponent />}
+      {!isAuthenticated && <TemplateGridPreview />}
     </Stack>
   );
 }
