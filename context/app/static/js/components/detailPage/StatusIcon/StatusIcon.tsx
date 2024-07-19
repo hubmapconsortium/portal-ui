@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColoredStatusIcon } from './style';
+import { ColoredStatusIcon } from './ColoredStatusIcon';
 
 function getColor(status: string) {
   if (['NEW', 'REOPENED', 'QA', 'LOCKED', 'PROCESSING', 'HOLD', 'SUBMITTED'].includes(status)) {
@@ -30,7 +30,7 @@ function StatusIcon({ status: irregularCaseStatus }: StatusIconProps) {
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 
-  return <ColoredStatusIcon $iconColor={color} data-testid="status-svg-icon" />;
+  return <ColoredStatusIcon $iconStatus={color} data-testid="status-svg-icon" />;
 }
 
 export default StatusIcon;
