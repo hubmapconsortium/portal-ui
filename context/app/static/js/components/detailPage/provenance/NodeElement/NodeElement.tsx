@@ -3,18 +3,25 @@
 import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
-import useProvenanceStore from 'js/stores/useProvenanceStore';
+import useProvenanceStore, { ProvenanceStore } from 'js/stores/useProvenanceStore';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { AsteriskWrapper } from './style';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
+import { ProvNode } from '../types';
 
-const uuidSelector = (state) => state.uuid;
-const setHasRenderedSelector = (state) => state.setHasRendered;
+const uuidSelector = (state: ProvenanceStore) => state.uuid;
+const setHasRenderedSelector = (state: ProvenanceStore) => state.setHasRendered;
 
-function NodeElement({ node, title, columnWidth }) {
-  const style = node.nodeType === 'input' || node.nodeType === 'output' ? { width: columnWidth || 100 } : null;
+interface NodeElementProps {
+  node: ProvNode;
+  title?: string;
+  columnWidth?: number;
+}
 
-  const displayTitle = title || node.title || node.name;
+function NodeElement({ node, title, columnWidth }: NodeElementProps) {
+  const style = ['input', 'output'].includes(node.nodeType) ? { width: columnWidth ?? 100 } : undefined;
+
+  const displayTitle = title ?? node.title ?? node.name;
 
   const uuid = useProvenanceStore(uuidSelector);
   const setHasRendered = useProvenanceStore(setHasRenderedSelector);

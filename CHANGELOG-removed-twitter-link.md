@@ -1,0 +1,1 @@
+- Removed twitter link from the footer.

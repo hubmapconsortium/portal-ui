@@ -1,17 +1,34 @@
-import React, { useEffect } from 'react';
+import React, { ComponentProps, ReactNode, useEffect } from 'react';
+// @ts-expect-error - We have our own type definitions for now
 import Graph, { GraphParser } from '@hms-dbmi-bgm/react-workflow-viz';
+// Upstream issue: https://github.com/4dn-dcic/react-workflow-viz/issues/43
 
-import useProvenanceStore from 'js/stores/useProvenanceStore';
+import useProvenanceStore, { ProvenanceStore } from 'js/stores/useProvenanceStore';
 import ProvData from './ProvData';
+import { ProvData as ProvDataType, ProvNode } from '../types';
 import NodeElement from '../NodeElement';
 
-const useProvenanceStoreSelector = (state) => ({ steps: state.steps, setSteps: state.setSteps });
+const useProvenanceStoreSelector = (state: ProvenanceStore) => ({ steps: state.steps, setSteps: state.setSteps });
 
-function renderNodeElement(node, props) {
+function renderNodeElement(node: ProvNode, props: ComponentProps<typeof Graph>) {
   return <NodeElement {...props} node={node} />;
 }
 
-export default function ProvVis({ provData, getNameForActivity, getNameForEntity, renderDetailPane, entity_type }) {
+interface ProvVisProps {
+  provData: ProvDataType;
+  getNameForActivity: (id: string, prov?: ProvDataType) => string;
+  getNameForEntity: (id: string, prov?: ProvDataType) => string;
+  renderDetailPane: (node: ProvNode) => ReactNode;
+  entity_type: string;
+}
+
+export default function ProvVis({
+  provData,
+  getNameForActivity,
+  getNameForEntity,
+  renderDetailPane,
+  entity_type,
+}: ProvVisProps) {
   const { steps, setSteps } = useProvenanceStore(useProvenanceStoreSelector);
 
   useEffect(() => {

@@ -1,7 +1,7 @@
 import { styled } from '@mui/material/styles';
 import SvgIcon from '@mui/material/SvgIcon';
 
-import { TabPanel, Tabs } from 'js/shared-styles/tabs';
+import { TabPanel } from 'js/shared-styles/tabs';
 import { Alert } from 'js/shared-styles/alerts';
 import { ComponentProps } from 'react';
 
@@ -11,10 +11,6 @@ const StyledTabPanel = styled(TabPanel)(({ index, value }: ComponentProps<typeof
   minHeight: 0, // flex overflow fix
   alignItems: 'center',
 }));
-
-const StyledTabs = styled(Tabs)({
-  flex: 0,
-});
 
 const StyledAlert = styled(Alert)({
   margin: 10,
@@ -26,4 +22,4 @@ const StyledSvgIcon = styled(SvgIcon)(({ theme }) => ({
   marginRight: theme.spacing(1),
 }));
 
-export { StyledTabPanel, StyledTabs, StyledAlert, StyledSvgIcon };
+export { StyledTabPanel, StyledAlert, StyledSvgIcon };
