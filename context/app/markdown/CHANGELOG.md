@@ -1,3 +1,25 @@
+## v0.101.3 - 2024-07-20
+
+- Fix changelog formatting for v0.101.1 entries.
+
+
+## v0.101.1 - 2024-07-19
+
+- Updated the status icons and colors with the provided mui icons.
+- Update messaging on My Workspace landing page for users who are not logged in.
+
+
+## v0.101.0 - 2024-07-17
+
+- Updated back-end dependencies.
+- Display dbGaP link to logged in users if one is available and logged in user does not have access to Globus.
+- Fix incorrect URL structure in gene search results.
+Fix headers on support entity detail pages.
+Fix styling on related entities table tabs.
+- Fixed the count in the Samples table header
+- Removed twitter link from the footer.
+
+
 ## v0.100.1 - 2024-07-10
 
 - Convert detail page components to TypeScript.

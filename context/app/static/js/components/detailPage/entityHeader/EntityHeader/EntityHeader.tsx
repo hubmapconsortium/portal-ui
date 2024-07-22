@@ -13,6 +13,7 @@ const entityStoreSelector = (state: EntityStore) => ({
   assayMetadata: state.assayMetadata,
   summaryComponentObserver: state.summaryComponentObserver,
 });
+
 const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
