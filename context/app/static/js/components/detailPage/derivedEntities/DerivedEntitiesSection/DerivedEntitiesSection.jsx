@@ -15,10 +15,10 @@ function DerivedEntitiesSection() {
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId="derived-samples-and-datasets"
+      sectionId="derived-data"
       headerComponent={
         <RelatedEntitiesSectionHeader
-          header="Derived Samples and Datasets"
+          header="Derived Data"
           uuid={uuid}
           searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
@@ -28,7 +28,7 @@ function DerivedEntitiesSection() {
         entities={entities}
         openIndex={openIndex}
         setOpenIndex={setOpenIndex}
-        ariaLabel="Derived Datasets and Samples Tabs"
+        ariaLabel="Derived Data Tabs"
         renderWarningMessage={(tableEntityType) =>
           `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
         }

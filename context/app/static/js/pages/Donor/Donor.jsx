@@ -35,7 +35,7 @@ function DonorDetail() {
   const shouldDisplaySection = {
     summary: true,
     metadata: Boolean(Object.keys(mapped_metadata).length),
-    'derived-samples-and-datasets': true,
+    'derived-data': true,
     provenance: true,
     protocols: Boolean(protocol_url),
     attribution: true,

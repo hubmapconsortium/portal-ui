@@ -44,7 +44,7 @@ function SampleDetail() {
 
   const shouldDisplaySection = {
     summary: true,
-    derived: Boolean(descendant_counts?.entity_type?.Dataset > 0),
+    'derived-data': Boolean(descendant_counts?.entity_type?.Dataset > 0),
     tissue: true,
     provenance: true,
     protocols: Boolean(protocol_url),
@@ -74,7 +74,7 @@ function SampleDetail() {
             {sample_category}
           </Typography>
         </Summary>
-        {shouldDisplaySection.derived && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
+        {shouldDisplaySection['derived-data'] && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
         <SampleTissue />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
