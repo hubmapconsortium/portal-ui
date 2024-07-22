@@ -9,7 +9,10 @@ interface LoginAlertProps {
 export default function LoginAlert({ featureName }: LoginAlertProps) {
   return (
     <Alert severity="info" action={<Button href="/login">Log in</Button>}>
-      You must be logged in to access {featureName}. Access to {featureName} is restricted to HuBMAP members at present.
+      You must be logged in to access {featureName}.
+      {featureName === 'workspaces'
+        ? ' At present, access to workspaces is restricted to HuBMAP members and invited community members.'
+        : ` Access to ${featureName} is restricted to HuBMAP members at present.`}
     </Alert>
   );
 }
