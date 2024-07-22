@@ -1,10 +1,10 @@
 ## Summary
 
-Briefly describe the feature being introduced/bug being fixed/whatever other changes are being made. Describe any implications this change may have on other parts of the application.
+Briefly describe the feature being introduced/bug being fixed/whatever other changes are being made. Mention any implications this change may have on other parts of the application.
 
-## Design Documentation
+## Design Documentation/Original Tickets
 
-Link to any design documents or diagrams relevant to this feature.
+Link to any design documents, diagrams, or JIRA tickets relevant to this feature.
 
 ## Testing
 
@@ -18,10 +18,10 @@ Include screenshots or video demonstrating any significant visual or behavioral 
 
 - [ ] Code follows the project's coding standards
   - [ ] Lint checks pass locally
-  - [ ] New `CHANGELOG-your-feature-name-here.md` is added to the top level directory, describing the changes in full sentences.
+  - [ ] New `CHANGELOG-your-feature-name-here.md` is present in the root directory, describing the change(s) in full sentences.
 - [ ] Unit tests covering the new feature have been added
 - [ ] All existing tests pass
-- [ ] The documentation has been updated to reflect the new feature
+- [ ] Any relevant documentation in JIRA/Confluence has been updated to reflect the new feature
 
 ## Additional Notes
 
