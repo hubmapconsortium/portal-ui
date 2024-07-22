@@ -4,9 +4,18 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import GlobusLink from './GlobusLink';
 import { useFetchProtectedFile } from './hooks';
 import { LoginButton } from './style';
+
+interface LinkPanel {
+  title: string;
+  tooltip: string;
+  description: string;
+  outboundLink: string;
+  key: 'dbGaP' | 'SRA Experiment';
+}
 
 const dbGaPText = {
   title: 'Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)',
@@ -19,16 +28,14 @@ const globusText = {
   tooltip: 'Global research data management system.',
 };
 
+const dbGaPTooltip = (
+  <>
+    dbGap <InfoTooltipIcon iconTooltipText="Database of Genotypes and Phenotypes" noMargin />
+  </>
+);
+
 const sraExpTooltip =
   'SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.';
-
-interface LinkPanel {
-  title: string;
-  tooltip: string;
-  description: string;
-  outboundLink: string;
-  key: 'dbGaP' | 'SRA Experiment';
-}
 
 const dbGaPLink: LinkPanel = {
   title: 'dbGaP Study',
@@ -73,13 +80,31 @@ const loginPanel: GlobusPanel = {
   ),
 };
 
-const noDbGaPPanel: GlobusPanel = {
+const dbGaPPanel: GlobusPanel = {
   ...dbGaPText,
+  status: 'success',
+  children: (
+    <>
+      This dataset contains protected-access human sequence data. If you are not a Consortium member, you must access
+      these data through {dbGaPTooltip} if available. dbGaP authentication is required for downloading through these
+      links. View{' '}
+      <OutboundLink href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title">
+        documentation
+      </OutboundLink>{' '}
+      on how to attain dbGaP access.
+    </>
+  ),
+};
+
+const noGlobusAccessWhileLoggedInPanel: GlobusPanel = {
+  ...globusText,
   status: 'error',
   children: (
     <>
-      This dataset contains protected-access human sequence data. Data is not yet available through dbGaP, but will be
-      available soon. Please <ContactUsLink variant="body2" /> with any questions regarding this data.
+      This dataset includes protected-access human sequence data. To obtain access, please request the PI of your HuBMAP
+      award to contact us and submit a ticket to get you access to this data through Globus. While {dbGaPTooltip} is
+      available, Globus offers comprehensive data for approved HuBMAP members. For additional help,{' '}
+      <ContactUsLink variant="body2" /> with the dataset ID and information about the files you are trying to access.
     </>
   ),
 };
@@ -100,26 +125,25 @@ interface ErrorPanelSet {
 
 type PanelSet = SuccessPanelSet | ErrorPanelSet;
 
-const PROTECTED_DATA: SuccessPanelSet = {
-  panels: [
-    loginPanel,
-    {
-      ...dbGaPText,
-      status: 'success',
-      children: (
-        <>
-          This dataset contains protected-access human sequence data. If you are not a Consortium member, you must
-          access these data through dbGaP if available. dbGaP authentication is required for downloading through these
-          links. View{' '}
-          <OutboundLink href="https://sharing.nih.gov/accessing-data/accessing-genomic-data/how-to-request-and-access-datasets-from-dbgap#block-bootstrap5-subtheme-page-title">
-            documentation
-          </OutboundLink>{' '}
-          on how to attain dbGaP access.
-        </>
-      ),
-    },
-  ],
+const PROTECTED_DATA_NOT_LOGGED_IN: SuccessPanelSet = {
+  panels: [loginPanel, dbGaPPanel],
   links: [dbGaPLink, sraExperimentLink],
+};
+
+const PROTECTED_DATA_LOGGED_IN_NO_GLOBUS_ACCESS: SuccessPanelSet = {
+  panels: [noGlobusAccessWhileLoggedInPanel],
+  links: [],
+};
+
+const noDbGaPPanel: GlobusPanel = {
+  ...dbGaPText,
+  status: 'error' as const,
+  children: (
+    <>
+      This dataset contains protected-access human sequence data. Data is not yet available through {dbGaPTooltip}, but
+      will be available soon. Please <ContactUsLink variant="body2" /> with any questions regarding this data.
+    </>
+  ),
 };
 
 const PROTECTED_DATA_NO_DBGAP: SuccessPanelSet = {
@@ -215,13 +239,7 @@ const ENTITY_API_ERROR: ErrorPanelSet = {
   },
 };
 
-interface GetGlobusPanelProps {
-  status?: number;
-  panel: PanelSet;
-  isLoading: boolean;
-}
-
-function getGlobusPanel({ status, panel, isLoading }: GetGlobusPanelProps) {
+function getGlobusPanel(status: number | undefined, panel: PanelSet, isLoading: boolean) {
   if (isLoading) {
     return panel;
   }
@@ -246,7 +264,7 @@ export const usePanelSet: () => PanelSet = () => {
   const isNonConsortium = !isHubmapUser;
 
   if (accessType !== 'Protected') {
-    return getGlobusPanel({ status: globusURLStatus, panel: PUBLIC_DATA, isLoading: globusURLIsLoading });
+    return getGlobusPanel(globusURLStatus, PUBLIC_DATA, globusURLIsLoading);
   }
 
   if (isAuthenticated) {
@@ -260,15 +278,18 @@ export const usePanelSet: () => PanelSet = () => {
 
     // If file is protected and request against the file returns 403, user has no access to protected data
     if (hasNoAccess) {
+      if (hasDbGaPStudyURL) {
+        return PROTECTED_DATA_LOGGED_IN_NO_GLOBUS_ACCESS;
+      }
       return NO_ACCESS_TO_PROTECTED_DATA;
     }
 
-    return getGlobusPanel({ status: globusURLStatus, panel: ACCESS_TO_PROTECTED_DATA, isLoading: globusURLIsLoading });
+    return getGlobusPanel(globusURLStatus, ACCESS_TO_PROTECTED_DATA, globusURLIsLoading);
   }
 
   // Unauthenticated cases
   if (hasDbGaPStudyURL) {
-    return PROTECTED_DATA;
+    return PROTECTED_DATA_NOT_LOGGED_IN;
   }
 
   return PROTECTED_DATA_NO_DBGAP;

@@ -30,6 +30,7 @@ export interface AssayMetadata {
   name: string;
   reference_link: React.ReactNode;
 }
+
 type EntityToFieldsType = Record<
   EntityTypesWithIcons,
   Record<string, (assayMetadata: Partial<AssayMetadata>) => React.ReactNode>
@@ -92,7 +93,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
         <>
           <StyledSvgIcon component={entityIconMap[entity_type]} />
           <EntityHeaderItem text={hubmap_id} />
-          {entityTypeHasIcon(entity_type)
+          {entityTypeHasIcon(entity_type) && entityToFieldsMap[entity_type]
             ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
                 <EntityHeaderItem
                   text={React.isValidElement(fn) ? fn : fn(assayMetadata) ?? `undefined ${label}`}
