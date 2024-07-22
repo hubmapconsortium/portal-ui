@@ -25,6 +25,7 @@ export function ToolsAndApplicationLinks() {
       icon={<AppsRounded />}
       direction="right"
       altOnlyTitle
+      tooltipText="HuBMAP Tools & Applications"
     />
   );
 }
@@ -38,6 +39,7 @@ export function UserLinks() {
       icon={<UserIcon />}
       direction="right"
       altOnlyTitle
+      tooltipText={isAuthenticated ? userEmail : 'Your Profile'}
     />
   );
 }
