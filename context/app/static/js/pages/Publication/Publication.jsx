@@ -3,7 +3,7 @@ import React, { useEffect, useMemo } from 'react';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
-import { getCombinedDatasetStatus, getSectionOrder } from 'js/components/detailPage/utils';
+import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import PublicationSummary from 'js/components/publications/PublicationSummary';
 import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
@@ -41,16 +41,14 @@ function Publication({ publication, vignette_json }) {
   const associatedCollectionUUID = associated_collection?.uuid;
 
   const shouldDisplaySection = {
+    summary: true,
+    data: true,
     visualizations: Boolean(Object.keys(vignette_json).length),
-    provenance: !associatedCollectionUUID,
     files: Boolean(files?.length),
-    bulkDataTransfer: true,
+    'bulk-data-transfer': true,
+    authors: true,
+    provenance: !associatedCollectionUUID,
   };
-
-  const sectionOrder = getSectionOrder(
-    ['summary', 'data', 'visualizations', 'files', 'bulk-data-transfer', 'authors', 'provenance'],
-    shouldDisplaySection,
-  );
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
@@ -68,7 +66,7 @@ function Publication({ publication, vignette_json }) {
 
   return (
     <DetailContext.Provider value={detailContext}>
-      <DetailLayout sectionOrder={sectionOrder}>
+      <DetailLayout sections={shouldDisplaySection}>
         <PublicationSummary
           {...publication}
           status={combinedStatus}
@@ -84,7 +82,9 @@ function Publication({ publication, vignette_json }) {
           <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
         )}
         {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
-        {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection['bulk-data-transfer'] && (
+          <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />
+        )}
         <ContributorsTable contributors={contributors} title="Authors" />
         {shouldDisplaySection.provenance && (
           <ProvSection

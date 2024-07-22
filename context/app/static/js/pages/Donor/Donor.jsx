@@ -8,7 +8,6 @@ import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import useEntityStore from 'js/stores/useEntityStore';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
-import { getSectionOrder } from 'js/components/detailPage/utils';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
@@ -34,14 +33,13 @@ function DonorDetail() {
   const { sex, race, age_value, age_unit } = mapped_metadata;
 
   const shouldDisplaySection = {
-    protocols: Boolean(protocol_url),
+    summary: true,
     metadata: Boolean(Object.keys(mapped_metadata).length),
+    'derived-samples-and-datasets': true,
+    provenance: true,
+    protocols: Boolean(protocol_url),
+    attribution: true,
   };
-
-  const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'derived-samples-and-datasets', 'provenance', 'protocols', 'attribution'],
-    shouldDisplaySection,
-  );
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
@@ -61,7 +59,7 @@ function DonorDetail() {
 
   return (
     <DetailContext.Provider value={detailContext}>
-      <DetailLayout sectionOrder={sectionOrder}>
+      <DetailLayout sections={shouldDisplaySection}>
         <Summary
           uuid={uuid}
           entity_type={entity_type}

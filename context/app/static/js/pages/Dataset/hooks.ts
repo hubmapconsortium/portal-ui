@@ -7,6 +7,7 @@ import { excludeComponentDatasetsClause, excludeSupportEntitiesClause, getIDsQue
 import { Dataset, isDataset } from 'js/components/types';
 import { getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
 import { multiFetcher } from 'js/helpers/swr';
+import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/TableOfContents';
 
 function useDatasetLabelPrefix() {
   const {
@@ -104,18 +105,16 @@ function getProcessedDatasetSection({
   };
 }
 
-function useProcessedDatasetsSections() {
+function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false; isLoading: boolean } {
   const { searchHits, confs, isLoading } = useProcessedDatasets();
 
   const sections =
     searchHits.length > 0
-      ? [
-          {
-            ...getSectionFromString('processed-data'),
-            items: searchHits.map((hit) => getProcessedDatasetSection({ hit, conf: confs.get(hit._id) })),
-          },
-        ]
-      : [];
+      ? {
+          ...getSectionFromString('processed-data'),
+          items: searchHits.map((hit) => getProcessedDatasetSection({ hit, conf: confs.get(hit._id) })),
+        }
+      : false;
 
   return {
     sections,

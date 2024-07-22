@@ -2,7 +2,6 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
-import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
@@ -11,6 +10,7 @@ import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
+import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 
 import { OrganFile } from 'js/components/organ/types';
 import { FlexRow, Content } from './style';
@@ -26,24 +26,21 @@ const assaysId = 'Assays';
 const samplesId = 'Samples';
 
 function Organ({ organ }: OrganProps) {
-  const shouldDisplaySearch = organ.search.length > 0;
+  const shouldDisplaySearch = Boolean(organ.search.length > 0);
 
-  const shouldDisplaySection = {
+  const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
-    [hraId]: organ.has_iu_component,
+    [hraId]: Boolean(organ.has_iu_component),
     [referenceId]: Boolean(organ?.azimuth),
     [assaysId]: shouldDisplaySearch,
     [samplesId]: shouldDisplaySearch,
   };
 
-  const sectionOrder = Object.entries(shouldDisplaySection)
-    .filter(([, shouldDisplay]) => shouldDisplay)
-    .map(([sectionName]) => sectionName);
-  const sections = getSections(sectionOrder);
+  const items = getSections(shouldDisplaySection);
 
   return (
     <FlexRow>
-      <TableOfContents items={sections} />
+      <TableOfContents items={items} />
       <Content>
         <Typography variant="subtitle1" component="h1" color="primary">
           Organ

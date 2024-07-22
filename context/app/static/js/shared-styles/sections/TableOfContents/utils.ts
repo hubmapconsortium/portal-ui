@@ -6,9 +6,17 @@ function getSectionFromString(s: string): TableOfContentsItem {
   return { text: capitalizeAndReplaceDashes(s), hash: s, icon: sectionIconMap?.[s] };
 }
 
-function getSections(sectionOrder: string[]) {
+export type SectionOrder = Record<string, boolean | TableOfContentsItem>;
+
+function getSections(sectionOrder: SectionOrder) {
+  const sectionsToDisplay = Object.entries(sectionOrder).filter(([_k, v]) => Boolean(v) === true);
   // Array order reflects order of table of contents.
-  return sectionOrder.map((s) => getSectionFromString(s));
+  return sectionsToDisplay.map(([s, v]) => {
+    if (typeof v === 'object' && v !== null) {
+      return v;
+    }
+    return getSectionFromString(s);
+  });
 }
 
 export { getSections, getSectionFromString };
