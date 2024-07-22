@@ -22,6 +22,7 @@ Include screenshots or video demonstrating any significant visual or behavioral 
 - [ ] Unit tests covering the new feature have been added
 - [ ] All existing tests pass
 - [ ] Any relevant documentation in JIRA/Confluence has been updated to reflect the new feature
+- [ ] Any new functionalities have appropriate analytics functionalities added
 
 ## Additional Notes
 
