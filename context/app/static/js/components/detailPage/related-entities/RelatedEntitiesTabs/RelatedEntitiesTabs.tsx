@@ -2,9 +2,9 @@ import React from 'react';
 
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
-import { Tab } from 'js/shared-styles/tabs';
+import { Tab, Tabs } from 'js/shared-styles/tabs';
 import { ESEntityType, PartialEntity } from 'js/components/types';
-import { StyledTabs, StyledTabPanel, StyledAlert, StyledSvgIcon } from './style';
+import { StyledTabPanel, StyledAlert, StyledSvgIcon } from './style';
 import { RelatedEntitiesColumn } from '../RelatedEntitiesTable/RelatedEntitiesTable';
 
 interface RelatedEntitiesTabProps {
@@ -33,7 +33,7 @@ function RelatedEntitiesTabs({
 
   return (
     <>
-      <StyledTabs value={openIndex} onChange={handleChange} aria-label={ariaLabel}>
+      <Tabs value={openIndex} onChange={handleChange} aria-label={ariaLabel}>
         {entities.map((entity, i) => (
           <Tab
             label={`${entity.tabLabel} (${entity.data.length})`}
@@ -44,7 +44,7 @@ function RelatedEntitiesTabs({
             iconPosition="start"
           />
         ))}
-      </StyledTabs>
+      </Tabs>
       {entities.map(({ tabLabel, data, entityType: tableEntityType, columns }, i) => (
         <StyledTabPanel value={openIndex} index={i} key={tabLabel} data-testid={`${tabLabel.toLowerCase()}-panel`}>
           {data.length > 0 ? (

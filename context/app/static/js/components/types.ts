@@ -36,6 +36,10 @@ export interface Entity {
   donor: Donor;
   descendant_counts: { entity_type: Record<string, number> };
   descendant_ids: string[];
+  metadata: {
+    dag_provenance_list: DagProvenanceType[];
+    [key: string]: unknown;
+  };
   group_name: string;
   created_by_user_displayname: string;
   created_by_user_email: string;
@@ -62,7 +66,6 @@ export interface Sample extends Entity {
   sample_category: string;
   mapped_organ: string;
   organ: string;
-  metadata?: Record<string, string>;
   origin_samples_unique_mapped_organs: string[];
   origin_samples: Sample[];
 }
@@ -76,10 +79,6 @@ export interface Dataset extends Entity {
   assay_modality: 'single' | 'multiple';
   donor: Donor;
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
-  metadata: {
-    dag_provenance_list: DagProvenanceType[];
-    [key: string]: unknown;
-  };
   origin_samples: Sample[];
   origin_samples_unique_mapped_organs: string[];
   mapped_data_types: string[];

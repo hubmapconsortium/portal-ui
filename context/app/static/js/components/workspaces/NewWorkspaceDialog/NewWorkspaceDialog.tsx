@@ -13,7 +13,7 @@ import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import { useWorkspaceTemplates, useWorkspaceTemplateTags } from './hooks';
+import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
@@ -80,8 +80,6 @@ function NewWorkspaceDialog({
   const { isOpen: isLaunchWorkspaceDialogOpen } = useLaunchWorkspaceStore();
 
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
-
-  const { tags } = useWorkspaceTemplateTags();
 
   const submit = useCallback(
     ({ 'workspace-name': workspaceName, templates: templateKeys, workspaceJobTypeId }: CreateWorkspaceFormTypes) => {
@@ -152,7 +150,6 @@ function NewWorkspaceDialog({
           stepIndex={2}
           control={control}
           toggleTag={toggleTag}
-          tags={tags}
           selectedRecommendedTags={selectedRecommendedTags}
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}

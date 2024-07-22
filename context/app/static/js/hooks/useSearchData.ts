@@ -100,7 +100,7 @@ export async function fetchSearchData<Documents, Aggs>(
   url: string,
   token: string,
 ): Promise<SearchResponseBody<Documents, Aggs>> {
-  const body = createSearchRequestBody({ query, useDefaultQuery: false });
+  const body = createSearchRequestBody({ query, useDefaultQuery: true });
   const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
   const searchResponse = await fetch<SearchResponseBody<Documents, Aggs> & Response>({
     url,
@@ -193,9 +193,15 @@ export function useMultiSearchData<Documents, Aggs>(
   const requestInits = useRequestInits({ queries, useDefaultQuery });
   const { elasticsearchEndpoint } = useAppContext();
 
+  const inlineFetcher = () =>
+    fetcher({
+      urls: [elasticsearchEndpoint],
+      requestInits,
+    }) as Promise<SearchResponseBody<Documents, Aggs>[]>;
+
   const { data: searchData, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>[]>(
     { queries, requestInits, url: elasticsearchEndpoint },
-    fetcher,
+    inlineFetcher,
     swrConfig,
   );
 
