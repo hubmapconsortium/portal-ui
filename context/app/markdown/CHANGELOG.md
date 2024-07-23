@@ -1,3 +1,8 @@
+## v0.101.3 - 2024-07-20
+
+- Fix changelog formatting for v0.101.1 entries.
+
+
 ## v0.101.1 - 2024-07-19
 
 - Updated the status icons and colors with the provided mui icons.

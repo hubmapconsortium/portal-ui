@@ -9,6 +9,7 @@ interface HeaderNavigationDrawerProps {
   sections: DrawerSection[];
   direction: 'left' | 'right';
   altOnlyTitle?: boolean;
+  tooltipText?: string;
 }
 
 export default function HeaderNavigationDrawer({
@@ -17,6 +18,7 @@ export default function HeaderNavigationDrawer({
   sections,
   direction,
   altOnlyTitle,
+  tooltipText,
 }: HeaderNavigationDrawerProps) {
   const { open, toggle, onClose } = useDrawerState();
   return (
@@ -27,6 +29,7 @@ export default function HeaderNavigationDrawer({
         altOnlyTitle={altOnlyTitle}
         onClick={toggle}
         icon={open ? <CloseIcon fontSize="1.5rem" /> : icon}
+        tooltip={tooltipText}
       />
       <NavigationDrawer title={title} direction={direction} sections={sections} onClose={onClose} open={open} />
     </>
