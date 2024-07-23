@@ -1,9 +1,11 @@
+import React from 'react';
 import { styled } from '@mui/material/styles';
 import { InfoRounded, ErrorRounded, WarningRounded, CheckCircleRounded } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 
 export interface ColoredStatusIconProps extends SvgIconProps {
   $iconStatus: 'info' | 'success' | 'warning' | 'error';
+  status?: string;
 }
 
 export const iconSymbolStatusMap: {
