@@ -7,7 +7,7 @@ import { excludeComponentDatasetsClause, excludeSupportEntitiesClause, getIDsQue
 import { Dataset, isDataset } from 'js/components/types';
 import { getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
 import { multiFetcher } from 'js/helpers/swr';
-import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/TableOfContents';
+import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/types';
 
 function useDatasetLabelPrefix() {
   const {

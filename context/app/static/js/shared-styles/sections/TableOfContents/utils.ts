@@ -1,6 +1,6 @@
 import { capitalizeAndReplaceDashes } from 'js/helpers/functions';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
-import { TableOfContentsItem } from './TableOfContents';
+import { TableOfContentsItem, TableOfContentsItemWithNode, TableOfContentsItems } from './types';
 
 function getSectionFromString(s: string): TableOfContentsItem {
   return { text: capitalizeAndReplaceDashes(s), hash: s, icon: sectionIconMap?.[s] };
@@ -19,4 +19,14 @@ function getSections(sectionOrder: SectionOrder) {
   });
 }
 
-export { getSections, getSectionFromString };
+function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<TableOfContentsItemWithNode> {
+  return items.map((item) => ({
+    text: item.text,
+    hash: item.hash,
+    node: document.getElementById(item.hash),
+    icon: item.icon,
+    ...(item?.items && { items: getItemsClient(item.items) }),
+  }));
+}
+
+export { getSections, getSectionFromString, getItemsClient };

@@ -4,7 +4,8 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
 import { DownloadIcon } from 'js/shared-styles/icons';
-import TableOfContents, { TableOfContentsItems } from './TableOfContents';
+import TableOfContents from './TableOfContents';
+import { TableOfContentsItems } from './types';
 
 interface HeaderStoryComponent {
   items: TableOfContentsItems;

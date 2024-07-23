@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import List from '@mui/material/List';
-import SvgIcon from '@mui/material/SvgIcon';
 import IconButton from '@mui/material/IconButton';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import ExpandLess from '@mui/icons-material/ExpandLess';
@@ -15,21 +14,10 @@ import { useSpring, animated } from '@react-spring/web';
 import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
-import { throttle } from 'js/helpers/functions';
 import { StickyNav, TableTitle, StyledItemLink } from './style';
-
-export interface TableOfContentsItem {
-  text: string;
-  hash: string;
-  icon?: typeof SvgIcon;
-  items?: TableOfContentsItem[];
-}
-
-export interface TableOfContentsItemWithNode extends TableOfContentsItem {
-  node: ReturnType<typeof document.getElementById>;
-}
-
-export type TableOfContentsItems<I = TableOfContentsItem> = I[];
+import { TableOfContentsItem, TableOfContentsItems } from './types';
+import { getItemsClient } from './utils';
+import { useThrottledOnScroll } from './hooks';
 
 const AnimatedNav = animated(StickyNav);
 const entityStoreSelector = (state: EntityStore) => state.summaryComponentObserver;
@@ -101,31 +89,6 @@ function ItemLinks({
       )}
     </>
   );
-}
-
-function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<TableOfContentsItemWithNode> {
-  return items.map((item) => ({
-    text: item.text,
-    hash: item.hash,
-    node: document.getElementById(item.hash),
-    icon: item.icon,
-    ...(item?.items && { items: getItemsClient(item.items) }),
-  }));
-}
-
-function useThrottledOnScroll(callback: (() => void) | null, delay: number) {
-  const throttledCallback = React.useMemo(() => (callback ? throttle(callback, delay) : null), [callback, delay]);
-
-  React.useEffect(() => {
-    if (throttledCallback === null) {
-      return undefined;
-    }
-
-    window.addEventListener('scroll', throttledCallback);
-    return () => {
-      window.removeEventListener('scroll', throttledCallback);
-    };
-  }, [throttledCallback]);
 }
 
 function ItemSkeleton() {

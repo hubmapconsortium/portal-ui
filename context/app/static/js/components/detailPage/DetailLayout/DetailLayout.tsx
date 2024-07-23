@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 
 import useEntityStore, { savedAlertStatus, editedAlertStatus, EntityStore } from 'js/stores/useEntityStore';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
-import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/TableOfContents';
+import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/types';
 import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
 import { SectionOrder, getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import { StyledAlert } from './style';
