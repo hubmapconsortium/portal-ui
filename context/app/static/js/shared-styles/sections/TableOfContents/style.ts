@@ -10,17 +10,13 @@ const TableTitle = styled(Typography)(({ theme }) => ({
   marginLeft: theme.spacing(1),
 }));
 
-const border = {
-  borderLeft: '3px solid',
-};
-
 const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boolean }>(
   ({ theme, $isCurrentSection, $isNested }) => ({
     fontSize: theme.typography.body1.fontSize,
     lineHeight: 1.25,
     paddingBottom: theme.spacing(0.5),
     paddingLeft: theme.spacing(0.5),
-    ...border,
+    borderLeft: '3px solid',
     ...($isNested && {
       marginLeft: theme.spacing(1),
     }),
