@@ -10,7 +10,6 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import StatusIcon from '../../StatusIcon';
 import useRelatedMultiAssayDatasets, { MultiAssayEntity } from '../useRelatedMultiAssayDatasets';
-import { FlexContainer } from './style';
 
 const text = {
   component: {
@@ -43,10 +42,10 @@ function MultiAssayLink({ dataset: { assay_display_name, uuid, hubmap_id, status
   return (
     <SecondaryBackgroundTooltip title={status}>
       <Typography>
-        <FlexContainer>
+        <Stack direction="row" useFlexGap gap={0.5} alignItems="center">
           {assay_display_name}:<InternalLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</InternalLink>
           <StatusIcon status={status} />
-        </FlexContainer>
+        </Stack>
       </Typography>
     </SecondaryBackgroundTooltip>
   );
