@@ -17,7 +17,7 @@ function RouteBoundary({
   id: typeof leftRouteBoundaryID | typeof rightRouteBoundaryID;
   showBoundary: boolean;
 }) {
-  return <Box id={id} flex="1 0" sx={{ padding: 2, ...(!showBoundary && { display: 'none' }) }} />;
+  return <Box id={id} flex="1 0" padding={2} display={!showBoundary ? 'none' : 'block'} />;
 }
 
 function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{ disableWidthConstraint: boolean }>) {
@@ -30,7 +30,7 @@ function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{
 
   return (
     <Suspense fallback={<RouteLoader />}>
-      <Stack direction="row" sx={{ width: '100%' }}>
+      <Stack direction="row" width="100%">
         <RouteBoundary id={leftRouteBoundaryID} showBoundary={shouldShowBoundaries} />
         <StyledContainer {...constrainWidthProps} component="div">
           {children}
