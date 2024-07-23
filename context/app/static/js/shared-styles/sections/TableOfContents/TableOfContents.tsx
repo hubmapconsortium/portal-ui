@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import List from '@mui/material/List';
 import IconButton from '@mui/material/IconButton';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -141,28 +141,31 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
 
   useThrottledOnScroll(items.length > 0 ? findActiveIndex : null, 200);
 
-  const handleClick = (hash: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-    if (
-      event.defaultPrevented ||
-      event.button !== 0 ||
-      event.metaKey ||
-      event.ctrlKey ||
-      event.altKey ||
-      event.shiftKey
-    ) {
-      return;
-    }
+  const handleClick = useCallback(
+    (hash: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      if (
+        event.defaultPrevented ||
+        event.button !== 0 ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.altKey ||
+        event.shiftKey
+      ) {
+        return;
+      }
 
-    // Used to disable findActiveIndex if the page scrolls due to a click
-    clickedRef.current = true;
-    unsetClickedRef.current = setTimeout(() => {
-      clickedRef.current = false;
-    }, 1000);
+      // Used to disable findActiveIndex if the page scrolls due to a click
+      clickedRef.current = true;
+      unsetClickedRef.current = setTimeout(() => {
+        clickedRef.current = false;
+      }, 1000);
 
-    if (currentSection !== hash) {
-      setCurrentSection(hash);
-    }
-  };
+      if (currentSection !== hash) {
+        setCurrentSection(hash);
+      }
+    },
+    [clickedRef, currentSection, setCurrentSection],
+  );
 
   React.useEffect(
     () => () => {
