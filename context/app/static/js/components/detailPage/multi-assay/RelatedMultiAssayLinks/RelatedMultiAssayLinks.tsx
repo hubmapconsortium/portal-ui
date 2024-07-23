@@ -3,6 +3,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+
 import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -63,7 +64,7 @@ function CurrentMultiAssayLink({ dataset }: MultiAssayLinkProps) {
 
 function RelatedMultiAssayLinks() {
   const {
-    entity: { uuid, status },
+    entity: { uuid },
   } = useFlaskDataContext();
   const { datasets } = useRelatedMultiAssayDatasets();
 
