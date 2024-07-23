@@ -26,7 +26,7 @@ function TableOfContentsPortal({ items, isLoading = false }: { items: TableOfCon
     return null;
   }
   return createPortal(
-    <Stack alignItems="end" alignSelf="flex-start" sx={{ height: '100%' }}>
+    <Stack alignItems="end" alignSelf="flex-start" height="100%">
       <TableOfContents items={items} isLoading={isLoading} />
     </Stack>,
     element,

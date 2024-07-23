@@ -8,6 +8,7 @@ import Collapse from '@mui/material/Collapse';
 import ListItem from '@mui/material/ListItem';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 
 import { useSpring, animated } from '@react-spring/web';
 
@@ -15,7 +16,7 @@ import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { throttle } from 'js/helpers/functions';
-import { TableContainer, StickyNav, TableTitle, StyledItemLink } from './style';
+import { StickyNav, TableTitle, StyledItemLink } from './style';
 
 export interface TableOfContentsItem {
   text: string;
@@ -219,7 +220,7 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
   }
 
   return (
-    <TableContainer data-testid="table-of-contents">
+    <Box data-testid="table-of-contents" height="100%" mr={1}>
       <AnimatedNav style={stickyNavAnimationProps}>
         <TableTitle variant="h5">Contents</TableTitle>
         {isLoading ? (
@@ -244,7 +245,7 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
           </List>
         )}
       </AnimatedNav>
-    </TableContainer>
+    </Box>
   );
 }
 

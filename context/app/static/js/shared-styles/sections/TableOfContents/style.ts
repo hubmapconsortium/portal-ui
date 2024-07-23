@@ -2,11 +2,6 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
 
-const TableContainer = styled('div')(({ theme }) => ({
-  marginRight: theme.spacing(1),
-  height: '100%',
-}));
-
 const StickyNav = styled('nav')({
   position: 'sticky',
 });
@@ -38,4 +33,4 @@ const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boo
   }),
 );
 
-export { TableContainer, StickyNav, TableTitle, StyledItemLink };
+export { StickyNav, TableTitle, StyledItemLink };
