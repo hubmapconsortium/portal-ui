@@ -1,4 +1,5 @@
 import SvgIcon from '@mui/material/SvgIcon';
+import { MutableRefObject } from 'react';
 
 export interface TableOfContentsItem {
   text: string;
@@ -12,3 +13,5 @@ export interface TableOfContentsItemWithNode extends TableOfContentsItem {
 }
 
 export type TableOfContentsItems<I = TableOfContentsItem> = I[];
+
+export type TableOfContentsNodesRef = MutableRefObject<TableOfContentsItems<TableOfContentsItemWithNode>>;

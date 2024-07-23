@@ -15,9 +15,9 @@ import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { StickyNav, TableTitle, StyledItemLink } from './style';
-import { TableOfContentsItem, TableOfContentsItems } from './types';
+import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
 import { getItemsClient } from './utils';
-import { useThrottledOnScroll } from './hooks';
+import { useThrottledOnScroll, useFindActiveIndex } from './hooks';
 
 const AnimatedNav = animated(StickyNav);
 const entityStoreSelector = (state: EntityStore) => state.summaryComponentObserver;
@@ -103,11 +103,7 @@ function ItemSkeleton() {
 function TableOfContents({ items, isLoading = false }: { items: TableOfContentsItems; isLoading?: boolean }) {
   const [currentSection, setCurrentSection] = useState(items[0].hash);
 
-  const itemsWithNodeRef = React.useRef<
-    (TableOfContentsItem & {
-      node: HTMLElement | null;
-    })[]
-  >([]);
+  const itemsWithNodeRef = React.useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
 
   React.useEffect(() => {
     itemsWithNodeRef.current = getItemsClient(items);
@@ -116,28 +112,7 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
   const clickedRef = React.useRef(false);
   const unsetClickedRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
-  const findActiveIndex = React.useCallback(() => {
-    // Don't set the active index based on scroll if a link was just clicked
-    if (clickedRef.current) {
-      return;
-    }
-
-    let active;
-    const d = document.documentElement;
-
-    for (let i = itemsWithNodeRef.current.length - 1; i >= 0; i -= 1) {
-      const item = itemsWithNodeRef.current[i];
-
-      if (item.node && item.node.offsetTop < d.scrollTop + d.clientHeight / 8) {
-        active = item;
-        break;
-      }
-    }
-
-    if (active && currentSection !== active.hash) {
-      setCurrentSection(active.hash);
-    }
-  }, [currentSection]);
+  const findActiveIndex = useFindActiveIndex({ clickedRef, itemsWithNodeRef, currentSection, setCurrentSection });
 
   useThrottledOnScroll(items.length > 0 ? findActiveIndex : null, 200);
 
@@ -167,14 +142,11 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
     [clickedRef, currentSection, setCurrentSection],
   );
 
-  React.useEffect(
-    () => () => {
-      if (unsetClickedRef.current) {
-        clearTimeout(unsetClickedRef.current);
-      }
-    },
-    [],
-  );
+  React.useEffect(() => {
+    if (unsetClickedRef.current) {
+      clearTimeout(unsetClickedRef.current);
+    }
+  }, []);
 
   const { summaryInView } = useEntityStore(entityStoreSelector);
   const initialHeightOffset = headerHeight + 16;
