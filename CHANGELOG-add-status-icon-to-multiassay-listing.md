@@ -1,1 +1,1 @@
-- Added status icon to the processed datasets to differntiate between different runs 
+- Added status icon to the processed datasets to differentiate between different runs.
