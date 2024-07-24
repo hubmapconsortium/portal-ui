@@ -1,0 +1,1 @@
+- Show IDs of workspaces in the workspaces list to differentiate between workspaces with the same name.
