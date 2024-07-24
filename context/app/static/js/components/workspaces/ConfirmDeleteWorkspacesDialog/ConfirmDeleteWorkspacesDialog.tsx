@@ -57,12 +57,13 @@ export default function ConfirmDeleteWorkspacesDialog({
       open={dialogIsOpen}
       onClose={handleClose}
       scroll="paper"
-      aria-labelledby="create-workspace-dialog-title"
+      aria-labelledby="delete-workspace-dialog"
       maxWidth="lg"
     >
       <Stack display="flex" flexDirection="row" justifyContent="space-between" marginRight={1}>
         <DialogTitle id="delete-workspace-dialog-title" variant="h3">
           Delete Workspace
+          {selectedWorkspaceIds.size > 1 ? 's' : ''}
         </DialogTitle>
         <Box alignContent="center">
           <IconButton aria-label="Close" onClick={handleClose} size="large">
@@ -71,8 +72,7 @@ export default function ConfirmDeleteWorkspacesDialog({
         </Box>
       </Stack>
       <DialogContent>
-        You have selected to delete
-        {` ${generateCommaList(selectedWorkspaceNames)}`}. You cannot undo this action.
+        You have selected to delete {`${generateCommaList(selectedWorkspaceNames)}`}. You cannot undo this action.
       </DialogContent>
       <Divider />
       <DialogActions>
