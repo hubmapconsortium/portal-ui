@@ -1,7 +1,10 @@
 import React, { useState } from 'react';
 
-import { Checkbox, Paper, Stack, Typography } from '@mui/material';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
+import Checkbox from '@mui/material/Checkbox';
 
 import Description from 'js/shared-styles/sections/Description';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';

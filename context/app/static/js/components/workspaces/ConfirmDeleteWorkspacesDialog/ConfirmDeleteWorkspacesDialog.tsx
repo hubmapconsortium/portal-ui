@@ -1,16 +1,15 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
-import {
-  Box,
-  Button,
-  Dialog,
-  DialogActions,
-  DialogContent,
-  DialogTitle,
-  Divider,
-  IconButton,
-  Stack,
-} from '@mui/material';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogTitle from '@mui/material/DialogTitle';
+import Divider from '@mui/material/Divider';
+import IconButton from '@mui/material/IconButton';
+
 import CloseRounded from '@mui/icons-material/CloseRounded';
 
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
@@ -33,24 +32,28 @@ export default function ConfirmDeleteWorkspacesDialog({
   selectedWorkspaceIds,
   workspacesList,
 }: ConfirmDeleteWorkspacesDialogProps) {
-  const { toastError } = useSnackbarActions();
-
-  const handleDeleteAndClose = () => {
-    const workspaceIds = [...selectedWorkspaceIds];
-
-    Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId)))).catch((e) => {
-      toastError(`Error deleting workspaces: ${generateCommaList(workspaceIds)}`);
-      console.error(e);
-    });
-
-    selectedWorkspaceIds.clear();
-    handleClose();
-  };
+  const { toastError, toastSuccess } = useSnackbarActions();
 
   const selectedWorkspaceNames = Array.from(selectedWorkspaceIds).map((id) => {
     const workspace = workspacesList.find((w) => w.id === Number(id));
     return workspace ? workspace.name : '';
   });
+
+  const handleDeleteAndClose = useCallback(() => {
+    const workspaceIds = [...selectedWorkspaceIds];
+
+    Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId))))
+      .then(() => {
+        toastSuccess(`Successfully deleted workspaces: ${generateCommaList(selectedWorkspaceNames)}`);
+        selectedWorkspaceIds.clear();
+      })
+      .catch((e) => {
+        toastError(`Error deleting workspaces: ${generateCommaList(selectedWorkspaceNames)}`);
+        console.error(e);
+      });
+
+    handleClose();
+  }, [handleDeleteWorkspace, selectedWorkspaceIds, selectedWorkspaceNames, handleClose, toastError, toastSuccess]);
 
   return (
     <Dialog
