@@ -1,5 +1,5 @@
 import React from 'react';
-import { ColoredStatusIcon } from './ColoredStatusIcon';
+import ColoredStatusIcon from './ColoredStatusIcon';
 
 function getColor(status: string) {
   if (['NEW', 'REOPENED', 'QA', 'LOCKED', 'PROCESSING', 'HOLD', 'SUBMITTED'].includes(status)) {

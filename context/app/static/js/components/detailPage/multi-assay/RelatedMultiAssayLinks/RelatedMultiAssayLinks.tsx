@@ -8,6 +8,7 @@ import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useFlaskDataContext } from 'js/components/Contexts';
+import StatusIcon from '../../StatusIcon';
 import useRelatedMultiAssayDatasets, { MultiAssayEntity } from '../useRelatedMultiAssayDatasets';
 
 const text = {
@@ -26,7 +27,7 @@ const text = {
       'Listed is the processed primary multi-assay dataset, which may contain additional multi-assay information including visualizations.',
   },
   current: {
-    tooltip: 'This is the current dataset that you are viewing.',
+    tooltip: 'Current Dataset | ',
   },
 };
 
@@ -37,17 +38,22 @@ type Entries<T> = {
 interface MultiAssayLinkProps {
   dataset: MultiAssayEntity;
 }
-function MultiAssayLink({ dataset: { assay_display_name, uuid, hubmap_id } }: MultiAssayLinkProps) {
+function MultiAssayLink({ dataset: { assay_display_name, uuid, hubmap_id, status } }: MultiAssayLinkProps) {
   return (
-    <Typography>
-      {assay_display_name}: <InternalLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</InternalLink>
-    </Typography>
+    <SecondaryBackgroundTooltip title={status}>
+      <Typography>
+        <Stack direction="row" useFlexGap gap={0.5} alignItems="center">
+          {assay_display_name}:<InternalLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</InternalLink>
+          <StatusIcon status={status} />
+        </Stack>
+      </Typography>
+    </SecondaryBackgroundTooltip>
   );
 }
 
 function CurrentMultiAssayLink({ dataset }: MultiAssayLinkProps) {
   return (
-    <SecondaryBackgroundTooltip title={text.current.tooltip}>
+    <SecondaryBackgroundTooltip title={`${text.current.tooltip} ${dataset.status}`}>
       <Box sx={(theme) => ({ borderLeft: `2px solid ${theme.palette.success.main}`, pl: 0.5 })}>
         <MultiAssayLink dataset={dataset} />
       </Box>
