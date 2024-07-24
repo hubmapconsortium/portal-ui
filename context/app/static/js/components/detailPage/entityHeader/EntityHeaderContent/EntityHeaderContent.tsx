@@ -94,12 +94,10 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
           <StyledSvgIcon component={entityIconMap[entity_type]} />
           <EntityHeaderItem text={hubmap_id} />
           {entityTypeHasIcon(entity_type) && entityToFieldsMap[entity_type]
-            ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => (
-                <EntityHeaderItem
-                  text={React.isValidElement(fn) ? fn : fn(assayMetadata) ?? `undefined ${label}`}
-                  key={label}
-                />
-              ))
+            ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => {
+                const text = fn(assayMetadata);
+                return React.isValidElement(text) ? <EntityHeaderItem text={text} key={label} /> : null;
+              })
             : null}
         </>
       )}
