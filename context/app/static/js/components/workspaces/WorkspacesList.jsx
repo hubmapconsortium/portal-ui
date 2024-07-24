@@ -14,7 +14,7 @@ import NewWorkspaceDialogFromWorkspaceList from './NewWorkspaceDialog/NewWorkspa
 import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
 
 function WorkspacesList() {
-  const { workspacesList, isDeleting } = useWorkspacesList();
+  const { workspacesList, handleDeleteWorkspace, isDeleting } = useWorkspacesList();
   const { selectedItems, toggleItem } = useSelectItems();
 
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -24,6 +24,7 @@ function WorkspacesList() {
       <ConfirmDeleteWorkspacesDialog
         dialogIsOpen={dialogIsOpen}
         handleClose={() => setDialogIsOpen(false)}
+        handleDeleteWorkspace={handleDeleteWorkspace}
         selectedWorkspaceIds={selectedItems}
         workspacesList={workspacesList}
       />

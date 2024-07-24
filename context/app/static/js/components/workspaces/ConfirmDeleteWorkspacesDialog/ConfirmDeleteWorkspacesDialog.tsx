@@ -17,22 +17,22 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import { generateCommaList } from 'js/helpers/functions';
 
-import { useWorkspacesList } from '../hooks';
 import { MergedWorkspace } from '../types';
 
 interface ConfirmDeleteWorkspacesDialogProps {
   dialogIsOpen: boolean;
   handleClose: () => void;
+  handleDeleteWorkspace: (workspaceId: number) => Promise<void>;
   selectedWorkspaceIds: SelectedItems;
   workspacesList: MergedWorkspace[];
 }
 export default function ConfirmDeleteWorkspacesDialog({
   dialogIsOpen,
   handleClose,
+  handleDeleteWorkspace,
   selectedWorkspaceIds,
   workspacesList,
 }: ConfirmDeleteWorkspacesDialogProps) {
-  const { handleDeleteWorkspace } = useWorkspacesList();
   const { toastError } = useSnackbarActions();
 
   const handleDeleteAndClose = () => {
