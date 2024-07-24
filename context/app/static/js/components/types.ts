@@ -35,6 +35,7 @@ export interface Entity {
   // eslint-disable-next-line no-use-before-define -- Donor is defined later in the file and extends Entity
   donor: Donor;
   descendant_counts: { entity_type: Record<string, number> };
+  descendant_ids: string[];
   metadata: {
     dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;
@@ -72,6 +73,7 @@ export interface Sample extends Entity {
 export interface Dataset extends Entity {
   entity_type: 'Dataset';
   processing: 'raw' | 'processed';
+  pipeline: string;
   assay_display_name: string;
   is_component?: boolean;
   assay_modality: 'single' | 'multiple';

@@ -25,9 +25,17 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
 import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { BarChartRounded, LightbulbOutlined } from '@mui/icons-material';
+import LightbulbOutlined from '@mui/icons-material/LightbulbOutlined';
 import GetAppRounded from '@mui/icons-material/GetAppRounded';
 import ScatterPlot from '@mui/icons-material/ScatterPlot';
+import SummarizeRoundedIcon from '@mui/icons-material/SummarizeRounded';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
+import BarChartRounded from '@mui/icons-material/BarChartRounded';
+import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
+import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
+import SchemaRoundedIcon from '@mui/icons-material/SchemaRounded';
+import AttributionRoundedIcon from '@mui/icons-material/AttributionRounded';
+import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -61,7 +69,7 @@ const SampleIcon = withIconStyles(BubbleChartIcon);
 
 const DatasetIcon = withIconStyles(TableChartIcon);
 
-const PublicationIcon = withIconStyles(DescriptionRoundedIcon);
+const PublicationIcon = withIconStyles(ArticleRoundedIcon);
 
 const ExternalLinkIcon = withIconStyles(LaunchRoundedIcon);
 
@@ -100,6 +108,20 @@ const DownloadIcon = withIconStyles(GetAppRounded);
 const LightbulbIcon = withIconStyles(LightbulbOutlined);
 
 const CellTypeIcon = withIconStyles(ScatterPlot);
+
+const SummaryIcon = withIconStyles(SummarizeRoundedIcon);
+
+const ProcessedDataIcon = withIconStyles(AccountTreeRoundedIcon);
+
+const AnalysisDetailsIcon = withIconStyles(FactCheckRoundedIcon);
+
+const MetadataIcon = withIconStyles(DescriptionRoundedIcon);
+
+const BulkDataIcon = withIconStyles(CloudDownloadRoundedIcon);
+
+const ProvenanceIcon = withIconStyles(SchemaRoundedIcon);
+
+const AttributionIcon = withIconStyles(AttributionRoundedIcon);
 
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
@@ -149,4 +171,11 @@ export {
   EUIIcon,
   AsctBIcon,
   CellTypeIcon,
+  SummaryIcon,
+  ProcessedDataIcon,
+  MetadataIcon,
+  BulkDataIcon,
+  ProvenanceIcon,
+  AttributionIcon,
+  AnalysisDetailsIcon,
 };
