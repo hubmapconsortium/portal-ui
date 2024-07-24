@@ -1,0 +1,1 @@
+- Add confirmation modal to the 'delete workspaces' button.
