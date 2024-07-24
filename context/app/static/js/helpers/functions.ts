@@ -176,3 +176,21 @@ export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, 
 export function getOriginSamplesOrgan(entity: { origin_samples_unique_mapped_organs: string[] }) {
   return entity.origin_samples_unique_mapped_organs.join(', ');
 }
+
+/**
+ * Given an array of strings, create a single comma-separated string that includes
+ * 'and' as well as an oxford comma.
+ *   Ex: ['apples'] => 'apples'
+ *   Ex: ['apples', 'bananas'] => 'apples and bananas'
+ *   Ex: ['apples', 'bananas', 'grapes'] => 'apples, bananas, and grapes'
+ * @author Austen Money
+ * @param list an array of elements to be made into a single comma-separated string.
+ * @returns a comma-separated string.
+ */
+export function generateCommaList(list: string[]): string {
+  const { length } = list;
+
+  return length < 2
+    ? list.join('')
+    : `${list.slice(0, length - 1).join(', ')}${length < 3 ? ' and ' : ', and '}${list[length - 1]}`;
+}

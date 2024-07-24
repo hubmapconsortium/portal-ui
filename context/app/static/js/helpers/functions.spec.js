@@ -9,6 +9,7 @@ import {
   getOriginSamplesOrgan,
   NOT_CAPITALIZED_WORDS,
   shouldCapitalizeString,
+  generateCommaList,
 } from './functions';
 
 test('isEmptyArrayOrObject', () => {
@@ -73,4 +74,14 @@ test('getOriginSamplesOrgan', () => {
   expect(getOriginSamplesOrgan(entity)).toEqual('heart, liver');
   entity.origin_samples_unique_mapped_organs = [];
   expect(getOriginSamplesOrgan(entity)).toEqual('');
+});
+
+test('generateCommaList', () => {
+  expect(generateCommaList([])).toStrictEqual('');
+  expect(generateCommaList(['apples'])).toStrictEqual('apples');
+  expect(generateCommaList(['apples', 'bananas'])).toStrictEqual('apples and bananas');
+  expect(generateCommaList(['apples', 'bananas', 'oranges'])).toStrictEqual('apples, bananas, and oranges');
+  expect(generateCommaList(['apples', 'bananas', 'oranges', 'grapes'])).toStrictEqual(
+    'apples, bananas, oranges, and grapes',
+  );
 });
