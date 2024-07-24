@@ -39,21 +39,23 @@ export default function ConfirmDeleteWorkspacesDialog({
     return workspace ? workspace.name : '';
   });
 
+  const selectedWorkspaceNamesList = generateCommaList(selectedWorkspaceNames);
+
   const handleDeleteAndClose = useCallback(() => {
     const workspaceIds = [...selectedWorkspaceIds];
 
     Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId))))
       .then(() => {
-        toastSuccess(`Successfully deleted workspaces: ${generateCommaList(selectedWorkspaceNames)}`);
+        toastSuccess(`Successfully deleted workspaces: ${selectedWorkspaceNamesList}`);
         selectedWorkspaceIds.clear();
       })
       .catch((e) => {
-        toastError(`Error deleting workspaces: ${generateCommaList(selectedWorkspaceNames)}`);
+        toastError(`Error deleting workspaces: ${selectedWorkspaceNamesList}`);
         console.error(e);
       });
 
     handleClose();
-  }, [handleDeleteWorkspace, selectedWorkspaceIds, selectedWorkspaceNames, handleClose, toastError, toastSuccess]);
+  }, [handleDeleteWorkspace, selectedWorkspaceIds, selectedWorkspaceNamesList, handleClose, toastError, toastSuccess]);
 
   return (
     <Dialog
@@ -75,7 +77,7 @@ export default function ConfirmDeleteWorkspacesDialog({
         </Box>
       </Stack>
       <DialogContent>
-        You have selected to delete {generateCommaList(selectedWorkspaceNames)}. You cannot undo this action.
+        You have selected to delete {selectedWorkspaceNamesList}. You cannot undo this action.
       </DialogContent>
       <Divider />
       <DialogActions>
