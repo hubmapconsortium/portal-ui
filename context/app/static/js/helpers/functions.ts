@@ -176,3 +176,11 @@ export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, 
 export function getOriginSamplesOrgan(entity: { origin_samples_unique_mapped_organs: string[] }) {
   return entity.origin_samples_unique_mapped_organs.join(', ');
 }
+
+export function generateCommaList(list: string[]): string {
+  const { length } = list;
+
+  return length < 2
+    ? list.join('')
+    : `${list.slice(0, length - 1).join(', ')}${length < 3 ? ' and ' : ', and '}${list[length - 1]}`;
+}

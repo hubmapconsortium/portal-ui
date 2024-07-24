@@ -1,15 +1,12 @@
 import React, { useState } from 'react';
 
-import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
+import { Checkbox, Paper, Stack, Typography } from '@mui/material';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
-import Checkbox from '@mui/material/Checkbox';
 
 import Description from 'js/shared-styles/sections/Description';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
 import { useSelectItems } from 'js/hooks/useSelectItems';
+import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
 
 import { useWorkspacesList } from './hooks';
 import WorkspaceButton from './WorkspaceButton';

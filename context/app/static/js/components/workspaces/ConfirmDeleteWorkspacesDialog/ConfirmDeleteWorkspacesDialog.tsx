@@ -1,24 +1,24 @@
 import React from 'react';
 
-import { Box, Button, DialogActions, DialogContent, Divider, Stack } from '@mui/material';
-import Dialog from '@mui/material/Dialog/Dialog';
-import DialogTitle from '@mui/material/DialogTitle/DialogTitle';
-import IconButton from '@mui/material/IconButton/IconButton';
+import {
+  Box,
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  Divider,
+  IconButton,
+  Stack,
+} from '@mui/material';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SelectedItems } from 'js/hooks/useSelectItems';
+import { generateCommaList } from 'js/helpers/functions';
 
 import { useWorkspacesList } from '../hooks';
 import { MergedWorkspace } from '../types';
-
-const genCommaList = (list: string[]): string => {
-  const { length } = list;
-
-  return length < 2
-    ? list.join('')
-    : `${list.slice(0, length - 1).join(', ')}${length < 3 ? ' and ' : ', and '}${list[length - 1]}`;
-};
 
 interface ConfirmDeleteWorkspacesDialogProps {
   dialogIsOpen: boolean;
@@ -39,7 +39,7 @@ export default function ConfirmDeleteWorkspacesDialog({
     const workspaceIds = [...selectedWorkspaceIds];
 
     Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId)))).catch((e) => {
-      toastError(`Error deleting workspaces: ${workspaceIds.join(', ')}`);
+      toastError(`Error deleting workspaces: ${generateCommaList(workspaceIds)}`);
       console.error(e);
     });
 
@@ -72,7 +72,7 @@ export default function ConfirmDeleteWorkspacesDialog({
       </Stack>
       <DialogContent>
         You have selected to delete
-        {` ${genCommaList(selectedWorkspaceNames)}`}. You cannot undo this action.
+        {` ${generateCommaList(selectedWorkspaceNames)}`}. You cannot undo this action.
       </DialogContent>
       <Divider />
       <DialogActions>
