@@ -72,7 +72,7 @@ export default function ConfirmDeleteWorkspacesDialog({
         </Box>
       </Stack>
       <DialogContent>
-        You have selected to delete {`${generateCommaList(selectedWorkspaceNames)}`}. You cannot undo this action.
+        You have selected to delete {generateCommaList(selectedWorkspaceNames)}. You cannot undo this action.
       </DialogContent>
       <Divider />
       <DialogActions>
