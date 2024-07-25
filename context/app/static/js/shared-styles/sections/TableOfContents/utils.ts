@@ -2,8 +2,8 @@ import { capitalizeAndReplaceDashes } from 'js/helpers/functions';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { TableOfContentsItem, TableOfContentsItemWithNode, TableOfContentsItems } from './types';
 
-function getSectionFromString(s: string): TableOfContentsItem {
-  return { text: capitalizeAndReplaceDashes(s), hash: s, icon: sectionIconMap?.[s] };
+function getSectionFromString(s: string, hash: string = s): TableOfContentsItem {
+  return { text: capitalizeAndReplaceDashes(s), hash: encodeURIComponent(hash), icon: sectionIconMap?.[s] };
 }
 
 export type SectionOrder = Record<string, boolean | TableOfContentsItem>;

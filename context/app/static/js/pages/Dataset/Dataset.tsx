@@ -36,6 +36,8 @@ import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert'
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
+import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
+import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
 import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
 
 function NotebookButton({ disabled, ...props }: { disabled: boolean } & ButtonProps) {
@@ -304,6 +306,8 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
   const metadataSectionProps =
     assay_modality === 'multiple' ? { assay_modality } : { metadata: combinedMetadata, assay_modality };
 
+  const datasetRelationships = useDatasetRelationships(uuid);
+
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
       <OldVersionAlert uuid={uuid} isLatest={isLatest} />
@@ -320,6 +324,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
             <>
               <MultiAssayRelationship assay_modality={assay_modality} />
               <DataProducts files={files} />
+              <DatasetRelationships {...datasetRelationships} />
             </>
           }
         >

@@ -6,7 +6,9 @@ import '@xyflow/react/dist/style.css';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { InfoIcon } from 'js/shared-styles/icons';
+import Box from '@mui/material/Box';
 import { nodeTypes } from './nodeTypes';
+import { edgeTypes } from './edgeTypes';
 import { applyLayout } from './utils';
 import { NodeLegend, StatusLegend } from './Legend';
 import { useDatasetStatuses, useDatasetTypes } from './hooks';
@@ -37,6 +39,8 @@ const reactFlowConfig: Partial<ReactFlowProps> = {
   edgesFocusable: false,
   panOnDrag: false,
   zoomOnScroll: false,
+  nodeTypes,
+  edgeTypes,
 } as const;
 
 export function DatasetRelationships({ nodes: initialNodes, edges: initialEdges }: DatasetRelationshipsProps) {
@@ -46,9 +50,11 @@ export function DatasetRelationships({ nodes: initialNodes, edges: initialEdges 
   return (
     <>
       <DatasetRelationshipsHeader />
-      <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges} nodeTypes={nodeTypes}>
-        <Controls showInteractive={false} />
-      </ReactFlow>
+      <Box sx={{ aspectRatio: '16 / 9' }}>
+        <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges}>
+          <Controls showInteractive={false} />
+        </ReactFlow>
+      </Box>
       <Stack direction="row" gap={1}>
         <NodeLegend nodeTypes={types} />
         <StatusLegend statuses={statuses} />

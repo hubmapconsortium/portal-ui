@@ -27,6 +27,7 @@ interface AppContextType {
   assetsEndpoint: string;
   entityEndpoint: string;
   elasticsearchEndpoint: string;
+  softAssayEndpoint: string;
   groupsToken: string;
   workspacesToken: string;
   workspacesEndpoint: string;

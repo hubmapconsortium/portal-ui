@@ -4,14 +4,17 @@ import Stack from '@mui/material/Stack';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import Typography from '@mui/material/Typography';
 import { AccountTreeRounded, ExtensionRounded, SvgIconComponent } from '@mui/icons-material';
+import Skeleton from '@mui/material/Skeleton';
 import StatusIcon from '../StatusIcon';
+import { usePipelineInfo } from './hooks';
 
 interface CommonNodeInfo extends Record<string, unknown> {
   name: string;
 }
 
 interface PipelineNodeInfo extends CommonNodeInfo {
-  description?: string;
+  childDatasets: string[];
+  singleAssay?: boolean;
 }
 
 interface DatasetNodeInfo extends CommonNodeInfo {
@@ -26,6 +29,8 @@ interface NodeTemplateProps extends PropsWithChildren, CommonNodeInfo {
   source?: boolean;
   rounded?: boolean;
   bgColor?: string;
+  isLoading?: boolean;
+  href?: string;
 }
 
 export const nodeColors = {
@@ -42,8 +47,19 @@ export const nodeIcons = {
   componentDataset: ExtensionRounded,
 };
 
-function NodeTemplate({ icon: Icon, status, children, name, target, source, rounded, bgColor }: NodeTemplateProps) {
-  return (
+function NodeTemplate({
+  icon: Icon,
+  status,
+  children,
+  name,
+  target,
+  source,
+  rounded,
+  bgColor,
+  isLoading,
+  href,
+}: NodeTemplateProps) {
+  const contents = (
     <Stack
       direction="column"
       px={2}
@@ -56,7 +72,7 @@ function NodeTemplate({ icon: Icon, status, children, name, target, source, roun
     >
       <Stack direction="row" gap={1} alignItems="center">
         {Icon && <Icon color="primary" fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
-        <Typography variant="subtitle2">{name}</Typography>
+        <Typography variant="subtitle2">{isLoading ? <Skeleton variant="text" width="10rem" /> : name}</Typography>
         {status && <StatusIcon status={status} />}
       </Stack>
       {children && <Typography variant="body2">{children}</Typography>}
@@ -64,6 +80,10 @@ function NodeTemplate({ icon: Icon, status, children, name, target, source, roun
       {source && <Handle style={{ opacity: 0 }} type="source" position={Position.Right} />}
     </Stack>
   );
+  if (href) {
+    return <a href={href}>{contents}</a>;
+  }
+  return contents;
 }
 
 type PrimaryDatasetNodeProps = Node<DatasetNodeInfo, 'primaryDataset'>;
@@ -78,10 +98,13 @@ function PrimaryDatasetNode({ data }: NodeProps<PrimaryDatasetNodeProps>) {
 
 type PipelineNodeProps = Node<PipelineNodeInfo, 'pipeline'>;
 
-function PipelineNode({ data }: NodeProps<PipelineNodeProps>) {
+function PipelineNode({ data: { childDatasets, singleAssay, name } }: NodeProps<PipelineNodeProps>) {
+  const { pipelineInfo = name, isLoading } = usePipelineInfo(childDatasets);
+  const selectedName = singleAssay ? pipelineInfo : 'Multi Assay Pipeline';
+  const description = singleAssay ? null : 'Create component datasets';
   return (
-    <NodeTemplate source target {...data} bgColor={nodeColors.pipeline}>
-      {data.description}
+    <NodeTemplate source target name={selectedName} isLoading={isLoading} bgColor={nodeColors.pipeline}>
+      {description}
     </NodeTemplate>
   );
 }
@@ -90,7 +113,14 @@ type ProcessedDatasetNodeProps = Node<DatasetNodeInfo, 'processedDataset'>;
 
 function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
   return (
-    <NodeTemplate rounded target icon={nodeIcons.processedDataset} bgColor={nodeColors.processedDataset} {...data}>
+    <NodeTemplate
+      rounded
+      target
+      href={`#${data.name}-section`}
+      icon={nodeIcons.processedDataset}
+      bgColor={nodeColors.processedDataset}
+      {...data}
+    >
       {data.datasetType}
     </NodeTemplate>
   );
@@ -100,7 +130,14 @@ type ComponentDatasetNodeProps = Node<DatasetNodeInfo, 'componentDataset'>;
 
 function ComponentDatasetNode({ data }: NodeProps<ComponentDatasetNodeProps>) {
   return (
-    <NodeTemplate rounded target icon={nodeIcons.componentDataset} bgColor={nodeColors.componentDataset} {...data}>
+    <NodeTemplate
+      rounded
+      target
+      icon={nodeIcons.componentDataset}
+      href={`#${data.name}-section`}
+      bgColor={nodeColors.componentDataset}
+      {...data}
+    >
       {data.datasetType}
     </NodeTemplate>
   );

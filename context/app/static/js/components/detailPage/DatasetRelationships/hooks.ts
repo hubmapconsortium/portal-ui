@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { Edge } from '@xyflow/react';
+import { type Edge } from '@xyflow/react';
+import useSWR from 'swr';
+import { useAppContext } from 'js/components/Contexts';
 import { NodeWithoutPosition } from './types';
 import useProvData from '../provenance/hooks';
 import { ProvData } from '../provenance/types';
@@ -26,9 +28,7 @@ function generatePrefix(key: string) {
 
 const entityPrefix = generatePrefix('entities');
 
-function getCurrentEntityType(componentDatasets: Set<string>, currentEntityUUID: string, primaryDatasetUUID: string) {
-  const currentEntityIsComponent = componentDatasets.has(currentEntityUUID);
-  const currentEntityIsPrimary = currentEntityUUID === primaryDatasetUUID;
+function getCurrentEntityType(currentEntityIsComponent: boolean, currentEntityIsPrimary: boolean) {
   if (currentEntityIsPrimary) {
     return 'primaryDataset';
   }
@@ -69,7 +69,9 @@ function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provData?: P
         }
       });
       // Determine the type of the current entity
-      const currentEntityType = getCurrentEntityType(componentDatasets, currentEntityUUID, primaryDatasetUUID);
+      const currentEntityIsComponent = componentDatasets.has(currentEntityUUID);
+      const currentEntityIsPrimary = currentEntityUUID === primaryDatasetUUID;
+      const currentEntityType = getCurrentEntityType(currentEntityIsComponent, currentEntityIsPrimary);
 
       // Add current entity as a node
       nodes.push({
@@ -101,9 +103,6 @@ function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provData?: P
               id: `${activityUUID}-${entityUUID}`,
               source: activityUUID,
               target: entityUUID,
-              data: {
-                originalData: edge,
-              },
             });
             queuedEntities.push(entityUUID);
           }
@@ -115,7 +114,8 @@ function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provData?: P
           data: {
             name: currentActivity[generatePrefix('creation_action')],
             status: currentActivity[generatePrefix('status')],
-            originalData: currentActivity,
+            childDatasets: activityChildEntityEdges.map((edge) => edge['prov:entity'].split('/')[1]),
+            singleAssay: activityChildEntityEdges.length === 1,
           },
         });
         // Add edges between the current entity and the current activity
@@ -123,6 +123,7 @@ function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provData?: P
           id: `${currentEntityUUID}-${activityUUID}`,
           source: currentEntityUUID,
           target: activityUUID,
+          type: 'default',
         });
       });
     }
@@ -134,4 +135,42 @@ export function useDatasetRelationships(uuid: string) {
   const { provData, isLoading } = useProvData(uuid, true);
   const { nodes, edges } = useMemo(() => convertProvDataToNodesAndEdges(uuid, provData), [uuid, provData]);
   return { isLoading, nodes, edges };
+}
+
+interface PipelineInfoRequest {
+  url: string;
+  datasets: string[];
+  groupsToken: string;
+}
+
+interface SoftAssayResponse {
+  assaytype: string;
+  'contains-pii': boolean;
+  description: string;
+  'pipeline-shorthand': string;
+  primary: boolean;
+  'vitessce-hints': string[];
+}
+
+async function fetchPipelineInfo({ url, datasets, groupsToken }: PipelineInfoRequest) {
+  // Only fetch pipeline info if there is one dataset descendant
+  if (datasets.length !== 1) {
+    return Promise.resolve('');
+  }
+  const datasetId = datasets[0];
+  const response = (await fetch(`${url}/${datasetId}`, {
+    headers: {
+      Authorization: `Bearer ${groupsToken}`,
+    },
+  }).then((res) => res.json())) as SoftAssayResponse;
+  return response['pipeline-shorthand'];
+}
+
+export function usePipelineInfo(datasets: string[]) {
+  const { groupsToken, softAssayEndpoint } = useAppContext();
+  const url = `${softAssayEndpoint}/assaytype`;
+  const { data: pipelineInfo, ...rest } = useSWR<string>({ url, datasets, groupsToken }, () =>
+    fetchPipelineInfo({ url, datasets, groupsToken }),
+  );
+  return { pipelineInfo, ...rest };
 }

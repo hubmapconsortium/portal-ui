@@ -100,7 +100,7 @@ function getProcessedDatasetSection({
   const sectionsToDisplay = Object.entries(shouldDisplaySection).filter(([_k, v]) => v === true);
 
   return {
-    ...getSectionFromString(pipeline),
+    ...getSectionFromString(pipeline, `${hubmap_id}-section`),
     items: sectionsToDisplay.map(([s]) => ({ ...getSectionFromString(s), hash: `${s}-${hubmap_id}` })),
   };
 }
