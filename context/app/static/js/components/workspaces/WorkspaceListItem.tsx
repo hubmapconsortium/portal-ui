@@ -12,6 +12,7 @@ import WorkspaceLaunchStopButtons from './WorkspaceLaunchStopButtons';
 import { MergedWorkspace } from './types';
 import { jobStatuses } from './statusCodes';
 import { useWorkspacesList } from './hooks';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
 
 interface WorkspaceListItemProps {
   workspace: MergedWorkspace;
@@ -20,6 +21,7 @@ interface WorkspaceListItemProps {
   selected: boolean;
   disableStop?: boolean;
   disableLaunch?: boolean;
+  checkMaxDatasets?: boolean;
 }
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -38,11 +40,20 @@ function WorkspaceListItem({
   ToggleComponent,
   disableLaunch = false,
   disableStop = false,
+  checkMaxDatasets = false,
 }: WorkspaceListItemProps) {
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
+  const hasMaxDatasets =
+    checkMaxDatasets &&
+    workspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
 
-  const tooltip = isRunning ? 'Stop all jobs before selecting.' : undefined;
+  let tooltip;
+  if (hasMaxDatasets) {
+    tooltip = 'This workspace has reached the maximum number of datasets allowed. You cannot add any more datasets.';
+  } else if (isRunning) {
+    tooltip = 'Stop all jobs before selecting.';
+  }
 
   // Deselect the workspace if the user starts it after selecting it for deletion
   useEffect(() => {
@@ -60,7 +71,7 @@ function WorkspaceListItem({
               aria-label={`Select ${workspace.name}.`}
               checked={selected}
               onChange={() => toggleItem(workspace.id)}
-              disabled={isRunning}
+              disabled={isRunning || hasMaxDatasets}
             />
           </span>
         </SecondaryBackgroundTooltip>
@@ -73,6 +84,7 @@ function WorkspaceListItem({
         isStoppingWorkspace={isStoppingWorkspace}
         disableLaunch={disableLaunch}
         disableStop={disableStop}
+        checkMaxDatasets={checkMaxDatasets}
       />
     </PanelWrapper>
   );

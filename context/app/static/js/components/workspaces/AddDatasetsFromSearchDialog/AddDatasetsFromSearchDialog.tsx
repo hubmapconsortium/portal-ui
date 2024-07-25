@@ -49,6 +49,7 @@ function SelectWorkspaceStep({
               selected={workspace.id === toggledWorkspace}
               ToggleComponent={Radio}
               disableLaunch
+              checkMaxDatasets
             />
           ))}
         </Box>

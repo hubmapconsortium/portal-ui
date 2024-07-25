@@ -9,6 +9,7 @@ import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspac
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { Alert } from 'js/shared-styles/alerts';
 import { MergedWorkspace } from '../types';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -16,6 +17,7 @@ interface WorkspaceButtonProps {
   isStoppingWorkspace: boolean;
   disableLaunch?: boolean;
   disableStop?: boolean;
+  checkMaxDatasets?: boolean;
   button: ElementType<ButtonProps>;
 }
 
@@ -24,12 +26,19 @@ function StopWorkspaceButton({
   handleStopWorkspace,
   button: ButtonComponent,
   isStoppingWorkspace,
+  checkMaxDatasets = false,
 }: Omit<WorkspaceButtonProps, 'disableLaunch' | 'disableStop'>) {
   const { toastError } = useSnackbarActions();
+
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
-  if (!currentWorkspaceIsRunning) {
+  const currentWorkspaceHasMaxDatasets =
+    checkMaxDatasets &&
+    workspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
+
+  if (!currentWorkspaceIsRunning || currentWorkspaceHasMaxDatasets) {
     return null;
   }
+
   return (
     <ButtonComponent
       type="button"
@@ -52,9 +61,13 @@ function StopWorkspaceAlertButton(props: ButtonProps) {
 
 function StopWorkspaceAlert() {
   const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
-  const runningWorkspace = findRunningWorkspace(workspacesList);
 
-  if (!runningWorkspace) {
+  const runningWorkspace = findRunningWorkspace(workspacesList);
+  const runningWorkspaceHasMaxDatasets =
+    runningWorkspace &&
+    runningWorkspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
+
+  if (!runningWorkspace || runningWorkspaceHasMaxDatasets) {
     return null;
   }
 
