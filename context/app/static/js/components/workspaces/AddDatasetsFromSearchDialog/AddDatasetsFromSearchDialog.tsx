@@ -77,6 +77,7 @@ function AddDatasetsStep({
   protectedRows,
   removeProtectedDatasets,
   datasetsErrorMessages,
+  datasetsWarningMessages,
   ...rest
 }: Pick<
   ReturnType<typeof useAddDatasetsFromSearchDialog>,
@@ -85,6 +86,7 @@ function AddDatasetsStep({
   | 'protectedRows'
   | 'removeProtectedDatasets'
   | 'datasetsErrorMessages'
+  | 'datasetsWarningMessages'
   | 'inputValue'
   | 'setInputValue'
   | 'autocompleteValue'
@@ -100,7 +102,11 @@ function AddDatasetsStep({
         Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be selected
         for deletion.
       </Alert>
-      {datasetsErrorMessages.length > 0 && <AlertMessages messages={datasetsErrorMessages} severity="error" />}
+      {datasetsErrorMessages.length > 0 ? (
+        <AlertMessages messages={datasetsErrorMessages} severity="error" />
+      ) : (
+        <AlertMessages messages={datasetsWarningMessages} severity="warning" />
+      )}
       <RemoveProtectedDatasetsFormField
         control={control}
         protectedHubmapIds={protectedHubmapIds}
@@ -121,6 +127,7 @@ function AddDatasetsFromSearchDialogForm() {
     reset,
     resetAutocompleteState,
     datasetsErrorMessages,
+    datasetsWarningMessages,
     workspaceIdErrorMessages,
     selectWorkspace,
     ...rest
@@ -136,10 +143,16 @@ function AddDatasetsFromSearchDialogForm() {
       },
       {
         heading: '2. Add Datasets',
-        content: <AddDatasetsStep datasetsErrorMessages={datasetsErrorMessages} {...rest} />,
+        content: (
+          <AddDatasetsStep
+            datasetsErrorMessages={datasetsErrorMessages}
+            datasetsWarningMessages={datasetsWarningMessages}
+            {...rest}
+          />
+        ),
       },
     ];
-  }, [selectWorkspace, workspaceIdErrorMessages, datasetsErrorMessages, rest]);
+  }, [selectWorkspace, workspaceIdErrorMessages, datasetsErrorMessages, datasetsWarningMessages, rest]);
 
   return (
     <EditWorkspaceDialogContent
