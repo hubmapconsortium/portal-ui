@@ -1,11 +1,11 @@
 import React from 'react';
 
 import Providers from '../app/static/js/components/Providers';
-import { initialize, mswDecorator, mswLoader } from 'msw-storybook-addon';
+import { initialize,  mswLoader } from 'msw-storybook-addon';
 import { enableMapSet } from 'immer';
 
 
-import InterVariable from '@fontsource-variable/inter/files/inter-latin-standard-normal.woff2';
+import '@fontsource-variable/inter/files/inter-latin-standard-normal.woff2';
 
 enableMapSet();
 
@@ -36,7 +36,6 @@ export const decorators = [
       <Story />
     </Providers>
   ),
-  mswDecorator,
 ];
 export const tags = ['autodocs'];
 
