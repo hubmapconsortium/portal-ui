@@ -16,7 +16,7 @@ const config: StorybookConfig = {
     '@chromatic-com/storybook',
     '@storybook/addon-webpack5-compiler-swc',
   ],
-
+  staticDirs: ['../app/static/assets', '../app/static/storybook-public'],
   webpackFinal: async (config) => {
     // exclude svgs from the default file loader
     config.module?.rules?.forEach((rule) => {

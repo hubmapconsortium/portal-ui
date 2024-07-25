@@ -1,9 +1,11 @@
 import React, { type ComponentProps } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { type Edge, MarkerType } from '@xyflow/react';
+import { type Edge } from '@xyflow/react';
+import { http, HttpResponse } from 'msw';
 
 import { DatasetRelationships } from './DatasetRelationships';
 import { NodeWithoutPosition } from './types';
+import { nodes, edges } from './prov.fixtures';
 
 const singleAssayNodes: NodeWithoutPosition[] = [
   {
@@ -20,6 +22,7 @@ const singleAssayNodes: NodeWithoutPosition[] = [
     type: 'pipeline',
     data: {
       name: 'Cytokit + SPRM',
+      singleAssay: true,
     },
   },
   {
@@ -28,6 +31,7 @@ const singleAssayNodes: NodeWithoutPosition[] = [
     data: {
       name: 'Segmentation Mask Action',
       description: 'External',
+      singleAssay: true,
     },
   },
   {
@@ -53,37 +57,21 @@ const singleAssayEdges: Edge[] = [
     id: 'HBM123.ABCD.123-pipeline-cytokit',
     source: 'HBM123.ABCD.123',
     target: 'pipeline-cytokit',
-    type: 'straight',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-    },
   },
   {
     id: 'pipeline-cytokit-HBM123.ABCD.456',
     source: 'pipeline-cytokit',
     target: 'HBM123.ABCD.456',
-    type: 'straight',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-    },
   },
   {
     id: 'HBM123.ABCD.123-pipeline-segmentation-mask',
     source: 'HBM123.ABCD.123',
     target: 'pipeline-segmentation-mask',
-    type: 'straight',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-    },
   },
   {
     id: 'pipeline-segmentation-mask-HBM123.ABCD.789',
     source: 'pipeline-segmentation-mask',
     target: 'HBM123.ABCD.789',
-    type: 'straight',
-    markerEnd: {
-      type: MarkerType.ArrowClosed,
-    },
   },
 ];
 
@@ -98,19 +86,11 @@ const multiAssayNodes: NodeWithoutPosition[] = [
     },
   },
   {
-    id: 'pipeline-split-capture-bead',
+    id: 'pipeline-split',
     type: 'pipeline',
     data: {
       name: 'Multi Assay Split',
-      description: 'Create component dataset',
-    },
-  },
-  {
-    id: 'pipeline-split-microscopy',
-    type: 'pipeline',
-    data: {
-      name: 'Multi Assay Split',
-      description: 'Create component dataset',
+      childDatasets: ['HBM123.ABCD.555', 'HBM123.ABCD.666'],
     },
   },
   {
@@ -118,6 +98,8 @@ const multiAssayNodes: NodeWithoutPosition[] = [
     type: 'pipeline',
     data: {
       name: 'Salmon + Scanpy',
+      childDatasets: ['HBM123.ABCD.999'],
+      singleAssay: true,
     },
   },
   {
@@ -151,14 +133,9 @@ const multiAssayNodes: NodeWithoutPosition[] = [
 
 const multiAssayEdges: Edge[] = [
   {
-    id: 'HBM123.ABCD.123-pipeline-split-capture-bead',
+    id: 'HBM123.ABCD.123-pipeline-split',
     source: 'HBM123.ABCD.123',
-    target: 'pipeline-split-capture-bead',
-  },
-  {
-    id: 'HBM123.ABCD.123-pipeline-split-microscopy',
-    source: 'HBM123.ABCD.123',
-    target: 'pipeline-split-microscopy',
+    target: 'pipeline-split',
   },
   {
     id: 'HBM123.ABCD.123-pipeline-salmon-scanpy',
@@ -167,12 +144,12 @@ const multiAssayEdges: Edge[] = [
   },
   {
     id: 'pipeline-split-capture-bead-HBM123.ABCD.555',
-    source: 'pipeline-split-capture-bead',
+    source: 'pipeline-split',
     target: 'HBM123.ABCD.555',
   },
   {
     id: 'pipeline-split-microscopy-HBM123.ABCD.666',
-    source: 'pipeline-split-microscopy',
+    source: 'pipeline-split',
     target: 'HBM123.ABCD.666',
   },
   {
@@ -190,12 +167,37 @@ function TemplateComponent(args: ComponentProps<typeof DatasetRelationships>) {
   );
 }
 
+const salmonScanpySoftAssayResponse = () =>
+  HttpResponse.json({
+    assaytype: 'salmon-scanpy',
+    'contains-pii': false,
+    description: 'Salmon + Scanpy',
+    'pipeline-shorthand': 'Salmon + Scanpy',
+    primary: false,
+    'vitessce-hints': [],
+  });
+
+const codexSPRMresponse = () =>
+  HttpResponse.json({
+    assaytype: 'codex_cytokit',
+    'contains-pii': false,
+    description: 'CODEX [Cytokit + SPRM]',
+    'pipeline-shorthand': 'Cytokit + SPRM',
+    primary: false,
+    'vitessce-hints': ['sprm', 'anndata', 'is_image', 'is_tiled'],
+  });
+
 const meta: Meta = {
   title: 'DatasetRelationships/DatasetRelationships',
   component: TemplateComponent,
   args: {
     nodes: singleAssayNodes,
     edges: singleAssayEdges,
+  },
+  parameters: {
+    msw: {
+      handlers: [http.get('/soft-assay-endpoint/assaytype/HBM123.ABCD.456', codexSPRMresponse)],
+    },
   },
 };
 
@@ -204,12 +206,37 @@ export const SingleAssay: StoryObj<typeof TemplateComponent> = {
     nodes: singleAssayNodes,
     edges: singleAssayEdges,
   },
+  parameters: {
+    msw: {
+      handlers: [http.get('/soft-assay-endpoint/assaytype/HBM123.ABCD.456', codexSPRMresponse)],
+    },
+  },
 };
 
 export const MultiAssay: StoryObj<typeof TemplateComponent> = {
   args: {
     nodes: multiAssayNodes,
     edges: multiAssayEdges,
+  },
+  parameters: {
+    msw: {
+      handlers: [http.get('/soft-assay-endpoint/assaytype/HBM123.ABCD.999', salmonScanpySoftAssayResponse)],
+    },
+  },
+};
+
+export const RealProv: StoryObj<typeof TemplateComponent> = {
+  args: {
+    nodes,
+    edges,
+  },
+  parameters: {
+    msw: {
+      handlers: [
+        http.get<{ id: string }>(`/soft-assay-endpoint/assaytype/d8f851efb54f84d7ee0952e10d4c449e`, codexSPRMresponse),
+        http.get<{ id: string }>(`/soft-assay-endpoint/assaytype/ff77fcae7f6d9b5b7b8741c282677eef`, codexSPRMresponse),
+      ],
+    },
   },
 };
 

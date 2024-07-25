@@ -15,6 +15,7 @@ interface CommonNodeInfo extends Record<string, unknown> {
 interface PipelineNodeInfo extends CommonNodeInfo {
   childDatasets: string[];
   singleAssay?: boolean;
+  description?: string;
 }
 
 interface DatasetNodeInfo extends CommonNodeInfo {
@@ -98,10 +99,12 @@ function PrimaryDatasetNode({ data }: NodeProps<PrimaryDatasetNodeProps>) {
 
 type PipelineNodeProps = Node<PipelineNodeInfo, 'pipeline'>;
 
-function PipelineNode({ data: { childDatasets, singleAssay, name } }: NodeProps<PipelineNodeProps>) {
+function PipelineNode({
+  data: { childDatasets, singleAssay, name, description: _description },
+}: NodeProps<PipelineNodeProps>) {
   const { pipelineInfo = name, isLoading } = usePipelineInfo(childDatasets);
   const selectedName = singleAssay ? pipelineInfo : 'Multi Assay Pipeline';
-  const description = singleAssay ? null : 'Create component datasets';
+  const description = singleAssay ? _description : 'Create component datasets';
   return (
     <NodeTemplate source target name={selectedName} isLoading={isLoading} bgColor={nodeColors.pipeline}>
       {description}

@@ -17,7 +17,7 @@ export interface ProvData {
   prefix: Record<string, string>;
   used: Record<string, ProvEdge>;
   wasGeneratedBy: Record<string, ProvEdge>;
-  agent: Record<string, Record<string, string>>;
+  agent: Record<string, Record<string, unknown>>;
   actedOnBehalfOf: Record<string, Record<string, string>>;
 }
 

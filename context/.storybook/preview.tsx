@@ -1,23 +1,21 @@
 import React from 'react';
 
 import Providers from '../app/static/js/components/Providers';
-import { initialize, mswDecorator } from 'msw-storybook-addon';
+import { initialize, mswDecorator, mswLoader } from 'msw-storybook-addon';
 import { enableMapSet } from 'immer';
+
+
+import InterVariable from '@fontsource-variable/inter/files/inter-latin-standard-normal.woff2';
 
 enableMapSet();
 
 const allowConditions = [(url) => String(url).endsWith('thumbnail.jpg')];
 initialize({
-  onUnhandledRequest: ({ method, url }) => {
-    if (!allowConditions.some((conditionFn) => conditionFn(url))) {
-      console.error(`Unhandled ${method} request to ${url}.
-
-        This exception has been only logged in the console, however, it's strongly recommended to resolve this error as you don't want unmocked data in Storybook stories.
-
-        If you wish to mock an error response, please refer to this guide: https://mswjs.io/docs/recipes/mocking-error-responses
-      `);
+  serviceWorker: {
+    options: {
+      updateViaCache: 'none'
     }
-  },
+  }
 });
 
 export const parameters = {
@@ -29,7 +27,7 @@ export const parameters = {
   },
 };
 
-export const mockEndpoints = { assetsEndpoint: 'https://assets.hubmapconsortium.org' };
+export const mockEndpoints = { assetsEndpoint: 'https://assets.hubmapconsortium.org', softAssayEndpoint: '/soft-assay-endpoint' };
 export const mockGroupsToken = '';
 
 export const decorators = [
@@ -41,3 +39,13 @@ export const decorators = [
   mswDecorator,
 ];
 export const tags = ['autodocs'];
+
+export const loaders = [mswLoader]
+
+const preview = {
+  parameters,
+  decorators,
+  loaders,
+}
+
+export default preview
