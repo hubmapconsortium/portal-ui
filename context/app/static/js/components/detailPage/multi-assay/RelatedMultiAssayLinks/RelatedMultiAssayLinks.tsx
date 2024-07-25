@@ -37,10 +37,15 @@ type Entries<T> = {
 
 interface MultiAssayLinkProps {
   dataset: MultiAssayEntity;
+  tooltipText?: string;
 }
-function MultiAssayLink({ dataset: { assay_display_name, uuid, hubmap_id, status } }: MultiAssayLinkProps) {
+
+function MultiAssayLink({
+  dataset: { assay_display_name, uuid, hubmap_id, status },
+  tooltipText,
+}: MultiAssayLinkProps) {
   return (
-    <SecondaryBackgroundTooltip title={status}>
+    <SecondaryBackgroundTooltip title={tooltipText ?? status}>
       <Typography>
         <Stack direction="row" useFlexGap gap={0.5} alignItems="center">
           {assay_display_name}:<InternalLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</InternalLink>
@@ -51,13 +56,11 @@ function MultiAssayLink({ dataset: { assay_display_name, uuid, hubmap_id, status
   );
 }
 
-function CurrentMultiAssayLink({ dataset }: MultiAssayLinkProps) {
+function CurrentMultiAssayLink({ dataset, tooltipText }: MultiAssayLinkProps) {
   return (
-    <SecondaryBackgroundTooltip title={`${text.current.tooltip} ${dataset.status}`}>
-      <Box sx={(theme) => ({ borderLeft: `2px solid ${theme.palette.success.main}`, pl: 0.5 })}>
-        <MultiAssayLink dataset={dataset} />
-      </Box>
-    </SecondaryBackgroundTooltip>
+    <Box sx={(theme) => ({ borderLeft: `2px solid ${theme.palette.success.main}`, pl: 0.5 })}>
+      <MultiAssayLink dataset={dataset} tooltipText={`${text.current.tooltip} ${dataset.status}`} />
+    </Box>
   );
 }
 
@@ -78,9 +81,9 @@ function RelatedMultiAssayLinks() {
         <Stack>
           {v.map((dataset) =>
             dataset.uuid === uuid ? (
-              <CurrentMultiAssayLink dataset={dataset} key={dataset.uuid} />
+              <CurrentMultiAssayLink dataset={dataset} key={dataset.uuid} tooltipText={undefined} />
             ) : (
-              <MultiAssayLink dataset={dataset} key={dataset.uuid} />
+              <MultiAssayLink dataset={dataset} key={dataset.uuid} tooltipText={undefined} />
             ),
           )}
         </Stack>
