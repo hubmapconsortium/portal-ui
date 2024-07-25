@@ -1,6 +1,7 @@
 import React, { useState, ElementType } from 'react';
-import SvgIcon from '@mui/material/SvgIcon';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { IconButtonTypeMap } from '@mui/material/IconButton';
+import Stack from '@mui/material/Stack';
 
 import { TooltipButtonProps, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/shared-styles/icons';
@@ -10,14 +11,18 @@ import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialo
 import useSavedEntitiesStore, { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import { Entity } from 'js/components/types';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
+import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
+import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import { useAppContext } from 'js/components/Contexts';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
   ...rest
-}: { icon: typeof SvgIcon } & TooltipButtonProps<E>) {
+}: { icon: typeof SvgIcon | React.ComponentType<SvgIconProps> } & TooltipButtonProps<E>) {
   return (
     <TooltipIconButton {...rest}>
-      <Icon color="primary" />
+      <Icon color="primary" fontSize="1.5rem" />
     </TooltipIconButton>
   );
 }
@@ -76,6 +81,38 @@ function EditSavedEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { e
   );
 }
 
+function WorkspaceSVGIcon(props: SvgIconProps) {
+  return <SvgIcon component={WorkspacesIcon} color="primary" {...props} />;
+}
+
+function CreateWorkspaceButton({
+  uuid,
+  hubmap_id,
+  mapped_data_access_level,
+}: Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'>) {
+  const { isWorkspacesUser } = useAppContext();
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
+
+  const disabled = mapped_data_access_level === 'Protected';
+
+  if (!isWorkspacesUser) {
+    return null;
+  }
+  return (
+    <>
+      <ActionButton
+        onClick={() => {
+          setDialogIsOpen(true);
+        }}
+        icon={WorkspaceSVGIcon}
+        tooltip={disabled ? 'Protected datasets are not available in Workspaces.' : 'Launch a new workspace.'}
+        disabled={disabled}
+      />
+      <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+    </>
+  );
+}
+
 const useSavedEntitiesSelector = (state: SavedEntitiesStore) => state.savedEntities;
 
 function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }) {
@@ -92,18 +129,26 @@ function EntityHeaderActionButtons({
   showJsonButton,
   entityCanBeSaved,
   uuid,
+  hubmap_id,
+  mapped_data_access_level,
   entity_type,
 }: { showJsonButton: boolean; entityCanBeSaved: boolean } & Partial<
-  Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }
+  Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'> & { entity_type: AllEntityTypes }
 >) {
   if (!(entity_type && uuid)) {
     return null;
   }
+
+  const showWorkspaceButton = mapped_data_access_level && hubmap_id && entity_type === 'Dataset';
+
   return (
-    <>
+    <Stack direction="row" spacing={1}>
       {showJsonButton && <JSONButton entity_type={entity_type} uuid={uuid} />}
       {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
-    </>
+      {showWorkspaceButton && (
+        <CreateWorkspaceButton uuid={uuid} hubmap_id={hubmap_id} mapped_data_access_level={mapped_data_access_level} />
+      )}
+    </Stack>
   );
 }
 

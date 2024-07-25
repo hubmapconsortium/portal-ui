@@ -1,8 +1,5 @@
 import React, { useEffect } from 'react';
-import SvgIcon from '@mui/material/SvgIcon';
-import { ButtonProps } from '@mui/material/Button';
 
-import { useAppContext } from 'js/components/Contexts';
 import { InternalLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import DataProducts from 'js/components/detailPage/files/DataProducts';
@@ -19,8 +16,6 @@ import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
-
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 
@@ -29,49 +24,21 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
-import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
+
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
 import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
 
-function NotebookButton({ disabled, ...props }: { disabled: boolean } & ButtonProps) {
-  return (
-    <TooltipIconButton
-      color="primary"
-      disabled={disabled}
-      {...props}
-      tooltip={disabled ? 'Protected datasets are not available in Workspaces.' : 'Launch a new workspace.'}
-    >
-      <SvgIcon component={WorkspacesIcon} />
-    </TooltipIconButton>
-  );
-}
-
 interface SummaryDataChildrenProps {
   mapped_data_types: string[];
   mapped_organ: string;
   doi_url?: string;
   registered_doi?: string;
-  hubmap_id: string;
-  uuid: string;
-  mapped_data_access_level: string;
 }
 
-function SummaryDataChildren({
-  mapped_data_types,
-  mapped_organ,
-  doi_url,
-  registered_doi,
-  hubmap_id,
-  uuid,
-  mapped_data_access_level,
-}: SummaryDataChildrenProps) {
-  const { isWorkspacesUser } = useAppContext();
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
+function SummaryDataChildren({ mapped_data_types, mapped_organ, doi_url, registered_doi }: SummaryDataChildrenProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const dataTypes = mapped_data_types.join(', ');
   return (
@@ -95,12 +62,6 @@ function SummaryDataChildren({
         <OutboundIconLink href={doi_url} variant="h6">
           doi:{registered_doi}
         </OutboundIconLink>
-      )}
-      {isWorkspacesUser && (
-        <>
-          <NotebookButton onClick={() => setDialogIsOpen(true)} disabled={mapped_data_access_level === 'Protected'} />
-          <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
-        </>
       )}
     </>
   );
@@ -217,13 +178,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
             </>
           }
         >
-          <SummaryDataChildren
-            mapped_organ={origin_samples[0].mapped_organ}
-            mapped_data_types={mapped_data_types}
-            uuid={uuid}
-            hubmap_id={hubmap_id}
-            mapped_data_access_level={mapped_data_access_level}
-          />
+          <SummaryDataChildren mapped_organ={origin_samples[0].mapped_organ} mapped_data_types={mapped_data_types} />
         </Summary>
         {shouldDisplaySection.metadata && (
           <MetadataSection {...makeMetadataSectionProps(combinedMetadata, assay_modality)} />
@@ -297,8 +252,8 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
   const setAssayMetadata = useEntityStore(entityStoreSelector);
 
   useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ, uuid });
-  }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, uuid, setAssayMetadata]);
+    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ, uuid, mapped_data_access_level });
+  }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, uuid, mapped_data_access_level, setAssayMetadata]);
 
   const datasetLabel = useDatasetLabel();
 
@@ -329,9 +284,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
             mapped_organ={mapped_organ}
             registered_doi={registered_doi}
             doi_url={doi_url}
-            uuid={uuid}
-            hubmap_id={hubmap_id}
-            mapped_data_access_level={mapped_data_access_level}
           />
         </Summary>
         {shouldDisplaySection.visualization && (

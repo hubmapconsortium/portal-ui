@@ -7,6 +7,7 @@ import VisualizationNotebookButton from 'js/components/detailPage/visualization/
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 
+import { Entity } from 'js/components/types';
 import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
@@ -17,7 +18,7 @@ type EntityTypesWithIcons = Exclude<
   'Support' | 'Collection' | 'Workspace' | 'VerifiedUser'
 >;
 
-export interface AssayMetadata {
+export interface AssayMetadata extends Pick<Entity, 'mapped_data_access_level'> {
   sex: string;
   race: string[];
   age_value: string;
@@ -86,7 +87,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
     opacity: shouldDisplayHeader || vizIsFullscreen ? 1 : 0,
   });
 
-  const { hubmap_id, entity_type, uuid } = assayMetadata;
+  const { hubmap_id, entity_type, uuid, mapped_data_access_level } = assayMetadata;
 
   const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
 
@@ -113,7 +114,14 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
             <VisualizationCollapseButton />
           </>
         ) : (
-          <EntityHeaderActionButtons showJsonButton entityCanBeSaved uuid={uuid} entity_type={entity_type} />
+          <EntityHeaderActionButtons
+            showJsonButton
+            entityCanBeSaved
+            uuid={uuid}
+            entity_type={entity_type}
+            hubmap_id={hubmap_id}
+            mapped_data_access_level={mapped_data_access_level}
+          />
         )}
       </RightDiv>
     </AnimatedFlexContainer>
