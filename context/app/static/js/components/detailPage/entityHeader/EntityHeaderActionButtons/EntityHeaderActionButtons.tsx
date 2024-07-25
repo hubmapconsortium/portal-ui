@@ -1,7 +1,9 @@
-import React, { useState, ElementType } from 'react';
+import React, { useState, ElementType, useCallback, Dispatch, SetStateAction } from 'react';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { IconButtonTypeMap } from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import Button, { ButtonProps } from '@mui/material/Button';
+import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 
 import { TooltipButtonProps, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/shared-styles/icons';
@@ -15,6 +17,7 @@ import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { useAppContext } from 'js/components/Contexts';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -125,6 +128,57 @@ function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { en
   );
 }
 
+type SummaryViews = 'narrow' | 'summary';
+
+function ViewSelectChip({
+  startIcon,
+  endIcon,
+  view,
+  setView,
+  selectedView,
+}: {
+  view: SummaryViews;
+  selectedView: SummaryViews;
+  setView: Dispatch<SetStateAction<SummaryViews>>;
+} & Pick<ButtonProps, 'startIcon' | 'endIcon'>) {
+  const handleClick = useCallback(() => setView(view), [setView, view]);
+
+  return (
+    <Button
+      startIcon={startIcon}
+      endIcon={endIcon}
+      variant="outlined"
+      onClick={handleClick}
+      sx={(theme) => ({
+        borderRadius: theme.spacing(1),
+        ...(view === selectedView && { boxShadow: theme.shadows[1] }),
+      })}
+    >
+      {view}
+    </Button>
+  );
+}
+
+function ViewSelectChips() {
+  const [selectedView, setView] = useState<SummaryViews>('narrow');
+  return (
+    <>
+      <ViewSelectChip
+        startIcon={<UnfoldLessRoundedIcon />}
+        view="narrow"
+        setView={setView}
+        selectedView={selectedView}
+      />
+      <ViewSelectChip
+        startIcon={<sectionIconMap.summary />}
+        view="summary"
+        setView={setView}
+        selectedView={selectedView}
+      />
+    </>
+  );
+}
+
 function EntityHeaderActionButtons({
   showJsonButton,
   entityCanBeSaved,
@@ -139,10 +193,12 @@ function EntityHeaderActionButtons({
     return null;
   }
 
-  const showWorkspaceButton = mapped_data_access_level && hubmap_id && entity_type === 'Dataset';
+  const isDataset = entity_type === 'Dataset';
+  const showWorkspaceButton = mapped_data_access_level && hubmap_id && isDataset;
 
   return (
-    <Stack direction="row" spacing={1}>
+    <Stack direction="row" spacing={1} alignItems="center">
+      {isDataset && <ViewSelectChips />}
       {showJsonButton && <JSONButton entity_type={entity_type} uuid={uuid} />}
       {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
       {showWorkspaceButton && (
