@@ -1,54 +1,30 @@
-import React from 'react';
-import { animated, useSpring } from '@react-spring/web';
+import React, { useRef, useEffect } from 'react';
+import useResizeObserver from 'use-resize-observer/polyfilled';
 
 import { useEntityStore, type EntityStore } from 'js/stores/useEntityStore';
-import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
-import { iconButtonHeight } from 'js/shared-styles/buttons';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 
-const AnimatedPaper = animated(StyledPaper);
+const entityStoreSelector = (state: EntityStore) => state.setEntityHeaderHeight;
 
-const entityStoreSelector = (state: EntityStore) => ({
-  assayMetadata: state.assayMetadata,
-  summaryComponentObserver: state.summaryComponentObserver,
-});
-
-const visualizationSelector = (state: VisualizationStore) => ({
-  vizIsFullscreen: state.vizIsFullscreen,
-});
-
-const entityHeaderHeight = iconButtonHeight;
+const entityHeaderHeight = 40;
 
 function Header() {
-  const {
-    assayMetadata,
-    summaryComponentObserver: { summaryInView },
-  } = useEntityStore(entityStoreSelector);
-  const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
+  const setEntityHeaderHeight = useEntityStore(entityStoreSelector);
 
-  const shouldDisplayHeader = !summaryInView || vizIsFullscreen;
+  const ref = useRef(null);
+  const { height = 40 } = useResizeObserver({ ref });
 
-  const styles = useSpring({
-    from: {
-      height: 0,
-      overflow: 'hidden',
-    },
-    to: {
-      height: shouldDisplayHeader ? entityHeaderHeight : 0,
-      overflow: 'hidden',
-    },
-  });
+  useEffect(() => {
+    setEntityHeaderHeight(height);
+  }, [height, setEntityHeaderHeight]);
 
   return (
-    <AnimatedPaper style={styles} elevation={4} data-testid="entity-header">
-      <EntityHeaderContent
-        assayMetadata={assayMetadata}
-        shouldDisplayHeader={shouldDisplayHeader}
-        vizIsFullscreen={vizIsFullscreen}
-      />
-    </AnimatedPaper>
+    <StyledPaper elevation={4} data-testid="entity-header" ref={ref}>
+      <EntityHeaderContent />
+    </StyledPaper>
   );
 }
+
 export { entityHeaderHeight };
 export default Header;

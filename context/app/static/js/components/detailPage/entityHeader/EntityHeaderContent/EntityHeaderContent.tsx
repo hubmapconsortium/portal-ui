@@ -1,14 +1,16 @@
 import React from 'react';
 import { animated, useSpring } from '@react-spring/web';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import Stack from '@mui/material/Stack';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
 import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationNotebookButton';
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import useVisualizationStore from 'js/stores/useVisualizationStore';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
+import { useEntityStore, type EntityStore } from 'js/stores/useEntityStore';
+import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
 
 import { Entity } from 'js/components/types';
 import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
@@ -74,16 +76,10 @@ const entityToFieldsMap: EntityToFieldsType = {
   },
 };
 
-const AnimatedFlexContainer = animated(FlexContainer);
+const AnimatedStack = animated(Stack);
 
 const vizNotebookIdSelector: (state: { vizNotebookId: string | null }) => string | null = (state) =>
   state.vizNotebookId;
-
-interface EntityHeaderContentProps {
-  assayMetadata: Partial<AssayMetadata>;
-  shouldDisplayHeader: boolean;
-  vizIsFullscreen: boolean;
-}
 
 function HuBMAPIDItem({ hubmap_id }: Pick<Entity, 'hubmap_id'>) {
   const handleCopyClick = useHandleCopyClick();
@@ -97,19 +93,34 @@ function HuBMAPIDItem({ hubmap_id }: Pick<Entity, 'hubmap_id'>) {
   );
 }
 
-function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }: EntityHeaderContentProps) {
-  const styles = useSpring({
-    opacity: shouldDisplayHeader || vizIsFullscreen ? 1 : 0,
-  });
+const entityStoreSelector = (state: EntityStore) => ({
+  assayMetadata: state.assayMetadata,
+  summaryComponentObserver: state.summaryComponentObserver,
+});
 
-  const { hubmap_id, entity_type, uuid, mapped_data_access_level } = assayMetadata;
+const visualizationSelector = (state: VisualizationStore) => ({
+  vizIsFullscreen: state.vizIsFullscreen,
+});
+
+function EntityHeaderContent() {
+  const {
+    assayMetadata,
+    summaryComponentObserver: { summaryInView },
+  } = useEntityStore(entityStoreSelector);
 
   const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
 
+  const { hubmap_id, entity_type, uuid, mapped_data_access_level } = assayMetadata;
+  const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
+
+  const styles = useSpring({
+    opacity: !summaryInView ? 1 : 0,
+  });
+
   return (
-    <AnimatedFlexContainer style={styles} maxWidth={vizIsFullscreen ? false : 'lg'}>
-      {entity_type && (
-        <>
+    <FlexContainer maxWidth={vizIsFullscreen ? false : 'lg'}>
+      {entity_type && !summaryInView && (
+        <AnimatedStack style={styles} direction="row" alignItems="center">
           <StyledSvgIcon component={entityIconMap[entity_type]} />
           {hubmap_id && <HuBMAPIDItem hubmap_id={hubmap_id} />}
           {entityTypeHasIcon(entity_type) && entityToFieldsMap[entity_type]
@@ -118,7 +129,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
                 return React.isValidElement(text) ? <EntityHeaderItem text={text} key={label} /> : null;
               })
             : null}
-        </>
+        </AnimatedStack>
       )}
       <RightDiv>
         {vizIsFullscreen ? (
@@ -139,7 +150,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
           />
         )}
       </RightDiv>
-    </AnimatedFlexContainer>
+    </FlexContainer>
   );
 }
 

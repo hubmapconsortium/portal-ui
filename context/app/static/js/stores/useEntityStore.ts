@@ -11,12 +11,14 @@ interface EntityStoreState {
   };
   assayMetadata: Partial<AssayMetadata>;
   shouldDisplaySavedOrEditedAlert: boolean | string;
+  entityHeaderHeight: number;
 }
 
 interface EntityStoreActions {
   setSummaryComponentObserver: (inView: boolean, entry: IntersectionObserverEntry) => void;
   setAssayMetadata: (val: Partial<AssayMetadata>) => void;
   setShouldDisplaySavedOrEditedAlert: (val: boolean | string) => void;
+  setEntityHeaderHeight: (val: number) => void;
 }
 
 export type EntityStore = EntityStoreState & EntityStoreActions;
@@ -33,6 +35,8 @@ export const useEntityStore = create<EntityStore>((set) => ({
         summaryEntry: entry,
       },
     }),
+  entityHeaderHeight: 0,
+  setEntityHeaderHeight: (height) => set({ entityHeaderHeight: height }),
   assayMetadata: {},
   setAssayMetadata: (val) => set({ assayMetadata: val }),
   shouldDisplaySavedOrEditedAlert: false,

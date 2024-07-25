@@ -12,7 +12,6 @@ import Box from '@mui/material/Box';
 import { useSpring, animated } from '@react-spring/web';
 
 import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
-import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { StickyNav, TableTitle, StyledItemLink } from './style';
 import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
@@ -20,7 +19,10 @@ import { getItemsClient } from './utils';
 import { useThrottledOnScroll, useFindActiveIndex } from './hooks';
 
 const AnimatedNav = animated(StickyNav);
-const entityStoreSelector = (state: EntityStore) => state.summaryComponentObserver;
+const entityStoreSelector = (state: EntityStore) => ({
+  summaryComponentObserver: state.summaryComponentObserver,
+  entityHeaderHeight: state.entityHeaderHeight,
+});
 
 interface LinkProps {
   currentSection: string;
@@ -148,9 +150,10 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
     }
   }, []);
 
-  const { summaryInView } = useEntityStore(entityStoreSelector);
+  const { entityHeaderHeight } = useEntityStore(entityStoreSelector);
+
   const initialHeightOffset = headerHeight + 16;
-  const top = summaryInView ? `${initialHeightOffset}px` : `${initialHeightOffset + entityHeaderHeight}px`;
+  const top = `${initialHeightOffset + entityHeaderHeight}px`;
   const stickyNavAnimationProps = useSpring({ top });
 
   if (!items || items.length === 0) {
