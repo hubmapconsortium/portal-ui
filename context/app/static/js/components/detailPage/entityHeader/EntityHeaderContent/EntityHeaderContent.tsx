@@ -114,19 +114,22 @@ function EntityHeaderContent() {
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
 
   const styles = useSpring({
-    opacity: !summaryInView ? 1 : 0,
+    from: { opacity: 1 },
+    to: {
+      opacity: !summaryInView ? 1 : 0,
+    },
   });
 
   return (
     <FlexContainer maxWidth={vizIsFullscreen ? false : 'lg'}>
-      {entity_type && !summaryInView && (
+      {entity_type && (
         <AnimatedStack style={styles} direction="row" alignItems="center">
           <StyledSvgIcon component={entityIconMap[entity_type]} />
           {hubmap_id && <HuBMAPIDItem hubmap_id={hubmap_id} />}
           {entityTypeHasIcon(entity_type) && entityToFieldsMap[entity_type]
             ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => {
                 const text = fn(assayMetadata);
-                return React.isValidElement(text) ? <EntityHeaderItem text={text} key={label} /> : null;
+                return text ? <EntityHeaderItem text={text} key={label} /> : null;
               })
             : null}
         </AnimatedStack>
