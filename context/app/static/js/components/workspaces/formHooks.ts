@@ -7,7 +7,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
-import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
+import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
 import { Dataset } from '../types';
 
 type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>>[];
@@ -27,8 +27,10 @@ function useDatasetsAccessLevel(ids: string[]) {
 }
 
 const errorHelper = {
-  datasets: (workspaceDatasets: number) =>
-    `You have selected ${workspaceDatasets} datasets. Workspaces currently only supports up to ${MAX_NUMBER_OF_WORKSPACE_DATASETS} datasets. Please unselect datasets.`,
+  excessiveDatasets: () =>
+    `You have selected over ${EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS} datasets, which may extend launch time. Workspace will still launch, but reduce your selection for a quicker launch.`,
+  maxDatasets: (workspaceDatasets: number) =>
+    `You have selected ${workspaceDatasets} datasets. The dataset limit for workspaces is ${MAX_NUMBER_OF_WORKSPACE_DATASETS} datasets. Please reduce your selection.`,
   protectedDataset: (protectedRows: DatasetAccessLevelHits) =>
     `You have selected a protected dataset (${protectedRows[0]?._source?.hubmap_id}). Workspaces currently only supports published public datasets. To remove the protected dataset from workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove this dataset.`,
   protectedDatasets: (protectedRows: DatasetAccessLevelHits) =>
@@ -72,7 +74,7 @@ function useTooManyDatasetsErrors({ numWorkspaceDatasets }: { numWorkspaceDatase
   const errorMessages = [];
   const reportedTooManyRows = useRef(false);
   if (numWorkspaceDatasets > MAX_NUMBER_OF_WORKSPACE_DATASETS) {
-    errorMessages.push(errorHelper.datasets(numWorkspaceDatasets));
+    errorMessages.push(errorHelper.maxDatasets(numWorkspaceDatasets));
     if (!reportedTooManyRows.current) {
       reportedTooManyRows.current = true;
       trackEvent({
@@ -82,7 +84,17 @@ function useTooManyDatasetsErrors({ numWorkspaceDatasets }: { numWorkspaceDatase
       });
     }
   }
+
   return errorMessages;
 }
 
-export { useProtectedDatasetsForm, useTooManyDatasetsErrors };
+function useTooManyDatasetsWarnings({ numWorkspaceDatasets }: { numWorkspaceDatasets: number }) {
+  const warningMessages = [];
+  if (numWorkspaceDatasets > EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS) {
+    warningMessages.push(errorHelper.excessiveDatasets());
+  }
+
+  return warningMessages;
+}
+
+export { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings };
