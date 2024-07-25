@@ -1,11 +1,14 @@
 import React from 'react';
 import { animated, useSpring } from '@react-spring/web';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
 import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationNotebookButton';
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
+import { useHandleCopyClick } from 'js/hooks/useCopyText';
+import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 
 import { Entity } from 'js/components/types';
 import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
@@ -82,6 +85,18 @@ interface EntityHeaderContentProps {
   vizIsFullscreen: boolean;
 }
 
+function HuBMAPIDItem({ hubmap_id }: Pick<Entity, 'hubmap_id'>) {
+  const handleCopyClick = useHandleCopyClick();
+
+  return (
+    <EntityHeaderItem text={hubmap_id}>
+      <TooltipIconButton onClick={() => handleCopyClick(hubmap_id)} tooltip="Copy HuBMAP ID">
+        <ContentCopyIcon sx={(theme) => ({ color: theme.palette.common.link, fontSize: '1.25rem' })} />
+      </TooltipIconButton>
+    </EntityHeaderItem>
+  );
+}
+
 function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscreen }: EntityHeaderContentProps) {
   const styles = useSpring({
     opacity: shouldDisplayHeader || vizIsFullscreen ? 1 : 0,
@@ -96,7 +111,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
       {entity_type && (
         <>
           <StyledSvgIcon component={entityIconMap[entity_type]} />
-          <EntityHeaderItem text={hubmap_id} />
+          {hubmap_id && <HuBMAPIDItem hubmap_id={hubmap_id} />}
           {entityTypeHasIcon(entity_type) && entityToFieldsMap[entity_type]
             ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => {
                 const text = fn(assayMetadata);

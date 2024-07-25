@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
 
 import { VerticalDivider } from './style';
@@ -8,10 +8,11 @@ interface EntityHeaderItemProps {
   text: React.ReactNode;
 }
 
-function EntityHeaderItem({ text }: EntityHeaderItemProps) {
+function EntityHeaderItem({ text, children }: PropsWithChildren<EntityHeaderItemProps>) {
   return (
     <>
       <Typography variant="body1">{typeof text === 'string' ? truncateText(text) : text}</Typography>
+      {children}
       <VerticalDivider orientation="vertical" flexItem />
     </>
   );
