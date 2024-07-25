@@ -33,8 +33,8 @@ function Publication({ publication, vignette_json }) {
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
-  }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata]);
+    setAssayMetadata({ hubmap_id, entity_type, title, publication_venue, uuid });
+  }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata, uuid]);
 
   useTrackID({ entity_type, hubmap_id });
 

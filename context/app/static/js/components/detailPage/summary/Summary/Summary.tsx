@@ -9,7 +9,6 @@ interface SummaryProps extends PropsWithChildren {
   status: string;
   mapped_data_access_level: string;
   entityTypeDisplay?: string;
-  entityCanBeSaved?: boolean;
   contributors?: { last_name: string; first_name: string }[];
   citationTitle?: string;
   doi_url?: string;
@@ -25,7 +24,6 @@ function Summary({
   children,
   mapped_data_access_level,
   entityTypeDisplay,
-  entityCanBeSaved,
   contributors,
   citationTitle,
   doi_url,
@@ -47,7 +45,6 @@ function Summary({
         uuid={uuid}
         status={status ?? 'Missing status'}
         mapped_data_access_level={mapped_data_access_level ?? 'Missing access level'}
-        entityCanBeSaved={entityCanBeSaved}
         mapped_external_group_name={mapped_external_group_name}
       >
         {children}

@@ -1,5 +1,4 @@
 import React, { PropsWithChildren } from 'react';
-import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton';
 
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -7,9 +6,7 @@ import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { ESEntityType } from 'js/components/types';
 import { FlexEnd, StyledTypography, StyledSvgIcon, SummaryDataHeader } from './style';
-import SummaryJSONButton from '../SummaryJSONButton';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -23,9 +20,7 @@ interface SummaryDataProps extends PropsWithChildren {
   status: string;
   mapped_data_access_level: string;
   title?: string;
-  entityCanBeSaved?: boolean;
   mapped_external_group_name?: string;
-  showJsonButton?: boolean;
   otherButtons?: React.ReactNode;
 }
 
@@ -36,10 +31,8 @@ function SummaryData({
   status,
   mapped_data_access_level,
   title,
-  entityCanBeSaved = true,
   children,
   mapped_external_group_name,
-  showJsonButton = true,
   otherButtons,
 }: SummaryDataProps) {
   const isPublication = publicationEntityTypes.includes(entity_type);
@@ -71,11 +64,7 @@ function SummaryData({
                 {mapped_external_group_name && <SummaryItem>{mapped_external_group_name}</SummaryItem>}
               </>
             )}
-            <FlexEnd>
-              {showJsonButton && <SummaryJSONButton entity_type={entity_type} uuid={uuid} />}
-              {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type as ESEntityType} />}
-              {datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}
-            </FlexEnd>
+            <FlexEnd>{datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}</FlexEnd>
             {otherButtons}
           </FlexEnd>
         }

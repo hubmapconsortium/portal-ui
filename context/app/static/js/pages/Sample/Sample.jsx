@@ -54,8 +54,8 @@ function SampleDetail() {
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, sample_category });
-  }, [hubmap_id, entity_type, mapped_organ, sample_category, setAssayMetadata]);
+    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, sample_category, uuid });
+  }, [hubmap_id, entity_type, mapped_organ, sample_category, setAssayMetadata, uuid]);
 
   useTrackID({ entity_type, hubmap_id });
 

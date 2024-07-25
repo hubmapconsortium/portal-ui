@@ -38,7 +38,6 @@ function Collection({ collection: collectionData }) {
             description={description}
             created_timestamp={created_timestamp}
             last_modified_timestamp={last_modified_timestamp}
-            entityCanBeSaved={false}
             contributors={creators}
             citationTitle={title}
             doi_url={doi_url}

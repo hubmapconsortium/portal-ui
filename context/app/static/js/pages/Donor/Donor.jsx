@@ -50,8 +50,9 @@ function DonorDetail() {
       race,
       age_value,
       age_unit,
+      uuid,
     });
-  }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata, group_name]);
+  }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata, group_name, uuid]);
 
   useTrackID({ entity_type, hubmap_id });
 

@@ -189,11 +189,12 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
 
   useEffect(() => {
     setAssayMetadata({
+      uuid,
       hubmap_id,
       entity_type,
       mapped_data_types,
     });
-  }, [entity_type, hubmap_id, mapped_data_types, setAssayMetadata]);
+  }, [entity_type, hubmap_id, mapped_data_types, uuid, setAssayMetadata]);
 
   const datasetLabel = useDatasetLabel();
 
@@ -296,8 +297,8 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
   const setAssayMetadata = useEntityStore(entityStoreSelector);
 
   useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
-  }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, setAssayMetadata]);
+    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ, uuid });
+  }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, uuid, setAssayMetadata]);
 
   const datasetLabel = useDatasetLabel();
 

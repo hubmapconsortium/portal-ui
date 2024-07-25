@@ -54,8 +54,6 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         <SummaryData
           title={workspace.name}
           entity_type="Workspace"
-          showJsonButton={false}
-          entityCanBeSaved={false}
           entityTypeDisplay={undefined}
           uuid=""
           status=""

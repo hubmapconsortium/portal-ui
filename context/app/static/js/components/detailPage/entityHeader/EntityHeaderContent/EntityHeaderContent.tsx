@@ -6,9 +6,11 @@ import VisualizationCollapseButton from 'js/components/detailPage/visualization/
 import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationNotebookButton';
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import useVisualizationStore from 'js/stores/useVisualizationStore';
+
 import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
+import EntityHeaderActionButtons from '../EntityHeaderActionButtons';
 
 type EntityTypesWithIcons = Exclude<
   keyof typeof entityIconMap,
@@ -29,6 +31,7 @@ export interface AssayMetadata {
   entity_type: AllEntityTypes;
   name: string;
   reference_link: React.ReactNode;
+  uuid: string;
 }
 
 type EntityToFieldsType = Record<
@@ -83,7 +86,7 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
     opacity: shouldDisplayHeader || vizIsFullscreen ? 1 : 0,
   });
 
-  const { hubmap_id, entity_type } = assayMetadata;
+  const { hubmap_id, entity_type, uuid } = assayMetadata;
 
   const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
 
@@ -101,14 +104,18 @@ function EntityHeaderContent({ assayMetadata, shouldDisplayHeader, vizIsFullscre
             : null}
         </>
       )}
-      {vizIsFullscreen && (
-        <RightDiv>
-          {vizNotebookId && <VisualizationNotebookButton uuid={vizNotebookId} />}
-          <VisualizationShareButtonWrapper />
-          <VizualizationThemeSwitch />
-          <VisualizationCollapseButton />
-        </RightDiv>
-      )}
+      <RightDiv>
+        {vizIsFullscreen ? (
+          <>
+            {vizNotebookId && <VisualizationNotebookButton uuid={vizNotebookId} />}
+            <VisualizationShareButtonWrapper />
+            <VizualizationThemeSwitch />
+            <VisualizationCollapseButton />
+          </>
+        ) : (
+          <EntityHeaderActionButtons showJsonButton entityCanBeSaved uuid={uuid} entity_type={entity_type} />
+        )}
+      </RightDiv>
     </AnimatedFlexContainer>
   );
 }

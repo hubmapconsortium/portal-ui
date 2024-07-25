@@ -23,7 +23,6 @@ function PublicationSummary({
   uuid,
   status,
   mapped_data_access_level,
-  entityCanBeSaved,
   description,
   publication_venue,
   publication_url,
@@ -49,7 +48,6 @@ function PublicationSummary({
         uuid={uuid}
         status={status}
         mapped_data_access_level={mapped_data_access_level}
-        entityCanBeSaved={entityCanBeSaved}
         mapped_external_group_name={mapped_external_group_name}
       >
         <SummaryItem showDivider={hasDOI}>{hubmap_id}</SummaryItem>
