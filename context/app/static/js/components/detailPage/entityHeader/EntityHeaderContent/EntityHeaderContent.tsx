@@ -17,6 +17,7 @@ import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 import EntityHeaderActionButtons from '../EntityHeaderActionButtons';
+import { SetViewType, SummaryViewsType } from '../EntityHeader/EntityHeader';
 
 type EntityTypesWithIcons = Exclude<
   keyof typeof entityIconMap,
@@ -102,7 +103,7 @@ const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
-function EntityHeaderContent() {
+function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setView: SetViewType }) {
   const {
     assayMetadata,
     summaryComponentObserver: { summaryInView },
@@ -150,6 +151,8 @@ function EntityHeaderContent() {
             entity_type={entity_type}
             hubmap_id={hubmap_id}
             mapped_data_access_level={mapped_data_access_level}
+            view={view}
+            setView={setView}
           />
         )}
       </RightDiv>

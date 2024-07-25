@@ -1,4 +1,4 @@
-import React, { useState, ElementType, useCallback, Dispatch, SetStateAction } from 'react';
+import React, { useState, ElementType, useCallback } from 'react';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { IconButtonTypeMap } from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
@@ -18,6 +18,7 @@ import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDia
 import { useAppContext } from 'js/components/Contexts';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { SetViewType, SummaryViewsType } from '../EntityHeader/EntityHeader';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -128,8 +129,6 @@ function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { en
   );
 }
 
-type SummaryViews = 'narrow' | 'summary';
-
 function ViewSelectChip({
   startIcon,
   endIcon,
@@ -137,9 +136,9 @@ function ViewSelectChip({
   setView,
   selectedView,
 }: {
-  view: SummaryViews;
-  selectedView: SummaryViews;
-  setView: Dispatch<SetStateAction<SummaryViews>>;
+  view: SummaryViewsType;
+  selectedView: SummaryViewsType;
+  setView: SetViewType;
 } & Pick<ButtonProps, 'startIcon' | 'endIcon'>) {
   const handleClick = useCallback(() => setView(view), [setView, view]);
 
@@ -159,8 +158,7 @@ function ViewSelectChip({
   );
 }
 
-function ViewSelectChips() {
-  const [selectedView, setView] = useState<SummaryViews>('narrow');
+function ViewSelectChips({ selectedView, setView }: { selectedView: SummaryViewsType; setView: SetViewType }) {
   return (
     <>
       <ViewSelectChip
@@ -186,7 +184,9 @@ function EntityHeaderActionButtons({
   hubmap_id,
   mapped_data_access_level,
   entity_type,
-}: { showJsonButton: boolean; entityCanBeSaved: boolean } & Partial<
+  view,
+  setView,
+}: { showJsonButton: boolean; entityCanBeSaved: boolean; view: SummaryViewsType; setView: SetViewType } & Partial<
   Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'> & { entity_type: AllEntityTypes }
 >) {
   if (!(entity_type && uuid)) {
@@ -198,7 +198,7 @@ function EntityHeaderActionButtons({
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      {isDataset && <ViewSelectChips />}
+      {isDataset && <ViewSelectChips selectedView={view} setView={setView} />}
       {showJsonButton && <JSONButton entity_type={entity_type} uuid={uuid} />}
       {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
       {showWorkspaceButton && (
