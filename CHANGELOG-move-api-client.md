@@ -1,1 +1,0 @@
-- Move API client to `portal-visualization` package to reduce code duplication between portal code and workspace templates.

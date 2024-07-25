@@ -1,3 +1,15 @@
+## v0.101.4 - 2024-07-25
+
+- Add confirmation modal to the 'delete workspaces' button.
+- Add tooltips to the apps and profile icons in the navigation bar.
+- Added status icon to the processed datasets to differentiate between different runs.
+- Show IDs of workspaces in the workspaces list to differentiate between workspaces with the same name.
+- Update login alert text on the workspaces landing page.
+- Increase max dataset limit for workspaces to 150.
+- Move API client to `portal-visualization` package to reduce code duplication between portal code and workspace templates.
+- Add pull request templates to ease future PR reviews.
+
+
 ## v0.101.3 - 2024-07-20
 
 - Fix changelog formatting for v0.101.1 entries.

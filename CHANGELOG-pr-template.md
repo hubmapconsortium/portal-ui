@@ -1,1 +1,0 @@
-- Add pull request templates to ease future PR reviews.
