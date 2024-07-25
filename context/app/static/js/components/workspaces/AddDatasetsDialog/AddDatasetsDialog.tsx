@@ -53,7 +53,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     >
       <Step title={title}>
         <Stack spacing={3}>
-          {errorMessages.length > 0 && <AlertMessages messages={errorMessages} severity="error" />}
+          <AlertMessages errorMessages={errorMessages} />
           <SearchPagePrompt />
           <AddDatasetsTable {...rest} />
         </Stack>

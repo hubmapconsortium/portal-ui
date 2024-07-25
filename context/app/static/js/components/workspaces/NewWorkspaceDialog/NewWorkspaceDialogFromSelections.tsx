@@ -31,11 +31,7 @@ function NewWorkspaceDialogFromSelections() {
         {...rest}
       >
         <Box>
-          {errorMessages.length > 0 ? (
-            <AlertMessages messages={errorMessages} severity="error" />
-          ) : (
-            <AlertMessages messages={warningMessages} severity="warning" />
-          )}
+          <AlertMessages errorMessages={errorMessages} warningMessages={warningMessages} />
           <RemoveProtectedDatasetsFormField control={control} {...restWorkspaceDatasets} />
         </Box>
       </NewWorkspaceDialog>

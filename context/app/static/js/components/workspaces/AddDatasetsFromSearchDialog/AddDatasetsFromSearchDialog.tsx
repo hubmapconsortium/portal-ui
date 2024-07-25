@@ -37,7 +37,7 @@ function SelectWorkspaceStep({
           all jobs are stopped.
         </Alert>
         <StopWorkspaceAlert />
-        {workspaceIdErrorMessages.length > 0 && <AlertMessages messages={workspaceIdErrorMessages} severity="error" />}
+        <AlertMessages errorMessages={workspaceIdErrorMessages} />
       </Stack>
       <Stack spacing={3} component={Paper}>
         <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
@@ -102,11 +102,7 @@ function AddDatasetsStep({
         Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be selected
         for deletion.
       </Alert>
-      {datasetsErrorMessages.length > 0 ? (
-        <AlertMessages messages={datasetsErrorMessages} severity="error" />
-      ) : (
-        <AlertMessages messages={datasetsWarningMessages} severity="warning" />
-      )}
+      <AlertMessages errorMessages={datasetsErrorMessages} warningMessages={datasetsWarningMessages} />
       <RemoveProtectedDatasetsFormField
         control={control}
         protectedHubmapIds={protectedHubmapIds}

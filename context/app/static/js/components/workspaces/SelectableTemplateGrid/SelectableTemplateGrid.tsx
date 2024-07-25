@@ -68,7 +68,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
 
   return (
     <Box>
-      {errorMessage && <AlertMessages messages={[errorMessage]} severity="error" />}
+      {errorMessage && <AlertMessages errorMessages={[errorMessage]} />}
       <SpacedSectionButtonRow
         leftText={<Typography variant="subtitle1">{selectedTemplates.size} Templates Selected</Typography>}
         buttons={
