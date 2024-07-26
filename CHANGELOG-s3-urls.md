@@ -1,0 +1,1 @@
+- Updated `vitessce-data` and `vitessce-data-v2` S3 bucket URLs to point to `data-1.vitessce.io` and `data-2.vitessce.io` subdomains, respectively.
