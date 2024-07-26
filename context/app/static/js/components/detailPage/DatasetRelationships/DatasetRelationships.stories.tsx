@@ -3,7 +3,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { type Edge } from '@xyflow/react';
 import { http, HttpResponse } from 'msw';
 
-import { DatasetRelationships } from './DatasetRelationships';
+import { DatasetRelationshipsVisualization } from './DatasetRelationships';
 import { NodeWithoutPosition } from './types';
 import { nodes, edges } from './prov.fixtures';
 
@@ -159,10 +159,10 @@ const multiAssayEdges: Edge[] = [
   },
 ];
 
-function TemplateComponent(args: ComponentProps<typeof DatasetRelationships>) {
+function TemplateComponent(args: ComponentProps<typeof DatasetRelationshipsVisualization>) {
   return (
     <div style={{ height: 600 }}>
-      <DatasetRelationships {...args} />
+      <DatasetRelationshipsVisualization {...args} />
     </div>
   );
 }

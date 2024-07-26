@@ -5,6 +5,7 @@ import { DatasetIcon } from 'js/shared-styles/icons';
 import Typography from '@mui/material/Typography';
 import { AccountTreeRounded, ExtensionRounded, SvgIconComponent } from '@mui/icons-material';
 import Skeleton from '@mui/material/Skeleton';
+import { Box } from '@mui/system';
 import StatusIcon from '../StatusIcon';
 import { usePipelineInfo } from './hooks';
 
@@ -48,6 +49,9 @@ export const nodeIcons = {
   componentDataset: ExtensionRounded,
 };
 
+const nodeHeightRem = 4.125;
+export const nodeHeight = nodeHeightRem * 16;
+
 function NodeTemplate({
   icon: Icon,
   status,
@@ -60,26 +64,28 @@ function NodeTemplate({
   isLoading,
   href,
 }: NodeTemplateProps) {
+  // Outer wrapper Box makes sure that nodes are always the same height
   const contents = (
-    <Stack
-      direction="column"
-      px={2}
-      py={1}
-      borderRadius={rounded ? '1rem' : 0}
-      minWidth="100%"
-      maxWidth="17.75rem"
-      bgcolor={bgColor}
-      boxShadow="0px 0px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.20)"
-    >
-      <Stack direction="row" gap={1} alignItems="center">
-        {Icon && <Icon color="primary" fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
-        <Typography variant="subtitle2">{isLoading ? <Skeleton variant="text" width="10rem" /> : name}</Typography>
-        {status && <StatusIcon status={status} />}
+    <Box height="4.125rem" display="flex" alignItems="center">
+      <Stack
+        direction="column"
+        px={2}
+        py={1}
+        borderRadius={rounded ? '1rem' : 0}
+        maxWidth="18rem"
+        bgcolor={bgColor}
+        boxShadow="0px 0px 2px 0px rgba(0, 0, 0, 0.14), 0px 2px 2px 0px rgba(0, 0, 0, 0.12), 0px 1px 3px 0px rgba(0, 0, 0, 0.20)"
+      >
+        <Stack direction="row" gap={1} my="auto" alignItems="center">
+          {Icon && <Icon color="primary" fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
+          <Typography variant="subtitle2">{isLoading ? <Skeleton variant="text" width="10rem" /> : name}</Typography>
+          {status && <StatusIcon status={status} />}
+        </Stack>
+        {children && <Typography variant="body2">{children}</Typography>}
+        {target && <Handle style={{ opacity: 0 }} type="target" position={Position.Left} />}
+        {source && <Handle style={{ opacity: 0 }} type="source" position={Position.Right} />}
       </Stack>
-      {children && <Typography variant="body2">{children}</Typography>}
-      {target && <Handle style={{ opacity: 0 }} type="target" position={Position.Left} />}
-      {source && <Handle style={{ opacity: 0 }} type="source" position={Position.Right} />}
-    </Stack>
+    </Box>
   );
   if (href) {
     return <a href={href}>{contents}</a>;

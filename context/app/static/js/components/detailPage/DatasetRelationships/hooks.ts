@@ -1,10 +1,11 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import useSWR from 'swr';
 import { useAppContext } from 'js/components/Contexts';
 import { fetchSoftAssay } from 'js/hooks/useSoftAssay';
 import { NodeWithoutPosition } from './types';
 import useProvData from '../provenance/hooks';
 import { convertProvDataToNodesAndEdges } from './utils';
+import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
 export function useDatasetStatuses(datasets: { status?: string }[]) {
   const statuses = useMemo(() => {
@@ -22,8 +23,8 @@ export function useDatasetTypes(nodes: NodeWithoutPosition[]) {
   return types;
 }
 
-export function useDatasetRelationships(uuid: string) {
-  const { provData, isLoading } = useProvData(uuid, true);
+export function useDatasetRelationships(uuid: string, shouldFetch = true) {
+  const { provData, isLoading } = useProvData(uuid, true, shouldFetch);
   const { nodes, edges } = useMemo(() => convertProvDataToNodesAndEdges(uuid, provData), [uuid, provData]);
   return { isLoading, nodes, edges };
 }
@@ -49,4 +50,24 @@ export function usePipelineInfo(datasets: string[]) {
     fetchPipelineInfo({ url, datasets, groupsToken }),
   );
   return { pipelineInfo, ...rest };
+}
+
+export function useDatasetRelationshipsTracking() {
+  const trackEvent = useTrackEntityPageEvent();
+  const trackFitView = useCallback(() => {
+    trackEvent({
+      action: 'Dataset Relationships Fit View',
+    });
+  }, [trackEvent]);
+  const trackZoomIn = useCallback(() => {
+    trackEvent({
+      action: 'Dataset Relationships Zoom In',
+    });
+  }, [trackEvent]);
+  const trackZoomOut = useCallback(() => {
+    trackEvent({
+      action: 'Dataset Relationships Zoom Out',
+    });
+  }, [trackEvent]);
+  return { trackFitView, trackZoomIn, trackZoomOut };
 }

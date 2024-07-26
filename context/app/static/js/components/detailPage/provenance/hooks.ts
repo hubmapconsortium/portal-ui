@@ -76,11 +76,12 @@ async function getCombinedProvData(
  * @param combined Whether to fetch combined provenance data for the entity's tree
  * @returns Provenance data and loading state
  */
-function useProvData(uuid: string, combined = false) {
+function useProvData(uuid: string, combined = false, shouldFetch = true) {
   const { entityEndpoint, groupsToken, elasticsearchEndpoint } = useAppContext();
 
   const { data: provData, isLoading } = useSWR<ProvData, unknown, [string, string, boolean]>(
-    [uuid, groupsToken, combined],
+    // @ts-expect-error - SWR suggests disabling fetching by providing a null key
+    shouldFetch ? [uuid, groupsToken, combined] : null,
     ([idToFetch, authToken, useCombinedFetcher]) =>
       useCombinedFetcher
         ? getCombinedProvData(idToFetch, entityEndpoint, authToken, elasticsearchEndpoint)
