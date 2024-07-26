@@ -85,7 +85,8 @@ interface DatasetRelationshipsSectionProps {
 export function DatasetRelationships({ uuid, processing }: DatasetRelationshipsSectionProps) {
   const shouldDisplay = processing === 'raw';
   const datasetRelationships = useDatasetRelationships(uuid, shouldDisplay);
-  if (!shouldDisplay) {
+  // If there are no related datasets to display, return null
+  if (!shouldDisplay || datasetRelationships.nodes.length < 2) {
     return null;
   }
   return <DatasetRelationshipsVisualization {...datasetRelationships} />;
