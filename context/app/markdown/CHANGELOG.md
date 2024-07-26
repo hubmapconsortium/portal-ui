@@ -1,3 +1,9 @@
+## v0.102.0 - 2024-07-26
+
+- Removed overlapping tooltip from current dataset in multi-assay relationships.
+- Updated `vitessce-data` and `vitessce-data-v2` S3 bucket URLs to point to `data-1.vitessce.io` and `data-2.vitessce.io` subdomains, respectively.
+
+
 ## v0.101.4 - 2024-07-25
 
 - Add confirmation modal to the 'delete workspaces' button.
