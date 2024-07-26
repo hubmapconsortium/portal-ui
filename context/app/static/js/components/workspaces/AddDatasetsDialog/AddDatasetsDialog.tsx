@@ -37,8 +37,17 @@ function SearchPagePrompt() {
 const title = 'Add Datasets';
 
 function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
-  const { submit, handleSubmit, isSubmitting, errors, reset, resetAutocompleteState, errorMessages, ...rest } =
-    useAddDatasetsDialog({ workspace });
+  const {
+    submit,
+    handleSubmit,
+    isSubmitting,
+    errors,
+    reset,
+    resetAutocompleteState,
+    errorMessages,
+    warningMessages,
+    ...rest
+  } = useAddDatasetsDialog({ workspace });
 
   return (
     <EditWorkspaceDialogContent
@@ -53,7 +62,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     >
       <Step title={title}>
         <Stack spacing={3}>
-          <AlertMessages errorMessages={errorMessages} />
+          <AlertMessages errorMessages={errorMessages} warningMessages={warningMessages} />
           <SearchPagePrompt />
           <AddDatasetsTable {...rest} />
         </Stack>

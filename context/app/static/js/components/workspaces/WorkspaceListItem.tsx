@@ -2,17 +2,18 @@ import React, { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import styled from '@mui/material/styles/styled';
 import Button, { ButtonProps } from '@mui/material/Button';
+import Checkbox from '@mui/material/Checkbox';
+import Radio from '@mui/material/Radio';
 
 import { PanelWrapper } from 'js/shared-styles/panels';
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import Checkbox from '@mui/material/Checkbox';
-import Radio from '@mui/material/Radio';
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
+
 import WorkspaceLaunchStopButtons from './WorkspaceLaunchStopButtons';
 import { MergedWorkspace } from './types';
 import { jobStatuses } from './statusCodes';
 import { useWorkspacesList } from './hooks';
-import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
 
 interface WorkspaceListItemProps {
   workspace: MergedWorkspace;
@@ -44,8 +45,7 @@ function WorkspaceListItem({
 }: WorkspaceListItemProps) {
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
-  const hasMaxDatasets =
-    workspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
+  const hasMaxDatasets = isWorkspaceAtDatasetLimit(workspace);
 
   let tooltip;
   if (checkMaxDatasets && hasMaxDatasets) {

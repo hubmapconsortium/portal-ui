@@ -3,13 +3,13 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { Alert } from 'js/shared-styles/alerts';
 import { MergedWorkspace } from '../types';
-import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -31,9 +31,7 @@ function StopWorkspaceButton({
   const { toastError } = useSnackbarActions();
 
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
-  const currentWorkspaceHasMaxDatasets =
-    checkMaxDatasets &&
-    workspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
+  const currentWorkspaceHasMaxDatasets = checkMaxDatasets && isWorkspaceAtDatasetLimit(workspace);
 
   if (!currentWorkspaceIsRunning || currentWorkspaceHasMaxDatasets) {
     return null;
@@ -63,9 +61,7 @@ function StopWorkspaceAlert() {
   const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
 
   const runningWorkspace = findRunningWorkspace(workspacesList);
-  const runningWorkspaceHasMaxDatasets =
-    runningWorkspace &&
-    runningWorkspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
+  const runningWorkspaceHasMaxDatasets = runningWorkspace && isWorkspaceAtDatasetLimit(runningWorkspace);
 
   if (!runningWorkspace || runningWorkspaceHasMaxDatasets) {
     return null;
