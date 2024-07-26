@@ -87,10 +87,21 @@ function makeEdge(source: string, target: string): Edge {
   };
 }
 
+/**
+ * Helper function to confirm that the provData object is valid
+ * This is necessary to avoid errors with datasets that are missing provenance data
+ * (e.g. datasets with invalid/error status)
+ * @returns boolean
+ */
+function verifyProvData(provData?: ProvData): provData is ProvData {
+  if (!provData) return false;
+  return Boolean(provData.entity && provData.activity && provData.used && provData.wasGeneratedBy);
+}
+
 export function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provData?: ProvData) {
   const nodes: NodeWithoutPosition[] = [];
   const edges: Edge[] = [];
-  if (provData) {
+  if (verifyProvData(provData)) {
     const { entity, activity, used, wasGeneratedBy } = provData;
     // First, add the primary entity as the starting point
     const primaryDatasetUUID = `${entityPrefix}/${primaryDatasetUuid}`;
