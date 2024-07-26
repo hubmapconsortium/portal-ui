@@ -12,7 +12,7 @@ vitessce_conf:
           'name': 'raster',
           'type': 'RASTER',
           'fileType': 'raster.json',
-          'url': 'https://data-1.vitessce.io/0.0.27/master_release/spraggins/spraggins.raster.json',
+          'url': 'https://data-1.vitessce.io/0.0.31/master_release/spraggins/spraggins.raster.json',
         },
       ],
     'name': 'Spraggins',
