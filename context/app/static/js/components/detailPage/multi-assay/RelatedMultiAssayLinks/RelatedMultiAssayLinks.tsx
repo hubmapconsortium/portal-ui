@@ -56,7 +56,7 @@ function MultiAssayLink({
   );
 }
 
-function CurrentMultiAssayLink({ dataset, tooltipText }: MultiAssayLinkProps) {
+function CurrentMultiAssayLink({ dataset }: Pick<MultiAssayLinkProps, 'dataset'>) {
   return (
     <Box sx={(theme) => ({ borderLeft: `2px solid ${theme.palette.success.main}`, pl: 0.5 })}>
       <MultiAssayLink dataset={dataset} tooltipText={`${text.current.tooltip} ${dataset.status}`} />
@@ -81,9 +81,9 @@ function RelatedMultiAssayLinks() {
         <Stack>
           {v.map((dataset) =>
             dataset.uuid === uuid ? (
-              <CurrentMultiAssayLink dataset={dataset} key={dataset.uuid} tooltipText={undefined} />
+              <CurrentMultiAssayLink dataset={dataset} key={dataset.uuid} />
             ) : (
-              <MultiAssayLink dataset={dataset} key={dataset.uuid} tooltipText={undefined} />
+              <MultiAssayLink dataset={dataset} key={dataset.uuid} />
             ),
           )}
         </Stack>
