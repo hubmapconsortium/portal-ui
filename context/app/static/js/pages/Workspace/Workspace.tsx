@@ -20,6 +20,8 @@ import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
+import { Alert } from 'js/shared-styles/alerts';
+import { InternalLink } from 'js/shared-styles/Links';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -91,7 +93,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           </LabelledSectionText>
         </SectionPaper>
       </Box>
-      {workspaceDatasets.length > 0 && (
+      {workspaceDatasets.length > 0 ? (
         <WorkspaceDatasetsTable
           datasetsUUIDs={workspaceDatasets}
           label={<SectionHeader> Datasets</SectionHeader>}
@@ -108,6 +110,28 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             </WorkspacesUpdateButton>
           }
         />
+      ) : (
+        <Box>
+          <SpacedSectionButtonRow
+            leftText={<SectionHeader>Datasets</SectionHeader>}
+            buttons={
+              <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES" tooltip={tooltips.templates}>
+                <AddIcon />
+              </WorkspacesUpdateButton>
+            }
+          />
+          <Alert
+            severity="info"
+            action={
+              <Button>
+                <InternalLink href="/search?entity_type[0]=Dataset">Dataset Search Page</InternalLink>
+              </Button>
+            }
+          >
+            There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to
+            your workspace.
+          </Alert>
+        </Box>
       )}
       <Box>
         <SpacedSectionButtonRow
