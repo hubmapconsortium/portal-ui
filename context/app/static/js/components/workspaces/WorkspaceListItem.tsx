@@ -45,10 +45,10 @@ function WorkspaceListItem({
 }: WorkspaceListItemProps) {
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
-  const hasMaxDatasets = isWorkspaceAtDatasetLimit(workspace);
+  const hasMaxDatasets = checkMaxDatasets && isWorkspaceAtDatasetLimit(workspace);
 
   let tooltip;
-  if (checkMaxDatasets && hasMaxDatasets) {
+  if (hasMaxDatasets) {
     tooltip = 'This workspace has reached the maximum number of datasets allowed. You cannot add any more datasets.';
   } else if (isRunning) {
     tooltip = 'Stop all jobs before selecting.';
