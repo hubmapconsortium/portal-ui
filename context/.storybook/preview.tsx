@@ -17,6 +17,7 @@ initialize({
     }
   }
 });
+export const loaders = [mswLoader]
 
 export const parameters = {
   controls: {
@@ -32,19 +33,18 @@ export const mockGroupsToken = '';
 
 export const decorators = [
   (Story) => (
-    <Providers endpoints={mockEndpoints} groupsToken={mockGroupsToken} isAuthenticated={false} userEmail={'undefined'} workspacesToken={'undefined'} isWorkspacesUser={false} isHubmapUser={false} flaskData={undefined}>
+    <Providers endpoints={mockEndpoints} groupsToken={mockGroupsToken} isAuthenticated={false} userEmail={'undefined'} workspacesToken={'undefined'} isWorkspacesUser={false} isHubmapUser={false} flaskData={{}}>
       <Story />
     </Providers>
   ),
 ];
 export const tags = ['autodocs'];
 
-export const loaders = [mswLoader]
 
 const preview = {
   parameters,
-  decorators,
   loaders,
+  decorators,
 }
 
 export default preview
