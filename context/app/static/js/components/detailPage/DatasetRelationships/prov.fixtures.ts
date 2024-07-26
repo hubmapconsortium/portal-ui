@@ -1,3 +1,4 @@
+import { MarkerType } from '@xyflow/react';
 import { ProvData } from '../provenance/types';
 
 export const provData: ProvData = {
@@ -515,24 +516,50 @@ export const nodes = [
 export const edges = [
   {
     id: 'hubmap:activities/02127e1a2d6211f3b5a8f63a605a5ae7-hubmap:entities/d8f851efb54f84d7ee0952e10d4c449e',
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
     source: 'hubmap:activities/02127e1a2d6211f3b5a8f63a605a5ae7',
+    style: {
+      color: '#636363',
+    },
     target: 'hubmap:entities/d8f851efb54f84d7ee0952e10d4c449e',
+    type: 'straight',
   },
   {
     id: 'hubmap:entities/6df2f796ad72307d04dc94d688b725c5-hubmap:activities/02127e1a2d6211f3b5a8f63a605a5ae7',
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
     source: 'hubmap:entities/6df2f796ad72307d04dc94d688b725c5',
+    style: {
+      color: '#636363',
+    },
     target: 'hubmap:activities/02127e1a2d6211f3b5a8f63a605a5ae7',
-    type: 'default',
+    type: 'straight',
   },
   {
     id: 'hubmap:activities/ff569428ddfd6c6ebd66ca652495f74b-hubmap:entities/ff77fcae7f6d9b5b7b8741c282677eef',
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
     source: 'hubmap:activities/ff569428ddfd6c6ebd66ca652495f74b',
+    style: {
+      color: '#636363',
+    },
     target: 'hubmap:entities/ff77fcae7f6d9b5b7b8741c282677eef',
+    type: 'straight',
   },
   {
     id: 'hubmap:entities/6df2f796ad72307d04dc94d688b725c5-hubmap:activities/ff569428ddfd6c6ebd66ca652495f74b',
+    markerEnd: {
+      type: MarkerType.ArrowClosed,
+    },
     source: 'hubmap:entities/6df2f796ad72307d04dc94d688b725c5',
+    style: {
+      color: '#636363',
+    },
     target: 'hubmap:activities/ff569428ddfd6c6ebd66ca652495f74b',
-    type: 'default',
+    type: 'straight',
   },
 ];
