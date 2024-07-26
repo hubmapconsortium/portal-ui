@@ -2,11 +2,14 @@ import React from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import { getSectionOrder } from 'js/components/detailPage/utils';
 import { MyLists, MyWorkspaces, ProfileSummary } from 'js/components/profile';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 
-const sectionOrder = getSectionOrder(['summary', 'my-lists', 'workspaces'], {});
+const shouldDisplaySection = {
+  summary: true,
+  'my-lists': true,
+  workspaces: true,
+};
 
 function ProfilePage() {
   const { isAuthenticated } = useAppContext();
@@ -16,7 +19,7 @@ function ProfilePage() {
   }
 
   return (
-    <DetailLayout sectionOrder={sectionOrder}>
+    <DetailLayout sections={shouldDisplaySection}>
       <ProfileSummary />
       <MyLists />
       <MyWorkspaces />

@@ -22,7 +22,7 @@ import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
-import { getSectionOrder, getCombinedDatasetStatus } from 'js/components/detailPage/utils';
+import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
@@ -36,7 +36,7 @@ import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert'
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
-import useDatasetLabel from './hooks';
+import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
 
 function NotebookButton({ disabled, ...props }: { disabled: boolean } & ButtonProps) {
   return (
@@ -175,18 +175,15 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     metadata as Record<string, unknown>,
   );
 
-  const shouldDisplaySection: Record<string, boolean> = {
+  const shouldDisplaySection = {
+    summary: true,
     provenance: false,
     metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
     files: Boolean(files?.length),
-    bulkDataTransfer: true,
+    'bulk-data-transfer': true,
     contributors: Boolean(contributors && (contributors as unknown[]).length),
+    attribution: true,
   };
-
-  const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'files', 'bulk-data-transfer', 'contributors', 'attribution'],
-    shouldDisplaySection,
-  );
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
 
@@ -206,7 +203,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
       <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
       <SupportAlert uuid={uuid} isSupport={entity_type === 'Support'} />
       {Boolean(is_component) && <ComponentAlert />}
-      <DetailLayout sectionOrder={sectionOrder}>
+      <DetailLayout sections={shouldDisplaySection}>
         <Summary
           entityTypeDisplay={datasetLabel}
           published_timestamp={published_timestamp}
@@ -231,7 +228,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
           <MetadataSection {...makeMetadataSectionProps(combinedMetadata, assay_modality)} />
         )}
         {shouldDisplaySection.files && <Files files={files} />}
-        {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer />}
+        {shouldDisplaySection['bulk-data-transfer'] === true && <BulkDataTransfer />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
 
         <Attribution />
@@ -280,32 +277,21 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
 
   const collectionsData = useDatasetsCollections([uuid]);
 
-  const shouldDisplaySection: Record<string, boolean> = {
-    provenance: true,
+  const { sections, isLoading } = useProcessedDatasetsSections();
+
+  const shouldDisplaySection = {
+    summary: true,
+    'processed-data': sections,
     visualization: Boolean(vitData),
+    provenance: true,
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
     files: Boolean(files?.length),
-    bulkDataTransfer: true,
+    'bulk-data-transfer': true,
     collections: Boolean(collectionsData.length),
     contributors: Boolean(contributors && (contributors as unknown[]).length),
+    attribution: true,
   };
-
-  const sectionOrder = getSectionOrder(
-    [
-      'summary',
-      'visualization',
-      'provenance',
-      'protocols',
-      'metadata',
-      'files',
-      'bulk-data-transfer',
-      'collections',
-      'contributors',
-      'attribution',
-    ],
-    shouldDisplaySection,
-  );
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
 
@@ -323,7 +309,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
       <OldVersionAlert uuid={uuid} isLatest={isLatest} />
       <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
       {Boolean(is_component) && <ComponentAlert />}
-      <DetailLayout sectionOrder={sectionOrder}>
+      <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
         <Summary
           entityTypeDisplay={datasetLabel}
           published_timestamp={published_timestamp}
@@ -354,7 +340,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
         {shouldDisplaySection.files && <Files files={files} />}
-        {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer />}
+        {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
         <Attribution />

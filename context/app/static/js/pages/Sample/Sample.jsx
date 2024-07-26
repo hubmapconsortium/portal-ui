@@ -12,7 +12,6 @@ import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SampleTissue from 'js/components/detailPage/SampleTissue';
 import useEntityStore from 'js/stores/useEntityStore';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
-import { getSectionOrder } from 'js/components/detailPage/utils';
 
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
 
@@ -44,16 +43,14 @@ function SampleDetail() {
   const combinedMetadata = combineMetadata(donor, undefined, undefined, metadata);
 
   const shouldDisplaySection = {
-    protocols: Boolean(protocol_url),
+    summary: true,
+    'derived-data': Boolean(descendant_counts?.entity_type?.Dataset > 0),
     tissue: true,
+    provenance: true,
+    protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(combinedMetadata).length),
-    derived: Boolean(descendant_counts?.entity_type?.Dataset > 0),
+    attribution: true,
   };
-
-  const sectionOrder = getSectionOrder(
-    ['summary', 'derived', 'tissue', 'provenance', 'protocols', 'metadata', 'attribution'],
-    shouldDisplaySection,
-  );
 
   const setAssayMetadata = useEntityStore(entityStoreSelector);
   useEffect(() => {
@@ -66,7 +63,7 @@ function SampleDetail() {
 
   return (
     <DetailContext.Provider value={detailContext}>
-      <DetailLayout sectionOrder={sectionOrder}>
+      <DetailLayout sections={shouldDisplaySection}>
         <Summary>
           <SummaryItem>
             <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
@@ -77,7 +74,7 @@ function SampleDetail() {
             {sample_category}
           </Typography>
         </Summary>
-        {shouldDisplaySection.derived && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
+        {shouldDisplaySection['derived-data'] && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
         <SampleTissue />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}

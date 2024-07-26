@@ -20,10 +20,6 @@ const shouldDisplaySection = {
   [biomarkerQuery]: true,
 };
 
-const sectionOrder = Object.entries(shouldDisplaySection)
-  .filter(([, shouldDisplay]) => shouldDisplay)
-  .map(([sectionName]) => sectionName);
-
 interface Props {
   geneSymbol: string;
 }
@@ -31,7 +27,7 @@ interface Props {
 function GeneDetails({ geneSymbol }: Props) {
   return (
     <GenePageProvider geneSymbol={geneSymbol}>
-      <DetailLayout sectionOrder={sectionOrder}>
+      <DetailLayout sections={shouldDisplaySection}>
         <SummaryTitle entityIcon="Gene">Gene</SummaryTitle>
         <GenePageTitle />
         {shouldDisplaySection[summary] && <Summary />}

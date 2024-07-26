@@ -35,6 +35,11 @@ export interface Entity {
   // eslint-disable-next-line no-use-before-define -- Donor is defined later in the file and extends Entity
   donor: Donor;
   descendant_counts: { entity_type: Record<string, number> };
+  descendant_ids: string[];
+  metadata: {
+    dag_provenance_list: DagProvenanceType[];
+    [key: string]: unknown;
+  };
   group_name: string;
   created_by_user_displayname: string;
   created_by_user_email: string;
@@ -61,7 +66,6 @@ export interface Sample extends Entity {
   sample_category: string;
   mapped_organ: string;
   organ: string;
-  metadata?: Record<string, string>;
   origin_samples_unique_mapped_organs: string[];
   origin_samples: Sample[];
 }
@@ -69,15 +73,12 @@ export interface Sample extends Entity {
 export interface Dataset extends Entity {
   entity_type: 'Dataset';
   processing: 'raw' | 'processed';
+  pipeline: string;
   assay_display_name: string;
   is_component?: boolean;
   assay_modality: 'single' | 'multiple';
   donor: Donor;
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
-  metadata: {
-    dag_provenance_list: DagProvenanceType[];
-    [key: string]: unknown;
-  };
   origin_samples: Sample[];
   origin_samples_unique_mapped_organs: string[];
   mapped_data_types: string[];

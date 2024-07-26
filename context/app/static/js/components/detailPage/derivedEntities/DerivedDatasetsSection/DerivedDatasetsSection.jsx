@@ -12,10 +12,10 @@ function DerivedDatasetsSection({ uuid, entityType }) {
   return (
     <DerivedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId="derived-datasets"
+      sectionId="derived-data"
       headerComponent={
         <DerivedEntitiesSectionHeader
-          header="Derived Datasets"
+          header="Derived Data"
           uuid={uuid}
           searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
@@ -25,7 +25,7 @@ function DerivedDatasetsSection({ uuid, entityType }) {
         entities={entities}
         openIndex={openIndex}
         setOpenIndex={setOpenIndex}
-        ariaLabel="Derived Datasets Tab"
+        ariaLabel="Derived Data Tabs"
         renderWarningMessage={(tableEntityType) =>
           `No derived ${tableEntityType.toLowerCase()}s for this ${entityType.toLowerCase()}.`
         }

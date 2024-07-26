@@ -12,7 +12,6 @@ import CellTypesSummary from 'js/components/cell-types/CellTypesSummary';
 import CellTypesEntitiesTables from 'js/components/cell-types/CellTypesEntitiesTables';
 import CellTypesBiomarkersTable from 'js/components/cell-types/CellTypesBiomarkersTable';
 import { StyledSvgIcon } from 'js/components/detailPage/entityHeader/EntityHeaderContent/style';
-
 import CellTypesTitle from 'js/components/cell-types/CellTypesTitle';
 
 interface Props {
@@ -26,14 +25,10 @@ const shouldDisplaySection = {
   organs: true,
 };
 
-const sectionOrder = Object.entries(shouldDisplaySection)
-  .filter(([, shouldDisplay]) => shouldDisplay)
-  .map(([sectionName]) => sectionName);
-
 function CellTypes({ cellId }: Props) {
   return (
     <CellTypesProvider cellId={cellId}>
-      <DetailLayout sectionOrder={sectionOrder}>
+      <DetailLayout sections={shouldDisplaySection}>
         <SummaryTitle>
           <Stack direction="row" spacing={1} alignItems="center">
             <StyledSvgIcon component={ScatterPlot} /> Cell Type

@@ -1,9 +1,13 @@
 import React, { PropsWithChildren } from 'react';
+import { createPortal } from 'react-dom';
+import Stack from '@mui/material/Stack';
 
 import useEntityStore, { savedAlertStatus, editedAlertStatus, EntityStore } from 'js/stores/useEntityStore';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
-import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-import { Content, FlexRow, StyledAlert } from './style';
+import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/types';
+import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
+import { SectionOrder, getSections } from 'js/shared-styles/sections/TableOfContents/utils';
+import { StyledAlert } from './style';
 
 const entityStoreSelector = (state: EntityStore) => ({
   shouldDisplaySavedOrEditedAlert: state.shouldDisplaySavedOrEditedAlert,
@@ -11,7 +15,22 @@ const entityStoreSelector = (state: EntityStore) => ({
 });
 
 interface DetailLayoutProps extends PropsWithChildren {
-  sectionOrder: string[];
+  sections: SectionOrder;
+  isLoading?: boolean;
+}
+
+function TableOfContentsPortal({ items, isLoading = false }: { items: TableOfContentsItems; isLoading: boolean }) {
+  const element = document.getElementById(leftRouteBoundaryID);
+
+  if (!element) {
+    return null;
+  }
+  return createPortal(
+    <Stack alignItems="end" alignSelf="flex-start" height="100%">
+      <TableOfContents items={items} isLoading={isLoading} />
+    </Stack>,
+    element,
+  );
 }
 
 function DetailAlert() {
@@ -36,17 +55,14 @@ function DetailAlert() {
   }
 }
 
-function DetailLayout({ sectionOrder, children }: DetailLayoutProps) {
-  // section hash must match section id in each component
-  const sections = new Map(getSections(sectionOrder));
+function DetailLayout({ sections, children, isLoading = false }: DetailLayoutProps) {
+  const items = getSections(sections);
 
   return (
     <>
       <DetailAlert />
-      <FlexRow>
-        <TableOfContents items={[...sections.values()]} />
-        <Content>{children}</Content>
-      </FlexRow>
+      <TableOfContentsPortal items={items} isLoading={isLoading} />
+      {children}
     </>
   );
 }

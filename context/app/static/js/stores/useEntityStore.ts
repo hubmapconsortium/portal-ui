@@ -33,7 +33,7 @@ export const useEntityStore = create<EntityStore>((set) => ({
         summaryEntry: entry,
       },
     }),
-  assayMetadata: {} as AssayMetadata,
+  assayMetadata: {},
   setAssayMetadata: (val) => set({ assayMetadata: val }),
   shouldDisplaySavedOrEditedAlert: false,
   setShouldDisplaySavedOrEditedAlert: (val) => set({ shouldDisplaySavedOrEditedAlert: val }),

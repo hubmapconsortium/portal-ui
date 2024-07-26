@@ -31,6 +31,16 @@ export const excludeSupportEntitiesClause: QueryDslQueryContainer = {
   },
 };
 
+export const excludeComponentDatasetsClause: QueryDslQueryContainer = {
+  bool: {
+    must_not: {
+      term: {
+        is_component: true,
+      },
+    },
+  },
+};
+
 export const includeOnlyDatasetsClause: QueryDslQueryContainer = {
   bool: {
     must: {
