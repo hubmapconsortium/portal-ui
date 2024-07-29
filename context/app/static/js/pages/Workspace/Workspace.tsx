@@ -86,8 +86,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             <Button>
               <InternalLink href="/search?entity_type[0]=Dataset">
                 <Typography color="primary" variant="button">
-                  {' '}
-                  Dataset Search Page{' '}
+                  Dataset Search Page
                 </Typography>
               </InternalLink>
             </Button>
