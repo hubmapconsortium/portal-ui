@@ -10,6 +10,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { useAddDatasetsFromSearchDialog } from './hooks';
@@ -17,6 +18,34 @@ import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
+import { MergedWorkspace } from '../types';
+
+function SearchDialogWorkspaceListItem({
+  workspace,
+  toggleItem,
+  selected,
+}: {
+  workspace: MergedWorkspace;
+  toggleItem: (workspaceId: number) => void;
+  selected: boolean;
+}) {
+  const hasMaxDatasets = isWorkspaceAtDatasetLimit(workspace);
+  const tooltip = hasMaxDatasets
+    ? 'This workspace has reached the maximum number of datasets allowed. You cannot add any more datasets.'
+    : undefined;
+
+  return (
+    <WorkspaceListItem
+      workspace={workspace}
+      key={workspace.id}
+      toggleItem={toggleItem}
+      selected={selected}
+      ToggleComponent={Radio}
+      disabled={hasMaxDatasets}
+      tooltip={tooltip}
+    />
+  );
+}
 
 function SelectWorkspaceStep({
   selectWorkspace,
@@ -42,13 +71,11 @@ function SelectWorkspaceStep({
       <Stack spacing={3} component={Paper}>
         <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
           {workspacesList.map((workspace) => (
-            <WorkspaceListItem
-              workspace={workspace}
+            <SearchDialogWorkspaceListItem
               key={workspace.id}
+              workspace={workspace}
               toggleItem={toggleWorkspace}
               selected={workspace.id === toggledWorkspace}
-              ToggleComponent={Radio}
-              checkMaxDatasets
             />
           ))}
         </Box>

@@ -8,7 +8,6 @@ import Radio from '@mui/material/Radio';
 import { PanelWrapper } from 'js/shared-styles/panels';
 import WorkspaceDetails from 'js/components/workspaces/WorkspaceDetails';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 
 import WorkspaceLaunchStopButtons from './WorkspaceLaunchStopButtons';
 import { MergedWorkspace } from './types';
@@ -22,7 +21,8 @@ interface WorkspaceListItemProps {
   selected: boolean;
   showStop?: boolean;
   showLaunch?: boolean;
-  checkMaxDatasets?: boolean;
+  disabled?: boolean;
+  tooltip?: string;
 }
 
 const StyledButton = styled(Button)(({ theme }) => ({
@@ -41,23 +41,13 @@ function WorkspaceListItem({
   ToggleComponent,
   showLaunch = false,
   showStop = false,
-  checkMaxDatasets = false,
+  disabled = false,
+  tooltip,
 }: WorkspaceListItemProps) {
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
 
-  const hasMaxDatasets = checkMaxDatasets && isWorkspaceAtDatasetLimit(workspace);
-
-  const tooltip = (() => {
-    switch (true) {
-      case hasMaxDatasets:
-        return 'This workspace has reached the maximum number of datasets allowed. You cannot add any more datasets.';
-      case isRunning:
-        return 'Stop all jobs before selecting.';
-      default:
-        return null;
-    }
-  })();
+  const tooltipToDisplay = tooltip === undefined && isRunning ? 'Stop all jobs before selecting.' : tooltip;
 
   // Deselect the workspace if the user starts it after selecting it for deletion
   useEffect(() => {
@@ -69,13 +59,13 @@ function WorkspaceListItem({
   return (
     <PanelWrapper key={workspace.id}>
       <Stack direction="row" spacing={2}>
-        <SecondaryBackgroundTooltip title={tooltip}>
+        <SecondaryBackgroundTooltip title={tooltipToDisplay}>
           <span>
             <ToggleComponent
               aria-label={`Select ${workspace.name}.`}
               checked={selected}
               onChange={() => toggleItem(workspace.id)}
-              disabled={isRunning || hasMaxDatasets}
+              disabled={isRunning || disabled}
             />
           </span>
         </SecondaryBackgroundTooltip>
