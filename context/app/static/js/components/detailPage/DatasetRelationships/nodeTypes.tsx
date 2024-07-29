@@ -109,8 +109,9 @@ function PipelineNode({
   data: { childDatasets, singleAssay, name, description: _description },
 }: NodeProps<PipelineNodeProps>) {
   const { pipelineInfo = name, isLoading } = usePipelineInfo(childDatasets);
-  const selectedName = singleAssay ? pipelineInfo : 'Multi Assay Pipeline';
-  const description = singleAssay ? _description : 'Create component datasets';
+  const [selectedName, description] = singleAssay
+    ? [pipelineInfo, _description]
+    : ['Multi Assay Pipeline', 'Create component datasets'];
   return (
     <NodeTemplate source target name={selectedName} isLoading={isLoading} bgColor={nodeColors.pipeline}>
       {description}
