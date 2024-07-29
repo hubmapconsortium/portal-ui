@@ -57,6 +57,13 @@ export function getCurrentEntityNodeType(currentEntityIsComponent: boolean, curr
   return 'processedDataset';
 }
 
+/**
+ * Helper function to determine if a dataset type is forbidden
+ * from being displayed in the dataset relationships graph
+ *
+ * @param datasetType the `dataset_type` property of a dataset entity
+ * @returns boolean
+ */
 function datasetTypeIsForbidden(datasetType: string) {
   if (datasetType === 'Publication') {
     return true;
@@ -67,6 +74,13 @@ function datasetTypeIsForbidden(datasetType: string) {
   return false;
 }
 
+/**
+ * Helper function to determine if an activity type is forbidden
+ * from being displayed in the dataset relationships graph
+ *
+ * @param activityType the `creation_action` property of an activity entity
+ * @returns boolean
+ */
 function activityTypeIsForbidden(activityType: string) {
   if (activityType === 'Create Publication Activity') {
     return true;
