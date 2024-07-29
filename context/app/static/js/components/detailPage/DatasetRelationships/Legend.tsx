@@ -25,7 +25,7 @@ function NodeLegendItem({ name, nodeKey }: NodeLegendItemProps) {
         alignItems="center"
         justifyContent="center"
       >
-        {Icon && <Icon color="primary" fontSize="0.75rem" width="0.75rem" height="0.75rem" />}
+        {Icon && <Icon color="primary" fontSize="0.75rem" />}
       </Box>
       <Typography variant="caption">{name}</Typography>
     </Stack>
