@@ -6,18 +6,17 @@ import Typography from '@mui/material/Typography';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { Alert } from 'js/shared-styles/alerts';
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { MergedWorkspace } from '../types';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
   handleStopWorkspace: (workspaceId: number) => Promise<void>;
   isStoppingWorkspace: boolean;
-  disableLaunch?: boolean;
-  disableStop?: boolean;
-  checkMaxDatasets?: boolean;
+  showLaunch?: boolean;
+  showStop?: boolean;
   button: ElementType<ButtonProps>;
 }
 
@@ -26,14 +25,12 @@ function StopWorkspaceButton({
   handleStopWorkspace,
   button: ButtonComponent,
   isStoppingWorkspace,
-  checkMaxDatasets = false,
-}: Omit<WorkspaceButtonProps, 'disableLaunch' | 'disableStop'>) {
+}: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
   const { toastError } = useSnackbarActions();
 
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
-  const currentWorkspaceHasMaxDatasets = checkMaxDatasets && isWorkspaceAtDatasetLimit(workspace);
 
-  if (!currentWorkspaceIsRunning || currentWorkspaceHasMaxDatasets) {
+  if (!currentWorkspaceIsRunning) {
     return null;
   }
 
@@ -61,9 +58,9 @@ function StopWorkspaceAlert() {
   const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
 
   const runningWorkspace = findRunningWorkspace(workspacesList);
-  const runningWorkspaceHasMaxDatasets = runningWorkspace && isWorkspaceAtDatasetLimit(runningWorkspace);
+  const runningWorkspaceAtMaxDatasets = runningWorkspace && isWorkspaceAtDatasetLimit(runningWorkspace);
 
-  if (!runningWorkspace || runningWorkspaceHasMaxDatasets) {
+  if (!runningWorkspace || runningWorkspaceAtMaxDatasets) {
     return null;
   }
 
@@ -93,7 +90,7 @@ function StopWorkspaceAlert() {
 }
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const { workspace, button: ButtonComponent, disableLaunch = false, disableStop = false } = props;
+  const { workspace, button: ButtonComponent, showLaunch = false, showStop = false } = props;
   const { open, setWorkspace } = useLaunchWorkspaceStore();
   if (workspace.status === 'deleting') {
     return (
@@ -104,8 +101,8 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
   }
   return (
     <Stack direction="row" spacing={2}>
-      {!disableStop && <StopWorkspaceButton {...props} />}
-      {!disableLaunch && (
+      {showStop && <StopWorkspaceButton {...props} />}
+      {showLaunch && (
         <Button
           type="button"
           onClick={() => {

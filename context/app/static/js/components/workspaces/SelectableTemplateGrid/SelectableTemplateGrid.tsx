@@ -6,7 +6,7 @@ import { useController, Control, Path } from 'react-hook-form';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import AlertMessages from 'js/shared-styles/alerts/AlertMessages';
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { TemplatesTypes } from '../types';
 import TemplateGrid from '../TemplateGrid';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
@@ -68,7 +68,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
 
   return (
     <Box>
-      {errorMessage && <AlertMessages errorMessages={[errorMessage]} />}
+      {errorMessage && <ErrorOrWarningMessages errorMessages={[errorMessage]} />}
       <SpacedSectionButtonRow
         leftText={<Typography variant="subtitle1">{selectedTemplates.size} Templates Selected</Typography>}
         buttons={

@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
-import AlertMessages from 'js/shared-styles/alerts/AlertMessages';
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { Alert } from 'js/shared-styles/alerts';
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
@@ -37,7 +37,7 @@ function SelectWorkspaceStep({
           all jobs are stopped.
         </Alert>
         <StopWorkspaceAlert />
-        <AlertMessages errorMessages={workspaceIdErrorMessages} />
+        <ErrorOrWarningMessages errorMessages={workspaceIdErrorMessages} />
       </Stack>
       <Stack spacing={3} component={Paper}>
         <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
@@ -48,7 +48,6 @@ function SelectWorkspaceStep({
               toggleItem={toggleWorkspace}
               selected={workspace.id === toggledWorkspace}
               ToggleComponent={Radio}
-              disableLaunch
               checkMaxDatasets
             />
           ))}
@@ -102,7 +101,7 @@ function AddDatasetsStep({
         Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be selected
         for deletion.
       </Alert>
-      <AlertMessages errorMessages={datasetsErrorMessages} warningMessages={datasetsWarningMessages} />
+      <ErrorOrWarningMessages errorMessages={datasetsErrorMessages} warningMessages={datasetsWarningMessages} />
       <RemoveProtectedDatasetsFormField
         control={control}
         protectedHubmapIds={protectedHubmapIds}

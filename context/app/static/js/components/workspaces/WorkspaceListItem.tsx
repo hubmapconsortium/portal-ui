@@ -20,8 +20,8 @@ interface WorkspaceListItemProps {
   toggleItem: (workspaceId: number) => void;
   ToggleComponent: typeof Checkbox | typeof Radio;
   selected: boolean;
-  disableStop?: boolean;
-  disableLaunch?: boolean;
+  showStop?: boolean;
+  showLaunch?: boolean;
   checkMaxDatasets?: boolean;
 }
 
@@ -39,20 +39,25 @@ function WorkspaceListItem({
   toggleItem,
   selected,
   ToggleComponent,
-  disableLaunch = false,
-  disableStop = false,
+  showLaunch = false,
+  showStop = false,
   checkMaxDatasets = false,
 }: WorkspaceListItemProps) {
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const isRunning = workspace.jobs.some((j) => !jobStatuses[j.status].isDone);
+
   const hasMaxDatasets = checkMaxDatasets && isWorkspaceAtDatasetLimit(workspace);
 
-  let tooltip;
-  if (hasMaxDatasets) {
-    tooltip = 'This workspace has reached the maximum number of datasets allowed. You cannot add any more datasets.';
-  } else if (isRunning) {
-    tooltip = 'Stop all jobs before selecting.';
-  }
+  const tooltip = (() => {
+    switch (true) {
+      case hasMaxDatasets:
+        return 'This workspace has reached the maximum number of datasets allowed. You cannot add any more datasets.';
+      case isRunning:
+        return 'Stop all jobs before selecting.';
+      default:
+        return null;
+    }
+  })();
 
   // Deselect the workspace if the user starts it after selecting it for deletion
   useEffect(() => {
@@ -81,9 +86,8 @@ function WorkspaceListItem({
         button={LaunchStopButton}
         handleStopWorkspace={handleStopWorkspace}
         isStoppingWorkspace={isStoppingWorkspace}
-        disableLaunch={disableLaunch}
-        disableStop={disableStop}
-        checkMaxDatasets={checkMaxDatasets}
+        showLaunch={showLaunch}
+        showStop={showStop}
       />
     </PanelWrapper>
   );

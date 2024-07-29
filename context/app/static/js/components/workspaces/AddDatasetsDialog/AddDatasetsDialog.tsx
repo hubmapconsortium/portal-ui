@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 
 import Step from 'js/shared-styles/surfaces/Step';
 import { InternalLink } from 'js/shared-styles/Links';
-import AlertMessages from 'js/shared-styles/alerts/AlertMessages';
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
 import AddDatasetsTable from '../AddDatasetsTable';
@@ -62,7 +62,7 @@ function AddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     >
       <Step title={title}>
         <Stack spacing={3}>
-          <AlertMessages errorMessages={errorMessages} warningMessages={warningMessages} />
+          <ErrorOrWarningMessages errorMessages={errorMessages} warningMessages={warningMessages} />
           <SearchPagePrompt />
           <AddDatasetsTable {...rest} />
         </Stack>
