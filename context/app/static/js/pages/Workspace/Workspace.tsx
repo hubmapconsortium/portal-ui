@@ -49,6 +49,53 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
 
   const job = condenseJobs(workspace.jobs);
 
+  const datasetsSection =
+    workspaceDatasets.length > 0 ? (
+      <WorkspaceDatasetsTable
+        datasetsUUIDs={workspaceDatasets}
+        label={<SectionHeader> Datasets</SectionHeader>}
+        additionalButtons={
+          <WorkspacesUpdateButton
+            workspace={workspace}
+            dialogType="ADD_DATASETS"
+            sx={(theme) => ({
+              marginRight: theme.spacing(1),
+            })}
+            tooltip={tooltips.datasets}
+          >
+            <AddIcon />
+          </WorkspacesUpdateButton>
+        }
+      />
+    ) : (
+      <Box>
+        <SpacedSectionButtonRow
+          leftText={<SectionHeader>Datasets</SectionHeader>}
+          buttons={
+            <WorkspacesUpdateButton workspace={workspace} dialogType="ADD_DATASETS" tooltip={tooltips.datasets}>
+              <AddIcon />
+            </WorkspacesUpdateButton>
+          }
+        />
+        <Alert
+          severity="info"
+          action={
+            <Button>
+              <InternalLink href="/search?entity_type[0]=Dataset">
+                <Typography color="primary" variant="button">
+                  {' '}
+                  Dataset Search Page{' '}
+                </Typography>
+              </InternalLink>
+            </Button>
+          }
+        >
+          There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your
+          workspace.
+        </Alert>
+      </Box>
+    );
+
   return (
     <Stack gap={6} sx={{ marginBottom: 5 }}>
       <WorkspaceSessionWarning workspaces={[workspace]} />
@@ -83,7 +130,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             </>
           }
         >
-          <Typography variant="subtitle1" component="p">
+          <Typography variant="subtitle1" component="p" marginTop={2}>
             <JobStatus job={job} />
           </Typography>
         </SummaryData>
@@ -93,49 +140,10 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           </LabelledSectionText>
         </SectionPaper>
       </Box>
-      {workspaceDatasets.length > 0 ? (
-        <WorkspaceDatasetsTable
-          datasetsUUIDs={workspaceDatasets}
-          label={<SectionHeader> Datasets</SectionHeader>}
-          additionalButtons={
-            <WorkspacesUpdateButton
-              workspace={workspace}
-              dialogType="ADD_DATASETS"
-              sx={(theme) => ({
-                marginRight: theme.spacing(1),
-              })}
-              tooltip={tooltips.datasets}
-            >
-              <AddIcon />
-            </WorkspacesUpdateButton>
-          }
-        />
-      ) : (
-        <Box>
-          <SpacedSectionButtonRow
-            leftText={<SectionHeader>Datasets</SectionHeader>}
-            buttons={
-              <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES" tooltip={tooltips.templates}>
-                <AddIcon />
-              </WorkspacesUpdateButton>
-            }
-          />
-          <Alert
-            severity="info"
-            action={
-              <Button>
-                <InternalLink href="/search?entity_type[0]=Dataset">Dataset Search Page</InternalLink>
-              </Button>
-            }
-          >
-            There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to
-            your workspace.
-          </Alert>
-        </Box>
-      )}
+      {datasetsSection}
       <Box>
         <SpacedSectionButtonRow
-          leftText={<SectionHeader iconTooltipText={tooltips.currentTemplates}>Templates</SectionHeader>}
+          leftText={<SectionHeader iconTooltipText={tooltips.currentTemplates}>Current Templates</SectionHeader>}
           buttons={
             <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES" tooltip={tooltips.templates}>
               <AddIcon />
