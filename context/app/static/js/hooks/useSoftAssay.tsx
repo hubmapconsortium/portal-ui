@@ -1,4 +1,5 @@
 import { useAppContext } from 'js/components/Contexts';
+import { fetcher } from 'js/helpers/swr';
 import useSWR from 'swr';
 
 interface SoftAssayRequest {
@@ -17,12 +18,14 @@ interface SoftAssayResponse {
 }
 
 export async function fetchSoftAssay({ url, dataset, groupsToken }: SoftAssayRequest) {
-  const response = (await fetch(`${url}/${dataset}`, {
-    headers: {
-      Authorization: `Bearer ${groupsToken}`,
+  return fetcher<SoftAssayResponse>({
+    url: `${url}/${dataset}`,
+    requestInit: {
+      headers: {
+        Authorization: `Bearer ${groupsToken}`,
+      },
     },
-  }).then((res) => res.json())) as SoftAssayResponse;
-  return response;
+  });
 }
 
 export function useSoftAssay(datasetId: string) {
