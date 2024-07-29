@@ -1,5 +1,6 @@
 import { Node, Edge, MarkerType } from '@xyflow/react';
 import Dagre from '@dagrejs/dagre';
+import theme from 'js/theme/theme';
 import { NodeWithoutPosition } from './types';
 import { ProvData } from '../provenance/types';
 import { nodeHeight } from './nodeTypes';
@@ -97,7 +98,7 @@ function makeEdge(source: string, target: string): Edge {
     markerEnd: {
       type: MarkerType.ArrowClosed,
     },
-    style: { color: '#636363' },
+    style: { color: theme.palette.secondary.main },
   };
 }
 
