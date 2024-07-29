@@ -30,6 +30,9 @@ const tooltips = {
   currentTemplates: 'Templates that are currently in this workspace.',
 };
 
+const datasetsInfoText =
+  'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
+
 interface WorkspacePageProps {
   workspaceId: number;
 }
@@ -90,8 +93,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             </Button>
           }
         >
-          There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your
-          workspace.
+          {datasetsInfoText}
         </Alert>
       </Box>
     );
