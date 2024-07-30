@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
@@ -26,7 +26,20 @@ const assaysId = 'Assays';
 const samplesId = 'Samples';
 
 function Organ({ organ }: OrganProps) {
-  const shouldDisplaySearch = organ.search.length > 0;
+  const [searchHasData, setSearchHasData] = useState(true);
+
+  const getShouldDisplaySearch = () => {
+    if (searchHasData) return organ.search.length > 0 || organ.name;
+    return organ.search.length > 0;
+  };
+
+  const getSearchItems = () => {
+    if (searchHasData) return organ.search.length > 0 ? organ.search : [organ.name];
+    return organ.search;
+  };
+
+  const shouldDisplaySearch = getShouldDisplaySearch();
+  const searchItems = getSearchItems();
 
   const shouldDisplaySection = {
     [summaryId]: Boolean(organ?.description),
@@ -40,6 +53,10 @@ function Organ({ organ }: OrganProps) {
     .filter(([, shouldDisplay]) => shouldDisplay)
     .map(([sectionName]) => sectionName);
   const sections = new Map(getSections(sectionOrder));
+
+  const handleDataStatus = (status: boolean) => {
+    setSearchHasData(status);
+  };
 
   return (
     <FlexRow>
@@ -68,15 +85,15 @@ function Organ({ organ }: OrganProps) {
             <Azimuth config={organ.azimuth} />
           </Section>
         )}
-        {shouldDisplaySection[assaysId] && (
+        {shouldDisplaySection[assaysId] && searchHasData && (
           <Section id={assaysId}>
-            <Assays organTerms={organ.search} />
-            <DatasetsBarChart search={organ.search} />
+            <Assays organTerms={searchItems} onHandleSearchStatus={handleDataStatus} />
+            <DatasetsBarChart search={searchItems} />
           </Section>
         )}
-        {shouldDisplaySection[samplesId] && (
+        {shouldDisplaySection[samplesId] && searchHasData && (
           <Section id={samplesId}>
-            <Samples organTerms={organ.search} />
+            <Samples organTerms={searchItems} />
           </Section>
         )}
       </Content>

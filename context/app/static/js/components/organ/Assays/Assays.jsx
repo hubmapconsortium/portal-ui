@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect, useState } from 'react';
 
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
@@ -17,8 +17,10 @@ import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks'
 import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
 import { getSearchURL } from '../utils';
 
-function Assays({ organTerms }) {
+function Assays({ organTerms, onHandleSearchStatus }) {
   const assayTypeMap = useDatasetTypeMap();
+
+  const [bucketData, setBucketData] = useState([]);
 
   const query = useMemo(
     () => ({
@@ -54,9 +56,14 @@ function Assays({ organTerms }) {
   );
 
   const { searchData } = useSearchData(query);
-  const buckets = searchData.aggregations
-    ? searchData.aggregations.mapped_data_types['assay_display_name.keyword'].buckets
-    : [];
+
+  useEffect(() => {
+    if (searchData && searchData.aggregations) {
+      const buckets = searchData.aggregations.mapped_data_types['assay_display_name.keyword'].buckets || [];
+      setBucketData(buckets);
+      if (buckets.length === 0) onHandleSearchStatus(false);
+    }
+  }, [searchData, onHandleSearchStatus]);
 
   return (
     <>
@@ -89,7 +96,7 @@ function Assays({ organTerms }) {
           ].map(({ id, label }) => (
             <HeaderCell key={id}>{label}</HeaderCell>
           ))}
-          tableRows={buckets.map((bucket) => (
+          tableRows={bucketData.map((bucket) => (
             <TableRow key={bucket.key}>
               <TableCell>
                 <InternalLink

@@ -1,0 +1,1 @@
+- Fixed assays and samples section on the organ's detail page.
