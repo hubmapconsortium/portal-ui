@@ -1,4 +1,4 @@
-import React, { useCallback, ChangeEvent } from 'react';
+import React, { useCallback, ChangeEvent, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -63,6 +63,17 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
     },
     [updateTemplates, selectedTemplates],
   );
+
+  // Add the blank template to the selected templates on initial render
+  const addInitialBlankTemplate = useCallback(() => {
+    const templatesCopy = selectedTemplates;
+    templatesCopy.add('blank');
+    updateTemplates([...templatesCopy]);
+  }, [selectedTemplates, updateTemplates]);
+
+  useEffect(() => {
+    addInitialBlankTemplate();
+  }, [addInitialBlankTemplate]);
 
   const errorMessage = fieldState?.error?.message;
 
