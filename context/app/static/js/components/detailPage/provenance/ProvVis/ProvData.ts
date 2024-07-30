@@ -1,5 +1,5 @@
 import { provSchema } from './ProvSchema';
-import type { CWLInput, CWLOutput, ProvData as ProvDataType, Step } from '../types';
+import type { CWLInput, CWLOutput, ProvData as ProvDataType, ProvEdge, Step } from '../types';
 
 function getCwlMeta(isReference: boolean) {
   return {
@@ -123,8 +123,8 @@ export default class ProvData {
 
   getEntityNames(activityName: string, relation: keyof ProvDataType) {
     return Object.values(this.prov[relation])
-      .filter((pair) => this.getNameForActivity(pair['prov:activity'], this.prov) === activityName)
-      .map((pair) => this.getNameForEntity(pair['prov:entity'], this.prov));
+      .filter((pair) => this.getNameForActivity((pair as ProvEdge)['prov:activity'], this.prov) === activityName)
+      .map((pair) => this.getNameForEntity((pair as ProvEdge)['prov:entity'], this.prov));
   }
 
   getParentEntityNames(activityName: string) {
@@ -143,8 +143,8 @@ export default class ProvData {
     const provRelation = this.prov[relation];
 
     return Object.values(provRelation)
-      .filter((pair) => this.getNameForEntity(pair['prov:entity'], this.prov) === entityName)
-      .map((pair) => this.getNameForActivity(pair['prov:activity'], this.prov));
+      .filter((pair) => this.getNameForEntity((pair as ProvEdge)['prov:entity'], this.prov) === entityName)
+      .map((pair) => this.getNameForActivity((pair as ProvEdge)['prov:activity'], this.prov));
   }
 
   getParentActivityNames(entityName: string) {
@@ -179,7 +179,7 @@ export default class ProvData {
         // TODO reduce to single value once apis are consistent
         !['Register Donor Activity', 'Create Donor Activity'].includes(activity['hubmap:creation_action']) ||
         // donors only have a single step which can't be removed
-        // TODO determine how to remove actvitiy node for donors
+        // TODO determine how to remove activity node for donors
         this.entity_type === 'Donor'
       ) {
         acc.push(this.makeCwlStep(activityId));

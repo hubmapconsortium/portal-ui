@@ -82,7 +82,7 @@ function ItemLinks({
         <Collapse in={open} timeout="auto" unmountOnExit>
           <List disablePadding sx={level === 1 ? { marginBottom: 1 } : {}}>
             {subItems.map((subItem) => (
-              <ItemLinks item={{ ...subItem }} key={subItem.text} {...rest} level={level + 1} />
+              <ItemLinks item={{ ...subItem }} key={`${subItem.text}-${subItem.hash}`} {...rest} level={level + 1} />
             ))}
           </List>
         </Collapse>
@@ -176,7 +176,7 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
                 item={item}
                 currentSection={currentSection}
                 handleClick={handleClick}
-                key={item.text}
+                key={`${item.hash}-${item.text}`}
                 level={0}
               />
             ))}

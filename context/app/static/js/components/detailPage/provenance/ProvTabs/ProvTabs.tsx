@@ -40,7 +40,7 @@ function ProvTabs({ provData }: ProvTabsProps) {
         'TMT-LC-MS',
         'salmon_rnaseq_snareseq',
       ]),
-    graph: true,
+    graph: provData && Object.keys(provData).length > 0,
     dag: ['Dataset', 'Support'].includes(entity_type) && metadata && 'dag_provenance_list' in metadata,
   };
 
@@ -68,9 +68,11 @@ function ProvTabs({ provData }: ProvTabsProps) {
           <ProvTable />
         </TabPanel>
       )}
-      <TabPanel value={open} index={filteredTabs.graph.index}>
-        <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
-      </TabPanel>
+      {filteredTabs?.graph && (
+        <TabPanel value={open} index={filteredTabs.graph.index}>
+          <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
+        </TabPanel>
+      )}
       {filteredTabs?.dag && (
         <TabPanel value={open} index={filteredTabs.dag.index} pad>
           <ProvAnalysisDetails dagListData={metadata.dag_provenance_list} />
