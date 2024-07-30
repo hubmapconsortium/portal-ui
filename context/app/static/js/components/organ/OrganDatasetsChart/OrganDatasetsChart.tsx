@@ -9,6 +9,7 @@ import { combineQueryClauses } from 'js/helpers/functions';
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import { useBandScale, useLinearScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
+import { mustHaveOrganClause } from 'js/pages/Organ/queries';
 import { OrganFile } from '../types';
 import { datasetTypeForOrganTermsQuery, DatasetTypeOrganQueryAggs } from './queries';
 import { getSearchURL } from '../utils';
@@ -19,10 +20,7 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
   const updatedQuery = useMemo(
     () =>
       Object.assign(datasetTypeForOrganTermsQuery, {
-        query: combineQueryClauses([
-          { bool: { must: { terms: { 'origin_samples.mapped_organ.keyword': search } } } },
-          includeOnlyDatasetsClause,
-        ]),
+        query: combineQueryClauses([mustHaveOrganClause(search), includeOnlyDatasetsClause]),
       }),
     [search],
   );
