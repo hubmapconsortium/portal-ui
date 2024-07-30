@@ -1,13 +1,13 @@
-import React, { useRef, useEffect, useState, Dispatch, SetStateAction } from 'react';
-import { animated, useSpring } from '@react-spring/web';
-import useResizeObserver from 'use-resize-observer/polyfilled';
+import React, { useEffect, Dispatch, SetStateAction } from 'react';
+import { animated } from '@react-spring/web';
 import Box from '@mui/material/Box';
 
 import { useEntityStore, type EntityStore } from 'js/stores/useEntityStore';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
+import { useEntityHeaderAnimations } from './hooks';
 
-const entityStoreSelector = (state: EntityStore) => state.setEntityHeaderHeight;
+const entityStoreSelector = (state: EntityStore) => state.setEntityHeaderSprings;
 
 const entityHeaderHeight = 40;
 
@@ -17,31 +17,27 @@ export type SetViewType = Dispatch<SetStateAction<SummaryViewsType>>;
 const AnimatedPaper = animated(StyledPaper);
 
 function Header() {
-  const setEntityHeaderHeight = useEntityStore(entityStoreSelector);
-  const [selectedView, setView] = useState<SummaryViewsType>('narrow');
+  const { setView, selectedView, entityHeaderRef, expandedContentRef, springs } = useEntityHeaderAnimations();
+  const setEntityHeaderSprings = useEntityStore(entityStoreSelector);
 
-  const ref = useRef(null);
-  const ref2 = useRef(null);
-  const { height = 40 } = useResizeObserver({ ref });
+  useEffect(() => setEntityHeaderSprings(springs), [springs, setEntityHeaderSprings]);
 
-  const { height: height2 = 40 } = useResizeObserver({ ref: ref2 });
-
-  useEffect(() => {
-    setEntityHeaderHeight(height2);
-  }, [height2, setEntityHeaderHeight]);
-
-  const styles = useSpring({
-    height: selectedView !== 'narrow' ? height : 40,
-  });
+  if (springs[0][0] === undefined) {
+    return null;
+  }
 
   return (
-    <AnimatedPaper elevation={4} data-testid="entity-header" sx={{ overflow: 'hidden' }} style={styles} ref={ref2}>
-      <div>
-        <Box ref={ref}>
-          <EntityHeaderContent setView={setView} view={selectedView} />
-          <Box height={200} width="100%" sx={{ backgroundColor: 'red' }} />
-        </Box>
-      </div>
+    <AnimatedPaper
+      elevation={4}
+      data-testid="entity-header"
+      sx={{ overflow: 'hidden' }}
+      ref={entityHeaderRef}
+      style={springs[0][0]}
+    >
+      <Box ref={expandedContentRef}>
+        <EntityHeaderContent setView={setView} view={selectedView} />
+        <Box height={200} width="100%" sx={{ backgroundColor: 'red' }} />
+      </Box>
     </AnimatedPaper>
   );
 }

@@ -1,5 +1,6 @@
 import { AssayMetadata } from 'js/components/detailPage/entityHeader/EntityHeaderContent/EntityHeaderContent';
 import { create } from 'zustand';
+import { useSprings } from '@react-spring/web';
 
 const savedAlertStatus = 'savedAlert';
 const editedAlertStatus = 'editedAlert';
@@ -11,14 +12,14 @@ interface EntityStoreState {
   };
   assayMetadata: Partial<AssayMetadata>;
   shouldDisplaySavedOrEditedAlert: boolean | string;
-  entityHeaderHeight: number;
+  entityHeaderSprings: ReturnType<typeof useSprings> | null;
 }
 
 interface EntityStoreActions {
   setSummaryComponentObserver: (inView: boolean, entry: IntersectionObserverEntry) => void;
   setAssayMetadata: (val: Partial<AssayMetadata>) => void;
   setShouldDisplaySavedOrEditedAlert: (val: boolean | string) => void;
-  setEntityHeaderHeight: (val: number) => void;
+  setEntityHeaderSprings: (springs: ReturnType<typeof useSprings>) => void;
 }
 
 export type EntityStore = EntityStoreState & EntityStoreActions;
@@ -35,8 +36,8 @@ export const useEntityStore = create<EntityStore>((set) => ({
         summaryEntry: entry,
       },
     }),
-  entityHeaderHeight: 0,
-  setEntityHeaderHeight: (height) => set({ entityHeaderHeight: height }),
+  entityHeaderSprings: null,
+  setEntityHeaderSprings: (springs) => set({ entityHeaderSprings: springs }),
   assayMetadata: {},
   setAssayMetadata: (val) => set({ assayMetadata: val }),
   shouldDisplaySavedOrEditedAlert: false,
