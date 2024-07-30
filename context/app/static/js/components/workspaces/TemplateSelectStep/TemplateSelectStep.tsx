@@ -36,7 +36,7 @@ interface TemplateSelectProps<FormType extends FormWithTemplates> {
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   templates: TemplatesTypes;
   disabledTemplates?: TemplatesTypes;
-  selectDefaultTemplate?: boolean;
+  defaultSelectedTemplateKey?: string;
 }
 
 function TemplateSelectStep<FormType extends FormWithTemplates>({
@@ -49,7 +49,7 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
   setSelectedTags,
   templates,
   disabledTemplates,
-  selectDefaultTemplate,
+  defaultSelectedTemplateKey,
 }: TemplateSelectProps<FormType>) {
   return (
     <Step title={title} index={stepIndex}>
@@ -69,7 +69,7 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
           templates={templates}
           disabledTemplates={disabledTemplates}
           control={control}
-          selectDefaultTemplate={selectDefaultTemplate}
+          defaultSelectedTemplateKey={defaultSelectedTemplateKey}
         />
       </Stack>
     </Step>

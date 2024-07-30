@@ -17,10 +17,10 @@ interface TemplateGridProps {
 }
 
 const inputName = 'templates';
-const defaultTemplateValue = 'blank';
+
 interface ControllerProps<FormType extends FormWithTemplates> {
   control: Control<FormType>;
-  selectDefaultTemplate?: boolean;
+  defaultSelectedTemplateKey?: string;
 }
 
 function getActiveTemplates({ templates, disabledTemplates = {} }: TemplateGridProps) {
@@ -36,7 +36,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   templates,
   disabledTemplates,
   control,
-  selectDefaultTemplate,
+  defaultSelectedTemplateKey,
 }: TemplateGridProps & ControllerProps<FormType>) {
   const { field, fieldState } = useController<FormType>({
     control,
@@ -56,7 +56,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
 
   const selectOrUnselectTemplate = useCallback(
     (templateKey: string, action: 'select' | 'unselect') => {
-      const templatesCopy = selectedTemplates;
+      const templatesCopy = new Set(selectedTemplates);
       if (action === 'select') {
         templatesCopy.add(templateKey);
       } else {
@@ -79,10 +79,11 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   );
 
   useEffect(() => {
-    if (selectDefaultTemplate) {
-      selectOrUnselectTemplate(defaultTemplateValue, 'select');
+    if (defaultSelectedTemplateKey) {
+      selectOrUnselectTemplate(defaultSelectedTemplateKey, 'select');
     }
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const errorMessage = fieldState?.error?.message;
 
