@@ -51,29 +51,34 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
     [field, setSelectedTemplates],
   );
 
-  const selectItem = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
+  const selectOrUnselectTemplate = useCallback(
+    (templateKey: string, action: 'select' | 'unselect') => {
       const templatesCopy = selectedTemplates;
-      if (e.target.checked) {
-        templatesCopy.add(e.target.value);
+      if (action === 'select') {
+        templatesCopy.add(templateKey);
       } else {
-        templatesCopy.delete(e.target.value);
+        templatesCopy.delete(templateKey);
       }
       updateTemplates([...templatesCopy]);
     },
-    [updateTemplates, selectedTemplates],
+    [selectedTemplates, updateTemplates],
   );
 
-  // Add the blank template to the selected templates on initial render
-  const addInitialBlankTemplate = useCallback(() => {
-    const templatesCopy = selectedTemplates;
-    templatesCopy.add('blank');
-    updateTemplates([...templatesCopy]);
-  }, [selectedTemplates, updateTemplates]);
+  const selectItem = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      if (e.target.checked) {
+        selectOrUnselectTemplate(e.target.value, 'select');
+      } else {
+        selectOrUnselectTemplate(e.target.value, 'unselect');
+      }
+    },
+    [selectOrUnselectTemplate],
+  );
 
+  // Select blank template by default
   useEffect(() => {
-    addInitialBlankTemplate();
-  }, [addInitialBlankTemplate]);
+    selectOrUnselectTemplate('blank', 'select');
+  }, [selectOrUnselectTemplate]);
 
   const errorMessage = fieldState?.error?.message;
 
