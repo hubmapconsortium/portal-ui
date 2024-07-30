@@ -11,7 +11,7 @@ import {
   templatesField,
   workspaceJobTypeIdField,
 } from '../workspaceFormFields';
-import { useProtectedDatasetsForm, useTooManyDatasetsErrors } from '../formHooks';
+import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 import { DEFAULT_JOB_TYPE } from '../constants';
 
 export interface FormWithTemplates {
@@ -79,8 +79,14 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
 function useCreateWorkspaceDatasets() {
   const { errorMessages: protectedDatasetsErrorMessages, selectedRows, ...rest } = useProtectedDatasetsForm();
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({ numWorkspaceDatasets: selectedRows.size });
+  const tooManyDatasetsWarningMessages = useTooManyDatasetsWarnings({ numWorkspaceDatasets: selectedRows.size });
 
-  return { errorMessages: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages], selectedRows, ...rest };
+  return {
+    errorMessages: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
+    warningMessages: [...tooManyDatasetsWarningMessages],
+    selectedRows,
+    ...rest,
+  };
 }
 
 export { useCreateWorkspaceForm, useCreateWorkspaceDatasets, type CreateWorkspaceFormTypes };

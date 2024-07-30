@@ -7,7 +7,7 @@ import { Workspace } from '../types';
 import { useUpdateWorkspaceDatasets } from '../hooks';
 import { datasetsField } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
-import { useTooManyDatasetsErrors } from '../formHooks';
+import { useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 
 export interface AddDatasetsFormTypes {
   datasets: string[];
@@ -88,6 +88,10 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     errorMessages.push(errorMessage);
   }
 
+  const warningMessages = useTooManyDatasetsWarnings({
+    numWorkspaceDatasets: field.value.length + workspaceDatasets.length,
+  });
+
   return {
     autocompleteValue,
     inputValue,
@@ -104,6 +108,7 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     workspaceDatasets,
     allDatasets,
     errorMessages,
+    warningMessages,
   };
 }
 

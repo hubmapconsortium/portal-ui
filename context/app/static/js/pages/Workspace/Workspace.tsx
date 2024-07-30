@@ -20,12 +20,11 @@ import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
-import Alert from '@mui/material/Alert';
+import { Alert } from 'js/shared-styles/alerts/Alert';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 
 const tooltips = {
   name: 'Edit workspace name.',
-  datasets: 'Add datasets to this workspace.',
   templates: 'Add templates to this workspace.',
   currentTemplates: 'Templates that are currently in this workspace.',
 };

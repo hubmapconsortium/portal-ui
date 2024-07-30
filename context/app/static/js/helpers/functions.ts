@@ -1,4 +1,6 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
+import { MergedWorkspace } from 'js/components/workspaces/types';
 
 export function isEmptyArrayOrObject(val: object | unknown[]) {
   if (val.constructor.name === 'Object') {
@@ -193,4 +195,14 @@ export function generateCommaList(list: string[]): string {
   return length < 2
     ? list.join('')
     : `${list.slice(0, length - 1).join(', ')}${length < 3 ? ' and ' : ', and '}${list[length - 1]}`;
+}
+
+/**
+ * Check if a given workspace has reached the maximum number of datasets allowed.
+ * @author Austen Money
+ * @param workspace the workspace to check.
+ * @returns true if the workspace has reached the maximum number of datasets allowed, false otherwise.
+ */
+export function isWorkspaceAtDatasetLimit(workspace: MergedWorkspace) {
+  return workspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
 }

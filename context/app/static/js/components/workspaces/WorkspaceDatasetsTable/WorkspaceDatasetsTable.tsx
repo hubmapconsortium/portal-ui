@@ -11,13 +11,16 @@ import { hubmapID, lastModifiedTimestamp, assayTypes, status, organ } from 'js/s
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
 import { AddIcon } from 'js/shared-styles/icons';
 
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
 import { MergedWorkspace } from '../types';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
 const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 const tooltips = {
   add: 'Add datasets to this workspace.',
   delete: 'Remove selected datasets.',
+  maxDatasets: `Workspaces are limited to ${MAX_NUMBER_OF_WORKSPACE_DATASETS} datasets. No more datasets can be added to this workspace.`,
 };
 
 interface WorkspaceDatasetsTableProps {
@@ -60,6 +63,7 @@ function WorkspaceDatasetsTable({
   );
 
   const datasetsPresent = datasetsUUIDs.length > 0;
+  const hasMaxDatasets = addDatasets && isWorkspaceAtDatasetLimit(addDatasets);
 
   return (
     <Box>
@@ -69,7 +73,12 @@ function WorkspaceDatasetsTable({
           <Stack direction="row" gap={1}>
             {datasetsPresent && <Copy />}
             {addDatasets && (
-              <WorkspacesUpdateButton workspace={addDatasets} dialogType="ADD_DATASETS" tooltip={tooltips.add}>
+              <WorkspacesUpdateButton
+                workspace={addDatasets}
+                dialogType="ADD_DATASETS"
+                tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.add}
+                disabled={hasMaxDatasets}
+              >
                 <AddIcon />
               </WorkspacesUpdateButton>
             )}

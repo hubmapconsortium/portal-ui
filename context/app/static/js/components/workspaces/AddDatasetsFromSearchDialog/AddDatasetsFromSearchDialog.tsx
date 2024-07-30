@@ -5,11 +5,12 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 
-import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { Alert } from 'js/shared-styles/alerts';
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { useAddDatasetsFromSearchDialog } from './hooks';
@@ -17,6 +18,34 @@ import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
+import { MergedWorkspace } from '../types';
+
+function SearchDialogWorkspaceListItem({
+  workspace,
+  toggleItem,
+  selected,
+}: {
+  workspace: MergedWorkspace;
+  toggleItem: (workspaceId: number) => void;
+  selected: boolean;
+}) {
+  const hasMaxDatasets = isWorkspaceAtDatasetLimit(workspace);
+  const tooltip = hasMaxDatasets
+    ? 'This workspace has reached the maximum number of datasets allowed. You cannot add any more datasets.'
+    : undefined;
+
+  return (
+    <WorkspaceListItem
+      workspace={workspace}
+      key={workspace.id}
+      toggleItem={toggleItem}
+      selected={selected}
+      ToggleComponent={Radio}
+      disabled={hasMaxDatasets}
+      tooltip={tooltip}
+    />
+  );
+}
 
 function SelectWorkspaceStep({
   selectWorkspace,
@@ -37,18 +66,16 @@ function SelectWorkspaceStep({
           all jobs are stopped.
         </Alert>
         <StopWorkspaceAlert />
-        {workspaceIdErrorMessages.length > 0 && <ErrorMessages errorMessages={workspaceIdErrorMessages} />}
+        <ErrorOrWarningMessages errorMessages={workspaceIdErrorMessages} />
       </Stack>
       <Stack spacing={3} component={Paper}>
         <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
           {workspacesList.map((workspace) => (
-            <WorkspaceListItem
-              workspace={workspace}
+            <SearchDialogWorkspaceListItem
               key={workspace.id}
+              workspace={workspace}
               toggleItem={toggleWorkspace}
               selected={workspace.id === toggledWorkspace}
-              ToggleComponent={Radio}
-              disableLaunch
             />
           ))}
         </Box>
@@ -76,6 +103,7 @@ function AddDatasetsStep({
   protectedRows,
   removeProtectedDatasets,
   datasetsErrorMessages,
+  datasetsWarningMessages,
   ...rest
 }: Pick<
   ReturnType<typeof useAddDatasetsFromSearchDialog>,
@@ -84,6 +112,7 @@ function AddDatasetsStep({
   | 'protectedRows'
   | 'removeProtectedDatasets'
   | 'datasetsErrorMessages'
+  | 'datasetsWarningMessages'
   | 'inputValue'
   | 'setInputValue'
   | 'autocompleteValue'
@@ -99,7 +128,7 @@ function AddDatasetsStep({
         Enter HuBMAP IDs below to add to a workspace. Datasets that already exist in the workspace cannot be selected
         for deletion.
       </Alert>
-      {datasetsErrorMessages.length > 0 && <ErrorMessages errorMessages={datasetsErrorMessages} />}
+      <ErrorOrWarningMessages errorMessages={datasetsErrorMessages} warningMessages={datasetsWarningMessages} />
       <RemoveProtectedDatasetsFormField
         control={control}
         protectedHubmapIds={protectedHubmapIds}
@@ -120,6 +149,7 @@ function AddDatasetsFromSearchDialogForm() {
     reset,
     resetAutocompleteState,
     datasetsErrorMessages,
+    datasetsWarningMessages,
     workspaceIdErrorMessages,
     selectWorkspace,
     ...rest
@@ -135,10 +165,16 @@ function AddDatasetsFromSearchDialogForm() {
       },
       {
         heading: '2. Add Datasets',
-        content: <AddDatasetsStep datasetsErrorMessages={datasetsErrorMessages} {...rest} />,
+        content: (
+          <AddDatasetsStep
+            datasetsErrorMessages={datasetsErrorMessages}
+            datasetsWarningMessages={datasetsWarningMessages}
+            {...rest}
+          />
+        ),
       },
     ];
-  }, [selectWorkspace, workspaceIdErrorMessages, datasetsErrorMessages, rest]);
+  }, [selectWorkspace, workspaceIdErrorMessages, datasetsErrorMessages, datasetsWarningMessages, rest]);
 
   return (
     <EditWorkspaceDialogContent
