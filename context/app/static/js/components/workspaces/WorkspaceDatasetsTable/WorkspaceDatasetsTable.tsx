@@ -9,11 +9,27 @@ import { DatasetDocument } from 'js/typings/search';
 import { getIDsQuery } from 'js/helpers/queries';
 import { hubmapID, lastModifiedTimestamp, assayTypes, status, organ } from 'js/shared-styles/tables/columns';
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
+import { AddIcon } from 'js/shared-styles/icons';
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import InternalLink from 'js/shared-styles/Links/InternalLink';
+import Typography from '@mui/material/Typography';
+import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
+import { MergedWorkspace } from '../types';
 
 const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
+const tooltips = {
+  add: 'Add datasets to this workspace.',
+  delete: 'Remove selected datasets.',
+};
+
+const noDatasetsText =
+  'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
+
 interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
+  addDatasets?: MergedWorkspace;
   label?: ReactNode;
   disabledIDs?: Set<string>;
   additionalButtons?: ReactNode;
@@ -21,9 +37,10 @@ interface WorkspaceDatasetsTableProps {
 
 function WorkspaceDatasetsTable({
   datasetsUUIDs,
-  disabledIDs,
   removeDatasets,
+  addDatasets,
   label,
+  disabledIDs,
   additionalButtons,
 }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
@@ -45,17 +62,44 @@ function WorkspaceDatasetsTable({
     }),
     [datasetsUUIDs],
   );
+
+  const datasetsPresent = datasetsUUIDs.length > 0;
+
+  const datasetsSection = datasetsPresent ? (
+    <EntitiesTables<DatasetDocument> entities={[{ query, columns, entityType: 'Dataset' }]} disabledIDs={disabledIDs} />
+  ) : (
+    <Alert
+      severity="info"
+      action={
+        <Button>
+          <InternalLink href="/search?entity_type[0]=Dataset">
+            <Typography color="primary" variant="button">
+              Dataset Search Page
+            </Typography>
+          </InternalLink>
+        </Button>
+      }
+    >
+      {noDatasetsText}
+    </Alert>
+  );
+
   return (
     <Box>
       <SpacedSectionButtonRow
         leftText={label}
         buttons={
           <Stack direction="row" gap={1}>
-            <Copy />
-            {removeDatasets && (
+            {datasetsPresent && <Copy />}
+            {addDatasets && (
+              <WorkspacesUpdateButton workspace={addDatasets} dialogType="ADD_DATASETS" tooltip={tooltips.add}>
+                <AddIcon />
+              </WorkspacesUpdateButton>
+            )}
+            {removeDatasets && datasetsPresent && (
               <Delete
                 onClick={() => removeDatasets([...selectedRows])}
-                tooltip="Remove selected datasets."
+                tooltip={tooltips.delete}
                 disabled={selectedRows.size === 0}
               />
             )}
@@ -63,10 +107,7 @@ function WorkspaceDatasetsTable({
           </Stack>
         }
       />
-      <EntitiesTables<DatasetDocument>
-        entities={[{ query, columns, entityType: 'Dataset' }]}
-        disabledIDs={disabledIDs}
-      />
+      {datasetsSection}
     </Box>
   );
 }

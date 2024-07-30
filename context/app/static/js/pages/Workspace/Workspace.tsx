@@ -20,8 +20,6 @@ import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
-import { Alert } from 'js/shared-styles/alerts';
-import { InternalLink } from 'js/shared-styles/Links';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -29,9 +27,6 @@ const tooltips = {
   templates: 'Add templates to this workspace.',
   currentTemplates: 'Templates that are currently in this workspace.',
 };
-
-const datasetsInfoText =
-  'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
 
 interface WorkspacePageProps {
   workspaceId: number;
@@ -51,51 +46,6 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
   }
 
   const job = condenseJobs(workspace.jobs);
-
-  const datasetsSection =
-    workspaceDatasets.length > 0 ? (
-      <WorkspaceDatasetsTable
-        datasetsUUIDs={workspaceDatasets}
-        label={<SectionHeader> Datasets</SectionHeader>}
-        additionalButtons={
-          <WorkspacesUpdateButton
-            workspace={workspace}
-            dialogType="ADD_DATASETS"
-            sx={(theme) => ({
-              marginRight: theme.spacing(1),
-            })}
-            tooltip={tooltips.datasets}
-          >
-            <AddIcon />
-          </WorkspacesUpdateButton>
-        }
-      />
-    ) : (
-      <Box>
-        <SpacedSectionButtonRow
-          leftText={<SectionHeader>Datasets</SectionHeader>}
-          buttons={
-            <WorkspacesUpdateButton workspace={workspace} dialogType="ADD_DATASETS" tooltip={tooltips.datasets}>
-              <AddIcon />
-            </WorkspacesUpdateButton>
-          }
-        />
-        <Alert
-          severity="info"
-          action={
-            <Button>
-              <InternalLink href="/search?entity_type[0]=Dataset">
-                <Typography color="primary" variant="button">
-                  Dataset Search Page
-                </Typography>
-              </InternalLink>
-            </Button>
-          }
-        >
-          {datasetsInfoText}
-        </Alert>
-      </Box>
-    );
 
   return (
     <Stack gap={6} sx={{ marginBottom: 5 }}>
@@ -141,7 +91,11 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           </LabelledSectionText>
         </SectionPaper>
       </Box>
-      {datasetsSection}
+      <WorkspaceDatasetsTable
+        datasetsUUIDs={workspaceDatasets}
+        addDatasets={workspace}
+        label={<SectionHeader>Datasets</SectionHeader>}
+      />
       <Box>
         <SpacedSectionButtonRow
           leftText={<SectionHeader iconTooltipText={tooltips.currentTemplates}>Current Templates</SectionHeader>}
