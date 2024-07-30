@@ -154,6 +154,7 @@ function NewWorkspaceDialog({
           selectedTags={selectedTags}
           setSelectedTags={setSelectedTags}
           templates={templates}
+          selectDefaultTemplate
         />
       </DialogContent>
       <DialogActions>
