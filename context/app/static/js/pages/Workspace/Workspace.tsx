@@ -20,6 +20,8 @@ import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
+import Alert from '@mui/material/Alert';
+import InternalLink from 'js/shared-styles/Links/InternalLink';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -27,6 +29,9 @@ const tooltips = {
   templates: 'Add templates to this workspace.',
   currentTemplates: 'Templates that are currently in this workspace.',
 };
+
+const noDatasetsText =
+  'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
 
 interface WorkspacePageProps {
   workspaceId: number;
@@ -95,6 +100,22 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         datasetsUUIDs={workspaceDatasets}
         addDatasets={workspace}
         label={<SectionHeader>Datasets</SectionHeader>}
+        additionalAlerts={
+          <Alert
+            severity="info"
+            action={
+              <Button>
+                <InternalLink href="/search?entity_type[0]=Dataset">
+                  <Typography color="primary" variant="button">
+                    Dataset Search Page
+                  </Typography>
+                </InternalLink>
+              </Button>
+            }
+          >
+            {noDatasetsText}
+          </Alert>
+        }
       />
       <Box>
         <SpacedSectionButtonRow

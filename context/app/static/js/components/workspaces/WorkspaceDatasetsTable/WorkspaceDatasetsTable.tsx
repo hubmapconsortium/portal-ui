@@ -10,10 +10,7 @@ import { getIDsQuery } from 'js/helpers/queries';
 import { hubmapID, lastModifiedTimestamp, assayTypes, status, organ } from 'js/shared-styles/tables/columns';
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
 import { AddIcon } from 'js/shared-styles/icons';
-import Alert from '@mui/material/Alert';
-import Button from '@mui/material/Button';
-import InternalLink from 'js/shared-styles/Links/InternalLink';
-import Typography from '@mui/material/Typography';
+
 import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
 import { MergedWorkspace } from '../types';
 
@@ -23,15 +20,13 @@ const tooltips = {
   delete: 'Remove selected datasets.',
 };
 
-const noDatasetsText =
-  'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
-
 interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
   addDatasets?: MergedWorkspace;
   label?: ReactNode;
   disabledIDs?: Set<string>;
+  additionalAlerts?: ReactNode;
   additionalButtons?: ReactNode;
 }
 
@@ -41,6 +36,7 @@ function WorkspaceDatasetsTable({
   addDatasets,
   label,
   disabledIDs,
+  additionalAlerts,
   additionalButtons,
 }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
@@ -65,25 +61,6 @@ function WorkspaceDatasetsTable({
 
   const datasetsPresent = datasetsUUIDs.length > 0;
 
-  const datasetsSection = datasetsPresent ? (
-    <EntitiesTables<DatasetDocument> entities={[{ query, columns, entityType: 'Dataset' }]} disabledIDs={disabledIDs} />
-  ) : (
-    <Alert
-      severity="info"
-      action={
-        <Button>
-          <InternalLink href="/search?entity_type[0]=Dataset">
-            <Typography color="primary" variant="button">
-              Dataset Search Page
-            </Typography>
-          </InternalLink>
-        </Button>
-      }
-    >
-      {noDatasetsText}
-    </Alert>
-  );
-
   return (
     <Box>
       <SpacedSectionButtonRow
@@ -107,7 +84,14 @@ function WorkspaceDatasetsTable({
           </Stack>
         }
       />
-      {datasetsSection}
+      {datasetsPresent ? (
+        <EntitiesTables<DatasetDocument>
+          entities={[{ query, columns, entityType: 'Dataset' }]}
+          disabledIDs={disabledIDs}
+        />
+      ) : (
+        additionalAlerts
+      )}
     </Box>
   );
 }
