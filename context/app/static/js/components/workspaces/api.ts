@@ -15,6 +15,7 @@ import {
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
+export const EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS = 25;
 export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 150;
 
 /**

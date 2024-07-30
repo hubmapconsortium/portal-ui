@@ -63,6 +63,8 @@ function WorkspacesList() {
               toggleItem={toggleItem}
               selected={selectedItems.has(workspace.id)}
               ToggleComponent={Checkbox}
+              showLaunch
+              showStop
             />
           ))
         )}

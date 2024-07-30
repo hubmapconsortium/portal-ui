@@ -20,10 +20,13 @@ import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 
 const tooltips = {
   name: 'Edit workspace name.',
   datasets: 'Add datasets to this workspace.',
+  maxDatasets: `Workspaces are limited to ${MAX_NUMBER_OF_WORKSPACE_DATASETS} datasets. No more datasets can be added to this workspace.`,
   templates: 'Add templates to this workspace.',
   currentTemplates: 'Templates that are currently in this workspace.',
 };
@@ -46,6 +49,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
   }
 
   const job = condenseJobs(workspace.jobs);
+  const hasMaxDatasets = isWorkspaceAtDatasetLimit(workspace);
 
   return (
     <Stack gap={6} sx={{ marginBottom: 5 }}>
@@ -102,7 +106,8 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
               sx={(theme) => ({
                 marginRight: theme.spacing(1),
               })}
-              tooltip={tooltips.datasets}
+              tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.datasets}
+              disabled={hasMaxDatasets}
             >
               <AddIcon />
             </WorkspacesUpdateButton>
