@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
+import React, { useMemo } from 'react';
 import Typography from '@mui/material/Typography';
-
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-
+import useSearchData from 'js/hooks/useSearchData';
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
@@ -19,6 +18,19 @@ interface OrganProps {
   organ: OrganFile;
 }
 
+interface Bucket {
+  key: string;
+  doc_count: number;
+}
+
+interface Aggregations {
+  mapped_data_types: {
+    'assay_display_name.keyword': {
+      buckets: Bucket[];
+    };
+  };
+}
+
 const summaryId = 'Summary';
 const hraId = 'Human Reference Atlas';
 const referenceId = 'Reference-Based Analysis';
@@ -26,20 +38,57 @@ const assaysId = 'Assays';
 const samplesId = 'Samples';
 
 function Organ({ organ }: OrganProps) {
-  const [searchHasData, setSearchHasData] = useState(true);
+  const searchItems = useMemo(
+    // to avoid returning all datasets with organ.search, [organ.name] is added
+    () => (organ.search.length > 0 ? organ.search : [organ.name]),
+    [organ.search, organ.name],
+  );
 
-  const getShouldDisplaySearch = () => {
-    if (searchHasData) return organ.search.length > 0 || organ.name;
-    return organ.search.length > 0;
-  };
+  let shouldDisplaySearch = organ.search.length >= 0;
 
-  const getSearchItems = () => {
-    if (searchHasData) return organ.search.length > 0 ? organ.search : [organ.name];
-    return organ.search;
-  };
+  const query = useMemo(
+    () => ({
+      size: 0,
+      aggs: {
+        mapped_data_types: {
+          filter: {
+            bool: {
+              must: [
+                {
+                  term: {
+                    'entity_type.keyword': 'Dataset',
+                  },
+                },
+                {
+                  bool: {
+                    should: searchItems.map((searchTerm) => ({
+                      term: { 'origin_samples.mapped_organ.keyword': searchTerm },
+                    })),
+                  },
+                },
+              ],
+            },
+          },
+          aggs: {
+            'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 100 } },
+            'assay_display_name.keyword_count': { cardinality: { field: 'assay_display_name.keyword' } },
+          },
+        },
+      },
+    }),
+    [searchItems],
+  );
 
-  const shouldDisplaySearch = getShouldDisplaySearch();
-  const searchItems = getSearchItems();
+  const { searchData } = useSearchData<Document, Aggregations>(query);
+
+  const buckets = searchData.aggregations
+    ? searchData.aggregations.mapped_data_types['assay_display_name.keyword'].buckets
+    : [];
+
+  // update the sections map when there are no datasets
+  if (buckets.length === 0) {
+    shouldDisplaySearch = organ.search.length > 0;
+  }
 
   const shouldDisplaySection = {
     [summaryId]: Boolean(organ?.description),
@@ -53,10 +102,6 @@ function Organ({ organ }: OrganProps) {
     .filter(([, shouldDisplay]) => shouldDisplay)
     .map(([sectionName]) => sectionName);
   const sections = new Map(getSections(sectionOrder));
-
-  const handleDataStatus = (status: boolean) => {
-    setSearchHasData(status);
-  };
 
   return (
     <FlexRow>
@@ -85,13 +130,13 @@ function Organ({ organ }: OrganProps) {
             <Azimuth config={organ.azimuth} />
           </Section>
         )}
-        {shouldDisplaySection[assaysId] && searchHasData && (
+        {shouldDisplaySection[assaysId] && (
           <Section id={assaysId}>
-            <Assays organTerms={searchItems} onHandleSearchStatus={handleDataStatus} />
+            <Assays organTerms={searchItems} bucketData={buckets} />
             <DatasetsBarChart search={searchItems} />
           </Section>
         )}
-        {shouldDisplaySection[samplesId] && searchHasData && (
+        {shouldDisplaySection[samplesId] && (
           <Section id={samplesId}>
             <Samples organTerms={searchItems} />
           </Section>
