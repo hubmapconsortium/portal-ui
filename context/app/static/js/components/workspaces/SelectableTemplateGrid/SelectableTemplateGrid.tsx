@@ -1,4 +1,4 @@
-import React, { useCallback, ChangeEvent, useEffect } from 'react';
+import React, { useCallback, ChangeEvent } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -20,7 +20,6 @@ const inputName = 'templates';
 
 interface ControllerProps<FormType extends FormWithTemplates> {
   control: Control<FormType>;
-  defaultSelectedTemplateKey?: string;
 }
 
 function getActiveTemplates({ templates, disabledTemplates = {} }: TemplateGridProps) {
@@ -36,7 +35,6 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   templates,
   disabledTemplates,
   control,
-  defaultSelectedTemplateKey,
 }: TemplateGridProps & ControllerProps<FormType>) {
   const { field, fieldState } = useController<FormType>({
     control,
@@ -54,36 +52,18 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
     [field, setSelectedTemplates],
   );
 
-  const selectOrUnselectTemplate = useCallback(
-    (templateKey: string, action: 'select' | 'unselect') => {
-      const templatesCopy = new Set(selectedTemplates);
-      if (action === 'select') {
-        templatesCopy.add(templateKey);
+  const selectItem = useCallback(
+    (e: ChangeEvent<HTMLInputElement>) => {
+      const templatesCopy = selectedTemplates;
+      if (e.target.checked) {
+        templatesCopy.add(e.target.value);
       } else {
-        templatesCopy.delete(templateKey);
+        templatesCopy.delete(e.target.value);
       }
       updateTemplates([...templatesCopy]);
     },
-    [selectedTemplates, updateTemplates],
+    [updateTemplates, selectedTemplates],
   );
-
-  const selectItem = useCallback(
-    (e: ChangeEvent<HTMLInputElement>) => {
-      if (e.target.checked) {
-        selectOrUnselectTemplate(e.target.value, 'select');
-      } else {
-        selectOrUnselectTemplate(e.target.value, 'unselect');
-      }
-    },
-    [selectOrUnselectTemplate],
-  );
-
-  useEffect(() => {
-    if (defaultSelectedTemplateKey) {
-      selectOrUnselectTemplate(defaultSelectedTemplateKey, 'select');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const errorMessage = fieldState?.error?.message;
 
