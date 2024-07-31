@@ -46,12 +46,10 @@ function useWorkspaceTemplates(tags: string[] = []) {
   const filteredSortedTemplates = Object.fromEntries(
     Object.entries(templates)
       .filter(([, template]) => !template?.is_hidden)
-      .sort(([, a], [, b]) => a.title.localeCompare(b.title))
-      .sort(([a], [b]) => {
-        if (a === DEFAULT_TEMPLATE_KEY || b === DEFAULT_TEMPLATE_KEY) {
-          return a === DEFAULT_TEMPLATE_KEY ? -1 : 1;
-        }
-        return 0;
+      .sort(([keyA, templateA], [keyB, templateB]) => {
+        if (keyA === DEFAULT_TEMPLATE_KEY) return -1;
+        if (keyB === DEFAULT_TEMPLATE_KEY) return 1;
+        return templateA.title.localeCompare(templateB.title);
       }),
   ) as TemplatesTypes;
 
