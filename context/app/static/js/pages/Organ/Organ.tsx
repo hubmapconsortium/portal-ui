@@ -72,7 +72,7 @@ function Organ({ organ }: OrganProps) {
 
   const samplesQuery = useMemo(
     () => ({
-      filter: {
+      query: {
         bool: {
           must: [
             {
