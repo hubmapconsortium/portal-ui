@@ -12,9 +12,7 @@ import {
   workspaceJobTypeIdField,
 } from '../workspaceFormFields';
 import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
-import { DEFAULT_JOB_TYPE } from '../constants';
-
-export const DEFAULT_TEMPLATE = 'blank';
+import { DEFAULT_JOB_TYPE, DEFAULT_TEMPLATE_KEY } from '../constants';
 
 export interface FormWithTemplates {
   templates: string[];
@@ -47,7 +45,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     defaultValues: {
       'workspace-name': defaultName ?? '',
       'protected-datasets': '',
-      templates: [DEFAULT_TEMPLATE],
+      templates: [DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
     mode: 'onChange',

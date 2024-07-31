@@ -9,7 +9,7 @@ import { SWRError } from 'js/helpers/swr/errors';
 import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
 import { buildDatasetSymlinks } from '../utils';
-import { DEFAULT_TEMPLATE } from './useCreateWorkspaceForm';
+import { DEFAULT_TEMPLATE_KEY } from '../constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -48,8 +48,8 @@ function useWorkspaceTemplates(tags: string[] = []) {
       .filter(([, template]) => !template?.is_hidden)
       .sort(([, a], [, b]) => a.title.localeCompare(b.title))
       .sort(([a], [b]) => {
-        if (a === DEFAULT_TEMPLATE || b === DEFAULT_TEMPLATE) {
-          return a === DEFAULT_TEMPLATE ? -1 : 1;
+        if (a === DEFAULT_TEMPLATE_KEY || b === DEFAULT_TEMPLATE_KEY) {
+          return a === DEFAULT_TEMPLATE_KEY ? -1 : 1;
         }
         return 0;
       }),
