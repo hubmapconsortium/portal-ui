@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
@@ -10,53 +10,15 @@ import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { InternalLink } from 'js/shared-styles/Links';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import useSearchData from 'js/hooks/useSearchData';
+
 import { HeaderCell } from 'js/shared-styles/tables';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 
 import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
 import { getSearchURL } from '../utils';
 
-function Assays({ organTerms }) {
+function Assays({ organTerms, bucketData }) {
   const assayTypeMap = useDatasetTypeMap();
-
-  const query = useMemo(
-    () => ({
-      size: 0,
-      aggs: {
-        mapped_data_types: {
-          filter: {
-            bool: {
-              must: [
-                {
-                  term: {
-                    'entity_type.keyword': 'Dataset',
-                  },
-                },
-                {
-                  bool: {
-                    should: organTerms.map((searchTerm) => ({
-                      term: { 'origin_samples.mapped_organ.keyword': searchTerm },
-                    })),
-                  },
-                },
-              ],
-            },
-          },
-          aggs: {
-            'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 100 } },
-            'assay_display_name.keyword_count': { cardinality: { field: 'assay_display_name.keyword' } },
-          },
-        },
-      },
-    }),
-    [organTerms],
-  );
-
-  const { searchData } = useSearchData(query);
-  const buckets = searchData.aggregations
-    ? searchData.aggregations.mapped_data_types['assay_display_name.keyword'].buckets
-    : [];
 
   return (
     <>
@@ -89,7 +51,7 @@ function Assays({ organTerms }) {
           ].map(({ id, label }) => (
             <HeaderCell key={id}>{label}</HeaderCell>
           ))}
-          tableRows={buckets.map((bucket) => (
+          tableRows={bucketData.map((bucket) => (
             <TableRow key={bucket.key}>
               <TableCell>
                 <InternalLink
