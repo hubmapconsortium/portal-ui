@@ -1,4 +1,5 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 
 export const recentPublicationsQuery: SearchRequest = {
   query: {
@@ -61,15 +62,7 @@ export const recentPublicationsQuery: SearchRequest = {
 // Fetches the most recent datasets with a visualization
 export const recentDatasetsQuery: SearchRequest = {
   size: 0,
-  query: {
-    bool: {
-      filter: {
-        term: {
-          visualization: 'true',
-        },
-      },
-    },
-  },
+  query: includeOnlyDatasetsClause,
   sort: [
     {
       last_modified_timestamp: 'desc',
