@@ -2,6 +2,7 @@ import React, { useCallback, ChangeEvent } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
 import { useController, Control, Path } from 'react-hook-form';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
@@ -69,23 +70,25 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   return (
     <Box>
       {errorMessage && <ErrorOrWarningMessages errorMessages={[errorMessage]} />}
-      <SpacedSectionButtonRow
-        leftText={<Typography variant="subtitle1">{selectedTemplates.size} Templates Selected</Typography>}
-        buttons={
-          <>
-            <Button disabled={selectedTemplates.size === 0} sx={{ mr: 1 }} onClick={() => updateTemplates([])}>
-              Deselect All
-            </Button>
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={() => updateTemplates(getActiveTemplates({ templates, disabledTemplates }))}
-            >
-              Select All
-            </Button>
-          </>
-        }
-      />
+      <Stack marginBottom={2}>
+        <SpacedSectionButtonRow
+          leftText={<Typography variant="subtitle1">{selectedTemplates.size} Templates Selected</Typography>}
+          buttons={
+            <>
+              <Button disabled={selectedTemplates.size === 0} sx={{ mr: 1 }} onClick={() => updateTemplates([])}>
+                Deselect All
+              </Button>
+              <Button
+                color="primary"
+                variant="contained"
+                onClick={() => updateTemplates(getActiveTemplates({ templates, disabledTemplates }))}
+              >
+                Select All
+              </Button>
+            </>
+          }
+        />
+      </Stack>
       <TemplateGrid
         templates={templates}
         selectItem={selectItem}
