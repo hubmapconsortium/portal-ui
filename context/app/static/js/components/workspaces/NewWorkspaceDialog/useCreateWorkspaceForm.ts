@@ -45,7 +45,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     defaultValues: {
       'workspace-name': defaultName ?? '',
       'protected-datasets': '',
-      templates: [],
+      templates: ['blank'],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
     mode: 'onChange',
