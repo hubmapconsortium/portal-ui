@@ -85,6 +85,36 @@ export async function multiFetcher<T>({
 }
 
 /**
+ * Same as the multiFetcher above, but allows for partial data to be returned if some requests fail instead of
+ * rejecting the entire promise.
+ *
+ * @see multiFetcher
+ * @returns
+ */
+export async function partialMultiFetcher<T>({
+  urls,
+  requestInits = [{}],
+  expectedStatusCodes = [200],
+  errorMessages = {},
+  returnResponse = false,
+}: MultiFetchOptionsType): Promise<PromiseSettledResult<T>[]> {
+  if (urls.length === 0) {
+    return Promise.resolve([] as T[]) as Promise<PromiseSettledResult<T>[]>;
+  }
+  return Promise.allSettled(
+    urls.map((url, i) =>
+      f({
+        url,
+        requestInit: requestInits.length === 1 ? requestInits[0] : requestInits[i],
+        expectedStatusCodes,
+        errorMessages,
+        returnResponse,
+      }),
+    ),
+  );
+}
+
+/**
  * SWR fetcher which accepts a single URL and returns the response as JSON.
  * A custom requestInit object can be passed to fetch as well.
  * @example // without requestInit

@@ -6,7 +6,7 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { excludeComponentDatasetsClause, excludeSupportEntitiesClause, getIDsQuery } from 'js/helpers/queries';
 import { Dataset, isDataset } from 'js/components/types';
 import { getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
-import { multiFetcher } from 'js/helpers/swr';
+import { partialMultiFetcher } from 'js/helpers/swr';
 import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/types';
 
 function useDatasetLabelPrefix() {
@@ -34,18 +34,35 @@ function useDatasetLabel() {
   return [prefix, 'Dataset'].join(' ');
 }
 
-type ProcessedDatasetTypes = Pick<
+export type ProcessedDatasetTypes = Pick<
   Dataset,
-  'hubmap_id' | 'entity_type' | 'uuid' | 'assay_display_name' | 'files' | 'pipeline'
+  | 'hubmap_id'
+  | 'entity_type'
+  | 'uuid'
+  | 'assay_display_name'
+  | 'files'
+  | 'pipeline'
+  | 'description'
+  | 'status'
+  | 'group_name'
+  | 'created_by_user_displayname'
+  | 'created_by_user_email'
+  | 'title'
+  | 'published_timestamp'
+  | 'metadata'
+  | 'protocol_url' // TODO: This is present for non-dataset entities, but not for datasets.
 >;
 
 type VitessceConf = object | null;
 
 async function fetchVitessceConfMap(uuids: string[]) {
   const urls = uuids.map((id) => `/browse/dataset/${id}.vitessce.json`);
-  const confs = await multiFetcher<VitessceConf>({ urls });
+  const confs = await partialMultiFetcher<VitessceConf>({ urls });
 
-  return new Map(uuids.map((id, i) => [id, confs[i]]));
+  const confPairs = confs.map((conf, i) => [uuids[i], conf.status === 'fulfilled' ? conf.value : null]);
+  const filteredConfs = confPairs.filter(([_id, conf]) => Boolean(conf)) as [string, VitessceConf][];
+
+  return new Map<string, VitessceConf>(filteredConfs);
 }
 
 function useVitessceConfs({ uuids, shouldFetch = true }: { uuids: string[]; shouldFetch?: boolean }) {
@@ -65,7 +82,24 @@ function useProcessedDatasets() {
         must: [getIDsQuery(descendant_ids), excludeSupportEntitiesClause, excludeComponentDatasetsClause],
       },
     },
-    _source: ['hubmap_id', 'entity_type', 'uuid', 'assay_display_name', 'files', 'pipeline'],
+    _source: [
+      'hubmap_id',
+      'entity_type',
+      'uuid',
+      'assay_display_name',
+      'files',
+      'pipeline',
+      'description',
+      'status',
+      'group_name',
+      'created_by_user_displayname',
+      'created_by_user_email',
+      'title',
+      'published_timestamp',
+      'metadata.dag_provenance_list',
+      'metadata.metadata',
+      'protocol_url',
+    ],
     size: 10000,
   };
 

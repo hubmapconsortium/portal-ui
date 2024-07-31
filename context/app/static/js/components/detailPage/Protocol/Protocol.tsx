@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Divider from '@mui/material/Divider';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
@@ -72,13 +71,10 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
 
 interface ProtocolProps {
   protocol_url: string;
+  entity_type: string;
 }
 
-function Protocol({ protocol_url }: ProtocolProps) {
-  const {
-    entity: { entity_type },
-  } = useFlaskDataContext();
-
+function Protocol({ protocol_url, entity_type }: ProtocolProps) {
   const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
 
   return (
@@ -97,13 +93,5 @@ function Protocol({ protocol_url }: ProtocolProps) {
     </DetailPageSection>
   );
 }
-
-Protocol.propTypes = {
-  protocol_url: PropTypes.string,
-};
-
-Protocol.defaultProps = {
-  protocol_url: '',
-};
 
 export default React.memo(Protocol);

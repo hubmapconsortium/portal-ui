@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 
-import ProvAnalysisDetails from './ProvAnalysisDetails';
+import { DagProvenanceType } from 'js/components/types';
+import AnalysisDetails from './AnalysisDetails';
 
 test('should display ingest and cwl lists', () => {
   const dagListData = [
@@ -9,7 +10,7 @@ test('should display ingest and cwl lists', () => {
     { origin: 'https://github.com/fake2/fake2.git', hash: 'bbbbbbb' },
     { origin: 'https://github.com/fake3/fake3.git', hash: 'ccccccc', name: 'fake3.cwl' },
   ];
-  render(<ProvAnalysisDetails dagListData={dagListData} />);
+  render(<AnalysisDetails dagListData={dagListData} />);
 
   expect(screen.getByText('Ingest Pipelines')).toBeInTheDocument();
   expect(screen.getByText('CWL Pipelines')).toBeInTheDocument();
@@ -19,8 +20,8 @@ test('should display ingest and cwl lists', () => {
 });
 
 test('should not display pipelines when pipelines do not exist', () => {
-  const dagListData = [];
-  render(<ProvAnalysisDetails dagListData={dagListData} />);
+  const dagListData: DagProvenanceType[] = [];
+  render(<AnalysisDetails dagListData={dagListData} />);
 
   expect(screen.queryByText('Ingest Pipelines')).not.toBeInTheDocument();
   expect(screen.queryByText('CWL Pipelines')).not.toBeInTheDocument();

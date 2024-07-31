@@ -37,6 +37,7 @@ import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAs
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
+import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
 
 function NotebookButton({ disabled, ...props }: { disabled: boolean } & ButtonProps) {
@@ -339,8 +340,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
         {shouldDisplaySection.visualization && (
           <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
         )}
+        {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
         {shouldDisplaySection.provenance && <ProvSection />}
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} entity_type={entity_type} />}
         {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
         {shouldDisplaySection.files && <Files files={files} />}
         {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
