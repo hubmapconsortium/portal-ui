@@ -1,4 +1,4 @@
-import { DEFAULT_JOB_TYPE } from './constants';
+import { DEFAULT_JOB_TYPE, DEFAULT_TEMPLATE_KEY } from './constants';
 import {
   jobStatuses,
   validateJobStatus,
@@ -13,7 +13,14 @@ import {
   JobStatusDisplayName,
 } from './statusCodes';
 
-import type { MergedWorkspace, Workspace, WorkspaceAPIResponse, WorkspaceJob, WorkspaceFile } from './types';
+import type {
+  MergedWorkspace,
+  Workspace,
+  WorkspaceAPIResponse,
+  WorkspaceJob,
+  WorkspaceFile,
+  TemplatesTypes,
+} from './types';
 
 interface WorkspaceActionArgs {
   workspaceId: number;
@@ -291,6 +298,30 @@ function getDefaultJobType({ workspace }: { workspace: Workspace }) {
   return workspace?.default_job_type ?? DEFAULT_JOB_TYPE;
 }
 
+/**
+ * Sort templates alphabetically by title, with all disabled templates first, then the default template.
+ *   Ex: [disabled1, disabled2, default, templateA, templateB, ...]
+ * @param templates The templates to sort.
+ * @param disabledTemplates The templates that are disabled.
+ * @returns The sorted templates.
+ */
+function sortTemplates(templates: TemplatesTypes, disabledTemplates?: TemplatesTypes) {
+  return Object.fromEntries(
+    Object.entries(templates).sort(([keyA, templateA], [keyB, templateB]) => {
+      const isSelectedA = disabledTemplates && keyA in disabledTemplates;
+      const isSelectedB = disabledTemplates && keyB in disabledTemplates;
+
+      if (isSelectedA && !isSelectedB) return -1;
+      if (!isSelectedA && isSelectedB) return 1;
+
+      if (keyA === DEFAULT_TEMPLATE_KEY && keyB !== DEFAULT_TEMPLATE_KEY) return -1;
+      if (keyB === DEFAULT_TEMPLATE_KEY && keyA !== DEFAULT_TEMPLATE_KEY) return 1;
+
+      return templateA.title.localeCompare(templateB.title);
+    }),
+  ) as TemplatesTypes;
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -306,4 +337,5 @@ export {
   isRunningJob,
   buildDatasetSymlinks,
   getDefaultJobType,
+  sortTemplates,
 };
