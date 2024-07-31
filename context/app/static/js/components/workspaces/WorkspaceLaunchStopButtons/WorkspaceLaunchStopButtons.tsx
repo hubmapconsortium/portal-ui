@@ -105,6 +105,8 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
       {showLaunch && (
         <Button
           type="button"
+          variant="contained"
+          color="primary"
           onClick={() => {
             setWorkspace(workspace);
             open();
