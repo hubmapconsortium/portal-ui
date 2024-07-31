@@ -16,7 +16,7 @@ interface ProvAnalysisDetailsListProps {
 function ProvAnalysisDetailsList({ pipelines, pipelineType }: ProvAnalysisDetailsListProps) {
   return (
     <>
-      <Typography variant="subtitle1">{`${pipelineType} Pipelines`}</Typography>
+      <Typography variant="subtitle2">{`${pipelineType} Pipelines`}</Typography>
       <List data-testid={pipelineType}>
         {pipelines.map((item) => (
           <ProvAnalysisDetailsLink

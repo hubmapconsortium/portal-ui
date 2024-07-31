@@ -342,7 +342,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
         )}
         {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
         {shouldDisplaySection.provenance && <ProvSection />}
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} entity_type={entity_type} />}
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
         {shouldDisplaySection.files && <Files files={files} />}
         {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}

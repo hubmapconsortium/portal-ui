@@ -65,7 +65,7 @@ function FilesAccordion({ files, id }: Pick<ProcessedDatasetTypes, 'files'> & { 
     <Subsection id={id} title="Files" icon={<InsertDriveFileRounded />}>
       <Tabs value={openTabIndex} onChange={(_, newValue) => setOpenTabIndex(newValue as number)}>
         <Tab label="Data Products" index={0} />
-        <Tab label="Files" index={1} />
+        <Tab label="File Browser" index={1} />
       </Tabs>
       <TabPanel value={openTabIndex} index={0}>
         <DataProducts files={files} />
@@ -92,9 +92,7 @@ function AnalysisDetailsAccordion({ dataset }: Pick<ProcessedDataVisualizationPr
   return (
     <Subsection id={`protocols-${dataset.hubmap_id}`} title="Analysis Details & Protocols" icon={<FactCheckRounded />}>
       <AnalysisDetails dagListData={dataset.metadata.dag_provenance_list} />
-      {Boolean(dataset.protocol_url) && (
-        <Protocol protocol_url={dataset.protocol_url} entity_type={dataset.entity_type} />
-      )}
+      {Boolean(dataset.protocol_url) && <Protocol protocol_url={dataset.protocol_url} />}
     </Subsection>
   );
 }
