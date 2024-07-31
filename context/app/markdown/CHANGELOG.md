@@ -1,3 +1,12 @@
+## v0.102.1 - 2024-07-31
+
+- Add alerts, errors, tooltips, and disabled buttons as needed to alert users when they have exceeded a dataset limit.
+- Add datasets section with info banner to empty workspace detail pages.
+- Fixed assays and samples section on the organ's detail page.
+- Select blank template by default in "Create New Workspace" dialog.
+- Updated query for recent datasets to avoid filtering based on presence of visualization.
+
+
 ## v0.102.0 - 2024-07-26
 
 - Removed overlapping tooltip from current dataset in multi-assay relationships.

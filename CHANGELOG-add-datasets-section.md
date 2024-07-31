@@ -1,1 +1,0 @@
-- Add datasets section with info banner to empty workspace detail pages.

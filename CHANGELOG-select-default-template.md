@@ -1,1 +1,0 @@
-- Select blank template by default in "Create New Workspace" dialog.
