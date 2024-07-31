@@ -1,4 +1,4 @@
-import React, { useCallback, ChangeEvent } from 'react';
+import React, { useCallback, ChangeEvent, useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -45,20 +45,24 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   );
 
   // Sort templates alphabetically by title with selected templates first, then default template
-  const sortedTemplates = Object.fromEntries(
-    Object.entries(templates).sort(([keyA, templateA], [keyB, templateB]) => {
-      const isSelectedA = disabledTemplates && keyA in disabledTemplates;
-      const isSelectedB = disabledTemplates && keyB in disabledTemplates;
+  const sortedTemplates = useMemo(
+    () =>
+      Object.fromEntries(
+        Object.entries(templates).sort(([keyA, templateA], [keyB, templateB]) => {
+          const isSelectedA = disabledTemplates && keyA in disabledTemplates;
+          const isSelectedB = disabledTemplates && keyB in disabledTemplates;
 
-      if (isSelectedA && !isSelectedB) return -1;
-      if (!isSelectedA && isSelectedB) return 1;
+          if (isSelectedA && !isSelectedB) return -1;
+          if (!isSelectedA && isSelectedB) return 1;
 
-      if (keyA === DEFAULT_TEMPLATE_KEY && keyB !== DEFAULT_TEMPLATE_KEY) return -1;
-      if (keyB === DEFAULT_TEMPLATE_KEY && keyA !== DEFAULT_TEMPLATE_KEY) return 1;
+          if (keyA === DEFAULT_TEMPLATE_KEY && keyB !== DEFAULT_TEMPLATE_KEY) return -1;
+          if (keyB === DEFAULT_TEMPLATE_KEY && keyA !== DEFAULT_TEMPLATE_KEY) return 1;
 
-      return templateA.title.localeCompare(templateB.title);
-    }),
-  ) as TemplatesTypes;
+          return templateA.title.localeCompare(templateB.title);
+        }),
+      ) as TemplatesTypes,
+    [templates, disabledTemplates],
+  );
 
   const updateTemplates = useCallback(
     (templateKeys: string[]) => {
