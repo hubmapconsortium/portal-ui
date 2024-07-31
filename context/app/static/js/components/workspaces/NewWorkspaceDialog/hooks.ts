@@ -9,7 +9,6 @@ import { SWRError } from 'js/helpers/swr/errors';
 import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
 import { buildDatasetSymlinks } from '../utils';
-import { DEFAULT_TEMPLATE_KEY } from '../constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -42,19 +41,12 @@ function useWorkspaceTemplates(tags: string[] = []) {
 
   const templates = result?.data?.data ?? {};
 
-  // Filter out hidden templates and sort alphabetically by title with default template first
-  const filteredSortedTemplates = Object.fromEntries(
-    Object.entries(templates)
-      .filter(([, template]) => !template?.is_hidden)
-      .sort(([keyA, templateA], [keyB, templateB]) => {
-        if (keyA === DEFAULT_TEMPLATE_KEY) return -1;
-        if (keyB === DEFAULT_TEMPLATE_KEY) return 1;
-        return templateA.title.localeCompare(templateB.title);
-      }),
+  const filteredTemplates = Object.fromEntries(
+    Object.entries(templates).filter(([, template]) => !template?.is_hidden),
   ) as TemplatesTypes;
 
   return {
-    templates: filteredSortedTemplates,
+    templates: filteredTemplates,
   };
 }
 

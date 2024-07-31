@@ -10,6 +10,7 @@ import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessag
 import { TemplatesTypes } from '../types';
 import TemplateGrid from '../TemplateGrid';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
+import { DEFAULT_TEMPLATE_KEY } from '../constants';
 
 interface TemplateGridProps {
   disabledTemplates?: TemplatesTypes;
@@ -42,6 +43,22 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   const { selectedItems: selectedTemplates, setSelectedItems: setSelectedTemplates } = useSelectItems(
     field.value satisfies FormType[typeof inputName],
   );
+
+  // Sort templates alphabetically by title with selected templates first, then default template
+  const sortedTemplates = Object.fromEntries(
+    Object.entries(templates).sort(([keyA, templateA], [keyB, templateB]) => {
+      const isSelectedA = disabledTemplates && keyA in disabledTemplates;
+      const isSelectedB = disabledTemplates && keyB in disabledTemplates;
+
+      if (isSelectedA && !isSelectedB) return -1;
+      if (!isSelectedA && isSelectedB) return 1;
+
+      if (keyA === DEFAULT_TEMPLATE_KEY && keyB !== DEFAULT_TEMPLATE_KEY) return -1;
+      if (keyB === DEFAULT_TEMPLATE_KEY && keyA !== DEFAULT_TEMPLATE_KEY) return 1;
+
+      return templateA.title.localeCompare(templateB.title);
+    }),
+  ) as TemplatesTypes;
 
   const updateTemplates = useCallback(
     (templateKeys: string[]) => {
@@ -87,7 +104,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
         }
       />
       <TemplateGrid
-        templates={templates}
+        templates={sortedTemplates}
         selectItem={selectItem}
         selectedTemplates={selectedTemplates}
         disabledTemplates={disabledTemplates}
