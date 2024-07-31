@@ -1,0 +1,1 @@
+- Updated query for recent datasets to avoid filtering based on presence of visualization.
