@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import Typography from '@mui/material/Typography';
+
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-import useSearchData from 'js/hooks/useSearchData';
+import useSearchData, { useSearchHits } from 'js/hooks/useSearchData';
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
@@ -10,8 +11,8 @@ import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
-
 import { OrganFile } from 'js/components/organ/types';
+import { mustHaveOrganClause } from './queries';
 import { FlexRow, Content } from './style';
 
 interface OrganProps {
@@ -39,14 +40,11 @@ const samplesId = 'Samples';
 
 function Organ({ organ }: OrganProps) {
   const searchItems = useMemo(
-    // to avoid returning all datasets with organ.search, [organ.name] is added
     () => (organ.search.length > 0 ? organ.search : [organ.name]),
     [organ.search, organ.name],
   );
 
-  let shouldDisplaySearch = organ.search.length >= 0;
-
-  const query = useMemo(
+  const assaysQuery = useMemo(
     () => ({
       size: 0,
       aggs: {
@@ -59,19 +57,12 @@ function Organ({ organ }: OrganProps) {
                     'entity_type.keyword': 'Dataset',
                   },
                 },
-                {
-                  bool: {
-                    should: searchItems.map((searchTerm) => ({
-                      term: { 'origin_samples.mapped_organ.keyword': searchTerm },
-                    })),
-                  },
-                },
+                mustHaveOrganClause(searchItems),
               ],
             },
           },
           aggs: {
             'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 100 } },
-            'assay_display_name.keyword_count': { cardinality: { field: 'assay_display_name.keyword' } },
           },
         },
       },
@@ -79,23 +70,39 @@ function Organ({ organ }: OrganProps) {
     [searchItems],
   );
 
-  const { searchData } = useSearchData<Document, Aggregations>(query);
+  const samplesQuery = useMemo(
+    () => ({
+      filter: {
+        bool: {
+          must: [
+            {
+              term: {
+                'entity_type.keyword': 'Sample',
+              },
+            },
+            mustHaveOrganClause(searchItems),
+          ],
+        },
+      },
+      _source: false,
+      size: 1,
+    }),
+    [searchItems],
+  );
 
-  const buckets = searchData.aggregations
-    ? searchData.aggregations.mapped_data_types['assay_display_name.keyword'].buckets
-    : [];
+  const { searchData: assaysData } = useSearchData<Document, Aggregations>(assaysQuery);
+  const { searchHits: samplesHits } = useSearchHits(samplesQuery);
 
-  // update the sections map when there are no datasets
-  if (buckets.length === 0) {
-    shouldDisplaySearch = organ.search.length > 0;
-  }
+  const assayBuckets = assaysData?.aggregations?.mapped_data_types?.['assay_display_name.keyword']?.buckets ?? [];
+
+  const hasSearchTerms = organ.search.length > 0;
 
   const shouldDisplaySection = {
     [summaryId]: Boolean(organ?.description),
     [hraId]: organ.has_iu_component,
     [referenceId]: Boolean(organ?.azimuth),
-    [assaysId]: shouldDisplaySearch,
-    [samplesId]: shouldDisplaySearch,
+    [assaysId]: hasSearchTerms || assayBuckets.length > 0,
+    [samplesId]: hasSearchTerms || samplesHits.length > 0,
   };
 
   const sectionOrder = Object.entries(shouldDisplaySection)
@@ -132,7 +139,7 @@ function Organ({ organ }: OrganProps) {
         )}
         {shouldDisplaySection[assaysId] && (
           <Section id={assaysId}>
-            <Assays organTerms={searchItems} bucketData={buckets} />
+            <Assays organTerms={searchItems} bucketData={assayBuckets} />
             <DatasetsBarChart search={searchItems} />
           </Section>
         )}
