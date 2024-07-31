@@ -14,6 +14,8 @@ import {
 import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 import { DEFAULT_JOB_TYPE } from '../constants';
 
+export const DEFAULT_TEMPLATE = 'blank';
+
 export interface FormWithTemplates {
   templates: string[];
 }
@@ -45,7 +47,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     defaultValues: {
       'workspace-name': defaultName ?? '',
       'protected-datasets': '',
-      templates: ['blank'],
+      templates: [DEFAULT_TEMPLATE],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
     mode: 'onChange',
