@@ -2,10 +2,10 @@ import React from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import PanelList from 'js/shared-styles/panels/PanelList';
-import { useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
 import { CollectionHit } from 'js/pages/Collections/types';
+import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 
 interface CollectionsSectionProps {
   collectionsData: CollectionHit[];
@@ -14,15 +14,13 @@ interface CollectionsSectionProps {
 function CollectionsSection({ collectionsData }: CollectionsSectionProps) {
   const panelsProps = buildCollectionsPanelsProps(collectionsData);
 
-  const {
-    entity: { entity_type },
-  } = useFlaskDataContext();
-
   return (
     <DetailPageSection id="collections">
-      <SectionHeader iconTooltipText={`List of collections that contain this ${entity_type?.toLowerCase()}.`}>
-        Collections
-      </SectionHeader>
+      <SectionHeader>Collections</SectionHeader>
+      <SectionDescription>
+        Collections may contain references to either raw or processed datasets. If a processed dataset is not included
+        in any collection, there will be no corresponding tabs in the table below.
+      </SectionDescription>
       <PanelList panelsProps={panelsProps} />
     </DetailPageSection>
   );

@@ -5,9 +5,10 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { excludeComponentDatasetsClause, excludeSupportEntitiesClause, getIDsQuery } from 'js/helpers/queries';
 import { Dataset, isDataset } from 'js/components/types';
-import { getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
+import { formatSectionHash, getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
 import { partialMultiFetcher } from 'js/helpers/swr';
 import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/types';
+import { useLayoutEffect } from 'react';
 
 function useDatasetLabelPrefix() {
   const {
@@ -49,8 +50,10 @@ export type ProcessedDatasetTypes = Pick<
   | 'created_by_user_email'
   | 'title'
   | 'published_timestamp'
+  | 'created_timestamp'
   | 'metadata'
   | 'protocol_url' // TODO: This is present for non-dataset entities, but not for datasets.
+  | 'dataset_type'
 >;
 
 type VitessceConf = object | null;
@@ -96,9 +99,11 @@ function useProcessedDatasets() {
       'created_by_user_email',
       'title',
       'published_timestamp',
+      'created_timestamp',
       'metadata.dag_provenance_list',
       'metadata.metadata',
       'protocol_url',
+      'dataset_type',
     ],
     size: 10000,
   };
@@ -129,14 +134,18 @@ function getProcessedDatasetSection({
     summary: true,
     visualization: Boolean(conf),
     files: Boolean(hit?._source?.files),
+    analysis: Boolean(hit?._source?.metadata?.dag_provenance_list),
   };
 
   const sectionsToDisplay = Object.entries(shouldDisplaySection).filter(([_k, v]) => v === true);
 
   return {
     // TODO: Improve the lookup for descendants to exclude anything with a missing pipeline name
-    ...getSectionFromString(pipeline ?? hubmap_id, `${hubmap_id}-section`),
-    items: sectionsToDisplay.map(([s]) => ({ ...getSectionFromString(s), hash: `${s}-${hubmap_id}` })),
+    ...getSectionFromString(pipeline ?? hubmap_id, `section-${hubmap_id}`),
+    items: sectionsToDisplay.map(([s]) => ({
+      ...getSectionFromString(s),
+      hash: formatSectionHash(`${s}-${hubmap_id}`),
+    })),
   };
 }
 
@@ -157,5 +166,27 @@ function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false
   };
 }
 
-export { useProcessedDatasets, useProcessedDatasetsSections };
+function useLazyLoadedHashHandler() {
+  const { isLoading } = useProcessedDatasets();
+  useLayoutEffect(() => {
+    if (!isLoading && window.location.hash) {
+      const { hash } = window.location;
+      const decodedHash = decodeURIComponent(hash);
+
+      if (decodedHash) {
+        // Since `document.querySelector` can fail if the hash is invalid, wrap it in a try-catch block.
+        try {
+          const element = document.querySelector(decodedHash);
+          if (element) {
+            element.scrollIntoView();
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      }
+    }
+  }, [isLoading]);
+}
+
+export { useProcessedDatasets, useProcessedDatasetsSections, useLazyLoadedHashHandler };
 export default useDatasetLabel;

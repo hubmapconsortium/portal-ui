@@ -7,6 +7,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import Skeleton from '@mui/material/Skeleton';
 import useProvData from '../hooks';
 import ProvTabs from '../ProvTabs';
+import { SectionDescription } from '../../ProcessedData/ProcessedDataset/SectionDescription';
 
 const provenanceTooltipText = `The provenance shows the sequence of events and actions that led to this page creation.`;
 
@@ -54,6 +55,11 @@ function ProvSection() {
 
   return (
     <ProvSectionWrapper>
+      <SectionDescription>
+        The provenance displays the sequence of events and actions that led to the creation of this dataset. The table
+        view provides a basic overview of the dataset&apos;s origin, from donor to sample level, and any processing that
+        has been done to the dataset. The graph view offers a comprehensive overview of the data&apos;s provenance.
+      </SectionDescription>
       <ProvTabs provData={provData} />
     </ProvSectionWrapper>
   );

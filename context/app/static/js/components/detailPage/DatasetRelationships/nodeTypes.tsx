@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { AccountTreeRounded, ExtensionRounded, SvgIconComponent } from '@mui/icons-material';
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
+import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
 import StatusIcon from '../StatusIcon';
 import { usePipelineInfo } from './hooks';
 
@@ -126,7 +127,7 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
     <NodeTemplate
       rounded
       target
-      href={`#${data.name}-section`}
+      href={formatSectionHash(`#section-${data.name}`)}
       icon={nodeIcons.processedDataset}
       bgColor={nodeColors.processedDataset}
       {...data}
@@ -144,7 +145,7 @@ function ComponentDatasetNode({ data }: NodeProps<ComponentDatasetNodeProps>) {
       rounded
       target
       icon={nodeIcons.componentDataset}
-      href={`#${data.name}-section`}
+      href={formatSectionHash(`#section-${data.name}`)}
       bgColor={nodeColors.componentDataset}
       {...data}
     >

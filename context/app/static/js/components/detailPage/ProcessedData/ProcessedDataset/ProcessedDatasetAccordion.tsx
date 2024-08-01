@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import Skeleton from '@mui/material/Skeleton';
+import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
 import StatusIcon from '../../StatusIcon';
 import { ProcessedDataVisualizationProps } from './types';
 import { ProcessedDatasetSectionAccordion } from './styles';
@@ -19,7 +20,7 @@ export function ProcessedDatasetAccordion({
 }: PropsWithChildren<ProcessedDataVisualizationProps>) {
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
   return (
-    <ProcessedDatasetSectionAccordion defaultExpanded id={`${dataset.hubmap_id}-section`}>
+    <ProcessedDatasetSectionAccordion defaultExpanded id={formatSectionHash(`section-${dataset.hubmap_id}`)}>
       <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
         {isLoading ? iconPlaceholder : visualizationIcon}
         <Typography variant="subtitle1" color="inherit" component="h4">

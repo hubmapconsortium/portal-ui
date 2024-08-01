@@ -13,8 +13,20 @@ function AnalysisDetails({ dagListData }: AnalysisDetails) {
 
   return (
     <div>
-      {ingestPipelines.length > 0 && <AnalysisDetailsList pipelines={ingestPipelines} pipelineType="Ingest" />}
-      {cwlPipelines.length > 0 && <AnalysisDetailsList pipelines={cwlPipelines} pipelineType="CWL" />}
+      {ingestPipelines.length > 0 && (
+        <AnalysisDetailsList
+          pipelines={ingestPipelines}
+          pipelineType="Ingest"
+          tooltip="Supplementary links for the data ingestion pipelines for this dataset"
+        />
+      )}
+      {cwlPipelines.length > 0 && (
+        <AnalysisDetailsList
+          pipelines={cwlPipelines}
+          pipelineType="CWL"
+          tooltip="Supplementary links for the CWL (Common Workflow Language) pipelines for this dataset"
+        />
+      )}
     </div>
   );
 }

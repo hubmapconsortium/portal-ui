@@ -38,7 +38,7 @@ import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
-import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
+import useDatasetLabel, { useLazyLoadedHashHandler, useProcessedDatasetsSections } from './hooks';
 
 function NotebookButton({ disabled, ...props }: { disabled: boolean } & ButtonProps) {
   return (
@@ -265,6 +265,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
   } = assayMetadata;
 
   const isLatest = !('next_revision_uuid' in assayMetadata);
+  useLazyLoadedHashHandler();
 
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;

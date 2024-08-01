@@ -1,13 +1,11 @@
 import React from 'react';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailSectionPaper } from 'js/shared-styles/surfaces';
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import { InfoIcon } from 'js/shared-styles/icons';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { DetailPageSection } from '../style';
 import ProcessedDataset from './ProcessedDataset';
+import { SectionDescription } from './ProcessedDataset/SectionDescription';
+import HelperPanel from './HelperPanel';
 
 function ProcessedDataSection() {
   const processedDatasets = useProcessedDatasets();
@@ -18,20 +16,14 @@ function ProcessedDataSection() {
   return (
     <DetailPageSection id="processed-data" data-testid="processed-data">
       <SectionHeader>Processed Data</SectionHeader>
-      <DetailSectionPaper>
-        <Stack direction="column" gap={1}>
-          <Stack direction="row" gap={0.5}>
-            <InfoIcon color="primary" fontSize="1.5rem" />
-            <Typography variant="body1">
-              This section contains the results of any additional analyses performed on this dataset. Additional data
-              may include visualizations and essential data files (data products). Analysis results could be generated
-              from consortium standardized pipelines or by external groups, and may have been generated independently
-              from the primary data submitted by the original group.
-            </Typography>
-          </Stack>
-          <LabelledSectionText label={pipelinesText}>{pipelines.join(', ')}</LabelledSectionText>
-        </Stack>
-      </DetailSectionPaper>
+      <SectionDescription
+        addendum={<LabelledSectionText label={pipelinesText}>{pipelines.join(', ')}</LabelledSectionText>}
+      >
+        This section contains the results of any additional analyses performed on this dataset. Additional data may
+        include visualizations and essential data files (data products). Analysis results could be generated from
+        consortium standardized pipelines or by external groups, and may have been generated independently from the
+        primary data submitted by the original group.
+      </SectionDescription>
       {processedDatasets.searchHits.map((dataset) => (
         <ProcessedDataset
           dataset={dataset._source}
@@ -40,6 +32,7 @@ function ProcessedDataSection() {
           isLoading={processedDatasets.isLoading}
         />
       ))}
+      <HelperPanel />
     </DetailPageSection>
   );
 }
