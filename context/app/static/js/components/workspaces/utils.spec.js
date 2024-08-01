@@ -1,4 +1,4 @@
-import { mergeJobsIntoWorkspaces, condenseJobs } from './utils';
+import { mergeJobsIntoWorkspaces, condenseJobs, sortTemplates } from './utils';
 
 const workspace_details = {
   current_workspace_details: {
@@ -183,5 +183,115 @@ describe('condenseJobs', () => {
       },
     ];
     expect(() => condenseJobs(jobs)).toThrow('Unexpected job status');
+  });
+});
+
+describe('sortTemplates', () => {
+  const templateA = {
+    title: 'A',
+    description: '',
+    tags: [],
+    is_multi_dataset_template: false,
+    template_format: '',
+    is_hidden: false,
+  };
+  const templateB = {
+    title: 'B',
+    description: '',
+    tags: [],
+    is_multi_dataset_template: false,
+    template_format: '',
+    is_hidden: false,
+  };
+  const templateC = {
+    title: 'C',
+    description: '',
+    tags: [],
+    is_multi_dataset_template: false,
+    template_format: '',
+    is_hidden: false,
+  };
+  const disabledA = {
+    title: 'DisabledA',
+    description: '',
+    tags: [],
+    is_multi_dataset_template: false,
+    template_format: '',
+    is_hidden: false,
+  };
+  const disabledB = {
+    title: 'DisabledB',
+    description: '',
+    tags: [],
+    is_multi_dataset_template: false,
+    template_format: '',
+    is_hidden: false,
+  };
+  const defaultA = {
+    title: 'defaultA',
+    description: '',
+    tags: [],
+    is_multi_dataset_template: false,
+    template_format: '',
+    is_hidden: false,
+  };
+
+  test('sort with multiple disabled templates and default', () => {
+    const unsorted = {
+      templateC,
+      templateB,
+      disabledB,
+      blank: defaultA,
+      disabledA,
+      templateA,
+    };
+
+    const sorted = {
+      disabledA,
+      disabledB,
+      blank: defaultA,
+      templateA,
+      templateB,
+      templateC,
+    };
+
+    const result = sortTemplates(unsorted);
+    expect(result).toEqual(sorted);
+  });
+
+  test('sort with no disabled templates and default', () => {
+    const unsorted = {
+      templateB,
+      templateC,
+      templateA,
+      blank: defaultA,
+    };
+
+    const sorted = {
+      blank: defaultA,
+      templateA,
+      templateB,
+      templateC,
+    };
+
+    const result = sortTemplates(unsorted);
+    expect(result).toEqual(sorted);
+  });
+
+  test('sort with no disabled templates and no default', () => {
+    const unsorted = {
+      templateC,
+      templateB,
+      templateA,
+    };
+
+    const sorted = {
+      templateA,
+      templateB,
+      templateC,
+    };
+
+    const result = sortTemplates(unsorted);
+    expect(result).toEqual(sorted);
   });
 });
