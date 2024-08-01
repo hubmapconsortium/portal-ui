@@ -1,0 +1,1 @@
+- Fix issue of "Launch Workspace" button not appearing in workspace detail pages. 

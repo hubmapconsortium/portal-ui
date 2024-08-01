@@ -81,6 +81,8 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                 button={LaunchStopButton}
                 handleStopWorkspace={handleStopWorkspace}
                 isStoppingWorkspace={isStoppingWorkspace}
+                showLaunch
+                showStop
               />
             </>
           }
