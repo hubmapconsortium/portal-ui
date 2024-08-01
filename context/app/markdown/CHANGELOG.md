@@ -1,3 +1,8 @@
+## v0.102.3 - 2024-08-01
+
+- Fix issue of "Launch Workspace" button not appearing in workspace detail pages. 
+
+
 ## v0.102.2 - 2024-08-01
 
 - Fix query to determine whether samples should be shown on organ pages.
