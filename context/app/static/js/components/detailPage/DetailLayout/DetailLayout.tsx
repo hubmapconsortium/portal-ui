@@ -38,7 +38,12 @@ export function HelperPanelPortal({ children }: PropsWithChildren) {
   if (!element) {
     return null;
   }
-  return createPortal(children, element);
+  return createPortal(
+    <Stack alignItems="start" alignSelf="flex-start" height="100%">
+      {children}
+    </Stack>,
+    element,
+  );
 }
 
 function DetailAlert() {

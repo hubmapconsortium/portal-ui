@@ -3,13 +3,14 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { formatDate } from 'date-fns/format';
 import Divider from '@mui/material/Divider';
-import Box from '@mui/system/Box';
 import { useIsDesktop } from 'js/hooks/media-queries';
 import SchemaRounded from '@mui/icons-material/SchemaRounded';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { CloudDownloadRounded } from '@mui/icons-material';
 import { useAppContext } from 'js/components/Contexts';
 import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
+import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
+import { animated } from '@react-spring/web';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
@@ -25,7 +26,7 @@ function HelperPanelHeader() {
   return (
     <Typography variant="subtitle2" display="flex" alignItems="center" gap={0.5} whiteSpace="nowrap">
       <SchemaRounded fontSize="small" />
-      <a href={formatSectionHash(`#section-${currentDataset?.hubmap_id}`)}>{currentDataset?.hubmap_id}</a>
+      <a href={`#${formatSectionHash(`section-${currentDataset?.hubmap_id}`)}`}>{currentDataset?.hubmap_id}</a>
     </Typography>
   );
 }
@@ -106,33 +107,34 @@ function HelperPanelActions() {
   );
 }
 
+const AnimatedStack = animated(Stack);
+
 export default function HelperPanel() {
   const currentDataset = useCurrentDataset();
   // const panelOffset = useProcessedDataStore((state) => state.currentDatasetOffset);
   const isDesktop = useIsDesktop();
+  const style = useAnimatedSidebarPosition();
   if (!currentDataset || !isDesktop) {
     return null;
   }
   return (
     <HelperPanelPortal>
-      <Box position="relative" height="100%">
-        <Stack
-          position="fixed"
-          bottom="50%"
-          direction="column"
-          maxWidth="12rem"
-          padding={1}
-          gap={1}
-          bgcolor="secondaryContainer.main"
-          boxShadow={2}
-        >
-          <HelperPanelHeader />
-          <Divider />
-          <HelperPanelStatus />
-          <HelperPanelBody />
-          <HelperPanelActions />
-        </Stack>
-      </Box>
+      <AnimatedStack
+        direction="column"
+        maxWidth="12rem"
+        padding={1}
+        gap={1}
+        bgcolor="secondaryContainer.main"
+        boxShadow={2}
+        style={style}
+        position="sticky"
+      >
+        <HelperPanelHeader />
+        <Divider />
+        <HelperPanelStatus />
+        <HelperPanelBody />
+        <HelperPanelActions />
+      </AnimatedStack>
     </HelperPanelPortal>
   );
 }

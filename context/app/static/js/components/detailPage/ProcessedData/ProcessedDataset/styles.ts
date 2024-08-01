@@ -24,6 +24,7 @@ export const ProcessedDatasetSectionAccordion = styled(Accordion)(({ theme }) =>
       backgroundColor: theme.palette.primary.main,
     },
   },
+  scrollMarginTop: theme.spacing(12),
 }));
 
 export const SubsectionAccordion = styled(Accordion)(({ theme }) => ({
@@ -41,4 +42,5 @@ export const SubsectionAccordion = styled(Accordion)(({ theme }) => ({
       color: theme.palette.primary.main,
     },
   },
+  scrollMarginTop: theme.spacing(12),
 }));
