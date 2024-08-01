@@ -89,10 +89,6 @@ function VisualizationAccordion({ conf, dataset }: Pick<ProcessedDataVisualizati
 
   const hasBeenSeen = useProcessedDataStore((state) => state.hasBeenSeen(hubmap_id));
 
-  if (!conf) {
-    return null;
-  }
-
   return (
     <Subsection id={`visualization-${hubmap_id}`} title="Visualization" icon={<VisualizationIcon />}>
       <SectionDescription subsection>

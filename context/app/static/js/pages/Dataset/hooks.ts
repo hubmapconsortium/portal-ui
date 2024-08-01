@@ -54,6 +54,7 @@ export type ProcessedDatasetTypes = Pick<
   | 'metadata'
   | 'protocol_url' // TODO: This is present for non-dataset entities, but not for datasets.
   | 'dataset_type'
+  | 'creation_action'
 >;
 
 type VitessceConf = object | null;
@@ -104,6 +105,7 @@ function useProcessedDatasets() {
       'metadata.metadata',
       'protocol_url',
       'dataset_type',
+      'creation_action',
     ],
     size: 10000,
   };

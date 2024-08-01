@@ -6,12 +6,15 @@ import { DetailPageSection } from '../style';
 import ProcessedDataset from './ProcessedDataset';
 import { SectionDescription } from './ProcessedDataset/SectionDescription';
 import HelperPanel from './HelperPanel';
+import { useSortedSearchHits } from './hooks';
 
 function ProcessedDataSection() {
   const processedDatasets = useProcessedDatasets();
 
   const pipelines = processedDatasets?.searchHits.map((dataset) => dataset._source.pipeline);
   const pipelinesText = `Pipelines (${pipelines.length})`;
+
+  const sortedSearchHits = useSortedSearchHits(processedDatasets.searchHits);
 
   return (
     <DetailPageSection id="processed-data" data-testid="processed-data">
@@ -24,7 +27,7 @@ function ProcessedDataSection() {
         consortium standardized pipelines or by external groups, and may have been generated independently from the
         primary data submitted by the original group.
       </SectionDescription>
-      {processedDatasets.searchHits.map((dataset) => (
+      {sortedSearchHits.map((dataset) => (
         <ProcessedDataset
           dataset={dataset._source}
           conf={processedDatasets.confs.get(dataset._id)!}
