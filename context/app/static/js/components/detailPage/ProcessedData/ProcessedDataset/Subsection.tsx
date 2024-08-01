@@ -5,6 +5,7 @@ import ExpandMore from '@mui/icons-material/ExpandMoreRounded';
 import Typography from '@mui/material/Typography';
 import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
 import { SubsectionAccordion } from './styles';
+import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 
 interface SubsectionProps extends PropsWithChildren {
   title: string;
@@ -13,8 +14,9 @@ interface SubsectionProps extends PropsWithChildren {
 }
 
 export function Subsection({ title, icon, id, children }: SubsectionProps) {
+  const { defaultExpanded } = useProcessedDatasetContext();
   return (
-    <SubsectionAccordion defaultExpanded id={formatSectionHash(id)}>
+    <SubsectionAccordion defaultExpanded={defaultExpanded} id={formatSectionHash(id)}>
       <AccordionSummary expandIcon={<ExpandMore />}>
         {icon}
         <Typography variant="subtitle1" component="h4">

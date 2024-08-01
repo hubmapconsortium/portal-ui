@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { ProcessedDatasetTypes } from 'js/pages/Dataset/hooks';
 import { formatDate } from 'date-fns/format';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
@@ -21,8 +20,12 @@ import { Subsection } from './Subsection';
 import { SectionDescription } from './SectionDescription';
 import useProcessedDataStore from '../store';
 import { getDateLabelAndValue } from '../../utils';
+import { ProcessedDatasetContextProvider, useProcessedDatasetContext } from './ProcessedDatasetContext';
 
-function ProcessedDatasetDescription({ description, title }: Pick<ProcessedDatasetTypes, 'description' | 'title'>) {
+function ProcessedDatasetDescription() {
+  const {
+    dataset: { description, title },
+  } = useProcessedDatasetContext();
   if (!description) {
     return <LabelledSectionText label="Title">{title}</LabelledSectionText>;
   }
@@ -30,10 +33,10 @@ function ProcessedDatasetDescription({ description, title }: Pick<ProcessedDatas
   return <LabelledSectionText label="Description">{description}</LabelledSectionText>;
 }
 
-function RegisteredBy({
-  created_by_user_displayname,
-  created_by_user_email,
-}: Pick<ProcessedDatasetTypes, 'created_by_user_displayname' | 'created_by_user_email'>) {
+function RegisteredBy() {
+  const {
+    dataset: { created_by_user_displayname, created_by_user_email },
+  } = useProcessedDatasetContext();
   return (
     <LabelledSectionText label="Registered By">
       {created_by_user_displayname} <br />
@@ -42,16 +45,14 @@ function RegisteredBy({
   );
 }
 
-function SummaryAccordion({ dataset }: Pick<ProcessedDataVisualizationProps, 'dataset'>) {
+function SummaryAccordion() {
+  const { dataset } = useProcessedDatasetContext();
   const [dateLabel, dateValue] = getDateLabelAndValue(dataset);
   return (
     <Subsection id={`summary-${dataset.hubmap_id}`} title="Summary" icon={<SummarizeRounded />}>
-      <ProcessedDatasetDescription description={dataset.description} title={dataset.title} />
+      <ProcessedDatasetDescription />
       <LabelledSectionText label="Consortium">{dataset.group_name}</LabelledSectionText>
-      <RegisteredBy
-        created_by_user_displayname={dataset.created_by_user_displayname}
-        created_by_user_email={dataset.created_by_user_email}
-      />
+      <RegisteredBy />
       <LabelledSectionText label={dateLabel}>
         {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
       </LabelledSectionText>
@@ -59,9 +60,11 @@ function SummaryAccordion({ dataset }: Pick<ProcessedDataVisualizationProps, 'da
   );
 }
 
-function FilesAccordion({ dataset }: Pick<ProcessedDataVisualizationProps, 'dataset'>) {
+function FilesAccordion() {
+  const {
+    dataset: { files, hubmap_id },
+  } = useProcessedDatasetContext();
   const [openTabIndex, setOpenTabIndex] = useState(0);
-  const { files, hubmap_id } = dataset;
   const id = `files-${hubmap_id}`;
   return (
     <Subsection id={id} title="Files" icon={<InsertDriveFileRounded />}>
@@ -84,8 +87,11 @@ function FilesAccordion({ dataset }: Pick<ProcessedDataVisualizationProps, 'data
   );
 }
 
-function VisualizationAccordion({ conf, dataset }: Pick<ProcessedDataVisualizationProps, 'dataset' | 'conf'>) {
-  const { hubmap_id, uuid } = dataset;
+function VisualizationAccordion() {
+  const {
+    dataset: { hubmap_id, uuid },
+    conf,
+  } = useProcessedDatasetContext();
 
   const hasBeenSeen = useProcessedDataStore((state) => state.hasBeenSeen(hubmap_id));
 
@@ -100,11 +106,18 @@ function VisualizationAccordion({ conf, dataset }: Pick<ProcessedDataVisualizati
   );
 }
 
-function AnalysisDetailsAccordion({ dataset }: Pick<ProcessedDataVisualizationProps, 'dataset'>) {
+function AnalysisDetailsAccordion() {
+  const {
+    dataset: {
+      hubmap_id,
+      metadata: { dag_provenance_list },
+      protocol_url,
+    },
+  } = useProcessedDatasetContext();
   return (
-    <Subsection id={`analysis-${dataset.hubmap_id}`} title="Analysis Details & Protocols" icon={<FactCheckRounded />}>
-      <AnalysisDetails dagListData={dataset.metadata.dag_provenance_list} />
-      {Boolean(dataset.protocol_url) && <Protocol protocol_url={dataset.protocol_url} />}
+    <Subsection id={`analysis-${hubmap_id}`} title="Analysis Details & Protocols" icon={<FactCheckRounded />}>
+      <AnalysisDetails dagListData={dag_provenance_list} />
+      {Boolean(protocol_url) && <Protocol protocol_url={protocol_url} />}
     </Subsection>
   );
 }
@@ -123,15 +136,24 @@ export default function ProcessedDataset({ conf, dataset, isLoading }: Processed
     },
   });
 
+  const defaultExpanded = dataset?.status === 'Published';
+
   return (
     <div ref={ref}>
-      <ProcessedDatasetAccordion dataset={dataset} conf={conf} isLoading={isLoading}>
-        <DatasetTitle hubmap_id={dataset.hubmap_id} status={dataset.status} />
-        <SummaryAccordion dataset={dataset} />
-        <VisualizationAccordion dataset={dataset} conf={conf} />
-        <FilesAccordion dataset={dataset} />
-        <AnalysisDetailsAccordion dataset={dataset} />
-      </ProcessedDatasetAccordion>
+      <ProcessedDatasetContextProvider
+        conf={conf}
+        dataset={dataset}
+        isLoading={isLoading}
+        defaultExpanded={defaultExpanded}
+      >
+        <ProcessedDatasetAccordion>
+          <DatasetTitle />
+          <SummaryAccordion />
+          <VisualizationAccordion />
+          <FilesAccordion />
+          <AnalysisDetailsAccordion />
+        </ProcessedDatasetAccordion>
+      </ProcessedDatasetContextProvider>
     </div>
   );
 }

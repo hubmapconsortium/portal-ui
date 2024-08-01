@@ -1,15 +1,16 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
-import { ProcessedDatasetTypes } from 'js/pages/Dataset/hooks';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import IconButton from '@mui/material/IconButton';
 import CopyAllRounded from '@mui/icons-material/CopyAllRounded';
 import StatusIcon from '../../StatusIcon';
+import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 
-type ProcessedDataHeaderProps = Pick<ProcessedDatasetTypes, 'hubmap_id' | 'status'>;
-
-export function DatasetTitle({ hubmap_id, status }: ProcessedDataHeaderProps) {
+export function DatasetTitle() {
+  const {
+    dataset: { hubmap_id, status },
+  } = useProcessedDatasetContext();
   const copyText = useHandleCopyClick();
   return (
     <Typography variant="h5" display="flex" alignItems="center" gap={0.5}>
