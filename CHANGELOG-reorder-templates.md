@@ -1,1 +1,0 @@
-- Order templates alphabetically with the default template first. 

@@ -1,1 +1,0 @@
-- Fix query to determine whether samples should be shown on organ pages.

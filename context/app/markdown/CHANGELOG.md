@@ -1,3 +1,10 @@
+## v0.102.2 - 2024-08-01
+
+- Fix query to determine whether samples should be shown on organ pages.
+- Prevent header from being clipped when the template selection grid is scrolled.
+- Order templates alphabetically with the default template first. 
+
+
 ## v0.102.1 - 2024-07-31
 
 - Add alerts, errors, tooltips, and disabled buttons as needed to alert users when they have exceeded a dataset limit.

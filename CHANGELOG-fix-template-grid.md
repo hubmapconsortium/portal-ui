@@ -1,1 +1,0 @@
-- Prevent header from being clipped when the template selection grid is scrolled.
