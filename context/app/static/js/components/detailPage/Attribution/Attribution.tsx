@@ -22,11 +22,17 @@ function Attribution() {
       entity_type,
       processing,
       creation_action,
+      descendants,
     },
   } = useFlaskDataContext();
 
   const isProcessedDataset = entity_type === 'Dataset' && processing === 'processed';
+  const isVisLiftedDataset = descendants.find((descendant) => descendant.dataset_type === 'Histology [Image Pyramid]');
   const isHiveProcessedDataset = isProcessedDataset && creation_action === 'Central Process';
+  const isSupportDataset = entity_type === 'Support';
+
+  const isProcessedOrVisLiftedDataset = isProcessedDataset || isVisLiftedDataset;
+  const isHiveOrSupportDataset = isHiveProcessedDataset || isSupportDataset;
 
   const tooltips = {
     group: 'This is the group that provided the raw dataset.',
@@ -52,11 +58,11 @@ function Attribution() {
     {
       label: 'Group',
       text: group_name,
-      tooltip: isProcessedDataset ? tooltips.group : undefined,
+      tooltip: isProcessedOrVisLiftedDataset ? tooltips.group : undefined,
     },
   ];
 
-  if (!isProcessedDataset) {
+  if (!isProcessedOrVisLiftedDataset) {
     sections.push({
       label: 'Registered by',
       text: (
@@ -68,7 +74,7 @@ function Attribution() {
         </Stack>
       ),
     });
-  } else if (isHiveProcessedDataset) {
+  } else if (isHiveOrSupportDataset) {
     sections.push({
       label: 'Contact',
       text: <ContactUsLink> HuBMAP Help Desk </ContactUsLink>,
@@ -80,12 +86,14 @@ function Attribution() {
     <DetailPageSection id="attribution">
       <SectionHeader
         iconTooltipText={
-          isProcessedDataset ? undefined : `Information about the group registering this ${entity_type?.toLowerCase()}.`
+          isProcessedOrVisLiftedDataset
+            ? undefined
+            : `Information about the group registering this ${entity_type?.toLowerCase()}.`
         }
       >
         Attribution
       </SectionHeader>
-      {isHiveProcessedDataset && hiveInfoAlert}
+      {isHiveOrSupportDataset && hiveInfoAlert}
       <SummaryPaper>
         <Stack direction="row" spacing={10}>
           {sections.map(({ label, text, tooltip }) => (

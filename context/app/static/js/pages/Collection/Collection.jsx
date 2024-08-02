@@ -17,7 +17,6 @@ function Collection({ collection: collectionData }) {
     description,
     created_timestamp,
     last_modified_timestamp,
-    contacts,
     datasets,
     creators,
   } = collectionData;
@@ -50,7 +49,6 @@ function Collection({ collection: collectionData }) {
               </OutboundIconLink>
             )}
           </Summary>
-          {'contacts' in collectionData && <ContributorsTable contributors={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
           {'creators' in collectionData && <ContributorsTable contributors={creators} title="Contributors" />}
         </>

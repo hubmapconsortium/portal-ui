@@ -16,6 +16,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 
 import { Stack, Typography } from '@mui/material';
+import { InfoIcon } from 'js/shared-styles/icons';
 import { useNormalizedContributors } from './hooks';
 import { ContributorAPIResponse, sortContributors } from './utils';
 
@@ -33,10 +34,23 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }: Contri
   ];
 
   const normalizedContributors = useNormalizedContributors(contributors);
+  const sortedContributors = sortContributors(normalizedContributors);
+
+  const contributorsInfoAlertText =
+    'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
+  const contributorsInfoAlert = (
+    <Stack component={Paper} p={2} spacing={2} marginBottom={1.25}>
+      <Stack direction="row" spacing={2}>
+        <InfoIcon color="primary" fontSize="1.5rem" />
+        <Typography>{contributorsInfoAlertText}</Typography>
+      </Stack>
+    </Stack>
+  );
 
   return (
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
       <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
+      {contributorsInfoAlert}
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
@@ -59,7 +73,7 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }: Contri
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortContributors(normalizedContributors).map(
+              {sortedContributors.map(
                 ({ orcid, name: displayName, affiliation, isContact, email, isPrincipalInvestigator }) => {
                   const contactCell = (
                     <Stack direction="row" alignItems="center" spacing={1}>

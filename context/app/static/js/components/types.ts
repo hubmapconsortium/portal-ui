@@ -35,6 +35,7 @@ export interface Entity {
   // eslint-disable-next-line no-use-before-define -- Donor is defined later in the file and extends Entity
   donor: Donor;
   descendant_counts: { entity_type: Record<string, number> };
+  descendants: Entity[];
   group_name: string;
   created_by_user_displayname: string;
   created_by_user_email: string;
