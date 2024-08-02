@@ -1,17 +1,15 @@
 import React from 'react';
 
+import Stack from '@mui/material/Stack';
+
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
-import { InfoIcon } from 'js/shared-styles/icons';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-
-import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
-import Paper from '@mui/material/Paper';
+import InfoAlert from 'js/shared-styles/alerts/InfoAlert';
 
 function Attribution() {
   const {
@@ -41,15 +39,6 @@ function Attribution() {
 
   const hiveInfoAlertText = `The data provided by the ${group_name} Group was centrally processed by HuBMAP. The results of this processing are independent of analyses conducted by the data providers or third parties.`;
 
-  const hiveInfoAlert = (
-    <Stack component={Paper} p={2} spacing={2} marginBottom={1.25}>
-      <Stack direction="row" spacing={2}>
-        <InfoIcon color="primary" fontSize="1.5rem" />
-        <Typography>{hiveInfoAlertText}</Typography>
-      </Stack>
-    </Stack>
-  );
-
   const sections: {
     label: string;
     text: React.ReactNode;
@@ -58,11 +47,17 @@ function Attribution() {
     {
       label: 'Group',
       text: group_name,
-      tooltip: isProcessedOrVisLiftedDataset ? tooltips.group : undefined,
+      tooltip: isProcessedOrVisLiftedDataset ?? isHiveOrSupportDataset ? tooltips.group : undefined,
     },
   ];
 
-  if (!isProcessedOrVisLiftedDataset) {
+  if (isHiveOrSupportDataset) {
+    sections.push({
+      label: 'Contact',
+      text: <ContactUsLink> HuBMAP Help Desk </ContactUsLink>,
+      tooltip: tooltips.contact,
+    });
+  } else if (!isProcessedOrVisLiftedDataset) {
     sections.push({
       label: 'Registered by',
       text: (
@@ -74,26 +69,20 @@ function Attribution() {
         </Stack>
       ),
     });
-  } else if (isHiveOrSupportDataset) {
-    sections.push({
-      label: 'Contact',
-      text: <ContactUsLink> HuBMAP Help Desk </ContactUsLink>,
-      tooltip: tooltips.contact,
-    });
   }
 
   return (
     <DetailPageSection id="attribution">
       <SectionHeader
         iconTooltipText={
-          isProcessedOrVisLiftedDataset
+          isProcessedOrVisLiftedDataset ?? isHiveOrSupportDataset
             ? undefined
             : `Information about the group registering this ${entity_type?.toLowerCase()}.`
         }
       >
         Attribution
       </SectionHeader>
-      {isHiveOrSupportDataset && hiveInfoAlert}
+      {isHiveOrSupportDataset && <InfoAlert text={hiveInfoAlertText} />}
       <SummaryPaper>
         <Stack direction="row" spacing={10}>
           {sections.map(({ label, text, tooltip }) => (

@@ -7,6 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import { Check } from '@mui/icons-material';
+import { Stack, Typography } from '@mui/material';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
@@ -14,9 +15,8 @@ import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
+import InfoAlert from 'js/shared-styles/alerts/InfoAlert';
 
-import { Stack, Typography } from '@mui/material';
-import { InfoIcon } from 'js/shared-styles/icons';
 import { useNormalizedContributors } from './hooks';
 import { ContributorAPIResponse, sortContributors } from './utils';
 
@@ -24,9 +24,10 @@ interface ContributorsTableProps {
   title: string;
   contributors: ContributorAPIResponse[];
   iconTooltipText?: string;
+  showInfoAlert?: boolean;
 }
 
-function ContributorsTable({ title, contributors = [], iconTooltipText }: ContributorsTableProps) {
+function ContributorsTable({ title, contributors = [], iconTooltipText, showInfoAlert }: ContributorsTableProps) {
   const columns = [
     { id: 'name', label: 'Name' },
     { id: 'affiliation', label: 'Affiliation' },
@@ -38,19 +39,11 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }: Contri
 
   const contributorsInfoAlertText =
     'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
-  const contributorsInfoAlert = (
-    <Stack component={Paper} p={2} spacing={2} marginBottom={1.25}>
-      <Stack direction="row" spacing={2}>
-        <InfoIcon color="primary" fontSize="1.5rem" />
-        <Typography>{contributorsInfoAlertText}</Typography>
-      </Stack>
-    </Stack>
-  );
 
   return (
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
       <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
-      {contributorsInfoAlert}
+      {showInfoAlert && <InfoAlert text={contributorsInfoAlertText} />}
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
