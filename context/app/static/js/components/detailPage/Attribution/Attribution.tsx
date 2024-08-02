@@ -4,12 +4,17 @@ import Stack from '@mui/material/Stack';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { DetailPageSection } from 'js/components/detailPage/style';
-import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import InfoAlert from 'js/shared-styles/alerts/InfoAlert';
+import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
+
+import { useAttributionSections } from '../ContributorsTable/hooks';
+
+const tooltips = {
+  group: 'This is the group that provided the raw dataset.',
+  contact: 'This is the contact for this data.',
+};
 
 function Attribution() {
   const {
@@ -32,64 +37,33 @@ function Attribution() {
   const showContactAndAlert = isHiveProcessedDataset ?? isSupportDataset;
   const showRegisteredBy = !(isProcessedDataset ?? isVisLiftedDataset ?? isHiveProcessedDataset ?? isSupportDataset);
 
-  const tooltips = {
-    group: 'This is the group that provided the raw dataset.',
-    contact: 'This is the contact for this data.',
-  };
-
   const hiveInfoAlertText = `The data provided by the ${group_name} Group was centrally processed by HuBMAP. The results of this processing are independent of analyses conducted by the data providers or third parties.`;
+  const iconTooltipText = showRegisteredBy
+    ? `Information about the group registering this ${entity_type?.toLowerCase()}.`
+    : undefined;
 
-  const sections: {
-    label: string;
-    text: React.ReactNode;
-    tooltip?: string;
-  }[] = [
-    {
-      label: 'Group',
-      text: group_name,
-      tooltip: showRegisteredBy ? undefined : tooltips.group,
-    },
-  ];
-
-  if (showContactAndAlert) {
-    sections.push({
-      label: 'Contact',
-      text: <ContactUsLink> HuBMAP Help Desk </ContactUsLink>,
-      tooltip: tooltips.contact,
-    });
-  } else if (showRegisteredBy) {
-    sections.push({
-      label: 'Registered by',
-      text: (
-        <Stack spacing={1}>
-          {created_by_user_displayname}
-          <EmailIconLink email={encodeURI(created_by_user_email)} iconFontSize="1.1rem">
-            {created_by_user_email}
-          </EmailIconLink>
-        </Stack>
-      ),
-    });
-  }
+  const sections = useAttributionSections(
+    group_name,
+    created_by_user_displayname,
+    created_by_user_email,
+    tooltips,
+    showRegisteredBy,
+    showContactAndAlert,
+  );
 
   return (
     <DetailPageSection id="attribution">
-      <SectionHeader
-        iconTooltipText={
-          showRegisteredBy ? `Information about the group registering this ${entity_type?.toLowerCase()}.` : undefined
-        }
-      >
-        Attribution
-      </SectionHeader>
-      {showContactAndAlert && <InfoAlert text={hiveInfoAlertText} />}
-      <SummaryPaper>
-        <Stack direction="row" spacing={10}>
-          {sections.map(({ label, text, tooltip }) => (
-            <LabelledSectionText key={label} label={label} iconTooltipText={tooltip}>
-              {text}
-            </LabelledSectionText>
-          ))}
-        </Stack>
-      </SummaryPaper>
+      <Stack spacing={1}>
+        <SectionHeader iconTooltipText={iconTooltipText}>Attribution</SectionHeader>
+        {showContactAndAlert && <OutlinedAlert severity="info">{hiveInfoAlertText}</OutlinedAlert>}
+        <SummaryPaper>
+          <Stack direction="row" spacing={10}>
+            {sections.map((props) => (
+              <LabelledSectionText key={props.label} {...props} />
+            ))}
+          </Stack>
+        </SummaryPaper>
+      </Stack>
     </DetailPageSection>
   );
 }

@@ -21,6 +21,33 @@ import { isValidEmail } from 'js/helpers/functions';
 import { useNormalizedContributors } from './hooks';
 import { ContributorAPIResponse, sortContributors } from './utils';
 
+const contributorsInfoAlertText =
+  'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
+
+interface ContactCellProps {
+  isContact: boolean;
+  email: string;
+}
+
+function ContactCell({ isContact, email }: ContactCellProps) {
+  if (!isContact) {
+    return null;
+  }
+
+  return (
+    <Stack direction="row" alignItems="center" spacing={1}>
+      <Check color="success" fontSize="1.5rem" />
+      {isValidEmail(email) ? (
+        <EmailIconLink email={encodeURI(email)} iconFontSize="1.1rem">
+          {email}
+        </EmailIconLink>
+      ) : (
+        <Typography variant="body2">no email provided</Typography>
+      )}
+    </Stack>
+  );
+}
+
 interface ContributorsTableProps {
   title: string;
   contributors: ContributorAPIResponse[];
@@ -37,9 +64,6 @@ function ContributorsTable({ title, contributors = [], iconTooltipText, showInfo
 
   const normalizedContributors = useNormalizedContributors(contributors);
   const sortedContributors = sortContributors(normalizedContributors);
-
-  const contributorsInfoAlertText =
-    'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
 
   return (
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
@@ -69,24 +93,13 @@ function ContributorsTable({ title, contributors = [], iconTooltipText, showInfo
             <TableBody>
               {sortedContributors.map(
                 ({ orcid, name: displayName, affiliation, isContact, email, isPrincipalInvestigator }) => {
-                  const contactCell = (
-                    <Stack direction="row" alignItems="center" spacing={1}>
-                      <Check color="success" fontSize="1.5rem" />
-                      {isValidEmail(email) ? (
-                        <EmailIconLink email={encodeURI(email)} iconFontSize="1.1rem">
-                          {email}
-                        </EmailIconLink>
-                      ) : (
-                        <Typography variant="body2">no email provided</Typography>
-                      )}
-                    </Stack>
-                  );
-
                   return (
                     <TableRow key={orcid} data-testid="contributor-row">
                       <TableCell>{`${displayName}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
                       <TableCell>{affiliation}</TableCell>
-                      <TableCell>{isContact && contactCell}</TableCell>
+                      <TableCell>
+                        <ContactCell isContact={isContact} email={email} />
+                      </TableCell>
                       <TableCell>
                         {orcid && (
                           <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
