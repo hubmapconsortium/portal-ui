@@ -15,8 +15,9 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 
+import { Stack, Typography } from '@mui/material';
 import { useNormalizedContributors } from './hooks';
-import { ContributorAPIResponse } from './utils';
+import { ContributorAPIResponse, sortContributors } from './utils';
 
 interface ContributorsTableProps {
   title: string;
@@ -58,20 +59,24 @@ function ContributorsTable({ title, contributors = [], iconTooltipText }: Contri
               </TableRow>
             </TableHead>
             <TableBody>
-              {normalizedContributors.map(
+              {sortContributors(normalizedContributors).map(
                 ({ orcid, name: displayName, affiliation, isContact, email, isPrincipalInvestigator }) => {
-                  const contactCell =
-                    email && email !== 'N/A' ? (
-                      <EmailIconLink email={encodeURI(email)} iconFontSize="1.1rem">
-                        {email}
-                      </EmailIconLink>
-                    ) : (
-                      <Check color="success" fontSize="1.1rem" />
-                    );
+                  const contactCell = (
+                    <Stack direction="row" alignItems="center" spacing={1}>
+                      <Check color="success" fontSize="1.5rem" />
+                      {email && email !== 'N/A' ? (
+                        <EmailIconLink email={encodeURI(email)} iconFontSize="1.1rem">
+                          {email}
+                        </EmailIconLink>
+                      ) : (
+                        <Typography variant="body2">no email provided</Typography>
+                      )}
+                    </Stack>
+                  );
 
                   return (
                     <TableRow key={orcid} data-testid="contributor-row">
-                      <TableCell>{`${displayName} ${isPrincipalInvestigator ? '(PI)' : ''}`}</TableCell>
+                      <TableCell>{`${displayName}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
                       <TableCell>{affiliation}</TableCell>
                       <TableCell>{isContact && contactCell}</TableCell>
                       <TableCell>

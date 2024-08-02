@@ -83,3 +83,31 @@ export const normalizeContributor = (contributor: ContributorAPIResponse): Contr
   'metadata_schema_id' in contributor
     ? normalizeCEDARContributor(contributor)
     : normalizeLegacyContributor(contributor);
+
+/**
+ * Given an array of contributors, sort them by contact status and then alphabetically by name.
+ *   Ex sorted array: PI Contact C, PI Contact D, Contact, Contributor A, Contributor B
+ * @author Austen Money
+ * @param contributors an array of contributors to be sorted.
+ * @returns a sorted array.
+ */
+export const sortContributors = (contributors: Contributor[]): Contributor[] =>
+  contributors.sort((a, b) => {
+    const aIsPIContact = a.isContact && a.isPrincipalInvestigator;
+    const bIsPIContact = b.isContact && b.isPrincipalInvestigator;
+
+    if (aIsPIContact && !bIsPIContact) {
+      return -1;
+    }
+    if (!aIsPIContact && bIsPIContact) {
+      return 1;
+    }
+    if (a.isContact && !b.isContact) {
+      return -1;
+    }
+    if (!a.isContact && b.isContact) {
+      return 1;
+    }
+
+    return a.name.localeCompare(b.name);
+  });
