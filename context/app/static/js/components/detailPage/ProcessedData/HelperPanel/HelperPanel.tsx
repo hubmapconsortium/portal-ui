@@ -53,7 +53,7 @@ const noWrapStyles = {
   overflow: 'hidden',
   textOverflow: 'ellipsis',
   display: '-webkit-box',
-  WebkitLineClamp: 2,
+  WebkitLineClamp: 3,
   WebkitBoxOrient: 'vertical',
 };
 
@@ -77,7 +77,11 @@ function HelperPanelBody() {
   const [dateLabel, date] = getDateLabelAndValue(currentDataset);
   return (
     <>
-      {currentDataset.title && <HelperPanelBodyItem label="Title">{currentDataset.title}</HelperPanelBodyItem>}
+      {currentDataset.title && (
+        <HelperPanelBodyItem label="Title" noWrap>
+          {currentDataset.title}
+        </HelperPanelBodyItem>
+      )}
       {currentDataset.description && (
         <HelperPanelBodyItem label="Description" noWrap>
           {currentDataset.description}
