@@ -16,7 +16,7 @@ import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import InfoAlert from 'js/shared-styles/alerts/InfoAlert';
+import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import { isValidEmail } from 'js/helpers/functions';
 
 import { useNormalizedContributors } from './hooks';
@@ -68,54 +68,56 @@ function ContributorsTable({ title, contributors = [], iconTooltipText, showInfo
 
   return (
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
-      <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
-      {showInfoAlert && <InfoAlert text={contributorsInfoAlertText} />}
-      <Paper>
-        <StyledTableContainer>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                {columns.map((column) => (
-                  <HeaderCell
-                    key={column.id}
-                    data-testid={`${title.toLowerCase()}-${column.label.toLowerCase()}-header`}
+      <Stack spacing={1}>
+        <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
+        {showInfoAlert && <OutlinedAlert severity="info">{contributorsInfoAlertText}</OutlinedAlert>}
+        <Paper>
+          <StyledTableContainer>
+            <Table stickyHeader>
+              <TableHead>
+                <TableRow>
+                  {columns.map((column) => (
+                    <HeaderCell
+                      key={column.id}
+                      data-testid={`${title.toLowerCase()}-${column.label.toLowerCase()}-header`}
+                    >
+                      {column.label}
+                    </HeaderCell>
+                  ))}
+                  <IconTooltipCell
+                    tooltipTitle="Open Researcher and Contributor ID"
+                    data-testid={`${title.toLowerCase()}-orcid-header`}
                   >
-                    {column.label}
-                  </HeaderCell>
-                ))}
-                <IconTooltipCell
-                  tooltipTitle="Open Researcher and Contributor ID"
-                  data-testid={`${title.toLowerCase()}-orcid-header`}
-                >
-                  ORCID
-                </IconTooltipCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {sortedContributors.map(
-                ({ orcid, name: displayName, affiliation, isContact, email, isPrincipalInvestigator }) => {
-                  return (
-                    <TableRow key={orcid} data-testid="contributor-row">
-                      <TableCell>{`${displayName}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
-                      <TableCell>{affiliation}</TableCell>
-                      <TableCell>
-                        <ContactCell isContact={isContact} email={email} />
-                      </TableCell>
-                      <TableCell>
-                        {orcid && (
-                          <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
-                            {orcid}
-                          </OutboundIconLink>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                },
-              )}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
-      </Paper>
+                    ORCID
+                  </IconTooltipCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {sortedContributors.map(
+                  ({ orcid, name: displayName, affiliation, isContact, email, isPrincipalInvestigator }) => {
+                    return (
+                      <TableRow key={orcid} data-testid="contributor-row">
+                        <TableCell>{`${displayName}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
+                        <TableCell>{affiliation}</TableCell>
+                        <TableCell>
+                          <ContactCell isContact={isContact} email={email} />
+                        </TableCell>
+                        <TableCell>
+                          {orcid && (
+                            <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
+                              {orcid}
+                            </OutboundIconLink>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  },
+                )}
+              </TableBody>
+            </Table>
+          </StyledTableContainer>
+        </Paper>
+      </Stack>
     </DetailPageSection>
   );
 }
