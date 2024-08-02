@@ -34,8 +34,8 @@ function Attribution() {
   const isHiveProcessedDataset = isProcessedDataset && creation_action === 'Central Process';
   const isSupportDataset = entity_type === 'Support';
 
-  const showContactAndAlert = isHiveProcessedDataset ?? isSupportDataset;
-  const showRegisteredBy = !(isProcessedDataset ?? isVisLiftedDataset ?? isHiveProcessedDataset ?? isSupportDataset);
+  const showContactAndAlert = isHiveProcessedDataset || isSupportDataset;
+  const showRegisteredBy = !isProcessedDataset && !isVisLiftedDataset && !isHiveProcessedDataset && !isSupportDataset;
 
   const hiveInfoAlertText = `The data provided by the ${group_name} Group was centrally processed by HuBMAP. The results of this processing are independent of analyses conducted by the data providers or third parties.`;
   const iconTooltipText = showRegisteredBy
@@ -59,7 +59,7 @@ function Attribution() {
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
             {sections.map((props) => (
-              <LabelledSectionText key={props.label} {...props} />
+              <LabelledSectionText key={props.label} iconTooltipText={props.tooltip} {...props} />
             ))}
           </Stack>
         </SummaryPaper>
