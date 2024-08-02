@@ -54,15 +54,6 @@ def details(type, uuid):
         **get_default_flask_data(),
         'entity': entity,
     }
-    marker = request.args.get('marker')
-
-    if type == 'dataset':
-        conf_cells_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(entity, marker=marker)
-        flask_data.update({
-            'vitessce_conf': conf_cells_uuid.vitessce_conf.conf,
-            'has_notebook': conf_cells_uuid.vitessce_conf.cells is not None,
-            'vis_lifted_uuid': conf_cells_uuid.vis_lifted_uuid
-        })
 
     if type == 'publication':
         publication_ancillary_data = client.get_publication_ancillary_json(entity)
@@ -93,7 +84,11 @@ def details_vitessce(type, uuid):
         abort(404)
     client = get_client()
     entity = client.get_entity(uuid)
-    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
+    parent_uuid = request.args.get('parent') or None
+    marker = request.args.get('marker') or None
+    parent = client.get_entity(parent_uuid) if parent_uuid else None
+    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
+        entity, marker=marker, parent=parent).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)
     response.headers.add("Access-Control-Allow-Origin", "*")

@@ -3,7 +3,7 @@ import useSWR from 'swr';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { excludeComponentDatasetsClause, excludeSupportEntitiesClause, getIDsQuery } from 'js/helpers/queries';
+import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries';
 import { Dataset, isDataset } from 'js/components/types';
 import { formatSectionHash, getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
 import { partialMultiFetcher } from 'js/helpers/swr';
@@ -59,8 +59,7 @@ export type ProcessedDatasetTypes = Pick<
 
 type VitessceConf = object | null;
 
-async function fetchVitessceConfMap(uuids: string[]) {
-  const urls = uuids.map((id) => `/browse/dataset/${id}.vitessce.json`);
+async function fetchVitessceConfMap(urls: string[], uuids: string[]) {
   const confs = await partialMultiFetcher<VitessceConf>({ urls });
 
   const confPairs = confs.map((conf, i) => [uuids[i], conf.status === 'fulfilled' ? conf.value : null]);
@@ -69,8 +68,28 @@ async function fetchVitessceConfMap(uuids: string[]) {
   return new Map<string, VitessceConf>(filteredConfs);
 }
 
-function useVitessceConfs({ uuids, shouldFetch = true }: { uuids: string[]; shouldFetch?: boolean }) {
-  return useSWR(shouldFetch ? uuids : null, (u) => fetchVitessceConfMap(u), { fallbackData: new Map() });
+function useVitessceConfs({
+  uuids,
+  shouldFetch = true,
+  parentSettings = {},
+}: {
+  uuids: string[];
+  shouldFetch?: boolean;
+  parentSettings: Record<string, string>;
+}) {
+  const urls = uuids.map((id) => {
+    const base = `/browse/dataset/${id}.vitessce.json`;
+    // Use current URL params to pass marker gene to the Vitessce config.
+    const urlParams = new URLSearchParams(window.location.search);
+    // If one of the descendants is an image pyramid, pass the parent UUID to the Vitessce config.
+    if (parentSettings[id]) {
+      urlParams.set('parent', parentSettings[id]);
+    }
+    return `${base}?${urlParams.toString()}`;
+  });
+  return useSWR(shouldFetch ? [urls, uuids] : null, ([links, ids]) => fetchVitessceConfMap(links, ids), {
+    fallbackData: new Map(),
+  });
 }
 
 function useProcessedDatasets() {
@@ -83,7 +102,7 @@ function useProcessedDatasets() {
     query: {
       bool: {
         // TODO: Futher narrow once we understand EPICs.
-        must: [getIDsQuery(descendant_ids), excludeSupportEntitiesClause, excludeComponentDatasetsClause],
+        must: [getIDsQuery(descendant_ids), excludeComponentDatasetsClause],
       },
     },
     _source: [
@@ -118,7 +137,22 @@ function useProcessedDatasets() {
     shouldFetch,
   });
 
-  const { data: confs, isLoading: isLoadingConfs } = useVitessceConfs({ uuids: descendant_ids, shouldFetch });
+  const parentSettings: Record<string, string> = searchHits.reduce(
+    (acc, hit) => {
+      // @ts-expect-error TODO: Fix this, temporary workaround for image pyramids
+      if (hit._source.entity_type === 'Support') {
+        acc[hit._id] = entity.uuid;
+      }
+      return acc;
+    },
+    {} as Record<string, string>,
+  );
+
+  const { data: confs, isLoading: isLoadingConfs } = useVitessceConfs({
+    uuids: descendant_ids,
+    shouldFetch,
+    parentSettings,
+  });
 
   return { searchHits, confs, isLoading: isLoading || isLoadingConfs };
 }

@@ -64,8 +64,10 @@ function FilesAccordion() {
   const {
     dataset: { files, hubmap_id },
   } = useProcessedDatasetContext();
-  const [openTabIndex, setOpenTabIndex] = useState(0);
   const id = `files-${hubmap_id}`;
+  const hasDataProducts = Boolean(files.filter((file) => file.is_data_product).length);
+  const [openTabIndex, setOpenTabIndex] = useState(0);
+  const fileBrowserIndex = hasDataProducts ? 1 : 0;
   return (
     <Subsection id={id} title="Files" icon={<InsertDriveFileRounded />}>
       <SectionDescription subsection>
@@ -74,13 +76,15 @@ function FilesAccordion() {
         the processed or the primary dataset, navigate to the bulk data transfer section.
       </SectionDescription>
       <Tabs value={openTabIndex} onChange={(_, newValue) => setOpenTabIndex(newValue as number)}>
-        <Tab label="Data Products" index={0} />
-        <Tab label="File Browser" index={1} />
+        {hasDataProducts && <Tab label="Data Products" index={0} />}
+        <Tab label="File Browser" index={fileBrowserIndex} />
       </Tabs>
-      <TabPanel value={openTabIndex} index={0}>
-        <DataProducts files={files} />
-      </TabPanel>
-      <TabPanel value={openTabIndex} index={1}>
+      {hasDataProducts && (
+        <TabPanel value={openTabIndex} index={0}>
+          <DataProducts files={files} />
+        </TabPanel>
+      )}
+      <TabPanel value={openTabIndex} index={fileBrowserIndex}>
         <Files files={files} />
       </TabPanel>
     </Subsection>

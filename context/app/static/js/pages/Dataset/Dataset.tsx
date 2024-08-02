@@ -10,7 +10,6 @@ import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
-import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
@@ -139,9 +138,6 @@ function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
 
 interface EntityDetailProps<T extends Entity> {
   assayMetadata: T;
-  vitData: object | object[];
-  hasNotebook?: boolean;
-  visLiftedUUID: string;
 }
 
 function makeMetadataSectionProps(metadata: Record<string, string>, assay_modality: 'single' | 'multiple') {
@@ -239,7 +235,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
   );
 }
 
-function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProps<Dataset>) {
+function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
     protocol_url,
     metadata,
@@ -286,7 +282,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
   const shouldDisplaySection = {
     summary: true,
     'processed-data': sections,
-    visualization: Boolean(vitData),
     provenance: true,
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
@@ -338,9 +333,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
             mapped_data_access_level={mapped_data_access_level}
           />
         </Summary>
-        {shouldDisplaySection.visualization && (
-          <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
-        )}
         {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
         {shouldDisplaySection.provenance && <ProvSection />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
