@@ -54,7 +54,7 @@ function Attribution() {
   if (showContactAndAlert) {
     sections.push({
       label: 'Contact',
-      text: <ContactUsLink> HuBMAP Help Desk </ContactUsLink>,
+      text: <ContactUsLink>HuBMAP Help Desk</ContactUsLink>,
       tooltip: tooltips.contact,
     });
   } else if (showRegisteredBy) {
