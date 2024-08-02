@@ -127,7 +127,7 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
     <NodeTemplate
       rounded
       target
-      href={formatSectionHash(`#section-${data.name}`)}
+      href={`#${formatSectionHash(`section-${data.name}`)}`}
       icon={nodeIcons.processedDataset}
       bgColor={nodeColors.processedDataset}
       {...data}
@@ -145,7 +145,7 @@ function ComponentDatasetNode({ data }: NodeProps<ComponentDatasetNodeProps>) {
       rounded
       target
       icon={nodeIcons.componentDataset}
-      href={formatSectionHash(`#section-${data.name}`)}
+      href={`#${formatSectionHash(`section-${data.name}`)}`}
       bgColor={nodeColors.componentDataset}
       {...data}
     >
