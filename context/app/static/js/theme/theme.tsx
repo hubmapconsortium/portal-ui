@@ -133,6 +133,7 @@ const theme = createTheme({
     secondaryContainer: {
       main: '#EFEFEF',
       contrastText: '#363636',
+      secondaryContrastText: 'rgb(37, 41, 56, 0.6)',
     },
     primary: {
       main: purple,
