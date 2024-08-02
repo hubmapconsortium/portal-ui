@@ -206,3 +206,19 @@ export function generateCommaList(list: string[]): string {
 export function isWorkspaceAtDatasetLimit(workspace: MergedWorkspace) {
   return workspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
 }
+
+/**
+ * Check if a given email address is valid.
+ * @author Austen Money
+ * @param email the email address to check.
+ * @returns true if the address is valid, false otherwise.
+ */
+export function isValidEmail(email: string) {
+  // validation regex, sourced from HTML living standard: http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#e-mail-state-(type=email)
+  const emailRegex =
+    // eslint-disable-next-line
+    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  const cleanedValue: string = email?.replace(/^\s+|\s+$/g, '');
+  return emailRegex.test(cleanedValue);
+}
