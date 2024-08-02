@@ -35,6 +35,7 @@ interface CaptionColors {
 interface ContainerColors {
   main: string;
   contrastText: string;
+  secondaryContrastText?: string; // used for unselected Tab in Tabs
 }
 
 declare module '@mui/material/styles' {
@@ -127,6 +128,7 @@ const theme = createTheme({
     primaryContainer: {
       main: '#C5C7CF',
       contrastText: '#252938',
+      secondaryContrastText: 'rgb(37, 41, 56, 0.6)',
     },
     secondaryContainer: {
       main: '#EFEFEF',
