@@ -121,11 +121,11 @@ const invalidEmails = [
 ];
 
 test('isValidEmail', () => {
-  validEmails.forEach((pair) => {
-    expect(isValidEmail(pair.input)).toStrictEqual(true);
+  validEmails.forEach((email) => {
+    expect(isValidEmail(email)).toStrictEqual(true);
   });
 
-  invalidEmails.forEach((pair) => {
-    expect(isValidEmail(pair.input)).toStrictEqual(false);
+  invalidEmails.forEach((email) => {
+    expect(isValidEmail(email)).toStrictEqual(false);
   });
 });
