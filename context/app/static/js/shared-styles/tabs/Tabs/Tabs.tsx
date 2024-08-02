@@ -17,6 +17,14 @@ const Tabs = styled((props: TabsProps) => <MUITabs variant="fullWidth" {...props
       backgroundColor: action.activeTab,
       height: spacing(0.5),
     },
+
+    '& .MuiTab-root': {
+      color: primaryContainer.secondaryContrastText,
+    },
+
+    '& .MuiTab-root.Mui-selected': {
+      color: primaryContainer.contrastText,
+    },
   }),
 );
 export default Tabs;
