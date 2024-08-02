@@ -16,6 +16,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import InfoAlert from 'js/shared-styles/alerts/InfoAlert';
+import { isValidEmail } from 'js/helpers/functions';
 
 import { useNormalizedContributors } from './hooks';
 import { ContributorAPIResponse, sortContributors } from './utils';
@@ -71,7 +72,7 @@ function ContributorsTable({ title, contributors = [], iconTooltipText, showInfo
                   const contactCell = (
                     <Stack direction="row" alignItems="center" spacing={1}>
                       <Check color="success" fontSize="1.5rem" />
-                      {email && email !== 'N/A' ? (
+                      {isValidEmail(email) ? (
                         <EmailIconLink email={encodeURI(email)} iconFontSize="1.1rem">
                           {email}
                         </EmailIconLink>

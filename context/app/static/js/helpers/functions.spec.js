@@ -10,6 +10,7 @@ import {
   NOT_CAPITALIZED_WORDS,
   shouldCapitalizeString,
   generateCommaList,
+  isValidEmail,
 } from './functions';
 
 test('isEmptyArrayOrObject', () => {
@@ -84,4 +85,47 @@ test('generateCommaList', () => {
   expect(generateCommaList(['apples', 'bananas', 'oranges', 'grapes'])).toStrictEqual(
     'apples, bananas, oranges, and grapes',
   );
+});
+
+const validEmails = [
+  'username@gmail.com',
+  'u@hotmail.org',
+  '   username@gmail.com',
+  'username@gmail.com        ',
+  ' username@gmail.com ',
+  'username@harvard.edu',
+  'username@harvard.subdomain.edu',
+  '\nusername@harvard.subdomain.edu',
+  '\n\tusername@harvard.subdomain.edu',
+  'username@harvard.subdomain.edu\n',
+  'username@harvard.subdomain.edu\n\t',
+];
+
+const invalidEmails = [
+  '',
+  ' ',
+  'gmail.com',
+  '@gmail.com ',
+  'username',
+  'username@.com',
+  'user name@gmail.com',
+  'username @gmail.com',
+  'username@ gmail.com',
+  'username@gmail .com',
+  'username\t@gmail.com',
+  'username\n@gmail.com',
+  'username@gmail\n.com',
+  'username@gmail.\tcom',
+  'user\nname@gmail.com',
+  'user\tname@gmail.com',
+];
+
+test('isValidEmail', () => {
+  validEmails.forEach((pair) => {
+    expect(isValidEmail(pair.input)).toStrictEqual(true);
+  });
+
+  invalidEmails.forEach((pair) => {
+    expect(isValidEmail(pair.input)).toStrictEqual(false);
+  });
 });
