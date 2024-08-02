@@ -29,8 +29,8 @@ function Attribution() {
   const isHiveProcessedDataset = isProcessedDataset && creation_action === 'Central Process';
   const isSupportDataset = entity_type === 'Support';
 
-  const isProcessedOrVisLiftedDataset = isProcessedDataset || isVisLiftedDataset;
-  const isHiveOrSupportDataset = isHiveProcessedDataset || isSupportDataset;
+  const showContactAndAlert = isHiveProcessedDataset ?? isSupportDataset;
+  const showRegisteredBy = !(isProcessedDataset ?? isVisLiftedDataset ?? isHiveProcessedDataset ?? isSupportDataset);
 
   const tooltips = {
     group: 'This is the group that provided the raw dataset.',
@@ -47,17 +47,17 @@ function Attribution() {
     {
       label: 'Group',
       text: group_name,
-      tooltip: isProcessedOrVisLiftedDataset ?? isHiveOrSupportDataset ? tooltips.group : undefined,
+      tooltip: showRegisteredBy ? undefined : tooltips.group,
     },
   ];
 
-  if (isHiveOrSupportDataset) {
+  if (showContactAndAlert) {
     sections.push({
       label: 'Contact',
       text: <ContactUsLink> HuBMAP Help Desk </ContactUsLink>,
       tooltip: tooltips.contact,
     });
-  } else if (!isProcessedOrVisLiftedDataset) {
+  } else if (showRegisteredBy) {
     sections.push({
       label: 'Registered by',
       text: (
@@ -75,14 +75,12 @@ function Attribution() {
     <DetailPageSection id="attribution">
       <SectionHeader
         iconTooltipText={
-          isProcessedOrVisLiftedDataset ?? isHiveOrSupportDataset
-            ? undefined
-            : `Information about the group registering this ${entity_type?.toLowerCase()}.`
+          showRegisteredBy ? `Information about the group registering this ${entity_type?.toLowerCase()}.` : undefined
         }
       >
         Attribution
       </SectionHeader>
-      {isHiveOrSupportDataset && <InfoAlert text={hiveInfoAlertText} />}
+      {showContactAndAlert && <InfoAlert text={hiveInfoAlertText} />}
       <SummaryPaper>
         <Stack direction="row" spacing={10}>
           {sections.map(({ label, text, tooltip }) => (
