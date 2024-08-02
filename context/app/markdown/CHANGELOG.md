@@ -1,3 +1,9 @@
+## v0.102.4 - 2024-08-02
+
+- Update attribution and contributors sections for processed datasets.
+- Updated the font color for the selected and unselected tabular tabs.
+
+
 ## v0.102.3 - 2024-08-01
 
 - Fix issue of "Launch Workspace" button not appearing in workspace detail pages. 
