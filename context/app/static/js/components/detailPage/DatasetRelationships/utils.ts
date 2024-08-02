@@ -69,9 +69,6 @@ function datasetTypeIsForbidden(datasetType: string) {
   if (datasetType === 'Publication') {
     return true;
   }
-  if (datasetType.includes('[Image Pyramid]')) {
-    return true;
-  }
   return false;
 }
 
