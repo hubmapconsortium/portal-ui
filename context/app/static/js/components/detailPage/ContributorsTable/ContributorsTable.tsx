@@ -6,8 +6,9 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { Check } from '@mui/icons-material';
-import { Stack, Typography } from '@mui/material';
+import Check from '@mui/icons-material/Check';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
