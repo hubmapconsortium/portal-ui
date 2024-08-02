@@ -25,7 +25,7 @@ function Attribution() {
   } = useFlaskDataContext();
 
   const isProcessedDataset = entity_type === 'Dataset' && processing === 'processed';
-  const isVisLiftedDataset = descendants.find((descendant) => descendant.dataset_type === 'Histology [Image Pyramid]');
+  const isVisLiftedDataset = descendants?.find((descendant) => descendant.dataset_type === 'Histology [Image Pyramid]');
   const isHiveProcessedDataset = isProcessedDataset && creation_action === 'Central Process';
   const isSupportDataset = entity_type === 'Support';
 
