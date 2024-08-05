@@ -7,7 +7,7 @@ import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 
 import { TooltipButtonProps, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { CheckIcon, EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/shared-styles/icons';
-import useEntityStore, { savedAlertStatus } from 'js/stores/useEntityStore';
+import useEntityStore, { savedAlertStatus, SummaryViewsType } from 'js/stores/useEntityStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
 import useSavedEntitiesStore, { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
@@ -18,7 +18,6 @@ import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDia
 import { useAppContext } from 'js/components/Contexts';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
-import { SetViewType, SummaryViewsType } from '../EntityHeader/EntityHeader';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -137,7 +136,7 @@ function ViewSelectChip({
 }: {
   view: SummaryViewsType;
   selectedView: SummaryViewsType;
-  setView: SetViewType;
+  setView: (v: SummaryViewsType) => void;
 } & Pick<ButtonProps, 'startIcon'>) {
   const handleClick = useCallback(() => setView(view), [setView, view]);
 
@@ -153,23 +152,41 @@ function ViewSelectChip({
         ...(isSelectedView && { boxShadow: theme.shadows[1] }),
       })}
     >
-      {view}
+      {view} View
     </Button>
   );
 }
 
-function ViewSelectChips({ selectedView, setView }: { selectedView: SummaryViewsType; setView: SetViewType }) {
+const ProcessedDataIcon = sectionIconMap['processed-data'];
+
+function ViewSelectChips({
+  selectedView,
+  setView,
+  isDataset,
+}: {
+  selectedView: SummaryViewsType;
+  setView: (v: SummaryViewsType) => void;
+  isDataset: boolean;
+}) {
   return (
     <>
       <ViewSelectChip
-        startIcon={<UnfoldLessRoundedIcon />}
-        view="narrow"
+        startIcon={<sectionIconMap.summary />}
+        view="summary"
         setView={setView}
         selectedView={selectedView}
       />
+      {isDataset && (
+        <ViewSelectChip
+          startIcon={<ProcessedDataIcon />}
+          view="diagram"
+          setView={setView}
+          selectedView={selectedView}
+        />
+      )}
       <ViewSelectChip
-        startIcon={<sectionIconMap.summary />}
-        view="summary"
+        startIcon={<UnfoldLessRoundedIcon />}
+        view="narrow"
         setView={setView}
         selectedView={selectedView}
       />
@@ -186,9 +203,12 @@ function EntityHeaderActionButtons({
   entity_type,
   view,
   setView,
-}: { showJsonButton: boolean; entityCanBeSaved: boolean; view: SummaryViewsType; setView: SetViewType } & Partial<
-  Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'> & { entity_type: AllEntityTypes }
->) {
+}: {
+  showJsonButton: boolean;
+  entityCanBeSaved: boolean;
+  view: SummaryViewsType;
+  setView: (v: SummaryViewsType) => void;
+} & Partial<Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'> & { entity_type: AllEntityTypes }>) {
   if (!(entity_type && uuid)) {
     return null;
   }
@@ -198,7 +218,7 @@ function EntityHeaderActionButtons({
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      {isDataset && <ViewSelectChips selectedView={view} setView={setView} />}
+      {isDataset && <ViewSelectChips selectedView={view} setView={setView} isDataset={isDataset} />}
       {showJsonButton && <JSONButton entity_type={entity_type} uuid={uuid} />}
       {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
       {showWorkspaceButton && (

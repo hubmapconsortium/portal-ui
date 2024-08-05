@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import Box from '@mui/material/Box';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
@@ -278,7 +279,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
             <>
               <MultiAssayRelationship assay_modality={assay_modality} />
               <DataProducts files={files} />
-              <DatasetRelationships uuid={uuid} processing={processing} />
+              <Box height={400} width="100%">
+                <DatasetRelationships uuid={uuid} processing={processing} />
+              </Box>
             </>
           }
         >

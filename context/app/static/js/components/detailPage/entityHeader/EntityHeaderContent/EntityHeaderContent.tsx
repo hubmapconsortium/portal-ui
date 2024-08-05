@@ -9,7 +9,7 @@ import VisualizationNotebookButton from 'js/components/detailPage/visualization/
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
-import { useEntityStore, type EntityStore } from 'js/stores/useEntityStore';
+import useEntityStore, { type EntityStore, SummaryViewsType } from 'js/stores/useEntityStore';
 import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
 
 import { Entity } from 'js/components/types';
@@ -17,7 +17,6 @@ import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 import EntityHeaderActionButtons from '../EntityHeaderActionButtons';
-import { SetViewType, SummaryViewsType } from '../EntityHeader/EntityHeader';
 
 type EntityTypesWithIcons = Exclude<
   keyof typeof entityIconMap,
@@ -103,7 +102,7 @@ const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
-function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setView: SetViewType }) {
+function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setView: (v: SummaryViewsType) => void }) {
   const {
     assayMetadata,
     summaryComponentObserver: { summaryInView },

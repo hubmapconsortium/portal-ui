@@ -12,8 +12,6 @@ import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/Der
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 
-const entityStoreSelector = (state) => state.setAssayMetadata;
-
 function DonorDetail() {
   const {
     entity: {
@@ -41,7 +39,7 @@ function DonorDetail() {
     attribution: true,
   };
 
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
+  const { setAssayMetadata } = useEntityStore();
   useEffect(() => {
     setAssayMetadata({
       hubmap_id,
