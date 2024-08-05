@@ -25,6 +25,7 @@ function Publication({ publication, vignette_json }) {
     sub_status,
     doi_url,
     contributors = [],
+    contacts = [],
     ancestor_ids,
     publication_venue,
     files,
@@ -85,7 +86,7 @@ function Publication({ publication, vignette_json }) {
         )}
         {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
         {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />}
-        <ContributorsTable contributors={contributors} title="Authors" />
+        <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
         {shouldDisplaySection.provenance && (
           <ProvSection
             uuid={uuid}
