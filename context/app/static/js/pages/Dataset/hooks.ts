@@ -9,6 +9,7 @@ import { formatSectionHash, getSectionFromString } from 'js/shared-styles/sectio
 import { partialMultiFetcher } from 'js/helpers/swr';
 import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/types';
 import { useLayoutEffect } from 'react';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 function useDatasetLabelPrefix() {
   const {
@@ -204,6 +205,7 @@ function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false
 
 function useLazyLoadedHashHandler() {
   const { isLoading } = useProcessedDatasets();
+  const { toastError } = useSnackbarActions();
   useLayoutEffect(() => {
     if (!isLoading && window.location.hash) {
       const { hash } = window.location;
@@ -215,13 +217,22 @@ function useLazyLoadedHashHandler() {
           const element = document.querySelector(decodedHash);
           if (element) {
             element.scrollIntoView();
+          } else {
+            // TODO: May need to be iterated on to provide a better error message.
+            // Sections may be missing due to:
+            // - malformed hash (incorrectly copied link, typo, etc)
+            // - original link pointed to QA-only dataset and the user is not able to view it
+            // - original link pointed to older version of the dataset and the user needs to select it
+            toastError(
+              'Could not find the section you were looking for. The dataset you wish to view may have been updated to a new version.',
+            );
           }
         } catch (e) {
           console.error(e);
         }
       }
     }
-  }, [isLoading]);
+  }, [isLoading, toastError]);
 }
 
 export { useProcessedDatasets, useProcessedDatasetsSections, useLazyLoadedHashHandler };
