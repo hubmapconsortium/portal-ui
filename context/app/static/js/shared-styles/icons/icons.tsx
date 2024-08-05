@@ -9,6 +9,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalanceRounded';
 import LaunchRoundedIcon from '@mui/icons-material/LaunchRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
@@ -129,6 +130,8 @@ const SaveEntityIcon = withIconStyles(BookmarkAddRounded);
 
 const EditSavedEntityIcon = withIconStyles(BookmarkAddedRounded);
 
+const CheckIcon = withIconStyles(CheckRoundedIcon);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -186,4 +189,5 @@ export {
   AnalysisDetailsIcon,
   SaveEntityIcon,
   EditSavedEntityIcon,
+  CheckIcon,
 };

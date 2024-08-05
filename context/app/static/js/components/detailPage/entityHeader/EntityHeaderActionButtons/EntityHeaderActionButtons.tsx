@@ -6,7 +6,7 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 
 import { TooltipButtonProps, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
-import { EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/shared-styles/icons';
+import { CheckIcon, EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/shared-styles/icons';
 import useEntityStore, { savedAlertStatus } from 'js/stores/useEntityStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
@@ -131,7 +131,6 @@ function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { en
 
 function ViewSelectChip({
   startIcon,
-  endIcon,
   view,
   setView,
   selectedView,
@@ -139,18 +138,19 @@ function ViewSelectChip({
   view: SummaryViewsType;
   selectedView: SummaryViewsType;
   setView: SetViewType;
-} & Pick<ButtonProps, 'startIcon' | 'endIcon'>) {
+} & Pick<ButtonProps, 'startIcon'>) {
   const handleClick = useCallback(() => setView(view), [setView, view]);
 
+  const isSelectedView = view === selectedView;
   return (
     <Button
       startIcon={startIcon}
-      endIcon={endIcon}
+      endIcon={isSelectedView ? <CheckIcon color="success" /> : undefined}
       variant="outlined"
       onClick={handleClick}
       sx={(theme) => ({
         borderRadius: theme.spacing(1),
-        ...(view === selectedView && { boxShadow: theme.shadows[1] }),
+        ...(isSelectedView && { boxShadow: theme.shadows[1] }),
       })}
     >
       {view}
