@@ -89,6 +89,7 @@ export interface Dataset extends Entity {
   dbgap_sra_experiment_url: string;
   files: UnprocessedFile[];
   contributors: ContributorAPIResponse[];
+  contacts?: ContributorAPIResponse[];
   sub_status: string;
   protocol_url: string;
   registered_doi: string;
@@ -110,6 +111,7 @@ export interface Support extends Entity {
   origin_samples: Sample[];
   files: UnprocessedFile[];
   contributors: ContributorAPIResponse[];
+  contacts?: ContributorAPIResponse[];
   published_timestamp: number;
   assay_modality: 'single' | 'multiple';
   created_timestamp: number;

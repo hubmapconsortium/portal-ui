@@ -85,16 +85,38 @@ export const normalizeContributor = (contributor: ContributorAPIResponse): Contr
     : normalizeLegacyContributor(contributor);
 
 /**
+ * Given a contributor, determine if they are a contact. Necessary to account
+ *  for different versions of contributors schemas.
+ * @author Austen Money
+ * @param contributor a contributor to be checked.
+ * @returns true if the contributor is a contact, false otherwise.
+ */
+export const contributorIsContact = (contributor: Contributor, contacts: Contributor[]): boolean => {
+  switch (true) {
+    case contributor.isContact:
+      return true;
+    case contacts.find((contact) => contact.orcid === contributor.orcid) !== undefined:
+      return true;
+    default:
+      return false;
+  }
+};
+
+/**
  * Given an array of contributors, sort them by contact status and then alphabetically by name.
  *   Ex sorted array: PI Contact C, PI Contact D, Contact, Contributor A, Contributor B
  * @author Austen Money
  * @param contributors an array of contributors to be sorted.
+ * @param contacts an array of contacts to be used for sorting.
  * @returns a sorted array.
  */
-export const sortContributors = (contributors: Contributor[]): Contributor[] =>
+export const sortContributors = (contributors: Contributor[], contacts: Contributor[]): Contributor[] =>
   contributors.sort((a, b) => {
-    const aIsPIContact = a.isContact && a.isPrincipalInvestigator;
-    const bIsPIContact = b.isContact && b.isPrincipalInvestigator;
+    const aIsContact = contributorIsContact(a, contacts);
+    const bIsContact = contributorIsContact(b, contacts);
+
+    const aIsPIContact = aIsContact && a.isPrincipalInvestigator;
+    const bIsPIContact = bIsContact && b.isPrincipalInvestigator;
 
     if (aIsPIContact && !bIsPIContact) {
       return -1;
@@ -102,10 +124,10 @@ export const sortContributors = (contributors: Contributor[]): Contributor[] =>
     if (!aIsPIContact && bIsPIContact) {
       return 1;
     }
-    if (a.isContact && !b.isContact) {
+    if (aIsContact && !bIsContact) {
       return -1;
     }
-    if (!a.isContact && b.isContact) {
+    if (!aIsContact && bIsContact) {
       return 1;
     }
 

@@ -162,6 +162,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     mapped_data_access_level,
     mapped_external_group_name,
     contributors,
+    contacts,
     is_component,
     assay_modality,
   } = assayMetadata;
@@ -233,7 +234,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
         {shouldDisplaySection.files && <Files files={files} />}
         {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer />}
         {shouldDisplaySection.contributors && (
-          <ContributorsTable contributors={contributors} title="Contributors" showInfoAlert />
+          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
         )}
 
         <Attribution />
@@ -262,6 +263,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     registered_doi,
     doi_url,
     contributors,
+    contacts,
     is_component,
     assay_modality,
   } = assayMetadata;
@@ -359,7 +361,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
         {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && (
-          <ContributorsTable contributors={contributors} title="Contributors" showInfoAlert />
+          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
         )}
         <Attribution />
       </DetailLayout>
