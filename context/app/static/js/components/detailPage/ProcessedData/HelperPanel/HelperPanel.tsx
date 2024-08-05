@@ -6,11 +6,18 @@ import Divider from '@mui/material/Divider';
 import { useIsDesktop } from 'js/hooks/media-queries';
 import SchemaRounded from '@mui/icons-material/SchemaRounded';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
-import { CloudDownloadRounded } from '@mui/icons-material';
+import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 import { useAppContext } from 'js/components/Contexts';
 import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
 import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
 import { animated } from '@react-spring/web';
+import { ListItemIcon, Menu, MenuItem } from '@mui/material';
+import AddRounded from '@mui/icons-material/AddRounded';
+import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
+import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import { useOpenDialog } from 'js/components/workspaces/WorkspacesDropdownMenu/WorkspacesDropdownMenu';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/SelectableTableProvider';
+import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
@@ -94,13 +101,92 @@ function HelperPanelBody() {
   );
 }
 
+function WorkspaceButton() {
+  const currentDataset = useCurrentDataset();
+  const { isWorkspacesUser } = useAppContext();
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const {
+    control,
+    errors,
+    setDialogIsOpen: setOpenCreateWorkspace,
+    dialogIsOpen: createWorkspaceIsOpen,
+    ...rest
+  } = useCreateWorkspaceForm({ defaultName: currentDataset?.hubmap_id });
+
+  const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH');
+
+  if (!isWorkspacesUser || currentDataset?.status !== 'Published') {
+    return null;
+  }
+  // The selectable table provider is used here since a lot of the workspace logic relies on the selected rows
+  return (
+    <SelectableTableProvider tableLabel="Current Dataset" selectedRows={new Set([currentDataset.uuid])}>
+      <HelperPanelButton
+        startIcon={<WorkspacesIcon color="primary" />}
+        onClick={handleClick}
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+      >
+        Workspace
+      </HelperPanelButton>
+      <Menu
+        open={open}
+        onClose={handleClose}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+      >
+        <MenuItem
+          onClick={() => {
+            setOpenCreateWorkspace(true);
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <WorkspacesIcon color="primary" fontSize="1.5rem" />
+          </ListItemIcon>
+          Launch New Workspace
+        </MenuItem>
+        <MenuItem
+          onClick={() => {
+            openEditWorkspaceDialog();
+            handleClose();
+          }}
+        >
+          <ListItemIcon>
+            <AddRounded />
+          </ListItemIcon>
+          Add to Workspace
+        </MenuItem>
+      </Menu>
+      <NewWorkspaceDialog
+        datasetUUIDs={new Set([currentDataset.uuid])}
+        dialogIsOpen={createWorkspaceIsOpen}
+        control={control}
+        errors={errors}
+        {...rest}
+      />
+      <AddDatasetsFromSearchDialog />
+    </SelectableTableProvider>
+  );
+}
+
 function HelperPanelActions() {
   const currentDataset = useCurrentDataset();
-  // TODO: Add workspace actions/dropdown menu
-  const { isWorkspacesUser } = useAppContext();
   return (
     <>
-      {isWorkspacesUser && <HelperPanelButton startIcon={<WorkspacesIcon />}>Workspace</HelperPanelButton>}
+      <WorkspaceButton />
       <HelperPanelButton
         startIcon={<CloudDownloadRounded />}
         href={`#bulk-data-transfer?bulk-data=${currentDataset?.hubmap_id}`}
