@@ -29,6 +29,7 @@ import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert'
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
+import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
 
 interface SummaryDataChildrenProps {
@@ -215,6 +216,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     contributors,
     is_component,
     assay_modality,
+    processing,
   } = assayMetadata;
 
   const isLatest = !('next_revision_uuid' in assayMetadata);
@@ -276,6 +278,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
             <>
               <MultiAssayRelationship assay_modality={assay_modality} />
               <DataProducts files={files} />
+              <DatasetRelationships uuid={uuid} processing={processing} />
             </>
           }
         >
