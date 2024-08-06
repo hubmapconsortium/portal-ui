@@ -39,9 +39,8 @@ export interface CEDARContributor extends ContributorBase {
 
 export type ContributorAPIResponse = V0Contributor | LegacyContributor | CEDARContributor;
 
-export interface v0Contact extends V0Contributor {
-  is_contact: true;
-}
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+export interface V0Contact extends V0Contributor {}
 export interface LegacyContact extends LegacyContributor {
   is_contact: 'TRUE';
 }
@@ -49,7 +48,7 @@ export interface CEDARContact extends CEDARContributor {
   is_contact: 'Yes';
 }
 
-export type ContactAPIResponse = v0Contact | LegacyContact | CEDARContact;
+export type ContactAPIResponse = V0Contact | LegacyContact | CEDARContact;
 
 export interface Contributor {
   affiliation: string;
