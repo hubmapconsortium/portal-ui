@@ -3,13 +3,20 @@ import React, { useMemo } from 'react';
 import { Stack } from '@mui/material';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { ContributorAPIResponse, normalizeContributor } from './utils';
+import { ContributorAPIResponse, ContactAPIResponse, normalizeContributor, normalizeContact } from './utils';
 
 export function useNormalizedContributors(contributors: ContributorAPIResponse[]) {
   const normalizedContributors = useMemo(() => {
     return contributors.map(normalizeContributor);
   }, [contributors]);
   return normalizedContributors;
+}
+
+export function useNormalizedContacts(contacts: ContactAPIResponse[]) {
+  const normalizedContacts = useMemo(() => {
+    return contacts.map(normalizeContact);
+  }, [contacts]);
+  return normalizedContacts;
 }
 
 export function useAttributionSections(

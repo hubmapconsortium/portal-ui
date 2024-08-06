@@ -1,4 +1,4 @@
-import { ContributorAPIResponse } from './detailPage/ContributorsTable/utils';
+import { ContributorAPIResponse, ContactAPIResponse } from './detailPage/ContributorsTable/utils';
 import { UnprocessedFile } from './detailPage/files/types';
 
 export type DonorEntityType = 'Donor';
@@ -89,6 +89,7 @@ export interface Dataset extends Entity {
   dbgap_sra_experiment_url: string;
   files: UnprocessedFile[];
   contributors: ContributorAPIResponse[];
+  contacts?: ContactAPIResponse[];
   sub_status: string;
   protocol_url: string;
   registered_doi: string;
@@ -99,10 +100,14 @@ export interface Dataset extends Entity {
 
 export interface Collection extends Entity {
   entity_type: 'Collection';
+  contributors: ContributorAPIResponse[];
+  contacts?: ContactAPIResponse[];
 }
 
 export interface Publication extends Entity {
   entity_type: 'Publication';
+  contributors: ContributorAPIResponse[];
+  contacts?: ContactAPIResponse[];
 }
 
 export interface Support extends Entity {
@@ -110,6 +115,7 @@ export interface Support extends Entity {
   origin_samples: Sample[];
   files: UnprocessedFile[];
   contributors: ContributorAPIResponse[];
+  contacts?: ContactAPIResponse[];
   published_timestamp: number;
   assay_modality: 'single' | 'multiple';
   created_timestamp: number;

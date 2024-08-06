@@ -19,6 +19,7 @@ function Collection({ collection: collectionData }) {
     last_modified_timestamp,
     datasets,
     creators,
+    contacts,
   } = collectionData;
 
   const doi = new URL(doi_url).pathname.slice(1);
@@ -50,7 +51,9 @@ function Collection({ collection: collectionData }) {
             )}
           </Summary>
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
-          {'creators' in collectionData && <ContributorsTable contributors={creators} title="Contributors" />}
+          {'creators' in collectionData && (
+            <ContributorsTable contributors={creators} contacts={contacts} title="Contributors" />
+          )}
         </>
       )}
     </div>

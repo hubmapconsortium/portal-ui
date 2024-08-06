@@ -19,8 +19,8 @@ import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import { isValidEmail } from 'js/helpers/functions';
 
-import { useNormalizedContributors } from './hooks';
-import { ContributorAPIResponse, sortContributors } from './utils';
+import { useNormalizedContacts, useNormalizedContributors } from './hooks';
+import { ContributorAPIResponse, sortContributors, contributorIsContact, ContactAPIResponse } from './utils';
 
 const contributorsInfoAlertText =
   'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
@@ -52,11 +52,18 @@ function ContactCell({ isContact, email }: ContactCellProps) {
 interface ContributorsTableProps {
   title: string;
   contributors: ContributorAPIResponse[];
+  contacts?: ContactAPIResponse[];
   iconTooltipText?: string;
   showInfoAlert?: boolean;
 }
 
-function ContributorsTable({ title, contributors = [], iconTooltipText, showInfoAlert }: ContributorsTableProps) {
+function ContributorsTable({
+  title,
+  contributors = [],
+  contacts = [],
+  iconTooltipText,
+  showInfoAlert,
+}: ContributorsTableProps) {
   const columns = [
     { id: 'name', label: 'Name' },
     { id: 'affiliation', label: 'Affiliation' },
@@ -64,7 +71,9 @@ function ContributorsTable({ title, contributors = [], iconTooltipText, showInfo
   ];
 
   const normalizedContributors = useNormalizedContributors(contributors);
-  const sortedContributors = sortContributors(normalizedContributors);
+  const normalizedContacts = useNormalizedContacts(contacts);
+
+  const sortedContributors = sortContributors(normalizedContributors, normalizedContacts);
 
   return (
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
@@ -93,26 +102,25 @@ function ContributorsTable({ title, contributors = [], iconTooltipText, showInfo
                 </TableRow>
               </TableHead>
               <TableBody>
-                {sortedContributors.map(
-                  ({ orcid, name: displayName, affiliation, isContact, email, isPrincipalInvestigator }) => {
-                    return (
-                      <TableRow key={orcid} data-testid="contributor-row">
-                        <TableCell>{`${displayName}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
-                        <TableCell>{affiliation}</TableCell>
-                        <TableCell>
-                          <ContactCell isContact={isContact} email={email} />
-                        </TableCell>
-                        <TableCell>
-                          {orcid && (
-                            <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
-                              {orcid}
-                            </OutboundIconLink>
-                          )}
-                        </TableCell>
-                      </TableRow>
-                    );
-                  },
-                )}
+                {sortedContributors.map((contributor) => {
+                  const { affiliation, name, email, isPrincipalInvestigator, orcid } = contributor;
+                  return (
+                    <TableRow key={orcid} data-testid="contributor-row">
+                      <TableCell>{`${name}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
+                      <TableCell>{affiliation}</TableCell>
+                      <TableCell>
+                        <ContactCell isContact={contributorIsContact(contributor, normalizedContacts)} email={email} />
+                      </TableCell>
+                      <TableCell>
+                        {orcid && (
+                          <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
+                            {orcid}
+                          </OutboundIconLink>
+                        )}
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
               </TableBody>
             </Table>
           </StyledTableContainer>
