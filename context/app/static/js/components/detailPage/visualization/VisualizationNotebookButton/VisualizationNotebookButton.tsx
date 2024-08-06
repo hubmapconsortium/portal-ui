@@ -15,7 +15,7 @@ import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { StyledTypography } from '../VisualizationShareButton/style';
-import { StyledSecondaryBackgroundTooltip } from './style';
+import { StyledSecondaryBackgroundTooltip, StyledSvgIcon } from './style';
 
 const tooltip = 'Launch new workspace or download a Jupyter notebook for this visualization.';
 
@@ -43,17 +43,7 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
         <MenuList id="preview-options">
           <MenuItem onClick={() => setDialogIsOpen(true)} disabled={mapped_data_access_level === 'Protected'}>
             <ListItemIcon>
-              <SvgIcon
-                component={WorkspacesIcon}
-                color="primary"
-                sx={{
-                  height: `20px`,
-                  width: `20px`,
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  marginLeft: '.2rem',
-                }}
-              />
+              <StyledSvgIcon component={WorkspacesIcon} color="primary" />
             </ListItemIcon>
             <StyledTypography variant="inherit">Launch New Workspace</StyledTypography>
           </MenuItem>

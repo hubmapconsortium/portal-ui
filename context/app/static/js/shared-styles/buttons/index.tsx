@@ -12,6 +12,7 @@ const whiteBackgroundCSS = {
   backgroundColor: '#fff',
   height: `${iconButtonHeight}px`,
   width: `${iconButtonHeight}px`,
+  border: `1px solid gray`,
   borderRadius: '4px',
   padding: '0px',
 };
@@ -20,15 +21,17 @@ const svgStyles = {
   fontSize: '1.25rem',
 };
 
-const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>({
+const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
   ...whiteBackgroundCSS,
   '& svg': svgStyles,
-});
+  border: `1px solid ${theme.palette.divider}`,
+}));
 
-const WhiteBackgroundBlankDropdownMenuButton = styled(BlankDropdownMenuButton)({
+const WhiteBackgroundBlankDropdownMenuButton = styled(BlankDropdownMenuButton)(({ theme }) => ({
   ...whiteBackgroundCSS,
   '& svg': svgStyles,
-});
+  border: `1px solid ${theme.palette.divider}`,
+}));
 
 const WhiteBackgroundToggleButton = styled(ToggleButton)({
   ...whiteBackgroundCSS,
