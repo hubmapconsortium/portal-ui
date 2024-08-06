@@ -19,7 +19,7 @@ import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import { isValidEmail } from 'js/helpers/functions';
 
-import { useNormalizedContributors } from './hooks';
+import { useNormalizedContacts, useNormalizedContributors } from './hooks';
 import { ContributorAPIResponse, sortContributors, contributorIsContact, ContactAPIResponse } from './utils';
 
 const contributorsInfoAlertText =
@@ -71,7 +71,7 @@ function ContributorsTable({
   ];
 
   const normalizedContributors = useNormalizedContributors(contributors);
-  const normalizedContacts = useNormalizedContributors(contacts);
+  const normalizedContacts = useNormalizedContacts(contacts);
 
   const sortedContributors = sortContributors(normalizedContributors, normalizedContacts);
 

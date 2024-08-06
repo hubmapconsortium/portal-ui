@@ -100,7 +100,7 @@ export const normalizeContact = (contact: ContactAPIResponse): Contact => ({
  * @param contacts an array of contacts to search for the contributor.
  * @returns true if the contributor is a contact, false otherwise.
  */
-export const contributorIsContact = (contributor: Contributor, contacts: Contributor[]): boolean => {
+export const contributorIsContact = (contributor: Contributor, contacts: Contact[]): boolean => {
   switch (true) {
     case contributor.isContact:
       return true;
@@ -119,7 +119,7 @@ export const contributorIsContact = (contributor: Contributor, contacts: Contrib
  * @param contacts an array of contacts to be used for sorting.
  * @returns a sorted array.
  */
-export const sortContributors = (contributors: Contributor[], contacts: Contributor[]): Contributor[] =>
+export const sortContributors = (contributors: Contributor[], contacts: Contact[]): Contributor[] =>
   contributors.sort((a, b) => {
     const aIsContact = contributorIsContact(a, contacts);
     const bIsContact = contributorIsContact(b, contacts);
