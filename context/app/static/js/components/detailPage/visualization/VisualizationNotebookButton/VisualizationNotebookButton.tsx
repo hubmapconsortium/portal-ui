@@ -31,6 +31,20 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
 
+  const downloadNotebook = () => {
+    trackEntityPageEvent({ action: `Vitessce / ${tooltip}` });
+    postAndDownloadFile({
+      url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
+      body: {},
+    })
+      .then(() => {
+        // Do nothing
+      })
+      .catch(() => {
+        toastError('Failed to download Jupyter Notebook');
+      });
+  };
+
   return (
     <>
       <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
@@ -47,21 +61,7 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
             </ListItemIcon>
             <StyledTypography variant="inherit">Launch New Workspace</StyledTypography>
           </MenuItem>
-          <MenuItem
-            onClick={() => {
-              trackEntityPageEvent({ action: `Vitessce / ${tooltip}` });
-              postAndDownloadFile({
-                url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
-                body: {},
-              })
-                .then(() => {
-                  // Do nothing
-                })
-                .catch(() => {
-                  toastError('Failed to download Jupyter Notebook');
-                });
-            }}
-          >
+          <MenuItem onClick={downloadNotebook}>
             <ListItemIcon>
               <Download color="primary" />
             </ListItemIcon>
