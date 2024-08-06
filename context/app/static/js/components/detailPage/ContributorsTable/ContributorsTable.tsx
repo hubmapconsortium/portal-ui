@@ -20,7 +20,7 @@ import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import { isValidEmail } from 'js/helpers/functions';
 
 import { useNormalizedContributors } from './hooks';
-import { ContributorAPIResponse, sortContributors, contributorIsContact } from './utils';
+import { ContributorAPIResponse, sortContributors, contributorIsContact, ContactAPIResponse } from './utils';
 
 const contributorsInfoAlertText =
   'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
@@ -52,7 +52,7 @@ function ContactCell({ isContact, email }: ContactCellProps) {
 interface ContributorsTableProps {
   title: string;
   contributors: ContributorAPIResponse[];
-  contacts?: ContributorAPIResponse[];
+  contacts?: ContactAPIResponse[];
   iconTooltipText?: string;
   showInfoAlert?: boolean;
 }

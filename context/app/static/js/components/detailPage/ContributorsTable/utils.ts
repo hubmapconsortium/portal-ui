@@ -3,12 +3,21 @@ type LegacyBoolean = 'TRUE' | 'FALSE';
 // CEDAR contributors use Yes / No
 type CEDARBoolean = 'Yes' | 'No';
 
-export interface LegacyContributor {
+interface ContributorBase {
   affiliation: string;
   first_name: string;
-  is_contact: LegacyBoolean;
   last_name: string;
   middle_name_or_initial: string;
+}
+
+export interface V0Contributor extends ContributorBase {
+  name: string;
+  orcid_id: string;
+  version: '0';
+}
+
+export interface LegacyContributor extends ContributorBase {
+  is_contact: LegacyBoolean;
   name: string;
   orcid_id: string;
   version: '1';
@@ -18,22 +27,29 @@ type V2SchemaId = '94dae6f8-0756-4ab0-a47b-138e446a9501';
 // Add future CEDAR schema IDs here as needed
 type CEDARSchemaID = V2SchemaId;
 
-export interface CEDARContributor {
-  affiliation: string;
+export interface CEDARContributor extends ContributorBase {
   display_name: string;
   email: string;
-  first_name: string;
+  orcid: string;
   is_contact: CEDARBoolean;
   is_operator: CEDARBoolean;
   is_principal_investigator: CEDARBoolean;
-  last_name: string;
   metadata_schema_id: CEDARSchemaID;
-  middle_name_or_initial: string;
-  orcid: string;
 }
 
-export type ContributorAPIResponse = LegacyContributor | CEDARContributor;
-export type ContactAPIResponse = ContributorAPIResponse & { is_contact: 'Yes' | 'TRUE' };
+export type ContributorAPIResponse = V0Contributor | LegacyContributor | CEDARContributor;
+
+export interface v0Contact extends V0Contributor {
+  is_contact: true;
+}
+export interface LegacyContact extends LegacyContributor {
+  is_contact: 'TRUE';
+}
+export interface CEDARContact extends CEDARContributor {
+  is_contact: 'Yes';
+}
+
+export type ContactAPIResponse = v0Contact | LegacyContact | CEDARContact;
 
 export interface Contributor {
   affiliation: string;
@@ -48,42 +64,31 @@ export interface Contributor {
   orcid: string;
 }
 
+export interface Contact extends Contributor {
+  isContact: true;
+}
+
 const humanBooleanToBoolean = (humanBoolean: LegacyBoolean | CEDARBoolean): boolean =>
   humanBoolean === 'TRUE' || humanBoolean === 'Yes';
 
-const normalizeLegacyContributor = (contributor: LegacyContributor): Contributor => ({
+export const normalizeContributor = (contributor: ContributorAPIResponse): Contributor => ({
   affiliation: contributor.affiliation,
-  name: contributor.name,
-  email: 'N/A',
+  name: 'name' in contributor ? contributor.name : contributor.display_name,
+  email: 'email' in contributor ? contributor.email : 'N/A',
   firstName: contributor.first_name,
-  isContact: humanBooleanToBoolean(contributor.is_contact),
-  isOperator: false,
-  isPrincipalInvestigator: false,
+  isContact: 'is_contact' in contributor ? humanBooleanToBoolean(contributor.is_contact) : false,
+  isOperator: 'is_operator' in contributor ? humanBooleanToBoolean(contributor.is_operator) : false,
+  isPrincipalInvestigator:
+    'is_principal_investigator' in contributor ? humanBooleanToBoolean(contributor.is_principal_investigator) : false,
   lastName: contributor.last_name,
   middleNameOrInitial: contributor.middle_name_or_initial,
-  orcid: contributor.orcid_id,
+  orcid: 'orcid' in contributor ? contributor.orcid : contributor.orcid_id,
 });
 
-const normalizeCEDARContributor = (contributor: CEDARContributor): Contributor => {
-  // In the future, if more iterations are made on the contributor version, add handling based on the schema ID here.
-  return {
-    affiliation: contributor.affiliation,
-    name: contributor.display_name,
-    email: contributor.email,
-    firstName: contributor.first_name,
-    isContact: humanBooleanToBoolean(contributor.is_contact),
-    isOperator: humanBooleanToBoolean(contributor.is_operator),
-    isPrincipalInvestigator: humanBooleanToBoolean(contributor.is_principal_investigator),
-    lastName: contributor.last_name,
-    middleNameOrInitial: contributor.middle_name_or_initial,
-    orcid: contributor.orcid,
-  };
-};
-
-export const normalizeContributor = (contributor: ContributorAPIResponse): Contributor =>
-  'metadata_schema_id' in contributor
-    ? normalizeCEDARContributor(contributor)
-    : normalizeLegacyContributor(contributor);
+export const normalizeContact = (contact: ContactAPIResponse): Contact => ({
+  ...normalizeContributor(contact),
+  isContact: true,
+});
 
 /**
  * Given a contributor, determine if they are a contact. Necessary to account
