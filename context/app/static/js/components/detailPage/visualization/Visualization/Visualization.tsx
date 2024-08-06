@@ -42,6 +42,8 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 interface VisualizationProps {
   vitData: object | object[];
   uuid: string;
+  hubmap_id?: string;
+  mapped_data_access_level?: string;
   hasNotebook: boolean;
   shouldDisplayHeader: boolean;
   shouldMountVitessce?: boolean;
@@ -51,6 +53,8 @@ interface VisualizationProps {
 function Visualization({
   vitData,
   uuid,
+  hubmap_id,
+  mapped_data_access_level,
   hasNotebook,
   shouldDisplayHeader,
   shouldMountVitessce = true,
@@ -117,7 +121,13 @@ function Visualization({
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
             <Stack direction="row">
-              {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
+              {hasNotebook && (
+                <VisualizationNotebookButton
+                  uuid={uuid}
+                  hubmap_id={hubmap_id}
+                  mapped_data_access_level={mapped_data_access_level}
+                />
+              )}
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">

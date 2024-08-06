@@ -12,51 +12,54 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import MenuItem from '@mui/material/MenuItem';
 import Download from '@mui/icons-material/Download';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
+import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
+import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { StyledTypography } from '../VisualizationShareButton/style';
 import { StyledSecondaryBackgroundTooltip } from './style';
 
-const title = 'Download Jupyter Notebook';
+const tooltip = 'Launch new workspace or download a Jupyter notebook for this visualization.';
 
 interface VisualizationNotebookButtonProps {
   uuid: string;
+  hubmap_id: string;
+  mapped_data_access_level: string;
 }
 
-function VisualizationNotebookButton({ uuid }: VisualizationNotebookButtonProps) {
+function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level }: VisualizationNotebookButtonProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const { toastError } = useSnackbarActions();
 
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
+
   return (
     <>
-      <StyledSecondaryBackgroundTooltip title={title}>
+      <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+      <StyledSecondaryBackgroundTooltip title={tooltip}>
         <WhiteBackgroundBlankDropdownMenuButton menuID="id">
           <SvgIcon component={WorkspacesIcon} />
         </WhiteBackgroundBlankDropdownMenuButton>
       </StyledSecondaryBackgroundTooltip>
       <DropdownMenu id="id">
         <MenuList id="preview-options">
-          <MenuItem
-            onClick={() => {
-              trackEntityPageEvent({ action: `Vitessce / ${title}` });
-              postAndDownloadFile({
-                url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
-                body: {},
-              })
-                .then(() => {
-                  // Do nothing
-                })
-                .catch(() => {
-                  toastError('Failed to download Jupyter Notebook');
-                });
-            }}
-          >
+          <MenuItem onClick={() => setDialogIsOpen(true)} disabled={mapped_data_access_level === 'Protected'}>
             <ListItemIcon>
-              <SvgIcon component={WorkspacesIcon} color="primary" sx={{ height: `20px`, width: `20px` }} />
+              <SvgIcon
+                component={WorkspacesIcon}
+                color="primary"
+                sx={{
+                  height: `20px`,
+                  width: `20px`,
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  marginLeft: '.2rem',
+                }}
+              />
             </ListItemIcon>
             <StyledTypography variant="inherit">Launch New Workspace</StyledTypography>
           </MenuItem>
           <MenuItem
             onClick={() => {
-              trackEntityPageEvent({ action: `Vitessce / ${title}` });
+              trackEntityPageEvent({ action: `Vitessce / ${tooltip}` });
               postAndDownloadFile({
                 url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
                 body: {},
