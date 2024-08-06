@@ -1,37 +1,35 @@
 import React from 'react';
+import Stack, { StackProps } from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import Citation from 'js/components/detailPage/Citation';
-import Typography from '@mui/material/Typography';
-import Stack, { StackProps } from '@mui/material/Stack';
-import { StyledCreationDate, StyledModificationDate } from './style';
+import { Entity, isCollection } from 'js/components/types';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import { useEntityStore } from 'js/stores';
+import { StyledCreationDate } from './style';
 
-interface SummaryBodyProps extends Pick<StackProps, 'direction'> {
-  description?: string;
-  collectionName?: string;
-  created_timestamp: number;
-  published_timestamp?: number;
-  last_modified_timestamp: number;
-  contributors?: { last_name: string; first_name: string }[];
-  citationTitle?: string;
-  doi_url?: string;
-  doi?: string;
-}
+function CollectionName() {
+  const { entity } = useFlaskDataContext();
 
-function CollectionName({ collectionName }: Pick<SummaryBodyProps, 'collectionName'>) {
-  if (!collectionName) {
+  if (!isCollection(entity)) {
+    return null;
+  }
+  const { title } = entity;
+
+  if (!title) {
     return null;
   }
 
   return (
     <Typography variant="h6" component="h3" mb={0.5}>
-      {collectionName}
+      {title}
     </Typography>
   );
 }
 
-function Description({ description }: Pick<SummaryBodyProps, 'description'>) {
+function Description({ description }: Pick<Entity, 'description'>) {
   if (!description) {
     return null;
   }
@@ -43,14 +41,19 @@ function Description({ description }: Pick<SummaryBodyProps, 'description'>) {
   );
 }
 
-function DOICitation({
-  doi,
-  contributors,
-  doi_url,
-  citationTitle,
-  created_timestamp,
-}: Pick<SummaryBodyProps, 'doi_url' | 'doi' | 'contributors' | 'citationTitle' | 'created_timestamp'>) {
-  if (!doi || !doi_url || !contributors || !citationTitle || !created_timestamp) {
+function DOICitation() {
+  const { entity } = useFlaskDataContext();
+  const {
+    assayMetadata: { doi },
+  } = useEntityStore();
+
+  if (!isCollection(entity)) {
+    return null;
+  }
+
+  const { doi_url, contributors, created_timestamp, title } = entity;
+
+  if (!doi || !doi_url || !contributors || !title || !created_timestamp) {
     return null;
   }
   return (
@@ -58,43 +61,45 @@ function DOICitation({
       doi={doi}
       doi_url={doi_url}
       contributors={contributors}
-      citationTitle={citationTitle}
+      citationTitle={title}
       created_timestamp={created_timestamp}
     />
   );
 }
 
-function SummaryBody({
-  description,
-  collectionName,
-  created_timestamp,
-  published_timestamp,
-  last_modified_timestamp,
-  contributors = [],
-  citationTitle,
-  doi_url,
-  doi,
+function SummaryBodyContent({
   direction = 'column',
-}: SummaryBodyProps) {
+  published_timestamp,
+  created_timestamp,
+  description,
+}: Pick<StackProps, 'direction'> & Pick<Entity, 'description' | 'created_timestamp' | 'published_timestamp'>) {
   const creationLabel = published_timestamp ? 'Publication Date' : 'Creation Date';
   const creationTimestamp = published_timestamp ?? created_timestamp;
+
   return (
     <Stack component={SummaryPaper} direction={direction}>
-      <CollectionName collectionName={collectionName} />
+      <CollectionName />
       <Description description={description} />
-      <DOICitation
-        contributors={contributors}
-        citationTitle={citationTitle}
-        created_timestamp={created_timestamp}
-        doi_url={doi_url}
-        doi={doi}
-      />
-      <Stack direction="row">
-        <StyledCreationDate label={creationLabel} timestamp={creationTimestamp} />
-        <StyledModificationDate label="Last Modified" timestamp={last_modified_timestamp} />
-      </Stack>
+      <DOICitation />
+      <StyledCreationDate label={creationLabel} timestamp={creationTimestamp} />
     </Stack>
   );
 }
 
+function SummaryBody({ direction = 'column' }: Pick<StackProps, 'direction'>) {
+  const { entity } = useFlaskDataContext();
+
+  const { created_timestamp, published_timestamp, description } = entity;
+
+  return (
+    <SummaryBodyContent
+      direction={direction}
+      created_timestamp={created_timestamp}
+      published_timestamp={published_timestamp}
+      description={description}
+    />
+  );
+}
+
+export { SummaryBodyContent };
 export default SummaryBody;

@@ -5,35 +5,23 @@ import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 
 interface SummaryProps extends PropsWithChildren {
-  published_timestamp?: number;
   status: string;
   mapped_data_access_level: string;
   entityTypeDisplay?: string;
-  contributors?: { last_name: string; first_name: string }[];
-  citationTitle?: string;
-  doi_url?: string;
-  doi?: string;
-  collectionName?: string;
   mapped_external_group_name?: string;
   bottomFold?: React.ReactNode;
 }
 
 function Summary({
-  published_timestamp,
   status,
-  children,
   mapped_data_access_level,
-  entityTypeDisplay,
-  contributors,
-  citationTitle,
-  doi_url,
-  doi,
-  collectionName,
   mapped_external_group_name,
+  entityTypeDisplay,
+  children,
   bottomFold,
 }: SummaryProps) {
   const {
-    entity: { uuid, hubmap_id, entity_type, created_timestamp, last_modified_timestamp, description },
+    entity: { uuid, hubmap_id, entity_type },
   } = useFlaskDataContext();
 
   return (
@@ -49,17 +37,7 @@ function Summary({
       >
         {children}
       </SummaryData>
-      <SummaryBody
-        description={description}
-        contributors={contributors}
-        citationTitle={citationTitle}
-        last_modified_timestamp={last_modified_timestamp}
-        created_timestamp={created_timestamp}
-        published_timestamp={published_timestamp}
-        doi_url={doi_url}
-        doi={doi}
-        collectionName={collectionName}
-      />
+      <SummaryBody />
       {bottomFold}
     </DetailPageSection>
   );

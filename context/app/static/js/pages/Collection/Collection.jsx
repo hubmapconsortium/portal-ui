@@ -13,7 +13,6 @@ function Collection({ collection: collectionData }) {
     entity_type,
     hubmap_id,
     doi_url,
-    title,
     description,
     created_timestamp,
     last_modified_timestamp,
@@ -34,12 +33,10 @@ function Collection({ collection: collectionData }) {
             uuid={uuid}
             entity_type={entity_type}
             title={hubmap_id}
-            collectionName={title}
             description={description}
             created_timestamp={created_timestamp}
             last_modified_timestamp={last_modified_timestamp}
             contributors={creators}
-            citationTitle={title}
             doi_url={doi_url}
             doi={doi}
           >

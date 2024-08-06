@@ -30,6 +30,8 @@ export interface Entity {
   uuid: string;
   hubmap_id: string;
   last_modified_timestamp: number;
+  contacts: ContributorAPIResponse & { is_contact: true }[];
+  contributors: ContributorAPIResponse[];
   created_timestamp: number;
   ancestors: Entity[];
   // eslint-disable-next-line no-use-before-define -- Donor is defined later in the file and extends Entity
@@ -88,34 +90,37 @@ export interface Dataset extends Entity {
   dbgap_study_url: string;
   dbgap_sra_experiment_url: string;
   files: UnprocessedFile[];
-  contributors: ContributorAPIResponse[];
   sub_status: string;
   protocol_url: string;
   registered_doi: string;
-  doi_url: string;
+  doi_url?: string;
   published_timestamp: number;
   mapped_external_group_name?: string;
 }
 
 export interface Collection extends Entity {
   entity_type: 'Collection';
+  doi_url: string;
+  title: string;
 }
 
 export interface Publication extends Entity {
   entity_type: 'Publication';
+  doi_url: string;
 }
 
 export interface Support extends Entity {
   entity_type: 'Support';
   origin_samples: Sample[];
   files: UnprocessedFile[];
-  contributors: ContributorAPIResponse[];
   published_timestamp: number;
   assay_modality: 'single' | 'multiple';
   created_timestamp: number;
   last_modified_timestamp: number;
   mapped_data_types: string[];
 }
+
+export type AllEntities = Dataset | Donor | Sample | Collection | Publication | Support;
 
 export type EntityWithType = Partial<Entity> & Required<Pick<Entity, 'entity_type'>>;
 

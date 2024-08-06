@@ -38,6 +38,14 @@ export interface AssayMetadata extends Pick<Entity, 'mapped_data_access_level'> 
   name: string;
   reference_link: React.ReactNode;
   uuid: string;
+  published_timestamp?: number;
+  contributors?: { last_name: string; first_name: string }[];
+  citationTitle?: string;
+  doi_url?: string;
+  doi?: string;
+  collectionName?: string;
+  description?: string;
+  created_timestamp: number;
 }
 
 type EntityToFieldsType = Record<

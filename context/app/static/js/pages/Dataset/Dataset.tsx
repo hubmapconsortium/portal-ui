@@ -156,8 +156,9 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
       hubmap_id,
       entity_type,
       mapped_data_types,
+      published_timestamp,
     });
-  }, [entity_type, hubmap_id, mapped_data_types, uuid, setAssayMetadata]);
+  }, [entity_type, hubmap_id, mapped_data_types, uuid, published_timestamp, setAssayMetadata]);
 
   const datasetLabel = useDatasetLabel();
 
@@ -170,7 +171,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
       <DetailLayout sections={shouldDisplaySection}>
         <Summary
           entityTypeDisplay={datasetLabel}
-          published_timestamp={published_timestamp}
           status={status}
           mapped_data_access_level={mapped_data_access_level}
           bottomFold={
@@ -255,8 +255,25 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
   const setAssayMetadata = useEntityStore(entityStoreSelector);
 
   useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ, uuid, mapped_data_access_level });
-  }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, uuid, mapped_data_access_level, setAssayMetadata]);
+    setAssayMetadata({
+      hubmap_id,
+      entity_type,
+      mapped_data_types,
+      mapped_organ,
+      uuid,
+      mapped_data_access_level,
+      published_timestamp,
+    });
+  }, [
+    entity_type,
+    hubmap_id,
+    mapped_data_types,
+    mapped_organ,
+    uuid,
+    mapped_data_access_level,
+    published_timestamp,
+    setAssayMetadata,
+  ]);
 
   const datasetLabel = useDatasetLabel();
 
@@ -271,7 +288,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
       <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
         <Summary
           entityTypeDisplay={datasetLabel}
-          published_timestamp={published_timestamp}
           status={combinedStatus}
           mapped_data_access_level={mapped_data_access_level}
           mapped_external_group_name={mapped_external_group_name}

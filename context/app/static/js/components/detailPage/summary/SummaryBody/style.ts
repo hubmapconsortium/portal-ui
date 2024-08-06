@@ -6,8 +6,4 @@ const StyledCreationDate = styled(LabelledSectionDate)({
   flexGrow: 1,
 });
 
-const StyledModificationDate = styled(LabelledSectionDate)({
-  flexGrow: 3,
-});
-
-export { StyledCreationDate, StyledModificationDate };
+export { StyledCreationDate };
