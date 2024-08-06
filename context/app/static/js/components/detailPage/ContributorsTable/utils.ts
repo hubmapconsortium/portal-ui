@@ -33,6 +33,7 @@ export interface CEDARContributor {
 }
 
 export type ContributorAPIResponse = LegacyContributor | CEDARContributor;
+export type ContactAPIResponse = ContributorAPIResponse & { is_contact: 'Yes' | 'TRUE' };
 
 export interface Contributor {
   affiliation: string;
@@ -86,9 +87,12 @@ export const normalizeContributor = (contributor: ContributorAPIResponse): Contr
 
 /**
  * Given a contributor, determine if they are a contact. Necessary to account
- *  for different versions of contributors schemas.
+ * for different versions of contributors schemas - some versions include the
+ * isContact field in contributors, and some have a separate contacts array that
+ * must be checked.
  * @author Austen Money
  * @param contributor a contributor to be checked.
+ * @param contacts an array of contacts to search for the contributor.
  * @returns true if the contributor is a contact, false otherwise.
  */
 export const contributorIsContact = (contributor: Contributor, contacts: Contributor[]): boolean => {

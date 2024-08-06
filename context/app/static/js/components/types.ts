@@ -100,10 +100,14 @@ export interface Dataset extends Entity {
 
 export interface Collection extends Entity {
   entity_type: 'Collection';
+  contributors: ContributorAPIResponse[];
+  contacts?: ContributorAPIResponse[];
 }
 
 export interface Publication extends Entity {
   entity_type: 'Publication';
+  contributors: ContributorAPIResponse[];
+  contacts?: ContributorAPIResponse[];
 }
 
 export interface Support extends Entity {

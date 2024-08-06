@@ -25,7 +25,7 @@ function Publication({ publication, vignette_json }) {
     sub_status,
     doi_url,
     contributors = [],
-    contacts = [],
+    contacts,
     ancestor_ids,
     publication_venue,
     files,
