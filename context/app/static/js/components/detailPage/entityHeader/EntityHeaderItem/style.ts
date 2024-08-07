@@ -3,8 +3,6 @@ import Divider from '@mui/material/Divider';
 
 const VerticalDivider = styled(Divider)(({ theme }) => ({
   margin: theme.spacing(0, 2),
-  height: '100%',
-  alignSelf: 'center',
 }));
 
 export { VerticalDivider };
