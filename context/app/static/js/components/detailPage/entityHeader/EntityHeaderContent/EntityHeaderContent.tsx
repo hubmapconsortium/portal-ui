@@ -124,7 +124,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
   const styles = useSpring({
     from: { opacity: 1 },
     to: {
-      opacity: !summaryInView ? 1 : 0,
+      opacity: !summaryInView || view !== 'narrow' ? 1 : 0,
     },
   });
 
