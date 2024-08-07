@@ -45,7 +45,6 @@ function PublicationSummary({
         title={title}
         entity_type={entity_type}
         entityTypeDisplay={isPublished ? 'Publication' : 'Preprint'}
-        uuid={uuid}
         status={status}
         mapped_data_access_level={mapped_data_access_level}
         mapped_external_group_name={mapped_external_group_name}

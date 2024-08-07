@@ -21,7 +21,6 @@ const lorem =
   'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.';
 
 const sharedArgs = {
-  uuid: 'fakeuuid',
   title: 'DOI123',
   status: 'QA',
   mapped_data_access_level: 'Public',

@@ -9,7 +9,6 @@ import SummaryData from './SummaryData';
 interface TemplateArgs {
   entity_type: ESEntityType;
   title: string;
-  uuid: string;
   status: string;
   mapped_data_access_level: string;
 }
@@ -17,7 +16,6 @@ interface TemplateArgs {
 const sharedArgs: TemplateArgs = {
   title: 'DOI123',
   entity_type: 'Sample',
-  uuid: 'fakeuuid',
   status: 'QA',
   mapped_data_access_level: 'Public',
 };

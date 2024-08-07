@@ -55,7 +55,6 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           title={workspace.name}
           entity_type="Workspace"
           entityTypeDisplay={undefined}
-          uuid=""
           status=""
           mapped_data_access_level=""
           otherButtons={

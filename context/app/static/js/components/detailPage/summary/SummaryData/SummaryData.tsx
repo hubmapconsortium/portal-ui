@@ -2,7 +2,6 @@ import React, { PropsWithChildren } from 'react';
 
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
@@ -16,7 +15,6 @@ const entitiesWithStatus = datasetEntityTypes.concat(...publicationEntityTypes);
 interface SummaryDataProps extends PropsWithChildren {
   entity_type: AllEntityTypes;
   entityTypeDisplay?: string;
-  uuid: string;
   status: string;
   mapped_data_access_level: string;
   title?: string;
@@ -27,7 +25,6 @@ interface SummaryDataProps extends PropsWithChildren {
 function SummaryData({
   entity_type,
   entityTypeDisplay,
-  uuid,
   status,
   mapped_data_access_level,
   title,
@@ -59,12 +56,15 @@ function SummaryData({
           <FlexEnd>
             {entitiesWithStatus.includes(entity_type) && (
               <>
-                <SummaryItem statusIcon={<StatusIcon status={status} />}>{status}</SummaryItem>
-                <SummaryItem>{`${mapped_data_access_level} Access`}</SummaryItem>
+                <SummaryItem
+                  showDivider={Boolean(mapped_external_group_name)}
+                  statusIcon={<StatusIcon status={status} />}
+                >
+                  {status} ({mapped_data_access_level})
+                </SummaryItem>
                 {mapped_external_group_name && <SummaryItem>{mapped_external_group_name}</SummaryItem>}
               </>
             )}
-            <FlexEnd>{datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}</FlexEnd>
             {otherButtons}
           </FlexEnd>
         }

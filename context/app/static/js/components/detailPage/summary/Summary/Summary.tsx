@@ -21,7 +21,7 @@ function Summary({
   bottomFold,
 }: SummaryProps) {
   const {
-    entity: { uuid, hubmap_id, entity_type },
+    entity: { hubmap_id, entity_type },
   } = useFlaskDataContext();
 
   return (
@@ -30,7 +30,6 @@ function Summary({
         title={hubmap_id}
         entityTypeDisplay={entityTypeDisplay}
         entity_type={entity_type}
-        uuid={uuid}
         status={status ?? 'Missing status'}
         mapped_data_access_level={mapped_data_access_level ?? 'Missing access level'}
         mapped_external_group_name={mapped_external_group_name}
