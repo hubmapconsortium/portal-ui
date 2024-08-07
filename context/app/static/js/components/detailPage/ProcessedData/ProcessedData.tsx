@@ -28,12 +28,7 @@ function ProcessedDataSection() {
         primary data submitted by the original group.
       </SectionDescription>
       {sortedSearchHits.map((dataset) => (
-        <ProcessedDataset
-          dataset={dataset._source}
-          conf={processedDatasets.confs.get(dataset._id)!}
-          key={dataset._id}
-          isLoading={processedDatasets.isLoading}
-        />
+        <ProcessedDataset sectionDataset={dataset._source} key={dataset._id} isLoading={processedDatasets.isLoading} />
       ))}
       <HelperPanel />
     </DetailPageSection>

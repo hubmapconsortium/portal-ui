@@ -12,25 +12,29 @@ import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 
 const iconPlaceholder = <Skeleton variant="circular" width={24} height={24} animation="pulse" />;
 
+function LoadingFallback() {
+  return <Skeleton variant="rectangular" height={200} />;
+}
+
 export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
-  const { defaultExpanded, dataset, conf, isLoading } = useProcessedDatasetContext();
+  const { defaultExpanded, dataset, sectionDataset, conf, isLoading } = useProcessedDatasetContext();
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
   return (
     <ProcessedDatasetSectionAccordion
       defaultExpanded={defaultExpanded}
-      id={formatSectionHash(`section-${dataset.hubmap_id}`)}
+      id={formatSectionHash(`section-${sectionDataset.hubmap_id}`)}
     >
       <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
         {isLoading ? iconPlaceholder : visualizationIcon}
         <Typography variant="subtitle1" color="inherit" component="h4">
-          {dataset.pipeline}
+          {sectionDataset.pipeline}
         </Typography>
         <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
-          <StatusIcon status={dataset.status} noColor sx={{ fontSize: 16 }} />
-          {dataset.hubmap_id}
+          <StatusIcon status={sectionDataset.status} noColor sx={{ fontSize: 16 }} />
+          {dataset?.hubmap_id}
         </Typography>
       </AccordionSummary>
-      <AccordionDetails>{children}</AccordionDetails>
+      {dataset && !isLoading ? <AccordionDetails>{children}</AccordionDetails> : <LoadingFallback />}
     </ProcessedDatasetSectionAccordion>
   );
 }

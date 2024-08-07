@@ -8,24 +8,35 @@ import SummarizeRounded from '@mui/icons-material/SummarizeRounded';
 import InsertDriveFileRounded from '@mui/icons-material/InsertDriveFileRounded';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useInView } from 'react-intersection-observer';
+import { useVitessceConf } from 'js/pages/Dataset/hooks';
+import { isSupport } from 'js/components/types';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import Skeleton from '@mui/material/Skeleton';
 import Files from '../../files/Files';
 import DataProducts from '../../files/DataProducts';
 import VisualizationWrapper from '../../visualization/VisualizationWrapper';
 import AnalysisDetails from '../../AnalysisDetails';
 import Protocol from '../../Protocol';
-import { ProcessedDataVisualizationProps } from './types';
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
 import { Subsection } from './Subsection';
 import { SectionDescription } from './SectionDescription';
 import useProcessedDataStore from '../store';
 import { getDateLabelAndValue } from '../../utils';
-import { ProcessedDatasetContextProvider, useProcessedDatasetContext } from './ProcessedDatasetContext';
+import {
+  ProcessedDatasetContextProvider,
+  useProcessedDatasetContext,
+  ProcessedDataVisualizationProps,
+} from './ProcessedDatasetContext';
+import { useSelectedVersionStore } from '../../VersionSelect/SelectedVersionStore';
+import { useProcessedDatasetDetails } from './hooks';
+import { useVersions } from '../../VersionSelect/hooks';
 
 function ProcessedDatasetDescription() {
   const {
     dataset: { description, title },
   } = useProcessedDatasetContext();
+
   if (!description) {
     return <LabelledSectionText label="Title">{title}</LabelledSectionText>;
   }
@@ -93,11 +104,16 @@ function FilesAccordion() {
 
 function VisualizationAccordion() {
   const {
-    dataset: { hubmap_id, uuid },
+    dataset: { uuid },
+    sectionDataset: { hubmap_id },
     conf,
   } = useProcessedDatasetContext();
 
   const hasBeenSeen = useProcessedDataStore((state) => state.hasBeenSeen(hubmap_id));
+
+  if (!conf) {
+    return null;
+  }
 
   return (
     <Subsection id={`visualization-${hubmap_id}`} title="Visualization" icon={<VisualizationIcon />}>
@@ -111,13 +127,18 @@ function VisualizationAccordion() {
 }
 
 function AnalysisDetailsAccordion() {
+  const { dataset } = useProcessedDatasetContext();
+
+  if (!dataset) {
+    return <Skeleton variant="rectangular" height={200} />;
+  }
+
   const {
-    dataset: {
-      hubmap_id,
-      metadata: { dag_provenance_list },
-      protocol_url,
-    },
-  } = useProcessedDatasetContext();
+    hubmap_id,
+    metadata: { dag_provenance_list },
+    protocol_url,
+  } = dataset;
+
   return (
     <Subsection id={`analysis-${hubmap_id}`} title="Analysis Details & Protocols" icon={<FactCheckRounded />}>
       <AnalysisDetails dagListData={dag_provenance_list} />
@@ -126,7 +147,13 @@ function AnalysisDetailsAccordion() {
   );
 }
 
-export default function ProcessedDataset({ conf, dataset, isLoading }: ProcessedDataVisualizationProps) {
+export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisualizationProps) {
+  const selectedDatasetVersionUUID =
+    useSelectedVersionStore((state) => state.selectedVersions.get(sectionDataset.uuid))?.uuid ?? sectionDataset.uuid;
+
+  const { datasetDetails, isLoading } = useProcessedDatasetDetails(selectedDatasetVersionUUID);
+  useVersions(sectionDataset.uuid);
+
   const { setCurrentDataset } = useProcessedDataStore((state) => ({
     setCurrentDataset: state.setCurrentDataset,
   }));
@@ -134,20 +161,27 @@ export default function ProcessedDataset({ conf, dataset, isLoading }: Processed
     threshold: 0.1,
     initialInView: false,
     onChange: (visible) => {
-      if (visible) {
-        setCurrentDataset(dataset);
+      if (visible && datasetDetails) {
+        setCurrentDataset(datasetDetails);
       }
     },
   });
+  const { entity: parent } = useFlaskDataContext();
 
-  const defaultExpanded = dataset?.status === 'Published';
+  const { data: conf, isLoading: loadingVitessceConf } = useVitessceConf(
+    selectedDatasetVersionUUID,
+    datasetDetails && isSupport(datasetDetails) ? parent.uuid : undefined,
+  );
+
+  const defaultExpanded = sectionDataset.status === 'Published';
 
   return (
     <div ref={ref}>
       <ProcessedDatasetContextProvider
         conf={conf}
-        dataset={dataset}
-        isLoading={isLoading}
+        dataset={datasetDetails}
+        sectionDataset={sectionDataset}
+        isLoading={isLoading || loadingVitessceConf}
         defaultExpanded={defaultExpanded}
       >
         <ProcessedDatasetAccordion>

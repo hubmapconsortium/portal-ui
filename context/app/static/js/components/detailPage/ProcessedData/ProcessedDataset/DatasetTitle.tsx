@@ -4,8 +4,10 @@ import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import IconButton from '@mui/material/IconButton';
 import CopyAllRounded from '@mui/icons-material/CopyAllRounded';
+import Box from '@mui/material/Box';
 import StatusIcon from '../../StatusIcon';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
+import VersionSelect from '../../VersionSelect';
 
 export function DatasetTitle() {
   const {
@@ -21,6 +23,9 @@ export function DatasetTitle() {
           <CopyAllRounded color="info" />
         </IconButton>
       </SecondaryBackgroundTooltip>
+      <Box ml="auto">
+        <VersionSelect />
+      </Box>
     </Typography>
   );
 }

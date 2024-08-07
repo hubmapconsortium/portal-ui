@@ -1,4 +1,4 @@
-import { ProcessedDatasetTypes } from 'js/pages/Dataset/hooks';
+import { ProcessedDatasetDetails } from './ProcessedData/ProcessedDataset/hooks';
 
 export function getSectionOrder(
   possibleSections: string[],
@@ -20,7 +20,7 @@ export function getCombinedDatasetStatus({ sub_status, status }: { sub_status?: 
  * @returns [label: string, value: number]
  */
 export function getDateLabelAndValue(
-  dataset: Pick<ProcessedDatasetTypes, 'published_timestamp' | 'created_timestamp' | 'status'>,
+  dataset: Pick<ProcessedDatasetDetails, 'published_timestamp' | 'created_timestamp' | 'status'>,
 ): [string, number] {
   const { published_timestamp, created_timestamp, status } = dataset;
 

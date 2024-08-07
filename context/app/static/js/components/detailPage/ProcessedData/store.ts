@@ -1,18 +1,20 @@
-import { ProcessedDatasetTypes } from 'js/pages/Dataset/hooks';
 import { create } from 'zustand';
+import { ProcessedDatasetDetails } from './ProcessedDataset/hooks';
 
+/**
+ * Store for tracking which datasets have been seen and which dataset is currently being viewed.
+ * The set of seen datasets is used to determine whether the vitessce visualization for that dataset should be displayed.
+ * The current dataset is used to display info in the helper panel.
+ */
 interface ProcessedDataStoreState {
   seenDatasets: Set<string>;
-  currentDataset: ProcessedDatasetTypes | null;
-  datasetOffsets: Map<string, number>;
-  currentDatasetOffset: number;
+  currentDataset: ProcessedDatasetDetails | null;
 }
 
 interface ProcessedDataStoreAction {
   addDataset: (hubmapId: string) => void;
-  setCurrentDataset: (dataset: ProcessedDatasetTypes) => void;
+  setCurrentDataset: (dataset: ProcessedDatasetDetails) => void;
   hasBeenSeen: (hubmapId: string) => boolean;
-  setDatasetOffset: (hubmapId: string, offset: number) => void;
 }
 
 const defaultState = {
@@ -28,12 +30,10 @@ export const useProcessedDataStore = create<ProcessedDataStore>((set, get) => ({
   ...defaultState,
   addDataset: (hubmapId) => set((state) => ({ seenDatasets: new Set([...state.seenDatasets, hubmapId]) })),
   setCurrentDataset: (dataset) => {
-    const { datasetOffsets, addDataset } = get();
+    const { addDataset } = get();
     addDataset(dataset.hubmap_id);
-    set({ currentDataset: dataset, currentDatasetOffset: datasetOffsets.get(dataset.hubmap_id) ?? 0 });
+    set({ currentDataset: dataset });
   },
   hasBeenSeen: (hubmapId) => Boolean(get().seenDatasets.has(hubmapId)),
-  setDatasetOffset: (hubmapId, offset) =>
-    set((state) => ({ datasetOffsets: new Map(state.datasetOffsets.set(hubmapId, offset)) })),
 }));
 export default useProcessedDataStore;

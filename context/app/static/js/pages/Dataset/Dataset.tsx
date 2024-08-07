@@ -37,7 +37,8 @@ import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
-import useDatasetLabel, { useLazyLoadedHashHandler, useProcessedDatasetsSections } from './hooks';
+import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
+import useDatasetLabel, { useLazyLoadedHashHandler, useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
 
 function NotebookButton({ disabled, ...props }: { disabled: boolean } & ButtonProps) {
   return (
@@ -278,6 +279,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const collectionsData = useDatasetsCollections([uuid]);
 
   const { sections, isLoading } = useProcessedDatasetsSections();
+  const { searchHits: processedDatasets } = useProcessedDatasets();
 
   const shouldDisplaySection = {
     summary: true,
@@ -333,7 +335,11 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
             mapped_data_access_level={mapped_data_access_level}
           />
         </Summary>
-        {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
+        {shouldDisplaySection['processed-data'] && (
+          <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
+            <ProcessedDataSection />
+          </SelectedVersionStoreProvider>
+        )}
         {shouldDisplaySection.provenance && <ProvSection />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
         {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
@@ -353,7 +359,11 @@ function DetailPageWrapper({ assayMetadata, ...props }: EntityDetailProps<Entity
   useTrackID({ entity_type, hubmap_id });
 
   if (isDataset(assayMetadata)) {
-    return <DatasetDetail assayMetadata={assayMetadata} {...props} />;
+    return (
+      <SelectedVersionStoreProvider initialVersionUUIDs={assayMetadata.descendant_ids}>
+        <DatasetDetail assayMetadata={assayMetadata} {...props} />;
+      </SelectedVersionStoreProvider>
+    );
   }
   if (isSupport(assayMetadata)) {
     return <SupportDetail assayMetadata={assayMetadata} {...props} />;
