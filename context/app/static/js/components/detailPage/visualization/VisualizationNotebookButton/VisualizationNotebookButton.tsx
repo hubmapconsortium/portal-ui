@@ -23,7 +23,10 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const { toastError } = useSnackbarActions();
 
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
+    defaultName: hubmap_id,
+    defaultTemplate: 'visualization',
+  });
 
   const downloadNotebook = useMemo(() => {
     return () => {
