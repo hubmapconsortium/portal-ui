@@ -1,0 +1,1 @@
+- Fixed view expansion in the visualization section to overflow within the container and not outside it.
