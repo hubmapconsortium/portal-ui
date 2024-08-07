@@ -3,12 +3,12 @@ import IconButton from '@mui/material/IconButton';
 
 import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
 
-interface DropdownMenuButtonProps {
+interface IconDropdownMenuButtonProps {
   children: React.ReactNode;
   menuID: string;
 }
 
-function BlankDropdownMenuButton({ children, menuID, ...rest }: DropdownMenuButtonProps) {
+function IconDropdownMenuButton({ children, menuID, ...rest }: IconDropdownMenuButtonProps) {
   const { menuRef, menuIsOpen, openMenu } = useDropdownMenuStore();
 
   return (
@@ -25,4 +25,4 @@ function BlankDropdownMenuButton({ children, menuID, ...rest }: DropdownMenuButt
   );
 }
 
-export default BlankDropdownMenuButton;
+export default IconDropdownMenuButton;

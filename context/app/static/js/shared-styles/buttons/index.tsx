@@ -4,7 +4,7 @@ import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ToggleButton from '@mui/material/ToggleButton';
 import Button from '@mui/material/Button';
 import { SecondaryBackgroundTooltip } from '../tooltips';
-import BlankDropdownMenuButton from '../dropdowns/BlankDropdownMenuButton';
+import BlankDropdownMenuButton from '../dropdowns/IconDropdownMenuButton';
 
 const iconButtonHeight = 40;
 
