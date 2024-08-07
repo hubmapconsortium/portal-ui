@@ -84,6 +84,7 @@ export interface Dataset extends Entity {
   origin_samples: Sample[];
   origin_samples_unique_mapped_organs: string[];
   mapped_data_types: string[];
+  mapped_consortium: string;
   thumbnail_file?: {
     file_uuid: string;
   };

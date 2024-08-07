@@ -4,8 +4,9 @@ import Typography from '@mui/material/Typography';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Citation from 'js/components/detailPage/Citation';
-import { Entity, isCollection } from 'js/components/types';
+import { Entity, isCollection, isDataset } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useEntityStore } from 'js/stores';
 import { StyledCreationDate } from './style';
@@ -23,7 +24,7 @@ function CollectionName() {
   }
 
   return (
-    <Typography variant="h6" component="h3" mb={0.5}>
+    <Typography variant="h6" component="h3">
       {title}
     </Typography>
   );
@@ -34,14 +35,48 @@ function Description({ description }: Pick<Entity, 'description'>) {
     return null;
   }
 
+  return <LabelledSectionText label="Description">{description}</LabelledSectionText>;
+}
+
+function DatasetCitation() {
+  const { entity } = useFlaskDataContext();
+
+  if (!isDataset(entity)) {
+    return null;
+  }
+
+  const { doi_url, registered_doi } = entity;
+
+  if (!(doi_url && registered_doi)) {
+    return null;
+  }
+
   return (
-    <LabelledSectionText label="Description" bottomSpacing={1}>
-      {description}
+    <LabelledSectionText label="Citation">
+      <OutboundIconLink href={doi_url} variant="h6">
+        doi:{registered_doi}
+      </OutboundIconLink>
     </LabelledSectionText>
   );
 }
 
-function DOICitation() {
+function DatasetConsortium() {
+  const { entity } = useFlaskDataContext();
+
+  if (!isDataset(entity)) {
+    return null;
+  }
+
+  const { mapped_consortium } = entity;
+
+  if (!mapped_consortium) {
+    return null;
+  }
+
+  return <LabelledSectionText label="Consortium">{mapped_consortium}</LabelledSectionText>;
+}
+
+function CollectionCitation() {
   const { entity } = useFlaskDataContext();
   const {
     assayMetadata: { doi },
@@ -78,10 +113,12 @@ function SummaryBodyContent({
   const creationTimestamp = published_timestamp ?? created_timestamp;
 
   return (
-    <Stack component={SummaryPaper} direction={direction} {...stackProps}>
+    <Stack component={SummaryPaper} direction={direction} spacing={1} {...stackProps}>
       <CollectionName />
       <Description description={description} />
-      <DOICitation />
+      <DatasetConsortium />
+      <DatasetCitation />
+      <CollectionCitation />
       <StyledCreationDate label={creationLabel} timestamp={creationTimestamp} />
     </Stack>
   );

@@ -21,7 +21,6 @@ import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
@@ -36,11 +35,9 @@ import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
 interface SummaryDataChildrenProps {
   mapped_data_types: string[];
   mapped_organ: string;
-  doi_url?: string;
-  registered_doi?: string;
 }
 
-function SummaryDataChildren({ mapped_data_types, mapped_organ, doi_url, registered_doi }: SummaryDataChildrenProps) {
+function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChildrenProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const dataTypes = mapped_data_types.join(', ');
   return (
@@ -55,16 +52,11 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ, doi_url, registe
           {dataTypes}
         </InternalLink>
       </SummaryItem>
-      <SummaryItem showDivider={Boolean(doi_url)}>
+      <SummaryItem showDivider={false}>
         <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
           {mapped_organ}
         </InternalLink>
       </SummaryItem>
-      {doi_url && (
-        <OutboundIconLink href={doi_url} variant="h6">
-          doi:{registered_doi}
-        </OutboundIconLink>
-      )}
     </>
   );
 }
@@ -212,8 +204,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     sub_status,
     mapped_data_access_level,
     mapped_external_group_name,
-    registered_doi,
-    doi_url,
     contributors,
     is_component,
     assay_modality,
@@ -301,12 +291,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
             </>
           }
         >
-          <SummaryDataChildren
-            mapped_data_types={mapped_data_types}
-            mapped_organ={mapped_organ}
-            registered_doi={registered_doi}
-            doi_url={doi_url}
-          />
+          <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
         </Summary>
         {shouldDisplaySection.visualization && (
           <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
