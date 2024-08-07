@@ -1,1 +1,0 @@
-- Add a check for "Contacts" data to display in the Contributors table of the detail pages of datasets, collections, and publications.

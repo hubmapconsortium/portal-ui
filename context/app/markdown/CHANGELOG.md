@@ -1,3 +1,8 @@
+## v0.102.5 - 2024-08-06
+
+- Add a check for "Contacts" data to display in the Contributors table of the detail pages of datasets, collections, and publications.
+
+
 ## v0.102.4 - 2024-08-02
 
 - Update attribution and contributors sections for processed datasets.
