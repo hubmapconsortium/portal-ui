@@ -1,10 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import IconButton from '@mui/material/IconButton';
 
 import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
 
-function BlankDropdownMenuButton({ children, menuID, ...rest }) {
+interface DropdownMenuButtonProps {
+  children: React.ReactNode;
+  menuID: string;
+}
+
+function BlankDropdownMenuButton({ children, menuID, ...rest }: DropdownMenuButtonProps) {
   const { menuRef, menuIsOpen, openMenu } = useDropdownMenuStore();
 
   return (
@@ -13,16 +17,12 @@ function BlankDropdownMenuButton({ children, menuID, ...rest }) {
       color="primary"
       aria-controls={menuIsOpen ? menuID : undefined}
       aria-haspopup="true"
-      ref={menuRef}
+      ref={menuRef as unknown as React.RefObject<HTMLButtonElement>}
       {...rest}
     >
       {children}
     </IconButton>
   );
 }
-
-BlankDropdownMenuButton.propTypes = {
-  menuID: PropTypes.string.isRequired,
-};
 
 export default BlankDropdownMenuButton;
