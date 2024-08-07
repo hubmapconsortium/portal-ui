@@ -31,6 +31,7 @@ import {
 import { useSelectedVersionStore } from '../../VersionSelect/SelectedVersionStore';
 import { useProcessedDatasetDetails } from './hooks';
 import { useVersions } from '../../VersionSelect/hooks';
+import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 
 function ProcessedDatasetDescription() {
   const {
@@ -79,6 +80,7 @@ function FilesAccordion() {
   const hasDataProducts = Boolean(files.filter((file) => file.is_data_product).length);
   const [openTabIndex, setOpenTabIndex] = useState(0);
   const fileBrowserIndex = hasDataProducts ? 1 : 0;
+  const track = useTrackEntityPageEvent();
   return (
     <Subsection id={id} title="Files" icon={<InsertDriveFileRounded />}>
       <SectionDescription subsection>
@@ -86,7 +88,16 @@ function FilesAccordion() {
         a comprehensive list of available files is displayed in the file browser. To download data in bulk from either
         the processed or the primary dataset, navigate to the bulk data transfer section.
       </SectionDescription>
-      <Tabs value={openTabIndex} onChange={(_, newValue) => setOpenTabIndex(newValue as number)}>
+      <Tabs
+        value={openTabIndex}
+        onChange={(_, newValue) => {
+          setOpenTabIndex(newValue as number);
+          track({
+            action: `Change to ${newValue === fileBrowserIndex ? 'File Browser' : 'Data Products'} Tab`,
+            label: hubmap_id,
+          });
+        }}
+      >
         {hasDataProducts && <Tab label="Data Products" index={0} />}
         <Tab label="File Browser" index={fileBrowserIndex} />
       </Tabs>

@@ -23,6 +23,7 @@ import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
 import { getDateLabelAndValue } from '../../utils';
 import { HelperPanelButton } from './styles';
+import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 
 function useCurrentDataset() {
   return useProcessedDataStore((state) => state.currentDataset);
@@ -106,7 +107,13 @@ function WorkspaceButton() {
   const { isWorkspacesUser } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
+  const track = useTrackEntityPageEvent();
+
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    track({
+      action: 'Open Workspace Menu',
+      label: currentDataset?.hubmap_id,
+    });
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
@@ -149,6 +156,10 @@ function WorkspaceButton() {
       >
         <MenuItem
           onClick={() => {
+            track({
+              action: 'Start Creating Workspace',
+              label: currentDataset?.hubmap_id,
+            });
             setOpenCreateWorkspace(true);
             handleClose();
           }}
@@ -160,6 +171,10 @@ function WorkspaceButton() {
         </MenuItem>
         <MenuItem
           onClick={() => {
+            track({
+              action: 'Start Adding Dataset to Existing Workspace',
+              label: currentDataset?.hubmap_id,
+            });
             openEditWorkspaceDialog();
             handleClose();
           }}
@@ -184,12 +199,19 @@ function WorkspaceButton() {
 
 function HelperPanelActions() {
   const currentDataset = useCurrentDataset();
+  const track = useTrackEntityPageEvent();
   return (
     <>
       <WorkspaceButton />
       <HelperPanelButton
         startIcon={<CloudDownloadRounded />}
-        href={`#bulk-data-transfer?bulk-data=${currentDataset?.hubmap_id}`}
+        href="#bulk-data-transfer"
+        onClick={() => {
+          track({
+            action: 'Navigate to Bulk Download',
+            label: currentDataset?.hubmap_id,
+          });
+        }}
       >
         Bulk Download
       </HelperPanelButton>

@@ -5,6 +5,7 @@ import { StyledButton, OverflowEllipsis, EmptyFullWidthDiv } from './style';
 import { Version } from './types';
 import { useSelectedVersionStore } from './SelectedVersionStore';
 import { useProcessedDatasetContext } from '../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
+import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
 function getOptionDisplay(option: Version) {
   return option?.revision_number ? (
@@ -16,6 +17,7 @@ function getOptionDisplay(option: Version) {
 
 function VersionSelect() {
   const { sectionDataset } = useProcessedDatasetContext();
+  const track = useTrackEntityPageEvent();
 
   const { versions, setSelectedVersion, currentSelectedVersion } = useSelectedVersionStore((state) => ({
     versions: state.versions.get(sectionDataset.uuid) ?? [],
@@ -34,6 +36,10 @@ function VersionSelect() {
       options={versions}
       selectOnClick={({ option }) => {
         setSelectedVersion(sectionDataset.uuid, option);
+        track({
+          action: `Change to version ${option.revision_number} (${option.uuid})`,
+          label: sectionDataset.hubmap_id,
+        });
       }}
       getOptionLabel={getOptionDisplay}
       buttonProps={{ disabled: versions.length === 0, color: 'primary' }}

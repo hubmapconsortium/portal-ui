@@ -8,18 +8,28 @@ import Box from '@mui/material/Box';
 import StatusIcon from '../../StatusIcon';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 import VersionSelect from '../../VersionSelect';
+import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 
 export function DatasetTitle() {
   const {
     dataset: { hubmap_id, status },
   } = useProcessedDatasetContext();
   const copyText = useHandleCopyClick();
+  const track = useTrackEntityPageEvent();
   return (
     <Typography variant="h5" display="flex" alignItems="center" gap={0.5}>
       <StatusIcon status={status} />
       {hubmap_id}
       <SecondaryBackgroundTooltip title="Copy HuBMAP ID">
-        <IconButton onClick={() => copyText(hubmap_id)}>
+        <IconButton
+          onClick={() => {
+            copyText(hubmap_id);
+            track({
+              action: 'Copy HuBMAP ID',
+              label: hubmap_id,
+            });
+          }}
+        >
           <CopyAllRounded color="info" />
         </IconButton>
       </SecondaryBackgroundTooltip>

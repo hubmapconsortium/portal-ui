@@ -3,9 +3,12 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
-import { VisualizationIcon } from 'js/shared-styles/icons';
 import Skeleton from '@mui/material/Skeleton';
+
+import { VisualizationIcon } from 'js/shared-styles/icons';
 import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
+
+import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
 import { ProcessedDatasetSectionAccordion } from './styles';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
@@ -19,10 +22,14 @@ function LoadingFallback() {
 export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   const { defaultExpanded, dataset, sectionDataset, conf, isLoading } = useProcessedDatasetContext();
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
+  const track = useTrackEntityPageEvent();
   return (
     <ProcessedDatasetSectionAccordion
       defaultExpanded={defaultExpanded}
       id={formatSectionHash(`section-${sectionDataset.hubmap_id}`)}
+      onChange={(_, expanded) =>
+        track({ action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`, label: sectionDataset.hubmap_id })
+      }
     >
       <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
         {isLoading ? iconPlaceholder : visualizationIcon}
