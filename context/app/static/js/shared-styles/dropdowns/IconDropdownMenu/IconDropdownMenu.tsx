@@ -42,8 +42,8 @@ function IconDropdownMenu({ tooltip, icon, options }: IconDropdownMenuProps) {
           <SvgIcon component={icon} />
         </WhiteBackgroundBlankDropdownMenuButton>
       </StyledSecondaryBackgroundTooltip>
-      <DropdownMenu id="id">
-        <MenuList id="preview-options">
+      <DropdownMenu id={`${tooltip}-menu`}>
+        <MenuList id="menu-options">
           {options.map((props) => (
             <IconDropdownMenuItem key={props.icon.toString()} {...props} />
           ))}
