@@ -170,7 +170,7 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
 
   const { data: conf, isLoading: loadingVitessceConf } = useVitessceConf(
     selectedDatasetVersionUUID,
-    datasetDetails && isSupport(datasetDetails) ? parent.uuid : undefined,
+    isSupport(sectionDataset) ? parent.uuid : undefined,
   );
 
   const defaultExpanded = sectionDataset.status === 'Published';

@@ -66,7 +66,7 @@ export function useVitessceConf(uuid: string, parentUuid?: string) {
     urlParams.set('parent', parentUuid);
   }
   return useSWR<VitessceConf>(getVitessceConfKey(uuid, groupsToken), (_key: unknown) =>
-    fetcher({ url: `${base}${urlParams.toString()}`, requestInit: { headers: getAuthHeader(groupsToken) } }),
+    fetcher({ url: `${base}?${urlParams.toString()}`, requestInit: { headers: getAuthHeader(groupsToken) } }),
   );
 }
 
