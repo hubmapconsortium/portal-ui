@@ -72,12 +72,13 @@ function SummaryBodyContent({
   published_timestamp,
   created_timestamp,
   description,
-}: Pick<StackProps, 'direction'> & Pick<Entity, 'description' | 'created_timestamp' | 'published_timestamp'>) {
+  ...stackProps
+}: Partial<StackProps> & Pick<Entity, 'description' | 'created_timestamp' | 'published_timestamp'>) {
   const creationLabel = published_timestamp ? 'Publication Date' : 'Creation Date';
   const creationTimestamp = published_timestamp ?? created_timestamp;
 
   return (
-    <Stack component={SummaryPaper} direction={direction}>
+    <Stack component={SummaryPaper} direction={direction} {...stackProps}>
       <CollectionName />
       <Description description={description} />
       <DOICitation />
@@ -86,17 +87,17 @@ function SummaryBodyContent({
   );
 }
 
-function SummaryBody({ direction = 'column' }: Pick<StackProps, 'direction'>) {
+function SummaryBody({ ...stackProps }: Partial<StackProps>) {
   const { entity } = useFlaskDataContext();
 
   const { created_timestamp, published_timestamp, description } = entity;
 
   return (
     <SummaryBodyContent
-      direction={direction}
       created_timestamp={created_timestamp}
       published_timestamp={published_timestamp}
       description={description}
+      {...stackProps}
     />
   );
 }

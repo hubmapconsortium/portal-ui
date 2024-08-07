@@ -1,17 +1,18 @@
-import { Dispatch, SetStateAction, useCallback } from 'react';
+import { useCallback } from 'react';
 import { useSprings } from '@react-spring/web';
 
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
-import { useEntityStore } from 'js/stores';
+import useEntityStore, { SummaryViewsType } from 'js/stores/useEntityStore';
 
-export type SummaryViewsType = 'narrow' | 'summary';
-export type SetViewType = Dispatch<SetStateAction<SummaryViewsType>>;
-
-const initialEntityHeaderHeight = 40;
+const initialEntityHeaderHeight = 48;
 
 const initialHeightOffset = headerHeight + 16;
 
-const expandedContentHeight = 300;
+const expandedHeights = {
+  diagram: 300,
+  summary: 150,
+  narrow: 0,
+};
 
 function useEntityHeaderSprings() {
   const springs = useSprings(2, (springIndex) => {
@@ -37,19 +38,20 @@ function useStartViewChangeSpring() {
   const [, springAPIs] = springs;
 
   return useCallback(
-    (isExpanded: boolean) => {
+    (view: SummaryViewsType) => {
+      const isExpanded = view !== 'narrow';
       async function startSprings() {
         await Promise.all(
           springAPIs.start((springIndex: number) => {
             if (springIndex === 0) {
               return {
-                height: isExpanded ? expandedContentHeight + initialEntityHeaderHeight : initialEntityHeaderHeight,
+                height: isExpanded ? expandedHeights[view] + initialEntityHeaderHeight : initialEntityHeaderHeight,
               };
             }
             if (springIndex === 1) {
               return {
                 top: isExpanded
-                  ? initialHeightOffset + expandedContentHeight
+                  ? initialHeightOffset + expandedHeights[view]
                   : initialHeightOffset + initialEntityHeaderHeight,
               };
             }
@@ -64,4 +66,4 @@ function useStartViewChangeSpring() {
   );
 }
 
-export { useEntityHeaderSprings, useStartViewChangeSpring };
+export { useEntityHeaderSprings, useStartViewChangeSpring, expandedHeights };

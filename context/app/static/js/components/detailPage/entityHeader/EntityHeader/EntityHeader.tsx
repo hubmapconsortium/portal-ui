@@ -5,10 +5,11 @@ import Box from '@mui/material/Box';
 import useEntityStore, { SummaryViewsType } from 'js/stores/useEntityStore';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
-import { useStartViewChangeSpring } from './hooks';
+import { useStartViewChangeSpring, expandedHeights } from './hooks';
 import DatasetRelationships from '../../DatasetRelationships';
+import SummaryBody from '../../summary/SummaryBody';
 
-const entityHeaderHeight = 40;
+const entityHeaderHeight = 48;
 
 const AnimatedPaper = animated(StyledPaper);
 
@@ -18,9 +19,8 @@ function Header() {
 
   const handleViewChange = useCallback(
     (v: SummaryViewsType) => {
-      const isExpanded = v !== 'narrow';
       setView(v);
-      startViewChangeSpring(isExpanded);
+      startViewChangeSpring(v);
     },
     [startViewChangeSpring, setView],
   );
@@ -36,8 +36,9 @@ function Header() {
     <AnimatedPaper elevation={4} data-testid="entity-header" sx={{ overflow: 'hidden' }} style={springValues[0]}>
       <Box>
         <EntityHeaderContent setView={handleViewChange} view={view} />
-        <Box height={300} width="100%" p={2}>
+        <Box height={expandedHeights[view]} width="100%" p={2}>
           {view === 'diagram' && uuid && <DatasetRelationships uuid={uuid} processing="raw" showHeader={false} />}
+          {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} />}
         </Box>
       </Box>
     </AnimatedPaper>

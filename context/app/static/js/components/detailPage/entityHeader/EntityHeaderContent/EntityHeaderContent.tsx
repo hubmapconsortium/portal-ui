@@ -13,7 +13,7 @@ import useEntityStore, { type EntityStore, SummaryViewsType } from 'js/stores/us
 import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
 
 import { Entity } from 'js/components/types';
-import { StyledSvgIcon, FlexContainer, RightDiv } from './style';
+import { StyledSvgIcon, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 import EntityHeaderActionButtons from '../EntityHeaderActionButtons';
@@ -129,7 +129,13 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
   });
 
   return (
-    <FlexContainer maxWidth={vizIsFullscreen ? false : 'lg'}>
+    <Stack
+      direction="row"
+      alignItems="center"
+      px={2}
+      py={0.5}
+      sx={(theme) => ({ ...(view !== 'narrow' && { borderBottom: `1px solid ${theme.palette.primary.lowEmphasis}` }) })}
+    >
       {entity_type && (
         <AnimatedStack style={styles} direction="row" alignItems="center">
           <StyledSvgIcon component={entityIconMap[entity_type]} />
@@ -163,7 +169,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
           />
         )}
       </RightDiv>
-    </FlexContainer>
+    </Stack>
   );
 }
 
