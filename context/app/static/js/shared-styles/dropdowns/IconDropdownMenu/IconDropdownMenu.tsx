@@ -5,7 +5,7 @@ import MenuList from '@mui/material/MenuList';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import MenuItem from '@mui/material/MenuItem';
 
-import { WhiteBackgroundBlankDropdownMenuButton } from 'js/shared-styles/buttons';
+import { WhiteBackgroundIconDropdownMenuButton } from 'js/shared-styles/buttons';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 
@@ -38,9 +38,9 @@ function IconDropdownMenu({ tooltip, icon, options }: IconDropdownMenuProps) {
   return (
     <>
       <StyledSecondaryBackgroundTooltip title={tooltip}>
-        <WhiteBackgroundBlankDropdownMenuButton menuID={tooltip}>
+        <WhiteBackgroundIconDropdownMenuButton menuID={tooltip}>
           <SvgIcon component={icon} />
-        </WhiteBackgroundBlankDropdownMenuButton>
+        </WhiteBackgroundIconDropdownMenuButton>
       </StyledSecondaryBackgroundTooltip>
       <DropdownMenu id={`${tooltip}-menu`}>
         <MenuList id="menu-options">
