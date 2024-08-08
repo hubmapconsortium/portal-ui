@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Box from '@mui/material/Box';
 
 import { InternalLink } from 'js/shared-styles/Links';
@@ -12,7 +12,6 @@ import VisualizationWrapper from 'js/components/detailPage/visualization/Visuali
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
-import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
@@ -60,8 +59,6 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChi
     </>
   );
 }
-
-const entityStoreSelector = (state: EntityStore) => state.setAssayMetadata;
 
 function OldVersionAlert({ uuid, isLatest }: { uuid: string; isLatest: boolean }) {
   if (isLatest) {
@@ -112,7 +109,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     origin_samples,
     hubmap_id,
     entity_type,
-    published_timestamp,
     status,
     mapped_data_access_level,
     mapped_external_group_name,
@@ -139,18 +135,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     contributors: Boolean(contributors && (contributors as unknown[]).length),
     attribution: true,
   };
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-
-  useEffect(() => {
-    setAssayMetadata({
-      uuid,
-      hubmap_id,
-      entity_type,
-      mapped_data_types,
-      published_timestamp,
-    });
-  }, [entity_type, hubmap_id, mapped_data_types, uuid, published_timestamp, setAssayMetadata]);
 
   const datasetLabel = useDatasetLabel();
 
@@ -198,8 +182,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     mapped_data_types,
     origin_samples,
     hubmap_id,
-    entity_type,
-    published_timestamp,
     status,
     sub_status,
     mapped_data_access_level,
@@ -241,31 +223,6 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     contributors: Boolean(contributors && (contributors as unknown[]).length),
     attribution: true,
   };
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-
-  useEffect(() => {
-    setAssayMetadata({
-      hubmap_id,
-      entity_type,
-      mapped_data_types,
-      mapped_organ,
-      uuid,
-      mapped_data_access_level,
-      status,
-      published_timestamp,
-    });
-  }, [
-    entity_type,
-    hubmap_id,
-    mapped_data_types,
-    mapped_organ,
-    uuid,
-    mapped_data_access_level,
-    status,
-    published_timestamp,
-    setAssayMetadata,
-  ]);
 
   const datasetLabel = useDatasetLabel();
 

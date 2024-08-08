@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
@@ -10,7 +10,6 @@ import Protocol from 'js/components/detailPage/Protocol';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SampleTissue from 'js/components/detailPage/SampleTissue';
-import useEntityStore from 'js/stores/useEntityStore';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
@@ -18,8 +17,6 @@ import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/Der
 import { combineMetadata } from 'js/pages/utils/entity-utils';
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
-
-const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function SampleDetail() {
   const {
@@ -51,11 +48,6 @@ function SampleDetail() {
     metadata: Boolean(Object.keys(combinedMetadata).length),
     attribution: true,
   };
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-  useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_organ, sample_category, uuid });
-  }, [hubmap_id, entity_type, mapped_organ, sample_category, setAssayMetadata, uuid]);
 
   useTrackID({ entity_type, hubmap_id });
 

@@ -9,7 +9,7 @@ import Citation from 'js/components/detailPage/Citation';
 import { LineClamp } from 'js/shared-styles/text';
 import { Entity, isCollection, isDataset } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { useEntityStore } from 'js/stores';
+import { getCollectionDOI } from 'js/pages/Collection/utils';
 import { StyledCreationDate } from './style';
 
 function CollectionName() {
@@ -91,15 +91,14 @@ function DatasetConsortium() {
 
 function CollectionCitation() {
   const { entity } = useFlaskDataContext();
-  const {
-    assayMetadata: { doi },
-  } = useEntityStore();
 
   if (!isCollection(entity)) {
     return null;
   }
 
   const { doi_url, contributors, created_timestamp, title } = entity;
+
+  const doi = getCollectionDOI(doi_url);
 
   if (!doi || !doi_url || !contributors || !title || !created_timestamp) {
     return null;

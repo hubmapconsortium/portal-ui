@@ -106,6 +106,8 @@ export interface Collection extends Entity {
 }
 
 export interface Publication extends Entity {
+  publication_venue: string;
+  title: string;
   entity_type: 'Publication';
   doi_url: string;
 }

@@ -11,8 +11,17 @@ import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import useEntityStore, { type EntityStore, SummaryViewsType } from 'js/stores/useEntityStore';
 import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
-
+import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity } from 'js/components/types';
+import {
+  getDonorMetadata,
+  getSampleCategories,
+  getDataTypes,
+  getPublicationTitle,
+  getPublicationVenue,
+  getOriginSampleAndMappedOrgan,
+} from '../../utils';
+
 import { StyledSvgIcon, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
@@ -25,34 +34,15 @@ type EntityTypesWithIcons = Exclude<
 >;
 
 export interface AssayMetadata extends Pick<Entity, 'mapped_data_access_level'> {
-  sex: string;
-  race: string[];
-  age_value: string;
-  age_unit: string;
-  mapped_organ: string;
-  sample_category: string;
-  mapped_data_types: string[];
-  title: string;
-  publication_venue: string;
-  hubmap_id: string;
   entity_type: AllEntityTypes;
   name: string;
   reference_link: React.ReactNode;
-  uuid: string;
-  published_timestamp?: number;
-  contributors?: { last_name: string; first_name: string }[];
   citationTitle?: string;
-  doi_url?: string;
-  doi?: string;
-  collectionName?: string;
-  description?: string;
-  created_timestamp: number;
-  status: string;
 }
 
 type EntityToFieldsType = Record<
   EntityTypesWithIcons,
-  Record<string, (assayMetadata: Partial<AssayMetadata>) => React.ReactNode>
+  Record<string, (assayMetadata: Partial<AssayMetadata> & Entity) => React.ReactNode>
 >;
 
 const entityTypeHasIcon = (entityType: string): entityType is EntityTypesWithIcons => {
@@ -61,17 +51,21 @@ const entityTypeHasIcon = (entityType: string): entityType is EntityTypesWithIco
 
 const entityToFieldsMap: EntityToFieldsType = {
   Donor: {
-    sex: ({ sex }) => sex,
-    race: ({ race }) => race?.join(', '),
-    age: ({ age_value, age_unit }) => (age_value && age_unit ? `${age_value} ${age_unit}` : ''),
+    sex: (e) => getDonorMetadata(e)?.sex,
+    race: (e) => getDonorMetadata(e)?.race?.join(', '),
+    age: (e) => {
+      const age_value = getDonorMetadata(e)?.age_value;
+      const age_unit = getDonorMetadata(e)?.age_unit;
+      return age_value && age_unit ? `${age_value} ${age_unit}` : '';
+    },
   },
   Sample: {
-    'organ type': ({ mapped_organ }) => mapped_organ,
-    'sample category': ({ sample_category }) => sample_category,
+    'organ type': (e) => getOriginSampleAndMappedOrgan(e)?.mapped_organ,
+    'sample category': getSampleCategories,
   },
   Dataset: {
-    'data type': ({ mapped_data_types }) => mapped_data_types?.join(', '),
-    'organ type': ({ mapped_organ }) => mapped_organ,
+    'data type': getDataTypes,
+    'organ type': (e) => getOriginSampleAndMappedOrgan(e)?.mapped_organ,
     status: ({ status, mapped_data_access_level }) =>
       status &&
       mapped_data_access_level && (
@@ -81,8 +75,8 @@ const entityToFieldsMap: EntityToFieldsType = {
       ),
   },
   Publication: {
-    title: ({ title }) => title,
-    'publication venue': ({ publication_venue }) => publication_venue,
+    title: getPublicationTitle,
+    'publication venue': getPublicationVenue,
   },
   CellType: {
     name: ({ name }) => name,
@@ -125,9 +119,10 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
     summaryComponentObserver: { summaryInView },
   } = useEntityStore(entityStoreSelector);
 
-  const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
+  const { entity } = useFlaskDataContext();
+  const { hubmap_id, entity_type, uuid, mapped_data_access_level } = entity;
 
-  const { hubmap_id, entity_type, uuid, mapped_data_access_level } = assayMetadata;
+  const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
 
   const styles = useSpring({
@@ -151,7 +146,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
           {hubmap_id && <HuBMAPIDItem hubmap_id={hubmap_id} />}
           {entityTypeHasIcon(entity_type) && entityToFieldsMap[entity_type]
             ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => {
-                const text = fn(assayMetadata);
+                const text = fn({ ...assayMetadata, ...entity });
                 return text ? <EntityHeaderItem text={text} key={label} /> : null;
               })
             : null}

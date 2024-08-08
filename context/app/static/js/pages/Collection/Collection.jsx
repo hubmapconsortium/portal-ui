@@ -6,6 +6,7 @@ import Summary from 'js/components/detailPage/summary/Summary';
 import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasetsTable';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import useTrackID from 'js/hooks/useTrackID';
+import { getCollectionDOI } from './utils';
 
 function Collection({ collection: collectionData }) {
   const {
@@ -21,7 +22,7 @@ function Collection({ collection: collectionData }) {
     creators,
   } = collectionData;
 
-  const doi = new URL(doi_url).pathname.slice(1);
+  const doi = getCollectionDOI(doi_url);
 
   useTrackID({ entity_type, hubmap_id });
 

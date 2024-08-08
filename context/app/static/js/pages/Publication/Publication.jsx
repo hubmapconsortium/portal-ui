@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
@@ -8,16 +8,12 @@ import PublicationSummary from 'js/components/publications/PublicationSummary';
 import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 import Files from 'js/components/detailPage/files/Files';
-import useEntityStore from 'js/stores/useEntityStore';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import useTrackID from 'js/hooks/useTrackID';
 
-const entityStoreSelector = (state) => state.setAssayMetadata;
-
 function Publication({ publication, vignette_json }) {
   const {
-    title,
     uuid,
     entity_type,
     hubmap_id,
@@ -26,15 +22,9 @@ function Publication({ publication, vignette_json }) {
     doi_url,
     contributors = [],
     ancestor_ids,
-    publication_venue,
     files,
     associated_collection,
   } = publication;
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-  useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, title, publication_venue, uuid });
-  }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata, uuid]);
 
   useTrackID({ entity_type, hubmap_id });
 

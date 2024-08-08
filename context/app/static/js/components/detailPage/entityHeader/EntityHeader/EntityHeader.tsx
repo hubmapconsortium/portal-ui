@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 
 import useEntityStore, { SummaryViewsType } from 'js/stores/useEntityStore';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 import { useStartViewChangeSpring, expandedHeights } from './hooks';
@@ -15,7 +16,7 @@ const entityHeaderHeight = 48;
 const AnimatedPaper = animated(StyledPaper);
 
 function Header() {
-  const { assayMetadata, springs, view, setView } = useEntityStore();
+  const { springs, view, setView } = useEntityStore();
   const startViewChangeSpring = useStartViewChangeSpring();
   const isLargeDesktop = useIsLargeDesktop();
 
@@ -27,12 +28,15 @@ function Header() {
     [startViewChangeSpring, setView],
   );
 
+  const {
+    entity: { uuid },
+  } = useFlaskDataContext();
+
   const [springValues] = springs;
 
   if (springValues[0] === undefined) {
     return null;
   }
-  const { uuid } = assayMetadata;
 
   return (
     <AnimatedPaper elevation={4} data-testid="entity-header" sx={{ overflow: 'hidden' }} style={springValues[0]}>
