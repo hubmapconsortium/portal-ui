@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Stack, { StackProps } from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -6,6 +6,7 @@ import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Citation from 'js/components/detailPage/Citation';
+import { LineClamp } from 'js/shared-styles/text';
 import { Entity, isCollection, isDataset } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useEntityStore } from 'js/stores';
@@ -30,12 +31,24 @@ function CollectionName() {
   );
 }
 
-function Description({ description }: Pick<Entity, 'description'>) {
+function CustomClamp({ children }: PropsWithChildren) {
+  return (
+    <LineClamp lines={3} component={Typography}>
+      {children}
+    </LineClamp>
+  );
+}
+
+function Description({ description, clamp }: { clamp?: boolean } & Pick<Entity, 'description'>) {
   if (!description) {
     return null;
   }
 
-  return <LabelledSectionText label="Description">{description}</LabelledSectionText>;
+  return (
+    <LabelledSectionText label="Description" childContainerComponent={clamp ? CustomClamp : undefined}>
+      {description}
+    </LabelledSectionText>
+  );
 }
 
 function DatasetCitation() {
@@ -103,19 +116,21 @@ function CollectionCitation() {
 }
 
 function SummaryBodyContent({
+  clamp,
   direction = 'column',
   published_timestamp,
   created_timestamp,
   description,
   ...stackProps
-}: Partial<StackProps> & Pick<Entity, 'description' | 'created_timestamp' | 'published_timestamp'>) {
+}: { clamp?: boolean } & Partial<StackProps> &
+  Pick<Entity, 'description' | 'created_timestamp' | 'published_timestamp'>) {
   const creationLabel = published_timestamp ? 'Publication Date' : 'Creation Date';
   const creationTimestamp = published_timestamp ?? created_timestamp;
 
   return (
     <Stack component={SummaryPaper} direction={direction} spacing={1} {...stackProps}>
       <CollectionName />
-      <Description description={description} />
+      <Description description={description} clamp={clamp} />
       <DatasetConsortium />
       <DatasetCitation />
       <CollectionCitation />
@@ -124,7 +139,7 @@ function SummaryBodyContent({
   );
 }
 
-function SummaryBody({ ...stackProps }: Partial<StackProps>) {
+function SummaryBody({ clamp, ...stackProps }: { clamp?: boolean } & Partial<StackProps>) {
   const { entity } = useFlaskDataContext();
 
   const { created_timestamp, published_timestamp, description } = entity;
@@ -134,6 +149,7 @@ function SummaryBody({ ...stackProps }: Partial<StackProps>) {
       created_timestamp={created_timestamp}
       published_timestamp={published_timestamp}
       description={description}
+      clamp={clamp}
       {...stackProps}
     />
   );

@@ -38,7 +38,7 @@ function Header() {
         <EntityHeaderContent setView={handleViewChange} view={view} />
         <Box height={expandedHeights[view]} width="100%" p={2}>
           {view === 'diagram' && uuid && <DatasetRelationships uuid={uuid} processing="raw" showHeader={false} />}
-          {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} />}
+          {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} clamp />}
         </Box>
       </Box>
     </AnimatedPaper>
