@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback } from 'react';
 
 import Download from '@mui/icons-material/Download';
 
@@ -28,16 +28,14 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
     defaultTemplate: 'visualization',
   });
 
-  const downloadNotebook = useMemo(() => {
+  const downloadNotebook = useCallback(() => {
     return () => {
       trackEntityPageEvent({ action: `Vitessce / ${tooltip}` });
       postAndDownloadFile({
         url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
         body: {},
       })
-        .then(() => {
-          // Do nothing
-        })
+        .then()
         .catch(() => {
           toastError('Failed to download Jupyter Notebook');
         });

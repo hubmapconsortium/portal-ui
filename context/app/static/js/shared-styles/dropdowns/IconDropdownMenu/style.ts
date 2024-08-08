@@ -13,13 +13,13 @@ export const StyledSecondaryBackgroundTooltip = styled(SecondaryBackgroundToolti
   marginLeft: theme.spacing(1),
 }));
 
-export const StyledSvgIcon = styled(SvgIcon)({
-  height: '20px',
-  width: '20px',
+export const StyledSvgIcon = styled(SvgIcon)(({ theme }) => ({
+  height: '1.25rem',
+  width: '1.25rem',
   alignItems: 'center',
   justifyContent: 'center',
-  marginLeft: '.2rem',
-}) as typeof SvgIcon;
+  marginLeft: theme.spacing(0.2),
+})) as typeof SvgIcon;
 
 export const StyledTypography = styled(Typography)({
   flexGrow: 1,
