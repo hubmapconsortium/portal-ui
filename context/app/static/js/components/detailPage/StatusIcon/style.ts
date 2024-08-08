@@ -2,10 +2,11 @@ import { styled } from '@mui/material/styles';
 import { InfoRounded, ErrorRounded, WarningRounded, CheckCircleRounded } from '@mui/icons-material';
 import { SvgIconProps } from '@mui/material/SvgIcon';
 
-type IconStatus = 'info' | 'success' | 'warning' | 'error';
+export type IconStatus = 'info' | 'success' | 'warning' | 'error';
 
 export interface ColoredStatusIconProps extends SvgIconProps {
   $iconStatus: IconStatus;
+  $noColor?: boolean;
 }
 
 export const iconSymbolStatusMap: {
@@ -17,10 +18,13 @@ export const iconSymbolStatusMap: {
   error: ErrorRounded,
 };
 
-const styleIcon = (IconComponent: React.ComponentType<SvgIconProps>, status: IconStatus) =>
-  styled(IconComponent)(({ theme }) => ({
-    color: theme.palette[status].main,
-    fontSize: 16,
+const styleIcon = (
+  IconComponent: React.ComponentType<Omit<ColoredStatusIconProps, '$iconStatus'>>,
+  status: IconStatus,
+) =>
+  styled(IconComponent)(({ theme, $noColor }) => ({
+    color: $noColor ? 'inherit' : theme.palette[status].main,
+    fontSize: '1em',
     marginRight: 3,
     alignSelf: 'center',
   }));
@@ -32,4 +36,5 @@ const styledIcons: Record<IconStatus, ReturnType<typeof styleIcon>> = {
   error: styleIcon(ErrorRounded, 'error'),
 };
 
-export const getStyledIcon = ($iconStatus: ColoredStatusIconProps['$iconStatus']) => styledIcons[$iconStatus];
+export const getStyledIcon = ($iconStatus: ColoredStatusIconProps['$iconStatus']) =>
+  styledIcons[$iconStatus.toLowerCase() as IconStatus];

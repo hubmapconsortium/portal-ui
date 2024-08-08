@@ -1,14 +1,9 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Divider from '@mui/material/Divider';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolData';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import { DetailPageSection } from 'js/components/detailPage/style';
-import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
@@ -75,35 +70,15 @@ interface ProtocolProps {
 }
 
 function Protocol({ protocol_url }: ProtocolProps) {
-  const {
-    entity: { entity_type },
-  } = useFlaskDataContext();
-
   const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
 
   return (
-    <DetailPageSection id="protocols">
-      <SectionHeader
-        iconTooltipText={`Protocols uploaded to protocols.io for the given ${entity_type?.toLowerCase()}.`}
-      >
-        Protocols
-      </SectionHeader>
-      <Divider />
-      <StyledPaper>
-        {protocolUrls.map((url, index) => (
-          <ProtocolLink key={url} url={url} index={index} />
-        ))}
-      </StyledPaper>
-    </DetailPageSection>
+    <>
+      {protocolUrls.map((url, index) => (
+        <ProtocolLink key={url} url={url} index={index} />
+      ))}
+    </>
   );
 }
-
-Protocol.propTypes = {
-  protocol_url: PropTypes.string,
-};
-
-Protocol.defaultProps = {
-  protocol_url: '',
-};
 
 export default React.memo(Protocol);

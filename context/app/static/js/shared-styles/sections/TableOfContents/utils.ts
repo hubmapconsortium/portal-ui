@@ -2,8 +2,17 @@ import { capitalizeAndReplaceDashes } from 'js/helpers/functions';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { TableOfContentsItem, TableOfContentsItemWithNode, TableOfContentsItems } from './types';
 
-function getSectionFromString(s: string, hash: string = s): TableOfContentsItem {
-  return { text: capitalizeAndReplaceDashes(s), hash: encodeURIComponent(hash), icon: sectionIconMap?.[s] };
+function formatSectionHash(hash: string) {
+  const hashWithoutDots = hash.replace(/\s/g, '').toLowerCase();
+  return encodeURIComponent(hashWithoutDots);
+}
+
+function getSectionFromString(s: string, hash: string = formatSectionHash(s)): TableOfContentsItem {
+  return {
+    text: capitalizeAndReplaceDashes(s),
+    hash,
+    icon: sectionIconMap?.[s],
+  };
 }
 
 export type SectionOrder = Record<string, boolean | TableOfContentsItem>;
@@ -29,4 +38,4 @@ function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<Table
   }));
 }
 
-export { getSections, getSectionFromString, getItemsClient };
+export { getSections, getSectionFromString, getItemsClient, formatSectionHash };

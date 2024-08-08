@@ -19,9 +19,13 @@ export type ESEntityType =
 export type DagProvenanceType =
   | {
       origin: string;
+      name?: string;
+      hash: string;
     }
   | {
       name: string;
+      hash: string;
+      origin: string;
     };
 
 export interface Entity {
@@ -95,6 +99,7 @@ export interface Dataset extends Entity {
   doi_url: string;
   published_timestamp: number;
   mapped_external_group_name?: string;
+  title: string;
 }
 
 export interface Collection extends Entity {

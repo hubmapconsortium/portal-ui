@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import useEntityStore, { savedAlertStatus, editedAlertStatus, EntityStore } from 'js/stores/useEntityStore';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/types';
-import { leftRouteBoundaryID } from 'js/components/Routes/Route/Route';
+import { leftRouteBoundaryID, rightRouteBoundaryID } from 'js/components/Routes/Route/Route';
 import { SectionOrder, getSections } from 'js/shared-styles/sections/TableOfContents/utils';
 import { StyledAlert } from './style';
 
@@ -28,6 +28,19 @@ function TableOfContentsPortal({ items, isLoading = false }: { items: TableOfCon
   return createPortal(
     <Stack alignItems="end" alignSelf="flex-start" height="100%">
       <TableOfContents items={items} isLoading={isLoading} />
+    </Stack>,
+    element,
+  );
+}
+
+export function HelperPanelPortal({ children }: PropsWithChildren) {
+  const element = document.getElementById(rightRouteBoundaryID);
+  if (!element) {
+    return null;
+  }
+  return createPortal(
+    <Stack alignItems="start" alignSelf="flex-start" height="100%">
+      {children}
     </Stack>,
     element,
   );

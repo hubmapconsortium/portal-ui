@@ -1,9 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import { CwlIcon, FlexOutboundLink, PrimaryTextDivider, StyledListItem } from './style';
 
-function ProvAnalysisDetailsLink({ data }) {
+interface CWLPipelineLink {
+  hash: string;
+  name: string;
+  origin: string;
+}
+
+interface IngestPipelineLink {
+  hash: string;
+  origin: string;
+}
+
+interface ProvAnalysisDetailsLinkProps {
+  data: CWLPipelineLink | IngestPipelineLink;
+}
+
+function ProvAnalysisDetailsLink({ data }: ProvAnalysisDetailsLinkProps) {
   const trimmedOrigin = data.origin.replace(/\.git$/, '');
   const githubUrl =
     'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;
@@ -25,13 +39,5 @@ function ProvAnalysisDetailsLink({ data }) {
     </StyledListItem>
   );
 }
-
-ProvAnalysisDetailsLink.propTypes = {
-  data: PropTypes.shape({
-    hash: PropTypes.string,
-    name: PropTypes.string,
-    origin: PropTypes.string,
-  }).isRequired,
-};
 
 export default ProvAnalysisDetailsLink;

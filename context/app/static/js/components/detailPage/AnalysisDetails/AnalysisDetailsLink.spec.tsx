@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from 'test-utils/functions';
 
-import ProvAnalysisDetailsLink from './ProvAnalysisDetailsLink';
+import ProvAnalysisDetailsLink from './AnalysisDetailsLink';
 
 test('should display ingest pipeline link', () => {
   const fakePipeline = { origin: 'https://github.com/fake/fake.git', hash: 'aabbccd' };

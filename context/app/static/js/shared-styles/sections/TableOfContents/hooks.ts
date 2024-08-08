@@ -1,5 +1,9 @@
 import React, { MutableRefObject } from 'react';
 import { throttle } from 'js/helpers/functions';
+import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
+import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
+import { useSpring } from '@react-spring/web';
+import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import { TableOfContentsNodesRef } from './types';
 
 function useThrottledOnScroll(callback: (() => void) | null, delay: number) {
@@ -52,4 +56,13 @@ function useFindActiveIndex({
   }, [currentSection, setCurrentSection, clickedRef, itemsWithNodeRef]);
 }
 
-export { useThrottledOnScroll, useFindActiveIndex };
+function useAnimatedSidebarPosition() {
+  const { summaryInView } = useEntityStore((state: EntityStore) => state.summaryComponentObserver);
+  const initialHeightOffset = headerHeight + 16;
+  const top = summaryInView ? `${initialHeightOffset}px` : `${initialHeightOffset + entityHeaderHeight}px`;
+  const stickyNavAnimationProps = useSpring({ top });
+
+  return stickyNavAnimationProps;
+}
+
+export { useThrottledOnScroll, useFindActiveIndex, useAnimatedSidebarPosition };

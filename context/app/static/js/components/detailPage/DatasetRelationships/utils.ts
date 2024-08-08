@@ -69,9 +69,6 @@ function datasetTypeIsForbidden(datasetType: string) {
   if (datasetType === 'Publication') {
     return true;
   }
-  if (datasetType.includes('[Image Pyramid]')) {
-    return true;
-  }
   return false;
 }
 
@@ -153,6 +150,7 @@ export function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provD
         id: currentEntityUUID,
         type: currentEntityType,
         data: {
+          uuid: currentEntity[generatePrefix('uuid')],
           name: currentEntity[generatePrefix('hubmap_id')],
           status: currentEntity[generatePrefix('status')],
           datasetType: currentEntity[generatePrefix('dataset_type')],

@@ -6,7 +6,6 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import MultiAssayProvenance from 'js/components/detailPage/multi-assay/MultiAssayProvenance';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
-import ProvAnalysisDetails from '../ProvAnalysisDetails';
 import { hasDataTypes } from './utils';
 import { filterTabsToDisplay } from './filterTabsToDisplay';
 import { ProvData } from '../types';
@@ -15,7 +14,6 @@ const availableTabDetails = {
   multi: { label: 'Multi-Assay', 'data-testid': 'multi-prov-tab' },
   table: { label: 'Table', 'data-testid': 'prov-table-tab' },
   graph: { label: 'Graph', 'data-testid': 'prov-graph-tab' },
-  dag: { label: 'Analysis Details', 'data-testid': 'prov-dag-tab' },
 };
 
 interface ProvTabsProps {
@@ -24,7 +22,7 @@ interface ProvTabsProps {
 
 function ProvTabs({ provData }: ProvTabsProps) {
   const {
-    entity: { uuid, metadata, entity_type, data_types, assay_modality },
+    entity: { uuid, entity_type, data_types, assay_modality },
   } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
@@ -41,7 +39,6 @@ function ProvTabs({ provData }: ProvTabsProps) {
         'salmon_rnaseq_snareseq',
       ]),
     graph: provData && Object.keys(provData).length > 0,
-    dag: ['Dataset', 'Support'].includes(entity_type) && metadata && 'dag_provenance_list' in metadata,
   };
 
   const filteredTabs = filterTabsToDisplay({ availableTabDetails, tabsToDisplay });
@@ -71,11 +68,6 @@ function ProvTabs({ provData }: ProvTabsProps) {
       {filteredTabs?.graph && (
         <TabPanel value={open} index={filteredTabs.graph.index}>
           <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
-        </TabPanel>
-      )}
-      {filteredTabs?.dag && (
-        <TabPanel value={open} index={filteredTabs.dag.index} pad>
-          <ProvAnalysisDetails dagListData={metadata.dag_provenance_list} />
         </TabPanel>
       )}
     </Paper>

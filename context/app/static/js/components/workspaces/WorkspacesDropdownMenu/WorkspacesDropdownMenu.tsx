@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useCallback } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import SvgIcon from '@mui/material/SvgIcon';
 
@@ -35,16 +35,19 @@ interface WorkspaceDropdownMenuItemProps extends PropsWithChildren {
   icon: typeof SvgIcon;
 }
 
-function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: WorkspaceDropdownMenuItemProps) {
+export function useOpenDialog(dialogType: DialogTypes) {
   const { open, setDialogType } = useEditWorkspaceStore();
+  const onClick = useCallback(() => {
+    setDialogType(dialogType);
+    open();
+  }, [dialogType, open, setDialogType]);
+  return onClick;
+}
 
+function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: WorkspaceDropdownMenuItemProps) {
+  const onClick = useOpenDialog(dialogType);
   return (
-    <MenuItem
-      onClick={() => {
-        setDialogType(dialogType);
-        open();
-      }}
-    >
+    <MenuItem onClick={onClick}>
       <Icon sx={{ mr: 1, fontSize: '1.25rem' }} />
       {children}
     </MenuItem>

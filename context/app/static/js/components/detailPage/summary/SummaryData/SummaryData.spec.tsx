@@ -31,13 +31,11 @@ test('json button exists and has href', () => {
   expect(screen.getByRole('link')).toHaveAttribute('href', `/browse/dataset/fakeuuid.json`);
 });
 
-test('dataset displays properly', async () => {
+test('dataset displays properly', () => {
   render(<SummaryData entity_type="Dataset" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
   const textToTest = ['QA', 'Public Access'];
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
   expect(screen.getByTestId('status-svg-icon')).toBeInTheDocument();
-
-  await screen.findByText('Version 1');
 });
 
 test('non-dataset displays properly', () => {

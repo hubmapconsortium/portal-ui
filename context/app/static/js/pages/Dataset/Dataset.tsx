@@ -10,7 +10,6 @@ import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
-import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
@@ -37,7 +36,9 @@ import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAs
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
-import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
+import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
+import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
+import useDatasetLabel, { useLazyLoadedHashHandler, useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
 
 function NotebookButton({ disabled, ...props }: { disabled: boolean } & ButtonProps) {
   return (
@@ -109,21 +110,6 @@ function SummaryDataChildren({
 
 const entityStoreSelector = (state: EntityStore) => state.setAssayMetadata;
 
-function OldVersionAlert({ uuid, isLatest }: { uuid: string; isLatest: boolean }) {
-  if (isLatest) {
-    return null;
-  }
-  return (
-    <DetailPageAlert severity="warning">
-      <span>
-        {/* <span> to override "display: flex" which splits this on to multiple lines. */}
-        You are viewing an older version of this page. Navigate to the{' '}
-        <InternalLink href={`/browse/latest/dataset/${uuid}`}>latest version</InternalLink>.
-      </span>
-    </DetailPageAlert>
-  );
-}
-
 function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
   if (!isExternal) {
     return null;
@@ -138,9 +124,6 @@ function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
 
 interface EntityDetailProps<T extends Entity> {
   assayMetadata: T;
-  vitData: object | object[];
-  hasNotebook?: boolean;
-  visLiftedUUID: string;
 }
 
 function makeMetadataSectionProps(metadata: Record<string, string>, assay_modality: 'single' | 'multiple') {
@@ -166,8 +149,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     is_component,
     assay_modality,
   } = assayMetadata;
-
-  const isLatest = !('next_revision_uuid' in assayMetadata);
 
   const combinedMetadata = combineMetadata(
     donor,
@@ -200,7 +181,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
 
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
-      <OldVersionAlert uuid={uuid} isLatest={isLatest} />
       <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
       <SupportAlert uuid={uuid} isSupport={entity_type === 'Support'} />
       {Boolean(is_component) && <ComponentAlert />}
@@ -238,7 +218,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
   );
 }
 
-function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProps<Dataset>) {
+function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
     protocol_url,
     metadata,
@@ -263,7 +243,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     processing,
   } = assayMetadata;
 
-  const isLatest = !('next_revision_uuid' in assayMetadata);
+  useLazyLoadedHashHandler();
 
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;
@@ -280,11 +260,11 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
   const collectionsData = useDatasetsCollections([uuid]);
 
   const { sections, isLoading } = useProcessedDatasetsSections();
+  const { searchHits: processedDatasets } = useProcessedDatasets();
 
   const shouldDisplaySection = {
     summary: true,
     'processed-data': sections,
-    visualization: Boolean(vitData),
     provenance: true,
     protocols: Boolean(protocol_url),
     metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
@@ -308,46 +288,45 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
 
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
-      <OldVersionAlert uuid={uuid} isLatest={isLatest} />
-      <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
-      {Boolean(is_component) && <ComponentAlert />}
-      <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-        <Summary
-          entityTypeDisplay={datasetLabel}
-          published_timestamp={published_timestamp}
-          status={combinedStatus}
-          mapped_data_access_level={mapped_data_access_level}
-          mapped_external_group_name={mapped_external_group_name}
-          bottomFold={
-            <>
-              <MultiAssayRelationship assay_modality={assay_modality} />
-              <DataProducts files={files} />
-              <DatasetRelationships uuid={uuid} processing={processing} />
-            </>
-          }
-        >
-          <SummaryDataChildren
-            mapped_data_types={mapped_data_types}
-            mapped_organ={mapped_organ}
-            registered_doi={registered_doi}
-            doi_url={doi_url}
-            uuid={uuid}
-            hubmap_id={hubmap_id}
+      <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
+        <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
+        {Boolean(is_component) && <ComponentAlert />}
+        <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
+          <Summary
+            entityTypeDisplay={datasetLabel}
+            published_timestamp={published_timestamp}
+            status={combinedStatus}
             mapped_data_access_level={mapped_data_access_level}
-          />
-        </Summary>
-        {shouldDisplaySection.visualization && (
-          <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
-        )}
-        {shouldDisplaySection.provenance && <ProvSection />}
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
-        {shouldDisplaySection.files && <Files files={files} />}
-        {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
-        {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
-        {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
-        <Attribution />
-      </DetailLayout>
+            mapped_external_group_name={mapped_external_group_name}
+            bottomFold={
+              <>
+                <MultiAssayRelationship assay_modality={assay_modality} />
+                <DataProducts files={files} />
+                <DatasetRelationships uuid={uuid} processing={processing} />
+              </>
+            }
+          >
+            <SummaryDataChildren
+              mapped_data_types={mapped_data_types}
+              mapped_organ={mapped_organ}
+              registered_doi={registered_doi}
+              doi_url={doi_url}
+              uuid={uuid}
+              hubmap_id={hubmap_id}
+              mapped_data_access_level={mapped_data_access_level}
+            />
+          </Summary>
+          {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
+          {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
+          {shouldDisplaySection.provenance && <ProvSection />}
+          {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
+          {shouldDisplaySection.files && <Files files={files} />}
+          {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
+          {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
+          {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+          <Attribution />
+        </DetailLayout>
+      </SelectedVersionStoreProvider>
     </DetailContextProvider>
   );
 }
@@ -358,7 +337,11 @@ function DetailPageWrapper({ assayMetadata, ...props }: EntityDetailProps<Entity
   useTrackID({ entity_type, hubmap_id });
 
   if (isDataset(assayMetadata)) {
-    return <DatasetDetail assayMetadata={assayMetadata} {...props} />;
+    return (
+      <SelectedVersionStoreProvider initialVersionUUIDs={assayMetadata.descendant_ids}>
+        <DatasetDetail assayMetadata={assayMetadata} {...props} />;
+      </SelectedVersionStoreProvider>
+    );
   }
   if (isSupport(assayMetadata)) {
     return <SupportDetail assayMetadata={assayMetadata} {...props} />;

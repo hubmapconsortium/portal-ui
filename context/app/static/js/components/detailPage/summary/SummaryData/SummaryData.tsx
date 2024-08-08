@@ -3,7 +3,6 @@ import SaveEditEntityButton from 'js/components/detailPage/SaveEditEntityButton'
 
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import VersionSelect from 'js/components/detailPage/VersionSelect';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
@@ -74,7 +73,6 @@ function SummaryData({
             <FlexEnd>
               {showJsonButton && <SummaryJSONButton entity_type={entity_type} uuid={uuid} />}
               {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type as ESEntityType} />}
-              {datasetEntityTypes.includes(entity_type) && <VersionSelect uuid={uuid} />}
             </FlexEnd>
             {otherButtons}
           </FlexEnd>

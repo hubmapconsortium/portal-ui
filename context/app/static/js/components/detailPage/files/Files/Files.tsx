@@ -2,7 +2,6 @@ import React from 'react';
 
 import { Box } from '@mui/material';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 
 import FileBrowser from '../FileBrowser';
@@ -16,8 +15,7 @@ interface FilesProps {
 function Files({ files }: FilesProps) {
   return (
     <FilesContextProvider>
-      <DetailPageSection id="files" data-testid="files">
-        <SectionHeader>Files</SectionHeader>
+      <DetailPageSection>
         {files.length > 0 && (
           <Box mb={2}>
             <FileBrowser files={files} />

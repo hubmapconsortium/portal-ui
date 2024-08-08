@@ -40,7 +40,14 @@ async function fetchPipelineInfo({ url, datasets, groupsToken }: PipelineInfoReq
   if (datasets.length !== 1) {
     return Promise.resolve('');
   }
-  return (await fetchSoftAssay({ url, dataset: datasets[0], groupsToken }))['pipeline-shorthand'];
+  const result = await fetchSoftAssay({ url, dataset: datasets[0], groupsToken });
+
+  // Handle image pyramids separately since their pipeline-shorthand is blank
+  if (result.assaytype === 'image_pyramid') {
+    return 'Image Pyramid Generation';
+  }
+
+  return result['pipeline-shorthand'];
 }
 
 export function usePipelineInfo(datasets: string[]) {
