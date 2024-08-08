@@ -100,6 +100,7 @@ export interface Dataset extends Entity {
   published_timestamp: number;
   mapped_external_group_name?: string;
   title: string;
+  dataset_type: string;
 }
 
 export interface Collection extends Entity {

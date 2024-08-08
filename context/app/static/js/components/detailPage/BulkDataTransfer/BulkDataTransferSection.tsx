@@ -1,13 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
-import BulkDataTransferPanels from './BulkDataTransferPanels';
-import { StyledContainer } from './style';
+import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
+import BulkDataTransferPanels from './BulkDataTransferPanels';
+import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 
 function BulkDataTransfer() {
+  const tabs = useProcessedDatasetTabs();
+
+  const [openTabIndex, setOpenTabIndex] = useState(0);
+
   return (
     <FilesContextProvider>
       <DetailPageSection id="bulk-data-transfer" data-testid="bulk-data-transfer">
@@ -16,9 +21,22 @@ function BulkDataTransfer() {
           This section explains how to download data in bulk from raw and processed datasets. Processed datasets have
           separate download directories in Globus or dbGaP, distinct from the raw dataset.
         </SectionDescription>
-        <StyledContainer>
-          <BulkDataTransferPanels />
-        </StyledContainer>
+        <Tabs
+          value={openTabIndex}
+          onChange={(_, newValue) => {
+            setOpenTabIndex(newValue as number);
+          }}
+        >
+          {tabs.map(({ label }, index) => (
+            <Tab key={label} label={label} index={index} />
+          ))}
+        </Tabs>
+
+        {tabs.map((tab, index) => (
+          <TabPanel key={tab.label} index={index} value={openTabIndex}>
+            <BulkDataTransferPanels {...tab} />
+          </TabPanel>
+        ))}
       </DetailPageSection>
     </FilesContextProvider>
   );

@@ -2,20 +2,11 @@ import React from 'react';
 
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { InternalLink } from 'js/shared-styles/Links';
-import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { useAppContext } from 'js/components/Contexts';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import GlobusLink from './GlobusLink';
 import { useFetchProtectedFile } from './hooks';
 import { LoginButton } from './style';
-
-interface LinkPanel {
-  title: string;
-  tooltip: string;
-  description: string;
-  outboundLink: string;
-  key: 'dbGaP' | 'SRA Experiment';
-}
 
 const dbGaPText = {
   title: 'Non-Consortium Members: Database of Genotypes and Phenotypes (dbGaP)',
@@ -33,25 +24,6 @@ const dbGaPTooltip = (
     dbGap <InfoTooltipIcon iconTooltipText="Database of Genotypes and Phenotypes" noMargin />
   </>
 );
-
-const sraExpTooltip =
-  'SRA data, available through multiple cloud providers and NCBI servers, is the largest publicly available repository of high throughput sequencing data.';
-
-const dbGaPLink: LinkPanel = {
-  title: 'dbGaP Study',
-  tooltip: dbGaPText.tooltip,
-  description: 'Navigate to the "Bioproject" or "Sequencing Read Archive" links to access the datasets.',
-  outboundLink: '',
-  key: 'dbGaP',
-};
-
-const sraExperimentLink: LinkPanel = {
-  title: 'SRA Experiment',
-  tooltip: sraExpTooltip,
-  description: 'Select the "Run" link on the page to download the dataset information.',
-  outboundLink: 'https://www.ncbi.nlm.nih.gov/sra/docs/',
-  key: 'SRA Experiment',
-};
 
 interface GlobusPanel {
   title: string;
@@ -111,7 +83,9 @@ const noGlobusAccessWhileLoggedInPanel: GlobusPanel = {
 
 interface SuccessPanelSet {
   panels: GlobusPanel[];
-  links: LinkPanel[] | React.ReactNode[];
+  showGlobus?: boolean;
+  showDbGaP?: boolean;
+  showSRA?: boolean;
 }
 
 interface ErrorPanelSet {
@@ -127,12 +101,12 @@ type PanelSet = SuccessPanelSet | ErrorPanelSet;
 
 const PROTECTED_DATA_NOT_LOGGED_IN: SuccessPanelSet = {
   panels: [loginPanel, dbGaPPanel],
-  links: [dbGaPLink, sraExperimentLink],
+  showDbGaP: true,
+  showSRA: true,
 };
 
 const PROTECTED_DATA_LOGGED_IN_NO_GLOBUS_ACCESS: SuccessPanelSet = {
   panels: [noGlobusAccessWhileLoggedInPanel],
-  links: [],
 };
 
 const noDbGaPPanel: GlobusPanel = {
@@ -148,7 +122,6 @@ const noDbGaPPanel: GlobusPanel = {
 
 const PROTECTED_DATA_NO_DBGAP: SuccessPanelSet = {
   panels: [loginPanel, noDbGaPPanel],
-  links: [],
 };
 
 const PUBLIC_DATA: SuccessPanelSet = {
@@ -166,7 +139,7 @@ const PUBLIC_DATA: SuccessPanelSet = {
       ),
     },
   ],
-  links: [<GlobusLink key="globus-public" />],
+  showGlobus: true,
 };
 
 const ACCESS_TO_PROTECTED_DATA: SuccessPanelSet = {
@@ -185,7 +158,7 @@ const ACCESS_TO_PROTECTED_DATA: SuccessPanelSet = {
       ),
     },
   ],
-  links: [<GlobusLink key="globus-protected" />],
+  showGlobus: true,
 };
 
 const NO_ACCESS_TO_PROTECTED_DATA: ErrorPanelSet = {
@@ -216,12 +189,12 @@ const NON_CONSORTIUM_MEMBERS: SuccessPanelSet = {
       ),
     },
   ],
-  links: [dbGaPLink, sraExperimentLink],
+  showDbGaP: true,
+  showSRA: true,
 };
 
 const NON_CONSORTIUM_MEMBERS_NO_DBGAP: SuccessPanelSet = {
   panels: [noDbGaPPanel],
-  links: [],
 };
 
 const ENTITY_API_ERROR: ErrorPanelSet = {
@@ -251,19 +224,19 @@ function getGlobusPanel(status: number | undefined, panel: PanelSet, isLoading: 
   return panel;
 }
 
-export const usePanelSet: () => PanelSet = () => {
+export const usePanelSet: (uuid: string, dbGapStudyURL?: string, accessType?: string) => PanelSet = (
+  uuid,
+  dbGapStudyURL,
+  accessType,
+) => {
   const { isAuthenticated, isHubmapUser } = useAppContext();
 
-  const {
-    entity: { dbgap_study_url, mapped_data_access_level: accessType, uuid },
-  } = useFlaskDataContext();
-
-  const hasDbGaPStudyURL = Boolean(dbgap_study_url);
+  const hasDbGaPStudyURL = Boolean(dbGapStudyURL);
   const { status: globusURLStatus, isLoading: globusURLIsLoading } = useFetchProtectedFile(uuid);
   const hasNoAccess = globusURLStatus === 403;
   const isNonConsortium = !isHubmapUser;
 
-  if (accessType !== 'Protected') {
+  if (!accessType || accessType !== 'Protected') {
     return getGlobusPanel(globusURLStatus, PUBLIC_DATA, globusURLIsLoading);
   }
 

@@ -50,6 +50,8 @@ export type ProcessedDatasetInfo = Pick<
   | 'metadata'
   | 'creation_action'
   | 'created_timestamp'
+  | 'dbgap_study_url'
+  | 'dbgap_sra_experiment_url'
 >;
 
 type VitessceConf = object | undefined;
@@ -95,6 +97,8 @@ function useProcessedDatasets() {
       'metadata',
       'creation_action',
       'created_timestamp',
+      'dbgap_study_url',
+      'dbgap_sra_experiment_url',
     ],
     size: 10000,
   };
