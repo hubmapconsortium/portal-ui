@@ -150,9 +150,11 @@ export function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provD
         id: currentEntityUUID,
         type: currentEntityType,
         data: {
+          uuid: currentEntity[generatePrefix('uuid')],
           name: currentEntity[generatePrefix('hubmap_id')],
           status: currentEntity[generatePrefix('status')],
           datasetType: currentEntity[generatePrefix('dataset_type')],
+          pipeline: currentEntity[generatePrefix('pipeline')],
         },
       });
       // Iterate over all activities that used this entity

@@ -6,8 +6,8 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 import Skeleton from '@mui/material/Skeleton';
 
 import { VisualizationIcon } from 'js/shared-styles/icons';
-import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
 
+import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
 import { ProcessedDatasetSectionAccordion } from './styles';
@@ -26,7 +26,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   return (
     <ProcessedDatasetSectionAccordion
       defaultExpanded={defaultExpanded}
-      id={formatSectionHash(`section-${sectionDataset.hubmap_id}`)}
+      id={datasetSectionId(sectionDataset, 'section')}
       onChange={(_, expanded) =>
         track({ action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`, label: sectionDataset.hubmap_id })
       }

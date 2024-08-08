@@ -5,12 +5,13 @@ import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries';
 import { Dataset, isDataset } from 'js/components/types';
-import { formatSectionHash, getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
+import { getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
 import { fetcher } from 'js/helpers/swr';
 import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/types';
 import { useLayoutEffect } from 'react';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { getAuthHeader } from 'js/helpers/functions';
+import { datasetSectionId } from './utils';
 
 function useDatasetLabelPrefix() {
   const {
@@ -116,23 +117,23 @@ function getProcessedDatasetSection({
   hit: Required<SearchHit<ProcessedDatasetInfo>>;
   conf?: VitessceConf;
 }) {
-  const { pipeline, hubmap_id } = hit._source;
+  const { pipeline, hubmap_id, files, metadata } = hit._source;
 
   const shouldDisplaySection = {
     summary: true,
     visualization: Boolean(conf && 'data' in conf && conf?.data),
-    files: Boolean(hit?._source?.files),
-    analysis: Boolean(hit?._source?.metadata?.dag_provenance_list),
+    files: Boolean(files),
+    analysis: Boolean(metadata?.dag_provenance_list),
   };
 
   const sectionsToDisplay = Object.entries(shouldDisplaySection).filter(([_k, v]) => v === true);
 
   return {
     // TODO: Improve the lookup for descendants to exclude anything with a missing pipeline name
-    ...getSectionFromString(pipeline ?? hubmap_id, `section-${hubmap_id}`),
+    ...getSectionFromString(pipeline ?? hubmap_id, datasetSectionId(hit._source, 'section')),
     items: sectionsToDisplay.map(([s]) => ({
-      ...getSectionFromString(s),
-      hash: formatSectionHash(`${s}-${hubmap_id}`),
+      ...getSectionFromString(s, datasetSectionId(hit._source, s)),
+      hash: datasetSectionId(hit._source, s),
     })),
   };
 }

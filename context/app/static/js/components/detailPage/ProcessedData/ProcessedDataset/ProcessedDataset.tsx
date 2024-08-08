@@ -30,6 +30,7 @@ import {
 } from './ProcessedDatasetContext';
 import { useSelectedVersionStore } from '../../VersionSelect/SelectedVersionStore';
 import { useProcessedDatasetDetails } from './hooks';
+import { useVersions } from '../../VersionSelect/hooks';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import { OldVersionAlert } from './OldVersionAlert';
 
@@ -61,7 +62,7 @@ function SummaryAccordion() {
   const { dataset } = useProcessedDatasetContext();
   const [dateLabel, dateValue] = getDateLabelAndValue(dataset);
   return (
-    <Subsection id={`summary-${dataset.hubmap_id}`} title="Summary" icon={<SummarizeRounded />}>
+    <Subsection title="Summary" icon={<SummarizeRounded />}>
       <ProcessedDatasetDescription />
       <LabelledSectionText label="Consortium">{dataset.group_name}</LabelledSectionText>
       <RegisteredBy />
@@ -76,13 +77,12 @@ function FilesAccordion() {
   const {
     dataset: { files, hubmap_id },
   } = useProcessedDatasetContext();
-  const id = `files-${hubmap_id}`;
   const hasDataProducts = Boolean(files.filter((file) => file.is_data_product).length);
   const [openTabIndex, setOpenTabIndex] = useState(0);
   const fileBrowserIndex = hasDataProducts ? 1 : 0;
   const track = useTrackEntityPageEvent();
   return (
-    <Subsection id={id} title="Files" icon={<InsertDriveFileRounded />}>
+    <Subsection title="Files" icon={<InsertDriveFileRounded />}>
       <SectionDescription subsection>
         Files are available for this processed dataset. Essential data products are identified for your convenience, and
         a comprehensive list of available files is displayed in the file browser. To download data in bulk from either
@@ -127,7 +127,7 @@ function VisualizationAccordion() {
   }
 
   return (
-    <Subsection id={`visualization-${hubmap_id}`} title="Visualization" icon={<VisualizationIcon />}>
+    <Subsection title="Visualization" icon={<VisualizationIcon />}>
       <SectionDescription subsection>
         This visualization includes various interactive elements such as scatter plots, spatial imaging plots, heat
         maps, genome browser tracks, and more.
@@ -145,13 +145,12 @@ function AnalysisDetailsAccordion() {
   }
 
   const {
-    hubmap_id,
     metadata: { dag_provenance_list },
     protocol_url,
   } = dataset;
 
   return (
-    <Subsection id={`analysis-${hubmap_id}`} title="Analysis Details & Protocols" icon={<FactCheckRounded />}>
+    <Subsection title="Analysis Details & Protocols" idTitleOverride="analysis" icon={<FactCheckRounded />}>
       <AnalysisDetails dagListData={dag_provenance_list} />
       {Boolean(protocol_url) && <Protocol protocol_url={protocol_url} />}
     </Subsection>
@@ -163,6 +162,7 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
     useSelectedVersionStore((state) => state.selectedVersions.get(sectionDataset.uuid))?.uuid ?? sectionDataset.uuid;
 
   const { datasetDetails, isLoading } = useProcessedDatasetDetails(selectedDatasetVersionUUID);
+  useVersions(sectionDataset.uuid);
 
   const { setCurrentDataset } = useProcessedDataStore((state) => ({
     setCurrentDataset: state.setCurrentDataset,

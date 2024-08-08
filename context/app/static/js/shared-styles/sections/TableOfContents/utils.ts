@@ -3,14 +3,14 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { TableOfContentsItem, TableOfContentsItemWithNode, TableOfContentsItems } from './types';
 
 function formatSectionHash(hash: string) {
-  const hashWithoutDots = hash.replace(/\./g, '-').toLowerCase();
+  const hashWithoutDots = hash.replace(/\s/g, '').toLowerCase();
   return encodeURIComponent(hashWithoutDots);
 }
 
-function getSectionFromString(s: string, hash: string = s): TableOfContentsItem {
+function getSectionFromString(s: string, hash: string = formatSectionHash(s)): TableOfContentsItem {
   return {
     text: capitalizeAndReplaceDashes(s),
-    hash: formatSectionHash(hash),
+    hash,
     icon: sectionIconMap?.[s],
   };
 }

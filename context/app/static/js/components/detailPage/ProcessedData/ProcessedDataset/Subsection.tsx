@@ -3,7 +3,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import ExpandMore from '@mui/icons-material/ExpandMoreRounded';
 import Typography from '@mui/material/Typography';
-import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
+import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { SubsectionAccordion } from './styles';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
@@ -11,16 +11,16 @@ import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 interface SubsectionProps extends PropsWithChildren {
   title: string;
   icon: React.ReactNode;
-  id: string;
+  idTitleOverride?: string;
 }
 
-export function Subsection({ title, icon, id, children }: SubsectionProps) {
+export function Subsection({ title, idTitleOverride, icon, children }: SubsectionProps) {
   const track = useTrackEntityPageEvent();
-  const { dataset } = useProcessedDatasetContext();
+  const { dataset, sectionDataset } = useProcessedDatasetContext();
   return (
     <SubsectionAccordion
       defaultExpanded
-      id={formatSectionHash(id)}
+      id={datasetSectionId(sectionDataset, idTitleOverride ?? title)}
       onChange={(_, expanded) =>
         track({
           action: `${expanded ? 'Expand' : 'Collapse'} ${title} Section`,
