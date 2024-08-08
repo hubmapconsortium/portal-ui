@@ -17,6 +17,7 @@ import { StyledSvgIcon, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 import EntityHeaderActionButtons from '../EntityHeaderActionButtons';
+import StatusIcon from '../../StatusIcon';
 
 type EntityTypesWithIcons = Exclude<
   keyof typeof entityIconMap,
@@ -46,6 +47,7 @@ export interface AssayMetadata extends Pick<Entity, 'mapped_data_access_level'> 
   collectionName?: string;
   description?: string;
   created_timestamp: number;
+  status: string;
 }
 
 type EntityToFieldsType = Record<
@@ -68,8 +70,15 @@ const entityToFieldsMap: EntityToFieldsType = {
     'sample category': ({ sample_category }) => sample_category,
   },
   Dataset: {
-    'organ type': ({ mapped_organ }) => mapped_organ,
     'data type': ({ mapped_data_types }) => mapped_data_types?.join(', '),
+    'organ type': ({ mapped_organ }) => mapped_organ,
+    status: ({ status, mapped_data_access_level }) =>
+      status &&
+      mapped_data_access_level && (
+        <>
+          <StatusIcon status={status} /> {status} ({mapped_data_access_level})
+        </>
+      ),
   },
   Publication: {
     title: ({ title }) => title,

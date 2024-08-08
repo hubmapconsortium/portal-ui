@@ -252,6 +252,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
       mapped_organ,
       uuid,
       mapped_data_access_level,
+      status,
       published_timestamp,
     });
   }, [
@@ -261,6 +262,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     mapped_organ,
     uuid,
     mapped_data_access_level,
+    status,
     published_timestamp,
     setAssayMetadata,
   ]);
