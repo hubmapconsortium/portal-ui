@@ -13,6 +13,8 @@ import useEntityStore, { type EntityStore, SummaryViewsType } from 'js/stores/us
 import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity } from 'js/components/types';
+import EntityIcon from 'js/shared-styles/icons/EntityIcon';
+
 import {
   getDonorMetadata,
   getSampleCategories,
@@ -64,13 +66,18 @@ const entityToFieldsMap: EntityToFieldsType = {
     'sample category': getSampleCategories,
   },
   Dataset: {
-    'data type': getDataTypes,
+    'data type': (e) => (
+      <>
+        <EntityIcon entity_type={e.entity_type} sx={{ alignSelf: 'center', marginRight: 1 }} />
+        {getDataTypes(e)}
+      </>
+    ),
     'organ type': (e) => getOriginSampleAndMappedOrgan(e)?.mapped_organ,
     status: ({ status, mapped_data_access_level }) =>
       status &&
       mapped_data_access_level && (
         <>
-          <StatusIcon status={status} /> {status} ({mapped_data_access_level})
+          <StatusIcon status={status} sx={{ marginRight: 1 }} /> {status} ({mapped_data_access_level})
         </>
       ),
   },

@@ -11,7 +11,9 @@ interface EntityHeaderItemProps {
 function EntityHeaderItem({ text, children }: PropsWithChildren<EntityHeaderItemProps>) {
   return (
     <>
-      <Typography variant="body1">{typeof text === 'string' ? truncateText(text) : text}</Typography>
+      <Typography display="flex" variant="body1">
+        {typeof text === 'string' ? truncateText(text) : text}
+      </Typography>
       {children}
       <VerticalDivider orientation="vertical" flexItem />
     </>

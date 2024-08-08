@@ -1,4 +1,5 @@
 import React from 'react';
+import { SvgIconProps } from '@mui/material/SvgIcon';
 import { ColoredStatusIcon } from './ColoredStatusIcon';
 
 function getColor(status: string) {
@@ -26,11 +27,11 @@ interface StatusIconProps {
   status: string;
 }
 
-function StatusIcon({ status: irregularCaseStatus }: StatusIconProps) {
+function StatusIcon({ status: irregularCaseStatus, ...svgIconProps }: StatusIconProps & Partial<SvgIconProps>) {
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 
-  return <ColoredStatusIcon $iconStatus={color} data-testid="status-svg-icon" />;
+  return <ColoredStatusIcon $iconStatus={color} data-testid="status-svg-icon" {...svgIconProps} />;
 }
 
 export default StatusIcon;
