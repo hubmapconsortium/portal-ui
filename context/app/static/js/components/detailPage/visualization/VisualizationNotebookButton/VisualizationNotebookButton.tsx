@@ -10,6 +10,7 @@ import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
+import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 
 const tooltip = 'Launch new workspace or download a Jupyter notebook for this visualization.';
 
@@ -42,7 +43,7 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
     };
   }, [uuid, toastError, trackEntityPageEvent]);
 
-  const menuOptions = [
+  const options = [
     {
       children: 'Launch New Workspace',
       onClick: () => setDialogIsOpen(true),
@@ -59,7 +60,11 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
   return (
     <>
       <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
-      <IconDropdownMenu tooltip={tooltip} icon={WorkspacesIcon} options={menuOptions} />
+      <IconDropdownMenu tooltip={tooltip} icon={WorkspacesIcon}>
+        {options.map((props) => (
+          <IconDropdownMenuItem key={props.children} {...props} />
+        ))}
+      </IconDropdownMenu>
     </>
   );
 }

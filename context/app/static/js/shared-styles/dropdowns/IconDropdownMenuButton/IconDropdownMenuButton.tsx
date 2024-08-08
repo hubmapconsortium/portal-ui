@@ -17,7 +17,7 @@ function IconDropdownMenuButton({ children, menuID, ...rest }: IconDropdownMenuB
       color="primary"
       aria-controls={menuIsOpen ? menuID : undefined}
       aria-haspopup="true"
-      ref={menuRef as unknown as React.RefObject<HTMLButtonElement>}
+      ref={menuRef as React.RefObject<HTMLButtonElement>}
       {...rest}
     >
       {children}

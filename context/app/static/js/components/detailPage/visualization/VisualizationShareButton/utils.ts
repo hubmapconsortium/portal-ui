@@ -35,4 +35,4 @@ const createEmailWithUrl = (conf: object) => {
   window.location.href = mailtoLink;
 };
 
-export { createEmailWithUrl, copyToClipBoard };
+export { createEmailWithUrl, copyToClipBoard, getUrl };
