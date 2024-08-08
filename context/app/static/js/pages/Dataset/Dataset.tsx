@@ -110,21 +110,6 @@ function SummaryDataChildren({
 
 const entityStoreSelector = (state: EntityStore) => state.setAssayMetadata;
 
-function OldVersionAlert({ uuid, isLatest }: { uuid: string; isLatest: boolean }) {
-  if (isLatest) {
-    return null;
-  }
-  return (
-    <DetailPageAlert severity="warning">
-      <span>
-        {/* <span> to override "display: flex" which splits this on to multiple lines. */}
-        You are viewing an older version of this page. Navigate to the{' '}
-        <InternalLink href={`/browse/latest/dataset/${uuid}`}>latest version</InternalLink>.
-      </span>
-    </DetailPageAlert>
-  );
-}
-
 function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
   if (!isExternal) {
     return null;
@@ -165,8 +150,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     assay_modality,
   } = assayMetadata;
 
-  const isLatest = !('next_revision_uuid' in assayMetadata);
-
   const combinedMetadata = combineMetadata(
     donor,
     origin_samples[0],
@@ -198,7 +181,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
 
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
-      <OldVersionAlert uuid={uuid} isLatest={isLatest} />
       <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
       <SupportAlert uuid={uuid} isSupport={entity_type === 'Support'} />
       {Boolean(is_component) && <ComponentAlert />}
@@ -261,7 +243,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     processing,
   } = assayMetadata;
 
-  const isLatest = !('next_revision_uuid' in assayMetadata);
   useLazyLoadedHashHandler();
 
   const origin_sample = origin_samples[0];
@@ -307,48 +288,45 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
-      <OldVersionAlert uuid={uuid} isLatest={isLatest} />
-      <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
-      {Boolean(is_component) && <ComponentAlert />}
-      <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-        <Summary
-          entityTypeDisplay={datasetLabel}
-          published_timestamp={published_timestamp}
-          status={combinedStatus}
-          mapped_data_access_level={mapped_data_access_level}
-          mapped_external_group_name={mapped_external_group_name}
-          bottomFold={
-            <>
-              <MultiAssayRelationship assay_modality={assay_modality} />
-              <DataProducts files={files} />
-              <DatasetRelationships uuid={uuid} processing={processing} />
-            </>
-          }
-        >
-          <SummaryDataChildren
-            mapped_data_types={mapped_data_types}
-            mapped_organ={mapped_organ}
-            registered_doi={registered_doi}
-            doi_url={doi_url}
-            uuid={uuid}
-            hubmap_id={hubmap_id}
+      <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
+        <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
+        {Boolean(is_component) && <ComponentAlert />}
+        <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
+          <Summary
+            entityTypeDisplay={datasetLabel}
+            published_timestamp={published_timestamp}
+            status={combinedStatus}
             mapped_data_access_level={mapped_data_access_level}
-          />
-        </Summary>
-        {shouldDisplaySection['processed-data'] && (
-          <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
-            <ProcessedDataSection />
-          </SelectedVersionStoreProvider>
-        )}
-        {shouldDisplaySection.provenance && <ProvSection />}
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
-        {shouldDisplaySection.files && <Files files={files} />}
-        {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
-        {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
-        {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
-        <Attribution />
-      </DetailLayout>
+            mapped_external_group_name={mapped_external_group_name}
+            bottomFold={
+              <>
+                <MultiAssayRelationship assay_modality={assay_modality} />
+                <DataProducts files={files} />
+                <DatasetRelationships uuid={uuid} processing={processing} />
+              </>
+            }
+          >
+            <SummaryDataChildren
+              mapped_data_types={mapped_data_types}
+              mapped_organ={mapped_organ}
+              registered_doi={registered_doi}
+              doi_url={doi_url}
+              uuid={uuid}
+              hubmap_id={hubmap_id}
+              mapped_data_access_level={mapped_data_access_level}
+            />
+          </Summary>
+          {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
+          {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
+          {shouldDisplaySection.provenance && <ProvSection />}
+          {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
+          {shouldDisplaySection.files && <Files files={files} />}
+          {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
+          {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
+          {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+          <Attribution />
+        </DetailLayout>
+      </SelectedVersionStoreProvider>
     </DetailContextProvider>
   );
 }

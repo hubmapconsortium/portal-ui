@@ -30,8 +30,8 @@ import {
 } from './ProcessedDatasetContext';
 import { useSelectedVersionStore } from '../../VersionSelect/SelectedVersionStore';
 import { useProcessedDatasetDetails } from './hooks';
-import { useVersions } from '../../VersionSelect/hooks';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
+import { OldVersionAlert } from './OldVersionAlert';
 
 function ProcessedDatasetDescription() {
   const {
@@ -163,7 +163,6 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
     useSelectedVersionStore((state) => state.selectedVersions.get(sectionDataset.uuid))?.uuid ?? sectionDataset.uuid;
 
   const { datasetDetails, isLoading } = useProcessedDatasetDetails(selectedDatasetVersionUUID);
-  useVersions(sectionDataset.uuid);
 
   const { setCurrentDataset } = useProcessedDataStore((state) => ({
     setCurrentDataset: state.setCurrentDataset,
@@ -196,6 +195,7 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
         defaultExpanded={defaultExpanded}
       >
         <ProcessedDatasetAccordion>
+          <OldVersionAlert />
           <DatasetTitle />
           <SummaryAccordion />
           <VisualizationAccordion />

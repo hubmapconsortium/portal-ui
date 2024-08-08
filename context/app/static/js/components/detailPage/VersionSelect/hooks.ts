@@ -22,7 +22,9 @@ export function useVersions(uuid: string) {
       },
     },
   );
-  const selectedVersionIndex = versions.findIndex((version) => version.uuid === uuid);
+  const selectedVersion = versions.find((version) => version.uuid === uuid);
+  const selectedVersionIndex = selectedVersion ? versions.indexOf(selectedVersion) : 0;
+  const selectedVersionUUID = selectedVersion ? selectedVersion.uuid : uuid;
 
-  return { versions, selectedVersionIndex, isLoading };
+  return { versions, selectedVersionIndex, isLoading, selectedVersionUUID };
 }
