@@ -26,7 +26,7 @@ export function OldVersionAlert() {
     <DetailPageAlert severity="warning">
       <span>
         {/* <span> to override "display: flex" which splits this on to multiple lines. */}
-        You are viewing an older version of this page. Navigate to the{' '}
+        You are viewing an older version of this dataset. Navigate to the{' '}
         <InternalLink
           onClick={() => {
             setSelectedVersion(sectionDataset.uuid, sectionDataset.uuid);
