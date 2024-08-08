@@ -29,6 +29,7 @@ function VisualizationShareButton() {
     copyToClipBoard(vitessceState as object, () => {
       urlIsLong = true;
     });
+
     const message = `Visualization URL copied to clipboard. ${urlIsLong ? DEFAULT_LONG_URL_WARNING : ''}`.trim();
     const toast = urlIsLong ? toastWarning : toastSuccess;
 

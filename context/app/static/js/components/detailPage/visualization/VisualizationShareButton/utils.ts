@@ -12,13 +12,14 @@ const getUrl = (conf: object, onOverMaximumUrlLength: () => void) => {
 };
 
 const copyToClipBoard = (conf: object, onOverMaximumUrlLength: () => void) => {
-  const dummy = document.createElement('input');
-  document.body.appendChild(dummy);
   const url = getUrl(conf, onOverMaximumUrlLength);
-  dummy.setAttribute('value', url);
-  dummy.select();
-  document.execCommand('copy');
-  document.body.removeChild(dummy);
+
+  navigator.clipboard
+    .writeText(url)
+    .then()
+    .catch((err) => {
+      console.error('Failed to copy text to clipboard: ', err);
+    });
 };
 
 const createEmailWithUrl = (conf: object) => {
