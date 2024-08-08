@@ -18,6 +18,7 @@ import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDia
 import { useAppContext } from 'js/components/Contexts';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { useIsLargeDesktop } from 'js/hooks/media-queries';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -209,6 +210,7 @@ function EntityHeaderActionButtons({
   view: SummaryViewsType;
   setView: (v: SummaryViewsType) => void;
 } & Partial<Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'> & { entity_type: AllEntityTypes }>) {
+  const isLargeDesktop = useIsLargeDesktop();
   if (!(entity_type && uuid)) {
     return null;
   }
@@ -218,7 +220,7 @@ function EntityHeaderActionButtons({
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      {isDataset && <ViewSelectChips selectedView={view} setView={setView} isDataset={isDataset} />}
+      {isDataset && isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} isDataset={isDataset} />}
       {showJsonButton && <JSONButton entity_type={entity_type} uuid={uuid} />}
       {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
       {showWorkspaceButton && (
