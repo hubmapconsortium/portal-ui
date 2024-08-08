@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
 import SvgIcon from '@mui/icons-material/GetAppRounded';
 import MenuList from '@mui/material/MenuList';
@@ -11,7 +11,8 @@ import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 
 import { StyledSecondaryBackgroundTooltip, StyledSvgIcon, StyledTypography } from './style';
 
-interface IconDropdownMenuItemProps extends PropsWithChildren {
+interface IconDropdownMenuItemProps {
+  children: string;
   icon: typeof SvgIcon;
   onClick: () => void;
   disabled?: boolean;
@@ -45,7 +46,7 @@ function IconDropdownMenu({ tooltip, icon, options }: IconDropdownMenuProps) {
       <DropdownMenu id={`${tooltip}-menu`}>
         <MenuList id="menu-options">
           {options.map((props) => (
-            <IconDropdownMenuItem key={props.icon.toString()} {...props} />
+            <IconDropdownMenuItem key={props.children} {...props} />
           ))}
         </MenuList>
       </DropdownMenu>
