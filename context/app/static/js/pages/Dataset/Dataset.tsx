@@ -352,7 +352,13 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
           />
         </Summary>
         {shouldDisplaySection.visualization && (
-          <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
+          <VisualizationWrapper
+            vitData={vitData}
+            uuid={uuid}
+            hubmap_id={hubmap_id}
+            mapped_data_access_level={mapped_data_access_level}
+            hasNotebook={hasNotebook}
+          />
         )}
         {shouldDisplaySection.provenance && <ProvSection />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}

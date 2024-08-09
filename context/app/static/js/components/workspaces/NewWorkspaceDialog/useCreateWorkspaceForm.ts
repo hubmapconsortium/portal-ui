@@ -25,6 +25,7 @@ interface CreateWorkspaceFormTypes extends FormWithTemplates {
 
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
+  defaultTemplate?: string;
 }
 
 const schema = z
@@ -32,7 +33,7 @@ const schema = z
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
-function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
+function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
 
@@ -45,7 +46,7 @@ function useCreateWorkspaceForm({ defaultName }: UseCreateWorkspaceTypes) {
     defaultValues: {
       'workspace-name': defaultName ?? '',
       'protected-datasets': '',
-      templates: [DEFAULT_TEMPLATE_KEY],
+      templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
     mode: 'onChange',

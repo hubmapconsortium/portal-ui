@@ -1,43 +1,72 @@
-import React from 'react';
-import GetAppRoundedIcon from '@mui/icons-material/GetAppRounded';
-import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
+import React, { useCallback } from 'react';
 
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import Download from '@mui/icons-material/Download';
+
+import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { StyledSecondaryBackgroundTooltip } from './style';
+import { WorkspacesIcon } from 'js/shared-styles/icons';
+import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
+import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
+import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
+import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 
-const title = 'Download Jupyter Notebook';
+const tooltip = 'Launch new workspace or download a Jupyter notebook for this visualization.';
 
 interface VisualizationNotebookButtonProps {
   uuid: string;
+  hubmap_id: string;
+  mapped_data_access_level: string;
 }
 
-function VisualizationNotebookButton({ uuid }: VisualizationNotebookButtonProps) {
+function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level }: VisualizationNotebookButtonProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const { toastError } = useSnackbarActions();
 
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
+    defaultName: hubmap_id,
+    defaultTemplate: 'visualization',
+  });
+
+  const downloadNotebook = useCallback(() => {
+    return () => {
+      trackEntityPageEvent({ action: `Vitessce / ${tooltip}` });
+      postAndDownloadFile({
+        url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
+        body: {},
+      })
+        .then()
+        .catch(() => {
+          toastError('Failed to download Jupyter Notebook');
+        });
+    };
+  }, [uuid, toastError, trackEntityPageEvent]);
+
+  const options = [
+    {
+      children: 'Launch New Workspace',
+      onClick: () => setDialogIsOpen(true),
+      disabled: mapped_data_access_level === 'Protected',
+      icon: WorkspacesIcon,
+    },
+    {
+      children: 'Download Jupyter Notebook',
+      onClick: downloadNotebook,
+      icon: Download,
+    },
+  ];
+
   return (
-    <StyledSecondaryBackgroundTooltip title={title}>
-      <WhiteBackgroundIconButton
-        onClick={() => {
-          trackEntityPageEvent({ action: `Vitessce / ${title}` });
-          postAndDownloadFile({
-            url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
-            body: {},
-          })
-            .then(() => {
-              // Do nothing
-            })
-            .catch(() => {
-              toastError('Failed to download Jupyter Notebook');
-            });
-        }}
-      >
-        <GetAppRoundedIcon color="primary" />
-      </WhiteBackgroundIconButton>
-    </StyledSecondaryBackgroundTooltip>
+    <>
+      <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+      <IconDropdownMenu tooltip={tooltip} icon={WorkspacesIcon}>
+        {options.map((props) => (
+          <IconDropdownMenuItem key={props.children} {...props} />
+        ))}
+      </IconDropdownMenu>
+    </>
   );
 }
 
-export default VisualizationNotebookButton;
+export default withDropdownMenuProvider(VisualizationNotebookButton, false);

@@ -1,82 +1,60 @@
-import React, { useReducer, useRef } from 'react';
+import React from 'react';
 
 import ShareIcon from '@mui/icons-material/Share';
-import Popper from '@mui/material/Popper';
-import Paper from '@mui/material/Paper';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ClickAwayListener from '@mui/material/ClickAwayListener';
-import Link from '@mui/material/Link';
+import LinkIcon from '@mui/icons-material/Link';
+import EmailIcon from '@mui/icons-material/Email';
 
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { copyToClipBoard, createEmailWithUrl } from './utils';
-import { DEFAULT_LONG_URL_WARNING } from './constants';
+import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
+import { useHandleCopyClick } from 'js/hooks/useCopyText';
 
-import { StyledLinkIcon, StyledTypography, StyledEmailIcon } from './style';
+import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
+import { createEmailWithUrl, getUrl } from './utils';
+import { DEFAULT_LONG_URL_WARNING } from './constants';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
   vitessceState: state.vitessceState,
 });
 
 function VisualizationShareButton() {
-  const [open, toggle] = useReducer((v) => !v, false);
-  const anchorRef = useRef(null);
   const { vitessceState } = useVisualizationStore(visualizationStoreSelector);
-  const { toastWarning, toastSuccess } = useSnackbarActions();
-
   const trackEntityPageEvent = useTrackEntityPageEvent();
+  const handleCopyClick = useHandleCopyClick();
 
-  const onClick = () => {
-    let urlIsLong = false;
+  const copyLink = () => {
     trackEntityPageEvent({ action: 'Vitessce / Share Visualization' });
-    copyToClipBoard(vitessceState as object, () => {
+
+    let urlIsLong = false;
+    const url = getUrl(vitessceState as object, () => {
       urlIsLong = true;
     });
-    const message = `Visualization URL copied to clipboard. ${urlIsLong ? DEFAULT_LONG_URL_WARNING : ''}`.trim();
-    const toast = urlIsLong ? toastWarning : toastSuccess;
-    toast(message);
-    toggle();
+
+    const message = urlIsLong ? DEFAULT_LONG_URL_WARNING : '';
+    handleCopyClick(url, message);
   };
 
+  const options = [
+    {
+      children: 'Copy Visualization Link',
+      onClick: copyLink,
+      icon: LinkIcon,
+    },
+    {
+      children: 'Email',
+      onClick: () => {
+        createEmailWithUrl(vitessceState as object);
+      },
+      icon: EmailIcon,
+    },
+  ];
+
   return (
-    <>
-      <SecondaryBackgroundTooltip title="Share Visualization">
-        <WhiteBackgroundIconButton ref={anchorRef} onClick={toggle}>
-          <ShareIcon color="primary" />
-        </WhiteBackgroundIconButton>
-      </SecondaryBackgroundTooltip>
-      <Popper open={open} anchorEl={anchorRef.current} placement="bottom-start" style={{ zIndex: 50 }}>
-        <Paper style={{ maxHeight: 200, overflow: 'auto' }}>
-          <ClickAwayListener onClickAway={toggle}>
-            <MenuList id="preview-options">
-              <MenuItem onClick={onClick}>
-                <StyledTypography variant="inherit">Copy Visualization Link</StyledTypography>
-                <ListItemIcon>
-                  <StyledLinkIcon fontSize="small" />
-                </ListItemIcon>
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  createEmailWithUrl(vitessceState as object);
-                  toggle();
-                }}
-                component={Link}
-              >
-                <StyledTypography variant="inherit">Email</StyledTypography>
-                <ListItemIcon>
-                  <StyledEmailIcon fontSize="small" />
-                </ListItemIcon>
-              </MenuItem>
-            </MenuList>
-          </ClickAwayListener>
-        </Paper>
-      </Popper>
-    </>
+    <IconDropdownMenu tooltip="Share Visualization" icon={ShareIcon}>
+      {options.map((props) => (
+        <IconDropdownMenuItem key={props.children} {...props} />
+      ))}
+    </IconDropdownMenu>
   );
 }
 

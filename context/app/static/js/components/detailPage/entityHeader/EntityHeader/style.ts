@@ -5,7 +5,7 @@ import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 import { iconButtonHeight } from 'js/shared-styles/buttons';
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
-  position: 'fixed',
+  position: 'sticky',
   height: iconButtonHeight,
   width: '100%',
   top: headerHeight,

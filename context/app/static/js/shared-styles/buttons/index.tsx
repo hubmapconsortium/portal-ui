@@ -1,9 +1,10 @@
 import React, { PropsWithChildren, ComponentProps } from 'react';
-import { styled } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ToggleButton from '@mui/material/ToggleButton';
 import Button from '@mui/material/Button';
 import { SecondaryBackgroundTooltip } from '../tooltips';
+import IconDropdownMenuButton from '../dropdowns/IconDropdownMenuButton';
 
 const iconButtonHeight = 40;
 
@@ -15,14 +16,25 @@ const whiteBackgroundCSS = {
   padding: '0px',
 };
 
+const border = (theme: Theme) => ({
+  border: `1px solid ${theme.palette.divider}`,
+});
+
 const svgStyles = {
   fontSize: '1.25rem',
 };
 
-const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>({
+const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
   ...whiteBackgroundCSS,
+  ...border(theme),
   '& svg': svgStyles,
-});
+}));
+
+const WhiteBackgroundIconDropdownMenuButton = styled(IconDropdownMenuButton)(({ theme }) => ({
+  ...whiteBackgroundCSS,
+  ...border(theme),
+  '& svg': svgStyles,
+}));
 
 const WhiteBackgroundToggleButton = styled(ToggleButton)({
   ...whiteBackgroundCSS,
@@ -60,4 +72,10 @@ const WhiteTextButton = styled(Button)({
 
 export default TooltipToggleButton;
 
-export { WhiteBackgroundIconButton, TooltipToggleButton, iconButtonHeight, WhiteTextButton };
+export {
+  WhiteBackgroundIconButton,
+  WhiteBackgroundIconDropdownMenuButton,
+  TooltipToggleButton,
+  iconButtonHeight,
+  WhiteTextButton,
+};
