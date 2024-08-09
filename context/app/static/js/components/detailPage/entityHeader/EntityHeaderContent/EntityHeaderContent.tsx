@@ -2,6 +2,7 @@ import React from 'react';
 import { animated, useSpring } from '@react-spring/web';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
@@ -12,17 +13,10 @@ import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import useEntityStore, { type EntityStore, SummaryViewsType } from 'js/stores/useEntityStore';
 import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { Entity } from 'js/components/types';
+import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
 import EntityIcon from 'js/shared-styles/icons/EntityIcon';
 
-import {
-  getDonorMetadata,
-  getSampleCategories,
-  getDataTypes,
-  getPublicationTitle,
-  getPublicationVenue,
-  getOriginSampleAndMappedOrgan,
-} from '../../utils';
+import { getDonorMetadata, getOriginSampleAndMappedOrgan } from '../../utils';
 
 import { StyledSvgIcon, RightDiv } from './style';
 import EntityHeaderItem from '../EntityHeaderItem';
@@ -35,63 +29,120 @@ type EntityTypesWithIcons = Exclude<
   'Support' | 'Collection' | 'Workspace' | 'VerifiedUser'
 >;
 
-export interface AssayMetadata extends Pick<Entity, 'mapped_data_access_level'> {
+export interface AssayMetadata {
   entity_type: AllEntityTypes;
   name: string;
   reference_link: React.ReactNode;
   citationTitle?: string;
 }
 
-type EntityToFieldsType = Record<
-  EntityTypesWithIcons,
-  Record<string, (assayMetadata: Partial<AssayMetadata> & Entity) => React.ReactNode>
->;
+interface EntityHeaderItemsProps {
+  data: {
+    assayMetadata: Partial<AssayMetadata>;
+    entity: Entity;
+  };
+}
+
+type EntityToFieldsType = Record<EntityTypesWithIcons, (props: EntityHeaderItemsProps) => React.ReactNode | null>;
 
 const entityTypeHasIcon = (entityType: string): entityType is EntityTypesWithIcons => {
   return entityType in entityIconMap;
 };
 
+function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
+  if (!isDonor(entity) || !isSample(entity) || isDataset(entity)) {
+    return null;
+  }
+
+  const { sex, race, age_unit, age_value } = getDonorMetadata(entity);
+
+  return (
+    <>
+      {sex && <Typography>{sex}</Typography>}
+      {race && <Typography>{race}</Typography>}
+      {age_unit && age_value && (
+        <Typography>
+          {age_value} {age_unit}
+        </Typography>
+      )}
+    </>
+  );
+}
+
+function SampleItems({ data: { entity } }: EntityHeaderItemsProps) {
+  if (!isSample(entity)) {
+    return null;
+  }
+
+  const { mapped_organ } = getOriginSampleAndMappedOrgan(entity);
+  const { sample_category } = entity;
+
+  return (
+    <>
+      <Typography>{mapped_organ}</Typography>
+      <Typography>{sample_category}</Typography>
+    </>
+  );
+}
+
+function DatasetItems({ data: { entity } }: EntityHeaderItemsProps) {
+  if (!isDataset(entity)) {
+    return null;
+  }
+  const { assay_display_name, entity_type, status, mapped_data_access_level } = entity;
+  const { mapped_organ } = getOriginSampleAndMappedOrgan(entity);
+
+  return (
+    <>
+      <Typography>
+        <EntityIcon entity_type={entity_type} sx={{ alignSelf: 'center', marginRight: 1 }} />
+        {assay_display_name}
+      </Typography>
+      <Typography>{mapped_organ}</Typography>
+      <Typography>
+        <StatusIcon status={status} sx={{ marginRight: 1 }} /> {status} ({mapped_data_access_level})
+      </Typography>
+    </>
+  );
+}
+
+function PublicationItems({ data: { entity } }: EntityHeaderItemsProps) {
+  if (!isPublication(entity)) {
+    return null;
+  }
+
+  const { title, publication_venue } = entity;
+
+  return (
+    <>
+      <Typography>{title}</Typography>
+      <Typography>{publication_venue}</Typography>
+    </>
+  );
+}
+
+function CellTypeItems({ data: { assayMetadata } }: EntityHeaderItemsProps) {
+  const { name, reference_link } = assayMetadata;
+  return (
+    <>
+      <Typography>{name}</Typography>
+      <Typography>{reference_link}</Typography>
+    </>
+  );
+}
+
+function GeneItems({ data: { assayMetadata } }: EntityHeaderItemsProps) {
+  const { name } = assayMetadata;
+  return <Typography>{name}</Typography>;
+}
+
 const entityToFieldsMap: EntityToFieldsType = {
-  Donor: {
-    sex: (e) => getDonorMetadata(e)?.sex,
-    race: (e) => getDonorMetadata(e)?.race?.join(', '),
-    age: (e) => {
-      const age_value = getDonorMetadata(e)?.age_value;
-      const age_unit = getDonorMetadata(e)?.age_unit;
-      return age_value && age_unit ? `${age_value} ${age_unit}` : '';
-    },
-  },
-  Sample: {
-    'organ type': (e) => getOriginSampleAndMappedOrgan(e)?.mapped_organ,
-    'sample category': getSampleCategories,
-  },
-  Dataset: {
-    'data type': (e) => (
-      <>
-        <EntityIcon entity_type={e.entity_type} sx={{ alignSelf: 'center', marginRight: 1 }} />
-        {getDataTypes(e)}
-      </>
-    ),
-    'organ type': (e) => getOriginSampleAndMappedOrgan(e)?.mapped_organ,
-    status: ({ status, mapped_data_access_level }) =>
-      status &&
-      mapped_data_access_level && (
-        <>
-          <StatusIcon status={status} sx={{ marginRight: 1 }} /> {status} ({mapped_data_access_level})
-        </>
-      ),
-  },
-  Publication: {
-    title: getPublicationTitle,
-    'publication venue': getPublicationVenue,
-  },
-  CellType: {
-    name: ({ name }) => name,
-    reference_link: ({ reference_link }) => reference_link,
-  },
-  Gene: {
-    name: ({ name }) => name,
-  },
+  Donor: DonorItems,
+  Sample: SampleItems,
+  Dataset: DatasetItems,
+  Publication: PublicationItems,
+  CellType: CellTypeItems,
+  Gene: GeneItems,
 };
 
 const AnimatedStack = animated(Stack);
@@ -139,6 +190,9 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
     },
   });
 
+  const type = entity_type || assayMetadata.entity_type;
+  const ItemsComponent = entityTypeHasIcon(type) ? entityToFieldsMap?.[type] : undefined;
+
   return (
     <Stack
       direction="row"
@@ -147,16 +201,11 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
       py={0.5}
       sx={(theme) => ({ ...(view !== 'narrow' && { borderBottom: `1px solid ${theme.palette.primary.lowEmphasis}` }) })}
     >
-      {entity_type && (
+      {ItemsComponent && (
         <AnimatedStack style={styles} direction="row" alignItems="center">
-          <StyledSvgIcon component={entityIconMap[entity_type]} />
+          <StyledSvgIcon component={entityIconMap[type]} />
           {hubmap_id && <HuBMAPIDItem hubmap_id={hubmap_id} />}
-          {entityTypeHasIcon(entity_type) && entityToFieldsMap[entity_type]
-            ? Object.entries(entityToFieldsMap[entity_type]).map(([label, fn]) => {
-                const text = fn({ ...assayMetadata, ...entity });
-                return text ? <EntityHeaderItem text={text} key={label} /> : null;
-              })
-            : null}
+          <ItemsComponent data={{ assayMetadata, entity }} />
         </AnimatedStack>
       )}
       <RightDiv>

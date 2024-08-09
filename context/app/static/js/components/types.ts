@@ -55,12 +55,12 @@ export type PartialEntity = Partial<Entity> & Pick<Entity, 'entity_type' | 'uuid
 
 export interface Donor extends Entity {
   entity_type: 'Donor';
-  mapped_metadata?: {
+  mapped_metadata: Partial<{
     sex: string;
     age_unit: string;
     age_value: string;
     race: string[];
-  };
+  }>;
 }
 
 export interface Sample extends Entity {

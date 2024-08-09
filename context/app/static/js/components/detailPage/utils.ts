@@ -1,4 +1,4 @@
-import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
+import { Dataset, Donor, isDataset, isDonor, isSample, Sample } from 'js/components/types';
 
 export function getSectionOrder(
   possibleSections: string[],
@@ -13,7 +13,7 @@ export function getCombinedDatasetStatus({ sub_status, status }: { sub_status?: 
   return sub_status ?? status;
 }
 
-export function getDonorMetadata(entity: Entity) {
+export function getDonorMetadata(entity: Donor | Sample | Dataset) {
   if (isDonor(entity)) {
     return entity.mapped_metadata;
   }
@@ -22,46 +22,10 @@ export function getDonorMetadata(entity: Entity) {
     return entity.donor.mapped_metadata;
   }
 
-  return null;
+  return {};
 }
 
-export function getSampleCategories(entity: Entity) {
-  if (!isSample(entity)) {
-    return null;
-  }
-
-  return entity.sample_category;
-}
-
-export function getOriginSampleAndMappedOrgan(entity: Entity) {
-  if (!isSample(entity) || isDataset(entity)) {
-    return null;
-  }
-
+export function getOriginSampleAndMappedOrgan(entity: Sample | Dataset) {
   const origin_sample = entity.origin_samples[0];
   return { origin_sample, mapped_organ: origin_sample.mapped_organ };
-}
-
-export function getDataTypes(entity: Entity) {
-  if (!isDataset(entity)) {
-    return null;
-  }
-
-  return entity.mapped_data_types?.join(', ');
-}
-
-export function getPublicationVenue(entity: Entity) {
-  if (!isPublication(entity)) {
-    return null;
-  }
-
-  return entity.publication_venue;
-}
-
-export function getPublicationTitle(entity: Entity) {
-  if (!isPublication(entity)) {
-    return null;
-  }
-
-  return entity.title;
 }
