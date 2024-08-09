@@ -1,13 +1,15 @@
-import React from 'react';
+import React, { ReactNode } from 'react';
 import { animated, useSpring } from '@react-spring/web';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import Divider from '@mui/material/Divider';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
 import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationNotebookButton';
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import useEntityStore, { type EntityStore, SummaryViewsType } from 'js/stores/useEntityStore';
@@ -15,11 +17,11 @@ import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVis
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
 import EntityIcon from 'js/shared-styles/icons/EntityIcon';
-
+import { SampleCategoryIcon } from 'js/shared-styles/icons';
 import { getDonorMetadata, getOriginSampleAndMappedOrgan } from '../../utils';
+import EntityHeaderItem from '../EntityHeaderItem';
 
 import { StyledSvgIcon, RightDiv } from './style';
-import EntityHeaderItem from '../EntityHeaderItem';
 import VisualizationShareButtonWrapper from '../VisualizationShareButtonWrapper';
 import EntityHeaderActionButtons from '../EntityHeaderActionButtons';
 import StatusIcon from '../../StatusIcon';
@@ -50,7 +52,7 @@ const entityTypeHasIcon = (entityType: string): entityType is EntityTypesWithIco
 };
 
 function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
-  if (!isDonor(entity) || !isSample(entity) || isDataset(entity)) {
+  if (!isDonor(entity)) {
     return null;
   }
 
@@ -79,8 +81,8 @@ function SampleItems({ data: { entity } }: EntityHeaderItemsProps) {
 
   return (
     <>
-      <Typography>{mapped_organ}</Typography>
-      <Typography>{sample_category}</Typography>
+      <EntityHeaderItem startIcon={<OrganIcon organName={mapped_organ} />}>{mapped_organ}</EntityHeaderItem>
+      <EntityHeaderItem startIcon={<SampleCategoryIcon />}>{sample_category}</EntityHeaderItem>
     </>
   );
 }
@@ -94,14 +96,11 @@ function DatasetItems({ data: { entity } }: EntityHeaderItemsProps) {
 
   return (
     <>
-      <Typography>
-        <EntityIcon entity_type={entity_type} sx={{ alignSelf: 'center', marginRight: 1 }} />
-        {assay_display_name}
-      </Typography>
-      <Typography>{mapped_organ}</Typography>
-      <Typography>
-        <StatusIcon status={status} sx={{ marginRight: 1 }} /> {status} ({mapped_data_access_level})
-      </Typography>
+      <EntityHeaderItem startIcon={<EntityIcon entity_type={entity_type} />}>{assay_display_name}</EntityHeaderItem>
+      <EntityHeaderItem startIcon={<OrganIcon organName={mapped_organ} />}>{mapped_organ}</EntityHeaderItem>
+      <EntityHeaderItem startIcon={<StatusIcon status={status} />}>
+        {status} ({mapped_data_access_level})
+      </EntityHeaderItem>
     </>
   );
 }
@@ -145,19 +144,35 @@ const entityToFieldsMap: EntityToFieldsType = {
   Gene: GeneItems,
 };
 
+function EntityHeaderItems({ type, ...rest }: { type: EntityTypesWithIcons } & EntityHeaderItemsProps) {
+  const Items = entityToFieldsMap[type];
+
+  return (
+    <>
+      <Items {...rest} />
+      <Divider orientation="vertical" flexItem />
+    </>
+  );
+}
+
 const AnimatedStack = animated(Stack);
 
 const vizNotebookIdSelector: (state: { vizNotebookId: string | null }) => string | null = (state) =>
   state.vizNotebookId;
 
-function HuBMAPIDItem({ hubmap_id }: Pick<Entity, 'hubmap_id'>) {
+function HuBMAPIDItem({ hubmap_id, entityTypeIcon }: Pick<Entity, 'hubmap_id'> & { entityTypeIcon: ReactNode }) {
   const handleCopyClick = useHandleCopyClick();
 
   return (
-    <EntityHeaderItem text={hubmap_id}>
-      <TooltipIconButton onClick={() => handleCopyClick(hubmap_id)} tooltip="Copy HuBMAP ID">
-        <ContentCopyIcon sx={(theme) => ({ color: theme.palette.common.link, fontSize: '1.25rem' })} />
-      </TooltipIconButton>
+    <EntityHeaderItem
+      endIcon={
+        <TooltipIconButton onClick={() => handleCopyClick(hubmap_id)} tooltip="Copy HuBMAP ID">
+          <ContentCopyIcon sx={(theme) => ({ color: theme.palette.common.link, fontSize: '1.25rem' })} />
+        </TooltipIconButton>
+      }
+      startIcon={entityTypeIcon}
+    >
+      {hubmap_id}
     </EntityHeaderItem>
   );
 }
@@ -191,7 +206,6 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
   });
 
   const type = entity_type || assayMetadata.entity_type;
-  const ItemsComponent = entityTypeHasIcon(type) ? entityToFieldsMap?.[type] : undefined;
 
   return (
     <Stack
@@ -201,11 +215,18 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
       py={0.5}
       sx={(theme) => ({ ...(view !== 'narrow' && { borderBottom: `1px solid ${theme.palette.primary.lowEmphasis}` }) })}
     >
-      {ItemsComponent && (
-        <AnimatedStack style={styles} direction="row" alignItems="center">
-          <StyledSvgIcon component={entityIconMap[type]} />
-          {hubmap_id && <HuBMAPIDItem hubmap_id={hubmap_id} />}
-          <ItemsComponent data={{ assayMetadata, entity }} />
+      {entityTypeHasIcon(type) && (
+        <AnimatedStack
+          style={styles}
+          direction="row"
+          alignItems="center"
+          spacing={2}
+          divider={<Divider orientation="vertical" flexItem />}
+        >
+          {hubmap_id && (
+            <HuBMAPIDItem hubmap_id={hubmap_id} entityTypeIcon={<StyledSvgIcon component={entityIconMap[type]} />} />
+          )}
+          <EntityHeaderItems type={type} data={{ assayMetadata, entity }} />
         </AnimatedStack>
       )}
       <RightDiv>
