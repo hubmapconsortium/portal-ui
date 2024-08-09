@@ -45,7 +45,7 @@ function Header() {
         {isLargeDesktop && (
           <Box height={expandedHeights[view]} width="100%" p={2}>
             {view === 'diagram' && uuid && <DatasetRelationships uuid={uuid} processing="raw" showHeader={false} />}
-            {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} clamp />}
+            {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} isEntityHeader />}
           </Box>
         )}
       </Box>

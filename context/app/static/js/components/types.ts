@@ -96,7 +96,7 @@ export interface Dataset extends Entity {
   registered_doi: string;
   doi_url?: string;
   published_timestamp: number;
-  mapped_external_group_name?: string;
+  mapped_external_group_name?: string; // Does this exist?
 }
 
 export interface Collection extends Entity {
@@ -106,10 +106,17 @@ export interface Collection extends Entity {
 }
 
 export interface Publication extends Entity {
-  publication_venue: string;
-  title: string;
   entity_type: 'Publication';
+  associated_collection?: Collection;
   doi_url: string;
+  mapped_external_group_name?: string; // Does this exist?
+  publication_doi: string;
+  publication_venue: string;
+  publication_url: string;
+  publication_date: string;
+  status: string;
+  sub_status: string;
+  title: string;
 }
 
 export interface Support extends Entity {
