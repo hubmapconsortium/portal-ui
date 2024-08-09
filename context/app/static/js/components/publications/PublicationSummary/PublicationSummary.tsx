@@ -17,6 +17,7 @@ function PublicationSummary() {
 
   const {
     hubmap_id,
+    title,
     publication_doi,
     publication_status: isPublished,
     status,
@@ -31,6 +32,7 @@ function PublicationSummary() {
 
   return (
     <Summary
+      title={title}
       entityTypeDisplay={isPublished ? 'Publication' : 'Preprint'}
       status={combinedStatus}
       mapped_data_access_level={mapped_data_access_level}

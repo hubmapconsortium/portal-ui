@@ -5,6 +5,7 @@ import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 
 interface SummaryProps extends PropsWithChildren {
+  title?: string;
   status: string;
   mapped_data_access_level: string;
   entityTypeDisplay?: string;
@@ -13,6 +14,7 @@ interface SummaryProps extends PropsWithChildren {
 }
 
 function Summary({
+  title,
   status,
   mapped_data_access_level,
   mapped_external_group_name,
@@ -27,7 +29,7 @@ function Summary({
   return (
     <DetailPageSection id="summary">
       <SummaryData
-        title={hubmap_id}
+        title={title ?? hubmap_id}
         entityTypeDisplay={entityTypeDisplay}
         entity_type={entity_type}
         status={status ?? 'Missing status'}
