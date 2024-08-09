@@ -94,14 +94,10 @@ function CreateWorkspaceButton({
   hubmap_id,
   mapped_data_access_level,
 }: Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'>) {
-  const { isWorkspacesUser } = useAppContext();
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
 
   const disabled = mapped_data_access_level === 'Protected';
 
-  if (!isWorkspacesUser) {
-    return null;
-  }
   return (
     <>
       <ActionButton
@@ -163,12 +159,17 @@ const ProcessedDataIcon = sectionIconMap['processed-data'];
 function ViewSelectChips({
   selectedView,
   setView,
-  isDataset,
+  entity_type,
 }: {
   selectedView: SummaryViewsType;
   setView: (v: SummaryViewsType) => void;
-  isDataset: boolean;
-}) {
+} & { entity_type: AllEntityTypes }) {
+  if (!['Donor', 'Sample', 'Dataset', 'Publication'].includes(entity_type)) {
+    return null;
+  }
+
+  const isDataset = entity_type === 'Dataset';
+
   return (
     <>
       <ViewSelectChip
@@ -211,16 +212,18 @@ function EntityHeaderActionButtons({
   setView: (v: SummaryViewsType) => void;
 } & Partial<Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'> & { entity_type: AllEntityTypes }>) {
   const isLargeDesktop = useIsLargeDesktop();
+  const { isWorkspacesUser } = useAppContext();
+
   if (!(entity_type && uuid)) {
     return null;
   }
 
   const isDataset = entity_type === 'Dataset';
-  const showWorkspaceButton = mapped_data_access_level && hubmap_id && isDataset;
+  const showWorkspaceButton = mapped_data_access_level && hubmap_id && isDataset && isWorkspacesUser;
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      {isDataset && isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} isDataset={isDataset} />}
+      {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
       {showJsonButton && <JSONButton entity_type={entity_type} uuid={uuid} />}
       {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
       {showWorkspaceButton && (
