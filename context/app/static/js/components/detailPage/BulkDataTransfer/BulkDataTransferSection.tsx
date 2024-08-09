@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
-import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
+import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
@@ -27,8 +27,8 @@ function BulkDataTransfer() {
             setOpenTabIndex(newValue as number);
           }}
         >
-          {tabs.map(({ label }, index) => (
-            <Tab key={label} label={label} index={index} />
+          {tabs.map(({ label, icon: Icon }, index) => (
+            <Tab key={label} label={label} index={index} icon={Icon ? <Icon /> : undefined} iconPosition="start" />
           ))}
         </Tabs>
 

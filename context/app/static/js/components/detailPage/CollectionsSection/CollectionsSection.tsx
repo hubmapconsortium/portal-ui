@@ -1,27 +1,104 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
-import { CollectionHit } from 'js/pages/Collections/types';
+import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
+import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
+import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
+import CollectionsSectionProvider, { useCollectionsSectionContext } from './CollectionsSectionContext';
 
-interface CollectionsSectionProps {
-  collectionsData: CollectionHit[];
+interface CollectionTabProps {
+  label: string;
+  uuid: string;
+  index: number;
+  icon?: React.ComponentType;
 }
 
-function CollectionsSection({ collectionsData }: CollectionsSectionProps) {
+function CollectionTab({ label, uuid, index, icon: Icon }: CollectionTabProps) {
+  const collectionsData = useDatasetsCollections([uuid]);
+  const {
+    entity: { uuid: primaryDatasetId },
+  } = useFlaskDataContext();
+  const { processedDatasetHasCollections } = useCollectionsSectionContext();
+
+  const isPrimaryDataset = uuid === primaryDatasetId;
+
+  if (!collectionsData || (collectionsData.length === 0 && uuid !== primaryDatasetId)) {
+    return null;
+  }
+  const isSingleTab = !processedDatasetHasCollections && isPrimaryDataset;
+
+  return (
+    <Tab
+      label={label}
+      isSingleTab={isSingleTab}
+      index={index}
+      icon={Icon ? <Icon /> : undefined}
+      iconPosition="start"
+    />
+  );
+}
+
+function CollectionPanel({ uuid, index }: { uuid: string; index: number }) {
+  const collectionsData = useDatasetsCollections([uuid]);
+  const { setProcessedDatasetHasCollections } = useCollectionsSectionContext();
+  const {
+    entity: { uuid: primaryDatasetId },
+  } = useFlaskDataContext();
+
+  useEffect(() => {
+    if (uuid !== primaryDatasetId && collectionsData?.length > 0) {
+      setProcessedDatasetHasCollections(true);
+    }
+  }, [collectionsData?.length, primaryDatasetId, setProcessedDatasetHasCollections, uuid]);
+  if (!collectionsData) {
+    return null;
+  }
   const panelsProps = buildCollectionsPanelsProps(collectionsData);
+  if (panelsProps.length === 0) {
+    if (uuid === primaryDatasetId) {
+      return (
+        <TabPanel value={index} index={index}>
+          <OutlinedAlert severity="info">The raw dataset is not referenced in any existing collections.</OutlinedAlert>
+        </TabPanel>
+      );
+    }
+    return null;
+  }
+  return (
+    <TabPanel value={index} index={index}>
+      <PanelList panelsProps={panelsProps} key={index} />
+    </TabPanel>
+  );
+}
+
+function CollectionsSection() {
+  const processedDatasetTabs = useProcessedDatasetTabs();
+
+  const [selectedTab, setSelectedTab] = useState(0);
 
   return (
     <DetailPageSection id="collections">
-      <SectionHeader>Collections</SectionHeader>
-      <SectionDescription>
-        Collections may contain references to either raw or processed datasets. If a processed dataset is not included
-        in any collection, there will be no corresponding tabs in the table below.
-      </SectionDescription>
-      <PanelList panelsProps={panelsProps} />
+      <CollectionsSectionProvider>
+        <SectionHeader>Collections</SectionHeader>
+        <SectionDescription>
+          Collections may contain references to either raw or processed datasets. If a processed dataset is not included
+          in any collection, there will be no corresponding tabs in the table below.
+        </SectionDescription>
+        <Tabs value={selectedTab} onChange={(_, tabIndex) => setSelectedTab(tabIndex as number)}>
+          {processedDatasetTabs.map(({ label, uuid, icon }, index) => (
+            <CollectionTab key={uuid} label={label} uuid={uuid} index={index} icon={icon} />
+          ))}
+        </Tabs>
+        {processedDatasetTabs.map(({ uuid }, index) => (
+          <CollectionPanel key={uuid} uuid={uuid} index={index} />
+        ))}
+      </CollectionsSectionProvider>
     </DetailPageSection>
   );
 }

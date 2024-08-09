@@ -25,11 +25,14 @@ function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
 
   const { showDbGaP, showGlobus, showSRA, panels } = panelsToUse;
 
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing -- this is a logical OR.
+  // This is a logical OR and should remain as such.
+  // If `showDbGaP` is false, we still want to check if `showGlobus` or `showSRA` are true.
+  // If we use `??` instead of `||`, the expression would only check if `showDbGaP` is false.
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
   const hasLinks = Boolean(showDbGaP || showGlobus || showSRA);
 
   return (
-    <>
+    <div>
       {panels.map((panel) => (
         <BulkDataTransferPanel {...panel} key={panel.title} />
       ))}
@@ -40,7 +43,7 @@ function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
           {showSRA && <Link href={dbgap_sra_experiment_url} title="SRA Experiment" />}
         </Paper>
       )}
-    </>
+    </div>
   );
 }
 

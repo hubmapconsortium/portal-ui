@@ -3,6 +3,8 @@ import { isDataset, type Dataset } from 'js/components/types';
 import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProcessedDatasets, type ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
+import { ComponentType } from 'react';
+import { nodeIcons } from '../../DatasetRelationships/nodeTypes';
 
 export type ProcessedDatasetDetails = ProcessedDatasetInfo &
   Pick<
@@ -60,7 +62,7 @@ export function useProcessedDatasetDetails(uuid: string) {
   return { datasetDetails, isLoading };
 }
 
-export function useProcessedDatasetTabs(): { label: string; uuid: string }[] {
+export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: ComponentType | undefined }[] {
   const { searchHits } = useProcessedDatasets();
   const { entity } = useFlaskDataContext();
 
@@ -73,15 +75,30 @@ export function useProcessedDatasetTabs(): { label: string; uuid: string }[] {
   const primaryDatasetTab = {
     label: dataset_type,
     uuid,
+    icon: nodeIcons.primaryDataset,
   };
 
-  // include the processed dataset's status in the label if more than one processed dataset of this type exists.
-  const processedDatasetTabs = searchHits.map(({ _source }, idx, hits) => ({
-    label: hits.find((h) => h._source.pipeline === _source.pipeline)
-      ? `${_source.pipeline} (${_source.status})`
-      : _source.pipeline,
-    uuid: _source.uuid,
-  }));
+  // Include datataset status in the label if more than one processed dataset of this type exists.
+  // This allows us to distinguish between published datasets and QA/New/other statuses.
+  const processedDatasetTabs = searchHits
+    // Prioritize published datasets
+    .sort((a, b) => {
+      if (a._source.status === 'Published') {
+        return -1;
+      }
+      if (b._source.status === 'Published') {
+        return 1;
+      }
+      return 0;
+    })
+    .map(({ _source }, _, hits) => ({
+      label:
+        hits.filter((h) => h._source.pipeline === _source.pipeline).length > 1
+          ? `${_source.pipeline} (${_source.status})`
+          : _source.pipeline,
+      uuid: _source.uuid,
+      icon: nodeIcons.processedDataset,
+    }));
 
   return [primaryDatasetTab, ...processedDatasetTabs];
 }

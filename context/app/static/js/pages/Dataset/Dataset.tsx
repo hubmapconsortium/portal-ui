@@ -9,7 +9,6 @@ import DataProducts from 'js/components/detailPage/files/DataProducts';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
-import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
@@ -256,11 +255,11 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     source_samples as Sample[],
     metadata as Record<string, unknown>,
   );
-
-  const collectionsData = useDatasetsCollections([uuid]);
-
   const { sections, isLoading } = useProcessedDatasetsSections();
   const { searchHits: processedDatasets } = useProcessedDatasets();
+
+  // Top level request for collections data to determine if there are any collections for any of the datasets
+  const collectionsData = useDatasetsCollections([uuid, ...processedDatasets.map((ds) => ds._id)]);
 
   const shouldDisplaySection = {
     summary: true,
@@ -318,11 +317,9 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
           </Summary>
           {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
           {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
-          {shouldDisplaySection.provenance && <ProvSection />}
-          {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-          {shouldDisplaySection.files && <Files files={files} />}
           {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
-          {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
+          {shouldDisplaySection.provenance && <ProvSection />}
+          {shouldDisplaySection.collections && <CollectionsSection />}
           {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
           <Attribution />
         </DetailLayout>
