@@ -50,7 +50,7 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorks
       templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
-    mode: 'all',
+    mode: 'onChange',
     resolver: zodResolver(schema),
   });
 
