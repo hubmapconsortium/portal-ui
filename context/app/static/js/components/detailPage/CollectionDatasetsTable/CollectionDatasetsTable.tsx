@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import type { Entity } from 'js/components/types';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
 
 import { useCollectionsDatasets } from './hooks';

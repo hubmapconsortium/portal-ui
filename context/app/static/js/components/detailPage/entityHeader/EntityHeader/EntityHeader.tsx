@@ -1,54 +1,66 @@
-import React from 'react';
-import { animated, useSpring } from '@react-spring/web';
+import React, { useCallback, useEffect } from 'react';
+import { animated } from '@react-spring/web';
+import Box from '@mui/material/Box';
 
-import { useEntityStore, type EntityStore } from 'js/stores/useEntityStore';
+import useEntityStore, { SummaryViewsType } from 'js/stores/useEntityStore';
+import { useIsLargeDesktop } from 'js/hooks/media-queries';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
-import { iconButtonHeight } from 'js/shared-styles/buttons';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
+import { useStartViewChangeSpring, expandedHeights } from './hooks';
+import DatasetRelationships from '../../DatasetRelationships';
+import SummaryBody from '../../summary/SummaryBody';
 
 const AnimatedPaper = animated(StyledPaper);
-
-const entityStoreSelector = (state: EntityStore) => ({
-  assayMetadata: state.assayMetadata,
-  summaryComponentObserver: state.summaryComponentObserver,
-});
 
 const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: state.vizIsFullscreen,
 });
 
-const entityHeaderHeight = iconButtonHeight;
-
 function Header() {
-  const {
-    assayMetadata,
-    summaryComponentObserver: { summaryInView },
-  } = useEntityStore(entityStoreSelector);
+  const { springs, view, setView } = useEntityStore();
+  const startViewChangeSpring = useStartViewChangeSpring();
+  const isLargeDesktop = useIsLargeDesktop();
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
 
-  const shouldDisplayHeader = !summaryInView || vizIsFullscreen;
+  const handleViewChange = useCallback(
+    (v: SummaryViewsType) => {
+      setView(v);
+      startViewChangeSpring(v);
+    },
+    [startViewChangeSpring, setView],
+  );
 
-  const styles = useSpring({
-    from: {
-      height: 0,
-      overflow: 'hidden',
-    },
-    to: {
-      height: shouldDisplayHeader ? entityHeaderHeight : 0,
-      overflow: 'hidden',
-    },
-  });
+  const { entity } = useFlaskDataContext();
+
+  const uuid = entity?.uuid;
+
+  useEffect(() => {
+    if (vizIsFullscreen) {
+      handleViewChange('narrow');
+    }
+  }, [vizIsFullscreen, handleViewChange]);
+
+  const [springValues] = springs;
+
+  if (springValues[0] === undefined) {
+    return null;
+  }
 
   return (
-    <AnimatedPaper style={styles} elevation={4} data-testid="entity-header">
-      <EntityHeaderContent
-        assayMetadata={assayMetadata}
-        shouldDisplayHeader={shouldDisplayHeader}
-        vizIsFullscreen={vizIsFullscreen}
-      />
+    <AnimatedPaper elevation={4} data-testid="entity-header" sx={{ overflow: 'hidden' }} style={springValues[0]}>
+      <Box>
+        <EntityHeaderContent setView={handleViewChange} view={view} />
+        {isLargeDesktop && (
+          <Box height={expandedHeights[view]} width="100%" p={2}>
+            {view === 'diagram' && uuid && <DatasetRelationships uuid={uuid} processing="raw" showHeader={false} />}
+            {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} isEntityHeader />}
+          </Box>
+        )}
+      </Box>
     </AnimatedPaper>
   );
 }
-export { entityHeaderHeight };
+
 export default Header;

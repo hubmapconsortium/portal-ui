@@ -17,6 +17,7 @@ import { NodeWithoutPosition } from './types';
 interface DatasetRelationshipsVisualizationProps {
   nodes: NodeWithoutPosition[];
   edges: Edge[];
+  showHeader: boolean;
 }
 
 function DatasetRelationshipsHeader() {
@@ -32,7 +33,6 @@ function DatasetRelationshipsHeader() {
 }
 
 const reactFlowConfig: Partial<ReactFlowProps> = {
-  fitView: true,
   proOptions: { hideAttribution: true },
   nodesDraggable: false,
   nodesConnectable: false,
@@ -58,36 +58,38 @@ function ReactFlowBody({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) {
 export function DatasetRelationshipsVisualization({
   nodes: initialNodes,
   edges: initialEdges,
+  showHeader,
 }: DatasetRelationshipsVisualizationProps) {
   const { nodes, edges } = applyLayout(initialNodes, initialEdges);
   const statuses = useDatasetStatuses(initialNodes.map(({ data }) => data));
   const types = useDatasetTypes(initialNodes);
 
   return (
-    <>
-      <DatasetRelationshipsHeader />
-      <Box sx={{ aspectRatio: '16 / 9' }}>
+    <Stack height="100%" width="100%">
+      {showHeader && <DatasetRelationshipsHeader />}
+      <Box flexGrow={1}>
         <ReactFlowBody nodes={nodes} edges={edges} />
       </Box>
       <Stack direction="row" gap={1}>
         <NodeLegend nodeTypes={types} />
         <StatusLegend statuses={statuses} />
       </Stack>
-    </>
+    </Stack>
   );
 }
 
 interface DatasetRelationshipsSectionProps {
   uuid: string;
   processing: string;
+  showHeader?: boolean;
 }
 
-export function DatasetRelationships({ uuid, processing }: DatasetRelationshipsSectionProps) {
+export function DatasetRelationships({ uuid, processing, showHeader = true }: DatasetRelationshipsSectionProps) {
   const shouldDisplay = processing === 'raw';
   const datasetRelationships = useDatasetRelationships(uuid, shouldDisplay);
   // If there are no related datasets to display, return null
   if (!shouldDisplay || datasetRelationships.nodes.length < 2) {
     return null;
   }
-  return <DatasetRelationshipsVisualization {...datasetRelationships} />;
+  return <DatasetRelationshipsVisualization {...datasetRelationships} showHeader={showHeader} />;
 }

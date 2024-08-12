@@ -1186,8 +1186,8 @@ platformdirs==2.5.1 \
     --hash=sha256:7535e70dfa32e84d4b34996ea99c5e432fa29a708d0f4e394bbcb2a8faa4f16d \
     --hash=sha256:bcae7cab893c2d310a711b70b24efb93334febe65f8de776ee320b517471e227
     # via black
-portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.5.zip \
-    --hash=sha256:af35146378cf213f55edd2b9870f8bba26812fe70d1a0bdf8e191f2e26c8f0dd
+portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.6.zip \
+    --hash=sha256:57dd4befb940c167203f43dbcccb0814a3aefeb2ab372a74d606a83b14b59a6b
     # via -r context/requirements.in
 property==2.2 \
     --hash=sha256:d25e4da4e415408b9eb39b6521c088e4e2b8a9e2f9f96fb2d91680e97207ea19
@@ -1257,7 +1257,9 @@ pyrsistent==0.18.1 \
 python-datauri==2.2.0 \
     --hash=sha256:8fa58222975fee541ce39e6b0b9d5653cefcc2481ad2629efc0378d48b13f43b \
     --hash=sha256:8fdbd6fc544a936eb492aa609ac457b08bbd7b9a77819c555805372cc76d7118
-    # via -r context/requirements.in
+    # via
+    #   -r context/requirements.in
+    #   portal-visualization
 python-dateutil==2.8.2 \
     --hash=sha256:0123cacc1627ae19ddf3c27a5de5bd67ee4586fbdd6440d9748f8abb483d3e86 \
     --hash=sha256:961d03dc3453ebbc59dbdea9e4e11c5651520a876d0f4db161e8674aae935da9
@@ -1586,9 +1588,9 @@ urllib3==1.26.9 \
     #   botocore
     #   distributed
     #   requests
-vitessce==3.2.6 \
-    --hash=sha256:19cbbc009513cf4119de3b095d1dc64b27ae26e6ce76949d9efe9f6070e63c67 \
-    --hash=sha256:259c145a56536a70b581c81dd04428a5a0a7e373a24eef193b7cfe9eae09a1e2
+vitessce==3.2.8 \
+    --hash=sha256:9155ca586a965fd6c20513506343955918b388e51ace85eb64fe440237f4f577 \
+    --hash=sha256:f95c59bd0062deb742634ca9b3e3eddb76342d2e50d83e2687f6001f2760f15e
     # via portal-visualization
 werkzeug==3.0.3 \
     --hash=sha256:097e5bfda9f0aba8da6b8545146def481d06aa7d3266e7448e2cccf67dd8bd18 \

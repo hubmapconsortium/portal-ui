@@ -6,10 +6,10 @@ import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolD
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import Divider from '@mui/material/Divider';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
-import { DetailPageSection } from '../style';
-import { StyledPaper } from './style';
 
 const loadingText = 'Protocols are loading. If protocols take a significant time to load, please ';
 const errorText = 'Failed to retrieve protocols. Please ';

@@ -8,8 +8,10 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import GlobalStyles from 'js/components/globalStyles';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
+import { EntityStoreProvider } from 'js/stores/useEntityStore';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
+import { useEntityHeaderSprings } from './detailPage/entityHeader/EntityHeader/hooks';
 
 const swrConfig = {
   revalidateOnFocus: false,
@@ -55,18 +57,24 @@ export default function Providers({
     [flaskData],
   );
 
+  const flaskDataWithDefaults = useMemo(() => ({ entity: {}, ...flaskData }), [flaskData]);
+
+  const { springs } = useEntityHeaderSprings();
+
   return (
     <SWRConfig value={swrConfig}>
       <GlobalFonts />
       <MuiThemeProvider theme={theme}>
         <SCThemeProvider theme={theme}>
           <AppContext.Provider value={appContext}>
-            <FlaskDataContext.Provider value={flaskData}>
-              <ProtocolAPIContext.Provider value={protocolsContext}>
-                <CssBaseline />
-                <GlobalStyles />
-                {children}
-              </ProtocolAPIContext.Provider>
+            <FlaskDataContext.Provider value={flaskDataWithDefaults}>
+              <EntityStoreProvider springs={springs} assayMetadata={flaskData?.entity ?? {}}>
+                <ProtocolAPIContext.Provider value={protocolsContext}>
+                  <CssBaseline />
+                  <GlobalStyles />
+                  {children}
+                </ProtocolAPIContext.Provider>
+              </EntityStoreProvider>
             </FlaskDataContext.Provider>
           </AppContext.Provider>
         </SCThemeProvider>

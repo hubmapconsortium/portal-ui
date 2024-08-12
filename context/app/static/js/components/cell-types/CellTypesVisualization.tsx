@@ -10,10 +10,10 @@ import Description from 'js/shared-styles/sections/Description';
 
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { CellTypeOrgan } from 'js/hooks/useCrossModalityApi';
 import { useCellTypeDetails, useCellTypeName } from './hooks';
-import { DetailPageSection } from '../detailPage/style';
 
 // Define the keys for the stack
 // TODO: Based on Nils's feedback, we are currently not including `other_cells`

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -6,13 +6,10 @@ import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import useEntityStore from 'js/stores/useEntityStore';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
-
-const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DonorDetail() {
   const {
@@ -30,7 +27,6 @@ function DonorDetail() {
       created_by_user_email,
     },
   } = useFlaskDataContext();
-  const { sex, race, age_value, age_unit } = mapped_metadata;
 
   const shouldDisplaySection = {
     summary: true,
@@ -40,18 +36,6 @@ function DonorDetail() {
     protocols: Boolean(protocol_url),
     attribution: true,
   };
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-  useEffect(() => {
-    setAssayMetadata({
-      hubmap_id,
-      entity_type,
-      sex,
-      race,
-      age_value,
-      age_unit,
-    });
-  }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata, group_name]);
 
   useTrackID({ entity_type, hubmap_id });
 

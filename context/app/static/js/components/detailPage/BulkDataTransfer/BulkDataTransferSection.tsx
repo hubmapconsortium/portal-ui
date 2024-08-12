@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';

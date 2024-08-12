@@ -6,7 +6,7 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { DetailPageSection } from '../detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { useAppContext } from '../Contexts';
 import { useWorkspaces } from '../workspaces/api';
 

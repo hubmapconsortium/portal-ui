@@ -18,6 +18,7 @@ function WorkspaceDetails({ workspace }) {
       </InternalLink>
       <Typography variant="body2">
         <JobStatus job={job} />
+        &nbsp;|&nbsp; ID: {workspace.id}
         &nbsp;|&nbsp; Created {workspace.datetime_created.slice(0, 10)}
       </Typography>
     </Stack>

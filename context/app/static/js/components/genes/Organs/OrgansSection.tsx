@@ -2,7 +2,7 @@ import React from 'react';
 
 import Stack from '@mui/material/Stack';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 
 import { organs } from '../constants';
 

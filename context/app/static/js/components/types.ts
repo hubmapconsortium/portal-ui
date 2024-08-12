@@ -1,4 +1,4 @@
-import { ContributorAPIResponse } from './detailPage/ContributorsTable/utils';
+import { ContributorAPIResponse, ContactAPIResponse } from './detailPage/ContributorsTable/utils';
 import { UnprocessedFile } from './detailPage/files/types';
 
 export type DonorEntityType = 'Donor';
@@ -34,6 +34,8 @@ export interface Entity {
   uuid: string;
   hubmap_id: string;
   last_modified_timestamp: number;
+  contacts: ContactAPIResponse[];
+  contributors: ContributorAPIResponse[];
   created_timestamp: number;
   ancestors: Entity[];
   // eslint-disable-next-line no-use-before-define -- Donor is defined later in the file and extends Entity
@@ -44,6 +46,7 @@ export interface Entity {
     dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;
   };
+  descendants: Entity[];
   group_name: string;
   created_by_user_displayname: string;
   created_by_user_email: string;
@@ -57,12 +60,12 @@ export type PartialEntity = Partial<Entity> & Pick<Entity, 'entity_type' | 'uuid
 
 export interface Donor extends Entity {
   entity_type: 'Donor';
-  mapped_metadata?: {
+  mapped_metadata: Partial<{
     sex: string;
     age_unit: string;
     age_value: string;
     race: string[];
-  };
+  }>;
 }
 
 export interface Sample extends Entity {
@@ -86,17 +89,17 @@ export interface Dataset extends Entity {
   origin_samples: Sample[];
   origin_samples_unique_mapped_organs: string[];
   mapped_data_types: string[];
+  mapped_consortium: string;
   thumbnail_file?: {
     file_uuid: string;
   };
   dbgap_study_url: string;
   dbgap_sra_experiment_url: string;
   files: UnprocessedFile[];
-  contributors: ContributorAPIResponse[];
   sub_status: string;
   protocol_url: string;
   registered_doi: string;
-  doi_url: string;
+  doi_url?: string;
   published_timestamp: number;
   mapped_external_group_name?: string;
   title: string;
@@ -105,23 +108,36 @@ export interface Dataset extends Entity {
 
 export interface Collection extends Entity {
   entity_type: 'Collection';
+  doi_url: string;
+  title: string;
 }
 
 export interface Publication extends Entity {
   entity_type: 'Publication';
+  associated_collection?: Collection;
+  doi_url: string;
+  mapped_external_group_name?: string; // Does this exist?
+  publication_doi: string;
+  publication_venue: string;
+  publication_url: string;
+  publication_date: string;
+  status: string;
+  sub_status: string;
+  title: string;
 }
 
 export interface Support extends Entity {
   entity_type: 'Support';
   origin_samples: Sample[];
   files: UnprocessedFile[];
-  contributors: ContributorAPIResponse[];
   published_timestamp: number;
   assay_modality: 'single' | 'multiple';
   created_timestamp: number;
   last_modified_timestamp: number;
   mapped_data_types: string[];
 }
+
+export type AllEntities = Dataset | Donor | Sample | Collection | Publication | Support;
 
 export type EntityWithType = Partial<Entity> & Required<Pick<Entity, 'entity_type'>>;
 

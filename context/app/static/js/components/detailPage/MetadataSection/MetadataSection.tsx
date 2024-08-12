@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from 'react';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';

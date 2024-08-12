@@ -223,10 +223,9 @@ const AnimatedStack = animated(Stack);
 
 export default function HelperPanel() {
   const currentDataset = useCurrentDataset();
-  // const panelOffset = useProcessedDataStore((state) => state.currentDatasetOffset);
   const isDesktop = useIsDesktop();
   const style = useAnimatedSidebarPosition();
-  if (!currentDataset || !isDesktop) {
+  if (!currentDataset || !isDesktop || !style) {
     return null;
   }
   return (

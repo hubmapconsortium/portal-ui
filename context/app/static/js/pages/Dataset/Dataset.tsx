@@ -1,8 +1,6 @@
-import React, { useEffect } from 'react';
-import SvgIcon from '@mui/material/SvgIcon';
-import { ButtonProps } from '@mui/material/Button';
-
-import { useAppContext } from 'js/components/Contexts';
+import React from 'react';
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
 import { InternalLink } from 'js/shared-styles/Links';
 import Files from 'js/components/detailPage/files/Files';
 import DataProducts from 'js/components/detailPage/files/DataProducts';
@@ -12,24 +10,18 @@ import Attribution from 'js/components/detailPage/Attribution';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
-import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
-
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 
 import { combineMetadata } from 'js/pages/utils/entity-utils';
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
-import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
+
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
@@ -39,40 +31,12 @@ import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import useDatasetLabel, { useLazyLoadedHashHandler, useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
 
-function NotebookButton({ disabled, ...props }: { disabled: boolean } & ButtonProps) {
-  return (
-    <TooltipIconButton
-      color="primary"
-      disabled={disabled}
-      {...props}
-      tooltip={disabled ? 'Protected datasets are not available in Workspaces.' : 'Launch a new workspace.'}
-    >
-      <SvgIcon component={WorkspacesIcon} />
-    </TooltipIconButton>
-  );
-}
-
 interface SummaryDataChildrenProps {
   mapped_data_types: string[];
   mapped_organ: string;
-  doi_url?: string;
-  registered_doi?: string;
-  hubmap_id: string;
-  uuid: string;
-  mapped_data_access_level: string;
 }
 
-function SummaryDataChildren({
-  mapped_data_types,
-  mapped_organ,
-  doi_url,
-  registered_doi,
-  hubmap_id,
-  uuid,
-  mapped_data_access_level,
-}: SummaryDataChildrenProps) {
-  const { isWorkspacesUser } = useAppContext();
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
+function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChildrenProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const dataTypes = mapped_data_types.join(', ');
   return (
@@ -87,27 +51,14 @@ function SummaryDataChildren({
           {dataTypes}
         </InternalLink>
       </SummaryItem>
-      <SummaryItem showDivider={Boolean(doi_url)}>
+      <SummaryItem showDivider={false}>
         <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
           {mapped_organ}
         </InternalLink>
       </SummaryItem>
-      {doi_url && (
-        <OutboundIconLink href={doi_url} variant="h6">
-          doi:{registered_doi}
-        </OutboundIconLink>
-      )}
-      {isWorkspacesUser && (
-        <>
-          <NotebookButton onClick={() => setDialogIsOpen(true)} disabled={mapped_data_access_level === 'Protected'} />
-          <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
-        </>
-      )}
     </>
   );
 }
-
-const entityStoreSelector = (state: EntityStore) => state.setAssayMetadata;
 
 function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
   if (!isExternal) {
@@ -140,11 +91,11 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     origin_samples,
     hubmap_id,
     entity_type,
-    published_timestamp,
     status,
     mapped_data_access_level,
     mapped_external_group_name,
     contributors,
+    contacts,
     is_component,
     assay_modality,
   } = assayMetadata;
@@ -161,16 +112,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     attribution: true,
   };
 
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-
-  useEffect(() => {
-    setAssayMetadata({
-      hubmap_id,
-      entity_type,
-      mapped_data_types,
-    });
-  }, [entity_type, hubmap_id, mapped_data_types, setAssayMetadata]);
-
   const datasetLabel = useDatasetLabel();
 
   return (
@@ -181,7 +122,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
       <DetailLayout sections={shouldDisplaySection}>
         <Summary
           entityTypeDisplay={datasetLabel}
-          published_timestamp={published_timestamp}
           status={status}
           mapped_data_access_level={mapped_data_access_level}
           bottomFold={
@@ -191,20 +131,16 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
             </>
           }
         >
-          <SummaryDataChildren
-            mapped_organ={origin_samples[0].mapped_organ}
-            mapped_data_types={mapped_data_types}
-            uuid={uuid}
-            hubmap_id={hubmap_id}
-            mapped_data_access_level={mapped_data_access_level}
-          />
+          <SummaryDataChildren mapped_organ={origin_samples[0].mapped_organ} mapped_data_types={mapped_data_types} />
         </Summary>
         {shouldDisplaySection.metadata && (
           <MetadataSection {...makeMetadataSectionProps(combinedMetadata, assay_modality)} />
         )}
         {shouldDisplaySection.files && <Files files={files} />}
-        {shouldDisplaySection['bulk-data-transfer'] === true && <BulkDataTransfer />}
-        {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+        {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
+        {shouldDisplaySection.contributors && (
+          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
+        )}
 
         <Attribution />
       </DetailLayout>
@@ -220,15 +156,12 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     mapped_data_types,
     origin_samples,
     hubmap_id,
-    entity_type,
-    published_timestamp,
     status,
     sub_status,
     mapped_data_access_level,
     mapped_external_group_name,
-    registered_doi,
-    doi_url,
     contributors,
+    contacts,
     is_component,
     assay_modality,
     processing,
@@ -260,12 +193,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     attribution: true,
   };
 
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-
-  useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, mapped_data_types, mapped_organ });
-  }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, setAssayMetadata]);
-
   const datasetLabel = useDatasetLabel();
 
   return (
@@ -276,7 +203,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
         <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
           <Summary
             entityTypeDisplay={datasetLabel}
-            published_timestamp={published_timestamp}
             status={combinedStatus}
             mapped_data_access_level={mapped_data_access_level}
             mapped_external_group_name={mapped_external_group_name}
@@ -284,26 +210,22 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
               <>
                 <MultiAssayRelationship assay_modality={assay_modality} />
                 <DataProducts files={files} />
-                <DatasetRelationships uuid={uuid} processing={processing} />
+                <Box height={400} width="100%" component={Paper} p={2}>
+                  <DatasetRelationships uuid={uuid} processing={processing} />
+                </Box>
               </>
             }
           >
-            <SummaryDataChildren
-              mapped_data_types={mapped_data_types}
-              mapped_organ={mapped_organ}
-              registered_doi={registered_doi}
-              doi_url={doi_url}
-              uuid={uuid}
-              hubmap_id={hubmap_id}
-              mapped_data_access_level={mapped_data_access_level}
-            />
+            <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
           </Summary>
           {shouldDisplaySection.metadata && <MetadataSection />}
           {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
           {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
           {shouldDisplaySection.provenance && <ProvSection />}
           {shouldDisplaySection.collections && <CollectionsSection />}
-          {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+          {shouldDisplaySection.contributors && (
+            <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" />
+          )}
           <Attribution />
         </DetailLayout>
       </SelectedVersionStoreProvider>

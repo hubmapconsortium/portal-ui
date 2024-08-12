@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';

@@ -11,6 +11,8 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+import { useAppContext } from 'js/components/Contexts';
+
 import Stack from '@mui/material/Stack';
 import VisualizationNotebookButton from '../VisualizationNotebookButton';
 import VisualizationShareButton from '../VisualizationShareButton';
@@ -42,6 +44,8 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 interface VisualizationProps {
   vitData: object | object[];
   uuid: string;
+  hubmap_id?: string;
+  mapped_data_access_level?: string;
   hasNotebook: boolean;
   shouldDisplayHeader: boolean;
   shouldMountVitessce?: boolean;
@@ -51,6 +55,8 @@ interface VisualizationProps {
 function Visualization({
   vitData,
   uuid,
+  hubmap_id,
+  mapped_data_access_level,
   hasNotebook,
   shouldDisplayHeader,
   shouldMountVitessce = true,
@@ -66,6 +72,7 @@ function Visualization({
   //
   useCanvasScrollFix();
   const { toastError, toastInfo } = useSnackbarActions();
+  const { isWorkspacesUser } = useAppContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
@@ -117,7 +124,13 @@ function Visualization({
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
             <Stack direction="row">
-              {hasNotebook && <VisualizationNotebookButton uuid={uuid} />}
+              {isWorkspacesUser && hasNotebook && (
+                <VisualizationNotebookButton
+                  uuid={uuid}
+                  hubmap_id={hubmap_id}
+                  mapped_data_access_level={mapped_data_access_level}
+                />
+              )}
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">

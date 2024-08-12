@@ -1,6 +1,6 @@
 import CellsResults from 'js/components/cells/CellsResults';
 import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';

@@ -4,14 +4,14 @@ import MenuItem from '@mui/material/MenuItem';
 import SvgIcon from '@mui/material/SvgIcon';
 
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
-import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 
 function NewWorkspaceDialogFromSelections() {
-  const { errorMessages, selectedRows, ...restWorkspaceDatasets } = useCreateWorkspaceDatasets();
+  const { errorMessages, warningMessages, selectedRows, ...restWorkspaceDatasets } = useCreateWorkspaceDatasets();
   const { deselectRows } = useSelectableTableStore();
 
   const { control, errors, setDialogIsOpen, ...rest } = useCreateWorkspaceForm({});
@@ -31,7 +31,7 @@ function NewWorkspaceDialogFromSelections() {
         {...rest}
       >
         <Box>
-          <ErrorMessages errorMessages={errorMessages} />
+          <ErrorOrWarningMessages errorMessages={errorMessages} warningMessages={warningMessages} />
           <RemoveProtectedDatasetsFormField control={control} {...restWorkspaceDatasets} />
         </Box>
       </NewWorkspaceDialog>

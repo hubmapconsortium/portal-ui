@@ -1,9 +1,7 @@
 import React, { MutableRefObject } from 'react';
 import { throttle } from 'js/helpers/functions';
-import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
-import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
-import { useSpring } from '@react-spring/web';
-import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
+import useEntityStore from 'js/stores/useEntityStore';
+import { SpringValues } from '@react-spring/web';
 import { TableOfContentsNodesRef } from './types';
 
 function useThrottledOnScroll(callback: (() => void) | null, delay: number) {
@@ -57,12 +55,15 @@ function useFindActiveIndex({
 }
 
 function useAnimatedSidebarPosition() {
-  const { summaryInView } = useEntityStore((state: EntityStore) => state.summaryComponentObserver);
-  const initialHeightOffset = headerHeight + 16;
-  const top = summaryInView ? `${initialHeightOffset}px` : `${initialHeightOffset + entityHeaderHeight}px`;
-  const stickyNavAnimationProps = useSpring({ top });
+  const { springs } = useEntityStore();
 
-  return stickyNavAnimationProps;
+  const [springValues] = springs;
+
+  if (springValues[1] === undefined) {
+    return null;
+  }
+
+  return springValues[1] as SpringValues;
 }
 
 export { useThrottledOnScroll, useFindActiveIndex, useAnimatedSidebarPosition };

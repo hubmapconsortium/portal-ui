@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import PanelList from 'js/shared-styles/panels/PanelList';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
-import { useFlaskDataContext } from 'js/components/Contexts';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';

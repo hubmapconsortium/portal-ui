@@ -9,6 +9,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalanceRounded';
 import LaunchRoundedIcon from '@mui/icons-material/LaunchRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
@@ -36,6 +37,9 @@ import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
 import SchemaRoundedIcon from '@mui/icons-material/SchemaRounded';
 import AttributionRoundedIcon from '@mui/icons-material/AttributionRounded';
 import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
+import BookmarkAddRounded from '@mui/icons-material/BookmarkAddRounded';
+import BookmarkAddedRounded from '@mui/icons-material/BookmarkAddedRounded';
+import BiotechRounded from '@mui/icons-material/BiotechRounded.js';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -123,6 +127,14 @@ const ProvenanceIcon = withIconStyles(SchemaRoundedIcon);
 
 const AttributionIcon = withIconStyles(AttributionRoundedIcon);
 
+const SaveEntityIcon = withIconStyles(BookmarkAddRounded);
+
+const EditSavedEntityIcon = withIconStyles(BookmarkAddedRounded);
+
+const CheckIcon = withIconStyles(CheckRoundedIcon);
+
+const SampleCategoryIcon = withIconStyles(BiotechRounded);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -178,4 +190,8 @@ export {
   ProvenanceIcon,
   AttributionIcon,
   AnalysisDetailsIcon,
+  SaveEntityIcon,
+  EditSavedEntityIcon,
+  CheckIcon,
+  SampleCategoryIcon,
 };

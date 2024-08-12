@@ -4,7 +4,7 @@ import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { isSample } from 'js/components/types';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';

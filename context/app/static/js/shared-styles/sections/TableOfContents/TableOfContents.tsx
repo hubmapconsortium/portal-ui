@@ -144,15 +144,19 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
     }
   }, []);
 
-  const stickyNavAnimationProps = useAnimatedSidebarPosition();
+  const position = useAnimatedSidebarPosition();
 
   if (!items || items.length === 0) {
     return null;
   }
 
+  if (!position) {
+    return null;
+  }
+
   return (
     <Box data-testid="table-of-contents" height="100%" mr={1}>
-      <AnimatedNav style={stickyNavAnimationProps}>
+      <AnimatedNav style={position}>
         <TableTitle variant="h5">Contents</TableTitle>
         {isLoading ? (
           <>

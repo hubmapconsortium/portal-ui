@@ -28,7 +28,6 @@ const CheckIcon = styled(CheckRoundedIcon)`
 
 const StyledSpan = styled.span`
   ${(props) => !props.isSelected && `padding-left: calc(${iconSize} + ${props.theme.spacing(1)})`};
-  padding-right: ${(props) => `calc(${iconSize} + ${props.theme.spacing(1)})`};
 `;
 
 export { FlexMenuItem, CheckIcon, StyledSpan };

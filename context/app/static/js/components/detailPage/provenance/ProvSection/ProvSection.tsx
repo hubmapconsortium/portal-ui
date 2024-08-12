@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from 'react';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import Skeleton from '@mui/material/Skeleton';
 import useProvData from '../hooks';
 import ProvTabs from '../ProvTabs';

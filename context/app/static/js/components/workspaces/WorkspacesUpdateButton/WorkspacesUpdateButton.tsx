@@ -21,9 +21,17 @@ type WorkspacesUpdateButtonProps = {
   workspace: MergedWorkspace;
   dialogType: DialogType;
   tooltip?: string;
+  disabled?: boolean;
 } & Omit<TooltipButtonProps, 'tooltip'>;
 
-function WorkspacesUpdateButton({ workspace, dialogType, tooltip, children, ...rest }: WorkspacesUpdateButtonProps) {
+function WorkspacesUpdateButton({
+  workspace,
+  dialogType,
+  tooltip,
+  disabled = false,
+  children,
+  ...rest
+}: WorkspacesUpdateButtonProps) {
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
   const { open, setWorkspace, setDialogType } = useEditWorkspaceStore();
 
@@ -34,7 +42,7 @@ function WorkspacesUpdateButton({ workspace, dialogType, tooltip, children, ...r
   return (
     <UpdateIconButton
       {...rest}
-      disabled={currentWorkspaceIsRunning}
+      disabled={currentWorkspaceIsRunning || disabled}
       onClick={() => {
         setWorkspace(workspace);
         setDialogType(dialogType);

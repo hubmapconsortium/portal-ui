@@ -1,4 +1,4 @@
-import React, { useCallback, ChangeEvent } from 'react';
+import React, { useCallback, ChangeEvent, useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -6,10 +6,11 @@ import { useController, Control, Path } from 'react-hook-form';
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import ErrorMessages from 'js/shared-styles/alerts/ErrorMessages';
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { TemplatesTypes } from '../types';
 import TemplateGrid from '../TemplateGrid';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
+import { sortTemplates } from '../utils';
 
 interface TemplateGridProps {
   disabledTemplates?: TemplatesTypes;
@@ -43,6 +44,8 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
     field.value satisfies FormType[typeof inputName],
   );
 
+  const sortedTemplates = useMemo(() => sortTemplates(templates, disabledTemplates), [templates, disabledTemplates]);
+
   const updateTemplates = useCallback(
     (templateKeys: string[]) => {
       setSelectedTemplates(templateKeys);
@@ -68,7 +71,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
 
   return (
     <Box>
-      {errorMessage && <ErrorMessages errorMessages={[errorMessage]} />}
+      {errorMessage && <ErrorOrWarningMessages errorMessages={[errorMessage]} />}
       <SpacedSectionButtonRow
         leftText={<Typography variant="subtitle1">{selectedTemplates.size} Templates Selected</Typography>}
         buttons={
@@ -87,7 +90,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
         }
       />
       <TemplateGrid
-        templates={templates}
+        templates={sortedTemplates}
         selectItem={selectItem}
         selectedTemplates={selectedTemplates}
         disabledTemplates={disabledTemplates}

@@ -12,7 +12,7 @@ for path in Path(__file__).parents:
     if (path / '.git').is_dir():
         sys.path.append(str(path))
         break
-from context.app.api.client import ApiClient  # noqa: E402
+from portal_visualization.client import ApiClient  # noqa: E402
 from context.app.default_config import DefaultConfig  # noqa: E402
 
 

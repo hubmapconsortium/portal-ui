@@ -20,13 +20,17 @@ import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
+import { Alert } from 'js/shared-styles/alerts/Alert';
+import InternalLink from 'js/shared-styles/Links/InternalLink';
 
 const tooltips = {
   name: 'Edit workspace name.',
-  datasets: 'Add datasets to this workspace.',
   templates: 'Add templates to this workspace.',
   currentTemplates: 'Templates that are currently in this workspace.',
 };
+
+const noDatasetsText =
+  'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
 
 interface WorkspacePageProps {
   workspaceId: number;
@@ -54,10 +58,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         <SummaryData
           title={workspace.name}
           entity_type="Workspace"
-          showJsonButton={false}
-          entityCanBeSaved={false}
           entityTypeDisplay={undefined}
-          uuid=""
           status=""
           mapped_data_access_level=""
           otherButtons={
@@ -77,11 +78,13 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                 button={LaunchStopButton}
                 handleStopWorkspace={handleStopWorkspace}
                 isStoppingWorkspace={isStoppingWorkspace}
+                showLaunch
+                showStop
               />
             </>
           }
         >
-          <Typography variant="subtitle1" component="p">
+          <Typography variant="subtitle1" component="p" marginTop={2}>
             <JobStatus job={job} />
           </Typography>
         </SummaryData>
@@ -91,27 +94,30 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           </LabelledSectionText>
         </SectionPaper>
       </Box>
-      {workspaceDatasets.length > 0 && (
-        <WorkspaceDatasetsTable
-          datasetsUUIDs={workspaceDatasets}
-          label={<SectionHeader> Datasets</SectionHeader>}
-          additionalButtons={
-            <WorkspacesUpdateButton
-              workspace={workspace}
-              dialogType="ADD_DATASETS"
-              sx={(theme) => ({
-                marginRight: theme.spacing(1),
-              })}
-              tooltip={tooltips.datasets}
-            >
-              <AddIcon />
-            </WorkspacesUpdateButton>
-          }
-        />
-      )}
+      <WorkspaceDatasetsTable
+        datasetsUUIDs={workspaceDatasets}
+        addDatasets={workspace}
+        label={<SectionHeader>Datasets</SectionHeader>}
+        additionalAlerts={
+          <Alert
+            severity="info"
+            action={
+              <Button>
+                <InternalLink href="/search?entity_type[0]=Dataset">
+                  <Typography color="primary" variant="button">
+                    Dataset Search Page
+                  </Typography>
+                </InternalLink>
+              </Button>
+            }
+          >
+            {noDatasetsText}
+          </Alert>
+        }
+      />
       <Box>
         <SpacedSectionButtonRow
-          leftText={<SectionHeader iconTooltipText={tooltips.currentTemplates}>Templates</SectionHeader>}
+          leftText={<SectionHeader iconTooltipText={tooltips.currentTemplates}>Current Templates</SectionHeader>}
           buttons={
             <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES" tooltip={tooltips.templates}>
               <AddIcon />

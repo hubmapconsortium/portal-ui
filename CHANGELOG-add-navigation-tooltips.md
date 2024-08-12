@@ -1,1 +1,0 @@
-- Add tooltips to the apps and profile icons in the navigation bar.

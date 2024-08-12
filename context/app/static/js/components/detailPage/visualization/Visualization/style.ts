@@ -3,11 +3,11 @@ import Button, { ButtonProps } from '@mui/material/Button';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
-import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
+import { initialEntityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 
-const totalHeightOffset = headerHeight + entityHeaderHeight;
+const totalHeightOffset = headerHeight + initialEntityHeaderHeight;
 
 const vitessceFixedHeight = 600;
 
@@ -42,7 +42,7 @@ const ExpandableDiv = styled('div')<ExpandableDivProps>(({ $isExpanded, theme, $
   height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${vitessceFixedHeight}px`,
   backgroundColor: $theme === 'dark' ? '#333333' : theme.palette.white.main,
   width: '100%',
-  overflow: 'visible',
+  overflow: 'scroll',
   '.vitessce-container': {
     display: 'block',
     height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : 'auto',

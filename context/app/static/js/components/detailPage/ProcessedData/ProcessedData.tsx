@@ -2,7 +2,7 @@ import React from 'react';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { DetailPageSection } from '../style';
+import DetailPageSection from '../DetailPageSection';
 import ProcessedDataset from './ProcessedDataset';
 import { SectionDescription } from './ProcessedDataset/SectionDescription';
 import HelperPanel from './HelperPanel';

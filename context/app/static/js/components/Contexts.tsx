@@ -1,11 +1,11 @@
 import { useContext, createContext } from 'js/helpers/context';
-import { Entity } from './types';
+import { AllEntities } from './types';
 
 // TODO: Continue populating these types as we find more of the uses of the flask data and app contexts
 
 export interface FlaskDataContextType {
   redirected_from: string;
-  entity: Entity; // Update to handle different entities.
+  entity: AllEntities; // Update to handle different entities.
   [key: string]: unknown;
   title: string; // preview page title
   vis_lifted_uuid?: string;

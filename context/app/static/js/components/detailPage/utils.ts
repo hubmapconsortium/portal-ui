@@ -1,3 +1,4 @@
+import { Dataset, Donor, isDataset, isDonor, isSample, Sample } from 'js/components/types';
 import { ProcessedDatasetDetails } from './ProcessedData/ProcessedDataset/hooks';
 
 export function getSectionOrder(
@@ -29,4 +30,21 @@ export function getDateLabelAndValue(
   }
 
   return ['Creation Date', created_timestamp];
+}
+
+export function getDonorMetadata(entity: Donor | Sample | Dataset) {
+  if (isDonor(entity)) {
+    return entity.mapped_metadata;
+  }
+
+  if (isSample(entity) || isDataset(entity)) {
+    return entity.donor.mapped_metadata;
+  }
+
+  return {};
+}
+
+export function getOriginSampleAndMappedOrgan(entity: Sample | Dataset) {
+  const origin_sample = entity.origin_samples[0];
+  return { origin_sample, mapped_organ: origin_sample.mapped_organ };
 }
