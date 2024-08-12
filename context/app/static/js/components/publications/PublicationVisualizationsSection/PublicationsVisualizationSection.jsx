@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import PublicationVignette from 'js/components/publications/PublicationVignette';
 import PrimaryColorAccordionSummary from 'js/shared-styles/accordions/PrimaryColorAccordionSummary';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';

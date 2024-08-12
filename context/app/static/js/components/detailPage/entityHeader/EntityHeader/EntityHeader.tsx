@@ -1,24 +1,28 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect } from 'react';
 import { animated } from '@react-spring/web';
 import Box from '@mui/material/Box';
 
 import useEntityStore, { SummaryViewsType } from 'js/stores/useEntityStore';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import { useFlaskDataContext } from 'js/components/Contexts';
+import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVisualizationStore';
 import { StyledPaper } from './style';
 import EntityHeaderContent from '../EntityHeaderContent';
 import { useStartViewChangeSpring, expandedHeights } from './hooks';
 import DatasetRelationships from '../../DatasetRelationships';
 import SummaryBody from '../../summary/SummaryBody';
 
-const entityHeaderHeight = 48;
-
 const AnimatedPaper = animated(StyledPaper);
+
+const visualizationSelector = (state: VisualizationStore) => ({
+  vizIsFullscreen: state.vizIsFullscreen,
+});
 
 function Header() {
   const { springs, view, setView } = useEntityStore();
   const startViewChangeSpring = useStartViewChangeSpring();
   const isLargeDesktop = useIsLargeDesktop();
+  const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
 
   const handleViewChange = useCallback(
     (v: SummaryViewsType) => {
@@ -31,6 +35,12 @@ function Header() {
   const { entity } = useFlaskDataContext();
 
   const uuid = entity?.uuid;
+
+  useEffect(() => {
+    if (vizIsFullscreen) {
+      handleViewChange('narrow');
+    }
+  }, [vizIsFullscreen, handleViewChange]);
 
   const [springValues] = springs;
 
@@ -53,5 +63,4 @@ function Header() {
   );
 }
 
-export { entityHeaderHeight };
 export default Header;

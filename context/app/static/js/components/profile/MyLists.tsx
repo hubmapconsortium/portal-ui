@@ -5,7 +5,7 @@ import { InternalLink } from 'js/shared-styles/Links';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { DetailPageSection } from '../detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 
 export function MyLists() {
   const savedListCount = useSavedEntitiesStore((s) => Object.keys(s.savedLists).length);

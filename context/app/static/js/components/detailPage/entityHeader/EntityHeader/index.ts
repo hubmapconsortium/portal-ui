@@ -1,4 +1,5 @@
-import EntityHeader, { entityHeaderHeight } from './EntityHeader';
+import EntityHeader from './EntityHeader';
+import { initialEntityHeaderHeight } from './hooks';
 
-export { entityHeaderHeight };
+export { initialEntityHeaderHeight };
 export default EntityHeader;

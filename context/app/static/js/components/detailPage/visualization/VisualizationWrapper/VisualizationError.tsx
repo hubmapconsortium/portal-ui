@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { FaroErrorBoundary, faro } from '@grafana/faro-react';
 
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import { VisualizationErrorBoundaryBackground } from './style';

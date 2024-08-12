@@ -20,7 +20,7 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import { CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
 
-import { DetailPageSection } from '../detailPage/style';
+import DetailPageSection from '../detailPage/DetailPageSection';
 import { useCellTypeBiomarkers } from './hooks';
 
 const tableKeys = ['genes', 'proteins'] as const;

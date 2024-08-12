@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 

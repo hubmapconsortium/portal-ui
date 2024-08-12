@@ -3,7 +3,7 @@ import React from 'react';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
 import { CollectionHit } from 'js/pages/Collections/types';
 

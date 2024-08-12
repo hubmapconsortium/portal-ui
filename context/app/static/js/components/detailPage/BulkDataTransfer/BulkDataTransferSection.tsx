@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
 import BulkDataTransferPanels from './BulkDataTransferPanels';

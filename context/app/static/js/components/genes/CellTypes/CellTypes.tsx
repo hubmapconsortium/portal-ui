@@ -8,7 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
 
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
