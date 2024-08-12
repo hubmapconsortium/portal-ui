@@ -33,7 +33,6 @@ function DatasetRelationshipsHeader() {
 }
 
 const reactFlowConfig: Partial<ReactFlowProps> = {
-  fitView: true,
   proOptions: { hideAttribution: true },
   nodesDraggable: false,
   nodesConnectable: false,
@@ -50,7 +49,7 @@ function ReactFlowBody({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) {
     return <Skeleton height="100%" width="100%" />;
   }
   return (
-    <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges} fitView>
+    <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges}>
       <Controls showInteractive={false} onFitView={trackFitView} onZoomIn={trackZoomIn} onZoomOut={trackZoomOut} />
     </ReactFlow>
   );
