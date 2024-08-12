@@ -17,6 +17,7 @@ function SummaryDescription({
   description,
   label,
   clamp,
+  ...rest
 }: { label?: string; clamp?: boolean } & Pick<Entity, 'description'>) {
   if (!description) {
     return null;
@@ -27,6 +28,7 @@ function SummaryDescription({
       label={label ?? 'Description'}
       childContainerComponent={clamp ? CustomClamp : undefined}
       flexShrink={1}
+      {...rest}
     >
       {description}
     </LabelledSectionText>
