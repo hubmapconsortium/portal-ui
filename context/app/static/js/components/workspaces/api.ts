@@ -15,7 +15,8 @@ import {
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
-export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 10;
+export const EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS = 25;
+export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 150;
 
 /**
  * Generates API URLs for various workspaces API actions

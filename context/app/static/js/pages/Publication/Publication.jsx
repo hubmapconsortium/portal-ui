@@ -12,7 +12,16 @@ import { DetailContext } from 'js/components/detailPage/DetailContext';
 import useTrackID from 'js/hooks/useTrackID';
 
 function Publication({ publication, vignette_json }) {
-  const { uuid, entity_type, hubmap_id, contributors = [], ancestor_ids, files, associated_collection } = publication;
+  const {
+    uuid,
+    entity_type,
+    hubmap_id,
+    contributors = [],
+    contacts = [],
+    ancestor_ids,
+    files,
+    associated_collection,
+  } = publication;
 
   useTrackID({ entity_type, hubmap_id });
 
@@ -54,7 +63,7 @@ function Publication({ publication, vignette_json }) {
         {shouldDisplaySection['bulk-data-transfer'] && (
           <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />
         )}
-        <ContributorsTable contributors={contributors} title="Authors" />
+        <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
         {shouldDisplaySection.provenance && (
           <ProvSection
             uuid={uuid}

@@ -11,7 +11,7 @@ import {
   protectedDatasetsField,
 } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
-import { useProtectedDatasetsForm, useTooManyDatasetsErrors } from '../formHooks';
+import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 
 export interface AddDatasetsFromSearchFormTypes {
   datasets: string[];
@@ -157,9 +157,18 @@ function useAddDatasetsFromSearchDialog() {
     numWorkspaceDatasets: datasetsField.value.length + workspaceDatasets.length,
   });
 
+  const tooManyDatasetsWarningMessages = useTooManyDatasetsWarnings({
+    numWorkspaceDatasets: datasetsField.value.length + workspaceDatasets.length,
+  });
+
   const datasetsErrorMessages = buildErrorMessages({
     fieldState: datasetsFieldState,
     otherErrors: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
+  });
+
+  const datasetsWarningMessages = buildErrorMessages({
+    fieldState: datasetsFieldState,
+    otherErrors: [...tooManyDatasetsWarningMessages],
   });
 
   const workspaceIdErrorMessages = buildErrorMessages({
@@ -183,6 +192,7 @@ function useAddDatasetsFromSearchDialog() {
     workspaceDatasets,
     allDatasets,
     datasetsErrorMessages,
+    datasetsWarningMessages,
     workspaceIdErrorMessages,
     selectWorkspace,
     protectedHubmapIds,

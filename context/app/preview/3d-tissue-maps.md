@@ -15,16 +15,16 @@ vitessce_conf:
           'files':
             [
               {
-                'url': 'https://vitessce-data-v2.s3.amazonaws.com/data/washu-kidney/LS_20x_5_Stitched.pyramid.ome.tiff',
+                'url': 'https://data-2.vitessce.io/data/washu-kidney/LS_20x_5_Stitched.pyramid.ome.tiff',
                 'fileType': 'image.ome-tiff',
                 'coordinationValues': { 'fileUid': 'kidney', 'obsType': 'gloms' },
                 'options':
                   {
-                    'offsetsUrl': 'https://vitessce-data-v2.s3.amazonaws.com/data/washu-kidney/LS_20x_5_Stitched.pyramid.offsets.json',
+                    'offsetsUrl': 'https://data-2.vitessce.io/data/washu-kidney/LS_20x_5_Stitched.pyramid.offsets.json',
                   },
               },
               {
-                'url': 'https://vitessce-data-v2.s3.amazonaws.com/data/washu-kidney/decimated.glb',
+                'url': 'https://data-2.vitessce.io/data/washu-kidney/decimated.glb',
                 'fileType': 'obsSegmentations.glb',
                 'coordinationValues': { 'fileUid': 'gloms', 'obsType': 'gloms' },
                 'options':
@@ -43,7 +43,7 @@ vitessce_conf:
                   },
               },
               {
-                'url': 'https://vitessce-data-v2.s3.amazonaws.com/data/washu-kidney/statistics.csv',
+                'url': 'https://data-2.vitessce.io/data/washu-kidney/statistics.csv',
                 'fileType': 'obsFeatureMatrix.csv',
                 'coordinationValues': { 'obsType': 'gloms', 'featureType': 'feature', 'featureValueType': 'value' },
               },

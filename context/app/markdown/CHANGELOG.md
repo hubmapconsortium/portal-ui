@@ -1,3 +1,53 @@
+## v0.102.5 - 2024-08-06
+
+- Add a check for "Contacts" data to display in the Contributors table of the detail pages of datasets, collections, and publications.
+
+
+## v0.102.4 - 2024-08-02
+
+- Update attribution and contributors sections for processed datasets.
+- Updated the font color for the selected and unselected tabular tabs.
+
+
+## v0.102.3 - 2024-08-01
+
+- Fix issue of "Launch Workspace" button not appearing in workspace detail pages. 
+
+
+## v0.102.2 - 2024-08-01
+
+- Fix query to determine whether samples should be shown on organ pages.
+- Prevent header from being clipped when the template selection grid is scrolled.
+- Order templates alphabetically with the default template first. 
+
+
+## v0.102.1 - 2024-07-31
+
+- Add alerts, errors, tooltips, and disabled buttons as needed to alert users when they have exceeded a dataset limit.
+- Add datasets section with info banner to empty workspace detail pages.
+- Fixed assays and samples section on the organ's detail page.
+- Select blank template by default in "Create New Workspace" dialog.
+- Updated query for recent datasets to avoid filtering based on presence of visualization.
+
+
+## v0.102.0 - 2024-07-26
+
+- Removed overlapping tooltip from current dataset in multi-assay relationships.
+- Updated `vitessce-data` and `vitessce-data-v2` S3 bucket URLs to point to `data-1.vitessce.io` and `data-2.vitessce.io` subdomains, respectively.
+
+
+## v0.101.4 - 2024-07-25
+
+- Add confirmation modal to the 'delete workspaces' button.
+- Add tooltips to the apps and profile icons in the navigation bar.
+- Added status icon to the processed datasets to differentiate between different runs.
+- Show IDs of workspaces in the workspaces list to differentiate between workspaces with the same name.
+- Update login alert text on the workspaces landing page.
+- Increase max dataset limit for workspaces to 150.
+- Move API client to `portal-visualization` package to reduce code duplication between portal code and workspace templates.
+- Add pull request templates to ease future PR reviews.
+
+
 ## v0.101.3 - 2024-07-20
 
 - Fix changelog formatting for v0.101.1 entries.

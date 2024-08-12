@@ -18,9 +18,9 @@ function TemplateGrid({
   disabledTemplates = {},
 }: TemplateGridProps) {
   return (
-    <Grid container spacing={2} alignItems="stretch" sx={{ maxHeight: '625px', overflowY: 'auto' }}>
+    <Grid container columnSpacing={2} alignItems="stretch" sx={{ maxHeight: '625px', overflowY: 'auto' }}>
       {Object.entries(templates).map(([templateKey, { title, description, tags }]) => (
-        <Grid item md={4} xs={12} key={templateKey}>
+        <Grid item md={4} xs={12} key={templateKey} paddingBottom={2}>
           <SelectableCard
             title={title}
             description={description}

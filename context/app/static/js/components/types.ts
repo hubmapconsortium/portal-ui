@@ -1,4 +1,4 @@
-import { ContributorAPIResponse } from './detailPage/ContributorsTable/utils';
+import { ContributorAPIResponse, ContactAPIResponse } from './detailPage/ContributorsTable/utils';
 import { UnprocessedFile } from './detailPage/files/types';
 
 export type DonorEntityType = 'Donor';
@@ -30,7 +30,7 @@ export interface Entity {
   uuid: string;
   hubmap_id: string;
   last_modified_timestamp: number;
-  contacts: ContributorAPIResponse & { is_contact: true }[];
+  contacts: ContactAPIResponse[];
   contributors: ContributorAPIResponse[];
   created_timestamp: number;
   ancestors: Entity[];
@@ -42,6 +42,7 @@ export interface Entity {
     dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;
   };
+  descendants: Entity[];
   group_name: string;
   created_by_user_displayname: string;
   created_by_user_email: string;

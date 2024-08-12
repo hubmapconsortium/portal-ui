@@ -1,8 +1,8 @@
 from urllib.parse import urlparse
 from flask import (current_app, request, session, Blueprint)
 
-from .api.client import ApiClient
-from .api.mock_client import MockApiClient
+from portal_visualization.client import ApiClient
+from portal_visualization.mock_client import MockApiClient
 from os.path import dirname
 from pathlib import Path
 
@@ -15,8 +15,14 @@ def get_client():
     if current_app.config.get('IS_MOCK'):
         return MockApiClient()
     return ApiClient(
-        current_app.config['ENTITY_API_BASE'],
-        session['groups_token']
+        groups_token=session['groups_token'],
+        elasticsearch_endpoint=current_app.config['ELASTICSEARCH_ENDPOINT'],
+        portal_index_path=current_app.config['PORTAL_INDEX_PATH'],
+        ubkg_endpoint=current_app.config['UBKG_ENDPOINT'],
+        assets_endpoint=current_app.config['ASSETS_ENDPOINT'],
+        soft_assay_endpoint=current_app.config['SOFT_ASSAY_ENDPOINT'],
+        soft_assay_endpoint_path=current_app.config['SOFT_ASSAY_ENDPOINT_PATH'],
+        entity_api_endpoint=current_app.config['ENTITY_API_BASE'],
     )
 
 

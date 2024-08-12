@@ -1,6 +1,6 @@
 import React from 'react';
 import { SvgIconProps } from '@mui/material/SvgIcon';
-import { ColoredStatusIcon } from './ColoredStatusIcon';
+import ColoredStatusIcon from './ColoredStatusIcon';
 
 function getColor(status: string) {
   if (['NEW', 'REOPENED', 'QA', 'LOCKED', 'PROCESSING', 'HOLD', 'SUBMITTED'].includes(status)) {

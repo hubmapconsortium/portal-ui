@@ -42,7 +42,7 @@ const ExpandableDiv = styled('div')<ExpandableDivProps>(({ $isExpanded, theme, $
   height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${vitessceFixedHeight}px`,
   backgroundColor: $theme === 'dark' ? '#333333' : theme.palette.white.main,
   width: '100%',
-  overflow: 'visible',
+  overflow: 'scroll',
   '.vitessce-container': {
     display: 'block',
     height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : 'auto',

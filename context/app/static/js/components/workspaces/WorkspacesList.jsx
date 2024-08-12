@@ -1,35 +1,36 @@
-import React from 'react';
+import React, { useState } from 'react';
+
 import Paper from '@mui/material/Paper';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
 import Checkbox from '@mui/material/Checkbox';
 
 import Description from 'js/shared-styles/sections/Description';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
+
 import { useWorkspacesList } from './hooks';
 import WorkspaceButton from './WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from './NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
+import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
 
 function WorkspacesList() {
   const { workspacesList, handleDeleteWorkspace, isDeleting } = useWorkspacesList();
-
   const { selectedItems, toggleItem } = useSelectItems();
-  const { toastError } = useSnackbarActions();
 
-  const handleDeleteSelected = () => {
-    const workspaceIds = [...selectedItems];
-    Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(workspaceId))).catch((e) => {
-      toastError(`Error deleting workspace: ${e.message}`);
-      console.error(e);
-    });
-  };
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
     <>
+      <ConfirmDeleteWorkspacesDialog
+        dialogIsOpen={dialogIsOpen}
+        handleClose={() => setDialogIsOpen(false)}
+        handleDeleteWorkspace={handleDeleteWorkspace}
+        selectedWorkspaceIds={selectedItems}
+        workspacesList={workspacesList}
+      />
       <SpacedSectionButtonRow
         leftText={
           <Typography variant="subtitle1">
@@ -39,7 +40,7 @@ function WorkspacesList() {
         buttons={
           <Stack direction="row" gap={1}>
             <WorkspaceButton
-              onClick={handleDeleteSelected}
+              onClick={() => setDialogIsOpen(true)}
               disabled={selectedItems.size === 0 || isDeleting}
               tooltip="Delete selected workspaces"
             >
@@ -62,6 +63,8 @@ function WorkspacesList() {
               toggleItem={toggleItem}
               selected={selectedItems.has(workspace.id)}
               ToggleComponent={Checkbox}
+              showLaunch
+              showStop
             />
           ))
         )}

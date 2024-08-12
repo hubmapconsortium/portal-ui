@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 
+import useSearchData, { useSearchHits } from 'js/hooks/useSearchData';
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
@@ -10,9 +11,23 @@ import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import Section from 'js/shared-styles/sections/Section';
 import { OrganFile } from 'js/components/organ/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
+import { mustHaveOrganClause } from './queries';
 
 interface OrganProps {
   organ: OrganFile;
+}
+
+interface Bucket {
+  key: string;
+  doc_count: number;
+}
+
+interface Aggregations {
+  mapped_data_types: {
+    'assay_display_name.keyword': {
+      buckets: Bucket[];
+    };
+  };
 }
 
 const summaryId = 'Summary';
@@ -22,14 +37,70 @@ const assaysId = 'Assays';
 const samplesId = 'Samples';
 
 function Organ({ organ }: OrganProps) {
-  const shouldDisplaySearch = Boolean(organ.search.length > 0);
+  const searchItems = useMemo(
+    () => (organ.search.length > 0 ? organ.search : [organ.name]),
+    [organ.search, organ.name],
+  );
+
+  const assaysQuery = useMemo(
+    () => ({
+      size: 0,
+      aggs: {
+        mapped_data_types: {
+          filter: {
+            bool: {
+              must: [
+                {
+                  term: {
+                    'entity_type.keyword': 'Dataset',
+                  },
+                },
+                mustHaveOrganClause(searchItems),
+              ],
+            },
+          },
+          aggs: {
+            'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 100 } },
+          },
+        },
+      },
+    }),
+    [searchItems],
+  );
+
+  const samplesQuery = useMemo(
+    () => ({
+      query: {
+        bool: {
+          must: [
+            {
+              term: {
+                'entity_type.keyword': 'Sample',
+              },
+            },
+            mustHaveOrganClause(searchItems),
+          ],
+        },
+      },
+      _source: false,
+      size: 1,
+    }),
+    [searchItems],
+  );
+
+  const { searchData: assaysData } = useSearchData<Document, Aggregations>(assaysQuery);
+  const { searchHits: samplesHits } = useSearchHits(samplesQuery);
+
+  const assayBuckets = assaysData?.aggregations?.mapped_data_types?.['assay_display_name.keyword']?.buckets ?? [];
+
+  const hasSearchTerms = organ.search.length > 0;
 
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
     [hraId]: Boolean(organ.has_iu_component),
     [referenceId]: Boolean(organ?.azimuth),
-    [assaysId]: shouldDisplaySearch,
-    [samplesId]: shouldDisplaySearch,
+    [assaysId]: hasSearchTerms || assayBuckets.length > 0,
+    [samplesId]: hasSearchTerms || samplesHits.length > 0,
   };
 
   return (
@@ -59,7 +130,7 @@ function Organ({ organ }: OrganProps) {
       )}
       {shouldDisplaySection[assaysId] && (
         <Section id={assaysId}>
-          <Assays organTerms={organ.search} />
+          <Assays organTerms={organ.search} bucketData={assayBuckets} />
           <DatasetsBarChart search={organ.search} />
         </Section>
       )}

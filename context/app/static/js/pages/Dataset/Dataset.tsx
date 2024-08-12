@@ -113,6 +113,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     mapped_data_access_level,
     mapped_external_group_name,
     contributors,
+    contacts,
     is_component,
     assay_modality,
   } = assayMetadata;
@@ -162,8 +163,10 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
           <MetadataSection {...makeMetadataSectionProps(combinedMetadata, assay_modality)} />
         )}
         {shouldDisplaySection.files && <Files files={files} />}
-        {shouldDisplaySection['bulk-data-transfer'] === true && <BulkDataTransfer />}
-        {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+        {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
+        {shouldDisplaySection.contributors && (
+          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
+        )}
 
         <Attribution />
       </DetailLayout>
@@ -187,6 +190,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     mapped_data_access_level,
     mapped_external_group_name,
     contributors,
+    contacts,
     is_component,
     assay_modality,
     processing,
@@ -253,7 +257,13 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
           <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
         </Summary>
         {shouldDisplaySection.visualization && (
-          <VisualizationWrapper vitData={vitData} uuid={uuid} hasNotebook={hasNotebook} />
+          <VisualizationWrapper
+            vitData={vitData}
+            uuid={uuid}
+            hubmap_id={hubmap_id}
+            mapped_data_access_level={mapped_data_access_level}
+            hasNotebook={hasNotebook}
+          />
         )}
         {shouldDisplaySection.provenance && <ProvSection />}
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
@@ -261,7 +271,9 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
         {shouldDisplaySection.files && <Files files={files} />}
         {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
-        {shouldDisplaySection.contributors && <ContributorsTable contributors={contributors} title="Contributors" />}
+        {shouldDisplaySection.contributors && (
+          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
+        )}
         <Attribution />
       </DetailLayout>
     </DetailContextProvider>

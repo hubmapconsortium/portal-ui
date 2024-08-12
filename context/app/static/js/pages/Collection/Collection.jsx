@@ -17,9 +17,9 @@ function Collection({ collection: collectionData }) {
     description,
     created_timestamp,
     last_modified_timestamp,
-    contacts,
     datasets,
     creators,
+    contacts,
   } = collectionData;
 
   const doi = getCollectionDOI(doi_url);
@@ -47,9 +47,10 @@ function Collection({ collection: collectionData }) {
               </OutboundIconLink>
             )}
           </Summary>
-          {'contacts' in collectionData && <ContributorsTable contributors={contacts} title="Contacts" />}
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
-          {'creators' in collectionData && <ContributorsTable contributors={creators} title="Contributors" />}
+          {'creators' in collectionData && (
+            <ContributorsTable contributors={creators} contacts={contacts} title="Contributors" />
+          )}
         </>
       )}
     </div>
