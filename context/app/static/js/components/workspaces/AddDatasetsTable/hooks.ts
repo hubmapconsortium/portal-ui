@@ -2,6 +2,8 @@ import { useState, SyntheticEvent, useCallback } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
+import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
+
 import { useWorkspaceDetail } from '../hooks';
 
 interface BuildIDPrefixQueryType {
@@ -89,17 +91,7 @@ function useDatasetsAutocomplete({
 }) {
   const [inputValue, setInputValue] = useState('');
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
-
-  const addDataset = useCallback(
-    (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
-      const uuid = newValue?._source?.uuid;
-      if (uuid) {
-        setAutocompleteValue(newValue);
-        updateDatasetsFormState([...selectedDatasets, uuid]);
-      }
-    },
-    [selectedDatasets, updateDatasetsFormState],
-  );
+  const { toastSuccess } = useSnackbarActions();
 
   const removeDatasets = useCallback(
     (uuids: string[]) => {
@@ -115,6 +107,19 @@ function useDatasetsAutocomplete({
     setAutocompleteValue(null);
   }, [setInputValue, setAutocompleteValue]);
 
+  const addDataset = useCallback(
+    (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
+      const uuid = newValue?._source?.uuid;
+
+      if (uuid) {
+        updateDatasetsFormState([...selectedDatasets, uuid]);
+        resetAutocompleteState();
+        toastSuccess(`${newValue._source.hubmap_id} successfully added.`);
+      }
+    },
+    [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccess],
+  );
+
   const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];
   const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });
@@ -124,9 +129,9 @@ function useDatasetsAutocomplete({
     setInputValue,
     autocompleteValue,
     selectedDatasets,
-    addDataset,
     removeDatasets,
     resetAutocompleteState,
+    addDataset,
     workspaceDatasets,
     allDatasets,
     searchHits,
