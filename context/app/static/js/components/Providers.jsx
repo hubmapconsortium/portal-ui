@@ -57,6 +57,8 @@ export default function Providers({
     [flaskData],
   );
 
+  const flaskDataWithDefaults = useMemo(() => ({ entity: {}, ...flaskData }), [flaskData]);
+
   const { springs } = useEntityHeaderSprings();
 
   return (
@@ -65,7 +67,7 @@ export default function Providers({
       <MuiThemeProvider theme={theme}>
         <SCThemeProvider theme={theme}>
           <AppContext.Provider value={appContext}>
-            <FlaskDataContext.Provider value={flaskData}>
+            <FlaskDataContext.Provider value={flaskDataWithDefaults}>
               <EntityStoreProvider springs={springs} assayMetadata={flaskData?.entity ?? {}}>
                 <ProtocolAPIContext.Provider value={protocolsContext}>
                   <CssBaseline />
