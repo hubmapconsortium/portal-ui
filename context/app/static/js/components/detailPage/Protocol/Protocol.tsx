@@ -4,8 +4,12 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolData';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import Divider from '@mui/material/Divider';
 import SectionItem from '../SectionItem';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
+import { DetailPageSection } from '../style';
+import { StyledPaper } from './style';
 
 const loadingText = 'Protocols are loading. If protocols take a significant time to load, please ';
 const errorText = 'Failed to retrieve protocols. Please ';
@@ -67,18 +71,35 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
 
 interface ProtocolProps {
   protocol_url: string;
+  showHeader?: boolean;
 }
 
-function Protocol({ protocol_url }: ProtocolProps) {
+function Protocol({ protocol_url, showHeader }: ProtocolProps) {
+  const { entity } = useFlaskDataContext();
   const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
 
-  return (
+  const contents = (
     <>
       {protocolUrls.map((url, index) => (
         <ProtocolLink key={url} url={url} index={index} />
       ))}
     </>
   );
+
+  if (showHeader) {
+    return (
+      <DetailPageSection id="protocols">
+        <SectionHeader
+          iconTooltipText={`Protocols uploaded to protocols.io for the given ${entity.entity_type?.toLowerCase()}.`}
+        >
+          Protocols
+        </SectionHeader>
+        <Divider />
+        <StyledPaper>{contents}</StyledPaper>
+      </DetailPageSection>
+    );
+  }
+  return contents;
 }
 
 export default React.memo(Protocol);

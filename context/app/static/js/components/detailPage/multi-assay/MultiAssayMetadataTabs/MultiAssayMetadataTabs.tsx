@@ -1,22 +1,11 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { useFlaskDataContext } from 'js/components/Contexts';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { useTabs } from 'js/shared-styles/tabs';
 import MetadataTable from 'js/components/detailPage/MetadataTable';
-import { SuccessIcon } from 'js/shared-styles/icons';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { MultiAssayEntity } from '../useRelatedMultiAssayDatasets';
 import { TableRows } from '../../MetadataSection/MetadataSection';
-
-function getIconProps(isCurrentEntity: boolean) {
-  return isCurrentEntity
-    ? {
-        icon: <SuccessIcon sx={(theme) => ({ color: theme.palette.success.light, fontSize: '1.5rem' })} />,
-      }
-    : { icon: undefined };
-}
 
 interface MultiAssayEntityTabProps {
   label: string;
@@ -24,31 +13,20 @@ interface MultiAssayEntityTabProps {
   index: number;
 }
 
-function MultiAssayEntityTab({ label, uuid, index, ...props }: MultiAssayEntityTabProps) {
-  // Props spreading neccesary as Tabs passes props to its children.
-  const {
-    entity: { uuid: currentEntityUUID },
-  } = useFlaskDataContext();
-  const isCurrentEntity = currentEntityUUID === uuid;
-
-  const iconProps = getIconProps(isCurrentEntity);
-  return (
-    <SecondaryBackgroundTooltip title={isCurrentEntity ? "This is the current dataset's metadata." : undefined}>
-      <Tab label={label} key={uuid} index={index} {...iconProps} iconPosition="end" {...props} />
-    </SecondaryBackgroundTooltip>
-  );
+function MetadataTab({ label, uuid, index, ...props }: MultiAssayEntityTabProps) {
+  return <Tab label={label} key={uuid} index={index} iconPosition="end" {...props} />;
 }
 
 type MultiAssayEntityWithTableRows = Pick<MultiAssayEntity, 'uuid'> & { tableRows: TableRows; label: string };
 
-function MultiAssayMetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] }) {
+function MetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] }) {
   const { openTabIndex, handleTabChange } = useTabs();
 
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange}>
         {entities.map(({ label, uuid }, index) => (
-          <MultiAssayEntityTab label={label} uuid={uuid} index={index} key={uuid} />
+          <MetadataTab label={label} uuid={uuid} index={index} key={uuid} />
         ))}
       </Tabs>
       {entities.map(({ uuid, tableRows }, index) => (
@@ -60,4 +38,4 @@ function MultiAssayMetadataTabs({ entities }: { entities: MultiAssayEntityWithTa
   );
 }
 
-export default MultiAssayMetadataTabs;
+export default MetadataTabs;

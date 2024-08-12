@@ -81,6 +81,13 @@ function FilesAccordion() {
   const [openTabIndex, setOpenTabIndex] = useState(0);
   const fileBrowserIndex = hasDataProducts ? 1 : 0;
   const track = useTrackEntityPageEvent();
+  if (files.length === 0) {
+    return (
+      <Subsection title="Files" icon={<InsertDriveFileRounded />}>
+        <SectionDescription subsection>No files are available for this dataset.</SectionDescription>
+      </Subsection>
+    );
+  }
   return (
     <Subsection title="Files" icon={<InsertDriveFileRounded />}>
       <SectionDescription subsection>
@@ -142,6 +149,16 @@ function AnalysisDetailsAccordion() {
 
   if (!dataset) {
     return <Skeleton variant="rectangular" height={200} />;
+  }
+
+  if (!dataset.metadata) {
+    return (
+      <Subsection title="Analysis Details & Protocols" idTitleOverride="analysis" icon={<FactCheckRounded />}>
+        <SectionDescription subsection>
+          Analysis details and protocols are not available for this dataset.
+        </SectionDescription>
+      </Subsection>
+    );
   }
 
   const {

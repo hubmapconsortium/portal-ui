@@ -40,7 +40,7 @@ function SampleDetail() {
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;
 
-  const combinedMetadata = combineMetadata(donor, undefined, undefined, metadata);
+  const combinedMetadata = combineMetadata(donor, undefined, metadata);
 
   const shouldDisplaySection = {
     summary: true,
@@ -77,8 +77,8 @@ function SampleDetail() {
         {shouldDisplaySection['derived-data'] && <DerivedDatasetsSection uuid={uuid} entityType={entity_type} />}
         <SampleTissue />
         <ProvSection />
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataSection metadata={combinedMetadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} showHeader />}
+        {shouldDisplaySection.metadata && <MetadataSection />}
         <Attribution />
       </DetailLayout>
     </DetailContext.Provider>

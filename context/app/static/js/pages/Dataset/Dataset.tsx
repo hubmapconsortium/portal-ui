@@ -149,12 +149,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     assay_modality,
   } = assayMetadata;
 
-  const combinedMetadata = combineMetadata(
-    donor,
-    origin_samples[0],
-    source_samples as Sample[],
-    metadata as Record<string, unknown>,
-  );
+  const combinedMetadata = combineMetadata(donor, source_samples as Sample[], metadata as Record<string, unknown>);
 
   const shouldDisplaySection = {
     summary: true,
@@ -220,10 +215,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
 function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
     protocol_url,
-    metadata,
     files,
-    donor,
-    source_samples,
     uuid,
     mapped_data_types,
     origin_samples,
@@ -249,12 +241,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
-  const combinedMetadata = combineMetadata(
-    donor,
-    origin_sample,
-    source_samples as Sample[],
-    metadata as Record<string, unknown>,
-  );
   const { sections, isLoading } = useProcessedDatasetsSections();
   const { searchHits: processedDatasets } = useProcessedDatasets();
 
@@ -266,7 +252,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     'processed-data': sections,
     provenance: true,
     protocols: Boolean(protocol_url),
-    metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
+    metadata: true,
     files: Boolean(files?.length),
     'bulk-data-transfer': true,
     collections: Boolean(collectionsData.length),
@@ -281,9 +267,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   }, [entity_type, hubmap_id, mapped_data_types, mapped_organ, setAssayMetadata]);
 
   const datasetLabel = useDatasetLabel();
-
-  const metadataSectionProps =
-    assay_modality === 'multiple' ? { assay_modality } : { metadata: combinedMetadata, assay_modality };
 
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
@@ -315,7 +298,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
               mapped_data_access_level={mapped_data_access_level}
             />
           </Summary>
-          {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
+          {shouldDisplaySection.metadata && <MetadataSection />}
           {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
           {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
           {shouldDisplaySection.provenance && <ProvSection />}

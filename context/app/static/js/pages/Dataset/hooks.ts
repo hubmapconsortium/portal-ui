@@ -73,7 +73,7 @@ export function useVitessceConf(uuid: string, parentUuid?: string) {
   );
 }
 
-function useProcessedDatasets() {
+function useProcessedDatasets(includeComponents?: boolean) {
   const { entity } = useFlaskDataContext();
   const entityIsDataset = isDataset(entity);
 
@@ -83,7 +83,9 @@ function useProcessedDatasets() {
     query: {
       bool: {
         // TODO: Futher narrow once we understand EPICs.
-        must: [getIDsQuery(descendant_ids), excludeComponentDatasetsClause],
+        must: includeComponents
+          ? [getIDsQuery(descendant_ids)]
+          : [getIDsQuery(descendant_ids), excludeComponentDatasetsClause],
       },
     },
     _source: [

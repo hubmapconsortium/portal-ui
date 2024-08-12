@@ -4,6 +4,7 @@ import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries'
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProcessedDatasets, type ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import { ComponentType } from 'react';
+import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { nodeIcons } from '../../DatasetRelationships/nodeTypes';
 
 export type ProcessedDatasetDetails = ProcessedDatasetInfo &
@@ -62,6 +63,20 @@ export function useProcessedDatasetDetails(uuid: string) {
   return { datasetDetails, isLoading };
 }
 
+function processDatasetLabel(dataset: ProcessedDatasetInfo, hits: Required<SearchHit<ProcessedDatasetInfo>>[]) {
+  const multipleHitsWithSamePipeline = hits.filter((h) => h._source.pipeline === dataset.pipeline).length > 1;
+  const multipleHitsWithSamePipelineAndStatus =
+    multipleHitsWithSamePipeline &&
+    hits.filter((h) => h._source.pipeline === dataset.pipeline && h._source.status === dataset.status).length > 1;
+  if (multipleHitsWithSamePipelineAndStatus) {
+    return `${dataset.pipeline} (${dataset.status}) [${dataset.hubmap_id}]`;
+  }
+  if (multipleHitsWithSamePipeline) {
+    return `${dataset.pipeline} (${dataset.status})`;
+  }
+  return dataset.pipeline;
+}
+
 export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: ComponentType | undefined }[] {
   const { searchHits } = useProcessedDatasets();
   const { entity } = useFlaskDataContext();
@@ -78,7 +93,7 @@ export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: 
     icon: nodeIcons.primaryDataset,
   };
 
-  // Include datataset status in the label if more than one processed dataset of this type exists.
+  // Include dataset status in the label if more than one processed dataset of this type exists.
   // This allows us to distinguish between published datasets and QA/New/other statuses.
   const processedDatasetTabs = searchHits
     // Prioritize published datasets
@@ -92,10 +107,7 @@ export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: 
       return 0;
     })
     .map(({ _source }, _, hits) => ({
-      label:
-        hits.filter((h) => h._source.pipeline === _source.pipeline).length > 1
-          ? `${_source.pipeline} (${_source.status})`
-          : _source.pipeline,
+      label: processDatasetLabel(_source, hits),
       uuid: _source.uuid,
       icon: nodeIcons.processedDataset,
     }));

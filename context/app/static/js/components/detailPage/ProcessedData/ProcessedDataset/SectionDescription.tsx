@@ -23,5 +23,13 @@ export function SectionDescription({ addendum, children, subsection }: SectionDe
   if (subsection) {
     return contents;
   }
-  return <DetailSectionPaper>{contents}</DetailSectionPaper>;
+  return (
+    <DetailSectionPaper
+      sx={(theme) => ({
+        marginBottom: theme.spacing(1),
+      })}
+    >
+      {contents}
+    </DetailSectionPaper>
+  );
 }
