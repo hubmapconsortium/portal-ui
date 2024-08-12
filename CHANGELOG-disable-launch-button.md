@@ -1,0 +1,1 @@
+- Disable "Launch Workspace" button when a workspace title is not provided.
