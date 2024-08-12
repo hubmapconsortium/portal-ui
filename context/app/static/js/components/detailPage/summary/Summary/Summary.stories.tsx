@@ -21,12 +21,10 @@ const lorem =
   'Fugiat irure nisi ea dolore non adipisicing non. Enim enim incididunt ut reprehenderit esse sint adipisicing. Aliqua excepteur reprehenderit tempor commodo anim veniam laboris labore exercitation qui. Adipisicing pariatur est anim nisi cupidatat ea Lorem nostrud labore laborum enim eiusmod.';
 
 const sharedArgs = {
-  uuid: 'fakeuuid',
-  created_timestamp: Date.now(),
-  last_modified_timestamp: Date.now(),
   title: 'DOI123',
   status: 'QA',
   mapped_data_access_level: 'Public',
+  created_timestamp: Date.now(),
 } as const;
 
 const donorSharedArgs = {
@@ -65,14 +63,6 @@ export const DonorWithDescription: StoryObj<typeof ChildlessTemplate> = {
   args: {
     ...donorSharedArgs,
     description: lorem,
-  },
-};
-
-export const DonorWithCitation: StoryObj<typeof ChildlessTemplate> = {
-  args: {
-    ...donorSharedArgs,
-    description: lorem,
-    ...Citation.args,
   },
 };
 
@@ -121,11 +111,8 @@ function DatasetTemplate(args: WrapperTemplateArgs) {
 export const DatasetDefault: StoryObj<typeof DatasetTemplate> = {
   args: {
     ...sharedArgs,
-    entity_type: 'Dataset',
-    status: 'QA',
-    mapped_data_access_level: 'Public',
     description: lorem,
-    ...Citation.args,
+    entity_type: 'Dataset',
   },
   parameters: {
     msw: {
@@ -143,7 +130,9 @@ export const CollectionDefault: StoryObj<typeof ChildlessTemplate> = {
     ...sharedArgs,
     entity_type: 'Collection',
     description: lorem,
-    ...Citation.args,
-    collectionName: 'Fake Collection Name',
+    ...Citation.args.contributors,
+    title: 'Fake Collection Name',
+    doi: 'DOI123',
+    doi_url: 'DOI123',
   },
 };

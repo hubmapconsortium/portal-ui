@@ -24,30 +24,20 @@ beforeAll(() => server.listen());
 afterEach(() => server.resetHandlers());
 afterAll(() => server.close());
 
-test('json button exists and has href', () => {
-  render(<SummaryData entity_type="Dataset" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
-
-  expect(screen.getByRole('link')).not.toBeEmptyDOMElement();
-  expect(screen.getByRole('link')).toHaveAttribute('href', `/browse/dataset/fakeuuid.json`);
-});
-
-test('dataset displays properly', async () => {
-  render(<SummaryData entity_type="Dataset" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
-  const textToTest = ['QA', 'Public Access'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+test('dataset displays properly', () => {
+  render(<SummaryData entity_type="Dataset" status="QA" mapped_data_access_level="Public" />);
+  expect(screen.getByText('QA (Public)')).toBeInTheDocument();
   expect(screen.getByTestId('status-svg-icon')).toBeInTheDocument();
-
-  await screen.findByText('Version 1');
 });
 
 test('non-dataset displays properly', () => {
-  render(<SummaryData entity_type="Sample" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
+  render(<SummaryData entity_type="Sample" status="QA" mapped_data_access_level="Public" />);
   expect(screen.queryByTestId('status-svg-icon')).not.toBeInTheDocument();
 });
 
 test('children display when provided', () => {
   render(
-    <SummaryData entity_type="Dataset" uuid={testUUID} status="QA" mapped_data_access_level="Public">
+    <SummaryData entity_type="Dataset" status="QA" mapped_data_access_level="Public">
       <div>child 1</div>
       <div>child 2</div>
     </SummaryData>,
@@ -60,6 +50,6 @@ test('children display when provided', () => {
 });
 
 test('children do not display when undefined', () => {
-  render(<SummaryData entity_type="Dataset" uuid={testUUID} status="QA" mapped_data_access_level="Public" />);
+  render(<SummaryData entity_type="Dataset" status="QA" mapped_data_access_level="Public" />);
   expect(screen.queryByTestId('summary-data-parent')).not.toBeInTheDocument();
 });

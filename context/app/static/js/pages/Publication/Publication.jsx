@@ -1,40 +1,18 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import ContributorsTable from 'js/components/detailPage/ContributorsTable/ContributorsTable';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
-import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import PublicationSummary from 'js/components/publications/PublicationSummary';
 import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 import Files from 'js/components/detailPage/files/Files';
-import useEntityStore from 'js/stores/useEntityStore';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import useTrackID from 'js/hooks/useTrackID';
 
-const entityStoreSelector = (state) => state.setAssayMetadata;
-
 function Publication({ publication, vignette_json }) {
-  const {
-    title,
-    uuid,
-    entity_type,
-    hubmap_id,
-    status,
-    sub_status,
-    doi_url,
-    contributors = [],
-    ancestor_ids,
-    publication_venue,
-    files,
-    associated_collection,
-  } = publication;
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-  useEffect(() => {
-    setAssayMetadata({ hubmap_id, entity_type, title, publication_venue });
-  }, [hubmap_id, entity_type, title, publication_venue, setAssayMetadata]);
+  const { uuid, entity_type, hubmap_id, contributors = [], ancestor_ids, files, associated_collection } = publication;
 
   useTrackID({ entity_type, hubmap_id });
 
@@ -50,10 +28,6 @@ function Publication({ publication, vignette_json }) {
     provenance: !associatedCollectionUUID,
   };
 
-  const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
-
-  const hasDOI = doi_url !== undefined;
-
   const detailContext = useMemo(
     () => ({
       uuid,
@@ -67,12 +41,7 @@ function Publication({ publication, vignette_json }) {
   return (
     <DetailContext.Provider value={detailContext}>
       <DetailLayout sections={shouldDisplaySection}>
-        <PublicationSummary
-          {...publication}
-          status={combinedStatus}
-          hasDOI={hasDOI}
-          associatedCollectionUUID={associatedCollectionUUID}
-        />
+        <PublicationSummary />
         <PublicationsDataSection
           uuid={uuid}
           datasetUUIDs={ancestor_ids}

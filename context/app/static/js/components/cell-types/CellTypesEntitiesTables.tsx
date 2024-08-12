@@ -13,7 +13,7 @@ import { format } from 'date-fns/format';
 import { InternalLink } from 'js/shared-styles/Links';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import { DetailPageSection } from '../detailPage/style';
+import DetailPageSection from '../detailPage/DetailPageSection';
 import { useCellTypeDetails } from './hooks';
 
 export default function CellTypesEntitiesTables() {

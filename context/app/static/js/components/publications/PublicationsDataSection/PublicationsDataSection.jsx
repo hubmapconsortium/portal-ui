@@ -6,7 +6,7 @@ import { buildCollectionsWithDatasetQuery } from 'js/hooks/useDatasetsCollection
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 
 function PublicationsDataSection({ datasetUUIDs, uuid, associatedCollectionUUID }) {
   const query = associatedCollectionUUID

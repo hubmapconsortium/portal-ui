@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 

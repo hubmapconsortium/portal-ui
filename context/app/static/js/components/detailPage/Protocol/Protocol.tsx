@@ -7,7 +7,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolData';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';

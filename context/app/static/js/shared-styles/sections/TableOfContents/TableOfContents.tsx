@@ -9,18 +9,15 @@ import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
-import { useSpring, animated } from '@react-spring/web';
+import { animated } from '@react-spring/web';
 
-import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
-import { entityHeaderHeight } from 'js/components/detailPage/entityHeader/EntityHeader';
-import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
+import useEntityStore from 'js/stores/useEntityStore';
 import { StickyNav, TableTitle, StyledItemLink } from './style';
 import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
 import { getItemsClient } from './utils';
 import { useThrottledOnScroll, useFindActiveIndex } from './hooks';
 
 const AnimatedNav = animated(StickyNav);
-const entityStoreSelector = (state: EntityStore) => state.summaryComponentObserver;
 
 interface LinkProps {
   currentSection: string;
@@ -148,18 +145,21 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
     }
   }, []);
 
-  const { summaryInView } = useEntityStore(entityStoreSelector);
-  const initialHeightOffset = headerHeight + 16;
-  const top = summaryInView ? `${initialHeightOffset}px` : `${initialHeightOffset + entityHeaderHeight}px`;
-  const stickyNavAnimationProps = useSpring({ top });
+  const { springs } = useEntityStore();
 
   if (!items || items.length === 0) {
     return null;
   }
 
+  const [springValues] = springs;
+
+  if (springValues[1] === undefined) {
+    return null;
+  }
+
   return (
     <Box data-testid="table-of-contents" height="100%" mr={1}>
-      <AnimatedNav style={stickyNavAnimationProps}>
+      <AnimatedNav style={springValues[1]}>
         <TableTitle variant="h5">Contents</TableTitle>
         {isLoading ? (
           <>

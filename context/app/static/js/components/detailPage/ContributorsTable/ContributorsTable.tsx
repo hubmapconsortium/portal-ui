@@ -11,7 +11,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { ContributorAPIResponse } from './utils';
 import { useNormalizedContributors } from './hooks';
 
