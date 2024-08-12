@@ -28,7 +28,7 @@ function ErrorOrWarningMessages({ errorMessages = [], warningMessages = [] }: Er
         };
 
   return (
-    <Stack spacing={3}>
+    <Stack spacing={2} marginBottom={2}>
       {content.messages.map((message) => {
         return (
           <Alert key={message} severity={content.severity}>
