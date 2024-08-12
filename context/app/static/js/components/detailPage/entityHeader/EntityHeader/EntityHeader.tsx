@@ -28,9 +28,9 @@ function Header() {
     [startViewChangeSpring, setView],
   );
 
-  const {
-    entity: { uuid },
-  } = useFlaskDataContext();
+  const { entity } = useFlaskDataContext();
+
+  const uuid = entity?.uuid;
 
   const [springValues] = springs;
 

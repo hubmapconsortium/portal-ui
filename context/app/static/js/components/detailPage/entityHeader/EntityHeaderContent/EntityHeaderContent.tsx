@@ -45,7 +45,9 @@ interface EntityHeaderItemsProps {
   };
 }
 
-type EntityToFieldsType = Record<EntityTypesWithIcons, (props: EntityHeaderItemsProps) => React.ReactNode | null>;
+type EntityToFieldsType = Partial<
+  Record<EntityTypesWithIcons, (props: EntityHeaderItemsProps) => React.ReactNode | null>
+>;
 
 const entityTypeHasIcon = (entityType: string): entityType is EntityTypesWithIcons => {
   return entityType in entityIconMap;
@@ -121,18 +123,8 @@ function PublicationItems({ data: { entity } }: EntityHeaderItemsProps) {
 }
 
 function CellTypeItems({ data: { assayMetadata } }: EntityHeaderItemsProps) {
-  const { name, reference_link } = assayMetadata;
-  return (
-    <>
-      <Typography>{name}</Typography>
-      <Typography>{reference_link}</Typography>
-    </>
-  );
-}
-
-function GeneItems({ data: { assayMetadata } }: EntityHeaderItemsProps) {
-  const { name } = assayMetadata;
-  return <Typography>{name}</Typography>;
+  const { reference_link } = assayMetadata;
+  return <Typography>{reference_link}</Typography>;
 }
 
 const entityToFieldsMap: EntityToFieldsType = {
@@ -141,11 +133,14 @@ const entityToFieldsMap: EntityToFieldsType = {
   Dataset: DatasetItems,
   Publication: PublicationItems,
   CellType: CellTypeItems,
-  Gene: GeneItems,
 };
 
 function EntityHeaderItems({ type, ...rest }: { type: EntityTypesWithIcons } & EntityHeaderItemsProps) {
   const Items = entityToFieldsMap[type];
+
+  if (!Items) {
+    return null;
+  }
 
   return (
     <>
@@ -160,19 +155,19 @@ const AnimatedStack = animated(Stack);
 const vizNotebookIdSelector: (state: { vizNotebookId: string | null }) => string | null = (state) =>
   state.vizNotebookId;
 
-function HuBMAPIDItem({ hubmap_id, entityTypeIcon }: Pick<Entity, 'hubmap_id'> & { entityTypeIcon: ReactNode }) {
+function HuBMAPIDItem({ title, entityTypeIcon }: { title: string } & { entityTypeIcon: ReactNode }) {
   const handleCopyClick = useHandleCopyClick();
 
   return (
     <EntityHeaderItem
       endIcon={
-        <TooltipIconButton onClick={() => handleCopyClick(hubmap_id)} tooltip="Copy HuBMAP ID">
+        <TooltipIconButton onClick={() => handleCopyClick(title)} tooltip="Copy ID">
           <ContentCopyIcon sx={(theme) => ({ color: theme.palette.common.link, fontSize: '1.25rem' })} />
         </TooltipIconButton>
       }
       startIcon={entityTypeIcon}
     >
-      {hubmap_id}
+      {title}
     </EntityHeaderItem>
   );
 }
@@ -193,7 +188,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
   } = useEntityStore(entityStoreSelector);
 
   const { entity } = useFlaskDataContext();
-  const { hubmap_id, entity_type, uuid, mapped_data_access_level } = entity;
+  const { hubmap_id, entity_type } = entity;
 
   const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
@@ -205,7 +200,8 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
     },
   });
 
-  const type = entity_type || assayMetadata.entity_type;
+  const title = hubmap_id ?? assayMetadata?.name;
+  const type = entity_type ?? assayMetadata?.entity_type;
 
   return (
     <Stack
@@ -223,9 +219,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
           spacing={2}
           divider={<Divider orientation="vertical" flexItem />}
         >
-          {hubmap_id && (
-            <HuBMAPIDItem hubmap_id={hubmap_id} entityTypeIcon={<StyledSvgIcon component={entityIconMap[type]} />} />
-          )}
+          {title && <HuBMAPIDItem title={title} entityTypeIcon={<StyledSvgIcon component={entityIconMap[type]} />} />}
           <EntityHeaderItems type={type} data={{ assayMetadata, entity }} />
         </AnimatedStack>
       )}
@@ -238,16 +232,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
             <VisualizationCollapseButton />
           </>
         ) : (
-          <EntityHeaderActionButtons
-            showJsonButton
-            entityCanBeSaved
-            uuid={uuid}
-            entity_type={entity_type}
-            hubmap_id={hubmap_id}
-            mapped_data_access_level={mapped_data_access_level}
-            view={view}
-            setView={setView}
-          />
+          <EntityHeaderActionButtons view={view} setView={setView} entity_type={type} />
         )}
       </RightDiv>
     </Stack>

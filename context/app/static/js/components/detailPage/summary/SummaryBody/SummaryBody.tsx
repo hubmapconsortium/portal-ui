@@ -79,11 +79,12 @@ function CollectionCitation() {
 
   const { doi_url, contributors, created_timestamp, title } = entity;
 
-  const doi = getCollectionDOI(doi_url);
-
-  if (!doi || !doi_url || !contributors || !title || !created_timestamp) {
+  if (!doi_url || !contributors || !title || !created_timestamp) {
     return null;
   }
+
+  const doi = getCollectionDOI(doi_url);
+
   return (
     <Citation
       doi={doi}

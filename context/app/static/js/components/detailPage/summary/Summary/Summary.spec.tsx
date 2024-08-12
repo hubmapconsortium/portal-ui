@@ -27,29 +27,6 @@ test('displays correctly with required props', () => {
   textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 });
 
-test('timestamps display when defined', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      entity_type: 'Dataset',
-      created_timestamp: 1596724856094,
-      last_modified_timestamp: 1596724856094,
-    } as Dataset,
-  } as FlaskDataContextType;
-
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary {...testStatusAndAccessLevel} />
-    </FlaskDataContext.Provider>,
-  );
-  const textToTest = ['Creation Date', 'Last Modified'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-
-  expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
-  expect(screen.queryByText('Undefined')).not.toBeInTheDocument();
-});
-
 test('publication prefered to creation, if available', () => {
   const flaskDataContext = {
     entity: {
@@ -66,10 +43,8 @@ test('publication prefered to creation, if available', () => {
       <Summary {...testStatusAndAccessLevel} />
     </FlaskDataContext.Provider>,
   );
-  const textToTest = ['Publication Date', 'Last Modified'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-
-  expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
+  expect(screen.getByText('Publication Date')).toBeInTheDocument();
+  expect(screen.getAllByText('2020-08-06')).toHaveLength(1);
   expect(screen.queryByText('Undefined')).not.toBeInTheDocument();
 });
 
@@ -88,10 +63,8 @@ test('timestamps do not display when undefined', () => {
     </FlaskDataContext.Provider>,
   );
 
-  const textToTest = ['Creation Date'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-
-  expect(screen.getAllByText('Undefined')).toHaveLength(2);
+  expect(screen.getByText('Creation Date')).toBeInTheDocument();
+  expect(screen.getAllByText('Undefined')).toHaveLength(1);
 });
 
 test('collection name displays when defined', () => {

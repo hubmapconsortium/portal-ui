@@ -15,7 +15,7 @@ import { Entity } from 'js/components/types';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import { useAppContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
@@ -197,22 +197,19 @@ function ViewSelectChips({
 }
 
 function EntityHeaderActionButtons({
-  showJsonButton,
-  entityCanBeSaved,
-  uuid,
-  hubmap_id,
-  mapped_data_access_level,
   entity_type,
   view,
   setView,
 }: {
-  showJsonButton: boolean;
-  entityCanBeSaved: boolean;
   view: SummaryViewsType;
   setView: (v: SummaryViewsType) => void;
-} & Partial<Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'> & { entity_type: AllEntityTypes }>) {
+} & Partial<{ entity_type: AllEntityTypes }>) {
   const isLargeDesktop = useIsLargeDesktop();
   const { isWorkspacesUser } = useAppContext();
+
+  const {
+    entity: { mapped_data_access_level, hubmap_id, uuid },
+  } = useFlaskDataContext();
 
   if (!(entity_type && uuid)) {
     return null;
@@ -224,8 +221,8 @@ function EntityHeaderActionButtons({
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
-      {showJsonButton && <JSONButton entity_type={entity_type} uuid={uuid} />}
-      {entityCanBeSaved && <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />}
+      <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
+      <JSONButton entity_type={entity_type} uuid={uuid} />
       {showWorkspaceButton && (
         <CreateWorkspaceButton uuid={uuid} hubmap_id={hubmap_id} mapped_data_access_level={mapped_data_access_level} />
       )}
