@@ -203,7 +203,8 @@ function EntityHeaderActionButtons({
 }: {
   view: SummaryViewsType;
   setView: (v: SummaryViewsType) => void;
-} & Partial<{ entity_type: AllEntityTypes }>) {
+  entity_type?: AllEntityTypes;
+}) {
   const isLargeDesktop = useIsLargeDesktop();
   const { isWorkspacesUser } = useAppContext();
 

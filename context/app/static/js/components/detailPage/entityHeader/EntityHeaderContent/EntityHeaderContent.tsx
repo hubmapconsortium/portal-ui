@@ -152,9 +152,6 @@ function EntityHeaderItems({ type, ...rest }: { type: EntityTypesWithIcons } & E
 
 const AnimatedStack = animated(Stack);
 
-const vizNotebookIdSelector: (state: { vizNotebookId: string | null }) => string | null = (state) =>
-  state.vizNotebookId;
-
 function HuBMAPIDItem({ title, entityTypeIcon }: { title: string } & { entityTypeIcon: ReactNode }) {
   const handleCopyClick = useHandleCopyClick();
 
@@ -179,6 +176,7 @@ const entityStoreSelector = (state: EntityStore) => ({
 
 const visualizationSelector = (state: VisualizationStore) => ({
   vizIsFullscreen: state.vizIsFullscreen,
+  vizNotebookId: state.vizNotebookId,
 });
 
 function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setView: (v: SummaryViewsType) => void }) {
@@ -190,8 +188,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
   const { entity } = useFlaskDataContext();
   const { hubmap_id, entity_type } = entity;
 
-  const vizNotebookId = useVisualizationStore(vizNotebookIdSelector);
-  const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
+  const { vizIsFullscreen, vizNotebookId } = useVisualizationStore(visualizationSelector);
 
   const styles = useSpring({
     from: { opacity: 1 },
