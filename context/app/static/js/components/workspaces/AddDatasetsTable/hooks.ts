@@ -112,7 +112,6 @@ function useDatasetsAutocomplete({
       const uuid = newValue?._source?.uuid;
 
       if (uuid) {
-        setAutocompleteValue(newValue);
         updateDatasetsFormState([...selectedDatasets, uuid]);
         resetAutocompleteState();
         toastSuccess(`${newValue._source.hubmap_id} successfully added.`);
