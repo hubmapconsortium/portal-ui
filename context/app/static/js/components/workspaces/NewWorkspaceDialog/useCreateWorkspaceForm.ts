@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -42,6 +42,7 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorks
     control,
     reset,
     formState: { errors, isSubmitting, isSubmitSuccessful },
+    trigger,
   } = useForm({
     defaultValues: {
       'workspace-name': defaultName ?? '',
@@ -64,6 +65,14 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorks
     reset();
     handleClose();
   }
+
+  useEffect(() => {
+    if (dialogIsOpen) {
+      trigger('workspace-name').catch((e) => {
+        console.error(e);
+      });
+    }
+  }, [dialogIsOpen, trigger]);
 
   return {
     dialogIsOpen,
