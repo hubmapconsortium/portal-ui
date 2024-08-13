@@ -14,13 +14,17 @@ function DetailPageSection({ children, ...rest }: PropsWithChildren<React.HTMLAt
     if (initialHash && initialHash?.length > 1) {
       const strippedHash = initialHash.slice(1);
       if (strippedHash === rest.id) {
-        sectionRef.current?.scrollIntoView();
+        setTimeout(() => {
+          sectionRef.current?.scrollIntoView({
+            behavior: 'smooth',
+          });
+        }, 1000);
       }
     }
   }, [initialHash, rest.id]);
 
   return (
-    <OffsetSection $offset={offset} {...rest}>
+    <OffsetSection $offset={offset} ref={sectionRef} {...rest}>
       {children}
     </OffsetSection>
   );

@@ -10,6 +10,8 @@ import { fetcher } from 'js/helpers/swr';
 import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/types';
 
 import { getAuthHeader } from 'js/helpers/functions';
+import { useEffect } from 'react';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { datasetSectionId } from './utils';
 
 function useDatasetLabelPrefix() {
@@ -168,6 +170,16 @@ function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false
     sections,
     isLoading,
   };
+}
+
+export function useRedirectAlert() {
+  const { redirected } = useFlaskDataContext();
+  const { toastInfo } = useSnackbarActions();
+  useEffect(() => {
+    if (redirected) {
+      toastInfo('You have been redirected to the unified view for this dataset.');
+    }
+  }, [redirected, toastInfo]);
 }
 
 export { useProcessedDatasets, useProcessedDatasetsSections };

@@ -1,5 +1,5 @@
 import json
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 
 from flask import (
     render_template, jsonify,
@@ -68,15 +68,27 @@ def details(type, uuid):
             },
             non_metadata_fields=['hubmap_id', 'uuid']
         )
+
+        pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
+        anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
+
         if len(supported_entity) > 0:
-            return redirect(url_for('routes_browse.details', type='dataset', uuid=supported_entity[0]['uuid']))
+            return redirect(
+                url_for('routes_browse.details',
+                        type='dataset',
+                        uuid=supported_entity[0]['uuid'],
+                        _anchor=anchor,
+                        redirected=True))
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
 
+    redirected = request.args.get('redirected') == 'True'
+
     flask_data = {
         **get_default_flask_data(),
         'entity': entity,
+        'redirected': redirected,
     }
 
     if type == 'publication':

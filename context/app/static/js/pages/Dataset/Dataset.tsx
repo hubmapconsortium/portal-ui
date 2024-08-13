@@ -29,7 +29,7 @@ import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSe
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import Stack from '@mui/material/Stack';
-import { useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
+import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
 interface SummaryDataChildrenProps {
   mapped_data_types: string[];
@@ -96,6 +96,8 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     assay_modality,
     processing,
   } = assayMetadata;
+
+  useRedirectAlert();
 
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;

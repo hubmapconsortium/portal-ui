@@ -334,6 +334,7 @@ Routes.propTypes = {
     redirected_from: PropTypes.string,
     cell_type: PropTypes.string,
     globusGroups: PropTypes.object,
+    redirected: PropTypes.bool,
   }),
 };
 
