@@ -47,6 +47,30 @@ def details(type, uuid):
     client = get_client()
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
+
+    # Redirect to primary dataset if this is
+    # - a support entity (e.g. an image pyramid)
+    # - a processed or component dataset
+    is_support = actual_type == 'support'
+    is_processed = entity.get('processing') != 'raw'
+    is_component = entity.get('is_component', False) is True
+    if (is_support or is_processed or is_component):
+        supported_entity = client.get_entities(
+            'datasets',
+            query_override={
+                "bool": {
+                    "must": {
+                        "terms": {
+                            "descendant_ids": [uuid]
+                        }
+                    }
+                }
+            },
+            non_metadata_fields=['hubmap_id', 'uuid']
+        )
+        if len(supported_entity) > 0:
+            return redirect(url_for('routes_browse.details', type='dataset', uuid=supported_entity[0]['uuid']))
+
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
 

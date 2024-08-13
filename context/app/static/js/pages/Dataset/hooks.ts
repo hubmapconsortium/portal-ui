@@ -52,6 +52,7 @@ export type ProcessedDatasetInfo = Pick<
   | 'dbgap_study_url'
   | 'dbgap_sra_experiment_url'
   | 'is_component'
+  | 'visualization'
 >;
 
 type VitessceConf = object | undefined;
@@ -102,6 +103,7 @@ function useProcessedDatasets(includeComponents?: boolean) {
       'dbgap_study_url',
       'dbgap_sra_experiment_url',
       'is_component',
+      'visualization',
     ],
     size: 10000,
   };
@@ -124,11 +126,11 @@ function getProcessedDatasetSection({
   hit: Required<SearchHit<ProcessedDatasetInfo>>;
   conf?: VitessceConf;
 }) {
-  const { pipeline, hubmap_id, files, metadata } = hit._source;
+  const { pipeline, hubmap_id, files, metadata, visualization } = hit._source;
 
   const shouldDisplaySection = {
     summary: true,
-    visualization: Boolean(conf && 'data' in conf && conf?.data),
+    visualization: visualization || Boolean(conf && 'data' in conf && conf?.data),
     files: Boolean(files),
     analysis: Boolean(metadata?.dag_provenance_list),
   };
