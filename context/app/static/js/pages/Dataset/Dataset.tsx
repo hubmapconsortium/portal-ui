@@ -29,7 +29,7 @@ import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSe
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import Stack from '@mui/material/Stack';
-import useDatasetLabel, { useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
+import { useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
 
 interface SummaryDataChildrenProps {
   mapped_data_types: string[];
@@ -119,8 +119,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     attribution: true,
   };
 
-  const datasetLabel = useDatasetLabel();
-
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
@@ -128,7 +126,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
         {Boolean(is_component) && <ComponentAlert />}
         <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
           <Summary
-            entityTypeDisplay={datasetLabel}
+            entityTypeDisplay="Dataset"
             status={combinedStatus}
             mapped_data_access_level={mapped_data_access_level}
             mapped_external_group_name={mapped_external_group_name}
