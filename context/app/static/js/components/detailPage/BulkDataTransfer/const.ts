@@ -17,3 +17,6 @@ export const SRA_EXPERIMENT_TEXT = {
   description: 'Select the "Run" link on the page to download the dataset information.',
   outboundLink: 'https://www.ncbi.nlm.nih.gov/sra/docs/',
 };
+
+export const BULK_DATA_DESCRIPTION_TEXT =
+  'This section explains how to download data in bulk from raw and processed datasets. Processed datasets have separate download directories in Globus or dbGaP, distinct from the raw dataset.';

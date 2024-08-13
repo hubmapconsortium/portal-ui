@@ -187,9 +187,7 @@ function useLazyLoadedHashHandler() {
             // - malformed hash (incorrectly copied link, typo, etc)
             // - original link pointed to QA-only dataset and the user is not able to view it
             // - original link pointed to older version of the dataset and the user needs to select it
-            toastError(
-              'Could not find the section you were looking for. The dataset you wish to view may have been updated to a new version.',
-            );
+            toastError('Could not find the section you were looking for.');
           }
         } catch (e) {
           console.error(e);

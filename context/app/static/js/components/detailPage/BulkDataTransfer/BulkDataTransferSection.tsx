@@ -7,6 +7,7 @@ import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
+import { BULK_DATA_DESCRIPTION_TEXT } from './const';
 
 function BulkDataTransfer() {
   const tabs = useProcessedDatasetTabs();
@@ -17,10 +18,7 @@ function BulkDataTransfer() {
     <FilesContextProvider>
       <DetailPageSection id="bulk-data-transfer" data-testid="bulk-data-transfer">
         <SectionHeader>Bulk Data Transfer</SectionHeader>
-        <SectionDescription>
-          This section explains how to download data in bulk from raw and processed datasets. Processed datasets have
-          separate download directories in Globus or dbGaP, distinct from the raw dataset.
-        </SectionDescription>
+        <SectionDescription>{BULK_DATA_DESCRIPTION_TEXT}</SectionDescription>
         <Tabs
           value={openTabIndex}
           onChange={(_, newValue) => {

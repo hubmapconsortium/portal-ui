@@ -1,4 +1,4 @@
-import { convertProvDataToNodesAndEdges, generatePrefix, getCurrentEntityNodeType } from './utils';
+import { convertProvDataToNodesAndEdges, generatePrefix, getCurrentEntityNodeType, makeNodeHref } from './utils';
 
 import { provData, nodes, edges } from './prov.fixtures';
 
@@ -32,5 +32,19 @@ describe('convertProvDataToNodesAndEdges', () => {
     );
     expect(nodes).toEqual(expectedNodes);
     expect(edges).toEqual(expectedEdges);
+  });
+});
+
+describe('makeNodeHref', () => {
+  it('should return a hash link for the provided node ID', () => {
+    const testPipeline = {
+      pipeline: 'Test Pipeline',
+      hubmap_id: 'HBM123',
+      status: 'Published',
+    };
+    expect(makeNodeHref(testPipeline)).toBe('#section-testpipeline-published');
+  });
+  it('should handle missing data by returning undefined', () => {
+    expect(makeNodeHref(undefined)).toBe(undefined);
   });
 });

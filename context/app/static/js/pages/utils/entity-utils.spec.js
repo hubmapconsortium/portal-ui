@@ -16,7 +16,7 @@ test('robust against empty objects', () => {
   expect(combineMetadata(donor, origin_sample, source_samples, metadata)).toEqual({});
 });
 
-test('combines appropiately structured metadata', () => {
+test('combines appropriately structured metadata', () => {
   // This information is also available in the "ancestors" list,
   // but metadata is structured differently between Samples and Donors,
   // so it wouldn't simplify things to use that.
@@ -48,7 +48,7 @@ test('combines appropiately structured metadata', () => {
   ];
   const metadata = {
     dag_provenance_list: [],
-    extra_metatadata: {},
+    extra_metadata: {},
     metadata: {
       analyte_class: 'polysaccharides',
       assay_category: 'imaging',

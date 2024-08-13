@@ -6,10 +6,10 @@ import Typography from '@mui/material/Typography';
 import { AccountTreeRounded, ExtensionRounded, SvgIconComponent } from '@mui/icons-material';
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
-import { datasetSectionId } from 'js/pages/Dataset/utils';
 import StatusIcon from '../StatusIcon';
 import { usePipelineInfo } from './hooks';
 import { useProcessedDatasetDetails } from '../ProcessedData/ProcessedDataset/hooks';
+import { makeNodeHref } from './utils';
 
 interface CommonNodeInfo extends Record<string, unknown> {
   name: string;
@@ -130,7 +130,7 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
     <NodeTemplate
       rounded
       target
-      href={datasetDetails ? `#${datasetSectionId(datasetDetails, 'section')}` : undefined}
+      href={makeNodeHref(datasetDetails)}
       icon={nodeIcons.processedDataset}
       bgColor={nodeColors.processedDataset}
       isLoading={isLoading}
@@ -150,7 +150,7 @@ function ComponentDatasetNode({ data }: NodeProps<ComponentDatasetNodeProps>) {
       rounded
       target
       icon={nodeIcons.componentDataset}
-      href={datasetDetails ? `#${datasetSectionId(datasetDetails, 'section')}` : undefined}
+      href={makeNodeHref(datasetDetails)}
       bgColor={nodeColors.componentDataset}
       isLoading={isLoading}
       {...data}

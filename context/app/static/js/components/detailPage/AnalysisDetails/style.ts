@@ -17,7 +17,7 @@ const FlexOutboundLink = styled(OutboundLink)({
 const PrimaryTextDivider = styled(Divider)(({ theme }) => ({
   marginLeft: theme.spacing(0.5),
   marginRight: theme.spacing(0.5),
-  height: '15px',
+  height: '1rem',
   backgroundColor: theme.palette.text.primary,
   alignSelf: 'center',
 }));

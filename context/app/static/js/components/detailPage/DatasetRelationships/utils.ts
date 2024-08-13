@@ -1,6 +1,7 @@
 import { Node, Edge, MarkerType } from '@xyflow/react';
 import Dagre from '@dagrejs/dagre';
 import theme from 'js/theme/theme';
+import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { NodeWithoutPosition } from './types';
 import { ProvData } from '../provenance/types';
 import { nodeHeight } from './nodeTypes';
@@ -210,4 +211,11 @@ export function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provD
     }
   }
   return { nodes, edges };
+}
+
+export function makeNodeHref(data?: Parameters<typeof datasetSectionId>[0]) {
+  if (!data) {
+    return undefined;
+  }
+  return `#${datasetSectionId(data, 'section')}`;
 }

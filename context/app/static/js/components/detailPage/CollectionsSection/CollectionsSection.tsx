@@ -77,6 +77,9 @@ function CollectionPanel({ uuid, index }: { uuid: string; index: number }) {
   );
 }
 
+const collectionsSectionDescription =
+  'Collections may contain references to either raw or processed datasets. If a processed dataset is not included in any collection, there will be no corresponding tabs in the table below.';
+
 function CollectionsSection() {
   const processedDatasetTabs = useProcessedDatasetTabs();
 
@@ -86,10 +89,7 @@ function CollectionsSection() {
     <DetailPageSection id="collections">
       <CollectionsSectionProvider>
         <SectionHeader>Collections</SectionHeader>
-        <SectionDescription>
-          Collections may contain references to either raw or processed datasets. If a processed dataset is not included
-          in any collection, there will be no corresponding tabs in the table below.
-        </SectionDescription>
+        <SectionDescription>{collectionsSectionDescription}</SectionDescription>
         <Tabs value={selectedTab} onChange={(_, tabIndex) => setSelectedTab(tabIndex as number)}>
           {processedDatasetTabs.map(({ label, uuid, icon }, index) => (
             <CollectionTab key={uuid} label={label} uuid={uuid} index={index} icon={icon} />
