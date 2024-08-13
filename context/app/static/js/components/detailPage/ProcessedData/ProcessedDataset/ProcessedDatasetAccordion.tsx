@@ -11,9 +11,10 @@ import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useInView } from 'react-intersection-observer';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
-import { ProcessedDatasetSectionAccordion } from './styles';
+import { StyledProcessedDatasetAccordion } from './styles';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 import useProcessedDataStore from '../store';
+import DetailPageSection from '../../DetailPageSection';
 
 const iconPlaceholder = <Skeleton variant="circular" width={24} height={24} animation="pulse" />;
 
@@ -39,25 +40,26 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
     },
   });
   return (
-    <ProcessedDatasetSectionAccordion
-      defaultExpanded={defaultExpanded}
-      id={datasetSectionId(sectionDataset, 'section')}
-      onChange={(_, expanded) =>
-        track({ action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`, label: sectionDataset.hubmap_id })
-      }
-      slotProps={{ transition: { unmountOnExit: true } }}
-    >
-      <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
-        {isLoading ? iconPlaceholder : visualizationIcon}
-        <Typography variant="subtitle1" color="inherit" component="h4">
-          {sectionDataset.pipeline}
-        </Typography>
-        <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
-          <StatusIcon status={sectionDataset.status} noColor sx={{ fontSize: 16 }} />
-          {dataset?.hubmap_id}
-        </Typography>
-      </AccordionSummary>
-      {dataset && !isLoading ? <AccordionDetails ref={ref}>{children}</AccordionDetails> : <LoadingFallback />}
-    </ProcessedDatasetSectionAccordion>
+    <DetailPageSection id={datasetSectionId(sectionDataset, 'section')}>
+      <StyledProcessedDatasetAccordion
+        defaultExpanded={defaultExpanded}
+        onChange={(_, expanded) =>
+          track({ action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`, label: sectionDataset.hubmap_id })
+        }
+        slotProps={{ transition: { unmountOnExit: true } }}
+      >
+        <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
+          {isLoading ? iconPlaceholder : visualizationIcon}
+          <Typography variant="subtitle1" color="inherit" component="h4">
+            {sectionDataset.pipeline}
+          </Typography>
+          <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
+            <StatusIcon status={sectionDataset.status} noColor sx={{ fontSize: 16 }} />
+            {dataset?.hubmap_id}
+          </Typography>
+        </AccordionSummary>
+        {dataset && !isLoading ? <AccordionDetails ref={ref}>{children}</AccordionDetails> : <LoadingFallback />}
+      </StyledProcessedDatasetAccordion>
+    </DetailPageSection>
   );
 }

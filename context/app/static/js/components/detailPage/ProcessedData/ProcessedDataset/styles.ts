@@ -1,7 +1,7 @@
 import Accordion from '@mui/material/Accordion';
 import { styled } from '@mui/material/styles';
 
-export const ProcessedDatasetSectionAccordion = styled(Accordion)(({ theme }) => ({
+export const StyledProcessedDatasetAccordion = styled(Accordion)(({ theme }) => ({
   '& > .MuiAccordionSummary-root': {
     backgroundColor: theme.palette.secondaryContainer.main,
     '& > .MuiAccordionSummary-content': {
@@ -24,10 +24,9 @@ export const ProcessedDatasetSectionAccordion = styled(Accordion)(({ theme }) =>
       backgroundColor: theme.palette.primary.main,
     },
   },
-  scrollMarginTop: theme.spacing(12),
 }));
 
-export const SubsectionAccordion = styled(Accordion)(({ theme }) => ({
+export const StyledSubsectionAccordion = styled(Accordion)(({ theme }) => ({
   '& > .MuiAccordionSummary-root': {
     flexDirection: 'row-reverse',
     backgroundColor: theme.palette.common.white,
@@ -42,5 +41,4 @@ export const SubsectionAccordion = styled(Accordion)(({ theme }) => ({
       color: theme.palette.primary.main,
     },
   },
-  scrollMarginTop: theme.spacing(12),
 }));

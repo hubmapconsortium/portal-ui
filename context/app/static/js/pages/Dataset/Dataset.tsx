@@ -29,7 +29,7 @@ import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/compo
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
-import useDatasetLabel, { useLazyLoadedHashHandler, useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
+import useDatasetLabel, { useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
 
 interface SummaryDataChildrenProps {
   mapped_data_types: string[];
@@ -164,8 +164,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     assay_modality,
     processing,
   } = assayMetadata;
-
-  useLazyLoadedHashHandler();
 
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;

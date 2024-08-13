@@ -8,8 +8,7 @@ import { Dataset, isDataset } from 'js/components/types';
 import { getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
 import { fetcher } from 'js/helpers/swr';
 import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/types';
-import { useLayoutEffect } from 'react';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
+
 import { getAuthHeader } from 'js/helpers/functions';
 import { datasetSectionId } from './utils';
 
@@ -169,35 +168,5 @@ function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false
   };
 }
 
-function useLazyLoadedHashHandler() {
-  const { isLoading } = useProcessedDatasets();
-  const { toastError } = useSnackbarActions();
-  useLayoutEffect(() => {
-    if (!isLoading && window.location.hash) {
-      const { hash } = window.location;
-      const decodedHash = decodeURIComponent(hash);
-
-      if (decodedHash) {
-        // Since `document.querySelector` can fail if the hash is invalid, wrap it in a try-catch block.
-        try {
-          const element = document.querySelector(decodedHash);
-          if (element) {
-            element.scrollIntoView();
-          } else {
-            // TODO: May need to be iterated on to provide a better error message.
-            // Sections may be missing due to:
-            // - malformed hash (incorrectly copied link, typo, etc)
-            // - original link pointed to QA-only dataset and the user is not able to view it
-            // - original link pointed to older version of the dataset and the user needs to select it
-            toastError('Could not find the section you were looking for.');
-          }
-        } catch (e) {
-          console.error(e);
-        }
-      }
-    }
-  }, [isLoading, toastError]);
-}
-
-export { useProcessedDatasets, useProcessedDatasetsSections, useLazyLoadedHashHandler };
+export { useProcessedDatasets, useProcessedDatasetsSections };
 export default useDatasetLabel;
