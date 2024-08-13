@@ -8,6 +8,7 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { workspaceJobTypeIdField } from '../workspaceFormFields';
 import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
 import { DEFAULT_JOB_TYPE } from '../constants';
+import { MergedWorkspace } from '../types';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
@@ -51,7 +52,8 @@ function useLaunchWorkspaceDialog() {
 
   const { handleStopWorkspace } = useWorkspacesList();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
-  const { isOpen, close, workspace } = useLaunchWorkspaceStore();
+  const { isOpen, open, close, workspace, setWorkspace } = useLaunchWorkspaceStore();
+
   const runningWorkspaceIsCurrentWorkpace = runningWorkspace?.id === workspace?.id;
 
   const { toastError } = useSnackbarActions();
@@ -111,6 +113,22 @@ function useLaunchWorkspaceDialog() {
     ],
   );
 
+  const handleLaunch = useCallback(
+    (currentWorkspace: MergedWorkspace) => {
+      setWorkspace(currentWorkspace);
+
+      if (currentWorkspace.jobs.length > 0) {
+        submit({ workspaceJobTypeId: currentWorkspace.jobs[0].job_type }).catch((e) => {
+          toastError('Failed to launch workspace. Please try again.');
+          console.error(e);
+        });
+      } else {
+        open();
+      }
+    },
+    [submit, toastError, setWorkspace, open],
+  );
+
   return {
     isRunningWorkspace,
     runningWorkspaceName: runningWorkspaceName.current,
@@ -125,6 +143,7 @@ function useLaunchWorkspaceDialog() {
     handleSubmit,
     isSubmitting,
     handleClose,
+    handleLaunch,
   };
 }
 

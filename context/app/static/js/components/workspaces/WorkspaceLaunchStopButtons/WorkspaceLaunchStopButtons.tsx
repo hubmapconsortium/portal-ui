@@ -5,11 +5,11 @@ import Typography from '@mui/material/Typography';
 
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
-import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { Alert } from 'js/shared-styles/alerts';
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { MergedWorkspace } from '../types';
+import { useLaunchWorkspaceDialog } from '../LaunchWorkspaceDialog/hooks';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -91,7 +91,8 @@ function StopWorkspaceAlert() {
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
   const { workspace, button: ButtonComponent, showLaunch = false, showStop = false } = props;
-  const { open, setWorkspace } = useLaunchWorkspaceStore();
+  const { handleLaunch } = useLaunchWorkspaceDialog();
+
   if (workspace.status === 'deleting') {
     return (
       <ButtonComponent type="button" disabled size="small">
@@ -99,21 +100,12 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
       </ButtonComponent>
     );
   }
+
   return (
     <Stack direction="row" spacing={2}>
       {showStop && <StopWorkspaceButton {...props} />}
       {showLaunch && (
-        <Button
-          type="button"
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            setWorkspace(workspace);
-            if (workspace.jobs.length === 0) {
-              open();
-            }
-          }}
-        >
+        <Button type="button" variant="contained" color="primary" onClick={() => handleLaunch(workspace)}>
           Launch Workspace
         </Button>
       )}

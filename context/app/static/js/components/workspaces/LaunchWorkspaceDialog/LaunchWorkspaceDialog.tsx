@@ -77,7 +77,7 @@ function LaunchWorkspaceDialog() {
           </Stack>
         </form>
       }
-      isOpen={isOpen && !runningWorkspaceIsCurrentWorkpace}
+      isOpen={isOpen}
       handleClose={handleClose}
       actions={
         <Stack direction="row" spacing={2} alignItems="end">
