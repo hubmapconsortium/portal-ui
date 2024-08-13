@@ -27,6 +27,8 @@ import DatasetRelationships from 'js/components/detailPage/DatasetRelationships'
 import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
+import OrganIcon from 'js/shared-styles/icons/OrganIcon';
+import Stack from '@mui/material/Stack';
 import useDatasetLabel, { useProcessedDatasets, useProcessedDatasetsSections } from './hooks';
 
 interface SummaryDataChildrenProps {
@@ -41,7 +43,6 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChi
     <>
       <SummaryItem>
         <InternalLink
-          variant="h6"
           href="https://docs.hubmapconsortium.org/assays"
           underline="none"
           onClick={() => trackEntityPageEvent({ action: 'Assay Documentation Navigation', label: dataTypes })}
@@ -50,8 +51,11 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChi
         </InternalLink>
       </SummaryItem>
       <SummaryItem showDivider={false}>
-        <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
-          {mapped_organ}
+        <InternalLink href={`/organ/${mapped_organ}`} underline="none">
+          <Stack direction="row" spacing={0.25} alignItems="center">
+            <OrganIcon organName={mapped_organ} />
+            {mapped_organ}
+          </Stack>
         </InternalLink>
       </SummaryItem>
     </>

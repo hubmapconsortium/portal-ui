@@ -15,7 +15,16 @@ interface MultiAssayEntityTabProps {
 }
 
 function MetadataTab({ label, uuid, index, icon: Icon, ...props }: MultiAssayEntityTabProps) {
-  return <Tab icon={<Icon />} label={label} key={uuid} index={index} iconPosition="start" {...props} />;
+  return (
+    <Tab
+      icon={<Icon fontSize="1.5rem" color="primary" />}
+      label={label}
+      key={uuid}
+      index={index}
+      iconPosition="start"
+      {...props}
+    />
+  );
 }
 
 type MultiAssayEntityWithTableRows = Pick<MultiAssayEntity, 'uuid'> & {
