@@ -41,7 +41,6 @@ function LaunchWorkspaceDialog() {
     },
     [submit, handleClose, toastError],
   );
-
   return (
     <DialogModal
       title={`Launch ${workspaceName}`}
