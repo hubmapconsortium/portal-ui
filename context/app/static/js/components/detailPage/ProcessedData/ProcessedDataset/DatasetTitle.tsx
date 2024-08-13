@@ -3,16 +3,17 @@ import Typography from '@mui/material/Typography';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import IconButton from '@mui/material/IconButton';
-import CopyAllRounded from '@mui/icons-material/CopyAllRounded';
-import Box from '@mui/material/Box';
+import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
+import Stack from '@mui/material/Stack';
 import StatusIcon from '../../StatusIcon';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 import VersionSelect from '../../VersionSelect';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
+import SummaryJSONButton from '../../summary/SummaryJSONButton';
 
 export function DatasetTitle() {
   const {
-    dataset: { hubmap_id, status },
+    dataset: { hubmap_id, status, uuid, entity_type },
   } = useProcessedDatasetContext();
   const copyText = useHandleCopyClick();
   const track = useTrackEntityPageEvent();
@@ -30,12 +31,13 @@ export function DatasetTitle() {
             });
           }}
         >
-          <CopyAllRounded color="info" />
+          <ContentCopyIcon color="info" />
         </IconButton>
       </SecondaryBackgroundTooltip>
-      <Box ml="auto">
+      <Stack ml="auto" direction="row" gap={1} alignItems="center">
+        <SummaryJSONButton entity_type={entity_type} uuid={uuid} />
         <VersionSelect />
-      </Box>
+      </Stack>
     </Typography>
   );
 }

@@ -1,6 +1,6 @@
 import React, { ReactNode } from 'react';
 import { animated, useSpring } from '@react-spring/web';
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';

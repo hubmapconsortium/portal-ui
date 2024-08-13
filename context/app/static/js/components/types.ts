@@ -104,6 +104,7 @@ export interface Dataset extends Entity {
   mapped_external_group_name?: string;
   title: string;
   dataset_type: string;
+  visualization: boolean;
 }
 
 export interface Collection extends Entity {

@@ -164,13 +164,9 @@ function DetailPageWrapper({ assayMetadata, ...props }: EntityDetailProps<Entity
   useTrackID({ entity_type, hubmap_id });
 
   if (isDataset(assayMetadata)) {
-    return (
-      <SelectedVersionStoreProvider initialVersionUUIDs={assayMetadata.descendant_ids}>
-        <DatasetDetail assayMetadata={assayMetadata} {...props} />;
-      </SelectedVersionStoreProvider>
-    );
+    return <DatasetDetail assayMetadata={assayMetadata} {...props} />;
   }
-  // Should never be reached due to redirect to primary dataset, but just in case...
+  // Should never be reached due to server-side redirect to primary dataset, but just in case...
   return <SupportAlert uuid={assayMetadata.uuid} isSupport />;
 }
 
