@@ -46,7 +46,7 @@ interface LegendProps {
 
 function Legend({ children, title, tooltip }: PropsWithChildren<LegendProps>) {
   return (
-    <Stack flexBasis="50%" gap={1}>
+    <Stack flexBasis="50%" gap={1} px={1}>
       <Typography variant="subtitle2">
         {title} {tooltip && <InfoTooltipIcon iconTooltipText={tooltip} />}
       </Typography>
