@@ -109,7 +109,9 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
           color="primary"
           onClick={() => {
             setWorkspace(workspace);
-            open();
+            if (workspace.jobs.length === 0) {
+              open();
+            }
           }}
         >
           Launch Workspace

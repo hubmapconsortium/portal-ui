@@ -41,6 +41,7 @@ function LaunchWorkspaceDialog() {
     },
     [submit, handleClose, toastError],
   );
+
   return (
     <DialogModal
       title={`Launch ${workspaceName}`}
@@ -76,7 +77,7 @@ function LaunchWorkspaceDialog() {
           </Stack>
         </form>
       }
-      isOpen={isOpen}
+      isOpen={isOpen && !runningWorkspaceIsCurrentWorkpace}
       handleClose={handleClose}
       actions={
         <Stack direction="row" spacing={2} alignItems="end">
