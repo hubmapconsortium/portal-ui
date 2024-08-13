@@ -11,13 +11,18 @@ interface MultiAssayEntityTabProps {
   label: string;
   uuid: string;
   index: number;
+  icon: React.ElementType;
 }
 
-function MetadataTab({ label, uuid, index, ...props }: MultiAssayEntityTabProps) {
-  return <Tab label={label} key={uuid} index={index} iconPosition="end" {...props} />;
+function MetadataTab({ label, uuid, index, icon: Icon, ...props }: MultiAssayEntityTabProps) {
+  return <Tab icon={<Icon />} label={label} key={uuid} index={index} iconPosition="start" {...props} />;
 }
 
-type MultiAssayEntityWithTableRows = Pick<MultiAssayEntity, 'uuid'> & { tableRows: TableRows; label: string };
+type MultiAssayEntityWithTableRows = Pick<MultiAssayEntity, 'uuid'> & {
+  tableRows: TableRows;
+  label: string;
+  icon: React.ElementType;
+};
 
 function MetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] }) {
   const { openTabIndex, handleTabChange } = useTabs();
@@ -25,8 +30,8 @@ function MetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] 
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange}>
-        {entities.map(({ label, uuid }, index) => (
-          <MetadataTab label={label} uuid={uuid} index={index} key={uuid} />
+        {entities.map(({ label, uuid, icon }, index) => (
+          <MetadataTab label={label} uuid={uuid} index={index} key={uuid} icon={icon} />
         ))}
       </Tabs>
       {entities.map(({ uuid, tableRows }, index) => (

@@ -4,6 +4,7 @@ import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
+import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
@@ -32,7 +33,9 @@ function BulkDataTransfer() {
 
         {tabs.map((tab, index) => (
           <TabPanel key={tab.label} index={index} value={openTabIndex}>
-            <BulkDataTransferPanels {...tab} />
+            <DetailSectionPaper>
+              <BulkDataTransferPanels {...tab} />
+            </DetailSectionPaper>
           </TabPanel>
         ))}
       </DetailPageSection>

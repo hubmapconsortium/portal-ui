@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import Stack from '@mui/material/Stack';
 
@@ -9,14 +9,25 @@ import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 
+import { isDataset } from 'js/components/types';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { useAttributionSections } from '../ContributorsTable/hooks';
+import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 
 const tooltips = {
-  group: 'This is the group that provided the raw dataset.',
+  group: 'This is the group that submitted the raw dataset to be published.',
   contact: 'This is the contact for this data.',
 };
 
-function Attribution() {
+const DatasetAttribution = (
+  <SectionDescription>
+    Below is the information for the individuals or group who submitted this dataset. The contact details of the primary
+    contacts are available for further inquiries about this dataset. For additional assistance, contact the{' '}
+    <ContactUsLink>HuBMAP Help Desk.</ContactUsLink>
+  </SectionDescription>
+);
+
+function Attribution({ children }: PropsWithChildren) {
   const {
     entity: {
       group_name,
@@ -51,10 +62,13 @@ function Attribution() {
     showContactAndAlert,
   );
 
+  const entityIsDataset = isDataset({ entity_type });
+
   return (
     <DetailPageSection id="attribution">
       <Stack spacing={1}>
         <SectionHeader iconTooltipText={iconTooltipText}>Attribution</SectionHeader>
+        {entityIsDataset && DatasetAttribution}
         {showContactAndAlert && <OutlinedAlert severity="info">{hiveInfoAlertText}</OutlinedAlert>}
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
@@ -63,6 +77,7 @@ function Attribution() {
             ))}
           </Stack>
         </SummaryPaper>
+        {children}
       </Stack>
     </DetailPageSection>
   );

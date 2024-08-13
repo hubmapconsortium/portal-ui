@@ -50,7 +50,7 @@ function ContactCell({ isContact, email }: ContactCellProps) {
 }
 
 interface ContributorsTableProps {
-  title: string;
+  title?: string;
   contributors: ContributorAPIResponse[];
   contacts?: ContactAPIResponse[];
   iconTooltipText?: string;
@@ -58,7 +58,7 @@ interface ContributorsTableProps {
 }
 
 function ContributorsTable({
-  title,
+  title = '',
   contributors = [],
   contacts = [],
   iconTooltipText,
@@ -72,6 +72,10 @@ function ContributorsTable({
 
   const normalizedContributors = useNormalizedContributors(contributors);
   const normalizedContacts = useNormalizedContacts(contacts);
+
+  if (contributors.length === 0) {
+    return null;
+  }
 
   const sortedContributors = sortContributors(normalizedContributors, normalizedContacts);
 

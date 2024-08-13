@@ -52,6 +52,7 @@ export type ProcessedDatasetInfo = Pick<
   | 'created_timestamp'
   | 'dbgap_study_url'
   | 'dbgap_sra_experiment_url'
+  | 'is_component'
 >;
 
 type VitessceConf = object | undefined;
@@ -101,6 +102,7 @@ function useProcessedDatasets(includeComponents?: boolean) {
       'created_timestamp',
       'dbgap_study_url',
       'dbgap_sra_experiment_url',
+      'is_component',
     ],
     size: 10000,
   };

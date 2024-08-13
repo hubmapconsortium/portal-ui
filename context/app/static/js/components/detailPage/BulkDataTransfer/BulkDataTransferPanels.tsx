@@ -1,6 +1,7 @@
 import React from 'react';
 import Paper from '@mui/material/Paper';
 
+import Stack from '@mui/material/Stack';
 import BulkDataTransferPanel from './BulkDataTransferPanel';
 import Link from './Link';
 import NoAccess from './NoAccess';
@@ -32,7 +33,7 @@ function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
   const hasLinks = Boolean(showDbGaP || showGlobus || showSRA);
 
   return (
-    <div>
+    <Stack gap={1}>
       {panels.map((panel) => (
         <BulkDataTransferPanel {...panel} key={panel.title} />
       ))}
@@ -43,7 +44,7 @@ function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
           {showSRA && <Link href={dbgap_sra_experiment_url} title="SRA Experiment" />}
         </Paper>
       )}
-    </div>
+    </Stack>
   );
 }
 

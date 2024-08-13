@@ -108,7 +108,6 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
     metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
     files: Boolean(files?.length),
     'bulk-data-transfer': true,
-    contributors: Boolean(contributors && (contributors as unknown[]).length),
     attribution: true,
   };
 
@@ -138,11 +137,10 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
         )}
         {shouldDisplaySection.files && <Files files={files} />}
         {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
-        {shouldDisplaySection.contributors && (
-          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
-        )}
 
-        <Attribution />
+        <Attribution>
+          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
+        </Attribution>
       </DetailLayout>
     </DetailContextProvider>
   );
@@ -189,7 +187,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     files: Boolean(files?.length),
     'bulk-data-transfer': true,
     collections: Boolean(collectionsData.length),
-    contributors: Boolean(contributors && (contributors as unknown[]).length),
     attribution: true,
   };
 
@@ -223,10 +220,9 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
           {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
           {shouldDisplaySection.provenance && <ProvSection />}
           {shouldDisplaySection.collections && <CollectionsSection />}
-          {shouldDisplaySection.contributors && (
-            <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" />
-          )}
-          <Attribution />
+          <Attribution>
+            <ContributorsTable contributors={contributors} contacts={contacts} />
+          </Attribution>
         </DetailLayout>
       </SelectedVersionStoreProvider>
     </DetailContextProvider>

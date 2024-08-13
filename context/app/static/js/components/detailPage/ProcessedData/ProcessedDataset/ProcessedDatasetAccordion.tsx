@@ -8,10 +8,12 @@ import Skeleton from '@mui/material/Skeleton';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 
 import { datasetSectionId } from 'js/pages/Dataset/utils';
+import { useInView } from 'react-intersection-observer';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
 import { ProcessedDatasetSectionAccordion } from './styles';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
+import useProcessedDataStore from '../store';
 
 const iconPlaceholder = <Skeleton variant="circular" width={24} height={24} animation="pulse" />;
 
@@ -23,6 +25,19 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   const { defaultExpanded, dataset, sectionDataset, conf, isLoading } = useProcessedDatasetContext();
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
   const track = useTrackEntityPageEvent();
+
+  const { setCurrentDataset } = useProcessedDataStore((state) => ({
+    setCurrentDataset: state.setCurrentDataset,
+  }));
+  const { ref } = useInView({
+    threshold: 0,
+    initialInView: false,
+    onChange: (visible) => {
+      if (visible && dataset) {
+        setCurrentDataset(dataset);
+      }
+    },
+  });
   return (
     <ProcessedDatasetSectionAccordion
       defaultExpanded={defaultExpanded}
@@ -30,6 +45,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
       onChange={(_, expanded) =>
         track({ action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`, label: sectionDataset.hubmap_id })
       }
+      slotProps={{ transition: { unmountOnExit: true } }}
     >
       <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
         {isLoading ? iconPlaceholder : visualizationIcon}
@@ -41,7 +57,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
           {dataset?.hubmap_id}
         </Typography>
       </AccordionSummary>
-      {dataset && !isLoading ? <AccordionDetails>{children}</AccordionDetails> : <LoadingFallback />}
+      {dataset && !isLoading ? <AccordionDetails ref={ref}>{children}</AccordionDetails> : <LoadingFallback />}
     </ProcessedDatasetSectionAccordion>
   );
 }

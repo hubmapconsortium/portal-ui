@@ -7,7 +7,6 @@ import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import SummarizeRounded from '@mui/icons-material/SummarizeRounded';
 import InsertDriveFileRounded from '@mui/icons-material/InsertDriveFileRounded';
 import { VisualizationIcon } from 'js/shared-styles/icons';
-import { useInView } from 'react-intersection-observer';
 import { useVitessceConf } from 'js/pages/Dataset/hooks';
 import { isSupport } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
@@ -181,18 +180,6 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
   const { datasetDetails, isLoading } = useProcessedDatasetDetails(selectedDatasetVersionUUID);
   useVersions(sectionDataset.uuid);
 
-  const { setCurrentDataset } = useProcessedDataStore((state) => ({
-    setCurrentDataset: state.setCurrentDataset,
-  }));
-  const { ref } = useInView({
-    threshold: 0.1,
-    initialInView: false,
-    onChange: (visible) => {
-      if (visible && datasetDetails) {
-        setCurrentDataset(datasetDetails);
-      }
-    },
-  });
   const { entity: parent } = useFlaskDataContext();
 
   const { data: conf, isLoading: loadingVitessceConf } = useVitessceConf(
@@ -203,23 +190,21 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
   const defaultExpanded = sectionDataset.status === 'Published';
 
   return (
-    <div ref={ref}>
-      <ProcessedDatasetContextProvider
-        conf={conf}
-        dataset={datasetDetails}
-        sectionDataset={sectionDataset}
-        isLoading={isLoading || loadingVitessceConf}
-        defaultExpanded={defaultExpanded}
-      >
-        <ProcessedDatasetAccordion>
-          <OldVersionAlert />
-          <DatasetTitle />
-          <SummaryAccordion />
-          <VisualizationAccordion />
-          <FilesAccordion />
-          <AnalysisDetailsAccordion />
-        </ProcessedDatasetAccordion>
-      </ProcessedDatasetContextProvider>
-    </div>
+    <ProcessedDatasetContextProvider
+      conf={conf}
+      dataset={datasetDetails}
+      sectionDataset={sectionDataset}
+      isLoading={isLoading || loadingVitessceConf}
+      defaultExpanded={defaultExpanded}
+    >
+      <ProcessedDatasetAccordion>
+        <OldVersionAlert />
+        <DatasetTitle />
+        <SummaryAccordion />
+        <VisualizationAccordion />
+        <FilesAccordion />
+        <AnalysisDetailsAccordion />
+      </ProcessedDatasetAccordion>
+    </ProcessedDatasetContextProvider>
   );
 }

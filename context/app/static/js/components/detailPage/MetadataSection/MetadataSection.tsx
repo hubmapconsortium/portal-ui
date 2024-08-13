@@ -8,13 +8,15 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { getMetadata, hasMetadata } from 'js/helpers/metadata';
-import { isDataset } from 'js/components/types';
+import { ESEntityType, isDataset } from 'js/components/types';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 import MetadataTable from '../MetadataTable';
+import { nodeIcons } from '../DatasetRelationships/nodeTypes';
 
 export function getDescription(
   field: string,
@@ -128,6 +130,19 @@ function SingleMetadata({ metadata }: { metadata: Record<string, string> }) {
   );
 }
 
+function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
+  if (isDataset(entity)) {
+    if (entity.is_component) {
+      return nodeIcons.componentDataset;
+    }
+    if (entity.processing === 'processed') {
+      return nodeIcons.processedDataset;
+    }
+    return nodeIcons.primaryDataset;
+  }
+  return entityIconMap[entity.entity_type];
+}
+
 interface MetadataProps {
   metadata?: Record<string, string>;
 }
@@ -155,6 +170,7 @@ function Metadata({ metadata }: MetadataProps) {
       return {
         uuid: e.uuid,
         label,
+        icon: getEntityIcon(e),
         tableRows: buildTableData(
           getMetadata({
             targetEntityType: e.entity_type,
