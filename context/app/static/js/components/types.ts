@@ -53,6 +53,7 @@ export interface Entity {
   mapped_status: string;
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   status: string;
+  mapped_metadata: Record<string, unknown>;
   [key: string]: unknown;
 }
 
@@ -65,6 +66,7 @@ export interface Donor extends Entity {
     age_unit: string;
     age_value: string;
     race: string[];
+    body_mass_index_value: string;
   }>;
 }
 

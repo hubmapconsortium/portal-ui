@@ -2,23 +2,26 @@ import React, { useState } from 'react';
 
 import DerivedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
-import DerivedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
+import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
+import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { useDerivedDatasetsSection } from './hooks';
 
-function DerivedDatasetsSection({ uuid, entityType }) {
+interface DerivedDatasetsSectionProps {
+  uuid: string;
+  entityType: AllEntityTypes;
+}
+
+function DerivedDatasetsSection({ uuid, entityType }: DerivedDatasetsSectionProps) {
   const [openIndex, setOpenIndex] = useState(0);
   const { entities, isLoading } = useDerivedDatasetsSection(uuid);
 
   return (
     <DerivedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId="derived-data"
-      headerComponent={
-        <DerivedEntitiesSectionHeader
-          header="Derived Data"
-          uuid={uuid}
-          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
-        />
+      id="derived-data"
+      title="Derived Data"
+      action={
+        <RelatedEntitiesSectionActions searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=Dataset`} />
       }
     >
       <RelatedEntitiesTabs

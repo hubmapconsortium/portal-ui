@@ -52,7 +52,7 @@ def details(type, uuid):
     # - a support entity (e.g. an image pyramid)
     # - a processed or component dataset
     is_support = actual_type == 'support'
-    is_processed = entity.get('processing') != 'raw'
+    is_processed = entity.get('processing') != 'raw' and actual_type == 'dataset'
     is_component = entity.get('is_component', False) is True
     if (is_support or is_processed or is_component):
         supported_entity = client.get_entities(

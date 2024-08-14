@@ -2,22 +2,25 @@ import React, { useState } from 'react';
 
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
-import RelatedEntitiesSectionHeader from 'js/components/detailPage/related-entities/RelatedEntitiesSectionHeader';
+import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
 import { usePublicationsRelatedEntities } from './hooks';
 
-function PublicationRelatedEntities({ uuid }) {
+interface PublicationRelatedEntitiesProps {
+  uuid: string;
+}
+
+function PublicationRelatedEntities({ uuid }: PublicationRelatedEntitiesProps) {
   const [openIndex, setOpenIndex] = useState(0);
 
   const { entities, isLoading } = usePublicationsRelatedEntities(uuid);
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
-      sectionId="data"
-      headerComponent={
-        <RelatedEntitiesSectionHeader
-          header="Data"
-          uuid={uuid}
-          iconTooltipText="HuBMAP data created or used by the publication."
+      id="data"
+      title="Data"
+      iconTooltipText="HuBMAP data created or used by the publication."
+      action={
+        <RelatedEntitiesSectionActions
           searchPageHref={`/search?descendant_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }

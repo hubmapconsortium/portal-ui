@@ -7,9 +7,9 @@ import PublicationSummary from 'js/components/publications/PublicationSummary';
 import PublicationsVisualizationSection from 'js/components/publications/PublicationVisualizationsSection/';
 import PublicationsDataSection from 'js/components/publications/PublicationsDataSection';
 import Files from 'js/components/detailPage/files/Files';
-import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import useTrackID from 'js/hooks/useTrackID';
+import PublicationBulkDataTransfer from 'js/components/detailPage/BulkDataTransfer/PublicationBulkDataTransfer';
 
 function Publication({ publication, vignette_json }) {
   const {
@@ -60,9 +60,7 @@ function Publication({ publication, vignette_json }) {
           <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
         )}
         {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
-        {shouldDisplaySection['bulk-data-transfer'] && (
-          <BulkDataTransfer files={files} uuid={uuid} hubmap_id={hubmap_id} />
-        )}
+        {shouldDisplaySection['bulk-data-transfer'] && <PublicationBulkDataTransfer uuid={uuid} label={hubmap_id} />}
         <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
         {shouldDisplaySection.provenance && (
           <ProvSection

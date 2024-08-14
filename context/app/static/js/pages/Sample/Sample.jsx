@@ -70,7 +70,7 @@ function SampleDetail() {
         <SampleTissue />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} showHeader />}
-        {shouldDisplaySection.metadata && <MetadataSection />}
+        <MetadataSection metadata={combinedMetadata} shouldDisplay={shouldDisplaySection.metadata} />
         <Attribution />
       </DetailLayout>
     </DetailContext.Provider>

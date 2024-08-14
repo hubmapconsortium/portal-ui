@@ -1,12 +1,12 @@
 import { useDerivedDatasetSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 import { derivedDatasetsColumns } from 'js/components/detailPage/derivedEntities/columns';
 
-function useDerivedDatasetsSection(uuid) {
+function useDerivedDatasetsSection(uuid: string) {
   const { searchHits: datasets, isLoading } = useDerivedDatasetSearchHits(uuid);
 
   const entities = [
     {
-      entityType: 'Dataset',
+      entityType: 'Dataset' as const,
       tabLabel: 'Datasets',
       data: datasets,
       columns: derivedDatasetsColumns,

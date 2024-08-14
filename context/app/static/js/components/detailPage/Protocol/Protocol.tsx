@@ -4,9 +4,9 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolData';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import Divider from '@mui/material/Divider';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
@@ -75,7 +75,6 @@ interface ProtocolProps {
 }
 
 function Protocol({ protocol_url, showHeader }: ProtocolProps) {
-  const { entity } = useFlaskDataContext();
   const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
 
   const contents = (
@@ -88,15 +87,10 @@ function Protocol({ protocol_url, showHeader }: ProtocolProps) {
 
   if (showHeader) {
     return (
-      <DetailPageSection id="protocols">
-        <SectionHeader
-          iconTooltipText={`Protocols uploaded to protocols.io for the given ${entity.entity_type?.toLowerCase()}.`}
-        >
-          Protocols
-        </SectionHeader>
+      <CollapsibleDetailPageSection id="protocols" title="Protocols" icon={sectionIconMap.analysis}>
         <Divider />
         <StyledPaper>{contents}</StyledPaper>
-      </DetailPageSection>
+      </CollapsibleDetailPageSection>
     );
   }
   return contents;

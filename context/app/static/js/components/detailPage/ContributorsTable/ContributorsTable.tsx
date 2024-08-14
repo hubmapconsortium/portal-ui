@@ -13,8 +13,7 @@ import Typography from '@mui/material/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import { isValidEmail } from 'js/helpers/functions';
@@ -80,9 +79,13 @@ function ContributorsTable({
   const sortedContributors = sortContributors(normalizedContributors, normalizedContacts);
 
   return (
-    <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
+    <CollapsibleDetailPageSection
+      id={title.toLowerCase()}
+      title={title}
+      iconTooltipText={iconTooltipText}
+      data-testid={title.toLowerCase()}
+    >
       <Stack spacing={1}>
-        <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
         {showInfoAlert && <OutlinedAlert severity="info">{contributorsInfoAlertText}</OutlinedAlert>}
         <Paper>
           <StyledTableContainer>
@@ -130,7 +133,7 @@ function ContributorsTable({
           </StyledTableContainer>
         </Paper>
       </Stack>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 

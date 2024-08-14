@@ -1,7 +1,7 @@
 import { useDerivedDatasetSearchHits, useDerivedSampleSearchHits } from 'js/hooks/useDerivedEntitySearchHits';
 import { derivedDatasetsColumns, derivedSamplesColumns } from 'js/components/detailPage/derivedEntities/columns';
 
-function useDerivedEntitiesSection(uuid) {
+function useDerivedEntitiesSection(uuid: string) {
   const { searchHits: datasets, isLoading: derivedDatasetsAreLoading } = useDerivedDatasetSearchHits(uuid);
   const { searchHits: samples, isLoading: derivedSamplesAreLoading } = useDerivedSampleSearchHits(uuid);
 
@@ -9,13 +9,13 @@ function useDerivedEntitiesSection(uuid) {
 
   const entities = [
     {
-      entityType: 'Sample',
+      entityType: 'Sample' as const,
       tabLabel: 'Samples',
       data: samples,
       columns: derivedSamplesColumns,
     },
     {
-      entityType: 'Dataset',
+      entityType: 'Dataset' as const,
       tabLabel: 'Datasets',
       data: datasets,
       columns: derivedDatasetsColumns,

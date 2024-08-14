@@ -9,7 +9,6 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 
 import { isDataset } from 'js/components/types';
-import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useAttributionSections } from '../ContributorsTable/hooks';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
@@ -21,9 +20,9 @@ const tooltips = {
 
 const DatasetAttribution = (
   <SectionDescription>
-    Below is the information for the individuals or group who submitted this dataset. The contact details of the primary
-    contacts are available for further inquiries about this dataset. For additional assistance, contact the{' '}
-    <ContactUsLink>HuBMAP Help Desk.</ContactUsLink>
+    Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to
+    the individuals listed as contacts, either via the email address listed in the table or via contact information
+    provided on their ORCID profile page.
   </SectionDescription>
 );
 

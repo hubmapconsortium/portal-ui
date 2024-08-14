@@ -14,7 +14,7 @@ import StatusIcon from '../../StatusIcon';
 import { StyledProcessedDatasetAccordion } from './styles';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 import useProcessedDataStore from '../store';
-import DetailPageSection from '../../DetailPageSection';
+import { DetailPageSection } from '../../DetailPageSection';
 
 const iconPlaceholder = <Skeleton variant="circular" width={24} height={24} animation="pulse" />;
 

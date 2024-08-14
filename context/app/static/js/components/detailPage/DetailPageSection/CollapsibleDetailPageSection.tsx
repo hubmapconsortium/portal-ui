@@ -5,15 +5,18 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { SvgIconComponent } from '@mui/icons-material';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
 import DetailPageSection from './DetailPageSection';
 import { DetailPageSectionAccordion } from './style';
 
-interface CollapsibleDetailPageSectionProps extends PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> {
+export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> {
   title: string;
   icon?: SvgIconComponent;
   action?: React.ReactNode;
   variant?: TypographyProps['variant'];
   component?: TypographyProps['component'];
+  iconTooltipText?: string;
 }
 
 export default function CollapsibleDetailPageSection({
@@ -23,6 +26,7 @@ export default function CollapsibleDetailPageSection({
   variant = 'h4',
   component = 'h3',
   action,
+  iconTooltipText,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
   return (
@@ -33,6 +37,11 @@ export default function CollapsibleDetailPageSection({
           <Typography variant={variant} component={component}>
             {title}
           </Typography>
+          {iconTooltipText && (
+            <SecondaryBackgroundTooltip title={iconTooltipText}>
+              <StyledInfoIcon color="primary" />
+            </SecondaryBackgroundTooltip>
+          )}
           {action && (
             <Box
               onClick={(e) => {
