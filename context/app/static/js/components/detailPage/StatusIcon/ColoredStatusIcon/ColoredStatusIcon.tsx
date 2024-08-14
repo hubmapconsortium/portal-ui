@@ -1,5 +1,6 @@
 import React from 'react';
-import { ColoredStatusIconProps, getStyledIcon, iconSymbolStatusMap } from './style';
+import { ColoredStatusIconProps, iconSymbolStatusMap } from 'js/shared-styles/icons/SeverityIcon';
+import { getStyledIcon } from './style';
 
 function ColoredStatusIcon({ $iconStatus, ...props }: ColoredStatusIconProps) {
   const IconComponent = iconSymbolStatusMap[$iconStatus];
