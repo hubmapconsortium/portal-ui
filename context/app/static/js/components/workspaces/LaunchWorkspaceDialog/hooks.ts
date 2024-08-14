@@ -8,6 +8,8 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { workspaceJobTypeIdField } from '../workspaceFormFields';
 import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
 import { DEFAULT_JOB_TYPE } from '../constants';
+import { MergedWorkspace } from '../types';
+import { findBestJobType, isRunningWorkspace } from '../utils';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
@@ -47,11 +49,12 @@ function useLaunchWorkspaceForm() {
 
 function useLaunchWorkspaceDialog() {
   const runningWorkspace = useRunningWorkspace();
-  const isRunningWorkspace = Boolean(runningWorkspace);
+  const runningWorkspaceExists = Boolean(runningWorkspace);
 
   const { handleStopWorkspace } = useWorkspacesList();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
-  const { isOpen, close, workspace } = useLaunchWorkspaceStore();
+  const { isOpen, open, close, workspace, setWorkspace } = useLaunchWorkspaceStore();
+
   const runningWorkspaceIsCurrentWorkpace = runningWorkspace?.id === workspace?.id;
 
   const { toastError } = useSnackbarActions();
@@ -67,7 +70,7 @@ function useLaunchWorkspaceDialog() {
 
   // Track the running workspace name to prevent layout shift between stopping the running workspace and starting the new one.
   const runningWorkspaceName = useRef<string | undefined>('');
-  if (isRunningWorkspace) {
+  if (runningWorkspaceExists) {
     runningWorkspaceName.current = runningWorkspace?.name;
   } else {
     runningWorkspaceName.current = '';
@@ -111,8 +114,25 @@ function useLaunchWorkspaceDialog() {
     ],
   );
 
+  const launchOrOpenDialog = useCallback(
+    (newWorkspace: MergedWorkspace) => {
+      setWorkspace(newWorkspace);
+      const workspaceJobTypeId = findBestJobType(newWorkspace.jobs);
+
+      if (isRunningWorkspace(newWorkspace)) {
+        submit({ workspaceJobTypeId }).catch((e) => {
+          toastError('Failed to launch workspace. Please try again.');
+          console.error(e);
+        });
+      } else {
+        open();
+      }
+    },
+    [submit, toastError, setWorkspace, open],
+  );
+
   return {
-    isRunningWorkspace,
+    runningWorkspaceExists,
     runningWorkspaceName: runningWorkspaceName.current,
     runningWorkspaceIsCurrentWorkpace,
     runningWorkspace,
@@ -125,6 +145,7 @@ function useLaunchWorkspaceDialog() {
     handleSubmit,
     isSubmitting,
     handleClose,
+    launchOrOpenDialog,
   };
 }
 
