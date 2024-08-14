@@ -144,11 +144,11 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
           >
             <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
           </Summary>
-          {shouldDisplaySection.metadata && <MetadataSection />}
-          {shouldDisplaySection['processed-data'] && <ProcessedDataSection />}
-          {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
-          {shouldDisplaySection.provenance && <ProvSection />}
-          {shouldDisplaySection.collections && <CollectionsSection />}
+          <MetadataSection shouldDisplay={shouldDisplaySection.metadata} />
+          <ProcessedDataSection shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
+          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
+          <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
+          <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <Attribution>
             <ContributorsTable contributors={contributors} contacts={contacts} />
           </Attribution>

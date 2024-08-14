@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 import CollectionsSectionProvider, { useCollectionsSectionContext } from './CollectionsSectionContext';
@@ -86,9 +87,8 @@ function CollectionsSection() {
   const [selectedTab, setSelectedTab] = useState(0);
 
   return (
-    <DetailPageSection id="collections">
+    <CollapsibleDetailPageSection id="collections" title="Collections" icon={sectionIconMap.collections}>
       <CollectionsSectionProvider>
-        <SectionHeader>Collections</SectionHeader>
         <SectionDescription>{collectionsSectionDescription}</SectionDescription>
         <Tabs value={selectedTab} onChange={(_, tabIndex) => setSelectedTab(tabIndex as number)}>
           {processedDatasetTabs.map(({ label, uuid, icon }, index) => (
@@ -99,8 +99,8 @@ function CollectionsSection() {
           <CollectionPanel key={uuid} uuid={uuid} index={index} />
         ))}
       </CollectionsSectionProvider>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 
-export default CollectionsSection;
+export default withShouldDisplay(CollectionsSection);

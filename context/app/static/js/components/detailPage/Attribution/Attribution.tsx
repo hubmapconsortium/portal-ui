@@ -3,14 +3,14 @@ import React, { PropsWithChildren } from 'react';
 import Stack from '@mui/material/Stack';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 
 import { isDataset } from 'js/components/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useAttributionSections } from '../ContributorsTable/hooks';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 
@@ -49,9 +49,6 @@ function Attribution({ children }: PropsWithChildren) {
   const showRegisteredBy = !isProcessedDataset && !isVisLiftedDataset && !isHiveProcessedDataset && !isSupportDataset;
 
   const hiveInfoAlertText = `The data provided by the ${group_name} Group was centrally processed by HuBMAP. The results of this processing are independent of analyses conducted by the data providers or third parties.`;
-  const iconTooltipText = showRegisteredBy
-    ? `Information about the group registering this ${entity_type?.toLowerCase()}.`
-    : undefined;
 
   const sections = useAttributionSections(
     group_name,
@@ -65,9 +62,8 @@ function Attribution({ children }: PropsWithChildren) {
   const entityIsDataset = isDataset({ entity_type });
 
   return (
-    <DetailPageSection id="attribution">
+    <CollapsibleDetailPageSection id="attribution" title="Attribution" icon={sectionIconMap.attribution}>
       <Stack spacing={1}>
-        <SectionHeader iconTooltipText={iconTooltipText}>Attribution</SectionHeader>
         {entityIsDataset && DatasetAttribution}
         {showContactAndAlert && <OutlinedAlert severity="info">{hiveInfoAlertText}</OutlinedAlert>}
         <SummaryPaper>
@@ -79,7 +75,7 @@ function Attribution({ children }: PropsWithChildren) {
         </SummaryPaper>
         {children}
       </Stack>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 

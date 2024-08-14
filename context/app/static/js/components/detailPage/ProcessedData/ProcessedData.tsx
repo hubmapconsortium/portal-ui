@@ -1,24 +1,28 @@
 import React from 'react';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import DetailPageSection from '../DetailPageSection';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import ProcessedDataset from './ProcessedDataset';
 import { SectionDescription } from './ProcessedDataset/SectionDescription';
 import HelperPanel from './HelperPanel';
 import { useSortedSearchHits } from './hooks';
+import CollapsibleDetailPageSection from '../DetailPageSection/CollapsibleDetailPageSection';
 
 function ProcessedDataSection() {
   const processedDatasets = useProcessedDatasets();
+  const sortedSearchHits = useSortedSearchHits(processedDatasets.searchHits);
 
   const pipelines = processedDatasets?.searchHits.map((dataset) => dataset._source.pipeline);
   const pipelinesText = `Pipelines (${pipelines.length})`;
 
-  const sortedSearchHits = useSortedSearchHits(processedDatasets.searchHits);
-
   return (
-    <DetailPageSection id="processed-data" data-testid="processed-data">
-      <SectionHeader>Processed Data</SectionHeader>
+    <CollapsibleDetailPageSection
+      id="processed-data"
+      data-testid="processed-data"
+      title="Processed Data"
+      icon={sectionIconMap['processed-data']}
+    >
       <SectionDescription
         addendum={<LabelledSectionText label={pipelinesText}>{pipelines.join(', ')}</LabelledSectionText>}
       >
@@ -31,8 +35,8 @@ function ProcessedDataSection() {
         <ProcessedDataset sectionDataset={dataset._source} key={dataset._id} isLoading={processedDatasets.isLoading} />
       ))}
       <HelperPanel />
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 
-export default ProcessedDataSection;
+export default withShouldDisplay(ProcessedDataSection);

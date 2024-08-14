@@ -1,9 +1,8 @@
 import React, { PropsWithChildren } from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
@@ -11,7 +10,9 @@ import { getMetadata, hasMetadata } from 'js/helpers/metadata';
 import { ESEntityType, isDataset } from 'js/components/types';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
@@ -98,9 +99,11 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
   const entityIsDataset = isDataset(entity);
 
   return (
-    <DetailPageSection id="metadata">
-      <Flex>
-        <SectionHeader>Metadata</SectionHeader>
+    <CollapsibleDetailPageSection
+      id="metadata"
+      title="Metadata"
+      icon={sectionIconMap.metadata}
+      action={
         <SecondaryBackgroundTooltip title="Download">
           <a href={downloadUrl} download={`${hubmap_id}.tsv`} aria-label="Download TSV of selected items' metadata">
             <StyledWhiteBackgroundIconButton
@@ -110,13 +113,14 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
             </StyledWhiteBackgroundIconButton>
           </a>
         </SecondaryBackgroundTooltip>
-      </Flex>
+      }
+    >
       <SectionDescription>
         This is the list of metadata that was provided by the data provider.
         {entityIsDataset && ' Metadata from the donor or sample of this dataset may also be included in this list.'}
       </SectionDescription>
       {children}
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 
@@ -194,4 +198,4 @@ function Metadata({ metadata }: MetadataProps) {
   );
 }
 
-export default Metadata;
+export default withShouldDisplay(Metadata);

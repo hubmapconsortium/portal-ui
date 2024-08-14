@@ -23,4 +23,4 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   provenance: ProvenanceIcon,
   collections: CollectionIcon,
   attribution: AttributionIcon,
-};
+} as const;

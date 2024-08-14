@@ -3,8 +3,10 @@ import React, { PropsWithChildren } from 'react';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import DetailPageSection, { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import Skeleton from '@mui/material/Skeleton';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import useProvData from '../hooks';
 import ProvTabs from '../ProvTabs';
 import { SectionDescription } from '../../ProcessedData/ProcessedDataset/SectionDescription';
@@ -54,15 +56,15 @@ function ProvSection() {
   }
 
   return (
-    <ProvSectionWrapper>
+    <CollapsibleDetailPageSection id="provenance" title="Provenance" icon={sectionIconMap.provenance}>
       <SectionDescription>
         The provenance displays the sequence of events and actions that led to the creation of this dataset. The table
         view provides a basic overview of the dataset&apos;s origin, from donor to sample level, and any processing that
         has been done to the dataset. The graph view offers a comprehensive overview of the data&apos;s provenance.
       </SectionDescription>
       <ProvTabs provData={provData} />
-    </ProvSectionWrapper>
+    </CollapsibleDetailPageSection>
   );
 }
 
-export default ProvSection;
+export default withShouldDisplay(ProvSection);

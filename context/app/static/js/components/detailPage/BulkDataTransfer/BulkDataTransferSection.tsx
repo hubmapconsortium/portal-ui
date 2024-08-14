@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
@@ -16,9 +17,13 @@ function BulkDataTransfer() {
   const [openTabIndex, setOpenTabIndex] = useState(0);
 
   return (
-    <FilesContextProvider>
-      <DetailPageSection id="bulk-data-transfer" data-testid="bulk-data-transfer">
-        <SectionHeader>Bulk Data Transfer</SectionHeader>
+    <CollapsibleDetailPageSection
+      id="bulk-data-transfer"
+      data-testid="bulk-data-transfer"
+      title="Bulk Data Transfer"
+      icon={sectionIconMap['bulk-data-transfer']}
+    >
+      <FilesContextProvider>
         <SectionDescription>{BULK_DATA_DESCRIPTION_TEXT}</SectionDescription>
         <Tabs
           value={openTabIndex}
@@ -38,9 +43,9 @@ function BulkDataTransfer() {
             </DetailSectionPaper>
           </TabPanel>
         ))}
-      </DetailPageSection>
-    </FilesContextProvider>
+      </FilesContextProvider>
+    </CollapsibleDetailPageSection>
   );
 }
 
-export default BulkDataTransfer;
+export default withShouldDisplay(BulkDataTransfer);
