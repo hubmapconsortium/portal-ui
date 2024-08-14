@@ -29,8 +29,9 @@ interface WorkspaceDatasetsTableProps {
   addDatasets?: MergedWorkspace;
   label?: ReactNode;
   disabledIDs?: Set<string>;
-  additionalAlerts?: ReactNode;
+  emptyAlerts?: ReactNode;
   additionalButtons?: ReactNode;
+  hideTableIfEmpty?: boolean;
 }
 
 function WorkspaceDatasetsTable({
@@ -39,8 +40,9 @@ function WorkspaceDatasetsTable({
   addDatasets,
   label,
   disabledIDs,
-  additionalAlerts,
+  emptyAlerts,
   additionalButtons,
+  hideTableIfEmpty,
 }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
@@ -64,6 +66,7 @@ function WorkspaceDatasetsTable({
 
   const datasetsPresent = datasetsUUIDs.length > 0;
   const hasMaxDatasets = addDatasets && isWorkspaceAtDatasetLimit(addDatasets);
+  const hideTable = hideTableIfEmpty && !datasetsPresent;
 
   return (
     <Box>
@@ -93,13 +96,14 @@ function WorkspaceDatasetsTable({
           </Stack>
         }
       />
-      {datasetsPresent ? (
+      {hideTable ? (
+        emptyAlerts
+      ) : (
         <EntitiesTables<DatasetDocument>
           entities={[{ query, columns, entityType: 'Dataset' }]}
           disabledIDs={disabledIDs}
+          emptyAlerts={emptyAlerts}
         />
-      ) : (
-        additionalAlerts
       )}
     </Box>
   );
