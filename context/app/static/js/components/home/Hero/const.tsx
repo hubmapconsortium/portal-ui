@@ -1,5 +1,5 @@
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { SearchIcon } from 'js/shared-styles/icons';
+import { SearchIcon, DonorIcon } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import React from 'react';
@@ -10,6 +10,21 @@ const timelineIconProps = {
 } as const;
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
+  {
+    title: 'Profile Page Now Available',
+    titleHref: '/profile',
+    description:
+      'Profile pages are now available to allow logged in users to view their profile information including permission groups, saved lists and saved workspaces.',
+    date: 'June 2024',
+    img: <DonorIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'Homepage Redesign Updated',
+    titleHref: '/',
+    description: 'Homepage design updated to highlight portal features and improve navigation to essential locations.',
+    date: 'June 2024',
+    img: <entityIconMap.CellType {...timelineIconProps} />,
+  },
   {
     title: 'Molecular & Cellular Query Updated',
     titleHref: '/cells',
