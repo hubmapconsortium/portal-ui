@@ -1,12 +1,15 @@
+import React from 'react';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { SearchIcon, DonorIcon } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import React from 'react';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 
 const timelineIconProps = {
   fontSize: '1.5rem',
+  height: '1.5rem',
+  width: '1.5rem',
 } as const;
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
@@ -23,7 +26,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     titleHref: '/',
     description: 'Homepage design updated to highlight portal features and improve navigation to essential locations.',
     date: 'June 2024',
-    img: <entityIconMap.CellType {...timelineIconProps} />,
+    img: <ExternalImageIcon icon="dataPortal" style={timelineIconProps} />,
   },
   {
     title: 'Molecular & Cellular Query Updated',
