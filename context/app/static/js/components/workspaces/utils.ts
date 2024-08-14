@@ -195,7 +195,7 @@ function findBestJob(jobs: WorkspaceJob[]) {
 /**
  * Return the type of the job with the highest status.
  * @param jobs A list of jobs to extract the best job type from.
- * @returns The type of the job with the highest status.
+ * @returns The type of the job with the highest status if it exists, else the default job type.
  */
 function findBestJobType(jobs: WorkspaceJob[]) {
   const bestJob = findBestJob(jobs);
