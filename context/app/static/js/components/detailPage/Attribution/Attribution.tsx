@@ -7,7 +7,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
+import InfoAlert from 'js/shared-styles/alerts/InfoAlert';
 
 import { useAttributionSections } from '../ContributorsTable/hooks';
 
@@ -55,7 +55,7 @@ function Attribution() {
     <DetailPageSection id="attribution">
       <Stack spacing={1}>
         <SectionHeader iconTooltipText={iconTooltipText}>Attribution</SectionHeader>
-        {showContactAndAlert && <OutlinedAlert severity="info">{hiveInfoAlertText}</OutlinedAlert>}
+        {showContactAndAlert && <InfoAlert>{hiveInfoAlertText}</InfoAlert>}
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
             {sections.map((props) => (

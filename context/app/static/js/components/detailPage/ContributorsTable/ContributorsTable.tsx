@@ -16,8 +16,8 @@ import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import { isValidEmail } from 'js/helpers/functions';
+import InfoAlert from 'js/shared-styles/alerts/InfoAlert';
 
 import { useNormalizedContacts, useNormalizedContributors } from './hooks';
 import { ContributorAPIResponse, sortContributors, contributorIsContact, ContactAPIResponse } from './utils';
@@ -79,7 +79,7 @@ function ContributorsTable({
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
       <Stack spacing={1}>
         <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
-        {showInfoAlert && <OutlinedAlert severity="info">{contributorsInfoAlertText}</OutlinedAlert>}
+        {showInfoAlert && <InfoAlert>{contributorsInfoAlertText}</InfoAlert>}
         <Paper>
           <StyledTableContainer>
             <Table stickyHeader>
