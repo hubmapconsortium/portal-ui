@@ -91,7 +91,7 @@ function StopWorkspaceAlert() {
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
   const { workspace, button: ButtonComponent, showLaunch = false, showStop = false } = props;
-  const { handleLaunch } = useLaunchWorkspaceDialog();
+  const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
 
   if (workspace.status === 'deleting') {
     return (
@@ -105,7 +105,7 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
     <Stack direction="row" spacing={2}>
       {showStop && <StopWorkspaceButton {...props} />}
       {showLaunch && (
-        <Button type="button" variant="contained" color="primary" onClick={() => handleLaunch(workspace)}>
+        <Button type="button" variant="contained" color="primary" onClick={() => launchOrOpenDialog(workspace)}>
           Launch Workspace
         </Button>
       )}

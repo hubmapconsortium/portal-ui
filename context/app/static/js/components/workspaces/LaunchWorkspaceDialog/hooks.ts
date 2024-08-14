@@ -9,6 +9,7 @@ import { workspaceJobTypeIdField } from '../workspaceFormFields';
 import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
 import { DEFAULT_JOB_TYPE } from '../constants';
 import { MergedWorkspace } from '../types';
+import { findBestJobType, isRunningWorkspace } from '../utils';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
@@ -48,7 +49,7 @@ function useLaunchWorkspaceForm() {
 
 function useLaunchWorkspaceDialog() {
   const runningWorkspace = useRunningWorkspace();
-  const isRunningWorkspace = Boolean(runningWorkspace);
+  const runningWorkspaceExists = Boolean(runningWorkspace);
 
   const { handleStopWorkspace } = useWorkspacesList();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
@@ -69,7 +70,7 @@ function useLaunchWorkspaceDialog() {
 
   // Track the running workspace name to prevent layout shift between stopping the running workspace and starting the new one.
   const runningWorkspaceName = useRef<string | undefined>('');
-  if (isRunningWorkspace) {
+  if (runningWorkspaceExists) {
     runningWorkspaceName.current = runningWorkspace?.name;
   } else {
     runningWorkspaceName.current = '';
@@ -113,12 +114,13 @@ function useLaunchWorkspaceDialog() {
     ],
   );
 
-  const handleLaunch = useCallback(
-    (currentWorkspace: MergedWorkspace) => {
-      setWorkspace(currentWorkspace);
+  const launchOrOpenDialog = useCallback(
+    (newWorkspace: MergedWorkspace) => {
+      setWorkspace(newWorkspace);
+      const workspaceJobTypeId = findBestJobType(newWorkspace.jobs);
 
-      if (currentWorkspace.jobs.length > 0) {
-        submit({ workspaceJobTypeId: currentWorkspace.jobs[0].job_type }).catch((e) => {
+      if (isRunningWorkspace(newWorkspace)) {
+        submit({ workspaceJobTypeId }).catch((e) => {
           toastError('Failed to launch workspace. Please try again.');
           console.error(e);
         });
@@ -130,7 +132,7 @@ function useLaunchWorkspaceDialog() {
   );
 
   return {
-    isRunningWorkspace,
+    runningWorkspaceExists,
     runningWorkspaceName: runningWorkspaceName.current,
     runningWorkspaceIsCurrentWorkpace,
     runningWorkspace,
@@ -143,7 +145,7 @@ function useLaunchWorkspaceDialog() {
     handleSubmit,
     isSubmitting,
     handleClose,
-    handleLaunch,
+    launchOrOpenDialog,
   };
 }
 
