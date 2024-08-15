@@ -55,7 +55,7 @@ function Attribution() {
     <DetailPageSection id="attribution">
       <Stack spacing={1}>
         <SectionHeader iconTooltipText={iconTooltipText}>Attribution</SectionHeader>
-        {showContactAndAlert && <IconPanel $iconStatus="info">{hiveIconPanelText}</IconPanel>}
+        {showContactAndAlert && <IconPanel status="info">{hiveIconPanelText}</IconPanel>}
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
             {sections.map((props) => (

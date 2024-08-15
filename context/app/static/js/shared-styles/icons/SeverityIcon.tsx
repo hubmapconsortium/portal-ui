@@ -2,11 +2,7 @@ import React from 'react';
 import { InfoRounded, ErrorRounded, WarningRounded, CheckCircleRounded } from '@mui/icons-material';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 
-type IconStatus = 'info' | 'success' | 'warning' | 'error';
-
-export interface ColoredStatusIconProps extends SvgIconProps {
-  $iconStatus: IconStatus;
-}
+export type IconStatus = 'info' | 'success' | 'warning' | 'error';
 
 export const iconSymbolStatusMap: Record<IconStatus, React.ComponentType<SvgIconProps>> = {
   info: InfoRounded,

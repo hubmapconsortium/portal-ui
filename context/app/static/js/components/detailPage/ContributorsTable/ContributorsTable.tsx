@@ -79,7 +79,7 @@ function ContributorsTable({
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
       <Stack spacing={1}>
         <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
-        {showIconPanel && <IconPanel $iconStatus="info">{contributorsIconPanelText}</IconPanel>}
+        {showIconPanel && <IconPanel status="info">{contributorsIconPanelText}</IconPanel>}
         <Paper>
           <StyledTableContainer>
             <Table stickyHeader>

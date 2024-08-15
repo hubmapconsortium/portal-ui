@@ -30,7 +30,7 @@ function StatusIcon({ status: irregularCaseStatus }: StatusIconProps) {
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 
-  return <ColoredStatusIcon $iconStatus={color} data-testid="status-svg-icon" />;
+  return <ColoredStatusIcon status={color} data-testid="status-svg-icon" />;
 }
 
 export default StatusIcon;
