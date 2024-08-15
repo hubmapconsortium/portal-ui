@@ -78,7 +78,7 @@ function LaunchWorkspaceDialog() {
               <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
             </Stack>
           </SummaryPaper>
-          <AdvancedConfigOptions title="Advanced Configuration Options" />
+          <AdvancedConfigOptions />
         </form>
       }
       isOpen={isOpen}
