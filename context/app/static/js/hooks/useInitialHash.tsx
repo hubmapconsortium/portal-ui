@@ -5,7 +5,7 @@ type InitialHashContextType = string | undefined;
 
 export const InitialHashContext = createContext<InitialHashContextType>('InitialHashContext');
 export function InitialHashContextProvider({ children }: PropsWithChildren) {
-  const [initialHash, setInitialHash] = useState<string | undefined>(undefined);
+  const [initialHash, setInitialHash] = useState<string>('');
   useEffect(() => {
     setInitialHash(window.location.hash);
   }, []);
