@@ -7,9 +7,10 @@ import Box from '@mui/material/Box';
 import { SvgIconComponent } from '@mui/icons-material';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
-import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { sectionIconMap, sectionImageIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import DetailPageSection from './DetailPageSection';
-import { DetailPageSectionAccordion } from './style';
+import { DetailPageSectionAccordion, StyledExternalImageIconContainer, StyledSvgIcon } from './style';
 
 export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<React.HTMLAttributes<HTMLDivElement>> {
   title: string;
@@ -20,9 +21,29 @@ export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<Rea
   iconTooltipText?: string;
 }
 
+interface IconDisplayProps {
+  icon?: SvgIconComponent;
+  id: string;
+}
+
+function IconDisplay({ icon: IconOverride, id }: IconDisplayProps) {
+  if (Boolean(IconOverride) || sectionIconMap[id]) {
+    return <StyledSvgIcon component={IconOverride ?? sectionIconMap[id]} fontSize="medium" color="primary" />;
+  }
+  const externalImageKey = sectionImageIconMap[id];
+  if (externalImageKey) {
+    return (
+      <StyledExternalImageIconContainer>
+        <ExternalImageIcon icon={externalImageKey} />
+      </StyledExternalImageIconContainer>
+    );
+  }
+  return null;
+}
+
 export default function CollapsibleDetailPageSection({
   title,
-  icon: IconOverride,
+  icon,
   children,
   variant = 'h4',
   component = 'h3',
@@ -30,12 +51,11 @@ export default function CollapsibleDetailPageSection({
   iconTooltipText,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
-  const Icon = IconOverride ?? sectionIconMap[rest.id!] ?? null;
   return (
     <DetailPageSection {...rest}>
       <DetailPageSectionAccordion defaultExpanded disableGutters variant="unstyled">
         <AccordionSummary expandIcon={<ExpandMore />}>
-          {Icon && <Icon fontSize="1.5rem" color="primary" />}
+          <IconDisplay icon={icon} id={rest.id!} />
           <Typography variant={variant} component={component}>
             {title}
           </Typography>
@@ -51,6 +71,7 @@ export default function CollapsibleDetailPageSection({
                 e.stopPropagation();
               }}
               ml="auto"
+              className="accordion-section-action"
             >
               {action}
             </Box>

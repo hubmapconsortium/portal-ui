@@ -62,13 +62,7 @@ function Publication({ publication, vignette_json }) {
         {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
         {shouldDisplaySection['bulk-data-transfer'] && <PublicationBulkDataTransfer uuid={uuid} label={hubmap_id} />}
         <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
-        {shouldDisplaySection.provenance && (
-          <ProvSection
-            uuid={uuid}
-            assayMetadata={publication}
-            iconTooltipText="The provenance shows the sequence of events and actions that led to this page creation."
-          />
-        )}
+        {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={publication} />}
       </DetailLayout>
     </DetailContext.Provider>
   );

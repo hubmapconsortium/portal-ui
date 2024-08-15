@@ -1,4 +1,6 @@
+import SvgIcon from '@mui/material/SvgIcon';
 import Accordion from '@mui/material/Accordion';
+import Box from '@mui/material/Box';
 import { styled } from '@mui/material/styles';
 
 export const DetailPageSectionAccordion = styled(Accordion)(({ theme }) => ({
@@ -17,4 +19,30 @@ export const DetailPageSectionAccordion = styled(Accordion)(({ theme }) => ({
       color: theme.palette.primary.main,
     },
   },
+
+  '.accordion-section-action': {
+    opacity: 0,
+    transition: 'opacity 0.3s',
+    pointerEvents: 'none',
+  },
+  '&.Mui-expanded': {
+    '.accordion-section-action': {
+      opacity: 1,
+      pointerEvents: 'auto',
+    },
+  },
 }));
+
+export const StyledExternalImageIconContainer = styled(Box)({
+  width: '1.5rem',
+  display: 'flex',
+  '& > *': {
+    width: '100%',
+    height: '100%',
+  },
+});
+
+export const StyledSvgIcon = styled(SvgIcon)({
+  fontSize: '1.5rem',
+  color: 'primary',
+}) as typeof SvgIcon;

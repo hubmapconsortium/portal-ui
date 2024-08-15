@@ -1,5 +1,5 @@
 import { capitalizeAndReplaceDashes } from 'js/helpers/functions';
-import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { sectionIconMap, sectionImageIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { TableOfContentsItem, TableOfContentsItemWithNode, TableOfContentsItems } from './types';
 
 function formatSectionHash(hash: string) {
@@ -12,6 +12,7 @@ function getSectionFromString(s: string, hash: string = formatSectionHash(s)): T
     text: capitalizeAndReplaceDashes(s),
     hash,
     icon: sectionIconMap?.[s],
+    externalIcon: sectionImageIconMap?.[s],
   };
 }
 
@@ -34,6 +35,7 @@ function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<Table
     hash: item.hash,
     node: document.getElementById(item.hash),
     icon: item.icon,
+    externalIcon: item.externalIcon,
     ...(item?.items && { items: getItemsClient(item.items) }),
   }));
 }

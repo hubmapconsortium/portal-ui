@@ -5,7 +5,6 @@ import PublicationCollections from 'js/components/publications/PublicationCollec
 import { buildCollectionsWithDatasetQuery } from 'js/hooks/useDatasetsCollections';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
 function PublicationsDataSection({ datasetUUIDs, uuid, associatedCollectionUUID }) {
   const query = associatedCollectionUUID
@@ -19,12 +18,7 @@ function PublicationsDataSection({ datasetUUIDs, uuid, associatedCollectionUUID 
       <PublicationCollections collectionsData={collectionsData} isCollectionPublication={associatedCollectionUUID} />
     );
   }
-
-  return (
-    <CollapsibleDetailPageSection title="Data" iconTooltipText="HuBMAP data created or used by the publication.">
-      {!associatedCollectionUUID && <PublicationRelatedEntities uuid={uuid} />}
-    </CollapsibleDetailPageSection>
-  );
+  return <PublicationRelatedEntities uuid={uuid} />;
 }
 
 export default PublicationsDataSection;

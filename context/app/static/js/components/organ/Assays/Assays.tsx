@@ -5,44 +5,43 @@ import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
 import Button from '@mui/material/Button';
 
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { InternalLink } from 'js/shared-styles/Links';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 
-import { Flex, StyledInfoIcon, StyledDatasetIcon } from '../style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import { DatasetIcon } from 'js/shared-styles/icons';
 import { getSearchURL } from '../utils';
 
-function Assays({ organTerms, bucketData }) {
+interface AssaysProps {
+  organTerms: string[];
+  bucketData: { key: string; doc_count: number }[];
+  id: string;
+}
+
+function Assays({ organTerms, bucketData, id: sectionId }: AssaysProps) {
   const assayTypeMap = useDatasetTypeMap();
 
   return (
-    <>
-      <SpacedSectionButtonRow
-        leftText={
-          <Flex>
-            <SectionHeader>Assays</SectionHeader>
-            <SecondaryBackgroundTooltip title="Experiments related to this organ">
-              <StyledInfoIcon color="primary" />
-            </SecondaryBackgroundTooltip>
-          </Flex>
-        }
-        buttons={
-          <Button
-            color="primary"
-            variant="contained"
-            component="a"
-            href={getSearchURL({ entityType: 'Dataset', organTerms })}
-          >
-            <StyledDatasetIcon />
-            View All Datasets
-          </Button>
-        }
-      />
+    <CollapsibleDetailPageSection
+      id={sectionId}
+      title="Assays"
+      iconTooltipText="Experiments related to this organ"
+      action={
+        <Button
+          color="primary"
+          variant="contained"
+          component="a"
+          href={getSearchURL({ entityType: 'Dataset', organTerms })}
+          startIcon={<DatasetIcon />}
+        >
+          View All Datasets
+        </Button>
+      }
+    >
       <Paper>
         <EntitiesTable
           headerCells={[
@@ -66,7 +65,8 @@ function Assays({ organTerms, bucketData }) {
           ))}
         />
       </Paper>
-    </>
+      <DatasetsBarChart search={organTerms} />
+    </CollapsibleDetailPageSection>
   );
 }
 
