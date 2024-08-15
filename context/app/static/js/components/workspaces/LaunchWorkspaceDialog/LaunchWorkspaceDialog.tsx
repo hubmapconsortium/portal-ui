@@ -4,11 +4,13 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
+import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import { useLaunchWorkspaceDialog, LaunchWorkspaceFormTypes } from './hooks';
+import AdvancedConfigOptions from '../AdvancedConfigOptions';
 
 const formId = 'launch-workspace-form';
 
@@ -48,32 +50,35 @@ function LaunchWorkspaceDialog() {
       content={
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
-          <Stack direction="column" gap={4}>
-            {runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace && (
-              <Alert
-                severity="warning"
-                sx={{
-                  '.MuiAlert-message': {
-                    flexGrow: 1,
-                  },
-                  alignItems: 'center',
-                }}
-              >
-                {runningWorkspaceName} is currently running. You can only run one workspace at a time. To launch this
-                workspace, jobs in the workspace {runningWorkspaceName} will be stopped. Make sure to save all progress
-                before launching this workspace.
-              </Alert>
-            )}
-            <Typography>
-              All workspaces are launched with Python support, with the option to add support for R . Workspaces with
-              added R support may experience longer load times.
-            </Typography>
-            <Typography>
-              If a workspace was previously launched with R, launching a workspace without R support may cause issues
-              with your saved work.
-            </Typography>
-            <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
-          </Stack>
+          <SummaryPaper>
+            <Stack direction="column" gap={4}>
+              {runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace && (
+                <Alert
+                  severity="warning"
+                  sx={{
+                    '.MuiAlert-message': {
+                      flexGrow: 1,
+                    },
+                    alignItems: 'center',
+                  }}
+                >
+                  {runningWorkspaceName} is currently running. You can only run one workspace at a time. To launch this
+                  workspace, jobs in the workspace {runningWorkspaceName} will be stopped. Make sure to save all
+                  progress before launching this workspace.
+                </Alert>
+              )}
+              <Typography>
+                All workspaces are launched with Python support, with the option to add support for R . Workspaces with
+                added R support may experience longer load times.
+              </Typography>
+              <Typography>
+                If a workspace was previously launched with R, launching a workspace without R support may cause issues
+                with your saved work.
+              </Typography>
+              <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+            </Stack>
+          </SummaryPaper>
+          <AdvancedConfigOptions title="Advanced Configuration Options" />
         </form>
       }
       isOpen={isOpen}
@@ -83,8 +88,8 @@ function LaunchWorkspaceDialog() {
           <Button type="button" onClick={handleClose} disabled={isSubmitting}>
             Cancel
           </Button>
-          <LoadingButton type="submit" form={formId} loading={isSubmitting}>
-            Launch
+          <LoadingButton type="submit" variant="contained" form={formId} loading={isSubmitting}>
+            Launch Workspace
           </LoadingButton>
         </Stack>
       }
