@@ -1,0 +1,1 @@
+- Fix bug preventing visualization notebooks from being downloaded on dataset detail pages.
