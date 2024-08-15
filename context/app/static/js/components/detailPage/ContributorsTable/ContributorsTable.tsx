@@ -16,13 +16,13 @@ import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { DetailPageSection } from 'js/components/detailPage/style';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import { isValidEmail } from 'js/helpers/functions';
+import IconPanel from 'js/shared-styles/panels/IconPanel';
 
 import { useNormalizedContacts, useNormalizedContributors } from './hooks';
 import { ContributorAPIResponse, sortContributors, contributorIsContact, ContactAPIResponse } from './utils';
 
-const contributorsInfoAlertText =
+const contributorsIconPanelText =
   'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
 
 interface ContactCellProps {
@@ -54,7 +54,7 @@ interface ContributorsTableProps {
   contributors: ContributorAPIResponse[];
   contacts?: ContactAPIResponse[];
   iconTooltipText?: string;
-  showInfoAlert?: boolean;
+  showIconPanel?: boolean;
 }
 
 function ContributorsTable({
@@ -62,7 +62,7 @@ function ContributorsTable({
   contributors = [],
   contacts = [],
   iconTooltipText,
-  showInfoAlert,
+  showIconPanel,
 }: ContributorsTableProps) {
   const columns = [
     { id: 'name', label: 'Name' },
@@ -79,7 +79,7 @@ function ContributorsTable({
     <DetailPageSection id={title.toLowerCase()} data-testid={title.toLowerCase()}>
       <Stack spacing={1}>
         <SectionHeader iconTooltipText={iconTooltipText}>{title}</SectionHeader>
-        {showInfoAlert && <OutlinedAlert severity="info">{contributorsInfoAlertText}</OutlinedAlert>}
+        {showIconPanel && <IconPanel status="info">{contributorsIconPanelText}</IconPanel>}
         <Paper>
           <StyledTableContainer>
             <Table stickyHeader>

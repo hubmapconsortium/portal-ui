@@ -1,0 +1,1 @@
+- Change banner above "Contributors" and "Attribution" sections from an alert to a styled paper component.

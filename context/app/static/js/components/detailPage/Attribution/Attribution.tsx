@@ -7,7 +7,7 @@ import { DetailPageSection } from 'js/components/detailPage/style';
 import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
+import IconPanel from 'js/shared-styles/panels/IconPanel';
 
 import { useAttributionSections } from '../ContributorsTable/hooks';
 
@@ -37,7 +37,7 @@ function Attribution() {
   const showContactAndAlert = isHiveProcessedDataset || isSupportDataset;
   const showRegisteredBy = !isProcessedDataset && !isVisLiftedDataset && !isHiveProcessedDataset && !isSupportDataset;
 
-  const hiveInfoAlertText = `The data provided by the ${group_name} Group was centrally processed by HuBMAP. The results of this processing are independent of analyses conducted by the data providers or third parties.`;
+  const hiveIconPanelText = `The data provided by the ${group_name} Group was centrally processed by HuBMAP. The results of this processing are independent of analyses conducted by the data providers or third parties.`;
   const iconTooltipText = showRegisteredBy
     ? `Information about the group registering this ${entity_type?.toLowerCase()}.`
     : undefined;
@@ -55,7 +55,7 @@ function Attribution() {
     <DetailPageSection id="attribution">
       <Stack spacing={1}>
         <SectionHeader iconTooltipText={iconTooltipText}>Attribution</SectionHeader>
-        {showContactAndAlert && <OutlinedAlert severity="info">{hiveInfoAlertText}</OutlinedAlert>}
+        {showContactAndAlert && <IconPanel status="info">{hiveIconPanelText}</IconPanel>}
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
             {sections.map((props) => (

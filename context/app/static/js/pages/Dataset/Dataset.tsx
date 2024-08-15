@@ -234,7 +234,7 @@ function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
         {shouldDisplaySection.files && <Files files={files} />}
         {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer />}
         {shouldDisplaySection.contributors && (
-          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
+          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showIconPanel />
         )}
 
         <Attribution />
@@ -367,7 +367,7 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
         {shouldDisplaySection.bulkDataTransfer && <BulkDataTransfer />}
         {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
         {shouldDisplaySection.contributors && (
-          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
+          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showIconPanel />
         )}
         <Attribution />
       </DetailLayout>
