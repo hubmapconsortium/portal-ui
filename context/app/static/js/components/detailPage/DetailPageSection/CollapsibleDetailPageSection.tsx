@@ -7,6 +7,7 @@ import Box from '@mui/material/Box';
 import { SvgIconComponent } from '@mui/icons-material';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import DetailPageSection from './DetailPageSection';
 import { DetailPageSectionAccordion } from './style';
 
@@ -21,7 +22,7 @@ export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<Rea
 
 export default function CollapsibleDetailPageSection({
   title,
-  icon: Icon,
+  icon: IconOverride,
   children,
   variant = 'h4',
   component = 'h3',
@@ -29,6 +30,7 @@ export default function CollapsibleDetailPageSection({
   iconTooltipText,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
+  const Icon = IconOverride ?? sectionIconMap[rest.id!] ?? null;
   return (
     <DetailPageSection {...rest}>
       <DetailPageSectionAccordion defaultExpanded disableGutters variant="unstyled">

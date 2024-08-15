@@ -78,6 +78,61 @@ function ContributorsTable({
 
   const sortedContributors = sortContributors(normalizedContributors, normalizedContacts);
 
+  const contents = (
+    <Stack spacing={1}>
+      {showInfoAlert && <OutlinedAlert severity="info">{contributorsInfoAlertText}</OutlinedAlert>}
+      <Paper>
+        <StyledTableContainer>
+          <Table stickyHeader>
+            <TableHead>
+              <TableRow>
+                {columns.map((column) => (
+                  <HeaderCell
+                    key={column.id}
+                    data-testid={`${title.toLowerCase()}-${column.label.toLowerCase()}-header`}
+                  >
+                    {column.label}
+                  </HeaderCell>
+                ))}
+                <IconTooltipCell
+                  tooltipTitle="Open Researcher and Contributor ID"
+                  data-testid={`${title.toLowerCase()}-orcid-header`}
+                >
+                  ORCID
+                </IconTooltipCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {sortedContributors.map((contributor) => {
+                const { affiliation, name, email, isPrincipalInvestigator, orcid } = contributor;
+                return (
+                  <TableRow key={orcid} data-testid="contributor-row">
+                    <TableCell>{`${name}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
+                    <TableCell>{affiliation}</TableCell>
+                    <TableCell>
+                      <ContactCell isContact={contributorIsContact(contributor, normalizedContacts)} email={email} />
+                    </TableCell>
+                    <TableCell>
+                      {orcid && (
+                        <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
+                          {orcid}
+                        </OutboundIconLink>
+                      )}
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
+            </TableBody>
+          </Table>
+        </StyledTableContainer>
+      </Paper>
+    </Stack>
+  );
+
+  if (title === '') {
+    return contents;
+  }
+
   return (
     <CollapsibleDetailPageSection
       id={title.toLowerCase()}
@@ -85,54 +140,7 @@ function ContributorsTable({
       iconTooltipText={iconTooltipText}
       data-testid={title.toLowerCase()}
     >
-      <Stack spacing={1}>
-        {showInfoAlert && <OutlinedAlert severity="info">{contributorsInfoAlertText}</OutlinedAlert>}
-        <Paper>
-          <StyledTableContainer>
-            <Table stickyHeader>
-              <TableHead>
-                <TableRow>
-                  {columns.map((column) => (
-                    <HeaderCell
-                      key={column.id}
-                      data-testid={`${title.toLowerCase()}-${column.label.toLowerCase()}-header`}
-                    >
-                      {column.label}
-                    </HeaderCell>
-                  ))}
-                  <IconTooltipCell
-                    tooltipTitle="Open Researcher and Contributor ID"
-                    data-testid={`${title.toLowerCase()}-orcid-header`}
-                  >
-                    ORCID
-                  </IconTooltipCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {sortedContributors.map((contributor) => {
-                  const { affiliation, name, email, isPrincipalInvestigator, orcid } = contributor;
-                  return (
-                    <TableRow key={orcid} data-testid="contributor-row">
-                      <TableCell>{`${name}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
-                      <TableCell>{affiliation}</TableCell>
-                      <TableCell>
-                        <ContactCell isContact={contributorIsContact(contributor, normalizedContacts)} email={email} />
-                      </TableCell>
-                      <TableCell>
-                        {orcid && (
-                          <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
-                            {orcid}
-                          </OutboundIconLink>
-                        )}
-                      </TableCell>
-                    </TableRow>
-                  );
-                })}
-              </TableBody>
-            </Table>
-          </StyledTableContainer>
-        </Paper>
-      </Stack>
+      {contents}
     </CollapsibleDetailPageSection>
   );
 }
