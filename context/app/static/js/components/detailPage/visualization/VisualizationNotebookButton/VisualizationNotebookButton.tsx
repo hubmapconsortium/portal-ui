@@ -52,7 +52,7 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
     },
     {
       children: 'Download Jupyter Notebook',
-      onClick: downloadNotebook,
+      onClick: downloadNotebook(),
       icon: Download,
     },
   ];
