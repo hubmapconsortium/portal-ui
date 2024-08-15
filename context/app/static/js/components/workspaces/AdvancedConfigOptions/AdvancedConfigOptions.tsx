@@ -2,10 +2,11 @@ import React, { useMemo } from 'react';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
-import { Slider, Typography } from '@mui/material';
+import { Button, Slider, Typography } from '@mui/material';
 import Stack from '@mui/system/Stack';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { StyledAccordion, StyledSubtitle } from './style';
+import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
+import { StyledAccordion, StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
 
 interface ConfigSliderProps {
   label: string;
@@ -51,12 +52,12 @@ function ConfigSlider({ label, tooltip, defaultValue, min, max }: ConfigSliderPr
   }, [min, max]);
 
   return (
-    <Stack spacing={1} marginY={2}>
+    <Stack marginTop={1}>
       <Stack direction="row" spacing={1} alignItems="center">
         <StyledSubtitle>{label}</StyledSubtitle>
         <InfoTooltipIcon iconTooltipText={tooltip} />
       </Stack>
-      <Stack paddingX={1}>
+      <Stack padding={1}>
         <Slider defaultValue={defaultValue} valueLabelDisplay="auto" marks={marks} min={min} max={max} />
       </Stack>
     </Stack>
@@ -67,14 +68,29 @@ function AdvancedConfigOptions() {
   return (
     <StyledAccordion>
       <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
-        <StyledSubtitle>Advanced Configurations (Optional)</StyledSubtitle>
+        <StyledHeader fontSize="5rem">Advanced Configurations (Optional)</StyledHeader>
       </AccordionSummary>
       <AccordionDetails>
         <Stack>
           <Typography>{description}</Typography>
+          <SpacedSectionButtonRow
+            buttons={
+              <Stack direction="row" gap={1} marginTop={1}>
+                <Button type="button" variant="contained" disabled>
+                  Restore Defaults
+                </Button>
+              </Stack>
+            }
+          />
           {configSliderOptions.map((props) => (
             <ConfigSlider key={props.label} {...props} />
           ))}
+          <StyledSubtitle>Enable GPU</StyledSubtitle>
+          <Stack direction="row" component="label" alignItems="center">
+            <StyledSwitchLabel>Disabled</StyledSwitchLabel>
+            <StyledSwitch />
+            <StyledSwitchLabel>Enabled</StyledSwitchLabel>
+          </Stack>
         </Stack>
       </AccordionDetails>
     </StyledAccordion>
