@@ -30,17 +30,15 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
   });
 
   const downloadNotebook = useCallback(() => {
-    return () => {
-      trackEntityPageEvent({ action: `Vitessce / ${tooltip}` });
-      postAndDownloadFile({
-        url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
-        body: {},
-      })
-        .then()
-        .catch(() => {
-          toastError('Failed to download Jupyter Notebook');
-        });
-    };
+    trackEntityPageEvent({ action: `Vitessce / ${tooltip}` });
+    postAndDownloadFile({
+      url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
+      body: {},
+    })
+      .then()
+      .catch(() => {
+        toastError('Failed to download Jupyter Notebook');
+      });
   }, [uuid, toastError, trackEntityPageEvent]);
 
   const options = [
@@ -52,7 +50,7 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
     },
     {
       children: 'Download Jupyter Notebook',
-      onClick: downloadNotebook(),
+      onClick: downloadNotebook,
       icon: Download,
     },
   ];
