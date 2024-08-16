@@ -25,6 +25,7 @@ import {
   UpdateWorkspaceBody,
   useWorkspacesApiURLs,
   useBuildWorkspacesSWRKey,
+  ResourceOptions,
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
@@ -34,6 +35,13 @@ interface UseWorkspacesListTypes<T> {
   workspacesLoading: boolean;
   mutateWorkspace?: KeyedMutator<T>;
 }
+
+const defaultResourceOptions: ResourceOptions = {
+  num_cpus: 1,
+  memory_mb: 8192,
+  time_limit_minutes: 180,
+  gpu_enabled: false,
+};
 
 /**
  * Returns a function that will mutate workspaces, jobs, and optionally a single workspace's details
@@ -88,8 +96,16 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
     await mutate();
   }
 
-  async function handleStartWorkspace({ workspaceId, jobTypeId }: { workspaceId: number; jobTypeId: string }) {
-    await startWorkspace({ workspaceId, jobTypeId });
+  async function handleStartWorkspace({
+    workspaceId,
+    jobTypeId,
+    resourceOptions,
+  }: {
+    workspaceId: number;
+    jobTypeId: string;
+    resourceOptions: ResourceOptions;
+  }) {
+    await startWorkspace({ workspaceId, jobTypeId, resourceOptions });
     await mutate();
   }
 
@@ -221,7 +237,7 @@ function useLaunchWorkspace() {
         return;
       }
 
-      await startWorkspace({ workspaceId: workspace.id, jobTypeId });
+      await startWorkspace({ workspaceId: workspace.id, jobTypeId, resourceOptions: defaultResourceOptions });
       await mutateWorkspacesAndJobs();
       await globalMutateWorkspace(workspace.id);
       window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
@@ -274,7 +290,11 @@ export function useCreateAndLaunchWorkspace() {
       toastSuccess('Workspace successfully created.');
 
       try {
-        await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
+        await startNewWorkspace({
+          workspace,
+          jobTypeId: body.default_job_type,
+          templatePath,
+        });
       } catch (e) {
         toastError('Workspace failed to launch.');
       }
@@ -322,7 +342,11 @@ function useRefreshSession(workspace: MergedWorkspace) {
   const { toastSuccess } = useSnackbarActions();
   const refreshSession = useCallback(async () => {
     await stopWorkspace(workspace.id);
-    await startWorkspace({ workspaceId: workspace.id, jobTypeId: getDefaultJobType({ workspace }) });
+    await startWorkspace({
+      workspaceId: workspace.id,
+      jobTypeId: getDefaultJobType({ workspace }),
+      resourceOptions: defaultResourceOptions,
+    });
     await mutate();
     toastSuccess('Session time for workspace successfully renewed');
   }, [mutate, startWorkspace, stopWorkspace, toastSuccess, workspace]);
