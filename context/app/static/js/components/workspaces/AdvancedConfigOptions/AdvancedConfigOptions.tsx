@@ -4,22 +4,27 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 import { Button, Slider, Typography } from '@mui/material';
 import Stack from '@mui/system/Stack';
+
+import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { StyledAccordion, StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
 
-interface ConfigSliderProps {
+interface ConfigSliderProps<FormType extends FieldValues> {
+  id: string;
   label: string;
   tooltip: string;
   defaultValue: number;
   min: number;
   max: number;
+  field: ControllerRenderProps<FormType, Path<FormType>>;
 }
 
 const description =
   'Adjusting these settings may result in longer workspace load times and could potentially affect your saved work.';
-const configSliderOptions: ConfigSliderProps[] = [
+const configSliderOptions = [
   {
+    id: 'time_limit_minutes',
     label: 'Time Limit (hours)',
     tooltip: 'Session duration for your workspace.',
     defaultValue: 3,
@@ -27,6 +32,7 @@ const configSliderOptions: ConfigSliderProps[] = [
     max: 6,
   },
   {
+    id: 'memory_mb',
     label: 'Memory (GB)',
     tooltip: 'Available memory for your workspace.',
     defaultValue: 8,
@@ -34,6 +40,7 @@ const configSliderOptions: ConfigSliderProps[] = [
     max: 16,
   },
   {
+    id: 'num_cpus',
     label: 'Number of CPUs',
     tooltip: 'Number of CPUs available for your workspace.',
     defaultValue: 1,
@@ -42,7 +49,15 @@ const configSliderOptions: ConfigSliderProps[] = [
   },
 ];
 
-function ConfigSlider({ label, tooltip, defaultValue, min, max }: ConfigSliderProps) {
+function ConfigSlider<FormType extends FieldValues>({
+  id,
+  label,
+  tooltip,
+  defaultValue,
+  min,
+  max,
+  field,
+}: ConfigSliderProps<FormType>) {
   const marks = useMemo(() => {
     const tempMarks = [];
     for (let i = min; i <= max; i += 1) {
@@ -58,13 +73,34 @@ function ConfigSlider({ label, tooltip, defaultValue, min, max }: ConfigSliderPr
         <InfoTooltipIcon iconTooltipText={tooltip} />
       </Stack>
       <Stack padding={1}>
-        <Slider defaultValue={defaultValue} valueLabelDisplay="auto" marks={marks} min={min} max={max} />
+        <Slider
+          defaultValue={defaultValue}
+          value={field.value[id] as number}
+          onChange={(e, value) =>
+            field.onChange({
+              ...field.value,
+              [id]: value,
+            })
+          }
+          valueLabelDisplay="auto"
+          marks={marks}
+          min={min}
+          max={max}
+        />
       </Stack>
     </Stack>
   );
 }
 
-function AdvancedConfigOptions() {
+type WorkspaceJobTypeFieldProps<FormType extends FieldValues> = Pick<UseControllerProps<FormType>, 'control'>;
+
+function AdvancedConfigOptions<FormType extends FieldValues>({ control }: WorkspaceJobTypeFieldProps<FormType>) {
+  const { field } = useController({
+    name: 'workspaceResourceOptions' as Path<FormType>,
+    control,
+    rules: { required: true },
+  });
+
   return (
     <StyledAccordion>
       <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
@@ -83,7 +119,7 @@ function AdvancedConfigOptions() {
             }
           />
           {configSliderOptions.map((props) => (
-            <ConfigSlider key={props.label} {...props} />
+            <ConfigSlider key={props.id} field={field} {...props} />
           ))}
           <StyledSubtitle>Enable GPU</StyledSubtitle>
           <Stack direction="row" component="label" alignItems="center">

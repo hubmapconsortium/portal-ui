@@ -5,19 +5,27 @@ import { z } from 'zod';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { workspaceJobTypeIdField } from '../workspaceFormFields';
+import { workspaceJobTypeIdField, workspaceResourceOptionsField } from '../workspaceFormFields';
 import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
-import { DEFAULT_JOB_TYPE } from '../constants';
-import { MergedWorkspace } from '../types';
+import {
+  DEFAULT_GPU_ENABLED,
+  DEFAULT_JOB_TYPE,
+  DEFAULT_MEMORY_MB,
+  DEFAULT_NUM_CPUS,
+  DEFAULT_TIME_LIMIT_MINUTES,
+} from '../constants';
+import { MergedWorkspace, WorkspaceResourceOptions } from '../types';
 import { findBestJobType, isRunningWorkspace } from '../utils';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
+  workspaceResourceOptions: WorkspaceResourceOptions;
 }
 
 const schema = z
   .object({
     ...workspaceJobTypeIdField,
+    ...workspaceResourceOptionsField,
   })
   .partial()
   .required({ workspaceJobTypeId: true });
@@ -32,6 +40,12 @@ function useLaunchWorkspaceForm() {
   } = useForm<LaunchWorkspaceFormTypes>({
     defaultValues: {
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
+      workspaceResourceOptions: {
+        num_cpus: DEFAULT_NUM_CPUS,
+        memory_mb: DEFAULT_MEMORY_MB,
+        time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+        gpu_enabled: DEFAULT_GPU_ENABLED,
+      },
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -83,7 +97,7 @@ function useLaunchWorkspaceDialog() {
   }, [close, reset]);
 
   const submit = useCallback(
-    async ({ workspaceJobTypeId }: LaunchWorkspaceFormTypes) => {
+    async ({ workspaceJobTypeId, workspaceResourceOptions }: LaunchWorkspaceFormTypes) => {
       if (!workspace) {
         console.error('No workspace to run found.');
         return;
@@ -102,7 +116,11 @@ function useLaunchWorkspaceDialog() {
         }
       }
 
-      await startAndOpenWorkspace({ jobTypeId: workspaceJobTypeId, workspace });
+      await startAndOpenWorkspace({
+        jobTypeId: workspaceJobTypeId,
+        workspace,
+        resourceOptions: workspaceResourceOptions,
+      });
     },
     [
       workspace,
@@ -118,9 +136,10 @@ function useLaunchWorkspaceDialog() {
     (newWorkspace: MergedWorkspace) => {
       setWorkspace(newWorkspace);
       const workspaceJobTypeId = findBestJobType(newWorkspace.jobs);
+      const workspaceResourceOptions = newWorkspace.jobs[0]?.job_details?.request_job_details?.resource_options;
 
       if (isRunningWorkspace(newWorkspace)) {
-        submit({ workspaceJobTypeId }).catch((e) => {
+        submit({ workspaceJobTypeId, workspaceResourceOptions }).catch((e) => {
           toastError('Failed to launch workspace. Please try again.');
           console.error(e);
         });

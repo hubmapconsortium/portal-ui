@@ -31,6 +31,13 @@ export interface Workspace {
   workspace_details: WorkspaceDetails;
 }
 
+export interface WorkspaceResourceOptions {
+  num_cpus: number;
+  memory_mb: number;
+  time_limit_minutes: number;
+  gpu_enabled: boolean;
+}
+
 interface WorkspaceJobDetail {
   message: string;
   time_left: number;
@@ -43,6 +50,7 @@ interface WorkspaceJobDetail {
     url_path: string;
     url_domain: string;
   };
+  resource_options: WorkspaceResourceOptions;
 }
 
 interface WorkspaceJobDetails {

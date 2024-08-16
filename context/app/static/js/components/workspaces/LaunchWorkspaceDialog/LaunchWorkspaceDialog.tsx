@@ -31,8 +31,8 @@ function LaunchWorkspaceDialog() {
   const { toastError } = useSnackbarActions();
 
   const onSubmit = useCallback(
-    ({ workspaceJobTypeId }: LaunchWorkspaceFormTypes) => {
-      submit({ workspaceJobTypeId })
+    ({ workspaceJobTypeId, workspaceResourceOptions }: LaunchWorkspaceFormTypes) => {
+      submit({ workspaceJobTypeId, workspaceResourceOptions })
         .then(() => {
           handleClose();
         })
@@ -78,7 +78,7 @@ function LaunchWorkspaceDialog() {
               <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
             </Stack>
           </SummaryPaper>
-          <AdvancedConfigOptions />
+          <AdvancedConfigOptions control={control} />
         </form>
       }
       isOpen={isOpen}

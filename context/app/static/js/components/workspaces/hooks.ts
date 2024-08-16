@@ -27,7 +27,7 @@ import {
   useBuildWorkspacesSWRKey,
   ResourceOptions,
 } from './api';
-import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
+import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 
 interface UseWorkspacesListTypes<T> {
@@ -224,10 +224,12 @@ function useLaunchWorkspace() {
     async ({
       workspace,
       jobTypeId,
+      resourceOptions,
       templatePath,
     }: {
       workspace: Workspace;
       jobTypeId: string;
+      resourceOptions: WorkspaceResourceOptions;
       templatePath?: string;
     }) => {
       const isNewJobType = workspace?.default_job_type !== jobTypeId;
@@ -237,7 +239,7 @@ function useLaunchWorkspace() {
         return;
       }
 
-      await startWorkspace({ workspaceId: workspace.id, jobTypeId, resourceOptions: defaultResourceOptions });
+      await startWorkspace({ workspaceId: workspace.id, jobTypeId, resourceOptions });
       await mutateWorkspacesAndJobs();
       await globalMutateWorkspace(workspace.id);
       window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
@@ -263,7 +265,7 @@ function useLaunchWorkspace() {
         open();
         setWorkspace(workspace);
       } else {
-        await startAndOpenWorkspace({ workspace, jobTypeId, templatePath });
+        await startAndOpenWorkspace({ workspace, jobTypeId, templatePath, resourceOptions: defaultResourceOptions });
       }
     },
     [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
