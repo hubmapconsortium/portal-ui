@@ -3,16 +3,24 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { CreateTemplateNotebooksTypes } from '../types';
+import { CreateTemplateNotebooksTypes, WorkspaceResourceOptions } from '../types';
 import { useTemplateNotebooks } from './hooks';
 import {
   workspaceNameField,
   protectedDatasetsField,
   templatesField,
   workspaceJobTypeIdField,
+  workspaceResourceOptionsField,
 } from '../workspaceFormFields';
 import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
-import { DEFAULT_JOB_TYPE, DEFAULT_TEMPLATE_KEY } from '../constants';
+import {
+  DEFAULT_GPU_ENABLED,
+  DEFAULT_JOB_TYPE,
+  DEFAULT_MEMORY_MB,
+  DEFAULT_NUM_CPUS,
+  DEFAULT_TEMPLATE_KEY,
+  DEFAULT_TIME_LIMIT_MINUTES,
+} from '../constants';
 
 export interface FormWithTemplates {
   templates: string[];
@@ -21,6 +29,7 @@ interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
   'protected-datasets': string;
   workspaceJobTypeId: string;
+  workspaceResourceOptions: WorkspaceResourceOptions;
 }
 
 interface UseCreateWorkspaceTypes {
@@ -29,7 +38,13 @@ interface UseCreateWorkspaceTypes {
 }
 
 const schema = z
-  .object({ ...workspaceNameField, ...protectedDatasetsField, ...templatesField, ...workspaceJobTypeIdField })
+  .object({
+    ...workspaceNameField,
+    ...protectedDatasetsField,
+    ...templatesField,
+    ...workspaceJobTypeIdField,
+    ...workspaceResourceOptionsField,
+  })
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
@@ -49,6 +64,12 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorks
       'protected-datasets': '',
       templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
+      workspaceResourceOptions: {
+        num_cpus: DEFAULT_NUM_CPUS,
+        memory_mb: DEFAULT_MEMORY_MB,
+        time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+        gpu_enabled: DEFAULT_GPU_ENABLED,
+      },
     },
     mode: 'onChange',
     resolver: zodResolver(schema),

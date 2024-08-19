@@ -14,12 +14,14 @@ import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 
+import { Typography } from '@mui/material';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
+import AdvancedConfigOptions from '../AdvancedConfigOptions';
 
 const text = {
   overview: {
@@ -142,8 +144,15 @@ function NewWorkspaceDialog({
                 e.stopPropagation();
               }}
             />
-            <StepDescription blocks={text.configure.description} />
-            <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+            <StepDescription
+              blocks={[
+                <Stack key="workspaceJobTypeId" spacing={1}>
+                  <Typography>{text.configure.description}</Typography>
+                  <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+                </Stack>,
+              ]}
+            />
+            <AdvancedConfigOptions control={control} />
           </Box>
         </Step>
         <TemplateSelectStep
