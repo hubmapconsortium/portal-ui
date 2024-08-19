@@ -26,6 +26,7 @@ interface CreateWorkspaceFormTypes extends FormWithTemplates {
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
   defaultTemplate?: string;
+  defaultProtectedDatasets?: string;
 }
 
 const schema = z
@@ -33,7 +34,7 @@ const schema = z
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
-function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorkspaceTypes) {
+function useCreateWorkspaceForm({ defaultName, defaultTemplate, defaultProtectedDatasets }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
 
@@ -46,7 +47,7 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorks
   } = useForm({
     defaultValues: {
       'workspace-name': defaultName ?? '',
-      'protected-datasets': '',
+      'protected-datasets': defaultProtectedDatasets ?? '',
       templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
@@ -65,6 +66,17 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorks
     reset();
     handleClose();
   }
+
+  useEffect(() => {
+    if (defaultProtectedDatasets && defaultProtectedDatasets !== '') {
+      reset({
+        'workspace-name': defaultName ?? '',
+        'protected-datasets': defaultProtectedDatasets ?? '',
+        templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
+        workspaceJobTypeId: DEFAULT_JOB_TYPE,
+      });
+    }
+  }, [defaultProtectedDatasets, reset, defaultName, defaultTemplate]);
 
   useEffect(() => {
     if (dialogIsOpen) {

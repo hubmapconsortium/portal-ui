@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { FieldValues, Path, PathValue, useController, UseControllerProps } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
@@ -23,12 +23,6 @@ function WorkspaceField<FormType extends FieldValues>({
     rules: { required: true },
     defaultValue: value,
   });
-
-  useEffect(() => {
-    if (value) {
-      field.onChange(value);
-    }
-  }, [value, field]);
 
   return (
     <Box display="flex" alignItems="center">

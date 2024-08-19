@@ -11,10 +11,13 @@ import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateW
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 
 function NewWorkspaceDialogFromSelections() {
-  const { errorMessages, warningMessages, selectedRows, ...restWorkspaceDatasets } = useCreateWorkspaceDatasets();
+  const { errorMessages, warningMessages, selectedRows, protectedHubmapIds, ...restWorkspaceDatasets } =
+    useCreateWorkspaceDatasets();
   const { deselectRows } = useSelectableTableStore();
 
-  const { control, errors, setDialogIsOpen, ...rest } = useCreateWorkspaceForm({});
+  const { control, errors, setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
+    defaultProtectedDatasets: protectedHubmapIds,
+  });
 
   return (
     <>
@@ -32,7 +35,11 @@ function NewWorkspaceDialogFromSelections() {
       >
         <Box>
           <ErrorOrWarningMessages errorMessages={errorMessages} warningMessages={warningMessages} />
-          <RemoveProtectedDatasetsFormField control={control} {...restWorkspaceDatasets} />
+          <RemoveProtectedDatasetsFormField
+            control={control}
+            protectedHubmapIds={protectedHubmapIds}
+            {...restWorkspaceDatasets}
+          />
         </Box>
       </NewWorkspaceDialog>
     </>
