@@ -11,6 +11,12 @@ const CollectionsSectionContext = createContext<CollectionsSectionContextType>('
 
 export const useCollectionsSectionContext = () => useContext(CollectionsSectionContext);
 
+/**
+ * This context helps deal with tab logic specific to the collections section.
+ * If no collections are found for any of the datasets, the section should not be displayed
+ * If the primary dataset is not found in any collections but the processed dataset is, the section should be displayed
+ * If the primary dataset is found in a collection, but none of the processed datasets are, the section should be displayed as a single tab
+ */
 export default function CollectionsSectionProvider({ children }: PropsWithChildren) {
   const [processedDatasetHasCollections, setProcessedDatasetHasCollections] = useState(false);
 
