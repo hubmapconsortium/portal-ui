@@ -1,0 +1,1 @@
+- Fix bug that prevented protected dataset ids from being displayed in "Launch New Workspace" dialog.
