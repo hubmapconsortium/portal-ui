@@ -12,30 +12,26 @@ git pull
 MAJOR=$1
 
 if [[ -z "$MAJOR" ]]; then
-  get_last_minor_version() {
-    TAGS=`git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags | tac`
-    # Iterate over tags to find date of last one with patch of .0
-    for TAG in $TAGS; do
-      if [[ $TAG == refs/tags/v* ]]; then
-        MINOR=`echo $TAG | perl -pne 's/.*v0\.(\d+)\.\d+/\1/'`
-        if [[ $MINOR -eq $1 ]]; then
-          REF_DATE=`echo $TAG | perl -pne 's/.*v0\.\d+\.\d+ //'`
-          break
-        fi
-      fi
-    done
+  NOW_EPOCH_DAY=`expr $(date +%s) / 86400`
 
-    REF_EPOCH_DAY=`expr $(date -j -f "%d %b %Y" "$REF_DATE" +%s) / 86400`
-    NOW_EPOCH_DAY=`expr $(date +%s) / 86400`
-    DAYS_PAST_REF=`expr $NOW_EPOCH_DAY - $REF_EPOCH_DAY`
+  TAGS=`git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags | tac`
+  while read -r -d $'\n' TAG DATE; do
+    if [[ $TAG =~ v0\.([0-9]+)\.0$ ]]; then
+      echo "Last minor tag: $TAG"
+      # Strip timezone info (last 6 characters)
+      DATE=${DATE%??????}
+      # Convert to epoch day
+      REF_EPOCH_DAY=`expr $(date --date="$DATE" "+%s") / 86400`
+      echo "Reference epoch day: $REF_EPOCH_DAY"
+      break
+    fi
+  done <<< "$TAGS"
+ 
+  echo "Now epoch day: $NOW_EPOCH_DAY"
 
-    echo "Days since last minor version: $DAYS_PAST_REF"
-    echo v0.`expr $REF_MINOR + $DAYS_PAST_REF / 14`
-    # Integer division truncates toward 0 for both positive and negative,
-    # so this doesn't work if the reference date is in the future.
-  }
+  DAYS_PAST_REF=`expr $NOW_EPOCH_DAY - $REF_EPOCH_DAY`
 
-  DAYS_PAST_REF=`get_last_minor_version`
+  echo "Days since last minor version: $DAYS_PAST_REF"
 
   if [[ $DAYS_PAST_REF -lt 14 ]]; then
     VERSION=`cd context && npm version patch --no-git-tag-version`
@@ -49,8 +45,6 @@ else
 fi
 
 echo "Version: $VERSION"
-
-die
 
 ./grab-dependencies.sh
 
