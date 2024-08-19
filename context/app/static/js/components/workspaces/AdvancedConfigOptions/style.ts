@@ -1,11 +1,6 @@
 import { styled } from '@mui/material/styles';
-import Accordion from '@mui/material/Accordion';
 import Typography from '@mui/material/Typography';
-import { Switch } from '@mui/material';
-
-const StyledAccordion = styled(Accordion)(({ theme }) => ({
-  marginTop: theme.spacing(1),
-}));
+import Switch from '@mui/material/Switch';
 
 const StyledSubtitle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -26,4 +21,4 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export { StyledAccordion, StyledSubtitle, StyledSwitch, StyledHeader, StyledSwitchLabel };
+export { StyledSubtitle, StyledSwitch, StyledHeader, StyledSwitchLabel };

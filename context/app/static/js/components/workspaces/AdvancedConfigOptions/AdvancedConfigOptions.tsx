@@ -1,14 +1,17 @@
 import React, { useMemo } from 'react';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
-import { Button, Slider, Typography } from '@mui/material';
+import Accordion from '@mui/material/Accordion';
+import Button from '@mui/material/Button';
+import Slider from '@mui/material/Slider';
+import Typography from '@mui/material/Typography';
 import Stack from '@mui/system/Stack';
+import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { StyledAccordion, StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
+import { StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_MEMORY_MB,
@@ -141,7 +144,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({ control }: Worksp
   };
 
   return (
-    <StyledAccordion>
+    <Accordion>
       <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
         <StyledHeader fontSize="5rem">Advanced Configurations (Optional)</StyledHeader>
       </AccordionSummary>
@@ -176,7 +179,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({ control }: Worksp
           </Stack>
         </Stack>
       </AccordionDetails>
-    </StyledAccordion>
+    </Accordion>
   );
 }
 
