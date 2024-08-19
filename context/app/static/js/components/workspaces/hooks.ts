@@ -341,6 +341,10 @@ function useSessionWarning(workspaces: MergedWorkspace[]) {
   };
 }
 
+function getWorkspaceResourceOptions(workspace: MergedWorkspace) {
+  return findBestJob(workspace?.jobs ?? [])?.job_details?.current_job_details?.resource_options;
+}
+
 function useRefreshSession(workspace: MergedWorkspace) {
   const { stopWorkspace, isStoppingWorkspace } = useStopWorkspace();
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
@@ -352,7 +356,7 @@ function useRefreshSession(workspace: MergedWorkspace) {
     await startWorkspace({
       workspaceId: workspace.id,
       jobTypeId: getDefaultJobType({ workspace }),
-      resourceOptions: {
+      resourceOptions: getWorkspaceResourceOptions(workspace) ?? {
         time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
         num_cpus: DEFAULT_NUM_CPUS,
         memory_mb: DEFAULT_MEMORY_MB,

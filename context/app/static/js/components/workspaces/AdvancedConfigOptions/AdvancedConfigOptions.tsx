@@ -24,7 +24,6 @@ import {
   MIN_NUM_CPUS,
   MIN_TIME_LIMIT_MINUTES,
 } from '../constants';
-import { WorkspaceResourceOptions } from '../types';
 
 interface ConfigSliderProps<FormType extends FieldValues> {
   field: ControllerRenderProps<FormType, Path<FormType>>;
@@ -112,13 +111,6 @@ function ConfigSlider<FormType extends FieldValues>({
   );
 }
 
-const defaultValues: WorkspaceResourceOptions = {
-  time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
-  memory_mb: DEFAULT_MEMORY_MB,
-  num_cpus: DEFAULT_NUM_CPUS,
-  gpu_enabled: DEFAULT_GPU_ENABLED,
-};
-
 type WorkspaceJobTypeFieldProps<FormType extends FieldValues> = Pick<UseControllerProps<FormType>, 'control'>;
 
 function AdvancedConfigOptions<FormType extends FieldValues>({ control }: WorkspaceJobTypeFieldProps<FormType>) {
@@ -129,17 +121,17 @@ function AdvancedConfigOptions<FormType extends FieldValues>({ control }: Worksp
   });
 
   const isDefault =
-    field.value.time_limit_minutes === defaultValues.time_limit_minutes &&
-    field.value.memory_mb === defaultValues.memory_mb &&
-    field.value.num_cpus === defaultValues.num_cpus &&
-    field.value.gpu_enabled === defaultValues.gpu_enabled;
+    field.value.time_limit_minutes === DEFAULT_TIME_LIMIT_MINUTES &&
+    field.value.memory_mb === DEFAULT_MEMORY_MB &&
+    field.value.num_cpus === DEFAULT_NUM_CPUS &&
+    field.value.gpu_enabled === DEFAULT_GPU_ENABLED;
 
   const handleRestoreDefaults = () => {
     field.onChange({
-      time_limit_minutes: defaultValues.time_limit_minutes,
-      memory_mb: defaultValues.memory_mb,
-      num_cpus: defaultValues.num_cpus,
-      gpu_enabled: defaultValues.gpu_enabled,
+      time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+      memory_mb: DEFAULT_MEMORY_MB,
+      num_cpus: DEFAULT_NUM_CPUS,
+      gpu_enabled: DEFAULT_GPU_ENABLED,
     });
   };
 
