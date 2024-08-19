@@ -40,7 +40,6 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtected
 
   const checkedWorkspaceName = defaultName ?? '';
   const checkedProtectedDatasets = initialProtectedDatasets ?? '';
-  const checkedTemplates = [defaultTemplate ?? DEFAULT_TEMPLATE_KEY];
 
   const {
     handleSubmit,
@@ -52,7 +51,7 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtected
     defaultValues: {
       'workspace-name': checkedWorkspaceName,
       'protected-datasets': checkedProtectedDatasets,
-      templates: checkedTemplates,
+      templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
     mode: 'onChange',
@@ -76,12 +75,11 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtected
       reset({
         'workspace-name': checkedWorkspaceName,
         'protected-datasets': checkedProtectedDatasets,
-        templates: checkedTemplates,
+        templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
         workspaceJobTypeId: DEFAULT_JOB_TYPE,
       });
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialProtectedDatasets, reset]);
+  }, [initialProtectedDatasets, reset, checkedWorkspaceName, checkedProtectedDatasets, defaultTemplate]);
 
   useEffect(() => {
     if (dialogIsOpen) {
