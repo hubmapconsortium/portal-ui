@@ -1,20 +1,10 @@
 import React from 'react';
 
+import { DagProvenanceType } from 'js/components/types';
 import { CwlIcon, FlexOutboundLink, PrimaryTextDivider, StyledListItem } from './style';
 
-interface CWLPipelineLink {
-  hash: string;
-  name: string;
-  origin: string;
-}
-
-interface IngestPipelineLink {
-  hash: string;
-  origin: string;
-}
-
 interface ProvAnalysisDetailsLinkProps {
-  data: CWLPipelineLink | IngestPipelineLink;
+  data: DagProvenanceType;
 }
 
 function ProvAnalysisDetailsLink({ data }: ProvAnalysisDetailsLinkProps) {

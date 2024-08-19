@@ -16,17 +16,18 @@ export type ESEntityType =
   | CollectionEntityType
   | PublicationEntityType;
 
-export type DagProvenanceType =
-  | {
-      origin: string;
-      name?: string;
-      hash: string;
-    }
-  | {
-      name: string;
-      hash: string;
-      origin: string;
-    };
+export interface CWLPipelineLink {
+  hash: string;
+  name: string;
+  origin: string;
+}
+
+export interface IngestPipelineLink {
+  hash: string;
+  origin: string;
+}
+
+export type DagProvenanceType = CWLPipelineLink | IngestPipelineLink;
 
 export interface Entity {
   entity_type: ESEntityType;
