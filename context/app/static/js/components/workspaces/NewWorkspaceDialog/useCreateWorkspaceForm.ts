@@ -26,7 +26,7 @@ interface CreateWorkspaceFormTypes extends FormWithTemplates {
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
   defaultTemplate?: string;
-  defaultProtectedDatasets?: string;
+  initialProtectedDatasets?: string;
 }
 
 const schema = z
@@ -34,9 +34,13 @@ const schema = z
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
-function useCreateWorkspaceForm({ defaultName, defaultTemplate, defaultProtectedDatasets }: UseCreateWorkspaceTypes) {
+function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtectedDatasets }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
+
+  const checkedWorkspaceName = defaultName ?? '';
+  const checkedProtectedDatasets = initialProtectedDatasets ?? '';
+  const checkedTemplates = [defaultTemplate ?? DEFAULT_TEMPLATE_KEY];
 
   const {
     handleSubmit,
@@ -46,9 +50,9 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, defaultProtected
     trigger,
   } = useForm({
     defaultValues: {
-      'workspace-name': defaultName ?? '',
-      'protected-datasets': defaultProtectedDatasets ?? '',
-      templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
+      'workspace-name': checkedWorkspaceName,
+      'protected-datasets': checkedProtectedDatasets,
+      templates: checkedTemplates,
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
     mode: 'onChange',
@@ -68,15 +72,16 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, defaultProtected
   }
 
   useEffect(() => {
-    if (defaultProtectedDatasets && defaultProtectedDatasets !== '') {
+    if (initialProtectedDatasets && initialProtectedDatasets !== '') {
       reset({
-        'workspace-name': defaultName ?? '',
-        'protected-datasets': defaultProtectedDatasets ?? '',
-        templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
+        'workspace-name': checkedWorkspaceName,
+        'protected-datasets': checkedProtectedDatasets,
+        templates: checkedTemplates,
         workspaceJobTypeId: DEFAULT_JOB_TYPE,
       });
     }
-  }, [defaultProtectedDatasets, reset, defaultName, defaultTemplate]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialProtectedDatasets, reset]);
 
   useEffect(() => {
     if (dialogIsOpen) {

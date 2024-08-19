@@ -16,7 +16,7 @@ function NewWorkspaceDialogFromSelections() {
   const { deselectRows } = useSelectableTableStore();
 
   const { control, errors, setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
-    defaultProtectedDatasets: protectedHubmapIds,
+    initialProtectedDatasets: protectedHubmapIds,
   });
 
   return (
