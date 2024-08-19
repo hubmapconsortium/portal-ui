@@ -18,6 +18,7 @@ import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDia
 import { useOpenDialog } from 'js/components/workspaces/WorkspacesDropdownMenu/WorkspacesDropdownMenu';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/SelectableTableProvider';
 import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
+import { LineClamp } from 'js/shared-styles/text';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
@@ -57,22 +58,12 @@ interface HelperPanelBodyItemProps extends PropsWithChildren {
   noWrap?: boolean;
 }
 
-const noWrapStyles = {
-  overflow: 'hidden',
-  textOverflow: 'ellipsis',
-  display: '-webkit-box',
-  WebkitLineClamp: 3,
-  WebkitBoxOrient: 'vertical',
-};
-
 function HelperPanelBodyItem({ label, children, noWrap }: HelperPanelBodyItemProps) {
-  const valueStyles = noWrap ? noWrapStyles : {};
+  const body = noWrap ? children : <LineClamp lines={3}>{children}</LineClamp>;
   return (
     <Stack direction="column">
       <Typography variant="overline">{label}</Typography>
-      <Typography variant="body2" sx={valueStyles}>
-        {children}
-      </Typography>
+      <Typography variant="body2">{body}</Typography>
     </Stack>
   );
 }
