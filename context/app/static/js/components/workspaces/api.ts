@@ -298,6 +298,7 @@ async function startJob(
     },
     workspaceId,
   );
+
   const result = fetch(url, {
     method: 'PUT',
     headers,

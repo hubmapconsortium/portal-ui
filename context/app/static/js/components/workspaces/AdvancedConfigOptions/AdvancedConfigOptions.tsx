@@ -10,6 +10,10 @@ import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { StyledAccordion, StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
 import {
+  DEFAULT_GPU_ENABLED,
+  DEFAULT_MEMORY_MB,
+  DEFAULT_NUM_CPUS,
+  DEFAULT_TIME_LIMIT_MINUTES,
   MAX_MEMORY_MB,
   MAX_NUM_CPUS,
   MAX_TIME_LIMIT_MINUTES,
@@ -17,6 +21,7 @@ import {
   MIN_NUM_CPUS,
   MIN_TIME_LIMIT_MINUTES,
 } from '../constants';
+import { WorkspaceResourceOptions } from '../types';
 
 interface ConfigSliderProps<FormType extends FieldValues> {
   field: ControllerRenderProps<FormType, Path<FormType>>;
@@ -104,6 +109,13 @@ function ConfigSlider<FormType extends FieldValues>({
   );
 }
 
+const defaultValues: WorkspaceResourceOptions = {
+  time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+  memory_mb: DEFAULT_MEMORY_MB,
+  num_cpus: DEFAULT_NUM_CPUS,
+  gpu_enabled: DEFAULT_GPU_ENABLED,
+};
+
 type WorkspaceJobTypeFieldProps<FormType extends FieldValues> = Pick<UseControllerProps<FormType>, 'control'>;
 
 function AdvancedConfigOptions<FormType extends FieldValues>({ control }: WorkspaceJobTypeFieldProps<FormType>) {
@@ -112,6 +124,21 @@ function AdvancedConfigOptions<FormType extends FieldValues>({ control }: Worksp
     control,
     rules: { required: true },
   });
+
+  const isDefault =
+    field.value.time_limit_minutes === defaultValues.time_limit_minutes &&
+    field.value.memory_mb === defaultValues.memory_mb &&
+    field.value.num_cpus === defaultValues.num_cpus &&
+    field.value.gpu_enabled === defaultValues.gpu_enabled;
+
+  const handleRestoreDefaults = () => {
+    field.onChange({
+      time_limit_minutes: defaultValues.time_limit_minutes,
+      memory_mb: defaultValues.memory_mb,
+      num_cpus: defaultValues.num_cpus,
+      gpu_enabled: defaultValues.gpu_enabled,
+    });
+  };
 
   return (
     <StyledAccordion>
@@ -124,7 +151,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({ control }: Worksp
           <SpacedSectionButtonRow
             buttons={
               <Stack direction="row" gap={1} marginTop={1}>
-                <Button type="button" variant="contained" disabled>
+                <Button type="button" variant="contained" disabled={isDefault} onClick={handleRestoreDefaults}>
                   Restore Defaults
                 </Button>
               </Stack>
@@ -136,7 +163,15 @@ function AdvancedConfigOptions<FormType extends FieldValues>({ control }: Worksp
           <StyledSubtitle>Enable GPU</StyledSubtitle>
           <Stack direction="row" component="label" alignItems="center">
             <StyledSwitchLabel>Disabled</StyledSwitchLabel>
-            <StyledSwitch />
+            <StyledSwitch
+              checked={field.value.gpu_enabled as boolean}
+              onChange={(e, value) =>
+                field.onChange({
+                  ...field.value,
+                  gpu_enabled: value,
+                })
+              }
+            />
             <StyledSwitchLabel>Enabled</StyledSwitchLabel>
           </Stack>
         </Stack>
