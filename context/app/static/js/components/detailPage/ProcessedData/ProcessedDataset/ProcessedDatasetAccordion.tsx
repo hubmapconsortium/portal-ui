@@ -27,8 +27,9 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
   const track = useTrackEntityPageEvent();
 
-  const { setCurrentDataset } = useProcessedDataStore((state) => ({
+  const { setCurrentDataset, removeVisibleDataset } = useProcessedDataStore((state) => ({
     setCurrentDataset: state.setCurrentDataset,
+    removeVisibleDataset: state.removeFromVisibleDatasets,
   }));
   const { ref } = useInView({
     threshold: 0,
@@ -36,6 +37,9 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
     onChange: (visible) => {
       if (visible && dataset) {
         setCurrentDataset(dataset);
+      }
+      if (!visible) {
+        removeVisibleDataset(sectionDataset.hubmap_id);
       }
     },
   });

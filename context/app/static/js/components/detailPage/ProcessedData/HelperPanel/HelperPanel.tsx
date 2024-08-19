@@ -22,6 +22,7 @@ import { useOpenDialog } from 'js/components/workspaces/WorkspacesDropdownMenu/W
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/SelectableTableProvider';
 import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
 import { LineClamp } from 'js/shared-styles/text';
+import Fade from '@mui/material/Fade';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
@@ -35,6 +36,9 @@ function useCurrentDataset() {
 
 function HelperPanelHeader() {
   const currentDataset = useCurrentDataset();
+  if (!currentDataset) {
+    return null;
+  }
   return (
     <Typography variant="subtitle2" display="flex" alignItems="center" gap={0.5} whiteSpace="nowrap">
       <SchemaRounded fontSize="small" />
@@ -194,6 +198,9 @@ function WorkspaceButton() {
 function HelperPanelActions() {
   const currentDataset = useCurrentDataset();
   const track = useTrackEntityPageEvent();
+  if (!currentDataset) {
+    return null;
+  }
   return (
     <>
       <WorkspaceButton />
@@ -219,27 +226,33 @@ export default function HelperPanel() {
   const currentDataset = useCurrentDataset();
   const isDesktop = useIsDesktop();
   const style = useAnimatedSidebarPosition();
-  if (!currentDataset || !isDesktop || !style) {
-    return null;
-  }
   return (
     <HelperPanelPortal>
-      <AnimatedStack
-        direction="column"
-        maxWidth="12rem"
-        padding={1}
-        gap={1}
-        bgcolor="secondaryContainer.main"
-        boxShadow={2}
-        style={style}
-        position="sticky"
+      <Fade
+        in={Boolean(currentDataset && isDesktop && style)}
+        timeout={{
+          appear: 300,
+          enter: 300,
+          exit: 0,
+        }}
       >
-        <HelperPanelHeader />
-        <Divider />
-        <HelperPanelStatus />
-        <HelperPanelBody />
-        <HelperPanelActions />
-      </AnimatedStack>
+        <AnimatedStack
+          direction="column"
+          maxWidth="12rem"
+          padding={1}
+          gap={1}
+          bgcolor="secondaryContainer.main"
+          boxShadow={2}
+          style={style!}
+          position="sticky"
+        >
+          <HelperPanelHeader />
+          <Divider />
+          <HelperPanelStatus />
+          <HelperPanelBody />
+          <HelperPanelActions />
+        </AnimatedStack>
+      </Fade>
     </HelperPanelPortal>
   );
 }

@@ -8,6 +8,7 @@ import { ProcessedDatasetDetails } from './ProcessedDataset/hooks';
  */
 interface ProcessedDataStoreState {
   seenDatasets: Set<string>;
+  currentlyVisibleDatasets: Set<string>;
   currentDataset: ProcessedDatasetDetails | null;
 }
 
@@ -15,25 +16,38 @@ interface ProcessedDataStoreAction {
   addDataset: (hubmapId: string) => void;
   setCurrentDataset: (dataset: ProcessedDatasetDetails) => void;
   hasBeenSeen: (hubmapId: string) => boolean;
+  removeFromVisibleDatasets: (hubmapId: string) => void;
 }
 
 const defaultState = {
   seenDatasets: new Set<string>(),
+  currentlyVisibleDatasets: new Set<string>(),
   currentDataset: null,
-  datasetOffsets: new Map<string, number>(),
-  currentDatasetOffset: 0,
 };
 
 export type ProcessedDataStore = ProcessedDataStoreState & ProcessedDataStoreAction;
 
 export const useProcessedDataStore = create<ProcessedDataStore>((set, get) => ({
   ...defaultState,
-  addDataset: (hubmapId) => set((state) => ({ seenDatasets: new Set([...state.seenDatasets, hubmapId]) })),
+  addDataset: (hubmapId) =>
+    set((state) => ({
+      seenDatasets: new Set([...state.seenDatasets, hubmapId]),
+      currentlyVisibleDatasets: new Set([...state.currentlyVisibleDatasets, hubmapId]),
+    })),
   setCurrentDataset: (dataset) => {
     const { addDataset } = get();
     addDataset(dataset.hubmap_id);
     set({ currentDataset: dataset });
   },
   hasBeenSeen: (hubmapId) => Boolean(get().seenDatasets.has(hubmapId)),
+  removeFromVisibleDatasets: (hubmapId) =>
+    set((state) => {
+      const { currentlyVisibleDatasets } = state;
+      currentlyVisibleDatasets.delete(hubmapId);
+      if (currentlyVisibleDatasets.size === 0) {
+        return { currentlyVisibleDatasets: new Set<string>(), currentDataset: null };
+      }
+      return { currentlyVisibleDatasets: new Set(state.currentlyVisibleDatasets) };
+    }),
 }));
 export default useProcessedDataStore;
