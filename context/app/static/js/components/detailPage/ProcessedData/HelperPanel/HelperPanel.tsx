@@ -11,7 +11,10 @@ import { useAppContext } from 'js/components/Contexts';
 import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
 import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
 import { animated } from '@react-spring/web';
-import { ListItemIcon, Menu, MenuItem } from '@mui/material';
+import { useEventCallback } from '@mui/material/utils';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
 import AddRounded from '@mui/icons-material/AddRounded';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
@@ -121,6 +124,24 @@ function WorkspaceButton() {
 
   const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH');
 
+  const trackCreateWorkspace = useEventCallback(() => {
+    track({
+      action: 'Start Creating Workspace',
+      label: currentDataset?.hubmap_id,
+    });
+    setOpenCreateWorkspace(true);
+    handleClose();
+  });
+
+  const trackAddToWorkspace = useEventCallback(() => {
+    track({
+      action: 'Start Adding Dataset to Existing Workspace',
+      label: currentDataset?.hubmap_id,
+    });
+    openEditWorkspaceDialog();
+    handleClose();
+  });
+
   if (!isWorkspacesUser || currentDataset?.status !== 'Published') {
     return null;
   }
@@ -145,31 +166,13 @@ function WorkspaceButton() {
           horizontal: 'right',
         }}
       >
-        <MenuItem
-          onClick={() => {
-            track({
-              action: 'Start Creating Workspace',
-              label: currentDataset?.hubmap_id,
-            });
-            setOpenCreateWorkspace(true);
-            handleClose();
-          }}
-        >
+        <MenuItem onClick={trackCreateWorkspace}>
           <ListItemIcon>
             <WorkspacesIcon color="primary" fontSize="1.5rem" />
           </ListItemIcon>
           Launch New Workspace
         </MenuItem>
-        <MenuItem
-          onClick={() => {
-            track({
-              action: 'Start Adding Dataset to Existing Workspace',
-              label: currentDataset?.hubmap_id,
-            });
-            openEditWorkspaceDialog();
-            handleClose();
-          }}
-        >
+        <MenuItem onClick={trackAddToWorkspace}>
           <ListItemIcon>
             <AddRounded />
           </ListItemIcon>
