@@ -16,6 +16,8 @@ import { StyledHeader } from '../AdvancedConfigOptions/style';
 const formId = 'launch-workspace-form';
 const infoText =
   'Advanced configuration settings are not retained from previous sessions. If you customized settings in a previous launch, you will need to reapply those changes.';
+const advancedConfigDescription =
+  'Adjusting these settings may result in longer workspace load times and could potentially affect your saved work.';
 
 function LaunchWorkspaceDialog() {
   const {
@@ -86,7 +88,7 @@ function LaunchWorkspaceDialog() {
                 <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
               </Stack>
             </SummaryPaper>
-            <AdvancedConfigOptions control={control} />
+            <AdvancedConfigOptions control={control} description={advancedConfigDescription} />
           </Stack>
         </form>
       }

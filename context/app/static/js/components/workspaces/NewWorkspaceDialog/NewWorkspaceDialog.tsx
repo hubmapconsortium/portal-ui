@@ -22,6 +22,7 @@ import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import AdvancedConfigOptions from '../AdvancedConfigOptions';
+import { StyledHeader } from '../AdvancedConfigOptions/style';
 
 const text = {
   overview: {
@@ -43,8 +44,8 @@ const text = {
     description: [
       'All workspaces are launched with Python support, with the option to add support for R. Workspaces with added R support may experience longer load times.',
     ],
+    advancedConfigDescription: 'Adjusting these settings may result in longer workspace load times.',
   },
-
   templates: {
     title: 'Select Templates',
   },
@@ -143,7 +144,7 @@ function NewWorkspaceDialog({
             <WorkspaceField
               control={control}
               name="workspace-name"
-              label="Name"
+              label="Workspace Name"
               placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
               autoFocus
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -151,10 +152,11 @@ function NewWorkspaceDialog({
               }}
             />
             <Stack gap={2} p={2} component={Paper} direction="column">
+              <StyledHeader fontSize="5rem">Environment Selection</StyledHeader>
               <Typography>{text.configure.description}</Typography>
               <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
             </Stack>
-            <AdvancedConfigOptions control={control} />
+            <AdvancedConfigOptions control={control} description={text.configure.advancedConfigDescription} />
           </Box>
         </Step>
         <TemplateSelectStep

@@ -35,8 +35,6 @@ interface ConfigSliderProps<FormType extends FieldValues> {
   conversionFactor?: number;
 }
 
-const description =
-  'Adjusting these settings may result in longer workspace load times and could potentially affect your saved work.';
 const configSliderOptions = [
   {
     id: 'time_limit_minutes',
@@ -52,7 +50,7 @@ const configSliderOptions = [
     tooltip: 'Available memory for your workspace.',
     min: MIN_MEMORY_MB,
     max: MAX_MEMORY_MB,
-    conversionFactor: 1024,
+    conversionFactor: 1000,
   },
   {
     id: 'num_cpus',
@@ -113,7 +111,10 @@ function ConfigSlider<FormType extends FieldValues>({
 
 type WorkspaceJobTypeFieldProps<FormType extends FieldValues> = Pick<UseControllerProps<FormType>, 'control'>;
 
-function AdvancedConfigOptions<FormType extends FieldValues>({ control }: WorkspaceJobTypeFieldProps<FormType>) {
+function AdvancedConfigOptions<FormType extends FieldValues>({
+  control,
+  description,
+}: WorkspaceJobTypeFieldProps<FormType> & { description: string }) {
   const { field } = useController({
     name: 'workspaceResourceOptions' as Path<FormType>,
     control,
