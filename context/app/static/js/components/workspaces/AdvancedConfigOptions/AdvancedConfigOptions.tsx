@@ -9,15 +9,23 @@ import { ControllerRenderProps, FieldValues, Path, useController, UseControllerP
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { StyledAccordion, StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
+import {
+  MAX_MEMORY_MB,
+  MAX_NUM_CPUS,
+  MAX_TIME_LIMIT_MINUTES,
+  MIN_MEMORY_MB,
+  MIN_NUM_CPUS,
+  MIN_TIME_LIMIT_MINUTES,
+} from '../constants';
 
 interface ConfigSliderProps<FormType extends FieldValues> {
+  field: ControllerRenderProps<FormType, Path<FormType>>;
   id: string;
   label: string;
   tooltip: string;
-  defaultValue: number;
   min: number;
   max: number;
-  field: ControllerRenderProps<FormType, Path<FormType>>;
+  conversionFactor?: number;
 }
 
 const description =
@@ -27,44 +35,49 @@ const configSliderOptions = [
     id: 'time_limit_minutes',
     label: 'Time Limit (hours)',
     tooltip: 'Session duration for your workspace.',
-    defaultValue: 3,
-    min: 1,
-    max: 6,
+    min: MIN_TIME_LIMIT_MINUTES,
+    max: MAX_TIME_LIMIT_MINUTES,
+    conversionFactor: 60,
   },
   {
     id: 'memory_mb',
     label: 'Memory (GB)',
     tooltip: 'Available memory for your workspace.',
-    defaultValue: 8,
-    min: 1,
-    max: 16,
+    min: MIN_MEMORY_MB,
+    max: MAX_MEMORY_MB,
+    conversionFactor: 1024,
   },
   {
     id: 'num_cpus',
     label: 'Number of CPUs',
     tooltip: 'Number of CPUs available for your workspace.',
-    defaultValue: 1,
-    min: 1,
-    max: 2,
+    min: MIN_NUM_CPUS,
+    max: MAX_NUM_CPUS,
   },
 ];
 
 function ConfigSlider<FormType extends FieldValues>({
+  field,
   id,
   label,
   tooltip,
-  defaultValue,
   min,
   max,
-  field,
+  conversionFactor = 1,
 }: ConfigSliderProps<FormType>) {
+  const convert = (value: number) => value / conversionFactor;
+  const unconvert = (value: number) => value * conversionFactor;
+
+  const convertedMin = convert(min);
+  const convertedMax = convert(max);
+
   const marks = useMemo(() => {
     const tempMarks = [];
-    for (let i = min; i <= max; i += 1) {
+    for (let i = convertedMin; i <= convertedMax; i += 1) {
       tempMarks.push({ value: i, label: i });
     }
     return tempMarks;
-  }, [min, max]);
+  }, [convertedMin, convertedMax]);
 
   return (
     <Stack marginTop={1}>
@@ -74,18 +87,17 @@ function ConfigSlider<FormType extends FieldValues>({
       </Stack>
       <Stack padding={1}>
         <Slider
-          defaultValue={defaultValue}
-          value={field.value[id] as number}
+          value={convert(field.value[id] as number)}
           onChange={(e, value) =>
             field.onChange({
               ...field.value,
-              [id]: value,
+              [id]: unconvert(value as number),
             })
           }
           valueLabelDisplay="auto"
           marks={marks}
-          min={min}
-          max={max}
+          min={convertedMin}
+          max={convertedMax}
         />
       </Stack>
     </Stack>
