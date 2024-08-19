@@ -80,9 +80,15 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorks
     setDialogIsOpen(false);
   }
 
-  async function onSubmit({ templateKeys, uuids, workspaceName, workspaceJobTypeId }: CreateTemplateNotebooksTypes) {
+  async function onSubmit({
+    templateKeys,
+    uuids,
+    workspaceName,
+    workspaceJobTypeId,
+    workspaceResourceOptions,
+  }: CreateTemplateNotebooksTypes) {
     if (isSubmitting || isSubmitSuccessful) return;
-    await createTemplateNotebooks({ templateKeys, uuids, workspaceName, workspaceJobTypeId });
+    await createTemplateNotebooks({ templateKeys, uuids, workspaceName, workspaceJobTypeId, workspaceResourceOptions });
     reset();
     handleClose();
   }

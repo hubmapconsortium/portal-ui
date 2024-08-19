@@ -133,6 +133,7 @@ interface CreateTemplateNotebooksTypes {
   uuids: string[];
   workspaceName: string;
   workspaceJobTypeId: string;
+  workspaceResourceOptions: WorkspaceResourceOptions;
 }
 
 type TemplateTags = Record<string, string>;

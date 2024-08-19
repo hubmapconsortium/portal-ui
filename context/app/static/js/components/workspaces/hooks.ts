@@ -29,19 +29,13 @@ import {
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
+import { DEFAULT_GPU_ENABLED, DEFAULT_MEMORY_MB, DEFAULT_NUM_CPUS, DEFAULT_TIME_LIMIT_MINUTES } from './constants';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
   workspacesLoading: boolean;
   mutateWorkspace?: KeyedMutator<T>;
 }
-
-const defaultResourceOptions: ResourceOptions = {
-  num_cpus: 1,
-  memory_mb: 8192,
-  time_limit_minutes: 180,
-  gpu_enabled: false,
-};
 
 /**
  * Returns a function that will mutate workspaces, jobs, and optionally a single workspace's details
@@ -255,17 +249,19 @@ function useLaunchWorkspace() {
     async ({
       workspace,
       jobTypeId,
+      resourceOptions,
       templatePath,
     }: {
       workspace: Workspace;
       jobTypeId: string;
+      resourceOptions: WorkspaceResourceOptions;
       templatePath?: string;
     }) => {
       if (runningWorkspace) {
         open();
         setWorkspace(workspace);
       } else {
-        await startAndOpenWorkspace({ workspace, jobTypeId, templatePath, resourceOptions: defaultResourceOptions });
+        await startAndOpenWorkspace({ workspace, jobTypeId, templatePath, resourceOptions });
       }
     },
     [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
@@ -280,7 +276,15 @@ export function useCreateAndLaunchWorkspace() {
   const { toastError, toastSuccess } = useSnackbarActions();
 
   const createAndLaunchWorkspace = useCallback(
-    async ({ body, templatePath }: { body: CreateWorkspaceBody; templatePath: string }) => {
+    async ({
+      body,
+      templatePath,
+      resourceOptions,
+    }: {
+      body: CreateWorkspaceBody;
+      templatePath: string;
+      resourceOptions: WorkspaceResourceOptions;
+    }) => {
       let workspace: Workspace;
 
       try {
@@ -296,6 +300,7 @@ export function useCreateAndLaunchWorkspace() {
           workspace,
           jobTypeId: body.default_job_type,
           templatePath,
+          resourceOptions,
         });
       } catch (e) {
         toastError('Workspace failed to launch.');
@@ -347,7 +352,12 @@ function useRefreshSession(workspace: MergedWorkspace) {
     await startWorkspace({
       workspaceId: workspace.id,
       jobTypeId: getDefaultJobType({ workspace }),
-      resourceOptions: defaultResourceOptions,
+      resourceOptions: {
+        time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+        num_cpus: DEFAULT_NUM_CPUS,
+        memory_mb: DEFAULT_MEMORY_MB,
+        gpu_enabled: DEFAULT_GPU_ENABLED,
+      },
     });
     await mutate();
     toastSuccess('Session time for workspace successfully renewed');

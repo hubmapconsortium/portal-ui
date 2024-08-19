@@ -85,12 +85,18 @@ function NewWorkspaceDialog({
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
   const submit = useCallback(
-    ({ 'workspace-name': workspaceName, templates: templateKeys, workspaceJobTypeId }: CreateWorkspaceFormTypes) => {
+    ({
+      'workspace-name': workspaceName,
+      templates: templateKeys,
+      workspaceJobTypeId,
+      workspaceResourceOptions,
+    }: CreateWorkspaceFormTypes) => {
       onSubmit({
         workspaceName,
         templateKeys,
         uuids: [...datasetUUIDs],
         workspaceJobTypeId,
+        workspaceResourceOptions,
       });
     },
     [datasetUUIDs, onSubmit],
