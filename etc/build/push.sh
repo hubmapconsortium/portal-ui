@@ -9,30 +9,48 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout main
 git pull
 
-get_minor_version() {
-  REF_MINOR=$1
-  REF_DATE=$2
-  REF_EPOCH_DAY=`expr $(date -j -f "%d %b %Y" "$REF_DATE" +%s) / 86400`
-  NOW_EPOCH_DAY=`expr $(date +%s) / 86400`
-  DAYS_PAST_REF=`expr $NOW_EPOCH_DAY - $REF_EPOCH_DAY`
-  echo v0.`expr $REF_MINOR + $DAYS_PAST_REF / 14`
-  # Integer division truncates toward 0 for both positive and negative,
-  # so this doesn't work if the reference date is in the future.
-}
+MAJOR=$1
 
-EXPECTED_MINOR=`get_minor_version 9 '01 JAN 2021'`
+if [[ -z "$MAJOR" ]]; then
+  get_last_minor_version() {
+    TAGS=`git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags | tac`
+    # Iterate over tags to find date of last one with patch of .0
+    for TAG in $TAGS; do
+      if [[ $TAG == refs/tags/v* ]]; then
+        MINOR=`echo $TAG | perl -pne 's/.*v0\.(\d+)\.\d+/\1/'`
+        if [[ $MINOR -eq $1 ]]; then
+          REF_DATE=`echo $TAG | perl -pne 's/.*v0\.\d+\.\d+ //'`
+          break
+        fi
+      fi
+    done
 
-# The docs say that a git tag will be created by default.
-# That would be useful, but it doesn't see to be happening for me.
-# Add additional flag to override.
-# https://docs.npmjs.com/cli/v6/commands/npm-version
-VERSION=`cd context && npm version patch --no-git-tag-version`
+    REF_EPOCH_DAY=`expr $(date -j -f "%d %b %Y" "$REF_DATE" +%s) / 86400`
+    NOW_EPOCH_DAY=`expr $(date +%s) / 86400`
+    DAYS_PAST_REF=`expr $NOW_EPOCH_DAY - $REF_EPOCH_DAY`
 
-if [[ $VERSION != $EXPECTED_MINOR* ]]; then
-  echo "End of 2-week cycle. Setting minor version to: $EXPECTED_MINOR"
-  VERSION=`cd context && npm version $EXPECTED_MINOR.0 --no-git-tag-version`
+    echo "Days since last minor version: $DAYS_PAST_REF"
+    echo v0.`expr $REF_MINOR + $DAYS_PAST_REF / 14`
+    # Integer division truncates toward 0 for both positive and negative,
+    # so this doesn't work if the reference date is in the future.
+  }
+
+  DAYS_PAST_REF=`get_last_minor_version`
+
+  if [[ $DAYS_PAST_REF -lt 14 ]]; then
+    VERSION=`cd context && npm version patch --no-git-tag-version`
+  else
+    echo "End of 2-week cycle."
+    VERSION=`cd context && npm version minor --no-git-tag-version`
+  fi
+else
+  # major version bump, don't need to check for 2-week cycle
+  VERSION=`cd context && npm version major`
 fi
+
 echo "Version: $VERSION"
+
+die
 
 ./grab-dependencies.sh
 
