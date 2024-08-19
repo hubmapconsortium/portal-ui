@@ -1,11 +1,11 @@
 import { useMemo } from 'react';
 import { ProcessedDatasetInfo, useProcessedDatasets } from 'js/pages/Dataset/hooks';
 
-function createdByCentralProcess(dataset: ProcessedDatasetInfo) {
+export function createdByCentralProcess(dataset: Pick<ProcessedDatasetInfo, 'creation_action'>) {
   return dataset.creation_action === 'Central Process';
 }
 
-function datasetIsPublished(dataset: ProcessedDatasetInfo) {
+export function datasetIsPublished(dataset: Pick<ProcessedDatasetInfo, 'status'>) {
   return dataset.status === 'Published';
 }
 
