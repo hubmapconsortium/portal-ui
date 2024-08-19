@@ -6,7 +6,8 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 
-// Workaround for publication pages
+// Workaround for publication pages, which only have one BulkDataTransfer section and doesn't need tabs.
+// For the dataset page's BulkDataTransfer section, see BulkDataTransferSection.tsx
 function BulkDataTransfer(props: { uuid: string; label: string }) {
   return (
     <CollapsibleDetailPageSection
