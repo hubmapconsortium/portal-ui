@@ -11,6 +11,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import { useLaunchWorkspaceDialog, LaunchWorkspaceFormTypes } from './hooks';
 import AdvancedConfigOptions from '../AdvancedConfigOptions';
+import { StyledHeader } from '../AdvancedConfigOptions/style';
 
 const formId = 'launch-workspace-form';
 const infoText =
@@ -31,6 +32,22 @@ function LaunchWorkspaceDialog() {
 
   const workspaceName = workspace?.name;
   const { toastError } = useSnackbarActions();
+
+  const runningWorkspaceAlert = runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace && (
+    <Alert
+      severity="warning"
+      sx={{
+        '.MuiAlert-message': {
+          flexGrow: 1,
+        },
+        alignItems: 'center',
+      }}
+    >
+      {runningWorkspaceName} is currently running. You can only run one workspace at a time. To launch this workspace,
+      jobs in the workspace {runningWorkspaceName} will be stopped. Make sure to save all progress before launching this
+      workspace.
+    </Alert>
+  );
 
   const onSubmit = useCallback(
     ({ workspaceJobTypeId, workspaceResourceOptions }: LaunchWorkspaceFormTypes) => {
@@ -53,24 +70,11 @@ function LaunchWorkspaceDialog() {
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
           <Stack direction="column" spacing={1}>
+            {runningWorkspaceAlert}
             <Alert severity="info">{infoText}</Alert>
             <SummaryPaper>
-              <Stack direction="column" gap={4}>
-                {runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace && (
-                  <Alert
-                    severity="warning"
-                    sx={{
-                      '.MuiAlert-message': {
-                        flexGrow: 1,
-                      },
-                      alignItems: 'center',
-                    }}
-                  >
-                    {runningWorkspaceName} is currently running. You can only run one workspace at a time. To launch
-                    this workspace, jobs in the workspace {runningWorkspaceName} will be stopped. Make sure to save all
-                    progress before launching this workspace.
-                  </Alert>
-                )}
+              <Stack direction="column" gap={2}>
+                <StyledHeader fontSize="5rem">Environment Selection</StyledHeader>
                 <Typography>
                   All workspaces are launched with Python support, with the option to add support for R . Workspaces
                   with added R support may experience longer load times.

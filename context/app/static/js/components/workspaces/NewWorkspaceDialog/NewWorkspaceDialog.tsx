@@ -14,7 +14,7 @@ import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 
-import { Typography } from '@mui/material';
+import { Paper, Typography } from '@mui/material';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
@@ -150,14 +150,10 @@ function NewWorkspaceDialog({
                 e.stopPropagation();
               }}
             />
-            <StepDescription
-              blocks={[
-                <Stack key="workspaceJobTypeId" spacing={1}>
-                  <Typography>{text.configure.description}</Typography>
-                  <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
-                </Stack>,
-              ]}
-            />
+            <Stack gap={2} p={2} component={Paper} direction="column">
+              <Typography>{text.configure.description}</Typography>
+              <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+            </Stack>
             <AdvancedConfigOptions control={control} />
           </Box>
         </Step>
