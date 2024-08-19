@@ -1,3 +1,10 @@
+## v0.103.1 - 2024-08-19
+
+- Fix bug preventing visualization notebooks from being downloaded on dataset detail pages.
+- Fix bug that prevented protected dataset ids from being displayed in "Launch New Workspace" dialog.
+- Change banner above "Contributors" and "Attribution" sections from an alert to a styled paper component.
+
+
 ## v0.103.0 - 2024-08-15
 
 - Clear workspace dropdown after adding a dataset to a workspace.
