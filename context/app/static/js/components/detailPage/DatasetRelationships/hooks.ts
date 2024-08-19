@@ -43,7 +43,7 @@ async function fetchPipelineInfo({ url, datasets, groupsToken }: PipelineInfoReq
   const result = await fetchSoftAssay({ url, dataset: datasets[0], groupsToken });
 
   // Handle image pyramids separately since their pipeline-shorthand is blank
-  if (result.assaytype === 'image_pyramid') {
+  if (result['vitessce-hints'].includes('pyramid') && result['vitessce-hints'].includes('is_image')) {
     return 'Image Pyramid Generation';
   }
 
