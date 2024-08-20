@@ -32,7 +32,7 @@ function StatusIcon({ status: irregularCaseStatus, noColor, ...props }: StatusIc
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 
-  return <ColoredStatusIcon $iconStatus={color} $noColor={noColor} data-testid="status-svg-icon" {...props} />;
+  return <ColoredStatusIcon status={color} noColor={noColor} data-testid="status-svg-icon" {...props} />;
 }
 
 export default StatusIcon;

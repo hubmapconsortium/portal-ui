@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -26,6 +26,7 @@ interface CreateWorkspaceFormTypes extends FormWithTemplates {
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
   defaultTemplate?: string;
+  initialProtectedDatasets?: string;
 }
 
 const schema = z
@@ -33,19 +34,23 @@ const schema = z
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
-function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorkspaceTypes) {
+function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtectedDatasets }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
+
+  const checkedWorkspaceName = defaultName ?? '';
+  const checkedProtectedDatasets = initialProtectedDatasets ?? '';
 
   const {
     handleSubmit,
     control,
     reset,
     formState: { errors, isSubmitting, isSubmitSuccessful },
+    trigger,
   } = useForm({
     defaultValues: {
-      'workspace-name': defaultName ?? '',
-      'protected-datasets': '',
+      'workspace-name': checkedWorkspaceName,
+      'protected-datasets': checkedProtectedDatasets,
       templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
     },
@@ -64,6 +69,25 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate }: UseCreateWorks
     reset();
     handleClose();
   }
+
+  useEffect(() => {
+    if (initialProtectedDatasets && initialProtectedDatasets !== '') {
+      reset({
+        'workspace-name': checkedWorkspaceName,
+        'protected-datasets': checkedProtectedDatasets,
+        templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
+        workspaceJobTypeId: DEFAULT_JOB_TYPE,
+      });
+    }
+  }, [initialProtectedDatasets, reset, checkedWorkspaceName, checkedProtectedDatasets, defaultTemplate]);
+
+  useEffect(() => {
+    if (dialogIsOpen) {
+      trigger('workspace-name').catch((e) => {
+        console.error(e);
+      });
+    }
+  }, [dialogIsOpen, trigger]);
 
   return {
     dialogIsOpen,
