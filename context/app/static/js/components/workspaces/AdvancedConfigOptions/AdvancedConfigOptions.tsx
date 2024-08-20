@@ -53,6 +53,7 @@ function ConfigSlider<FormType extends FieldValues>({
 
   const marks = useMemo(() => {
     const tempMarks = [];
+    // Show even numbers if the interval is even, otherwise show odd numbers
     const start = markInterval % 2 === 0 ? convertedMin + 1 : convertedMin;
 
     for (let i = start; i <= convertedMax; i += markInterval) {
