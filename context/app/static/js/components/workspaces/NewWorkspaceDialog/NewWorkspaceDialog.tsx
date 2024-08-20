@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
+import { Alert } from 'js/shared-styles/alerts/Alert';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
@@ -115,9 +116,11 @@ function NewWorkspaceDialog({
           <Stack spacing={1}>
             {children}
             <StepDescription blocks={text.datasets.description} />
-            {datasetUUIDs.size > 0 && (
-              <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} removeDatasets={removeDatasets} />
-            )}
+            <WorkspaceDatasetsTable
+              datasetsUUIDs={[...datasetUUIDs]}
+              removeDatasets={removeDatasets}
+              emptyAlerts={<Alert severity="info">No datasets available.</Alert>}
+            />
           </Stack>
         </Step>
         <Step title={text.configure.title} isRequired index={1}>
