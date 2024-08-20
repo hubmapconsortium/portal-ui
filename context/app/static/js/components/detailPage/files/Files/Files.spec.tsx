@@ -8,6 +8,7 @@ import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import Files from './Files';
 import { detailContext, flaskDataContext, testFiles, uuid as testUuid } from '../file-fixtures.spec';
+import { FilesContextProvider } from '../FilesContext';
 
 const globusHandler: RequestHandler = http.get<PathParams, DefaultBodyType, { url: string }>(
   `/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${testUuid}`,
@@ -28,7 +29,9 @@ function TestFiles({ files = testFiles }) {
   return (
     <FlaskDataContext.Provider value={flaskDataContext}>
       <DetailContext.Provider value={detailContext}>
-        <Files files={files} />
+        <FilesContextProvider>
+          <Files files={files} />
+        </FilesContextProvider>
       </DetailContext.Provider>
     </FlaskDataContext.Provider>
   );

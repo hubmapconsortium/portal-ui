@@ -1,5 +1,8 @@
 /** @type {import('jest').Config} */
 const config = {
+  globals: {
+    CDN_URL: 'https://cdn_url.example.com/',
+  },
   restoreMocks: true,
   testPathIgnorePatterns: ['jest.config.js', '/cypress/'],
   setupFilesAfterEnv: ['<rootDir>/test-utils/setupTests.js'],

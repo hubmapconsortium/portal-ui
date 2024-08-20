@@ -5,8 +5,6 @@ import PublicationCollections from 'js/components/publications/PublicationCollec
 import { buildCollectionsWithDatasetQuery } from 'js/hooks/useDatasetsCollections';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 
 function PublicationsDataSection({ datasetUUIDs, uuid, associatedCollectionUUID }) {
   const query = associatedCollectionUUID
@@ -15,17 +13,12 @@ function PublicationsDataSection({ datasetUUIDs, uuid, associatedCollectionUUID 
 
   const { searchHits: collectionsData } = useSearchHits(query);
 
-  return (
-    <DetailPageSection id="data">
-      {associatedCollectionUUID && (
-        <SectionHeader iconTooltipText="HuBMAP data created or used by the publication.">Data</SectionHeader>
-      )}
-      {!associatedCollectionUUID && <PublicationRelatedEntities uuid={uuid} />}
-      {collectionsData.length > 0 && (
-        <PublicationCollections collectionsData={collectionsData} isCollectionPublication={associatedCollectionUUID} />
-      )}
-    </DetailPageSection>
-  );
+  if (associatedCollectionUUID) {
+    return (
+      <PublicationCollections collectionsData={collectionsData} isCollectionPublication={associatedCollectionUUID} />
+    );
+  }
+  return <PublicationRelatedEntities uuid={uuid} />;
 }
 
 export default PublicationsDataSection;

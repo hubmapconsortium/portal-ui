@@ -2,24 +2,19 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { InternalLink } from 'js/shared-styles/Links';
-import Files from 'js/components/detailPage/files/Files';
 import DataProducts from 'js/components/detailPage/files/DataProducts';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
-import Protocol from 'js/components/detailPage/Protocol';
-import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import CollectionsSection from 'js/components/detailPage/CollectionsSection';
-import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 
-import { combineMetadata } from 'js/pages/utils/entity-utils';
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
@@ -27,9 +22,14 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
-import { Dataset, Entity, isDataset, isSupport, Sample, Support } from 'js/components/types';
+import { Dataset, Entity, isDataset } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
-import useDatasetLabel, { useProcessedDatasetsSections } from './hooks';
+import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
+import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
+import SupportAlert from 'js/components/detailPage/SupportAlert';
+import OrganIcon from 'js/shared-styles/icons/OrganIcon';
+import Stack from '@mui/material/Stack';
+import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
 interface SummaryDataChildrenProps {
   mapped_data_types: string[];
@@ -43,7 +43,6 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChi
     <>
       <SummaryItem>
         <InternalLink
-          variant="h6"
           href="https://docs.hubmapconsortium.org/assays"
           underline="none"
           onClick={() => trackEntityPageEvent({ action: 'Assay Documentation Navigation', label: dataTypes })}
@@ -52,26 +51,14 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChi
         </InternalLink>
       </SummaryItem>
       <SummaryItem showDivider={false}>
-        <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
-          {mapped_organ}
+        <InternalLink href={`/organ/${mapped_organ}`} underline="none">
+          <Stack direction="row" spacing={0.25} alignItems="center">
+            <OrganIcon organName={mapped_organ} />
+            {mapped_organ}
+          </Stack>
         </InternalLink>
       </SummaryItem>
     </>
-  );
-}
-
-function OldVersionAlert({ uuid, isLatest }: { uuid: string; isLatest: boolean }) {
-  if (isLatest) {
-    return null;
-  }
-  return (
-    <DetailPageAlert severity="warning">
-      <span>
-        {/* <span> to override "display: flex" which splits this on to multiple lines. */}
-        You are viewing an older version of this page. Navigate to the{' '}
-        <InternalLink href={`/browse/latest/dataset/${uuid}`}>latest version</InternalLink>.
-      </span>
-    </DetailPageAlert>
   );
 }
 
@@ -89,98 +76,12 @@ function ExternalDatasetAlert({ isExternal }: { isExternal: boolean }) {
 
 interface EntityDetailProps<T extends Entity> {
   assayMetadata: T;
-  vitData: object | object[];
-  hasNotebook?: boolean;
-  visLiftedUUID: string;
 }
 
-function makeMetadataSectionProps(metadata: Record<string, string>, assay_modality: 'single' | 'multiple') {
-  return assay_modality === 'multiple' ? { assay_modality } : { metadata, assay_modality };
-}
-
-function SupportDetail({ assayMetadata }: EntityDetailProps<Support>) {
-  const {
-    metadata,
-    files,
-    donor,
-    source_samples,
-    uuid,
-    mapped_data_types,
-    origin_samples,
-    hubmap_id,
-    entity_type,
-    status,
-    mapped_data_access_level,
-    mapped_external_group_name,
-    contributors,
-    contacts,
-    is_component,
-    assay_modality,
-  } = assayMetadata;
-
-  const isLatest = !('next_revision_uuid' in assayMetadata);
-
-  const combinedMetadata = combineMetadata(
-    donor,
-    origin_samples[0],
-    source_samples as Sample[],
-    metadata as Record<string, unknown>,
-  );
-
-  const shouldDisplaySection = {
-    summary: true,
-    provenance: false,
-    metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
-    files: Boolean(files?.length),
-    'bulk-data-transfer': true,
-    contributors: Boolean(contributors && (contributors as unknown[]).length),
-    attribution: true,
-  };
-
-  const datasetLabel = useDatasetLabel();
-
-  return (
-    <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
-      <OldVersionAlert uuid={uuid} isLatest={isLatest} />
-      <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
-      <SupportAlert uuid={uuid} isSupport={entity_type === 'Support'} />
-      {Boolean(is_component) && <ComponentAlert />}
-      <DetailLayout sections={shouldDisplaySection}>
-        <Summary
-          entityTypeDisplay={datasetLabel}
-          status={status}
-          mapped_data_access_level={mapped_data_access_level}
-          bottomFold={
-            <>
-              <MultiAssayRelationship assay_modality={assay_modality} />
-              <DataProducts files={files} />
-            </>
-          }
-        >
-          <SummaryDataChildren mapped_organ={origin_samples[0].mapped_organ} mapped_data_types={mapped_data_types} />
-        </Summary>
-        {shouldDisplaySection.metadata && (
-          <MetadataSection {...makeMetadataSectionProps(combinedMetadata, assay_modality)} />
-        )}
-        {shouldDisplaySection.files && <Files files={files} />}
-        {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
-        {shouldDisplaySection.contributors && (
-          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
-        )}
-
-        <Attribution />
-      </DetailLayout>
-    </DetailContextProvider>
-  );
-}
-
-function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProps<Dataset>) {
+function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
     protocol_url,
-    metadata,
     files,
-    donor,
-    source_samples,
     uuid,
     mapped_data_types,
     origin_samples,
@@ -196,86 +97,63 @@ function DatasetDetail({ assayMetadata, vitData, hasNotebook }: EntityDetailProp
     processing,
   } = assayMetadata;
 
-  const isLatest = !('next_revision_uuid' in assayMetadata);
+  useRedirectAlert();
 
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;
 
   const combinedStatus = getCombinedDatasetStatus({ sub_status, status });
 
-  const combinedMetadata = combineMetadata(
-    donor,
-    origin_sample,
-    source_samples as Sample[],
-    metadata as Record<string, unknown>,
-  );
-
-  const collectionsData = useDatasetsCollections([uuid]);
-
   const { sections, isLoading } = useProcessedDatasetsSections();
+  const { searchHits: processedDatasets } = useProcessedDatasets();
+
+  // Top level request for collections data to determine if there are any collections for any of the datasets
+  const collectionsData = useDatasetsCollections([uuid, ...processedDatasets.map((ds) => ds._id)]);
 
   const shouldDisplaySection = {
     summary: true,
+    metadata: true,
     'processed-data': sections,
-    visualization: Boolean(vitData),
+    'bulk-data-transfer': true,
     provenance: true,
     protocols: Boolean(protocol_url),
-    metadata: Boolean(Object.keys(combinedMetadata).length) || assay_modality === 'multiple',
-    files: Boolean(files?.length),
-    'bulk-data-transfer': true,
     collections: Boolean(collectionsData.length),
-    contributors: Boolean(contributors && (contributors as unknown[]).length),
     attribution: true,
   };
 
-  const datasetLabel = useDatasetLabel();
-
-  const metadataSectionProps =
-    assay_modality === 'multiple' ? { assay_modality } : { metadata: combinedMetadata, assay_modality };
-
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
-      <OldVersionAlert uuid={uuid} isLatest={isLatest} />
-      <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
-      {Boolean(is_component) && <ComponentAlert />}
-      <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-        <Summary
-          entityTypeDisplay={datasetLabel}
-          status={combinedStatus}
-          mapped_data_access_level={mapped_data_access_level}
-          mapped_external_group_name={mapped_external_group_name}
-          bottomFold={
-            <>
-              <MultiAssayRelationship assay_modality={assay_modality} />
-              <DataProducts files={files} />
-              <Box height={400} width="100%" component={Paper} p={2}>
-                <DatasetRelationships uuid={uuid} processing={processing} />
-              </Box>
-            </>
-          }
-        >
-          <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
-        </Summary>
-        {shouldDisplaySection.visualization && (
-          <VisualizationWrapper
-            vitData={vitData}
-            uuid={uuid}
-            hubmap_id={hubmap_id}
+      <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
+        <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
+        {Boolean(is_component) && <ComponentAlert />}
+        <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
+          <Summary
+            entityTypeDisplay="Dataset"
+            status={combinedStatus}
             mapped_data_access_level={mapped_data_access_level}
-            hasNotebook={hasNotebook}
-          />
-        )}
-        {shouldDisplaySection.provenance && <ProvSection />}
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
-        {shouldDisplaySection.metadata && <MetadataSection {...metadataSectionProps} />}
-        {shouldDisplaySection.files && <Files files={files} />}
-        {shouldDisplaySection['bulk-data-transfer'] && <BulkDataTransfer />}
-        {shouldDisplaySection.collections && <CollectionsSection collectionsData={collectionsData} />}
-        {shouldDisplaySection.contributors && (
-          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" showInfoAlert />
-        )}
-        <Attribution />
-      </DetailLayout>
+            mapped_external_group_name={mapped_external_group_name}
+            bottomFold={
+              <>
+                <MultiAssayRelationship assay_modality={assay_modality} />
+                <DataProducts files={files} />
+                <Box height={400} width="100%" component={Paper} p={2}>
+                  <DatasetRelationships uuid={uuid} processing={processing} />
+                </Box>
+              </>
+            }
+          >
+            <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
+          </Summary>
+          <MetadataSection shouldDisplay={shouldDisplaySection.metadata} />
+          <ProcessedDataSection shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
+          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
+          <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
+          <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
+          <Attribution>
+            <ContributorsTable contributors={contributors} contacts={contacts} />
+          </Attribution>
+        </DetailLayout>
+      </SelectedVersionStoreProvider>
     </DetailContextProvider>
   );
 }
@@ -288,11 +166,8 @@ function DetailPageWrapper({ assayMetadata, ...props }: EntityDetailProps<Entity
   if (isDataset(assayMetadata)) {
     return <DatasetDetail assayMetadata={assayMetadata} {...props} />;
   }
-  if (isSupport(assayMetadata)) {
-    return <SupportDetail assayMetadata={assayMetadata} {...props} />;
-  }
-  console.error('Unsupported entity type');
-  return null;
+  // Should never be reached due to server-side redirect to primary dataset, but just in case...
+  return <SupportAlert uuid={assayMetadata.uuid} isSupport />;
 }
 
 export default DetailPageWrapper;

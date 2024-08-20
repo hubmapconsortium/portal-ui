@@ -1,6 +1,6 @@
 type Markdown = string;
 
-interface Azimuth {
+export interface AzimuthConfig {
   annotations: {
     file: string;
     name: string;
@@ -31,7 +31,7 @@ export interface OrganFile {
   search: string[];
   uberon: string;
   uberon_short: string;
-  azimuth?: Azimuth;
+  azimuth?: AzimuthConfig;
 }
 
 export interface OrganFileWithDescendants extends OrganFile {

@@ -7,8 +7,6 @@ import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
 import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
-import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
-import Section from 'js/shared-styles/sections/Section';
 import { OrganFile } from 'js/components/organ/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import { mustHaveOrganClause } from './queries';
@@ -30,11 +28,11 @@ interface Aggregations {
   };
 }
 
-const summaryId = 'Summary';
-const hraId = 'Human Reference Atlas';
-const referenceId = 'Reference-Based Analysis';
-const assaysId = 'Assays';
-const samplesId = 'Samples';
+const summaryId = 'summary';
+const hraId = 'human-reference-atlas';
+const referenceId = 'reference-based-analysis';
+const assaysId = 'assays';
+const samplesId = 'samples';
 
 function Organ({ organ }: OrganProps) {
   const searchItems = useMemo(
@@ -112,33 +110,14 @@ function Organ({ organ }: OrganProps) {
         {organ.name}
       </Typography>
       {shouldDisplaySection[summaryId] && (
-        <Section id={summaryId}>
-          <Description uberonIri={organ.uberon} uberonShort={organ.uberon_short} asctbId={organ.asctb}>
-            {organ.description}
-          </Description>
-        </Section>
+        <Description id={summaryId} uberonIri={organ.uberon} uberonShort={organ.uberon_short} asctbId={organ.asctb}>
+          {organ.description}
+        </Description>
       )}
-      {shouldDisplaySection[hraId] && (
-        <Section id={hraId}>
-          <HumanReferenceAtlas uberonIri={organ.uberon} />
-        </Section>
-      )}
-      {shouldDisplaySection[referenceId] && (
-        <Section id={referenceId}>
-          <Azimuth config={organ.azimuth} />
-        </Section>
-      )}
-      {shouldDisplaySection[assaysId] && (
-        <Section id={assaysId}>
-          <Assays organTerms={organ.search} bucketData={assayBuckets} />
-          <DatasetsBarChart search={organ.search} />
-        </Section>
-      )}
-      {shouldDisplaySection[samplesId] && (
-        <Section id={samplesId}>
-          <Samples organTerms={organ.search} />
-        </Section>
-      )}
+      {shouldDisplaySection[hraId] && <HumanReferenceAtlas id={hraId} uberonIri={organ.uberon} />}
+      {shouldDisplaySection[referenceId] && <Azimuth id={referenceId} config={organ.azimuth!} />}
+      {shouldDisplaySection[assaysId] && <Assays id={assaysId} organTerms={organ.search} bucketData={assayBuckets} />}
+      {shouldDisplaySection[samplesId] && <Samples id={samplesId} organTerms={organ.search} />}
     </DetailLayout>
   );
 }

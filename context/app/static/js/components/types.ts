@@ -16,13 +16,18 @@ export type ESEntityType =
   | CollectionEntityType
   | PublicationEntityType;
 
-export type DagProvenanceType =
-  | {
-      origin: string;
-    }
-  | {
-      name: string;
-    };
+export interface CWLPipelineLink {
+  hash: string;
+  name: string;
+  origin: string;
+}
+
+export interface IngestPipelineLink {
+  hash: string;
+  origin: string;
+}
+
+export type DagProvenanceType = CWLPipelineLink | IngestPipelineLink;
 
 export interface Entity {
   entity_type: ESEntityType;
@@ -47,8 +52,10 @@ export interface Entity {
   created_by_user_displayname: string;
   created_by_user_email: string;
   mapped_status: string;
+  mapped_data_types?: string[];
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   status: string;
+  mapped_metadata: Record<string, unknown>;
   [key: string]: unknown;
 }
 
@@ -61,6 +68,7 @@ export interface Donor extends Entity {
     age_unit: string;
     age_value: string;
     race: string[];
+    body_mass_index_value: string;
   }>;
 }
 
@@ -97,7 +105,10 @@ export interface Dataset extends Entity {
   registered_doi: string;
   doi_url?: string;
   published_timestamp: number;
-  mapped_external_group_name?: string; // Does this exist?
+  mapped_external_group_name?: string;
+  title: string;
+  dataset_type: string;
+  visualization: boolean;
 }
 
 export interface Collection extends Entity {

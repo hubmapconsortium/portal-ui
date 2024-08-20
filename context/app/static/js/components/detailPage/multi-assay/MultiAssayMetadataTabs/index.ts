@@ -1,3 +1,3 @@
-import MultiAssayMetadataTabs from './MultiAssayMetadataTabs';
+import MetadataTabs from './MultiAssayMetadataTabs';
 
-export default MultiAssayMetadataTabs;
+export default MetadataTabs;

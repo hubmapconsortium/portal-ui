@@ -42,7 +42,7 @@ export function processDagList(acc: PipelineInfo, dag: DagProvenanceType) {
     if (nameDenylist.includes(dag.name)) {
       acc.name = getGithubRepoName(acc.origin);
     } else {
-      acc.name = dag.name;
+      acc.name = dag.name!;
     }
   }
   return acc;

@@ -9,6 +9,7 @@ export interface FlaskDataContextType {
   [key: string]: unknown;
   title: string; // preview page title
   vis_lifted_uuid?: string;
+  redirected?: boolean;
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');

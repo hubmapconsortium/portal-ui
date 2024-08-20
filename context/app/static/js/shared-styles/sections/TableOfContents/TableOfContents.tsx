@@ -11,11 +11,11 @@ import Box from '@mui/material/Box';
 
 import { animated } from '@react-spring/web';
 
-import useEntityStore from 'js/stores/useEntityStore';
-import { StickyNav, TableTitle, StyledItemLink } from './style';
+import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
+import { StickyNav, TableTitle, StyledItemLink, StyledIconContainer } from './style';
 import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
 import { getItemsClient } from './utils';
-import { useThrottledOnScroll, useFindActiveIndex } from './hooks';
+import { useThrottledOnScroll, useFindActiveIndex, useAnimatedSidebarPosition } from './hooks';
 
 const AnimatedNav = animated(StickyNav);
 
@@ -26,7 +26,7 @@ interface LinkProps {
 }
 
 function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkProps & { item: TableOfContentsItem }) {
-  const { icon: Icon } = item;
+  const { icon: Icon, externalIcon } = item;
 
   return (
     <StyledItemLink
@@ -40,6 +40,11 @@ function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkP
       $isNested={isNested}
     >
       {Icon && <Icon sx={{ fontSize: '1rem' }} color="primary" />}
+      {externalIcon && (
+        <StyledIconContainer>
+          <ExternalImageIcon icon={externalIcon} />
+        </StyledIconContainer>
+      )}
       {item.text}
     </StyledItemLink>
   );
@@ -145,21 +150,19 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
     }
   }, []);
 
-  const { springs } = useEntityStore();
+  const position = useAnimatedSidebarPosition();
 
   if (!items || items.length === 0) {
     return null;
   }
 
-  const [springValues] = springs;
-
-  if (springValues[1] === undefined) {
+  if (!position) {
     return null;
   }
 
   return (
     <Box data-testid="table-of-contents" height="100%" mr={1}>
-      <AnimatedNav style={springValues[1]}>
+      <AnimatedNav style={position}>
         <TableTitle variant="h5">Contents</TableTitle>
         {isLoading ? (
           <>

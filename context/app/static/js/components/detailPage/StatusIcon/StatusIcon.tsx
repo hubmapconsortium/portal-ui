@@ -23,15 +23,16 @@ function getColor(status: string) {
   return 'error';
 }
 
-interface StatusIconProps {
+interface StatusIconProps extends SvgIconProps {
   status: string;
+  noColor?: boolean;
 }
 
-function StatusIcon({ status: irregularCaseStatus, ...svgIconProps }: StatusIconProps & Partial<SvgIconProps>) {
+function StatusIcon({ status: irregularCaseStatus, noColor, ...props }: StatusIconProps) {
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 
-  return <ColoredStatusIcon $iconStatus={color} data-testid="status-svg-icon" {...svgIconProps} />;
+  return <ColoredStatusIcon $iconStatus={color} $noColor={noColor} data-testid="status-svg-icon" {...props} />;
 }
 
 export default StatusIcon;

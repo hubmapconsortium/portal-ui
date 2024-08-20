@@ -1,13 +1,12 @@
 import React from 'react';
-import PropTypes from 'prop-types';
-import Divider from '@mui/material/Divider';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import useProtocolData, { useFormattedProtocolUrls } from 'js/hooks/useProtocolData';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import Divider from '@mui/material/Divider';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
@@ -72,38 +71,29 @@ function ProtocolLink({ url, index }: ProtocolLinkProps) {
 
 interface ProtocolProps {
   protocol_url: string;
+  showHeader?: boolean;
 }
 
-function Protocol({ protocol_url }: ProtocolProps) {
-  const {
-    entity: { entity_type },
-  } = useFlaskDataContext();
-
+function Protocol({ protocol_url, showHeader }: ProtocolProps) {
   const protocolUrls = useFormattedProtocolUrls(protocol_url, 1);
 
-  return (
-    <DetailPageSection id="protocols">
-      <SectionHeader
-        iconTooltipText={`Protocols uploaded to protocols.io for the given ${entity_type?.toLowerCase()}.`}
-      >
-        Protocols
-      </SectionHeader>
-      <Divider />
-      <StyledPaper>
-        {protocolUrls.map((url, index) => (
-          <ProtocolLink key={url} url={url} index={index} />
-        ))}
-      </StyledPaper>
-    </DetailPageSection>
+  const contents = (
+    <>
+      {protocolUrls.map((url, index) => (
+        <ProtocolLink key={url} url={url} index={index} />
+      ))}
+    </>
   );
+
+  if (showHeader) {
+    return (
+      <CollapsibleDetailPageSection id="protocols" title="Protocols" icon={sectionIconMap.analysis}>
+        <Divider />
+        <StyledPaper>{contents}</StyledPaper>
+      </CollapsibleDetailPageSection>
+    );
+  }
+  return contents;
 }
-
-Protocol.propTypes = {
-  protocol_url: PropTypes.string,
-};
-
-Protocol.defaultProps = {
-  protocol_url: '',
-};
 
 export default React.memo(Protocol);

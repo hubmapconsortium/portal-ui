@@ -8,6 +8,8 @@ import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
 import StatusIcon from '../StatusIcon';
 import { usePipelineInfo } from './hooks';
+import { useProcessedDatasetDetails } from '../ProcessedData/ProcessedDataset/hooks';
+import { makeNodeHref } from './utils';
 
 interface CommonNodeInfo extends Record<string, unknown> {
   name: string;
@@ -21,6 +23,7 @@ interface PipelineNodeInfo extends CommonNodeInfo {
 
 interface DatasetNodeInfo extends CommonNodeInfo {
   datasetType?: string;
+  uuid: string;
   status: string;
 }
 
@@ -122,13 +125,15 @@ function PipelineNode({
 type ProcessedDatasetNodeProps = Node<DatasetNodeInfo, 'processedDataset'>;
 
 function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
+  const { datasetDetails, isLoading } = useProcessedDatasetDetails(data.uuid);
   return (
     <NodeTemplate
       rounded
       target
-      href={`#${data.name}-section`}
+      href={makeNodeHref(datasetDetails)}
       icon={nodeIcons.processedDataset}
       bgColor={nodeColors.processedDataset}
+      isLoading={isLoading}
       {...data}
     >
       {data.datasetType}
@@ -139,13 +144,15 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
 type ComponentDatasetNodeProps = Node<DatasetNodeInfo, 'componentDataset'>;
 
 function ComponentDatasetNode({ data }: NodeProps<ComponentDatasetNodeProps>) {
+  const { datasetDetails, isLoading } = useProcessedDatasetDetails(data.uuid);
   return (
     <NodeTemplate
       rounded
       target
       icon={nodeIcons.componentDataset}
-      href={`#${data.name}-section`}
+      href={makeNodeHref(datasetDetails)}
       bgColor={nodeColors.componentDataset}
+      isLoading={isLoading}
       {...data}
     >
       {data.datasetType}

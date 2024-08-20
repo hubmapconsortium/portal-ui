@@ -9,25 +9,19 @@ interface SearchNoteProps {
   params: URLSearchParams;
 }
 
-interface EntityType {
-  entity_type: string;
-  hubmap_id: string;
-  mapped_data_types: string[];
-}
-
 interface MessageProps {
   label: string;
   arg: string;
 }
 
 function EntityMessage({ arg: uuid, label }: MessageProps) {
-  const entity = useEntityData(uuid) as EntityType;
-  if (!entity) {
+  const [entity, isLoading] = useEntityData(uuid, ['hubmap_id', 'entity_type', 'mapped_data_types']);
+  if (!entity || isLoading) {
     return <Skeleton variant="text" />;
   }
   const { entity_type, hubmap_id } = entity;
   const lcType = entity_type.toLowerCase();
-  const dataTypes = (entity?.mapped_data_types || []).join('/');
+  const dataTypes = (entity?.mapped_data_types ?? []).join('/');
   return (
     <>
       {`${label} ${dataTypes} ${lcType} `}

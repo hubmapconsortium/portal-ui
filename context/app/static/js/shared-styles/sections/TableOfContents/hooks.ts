@@ -1,5 +1,7 @@
 import React, { MutableRefObject } from 'react';
 import { throttle } from 'js/helpers/functions';
+import useEntityStore from 'js/stores/useEntityStore';
+import { SpringValues } from '@react-spring/web';
 import { TableOfContentsNodesRef } from './types';
 
 function useThrottledOnScroll(callback: (() => void) | null, delay: number) {
@@ -52,4 +54,16 @@ function useFindActiveIndex({
   }, [currentSection, setCurrentSection, clickedRef, itemsWithNodeRef]);
 }
 
-export { useThrottledOnScroll, useFindActiveIndex };
+function useAnimatedSidebarPosition() {
+  const { springs } = useEntityStore();
+
+  const [springValues] = springs;
+
+  if (springValues[1] === undefined) {
+    return null;
+  }
+
+  return springValues[1] as SpringValues;
+}
+
+export { useThrottledOnScroll, useFindActiveIndex, useAnimatedSidebarPosition };

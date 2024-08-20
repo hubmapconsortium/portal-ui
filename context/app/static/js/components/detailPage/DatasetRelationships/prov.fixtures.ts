@@ -473,6 +473,7 @@ export const nodes = [
       name: 'HBM749.SMWP.555',
       status: 'Published',
       datasetType: 'CODEX',
+      uuid: '6df2f796ad72307d04dc94d688b725c5',
     },
   },
   {
@@ -500,6 +501,7 @@ export const nodes = [
       name: 'HBM878.HRPG.642',
       status: 'QA',
       datasetType: 'CODEX [Cytokit + SPRM]',
+      uuid: 'd8f851efb54f84d7ee0952e10d4c449e',
     },
   },
   {
@@ -509,6 +511,7 @@ export const nodes = [
       name: 'HBM398.SWKV.256',
       status: 'Published',
       datasetType: 'CODEX [Cytokit + SPRM]',
+      uuid: 'ff77fcae7f6d9b5b7b8741c282677eef',
     },
   },
 ];

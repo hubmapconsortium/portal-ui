@@ -56,7 +56,7 @@ function DonorDetail() {
         {shouldDisplaySection.metadata && <MetadataSection metadata={mapped_metadata} hubmap_id={hubmap_id} />}
         <DerivedEntitiesSection />
         <ProvSection />
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} showHeader />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}

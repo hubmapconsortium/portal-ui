@@ -12,7 +12,6 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import { capitalize } from '@mui/material/utils';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import Description from 'js/shared-styles/sections/Description';
 import { useTabs } from 'js/shared-styles/tabs';
 import { Tab, Tabs, TabPanel } from 'js/shared-styles/tables/TableTabs';
@@ -20,7 +19,7 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import { InternalLink } from 'js/shared-styles/Links';
 import { CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
 
-import DetailPageSection from '../detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import { useCellTypeBiomarkers } from './hooks';
 
 const tableKeys = ['genes', 'proteins'] as const;
@@ -80,8 +79,7 @@ export default function CellTypesBiomarkersTable() {
   const { openTabIndex, handleTabChange } = useTabs();
 
   return (
-    <DetailPageSection id="biomarkers">
-      <SectionHeader>Biomarkers</SectionHeader>
+    <CollapsibleDetailPageSection id="biomarkers" title="Biomarkers">
       <Stack direction="column" spacing={2}>
         <Description>
           This is a list of identified biomarkers that are validated from the listed source. Explore other sources in
@@ -118,6 +116,6 @@ export default function CellTypesBiomarkersTable() {
           ))}
         </div>
       </Stack>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }

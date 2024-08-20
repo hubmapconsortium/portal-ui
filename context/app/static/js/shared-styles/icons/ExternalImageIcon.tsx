@@ -1,11 +1,11 @@
 import React from 'react';
-import * as externalIcons from './externalImageIcons';
+import { externalIconMap } from './externalImageIcons';
 
 interface ExternalImageIconProps {
-  icon: keyof typeof externalIcons;
+  icon: keyof typeof externalIconMap;
 }
 
 export default function ExternalImageIcon({ icon }: ExternalImageIconProps) {
-  const { src, alt } = externalIcons[icon];
+  const { src, alt } = externalIconMap[icon];
   return <img src={src} alt={alt} />;
 }

@@ -5,12 +5,11 @@ import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import Description from 'js/shared-styles/sections/Description';
 
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { CellTypeOrgan } from 'js/hooks/useCrossModalityApi';
 import { useCellTypeDetails, useCellTypeName } from './hooks';
@@ -158,10 +157,9 @@ export default function CellTypesVisualization() {
   const { organs = [] } = useCellTypeDetails();
 
   return (
-    <DetailPageSection id="distribution-across-organs">
-      <SectionHeader>Distribution Across Organs</SectionHeader>
+    <CollapsibleDetailPageSection id="distribution-across-organs" title="Distribution Across Organs">
       <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
       <CellTypeOrgansGraph organs={organs} />
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }

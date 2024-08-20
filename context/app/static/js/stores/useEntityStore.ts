@@ -41,7 +41,7 @@ export const createEntityStore = ({ springs }: { springs: ReturnType<typeof useS
           summaryEntry: entry,
         },
       }),
-    view: 'narrow',
+    view: 'narrow' as const,
     setView: (val) => set({ view: val }),
     springs,
     assayMetadata: {},

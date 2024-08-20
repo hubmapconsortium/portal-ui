@@ -16,9 +16,8 @@ function prefixSampleMetadata(source_samples: Sample[] | null | undefined) {
 
 function combineMetadata(
   donor: Donor,
-  _origin_sample: unknown,
-  source_samples: Sample[],
-  metadata: Record<string, unknown> | null | undefined,
+  source_samples: Sample[] = [],
+  metadata: Record<string, unknown> | null | undefined = {},
 ) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const combinedMetadata: Record<string, string> = {

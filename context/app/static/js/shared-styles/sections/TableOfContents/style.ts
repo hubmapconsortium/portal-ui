@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Link from '@mui/material/Link';
+import Box from '@mui/material/Box';
 
 const StickyNav = styled('nav')({
   position: 'sticky',
@@ -29,4 +30,13 @@ const StyledItemLink = styled(Link)<{ $isCurrentSection: boolean; $isNested: boo
   }),
 );
 
-export { StickyNav, TableTitle, StyledItemLink };
+const StyledIconContainer = styled(Box)({
+  width: '1rem',
+  display: 'flex',
+  '& > *': {
+    width: '100%',
+    height: '100%',
+  },
+});
+
+export { StickyNav, TableTitle, StyledItemLink, StyledIconContainer };
