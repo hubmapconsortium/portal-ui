@@ -165,9 +165,9 @@ function Metadata({ metadata }: MetadataProps) {
     return null;
   }
 
-  const { donor } = entity;
+  const { donor, source_samples } = entity;
 
-  const entities = [entity, ...datasetsWithMetadata.map((d) => d._source), donor]
+  const entities = [entity, ...datasetsWithMetadata.map((d) => d._source), ...source_samples, donor]
     .filter((e) => hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }))
     .map((e) => {
       const label = isDataset(e) ? e.assay_display_name : e.entity_type;
