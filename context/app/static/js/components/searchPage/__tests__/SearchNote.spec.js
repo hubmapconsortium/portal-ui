@@ -1,6 +1,5 @@
 import React from 'react';
-// eslint-disable-next-line
-import { act, render, screen } from 'test-utils/functions';
+import { render, screen } from 'test-utils/functions';
 
 import SearchNote from '../SearchNote';
 
@@ -10,7 +9,7 @@ const entity = {
   hubmap_id: 'FAKE_DOI',
 };
 
-jest.mock('js/hooks/useEntityData', () => () => entity);
+jest.mock('js/hooks/useEntityData', () => () => [entity, false]);
 
 test('SearchNote renders for derived entities', async () => {
   const params = new URLSearchParams();
