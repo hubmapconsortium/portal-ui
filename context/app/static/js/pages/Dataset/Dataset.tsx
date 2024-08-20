@@ -29,6 +29,7 @@ import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSe
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import Stack from '@mui/material/Stack';
+import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
 interface SummaryDataChildrenProps {
@@ -121,6 +122,8 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     attribution: true,
   };
 
+  const { shouldDisplay: shouldDisplayRelationships } = useDatasetRelationships(uuid, processing);
+
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
@@ -136,9 +139,11 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
               <>
                 <MultiAssayRelationship assay_modality={assay_modality} />
                 <DataProducts files={files} />
-                <Box height={400} width="100%" component={Paper} p={2}>
-                  <DatasetRelationships uuid={uuid} processing={processing} />
-                </Box>
+                {shouldDisplayRelationships && (
+                  <Box height={400} width="100%" component={Paper} p={2}>
+                    <DatasetRelationships uuid={uuid} processing={processing} />
+                  </Box>
+                )}
               </>
             }
           >
