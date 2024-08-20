@@ -1,4 +1,11 @@
-import { DEFAULT_JOB_TYPE, DEFAULT_TEMPLATE_KEY } from './constants';
+import {
+  DEFAULT_GPU_ENABLED,
+  DEFAULT_JOB_TYPE,
+  DEFAULT_MEMORY_MB,
+  DEFAULT_NUM_CPUS,
+  DEFAULT_TEMPLATE_KEY,
+  DEFAULT_TIME_LIMIT_MINUTES,
+} from './constants';
 import {
   jobStatuses,
   validateJobStatus,
@@ -332,6 +339,22 @@ function sortTemplates(templates: TemplatesTypes, disabledTemplates?: TemplatesT
   ) as TemplatesTypes;
 }
 
+/**
+ * Get the resource options for a workspace, if they exist.
+ * @param workspace The workspace to get the resource options from.
+ * @returns The resource options if they exist, else the default resource values.
+ */
+function getWorkspaceResourceOptions(workspace: MergedWorkspace) {
+  return (
+    findBestJob(workspace?.jobs ?? [])?.job_details?.request_job_details?.resource_options ?? {
+      num_cpus: DEFAULT_NUM_CPUS,
+      memory_mb: DEFAULT_MEMORY_MB,
+      time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+      gpu_enabled: DEFAULT_GPU_ENABLED,
+    }
+  );
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -349,4 +372,5 @@ export {
   buildDatasetSymlinks,
   getDefaultJobType,
   sortTemplates,
+  getWorkspaceResourceOptions,
 };

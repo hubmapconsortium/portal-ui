@@ -11,6 +11,7 @@ import {
   getWorkspaceFileName,
   buildDatasetSymlinks,
   getDefaultJobType,
+  getWorkspaceResourceOptions,
 } from './utils';
 import {
   useDeleteWorkspace,
@@ -25,11 +26,9 @@ import {
   UpdateWorkspaceBody,
   useWorkspacesApiURLs,
   useBuildWorkspacesSWRKey,
-  ResourceOptions,
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
-import { DEFAULT_GPU_ENABLED, DEFAULT_MEMORY_MB, DEFAULT_NUM_CPUS, DEFAULT_TIME_LIMIT_MINUTES } from './constants';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -97,7 +96,7 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
   }: {
     workspaceId: number;
     jobTypeId: string;
-    resourceOptions: ResourceOptions;
+    resourceOptions: WorkspaceResourceOptions;
   }) {
     await startWorkspace({ workspaceId, jobTypeId, resourceOptions });
     await mutate();
@@ -341,10 +340,6 @@ function useSessionWarning(workspaces: MergedWorkspace[]) {
   };
 }
 
-function getWorkspaceResourceOptions(workspace: MergedWorkspace) {
-  return findBestJob(workspace?.jobs ?? [])?.job_details?.current_job_details?.resource_options;
-}
-
 function useRefreshSession(workspace: MergedWorkspace) {
   const { stopWorkspace, isStoppingWorkspace } = useStopWorkspace();
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
@@ -356,12 +351,7 @@ function useRefreshSession(workspace: MergedWorkspace) {
     await startWorkspace({
       workspaceId: workspace.id,
       jobTypeId: getDefaultJobType({ workspace }),
-      resourceOptions: getWorkspaceResourceOptions(workspace) ?? {
-        time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
-        num_cpus: DEFAULT_NUM_CPUS,
-        memory_mb: DEFAULT_MEMORY_MB,
-        gpu_enabled: DEFAULT_GPU_ENABLED,
-      },
+      resourceOptions: getWorkspaceResourceOptions(workspace),
     });
     await mutate();
     toastSuccess('Session time for workspace successfully renewed');

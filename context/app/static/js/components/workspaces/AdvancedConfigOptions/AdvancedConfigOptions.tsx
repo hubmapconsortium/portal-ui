@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
@@ -132,19 +132,19 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
     field.value.num_cpus === DEFAULT_NUM_CPUS &&
     field.value.gpu_enabled === DEFAULT_GPU_ENABLED;
 
-  const handleRestoreDefaults = () => {
+  const handleRestoreDefaults = useCallback(() => {
     field.onChange({
       time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
       memory_mb: DEFAULT_MEMORY_MB,
       num_cpus: DEFAULT_NUM_CPUS,
       gpu_enabled: DEFAULT_GPU_ENABLED,
     });
-  };
+  }, [field]);
 
   return (
     <StyledAccordion>
       <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
-        <StyledHeader fontSize="5rem">Advanced Configurations (Optional)</StyledHeader>
+        <StyledHeader>Advanced Configurations (Optional)</StyledHeader>
       </AccordionSummary>
       <AccordionDetails>
         <Stack>

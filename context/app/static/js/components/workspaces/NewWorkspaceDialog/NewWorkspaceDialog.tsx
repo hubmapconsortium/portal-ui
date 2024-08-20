@@ -44,7 +44,7 @@ const text = {
     description: [
       'All workspaces are launched with Python support, with the option to add support for R. Workspaces with added R support may experience longer load times.',
     ],
-    advancedConfigDescription: 'Adjusting these settings may result in longer workspace load times.',
+    advancedDescription: 'Adjusting these settings may result in longer workspace load times.',
   },
   templates: {
     title: 'Select Templates',
@@ -152,11 +152,11 @@ function NewWorkspaceDialog({
               }}
             />
             <Stack gap={2} p={2} component={Paper} direction="column">
-              <StyledHeader fontSize="5rem">Environment Selection</StyledHeader>
+              <StyledHeader>Environment Selection</StyledHeader>
               <Typography>{text.configure.description}</Typography>
               <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
             </Stack>
-            <AdvancedConfigOptions control={control} description={text.configure.advancedConfigDescription} />
+            <AdvancedConfigOptions control={control} description={text.configure.advancedDescription} />
           </Box>
         </Step>
         <TemplateSelectStep

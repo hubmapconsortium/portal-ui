@@ -15,7 +15,7 @@ import {
   DEFAULT_TIME_LIMIT_MINUTES,
 } from '../constants';
 import { MergedWorkspace, WorkspaceResourceOptions } from '../types';
-import { findBestJobType, isRunningWorkspace } from '../utils';
+import { findBestJobType, getWorkspaceResourceOptions, isRunningWorkspace } from '../utils';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
@@ -136,7 +136,7 @@ function useLaunchWorkspaceDialog() {
     (newWorkspace: MergedWorkspace) => {
       setWorkspace(newWorkspace);
       const workspaceJobTypeId = findBestJobType(newWorkspace.jobs);
-      const workspaceResourceOptions = newWorkspace.jobs[0]?.job_details?.request_job_details?.resource_options;
+      const workspaceResourceOptions = getWorkspaceResourceOptions(newWorkspace);
 
       if (isRunningWorkspace(newWorkspace)) {
         submit({ workspaceJobTypeId, workspaceResourceOptions }).catch((e) => {

@@ -12,6 +12,7 @@ import {
   WorkspaceAPIResponseWithoutData,
   WorkspaceJob,
   WorkspaceJobType,
+  WorkspaceResourceOptions,
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
@@ -273,18 +274,11 @@ export function useJobTypes() {
   return useSWR(hasAccess ? api.jobTypes : null, fetchJobTypes);
 }
 
-export interface ResourceOptions {
-  num_cpus: number;
-  memory_mb: number;
-  time_limit_minutes: number;
-  gpu_enabled: boolean;
-}
-
 interface WorkspaceActionArgs extends APIAction {
   workspaceId: number;
   jobType: unknown;
   jobDetails: unknown;
-  resourceOptions: ResourceOptions;
+  resourceOptions: WorkspaceResourceOptions;
 }
 
 async function startJob(
@@ -325,7 +319,7 @@ export function useStartWorkspace() {
     }: {
       workspaceId: number;
       jobTypeId: string;
-      resourceOptions: ResourceOptions;
+      resourceOptions: WorkspaceResourceOptions;
     }) => {
       return trigger({
         url: api.startWorkspace(workspaceId),

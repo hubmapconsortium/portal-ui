@@ -14,10 +14,22 @@ import AdvancedConfigOptions from '../AdvancedConfigOptions';
 import { StyledHeader } from '../AdvancedConfigOptions/style';
 
 const formId = 'launch-workspace-form';
-const infoText =
-  'Advanced configuration settings are not retained from previous sessions. If you customized settings in a previous launch, you will need to reapply those changes.';
-const advancedConfigDescription =
-  'Adjusting these settings may result in longer workspace load times and could potentially affect your saved work.';
+
+const text = {
+  environment: {
+    title: 'Environment Selection',
+    description: [
+      'All workspaces are launched with Python support, with the option to add support for R . Workspaces with added R support may experience longer load times.',
+      'If a workspace was previously launched with R, launching a workspace without R support may cause issues with your saved work.',
+    ],
+  },
+  resources: {
+    alert:
+      'Advanced configuration settings are not retained from previous sessions. If you customized settings in a previous launch, you will need to reapply those changes.',
+    description:
+      'Adjusting these settings may result in longer workspace load times and could potentially affect your saved work.',
+  },
+};
 
 function LaunchWorkspaceDialog() {
   const {
@@ -73,22 +85,17 @@ function LaunchWorkspaceDialog() {
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
           <Stack direction="column" spacing={1}>
             {runningWorkspaceAlert}
-            <Alert severity="info">{infoText}</Alert>
+            <Alert severity="info">{text.resources.alert}</Alert>
             <SummaryPaper>
               <Stack direction="column" gap={2}>
-                <StyledHeader fontSize="5rem">Environment Selection</StyledHeader>
-                <Typography>
-                  All workspaces are launched with Python support, with the option to add support for R . Workspaces
-                  with added R support may experience longer load times.
-                </Typography>
-                <Typography>
-                  If a workspace was previously launched with R, launching a workspace without R support may cause
-                  issues with your saved work.
-                </Typography>
+                <StyledHeader>{text.environment.title}</StyledHeader>
+                {text.environment.description.map((description) => (
+                  <Typography key={description}>{description}</Typography>
+                ))}
                 <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
               </Stack>
             </SummaryPaper>
-            <AdvancedConfigOptions control={control} description={advancedConfigDescription} />
+            <AdvancedConfigOptions control={control} description={text.resources.description} />
           </Stack>
         </form>
       }
