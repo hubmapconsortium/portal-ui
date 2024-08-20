@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
-import Accordion from '@mui/material/Accordion';
 import Button from '@mui/material/Button';
 import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
@@ -11,7 +10,7 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
+import { StyledAccordion, StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_MEMORY_MB,
@@ -33,33 +32,8 @@ interface ConfigSliderProps<FormType extends FieldValues> {
   min: number;
   max: number;
   conversionFactor?: number;
+  markInterval?: number;
 }
-
-const configSliderOptions = [
-  {
-    id: 'time_limit_minutes',
-    label: 'Time Limit (hours)',
-    tooltip: 'Session duration for your workspace.',
-    min: MIN_TIME_LIMIT_MINUTES,
-    max: MAX_TIME_LIMIT_MINUTES,
-    conversionFactor: 60,
-  },
-  {
-    id: 'memory_mb',
-    label: 'Memory (GB)',
-    tooltip: 'Available memory for your workspace.',
-    min: MIN_MEMORY_MB,
-    max: MAX_MEMORY_MB,
-    conversionFactor: 1000,
-  },
-  {
-    id: 'num_cpus',
-    label: 'Number of CPUs',
-    tooltip: 'Number of CPUs available for your workspace.',
-    min: MIN_NUM_CPUS,
-    max: MAX_NUM_CPUS,
-  },
-];
 
 function ConfigSlider<FormType extends FieldValues>({
   field,
@@ -69,6 +43,7 @@ function ConfigSlider<FormType extends FieldValues>({
   min,
   max,
   conversionFactor = 1,
+  markInterval = 1,
 }: ConfigSliderProps<FormType>) {
   const convert = (value: number) => value / conversionFactor;
   const unconvert = (value: number) => value * conversionFactor;
@@ -78,11 +53,14 @@ function ConfigSlider<FormType extends FieldValues>({
 
   const marks = useMemo(() => {
     const tempMarks = [];
-    for (let i = convertedMin; i <= convertedMax; i += 1) {
+    const start = markInterval % 2 === 0 ? convertedMin + 1 : convertedMin;
+
+    for (let i = start; i <= convertedMax; i += markInterval) {
       tempMarks.push({ value: i, label: i });
     }
+
     return tempMarks;
-  }, [convertedMin, convertedMax]);
+  }, [convertedMin, convertedMax, markInterval]);
 
   return (
     <Stack marginTop={1}>
@@ -108,6 +86,33 @@ function ConfigSlider<FormType extends FieldValues>({
     </Stack>
   );
 }
+
+const configSliderOptions: Omit<ConfigSliderProps<Record<string, number>>, 'field'>[] = [
+  {
+    id: 'time_limit_minutes',
+    label: 'Time Limit (hours)',
+    tooltip: 'Session duration for your workspace.',
+    min: MIN_TIME_LIMIT_MINUTES,
+    max: MAX_TIME_LIMIT_MINUTES,
+    conversionFactor: 60,
+  },
+  {
+    id: 'memory_mb',
+    label: 'Memory (GB)',
+    tooltip: 'Available memory for your workspace.',
+    min: MIN_MEMORY_MB,
+    max: MAX_MEMORY_MB,
+    conversionFactor: 1000,
+    markInterval: 2,
+  },
+  {
+    id: 'num_cpus',
+    label: 'Number of CPUs',
+    tooltip: 'Number of CPUs available for your workspace.',
+    min: MIN_NUM_CPUS,
+    max: MAX_NUM_CPUS,
+  },
+];
 
 type WorkspaceJobTypeFieldProps<FormType extends FieldValues> = Pick<UseControllerProps<FormType>, 'control'>;
 
@@ -137,7 +142,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
   };
 
   return (
-    <Accordion>
+    <StyledAccordion>
       <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
         <StyledHeader fontSize="5rem">Advanced Configurations (Optional)</StyledHeader>
       </AccordionSummary>
@@ -172,7 +177,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
           </Stack>
         </Stack>
       </AccordionDetails>
-    </Accordion>
+    </StyledAccordion>
   );
 }
 

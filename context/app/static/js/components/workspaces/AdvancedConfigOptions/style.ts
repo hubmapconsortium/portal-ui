@@ -1,6 +1,7 @@
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import Switch from '@mui/material/Switch';
+import Accordion from '@mui/material/Accordion';
 
 const StyledSubtitle = styled(Typography)(({ theme }) => ({
   ...theme.typography.subtitle2,
@@ -21,4 +22,11 @@ const StyledSwitch = styled(Switch)(({ theme }) => ({
   },
 }));
 
-export { StyledSubtitle, StyledSwitch, StyledHeader, StyledSwitchLabel };
+// Get rid of the `::before` border pseudo-element
+const StyledAccordion = styled(Accordion)`
+  ::before {
+    display: none;
+  }
+`;
+
+export { StyledSubtitle, StyledSwitch, StyledHeader, StyledSwitchLabel, StyledAccordion };

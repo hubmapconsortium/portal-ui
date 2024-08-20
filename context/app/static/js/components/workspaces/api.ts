@@ -299,12 +299,6 @@ async function startJob(
     workspaceId,
   );
 
-  // console.log('body:', JSON.stringify({
-  //   job_type: jobType,
-  //   job_details: jobDetails,
-  //   resource_options: resourceOptions,
-  // }, null, 2))
-
   const result = fetch(url, {
     method: 'PUT',
     headers,
