@@ -52,6 +52,7 @@ export interface Entity {
   created_by_user_displayname: string;
   created_by_user_email: string;
   mapped_status: string;
+  mapped_data_types?: string[];
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   status: string;
   mapped_metadata: Record<string, unknown>;

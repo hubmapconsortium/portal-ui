@@ -22,8 +22,13 @@ async function f({
   expectedStatusCodes = [200],
   errorMessages = {},
   returnResponse = false,
-}: SingleFetchOptionsType) {
+}: SingleFetchOptionsType): Promise<unknown> {
   return fetch(url, requestInit).then(async (response) => {
+    // Separate handling for 303 status code thrown by ES when documents are >10MB
+    if (response.status === 303) {
+      const s3URL = await response.text();
+      return fetch(s3URL);
+    }
     if (!expectedStatusCodes.includes(response.status)) {
       const rawText = await response.text();
       let errorBody: Record<string, unknown> = { error: rawText };
@@ -82,36 +87,6 @@ export async function multiFetcher<T>({
       }),
     ),
   ) as Promise<T[]>;
-}
-
-/**
- * Same as the multiFetcher above, but allows for partial data to be returned if some requests fail instead of
- * rejecting the entire promise.
- *
- * @see multiFetcher
- * @returns
- */
-export async function partialMultiFetcher<T>({
-  urls,
-  requestInits = [{}],
-  expectedStatusCodes = [200],
-  errorMessages = {},
-  returnResponse = false,
-}: MultiFetchOptionsType): Promise<PromiseSettledResult<T>[]> {
-  if (urls.length === 0) {
-    return Promise.resolve([] as T[]) as Promise<PromiseSettledResult<T>[]>;
-  }
-  return Promise.allSettled(
-    urls.map((url, i) =>
-      f({
-        url,
-        requestInit: requestInits.length === 1 ? requestInits[0] : requestInits[i],
-        expectedStatusCodes,
-        errorMessages,
-        returnResponse,
-      }),
-    ),
-  );
 }
 
 /**
