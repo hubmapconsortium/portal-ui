@@ -52,8 +52,8 @@ function DevSearch() {
         listFilter('mapped_data_types', 'mapped_data_types'),
         listFilter('metadata.metadata.assay_category', 'assay_category'),
         listFilter('metadata.metadata.assay_type', 'assay_type'),
-        checkboxFilter('is_derived', 'Is derived?', TermQuery('ancestors.entity_type', 'dataset')),
-        checkboxFilter('is_raw', 'Is raw?', BoolMustNot(TermQuery('ancestors.entity_type', 'dataset'))),
+        checkboxFilter('is_derived', 'Is derived?', TermQuery('processing', 'processed')),
+        checkboxFilter('is_raw', 'Is raw?', BoolMustNot(TermQuery('processing', 'raw'))),
         hierarchicalFilter({
           fields: {
             parent: { id: 'metadata.metadata.analyte_class.keyword' },
