@@ -278,14 +278,20 @@ export function useCreateAndLaunchWorkspace() {
       }
 
       toastSuccess(
-        <Stack sx={{ maxWidth: '20rem', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+        <Stack sx={{ maxWidth: '22rem' }}>
           <Typography>
             Workspace successfully launched in a new tab. If the tab didn&apos;t open, please check your pop-up blocker
             settings and relaunch your workspace.
           </Typography>
-          <Button href={`/workspaces/${workspace.id}`} variant="contained" sx={{ backgroundColor: 'transparent' }}>
-            <Typography sx={{ color: 'white' }}>View Workspace Detail Page</Typography>
-          </Button>
+          <Stack direction="row" justifyContent="flex-end" marginTop={1}>
+            <Button
+              href={`/workspaces/${workspace.id}`}
+              variant="contained"
+              sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}
+            >
+              <Typography variant="button">View Workspace Detail Page</Typography>
+            </Button>
+          </Stack>
         </Stack>,
       );
 
