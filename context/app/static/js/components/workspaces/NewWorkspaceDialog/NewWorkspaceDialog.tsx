@@ -36,12 +36,12 @@ const text = {
   datasets: {
     title: 'Edit Datasets Selection',
     description: [
-      <>
+      <span key="datasets-step">
         {' '}
         Add datasets by HuBMAP ID below or navigate to the{' '}
         <InternalLink href="/search?entity_type[0]=Dataset">dataset search page</InternalLink>, select datasets and
         follow steps to launch a workspace.
-      </>,
+      </span>,
       'To remove a dataset, select the dataset and press the delete button. If all datasets are removed, an empty workspace will be launched.',
       'Once you navigate away from this page, all progress will be lost. You can copy IDs to your clipboard by selecting datasets in the table below and pressing the copy button. You can also save datasets to “My Lists”.',
       <Button variant="outlined" key="datasets-button">
