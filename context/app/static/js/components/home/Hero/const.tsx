@@ -14,9 +14,10 @@ const timelineIconProps = {
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   {
-    title: 'Unified Dataset Pages Now Available',
+    title: 'Raw & Processed Unified Datasets Page',
     titleHref: '/search?entity_type[0]=Dataset',
-    description: 'Datasets and their processed descendants are now displayed on a single page.',
+    description:
+      'Dataset page design has been updated to display both raw and processed data on the same page, enhancing the understanding of relationships between datasets.',
     date: 'August 2024',
     img: <entityIconMap.Dataset {...timelineIconProps} />,
   },
