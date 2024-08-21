@@ -1,9 +1,5 @@
-import React, { useCallback, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr';
-
-import Stack from '@mui/system/Stack';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
@@ -33,6 +29,7 @@ import {
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
+import WorkspaceToastSuccessMessage from './WorkspaceToastSuccessMessage';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -277,23 +274,7 @@ export function useCreateAndLaunchWorkspace() {
         return;
       }
 
-      toastSuccess(
-        <Stack sx={{ maxWidth: '22rem' }}>
-          <Typography>
-            Workspace successfully launched in a new tab. If the tab didn&apos;t open, please check your pop-up blocker
-            settings and relaunch your workspace.
-          </Typography>
-          <Stack direction="row" justifyContent="flex-end" marginTop={1}>
-            <Button
-              href={`/workspaces/${workspace.id}`}
-              variant="contained"
-              sx={{ backgroundColor: 'transparent', boxShadow: 'none' }}
-            >
-              <Typography variant="button">View Workspace Detail Page</Typography>
-            </Button>
-          </Stack>
-        </Stack>,
-      );
+      toastSuccess(WorkspaceToastSuccessMessage(workspace.id));
 
       try {
         await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
