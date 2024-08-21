@@ -11,7 +11,7 @@ function NewWorkspaceDialogFromWorkspaceList() {
       <WorkspaceButton onClick={() => setDialogIsOpen(true)} tooltip="Create workspace">
         <AddRounded />
       </WorkspaceButton>
-      <NewWorkspaceDialog {...rest} />
+      <NewWorkspaceDialog showDatasetsSearchBar {...rest} />
     </>
   );
 }

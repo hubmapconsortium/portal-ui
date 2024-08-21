@@ -6,9 +6,11 @@ import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SWRError } from 'js/helpers/swr/errors';
+
 import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
 import { buildDatasetSymlinks } from '../utils';
+import { useDatasetsAutocomplete } from '../AddDatasetsTable/hooks';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -121,4 +123,36 @@ function useWorkspaceTemplateTags() {
   return { tags };
 }
 
-export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks };
+function useEditDatasetsTable() {
+  const {
+    inputValue,
+    setInputValue,
+    autocompleteValue,
+    addDataset,
+    removeDatasets,
+    workspaceDatasets,
+    allDatasets,
+    searchHits,
+    resetAutocompleteState,
+  } = useDatasetsAutocomplete({
+    workspaceId: 1,
+    selectedDatasets: [],
+    updateDatasetsFormState: () => {
+      console.error('updated');
+    },
+  });
+
+  return {
+    inputValue,
+    setInputValue,
+    autocompleteValue,
+    addDataset,
+    removeDatasets,
+    workspaceDatasets,
+    allDatasets,
+    searchHits,
+    resetAutocompleteState,
+  };
+}
+
+export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks, useEditDatasetsTable };

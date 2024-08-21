@@ -8,21 +8,22 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Typography from '@mui/material/Typography';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-
 import InternalLink from 'js/shared-styles/Links/InternalLink';
-import Typography from '@mui/material/Typography';
-import { useWorkspaceTemplates } from './hooks';
+
+import { useEditDatasetsTable, useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
+import AddDatasetsTable from '../AddDatasetsTable';
 
 const text = {
   overview: {
@@ -64,6 +65,28 @@ const text = {
   },
 };
 
+function EditDatasetsTable({
+  showDatasetsSearchBar,
+  datasetUUIDs,
+  deleteDatasets,
+}: {
+  showDatasetsSearchBar?: boolean;
+  datasetUUIDs: Set<string>;
+  deleteDatasets?: (ids: string[]) => void;
+}) {
+  const { ...rest } = useEditDatasetsTable();
+
+  return showDatasetsSearchBar ? (
+    <AddDatasetsTable {...rest} />
+  ) : (
+    <WorkspaceDatasetsTable
+      datasetsUUIDs={[...datasetUUIDs]}
+      removeDatasets={deleteDatasets}
+      emptyAlerts={<Alert severity="info">No datasets available.</Alert>}
+    />
+  );
+}
+
 type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormTypes>, 'handleSubmit' | 'control'> & {
   errors: FieldErrors<CreateWorkspaceFormTypes>;
 };
@@ -76,6 +99,7 @@ interface NewWorkspaceDialogProps {
   removeDatasets?: (datasetUUIDs: string[]) => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
   isSubmitting?: boolean;
+  showDatasetsSearchBar?: boolean;
 }
 
 function NewWorkspaceDialog({
@@ -90,6 +114,7 @@ function NewWorkspaceDialog({
   removeDatasets,
   children,
   isSubmitting,
+  showDatasetsSearchBar,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -131,10 +156,10 @@ function NewWorkspaceDialog({
           <Stack spacing={1}>
             {children}
             <StepDescription blocks={text.datasets.description} />
-            <WorkspaceDatasetsTable
-              datasetsUUIDs={[...datasetUUIDs]}
-              removeDatasets={removeDatasets}
-              emptyAlerts={<Alert severity="info">No datasets available.</Alert>}
+            <EditDatasetsTable
+              showDatasetsSearchBar={showDatasetsSearchBar}
+              datasetUUIDs={datasetUUIDs}
+              deleteDatasets={removeDatasets}
             />
           </Stack>
         </Step>

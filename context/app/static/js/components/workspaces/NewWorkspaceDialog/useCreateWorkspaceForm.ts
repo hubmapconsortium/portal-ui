@@ -10,6 +10,7 @@ import {
   protectedDatasetsField,
   templatesField,
   workspaceJobTypeIdField,
+  datasetsField,
 } from '../workspaceFormFields';
 import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 import { DEFAULT_JOB_TYPE, DEFAULT_TEMPLATE_KEY } from '../constants';
@@ -21,6 +22,7 @@ interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
   'protected-datasets': string;
   workspaceJobTypeId: string;
+  datasets: string[];
 }
 
 interface UseCreateWorkspaceTypes {
@@ -30,7 +32,13 @@ interface UseCreateWorkspaceTypes {
 }
 
 const schema = z
-  .object({ ...workspaceNameField, ...protectedDatasetsField, ...templatesField, ...workspaceJobTypeIdField })
+  .object({
+    ...workspaceNameField,
+    ...protectedDatasetsField,
+    ...templatesField,
+    ...workspaceJobTypeIdField,
+    ...datasetsField,
+  })
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
@@ -53,6 +61,7 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtected
       'protected-datasets': checkedProtectedDatasets,
       templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
+      datasets: [],
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
