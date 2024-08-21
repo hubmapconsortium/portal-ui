@@ -1,5 +1,10 @@
-import { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr';
+
+import Stack from '@mui/system/Stack';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
@@ -271,7 +276,18 @@ export function useCreateAndLaunchWorkspace() {
         toastError('Failed to create workspace.');
         return;
       }
-      toastSuccess('Workspace successfully created.');
+
+      toastSuccess(
+        <Stack sx={{ maxWidth: '20rem', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
+          <Typography>
+            Workspace successfully launched in a new tab. If the tab didn&apos;t open, please check your pop-up blocker
+            settings and relaunch your workspace.
+          </Typography>
+          <Button href={`/workspaces/${workspace.id}`} variant="contained" sx={{ backgroundColor: 'transparent' }}>
+            <Typography sx={{ color: 'white' }}>View Workspace Detail Page</Typography>
+          </Button>
+        </Stack>,
+      );
 
       try {
         await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
