@@ -1,19 +1,23 @@
 import React, { PropsWithChildren } from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { getMetadata, hasMetadata } from 'js/helpers/metadata';
-import { isDataset } from 'js/components/types';
-import { DownloadIcon, Flex, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
-import MultiAssayMetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
-import MetadataTable from '../MetadataTable';
-import { useRelatedMultiAssayMetadata } from '../multi-assay/useRelatedMultiAssayDatasets';
+import { ESEntityType, isDataset } from 'js/components/types';
+import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
+import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
+import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
+import MetadataTable from '../MetadataTable';
+import { nodeIcons } from '../DatasetRelationships/nodeTypes';
 
 export function getDescription(
   field: string,
@@ -74,17 +78,11 @@ export type TableRows = TableRow[];
 type MetadataWrapperProps = PropsWithChildren<{
   allTableRows: TableRows;
   tsvColumns?: Columns;
-  buildTooltip: (entity_type: string) => string;
 }>;
 
-function MetadataWrapper({
-  allTableRows,
-  buildTooltip,
-  tsvColumns = defaultTSVColumns,
-  children,
-}: MetadataWrapperProps) {
+function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, children }: MetadataWrapperProps) {
   const {
-    entity: { entity_type, hubmap_id },
+    entity: { hubmap_id, ...entity },
   } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
@@ -98,10 +96,14 @@ function MetadataWrapper({
     'text/tab-separated-values',
   );
 
+  const entityIsDataset = isDataset(entity);
+
   return (
-    <DetailPageSection id="metadata">
-      <Flex>
-        <SectionHeader iconTooltipText={buildTooltip(entity_type)}>Metadata</SectionHeader>
+    <CollapsibleDetailPageSection
+      id="metadata"
+      title="Metadata"
+      icon={sectionIconMap.metadata}
+      action={
         <SecondaryBackgroundTooltip title="Download">
           <a href={downloadUrl} download={`${hubmap_id}.tsv`} aria-label="Download TSV of selected items' metadata">
             <StyledWhiteBackgroundIconButton
@@ -111,34 +113,68 @@ function MetadataWrapper({
             </StyledWhiteBackgroundIconButton>
           </a>
         </SecondaryBackgroundTooltip>
-      </Flex>
+      }
+    >
+      <SectionDescription>
+        This is the list of metadata that was provided by the data provider.
+        {entityIsDataset && ' Metadata from the donor or sample of this dataset may also be included in this list.'}
+      </SectionDescription>
       {children}
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 
-const buildMultiAssayTooltip = (entity_type: string) =>
-  `Data provided for all ${entity_type.toLowerCase()}s involved in the multi-assay.`;
+function SingleMetadata({ metadata }: { metadata: Record<string, string> }) {
+  const tableRows = useTableData(metadata);
 
-function MultiAssayMetadata() {
-  const datasetsWithMetadata = useRelatedMultiAssayMetadata();
+  return (
+    <MetadataWrapper allTableRows={tableRows}>
+      <MetadataTable tableRows={tableRows} />
+    </MetadataWrapper>
+  );
+}
+
+function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
+  if (isDataset(entity)) {
+    if (entity.is_component) {
+      return nodeIcons.componentDataset;
+    }
+    if (entity.processing === 'processed') {
+      return nodeIcons.processedDataset;
+    }
+    return nodeIcons.primaryDataset;
+  }
+  return entityIconMap[entity.entity_type];
+}
+
+interface MetadataProps {
+  metadata?: Record<string, string>;
+}
+
+function Metadata({ metadata }: MetadataProps) {
+  const { searchHits: datasetsWithMetadata, isLoading } = useProcessedDatasets(true);
   const { data: fieldDescriptions } = useMetadataFieldDescriptions();
 
   const { entity } = useFlaskDataContext();
 
   if (!isDataset(entity)) {
-    throw new Error(`Expected entity to be a dataset, got ${entity.entity_type}`);
+    return <SingleMetadata metadata={metadata!} />;
   }
 
-  const { donor } = entity;
+  if (isLoading || !datasetsWithMetadata) {
+    return null;
+  }
 
-  const entities = [donor, ...datasetsWithMetadata]
+  const { donor, source_samples } = entity;
+
+  const entities = [entity, ...datasetsWithMetadata.map((d) => d._source), ...source_samples, donor]
     .filter((e) => hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }))
     .map((e) => {
       const label = isDataset(e) ? e.assay_display_name : e.entity_type;
       return {
         uuid: e.uuid,
         label,
+        icon: getEntityIcon(e),
         tableRows: buildTableData(
           getMetadata({
             targetEntityType: e.entity_type,
@@ -155,42 +191,11 @@ function MultiAssayMetadata() {
   return (
     <MetadataWrapper
       allTableRows={allTableRows}
-      buildTooltip={buildMultiAssayTooltip}
       tsvColumns={[{ id: 'hubmap_id', label: 'HuBMAP ID' }, { id: 'label', label: 'Entity' }, ...defaultTSVColumns]}
     >
-      <MultiAssayMetadataTabs entities={entities} />
+      <MetadataTabs entities={entities} />
     </MetadataWrapper>
   );
 }
 
-const buildMetadataTooltip = (entity_type: string) => `Data provided for the given ${entity_type?.toLowerCase()}.`;
-
-function Metadata({ metadata }: { metadata: Record<string, string> }) {
-  const tableRows = useTableData(metadata);
-
-  return (
-    <MetadataWrapper allTableRows={tableRows} buildTooltip={buildMetadataTooltip}>
-      <MetadataTable tableRows={tableRows} />
-    </MetadataWrapper>
-  );
-}
-
-type MetadataSectionProps =
-  | {
-      assay_modality: 'single';
-      metadata: Record<string, string>;
-    }
-  | {
-      assay_modality: 'multiple';
-      metadata: undefined;
-    };
-
-function MetadataSection({ metadata, assay_modality }: MetadataSectionProps) {
-  if (assay_modality === 'multiple') {
-    return <MultiAssayMetadata />;
-  }
-
-  return <Metadata metadata={metadata} />;
-}
-
-export default MetadataSection;
+export default withShouldDisplay(Metadata);

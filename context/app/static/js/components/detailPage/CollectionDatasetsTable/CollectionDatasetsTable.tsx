@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import type { Entity } from 'js/components/types';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
 
 import { useCollectionsDatasets } from './hooks';
@@ -20,15 +19,14 @@ function CollectionDatasetsTable({ datasets }: CollectionDatasetsTableProps) {
   });
 
   return (
-    <DetailPageSection id="datasets-table">
-      <SectionHeader>Datasets</SectionHeader>
+    <CollapsibleDetailPageSection title="Datasets" id="datasets-table">
       <Typography variant="subtitle1" color="primary">
         {datasets.length} Datasets
       </Typography>
       <Paper>
         <RelatedEntitiesTable columns={columns} entities={data} entityType="dataset" />
       </Paper>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 

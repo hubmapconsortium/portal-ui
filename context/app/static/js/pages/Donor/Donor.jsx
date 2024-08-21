@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useMemo } from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
@@ -6,14 +6,10 @@ import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import useEntityStore from 'js/stores/useEntityStore';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
-import { getSectionOrder } from 'js/components/detailPage/utils';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
-
-const entityStoreSelector = (state) => state.setAssayMetadata;
 
 function DonorDetail() {
   const {
@@ -31,29 +27,15 @@ function DonorDetail() {
       created_by_user_email,
     },
   } = useFlaskDataContext();
-  const { sex, race, age_value, age_unit } = mapped_metadata;
 
   const shouldDisplaySection = {
-    protocols: Boolean(protocol_url),
+    summary: true,
     metadata: Boolean(Object.keys(mapped_metadata).length),
+    'derived-data': true,
+    provenance: true,
+    protocols: Boolean(protocol_url),
+    attribution: true,
   };
-
-  const sectionOrder = getSectionOrder(
-    ['summary', 'metadata', 'derived-samples-and-datasets', 'provenance', 'protocols', 'attribution'],
-    shouldDisplaySection,
-  );
-
-  const setAssayMetadata = useEntityStore(entityStoreSelector);
-  useEffect(() => {
-    setAssayMetadata({
-      hubmap_id,
-      entity_type,
-      sex,
-      race,
-      age_value,
-      age_unit,
-    });
-  }, [hubmap_id, entity_type, sex, race, age_value, age_unit, setAssayMetadata, group_name]);
 
   useTrackID({ entity_type, hubmap_id });
 
@@ -61,7 +43,7 @@ function DonorDetail() {
 
   return (
     <DetailContext.Provider value={detailContext}>
-      <DetailLayout sectionOrder={sectionOrder}>
+      <DetailLayout sections={shouldDisplaySection}>
         <Summary
           uuid={uuid}
           entity_type={entity_type}
@@ -74,7 +56,7 @@ function DonorDetail() {
         {shouldDisplaySection.metadata && <MetadataSection metadata={mapped_metadata} hubmap_id={hubmap_id} />}
         <DerivedEntitiesSection />
         <ProvSection />
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} />}
+        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} showHeader />}
         <Attribution
           group_name={group_name}
           created_by_user_displayname={created_by_user_displayname}

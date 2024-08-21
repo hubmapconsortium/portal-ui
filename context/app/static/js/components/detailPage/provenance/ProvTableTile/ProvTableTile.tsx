@@ -1,9 +1,9 @@
-import React, { useState, useEffect, ComponentProps } from 'react';
+import React, { ComponentProps } from 'react';
 
-import useEntityData from 'js/hooks/useEntityData';
+import { useEntityData } from 'js/hooks/useEntityData';
 import EntityTile from 'js/components/entity-tile/EntityTile';
 import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
-import { Entity } from 'js/components/types';
+import { ErrorTile } from 'js/components/entity-tile/EntityTile/EntityTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import { DownIcon } from './style';
 
@@ -14,6 +14,17 @@ interface ProvTableTileProps extends Omit<ComponentProps<typeof EntityTile>, 'en
   isLastTile: boolean;
 }
 
+const provTilesSource = [
+  'descendant_counts',
+  'mapped_data_types',
+  'last_modified_timestamp',
+  'origin_samples_unique_mapped_organs',
+  'mapped_metadata',
+  'sample_category',
+  'origin_samples_unique_mapped_organs',
+  'thumbnail_file',
+];
+
 function ProvTableTile({
   uuid,
   entity_type,
@@ -23,17 +34,15 @@ function ProvTableTile({
   isLastTile,
   ...rest
 }: ProvTableTileProps) {
-  const [descendantCounts, setDescendantCounts] = useState<Record<string, number>>({});
-  const [descendantCountsToDisplay, setDescendantCountsToDisplay] = useState<Record<string, number>>({});
-  // mapped fields are not included in ancestor object
-  const entityData = useEntityData(uuid) as Entity;
+  // mapped fields are not included in ancestor object, so we need to fetch them separately
+  const [entityData, isLoading] = useEntityData(uuid, provTilesSource);
+  const descendantCounts = entityData?.descendant_counts?.entity_type;
+  const descendantCountsToDisplay = getTileDescendantCounts(entityData, entity_type);
 
-  useEffect(() => {
-    if (entityData?.descendant_counts) {
-      setDescendantCounts(entityData.descendant_counts.entity_type);
-      setDescendantCountsToDisplay(getTileDescendantCounts(entityData, entity_type));
-    }
-  }, [entityData, entity_type]);
+  if (!entityData && !isLoading) {
+    // No entity data found for this tile and not loading = the entity failed to index
+    return <ErrorTile entity_type={entity_type} id={rest.id} />;
+  }
 
   return (
     <>

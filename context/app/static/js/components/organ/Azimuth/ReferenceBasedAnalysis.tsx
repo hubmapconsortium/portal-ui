@@ -5,7 +5,7 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import Skeleton from '@mui/material/Skeleton';
 import MarkdownRenderer from 'js/components/Markdown/MarkdownRenderer';
 import { ExtraProps } from 'react-markdown';
-import { StyledPaper } from './style';
+import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 
 interface ReferenceBasedAnalysisProps {
   modalities: string;
@@ -22,7 +22,7 @@ function MarkdownParagraph({
 }
 
 export default function ReferenceBasedAnalysis({ modalities, nunit, dataref, wrapped }: ReferenceBasedAnalysisProps) {
-  const Wrapper = wrapped ? StyledPaper : React.Fragment;
+  const Wrapper = wrapped ? DetailSectionPaper : React.Fragment;
   return (
     <Wrapper>
       <LabelledSectionText label="Modalities">{modalities}</LabelledSectionText>
@@ -36,7 +36,7 @@ export default function ReferenceBasedAnalysis({ modalities, nunit, dataref, wra
 
 export function ReferenceBasedAnalysisSkeleton() {
   return (
-    <StyledPaper>
+    <DetailSectionPaper>
       <LabelledSectionText label="Modalities">
         <Skeleton />
       </LabelledSectionText>
@@ -46,6 +46,6 @@ export function ReferenceBasedAnalysisSkeleton() {
       <LabelledSectionText label="Reference dataset">
         <Skeleton />
       </LabelledSectionText>
-    </StyledPaper>
+    </DetailSectionPaper>
   );
 }

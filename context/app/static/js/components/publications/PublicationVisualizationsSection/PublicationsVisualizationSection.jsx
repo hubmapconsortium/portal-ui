@@ -3,10 +3,9 @@ import Typography from '@mui/material/Typography';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import React, { useCallback, useMemo, useState } from 'react';
 
-import { DetailPageSection } from 'js/components/detailPage/style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import PublicationVignette from 'js/components/publications/PublicationVignette';
 import PrimaryColorAccordionSummary from 'js/shared-styles/accordions/PrimaryColorAccordionSummary';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import { StyledAccordionDetails } from './style';
 
 function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }) {
@@ -23,14 +22,13 @@ function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }
   const handleChange = useCallback((i) => (event, isExpanded) => setExpandedIndex(isExpanded ? i : false), []);
 
   return (
-    <DetailPageSection id="visualizations" data-testid="vignettes">
-      <SectionHeader>Visualizations</SectionHeader>
+    <CollapsibleDetailPageSection id="visualizations" data-testid="vignettes" title="Visualizations">
       {sortedVignettes.map((vignette, i) => {
         return (
           <Accordion
             key={vignette.name}
             expanded={i === expandedIndex}
-            TransitionProps={{ onEntered: () => setDisplayedVignettes((prev) => ({ ...prev, [i]: true })) }}
+            slotProps={{ transition: { onEntered: () => setDisplayedVignettes((prev) => ({ ...prev, [i]: true })) } }}
             onChange={handleChange(i)}
             data-testid="vignette"
           >
@@ -52,7 +50,7 @@ function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }
           </Accordion>
         );
       })}
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 

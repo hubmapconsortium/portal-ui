@@ -3,8 +3,7 @@ import React from 'react';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { isSample } from 'js/components/types';
 import { FlexPaper } from './style';
 import SectionItem from '../SectionItem';
@@ -21,8 +20,7 @@ function SampleTissue() {
   const hasRUI = Boolean(rui_location);
 
   return (
-    <DetailPageSection id="tissue">
-      <SectionHeader>Tissue</SectionHeader>
+    <CollapsibleDetailPageSection title="Tissue" id="tissue">
       <FlexPaper>
         <SectionItem label="Organ Type" flexBasis="25%">
           <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
@@ -45,7 +43,7 @@ function SampleTissue() {
           </SectionItem>
         )}
       </FlexPaper>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 

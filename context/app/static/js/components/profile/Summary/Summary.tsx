@@ -1,8 +1,9 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+
+import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 import { useAppContext } from '../../Contexts';
-import { DetailPageSection } from '../../detailPage/style';
 import { ProfileGroups } from './Groups';
 import { ProfileTitle } from './Title';
 import { ProfileDescription } from './Description';

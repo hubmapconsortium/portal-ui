@@ -1,22 +1,22 @@
 import { format } from 'date-fns/format';
-import { Entity, isDataset, isSample } from 'js/components/types';
+import { isDataset, isSample, PartialEntity } from 'js/components/types';
 
 interface Column {
   id: string;
   label: string;
-  renderColumnCell: (entity: Entity) => string | number;
+  renderColumnCell: (entity: PartialEntity) => string | number;
 }
 
 const descendantCountsCol: Column = {
   id: 'descendant_counts.entity_type.Dataset',
   label: 'Derived Dataset Count',
-  renderColumnCell: ({ descendant_counts }) => descendant_counts?.entity_type?.Dataset || 0,
+  renderColumnCell: ({ descendant_counts }) => descendant_counts?.entity_type?.Dataset ?? 0,
 };
 
 const lastModifiedTimestampCol: Column = {
   id: 'last_modified_timestamp',
   label: 'Last Modified',
-  renderColumnCell: ({ last_modified_timestamp }) => format(last_modified_timestamp, 'yyyy-MM-dd'),
+  renderColumnCell: ({ last_modified_timestamp }) => format(last_modified_timestamp ?? 0, 'yyyy-MM-dd'),
 };
 
 const organCol: Column = {
@@ -34,7 +34,7 @@ const dataTypesCol: Column = {
 const statusCol: Column = {
   id: 'mapped_status',
   label: 'Status',
-  renderColumnCell: ({ mapped_status }) => mapped_status,
+  renderColumnCell: ({ mapped_status }) => mapped_status ?? '',
 };
 
 const derivedSamplesColumns: Column[] = [
