@@ -8,15 +8,15 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Typography from '@mui/material/Typography';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-
 import InternalLink from 'js/shared-styles/Links/InternalLink';
-import Typography from '@mui/material/Typography';
+
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
@@ -35,12 +35,12 @@ const text = {
   datasets: {
     title: 'Edit Datasets Selection',
     description: [
-      <>
+      <span key="datasets-step">
         {' '}
         Add datasets by HuBMAP ID below or navigate to the{' '}
         <InternalLink href="/search?entity_type[0]=Dataset">dataset search page</InternalLink>, select datasets and
         follow steps to launch a workspace.
-      </>,
+      </span>,
       'To remove a dataset, select the dataset and press the delete button. If all datasets are removed, an empty workspace will be launched.',
       'Once you navigate away from this page, all progress will be lost. You can copy IDs to your clipboard by selecting datasets in the table below and pressing the copy button. You can also save datasets to “My Lists”.',
       <Button variant="outlined" key="datasets-button">
