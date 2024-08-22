@@ -44,8 +44,6 @@ else
   VERSION=`cd context && npm version major`
 fi
 
-die
-
 echo "Version: $VERSION"
 
 ./grab-dependencies.sh

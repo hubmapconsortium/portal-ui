@@ -1,0 +1,1 @@
+- Fix `push` script compatibility with mac OS.
