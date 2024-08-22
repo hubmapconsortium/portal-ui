@@ -24,7 +24,7 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const { toastError } = useSnackbarActions();
 
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
+  const { setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
     defaultName: hubmap_id,
     defaultTemplate: 'visualization',
     initialSelectedDatasets: [uuid],
