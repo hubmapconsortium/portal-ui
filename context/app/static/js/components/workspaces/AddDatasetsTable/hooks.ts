@@ -88,14 +88,17 @@ function useDatasetsAutocomplete({
   updateDatasetsFormState: (datasetUUIDS: string[]) => void;
 }) {
   const [inputValue, setInputValue] = useState('');
+  const [, setRefresh] = useState(false);
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
   const { toastSuccess } = useSnackbarActions();
 
   const removeDatasets = useCallback(
     (uuids: string[]) => {
-      const selectedDatasetsSet = new Set(selectedDatasets);
-      uuids.forEach((uuid) => selectedDatasetsSet.delete(uuid));
-      updateDatasetsFormState([...selectedDatasetsSet]);
+      const updatedDatasets = selectedDatasets.filter((uuid) => !uuids.includes(uuid));
+      updateDatasetsFormState(updatedDatasets);
+
+      // Trigger a re-render to update the table results
+      setRefresh((prev) => !prev);
     },
     [selectedDatasets, updateDatasetsFormState],
   );
