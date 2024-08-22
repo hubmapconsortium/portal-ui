@@ -4,8 +4,6 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
 
-import { useWorkspaceDetail } from '../hooks';
-
 interface BuildIDPrefixQueryType {
   value: string;
   valuePrefix?: string;
@@ -81,11 +79,11 @@ function useSearchAhead({ value, valuePrefix = '', uuidsToExclude = [] }: BuildI
 }
 
 function useDatasetsAutocomplete({
-  workspaceId,
+  workspaceDatasets = [],
   selectedDatasets = [],
   updateDatasetsFormState,
 }: {
-  workspaceId: number;
+  workspaceDatasets?: string[];
   selectedDatasets: string[];
   updateDatasetsFormState: (datasetUUIDS: string[]) => void;
 }) {
@@ -120,7 +118,6 @@ function useDatasetsAutocomplete({
     [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccess],
   );
 
-  const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];
   const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });
 

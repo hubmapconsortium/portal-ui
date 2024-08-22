@@ -14,6 +14,7 @@ import {
 } from '../workspaceFormFields';
 import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 import { DEFAULT_JOB_TYPE, DEFAULT_TEMPLATE_KEY } from '../constants';
+import { useDatasetsAutocomplete } from '../AddDatasetsTable/hooks';
 
 export interface FormWithTemplates {
   templates: string[];
@@ -29,6 +30,7 @@ interface UseCreateWorkspaceTypes {
   defaultName?: string;
   defaultTemplate?: string;
   initialProtectedDatasets?: string;
+  initialSelectedDatasets?: string[];
 }
 
 const schema = z
@@ -42,17 +44,25 @@ const schema = z
   .partial()
   .required({ 'workspace-name': true, templates: true });
 
-function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtectedDatasets }: UseCreateWorkspaceTypes) {
+function useCreateWorkspaceForm({
+  defaultName,
+  defaultTemplate,
+  initialProtectedDatasets,
+  initialSelectedDatasets,
+}: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
 
   const checkedWorkspaceName = defaultName ?? '';
   const checkedProtectedDatasets = initialProtectedDatasets ?? '';
+  const checkedSelectedDatasets = initialSelectedDatasets ?? [];
 
   const {
     handleSubmit,
     control,
     reset,
+    getValues,
+    setValue,
     formState: { errors, isSubmitting, isSubmitSuccessful },
     trigger,
   } = useForm({
@@ -61,10 +71,25 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtected
       'protected-datasets': checkedProtectedDatasets,
       templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
-      datasets: [],
+      datasets: checkedSelectedDatasets,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
+  });
+
+  const {
+    inputValue,
+    setInputValue,
+    autocompleteValue,
+    addDataset,
+    removeDatasets,
+    workspaceDatasets,
+    allDatasets,
+    searchHits,
+    resetAutocompleteState,
+  } = useDatasetsAutocomplete({
+    selectedDatasets: getValues('datasets'),
+    updateDatasetsFormState: (newDatasets) => setValue('datasets', newDatasets),
   });
 
   function handleClose() {
@@ -86,9 +111,17 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtected
         'protected-datasets': checkedProtectedDatasets,
         templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
         workspaceJobTypeId: DEFAULT_JOB_TYPE,
+        datasets: initialSelectedDatasets ?? [],
       });
     }
-  }, [initialProtectedDatasets, reset, checkedWorkspaceName, checkedProtectedDatasets, defaultTemplate]);
+  }, [
+    initialProtectedDatasets,
+    reset,
+    checkedWorkspaceName,
+    checkedProtectedDatasets,
+    defaultTemplate,
+    initialSelectedDatasets,
+  ]);
 
   useEffect(() => {
     if (dialogIsOpen) {
@@ -107,6 +140,15 @@ function useCreateWorkspaceForm({ defaultName, defaultTemplate, initialProtected
     errors,
     onSubmit,
     isSubmitting: isSubmitting || isSubmitSuccessful,
+    inputValue,
+    setInputValue,
+    autocompleteValue,
+    addDataset,
+    removeDatasets,
+    workspaceDatasets,
+    allDatasets,
+    searchHits,
+    resetAutocompleteState,
   };
 }
 

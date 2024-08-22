@@ -27,6 +27,7 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
     defaultName: hubmap_id,
     defaultTemplate: 'visualization',
+    initialSelectedDatasets: [uuid],
   });
 
   const downloadNotebook = useCallback(() => {
@@ -57,7 +58,7 @@ function VisualizationNotebookButton({ uuid, hubmap_id, mapped_data_access_level
 
   return (
     <>
-      <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+      <NewWorkspaceDialog {...rest} />
       <IconDropdownMenu tooltip={tooltip} icon={WorkspacesIcon}>
         {options.map((props) => (
           <IconDropdownMenuItem key={props.children} {...props} />

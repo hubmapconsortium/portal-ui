@@ -6,6 +6,7 @@ import { useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 
 function NewWorkspaceDialogFromWorkspaceList() {
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({});
+
   return (
     <>
       <WorkspaceButton onClick={() => setDialogIsOpen(true)} tooltip="Create workspace">

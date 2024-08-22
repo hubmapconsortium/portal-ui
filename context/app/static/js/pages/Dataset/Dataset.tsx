@@ -71,7 +71,10 @@ function SummaryDataChildren({
   mapped_data_access_level,
 }: SummaryDataChildrenProps) {
   const { isWorkspacesUser } = useAppContext();
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
+    defaultName: hubmap_id,
+    initialSelectedDatasets: [uuid],
+  });
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const dataTypes = mapped_data_types.join(', ');
   return (
@@ -99,7 +102,7 @@ function SummaryDataChildren({
       {isWorkspacesUser && (
         <>
           <NotebookButton onClick={() => setDialogIsOpen(true)} disabled={mapped_data_access_level === 'Protected'} />
-          <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+          <NewWorkspaceDialog {...rest} />
         </>
       )}
     </>
