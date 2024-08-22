@@ -21,7 +21,7 @@ if [[ -z "$MAJOR" ]]; then
       # Strip timezone info (last 6 characters)
       DATE=${DATE%??????}
       # Convert to epoch day
-      REF_EPOCH_DAY=`expr $(date --date="$DATE" "+%s") / 86400`
+      REF_EPOCH_DAY=`expr $(date -j -f "%a %b %d %H:%M:%S %Y" "$DATE" "+%s") / 86400`
       echo "Reference epoch day: $REF_EPOCH_DAY"
       break
     fi
@@ -43,6 +43,8 @@ else
   # major version bump, don't need to check for 2-week cycle
   VERSION=`cd context && npm version major`
 fi
+
+die
 
 echo "Version: $VERSION"
 
