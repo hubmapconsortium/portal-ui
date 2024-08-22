@@ -114,14 +114,8 @@ function useCreateWorkspaceForm({
         datasets: initialSelectedDatasets ?? [],
       });
     }
-  }, [
-    initialProtectedDatasets,
-    reset,
-    checkedWorkspaceName,
-    checkedProtectedDatasets,
-    defaultTemplate,
-    initialSelectedDatasets,
-  ]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialProtectedDatasets, reset, checkedWorkspaceName, checkedProtectedDatasets, defaultTemplate]);
 
   useEffect(() => {
     if (dialogIsOpen) {

@@ -167,7 +167,7 @@ function NewWorkspaceDialog({
               />
             ) : (
               <WorkspaceDatasetsTable
-                datasetsUUIDs={[...allDatasets]}
+                datasetsUUIDs={allDatasets}
                 removeDatasets={removeDatasets}
                 emptyAlerts={<Alert severity="info">No datasets available.</Alert>}
               />
