@@ -71,7 +71,7 @@ function SummaryDataChildren({
   mapped_data_access_level,
 }: SummaryDataChildrenProps) {
   const { isWorkspacesUser } = useAppContext();
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
+  const { setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
     defaultName: hubmap_id,
     initialSelectedDatasets: [uuid],
   });

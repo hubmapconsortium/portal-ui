@@ -75,7 +75,7 @@ interface NewWorkspaceDialogProps {
   errorMessages?: string[];
   dialogIsOpen: boolean;
   handleClose: () => void;
-  removeDatasets: (uuids: string[]) => void;
+  removeDatasets?: (uuids: string[]) => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
   isSubmitting?: boolean;
   showDatasetsSearchBar?: boolean;
@@ -154,7 +154,7 @@ function NewWorkspaceDialog({
           <Stack spacing={1}>
             {children}
             <StepDescription blocks={text.datasets.description} />
-            {showDatasetsSearchBar ? (
+            {showDatasetsSearchBar && removeDatasets ? (
               <AddDatasetsTable
                 inputValue={inputValue}
                 setInputValue={setInputValue}
