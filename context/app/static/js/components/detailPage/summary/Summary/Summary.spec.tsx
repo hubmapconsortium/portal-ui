@@ -1,7 +1,7 @@
 import React from 'react';
 import { FlaskDataContext, FlaskDataContextType } from 'js/components/Contexts';
 import { render, screen } from 'test-utils/functions';
-import { Entity } from 'js/components/types';
+import { Collection, Dataset, Publication } from 'js/components/types';
 import Summary from './Summary';
 
 const testStatusAndAccessLevel = {
@@ -9,160 +9,155 @@ const testStatusAndAccessLevel = {
   mapped_data_access_level: 'fakeAccessLevel',
 };
 
-test('displays correctly with required props', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      entity_type: 'Publication',
-    } as Entity,
-  } as FlaskDataContextType;
+describe('Summary', () => {
+  let location: Location;
+  const mockLocation: Location = new URL('https://example.com') as unknown as Location;
 
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary {...testStatusAndAccessLevel} />
-    </FlaskDataContext.Provider>,
-  );
-  const textToTest = ['fakeTitle', 'Publication'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-});
+  beforeEach(() => {
+    location = window.location;
+    mockLocation.replace = jest.fn();
+    mockLocation.assign = jest.fn();
+    mockLocation.reload = jest.fn();
+    mockLocation.search = 'mockSearch';
+    mockLocation.hash = 'mockHash';
+    // @ts-expect-error - This is setting up test mocks.
+    delete window.location;
+    window.location = mockLocation;
+  });
 
-test('timestamps display when defined', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      entity_type: 'Dataset',
-      created_timestamp: 1596724856094,
-      last_modified_timestamp: 1596724856094,
-    } as Entity,
-  } as FlaskDataContextType;
+  afterEach(() => {
+    window.location = location;
+  });
 
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary {...testStatusAndAccessLevel} />
-    </FlaskDataContext.Provider>,
-  );
-  const textToTest = ['Creation Date', 'Last Modified'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  test('displays correctly with required props', () => {
+    const flaskDataContext = {
+      entity: {
+        uuid: 'fakeUUID',
+        hubmap_id: 'fakeTitle',
+        entity_type: 'Publication',
+      } as Publication,
+    } as FlaskDataContextType;
 
-  expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
-  expect(screen.queryByText('Undefined')).not.toBeInTheDocument();
-});
+    render(
+      <FlaskDataContext.Provider value={flaskDataContext}>
+        <Summary {...testStatusAndAccessLevel} />
+      </FlaskDataContext.Provider>,
+    );
+    const textToTest = ['fakeTitle', 'Publication'];
+    textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  });
 
-test('publication prefered to creation, if available', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      entity_type: 'Dataset',
-      created_timestamp: 1596724856094,
-      last_modified_timestamp: 1596724856094,
-    } as Entity,
-  } as FlaskDataContextType;
+  test('publication preferred to creation, if available', () => {
+    const flaskDataContext = {
+      entity: {
+        uuid: 'fakeUUID',
+        hubmap_id: 'fakeTitle',
+        entity_type: 'Dataset',
+        created_timestamp: 1596724856094,
+        published_timestamp: 1596724856094,
+      } as Dataset,
+    } as FlaskDataContextType;
 
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary published_timestamp={1596724856094} {...testStatusAndAccessLevel} />
-    </FlaskDataContext.Provider>,
-  );
-  const textToTest = ['Publication Date', 'Last Modified'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+    render(
+      <FlaskDataContext.Provider value={flaskDataContext}>
+        <Summary {...testStatusAndAccessLevel} />
+      </FlaskDataContext.Provider>,
+    );
+    expect(screen.getByText('Publication Date')).toBeInTheDocument();
+    expect(screen.getAllByText('2020-08-06')).toHaveLength(1);
+    expect(screen.queryByText('Undefined')).not.toBeInTheDocument();
+  });
 
-  expect(screen.getAllByText('2020-08-06')).toHaveLength(2);
-  expect(screen.queryByText('Undefined')).not.toBeInTheDocument();
-});
+  test('timestamps do not display when undefined', () => {
+    const flaskDataContext = {
+      entity: {
+        uuid: 'fakeUUID',
+        hubmap_id: 'fakeTitle',
+        entity_type: 'Dataset',
+      } as Dataset,
+    } as FlaskDataContextType;
 
-test('timestamps do not display when undefined', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      entity_type: 'Dataset',
-    } as Entity,
-  } as FlaskDataContextType;
+    render(
+      <FlaskDataContext.Provider value={flaskDataContext}>
+        <Summary {...testStatusAndAccessLevel} />
+      </FlaskDataContext.Provider>,
+    );
 
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary {...testStatusAndAccessLevel} />
-    </FlaskDataContext.Provider>,
-  );
+    expect(screen.getByText('Creation Date')).toBeInTheDocument();
+    expect(screen.getAllByText('Undefined')).toHaveLength(1);
+  });
 
-  const textToTest = ['Creation Date', 'Last Modified'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  test('collection name displays when defined', () => {
+    const flaskDataContext = {
+      entity: {
+        uuid: 'fakeUUID',
+        hubmap_id: 'fakeTitle',
+        entity_type: 'Collection',
+        title: 'Fake Collection Name',
+      } as Collection,
+    } as FlaskDataContextType;
 
-  expect(screen.getAllByText('Undefined')).toHaveLength(2);
-});
+    render(
+      <FlaskDataContext.Provider value={flaskDataContext}>
+        <Summary {...testStatusAndAccessLevel} />
+      </FlaskDataContext.Provider>,
+    );
 
-test('collection name displays when defined', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      entity_type: 'Dataset',
-    } as Entity,
-  } as FlaskDataContextType;
+    expect(screen.getByText('Fake Collection Name')).toBeInTheDocument();
+  });
 
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary {...testStatusAndAccessLevel} collectionName="Fake Collection Name" />
-    </FlaskDataContext.Provider>,
-  );
+  test('collection name does not display when undefined', () => {
+    const flaskDataContext = {
+      entity: {
+        uuid: 'fakeUUID',
+        hubmap_id: 'fakeTitle',
+        entity_type: 'Collection',
+      } as Collection,
+    } as FlaskDataContextType;
 
-  expect(screen.getByText('Fake Collection Name')).toBeInTheDocument();
-});
+    render(
+      <FlaskDataContext.Provider value={flaskDataContext}>
+        <Summary {...testStatusAndAccessLevel} />
+      </FlaskDataContext.Provider>,
+    );
 
-test('collection name does not display when undefined', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      entity_type: 'Dataset',
-    } as Entity,
-  } as FlaskDataContextType;
+    expect(screen.queryByText('Fake Collection Name')).not.toBeInTheDocument();
+  });
 
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary {...testStatusAndAccessLevel} />
-    </FlaskDataContext.Provider>,
-  );
+  test('description displays when defined', () => {
+    const flaskDataContext = {
+      entity: {
+        uuid: 'fakeUUID',
+        hubmap_id: 'fakeTitle',
+        description: 'fake description',
+        entity_type: 'Dataset',
+      } as Dataset,
+    } as FlaskDataContextType;
 
-  expect(screen.queryByText('Fake Collection Name')).not.toBeInTheDocument();
-});
+    render(
+      <FlaskDataContext.Provider value={flaskDataContext}>
+        <Summary {...testStatusAndAccessLevel} />
+      </FlaskDataContext.Provider>,
+    );
 
-test('description displays when defined', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      description: 'fake description',
-      entity_type: 'Dataset',
-    } as Entity,
-  } as FlaskDataContextType;
+    expect(screen.getByText('fake description')).toBeInTheDocument();
+  });
 
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary {...testStatusAndAccessLevel} />
-    </FlaskDataContext.Provider>,
-  );
+  test('description name does not display when undefined', () => {
+    const flaskDataContext = {
+      entity: {
+        uuid: 'fakeUUID',
+        hubmap_id: 'fakeTitle',
+        entity_type: 'Dataset',
+      } as Dataset,
+    } as FlaskDataContextType;
 
-  expect(screen.getByText('fake description')).toBeInTheDocument();
-});
+    render(
+      <FlaskDataContext.Provider value={flaskDataContext}>
+        <Summary {...testStatusAndAccessLevel} />
+      </FlaskDataContext.Provider>,
+    );
 
-test('description name does not display when undefined', () => {
-  const flaskDataContext = {
-    entity: {
-      uuid: 'fakeUUID',
-      hubmap_id: 'fakeTitle',
-      entity_type: 'Dataset',
-    } as Entity,
-  } as FlaskDataContextType;
-
-  render(
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <Summary {...testStatusAndAccessLevel} />
-    </FlaskDataContext.Provider>,
-  );
-
-  expect(screen.queryByText('fake description')).not.toBeInTheDocument();
+    expect(screen.queryByText('fake description')).not.toBeInTheDocument();
+  });
 });

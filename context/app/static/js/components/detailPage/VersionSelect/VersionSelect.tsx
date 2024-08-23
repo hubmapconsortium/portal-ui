@@ -2,33 +2,44 @@ import React from 'react';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
 import { StyledButton, OverflowEllipsis, EmptyFullWidthDiv } from './style';
-import { useVersions } from './hooks';
 import { Version } from './types';
+import { useSelectedVersionStore } from './SelectedVersionStore';
+import { useProcessedDatasetContext } from '../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
+import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
 
-interface VersionSelectProps {
-  uuid: string;
+function getOptionDisplay(option: Version) {
+  return option?.revision_number ? (
+    <OverflowEllipsis>Version {option.revision_number}</OverflowEllipsis>
+  ) : (
+    <EmptyFullWidthDiv />
+  );
 }
 
-function VersionSelect({ uuid }: VersionSelectProps) {
-  const { versions, selectedVersionIndex } = useVersions(uuid);
+function VersionSelect() {
+  const { sectionDataset } = useProcessedDatasetContext();
+  const track = useTrackEntityPageEvent();
 
-  function getOptionDisplay(option: Version) {
-    return option?.revision_number ? (
-      <OverflowEllipsis>Version {option.revision_number}</OverflowEllipsis>
-    ) : (
-      <EmptyFullWidthDiv />
-    );
-  }
+  const { versions, setSelectedVersion, currentSelectedVersion } = useSelectedVersionStore((state) => ({
+    versions: state.versions.get(sectionDataset.uuid) ?? [],
+    currentSelectedVersion: state.selectedVersions.get(sectionDataset.uuid),
+    setSelectedVersion: state.setSelectedVersion,
+  }));
+
+  const selectedVersionIndex = versions.findIndex((version) => version.uuid === currentSelectedVersion?.uuid);
 
   return (
     <DropdownListbox
-      id="version-select"
+      id={`version-select-${sectionDataset.uuid}`}
       optionComponent={DropdownListboxOption}
       buttonComponent={StyledButton}
       selectedOptionIndex={selectedVersionIndex}
       options={versions}
-      selectOnClick={({ i }) => {
-        window.location.href = `/browse/dataset/${versions[i].uuid}`;
+      selectOnClick={({ option }) => {
+        setSelectedVersion(sectionDataset.uuid, option);
+        track({
+          action: `Change to version ${option.revision_number} (${option.uuid})`,
+          label: sectionDataset.hubmap_id,
+        });
       }}
       getOptionLabel={getOptionDisplay}
       buttonProps={{ disabled: versions.length === 0, color: 'primary' }}

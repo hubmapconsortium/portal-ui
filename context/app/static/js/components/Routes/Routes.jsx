@@ -45,8 +45,6 @@ function Routes({ flaskData }) {
     markdown,
     errorCode,
     list_uuid,
-    has_notebook,
-    vis_lifted_uuid,
     entities,
     organs,
     organs_count,
@@ -86,12 +84,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/dataset/') || urlPath.startsWith('/browse/support/')) {
     return (
       <Route>
-        <Dataset
-          assayMetadata={entity}
-          vitData={vitessce_conf}
-          hasNotebook={has_notebook}
-          visLiftedUUID={vis_lifted_uuid}
-        />
+        <Dataset assayMetadata={entity} />
       </Route>
     );
   }
@@ -341,6 +334,7 @@ Routes.propTypes = {
     redirected_from: PropTypes.string,
     cell_type: PropTypes.string,
     globusGroups: PropTypes.object,
+    redirected: PropTypes.bool,
   }),
 };
 

@@ -4,16 +4,9 @@ import Paper from '@mui/material/Paper';
 import ExternalLink from 'js/components/home/ExternalLink';
 import Stack from '@mui/material/Stack';
 import { SectionHeader } from 'js/pages/Home/style';
-import {
-  avr,
-  azimuth,
-  fusion,
-  googleScholar,
-  hra,
-  hubmapConsortium,
-  nih,
-  protocols,
-} from 'js/shared-styles/icons/externalImageIcons';
+import { externalIconMap } from 'js/shared-styles/icons/externalImageIcons';
+
+const { avr, azimuth, fusion, googleScholar, hra, hubmapConsortium, nih, protocols } = externalIconMap;
 
 interface ExternalLinkPropsAdapter {
   src: string;

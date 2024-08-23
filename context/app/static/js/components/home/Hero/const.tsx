@@ -14,6 +14,21 @@ const timelineIconProps = {
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   {
+    title: 'Raw & Processed Unified Datasets Page',
+    titleHref: '/search?entity_type[0]=Dataset',
+    description:
+      'Dataset page design has been updated to display both raw and processed data on the same page, enhancing the understanding of relationships between datasets.',
+    date: 'August 2024',
+    img: <entityIconMap.Dataset {...timelineIconProps} />,
+  },
+  {
+    title: '10X Multiome and Visium Datasets Now Available',
+    titleHref: '/search?assay_modality[0]=multiple&entity_type[0]=Dataset',
+    description: 'Explore and download 10X Multiome and Visium multi-assay datasets.',
+    date: 'August 2024',
+    img: <entityIconMap.Dataset {...timelineIconProps} />,
+  },
+  {
     title: 'Profile Page Now Available',
     titleHref: '/profile',
     description:

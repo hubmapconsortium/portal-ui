@@ -1,3 +1,18 @@
+## v1.0.0 - 2024-08-23
+
+- Extend provenance table logic to handle missing entities.
+- Fix handling of large search requests.
+- Request less data for provenance table tiles.
+- Add dataset relationships diagram.
+- Fix multi-assay provenance overflow.
+- Fix `push` script compatibility with mac OS.
+- Update homepage news to inform users about unified dataset pages and multiomic dataset availability.
+- Added processed datasets section to display all visualizations for a given raw dataset.
+- Extended push script to support major version bumps.
+- Update raw dataset detail pages to include processed dataset information.
+- Update table of contents design.
+
+
 ## v0.103.1 - 2024-08-19
 
 - Fix bug preventing visualization notebooks from being downloaded on dataset detail pages.

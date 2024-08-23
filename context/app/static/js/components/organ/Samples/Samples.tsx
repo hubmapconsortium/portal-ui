@@ -1,8 +1,6 @@
 import React, { useMemo } from 'react';
 import Button from '@mui/material/Button';
 
-import SectionContainer from 'js/shared-styles/sections/SectionContainer';
-import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
@@ -15,16 +13,17 @@ import {
   parentDonorSex,
   parentDonorRace,
 } from 'js/shared-styles/tables/columns';
-import { StyledSectionHeader } from './style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { getSearchURL } from '../utils';
 
 const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, lastModifiedTimestamp];
 
 interface OrganSamplesProps {
   organTerms: string[];
+  id: string;
 }
 
-function Samples({ organTerms }: OrganSamplesProps) {
+function Samples({ organTerms, id }: OrganSamplesProps) {
   const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
 
@@ -55,28 +54,25 @@ function Samples({ organTerms }: OrganSamplesProps) {
   );
 
   return (
-    <SectionContainer>
-      <SpacedSectionButtonRow
-        leftText={
-          <div>
-            <StyledSectionHeader>Samples</StyledSectionHeader>
-          </div>
-        }
-        buttons={
-          <>
-            <Button color="primary" variant="outlined" component="a" href={searchUrl}>
-              View Data on Search Page
-            </Button>
-            <AddItemsToListDialog
-              itemsToAddUUIDS={selectedRows}
-              onSaveCallback={deselectHeaderAndRows}
-              disabled={selectedRows.size === 0}
-            />
-          </>
-        }
-      />
+    <CollapsibleDetailPageSection
+      id={id}
+      title="Samples"
+      action={
+        <>
+          <Button color="primary" variant="outlined" component="a" href={searchUrl}>
+            View Data on Search Page
+          </Button>
+          <AddItemsToListDialog
+            itemsToAddUUIDS={selectedRows}
+            onSaveCallback={deselectHeaderAndRows}
+            disabled={selectedRows.size === 0}
+          />
+        </>
+      }
+    >
       <EntitiesTables<SampleDocument> entities={[{ query, columns, entityType: 'Sample' }]} />
-    </SectionContainer>
+    </CollapsibleDetailPageSection>
   );
 }
+
 export default withSelectableTableProvider(Samples, 'organ-samples');

@@ -1,13 +1,13 @@
 import React from 'react';
 import { CSSProperties } from 'styled-components';
-import * as externalIcons from './externalImageIcons';
+import { externalIconMap } from './externalImageIcons';
 
 interface ExternalImageIconProps {
-  icon: keyof typeof externalIcons;
+  icon: keyof typeof externalIconMap;
   style?: CSSProperties;
 }
 
 export default function ExternalImageIcon({ icon, style }: ExternalImageIconProps) {
-  const { src, alt } = externalIcons[icon];
+  const { src, alt } = externalIconMap[icon];
   return <img src={src} alt={alt} style={style} />;
 }
