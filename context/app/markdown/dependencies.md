@@ -37,6 +37,7 @@ lxml>=4.9.1
 
 ```
 {
+"@dagrejs/dagre": "^1.1.3",
 "@datapunt/matomo-tracker-js": "^0.5.1",
 "@elastic/elasticsearch": "^8.13.0",
 "@fontsource-variable/inter": "^5.0.17",
@@ -65,6 +66,7 @@ lxml>=4.9.1
 "@visx/shape": "^3.5.0",
 "@visx/text": "^3.3.0",
 "@visx/tooltip": "^3.3.0",
+"@xyflow/react": "^12.0.3",
 "chart.js": "^4.4.2",
 "d3": "^7.9.0",
 "d3-array": "^3.2.4",
