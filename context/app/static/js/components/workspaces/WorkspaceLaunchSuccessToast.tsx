@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-function WorkspaceToastSuccessMessage(id: number) {
+function WorkspaceLaunchSuccessToast(id: number) {
   return (
     <Stack sx={{ maxWidth: '22rem' }}>
       <Typography>
@@ -11,20 +11,12 @@ function WorkspaceToastSuccessMessage(id: number) {
         settings and relaunch your workspace.
       </Typography>
       <Stack direction="row" justifyContent="flex-end" marginTop={1}>
-        <Button
-          href={`/workspaces/${id}`}
-          variant="contained"
-          sx={{
-            backgroundColor: 'transparent',
-            boxShadow: 'none',
-            ':hover': { backgroundColor: 'transparent', boxShadow: 'none' },
-          }}
-        >
-          <Typography variant="button">View Workspace Detail Page</Typography>
+        <Button href={`/workspaces/${id}`} variant="text" color="inherit">
+          View Workspace Detail Page
         </Button>
       </Stack>
     </Stack>
   );
 }
 
-export default WorkspaceToastSuccessMessage;
+export default WorkspaceLaunchSuccessToast;

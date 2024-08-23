@@ -29,7 +29,7 @@ import {
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
-import WorkspaceToastSuccessMessage from './WorkspaceToastSuccessMessage';
+import WorkspaceLaunchSuccessToast from './WorkspaceLaunchSuccessToast';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -274,7 +274,7 @@ export function useCreateAndLaunchWorkspace() {
         return;
       }
 
-      toastSuccess(WorkspaceToastSuccessMessage(workspace.id));
+      toastSuccess(WorkspaceLaunchSuccessToast(workspace.id));
 
       try {
         await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
