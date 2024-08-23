@@ -111,11 +111,11 @@ function useCreateWorkspaceForm({
         'protected-datasets': checkedProtectedDatasets,
         templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
         workspaceJobTypeId: DEFAULT_JOB_TYPE,
-        datasets: allDatasets ?? [],
+        datasets: initialSelectedDatasets ?? [],
       });
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialProtectedDatasets, reset, checkedWorkspaceName, checkedProtectedDatasets, defaultTemplate, allDatasets]);
+  }, [initialProtectedDatasets, reset, checkedWorkspaceName, checkedProtectedDatasets, defaultTemplate]);
 
   useEffect(() => {
     if (dialogIsOpen) {

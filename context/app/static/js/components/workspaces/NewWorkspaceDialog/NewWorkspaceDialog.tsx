@@ -37,23 +37,27 @@ const text = {
   },
   datasets: {
     title: 'Edit Datasets Selection',
-    description: [
-      <span key="datasets-step">
-        {' '}
-        Add datasets by HuBMAP ID below or navigate to the{' '}
-        <InternalLink href="/search?entity_type[0]=Dataset">dataset search page</InternalLink>, select datasets and
-        follow steps to launch a workspace.
-      </span>,
-      'To remove a dataset, select the dataset and press the delete button. If all datasets are removed, an empty workspace will be launched.',
-      'Once you navigate away from this page, all progress will be lost. You can copy IDs to your clipboard by selecting datasets in the table below and pressing the copy button. You can also save datasets to “My Lists”.',
-      <Button variant="outlined" key="datasets-button">
-        <InternalLink href="/search?entity_type[0]=Dataset">
-          <Typography color="primary" variant="button">
-            Select Additional Datasets
-          </Typography>
-        </InternalLink>
-      </Button>,
-    ],
+    description: {
+      searchBar: [
+        <span key="datasets-step">
+          {' '}
+          Add datasets by HuBMAP ID below or navigate to the{' '}
+          <InternalLink href="/search?entity_type[0]=Dataset">dataset search page</InternalLink>, select datasets and
+          follow steps to launch a workspace.
+        </span>,
+      ],
+      all: [
+        'To remove a dataset, select the dataset and press the delete button. If all datasets are removed, an empty workspace will be launched.',
+        'Once you navigate away from this page, all progress will be lost. You can copy IDs to your clipboard by selecting datasets in the table below and pressing the copy button. You can also save datasets to “My Lists”.',
+        <Button variant="outlined" key="datasets-button">
+          <InternalLink href="/search?entity_type[0]=Dataset">
+            <Typography color="primary" variant="button">
+              Select Additional Datasets
+            </Typography>
+          </InternalLink>
+        </Button>,
+      ],
+    },
   },
   configure: {
     title: 'Configure Workspace',
@@ -153,7 +157,12 @@ function NewWorkspaceDialog({
         <Step title={text.datasets.title} index={0}>
           <Stack spacing={1}>
             {children}
-            <StepDescription blocks={text.datasets.description} />
+            <StepDescription
+              blocks={[
+                ...(showDatasetsSearchBar ? [...text.datasets.description.searchBar] : []),
+                ...text.datasets.description.all,
+              ]}
+            />
             {showDatasetsSearchBar && removeDatasets ? (
               <AddDatasetsTable
                 inputValue={inputValue}
