@@ -1,1 +1,0 @@
-- Extended push script to support major version bumps.

@@ -1,3 +1,0 @@
-- Extend provenance table logic to handle missing entities.
-- Fix handling of large search requests.
-- Request less data for provenance table tiles.
