@@ -17,7 +17,6 @@ import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 
-import { Hit } from 'js/hooks/useSearchData';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
@@ -90,7 +89,7 @@ interface NewWorkspaceDialogProps {
   workspaceDatasets: string[];
   allDatasets: string[];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  searchHits: Hit<any>[];
+  searchHits: SearchAheadHit[];
 }
 
 function NewWorkspaceDialog({
@@ -178,7 +177,7 @@ function NewWorkspaceDialog({
               <WorkspaceDatasetsTable
                 datasetsUUIDs={allDatasets}
                 removeDatasets={removeDatasets}
-                emptyAlerts={<Alert severity="info">No datasets available.</Alert>}
+                emptyAlert={<Alert severity="info">No datasets available.</Alert>}
               />
             )}
           </Stack>

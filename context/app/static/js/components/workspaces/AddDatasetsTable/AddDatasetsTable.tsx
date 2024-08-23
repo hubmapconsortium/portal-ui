@@ -76,7 +76,7 @@ function AddDatasetsTable({
         datasetsUUIDs={allDatasets}
         disabledIDs={new Set(workspaceDatasets)}
         removeDatasets={removeDatasets}
-        emptyAlerts={<Alert severity="info">No datasets available.</Alert>}
+        emptyAlert={<Alert severity="info">No datasets available.</Alert>}
       />
     </Stack>
   );

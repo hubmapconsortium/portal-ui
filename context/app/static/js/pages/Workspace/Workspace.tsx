@@ -102,7 +102,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         addDatasets={workspace}
         label={<SectionHeader>Datasets</SectionHeader>}
         hideTableIfEmpty
-        emptyAlerts={
+        emptyAlert={
           <Alert
             severity="info"
             action={

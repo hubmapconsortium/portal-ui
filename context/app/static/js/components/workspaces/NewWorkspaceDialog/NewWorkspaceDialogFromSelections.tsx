@@ -37,7 +37,7 @@ function NewWorkspaceDialogFromSelections() {
         control={control}
         errors={errors}
         errorMessages={errorMessages}
-        removeDatasets={(uuids) => {
+        removeDatasets={(uuids: string[]) => {
           removeDatasets(uuids);
           deselectRows(uuids);
         }}

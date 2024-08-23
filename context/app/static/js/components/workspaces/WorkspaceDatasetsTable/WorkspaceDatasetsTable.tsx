@@ -29,7 +29,7 @@ interface WorkspaceDatasetsTableProps {
   addDatasets?: MergedWorkspace;
   label?: ReactNode;
   disabledIDs?: Set<string>;
-  emptyAlerts?: ReactNode;
+  emptyAlert?: ReactNode;
   additionalButtons?: ReactNode;
   hideTableIfEmpty?: boolean;
 }
@@ -40,7 +40,7 @@ function WorkspaceDatasetsTable({
   addDatasets,
   label,
   disabledIDs,
-  emptyAlerts,
+  emptyAlert,
   additionalButtons,
   hideTableIfEmpty,
 }: WorkspaceDatasetsTableProps) {
@@ -97,12 +97,12 @@ function WorkspaceDatasetsTable({
         }
       />
       {hideTable ? (
-        emptyAlerts
+        emptyAlert
       ) : (
         <EntitiesTables<DatasetDocument>
           entities={[{ query, columns, entityType: 'Dataset' }]}
           disabledIDs={disabledIDs}
-          emptyAlerts={emptyAlerts}
+          emptyAlert={emptyAlert}
         />
       )}
     </Box>

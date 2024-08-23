@@ -14,7 +14,7 @@ interface EntitiesTablesProps<Doc> {
   initialTabIndex?: number;
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
-  emptyAlerts?: React.ReactNode;
+  emptyAlert?: React.ReactNode;
 }
 
 function EntitiesTables<Doc>({
@@ -22,7 +22,7 @@ function EntitiesTables<Doc>({
   initialTabIndex = 0,
   entities,
   disabledIDs,
-  emptyAlerts,
+  emptyAlert,
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
@@ -51,7 +51,7 @@ function EntitiesTables<Doc>({
         })}
       </Tabs>
       {tableIsEmpty ? (
-        <StyledPaper sx={{ padding: '1rem' }}>{emptyAlerts}</StyledPaper>
+        <StyledPaper sx={{ padding: '1rem' }}>{emptyAlert}</StyledPaper>
       ) : (
         entities.map(({ query, columns, entityType }, i) => (
           <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
