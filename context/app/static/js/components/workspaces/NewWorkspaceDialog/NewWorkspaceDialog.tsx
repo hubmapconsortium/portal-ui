@@ -88,7 +88,6 @@ interface NewWorkspaceDialogProps {
   addDataset: (e: React.SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => void;
   workspaceDatasets: string[];
   allDatasets: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   searchHits: SearchAheadHit[];
 }
 

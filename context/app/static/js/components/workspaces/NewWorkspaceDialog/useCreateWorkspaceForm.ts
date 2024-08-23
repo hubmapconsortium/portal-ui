@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -48,14 +48,14 @@ function useCreateWorkspaceForm({
   defaultName,
   defaultTemplate,
   initialProtectedDatasets,
-  initialSelectedDatasets,
+  initialSelectedDatasets = [],
 }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
 
   const checkedWorkspaceName = defaultName ?? '';
   const checkedProtectedDatasets = initialProtectedDatasets ?? '';
-  const checkedSelectedDatasets = initialSelectedDatasets ?? [];
+  const memoizedInitialSelectedDatasets = useMemo(() => initialSelectedDatasets, [initialSelectedDatasets]);
 
   const {
     handleSubmit,
@@ -71,7 +71,7 @@ function useCreateWorkspaceForm({
       'protected-datasets': checkedProtectedDatasets,
       templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
-      datasets: checkedSelectedDatasets,
+      datasets: memoizedInitialSelectedDatasets,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -106,16 +106,9 @@ function useCreateWorkspaceForm({
 
   useEffect(() => {
     if (initialProtectedDatasets && initialProtectedDatasets !== '') {
-      reset({
-        'workspace-name': checkedWorkspaceName,
-        'protected-datasets': checkedProtectedDatasets,
-        templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
-        workspaceJobTypeId: DEFAULT_JOB_TYPE,
-        datasets: initialSelectedDatasets ?? [],
-      });
+      setValue('protected-datasets', initialProtectedDatasets);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [initialProtectedDatasets, reset, checkedWorkspaceName, checkedProtectedDatasets, defaultTemplate]);
+  }, [initialProtectedDatasets, setValue]);
 
   useEffect(() => {
     if (dialogIsOpen) {
