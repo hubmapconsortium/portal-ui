@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -55,7 +55,6 @@ function useCreateWorkspaceForm({
 
   const checkedWorkspaceName = defaultName ?? '';
   const checkedProtectedDatasets = initialProtectedDatasets ?? '';
-  const memoizedInitialSelectedDatasets = useMemo(() => initialSelectedDatasets, [initialSelectedDatasets]);
 
   const {
     handleSubmit,
@@ -71,7 +70,7 @@ function useCreateWorkspaceForm({
       'protected-datasets': checkedProtectedDatasets,
       templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
-      datasets: memoizedInitialSelectedDatasets,
+      datasets: initialSelectedDatasets,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
