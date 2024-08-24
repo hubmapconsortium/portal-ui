@@ -14,6 +14,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { InfoIcon } from 'js/shared-styles/icons';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 
+import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 import { LoginButton } from '../detailPage/BulkDataTransfer/style';
@@ -30,6 +31,20 @@ function ContactUsForAccess() {
 const workspacesDescription = {
   title: 'What are workspaces?',
   body: 'Workspaces enable lightweight exploration of public HuBMAP data and user-provided data using Python and R in a Jupyter Lab environment hosted by HuBMAP at no cost to community members.',
+};
+
+const workspacesUsage = {
+  title: 'How do I use workspaces?',
+  body: (
+    <>
+      Explore more about this platform through our{' '}
+      <InternalLink href="/tutorials/workspaces">workspace tutorials</InternalLink> to optimize your experience with
+      workspaces. To begin a new workspace, find datasets on our{' '}
+      <InternalLink href="/search?entity_type[0]=Dataset">search page</InternalLink> and launch a workspace from them.
+      To learn more about getting started, explore <InternalLink href="/templates">workspace templates</InternalLink> to
+      help you start analyzing HuBMAP data.
+    </>
+  ),
 };
 
 const workspacesSupportInfo = {
@@ -49,7 +64,7 @@ const workspacesQuestionsSuggestions = {
 };
 
 const text = {
-  unauthenticated: [workspacesDescription, workspacesSupportInfo, workspacesQuestionsSuggestions],
+  unauthenticated: [workspacesDescription, workspacesUsage, workspacesSupportInfo, workspacesQuestionsSuggestions],
   noAccess: [
     workspacesDescription,
     {
@@ -64,24 +79,23 @@ const text = {
       ),
     },
   ],
-  access: [
-    workspacesDescription,
-    {
-      title: 'How do I use workspaces?',
-      body: (
-        <>
-          Explore more about this platform through our{' '}
-          <InternalLink href="/tutorials/workspaces">workspace tutorials</InternalLink> to optimize your experience with
-          workspaces. To begin a new workspace, find datasets on our{' '}
-          <InternalLink href="/search?entity_type[0]=Dataset">search page</InternalLink> and launch a workspace from
-          them.
-        </>
-      ),
-    },
-    workspacesSupportInfo,
-    workspacesQuestionsSuggestions,
-  ],
+  access: [workspacesDescription, workspacesUsage, workspacesSupportInfo, workspacesQuestionsSuggestions],
 };
+
+const pageLinks = [
+  {
+    link: '/tutorials/workspaces',
+    children: 'Tutorials',
+  },
+  {
+    link: '/templates',
+    children: 'Templates',
+  },
+  {
+    link: '/search?entity_type[0]=Dataset',
+    children: 'Dataset Search Page',
+  },
+];
 
 function LogInAlert() {
   return <LoginAlert featureName="workspaces" />;
@@ -112,9 +126,9 @@ function TemplateGridPreview() {
         <Stack direction="row" spacing={2}>
           <InfoIcon color="primary" fontSize="1.5rem" />
           <Typography>
-            Here are workspace templates available to help you start analyzing HuBMAP data. They are categorized by
-            tags, which can help you filter templates based on your interests. To view more details on a template,
-            please <InternalLink href="/login">log in</InternalLink>.
+            Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates
+            by your specific interests. Click on any template for detailed information.{' '}
+            <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
           </Typography>
         </Stack>
         <Box>
@@ -123,8 +137,7 @@ function TemplateGridPreview() {
           </LoginButton>
         </Box>
       </Stack>
-      <Typography variant="subtitle2">Workspace Template Tags</Typography>
-      <Stack spacing={1}>
+      <Stack spacing={2}>
         <TemplateTagsAutocomplete
           selectedTags={selectedTags}
           recommendedTags={recommendedTags}
@@ -145,10 +158,17 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
         {children}
         <Stack spacing={1}>
           {text[textKey].map(({ title, body }) => (
-            <LabelledSectionText label={title} key={title} spacing={2}>
+            <LabelledSectionText label={title} key={title} spacing={1}>
               {body}
             </LabelledSectionText>
           ))}
+          <LabelledSectionText label="Relevant Pages" spacing={1}>
+            <Stack direction="row" spacing={1}>
+              {pageLinks.map((page) => (
+                <OutlinedLinkButton key={page.link} {...page} />
+              ))}
+            </Stack>
+          </LabelledSectionText>
         </Stack>
       </Stack>
       {!isAuthenticated && <TemplateGridPreview />}

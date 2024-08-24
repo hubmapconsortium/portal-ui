@@ -48,6 +48,11 @@ function TemplateTagsAutocomplete({
         onChange={(_, value: string[]) => {
           setSelectedTags(value);
         }}
+        renderInputProps={{
+          variant: 'outlined',
+          label: 'Workspace Template Tags',
+          placeholder: 'Select tags to filter workspace templates',
+        }}
       />
       <Box>
         <Typography variant="subtitle2" gutterBottom>
