@@ -35,12 +35,12 @@ const noDatasetsText =
 
 const pageLinks = [
   {
-    label: 'My Workspaces',
     link: '/workspaces',
+    children: 'My Workspaces',
   },
   {
-    label: 'Dataset Search Page',
     link: '/search?entity_type[0]=Dataset',
+    children: 'Dataset Search Page',
   },
 ];
 
@@ -108,7 +108,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             <LabelledSectionText label="Relevant Pages" spacing={1}>
               <Stack direction="row" spacing={1}>
                 {pageLinks.map((page) => (
-                  <OutlinedLinkButton key={page.label} {...page} />
+                  <OutlinedLinkButton key={page.link} {...page} />
                 ))}
               </Stack>
             </LabelledSectionText>

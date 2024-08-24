@@ -1,15 +1,14 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Button from '@mui/material/Button';
 import LinkIcon from '@mui/icons-material/Link';
 import SvgIcon from '@mui/material/SvgIcon';
 import Typography from '@mui/material/Typography';
 
-interface OutlinedLinkButtonProps {
-  label: string;
+interface OutlinedLinkButtonProps extends PropsWithChildren {
   link: string;
 }
 
-function OutlinedLinkButton({ label, link }: OutlinedLinkButtonProps) {
+function OutlinedLinkButton({ link, children }: OutlinedLinkButtonProps) {
   return (
     <Button
       variant="outlined"
@@ -21,7 +20,7 @@ function OutlinedLinkButton({ label, link }: OutlinedLinkButtonProps) {
       href={link}
     >
       <Typography variant="inherit" marginRight=".5rem">
-        {label}
+        {children}
       </Typography>
       <SvgIcon component={LinkIcon} color="info" sx={{ fontSize: '1rem' }} />
     </Button>
