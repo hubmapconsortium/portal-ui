@@ -1,6 +1,5 @@
 import React from 'react';
 import { Control } from 'react-hook-form';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
 import { SelectedItems } from 'js/hooks/useSelectItems';
@@ -52,10 +51,7 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
   return (
     <Step title={title} index={stepIndex}>
       <StepDescription blocks={description} />
-      <Typography sx={{ mt: 2 }} variant="subtitle1">
-        Filter workspace templates by tags
-      </Typography>
-      <Stack spacing={1}>
+      <Stack spacing={1} marginTop={3}>
         <TemplateTagsAutocomplete
           selectedTags={selectedTags}
           recommendedTags={recommendedTags}

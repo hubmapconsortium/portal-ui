@@ -31,6 +31,7 @@ const Workspaces = lazy(() => import('js/pages/Workspaces'));
 const Workspace = lazy(() => import('js/pages/Workspace'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 const Templates = lazy(() => import('js/pages/Templates'));
+const Template = lazy(() => import('js/pages/Template'));
 const GeneDetails = lazy(() => import('js/pages/Genes'));
 const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
 const CellTypes = lazy(() => import('js/pages/CellTypes'));
@@ -248,6 +249,15 @@ function Routes({ flaskData }) {
     return (
       <Route>
         <Templates />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/templates/')) {
+    const templateKey = urlPath.split('/').pop();
+    return (
+      <Route>
+        <Template templateKey={templateKey} />
       </Route>
     );
   }
