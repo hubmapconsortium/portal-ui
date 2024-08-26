@@ -66,7 +66,7 @@ interface HelperPanelBodyItemProps extends PropsWithChildren {
 }
 
 function HelperPanelBodyItem({ label, children, noWrap }: HelperPanelBodyItemProps) {
-  const body = noWrap ? children : <LineClamp lines={3}>{children}</LineClamp>;
+  const body = noWrap ? <LineClamp lines={3}>{children}</LineClamp> : children;
   return (
     <Stack direction="column">
       <Typography variant="overline">{label}</Typography>
