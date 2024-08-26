@@ -3,15 +3,18 @@ import React from 'react';
 import { useTabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
+import { StyledPaper } from './style';
 
 interface EntitiesTablesProps<Doc> {
   isSelectable?: boolean;
   initialTabIndex?: number;
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
+  emptyAlert?: React.ReactNode;
 }
 
 function EntitiesTables<Doc>({
@@ -19,6 +22,7 @@ function EntitiesTables<Doc>({
   initialTabIndex = 0,
   entities,
   disabledIDs,
+  emptyAlert,
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
@@ -26,6 +30,8 @@ function EntitiesTables<Doc>({
     totalHitsCounts: number[];
     isLoading: boolean;
   };
+
+  const tableIsEmpty = entities[0].query.query?.ids?.values?.length === 0;
 
   return (
     <>
@@ -44,11 +50,15 @@ function EntitiesTables<Doc>({
           );
         })}
       </Tabs>
-      {entities.map(({ query, columns, entityType }, i) => (
-        <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
-          <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} disabledIDs={disabledIDs} />
-        </TabPanel>
-      ))}
+      {tableIsEmpty ? (
+        <StyledPaper sx={{ padding: '1rem' }}>{emptyAlert}</StyledPaper>
+      ) : (
+        entities.map(({ query, columns, entityType }, i) => (
+          <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
+            <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} disabledIDs={disabledIDs} />
+          </TabPanel>
+        ))
+      )}
     </>
   );
 }

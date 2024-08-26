@@ -94,7 +94,10 @@ function CreateWorkspaceButton({
   hubmap_id,
   mapped_data_access_level,
 }: Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'>) {
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
+  const { setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
+    defaultName: hubmap_id,
+    initialSelectedDatasets: [uuid],
+  });
 
   const disabled = mapped_data_access_level === 'Protected';
 
@@ -108,7 +111,7 @@ function CreateWorkspaceButton({
         tooltip={disabled ? 'Protected datasets are not available in Workspaces.' : 'Launch a new workspace.'}
         disabled={disabled}
       />
-      <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+      <NewWorkspaceDialog {...rest} />
     </>
   );
 }
