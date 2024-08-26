@@ -121,10 +121,14 @@ function WorkspaceButton() {
   const {
     control,
     errors,
+    removeDatasets,
     setDialogIsOpen: setOpenCreateWorkspace,
     dialogIsOpen: createWorkspaceIsOpen,
     ...rest
-  } = useCreateWorkspaceForm({ defaultName: currentDataset?.hubmap_id });
+  } = useCreateWorkspaceForm({
+    defaultName: currentDataset?.hubmap_id,
+    initialSelectedDatasets: currentDataset ? [currentDataset.uuid] : [],
+  });
 
   const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH');
 
@@ -183,13 +187,7 @@ function WorkspaceButton() {
           Add to Workspace
         </MenuItem>
       </Menu>
-      <NewWorkspaceDialog
-        datasetUUIDs={new Set([currentDataset.uuid])}
-        dialogIsOpen={createWorkspaceIsOpen}
-        control={control}
-        errors={errors}
-        {...rest}
-      />
+      <NewWorkspaceDialog dialogIsOpen={createWorkspaceIsOpen} control={control} errors={errors} {...rest} />
       <AddDatasetsFromSearchDialog />
     </SelectableTableProvider>
   );
