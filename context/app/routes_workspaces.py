@@ -34,3 +34,12 @@ def workspace_detail(workspace_id):
         flask_data=flask_data,
         title='Workspace'
     )
+
+@blueprint.route('/workspaces/templates')
+def templates():
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html',
+        flask_data=flask_data,
+        title='Templates'
+    )
