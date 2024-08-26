@@ -11,7 +11,7 @@ import {
   CellTypeIcon,
 } from './icons';
 
-type MUIIcon = typeof DonorIcon;
+export type MUIIcon = typeof DonorIcon;
 
 type CellTypeEntityType = 'CellType';
 type GeneEntityType = 'Gene';

@@ -244,7 +244,7 @@ function Routes({ flaskData }) {
     );
   }
 
-  if (urlPath === '/workspaces/templates') {
+  if (urlPath === '/templates') {
     return (
       <Route>
         <Templates />

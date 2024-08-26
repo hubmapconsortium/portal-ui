@@ -35,7 +35,7 @@ def workspace_detail(workspace_id):
         title='Workspace'
     )
 
-@blueprint.route('/workspaces/templates')
+@blueprint.route('/templates')
 def templates():
     flask_data = {**get_default_flask_data()}
     return render_template(

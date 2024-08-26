@@ -110,6 +110,26 @@ function AccessAlert() {
   );
 }
 
+function TemplateLogInBanner() {
+  return (
+    <Stack component={Paper} p={2} spacing={2}>
+      <Stack direction="row" spacing={2}>
+        <InfoIcon color="primary" fontSize="1.5rem" />
+        <Typography>
+          Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
+          your specific interests. Click on any template for detailed information.{' '}
+          <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
+        </Typography>
+      </Stack>
+      <Box>
+        <LoginButton href="/login" variant="contained" color="primary">
+          Log In
+        </LoginButton>
+      </Box>
+    </Stack>
+  );
+}
+
 function TemplateGridPreview() {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -118,35 +138,27 @@ function TemplateGridPreview() {
   const recommendedTags = ['visualization', 'api'];
 
   return (
+    <Stack spacing={2}>
+      <TemplateTagsAutocomplete
+        selectedTags={selectedTags}
+        recommendedTags={recommendedTags}
+        toggleTag={toggleTag}
+        setSelectedTags={setSelectedTags}
+        selectedRecommendedTags={selectedRecommendedTags}
+      />
+      <TemplateGrid templates={templates} />
+    </Stack>
+  );
+}
+
+function TemplatePreviewSection() {
+  return (
     <Stack pt={2} spacing={2}>
       <Typography component="h3" variant="h4">
         Workspace Templates
       </Typography>
-      <Stack component={Paper} p={2} spacing={2}>
-        <Stack direction="row" spacing={2}>
-          <InfoIcon color="primary" fontSize="1.5rem" />
-          <Typography>
-            Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates
-            by your specific interests. Click on any template for detailed information.{' '}
-            <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
-          </Typography>
-        </Stack>
-        <Box>
-          <LoginButton href="/login" variant="contained" color="primary">
-            Log In
-          </LoginButton>
-        </Box>
-      </Stack>
-      <Stack spacing={2}>
-        <TemplateTagsAutocomplete
-          selectedTags={selectedTags}
-          recommendedTags={recommendedTags}
-          toggleTag={toggleTag}
-          setSelectedTags={setSelectedTags}
-          selectedRecommendedTags={selectedRecommendedTags}
-        />
-        <TemplateGrid templates={templates} />
-      </Stack>
+      <TemplateLogInBanner />
+      <TemplateGridPreview />
     </Stack>
   );
 }
@@ -171,9 +183,9 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
           </LabelledSectionText>
         </Stack>
       </Stack>
-      {!isAuthenticated && <TemplateGridPreview />}
+      {!isAuthenticated && <TemplatePreviewSection />}
     </Stack>
   );
 }
 
-export { LogInAlert, AccessAlert, TextItems };
+export { LogInAlert, AccessAlert, TemplateLogInBanner, TemplateGridPreview, TextItems };
