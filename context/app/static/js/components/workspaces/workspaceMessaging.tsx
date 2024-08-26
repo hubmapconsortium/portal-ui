@@ -64,8 +64,13 @@ const workspacesQuestionsSuggestions = {
 };
 
 const text = {
-  unauthenticated: [workspacesDescription, workspacesUsage, workspacesSupportInfo, workspacesQuestionsSuggestions],
-  noAccess: [
+  workspaceUserOrLoggedOut: [
+    workspacesDescription,
+    workspacesUsage,
+    workspacesSupportInfo,
+    workspacesQuestionsSuggestions,
+  ],
+  nonWorkspaceUser: [
     workspacesDescription,
     {
       title: 'How do I get access to workspaces as a HuBMAP member?',
@@ -78,8 +83,9 @@ const text = {
         </>
       ),
     },
+    workspacesUsage,
+    workspacesSupportInfo,
   ],
-  access: [workspacesDescription, workspacesUsage, workspacesSupportInfo, workspacesQuestionsSuggestions],
 };
 
 const pageLinks = [

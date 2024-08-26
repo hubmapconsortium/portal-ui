@@ -8,7 +8,7 @@ function WorkspacesAuthGuard({ children }: { children: ReactNode }) {
 
   if (!isAuthenticated) {
     return (
-      <TextItems textKey="unauthenticated">
+      <TextItems textKey="workspaceUserOrLoggedOut">
         <LogInAlert />
       </TextItems>
     );
@@ -16,7 +16,7 @@ function WorkspacesAuthGuard({ children }: { children: ReactNode }) {
 
   if (!isWorkspacesUser) {
     return (
-      <TextItems textKey="noAccess">
+      <TextItems textKey="nonWorkspaceUser">
         <AccessAlert />
       </TextItems>
     );
