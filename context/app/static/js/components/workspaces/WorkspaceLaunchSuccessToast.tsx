@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 
 function WorkspaceLaunchSuccessToast(id: number) {
   return (
-    <Stack spacing={1} sx={{ maxWidth: '22rem' }}>
+    <Stack spacing={1} maxWidth="22rem">
       <Typography>
         Workspace successfully launched in a new tab. If the tab didn&apos;t open, please check your pop-up blocker
         settings and relaunch your workspace.
