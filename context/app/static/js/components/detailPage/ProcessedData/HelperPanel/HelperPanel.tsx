@@ -23,6 +23,7 @@ import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProv
 import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
 import { LineClamp } from 'js/shared-styles/text';
 import Fade from '@mui/material/Fade';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
@@ -202,18 +203,20 @@ function HelperPanelActions() {
   return (
     <>
       <WorkspaceButton />
-      <HelperPanelButton
-        startIcon={<CloudDownloadRounded />}
-        href="#bulk-data-transfer"
-        onClick={() => {
-          track({
-            action: 'Navigate to Bulk Download',
-            label: currentDataset?.hubmap_id,
-          });
-        }}
-      >
-        Bulk Download
-      </HelperPanelButton>
+      <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">
+        <HelperPanelButton
+          startIcon={<CloudDownloadRounded />}
+          href="#bulk-data-transfer"
+          onClick={() => {
+            track({
+              action: 'Navigate to Bulk Download',
+              label: currentDataset?.hubmap_id,
+            });
+          }}
+        >
+          Bulk Download
+        </HelperPanelButton>
+      </SecondaryBackgroundTooltip>
     </>
   );
 }
