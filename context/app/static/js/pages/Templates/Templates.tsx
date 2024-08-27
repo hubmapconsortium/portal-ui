@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 
 import { TemplateGridPreview, TemplateLogInBanner } from 'js/components/workspaces/workspaceMessaging';
 import { WorkspacesIcon } from 'js/shared-styles/icons';

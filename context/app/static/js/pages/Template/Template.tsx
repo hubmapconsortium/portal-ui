@@ -1,6 +1,5 @@
 import React from 'react';
-
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import IconPageTitle from 'js/shared-styles/pages/IconPageTitle';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
