@@ -57,7 +57,7 @@
     "rehype-raw": "^7.0.0",
     "sass": "^1.72.0",
     "searchkit": "^2.4.1-alpha.4",
-    "styled-components": "^5.3.10",
+    "styled-components": "^6.1.12",
     "swr": "^2.2.5",
     "universal-cookie": "^7.1.2",
     "use-debounce": "^10.0.0",
