@@ -199,19 +199,21 @@ export const toolsAndAppsLinks: DrawerSection[] = [
       {
         label: 'Human Reference Atlas',
         description:
-          'Navigate a comprehensive, high-resolution, three-dimensional atlas of all the cells in the healthy human body.',
+          'Use the HRA Portal to access atlas data, explore atlas functionality, and contribute to the Human Reference Atlas.',
         href: 'https://humanatlas.io/',
         icon: <ExternalImageIcon icon="hra" />,
       },
       {
         label: 'Exploration User Interface (EUI)',
-        description: 'Explore and validate spatially registered tissue blocks and cell-type populations.',
+        description:
+          'Explore and validate spatially registered single-cell datasets in three-dimensions across organs.',
         href: 'https://apps.humanatlas.io/eui/',
         icon: <EUIIcon />,
       },
       {
         label: 'ASCT+B Reporter',
-        description: 'Explore and compare ASCT+B tables and construct OMAP tables.',
+        description:
+          'Explore and compare ASCT+B tables and construct validated panels for multiplexed antibody-based imaging (OMAPs) tables.',
         href: 'https://hubmapconsortium.github.io/ccf-asct-reporter/',
         icon: <AsctBIcon />,
       },

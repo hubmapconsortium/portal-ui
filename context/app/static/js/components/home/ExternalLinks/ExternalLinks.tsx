@@ -52,7 +52,7 @@ const relatedTools: ExternalLinkPropsAdapter[] = [
     ...hra,
     linkHref: 'https://humanatlas.io/',
     description:
-      'Navigate a comprehensive, high-resolution, three-dimensional atlas of all the cells in the healthy human body.',
+      'Use the HRA Portal to access atlas data, explore atlas functionality, and contribute to the Human Reference Atlas.',
   },
   {
     linkText: 'Azimuth',
