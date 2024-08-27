@@ -19,7 +19,7 @@ export function DatasetTitle() {
   const track = useTrackEntityPageEvent();
   return (
     <Typography variant="h5" display="flex" alignItems="center" gap={0.5}>
-      <StatusIcon status={status} />
+      <StatusIcon status={status} tooltip />
       {hubmap_id}
       <SecondaryBackgroundTooltip title="Copy HuBMAP ID">
         <IconButton

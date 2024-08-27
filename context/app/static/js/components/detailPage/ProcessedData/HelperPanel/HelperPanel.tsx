@@ -8,7 +8,6 @@ import SchemaRounded from '@mui/icons-material/SchemaRounded';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 import { useAppContext } from 'js/components/Contexts';
-import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
 import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
 import { animated } from '@react-spring/web';
 import { useEventCallback } from '@mui/material/utils';
@@ -43,7 +42,7 @@ function HelperPanelHeader() {
   return (
     <Typography variant="subtitle2" display="flex" alignItems="center" gap={0.5} whiteSpace="nowrap">
       <SchemaRounded fontSize="small" />
-      <a href={`#${formatSectionHash(`section-${currentDataset?.hubmap_id}`)}`}>{currentDataset?.hubmap_id}</a>
+      {currentDataset?.hubmap_id}
     </Typography>
   );
 }
