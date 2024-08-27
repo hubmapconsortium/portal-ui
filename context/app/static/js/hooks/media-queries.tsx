@@ -10,3 +10,8 @@ export function useIsDesktop() {
   const theme = useTheme();
   return useMediaQuery(theme.breakpoints.up('md'));
 }
+
+export function useIsLargeDesktop() {
+  const theme = useTheme();
+  return useMediaQuery(theme.breakpoints.up('lg'));
+}

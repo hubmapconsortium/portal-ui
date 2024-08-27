@@ -1,3 +1,4 @@
+import Paper from '@mui/material/Paper';
 import { styled } from '@mui/material/styles';
 
 const StyledDiv = styled('div')({
@@ -8,4 +9,8 @@ const StyledDiv = styled('div')({
   maxHeight: '340px', // Cuts off the last row partially to cue users to scroll.
 });
 
-export { StyledDiv };
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(1),
+}));
+
+export { StyledDiv, StyledPaper };

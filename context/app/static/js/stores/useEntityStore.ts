@@ -1,8 +1,12 @@
+import { createStore } from 'zustand';
+import { useSprings } from '@react-spring/web';
+
+import { createStoreContext } from 'js/helpers/zustand';
 import { AssayMetadata } from 'js/components/detailPage/entityHeader/EntityHeaderContent/EntityHeaderContent';
-import { create } from 'zustand';
 
 const savedAlertStatus = 'savedAlert';
 const editedAlertStatus = 'editedAlert';
+export type SummaryViewsType = 'narrow' | 'summary' | 'diagram';
 
 interface EntityStoreState {
   summaryComponentObserver: {
@@ -11,33 +15,42 @@ interface EntityStoreState {
   };
   assayMetadata: Partial<AssayMetadata>;
   shouldDisplaySavedOrEditedAlert: boolean | string;
+  view: SummaryViewsType;
+  springs: ReturnType<typeof useSprings>;
 }
 
 interface EntityStoreActions {
   setSummaryComponentObserver: (inView: boolean, entry: IntersectionObserverEntry) => void;
   setAssayMetadata: (val: Partial<AssayMetadata>) => void;
   setShouldDisplaySavedOrEditedAlert: (val: boolean | string) => void;
+  setView: (val: SummaryViewsType) => void;
 }
 
 export type EntityStore = EntityStoreState & EntityStoreActions;
 
-export const useEntityStore = create<EntityStore>((set) => ({
-  summaryComponentObserver: {
-    summaryInView: true,
-    summaryEntry: undefined,
-  },
-  setSummaryComponentObserver: (inView, entry) =>
-    set({
-      summaryComponentObserver: {
-        summaryInView: inView,
-        summaryEntry: entry,
-      },
-    }),
-  assayMetadata: {} as AssayMetadata,
-  setAssayMetadata: (val) => set({ assayMetadata: val }),
-  shouldDisplaySavedOrEditedAlert: false,
-  setShouldDisplaySavedOrEditedAlert: (val) => set({ shouldDisplaySavedOrEditedAlert: val }),
-}));
+export const createEntityStore = ({ springs }: { springs: ReturnType<typeof useSprings> }) =>
+  createStore<EntityStore>((set) => ({
+    summaryComponentObserver: {
+      summaryInView: true,
+      summaryEntry: undefined,
+    },
+    setSummaryComponentObserver: (inView, entry) =>
+      set({
+        summaryComponentObserver: {
+          summaryInView: inView,
+          summaryEntry: entry,
+        },
+      }),
+    view: 'narrow' as const,
+    setView: (val) => set({ view: val }),
+    springs,
+    assayMetadata: {},
+    setAssayMetadata: (val) => set({ assayMetadata: val }),
+    shouldDisplaySavedOrEditedAlert: false,
+    setShouldDisplaySavedOrEditedAlert: (val) => set({ shouldDisplaySavedOrEditedAlert: val }),
+  }));
 
-export { savedAlertStatus, editedAlertStatus };
+const [EntityStoreProvider, useEntityStore, EntityStoreContext] = createStoreContext(createEntityStore, 'Entity Store');
+
+export { savedAlertStatus, editedAlertStatus, EntityStoreProvider, EntityStoreContext };
 export default useEntityStore;

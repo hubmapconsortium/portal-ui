@@ -43,7 +43,7 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 
 interface VisualizationProps {
   vitData: object | object[];
-  uuid: string;
+  uuid?: string;
   hubmap_id?: string;
   mapped_data_access_level?: string;
   hasNotebook: boolean;
@@ -79,7 +79,7 @@ function Visualization({
   // Propagate UUID to the store if there is a notebook so we can display the download button when the visualization is expanded
   // Reruns every time vizIsFullscreen changes to ensure the proper notebook's UUID is used
   useEffect(() => {
-    if (hasNotebook) {
+    if (hasNotebook && uuid) {
       setVizNotebookId(uuid);
     }
   }, [hasNotebook, vizIsFullscreen, setVizNotebookId, uuid]);

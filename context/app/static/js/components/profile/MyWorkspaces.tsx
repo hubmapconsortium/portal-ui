@@ -1,12 +1,11 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Stack from '@mui/material/Stack';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { Alert } from 'js/shared-styles/alerts';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { DetailPageSection } from '../detailPage/style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { useAppContext } from '../Contexts';
 import { useWorkspaces } from '../workspaces/api';
 
@@ -44,11 +43,8 @@ function MainView() {
 export function MyWorkspaces() {
   const { isWorkspacesUser } = useAppContext();
   return (
-    <DetailPageSection id="workspaces">
-      <Stack spacing={1}>
-        <Typography variant="h2">My Workspaces</Typography>
-        {isWorkspacesUser ? <MainView /> : <NonWorkspacesUserView />}
-      </Stack>
-    </DetailPageSection>
+    <CollapsibleDetailPageSection id="workspaces" title="My Workspaces" variant="h2">
+      <Stack spacing={1}>{isWorkspacesUser ? <MainView /> : <NonWorkspacesUserView />}</Stack>
+    </CollapsibleDetailPageSection>
   );
 }

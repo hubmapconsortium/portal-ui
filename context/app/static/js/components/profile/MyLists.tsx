@@ -5,14 +5,13 @@ import { InternalLink } from 'js/shared-styles/Links';
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import { DetailPageSection } from '../detailPage/style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
 export function MyLists() {
   const savedListCount = useSavedEntitiesStore((s) => Object.keys(s.savedLists).length);
   const buttonText = savedListCount === 0 ? 'Create List' : `Manage Lists (${savedListCount})`;
   return (
-    <DetailPageSection id="my-lists">
-      <Typography variant="h2">My Lists</Typography>
+    <CollapsibleDetailPageSection id="my-lists" title="My Lists" component="h2" variant="h2">
       <SectionPaper>
         <Stack spacing={1} alignItems="start">
           <Typography variant="body1">
@@ -24,6 +23,6 @@ export function MyLists() {
           </Button>
         </Stack>
       </SectionPaper>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }

@@ -1,32 +1,24 @@
 import React from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 
-import { DetailPageSection } from 'js/components/detailPage/style';
+import {
+  CollapsibleDetailPageSection,
+  CollapsibleDetailPageSectionProps,
+} from 'js/components/detailPage/DetailPageSection';
 import { StyledCenteredLoaderWrapper, RelatedEntitiesPaper } from './style';
 
-interface WrapperProps {
-  sectionId?: string;
-  children: React.ReactNode;
-}
-
-function Wrapper({ sectionId, children }: WrapperProps) {
-  if (sectionId) {
-    return <DetailPageSection id={sectionId}>{children}</DetailPageSection>;
-  }
-
-  return children;
-}
-
-interface RelatedEntitiesSectionWrapperProps extends WrapperProps {
+interface RelatedEntitiesSectionWrapperProps extends CollapsibleDetailPageSectionProps {
   isLoading: boolean;
-  headerComponent: React.ReactNode;
+  title: string;
 }
 
 function RelatedEntitiesSectionWrapper({
   isLoading,
-  sectionId,
+  id,
   children,
-  headerComponent,
+  title,
+  action,
+  iconTooltipText,
 }: RelatedEntitiesSectionWrapperProps) {
   if (isLoading) {
     <StyledCenteredLoaderWrapper>
@@ -35,10 +27,9 @@ function RelatedEntitiesSectionWrapper({
   }
 
   return (
-    <Wrapper sectionId={sectionId}>
-      {headerComponent}
+    <CollapsibleDetailPageSection id={id} title={title} action={action} iconTooltipText={iconTooltipText}>
       <RelatedEntitiesPaper>{children}</RelatedEntitiesPaper>
-    </Wrapper>
+    </CollapsibleDetailPageSection>
   );
 }
 

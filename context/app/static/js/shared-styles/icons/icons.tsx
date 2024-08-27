@@ -9,6 +9,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalanceRounded';
 import LaunchRoundedIcon from '@mui/icons-material/LaunchRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
 import MoreHorizRoundedIcon from '@mui/icons-material/MoreHorizRounded';
@@ -25,9 +26,20 @@ import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
 import VerifiedUserRounded from '@mui/icons-material/VerifiedUserRounded';
 import { styled } from '@mui/material/styles';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { BarChartRounded, LightbulbOutlined } from '@mui/icons-material';
+import LightbulbOutlined from '@mui/icons-material/LightbulbOutlined';
 import GetAppRounded from '@mui/icons-material/GetAppRounded';
 import ScatterPlot from '@mui/icons-material/ScatterPlot';
+import SummarizeRoundedIcon from '@mui/icons-material/SummarizeRounded';
+import AccountTreeRoundedIcon from '@mui/icons-material/AccountTreeRounded';
+import BarChartRounded from '@mui/icons-material/BarChartRounded';
+import ArticleRoundedIcon from '@mui/icons-material/ArticleRounded';
+import CloudDownloadRoundedIcon from '@mui/icons-material/CloudDownloadRounded';
+import SchemaRoundedIcon from '@mui/icons-material/SchemaRounded';
+import AttributionRoundedIcon from '@mui/icons-material/AttributionRounded';
+import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
+import BookmarkAddRounded from '@mui/icons-material/BookmarkAddRounded';
+import BookmarkAddedRounded from '@mui/icons-material/BookmarkAddedRounded';
+import BiotechRounded from '@mui/icons-material/BiotechRounded.js';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -61,7 +73,7 @@ const SampleIcon = withIconStyles(BubbleChartIcon);
 
 const DatasetIcon = withIconStyles(TableChartIcon);
 
-const PublicationIcon = withIconStyles(DescriptionRoundedIcon);
+const PublicationIcon = withIconStyles(ArticleRoundedIcon);
 
 const ExternalLinkIcon = withIconStyles(LaunchRoundedIcon);
 
@@ -100,6 +112,28 @@ const DownloadIcon = withIconStyles(GetAppRounded);
 const LightbulbIcon = withIconStyles(LightbulbOutlined);
 
 const CellTypeIcon = withIconStyles(ScatterPlot);
+
+const SummaryIcon = withIconStyles(SummarizeRoundedIcon);
+
+const ProcessedDataIcon = withIconStyles(AccountTreeRoundedIcon);
+
+const AnalysisDetailsIcon = withIconStyles(FactCheckRoundedIcon);
+
+const MetadataIcon = withIconStyles(DescriptionRoundedIcon);
+
+const BulkDataIcon = withIconStyles(CloudDownloadRoundedIcon);
+
+const ProvenanceIcon = withIconStyles(SchemaRoundedIcon);
+
+const AttributionIcon = withIconStyles(AttributionRoundedIcon);
+
+const SaveEntityIcon = withIconStyles(BookmarkAddRounded);
+
+const EditSavedEntityIcon = withIconStyles(BookmarkAddedRounded);
+
+const CheckIcon = withIconStyles(CheckRoundedIcon);
+
+const SampleCategoryIcon = withIconStyles(BiotechRounded);
 
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
@@ -149,4 +183,15 @@ export {
   EUIIcon,
   AsctBIcon,
   CellTypeIcon,
+  SummaryIcon,
+  ProcessedDataIcon,
+  MetadataIcon,
+  BulkDataIcon,
+  ProvenanceIcon,
+  AttributionIcon,
+  AnalysisDetailsIcon,
+  SaveEntityIcon,
+  EditSavedEntityIcon,
+  CheckIcon,
+  SampleCategoryIcon,
 };

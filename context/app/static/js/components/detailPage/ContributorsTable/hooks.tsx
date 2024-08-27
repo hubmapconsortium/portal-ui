@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 
 import { Stack } from '@mui/material';
-import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { ContributorAPIResponse, ContactAPIResponse, normalizeContributor, normalizeContact } from './utils';
 
@@ -28,7 +27,6 @@ export function useAttributionSections(
     contact: string;
   },
   showRegisteredBy: boolean,
-  showContactAndAlert: boolean,
 ) {
   return useMemo(() => {
     const sections: {
@@ -43,13 +41,7 @@ export function useAttributionSections(
       },
     ];
 
-    if (showContactAndAlert) {
-      sections.push({
-        label: 'Contact',
-        children: <ContactUsLink> HuBMAP Help Desk </ContactUsLink>,
-        tooltip: tooltips.contact,
-      });
-    } else if (showRegisteredBy) {
+    if (showRegisteredBy) {
       sections.push({
         label: 'Registered by',
         children: (
@@ -64,5 +56,5 @@ export function useAttributionSections(
     }
 
     return sections;
-  }, [group_name, created_by_user_displayname, created_by_user_email, tooltips, showRegisteredBy, showContactAndAlert]);
+  }, [group_name, created_by_user_displayname, created_by_user_email, tooltips, showRegisteredBy]);
 }

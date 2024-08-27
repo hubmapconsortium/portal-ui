@@ -1,14 +1,43 @@
 import { capitalizeAndReplaceDashes } from 'js/helpers/functions';
+import { sectionIconMap, sectionImageIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { TableOfContentsItem, TableOfContentsItemWithNode, TableOfContentsItems } from './types';
 
-type Section = [string, { text: string; hash: string }];
-
-function getSectionFromString(s: string): Section {
-  return [s, { text: capitalizeAndReplaceDashes(s), hash: s }];
+function formatSectionHash(hash: string) {
+  const hashWithoutDots = hash.replace(/\s/g, '').toLowerCase();
+  return encodeURIComponent(hashWithoutDots);
 }
 
-function getSections(sectionOrder: string[]) {
+function getSectionFromString(s: string, hash: string = formatSectionHash(s)): TableOfContentsItem {
+  return {
+    text: capitalizeAndReplaceDashes(s),
+    hash,
+    icon: sectionIconMap?.[s],
+    externalIcon: sectionImageIconMap?.[s],
+  };
+}
+
+export type SectionOrder = Record<string, boolean | TableOfContentsItem>;
+
+function getSections(sectionOrder: SectionOrder) {
+  const sectionsToDisplay = Object.entries(sectionOrder).filter(([_k, v]) => Boolean(v) === true);
   // Array order reflects order of table of contents.
-  return sectionOrder.map((s) => getSectionFromString(s));
+  return sectionsToDisplay.map(([s, v]) => {
+    if (typeof v === 'object' && v !== null) {
+      return v;
+    }
+    return getSectionFromString(s);
+  });
 }
 
-export { getSections };
+function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<TableOfContentsItemWithNode> {
+  return items.map((item) => ({
+    text: item.text,
+    hash: item.hash,
+    node: document.getElementById(item.hash),
+    icon: item.icon,
+    externalIcon: item.externalIcon,
+    ...(item?.items && { items: getItemsClient(item.items) }),
+  }));
+}
+
+export { getSections, getSectionFromString, getItemsClient, formatSectionHash };

@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 
 import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
-import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
+import { SummaryBodyContent } from 'js/components/detailPage/summary/SummaryBody';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
@@ -56,7 +56,7 @@ function SavedList({ listUUID }) {
         <LocalStorageDescription />
       </SpacingDiv>
       <SpacingDiv>
-        <SummaryBody
+        <SummaryBodyContent
           description={savedList.description}
           created_timestamp={savedList.dateSaved}
           last_modified_timestamp={savedList.dateLastModified}

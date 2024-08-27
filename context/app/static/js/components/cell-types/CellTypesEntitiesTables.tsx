@@ -1,4 +1,3 @@
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
 import React, { Fragment } from 'react';
 import Description from 'js/shared-styles/sections/Description';
 import { useTabs } from 'js/shared-styles/tabs';
@@ -13,7 +12,7 @@ import { format } from 'date-fns/format';
 import { InternalLink } from 'js/shared-styles/Links';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import { DetailPageSection } from '../detailPage/style';
+import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import { useCellTypeDetails } from './hooks';
 
 export default function CellTypesEntitiesTables() {
@@ -21,8 +20,7 @@ export default function CellTypesEntitiesTables() {
 
   const { openTabIndex, handleTabChange } = useTabs();
   return (
-    <DetailPageSection id="organs">
-      <SectionHeader>Organs</SectionHeader>
+    <CollapsibleDetailPageSection title="Organs" id="organs">
       <Description>
         This is the list of organs and its associated data that is dependent on the data available within HuBMAP. To
         filter the list of data in the table below by organ, select organ(s) from the list below. Multiple organs can be
@@ -71,6 +69,6 @@ export default function CellTypesEntitiesTables() {
           ))}
         </StyledTableContainer>
       </TabPanel>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }

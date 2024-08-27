@@ -22,6 +22,7 @@ import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
+import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -31,6 +32,17 @@ const tooltips = {
 
 const noDatasetsText =
   'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
+
+const pageLinks = [
+  {
+    link: '/workspaces',
+    children: 'My Workspaces',
+  },
+  {
+    link: '/search?entity_type[0]=Dataset',
+    children: 'Dataset Search Page',
+  },
+];
 
 interface WorkspacePageProps {
   workspaceId: number;
@@ -58,10 +70,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         <SummaryData
           title={workspace.name}
           entity_type="Workspace"
-          showJsonButton={false}
-          entityCanBeSaved={false}
           entityTypeDisplay={undefined}
-          uuid=""
           status=""
           mapped_data_access_level=""
           otherButtons={
@@ -92,16 +101,26 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           </Typography>
         </SummaryData>
         <SectionPaper>
-          <LabelledSectionText label="Creation Date">
-            {format(new Date(workspace.datetime_created), 'yyyy-MM-dd')}
-          </LabelledSectionText>
+          <Stack spacing={1}>
+            <LabelledSectionText label="Creation Date">
+              {format(new Date(workspace.datetime_created), 'yyyy-MM-dd')}
+            </LabelledSectionText>
+            <LabelledSectionText label="Relevant Pages" spacing={1}>
+              <Stack direction="row" spacing={1}>
+                {pageLinks.map((page) => (
+                  <OutlinedLinkButton key={page.link} {...page} />
+                ))}
+              </Stack>
+            </LabelledSectionText>
+          </Stack>
         </SectionPaper>
       </Box>
       <WorkspaceDatasetsTable
         datasetsUUIDs={workspaceDatasets}
         addDatasets={workspace}
         label={<SectionHeader>Datasets</SectionHeader>}
-        additionalAlerts={
+        hideTableIfEmpty
+        emptyAlert={
           <Alert
             severity="info"
             action={

@@ -9,7 +9,7 @@ const Visualization = React.lazy(() => import('../Visualization'));
 
 interface VisualizationWrapperProps {
   vitData: object | object[];
-  uuid: string;
+  uuid?: string;
   hubmap_id?: string;
   mapped_data_access_level?: string;
   hasNotebook?: boolean;

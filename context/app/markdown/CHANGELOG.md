@@ -1,3 +1,36 @@
+## v1.0.0 - 2024-08-23
+
+- Extend provenance table logic to handle missing entities.
+- Fix handling of large search requests.
+- Request less data for provenance table tiles.
+- Add dataset relationships diagram.
+- Fix multi-assay provenance overflow.
+- Fix `push` script compatibility with mac OS.
+- Update homepage news to inform users about unified dataset pages and multiomic dataset availability.
+- Added processed datasets section to display all visualizations for a given raw dataset.
+- Extended push script to support major version bumps.
+- Update raw dataset detail pages to include processed dataset information.
+- Update table of contents design.
+
+
+## v0.103.1 - 2024-08-19
+
+- Fix bug preventing visualization notebooks from being downloaded on dataset detail pages.
+- Fix bug that prevented protected dataset ids from being displayed in "Launch New Workspace" dialog.
+- Change banner above "Contributors" and "Attribution" sections from an alert to a styled paper component.
+
+
+## v0.103.0 - 2024-08-15
+
+- Clear workspace dropdown after adding a dataset to a workspace.
+- Prevent already running workspaces from prompting the user to choose a job type.
+- Disable "Launch Workspace" button when a workspace title is not provided.
+- Fix spacing issue for alert banners that show in datasets section of the "Create New Workspace" dialog.
+- Fixed view expansion in the visualization section to overflow within the container and not outside it.
+- Update download button on Visualization section of detail pages to a Workspaces dropdown menu button.
+- Update "What's New?" homepage listing with June 2024 user facing updates.
+
+
 ## v0.102.5 - 2024-08-06
 
 - Add a check for "Contacts" data to display in the Contributors table of the detail pages of datasets, collections, and publications.

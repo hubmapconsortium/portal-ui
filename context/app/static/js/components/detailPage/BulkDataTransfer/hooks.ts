@@ -2,6 +2,8 @@ import useSWR from 'swr';
 
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { Dataset } from 'js/components/types';
 
 interface FetchProtectedFileResponse {
   status?: number;
@@ -40,4 +42,25 @@ export const useFetchProtectedFile = (uuid: string) => {
   );
 
   return { ...result, isLoading };
+};
+
+type DatasetURLs = Pick<
+  Dataset,
+  'hubmap_id' | 'dbgap_study_url' | 'dbgap_sra_experiment_url' | 'mapped_data_access_level'
+>;
+
+export const useStudyURLsQuery = (uuid: string) => {
+  return useSearchHits<DatasetURLs>(
+    {
+      query: {
+        bool: {
+          must: [{ term: { uuid } }],
+        },
+      },
+      _source: ['hubmap_id', 'dbgap_study_url', 'dbgap_sra_experiment_url', 'mapped_data_access_level'],
+    },
+    {
+      useDefaultQuery: false,
+    },
+  );
 };

@@ -1,10 +1,19 @@
 import React from 'react';
-import { ColoredStatusIconProps, getStyledIcon, iconSymbolStatusMap } from './style';
+import SeverityIcon, { IconStatus } from 'js/shared-styles/icons/SeverityIcon';
+import { SvgIconProps } from '@mui/material/SvgIcon';
 
-function ColoredStatusIcon({ $iconStatus, ...props }: ColoredStatusIconProps) {
-  const IconComponent = iconSymbolStatusMap[$iconStatus];
-  const StyledIcon = getStyledIcon(IconComponent, $iconStatus);
-  return <StyledIcon {...props} />;
+function ColoredStatusIcon({
+  status,
+  noColor,
+  ...props
+}: Partial<SvgIconProps> & { status: IconStatus; noColor?: boolean }) {
+  return (
+    <SeverityIcon
+      status={status}
+      sx={{ fontSize: 16, marginRight: '3px', alignSelf: 'center', color: noColor ? 'white' : undefined }}
+      {...props}
+    />
+  );
 }
 
 export { ColoredStatusIcon };

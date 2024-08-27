@@ -1,46 +1,37 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 
 import Stack from '@mui/material/Stack';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { DetailPageSection } from 'js/components/detailPage/style';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useAttributionSections } from '../ContributorsTable/hooks';
+import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 
 const tooltips = {
-  group: 'This is the group that provided the raw dataset.',
+  group: 'This is the group that submitted the raw dataset to be published.',
   contact: 'This is the contact for this data.',
 };
 
-function Attribution() {
+const DatasetAttribution = (
+  <SectionDescription>
+    Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to
+    the individuals listed as contacts, either via the email address listed in the table or via contact information
+    provided on their ORCID profile page.
+  </SectionDescription>
+);
+
+function Attribution({ children }: PropsWithChildren) {
   const {
-    entity: {
-      group_name,
-      created_by_user_displayname,
-      created_by_user_email,
-      entity_type,
-      processing,
-      creation_action,
-      descendants,
-    },
+    entity: { group_name, created_by_user_displayname, created_by_user_email, entity_type },
   } = useFlaskDataContext();
 
-  const isProcessedDataset = entity_type === 'Dataset' && processing === 'processed';
-  const isVisLiftedDataset = descendants?.find((descendant) => descendant.dataset_type === 'Histology [Image Pyramid]');
-  const isHiveProcessedDataset = isProcessedDataset && creation_action === 'Central Process';
-  const isSupportDataset = entity_type === 'Support';
+  const isDataset = entity_type === 'Dataset';
 
-  const showContactAndAlert = isHiveProcessedDataset || isSupportDataset;
-  const showRegisteredBy = !isProcessedDataset && !isVisLiftedDataset && !isHiveProcessedDataset && !isSupportDataset;
-
-  const hiveInfoAlertText = `The data provided by the ${group_name} Group was centrally processed by HuBMAP. The results of this processing are independent of analyses conducted by the data providers or third parties.`;
-  const iconTooltipText = showRegisteredBy
-    ? `Information about the group registering this ${entity_type?.toLowerCase()}.`
-    : undefined;
+  const showRegisteredBy = !isDataset;
 
   const sections = useAttributionSections(
     group_name,
@@ -48,14 +39,12 @@ function Attribution() {
     created_by_user_email,
     tooltips,
     showRegisteredBy,
-    showContactAndAlert,
   );
 
   return (
-    <DetailPageSection id="attribution">
+    <CollapsibleDetailPageSection id="attribution" title="Attribution" icon={sectionIconMap.attribution}>
       <Stack spacing={1}>
-        <SectionHeader iconTooltipText={iconTooltipText}>Attribution</SectionHeader>
-        {showContactAndAlert && <OutlinedAlert severity="info">{hiveInfoAlertText}</OutlinedAlert>}
+        {isDataset && DatasetAttribution}
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
             {sections.map((props) => (
@@ -63,8 +52,9 @@ function Attribution() {
             ))}
           </Stack>
         </SummaryPaper>
+        {children}
       </Stack>
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
 

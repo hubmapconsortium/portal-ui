@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr';
+
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
@@ -29,6 +30,7 @@ import {
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
+import WorkspaceLaunchSuccessToast from './WorkspaceLaunchSuccessToast';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -292,7 +294,8 @@ export function useCreateAndLaunchWorkspace() {
         toastError('Failed to create workspace.');
         return;
       }
-      toastSuccess('Workspace successfully created.');
+
+      toastSuccess(WorkspaceLaunchSuccessToast(workspace.id));
 
       try {
         await startNewWorkspace({

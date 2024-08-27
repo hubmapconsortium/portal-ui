@@ -36,7 +36,7 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTil
                 {entityData.mapped_metadata?.age_value} {entityData.mapped_metadata?.age_unit}
               </Tile.Text>
             </Flex>
-            <Tile.Text>{entityData.mapped_metadata?.race.join(', ')}</Tile.Text>
+            <Tile.Text>{(entityData.mapped_metadata?.race ?? []).join(', ')}</Tile.Text>
           </>
         )}
       </StyledDiv>

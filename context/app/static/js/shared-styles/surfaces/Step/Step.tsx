@@ -29,7 +29,7 @@ function StepDescription({ blocks }: { blocks: (string | ReactElement)[] }) {
   return (
     <Stack gap={2} p={2} component={Paper} direction="column">
       {blocks.map((block) => (
-        <Typography key={String(block)}>{block}</Typography>
+        <Typography key={typeof block === 'string' ? block : block.key}>{block}</Typography>
       ))}
     </Stack>
   );

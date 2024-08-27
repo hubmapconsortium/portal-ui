@@ -11,14 +11,13 @@ function prefixDonorMetadata(donor: Donor | null | undefined) {
 
 function prefixSampleMetadata(source_samples: Sample[] | null | undefined) {
   const sampleMetadatas = (source_samples ?? []).filter((sample) => sample?.metadata).map((sample) => sample.metadata);
-  return sampleMetadatas.map((sampleMetadata) => addPrefix('sample.', sampleMetadata!));
+  return sampleMetadatas.map((sampleMetadata) => addPrefix('sample.', sampleMetadata));
 }
 
 function combineMetadata(
   donor: Donor,
-  _origin_sample: unknown,
-  source_samples: Sample[],
-  metadata: Record<string, unknown> | null | undefined,
+  source_samples: Sample[] = [],
+  metadata: Record<string, unknown> | null | undefined = {},
 ) {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const combinedMetadata: Record<string, string> = {

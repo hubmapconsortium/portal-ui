@@ -8,8 +8,7 @@ import TableRow from '@mui/material/TableRow';
 import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
 
-import { DetailPageSection } from 'js/components/detailPage/style';
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import { StyledTableContainer } from 'js/shared-styles/tables';
@@ -100,9 +99,8 @@ function CellTypesTable() {
 
 export default function CellTypes() {
   return (
-    <DetailPageSection id={cellTypes.id}>
-      <SectionHeader iconTooltipText={cellTypes.tooltip}>{cellTypes.title}</SectionHeader>
+    <CollapsibleDetailPageSection id={cellTypes.id} title={cellTypes.title} iconTooltipText={cellTypes.tooltip}>
       <CellTypesTable />
-    </DetailPageSection>
+    </CollapsibleDetailPageSection>
   );
 }
