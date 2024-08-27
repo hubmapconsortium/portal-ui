@@ -11,7 +11,6 @@ import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import { useLaunchWorkspaceDialog, LaunchWorkspaceFormTypes } from './hooks';
 import AdvancedConfigOptions from '../AdvancedConfigOptions';
-import { StyledHeader } from '../AdvancedConfigOptions/style';
 
 const formId = 'launch-workspace-form';
 
@@ -19,7 +18,7 @@ const text = {
   environment: {
     title: 'Environment Selection',
     description: [
-      'All workspaces are launched with Python support, with the option to add support for R . Workspaces with added R support may experience longer load times.',
+      'All workspaces are launched with Python support, with the option to add support for R. Workspaces with added R support may experience longer load times.',
       'If a workspace was previously launched with R, launching a workspace without R support may cause issues with your saved work.',
     ],
   },
@@ -87,8 +86,10 @@ function LaunchWorkspaceDialog() {
             {runningWorkspaceAlert}
             <Alert severity="info">{text.resources.alert}</Alert>
             <SummaryPaper>
-              <Stack direction="column" gap={2}>
-                <StyledHeader>{text.environment.title}</StyledHeader>
+              <Stack direction="column" spacing={2}>
+                <Typography variant="button" fontSize="1rem">
+                  {text.environment.title}
+                </Typography>
                 {text.environment.description.map((description) => (
                   <Typography key={description}>{description}</Typography>
                 ))}

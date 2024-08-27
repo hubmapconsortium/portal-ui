@@ -355,6 +355,13 @@ function getWorkspaceResourceOptions(workspace: MergedWorkspace) {
   );
 }
 
+function convert(value: number, conversionFactor: number) {
+  return value / conversionFactor;
+}
+function unconvert(value: number, conversionFactor: number) {
+  return value * conversionFactor;
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -373,4 +380,6 @@ export {
   getDefaultJobType,
   sortTemplates,
   getWorkspaceResourceOptions,
+  convert,
+  unconvert,
 };

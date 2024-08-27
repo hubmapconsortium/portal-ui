@@ -22,7 +22,6 @@ import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import AdvancedConfigOptions from '../AdvancedConfigOptions';
-import { StyledHeader } from '../AdvancedConfigOptions/style';
 
 const text = {
   overview: {
@@ -151,8 +150,10 @@ function NewWorkspaceDialog({
                 e.stopPropagation();
               }}
             />
-            <Stack gap={2} p={2} component={Paper} direction="column">
-              <StyledHeader>Environment Selection</StyledHeader>
+            <Stack spacing={2} p={2} component={Paper} direction="column">
+              <Typography variant="button" fontSize="1rem">
+                Environment Selection
+              </Typography>
               <Typography>{text.configure.description}</Typography>
               <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
             </Stack>

@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback } from 'react';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
@@ -9,8 +9,7 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
-import { StyledAccordion, StyledHeader, StyledSubtitle, StyledSwitch, StyledSwitchLabel } from './style';
+import { StyledAccordion, StyledSwitch } from './style';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_MEMORY_MB,
@@ -23,6 +22,7 @@ import {
   MIN_NUM_CPUS,
   MIN_TIME_LIMIT_MINUTES,
 } from '../constants';
+import { convert, unconvert } from '../utils';
 
 interface ConfigSliderProps<FormType extends FieldValues> {
   field: ControllerRenderProps<FormType, Path<FormType>>;
@@ -45,37 +45,30 @@ function ConfigSlider<FormType extends FieldValues>({
   conversionFactor = 1,
   markInterval = 1,
 }: ConfigSliderProps<FormType>) {
-  const convert = (value: number) => value / conversionFactor;
-  const unconvert = (value: number) => value * conversionFactor;
+  const convertedMin = convert(min, conversionFactor);
+  const convertedMax = convert(max, conversionFactor);
 
-  const convertedMin = convert(min);
-  const convertedMax = convert(max);
+  // Show even numbers if the interval is even, otherwise show odd numbers
+  const start = markInterval % 2 === 0 ? convertedMin + 1 : convertedMin;
 
-  const marks = useMemo(() => {
-    const tempMarks = [];
-    // Show even numbers if the interval is even, otherwise show odd numbers
-    const start = markInterval % 2 === 0 ? convertedMin + 1 : convertedMin;
-
-    for (let i = start; i <= convertedMax; i += markInterval) {
-      tempMarks.push({ value: i, label: i });
-    }
-
-    return tempMarks;
-  }, [convertedMin, convertedMax, markInterval]);
+  const marks = Array.from({ length: Math.floor((convertedMax - start) / markInterval) + 1 }, (_, i) => {
+    const value = start + i * markInterval;
+    return { value, label: value };
+  });
 
   return (
     <Stack marginTop={1}>
       <Stack direction="row" spacing={1} alignItems="center">
-        <StyledSubtitle>{label}</StyledSubtitle>
+        <Typography variant="button">{label}</Typography>
         <InfoTooltipIcon iconTooltipText={tooltip} />
       </Stack>
       <Stack padding={1}>
         <Slider
-          value={convert(field.value[id] as number)}
+          value={convert(field.value[id] as number, conversionFactor)}
           onChange={(e, value) =>
             field.onChange({
               ...field.value,
-              [id]: unconvert(value as number),
+              [id]: unconvert(value as number, conversionFactor),
             })
           }
           valueLabelDisplay="auto"
@@ -103,7 +96,7 @@ const configSliderOptions: Omit<ConfigSliderProps<Record<string, number>>, 'fiel
     tooltip: 'Available memory for your workspace.',
     min: MIN_MEMORY_MB,
     max: MAX_MEMORY_MB,
-    conversionFactor: 1000,
+    conversionFactor: 1024,
     markInterval: 2,
   },
   {
@@ -145,26 +138,28 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
   return (
     <StyledAccordion>
       <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
-        <StyledHeader>Advanced Configurations (Optional)</StyledHeader>
+        <Typography variant="button" fontSize="1rem">
+          Advanced Configurations (Optional)
+        </Typography>
       </AccordionSummary>
       <AccordionDetails>
         <Stack>
-          <Typography>{description}</Typography>
-          <SpacedSectionButtonRow
-            buttons={
-              <Stack direction="row" gap={1} marginTop={1}>
-                <Button type="button" variant="contained" disabled={isDefault} onClick={handleRestoreDefaults}>
-                  Restore Defaults
-                </Button>
-              </Stack>
-            }
-          />
+          <Typography marginBottom={1}>{description}</Typography>
+          <Button
+            type="button"
+            variant="contained"
+            sx={{ alignSelf: 'flex-end' }}
+            disabled={isDefault}
+            onClick={handleRestoreDefaults}
+          >
+            Restore Defaults
+          </Button>
           {configSliderOptions.map((props) => (
             <ConfigSlider key={props.id} field={field} {...props} />
           ))}
-          <StyledSubtitle>Enable GPU</StyledSubtitle>
+          <Typography variant="button">Enable GPU</Typography>
           <Stack direction="row" component="label" alignItems="center">
-            <StyledSwitchLabel>Disabled</StyledSwitchLabel>
+            <Typography fontSize=".75rem">Disabled</Typography>
             <StyledSwitch
               checked={field.value.gpu_enabled as boolean}
               onChange={(e, value) =>
@@ -174,7 +169,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
                 })
               }
             />
-            <StyledSwitchLabel>Enabled</StyledSwitchLabel>
+            <Typography fontSize=".75rem">Enabled</Typography>
           </Stack>
         </Stack>
       </AccordionDetails>
