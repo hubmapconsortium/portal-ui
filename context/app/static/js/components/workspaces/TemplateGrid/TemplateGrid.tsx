@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from 'react';
 import Grid from '@mui/material/Grid';
-
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
+import { InternalLink } from 'js/shared-styles/Links';
 import { TemplatesTypes } from '../types';
 
 interface TemplateGridProps {
@@ -22,7 +22,7 @@ function TemplateGrid({
       {Object.entries(templates).map(([templateKey, { title, description, tags }]) => (
         <Grid item md={4} xs={12} key={templateKey} paddingBottom={2} paddingX={1}>
           <SelectableCard
-            title={title}
+            title={<InternalLink href={`/templates/${templateKey}`}>{title}</InternalLink>}
             description={description}
             tags={tags}
             isSelected={selectedTemplates.has(templateKey) || templateKey in disabledTemplates}
