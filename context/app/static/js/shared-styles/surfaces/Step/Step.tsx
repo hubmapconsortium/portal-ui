@@ -42,7 +42,6 @@ function Step({ index, title, isRequired = false, children }: PropsWithChildren<
         sx={{
           backgroundColor: `${color}.main`,
           p: 2,
-          mt: 2,
         }}
       >
         <Typography variant="subtitle2" sx={{ color: `${color}.contrastText` }}>
@@ -50,7 +49,7 @@ function Step({ index, title, isRequired = false, children }: PropsWithChildren<
           {`${title} (${text})`}
         </Typography>
       </Paper>
-      <Paper sx={{ p: 2 }}>{children}</Paper>
+      <Paper sx={{ p: 2, mb: 2 }}>{children}</Paper>
     </>
   );
 }
