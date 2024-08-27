@@ -18,7 +18,7 @@ function Error({
   const { title, subtitle } = getErrorTitleAndSubtitle(errorCode, isMaintenancePage, isErrorBoundary);
 
   return (
-    <Background isMaintenancePage={isMaintenancePage}>
+    <Background $isMaintenancePage={isMaintenancePage}>
       <StyledPaper>
         <StyledTypography variant="h1" $mb={2}>
           {title}

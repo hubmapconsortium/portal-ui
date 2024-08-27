@@ -5,7 +5,7 @@ function DropdownListboxOption({ children, selected, className, ...rest }) {
   return (
     <FlexMenuItem className={className} selected={selected} {...rest} role="option">
       {selected && <CheckIcon color="primary" />}
-      <StyledSpan isSelected={selected}>{children}</StyledSpan>
+      <StyledSpan $isSelected={selected}>{children}</StyledSpan>
     </FlexMenuItem>
   );
 }
