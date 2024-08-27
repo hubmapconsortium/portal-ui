@@ -8,15 +8,11 @@ import NoAccess from './NoAccess';
 import { usePanelSet } from './usePanelSet';
 import { useStudyURLsQuery } from './hooks';
 import GlobusLink from './GlobusLink';
+import { sanitizeLabel } from './utils';
 
 interface BulkDataTransferPanelProps {
   uuid: string;
   label: string;
-}
-
-// Removes the HuBMAP ID from the label (present if there is more than one dataset with the same pipeline and status)
-function sanitizeLabel(label: string) {
-  return label.split(' [')[0];
 }
 
 function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
