@@ -49,6 +49,7 @@ export interface Entity {
     dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;
   };
+  /** @deprecated Use `descendant_ids` and `useEntitiesData` instead */
   descendants: Entity[];
   group_name: string;
   created_by_user_displayname: string;

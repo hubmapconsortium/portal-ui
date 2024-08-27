@@ -74,7 +74,7 @@ function ErrorTile({ entity_type, id }: Pick<EntityTileProps, 'id' | 'entity_typ
       variant="outlined"
     >
       <Stack direction="row" gap={1}>
-        <StatusIcon status="error" sx={{ alignSelf: 'start', fontSize: '1.3rem' }} />
+        <StatusIcon status="error" sx={{ alignSelf: 'start', fontSize: '1.25rem' }} />
         <Typography variant="body2">
           Unable to load {entityTypeLowercase}. <ContactUsLink capitalize /> with the{' '}
           <IconLink
