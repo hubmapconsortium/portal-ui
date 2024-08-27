@@ -11,7 +11,7 @@ function ColoredStatusIcon({
     <SeverityIcon
       status={status}
       noColor={noColor}
-      sx={{ fontSize: 16, marginRight: '3px', alignSelf: 'center' }}
+      sx={({spacing}) => ({ fontSize: '1rem', marginRight: spacing(1), alignSelf: 'center' })}
       {...props}
     />
   );
