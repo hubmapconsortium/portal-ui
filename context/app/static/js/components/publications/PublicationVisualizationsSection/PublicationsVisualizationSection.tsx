@@ -8,8 +8,18 @@ import PublicationVignette from 'js/components/publications/PublicationVignette'
 import PrimaryColorAccordionSummary from 'js/shared-styles/accordions/PrimaryColorAccordionSummary';
 import { StyledAccordionDetails } from './style';
 
-function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }) {
-  const [expandedIndex, setExpandedIndex] = useState(0);
+interface PublicationsVisualizationSectionProps {
+  vignette_json: {
+    vignettes: { name: string; directory_name: string }[];
+  };
+  uuid: string;
+}
+
+function PublicationsVisualizationSection({
+  vignette_json: { vignettes },
+  uuid,
+}: PublicationsVisualizationSectionProps) {
+  const [expandedIndex, setExpandedIndex] = useState<number | false>(0);
 
   const [displayedVignettes, setDisplayedVignettes] = useState({
     ...[true].concat(Array(vignettes.length - 1).fill(false)),
@@ -19,7 +29,10 @@ function PublicationsVisualizationSection({ vignette_json: { vignettes }, uuid }
     return vignettes.sort((a, b) => a.directory_name.localeCompare(b.directory_name));
   }, [vignettes]);
 
-  const handleChange = useCallback((i) => (event, isExpanded) => setExpandedIndex(isExpanded ? i : false), []);
+  const handleChange = useCallback(
+    (i: number) => (_: unknown, isExpanded: boolean) => setExpandedIndex(isExpanded ? i : false),
+    [],
+  );
 
   return (
     <CollapsibleDetailPageSection id="visualizations" data-testid="vignettes" title="Visualizations">

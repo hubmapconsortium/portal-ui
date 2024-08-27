@@ -6,7 +6,12 @@ import { StyledListsIcon } from './style';
 
 const prompt = 'Add To List';
 
-function AddItemsToListDialog({ itemsToAddUUIDS, onSaveCallback, ...rest }) {
+interface AddItemsToListDialogProps extends React.ComponentProps<typeof LeftMarginButton> {
+  itemsToAddUUIDS: Set<string>;
+  onSaveCallback: () => void;
+}
+
+function AddItemsToListDialog({ itemsToAddUUIDS, onSaveCallback, ...rest }: AddItemsToListDialogProps) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   return (
     <>

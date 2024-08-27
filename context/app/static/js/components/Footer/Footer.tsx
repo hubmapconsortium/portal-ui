@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Typography from '@mui/material/Typography';
 
 import { InternalLink } from 'js/shared-styles/Links';
@@ -9,7 +8,11 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { FlexContainer, Flex, FlexColumn, HubmapLogo, LogoWrapper, Background } from './style';
 
-function Footer({ isMaintenancePage }) {
+interface FooterProps {
+  isMaintenancePage?: boolean;
+}
+
+function Footer({ isMaintenancePage }: FooterProps) {
   return (
     <Background>
       <FlexContainer maxWidth="lg">
@@ -18,7 +21,7 @@ function Footer({ isMaintenancePage }) {
         </LogoWrapper>
         <div>
           <Flex>
-            <FlexColumn $mr={1}>
+            <FlexColumn $mr>
               <Typography variant="subtitle2">About</Typography>
               <OutboundLink href="https://hubmapconsortium.org/" variant="body2">
                 Project Website
@@ -35,7 +38,7 @@ function Footer({ isMaintenancePage }) {
               )}
               <ContactUsLink variant="body2">Submit Feedback</ContactUsLink>
             </FlexColumn>
-            <FlexColumn $mr={1}>
+            <FlexColumn $mr>
               <Typography variant="subtitle2">Software</Typography>
               <OutboundIconLink variant="body2" href="https://github.com/hubmapconsortium">
                 GitHub
@@ -57,7 +60,7 @@ function Footer({ isMaintenancePage }) {
                 Portal Usage Analytics
               </OutboundIconLink>
             </FlexColumn>
-            <FlexColumn $mr={1}>
+            <FlexColumn $mr>
               <Typography variant="subtitle2">Policies</Typography>
               <OutboundLink href="https://hubmapconsortium.org/policies/" variant="body2">
                 Overview
@@ -92,13 +95,5 @@ function Footer({ isMaintenancePage }) {
     </Background>
   );
 }
-
-Footer.propTypes = {
-  isMaintenancePage: PropTypes.bool,
-};
-
-Footer.defaultProps = {
-  isMaintenancePage: false,
-};
 
 export default Footer;
