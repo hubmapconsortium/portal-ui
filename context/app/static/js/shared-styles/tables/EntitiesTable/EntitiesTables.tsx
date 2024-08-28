@@ -4,6 +4,7 @@ import { useTabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
+import SvgIcon from '@mui/material/SvgIcon';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
@@ -43,7 +44,7 @@ function EntitiesTables<Doc>({
               label={`${entityType}s (${totalHitsCounts[i] ?? 0})`}
               key={`${entityType}-tab`}
               index={i}
-              icon={Icon ? <Icon sx={{ fontSize: '1.5rem', color: 'primary' }} /> : undefined}
+              icon={Icon ? <SvgIcon component={Icon} sx={{ fontSize: '1.5rem', color: 'primary' }} /> : undefined}
               iconPosition="start"
               isSingleTab={entities.length === 0}
             />
