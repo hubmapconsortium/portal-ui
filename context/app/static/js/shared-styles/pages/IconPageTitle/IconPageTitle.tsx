@@ -12,7 +12,7 @@ interface IconPageTitleProps extends ComponentProps<typeof FlexContainer> {
 function IconPageTitle({ icon, children, iconProps, ...rest }: IconPageTitleProps) {
   return (
     <FlexContainer {...rest}>
-      <StyledHeaderIcon component={icon} color="primary" {...iconProps} />
+      <StyledHeaderIcon as={icon} color="primary" {...iconProps} />
       <PageTitle>{children}</PageTitle>
     </FlexContainer>
   );

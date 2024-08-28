@@ -10,6 +10,6 @@ const FlexContainer = styled('div')(({ theme }) => ({
 
 const StyledHeaderIcon = styled(HeaderIcon)(({ theme }) => ({
   marginRight: theme.spacing(1.5),
-})) as typeof HeaderIcon;
+}));
 
 export { FlexContainer, StyledHeaderIcon };

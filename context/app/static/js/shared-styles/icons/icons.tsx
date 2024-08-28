@@ -59,7 +59,7 @@ type CustomIconProps<T extends ElementType<any>> = {
 const withIconStyles = (Icon: typeof SvgIcon) =>
   styled(Icon)(({ fontSize }: CustomIconProps<ElementType<'svg'>>) => ({
     fontSize: fontSize ?? '1rem',
-  })) as typeof SvgIcon;
+  })) as unknown as typeof SvgIcon;
 
 const CenterIcon = withIconStyles(AccountBalanceIcon);
 

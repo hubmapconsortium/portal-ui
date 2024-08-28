@@ -23,7 +23,7 @@ const Directory = styled(Box)(({ theme }) => ({
 const withIconStyles = (Icon: typeof SvgIcon) =>
   styled(Icon)(({ theme }) => ({
     marginRight: theme.spacing(1),
-  })) as typeof SvgIcon;
+  }));
 
 const StyledFolderIcon = withIconStyles(FolderIcon);
 
