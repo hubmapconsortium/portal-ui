@@ -1,0 +1,1 @@
+- Improve behavior of entity header at certain intermediate screen widths.
