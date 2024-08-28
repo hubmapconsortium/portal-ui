@@ -38,7 +38,9 @@ export interface Entity {
   contacts: ContactAPIResponse[];
   contributors: ContributorAPIResponse[];
   created_timestamp: number;
+  /** @deprecated Use `ancestor_ids` and `useEntitiesData` instead */
   ancestors: Entity[];
+  ancestor_ids: string[];
   // eslint-disable-next-line no-use-before-define -- Donor is defined later in the file and extends Entity
   donor: Donor;
   descendant_counts: { entity_type: Record<string, number> };
@@ -47,6 +49,7 @@ export interface Entity {
     dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;
   };
+  /** @deprecated Use `descendant_ids` and `useEntitiesData` instead */
   descendants: Entity[];
   group_name: string;
   created_by_user_displayname: string;

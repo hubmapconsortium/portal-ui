@@ -139,18 +139,12 @@ def details_rui_json(type, uuid):
         abort(404)
     client = get_client()
     entity = client.get_entity(uuid)
-    # For Samples...
+    # For samples and datasets, the nearest RUI location is indexed with the entity itself.
+    # https://github.com/hubmapconsortium/search-api/pull/860
     if 'rui_location' in entity:
         return json.loads(entity['rui_location'])
-    # For Datasets...
-    if 'ancestors' not in entity:
-        abort(404)
-    located_ancestors = [a for a in entity['ancestors'] if 'rui_location' in a]
-    if not located_ancestors:
-        abort(404)
-    # There may be multiple: The last should be the closest...
-    # but this should be confirmed, when there are examples.
-    return json.loads(located_ancestors[-1]['rui_location'])
+    # Otherwise throw 404
+    abort(404)
 
 
 @blueprint.route('/sitemap.txt')

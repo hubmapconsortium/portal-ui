@@ -39,15 +39,6 @@ export const getAncestorsQuery = (uuid: string) => ({
             },
           },
         },
-        {
-          bool: {
-            must_not: {
-              term: {
-                'ancestors.entity_type.keyword': 'Dataset',
-              },
-            },
-          },
-        },
       ],
     },
   },

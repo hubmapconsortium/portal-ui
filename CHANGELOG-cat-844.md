@@ -1,0 +1,1 @@
+- Deprecate `ancestors`, `descendants`, and their `immediate` variants to only look up by ID.
