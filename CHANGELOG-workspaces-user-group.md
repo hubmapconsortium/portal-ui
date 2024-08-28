@@ -1,0 +1,1 @@
+- Enable access to workspaces for users in HuBMAP Read or HuBMAP Workspaces globus groups.

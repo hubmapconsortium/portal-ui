@@ -45,8 +45,8 @@ function App(props) {
   const { endpoints, globalAlertMd } = flaskData;
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
-  const isWorkspacesUser = userGroups?.includes('Workspaces') || workspacesUsers.includes(userEmail);
   const isHubmapUser = userGroups?.includes('HuBMAP');
+  const isWorkspacesUser = userGroups?.includes('Workspaces') || workspacesUsers.includes(userEmail) || isHubmapUser;
 
   return (
     <StrictMode>
