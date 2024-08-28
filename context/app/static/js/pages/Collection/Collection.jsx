@@ -27,7 +27,8 @@ function Collection({ collection: collectionData }) {
 
   useTrackID({ entity_type, hubmap_id });
 
-  const possible_contributors = contributors ?? contacts;
+  // Handle both fields until creators is renamed to contributors.
+  const possible_contributors = contributors ?? creators;
 
   return (
     <div>
