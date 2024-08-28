@@ -1,0 +1,1 @@
+- Handle both contributors and creators fields for collections until the creators field is renamed to contributors.

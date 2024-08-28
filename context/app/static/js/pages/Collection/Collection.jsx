@@ -19,12 +19,16 @@ function Collection({ collection: collectionData }) {
     last_modified_timestamp,
     datasets,
     creators,
+    contributors,
     contacts,
   } = collectionData;
 
   const doi = getCollectionDOI(doi_url);
 
   useTrackID({ entity_type, hubmap_id });
+
+  // Handle both fields until creators is renamed to contributors.
+  const possibleContributors = contributors ?? creators;
 
   return (
     <div>
@@ -48,8 +52,8 @@ function Collection({ collection: collectionData }) {
             )}
           </Summary>
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
-          {'creators' in collectionData && (
-            <ContributorsTable contributors={creators} contacts={contacts} title="Contributors" />
+          {possibleContributors && Boolean(possibleContributors.length) && (
+            <ContributorsTable contributors={possibleContributors} contacts={contacts} title="Contributors" />
           )}
         </>
       )}
