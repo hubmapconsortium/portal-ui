@@ -1,2 +1,0 @@
-- Update to Styled-Components v6.
-- Standardize styling to use the same utility/theme provider throughout the site.

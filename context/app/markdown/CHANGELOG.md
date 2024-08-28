@@ -1,3 +1,28 @@
+## v1.0.1 - 2024-08-28
+
+- Add the HuBMAP ID search bar component to the "Launch New Workspace" dialog on the "My Workspaces" landing page.
+- Deprecate `ancestors`, `descendants`, and their `immediate` variants to only look up by ID.
+- Improve behavior of entity header at certain intermediate screen widths.
+- Handle both contributors and creators fields for collections until the creators field is renamed to contributors.
+- Adjust link for 10X Multiome/Visium news item to point to those assays specifically.
+- Update language describing HRA/EUI/ASCT+B Reporter on the homepage and navigation.
+- Update to Styled-Components v6.
+- Standardize styling to use the same utility/theme provider throughout the site.
+- Prevent helper panel overflow from long titles/descriptions.
+- Prevent lifting of publication ancillary data on dataset pages.
+- Remove excessive margin on section descriptions.
+- Indicate disabled state on entity header items.
+- Add tooltip to bulk download shortcut link.
+- Restore assay graphs for datasets with no defined search terms but with present datasets.
+- Remove duplicate HuBMAP ID from bulk data transfer panel links.
+- Fix single-tab table styles so the single tab appears selected.
+- Add tooltips to unlabeled status icons.
+- Remove link from helper panel dataset ID display.
+- Add "Relevant Pages" section to workspace detail pages.
+- Update language and add an action button to toasts for successful workspace creation.
+- Enable access to workspaces for users in HuBMAP Read or HuBMAP Workspaces globus groups.
+
+
 ## v1.0.0 - 2024-08-23
 
 - Extend provenance table logic to handle missing entities.

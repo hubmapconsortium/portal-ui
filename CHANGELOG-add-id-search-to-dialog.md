@@ -1,1 +1,0 @@
-- Add the HuBMAP ID search bar component to the "Launch New Workspace" dialog on the "My Workspaces" landing page.
