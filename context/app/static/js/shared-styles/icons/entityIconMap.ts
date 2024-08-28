@@ -20,7 +20,7 @@ type UBKGEntityType = CellTypeEntityType | GeneEntityType;
 type VerifiedUserEntityType = 'VerifiedUser';
 type GlobusEntityType = VerifiedUserEntityType;
 
-type WorkspaceEntityType = 'Workspace';
+type WorkspaceEntityType = 'Workspace' | 'Workspace Template';
 
 type WorkspaceAPIEntityType = WorkspaceEntityType;
 
@@ -34,6 +34,7 @@ export const entityIconMap: Record<AllEntityTypes, MUIIcon> = {
   Publication: PublicationIcon,
   Collection: CollectionIcon,
   Workspace: WorkspacesIcon,
+  'Workspace Template': WorkspacesIcon,
   CellType: CellTypeIcon,
   Gene: GeneIcon,
   VerifiedUser: VerifiedIcon,
