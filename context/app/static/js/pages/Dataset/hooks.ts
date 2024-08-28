@@ -3,7 +3,7 @@ import useSWR, { useSWRConfig } from 'swr';
 
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries';
+import { excludeComponentDatasetsClause, includeDatasetsAndImageSupports, getIDsQuery } from 'js/helpers/queries';
 import { Dataset, isDataset } from 'js/components/types';
 import { getSectionFromString } from 'js/shared-styles/sections/TableOfContents/utils';
 import { fetcher } from 'js/helpers/swr';
@@ -87,8 +87,8 @@ function useProcessedDatasets(includeComponents?: boolean) {
       bool: {
         // TODO: Futher narrow once we understand EPICs.
         must: includeComponents
-          ? [getIDsQuery(descendant_ids)]
-          : [getIDsQuery(descendant_ids), excludeComponentDatasetsClause],
+          ? [getIDsQuery(descendant_ids), includeDatasetsAndImageSupports]
+          : [getIDsQuery(descendant_ids), includeDatasetsAndImageSupports, excludeComponentDatasetsClause],
       },
     },
     _source: [

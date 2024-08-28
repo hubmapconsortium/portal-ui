@@ -31,6 +31,18 @@ export const excludeSupportEntitiesClause: QueryDslQueryContainer = {
   },
 };
 
+export const includeDatasetsAndImageSupports: QueryDslQueryContainer = {
+  bool: {
+    should: [
+      {
+        terms: { entity_type: ['Dataset', 'Support'] },
+      },
+      { terms: { 'vitessce-hints': ['pyramid', 'is_image'] } },
+    ],
+    minimum_should_match: 1,
+  },
+};
+
 export const excludeComponentDatasetsClause: QueryDslQueryContainer = {
   bool: {
     must_not: {

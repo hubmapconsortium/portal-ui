@@ -1,11 +1,14 @@
 import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import Skeleton from '@mui/material/Skeleton';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { ESEntityType, Entity } from 'js/components/types';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { Button } from '@mui/material';
+import { useEntitiesData } from 'js/hooks/useEntityData';
+import { ErrorTile } from 'js/components/entity-tile/EntityTile/EntityTile';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
@@ -20,14 +23,23 @@ interface ProvTableColumnProps {
   entities: Entity[];
   currentEntityUUID: string;
   descendantEntityCounts?: Record<string, number>;
+  missingAncestors?: string[];
 }
 
-function ProvEntityColumn({ type, entities, currentEntityUUID, descendantEntityCounts }: ProvTableColumnProps) {
+function ProvEntityColumn({
+  type,
+  entities,
+  currentEntityUUID,
+  descendantEntityCounts,
+  missingAncestors,
+}: ProvTableColumnProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
   // Track expanded state for each sample category
   const [isExpanded, setIsExpanded] = useState<Record<string, boolean>>({});
 
+  const displayMissingAncestors =
+    missingAncestors && missingAncestors.length > 0 && entities.length === 0 && type !== 'Dataset';
   return (
     <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
       <ProvTableEntityHeader>
@@ -72,20 +84,42 @@ function ProvEntityColumn({ type, entities, currentEntityUUID, descendantEntityC
                   onClick={() =>
                     trackEntityPageEvent({ action: 'Provenance / Table / Select Card', label: item.hubmap_id })
                   }
+                  entityData={item}
                 />
               );
             })}
         {descendantEntityCounts?.[type] && <ProvTableDerivedLink uuid={currentEntityUUID} type={type} />}
+        {displayMissingAncestors && missingAncestors.map((id) => <ErrorTile key={id} entity_type={type} id={id} />)}
       </FlexColumn>
     </TableColumn>
   );
 }
 
+const provTableSource = [
+  'uuid',
+  'hubmap_id',
+  'entity_type',
+  'descendant_counts',
+  'mapped_data_types',
+  'last_modified_timestamp',
+  'origin_samples_unique_mapped_organs',
+  'mapped_metadata',
+  'sample_category',
+  'thumbnail_file',
+];
+
 function ProvTable() {
   // Make a new list rather modifying old one in place: Caused duplication in UI.
   const { entity: assayMetadata } = useFlaskDataContext();
-  const { ancestors, uuid } = assayMetadata;
-  const ancestorsAndSelf = [...ancestors, assayMetadata];
+  const { uuid, ancestor_ids } = assayMetadata;
+  const ancestorAndSelfIds = [...ancestor_ids, uuid];
+  const [ancestorsAndSelf, isLoadingAncestors] = useEntitiesData(ancestorAndSelfIds, provTableSource);
+
+  if (isLoadingAncestors) {
+    return <Skeleton variant="rectangular" height={300} />;
+  }
+
+  const missingAncestors = ancestorAndSelfIds.filter((id) => !ancestorsAndSelf.find((entity) => entity.uuid === id));
 
   const ancestorsAndSelfByType = ancestorsAndSelf.reduce(
     (acc, entity) => {
@@ -111,6 +145,7 @@ function ProvTable() {
           entities={entities}
           currentEntityUUID={uuid}
           descendantEntityCounts={descendantEntityCounts}
+          missingAncestors={missingAncestors}
         />
       ))}
     </FlexContainer>

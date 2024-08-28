@@ -58,7 +58,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
             {sectionDataset.pipeline}
           </Typography>
           <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
-            <StatusIcon status={sectionDataset.status} noColor sx={{ fontSize: 16 }} />
+            <StatusIcon status={sectionDataset.status} noColor tooltip />
             {dataset?.hubmap_id}
           </Typography>
         </AccordionSummary>

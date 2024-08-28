@@ -8,7 +8,6 @@ import SchemaRounded from '@mui/icons-material/SchemaRounded';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 import { useAppContext } from 'js/components/Contexts';
-import { formatSectionHash } from 'js/shared-styles/sections/TableOfContents/utils';
 import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
 import { animated } from '@react-spring/web';
 import { useEventCallback } from '@mui/material/utils';
@@ -23,6 +22,7 @@ import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProv
 import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
 import { LineClamp } from 'js/shared-styles/text';
 import Fade from '@mui/material/Fade';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
@@ -42,7 +42,7 @@ function HelperPanelHeader() {
   return (
     <Typography variant="subtitle2" display="flex" alignItems="center" gap={0.5} whiteSpace="nowrap">
       <SchemaRounded fontSize="small" />
-      <a href={`#${formatSectionHash(`section-${currentDataset?.hubmap_id}`)}`}>{currentDataset?.hubmap_id}</a>
+      {currentDataset?.hubmap_id}
     </Typography>
   );
 }
@@ -66,7 +66,7 @@ interface HelperPanelBodyItemProps extends PropsWithChildren {
 }
 
 function HelperPanelBodyItem({ label, children, noWrap }: HelperPanelBodyItemProps) {
-  const body = noWrap ? children : <LineClamp lines={3}>{children}</LineClamp>;
+  const body = noWrap ? <LineClamp lines={3}>{children}</LineClamp> : children;
   return (
     <Stack direction="column">
       <Typography variant="overline">{label}</Typography>
@@ -202,18 +202,20 @@ function HelperPanelActions() {
   return (
     <>
       <WorkspaceButton />
-      <HelperPanelButton
-        startIcon={<CloudDownloadRounded />}
-        href="#bulk-data-transfer"
-        onClick={() => {
-          track({
-            action: 'Navigate to Bulk Download',
-            label: currentDataset?.hubmap_id,
-          });
-        }}
-      >
-        Bulk Download
-      </HelperPanelButton>
+      <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">
+        <HelperPanelButton
+          startIcon={<CloudDownloadRounded />}
+          href="#bulk-data-transfer"
+          onClick={() => {
+            track({
+              action: 'Navigate to Bulk Download',
+              label: currentDataset?.hubmap_id,
+            });
+          }}
+        >
+          Bulk Download
+        </HelperPanelButton>
+      </SecondaryBackgroundTooltip>
     </>
   );
 }
