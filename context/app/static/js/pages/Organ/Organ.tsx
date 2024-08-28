@@ -91,14 +91,12 @@ function Organ({ organ }: OrganProps) {
 
   const assayBuckets = assaysData?.aggregations?.mapped_data_types?.['assay_display_name.keyword']?.buckets ?? [];
 
-  const hasSearchTerms = organ.search.length > 0;
-
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
     [hraId]: Boolean(organ.has_iu_component),
     [referenceId]: Boolean(organ?.azimuth),
-    [assaysId]: hasSearchTerms || assayBuckets.length > 0,
-    [samplesId]: hasSearchTerms || samplesHits.length > 0,
+    [assaysId]: assayBuckets.length > 0,
+    [samplesId]: samplesHits.length > 0,
   };
 
   return (
@@ -116,8 +114,8 @@ function Organ({ organ }: OrganProps) {
       )}
       {shouldDisplaySection[hraId] && <HumanReferenceAtlas id={hraId} uberonIri={organ.uberon} />}
       {shouldDisplaySection[referenceId] && <Azimuth id={referenceId} config={organ.azimuth!} />}
-      {shouldDisplaySection[assaysId] && <Assays id={assaysId} organTerms={organ.search} bucketData={assayBuckets} />}
-      {shouldDisplaySection[samplesId] && <Samples id={samplesId} organTerms={organ.search} />}
+      {shouldDisplaySection[assaysId] && <Assays id={assaysId} organTerms={searchItems} bucketData={assayBuckets} />}
+      {shouldDisplaySection[samplesId] && <Samples id={samplesId} organTerms={searchItems} />}
     </DetailLayout>
   );
 }

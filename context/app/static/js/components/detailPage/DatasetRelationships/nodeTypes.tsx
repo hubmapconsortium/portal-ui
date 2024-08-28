@@ -82,7 +82,7 @@ function NodeTemplate({
         <Stack direction="row" gap={1} my="auto" alignItems="center">
           {Icon && <Icon color="primary" fontSize="1.5rem" width="1.5rem" height="1.5rem" />}
           <Typography variant="subtitle2">{isLoading ? <Skeleton variant="text" width="10rem" /> : name}</Typography>
-          {status && <StatusIcon status={status} />}
+          {status && <StatusIcon status={status} tooltip />}
         </Stack>
         {children && <Typography variant="body2">{children}</Typography>}
         {target && <Handle style={{ opacity: 0 }} type="target" position={Position.Left} />}

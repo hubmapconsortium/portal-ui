@@ -1,5 +1,7 @@
-import React from 'react';
+import React, { forwardRef } from 'react';
 import { SvgIconProps } from '@mui/material/SvgIcon';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import Box from '@mui/material/Box';
 import ColoredStatusIcon from './ColoredStatusIcon';
 
 function getColor(status: string) {
@@ -26,13 +28,30 @@ function getColor(status: string) {
 interface StatusIconProps extends SvgIconProps {
   status: string;
   noColor?: boolean;
+  tooltip?: boolean;
 }
 
-function StatusIcon({ status: irregularCaseStatus, noColor, ...props }: StatusIconProps) {
+const StatusIcon = forwardRef(function StatusIcon(
+  { status: irregularCaseStatus, noColor, tooltip, ...props }: StatusIconProps,
+  ref: React.Ref<SVGSVGElement>,
+) {
   const status = irregularCaseStatus.toUpperCase();
   const color = getColor(status);
 
-  return <ColoredStatusIcon status={color} noColor={noColor} data-testid="status-svg-icon" {...props} />;
-}
+  const content = (
+    <ColoredStatusIcon ref={ref} status={color} noColor={noColor} data-testid="status-svg-icon" {...props} />
+  );
+
+  if (tooltip) {
+    return (
+      <SecondaryBackgroundTooltip title={irregularCaseStatus}>
+        {/* The wrapper is required for the tooltip to work */}
+        <Box display="flex">{content}</Box>
+      </SecondaryBackgroundTooltip>
+    );
+  }
+
+  return content;
+});
 
 export default StatusIcon;

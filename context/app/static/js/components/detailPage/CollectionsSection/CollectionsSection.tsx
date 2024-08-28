@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { useFlaskDataContext } from 'js/components/Contexts';
@@ -9,6 +9,7 @@ import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { useTabs } from 'js/shared-styles/tabs';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 import CollectionsSectionProvider, { useCollectionsSectionContext } from './CollectionsSectionContext';
@@ -45,7 +46,7 @@ function CollectionTab({ label, uuid, index, icon: Icon }: CollectionTabProps) {
   );
 }
 
-function CollectionPanel({ uuid, index }: { uuid: string; index: number }) {
+function CollectionPanel({ uuid, index, value }: { uuid: string; index: number; value: number }) {
   const collectionsData = useDatasetsCollections([uuid]);
   const { setProcessedDatasetHasCollections } = useCollectionsSectionContext();
   const {
@@ -64,7 +65,7 @@ function CollectionPanel({ uuid, index }: { uuid: string; index: number }) {
   if (panelsProps.length === 0) {
     if (uuid === primaryDatasetId) {
       return (
-        <TabPanel value={index} index={index}>
+        <TabPanel value={value} index={index}>
           <OutlinedAlert severity="info">The raw dataset is not referenced in any existing collections.</OutlinedAlert>
         </TabPanel>
       );
@@ -72,7 +73,7 @@ function CollectionPanel({ uuid, index }: { uuid: string; index: number }) {
     return null;
   }
   return (
-    <TabPanel value={index} index={index}>
+    <TabPanel value={value} index={index}>
       <PanelList panelsProps={panelsProps} key={index} />
     </TabPanel>
   );
@@ -84,19 +85,19 @@ const collectionsSectionDescription =
 function CollectionsSection() {
   const processedDatasetTabs = useProcessedDatasetTabs();
 
-  const [selectedTab, setSelectedTab] = useState(0);
+  const { openTabIndex, handleTabChange } = useTabs();
 
   return (
     <CollapsibleDetailPageSection id="collections" title="Collections" icon={sectionIconMap.collections}>
       <CollectionsSectionProvider>
         <SectionDescription>{collectionsSectionDescription}</SectionDescription>
-        <Tabs value={selectedTab} onChange={(_, tabIndex) => setSelectedTab(tabIndex as number)}>
+        <Tabs value={openTabIndex} onChange={handleTabChange} aria-label="Dataset collections">
           {processedDatasetTabs.map(({ label, uuid, icon }, index) => (
             <CollectionTab key={uuid} label={label} uuid={uuid} index={index} icon={icon} />
           ))}
         </Tabs>
         {processedDatasetTabs.map(({ uuid }, index) => (
-          <CollectionPanel key={uuid} uuid={uuid} index={index} />
+          <CollectionPanel key={uuid} uuid={uuid} index={index} value={openTabIndex} />
         ))}
       </CollectionsSectionProvider>
     </CollapsibleDetailPageSection>

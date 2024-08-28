@@ -6,7 +6,9 @@ interface TableTabProps extends TabProps {
   isSingleTab?: boolean;
 }
 
-const SingleTableTab = styled((props: TabProps) => <Tab aria-disabled disableRipple {...props} />)({
+const SingleTableTab = styled((props: TabProps) => (
+  <Tab aria-disabled disableRipple {...props} className={`${props.className} Mui-selected`} />
+))({
   cursor: 'default',
   maxWidth: 'unset',
   flexGrow: 1,
