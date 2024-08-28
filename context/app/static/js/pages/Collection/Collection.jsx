@@ -28,7 +28,7 @@ function Collection({ collection: collectionData }) {
   useTrackID({ entity_type, hubmap_id });
 
   // Handle both fields until creators is renamed to contributors.
-  const possible_contributors = contributors ?? creators;
+  const possibleContributors = contributors ?? creators;
 
   return (
     <div>
@@ -52,8 +52,8 @@ function Collection({ collection: collectionData }) {
             )}
           </Summary>
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
-          {possible_contributors && Boolean(possible_contributors.length) && (
-            <ContributorsTable contributors={possible_contributors} contacts={contacts} title="Contributors" />
+          {possibleContributors && Boolean(possibleContributors.length) && (
+            <ContributorsTable contributors={possibleContributors} contacts={contacts} title="Contributors" />
           )}
         </>
       )}
