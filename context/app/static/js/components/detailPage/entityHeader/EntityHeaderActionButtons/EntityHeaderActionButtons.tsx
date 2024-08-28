@@ -150,6 +150,7 @@ function ViewSelectChip({
       sx={(theme) => ({
         borderRadius: theme.spacing(1),
         ...(isSelectedView && { boxShadow: theme.shadows[1] }),
+        whiteSpace: 'nowrap',
       })}
     >
       {view} View
