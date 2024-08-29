@@ -205,6 +205,7 @@ function useLaunchWorkspace() {
   const { open, setWorkspace } = useLaunchWorkspaceStore();
 
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
+  const { toastSuccess } = useSnackbarActions();
 
   const startAndOpenWorkspace = useCallback(
     async ({
@@ -231,8 +232,17 @@ function useLaunchWorkspace() {
       if (isNewJobType) {
         await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
       }
+
+      toastSuccess(WorkspaceLaunchSuccessToast({ id: workspace.id, workspaceLaunched: true }));
     },
-    [mutateWorkspacesAndJobs, startWorkspace, globalMutateWorkspace, handleUpdateWorkspace, runningWorkspace],
+    [
+      mutateWorkspacesAndJobs,
+      startWorkspace,
+      globalMutateWorkspace,
+      handleUpdateWorkspace,
+      runningWorkspace,
+      toastSuccess,
+    ],
   );
 
   const startNewWorkspace = useCallback(
@@ -248,11 +258,12 @@ function useLaunchWorkspace() {
       if (runningWorkspace) {
         open();
         setWorkspace(workspace);
+        toastSuccess(WorkspaceLaunchSuccessToast({ id: workspace.id, workspaceLaunched: false }));
       } else {
         await startAndOpenWorkspace({ workspace, jobTypeId, templatePath });
       }
     },
-    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
+    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace, toastSuccess],
   );
 
   return { startNewWorkspace, startAndOpenWorkspace };
@@ -261,7 +272,7 @@ function useLaunchWorkspace() {
 export function useCreateAndLaunchWorkspace() {
   const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
   const { startNewWorkspace } = useLaunchWorkspace();
-  const { toastError, toastSuccess } = useSnackbarActions();
+  const { toastError } = useSnackbarActions();
 
   const createAndLaunchWorkspace = useCallback(
     async ({ body, templatePath }: { body: CreateWorkspaceBody; templatePath: string }) => {
@@ -274,15 +285,13 @@ export function useCreateAndLaunchWorkspace() {
         return;
       }
 
-      toastSuccess(WorkspaceLaunchSuccessToast(workspace.id));
-
       try {
         await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
       } catch (e) {
         toastError('Workspace failed to launch.');
       }
     },
-    [createWorkspace, startNewWorkspace, toastError, toastSuccess],
+    [createWorkspace, startNewWorkspace, toastError],
   );
 
   return { createAndLaunchWorkspace, isCreatingWorkspace };
