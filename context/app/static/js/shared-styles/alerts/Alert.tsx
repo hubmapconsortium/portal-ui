@@ -28,7 +28,7 @@ interface StyledAlertProps extends AlertProps {
 
 // TODO: Figure out why `sx` doesn't work with this component. https://hms-dbmi.atlassian.net/browse/CAT-650
 const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBottom, $marginTop }) => ({
-  ':not(svg)': {
+  '> &:not(svg)': {
     color: theme.palette.text.primary,
   },
   '& .MuiAlert-action': {
