@@ -3,7 +3,6 @@ import React, { PropsWithChildren, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
 
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
@@ -11,13 +10,12 @@ import { Alert } from 'js/shared-styles/alerts';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { InfoIcon } from 'js/shared-styles/icons';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
+import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
-import { LoginButton } from '../detailPage/BulkDataTransfer/style';
 import TemplateTagsAutocomplete from './TemplateTagsAutocomplete/TemplateTagsAutocomplete';
 
 function ContactUsForAccess() {
@@ -116,23 +114,13 @@ function AccessAlert() {
   );
 }
 
-function TemplateLogInBanner() {
+function TemplateLogInPanel() {
   return (
-    <Stack component={Paper} p={2} spacing={2}>
-      <Stack direction="row" spacing={2}>
-        <InfoIcon color="primary" fontSize="1.5rem" />
-        <Typography>
-          Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
-          your specific interests. Click on any template for detailed information.{' '}
-          <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
-        </Typography>
-      </Stack>
-      <Box>
-        <LoginButton href="/login" variant="contained" color="primary">
-          Log In
-        </LoginButton>
-      </Box>
-    </Stack>
+    <LogInPanel>
+      Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by your
+      specific interests. Click on any template for detailed information.{' '}
+      <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
+    </LogInPanel>
   );
 }
 
@@ -160,10 +148,8 @@ function TemplateGridPreview() {
 function TemplatePreviewSection() {
   return (
     <Stack pt={2} spacing={2}>
-      <Typography component="h3" variant="h4">
-        Workspace Templates
-      </Typography>
-      <TemplateLogInBanner />
+      <Typography variant="h4">Workspace Templates</Typography>
+      <TemplateLogInPanel />
       <TemplateGridPreview />
     </Stack>
   );
@@ -194,4 +180,4 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
   );
 }
 
-export { LogInAlert, AccessAlert, TemplateLogInBanner, TemplateGridPreview, TextItems };
+export { LogInAlert, AccessAlert, TemplateLogInPanel, TemplateGridPreview, TextItems };
