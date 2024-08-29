@@ -100,6 +100,12 @@ interface TemplateTypes {
   is_multi_dataset_template: boolean;
   template_format: string;
   is_hidden: boolean;
+  examples: {
+    title: string;
+    description: string;
+    data_type: string[];
+    datasets: string[];
+  }[];
 }
 
 type TemplatesTypes = Record<string, TemplateTypes>;

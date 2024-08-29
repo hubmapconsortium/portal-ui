@@ -116,7 +116,7 @@ function NewWorkspaceDialog({
             {children}
             <StepDescription blocks={text.datasets.description} />
             {datasetUUIDs.size > 0 && (
-              <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} removeDatasets={removeDatasets} />
+              <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} removeDatasets={removeDatasets} copyDatasets />
             )}
           </Stack>
         </Step>

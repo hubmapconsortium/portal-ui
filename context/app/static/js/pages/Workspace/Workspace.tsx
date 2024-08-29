@@ -118,6 +118,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
       <WorkspaceDatasetsTable
         datasetsUUIDs={workspaceDatasets}
         addDatasets={workspace}
+        copyDatasets
         label={<SectionHeader>Datasets</SectionHeader>}
         additionalAlerts={
           <Alert
