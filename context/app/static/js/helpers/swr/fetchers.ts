@@ -27,7 +27,7 @@ async function f({
     // Separate handling for 303 status code thrown by ES when documents are >10MB
     if (response.status === 303) {
       const s3URL = await response.text();
-      return fetch(s3URL);
+      return f({ url: s3URL });
     }
     if (!expectedStatusCodes.includes(response.status)) {
       const rawText = await response.text();
