@@ -1,0 +1,1 @@
+- Fix regression in 303 redirect.
