@@ -101,7 +101,11 @@ function HelperPanelActions() {
   return (
     <>
       <ProcessedDataWorkspaceMenu
-        button={<HelperPanelButton startIcon={<WorkspacesIcon color="primary" />}>Workspace</HelperPanelButton>}
+        button={
+          <SecondaryBackgroundTooltip title="Launch new workspace or add dataset to an existing workspace.">
+            <HelperPanelButton startIcon={<WorkspacesIcon color="primary" />}>Workspace</HelperPanelButton>
+          </SecondaryBackgroundTooltip>
+        }
       />
       <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">
         <HelperPanelButton

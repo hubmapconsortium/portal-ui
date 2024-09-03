@@ -203,7 +203,11 @@ function EntityHeaderActionButtons({
         button={
           <ActionButton
             icon={WorkspaceSVGIcon}
-            tooltip={disabled ? 'Protected datasets are not available in workspaces.' : 'Launch a new workspace.'}
+            tooltip={
+              disabled
+                ? 'Protected datasets are not available in workspaces.'
+                : 'Launch new workspace or add dataset to an existing workspace.'
+            }
             disabled={disabled}
           />
         }
