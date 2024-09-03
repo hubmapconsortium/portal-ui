@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
@@ -43,13 +43,18 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
       }
     },
   });
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
   return (
     <DetailPageSection id={datasetSectionId(sectionDataset, 'section')}>
       <StyledProcessedDatasetAccordion
         defaultExpanded={defaultExpanded}
-        onChange={(_, expanded) =>
-          track({ action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`, label: sectionDataset.hubmap_id })
-        }
+        onChange={(_, expanded) => {
+          track({
+            action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`,
+            label: sectionDataset.hubmap_id,
+          });
+          setIsExpanded(expanded);
+        }}
         slotProps={{ transition: { unmountOnExit: true } }}
       >
         <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
@@ -58,7 +63,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
             {sectionDataset.pipeline}
           </Typography>
           <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
-            <StatusIcon status={sectionDataset.status} noColor tooltip />
+            <StatusIcon status={sectionDataset.status} noColor={isExpanded} tooltip />
             {dataset?.hubmap_id}
           </Typography>
         </AccordionSummary>
