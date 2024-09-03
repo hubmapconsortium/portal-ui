@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
@@ -9,6 +9,7 @@ import { VisualizationIcon } from 'js/shared-styles/icons';
 
 import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useInView } from 'react-intersection-observer';
+import { useHash } from 'js/hooks/useHash';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
 import { StyledProcessedDatasetAccordion } from './styles';
@@ -43,11 +44,22 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
       }
     },
   });
-  const [isExpanded, setIsExpanded] = useState(defaultExpanded);
+  const datasetIdSubstring = datasetSectionId(sectionDataset);
+  const [hash] = useHash();
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded || hash.includes(datasetIdSubstring));
+
+  useEffect(() => {
+    const datasetId = datasetSectionId(sectionDataset);
+    if (hash.includes(datasetId)) {
+      setIsExpanded(true);
+    }
+  }, [hash, sectionDataset]);
+
   return (
     <DetailPageSection id={datasetSectionId(sectionDataset, 'section')}>
       <StyledProcessedDatasetAccordion
         defaultExpanded={defaultExpanded}
+        expanded={isExpanded}
         onChange={(_, expanded) => {
           track({
             action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`,

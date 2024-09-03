@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { AccountTreeRounded, ExtensionRounded, SvgIconComponent } from '@mui/icons-material';
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
+import { useHash } from 'js/hooks/useHash';
 import StatusIcon from '../StatusIcon';
 import { usePipelineInfo } from './hooks';
 import { useProcessedDatasetDetails } from '../ProcessedData/ProcessedDataset/hooks';
@@ -69,7 +70,7 @@ function NodeTemplate({
 }: NodeTemplateProps) {
   // Outer wrapper Box makes sure that nodes are always the same height
   const contents = (
-    <Box height="4.125rem" display="flex" alignItems="center">
+    <Box height="4.125rem" display="flex" alignItems="center" sx={{ cursor: href ? 'pointer' : 'default' }}>
       <Stack
         direction="column"
         px={2}
@@ -90,8 +91,24 @@ function NodeTemplate({
       </Stack>
     </Box>
   );
+  const [, setHash] = useHash();
   if (href) {
-    return <a href={href}>{contents}</a>;
+    return (
+      <a
+        onClick={(e) => {
+          if (isLoading) return;
+          if (href.startsWith('#')) {
+            e.preventDefault();
+            const sanitizedHref = `#${CSS.escape(href.split('#')[1])}`;
+            document.querySelector(sanitizedHref)?.scrollIntoView({ behavior: 'smooth' });
+            setHash(href);
+          }
+        }}
+        href={href}
+      >
+        {contents}
+      </a>
+    );
   }
   return contents;
 }

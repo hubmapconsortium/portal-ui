@@ -11,7 +11,7 @@ export interface ProcessedDataVisualizationProps {
 interface ProcessedDatasetContext extends ProcessedDataVisualizationProps {
   conf?: object;
   dataset: ProcessedDatasetDetails;
-  defaultExpanded?: boolean;
+  defaultExpanded: boolean;
 }
 
 const ProcessedDatasetContext = createContext<ProcessedDatasetContext>('ProcessedDatasetContext');
