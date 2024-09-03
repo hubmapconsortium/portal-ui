@@ -1,0 +1,1 @@
+- Improve status icon visibility on collapsed processed dataset accordions.
