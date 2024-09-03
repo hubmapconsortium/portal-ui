@@ -1,0 +1,1 @@
+- Fix descendants lookup query so it looks for either dataset descendants or image pyramid support descendants.

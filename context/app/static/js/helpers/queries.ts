@@ -35,9 +35,16 @@ export const includeDatasetsAndImageSupports: QueryDslQueryContainer = {
   bool: {
     should: [
       {
-        terms: { entity_type: ['Dataset', 'Support'] },
+        term: { 'entity_type.keyword': 'Dataset' },
       },
-      { terms: { 'vitessce-hints': ['pyramid', 'is_image'] } },
+      {
+        bool: {
+          must: [
+            { term: { 'entity_type.keyword': 'Support' } },
+            { terms: { 'vitessce-hints': ['pyramid', 'is_image'] } },
+          ],
+        },
+      },
     ],
     minimum_should_match: 1,
   },
