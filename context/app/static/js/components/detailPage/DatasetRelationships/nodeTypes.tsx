@@ -7,6 +7,8 @@ import { AccountTreeRounded, ExtensionRounded, SvgIconComponent } from '@mui/ico
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
 import { useHash } from 'js/hooks/useHash';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import StatusIcon from '../StatusIcon';
 import { usePipelineInfo } from './hooks';
 import { useProcessedDatasetDetails } from '../ProcessedData/ProcessedDataset/hooks';
@@ -37,6 +39,8 @@ interface NodeTemplateProps extends PropsWithChildren, CommonNodeInfo {
   bgColor?: string;
   isLoading?: boolean;
   href?: string;
+  toastText?: string;
+  tooltipText?: string;
 }
 
 export const nodeColors = {
@@ -67,6 +71,8 @@ function NodeTemplate({
   bgColor,
   isLoading,
   href,
+  toastText,
+  tooltipText,
 }: NodeTemplateProps) {
   // Outer wrapper Box makes sure that nodes are always the same height
   const contents = (
@@ -92,8 +98,9 @@ function NodeTemplate({
     </Box>
   );
   const [, setHash] = useHash();
+  const { toastInfo } = useSnackbarActions();
   if (href) {
-    return (
+    const linkedContents = (
       <a
         onClick={(e) => {
           if (isLoading) return;
@@ -102,6 +109,9 @@ function NodeTemplate({
             const sanitizedHref = `#${CSS.escape(href.split('#')[1])}`;
             document.querySelector(sanitizedHref)?.scrollIntoView({ behavior: 'smooth' });
             setHash(href);
+            if (toastText) {
+              toastInfo(toastText);
+            }
           }
         }}
         href={href}
@@ -109,6 +119,14 @@ function NodeTemplate({
         {contents}
       </a>
     );
+    if (tooltipText) {
+      return (
+        <SecondaryBackgroundTooltip title={tooltipText} placement="top">
+          {linkedContents}
+        </SecondaryBackgroundTooltip>
+      );
+    }
+    return linkedContents;
   }
   return contents;
 }
@@ -151,6 +169,8 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
       icon={nodeIcons.processedDataset}
       bgColor={nodeColors.processedDataset}
       isLoading={isLoading}
+      toastText={`Scrolled to ${datasetDetails.pipeline}`}
+      tooltipText={`Scroll to ${datasetDetails.pipeline}`}
       {...data}
     >
       {data.datasetType}
@@ -161,15 +181,13 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
 type ComponentDatasetNodeProps = Node<DatasetNodeInfo, 'componentDataset'>;
 
 function ComponentDatasetNode({ data }: NodeProps<ComponentDatasetNodeProps>) {
-  const { datasetDetails, isLoading } = useProcessedDatasetDetails(data.uuid);
   return (
     <NodeTemplate
       rounded
       target
       icon={nodeIcons.componentDataset}
-      href={makeNodeHref(datasetDetails)}
       bgColor={nodeColors.componentDataset}
-      isLoading={isLoading}
+      isLoading={false}
       {...data}
     >
       {data.datasetType}
