@@ -10,6 +10,7 @@ import { SWRError } from 'js/helpers/swr/errors';
 import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
 import { buildDatasetSymlinks } from '../utils';
+import { WorkspaceTemplateErrorToast } from '../WorkspaceToasts';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -81,11 +82,11 @@ function useTemplateNotebooks() {
           const templateKey = url.split('/').pop();
 
           if (templateKey && templates?.[templateKey]) {
-            toastError(`There are issues with creating ${templates?.[templateKey].title}. Failed to create workspace.`);
+            toastError(WorkspaceTemplateErrorToast(templates?.[templateKey].title));
             return;
           }
         }
-        toastError(`There are issues with creating the selected templates. Failed to create workspace.`);
+        toastError(WorkspaceTemplateErrorToast());
         return;
       }
 

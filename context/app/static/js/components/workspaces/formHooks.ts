@@ -9,6 +9,7 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
 import { Dataset } from '../types';
+import { ProtectedDatasetsRemoveSuccessToast } from './WorkspaceToasts';
 
 type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>>[];
 
@@ -64,7 +65,7 @@ function useProtectedDatasetsForm() {
 
   const removeProtectedDatasets = useCallback(() => {
     deselectRows(protectedRows.map((r) => r._id));
-    toastSuccess('Protected datasets successfully removed from selection.');
+    toastSuccess(ProtectedDatasetsRemoveSuccessToast());
   }, [deselectRows, protectedRows, toastSuccess]);
 
   return { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows };

@@ -29,7 +29,13 @@ import {
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
-import WorkspaceLaunchSuccessToast from './WorkspaceLaunchSuccessToast';
+import {
+  WorkspaceLaunchSuccessToast,
+  WorkspaceCreateSuccessToast,
+  SessionRenewSuccessToast,
+  WorkspaceCreateErrorToast,
+  WorkspaceLaunchErrorToast,
+} from './WorkspaceToasts';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -233,7 +239,7 @@ function useLaunchWorkspace() {
         await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
       }
 
-      toastSuccess(WorkspaceLaunchSuccessToast({ id: workspace.id, workspaceLaunched: true }));
+      toastSuccess(WorkspaceLaunchSuccessToast(workspace.id));
     },
     [
       mutateWorkspacesAndJobs,
@@ -258,7 +264,7 @@ function useLaunchWorkspace() {
       if (runningWorkspace) {
         open();
         setWorkspace(workspace);
-        toastSuccess(WorkspaceLaunchSuccessToast({ id: workspace.id, workspaceLaunched: false }));
+        toastSuccess(WorkspaceCreateSuccessToast());
       } else {
         await startAndOpenWorkspace({ workspace, jobTypeId, templatePath });
       }
@@ -281,14 +287,14 @@ export function useCreateAndLaunchWorkspace() {
       try {
         workspace = await createWorkspace(body);
       } catch (e) {
-        toastError('Failed to create workspace.');
+        toastError(WorkspaceCreateErrorToast());
         return;
       }
 
       try {
         await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
       } catch (e) {
-        toastError('Workspace failed to launch.');
+        toastError(WorkspaceLaunchErrorToast());
       }
     },
     [createWorkspace, startNewWorkspace, toastError],
@@ -336,7 +342,7 @@ function useRefreshSession(workspace: MergedWorkspace) {
     await stopWorkspace(workspace.id);
     await startWorkspace({ workspaceId: workspace.id, jobTypeId: getDefaultJobType({ workspace }) });
     await mutate();
-    toastSuccess('Session time for workspace successfully renewed');
+    toastSuccess(SessionRenewSuccessToast());
   }, [mutate, startWorkspace, stopWorkspace, toastSuccess, workspace]);
 
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };

@@ -9,6 +9,7 @@ import DialogModal from 'js/shared-styles/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import { useLaunchWorkspaceDialog, LaunchWorkspaceFormTypes } from './hooks';
+import { WorkspaceLaunchErrorToast } from '../WorkspaceToasts';
 
 const formId = 'launch-workspace-form';
 
@@ -35,7 +36,7 @@ function LaunchWorkspaceDialog() {
           handleClose();
         })
         .catch((e) => {
-          toastError('Failed to launch workspace. Please try again.');
+          toastError(WorkspaceLaunchErrorToast());
           console.error(e);
         });
     },

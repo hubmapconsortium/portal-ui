@@ -10,6 +10,7 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import EditWorkspaceTemplatesDialog from '../EditWorkspaceTemplatesDialog';
 import EditWorkspaceNameDialog from '../EditWorkspaceNameDialog';
 import AddDatasetsDialog from '../AddDatasetsDialog';
+import { WorkspaceUpdateErrorToast, WorkspaceUpdateSuccessToast } from '../WorkspaceToasts';
 
 const formId = 'edit-workspace-form';
 
@@ -49,12 +50,12 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
     (fieldValues: T) => {
       onSubmit(fieldValues)
         .then(() => {
-          toastSuccess('Workspace successfully updated.');
+          toastSuccess(WorkspaceUpdateSuccessToast());
           handleClose();
         })
         .catch((error) => {
           console.error(error);
-          toastError('Failed to update workspace.');
+          toastError(WorkspaceUpdateErrorToast());
         });
     },
     [onSubmit, handleClose, toastError, toastSuccess],

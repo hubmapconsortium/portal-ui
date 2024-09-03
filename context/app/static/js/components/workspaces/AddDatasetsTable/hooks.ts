@@ -3,6 +3,7 @@ import { useState, SyntheticEvent, useCallback } from 'react';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
+import { DatasetAddSuccessToast } from '../WorkspaceToasts';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -115,7 +116,7 @@ function useDatasetsAutocomplete({
       if (uuid) {
         updateDatasetsFormState([...selectedDatasets, uuid]);
         resetAutocompleteState();
-        toastSuccess(`${newValue._source.hubmap_id} successfully added.`);
+        toastSuccess(DatasetAddSuccessToast(newValue._source.hubmap_id));
       }
     },
     [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccess],

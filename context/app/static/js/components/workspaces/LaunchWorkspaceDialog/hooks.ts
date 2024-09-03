@@ -10,6 +10,7 @@ import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../h
 import { DEFAULT_JOB_TYPE } from '../constants';
 import { MergedWorkspace } from '../types';
 import { findBestJobType, isRunningWorkspace } from '../utils';
+import { WorkspaceLaunchErrorToast, WorkspaceStopErrorToast } from '../WorkspaceToasts';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
@@ -96,7 +97,7 @@ function useLaunchWorkspaceDialog() {
         try {
           await handleStopWorkspace(runningWorkspace.id);
         } catch (e) {
-          toastError('Failed to stop workspace. Please try again.');
+          toastError(WorkspaceStopErrorToast());
           console.error(e);
           return;
         }
@@ -121,7 +122,7 @@ function useLaunchWorkspaceDialog() {
 
       if (isRunningWorkspace(newWorkspace)) {
         submit({ workspaceJobTypeId }).catch((e) => {
-          toastError('Failed to launch workspace. Please try again.');
+          toastError(WorkspaceLaunchErrorToast());
           console.error(e);
         });
       } else {

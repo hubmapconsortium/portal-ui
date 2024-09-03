@@ -17,6 +17,7 @@ import { SelectedItems } from 'js/hooks/useSelectItems';
 import { generateCommaList } from 'js/helpers/functions';
 
 import { MergedWorkspace } from '../types';
+import { WorkspacesDeleteErrorToast, WorkspacesDeleteSuccessToast } from '../WorkspaceToasts';
 
 interface ConfirmDeleteWorkspacesDialogProps {
   dialogIsOpen: boolean;
@@ -46,11 +47,11 @@ export default function ConfirmDeleteWorkspacesDialog({
 
     Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId))))
       .then(() => {
-        toastSuccess(`Successfully deleted workspaces: ${selectedWorkspaceNamesList}`);
+        toastSuccess(WorkspacesDeleteSuccessToast(selectedWorkspaceNamesList));
         selectedWorkspaceIds.clear();
       })
       .catch((e) => {
-        toastError(`Error deleting workspaces: ${selectedWorkspaceNamesList}`);
+        toastError(WorkspacesDeleteErrorToast(selectedWorkspaceNamesList));
         console.error(e);
       });
 
