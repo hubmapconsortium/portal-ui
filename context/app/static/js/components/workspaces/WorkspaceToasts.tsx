@@ -7,16 +7,8 @@ import Button from '@mui/material/Button';
  *           Error Toasts         *
  ********************************* */
 
-function WorkspacesDeleteErrorToast(names: string) {
-  return `Error deleting workspaces: ${names}`;
-}
-
 function WorkspaceUpdateErrorToast() {
   return 'Failed to update workspace.';
-}
-
-function WorkspaceStopErrorToast(workspaceName?: string) {
-  return `Failed to stop ${workspaceName ?? 'workspace'}. Please try again.`;
 }
 
 function WorkspaceLaunchErrorToast() {
@@ -25,6 +17,14 @@ function WorkspaceLaunchErrorToast() {
 
 function WorkspaceCreateErrorToast() {
   return 'Failed to create workspace.';
+}
+
+function WorkspacesDeleteErrorToast(names: string) {
+  return `Error deleting workspaces: ${names}`;
+}
+
+function WorkspaceStopErrorToast(workspaceName?: string) {
+  return `Failed to stop ${workspaceName ?? 'workspace'}. Please try again.`;
 }
 
 function WorkspaceTemplateErrorToast(templateTitle?: string) {
@@ -83,10 +83,10 @@ export {
   WorkspaceUpdateSuccessToast,
   ProtectedDatasetsRemoveSuccessToast,
   SessionRenewSuccessToast,
-  WorkspacesDeleteErrorToast,
   WorkspaceUpdateErrorToast,
-  WorkspaceStopErrorToast,
   WorkspaceLaunchErrorToast,
-  WorkspaceTemplateErrorToast,
   WorkspaceCreateErrorToast,
+  WorkspacesDeleteErrorToast,
+  WorkspaceStopErrorToast,
+  WorkspaceTemplateErrorToast,
 };
