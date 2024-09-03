@@ -1,3 +1,10 @@
+## v1.1.0 - 2024-09-03
+
+- Fix color of alerts' icons.
+- Fix regression in 303 redirect.
+- Fix descendants lookup query so it looks for either dataset descendants or image pyramid support descendants.
+
+
 ## v1.0.1 - 2024-08-28
 
 - Add the HuBMAP ID search bar component to the "Launch New Workspace" dialog on the "My Workspaces" landing page.
