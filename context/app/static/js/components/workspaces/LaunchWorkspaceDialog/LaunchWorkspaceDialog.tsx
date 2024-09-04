@@ -41,12 +41,16 @@ function LaunchWorkspaceDialog() {
     handleClose,
     workspace,
     isSubmitting,
+    dialogType,
   } = useLaunchWorkspaceDialog();
 
   const workspaceName = workspace?.name;
   const { toastError } = useSnackbarActions();
 
-  const runningWorkspaceAlert = runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace && (
+  const newWorkspaceLaunch = dialogType === 'LAUNCH_NEW_WORKSPACE';
+  const isAnotherWorkspaceRunning = runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace;
+
+  const runningWorkspaceAlert = isAnotherWorkspaceRunning && (
     <Alert
       severity="warning"
       sx={{
@@ -75,31 +79,38 @@ function LaunchWorkspaceDialog() {
     },
     [submit, handleClose, toastError],
   );
+
+  const dialogContent = (
+    // eslint-disable-next-line @typescript-eslint/no-misused-promises
+    <form id={formId} onSubmit={handleSubmit(onSubmit)}>
+      {newWorkspaceLaunch ? (
+        runningWorkspaceAlert
+      ) : (
+        <Stack direction="column" spacing={1}>
+          {runningWorkspaceAlert}
+          <Alert severity="info">{text.resources.alert}</Alert>
+          <SummaryPaper>
+            <Stack direction="column" spacing={2}>
+              <Typography variant="button" fontSize="1rem">
+                {text.environment.title}
+              </Typography>
+              {text.environment.description.map((description) => (
+                <Typography key={description}>{description}</Typography>
+              ))}
+              <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+            </Stack>
+          </SummaryPaper>
+          <AdvancedConfigOptions control={control} description={text.resources.description} />
+        </Stack>
+      )}
+    </form>
+  );
+
   return (
     <DialogModal
       title={`Launch ${workspaceName}`}
       maxWidth="md"
-      content={
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        <form id={formId} onSubmit={handleSubmit(onSubmit)}>
-          <Stack direction="column" spacing={1}>
-            {runningWorkspaceAlert}
-            <Alert severity="info">{text.resources.alert}</Alert>
-            <SummaryPaper>
-              <Stack direction="column" spacing={2}>
-                <Typography variant="button" fontSize="1rem">
-                  {text.environment.title}
-                </Typography>
-                {text.environment.description.map((description) => (
-                  <Typography key={description}>{description}</Typography>
-                ))}
-                <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
-              </Stack>
-            </SummaryPaper>
-            <AdvancedConfigOptions control={control} description={text.resources.description} />
-          </Stack>
-        </form>
-      }
+      content={dialogContent}
       isOpen={isOpen}
       handleClose={handleClose}
       actions={

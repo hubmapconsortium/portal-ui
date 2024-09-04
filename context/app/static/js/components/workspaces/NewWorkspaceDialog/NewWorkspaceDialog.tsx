@@ -116,7 +116,7 @@ function NewWorkspaceDialog({
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
 
-  const { isOpen: isLaunchWorkspaceDialogOpen } = useLaunchWorkspaceStore();
+  const { isOpen: isLaunchWorkspaceDialogOpen, setDialogType } = useLaunchWorkspaceStore();
 
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
@@ -128,6 +128,7 @@ function NewWorkspaceDialog({
       datasets,
       workspaceResourceOptions,
     }: CreateWorkspaceFormTypes) => {
+      setDialogType('LAUNCH_NEW_WORKSPACE');
       onSubmit({
         workspaceName,
         templateKeys,
@@ -136,7 +137,7 @@ function NewWorkspaceDialog({
         workspaceResourceOptions,
       });
     },
-    [onSubmit],
+    [onSubmit, setDialogType],
   );
 
   return (

@@ -211,7 +211,7 @@ function useLaunchWorkspace() {
   const runningWorkspace = useRunningWorkspace();
   const mutateWorkspacesAndJobs = useMutateWorkspacesAndJobs();
   const globalMutateWorkspace = useGlobalMutateWorkspace();
-  const { open, setWorkspace } = useLaunchWorkspaceStore();
+  const { open, setWorkspace, setDialogType } = useLaunchWorkspaceStore();
 
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
 
@@ -263,9 +263,10 @@ function useLaunchWorkspace() {
         setWorkspace(workspace);
       } else {
         await startAndOpenWorkspace({ workspace, jobTypeId, templatePath, resourceOptions });
+        setDialogType(null);
       }
     },
-    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
+    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace, setDialogType],
   );
 
   return { startNewWorkspace, startAndOpenWorkspace };

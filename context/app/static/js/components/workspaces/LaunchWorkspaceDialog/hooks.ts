@@ -67,7 +67,7 @@ function useLaunchWorkspaceDialog() {
 
   const { handleStopWorkspace } = useWorkspacesList();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
-  const { isOpen, open, close, workspace, setWorkspace } = useLaunchWorkspaceStore();
+  const { isOpen, open, close, workspace, setWorkspace, dialogType, setDialogType } = useLaunchWorkspaceStore();
 
   const runningWorkspaceIsCurrentWorkpace = runningWorkspace?.id === workspace?.id;
 
@@ -94,7 +94,8 @@ function useLaunchWorkspaceDialog() {
     runningWorkspaceName.current = '';
     reset();
     close();
-  }, [close, reset]);
+    setDialogType(null);
+  }, [close, reset, setDialogType]);
 
   const submit = useCallback(
     async ({ workspaceJobTypeId, workspaceResourceOptions }: LaunchWorkspaceFormTypes) => {
@@ -165,6 +166,8 @@ function useLaunchWorkspaceDialog() {
     isSubmitting,
     handleClose,
     launchOrOpenDialog,
+    dialogType,
+    setDialogType,
   };
 }
 

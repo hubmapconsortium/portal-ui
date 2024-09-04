@@ -63,6 +63,7 @@ function useCreateWorkspaceForm({
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
 
+  // const { setDialogType } = useLaunchWorkspaceStore();
   const checkedWorkspaceName = defaultName ?? '';
   const checkedProtectedDatasets = initialProtectedDatasets ?? '';
 
