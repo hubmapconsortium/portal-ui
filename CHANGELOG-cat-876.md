@@ -1,0 +1,3 @@
+- Add smooth scrolling for dataset relationships links.
+- Make dataset relationship node behavior clearer by adding explanatory toast, tooltip, and using appropriate cursor.
+- Expand processed datasets if navigated to via table of contents or dataset relationships node link.
