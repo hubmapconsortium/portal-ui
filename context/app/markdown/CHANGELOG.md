@@ -1,3 +1,11 @@
+## v1.2.0 - 2024-09-04
+
+- Improve status icon visibility on collapsed processed dataset accordions.
+- Add smooth scrolling for dataset relationships links.
+- Make dataset relationship node behavior clearer by adding explanatory toast, tooltip, and using appropriate cursor.
+- Expand processed datasets if navigated to via table of contents or dataset relationships node link.
+
+
 ## v1.1.0 - 2024-09-03
 
 - Fix color of alerts' icons.
