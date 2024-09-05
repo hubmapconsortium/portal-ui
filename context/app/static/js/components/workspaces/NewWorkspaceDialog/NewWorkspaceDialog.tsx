@@ -27,6 +27,7 @@ import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import AdvancedConfigOptions from '../AdvancedConfigOptions';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { SearchAheadHit } from '../AddDatasetsTable/hooks';
+import { StyledSubtitle1 } from '../style';
 
 const text = {
   overview: {
@@ -208,9 +209,7 @@ function NewWorkspaceDialog({
               }}
             />
             <Stack spacing={2} p={2} component={Paper} direction="column">
-              <Typography variant="button" fontSize="1rem">
-                Environment Selection
-              </Typography>
+              <StyledSubtitle1>Environment Selection</StyledSubtitle1>
               <Typography>{text.configure.description}</Typography>
               <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
             </Stack>

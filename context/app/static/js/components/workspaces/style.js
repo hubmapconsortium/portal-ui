@@ -24,4 +24,14 @@ const StyledDescription = styled(Description)`
   padding: ${(props) => props.theme.spacing(2.5)};
 `;
 
-export { StyledButton, LinkButton, Bold, StyledDescription };
+const StyledSubtitle1 = styled(Typography)(({ theme }) => ({
+  ...theme.typography.subtitle1,
+  color: theme.palette.text.primary,
+}));
+
+const StyledSubtitle2 = styled(Typography)(({ theme }) => ({
+  ...theme.typography.subtitle2,
+  color: theme.palette.text.primary,
+}));
+
+export { StyledButton, LinkButton, Bold, StyledDescription, StyledSubtitle1, StyledSubtitle2 };

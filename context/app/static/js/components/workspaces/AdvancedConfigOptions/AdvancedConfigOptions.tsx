@@ -10,6 +10,7 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { StyledAccordion, StyledSwitch } from './style';
+import { StyledSubtitle1, StyledSubtitle2 } from '../style';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_MEMORY_MB,
@@ -59,7 +60,7 @@ function ConfigSlider<FormType extends FieldValues>({
   return (
     <Stack marginTop={1}>
       <Stack direction="row" spacing={1} alignItems="center">
-        <Typography variant="button">{label}</Typography>
+        <StyledSubtitle2>{label}</StyledSubtitle2>
         <InfoTooltipIcon iconTooltipText={tooltip} />
       </Stack>
       <Stack padding={1}>
@@ -138,15 +139,12 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
   return (
     <StyledAccordion>
       <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
-        <Typography variant="button" fontSize="1rem">
-          Advanced Configurations (Optional)
-        </Typography>
+        <StyledSubtitle1>Advanced Configurations (Optional)</StyledSubtitle1>
       </AccordionSummary>
       <AccordionDetails>
         <Stack>
           <Typography marginBottom={1}>{description}</Typography>
           <Button
-            type="button"
             variant="contained"
             sx={{ alignSelf: 'flex-end' }}
             disabled={isDefault}
@@ -157,9 +155,9 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
           {configSliderOptions.map((props) => (
             <ConfigSlider key={props.id} field={field} {...props} />
           ))}
-          <Typography variant="button">Enable GPU</Typography>
+          <StyledSubtitle2>Enable GPU</StyledSubtitle2>
           <Stack direction="row" component="label" alignItems="center">
-            <Typography fontSize=".75rem">Disabled</Typography>
+            <Typography variant="caption">Disabled</Typography>
             <StyledSwitch
               checked={field.value.gpu_enabled as boolean}
               onChange={(e, value) =>
@@ -169,7 +167,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
                 })
               }
             />
-            <Typography fontSize=".75rem">Enabled</Typography>
+            <Typography variant="caption">Enabled</Typography>
           </Stack>
         </Stack>
       </AccordionDetails>
