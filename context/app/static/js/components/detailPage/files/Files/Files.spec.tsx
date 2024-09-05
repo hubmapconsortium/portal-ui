@@ -6,9 +6,12 @@ import { setupServer } from 'msw/node';
 
 import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
+import { ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import Files from './Files';
 import { detailContext, flaskDataContext, testFiles, uuid as testUuid } from '../file-fixtures.spec';
 import { FilesContextProvider } from '../FilesContext';
+import { ProcessedDatasetDetails } from '../../ProcessedData/ProcessedDataset/hooks';
+import { ProcessedDatasetContextProvider } from '../../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
 
 const globusHandler: RequestHandler = http.get<PathParams, DefaultBodyType, { url: string }>(
   `/${appProviderEndpoints.entityEndpoint}/entities/dataset/globus-url/${testUuid}`,
@@ -27,13 +30,19 @@ afterAll(() => server.close());
 
 function TestFiles({ files = testFiles }) {
   return (
-    <FlaskDataContext.Provider value={flaskDataContext}>
-      <DetailContext.Provider value={detailContext}>
-        <FilesContextProvider>
-          <Files files={files} />
-        </FilesContextProvider>
-      </DetailContext.Provider>
-    </FlaskDataContext.Provider>
+    <ProcessedDatasetContextProvider
+      dataset={{ uuid: 'fakeuuid' } as unknown as ProcessedDatasetDetails}
+      defaultExpanded
+      sectionDataset={{ uuid: 'fakeparentuuid' } as unknown as ProcessedDatasetInfo}
+    >
+      <FlaskDataContext.Provider value={flaskDataContext}>
+        <DetailContext.Provider value={detailContext}>
+          <FilesContextProvider>
+            <Files files={files} />
+          </FilesContextProvider>
+        </DetailContext.Provider>
+      </FlaskDataContext.Provider>
+    </ProcessedDatasetContextProvider>
   );
 }
 
