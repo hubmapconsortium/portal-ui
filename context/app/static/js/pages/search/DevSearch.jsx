@@ -1,5 +1,5 @@
 import React from 'react';
-import { ExistsQuery, BoolMustNot, TermQuery } from 'searchkit';
+import { ExistsQuery, BoolMustNot, BoolMust, TermQuery } from 'searchkit';
 
 import { Alert } from 'js/shared-styles/alerts';
 import { useAppContext } from 'js/components/Contexts';
@@ -52,8 +52,8 @@ function DevSearch() {
         listFilter('mapped_data_types', 'mapped_data_types'),
         listFilter('metadata.metadata.assay_category', 'assay_category'),
         listFilter('metadata.metadata.assay_type', 'assay_type'),
-        checkboxFilter('is_derived', 'Is derived?', TermQuery('ancestors.entity_type', 'dataset')),
-        checkboxFilter('is_raw', 'Is raw?', BoolMustNot(TermQuery('ancestors.entity_type', 'dataset'))),
+        checkboxFilter('is_derived', 'Is derived?', BoolMust(TermQuery('processing.keyword', 'processed'))),
+        checkboxFilter('is_raw', 'Is raw?', BoolMust(TermQuery('processing.keyword', 'raw'))),
         hierarchicalFilter({
           fields: {
             parent: { id: 'metadata.metadata.analyte_class.keyword' },
@@ -88,10 +88,8 @@ function DevSearch() {
         checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
         checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
         checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
-        checkboxFilter('has_rui_sample', 'Spatial Sample?', ExistsQuery('rui_location')),
-        checkboxFilter('no_rui_sample', 'Not Spatial Sample?', BoolMustNot(ExistsQuery('rui_location'))),
-        checkboxFilter('has_rui_dataset', 'Spatial Dataset?', ExistsQuery('ancestors.rui_location')),
-        checkboxFilter('no_rui_dataset', 'Not Spatial Dataset?', BoolMustNot(ExistsQuery('ancestors.rui_location'))),
+        checkboxFilter('is_spatial', 'Spatial?', ExistsQuery('rui_location')),
+        checkboxFilter('not_spatial', 'Not Spatial?', BoolMustNot(ExistsQuery('rui_location'))),
         checkboxFilter('has_errors', 'Validation Errors?', ExistsQuery('mapper_metadata.validation_errors')),
         checkboxFilter(
           'no_errors',

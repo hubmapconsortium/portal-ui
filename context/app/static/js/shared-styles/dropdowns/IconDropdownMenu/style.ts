@@ -19,7 +19,7 @@ export const StyledSvgIcon = styled(SvgIcon)(({ theme }) => ({
   alignItems: 'center',
   justifyContent: 'center',
   marginLeft: theme.spacing(0.2),
-})) as typeof SvgIcon;
+}));
 
 export const StyledTypography = styled(Typography)({
   flexGrow: 1,

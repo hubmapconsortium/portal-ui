@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
-import { ThemeProvider as SCThemeProvider } from 'styled-components';
 import { faro } from '@grafana/faro-web-sdk';
 import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -67,19 +66,17 @@ export default function Providers({
       <InitialHashContextProvider>
         <GlobalFonts />
         <MuiThemeProvider theme={theme}>
-          <SCThemeProvider theme={theme}>
-            <AppContext.Provider value={appContext}>
-              <FlaskDataContext.Provider value={flaskDataWithDefaults}>
-                <EntityStoreProvider springs={springs} assayMetadata={flaskData?.entity ?? {}}>
-                  <ProtocolAPIContext.Provider value={protocolsContext}>
-                    <CssBaseline />
-                    <GlobalStyles />
-                    {children}
-                  </ProtocolAPIContext.Provider>
-                </EntityStoreProvider>
-              </FlaskDataContext.Provider>
-            </AppContext.Provider>
-          </SCThemeProvider>
+          <AppContext.Provider value={appContext}>
+            <FlaskDataContext.Provider value={flaskDataWithDefaults}>
+              <EntityStoreProvider springs={springs} assayMetadata={flaskData?.entity ?? {}}>
+                <ProtocolAPIContext.Provider value={protocolsContext}>
+                  <CssBaseline />
+                  <GlobalStyles />
+                  {children}
+                </ProtocolAPIContext.Provider>
+              </EntityStoreProvider>
+            </FlaskDataContext.Provider>
+          </AppContext.Provider>
         </MuiThemeProvider>
       </InitialHashContextProvider>
     </SWRConfig>

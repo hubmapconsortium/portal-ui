@@ -1,14 +1,11 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 
 export const getAncestorsQuery = (uuid: string) => ({
   query: {
     bool: {
       must: [
-        {
-          term: {
-            'entity_type.keyword': 'Dataset',
-          },
-        },
+        includeOnlyDatasetsClause,
         {
           term: {
             'processing.keyword': 'raw',
@@ -38,15 +35,6 @@ export const getAncestorsQuery = (uuid: string) => ({
             must_not: {
               exists: {
                 field: 'sub_status',
-              },
-            },
-          },
-        },
-        {
-          bool: {
-            must_not: {
-              term: {
-                'ancestors.entity_type.keyword': 'Dataset',
               },
             },
           },

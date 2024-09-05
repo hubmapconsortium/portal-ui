@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
@@ -9,6 +9,7 @@ import { VisualizationIcon } from 'js/shared-styles/icons';
 
 import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useInView } from 'react-intersection-observer';
+import { useHash } from 'js/hooks/useHash';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
 import { StyledProcessedDatasetAccordion } from './styles';
@@ -43,13 +44,29 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
       }
     },
   });
+  const datasetIdSubstring = datasetSectionId(sectionDataset);
+  const [hash] = useHash();
+  const [isExpanded, setIsExpanded] = useState(defaultExpanded || hash.includes(datasetIdSubstring));
+
+  useEffect(() => {
+    const datasetId = datasetSectionId(sectionDataset);
+    if (hash.includes(datasetId)) {
+      setIsExpanded(true);
+    }
+  }, [hash, sectionDataset]);
+
   return (
     <DetailPageSection id={datasetSectionId(sectionDataset, 'section')}>
       <StyledProcessedDatasetAccordion
         defaultExpanded={defaultExpanded}
-        onChange={(_, expanded) =>
-          track({ action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`, label: sectionDataset.hubmap_id })
-        }
+        expanded={isExpanded}
+        onChange={(_, expanded) => {
+          track({
+            action: `${expanded ? 'Expand' : 'Collapse'} Main Dataset Section`,
+            label: sectionDataset.hubmap_id,
+          });
+          setIsExpanded(expanded);
+        }}
         slotProps={{ transition: { unmountOnExit: true } }}
       >
         <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
@@ -58,7 +75,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
             {sectionDataset.pipeline}
           </Typography>
           <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
-            <StatusIcon status={sectionDataset.status} noColor sx={{ fontSize: 16 }} />
+            <StatusIcon status={sectionDataset.status} noColor={isExpanded} tooltip />
             {dataset?.hubmap_id}
           </Typography>
         </AccordionSummary>

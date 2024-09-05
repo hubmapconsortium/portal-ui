@@ -8,6 +8,6 @@ const Flex = styled('div')({
 
 const StyledSvgIcon = styled(SvgIcon)((props) => ({
   marginLeft: props.theme.spacing(0.5),
-})) as typeof SvgIcon;
+}));
 
 export { Flex, StyledSvgIcon };

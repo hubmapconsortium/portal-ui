@@ -45,4 +45,4 @@ export const StyledExternalImageIconContainer = styled(Box)({
 export const StyledSvgIcon = styled(SvgIcon)({
   fontSize: '1.5rem',
   color: 'primary',
-}) as typeof SvgIcon;
+});

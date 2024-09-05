@@ -3,10 +3,13 @@ import { render, screen, appProviderEndpoints, appProviderToken } from 'test-uti
 
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 
+import { ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import { FilesContext } from '../FilesContext';
 
 import FileBrowserFile from './FileBrowserFile';
 import { detailContext, filesContext, uuid } from '../file-fixtures.spec';
+import { ProcessedDatasetContextProvider } from '../../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
+import { ProcessedDatasetDetails } from '../../ProcessedData/ProcessedDataset/hooks';
 
 const defaultFileObject = {
   rel_path: 'fakepath',
@@ -25,11 +28,17 @@ function RenderFileTest({ fileObjOverrides = {}, depth = 0 }) {
     ...fileObjOverrides,
   };
   return (
-    <DetailContext.Provider value={detailContext}>
-      <FilesContext.Provider value={filesContext}>
-        <FileBrowserFile fileObj={completeFileObject} depth={depth} />
-      </FilesContext.Provider>
-    </DetailContext.Provider>
+    <ProcessedDatasetContextProvider
+      dataset={{ uuid: 'fakeuuid' } as unknown as ProcessedDatasetDetails}
+      defaultExpanded
+      sectionDataset={{ uuid: 'fakeparentuuid' } as unknown as ProcessedDatasetInfo}
+    >
+      <DetailContext.Provider value={detailContext}>
+        <FilesContext.Provider value={filesContext}>
+          <FileBrowserFile fileObj={completeFileObject} depth={depth} />
+        </FilesContext.Provider>
+      </DetailContext.Provider>
+    </ProcessedDatasetContextProvider>
   );
 }
 

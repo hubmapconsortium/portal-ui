@@ -5,6 +5,6 @@ const StyledOpenInNewRoundedIcon = styled(OpenInNewRoundedIcon)(({ theme }) => (
   fontSize: '1.1rem',
   verticalAlign: 'text-bottom',
   marginLeft: theme.spacing(1),
-})) as typeof OpenInNewRoundedIcon;
+}));
 
 export default StyledOpenInNewRoundedIcon;

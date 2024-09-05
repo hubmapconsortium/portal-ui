@@ -22,7 +22,7 @@ export function IconDropdownMenuItem({ icon, onClick, disabled, children }: Icon
   return (
     <MenuItem onClick={onClick} disabled={disabled}>
       <ListItemIcon>
-        <StyledSvgIcon component={icon} color="primary" />
+        <StyledSvgIcon as={icon} color="primary" />
       </ListItemIcon>
       <StyledTypography variant="inherit">{children}</StyledTypography>
     </MenuItem>

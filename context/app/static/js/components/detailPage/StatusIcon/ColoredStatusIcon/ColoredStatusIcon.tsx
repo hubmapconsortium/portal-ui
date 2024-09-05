@@ -10,7 +10,8 @@ function ColoredStatusIcon({
   return (
     <SeverityIcon
       status={status}
-      sx={{ fontSize: 16, marginRight: '3px', alignSelf: 'center', color: noColor ? 'white' : undefined }}
+      noColor={noColor}
+      sx={({ spacing }) => ({ fontSize: '1rem', marginRight: spacing(1), alignSelf: 'center' })}
       {...props}
     />
   );

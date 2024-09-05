@@ -11,8 +11,12 @@ export const iconSymbolStatusMap: Record<IconStatus, React.ComponentType<SvgIcon
   error: ErrorRounded,
 };
 
-function SeverityIcon({ status, ...svgIconProps }: Partial<SvgIconProps> & { status: IconStatus }) {
-  return <SvgIcon color={status} component={iconSymbolStatusMap[status]} {...svgIconProps} />;
+function SeverityIcon({
+  status,
+  noColor,
+  ...svgIconProps
+}: Partial<SvgIconProps> & { status: IconStatus; noColor?: boolean }) {
+  return <SvgIcon color={noColor ? 'white' : status} component={iconSymbolStatusMap[status]} {...svgIconProps} />;
 }
 
 export default SeverityIcon;

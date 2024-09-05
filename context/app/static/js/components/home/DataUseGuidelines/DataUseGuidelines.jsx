@@ -70,7 +70,7 @@ function DataUseGuidelines() {
   return (
     <StyledPaper>
       {paragraphs.map(({ key, component }, i) => (
-        <StyledTypography key={key} mt={i === 0 ? 1 : 2}>
+        <StyledTypography key={key} $mt={i === 0 ? 1 : 2}>
           {component}
         </StyledTypography>
       ))}

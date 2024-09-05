@@ -109,13 +109,6 @@ export async function fetchSearchData<Documents, Aggs>(
     returnResponse: true,
   });
 
-  if (searchResponse?.status === 303) {
-    const s3URL = await searchResponse.text();
-    return fetch({
-      url: s3URL,
-    });
-  }
-
   return searchResponse.json() as Promise<SearchResponseBody<Documents, Aggs>>;
 }
 
