@@ -169,8 +169,8 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
       icon={nodeIcons.processedDataset}
       bgColor={nodeColors.processedDataset}
       isLoading={isLoading}
-      toastText={`Scrolled to ${datasetDetails.pipeline}`}
-      tooltipText={`Scroll to ${datasetDetails.pipeline}`}
+      toastText={`Scrolled to ${datasetDetails?.pipeline}`}
+      tooltipText={`Scroll to ${datasetDetails?.pipeline}`}
       {...data}
     >
       {data.datasetType}
