@@ -38,6 +38,25 @@ interface UseWorkspacesListTypes<T> {
   mutateWorkspace?: KeyedMutator<T>;
 }
 
+interface handleStartWorkspaceProps {
+  workspaceId: number;
+  jobTypeId: string;
+  resourceOptions: WorkspaceResourceOptions;
+}
+
+interface startWorkspaceProps {
+  workspace: Workspace;
+  jobTypeId: string;
+  resourceOptions: WorkspaceResourceOptions;
+  templatePath?: string;
+}
+
+interface createAndLaunchWorkspaceProps {
+  body: CreateWorkspaceBody;
+  templatePath: string;
+  resourceOptions: WorkspaceResourceOptions;
+}
+
 /**
  * Returns a function that will mutate workspaces, jobs, and optionally a single workspace's details
  *
@@ -91,15 +110,7 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
     await mutate();
   }
 
-  async function handleStartWorkspace({
-    workspaceId,
-    jobTypeId,
-    resourceOptions,
-  }: {
-    workspaceId: number;
-    jobTypeId: string;
-    resourceOptions: WorkspaceResourceOptions;
-  }) {
+  async function handleStartWorkspace({ workspaceId, jobTypeId, resourceOptions }: handleStartWorkspaceProps) {
     await startWorkspace({ workspaceId, jobTypeId, resourceOptions });
     await mutate();
   }
@@ -216,17 +227,7 @@ function useLaunchWorkspace() {
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
 
   const startAndOpenWorkspace = useCallback(
-    async ({
-      workspace,
-      jobTypeId,
-      resourceOptions,
-      templatePath,
-    }: {
-      workspace: Workspace;
-      jobTypeId: string;
-      resourceOptions: WorkspaceResourceOptions;
-      templatePath?: string;
-    }) => {
+    async ({ workspace, jobTypeId, resourceOptions, templatePath }: startWorkspaceProps) => {
       const isNewJobType = workspace?.default_job_type !== jobTypeId;
 
       if (runningWorkspace && workspace.id === runningWorkspace.id && !isNewJobType) {
@@ -247,17 +248,7 @@ function useLaunchWorkspace() {
   );
 
   const startNewWorkspace = useCallback(
-    async ({
-      workspace,
-      jobTypeId,
-      resourceOptions,
-      templatePath,
-    }: {
-      workspace: Workspace;
-      jobTypeId: string;
-      resourceOptions: WorkspaceResourceOptions;
-      templatePath?: string;
-    }) => {
+    async ({ workspace, jobTypeId, resourceOptions, templatePath }: startWorkspaceProps) => {
       if (runningWorkspace) {
         open();
         setWorkspace(workspace);
@@ -278,15 +269,7 @@ export function useCreateAndLaunchWorkspace() {
   const { toastError, toastSuccess } = useSnackbarActions();
 
   const createAndLaunchWorkspace = useCallback(
-    async ({
-      body,
-      templatePath,
-      resourceOptions,
-    }: {
-      body: CreateWorkspaceBody;
-      templatePath: string;
-      resourceOptions: WorkspaceResourceOptions;
-    }) => {
+    async ({ body, templatePath, resourceOptions }: createAndLaunchWorkspaceProps) => {
       let workspace: Workspace;
 
       try {
