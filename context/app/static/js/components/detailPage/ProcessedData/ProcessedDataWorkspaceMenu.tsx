@@ -87,6 +87,19 @@ function ProcessedDataWorkspaceMenu({ button }: ProcessedDataWorkspaceMenuProps)
     return null;
   }
 
+  const options = [
+    {
+      children: 'Launch New Workspace',
+      onClick: trackCreateWorkspace,
+      icon: <WorkspacesIcon color="primary" fontSize="1.25rem" />,
+    },
+    {
+      children: 'Add to Workspace',
+      onClick: trackAddToWorkspace,
+      icon: <AddRounded color="primary" />,
+    },
+  ];
+
   // The selectable table provider is used here since a lot of the workspace logic relies on the selected rows
   return (
     <SelectableTableProvider tableLabel="Current Dataset" selectedRows={new Set([uuid])}>
@@ -101,18 +114,12 @@ function ProcessedDataWorkspaceMenu({ button }: ProcessedDataWorkspaceMenuProps)
             horizontal: 'right',
           }}
         >
-          <MenuItem onClick={trackCreateWorkspace}>
-            <ListItemIcon>
-              <WorkspacesIcon color="primary" fontSize="1.5rem" />
-            </ListItemIcon>
-            Launch New Workspace
-          </MenuItem>
-          <MenuItem onClick={trackAddToWorkspace}>
-            <ListItemIcon>
-              <AddRounded />
-            </ListItemIcon>
-            Add to Workspace
-          </MenuItem>
+          {options.map(({ children, onClick, icon }) => (
+            <MenuItem key={children} onClick={onClick}>
+              <ListItemIcon>{icon}</ListItemIcon>
+              {children}
+            </MenuItem>
+          ))}
         </Menu>
         <NewWorkspaceDialog dialogIsOpen={createWorkspaceIsOpen} control={control} errors={errors} {...rest} />
         <AddDatasetsFromSearchDialog />
