@@ -7,13 +7,12 @@ import AddRounded from '@mui/icons-material/AddRounded';
 
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
-
-import { useOpenDialog } from '../../workspaces/WorkspacesDropdownMenu/WorkspacesDropdownMenu';
-import { useCreateWorkspaceForm } from '../../workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import NewWorkspaceDialog from '../../workspaces/NewWorkspaceDialog/NewWorkspaceDialog';
-import AddDatasetsFromSearchDialog from '../../workspaces/AddDatasetsFromSearchDialog/AddDatasetsFromSearchDialog';
-import { useAppContext, useFlaskDataContext } from '../../Contexts';
-import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
+import { useOpenDialog } from 'js/components/workspaces/WorkspacesDropdownMenu/WorkspacesDropdownMenu';
+import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialog';
+import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog/AddDatasetsFromSearchDialog';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
