@@ -5,8 +5,11 @@ import { render, screen } from 'test-utils/functions';
 
 import { FlaskDataContext } from 'js/components/Contexts';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
+import { ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import DataProducts from './DataProducts';
 import { flaskDataContext } from '../file-fixtures.spec';
+import { ProcessedDatasetContextProvider } from '../../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
+import { ProcessedDatasetDetails } from '../../ProcessedData/ProcessedDataset/hooks';
 
 const files = {
   get all() {
@@ -39,11 +42,17 @@ const flaskDataContextEdited = { ...flaskDataContext, entity: { ...flaskDataCont
 
 function TestDataProducts({ files: passedFiles = files.all }) {
   return (
-    <FlaskDataContext.Provider value={flaskDataContextEdited}>
-      <DetailContext.Provider value={detailContext}>
-        <DataProducts files={passedFiles} />
-      </DetailContext.Provider>
-    </FlaskDataContext.Provider>
+    <ProcessedDatasetContextProvider
+      dataset={{ uuid: 'fakeuuid' } as unknown as ProcessedDatasetDetails}
+      defaultExpanded
+      sectionDataset={{ uuid: 'fakeparentuuid' } as unknown as ProcessedDatasetInfo}
+    >
+      <FlaskDataContext.Provider value={flaskDataContextEdited}>
+        <DetailContext.Provider value={detailContext}>
+          <DataProducts files={passedFiles} />
+        </DetailContext.Provider>
+      </FlaskDataContext.Provider>
+    </ProcessedDatasetContextProvider>
   );
 }
 
