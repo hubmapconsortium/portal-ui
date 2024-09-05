@@ -10,7 +10,6 @@ import { Alert } from 'js/shared-styles/alerts';
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { MergedWorkspace } from '../types';
 import { useLaunchWorkspaceDialog } from '../LaunchWorkspaceDialog/hooks';
-import { WorkspaceStopErrorToast } from '../WorkspaceToasts';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -27,7 +26,7 @@ function StopWorkspaceButton({
   button: ButtonComponent,
   isStoppingWorkspace,
 }: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
-  const { toastError } = useSnackbarActions();
+  const { toastErrorStopWorkspace } = useSnackbarActions();
 
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
 
@@ -41,7 +40,7 @@ function StopWorkspaceButton({
       disabled={isStoppingWorkspace}
       onClick={() => {
         handleStopWorkspace(workspace.id).catch((err) => {
-          toastError(WorkspaceStopErrorToast(workspace.name));
+          toastErrorStopWorkspace(workspace.name);
           console.error(err);
         });
       }}

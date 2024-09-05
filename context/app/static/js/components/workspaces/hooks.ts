@@ -29,13 +29,6 @@ import {
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
-import {
-  WorkspaceLaunchSuccessToast,
-  WorkspaceCreateSuccessToast,
-  SessionRenewSuccessToast,
-  WorkspaceCreateErrorToast,
-  WorkspaceLaunchErrorToast,
-} from './WorkspaceToasts';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -211,7 +204,7 @@ function useLaunchWorkspace() {
   const { open, setWorkspace } = useLaunchWorkspaceStore();
 
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
-  const { toastSuccess } = useSnackbarActions();
+  const { toastSuccessLaunchWorkspace, toastSuccessCreateWorkspace } = useSnackbarActions();
 
   const startAndOpenWorkspace = useCallback(
     async ({
@@ -239,7 +232,7 @@ function useLaunchWorkspace() {
         await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
       }
 
-      toastSuccess(WorkspaceLaunchSuccessToast(workspace.id));
+      toastSuccessLaunchWorkspace(workspace.id);
     },
     [
       mutateWorkspacesAndJobs,
@@ -247,7 +240,7 @@ function useLaunchWorkspace() {
       globalMutateWorkspace,
       handleUpdateWorkspace,
       runningWorkspace,
-      toastSuccess,
+      toastSuccessLaunchWorkspace,
     ],
   );
 
@@ -264,12 +257,12 @@ function useLaunchWorkspace() {
       if (runningWorkspace) {
         open();
         setWorkspace(workspace);
-        toastSuccess(WorkspaceCreateSuccessToast());
+        toastSuccessCreateWorkspace();
       } else {
         await startAndOpenWorkspace({ workspace, jobTypeId, templatePath });
       }
     },
-    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace, toastSuccess],
+    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace, toastSuccessCreateWorkspace],
   );
 
   return { startNewWorkspace, startAndOpenWorkspace };
@@ -278,7 +271,7 @@ function useLaunchWorkspace() {
 export function useCreateAndLaunchWorkspace() {
   const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
   const { startNewWorkspace } = useLaunchWorkspace();
-  const { toastError } = useSnackbarActions();
+  const { toastErrorCreateWorkspace, toastErrorLaunchWorkspace } = useSnackbarActions();
 
   const createAndLaunchWorkspace = useCallback(
     async ({ body, templatePath }: { body: CreateWorkspaceBody; templatePath: string }) => {
@@ -287,17 +280,17 @@ export function useCreateAndLaunchWorkspace() {
       try {
         workspace = await createWorkspace(body);
       } catch (e) {
-        toastError(WorkspaceCreateErrorToast());
+        toastErrorCreateWorkspace();
         return;
       }
 
       try {
         await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
       } catch (e) {
-        toastError(WorkspaceLaunchErrorToast());
+        toastErrorLaunchWorkspace();
       }
     },
-    [createWorkspace, startNewWorkspace, toastError],
+    [createWorkspace, startNewWorkspace, toastErrorCreateWorkspace, toastErrorLaunchWorkspace],
   );
 
   return { createAndLaunchWorkspace, isCreatingWorkspace };
@@ -337,13 +330,14 @@ function useRefreshSession(workspace: MergedWorkspace) {
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
   const { mutate: mutateWorkspace } = useWorkspace(workspace.id);
   const mutate = useMutateWorkspacesAndJobs(mutateWorkspace);
-  const { toastSuccess } = useSnackbarActions();
+  const { toastSuccessRenewSession } = useSnackbarActions();
+
   const refreshSession = useCallback(async () => {
     await stopWorkspace(workspace.id);
     await startWorkspace({ workspaceId: workspace.id, jobTypeId: getDefaultJobType({ workspace }) });
     await mutate();
-    toastSuccess(SessionRenewSuccessToast());
-  }, [mutate, startWorkspace, stopWorkspace, toastSuccess, workspace]);
+    toastSuccessRenewSession();
+  }, [mutate, startWorkspace, stopWorkspace, toastSuccessRenewSession, workspace]);
 
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
 }

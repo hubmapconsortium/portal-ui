@@ -9,7 +9,6 @@ import DialogModal from 'js/shared-styles/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
 import { useLaunchWorkspaceDialog, LaunchWorkspaceFormTypes } from './hooks';
-import { WorkspaceLaunchErrorToast } from '../WorkspaceToasts';
 
 const formId = 'launch-workspace-form';
 
@@ -27,7 +26,7 @@ function LaunchWorkspaceDialog() {
   } = useLaunchWorkspaceDialog();
 
   const workspaceName = workspace?.name;
-  const { toastError } = useSnackbarActions();
+  const { toastErrorLaunchWorkspace } = useSnackbarActions();
 
   const onSubmit = useCallback(
     ({ workspaceJobTypeId }: LaunchWorkspaceFormTypes) => {
@@ -36,11 +35,11 @@ function LaunchWorkspaceDialog() {
           handleClose();
         })
         .catch((e) => {
-          toastError(WorkspaceLaunchErrorToast());
+          toastErrorLaunchWorkspace();
           console.error(e);
         });
     },
-    [submit, handleClose, toastError],
+    [submit, handleClose, toastErrorLaunchWorkspace],
   );
   return (
     <DialogModal

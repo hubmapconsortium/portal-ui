@@ -10,7 +10,6 @@ import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../h
 import { DEFAULT_JOB_TYPE } from '../constants';
 import { MergedWorkspace } from '../types';
 import { findBestJobType, isRunningWorkspace } from '../utils';
-import { WorkspaceLaunchErrorToast, WorkspaceStopErrorToast } from '../WorkspaceToasts';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
@@ -58,7 +57,7 @@ function useLaunchWorkspaceDialog() {
 
   const runningWorkspaceIsCurrentWorkpace = runningWorkspace?.id === workspace?.id;
 
-  const { toastError } = useSnackbarActions();
+  const { toastErrorStopWorkspace, toastErrorLaunchWorkspace } = useSnackbarActions();
 
   const { control, handleSubmit, isSubmitting, reset, setValue } = useLaunchWorkspaceForm();
 
@@ -97,7 +96,7 @@ function useLaunchWorkspaceDialog() {
         try {
           await handleStopWorkspace(runningWorkspace.id);
         } catch (e) {
-          toastError(WorkspaceStopErrorToast());
+          toastErrorStopWorkspace();
           console.error(e);
           return;
         }
@@ -111,7 +110,7 @@ function useLaunchWorkspaceDialog() {
       startAndOpenWorkspace,
       runningWorkspaceIsCurrentWorkpace,
       handleStopWorkspace,
-      toastError,
+      toastErrorStopWorkspace,
     ],
   );
 
@@ -122,14 +121,14 @@ function useLaunchWorkspaceDialog() {
 
       if (isRunningWorkspace(newWorkspace)) {
         submit({ workspaceJobTypeId }).catch((e) => {
-          toastError(WorkspaceLaunchErrorToast());
+          toastErrorLaunchWorkspace();
           console.error(e);
         });
       } else {
         open();
       }
     },
-    [submit, toastError, setWorkspace, open],
+    [submit, toastErrorLaunchWorkspace, setWorkspace, open],
   );
 
   return {

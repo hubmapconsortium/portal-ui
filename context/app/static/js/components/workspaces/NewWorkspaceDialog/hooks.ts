@@ -10,7 +10,6 @@ import { SWRError } from 'js/helpers/swr/errors';
 import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
 import { buildDatasetSymlinks } from '../utils';
-import { WorkspaceTemplateErrorToast } from '../WorkspaceToasts';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -57,10 +56,8 @@ function useTemplateNotebooks() {
 
   const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
   const { createTemplates } = useCreateTemplates();
-
-  const { toastError } = useSnackbarActions();
-
   const { templates } = useWorkspaceTemplates();
+  const { toastErrorWorkspaceTemplate } = useSnackbarActions();
 
   const createTemplateNotebooks = useCallback(
     async ({ workspaceName, templateKeys, uuids, workspaceJobTypeId }: CreateTemplateNotebooksTypes) => {
@@ -82,11 +79,11 @@ function useTemplateNotebooks() {
           const templateKey = url.split('/').pop();
 
           if (templateKey && templates?.[templateKey]) {
-            toastError(WorkspaceTemplateErrorToast(templates?.[templateKey].title));
+            toastErrorWorkspaceTemplate(templates?.[templateKey].title);
             return;
           }
         }
-        toastError(WorkspaceTemplateErrorToast());
+        toastErrorWorkspaceTemplate();
         return;
       }
 
@@ -106,7 +103,7 @@ function useTemplateNotebooks() {
         },
       });
     },
-    [groupsToken, createAndLaunchWorkspace, createTemplates, toastError, templates],
+    [groupsToken, createAndLaunchWorkspace, createTemplates, toastErrorWorkspaceTemplate, templates],
   );
 
   return createTemplateNotebooks;

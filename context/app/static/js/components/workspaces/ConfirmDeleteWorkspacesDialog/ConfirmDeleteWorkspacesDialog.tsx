@@ -17,7 +17,6 @@ import { SelectedItems } from 'js/hooks/useSelectItems';
 import { generateCommaList } from 'js/helpers/functions';
 
 import { MergedWorkspace } from '../types';
-import { WorkspacesDeleteErrorToast, WorkspacesDeleteSuccessToast } from '../WorkspaceToasts';
 
 interface ConfirmDeleteWorkspacesDialogProps {
   dialogIsOpen: boolean;
@@ -33,7 +32,7 @@ export default function ConfirmDeleteWorkspacesDialog({
   selectedWorkspaceIds,
   workspacesList,
 }: ConfirmDeleteWorkspacesDialogProps) {
-  const { toastError, toastSuccess } = useSnackbarActions();
+  const { toastErrorDeleteWorkspaces, toastSuccessDeleteWorkspaces } = useSnackbarActions();
 
   const selectedWorkspaceNames = Array.from(selectedWorkspaceIds).map((id) => {
     const workspace = workspacesList.find((w) => w.id === Number(id));
@@ -47,16 +46,23 @@ export default function ConfirmDeleteWorkspacesDialog({
 
     Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId))))
       .then(() => {
-        toastSuccess(WorkspacesDeleteSuccessToast(selectedWorkspaceNamesList));
+        toastSuccessDeleteWorkspaces(selectedWorkspaceNamesList);
         selectedWorkspaceIds.clear();
       })
       .catch((e) => {
-        toastError(WorkspacesDeleteErrorToast(selectedWorkspaceNamesList));
+        toastErrorDeleteWorkspaces(selectedWorkspaceNamesList);
         console.error(e);
       });
 
     handleClose();
-  }, [handleDeleteWorkspace, selectedWorkspaceIds, selectedWorkspaceNamesList, handleClose, toastError, toastSuccess]);
+  }, [
+    handleDeleteWorkspace,
+    selectedWorkspaceIds,
+    toastSuccessDeleteWorkspaces,
+    toastErrorDeleteWorkspaces,
+    selectedWorkspaceNamesList,
+    handleClose,
+  ]);
 
   return (
     <Dialog

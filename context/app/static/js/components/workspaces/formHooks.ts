@@ -9,7 +9,6 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
 import { Dataset } from '../types';
-import { ProtectedDatasetsRemoveSuccessToast } from './WorkspaceToasts';
 
 type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>>[];
 
@@ -40,7 +39,7 @@ const errorHelper = {
 
 function useProtectedDatasetsForm() {
   const { selectedRows, deselectRows } = useSelectableTableStore();
-  const { toastSuccess } = useSnackbarActions();
+  const { toastSuccessRemoveProtectedDatasets } = useSnackbarActions();
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
   const containsProtectedDataset = protectedRows.length > 0;
 
@@ -65,8 +64,8 @@ function useProtectedDatasetsForm() {
 
   const removeProtectedDatasets = useCallback(() => {
     deselectRows(protectedRows.map((r) => r._id));
-    toastSuccess(ProtectedDatasetsRemoveSuccessToast());
-  }, [deselectRows, protectedRows, toastSuccess]);
+    toastSuccessRemoveProtectedDatasets();
+  }, [deselectRows, protectedRows, toastSuccessRemoveProtectedDatasets]);
 
   return { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows };
 }
