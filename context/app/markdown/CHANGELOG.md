@@ -1,3 +1,9 @@
+## v1.3.0 - 2024-09-05
+
+- Improve handling of loading/potentially undefined data in dataset relationship diagram.
+- Ensure data product and file URLs use relevant dataset IDs when constructing.
+
+
 ## v1.2.0 - 2024-09-04
 
 - Improve status icon visibility on collapsed processed dataset accordions.
