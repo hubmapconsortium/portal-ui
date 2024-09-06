@@ -16,9 +16,8 @@ import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
-
+import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
-import ProcessedDataWorkspaceMenu from '../../ProcessedData/ProcessedDataWorkspaceMenu';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -185,7 +184,7 @@ function EntityHeaderActionButtons({
   const isLargeDesktop = useIsLargeDesktop();
 
   const {
-    entity: { mapped_data_access_level, uuid },
+    entity: { mapped_data_access_level, uuid, hubmap_id, status },
   } = useFlaskDataContext();
 
   if (!(entity_type && uuid)) {
@@ -211,6 +210,7 @@ function EntityHeaderActionButtons({
             disabled={disabled}
           />
         }
+        datasetDetails={{ hubmap_id, uuid, status }}
       />
     </Stack>
   );

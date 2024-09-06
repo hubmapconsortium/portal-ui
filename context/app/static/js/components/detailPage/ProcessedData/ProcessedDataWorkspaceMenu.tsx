@@ -16,25 +16,30 @@ import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFro
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
+  datasetDetails: { hubmap_id: string; uuid: string; status: string };
 }
 
-function ProcessedDataWorkspaceMenu({ button }: ProcessedDataWorkspaceMenuProps) {
+function ProcessedDataWorkspaceMenu({
+  button,
+  datasetDetails: { hubmap_id, uuid, status },
+}: ProcessedDataWorkspaceMenuProps) {
   const {
-    entity: { mapped_data_access_level, hubmap_id, uuid, entity_type, status },
+    entity: { mapped_data_access_level },
   } = useFlaskDataContext();
-  const isDataset = entity_type === 'Dataset';
+
   const { isWorkspacesUser } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const track = useTrackEntityPageEvent();
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     track({
       action: 'Open Workspace Menu',
       label: hubmap_id,
     });
     setAnchorEl(event.currentTarget);
   };
+
   const handleClose = () => {
     setAnchorEl(null);
   };
@@ -53,7 +58,7 @@ function ProcessedDataWorkspaceMenu({ button }: ProcessedDataWorkspaceMenuProps)
 
   const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH');
 
-  const trackCreateWorkspace = useEventCallback(() => {
+  const createWorkspace = useEventCallback(() => {
     track({
       action: 'Start Creating Workspace',
       label: hubmap_id,
@@ -62,7 +67,7 @@ function ProcessedDataWorkspaceMenu({ button }: ProcessedDataWorkspaceMenuProps)
     handleClose();
   });
 
-  const trackAddToWorkspace = useEventCallback(() => {
+  const addToWorkspace = useEventCallback(() => {
     track({
       action: 'Start Adding Dataset to Existing Workspace',
       label: hubmap_id,
@@ -73,14 +78,13 @@ function ProcessedDataWorkspaceMenu({ button }: ProcessedDataWorkspaceMenuProps)
 
   // Clone the button element and add the onClick handler
   const buttonWithClickHandler = React.cloneElement(button as React.ReactElement, {
-    onClick: handleClick,
+    onClick: handleOpen,
     'aria-controls': open ? 'basic-menu' : undefined,
     'aria-haspopup': 'true',
     'aria-expanded': open ? 'true' : undefined,
   });
 
-  const showWorkspaceButton =
-    mapped_data_access_level && hubmap_id && isDataset && isWorkspacesUser && status === 'Published';
+  const showWorkspaceButton = mapped_data_access_level && hubmap_id && isWorkspacesUser && status === 'Published';
 
   if (!showWorkspaceButton) {
     return null;
@@ -89,12 +93,12 @@ function ProcessedDataWorkspaceMenu({ button }: ProcessedDataWorkspaceMenuProps)
   const options = [
     {
       children: 'Launch New Workspace',
-      onClick: trackCreateWorkspace,
+      onClick: createWorkspace,
       icon: <WorkspacesIcon color="primary" fontSize="1.25rem" />,
     },
     {
       children: 'Add to Workspace',
-      onClick: trackAddToWorkspace,
+      onClick: addToWorkspace,
       icon: <AddRounded color="primary" />,
     },
   ];

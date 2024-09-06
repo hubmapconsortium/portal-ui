@@ -98,6 +98,9 @@ function HelperPanelActions() {
   if (!currentDataset) {
     return null;
   }
+
+  const { hubmap_id, uuid, status } = currentDataset;
+
   return (
     <>
       <ProcessedDataWorkspaceMenu
@@ -106,6 +109,7 @@ function HelperPanelActions() {
             <HelperPanelButton startIcon={<WorkspacesIcon color="primary" />}>Workspace</HelperPanelButton>
           </SecondaryBackgroundTooltip>
         }
+        datasetDetails={{ hubmap_id, uuid, status }}
       />
       <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">
         <HelperPanelButton
