@@ -4,18 +4,18 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { workspaceJobTypeIdField, workspaceResourceOptionsField } from '../workspaceFormFields';
-import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
+import { workspaceJobTypeIdField, workspaceResourceOptionsField } from 'js/components/workspaces/workspaceFormFields';
+import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from 'js/components/workspaces/hooks';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_JOB_TYPE,
   DEFAULT_MEMORY_MB,
   DEFAULT_NUM_CPUS,
   DEFAULT_TIME_LIMIT_MINUTES,
-} from '../constants';
-import { MergedWorkspace, WorkspaceResourceOptions } from '../types';
-import { findBestJobType, getWorkspaceResourceOptions, isRunningWorkspace } from '../utils';
+} from 'js/components/workspaces/constants';
+import { MergedWorkspace, WorkspaceResourceOptions } from 'js/components/workspaces/types';
+import { findBestJobType, getWorkspaceResourceOptions, isRunningWorkspace } from 'js/components/workspaces/utils';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
@@ -71,7 +71,7 @@ function useLaunchWorkspaceDialog() {
 
   const runningWorkspaceIsCurrentWorkpace = runningWorkspace?.id === workspace?.id;
 
-  const { toastErrorStopWorkspace, toastErrorLaunchWorkspace } = useSnackbarActions();
+  const { toastErrorStopWorkspace, toastErrorLaunchWorkspace } = useWorkspaceToasts();
 
   const { control, handleSubmit, isSubmitting, reset, setValue } = useLaunchWorkspaceForm();
 

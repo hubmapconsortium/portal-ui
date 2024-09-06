@@ -2,7 +2,7 @@ import { useState, SyntheticEvent, useCallback } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
-import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -90,7 +90,7 @@ function useDatasetsAutocomplete({
   const [inputValue, setInputValue] = useState('');
   const [, setRefresh] = useState(false);
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
-  const { toastSuccessAddDataset } = useSnackbarActions();
+  const { toastSuccessAddDataset } = useWorkspaceToasts();
 
   const removeDatasets = useCallback(
     (uuids: string[]) => {

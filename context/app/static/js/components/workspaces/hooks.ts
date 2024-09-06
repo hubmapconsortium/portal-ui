@@ -1,10 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr';
 
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
 import { multiFetcher } from 'js/helpers/swr';
+import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import {
   getWorkspaceStartLink,
   mergeJobsIntoWorkspaces,
@@ -29,7 +30,6 @@ import {
   useBuildWorkspacesSWRKey,
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
-import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -224,7 +224,7 @@ function useLaunchWorkspace() {
   const { open, setWorkspace, setDialogType } = useLaunchWorkspaceStore();
 
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
-  const { toastSuccessLaunchWorkspace, toastSuccessCreateWorkspace } = useSnackbarActions();
+  const { toastSuccessLaunchWorkspace, toastSuccessCreateWorkspace } = useWorkspaceToasts();
 
   const startAndOpenWorkspace = useCallback(
     async ({ workspace, jobTypeId, resourceOptions, templatePath }: startWorkspaceProps) => {
@@ -276,7 +276,7 @@ function useLaunchWorkspace() {
 export function useCreateAndLaunchWorkspace() {
   const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
   const { startNewWorkspace } = useLaunchWorkspace();
-  const { toastErrorCreateWorkspace, toastErrorLaunchWorkspace, toastSuccessLaunchWorkspace } = useSnackbarActions();
+  const { toastErrorCreateWorkspace, toastErrorLaunchWorkspace, toastSuccessLaunchWorkspace } = useWorkspaceToasts();
 
   const createAndLaunchWorkspace = useCallback(
     async ({ body, templatePath, resourceOptions }: createAndLaunchWorkspaceProps) => {
@@ -348,7 +348,7 @@ function useRefreshSession(workspace: MergedWorkspace) {
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
   const { mutate: mutateWorkspace } = useWorkspace(workspace.id);
   const mutate = useMutateWorkspacesAndJobs(mutateWorkspace);
-  const { toastSuccessRenewSession } = useSnackbarActions();
+  const { toastSuccessRenewSession } = useWorkspaceToasts();
 
   const refreshSession = useCallback(async () => {
     await stopWorkspace(workspace.id);

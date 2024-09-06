@@ -5,13 +5,16 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
-import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
-import { useLaunchWorkspaceDialog, LaunchWorkspaceFormTypes } from './hooks';
-import AdvancedConfigOptions from '../AdvancedConfigOptions';
-import { StyledSubtitle1 } from '../style';
+import WorkspaceJobTypeField from 'js/components/workspaces/WorkspaceJobTypeField';
+import AdvancedConfigOptions from 'js/components/workspaces/AdvancedConfigOptions';
+import { StyledSubtitle1 } from 'js/components/workspaces/style';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import {
+  useLaunchWorkspaceDialog,
+  LaunchWorkspaceFormTypes,
+} from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 
 const formId = 'launch-workspace-form';
 
@@ -46,7 +49,7 @@ function LaunchWorkspaceDialog() {
   } = useLaunchWorkspaceDialog();
 
   const workspaceName = workspace?.name;
-  const { toastErrorLaunchWorkspace } = useSnackbarActions();
+  const { toastErrorLaunchWorkspace } = useWorkspaceToasts();
 
   const newWorkspaceLaunch = dialogType === 'LAUNCH_NEW_WORKSPACE';
   const isAnotherWorkspaceRunning = runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace;
