@@ -2,7 +2,7 @@ import { useState, SyntheticEvent, useCallback } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
-import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -90,7 +90,7 @@ function useDatasetsAutocomplete({
   const [inputValue, setInputValue] = useState('');
   const [, setRefresh] = useState(false);
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
-  const { toastSuccess } = useSnackbarActions();
+  const { toastSuccessAddDataset } = useWorkspaceToasts();
 
   const removeDatasets = useCallback(
     (uuids: string[]) => {
@@ -115,10 +115,10 @@ function useDatasetsAutocomplete({
       if (uuid) {
         updateDatasetsFormState([...selectedDatasets, uuid]);
         resetAutocompleteState();
-        toastSuccess(`${newValue._source.hubmap_id} successfully added.`);
+        toastSuccessAddDataset(newValue._source.hubmap_id);
       }
     },
-    [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccess],
+    [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccessAddDataset],
   );
 
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];

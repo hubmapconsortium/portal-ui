@@ -4,12 +4,16 @@ import useSWR, { SWRConfiguration } from 'swr';
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SWRError } from 'js/helpers/swr/errors';
-
-import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
-import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
-import { buildDatasetSymlinks } from '../utils';
+import {
+  TemplatesResponse,
+  CreateTemplateNotebooksTypes,
+  TemplateTagsResponse,
+  TemplatesTypes,
+} from 'js/components/workspaces/types';
+import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
+import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -56,10 +60,8 @@ function useTemplateNotebooks() {
 
   const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
   const { createTemplates } = useCreateTemplates();
-
-  const { toastError } = useSnackbarActions();
-
   const { templates } = useWorkspaceTemplates();
+  const { toastErrorWorkspaceTemplate } = useWorkspaceToasts();
 
   const createTemplateNotebooks = useCallback(
     async ({
@@ -87,11 +89,11 @@ function useTemplateNotebooks() {
           const templateKey = url.split('/').pop();
 
           if (templateKey && templates?.[templateKey]) {
-            toastError(`There are issues with creating ${templates?.[templateKey].title}. Failed to create workspace.`);
+            toastErrorWorkspaceTemplate(templates?.[templateKey].title);
             return;
           }
         }
-        toastError(`There are issues with creating the selected templates. Failed to create workspace.`);
+        toastErrorWorkspaceTemplate();
         return;
       }
 
@@ -112,7 +114,7 @@ function useTemplateNotebooks() {
         resourceOptions: workspaceResourceOptions,
       });
     },
-    [groupsToken, createAndLaunchWorkspace, createTemplates, toastError, templates],
+    [groupsToken, createAndLaunchWorkspace, createTemplates, toastErrorWorkspaceTemplate, templates],
   );
 
   return createTemplateNotebooks;

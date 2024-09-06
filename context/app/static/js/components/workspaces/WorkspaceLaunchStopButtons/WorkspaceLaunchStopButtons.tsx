@@ -5,11 +5,11 @@ import Typography from '@mui/material/Typography';
 
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { Alert } from 'js/shared-styles/alerts';
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
-import { MergedWorkspace } from '../types';
-import { useLaunchWorkspaceDialog } from '../LaunchWorkspaceDialog/hooks';
+import { MergedWorkspace } from 'js/components/workspaces/types';
+import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -26,8 +26,7 @@ function StopWorkspaceButton({
   button: ButtonComponent,
   isStoppingWorkspace,
 }: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
-  const { toastError } = useSnackbarActions();
-
+  const { toastErrorStopWorkspace } = useWorkspaceToasts();
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
 
   if (!currentWorkspaceIsRunning) {
@@ -40,7 +39,7 @@ function StopWorkspaceButton({
       disabled={isStoppingWorkspace}
       onClick={() => {
         handleStopWorkspace(workspace.id).catch((err) => {
-          toastError(`Error stopping ${workspace.name}.`);
+          toastErrorStopWorkspace(workspace.name);
           console.error(err);
         });
       }}

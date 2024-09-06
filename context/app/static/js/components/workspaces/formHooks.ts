@@ -1,14 +1,13 @@
 import { useCallback, useRef } from 'react';
 
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { trackEvent } from 'js/helpers/trackers';
-
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
-import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from './api';
-import { Dataset } from '../types';
+import { Dataset } from 'js/components/types';
+import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>>[];
 
@@ -39,7 +38,7 @@ const errorHelper = {
 
 function useProtectedDatasetsForm() {
   const { selectedRows, deselectRows } = useSelectableTableStore();
-  const { toastSuccess } = useSnackbarActions();
+  const { toastSuccessRemoveProtectedDatasets } = useWorkspaceToasts();
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
   const containsProtectedDataset = protectedRows.length > 0;
 
@@ -64,8 +63,8 @@ function useProtectedDatasetsForm() {
 
   const removeProtectedDatasets = useCallback(() => {
     deselectRows(protectedRows.map((r) => r._id));
-    toastSuccess('Protected datasets successfully removed from selection.');
-  }, [deselectRows, protectedRows, toastSuccess]);
+    toastSuccessRemoveProtectedDatasets();
+  }, [deselectRows, protectedRows, toastSuccessRemoveProtectedDatasets]);
 
   return { errorMessages, protectedHubmapIds, removeProtectedDatasets, protectedRows, selectedRows };
 }
