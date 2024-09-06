@@ -53,7 +53,7 @@ function ProcessedDataWorkspaceMenu({
     ...rest
   } = useCreateWorkspaceForm({
     defaultName: hubmap_id,
-    initialSelectedDatasets: [uuid] ?? [],
+    initialSelectedDatasets: [uuid].filter(Boolean),
   });
 
   const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH');
