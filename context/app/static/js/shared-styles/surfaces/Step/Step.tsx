@@ -49,7 +49,7 @@ function Step({ index, title, isRequired = false, children }: PropsWithChildren<
           {`${title} (${text})`}
         </Typography>
       </Paper>
-      <Paper sx={{ p: 2 }}>{children}</Paper>
+      <Paper sx={{ p: 2, mb: 2 }}>{children}</Paper>
     </>
   );
 }

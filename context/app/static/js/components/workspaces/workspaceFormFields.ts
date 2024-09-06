@@ -44,6 +44,17 @@ const workspaceJobTypeIdField = {
   }),
 };
 
+const workspaceResourceOptionsField = {
+  workspaceResourceOptions: z
+    .object({
+      num_cpus: z.number(),
+      memory_mb: z.number(),
+      time_limit_minutes: z.number(),
+      gpu_enabled: z.boolean(),
+    })
+    .optional(),
+};
+
 export {
   workspaceNameField,
   protectedDatasetsField,
@@ -51,4 +62,5 @@ export {
   datasetsField,
   workspaceIdField,
   workspaceJobTypeIdField,
+  workspaceResourceOptionsField,
 };

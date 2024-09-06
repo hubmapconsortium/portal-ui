@@ -8,7 +8,7 @@ import { getIDsQuery } from 'js/helpers/queries';
 
 function PublicationsDataSection({ datasetUUIDs, uuid, associatedCollectionUUID }) {
   const query = associatedCollectionUUID
-    ? { query: getIDsQuery(associatedCollectionUUID) }
+    ? { query: getIDsQuery(associatedCollectionUUID), _source: ['uuid', 'title', 'hubmap_id', 'datasets.uuid'] }
     : buildCollectionsWithDatasetQuery(datasetUUIDs);
 
   const { searchHits: collectionsData } = useSearchHits(query);

@@ -60,7 +60,13 @@ function useTemplateNotebooks() {
   const { toastErrorWorkspaceTemplate } = useSnackbarActions();
 
   const createTemplateNotebooks = useCallback(
-    async ({ workspaceName, templateKeys, uuids, workspaceJobTypeId }: CreateTemplateNotebooksTypes) => {
+    async ({
+      workspaceName,
+      templateKeys,
+      uuids,
+      workspaceJobTypeId,
+      workspaceResourceOptions,
+    }: CreateTemplateNotebooksTypes) => {
       let templatesDetails: {
         name: string;
         content: string | undefined;
@@ -101,6 +107,7 @@ function useTemplateNotebooks() {
             symlinks: buildDatasetSymlinks({ datasetUUIDs: uuids }),
           },
         },
+        resourceOptions: workspaceResourceOptions,
       });
     },
     [groupsToken, createAndLaunchWorkspace, createTemplates, toastErrorWorkspaceTemplate, templates],

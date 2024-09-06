@@ -1,1 +1,0 @@
-- Fix color of alerts' icons.
