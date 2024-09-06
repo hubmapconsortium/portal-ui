@@ -1,0 +1,2 @@
+- Update attribution and processed dataset section language.
+- Direct users to HuBMAP Help Desk for questions about internally processed datasets.

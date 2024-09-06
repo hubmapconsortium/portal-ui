@@ -18,8 +18,8 @@ const tooltips = {
 
 const DatasetAttribution = (
   <SectionDescription>
-    Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to
-    the individuals listed as contacts, either via the email address listed in the table or via contact information
+    Below is the information for the individuals who provided this dataset. For questions about this dataset, reach out
+    to the individuals listed as contacts, either via the email address listed in the table or via contact information
     provided on their ORCID profile page.
   </SectionDescription>
 );

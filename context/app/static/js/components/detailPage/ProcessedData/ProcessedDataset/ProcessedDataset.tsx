@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { formatDate } from 'date-fns/format';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
@@ -11,6 +10,7 @@ import { useVitessceConf } from 'js/pages/Dataset/hooks';
 import { isSupport } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import Skeleton from '@mui/material/Skeleton';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import Files from '../../files/Files';
 import DataProducts from '../../files/DataProducts';
 import VisualizationWrapper from '../../visualization/VisualizationWrapper';
@@ -45,16 +45,18 @@ function ProcessedDatasetDescription() {
   return <LabelledSectionText label="Description">{description}</LabelledSectionText>;
 }
 
-function RegisteredBy() {
+function Contact() {
   const {
-    dataset: { created_by_user_displayname, created_by_user_email },
+    dataset: { group_name },
   } = useProcessedDatasetContext();
-  return (
-    <LabelledSectionText label="Registered By">
-      {created_by_user_displayname} <br />
-      <EmailIconLink email={created_by_user_displayname}>{created_by_user_email}</EmailIconLink>
-    </LabelledSectionText>
-  );
+  if (group_name === 'HuBMAP Consortium') {
+    return (
+      <LabelledSectionText label="Contact" iconTooltipText="This is the contact for this data.">
+        <ContactUsLink>HuBMAP Help Desk</ContactUsLink>
+      </LabelledSectionText>
+    );
+  }
+  return null;
 }
 
 function SummaryAccordion() {
@@ -64,7 +66,7 @@ function SummaryAccordion() {
     <Subsection title="Summary" icon={<SummarizeRounded />}>
       <ProcessedDatasetDescription />
       <LabelledSectionText label="Consortium">{dataset.group_name}</LabelledSectionText>
-      <RegisteredBy />
+      <Contact />
       <LabelledSectionText label={dateLabel}>
         {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
       </LabelledSectionText>
