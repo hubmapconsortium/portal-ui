@@ -1,3 +1,12 @@
+## v1.4.0 - 2024-09-06
+
+- Add advanced configuration options to workspace job dialogs.
+- Update attribution and processed dataset section language.
+- Direct users to HuBMAP Help Desk for questions about internally processed datasets.
+- Update workspace success toast to indicate whether the workspace has launched in a new tab or just been created.
+- Centralize toast messages for workspaces into a single file.
+
+
 ## v1.3.0 - 2024-09-05
 
 - Improve handling of loading/potentially undefined data in dataset relationship diagram.
