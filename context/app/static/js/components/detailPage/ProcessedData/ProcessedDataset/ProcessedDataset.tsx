@@ -47,9 +47,9 @@ function ProcessedDatasetDescription() {
 
 function Contact() {
   const {
-    dataset: { group_name },
+    dataset: { mapped_consortium },
   } = useProcessedDatasetContext();
-  if (group_name === 'HuBMAP Consortium') {
+  if (mapped_consortium === 'HuBMAP') {
     return (
       <LabelledSectionText label="Contact" iconTooltipText="This is the contact for this data.">
         <ContactUsLink>HuBMAP Help Desk</ContactUsLink>
