@@ -49,14 +49,15 @@ function Contact() {
   const {
     dataset: { mapped_consortium },
   } = useProcessedDatasetContext();
-  if (mapped_consortium === 'HuBMAP') {
-    return (
-      <LabelledSectionText label="Contact" iconTooltipText="This is the contact for this data.">
-        <ContactUsLink>HuBMAP Help Desk</ContactUsLink>
-      </LabelledSectionText>
-    );
+
+  if (mapped_consortium !== 'HuBMAP') {
+    return null;
   }
-  return null;
+  return (
+    <LabelledSectionText label="Contact" iconTooltipText="This is the contact for this data.">
+      <ContactUsLink>HuBMAP Help Desk</ContactUsLink>
+    </LabelledSectionText>
+  );
 }
 
 function SummaryAccordion() {
