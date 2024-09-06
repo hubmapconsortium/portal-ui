@@ -12,6 +12,7 @@ import {
   WorkspaceAPIResponseWithoutData,
   WorkspaceJob,
   WorkspaceJobType,
+  WorkspaceResourceOptions,
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
@@ -277,11 +278,12 @@ interface WorkspaceActionArgs extends APIAction {
   workspaceId: number;
   jobType: unknown;
   jobDetails: unknown;
+  resourceOptions: WorkspaceResourceOptions;
 }
 
 async function startJob(
   _key: string,
-  { arg: { workspaceId, jobDetails, jobType, url, headers } }: { arg: WorkspaceActionArgs },
+  { arg: { workspaceId, jobDetails, jobType, resourceOptions, url, headers } }: { arg: WorkspaceActionArgs },
 ) {
   trackEvent(
     {
@@ -290,12 +292,14 @@ async function startJob(
     },
     workspaceId,
   );
+
   const result = fetch(url, {
     method: 'PUT',
     headers,
     body: JSON.stringify({
       job_type: jobType,
       job_details: jobDetails,
+      resource_options: resourceOptions,
     }),
   });
   if (!(await result).ok) {
@@ -308,10 +312,19 @@ export function useStartWorkspace() {
   const headers = useWorkspaceHeaders();
   const { trigger, isMutating } = useSWRMutation('start-workspace', startJob);
   const startWorkspace = useCallback(
-    async ({ workspaceId, jobTypeId }: { workspaceId: number; jobTypeId: string }) => {
+    async ({
+      workspaceId,
+      jobTypeId,
+      resourceOptions,
+    }: {
+      workspaceId: number;
+      jobTypeId: string;
+      resourceOptions: WorkspaceResourceOptions;
+    }) => {
       return trigger({
         url: api.startWorkspace(workspaceId),
         jobDetails: {},
+        resourceOptions,
         headers,
         jobType: jobTypeId,
         workspaceId,

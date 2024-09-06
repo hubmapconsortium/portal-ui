@@ -9,6 +9,7 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import { Alert } from 'js/shared-styles/alerts/Alert';
@@ -23,8 +24,10 @@ import { CreateTemplateNotebooksTypes } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
+import AdvancedConfigOptions from '../AdvancedConfigOptions';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { SearchAheadHit } from '../AddDatasetsTable/hooks';
+import { StyledSubtitle1 } from '../style';
 
 const text = {
   overview: {
@@ -63,8 +66,8 @@ const text = {
     description: [
       'All workspaces are launched with Python support, with the option to add support for R. Workspaces with added R support may experience longer load times.',
     ],
+    advancedDescription: 'Adjusting these settings may result in longer workspace load times.',
   },
-
   templates: {
     title: 'Select Templates',
   },
@@ -124,12 +127,14 @@ function NewWorkspaceDialog({
       templates: templateKeys,
       workspaceJobTypeId,
       datasets,
+      workspaceResourceOptions,
     }: CreateWorkspaceFormTypes) => {
       onSubmit({
         workspaceName,
         templateKeys,
         uuids: datasets,
         workspaceJobTypeId,
+        workspaceResourceOptions,
       });
     },
     [onSubmit],
@@ -196,15 +201,19 @@ function NewWorkspaceDialog({
             <WorkspaceField
               control={control}
               name="workspace-name"
-              label="Name"
+              label="Workspace Name"
               placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
               autoFocus
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 e.stopPropagation();
               }}
             />
-            <StepDescription blocks={text.configure.description} />
-            <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+            <Stack spacing={2} p={2} component={Paper} direction="column">
+              <StyledSubtitle1>Environment Selection</StyledSubtitle1>
+              <Typography>{text.configure.description}</Typography>
+              <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+            </Stack>
+            <AdvancedConfigOptions control={control} description={text.configure.advancedDescription} />
           </Box>
         </Step>
         <TemplateSelectStep

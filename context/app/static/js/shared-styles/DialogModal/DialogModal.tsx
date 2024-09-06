@@ -3,13 +3,12 @@ import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import MUIDialogContent, { DialogContentProps } from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
-import Box from '@mui/material/Box';
-
-import { Alert } from 'js/shared-styles/alerts';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/system/Stack';
+
 import { StyledDivider, StyledDialogTitle } from './style';
 import { CloseIcon } from '../icons';
+import ErrorOrWarningMessages from '../alerts/ErrorOrWarningMessages';
 
 interface DialogModalProps extends Omit<React.ComponentProps<typeof Dialog>, 'content' | 'open'> {
   title: string;
@@ -41,16 +40,7 @@ function DialogModal({
 
   return (
     <Dialog {...props} open={isOpen} onClose={handleClose} fullWidth>
-      <Stack
-        direction="row"
-        alignItems="center"
-        justifyContent="space-between"
-        flexGrow={1}
-        pt={2}
-        pl={3}
-        pr={2}
-        mb={1}
-      >
+      <Stack direction="row" alignItems="center" justifyContent="space-between" flexGrow={1} pt={2} pl={3} pr={2}>
         <StyledDialogTitle variant="h3" component="h2">
           {title}
         </StyledDialogTitle>
@@ -62,19 +52,7 @@ function DialogModal({
         )}
       </Stack>
       <DialogContent>
-        {errorMessages.length > 0 && (
-          <Box sx={{ display: 'grid', gap: 1, marginBottom: 3 }}>
-            {errorMessages.map((errorMessage) => {
-              return (
-                <div key={errorMessage}>
-                  <Alert key={errorMessage} severity="error">
-                    {errorMessage}
-                  </Alert>
-                </div>
-              );
-            })}
-          </Box>
-        )}
+        <ErrorOrWarningMessages errorMessages={errorMessages} />
         {secondaryText && (
           <DialogContentText color="primary" variant="subtitle2">
             {secondaryText}
