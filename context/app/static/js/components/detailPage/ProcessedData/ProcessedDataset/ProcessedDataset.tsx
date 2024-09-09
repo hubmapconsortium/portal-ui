@@ -138,7 +138,13 @@ function VisualizationAccordion() {
         This visualization includes various interactive elements such as scatter plots, spatial imaging plots, heat
         maps, genome browser tracks, and more.
       </SectionDescription>
-      <VisualizationWrapper vitData={conf} uuid={uuid} shouldDisplayHeader={false} hasBeenMounted={hasBeenSeen} />
+      <VisualizationWrapper
+        vitData={conf}
+        uuid={uuid}
+        shouldDisplayHeader={false}
+        hasBeenMounted={hasBeenSeen}
+        hasNotebook
+      />
     </Subsection>
   );
 }
