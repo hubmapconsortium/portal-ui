@@ -111,7 +111,7 @@ interface TemplateTypes {
   examples: {
     title: string;
     description: string;
-    data_type: string[];
+    assay_display_name: string[];
     datasets: string[];
   }[];
 }

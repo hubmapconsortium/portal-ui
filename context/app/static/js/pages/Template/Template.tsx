@@ -19,21 +19,6 @@ import { StyledAccordionSummary } from 'js/pages/Template/style';
 import { NewWorkspaceDialogFromSample } from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 
-const examples = [
-  {
-    title: 'Example 1',
-    description: 'This is an example workspace.',
-    data_type: ['RNA-Seq'],
-    datasets: ['8ac49b59b3a0471b0b9393942e5d4c70', '70c76b73efa58124e247d6e3a46c85f3'],
-  },
-  {
-    title: 'Example 2',
-    description: 'This is another example workspace.',
-    data_type: ['Imaging'],
-    datasets: ['b2f4e80fd01b9157ba6b5b48154c6b61'],
-  },
-];
-
 interface TemplateSummaryProps {
   description: string;
   tags: string[];
@@ -41,7 +26,7 @@ interface TemplateSummaryProps {
 
 function TemplateSummary({ description, tags }: TemplateSummaryProps) {
   return (
-    <Stack component={SummaryPaper} spacing={1}>
+    <Stack component={SummaryPaper}>
       <LabelledSectionText label="Description">{description}</LabelledSectionText>
       <LabelledSectionText label="Tags">
         <Stack spacing={1} marginTop={1} direction="row">
@@ -63,17 +48,21 @@ interface ExampleAccordionProps {
   example: {
     title: string;
     description: string;
-    data_type: string[];
+    assay_display_name: string[];
     datasets: string[];
   };
+  defaultExpanded?: boolean;
 }
 
-function ExampleAccordion({ example: { title, description, data_type, datasets } }: ExampleAccordionProps) {
+function ExampleAccordion({
+  example: { title, description, assay_display_name, datasets },
+  defaultExpanded,
+}: ExampleAccordionProps) {
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ initialSelectedDatasets: datasets });
 
   return (
     <>
-      <Accordion>
+      <Accordion defaultExpanded={defaultExpanded}>
         <StyledAccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className="accordion-icon" />}>
           <Typography variant="subtitle1" color="inherit" component="h4">
             {title}
@@ -89,14 +78,14 @@ function ExampleAccordion({ example: { title, description, data_type, datasets }
             >
               Try Sample Workspace
             </Button>
-            <Stack component={SummaryPaper} spacing={1}>
+            <Stack component={SummaryPaper}>
               <LabelledSectionText label="Description">{description}</LabelledSectionText>
               <LabelledSectionText
                 label="Dataset Types"
                 iconTooltipText="Dataset types that are used in this sample workspace."
               >
                 <Stack spacing={1} direction="row">
-                  {data_type.map((type) => type)}
+                  {assay_display_name.map((type) => type)}
                 </Stack>
               </LabelledSectionText>
             </Stack>
@@ -104,8 +93,39 @@ function ExampleAccordion({ example: { title, description, data_type, datasets }
           </Stack>
         </AccordionDetails>
       </Accordion>
-      <NewWorkspaceDialogFromSample sample={{ title, description, data_type, datasets }} {...rest} />
+      <NewWorkspaceDialogFromSample sample={{ title, description, assay_display_name, datasets }} {...rest} />
     </>
+  );
+}
+
+interface SampleWorkspacesProps {
+  examples: {
+    title: string;
+    description: string;
+    assay_display_name: string[];
+    datasets: string[];
+  }[];
+}
+
+function SampleWorkspaces({ examples }: SampleWorkspacesProps) {
+  return (
+    <Stack spacing={1}>
+      <Typography variant="h4">Sample Workspaces</Typography>
+      {isAuthenticated ? (
+        <IconPanel status="info">
+          Sample workspaces are provided to help you get started with this template and to better understand the types
+          of data that are compatible with it.
+        </IconPanel>
+      ) : (
+        <LogInPanel>
+          Sample workspaces are available to help you get started with this template and better understand the types of
+          compatible data. Please <InternalLink href="/login">log in</InternalLink> to explore a sample workspace.
+        </LogInPanel>
+      )}
+      {examples.map((example, idx) => (
+        <ExampleAccordion key={example.title} example={example} defaultExpanded={idx === 0} />
+      ))}
+    </Stack>
   );
 }
 
@@ -123,7 +143,7 @@ function Template({ templateKey }: TemplatePageProps) {
 
   return (
     <Stack spacing={4} marginBottom={5}>
-      <Stack spacing={1}>
+      <Stack>
         <SummaryData
           title={template.title}
           entity_type="Workspace Template"
@@ -133,23 +153,7 @@ function Template({ templateKey }: TemplatePageProps) {
         />
         <TemplateSummary description={template.description} tags={template.tags} />
       </Stack>
-      <Stack spacing={1}>
-        <Typography variant="h4">Sample Workspaces</Typography>
-        {isAuthenticated ? (
-          <IconPanel status="info">
-            Sample workspaces are provided to help you get started with this template and to better understand the types
-            of data that are compatible with it.
-          </IconPanel>
-        ) : (
-          <LogInPanel>
-            Sample workspaces are available to help you get started with this template and better understand the types
-            of compatible data. Please <InternalLink href="/login">log in</InternalLink> to explore a sample workspace.
-          </LogInPanel>
-        )}
-        {examples.map((example) => (
-          <ExampleAccordion key={example.title} example={example} />
-        ))}
-      </Stack>
+      {template.examples && <SampleWorkspaces examples={template.examples} />}
     </Stack>
   );
 }

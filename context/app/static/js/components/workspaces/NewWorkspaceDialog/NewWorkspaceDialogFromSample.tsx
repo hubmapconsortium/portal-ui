@@ -58,7 +58,7 @@ interface NewWorkspaceDialogFromSampleProps {
   sample: {
     title: string;
     description: string;
-    data_type: string[];
+    assay_display_name: string[];
     datasets: string[];
   };
   dialogIsOpen: boolean;
@@ -155,7 +155,7 @@ function NewWorkspaceDialogFromSample({
                   <StyledSubtitle1>{text.configure.selected.title}</StyledSubtitle1>
                   <Typography>{text.configure.selected.description}</Typography>
                   <Typography variant="subtitle2">Environment</Typography>
-                  <Typography>Python 3.8</Typography>
+                  <Typography>Python (TODO)</Typography>
                 </Stack>
               </AccordionSummary>
               <AccordionDetails>
