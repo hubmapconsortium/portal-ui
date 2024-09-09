@@ -60,9 +60,9 @@ export function nonDestructiveMerge<T extends Record<string, unknown>, U extends
         return;
       }
 
-      if (typeof merged[key] === 'object' && typeof value === 'object') {
+      if (merged[key] && typeof merged[key] === 'object' && value && typeof value === 'object') {
         // Perform a more in-depth check to see if objects are the same when excluding certain fields
-        const difference = findDifference(merged[key] as object, value!).filter(
+        const difference = findDifference(merged[key] as object, value).filter(
           (diffField) => !ignoredFields.includes(diffField),
         );
 
