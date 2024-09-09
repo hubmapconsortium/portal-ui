@@ -51,14 +51,19 @@ interface ExampleAccordionProps {
     assay_display_name: string[];
     datasets: string[];
   };
+  templateKey: string;
   defaultExpanded?: boolean;
 }
 
 function ExampleAccordion({
   example: { title, description, assay_display_name, datasets },
+  templateKey,
   defaultExpanded,
 }: ExampleAccordionProps) {
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ initialSelectedDatasets: datasets });
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
+    initialSelectedDatasets: datasets,
+    defaultTemplate: templateKey,
+  });
 
   return (
     <>
@@ -98,37 +103,6 @@ function ExampleAccordion({
   );
 }
 
-interface SampleWorkspacesProps {
-  examples: {
-    title: string;
-    description: string;
-    assay_display_name: string[];
-    datasets: string[];
-  }[];
-}
-
-function SampleWorkspaces({ examples }: SampleWorkspacesProps) {
-  return (
-    <Stack spacing={1}>
-      <Typography variant="h4">Sample Workspaces</Typography>
-      {isAuthenticated ? (
-        <IconPanel status="info">
-          Sample workspaces are provided to help you get started with this template and to better understand the types
-          of data that are compatible with it.
-        </IconPanel>
-      ) : (
-        <LogInPanel>
-          Sample workspaces are available to help you get started with this template and better understand the types of
-          compatible data. Please <InternalLink href="/login">log in</InternalLink> to explore a sample workspace.
-        </LogInPanel>
-      )}
-      {examples.map((example, idx) => (
-        <ExampleAccordion key={example.title} example={example} defaultExpanded={idx === 0} />
-      ))}
-    </Stack>
-  );
-}
-
 interface TemplatePageProps {
   templateKey: string;
 }
@@ -153,7 +127,31 @@ function Template({ templateKey }: TemplatePageProps) {
         />
         <TemplateSummary description={template.description} tags={template.tags} />
       </Stack>
-      {template.examples && <SampleWorkspaces examples={template.examples} />}
+      {template.examples && (
+        <Stack spacing={1}>
+          <Typography variant="h4">Sample Workspaces</Typography>
+          {isAuthenticated ? (
+            <IconPanel status="info">
+              Sample workspaces are provided to help you get started with this template and to better understand the
+              types of data that are compatible with it.
+            </IconPanel>
+          ) : (
+            <LogInPanel>
+              Sample workspaces are available to help you get started with this template and better understand the types
+              of compatible data. Please <InternalLink href="/login">log in</InternalLink> to explore a sample
+              workspace.
+            </LogInPanel>
+          )}
+          {template.examples.map((example, idx) => (
+            <ExampleAccordion
+              key={example.title}
+              example={example}
+              templateKey={templateKey}
+              defaultExpanded={idx === 0}
+            />
+          ))}
+        </Stack>
+      )}
     </Stack>
   );
 }
