@@ -21,7 +21,7 @@ export function makeCwlInput(name: string, steps: unknown[], extras: unknown, is
   ];
   if (steps) {
     if (steps.length > 1) {
-      throw new Error('Limited to 1 step');
+      throw new Error(`Limited to 1 input source step, ${name} got: ${JSON.stringify(steps)}`);
     } else if (steps.length === 1) {
       [source[0].step] = steps as unknown as string;
     }
