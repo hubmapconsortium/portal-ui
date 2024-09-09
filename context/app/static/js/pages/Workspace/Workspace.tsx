@@ -118,9 +118,9 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
       <WorkspaceDatasetsTable
         datasetsUUIDs={workspaceDatasets}
         addDatasets={workspace}
-        copyDatasets
         label={<SectionHeader>Datasets</SectionHeader>}
-        additionalAlerts={
+        hideTableIfEmpty
+        emptyAlert={
           <Alert
             severity="info"
             action={

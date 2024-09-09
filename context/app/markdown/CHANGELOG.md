@@ -1,3 +1,58 @@
+## v1.4.0 - 2024-09-06
+
+- Add advanced configuration options to workspace job dialogs.
+- Update attribution and processed dataset section language.
+- Direct users to HuBMAP Help Desk for questions about internally processed datasets.
+- Update workspace success toast to indicate whether the workspace has launched in a new tab or just been created.
+- Centralize toast messages for workspaces into a single file.
+
+
+## v1.3.0 - 2024-09-05
+
+- Improve handling of loading/potentially undefined data in dataset relationship diagram.
+- Ensure data product and file URLs use relevant dataset IDs when constructing.
+
+
+## v1.2.0 - 2024-09-04
+
+- Improve status icon visibility on collapsed processed dataset accordions.
+- Add smooth scrolling for dataset relationships links.
+- Make dataset relationship node behavior clearer by adding explanatory toast, tooltip, and using appropriate cursor.
+- Expand processed datasets if navigated to via table of contents or dataset relationships node link.
+
+
+## v1.1.0 - 2024-09-03
+
+- Fix color of alerts' icons.
+- Fix regression in 303 redirect.
+- Fix descendants lookup query so it looks for either dataset descendants or image pyramid support descendants.
+
+
+## v1.0.1 - 2024-08-28
+
+- Add the HuBMAP ID search bar component to the "Launch New Workspace" dialog on the "My Workspaces" landing page.
+- Deprecate `ancestors`, `descendants`, and their `immediate` variants to only look up by ID.
+- Improve behavior of entity header at certain intermediate screen widths.
+- Handle both contributors and creators fields for collections until the creators field is renamed to contributors.
+- Adjust link for 10X Multiome/Visium news item to point to those assays specifically.
+- Update language describing HRA/EUI/ASCT+B Reporter on the homepage and navigation.
+- Update to Styled-Components v6.
+- Standardize styling to use the same utility/theme provider throughout the site.
+- Prevent helper panel overflow from long titles/descriptions.
+- Prevent lifting of publication ancillary data on dataset pages.
+- Remove excessive margin on section descriptions.
+- Indicate disabled state on entity header items.
+- Add tooltip to bulk download shortcut link.
+- Restore assay graphs for datasets with no defined search terms but with present datasets.
+- Remove duplicate HuBMAP ID from bulk data transfer panel links.
+- Fix single-tab table styles so the single tab appears selected.
+- Add tooltips to unlabeled status icons.
+- Remove link from helper panel dataset ID display.
+- Add "Relevant Pages" section to workspace detail pages.
+- Update language and add an action button to toasts for successful workspace creation.
+- Enable access to workspaces for users in HuBMAP Read or HuBMAP Workspaces globus groups.
+
+
 ## v1.0.0 - 2024-08-23
 
 - Extend provenance table logic to handle missing entities.

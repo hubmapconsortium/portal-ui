@@ -6,7 +6,7 @@ import SectionContainer from 'js/shared-styles/sections/SectionContainer';
 
 import TileGrid from 'js/shared-styles/tiles/TileGrid';
 import { RedirectAlert } from 'js/shared-styles/alerts/RedirectAlert';
-import { StyledTypography } from './style';
+import { StyledTypography } from './style.ts';
 import { useOrgansDatasetCounts, organNotFoundMessageTemplate } from './hooks';
 
 function Organs({ organs }) {

@@ -9,14 +9,12 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
-
 import CloseRounded from '@mui/icons-material/CloseRounded';
 
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import { generateCommaList } from 'js/helpers/functions';
-
-import { MergedWorkspace } from '../types';
+import { MergedWorkspace } from 'js/components/workspaces/types';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 interface ConfirmDeleteWorkspacesDialogProps {
   dialogIsOpen: boolean;
@@ -32,7 +30,7 @@ export default function ConfirmDeleteWorkspacesDialog({
   selectedWorkspaceIds,
   workspacesList,
 }: ConfirmDeleteWorkspacesDialogProps) {
-  const { toastError, toastSuccess } = useSnackbarActions();
+  const { toastErrorDeleteWorkspaces, toastSuccessDeleteWorkspaces } = useWorkspaceToasts();
 
   const selectedWorkspaceNames = Array.from(selectedWorkspaceIds).map((id) => {
     const workspace = workspacesList.find((w) => w.id === Number(id));
@@ -46,16 +44,23 @@ export default function ConfirmDeleteWorkspacesDialog({
 
     Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId))))
       .then(() => {
-        toastSuccess(`Successfully deleted workspaces: ${selectedWorkspaceNamesList}`);
+        toastSuccessDeleteWorkspaces(selectedWorkspaceNamesList);
         selectedWorkspaceIds.clear();
       })
       .catch((e) => {
-        toastError(`Error deleting workspaces: ${selectedWorkspaceNamesList}`);
+        toastErrorDeleteWorkspaces(selectedWorkspaceNamesList);
         console.error(e);
       });
 
     handleClose();
-  }, [handleDeleteWorkspace, selectedWorkspaceIds, selectedWorkspaceNamesList, handleClose, toastError, toastSuccess]);
+  }, [
+    handleDeleteWorkspace,
+    selectedWorkspaceIds,
+    toastSuccessDeleteWorkspaces,
+    toastErrorDeleteWorkspaces,
+    selectedWorkspaceNamesList,
+    handleClose,
+  ]);
 
   return (
     <Dialog

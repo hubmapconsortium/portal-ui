@@ -4,7 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { Workspace } from '../types';
-import { useUpdateWorkspaceDatasets } from '../hooks';
+import { useUpdateWorkspaceDatasets, useWorkspaceDetail } from '../hooks';
 import { datasetsField } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
 import { useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
@@ -51,6 +51,8 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     name: 'datasets',
   });
 
+  const { workspaceDatasets: initialDatasets } = useWorkspaceDetail({ workspaceId });
+
   const {
     inputValue,
     setInputValue,
@@ -62,7 +64,7 @@ function useAddDatasetsDialog({ workspace }: { workspace: Workspace }) {
     searchHits,
     resetAutocompleteState,
   } = useDatasetsAutocomplete({
-    workspaceId,
+    workspaceDatasets: initialDatasets,
     selectedDatasets: field.value,
     updateDatasetsFormState: field.onChange,
   });

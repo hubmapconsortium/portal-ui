@@ -23,7 +23,8 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   },
   {
     title: '10X Multiome and Visium Datasets Now Available',
-    titleHref: '/search?assay_modality[0]=multiple&entity_type[0]=Dataset',
+    titleHref:
+      '/search?raw_dataset_type_keyword-assay_display_name_keyword[10X Multiome][0]=10x Multiome&raw_dataset_type_keyword-assay_display_name_keyword[10X Multiome][1]=10x Multiome [Salmon %2B ArchR %2B Muon]&raw_dataset_type_keyword-assay_display_name_keyword[Visium (no probes)][0]=Visium (no probes)&raw_dataset_type_keyword-assay_display_name_keyword[Visium (no probes)][1]=Visium (no probes) [Salmon %2B Scanpy]&entity_type[0]=Dataset',
     description: 'Explore and download 10X Multiome and Visium multi-assay datasets.',
     date: 'August 2024',
     img: <entityIconMap.Dataset {...timelineIconProps} />,

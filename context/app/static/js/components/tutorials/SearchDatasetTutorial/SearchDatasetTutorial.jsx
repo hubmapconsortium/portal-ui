@@ -1,11 +1,11 @@
-import React, { useContext, useState } from 'react';
-import { ThemeContext } from 'styled-components';
+import React, { useState } from 'react';
 import Joyride, { STATUS, ACTIONS, LIFECYCLE } from 'react-joyride';
 
 import DatasetSearchPrompt from 'js/components/tutorials/DatasetSearchPrompt';
 import TutorialTooltip from 'js/shared-styles/tutorials/TutorialTooltip';
 import useSearchViewStore from 'js/stores/useSearchViewStore';
 import { useTutorialStore, withTutorialProvider } from 'js/shared-styles/tutorials/TutorialProvider';
+import { useTheme } from '@mui/material/styles';
 import { sortTileViewStepTitle, defaultSteps, stepToAddIfViewMoreExists } from './config';
 
 const searchViewStoreSelector = (state) => ({
@@ -17,7 +17,7 @@ const searchViewStoreSelector = (state) => ({
 const finishedStatuses = [STATUS.FINISHED, STATUS.SKIPPED];
 
 function SearchDatasetTutorial() {
-  const themeContext = useContext(ThemeContext);
+  const themeContext = useTheme();
   const [steps, setSteps] = useState(defaultSteps);
   const { searchView, setSearchView, toggleItem } = useSearchViewStore(searchViewStoreSelector);
   const { tutorialStep, isTutorialRunning, closeTutorial } = useTutorialStore();

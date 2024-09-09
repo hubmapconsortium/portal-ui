@@ -4,20 +4,28 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { workspaceJobTypeIdField } from '../workspaceFormFields';
-import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from '../hooks';
-import { DEFAULT_JOB_TYPE } from '../constants';
-import { MergedWorkspace } from '../types';
-import { findBestJobType, isRunningWorkspace } from '../utils';
+import { workspaceJobTypeIdField, workspaceResourceOptionsField } from 'js/components/workspaces/workspaceFormFields';
+import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from 'js/components/workspaces/hooks';
+import {
+  DEFAULT_GPU_ENABLED,
+  DEFAULT_JOB_TYPE,
+  DEFAULT_MEMORY_MB,
+  DEFAULT_NUM_CPUS,
+  DEFAULT_TIME_LIMIT_MINUTES,
+} from 'js/components/workspaces/constants';
+import { MergedWorkspace, WorkspaceResourceOptions } from 'js/components/workspaces/types';
+import { findBestJobType, getWorkspaceResourceOptions, isRunningWorkspace } from 'js/components/workspaces/utils';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 export interface LaunchWorkspaceFormTypes {
   workspaceJobTypeId: string;
+  workspaceResourceOptions: WorkspaceResourceOptions;
 }
 
 const schema = z
   .object({
     ...workspaceJobTypeIdField,
+    ...workspaceResourceOptionsField,
   })
   .partial()
   .required({ workspaceJobTypeId: true });
@@ -32,6 +40,12 @@ function useLaunchWorkspaceForm() {
   } = useForm<LaunchWorkspaceFormTypes>({
     defaultValues: {
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
+      workspaceResourceOptions: {
+        num_cpus: DEFAULT_NUM_CPUS,
+        memory_mb: DEFAULT_MEMORY_MB,
+        time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+        gpu_enabled: DEFAULT_GPU_ENABLED,
+      },
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -53,11 +67,11 @@ function useLaunchWorkspaceDialog() {
 
   const { handleStopWorkspace } = useWorkspacesList();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
-  const { isOpen, open, close, workspace, setWorkspace } = useLaunchWorkspaceStore();
+  const { isOpen, open, close, workspace, setWorkspace, dialogType, setDialogType } = useLaunchWorkspaceStore();
 
   const runningWorkspaceIsCurrentWorkpace = runningWorkspace?.id === workspace?.id;
 
-  const { toastError } = useSnackbarActions();
+  const { toastErrorStopWorkspace, toastErrorLaunchWorkspace } = useWorkspaceToasts();
 
   const { control, handleSubmit, isSubmitting, reset, setValue } = useLaunchWorkspaceForm();
 
@@ -80,10 +94,11 @@ function useLaunchWorkspaceDialog() {
     runningWorkspaceName.current = '';
     reset();
     close();
-  }, [close, reset]);
+    setDialogType(null);
+  }, [close, reset, setDialogType]);
 
   const submit = useCallback(
-    async ({ workspaceJobTypeId }: LaunchWorkspaceFormTypes) => {
+    async ({ workspaceJobTypeId, workspaceResourceOptions }: LaunchWorkspaceFormTypes) => {
       if (!workspace) {
         console.error('No workspace to run found.');
         return;
@@ -96,13 +111,17 @@ function useLaunchWorkspaceDialog() {
         try {
           await handleStopWorkspace(runningWorkspace.id);
         } catch (e) {
-          toastError('Failed to stop workspace. Please try again.');
+          toastErrorStopWorkspace();
           console.error(e);
           return;
         }
       }
 
-      await startAndOpenWorkspace({ jobTypeId: workspaceJobTypeId, workspace });
+      await startAndOpenWorkspace({
+        jobTypeId: workspaceJobTypeId,
+        workspace,
+        resourceOptions: workspaceResourceOptions,
+      });
     },
     [
       workspace,
@@ -110,7 +129,7 @@ function useLaunchWorkspaceDialog() {
       startAndOpenWorkspace,
       runningWorkspaceIsCurrentWorkpace,
       handleStopWorkspace,
-      toastError,
+      toastErrorStopWorkspace,
     ],
   );
 
@@ -118,17 +137,18 @@ function useLaunchWorkspaceDialog() {
     (newWorkspace: MergedWorkspace) => {
       setWorkspace(newWorkspace);
       const workspaceJobTypeId = findBestJobType(newWorkspace.jobs);
+      const workspaceResourceOptions = getWorkspaceResourceOptions(newWorkspace);
 
       if (isRunningWorkspace(newWorkspace)) {
-        submit({ workspaceJobTypeId }).catch((e) => {
-          toastError('Failed to launch workspace. Please try again.');
+        submit({ workspaceJobTypeId, workspaceResourceOptions }).catch((e) => {
+          toastErrorLaunchWorkspace();
           console.error(e);
         });
       } else {
         open();
       }
     },
-    [submit, toastError, setWorkspace, open],
+    [submit, toastErrorLaunchWorkspace, setWorkspace, open],
   );
 
   return {
@@ -146,6 +166,8 @@ function useLaunchWorkspaceDialog() {
     isSubmitting,
     handleClose,
     launchOrOpenDialog,
+    dialogType,
+    setDialogType,
   };
 }
 

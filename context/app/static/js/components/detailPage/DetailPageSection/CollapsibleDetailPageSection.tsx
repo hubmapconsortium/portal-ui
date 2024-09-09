@@ -28,7 +28,7 @@ interface IconDisplayProps {
 
 function IconDisplay({ icon: IconOverride, id }: IconDisplayProps) {
   if (Boolean(IconOverride) || sectionIconMap[id]) {
-    return <StyledSvgIcon component={IconOverride ?? sectionIconMap[id]} fontSize="medium" color="primary" />;
+    return <StyledSvgIcon as={IconOverride ?? sectionIconMap[id]} fontSize="medium" color="primary" />;
   }
   const externalImageKey = sectionImageIconMap[id];
   if (externalImageKey) {

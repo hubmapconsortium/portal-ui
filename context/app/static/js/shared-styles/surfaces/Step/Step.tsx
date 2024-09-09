@@ -29,7 +29,7 @@ function StepDescription({ blocks }: { blocks: (string | ReactElement)[] }) {
   return (
     <Stack gap={2} p={2} component={Paper} direction="column">
       {blocks.map((block) => (
-        <Typography key={String(block)}>{block}</Typography>
+        <Typography key={typeof block === 'string' ? block : block.key}>{block}</Typography>
       ))}
     </Stack>
   );
@@ -49,7 +49,7 @@ function Step({ index, title, isRequired = false, children }: PropsWithChildren<
           {`${title} (${text})`}
         </Typography>
       </Paper>
-      <Paper sx={{ p: 2 }}>{children}</Paper>
+      <Paper sx={{ p: 2, mb: 2 }}>{children}</Paper>
     </>
   );
 }

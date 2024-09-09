@@ -31,7 +31,7 @@ function CellTypes({ cellId }: Props) {
       <DetailLayout sections={shouldDisplaySection}>
         <SummaryTitle>
           <Stack direction="row" spacing={1} alignItems="center">
-            <StyledSvgIcon component={ScatterPlot} /> Cell Type
+            <StyledSvgIcon as={ScatterPlot} /> Cell Type
           </Stack>
         </SummaryTitle>
         <CellTypesTitle />

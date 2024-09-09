@@ -8,11 +8,15 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
+import Typography from '@mui/material/Typography';
+import Paper from '@mui/material/Paper';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
+import { Alert } from 'js/shared-styles/alerts/Alert';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
+import InternalLink from 'js/shared-styles/Links/InternalLink';
 
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
@@ -20,6 +24,10 @@ import { CreateTemplateNotebooksTypes } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
+import AdvancedConfigOptions from '../AdvancedConfigOptions';
+import AddDatasetsTable from '../AddDatasetsTable';
+import { SearchAheadHit } from '../AddDatasetsTable/hooks';
+import { StyledSubtitle1 } from '../style';
 
 const text = {
   overview: {
@@ -31,18 +39,35 @@ const text = {
   },
   datasets: {
     title: 'Edit Datasets Selection',
-    description: [
-      'To remove a dataset, select the dataset and press the delete button. If all datasets are removed, an empty workspace will be launched.',
-      'To add more datasets to a workspace, you must navigate to the dataset search page, select datasets of interests and follow steps to launch a workspace from the search page. As a reminder, once you navigate away from this page, all selected datasets will be lost so take note of any HuBMAP IDs of interest, or copy IDs to your clipboard by selecting datasets in the table below and pressing the copy button. You can also save datasets to the “My Lists” feature.',
-    ],
+    description: {
+      searchBar: [
+        <span key="datasets-step">
+          {' '}
+          Add datasets by HuBMAP ID below or navigate to the{' '}
+          <InternalLink href="/search?entity_type[0]=Dataset">dataset search page</InternalLink>, select datasets and
+          follow steps to launch a workspace.
+        </span>,
+      ],
+      all: [
+        'To remove a dataset, select the dataset and press the delete button. If all datasets are removed, an empty workspace will be launched.',
+        'Once you navigate away from this page, all progress will be lost. You can copy IDs to your clipboard by selecting datasets in the table below and pressing the copy button. You can also save datasets to “My Lists”.',
+        <Button variant="outlined" key="datasets-button">
+          <InternalLink href="/search?entity_type[0]=Dataset">
+            <Typography color="primary" variant="button">
+              Select Additional Datasets
+            </Typography>
+          </InternalLink>
+        </Button>,
+      ],
+    },
   },
   configure: {
     title: 'Configure Workspace',
     description: [
       'All workspaces are launched with Python support, with the option to add support for R. Workspaces with added R support may experience longer load times.',
     ],
+    advancedDescription: 'Adjusting these settings may result in longer workspace load times.',
   },
-
   templates: {
     title: 'Select Templates',
   },
@@ -53,17 +78,23 @@ type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormTypes>, 'handleS
 };
 
 interface NewWorkspaceDialogProps {
-  datasetUUIDs?: Set<string>;
   errorMessages?: string[];
   dialogIsOpen: boolean;
   handleClose: () => void;
-  removeDatasets?: (datasetUUIDs: string[]) => void;
+  removeDatasets?: (uuids: string[]) => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
   isSubmitting?: boolean;
+  showDatasetsSearchBar?: boolean;
+  inputValue: string;
+  setInputValue: React.Dispatch<React.SetStateAction<string>>;
+  autocompleteValue: SearchAheadHit | null;
+  addDataset: (e: React.SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => void;
+  workspaceDatasets: string[];
+  allDatasets: string[];
+  searchHits: SearchAheadHit[];
 }
 
 function NewWorkspaceDialog({
-  datasetUUIDs = new Set(),
   errorMessages = [],
   dialogIsOpen,
   handleClose,
@@ -71,9 +102,17 @@ function NewWorkspaceDialog({
   control,
   errors,
   onSubmit,
-  removeDatasets,
   children,
   isSubmitting,
+  showDatasetsSearchBar,
+  inputValue,
+  setInputValue,
+  autocompleteValue,
+  addDataset,
+  removeDatasets,
+  workspaceDatasets,
+  allDatasets,
+  searchHits,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -83,15 +122,22 @@ function NewWorkspaceDialog({
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
   const submit = useCallback(
-    ({ 'workspace-name': workspaceName, templates: templateKeys, workspaceJobTypeId }: CreateWorkspaceFormTypes) => {
+    ({
+      'workspace-name': workspaceName,
+      templates: templateKeys,
+      workspaceJobTypeId,
+      datasets,
+      workspaceResourceOptions,
+    }: CreateWorkspaceFormTypes) => {
       onSubmit({
         workspaceName,
         templateKeys,
-        uuids: [...datasetUUIDs],
+        uuids: datasets,
         workspaceJobTypeId,
+        workspaceResourceOptions,
       });
     },
-    [datasetUUIDs, onSubmit],
+    [onSubmit],
   );
 
   return (
@@ -114,9 +160,29 @@ function NewWorkspaceDialog({
         <Step title={text.datasets.title} index={0}>
           <Stack spacing={1}>
             {children}
-            <StepDescription blocks={text.datasets.description} />
-            {datasetUUIDs.size > 0 && (
-              <WorkspaceDatasetsTable datasetsUUIDs={[...datasetUUIDs]} removeDatasets={removeDatasets} copyDatasets />
+            <StepDescription
+              blocks={[
+                ...(showDatasetsSearchBar ? [...text.datasets.description.searchBar] : []),
+                ...text.datasets.description.all,
+              ]}
+            />
+            {showDatasetsSearchBar && removeDatasets ? (
+              <AddDatasetsTable
+                inputValue={inputValue}
+                setInputValue={setInputValue}
+                autocompleteValue={autocompleteValue}
+                addDataset={addDataset}
+                removeDatasets={removeDatasets}
+                workspaceDatasets={workspaceDatasets}
+                allDatasets={allDatasets}
+                searchHits={searchHits}
+              />
+            ) : (
+              <WorkspaceDatasetsTable
+                datasetsUUIDs={allDatasets}
+                removeDatasets={removeDatasets}
+                emptyAlert={<Alert severity="info">No datasets available.</Alert>}
+              />
             )}
           </Stack>
         </Step>
@@ -135,15 +201,19 @@ function NewWorkspaceDialog({
             <WorkspaceField
               control={control}
               name="workspace-name"
-              label="Name"
+              label="Workspace Name"
               placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
               autoFocus
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 e.stopPropagation();
               }}
             />
-            <StepDescription blocks={text.configure.description} />
-            <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+            <Stack spacing={2} p={2} component={Paper} direction="column">
+              <StyledSubtitle1>Environment Selection</StyledSubtitle1>
+              <Typography>{text.configure.description}</Typography>
+              <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+            </Stack>
+            <AdvancedConfigOptions control={control} description={text.configure.advancedDescription} />
           </Box>
         </Step>
         <TemplateSelectStep

@@ -2,9 +2,7 @@ import { useState, SyntheticEvent, useCallback } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
-import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
-
-import { useWorkspaceDetail } from '../hooks';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -81,23 +79,26 @@ function useSearchAhead({ value, valuePrefix = '', uuidsToExclude = [] }: BuildI
 }
 
 function useDatasetsAutocomplete({
-  workspaceId,
+  workspaceDatasets = [],
   selectedDatasets = [],
   updateDatasetsFormState,
 }: {
-  workspaceId: number;
+  workspaceDatasets?: string[];
   selectedDatasets: string[];
   updateDatasetsFormState: (datasetUUIDS: string[]) => void;
 }) {
   const [inputValue, setInputValue] = useState('');
+  const [, setRefresh] = useState(false);
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
-  const { toastSuccess } = useSnackbarActions();
+  const { toastSuccessAddDataset } = useWorkspaceToasts();
 
   const removeDatasets = useCallback(
     (uuids: string[]) => {
-      const selectedDatasetsSet = new Set(selectedDatasets);
-      uuids.forEach((uuid) => selectedDatasetsSet.delete(uuid));
-      updateDatasetsFormState([...selectedDatasetsSet]);
+      const updatedDatasets = selectedDatasets.filter((uuid) => !uuids.includes(uuid));
+      updateDatasetsFormState(updatedDatasets);
+
+      // Trigger a re-render to update the table results
+      setRefresh((prev) => !prev);
     },
     [selectedDatasets, updateDatasetsFormState],
   );
@@ -114,13 +115,12 @@ function useDatasetsAutocomplete({
       if (uuid) {
         updateDatasetsFormState([...selectedDatasets, uuid]);
         resetAutocompleteState();
-        toastSuccess(`${newValue._source.hubmap_id} successfully added.`);
+        toastSuccessAddDataset(newValue._source.hubmap_id);
       }
     },
-    [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccess],
+    [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccessAddDataset],
   );
 
-  const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];
   const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });
 

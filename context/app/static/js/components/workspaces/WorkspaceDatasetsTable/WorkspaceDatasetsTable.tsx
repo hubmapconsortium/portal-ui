@@ -27,22 +27,22 @@ interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
   addDatasets?: MergedWorkspace;
-  copyDatasets?: boolean;
   label?: ReactNode;
   disabledIDs?: Set<string>;
-  additionalAlerts?: ReactNode;
+  emptyAlert?: ReactNode;
   additionalButtons?: ReactNode;
+  hideTableIfEmpty?: boolean;
 }
 
 function WorkspaceDatasetsTable({
   datasetsUUIDs,
   removeDatasets,
   addDatasets,
-  copyDatasets,
   label,
   disabledIDs,
-  additionalAlerts,
+  emptyAlert,
   additionalButtons,
+  hideTableIfEmpty,
 }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
@@ -66,45 +66,44 @@ function WorkspaceDatasetsTable({
 
   const datasetsPresent = datasetsUUIDs.length > 0;
   const hasMaxDatasets = addDatasets && isWorkspaceAtDatasetLimit(addDatasets);
-  const buttonOptionsPresent = copyDatasets ?? addDatasets ?? removeDatasets ?? additionalButtons;
+  const hideTable = hideTableIfEmpty && !datasetsPresent;
 
   return (
     <Box>
-      {buttonOptionsPresent && (
-        <SpacedSectionButtonRow
-          leftText={label}
-          buttons={
-            <Stack direction="row" gap={1}>
-              {copyDatasets && datasetsPresent && <Copy />}
-              {addDatasets && (
-                <WorkspacesUpdateButton
-                  workspace={addDatasets}
-                  dialogType="ADD_DATASETS"
-                  tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.add}
-                  disabled={hasMaxDatasets}
-                >
-                  <AddIcon />
-                </WorkspacesUpdateButton>
-              )}
-              {removeDatasets && datasetsPresent && (
-                <Delete
-                  onClick={() => removeDatasets([...selectedRows])}
-                  tooltip={tooltips.delete}
-                  disabled={selectedRows.size === 0}
-                />
-              )}
-              {additionalButtons}
-            </Stack>
-          }
-        />
-      )}
-      {datasetsPresent ? (
+      <SpacedSectionButtonRow
+        leftText={label}
+        buttons={
+          <Stack direction="row" gap={1}>
+            {datasetsPresent && <Copy />}
+            {addDatasets && (
+              <WorkspacesUpdateButton
+                workspace={addDatasets}
+                dialogType="ADD_DATASETS"
+                tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.add}
+                disabled={hasMaxDatasets}
+              >
+                <AddIcon />
+              </WorkspacesUpdateButton>
+            )}
+            {removeDatasets && datasetsPresent && (
+              <Delete
+                onClick={() => removeDatasets([...selectedRows])}
+                tooltip={tooltips.delete}
+                disabled={selectedRows.size === 0}
+              />
+            )}
+            {additionalButtons}
+          </Stack>
+        }
+      />
+      {hideTable ? (
+        emptyAlert
+      ) : (
         <EntitiesTables<DatasetDocument>
           entities={[{ query, columns, entityType: 'Dataset' }]}
           disabledIDs={disabledIDs}
+          emptyAlert={emptyAlert}
         />
-      ) : (
-        additionalAlerts
       )}
     </Box>
   );

@@ -48,6 +48,7 @@ declare module '@mui/material/styles' {
     fileBrowserHeader: number;
   }
   export type ZIndexOptions = Partial<ZIndex>;
+
   export interface CommonColors {
     link: string;
     halfShadow: string;
@@ -96,6 +97,10 @@ declare module '@mui/material/SvgIcon' {
   // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
   export interface SvgIconPropsSizeOverrides {
     [key: `${number}rem`]: true;
+  }
+
+  export interface SvgIconPropsColorOverrides {
+    white: true;
   }
 }
 

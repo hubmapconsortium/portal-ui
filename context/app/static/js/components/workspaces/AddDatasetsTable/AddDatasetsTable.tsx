@@ -75,7 +75,6 @@ function AddDatasetsTable({
         datasetsUUIDs={allDatasets}
         disabledIDs={new Set(workspaceDatasets)}
         removeDatasets={removeDatasets}
-        copyDatasets
       />
     </Stack>
   );

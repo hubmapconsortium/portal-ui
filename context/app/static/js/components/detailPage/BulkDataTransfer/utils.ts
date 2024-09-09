@@ -32,4 +32,9 @@ function getDUAText(mapped_data_access_level: string) {
   }
 }
 
-export { getDUAText };
+// Removes the HuBMAP ID from the label (present if there is more than one dataset with the same pipeline and status)
+function sanitizeLabel(label: string) {
+  return label.split(' [')[0];
+}
+
+export { getDUAText, sanitizeLabel };

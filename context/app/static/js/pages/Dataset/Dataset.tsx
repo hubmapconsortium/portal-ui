@@ -2,7 +2,6 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import { InternalLink } from 'js/shared-styles/Links';
-import DataProducts from 'js/components/detailPage/files/DataProducts';
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
@@ -82,7 +81,6 @@ interface EntityDetailProps<T extends Entity> {
 function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   const {
     protocol_url,
-    files,
     uuid,
     mapped_data_types,
     origin_samples,
@@ -138,7 +136,6 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
             bottomFold={
               <>
                 <MultiAssayRelationship assay_modality={assay_modality} />
-                <DataProducts files={files} />
                 {shouldDisplayRelationships && (
                   <Box height={400} width="100%" component={Paper} p={2}>
                     <DatasetRelationships uuid={uuid} processing={processing} />

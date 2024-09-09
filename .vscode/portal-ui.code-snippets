@@ -18,7 +18,6 @@
   "Portal UI Test Imports": {
     "prefix": "puti",
     "body": [
-      "$BLOCK_COMMENT_START eslint-disable import/no-unresolved $BLOCK_COMMENT_END",
       "import React from 'react';",
       "import { render, screen } from 'test-utils/functions';",
       "",
@@ -27,9 +26,14 @@
     ],
     "description": "Basic imports needed for a javascript test"
   },
+  "Import React": {
+    "prefix": "imr",
+    "body": ["import React from 'react';"],
+    "description": "Import React"
+  },
   "Import Styled Components": {
     "prefix": "isc",
-    "body": ["import styled from 'styled-components';"],
+    "body": ["import { styled } from '@mui/material/styles';"],
     "description": "Import styled-components"
   },
   "Create Component Story Skeleton": {

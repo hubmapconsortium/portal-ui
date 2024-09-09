@@ -26,7 +26,7 @@ function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponen
 }: { icon: typeof SvgIcon | React.ComponentType<SvgIconProps> } & TooltipButtonProps<E>) {
   return (
     <TooltipIconButton {...rest}>
-      <Icon color="primary" fontSize="1.5rem" />
+      <Icon color={rest.disabled ? 'disabled' : 'primary'} fontSize="1.5rem" />
     </TooltipIconButton>
   );
 }
@@ -85,8 +85,8 @@ function EditSavedEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { e
   );
 }
 
-function WorkspaceSVGIcon(props: SvgIconProps) {
-  return <SvgIcon component={WorkspacesIcon} color="primary" {...props} />;
+function WorkspaceSVGIcon({ color = 'primary', ...props }: SvgIconProps) {
+  return <SvgIcon component={WorkspacesIcon} color={color} {...props} />;
 }
 
 function CreateWorkspaceButton({
@@ -94,7 +94,10 @@ function CreateWorkspaceButton({
   hubmap_id,
   mapped_data_access_level,
 }: Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'>) {
-  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ defaultName: hubmap_id });
+  const { setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
+    defaultName: hubmap_id,
+    initialSelectedDatasets: [uuid],
+  });
 
   const disabled = mapped_data_access_level === 'Protected';
 
@@ -105,10 +108,10 @@ function CreateWorkspaceButton({
           setDialogIsOpen(true);
         }}
         icon={WorkspaceSVGIcon}
-        tooltip={disabled ? 'Protected datasets are not available in Workspaces.' : 'Launch a new workspace.'}
+        tooltip={disabled ? 'Protected datasets are not available in workspaces.' : 'Launch a new workspace.'}
         disabled={disabled}
       />
-      <NewWorkspaceDialog datasetUUIDs={new Set([uuid])} {...rest} />
+      <NewWorkspaceDialog {...rest} />
     </>
   );
 }
@@ -147,6 +150,7 @@ function ViewSelectChip({
       sx={(theme) => ({
         borderRadius: theme.spacing(1),
         ...(isSelectedView && { boxShadow: theme.shadows[1] }),
+        whiteSpace: 'nowrap',
       })}
     >
       {view} View

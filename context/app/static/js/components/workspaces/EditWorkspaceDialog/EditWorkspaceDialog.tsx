@@ -6,10 +6,10 @@ import { UseFormReturn, FormState, FieldValues } from 'react-hook-form';
 
 import DialogModal from 'js/shared-styles/DialogModal';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import EditWorkspaceTemplatesDialog from '../EditWorkspaceTemplatesDialog';
-import EditWorkspaceNameDialog from '../EditWorkspaceNameDialog';
-import AddDatasetsDialog from '../AddDatasetsDialog';
+import EditWorkspaceTemplatesDialog from 'js/components/workspaces/EditWorkspaceTemplatesDialog';
+import EditWorkspaceNameDialog from 'js/components/workspaces/EditWorkspaceNameDialog';
+import AddDatasetsDialog from 'js/components/workspaces/AddDatasetsDialog';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 const formId = 'edit-workspace-form';
 
@@ -35,7 +35,7 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
   disabled,
 }: EditWorkspaceDialogTypes<T> & FormProps<T>) {
   const { isOpen, close } = useEditWorkspaceStore();
-  const { toastSuccess, toastError } = useSnackbarActions();
+  const { toastSuccessUpdateWorkspace, toastErrorUpdateWorkspace } = useWorkspaceToasts();
 
   const handleClose = useCallback(() => {
     reset();
@@ -49,15 +49,15 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
     (fieldValues: T) => {
       onSubmit(fieldValues)
         .then(() => {
-          toastSuccess('Workspace successfully updated.');
+          toastSuccessUpdateWorkspace();
           handleClose();
         })
         .catch((error) => {
           console.error(error);
-          toastError('Failed to update workspace.');
+          toastErrorUpdateWorkspace();
         });
     },
-    [onSubmit, handleClose, toastError, toastSuccess],
+    [onSubmit, handleClose, toastSuccessUpdateWorkspace, toastErrorUpdateWorkspace],
   );
 
   return (

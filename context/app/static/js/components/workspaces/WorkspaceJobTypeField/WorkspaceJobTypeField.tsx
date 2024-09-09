@@ -26,7 +26,7 @@ function WorkspaceJobTypeField<FormType extends FieldValues>({ control, name }: 
     <Box>
       <FormLabel
         id="workspace-environment"
-        sx={(theme) => ({ ...theme.typography.subtitle2, color: theme.palette.text.primary })}
+        sx={(theme) => ({ ...theme.typography.button, color: theme.palette.text.primary })}
       >
         Select Environment
       </FormLabel>

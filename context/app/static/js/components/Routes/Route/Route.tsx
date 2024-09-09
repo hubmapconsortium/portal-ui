@@ -29,15 +29,15 @@ function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{
   const shouldShowBoundaries = !disableWidthConstraint && isDesktop;
 
   return (
-    <Suspense fallback={<RouteLoader />}>
-      <Stack direction="row" width="100%">
+    <Stack direction="row" width="100%" flexGrow={1}>
+      <Suspense fallback={<RouteLoader />}>
         <RouteBoundary id={leftRouteBoundaryID} showBoundary={shouldShowBoundaries} />
         <StyledContainer {...constrainWidthProps} component="div">
           {children}
         </StyledContainer>
         <RouteBoundary id={rightRouteBoundaryID} showBoundary={shouldShowBoundaries} />
-      </Stack>
-    </Suspense>
+      </Suspense>
+    </Stack>
   );
 }
 

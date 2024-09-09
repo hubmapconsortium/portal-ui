@@ -8,6 +8,7 @@ import NoAccess from './NoAccess';
 import { usePanelSet } from './usePanelSet';
 import { useStudyURLsQuery } from './hooks';
 import GlobusLink from './GlobusLink';
+import { sanitizeLabel } from './utils';
 
 interface BulkDataTransferPanelProps {
   uuid: string;
@@ -26,11 +27,7 @@ function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
 
   const { showDbGaP, showGlobus, showSRA, panels } = panelsToUse;
 
-  // This is a logical OR and should remain as such.
-  // If `showDbGaP` is false, we still want to check if `showGlobus` or `showSRA` are true.
-  // If we use `??` instead of `||`, the expression would only check if `showDbGaP` is false.
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  const hasLinks = Boolean(showDbGaP || showGlobus || showSRA);
+  const hasLinks = Boolean(showDbGaP ?? showGlobus ?? showSRA);
 
   return (
     <Stack gap={1}>
@@ -39,7 +36,7 @@ function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
       ))}
       {hasLinks && (
         <Paper>
-          {showGlobus && <GlobusLink uuid={uuid} hubmap_id={hubmap_id} label={label} />}
+          {showGlobus && <GlobusLink uuid={uuid} hubmap_id={hubmap_id} label={sanitizeLabel(label)} />}
           {showDbGaP && <Link href={dbgap_study_url} title="dbGaP" />}
           {showSRA && <Link href={dbgap_sra_experiment_url} title="SRA Experiment" />}
         </Paper>

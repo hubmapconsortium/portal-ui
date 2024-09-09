@@ -216,7 +216,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
           spacing={2}
           divider={<Divider orientation="vertical" flexItem />}
         >
-          {title && <HuBMAPIDItem title={title} entityTypeIcon={<StyledSvgIcon component={entityIconMap[type]} />} />}
+          {title && <HuBMAPIDItem title={title} entityTypeIcon={<StyledSvgIcon as={entityIconMap[type]} />} />}
           <EntityHeaderItems type={type} data={{ assayMetadata, entity }} />
         </AnimatedStack>
       )}
