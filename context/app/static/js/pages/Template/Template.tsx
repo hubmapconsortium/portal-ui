@@ -16,6 +16,8 @@ import { InternalLink } from 'js/shared-styles/Links';
 import IconPanel from 'js/shared-styles/panels/IconPanel';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { StyledAccordionSummary } from 'js/pages/Template/style';
+import { NewWorkspaceDialogFromSample } from 'js/components/workspaces/NewWorkspaceDialog';
+import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 
 const examples = [
   {
@@ -67,33 +69,43 @@ interface ExampleAccordionProps {
 }
 
 function ExampleAccordion({ example: { title, description, data_type, datasets } }: ExampleAccordionProps) {
+  const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({ initialSelectedDatasets: datasets });
+
   return (
-    <Accordion>
-      <StyledAccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className="accordion-icon" />}>
-        <Typography variant="subtitle1" color="inherit" component="h4">
-          {title}
-        </Typography>
-      </StyledAccordionSummary>
-      <AccordionDetails>
-        <Stack spacing={2}>
-          <Button variant="contained" sx={{ alignSelf: 'flex-end' }} disabled={!isAuthenticated}>
-            Try Sample Workspace
-          </Button>
-          <Stack component={SummaryPaper} spacing={1}>
-            <LabelledSectionText label="Description">{description}</LabelledSectionText>
-            <LabelledSectionText
-              label="Dataset Types"
-              iconTooltipText="Dataset types that are used in this sample workspace."
+    <>
+      <Accordion>
+        <StyledAccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className="accordion-icon" />}>
+          <Typography variant="subtitle1" color="inherit" component="h4">
+            {title}
+          </Typography>
+        </StyledAccordionSummary>
+        <AccordionDetails>
+          <Stack spacing={2}>
+            <Button
+              variant="contained"
+              sx={{ alignSelf: 'flex-end' }}
+              disabled={!isAuthenticated}
+              onClick={() => setDialogIsOpen(true)}
             >
-              <Stack spacing={1} direction="row">
-                {data_type.map((type) => type)}
-              </Stack>
-            </LabelledSectionText>
+              Try Sample Workspace
+            </Button>
+            <Stack component={SummaryPaper} spacing={1}>
+              <LabelledSectionText label="Description">{description}</LabelledSectionText>
+              <LabelledSectionText
+                label="Dataset Types"
+                iconTooltipText="Dataset types that are used in this sample workspace."
+              >
+                <Stack spacing={1} direction="row">
+                  {data_type.map((type) => type)}
+                </Stack>
+              </LabelledSectionText>
+            </Stack>
+            <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} />
           </Stack>
-          <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} />
-        </Stack>
-      </AccordionDetails>
-    </Accordion>
+        </AccordionDetails>
+      </Accordion>
+      <NewWorkspaceDialogFromSample sample={{ title, description, data_type, datasets }} {...rest} />
+    </>
   );
 }
 

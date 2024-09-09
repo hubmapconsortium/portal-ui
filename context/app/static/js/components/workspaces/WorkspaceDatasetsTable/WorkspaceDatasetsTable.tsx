@@ -69,35 +69,38 @@ function WorkspaceDatasetsTable({
   const datasetsPresent = datasetsUUIDs.length > 0;
   const hasMaxDatasets = addDatasets && isWorkspaceAtDatasetLimit(addDatasets);
   const hideTable = hideTableIfEmpty && !datasetsPresent;
+  const hideButtonRow = !addDatasets && !removeDatasets && !copyDatasets && !additionalButtons;
 
   return (
     <Box>
-      <SpacedSectionButtonRow
-        leftText={label}
-        buttons={
-          <Stack direction="row" gap={1}>
-            {copyDatasets && datasetsPresent && <Copy />}
-            {addDatasets && (
-              <WorkspacesUpdateButton
-                workspace={addDatasets}
-                dialogType="ADD_DATASETS"
-                tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.add}
-                disabled={hasMaxDatasets}
-              >
-                <AddIcon />
-              </WorkspacesUpdateButton>
-            )}
-            {removeDatasets && datasetsPresent && (
-              <Delete
-                onClick={() => removeDatasets([...selectedRows])}
-                tooltip={tooltips.delete}
-                disabled={selectedRows.size === 0}
-              />
-            )}
-            {additionalButtons}
-          </Stack>
-        }
-      />
+      {!hideButtonRow && (
+        <SpacedSectionButtonRow
+          leftText={label}
+          buttons={
+            <Stack direction="row" gap={1}>
+              {copyDatasets && datasetsPresent && <Copy />}
+              {addDatasets && (
+                <WorkspacesUpdateButton
+                  workspace={addDatasets}
+                  dialogType="ADD_DATASETS"
+                  tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.add}
+                  disabled={hasMaxDatasets}
+                >
+                  <AddIcon />
+                </WorkspacesUpdateButton>
+              )}
+              {removeDatasets && datasetsPresent && (
+                <Delete
+                  onClick={() => removeDatasets([...selectedRows])}
+                  tooltip={tooltips.delete}
+                  disabled={selectedRows.size === 0}
+                />
+              )}
+              {additionalButtons}
+            </Stack>
+          }
+        />
+      )}
       {hideTable ? (
         emptyAlert
       ) : (
