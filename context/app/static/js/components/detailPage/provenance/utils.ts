@@ -60,14 +60,15 @@ export function nonDestructiveMerge<T extends Record<string, unknown>, U extends
         return;
       }
 
-      // More in-depth check to see if the objects are the same
-      // Allows us to ignore certain timestamp fields
-      const difference = findDifference(merged[key] as object, value as object).filter(
-        (diffField) => !ignoredFields.includes(diffField),
-      );
+      if (typeof merged[key] === 'object' && typeof value === 'object') {
+        // Perform a more in-depth check to see if objects are the same when excluding certain fields
+        const difference = findDifference(merged[key] as object, value!).filter(
+          (diffField) => !ignoredFields.includes(diffField),
+        );
 
-      if (difference.length === 0) {
-        return;
+        if (difference.length === 0) {
+          return;
+        }
       }
 
       merged[`${key}-${keyMod}`] = value;
