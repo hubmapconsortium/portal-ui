@@ -12,6 +12,18 @@ import { ProvNode } from '../types';
 const uuidSelector = (state: ProvenanceStore) => state.uuid;
 const setHasRenderedSelector = (state: ProvenanceStore) => state.setHasRendered;
 
+// Hide the HuBMAP ID from the display title for non-entity nodes returned by provenance
+// e.g. "Create Dataset" instead of "Create Dataset - HBM789.1234.123"
+function getDisplayTitle(node: ProvNode, title?: string) {
+  if (title) {
+    return title;
+  }
+  if (node.nodeType === 'step') {
+    return (node.title ?? node.name).split(' - ')[0];
+  }
+  return node.title ?? node.name;
+}
+
 interface NodeElementProps {
   node: ProvNode;
   title?: string;
@@ -21,7 +33,7 @@ interface NodeElementProps {
 function NodeElement({ node, title, columnWidth }: NodeElementProps) {
   const style = ['input', 'output'].includes(node.nodeType) ? { width: columnWidth ?? 100 } : undefined;
 
-  const displayTitle = title ?? node.title ?? node.name;
+  const displayTitle = getDisplayTitle(node, title);
 
   const uuid = useProvenanceStore(uuidSelector);
   const setHasRendered = useProvenanceStore(setHasRenderedSelector);
