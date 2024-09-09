@@ -27,6 +27,7 @@ interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
   addDatasets?: MergedWorkspace;
+  copyDatasets?: boolean;
   label?: ReactNode;
   disabledIDs?: Set<string>;
   emptyAlert?: ReactNode;
@@ -38,6 +39,7 @@ function WorkspaceDatasetsTable({
   datasetsUUIDs,
   removeDatasets,
   addDatasets,
+  copyDatasets,
   label,
   disabledIDs,
   emptyAlert,
@@ -74,7 +76,7 @@ function WorkspaceDatasetsTable({
         leftText={label}
         buttons={
           <Stack direction="row" gap={1}>
-            {datasetsPresent && <Copy />}
+            {copyDatasets && datasetsPresent && <Copy />}
             {addDatasets && (
               <WorkspacesUpdateButton
                 workspace={addDatasets}

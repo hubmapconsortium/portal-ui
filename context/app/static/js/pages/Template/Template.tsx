@@ -76,8 +76,8 @@ function ExampleAccordion({ example: { title, description, data_type, datasets }
       </StyledAccordionSummary>
       <AccordionDetails>
         <Stack spacing={2}>
-          <Button variant="contained" sx={{ alignSelf: 'flex-end' }}>
-            Clone Workspace
+          <Button variant="contained" sx={{ alignSelf: 'flex-end' }} disabled={!isAuthenticated}>
+            Try Sample Workspace
           </Button>
           <Stack component={SummaryPaper} spacing={1}>
             <LabelledSectionText label="Description">{description}</LabelledSectionText>

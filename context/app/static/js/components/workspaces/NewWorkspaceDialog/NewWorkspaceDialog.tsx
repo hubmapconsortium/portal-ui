@@ -182,6 +182,7 @@ function NewWorkspaceDialog({
                 datasetsUUIDs={allDatasets}
                 removeDatasets={removeDatasets}
                 emptyAlert={<Alert severity="info">No datasets available.</Alert>}
+                copyDatasets
               />
             )}
           </Stack>

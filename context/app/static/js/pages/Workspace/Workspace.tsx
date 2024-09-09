@@ -120,6 +120,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         addDatasets={workspace}
         label={<SectionHeader>Datasets</SectionHeader>}
         hideTableIfEmpty
+        copyDatasets
         emptyAlert={
           <Alert
             severity="info"
