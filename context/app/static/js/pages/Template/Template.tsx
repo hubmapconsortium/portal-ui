@@ -2,7 +2,6 @@ import React from 'react';
 import Stack from '@mui/material/Stack';
 import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
@@ -16,6 +15,7 @@ import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { InternalLink } from 'js/shared-styles/Links';
 import IconPanel from 'js/shared-styles/panels/IconPanel';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
+import { StyledAccordionSummary } from 'js/pages/Template/style';
 
 const examples = [
   {
@@ -69,19 +69,15 @@ interface ExampleAccordionProps {
 function ExampleAccordion({ example: { title, description, data_type, datasets } }: ExampleAccordionProps) {
   return (
     <Accordion>
-      <AccordionSummary
-        expandIcon={<KeyboardArrowDownRoundedIcon sx={(theme) => ({ color: theme.palette.white.main })} />}
-        sx={(theme) => ({ backgroundColor: theme.palette.primary.main, color: theme.palette.white.main })}
-      >
+      <StyledAccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className="accordion-icon" />}>
         <Typography variant="subtitle1" color="inherit" component="h4">
           {title}
         </Typography>
-      </AccordionSummary>
+      </StyledAccordionSummary>
       <AccordionDetails>
         <Stack spacing={2}>
           <Button variant="contained" sx={{ alignSelf: 'flex-end' }}>
-            {' '}
-            Clone Workspace{' '}
+            Clone Workspace
           </Button>
           <Stack component={SummaryPaper} spacing={1}>
             <LabelledSectionText label="Description">{description}</LabelledSectionText>
