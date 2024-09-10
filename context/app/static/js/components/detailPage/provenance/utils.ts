@@ -9,12 +9,12 @@ export function createProvDataURL(uuid: string, entityEndpoint: string) {
 }
 
 function findDifference<T extends Record<string, unknown>, U extends Record<string, unknown>>(obj1: T, obj2: U) {
-  const diffKeys = Object.keys({ ...obj1, ...obj2 }).reduce((acc, key) => {
+  const diffKeys = Object.keys({ ...obj1, ...obj2 }).reduce<string[]>((acc, key) => {
     if (key in obj1 && key in obj2 && obj1[key] === obj2[key]) {
       return acc;
     }
     return [...acc, key];
-  }, [] as string[]);
+  }, []);
   return diffKeys;
 }
 
