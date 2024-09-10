@@ -1,34 +1,26 @@
 import React, { PropsWithChildren } from 'react';
+import { animated } from '@react-spring/web';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { formatDate } from 'date-fns/format';
 import Divider from '@mui/material/Divider';
-import { useIsDesktop } from 'js/hooks/media-queries';
-import SchemaRounded from '@mui/icons-material/SchemaRounded';
-import { WorkspacesIcon } from 'js/shared-styles/icons';
-import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
-import { useAppContext } from 'js/components/Contexts';
-import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
-import { animated } from '@react-spring/web';
-import { useEventCallback } from '@mui/material/utils';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-import AddRounded from '@mui/icons-material/AddRounded';
-import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
-import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import { useOpenDialog } from 'js/components/workspaces/WorkspacesDropdownMenu/WorkspacesDropdownMenu';
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider/SelectableTableProvider';
-import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
-import { LineClamp } from 'js/shared-styles/text';
 import Fade from '@mui/material/Fade';
+import SchemaRounded from '@mui/icons-material/SchemaRounded';
+import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
+
+import { useIsDesktop } from 'js/hooks/media-queries';
+import { WorkspacesIcon } from 'js/shared-styles/icons';
+import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
+import { LineClamp } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+
+import { formatDate } from 'date-fns/format';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
 import { getDateLabelAndValue } from '../../utils';
 import { HelperPanelButton } from './styles';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
+import ProcessedDataWorkspaceMenu from '../ProcessedDataWorkspaceMenu';
 
 function useCurrentDataset() {
   return useProcessedDataStore((state) => state.currentDataset);
@@ -100,108 +92,25 @@ function HelperPanelBody() {
   );
 }
 
-function WorkspaceButton() {
-  const currentDataset = useCurrentDataset();
-  const { isWorkspacesUser } = useAppContext();
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const track = useTrackEntityPageEvent();
-
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    track({
-      action: 'Open Workspace Menu',
-      label: currentDataset?.hubmap_id,
-    });
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
-
-  const {
-    control,
-    errors,
-    removeDatasets,
-    setDialogIsOpen: setOpenCreateWorkspace,
-    dialogIsOpen: createWorkspaceIsOpen,
-    ...rest
-  } = useCreateWorkspaceForm({
-    defaultName: currentDataset?.hubmap_id,
-    initialSelectedDatasets: currentDataset ? [currentDataset.uuid] : [],
-  });
-
-  const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH');
-
-  const trackCreateWorkspace = useEventCallback(() => {
-    track({
-      action: 'Start Creating Workspace',
-      label: currentDataset?.hubmap_id,
-    });
-    setOpenCreateWorkspace(true);
-    handleClose();
-  });
-
-  const trackAddToWorkspace = useEventCallback(() => {
-    track({
-      action: 'Start Adding Dataset to Existing Workspace',
-      label: currentDataset?.hubmap_id,
-    });
-    openEditWorkspaceDialog();
-    handleClose();
-  });
-
-  if (!isWorkspacesUser || currentDataset?.status !== 'Published') {
-    return null;
-  }
-  // The selectable table provider is used here since a lot of the workspace logic relies on the selected rows
-  return (
-    <SelectableTableProvider tableLabel="Current Dataset" selectedRows={new Set([currentDataset.uuid])}>
-      <HelperPanelButton
-        startIcon={<WorkspacesIcon color="primary" />}
-        onClick={handleClick}
-        aria-controls={open ? 'basic-menu' : undefined}
-        aria-haspopup="true"
-        aria-expanded={open ? 'true' : undefined}
-      >
-        Workspace
-      </HelperPanelButton>
-      <Menu
-        open={open}
-        onClose={handleClose}
-        anchorEl={anchorEl}
-        anchorOrigin={{
-          vertical: 'bottom',
-          horizontal: 'right',
-        }}
-      >
-        <MenuItem onClick={trackCreateWorkspace}>
-          <ListItemIcon>
-            <WorkspacesIcon color="primary" fontSize="1.5rem" />
-          </ListItemIcon>
-          Launch New Workspace
-        </MenuItem>
-        <MenuItem onClick={trackAddToWorkspace}>
-          <ListItemIcon>
-            <AddRounded />
-          </ListItemIcon>
-          Add to Workspace
-        </MenuItem>
-      </Menu>
-      <NewWorkspaceDialog dialogIsOpen={createWorkspaceIsOpen} control={control} errors={errors} {...rest} />
-      <AddDatasetsFromSearchDialog />
-    </SelectableTableProvider>
-  );
-}
-
 function HelperPanelActions() {
   const currentDataset = useCurrentDataset();
   const track = useTrackEntityPageEvent();
   if (!currentDataset) {
     return null;
   }
+
+  const { hubmap_id, uuid, status } = currentDataset;
+
   return (
     <>
-      <WorkspaceButton />
+      <ProcessedDataWorkspaceMenu
+        button={
+          <SecondaryBackgroundTooltip title="Launch new workspace or add dataset to an existing workspace.">
+            <HelperPanelButton startIcon={<WorkspacesIcon color="primary" />}>Workspace</HelperPanelButton>
+          </SecondaryBackgroundTooltip>
+        }
+        datasetDetails={{ hubmap_id, uuid, status }}
+      />
       <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">
         <HelperPanelButton
           startIcon={<CloudDownloadRounded />}

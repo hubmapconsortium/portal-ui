@@ -13,12 +13,11 @@ import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialo
 import useSavedEntitiesStore, { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import { Entity } from 'js/components/types';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
-import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
-import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
+import { useFlaskDataContext } from 'js/components/Contexts';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
+import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -87,33 +86,6 @@ function EditSavedEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { e
 
 function WorkspaceSVGIcon({ color = 'primary', ...props }: SvgIconProps) {
   return <SvgIcon component={WorkspacesIcon} color={color} {...props} />;
-}
-
-function CreateWorkspaceButton({
-  uuid,
-  hubmap_id,
-  mapped_data_access_level,
-}: Pick<Entity, 'uuid' | 'hubmap_id' | 'mapped_data_access_level'>) {
-  const { setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
-    defaultName: hubmap_id,
-    initialSelectedDatasets: [uuid],
-  });
-
-  const disabled = mapped_data_access_level === 'Protected';
-
-  return (
-    <>
-      <ActionButton
-        onClick={() => {
-          setDialogIsOpen(true);
-        }}
-        icon={WorkspaceSVGIcon}
-        tooltip={disabled ? 'Protected datasets are not available in workspaces.' : 'Launch a new workspace.'}
-        disabled={disabled}
-      />
-      <NewWorkspaceDialog {...rest} />
-    </>
-  );
 }
 
 const useSavedEntitiesSelector = (state: SavedEntitiesStore) => state.savedEntities;
@@ -210,27 +182,36 @@ function EntityHeaderActionButtons({
   entity_type?: AllEntityTypes;
 }) {
   const isLargeDesktop = useIsLargeDesktop();
-  const { isWorkspacesUser } = useAppContext();
 
   const {
-    entity: { mapped_data_access_level, hubmap_id, uuid },
+    entity: { mapped_data_access_level, uuid, hubmap_id, status },
   } = useFlaskDataContext();
 
   if (!(entity_type && uuid)) {
     return null;
   }
 
-  const isDataset = entity_type === 'Dataset';
-  const showWorkspaceButton = mapped_data_access_level && hubmap_id && isDataset && isWorkspacesUser;
+  const disabled = mapped_data_access_level === 'Protected';
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
       <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
       <JSONButton entity_type={entity_type} uuid={uuid} />
-      {showWorkspaceButton && (
-        <CreateWorkspaceButton uuid={uuid} hubmap_id={hubmap_id} mapped_data_access_level={mapped_data_access_level} />
-      )}
+      <ProcessedDataWorkspaceMenu
+        button={
+          <ActionButton
+            icon={WorkspaceSVGIcon}
+            tooltip={
+              disabled
+                ? 'Protected datasets are not available in workspaces.'
+                : 'Launch new workspace or add dataset to an existing workspace.'
+            }
+            disabled={disabled}
+          />
+        }
+        datasetDetails={{ hubmap_id, uuid, status }}
+      />
     </Stack>
   );
 }
