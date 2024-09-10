@@ -22,7 +22,7 @@ import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
 import { useJobTypes } from 'js/components/workspaces/api';
-import { CreateTemplateNotebooksTypes } from 'js/components/workspaces/types';
+import { CreateTemplateNotebooksTypes, TemplateExample } from 'js/components/workspaces/types';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import AdvancedConfigOptions from 'js/components/workspaces/AdvancedConfigOptions';
 import { StyledSubtitle1 } from 'js/components/workspaces/style';
@@ -55,13 +55,8 @@ type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormTypes>, 'handleS
   errors: FieldErrors<CreateWorkspaceFormTypes>;
 };
 
-interface NewWorkspaceDialogFromSampleProps {
-  sample: {
-    title: string;
-    description: string;
-    assay_display_name: string[];
-    datasets: string[];
-  };
+interface NewWorkspaceDialogFromExampleProps {
+  example: TemplateExample;
   dialogIsOpen: boolean;
   handleClose: () => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
@@ -69,8 +64,8 @@ interface NewWorkspaceDialogFromSampleProps {
   isSubmitting?: boolean;
 }
 
-function NewWorkspaceDialogFromSample({
-  sample,
+function NewWorkspaceDialogFromExample({
+  example,
   dialogIsOpen,
   handleClose,
   handleSubmit,
@@ -79,9 +74,10 @@ function NewWorkspaceDialogFromSample({
   onSubmit,
   allDatasets,
   isSubmitting,
-}: PropsWithChildren<NewWorkspaceDialogFromSampleProps & ReactHookFormProps>) {
+}: PropsWithChildren<NewWorkspaceDialogFromExampleProps & ReactHookFormProps>) {
   const { isOpen: isLaunchWorkspaceDialogOpen } = useLaunchWorkspaceStore();
   const { data } = useJobTypes();
+  const jobType = example.job_type ?? DEFAULT_JOB_TYPE;
 
   const submit = useCallback(
     ({
@@ -117,8 +113,8 @@ function NewWorkspaceDialogFromSample({
         <Box sx={{ px: 3 }}>
           <Stack spacing={1} p={2} component={Paper}>
             <Typography>{text.overview.description}</Typography>
-            <Typography variant="subtitle2">{sample.title}</Typography>
-            <Typography>{sample.description}</Typography>
+            <Typography variant="subtitle2">{example.title}</Typography>
+            <Typography>{example.description}</Typography>
           </Stack>
         </Box>
       </Box>
@@ -160,9 +156,7 @@ function NewWorkspaceDialogFromSample({
                 <Stack spacing={1}>
                   <Typography>{text.configure.selected.description}</Typography>
                   <Typography variant="subtitle2">Environment</Typography>
-                  <Typography>
-                    {data ? Object.values(data).find(({ id }) => id === DEFAULT_JOB_TYPE)?.name : DEFAULT_JOB_TYPE}
-                  </Typography>
+                  <Typography>{data ? Object.values(data).find(({ id }) => id === jobType)?.name : jobType}</Typography>
                 </Stack>
               </AccordionDetails>
             </Accordion>
@@ -185,4 +179,4 @@ function NewWorkspaceDialogFromSample({
   );
 }
 
-export default NewWorkspaceDialogFromSample;
+export default NewWorkspaceDialogFromExample;

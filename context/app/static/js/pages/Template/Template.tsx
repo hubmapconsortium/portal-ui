@@ -1,6 +1,5 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
-import Accordion from '@mui/material/Accordion';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Button from '@mui/material/Button';
 import Chip from '@mui/material/Chip';
@@ -16,8 +15,11 @@ import { InternalLink } from 'js/shared-styles/Links';
 import IconPanel from 'js/shared-styles/panels/IconPanel';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { StyledAccordionSummary } from 'js/pages/Template/style';
-import { NewWorkspaceDialogFromSample } from 'js/components/workspaces/NewWorkspaceDialog';
+import { StyledAccordion } from 'js/components/workspaces/AdvancedConfigOptions/style';
+import { NewWorkspaceDialogFromExample } from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
+import { TemplateExample } from 'js/components/workspaces/types';
 
 interface TemplateSummaryProps {
   description: string;
@@ -45,19 +47,16 @@ function TemplateSummary({ description, tags }: TemplateSummaryProps) {
 }
 
 interface ExampleAccordionProps {
-  example: {
-    title: string;
-    description: string;
-    assay_display_name: string[];
-    datasets: string[];
-  };
+  example: TemplateExample;
   templateKey: string;
+  rawDatasetType: string;
   defaultExpanded?: boolean;
 }
 
 function ExampleAccordion({
-  example: { title, description, assay_display_name, datasets },
+  example: { title, description, assay_display_name, datasets, job_type },
   templateKey,
+  rawDatasetType,
   defaultExpanded,
 }: ExampleAccordionProps) {
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
@@ -67,7 +66,7 @@ function ExampleAccordion({
 
   return (
     <>
-      <Accordion defaultExpanded={defaultExpanded}>
+      <StyledAccordion defaultExpanded={defaultExpanded}>
         <StyledAccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className="accordion-icon" />}>
           <Typography variant="subtitle1" color="inherit" component="h4">
             {title}
@@ -91,7 +90,10 @@ function ExampleAccordion({
               >
                 <Stack spacing={1} direction="row">
                   {assay_display_name.map((type, idx) => (
-                    <InternalLink href="https://docs.hubmapconsortium.org/assays" key={type}>
+                    <InternalLink
+                      href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${rawDatasetType}][0]=${encodeURI(type)}&entity_type[0]=Dataset`}
+                      key={type}
+                    >
                       {idx === assay_display_name.length - 1 ? type : `${type}, `}
                     </InternalLink>
                   ))}
@@ -101,8 +103,11 @@ function ExampleAccordion({
             <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} isSelectable={false} />
           </Stack>
         </AccordionDetails>
-      </Accordion>
-      <NewWorkspaceDialogFromSample sample={{ title, description, assay_display_name, datasets }} {...rest} />
+      </StyledAccordion>
+      <NewWorkspaceDialogFromExample
+        example={{ title, description, assay_display_name, datasets, job_type }}
+        {...rest}
+      />
     </>
   );
 }
@@ -114,6 +119,7 @@ interface TemplatePageProps {
 function Template({ templateKey }: TemplatePageProps) {
   const { templates } = useWorkspaceTemplates();
   const template = templates[templateKey];
+  const datasetTypeMap = useDatasetTypeMap();
 
   if (!template) {
     return null;
@@ -152,6 +158,11 @@ function Template({ templateKey }: TemplatePageProps) {
               example={example}
               templateKey={templateKey}
               defaultExpanded={idx === 0}
+              rawDatasetType={
+                Object.keys(datasetTypeMap).find((key) =>
+                  datasetTypeMap[key].includes(example.assay_display_name[0]),
+                ) ?? example.assay_display_name[0]
+              }
             />
           ))}
         </Stack>

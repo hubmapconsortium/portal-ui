@@ -1,6 +1,6 @@
 import NewWorkspaceDialog from './NewWorkspaceDialog';
 import NewWorkspaceDialogFromSelections from './NewWorkspaceDialogFromSelections';
-import NewWorkspaceDialogFromSample from './NewWorkspaceDialogFromSample';
+import NewWorkspaceDialogFromExample from './NewWorkspaceDialogFromExample';
 
-export { NewWorkspaceDialogFromSelections, NewWorkspaceDialogFromSample };
+export { NewWorkspaceDialogFromSelections, NewWorkspaceDialogFromExample };
 export default NewWorkspaceDialog;

@@ -101,6 +101,14 @@ type WorkspaceAPIResponse<Data> = WorkspaceAPIFailure | WorkspaceAPISuccess<Data
 
 type WorkspaceAPIResponseWithoutData = Omit<WorkspaceAPIResponse<undefined>, 'data'>;
 
+interface TemplateExample {
+  title: string;
+  description: string;
+  assay_display_name: string[];
+  datasets: string[];
+  job_type: string;
+}
+
 interface TemplateTypes {
   title: string;
   description: string;
@@ -108,12 +116,7 @@ interface TemplateTypes {
   is_multi_dataset_template: boolean;
   template_format: string;
   is_hidden: boolean;
-  examples: {
-    title: string;
-    description: string;
-    assay_display_name: string[];
-    datasets: string[];
-  }[];
+  examples: TemplateExample[];
 }
 
 type TemplatesTypes = Record<string, TemplateTypes>;
@@ -153,6 +156,7 @@ export type {
   TemplatesResponse,
   CreateTemplatesResponse,
   CreateWorkspaceResponse,
+  TemplateExample,
   TemplatesTypes,
   CreateTemplateNotebooksTypes,
   TemplateTags,
