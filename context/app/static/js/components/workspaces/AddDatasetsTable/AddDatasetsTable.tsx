@@ -5,6 +5,7 @@ import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autoc
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
 
+import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
 import { UseDatasetsAutocompleteReturnType, SearchAheadHit } from './hooks';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 
@@ -75,6 +76,7 @@ function AddDatasetsTable({
         datasetsUUIDs={allDatasets}
         disabledIDs={new Set(workspaceDatasets)}
         removeDatasets={removeDatasets}
+        emptyAlert={<WorkspacesNoDatasetsAlert />}
         copyDatasets
       />
     </Stack>

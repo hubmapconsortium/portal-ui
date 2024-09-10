@@ -17,7 +17,6 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 
 import Step from 'js/shared-styles/surfaces/Step';
-import { Alert } from 'js/shared-styles/alerts/Alert';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
@@ -26,6 +25,7 @@ import { CreateTemplateNotebooksTypes, TemplateExample } from 'js/components/wor
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import AdvancedConfigOptions from 'js/components/workspaces/AdvancedConfigOptions';
 import { StyledSubtitle1 } from 'js/components/workspaces/style';
+import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 
 const text = {
@@ -122,7 +122,7 @@ function NewWorkspaceDialogFromExample({
         <Step title={text.datasets.title} index={0} hideRequiredText>
           <WorkspaceDatasetsTable
             datasetsUUIDs={allDatasets}
-            emptyAlert={<Alert severity="info">No datasets available.</Alert>}
+            emptyAlert={<WorkspacesNoDatasetsAlert />}
             isSelectable={false}
           />
         </Step>
