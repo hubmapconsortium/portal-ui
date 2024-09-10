@@ -8,22 +8,13 @@ export function createProvDataURL(uuid: string, entityEndpoint: string) {
   return `${entityEndpoint}/entities/${uuid}/provenance`;
 }
 
-function findDifference(obj1: object, obj2: object) {
-  const diffKeys: string[] = [];
-  Object.keys(obj1).forEach((key) => {
-    // @ts-expect-error -- We're specifically checking for the key in obj2
-    if (!(key in obj2) || obj1[key] !== obj2[key]) {
-      diffKeys.push(key);
+function findDifference<T extends Record<string, unknown>, U extends Record<string, unknown>>(obj1: T, obj2: U) {
+  const diffKeys = Object.keys({ ...obj1, ...obj2 }).reduce((acc, key) => {
+    if (key in obj1 && key in obj2 && obj1[key] === obj2[key]) {
+      return acc;
     }
-  });
-  Object.keys(obj2).forEach((key) => {
-    // @ts-expect-error -- We're specifically checking for the key in obj1
-    if (!(key in obj1) || obj1[key] !== obj2[key]) {
-      if (!diffKeys.includes(key)) {
-        diffKeys.push(key);
-      }
-    }
-  });
+    return [...acc, key];
+  }, [] as string[]);
   return diffKeys;
 }
 
@@ -46,8 +37,13 @@ export function nonDestructiveMerge<T extends Record<string, unknown>, U extends
     if (value && typeof value === 'object' && 'prov:entity' in value && 'prov:activity' in value) {
       if (
         Object.values(merged).some(
-          // @ts-expect-error -- We're specifically comparing these keys and have confirmed they exist in the value object
-          (v) => v['prov:entity'] === value['prov:entity'] && v['prov:activity'] === value['prov:activity'],
+          (v) =>
+            typeof v === 'object' &&
+            v &&
+            'prov:entity' in v &&
+            'prov:activity' in v &&
+            v['prov:entity'] === value['prov:entity'] &&
+            v['prov:activity'] === value['prov:activity'],
         )
       ) {
         return;
@@ -62,9 +58,10 @@ export function nonDestructiveMerge<T extends Record<string, unknown>, U extends
 
       if (merged[key] && typeof merged[key] === 'object' && value && typeof value === 'object') {
         // Perform a more in-depth check to see if objects are the same when excluding certain fields
-        const difference = findDifference(merged[key] as object, value).filter(
-          (diffField) => !ignoredFields.includes(diffField),
-        );
+        const difference = findDifference(
+          merged[key] as Record<string, unknown>,
+          value as Record<string, unknown>,
+        ).filter((diffField) => !ignoredFields.includes(diffField));
 
         if (difference.length === 0) {
           return;
