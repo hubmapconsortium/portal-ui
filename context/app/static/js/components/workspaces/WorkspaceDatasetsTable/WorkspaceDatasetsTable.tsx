@@ -33,6 +33,7 @@ interface WorkspaceDatasetsTableProps {
   emptyAlert?: ReactNode;
   additionalButtons?: ReactNode;
   hideTableIfEmpty?: boolean;
+  isSelectable?: boolean;
 }
 
 function WorkspaceDatasetsTable({
@@ -45,6 +46,7 @@ function WorkspaceDatasetsTable({
   emptyAlert,
   additionalButtons,
   hideTableIfEmpty,
+  isSelectable = true,
 }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
@@ -108,6 +110,7 @@ function WorkspaceDatasetsTable({
           entities={[{ query, columns, entityType: 'Dataset' }]}
           disabledIDs={disabledIDs}
           emptyAlert={emptyAlert}
+          isSelectable={isSelectable}
         />
       )}
     </Box>

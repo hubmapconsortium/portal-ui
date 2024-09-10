@@ -26,7 +26,7 @@ interface TemplateSummaryProps {
 
 function TemplateSummary({ description, tags }: TemplateSummaryProps) {
   return (
-    <Stack component={SummaryPaper}>
+    <Stack component={SummaryPaper} spacing={1}>
       <LabelledSectionText label="Description">{description}</LabelledSectionText>
       <LabelledSectionText label="Tags">
         <Stack spacing={1} marginTop={1} direction="row">
@@ -83,18 +83,22 @@ function ExampleAccordion({
             >
               Try Sample Workspace
             </Button>
-            <Stack component={SummaryPaper}>
+            <Stack component={SummaryPaper} spacing={1}>
               <LabelledSectionText label="Description">{description}</LabelledSectionText>
               <LabelledSectionText
                 label="Dataset Types"
                 iconTooltipText="Dataset types that are used in this sample workspace."
               >
                 <Stack spacing={1} direction="row">
-                  {assay_display_name.map((type) => type)}
+                  {assay_display_name.map((type, idx) => (
+                    <InternalLink href="https://docs.hubmapconsortium.org/assays" key={type}>
+                      {idx === assay_display_name.length - 1 ? type : `${type}, `}
+                    </InternalLink>
+                  ))}
                 </Stack>
               </LabelledSectionText>
             </Stack>
-            <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} />
+            <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} isSelectable={false} />
           </Stack>
         </AccordionDetails>
       </Accordion>
@@ -117,7 +121,7 @@ function Template({ templateKey }: TemplatePageProps) {
 
   return (
     <Stack spacing={4} marginBottom={5}>
-      <Stack>
+      <Stack spacing={2}>
         <SummaryData
           title={template.title}
           entity_type="Workspace Template"

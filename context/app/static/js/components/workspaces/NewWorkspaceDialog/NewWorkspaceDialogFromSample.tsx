@@ -1,5 +1,6 @@
 import React, { PropsWithChildren, useCallback } from 'react';
 import { UseFormReturn, FieldErrors } from 'react-hook-form';
+
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -10,22 +11,22 @@ import Button from '@mui/material/Button';
 import LoadingButton from '@mui/lab/LoadingButton';
 import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 
 import Step from 'js/shared-styles/surfaces/Step';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-
-import Accordion from '@mui/material/Accordion';
-import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
-import AccordionSummary from '@mui/material/AccordionSummary';
-import AccordionDetails from '@mui/material/AccordionDetails';
+import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
+import { useJobTypes } from 'js/components/workspaces/api';
+import { CreateTemplateNotebooksTypes } from 'js/components/workspaces/types';
+import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
+import AdvancedConfigOptions from 'js/components/workspaces/AdvancedConfigOptions';
+import { StyledSubtitle1 } from 'js/components/workspaces/style';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
-import { CreateTemplateNotebooksTypes } from '../types';
-import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
-import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
-import AdvancedConfigOptions from '../AdvancedConfigOptions';
-import { StyledSubtitle1 } from '../style';
 
 const text = {
   overview: {
@@ -80,6 +81,7 @@ function NewWorkspaceDialogFromSample({
   isSubmitting,
 }: PropsWithChildren<NewWorkspaceDialogFromSampleProps & ReactHookFormProps>) {
   const { isOpen: isLaunchWorkspaceDialogOpen } = useLaunchWorkspaceStore();
+  const { data } = useJobTypes();
 
   const submit = useCallback(
     ({
@@ -121,10 +123,11 @@ function NewWorkspaceDialogFromSample({
         </Box>
       </Box>
       <DialogContent dividers>
-        <Step title={text.datasets.title} index={0}>
+        <Step title={text.datasets.title} index={0} hideRequiredText>
           <WorkspaceDatasetsTable
             datasetsUUIDs={allDatasets}
             emptyAlert={<Alert severity="info">No datasets available.</Alert>}
+            isSelectable={false}
           />
         </Step>
         <Step title={text.configure.title} isRequired index={1}>
@@ -151,15 +154,16 @@ function NewWorkspaceDialogFromSample({
             />
             <Accordion>
               <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
-                <Stack spacing={1}>
-                  <StyledSubtitle1>{text.configure.selected.title}</StyledSubtitle1>
-                  <Typography>{text.configure.selected.description}</Typography>
-                  <Typography variant="subtitle2">Environment</Typography>
-                  <Typography>Python (TODO)</Typography>
-                </Stack>
+                <StyledSubtitle1>{text.configure.selected.title}</StyledSubtitle1>
               </AccordionSummary>
               <AccordionDetails>
-                <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+                <Stack spacing={1}>
+                  <Typography>{text.configure.selected.description}</Typography>
+                  <Typography variant="subtitle2">Environment</Typography>
+                  <Typography>
+                    {data ? Object.values(data).find(({ id }) => id === DEFAULT_JOB_TYPE)?.name : DEFAULT_JOB_TYPE}
+                  </Typography>
+                </Stack>
               </AccordionDetails>
             </Accordion>
             <AdvancedConfigOptions control={control} description={text.configure.advanced.description} />
