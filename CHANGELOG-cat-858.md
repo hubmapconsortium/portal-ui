@@ -1,1 +1,0 @@
-- Hide HuBMAP ID's for non-entity nodes in provenance graph.

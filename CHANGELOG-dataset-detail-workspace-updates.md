@@ -1,1 +1,0 @@
-- Update menu choices for the workspace buttons in unified views dataset detail pages.

@@ -1,3 +1,10 @@
+## v1.5.0 - 2024-09-10
+
+- Hide HuBMAP ID's for non-entity nodes in provenance graph.
+- Improve combined provenance logic to safeguard against duplicate nodes/edges.
+- Update menu choices for the workspace buttons in unified views dataset detail pages.
+
+
 ## v1.4.0 - 2024-09-06
 
 - Add advanced configuration options to workspace job dialogs.
