@@ -32,6 +32,7 @@ function ExampleAccordion({ example, templateKey, datasetTypeMap, defaultExpande
   const { title, description, assay_display_name, datasets, job_type, resource_options } = example;
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
+    defaultName: title,
     defaultTemplate: templateKey,
     defaultJobType: job_type,
     defaultResourceOptions: resource_options,
