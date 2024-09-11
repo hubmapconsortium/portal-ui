@@ -24,11 +24,11 @@ import { TemplateExample } from 'js/components/workspaces/types';
 interface ExampleAccordionProps {
   example: TemplateExample;
   templateKey: string;
-  rawDatasetType: string;
+  datasetTypeMap: Record<string, string[]>;
   defaultExpanded?: boolean;
 }
 
-function ExampleAccordion({ example, templateKey, rawDatasetType, defaultExpanded }: ExampleAccordionProps) {
+function ExampleAccordion({ example, templateKey, datasetTypeMap, defaultExpanded }: ExampleAccordionProps) {
   const { title, description, assay_display_name, datasets, job_type, resource_options } = example;
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
@@ -37,6 +37,11 @@ function ExampleAccordion({ example, templateKey, rawDatasetType, defaultExpande
     defaultResourceOptions: resource_options,
     initialSelectedDatasets: datasets,
   });
+
+  const getRawDatasetType = useCallback(
+    (name: string) => Object.keys(datasetTypeMap).find((key) => datasetTypeMap[key].includes(name)) ?? name,
+    [datasetTypeMap],
+  );
 
   return (
     <>
@@ -58,21 +63,23 @@ function ExampleAccordion({ example, templateKey, rawDatasetType, defaultExpande
             </Button>
             <Stack component={SummaryPaper} spacing={1}>
               <LabelledSectionText label="Description">{description}</LabelledSectionText>
-              <LabelledSectionText
-                label="Dataset Types"
-                iconTooltipText="Dataset types that are used in this sample workspace."
-              >
-                <Stack spacing={1} direction="row">
-                  {assay_display_name.map((type, idx) => (
-                    <InternalLink
-                      href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${rawDatasetType}][0]=${encodeURI(type)}&entity_type[0]=Dataset`}
-                      key={type}
-                    >
-                      {idx === assay_display_name.length - 1 ? type : `${type}, `}
-                    </InternalLink>
-                  ))}
-                </Stack>
-              </LabelledSectionText>
+              {assay_display_name && (
+                <LabelledSectionText
+                  label="Dataset Types"
+                  iconTooltipText="Dataset types that are used in this sample workspace."
+                >
+                  <Stack spacing={1} direction="row">
+                    {assay_display_name.map((name, idx) => (
+                      <InternalLink
+                        href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${getRawDatasetType(name)}][0]=${encodeURI(name)}&entity_type[0]=Dataset`}
+                        key={name}
+                      >
+                        {idx === assay_display_name.length - 1 ? name : `${name}, `}
+                      </InternalLink>
+                    ))}
+                  </Stack>
+                </LabelledSectionText>
+              )}
             </Stack>
             <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} isSelectable={false} />
           </Stack>
@@ -91,12 +98,6 @@ function Template({ templateKey }: TemplatePageProps) {
   const { templates } = useWorkspaceTemplates();
   const template = templates[templateKey];
   const datasetTypeMap = useDatasetTypeMap();
-
-  const getRawDatasetType = useCallback(
-    (assay_display_name: string) =>
-      Object.keys(datasetTypeMap).find((key) => datasetTypeMap[key].includes(assay_display_name)) ?? assay_display_name,
-    [datasetTypeMap],
-  );
 
   if (!template) {
     return null;
@@ -149,7 +150,7 @@ function Template({ templateKey }: TemplatePageProps) {
               example={example}
               templateKey={templateKey}
               defaultExpanded={idx === 0}
-              rawDatasetType={getRawDatasetType(example.assay_display_name[0])}
+              datasetTypeMap={datasetTypeMap}
             />
           ))}
         </Stack>

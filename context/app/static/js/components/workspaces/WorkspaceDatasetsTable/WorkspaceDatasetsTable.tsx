@@ -71,7 +71,7 @@ function WorkspaceDatasetsTable({
   const datasetsPresent = datasetsUUIDs.length > 0;
   const hasMaxDatasets = addDatasets && isWorkspaceAtDatasetLimit(addDatasets);
   const hideTable = hideTableIfEmpty && !datasetsPresent;
-  const hideButtonRow = !addDatasets && !removeDatasets && !copyDatasets && !additionalButtons;
+  const hideButtonRow = (!addDatasets && !removeDatasets && !copyDatasets && !additionalButtons) || !datasetsPresent;
 
   return (
     <Box>
