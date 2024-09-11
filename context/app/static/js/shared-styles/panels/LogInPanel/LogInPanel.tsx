@@ -8,9 +8,7 @@ import Box from '@mui/material/Box';
 import { InfoIcon } from 'js/shared-styles/icons';
 import { LoginButton } from 'js/components/detailPage/BulkDataTransfer/style';
 
-type LogInPanelProps = PropsWithChildren;
-
-function LogInPanel({ children }: LogInPanelProps) {
+function LogInPanel({ children }: PropsWithChildren) {
   if (isAuthenticated) {
     return null;
   }

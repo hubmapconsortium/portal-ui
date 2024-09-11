@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import Button from '@mui/material/Button';
@@ -21,31 +21,6 @@ import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDia
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 import { TemplateExample } from 'js/components/workspaces/types';
 
-interface TemplateSummaryProps {
-  description: string;
-  tags: string[];
-}
-
-function TemplateSummary({ description, tags }: TemplateSummaryProps) {
-  return (
-    <Stack component={SummaryPaper} spacing={1}>
-      <LabelledSectionText label="Description">{description}</LabelledSectionText>
-      <LabelledSectionText label="Tags">
-        <Stack spacing={1} marginTop={1} direction="row">
-          {tags.map((tag) => (
-            <Chip
-              key={tag}
-              label={tag}
-              variant="outlined"
-              sx={(theme) => ({ borderRadius: '.5rem', borderColor: theme.palette.grey[200] })}
-            />
-          ))}
-        </Stack>
-      </LabelledSectionText>
-    </Stack>
-  );
-}
-
 interface ExampleAccordionProps {
   example: TemplateExample;
   templateKey: string;
@@ -53,15 +28,14 @@ interface ExampleAccordionProps {
   defaultExpanded?: boolean;
 }
 
-function ExampleAccordion({
-  example: { title, description, assay_display_name, datasets, job_type },
-  templateKey,
-  rawDatasetType,
-  defaultExpanded,
-}: ExampleAccordionProps) {
+function ExampleAccordion({ example, templateKey, rawDatasetType, defaultExpanded }: ExampleAccordionProps) {
+  const { title, description, assay_display_name, datasets, job_type, resource_options } = example;
+
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
-    initialSelectedDatasets: datasets,
     defaultTemplate: templateKey,
+    defaultJobType: job_type,
+    defaultResourceOptions: resource_options,
+    initialSelectedDatasets: datasets,
   });
 
   return (
@@ -104,10 +78,7 @@ function ExampleAccordion({
           </Stack>
         </AccordionDetails>
       </StyledAccordion>
-      <NewWorkspaceDialogFromExample
-        example={{ title, description, assay_display_name, datasets, job_type }}
-        {...rest}
-      />
+      <NewWorkspaceDialogFromExample example={example} {...rest} />
     </>
   );
 }
@@ -121,6 +92,12 @@ function Template({ templateKey }: TemplatePageProps) {
   const template = templates[templateKey];
   const datasetTypeMap = useDatasetTypeMap();
 
+  const getRawDatasetType = useCallback(
+    (assay_display_name: string) =>
+      Object.keys(datasetTypeMap).find((key) => datasetTypeMap[key].includes(assay_display_name)) ?? assay_display_name,
+    [datasetTypeMap],
+  );
+
   if (!template) {
     return null;
   }
@@ -130,12 +107,26 @@ function Template({ templateKey }: TemplatePageProps) {
       <Stack spacing={2}>
         <SummaryData
           title={template.title}
-          entity_type="Workspace Template"
-          entityTypeDisplay={undefined}
+          entity_type="WorkspaceTemplate"
+          entityTypeDisplay="Workspace Template"
           status=""
           mapped_data_access_level=""
         />
-        <TemplateSummary description={template.description} tags={template.tags} />
+        <Stack component={SummaryPaper} spacing={1}>
+          <LabelledSectionText label="Description">{template.description}</LabelledSectionText>
+          <LabelledSectionText label="Tags">
+            <Stack spacing={1} marginTop={1} direction="row">
+              {template.tags.map((tag) => (
+                <Chip
+                  key={tag}
+                  label={tag}
+                  variant="outlined"
+                  sx={(theme) => ({ borderRadius: '.5rem', borderColor: theme.palette.grey[200] })}
+                />
+              ))}
+            </Stack>
+          </LabelledSectionText>
+        </Stack>
       </Stack>
       {template.examples && (
         <Stack spacing={1}>
@@ -158,11 +149,7 @@ function Template({ templateKey }: TemplatePageProps) {
               example={example}
               templateKey={templateKey}
               defaultExpanded={idx === 0}
-              rawDatasetType={
-                Object.keys(datasetTypeMap).find((key) =>
-                  datasetTypeMap[key].includes(example.assay_display_name[0]),
-                ) ?? example.assay_display_name[0]
-              }
+              rawDatasetType={getRawDatasetType(example.assay_display_name[0])}
             />
           ))}
         </Stack>

@@ -6,8 +6,8 @@ import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
 
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
+import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { UseDatasetsAutocompleteReturnType, SearchAheadHit } from './hooks';
-import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 
 function DatasetOption(props: React.HTMLAttributes<HTMLLIElement>, option: SearchAheadHit) {
   const {

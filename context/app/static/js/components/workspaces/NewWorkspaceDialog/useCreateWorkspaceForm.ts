@@ -39,6 +39,8 @@ interface CreateWorkspaceFormTypes extends FormWithTemplates {
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
   defaultTemplate?: string;
+  defaultJobType?: string;
+  defaultResourceOptions?: WorkspaceResourceOptions;
   initialProtectedDatasets?: string;
   initialSelectedDatasets?: string[];
 }
@@ -57,7 +59,14 @@ const schema = z
 
 function useCreateWorkspaceForm({
   defaultName,
-  defaultTemplate,
+  defaultTemplate = DEFAULT_TEMPLATE_KEY,
+  defaultJobType = DEFAULT_JOB_TYPE,
+  defaultResourceOptions = {
+    num_cpus: DEFAULT_NUM_CPUS,
+    memory_mb: DEFAULT_MEMORY_MB,
+    time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+    gpu_enabled: DEFAULT_GPU_ENABLED,
+  },
   initialProtectedDatasets,
   initialSelectedDatasets = [],
 }: UseCreateWorkspaceTypes) {
@@ -80,14 +89,9 @@ function useCreateWorkspaceForm({
     defaultValues: {
       'workspace-name': checkedWorkspaceName,
       'protected-datasets': checkedProtectedDatasets,
-      templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
-      workspaceJobTypeId: DEFAULT_JOB_TYPE,
-      workspaceResourceOptions: {
-        num_cpus: DEFAULT_NUM_CPUS,
-        memory_mb: DEFAULT_MEMORY_MB,
-        time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
-        gpu_enabled: DEFAULT_GPU_ENABLED,
-      },
+      templates: [defaultTemplate],
+      workspaceJobTypeId: defaultJobType,
+      workspaceResourceOptions: defaultResourceOptions,
       datasets: initialSelectedDatasets,
     },
     mode: 'onChange',

@@ -76,8 +76,10 @@ function NewWorkspaceDialogFromExample({
   isSubmitting,
 }: PropsWithChildren<NewWorkspaceDialogFromExampleProps & ReactHookFormProps>) {
   const { isOpen: isLaunchWorkspaceDialogOpen } = useLaunchWorkspaceStore();
+
   const { data } = useJobTypes();
-  const jobType = example.job_type ?? DEFAULT_JOB_TYPE;
+  const jobTypeKey = example.job_type ?? DEFAULT_JOB_TYPE;
+  const jobTypeName = data ? Object.values(data).find(({ id }) => id === jobTypeKey)?.name : jobTypeKey;
 
   const submit = useCallback(
     ({
@@ -126,7 +128,7 @@ function NewWorkspaceDialogFromExample({
             isSelectable={false}
           />
         </Step>
-        <Step title={text.configure.title} isRequired index={1}>
+        <Step title={text.configure.title} index={1} isRequired>
           <Box
             id="create-workspace-form"
             component="form"
@@ -156,7 +158,7 @@ function NewWorkspaceDialogFromExample({
                 <Stack spacing={1}>
                   <Typography>{text.configure.selected.description}</Typography>
                   <Typography variant="subtitle2">Environment</Typography>
-                  <Typography>{data ? Object.values(data).find(({ id }) => id === jobType)?.name : jobType}</Typography>
+                  <Typography>{jobTypeName}</Typography>
                 </Stack>
               </AccordionDetails>
             </Accordion>

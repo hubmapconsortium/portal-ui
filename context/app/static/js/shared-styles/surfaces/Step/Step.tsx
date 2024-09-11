@@ -35,7 +35,7 @@ function StepDescription({ blocks }: { blocks: (string | ReactElement)[] }) {
     </Stack>
   );
 }
-function Step({ index, title, isRequired = false, hideRequiredText = false, children }: PropsWithChildren<StepProps>) {
+function Step({ index, title, isRequired = false, hideRequiredText, children }: PropsWithChildren<StepProps>) {
   const { color, text } = requiredVariants[isRequired.toString() as 'true' | 'false'] as RequiredVariant;
   return (
     <>

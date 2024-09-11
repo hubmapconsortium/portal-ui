@@ -10,10 +10,10 @@ import { Alert } from 'js/shared-styles/alerts';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { useSelectItems } from 'js/hooks/useSelectItems';
-
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import LogInPanel from 'js/shared-styles/panels/LogInPanel';
+import { useSelectItems } from 'js/hooks/useSelectItems';
+
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 import TemplateTagsAutocomplete from './TemplateTagsAutocomplete/TemplateTagsAutocomplete';
@@ -62,13 +62,13 @@ const workspacesQuestionsSuggestions = {
 };
 
 const text = {
-  workspaceUserOrLoggedOut: [
+  workspacesUserOrLoggedOut: [
     workspacesDescription,
     workspacesUsage,
     workspacesSupportInfo,
     workspacesQuestionsSuggestions,
   ],
-  nonWorkspaceUser: [
+  nonWorkspacesUser: [
     workspacesDescription,
     {
       title: 'How do I get access to workspaces as a HuBMAP member?',

@@ -107,6 +107,7 @@ interface TemplateExample {
   assay_display_name: string[];
   datasets: string[];
   job_type: string;
+  resource_options: WorkspaceResourceOptions;
 }
 
 interface TemplateTypes {
