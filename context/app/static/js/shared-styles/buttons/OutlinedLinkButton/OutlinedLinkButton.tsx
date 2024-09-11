@@ -1,6 +1,6 @@
 import React, { PropsWithChildren } from 'react';
-import Button from '@mui/material/Button';
 import LinkIcon from '@mui/icons-material/Link';
+import { StyledButton } from 'js/shared-styles/buttons/OutlinedLinkButton/style';
 
 interface OutlinedLinkButtonProps extends PropsWithChildren {
   link: string;
@@ -8,18 +8,14 @@ interface OutlinedLinkButtonProps extends PropsWithChildren {
 
 function OutlinedLinkButton({ link, children }: OutlinedLinkButtonProps) {
   return (
-    <Button
+    <StyledButton
       variant="outlined"
       color="info"
-      sx={(theme) => ({
-        borderColor: theme.palette.grey[300],
-        borderRadius: theme.spacing(0.5),
-      })}
       href={link}
-      endIcon={<LinkIcon color="info" fontSize="1rem" />}
+      endIcon={<LinkIcon color="info" sx={{ width: '1rem' }} />}
     >
       {children}
-    </Button>
+    </StyledButton>
   );
 }
 

@@ -10,10 +10,13 @@ import {
   CreateTemplateNotebooksTypes,
   TemplateTagsResponse,
   TemplatesTypes,
+  TemplateExample,
 } from 'js/components/workspaces/types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { useJobTypes } from 'js/components/workspaces/api';
+import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -131,4 +134,11 @@ function useWorkspaceTemplateTags() {
   return { tags };
 }
 
-export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks };
+function useJobTypeName(example: TemplateExample) {
+  const { data } = useJobTypes();
+  const jobTypeKey = example.job_type ?? DEFAULT_JOB_TYPE;
+
+  return data ? Object.values(data).find(({ id }) => id === jobTypeKey)?.name : jobTypeKey;
+}
+
+export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks, useJobTypeName };

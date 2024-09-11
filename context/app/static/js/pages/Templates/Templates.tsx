@@ -10,7 +10,7 @@ function Templates() {
   return (
     <Stack spacing={3}>
       <IconPageTitle icon={WorkspacesIcon}>Templates</IconPageTitle>
-      {!isAuthenticated && <TemplateLogInPanel />}
+      <TemplateLogInPanel />
       <TemplateGridPreview />
     </Stack>
   );

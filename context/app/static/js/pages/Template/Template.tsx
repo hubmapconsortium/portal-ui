@@ -1,9 +1,8 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import AccordionDetails from '@mui/material/AccordionDetails';
-import Button from '@mui/material/Button';
-import Chip from '@mui/material/Chip';
 import Typography from '@mui/material/Typography';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 
 import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
@@ -14,21 +13,20 @@ import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { InternalLink } from 'js/shared-styles/Links';
 import IconPanel from 'js/shared-styles/panels/IconPanel';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
-import { StyledAccordionSummary } from 'js/pages/Template/style';
-import { StyledAccordion } from 'js/components/workspaces/AdvancedConfigOptions/style';
+import { StyledButton, StyledChip } from 'js/pages/Template/style';
 import { NewWorkspaceDialogFromExample } from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 import { TemplateExample } from 'js/components/workspaces/types';
+import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
 
 interface ExampleAccordionProps {
   example: TemplateExample;
   templateKey: string;
-  datasetTypeMap: Record<string, string[]>;
   defaultExpanded?: boolean;
 }
 
-function ExampleAccordion({ example, templateKey, datasetTypeMap, defaultExpanded }: ExampleAccordionProps) {
+function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAccordionProps) {
   const { title, description, assay_display_name, datasets, job_type, resource_options } = example;
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
@@ -39,29 +37,30 @@ function ExampleAccordion({ example, templateKey, datasetTypeMap, defaultExpande
     initialSelectedDatasets: datasets,
   });
 
-  const getRawDatasetType = useCallback(
-    (name: string) => Object.keys(datasetTypeMap).find((key) => datasetTypeMap[key].includes(name)) ?? name,
-    [datasetTypeMap],
-  );
+  const datasetTypeMap = useDatasetTypeMap();
+  const assayToRawDatasetMap = useMemo(() => {
+    const map: Record<string, string> = {};
+    Object.keys(datasetTypeMap).forEach((key) => {
+      datasetTypeMap[key].forEach((name) => {
+        map[name] = key;
+      });
+    });
+    return map;
+  }, [datasetTypeMap]);
 
   return (
     <>
-      <StyledAccordion defaultExpanded={defaultExpanded}>
-        <StyledAccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className="accordion-icon" />}>
+      <PrimaryColorAccordion defaultExpanded={defaultExpanded}>
+        <AccordionSummary expandIcon={<KeyboardArrowDownRoundedIcon className="accordion-icon" />}>
           <Typography variant="subtitle1" color="inherit" component="h4">
             {title}
           </Typography>
-        </StyledAccordionSummary>
+        </AccordionSummary>
         <AccordionDetails>
           <Stack spacing={2}>
-            <Button
-              variant="contained"
-              sx={{ alignSelf: 'flex-end' }}
-              disabled={!isAuthenticated}
-              onClick={() => setDialogIsOpen(true)}
-            >
+            <StyledButton variant="contained" disabled={!isAuthenticated} onClick={() => setDialogIsOpen(true)}>
               Try Sample Workspace
-            </Button>
+            </StyledButton>
             <Stack component={SummaryPaper} spacing={1}>
               <LabelledSectionText label="Description">{description}</LabelledSectionText>
               {assay_display_name && (
@@ -72,7 +71,7 @@ function ExampleAccordion({ example, templateKey, datasetTypeMap, defaultExpande
                   <Stack spacing={1} direction="row">
                     {assay_display_name.map((name, idx) => (
                       <InternalLink
-                        href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${getRawDatasetType(name)}][0]=${encodeURI(name)}&entity_type[0]=Dataset`}
+                        href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${assayToRawDatasetMap[name]}][0]=${encodeURI(name)}&entity_type[0]=Dataset`}
                         key={name}
                       >
                         {idx === assay_display_name.length - 1 ? name : `${name}, `}
@@ -85,7 +84,7 @@ function ExampleAccordion({ example, templateKey, datasetTypeMap, defaultExpande
             <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} isSelectable={false} />
           </Stack>
         </AccordionDetails>
-      </StyledAccordion>
+      </PrimaryColorAccordion>
       <NewWorkspaceDialogFromExample example={example} {...rest} />
     </>
   );
@@ -98,7 +97,6 @@ interface TemplatePageProps {
 function Template({ templateKey }: TemplatePageProps) {
   const { templates } = useWorkspaceTemplates();
   const template = templates[templateKey];
-  const datasetTypeMap = useDatasetTypeMap();
 
   if (!template) {
     return null;
@@ -107,24 +105,13 @@ function Template({ templateKey }: TemplatePageProps) {
   return (
     <Stack spacing={4} marginBottom={5}>
       <Stack spacing={2}>
-        <SummaryData
-          title={template.title}
-          entity_type="WorkspaceTemplate"
-          entityTypeDisplay="Workspace Template"
-          status=""
-          mapped_data_access_level=""
-        />
+        <SummaryData title={template.title} entity_type="WorkspaceTemplate" entityTypeDisplay="Workspace Template" />
         <Stack component={SummaryPaper} spacing={1}>
           <LabelledSectionText label="Description">{template.description}</LabelledSectionText>
           <LabelledSectionText label="Tags">
             <Stack spacing={1} marginTop={1} direction="row">
               {template.tags.map((tag) => (
-                <Chip
-                  key={tag}
-                  label={tag}
-                  variant="outlined"
-                  sx={(theme) => ({ borderRadius: '.5rem', borderColor: theme.palette.grey[200] })}
-                />
+                <StyledChip key={tag} label={tag} variant="outlined" />
               ))}
             </Stack>
           </LabelledSectionText>
@@ -151,7 +138,6 @@ function Template({ templateKey }: TemplatePageProps) {
               example={example}
               templateKey={templateKey}
               defaultExpanded={idx === 0}
-              datasetTypeMap={datasetTypeMap}
             />
           ))}
         </Stack>

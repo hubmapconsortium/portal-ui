@@ -48,7 +48,7 @@ function Step({ index, title, isRequired = false, hideRequiredText, children }: 
         <Typography variant="subtitle2" sx={{ color: `${color}.contrastText` }}>
           {index !== undefined && `${index + 1}. `}
           {title}
-          {hideRequiredText ? '' : ` (${text})`}
+          {!hideRequiredText && ` (${text})`}
         </Typography>
       </Paper>
       <Paper sx={{ p: 2, mb: 2 }}>{children}</Paper>

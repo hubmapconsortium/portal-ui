@@ -1,24 +1,14 @@
-import AccordionSummary from '@mui/material/AccordionSummary';
 import { styled } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Chip from '@mui/material/Chip';
 
-const StyledAccordionSummary = styled(AccordionSummary)(({ theme }) => {
-  const primaryColor = theme.palette.primary.main;
-  const whiteColor = theme.palette.white.main;
-
-  return {
-    '&.Mui-expanded': {
-      backgroundColor: primaryColor,
-      color: whiteColor,
-      '.accordion-icon': {
-        color: whiteColor,
-      },
-    },
-    backgroundColor: whiteColor,
-    color: primaryColor,
-    '.accordion-icon': {
-      color: primaryColor,
-    },
-  };
+const StyledButton = styled(Button)({
+  alignSelf: 'flex-end',
 });
 
-export { StyledAccordionSummary };
+const StyledChip = styled(Chip)(({ theme }) => ({
+  borderRadius: '.5rem',
+  borderColor: theme.palette.grey[200],
+}));
+
+export { StyledChip, StyledButton };

@@ -115,6 +115,10 @@ function AccessAlert() {
 }
 
 function TemplateLogInPanel() {
+  if (isAuthenticated) {
+    return null;
+  }
+
   return (
     <LogInPanel>
       Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by your
@@ -146,6 +150,10 @@ function TemplateGridPreview() {
 }
 
 function TemplatePreviewSection() {
+  if (isAuthenticated) {
+    return null;
+  }
+
   return (
     <Stack pt={2} spacing={2}>
       <Typography variant="h4">Workspace Templates</Typography>
@@ -175,7 +183,7 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
           </LabelledSectionText>
         </Stack>
       </Stack>
-      {!isAuthenticated && <TemplatePreviewSection />}
+      <TemplatePreviewSection />
     </Stack>
   );
 }

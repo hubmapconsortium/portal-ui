@@ -19,13 +19,12 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 import Step from 'js/shared-styles/surfaces/Step';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
-import { useJobTypes } from 'js/components/workspaces/api';
 import { CreateTemplateNotebooksTypes, TemplateExample } from 'js/components/workspaces/types';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import AdvancedConfigOptions from 'js/components/workspaces/AdvancedConfigOptions';
 import { StyledSubtitle1 } from 'js/components/workspaces/style';
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
+import { useJobTypeName } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 
 const text = {
@@ -76,10 +75,7 @@ function NewWorkspaceDialogFromExample({
   isSubmitting,
 }: PropsWithChildren<NewWorkspaceDialogFromExampleProps & ReactHookFormProps>) {
   const { isOpen: isLaunchWorkspaceDialogOpen } = useLaunchWorkspaceStore();
-
-  const { data } = useJobTypes();
-  const jobTypeKey = example.job_type ?? DEFAULT_JOB_TYPE;
-  const jobTypeName = data ? Object.values(data).find(({ id }) => id === jobTypeKey)?.name : jobTypeKey;
+  const jobTypeName = useJobTypeName(example);
 
   const submit = useCallback(
     ({
@@ -129,14 +125,11 @@ function NewWorkspaceDialogFromExample({
           />
         </Step>
         <Step title={text.configure.title} index={1} isRequired>
-          <Box
-            id="create-workspace-form"
+          <Stack
+            gap={2}
+            mt={1}
             component="form"
-            sx={{
-              display: 'grid',
-              gap: 2,
-              marginTop: 1,
-            }}
+            id="create-workspace-form"
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={handleSubmit(submit)}
           >
@@ -163,7 +156,7 @@ function NewWorkspaceDialogFromExample({
               </AccordionDetails>
             </Accordion>
             <AdvancedConfigOptions control={control} description={text.configure.advanced.description} />
-          </Box>
+          </Stack>
         </Step>
       </DialogContent>
       <DialogActions>

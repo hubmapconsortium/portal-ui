@@ -15,8 +15,8 @@ const entitiesWithStatus = datasetEntityTypes.concat(...publicationEntityTypes);
 interface SummaryDataProps extends PropsWithChildren {
   entity_type: AllEntityTypes;
   entityTypeDisplay?: string;
-  status: string;
-  mapped_data_access_level: string;
+  status?: string;
+  mapped_data_access_level?: string;
   title?: string;
   mapped_external_group_name?: string;
   otherButtons?: React.ReactNode;
@@ -58,9 +58,9 @@ function SummaryData({
               <>
                 <SummaryItem
                   showDivider={Boolean(mapped_external_group_name)}
-                  statusIcon={<StatusIcon status={status} />}
+                  statusIcon={<StatusIcon status={status ?? ''} />}
                 >
-                  {status} ({mapped_data_access_level})
+                  {status} ({mapped_data_access_level ?? ''})
                 </SummaryItem>
                 {mapped_external_group_name && <SummaryItem>{mapped_external_group_name}</SummaryItem>}
               </>
