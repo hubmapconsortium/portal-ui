@@ -134,6 +134,7 @@ interface CreateTemplateNotebooksTypes {
   workspaceName: string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
+  fromWorkspaceLandingPage?: boolean;
 }
 
 type TemplateTags = Record<string, string>;

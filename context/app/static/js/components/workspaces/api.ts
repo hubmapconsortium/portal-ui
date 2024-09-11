@@ -366,6 +366,7 @@ async function createWorkspaceFetcher(_key: string, { arg: { body, url, headers 
       symlinks: body.workspace_details.symlinks.map((s) => s.name),
     },
   });
+
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),

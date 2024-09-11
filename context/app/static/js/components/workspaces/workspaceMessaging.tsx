@@ -14,6 +14,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { InfoIcon } from 'js/shared-styles/icons';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 
+import { trackEvent } from 'js/helpers/trackers';
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 import { LoginButton } from '../detailPage/BulkDataTransfer/style';
@@ -114,7 +115,19 @@ function TemplateGridPreview() {
           <Typography>
             Here are workspace templates available to help you start analyzing HuBMAP data. They are categorized by
             tags, which can help you filter templates based on your interests. To view more details on a template,
-            please <InternalLink href="/login">log in</InternalLink>.
+            please{' '}
+            <InternalLink
+              href="/login"
+              onClick={() =>
+                trackEvent({
+                  category: 'Workspace Landing Page',
+                  action: 'Log In / From template section',
+                })
+              }
+            >
+              log in
+            </InternalLink>
+            .
           </Typography>
         </Stack>
         <Box>
@@ -131,6 +144,7 @@ function TemplateGridPreview() {
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}
+          fromWorkspaceLandingPage
         />
         <TemplateGrid templates={templates} />
       </Stack>

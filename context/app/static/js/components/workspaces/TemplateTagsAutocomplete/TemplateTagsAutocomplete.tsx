@@ -7,6 +7,7 @@ import Typography from '@mui/material/Typography';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import { SelectedItems } from 'js/hooks/useSelectItems';
+import { trackEvent } from 'js/helpers/trackers';
 import { useWorkspaceTemplateTags } from '../NewWorkspaceDialog/hooks';
 
 interface TemplateTagsAutocompleteProps {
@@ -15,6 +16,7 @@ interface TemplateTagsAutocompleteProps {
   toggleTag: (itemKey: string) => void;
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedRecommendedTags: SelectedItems;
+  fromWorkspaceLandingPage?: boolean;
 }
 
 export interface TagTypes extends ChipProps {
@@ -31,6 +33,7 @@ function TemplateTagsAutocomplete({
   toggleTag,
   setSelectedTags,
   selectedRecommendedTags,
+  fromWorkspaceLandingPage,
 }: TemplateTagsAutocompleteProps) {
   const { tags } = useWorkspaceTemplateTags();
 
@@ -46,6 +49,15 @@ function TemplateTagsAutocomplete({
         isOptionEqualToValue={(option, value) => option === value}
         tagComponent={TagComponent}
         onChange={(_, value: string[]) => {
+          const addedValue = value.find((tag) => !selectedTags.includes(tag));
+
+          if (fromWorkspaceLandingPage && addedValue) {
+            trackEvent({
+              category: 'Workspace Landing Page',
+              action: 'Select Template Tag from Dropdown',
+              value: addedValue,
+            });
+          }
           setSelectedTags(value);
         }}
       />
@@ -58,7 +70,16 @@ function TemplateTagsAutocomplete({
             <SelectableChip
               isSelected={selectedRecommendedTags.has(tag)}
               label={tag}
-              onClick={() => toggleTag(tag)}
+              onClick={() => {
+                if (fromWorkspaceLandingPage) {
+                  trackEvent({
+                    category: 'Workspace Landing Page',
+                    action: 'Select Recommended Template Tag',
+                    tag,
+                  });
+                }
+                toggleTag(tag);
+              }}
               key={tag}
             />
           ))}

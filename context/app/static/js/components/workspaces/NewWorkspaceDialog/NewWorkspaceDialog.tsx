@@ -82,7 +82,7 @@ interface NewWorkspaceDialogProps {
   dialogIsOpen: boolean;
   handleClose: () => void;
   removeDatasets?: (uuids: string[]) => void;
-  onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
+  onSubmit: ({ workspaceName, templateKeys, uuids, fromWorkspaceLandingPage }: CreateTemplateNotebooksTypes) => void;
   isSubmitting?: boolean;
   showDatasetsSearchBar?: boolean;
   inputValue: string;
@@ -135,9 +135,10 @@ function NewWorkspaceDialog({
         uuids: datasets,
         workspaceJobTypeId,
         workspaceResourceOptions,
+        fromWorkspaceLandingPage: showDatasetsSearchBar,
       });
     },
-    [onSubmit],
+    [onSubmit, showDatasetsSearchBar],
   );
 
   return (

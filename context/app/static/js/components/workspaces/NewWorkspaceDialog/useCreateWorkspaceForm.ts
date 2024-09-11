@@ -120,10 +120,18 @@ function useCreateWorkspaceForm({
     workspaceName,
     workspaceJobTypeId,
     workspaceResourceOptions,
+    fromWorkspaceLandingPage,
   }: CreateTemplateNotebooksTypes) {
     if (isSubmitting || isSubmitSuccessful) return;
     setDialogType('LAUNCH_NEW_WORKSPACE');
-    await createTemplateNotebooks({ templateKeys, uuids, workspaceName, workspaceJobTypeId, workspaceResourceOptions });
+    await createTemplateNotebooks({
+      templateKeys,
+      uuids,
+      workspaceName,
+      workspaceJobTypeId,
+      workspaceResourceOptions,
+      fromWorkspaceLandingPage,
+    });
     reset();
     handleClose();
   }
