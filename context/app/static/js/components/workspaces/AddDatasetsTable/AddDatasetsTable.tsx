@@ -5,9 +5,9 @@ import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autoc
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
 
-import { Alert } from 'js/shared-styles/alerts/Alert';
+import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
+import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { UseDatasetsAutocompleteReturnType, SearchAheadHit } from './hooks';
-import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 
 function DatasetOption(props: React.HTMLAttributes<HTMLLIElement>, option: SearchAheadHit) {
   const {
@@ -76,7 +76,8 @@ function AddDatasetsTable({
         datasetsUUIDs={allDatasets}
         disabledIDs={new Set(workspaceDatasets)}
         removeDatasets={removeDatasets}
-        emptyAlert={<Alert severity="info">No datasets available.</Alert>}
+        emptyAlert={<WorkspacesNoDatasetsAlert />}
+        copyDatasets
       />
     </Stack>
   );

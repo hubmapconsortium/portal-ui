@@ -7,8 +7,7 @@ import Typography from '@mui/material/Typography';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import { SelectedItems } from 'js/hooks/useSelectItems';
-import { trackEvent } from 'js/helpers/trackers';
-import { useWorkspaceTemplateTags } from '../NewWorkspaceDialog/hooks';
+import { useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 
 interface TemplateTagsAutocompleteProps {
   selectedTags: string[];
@@ -16,7 +15,8 @@ interface TemplateTagsAutocompleteProps {
   toggleTag: (itemKey: string) => void;
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedRecommendedTags: SelectedItems;
-  fromWorkspaceLandingPage?: boolean;
+  onSelectTag?: (tag: string) => void;
+  onSelectRecommendedTag?: (tag: string) => void;
 }
 
 export interface TagTypes extends ChipProps {
@@ -33,7 +33,8 @@ function TemplateTagsAutocomplete({
   toggleTag,
   setSelectedTags,
   selectedRecommendedTags,
-  fromWorkspaceLandingPage,
+  onSelectTag,
+  onSelectRecommendedTag,
 }: TemplateTagsAutocompleteProps) {
   const { tags } = useWorkspaceTemplateTags();
 
@@ -51,14 +52,16 @@ function TemplateTagsAutocomplete({
         onChange={(_, value: string[]) => {
           const addedValue = value.find((tag) => !selectedTags.includes(tag));
 
-          if (fromWorkspaceLandingPage && addedValue) {
-            trackEvent({
-              category: 'Workspace Landing Page',
-              action: 'Select Template Tag from Dropdown',
-              value: addedValue,
-            });
+          if (addedValue) {
+            onSelectTag?.(addedValue);
           }
+
           setSelectedTags(value);
+        }}
+        renderInputProps={{
+          variant: 'outlined',
+          label: 'Workspace Template Tags',
+          placeholder: 'Select tags to filter workspace templates',
         }}
       />
       <Box>
@@ -71,13 +74,7 @@ function TemplateTagsAutocomplete({
               isSelected={selectedRecommendedTags.has(tag)}
               label={tag}
               onClick={() => {
-                if (fromWorkspaceLandingPage) {
-                  trackEvent({
-                    category: 'Workspace Landing Page',
-                    action: 'Select Recommended Template Tag',
-                    tag,
-                  });
-                }
+                onSelectRecommendedTag?.(tag);
                 toggleTag(tag);
               }}
               key={tag}

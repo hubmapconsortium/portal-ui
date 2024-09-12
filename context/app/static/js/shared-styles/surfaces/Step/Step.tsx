@@ -7,6 +7,7 @@ interface StepProps {
   index?: number;
   title: string;
   isRequired?: boolean;
+  hideRequiredText?: boolean;
 }
 
 interface RequiredVariant {
@@ -34,7 +35,7 @@ function StepDescription({ blocks }: { blocks: (string | ReactElement)[] }) {
     </Stack>
   );
 }
-function Step({ index, title, isRequired = false, children }: PropsWithChildren<StepProps>) {
+function Step({ index, title, isRequired = false, hideRequiredText, children }: PropsWithChildren<StepProps>) {
   const { color, text } = requiredVariants[isRequired.toString() as 'true' | 'false'] as RequiredVariant;
   return (
     <>
@@ -46,7 +47,8 @@ function Step({ index, title, isRequired = false, children }: PropsWithChildren<
       >
         <Typography variant="subtitle2" sx={{ color: `${color}.contrastText` }}>
           {index !== undefined && `${index + 1}. `}
-          {`${title} (${text})`}
+          {title}
+          {!hideRequiredText && ` (${text})`}
         </Typography>
       </Paper>
       <Paper sx={{ p: 2, mb: 2 }}>{children}</Paper>

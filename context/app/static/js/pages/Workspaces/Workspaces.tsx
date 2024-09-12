@@ -29,7 +29,7 @@ function Workspaces() {
       <WorkspacesTitle />
       <WorkspacesTutorialPrompt />
       <WorkspacesAuthGuard>
-        <TextItems textKey="access" />
+        <TextItems textKey="workspacesUserOrLoggedOut" />
         <WorkspacesAuthenticated />
       </WorkspacesAuthGuard>
     </Stack>
