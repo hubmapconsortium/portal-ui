@@ -19,14 +19,16 @@ import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDia
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 import { TemplateExample } from 'js/components/workspaces/types';
 import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface ExampleAccordionProps {
   example: TemplateExample;
   templateKey: string;
+  templateName: string;
   defaultExpanded?: boolean;
 }
 
-function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAccordionProps) {
+function ExampleAccordion({ example, templateKey, defaultExpanded, templateName }: ExampleAccordionProps) {
   const { title, description, assay_display_name, datasets, job_type, resource_options } = example;
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
@@ -58,7 +60,18 @@ function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAcco
         </AccordionSummary>
         <AccordionDetails>
           <Stack spacing={2}>
-            <StyledButton variant="contained" disabled={!isAuthenticated} onClick={() => setDialogIsOpen(true)}>
+            <StyledButton
+              variant="contained"
+              disabled={!isAuthenticated}
+              onClick={() => {
+                trackEvent({
+                  category: 'Workspace Template Detail Page',
+                  action: 'Select Try Sample Workspace',
+                  value: templateName,
+                });
+                setDialogIsOpen(true);
+              }}
+            >
               Try Sample Workspace
             </StyledButton>
             <Stack component={SummaryPaper} spacing={1}>
@@ -71,6 +84,13 @@ function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAcco
                   <Stack spacing={1} direction="row">
                     {assay_display_name.map((name, idx) => (
                       <InternalLink
+                        onClick={() => {
+                          trackEvent({
+                            category: 'Workspace Template Detail Page',
+                            action: 'Navigate to dataset search page from assay type',
+                            value: { templateName, name },
+                          });
+                        }}
                         href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${assayToRawDatasetMap[name]}][0]=${encodeURI(name)}&entity_type[0]=Dataset`}
                         key={name}
                       >
@@ -137,6 +157,7 @@ function Template({ templateKey }: TemplatePageProps) {
               key={example.title}
               example={example}
               templateKey={templateKey}
+              templateName={template.title}
               defaultExpanded={idx === 0}
             />
           ))}
