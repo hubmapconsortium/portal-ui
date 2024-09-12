@@ -8,7 +8,11 @@ import Box from '@mui/material/Box';
 import { InfoIcon } from 'js/shared-styles/icons';
 import { LoginButton } from 'js/components/detailPage/BulkDataTransfer/style';
 
-function LogInPanel({ children }: PropsWithChildren) {
+interface LogInPanelProps extends PropsWithChildren {
+  onClick?: () => void;
+}
+
+function LogInPanel({ children, onClick }: LogInPanelProps) {
   if (isAuthenticated) {
     return null;
   }
@@ -20,7 +24,7 @@ function LogInPanel({ children }: PropsWithChildren) {
         <Typography>{children}</Typography>
       </Stack>
       <Box>
-        <LoginButton href="/login" variant="contained" color="primary">
+        <LoginButton href="/login" variant="contained" color="primary" onClick={onClick}>
           Log In
         </LoginButton>
       </Box>

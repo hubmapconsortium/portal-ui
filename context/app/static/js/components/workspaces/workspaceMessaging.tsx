@@ -123,8 +123,18 @@ const pageLinks = [
   },
 ];
 
-function LogInAlert() {
-  return <LoginAlert featureName="workspaces" />;
+function WorkspacesLogInAlert() {
+  return (
+    <LoginAlert
+      featureName="workspaces"
+      onClick={() =>
+        trackEvent({
+          category: 'Workspace Landing Page',
+          action: 'Log In / From alert',
+        })
+      }
+    />
+  );
 }
 
 function AccessAlert() {
@@ -136,85 +146,67 @@ function AccessAlert() {
   );
 }
 
-function TemplateLogInPanel() {
-  if (isAuthenticated) {
-    return null;
-  }
-
-  return (
-    <LogInPanel>
-      Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by your
-      specific interests. Click on any template for detailed information.{' '}
-      <InternalLink
-        onClick={() =>
-          trackEvent({
-            category: 'Workspace Landing Page',
-            action: 'Log In / From template section',
-          })
-        }
-        href="/login"
-      >
-        Log in
-      </InternalLink>{' '}
-      to begin working in a workspace.
-    </LogInPanel>
-  );
+interface EventTrackingProps {
+  trackingCategory: string;
 }
 
-function TemplateGridPreview() {
+function TemplatePreviewSection({ trackingCategory }: EventTrackingProps) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
   const recommendedTags = ['visualization', 'api'];
 
-  return (
-    <Stack spacing={2}>
-      <TemplateTagsAutocomplete
-        selectedTags={selectedTags}
-        recommendedTags={recommendedTags}
-        toggleTag={toggleTag}
-        setSelectedTags={setSelectedTags}
-        selectedRecommendedTags={selectedRecommendedTags}
-        onSelectTag={(tag) =>
-          trackEvent({
-            category: 'Workspace Landing Page',
-            action: 'Select Template Tag from Dropdown',
-            value: tag,
-          })
-        }
-        onSelectRecommendedTag={(tag) =>
-          trackEvent({
-            category: 'Workspace Landing Page',
-            action: 'Select Recommended Template Tag',
-            value: tag,
-          })
-        }
-      />
-      <TemplateGrid
-        templates={templates}
-        onClick={(templateName: string) =>
-          trackEvent({
-            category: 'Workspace Landing Page',
-            action: 'Click template card',
-            value: templateName,
-          })
-        }
-      />
-    </Stack>
-  );
-}
-
-function TemplatePreviewSection() {
-  if (isAuthenticated) {
-    return null;
-  }
+  const trackLogIn = () => {
+    trackEvent({
+      category: trackingCategory,
+      action: 'Log In / From template section',
+    });
+  };
 
   return (
-    <Stack pt={2} spacing={2}>
-      <Typography variant="h4">Workspace Templates</Typography>
-      <TemplateLogInPanel />
-      <TemplateGridPreview />
+    <Stack spacing={3}>
+      <LogInPanel onClick={trackLogIn}>
+        Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
+        your specific interests. Click on any template for detailed information.{' '}
+        <InternalLink onClick={trackLogIn} href="/login">
+          Log in
+        </InternalLink>{' '}
+        to begin working in a workspace.
+      </LogInPanel>
+      <Stack spacing={2}>
+        <TemplateTagsAutocomplete
+          selectedTags={selectedTags}
+          recommendedTags={recommendedTags}
+          toggleTag={toggleTag}
+          setSelectedTags={setSelectedTags}
+          selectedRecommendedTags={selectedRecommendedTags}
+          onSelectTag={(tag) =>
+            trackEvent({
+              category: trackingCategory,
+              action: 'Select Template Tag from Dropdown',
+              value: tag,
+            })
+          }
+          onSelectRecommendedTag={(tag) =>
+            trackEvent({
+              category: trackingCategory,
+              action: 'Select Recommended Template Tag',
+              value: tag,
+            })
+          }
+        />
+        <TemplateGrid
+          templates={templates}
+          onClick={(templateName: string) =>
+            trackEvent({
+              category: trackingCategory,
+              action: 'Click template card',
+              value: templateName,
+            })
+          }
+        />
+      </Stack>
     </Stack>
   );
 }
@@ -239,9 +231,14 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
           </LabelledSectionText>
         </Stack>
       </Stack>
-      <TemplatePreviewSection />
+      {!isAuthenticated && (
+        <Stack pt={2} spacing={2}>
+          <Typography variant="h4">Workspace Templates</Typography>
+          <TemplatePreviewSection trackingCategory="Workspace Landing Page" />
+        </Stack>
+      )}
     </Stack>
   );
 }
 
-export { LogInAlert, AccessAlert, TemplateLogInPanel, TemplateGridPreview, TextItems };
+export { WorkspacesLogInAlert, AccessAlert, TemplatePreviewSection, TextItems };
