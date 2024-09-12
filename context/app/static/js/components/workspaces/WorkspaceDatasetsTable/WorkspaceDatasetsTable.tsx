@@ -28,6 +28,7 @@ interface WorkspaceDatasetsTableProps {
   removeDatasets?: (ids: string[]) => void;
   addDatasets?: MergedWorkspace;
   copyDatasets?: boolean;
+  onCopyDatasets?: () => void;
   label?: ReactNode;
   disabledIDs?: Set<string>;
   emptyAlert?: ReactNode;
@@ -41,6 +42,7 @@ function WorkspaceDatasetsTable({
   removeDatasets,
   addDatasets,
   copyDatasets,
+  onCopyDatasets,
   label,
   disabledIDs,
   emptyAlert,
@@ -80,7 +82,7 @@ function WorkspaceDatasetsTable({
           leftText={label}
           buttons={
             <Stack direction="row" gap={1}>
-              {copyDatasets && datasetsPresent && <Copy />}
+              {copyDatasets && datasetsPresent && <Copy onCopy={onCopyDatasets} />}
               {addDatasets && (
                 <WorkspacesUpdateButton
                   workspace={addDatasets}

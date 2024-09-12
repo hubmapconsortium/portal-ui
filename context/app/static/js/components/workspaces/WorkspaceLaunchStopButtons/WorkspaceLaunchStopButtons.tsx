@@ -14,10 +14,11 @@ import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
   handleStopWorkspace: (workspaceId: number) => Promise<void>;
+  button: ElementType<ButtonProps>;
   isStoppingWorkspace: boolean;
   showLaunch?: boolean;
   showStop?: boolean;
-  button: ElementType<ButtonProps>;
+  onLaunchWorkspace?: (workspaceName: string) => void;
 }
 
 function StopWorkspaceButton({
@@ -89,7 +90,7 @@ function StopWorkspaceAlert() {
 }
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const { workspace, button: ButtonComponent, showLaunch = false, showStop = false } = props;
+  const { workspace, button: ButtonComponent, onLaunchWorkspace, showLaunch = false, showStop = false } = props;
   const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
 
   if (workspace.status === 'deleting') {
@@ -104,7 +105,15 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
     <Stack direction="row" spacing={2}>
       {showStop && <StopWorkspaceButton {...props} />}
       {showLaunch && (
-        <Button type="button" variant="contained" color="primary" onClick={() => launchOrOpenDialog(workspace)}>
+        <Button
+          type="button"
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            onLaunchWorkspace?.(workspace.name);
+            launchOrOpenDialog(workspace);
+          }}
+        >
           Launch Workspace
         </Button>
       )}

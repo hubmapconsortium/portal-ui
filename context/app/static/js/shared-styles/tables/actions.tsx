@@ -22,7 +22,11 @@ const TableIconButton = styled(TooltipIconButton)(({ theme }) => ({
   border: `1px solid ${theme.palette.divider}`,
 }));
 
-export function Copy() {
+interface CopyProps {
+  onCopy?: () => void;
+}
+
+export function Copy({ onCopy }: CopyProps) {
   const [isLoading, setLoading] = useState(false);
   const handleCopyClick = useHandleCopyClick();
   const { selectedRows } = useSelectableTableStore();
@@ -30,6 +34,8 @@ export function Copy() {
   const { toastError } = useSnackbarActions();
 
   const handleClick = useCallback(() => {
+    onCopy?.();
+
     async function fetchIDs() {
       const query = { query: getIDsQuery([...selectedRows]), _source: 'hubmap_id' };
       setLoading(true);
@@ -48,7 +54,7 @@ export function Copy() {
       .finally(() => {
         setLoading(false);
       });
-  }, [handleCopyClick, toastError, selectedRows, elasticsearchEndpoint, groupsToken]);
+  }, [onCopy, handleCopyClick, toastError, selectedRows, elasticsearchEndpoint, groupsToken]);
 
   return (
     <TableIconButton

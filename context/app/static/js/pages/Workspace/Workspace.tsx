@@ -23,6 +23,7 @@ import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateBut
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
+import { trackEvent } from 'js/helpers/trackers';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -80,6 +81,13 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                   marginRight: theme.spacing(1),
                 })}
                 tooltip={tooltips.name}
+                onClick={() => {
+                  trackEvent({
+                    category: 'Workspace Detail Page',
+                    action: 'Launch Edit Workspace Dialog',
+                    value: workspace.name,
+                  });
+                }}
               >
                 <EditIcon />
               </WorkspacesUpdateButton>
@@ -88,6 +96,13 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                 button={LaunchStopButton}
                 handleStopWorkspace={handleStopWorkspace}
                 isStoppingWorkspace={isStoppingWorkspace}
+                onLaunchWorkspace={(workspaceName: string) => {
+                  trackEvent({
+                    category: 'Workspace Detail Page',
+                    action: 'Launch Workspace',
+                    value: workspaceName,
+                  });
+                }}
                 showLaunch
                 showStop
               />
@@ -119,6 +134,13 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         label={<SectionHeader>Datasets</SectionHeader>}
         hideTableIfEmpty
         copyDatasets
+        onCopyDatasets={() => {
+          trackEvent({
+            category: 'Workspace Detail Page',
+            action: 'Copy HuBMAP IDs',
+            value: workspace.name,
+          });
+        }}
         emptyAlert={
           <Alert
             severity="info"
