@@ -136,7 +136,7 @@ function useWorkspaceTemplateTags() {
 
 function useJobTypeName(example: TemplateExample) {
   const { data } = useJobTypes();
-  const jobTypeKey = example.job_type ?? DEFAULT_JOB_TYPE;
+  const jobTypeKey = example.job_types?.[0] ?? DEFAULT_JOB_TYPE;
 
   return data ? Object.values(data).find(({ id }) => id === jobTypeKey)?.name : jobTypeKey;
 }

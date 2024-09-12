@@ -27,12 +27,12 @@ interface ExampleAccordionProps {
 }
 
 function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAccordionProps) {
-  const { title, description, assay_display_name, datasets, job_type, resource_options } = example;
+  const { title, description, assay_display_name, datasets, job_types, resource_options } = example;
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
     defaultName: title,
     defaultTemplate: templateKey,
-    defaultJobType: job_type,
+    defaultJobType: job_types?.[0],
     defaultResourceOptions: resource_options,
     initialSelectedDatasets: datasets,
   });
