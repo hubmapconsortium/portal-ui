@@ -1,8 +1,9 @@
-import React, { ChangeEvent } from 'react';
+import React, { ChangeEvent, useMemo } from 'react';
 import Grid from '@mui/material/Grid';
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
 import { InternalLink } from 'js/shared-styles/Links';
-import { TemplatesTypes } from '../types';
+import { sortTemplates } from 'js/components/workspaces/utils';
+import { TemplatesTypes } from 'js/components/workspaces/types';
 
 interface TemplateGridProps {
   templates: TemplatesTypes;
@@ -17,9 +18,11 @@ function TemplateGrid({
   selectedTemplates = new Set([]),
   disabledTemplates = {},
 }: TemplateGridProps) {
+  const sortedTemplates = useMemo(() => sortTemplates(templates, disabledTemplates), [templates, disabledTemplates]);
+
   return (
     <Grid container alignItems="stretch" sx={{ maxHeight: '625px', overflowY: 'auto' }}>
-      {Object.entries(templates).map(([templateKey, { title, description, tags }]) => (
+      {Object.entries(sortedTemplates).map(([templateKey, { title, description, tags }]) => (
         <Grid item md={4} xs={12} key={templateKey} paddingBottom={2} paddingX={1}>
           <SelectableCard
             title={<InternalLink href={`/templates/${templateKey}`}>{title}</InternalLink>}
