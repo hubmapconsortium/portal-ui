@@ -64,6 +64,14 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
 
   const job = condenseJobs(workspace.jobs);
 
+  const trackWorkspaceEvent = (action: string) => {
+    trackEvent({
+      category: 'Workspace Detail Page',
+      action,
+      value: workspace.name,
+    });
+  };
+
   return (
     <Stack gap={6} sx={{ marginBottom: 5 }}>
       <WorkspaceSessionWarning workspaces={[workspace]} />
@@ -81,13 +89,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                   marginRight: theme.spacing(1),
                 })}
                 tooltip={tooltips.name}
-                onClick={() => {
-                  trackEvent({
-                    category: 'Workspace Detail Page',
-                    action: 'Launch Edit Workspace Dialog',
-                    value: workspace.name,
-                  });
-                }}
+                onClick={() => trackWorkspaceEvent('Launch Edit Workspace Dialog')}
               >
                 <EditIcon />
               </WorkspacesUpdateButton>
@@ -96,13 +98,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                 button={LaunchStopButton}
                 handleStopWorkspace={handleStopWorkspace}
                 isStoppingWorkspace={isStoppingWorkspace}
-                onLaunchWorkspace={(workspaceName: string) => {
-                  trackEvent({
-                    category: 'Workspace Detail Page',
-                    action: 'Launch Workspace',
-                    value: workspaceName,
-                  });
-                }}
+                onLaunchWorkspace={() => trackWorkspaceEvent('Launch Workspace')}
                 showLaunch
                 showStop
               />
@@ -130,17 +126,12 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
       </Box>
       <WorkspaceDatasetsTable
         datasetsUUIDs={workspaceDatasets}
-        addDatasets={workspace}
         label={<SectionHeader>Datasets</SectionHeader>}
         hideTableIfEmpty
+        addDatasets={workspace}
+        onAddDatasets={() => trackWorkspaceEvent('Launch Add Datasets Dialog')}
         copyDatasets
-        onCopyDatasets={() => {
-          trackEvent({
-            category: 'Workspace Detail Page',
-            action: 'Copy HuBMAP IDs',
-            value: workspace.name,
-          });
-        }}
+        onCopyDatasets={() => trackWorkspaceEvent('Copy HuBMAP IDs')}
         emptyAlert={
           <Alert
             severity="info"
@@ -167,7 +158,10 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             </WorkspacesUpdateButton>
           }
         />
-        <TemplateGrid templates={workspaceTemplates} />
+        <TemplateGrid
+          templates={workspaceTemplates}
+          onClick={() => trackWorkspaceEvent('Navigate to Workspace Template')}
+        />
       </Box>
     </Stack>
   );

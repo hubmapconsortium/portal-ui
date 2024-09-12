@@ -18,7 +18,7 @@ interface WorkspaceButtonProps {
   isStoppingWorkspace: boolean;
   showLaunch?: boolean;
   showStop?: boolean;
-  onLaunchWorkspace?: (workspaceName: string) => void;
+  onLaunchWorkspace?: () => void;
 }
 
 function StopWorkspaceButton({
@@ -110,7 +110,7 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
           variant="contained"
           color="primary"
           onClick={() => {
-            onLaunchWorkspace?.(workspace.name);
+            onLaunchWorkspace?.();
             launchOrOpenDialog(workspace);
           }}
         >

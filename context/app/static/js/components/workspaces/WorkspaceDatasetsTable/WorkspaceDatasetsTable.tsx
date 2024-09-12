@@ -27,6 +27,7 @@ interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
   addDatasets?: MergedWorkspace;
+  onAddDatasets?: () => void;
   copyDatasets?: boolean;
   onCopyDatasets?: () => void;
   label?: ReactNode;
@@ -41,6 +42,7 @@ function WorkspaceDatasetsTable({
   datasetsUUIDs,
   removeDatasets,
   addDatasets,
+  onAddDatasets,
   copyDatasets,
   onCopyDatasets,
   label,
@@ -89,6 +91,7 @@ function WorkspaceDatasetsTable({
                   dialogType="ADD_DATASETS"
                   tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.add}
                   disabled={hasMaxDatasets}
+                  onClick={onAddDatasets}
                 >
                   <AddIcon />
                 </WorkspacesUpdateButton>
