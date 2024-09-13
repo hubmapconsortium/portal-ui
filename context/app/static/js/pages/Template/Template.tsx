@@ -67,7 +67,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
                 trackEvent({
                   category: 'Workspace Template Detail Page',
                   action: 'Select Try Sample Workspace',
-                  value: templateName,
+                  label: templateName,
                 });
                 setDialogIsOpen(true);
               }}

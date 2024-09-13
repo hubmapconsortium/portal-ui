@@ -68,7 +68,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
     trackEvent({
       category: 'Workspace Detail Page',
       action,
-      value: workspace.name,
+      label: workspace.name,
     });
   };
 

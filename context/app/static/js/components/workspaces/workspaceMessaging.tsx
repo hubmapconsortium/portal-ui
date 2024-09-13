@@ -100,8 +100,8 @@ const text = {
 const trackRelevantPage = (pageName: string) => {
   trackEvent({
     category: 'Workspace Landing Page',
-    action: 'Navigate to Relevant Page',
-    value: pageName,
+    action: 'Select Relevant Page Button',
+    label: pageName,
   });
 };
 
@@ -185,14 +185,14 @@ function TemplatePreviewSection({ trackingCategory }: EventTrackingProps) {
             trackEvent({
               category: trackingCategory,
               action: 'Select Template Tag from Dropdown',
-              value: tag,
+              label: tag,
             })
           }
           onSelectRecommendedTag={(tag) =>
             trackEvent({
               category: trackingCategory,
               action: 'Select Recommended Template Tag',
-              value: tag,
+              label: tag,
             })
           }
         />
@@ -202,7 +202,7 @@ function TemplatePreviewSection({ trackingCategory }: EventTrackingProps) {
             trackEvent({
               category: trackingCategory,
               action: 'Click template card',
-              value: templateName,
+              label: templateName,
             })
           }
         />
