@@ -71,8 +71,6 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
           title={workspace.name}
           entity_type="Workspace"
           entityTypeDisplay={undefined}
-          status=""
-          mapped_data_access_level=""
           otherButtons={
             <>
               <WorkspacesUpdateButton
@@ -120,6 +118,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         addDatasets={workspace}
         label={<SectionHeader>Datasets</SectionHeader>}
         hideTableIfEmpty
+        copyDatasets
         emptyAlert={
           <Alert
             severity="info"
