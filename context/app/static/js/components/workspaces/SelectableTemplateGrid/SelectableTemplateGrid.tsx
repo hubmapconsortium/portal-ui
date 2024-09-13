@@ -1,4 +1,4 @@
-import React, { useCallback, ChangeEvent, useMemo } from 'react';
+import React, { useCallback, ChangeEvent } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -10,7 +10,6 @@ import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessag
 import { TemplatesTypes } from '../types';
 import TemplateGrid from '../TemplateGrid';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
-import { sortTemplates } from '../utils';
 
 interface TemplateGridProps {
   disabledTemplates?: TemplatesTypes;
@@ -43,8 +42,6 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   const { selectedItems: selectedTemplates, setSelectedItems: setSelectedTemplates } = useSelectItems(
     field.value satisfies FormType[typeof inputName],
   );
-
-  const sortedTemplates = useMemo(() => sortTemplates(templates, disabledTemplates), [templates, disabledTemplates]);
 
   const updateTemplates = useCallback(
     (templateKeys: string[]) => {
@@ -90,7 +87,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
         }
       />
       <TemplateGrid
-        templates={sortedTemplates}
+        templates={templates}
         selectItem={selectItem}
         selectedTemplates={selectedTemplates}
         disabledTemplates={disabledTemplates}

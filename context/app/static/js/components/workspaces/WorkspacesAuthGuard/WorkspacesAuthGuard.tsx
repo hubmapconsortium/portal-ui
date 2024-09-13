@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
-import { TextItems, WorkspacesLogInAlert, AccessAlert } from '../workspaceMessaging';
+import { TextItems, WorkspacesLogInAlert, AccessAlert } from 'js/components/workspaces/workspaceMessaging';
 
 function WorkspacesAuthGuard({ children }: { children: ReactNode }) {
   const { isAuthenticated, isWorkspacesUser } = useAppContext();
