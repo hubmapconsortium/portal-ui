@@ -6,10 +6,11 @@ import Stack from '@mui/material/Stack';
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import SelectableTemplateGrid from '../SelectableTemplateGrid';
-import { TemplatesTypes } from '../types';
-import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
-import TemplateTagsAutocomplete from '../TemplateTagsAutocomplete';
+import SelectableTemplateGrid from 'js/components/workspaces/SelectableTemplateGrid';
+import { TemplatesTypes } from 'js/components/workspaces/types';
+import { FormWithTemplates } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import TemplateTagsAutocomplete from 'js/components/workspaces/TemplateTagsAutocomplete';
+import { R_TEMPLATE_LABEL } from 'js/components/workspaces/constants';
 
 function ContactPrompt() {
   return (
@@ -24,7 +25,7 @@ const description = [
   <ContactPrompt key="configure-workspace-contact" />,
 ];
 
-const recommendedTags = ['visualization', 'api'];
+const recommendedTags = ['visualization', 'api', R_TEMPLATE_LABEL];
 
 interface TemplateSelectProps<FormType extends FormWithTemplates> {
   title: string;

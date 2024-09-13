@@ -108,6 +108,7 @@ interface TemplateTypes {
   is_multi_dataset_template: boolean;
   template_format: string;
   is_hidden: boolean;
+  job_types?: string[];
 }
 
 type TemplatesTypes = Record<string, TemplateTypes>;

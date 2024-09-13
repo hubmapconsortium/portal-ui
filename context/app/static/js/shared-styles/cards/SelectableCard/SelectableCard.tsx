@@ -30,6 +30,7 @@ function SelectableCard({
   ...rest
 }: SelectableCardProps) {
   const colorVariant = isSelected ? 'primaryContainer' : 'secondaryContainer';
+
   return (
     <SecondaryBackgroundTooltip title={tooltip}>
       <StyledCard $colorVariant={colorVariant} {...rest}>

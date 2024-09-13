@@ -20,7 +20,7 @@ import {
   DEFAULT_JOB_TYPE,
   DEFAULT_MEMORY_MB,
   DEFAULT_NUM_CPUS,
-  DEFAULT_TEMPLATE_KEY,
+  DEFAULT_PYTHON_TEMPLATE_KEY,
   DEFAULT_TIME_LIMIT_MINUTES,
 } from '../constants';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable/hooks';
@@ -80,7 +80,7 @@ function useCreateWorkspaceForm({
     defaultValues: {
       'workspace-name': checkedWorkspaceName,
       'protected-datasets': checkedProtectedDatasets,
-      templates: [defaultTemplate ?? DEFAULT_TEMPLATE_KEY],
+      templates: [defaultTemplate ?? DEFAULT_PYTHON_TEMPLATE_KEY],
       workspaceJobTypeId: DEFAULT_JOB_TYPE,
       workspaceResourceOptions: {
         num_cpus: DEFAULT_NUM_CPUS,
