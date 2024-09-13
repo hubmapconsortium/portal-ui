@@ -117,8 +117,9 @@ export interface Dataset extends Entity {
 
 export interface Collection extends Entity {
   entity_type: 'Collection';
-  doi_url: string;
+  doi_url?: string;
   title: string;
+  datasets: Dataset[];
 }
 
 export interface Publication extends Entity {

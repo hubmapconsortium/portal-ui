@@ -6,8 +6,8 @@ import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
 
 interface SummaryProps extends PropsWithChildren {
   title?: string;
-  status: string;
-  mapped_data_access_level: string;
+  status?: string;
+  mapped_data_access_level?: string;
   entityTypeDisplay?: string;
   mapped_external_group_name?: string;
   bottomFold?: React.ReactNode;
