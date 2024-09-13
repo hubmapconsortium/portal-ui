@@ -23,12 +23,11 @@ function DOILink({ doi_url }: Pick<Collection, 'doi_url'>) {
 }
 
 function CollectionDetail({ collection: collectionData }: { collection: Collection }) {
-  const { entity_type, hubmap_id, doi_url, datasets, creators, contributors, contacts } = collectionData;
+  const { entity_type, hubmap_id, doi_url, datasets, contributors, contacts } = collectionData;
 
   useTrackID({ entity_type, hubmap_id });
 
-  // Handle both fields until creators is renamed to contributors.
-  const possibleContributors = contributors ?? creators;
+  const possibleContributors = contributors;
 
   return (
     <div>
