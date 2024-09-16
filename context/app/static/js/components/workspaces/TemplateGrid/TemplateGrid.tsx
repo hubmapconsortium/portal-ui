@@ -2,7 +2,6 @@ import React, { ChangeEvent } from 'react';
 import Grid from '@mui/material/Grid';
 
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
-import { R_JOB_TYPE, R_TEMPLATE_LABEL } from 'js/components/workspaces/constants';
 import { TemplatesTypes } from '../types';
 
 interface TemplateGridProps {
@@ -21,13 +20,12 @@ function TemplateGrid({
   return (
     <Grid container columnSpacing={2} alignItems="stretch" sx={{ maxHeight: '625px', overflowY: 'auto' }}>
       {Object.entries(templates).map(([templateKey, { title, description, tags, job_types }]) => {
-        const isRTemplate = job_types?.includes(R_JOB_TYPE);
         return (
           <Grid item md={4} xs={12} key={templateKey} paddingBottom={2}>
             <SelectableCard
-              title={isRTemplate ? `${title} (${R_TEMPLATE_LABEL})` : title}
+              title={title}
               description={description}
-              tags={[...tags, ...(isRTemplate ? [R_TEMPLATE_LABEL] : [])]}
+              tags={tags}
               isSelected={selectedTemplates.has(templateKey) || templateKey in disabledTemplates}
               selectItem={selectItem}
               cardKey={templateKey}

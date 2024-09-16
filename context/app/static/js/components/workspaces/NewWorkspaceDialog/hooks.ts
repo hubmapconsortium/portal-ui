@@ -5,15 +5,11 @@ import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
 import { SWRError } from 'js/helpers/swr/errors';
-import {
-  TemplatesResponse,
-  CreateTemplateNotebooksTypes,
-  TemplateTagsResponse,
-  TemplatesTypes,
-} from 'js/components/workspaces/types';
+import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse } from 'js/components/workspaces/types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { R_JOB_TYPE, R_TEMPLATE_LABEL } from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -39,16 +35,27 @@ function useUserTemplatesAPI<T>({ templatesURL, config = { fallbackData: {} } }:
 function useWorkspaceTemplates(tags: string[] = []) {
   const { userTemplatesEndpoint } = useAppContext();
 
-  const queryParams = tags.map((tag, i) => `${i === 0 ? '' : '&'}tags=${encodeURIComponent(tag)}`).join('');
-
-  const url = `${userTemplatesEndpoint}/templates/jupyter_lab/?${queryParams}`;
+  const url = `${userTemplatesEndpoint}/templates/jupyter_lab`;
   const result = useUserTemplatesAPI<TemplatesResponse>({ templatesURL: url });
 
   const templates = result?.data?.data ?? {};
 
+  // Manually update tags and title for R templates
+  const updatedTemplates = Object.fromEntries(
+    Object.entries(templates).map(([key, template]) => {
+      const isRTemplate = template.job_types?.includes(R_JOB_TYPE);
+
+      const updatedTitle = isRTemplate ? `${template.title} (${R_TEMPLATE_LABEL})` : template.title;
+      const updatedTags = [...template.tags, ...(isRTemplate ? [R_TEMPLATE_LABEL] : [])];
+
+      return [key, { ...template, tags: updatedTags, title: updatedTitle }];
+    }),
+  );
+
+  // Filter templates by tags
   const filteredTemplates = Object.fromEntries(
-    Object.entries(templates).filter(([, template]) => !template?.is_hidden),
-  ) as TemplatesTypes;
+    Object.entries(updatedTemplates).filter(([_, template]) => tags.every((tag) => template.tags?.includes(tag))),
+  );
 
   return {
     templates: filteredTemplates,
