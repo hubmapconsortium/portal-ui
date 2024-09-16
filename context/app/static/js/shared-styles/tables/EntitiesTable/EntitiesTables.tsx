@@ -16,6 +16,7 @@ interface EntitiesTablesProps<Doc> {
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
   emptyAlert?: React.ReactNode;
+  onClickCell?: () => void;
 }
 
 function EntitiesTables<Doc>({
@@ -24,6 +25,7 @@ function EntitiesTables<Doc>({
   entities,
   disabledIDs,
   emptyAlert,
+  onClickCell,
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
@@ -56,7 +58,13 @@ function EntitiesTables<Doc>({
       ) : (
         entities.map(({ query, columns, entityType }, i) => (
           <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
-            <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} disabledIDs={disabledIDs} />
+            <EntityTable<Doc>
+              query={query}
+              columns={columns}
+              isSelectable={isSelectable}
+              disabledIDs={disabledIDs}
+              onClickCell={onClickCell}
+            />
           </TabPanel>
         ))
       )}

@@ -132,6 +132,13 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         onAddDatasets={() => trackWorkspaceEvent('Launch Add Datasets Dialog')}
         copyDatasets
         onCopyDatasets={() => trackWorkspaceEvent('Copy HuBMAP IDs')}
+        onSelectDataset={() =>
+          trackEvent({
+            category: 'Workspace Detail Page',
+            action: 'Navigate to Dataset from Table',
+            label: workspace.name,
+          })
+        }
         emptyAlert={
           <Alert
             severity="info"

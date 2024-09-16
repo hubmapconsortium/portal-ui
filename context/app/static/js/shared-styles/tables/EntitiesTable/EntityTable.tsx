@@ -69,11 +69,12 @@ function TablePaddingRow({ padding }: { padding: number }) {
 interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns'> {
   isSelectable: boolean;
   disabledIDs?: Set<string>;
+  onClickCell?: () => void;
 }
 
 const headerRowHeight = 60;
 
-function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true }: EntityTableProps<Doc>) {
+function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, onClickCell }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
 
   const {
@@ -141,7 +142,7 @@ function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true }: 
                   {isSelectable && <SelectableRowCell rowKey={hit?._id} disabled={disabledIDs?.has(hit?._id)} />}
                   {columns.map(({ cellContent: CellContent, id }) => (
                     <TableCell key={id}>
-                      <CellContent hit={hit._source} />
+                      <CellContent hit={hit._source} onClick={onClickCell} />
                     </TableCell>
                   ))}
                 </TableRow>

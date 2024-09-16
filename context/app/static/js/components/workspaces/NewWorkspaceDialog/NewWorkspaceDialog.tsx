@@ -18,6 +18,7 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
+import { trackEvent } from 'js/helpers/trackers';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
@@ -82,7 +83,7 @@ interface NewWorkspaceDialogProps {
   dialogIsOpen: boolean;
   handleClose: () => void;
   removeDatasets?: (uuids: string[]) => void;
-  onSubmit: ({ workspaceName, templateKeys, uuids, fromWorkspaceLandingPage }: CreateTemplateNotebooksTypes) => void;
+  onSubmit: ({ workspaceName, templateKeys, uuids, onCreateWorkspace }: CreateTemplateNotebooksTypes) => void;
   isSubmitting?: boolean;
   showDatasetsSearchBar?: boolean;
   inputValue: string;
@@ -135,10 +136,20 @@ function NewWorkspaceDialog({
         uuids: datasets,
         workspaceJobTypeId,
         workspaceResourceOptions,
-        fromWorkspaceLandingPage: showDatasetsSearchBar,
+        onCreateWorkspace: ({ name, files, symlinks }) => {
+          trackEvent({
+            category: 'Workspace Landing Page',
+            action: 'Create Workspace',
+            label: {
+              name,
+              files,
+              symlinks,
+            },
+          });
+        },
       });
     },
-    [onSubmit, showDatasetsSearchBar],
+    [onSubmit],
   );
 
   return (

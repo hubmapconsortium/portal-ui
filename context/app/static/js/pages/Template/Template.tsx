@@ -101,7 +101,17 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
                 </LabelledSectionText>
               )}
             </Stack>
-            <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} isSelectable={false} />
+            <WorkspaceDatasetsTable
+              datasetsUUIDs={[...datasets]}
+              isSelectable={false}
+              onSelectDataset={() =>
+                trackEvent({
+                  category: 'Workspace Template Detail Page',
+                  action: 'Navigate to Dataset from Table',
+                  label: templateName,
+                })
+              }
+            />
           </Stack>
         </AccordionDetails>
       </PrimaryColorAccordion>

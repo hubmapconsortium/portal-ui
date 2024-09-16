@@ -145,7 +145,7 @@ interface CreateTemplateNotebooksTypes {
   workspaceName: string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
-  fromWorkspaceLandingPage?: boolean;
+  onCreateWorkspace?: ({ name, files, symlinks }: { name: string; files: string[]; symlinks: string[] }) => void;
 }
 
 type TemplateTags = Record<string, string>;

@@ -9,9 +9,12 @@ interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
 }
 
-function HubmapIDCell({ hit: { uuid, hubmap_id } }: CellContentProps<EntityDocument>) {
+function HubmapIDCell({
+  hit: { uuid, hubmap_id },
+  onClick,
+}: CellContentProps<EntityDocument> & { onClick?: () => void }) {
   return (
-    <InternalLink href={`/browse/dataset/${uuid}`} variant="body2">
+    <InternalLink href={`/browse/dataset/${uuid}`} onClick={onClick} variant="body2">
       {hubmap_id}
     </InternalLink>
   );

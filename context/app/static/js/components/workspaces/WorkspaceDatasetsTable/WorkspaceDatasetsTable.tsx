@@ -7,7 +7,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { DatasetDocument } from 'js/typings/search';
 import { getIDsQuery } from 'js/helpers/queries';
-import { hubmapID, lastModifiedTimestamp, assayTypes, status, organ } from 'js/shared-styles/tables/columns';
+import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
 import { AddIcon } from 'js/shared-styles/icons';
 
@@ -30,6 +30,7 @@ interface WorkspaceDatasetsTableProps {
   onAddDatasets?: () => void;
   copyDatasets?: boolean;
   onCopyDatasets?: () => void;
+  onSelectDataset?: () => void;
   label?: ReactNode;
   disabledIDs?: Set<string>;
   emptyAlert?: ReactNode;
@@ -45,6 +46,7 @@ function WorkspaceDatasetsTable({
   onAddDatasets,
   copyDatasets,
   onCopyDatasets,
+  onSelectDataset,
   label,
   disabledIDs,
   emptyAlert,
@@ -116,6 +118,7 @@ function WorkspaceDatasetsTable({
           disabledIDs={disabledIDs}
           emptyAlert={emptyAlert}
           isSelectable={isSelectable}
+          onClickCell={onSelectDataset}
         />
       )}
     </Box>
