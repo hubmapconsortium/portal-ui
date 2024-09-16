@@ -12,12 +12,12 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
-import { Alert } from 'js/shared-styles/alerts/Alert';
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 
+import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes } from '../types';
@@ -181,7 +181,8 @@ function NewWorkspaceDialog({
               <WorkspaceDatasetsTable
                 datasetsUUIDs={allDatasets}
                 removeDatasets={removeDatasets}
-                emptyAlert={<Alert severity="info">No datasets available.</Alert>}
+                emptyAlert={<WorkspacesNoDatasetsAlert />}
+                copyDatasets
               />
             )}
           </Stack>

@@ -1,0 +1,1 @@
+- Add templates landing page and template detail pages.

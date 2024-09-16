@@ -28,7 +28,7 @@ import StatusIcon from '../../StatusIcon';
 
 type EntityTypesWithIcons = Exclude<
   keyof typeof entityIconMap,
-  'Support' | 'Collection' | 'Workspace' | 'VerifiedUser'
+  'Support' | 'Collection' | 'Workspace' | 'WorkspaceTemplate' | 'VerifiedUser'
 >;
 
 export interface AssayMetadata {

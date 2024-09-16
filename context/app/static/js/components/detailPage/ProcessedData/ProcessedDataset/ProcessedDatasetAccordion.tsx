@@ -6,13 +6,13 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 import Skeleton from '@mui/material/Skeleton';
 
 import { VisualizationIcon } from 'js/shared-styles/icons';
+import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
 
 import { datasetSectionId } from 'js/pages/Dataset/utils';
 import { useInView } from 'react-intersection-observer';
 import { useHash } from 'js/hooks/useHash';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import StatusIcon from '../../StatusIcon';
-import { StyledProcessedDatasetAccordion } from './styles';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 import useProcessedDataStore from '../store';
 import { DetailPageSection } from '../../DetailPageSection';
@@ -57,7 +57,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
 
   return (
     <DetailPageSection id={datasetSectionId(sectionDataset, 'section')}>
-      <StyledProcessedDatasetAccordion
+      <PrimaryColorAccordion
         defaultExpanded={defaultExpanded}
         expanded={isExpanded}
         onChange={(_, expanded) => {
@@ -80,7 +80,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
           </Typography>
         </AccordionSummary>
         {dataset && !isLoading ? <AccordionDetails ref={ref}>{children}</AccordionDetails> : <LoadingFallback />}
-      </StyledProcessedDatasetAccordion>
+      </PrimaryColorAccordion>
     </DetailPageSection>
   );
 }

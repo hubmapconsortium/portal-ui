@@ -5,11 +5,17 @@ import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
 import { SWRError } from 'js/helpers/swr/errors';
-import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse } from 'js/components/workspaces/types';
+import {
+  TemplatesResponse,
+  CreateTemplateNotebooksTypes,
+  TemplateTagsResponse,
+  TemplateExample,
+} from 'js/components/workspaces/types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
-import { R_JOB_TYPE, R_TEMPLATE_TAG } from 'js/components/workspaces/constants';
+import { useJobTypes } from 'js/components/workspaces/api';
+import { DEFAULT_JOB_TYPE, R_JOB_TYPE, R_TEMPLATE_TAG } from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -138,4 +144,11 @@ function useWorkspaceTemplateTags() {
   return { tags };
 }
 
-export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks };
+function useJobTypeName(example: TemplateExample) {
+  const { data } = useJobTypes();
+  const jobTypeKey = example.job_types?.[0] ?? DEFAULT_JOB_TYPE;
+
+  return data ? Object.values(data).find(({ id }) => id === jobTypeKey)?.name : jobTypeKey;
+}
+
+export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks, useJobTypeName };
