@@ -10,7 +10,7 @@ import SelectableTemplateGrid from 'js/components/workspaces/SelectableTemplateG
 import { TemplatesTypes } from 'js/components/workspaces/types';
 import { FormWithTemplates } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import TemplateTagsAutocomplete from 'js/components/workspaces/TemplateTagsAutocomplete';
-import { R_TEMPLATE_LABEL } from 'js/components/workspaces/constants';
+import { R_TEMPLATE_TAG } from 'js/components/workspaces/constants';
 
 function ContactPrompt() {
   return (
@@ -25,7 +25,7 @@ const description = [
   <ContactPrompt key="configure-workspace-contact" />,
 ];
 
-const recommendedTags = ['visualization', 'api', R_TEMPLATE_LABEL];
+const recommendedTags = ['visualization', 'api', R_TEMPLATE_TAG];
 
 interface TemplateSelectProps<FormType extends FormWithTemplates> {
   title: string;

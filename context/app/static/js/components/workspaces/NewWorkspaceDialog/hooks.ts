@@ -9,7 +9,7 @@ import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse }
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
-import { R_JOB_TYPE, R_TEMPLATE_LABEL } from 'js/components/workspaces/constants';
+import { R_JOB_TYPE, R_TEMPLATE_TAG } from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -45,8 +45,8 @@ function useWorkspaceTemplates(tags: string[] = []) {
     Object.entries(templates).map(([key, template]) => {
       const isRTemplate = template.job_types?.includes(R_JOB_TYPE);
 
-      const updatedTitle = isRTemplate ? `${template.title} (${R_TEMPLATE_LABEL})` : template.title;
-      const updatedTags = [...template.tags, ...(isRTemplate ? [R_TEMPLATE_LABEL] : [])];
+      const updatedTitle = isRTemplate ? `${template.title} (${R_TEMPLATE_TAG})` : template.title;
+      const updatedTags = [...template.tags, ...(isRTemplate ? [R_TEMPLATE_TAG] : [])];
 
       return [key, { ...template, tags: updatedTags, title: updatedTitle }];
     }),
