@@ -1,4 +1,4 @@
-import React, { useCallback, ChangeEvent, useMemo } from 'react';
+import React, { useCallback, ChangeEvent, useMemo, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
@@ -7,6 +7,7 @@ import { useController, Control, Path } from 'react-hook-form';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
+import { DEFAULT_R_TEMPLATE_KEY, R_JOB_TYPE } from 'js/components/workspaces/constants';
 import { TemplatesTypes } from '../types';
 import TemplateGrid from '../TemplateGrid';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
@@ -43,6 +44,20 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   const { selectedItems: selectedTemplates, setSelectedItems: setSelectedTemplates } = useSelectItems(
     field.value satisfies FormType[typeof inputName],
   );
+
+  const { field: jobType } = useController({
+    name: 'workspaceJobTypeId' as Path<FormType>,
+    control,
+    rules: { required: true },
+  });
+
+  // If the Python + R job type is selected, select the default R template
+  useEffect(() => {
+    if (jobType.value === R_JOB_TYPE) {
+      setSelectedTemplates([...selectedTemplates, DEFAULT_R_TEMPLATE_KEY]);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [jobType.value, setSelectedTemplates]);
 
   const sortedTemplates = useMemo(() => sortTemplates(templates, disabledTemplates), [templates, disabledTemplates]);
 
