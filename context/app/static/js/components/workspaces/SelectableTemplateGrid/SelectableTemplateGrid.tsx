@@ -109,6 +109,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
         selectItem={selectItem}
         selectedTemplates={selectedTemplates}
         disabledTemplates={disabledTemplates}
+        jobType={jobType.value as string}
       />
     </Box>
   );
