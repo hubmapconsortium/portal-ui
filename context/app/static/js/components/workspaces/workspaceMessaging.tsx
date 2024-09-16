@@ -33,20 +33,20 @@ const workspacesDescription = {
   body: 'Workspaces enable lightweight exploration of public HuBMAP data and user-provided data using Python and R in a Jupyter Lab environment hosted by HuBMAP at no cost to community members.',
 };
 
+const trackRelevantPage = (pageName: string) => {
+  trackEvent({
+    category: WorkspacesEventCategories.WorkspaceLandingPage,
+    action: 'Select Relevant Page Button',
+    label: pageName,
+  });
+};
+
 const workspacesUsage = {
   title: 'How do I use workspaces?',
   body: (
     <>
       Explore more about this platform through our{' '}
-      <InternalLink
-        href="/tutorials/workspaces"
-        onClick={() =>
-          trackEvent({
-            category: WorkspacesEventCategories.WorkspaceLandingPage,
-            action: 'Navigate to Workspace Tutorial',
-          })
-        }
-      >
+      <InternalLink href="/tutorials/workspaces" onClick={() => trackRelevantPage('Tutorials')}>
         workspace tutorials
       </InternalLink>{' '}
       to optimize your experience with workspaces. To begin a new workspace, find datasets on our{' '}
@@ -96,14 +96,6 @@ const text = {
     workspacesUsage,
     workspacesSupportInfo,
   ],
-};
-
-const trackRelevantPage = (pageName: string) => {
-  trackEvent({
-    category: WorkspacesEventCategories.WorkspaceLandingPage,
-    action: 'Select Relevant Page Button',
-    label: pageName,
-  });
 };
 
 const pageLinks = [
