@@ -27,7 +27,6 @@ function CollectionDetail({ collection: collectionData }: { collection: Collecti
 
   useTrackID({ entity_type, hubmap_id });
 
-
   return (
     <div>
       {collectionData && (
@@ -37,7 +36,7 @@ function CollectionDetail({ collection: collectionData }: { collection: Collecti
           </Summary>
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
           {contributors && Boolean(contributors.length) && (
-            <ContributorsTable contributors={possibleContributors} contacts={contacts} title="Contributors" />
+            <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" />
           )}
         </>
       )}
