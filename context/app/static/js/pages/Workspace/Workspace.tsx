@@ -24,6 +24,7 @@ import { Alert } from 'js/shared-styles/alerts/Alert';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -66,7 +67,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
 
   const trackWorkspaceEvent = (action: string) => {
     trackEvent({
-      category: 'Workspace Detail Page',
+      category: WorkspacesEventCategories.WorkspaceDetailPage,
       action,
       label: workspace.name,
     });
@@ -134,7 +135,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         onCopyDatasets={() => trackWorkspaceEvent('Copy HuBMAP IDs')}
         onSelectDataset={() =>
           trackEvent({
-            category: 'Workspace Detail Page',
+            category: WorkspacesEventCategories.WorkspaceDetailPage,
             action: 'Navigate to Dataset from Table',
             label: workspace.name,
           })

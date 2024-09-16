@@ -13,8 +13,9 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
+
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 import TemplateTagsAutocomplete from './TemplateTagsAutocomplete/TemplateTagsAutocomplete';
@@ -41,7 +42,7 @@ const workspacesUsage = {
         href="/tutorials/workspaces"
         onClick={() =>
           trackEvent({
-            category: 'Workspace Landing Page',
+            category: WorkspacesEventCategories.WorkspaceLandingPage,
             action: 'Navigate to Workspace Tutorial',
           })
         }
@@ -99,7 +100,7 @@ const text = {
 
 const trackRelevantPage = (pageName: string) => {
   trackEvent({
-    category: 'Workspace Landing Page',
+    category: WorkspacesEventCategories.WorkspaceLandingPage,
     action: 'Select Relevant Page Button',
     label: pageName,
   });
@@ -129,7 +130,7 @@ function WorkspacesLogInAlert() {
       featureName="workspaces"
       onClick={() =>
         trackEvent({
-          category: 'Workspace Landing Page',
+          category: WorkspacesEventCategories.WorkspaceLandingPage,
           action: 'Log In / From alert',
         })
       }

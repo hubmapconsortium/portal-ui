@@ -11,6 +11,7 @@ import {
   TemplateTagsResponse,
   TemplatesTypes,
   TemplateExample,
+  WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
@@ -83,7 +84,7 @@ function useTemplateNotebooks() {
       try {
         templatesDetails = await createTemplates({ templateKeys, uuids });
         trackEvent({
-          category: 'Workspaces',
+          category: WorkspacesEventCategories.Workspaces,
           action: 'Create Templates',
           label: { templateKeys, templateCount: templateKeys.length, uuids },
         });

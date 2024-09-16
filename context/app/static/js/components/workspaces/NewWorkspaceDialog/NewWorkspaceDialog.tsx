@@ -21,7 +21,7 @@ import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoData
 import { trackEvent } from 'js/helpers/trackers';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
-import { CreateTemplateNotebooksTypes } from '../types';
+import { CreateTemplateNotebooksTypes, WorkspacesEventCategories } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
@@ -138,7 +138,7 @@ function NewWorkspaceDialog({
         workspaceResourceOptions,
         onCreateWorkspace: ({ name, files, symlinks }) => {
           trackEvent({
-            category: 'Workspace Landing Page',
+            category: WorkspacesEventCategories.WorkspaceLandingPage,
             action: 'Create Workspace',
             label: {
               name,

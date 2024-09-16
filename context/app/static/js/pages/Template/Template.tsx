@@ -17,7 +17,7 @@ import { StyledButton, StyledChip } from 'js/pages/Template/style';
 import { NewWorkspaceDialogFromExample } from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
-import { TemplateExample } from 'js/components/workspaces/types';
+import { TemplateExample, WorkspacesEventCategories } from 'js/components/workspaces/types';
 import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
 import { trackEvent } from 'js/helpers/trackers';
 
@@ -65,7 +65,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
               disabled={!isAuthenticated}
               onClick={() => {
                 trackEvent({
-                  category: 'Workspace Template Detail Page',
+                  category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
                   action: 'Select Try Sample Workspace',
                   label: templateName,
                 });
@@ -86,7 +86,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
                       <InternalLink
                         onClick={() => {
                           trackEvent({
-                            category: 'Workspace Template Detail Page',
+                            category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
                             action: 'Navigate to dataset search page from assay type',
                             value: { templateName, name },
                           });
@@ -106,7 +106,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
               isSelectable={false}
               onSelectDataset={() =>
                 trackEvent({
-                  category: 'Workspace Template Detail Page',
+                  category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
                   action: 'Navigate to Dataset from Table',
                   label: templateName,
                 })

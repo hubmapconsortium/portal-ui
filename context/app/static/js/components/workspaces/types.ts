@@ -152,6 +152,15 @@ type TemplateTags = Record<string, string>;
 
 type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
+/* eslint-disable-next-line no-shadow */
+export enum WorkspacesEventCategories {
+  Workspaces = 'Workspaces',
+  WorkspaceLandingPage = 'Workspace Landing Page',
+  WorkspaceDetailPage = 'Workspace Detail Page',
+  WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
+  WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
+}
+
 export type {
   WorkspaceFile,
   WorkspaceAPIResponse,
