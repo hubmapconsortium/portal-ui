@@ -147,11 +147,11 @@ function AccessAlert() {
   );
 }
 
-interface EventTrackingProps {
-  trackingCategory: string;
+interface TemplatePreviewSectionProps {
+  trackingCategory: WorkspacesEventCategories;
 }
 
-function TemplatePreviewSection({ trackingCategory }: EventTrackingProps) {
+function TemplatePreviewSection({ trackingCategory }: TemplatePreviewSectionProps) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
@@ -167,14 +167,16 @@ function TemplatePreviewSection({ trackingCategory }: EventTrackingProps) {
 
   return (
     <Stack spacing={3}>
-      <LogInPanel onClick={trackLogIn}>
-        Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
-        your specific interests. Click on any template for detailed information.{' '}
-        <InternalLink onClick={trackLogIn} href="/login">
-          Log in
-        </InternalLink>{' '}
-        to begin working in a workspace.
-      </LogInPanel>
+      {!isAuthenticated && (
+        <LogInPanel onClick={trackLogIn}>
+          Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
+          your specific interests. Click on any template for detailed information.{' '}
+          <InternalLink onClick={trackLogIn} href="/login">
+            Log in
+          </InternalLink>{' '}
+          to begin working in a workspace.
+        </LogInPanel>
+      )}
       <Stack spacing={2}>
         <TemplateTagsAutocomplete
           selectedTags={selectedTags}
@@ -235,7 +237,7 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
       {!isAuthenticated && (
         <Stack pt={2} spacing={2}>
           <Typography variant="h4">Workspace Templates</Typography>
-          <TemplatePreviewSection trackingCategory="Workspace Landing Page" />
+          <TemplatePreviewSection trackingCategory={WorkspacesEventCategories.WorkspaceLandingPage} />
         </Stack>
       )}
     </Stack>
