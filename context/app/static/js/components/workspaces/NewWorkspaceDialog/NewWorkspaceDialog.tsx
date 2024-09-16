@@ -18,10 +18,9 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
-import { trackEvent } from 'js/helpers/trackers';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
-import { CreateTemplateNotebooksTypes, WorkspacesEventCategories } from '../types';
+import { CreateTemplateNotebooksTypes } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
@@ -93,6 +92,7 @@ interface NewWorkspaceDialogProps {
   workspaceDatasets: string[];
   allDatasets: string[];
   searchHits: SearchAheadHit[];
+  onCreateWorkspace?: ({ name, files, symlinks }: { name: string; files: string[]; symlinks: string[] }) => void;
 }
 
 function NewWorkspaceDialog({
@@ -114,6 +114,7 @@ function NewWorkspaceDialog({
   workspaceDatasets,
   allDatasets,
   searchHits,
+  onCreateWorkspace,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -136,20 +137,10 @@ function NewWorkspaceDialog({
         uuids: datasets,
         workspaceJobTypeId,
         workspaceResourceOptions,
-        onCreateWorkspace: ({ name, files, symlinks }) => {
-          trackEvent({
-            category: WorkspacesEventCategories.WorkspaceLandingPage,
-            action: 'Create Workspace',
-            label: {
-              name,
-              files,
-              symlinks,
-            },
-          });
-        },
+        onCreateWorkspace,
       });
     },
-    [onSubmit],
+    [onSubmit, onCreateWorkspace],
   );
 
   return (

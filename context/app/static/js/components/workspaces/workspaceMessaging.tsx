@@ -132,6 +132,7 @@ function WorkspacesLogInAlert() {
         trackEvent({
           category: WorkspacesEventCategories.WorkspaceLandingPage,
           action: 'Log In / From alert',
+          label: 'alert banner',
         })
       }
     />
@@ -162,6 +163,7 @@ function TemplatePreviewSection({ trackingCategory }: TemplatePreviewSectionProp
     trackEvent({
       category: trackingCategory,
       action: 'Log In / From template section',
+      label: 'template button',
     });
   };
 
