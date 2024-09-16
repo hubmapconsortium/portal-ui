@@ -27,7 +27,6 @@ function CollectionDetail({ collection: collectionData }: { collection: Collecti
 
   useTrackID({ entity_type, hubmap_id });
 
-  const possibleContributors = contributors;
 
   return (
     <div>
@@ -37,7 +36,7 @@ function CollectionDetail({ collection: collectionData }: { collection: Collecti
             <DOILink doi_url={doi_url} />
           </Summary>
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
-          {possibleContributors && Boolean(possibleContributors.length) && (
+          {contributors && Boolean(contributors.length) && (
             <ContributorsTable contributors={possibleContributors} contacts={contacts} title="Contributors" />
           )}
         </>
