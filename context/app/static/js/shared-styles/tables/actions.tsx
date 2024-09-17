@@ -10,6 +10,8 @@ import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTable
 import { fetchSearchData } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
 import { DeleteIcon } from 'js/shared-styles/icons';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 import { useSnackbarActions } from '../snackbars';
 
 const TableIconButton = styled(TooltipIconButton)(({ theme }) => ({
@@ -23,10 +25,10 @@ const TableIconButton = styled(TooltipIconButton)(({ theme }) => ({
 }));
 
 interface CopyProps {
-  onCopy?: () => void;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
-export function Copy({ onCopy }: CopyProps) {
+export function Copy({ trackingInfo }: CopyProps) {
   const [isLoading, setLoading] = useState(false);
   const handleCopyClick = useHandleCopyClick();
   const { selectedRows } = useSelectableTableStore();
@@ -34,7 +36,12 @@ export function Copy({ onCopy }: CopyProps) {
   const { toastError } = useSnackbarActions();
 
   const handleClick = useCallback(() => {
-    onCopy?.();
+    if (trackingInfo) {
+      trackEvent({
+        ...trackingInfo,
+        action: 'Copy HuBMAP IDs',
+      });
+    }
 
     async function fetchIDs() {
       const query = { query: getIDsQuery([...selectedRows]), _source: 'hubmap_id' };
@@ -54,7 +61,7 @@ export function Copy({ onCopy }: CopyProps) {
       .finally(() => {
         setLoading(false);
       });
-  }, [onCopy, handleCopyClick, toastError, selectedRows, elasticsearchEndpoint, groupsToken]);
+  }, [trackingInfo, handleCopyClick, toastError, selectedRows, elasticsearchEndpoint, groupsToken]);
 
   return (
     <TableIconButton

@@ -82,7 +82,7 @@ interface NewWorkspaceDialogProps {
   dialogIsOpen: boolean;
   handleClose: () => void;
   removeDatasets?: (uuids: string[]) => void;
-  onSubmit: ({ workspaceName, templateKeys, uuids, onCreateWorkspace }: CreateTemplateNotebooksTypes) => void;
+  onSubmit: ({ workspaceName, templateKeys, uuids, trackingCategory }: CreateTemplateNotebooksTypes) => void;
   isSubmitting?: boolean;
   showDatasetsSearchBar?: boolean;
   inputValue: string;
@@ -92,7 +92,7 @@ interface NewWorkspaceDialogProps {
   workspaceDatasets: string[];
   allDatasets: string[];
   searchHits: SearchAheadHit[];
-  onCreateWorkspace?: ({ name, files, symlinks }: { name: string; files: string[]; symlinks: string[] }) => void;
+  trackingCategory?: string;
 }
 
 function NewWorkspaceDialog({
@@ -114,7 +114,7 @@ function NewWorkspaceDialog({
   workspaceDatasets,
   allDatasets,
   searchHits,
-  onCreateWorkspace,
+  trackingCategory,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -137,10 +137,10 @@ function NewWorkspaceDialog({
         uuids: datasets,
         workspaceJobTypeId,
         workspaceResourceOptions,
-        onCreateWorkspace,
+        trackingCategory,
       });
     },
-    [onSubmit, onCreateWorkspace],
+    [onSubmit, trackingCategory],
   );
 
   return (

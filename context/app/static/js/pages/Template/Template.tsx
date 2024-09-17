@@ -104,13 +104,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
             <WorkspaceDatasetsTable
               datasetsUUIDs={[...datasets]}
               isSelectable={false}
-              onSelectDataset={() =>
-                trackEvent({
-                  category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
-                  action: 'Navigate to Dataset from Table',
-                  label: templateName,
-                })
-              }
+              trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage }}
             />
           </Stack>
         </AccordionDetails>
@@ -138,13 +132,15 @@ function Template({ templateKey }: TemplatePageProps) {
         <SummaryData title={template.title} entity_type="WorkspaceTemplate" entityTypeDisplay="Workspace Template" />
         <Stack component={SummaryPaper} spacing={1}>
           <LabelledSectionText label="Description">{template.description}</LabelledSectionText>
-          <LabelledSectionText label="Tags">
-            <Stack spacing={1} marginTop={1} direction="row">
-              {template.tags.map((tag) => (
-                <StyledChip key={tag} label={tag} variant="outlined" />
-              ))}
-            </Stack>
-          </LabelledSectionText>
+          {template.tags.length > 0 && (
+            <LabelledSectionText label="Tags">
+              <Stack spacing={1} marginTop={1} direction="row">
+                {template.tags.map((tag) => (
+                  <StyledChip key={tag} label={tag} variant="outlined" />
+                ))}
+              </Stack>
+            </LabelledSectionText>
+          )}
         </Stack>
       </Stack>
       {template.examples && (
@@ -156,7 +152,7 @@ function Template({ templateKey }: TemplatePageProps) {
               types of data that are compatible with it.
             </IconPanel>
           ) : (
-            <LogInPanel>
+            <LogInPanel trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage }}>
               Sample workspaces are available to help you get started with this template and better understand the types
               of compatible data. Please <InternalLink href="/login">log in</InternalLink> to explore a sample
               workspace.

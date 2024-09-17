@@ -13,7 +13,7 @@ import { AddIcon } from 'js/shared-styles/icons';
 
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
-import { MergedWorkspace } from '../types';
+import { MergedWorkspace, WorkspacesEventInfo } from '../types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
 const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
@@ -27,32 +27,28 @@ interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
   addDatasets?: MergedWorkspace;
-  onAddDatasets?: () => void;
   copyDatasets?: boolean;
-  onCopyDatasets?: () => void;
-  onSelectDataset?: () => void;
   label?: ReactNode;
   disabledIDs?: Set<string>;
   emptyAlert?: ReactNode;
   additionalButtons?: ReactNode;
   hideTableIfEmpty?: boolean;
   isSelectable?: boolean;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
 function WorkspaceDatasetsTable({
   datasetsUUIDs,
   removeDatasets,
   addDatasets,
-  onAddDatasets,
   copyDatasets,
-  onCopyDatasets,
-  onSelectDataset,
   label,
   disabledIDs,
   emptyAlert,
   additionalButtons,
   hideTableIfEmpty,
   isSelectable = true,
+  trackingInfo,
 }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
@@ -86,14 +82,14 @@ function WorkspaceDatasetsTable({
           leftText={label}
           buttons={
             <Stack direction="row" gap={1}>
-              {copyDatasets && datasetsPresent && <Copy onCopy={onCopyDatasets} />}
+              {copyDatasets && datasetsPresent && <Copy trackingInfo={trackingInfo} />}
               {addDatasets && (
                 <WorkspacesUpdateButton
                   workspace={addDatasets}
                   dialogType="ADD_DATASETS"
                   tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.add}
                   disabled={hasMaxDatasets}
-                  onClick={onAddDatasets}
+                  trackingInfo={trackingInfo && { ...trackingInfo, action: 'Launch Add Datasets Dialog' }}
                 >
                   <AddIcon />
                 </WorkspacesUpdateButton>
@@ -118,7 +114,7 @@ function WorkspaceDatasetsTable({
           disabledIDs={disabledIDs}
           emptyAlert={emptyAlert}
           isSelectable={isSelectable}
-          onClickCell={onSelectDataset}
+          trackingInfo={trackingInfo}
         />
       )}
     </Box>

@@ -3,14 +3,15 @@ import Grid from '@mui/material/Grid';
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
 import { InternalLink } from 'js/shared-styles/Links';
 import { sortTemplates } from 'js/components/workspaces/utils';
-import { TemplatesTypes } from 'js/components/workspaces/types';
+import { TemplatesTypes, WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface TemplateGridProps {
   templates: TemplatesTypes;
   selectItem?: (e: ChangeEvent<HTMLInputElement>) => void;
   selectedTemplates?: Set<string>;
   disabledTemplates?: TemplatesTypes;
-  onClick?: (templateName: string) => void;
+  trackingInfo: WorkspacesEventInfo;
 }
 
 function TemplateGrid({
@@ -18,7 +19,7 @@ function TemplateGrid({
   selectItem,
   selectedTemplates = new Set([]),
   disabledTemplates = {},
-  onClick,
+  trackingInfo,
 }: TemplateGridProps) {
   const sortedTemplates = useMemo(() => sortTemplates(templates, disabledTemplates), [templates, disabledTemplates]);
 
@@ -28,7 +29,16 @@ function TemplateGrid({
         <Grid item md={4} xs={12} key={templateKey} paddingBottom={2} paddingX={1}>
           <SelectableCard
             title={
-              <InternalLink href={`/templates/${templateKey}`} onClick={() => onClick?.(title)}>
+              <InternalLink
+                href={`/templates/${templateKey}`}
+                onClick={() =>
+                  trackEvent({
+                    ...trackingInfo,
+                    action: 'Click template card',
+                    label: title,
+                  })
+                }
+              >
                 {title}
               </InternalLink>
             }

@@ -120,13 +120,9 @@ function WorkspacesLogInAlert() {
   return (
     <LoginAlert
       featureName="workspaces"
-      onClick={() =>
-        trackEvent({
-          category: WorkspacesEventCategories.WorkspaceLandingPage,
-          action: 'Log In / From alert',
-          label: 'alert banner',
-        })
-      }
+      trackingInfo={{
+        category: WorkspacesEventCategories.WorkspaceLandingPage,
+      }}
     />
   );
 }
@@ -151,24 +147,13 @@ function TemplatePreviewSection({ trackingCategory }: TemplatePreviewSectionProp
 
   const recommendedTags = ['visualization', 'api'];
 
-  const trackLogIn = () => {
-    trackEvent({
-      category: trackingCategory,
-      action: 'Log In / From template section',
-      label: 'template button',
-    });
-  };
-
   return (
     <Stack spacing={3}>
       {!isAuthenticated && (
-        <LogInPanel onClick={trackLogIn}>
+        <LogInPanel trackingInfo={{ category: trackingCategory }}>
           Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
           your specific interests. Click on any template for detailed information.{' '}
-          <InternalLink onClick={trackLogIn} href="/login">
-            Log in
-          </InternalLink>{' '}
-          to begin working in a workspace.
+          <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
         </LogInPanel>
       )}
       <Stack spacing={2}>
@@ -178,31 +163,9 @@ function TemplatePreviewSection({ trackingCategory }: TemplatePreviewSectionProp
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}
-          onSelectTag={(tag) =>
-            trackEvent({
-              category: trackingCategory,
-              action: 'Select Template Tag from Dropdown',
-              label: tag,
-            })
-          }
-          onSelectRecommendedTag={(tag) =>
-            trackEvent({
-              category: trackingCategory,
-              action: 'Select Recommended Template Tag',
-              label: tag,
-            })
-          }
+          trackingInfo={{ category: trackingCategory }}
         />
-        <TemplateGrid
-          templates={templates}
-          onClick={(templateName: string) =>
-            trackEvent({
-              category: trackingCategory,
-              action: 'Click template card',
-              label: templateName,
-            })
-          }
-        />
+        <TemplateGrid templates={templates} trackingInfo={{ category: trackingCategory }} />
       </Stack>
     </Stack>
   );

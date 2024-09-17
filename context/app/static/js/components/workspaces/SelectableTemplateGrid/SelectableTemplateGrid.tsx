@@ -7,7 +7,7 @@ import { useController, Control, Path } from 'react-hook-form';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
-import { TemplatesTypes } from '../types';
+import { TemplatesTypes, WorkspacesEventCategories } from '../types';
 import TemplateGrid from '../TemplateGrid';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 
@@ -91,6 +91,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
         selectItem={selectItem}
         selectedTemplates={selectedTemplates}
         disabledTemplates={disabledTemplates}
+        trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDialog }}
       />
     </Box>
   );

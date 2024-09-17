@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns/format';
+
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button, { ButtonProps } from '@mui/material/Button';
@@ -23,7 +24,6 @@ import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateBut
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
-import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 const tooltips = {
@@ -65,14 +65,6 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
 
   const job = condenseJobs(workspace.jobs);
 
-  const trackWorkspaceEvent = (action: string) => {
-    trackEvent({
-      category: WorkspacesEventCategories.WorkspaceDetailPage,
-      action,
-      label: workspace.name,
-    });
-  };
-
   return (
     <Stack gap={6} sx={{ marginBottom: 5 }}>
       <WorkspaceSessionWarning workspaces={[workspace]} />
@@ -90,7 +82,11 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                   marginRight: theme.spacing(1),
                 })}
                 tooltip={tooltips.name}
-                onClick={() => trackWorkspaceEvent('Launch Edit Workspace Dialog')}
+                trackingInfo={{
+                  category: WorkspacesEventCategories.WorkspaceDetailPage,
+                  action: 'Launch Edit Workspace Dialog',
+                  label: workspace.name,
+                }}
               >
                 <EditIcon />
               </WorkspacesUpdateButton>
@@ -99,7 +95,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                 button={LaunchStopButton}
                 handleStopWorkspace={handleStopWorkspace}
                 isStoppingWorkspace={isStoppingWorkspace}
-                onLaunchWorkspace={() => trackWorkspaceEvent('Launch Workspace')}
+                trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
                 showLaunch
                 showStop
               />
@@ -130,16 +126,11 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         label={<SectionHeader>Datasets</SectionHeader>}
         hideTableIfEmpty
         addDatasets={workspace}
-        onAddDatasets={() => trackWorkspaceEvent('Launch Add Datasets Dialog')}
         copyDatasets
-        onCopyDatasets={() => trackWorkspaceEvent('Copy HuBMAP IDs')}
-        onSelectDataset={() =>
-          trackEvent({
-            category: WorkspacesEventCategories.WorkspaceDetailPage,
-            action: 'Navigate to Dataset from Table',
-            label: workspace.name,
-          })
-        }
+        trackingInfo={{
+          category: WorkspacesEventCategories.WorkspaceDetailPage,
+          label: workspace.name,
+        }}
         emptyAlert={
           <Alert
             severity="info"
@@ -168,7 +159,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
         />
         <TemplateGrid
           templates={workspaceTemplates}
-          onClick={() => trackWorkspaceEvent('Navigate to Workspace Template')}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
         />
       </Box>
     </Stack>

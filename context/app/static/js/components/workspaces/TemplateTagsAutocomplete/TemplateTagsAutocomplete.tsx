@@ -8,6 +8,8 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import { useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 
 interface TemplateTagsAutocompleteProps {
   selectedTags: string[];
@@ -15,8 +17,7 @@ interface TemplateTagsAutocompleteProps {
   toggleTag: (itemKey: string) => void;
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedRecommendedTags: SelectedItems;
-  onSelectTag?: (tag: string) => void;
-  onSelectRecommendedTag?: (tag: string) => void;
+  trackingInfo: WorkspacesEventInfo;
 }
 
 export interface TagTypes extends ChipProps {
@@ -33,8 +34,7 @@ function TemplateTagsAutocomplete({
   toggleTag,
   setSelectedTags,
   selectedRecommendedTags,
-  onSelectTag,
-  onSelectRecommendedTag,
+  trackingInfo,
 }: TemplateTagsAutocompleteProps) {
   const { tags } = useWorkspaceTemplateTags();
 
@@ -53,7 +53,11 @@ function TemplateTagsAutocomplete({
           const addedValue = value.find((tag) => !selectedTags.includes(tag));
 
           if (addedValue) {
-            onSelectTag?.(addedValue);
+            trackEvent({
+              ...trackingInfo,
+              action: 'Select Template Tag from Dropdown',
+              label: addedValue,
+            });
           }
 
           setSelectedTags(value);
@@ -74,7 +78,13 @@ function TemplateTagsAutocomplete({
               isSelected={selectedRecommendedTags.has(tag)}
               label={tag}
               onClick={() => {
-                onSelectRecommendedTag?.(tag);
+                if (trackingInfo) {
+                  trackEvent({
+                    ...trackingInfo,
+                    action: 'Select Recommended Template Tag',
+                    label: tag,
+                  });
+                }
                 toggleTag(tag);
               }}
               key={tag}

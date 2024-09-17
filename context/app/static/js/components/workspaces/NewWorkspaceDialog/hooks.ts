@@ -74,7 +74,7 @@ function useTemplateNotebooks() {
       uuids,
       workspaceJobTypeId,
       workspaceResourceOptions,
-      onCreateWorkspace,
+      trackingCategory,
     }: CreateTemplateNotebooksTypes) => {
       let templatesDetails: {
         name: string;
@@ -105,11 +105,17 @@ function useTemplateNotebooks() {
       const templatePath = templatesDetails[0].name;
       const symlinks = buildDatasetSymlinks({ datasetUUIDs: uuids });
 
-      onCreateWorkspace?.({
-        name: workspaceName,
-        files: templatesDetails.map((f) => f.name),
-        symlinks: symlinks.map((s) => s.name),
-      });
+      if (trackingCategory) {
+        trackEvent({
+          category: trackingCategory,
+          action: 'Create Workspace',
+          label: {
+            name: workspaceName,
+            files: templatesDetails.map((f) => f.name),
+            symlinks: symlinks.map((s) => s.name),
+          },
+        });
+      }
 
       await createAndLaunchWorkspace({
         templatePath,

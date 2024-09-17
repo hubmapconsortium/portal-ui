@@ -7,7 +7,7 @@ import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import Typography from '@mui/material/Typography';
 import SelectableTemplateGrid from '../SelectableTemplateGrid';
-import { TemplatesTypes } from '../types';
+import { TemplatesTypes, WorkspacesEventCategories } from '../types';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 import TemplateTagsAutocomplete from '../TemplateTagsAutocomplete';
 
@@ -62,6 +62,7 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDialog }}
         />
         <SelectableTemplateGrid templates={templates} disabledTemplates={disabledTemplates} control={control} />
       </Stack>

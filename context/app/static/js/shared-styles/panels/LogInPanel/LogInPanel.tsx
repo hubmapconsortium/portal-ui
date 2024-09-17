@@ -7,12 +7,14 @@ import Box from '@mui/material/Box';
 
 import { InfoIcon } from 'js/shared-styles/icons';
 import { LoginButton } from 'js/components/detailPage/BulkDataTransfer/style';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 
 interface LogInPanelProps extends PropsWithChildren {
-  onClick?: () => void;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
-function LogInPanel({ children, onClick }: LogInPanelProps) {
+function LogInPanel({ children, trackingInfo }: LogInPanelProps) {
   if (isAuthenticated) {
     return null;
   }
@@ -24,7 +26,19 @@ function LogInPanel({ children, onClick }: LogInPanelProps) {
         <Typography>{children}</Typography>
       </Stack>
       <Box>
-        <LoginButton href="/login" variant="contained" color="primary" onClick={onClick}>
+        <LoginButton
+          href="/login"
+          variant="contained"
+          color="primary"
+          onClick={() =>
+            trackingInfo &&
+            trackEvent({
+              ...trackingInfo,
+              action: 'Log In / From template section',
+              label: 'template button',
+            })
+          }
+        >
           Log In
         </LoginButton>
       </Box>

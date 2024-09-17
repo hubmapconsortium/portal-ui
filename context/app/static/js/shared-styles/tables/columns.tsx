@@ -4,6 +4,8 @@ import { format } from 'date-fns/format';
 import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from 'js/typings/search';
 import { InternalLink } from 'js/shared-styles/Links';
 import { getDonorAgeString } from 'js/helpers/functions';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 
 interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
@@ -11,10 +13,14 @@ interface CellContentProps<SearchDoc> {
 
 function HubmapIDCell({
   hit: { uuid, hubmap_id },
-  onClick,
-}: CellContentProps<EntityDocument> & { onClick?: () => void }) {
+  trackingInfo,
+}: CellContentProps<EntityDocument> & { trackingInfo: WorkspacesEventInfo }) {
   return (
-    <InternalLink href={`/browse/dataset/${uuid}`} onClick={onClick} variant="body2">
+    <InternalLink
+      href={`/browse/dataset/${uuid}`}
+      onClick={() => trackingInfo && trackEvent({ ...trackingInfo, action: 'Navigate to Dataset from Table' })}
+      variant="body2"
+    >
       {hubmap_id}
     </InternalLink>
   );

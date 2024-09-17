@@ -145,20 +145,26 @@ interface CreateTemplateNotebooksTypes {
   workspaceName: string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
-  onCreateWorkspace?: ({ name, files, symlinks }: { name: string; files: string[]; symlinks: string[] }) => void;
+  trackingCategory?: string;
 }
 
 type TemplateTags = Record<string, string>;
 
 type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
-/* eslint-disable-next-line no-shadow */
 export enum WorkspacesEventCategories {
   Workspaces = 'Workspaces',
+  WorkspaceDialog = 'Workspace Dialog',
   WorkspaceLandingPage = 'Workspace Landing Page',
   WorkspaceDetailPage = 'Workspace Detail Page',
   WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
   WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
+}
+
+interface WorkspacesEventInfo {
+  category: WorkspacesEventCategories;
+  action?: string;
+  label?: string;
 }
 
 export type {
@@ -173,4 +179,5 @@ export type {
   CreateTemplateNotebooksTypes,
   TemplateTags,
   TemplateTagsResponse,
+  WorkspacesEventInfo,
 };
