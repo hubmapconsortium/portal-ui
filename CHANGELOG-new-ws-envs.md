@@ -1,1 +1,0 @@
-- Add language to workspace environment sections to help users distinguish between environments.

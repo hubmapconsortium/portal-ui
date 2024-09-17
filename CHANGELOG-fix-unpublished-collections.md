@@ -1,2 +1,0 @@
-- Fix bug causing detail page for unpublished collections to error.
-- Drop support for collection creators.

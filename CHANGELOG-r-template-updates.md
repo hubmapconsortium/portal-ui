@@ -1,1 +1,0 @@
-- Update Launch Workspace dialogs to account for new R template.

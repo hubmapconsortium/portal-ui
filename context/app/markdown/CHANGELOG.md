@@ -1,3 +1,13 @@
+## v1.6.0 - 2024-09-17
+
+- Add tracking to landing pages and detail pages for workspaces and templates.
+- Fix bug causing detail page for unpublished collections to error.
+- Drop support for collection creators.
+- Add language to workspace environment sections to help users distinguish between environments.
+- Update Launch Workspace dialogs to account for new R template.
+- Add templates landing page and template detail pages.
+
+
 ## v1.5.0 - 2024-09-10
 
 - Hide HuBMAP ID's for non-entity nodes in provenance graph.
