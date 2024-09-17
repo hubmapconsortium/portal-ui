@@ -17,7 +17,7 @@ import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/w
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useJobTypes } from 'js/components/workspaces/api';
-import { DEFAULT_JOB_TYPE, R_JOB_TYPE, R_TEMPLATE_TITLE } from 'js/components/workspaces/constants';
+import { DEFAULT_JOB_TYPE, JUPYTER_LAB_R_JOB_TYPE, R_TEMPLATE_TITLE } from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -54,7 +54,7 @@ function useWorkspaceTemplates(tags: string[] = []) {
     Object.entries(templates)
       .filter(([, template]) => !template?.is_hidden)
       .map(([key, template]) => {
-        const newTitle = template?.job_types?.includes(R_JOB_TYPE)
+        const newTitle = template?.job_types?.includes(JUPYTER_LAB_R_JOB_TYPE)
           ? `${template.title} (${R_TEMPLATE_TITLE})`
           : template.title;
         return [key, { ...template, title: newTitle }];

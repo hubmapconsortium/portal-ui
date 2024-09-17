@@ -3,7 +3,7 @@ import Grid from '@mui/material/Grid';
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
 import { InternalLink } from 'js/shared-styles/Links';
 import { sortTemplates } from 'js/components/workspaces/utils';
-import { R_JOB_TYPE } from 'js/components/workspaces/constants';
+import { JUPYTER_LAB_R_JOB_TYPE } from 'js/components/workspaces/constants';
 import { TemplatesTypes, WorkspacesEventInfo } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
 
@@ -29,7 +29,7 @@ function TemplateGrid({
       return 'This template is already in your workspace.';
     }
     // If the template is an R template and the job type is not R
-    if (jobType !== R_JOB_TYPE && job_types?.includes(R_JOB_TYPE)) {
+    if (jobType !== JUPYTER_LAB_R_JOB_TYPE && job_types?.includes(JUPYTER_LAB_R_JOB_TYPE)) {
       return 'This template is not compatible with your current environment. To avoid potential issues, please ensure that you have selected the correct environment for your workspace.';
     }
     return undefined;

@@ -7,7 +7,7 @@ import { useController, Control, Path } from 'react-hook-form';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
-import { DEFAULT_R_TEMPLATE_KEY, R_JOB_TYPE } from 'js/components/workspaces/constants';
+import { DEFAULT_R_TEMPLATE_KEY, JUPYTER_LAB_R_JOB_TYPE } from 'js/components/workspaces/constants';
 
 import { TemplatesTypes, WorkspacesEventCategories } from '../types';
 import TemplateGrid from '../TemplateGrid';
@@ -56,7 +56,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
 
   // If the Python + R job type is selected, select the default R template
   useEffect(() => {
-    if (jobType.value === R_JOB_TYPE) {
+    if (jobType.value === JUPYTER_LAB_R_JOB_TYPE) {
       addItem(DEFAULT_R_TEMPLATE_KEY);
     }
   }, [jobType.value, addItem]);
