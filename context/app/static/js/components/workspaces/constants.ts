@@ -1,5 +1,11 @@
+/* Workspace job types */
+export const JUPYTER_LAB_JOB_TYPE = 'jupyter_lab';
+export const JUPYTER_LAB_R_JOB_TYPE = 'jupyter_lab_r';
+export const JUPYTER_LAB_GPU_JOB_TYPE = 'jupyter_lab_gpu_common_packages';
+export const JUPYTER_LAB_NON_GPU_JOB_TYPE = 'jupyter_lab_non_gpu_common_packages';
+
 /* Workspace defaults */
-export const DEFAULT_JOB_TYPE = 'jupyter_lab';
+export const DEFAULT_JOB_TYPE = JUPYTER_LAB_JOB_TYPE;
 export const DEFAULT_TEMPLATE_KEY = 'blank';
 
 /* Workspace resource defaults */
