@@ -3,7 +3,8 @@ import {
   DEFAULT_JOB_TYPE,
   DEFAULT_MEMORY_MB,
   DEFAULT_NUM_CPUS,
-  DEFAULT_TEMPLATE_KEY,
+  DEFAULT_PYTHON_TEMPLATE_KEY,
+  DEFAULT_R_TEMPLATE_KEY,
   DEFAULT_TIME_LIMIT_MINUTES,
 } from './constants';
 import {
@@ -316,8 +317,8 @@ function getDefaultJobType({ workspace }: { workspace: Workspace }) {
 }
 
 /**
- * Sort templates alphabetically by title, with all disabled templates first, then the default template.
- *   Ex: [disabled1, disabled2, default, templateA, templateB, ...]
+ * Sort templates alphabetically by title, with all disabled templates first, then the default python template, then the default R template.
+ *   Ex: [disabled1, disabled2, defaultPython, defaultR, templateA, templateB, ...]
  * @param templates The templates to sort.
  * @param disabledTemplates The templates that are disabled.
  * @returns The sorted templates.
@@ -328,12 +329,19 @@ function sortTemplates(templates: TemplatesTypes, disabledTemplates?: TemplatesT
       const isSelectedA = disabledTemplates && keyA in disabledTemplates;
       const isSelectedB = disabledTemplates && keyB in disabledTemplates;
 
+      // Disabled templates
       if (isSelectedA && !isSelectedB) return -1;
       if (!isSelectedA && isSelectedB) return 1;
 
-      if (keyA === DEFAULT_TEMPLATE_KEY && keyB !== DEFAULT_TEMPLATE_KEY) return -1;
-      if (keyB === DEFAULT_TEMPLATE_KEY && keyA !== DEFAULT_TEMPLATE_KEY) return 1;
+      // Default Python template
+      if (keyA === DEFAULT_PYTHON_TEMPLATE_KEY && keyB !== DEFAULT_PYTHON_TEMPLATE_KEY) return -1;
+      if (keyB === DEFAULT_PYTHON_TEMPLATE_KEY && keyA !== DEFAULT_PYTHON_TEMPLATE_KEY) return 1;
 
+      // Default R template
+      if (keyA === DEFAULT_R_TEMPLATE_KEY && keyB !== DEFAULT_PYTHON_TEMPLATE_KEY) return -1;
+      if (keyB === DEFAULT_R_TEMPLATE_KEY && keyA !== DEFAULT_PYTHON_TEMPLATE_KEY) return 1;
+
+      // Alphabetical sorting by title for remaining templates
       return templateA.title.localeCompare(templateB.title);
     }),
   ) as TemplatesTypes;

@@ -7,13 +7,13 @@ import Typography from '@mui/material/Typography';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import { SelectedItems } from 'js/hooks/useSelectItems';
+import { RECOMMENDED_TAGS } from 'js/components/workspaces/constants';
 import { useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 
 interface TemplateTagsAutocompleteProps {
   selectedTags: string[];
-  recommendedTags: string[];
   toggleTag: (itemKey: string) => void;
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedRecommendedTags: SelectedItems;
@@ -30,7 +30,6 @@ function TagComponent({ option, ...rest }: TagTypes) {
 
 function TemplateTagsAutocomplete({
   selectedTags,
-  recommendedTags,
   toggleTag,
   setSelectedTags,
   selectedRecommendedTags,
@@ -43,7 +42,7 @@ function TemplateTagsAutocomplete({
       <MultiAutocomplete
         value={selectedTags}
         options={Object.keys(tags)
-          .filter((tag) => !recommendedTags.includes(tag))
+          .filter((tag) => !RECOMMENDED_TAGS.includes(tag))
           .sort((a, b) => a.localeCompare(b))}
         multiple
         filterSelectedOptions
@@ -73,7 +72,7 @@ function TemplateTagsAutocomplete({
           Recommended Tags
         </Typography>
         <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
-          {recommendedTags.map((tag) => (
+          {RECOMMENDED_TAGS.map((tag) => (
             <SelectableChip
               isSelected={selectedRecommendedTags.has(tag)}
               label={tag}

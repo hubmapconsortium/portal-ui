@@ -1,15 +1,15 @@
 import React from 'react';
 import { Control } from 'react-hook-form';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import Typography from '@mui/material/Typography';
-import SelectableTemplateGrid from '../SelectableTemplateGrid';
-import { TemplatesTypes, WorkspacesEventCategories } from '../types';
-import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
-import TemplateTagsAutocomplete from '../TemplateTagsAutocomplete';
+import SelectableTemplateGrid from 'js/components/workspaces/SelectableTemplateGrid';
+import { TemplatesTypes, WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { FormWithTemplates } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import TemplateTagsAutocomplete from 'js/components/workspaces/TemplateTagsAutocomplete';
 
 function ContactPrompt() {
   return (
@@ -23,8 +23,6 @@ const description = [
   'Templates can be selected for your workspace for potential workflows revolving around data assays, visualization, QA or other purposes. Multiple templates can be selected. If you are unsure of which templates to launch, the “Select All” button selects all templates.',
   <ContactPrompt key="configure-workspace-contact" />,
 ];
-
-const recommendedTags = ['visualization', 'api'];
 
 interface TemplateSelectProps<FormType extends FormWithTemplates> {
   title: string;
@@ -58,7 +56,6 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
         </Typography>
         <TemplateTagsAutocomplete
           selectedTags={selectedTags}
-          recommendedTags={recommendedTags}
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}

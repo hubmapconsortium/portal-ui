@@ -20,7 +20,7 @@ import {
   DEFAULT_JOB_TYPE,
   DEFAULT_MEMORY_MB,
   DEFAULT_NUM_CPUS,
-  DEFAULT_TEMPLATE_KEY,
+  DEFAULT_PYTHON_TEMPLATE_KEY,
   DEFAULT_TIME_LIMIT_MINUTES,
 } from '../constants';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable/hooks';
@@ -59,7 +59,7 @@ const schema = z
 
 function useCreateWorkspaceForm({
   defaultName,
-  defaultTemplate = DEFAULT_TEMPLATE_KEY,
+  defaultTemplate = DEFAULT_PYTHON_TEMPLATE_KEY,
   defaultJobType = DEFAULT_JOB_TYPE,
   defaultResourceOptions = {
     num_cpus: DEFAULT_NUM_CPUS,
