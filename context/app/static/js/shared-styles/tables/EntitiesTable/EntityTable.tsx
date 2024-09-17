@@ -15,6 +15,7 @@ import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
+import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 import { Column, EntitiesTabTypes } from './types';
 
 interface EntityHeaderCellTypes<Doc> {
@@ -69,11 +70,12 @@ function TablePaddingRow({ padding }: { padding: number }) {
 interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns'> {
   isSelectable: boolean;
   disabledIDs?: Set<string>;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
 const headerRowHeight = 60;
 
-function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true }: EntityTableProps<Doc>) {
+function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, trackingInfo }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
 
   const {
@@ -141,7 +143,7 @@ function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true }: 
                   {isSelectable && <SelectableRowCell rowKey={hit?._id} disabled={disabledIDs?.has(hit?._id)} />}
                   {columns.map(({ cellContent: CellContent, id }) => (
                     <TableCell key={id}>
-                      <CellContent hit={hit._source} />
+                      <CellContent hit={hit._source} trackingInfo={trackingInfo} />
                     </TableCell>
                   ))}
                 </TableRow>

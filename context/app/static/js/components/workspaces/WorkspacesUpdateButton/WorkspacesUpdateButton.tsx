@@ -4,7 +4,8 @@ import { styled } from '@mui/material/styles';
 import { isRunningWorkspace } from 'js/components/workspaces/utils';
 import { TooltipIconButton, TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
 import { useEditWorkspaceStore, DialogType } from 'js/stores/useWorkspaceModalStore';
-import { MergedWorkspace } from '../types';
+import { trackEvent } from 'js/helpers/trackers';
+import { MergedWorkspace, WorkspacesEventInfo } from '../types';
 
 const UpdateIconButton = styled(TooltipIconButton)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
@@ -22,6 +23,7 @@ type WorkspacesUpdateButtonProps = {
   dialogType: DialogType;
   tooltip?: string;
   disabled?: boolean;
+  trackingInfo?: WorkspacesEventInfo;
 } & Omit<TooltipButtonProps, 'tooltip'>;
 
 function WorkspacesUpdateButton({
@@ -29,6 +31,7 @@ function WorkspacesUpdateButton({
   dialogType,
   tooltip,
   disabled = false,
+  trackingInfo,
   children,
   ...rest
 }: WorkspacesUpdateButtonProps) {
@@ -44,6 +47,9 @@ function WorkspacesUpdateButton({
       {...rest}
       disabled={currentWorkspaceIsRunning || disabled}
       onClick={() => {
+        if (trackingInfo) {
+          trackEvent(trackingInfo);
+        }
         setWorkspace(workspace);
         setDialogType(dialogType);
         open();

@@ -1,6 +1,7 @@
-import AddRounded from '@mui/icons-material/AddRounded';
 import React from 'react';
-import WorkspaceButton from '../WorkspaceButton';
+import AddRounded from '@mui/icons-material/AddRounded';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
 import NewWorkspaceDialog from './NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 
@@ -12,7 +13,11 @@ function NewWorkspaceDialogFromWorkspaceList() {
       <WorkspaceButton onClick={() => setDialogIsOpen(true)} tooltip="Create workspace">
         <AddRounded />
       </WorkspaceButton>
-      <NewWorkspaceDialog showDatasetsSearchBar {...rest} />
+      <NewWorkspaceDialog
+        showDatasetsSearchBar
+        trackingInfo={{ category: WorkspacesEventCategories.WorkspaceLandingPage }}
+        {...rest}
+      />
     </>
   );
 }

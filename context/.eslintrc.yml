@@ -66,6 +66,9 @@ overrides:
       - plugin:@typescript-eslint/stylistic-type-checked
     parserOptions:
       project: ./tsconfig.json
+    rules:
+      no-shadow: [0] # Use TS rule instead of eslint rule
+      '@typescript-eslint/no-shadow': ["error"] # Use TS rule instead of eslint rule
   - files: ['**/*.spec.{js,jsx,ts,tsx}', '**/__mocks__/**/*.{js,jsx,ts,tsx}', 'test-utils/**/*.{js,jsx,ts,tsx}']
     plugins:
       - jest

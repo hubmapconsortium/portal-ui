@@ -8,7 +8,8 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { DEFAULT_R_TEMPLATE_KEY, R_JOB_TYPE } from 'js/components/workspaces/constants';
-import { TemplatesTypes } from '../types';
+
+import { TemplatesTypes, WorkspacesEventCategories } from '../types';
 import TemplateGrid from '../TemplateGrid';
 import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
 import { sortTemplates } from '../utils';
@@ -110,6 +111,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
         selectItem={selectItem}
         selectedTemplates={selectedTemplates}
         disabledTemplates={disabledTemplates}
+        trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDialog }}
         jobType={jobType.value as string}
       />
     </Box>

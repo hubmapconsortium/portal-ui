@@ -7,17 +7,19 @@ import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
 import { Alert } from 'js/shared-styles/alerts';
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
-import { MergedWorkspace } from 'js/components/workspaces/types';
+import { MergedWorkspace, WorkspacesEventInfo } from 'js/components/workspaces/types';
 import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
   handleStopWorkspace: (workspaceId: number) => Promise<void>;
+  button: ElementType<ButtonProps>;
   isStoppingWorkspace: boolean;
   showLaunch?: boolean;
   showStop?: boolean;
-  button: ElementType<ButtonProps>;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
 function StopWorkspaceButton({
@@ -89,7 +91,7 @@ function StopWorkspaceAlert() {
 }
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const { workspace, button: ButtonComponent, showLaunch = false, showStop = false } = props;
+  const { workspace, button: ButtonComponent, trackingInfo, showLaunch = false, showStop = false } = props;
   const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
 
   if (workspace.status === 'deleting') {
@@ -104,7 +106,21 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
     <Stack direction="row" spacing={2}>
       {showStop && <StopWorkspaceButton {...props} />}
       {showLaunch && (
-        <Button type="button" variant="contained" color="primary" onClick={() => launchOrOpenDialog(workspace)}>
+        <Button
+          type="button"
+          variant="contained"
+          color="primary"
+          onClick={() => {
+            if (trackingInfo) {
+              trackEvent({
+                ...trackingInfo,
+                action: 'Launch Open Workspace Dialog',
+                label: workspace.name,
+              });
+            }
+            launchOrOpenDialog(workspace);
+          }}
+        >
           Launch Workspace
         </Button>
       )}

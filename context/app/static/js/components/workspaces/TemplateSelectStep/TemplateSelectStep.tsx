@@ -7,7 +7,7 @@ import { SelectedItems } from 'js/hooks/useSelectItems';
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import SelectableTemplateGrid from 'js/components/workspaces/SelectableTemplateGrid';
-import { TemplatesTypes } from 'js/components/workspaces/types';
+import { TemplatesTypes, WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { FormWithTemplates } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import TemplateTagsAutocomplete from 'js/components/workspaces/TemplateTagsAutocomplete';
 
@@ -59,6 +59,7 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDialog }}
         />
         <SelectableTemplateGrid templates={templates} disabledTemplates={disabledTemplates} control={control} />
       </Stack>

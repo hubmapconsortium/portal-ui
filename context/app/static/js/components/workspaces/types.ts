@@ -140,17 +140,33 @@ interface CreateWorkspaceData {
 
 type CreateWorkspaceResponse = WorkspaceAPIResponse<CreateWorkspaceData>;
 
+type TemplateTags = Record<string, string>;
+
+type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
+
+export enum WorkspacesEventCategories {
+  Workspaces = 'Workspaces',
+  WorkspaceDialog = 'Workspace Dialog',
+  WorkspaceLandingPage = 'Workspace Landing Page',
+  WorkspaceDetailPage = 'Workspace Detail Page',
+  WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
+  WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
+}
+
+interface WorkspacesEventInfo {
+  category: WorkspacesEventCategories;
+  action?: string;
+  label?: string;
+}
+
 interface CreateTemplateNotebooksTypes {
   templateKeys: string[];
   uuids: string[];
   workspaceName: string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
+  trackingInfo?: WorkspacesEventInfo;
 }
-
-type TemplateTags = Record<string, string>;
-
-type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
 export type {
   WorkspaceFile,
@@ -164,4 +180,5 @@ export type {
   CreateTemplateNotebooksTypes,
   TemplateTags,
   TemplateTagsResponse,
+  WorkspacesEventInfo,
 };

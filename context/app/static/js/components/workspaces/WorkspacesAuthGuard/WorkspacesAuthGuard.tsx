@@ -1,7 +1,7 @@
 import React, { ReactNode } from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
-import { TextItems, LogInAlert, AccessAlert } from '../workspaceMessaging';
+import { TextItems, WorkspacesLogInAlert, AccessAlert } from 'js/components/workspaces/workspaceMessaging';
 
 function WorkspacesAuthGuard({ children }: { children: ReactNode }) {
   const { isAuthenticated, isWorkspacesUser } = useAppContext();
@@ -9,7 +9,7 @@ function WorkspacesAuthGuard({ children }: { children: ReactNode }) {
   if (!isAuthenticated) {
     return (
       <TextItems textKey="workspacesUserOrLoggedOut">
-        <LogInAlert />
+        <WorkspacesLogInAlert />
       </TextItems>
     );
   }

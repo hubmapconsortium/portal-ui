@@ -1,5 +1,6 @@
 import React from 'react';
 import { format } from 'date-fns/format';
+
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Button, { ButtonProps } from '@mui/material/Button';
@@ -23,6 +24,7 @@ import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateBut
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -80,6 +82,11 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                   marginRight: theme.spacing(1),
                 })}
                 tooltip={tooltips.name}
+                trackingInfo={{
+                  category: WorkspacesEventCategories.WorkspaceDetailPage,
+                  action: 'Launch Edit Workspace Dialog',
+                  label: workspace.name,
+                }}
               >
                 <EditIcon />
               </WorkspacesUpdateButton>
@@ -88,6 +95,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
                 button={LaunchStopButton}
                 handleStopWorkspace={handleStopWorkspace}
                 isStoppingWorkspace={isStoppingWorkspace}
+                trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
                 showLaunch
                 showStop
               />
@@ -115,10 +123,14 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
       </Box>
       <WorkspaceDatasetsTable
         datasetsUUIDs={workspaceDatasets}
-        addDatasets={workspace}
         label={<SectionHeader>Datasets</SectionHeader>}
         hideTableIfEmpty
+        addDatasets={workspace}
         copyDatasets
+        trackingInfo={{
+          category: WorkspacesEventCategories.WorkspaceDetailPage,
+          label: workspace.name,
+        }}
         emptyAlert={
           <Alert
             severity="info"
@@ -145,7 +157,10 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             </WorkspacesUpdateButton>
           }
         />
-        <TemplateGrid templates={workspaceTemplates} />
+        <TemplateGrid
+          templates={workspaceTemplates}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
+        />
       </Box>
     </Stack>
   );
