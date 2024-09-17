@@ -124,7 +124,7 @@ function useCreateWorkspaceForm({
     workspaceName,
     workspaceJobTypeId,
     workspaceResourceOptions,
-    trackingCategory,
+    trackingInfo,
   }: CreateTemplateNotebooksTypes) {
     if (isSubmitting || isSubmitSuccessful) return;
     setDialogType('LAUNCH_NEW_WORKSPACE');
@@ -134,7 +134,7 @@ function useCreateWorkspaceForm({
       workspaceName,
       workspaceJobTypeId,
       workspaceResourceOptions,
-      trackingCategory,
+      trackingInfo,
     });
     reset();
     handleClose();

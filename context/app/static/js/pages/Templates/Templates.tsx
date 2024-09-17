@@ -11,7 +11,7 @@ function Templates() {
   return (
     <Stack spacing={3}>
       <IconPageTitle icon={WorkspacesIcon}>Templates</IconPageTitle>
-      <TemplatePreviewSection trackingCategory={WorkspacesEventCategories.WorkspaceTemplateLandingPage} />
+      <TemplatePreviewSection trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateLandingPage }} />
     </Stack>
   );
 }

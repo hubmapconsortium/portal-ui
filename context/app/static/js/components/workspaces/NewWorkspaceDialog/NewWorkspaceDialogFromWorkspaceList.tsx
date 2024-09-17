@@ -15,7 +15,7 @@ function NewWorkspaceDialogFromWorkspaceList() {
       </WorkspaceButton>
       <NewWorkspaceDialog
         showDatasetsSearchBar
-        trackingCategory={WorkspacesEventCategories.WorkspaceLandingPage}
+        trackingInfo={{ category: WorkspacesEventCategories.WorkspaceLandingPage }}
         {...rest}
       />
     </>

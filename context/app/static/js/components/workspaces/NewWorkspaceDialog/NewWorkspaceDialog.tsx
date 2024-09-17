@@ -20,7 +20,7 @@ import InternalLink from 'js/shared-styles/Links/InternalLink';
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
-import { CreateTemplateNotebooksTypes } from '../types';
+import { CreateTemplateNotebooksTypes, WorkspacesEventInfo } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
@@ -82,7 +82,7 @@ interface NewWorkspaceDialogProps {
   dialogIsOpen: boolean;
   handleClose: () => void;
   removeDatasets?: (uuids: string[]) => void;
-  onSubmit: ({ workspaceName, templateKeys, uuids, trackingCategory }: CreateTemplateNotebooksTypes) => void;
+  onSubmit: ({ workspaceName, templateKeys, uuids, trackingInfo }: CreateTemplateNotebooksTypes) => void;
   isSubmitting?: boolean;
   showDatasetsSearchBar?: boolean;
   inputValue: string;
@@ -92,7 +92,7 @@ interface NewWorkspaceDialogProps {
   workspaceDatasets: string[];
   allDatasets: string[];
   searchHits: SearchAheadHit[];
-  trackingCategory?: string;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
 function NewWorkspaceDialog({
@@ -114,7 +114,7 @@ function NewWorkspaceDialog({
   workspaceDatasets,
   allDatasets,
   searchHits,
-  trackingCategory,
+  trackingInfo,
 }: PropsWithChildren<NewWorkspaceDialogProps & ReactHookFormProps>) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
@@ -137,10 +137,10 @@ function NewWorkspaceDialog({
         uuids: datasets,
         workspaceJobTypeId,
         workspaceResourceOptions,
-        trackingCategory,
+        trackingInfo,
       });
     },
-    [onSubmit, trackingCategory],
+    [onSubmit, trackingInfo],
   );
 
   return (

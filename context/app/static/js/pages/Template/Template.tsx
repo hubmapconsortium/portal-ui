@@ -66,7 +66,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
               onClick={() => {
                 trackEvent({
                   category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
-                  action: 'Select Try Sample Workspace',
+                  action: 'Open Try Sample Workspace Dialog',
                   label: templateName,
                 });
                 setDialogIsOpen(true);

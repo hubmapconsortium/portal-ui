@@ -74,7 +74,7 @@ function useTemplateNotebooks() {
       uuids,
       workspaceJobTypeId,
       workspaceResourceOptions,
-      trackingCategory,
+      trackingInfo,
     }: CreateTemplateNotebooksTypes) => {
       let templatesDetails: {
         name: string;
@@ -105,9 +105,9 @@ function useTemplateNotebooks() {
       const templatePath = templatesDetails[0].name;
       const symlinks = buildDatasetSymlinks({ datasetUUIDs: uuids });
 
-      if (trackingCategory) {
+      if (trackingInfo) {
         trackEvent({
-          category: trackingCategory,
+          ...trackingInfo,
           action: 'Create Workspace',
           label: {
             name: workspaceName,
