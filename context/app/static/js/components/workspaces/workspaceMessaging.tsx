@@ -133,13 +133,10 @@ function TemplateGridPreview() {
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
 
-  const recommendedTags = ['visualization', 'api'];
-
   return (
     <Stack spacing={2}>
       <TemplateTagsAutocomplete
         selectedTags={selectedTags}
-        recommendedTags={recommendedTags}
         toggleTag={toggleTag}
         setSelectedTags={setSelectedTags}
         selectedRecommendedTags={selectedRecommendedTags}

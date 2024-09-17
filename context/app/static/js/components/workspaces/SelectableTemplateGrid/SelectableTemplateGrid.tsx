@@ -41,9 +41,11 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
     control,
     name: inputName as Path<FormType>,
   });
-  const { selectedItems: selectedTemplates, setSelectedItems: setSelectedTemplates } = useSelectItems(
-    field.value satisfies FormType[typeof inputName],
-  );
+  const {
+    selectedItems: selectedTemplates,
+    setSelectedItems: setSelectedTemplates,
+    addItem,
+  } = useSelectItems(field.value satisfies FormType[typeof inputName]);
 
   const { field: jobType } = useController({
     name: 'workspaceJobTypeId' as Path<FormType>,
@@ -54,10 +56,9 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   // If the Python + R job type is selected, select the default R template
   useEffect(() => {
     if (jobType.value === R_JOB_TYPE) {
-      setSelectedTemplates([...selectedTemplates, DEFAULT_R_TEMPLATE_KEY]);
+      addItem(DEFAULT_R_TEMPLATE_KEY);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [jobType.value, setSelectedTemplates]);
+  }, [jobType.value, addItem]);
 
   const sortedTemplates = useMemo(() => sortTemplates(templates, disabledTemplates), [templates, disabledTemplates]);
 

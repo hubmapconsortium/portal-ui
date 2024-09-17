@@ -4,8 +4,11 @@ export const DEFAULT_PYTHON_TEMPLATE_KEY = 'blank';
 export const DEFAULT_R_TEMPLATE_KEY = 'blank_r';
 
 /* Workspace R templates */
-export const R_TEMPLATE_TAG = 'Jupyter Lab: Python + R';
+export const R_TEMPLATE_TAG = 'R';
+export const R_TEMPLATE_TITLE = 'Jupyter Lab: Python + R';
 export const R_JOB_TYPE = 'jupyter_lab_r';
+
+export const RECOMMENDED_TAGS = ['visualization', 'api', R_TEMPLATE_TAG];
 
 /* Workspace resource defaults */
 export const DEFAULT_NUM_CPUS = 1;

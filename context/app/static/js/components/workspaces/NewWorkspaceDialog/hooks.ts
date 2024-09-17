@@ -10,12 +10,13 @@ import {
   CreateTemplateNotebooksTypes,
   TemplateTagsResponse,
   TemplateExample,
+  TemplatesTypes,
 } from 'js/components/workspaces/types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useJobTypes } from 'js/components/workspaces/api';
-import { DEFAULT_JOB_TYPE, R_JOB_TYPE, R_TEMPLATE_TAG } from 'js/components/workspaces/constants';
+import { DEFAULT_JOB_TYPE, R_TEMPLATE_TITLE } from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -41,27 +42,21 @@ function useUserTemplatesAPI<T>({ templatesURL, config = { fallbackData: {} } }:
 function useWorkspaceTemplates(tags: string[] = []) {
   const { userTemplatesEndpoint } = useAppContext();
 
-  const url = `${userTemplatesEndpoint}/templates/jupyter_lab`;
+  const queryParams = tags.map((tag, i) => `${i === 0 ? '' : '&'}tags=${encodeURIComponent(tag)}`).join('');
+
+  const url = `${userTemplatesEndpoint}/templates/jupyter_lab/?${queryParams}`;
   const result = useUserTemplatesAPI<TemplatesResponse>({ templatesURL: url });
 
   const templates = result?.data?.data ?? {};
 
-  // Manually update tags and title for R templates
-  const updatedTemplates = Object.fromEntries(
-    Object.entries(templates).map(([key, template]) => {
-      const isRTemplate = template.job_types?.includes(R_JOB_TYPE);
-
-      const updatedTitle = isRTemplate ? `${template.title} (${R_TEMPLATE_TAG})` : template.title;
-      const updatedTags = [...template.tags, ...(isRTemplate ? [R_TEMPLATE_TAG] : [])];
-
-      return [key, { ...template, tags: updatedTags, title: updatedTitle }];
-    }),
-  );
-
-  // Filter templates by tags
   const filteredTemplates = Object.fromEntries(
-    Object.entries(updatedTemplates).filter(([_, template]) => tags.every((tag) => template.tags?.includes(tag))),
-  );
+    Object.entries(templates)
+      .filter(([, template]) => !template?.is_hidden)
+      .map(([key, template]) => {
+        const newTitle = template?.tags?.includes('R') ? `${template.title} (${R_TEMPLATE_TITLE})` : template.title;
+        return [key, { ...template, title: newTitle }];
+      }),
+  ) as TemplatesTypes;
 
   return {
     templates: filteredTemplates,
