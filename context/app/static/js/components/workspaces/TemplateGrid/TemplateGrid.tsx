@@ -27,8 +27,8 @@ function TemplateGrid({
   const getTooltip = (templateKey: string, job_types?: string[]) => {
     if (templateKey in disabledTemplates) {
       return 'This template is already in your workspace.';
-      // If the template is an R template and the job type is not R
     }
+    // If the template is an R template and the job type is not R
     if (jobType !== R_JOB_TYPE && job_types?.includes(R_JOB_TYPE)) {
       return 'This template is not compatible with your current environment. To avoid potential issues, please ensure that you have selected the correct environment for your workspace.';
     }
