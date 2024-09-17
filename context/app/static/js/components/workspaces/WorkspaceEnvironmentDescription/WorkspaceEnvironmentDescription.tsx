@@ -2,15 +2,8 @@ import React, { PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
+import HighEmphasis from 'js/shared-styles/text/HighEmphasis';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-
-function HighEmphasis({ children }: PropsWithChildren) {
-  return (
-    <Typography variant="subtitle2" color="textPrimary" component="span">
-      {children}
-    </Typography>
-  );
-}
 
 function WorkspaceEnvironmentDescription({ children }: PropsWithChildren) {
   return (
