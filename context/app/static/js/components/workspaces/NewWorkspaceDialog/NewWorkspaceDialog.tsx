@@ -28,6 +28,7 @@ import AdvancedConfigOptions from '../AdvancedConfigOptions';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { SearchAheadHit } from '../AddDatasetsTable/hooks';
 import { StyledSubtitle1 } from '../style';
+import WorkspaceEnvironmentDescription from '../WorkspaceEnvironmentDescription';
 
 const text = {
   overview: {
@@ -63,9 +64,7 @@ const text = {
   },
   configure: {
     title: 'Configure Workspace',
-    description: [
-      'All workspaces are launched with Python support, with the option to add support for R. Workspaces with added R support may experience longer load times.',
-    ],
+    description: <WorkspaceEnvironmentDescription />,
     advancedDescription: 'Adjusting these settings may result in longer workspace load times.',
   },
   templates: {
@@ -211,7 +210,7 @@ function NewWorkspaceDialog({
             />
             <Stack spacing={2} p={2} component={Paper} direction="column">
               <StyledSubtitle1>Environment Selection</StyledSubtitle1>
-              <Typography>{text.configure.description}</Typography>
+              {text.configure.description}
               <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
             </Stack>
             <AdvancedConfigOptions control={control} description={text.configure.advancedDescription} />
