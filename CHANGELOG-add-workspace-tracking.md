@@ -1,0 +1,1 @@
+- Add tracking to landing pages and detail pages for workspaces and templates.

@@ -13,6 +13,8 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { useSelectItems } from 'js/hooks/useSelectItems';
+import { WorkspacesEventCategories, WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { trackEvent } from 'js/helpers/trackers';
 
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
@@ -31,13 +33,23 @@ const workspacesDescription = {
   body: 'Workspaces enable lightweight exploration of public HuBMAP data and user-provided data using Python and R in a Jupyter Lab environment hosted by HuBMAP at no cost to community members.',
 };
 
+const trackRelevantPage = (pageName: string) => {
+  trackEvent({
+    category: WorkspacesEventCategories.WorkspaceLandingPage,
+    action: 'Select Relevant Page Button',
+    label: pageName,
+  });
+};
+
 const workspacesUsage = {
   title: 'How do I use workspaces?',
   body: (
     <>
       Explore more about this platform through our{' '}
-      <InternalLink href="/tutorials/workspaces">workspace tutorials</InternalLink> to optimize your experience with
-      workspaces. To begin a new workspace, find datasets on our{' '}
+      <InternalLink href="/tutorials/workspaces" onClick={() => trackRelevantPage('Tutorials')}>
+        workspace tutorials
+      </InternalLink>{' '}
+      to optimize your experience with workspaces. To begin a new workspace, find datasets on our{' '}
       <InternalLink href="/search?entity_type[0]=Dataset">search page</InternalLink> and launch a workspace from them.
       To learn more about getting started, explore <InternalLink href="/templates">workspace templates</InternalLink> to
       help you start analyzing HuBMAP data.
@@ -88,21 +100,31 @@ const text = {
 
 const pageLinks = [
   {
+    onClick: () => trackRelevantPage('Tutorials'),
     link: '/tutorials/workspaces',
     children: 'Tutorials',
   },
   {
+    onClick: () => trackRelevantPage('Templates'),
     link: '/templates',
     children: 'Templates',
   },
   {
+    onClick: () => trackRelevantPage('Dataset Search Page'),
     link: '/search?entity_type[0]=Dataset',
     children: 'Dataset Search Page',
   },
 ];
 
-function LogInAlert() {
-  return <LoginAlert featureName="workspaces" />;
+function WorkspacesLogInAlert() {
+  return (
+    <LoginAlert
+      featureName="workspaces"
+      trackingInfo={{
+        category: WorkspacesEventCategories.WorkspaceLandingPage,
+      }}
+    />
+  );
 }
 
 function AccessAlert() {
@@ -114,21 +136,11 @@ function AccessAlert() {
   );
 }
 
-function TemplateLogInPanel() {
-  if (isAuthenticated) {
-    return null;
-  }
-
-  return (
-    <LogInPanel>
-      Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by your
-      specific interests. Click on any template for detailed information.{' '}
-      <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
-    </LogInPanel>
-  );
+interface TemplatePreviewSectionProps {
+  trackingInfo: WorkspacesEventInfo;
 }
 
-function TemplateGridPreview() {
+function TemplatePreviewSection({ trackingInfo }: TemplatePreviewSectionProps) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
@@ -136,29 +148,25 @@ function TemplateGridPreview() {
   const recommendedTags = ['visualization', 'api'];
 
   return (
-    <Stack spacing={2}>
-      <TemplateTagsAutocomplete
-        selectedTags={selectedTags}
-        recommendedTags={recommendedTags}
-        toggleTag={toggleTag}
-        setSelectedTags={setSelectedTags}
-        selectedRecommendedTags={selectedRecommendedTags}
-      />
-      <TemplateGrid templates={templates} />
-    </Stack>
-  );
-}
-
-function TemplatePreviewSection() {
-  if (isAuthenticated) {
-    return null;
-  }
-
-  return (
-    <Stack pt={2} spacing={2}>
-      <Typography variant="h4">Workspace Templates</Typography>
-      <TemplateLogInPanel />
-      <TemplateGridPreview />
+    <Stack spacing={3}>
+      {!isAuthenticated && (
+        <LogInPanel trackingInfo={trackingInfo}>
+          Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
+          your specific interests. Click on any template for detailed information.{' '}
+          <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
+        </LogInPanel>
+      )}
+      <Stack spacing={2}>
+        <TemplateTagsAutocomplete
+          selectedTags={selectedTags}
+          recommendedTags={recommendedTags}
+          toggleTag={toggleTag}
+          setSelectedTags={setSelectedTags}
+          selectedRecommendedTags={selectedRecommendedTags}
+          trackingInfo={trackingInfo}
+        />
+        <TemplateGrid templates={templates} trackingInfo={trackingInfo} />
+      </Stack>
     </Stack>
   );
 }
@@ -183,9 +191,14 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
           </LabelledSectionText>
         </Stack>
       </Stack>
-      <TemplatePreviewSection />
+      {!isAuthenticated && (
+        <Stack pt={2} spacing={2}>
+          <Typography variant="h4">Workspace Templates</Typography>
+          <TemplatePreviewSection trackingInfo={{ category: WorkspacesEventCategories.WorkspaceLandingPage }} />
+        </Stack>
+      )}
     </Stack>
   );
 }
 
-export { LogInAlert, AccessAlert, TemplateLogInPanel, TemplateGridPreview, TextItems };
+export { WorkspacesLogInAlert, AccessAlert, TemplatePreviewSection, TextItems };

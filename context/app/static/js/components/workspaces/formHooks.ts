@@ -8,6 +8,7 @@ import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { Dataset } from 'js/components/types';
 import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>>[];
 
@@ -53,7 +54,7 @@ function useProtectedDatasetsForm() {
     if (!reportedProtectedRows.current) {
       reportedProtectedRows.current = true;
       trackEvent({
-        category: 'Workspaces',
+        category: WorkspacesEventCategories.Workspaces,
         action: 'Create Workspace / Protected datasets selected',
         value: protectedRows.length,
       });
@@ -77,7 +78,7 @@ function useTooManyDatasetsErrors({ numWorkspaceDatasets }: { numWorkspaceDatase
     if (!reportedTooManyRows.current) {
       reportedTooManyRows.current = true;
       trackEvent({
-        category: 'Workspaces',
+        category: WorkspacesEventCategories.Workspaces,
         action: 'Create Workspace / Too many datasets selected',
         value: numWorkspaceDatasets,
       });

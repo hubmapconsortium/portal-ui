@@ -7,7 +7,9 @@ import Typography from '@mui/material/Typography';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 import { SelectedItems } from 'js/hooks/useSelectItems';
-import { useWorkspaceTemplateTags } from '../NewWorkspaceDialog/hooks';
+import { useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 
 interface TemplateTagsAutocompleteProps {
   selectedTags: string[];
@@ -15,6 +17,7 @@ interface TemplateTagsAutocompleteProps {
   toggleTag: (itemKey: string) => void;
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedRecommendedTags: SelectedItems;
+  trackingInfo: WorkspacesEventInfo;
 }
 
 export interface TagTypes extends ChipProps {
@@ -31,6 +34,7 @@ function TemplateTagsAutocomplete({
   toggleTag,
   setSelectedTags,
   selectedRecommendedTags,
+  trackingInfo,
 }: TemplateTagsAutocompleteProps) {
   const { tags } = useWorkspaceTemplateTags();
 
@@ -46,6 +50,16 @@ function TemplateTagsAutocomplete({
         isOptionEqualToValue={(option, value) => option === value}
         tagComponent={TagComponent}
         onChange={(_, value: string[]) => {
+          const addedValue = value.find((tag) => !selectedTags.includes(tag));
+
+          if (addedValue) {
+            trackEvent({
+              ...trackingInfo,
+              action: 'Select Template Tag from Dropdown',
+              label: addedValue,
+            });
+          }
+
           setSelectedTags(value);
         }}
         renderInputProps={{
@@ -63,7 +77,14 @@ function TemplateTagsAutocomplete({
             <SelectableChip
               isSelected={selectedRecommendedTags.has(tag)}
               label={tag}
-              onClick={() => toggleTag(tag)}
+              onClick={() => {
+                trackEvent({
+                  ...trackingInfo,
+                  action: 'Select Recommended Template Tag',
+                  label: tag,
+                });
+                toggleTag(tag);
+              }}
               key={tag}
             />
           ))}

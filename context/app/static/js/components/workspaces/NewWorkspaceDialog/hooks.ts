@@ -11,6 +11,7 @@ import {
   TemplateTagsResponse,
   TemplatesTypes,
   TemplateExample,
+  WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
 import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
 import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
@@ -73,6 +74,7 @@ function useTemplateNotebooks() {
       uuids,
       workspaceJobTypeId,
       workspaceResourceOptions,
+      trackingInfo,
     }: CreateTemplateNotebooksTypes) => {
       let templatesDetails: {
         name: string;
@@ -82,7 +84,7 @@ function useTemplateNotebooks() {
       try {
         templatesDetails = await createTemplates({ templateKeys, uuids });
         trackEvent({
-          category: 'Workspaces',
+          category: WorkspacesEventCategories.Workspaces,
           action: 'Create Templates',
           label: { templateKeys, templateCount: templateKeys.length, uuids },
         });
@@ -101,6 +103,19 @@ function useTemplateNotebooks() {
       }
 
       const templatePath = templatesDetails[0].name;
+      const symlinks = buildDatasetSymlinks({ datasetUUIDs: uuids });
+
+      if (trackingInfo) {
+        trackEvent({
+          ...trackingInfo,
+          action: 'Create Workspace',
+          label: {
+            name: workspaceName,
+            files: templatesDetails.map((f) => f.name),
+            symlinks: symlinks.map((s) => s.name),
+          },
+        });
+      }
 
       await createAndLaunchWorkspace({
         templatePath,
@@ -111,7 +126,7 @@ function useTemplateNotebooks() {
           workspace_details: {
             globus_groups_token: groupsToken,
             files: templatesDetails,
-            symlinks: buildDatasetSymlinks({ datasetUUIDs: uuids }),
+            symlinks,
           },
         },
         resourceOptions: workspaceResourceOptions,

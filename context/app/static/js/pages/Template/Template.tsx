@@ -17,16 +17,18 @@ import { StyledButton, StyledChip } from 'js/pages/Template/style';
 import { NewWorkspaceDialogFromExample } from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
-import { TemplateExample } from 'js/components/workspaces/types';
+import { TemplateExample, WorkspacesEventCategories } from 'js/components/workspaces/types';
 import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface ExampleAccordionProps {
   example: TemplateExample;
   templateKey: string;
+  templateName: string;
   defaultExpanded?: boolean;
 }
 
-function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAccordionProps) {
+function ExampleAccordion({ example, templateKey, defaultExpanded, templateName }: ExampleAccordionProps) {
   const { title, description, assay_display_name, datasets, job_types, resource_options } = example;
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
@@ -58,7 +60,18 @@ function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAcco
         </AccordionSummary>
         <AccordionDetails>
           <Stack spacing={2}>
-            <StyledButton variant="contained" disabled={!isAuthenticated} onClick={() => setDialogIsOpen(true)}>
+            <StyledButton
+              variant="contained"
+              disabled={!isAuthenticated}
+              onClick={() => {
+                trackEvent({
+                  category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
+                  action: 'Open Try Sample Workspace Dialog',
+                  label: templateName,
+                });
+                setDialogIsOpen(true);
+              }}
+            >
               Try Sample Workspace
             </StyledButton>
             <Stack component={SummaryPaper} spacing={1}>
@@ -71,6 +84,13 @@ function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAcco
                   <Stack spacing={1} direction="row">
                     {assay_display_name.map((name, idx) => (
                       <InternalLink
+                        onClick={() => {
+                          trackEvent({
+                            category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
+                            action: 'Navigate to dataset search page from assay type',
+                            value: { templateName, name },
+                          });
+                        }}
                         href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${assayToRawDatasetMap[name]}][0]=${encodeURI(name)}&entity_type[0]=Dataset`}
                         key={name}
                       >
@@ -81,7 +101,11 @@ function ExampleAccordion({ example, templateKey, defaultExpanded }: ExampleAcco
                 </LabelledSectionText>
               )}
             </Stack>
-            <WorkspaceDatasetsTable datasetsUUIDs={[...datasets]} isSelectable={false} />
+            <WorkspaceDatasetsTable
+              datasetsUUIDs={[...datasets]}
+              isSelectable={false}
+              trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage, label: title }}
+            />
           </Stack>
         </AccordionDetails>
       </PrimaryColorAccordion>
@@ -108,13 +132,15 @@ function Template({ templateKey }: TemplatePageProps) {
         <SummaryData title={template.title} entity_type="WorkspaceTemplate" entityTypeDisplay="Workspace Template" />
         <Stack component={SummaryPaper} spacing={1}>
           <LabelledSectionText label="Description">{template.description}</LabelledSectionText>
-          <LabelledSectionText label="Tags">
-            <Stack spacing={1} marginTop={1} direction="row">
-              {template.tags.map((tag) => (
-                <StyledChip key={tag} label={tag} variant="outlined" />
-              ))}
-            </Stack>
-          </LabelledSectionText>
+          {template.tags.length > 0 && (
+            <LabelledSectionText label="Tags">
+              <Stack spacing={1} marginTop={1} direction="row">
+                {template.tags.map((tag) => (
+                  <StyledChip key={tag} label={tag} variant="outlined" />
+                ))}
+              </Stack>
+            </LabelledSectionText>
+          )}
         </Stack>
       </Stack>
       {template.examples && (
@@ -126,7 +152,7 @@ function Template({ templateKey }: TemplatePageProps) {
               types of data that are compatible with it.
             </IconPanel>
           ) : (
-            <LogInPanel>
+            <LogInPanel trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage }}>
               Sample workspaces are available to help you get started with this template and better understand the types
               of compatible data. Please <InternalLink href="/login">log in</InternalLink> to explore a sample
               workspace.
@@ -137,6 +163,7 @@ function Template({ templateKey }: TemplatePageProps) {
               key={example.title}
               example={example}
               templateKey={templateKey}
+              templateName={template.title}
               defaultExpanded={idx === 0}
             />
           ))}

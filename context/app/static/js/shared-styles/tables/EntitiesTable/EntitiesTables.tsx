@@ -5,6 +5,7 @@ import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
 import SvgIcon from '@mui/material/SvgIcon';
+import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
@@ -16,6 +17,7 @@ interface EntitiesTablesProps<Doc> {
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
   emptyAlert?: React.ReactNode;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
 function EntitiesTables<Doc>({
@@ -24,6 +26,7 @@ function EntitiesTables<Doc>({
   entities,
   disabledIDs,
   emptyAlert,
+  trackingInfo,
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
@@ -56,7 +59,13 @@ function EntitiesTables<Doc>({
       ) : (
         entities.map(({ query, columns, entityType }, i) => (
           <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
-            <EntityTable<Doc> query={query} columns={columns} isSelectable={isSelectable} disabledIDs={disabledIDs} />
+            <EntityTable<Doc>
+              query={query}
+              columns={columns}
+              isSelectable={isSelectable}
+              disabledIDs={disabledIDs}
+              trackingInfo={trackingInfo}
+            />
           </TabPanel>
         ))
       )}

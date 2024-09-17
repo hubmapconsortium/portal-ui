@@ -13,6 +13,7 @@ import {
   WorkspaceJob,
   WorkspaceJobType,
   WorkspaceResourceOptions,
+  WorkspacesEventCategories,
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
@@ -203,7 +204,7 @@ export function useStopWorkspace() {
     async (workspaceId: number) => {
       trackEvent(
         {
-          category: 'Workspaces',
+          category: WorkspacesEventCategories.Workspaces,
           action: 'Stop Workspace',
         },
         workspaceId,
@@ -224,7 +225,7 @@ async function fetchDeleteWorkspace(
 ) {
   trackEvent(
     {
-      category: 'Workspaces',
+      category: WorkspacesEventCategories.Workspaces,
       action: 'Delete Workspace',
     },
     workspaceId,
@@ -287,7 +288,7 @@ async function startJob(
 ) {
   trackEvent(
     {
-      category: 'Workspaces',
+      category: WorkspacesEventCategories.Workspaces,
       action: 'Start Workspace',
     },
     workspaceId,
@@ -358,7 +359,7 @@ export interface CreateWorkspaceArgs extends APIAction {
 
 async function createWorkspaceFetcher(_key: string, { arg: { body, url, headers } }: { arg: CreateWorkspaceArgs }) {
   trackEvent({
-    category: 'Workspaces',
+    category: WorkspacesEventCategories.Workspaces,
     action: 'Create Workspace',
     label: {
       name: body.name,
@@ -366,6 +367,7 @@ async function createWorkspaceFetcher(_key: string, { arg: { body, url, headers 
       symlinks: body.workspace_details.symlinks.map((s) => s.name),
     },
   });
+
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),
@@ -428,7 +430,7 @@ async function updateWorkspaceFetcher(
 ) {
   trackEvent(
     {
-      category: 'Workspaces',
+      category: WorkspacesEventCategories.Workspaces,
       action: 'Update Workspace',
       value: {
         name: body?.name,
