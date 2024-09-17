@@ -78,13 +78,11 @@ function TemplateTagsAutocomplete({
               isSelected={selectedRecommendedTags.has(tag)}
               label={tag}
               onClick={() => {
-                if (trackingInfo) {
-                  trackEvent({
-                    ...trackingInfo,
-                    action: 'Select Recommended Template Tag',
-                    label: tag,
-                  });
-                }
+                trackEvent({
+                  ...trackingInfo,
+                  action: 'Select Recommended Template Tag',
+                  label: tag,
+                });
                 toggleTag(tag);
               }}
               key={tag}

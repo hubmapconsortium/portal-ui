@@ -104,7 +104,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
             <WorkspaceDatasetsTable
               datasetsUUIDs={[...datasets]}
               isSelectable={false}
-              trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage }}
+              trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage, label: title }}
             />
           </Stack>
         </AccordionDetails>

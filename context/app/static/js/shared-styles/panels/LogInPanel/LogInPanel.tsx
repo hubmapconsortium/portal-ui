@@ -11,7 +11,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 
 interface LogInPanelProps extends PropsWithChildren {
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo: WorkspacesEventInfo;
 }
 
 function LogInPanel({ children, trackingInfo }: LogInPanelProps) {
@@ -31,11 +31,10 @@ function LogInPanel({ children, trackingInfo }: LogInPanelProps) {
           variant="contained"
           color="primary"
           onClick={() =>
-            trackingInfo &&
             trackEvent({
               ...trackingInfo,
-              action: 'Log In / From template section',
-              label: 'template button',
+              action: 'Log In / From panel',
+              label: 'info panel',
             })
           }
         >

@@ -111,11 +111,13 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
           variant="contained"
           color="primary"
           onClick={() => {
-            trackEvent({
-              ...trackingInfo,
-              action: 'Launch Open Workspace Dialog',
-              label: workspace.name,
-            });
+            if (trackingInfo) {
+              trackEvent({
+                ...trackingInfo,
+                action: 'Launch Open Workspace Dialog',
+                label: workspace.name,
+              });
+            }
             launchOrOpenDialog(workspace);
           }}
         >

@@ -14,14 +14,15 @@ export default function LoginAlert({ featureName, trackingInfo }: LoginAlertProp
       severity="info"
       action={
         <Button
-          onClick={() =>
-            trackingInfo &&
-            trackEvent({
-              ...trackingInfo,
-              action: 'Log In / From alert',
-              label: 'alert banner',
-            })
-          }
+          onClick={() => {
+            if (trackingInfo) {
+              trackEvent({
+                ...trackingInfo,
+                action: 'Log In / From alert',
+                label: 'alert banner',
+              });
+            }
+          }}
           href="/login"
         >
           Log in
