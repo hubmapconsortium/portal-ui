@@ -15,16 +15,21 @@ import {
   useLaunchWorkspaceDialog,
   LaunchWorkspaceFormTypes,
 } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
+import WorkspaceEnvironmentDescription from '../WorkspaceEnvironmentDescription';
 
 const formId = 'launch-workspace-form';
 
 const text = {
   environment: {
     title: 'Environment Selection',
-    description: [
-      'All workspaces are launched with Python support, with the option to add support for R. Workspaces with added R support may experience longer load times.',
-      'If a workspace was previously launched with R, launching a workspace without R support may cause issues with your saved work.',
-    ],
+    description: (
+      <WorkspaceEnvironmentDescription>
+        <Typography>
+          If a workspace was previously launched with R, launching a workspace without R support may cause issues with
+          your saved work.
+        </Typography>
+      </WorkspaceEnvironmentDescription>
+    ),
   },
   resources: {
     alert:
@@ -100,9 +105,7 @@ function LaunchWorkspaceDialog() {
               <SummaryPaper>
                 <Stack direction="column" spacing={2}>
                   <StyledSubtitle1>{text.environment.title}</StyledSubtitle1>
-                  {text.environment.description.map((description) => (
-                    <Typography key={description}>{description}</Typography>
-                  ))}
+                  {text.environment.description}
                   <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
                 </Stack>
               </SummaryPaper>
