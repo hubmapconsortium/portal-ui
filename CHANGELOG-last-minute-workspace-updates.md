@@ -1,2 +1,0 @@
-- Increase maximum resource options for workspace jobs from 2 CPUs to 16, 32GB of memory to 128GB and session length from 6 hours to 12.
-- Add last modified date to template detail pages.

@@ -1,3 +1,9 @@
+## v1.7.0 - 2024-09-18
+
+- Increase maximum resource options for workspace jobs from 2 CPUs to 16, 32GB of memory to 128GB and session length from 6 hours to 12.
+- Add last modified date to template detail pages.
+
+
 ## v1.6.0 - 2024-09-17
 
 - Add tracking to landing pages and detail pages for workspaces and templates.
