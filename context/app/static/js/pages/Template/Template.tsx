@@ -4,6 +4,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import Typography from '@mui/material/Typography';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
+import { format } from 'date-fns/format';
 
 import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
@@ -139,6 +140,14 @@ function Template({ templateKey }: TemplatePageProps) {
                   <StyledChip key={tag} label={tag} variant="outlined" />
                 ))}
               </Stack>
+            </LabelledSectionText>
+          )}
+          {template?.last_modified_unix_timestamp && (
+            <LabelledSectionText
+              label="Last Modified"
+              iconTooltipText="Date when this template was last modified by its provider."
+            >
+              {format(template.last_modified_unix_timestamp * 1000, 'yyyy-MM-dd')}
             </LabelledSectionText>
           )}
         </Stack>
