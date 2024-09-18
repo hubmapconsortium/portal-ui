@@ -29,4 +29,4 @@ export const MIN_MEMORY_MB = 1024;
 export const MAX_MEMORY_MB = 131072;
 
 export const MIN_TIME_LIMIT_MINUTES = 60;
-export const MAX_TIME_LIMIT_MINUTES = 360;
+export const MAX_TIME_LIMIT_MINUTES = 720;
