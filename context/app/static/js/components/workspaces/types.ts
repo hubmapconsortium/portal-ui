@@ -120,6 +120,7 @@ interface TemplateTypes {
   is_hidden: boolean;
   job_types?: string[];
   examples: TemplateExample[];
+  last_modified_unix_timestamp: number;
 }
 
 type TemplatesTypes = Record<string, TemplateTypes>;
