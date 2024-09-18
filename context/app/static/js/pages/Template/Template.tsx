@@ -145,7 +145,7 @@ function Template({ templateKey }: TemplatePageProps) {
           {template?.last_modified_unix_timestamp && (
             <LabelledSectionText
               label="Last Modified"
-              iconTooltipText="Date when this template was last modified by its template provider."
+              iconTooltipText="Date when this template was last modified by its provider."
             >
               {format(template.last_modified_unix_timestamp * 1000, 'yyyy-MM-dd')}
             </LabelledSectionText>
