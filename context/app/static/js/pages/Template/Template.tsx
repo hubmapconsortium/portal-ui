@@ -5,7 +5,6 @@ import Typography from '@mui/material/Typography';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { format } from 'date-fns/format';
-import { fromUnixTime } from 'date-fns/fromUnixTime';
 
 import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
@@ -148,7 +147,7 @@ function Template({ templateKey }: TemplatePageProps) {
               label="Last Modified"
               iconTooltipText="Date when this template was last modified by its template provider."
             >
-              {format(fromUnixTime(template.last_modified_unix_timestamp), 'yyyy-MM-dd')}
+              {format(template.last_modified_unix_timestamp * 1000, 'yyyy-MM-dd')}
             </LabelledSectionText>
           )}
         </Stack>
