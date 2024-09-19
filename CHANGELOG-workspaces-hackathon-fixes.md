@@ -1,0 +1,3 @@
+- Fix Advanced Config marker issue.
+- Remove extraneous tooltip from the non-selectable template grid.
+- Fix "Copy to Clipboard" error when copying dataset IDs.

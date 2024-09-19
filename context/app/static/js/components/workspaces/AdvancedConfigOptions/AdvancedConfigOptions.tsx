@@ -33,7 +33,7 @@ interface ConfigSliderProps<FormType extends FieldValues> {
   min: number;
   max: number;
   conversionFactor?: number;
-  markInterval?: number;
+  numMarks?: number;
 }
 
 function ConfigSlider<FormType extends FieldValues>({
@@ -44,17 +44,19 @@ function ConfigSlider<FormType extends FieldValues>({
   min,
   max,
   conversionFactor = 1,
-  markInterval = 1,
+  numMarks,
 }: ConfigSliderProps<FormType>) {
   const convertedMin = convert(min, conversionFactor);
   const convertedMax = convert(max, conversionFactor);
 
-  // Show even numbers if the interval is even, otherwise show odd numbers
-  const start = markInterval % 2 === 0 ? convertedMin + 1 : convertedMin;
+  const step = numMarks ? convertedMax / numMarks : 1;
 
-  const marks = Array.from({ length: Math.floor((convertedMax - start) / markInterval) + 1 }, (_, i) => {
-    const value = start + i * markInterval;
-    return { value, label: value };
+  const marks = Array.from({ length: convertedMax / step + 10 }, (_, i) => {
+    const value = convertedMin % 2 === 0 ? convertedMin : 0 + step * (i + 1);
+    return {
+      value,
+      label: value.toString(),
+    };
   });
 
   return (
@@ -98,7 +100,7 @@ const configSliderOptions: Omit<ConfigSliderProps<Record<string, number>>, 'fiel
     min: MIN_MEMORY_MB,
     max: MAX_MEMORY_MB,
     conversionFactor: 1024,
-    markInterval: 2,
+    numMarks: 16,
   },
   {
     id: 'num_cpus',

@@ -14,6 +14,7 @@ interface TemplateGridProps {
   disabledTemplates?: TemplatesTypes;
   trackingInfo: WorkspacesEventInfo;
   jobType?: string;
+  showJobTooltip?: boolean;
 }
 
 function TemplateGrid({
@@ -23,13 +24,14 @@ function TemplateGrid({
   disabledTemplates = {},
   trackingInfo,
   jobType,
+  showJobTooltip,
 }: TemplateGridProps) {
   const getTooltip = (templateKey: string, job_types?: string[]) => {
     if (templateKey in disabledTemplates) {
       return 'This template is already in your workspace.';
     }
     // If the template is an R template and the job type is not R
-    if (jobType !== JUPYTER_LAB_R_JOB_TYPE && job_types?.includes(JUPYTER_LAB_R_JOB_TYPE)) {
+    if (showJobTooltip && jobType !== JUPYTER_LAB_R_JOB_TYPE && job_types?.includes(JUPYTER_LAB_R_JOB_TYPE)) {
       return 'This template is not compatible with your current environment. To avoid potential issues, please ensure that you have selected the correct environment for your workspace.';
     }
     return undefined;
