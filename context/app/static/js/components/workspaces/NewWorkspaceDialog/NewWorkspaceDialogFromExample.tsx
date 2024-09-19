@@ -24,7 +24,6 @@ import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTa
 import AdvancedConfigOptions from 'js/components/workspaces/AdvancedConfigOptions';
 import { StyledSubtitle1 } from 'js/components/workspaces/style';
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
-import { useJobTypeName } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 
 const text = {
@@ -60,6 +59,7 @@ interface NewWorkspaceDialogFromExampleProps {
   handleClose: () => void;
   onSubmit: ({ workspaceName, templateKeys, uuids }: CreateTemplateNotebooksTypes) => void;
   allDatasets: string[];
+  jobTypeName: string;
   isSubmitting?: boolean;
 }
 
@@ -72,10 +72,10 @@ function NewWorkspaceDialogFromExample({
   errors,
   onSubmit,
   allDatasets,
+  jobTypeName,
   isSubmitting,
 }: PropsWithChildren<NewWorkspaceDialogFromExampleProps & ReactHookFormProps>) {
   const { isOpen: isLaunchWorkspaceDialogOpen } = useLaunchWorkspaceStore();
-  const jobTypeName = useJobTypeName(example);
 
   const submit = useCallback(
     ({

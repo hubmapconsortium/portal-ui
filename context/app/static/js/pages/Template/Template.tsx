@@ -6,7 +6,7 @@ import AccordionSummary from '@mui/material/AccordionSummary';
 import KeyboardArrowDownRoundedIcon from '@mui/icons-material/KeyboardArrowDownRounded';
 import { format } from 'date-fns/format';
 
-import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
+import { useJobTypeName, useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
@@ -21,24 +21,28 @@ import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks'
 import { TemplateExample, WorkspacesEventCategories } from 'js/components/workspaces/types';
 import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
 import { trackEvent } from 'js/helpers/trackers';
+import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
 
 interface ExampleAccordionProps {
   example: TemplateExample;
   templateKey: string;
   templateName: string;
+  jobType?: string;
   defaultExpanded?: boolean;
 }
 
-function ExampleAccordion({ example, templateKey, defaultExpanded, templateName }: ExampleAccordionProps) {
-  const { title, description, assay_display_name, datasets, job_types, resource_options } = example;
+function ExampleAccordion({ example, templateKey, defaultExpanded, templateName, jobType }: ExampleAccordionProps) {
+  const { title, description, assay_display_name, datasets, resource_options } = example;
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
     defaultName: title,
     defaultTemplate: templateKey,
-    defaultJobType: job_types?.[0],
+    defaultJobType: jobType,
     defaultResourceOptions: resource_options,
     initialSelectedDatasets: datasets,
   });
+
+  const jobTypeName = useJobTypeName(jobType) ?? DEFAULT_JOB_TYPE;
 
   const datasetTypeMap = useDatasetTypeMap();
   const assayToRawDatasetMap = useMemo(() => {
@@ -110,7 +114,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName 
           </Stack>
         </AccordionDetails>
       </PrimaryColorAccordion>
-      <NewWorkspaceDialogFromExample example={example} {...rest} />
+      <NewWorkspaceDialogFromExample example={example} jobTypeName={jobTypeName} {...rest} />
     </>
   );
 }
@@ -173,6 +177,7 @@ function Template({ templateKey }: TemplatePageProps) {
               example={example}
               templateKey={templateKey}
               templateName={template.title}
+              jobType={template.job_types?.[0]}
               defaultExpanded={idx === 0}
             />
           ))}
