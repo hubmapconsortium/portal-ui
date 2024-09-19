@@ -1,3 +1,11 @@
+## v1.8.0 - 2024-09-19
+
+- Fix Advanced Config marker issue.
+- Remove extraneous tooltip from the non-selectable template grid.
+- Fix "Copy to Clipboard" error when copying dataset IDs.
+- Rely on template job type, not example job type (which is not always present).
+
+
 ## v1.7.0 - 2024-09-18
 
 - Increase maximum resource options for workspace jobs from 2 CPUs to 16, 32GB of memory to 128GB and session length from 6 hours to 12.
