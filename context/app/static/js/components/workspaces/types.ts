@@ -106,7 +106,6 @@ interface TemplateExample {
   description: string;
   datasets: string[];
   assay_display_name?: string[];
-  job_types?: string[];
   resource_options?: WorkspaceResourceOptions;
   required_filetypes?: string[];
 }

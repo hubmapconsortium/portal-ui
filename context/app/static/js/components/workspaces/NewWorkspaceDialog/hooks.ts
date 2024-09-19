@@ -9,7 +9,6 @@ import {
   TemplatesResponse,
   CreateTemplateNotebooksTypes,
   TemplateTagsResponse,
-  TemplateExample,
   TemplatesTypes,
   WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
@@ -156,10 +155,8 @@ function useWorkspaceTemplateTags() {
   return { tags };
 }
 
-function useJobTypeName(example: TemplateExample) {
+function useJobTypeName(jobTypeKey: string = DEFAULT_JOB_TYPE) {
   const { data } = useJobTypes();
-  const jobTypeKey = example.job_types?.[0] ?? DEFAULT_JOB_TYPE;
-
   return data ? Object.values(data).find(({ id }) => id === jobTypeKey)?.name : jobTypeKey;
 }
 

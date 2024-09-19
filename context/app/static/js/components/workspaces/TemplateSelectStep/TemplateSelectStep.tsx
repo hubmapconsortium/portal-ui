@@ -61,7 +61,12 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
           selectedRecommendedTags={selectedRecommendedTags}
           trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDialog }}
         />
-        <SelectableTemplateGrid templates={templates} disabledTemplates={disabledTemplates} control={control} />
+        <SelectableTemplateGrid
+          templates={templates}
+          disabledTemplates={disabledTemplates}
+          control={control}
+          showJobTooltip={!!stepIndex}
+        />
       </Stack>
     </Step>
   );

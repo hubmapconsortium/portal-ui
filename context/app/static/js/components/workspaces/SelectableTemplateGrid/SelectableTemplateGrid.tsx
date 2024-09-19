@@ -17,6 +17,7 @@ import { sortTemplates } from '../utils';
 interface TemplateGridProps {
   disabledTemplates?: TemplatesTypes;
   templates: TemplatesTypes;
+  showJobTooltip?: boolean;
 }
 
 const inputName = 'templates';
@@ -36,6 +37,7 @@ function getActiveTemplates({ templates, disabledTemplates = {} }: TemplateGridP
 function SelectableTemplateGrid<FormType extends FormWithTemplates>({
   templates,
   disabledTemplates,
+  showJobTooltip,
   control,
 }: TemplateGridProps & ControllerProps<FormType>) {
   const { field, fieldState } = useController<FormType>({
@@ -113,6 +115,7 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
         disabledTemplates={disabledTemplates}
         trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDialog }}
         jobType={jobType.value as string}
+        showJobTooltip={showJobTooltip}
       />
     </Box>
   );
