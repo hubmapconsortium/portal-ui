@@ -51,7 +51,7 @@ function ConfigSlider<FormType extends FieldValues>({
 
   const step = numMarks ? convertedMax / numMarks : 1;
 
-  const marks = Array.from({ length: convertedMax / step + 10 }, (_, i) => {
+  const marks = Array.from({ length: convertedMax / step }, (_, i) => {
     const value = convertedMin % 2 === 0 ? convertedMin : 0 + step * (i + 1);
     return {
       value,
