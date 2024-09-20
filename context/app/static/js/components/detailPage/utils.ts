@@ -34,11 +34,11 @@ export function getDateLabelAndValue(
 
 export function getDonorMetadata(entity: Donor | Sample | Dataset) {
   if (isDonor(entity)) {
-    return entity.mapped_metadata;
+    return entity?.mapped_metadata ?? {};
   }
 
   if (isSample(entity) || isDataset(entity)) {
-    return entity.donor.mapped_metadata;
+    return entity?.donor.mapped_metadata ?? {};
   }
 
   return {};
