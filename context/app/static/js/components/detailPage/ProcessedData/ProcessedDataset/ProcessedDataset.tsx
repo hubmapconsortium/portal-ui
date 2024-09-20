@@ -10,6 +10,7 @@ import { useVitessceConf } from 'js/pages/Dataset/hooks';
 import { isSupport } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import Files from '../../files/Files';
 import DataProducts from '../../files/DataProducts';
@@ -47,12 +48,13 @@ function ProcessedDatasetDescription() {
 
 function Contact() {
   const {
-    dataset: { mapped_consortium },
+    dataset: { creation_action },
   } = useProcessedDatasetContext();
 
-  if (mapped_consortium !== 'HuBMAP') {
+  if (creation_action !== 'Central Process') {
     return null;
   }
+
   return (
     <LabelledSectionText label="Contact" iconTooltipText="This is the contact for this data.">
       <ContactUsLink>HuBMAP Help Desk</ContactUsLink>
@@ -65,12 +67,14 @@ function SummaryAccordion() {
   const [dateLabel, dateValue] = getDateLabelAndValue(dataset);
   return (
     <Subsection title="Summary" icon={<SummarizeRounded />}>
-      <ProcessedDatasetDescription />
-      <LabelledSectionText label="Consortium">{dataset.group_name}</LabelledSectionText>
-      <Contact />
-      <LabelledSectionText label={dateLabel}>
-        {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
-      </LabelledSectionText>
+      <Stack spacing={1}>
+        <ProcessedDatasetDescription />
+        <LabelledSectionText label="Consortium">{dataset.group_name}</LabelledSectionText>
+        <Contact />
+        <LabelledSectionText label={dateLabel}>
+          {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
+        </LabelledSectionText>
+      </Stack>
     </Subsection>
   );
 }
