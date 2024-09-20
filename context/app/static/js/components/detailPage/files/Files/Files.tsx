@@ -2,8 +2,6 @@ import React from 'react';
 
 import Box from '@mui/material/Box';
 
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
-
 import FileBrowser from '../FileBrowser';
 import { FilesContextProvider } from '../FilesContext';
 import { UnprocessedFile } from '../types';
@@ -15,13 +13,11 @@ interface FilesProps {
 function Files({ files }: FilesProps) {
   return (
     <FilesContextProvider>
-      <CollapsibleDetailPageSection id="files" title="Files">
-        {files.length > 0 && (
-          <Box mb={2}>
-            <FileBrowser files={files} />
-          </Box>
-        )}
-      </CollapsibleDetailPageSection>
+      {files.length > 0 && (
+        <Box mb={2}>
+          <FileBrowser files={files} />
+        </Box>
+      )}
     </FilesContextProvider>
   );
 }
