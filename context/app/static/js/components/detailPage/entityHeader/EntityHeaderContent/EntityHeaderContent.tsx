@@ -136,7 +136,8 @@ function CellTypeItems({ data: { assayMetadata } }: EntityHeaderItemsProps) {
   const { reference_link } = assayMetadata;
   return (
     <>
-      <Typography>{reference_link}</Typography> <Divider orientation="vertical" flexItem />
+      <Typography>{reference_link}</Typography>
+      <Divider orientation="vertical" flexItem />
     </>
   );
 }
