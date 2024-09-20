@@ -59,7 +59,7 @@ function Publication({ publication, vignette_json }) {
         {shouldDisplaySection.visualizations && (
           <PublicationsVisualizationSection vignette_json={vignette_json} uuid={uuid} />
         )}
-        {shouldDisplaySection.files && <Files files={files} uuid={uuid} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.files && <Files files={files} includeAccordion />}
         {shouldDisplaySection['bulk-data-transfer'] && <PublicationBulkDataTransfer uuid={uuid} label={hubmap_id} />}
         <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
         {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={publication} />}
