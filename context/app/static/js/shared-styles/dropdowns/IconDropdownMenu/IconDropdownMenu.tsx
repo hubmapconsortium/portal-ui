@@ -38,6 +38,7 @@ function IconDropdownMenu({ tooltip, icon, children }: PropsWithChildren<IconDro
   return (
     <>
       <StyledSecondaryBackgroundTooltip title={tooltip}>
+        {/* Span is needed here for tooltip to appear without clicking */}
         <span>
           <WhiteBackgroundIconDropdownMenuButton menuID={tooltip}>
             <SvgIcon component={icon} />

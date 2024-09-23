@@ -14,15 +14,15 @@ const tooltip = 'Launch New Workspace';
 interface VisualizationWorkspaceButtonProps {
   uuid?: string;
   hubmap_id?: string;
-  mapped_data_access_level?: string;
   hasNotebook?: boolean;
+  mapped_data_access_level?: string;
 }
 
 function VisualizationWorkspaceButton({
   uuid = '',
   hubmap_id,
-  mapped_data_access_level,
   hasNotebook,
+  mapped_data_access_level,
 }: VisualizationWorkspaceButtonProps) {
   const { isWorkspacesUser } = useAppContext();
   const { setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
@@ -31,7 +31,7 @@ function VisualizationWorkspaceButton({
     initialSelectedDatasets: [uuid],
   });
 
-  if (!isWorkspacesUser ?? mapped_data_access_level === 'Protected' ?? !uuid ?? !hubmap_id ?? !hasNotebook) {
+  if (!isWorkspacesUser ?? !uuid ?? !hubmap_id ?? !hasNotebook ?? mapped_data_access_level === 'Protected') {
     return null;
   }
 
