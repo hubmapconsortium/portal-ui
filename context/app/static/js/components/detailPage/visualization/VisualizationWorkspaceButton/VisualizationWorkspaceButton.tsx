@@ -11,19 +11,19 @@ import { useAppContext } from 'js/components/Contexts';
 
 const tooltip = 'Launch New Workspace';
 
-interface VisualizationNotebookButtonProps {
+interface VisualizationWorkspaceButtonProps {
   uuid?: string;
   hubmap_id?: string;
   mapped_data_access_level?: string;
   hasNotebook?: boolean;
 }
 
-function VisualizationNotebookButton({
+function VisualizationWorkspaceButton({
   uuid = '',
   hubmap_id,
   mapped_data_access_level,
   hasNotebook,
-}: VisualizationNotebookButtonProps) {
+}: VisualizationWorkspaceButtonProps) {
   const { isWorkspacesUser } = useAppContext();
   const { setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
     defaultName: hubmap_id,
@@ -47,4 +47,4 @@ function VisualizationNotebookButton({
   );
 }
 
-export default VisualizationNotebookButton;
+export default VisualizationWorkspaceButton;

@@ -13,11 +13,11 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import VisualizationDownloadButton from 'js/components/detailPage/visualization/VisualizationDownloadButton';
-import VisualizationNotebookButton from '../VisualizationNotebookButton';
-import VisualizationShareButton from '../VisualizationShareButton';
-import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
-import VisualizationFooter from '../VisualizationFooter';
-import VisualizationTracker from '../VisualizationTracker';
+import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
+import VisualizationShareButton from 'js/components/detailPage/visualization/VisualizationShareButton';
+import VisualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
+import VisualizationFooter from 'js/components/detailPage/visualization/VisualizationFooter';
+import VisualizationTracker from 'js/components/detailPage/visualization/VisualizationTracker';
 
 import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
 import {
