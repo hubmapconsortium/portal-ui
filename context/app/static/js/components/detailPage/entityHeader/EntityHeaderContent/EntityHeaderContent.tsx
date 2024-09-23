@@ -18,6 +18,7 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
 import EntityIcon from 'js/shared-styles/icons/EntityIcon';
 import { SampleCategoryIcon } from 'js/shared-styles/icons';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { getDonorMetadata, getOriginSampleAndMappedOrgan } from '../../utils';
 import EntityHeaderItem from '../EntityHeaderItem';
 
@@ -71,9 +72,11 @@ function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
       {sex && <Typography>{sex}</Typography>}
       {race && <Typography>{race}</Typography>}
       {age_unit && age_value && (
-        <Typography>
-          {age_value} {age_unit}
-        </Typography>
+        <SecondaryBackgroundTooltip title="For donors older than 89, the metadata will indicate an age of 90.">
+          <Typography>
+            {age_value} {age_unit}
+          </Typography>
+        </SecondaryBackgroundTooltip>
       )}
       <Divider orientation="vertical" flexItem />
     </>

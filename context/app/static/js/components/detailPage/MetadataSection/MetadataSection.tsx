@@ -7,7 +7,7 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { getMetadata, hasMetadata } from 'js/helpers/metadata';
-import { ESEntityType, isDataset } from 'js/components/types';
+import { ESEntityType, EntityWithType, isDataset, isDonor } from 'js/components/types';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
@@ -67,6 +67,16 @@ function useTableData(tableData: Record<string, string>) {
   return buildTableData(tableData, fieldDescriptions);
 }
 
+function isDonorOlderThan89(entity: EntityWithType) {
+  if (isDonor(entity)) {
+    return Number(entity.mapped_metadata.age_value) > 89;
+  }
+  if (isDataset(entity)) {
+    return Number(entity.donor.mapped_metadata.age_value) > 89;
+  }
+  return false;
+}
+
 interface TableRow {
   key: string;
   value: string;
@@ -117,7 +127,8 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
     >
       <SectionDescription>
         This is the list of metadata that was provided by the data provider.
-        {entityIsDataset && ' Metadata from the donor or sample of this dataset may also be included in this list.'}
+        {entityIsDataset && ' Metadata from the donor or sample of this dataset may also be included in this list. '}
+        {isDonorOlderThan89(entity) && ' For donors older than 89, the metadata will indicate an age of 90.'}
       </SectionDescription>
       {children}
     </CollapsibleDetailPageSection>
