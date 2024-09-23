@@ -13,7 +13,7 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import VisualizationDownloadButton from 'js/components/detailPage/visualization/VisualizationDownloadButton';
-import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
+import VisualizationWorkspaceButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
 import VisualizationShareButton from 'js/components/detailPage/visualization/VisualizationShareButton';
 import VisualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationFooter from 'js/components/detailPage/visualization/VisualizationFooter';
@@ -122,7 +122,7 @@ function Visualization({
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
             <Stack direction="row" spacing={1}>
-              <VisualizationNotebookButton
+              <VisualizationWorkspaceButton
                 uuid={uuid}
                 hubmap_id={hubmap_id}
                 mapped_data_access_level={mapped_data_access_level}
