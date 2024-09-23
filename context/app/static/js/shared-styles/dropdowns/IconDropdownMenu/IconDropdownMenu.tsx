@@ -38,9 +38,11 @@ function IconDropdownMenu({ tooltip, icon, children }: PropsWithChildren<IconDro
   return (
     <>
       <StyledSecondaryBackgroundTooltip title={tooltip}>
-        <WhiteBackgroundIconDropdownMenuButton menuID={tooltip}>
-          <SvgIcon component={icon} />
-        </WhiteBackgroundIconDropdownMenuButton>
+        <span>
+          <WhiteBackgroundIconDropdownMenuButton menuID={tooltip}>
+            <SvgIcon component={icon} />
+          </WhiteBackgroundIconDropdownMenuButton>
+        </span>
       </StyledSecondaryBackgroundTooltip>
       <DropdownMenu id={`${tooltip}-menu`}>
         <MenuList id="menu-options">{children}</MenuList>
