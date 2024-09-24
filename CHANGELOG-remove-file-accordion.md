@@ -1,1 +1,0 @@
-- Remove extra files accordion from processed datasets summary sections. 

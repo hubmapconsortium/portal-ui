@@ -1,1 +1,0 @@
-- Fix bug where donor pages for donors without metadata do not display.

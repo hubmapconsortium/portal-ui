@@ -1,1 +1,0 @@
-- Allow Jupyter notebooks for dataset visualizations to be downloaded by all users.

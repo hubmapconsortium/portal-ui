@@ -1,3 +1,10 @@
+## v1.9.0 - 2024-09-24
+
+- Fix bug where donor pages for donors without metadata do not display.
+- Remove extra files accordion from processed datasets summary sections. 
+- Allow Jupyter notebooks for dataset visualizations to be downloaded by all users.
+
+
 ## v1.8.0 - 2024-09-19
 
 - Fix Advanced Config marker issue.
