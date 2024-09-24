@@ -9,7 +9,7 @@ import { WhiteBackgroundIconDropdownMenuButton } from 'js/shared-styles/buttons'
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 
-import { StyledSecondaryBackgroundTooltip, StyledSvgIcon, StyledTypography } from './style';
+import { StyledSvgIcon, StyledTypography } from './style';
 
 interface IconDropdownMenuItemProps {
   children: string;
@@ -37,14 +37,9 @@ interface IconDropdownMenuProps {
 function IconDropdownMenu({ tooltip, icon, children }: PropsWithChildren<IconDropdownMenuProps>) {
   return (
     <>
-      <StyledSecondaryBackgroundTooltip title={tooltip}>
-        {/* Span is needed here for tooltip to appear without clicking */}
-        <span>
-          <WhiteBackgroundIconDropdownMenuButton menuID={tooltip}>
-            <SvgIcon component={icon} />
-          </WhiteBackgroundIconDropdownMenuButton>
-        </span>
-      </StyledSecondaryBackgroundTooltip>
+      <WhiteBackgroundIconDropdownMenuButton menuID={tooltip} tooltip={tooltip}>
+        <SvgIcon component={icon} />
+      </WhiteBackgroundIconDropdownMenuButton>
       <DropdownMenu id={`${tooltip}-menu`}>
         <MenuList id="menu-options">{children}</MenuList>
       </DropdownMenu>

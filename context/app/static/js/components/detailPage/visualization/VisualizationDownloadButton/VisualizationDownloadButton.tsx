@@ -6,8 +6,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 
 const tooltip = 'Download Jupyter Notebook';
 
@@ -32,16 +31,14 @@ function VisualizationDownloadButton({ uuid, hasNotebook }: VisualizationDownloa
       });
   }, [uuid, toastError, trackEntityPageEvent]);
 
-  if (!uuid ?? !hasNotebook) {
+  if (!uuid || !hasNotebook) {
     return null;
   }
 
   return (
-    <SecondaryBackgroundTooltip title={tooltip}>
-      <WhiteBackgroundIconButton onClick={downloadNotebook}>
-        <SvgIcon color="primary" component={Download} />
-      </WhiteBackgroundIconButton>
-    </SecondaryBackgroundTooltip>
+    <WhiteBackgroundIconTooltipButton tooltip={tooltip} onClick={downloadNotebook}>
+      <SvgIcon color="primary" component={Download} />
+    </WhiteBackgroundIconTooltipButton>
   );
 }
 

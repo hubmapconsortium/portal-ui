@@ -5,8 +5,7 @@ import SvgIcon from '@mui/icons-material/Download';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 import { useAppContext } from 'js/components/Contexts';
 
 const tooltip = 'Launch New Workspace';
@@ -38,11 +37,9 @@ function VisualizationWorkspaceButton({
   return (
     <>
       <NewWorkspaceDialog {...rest} />
-      <SecondaryBackgroundTooltip title={tooltip}>
-        <WhiteBackgroundIconButton onClick={() => setDialogIsOpen(true)}>
-          <SvgIcon color="primary" component={WorkspacesIcon} />
-        </WhiteBackgroundIconButton>
-      </SecondaryBackgroundTooltip>
+      <WhiteBackgroundIconTooltipButton tooltip={tooltip} onClick={() => setDialogIsOpen(true)}>
+        <SvgIcon color="primary" component={WorkspacesIcon} />
+      </WhiteBackgroundIconTooltipButton>
     </>
   );
 }
