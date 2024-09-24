@@ -12,6 +12,7 @@ import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { DONOR_AGE_TEXT } from 'js/components/detailPage/BulkDataTransfer/const';
 import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
@@ -128,7 +129,7 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
       <SectionDescription>
         This is the list of metadata that was provided by the data provider.
         {entityIsDataset && ' Metadata from the donor or sample of this dataset may also be included in this list. '}
-        {isDonorOlderThan89(entity) && ' For donors older than 89, the metadata will indicate an age of 90.'}
+        {isDonorOlderThan89(entity) && ` ${DONOR_AGE_TEXT}`}
       </SectionDescription>
       {children}
     </CollapsibleDetailPageSection>

@@ -1,10 +1,14 @@
 import React from 'react';
 
+import { Stack } from '@mui/system';
 import Tile from 'js/shared-styles/tiles/Tile';
 import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
 import { EntityWithType, isDataset, isDonor, isSample } from 'js/components/types';
-import { Flex, StyledDiv, BodyWrapper } from './style';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { InfoIcon } from 'js/shared-styles/icons';
+import { DONOR_AGE_TEXT } from 'js/components/detailPage/BulkDataTransfer/const';
+import { Flex, StyledDiv, BodyWrapper, StyledIconDiv } from './style';
 
 const thumbnailDimension = 80;
 
@@ -16,6 +20,8 @@ interface EntityTileBodyProps {
 }
 
 function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTileBodyProps) {
+  const donorIsOlderThan89 = Number(entityData.mapped_metadata?.age_value) > 89;
+
   return (
     <BodyWrapper $thumbnailDimension={thumbnailDimension}>
       <StyledDiv>
@@ -33,7 +39,16 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTil
               <Tile.Text>{entityData.mapped_metadata?.sex}</Tile.Text>
               <Tile.Divider invertColors={invertColors} />
               <Tile.Text>
-                {entityData.mapped_metadata?.age_value} {entityData.mapped_metadata?.age_unit}
+                <Stack direction="row">
+                  {entityData.mapped_metadata?.age_value} {entityData.mapped_metadata?.age_unit}
+                  {donorIsOlderThan89 && (
+                    <SecondaryBackgroundTooltip title={DONOR_AGE_TEXT}>
+                      <StyledIconDiv>
+                        <InfoIcon fontSize="0.75rem" />
+                      </StyledIconDiv>
+                    </SecondaryBackgroundTooltip>
+                  )}
+                </Stack>
               </Tile.Text>
             </Flex>
             <Tile.Text>{(entityData.mapped_metadata?.race ?? []).join(', ')}</Tile.Text>

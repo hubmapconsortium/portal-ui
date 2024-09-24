@@ -17,8 +17,10 @@ import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVis
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
 import EntityIcon from 'js/shared-styles/icons/EntityIcon';
-import { SampleCategoryIcon } from 'js/shared-styles/icons';
+import { InfoIcon, SampleCategoryIcon } from 'js/shared-styles/icons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { DONOR_AGE_TEXT } from 'js/components/detailPage/BulkDataTransfer/const';
+import { StyledIconDiv } from 'js/components/entity-tile/EntityTileBody/style';
 import { getDonorMetadata, getOriginSampleAndMappedOrgan } from '../../utils';
 import EntityHeaderItem from '../EntityHeaderItem';
 
@@ -63,6 +65,8 @@ function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
 
   const { sex, race, age_unit, age_value } = donorMetadata;
 
+  const donorIsOlderThan89 = Number(age_value) > 89;
+
   if (Object.keys(donorMetadata).length === 0) {
     return null;
   }
@@ -72,11 +76,18 @@ function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
       {sex && <Typography>{sex}</Typography>}
       {race && <Typography>{race}</Typography>}
       {age_unit && age_value && (
-        <SecondaryBackgroundTooltip title="For donors older than 89, the metadata will indicate an age of 90.">
-          <Typography>
+        <Typography>
+          <Stack direction="row" justifyContent="center" alignItems="center">
             {age_value} {age_unit}
-          </Typography>
-        </SecondaryBackgroundTooltip>
+            {donorIsOlderThan89 && (
+              <SecondaryBackgroundTooltip title={DONOR_AGE_TEXT}>
+                <StyledIconDiv>
+                  <InfoIcon color="primary" fontSize="0.75rem" />
+                </StyledIconDiv>
+              </SecondaryBackgroundTooltip>
+            )}
+          </Stack>
+        </Typography>
       )}
       <Divider orientation="vertical" flexItem />
     </>
