@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
-import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationNotebookButton';
+import VisualizationWorkspaceButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
@@ -233,7 +233,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
       <RightDiv>
         {vizIsFullscreen ? (
           <>
-            {vizNotebookId && <VisualizationNotebookButton uuid={vizNotebookId} />}
+            {vizNotebookId && <VisualizationWorkspaceButton uuid={vizNotebookId} />}
             <VisualizationShareButtonWrapper />
             <VizualizationThemeSwitch />
             <VisualizationCollapseButton />

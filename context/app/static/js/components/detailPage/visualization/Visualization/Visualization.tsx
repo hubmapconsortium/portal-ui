@@ -1,8 +1,9 @@
-import Paper from '@mui/material/Paper';
-import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
-
 import React, { useEffect } from 'react';
 import { Vitessce } from 'vitessce';
+
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
 
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
@@ -11,14 +12,12 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { useAppContext } from 'js/components/Contexts';
-
-import Stack from '@mui/material/Stack';
-import VisualizationNotebookButton from '../VisualizationNotebookButton';
-import VisualizationShareButton from '../VisualizationShareButton';
-import VisualizationThemeSwitch from '../VisualizationThemeSwitch';
-import VisualizationFooter from '../VisualizationFooter';
-import VisualizationTracker from '../VisualizationTracker';
+import VisualizationDownloadButton from 'js/components/detailPage/visualization/VisualizationDownloadButton';
+import VisualizationWorkspaceButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
+import VisualizationShareButton from 'js/components/detailPage/visualization/VisualizationShareButton';
+import VisualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
+import VisualizationFooter from 'js/components/detailPage/visualization/VisualizationFooter';
+import VisualizationTracker from 'js/components/detailPage/visualization/VisualizationTracker';
 
 import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
 import {
@@ -72,7 +71,6 @@ function Visualization({
   //
   useCanvasScrollFix();
   const { toastError, toastInfo } = useSnackbarActions();
-  const { isWorkspacesUser } = useAppContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
@@ -123,14 +121,14 @@ function Visualization({
         <SpacedSectionButtonRow
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
-            <Stack direction="row">
-              {isWorkspacesUser && hasNotebook && (
-                <VisualizationNotebookButton
-                  uuid={uuid}
-                  hubmap_id={hubmap_id}
-                  mapped_data_access_level={mapped_data_access_level}
-                />
-              )}
+            <Stack direction="row" spacing={1}>
+              <VisualizationWorkspaceButton
+                uuid={uuid}
+                hubmap_id={hubmap_id}
+                mapped_data_access_level={mapped_data_access_level}
+                hasNotebook={hasNotebook}
+              />
+              <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} />
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
