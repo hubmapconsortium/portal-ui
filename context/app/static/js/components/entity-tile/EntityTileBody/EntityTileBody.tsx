@@ -5,10 +5,8 @@ import Tile from 'js/shared-styles/tiles/Tile';
 import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
 import { EntityWithType, isDataset, isDonor, isSample } from 'js/components/types';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { InfoIcon } from 'js/shared-styles/icons';
-import { DONOR_AGE_TEXT } from 'js/components/detailPage/BulkDataTransfer/const';
-import { Flex, StyledDiv, BodyWrapper, StyledIconDiv } from './style';
+import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
+import { Flex, StyledDiv, BodyWrapper } from './style';
 
 const thumbnailDimension = 80;
 
@@ -20,8 +18,6 @@ interface EntityTileBodyProps {
 }
 
 function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTileBodyProps) {
-  const donorIsOlderThan89 = Number(entityData.mapped_metadata?.age_value) > 89;
-
   return (
     <BodyWrapper $thumbnailDimension={thumbnailDimension}>
       <StyledDiv>
@@ -41,13 +37,7 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTil
               <Tile.Text>
                 <Stack direction="row">
                   {entityData.mapped_metadata?.age_value} {entityData.mapped_metadata?.age_unit}
-                  {donorIsOlderThan89 && (
-                    <SecondaryBackgroundTooltip title={DONOR_AGE_TEXT}>
-                      <StyledIconDiv>
-                        <InfoIcon fontSize="0.75rem" />
-                      </StyledIconDiv>
-                    </SecondaryBackgroundTooltip>
-                  )}
+                  <DonorAgeTooltip donorAge={entityData.mapped_metadata?.age_value} />
                 </Stack>
               </Tile.Text>
             </Flex>

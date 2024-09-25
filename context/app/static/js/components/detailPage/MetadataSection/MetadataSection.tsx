@@ -12,7 +12,7 @@ import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
-import { DONOR_AGE_TEXT } from 'js/components/detailPage/BulkDataTransfer/const';
+import { DONOR_AGE_TEXT } from 'js/shared-styles/tooltips/DonorAgeTooltip/DonorAgeTooltip';
 import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';

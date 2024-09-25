@@ -9,10 +9,6 @@ const StyledDiv = styled('div')({
   minWidth: 0,
 });
 
-const StyledIconDiv = styled('div')(({ theme }) => ({
-  marginLeft: theme.spacing(0.5),
-}));
-
 interface BodyWrapperProps {
   $thumbnailDimension: number;
 }
@@ -24,4 +20,4 @@ const BodyWrapper = styled('div')<BodyWrapperProps>(({ $thumbnailDimension }) =>
   boxSizing: 'content-box',
 }));
 
-export { Flex, StyledDiv, StyledIconDiv, BodyWrapper };
+export { Flex, StyledDiv, BodyWrapper };
