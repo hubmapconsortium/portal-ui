@@ -40,7 +40,7 @@ interface UseCreateWorkspaceTypes {
   defaultName?: string;
   defaultTemplate?: string;
   defaultJobType?: string;
-  defaultResourceOptions?: WorkspaceResourceOptions;
+  defaultResourceOptions?: Partial<WorkspaceResourceOptions>;
   initialProtectedDatasets?: string;
   initialSelectedDatasets?: string[];
 }
@@ -61,12 +61,7 @@ function useCreateWorkspaceForm({
   defaultName,
   defaultTemplate = DEFAULT_PYTHON_TEMPLATE_KEY,
   defaultJobType = DEFAULT_JOB_TYPE,
-  defaultResourceOptions = {
-    num_cpus: DEFAULT_NUM_CPUS,
-    memory_mb: DEFAULT_MEMORY_MB,
-    time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
-    gpu_enabled: DEFAULT_GPU_ENABLED,
-  },
+  defaultResourceOptions = {},
   initialProtectedDatasets,
   initialSelectedDatasets = [],
 }: UseCreateWorkspaceTypes) {
@@ -77,6 +72,13 @@ function useCreateWorkspaceForm({
   const checkedWorkspaceName = defaultName ?? '';
   const checkedProtectedDatasets = initialProtectedDatasets ?? '';
 
+  const initialResourceOptions = {
+    num_cpus: DEFAULT_NUM_CPUS,
+    memory_mb: DEFAULT_MEMORY_MB,
+    time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+    gpu_enabled: DEFAULT_GPU_ENABLED,
+    ...defaultResourceOptions,
+  };
   const {
     handleSubmit,
     control,
@@ -91,7 +93,7 @@ function useCreateWorkspaceForm({
       'protected-datasets': checkedProtectedDatasets,
       templates: [defaultTemplate],
       workspaceJobTypeId: defaultJobType,
-      workspaceResourceOptions: defaultResourceOptions,
+      workspaceResourceOptions: initialResourceOptions,
       datasets: initialSelectedDatasets,
     },
     mode: 'onChange',

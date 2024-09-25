@@ -1,0 +1,1 @@
+- Fix bug where template examples with default resource options would not launch.
