@@ -70,10 +70,10 @@ function useTableData(tableData: Record<string, string>) {
 
 function isDonorOlderThan89(entity: EntityWithType) {
   if (isDonor(entity)) {
-    return Number(entity.mapped_metadata.age_value) > 89;
+    return Number(entity.mapped_metadata?.age_value) > 89;
   }
   if (isDataset(entity)) {
-    return Number(entity.donor.mapped_metadata.age_value) > 89;
+    return Number(entity.donor.mapped_metadata?.age_value) > 89;
   }
   return false;
 }
