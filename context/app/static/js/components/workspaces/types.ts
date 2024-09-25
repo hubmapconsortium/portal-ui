@@ -106,7 +106,7 @@ interface TemplateExample {
   description: string;
   datasets: string[];
   assay_display_name?: string[];
-  resource_options?: WorkspaceResourceOptions;
+  resource_options?: Partial<WorkspaceResourceOptions>;
   required_filetypes?: string[];
 }
 
