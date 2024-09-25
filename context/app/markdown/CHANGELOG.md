@@ -1,3 +1,9 @@
+## v1.10.0 - 2024-09-25
+
+- Only allow Globus group members to access sample workspaces.
+- Fix bug where template examples with default resource options would not launch.
+
+
 ## v1.9.0 - 2024-09-24
 
 - Fix bug where donor pages for donors without metadata do not display.

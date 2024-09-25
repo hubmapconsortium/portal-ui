@@ -1,1 +1,0 @@
-- Only allow Globus group members to access sample workspaces.
