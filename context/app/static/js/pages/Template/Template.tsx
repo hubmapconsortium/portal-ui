@@ -22,6 +22,7 @@ import { TemplateExample, WorkspacesEventCategories } from 'js/components/worksp
 import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccordion';
 import { trackEvent } from 'js/helpers/trackers';
 import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
+import { useAppContext } from 'js/components/Contexts';
 
 interface ExampleAccordionProps {
   example: TemplateExample;
@@ -55,6 +56,8 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
     return map;
   }, [datasetTypeMap]);
 
+  const { isWorkspacesUser } = useAppContext();
+
   return (
     <>
       <PrimaryColorAccordion defaultExpanded={defaultExpanded}>
@@ -67,7 +70,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
           <Stack spacing={2}>
             <StyledButton
               variant="contained"
-              disabled={!isAuthenticated}
+              disabled={!isWorkspacesUser}
               onClick={() => {
                 trackEvent({
                   category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
