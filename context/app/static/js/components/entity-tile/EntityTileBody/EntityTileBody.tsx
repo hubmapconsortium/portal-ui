@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { Stack } from '@mui/system';
+import Stack from '@mui/system/Stack';
 import Tile from 'js/shared-styles/tiles/Tile';
 import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
