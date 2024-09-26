@@ -3,7 +3,8 @@ import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDownRounded';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUpRounded';
 import ClickAwayListener from '@mui/material/ClickAwayListener';
 import MenuList from '@mui/material/MenuList';
-
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { StyledPopper, StyledPaper } from './style';
 
 interface DropdownListboxProps<T> {
@@ -47,8 +48,10 @@ function DropdownListbox<T>({
         onClick={() => setIsOpen(true)}
         {...buttonProps}
       >
-        {getOptionLabel(options[selectedOptionIndex])}
-        {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
+          <Typography variant="inherit">{getOptionLabel(options[selectedOptionIndex])}</Typography>
+          {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+        </Stack>
       </SelectionButton>
       <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
         <StyledPaper>
