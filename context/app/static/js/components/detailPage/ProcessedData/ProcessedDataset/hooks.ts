@@ -21,7 +21,6 @@ export type ProcessedDatasetDetails = ProcessedDatasetInfo &
     | 'metadata'
     | 'protocol_url' // TODO: This is present for non-dataset entities, but not for datasets.
     | 'dataset_type'
-    | 'creation_action'
     | 'mapped_consortium'
   >;
 
