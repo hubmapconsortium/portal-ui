@@ -3,7 +3,7 @@ import React from 'react';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledStack, StyledInfoIcon } from 'js/shared-styles/tooltips/DonorAgeTooltip/style';
 
-export const DONOR_AGE_TEXT = 'For donors older than 89, the metadata will indicate an age of 90.';
+const DONOR_AGE_TEXT = 'For donors older than 89, the metadata will indicate an age of 90.';
 
 interface DonorAgeTooltipProps {
   donorAge?: string;
