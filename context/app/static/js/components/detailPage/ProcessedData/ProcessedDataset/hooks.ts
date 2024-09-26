@@ -23,8 +23,6 @@ export type ProcessedDatasetDetails = ProcessedDatasetInfo &
     | 'dataset_type'
     | 'creation_action'
     | 'mapped_consortium'
-    | 'contributors'
-    | 'contacts'
   >;
 
 export function useProcessedDatasetDetails(uuid: string) {
