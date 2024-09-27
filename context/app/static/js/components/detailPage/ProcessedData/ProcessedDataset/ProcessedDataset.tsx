@@ -75,7 +75,8 @@ function SummaryAccordion() {
     <Subsection title="Summary" icon={<SummarizeRounded />}>
       <Stack spacing={1}>
         <ProcessedDatasetDescription />
-        <LabelledSectionText label="Consortium">{dataset.group_name}</LabelledSectionText>
+        <LabelledSectionText label="Group">{dataset.group_name}</LabelledSectionText>
+        <LabelledSectionText label="Consortium">{dataset.mapped_consortium}</LabelledSectionText>
         <Contact />
         <LabelledSectionText label={dateLabel}>
           {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
@@ -197,7 +198,7 @@ function AttributionAccordion() {
     dataset: { creation_action, contributors, contacts },
   } = useProcessedDatasetContext();
 
-  if (creation_action === 'Central Process' || !contributors) {
+  if (creation_action === 'Central Process' || contributors?.length === 0) {
     return null;
   }
 

@@ -86,7 +86,7 @@ function HelperPanelBody() {
         </HelperPanelBodyItem>
       )}
       <HelperPanelBodyItem label="Pipeline">{currentDataset.pipeline}</HelperPanelBodyItem>
-      <HelperPanelBodyItem label="Consortium">{currentDataset.group_name}</HelperPanelBodyItem>
+      <HelperPanelBodyItem label="Group">{currentDataset.group_name}</HelperPanelBodyItem>
       <HelperPanelBodyItem label={dateLabel}>{date && formatDate(date, 'yyyy-MM-dd')}</HelperPanelBodyItem>
     </>
   );
