@@ -1,1 +1,2 @@
 - Fix positioning of dropdown order menu on the tile view of the search page. 
+- Fix tabs moving around in bulk data transfer section on detail pages.
