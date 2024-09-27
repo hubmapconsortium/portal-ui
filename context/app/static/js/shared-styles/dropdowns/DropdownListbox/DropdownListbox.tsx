@@ -48,8 +48,10 @@ function DropdownListbox<T>({
         onClick={() => setIsOpen(true)}
         {...buttonProps}
       >
-        <Stack direction="row" spacing={2} alignItems="center" justifyContent="center">
-          <Typography variant="inherit">{getOptionLabel(options[selectedOptionIndex])}</Typography>
+        <Stack direction="row" alignItems="center" justifyContent="flex-end">
+          <Typography variant="inherit" flexGrow={1} display="flex" justifyContent="center">
+            {getOptionLabel(options[selectedOptionIndex])}
+          </Typography>
           {isOpen ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
         </Stack>
       </SelectionButton>
