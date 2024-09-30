@@ -1,3 +1,0 @@
-- Fix positioning of dropdown order menu on the tile view of the search page. 
-- Fix tabs moving around in bulk data transfer section on detail pages.
-- Update unified datasets link in "What’s New" section on homepage to point to an example dataset detail page.
