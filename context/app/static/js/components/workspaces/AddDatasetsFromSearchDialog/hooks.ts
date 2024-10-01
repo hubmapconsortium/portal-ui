@@ -3,7 +3,6 @@ import { useForm, useController, ControllerFieldState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useUpdateWorkspaceDatasets, useWorkspaceDetail } from '../hooks';
 import {
   datasetsField as datasetsFieldSchema,
@@ -75,7 +74,7 @@ function useAddWorkspaceDatasetsFromSearchForm({
   };
 }
 
-function useAddDatasetsFromSearchOrDetailDialog() {
+function useAddDatasetsFromSearchDialog() {
   const {
     selectedRows,
     errorMessages: protectedDatasetsErrorMessages,
@@ -86,13 +85,9 @@ function useAddDatasetsFromSearchOrDetailDialog() {
   } = useProtectedDatasetsForm();
 
   const datasetsFromSearch = useMemo(() => [...selectedRows], [selectedRows]);
-  const { dialogDatasetUUIDs } = useEditWorkspaceStore();
-
-  // Use search results if we are coming from the search page, otherwise use the datasets from the detail page dialog
-  const datasetsToAdd = !datasetsFromSearch.length ? dialogDatasetUUIDs : datasetsFromSearch;
 
   const { handleSubmit, isSubmitting, control, errors, reset, setValue } = useAddWorkspaceDatasetsFromSearchForm({
-    initialDatasetUUIDs: datasetsToAdd,
+    initialDatasetUUIDs: datasetsFromSearch,
     initialProtectedDatasets: protectedHubmapIds,
   });
 
@@ -145,17 +140,17 @@ function useAddDatasetsFromSearchOrDetailDialog() {
 
   // react-hook-form's defaultValues are cached and must be set upon open. https://react-hook-form.com/docs/useform#defaultValues
   useEffect(() => {
-    setValue('datasets', datasetsToAdd);
-  }, [datasetsToAdd, setValue, protectedHubmapIds]);
+    setValue('datasets', datasetsFromSearch);
+  }, [datasetsFromSearch, setValue, protectedHubmapIds]);
 
   const selectWorkspace = useCallback(
     (workspaceId: number) => {
       workspaceIdField.onChange(workspaceId);
-      const selectedDatasetsSet = new Set([...datasetsField.value, ...datasetsToAdd]);
+      const selectedDatasetsSet = new Set([...datasetsField.value, ...datasetsFromSearch]);
       setValue('datasets', [...selectedDatasetsSet]);
       setValue('protected-datasets', protectedHubmapIds);
     },
-    [setValue, datasetsField.value, protectedHubmapIds, datasetsToAdd, workspaceIdField],
+    [setValue, datasetsField.value, protectedHubmapIds, datasetsFromSearch, workspaceIdField],
   );
 
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({
@@ -207,4 +202,4 @@ function useAddDatasetsFromSearchOrDetailDialog() {
   };
 }
 
-export { useAddDatasetsFromSearchOrDetailDialog };
+export { useAddDatasetsFromSearchDialog };

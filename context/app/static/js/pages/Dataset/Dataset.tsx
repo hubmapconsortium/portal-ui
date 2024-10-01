@@ -24,14 +24,12 @@ import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSe
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
-import AddDatasetsFromSearchOrDetailDialog from 'js/components/workspaces/AddDatasetsFromSearchOrDetailDialog';
 
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
@@ -129,39 +127,36 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
-        <SelectableTableProvider tableLabel="Current Dataset">
-          <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
-          {Boolean(is_component) && <ComponentAlert />}
-          <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-            <Summary
-              entityTypeDisplay="Dataset"
-              status={combinedStatus}
-              mapped_data_access_level={mapped_data_access_level}
-              mapped_external_group_name={mapped_external_group_name}
-              bottomFold={
-                <>
-                  <MultiAssayRelationship assay_modality={assay_modality} />
-                  {shouldDisplayRelationships && (
-                    <Box height={400} width="100%" component={Paper} p={2}>
-                      <DatasetRelationships uuid={uuid} processing={processing} />
-                    </Box>
-                  )}
-                </>
-              }
-            >
-              <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
-            </Summary>
-            <MetadataSection shouldDisplay={shouldDisplaySection.metadata} />
-            <ProcessedDataSection shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
-            <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
-            <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
-            <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
-            <Attribution>
-              <ContributorsTable contributors={contributors} contacts={contacts} />
-            </Attribution>
-          </DetailLayout>
-          <AddDatasetsFromSearchOrDetailDialog />
-        </SelectableTableProvider>
+        <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
+        {Boolean(is_component) && <ComponentAlert />}
+        <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
+          <Summary
+            entityTypeDisplay="Dataset"
+            status={combinedStatus}
+            mapped_data_access_level={mapped_data_access_level}
+            mapped_external_group_name={mapped_external_group_name}
+            bottomFold={
+              <>
+                <MultiAssayRelationship assay_modality={assay_modality} />
+                {shouldDisplayRelationships && (
+                  <Box height={400} width="100%" component={Paper} p={2}>
+                    <DatasetRelationships uuid={uuid} processing={processing} />
+                  </Box>
+                )}
+              </>
+            }
+          >
+            <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
+          </Summary>
+          <MetadataSection shouldDisplay={shouldDisplaySection.metadata} />
+          <ProcessedDataSection shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
+          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
+          <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
+          <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
+          <Attribution>
+            <ContributorsTable contributors={contributors} contacts={contacts} />
+          </Attribution>
+        </DetailLayout>
       </SelectedVersionStoreProvider>
     </DetailContextProvider>
   );

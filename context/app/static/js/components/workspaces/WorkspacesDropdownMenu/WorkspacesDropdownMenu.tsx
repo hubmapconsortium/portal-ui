@@ -8,9 +8,9 @@ import { useAppContext } from 'js/components/Contexts';
 import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { StyledDropdownMenuButton } from 'js/components/searchPage/MetadataMenu/style';
 import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { AddIcon } from 'js/shared-styles/icons';
-import AddDatasetsFromSearchOrDetailDialog from '../AddDatasetsFromSearchOrDetailDialog';
+import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 
 const menuID = 'workspace-menu';
 
@@ -24,25 +24,24 @@ function WorkspaceSearchDialogs() {
   const { dialogType } = useEditWorkspaceStore();
 
   if (dialogType === addDatasetsDialogType) {
-    return <AddDatasetsFromSearchOrDetailDialog />;
+    return <AddDatasetsFromSearchDialog />;
   }
 }
 
-type DialogTypes = Extract<DialogType, typeof addDatasetsDialogType>;
+// type DialogTypes = Extract<DialogType, typeof addDatasetsDialogType>;
 
 interface WorkspaceDropdownMenuItemProps extends PropsWithChildren {
-  dialogType: DialogTypes;
+  dialogType: DialogType;
   icon: typeof SvgIcon;
 }
 
-export function useOpenDialog(dialogType: DialogTypes, uuid?: string) {
-  const { open, setDialogType, setDialogDatasetUUIDs } = useEditWorkspaceStore();
+export function useOpenDialog(dialogType: DialogType) {
+  const { open, setDialogType } = useEditWorkspaceStore();
 
   const onClick = useCallback(() => {
     setDialogType(dialogType);
-    setDialogDatasetUUIDs(uuid ? [uuid] : []);
     open();
-  }, [dialogType, open, setDialogType, uuid, setDialogDatasetUUIDs]);
+  }, [dialogType, open, setDialogType]);
   return onClick;
 }
 
@@ -58,7 +57,7 @@ function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: Workspa
 
 const menuItems: {
   label: string;
-  dialogType: DialogTypes;
+  dialogType: DialogType;
   icon: typeof SvgIcon;
 }[] = [{ label: 'Add to Existing Workspace', dialogType: addDatasetsDialogType, icon: AddIcon }];
 

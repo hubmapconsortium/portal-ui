@@ -18,6 +18,7 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
+import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -211,7 +212,9 @@ function EntityHeaderActionButtons({
           />
         }
         datasetDetails={{ hubmap_id, uuid, status }}
+        dialogType="ADD_DATASETS_FROM_HEADER"
       />
+      <AddDatasetsFromDetailDialog uuid={uuid} dialogType="ADD_DATASETS_FROM_HEADER" />
     </Stack>
   );
 }

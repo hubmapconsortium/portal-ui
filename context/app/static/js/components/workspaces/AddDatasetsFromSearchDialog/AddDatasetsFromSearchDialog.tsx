@@ -13,7 +13,7 @@ import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSte
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import AddDatasetsTable from '../AddDatasetsTable';
-import { useAddDatasetsFromSearchOrDetailDialog } from './hooks';
+import { useAddDatasetsFromSearchDialog } from './hooks';
 import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
@@ -50,7 +50,7 @@ function SearchDialogWorkspaceListItem({
 function SelectWorkspaceStep({
   selectWorkspace,
   workspaceIdErrorMessages,
-}: Pick<ReturnType<typeof useAddDatasetsFromSearchOrDetailDialog>, 'selectWorkspace' | 'workspaceIdErrorMessages'>) {
+}: Pick<ReturnType<typeof useAddDatasetsFromSearchDialog>, 'selectWorkspace' | 'workspaceIdErrorMessages'>) {
   const { completeStep } = useAccordionStep();
 
   const { workspacesList } = useWorkspacesList();
@@ -106,7 +106,7 @@ function AddDatasetsStep({
   datasetsWarningMessages,
   ...rest
 }: Pick<
-  ReturnType<typeof useAddDatasetsFromSearchOrDetailDialog>,
+  ReturnType<typeof useAddDatasetsFromSearchDialog>,
   | 'control'
   | 'protectedHubmapIds'
   | 'protectedRows'
@@ -140,7 +140,7 @@ function AddDatasetsStep({
   );
 }
 
-function AddDatasetsFromSearchOrDetailDialogForm() {
+function AddDatasetsFromSearchDialogForm() {
   const {
     submit,
     handleSubmit,
@@ -153,7 +153,7 @@ function AddDatasetsFromSearchOrDetailDialogForm() {
     workspaceIdErrorMessages,
     selectWorkspace,
     ...rest
-  } = useAddDatasetsFromSearchOrDetailDialog();
+  } = useAddDatasetsFromSearchDialog();
 
   const steps = useMemo(() => {
     return [
@@ -194,13 +194,13 @@ function AddDatasetsFromSearchOrDetailDialogForm() {
   );
 }
 
-function AddDatasetsFromSearchOrDetailDialog() {
+function AddDatasetsFromSearchDialog() {
   const { isLoading } = useWorkspacesList();
   if (isLoading) {
     return null;
   }
 
-  return <AddDatasetsFromSearchOrDetailDialogForm />;
+  return <AddDatasetsFromSearchDialogForm />;
 }
 
-export default AddDatasetsFromSearchOrDetailDialog;
+export default AddDatasetsFromSearchDialog;
