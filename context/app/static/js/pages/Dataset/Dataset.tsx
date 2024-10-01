@@ -24,10 +24,8 @@ import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSe
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
-
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
-
 import { InternalLink } from 'js/shared-styles/Links';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 

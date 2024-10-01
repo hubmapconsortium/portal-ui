@@ -3,6 +3,7 @@ import { useForm, useController, ControllerFieldState } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
+import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useUpdateWorkspaceDatasets, useWorkspaceDetail } from '../hooks';
 import {
   datasetsField as datasetsFieldSchema,
@@ -138,10 +139,12 @@ function useAddDatasetsFromSearchDialog() {
     [updateWorkspaceDatasets, workspaceDatasets],
   );
 
+  const { isOpen } = useEditWorkspaceStore();
+
   // react-hook-form's defaultValues are cached and must be set upon open. https://react-hook-form.com/docs/useform#defaultValues
   useEffect(() => {
     setValue('datasets', datasetsFromSearch);
-  }, [datasetsFromSearch, setValue, protectedHubmapIds]);
+  }, [datasetsFromSearch, setValue, protectedHubmapIds, isOpen]);
 
   const selectWorkspace = useCallback(
     (workspaceId: number) => {

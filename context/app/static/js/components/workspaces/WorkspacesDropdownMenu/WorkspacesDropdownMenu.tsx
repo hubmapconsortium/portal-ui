@@ -28,8 +28,6 @@ function WorkspaceSearchDialogs() {
   }
 }
 
-// type DialogTypes = Extract<DialogType, typeof addDatasetsDialogType>;
-
 interface WorkspaceDropdownMenuItemProps extends PropsWithChildren {
   dialogType: DialogType;
   icon: typeof SvgIcon;
