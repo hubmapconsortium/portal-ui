@@ -12,7 +12,6 @@ import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDia
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialog';
-import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog/AddDatasetsFromSearchDialog';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
@@ -29,8 +28,8 @@ function ProcessedDataWorkspaceMenu({
 
   const { isWorkspacesUser } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
   const track = useTrackEntityPageEvent();
+  const open = Boolean(anchorEl);
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     track({
@@ -56,7 +55,7 @@ function ProcessedDataWorkspaceMenu({
     initialSelectedDatasets: [uuid].filter(Boolean),
   });
 
-  const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH');
+  const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH', uuid);
 
   const createWorkspace = useEventCallback(() => {
     track({
@@ -125,7 +124,6 @@ function ProcessedDataWorkspaceMenu({
           ))}
         </Menu>
         <NewWorkspaceDialog dialogIsOpen={createWorkspaceIsOpen} control={control} errors={errors} {...rest} />
-        <AddDatasetsFromSearchDialog />
       </>
     </SelectableTableProvider>
   );

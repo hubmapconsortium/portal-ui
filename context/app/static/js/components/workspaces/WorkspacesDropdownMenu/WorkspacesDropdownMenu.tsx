@@ -35,12 +35,14 @@ interface WorkspaceDropdownMenuItemProps extends PropsWithChildren {
   icon: typeof SvgIcon;
 }
 
-export function useOpenDialog(dialogType: DialogTypes) {
-  const { open, setDialogType } = useEditWorkspaceStore();
+export function useOpenDialog(dialogType: DialogTypes, uuid?: string) {
+  const { open, setDialogType, setDialogDatasetUUIDs } = useEditWorkspaceStore();
+
   const onClick = useCallback(() => {
     setDialogType(dialogType);
+    setDialogDatasetUUIDs(uuid ? [uuid] : []);
     open();
-  }, [dialogType, open, setDialogType]);
+  }, [dialogType, open, setDialogType, uuid, setDialogDatasetUUIDs]);
   return onClick;
 }
 

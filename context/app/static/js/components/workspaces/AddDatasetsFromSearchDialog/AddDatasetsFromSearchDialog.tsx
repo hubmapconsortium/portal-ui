@@ -178,7 +178,7 @@ function AddDatasetsFromSearchDialogForm() {
 
   return (
     <EditWorkspaceDialogContent
-      title="Add Datasets to Existing Workspace"
+      title="A Datasets to Existing Workspace"
       reset={reset}
       resetState={resetAutocompleteState}
       handleSubmit={handleSubmit}
