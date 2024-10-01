@@ -75,7 +75,7 @@ function useAddWorkspaceDatasetsFromSearchForm({
   };
 }
 
-function useAddDatasetsFromSearchDialog() {
+function useAddDatasetsFromSearchOrDetailDialog() {
   const {
     selectedRows,
     errorMessages: protectedDatasetsErrorMessages,
@@ -207,4 +207,4 @@ function useAddDatasetsFromSearchDialog() {
   };
 }
 
-export { useAddDatasetsFromSearchDialog };
+export { useAddDatasetsFromSearchOrDetailDialog };

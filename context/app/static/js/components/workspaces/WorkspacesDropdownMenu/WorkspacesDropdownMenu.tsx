@@ -10,7 +10,7 @@ import { StyledDropdownMenuButton } from 'js/components/searchPage/MetadataMenu/
 import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { AddIcon } from 'js/shared-styles/icons';
-import AddDatasetsFromSearchDialog from '../AddDatasetsFromSearchDialog';
+import AddDatasetsFromSearchOrDetailDialog from '../AddDatasetsFromSearchOrDetailDialog';
 
 const menuID = 'workspace-menu';
 
@@ -24,7 +24,7 @@ function WorkspaceSearchDialogs() {
   const { dialogType } = useEditWorkspaceStore();
 
   if (dialogType === addDatasetsDialogType) {
-    return <AddDatasetsFromSearchDialog />;
+    return <AddDatasetsFromSearchOrDetailDialog />;
   }
 }
 

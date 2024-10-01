@@ -24,7 +24,7 @@ import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSe
 import SupportAlert from 'js/components/detailPage/SupportAlert';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
-import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
+import AddDatasetsFromSearchOrDetailDialog from 'js/components/workspaces/AddDatasetsFromSearchOrDetailDialog';
 
 import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
@@ -160,7 +160,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
               <ContributorsTable contributors={contributors} contacts={contacts} />
             </Attribution>
           </DetailLayout>
-          <AddDatasetsFromSearchDialog />
+          <AddDatasetsFromSearchOrDetailDialog />
         </SelectableTableProvider>
       </SelectedVersionStoreProvider>
     </DetailContextProvider>

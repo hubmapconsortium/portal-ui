@@ -13,7 +13,7 @@ import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSte
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import AddDatasetsTable from '../AddDatasetsTable';
-import { useAddDatasetsFromSearchDialog } from './hooks';
+import { useAddDatasetsFromSearchOrDetailDialog } from './hooks';
 import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
@@ -50,7 +50,7 @@ function SearchDialogWorkspaceListItem({
 function SelectWorkspaceStep({
   selectWorkspace,
   workspaceIdErrorMessages,
-}: Pick<ReturnType<typeof useAddDatasetsFromSearchDialog>, 'selectWorkspace' | 'workspaceIdErrorMessages'>) {
+}: Pick<ReturnType<typeof useAddDatasetsFromSearchOrDetailDialog>, 'selectWorkspace' | 'workspaceIdErrorMessages'>) {
   const { completeStep } = useAccordionStep();
 
   const { workspacesList } = useWorkspacesList();
@@ -106,7 +106,7 @@ function AddDatasetsStep({
   datasetsWarningMessages,
   ...rest
 }: Pick<
-  ReturnType<typeof useAddDatasetsFromSearchDialog>,
+  ReturnType<typeof useAddDatasetsFromSearchOrDetailDialog>,
   | 'control'
   | 'protectedHubmapIds'
   | 'protectedRows'
@@ -140,7 +140,7 @@ function AddDatasetsStep({
   );
 }
 
-function AddDatasetsFromSearchDialogForm() {
+function AddDatasetsFromSearchOrDetailDialogForm() {
   const {
     submit,
     handleSubmit,
@@ -153,7 +153,7 @@ function AddDatasetsFromSearchDialogForm() {
     workspaceIdErrorMessages,
     selectWorkspace,
     ...rest
-  } = useAddDatasetsFromSearchDialog();
+  } = useAddDatasetsFromSearchOrDetailDialog();
 
   const steps = useMemo(() => {
     return [
@@ -194,13 +194,13 @@ function AddDatasetsFromSearchDialogForm() {
   );
 }
 
-function AddDatasetsFromSearchDialog() {
+function AddDatasetsFromSearchOrDetailDialog() {
   const { isLoading } = useWorkspacesList();
   if (isLoading) {
     return null;
   }
 
-  return <AddDatasetsFromSearchDialogForm />;
+  return <AddDatasetsFromSearchOrDetailDialogForm />;
 }
 
-export default AddDatasetsFromSearchDialog;
+export default AddDatasetsFromSearchOrDetailDialog;

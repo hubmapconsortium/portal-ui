@@ -1,0 +1,3 @@
+import AddDatasetsFromSearchOrDetailDialog from './AddDatasetsFromSearchOrDetailDialog';
+
+export default AddDatasetsFromSearchOrDetailDialog;
