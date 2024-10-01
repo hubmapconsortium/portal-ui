@@ -198,7 +198,7 @@ function AttributionAccordion() {
     dataset: { creation_action, contributors, contacts },
   } = useProcessedDatasetContext();
 
-  if (creation_action === 'Central Process' || !Boolean(contributors?.length) {
+  if (creation_action === 'Central Process' || !contributors?.length) {
     return null;
   }
 
