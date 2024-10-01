@@ -8,11 +8,12 @@ interface StyledButtonProps {
 
 // must use display: none instead of conditional rendering to preserve sort history between views
 const StyledButton = styled(Button)<StyledButtonProps>(({ theme, $searchView }) => ({
-  marginLeft: theme.spacing(1),
-  color: 'white',
+  margin: theme.spacing(0, 1),
   height: theme.spacing(5),
-  marginRight: theme.spacing(1),
   borderRadius: theme.spacing(0.5),
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'white',
   width: '185px',
   display: $searchView === 'table' ? 'none' : 'block',
 }));
