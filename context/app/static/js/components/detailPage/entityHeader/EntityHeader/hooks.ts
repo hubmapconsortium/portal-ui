@@ -10,14 +10,15 @@ export const initialHeaderOffset = headerHeight + 16;
 
 const expandedHeights = {
   diagram: 300,
-  summary: 150,
+  summary: 'fit-content',
   narrow: 0,
 };
 
 function useTotalHeaderOffset() {
-  const { view } = useEntityStore();
+  const { view, summaryHeight } = useEntityStore();
+  const contentHeight = view === 'summary' ? summaryHeight : expandedHeights[view];
 
-  return expandedHeights[view] + initialEntityHeaderHeight + headerHeight;
+  return contentHeight + initialEntityHeaderHeight + headerHeight;
 }
 
 function useEntityHeaderSprings() {
@@ -39,25 +40,27 @@ function useEntityHeaderSprings() {
 }
 
 function useStartViewChangeSpring() {
-  const { springs } = useEntityStore();
+  const { springs, summaryHeight } = useEntityStore();
 
   const [, springAPIs] = springs;
 
   return useCallback(
     (view: SummaryViewsType) => {
       const isExpanded = view !== 'narrow';
+      const contentHeight = view === 'summary' ? summaryHeight : expandedHeights[view];
+
       async function startSprings() {
         await Promise.all(
           springAPIs.start((springIndex: number) => {
             if (springIndex === 0) {
               return {
-                height: isExpanded ? expandedHeights[view] + initialEntityHeaderHeight : initialEntityHeaderHeight,
+                height: isExpanded ? contentHeight + initialEntityHeaderHeight : initialEntityHeaderHeight,
               };
             }
             if (springIndex === 1) {
               return {
                 top: isExpanded
-                  ? initialHeaderOffset + expandedHeights[view] + initialEntityHeaderHeight
+                  ? contentHeight + initialEntityHeaderHeight + initialHeaderOffset
                   : initialHeaderOffset + initialEntityHeaderHeight,
               };
             }
@@ -68,7 +71,7 @@ function useStartViewChangeSpring() {
       }
       startSprings().catch((e) => console.error(e));
     },
-    [springAPIs],
+    [springAPIs, summaryHeight],
   );
 }
 

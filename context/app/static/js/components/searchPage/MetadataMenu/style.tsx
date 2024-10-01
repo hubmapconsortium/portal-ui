@@ -10,6 +10,7 @@ import Stack from '@mui/material/Stack';
 
 const StyledDropdownMenuButton = styled(DropdownMenuButton)(({ theme }) => ({
   margin: theme.spacing(0, 1),
+  height: theme.spacing(5),
 }));
 
 const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({

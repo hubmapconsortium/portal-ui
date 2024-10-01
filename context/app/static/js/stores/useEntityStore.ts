@@ -15,6 +15,7 @@ interface EntityStoreState {
   };
   assayMetadata: Partial<AssayMetadata>;
   shouldDisplaySavedOrEditedAlert: boolean | string;
+  summaryHeight: number;
   view: SummaryViewsType;
   springs: ReturnType<typeof useSprings>;
 }
@@ -23,6 +24,7 @@ interface EntityStoreActions {
   setSummaryComponentObserver: (inView: boolean, entry: IntersectionObserverEntry) => void;
   setAssayMetadata: (val: Partial<AssayMetadata>) => void;
   setShouldDisplaySavedOrEditedAlert: (val: boolean | string) => void;
+  setSummaryHeight: (val: number) => void;
   setView: (val: SummaryViewsType) => void;
 }
 
@@ -41,6 +43,8 @@ export const createEntityStore = ({ springs }: { springs: ReturnType<typeof useS
           summaryEntry: entry,
         },
       }),
+    summaryHeight: 0,
+    setSummaryHeight: (val: number) => set({ summaryHeight: val }),
     view: 'narrow' as const,
     setView: (val) => set({ view: val }),
     springs,
