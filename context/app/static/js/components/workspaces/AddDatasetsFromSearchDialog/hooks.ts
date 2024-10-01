@@ -140,7 +140,6 @@ function useAddDatasetsFromSearchDialog() {
   );
 
   const { isOpen } = useEditWorkspaceStore();
-
   // react-hook-form's defaultValues are cached and must be set upon open. https://react-hook-form.com/docs/useform#defaultValues
   useEffect(() => {
     setValue('datasets', datasetsFromSearch);
