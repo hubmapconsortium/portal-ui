@@ -136,7 +136,7 @@ function getProcessedDatasetSection({
   const shouldDisplaySection = {
     summary: true,
     visualization: visualization || Boolean(conf && 'data' in conf && conf?.data),
-    files: Boolean(files?.length !== 0),
+    files: Boolean(files?.length),
     analysis: Boolean(metadata?.dag_provenance_list),
     attribution: creation_action !== 'Central Process' && Boolean(contributors?.length !== 0),
   };
