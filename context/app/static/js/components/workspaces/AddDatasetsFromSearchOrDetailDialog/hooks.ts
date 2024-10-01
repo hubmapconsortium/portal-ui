@@ -89,10 +89,10 @@ function useAddDatasetsFromSearchOrDetailDialog() {
   const { dialogDatasetUUIDs } = useEditWorkspaceStore();
 
   // Use search results if we are coming from the search page, otherwise use the datasets from the detail page dialog
-  const datasetsToUse = datasetsFromSearch.length === 0 ? dialogDatasetUUIDs : datasetsFromSearch;
+  const datasetsToAdd = !datasetsFromSearch.length ? dialogDatasetUUIDs : datasetsFromSearch;
 
   const { handleSubmit, isSubmitting, control, errors, reset, setValue } = useAddWorkspaceDatasetsFromSearchForm({
-    initialDatasetUUIDs: datasetsToUse,
+    initialDatasetUUIDs: datasetsToAdd,
     initialProtectedDatasets: protectedHubmapIds,
   });
 
@@ -145,17 +145,17 @@ function useAddDatasetsFromSearchOrDetailDialog() {
 
   // react-hook-form's defaultValues are cached and must be set upon open. https://react-hook-form.com/docs/useform#defaultValues
   useEffect(() => {
-    setValue('datasets', datasetsToUse);
-  }, [datasetsToUse, setValue, protectedHubmapIds]);
+    setValue('datasets', datasetsToAdd);
+  }, [datasetsToAdd, setValue, protectedHubmapIds]);
 
   const selectWorkspace = useCallback(
     (workspaceId: number) => {
       workspaceIdField.onChange(workspaceId);
-      const selectedDatasetsSet = new Set([...datasetsField.value, ...datasetsToUse]);
+      const selectedDatasetsSet = new Set([...datasetsField.value, ...datasetsToAdd]);
       setValue('datasets', [...selectedDatasetsSet]);
       setValue('protected-datasets', protectedHubmapIds);
     },
-    [setValue, datasetsField.value, protectedHubmapIds, datasetsToUse, workspaceIdField],
+    [setValue, datasetsField.value, protectedHubmapIds, datasetsToAdd, workspaceIdField],
   );
 
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({
