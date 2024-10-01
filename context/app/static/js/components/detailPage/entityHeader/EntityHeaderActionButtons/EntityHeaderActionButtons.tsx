@@ -18,8 +18,6 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
-import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -196,28 +194,25 @@ function EntityHeaderActionButtons({
   const disabled = mapped_data_access_level === 'Protected';
 
   return (
-    <SelectableTableProvider tableLabel="Current Dataset">
-      <Stack direction="row" spacing={1} alignItems="center">
-        {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
-        <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
-        <JSONButton entity_type={entity_type} uuid={uuid} />
-        <ProcessedDataWorkspaceMenu
-          button={
-            <ActionButton
-              icon={WorkspaceSVGIcon}
-              tooltip={
-                disabled
-                  ? 'Protected datasets are not available in workspaces.'
-                  : 'Launch new workspace or add dataset to an existing workspace.'
-              }
-              disabled={disabled}
-            />
-          }
-          datasetDetails={{ hubmap_id, uuid, status }}
-        />
-        <AddDatasetsFromSearchDialog />
-      </Stack>
-    </SelectableTableProvider>
+    <Stack direction="row" spacing={1} alignItems="center">
+      {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
+      <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
+      <JSONButton entity_type={entity_type} uuid={uuid} />
+      <ProcessedDataWorkspaceMenu
+        button={
+          <ActionButton
+            icon={WorkspaceSVGIcon}
+            tooltip={
+              disabled
+                ? 'Protected datasets are not available in workspaces.'
+                : 'Launch new workspace or add dataset to an existing workspace.'
+            }
+            disabled={disabled}
+          />
+        }
+        datasetDetails={{ hubmap_id, uuid, status }}
+      />
+    </Stack>
   );
 }
 

@@ -28,8 +28,8 @@ function ProcessedDataWorkspaceMenu({
 
   const { isWorkspacesUser } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const track = useTrackEntityPageEvent();
   const open = Boolean(anchorEl);
+  const track = useTrackEntityPageEvent();
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     track({
