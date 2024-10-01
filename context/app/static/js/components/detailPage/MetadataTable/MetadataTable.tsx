@@ -37,8 +37,7 @@ function MetadataTable({ tableRows = [] as MetadataTableRow[], columns = default
                 <TableCell>
                   <Stack direction="row">
                     {row.value}
-                    {row.key === 'age_value' ||
-                      (row.key === 'donor.age_value' && <DonorAgeTooltip donorAge={row.value} />)}
+                    {row.key.endsWith('age_value') && <DonorAgeTooltip donorAge={row.value} />}
                   </Stack>
                 </TableCell>
               </TableRow>
