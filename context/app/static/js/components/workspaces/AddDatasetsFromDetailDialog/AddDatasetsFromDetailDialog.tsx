@@ -18,7 +18,7 @@ function AddDatasetsFromDetailDialog({ uuid, dialogType }: AddDatasetsFromDetail
 
   return (
     // We're populating the table provider with the dataset from the detail page so as not to duplicate logic from the search dialog
-    <SelectableTableProvider tableLabel="Add Datasets From Detail Dialog" selectedRows={new Set([uuid])}>
+    <SelectableTableProvider key={uuid} tableLabel="Add Datasets From Detail Dialog" selectedRows={new Set([uuid])}>
       <AddDatasetsFromSearchDialog />
     </SelectableTableProvider>
   );
