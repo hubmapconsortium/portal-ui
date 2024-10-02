@@ -1,7 +1,8 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
-import { InternalLink } from 'js/shared-styles/Links';
+import Stack from '@mui/material/Stack';
+
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
@@ -13,11 +14,6 @@ import { DetailPageAlert } from 'js/components/detailPage/style';
 import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
-
-import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
-import useTrackID from 'js/hooks/useTrackID';
-import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
@@ -26,9 +22,13 @@ import DatasetRelationships from 'js/components/detailPage/DatasetRelationships'
 import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import SupportAlert from 'js/components/detailPage/SupportAlert';
-import OrganIcon from 'js/shared-styles/icons/OrganIcon';
-import Stack from '@mui/material/Stack';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useDatasetRelationships } from 'js/components/detailPage/DatasetRelationships/hooks';
+import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
+import useTrackID from 'js/hooks/useTrackID';
+import { InternalLink } from 'js/shared-styles/Links';
+import OrganIcon from 'js/shared-styles/icons/OrganIcon';
+
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
 interface SummaryDataChildrenProps {

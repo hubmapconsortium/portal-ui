@@ -86,7 +86,7 @@ function HelperPanelBody() {
         </HelperPanelBodyItem>
       )}
       <HelperPanelBodyItem label="Pipeline">{currentDataset.pipeline}</HelperPanelBodyItem>
-      <HelperPanelBodyItem label="Consortium">{currentDataset.group_name}</HelperPanelBodyItem>
+      <HelperPanelBodyItem label="Group">{currentDataset.group_name}</HelperPanelBodyItem>
       <HelperPanelBodyItem label={dateLabel}>{date && formatDate(date, 'yyyy-MM-dd')}</HelperPanelBodyItem>
     </>
   );
@@ -110,6 +110,7 @@ function HelperPanelActions() {
           </SecondaryBackgroundTooltip>
         }
         datasetDetails={{ hubmap_id, uuid, status }}
+        dialogType="ADD_DATASETS_FROM_HELPER_PANEL"
       />
       <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">
         <HelperPanelButton

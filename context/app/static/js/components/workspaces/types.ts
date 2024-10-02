@@ -106,8 +106,7 @@ interface TemplateExample {
   description: string;
   datasets: string[];
   assay_display_name?: string[];
-  job_types?: string[];
-  resource_options?: WorkspaceResourceOptions;
+  resource_options?: Partial<WorkspaceResourceOptions>;
   required_filetypes?: string[];
 }
 
@@ -120,6 +119,7 @@ interface TemplateTypes {
   is_hidden: boolean;
   job_types?: string[];
   examples: TemplateExample[];
+  last_modified_unix_timestamp: number;
 }
 
 type TemplatesTypes = Record<string, TemplateTypes>;

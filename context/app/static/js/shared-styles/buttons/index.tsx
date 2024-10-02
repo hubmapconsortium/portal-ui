@@ -3,6 +3,7 @@ import { Theme, styled } from '@mui/material/styles';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ToggleButton from '@mui/material/ToggleButton';
 import Button from '@mui/material/Button';
+import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SecondaryBackgroundTooltip } from '../tooltips';
 import IconDropdownMenuButton from '../dropdowns/IconDropdownMenuButton';
 
@@ -31,6 +32,12 @@ const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme }
 }));
 
 const WhiteBackgroundIconDropdownMenuButton = styled(IconDropdownMenuButton)(({ theme }) => ({
+  ...whiteBackgroundCSS,
+  ...border(theme),
+  '& svg': svgStyles,
+}));
+
+const WhiteBackgroundIconTooltipButton = styled(TooltipIconButton)(({ theme }) => ({
   ...whiteBackgroundCSS,
   ...border(theme),
   '& svg': svgStyles,
@@ -75,6 +82,7 @@ export default TooltipToggleButton;
 export {
   WhiteBackgroundIconButton,
   WhiteBackgroundIconDropdownMenuButton,
+  WhiteBackgroundIconTooltipButton,
   TooltipToggleButton,
   iconButtonHeight,
   WhiteTextButton,

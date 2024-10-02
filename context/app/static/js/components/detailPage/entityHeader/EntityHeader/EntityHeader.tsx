@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react';
+import React, { useCallback, useEffect, useRef } from 'react';
 import { animated } from '@react-spring/web';
 import Box from '@mui/material/Box';
 
@@ -19,22 +19,36 @@ const visualizationSelector = (state: VisualizationStore) => ({
 });
 
 function Header() {
-  const { springs, view, setView } = useEntityStore();
+  const { springs, view, setView, summaryHeight, setSummaryHeight } = useEntityStore();
   const startViewChangeSpring = useStartViewChangeSpring();
   const isLargeDesktop = useIsLargeDesktop();
   const { vizIsFullscreen } = useVisualizationStore(visualizationSelector);
 
+  const { entity } = useFlaskDataContext();
+  const uuid = entity?.uuid;
+
+  const summaryBodyRef = useRef<HTMLDivElement | null>(null);
+
   const handleViewChange = useCallback(
     (v: SummaryViewsType) => {
       setView(v);
-      startViewChangeSpring(v);
+
+      // Delay height ref calculation to allow DOM to fully render
+      setTimeout(() => {
+        if (summaryBodyRef.current) {
+          const newHeight = summaryBodyRef.current.offsetHeight;
+          setSummaryHeight(newHeight);
+        }
+      }, 0);
     },
-    [startViewChangeSpring, setView],
+    [setView, setSummaryHeight],
   );
 
-  const { entity } = useFlaskDataContext();
-
-  const uuid = entity?.uuid;
+  useEffect(() => {
+    if (summaryHeight !== 0) {
+      startViewChangeSpring(view);
+    }
+  }, [summaryHeight, view, startViewChangeSpring]);
 
   useEffect(() => {
     if (vizIsFullscreen) {
@@ -53,7 +67,7 @@ function Header() {
       <Box>
         <EntityHeaderContent setView={handleViewChange} view={view} />
         {isLargeDesktop && (
-          <Box height={expandedHeights[view]} width="100%" p={2}>
+          <Box ref={summaryBodyRef} height={expandedHeights[view]} width="100%" p={2}>
             {view === 'diagram' && uuid && <DatasetRelationships uuid={uuid} processing="raw" showHeader={false} />}
             {view === 'summary' && <SummaryBody direction="row" spacing={2} component={Box} isEntityHeader />}
           </Box>

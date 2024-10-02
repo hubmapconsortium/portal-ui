@@ -7,7 +7,7 @@ import Divider from '@mui/material/Divider';
 
 import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
-import VisualizationNotebookButton from 'js/components/detailPage/visualization/VisualizationNotebookButton';
+import VisualizationWorkspaceButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
@@ -18,6 +18,7 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
 import EntityIcon from 'js/shared-styles/icons/EntityIcon';
 import { SampleCategoryIcon } from 'js/shared-styles/icons';
+import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { getDonorMetadata, getOriginSampleAndMappedOrgan } from '../../utils';
 import EntityHeaderItem from '../EntityHeaderItem';
 
@@ -58,7 +59,13 @@ function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
     return null;
   }
 
-  const { sex, race, age_unit, age_value } = getDonorMetadata(entity);
+  const donorMetadata = getDonorMetadata(entity);
+
+  const { sex, race, age_unit, age_value } = donorMetadata;
+
+  if (Object.keys(donorMetadata).length === 0) {
+    return null;
+  }
 
   return (
     <>
@@ -66,9 +73,13 @@ function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
       {race && <Typography>{race}</Typography>}
       {age_unit && age_value && (
         <Typography>
-          {age_value} {age_unit}
+          <Stack direction="row" justifyContent="center">
+            {age_value} {age_unit}
+            <DonorAgeTooltip donorAge={age_value} />
+          </Stack>
         </Typography>
       )}
+      <Divider orientation="vertical" flexItem />
     </>
   );
 }
@@ -85,6 +96,7 @@ function SampleItems({ data: { entity } }: EntityHeaderItemsProps) {
     <>
       <EntityHeaderItem startIcon={<OrganIcon organName={mapped_organ} />}>{mapped_organ}</EntityHeaderItem>
       <EntityHeaderItem startIcon={<SampleCategoryIcon />}>{sample_category}</EntityHeaderItem>
+      <Divider orientation="vertical" flexItem />
     </>
   );
 }
@@ -103,6 +115,7 @@ function DatasetItems({ data: { entity } }: EntityHeaderItemsProps) {
       <EntityHeaderItem startIcon={<StatusIcon status={status} />}>
         {status} ({mapped_data_access_level})
       </EntityHeaderItem>
+      <Divider orientation="vertical" flexItem />
     </>
   );
 }
@@ -118,13 +131,19 @@ function PublicationItems({ data: { entity } }: EntityHeaderItemsProps) {
     <>
       <Typography>{title}</Typography>
       <Typography>{publication_venue}</Typography>
+      <Divider orientation="vertical" flexItem />
     </>
   );
 }
 
 function CellTypeItems({ data: { assayMetadata } }: EntityHeaderItemsProps) {
   const { reference_link } = assayMetadata;
-  return <Typography>{reference_link}</Typography>;
+  return (
+    <>
+      <Typography>{reference_link}</Typography>
+      <Divider orientation="vertical" flexItem />
+    </>
+  );
 }
 
 const entityToFieldsMap: EntityToFieldsType = {
@@ -142,12 +161,7 @@ function EntityHeaderItems({ type, ...rest }: { type: EntityTypesWithIcons } & E
     return null;
   }
 
-  return (
-    <>
-      <Items {...rest} />
-      <Divider orientation="vertical" flexItem />
-    </>
-  );
+  return <Items {...rest} />;
 }
 
 const AnimatedStack = animated(Stack);
@@ -223,7 +237,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
       <RightDiv>
         {vizIsFullscreen ? (
           <>
-            {vizNotebookId && <VisualizationNotebookButton uuid={vizNotebookId} />}
+            {vizNotebookId && <VisualizationWorkspaceButton uuid={vizNotebookId} />}
             <VisualizationShareButtonWrapper />
             <VizualizationThemeSwitch />
             <VisualizationCollapseButton />

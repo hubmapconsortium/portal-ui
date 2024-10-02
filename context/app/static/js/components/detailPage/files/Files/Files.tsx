@@ -10,18 +10,25 @@ import { UnprocessedFile } from '../types';
 
 interface FilesProps {
   files: UnprocessedFile[];
+  includeAccordion?: boolean;
 }
 
-function Files({ files }: FilesProps) {
+function Files({ files, includeAccordion }: FilesProps) {
+  const fileContent = files.length > 0 && (
+    <Box mb={2}>
+      <FileBrowser files={files} />
+    </Box>
+  );
+
   return (
     <FilesContextProvider>
-      <CollapsibleDetailPageSection id="files" title="Files">
-        {files.length > 0 && (
-          <Box mb={2}>
-            <FileBrowser files={files} />
-          </Box>
-        )}
-      </CollapsibleDetailPageSection>
+      {includeAccordion ? (
+        <CollapsibleDetailPageSection id="files" title="Files">
+          {fileContent}
+        </CollapsibleDetailPageSection>
+      ) : (
+        fileContent
+      )}
     </FilesContextProvider>
   );
 }

@@ -1,18 +1,20 @@
 import React from 'react';
-import IconButton from '@mui/material/IconButton';
 
 import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
+import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 
 interface IconDropdownMenuButtonProps {
   children: React.ReactNode;
   menuID: string;
+  tooltip: string;
 }
 
-function IconDropdownMenuButton({ children, menuID, ...rest }: IconDropdownMenuButtonProps) {
+function IconDropdownMenuButton({ children, menuID, tooltip, ...rest }: IconDropdownMenuButtonProps) {
   const { menuRef, menuIsOpen, openMenu } = useDropdownMenuStore();
 
   return (
-    <IconButton
+    <WhiteBackgroundIconTooltipButton
+      tooltip={tooltip}
       onClick={openMenu}
       color="primary"
       aria-controls={menuIsOpen ? menuID : undefined}
@@ -21,7 +23,7 @@ function IconDropdownMenuButton({ children, menuID, ...rest }: IconDropdownMenuB
       {...rest}
     >
       {children}
-    </IconButton>
+    </WhiteBackgroundIconTooltipButton>
   );
 }
 

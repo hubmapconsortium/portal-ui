@@ -21,7 +21,6 @@ export type ProcessedDatasetDetails = ProcessedDatasetInfo &
     | 'metadata'
     | 'protocol_url' // TODO: This is present for non-dataset entities, but not for datasets.
     | 'dataset_type'
-    | 'creation_action'
     | 'mapped_consortium'
   >;
 
@@ -53,6 +52,8 @@ export function useProcessedDatasetDetails(uuid: string) {
       'dataset_type',
       'creation_action',
       'mapped_consortium',
+      'contributors',
+      'contacts',
     ],
     size: 10000,
   };
@@ -97,7 +98,7 @@ export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: 
 
   // Include dataset status in the label if more than one processed dataset of this type exists.
   // This allows us to distinguish between published datasets and QA/New/other statuses.
-  const processedDatasetTabs = searchHits
+  const processedDatasetTabs = [...searchHits]
     // Prioritize published datasets
     .sort((a, b) => {
       if (a._source.status === 'Published') {

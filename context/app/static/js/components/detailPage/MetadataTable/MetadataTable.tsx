@@ -5,9 +5,11 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import Stack from '@mui/material/Stack';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
+import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { defaultColumns } from '../MetadataSection/columns';
 
 interface MetadataTableRow {
@@ -32,7 +34,12 @@ function MetadataTable({ tableRows = [] as MetadataTableRow[], columns = default
             {tableRows.map((row) => (
               <TableRow key={row.key}>
                 <IconTooltipCell tooltipTitle={row?.description}>{row.key}</IconTooltipCell>
-                <TableCell>{row.value}</TableCell>
+                <TableCell>
+                  <Stack direction="row">
+                    {row.value}
+                    {row.key.endsWith('age_value') && <DonorAgeTooltip donorAge={row.value} />}
+                  </Stack>
+                </TableCell>
               </TableRow>
             ))}
           </TableBody>

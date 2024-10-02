@@ -58,7 +58,7 @@ export interface Entity {
   mapped_data_types?: string[];
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
   status: string;
-  mapped_metadata: Record<string, unknown>;
+  mapped_metadata?: Record<string, unknown>;
   [key: string]: unknown;
 }
 
@@ -66,7 +66,7 @@ export type PartialEntity = Partial<Entity> & Pick<Entity, 'entity_type' | 'uuid
 
 export interface Donor extends Entity {
   entity_type: 'Donor';
-  mapped_metadata: Partial<{
+  mapped_metadata?: Partial<{
     sex: string;
     age_unit: string;
     age_value: string;
@@ -84,6 +84,14 @@ export interface Sample extends Entity {
   origin_samples: Sample[];
 }
 
+export type CreationAction =
+  | 'Create Dataset Activity'
+  | 'Central Process'
+  | 'Multi-Assay Split'
+  | 'Lab Process'
+  | 'Create Publication Activity'
+  | 'External Process';
+
 export interface Dataset extends Entity {
   entity_type: 'Dataset';
   processing: 'raw' | 'processed';
@@ -93,6 +101,7 @@ export interface Dataset extends Entity {
   assay_modality: 'single' | 'multiple';
   donor: Donor;
   mapped_data_access_level: 'Public' | 'Protected' | 'Consortium';
+  creation_action: CreationAction;
   origin_samples: Sample[];
   origin_samples_unique_mapped_organs: string[];
   mapped_data_types: string[];

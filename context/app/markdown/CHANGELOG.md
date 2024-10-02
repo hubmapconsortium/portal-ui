@@ -1,3 +1,41 @@
+## v1.11.0 - 2024-10-02
+
+- Add messaging where donors with ages > 89 are displayed on search and detail pages.
+- Fix "Add to workspace" bug on dataset detail pages.
+- Fix positioning of dropdown order menu on the tile view of the search page. 
+- Fix tabs moving around in bulk data transfer section on detail pages.
+- Update unified datasets link in "What’s New" section on homepage to point to an example dataset detail page.
+- Adjust size of "summary" view in entity headers dynamically based on the length of the content.
+- Remove "Contact" section and add Attribution table with contributors for EPICs and Lab Processed datasets.
+
+
+## v1.10.0 - 2024-09-25
+
+- Only allow Globus group members to access sample workspaces.
+- Fix bug where template examples with default resource options would not launch.
+
+
+## v1.9.0 - 2024-09-24
+
+- Fix bug where donor pages for donors without metadata do not display.
+- Remove extra files accordion from processed datasets summary sections. 
+- Allow Jupyter notebooks for dataset visualizations to be downloaded by all users.
+
+
+## v1.8.0 - 2024-09-19
+
+- Fix Advanced Config marker issue.
+- Remove extraneous tooltip from the non-selectable template grid.
+- Fix "Copy to Clipboard" error when copying dataset IDs.
+- Rely on template job type, not example job type (which is not always present).
+
+
+## v1.7.0 - 2024-09-18
+
+- Increase maximum resource options for workspace jobs from 2 CPUs to 16, 32GB of memory to 128GB and session length from 6 hours to 12.
+- Add last modified date to template detail pages.
+
+
 ## v1.6.0 - 2024-09-17
 
 - Add tracking to landing pages and detail pages for workspaces and templates.
