@@ -18,6 +18,7 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
 import EntityIcon from 'js/shared-styles/icons/EntityIcon';
 import { SampleCategoryIcon } from 'js/shared-styles/icons';
+import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { getDonorMetadata, getOriginSampleAndMappedOrgan } from '../../utils';
 import EntityHeaderItem from '../EntityHeaderItem';
 
@@ -72,7 +73,10 @@ function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
       {race && <Typography>{race}</Typography>}
       {age_unit && age_value && (
         <Typography>
-          {age_value} {age_unit}
+          <Stack direction="row" justifyContent="center">
+            {age_value} {age_unit}
+            <DonorAgeTooltip donorAge={age_value} />
+          </Stack>
         </Typography>
       )}
       <Divider orientation="vertical" flexItem />
