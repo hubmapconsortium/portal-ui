@@ -146,7 +146,12 @@ function useCreateWorkspaceForm({
     if (initialProtectedDatasets && initialProtectedDatasets !== '') {
       setValue('protected-datasets', initialProtectedDatasets);
     }
-  }, [initialProtectedDatasets, setValue]);
+    // Necessary to update dialog state between different processed datasets on detail pages
+    if (initialSelectedDatasets && initialSelectedDatasets.length !== 0) {
+      setValue('datasets', initialSelectedDatasets);
+      setValue('workspace-name', checkedWorkspaceName);
+    }
+  }, [initialProtectedDatasets, initialSelectedDatasets, checkedWorkspaceName, setValue]);
 
   useEffect(() => {
     if (dialogIsOpen) {
