@@ -1,36 +1,43 @@
 import React, { useState } from 'react';
-import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { formatDate } from 'date-fns/format';
-import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
+
 import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import SummarizeRounded from '@mui/icons-material/SummarizeRounded';
+import AttributionRoundedIcon from '@mui/icons-material/AttributionRounded';
 import InsertDriveFileRounded from '@mui/icons-material/InsertDriveFileRounded';
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
+
+import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
+import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useVitessceConf } from 'js/pages/Dataset/hooks';
 import { isSupport } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import Skeleton from '@mui/material/Skeleton';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import Files from '../../files/Files';
-import DataProducts from '../../files/DataProducts';
-import VisualizationWrapper from '../../visualization/VisualizationWrapper';
-import AnalysisDetails from '../../AnalysisDetails';
-import Protocol from '../../Protocol';
+import ContributorsTable from 'js/components/detailPage/ContributorsTable';
+import { DatasetAttributionDescription } from 'js/components/detailPage/Attribution/Attribution';
+import Files from 'js/components/detailPage/files/Files';
+import DataProducts from 'js/components/detailPage/files/DataProducts';
+import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
+import AnalysisDetails from 'js/components/detailPage/AnalysisDetails';
+import Protocol from 'js/components/detailPage/Protocol';
+import { getDateLabelAndValue } from 'js/components/detailPage/utils';
+import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
+import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
 import { Subsection } from './Subsection';
 import { SectionDescription } from './SectionDescription';
 import useProcessedDataStore from '../store';
-import { getDateLabelAndValue } from '../../utils';
 import {
   ProcessedDatasetContextProvider,
   useProcessedDatasetContext,
   ProcessedDataVisualizationProps,
 } from './ProcessedDatasetContext';
-import { useSelectedVersionStore } from '../../VersionSelect/SelectedVersionStore';
 import { useProcessedDatasetDetails } from './hooks';
-import { useVersions } from '../../VersionSelect/hooks';
-import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import { OldVersionAlert } from './OldVersionAlert';
 
 function ProcessedDatasetDescription() {
@@ -47,12 +54,13 @@ function ProcessedDatasetDescription() {
 
 function Contact() {
   const {
-    dataset: { mapped_consortium },
+    dataset: { creation_action },
   } = useProcessedDatasetContext();
 
-  if (mapped_consortium !== 'HuBMAP') {
+  if (creation_action !== 'Central Process') {
     return null;
   }
+
   return (
     <LabelledSectionText label="Contact" iconTooltipText="This is the contact for this data.">
       <ContactUsLink>HuBMAP Help Desk</ContactUsLink>
@@ -65,12 +73,15 @@ function SummaryAccordion() {
   const [dateLabel, dateValue] = getDateLabelAndValue(dataset);
   return (
     <Subsection title="Summary" icon={<SummarizeRounded />}>
-      <ProcessedDatasetDescription />
-      <LabelledSectionText label="Consortium">{dataset.group_name}</LabelledSectionText>
-      <Contact />
-      <LabelledSectionText label={dateLabel}>
-        {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
-      </LabelledSectionText>
+      <Stack spacing={1}>
+        <ProcessedDatasetDescription />
+        <LabelledSectionText label="Group">{dataset.group_name}</LabelledSectionText>
+        <LabelledSectionText label="Consortium">{dataset.mapped_consortium}</LabelledSectionText>
+        <Contact />
+        <LabelledSectionText label={dateLabel}>
+          {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
+        </LabelledSectionText>
+      </Stack>
     </Subsection>
   );
 }
@@ -182,6 +193,23 @@ function AnalysisDetailsAccordion() {
   );
 }
 
+function AttributionAccordion() {
+  const {
+    dataset: { creation_action, contributors, contacts },
+  } = useProcessedDatasetContext();
+
+  if (creation_action === 'Central Process' || !contributors?.length) {
+    return null;
+  }
+
+  return (
+    <Subsection title="Attribution" idTitleOverride="attribution" icon={<AttributionRoundedIcon />}>
+      {DatasetAttributionDescription}
+      <ContributorsTable contributors={contributors} contacts={contacts} />
+    </Subsection>
+  );
+}
+
 export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisualizationProps) {
   const selectedDatasetVersionUUID =
     useSelectedVersionStore((state) => state.selectedVersions.get(sectionDataset.uuid))?.uuid ?? sectionDataset.uuid;
@@ -213,6 +241,7 @@ export default function ProcessedDataset({ sectionDataset }: ProcessedDataVisual
         <VisualizationAccordion />
         <FilesAccordion />
         <AnalysisDetailsAccordion />
+        <AttributionAccordion />
       </ProcessedDatasetAccordion>
     </ProcessedDatasetContextProvider>
   );

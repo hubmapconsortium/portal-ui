@@ -1,7 +1,24 @@
+import { CreationAction } from 'js/components/types';
 import { renderHook } from 'test-utils/functions';
 import { useSortedSearchHits, createdByCentralProcess, datasetIsPublished } from './hooks';
 
-const testDatasets = [
+const testDatasets: {
+  _id: string;
+  _index: string;
+  _score: number;
+  _source: {
+    assay_display_name: string[];
+    created_timestamp: number;
+    creation_action: CreationAction;
+    entity_type: string;
+    hubmap_id: string;
+    pipeline: string;
+    status: string;
+    uuid: string;
+    visualization: boolean;
+  };
+  _type: string;
+}[] = [
   {
     _id: 'c1fc38a4a6139a4830b8b2aec7227a8e',
     _index: 'hm_prod_consortium_portal',

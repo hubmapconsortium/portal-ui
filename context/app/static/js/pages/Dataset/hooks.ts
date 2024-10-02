@@ -55,6 +55,8 @@ export type ProcessedDatasetInfo = Pick<
   | 'dbgap_sra_experiment_url'
   | 'is_component'
   | 'visualization'
+  | 'contributors'
+  | 'contacts'
 >;
 
 type VitessceConf = object | undefined;
@@ -106,6 +108,7 @@ function useProcessedDatasets(includeComponents?: boolean) {
       'dbgap_sra_experiment_url',
       'is_component',
       'visualization',
+      'contributors',
     ],
     size: 10000,
   };
@@ -128,13 +131,14 @@ function getProcessedDatasetSection({
   hit: Required<SearchHit<ProcessedDatasetInfo>>;
   conf?: VitessceConf;
 }) {
-  const { pipeline, hubmap_id, files, metadata, visualization } = hit._source;
+  const { pipeline, hubmap_id, files, metadata, visualization, creation_action, contributors } = hit._source;
 
   const shouldDisplaySection = {
     summary: true,
     visualization: visualization || Boolean(conf && 'data' in conf && conf?.data),
-    files: Boolean(files),
+    files: Boolean(files?.length),
     analysis: Boolean(metadata?.dag_provenance_list),
+    attribution: creation_action !== 'Central Process' && Boolean(contributors?.length),
   };
 
   const sectionsToDisplay = Object.entries(shouldDisplaySection).filter(([_k, v]) => v === true);

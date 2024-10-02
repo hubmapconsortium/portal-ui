@@ -16,7 +16,7 @@ const tooltips = {
   contact: 'This is the contact for this data.',
 };
 
-const DatasetAttribution = (
+export const DatasetAttributionDescription = (
   <SectionDescription>
     Below is the information for the individuals who provided this dataset. For questions about this dataset, reach out
     to the individuals listed as contacts, either via the email address listed in the table or via contact information
@@ -44,7 +44,7 @@ function Attribution({ children }: PropsWithChildren) {
   return (
     <CollapsibleDetailPageSection id="attribution" title="Attribution" icon={sectionIconMap.attribution}>
       <Stack spacing={1}>
-        {isDataset && DatasetAttribution}
+        {isDataset && DatasetAttributionDescription}
         <SummaryPaper>
           <Stack direction="row" spacing={10}>
             {sections.map((props) => (
