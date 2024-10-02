@@ -1,3 +1,14 @@
+## v1.11.0 - 2024-10-02
+
+- Add messaging where donors with ages > 89 are displayed on search and detail pages.
+- Fix "Add to workspace" bug on dataset detail pages.
+- Fix positioning of dropdown order menu on the tile view of the search page. 
+- Fix tabs moving around in bulk data transfer section on detail pages.
+- Update unified datasets link in "What’s New" section on homepage to point to an example dataset detail page.
+- Adjust size of "summary" view in entity headers dynamically based on the length of the content.
+- Remove "Contact" section and add Attribution table with contributors for EPICs and Lab Processed datasets.
+
+
 ## v1.10.0 - 2024-09-25
 
 - Only allow Globus group members to access sample workspaces.
