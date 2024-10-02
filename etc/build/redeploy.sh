@@ -36,7 +36,7 @@ docker-compose -f \$COMPOSE_CONFIG up -d
 # We don't understand why the prod-test instance is getting the wrong configuration.
 # We hope turning it off-and-on will help, but this is not a good situation.
 if [ "$TARGET" = "test" ]; then
-    echo 'Restart the hubmap-auth container... for STAGE only'
+    echo 'Restart the hubmap-auth container... for TEST only'
     docker restart hubmap-auth
 fi
 
