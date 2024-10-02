@@ -55,7 +55,7 @@ function getByPath(hitSource, field) {
       return (
         <Stack direction="row">
           {fieldValue.join(' / ')}
-          <DonorAgeTooltip donorAge={fieldValue.join(' / ')} />
+          <DonorAgeTooltip donorAge={fieldValue[0]} />
         </Stack>
       );
     }
