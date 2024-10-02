@@ -12,6 +12,7 @@ import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialog';
 import { DialogType } from 'js/stores/useWorkspaceModalStore';
+import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
@@ -124,6 +125,7 @@ function ProcessedDataWorkspaceMenu({
           </MenuItem>
         ))}
       </Menu>
+      <AddDatasetsFromDetailDialog uuid={uuid} dialogType={dialogType} />
       <NewWorkspaceDialog dialogIsOpen={createWorkspaceIsOpen} control={control} errors={errors} {...rest} />
     </>
   );

@@ -14,7 +14,6 @@ import { LineClamp } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import { formatDate } from 'date-fns/format';
-import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
@@ -113,7 +112,6 @@ function HelperPanelActions() {
         datasetDetails={{ hubmap_id, uuid, status }}
         dialogType="ADD_DATASETS_FROM_HELPER_PANEL"
       />
-      <AddDatasetsFromDetailDialog uuid={uuid} dialogType="ADD_DATASETS_FROM_HELPER_PANEL" />
       <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">
         <HelperPanelButton
           startIcon={<CloudDownloadRounded />}
