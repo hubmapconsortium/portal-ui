@@ -211,6 +211,7 @@ function EntityHeaderActionButtons({
           />
         }
         datasetDetails={{ hubmap_id, uuid, status }}
+        dialogType="ADD_DATASETS_FROM_HEADER"
       />
     </Stack>
   );

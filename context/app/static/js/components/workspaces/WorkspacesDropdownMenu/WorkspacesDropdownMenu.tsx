@@ -8,9 +8,9 @@ import { useAppContext } from 'js/components/Contexts';
 import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { StyledDropdownMenuButton } from 'js/components/searchPage/MetadataMenu/style';
 import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { AddIcon } from 'js/shared-styles/icons';
-import AddDatasetsFromSearchDialog from '../AddDatasetsFromSearchDialog';
+import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 
 const menuID = 'workspace-menu';
 
@@ -28,15 +28,14 @@ function WorkspaceSearchDialogs() {
   }
 }
 
-type DialogTypes = Extract<DialogType, typeof addDatasetsDialogType>;
-
 interface WorkspaceDropdownMenuItemProps extends PropsWithChildren {
-  dialogType: DialogTypes;
+  dialogType: DialogType;
   icon: typeof SvgIcon;
 }
 
-export function useOpenDialog(dialogType: DialogTypes) {
+export function useOpenDialog(dialogType: DialogType) {
   const { open, setDialogType } = useEditWorkspaceStore();
+
   const onClick = useCallback(() => {
     setDialogType(dialogType);
     open();
@@ -56,7 +55,7 @@ function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: Workspa
 
 const menuItems: {
   label: string;
-  dialogType: DialogTypes;
+  dialogType: DialogType;
   icon: typeof SvgIcon;
 }[] = [{ label: 'Add to Existing Workspace', dialogType: addDatasetsDialogType, icon: AddIcon }];
 

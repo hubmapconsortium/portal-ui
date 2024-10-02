@@ -1,0 +1,1 @@
+- Fix "Add to workspace" bug on dataset detail pages.

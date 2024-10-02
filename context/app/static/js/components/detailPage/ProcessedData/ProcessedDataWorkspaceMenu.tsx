@@ -5,23 +5,25 @@ import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import AddRounded from '@mui/icons-material/AddRounded';
 
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { useOpenDialog } from 'js/components/workspaces/WorkspacesDropdownMenu/WorkspacesDropdownMenu';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialog';
-import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog/AddDatasetsFromSearchDialog';
+import { DialogType } from 'js/stores/useWorkspaceModalStore';
+import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
   datasetDetails: { hubmap_id: string; uuid: string; status: string };
+  dialogType: DialogType;
 }
 
 function ProcessedDataWorkspaceMenu({
   button,
   datasetDetails: { hubmap_id, uuid, status },
+  dialogType,
 }: ProcessedDataWorkspaceMenuProps) {
   const {
     entity: { mapped_data_access_level },
@@ -56,7 +58,7 @@ function ProcessedDataWorkspaceMenu({
     initialSelectedDatasets: [uuid].filter(Boolean),
   });
 
-  const openEditWorkspaceDialog = useOpenDialog('ADD_DATASETS_FROM_SEARCH');
+  const openEditWorkspaceDialog = useOpenDialog(dialogType);
 
   const createWorkspace = useEventCallback(() => {
     track({
@@ -105,29 +107,27 @@ function ProcessedDataWorkspaceMenu({
 
   // The selectable table provider is used here since a lot of the workspace logic relies on the selected rows
   return (
-    <SelectableTableProvider tableLabel="Current Dataset" selectedRows={new Set([uuid])}>
+    <>
       {buttonWithClickHandler}
-      <>
-        <Menu
-          open={open}
-          onClose={handleClose}
-          anchorEl={anchorEl}
-          anchorOrigin={{
-            vertical: 'bottom',
-            horizontal: 'right',
-          }}
-        >
-          {options.map(({ children, onClick, icon }) => (
-            <MenuItem key={children} onClick={onClick}>
-              <ListItemIcon>{icon}</ListItemIcon>
-              {children}
-            </MenuItem>
-          ))}
-        </Menu>
-        <NewWorkspaceDialog dialogIsOpen={createWorkspaceIsOpen} control={control} errors={errors} {...rest} />
-        <AddDatasetsFromSearchDialog />
-      </>
-    </SelectableTableProvider>
+      <Menu
+        open={open}
+        onClose={handleClose}
+        anchorEl={anchorEl}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+      >
+        {options.map(({ children, onClick, icon }) => (
+          <MenuItem key={children} onClick={onClick}>
+            <ListItemIcon>{icon}</ListItemIcon>
+            {children}
+          </MenuItem>
+        ))}
+      </Menu>
+      <AddDatasetsFromDetailDialog uuid={uuid} dialogType={dialogType} />
+      <NewWorkspaceDialog dialogIsOpen={createWorkspaceIsOpen} control={control} errors={errors} {...rest} />
+    </>
   );
 }
 
