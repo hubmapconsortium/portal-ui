@@ -37,7 +37,7 @@ function SampleDetail() {
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;
 
-  const combinedMetadata = combineMetadata(donor, undefined, metadata);
+  const combinedMetadata = combineMetadata(donor, origin_samples, metadata);
 
   const shouldDisplaySection = {
     summary: true,
