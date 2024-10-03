@@ -80,9 +80,7 @@ def details(type, uuid):
                         _anchor=anchor,
                         redirected=True,
                         redirectedFromId=entity['hubmap_id'],
-                        redirectedFromPipeline=entity['pipeline']
-                        )
-            )
+                        redirectedFromPipeline=entity['pipeline']))
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
