@@ -1,0 +1,1 @@
+- Fix issue of sample metadata not showing up in the sample detail page metadata table.
