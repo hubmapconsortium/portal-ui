@@ -10,6 +10,8 @@ export interface FlaskDataContextType {
   title: string; // preview page title
   vis_lifted_uuid?: string;
   redirected?: boolean;
+  redirectedFromId?: string;
+  redirectedFromPipeline?: string;
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');

@@ -78,7 +78,11 @@ def details(type, uuid):
                         type='dataset',
                         uuid=supported_entity[0]['uuid'],
                         _anchor=anchor,
-                        redirected=True))
+                        redirected=True,
+                        redirectedFromId=entity['hubmap_id'],
+                        redirectedFromPipeline=entity['pipeline']
+                        )
+            )
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
@@ -89,6 +93,8 @@ def details(type, uuid):
         **get_default_flask_data(),
         'entity': entity,
         'redirected': redirected,
+        'redirectedFromId': request.args.get('redirectedFromId'),
+        'redirectedFromPipeline': request.args.get('redirectedFromPipeline')
     }
 
     if type == 'publication':
