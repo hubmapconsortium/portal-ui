@@ -73,10 +73,9 @@ function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
       {race && <Typography>{race}</Typography>}
       {age_unit && age_value && (
         <Typography>
-          <Stack direction="row" justifyContent="center">
+          <DonorAgeTooltip donorAge={age_value}>
             {age_value} {age_unit}
-            <DonorAgeTooltip donorAge={age_value} />
-          </Stack>
+          </DonorAgeTooltip>
         </Typography>
       )}
       <Divider orientation="vertical" flexItem />
