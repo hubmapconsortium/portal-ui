@@ -83,6 +83,7 @@ function ProvSection() {
       <SectionDescription>
         <Description />
       </SectionDescription>
+
       <ProvTabs provData={provData} />
     </CollapsibleDetailPageSection>
   );
