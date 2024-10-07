@@ -32,6 +32,8 @@ export function useVitessceEventMetadata() {
   return formatEventCategoryAndLabel('Unknown', location);
 }
 
+const arrowKeys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'];
+
 export function useVisualizationTracker() {
   const { category, label } = useVitessceEventMetadata();
   // Track when the visualization is first mounted
@@ -66,6 +68,11 @@ export function useVisualizationTracker() {
   const trackKeyDown: React.KeyboardEventHandler<HTMLSpanElement> = useEventCallback((e) => {
     const target = getNearestIdentifier(e.target as HTMLElement);
     const key = e.key === ' ' ? 'Space' : e.key;
+    // Prevent default scrolling behavior of arrow keys
+    if (arrowKeys.includes(key)) {
+      trackVitessceAction(`${key} ${target}`);
+      e.preventDefault();
+    }
     if (!target || modifierKeys.includes(key)) return;
     if (typingTimeout.current) {
       clearTimeout(typingTimeout.current);
