@@ -16,7 +16,7 @@ if [[ -z "$MAJOR" ]]; then
 
   TAGS=`git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags | tac`
   while read -r -d $'\n' TAG DATE; do
-    if [[ $TAG =~ v0\.([0-9]+)\.0$ ]]; then
+    if [[ $TAG =~ ([0-9]+)\.([0-9]+)\.0$ ]]; then
       echo "Last minor tag: $TAG"
       # Strip timezone info (last 6 characters)
       DATE=${DATE%??????}
