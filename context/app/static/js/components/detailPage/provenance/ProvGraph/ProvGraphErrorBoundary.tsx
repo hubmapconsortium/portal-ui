@@ -13,7 +13,7 @@ function ErrorFallback(error: Error) {
     <Stack p={4}>
       <Typography variant="subtitle1">An error occurred while attempting to display the provenance graph.</Typography>
       <DetailsAccordion summary="Click to expand error details">
-        <div>{error?.message}</div>
+        <Typography variant="body2">{error?.message}</Typography>
       </DetailsAccordion>
     </Stack>
   );
