@@ -9,7 +9,7 @@ interface DonorAgeTooltipProps extends PropsWithChildren {
 
 function DonorAgeTooltip({ donorAge, children }: DonorAgeTooltipProps) {
   if (!donorAge || Number(donorAge) <= 89) {
-    return null;
+    return children;
   }
 
   return <InfoTextTooltip tooltipTitle={DONOR_AGE_TEXT}>{children}</InfoTextTooltip>;
