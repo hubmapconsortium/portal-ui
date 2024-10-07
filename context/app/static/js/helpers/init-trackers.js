@@ -11,7 +11,7 @@ import { getUserGroups, getUserType } from './trackers';
 function initTrackers() {
   const version = `portal-ui-react@${PACKAGE_VERSION}`;
   const environment = sentryEnv;
-  const shouldReport = ['prod', 'prod-stage'].includes(environment);
+  const shouldReport = ['prod', 'prod-test'].includes(environment);
 
   initializeFaro({
     url: 'https://faro-collector-prod-us-east-0.grafana.net/collect/77a0efade67edd876ae6c63ebb2d825c',
