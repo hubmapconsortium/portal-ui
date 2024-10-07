@@ -1,0 +1,1 @@
+- Prevent malformed provenance graph data from crashing the entire page.
