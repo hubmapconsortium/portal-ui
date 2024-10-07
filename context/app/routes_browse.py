@@ -79,8 +79,8 @@ def details(type, uuid):
                         uuid=supported_entity[0]['uuid'],
                         _anchor=anchor,
                         redirected=True,
-                        redirectedFromId=entity['hubmap_id'],
-                        redirectedFromPipeline=entity['pipeline']))
+                        redirectedFromId=entity.get('hubmap_id'),
+                        redirectedFromPipeline=entity.get('pipeline')))
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
