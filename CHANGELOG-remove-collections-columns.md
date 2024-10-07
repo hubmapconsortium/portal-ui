@@ -1,1 +1,0 @@
-- Remove "Contact" and "Last Modified" columns from the Datasets table on Collections pages.
