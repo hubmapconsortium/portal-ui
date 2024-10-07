@@ -182,9 +182,13 @@ export function useRedirectAlert() {
 
   useEffect(() => {
     if (redirected) {
-      toastInfo(
-        `You have been redirected to the unified view for ${redirectedFromPipeline} dataset ${redirectedFromId}.`,
-      );
+      if (redirectedFromId && redirectedFromPipeline) {
+        toastInfo(
+          `You have been redirected to the unified view for ${redirectedFromPipeline} dataset ${redirectedFromId}.`,
+        );
+      } else {
+        toastInfo('You have been redirected to the unified view for this dataset.');
+      }
     }
   }, [redirected, toastInfo, redirectedFromId, redirectedFromPipeline]);
 }
