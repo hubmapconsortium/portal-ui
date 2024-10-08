@@ -37,3 +37,28 @@ export function useSortedSearchHits(datasets: ReturnType<typeof useProcessedData
   }, [datasets]);
   return sortedSearchHits;
 }
+
+/**
+ * Formats the processed datasets' pipelines and their counts for presentation.
+ * @param datasets The processed datasets to count the pipelines of.
+ * @returns Text for the pipelines label, and additional text for each pipeline and its count.
+ */
+export function usePipelineCountsInfo(datasets: Pick<ProcessedDatasetInfo, 'pipeline'>[]) {
+  const pipelines = datasets.map((dataset) => dataset.pipeline);
+  const pipelineCounts = pipelines.reduce(
+    (acc, pipeline) => {
+      acc[pipeline] = (acc[pipeline] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+  const pipelinesText = `Pipelines (${Object.keys(pipelineCounts).length})`;
+  const pipelineCountsText = Object.entries(pipelineCounts)
+    .map(([pipeline, count]) => `${pipeline} (${count})`)
+    .join(', ');
+
+  return {
+    pipelinesText,
+    pipelineCountsText,
+  };
+}
