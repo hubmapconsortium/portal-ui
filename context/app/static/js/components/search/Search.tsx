@@ -318,7 +318,7 @@ function Body({ facetGroups }: { facetGroups: FacetGroups }) {
 
 function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
   return (
-    <Stack spacing={2}>
+    <Stack spacing={2} mb={4}>
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <Bar type={type} />

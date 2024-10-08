@@ -9,14 +9,15 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
-const InnerAccordionDetails = styled(AccordionDetails)({
+const FacetAccordionDetails = styled(AccordionDetails)({
   flexDirection: 'column',
-  padding: '4px 10px 4px 16px',
+  padding: '4px 4px 4px 8px',
 });
 
-const InnerAccordionSummary = styled(AccordionSummary)({
+const FacetAccordionSummary = styled(AccordionSummary)(({ $position }: { $position: 'inner' | 'outer' }) => ({
+  padding: $position === 'outer' ? '4px 0px' : 0,
   justifyContent: 'left',
-  padding: '0px 16px',
+  width: '100%',
   '& > *': {
     flexGrow: 'unset',
     padding: 0,
@@ -24,7 +25,7 @@ const InnerAccordionSummary = styled(AccordionSummary)({
     color: '#000',
   },
   margin: 0,
-});
+}));
 
 const StyledExpandMoreIcon = styled(ExpandMoreIcon)(({ theme }) => ({
   fontSize: '1rem',
@@ -82,8 +83,8 @@ export {
   StyledCheckBoxIcon,
   StyledCheckbox,
   StyledFormControlLabel,
-  InnerAccordionDetails,
-  InnerAccordionSummary,
+  FacetAccordionDetails,
+  FacetAccordionSummary,
   StyledExpandMoreIcon,
   StyledStack,
   FormLabelText,
