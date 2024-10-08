@@ -10,7 +10,7 @@ function mapProcessingType(label: string) {
 
 const fieldConfigurationsMap: Record<
   string,
-  { label?: string; valueTransformations?: ((label: string) => string)[]; valueSort?: 'asc' | 'dsc' | 'count' }
+  { label?: string; valueTransformations?: ((label: string) => string)[]; valueSort?: 'asc' | 'desc' | 'count' }
 > = {
   age_value: { label: 'Donor Age' },
   analyte_class: { label: 'Analyte Class', valueTransformations: [capitalizeString] },

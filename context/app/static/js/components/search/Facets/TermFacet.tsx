@@ -9,7 +9,7 @@ import { AggregationsBuckets } from '@elastic/elasticsearch/lib/api/types';
 
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { trackEvent } from 'js/helpers/trackers';
-import { useSearch } from '../Search';
+import { useSearch, HierarchichalBucket, InnerBucket } from '../Search';
 import { isTermFilter, useSearchStore, TermValues, isHierarchicalFilter, isTermFacet } from '../store';
 import {
   StyledCheckBoxBlankIcon,
@@ -21,7 +21,7 @@ import {
   HierarchicalAccordionSummary,
 } from './style';
 import FacetAccordion from './FacetAccordion';
-import { getFieldLabel, getTransformedFieldalue } from '../fieldConfigurations';
+import { getFieldLabel, getFieldValueSort, getTransformedFieldalue } from '../fieldConfigurations';
 
 interface CheckboxItem {
   label: string;
@@ -33,9 +33,30 @@ interface CheckboxItem {
   field: string;
 }
 
-function getBucketKey(bucket: { key: string; key_as_string?: string; doc_count: number }) {
+type Bucket = HierarchichalBucket | InnerBucket;
+
+function getBucketKey(bucket: InnerBucket) {
   const { key, key_as_string } = bucket;
   return key_as_string ?? key;
+}
+
+const sortFunctions: Record<'asc' | 'desc' | 'count', (a: Bucket, b: Bucket) => number> = {
+  count: ({ doc_count: a }, { doc_count: b }) => b - a,
+  asc: (a, b) => getBucketKey(a).localeCompare(getBucketKey(b)),
+  desc: (a, b) => getBucketKey(b).localeCompare(getBucketKey(a)),
+};
+
+function sortBuckets<T extends Bucket>({
+  field,
+  buckets,
+  sort,
+}: {
+  field: string;
+  buckets: T[];
+  sort?: 'asc' | 'desc' | 'count';
+}): T[] {
+  const sortFn = sortFunctions[sort ?? getFieldValueSort(field)];
+  return buckets.sort(sortFn);
 }
 
 type TermLabelCount = Omit<CheckboxItem, 'field' | 'indeterminate' | 'onClick' | 'title'>;
@@ -148,7 +169,7 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
   const title = getFieldLabel(field);
   return (
     <FacetAccordion title={title} position="inner">
-      {aggBuckets.map((bucket) => {
+      {sortBuckets({ field, buckets: aggBuckets }).map((bucket) => {
         const key = getBucketKey(bucket);
         return (
           <TermFacetItem
@@ -223,7 +244,7 @@ export function HierarchicalTermFacetItem({
 }: TermFacet & {
   parentField: string;
   childField: string;
-  childBuckets?: AggregationsBuckets<{ key: string; doc_count: number }>;
+  childBuckets?: AggregationsBuckets<InnerBucket>;
 }) {
   const [expanded, setExpanded] = useState(false);
   const toggleExpanded = useCallback(() => {
@@ -281,7 +302,7 @@ export function HierarchicalTermFacetItem({
         />
       </HierarchicalAccordionSummary>
       <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
-        {childBuckets.map(({ key, doc_count }) => (
+        {sortBuckets({ buckets: childBuckets, field: parentField }).map(({ key, doc_count }) => (
           <HierarchicalFacetChild
             field={field}
             label={key}
@@ -320,7 +341,7 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
 
   return (
     <FacetAccordion title={title} position="inner">
-      {parentBuckets.map((bucket) => {
+      {sortBuckets({ buckets: parentBuckets, field: parentField }).map((bucket) => {
         const key = getBucketKey(bucket);
         return (
           <HierarchicalTermFacetItem

@@ -192,18 +192,14 @@ interface OuterBucket {
   doc_count: number;
   sum_other_doc_count?: number;
 }
-interface InnerBucket extends OuterBucket {
+export interface InnerBucket extends OuterBucket {
   key: string;
+  key_as_string?: string;
 }
 
-type Aggregations = Record<
-  string,
-  OuterBucket &
-    Record<
-      string,
-      AggregationsTermsAggregateBase<InnerBucket & Partial<Record<string, AggregationsTermsAggregateBase<InnerBucket>>>>
-    >
->;
+export type HierarchichalBucket = InnerBucket & Partial<Record<string, AggregationsTermsAggregateBase<InnerBucket>>>;
+
+type Aggregations = Record<string, OuterBucket & Record<string, AggregationsTermsAggregateBase<HierarchichalBucket>>>;
 
 export function useSearch() {
   const { endpoint, swrConfig = {}, ...rest }: SearchStoreState = useSearchStore();
