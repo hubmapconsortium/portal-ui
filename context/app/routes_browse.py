@@ -1,5 +1,5 @@
 import json
-from urllib.parse import urlparse
+from urllib.parse import urlparse, quote
 
 from flask import (
     render_template, jsonify,
@@ -47,22 +47,49 @@ def details(type, uuid):
     client = get_client()
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
+
+    # Redirect to primary dataset if this is
+    # - a support entity (e.g. an image pyramid)
+    # - a processed or component dataset
+    is_support = actual_type == 'support'
+    is_processed = entity.get('processing') != 'raw' and actual_type == 'dataset'
+    is_component = entity.get('is_component', False) is True
+    if (is_support or is_processed or is_component):
+        supported_entity = client.get_entities(
+            'datasets',
+            query_override={
+                "bool": {
+                    "must": {
+                        "terms": {
+                            "descendant_ids": [uuid]
+                        }
+                    }
+                }
+            },
+            non_metadata_fields=['hubmap_id', 'uuid']
+        )
+
+        pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
+        anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
+
+        if len(supported_entity) > 0:
+            return redirect(
+                url_for('routes_browse.details',
+                        type='dataset',
+                        uuid=supported_entity[0]['uuid'],
+                        _anchor=anchor,
+                        redirected=True))
+
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
+
+    redirected = request.args.get('redirected') == 'True'
 
     flask_data = {
         **get_default_flask_data(),
         'entity': entity,
+        'redirected': redirected,
     }
-    marker = request.args.get('marker')
-
-    if type == 'dataset':
-        conf_cells_uuid = client.get_vitessce_conf_cells_and_lifted_uuid(entity, marker=marker)
-        flask_data.update({
-            'vitessce_conf': conf_cells_uuid.vitessce_conf.conf,
-            'has_notebook': conf_cells_uuid.vitessce_conf.cells is not None,
-            'vis_lifted_uuid': conf_cells_uuid.vis_lifted_uuid
-        })
 
     if type == 'publication':
         publication_ancillary_data = client.get_publication_ancillary_json(entity)
@@ -93,7 +120,11 @@ def details_vitessce(type, uuid):
         abort(404)
     client = get_client()
     entity = client.get_entity(uuid)
-    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(entity).vitessce_conf
+    parent_uuid = request.args.get('parent') or None
+    marker = request.args.get('marker') or None
+    parent = client.get_entity(parent_uuid) if parent_uuid else None
+    vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
+        entity, marker=marker, parent=parent).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)
     response.headers.add("Access-Control-Allow-Origin", "*")
@@ -108,18 +139,12 @@ def details_rui_json(type, uuid):
         abort(404)
     client = get_client()
     entity = client.get_entity(uuid)
-    # For Samples...
+    # For samples and datasets, the nearest RUI location is indexed with the entity itself.
+    # https://github.com/hubmapconsortium/search-api/pull/860
     if 'rui_location' in entity:
         return json.loads(entity['rui_location'])
-    # For Datasets...
-    if 'ancestors' not in entity:
-        abort(404)
-    located_ancestors = [a for a in entity['ancestors'] if 'rui_location' in a]
-    if not located_ancestors:
-        abort(404)
-    # There may be multiple: The last should be the closest...
-    # but this should be confirmed, when there are examples.
-    return json.loads(located_ancestors[-1]['rui_location'])
+    # Otherwise throw 404
+    abort(404)
 
 
 @blueprint.route('/sitemap.txt')

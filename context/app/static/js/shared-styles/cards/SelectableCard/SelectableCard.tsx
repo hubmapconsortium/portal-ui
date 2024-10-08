@@ -8,7 +8,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledCard, SelectableCardText } from './styles';
 
 interface SelectableCardProps extends React.ComponentProps<typeof StyledCard> {
-  title: string;
+  title: React.ReactNode;
   description: string;
   tags?: string[];
   isSelected?: boolean;

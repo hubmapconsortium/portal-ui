@@ -7,24 +7,48 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { DatasetDocument } from 'js/typings/search';
 import { getIDsQuery } from 'js/helpers/queries';
-import { hubmapID, lastModifiedTimestamp, assayTypes, status, organ } from 'js/shared-styles/tables/columns';
+import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
+import { AddIcon } from 'js/shared-styles/icons';
+
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
+import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
+import { MergedWorkspace, WorkspacesEventInfo } from '../types';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
 const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
+const tooltips = {
+  add: 'Add datasets to this workspace.',
+  delete: 'Remove selected datasets.',
+  maxDatasets: `Workspaces are limited to ${MAX_NUMBER_OF_WORKSPACE_DATASETS} datasets. No more datasets can be added to this workspace.`,
+};
+
 interface WorkspaceDatasetsTableProps {
   datasetsUUIDs: string[];
   removeDatasets?: (ids: string[]) => void;
+  addDatasets?: MergedWorkspace;
+  copyDatasets?: boolean;
   label?: ReactNode;
   disabledIDs?: Set<string>;
+  emptyAlert?: ReactNode;
   additionalButtons?: ReactNode;
+  hideTableIfEmpty?: boolean;
+  isSelectable?: boolean;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
 function WorkspaceDatasetsTable({
   datasetsUUIDs,
-  disabledIDs,
   removeDatasets,
+  addDatasets,
+  copyDatasets,
   label,
+  disabledIDs,
+  emptyAlert,
   additionalButtons,
+  hideTableIfEmpty,
+  isSelectable = true,
+  trackingInfo,
 }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
@@ -45,28 +69,54 @@ function WorkspaceDatasetsTable({
     }),
     [datasetsUUIDs],
   );
+
+  const datasetsPresent = datasetsUUIDs.length > 0;
+  const hasMaxDatasets = addDatasets && isWorkspaceAtDatasetLimit(addDatasets);
+  const hideTable = hideTableIfEmpty && !datasetsPresent;
+  const hideButtonRow = (!addDatasets && !removeDatasets && !copyDatasets && !additionalButtons) || !datasetsPresent;
+
   return (
     <Box>
-      <SpacedSectionButtonRow
-        leftText={label}
-        buttons={
-          <Stack direction="row" gap={1}>
-            <Copy />
-            {removeDatasets && (
-              <Delete
-                onClick={() => removeDatasets([...selectedRows])}
-                tooltip="Remove selected datasets."
-                disabled={selectedRows.size === 0}
-              />
-            )}
-            {additionalButtons}
-          </Stack>
-        }
-      />
-      <EntitiesTables<DatasetDocument>
-        entities={[{ query, columns, entityType: 'Dataset' }]}
-        disabledIDs={disabledIDs}
-      />
+      {!hideButtonRow && (
+        <SpacedSectionButtonRow
+          leftText={label}
+          buttons={
+            <Stack direction="row" gap={1}>
+              {copyDatasets && datasetsPresent && <Copy trackingInfo={trackingInfo} />}
+              {addDatasets && (
+                <WorkspacesUpdateButton
+                  workspace={addDatasets}
+                  dialogType="ADD_DATASETS"
+                  tooltip={hasMaxDatasets ? tooltips.maxDatasets : tooltips.add}
+                  disabled={hasMaxDatasets}
+                  trackingInfo={trackingInfo && { ...trackingInfo, action: 'Launch Add Datasets Dialog' }}
+                >
+                  <AddIcon />
+                </WorkspacesUpdateButton>
+              )}
+              {removeDatasets && datasetsPresent && (
+                <Delete
+                  onClick={() => removeDatasets([...selectedRows])}
+                  tooltip={tooltips.delete}
+                  disabled={selectedRows.size === 0}
+                />
+              )}
+              {additionalButtons}
+            </Stack>
+          }
+        />
+      )}
+      {hideTable ? (
+        emptyAlert
+      ) : (
+        <EntitiesTables<DatasetDocument>
+          entities={[{ query, columns, entityType: 'Dataset' }]}
+          disabledIDs={disabledIDs}
+          emptyAlert={emptyAlert}
+          isSelectable={isSelectable}
+          trackingInfo={trackingInfo}
+        />
+      )}
     </Box>
   );
 }

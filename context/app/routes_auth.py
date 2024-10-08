@@ -150,8 +150,7 @@ def login():
 
     permission_groups = {
         'HuBMAP': current_app.config['GROUP_ID'],
-        # Temporarily use HuBMAP Read while in consortium beta.
-        'Workspaces': current_app.config['GROUP_ID']
+        'Workspaces': current_app.config['WORKSPACES_GROUP_ID']
     }
 
     # Determine if the user belongs to any of the groups in the globus groups master list

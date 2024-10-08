@@ -1,18 +1,15 @@
 import React from 'react';
 import { Control } from 'react-hook-form';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
-import Chip, { ChipProps } from '@mui/material/Chip';
+import Typography from '@mui/material/Typography';
 
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
-import SelectableChip from 'js/shared-styles/chips/SelectableChip';
-import SelectableTemplateGrid from '../SelectableTemplateGrid';
-import { TemplateTags, TemplatesTypes } from '../types';
-import { FormWithTemplates } from '../NewWorkspaceDialog/useCreateWorkspaceForm';
+import SelectableTemplateGrid from 'js/components/workspaces/SelectableTemplateGrid';
+import { TemplatesTypes, WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { FormWithTemplates } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
+import TemplateTagsAutocomplete from 'js/components/workspaces/TemplateTagsAutocomplete';
 
 function ContactPrompt() {
   return (
@@ -27,16 +24,6 @@ const description = [
   <ContactPrompt key="configure-workspace-contact" />,
 ];
 
-interface TagTypes extends ChipProps {
-  option: string;
-}
-
-function TagComponent({ option, ...rest }: TagTypes) {
-  return <Chip label={option} {...rest} />;
-}
-
-const recommendedTags = ['visualization', 'api'];
-
 interface TemplateSelectProps<FormType extends FormWithTemplates> {
   title: string;
   stepIndex?: number;
@@ -45,7 +32,6 @@ interface TemplateSelectProps<FormType extends FormWithTemplates> {
   toggleTag: (itemKey: string) => void;
   selectedTags: string[];
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
-  tags: TemplateTags;
   templates: TemplatesTypes;
   disabledTemplates?: TemplatesTypes;
 }
@@ -58,46 +44,29 @@ function TemplateSelectStep<FormType extends FormWithTemplates>({
   toggleTag,
   selectedTags,
   setSelectedTags,
-  tags,
   templates,
   disabledTemplates,
 }: TemplateSelectProps<FormType>) {
   return (
     <Step title={title} index={stepIndex}>
       <StepDescription blocks={description} />
-      <Typography sx={{ mt: 2 }} variant="subtitle1">
-        Filter workspace templates by tags
-      </Typography>
-      <Stack spacing={1}>
-        <MultiAutocomplete
-          value={selectedTags}
-          options={Object.keys(tags)
-            .filter((tag) => !recommendedTags.includes(tag))
-            .sort((a, b) => a.localeCompare(b))}
-          multiple
-          filterSelectedOptions
-          isOptionEqualToValue={(option, value) => option === value}
-          tagComponent={TagComponent}
-          onChange={(_, value: string[]) => {
-            setSelectedTags(value);
-          }}
+      <Stack spacing={2} marginTop={3}>
+        <Typography sx={{ mt: 2 }} variant="subtitle1">
+          Filter workspace templates by tags
+        </Typography>
+        <TemplateTagsAutocomplete
+          selectedTags={selectedTags}
+          toggleTag={toggleTag}
+          setSelectedTags={setSelectedTags}
+          selectedRecommendedTags={selectedRecommendedTags}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDialog }}
         />
-        <Box>
-          <Typography variant="subtitle2" gutterBottom>
-            Recommended Tags
-          </Typography>
-          <Stack spacing={2} direction="row" useFlexGap flexWrap="wrap">
-            {recommendedTags.map((tag) => (
-              <SelectableChip
-                isSelected={selectedRecommendedTags.has(tag)}
-                label={tag}
-                onClick={() => toggleTag(tag)}
-                key={tag}
-              />
-            ))}
-          </Stack>
-        </Box>
-        <SelectableTemplateGrid templates={templates} disabledTemplates={disabledTemplates} control={control} />
+        <SelectableTemplateGrid
+          templates={templates}
+          disabledTemplates={disabledTemplates}
+          control={control}
+          showJobTooltip={!!stepIndex}
+        />
       </Stack>
     </Step>
   );

@@ -22,8 +22,13 @@ async function f({
   expectedStatusCodes = [200],
   errorMessages = {},
   returnResponse = false,
-}: SingleFetchOptionsType) {
+}: SingleFetchOptionsType): Promise<unknown> {
   return fetch(url, requestInit).then(async (response) => {
+    // Separate handling for 303 status code thrown by ES when documents are >10MB
+    if (response.status === 303) {
+      const s3URL = await response.text();
+      return f({ url: s3URL });
+    }
     if (!expectedStatusCodes.includes(response.status)) {
       const rawText = await response.text();
       let errorBody: Record<string, unknown> = { error: rawText };

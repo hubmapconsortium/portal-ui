@@ -22,9 +22,9 @@ interface VisualizationStoreActions {
   setVizNotebookId: (val: string) => void;
 }
 
-type VisualizationStore = VisualizationStoreState & VisualizationStoreActions;
+export type VisualizationStore = VisualizationStoreState & VisualizationStoreActions;
 
-const useVisualizationStore = create<VisualizationStore>((set) => ({
+export const useVisualizationStore = create<VisualizationStore>((set) => ({
   vizIsFullscreen: false,
   vizEscSnackbarIsOpen: false,
   setVizEscSnackbarIsOpen: (val) => set({ vizEscSnackbarIsOpen: val }),

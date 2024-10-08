@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useCallback } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import SvgIcon from '@mui/material/SvgIcon';
 
@@ -8,9 +8,9 @@ import { useAppContext } from 'js/components/Contexts';
 import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
 import { StyledDropdownMenuButton } from 'js/components/searchPage/MetadataMenu/style';
 import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { AddIcon } from 'js/shared-styles/icons';
-import AddDatasetsFromSearchDialog from '../AddDatasetsFromSearchDialog';
+import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 
 const menuID = 'workspace-menu';
 
@@ -28,23 +28,25 @@ function WorkspaceSearchDialogs() {
   }
 }
 
-type DialogTypes = Extract<DialogType, typeof addDatasetsDialogType>;
-
 interface WorkspaceDropdownMenuItemProps extends PropsWithChildren {
-  dialogType: DialogTypes;
+  dialogType: DialogType;
   icon: typeof SvgIcon;
 }
 
-function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: WorkspaceDropdownMenuItemProps) {
+export function useOpenDialog(dialogType: DialogType) {
   const { open, setDialogType } = useEditWorkspaceStore();
 
+  const onClick = useCallback(() => {
+    setDialogType(dialogType);
+    open();
+  }, [dialogType, open, setDialogType]);
+  return onClick;
+}
+
+function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: WorkspaceDropdownMenuItemProps) {
+  const onClick = useOpenDialog(dialogType);
   return (
-    <MenuItem
-      onClick={() => {
-        setDialogType(dialogType);
-        open();
-      }}
-    >
+    <MenuItem onClick={onClick}>
       <Icon sx={{ mr: 1, fontSize: '1.25rem' }} />
       {children}
     </MenuItem>
@@ -53,7 +55,7 @@ function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: Workspa
 
 const menuItems: {
   label: string;
-  dialogType: DialogTypes;
+  dialogType: DialogType;
   icon: typeof SvgIcon;
 }[] = [{ label: 'Add to Existing Workspace', dialogType: addDatasetsDialogType, icon: AddIcon }];
 

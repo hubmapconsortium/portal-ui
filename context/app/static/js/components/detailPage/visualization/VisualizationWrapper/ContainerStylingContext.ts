@@ -2,7 +2,7 @@ import { createContext, useContext } from 'js/helpers/context';
 
 export interface VizContainerStylingProps {
   isPublicationPage: boolean;
-  uuid: string;
+  uuid?: string;
   shouldDisplayHeader: boolean;
 }
 

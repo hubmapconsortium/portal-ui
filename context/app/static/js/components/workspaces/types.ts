@@ -31,6 +31,13 @@ export interface Workspace {
   workspace_details: WorkspaceDetails;
 }
 
+export interface WorkspaceResourceOptions {
+  num_cpus: number;
+  memory_mb: number;
+  time_limit_minutes: number;
+  gpu_enabled: boolean;
+}
+
 interface WorkspaceJobDetail {
   message: string;
   time_left: number;
@@ -43,6 +50,7 @@ interface WorkspaceJobDetail {
     url_path: string;
     url_domain: string;
   };
+  resource_options: WorkspaceResourceOptions;
 }
 
 interface WorkspaceJobDetails {
@@ -93,6 +101,15 @@ type WorkspaceAPIResponse<Data> = WorkspaceAPIFailure | WorkspaceAPISuccess<Data
 
 type WorkspaceAPIResponseWithoutData = Omit<WorkspaceAPIResponse<undefined>, 'data'>;
 
+interface TemplateExample {
+  title: string;
+  description: string;
+  datasets: string[];
+  assay_display_name?: string[];
+  resource_options?: Partial<WorkspaceResourceOptions>;
+  required_filetypes?: string[];
+}
+
 interface TemplateTypes {
   title: string;
   description: string;
@@ -100,6 +117,9 @@ interface TemplateTypes {
   is_multi_dataset_template: boolean;
   template_format: string;
   is_hidden: boolean;
+  job_types?: string[];
+  examples: TemplateExample[];
+  last_modified_unix_timestamp: number;
 }
 
 type TemplatesTypes = Record<string, TemplateTypes>;
@@ -120,16 +140,33 @@ interface CreateWorkspaceData {
 
 type CreateWorkspaceResponse = WorkspaceAPIResponse<CreateWorkspaceData>;
 
+type TemplateTags = Record<string, string>;
+
+type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
+
+export enum WorkspacesEventCategories {
+  Workspaces = 'Workspaces',
+  WorkspaceDialog = 'Workspace Dialog',
+  WorkspaceLandingPage = 'Workspace Landing Page',
+  WorkspaceDetailPage = 'Workspace Detail Page',
+  WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
+  WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
+}
+
+interface WorkspacesEventInfo {
+  category: WorkspacesEventCategories;
+  action?: string;
+  label?: string;
+}
+
 interface CreateTemplateNotebooksTypes {
   templateKeys: string[];
   uuids: string[];
   workspaceName: string;
   workspaceJobTypeId: string;
+  workspaceResourceOptions: WorkspaceResourceOptions;
+  trackingInfo?: WorkspacesEventInfo;
 }
-
-type TemplateTags = Record<string, string>;
-
-type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
 export type {
   WorkspaceFile,
@@ -138,8 +175,10 @@ export type {
   TemplatesResponse,
   CreateTemplatesResponse,
   CreateWorkspaceResponse,
+  TemplateExample,
   TemplatesTypes,
   CreateTemplateNotebooksTypes,
   TemplateTags,
   TemplateTagsResponse,
+  WorkspacesEventInfo,
 };

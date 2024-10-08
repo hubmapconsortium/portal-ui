@@ -2,7 +2,7 @@ import { useState, SyntheticEvent, useCallback } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
-import { useWorkspaceDetail } from '../hooks';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -79,33 +79,26 @@ function useSearchAhead({ value, valuePrefix = '', uuidsToExclude = [] }: BuildI
 }
 
 function useDatasetsAutocomplete({
-  workspaceId,
+  workspaceDatasets = [],
   selectedDatasets = [],
   updateDatasetsFormState,
 }: {
-  workspaceId: number;
+  workspaceDatasets?: string[];
   selectedDatasets: string[];
   updateDatasetsFormState: (datasetUUIDS: string[]) => void;
 }) {
   const [inputValue, setInputValue] = useState('');
+  const [, setRefresh] = useState(false);
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
-
-  const addDataset = useCallback(
-    (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
-      const uuid = newValue?._source?.uuid;
-      if (uuid) {
-        setAutocompleteValue(newValue);
-        updateDatasetsFormState([...selectedDatasets, uuid]);
-      }
-    },
-    [selectedDatasets, updateDatasetsFormState],
-  );
+  const { toastSuccessAddDataset } = useWorkspaceToasts();
 
   const removeDatasets = useCallback(
     (uuids: string[]) => {
-      const selectedDatasetsSet = new Set(selectedDatasets);
-      uuids.forEach((uuid) => selectedDatasetsSet.delete(uuid));
-      updateDatasetsFormState([...selectedDatasetsSet]);
+      const updatedDatasets = selectedDatasets.filter((uuid) => !uuids.includes(uuid));
+      updateDatasetsFormState(updatedDatasets);
+
+      // Trigger a re-render to update the table results
+      setRefresh((prev) => !prev);
     },
     [selectedDatasets, updateDatasetsFormState],
   );
@@ -115,7 +108,19 @@ function useDatasetsAutocomplete({
     setAutocompleteValue(null);
   }, [setInputValue, setAutocompleteValue]);
 
-  const { workspaceDatasets } = useWorkspaceDetail({ workspaceId });
+  const addDataset = useCallback(
+    (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
+      const uuid = newValue?._source?.uuid;
+
+      if (uuid) {
+        updateDatasetsFormState([...selectedDatasets, uuid]);
+        resetAutocompleteState();
+        toastSuccessAddDataset(newValue._source.hubmap_id);
+      }
+    },
+    [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccessAddDataset],
+  );
+
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];
   const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });
 
@@ -124,9 +129,9 @@ function useDatasetsAutocomplete({
     setInputValue,
     autocompleteValue,
     selectedDatasets,
-    addDataset,
     removeDatasets,
     resetAutocompleteState,
+    addDataset,
     workspaceDatasets,
     allDatasets,
     searchHits,

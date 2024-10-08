@@ -2,9 +2,9 @@ import { useMemo } from 'react';
 
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { DagProvenanceType, isDataset } from 'js/components/types';
-import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import { getTokenParam } from 'js/helpers/functions';
 import { UnprocessedFile } from '../types';
+import { useProcessedDatasetContext } from '../../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
 
 interface PipelineInfo {
   origin: string;
@@ -42,7 +42,7 @@ export function processDagList(acc: PipelineInfo, dag: DagProvenanceType) {
     if (nameDenylist.includes(dag.name)) {
       acc.name = getGithubRepoName(acc.origin);
     } else {
-      acc.name = dag.name;
+      acc.name = dag.name!;
     }
   }
   return acc;
@@ -82,7 +82,9 @@ function formatFileLink(assetsEndpoint: string, uuid: string, relPath: string, t
 function useFileLinkParameters() {
   const { assetsEndpoint, groupsToken } = useAppContext();
   const token = getTokenParam(groupsToken);
-  const { uuid } = useDetailContext();
+  const {
+    dataset: { uuid },
+  } = useProcessedDatasetContext();
   return { assetsEndpoint, uuid, token };
 }
 

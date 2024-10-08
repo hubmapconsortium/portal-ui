@@ -7,7 +7,7 @@ function sendEmailEvent(event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) 
   trackLink((event.target as HTMLAnchorElement).href, 'email');
 }
 
-interface EmailIconLinkProps extends IconLinkProps {
+interface EmailIconLinkProps extends Omit<IconLinkProps, 'icon'> {
   iconFontSize?: string;
   email: string;
 }

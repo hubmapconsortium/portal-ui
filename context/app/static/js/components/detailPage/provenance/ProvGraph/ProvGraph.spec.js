@@ -55,7 +55,7 @@ afterAll(() => server.close());
 test('should display the correct initial nodes for a donor', () => {
   const nodesText = [
     'hubmap:entities/308f5ffc-ed43-11e8-b56a-0e8017bdda58',
-    'Register Donor Activity - HBM826.XCGC.423',
+    'Register Donor Activity',
     'Donor - HBM528.WJLC.564',
   ];
 
@@ -66,12 +66,9 @@ test('should display the correct initial nodes for a donor', () => {
 
 test('should display the correct initial nodes for a sample', () => {
   const sampleEntityText = 'Sample - HBM666.CHPF.373';
-  const nodesText = ['Donor - HBM547.NCQL.874', 'Create Sample Activity - HBM665.NTZB.997', sampleEntityText];
+  const nodesText = ['Donor - HBM547.NCQL.874', 'Create Sample Activity', sampleEntityText];
 
-  const notIncludedNodesText = [
-    'hubmap:entities/73bb26e4-ed43-11e8-8f19-0a7c1eab007a',
-    'Register Donor Activity - HBM398.NBBW.527',
-  ];
+  const notIncludedNodesText = ['hubmap:entities/73bb26e4-ed43-11e8-8f19-0a7c1eab007a', 'Register Donor Activity'];
 
   render(<ProvGraph provData={sampleProv} />);
 
@@ -101,19 +98,6 @@ test('should display selected node information in detail pane and show immediate
   detailPaneText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
 
   await waitFor(() => expect(derivedEntitiesButton).toBeEnabled());
-
-  /* TODO: After npm upgrade, the next line fails: */
-
-  // fireEvent.click(derivedEntitiesButton);
-  //
-  // const newNodesText = [
-  //   'Create Sample Activity - HBM358.MRDC.967',
-  //   'Sample - HBM743.BZVB.466',
-  //   'Create Sample Activity - HBM534.VGXH.932',
-  //   'Sample - HBM643.FDGT.862',
-  // ];
-  //
-  // await waitFor(() => newNodesText.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument()));
 });
 
 test("should display an asterisk in the current page's node", () => {

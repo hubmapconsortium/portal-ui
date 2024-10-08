@@ -12,10 +12,13 @@ import {
   WorkspaceAPIResponseWithoutData,
   WorkspaceJob,
   WorkspaceJobType,
+  WorkspaceResourceOptions,
+  WorkspacesEventCategories,
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
 
-export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 10;
+export const EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS = 25;
+export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 150;
 
 /**
  * Generates API URLs for various workspaces API actions
@@ -201,7 +204,7 @@ export function useStopWorkspace() {
     async (workspaceId: number) => {
       trackEvent(
         {
-          category: 'Workspaces',
+          category: WorkspacesEventCategories.Workspaces,
           action: 'Stop Workspace',
         },
         workspaceId,
@@ -222,7 +225,7 @@ async function fetchDeleteWorkspace(
 ) {
   trackEvent(
     {
-      category: 'Workspaces',
+      category: WorkspacesEventCategories.Workspaces,
       action: 'Delete Workspace',
     },
     workspaceId,
@@ -276,25 +279,28 @@ interface WorkspaceActionArgs extends APIAction {
   workspaceId: number;
   jobType: unknown;
   jobDetails: unknown;
+  resourceOptions: WorkspaceResourceOptions;
 }
 
 async function startJob(
   _key: string,
-  { arg: { workspaceId, jobDetails, jobType, url, headers } }: { arg: WorkspaceActionArgs },
+  { arg: { workspaceId, jobDetails, jobType, resourceOptions, url, headers } }: { arg: WorkspaceActionArgs },
 ) {
   trackEvent(
     {
-      category: 'Workspaces',
+      category: WorkspacesEventCategories.Workspaces,
       action: 'Start Workspace',
     },
     workspaceId,
   );
+
   const result = fetch(url, {
     method: 'PUT',
     headers,
     body: JSON.stringify({
       job_type: jobType,
       job_details: jobDetails,
+      resource_options: resourceOptions,
     }),
   });
   if (!(await result).ok) {
@@ -307,10 +313,19 @@ export function useStartWorkspace() {
   const headers = useWorkspaceHeaders();
   const { trigger, isMutating } = useSWRMutation('start-workspace', startJob);
   const startWorkspace = useCallback(
-    async ({ workspaceId, jobTypeId }: { workspaceId: number; jobTypeId: string }) => {
+    async ({
+      workspaceId,
+      jobTypeId,
+      resourceOptions,
+    }: {
+      workspaceId: number;
+      jobTypeId: string;
+      resourceOptions: WorkspaceResourceOptions;
+    }) => {
       return trigger({
         url: api.startWorkspace(workspaceId),
         jobDetails: {},
+        resourceOptions,
         headers,
         jobType: jobTypeId,
         workspaceId,
@@ -344,7 +359,7 @@ export interface CreateWorkspaceArgs extends APIAction {
 
 async function createWorkspaceFetcher(_key: string, { arg: { body, url, headers } }: { arg: CreateWorkspaceArgs }) {
   trackEvent({
-    category: 'Workspaces',
+    category: WorkspacesEventCategories.Workspaces,
     action: 'Create Workspace',
     label: {
       name: body.name,
@@ -352,6 +367,7 @@ async function createWorkspaceFetcher(_key: string, { arg: { body, url, headers 
       symlinks: body.workspace_details.symlinks.map((s) => s.name),
     },
   });
+
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),
@@ -414,7 +430,7 @@ async function updateWorkspaceFetcher(
 ) {
   trackEvent(
     {
-      category: 'Workspaces',
+      category: WorkspacesEventCategories.Workspaces,
       action: 'Update Workspace',
       value: {
         name: body?.name,

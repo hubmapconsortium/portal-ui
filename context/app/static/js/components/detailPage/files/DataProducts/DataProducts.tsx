@@ -48,11 +48,11 @@ function DataProducts({ files }: DataProductsProps) {
         <Box display="flex" justifyContent="space-between" alignItems="start" pb={2}>
           <Box data-testid="data-products-title-and-size">
             <Box display="flex" alignItems="center">
-              <Typography component="h3" variant="h4" display="inline-block">
+              <Typography component="h5" variant="subtitle2" display="inline-block">
                 Data Products
               </Typography>
               <SecondaryBackgroundTooltip title="Essential files of interest for this dataset.">
-                <StyledInfoIcon color="primary" />
+                <StyledInfoIcon color="primary" sx={{ fontSize: '1rem' }} />
               </SecondaryBackgroundTooltip>
             </Box>
             <FileSize size={totalFileSize} variant="body1" color="secondary.main" />
@@ -60,7 +60,7 @@ function DataProducts({ files }: DataProductsProps) {
           <DownloadAllButton onDownloadAll={onDownloadAll} disabled={downloadAllClicked} />
           {downloadAllClicked && <MultiFileDownloader files={downloadLinks} />}
         </Box>
-        <Stack divider={<Divider />} maxHeight="35rem" overflow="auto">
+        <Stack divider={<Divider />} maxHeight={600} overflow="auto">
           {dataProducts.map((file) => (
             <DataProduct file={file} key={file.rel_path} />
           ))}

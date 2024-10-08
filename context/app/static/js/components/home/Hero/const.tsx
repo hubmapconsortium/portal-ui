@@ -1,17 +1,55 @@
+import React from 'react';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { SearchIcon } from 'js/shared-styles/icons';
+import { SearchIcon, DonorIcon } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
-import React from 'react';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
+
+const timelineIconProps = {
+  fontSize: '1.5rem',
+  height: '1.5rem',
+  width: '1.5rem',
+} as const;
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
+  {
+    title: 'Raw & Processed Unified Datasets Page',
+    titleHref: '/browse/dataset/8690897fced9931da34d66d669c1d698',
+    description:
+      'Dataset page design has been updated to display both raw and processed data on the same page, enhancing the understanding of relationships between datasets.',
+    date: 'August 2024',
+    img: <entityIconMap.Dataset {...timelineIconProps} />,
+  },
+  {
+    title: '10X Multiome and Visium Datasets Now Available',
+    titleHref:
+      '/search?raw_dataset_type_keyword-assay_display_name_keyword[10X Multiome][0]=10x Multiome&raw_dataset_type_keyword-assay_display_name_keyword[10X Multiome][1]=10x Multiome [Salmon %2B ArchR %2B Muon]&raw_dataset_type_keyword-assay_display_name_keyword[Visium (no probes)][0]=Visium (no probes)&raw_dataset_type_keyword-assay_display_name_keyword[Visium (no probes)][1]=Visium (no probes) [Salmon %2B Scanpy]&entity_type[0]=Dataset',
+    description: 'Explore and download 10X Multiome and Visium multi-assay datasets.',
+    date: 'August 2024',
+    img: <entityIconMap.Dataset {...timelineIconProps} />,
+  },
+  {
+    title: 'Profile Page Now Available',
+    titleHref: '/profile',
+    description:
+      'Profile pages are now available to allow logged in users to view their profile information including permission groups, saved lists and saved workspaces.',
+    date: 'June 2024',
+    img: <DonorIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'Homepage Redesign Updated',
+    titleHref: '/',
+    description: 'Homepage design updated to highlight portal features and improve navigation to essential locations.',
+    date: 'June 2024',
+    img: <ExternalImageIcon icon="dataPortal" style={timelineIconProps} />,
+  },
   {
     title: 'Molecular & Cellular Query Updated',
     titleHref: '/cells',
     description: 'Search datasets by cell type name or Cell Ontology ID.',
     date: 'May 2024',
-    img: <entityIconMap.CellType />,
+    img: <entityIconMap.CellType {...timelineIconProps} />,
   },
   {
     title: 'MUSIC Datasets now available',
@@ -23,7 +61,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
       </>
     ),
     date: 'May 2024',
-    img: <entityIconMap.Dataset fontSize="1.5rem" />,
+    img: <entityIconMap.Dataset {...timelineIconProps} />,
   },
   {
     title: 'Dataset Search reorganized',
@@ -32,7 +70,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     description:
       'Added visualization, dataset category and pipeline filters to dataset search page. Dataset assay filter is now hierarchical to improve grouping of similar experiments.',
     date: 'March 2024',
-    img: <SearchIcon />,
+    img: <SearchIcon {...timelineIconProps} />,
   },
   {
     title: 'Workspace Beta announced',
@@ -43,7 +81,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
         use this feature. <ContactUsLink capitalize /> if interested.
       </>
     ),
-    img: <entityIconMap.Workspace />,
+    img: <entityIconMap.Workspace {...timelineIconProps} />,
     date: 'December 2023',
   },
   {
@@ -52,7 +90,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     description:
       'Beta of biomarkers page is now available to all public users. Gene information is currently available, and protein information is in development.',
     date: 'December 2023',
-    img: <entityIconMap.Gene />,
+    img: <entityIconMap.Gene {...timelineIconProps} />,
   },
 ];
 

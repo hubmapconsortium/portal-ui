@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import { useWorkspaceTemplates, useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
+import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import TemplateSelectStep from '../TemplateSelectStep';
 import { useEditWorkspaceForm, EditTemplatesFormTypes } from './hooks';
 import { Workspace } from '../types';
@@ -12,7 +12,6 @@ function EditWorkspaceTemplatesDialog({ workspace }: { workspace: Workspace }) {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
-  const { tags } = useWorkspaceTemplateTags();
 
   const workspaceId = workspace.id;
   const { workspaceTemplates, workspaceDatasets } = useWorkspaceDetail({ workspaceId });
@@ -44,7 +43,6 @@ function EditWorkspaceTemplatesDialog({ workspace }: { workspace: Workspace }) {
         title="Add Templates"
         control={control}
         toggleTag={toggleTag}
-        tags={tags}
         selectedRecommendedTags={selectedRecommendedTags}
         selectedTags={selectedTags}
         setSelectedTags={setSelectedTags}

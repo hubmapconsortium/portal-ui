@@ -29,6 +29,8 @@ const Organ = lazy(() => import('js/pages/Organ'));
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
 const Workspace = lazy(() => import('js/pages/Workspace'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
+const Templates = lazy(() => import('js/pages/Templates'));
+const Template = lazy(() => import('js/pages/Template'));
 const GeneDetails = lazy(() => import('js/pages/Genes'));
 const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
 const CellTypes = lazy(() => import('js/pages/CellTypes'));
@@ -44,8 +46,6 @@ function Routes({ flaskData }) {
     markdown,
     errorCode,
     list_uuid,
-    has_notebook,
-    vis_lifted_uuid,
     entities,
     organs,
     organs_count,
@@ -86,12 +86,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/browse/dataset/') || urlPath.startsWith('/browse/support/')) {
     return (
       <Route>
-        <Dataset
-          assayMetadata={entity}
-          vitData={vitessce_conf}
-          hasNotebook={has_notebook}
-          visLiftedUUID={vis_lifted_uuid}
-        />
+        <Dataset assayMetadata={entity} />
       </Route>
     );
   }
@@ -242,6 +237,23 @@ function Routes({ flaskData }) {
     );
   }
 
+  if (urlPath === '/templates') {
+    return (
+      <Route>
+        <Templates />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/templates/')) {
+    const templateKey = urlPath.split('/').pop();
+    return (
+      <Route>
+        <Template templateKey={templateKey} />
+      </Route>
+    );
+  }
+
   if (urlPath === '/profile') {
     return (
       <Route>
@@ -333,6 +345,7 @@ Routes.propTypes = {
     redirected_from: PropTypes.string,
     cell_type: PropTypes.string,
     globusGroups: PropTypes.object,
+    redirected: PropTypes.bool,
   }),
 };
 

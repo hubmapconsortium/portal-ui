@@ -1,6 +1,7 @@
 import type { StorybookConfig } from '@storybook/react-webpack5';
 import { merge } from 'webpack-merge';
 import { alias } from '../build-utils/alias';
+import { HuBMAPGlobals } from '../build-utils/webpack.plugins';
 import path from 'path';
 
 const prodConfigPath = path.resolve(__dirname, '../build-utils/webpack.prod.js');
@@ -15,7 +16,7 @@ const config: StorybookConfig = {
     '@chromatic-com/storybook',
     '@storybook/addon-webpack5-compiler-swc',
   ],
-
+  staticDirs: ['../app/static/assets', '../app/static/storybook-public'],
   webpackFinal: async (config) => {
     // exclude svgs from the default file loader
     config.module?.rules?.forEach((rule) => {
@@ -49,6 +50,7 @@ const config: StorybookConfig = {
       resolve: {
         alias: alias,
       },
+      plugins: [HuBMAPGlobals],
     });
   },
 

@@ -1,13 +1,11 @@
-import React, { useState, useEffect, ComponentProps } from 'react';
+import React, { ComponentProps } from 'react';
 
-import useEntityData from 'js/hooks/useEntityData';
 import EntityTile from 'js/components/entity-tile/EntityTile';
 import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
-import { Entity } from 'js/components/types';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
 import { DownIcon } from './style';
 
-interface ProvTableTileProps extends Omit<ComponentProps<typeof EntityTile>, 'entityData' | 'descendantCounts'> {
+interface ProvTableTileProps extends Omit<ComponentProps<typeof EntityTile>, 'descendantCounts'> {
   isCurrentEntity: boolean;
   isSampleSibling: boolean;
   isFirstTile: boolean;
@@ -17,23 +15,15 @@ interface ProvTableTileProps extends Omit<ComponentProps<typeof EntityTile>, 'en
 function ProvTableTile({
   uuid,
   entity_type,
+  entityData,
   isCurrentEntity,
   isSampleSibling,
   isFirstTile,
   isLastTile,
   ...rest
 }: ProvTableTileProps) {
-  const [descendantCounts, setDescendantCounts] = useState<Record<string, number>>({});
-  const [descendantCountsToDisplay, setDescendantCountsToDisplay] = useState<Record<string, number>>({});
-  // mapped fields are not included in ancestor object
-  const entityData = useEntityData(uuid) as Entity;
-
-  useEffect(() => {
-    if (entityData?.descendant_counts) {
-      setDescendantCounts(entityData.descendant_counts.entity_type);
-      setDescendantCountsToDisplay(getTileDescendantCounts(entityData, entity_type));
-    }
-  }, [entityData, entity_type]);
+  const descendantCounts = entityData?.descendant_counts?.entity_type;
+  const descendantCountsToDisplay = getTileDescendantCounts(entityData, entity_type);
 
   return (
     <>
@@ -48,7 +38,7 @@ function ProvTableTile({
           {...rest}
         />
       )}
-      {isLastTile && entity_type !== 'Donor' && descendantCounts?.[entity_type] > 0 && (
+      {isLastTile && entity_type !== 'Donor' && (descendantCounts?.[entity_type] ?? 0) > 0 && (
         <ProvTableDerivedLink uuid={uuid} type={entity_type} />
       )}
     </>

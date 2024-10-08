@@ -1,4 +1,12 @@
-import { DEFAULT_JOB_TYPE } from './constants';
+import {
+  DEFAULT_GPU_ENABLED,
+  DEFAULT_JOB_TYPE,
+  DEFAULT_MEMORY_MB,
+  DEFAULT_NUM_CPUS,
+  DEFAULT_PYTHON_TEMPLATE_KEY,
+  DEFAULT_R_TEMPLATE_KEY,
+  DEFAULT_TIME_LIMIT_MINUTES,
+} from './constants';
 import {
   jobStatuses,
   validateJobStatus,
@@ -13,7 +21,14 @@ import {
   JobStatusDisplayName,
 } from './statusCodes';
 
-import type { MergedWorkspace, Workspace, WorkspaceAPIResponse, WorkspaceJob, WorkspaceFile } from './types';
+import type {
+  MergedWorkspace,
+  Workspace,
+  WorkspaceAPIResponse,
+  WorkspaceJob,
+  WorkspaceFile,
+  TemplatesTypes,
+} from './types';
 
 interface WorkspaceActionArgs {
   workspaceId: number;
@@ -186,6 +201,16 @@ function findBestJob(jobs: WorkspaceJob[]) {
 }
 
 /**
+ * Return the type of the job with the highest status.
+ * @param jobs A list of jobs to extract the best job type from.
+ * @returns The type of the job with the highest status if it exists, else the default job type.
+ */
+function findBestJobType(jobs: WorkspaceJob[]) {
+  const bestJob = findBestJob(jobs);
+  return bestJob?.job_type ?? DEFAULT_JOB_TYPE;
+}
+
+/**
  * Finds the job with the highest status and returns a digest.
  * @param jobs A list of jobs to extract the best job from.
  * @returns A digest of the best job to use for a workspace which includes the status, whether a new job can be created, and the URL and message if the job is active/activating
@@ -291,9 +316,64 @@ function getDefaultJobType({ workspace }: { workspace: Workspace }) {
   return workspace?.default_job_type ?? DEFAULT_JOB_TYPE;
 }
 
+/**
+ * Sort templates alphabetically by title, with all disabled templates first, then the default python template, then the default R template.
+ *   Ex: [disabled1, disabled2, defaultPython, defaultR, templateA, templateB, ...]
+ * @param templates The templates to sort.
+ * @param disabledTemplates The templates that are disabled.
+ * @returns The sorted templates.
+ */
+function sortTemplates(templates: TemplatesTypes, disabledTemplates?: TemplatesTypes) {
+  return Object.fromEntries(
+    Object.entries(templates).sort(([keyA, templateA], [keyB, templateB]) => {
+      const isSelectedA = disabledTemplates && keyA in disabledTemplates;
+      const isSelectedB = disabledTemplates && keyB in disabledTemplates;
+
+      // Disabled templates
+      if (isSelectedA && !isSelectedB) return -1;
+      if (!isSelectedA && isSelectedB) return 1;
+
+      // Default Python template
+      if (keyA === DEFAULT_PYTHON_TEMPLATE_KEY && keyB !== DEFAULT_PYTHON_TEMPLATE_KEY) return -1;
+      if (keyB === DEFAULT_PYTHON_TEMPLATE_KEY && keyA !== DEFAULT_PYTHON_TEMPLATE_KEY) return 1;
+
+      // Default R template
+      if (keyA === DEFAULT_R_TEMPLATE_KEY && keyB !== DEFAULT_PYTHON_TEMPLATE_KEY) return -1;
+      if (keyB === DEFAULT_R_TEMPLATE_KEY && keyA !== DEFAULT_PYTHON_TEMPLATE_KEY) return 1;
+
+      // Alphabetical sorting by title for remaining templates
+      return templateA.title.localeCompare(templateB.title);
+    }),
+  ) as TemplatesTypes;
+}
+
+/**
+ * Get the resource options for a workspace, if they exist.
+ * @param workspace The workspace to get the resource options from.
+ * @returns The resource options if they exist, else the default resource values.
+ */
+function getWorkspaceResourceOptions(workspace: MergedWorkspace) {
+  return (
+    findBestJob(workspace?.jobs ?? [])?.job_details?.request_job_details?.resource_options ?? {
+      num_cpus: DEFAULT_NUM_CPUS,
+      memory_mb: DEFAULT_MEMORY_MB,
+      time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
+      gpu_enabled: DEFAULT_GPU_ENABLED,
+    }
+  );
+}
+
+function convert(value: number, conversionFactor: number) {
+  return value / conversionFactor;
+}
+function unconvert(value: number, conversionFactor: number) {
+  return value * conversionFactor;
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
+  findBestJobType,
   condenseJobs,
   locationIfJobRunning,
   getWorkspaceFileName,
@@ -306,4 +386,8 @@ export {
   isRunningJob,
   buildDatasetSymlinks,
   getDefaultJobType,
+  sortTemplates,
+  getWorkspaceResourceOptions,
+  convert,
+  unconvert,
 };

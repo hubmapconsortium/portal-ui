@@ -1,22 +1,22 @@
 import React, { ReactNode } from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
-import { TextItems, LogInAlert, AccessAlert } from '../workspaceMessaging';
+import { TextItems, WorkspacesLogInAlert, AccessAlert } from 'js/components/workspaces/workspaceMessaging';
 
 function WorkspacesAuthGuard({ children }: { children: ReactNode }) {
   const { isAuthenticated, isWorkspacesUser } = useAppContext();
 
   if (!isAuthenticated) {
     return (
-      <TextItems textKey="unauthenticated">
-        <LogInAlert />
+      <TextItems textKey="workspacesUserOrLoggedOut">
+        <WorkspacesLogInAlert />
       </TextItems>
     );
   }
 
   if (!isWorkspacesUser) {
     return (
-      <TextItems textKey="noAccess">
+      <TextItems textKey="nonWorkspacesUser">
         <AccessAlert />
       </TextItems>
     );

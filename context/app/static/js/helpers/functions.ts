@@ -1,4 +1,6 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
+import { MergedWorkspace } from 'js/components/workspaces/types';
 
 export function isEmptyArrayOrObject(val: object | unknown[]) {
   if (val.constructor.name === 'Object') {
@@ -175,4 +177,48 @@ export function filterObjectByKeys<O extends object, K extends keyof O>(obj: O, 
 
 export function getOriginSamplesOrgan(entity: { origin_samples_unique_mapped_organs: string[] }) {
   return entity.origin_samples_unique_mapped_organs.join(', ');
+}
+
+/**
+ * Given an array of strings, create a single comma-separated string that includes
+ * 'and' as well as an oxford comma.
+ *   Ex: ['apples'] => 'apples'
+ *   Ex: ['apples', 'bananas'] => 'apples and bananas'
+ *   Ex: ['apples', 'bananas', 'grapes'] => 'apples, bananas, and grapes'
+ * @author Austen Money
+ * @param list an array of elements to be made into a single comma-separated string.
+ * @returns a comma-separated string.
+ */
+export function generateCommaList(list: string[]): string {
+  const { length } = list;
+
+  return length < 2
+    ? list.join('')
+    : `${list.slice(0, length - 1).join(', ')}${length < 3 ? ' and ' : ', and '}${list[length - 1]}`;
+}
+
+/**
+ * Check if a given workspace has reached the maximum number of datasets allowed.
+ * @author Austen Money
+ * @param workspace the workspace to check.
+ * @returns true if the workspace has reached the maximum number of datasets allowed, false otherwise.
+ */
+export function isWorkspaceAtDatasetLimit(workspace: MergedWorkspace) {
+  return workspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
+}
+
+/**
+ * Check if a given email address is valid.
+ * @author Austen Money
+ * @param email the email address to check.
+ * @returns true if the address is valid, false otherwise.
+ */
+export function isValidEmail(email: string) {
+  // validation regex, sourced from HTML living standard: http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#e-mail-state-(type=email)
+  const emailRegex =
+    // eslint-disable-next-line
+    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+
+  const cleanedValue: string = email?.replace(/^\s+|\s+$/g, '');
+  return emailRegex.test(cleanedValue);
 }

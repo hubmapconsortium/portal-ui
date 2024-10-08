@@ -6,6 +6,8 @@ import { Dataset, isDataset } from 'js/components/types';
 
 const source = [
   'uuid',
+  'status',
+  'mapped_status',
   'hubmap_id',
   'entity_type',
   'assay_display_name',
@@ -80,6 +82,8 @@ function getPrimaryDescendants(uuid: string) {
 export type MultiAssayEntity = Pick<
   Dataset,
   | 'uuid'
+  | 'status'
+  | 'mapped_status'
   | 'hubmap_id'
   | 'entity_type'
   | 'assay_display_name'
@@ -107,6 +111,12 @@ function buildRelatedDatasets({ entities }: { entities: MultiAssayEntity[] }) {
         const multiAssayType = getMultiAssayType({ processing: curr.processing, is_component: curr.is_component });
         if (draft[multiAssayType]) {
           draft[multiAssayType].push(curr);
+          // Sort by if pushlished, and then by last_modified_timestamp
+          draft[multiAssayType].sort((a, b) => {
+            if (a.mapped_status === 'published' && b.mapped_status !== 'published') return -1;
+            if (a.mapped_status !== 'published' && b.mapped_status === 'published') return 1;
+            return b.last_modified_timestamp - a.last_modified_timestamp;
+          });
         }
       });
     },

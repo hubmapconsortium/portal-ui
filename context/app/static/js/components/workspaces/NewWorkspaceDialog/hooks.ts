@@ -4,11 +4,19 @@ import useSWR, { SWRConfiguration } from 'swr';
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
 import { trackEvent } from 'js/helpers/trackers';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SWRError } from 'js/helpers/swr/errors';
-import { TemplatesResponse, CreateTemplateNotebooksTypes, TemplateTagsResponse, TemplatesTypes } from '../types';
-import { useCreateAndLaunchWorkspace, useCreateTemplates } from '../hooks';
-import { buildDatasetSymlinks } from '../utils';
+import {
+  TemplatesResponse,
+  CreateTemplateNotebooksTypes,
+  TemplateTagsResponse,
+  TemplatesTypes,
+  WorkspacesEventCategories,
+} from 'js/components/workspaces/types';
+import { useCreateAndLaunchWorkspace, useCreateTemplates } from 'js/components/workspaces/hooks';
+import { buildDatasetSymlinks } from 'js/components/workspaces/utils';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { useJobTypes } from 'js/components/workspaces/api';
+import { DEFAULT_JOB_TYPE, JUPYTER_LAB_R_JOB_TYPE, R_TEMPLATE_TITLE } from 'js/components/workspaces/constants';
 
 interface UserTemplatesTypes {
   templatesURL: string;
@@ -42,7 +50,14 @@ function useWorkspaceTemplates(tags: string[] = []) {
   const templates = result?.data?.data ?? {};
 
   const filteredTemplates = Object.fromEntries(
-    Object.entries(templates).filter(([, template]) => !template?.is_hidden),
+    Object.entries(templates)
+      .filter(([, template]) => !template?.is_hidden)
+      .map(([key, template]) => {
+        const newTitle = template?.job_types?.includes(JUPYTER_LAB_R_JOB_TYPE)
+          ? `${template.title} (${R_TEMPLATE_TITLE})`
+          : template.title;
+        return [key, { ...template, title: newTitle }];
+      }),
   ) as TemplatesTypes;
 
   return {
@@ -55,13 +70,18 @@ function useTemplateNotebooks() {
 
   const { createAndLaunchWorkspace } = useCreateAndLaunchWorkspace();
   const { createTemplates } = useCreateTemplates();
-
-  const { toastError } = useSnackbarActions();
-
   const { templates } = useWorkspaceTemplates();
+  const { toastErrorWorkspaceTemplate } = useWorkspaceToasts();
 
   const createTemplateNotebooks = useCallback(
-    async ({ workspaceName, templateKeys, uuids, workspaceJobTypeId }: CreateTemplateNotebooksTypes) => {
+    async ({
+      workspaceName,
+      templateKeys,
+      uuids,
+      workspaceJobTypeId,
+      workspaceResourceOptions,
+      trackingInfo,
+    }: CreateTemplateNotebooksTypes) => {
       let templatesDetails: {
         name: string;
         content: string | undefined;
@@ -70,7 +90,7 @@ function useTemplateNotebooks() {
       try {
         templatesDetails = await createTemplates({ templateKeys, uuids });
         trackEvent({
-          category: 'Workspaces',
+          category: WorkspacesEventCategories.Workspaces,
           action: 'Create Templates',
           label: { templateKeys, templateCount: templateKeys.length, uuids },
         });
@@ -80,15 +100,28 @@ function useTemplateNotebooks() {
           const templateKey = url.split('/').pop();
 
           if (templateKey && templates?.[templateKey]) {
-            toastError(`There are issues with creating ${templates?.[templateKey].title}. Failed to create workspace.`);
+            toastErrorWorkspaceTemplate(templates?.[templateKey].title);
             return;
           }
         }
-        toastError(`There are issues with creating the selected templates. Failed to create workspace.`);
+        toastErrorWorkspaceTemplate();
         return;
       }
 
       const templatePath = templatesDetails[0].name;
+      const symlinks = buildDatasetSymlinks({ datasetUUIDs: uuids });
+
+      if (trackingInfo) {
+        trackEvent({
+          ...trackingInfo,
+          action: 'Create Workspace',
+          label: {
+            name: workspaceName,
+            files: templatesDetails.map((f) => f.name),
+            symlinks: symlinks.map((s) => s.name),
+          },
+        });
+      }
 
       await createAndLaunchWorkspace({
         templatePath,
@@ -99,12 +132,13 @@ function useTemplateNotebooks() {
           workspace_details: {
             globus_groups_token: groupsToken,
             files: templatesDetails,
-            symlinks: buildDatasetSymlinks({ datasetUUIDs: uuids }),
+            symlinks,
           },
         },
+        resourceOptions: workspaceResourceOptions,
       });
     },
-    [groupsToken, createAndLaunchWorkspace, createTemplates, toastError, templates],
+    [groupsToken, createAndLaunchWorkspace, createTemplates, toastErrorWorkspaceTemplate, templates],
   );
 
   return createTemplateNotebooks;
@@ -121,4 +155,9 @@ function useWorkspaceTemplateTags() {
   return { tags };
 }
 
-export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks };
+function useJobTypeName(jobTypeKey: string = DEFAULT_JOB_TYPE) {
+  const { data } = useJobTypes();
+  return data ? Object.values(data).find(({ id }) => id === jobTypeKey)?.name : jobTypeKey;
+}
+
+export { useWorkspaceTemplates, useWorkspaceTemplateTags, useTemplateNotebooks, useJobTypeName };

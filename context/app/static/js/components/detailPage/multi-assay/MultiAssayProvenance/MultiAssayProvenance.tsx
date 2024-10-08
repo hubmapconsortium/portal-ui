@@ -25,7 +25,7 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
         <Icon component={entityIconMap.Dataset} color="primary" fontSize="inherit" sx={{ fontSize: '1.5rem' }} />
         <Typography variant="h5">{title}</Typography>
       </Stack>
-      <Stack direction="row" justifyContent="center" spacing={1}>
+      <Stack direction="row" justifyContent="center" spacing={1} flexWrap="wrap">
         {datasets?.map(
           ({ uuid, entity_type, hubmap_id, assay_display_name, descendant_counts, last_modified_timestamp }) => (
             <EntityTile

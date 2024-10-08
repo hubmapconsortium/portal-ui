@@ -1,9 +1,11 @@
 import { useCallback, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
+
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
 import { multiFetcher } from 'js/helpers/swr';
+import { useWorkspaceTemplates } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import {
   getWorkspaceStartLink,
   mergeJobsIntoWorkspaces,
@@ -11,6 +13,7 @@ import {
   getWorkspaceFileName,
   buildDatasetSymlinks,
   getDefaultJobType,
+  getWorkspaceResourceOptions,
 } from './utils';
 import {
   useDeleteWorkspace,
@@ -26,13 +29,31 @@ import {
   useWorkspacesApiURLs,
   useBuildWorkspacesSWRKey,
 } from './api';
-import { MergedWorkspace, Workspace, CreateTemplatesResponse } from './types';
-import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
+import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
   workspacesLoading: boolean;
   mutateWorkspace?: KeyedMutator<T>;
+}
+
+interface handleStartWorkspaceProps {
+  workspaceId: number;
+  jobTypeId: string;
+  resourceOptions: WorkspaceResourceOptions;
+}
+
+interface startWorkspaceProps {
+  workspace: Workspace;
+  jobTypeId: string;
+  resourceOptions: WorkspaceResourceOptions;
+  templatePath?: string;
+}
+
+interface createAndLaunchWorkspaceProps {
+  body: CreateWorkspaceBody;
+  templatePath: string;
+  resourceOptions: WorkspaceResourceOptions;
 }
 
 /**
@@ -88,8 +109,8 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
     await mutate();
   }
 
-  async function handleStartWorkspace({ workspaceId, jobTypeId }: { workspaceId: number; jobTypeId: string }) {
-    await startWorkspace({ workspaceId, jobTypeId });
+  async function handleStartWorkspace({ workspaceId, jobTypeId, resourceOptions }: handleStartWorkspaceProps) {
+    await startWorkspace({ workspaceId, jobTypeId, resourceOptions });
     await mutate();
   }
 
@@ -200,20 +221,13 @@ function useLaunchWorkspace() {
   const runningWorkspace = useRunningWorkspace();
   const mutateWorkspacesAndJobs = useMutateWorkspacesAndJobs();
   const globalMutateWorkspace = useGlobalMutateWorkspace();
-  const { open, setWorkspace } = useLaunchWorkspaceStore();
+  const { open, setWorkspace, setDialogType } = useLaunchWorkspaceStore();
 
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
+  const { toastSuccessLaunchWorkspace, toastSuccessCreateWorkspace } = useWorkspaceToasts();
 
   const startAndOpenWorkspace = useCallback(
-    async ({
-      workspace,
-      jobTypeId,
-      templatePath,
-    }: {
-      workspace: Workspace;
-      jobTypeId: string;
-      templatePath?: string;
-    }) => {
+    async ({ workspace, jobTypeId, resourceOptions, templatePath }: startWorkspaceProps) => {
       const isNewJobType = workspace?.default_job_type !== jobTypeId;
 
       if (runningWorkspace && workspace.id === runningWorkspace.id && !isNewJobType) {
@@ -221,7 +235,7 @@ function useLaunchWorkspace() {
         return;
       }
 
-      await startWorkspace({ workspaceId: workspace.id, jobTypeId });
+      await startWorkspace({ workspaceId: workspace.id, jobTypeId, resourceOptions });
       await mutateWorkspacesAndJobs();
       await globalMutateWorkspace(workspace.id);
       window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
@@ -229,28 +243,31 @@ function useLaunchWorkspace() {
       if (isNewJobType) {
         await handleUpdateWorkspace({ workspaceId: workspace.id, body: { default_job_type: jobTypeId } });
       }
+
+      toastSuccessLaunchWorkspace(workspace.id);
     },
-    [mutateWorkspacesAndJobs, startWorkspace, globalMutateWorkspace, handleUpdateWorkspace, runningWorkspace],
+    [
+      mutateWorkspacesAndJobs,
+      startWorkspace,
+      globalMutateWorkspace,
+      handleUpdateWorkspace,
+      runningWorkspace,
+      toastSuccessLaunchWorkspace,
+    ],
   );
 
   const startNewWorkspace = useCallback(
-    async ({
-      workspace,
-      jobTypeId,
-      templatePath,
-    }: {
-      workspace: Workspace;
-      jobTypeId: string;
-      templatePath?: string;
-    }) => {
+    async ({ workspace, jobTypeId, resourceOptions, templatePath }: startWorkspaceProps) => {
       if (runningWorkspace) {
         open();
         setWorkspace(workspace);
+        toastSuccessCreateWorkspace();
       } else {
-        await startAndOpenWorkspace({ workspace, jobTypeId, templatePath });
+        await startAndOpenWorkspace({ workspace, jobTypeId, templatePath, resourceOptions });
+        setDialogType(null);
       }
     },
-    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace],
+    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace, toastSuccessCreateWorkspace, setDialogType],
   );
 
   return { startNewWorkspace, startAndOpenWorkspace };
@@ -259,30 +276,42 @@ function useLaunchWorkspace() {
 export function useCreateAndLaunchWorkspace() {
   const { createWorkspace, isCreatingWorkspace } = useCreateWorkspace();
   const { startNewWorkspace } = useLaunchWorkspace();
-  const { toastError, toastSuccess } = useSnackbarActions();
+  const { toastErrorCreateWorkspace, toastErrorLaunchWorkspace, toastSuccessLaunchWorkspace } = useWorkspaceToasts();
 
   const createAndLaunchWorkspace = useCallback(
-    async ({ body, templatePath }: { body: CreateWorkspaceBody; templatePath: string }) => {
+    async ({ body, templatePath, resourceOptions }: createAndLaunchWorkspaceProps) => {
       let workspace: Workspace;
 
       try {
         workspace = await createWorkspace(body);
       } catch (e) {
-        toastError('Failed to create workspace.');
+        toastErrorCreateWorkspace();
         return;
       }
-      toastSuccess('Workspace successfully created.');
+
+      toastSuccessLaunchWorkspace(workspace.id);
 
       try {
-        await startNewWorkspace({ workspace, jobTypeId: body.default_job_type, templatePath });
+        await startNewWorkspace({
+          workspace,
+          jobTypeId: body.default_job_type,
+          templatePath,
+          resourceOptions,
+        });
       } catch (e) {
-        toastError('Workspace failed to launch.');
+        toastErrorLaunchWorkspace();
       }
     },
-    [createWorkspace, startNewWorkspace, toastError, toastSuccess],
+    [
+      createWorkspace,
+      startNewWorkspace,
+      toastErrorCreateWorkspace,
+      toastSuccessLaunchWorkspace,
+      toastErrorLaunchWorkspace,
+    ],
   );
 
-  return { createAndLaunchWorkspace, isCreatingWorkspace };
+  return { createAndLaunchWorkspace, isCreatingWorkspace, toastErrorLaunchWorkspace };
 }
 
 function getWorkspaceTimeLeft(workspace: MergedWorkspace) {
@@ -319,13 +348,18 @@ function useRefreshSession(workspace: MergedWorkspace) {
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
   const { mutate: mutateWorkspace } = useWorkspace(workspace.id);
   const mutate = useMutateWorkspacesAndJobs(mutateWorkspace);
-  const { toastSuccess } = useSnackbarActions();
+  const { toastSuccessRenewSession } = useWorkspaceToasts();
+
   const refreshSession = useCallback(async () => {
     await stopWorkspace(workspace.id);
-    await startWorkspace({ workspaceId: workspace.id, jobTypeId: getDefaultJobType({ workspace }) });
+    await startWorkspace({
+      workspaceId: workspace.id,
+      jobTypeId: getDefaultJobType({ workspace }),
+      resourceOptions: getWorkspaceResourceOptions(workspace),
+    });
     await mutate();
-    toastSuccess('Session time for workspace successfully renewed');
-  }, [mutate, startWorkspace, stopWorkspace, toastSuccess, workspace]);
+    toastSuccessRenewSession();
+  }, [mutate, startWorkspace, stopWorkspace, toastSuccessRenewSession, workspace]);
 
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
 }

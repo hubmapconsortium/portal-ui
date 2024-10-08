@@ -100,7 +100,7 @@ export async function fetchSearchData<Documents, Aggs>(
   url: string,
   token: string,
 ): Promise<SearchResponseBody<Documents, Aggs>> {
-  const body = createSearchRequestBody({ query, useDefaultQuery: false });
+  const body = createSearchRequestBody({ query, useDefaultQuery: true });
   const requestInit = buildSearchRequestInit({ body, authHeader: getAuthHeader(token) });
   const searchResponse = await fetch<SearchResponseBody<Documents, Aggs> & Response>({
     url,
@@ -109,13 +109,6 @@ export async function fetchSearchData<Documents, Aggs>(
     returnResponse: true,
   });
 
-  if (searchResponse?.status === 303) {
-    const s3URL = await searchResponse.text();
-    return fetch({
-      url: s3URL,
-    });
-  }
-
   return searchResponse.json() as Promise<SearchResponseBody<Documents, Aggs>>;
 }
 
@@ -123,6 +116,7 @@ export default function useSearchData<Documents, Aggs>(
   query: SearchRequest,
   {
     useDefaultQuery = defaultConfig.useDefaultQuery,
+    shouldFetch = true,
     fetcher = defaultConfig.fetcher,
     ...swrConfig
   }: UseSearchDataConfig | undefined = defaultConfig,
@@ -131,7 +125,7 @@ export default function useSearchData<Documents, Aggs>(
   const { elasticsearchEndpoint } = useAppContext();
 
   const { data, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>>(
-    { query, requestInit, url: elasticsearchEndpoint },
+    shouldFetch ? { query, requestInit, url: elasticsearchEndpoint } : null,
     fetcher,
     swrConfig,
   );
@@ -144,11 +138,12 @@ export function useSearchHits<Documents>(
   query: SearchRequest,
   {
     useDefaultQuery = defaultConfig.useDefaultQuery,
+    shouldFetch = true,
     fetcher = defaultConfig.fetcher,
     ...swrConfig
   }: UseSearchDataConfig | undefined = defaultConfig,
 ): UseHitsData<Documents> {
-  const { searchData, isLoading } = useSearchData(query, { useDefaultQuery, fetcher, ...swrConfig });
+  const { searchData, isLoading } = useSearchData(query, { useDefaultQuery, shouldFetch, fetcher, ...swrConfig });
   const searchHits = (searchData?.hits?.hits ?? []) as Required<SearchHit<Documents>>[];
   return { searchHits, isLoading };
 }
@@ -191,9 +186,15 @@ export function useMultiSearchData<Documents, Aggs>(
   const requestInits = useRequestInits({ queries, useDefaultQuery });
   const { elasticsearchEndpoint } = useAppContext();
 
+  const inlineFetcher = () =>
+    fetcher({
+      urls: [elasticsearchEndpoint],
+      requestInits,
+    }) as Promise<SearchResponseBody<Documents, Aggs>[]>;
+
   const { data: searchData, isLoading } = useSWR<SearchResponseBody<Documents, Aggs>[]>(
     { queries, requestInits, url: elasticsearchEndpoint },
-    fetcher,
+    inlineFetcher,
     swrConfig,
   );
 

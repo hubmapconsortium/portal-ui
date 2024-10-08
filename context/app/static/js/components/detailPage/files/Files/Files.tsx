@@ -1,9 +1,8 @@
 import React from 'react';
 
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
-import SectionHeader from 'js/shared-styles/sections/SectionHeader';
-import { DetailPageSection } from 'js/components/detailPage/style';
+import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
 import FileBrowser from '../FileBrowser';
 import { FilesContextProvider } from '../FilesContext';
@@ -11,19 +10,25 @@ import { UnprocessedFile } from '../types';
 
 interface FilesProps {
   files: UnprocessedFile[];
+  includeAccordion?: boolean;
 }
 
-function Files({ files }: FilesProps) {
+function Files({ files, includeAccordion }: FilesProps) {
+  const fileContent = files.length > 0 && (
+    <Box mb={2}>
+      <FileBrowser files={files} />
+    </Box>
+  );
+
   return (
     <FilesContextProvider>
-      <DetailPageSection id="files" data-testid="files">
-        <SectionHeader>Files</SectionHeader>
-        {files.length > 0 && (
-          <Box mb={2}>
-            <FileBrowser files={files} />
-          </Box>
-        )}
-      </DetailPageSection>
+      {includeAccordion ? (
+        <CollapsibleDetailPageSection id="files" title="Files">
+          {fileContent}
+        </CollapsibleDetailPageSection>
+      ) : (
+        fileContent
+      )}
     </FilesContextProvider>
   );
 }

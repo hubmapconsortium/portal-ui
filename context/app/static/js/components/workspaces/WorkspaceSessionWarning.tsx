@@ -1,6 +1,6 @@
 import React from 'react';
-import { Alert } from 'js/shared-styles/alerts';
 import Button from '@mui/material/Button';
+import { Alert } from 'js/shared-styles/alerts';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useRefreshSession, useSessionWarning, useWorkspacesList } from './hooks';

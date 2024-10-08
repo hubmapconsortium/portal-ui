@@ -9,6 +9,8 @@ import {
   getOriginSamplesOrgan,
   NOT_CAPITALIZED_WORDS,
   shouldCapitalizeString,
+  generateCommaList,
+  isValidEmail,
 } from './functions';
 
 test('isEmptyArrayOrObject', () => {
@@ -73,4 +75,57 @@ test('getOriginSamplesOrgan', () => {
   expect(getOriginSamplesOrgan(entity)).toEqual('heart, liver');
   entity.origin_samples_unique_mapped_organs = [];
   expect(getOriginSamplesOrgan(entity)).toEqual('');
+});
+
+test('generateCommaList', () => {
+  expect(generateCommaList([])).toStrictEqual('');
+  expect(generateCommaList(['apples'])).toStrictEqual('apples');
+  expect(generateCommaList(['apples', 'bananas'])).toStrictEqual('apples and bananas');
+  expect(generateCommaList(['apples', 'bananas', 'oranges'])).toStrictEqual('apples, bananas, and oranges');
+  expect(generateCommaList(['apples', 'bananas', 'oranges', 'grapes'])).toStrictEqual(
+    'apples, bananas, oranges, and grapes',
+  );
+});
+
+const validEmails = [
+  'username@gmail.com',
+  'u@hotmail.org',
+  '   username@gmail.com',
+  'username@gmail.com        ',
+  ' username@gmail.com ',
+  'username@harvard.edu',
+  'username@harvard.subdomain.edu',
+  '\nusername@harvard.subdomain.edu',
+  '\n\tusername@harvard.subdomain.edu',
+  'username@harvard.subdomain.edu\n',
+  'username@harvard.subdomain.edu\n\t',
+];
+
+const invalidEmails = [
+  '',
+  ' ',
+  'gmail.com',
+  '@gmail.com ',
+  'username',
+  'username@.com',
+  'user name@gmail.com',
+  'username @gmail.com',
+  'username@ gmail.com',
+  'username@gmail .com',
+  'username\t@gmail.com',
+  'username\n@gmail.com',
+  'username@gmail\n.com',
+  'username@gmail.\tcom',
+  'user\nname@gmail.com',
+  'user\tname@gmail.com',
+];
+
+test('isValidEmail', () => {
+  validEmails.forEach((email) => {
+    expect(isValidEmail(email)).toStrictEqual(true);
+  });
+
+  invalidEmails.forEach((email) => {
+    expect(isValidEmail(email)).toStrictEqual(false);
+  });
 });

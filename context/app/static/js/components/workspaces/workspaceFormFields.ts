@@ -27,11 +27,9 @@ const templatesField = {
 };
 
 const datasetsField = {
-  datasets: z
-    .array(z.string(), {
-      errorMap: withCustomMessage('At least one dataset must be selected. Please select a dataset.'),
-    })
-    .nonempty(),
+  datasets: z.array(z.string(), {
+    errorMap: withCustomMessage('At least one dataset must be selected. Please select a dataset.'),
+  }),
 };
 
 const workspaceIdField = {
@@ -46,6 +44,17 @@ const workspaceJobTypeIdField = {
   }),
 };
 
+const workspaceResourceOptionsField = {
+  workspaceResourceOptions: z
+    .object({
+      num_cpus: z.number(),
+      memory_mb: z.number(),
+      time_limit_minutes: z.number(),
+      gpu_enabled: z.boolean(),
+    })
+    .optional(),
+};
+
 export {
   workspaceNameField,
   protectedDatasetsField,
@@ -53,4 +62,5 @@ export {
   datasetsField,
   workspaceIdField,
   workspaceJobTypeIdField,
+  workspaceResourceOptionsField,
 };

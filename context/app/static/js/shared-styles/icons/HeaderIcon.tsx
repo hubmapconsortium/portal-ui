@@ -4,6 +4,6 @@ import SvgIcon from '@mui/material/SvgIcon';
 const HeaderIcon = styled(SvgIcon)(() => ({
   verticalAlign: '-12%',
   fontSize: '2.4rem',
-})) as typeof SvgIcon;
+}));
 
 export default HeaderIcon;

@@ -9,29 +9,41 @@ git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout main
 git pull
 
-get_minor_version() {
-  REF_MINOR=$1
-  REF_DATE=$2
-  REF_EPOCH_DAY=`expr $(date -j -f "%d %b %Y" "$REF_DATE" +%s) / 86400`
+MAJOR=$1
+
+if [[ -z "$MAJOR" ]]; then
   NOW_EPOCH_DAY=`expr $(date +%s) / 86400`
+
+  TAGS=`git for-each-ref --sort=creatordate --format '%(refname) %(creatordate)' refs/tags | tac`
+  while read -r -d $'\n' TAG DATE; do
+    if [[ $TAG =~ v0\.([0-9]+)\.0$ ]]; then
+      echo "Last minor tag: $TAG"
+      # Strip timezone info (last 6 characters)
+      DATE=${DATE%??????}
+      # Convert to epoch day
+      REF_EPOCH_DAY=`expr $(date -j -f "%a %b %d %H:%M:%S %Y" "$DATE" "+%s") / 86400`
+      echo "Reference epoch day: $REF_EPOCH_DAY"
+      break
+    fi
+  done <<< "$TAGS"
+ 
+  echo "Now epoch day: $NOW_EPOCH_DAY"
+
   DAYS_PAST_REF=`expr $NOW_EPOCH_DAY - $REF_EPOCH_DAY`
-  echo v0.`expr $REF_MINOR + $DAYS_PAST_REF / 14`
-  # Integer division truncates toward 0 for both positive and negative,
-  # so this doesn't work if the reference date is in the future.
-}
 
-EXPECTED_MINOR=`get_minor_version 9 '01 JAN 2021'`
+  echo "Days since last minor version: $DAYS_PAST_REF"
 
-# The docs say that a git tag will be created by default.
-# That would be useful, but it doesn't see to be happening for me.
-# Add additional flag to override.
-# https://docs.npmjs.com/cli/v6/commands/npm-version
-VERSION=`cd context && npm version patch --no-git-tag-version`
-
-if [[ $VERSION != $EXPECTED_MINOR* ]]; then
-  echo "End of 2-week cycle. Setting minor version to: $EXPECTED_MINOR"
-  VERSION=`cd context && npm version $EXPECTED_MINOR.0 --no-git-tag-version`
+  if [[ $DAYS_PAST_REF -lt 14 ]]; then
+    VERSION=`cd context && npm version patch --no-git-tag-version`
+  else
+    echo "End of 2-week cycle."
+    VERSION=`cd context && npm version minor --no-git-tag-version`
+  fi
+else
+  # major version bump, don't need to check for 2-week cycle
+  VERSION=`cd context && npm version major`
 fi
+
 echo "Version: $VERSION"
 
 ./grab-dependencies.sh

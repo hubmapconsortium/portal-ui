@@ -18,7 +18,7 @@ function IconTooltipCell({ children, tooltipTitle, icon, ...rest }: IconTooltipC
         {children}
         {tooltipTitle && (
           <SecondaryBackgroundTooltip title={tooltipTitle} placement="bottom-start">
-            <StyledSvgIcon component={icon ?? InfoIcon} color="primary" />
+            <StyledSvgIcon as={icon ?? InfoIcon} color="primary" />
           </SecondaryBackgroundTooltip>
         )}
       </Flex>

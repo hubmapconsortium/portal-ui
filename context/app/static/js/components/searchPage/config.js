@@ -12,7 +12,7 @@ function makeDonorMetadataFilters(isDonor) {
   const labelPrefix = isDonor ? '' : 'Donor ';
   return [
     listFilter(`${pathPrefix}mapped_metadata.sex`, `${labelPrefix}Sex`),
-    rangeFilter(`${pathPrefix}mapped_metadata.${ageField}`, `${labelPrefix}Age`, 0, 100),
+    rangeFilter(`${pathPrefix}mapped_metadata.${ageField}`, `${labelPrefix}Age`, 0, 90),
     listFilter(`${pathPrefix}mapped_metadata.race`, `${labelPrefix}Race`),
     rangeFilter(`${pathPrefix}mapped_metadata.${bmiField}`, `${labelPrefix}BMI`, 0, 50),
   ];

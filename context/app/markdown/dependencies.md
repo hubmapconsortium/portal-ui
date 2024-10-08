@@ -4,12 +4,6 @@ The portal has many dependencies:
 Git submodules and Python and NodeJS packages are summarized here;
 The services the portal relies on are [listed separately](/services).
 
-## Git submodules
-
-```
-
-```
-
 ## Python packages
 
 `requirements.in`:
@@ -17,22 +11,22 @@ The services the portal relies on are [listed separately](/services).
 # Update requirements.txt if this file changes:
 # pip install pip-tools
 # pip-compile --allow-unsafe --generate-hashes --output-file=context/requirements.txt context/requirements.in
-Flask>=2.3.3
-Flask[async]>=2.3.3
+Flask>=3.0.3
+Flask[async]>=3.0.3
 globus-sdk>=3.9.0
-requests>=2.27.1
-pyyaml>=5.4
-python-datauri>=0.2.8
-python-frontmatter>=0.5.0
+requests>=2.32.3
+pyyaml>=6.0.1
+python-datauri>=2.2.0
+python-frontmatter>=1.1.0
 hubmap-api-py-client>=0.0.11
-hubmap-commons>=2.1.14
+hubmap-commons>=2.1.15
 # As of 2023-08-24, this is the version of boto3 which is compatible with both the 
 # portal-visualization->vitessce->ome-zarr dependency on aiobotocore~=2.5
 # and the hubmap-commons dependency on boto3>=1.24.47
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.4.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.6.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -43,6 +37,7 @@ lxml>=4.9.1
 
 ```
 {
+"@dagrejs/dagre": "^1.1.3",
 "@datapunt/matomo-tracker-js": "^0.5.1",
 "@elastic/elasticsearch": "^8.13.0",
 "@fontsource-variable/inter": "^5.0.17",
@@ -51,12 +46,12 @@ lxml>=4.9.1
 "@grafana/faro-web-tracing": "^1.5.0",
 "@hms-dbmi-bgm/react-workflow-viz": "^0.1.10",
 "@hookform/resolvers": "^3.3.4",
-"@mui/icons-material": "^5.15.14",
+"@mui/icons-material": "^5.16.7",
 "@mui/lab": "^5.0.0-alpha.169",
-"@mui/material": "^5.15.14",
+"@mui/material": "^5.16.7",
 "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-"@mui/styled-engine-sc": "^5.14.12",
-"@mui/system": "^5.15.14",
+"@mui/styled-engine-sc": "6.0.0",
+"@mui/system": "^5.16.7",
 "@react-spring/web": "^9.7.3",
 "@searchkit/client": "^3.0.0-canary.53",
 "@searchkit/sdk": "^3.0.0-canary.53",
@@ -71,6 +66,7 @@ lxml>=4.9.1
 "@visx/shape": "^3.5.0",
 "@visx/text": "^3.3.0",
 "@visx/tooltip": "^3.3.0",
+"@xyflow/react": "^12.0.3",
 "chart.js": "^4.4.2",
 "d3": "^7.9.0",
 "d3-array": "^3.2.4",
@@ -96,7 +92,7 @@ lxml>=4.9.1
 "rehype-raw": "^7.0.0",
 "sass": "^1.72.0",
 "searchkit": "^2.4.1-alpha.4",
-"styled-components": "^5.3.10",
+"styled-components": "^6.1.12",
 "swr": "^2.2.5",
 "universal-cookie": "^7.1.2",
 "use-debounce": "^10.0.0",

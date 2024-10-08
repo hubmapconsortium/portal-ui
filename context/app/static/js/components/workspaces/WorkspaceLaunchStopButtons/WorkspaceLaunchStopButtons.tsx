@@ -3,20 +3,23 @@ import Button, { ButtonProps } from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
-import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { Alert } from 'js/shared-styles/alerts';
-import { MergedWorkspace } from '../types';
+import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
+import { MergedWorkspace, WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
   handleStopWorkspace: (workspaceId: number) => Promise<void>;
-  isStoppingWorkspace: boolean;
-  disableLaunch?: boolean;
-  disableStop?: boolean;
   button: ElementType<ButtonProps>;
+  isStoppingWorkspace: boolean;
+  showLaunch?: boolean;
+  showStop?: boolean;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
 function StopWorkspaceButton({
@@ -24,19 +27,21 @@ function StopWorkspaceButton({
   handleStopWorkspace,
   button: ButtonComponent,
   isStoppingWorkspace,
-}: Omit<WorkspaceButtonProps, 'disableLaunch' | 'disableStop'>) {
-  const { toastError } = useSnackbarActions();
+}: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
+  const { toastErrorStopWorkspace } = useWorkspaceToasts();
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
+
   if (!currentWorkspaceIsRunning) {
     return null;
   }
+
   return (
     <ButtonComponent
       type="button"
       disabled={isStoppingWorkspace}
       onClick={() => {
         handleStopWorkspace(workspace.id).catch((err) => {
-          toastError(`Error stopping ${workspace.name}.`);
+          toastErrorStopWorkspace(workspace.name);
           console.error(err);
         });
       }}
@@ -52,9 +57,11 @@ function StopWorkspaceAlertButton(props: ButtonProps) {
 
 function StopWorkspaceAlert() {
   const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
-  const runningWorkspace = findRunningWorkspace(workspacesList);
 
-  if (!runningWorkspace) {
+  const runningWorkspace = findRunningWorkspace(workspacesList);
+  const runningWorkspaceAtMaxDatasets = runningWorkspace && isWorkspaceAtDatasetLimit(runningWorkspace);
+
+  if (!runningWorkspace || runningWorkspaceAtMaxDatasets) {
     return null;
   }
 
@@ -84,8 +91,9 @@ function StopWorkspaceAlert() {
 }
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const { workspace, button: ButtonComponent, disableLaunch = false, disableStop = false } = props;
-  const { open, setWorkspace } = useLaunchWorkspaceStore();
+  const { workspace, button: ButtonComponent, trackingInfo, showLaunch = false, showStop = false } = props;
+  const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
+
   if (workspace.status === 'deleting') {
     return (
       <ButtonComponent type="button" disabled size="small">
@@ -93,15 +101,24 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
       </ButtonComponent>
     );
   }
+
   return (
     <Stack direction="row" spacing={2}>
-      {!disableStop && <StopWorkspaceButton {...props} />}
-      {!disableLaunch && (
+      {showStop && <StopWorkspaceButton {...props} />}
+      {showLaunch && (
         <Button
           type="button"
+          variant="contained"
+          color="primary"
           onClick={() => {
-            setWorkspace(workspace);
-            open();
+            if (trackingInfo) {
+              trackEvent({
+                ...trackingInfo,
+                action: 'Launch Open Workspace Dialog',
+                label: workspace.name,
+              });
+            }
+            launchOrOpenDialog(workspace);
           }}
         >
           Launch Workspace

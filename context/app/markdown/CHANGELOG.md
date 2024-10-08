@@ -1,3 +1,245 @@
+## v1.12.0 - 2024-10-07
+
+- Fix bug on dataset detail page for workspace dialogs opened in succession for different processed datasets. 
+- Remove "Contact" and "Last Modified" columns from the Datasets table on Collections pages.
+- Delete STAGE environment and spin up new portal instance on TEST
+
+
+## v1.11.0 - 2024-10-02
+
+- Add messaging where donors with ages > 89 are displayed on search and detail pages.
+- Fix "Add to workspace" bug on dataset detail pages.
+- Fix positioning of dropdown order menu on the tile view of the search page. 
+- Fix tabs moving around in bulk data transfer section on detail pages.
+- Update unified datasets link in "What’s New" section on homepage to point to an example dataset detail page.
+- Adjust size of "summary" view in entity headers dynamically based on the length of the content.
+- Remove "Contact" section and add Attribution table with contributors for EPICs and Lab Processed datasets.
+
+
+## v1.10.0 - 2024-09-25
+
+- Only allow Globus group members to access sample workspaces.
+- Fix bug where template examples with default resource options would not launch.
+
+
+## v1.9.0 - 2024-09-24
+
+- Fix bug where donor pages for donors without metadata do not display.
+- Remove extra files accordion from processed datasets summary sections. 
+- Allow Jupyter notebooks for dataset visualizations to be downloaded by all users.
+
+
+## v1.8.0 - 2024-09-19
+
+- Fix Advanced Config marker issue.
+- Remove extraneous tooltip from the non-selectable template grid.
+- Fix "Copy to Clipboard" error when copying dataset IDs.
+- Rely on template job type, not example job type (which is not always present).
+
+
+## v1.7.0 - 2024-09-18
+
+- Increase maximum resource options for workspace jobs from 2 CPUs to 16, 32GB of memory to 128GB and session length from 6 hours to 12.
+- Add last modified date to template detail pages.
+
+
+## v1.6.0 - 2024-09-17
+
+- Add tracking to landing pages and detail pages for workspaces and templates.
+- Fix bug causing detail page for unpublished collections to error.
+- Drop support for collection creators.
+- Add language to workspace environment sections to help users distinguish between environments.
+- Update Launch Workspace dialogs to account for new R template.
+- Add templates landing page and template detail pages.
+
+
+## v1.5.0 - 2024-09-10
+
+- Hide HuBMAP ID's for non-entity nodes in provenance graph.
+- Improve combined provenance logic to safeguard against duplicate nodes/edges.
+- Update menu choices for the workspace buttons in unified views dataset detail pages.
+
+
+## v1.4.0 - 2024-09-06
+
+- Add advanced configuration options to workspace job dialogs.
+- Update attribution and processed dataset section language.
+- Direct users to HuBMAP Help Desk for questions about internally processed datasets.
+- Update workspace success toast to indicate whether the workspace has launched in a new tab or just been created.
+- Centralize toast messages for workspaces into a single file.
+
+
+## v1.3.0 - 2024-09-05
+
+- Improve handling of loading/potentially undefined data in dataset relationship diagram.
+- Ensure data product and file URLs use relevant dataset IDs when constructing.
+
+
+## v1.2.0 - 2024-09-04
+
+- Improve status icon visibility on collapsed processed dataset accordions.
+- Add smooth scrolling for dataset relationships links.
+- Make dataset relationship node behavior clearer by adding explanatory toast, tooltip, and using appropriate cursor.
+- Expand processed datasets if navigated to via table of contents or dataset relationships node link.
+
+
+## v1.1.0 - 2024-09-03
+
+- Fix color of alerts' icons.
+- Fix regression in 303 redirect.
+- Fix descendants lookup query so it looks for either dataset descendants or image pyramid support descendants.
+
+
+## v1.0.1 - 2024-08-28
+
+- Add the HuBMAP ID search bar component to the "Launch New Workspace" dialog on the "My Workspaces" landing page.
+- Deprecate `ancestors`, `descendants`, and their `immediate` variants to only look up by ID.
+- Improve behavior of entity header at certain intermediate screen widths.
+- Handle both contributors and creators fields for collections until the creators field is renamed to contributors.
+- Adjust link for 10X Multiome/Visium news item to point to those assays specifically.
+- Update language describing HRA/EUI/ASCT+B Reporter on the homepage and navigation.
+- Update to Styled-Components v6.
+- Standardize styling to use the same utility/theme provider throughout the site.
+- Prevent helper panel overflow from long titles/descriptions.
+- Prevent lifting of publication ancillary data on dataset pages.
+- Remove excessive margin on section descriptions.
+- Indicate disabled state on entity header items.
+- Add tooltip to bulk download shortcut link.
+- Restore assay graphs for datasets with no defined search terms but with present datasets.
+- Remove duplicate HuBMAP ID from bulk data transfer panel links.
+- Fix single-tab table styles so the single tab appears selected.
+- Add tooltips to unlabeled status icons.
+- Remove link from helper panel dataset ID display.
+- Add "Relevant Pages" section to workspace detail pages.
+- Update language and add an action button to toasts for successful workspace creation.
+- Enable access to workspaces for users in HuBMAP Read or HuBMAP Workspaces globus groups.
+
+
+## v1.0.0 - 2024-08-23
+
+- Extend provenance table logic to handle missing entities.
+- Fix handling of large search requests.
+- Request less data for provenance table tiles.
+- Add dataset relationships diagram.
+- Fix multi-assay provenance overflow.
+- Fix `push` script compatibility with mac OS.
+- Update homepage news to inform users about unified dataset pages and multiomic dataset availability.
+- Added processed datasets section to display all visualizations for a given raw dataset.
+- Extended push script to support major version bumps.
+- Update raw dataset detail pages to include processed dataset information.
+- Update table of contents design.
+
+
+## v0.103.1 - 2024-08-19
+
+- Fix bug preventing visualization notebooks from being downloaded on dataset detail pages.
+- Fix bug that prevented protected dataset ids from being displayed in "Launch New Workspace" dialog.
+- Change banner above "Contributors" and "Attribution" sections from an alert to a styled paper component.
+
+
+## v0.103.0 - 2024-08-15
+
+- Clear workspace dropdown after adding a dataset to a workspace.
+- Prevent already running workspaces from prompting the user to choose a job type.
+- Disable "Launch Workspace" button when a workspace title is not provided.
+- Fix spacing issue for alert banners that show in datasets section of the "Create New Workspace" dialog.
+- Fixed view expansion in the visualization section to overflow within the container and not outside it.
+- Update download button on Visualization section of detail pages to a Workspaces dropdown menu button.
+- Update "What's New?" homepage listing with June 2024 user facing updates.
+
+
+## v0.102.5 - 2024-08-06
+
+- Add a check for "Contacts" data to display in the Contributors table of the detail pages of datasets, collections, and publications.
+
+
+## v0.102.4 - 2024-08-02
+
+- Update attribution and contributors sections for processed datasets.
+- Updated the font color for the selected and unselected tabular tabs.
+
+
+## v0.102.3 - 2024-08-01
+
+- Fix issue of "Launch Workspace" button not appearing in workspace detail pages. 
+
+
+## v0.102.2 - 2024-08-01
+
+- Fix query to determine whether samples should be shown on organ pages.
+- Prevent header from being clipped when the template selection grid is scrolled.
+- Order templates alphabetically with the default template first. 
+
+
+## v0.102.1 - 2024-07-31
+
+- Add alerts, errors, tooltips, and disabled buttons as needed to alert users when they have exceeded a dataset limit.
+- Add datasets section with info banner to empty workspace detail pages.
+- Fixed assays and samples section on the organ's detail page.
+- Select blank template by default in "Create New Workspace" dialog.
+- Updated query for recent datasets to avoid filtering based on presence of visualization.
+
+
+## v0.102.0 - 2024-07-26
+
+- Removed overlapping tooltip from current dataset in multi-assay relationships.
+- Updated `vitessce-data` and `vitessce-data-v2` S3 bucket URLs to point to `data-1.vitessce.io` and `data-2.vitessce.io` subdomains, respectively.
+
+
+## v0.101.4 - 2024-07-25
+
+- Add confirmation modal to the 'delete workspaces' button.
+- Add tooltips to the apps and profile icons in the navigation bar.
+- Added status icon to the processed datasets to differentiate between different runs.
+- Show IDs of workspaces in the workspaces list to differentiate between workspaces with the same name.
+- Update login alert text on the workspaces landing page.
+- Increase max dataset limit for workspaces to 150.
+- Move API client to `portal-visualization` package to reduce code duplication between portal code and workspace templates.
+- Add pull request templates to ease future PR reviews.
+
+
+## v0.101.3 - 2024-07-20
+
+- Fix changelog formatting for v0.101.1 entries.
+
+
+## v0.101.1 - 2024-07-19
+
+- Updated the status icons and colors with the provided mui icons.
+- Update messaging on My Workspace landing page for users who are not logged in.
+
+
+## v0.101.0 - 2024-07-17
+
+- Updated back-end dependencies.
+- Display dbGaP link to logged in users if one is available and logged in user does not have access to Globus.
+- Fix incorrect URL structure in gene search results.
+Fix headers on support entity detail pages.
+Fix styling on related entities table tabs.
+- Fixed the count in the Samples table header
+- Removed twitter link from the footer.
+
+
+## v0.100.1 - 2024-07-10
+
+- Convert detail page components to TypeScript.
+- Convert dataset detail page to TypeScript.
+- Fix pip install issues in dev environments.
+
+
+## v0.100.0 - 2024-07-08
+
+- Fix minor nav issues found during QA.
+
+
+## v0.99.2 - 2024-06-27
+
+- Implement updated header/navigation components.
+- Fix "explore datasets" link on updated homepage.
+- Fix icon colors in tools section.
+- Fix broken entity tiles.
+
+
 ## v0.99.1 - 2024-06-20
 
 - Implement homepage tools section.
