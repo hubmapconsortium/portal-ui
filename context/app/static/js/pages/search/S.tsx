@@ -109,7 +109,7 @@ const sampleConfig = {
 
 const datasetFacetGroups = {
   'Dataset Metadata': [
-    { field: 'dataset_type', childField: 'assay_display_name', type: FACETS.hierarchical },
+    { field: 'raw_dataset_type', childField: 'assay_display_name', type: FACETS.hierarchical },
     {
       field: 'origin_samples_unique_mapped_organs',
       type: FACETS.term,

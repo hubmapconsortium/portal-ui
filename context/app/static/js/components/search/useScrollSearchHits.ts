@@ -95,19 +95,13 @@ export function useScrollSearchHits<Doc, Aggs>({
   const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<
     SearchResponseBody<Doc, Aggs>,
     SWRError
-  >(
-    getKey,
-    // TODO: revisit to fix types/make keys more type-safe
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
-    fetcher,
-    {
-      fallbackData: [],
-      revalidateAll: false,
-      revalidateFirstPage: false,
-      keepPreviousData: true,
-      ...swrConfig,
-    },
-  );
+  >(getKey, fetcher, {
+    fallbackData: [],
+    revalidateAll: false,
+    revalidateFirstPage: false,
+    keepPreviousData: true,
+    ...swrConfig,
+  });
 
   const { searchHits, totalHitsCount, aggregations } = getCombinedHits<Doc, Aggs>(data ?? []);
 
