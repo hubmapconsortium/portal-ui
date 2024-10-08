@@ -1,5 +1,4 @@
 import React from 'react';
-import Stack from '@mui/material/Stack';
 import { get } from 'js/helpers/nodash';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 
@@ -53,10 +52,7 @@ function getByPath(hitSource, field) {
   if (Array.isArray(fieldValue)) {
     if (field?.id === 'mapped_metadata.age_value') {
       return (
-        <Stack direction="row">
-          {fieldValue.join(' / ')}
-          {fieldValue.length > 0 && <DonorAgeTooltip donorAge={fieldValue[0]} />}
-        </Stack>
+        fieldValue.length > 0 && <DonorAgeTooltip donorAge={fieldValue[0]}>{fieldValue.join(' / ')}</DonorAgeTooltip>
       );
     }
     return fieldValue.join(' / ');

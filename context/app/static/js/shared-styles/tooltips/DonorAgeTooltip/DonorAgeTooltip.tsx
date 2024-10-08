@@ -1,25 +1,17 @@
-import React from 'react';
-
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { StyledStack, StyledInfoIcon } from 'js/shared-styles/tooltips/DonorAgeTooltip/style';
+import React, { PropsWithChildren } from 'react';
+import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 
 const DONOR_AGE_TEXT = 'For donors older than 89, the metadata will indicate an age of 90.';
 
-interface DonorAgeTooltipProps {
+interface DonorAgeTooltipProps extends PropsWithChildren {
   donorAge?: string;
 }
 
-function DonorAgeTooltip({ donorAge }: DonorAgeTooltipProps) {
+function DonorAgeTooltip({ donorAge, children }: DonorAgeTooltipProps) {
   if (!donorAge || Number(donorAge) <= 89) {
-    return null;
+    return children;
   }
 
-  return (
-    <SecondaryBackgroundTooltip title={DONOR_AGE_TEXT}>
-      <StyledStack>
-        <StyledInfoIcon />
-      </StyledStack>
-    </SecondaryBackgroundTooltip>
-  );
+  return <InfoTextTooltip tooltipTitle={DONOR_AGE_TEXT}>{children}</InfoTextTooltip>;
 }
 export default DonorAgeTooltip;
