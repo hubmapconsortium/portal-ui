@@ -1,0 +1,1 @@
+- Improve entity header state handling of page resizes.
