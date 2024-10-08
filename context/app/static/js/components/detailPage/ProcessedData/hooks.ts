@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { ProcessedDatasetInfo, useProcessedDatasets } from 'js/pages/Dataset/hooks';
+import { generateCommaList } from 'js/helpers/functions';
 
 export function createdByCentralProcess(dataset: Pick<ProcessedDatasetInfo, 'creation_action'>) {
   return dataset.creation_action === 'Central Process';
@@ -53,9 +54,9 @@ export function usePipelineCountsInfo(datasets: Pick<ProcessedDatasetInfo, 'pipe
     {} as Record<string, number>,
   );
   const pipelinesText = `Pipelines (${Object.keys(pipelineCounts).length})`;
-  const pipelineCountsText = Object.entries(pipelineCounts)
-    .map(([pipeline, count]) => (count > 1 ? `${pipeline} (${count})` : pipeline))
-    .join(', ');
+  const pipelineCountsText = generateCommaList(
+    Object.entries(pipelineCounts).map(([pipeline, count]) => (count > 1 ? `${pipeline} (${count})` : pipeline)),
+  );
 
   return {
     pipelinesText,
