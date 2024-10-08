@@ -1,0 +1,1 @@
+- Prevent collections without a DOI from being counted on the homepage.
