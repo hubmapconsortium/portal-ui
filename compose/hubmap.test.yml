@@ -1,5 +1,3 @@
-version: "3.7"
-
 services:
   portal-ui:
     hostname: portal-ui
@@ -20,7 +18,7 @@ services:
       options:
         awslogs-region: us-east-1
         awslogs-group: portal-ui-docker-logs
-        awslogs-stream: ${LOG_STREAM_STAGE}
+        awslogs-stream: ${LOG_STREAM_TEST}
 
   # Service names need to be kept in sync with gateway:
   # https://github.com/hubmapconsortium/gateway/blob/f2c2d5d/nginx/conf.d-stage/prod-portal-ui.conf
@@ -44,7 +42,7 @@ services:
       options:
         awslogs-region: us-east-1
         awslogs-group: portal-ui-docker-logs
-        awslogs-stream: ${LOG_STREAM_STAGE_PROD}
+        awslogs-stream: ${LOG_STREAM_TEST_PROD}
 
 networks:
   # This is the network created by gateway to enable communicaton between multiple docker-compose projects

@@ -1,3 +1,10 @@
+## v1.12.0 - 2024-10-07
+
+- Fix bug on dataset detail page for workspace dialogs opened in succession for different processed datasets. 
+- Remove "Contact" and "Last Modified" columns from the Datasets table on Collections pages.
+- Delete STAGE environment and spin up new portal instance on TEST
+
+
 ## v1.11.0 - 2024-10-02
 
 - Add messaging where donors with ages > 89 are displayed on search and detail pages.

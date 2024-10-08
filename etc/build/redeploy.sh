@@ -3,7 +3,7 @@ set -o errexit
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
-[ "$#" -eq 2 ] || die "usage: $0 USERNAME [ dev | test | stage]"
+[ "$#" -eq 2 ] || die "usage: $0 USERNAME [dev | test]"
 USER="$1"
 TARGET="$2"
 
@@ -19,8 +19,8 @@ cd /opt/hubmap/portal-ui/compose
 echo 'portal running?' \`docker ps | grep portal-ui\`
 
 COMPOSE_CONFIG=hubmap.yml
-[ "$TARGET" = "stage" ] && COMPOSE_CONFIG=hubmap.stage.yml
-# hubmap.stage.yml includes two portal instances.
+[ "$TARGET" = "test" ] && COMPOSE_CONFIG=hubmap.test.yml
+# hubmap.test.yml includes two portal instances.
 
 echo 'stopping...'
 docker-compose -f \$COMPOSE_CONFIG down
@@ -33,10 +33,10 @@ docker rmi hubmap/portal-ui:latest
 echo 'starting...'
 docker-compose -f \$COMPOSE_CONFIG up -d
 
-# We don't understand why the prod-stage instance is getting the wrong configuration.
+# We don't understand why the prod-test instance is getting the wrong configuration.
 # We hope turning it off-and-on will help, but this is not a good situation.
-if [ "$TARGET" = "stage" ]; then
-    echo 'Restart the hubmap-auth container... for STAGE only'
+if [ "$TARGET" = "test" ]; then
+    echo 'Restart the hubmap-auth container... for TEST only'
     docker restart hubmap-auth
 fi
 
@@ -48,4 +48,4 @@ EOF
 
 echo "Visit --> http://portal.$TARGET.hubmapconsortium.org/"
 
-[ "$TARGET" = "stage" ] && echo "Visit --> http://portal-prod.stage.hubmapconsortium.org/"
+[ "$TARGET" = "test" ] && echo "Visit --> http://portal-prod.test.hubmapconsortium.org/"
