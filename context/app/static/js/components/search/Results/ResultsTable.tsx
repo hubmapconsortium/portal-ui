@@ -26,7 +26,7 @@ import {
 } from './style';
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
-import { getFieldLabel } from '../labelMap';
+import { getFieldLabel } from '../fieldConfigurations';
 import ViewMoreResults from './ViewMoreResults';
 
 type SortDirection = 'asc' | 'desc';

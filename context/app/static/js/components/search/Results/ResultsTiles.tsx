@@ -16,7 +16,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import ViewMoreResults from './ViewMoreResults';
 import { useSearchStore } from '../store';
-import { getFieldLabel } from '../labelMap';
+import { getFieldLabel } from '../fieldConfigurations';
 
 function TilesSortSelect() {
   const {

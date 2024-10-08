@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import { useSearch } from '../Search';
 import { RangeConfig, RangeValues, isRangeFacet, isRangeFilter, useSearchStore } from '../store';
 import FacetAccordion from './FacetAccordion';
-import { getFieldLabel } from '../labelMap';
+import { getFieldLabel } from '../fieldConfigurations';
 
 interface HistogramBucket {
   doc_count: number;

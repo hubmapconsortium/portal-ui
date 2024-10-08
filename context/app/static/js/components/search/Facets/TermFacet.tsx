@@ -21,8 +21,7 @@ import {
   HierarchicalAccordionSummary,
 } from './style';
 import FacetAccordion from './FacetAccordion';
-import { getFieldLabel } from '../labelMap';
-import transformValueLabel from '../fieldTransformationMap';
+import { getFieldLabel, getTransformedFieldalue } from '../fieldConfigurations';
 
 interface CheckboxItem {
   label: string;
@@ -86,7 +85,9 @@ function CheckboxFilterItem({
           onClick={handleClick}
         />
       }
-      label={<TermLabelAndCount label={transformValueLabel({ label, field })} count={count} active={active} />}
+      label={
+        <TermLabelAndCount label={getTransformedFieldalue({ value: label, field })} count={count} active={active} />
+      }
     />
   );
 }
