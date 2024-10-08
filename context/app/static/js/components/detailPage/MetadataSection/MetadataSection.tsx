@@ -7,11 +7,12 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { getMetadata, hasMetadata } from 'js/helpers/metadata';
-import { ESEntityType, isDataset } from 'js/components/types';
-import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
+import { Dataset, Donor, ESEntityType, Sample, isDataset, isSample } from 'js/components/types';
+import { ProcessedDatasetInfo, useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
@@ -147,6 +148,57 @@ function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boole
   return entityIconMap[entity.entity_type];
 }
 
+function getEntityLabel(entity: ProcessedDatasetInfo | Donor | Sample, sampleCategoryCounts: Record<string, number>) {
+  if (isSample(entity)) {
+    // If samples have the same category, add the HuBMAP ID to the label
+    if (sampleCategoryCounts[entity.sample_category] > 1) {
+      return `${entity.sample_category} ${entity.hubmap_id}`;
+    }
+    return entity.sample_category;
+  }
+  if (isDataset(entity)) {
+    return entity.assay_display_name;
+  }
+  return entity.entity_type;
+}
+
+function getTableEntities(
+  entity: Dataset,
+  datasetsWithMetadata: Required<SearchHit<ProcessedDatasetInfo>>[],
+  fieldDescriptions: Record<string, string>,
+) {
+  const { donor, source_samples } = entity;
+
+  const entitiesWithMetadata = [entity, ...datasetsWithMetadata.map((d) => d._source), ...source_samples, donor].filter(
+    (e) => hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
+  );
+
+  // Check whether there are multiple samples with the same sample category
+  const sampleCategoryCounts: Record<string, number> = {};
+  entitiesWithMetadata.forEach((e) => {
+    if (isSample(e)) {
+      sampleCategoryCounts[e.sample_category] = (sampleCategoryCounts[e.sample_category] || 0) + 1;
+    }
+  });
+
+  return entitiesWithMetadata.map((e) => {
+    const label = getEntityLabel(e, sampleCategoryCounts);
+    return {
+      uuid: e.uuid,
+      label,
+      icon: getEntityIcon(e),
+      tableRows: buildTableData(
+        getMetadata({
+          targetEntityType: e.entity_type,
+          currentEntity: e,
+        }),
+        fieldDescriptions,
+        { hubmap_id: e.hubmap_id, label },
+      ),
+    };
+  });
+}
+
 interface MetadataProps {
   metadata?: Record<string, string>;
 }
@@ -165,27 +217,7 @@ function Metadata({ metadata }: MetadataProps) {
     return null;
   }
 
-  const { donor, source_samples } = entity;
-
-  const entities = [entity, ...datasetsWithMetadata.map((d) => d._source), ...source_samples, donor]
-    .filter((e) => hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }))
-    .map((e) => {
-      const label = isDataset(e) ? e.assay_display_name : e.entity_type;
-      return {
-        uuid: e.uuid,
-        label,
-        icon: getEntityIcon(e),
-        tableRows: buildTableData(
-          getMetadata({
-            targetEntityType: e.entity_type,
-            currentEntity: e,
-          }),
-          fieldDescriptions,
-          { hubmap_id: e.hubmap_id, label },
-        ),
-      };
-    });
-
+  const entities = getTableEntities(entity, datasetsWithMetadata, fieldDescriptions);
   const allTableRows = entities.map((d) => d.tableRows).flat();
 
   return (
