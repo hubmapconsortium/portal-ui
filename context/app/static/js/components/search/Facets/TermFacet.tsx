@@ -22,6 +22,7 @@ import {
 } from './style';
 import FacetAccordion from './FacetAccordion';
 import { getFieldLabel } from '../labelMap';
+import transformValueLabel from '../fieldTransformationMap';
 
 interface CheckboxItem {
   label: string;
@@ -30,31 +31,34 @@ interface CheckboxItem {
   active: boolean;
   onClick: () => void;
   indeterminate?: boolean;
+  field: string;
 }
 
-type LabelTransformations = ((label: string) => string)[];
-
-interface TermLabelCount extends Omit<CheckboxItem, 'field' | 'indeterminate' | 'onClick' | 'title'> {
-  labelTransformations?: LabelTransformations;
+function getBucketKey(bucket: { key: string; key_as_string?: string; doc_count: number }) {
+  const { key, key_as_string } = bucket;
+  return key_as_string ?? key;
 }
 
-export function transformLabel({
-  label,
-  labelTransformations,
-}: Required<Pick<TermLabelCount, 'label' | 'labelTransformations'>>) {
-  return labelTransformations.reduce((l, transformFn) => transformFn(l), label);
-}
+type TermLabelCount = Omit<CheckboxItem, 'field' | 'indeterminate' | 'onClick' | 'title'>;
 
-export function TermLabelAndCount({ label, count, active, labelTransformations = [] }: TermLabelCount) {
+export function TermLabelAndCount({ label, count, active }: TermLabelCount) {
   return (
     <StyledStack direction="row" justifyContent="space-between" $active={active}>
-      <FormLabelText>{transformLabel({ label, labelTransformations })}</FormLabelText>
+      <FormLabelText>{label}</FormLabelText>
       <Typography>{count}</Typography>
     </StyledStack>
   );
 }
 
-function CheckboxFilterItem({ active = false, label, title, count, onClick, indeterminate = false }: CheckboxItem) {
+function CheckboxFilterItem({
+  active = false,
+  label,
+  title,
+  count,
+  onClick,
+  indeterminate = false,
+  field,
+}: CheckboxItem) {
   const { analyticsCategory } = useSearchStore();
 
   const handleClick = useCallback(() => {
@@ -82,7 +86,7 @@ function CheckboxFilterItem({ active = false, label, title, count, onClick, inde
           onClick={handleClick}
         />
       }
-      label={<TermLabelAndCount label={label} count={count} active={active} />}
+      label={<TermLabelAndCount label={transformValueLabel({ label, field })} count={count} active={active} />}
     />
   );
 }
@@ -98,7 +102,7 @@ export function TermFacetItem({ label, field, ...rest }: TermFacet) {
     filterTerm({ term: field, value: label });
   }, [filterTerm, field, label]);
 
-  return <CheckboxFilterItem onClick={handleClick} label={label} {...rest} />;
+  return <CheckboxFilterItem onClick={handleClick} label={label} field={field} {...rest} />;
 }
 
 const smallAggSize = 5;
@@ -143,16 +147,19 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
   const title = getFieldLabel(field);
   return (
     <FacetAccordion title={title} position="inner">
-      {aggBuckets.map((bucket) => (
-        <TermFacetItem
-          label={bucket.key}
-          count={bucket.doc_count}
-          key={bucket.key}
-          active={filter.values.has(bucket.key)}
-          field={field}
-          title={title}
-        />
-      ))}
+      {aggBuckets.map((bucket) => {
+        const key = getBucketKey(bucket);
+        return (
+          <TermFacetItem
+            label={key}
+            count={bucket.doc_count}
+            key={key}
+            active={filter.values.has(key)}
+            field={field}
+            title={title}
+          />
+        );
+      })}
       <FacetSizeButton field={field} hasMoreBuckets={hasMoreBuckets} />
     </FacetAccordion>
   );
@@ -185,6 +192,7 @@ export function HierarchicalFacetParent({ childValues, field, label, ...rest }: 
     <CheckboxFilterItem
       onClick={() => filterHierarchicalParentTerm({ term: field, value: label, childValues })}
       label={label}
+      field={field}
       {...rest}
     />
   );
@@ -197,6 +205,7 @@ export function HierarchicalFacetChild({ parentValue, field, label, ...rest }: T
     <CheckboxFilterItem
       onClick={() => filterHierarchicalChildTerm({ parentTerm: field, value: label, parentValue })}
       label={label}
+      field={field}
       {...rest}
     />
   );
@@ -310,19 +319,22 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
 
   return (
     <FacetAccordion title={title} position="inner">
-      {parentBuckets.map((bucket) => (
-        <HierarchicalTermFacetItem
-          label={bucket.key}
-          count={bucket.doc_count}
-          key={bucket.key}
-          active={bucket.key in values}
-          field={parentField}
-          childField={childField}
-          parentField={parentField}
-          childBuckets={bucket[childField]?.buckets}
-          title={title}
-        />
-      ))}
+      {parentBuckets.map((bucket) => {
+        const key = getBucketKey(bucket);
+        return (
+          <HierarchicalTermFacetItem
+            label={key}
+            count={bucket.doc_count}
+            key={key}
+            active={key in values}
+            field={parentField}
+            childField={childField}
+            parentField={parentField}
+            childBuckets={bucket[childField]?.buckets}
+            title={title}
+          />
+        );
+      })}
     </FacetAccordion>
   );
 }

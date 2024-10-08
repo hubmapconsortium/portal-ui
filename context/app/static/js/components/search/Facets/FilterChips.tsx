@@ -15,6 +15,7 @@ import {
   useSearchStore,
 } from '../store';
 import { getFieldLabel } from '../labelMap';
+import transformValueLabel from '../fieldTransformationMap';
 
 function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () => void }) {
   const { analyticsCategory } = useSearchStore();
@@ -40,7 +41,7 @@ function FilterChips() {
         if (isTermFilter(v)) {
           return [...v.values].map((val) => (
             <FilterChip
-              label={`${getFieldLabel(field)}: ${val}`}
+              label={`${getFieldLabel(field)}: ${transformValueLabel({ field, label: val })}`}
               key={val}
               onDelete={() => filterTerm({ term: field, value: val })}
             />
