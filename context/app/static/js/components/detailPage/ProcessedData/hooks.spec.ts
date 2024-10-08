@@ -97,5 +97,5 @@ it('checks if dataset is published', () => {
 it('counts pipelines and their occurrences', () => {
   const { pipelinesText, pipelineCountsText } = usePipelineCountsInfo(testDatasets.map((dataset) => dataset._source));
   expect(pipelinesText).toBe('Pipelines (2)');
-  expect(pipelineCountsText).toBe('Cytokit + SPRM (2), Segmentation Mask (1)');
+  expect(pipelineCountsText).toBe('Cytokit + SPRM (2), Segmentation Mask');
 });

@@ -54,7 +54,7 @@ export function usePipelineCountsInfo(datasets: Pick<ProcessedDatasetInfo, 'pipe
   );
   const pipelinesText = `Pipelines (${Object.keys(pipelineCounts).length})`;
   const pipelineCountsText = Object.entries(pipelineCounts)
-    .map(([pipeline, count]) => `${pipeline} (${count})`)
+    .map(([pipeline, count]) => (count > 1 ? `${pipeline} (${count})` : pipeline))
     .join(', ');
 
   return {
