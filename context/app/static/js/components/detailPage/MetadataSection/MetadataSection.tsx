@@ -135,7 +135,7 @@ function getEntityLabel(entity: ProcessedDatasetInfo | Donor | Sample, sampleCat
   if (isSample(entity)) {
     // If samples have the same category, add the HuBMAP ID to the label
     if (sampleCategoryCounts[entity.sample_category] > 1) {
-      return `${entity.sample_category} ${entity.hubmap_id}`;
+      return `${entity.sample_category} (${entity.hubmap_id})`;
     }
     return entity.sample_category;
   }
