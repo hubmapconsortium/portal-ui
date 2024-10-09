@@ -3,7 +3,20 @@ import useSearchData from 'js/hooks/useSearchData';
 
 const entityCountsQuery: SearchRequest = {
   size: 0,
-  aggs: { entity_type: { terms: { field: 'entity_type.keyword' } } },
+  query: {
+    bool: {
+      // Only include collections with a DOI in count
+      should: [
+        { bool: { must_not: { term: { 'entity_type.keyword': 'Collection' } } } },
+        { bool: { must: [{ exists: { field: 'doi_url' } }, { exists: { field: 'registered_doi' } }] } },
+      ],
+    },
+  },
+  aggs: {
+    entity_type: {
+      terms: { field: 'entity_type.keyword' },
+    },
+  },
 };
 
 interface EntityCounts {
