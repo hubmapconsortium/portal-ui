@@ -6,18 +6,16 @@ import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPag
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
-import { getMetadata, hasMetadata } from 'js/helpers/metadata';
+import { getMetadata } from 'js/helpers/metadata';
 import { Dataset, Donor, ESEntityType, Sample, isDataset, isSample } from 'js/components/types';
 import { ProcessedDatasetInfo, useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
 import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
-import MetadataTable from '../MetadataTable';
 import { nodeIcons } from '../DatasetRelationships/nodeTypes';
 
 export function getDescription(
@@ -61,11 +59,6 @@ export function buildTableData(
         description: getDescription(entry[0], metadataFieldDescriptions),
       }))
   );
-}
-
-function useTableData(tableData: Record<string, string>) {
-  const { data: fieldDescriptions } = useMetadataFieldDescriptions();
-  return buildTableData(tableData, fieldDescriptions);
 }
 
 interface TableRow {
@@ -125,16 +118,6 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
   );
 }
 
-function SingleMetadata({ metadata }: { metadata: Record<string, string> }) {
-  const tableRows = useTableData(metadata);
-
-  return (
-    <MetadataWrapper allTableRows={tableRows}>
-      <MetadataTable tableRows={tableRows} />
-    </MetadataWrapper>
-  );
-}
-
 function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
   if (isDataset(entity)) {
     if (entity.is_component) {
@@ -163,29 +146,23 @@ function getEntityLabel(entity: ProcessedDatasetInfo | Donor | Sample, sampleCat
 }
 
 function getTableEntities(
-  entity: Dataset,
-  datasetsWithMetadata: Required<SearchHit<ProcessedDatasetInfo>>[],
+  entities: (Donor | Dataset | Sample)[],
+  uuid: string,
   fieldDescriptions: Record<string, string>,
 ) {
-  const { donor, source_samples } = entity;
-
-  const entitiesWithMetadata = [entity, ...datasetsWithMetadata.map((d) => d._source), ...source_samples, donor].filter(
-    (e) => hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
-  );
-
   // Check whether there are multiple samples with the same sample category
   const sampleCategoryCounts: Record<string, number> = {};
-  entitiesWithMetadata.forEach((e) => {
+  entities.forEach((e) => {
     if (isSample(e)) {
       sampleCategoryCounts[e.sample_category] = (sampleCategoryCounts[e.sample_category] || 0) + 1;
     }
   });
 
-  return entitiesWithMetadata.map((e) => {
+  const sortedEntities = entities.map((e) => {
     const label = getEntityLabel(e, sampleCategoryCounts);
     return {
       uuid: e.uuid,
-      label,
+      label: label ?? '',
       icon: getEntityIcon(e),
       tableRows: buildTableData(
         getMetadata({
@@ -195,37 +172,56 @@ function getTableEntities(
         fieldDescriptions,
         { hubmap_id: e.hubmap_id, label },
       ),
+      entity_type: e.entity_type,
+      hubmap_id: e.hubmap_id,
     };
   });
+
+  sortedEntities.sort((a, b) => {
+    // Current entity at the front
+    if (a.uuid === uuid) return -1;
+    if (b.uuid === uuid) return 1;
+
+    // Then donors
+    if (a.entity_type === 'Donor' && b.entity_type !== 'Donor') return -1;
+    if (b.entity_type === 'Donor' && a.entity_type !== 'Donor') return 1;
+
+    // Then samples, with unique categories first
+    const aIsSampleWithoutHubmapId = a.entity_type === 'Sample' && !a.label.includes(a.hubmap_id);
+    const bIsSampleWithoutHubmapId = b.entity_type === 'Sample' && !b.label.includes(b.hubmap_id);
+    if (aIsSampleWithoutHubmapId && !bIsSampleWithoutHubmapId) return -1;
+    if (bIsSampleWithoutHubmapId && !aIsSampleWithoutHubmapId) return 1;
+
+    return a.label.localeCompare(b.label);
+  });
+
+  return sortedEntities;
 }
 
 interface MetadataProps {
-  metadata?: Record<string, string>;
+  entities: (Donor | Dataset | Sample)[];
 }
 
-function Metadata({ metadata }: MetadataProps) {
+function Metadata({ entities }: MetadataProps) {
   const { searchHits: datasetsWithMetadata, isLoading } = useProcessedDatasets(true);
   const { data: fieldDescriptions } = useMetadataFieldDescriptions();
-
-  const { entity } = useFlaskDataContext();
-
-  if (!isDataset(entity)) {
-    return <SingleMetadata metadata={metadata!} />;
-  }
+  const {
+    entity: { uuid },
+  } = useFlaskDataContext();
 
   if (isLoading || !datasetsWithMetadata) {
     return null;
   }
 
-  const entities = getTableEntities(entity, datasetsWithMetadata, fieldDescriptions);
-  const allTableRows = entities.map((d) => d.tableRows).flat();
+  const tableEntities = getTableEntities(entities, uuid, fieldDescriptions);
+  const allTableRows = tableEntities.map((d) => d.tableRows).flat();
 
   return (
     <MetadataWrapper
       allTableRows={allTableRows}
       tsvColumns={[{ id: 'hubmap_id', label: 'HuBMAP ID' }, { id: 'label', label: 'Entity' }, ...defaultTSVColumns]}
     >
-      <MetadataTabs entities={entities} />
+      <MetadataTabs entities={tableEntities} />
     </MetadataWrapper>
   );
 }

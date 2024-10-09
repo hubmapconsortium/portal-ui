@@ -38,7 +38,7 @@ function MetadataTabs({ entities }: { entities: MultiAssayEntityWithTableRows[] 
 
   return (
     <Box sx={{ width: '100%' }}>
-      <Tabs value={openTabIndex} onChange={handleTabChange}>
+      <Tabs value={openTabIndex} onChange={handleTabChange} variant="scrollable">
         {entities.map(({ label, uuid, icon }, index) => (
           <MetadataTab label={label} uuid={uuid} index={index} key={uuid} icon={icon} />
         ))}
