@@ -1,5 +1,6 @@
 import { useMemo } from 'react';
 import { ProcessedDatasetInfo, useProcessedDatasets } from 'js/pages/Dataset/hooks';
+import { generateCommaList } from 'js/helpers/functions';
 
 export function createdByCentralProcess(dataset: Pick<ProcessedDatasetInfo, 'creation_action'>) {
   return dataset.creation_action === 'Central Process';
@@ -36,4 +37,29 @@ export function useSortedSearchHits(datasets: ReturnType<typeof useProcessedData
     return sorted;
   }, [datasets]);
   return sortedSearchHits;
+}
+
+/**
+ * Formats the processed datasets' pipelines and their counts for presentation.
+ * @param datasets The processed datasets to count the pipelines of.
+ * @returns Text for the pipelines label, and additional text for each pipeline and its count.
+ */
+export function usePipelineCountsInfo(datasets: Pick<ProcessedDatasetInfo, 'pipeline'>[]) {
+  const pipelines = datasets.map((dataset) => dataset.pipeline);
+  const pipelineCounts = pipelines.reduce(
+    (acc, pipeline) => {
+      acc[pipeline] = (acc[pipeline] || 0) + 1;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
+  const pipelinesText = `Pipelines (${Object.keys(pipelineCounts).length})`;
+  const pipelineCountsText = generateCommaList(
+    Object.entries(pipelineCounts).map(([pipeline, count]) => (count > 1 ? `${pipeline} (${count})` : pipeline)),
+  );
+
+  return {
+    pipelinesText,
+    pipelineCountsText,
+  };
 }
