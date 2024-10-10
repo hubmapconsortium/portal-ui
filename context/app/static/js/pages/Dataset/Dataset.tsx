@@ -17,7 +17,7 @@ import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
-import { Dataset, Entity, isDataset } from 'js/components/types';
+import { Dataset, Donor, Entity, Sample, isDataset } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
@@ -28,7 +28,6 @@ import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { InternalLink } from 'js/shared-styles/Links';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
-
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { hasMetadata } from 'js/helpers/metadata';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
@@ -99,8 +98,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     ancestor_ids,
   } = assayMetadata;
 
-  const [entities, loadingEntities] = useEntitiesData([uuid, ...ancestor_ids]);
-
+  const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
   const entitiesWithMetadata = entities.filter((e) =>
     hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
   );

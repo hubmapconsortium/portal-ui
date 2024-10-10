@@ -7,7 +7,6 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import { tableToDelimitedString, createDownloadUrl } from 'js/helpers/functions';
 import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { Dataset, Donor, Sample, isDataset } from 'js/components/types';
-import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { getTableEntities } from 'js/components/detailPage/MetadataSection/utils';
@@ -78,15 +77,10 @@ interface MetadataProps {
 }
 
 function Metadata({ entities }: MetadataProps) {
-  const { searchHits: datasetsWithMetadata, isLoading } = useProcessedDatasets(true);
   const { data: fieldDescriptions } = useMetadataFieldDescriptions();
   const {
     entity: { uuid },
   } = useFlaskDataContext();
-
-  if (isLoading || !datasetsWithMetadata) {
-    return null;
-  }
 
   const tableEntities = getTableEntities({ entities, uuid, fieldDescriptions });
   const allTableRows = tableEntities.map((d) => d.tableRows).flat();

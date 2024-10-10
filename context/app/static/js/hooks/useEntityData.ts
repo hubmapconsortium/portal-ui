@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { Dataset, Donor, Entity, Sample } from 'js/components/types';
+import { Entity } from 'js/components/types';
 
 export const useEntityQuery = (uuid: string | string[], source?: string[]) => {
   return useMemo(
@@ -20,10 +20,10 @@ export function useEntityData(uuid: string, source?: string[]): [Entity, boolean
   return [searchHits[0]?._source, isLoading];
 }
 
-export function useEntitiesData(uuids: string[], source?: string[]): [(Donor | Sample | Dataset)[], boolean] {
+export function useEntitiesData<T extends Entity = Entity>(uuids: string[], source?: string[]): [T[], boolean] {
   const query = useEntityQuery(uuids, source);
 
-  const { searchHits, isLoading } = useSearchHits<Donor | Dataset | Sample>(query);
+  const { searchHits, isLoading } = useSearchHits<T>(query);
 
   return [searchHits.map((hit) => hit._source), isLoading];
 }
