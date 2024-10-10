@@ -1,3 +1,17 @@
+## v1.12.1 - 2024-10-10
+
+- Prevent collections without a DOI from being counted on the homepage.
+- Avoid page scrolling from using arrow keys on vitessce visualization.
+- Prevent malformed provenance graph data from crashing the entire page.
+- Improve readability of pipeline list in processed dataset sections.
+- Append HuBMAP ID to errored datasets' URL anchors to avoid anchor duplication on dataset pages with multiple failed processing attempts.
+- Improve entity header state handling of page resizes.
+- Fix push script to correctly check latest minor version date.
+- Sort publications by their date of publication.
+- Update Unified View redirect toast to be more informative.
+- Update group for HIVE-processed datasets to be 'HIVE'.
+
+
 ## v1.12.0 - 2024-10-07
 
 - Fix bug on dataset detail page for workspace dialogs opened in succession for different processed datasets. 

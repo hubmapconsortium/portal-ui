@@ -1,1 +1,0 @@
-- Fix push script to correctly check latest minor version date.

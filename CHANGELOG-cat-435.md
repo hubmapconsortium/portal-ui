@@ -1,1 +1,0 @@
-- Avoid page scrolling from using arrow keys on vitessce visualization.
