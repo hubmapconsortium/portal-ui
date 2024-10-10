@@ -22,7 +22,8 @@ const lastModifiedTimestampCol: Column = {
 const organCol: Column = {
   id: 'origin_samples_unique_mapped_organs',
   label: 'Organ',
-  renderColumnCell: (entity) => (isDataset(entity) ? entity.origin_samples_unique_mapped_organs.join(', ') : ''),
+  renderColumnCell: (entity) =>
+    isDataset(entity) || isSample(entity) ? entity.origin_samples_unique_mapped_organs.join(', ') : '',
 };
 
 const dataTypesCol: Column = {
@@ -34,7 +35,7 @@ const dataTypesCol: Column = {
 const statusCol: Column = {
   id: 'mapped_status',
   label: 'Status',
-  renderColumnCell: ({ mapped_status }) => mapped_status ?? '',
+  renderColumnCell: ({ mapped_status, status }) => mapped_status ?? status ?? '',
 };
 
 const derivedSamplesColumns: Column[] = [

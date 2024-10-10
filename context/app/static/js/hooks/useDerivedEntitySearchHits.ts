@@ -1,8 +1,9 @@
 import { useMemo } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
+import { Dataset, Sample } from 'js/components/types';
 
-function getTypeQuery(ancestorUUID, type) {
+function getTypeQuery(ancestorUUID: string, type: string) {
   return {
     bool: {
       filter: [
@@ -21,7 +22,7 @@ function getTypeQuery(ancestorUUID, type) {
   };
 }
 
-function useDerivedDatasetSearchHits(ancestorUUID) {
+function useDerivedDatasetSearchHits(ancestorUUID: string) {
   const query = useMemo(
     () => ({
       query: getTypeQuery(ancestorUUID, 'dataset'),
@@ -39,10 +40,10 @@ function useDerivedDatasetSearchHits(ancestorUUID) {
     [ancestorUUID],
   );
 
-  return useSearchHits(query);
+  return useSearchHits<Dataset>(query);
 }
 
-function useDerivedSampleSearchHits(ancestorUUID) {
+function useDerivedSampleSearchHits(ancestorUUID: string) {
   const query = useMemo(
     () => ({
       query: getTypeQuery(ancestorUUID, 'sample'),
@@ -59,7 +60,7 @@ function useDerivedSampleSearchHits(ancestorUUID) {
     }),
     [ancestorUUID],
   );
-  return useSearchHits(query);
+  return useSearchHits<Sample>(query);
 }
 
 export { useDerivedDatasetSearchHits, useDerivedSampleSearchHits };
