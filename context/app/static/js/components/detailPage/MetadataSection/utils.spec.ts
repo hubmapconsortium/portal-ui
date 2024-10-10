@@ -1,39 +1,5 @@
 import { DonorIcon } from 'js/shared-styles/icons';
-import { getDescription, buildTableData, sortEntities, TableEntity } from './utils';
-
-/**
- * =============================================================================
- *                                getDescription
- * =============================================================================
- */
-
-test('should handle plain fields', () => {
-  // Wouldn't actually expect to see age_value anywhere except for donor,
-  // but shouldn't make a difference... and if it does, we want to know.
-  expect(getDescription('age_value', { age_value: 'The time elapsed since birth.' })).toEqual(
-    'The time elapsed since birth.',
-  );
-});
-
-test('should handle donor fields', () => {
-  expect(getDescription('donor.age_value', { age_value: 'The time elapsed since birth.' })).toEqual(
-    'For the original donor: The time elapsed since birth.',
-  );
-});
-
-test('should handle sample fields', () => {
-  expect(getDescription('sample.age_value', { age_value: 'The time elapsed since birth.' })).toEqual(
-    'For the original sample: The time elapsed since birth.',
-  );
-});
-
-test('should return undefined if there is not a definition', () => {
-  expect(getDescription('sample.no_such_stem', {})).toEqual(undefined);
-});
-
-test('should error if stem is known, but prefix is not', () => {
-  expect(() => getDescription('no_such_prefix.age_value', { age_value: 'The time elapsed since birth.' })).toThrow();
-});
+import { buildTableData, sortEntities, TableEntity } from './utils';
 
 /**
  * =============================================================================

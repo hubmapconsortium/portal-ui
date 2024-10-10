@@ -5,24 +5,6 @@ import { getMetadata } from 'js/helpers/metadata';
 import { ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import { MUIIcon, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
-function getDescription(field: string, metadataFieldDescriptions: Record<string, string> | Record<string, never>) {
-  const [prefix, stem] = field.split('.');
-  if (!stem) {
-    return metadataFieldDescriptions?.[field];
-  }
-  const description = metadataFieldDescriptions?.[stem];
-  if (!description) {
-    return undefined;
-  }
-  if (prefix === 'donor') {
-    return `For the original donor: ${metadataFieldDescriptions?.[stem]}`;
-  }
-  if (prefix === 'sample') {
-    return `For the original sample: ${metadataFieldDescriptions?.[stem]}`;
-  }
-  throw new Error(`Unrecognized metadata field prefix: ${prefix}`);
-}
-
 function buildTableData(
   tableData: Record<string, string | object | unknown[]>,
   metadataFieldDescriptions: Record<string, string> | Record<string, never>,
@@ -40,7 +22,7 @@ function buildTableData(
         key: entry[0],
         // eslint-disable-next-line @typescript-eslint/no-base-to-string
         value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
-        description: getDescription(entry[0], metadataFieldDescriptions),
+        description: metadataFieldDescriptions?.[entry[0]],
       }))
   );
 }
@@ -73,7 +55,7 @@ interface sortEntitiesProps {
 }
 
 function sortEntities({ tableEntities, uuid }: sortEntitiesProps) {
-  return tableEntities.sort((a, b) => {
+  return [...tableEntities].sort((a, b) => {
     // Current entity at the front
     if (a.uuid === uuid) return -1;
     if (b.uuid === uuid) return 1;
@@ -149,4 +131,4 @@ function getTableEntities({ entities, uuid, fieldDescriptions }: getTableEntitie
   return sortEntities({ tableEntities, uuid });
 }
 
-export { getTableEntities, getDescription, buildTableData, sortEntities };
+export { getTableEntities, buildTableData, sortEntities };
