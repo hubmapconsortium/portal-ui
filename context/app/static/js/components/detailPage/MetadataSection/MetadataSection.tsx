@@ -9,7 +9,7 @@ import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { getMetadata } from 'js/helpers/metadata';
 import { Dataset, Donor, ESEntityType, Sample, isDataset, isSample } from 'js/components/types';
 import { ProcessedDatasetInfo, useProcessedDatasets } from 'js/pages/Dataset/hooks';
-import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { MUIIcon, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
@@ -131,53 +131,20 @@ function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boole
   return entityIconMap[entity.entity_type];
 }
 
-function getEntityLabel(entity: ProcessedDatasetInfo | Donor | Sample, sampleCategoryCounts: Record<string, number>) {
-  if (isSample(entity)) {
-    // If samples have the same category, add the HuBMAP ID to the label
-    if (sampleCategoryCounts[entity.sample_category] > 1) {
-      return `${entity.sample_category} (${entity.hubmap_id})`;
-    }
-    return entity.sample_category;
-  }
-  if (isDataset(entity)) {
-    return entity.assay_display_name;
-  }
-  return entity.entity_type;
+interface sortEntitiesProps {
+  tableEntities: {
+    uuid: string;
+    label: string;
+    icon: MUIIcon;
+    tableRows: TableRows;
+    entity_type: ESEntityType;
+    hubmap_id: string;
+  }[];
+  uuid: string;
 }
 
-function getTableEntities(
-  entities: (Donor | Dataset | Sample)[],
-  uuid: string,
-  fieldDescriptions: Record<string, string>,
-) {
-  // Check whether there are multiple samples with the same sample category
-  const sampleCategoryCounts: Record<string, number> = {};
-  entities.forEach((e) => {
-    if (isSample(e)) {
-      sampleCategoryCounts[e.sample_category] = (sampleCategoryCounts[e.sample_category] || 0) + 1;
-    }
-  });
-
-  const sortedEntities = entities.map((e) => {
-    const label = getEntityLabel(e, sampleCategoryCounts);
-    return {
-      uuid: e.uuid,
-      label: label ?? '',
-      icon: getEntityIcon(e),
-      tableRows: buildTableData(
-        getMetadata({
-          targetEntityType: e.entity_type,
-          currentEntity: e,
-        }),
-        fieldDescriptions,
-        { hubmap_id: e.hubmap_id, label },
-      ),
-      entity_type: e.entity_type,
-      hubmap_id: e.hubmap_id,
-    };
-  });
-
-  sortedEntities.sort((a, b) => {
+function sortEntities({ tableEntities, uuid }: sortEntitiesProps) {
+  return tableEntities.sort((a, b) => {
     // Current entity at the front
     if (a.uuid === uuid) return -1;
     if (b.uuid === uuid) return 1;
@@ -194,8 +161,62 @@ function getTableEntities(
 
     return a.label.localeCompare(b.label);
   });
+}
 
-  return sortedEntities;
+interface getEntityLabelProps {
+  entity: ProcessedDatasetInfo | Donor | Sample;
+  sampleCategoryCounts: Record<string, number>;
+}
+
+function getEntityLabel({ entity, sampleCategoryCounts }: getEntityLabelProps) {
+  if (isSample(entity)) {
+    // If samples have the same category, add the HuBMAP ID to the label
+    if (sampleCategoryCounts[entity.sample_category] > 1) {
+      return `${entity.sample_category} (${entity.hubmap_id})`;
+    }
+    return entity.sample_category;
+  }
+  if (isDataset(entity)) {
+    return entity.assay_display_name;
+  }
+  return entity.entity_type;
+}
+
+interface getTableEntitiesProps {
+  entities: (Donor | Dataset | Sample)[];
+  uuid: string;
+  fieldDescriptions: Record<string, string>;
+}
+
+function getTableEntities({ entities, uuid, fieldDescriptions }: getTableEntitiesProps) {
+  // Check whether there are multiple samples with the same sample category
+  const sampleCategoryCounts: Record<string, number> = {};
+  entities.forEach((e) => {
+    if (isSample(e)) {
+      sampleCategoryCounts[e.sample_category] = (sampleCategoryCounts[e.sample_category] || 0) + 1;
+    }
+  });
+
+  const tableEntities = entities.map((entity) => {
+    const label = getEntityLabel({ entity, sampleCategoryCounts });
+    return {
+      uuid: entity.uuid,
+      label: label ?? '',
+      icon: getEntityIcon(entity),
+      tableRows: buildTableData(
+        getMetadata({
+          targetEntityType: entity.entity_type,
+          currentEntity: entity,
+        }),
+        fieldDescriptions,
+        { hubmap_id: entity.hubmap_id, label },
+      ),
+      entity_type: entity.entity_type,
+      hubmap_id: entity.hubmap_id,
+    };
+  });
+
+  return sortEntities({ tableEntities, uuid });
 }
 
 interface MetadataProps {
@@ -213,7 +234,7 @@ function Metadata({ entities }: MetadataProps) {
     return null;
   }
 
-  const tableEntities = getTableEntities(entities, uuid, fieldDescriptions);
+  const tableEntities = getTableEntities({ entities, uuid, fieldDescriptions });
   const allTableRows = tableEntities.map((d) => d.tableRows).flat();
 
   return (
