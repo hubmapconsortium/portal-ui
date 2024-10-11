@@ -14,10 +14,9 @@ const tooltip = 'Launch New Workspace';
 
 interface VisualizationWorkspaceButtonProps {
   uuid?: string;
-  hasNotebook?: boolean;
 }
 
-function VisualizationWorkspaceButton({ uuid = '', hasNotebook }: VisualizationWorkspaceButtonProps) {
+function VisualizationWorkspaceButton({ uuid = '' }: VisualizationWorkspaceButtonProps) {
   const { mapped_data_access_level } = useDetailContext();
   const {
     datasetDetails: { hubmap_id },
@@ -30,7 +29,7 @@ function VisualizationWorkspaceButton({ uuid = '', hasNotebook }: VisualizationW
     initialSelectedDatasets: [uuid],
   });
 
-  if (!isWorkspacesUser || !hubmap_id || !hasNotebook || mapped_data_access_level !== 'Public') {
+  if (!isWorkspacesUser || !hubmap_id || mapped_data_access_level !== 'Public') {
     return null;
   }
 
