@@ -1,3 +1,5 @@
+# Changelog
+
 ## v1.12.1 - 2024-10-10
 
 - Prevent collections without a DOI from being counted on the homepage.
