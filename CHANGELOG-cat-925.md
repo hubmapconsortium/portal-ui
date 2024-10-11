@@ -1,0 +1,1 @@
+- Ensure visualizations for image pyramids use parent UUID to fetch notebooks.

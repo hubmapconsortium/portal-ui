@@ -49,6 +49,7 @@ interface VisualizationProps {
   shouldDisplayHeader: boolean;
   shouldMountVitessce?: boolean;
   markerGene?: string;
+  parentUuid?: string;
 }
 
 function Visualization({
@@ -60,6 +61,7 @@ function Visualization({
   shouldDisplayHeader,
   shouldMountVitessce = true,
   markerGene,
+  parentUuid,
 }: VisualizationProps) {
   const { vizIsFullscreen, expandViz, vizTheme, setVitessceState, setVitessceStateDebounced, setVizNotebookId } =
     useVisualizationStore(visualizationStoreSelector);
@@ -128,7 +130,7 @@ function Visualization({
                 mapped_data_access_level={mapped_data_access_level}
                 hasNotebook={hasNotebook}
               />
-              <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} />
+              <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">

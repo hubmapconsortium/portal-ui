@@ -38,6 +38,19 @@ function VisualizationWrapper({
     }),
     [isPublicationPage, shouldDisplayHeader, uuid],
   );
+  // Find parent UUID for the visualization if present
+  const parentUuid: string | undefined = useMemo(() => {
+    if (Array.isArray(vitData)) {
+      const vitDataArray = vitData as object[];
+      const found = vitDataArray.find((data) => 'parentUuid' in data) as { parentUuid: string } | undefined;
+      return found?.parentUuid;
+    }
+    if ('parentUuid' in vitData) {
+      return (vitData as { parentUuid: string }).parentUuid;
+    }
+    return undefined;
+  }, [vitData]);
+
   return (
     <VizContainerStyleContext.Provider value={containerStyles}>
       <VisualizationErrorBoundary>
@@ -51,6 +64,7 @@ function VisualizationWrapper({
             shouldDisplayHeader={shouldDisplayHeader}
             shouldMountVitessce={hasBeenMounted}
             markerGene={markerGene}
+            parentUuid={parentUuid}
           />
         </Suspense>
       </VisualizationErrorBoundary>
