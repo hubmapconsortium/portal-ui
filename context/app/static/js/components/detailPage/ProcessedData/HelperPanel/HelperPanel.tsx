@@ -14,6 +14,7 @@ import { LineClamp } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import { formatDate } from 'date-fns/format';
+import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
@@ -41,13 +42,15 @@ function HelperPanelHeader() {
 
 function HelperPanelStatus() {
   const currentDataset = useCurrentDataset();
+  const { mapped_data_access_level } = useDetailContext();
+
   if (!currentDataset) {
     return null;
   }
   return (
     <Stack direction="row" alignItems="center">
       <StatusIcon status={currentDataset.status} />
-      <Typography variant="body2">{currentDataset.status}</Typography>
+      <Typography variant="body2">{`${currentDataset.status} (${mapped_data_access_level})`}</Typography>
     </Stack>
   );
 }
