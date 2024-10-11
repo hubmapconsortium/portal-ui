@@ -30,7 +30,7 @@ function VisualizationWorkspaceButton({ uuid = '', hasNotebook }: VisualizationW
     initialSelectedDatasets: [uuid],
   });
 
-  if (!isWorkspacesUser || !hubmap_id || !hasNotebook || mapped_data_access_level === 'Protected') {
+  if (!isWorkspacesUser || !hubmap_id || !hasNotebook || mapped_data_access_level !== 'Public') {
     return null;
   }
 
