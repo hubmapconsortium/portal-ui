@@ -1,9 +1,9 @@
-import { nodeIcons } from 'js/components/detailPage/DatasetRelationships/nodeTypes';
 import { TableRows } from 'js/components/detailPage/MetadataSection/MetadataSection';
 import { Dataset, Donor, ESEntityType, Sample, isDataset, isSample } from 'js/components/types';
+import { getEntityIcon } from 'js/helpers/functions';
 import { getMetadata } from 'js/helpers/metadata';
 import { ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
-import { MUIIcon, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { MUIIcon } from 'js/shared-styles/icons/entityIconMap';
 
 function buildTableData(
   tableData: Record<string, string | object | unknown[]>,
@@ -25,19 +25,6 @@ function buildTableData(
         description: metadataFieldDescriptions?.[entry[0]],
       }))
   );
-}
-
-function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
-  if (isDataset(entity)) {
-    if (entity.is_component) {
-      return nodeIcons.componentDataset;
-    }
-    if (entity.processing === 'processed') {
-      return nodeIcons.processedDataset;
-    }
-    return nodeIcons.primaryDataset;
-  }
-  return entityIconMap[entity.entity_type];
 }
 
 export interface TableEntity {
