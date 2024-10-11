@@ -217,7 +217,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
     <Stack
       direction="row"
       alignItems="center"
-      height="48px"
+      height="3rem"
       px={2}
       py={0.5}
       sx={(theme) => ({ ...(view !== 'narrow' && { borderBottom: `1px solid ${theme.palette.primary.lowEmphasis}` }) })}
