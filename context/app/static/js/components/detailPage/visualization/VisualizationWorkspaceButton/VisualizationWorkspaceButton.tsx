@@ -7,30 +7,30 @@ import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 import { useAppContext } from 'js/components/Contexts';
+import { useDetailContext } from 'js/components/detailPage/DetailContext';
+import { useProcessedDatasetDetails } from 'js/components/detailPage/ProcessedData/ProcessedDataset/hooks';
 
 const tooltip = 'Launch New Workspace';
 
 interface VisualizationWorkspaceButtonProps {
   uuid?: string;
-  hubmap_id?: string;
   hasNotebook?: boolean;
-  mapped_data_access_level?: string;
 }
 
-function VisualizationWorkspaceButton({
-  uuid = '',
-  hubmap_id,
-  hasNotebook,
-  mapped_data_access_level,
-}: VisualizationWorkspaceButtonProps) {
+function VisualizationWorkspaceButton({ uuid = '', hasNotebook }: VisualizationWorkspaceButtonProps) {
+  const { mapped_data_access_level } = useDetailContext();
+  const {
+    datasetDetails: { hubmap_id },
+  } = useProcessedDatasetDetails(uuid);
   const { isWorkspacesUser } = useAppContext();
+
   const { setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
     defaultName: hubmap_id,
     defaultTemplate: 'visualization',
     initialSelectedDatasets: [uuid],
   });
 
-  if (!isWorkspacesUser ?? !uuid ?? !hubmap_id ?? !hasNotebook ?? mapped_data_access_level === 'Protected') {
+  if (!isWorkspacesUser || !hubmap_id || !hasNotebook || mapped_data_access_level === 'Protected') {
     return null;
   }
 

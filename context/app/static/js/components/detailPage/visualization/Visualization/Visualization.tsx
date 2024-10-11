@@ -43,8 +43,6 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 interface VisualizationProps {
   vitData: object | object[];
   uuid?: string;
-  hubmap_id?: string;
-  mapped_data_access_level?: string;
   hasNotebook: boolean;
   shouldDisplayHeader: boolean;
   shouldMountVitessce?: boolean;
@@ -54,8 +52,6 @@ interface VisualizationProps {
 function Visualization({
   vitData,
   uuid,
-  hubmap_id,
-  mapped_data_access_level,
   hasNotebook,
   shouldDisplayHeader,
   shouldMountVitessce = true,
@@ -122,12 +118,7 @@ function Visualization({
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
             <Stack direction="row" spacing={1}>
-              <VisualizationWorkspaceButton
-                uuid={uuid}
-                hubmap_id={hubmap_id}
-                mapped_data_access_level={mapped_data_access_level}
-                hasNotebook={hasNotebook}
-              />
+              <VisualizationWorkspaceButton uuid={uuid} hasNotebook={hasNotebook} />
               <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} />
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
