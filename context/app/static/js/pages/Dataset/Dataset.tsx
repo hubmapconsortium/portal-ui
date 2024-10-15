@@ -17,7 +17,7 @@ import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
-import { Dataset, Entity, isDataset } from 'js/components/types';
+import { Dataset, Donor, Entity, Sample, isDataset } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
 import ProcessedDataSection from 'js/components/detailPage/ProcessedData';
 import { SelectedVersionStoreProvider } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
@@ -28,7 +28,8 @@ import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
 import useTrackID from 'js/hooks/useTrackID';
 import { InternalLink } from 'js/shared-styles/Links';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
-
+import { useEntitiesData } from 'js/hooks/useEntityData';
+import { hasMetadata } from 'js/helpers/metadata';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
 interface SummaryDataChildrenProps {
@@ -94,7 +95,13 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     is_component,
     assay_modality,
     processing,
+    ancestor_ids,
   } = assayMetadata;
+
+  const [entities, loadingEntities] = useEntitiesData<Dataset | Donor | Sample>([uuid, ...ancestor_ids]);
+  const entitiesWithMetadata = entities.filter((e) =>
+    hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
+  );
 
   useRedirectAlert();
 
@@ -122,6 +129,10 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   const { shouldDisplay: shouldDisplayRelationships } = useDatasetRelationships(uuid, processing);
 
+  if (loadingEntities) {
+    return null;
+  }
+
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
@@ -146,7 +157,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
           >
             <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
           </Summary>
-          <MetadataSection shouldDisplay={shouldDisplaySection.metadata} />
+          <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
           <ProcessedDataSection shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
