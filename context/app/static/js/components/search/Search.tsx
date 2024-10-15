@@ -327,7 +327,7 @@ function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups })
 }
 
 const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<string[]>) => {
-  const z = Object.entries(filterState).reduce<FiltersType>((acc, [k, v]) => {
+  const mergedFilters = Object.entries(filterState).reduce<FiltersType>((acc, [k, v]) => {
     return produce(acc, (draft) => {
       const URLStateFilter = filterURLState?.[k];
 
@@ -360,7 +360,7 @@ const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<stri
       return draft;
     });
   }, {});
-  return z;
+  return mergedFilters;
 };
 
 const options = {
