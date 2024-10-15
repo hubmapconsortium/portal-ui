@@ -10,7 +10,7 @@ import FacetAccordion from './FacetAccordion';
 
 export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
-    <Box sx={{ maxWidth: 246 }}>
+    <Box sx={{ minWidth: 250, maxWidth: 250 }}>
       <Stack
         sx={(theme) => ({
           alignItems: 'center',
