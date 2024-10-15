@@ -12,21 +12,20 @@ import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 
 function DonorDetail() {
+  const { entity } = useFlaskDataContext();
   const {
-    entity: {
-      uuid,
-      protocol_url,
-      hubmap_id,
-      entity_type,
-      mapped_metadata = {},
-      created_timestamp,
-      last_modified_timestamp,
-      description,
-      group_name,
-      created_by_user_displayname,
-      created_by_user_email,
-    },
-  } = useFlaskDataContext();
+    uuid,
+    protocol_url,
+    hubmap_id,
+    entity_type,
+    mapped_metadata = {},
+    created_timestamp,
+    last_modified_timestamp,
+    description,
+    group_name,
+    created_by_user_displayname,
+    created_by_user_email,
+  } = entity;
 
   const shouldDisplaySection = {
     summary: true,
@@ -53,7 +52,7 @@ function DonorDetail() {
           description={description}
           group_name={group_name}
         />
-        {shouldDisplaySection.metadata && <MetadataSection metadata={mapped_metadata} hubmap_id={hubmap_id} />}
+        {shouldDisplaySection.metadata && <MetadataSection entities={[entity]} hubmap_id={hubmap_id} />}
         <DerivedEntitiesSection />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} showHeader />}
