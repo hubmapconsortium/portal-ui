@@ -1,7 +1,7 @@
 import esb from 'elastic-builder';
 import { stringify } from 'qs';
 import { createStoreImmer, createStoreContext } from 'js/helpers/zustand';
-
+import history from 'history/browser';
 import { SWRConfiguration } from 'swr';
 
 export interface SortField {
@@ -168,11 +168,9 @@ function replaceURLSearchParams(state: SearchStoreState) {
     JSON.stringify(urlState, (_key, value: unknown) => (value instanceof Set ? [...value] : value)),
   );
 
-  const urlCopy = new URL(String(window.location));
-  urlCopy.search = stringify(urlStateWithArrays);
+  const { pathname } = history.location;
 
-  // eslint-disable-next-line no-restricted-globals
-  history.pushState(null, '', urlCopy);
+  history.push(`${pathname}?${stringify(urlStateWithArrays)}`);
 }
 
 export const createStore = ({ initialState }: { initialState: SearchStoreState }) =>

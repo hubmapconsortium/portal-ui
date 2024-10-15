@@ -9,11 +9,12 @@ import Typography from '@mui/material/Typography';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { parse } from 'qs';
 import merge from 'deepmerge';
+import history from 'history/browser';
+
 import { useAppContext } from 'js/components/Contexts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-
 import {
   SearchStoreProvider,
   useSearchStore,
@@ -376,7 +377,7 @@ function useInitialURLState() {
   const [initialUrlState, setInitialUrlState] = useState<Partial<SearchURLState>>({ filters: {} });
 
   useEffect(() => {
-    const searchParams: Partial<SearchURLState> = parse(window.location.search, { ignoreQueryPrefix: true });
+    const searchParams: Partial<SearchURLState> = parse(history.location.search, { ignoreQueryPrefix: true });
 
     if (Object.keys(searchParams).length) {
       setInitialUrlState({ filters: {}, ...searchParams });
