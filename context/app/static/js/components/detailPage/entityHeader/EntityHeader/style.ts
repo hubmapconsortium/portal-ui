@@ -7,7 +7,7 @@ const StyledPaper = styled(Paper)(({ theme }) => ({
   position: 'sticky',
   width: '100%',
   top: headerHeight,
-  zIndex: theme.zIndex.entityHeader,
+  zIndex: theme.zIndex.header,
 }));
 
 export { StyledPaper };
