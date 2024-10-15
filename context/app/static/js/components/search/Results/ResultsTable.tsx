@@ -3,6 +3,7 @@ import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
+import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import DOMPurify from 'isomorphic-dompurify';
 import parse from 'html-react-parser';
@@ -120,29 +121,44 @@ function HighlightRow({ colSpan, highlight }: { colSpan: number } & Required<Pic
   );
 }
 
+function LoadingRows() {
+  const {
+    sourceFields: { table: tableFields },
+    size,
+  } = useSearchStore();
+  return Array.from({ length: size }).map((_, i) => (
+    // eslint-disable-next-line react/no-array-index-key
+    <TableRow key={i}>
+      <SelectableRowCell rowKey="" disabled cellComponent={StyledTableCell} />
+      {tableFields.map((field) => (
+        <StyledTableCell key={field}>
+          <Skeleton variant="text" />
+        </StyledTableCell>
+      ))}
+    </TableRow>
+  ));
+}
+
 function ResultsTable() {
-  const { searchHits: hits } = useSearch();
+  const { searchHits: hits, isLoading } = useSearch();
+
   const {
     sourceFields: { table: tableFields },
   } = useSearchStore();
-
-  // TODO: Loading State
-  if (!hits.length) {
-    return null;
-  }
 
   return (
     <Box>
       <StyledTable data-testid="search-results-table">
         <TableHead>
           <TableRow>
-            <SelectableHeaderCell allTableRowKeys={hits.map((h) => h._id)} disabled={false} />
+            <SelectableHeaderCell allTableRowKeys={hits.map((h) => h._id)} disabled={isLoading} />
             {tableFields.map((field) => (
               <SortHeaderCell key={field} field={field} label={getFieldLabel(field)} />
             ))}
           </TableRow>
         </TableHead>
         <StyledTableBody>
+          {isLoading && !hits?.length && <LoadingRows />}
           {hits.map((hit) => (
             <React.Fragment key={hit._id}>
               <StyledTableRow $beforeHighlight={Boolean(hit?.highlight)}>

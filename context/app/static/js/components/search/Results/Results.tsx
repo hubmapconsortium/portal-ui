@@ -16,11 +16,12 @@ function NoResults() {
 function Results() {
   const {
     searchHits: { length },
+    isLoading,
   } = useSearch();
 
   const { view } = useSearchStore();
 
-  if (!length) {
+  if (!isLoading && !length) {
     return <NoResults />;
   }
 

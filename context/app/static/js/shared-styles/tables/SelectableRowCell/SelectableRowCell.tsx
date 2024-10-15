@@ -1,16 +1,23 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 
 import Checkbox from '@mui/material/Checkbox';
 import TableCell from '@mui/material/TableCell';
 
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
-function SelectableRowCell({ rowKey, disabled }) {
+function SelectableRowCell({
+  rowKey,
+  disabled = false,
+  cellComponent: CellComponent = TableCell,
+}: {
+  rowKey: string;
+  disabled?: boolean;
+  cellComponent?: React.FunctionComponent | typeof TableCell;
+}) {
   const { toggleRow, selectedRows, tableLabel } = useSelectableTableStore();
 
   return (
-    <TableCell padding="checkbox">
+    <CellComponent padding="checkbox">
       <Checkbox
         color="secondary"
         checked={selectedRows.has(rowKey)}
@@ -18,20 +25,8 @@ function SelectableRowCell({ rowKey, disabled }) {
         onChange={() => toggleRow(rowKey)}
         disabled={disabled}
       />
-    </TableCell>
+    </CellComponent>
   );
 }
-
-SelectableRowCell.propTypes = {
-  /**
-   Unique key representing the table.
-  */
-  rowKey: PropTypes.string.isRequired,
-  disabled: PropTypes.bool,
-};
-
-SelectableRowCell.defaultProps = {
-  disabled: false,
-};
 
 export default SelectableRowCell;
