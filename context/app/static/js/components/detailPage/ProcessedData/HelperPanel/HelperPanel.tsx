@@ -36,7 +36,6 @@ function HelperPanelHeader() {
 
 function HelperPanelStatus() {
   const currentDataset = useCurrentDataset();
-
   if (!currentDataset) {
     return null;
   }
