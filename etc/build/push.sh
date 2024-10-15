@@ -44,6 +44,7 @@ else
   VERSION=`cd context && npm version major`
 fi
 
+
 echo "Version: $VERSION"
 
 ./grab-dependencies.sh
@@ -54,13 +55,16 @@ git commit -m "Version bump to $VERSION"
 
 if ls CHANGELOG-*.md; then
   (
+    echo '# Changelog'
+    echo 
     echo '##' $VERSION - `date +"%F"`
     echo
     # "-l" chomps and adds newline.
     perl -lpe '' CHANGELOG-*.md
     echo
     echo
-    cat CHANGELOG.md
+    # Skip the first line of the existing changelog (the header).
+    tail -n +2 context/app/markdown/CHANGELOG.md
   ) > CHANGELOG.md.new
   mv CHANGELOG.md.new context/app/markdown/CHANGELOG.md
   git rm CHANGELOG-*.md

@@ -39,10 +39,7 @@ function DonorDetail() {
     <DetailContext.Provider value={detailContext}>
       <DetailLayout sections={shouldDisplaySection}>
         <Summary title={hubmap_id} />
-        <MetadataSection
-          metadata={mapped_metadata as Record<string, string>}
-          shouldDisplay={shouldDisplaySection.metadata}
-        />
+        <MetadataSection entities={[entity]} shouldDisplay={shouldDisplaySection.metadata} />
         <DerivedEntitiesSection />
         <Protocol protocol_url={protocol_url} showHeader shouldDisplay={shouldDisplaySection.protocols} />
         <Attribution />

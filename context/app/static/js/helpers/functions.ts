@@ -1,6 +1,9 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { nodeIcons } from 'js/components/detailPage/DatasetRelationships/nodeTypes';
+import { ESEntityType, isDataset } from 'js/components/types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { MergedWorkspace } from 'js/components/workspaces/types';
+import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
 export function isEmptyArrayOrObject(val: object | unknown[]) {
   if (val.constructor.name === 'Object') {
@@ -221,4 +224,17 @@ export function isValidEmail(email: string) {
 
   const cleanedValue: string = email?.replace(/^\s+|\s+$/g, '');
   return emailRegex.test(cleanedValue);
+}
+
+export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
+  if (isDataset(entity)) {
+    if (entity.is_component) {
+      return nodeIcons.componentDataset;
+    }
+    if (entity.processing === 'processed') {
+      return nodeIcons.processedDataset;
+    }
+    return nodeIcons.primaryDataset;
+  }
+  return entityIconMap[entity.entity_type];
 }

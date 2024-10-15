@@ -1,0 +1,3 @@
+- Switch to using metadata table with tabs component in the Sample and Donor pages.
+- In the metadata sections of Dataset, Sample, and Donor pages, add tabs for any entities in the Provenance section with metadata.
+- Update the metadata table component to show unique labels for each tab and to be scrollable when many tabs are present.

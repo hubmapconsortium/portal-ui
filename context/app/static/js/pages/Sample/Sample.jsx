@@ -11,33 +11,35 @@ import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SampleTissue from 'js/components/detailPage/SampleTissue';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
+import { hasMetadata } from 'js/helpers/metadata';
 
 import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/DerivedDatasetsSection';
 
-import { combineMetadata } from 'js/pages/utils/entity-utils';
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
+import { useEntitiesData } from 'js/hooks/useEntityData';
 
 function SampleDetail() {
+  const { entity } = useFlaskDataContext();
   const {
-    entity: {
-      uuid,
-      donor,
-      protocol_url,
-      sample_category,
-      origin_samples,
-      hubmap_id,
-      entity_type,
-      metadata,
-      descendant_counts,
-    },
-  } = useFlaskDataContext();
+    uuid,
+    protocol_url,
+    sample_category,
+    origin_samples,
+    hubmap_id,
+    entity_type,
+    descendant_counts,
+    ancestor_ids,
+  } = entity;
+
+  const [entities, loadingEntities] = useEntitiesData([uuid, ...ancestor_ids]);
+  const entitiesWithMetadata = entities.filter((e) =>
+    hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
+  );
 
   // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
   const origin_sample = origin_samples[0];
   const { mapped_organ } = origin_sample;
-
-  const combinedMetadata = combineMetadata(donor, undefined, metadata);
 
   const shouldDisplaySection = {
     summary: true,
@@ -45,13 +47,17 @@ function SampleDetail() {
     tissue: true,
     provenance: true,
     protocols: Boolean(protocol_url),
-    metadata: Boolean(Object.keys(combinedMetadata).length),
+    metadata: Boolean(entitiesWithMetadata.length),
     attribution: true,
   };
 
   useTrackID({ entity_type, hubmap_id });
 
   const detailContext = useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid]);
+
+  if (loadingEntities) {
+    return null;
+  }
 
   return (
     <DetailContext.Provider value={detailContext}>
@@ -70,7 +76,7 @@ function SampleDetail() {
         <SampleTissue />
         <ProvSection />
         {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} showHeader />}
-        <MetadataSection metadata={combinedMetadata} shouldDisplay={shouldDisplaySection.metadata} />
+        <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
         <Attribution />
       </DetailLayout>
     </DetailContext.Provider>

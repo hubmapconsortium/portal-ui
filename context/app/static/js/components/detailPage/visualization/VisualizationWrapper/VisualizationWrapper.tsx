@@ -10,8 +10,6 @@ const Visualization = React.lazy(() => import('../Visualization'));
 interface VisualizationWrapperProps {
   vitData: object | object[];
   uuid?: string;
-  hubmap_id?: string;
-  mapped_data_access_level?: string;
   hasNotebook?: boolean;
   shouldDisplayHeader?: boolean;
   hasBeenMounted?: boolean;
@@ -22,8 +20,6 @@ interface VisualizationWrapperProps {
 function VisualizationWrapper({
   vitData,
   uuid,
-  hubmap_id,
-  mapped_data_access_level,
   hasNotebook = false,
   shouldDisplayHeader = true,
   hasBeenMounted,
@@ -45,8 +41,6 @@ function VisualizationWrapper({
           <Visualization
             vitData={vitData}
             uuid={uuid}
-            hubmap_id={hubmap_id}
-            mapped_data_access_level={mapped_data_access_level}
             hasNotebook={hasNotebook}
             shouldDisplayHeader={shouldDisplayHeader}
             shouldMountVitessce={hasBeenMounted}
