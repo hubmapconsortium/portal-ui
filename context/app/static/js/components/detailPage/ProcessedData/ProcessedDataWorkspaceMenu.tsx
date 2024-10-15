@@ -8,7 +8,7 @@ import AddRounded from '@mui/icons-material/AddRounded';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { useOpenDialog } from 'js/components/workspaces/WorkspacesDropdownMenu/WorkspacesDropdownMenu';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
+import { useAppContext } from 'js/components/Contexts';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialog';
 import { DialogType } from 'js/stores/useWorkspaceModalStore';
@@ -16,19 +16,15 @@ import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFro
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
-  datasetDetails: { hubmap_id: string; uuid: string; status: string };
+  datasetDetails: { hubmap_id: string; uuid: string; status: string; mapped_data_access_level: string };
   dialogType: DialogType;
 }
 
 function ProcessedDataWorkspaceMenu({
   button,
-  datasetDetails: { hubmap_id, uuid, status },
+  datasetDetails: { hubmap_id, uuid, status, mapped_data_access_level },
   dialogType,
 }: ProcessedDataWorkspaceMenuProps) {
-  const {
-    entity: { mapped_data_access_level },
-  } = useFlaskDataContext();
-
   const { isWorkspacesUser } = useAppContext();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -86,9 +82,7 @@ function ProcessedDataWorkspaceMenu({
     'aria-expanded': open ? 'true' : undefined,
   });
 
-  const showWorkspaceButton = mapped_data_access_level && hubmap_id && isWorkspacesUser && status === 'Published';
-
-  if (!showWorkspaceButton) {
+  if (!isWorkspacesUser || !hubmap_id || mapped_data_access_level !== 'Public' || status !== 'Published') {
     return null;
   }
 

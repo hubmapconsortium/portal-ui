@@ -210,7 +210,7 @@ function EntityHeaderActionButtons({
             disabled={disabled}
           />
         }
-        datasetDetails={{ hubmap_id, uuid, status }}
+        datasetDetails={{ hubmap_id, uuid, status, mapped_data_access_level }}
         dialogType="ADD_DATASETS_FROM_HEADER"
       />
     </Stack>

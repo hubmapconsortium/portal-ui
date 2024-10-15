@@ -14,18 +14,12 @@ import { LineClamp } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import { formatDate } from 'date-fns/format';
-import { useDetailContext } from 'js/components/detailPage/DetailContext';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
-import useProcessedDataStore from '../store';
 import StatusIcon from '../../StatusIcon';
-import { getDateLabelAndValue } from '../../utils';
+import { getDateLabelAndValue, useCurrentDataset } from '../../utils';
 import { HelperPanelButton } from './styles';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import ProcessedDataWorkspaceMenu from '../ProcessedDataWorkspaceMenu';
-
-function useCurrentDataset() {
-  return useProcessedDataStore((state) => state.currentDataset);
-}
 
 function HelperPanelHeader() {
   const currentDataset = useCurrentDataset();
@@ -42,7 +36,6 @@ function HelperPanelHeader() {
 
 function HelperPanelStatus() {
   const currentDataset = useCurrentDataset();
-  const { mapped_data_access_level } = useDetailContext();
 
   if (!currentDataset) {
     return null;
@@ -50,7 +43,7 @@ function HelperPanelStatus() {
   return (
     <Stack direction="row" alignItems="center">
       <StatusIcon status={currentDataset.status} />
-      <Typography variant="body2">{`${currentDataset.status} (${mapped_data_access_level})`}</Typography>
+      <Typography variant="body2">{`${currentDataset.status} (${currentDataset.mapped_data_access_level})`}</Typography>
     </Stack>
   );
 }
@@ -102,7 +95,7 @@ function HelperPanelActions() {
     return null;
   }
 
-  const { hubmap_id, uuid, status } = currentDataset;
+  const { hubmap_id, uuid, status, mapped_data_access_level } = currentDataset;
 
   return (
     <>
@@ -112,7 +105,7 @@ function HelperPanelActions() {
             <HelperPanelButton startIcon={<WorkspacesIcon color="primary" />}>Workspace</HelperPanelButton>
           </SecondaryBackgroundTooltip>
         }
-        datasetDetails={{ hubmap_id, uuid, status }}
+        datasetDetails={{ hubmap_id, uuid, status, mapped_data_access_level }}
         dialogType="ADD_DATASETS_FROM_HELPER_PANEL"
       />
       <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">
