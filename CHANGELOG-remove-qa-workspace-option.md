@@ -1,0 +1,1 @@
+- Fix issue of Workspaces button being available for protected datasets in the Visualization section.
