@@ -73,9 +73,13 @@ export function useVitessceConf(uuid: string, parentUuid?: string) {
   if (parentUuid) {
     urlParams.set('parent', parentUuid);
   }
-  return useSWR<VitessceConf>(getVitessceConfKey(uuid, groupsToken), (_key: unknown) =>
+  const swr = useSWR<VitessceConf>(getVitessceConfKey(uuid, groupsToken), (_key: unknown) =>
     fetcher({ url: `${base}?${urlParams.toString()}`, requestInit: { headers: getAuthHeader(groupsToken) } }),
   );
+  if (parentUuid) {
+    return { ...swr, data: { ...swr.data, parentUuid } };
+  }
+  return swr;
 }
 
 function useProcessedDatasets(includeComponents?: boolean) {

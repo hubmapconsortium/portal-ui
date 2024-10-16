@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Vitessce } from 'vitessce';
 
 import Paper from '@mui/material/Paper';
@@ -98,6 +98,19 @@ function Visualization({
 
   const isMultiDataset = Array.isArray(vitessceConfig);
 
+  // Find parent UUID for the visualization if present
+  const parentUuid: string | undefined = useMemo(() => {
+    if (Array.isArray(vitData)) {
+      const vitDataArray = vitData as object[];
+      const found = vitDataArray.find((data) => 'parentUuid' in data) as { parentUuid: string } | undefined;
+      return found?.parentUuid;
+    }
+    if ('parentUuid' in vitData) {
+      return (vitData as { parentUuid: string }).parentUuid;
+    }
+    return undefined;
+  }, [vitData]);
+
   if (!vitessceConfig) {
     return null;
   }
@@ -119,7 +132,7 @@ function Visualization({
           buttons={
             <Stack direction="row" spacing={1}>
               {hasNotebook && <VisualizationWorkspaceButton uuid={uuid} />}
-              <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} />
+              <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">

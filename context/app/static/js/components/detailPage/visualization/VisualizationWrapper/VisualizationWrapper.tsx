@@ -34,6 +34,7 @@ function VisualizationWrapper({
     }),
     [isPublicationPage, shouldDisplayHeader, uuid],
   );
+
   return (
     <VizContainerStyleContext.Provider value={containerStyles}>
       <VisualizationErrorBoundary>
