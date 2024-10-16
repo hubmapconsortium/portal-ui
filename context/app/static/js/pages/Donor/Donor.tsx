@@ -1,7 +1,6 @@
 import React, { useMemo } from 'react';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
-import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
 import Attribution from 'js/components/detailPage/Attribution';
 import Protocol from 'js/components/detailPage/Protocol';
@@ -10,57 +9,40 @@ import { DetailContext } from 'js/components/detailPage/DetailContext';
 import DerivedEntitiesSection from 'js/components/detailPage/derivedEntities/DerivedEntitiesSection';
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
+import { isDonor } from 'js/components/types';
 
 function DonorDetail() {
   const { entity } = useFlaskDataContext();
-  const {
-    uuid,
-    protocol_url,
-    hubmap_id,
-    entity_type,
-    mapped_metadata = {},
-    created_timestamp,
-    last_modified_timestamp,
-    description,
-    group_name,
-    created_by_user_displayname,
-    created_by_user_email,
-  } = entity;
+
+  if (!isDonor(entity)) {
+    throw new Error('Entity is not a donor');
+  }
+
+  const { uuid, protocol_url, hubmap_id, entity_type, mapped_metadata = {}, mapped_data_access_level } = entity;
 
   const shouldDisplaySection = {
     summary: true,
     metadata: Boolean(Object.keys(mapped_metadata).length),
     'derived-data': true,
-    provenance: true,
     protocols: Boolean(protocol_url),
     attribution: true,
   };
 
   useTrackID({ entity_type, hubmap_id });
 
-  const detailContext = useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid]);
+  const detailContext = useMemo(
+    () => ({ hubmap_id, uuid, mapped_data_access_level }),
+    [hubmap_id, uuid, mapped_data_access_level],
+  );
 
   return (
     <DetailContext.Provider value={detailContext}>
       <DetailLayout sections={shouldDisplaySection}>
-        <Summary
-          uuid={uuid}
-          entity_type={entity_type}
-          title={hubmap_id}
-          created_timestamp={created_timestamp}
-          last_modified_timestamp={last_modified_timestamp}
-          description={description}
-          group_name={group_name}
-        />
-        {shouldDisplaySection.metadata && <MetadataSection entities={[entity]} hubmap_id={hubmap_id} />}
+        <Summary title={hubmap_id} />
+        <MetadataSection entities={[entity]} shouldDisplay={shouldDisplaySection.metadata} />
         <DerivedEntitiesSection />
-        <ProvSection />
-        {shouldDisplaySection.protocols && <Protocol protocol_url={protocol_url} showHeader />}
-        <Attribution
-          group_name={group_name}
-          created_by_user_displayname={created_by_user_displayname}
-          created_by_user_email={created_by_user_email}
-        />
+        <Protocol protocol_url={protocol_url} showHeader shouldDisplay={shouldDisplaySection.protocols} />
+        <Attribution />
       </DetailLayout>
     </DetailContext.Provider>
   );
