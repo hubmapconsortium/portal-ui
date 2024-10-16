@@ -15,12 +15,19 @@ function DetailPageSection({ children, ...rest }: PropsWithChildren<React.HTMLAt
       const strippedHash = initialHash.slice(1);
       if (strippedHash === rest.id) {
         setTimeout(() => {
-          sectionRef.current?.scrollIntoView({
+          // Manually scroll to section and account for header offset
+          const sectionTop = sectionRef.current?.getBoundingClientRect().top ?? 0;
+          const scrollPosition = window.scrollY + sectionTop - offset;
+
+          window.scrollTo({
+            top: Math.max(scrollPosition, 0),
             behavior: 'smooth',
           });
         }, 1000);
       }
     }
+    // We do not want to re-scroll down to the section if the header view changes (aka offset changes)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialHash, rest.id]);
 
   return (
