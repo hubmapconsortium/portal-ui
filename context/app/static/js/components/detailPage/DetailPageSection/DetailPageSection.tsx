@@ -26,7 +26,9 @@ function DetailPageSection({ children, ...rest }: PropsWithChildren<React.HTMLAt
         }, 1000);
       }
     }
-  }, [initialHash, rest.id, offset]);
+    // We do not want to re-scroll down to the section if the header view changes (aka offset changes)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [initialHash, rest.id]);
 
   return (
     <OffsetSection $offset={offset} ref={sectionRef} {...rest}>
