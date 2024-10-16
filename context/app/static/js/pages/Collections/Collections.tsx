@@ -15,6 +15,7 @@ function Collections() {
       title="Collections"
       subtitle={panelsProps.length > 0 ? `${panelsProps.length} Collections` : undefined}
       description={description}
+      dataTestId="collections-title"
     >
       <PanelList panelsProps={panelsProps} />
     </PanelListLandingPage>

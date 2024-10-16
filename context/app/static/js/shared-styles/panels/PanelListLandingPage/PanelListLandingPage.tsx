@@ -9,12 +9,20 @@ interface PanelListLandingPageProps extends PropsWithChildren {
   subtitle?: string;
   description: React.ReactNode;
   noIcon?: boolean;
+  dataTestId?: string;
 }
 
-function PanelListLandingPage({ title, subtitle, description, children, noIcon }: PanelListLandingPageProps) {
+function PanelListLandingPage({
+  title,
+  subtitle,
+  description,
+  children,
+  noIcon,
+  dataTestId,
+}: PanelListLandingPageProps) {
   return (
-    <PageWrapper>
-      <PageTitle data-testid="landing-page-title">{title}</PageTitle>
+    <PageWrapper data-testid={dataTestId}>
+      <PageTitle>{title}</PageTitle>
       <Typography variant="subtitle1" color="primary" data-testid="landing-page-subtitle">
         {subtitle}
       </Typography>
