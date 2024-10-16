@@ -131,7 +131,7 @@ function Visualization({
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
             <Stack direction="row" spacing={1}>
-              {hasNotebook && <VisualizationWorkspaceButton uuid={uuid} />}
+              {hasNotebook && <VisualizationWorkspaceButton />}
               <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
               <VisualizationShareButton />
               <VisualizationThemeSwitch />

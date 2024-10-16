@@ -237,7 +237,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
       <RightDiv>
         {vizIsFullscreen ? (
           <>
-            {vizNotebookId && <VisualizationWorkspaceButton uuid={vizNotebookId} />}
+            {vizNotebookId && <VisualizationWorkspaceButton />}
             <VisualizationShareButtonWrapper />
             <VizualizationThemeSwitch />
             <VisualizationCollapseButton />
