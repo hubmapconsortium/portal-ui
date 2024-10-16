@@ -7,6 +7,7 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import Divider from '@mui/material/Divider';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { StyledPaper } from './style';
 import SectionItem from '../SectionItem';
 import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
@@ -96,4 +97,4 @@ function Protocol({ protocol_url, showHeader }: ProtocolProps) {
   return contents;
 }
 
-export default React.memo(Protocol);
+export default React.memo(withShouldDisplay(Protocol));

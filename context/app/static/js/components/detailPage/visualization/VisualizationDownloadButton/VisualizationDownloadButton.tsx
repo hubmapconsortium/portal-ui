@@ -13,23 +13,24 @@ const tooltip = 'Download Jupyter Notebook';
 interface VisualizationDownloadButtonProps {
   uuid?: string;
   hasNotebook?: boolean;
+  parentUuid?: string;
 }
 
-function VisualizationDownloadButton({ uuid, hasNotebook }: VisualizationDownloadButtonProps) {
+function VisualizationDownloadButton({ uuid, hasNotebook, parentUuid }: VisualizationDownloadButtonProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const { toastError } = useSnackbarActions();
 
   const downloadNotebook = useCallback(() => {
     trackEntityPageEvent({ action: `Vitessce / ${tooltip}` });
     postAndDownloadFile({
-      url: `/notebooks/entities/dataset/${uuid}.ws.ipynb`,
+      url: `/notebooks/entities/dataset/${parentUuid ?? uuid}.ws.ipynb`,
       body: {},
     })
       .then()
       .catch(() => {
         toastError('Failed to download Jupyter Notebook');
       });
-  }, [uuid, toastError, trackEntityPageEvent]);
+  }, [parentUuid, uuid, toastError, trackEntityPageEvent]);
 
   if (!uuid || !hasNotebook) {
     return null;
