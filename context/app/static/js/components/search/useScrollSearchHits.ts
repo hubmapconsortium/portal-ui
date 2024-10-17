@@ -37,6 +37,7 @@ function useBuildRequestInit() {
   return useCallback(({ body }: { body: SearchRequest }) => buildSearchRequestInit({ body, authHeader }), [authHeader]);
 }
 
+// TODO: Conform search hooks to use elastic-builder and dedupe useScrollSearchHits hooks
 export function useScrollSearchHits<Doc, Aggs>({
   query,
   endpoint,
