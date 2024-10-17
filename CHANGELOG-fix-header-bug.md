@@ -1,1 +1,0 @@
-- Resolve issues of header cutting off the top of detail pages and header shifting off-screen when scrolling.

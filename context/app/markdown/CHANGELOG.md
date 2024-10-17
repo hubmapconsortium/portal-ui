@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.12.2 - 2024-10-17
+
+- Add access levels to processed dataset helper panels.
+- Use relevant access levels when determining whether or not to show workspace buttons on dataset detail pages.
+- Add title to changelog page.
+- Ensure visualizations for image pyramids use parent UUID to fetch notebooks.
+- Restore missing columns to derived entities section.
+- Remove Provenance section from donor page in favor of using derived data tables.
+- Fix Webkit-specific bugs that caused the entity header to become misaligned.
+- Resolve issues of header cutting off the top of detail pages and header shifting off-screen when scrolling.
+- Switch to using metadata table with tabs component in the Sample and Donor pages.
+- In the metadata sections of Dataset, Sample, and Donor pages, add tabs for any entities in the Provenance section with metadata.
+- Update the metadata table component to show unique labels for each tab and to be scrollable when many tabs are present.
+- Fix issue of Workspaces button being available for protected datasets in the Visualization section.
+
+
+
 ## v1.12.1 - 2024-10-10
 
 - Prevent collections without a DOI from being counted on the homepage.

@@ -1,1 +1,0 @@
-- Fix Webkit-specific bugs that caused the entity header to become misaligned.

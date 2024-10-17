@@ -1,1 +1,0 @@
-- Restore missing columns to derived entities section.
