@@ -1,8 +1,9 @@
 import esb from 'elastic-builder';
-import { stringify } from 'qs';
+import LZString from 'lz-string';
 import { createStoreImmer, createStoreContext } from 'js/helpers/zustand';
 import history from 'history/browser';
 import { SWRConfiguration } from 'swr';
+import { z } from 'zod';
 
 export interface SortField {
   field: string;
@@ -17,7 +18,6 @@ export const FACETS = {
 
 export interface FacetConfig {
   field: string;
-  type: (typeof FACETS)[keyof typeof FACETS];
 }
 
 export interface TermConfig extends FacetConfig {
@@ -76,6 +76,53 @@ export interface SearchState<V> {
   swrConfig?: SWRConfiguration;
   type: 'Donor' | 'Sample' | 'Dataset';
   analyticsCategory: string;
+}
+
+// Used to validate URL Search
+
+const rangeFilterSchema = z.object({
+  values: z.object({
+    min: z.number(),
+    max: z.number(),
+  }),
+  type: z.literal(FACETS.range),
+});
+
+const termFilterSchema = z.object({
+  values: z.array(z.string()),
+  type: z.literal(FACETS.term),
+});
+
+const hierarchicalTermFilterSchema = z.object({
+  values: z.record(z.string(), z.array(z.string())),
+  type: z.literal(FACETS.hierarchical),
+});
+
+const filtersSchema = z.record(
+  z.string(),
+  z.union([rangeFilterSchema, termFilterSchema, hierarchicalTermFilterSchema]),
+);
+
+const sortFieldSchema = z.object({
+  field: z.string(),
+  direction: z.union([z.literal('asc'), z.literal('desc')]),
+});
+
+const searchURLStateSchema = z
+  .object({
+    search: z.string(),
+    sortField: sortFieldSchema,
+    filters: filtersSchema,
+  })
+  .partial();
+
+export function parseURLState(stateJSON: string) {
+  try {
+    const parsed = searchURLStateSchema.parse(JSON.parse(stateJSON));
+    return parsed;
+  } catch (e) {
+    return {};
+  }
 }
 
 export type SearchStoreState = SearchState<Set<string>>;
@@ -163,14 +210,13 @@ function replaceURLSearchParams(state: SearchStoreState) {
     filters: filtersWithValues,
   };
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-  const urlStateWithArrays: URLSearchParams = JSON.parse(
-    JSON.stringify(urlState, (_key, value: unknown) => (value instanceof Set ? [...value] : value)),
+  const urlStateWithArrays: string = JSON.stringify(urlState, (_key, value: unknown) =>
+    value instanceof Set ? [...value] : value,
   );
 
   const { pathname } = history.location;
 
-  history.push(`${pathname}?${stringify(urlStateWithArrays)}`);
+  history.push(`${pathname}?${LZString.compressToEncodedURIComponent(urlStateWithArrays)}`);
 }
 
 export const createStore = ({ initialState }: { initialState: SearchStoreState }) =>

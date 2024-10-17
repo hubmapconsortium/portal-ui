@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
-import { parse } from 'qs';
+import LZString from 'lz-string';
 import merge from 'deepmerge';
 import history from 'history/browser';
 
@@ -33,6 +33,7 @@ import {
   isHierarchicalFacet,
   isTermFacet,
   isRangeFacet,
+  parseURLState,
 } from './store';
 import Results from './Results';
 import { getPortalESField } from './buildTypesMap';
@@ -377,7 +378,9 @@ function useInitialURLState() {
   const [initialUrlState, setInitialUrlState] = useState<Partial<SearchURLState>>({ filters: {} });
 
   useEffect(() => {
-    const searchParams: Partial<SearchURLState> = parse(history.location.search, { ignoreQueryPrefix: true });
+    const searchParams = history?.location?.search
+      ? parseURLState(LZString.decompressFromEncodedURIComponent(history?.location?.search?.slice(1)))
+      : {};
 
     if (Object.keys(searchParams).length) {
       setInitialUrlState({ filters: {}, ...searchParams });
