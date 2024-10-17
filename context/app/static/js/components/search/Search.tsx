@@ -328,16 +328,16 @@ function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups })
 }
 
 const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<string[]>) => {
-  const mergedFilters = Object.entries(filterState).reduce<FiltersType>((acc, [k, v]) => {
+  const mergedFilters = Object.entries({ ...filterURLState, ...filterState }).reduce<FiltersType>((acc, [k, v]) => {
     return produce(acc, (draft) => {
       const URLStateFilter = filterURLState?.[k];
 
-      if (isTermFilter(v)) {
+      if (isTermFilter<string[] | Set<string>>(v)) {
         const urlStateValues = URLStateFilter && isTermFilter<string[]>(URLStateFilter) ? URLStateFilter.values : [];
         draft[k] = { ...v, values: new Set([...v.values, ...urlStateValues]) };
       }
 
-      if (isHierarchicalFilter(v)) {
+      if (isHierarchicalFilter<string[] | Set<string>>(v)) {
         const urlStateValues =
           URLStateFilter && isHierarchicalFilter<string[]>(URLStateFilter) ? URLStateFilter.values : {};
         draft[k] = {
@@ -351,7 +351,7 @@ const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<stri
         };
       }
 
-      if (isRangeFilter(v)) {
+      if (isRangeFilter<string[] | Set<string>>(v)) {
         draft[k] = {
           ...v,
           values: URLStateFilter && isRangeFilter<string[]>(URLStateFilter) ? URLStateFilter?.values : v.values,

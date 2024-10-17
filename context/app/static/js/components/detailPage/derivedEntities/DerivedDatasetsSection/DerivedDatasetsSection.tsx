@@ -4,6 +4,7 @@ import DerivedEntitiesSectionWrapper from 'js/components/detailPage/related-enti
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
+import { buildSearchLink } from 'js/components/search/store';
 import { useDerivedDatasetsSection } from './hooks';
 
 interface DerivedDatasetsSectionProps {
@@ -21,7 +22,17 @@ function DerivedDatasetsSection({ uuid, entityType }: DerivedDatasetsSectionProp
       id="derived-data"
       title="Derived Data"
       action={
-        <RelatedEntitiesSectionActions searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=Dataset`} />
+        <RelatedEntitiesSectionActions
+          searchPageHref={buildSearchLink({
+            entity: 'datasets',
+            filters: {
+              ancestor_ids: {
+                values: [uuid],
+                type: 'TERM',
+              },
+            },
+          })}
+        />
       }
     >
       <RelatedEntitiesTabs

@@ -197,6 +197,18 @@ export function filterHasValues({ filter, facet }: { filter: Filter; facet: Face
   return false;
 }
 
+export function buildSearchLink({
+  entity,
+  filters,
+}: {
+  entity: 'donors' | 'samples' | 'datasets';
+  filters: FiltersType<string[]>;
+}) {
+  const filtersState = JSON.stringify({ filters });
+
+  return `/search/${entity}?${LZString.compressToEncodedURIComponent(filtersState)}`;
+}
+
 function replaceURLSearchParams(state: SearchStoreState) {
   const { search, sortField, filters, facets } = state;
 
