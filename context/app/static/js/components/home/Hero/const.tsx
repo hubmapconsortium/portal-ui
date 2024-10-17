@@ -5,6 +5,7 @@ import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
+import { buildSearchLink } from 'js/components/search/store';
 
 const timelineIconProps = {
   fontSize: '1.5rem',
@@ -23,8 +24,18 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   },
   {
     title: '10X Multiome and Visium Datasets Now Available',
-    titleHref:
-      '/search?raw_dataset_type_keyword-assay_display_name_keyword[10X Multiome][0]=10x Multiome&raw_dataset_type_keyword-assay_display_name_keyword[10X Multiome][1]=10x Multiome [Salmon %2B ArchR %2B Muon]&raw_dataset_type_keyword-assay_display_name_keyword[Visium (no probes)][0]=Visium (no probes)&raw_dataset_type_keyword-assay_display_name_keyword[Visium (no probes)][1]=Visium (no probes) [Salmon %2B Scanpy]&entity_type[0]=Dataset',
+    titleHref: buildSearchLink({
+      entity_type: 'Dataset',
+      filters: {
+        raw_dataset_type: {
+          type: 'HIERARCHICAL',
+          values: {
+            '10X Multiome': ['10x Multiome', '10X Multiome', '10x Multiome [Salmon + ArchR + Muon]'],
+            'Visium (no probes)': ['Visium (no probes)', 'Visium (no probes) [Salmon + Scanpy]'],
+          },
+        },
+      },
+    }),
     description: 'Explore and download 10X Multiome and Visium multi-assay datasets.',
     date: 'August 2024',
     img: <entityIconMap.Dataset {...timelineIconProps} />,
@@ -53,7 +64,17 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   },
   {
     title: 'MUSIC Datasets now available',
-    titleHref: '/search?raw_dataset_type_keyword-assay_display_name_keyword[MUSIC][0]=MUSIC&entity_type[0]=Dataset',
+    titleHref: buildSearchLink({
+      entity_type: 'Dataset',
+      filters: {
+        raw_dataset_type: {
+          type: 'HIERARCHICAL',
+          values: {
+            MUSIC: ['MUSIC'],
+          },
+        },
+      },
+    }),
     description: (
       <>
         Download data from <OutboundIconLink href="https://github.com/gersteinlab/MUSIC">MUSIC</OutboundIconLink>{' '}
@@ -65,8 +86,23 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   },
   {
     title: 'Dataset Search reorganized',
-    titleHref:
-      '/search?processing[0]=processed&processing[1]=raw&pipeline[0]=Salmon&pipeline[1]=Cytokit %2B SPRM&pipeline[2]=SnapATAC&visualization[0]=true&entity_type[0]=Dataset',
+    titleHref: buildSearchLink({
+      entity_type: 'Dataset',
+      filters: {
+        processing: {
+          type: 'TERM',
+          values: ['processed', 'raw'],
+        },
+        pipeline: {
+          type: 'TERM',
+          values: ['Salmon', 'Cytokit + SPRM', 'SnapATAC'],
+        },
+        visualization: {
+          type: 'TERM',
+          values: ['true'],
+        },
+      },
+    }),
     description:
       'Added visualization, dataset category and pipeline filters to dataset search page. Dataset assay filter is now hierarchical to improve grouping of similar experiments.',
     date: 'March 2024',

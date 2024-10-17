@@ -140,9 +140,10 @@ function trackLink(href, type) {
   faro.api.pushEvent(type || 'Outbound Link Clicked', { href });
 }
 
-function trackSiteSearch(keyword) {
+function trackSiteSearch(keyword, category) {
   tracker.trackSiteSearch({
     keyword,
+    category,
   });
   /*
   We currently call both trackEvent and trackSiteSearch:
