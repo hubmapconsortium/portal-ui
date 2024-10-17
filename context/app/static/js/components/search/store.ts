@@ -54,7 +54,7 @@ export interface RangeValues {
   type: typeof FACETS.range;
 }
 
-type Filter<V = Set<string>> = TermValues<V> | HierarchichalTermValues<V> | RangeValues;
+export type Filter<V = Set<string>> = TermValues<V> | HierarchichalTermValues<V> | RangeValues;
 type Facet = TermConfig | HierarchicalTermConfig | RangeConfig;
 
 export type FiltersType<V = Set<string>> = Record<string, Filter<V>>;

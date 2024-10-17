@@ -45,6 +45,7 @@ import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import { TilesSortSelect } from './Results/ResultsTiles';
 import MetadataMenu from '../searchPage/MetadataMenu';
+import SearchNote from './SearchNote';
 
 const maxAggSize = 10000;
 
@@ -319,7 +320,10 @@ function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups })
     <Stack spacing={2} mb={4}>
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
-        <Bar type={type} />
+        <Box>
+          <SearchNote />
+          <Bar type={type} />
+        </Box>
         <FilterChips />
         <Body facetGroups={facetGroups} />
       </Stack>

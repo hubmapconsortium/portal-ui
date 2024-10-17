@@ -13,12 +13,14 @@ const fieldConfigurationsMap: Record<
   { label?: string; valueTransformations?: ((label: string) => string)[]; valueSort?: 'asc' | 'desc' | 'count' }
 > = {
   age_value: { label: 'Donor Age' },
+  ancestor_ids: { label: 'Ancestor ID' },
   analyte_class: { label: 'Analyte Class', valueTransformations: [capitalizeString] },
   assay_display_name: { label: 'Data Types' },
   assay_modality: { label: 'Assay Modalities', valueTransformations: [capitalizeString] },
   body_mass_index_value: { label: 'Donor BMI' },
   created_by_user_displayname: { label: 'Registered By' },
   dataset_type: { label: 'Dataset Type' },
+  descendant_ids: { label: 'Descendant ID' },
   entity_type: { label: 'Entity Type' },
   group_name: { label: 'Group' },
   hubmap_id: { label: 'HuBMAP ID' },
