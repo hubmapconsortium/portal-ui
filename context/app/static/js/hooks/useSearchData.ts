@@ -270,12 +270,12 @@ export function useAllSearchIDs(
 }
 
 // Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
-function getSearchAfterSort(hits: SearchResponseBody<unknown, unknown>['hits']['hits']) {
+export function getSearchAfterSort(hits: SearchResponseBody<unknown, unknown>['hits']['hits']) {
   const { sort } = hits.slice(-1)[0];
   return sort;
 }
 
-function getCombinedHits(pagesResults: SearchResponseBody<unknown, unknown>[]) {
+export function getCombinedHits<Doc, Aggs>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {
   const hasData = pagesResults.length > 0;
 
   if (!hasData) {
@@ -284,6 +284,7 @@ function getCombinedHits(pagesResults: SearchResponseBody<unknown, unknown>[]) {
 
   return {
     totalHitsCount: getTotalHitsCount(pagesResults[0]),
+    aggregations: pagesResults[0]?.aggregations,
     searchHits: pagesResults.map((d) => d?.hits?.hits).flat(),
   };
 }

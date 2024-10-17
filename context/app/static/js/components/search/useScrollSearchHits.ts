@@ -8,6 +8,8 @@ import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 import { SWRError } from 'js/helpers/swr/errors';
 
+import { getSearchAfterSort, getCombinedHits } from 'js/hooks/useSearchData';
+
 function useAuthHeader() {
   const { groupsToken } = useAppContext();
   return useMemo(() => getAuthHeader(groupsToken), [groupsToken]);
@@ -33,34 +35,6 @@ function useBuildRequestInit() {
   const authHeader = useAuthHeader();
 
   return useCallback(({ body }: { body: SearchRequest }) => buildSearchRequestInit({ body, authHeader }), [authHeader]);
-}
-
-function getTotalHitsCount(results?: SearchResponseBody<unknown, unknown>) {
-  const total = results?.hits?.total;
-  if (typeof total === 'number') {
-    return total;
-  }
-  return total?.value;
-}
-
-// Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
-function getSearchAfterSort(hits: SearchResponseBody<unknown, unknown>['hits']['hits']) {
-  const { sort } = hits.slice(-1)[0];
-  return sort;
-}
-
-function getCombinedHits<Doc, Aggs>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {
-  const hasData = pagesResults.length > 0;
-
-  if (!hasData) {
-    return { totalHitsCount: undefined, searchHits: [] };
-  }
-
-  return {
-    totalHitsCount: getTotalHitsCount(pagesResults[0]),
-    aggregations: pagesResults[0]?.aggregations,
-    searchHits: pagesResults.map((d) => d?.hits?.hits).flat(),
-  };
 }
 
 export function useScrollSearchHits<Doc, Aggs>({
