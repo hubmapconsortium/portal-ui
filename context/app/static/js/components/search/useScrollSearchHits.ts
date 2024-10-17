@@ -1,14 +1,14 @@
 import { useCallback, useMemo } from 'react';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
-import { SWRConfiguration } from 'swr';
-import { SearchRequest, SearchResponseBody } from '@elastic/elasticsearch/lib/api/types';
+import { SearchRequest, SearchResponseBody, SortResults } from '@elastic/elasticsearch/lib/api/types';
 
 import { fetcher } from 'js/helpers/swr';
 import { getAuthHeader } from 'js/helpers/functions';
 import { useAppContext } from 'js/components/Contexts';
 import { SWRError } from 'js/helpers/swr/errors';
-
 import { getSearchAfterSort, getCombinedHits } from 'js/hooks/useSearchData';
+import { buildQuery } from './utils';
+import { SearchStoreState } from './store';
 
 function useAuthHeader() {
   const { groupsToken } = useAppContext();
@@ -31,46 +31,63 @@ function buildSearchRequestInit({ body, authHeader }: BuildSearchRequestInitArgs
   };
 }
 
-function useBuildRequestInit() {
-  const authHeader = useAuthHeader();
+async function fetchSearchHits<Doc, Aggs>({
+  endpoint,
+  authHeader,
+  searchAfterSort,
+  ...rest
+}: {
+  endpoint: string;
+  authHeader: HeadersInit;
+  searchAfterSort?: SortResults;
+} & Omit<SearchStoreState, 'swrConfig' | 'view' | 'type' | 'analyticsCategory'>) {
+  const query = buildQuery({ ...rest });
 
-  return useCallback(({ body }: { body: SearchRequest }) => buildSearchRequestInit({ body, authHeader }), [authHeader]);
+  return fetcher<SearchResponseBody<Doc, Aggs>>({
+    url: endpoint,
+    requestInit: buildSearchRequestInit({
+      authHeader,
+      body: {
+        ...query,
+        track_total_hits: true,
+        ...(searchAfterSort ? { search_after: searchAfterSort } : {}),
+      },
+    }),
+  });
 }
 
 // TODO: Conform search hooks to use elastic-builder and dedupe useScrollSearchHits hooks
 export function useScrollSearchHits<Doc, Aggs>({
-  query,
   endpoint,
   swrConfig,
-}: {
-  query: SearchRequest;
-  endpoint: string;
-  swrConfig: SWRConfiguration;
-}) {
-  const buildRequestInit = useBuildRequestInit();
+  ...rest
+}: Omit<SearchStoreState, 'view' | 'type' | 'analyticsCategory'>) {
+  const authHeader = useAuthHeader();
+
   const getKey: SWRInfiniteKeyLoader = useCallback(
     (pageIndex: number, previousPageData: SearchResponseBody) => {
       const previousPageHits = previousPageData?.hits?.hits ?? [];
 
       if (previousPageData && !previousPageHits.length) return null;
       // First page, we return the key array unmodified.
-      if (pageIndex === 0)
-        return { requestInit: buildRequestInit({ body: { ...query, track_total_hits: true } }), url: endpoint };
+      if (pageIndex === 0) return { ...rest, authHeader, endpoint };
 
       // Subsequent pages, we add the search after param to the query.
       const searchAfterSort = getSearchAfterSort(previousPageHits);
       return {
-        requestInit: buildRequestInit({ body: { ...query, track_total_hits: true, search_after: searchAfterSort } }),
-        url: endpoint,
+        ...rest,
+        endpoint,
+        authHeader,
+        searchAfterSort,
       };
     },
-    [query, buildRequestInit, endpoint],
+    [rest, endpoint, authHeader],
   );
 
   const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<
     SearchResponseBody<Doc, Aggs>,
     SWRError
-  >(getKey, fetcher, {
+  >(getKey, fetchSearchHits, {
     fallbackData: [],
     revalidateAll: false,
     revalidateFirstPage: false,

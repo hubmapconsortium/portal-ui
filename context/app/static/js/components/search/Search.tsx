@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { AggregationsTermsAggregateBase } from '@elastic/elasticsearch/lib/api/types';
-import esb from 'elastic-builder';
 import { produce } from 'immer';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
@@ -23,20 +22,15 @@ import {
   TermConfig,
   RangeConfig,
   FACETS,
-  filterHasValues,
   SearchURLState,
   FiltersType,
   FacetsType,
   isTermFilter,
   isRangeFilter,
   isHierarchicalFilter,
-  isHierarchicalFacet,
-  isTermFacet,
-  isRangeFacet,
   parseURLState,
 } from './store';
 import Results from './Results';
-import { getPortalESField } from './buildTypesMap';
 import Facets from './Facets/Facets';
 import SearchBar from './SearchBar';
 import { useScrollSearchHits } from './useScrollSearchHits';
@@ -46,150 +40,6 @@ import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import { TilesSortSelect } from './Results/ResultsTiles';
 import MetadataMenu from '../searchPage/MetadataMenu';
 import SearchNote from './SearchNote';
-
-const maxAggSize = 10000;
-
-type FilterClauses = Record<string, esb.Query>;
-
-function buildFilterAggregation({
-  field,
-  portalFields,
-  aggregation,
-  filters,
-}: {
-  field: string;
-  portalFields: string[];
-  aggregation: esb.Aggregation;
-  filters: FilterClauses;
-}) {
-  portalFields.forEach((f) => {
-    if (f in filters) {
-      delete filters[f];
-    }
-  });
-
-  const otherFiltersQuery = Object.keys(filters).length
-    ? esb.boolQuery().must(Object.values(filters))
-    : esb.boolQuery().must([]);
-
-  return esb.filterAggregation(field, otherFiltersQuery).agg(aggregation);
-}
-
-function buildQuery({
-  filters,
-  facets,
-  search,
-  size,
-  searchFields,
-  sourceFields,
-  sortField,
-  defaultQuery,
-}: Omit<SearchStoreState, 'endpoint' | 'swrConfig'>) {
-  const query = esb
-    .requestBodySearch()
-    .size(size)
-    .source([...new Set(Object.values(sourceFields).flat())])
-    .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
-
-  const hasTextQuery = search.length > 0;
-
-  const freeTextQueries = hasTextQuery ? [esb.simpleQueryStringQuery(search).fields(searchFields)] : [];
-  const defaultQueries = defaultQuery ? [defaultQuery] : [];
-
-  query.query(esb.boolQuery().must([...defaultQueries, ...freeTextQueries]));
-
-  if (hasTextQuery) {
-    query.highlight(esb.highlight(searchFields));
-  }
-
-  const allFilters = Object.entries(filters).reduce<FilterClauses>((acc, [field, filter]) => {
-    return produce(acc, (draft) => {
-      const portalField = getPortalESField(field);
-      const facetConfig = facets[field];
-
-      if (isTermFilter(filter)) {
-        if (filterHasValues({ filter, facet: facetConfig })) {
-          draft[portalField] = esb.termsQuery(portalField, [...filter.values]);
-        }
-      }
-
-      if (isRangeFilter(filter)) {
-        if (filterHasValues({ filter, facet: facetConfig })) {
-          draft[portalField] = esb.rangeQuery(portalField).gte(filter.values.min).lte(filter.values.max);
-        }
-      }
-
-      if (isHierarchicalFilter(filter) && isHierarchicalFacet(facetConfig)) {
-        if (filterHasValues({ filter, facet: facetConfig })) {
-          const childPortalField = getPortalESField(facetConfig.childField);
-
-          draft[portalField] = esb.termsQuery(portalField, Object.keys(filter.values));
-
-          const childValues = Object.values(filter.values)
-            .map((v) => [...v])
-            .flat();
-          draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
-        }
-      }
-    });
-  }, {});
-
-  query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
-
-  Object.values(facets).forEach((facet) => {
-    const { field } = facet;
-    const portalField = getPortalESField(field);
-
-    if (isTermFacet(facet)) {
-      const { size: facetSize } = facet;
-      query.agg(
-        buildFilterAggregation({
-          portalFields: [portalField],
-          aggregation: esb.termsAggregation(field, portalField).size(facetSize ?? maxAggSize),
-          filters: { ...allFilters },
-          field,
-        }),
-      );
-    }
-
-    if (isRangeFacet(facet)) {
-      const { min, max } = facet;
-      const interval = Math.ceil((max - min) / 20);
-
-      query.agg(
-        buildFilterAggregation({
-          portalFields: [portalField],
-          aggregation: esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max),
-          filters: { ...allFilters },
-          field,
-        }),
-      );
-    }
-
-    if (isHierarchicalFacet(facet)) {
-      const { childField } = facet;
-      if (!childField) {
-        return;
-      }
-      const parentPortalField = getPortalESField(field);
-      const childPortalField = getPortalESField(childField);
-
-      query.agg(
-        buildFilterAggregation({
-          portalFields: [parentPortalField, childPortalField],
-          aggregation: esb
-            .termsAggregation(field, parentPortalField)
-            .size(maxAggSize)
-            .agg(esb.termsAggregation(childField, childPortalField).size(maxAggSize)),
-          filters: { ...allFilters },
-          field,
-        }),
-      );
-    }
-  });
-
-  return query.toJSON();
-}
 
 interface OuterBucket {
   doc_count: number;
@@ -205,10 +55,31 @@ export type HierarchichalBucket = InnerBucket & Partial<Record<string, Aggregati
 type Aggregations = Record<string, OuterBucket & Record<string, AggregationsTermsAggregateBase<HierarchichalBucket>>>;
 
 export function useSearch() {
-  const { endpoint, swrConfig = {}, ...rest }: SearchStoreState = useSearchStore();
-  const query = buildQuery({ ...rest });
+  const {
+    endpoint,
+    swrConfig = {},
+    filters,
+    facets,
+    search,
+    size,
+    searchFields,
+    sourceFields,
+    sortField,
+    defaultQuery,
+  }: SearchStoreState = useSearchStore();
 
-  return useScrollSearchHits<Partial<Entity>, Aggregations>({ query, endpoint, swrConfig });
+  return useScrollSearchHits<Partial<Entity>, Aggregations>({
+    endpoint,
+    swrConfig,
+    filters,
+    facets,
+    search,
+    size,
+    searchFields,
+    sourceFields,
+    sortField,
+    defaultQuery,
+  });
 }
 
 type FacetOption = TermConfig | HierarchicalTermConfig | RangeConfig;
