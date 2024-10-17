@@ -25,6 +25,7 @@ import { Alert } from 'js/shared-styles/alerts/Alert';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { buildSearchLink } from 'js/components/search/store';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -41,7 +42,9 @@ const pageLinks = [
     children: 'My Workspaces',
   },
   {
-    link: '/search?entity_type[0]=Dataset',
+    link: buildSearchLink({
+      entity_type: 'Dataset',
+    }),
     children: 'Dataset Search Page',
   },
 ];
@@ -136,7 +139,11 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             severity="info"
             action={
               <Button>
-                <InternalLink href="/search?entity_type[0]=Dataset">
+                <InternalLink
+                  href={buildSearchLink({
+                    entity_type: 'Dataset',
+                  })}
+                >
                   <Typography color="primary" variant="button">
                     Dataset Search Page
                   </Typography>

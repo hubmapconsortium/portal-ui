@@ -4,6 +4,8 @@ import { useOrgan } from 'js/hooks/useOrgansApi';
 import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
 import Grid from '@mui/material/Grid';
 import { format } from 'date-fns/format';
+
+import { buildSearchLink } from 'js/components/search/store';
 import { buildPublicationPanelProps } from 'js/components/publications/PublicationsPanelList/utils';
 import {
   useRecentDatasetsQuery,
@@ -44,7 +46,9 @@ function RecentDatasets() {
       entityName="Dataset"
       entities={recentDatasets}
       entityComponent={DatasetPanel}
-      viewAllLink="/search?entity_type[0]=Dataset"
+      viewAllLink={buildSearchLink({
+        entity_type: 'Dataset',
+      })}
     />
   );
 }

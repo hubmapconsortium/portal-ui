@@ -24,7 +24,7 @@ function DerivedDatasetsSection({ uuid, entityType }: DerivedDatasetsSectionProp
       action={
         <RelatedEntitiesSectionActions
           searchPageHref={buildSearchLink({
-            entity: 'datasets',
+            entity_type: 'Dataset',
             filters: {
               ancestor_ids: {
                 values: [uuid],

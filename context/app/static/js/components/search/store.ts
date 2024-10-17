@@ -198,15 +198,15 @@ export function filterHasValues({ filter, facet }: { filter: Filter; facet: Face
 }
 
 export function buildSearchLink({
-  entity,
+  entity_type,
   filters,
 }: {
-  entity: 'donors' | 'samples' | 'datasets';
-  filters: FiltersType<string[]>;
+  entity_type: 'Donor' | 'Dataset' | 'Sample';
+  filters?: FiltersType<string[]>;
 }) {
   const filtersState = JSON.stringify({ filters });
 
-  return `/search/${entity}?${LZString.compressToEncodedURIComponent(filtersState)}`;
+  return `/search/${entity_type.toLowerCase()}s?${LZString.compressToEncodedURIComponent(filtersState)}`;
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {

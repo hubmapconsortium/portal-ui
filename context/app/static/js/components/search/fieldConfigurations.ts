@@ -31,7 +31,7 @@ const fieldConfigurationsMap: Record<
   mapped_status: { label: 'Status' },
   origin_samples_unique_mapped_organs: { label: 'Organ' },
   pipeline: { label: 'Pipeline', valueTransformations: [capitalizeString] },
-  processing: { label: 'Processing' },
+  processing: { label: 'Processing', valueTransformations: [capitalizeString] },
   processing_type: { label: 'Processing Type', valueTransformations: [mapProcessingType] },
   race: { label: 'Donor Race' },
   raw_dataset_type: { label: 'Dataset Type', valueSort: 'asc' },
