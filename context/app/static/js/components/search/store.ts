@@ -204,9 +204,8 @@ export function buildSearchLink({
   entity_type: 'Donor' | 'Dataset' | 'Sample';
   filters?: FiltersType<string[]>;
 }) {
-  const filtersState = JSON.stringify({ filters });
-
-  return `/search/${entity_type.toLowerCase()}s?${LZString.compressToEncodedURIComponent(filtersState)}`;
+  const search = filters ? `?${LZString.compressToEncodedURIComponent(JSON.stringify({ filters }))}` : '';
+  return `/search/${entity_type.toLowerCase()}s${search}`;
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
