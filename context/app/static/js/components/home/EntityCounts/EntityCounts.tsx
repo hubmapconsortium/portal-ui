@@ -2,10 +2,14 @@ import React from 'react';
 
 import EntityCount from 'js/components/home/EntityCount';
 import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon, OrganIcon } from 'js/shared-styles/icons';
+import { buildSearchLink } from 'js/components/search/store';
 import { useEntityCounts } from './hooks';
 import { Background, FlexContainer, StyledSvgIcon } from './style';
 
-const entities = [
+const entities: {
+  icon: typeof DonorIcon;
+  entity_type: 'Donor' | 'Sample' | 'Dataset';
+}[] = [
   {
     icon: DonorIcon,
     entity_type: 'Donor',
@@ -37,7 +41,9 @@ function EntityCounts({ organsCount }: EntityCountsProps) {
             }
             count={entityCounts?.[entity_type]}
             label={`${entity_type}s`}
-            href={`/search?entity_type[0]=${entity_type}`}
+            href={buildSearchLink({
+              entity_type,
+            })}
           />
         ))}
         <EntityCount

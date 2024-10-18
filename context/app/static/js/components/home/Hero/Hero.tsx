@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import { DownloadIcon, LightbulbIcon, SearchIcon, VisualizationIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { buildSearchLink } from 'js/components/search/store';
 import HeroTimelineSlide from './HeroTimelineSlide';
 import HeroTab, { HeroTabProps } from './HeroTab';
 import { HeroImageSlide } from './HeroImageSlide';
@@ -22,7 +23,9 @@ const heroTabs = [
       {
         title: 'Explore datasets',
         icon: <entityIconMap.Dataset {...fontSize} />,
-        href: '/search?entity_type[0]=Dataset',
+        href: buildSearchLink({
+          entity_type: 'Dataset',
+        }),
       },
       {
         title: 'Explore molecules/cell types',
@@ -57,7 +60,9 @@ const heroTabs = [
       {
         title: 'Find datasets to download',
         icon: <entityIconMap.Dataset {...fontSize} />,
-        href: '/search?entity_type[0]=Dataset',
+        href: buildSearchLink({
+          entity_type: 'Dataset',
+        }),
       },
     ],
     bgColor: '#EAF0F8', // info-90 in figma
