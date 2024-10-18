@@ -1,4 +1,5 @@
 import { Dataset, Donor, isDataset, isDonor, isSample, Sample } from 'js/components/types';
+import useProcessedDataStore from 'js/components/detailPage/ProcessedData/store';
 import { ProcessedDatasetDetails } from './ProcessedData/ProcessedDataset/hooks';
 
 export function getSectionOrder(
@@ -47,4 +48,8 @@ export function getDonorMetadata(entity: Donor | Sample | Dataset) {
 export function getOriginSampleAndMappedOrgan(entity: Sample | Dataset) {
   const origin_sample = entity.origin_samples[0];
   return { origin_sample, mapped_organ: origin_sample.mapped_organ };
+}
+
+export function useCurrentDataset() {
+  return useProcessedDataStore((state) => state.currentDataset);
 }

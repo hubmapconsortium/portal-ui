@@ -73,6 +73,8 @@ export interface Donor extends Entity {
     race: string[];
     body_mass_index_value: string;
   }>;
+  group_name: string;
+  protocol_url: string;
 }
 
 export interface Sample extends Entity {

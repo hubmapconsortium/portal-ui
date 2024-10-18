@@ -42,7 +42,7 @@ declare module '@mui/material/styles' {
   export interface ZIndex {
     tutorial: number;
     dropdownOffset: number;
-    entityHeader: number;
+    header: number;
     dropdown: number;
     visualization: number;
     fileBrowserHeader: number;
@@ -264,7 +264,7 @@ const theme = createTheme({
   zIndex: {
     tutorial: 1101, // one higher than AppBar zIndex provided by MUI
     dropdownOffset: 1001,
-    entityHeader: 1000,
+    header: 1000,
     dropdown: 50,
     visualization: 3,
     fileBrowserHeader: 1,

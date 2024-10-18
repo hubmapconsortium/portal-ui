@@ -56,6 +56,21 @@ function Header() {
     }
   }, [vizIsFullscreen, handleViewChange]);
 
+  // Switch to narrow view if screen size changes from large desktop to smaller
+  // Restore previous view when screen size changes back to large desktop
+  const previousView = useRef(view);
+  const wasLargeDesktop = useRef(isLargeDesktop);
+  useEffect(() => {
+    if (!isLargeDesktop && wasLargeDesktop.current) {
+      previousView.current = view;
+      handleViewChange('narrow');
+      // Else if is required to prevent infinite loop/maintain functionality
+    } else if (isLargeDesktop && !wasLargeDesktop.current) {
+      handleViewChange(previousView.current);
+    }
+    wasLargeDesktop.current = isLargeDesktop;
+  }, [isLargeDesktop, handleViewChange, view]);
+
   const [springValues] = springs;
 
   if (springValues[0] === undefined) {

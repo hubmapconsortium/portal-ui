@@ -1,6 +1,5 @@
 import React from 'react';
 
-import Stack from '@mui/system/Stack';
 import Tile from 'js/shared-styles/tiles/Tile';
 import EntityTileThumbnail from 'js/components/entity-tile/EntityTileThumbnail';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
@@ -35,10 +34,9 @@ function EntityTileBody({ entity_type, id, entityData, invertColors }: EntityTil
               <Tile.Text>{entityData.mapped_metadata?.sex}</Tile.Text>
               <Tile.Divider invertColors={invertColors} />
               <Tile.Text>
-                <Stack direction="row">
+                <DonorAgeTooltip donorAge={entityData.mapped_metadata?.age_value}>
                   {entityData.mapped_metadata?.age_value} {entityData.mapped_metadata?.age_unit}
-                  <DonorAgeTooltip donorAge={entityData.mapped_metadata?.age_value} />
-                </Stack>
+                </DonorAgeTooltip>
               </Tile.Text>
             </Flex>
             <Tile.Text>{(entityData.mapped_metadata?.race ?? []).join(', ')}</Tile.Text>

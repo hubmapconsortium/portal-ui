@@ -9,6 +9,7 @@ import ProvTable from '../ProvTable';
 import { hasDataTypes } from './utils';
 import { filterTabsToDisplay } from './filterTabsToDisplay';
 import { ProvData } from '../types';
+import ProvGraphErrorBoundary from '../ProvGraph/ProvGraphErrorBoundary';
 
 const availableTabDetails = {
   multi: { label: 'Multi-Assay', 'data-testid': 'multi-prov-tab' },
@@ -67,7 +68,9 @@ function ProvTabs({ provData }: ProvTabsProps) {
       )}
       {filteredTabs?.graph && (
         <TabPanel value={open} index={filteredTabs.graph.index}>
-          <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
+          <ProvGraphErrorBoundary>
+            <ProvGraph provData={provData} entity_type={entity_type} uuid={uuid} />
+          </ProvGraphErrorBoundary>
         </TabPanel>
       )}
     </Paper>

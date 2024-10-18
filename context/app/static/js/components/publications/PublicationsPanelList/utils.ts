@@ -23,7 +23,7 @@ function buildSecondaryText(contributors: Contributor[], publication_venue: stri
     .join(' | ');
 }
 
-interface PublicationHit {
+export interface PublicationHit {
   _source: {
     uuid: string;
     title: string;

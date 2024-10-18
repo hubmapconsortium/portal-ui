@@ -1,3 +1,36 @@
+# Changelog
+
+## v1.12.2 - 2024-10-17
+
+- Add access levels to processed dataset helper panels.
+- Use relevant access levels when determining whether or not to show workspace buttons on dataset detail pages.
+- Add title to changelog page.
+- Ensure visualizations for image pyramids use parent UUID to fetch notebooks.
+- Restore missing columns to derived entities section.
+- Remove Provenance section from donor page in favor of using derived data tables.
+- Fix Webkit-specific bugs that caused the entity header to become misaligned.
+- Resolve issues of header cutting off the top of detail pages and header shifting off-screen when scrolling.
+- Switch to using metadata table with tabs component in the Sample and Donor pages.
+- In the metadata sections of Dataset, Sample, and Donor pages, add tabs for any entities in the Provenance section with metadata.
+- Update the metadata table component to show unique labels for each tab and to be scrollable when many tabs are present.
+- Fix issue of Workspaces button being available for protected datasets in the Visualization section.
+
+
+
+## v1.12.1 - 2024-10-10
+
+- Prevent collections without a DOI from being counted on the homepage.
+- Avoid page scrolling from using arrow keys on vitessce visualization.
+- Prevent malformed provenance graph data from crashing the entire page.
+- Improve readability of pipeline list in processed dataset sections.
+- Append HuBMAP ID to errored datasets' URL anchors to avoid anchor duplication on dataset pages with multiple failed processing attempts.
+- Improve entity header state handling of page resizes.
+- Fix push script to correctly check latest minor version date.
+- Sort publications by their date of publication.
+- Update Unified View redirect toast to be more informative.
+- Update group for HIVE-processed datasets to be 'HIVE'.
+
+
 ## v1.12.0 - 2024-10-07
 
 - Fix bug on dataset detail page for workspace dialogs opened in succession for different processed datasets. 

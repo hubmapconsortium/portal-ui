@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Vitessce } from 'vitessce';
 
 import Paper from '@mui/material/Paper';
@@ -43,8 +43,6 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 interface VisualizationProps {
   vitData: object | object[];
   uuid?: string;
-  hubmap_id?: string;
-  mapped_data_access_level?: string;
   hasNotebook: boolean;
   shouldDisplayHeader: boolean;
   shouldMountVitessce?: boolean;
@@ -54,8 +52,6 @@ interface VisualizationProps {
 function Visualization({
   vitData,
   uuid,
-  hubmap_id,
-  mapped_data_access_level,
   hasNotebook,
   shouldDisplayHeader,
   shouldMountVitessce = true,
@@ -102,6 +98,19 @@ function Visualization({
 
   const isMultiDataset = Array.isArray(vitessceConfig);
 
+  // Find parent UUID for the visualization if present
+  const parentUuid: string | undefined = useMemo(() => {
+    if (Array.isArray(vitData)) {
+      const vitDataArray = vitData as object[];
+      const found = vitDataArray.find((data) => 'parentUuid' in data) as { parentUuid: string } | undefined;
+      return found?.parentUuid;
+    }
+    if ('parentUuid' in vitData) {
+      return (vitData as { parentUuid: string }).parentUuid;
+    }
+    return undefined;
+  }, [vitData]);
+
   if (!vitessceConfig) {
     return null;
   }
@@ -122,13 +131,8 @@ function Visualization({
           leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
           buttons={
             <Stack direction="row" spacing={1}>
-              <VisualizationWorkspaceButton
-                uuid={uuid}
-                hubmap_id={hubmap_id}
-                mapped_data_access_level={mapped_data_access_level}
-                hasNotebook={hasNotebook}
-              />
-              <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} />
+              {hasNotebook && <VisualizationWorkspaceButton />}
+              <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">

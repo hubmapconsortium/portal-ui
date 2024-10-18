@@ -22,6 +22,7 @@ export type ProcessedDatasetDetails = ProcessedDatasetInfo &
     | 'protocol_url' // TODO: This is present for non-dataset entities, but not for datasets.
     | 'dataset_type'
     | 'mapped_consortium'
+    | 'mapped_data_access_level'
   >;
 
 export function useProcessedDatasetDetails(uuid: string) {
@@ -54,6 +55,7 @@ export function useProcessedDatasetDetails(uuid: string) {
       'mapped_consortium',
       'contributors',
       'contacts',
+      'mapped_data_access_level',
     ],
     size: 10000,
   };

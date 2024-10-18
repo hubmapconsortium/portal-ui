@@ -73,9 +73,13 @@ export function useVitessceConf(uuid: string, parentUuid?: string) {
   if (parentUuid) {
     urlParams.set('parent', parentUuid);
   }
-  return useSWR<VitessceConf>(getVitessceConfKey(uuid, groupsToken), (_key: unknown) =>
+  const swr = useSWR<VitessceConf>(getVitessceConfKey(uuid, groupsToken), (_key: unknown) =>
     fetcher({ url: `${base}?${urlParams.toString()}`, requestInit: { headers: getAuthHeader(groupsToken) } }),
   );
+  if (parentUuid) {
+    return { ...swr, data: { ...swr.data, parentUuid } };
+  }
+  return swr;
 }
 
 function useProcessedDatasets(includeComponents?: boolean) {
@@ -177,13 +181,20 @@ function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false
 }
 
 export function useRedirectAlert() {
-  const { redirected } = useFlaskDataContext();
+  const { redirected, redirectedFromId, redirectedFromPipeline } = useFlaskDataContext();
   const { toastInfo } = useSnackbarActions();
+
   useEffect(() => {
     if (redirected) {
-      toastInfo('You have been redirected to the unified view for this dataset.');
+      if (redirectedFromId && redirectedFromPipeline) {
+        toastInfo(
+          `You have been redirected to the unified view for ${redirectedFromPipeline} dataset ${redirectedFromId}.`,
+        );
+      } else {
+        toastInfo('You have been redirected to the unified view for this dataset.');
+      }
     }
-  }, [redirected, toastInfo]);
+  }, [redirected, toastInfo, redirectedFromId, redirectedFromPipeline]);
 }
 
 export { useProcessedDatasets, useProcessedDatasetsSections };

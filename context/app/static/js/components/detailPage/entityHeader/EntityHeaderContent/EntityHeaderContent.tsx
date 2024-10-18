@@ -73,10 +73,9 @@ function DonorItems({ data: { entity } }: EntityHeaderItemsProps) {
       {race && <Typography>{race}</Typography>}
       {age_unit && age_value && (
         <Typography>
-          <Stack direction="row" justifyContent="center">
+          <DonorAgeTooltip donorAge={age_value}>
             {age_value} {age_unit}
-            <DonorAgeTooltip donorAge={age_value} />
-          </Stack>
+          </DonorAgeTooltip>
         </Typography>
       )}
       <Divider orientation="vertical" flexItem />
@@ -218,6 +217,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
     <Stack
       direction="row"
       alignItems="center"
+      height="3rem"
       px={2}
       py={0.5}
       sx={(theme) => ({ ...(view !== 'narrow' && { borderBottom: `1px solid ${theme.palette.primary.lowEmphasis}` }) })}
@@ -237,7 +237,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
       <RightDiv>
         {vizIsFullscreen ? (
           <>
-            {vizNotebookId && <VisualizationWorkspaceButton uuid={vizNotebookId} />}
+            {vizNotebookId && <VisualizationWorkspaceButton />}
             <VisualizationShareButtonWrapper />
             <VizualizationThemeSwitch />
             <VisualizationCollapseButton />
