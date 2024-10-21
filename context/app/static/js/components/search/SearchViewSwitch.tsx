@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import ListRoundedIcon from '@mui/icons-material/ListRounded';
 import GridOnRoundedIcon from '@mui/icons-material/GridOnRounded';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { Button, SvgIcon } from '@mui/material';
+import { SvgIcon } from '@mui/material';
 
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -36,7 +36,6 @@ function SearchViewSwitch({ views }: { views: { label: string; icon: typeof SvgI
       {views.map(({ label, icon: Icon }) => (
         <TooltipToggleButton
           tooltipComponent={SecondaryBackgroundTooltip}
-          buttonComponent={Button}
           tooltipTitle={`Switch to ${label} View`}
           disableRipple
           value={label.toLowerCase()}
