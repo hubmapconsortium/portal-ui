@@ -5,7 +5,7 @@ describe("publications list page", () => {
       cy.visit("/publications");
     });
     it("has a title, subtitle, and description at the top", () => {
-      cy.findByTestId("landing-page-title").findByText("Publications");
+      cy.findByTestId("publications-title").findByText("Publications");
       cy.findByTestId("landing-page-description").contains(
         "The following publications"
       );
