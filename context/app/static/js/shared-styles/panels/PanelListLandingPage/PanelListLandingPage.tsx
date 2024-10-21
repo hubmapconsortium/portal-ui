@@ -14,7 +14,7 @@ interface PanelListLandingPageProps extends PropsWithChildren {
 function PanelListLandingPage({ title, subtitle, description, children, noIcon, ...rest }: PanelListLandingPageProps) {
   return (
     <PageWrapper {...rest}>
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-testid="landing-page-title">{title}</PageTitle>
       <Typography variant="subtitle1" color="primary" data-testid="landing-page-subtitle">
         {subtitle}
       </Typography>
