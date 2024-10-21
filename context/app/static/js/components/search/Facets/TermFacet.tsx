@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import Typography from '@mui/material/Typography';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
@@ -236,7 +236,7 @@ export function HierarchicalFacetChild({ parentValue, field, label, ...rest }: T
   );
 }
 
-export function HierarchicalTermFacetItem({
+export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFacetItem({
   field,
   label,
   childBuckets,
@@ -257,6 +257,13 @@ export function HierarchicalTermFacetItem({
   const filters = useSearchStore((state) => state.filters);
 
   const { [parentField]: filter } = filters;
+
+  const sortedBuckets = useMemo(() => {
+    if (!expanded || !childBuckets || !Array.isArray(childBuckets)) {
+      return [];
+    }
+    return sortBuckets({ buckets: childBuckets, field: parentField });
+  }, [expanded, childBuckets, parentField]);
 
   if (!childBuckets || !Array.isArray(childBuckets) || !isHierarchicalFilter(filter)) {
     return null;
@@ -305,22 +312,21 @@ export function HierarchicalTermFacetItem({
         />
       </HierarchicalAccordionSummary>
       <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
-        {expanded &&
-          sortBuckets({ buckets: childBuckets, field: parentField }).map(({ key, doc_count }) => (
-            <HierarchicalFacetChild
-              field={field}
-              label={key}
-              key={key}
-              count={doc_count}
-              parentValue={label}
-              active={childState?.has(key)}
-              title={title}
-            />
-          ))}
+        {sortedBuckets.map(({ key, doc_count }) => (
+          <HierarchicalFacetChild
+            field={field}
+            label={key}
+            key={key}
+            count={doc_count}
+            parentValue={label}
+            active={childState?.has(key)}
+            title={title}
+          />
+        ))}
       </AccordionDetails>
     </Accordion>
   );
-}
+});
 
 export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
   const { aggregations } = useSearch();
@@ -329,23 +335,25 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
 
   const { [parentField]: filter } = filters;
 
+  const sortedBuckets = useMemo(() => {
+    const parentBuckets = aggregations?.[parentField]?.[parentField]?.buckets;
+    if (!parentBuckets || !Array.isArray(parentBuckets)) {
+      return [];
+    }
+    return sortBuckets({ buckets: parentBuckets, field: parentField });
+  }, [parentField, aggregations]);
+
   if (!aggregations || !isHierarchicalFilter(filter)) {
     return null;
   }
 
   const { values } = filter;
 
-  const parentBuckets = aggregations?.[parentField]?.[parentField]?.buckets;
-
-  if (!parentBuckets || !Array.isArray(parentBuckets)) {
-    return null;
-  }
-
   const title = getFieldLabel(parentField);
 
   return (
     <FacetAccordion title={title} position="inner">
-      {sortBuckets({ buckets: parentBuckets, field: parentField }).map((bucket) => {
+      {sortedBuckets.map((bucket) => {
         const key = getBucketKey(bucket);
         return (
           <HierarchicalTermFacetItem
