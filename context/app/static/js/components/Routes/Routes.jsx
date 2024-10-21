@@ -346,6 +346,7 @@ Routes.propTypes = {
     cell_type: PropTypes.string,
     globusGroups: PropTypes.object,
     redirected: PropTypes.bool,
+    type: PropTypes.string,
   }),
 };
 
