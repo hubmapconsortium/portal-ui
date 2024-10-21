@@ -9,7 +9,7 @@ import { useSearchStore } from '../store';
 
 function ViewMoreResults() {
   const { searchHits: hits, loadMore, totalHitsCount } = useSearch();
-  const { analyticsCategory } = useSearchStore();
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
   const resultsShown = `${hits.length} Results Shown | ${totalHitsCount} Total Results`;
 

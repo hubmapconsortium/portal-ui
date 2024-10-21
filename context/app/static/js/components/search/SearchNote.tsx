@@ -53,7 +53,7 @@ const paramNotes = [
 ];
 
 function SearchNote() {
-  const { filters } = useSearchStore();
+  const filters = useSearchStore((state) => state.filters);
   const notesToDisplay = paramNotes.filter(({ filter }) => filters?.[filter]);
 
   if (notesToDisplay.length === 0) {

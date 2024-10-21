@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import ListRoundedIcon from '@mui/icons-material/ListRounded';
 import GridOnRoundedIcon from '@mui/icons-material/GridOnRounded';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
@@ -10,7 +11,13 @@ import { trackEvent } from 'js/helpers/trackers';
 import { useSearchStore } from './store';
 
 function SearchViewSwitch({ views }: { views: { label: string; icon: typeof SvgIcon }[] }) {
-  const { view, setView, analyticsCategory } = useSearchStore();
+  const { view, setView, analyticsCategory } = useSearchStore(
+    useShallow((state) => ({
+      view: state.view,
+      setView: state.setView,
+      analyticsCategory: state.analyticsCategory,
+    })),
+  );
 
   const handleChange = useCallback(
     (event: React.MouseEvent<HTMLElement>, v: string) => {

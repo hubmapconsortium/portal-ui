@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
@@ -59,7 +60,13 @@ export function getSortOrder({
 }
 
 function SortHeaderCell({ field, label }: { field: string; label: string }) {
-  const { sortField, setSortField, analyticsCategory } = useSearchStore();
+  const { sortField, setSortField, analyticsCategory } = useSearchStore(
+    useShallow((state) => ({
+      sortField: state.sortField,
+      setSortField: state.setSortField,
+      analyticsCategory: state.analyticsCategory,
+    })),
+  );
 
   const { direction, field: currentSortField } = sortField;
 
@@ -122,10 +129,15 @@ function HighlightRow({ colSpan, highlight }: { colSpan: number } & Required<Pic
 }
 
 function LoadingRows() {
-  const {
-    sourceFields: { table: tableFields },
-    size,
-  } = useSearchStore();
+  const { sourceFields, size } = useSearchStore(
+    useShallow((state) => ({
+      sourceFields: state.sourceFields,
+      size: state.size,
+    })),
+  );
+
+  const { table: tableFields } = sourceFields;
+
   return Array.from({ length: size }).map((_, i) => (
     // eslint-disable-next-line react/no-array-index-key
     <TableRow key={i}>
@@ -142,9 +154,8 @@ function LoadingRows() {
 function ResultsTable() {
   const { searchHits: hits, isLoading } = useSearch();
 
-  const {
-    sourceFields: { table: tableFields },
-  } = useSearchStore();
+  const sourceFields = useSearchStore((state) => state.sourceFields);
+  const { table: tableFields } = sourceFields;
 
   return (
     <Box>

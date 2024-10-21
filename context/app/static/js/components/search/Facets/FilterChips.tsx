@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
@@ -17,7 +18,7 @@ import {
 import { getFieldLabel, getTransformedFieldalue } from '../fieldConfigurations';
 
 function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () => void }) {
-  const { analyticsCategory } = useSearchStore();
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
   const handleDelete = useCallback(() => {
     onDelete();
@@ -32,7 +33,15 @@ function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () =>
 }
 
 function FilterChips() {
-  const { filters, facets, filterTerm, filterRange, filterHierarchicalChildTerm } = useSearchStore();
+  const { filters, facets, filterTerm, filterRange, filterHierarchicalChildTerm } = useSearchStore(
+    useShallow((state) => ({
+      filters: state.filters,
+      facets: state.facets,
+      filterTerm: state.filterTerm,
+      filterRange: state.filterRange,
+      filterHierarchicalChildTerm: state.filterHierarchicalChildTerm,
+    })),
+  );
 
   return (
     <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>

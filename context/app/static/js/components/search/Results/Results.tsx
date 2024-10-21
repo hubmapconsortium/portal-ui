@@ -19,7 +19,7 @@ function Results() {
     isLoading,
   } = useSearch();
 
-  const { view } = useSearchStore();
+  const view = useSearchStore((state) => state.view);
 
   if (!isLoading && !length) {
     return <NoResults />;

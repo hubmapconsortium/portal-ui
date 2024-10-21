@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 import Typography from '@mui/material/Typography';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import Accordion from '@mui/material/Accordion';
@@ -79,7 +80,7 @@ function CheckboxFilterItem({
   indeterminate = false,
   field,
 }: CheckboxItem) {
-  const { analyticsCategory } = useSearchStore();
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
   const handleClick = useCallback(() => {
     onClick();
@@ -103,7 +104,7 @@ function CheckboxFilterItem({
           color="primary"
           icon={<StyledCheckBoxBlankIcon />}
           checkedIcon={<StyledCheckBoxIcon />}
-          onClick={handleClick}
+          onChange={handleClick}
         />
       }
       label={
@@ -118,7 +119,7 @@ interface TermFacet extends Omit<CheckboxItem, 'onClick'> {
 }
 
 export function TermFacetItem({ label, field, ...rest }: TermFacet) {
-  const { filterTerm } = useSearchStore();
+  const filterTerm = useSearchStore((state) => state.filterTerm);
 
   const handleClick = useCallback(() => {
     filterTerm({ term: field, value: label });
@@ -131,7 +132,9 @@ const smallAggSize = 5;
 const maxAggSize = 10000;
 
 function FacetSizeButton({ field, hasMoreBuckets }: { field: string; hasMoreBuckets: boolean }) {
-  const { setTermSize, facets } = useSearchStore();
+  const { setTermSize, facets } = useSearchStore(
+    useShallow((state) => ({ setTermSize: state.setTermSize, facets: state.facets })),
+  );
 
   const facet = facets?.[field];
 
@@ -188,9 +191,9 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
 }
 
 export function TermFacet({ field }: { field: string }) {
-  const {
-    filters: { [field]: filter },
-  } = useSearchStore();
+  const filters = useSearchStore((state) => state.filters);
+
+  const { [field]: filter } = filters;
 
   if (!isTermFilter(filter)) {
     return null;
@@ -208,7 +211,7 @@ function buildExpandTooltip({ expanded, disabled }: { expanded: boolean; disable
 }
 
 export function HierarchicalFacetParent({ childValues, field, label, ...rest }: TermFacet & { childValues: string[] }) {
-  const { filterHierarchicalParentTerm } = useSearchStore();
+  const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
 
   return (
     <CheckboxFilterItem
@@ -221,7 +224,7 @@ export function HierarchicalFacetParent({ childValues, field, label, ...rest }: 
 }
 
 export function HierarchicalFacetChild({ parentValue, field, label, ...rest }: TermFacet & { parentValue: string }) {
-  const { filterHierarchicalChildTerm } = useSearchStore();
+  const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
 
   return (
     <CheckboxFilterItem
@@ -251,9 +254,9 @@ export function HierarchicalTermFacetItem({
     setExpanded((prev) => !prev);
   }, [setExpanded]);
 
-  const {
-    filters: { [parentField]: filter },
-  } = useSearchStore();
+  const filters = useSearchStore((state) => state.filters);
+
+  const { [parentField]: filter } = filters;
 
   if (!childBuckets || !Array.isArray(childBuckets) || !isHierarchicalFilter(filter)) {
     return null;
@@ -302,17 +305,18 @@ export function HierarchicalTermFacetItem({
         />
       </HierarchicalAccordionSummary>
       <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
-        {sortBuckets({ buckets: childBuckets, field: parentField }).map(({ key, doc_count }) => (
-          <HierarchicalFacetChild
-            field={field}
-            label={key}
-            key={key}
-            count={doc_count}
-            parentValue={label}
-            active={childState?.has(key)}
-            title={title}
-          />
-        ))}
+        {expanded &&
+          sortBuckets({ buckets: childBuckets, field: parentField }).map(({ key, doc_count }) => (
+            <HierarchicalFacetChild
+              field={field}
+              label={key}
+              key={key}
+              count={doc_count}
+              parentValue={label}
+              active={childState?.has(key)}
+              title={title}
+            />
+          ))}
       </AccordionDetails>
     </Accordion>
   );
@@ -321,9 +325,9 @@ export function HierarchicalTermFacetItem({
 export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
   const { aggregations } = useSearch();
 
-  const {
-    filters: { [parentField]: filter },
-  } = useSearchStore();
+  const filters = useSearchStore((state) => state.filters);
+
+  const { [parentField]: filter } = filters;
 
   if (!aggregations || !isHierarchicalFilter(filter)) {
     return null;
