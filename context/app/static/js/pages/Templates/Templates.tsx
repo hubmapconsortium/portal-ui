@@ -10,7 +10,9 @@ import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 function Templates() {
   return (
     <Stack spacing={3}>
-      <IconPageTitle icon={WorkspacesIcon}>Templates</IconPageTitle>
+      <IconPageTitle icon={WorkspacesIcon} data-testid="templates-title">
+        Templates
+      </IconPageTitle>
       <TemplatePreviewSection trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateLandingPage }} />
     </Stack>
   );

@@ -37,7 +37,7 @@ function Publications() {
       title="Publications"
       subtitle={publicationsCount > 0 && `${publicationsCount} Publications`}
       description={<Description />}
-      dataTestId="publications-title"
+      data-testid="publications-title"
     >
       <StyledTabs
         data-testid="publication-tabs"

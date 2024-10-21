@@ -28,6 +28,7 @@ export default function LoginAlert({ featureName, trackingInfo }: LoginAlertProp
           Log in
         </Button>
       }
+      data-testid="login-alert"
     >
       You must be logged in to access {featureName}.
       {featureName === 'workspaces'

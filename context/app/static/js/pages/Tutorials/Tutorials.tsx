@@ -26,7 +26,7 @@ const StyledLink = styled('a')(({ theme }) => ({
 function Tutorials() {
   return (
     <Stack spacing={2}>
-      <PageTitle>Tutorials</PageTitle>
+      <PageTitle data-testid="tutorials-title">Tutorials</PageTitle>
       <SectionPaper>Browse tutorials of how to navigate the HuBMAP Data Portal for your specific needs.</SectionPaper>
       <Grid container alignItems="stretch">
         {Object.values(tutorials).map(({ title, description, tags, route }) => (
