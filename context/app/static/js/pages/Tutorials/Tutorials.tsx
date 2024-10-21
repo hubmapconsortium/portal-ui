@@ -32,7 +32,13 @@ function Tutorials() {
         {Object.values(tutorials).map(({ title, description, tags, route }) => (
           <Grid item xs={4} key={title} aria-label={`${title} tutorial`}>
             <StyledLink href={`/tutorials/${route}`}>
-              <SelectableCard title={title} description={description} cardKey={title} tags={tags} />
+              <SelectableCard
+                title={title}
+                description={description}
+                cardKey={title}
+                tags={tags}
+                data-testid="tutorial-card"
+              />
             </StyledLink>
           </Grid>
         ))}
