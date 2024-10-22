@@ -45,7 +45,7 @@ describe("Publication page", () => {
         .should("contain", "Kidney (Left)")
         .and("contain", "Spleen");
     });
-    it("has a publication date, which is labeled as a preprint date", () => {
+    it("has a publication date", () => {
       cy.findByTestId("publication-date")
         .should("contain", "2024-09-27")
         .and("contain", "Publication Date");
