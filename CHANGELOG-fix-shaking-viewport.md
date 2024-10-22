@@ -1,0 +1,1 @@
+- Fix bug where expanding a processed dataset section leads to a shaking viewport.
