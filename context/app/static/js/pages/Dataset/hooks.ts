@@ -147,10 +147,11 @@ function getProcessedDatasetSection({
   };
 
   const sectionsToDisplay = Object.entries(shouldDisplaySection).filter(([_k, v]) => v === true);
+  const sectionTitle = pipeline ?? assay_display_name[0] ?? hubmap_id;
 
   return {
     // TODO: Improve the lookup for descendants to exclude anything with a missing pipeline name
-    ...getSectionFromString(pipeline ?? assay_display_name[0] ?? hubmap_id, datasetSectionId(hit._source, 'section')),
+    ...getSectionFromString(sectionTitle, datasetSectionId(hit._source, 'section')),
     items: sectionsToDisplay.map(([s]) => ({
       ...getSectionFromString(s, datasetSectionId(hit._source, s)),
       hash: datasetSectionId(hit._source, s),
@@ -160,6 +161,7 @@ function getProcessedDatasetSection({
 
 function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false; isLoading: boolean } {
   const { searchHits, isLoading } = useProcessedDatasets();
+
   const { cache } = useSWRConfig();
 
   const { groupsToken } = useAppContext();
