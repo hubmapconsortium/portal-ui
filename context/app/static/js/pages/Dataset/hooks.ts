@@ -135,7 +135,8 @@ function getProcessedDatasetSection({
   hit: Required<SearchHit<ProcessedDatasetInfo>>;
   conf?: VitessceConf;
 }) {
-  const { pipeline, hubmap_id, files, metadata, visualization, creation_action, contributors } = hit._source;
+  const { pipeline, assay_display_name, hubmap_id, files, metadata, visualization, creation_action, contributors } =
+    hit._source;
 
   const shouldDisplaySection = {
     summary: true,
@@ -149,7 +150,7 @@ function getProcessedDatasetSection({
 
   return {
     // TODO: Improve the lookup for descendants to exclude anything with a missing pipeline name
-    ...getSectionFromString(pipeline ?? hubmap_id, datasetSectionId(hit._source, 'section')),
+    ...getSectionFromString(pipeline ?? assay_display_name[0] ?? hubmap_id, datasetSectionId(hit._source, 'section')),
     items: sectionsToDisplay.map(([s]) => ({
       ...getSectionFromString(s, datasetSectionId(hit._source, s)),
       hash: datasetSectionId(hit._source, s),
@@ -159,7 +160,6 @@ function getProcessedDatasetSection({
 
 function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false; isLoading: boolean } {
   const { searchHits, isLoading } = useProcessedDatasets();
-
   const { cache } = useSWRConfig();
 
   const { groupsToken } = useAppContext();
