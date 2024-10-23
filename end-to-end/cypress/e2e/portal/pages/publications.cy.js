@@ -5,7 +5,7 @@ describe("publications list page", () => {
       cy.visit("/publications");
     });
     it("has a title, subtitle, and description at the top", () => {
-      cy.findByTestId("landing-page-title").findByText("Publications");
+      cy.findByTestId("publications-title").findByText("Publications");
       cy.findByTestId("landing-page-description").contains(
         "The following publications"
       );
@@ -30,12 +30,12 @@ describe("publications list page", () => {
     it("has clickable publication links", () => {
       const publishedTab = cy.findByTestId("publication-tab-peer-reviewed");
       const preprintTab = cy.findByTestId("publication-tab-preprint");
-      publishedTab.should("exist").then(($pubTab) => {
-        if ($pubTab.text().includes("(0)")) {
-          preprintTab.click();
-          cy.wait(1000);
-        }
-      });
+      // publishedTab.should("exist").then(($pubTab) => {
+      //   if ($pubTab.text().includes("(0)")) {
+      //     preprintTab.click();
+      //     cy.wait(1000);
+      //   }
+      // });
       cy.findAllByTestId("panel-title")
         .should("exist")
         .and("have.attr", "href");

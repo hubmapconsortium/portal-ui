@@ -26,13 +26,19 @@ const StyledLink = styled('a')(({ theme }) => ({
 function Tutorials() {
   return (
     <Stack spacing={2}>
-      <PageTitle>Tutorials</PageTitle>
+      <PageTitle data-testid="tutorials-title">Tutorials</PageTitle>
       <SectionPaper>Browse tutorials of how to navigate the HuBMAP Data Portal for your specific needs.</SectionPaper>
       <Grid container alignItems="stretch">
         {Object.values(tutorials).map(({ title, description, tags, route }) => (
           <Grid item xs={4} key={title} aria-label={`${title} tutorial`}>
             <StyledLink href={`/tutorials/${route}`}>
-              <SelectableCard title={title} description={description} cardKey={title} tags={tags} />
+              <SelectableCard
+                title={title}
+                description={description}
+                cardKey={title}
+                tags={tags}
+                data-testid="tutorial-card"
+              />
             </StyledLink>
           </Grid>
         ))}

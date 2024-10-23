@@ -1,0 +1,1 @@
+- Add end-to-end tests that check whether all page types load successfully.

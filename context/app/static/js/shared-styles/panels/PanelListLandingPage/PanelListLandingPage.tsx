@@ -11,10 +11,10 @@ interface PanelListLandingPageProps extends PropsWithChildren {
   noIcon?: boolean;
 }
 
-function PanelListLandingPage({ title, subtitle, description, children, noIcon }: PanelListLandingPageProps) {
+function PanelListLandingPage({ title, subtitle, description, children, noIcon, ...rest }: PanelListLandingPageProps) {
   return (
     <PageWrapper>
-      <PageTitle data-testid="landing-page-title">{title}</PageTitle>
+      <PageTitle {...rest}>{title}</PageTitle>
       <Typography variant="subtitle1" color="primary" data-testid="landing-page-subtitle">
         {subtitle}
       </Typography>

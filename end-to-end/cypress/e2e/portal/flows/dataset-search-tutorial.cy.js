@@ -1,10 +1,10 @@
-import defaultSearch from "../../fixtures/dataset-search/default";
-import limitedDataTypesSearch from "../../fixtures/dataset-search/fewer-than-5-organs";
+import defaultSearch from "../../../fixtures/dataset-search/default";
+import limitedDataTypesSearch from "../../../fixtures/dataset-search/fewer-than-5-organs";
 
 import {
   defaultSteps,
   stepToAddIfViewMoreExists,
-} from "../../../../context/app/static/js/components/tutorials/SearchDatasetTutorial/config";
+} from "../../../../../context/app/static/js/components/tutorials/SearchDatasetTutorial/config";
 
 function traverseSteps(steps) {
   cy.wrap(steps).each((step, i) => {

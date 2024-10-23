@@ -54,6 +54,7 @@ function TemplateGrid({
                     label: title,
                   })
                 }
+                data-testid="template-card"
               >
                 {title}
               </InternalLink>
