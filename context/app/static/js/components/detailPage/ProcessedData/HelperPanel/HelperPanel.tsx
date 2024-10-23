@@ -10,7 +10,7 @@ import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 import { useIsDesktop } from 'js/hooks/media-queries';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
-import { LineClamp } from 'js/shared-styles/text';
+import { LineClampWithTooltip } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import { formatDate } from 'date-fns/format';
@@ -53,7 +53,7 @@ interface HelperPanelBodyItemProps extends PropsWithChildren {
 }
 
 function HelperPanelBodyItem({ label, children, noWrap }: HelperPanelBodyItemProps) {
-  const body = noWrap ? <LineClamp lines={3}>{children}</LineClamp> : children;
+  const body = noWrap ? <LineClampWithTooltip lines={3}>{children}</LineClampWithTooltip> : children;
   return (
     <Stack direction="column">
       <Typography variant="overline">{label}</Typography>

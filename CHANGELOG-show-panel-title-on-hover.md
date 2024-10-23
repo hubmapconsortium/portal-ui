@@ -1,0 +1,1 @@
+- If a title or description in a processed dataset helper panel is truncated, show the full text on hover in a tooltip.
