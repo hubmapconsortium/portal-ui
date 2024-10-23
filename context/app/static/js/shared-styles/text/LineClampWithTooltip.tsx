@@ -1,5 +1,4 @@
 import React, { PropsWithChildren, useEffect, useRef, useState } from 'react';
-import Box from '@mui/material/Box';
 import LineClamp from 'js/shared-styles/text/LineClamp';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
@@ -25,13 +24,7 @@ function LineClampWithTooltip({ lines, children }: LineClampWithTooltipProps) {
     </LineClamp>
   );
 
-  return isTruncated ? (
-    <SecondaryBackgroundTooltip title={children}>
-      <Box>{content}</Box>
-    </SecondaryBackgroundTooltip>
-  ) : (
-    content
-  );
+  return isTruncated ? <SecondaryBackgroundTooltip title={children}>{content}</SecondaryBackgroundTooltip> : content;
 }
 
 export default LineClampWithTooltip;
