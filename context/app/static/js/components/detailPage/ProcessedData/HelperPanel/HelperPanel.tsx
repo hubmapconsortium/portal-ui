@@ -80,7 +80,7 @@ function HelperPanelBody() {
           {currentDataset.description}
         </HelperPanelBodyItem>
       )}
-      <HelperPanelBodyItem label="Pipeline">
+      <HelperPanelBodyItem label="Analysis Type">
         {currentDataset.pipeline ?? currentDataset.assay_display_name[0]}
       </HelperPanelBodyItem>
       <HelperPanelBodyItem label="Group">{currentDataset.group_name}</HelperPanelBodyItem>
