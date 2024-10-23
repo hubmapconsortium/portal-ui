@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.13.0 - 2024-10-23
+
+- Add end-to-end tests that check whether all page types load successfully.
+- Fix bug where expanding a processed dataset section leads to a shaking viewport.
+- If a title or description in a processed dataset helper panel is truncated, show the full text on hover in a tooltip.
+- Updated HRA EUI and organ-info web components to latest version
+
+
+
 ## v1.12.2 - 2024-10-17
 
 - Add access levels to processed dataset helper panels.
