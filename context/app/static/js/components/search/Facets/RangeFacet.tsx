@@ -111,15 +111,12 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
 }
 
 function FacetGuard({ field }: { field: string }) {
-  const { filters, facets } = useSearchStore(
+  const { filter, facet } = useSearchStore(
     useShallow((state) => ({
-      filters: state.filters,
-      facets: state.facets,
+      filter: state.filters[field],
+      facet: state.facets[field],
     })),
   );
-
-  const { [field]: filter } = filters;
-  const { [field]: facet } = facets;
 
   if (!isRangeFilter(filter) || !isRangeFacet(facet)) {
     return null;

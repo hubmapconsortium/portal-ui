@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 
 import { trackEvent } from 'js/helpers/trackers';
 import {
-  HierarchichalTermValues,
+  HierarchicalTermValues,
   RangeValues,
   TermValues,
   isHierarchicalFacet,
@@ -15,7 +15,7 @@ import {
   isTermFilter,
   useSearchStore,
 } from '../store';
-import { getFieldLabel, getTransformedFieldalue } from '../fieldConfigurations';
+import { getFieldLabel, getTransformedFieldValue } from '../fieldConfigurations';
 
 function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () => void }) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
@@ -45,11 +45,11 @@ function FilterChips() {
 
   return (
     <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
-      {Object.entries(filters).map(([field, v]: [string, RangeValues | HierarchichalTermValues | TermValues]) => {
+      {Object.entries(filters).map(([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues]) => {
         if (isTermFilter(v)) {
           return [...v.values].map((val) => (
             <FilterChip
-              label={`${getFieldLabel(field)}: ${getTransformedFieldalue({ field, value: val })}`}
+              label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: val })}`}
               key={val}
               onDelete={() => filterTerm({ term: field, value: val })}
             />

@@ -35,7 +35,7 @@ export interface HierarchicalTermConfig extends FacetConfig {
   type: typeof FACETS.hierarchical;
 }
 
-export interface HierarchichalTermValues<V = Set<string>> {
+export interface HierarchicalTermValues<V = Set<string>> {
   values: Record<string, V>;
   type: typeof FACETS.hierarchical;
 }
@@ -54,7 +54,7 @@ export interface RangeValues {
   type: typeof FACETS.range;
 }
 
-export type Filter<V = Set<string>> = TermValues<V> | HierarchichalTermValues<V> | RangeValues;
+export type Filter<V = Set<string>> = TermValues<V> | HierarchicalTermValues<V> | RangeValues;
 type Facet = TermConfig | HierarchicalTermConfig | RangeConfig;
 
 export type FiltersType<V = Set<string>> = Record<string, Filter<V>>;
@@ -173,7 +173,7 @@ export function isRangeFacet(facet: Facet): facet is RangeConfig {
   return facet.type === 'RANGE';
 }
 
-export function isHierarchicalFilter<V = Set<string>>(filter: Filter<V>): filter is HierarchichalTermValues<V> {
+export function isHierarchicalFilter<V = Set<string>>(filter: Filter<V>): filter is HierarchicalTermValues<V> {
   return filter.type === 'HIERARCHICAL';
 }
 

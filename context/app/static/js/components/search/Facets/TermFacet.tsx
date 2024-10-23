@@ -10,7 +10,7 @@ import { AggregationsBuckets } from '@elastic/elasticsearch/lib/api/types';
 
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { trackEvent } from 'js/helpers/trackers';
-import { useSearch, HierarchichalBucket, InnerBucket } from '../Search';
+import { useSearch, HierarchicalBucket, InnerBucket } from '../Search';
 import { isTermFilter, useSearchStore, TermValues, isHierarchicalFilter, isTermFacet } from '../store';
 import {
   StyledCheckBoxBlankIcon,
@@ -22,7 +22,7 @@ import {
   HierarchicalAccordionSummary,
 } from './style';
 import FacetAccordion from './FacetAccordion';
-import { getFieldLabel, getFieldValueSort, getTransformedFieldalue } from '../fieldConfigurations';
+import { getFieldLabel, getFieldValueSort, getTransformedFieldValue } from '../fieldConfigurations';
 
 interface CheckboxItem {
   label: string;
@@ -34,7 +34,7 @@ interface CheckboxItem {
   field: string;
 }
 
-type Bucket = HierarchichalBucket | InnerBucket;
+type Bucket = HierarchicalBucket | InnerBucket;
 
 function getBucketKey(bucket: InnerBucket) {
   const { key, key_as_string } = bucket;
@@ -108,7 +108,7 @@ function CheckboxFilterItem({
         />
       }
       label={
-        <TermLabelAndCount label={getTransformedFieldalue({ value: label, field })} count={count} active={active} />
+        <TermLabelAndCount label={getTransformedFieldValue({ value: label, field })} count={count} active={active} />
       }
     />
   );
@@ -132,11 +132,9 @@ const smallAggSize = 5;
 const maxAggSize = 10000;
 
 function FacetSizeButton({ field, hasMoreBuckets }: { field: string; hasMoreBuckets: boolean }) {
-  const { setTermSize, facets } = useSearchStore(
-    useShallow((state) => ({ setTermSize: state.setTermSize, facets: state.facets })),
+  const { setTermSize, facet } = useSearchStore(
+    useShallow((state) => ({ setTermSize: state.setTermSize, facet: state.facets[field] })),
   );
-
-  const facet = facets?.[field];
 
   if (!isTermFacet(facet)) {
     return null;
@@ -191,9 +189,7 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
 }
 
 export function TermFacet({ field }: { field: string }) {
-  const filters = useSearchStore((state) => state.filters);
-
-  const { [field]: filter } = filters;
+  const filter = useSearchStore((state) => state.filters[field]);
 
   if (!isTermFilter(filter)) {
     return null;
@@ -254,9 +250,7 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
     setExpanded((prev) => !prev);
   }, [setExpanded]);
 
-  const filters = useSearchStore((state) => state.filters);
-
-  const { [parentField]: filter } = filters;
+  const filter = useSearchStore((state) => state.filters[parentField]);
 
   const sortedBuckets = useMemo(() => {
     if (!expanded || !childBuckets || !Array.isArray(childBuckets)) {
@@ -331,9 +325,7 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
 export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
   const { aggregations } = useSearch();
 
-  const filters = useSearchStore((state) => state.filters);
-
-  const { [parentField]: filter } = filters;
+  const filter = useSearchStore((state) => state.filters[parentField]);
 
   const sortedBuckets = useMemo(() => {
     const parentBuckets = aggregations?.[parentField]?.[parentField]?.buckets;

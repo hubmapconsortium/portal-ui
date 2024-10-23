@@ -50,9 +50,9 @@ export interface InnerBucket extends OuterBucket {
   key_as_string?: string;
 }
 
-export type HierarchichalBucket = InnerBucket & Partial<Record<string, AggregationsTermsAggregateBase<InnerBucket>>>;
+export type HierarchicalBucket = InnerBucket & Partial<Record<string, AggregationsTermsAggregateBase<InnerBucket>>>;
 
-type Aggregations = Record<string, OuterBucket & Record<string, AggregationsTermsAggregateBase<HierarchichalBucket>>>;
+type Aggregations = Record<string, OuterBucket & Record<string, AggregationsTermsAggregateBase<HierarchicalBucket>>>;
 
 export function useSearch() {
   const {

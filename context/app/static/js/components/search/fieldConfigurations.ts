@@ -49,7 +49,7 @@ export function getFieldConfigurations(field: string) {
   return exactMatch ?? stemMatch ?? undefined;
 }
 
-export function getTransformedFieldalue({ value, field }: { value: string; field: string }) {
+export function getTransformedFieldValue({ value, field }: { value: string; field: string }) {
   const valueTransformations = getFieldConfigurations(field)?.valueTransformations;
 
   if (!valueTransformations) {
