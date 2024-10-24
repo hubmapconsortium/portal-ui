@@ -1,1 +1,2 @@
-- Use assay_display_name instead of pipeline for labelling EPIC dataset sections.
+- Use assay_display_name instead of pipeline when labelling EPIC dataset sections.
+- Update language in processed dataset sections from "pipeline" to "analysis".
