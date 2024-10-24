@@ -15,6 +15,7 @@ interface SoftAssayResponse {
   'pipeline-shorthand': string;
   primary: boolean;
   'vitessce-hints': string[];
+  process_state: string;
 }
 
 export async function fetchSoftAssay({ url, dataset, groupsToken }: SoftAssayRequest) {
