@@ -18,6 +18,7 @@ interface BulkDataTransferPanelProps {
 function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
   const { dbgap_study_url, dbgap_sra_experiment_url, mapped_data_access_level, hubmap_id } =
     useStudyURLsQuery(uuid).searchHits[0]?._source || {};
+
   const panelsToUse = usePanelSet(uuid, dbgap_study_url, mapped_data_access_level);
 
   if ('error' in panelsToUse) {
