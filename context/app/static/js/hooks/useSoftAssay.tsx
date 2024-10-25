@@ -16,6 +16,7 @@ interface SoftAssayResponse {
   primary: boolean;
   'vitessce-hints': string[];
   process_state: string;
+  'dataset-type': string;
 }
 
 export async function fetchSoftAssay({ url, dataset, groupsToken }: SoftAssayRequest) {
