@@ -62,3 +62,29 @@ def get_organs():
     dir_path = Path(dirname(__file__) + '/organ')
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
+
+def find_earliest_ancestor(client, uuid):
+    dataset = client.get_entities(
+        'datasets',
+        query_override={
+            "bool": {
+                "must": {
+                    "term": {
+                        "uuid": uuid
+                    }
+                }
+            }
+        },
+        non_metadata_fields=['hubmap_id', 'uuid', 'immediate_ancestors', 'entity_type']
+    )
+
+    # If no dataset is found or it has no ancestors, return the current dataset UUID
+    if not dataset or not dataset[0].get('immediate_ancestors'):
+        return uuid
+
+    # Traverse through immediate ancestors to find the earliest dataset ancestor
+    for ancestor in dataset[0]['immediate_ancestors']:
+        if ancestor.get('entity_type') == 'Dataset':
+            uuid = find_earliest_ancestor(client, ancestor.get('uuid'))
+
+    return uuid

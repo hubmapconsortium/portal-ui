@@ -7,7 +7,7 @@ from flask import (
 
 from .utils import (
     get_default_flask_data, make_blueprint, get_client,
-    get_url_base_from_request, entity_types)
+    get_url_base_from_request, entity_types, find_earliest_ancestor)
 
 
 blueprint = make_blueprint(__name__)
@@ -55,32 +55,36 @@ def details(type, uuid):
     is_processed = entity.get('processing') != 'raw' and actual_type == 'dataset'
     is_component = entity.get('is_component', False) is True
     if (is_support or is_processed or is_component):
+        primary_uuid = find_earliest_ancestor(client, uuid)
+        print('primary_uuid:', primary_uuid)
         supported_entity = client.get_entities(
             'datasets',
             query_override={
                 "bool": {
                     "must": {
-                        "terms": {
-                            "descendant_ids": [uuid]
+                        "term": {
+                            "uuid": primary_uuid
                         }
                     }
                 }
             },
             non_metadata_fields=['hubmap_id', 'uuid']
         )
+        print('supported entity:', supported_entity)
 
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
         anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
 
-        if len(supported_entity) > 0:
-            return redirect(
-                url_for('routes_browse.details',
-                        type='dataset',
-                        uuid=supported_entity[0]['uuid'],
-                        _anchor=anchor,
-                        redirected=True,
-                        redirectedFromId=entity.get('hubmap_id'),
-                        redirectedFromPipeline=entity.get('pipeline')))
+        # Don't check whether the primary dataset exists, just redirect to it. 404 is preferable to a page 
+        # that shows only a support entity or processed/component dataset.
+        return redirect(
+            url_for('routes_browse.details',
+                    type='dataset',
+                    uuid=primary_uuid,
+                    _anchor=anchor,
+                    redirected=True,
+                    redirectedFromId=entity.get('hubmap_id'),
+                    redirectedFromPipeline=entity.get('pipeline')))
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
