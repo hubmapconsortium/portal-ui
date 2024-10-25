@@ -69,17 +69,24 @@ export function useProcessedDatasetDetails(uuid: string) {
 }
 
 function processDatasetLabel(dataset: ProcessedDatasetInfo, hits: Required<SearchHit<ProcessedDatasetInfo>>[]) {
-  const multipleHitsWithSamePipeline = hits.filter((h) => h._source.pipeline === dataset.pipeline).length > 1;
-  const multipleHitsWithSamePipelineAndStatus =
-    multipleHitsWithSamePipeline &&
-    hits.filter((h) => h._source.pipeline === dataset.pipeline && h._source.status === dataset.status).length > 1;
-  if (multipleHitsWithSamePipelineAndStatus) {
-    return `${dataset.pipeline} (${dataset.status}) [${dataset.hubmap_id}]`;
+  const label = dataset.pipeline || dataset.assay_display_name[0];
+
+  const multipleHitsWithSameLabel =
+    hits.filter((h) => (h._source.pipeline || h._source.assay_display_name[0]) === label).length > 1;
+
+  const multipleHitsWithSameLabelAndStatus =
+    multipleHitsWithSameLabel &&
+    hits.filter(
+      (h) => (h._source.pipeline || h._source.assay_display_name[0]) === label && h._source.status === dataset.status,
+    ).length > 1;
+
+  if (multipleHitsWithSameLabelAndStatus) {
+    return `${label} (${dataset.status}) [${dataset.hubmap_id}]`;
   }
-  if (multipleHitsWithSamePipeline) {
-    return `${dataset.pipeline} (${dataset.status})`;
+  if (multipleHitsWithSameLabel) {
+    return `${label} (${dataset.status})`;
   }
-  return dataset.pipeline;
+  return label;
 }
 
 export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: ComponentType | undefined }[] {

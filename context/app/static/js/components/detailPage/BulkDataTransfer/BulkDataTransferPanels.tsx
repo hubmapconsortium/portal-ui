@@ -20,7 +20,6 @@ function BulkDataTransferPanels({ uuid, label }: BulkDataTransferPanelProps) {
     useStudyURLsQuery(uuid).searchHits[0]?._source || {};
 
   const panelsToUse = usePanelSet(uuid, dbgap_study_url, mapped_data_access_level);
-
   if ('error' in panelsToUse) {
     return <NoAccess {...panelsToUse.error} />;
   }

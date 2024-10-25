@@ -13,7 +13,6 @@ import { BULK_DATA_DESCRIPTION_TEXT } from './const';
 
 function BulkDataTransfer() {
   const tabs = useProcessedDatasetTabs();
-
   const [openTabIndex, setOpenTabIndex] = useState(0);
 
   return (
