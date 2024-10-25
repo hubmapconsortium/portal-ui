@@ -45,7 +45,7 @@ export function useSortedSearchHits(datasets: ReturnType<typeof useProcessedData
  * @returns Text for the analyses label, and additional text for each analysis and its count.
  */
 export function useAnalysesCountInfo(datasets: Pick<ProcessedDatasetInfo, 'pipeline' | 'assay_display_name'>[]) {
-  const analyses = datasets.map((dataset) => dataset.pipeline ?? dataset.assay_display_name[0]);
+  const analyses = datasets.map((dataset) => dataset.pipeline ?? dataset.assay_display_name);
   const analysesCount = analyses.reduce(
     (acc, analysis) => {
       acc[analysis] = (acc[analysis] || 0) + 1;
