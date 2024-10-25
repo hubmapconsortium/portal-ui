@@ -46,7 +46,7 @@ async function fetchPipelineInfo({ url, datasets, groupsToken }: PipelineInfoReq
 
   // Handle epics separately since their pipeline-shorthand is blank
   if (result.process_state === 'epic') {
-    return result['dataset-type'];
+    return result.description;
   }
 
   // Also handle image pyramids separately since their pipeline-shorthand is blank
