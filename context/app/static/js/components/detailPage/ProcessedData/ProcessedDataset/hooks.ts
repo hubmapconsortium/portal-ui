@@ -4,7 +4,6 @@ import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries'
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProcessedDatasets, type ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import { ComponentType } from 'react';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { nodeIcons } from '../../DatasetRelationships/nodeTypes';
 
 export type ProcessedDatasetDetails = ProcessedDatasetInfo &
@@ -68,16 +67,18 @@ export function useProcessedDatasetDetails(uuid: string) {
   return { datasetDetails, isLoading };
 }
 
-function processDatasetLabel(dataset: ProcessedDatasetInfo, hits: Required<SearchHit<ProcessedDatasetInfo>>[]) {
-  const label = dataset.pipeline || dataset.assay_display_name[0];
-
+export function processDatasetLabel(
+  dataset: Pick<ProcessedDatasetInfo, 'assay_display_name' | 'pipeline' | 'status' | 'hubmap_id'>,
+  hits: { _source: Pick<ProcessedDatasetInfo, 'assay_display_name' | 'pipeline' | 'status'> }[],
+) {
+  const label = dataset.pipeline ?? dataset.assay_display_name[0];
   const multipleHitsWithSameLabel =
-    hits.filter((h) => (h._source.pipeline || h._source.assay_display_name[0]) === label).length > 1;
+    hits.filter((h) => (h._source.pipeline ?? h._source.assay_display_name[0]) === label).length > 1;
 
   const multipleHitsWithSameLabelAndStatus =
     multipleHitsWithSameLabel &&
     hits.filter(
-      (h) => (h._source.pipeline || h._source.assay_display_name[0]) === label && h._source.status === dataset.status,
+      (h) => (h._source.pipeline ?? h._source.assay_display_name[0]) === label && h._source.status === dataset.status,
     ).length > 1;
 
   if (multipleHitsWithSameLabelAndStatus) {
@@ -86,6 +87,7 @@ function processDatasetLabel(dataset: ProcessedDatasetInfo, hits: Required<Searc
   if (multipleHitsWithSameLabel) {
     return `${label} (${dataset.status})`;
   }
+
   return label;
 }
 

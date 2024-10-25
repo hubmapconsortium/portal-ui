@@ -48,7 +48,9 @@ export function usePipelineCountsInfo(datasets: Pick<ProcessedDatasetInfo, 'pipe
   const pipelines = datasets.map((dataset) => dataset.pipeline);
   const pipelineCounts = pipelines.reduce(
     (acc, pipeline) => {
-      acc[pipeline] = (acc[pipeline] || 0) + 1;
+      if (pipeline) {
+        acc[pipeline] = (acc[pipeline] || 0) + 1;
+      }
       return acc;
     },
     {} as Record<string, number>,
