@@ -63,6 +63,23 @@ def get_organs():
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
 
+# Redirect to primary dataset if this entity is
+# - non-existent
+# - a support entity (e.g. an image pyramid)
+# - a processed or component dataset
+def should_redirect_entity(entity):
+    if not entity:
+        return True
+
+    is_support_type = entity.get('entity_type').lower() == 'support'
+    is_component = entity.get('is_component', False) is True
+    is_not_raw_dataset = entity.get('processing') != 'raw' and entity.get('entity_type').lower() == 'dataset'
+
+    if is_support_type or is_component or is_not_raw_dataset:
+        return True
+
+    return False
+
 
 def find_earliest_ancestor(client, uuid):
     dataset = client.get_entities(

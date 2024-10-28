@@ -7,7 +7,8 @@ from flask import (
 
 from .utils import (
     get_default_flask_data, make_blueprint, get_client,
-    get_url_base_from_request, entity_types, find_earliest_ancestor)
+    get_url_base_from_request, entity_types, find_earliest_ancestor,
+    should_redirect_entity)
 
 
 blueprint = make_blueprint(__name__)
@@ -48,24 +49,35 @@ def details(type, uuid):
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
 
-    # Redirect to primary dataset if this is
-    # - a support entity (e.g. an image pyramid)
-    # - a processed or component dataset
-    is_support = actual_type == 'support'
-    is_processed = entity.get('processing') != 'raw' and actual_type == 'dataset'
-    is_component = entity.get('is_component', False) is True
-    if (is_support or is_processed or is_component):
-        primary_uuid = find_earliest_ancestor(client, uuid)
+    if (should_redirect_entity(entity)):
+        earliest_uuid = find_earliest_ancestor(client, uuid)
+        earliest_dataset = client.get_entities(
+            'datasets',
+            query_override={
+                "bool": {
+                    "must": {
+                        "term": {
+                            "uuid": earliest_uuid
+                        }
+                    }
+                }
+            },
+            non_metadata_fields=['uuid', 'processing', 'entity_type', 'is_component']
+        )
 
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
         anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
 
-        # Don't check whether the primary dataset exists, just redirect to it. 404 is
-        # preferable to a page that shows only a support entity or processed/component dataset.
+        # Check whether the oldest found ancestor exists and is a raw dataset. 404 is preferable
+        # to a page that shows only a support entity or processed/component dataset.
+        if not earliest_dataset or should_redirect_entity(earliest_dataset[0]):
+            abort(404)
+
+        # Redirect to the primary dataset
         return redirect(
             url_for('routes_browse.details',
                     type='dataset',
-                    uuid=primary_uuid,
+                    uuid=earliest_uuid,
                     _anchor=anchor,
                     redirected=True,
                     redirectedFromId=entity.get('hubmap_id'),
