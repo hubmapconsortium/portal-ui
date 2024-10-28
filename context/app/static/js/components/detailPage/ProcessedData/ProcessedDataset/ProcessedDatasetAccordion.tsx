@@ -76,7 +76,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
         <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
           {isLoading ? iconPlaceholder : visualizationIcon}
           <Typography variant="subtitle1" color="inherit" component="h4">
-            {sectionDataset.pipeline}
+            {sectionDataset.pipeline ?? sectionDataset.assay_display_name[0]}
           </Typography>
           <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
             <StatusIcon status={sectionDataset.status} noColor={isExpanded} tooltip />
