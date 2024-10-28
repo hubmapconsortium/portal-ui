@@ -7,7 +7,7 @@ from flask import (
 
 from .utils import (
     get_default_flask_data, make_blueprint, get_client,
-    get_url_base_from_request, entity_types, find_earliest_ancestor,
+    get_url_base_from_request, entity_types, find_earliest_dataset_ancestor,
     should_redirect_entity)
 
 
@@ -50,7 +50,7 @@ def details(type, uuid):
     actual_type = entity['entity_type'].lower()
 
     if (should_redirect_entity(entity)):
-        earliest_uuid = find_earliest_ancestor(client, uuid)
+        earliest_uuid = find_earliest_dataset_ancestor(client, uuid)
         earliest_dataset = client.get_entities(
             'datasets',
             query_override={
@@ -68,8 +68,8 @@ def details(type, uuid):
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
         anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
 
-        # Check whether the oldest found ancestor exists and is a raw dataset. 404 is preferable
-        # to a page that shows only a support entity or processed/component dataset.
+        # Check whether the oldest found ancestor exists and is of an expected type. 404 is
+        # preferable to a page that shows only a support entity or processed/component dataset.
         if not earliest_dataset or should_redirect_entity(earliest_dataset[0]):
             abort(404)
 

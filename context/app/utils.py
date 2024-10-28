@@ -63,6 +63,7 @@ def get_organs():
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
 
+
 # Redirect to primary dataset if this entity is
 # - non-existent
 # - a support entity (e.g. an image pyramid)
@@ -71,9 +72,10 @@ def should_redirect_entity(entity):
     if not entity:
         return True
 
-    is_support_type = entity.get('entity_type').lower() == 'support'
+    actual_type = entity.get('entity_type').lower()
+    is_support_type = actual_type == 'support'
     is_component = entity.get('is_component', False) is True
-    is_not_raw_dataset = entity.get('processing') != 'raw' and entity.get('entity_type').lower() == 'dataset'
+    is_not_raw_dataset = entity.get('processing') != 'raw' and actual_type == 'dataset'
 
     if is_support_type or is_component or is_not_raw_dataset:
         return True
@@ -81,7 +83,7 @@ def should_redirect_entity(entity):
     return False
 
 
-def find_earliest_ancestor(client, uuid):
+def find_earliest_dataset_ancestor(client, uuid):
     dataset = client.get_entities(
         'datasets',
         query_override={
@@ -103,6 +105,6 @@ def find_earliest_ancestor(client, uuid):
     # Traverse through immediate ancestors to find the earliest dataset ancestor
     for ancestor in dataset[0]['immediate_ancestors']:
         if ancestor.get('entity_type') == 'Dataset':
-            uuid = find_earliest_ancestor(client, ancestor.get('uuid'))
+            uuid = find_earliest_dataset_ancestor(client, ancestor.get('uuid'))
 
     return uuid

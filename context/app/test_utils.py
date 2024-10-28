@@ -1,10 +1,10 @@
 import pytest
 from unittest.mock import Mock
-from .utils import find_earliest_ancestor
+from .utils import find_earliest_dataset_ancestor
 
 
 @pytest.mark.parametrize(
-    "initial_uuid, side_effect, expected_result",
+    "initial_uuid, client_responses, expected_result",
     [
         # Dataset with no ancestors
         (
@@ -128,12 +128,9 @@ from .utils import find_earliest_ancestor
 
     ]
 )
-def test_find_earliest_ancestor(initial_uuid, side_effect, expected_result):
+def test_find_earliest_dataset_ancestor(initial_uuid, client_responses, expected_result):
     client = Mock()
-    client.get_entities.side_effect = side_effect
+    client.get_entities.side_effect = client_responses
 
-    result = find_earliest_ancestor(client, initial_uuid)
-    print('initial_uuid:', initial_uuid)
-    print('result:', result)
-
+    result = find_earliest_dataset_ancestor(client, initial_uuid)
     assert result == expected_result
