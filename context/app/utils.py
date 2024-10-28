@@ -63,6 +63,7 @@ def get_organs():
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
 
+
 def find_earliest_ancestor(client, uuid):
     dataset = client.get_entities(
         'datasets',

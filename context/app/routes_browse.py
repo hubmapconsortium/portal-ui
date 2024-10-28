@@ -56,27 +56,12 @@ def details(type, uuid):
     is_component = entity.get('is_component', False) is True
     if (is_support or is_processed or is_component):
         primary_uuid = find_earliest_ancestor(client, uuid)
-        print('primary_uuid:', primary_uuid)
-        supported_entity = client.get_entities(
-            'datasets',
-            query_override={
-                "bool": {
-                    "must": {
-                        "term": {
-                            "uuid": primary_uuid
-                        }
-                    }
-                }
-            },
-            non_metadata_fields=['hubmap_id', 'uuid']
-        )
-        print('supported entity:', supported_entity)
 
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
         anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
 
-        # Don't check whether the primary dataset exists, just redirect to it. 404 is preferable to a page 
-        # that shows only a support entity or processed/component dataset.
+        # Don't check whether the primary dataset exists, just redirect to it. 404 is
+        # preferable to a page that shows only a support entity or processed/component dataset.
         return redirect(
             url_for('routes_browse.details',
                     type='dataset',
