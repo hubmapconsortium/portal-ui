@@ -4,7 +4,6 @@ import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries'
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProcessedDatasets, type ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import { ComponentType } from 'react';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { nodeIcons } from '../../DatasetRelationships/nodeTypes';
 
 export type ProcessedDatasetDetails = ProcessedDatasetInfo &
@@ -68,18 +67,28 @@ export function useProcessedDatasetDetails(uuid: string) {
   return { datasetDetails, isLoading };
 }
 
-function processDatasetLabel(dataset: ProcessedDatasetInfo, hits: Required<SearchHit<ProcessedDatasetInfo>>[]) {
-  const multipleHitsWithSamePipeline = hits.filter((h) => h._source.pipeline === dataset.pipeline).length > 1;
-  const multipleHitsWithSamePipelineAndStatus =
-    multipleHitsWithSamePipeline &&
-    hits.filter((h) => h._source.pipeline === dataset.pipeline && h._source.status === dataset.status).length > 1;
-  if (multipleHitsWithSamePipelineAndStatus) {
-    return `${dataset.pipeline} (${dataset.status}) [${dataset.hubmap_id}]`;
+export function processDatasetLabel(
+  dataset: Pick<ProcessedDatasetInfo, 'assay_display_name' | 'pipeline' | 'status' | 'hubmap_id'>,
+  hits: { _source: Pick<ProcessedDatasetInfo, 'assay_display_name' | 'pipeline' | 'status'> }[],
+) {
+  const label = dataset.pipeline ?? dataset.assay_display_name[0];
+  const hasMultipleHitsWithSameLabel =
+    hits.filter((h) => (h._source.pipeline ?? h._source.assay_display_name[0]) === label).length > 1;
+
+  const hasMultipleHitsWithSameLabelAndStatus =
+    hasMultipleHitsWithSameLabel &&
+    hits.filter(
+      (h) => (h._source.pipeline ?? h._source.assay_display_name[0]) === label && h._source.status === dataset.status,
+    ).length > 1;
+
+  if (hasMultipleHitsWithSameLabelAndStatus) {
+    return `${label} (${dataset.status}) [${dataset.hubmap_id}]`;
   }
-  if (multipleHitsWithSamePipeline) {
-    return `${dataset.pipeline} (${dataset.status})`;
+  if (hasMultipleHitsWithSameLabel) {
+    return `${label} (${dataset.status})`;
   }
-  return dataset.pipeline;
+
+  return label;
 }
 
 export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: ComponentType | undefined }[] {

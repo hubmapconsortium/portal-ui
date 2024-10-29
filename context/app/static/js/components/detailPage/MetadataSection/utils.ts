@@ -75,7 +75,7 @@ function getEntityLabel({ entity, sampleCategoryCounts }: getEntityLabelProps) {
     return entity.sample_category;
   }
   if (isDataset(entity)) {
-    return entity.assay_display_name;
+    return entity.assay_display_name[0];
   }
   return entity.entity_type;
 }

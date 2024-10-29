@@ -7,7 +7,7 @@ const testDatasets: {
   _index: string;
   _score: number;
   _source: {
-    assay_display_name: string;
+    assay_display_name: string[];
     created_timestamp: number;
     creation_action: CreationAction;
     entity_type: string;
@@ -24,7 +24,7 @@ const testDatasets: {
     _index: 'hm_prod_consortium_portal',
     _score: 1,
     _source: {
-      assay_display_name: 'CODEX [Cytokit + SPRM]',
+      assay_display_name: ['CODEX [Cytokit + SPRM]'],
       created_timestamp: 1688952984040,
       creation_action: 'Central Process',
       entity_type: 'Dataset',
@@ -41,7 +41,7 @@ const testDatasets: {
     _index: 'hm_prod_consortium_portal',
     _score: 1,
     _source: {
-      assay_display_name: 'CODEX [Cytokit + SPRM]',
+      assay_display_name: ['CODEX [Cytokit + SPRM]'],
       created_timestamp: 1689198074733,
       creation_action: 'Central Process',
       entity_type: 'Dataset',
@@ -58,7 +58,7 @@ const testDatasets: {
     _index: 'hm_prod_consortium_portal',
     _score: 1,
     _source: {
-      assay_display_name: 'External (Segmentation Mask)',
+      assay_display_name: ['External (Segmentation Mask)'],
       created_timestamp: 1689198074733,
       creation_action: 'External Process',
       entity_type: 'Dataset',
