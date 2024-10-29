@@ -83,7 +83,7 @@ def should_redirect_entity(entity):
     return False
 
 
-def find_earliest_dataset_ancestor(client, ancestor_ids):
+def find_raw_dataset_ancestor(client, ancestor_ids):
     return client.get_entities(
         'datasets',
         query_override={

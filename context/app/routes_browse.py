@@ -7,7 +7,7 @@ from flask import (
 
 from .utils import (
     get_default_flask_data, make_blueprint, get_client,
-    get_url_base_from_request, entity_types, find_earliest_dataset_ancestor,
+    get_url_base_from_request, entity_types, find_raw_dataset_ancestor,
     should_redirect_entity)
 
 
@@ -50,7 +50,7 @@ def details(type, uuid):
     actual_type = entity['entity_type'].lower()
 
     if (should_redirect_entity(entity)):
-        earliest_dataset = find_earliest_dataset_ancestor(client, entity.get('ancestor_ids'))
+        earliest_dataset = find_raw_dataset_ancestor(client, entity.get('ancestor_ids'))
 
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
         anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
