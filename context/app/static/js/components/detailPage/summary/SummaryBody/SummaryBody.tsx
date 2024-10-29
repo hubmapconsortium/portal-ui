@@ -70,6 +70,22 @@ function DatasetConsortium() {
   return <LabelledSectionText label="Consortium">{mapped_consortium}</LabelledSectionText>;
 }
 
+function DatasetGroup() {
+  const { entity } = useFlaskDataContext();
+
+  if (!isDataset(entity)) {
+    return null;
+  }
+
+  const { group_name } = entity;
+
+  if (!group_name) {
+    return null;
+  }
+
+  return <LabelledSectionText label="Group">{group_name}</LabelledSectionText>;
+}
+
 function CollectionCitation() {
   const { entity } = useFlaskDataContext();
 
@@ -122,6 +138,7 @@ function SummaryBodyContent({
     <Stack component={SummaryPaper} direction={direction} spacing={1} {...stackProps}>
       <CollectionName />
       <SummaryDescription description={description} clamp={isEntityHeader} />
+      <DatasetGroup />
       <DatasetConsortium />
       <DatasetCitation />
       <CollectionCitation />
