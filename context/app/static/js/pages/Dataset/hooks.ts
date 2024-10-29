@@ -150,7 +150,6 @@ function getProcessedDatasetSection({
 
   const sectionsToDisplay = Object.entries(shouldDisplaySection).filter(([_k, v]) => v === true);
   const sectionTitle = processDatasetLabel(hit._source, searchHits);
-  // const sectionTitle = pipeline ?? assay_display_name[0] ?? hubmap_id;
 
   return {
     // TODO: Improve the lookup for descendants to exclude anything with a missing pipeline name
