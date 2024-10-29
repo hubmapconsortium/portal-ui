@@ -95,7 +95,7 @@ export function useScrollSearchHits<Doc, Aggs>({
     ...swrConfig,
   });
 
-  const { searchHits, totalHitsCount, aggregations } = getCombinedHits<Doc, Aggs>(data ?? []);
+  const { searchHits, totalHitsCount, aggregations } = useMemo(() => getCombinedHits<Doc, Aggs>(data ?? []), [data]);
 
   const isReachingEnd = searchHits.length === 0 || searchHits.length === totalHitsCount;
 

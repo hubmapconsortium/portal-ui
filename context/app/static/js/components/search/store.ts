@@ -287,10 +287,10 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         }
         const { values } = filter;
 
-        if (value in values) {
+        if (values?.[value]) {
           delete values[value];
         } else {
-          values[value] = new Set(childValues);
+          values[value] = new Set([...childValues]);
         }
         replaceURLSearchParams(state);
       });

@@ -183,7 +183,7 @@ const HeaderCells = React.memo(function HeaderCells({ tableFields }: { tableFiel
     </>
   );
 });
-const ResultsTable = React.memo(function ResultsTable({
+const Table = React.memo(function Table({
   isLoading,
   hits,
 }: {
@@ -213,10 +213,10 @@ const ResultsTable = React.memo(function ResultsTable({
   );
 });
 
-function X({ isLoading }: { isLoading: boolean }) {
+function ResultsTable({ isLoading }: { isLoading: boolean }) {
   const { searchHits: hits } = useSearch();
 
-  return <ResultsTable hits={hits} isLoading={isLoading} />;
+  return <Table hits={hits} isLoading={isLoading} />;
 }
 
-export default X;
+export default ResultsTable;

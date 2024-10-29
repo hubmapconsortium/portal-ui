@@ -30,13 +30,30 @@ function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () =>
 
   return <Chip variant="outlined" color="primary" label={label} onDelete={handleDelete} {...props} />;
 }
+const HierarchichalTermChip = React.memo(function HierarchicalTermChip({
+  parentField,
+  parentValue,
+  value,
+}: {
+  parentField: string;
+  parentValue: string;
+  value: string;
+}) {
+  const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
+
+  const filter = useCallback(
+    () => filterHierarchicalChildTerm({ parentTerm: parentField, parentValue, value }),
+    [parentField, value, parentValue, filterHierarchicalChildTerm],
+  );
+
+  return <FilterChip label={`${getFieldLabel(parentField)}: ${value}`} key={value} onDelete={filter} />;
+});
 
 function FilterChips() {
   const filters = useSearchStore((state) => state.filters);
   const facets = useSearchStore((state) => state.facets);
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterRange = useSearchStore((state) => state.filterRange);
-  const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
 
   return (
     <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
@@ -69,10 +86,11 @@ function FilterChips() {
         if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
           return Object.entries(v.values).map(([parent, children]) => {
             return [...children].map((child) => (
-              <FilterChip
-                label={`${getFieldLabel(field)}: ${child}`}
-                key={child}
-                onDelete={() => filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: child })}
+              <HierarchichalTermChip
+                key={`${parent}-${child}`}
+                parentField={field}
+                value={child}
+                parentValue={parent}
               />
             ));
           });
