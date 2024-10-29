@@ -12,6 +12,7 @@ import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/t
 import { getAuthHeader } from 'js/helpers/functions';
 import { useEffect } from 'react';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { processDatasetLabel } from 'js/components/detailPage/ProcessedData/ProcessedDataset/hooks';
 import { datasetSectionId } from './utils';
 
 function useDatasetLabelPrefix() {
@@ -130,13 +131,14 @@ function useProcessedDatasets(includeComponents?: boolean) {
 
 function getProcessedDatasetSection({
   hit,
+  searchHits,
   conf,
 }: {
   hit: Required<SearchHit<ProcessedDatasetInfo>>;
+  searchHits: Required<SearchHit<ProcessedDatasetInfo>>[];
   conf?: VitessceConf;
 }) {
-  const { pipeline, assay_display_name, hubmap_id, files, metadata, visualization, creation_action, contributors } =
-    hit._source;
+  const { files, metadata, visualization, creation_action, contributors } = hit._source;
 
   const shouldDisplaySection = {
     summary: true,
@@ -147,7 +149,8 @@ function getProcessedDatasetSection({
   };
 
   const sectionsToDisplay = Object.entries(shouldDisplaySection).filter(([_k, v]) => v === true);
-  const sectionTitle = pipeline ?? assay_display_name[0] ?? hubmap_id;
+  const sectionTitle = processDatasetLabel(hit._source, searchHits);
+  // const sectionTitle = pipeline ?? assay_display_name[0] ?? hubmap_id;
 
   return {
     // TODO: Improve the lookup for descendants to exclude anything with a missing pipeline name
@@ -171,7 +174,7 @@ function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false
       ? {
           ...getSectionFromString('processed-data'),
           items: searchHits.map((hit) =>
-            getProcessedDatasetSection({ hit, conf: cache.get(getVitessceConfKey(hit._id, groupsToken)) }),
+            getProcessedDatasetSection({ hit, searchHits, conf: cache.get(getVitessceConfKey(hit._id, groupsToken)) }),
           ),
         }
       : false;
