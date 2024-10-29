@@ -80,7 +80,9 @@ function HelperPanelBody() {
           {currentDataset.description}
         </HelperPanelBodyItem>
       )}
-      <HelperPanelBodyItem label="Pipeline">{currentDataset.pipeline}</HelperPanelBodyItem>
+      <HelperPanelBodyItem label="Analysis Type">
+        {currentDataset.pipeline ?? currentDataset.assay_display_name[0]}
+      </HelperPanelBodyItem>
       <HelperPanelBodyItem label="Group">{currentDataset.group_name}</HelperPanelBodyItem>
       <HelperPanelBodyItem label={dateLabel}>{date && formatDate(date, 'yyyy-MM-dd')}</HelperPanelBodyItem>
     </>
