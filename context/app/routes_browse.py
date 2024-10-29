@@ -50,21 +50,19 @@ def details(type, uuid):
     actual_type = entity['entity_type'].lower()
 
     if (should_redirect_entity(entity)):
-        earliest_dataset = find_raw_dataset_ancestor(client, entity.get('ancestor_ids'))
+        raw_dataset = find_raw_dataset_ancestor(client, entity.get('ancestor_ids'))
 
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
         anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
 
-        # Check whether the oldest found ancestor exists and is of an expected type. 404 is
-        # preferable to a page that shows only a support entity or processed/component dataset.
-        if not earliest_dataset or should_redirect_entity(earliest_dataset[0]):
+        if raw_dataset is None or len(raw_dataset) == 0:
             abort(404)
 
         # Redirect to the primary dataset
         return redirect(
             url_for('routes_browse.details',
                     type='dataset',
-                    uuid=earliest_dataset[0].get('uuid'),
+                    uuid=raw_dataset[0].get('uuid'),
                     _anchor=anchor,
                     redirected=True,
                     redirectedFromId=entity.get('hubmap_id'),
