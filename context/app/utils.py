@@ -83,28 +83,36 @@ def should_redirect_entity(entity):
     return False
 
 
-def find_earliest_dataset_ancestor(client, uuid):
-    dataset = client.get_entities(
+def find_earliest_dataset_ancestor(client, ancestor_ids):
+    return client.get_entities(
         'datasets',
         query_override={
             "bool": {
-                "must": {
-                    "term": {
-                        "uuid": uuid
+                "must": [
+                    {
+                        "term": {
+                            "processing": "raw"
+                        }
+                    },
+                    {
+                        "terms": {
+                            "uuid": ancestor_ids
+                        }
+                    },
+                ],
+                "must_not": [
+                    {
+                        "exists": {
+                            "field": "ancestor_counts.entity_type.Dataset"
+                        }
                     }
-                }
+                ]
             }
         },
-        non_metadata_fields=['hubmap_id', 'uuid', 'immediate_ancestors', 'entity_type']
+        non_metadata_fields=[
+            'uuid',
+            'processing',
+            'entity_type',
+            'is_component'
+        ]
     )
-
-    # If no dataset is found or it has no ancestors, return the current dataset UUID
-    if not dataset or not dataset[0].get('immediate_ancestors'):
-        return uuid
-
-    # Traverse through immediate ancestors to find the earliest dataset ancestor
-    for ancestor in dataset[0]['immediate_ancestors']:
-        if ancestor.get('entity_type') == 'Dataset':
-            uuid = find_earliest_dataset_ancestor(client, ancestor.get('uuid'))
-
-    return uuid

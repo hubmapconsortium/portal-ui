@@ -50,20 +50,7 @@ def details(type, uuid):
     actual_type = entity['entity_type'].lower()
 
     if (should_redirect_entity(entity)):
-        earliest_uuid = find_earliest_dataset_ancestor(client, uuid)
-        earliest_dataset = client.get_entities(
-            'datasets',
-            query_override={
-                "bool": {
-                    "must": {
-                        "term": {
-                            "uuid": earliest_uuid
-                        }
-                    }
-                }
-            },
-            non_metadata_fields=['uuid', 'processing', 'entity_type', 'is_component']
-        )
+        earliest_dataset = find_earliest_dataset_ancestor(client, entity.get('ancestor_ids'))
 
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
         anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
@@ -77,7 +64,7 @@ def details(type, uuid):
         return redirect(
             url_for('routes_browse.details',
                     type='dataset',
-                    uuid=earliest_uuid,
+                    uuid=earliest_dataset[0].get('uuid'),
                     _anchor=anchor,
                     redirected=True,
                     redirectedFromId=entity.get('hubmap_id'),
