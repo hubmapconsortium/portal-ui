@@ -5,6 +5,7 @@ from portal_visualization.client import ApiClient
 from portal_visualization.mock_client import MockApiClient
 from os.path import dirname
 from pathlib import Path
+from datetime import datetime
 
 from yaml import safe_load
 
@@ -62,3 +63,18 @@ def get_organs():
     dir_path = Path(dirname(__file__) + '/organ')
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
+
+def get_epics_pyramid_entity(uuid):
+    client = get_client()
+    entity = client.get_entity(uuid)
+    decendents = entity.get('descendant_ids')
+    max_modified_date =  None
+    max_date_decendent = None
+    for decendent in decendents:
+        dec_entity = client.get_entity(decendent)
+        if dec_entity.get('creation_action').lower() == 'central process':
+            mapped_last_modified_timestamp = datetime.strptime(dec_entity.get('mapped_last_modified_timestamp'), "%Y-%m-%d %H:%M:%S")
+            if max_modified_date is None or mapped_last_modified_timestamp > max_modified_date:
+                max_modified_date = mapped_last_modified_timestamp
+                max_date_decendent = dec_entity 
+    return max_date_decendent

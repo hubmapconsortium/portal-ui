@@ -7,6 +7,7 @@ from flask import (
 
 from .utils import (
     get_default_flask_data, make_blueprint, get_client,
+    get_epics_pyramid_entity,
     get_url_base_from_request, entity_types)
 
 
@@ -127,8 +128,19 @@ def details_vitessce(type, uuid):
     parent_uuid = request.args.get('parent') or None
     marker = request.args.get('marker') or None
     parent = client.get_entity(parent_uuid) if parent_uuid else None
+    epic_uuid = None
+    epic_entity = None
+    if 'segmentation_mask' in entity.get('vitessce-hints'):
+        epic_entity = entity
+        epic_uuid = uuid
+        if parent is None:
+            ancestors = entity.get('immediate_ancestors')
+            if len(ancestors) > 0 and ancestors[0]['entity_type'] == 'Dataset':
+                parent = ancestors[0]['uuid']
+                entity = get_epics_pyramid_entity(parent)
+
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
-        entity, marker=marker, parent=parent).vitessce_conf
+        entity, marker=marker, parent=parent, epic_uuid=epic_uuid, epic_entity=epic_entity).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)
     response.headers.add("Access-Control-Allow-Origin", "*")
