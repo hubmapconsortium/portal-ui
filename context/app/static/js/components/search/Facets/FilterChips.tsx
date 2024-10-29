@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 
@@ -33,15 +32,11 @@ function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () =>
 }
 
 function FilterChips() {
-  const { filters, facets, filterTerm, filterRange, filterHierarchicalChildTerm } = useSearchStore(
-    useShallow((state) => ({
-      filters: state.filters,
-      facets: state.facets,
-      filterTerm: state.filterTerm,
-      filterRange: state.filterRange,
-      filterHierarchicalChildTerm: state.filterHierarchicalChildTerm,
-    })),
-  );
+  const filters = useSearchStore((state) => state.filters);
+  const facets = useSearchStore((state) => state.facets);
+  const filterTerm = useSearchStore((state) => state.filterTerm);
+  const filterRange = useSearchStore((state) => state.filterRange);
+  const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
 
   return (
     <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>

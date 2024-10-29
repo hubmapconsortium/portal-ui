@@ -151,11 +151,46 @@ function LoadingRows() {
   ));
 }
 
-function ResultsTable() {
-  const { searchHits: hits, isLoading } = useSearch();
+interface RowProps {
+  hit: SearchHit<Partial<Entity>>;
+  tableFields: string[];
+}
 
-  const sourceFields = useSearchStore((state) => state.sourceFields);
-  const { table: tableFields } = sourceFields;
+function compareRowProps(oldProps: RowProps, newProps: RowProps) {
+  return oldProps.hit._id === newProps.hit._id;
+}
+
+const ResultRow = React.memo(function ResultRow({ hit, tableFields }: RowProps) {
+  return (
+    <>
+      <StyledTableRow $beforeHighlight={Boolean(hit?.highlight)}>
+        <SelectableRowCell rowKey={hit._id} />
+        {tableFields.map((field) => (
+          <ResultCell hit={hit} field={field} key={field} />
+        ))}
+      </StyledTableRow>
+      {hit?.highlight && <HighlightRow colSpan={tableFields.length + 1} highlight={hit.highlight} />}
+    </>
+  );
+}, compareRowProps);
+
+const HeaderCells = React.memo(function HeaderCells({ tableFields }: { tableFields: string[] }) {
+  return (
+    <>
+      {tableFields.map((field) => (
+        <SortHeaderCell key={field} field={field} label={getFieldLabel(field)} />
+      ))}
+    </>
+  );
+});
+const ResultsTable = React.memo(function ResultsTable({
+  isLoading,
+  hits,
+}: {
+  isLoading: boolean;
+  hits: never[] | SearchHit<Partial<Entity>>[];
+}) {
+  const tableFields = useSearchStore((state) => state.sourceFields?.table);
 
   return (
     <Box>
@@ -163,29 +198,25 @@ function ResultsTable() {
         <TableHead>
           <TableRow>
             <SelectableHeaderCell allTableRowKeys={hits.map((h) => h._id)} disabled={isLoading} />
-            {tableFields.map((field) => (
-              <SortHeaderCell key={field} field={field} label={getFieldLabel(field)} />
-            ))}
+            <HeaderCells tableFields={tableFields} />
           </TableRow>
         </TableHead>
         <StyledTableBody>
           {isLoading && !hits?.length && <LoadingRows />}
           {hits.map((hit) => (
-            <React.Fragment key={hit._id}>
-              <StyledTableRow $beforeHighlight={Boolean(hit?.highlight)}>
-                <SelectableRowCell rowKey={hit._id} />
-                {tableFields.map((field) => (
-                  <ResultCell hit={hit} field={field} key={field} />
-                ))}
-              </StyledTableRow>
-              {hit?.highlight && <HighlightRow colSpan={tableFields.length + 1} highlight={hit.highlight} />}
-            </React.Fragment>
+            <ResultRow hit={hit} key={hit._id} tableFields={tableFields} />
           ))}
         </StyledTableBody>
       </StyledTable>
       <ViewMoreResults />
     </Box>
   );
+});
+
+function X({ isLoading }: { isLoading: boolean }) {
+  const { searchHits: hits } = useSearch();
+
+  return <ResultsTable hits={hits} isLoading={isLoading} />;
 }
 
-export default ResultsTable;
+export default X;

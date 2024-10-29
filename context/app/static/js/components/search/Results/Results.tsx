@@ -13,14 +13,15 @@ function NoResults() {
   return <Alert severity="warning">{`No results found. ${message}`}</Alert>;
 }
 
-function Results() {
-  const {
-    searchHits: { length },
-    isLoading,
-  } = useSearch();
-
-  const view = useSearchStore((state) => state.view);
-
+const Results = React.memo(function Results({
+  length,
+  isLoading,
+  view,
+}: {
+  length: number;
+  isLoading: boolean;
+  view: string;
+}) {
   if (!isLoading && !length) {
     return <NoResults />;
   }
@@ -29,7 +30,17 @@ function Results() {
     return <ResultsTiles />;
   }
 
-  return <ResultsTable />;
+  return <ResultsTable isLoading={isLoading} />;
+});
+
+function R() {
+  const {
+    searchHits: { length },
+    isLoading,
+  } = useSearch();
+  const view = useSearchStore((state) => state.view);
+
+  return <Results length={length} view={view} isLoading={isLoading} />;
 }
 
-export default Results;
+export default R;

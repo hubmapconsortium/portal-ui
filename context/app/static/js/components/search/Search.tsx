@@ -186,7 +186,7 @@ function Body({ facetGroups }: { facetGroups: FacetGroups }) {
   );
 }
 
-function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
+const Search = React.memo(function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
   return (
     <Stack spacing={2} mb={4}>
       <Header type={type} />
@@ -200,7 +200,7 @@ function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups })
       </Stack>
     </Stack>
   );
-}
+});
 
 const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<string[]>) => {
   const mergedFilters = Object.entries({ ...filterURLState, ...filterState }).reduce<FiltersType>((acc, [k, v]) => {

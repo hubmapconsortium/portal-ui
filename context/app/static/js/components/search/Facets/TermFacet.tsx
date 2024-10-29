@@ -1,5 +1,4 @@
-import React, { useState, useCallback, useMemo } from 'react';
-import { useShallow } from 'zustand/react/shallow';
+import React, { useState, useCallback } from 'react';
 import Typography from '@mui/material/Typography';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import Accordion from '@mui/material/Accordion';
@@ -132,9 +131,8 @@ const smallAggSize = 5;
 const maxAggSize = 10000;
 
 function FacetSizeButton({ field, hasMoreBuckets }: { field: string; hasMoreBuckets: boolean }) {
-  const { setTermSize, facet } = useSearchStore(
-    useShallow((state) => ({ setTermSize: state.setTermSize, facet: state.facets[field] })),
-  );
+  const facet = useSearchStore((state) => state.facets[field]);
+  const setTermSize = useSearchStore((state) => state.setTermSize);
 
   if (!isTermFacet(facet)) {
     return null;
@@ -209,14 +207,11 @@ function buildExpandTooltip({ expanded, disabled }: { expanded: boolean; disable
 export function HierarchicalFacetParent({ childValues, field, label, ...rest }: TermFacet & { childValues: string[] }) {
   const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
 
-  return (
-    <CheckboxFilterItem
-      onClick={() => filterHierarchicalParentTerm({ term: field, value: label, childValues })}
-      label={label}
-      field={field}
-      {...rest}
-    />
+  const f = useCallback(
+    () => filterHierarchicalParentTerm({ term: field, value: label, childValues }),
+    [field, label, childValues, filterHierarchicalParentTerm],
   );
+  return <CheckboxFilterItem onClick={f} label={label} field={field} {...rest} />;
 }
 
 export function HierarchicalFacetChild({ parentValue, field, label, ...rest }: TermFacet & { parentValue: string }) {
@@ -251,13 +246,6 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
   }, [setExpanded]);
 
   const filter = useSearchStore((state) => state.filters[parentField]);
-
-  const sortedBuckets = useMemo(() => {
-    if (!expanded || !childBuckets || !Array.isArray(childBuckets)) {
-      return [];
-    }
-    return sortBuckets({ buckets: childBuckets, field: parentField });
-  }, [expanded, childBuckets, parentField]);
 
   if (!childBuckets || !Array.isArray(childBuckets) || !isHierarchicalFilter(filter)) {
     return null;
@@ -306,36 +294,33 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
         />
       </HierarchicalAccordionSummary>
       <AccordionDetails sx={{ ml: 1.5, p: 0 }}>
-        {sortedBuckets.map(({ key, doc_count }) => (
-          <HierarchicalFacetChild
-            field={field}
-            label={key}
-            key={key}
-            count={doc_count}
-            parentValue={label}
-            active={childState?.has(key)}
-            title={title}
-          />
-        ))}
+        {expanded &&
+          childBuckets.map(({ key, doc_count }) => (
+            <HierarchicalFacetChild
+              field={field}
+              label={key}
+              key={key}
+              count={doc_count}
+              parentValue={label}
+              active={childState?.has(key)}
+              title={title}
+            />
+          ))}
       </AccordionDetails>
     </Accordion>
   );
 });
 
 export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
-  const { aggregations } = useSearch();
+  const parentBuckets = useSearch()?.aggregations?.[parentField]?.[parentField]?.buckets;
 
   const filter = useSearchStore((state) => state.filters[parentField]);
 
-  const sortedBuckets = useMemo(() => {
-    const parentBuckets = aggregations?.[parentField]?.[parentField]?.buckets;
-    if (!parentBuckets || !Array.isArray(parentBuckets)) {
-      return [];
-    }
-    return sortBuckets({ buckets: parentBuckets, field: parentField });
-  }, [parentField, aggregations]);
+  if (!parentBuckets || !Array.isArray(parentBuckets)) {
+    return [];
+  }
 
-  if (!aggregations || !isHierarchicalFilter(filter)) {
+  if (!isHierarchicalFilter(filter)) {
     return null;
   }
 
@@ -345,7 +330,7 @@ export function HierarchicalTermFacet({ field: parentField, childField }: { fiel
 
   return (
     <FacetAccordion title={title} position="inner">
-      {sortedBuckets.map((bucket) => {
+      {parentBuckets.map((bucket) => {
         const key = getBucketKey(bucket);
         return (
           <HierarchicalTermFacetItem
