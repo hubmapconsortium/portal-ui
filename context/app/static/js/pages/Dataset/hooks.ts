@@ -12,8 +12,7 @@ import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/t
 import { getAuthHeader } from 'js/helpers/functions';
 import { useEffect } from 'react';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import { processDatasetLabel } from 'js/components/detailPage/ProcessedData/ProcessedDataset/hooks';
-import { datasetSectionId } from './utils';
+import { datasetSectionId, processDatasetLabel } from './utils';
 
 function useDatasetLabelPrefix() {
   const {
