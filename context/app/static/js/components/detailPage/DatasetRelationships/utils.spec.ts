@@ -42,7 +42,7 @@ describe('makeNodeHref', () => {
       hubmap_id: 'HBM123',
       status: 'Published',
     };
-    expect(makeNodeHref(testPipeline)).toBe('#section-HBM123');
+    expect(makeNodeHref(testPipeline)).toBe('#section-hbm123');
   });
   it('should handle missing data by returning undefined', () => {
     expect(makeNodeHref(undefined)).toBe(undefined);
