@@ -19,7 +19,7 @@ function PublicationCollections({ collectionsData = [], isCollectionPublication 
     <CollapsibleDetailPageSection id="data" title="Data">
       <StyledSectionPaper $isCollectionPublication={isCollectionPublication}>
         <LabelledSectionText label="Collections">
-          Datasets associated with this publication are included in the Collections listed below.
+          Datasets associated with this publication are included in the collections listed below.
         </LabelledSectionText>
       </StyledSectionPaper>
       <PanelList panelsProps={panelsProps} />

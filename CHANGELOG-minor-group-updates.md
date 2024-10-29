@@ -1,0 +1,2 @@
+- Label centrally processed dataset groups as HIVE in the helper panel.
+- Fix typo in publication collections summary.
