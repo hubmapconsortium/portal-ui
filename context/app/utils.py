@@ -119,13 +119,14 @@ def find_raw_dataset_ancestor(client, ancestor_ids):
     )
 
 
-def get_epics_pyramid_entity(uuid):
+def get_epics_pyramid_entity(client, uuid):
     """
         Retrieves the entity for the base image-pyramid for EPIC segmentation masks
         by searching through the descendants of the parent and looking for the latest
         centrally processed dataset.
 
         Parameters:
+        client : API client
         uuid (str): The unique identifier of the parent entity whose descendants will be searched.
 
         Returns:
@@ -133,19 +134,41 @@ def get_epics_pyramid_entity(uuid):
             image-pyramid dataset, or None if no suitable dataset is found.
 
     """
-    client = get_client()
     entity = client.get_entity(uuid)
     descendants = entity.get('descendant_ids')
-    max_modified_date = None
     max_date_descendant = None
-    for descendant in descendants:
-        dec_entity = client.get_entity(descendant)
-        # TODO: Until we have better entity qualifier
-        if dec_entity.get('creation_action').lower() == 'central process' and len(
-                dec_entity.get('files')) > 0 and dec_entity.get('status').lower() != 'error':
-            mapped_last_modified_timestamp = datetime.strptime(
-                dec_entity.get('mapped_last_modified_timestamp'), "%Y-%m-%d %H:%M:%S")
-            if max_modified_date is None or mapped_last_modified_timestamp > max_modified_date:
-                max_modified_date = mapped_last_modified_timestamp
-                max_date_descendant = dec_entity
+    descendant_entities = []
+    try:
+        query_override = {
+            "bool": {
+                "must": [
+                    {
+                        "terms": {
+                            "uuid": descendants
+                        }
+                    },
+                    {
+                        "terms": {
+                            "mapped_status.keyword": ["QA"]
+                        }
+                    },
+                    {
+                        "term": {
+                            "creation_action.keyword": "Central Process"
+                        }
+                    }
+                ]
+            }
+        }
+        fields = ['uuid',
+                  'last_modified_timestamp']
+        descendant_entities = client.get_entities(plural_lc_entity_type='datasets',
+                                                  query_override=query_override, non_metadata_fields=fields)
+    except Exception as e:
+        print(f"Error retrieving descendant entities {str(e)}")
+
+    max_last_modified = max(descendant_entities,
+                            key=lambda x: x['last_modified_timestamp']) or None
+    if max_last_modified is not None:
+        max_date_descendant = client.get_entity(max_last_modified['uuid'])
     return max_date_descendant

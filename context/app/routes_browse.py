@@ -120,10 +120,10 @@ def details_vitessce(type, uuid):
         epic_entity = entity
         epic_uuid = uuid
         if parent is None:
-            ancestors = entity.get('immediate_ancestors')
-            if len(ancestors) > 0 and ancestors[0]['entity_type'] == 'Dataset':
-                parent = ancestors[0]['uuid']
-                entity = get_epics_pyramid_entity(parent)
+            ancestors = entity.get('immediate_ancestor_ids')
+            if len(ancestors) > 0:
+                parent = ancestors[0]
+                entity = get_epics_pyramid_entity(client, parent)
 
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
         entity,
