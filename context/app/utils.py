@@ -161,8 +161,11 @@ def get_epics_pyramid_entity(client, uuid):
         }
         fields = ['uuid',
                   'last_modified_timestamp']
-        descendant_entities = client.get_entities(plural_lc_entity_type='datasets',
-                                                  query_override=query_override, non_metadata_fields=fields)
+        descendant_entities = client.get_entities(
+                                        plural_lc_entity_type='datasets',
+                                        query_override=query_override, 
+                                        non_metadata_fields=fields
+                                    )
     except Exception as e:
         print(f"Error retrieving descendant entities {str(e)}")
 
