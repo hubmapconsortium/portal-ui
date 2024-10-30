@@ -2,8 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle, SimpleQueryString } from 'searchkit';
 
+import SvgIcon from '@mui/material/SvgIcon';
+import Download from '@mui/icons-material/Download';
+
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
+import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
 import MetadataMenu from '../MetadataMenu';
 import TilesSortDropdown from '../TilesSortDropdown';
@@ -33,6 +37,12 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
           />
           {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
           {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
+          {!isDevSearch && (
+            // TODO: CLT modal
+            <WhiteBackgroundIconTooltipButton tooltip="Download dataset manifest" onClick={() => {}} sx={{ mr: 1 }}>
+              <SvgIcon color="primary" component={Download} />
+            </WhiteBackgroundIconTooltipButton>
+          )}
           <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
         </CenteredDiv>
       </Flex>
