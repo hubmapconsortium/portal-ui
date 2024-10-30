@@ -64,17 +64,85 @@ def get_organs():
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
 
+
+# Redirect to primary dataset if this entity is
+# - non-existent
+# - a support entity (e.g. an image pyramid)
+# - a processed or component dataset
+def should_redirect_entity(entity):
+    if not entity:
+        return True
+
+    actual_type = entity.get('entity_type').lower()
+    is_support_type = actual_type == 'support'
+    is_component = entity.get('is_component', False) is True
+    is_not_raw_dataset = entity.get('processing') != 'raw' and actual_type == 'dataset'
+
+    if is_support_type or is_component or is_not_raw_dataset:
+        return True
+
+    return False
+
+
+def find_raw_dataset_ancestor(client, ancestor_ids):
+    return client.get_entities(
+        'datasets',
+        query_override={
+            "bool": {
+                "must": [
+                    {
+                        "term": {
+                            "processing": "raw"
+                        }
+                    },
+                    {
+                        "terms": {
+                            "uuid": ancestor_ids
+                        }
+                    },
+                ],
+                "must_not": [
+                    {
+                        "exists": {
+                            "field": "ancestor_counts.entity_type.Dataset"
+                        }
+                    }
+                ]
+            }
+        },
+        non_metadata_fields=[
+            'uuid',
+            'processing',
+            'entity_type',
+            'is_component'
+        ]
+    )
+
 def get_epics_pyramid_entity(uuid):
+    """
+        Retrieves the entity for the base image-pyramid for EPIC segmentation masks
+        by searching through the descendants of the parent and looking for the latest 
+        centrally processed dataset.
+
+        Parameters:
+        uuid (str): The unique identifier of the parent entity whose descendants will be searched.
+
+        Returns:
+            dict: The entity dictionary representing the most recent centrally processed image-pyramid dataset, 
+            or None if no suitable dataset is found.
+    
+    """
     client = get_client()
     entity = client.get_entity(uuid)
-    decendents = entity.get('descendant_ids')
+    descendants = entity.get('descendant_ids')
     max_modified_date =  None
-    max_date_decendent = None
-    for decendent in decendents:
-        dec_entity = client.get_entity(decendent)
-        if dec_entity.get('creation_action').lower() == 'central process':
+    max_date_descendant = None
+    for descendant in descendants:
+        dec_entity = client.get_entity(descendant)
+        # TODO: Until we have better entity qualifier
+        if dec_entity.get('creation_action').lower() == 'central process' and len(dec_entity.get('files')) > 0 and dec_entity.get('status').lower() != 'error':
             mapped_last_modified_timestamp = datetime.strptime(dec_entity.get('mapped_last_modified_timestamp'), "%Y-%m-%d %H:%M:%S")
             if max_modified_date is None or mapped_last_modified_timestamp > max_modified_date:
                 max_modified_date = mapped_last_modified_timestamp
-                max_date_decendent = dec_entity 
-    return max_date_decendent
+                max_date_descendant = dec_entity 
+    return max_date_descendant
