@@ -129,8 +129,8 @@ def get_epics_pyramid_entity(uuid):
         uuid (str): The unique identifier of the parent entity whose descendants will be searched.
 
         Returns:
-            dict: The entity dictionary representing the most recent centrally processed image-pyramid dataset,
-            or None if no suitable dataset is found.
+            dict: The entity dictionary representing the most recent centrally processed
+            image-pyramid dataset, or None if no suitable dataset is found.
 
     """
     client = get_client()

@@ -126,7 +126,12 @@ def details_vitessce(type, uuid):
                 entity = get_epics_pyramid_entity(parent)
 
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
-        entity, marker=marker, parent=parent, epic_uuid=epic_uuid, epic_entity=epic_entity).vitessce_conf
+        entity,
+        marker=marker,
+        parent=parent,
+        epic_uuid=epic_uuid,
+        epic_entity=epic_entity
+    ).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)
     response.headers.add("Access-Control-Allow-Origin", "*")
