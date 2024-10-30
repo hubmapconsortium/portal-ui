@@ -7,6 +7,7 @@ import Stack from '@mui/material/Stack';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 import SvgIcon from '@mui/material/SvgIcon';
 import Download from '@mui/icons-material/Download';
+import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
 
 interface RelatedEntitiesSectionHeaderProps {
   searchPageHref: string;
@@ -16,6 +17,7 @@ export function RelatedEntitiesSectionActions({ searchPageHref }: RelatedEntitie
   const {
     entity: { uuid },
   } = useFlaskDataContext();
+  const { openDialog } = useBulkDownloadDialog();
 
   const track = useTrackEntityPageEvent();
 
@@ -23,7 +25,7 @@ export function RelatedEntitiesSectionActions({ searchPageHref }: RelatedEntitie
     <Stack direction="row" spacing={1}>
       {/* TODO: CLT modal */}
       {/* eslint-disable-next-line @typescript-eslint/no-empty-function */}
-      <WhiteBackgroundIconTooltipButton tooltip="Download dataset manifest" onClick={() => {}}>
+      <WhiteBackgroundIconTooltipButton tooltip="Download dataset manifest" onClick={openDialog}>
         <SvgIcon color="primary" component={Download} />
       </WhiteBackgroundIconTooltipButton>
       <Button
