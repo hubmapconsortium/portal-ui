@@ -124,6 +124,11 @@ function useProcessedDatasets(includeComponents?: boolean) {
     shouldFetch,
   });
 
+  return { searchHits, isLoading };
+}
+
+function useLabeledProcessedDatasets() {
+  const { searchHits, isLoading } = useProcessedDatasets();
   const searchHitsWithLabels = searchHits.map((hit) => ({
     ...hit,
     _source: {
@@ -132,7 +137,7 @@ function useProcessedDatasets(includeComponents?: boolean) {
     },
   }));
 
-  return { searchHits: searchHitsWithLabels, isLoading };
+  return { searchHitsWithLabels, isLoading };
 }
 
 function getProcessedDatasetSection({
@@ -165,17 +170,17 @@ function getProcessedDatasetSection({
 }
 
 function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false; isLoading: boolean } {
-  const { searchHits, isLoading } = useProcessedDatasets();
+  const { searchHitsWithLabels, isLoading } = useLabeledProcessedDatasets();
 
   const { cache } = useSWRConfig();
 
   const { groupsToken } = useAppContext();
 
   const sections =
-    searchHits.length > 0
+    searchHitsWithLabels.length > 0
       ? {
           ...getSectionFromString('processed-data'),
-          items: searchHits.map((hit) =>
+          items: searchHitsWithLabels.map((hit) =>
             getProcessedDatasetSection({
               dataset: hit._source,
               conf: cache.get(getVitessceConfKey(hit._id, groupsToken)),
@@ -207,5 +212,5 @@ export function useRedirectAlert() {
   }, [redirected, toastInfo, redirectedFromId, redirectedFromPipeline]);
 }
 
-export { useProcessedDatasets, useProcessedDatasetsSections };
+export { useProcessedDatasets, useLabeledProcessedDatasets, useProcessedDatasetsSections };
 export default useDatasetLabel;
