@@ -3,7 +3,6 @@ import { isDataset, type Dataset } from 'js/components/types';
 import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProcessedDatasets, type ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
-import { processDatasetLabel } from 'js/pages/Dataset/utils';
 import { ComponentType } from 'react';
 import { nodeIcons } from '../../DatasetRelationships/nodeTypes';
 
@@ -97,8 +96,8 @@ export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: 
       }
       return 0;
     })
-    .map(({ _source }, _, hits) => ({
-      label: processDatasetLabel(_source, hits),
+    .map(({ _source }, _) => ({
+      label: _source.label,
       uuid: _source.uuid,
       icon: nodeIcons.processedDataset,
     }));

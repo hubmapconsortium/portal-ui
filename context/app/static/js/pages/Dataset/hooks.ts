@@ -1,4 +1,3 @@
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import useSWR, { useSWRConfig } from 'swr';
 
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
@@ -125,19 +124,25 @@ function useProcessedDatasets(includeComponents?: boolean) {
     shouldFetch,
   });
 
-  return { searchHits, isLoading };
+  const searchHitsWithLabels = searchHits.map((hit) => ({
+    ...hit,
+    _source: {
+      ...hit._source,
+      label: processDatasetLabel(hit._source, searchHits),
+    },
+  }));
+
+  return { searchHits: searchHitsWithLabels, isLoading };
 }
 
 function getProcessedDatasetSection({
-  hit,
-  searchHits,
+  dataset,
   conf,
 }: {
-  hit: Required<SearchHit<ProcessedDatasetInfo>>;
-  searchHits: Required<SearchHit<ProcessedDatasetInfo>>[];
+  dataset: ProcessedDatasetInfo & { label: string };
   conf?: VitessceConf;
 }) {
-  const { files, metadata, visualization, creation_action, contributors } = hit._source;
+  const { files, metadata, visualization, creation_action, contributors } = dataset;
 
   const shouldDisplaySection = {
     summary: true,
@@ -148,14 +153,13 @@ function getProcessedDatasetSection({
   };
 
   const sectionsToDisplay = Object.entries(shouldDisplaySection).filter(([_k, v]) => v === true);
-  const sectionTitle = processDatasetLabel(hit._source, searchHits);
 
   return {
     // TODO: Improve the lookup for descendants to exclude anything with a missing pipeline name
-    ...getSectionFromString(sectionTitle, datasetSectionId(hit._source, 'section')),
+    ...getSectionFromString(dataset.label, datasetSectionId(dataset, 'section')),
     items: sectionsToDisplay.map(([s]) => ({
-      ...getSectionFromString(s, datasetSectionId(hit._source, s)),
-      hash: datasetSectionId(hit._source, s),
+      ...getSectionFromString(s, datasetSectionId(dataset, s)),
+      hash: datasetSectionId(dataset, s),
     })),
   };
 }
@@ -172,7 +176,10 @@ function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false
       ? {
           ...getSectionFromString('processed-data'),
           items: searchHits.map((hit) =>
-            getProcessedDatasetSection({ hit, searchHits, conf: cache.get(getVitessceConfKey(hit._id, groupsToken)) }),
+            getProcessedDatasetSection({
+              dataset: hit._source,
+              conf: cache.get(getVitessceConfKey(hit._id, groupsToken)),
+            }),
           ),
         }
       : false;
