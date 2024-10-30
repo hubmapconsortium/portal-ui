@@ -14,6 +14,7 @@ import { LineClampWithTooltip } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import { formatDate } from 'date-fns/format';
+import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import StatusIcon from '../../StatusIcon';
 import { getDateLabelAndValue, useCurrentDataset } from '../../utils';
@@ -68,22 +69,24 @@ function HelperPanelBody() {
     return null;
   }
   const [dateLabel, date] = getDateLabelAndValue(currentDataset);
+
+  const { title, description, pipeline, assay_display_name, creation_action, group_name } = currentDataset;
   return (
     <>
-      {currentDataset.title && (
+      {title && (
         <HelperPanelBodyItem label="Title" noWrap>
-          {currentDataset.title}
+          {title}
         </HelperPanelBodyItem>
       )}
-      {currentDataset.description && (
+      {description && (
         <HelperPanelBodyItem label="Description" noWrap>
-          {currentDataset.description}
+          {description}
         </HelperPanelBodyItem>
       )}
-      <HelperPanelBodyItem label="Analysis Type">
-        {currentDataset.pipeline ?? currentDataset.assay_display_name[0]}
+      <HelperPanelBodyItem label="Analysis Type">{pipeline ?? assay_display_name[0]}</HelperPanelBodyItem>
+      <HelperPanelBodyItem label="Group">
+        <ProcessedDataGroup creation_action={creation_action} group_name={group_name} />
       </HelperPanelBodyItem>
-      <HelperPanelBodyItem label="Group">{currentDataset.group_name}</HelperPanelBodyItem>
       <HelperPanelBodyItem label={dateLabel}>{date && formatDate(date, 'yyyy-MM-dd')}</HelperPanelBodyItem>
     </>
   );
