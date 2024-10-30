@@ -118,31 +118,34 @@ def find_raw_dataset_ancestor(client, ancestor_ids):
         ]
     )
 
+
 def get_epics_pyramid_entity(uuid):
     """
         Retrieves the entity for the base image-pyramid for EPIC segmentation masks
-        by searching through the descendants of the parent and looking for the latest 
+        by searching through the descendants of the parent and looking for the latest
         centrally processed dataset.
 
         Parameters:
         uuid (str): The unique identifier of the parent entity whose descendants will be searched.
 
         Returns:
-            dict: The entity dictionary representing the most recent centrally processed image-pyramid dataset, 
+            dict: The entity dictionary representing the most recent centrally processed image-pyramid dataset,
             or None if no suitable dataset is found.
-    
+
     """
     client = get_client()
     entity = client.get_entity(uuid)
     descendants = entity.get('descendant_ids')
-    max_modified_date =  None
+    max_modified_date = None
     max_date_descendant = None
     for descendant in descendants:
         dec_entity = client.get_entity(descendant)
         # TODO: Until we have better entity qualifier
-        if dec_entity.get('creation_action').lower() == 'central process' and len(dec_entity.get('files')) > 0 and dec_entity.get('status').lower() != 'error':
-            mapped_last_modified_timestamp = datetime.strptime(dec_entity.get('mapped_last_modified_timestamp'), "%Y-%m-%d %H:%M:%S")
+        if dec_entity.get('creation_action').lower() == 'central process' and len(
+                dec_entity.get('files')) > 0 and dec_entity.get('status').lower() != 'error':
+            mapped_last_modified_timestamp = datetime.strptime(
+                dec_entity.get('mapped_last_modified_timestamp'), "%Y-%m-%d %H:%M:%S")
             if max_modified_date is None or mapped_last_modified_timestamp > max_modified_date:
                 max_modified_date = mapped_last_modified_timestamp
-                max_date_descendant = dec_entity 
+                max_date_descendant = dec_entity
     return max_date_descendant
