@@ -1,0 +1,1 @@
+- Fix bug causing table of contents on EPIC detail pages to show duplicate entries and not link to the correct sections.
