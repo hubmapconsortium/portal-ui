@@ -5,7 +5,6 @@ from portal_visualization.client import ApiClient
 from portal_visualization.mock_client import MockApiClient
 from os.path import dirname
 from pathlib import Path
-from datetime import datetime
 
 from yaml import safe_load
 
