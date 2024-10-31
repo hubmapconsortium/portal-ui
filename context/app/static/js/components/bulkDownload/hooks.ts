@@ -8,16 +8,18 @@ import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 
 export interface BulkDownloadFormTypes {
   bulkDownloadOptions: string;
+  bulkDownloadMetadata: boolean;
 }
 
 const schema = z
   .object({
-    ...bulkDownloadOptionsField,
+    bulkDownloadOptions: bulkDownloadOptionsField.bulkDownloadOptions,
+    bulkDownloadMetadata: z.boolean().optional(),
   })
   .partial()
   .required({ bulkDownloadOptions: true });
 
-function useLaunchWorkspaceForm() {
+function useBulkDownloadForm() {
   const {
     handleSubmit,
     control,
@@ -27,6 +29,7 @@ function useLaunchWorkspaceForm() {
   } = useForm<BulkDownloadFormTypes>({
     defaultValues: {
       bulkDownloadOptions: '',
+      // bulkDownloadMetadata: false,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -45,7 +48,7 @@ function useLaunchWorkspaceForm() {
 function useBulkDownloadDialog() {
   const { isOpen, datasets, open, close } = useBulkDownloadStore();
 
-  const { control, handleSubmit, isSubmitting, reset } = useLaunchWorkspaceForm();
+  const { control, handleSubmit, isSubmitting, reset } = useBulkDownloadForm();
 
   const handleClose = useCallback(() => {
     reset();
@@ -53,16 +56,18 @@ function useBulkDownloadDialog() {
   }, [close, reset]);
 
   const submit = useCallback(
-    ({ bulkDownloadOptions }: BulkDownloadFormTypes) => {
+    ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
       if (datasets.length === 0) {
-        console.error('No workspace to run found.');
+        console.error('No datasets to download found.');
+        reset();
         return;
       }
 
       // eslint-disable-next-line no-console
-      console.log('Creating bulk download manifest for these datasets:', bulkDownloadOptions);
+      console.log('Creating bulk download manifest for these datasets:', bulkDownloadOptions, bulkDownloadMetadata);
+      reset();
     },
-    [datasets.length],
+    [datasets.length, reset],
   );
 
   return {

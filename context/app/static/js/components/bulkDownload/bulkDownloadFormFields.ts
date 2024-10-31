@@ -15,4 +15,8 @@ const bulkDownloadOptionsField = {
   }),
 };
 
-export { bulkDownloadOptionsField };
+const bulkDownloadMetadataField = z.object({
+  bulkDownloadMetadata: z.boolean().optional(),
+});
+
+export { bulkDownloadOptionsField, bulkDownloadMetadataField };

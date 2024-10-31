@@ -9,15 +9,16 @@ import { useBulkDownloadDialog, BulkDownloadFormTypes } from 'js/components/bulk
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import Step from 'js/shared-styles/surfaces/Step';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
+import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
 
-const formId = 'launch-workspace-form';
+const formId = 'bulk-download-form';
 
 function BulkDownloadDialog() {
   const { handleSubmit, submit, isSubmitting, isOpen, handleClose, control } = useBulkDownloadDialog();
 
   const onSubmit = useCallback(
-    ({ bulkDownloadOptions }: BulkDownloadFormTypes) => {
-      submit({ bulkDownloadOptions });
+    ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
+      submit({ bulkDownloadOptions, bulkDownloadMetadata });
       handleClose();
     },
     [submit, handleClose],
@@ -37,6 +38,7 @@ function BulkDownloadDialog() {
               <SummaryPaper>
                 <Stack direction="column" spacing={2}>
                   <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" />
+                  <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
                 </Stack>
               </SummaryPaper>
             </Step>
