@@ -4,7 +4,7 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import ProcessedDataset from './ProcessedDataset';
-import { SectionDescription } from './ProcessedDataset/SectionDescription';
+import { SectionDescription } from '../../../shared-styles/sections/SectionDescription';
 import HelperPanel from './HelperPanel';
 import { useAnalysesCountInfo, useSortedSearchHits } from './hooks';
 import CollapsibleDetailPageSection from '../DetailPageSection/CollapsibleDetailPageSection';

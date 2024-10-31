@@ -13,7 +13,7 @@ export function SectionDescription({ addendum, children, subsection }: SectionDe
   const iconSize = subsection ? '1rem' : '1.5rem';
   const contents = (
     <Stack direction="column" gap={1} marginBottom={subsection ? 2 : 0}>
-      <Stack direction="row" gap={1} alignItems="start">
+      <Stack direction="row" gap={1} alignItems="center">
         <InfoIcon color="primary" fontSize={iconSize} />
         <Typography variant="body1">{children}</Typography>
       </Stack>

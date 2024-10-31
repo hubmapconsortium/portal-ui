@@ -12,7 +12,7 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { getTableEntities } from 'js/components/detailPage/MetadataSection/utils';
 import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
-import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
+import { SectionDescription } from '../../../shared-styles/sections/SectionDescription';
 import { Columns, defaultTSVColumns } from './columns';
 
 interface TableRow {

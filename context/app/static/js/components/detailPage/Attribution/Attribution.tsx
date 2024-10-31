@@ -9,7 +9,7 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useAttributionSections } from '../ContributorsTable/hooks';
-import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
+import { SectionDescription } from '../../../shared-styles/sections/SectionDescription';
 
 const tooltips = {
   group: 'This is the group that submitted the raw dataset to be published.',

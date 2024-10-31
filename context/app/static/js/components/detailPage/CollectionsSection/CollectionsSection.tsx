@@ -11,7 +11,7 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useTabs } from 'js/shared-styles/tabs';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
-import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
+import { SectionDescription } from '../../../shared-styles/sections/SectionDescription';
 import CollectionsSectionProvider, { useCollectionsSectionContext } from './CollectionsSectionContext';
 
 interface CollectionTabProps {

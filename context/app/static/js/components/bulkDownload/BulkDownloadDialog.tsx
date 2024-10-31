@@ -6,11 +6,14 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { useBulkDownloadDialog, BulkDownloadFormTypes } from 'js/components/bulkDownload/hooks';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import Step from 'js/shared-styles/surfaces/Step';
+import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 
 const formId = 'launch-workspace-form';
 
 function BulkDownloadDialog() {
-  const { handleSubmit, submit, isSubmitting, isOpen, handleClose } = useBulkDownloadDialog();
+  const { handleSubmit, submit, isSubmitting, isOpen, handleClose, control } = useBulkDownloadDialog();
 
   const onSubmit = useCallback(
     ({ bulkDownloadOptions }: BulkDownloadFormTypes) => {
@@ -23,16 +26,20 @@ function BulkDownloadDialog() {
   return (
     <DialogModal
       title="Bulk Download Files"
-      maxWidth="md"
+      maxWidth="lg"
       content={
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
           <Stack direction="column" spacing={1}>
-            <SummaryPaper>
-              <Stack direction="column" spacing={2}>
-                {/* <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" /> */}
-              </Stack>
-            </SummaryPaper>
+            <SectionDescription>(todo)</SectionDescription>
+            <Step title="Download Options" hideRequiredText>
+              <SectionDescription>(description)</SectionDescription>
+              <SummaryPaper>
+                <Stack direction="column" spacing={2}>
+                  <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" />
+                </Stack>
+              </SummaryPaper>
+            </Step>
             {/* <AdvancedConfigOptions control={control} description={text.resources.description} /> */}
           </Stack>
         </form>
