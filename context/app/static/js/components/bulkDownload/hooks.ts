@@ -25,11 +25,11 @@ function useBulkDownloadForm() {
     control,
     reset,
     setValue,
-    formState: { errors, isSubmitting, isSubmitSuccessful },
+    formState: { errors },
   } = useForm<BulkDownloadFormTypes>({
     defaultValues: {
-      bulkDownloadOptions: '',
-      // bulkDownloadMetadata: false,
+      bulkDownloadOptions: 'all',
+      bulkDownloadMetadata: false,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -41,14 +41,13 @@ function useBulkDownloadForm() {
     control,
     errors,
     reset,
-    isSubmitting: isSubmitting || isSubmitSuccessful,
   };
 }
 
 function useBulkDownloadDialog() {
   const { isOpen, datasets, open, close } = useBulkDownloadStore();
 
-  const { control, handleSubmit, isSubmitting, reset } = useBulkDownloadForm();
+  const { control, handleSubmit, reset } = useBulkDownloadForm();
 
   const handleClose = useCallback(() => {
     reset();
@@ -77,7 +76,6 @@ function useBulkDownloadDialog() {
     close,
     submit,
     handleSubmit,
-    isSubmitting,
     handleClose,
     openDialog: open,
   };

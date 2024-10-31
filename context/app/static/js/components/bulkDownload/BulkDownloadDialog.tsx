@@ -1,7 +1,6 @@
 import React, { useCallback } from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import LoadingButton from '@mui/lab/LoadingButton';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/DialogModal';
@@ -10,18 +9,26 @@ import { SectionDescription } from 'js/shared-styles/sections/SectionDescription
 import Step from 'js/shared-styles/surfaces/Step';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 const formId = 'bulk-download-form';
 
 function BulkDownloadDialog() {
-  const { handleSubmit, submit, isSubmitting, isOpen, handleClose, control } = useBulkDownloadDialog();
+  const { handleSubmit, submit, isOpen, handleClose, control } = useBulkDownloadDialog();
+  const { toastError } = useSnackbarActions();
 
   const onSubmit = useCallback(
     ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
-      submit({ bulkDownloadOptions, bulkDownloadMetadata });
+      try {
+        submit({ bulkDownloadOptions, bulkDownloadMetadata });
+      } catch (e) {
+        toastError('Error creating bulk download manifest.');
+        console.error(e);
+      }
+
       handleClose();
     },
-    [submit, handleClose],
+    [submit, handleClose, toastError],
   );
 
   return (
@@ -42,7 +49,6 @@ function BulkDownloadDialog() {
                 </Stack>
               </SummaryPaper>
             </Step>
-            {/* <AdvancedConfigOptions control={control} description={text.resources.description} /> */}
           </Stack>
         </form>
       }
@@ -50,12 +56,12 @@ function BulkDownloadDialog() {
       handleClose={handleClose}
       actions={
         <Stack direction="row" spacing={2} alignItems="end">
-          <Button type="button" onClick={handleClose} disabled={isSubmitting}>
+          <Button type="button" onClick={handleClose}>
             Cancel
           </Button>
-          <LoadingButton type="submit" variant="contained" form={formId} loading={isSubmitting}>
+          <Button type="submit" variant="contained" form={formId}>
             Generate Download Manifest
-          </LoadingButton>
+          </Button>
         </Stack>
       }
       withCloseButton
