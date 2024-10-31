@@ -1,5 +1,20 @@
 # Changelog
 
+## v1.13.1 - 2024-10-31
+
+- Fix parent UUID handling for multi-vitessce conf datasets.
+- Fix EPIC Bulk Data Transfer section tabs and prevent these from crashing the page.
+- Update support entity and processed/component dataset redirects to go only to the appropriate primary datasets.
+- Fix bug causing table of contents on EPIC detail pages to show duplicate entries and not link to the correct sections.
+- Label centrally processed dataset groups as HIVE in the helper panel.
+- Fix typo in publication collections summary.
+- Add group name to raw dataset summary section.
+- Use assay_display_name instead of pipeline when labelling EPIC dataset sections.
+- Update language in processed dataset sections from "pipeline" to "analysis".
+- Display EPIC datasets as being generated via external processing in dataset relationship diagrams.
+
+
+
 ## v1.13.0 - 2024-10-23
 
 - Add end-to-end tests that check whether all page types load successfully.
