@@ -9,13 +9,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
-const FacetAccordionDetails = styled(AccordionDetails)({
+const FacetAccordionDetails = styled(AccordionDetails)(({ theme }) => ({
   flexDirection: 'column',
-  padding: '4px 4px 4px 8px',
-});
+  padding: theme.spacing(0.5, 0.5, 0.5, 1),
+}));
 
-const FacetAccordionSummary = styled(AccordionSummary)(({ $position }: { $position: 'inner' | 'outer' }) => ({
-  padding: $position === 'outer' ? '4px 0px' : 0,
+const FacetAccordionSummary = styled(AccordionSummary)<{ $position: 'inner' | 'outer' }>(({ $position, theme }) => ({
+  padding: $position === 'outer' ? theme.spacing(0.5, 0) : 0,
   justifyContent: 'left',
   width: '100%',
   '& > *': {
@@ -65,9 +65,9 @@ const StyledStack = styled(Stack)<{ $active: boolean }>(({ theme, $active }) => 
   },
 }));
 
-const FormLabelText = styled(Typography)({
-  marginRight: '2px',
-});
+const FormLabelText = styled(Typography)(({ theme }) => ({
+  marginRight: theme.spacing(0.25),
+}));
 
 const HierarchicalAccordionSummary = styled(AccordionSummary)({
   margin: 0,

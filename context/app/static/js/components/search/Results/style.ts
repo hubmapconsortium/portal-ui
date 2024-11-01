@@ -19,8 +19,8 @@ const StyledTableBody = styled(TableBody)({
   borderRight: 'none',
 });
 
-const interPadding = `${16 * 0.6}px`;
-const sidePadding = '64px';
+const interPadding = '.6rem';
+const sidePadding = '4rem';
 
 const StyledTableRow = styled(TableRow)<{ $beforeHighlight?: boolean; $highlight?: boolean }>(
   ({ theme, $beforeHighlight, $highlight }) => ({
