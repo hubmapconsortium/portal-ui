@@ -2,19 +2,19 @@ import { get } from 'js/helpers/nodash';
 import { Entity } from 'js/components/types';
 
 const donorMetadataPath = 'mapped_metadata';
-const sampleMetdataPath = 'metadata';
+const sampleMetadataPath = 'metadata';
 
 const paths = {
   donor: {
     donor: donorMetadataPath,
   },
   sample: {
-    sample: sampleMetdataPath,
+    sample: sampleMetadataPath,
     donor: `donor.${donorMetadataPath}`,
   },
   dataset: {
     donor: `donor.${donorMetadataPath}`,
-    sample: `source_samples.${sampleMetdataPath}`,
+    sample: `source_samples.${sampleMetadataPath}`,
     dataset: 'metadata.metadata',
   },
 };
