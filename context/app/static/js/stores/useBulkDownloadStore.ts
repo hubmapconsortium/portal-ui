@@ -3,11 +3,11 @@ import { Dataset } from 'js/components/types';
 
 interface BulkDownloadStore {
   isOpen: boolean;
-  datasets: Dataset[];
+  datasets: Pick<Dataset, 'hubmap_id'>[];
   open: () => void;
   close: () => void;
   reset: () => void;
-  setDatasets: (datasets: Dataset[]) => void;
+  setDatasets: (datasets: Pick<Dataset, 'hubmap_id'>[]) => void;
 }
 
 const storeDefinition = (set: StoreApi<BulkDownloadStore>['setState']) => ({
@@ -16,7 +16,7 @@ const storeDefinition = (set: StoreApi<BulkDownloadStore>['setState']) => ({
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
   reset: () => set({ isOpen: false, datasets: [] }),
-  setDatasets: (datasets: Dataset[]) => set({ datasets }),
+  setDatasets: (datasets: Pick<Dataset, 'hubmap_id'>[]) => set({ datasets }),
 });
 
 export const useBulkDownloadStore = create<BulkDownloadStore>(storeDefinition);

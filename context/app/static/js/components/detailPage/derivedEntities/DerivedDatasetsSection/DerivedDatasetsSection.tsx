@@ -21,7 +21,10 @@ function DerivedDatasetsSection({ uuid, entityType }: DerivedDatasetsSectionProp
       id="derived-data"
       title="Derived Data"
       action={
-        <RelatedEntitiesSectionActions searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=Dataset`} />
+        <RelatedEntitiesSectionActions
+          entities={entities}
+          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=Dataset`}
+        />
       }
     >
       <RelatedEntitiesTabs

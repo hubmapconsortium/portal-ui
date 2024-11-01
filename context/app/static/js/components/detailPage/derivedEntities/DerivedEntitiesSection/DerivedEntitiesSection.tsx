@@ -27,6 +27,7 @@ function DerivedEntitiesSection() {
       title="Derived Data"
       action={
         <RelatedEntitiesSectionActions
+          entities={entities}
           searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }

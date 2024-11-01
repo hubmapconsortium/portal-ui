@@ -5,6 +5,7 @@ import { z } from 'zod';
 
 import { bulkDownloadOptionsField } from 'js/components/bulkDownload/bulkDownloadFormFields';
 import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
+import { Dataset } from 'js/components/types';
 
 export interface BulkDownloadFormTypes {
   bulkDownloadOptions: string;
@@ -45,8 +46,7 @@ function useBulkDownloadForm() {
 }
 
 function useBulkDownloadDialog() {
-  const { isOpen, datasets, open, close } = useBulkDownloadStore();
-
+  const { isOpen, datasets, open, close, setDatasets } = useBulkDownloadStore();
   const { control, handleSubmit, reset } = useBulkDownloadForm();
 
   const handleClose = useCallback(() => {
@@ -63,21 +63,36 @@ function useBulkDownloadDialog() {
       }
 
       // eslint-disable-next-line no-console
-      console.log('Creating bulk download manifest for these datasets:', bulkDownloadOptions, bulkDownloadMetadata);
+      console.log(
+        'Creating bulk download manifest with these options:',
+        bulkDownloadOptions,
+        bulkDownloadMetadata,
+        'for these datasets:',
+        datasets,
+      );
       reset();
     },
-    [datasets.length, reset],
+    [datasets, reset],
+  );
+
+  const openDialog = useCallback(
+    (initialDatasets: Pick<Dataset, 'hubmap_id'>[]) => {
+      setDatasets(initialDatasets);
+      open();
+    },
+    [setDatasets, open],
   );
 
   return {
     control,
     isOpen,
+    datasets,
     reset,
     close,
     submit,
     handleSubmit,
     handleClose,
-    openDialog: open,
+    openDialog,
   };
 }
 
