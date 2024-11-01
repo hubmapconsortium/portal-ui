@@ -107,11 +107,14 @@ export function buildQuery({
     const portalField = getPortalESField(field);
 
     if (isTermFacet(facet)) {
-      const { size: facetSize } = facet;
+      const { size: facetSize, order } = facet;
       query.agg(
         buildFilterAggregation({
           portalFields: [portalField],
-          aggregation: esb.termsAggregation(field, portalField).size(facetSize ?? maxAggSize),
+          aggregation: esb
+            .termsAggregation(field, portalField)
+            .size(facetSize ?? maxAggSize)
+            .order(order?.type ?? '_count', order?.dir ?? 'desc'),
           filters: { ...allFilters },
           field,
         }),
@@ -133,7 +136,7 @@ export function buildQuery({
     }
 
     if (isHierarchicalFacet(facet)) {
-      const { childField } = facet;
+      const { childField, order } = facet;
       if (!childField) {
         return;
       }
@@ -146,7 +149,13 @@ export function buildQuery({
           aggregation: esb
             .termsAggregation(field, parentPortalField)
             .size(maxAggSize)
-            .agg(esb.termsAggregation(childField, childPortalField).size(maxAggSize)),
+            .order(order?.type ?? '_count', order?.dir ?? 'desc')
+            .agg(
+              esb
+                .termsAggregation(childField, childPortalField)
+                .size(maxAggSize)
+                .order(order?.type ?? '_count', order?.dir ?? 'desc'),
+            ),
           filters: { ...allFilters },
           field,
         }),

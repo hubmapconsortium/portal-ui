@@ -20,8 +20,13 @@ export interface FacetConfig {
   field: string;
 }
 
+interface AggregationOrder {
+  type: '_count' | '_term';
+  dir: 'asc' | 'desc';
+}
 export interface TermConfig extends FacetConfig {
   type: typeof FACETS.term;
+  order?: AggregationOrder;
   size?: number;
 }
 
@@ -32,6 +37,7 @@ export interface TermValues<V = Set<string>> {
 
 export interface HierarchicalTermConfig extends FacetConfig {
   childField: string;
+  order?: AggregationOrder;
   type: typeof FACETS.hierarchical;
 }
 
