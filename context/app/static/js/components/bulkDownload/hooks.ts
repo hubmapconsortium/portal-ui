@@ -6,6 +6,8 @@ import { z } from 'zod';
 import { bulkDownloadOptionsField } from 'js/components/bulkDownload/bulkDownloadFormFields';
 import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { Dataset } from 'js/components/types';
+import { createDownloadUrl } from 'js/helpers/functions';
+import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
 
 export interface BulkDownloadFormTypes {
   bulkDownloadOptions: string;
@@ -48,11 +50,23 @@ function useBulkDownloadForm() {
 function useBulkDownloadDialog() {
   const { isOpen, datasets, open, close, setDatasets } = useBulkDownloadStore();
   const { control, handleSubmit, reset } = useBulkDownloadForm();
+  const { toastError } = useSnackbarActions();
 
   const handleClose = useCallback(() => {
     reset();
     close();
   }, [close, reset]);
+
+  const downloadManifest = useCallback(() => {
+    const url = createDownloadUrl(`${datasets.map((dataset) => dataset.hubmap_id).join('\t / \n')}\t / `, 'text/plain');
+
+    const downloadLink = document.createElement('a');
+    downloadLink.href = url;
+    downloadLink.download = 'manifest.txt';
+    downloadLink.click();
+
+    URL.revokeObjectURL(url);
+  }, [datasets]);
 
   const submit = useCallback(
     ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
@@ -70,9 +84,10 @@ function useBulkDownloadDialog() {
         'for these datasets:',
         datasets,
       );
+      downloadManifest();
       reset();
     },
-    [datasets, reset],
+    [datasets, reset, downloadManifest],
   );
 
   const openDialog = useCallback(
@@ -83,6 +98,20 @@ function useBulkDownloadDialog() {
     [setDatasets, open],
   );
 
+  const onSubmit = useCallback(
+    ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
+      try {
+        submit({ bulkDownloadOptions, bulkDownloadMetadata });
+      } catch (e) {
+        toastError('Error creating bulk download manifest.');
+        console.error(e);
+      }
+
+      handleClose();
+    },
+    [submit, handleClose, toastError],
+  );
+
   return {
     control,
     isOpen,
@@ -90,6 +119,7 @@ function useBulkDownloadDialog() {
     reset,
     close,
     submit,
+    onSubmit,
     handleSubmit,
     handleClose,
     openDialog,

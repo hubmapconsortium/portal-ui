@@ -1,35 +1,19 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/DialogModal';
-import { useBulkDownloadDialog, BulkDownloadFormTypes } from 'js/components/bulkDownload/hooks';
+import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import Step from 'js/shared-styles/surfaces/Step';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
-import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 const formId = 'bulk-download-form';
 
 function BulkDownloadDialog() {
-  const { handleSubmit, submit, isOpen, handleClose, control } = useBulkDownloadDialog();
-  const { toastError } = useSnackbarActions();
-
-  const onSubmit = useCallback(
-    ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
-      try {
-        submit({ bulkDownloadOptions, bulkDownloadMetadata });
-      } catch (e) {
-        toastError('Error creating bulk download manifest.');
-        console.error(e);
-      }
-
-      handleClose();
-    },
-    [submit, handleClose, toastError],
-  );
+  const { handleSubmit, onSubmit, isOpen, handleClose, control } = useBulkDownloadDialog();
 
   return (
     <DialogModal
