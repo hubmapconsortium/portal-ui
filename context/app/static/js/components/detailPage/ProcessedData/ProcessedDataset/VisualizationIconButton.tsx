@@ -1,27 +1,26 @@
 import React from 'react';
 
 import { WhiteRectangularTooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
-import { FileIcon } from 'js/shared-styles/icons';
+import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 
 interface Props {
-  entity_type: string;
-  uuid: string;
+  href: string;
 }
 
-function SummaryJSONButton({ entity_type, uuid }: Props) {
+function VisualizationIconButton({ href }: Props) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
   return (
     <WhiteRectangularTooltipIconButton
-      tooltip="View JSON"
-      href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
+      tooltip="View Vitessce Configuration"
+      href={href}
       target="_blank"
-      onClick={() => trackEntityPageEvent({ action: 'View JSON' })}
+      onClick={() => trackEntityPageEvent({ action: 'View Vitessce Conf' })}
     >
-      <FileIcon color="primary" />
+      <VisualizationIcon color="primary" />
     </WhiteRectangularTooltipIconButton>
   );
 }
 
-export default SummaryJSONButton;
+export default VisualizationIconButton;
