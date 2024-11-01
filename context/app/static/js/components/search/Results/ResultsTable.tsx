@@ -15,6 +15,7 @@ import { Entity } from 'js/components/types';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { trackEvent } from 'js/helpers/trackers';
+import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { getByPath } from './utils';
 import {
   StyledTable,
@@ -98,11 +99,13 @@ function SortHeaderCell({ field, label }: { field: string; label: string }) {
 }
 
 function CellContent({ field, fieldValue }: { field: string; fieldValue: string }) {
-  switch (field) {
+  switch (field.split('.').pop()) {
     case 'hubmap_id':
       return <InternalLink href={`/browse/${fieldValue}`}>{fieldValue}</InternalLink>;
     case 'last_modified_timestamp':
       return format(fieldValue, 'yyyy-MM-dd');
+    case 'age':
+      return <DonorAgeTooltip donorAge={fieldValue}>{fieldValue}</DonorAgeTooltip>;
     default:
       return fieldValue;
   }

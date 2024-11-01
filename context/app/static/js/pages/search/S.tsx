@@ -32,7 +32,7 @@ function makeDonorMetadataFilters(e: EntityWithType) {
   const pathPrefix = isDonorEntity ? '' : 'donor.';
   return [
     { field: `${pathPrefix}mapped_metadata.sex`, type: FACETS.term },
-    { field: `${pathPrefix}mapped_metadata.age_value`, min: 0, max: 100, type: FACETS.range },
+    { field: `${pathPrefix}mapped_metadata.age_value`, min: 0, max: 90, type: FACETS.range },
     { field: `${pathPrefix}mapped_metadata.race`, type: FACETS.term },
     { field: `${pathPrefix}mapped_metadata.body_mass_index_value`, min: 0, max: 50, type: FACETS.range },
   ];
