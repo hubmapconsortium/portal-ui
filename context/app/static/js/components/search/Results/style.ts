@@ -72,23 +72,18 @@ const StyledTableCell = styled(TableCell)({
 const sharedArrowStyles = {
   verticalAlign: 'text-top',
   fontSize: '1.1rem',
-};
+} as const;
 
-const ArrowUpOn = styled(ArrowUpward)({
-  ...sharedArrowStyles,
-});
+const ArrowUpOn = styled(ArrowUpward)(sharedArrowStyles);
 
-const ArrowDownOn = styled(ArrowDownward)({
-  ...sharedArrowStyles,
-});
+const ArrowDownOn = styled(ArrowDownward)(sharedArrowStyles);
 
 const ArrowDownOff = styled(ArrowDownward)({
   ...sharedArrowStyles,
-  opacity: '12%',
+  opacity: '40%',
 });
 
 const StyledHeaderCell = styled(HeaderCell)({
-  cursor: 'pointer',
   whiteSpace: 'nowrap',
 });
 

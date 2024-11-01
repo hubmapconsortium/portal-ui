@@ -85,7 +85,12 @@ function SortHeaderCell({ field, label }: { field: string; label: string }) {
   return (
     <StyledHeaderCell>
       {label}
-      <IconButton onClick={handleClick}>
+      <IconButton
+        onClick={handleClick}
+        sx={(theme) => ({
+          color: theme.palette.text.primary,
+        })}
+      >
         <OrderIcon direction={direction} isCurrentSortField={isCurrentSortField} />
       </IconButton>
     </StyledHeaderCell>
