@@ -1,0 +1,1 @@
+- Add space between footer columns to improve readability.
