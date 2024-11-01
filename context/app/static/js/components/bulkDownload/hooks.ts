@@ -4,8 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { bulkDownloadOptionsField } from 'js/components/bulkDownload/bulkDownloadFormFields';
-import { useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
-import { Dataset } from 'js/components/types';
+import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
 
@@ -70,9 +69,15 @@ function useBulkDownloadDialog() {
 
   const submit = useCallback(
     ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
-      if (datasets.length === 0) {
-        console.error('No datasets to download found.');
-        reset();
+      const datasetsToDownload = datasets.filter((dataset) => {
+        if (bulkDownloadOptions === 'all') {
+          return true;
+        }
+        return bulkDownloadOptions === 'raw' ? dataset.processing === 'raw' : dataset.processing === 'processed';
+      });
+
+      if (datasetsToDownload.length === 0) {
+        toastError('No datasets were included in your download selection.');
         return;
       }
 
@@ -81,17 +86,16 @@ function useBulkDownloadDialog() {
         'Creating bulk download manifest with these options:',
         bulkDownloadOptions,
         bulkDownloadMetadata,
-        'for these datasets:',
-        datasets,
+        'for these datasetsToDownload:',
+        datasetsToDownload.map((dataset) => `${dataset.hubmap_id} (${dataset.processing})`),
       );
       downloadManifest();
-      reset();
     },
-    [datasets, reset, downloadManifest],
+    [datasets, downloadManifest, toastError],
   );
 
   const openDialog = useCallback(
-    (initialDatasets: Pick<Dataset, 'hubmap_id'>[]) => {
+    (initialDatasets: BulkDownloadDataset[]) => {
       setDatasets(initialDatasets);
       open();
     },

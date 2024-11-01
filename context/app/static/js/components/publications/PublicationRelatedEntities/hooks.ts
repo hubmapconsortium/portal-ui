@@ -12,6 +12,7 @@ import { getAncestorsQuery } from 'js/helpers/queries';
 import { Dataset, Donor, ESEntityType, PartialEntity, Sample } from 'js/components/types';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { RelatedEntitiesColumn } from 'js/components/detailPage/related-entities/RelatedEntitiesTable/RelatedEntitiesTable';
+import { BulkDownloadDataset } from 'js/stores/useBulkDownloadStore';
 
 function useAncestorSearchHits(descendantUUID: string) {
   const query = useMemo(
@@ -28,6 +29,8 @@ function useAncestorSearchHits(descendantUUID: string) {
         'mapped_metadata',
         'origin_samples_unique_mapped_organs',
         'sample_category',
+        'files',
+        'processing',
       ],
       size: 10000,
     }),
@@ -62,6 +65,8 @@ function usePublicationsRelatedEntities(uuid: string) {
     },
     { Donor: [], Sample: [], Dataset: [] } as Record<string, Required<SearchHit<PartialEntity>>[]>,
   );
+
+  const datasets = ancestorsSplitByEntityType.Dataset.map((hit) => hit._source as BulkDownloadDataset & PartialEntity);
 
   const entities: PublicationsRelatedEntity[] = [
     {
@@ -115,7 +120,7 @@ function usePublicationsRelatedEntities(uuid: string) {
     },
   ];
 
-  return { entities, isLoading };
+  return { entities, datasets, isLoading };
 }
 
 export { usePublicationsRelatedEntities };

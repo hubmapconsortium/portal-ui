@@ -13,7 +13,7 @@ interface DerivedDatasetsSectionProps {
 
 function DerivedDatasetsSection({ uuid, entityType }: DerivedDatasetsSectionProps) {
   const [openIndex, setOpenIndex] = useState(0);
-  const { entities, isLoading } = useDerivedDatasetsSection(uuid);
+  const { entities, datasets, isLoading } = useDerivedDatasetsSection(uuid);
 
   return (
     <DerivedEntitiesSectionWrapper
@@ -22,7 +22,7 @@ function DerivedDatasetsSection({ uuid, entityType }: DerivedDatasetsSectionProp
       title="Derived Data"
       action={
         <RelatedEntitiesSectionActions
-          entities={entities}
+          datasets={datasets}
           searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=Dataset`}
         />
       }

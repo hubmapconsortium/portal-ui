@@ -12,7 +12,7 @@ interface PublicationRelatedEntitiesProps {
 function PublicationRelatedEntities({ uuid }: PublicationRelatedEntitiesProps) {
   const [openIndex, setOpenIndex] = useState(0);
 
-  const { entities, isLoading } = usePublicationsRelatedEntities(uuid);
+  const { entities, datasets, isLoading } = usePublicationsRelatedEntities(uuid);
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
@@ -21,7 +21,7 @@ function PublicationRelatedEntities({ uuid }: PublicationRelatedEntitiesProps) {
       iconTooltipText="HuBMAP data created or used by the publication."
       action={
         <RelatedEntitiesSectionActions
-          entities={entities}
+          datasets={datasets}
           searchPageHref={`/search?descendant_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }

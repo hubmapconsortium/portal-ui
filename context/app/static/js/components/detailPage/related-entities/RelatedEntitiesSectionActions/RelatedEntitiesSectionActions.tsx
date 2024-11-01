@@ -8,14 +8,14 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
-import { PublicationsRelatedEntity } from 'js/components/publications/PublicationRelatedEntities/hooks';
+import { BulkDownloadDataset } from 'js/stores/useBulkDownloadStore';
 
 interface RelatedEntitiesSectionHeaderProps {
   searchPageHref: string;
-  entities: PublicationsRelatedEntity[];
+  datasets: BulkDownloadDataset[];
 }
 
-export function RelatedEntitiesSectionActions({ searchPageHref, entities }: RelatedEntitiesSectionHeaderProps) {
+export function RelatedEntitiesSectionActions({ searchPageHref, datasets }: RelatedEntitiesSectionHeaderProps) {
   const {
     entity: { uuid },
   } = useFlaskDataContext();
@@ -23,15 +23,10 @@ export function RelatedEntitiesSectionActions({ searchPageHref, entities }: Rela
 
   const track = useTrackEntityPageEvent();
 
-  const derivedDatasets = entities.find((e) => e.entityType === 'Dataset')?.data.map((dataset) => dataset._source);
-
   return (
     <Stack direction="row" spacing={1}>
-      {derivedDatasets && (
-        <WhiteBackgroundIconTooltipButton
-          tooltip="Download dataset manifest"
-          onClick={() => openDialog(derivedDatasets)}
-        >
+      {datasets && (
+        <WhiteBackgroundIconTooltipButton tooltip="Download dataset manifest" onClick={() => openDialog(datasets)}>
           <SvgIcon color="primary" component={Download} />
         </WhiteBackgroundIconTooltipButton>
       )}
