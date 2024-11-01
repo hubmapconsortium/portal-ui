@@ -7,6 +7,7 @@ import { bulkDownloadOptionsField } from 'js/components/bulkDownload/bulkDownloa
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
+import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 
 export interface BulkDownloadFormTypes {
   bulkDownloadOptions: string;
@@ -56,8 +57,24 @@ function useBulkDownloadDialog() {
     close();
   }, [close, reset]);
 
-  const downloadManifest = useCallback(() => {
-    const url = createDownloadUrl(`${datasets.map((dataset) => dataset.hubmap_id).join('\t / \n')}\t / `, 'text/plain');
+  const downloadMetadata = useCallback(
+    (datasetsToDownload: BulkDownloadDataset[]) => {
+      postAndDownloadFile({
+        url: '/metadata/v0/datasets.tsv',
+        body: { uuids: datasetsToDownload.map((dataset) => dataset.uuid) },
+      }).catch((e) => {
+        toastError('Error downloading metadata.');
+        console.error(e);
+      });
+    },
+    [toastError],
+  );
+
+  const downloadManifest = useCallback((datasetsToDownload: BulkDownloadDataset[]) => {
+    const url = createDownloadUrl(
+      `${datasetsToDownload.map((dataset) => dataset.hubmap_id).join('\t / \n')}\t / `,
+      'text/plain',
+    );
 
     const downloadLink = document.createElement('a');
     downloadLink.href = url;
@@ -65,7 +82,7 @@ function useBulkDownloadDialog() {
     downloadLink.click();
 
     URL.revokeObjectURL(url);
-  }, [datasets]);
+  }, []);
 
   const submit = useCallback(
     ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
@@ -81,17 +98,13 @@ function useBulkDownloadDialog() {
         return;
       }
 
-      // eslint-disable-next-line no-console
-      console.log(
-        'Creating bulk download manifest with these options:',
-        bulkDownloadOptions,
-        bulkDownloadMetadata,
-        'for these datasetsToDownload:',
-        datasetsToDownload.map((dataset) => `${dataset.hubmap_id} (${dataset.processing})`),
-      );
-      downloadManifest();
+      if (bulkDownloadMetadata) {
+        downloadMetadata(datasetsToDownload);
+      }
+
+      downloadManifest(datasetsToDownload);
     },
-    [datasets, downloadManifest, toastError],
+    [datasets, downloadManifest, downloadMetadata, toastError],
   );
 
   const openDialog = useCallback(
