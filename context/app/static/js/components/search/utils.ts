@@ -107,13 +107,13 @@ export function buildQuery({
     const portalField = getPortalESField(field);
 
     if (isTermFacet(facet)) {
-      const { size: facetSize, order } = facet;
+      const { order } = facet;
       query.agg(
         buildFilterAggregation({
           portalFields: [portalField],
           aggregation: esb
             .termsAggregation(field, portalField)
-            .size(facetSize ?? maxAggSize)
+            .size(maxAggSize)
             .order(order?.type ?? '_count', order?.dir ?? 'desc'),
           filters: { ...allFilters },
           field,

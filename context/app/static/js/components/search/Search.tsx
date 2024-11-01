@@ -94,7 +94,7 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
       return produce(acc, (draft) => {
         if (curr.type === FACETS.term) {
           draft.filters[curr.field] = { values: new Set([]), type: curr.type };
-          draft.facets[curr.field] = { ...curr, size: 5 };
+          draft.facets[curr.field] = { ...curr };
         }
 
         if (curr.type === FACETS.hierarchical) {
