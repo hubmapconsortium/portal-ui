@@ -11,6 +11,7 @@ import { HeaderCell } from 'js/shared-styles/tables';
 const StyledTable = styled(Table)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
   boxShadow: theme.shadows[1],
+  tableLayout: 'auto',
 }));
 
 const StyledTableBody = styled(TableBody)({
