@@ -6,6 +6,7 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import IconLink from 'js/shared-styles/Links/iconLinks/IconLink';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 interface Contributor {
   last_name: string;
@@ -37,16 +38,18 @@ function ExternalDoiLink({ doi_url }: { doi_url: string }) {
 function InternalDoiLink({ doi_url }: { doi_url: string }) {
   const copy = useHandleCopyClick();
   return (
-    <IconLink
-      href={doi_url}
-      onClick={(e) => {
-        e.preventDefault();
-        copy(doi_url);
-      }}
-      icon={<ContentCopyIcon />}
-    >
-      {doi_url}
-    </IconLink>
+    <SecondaryBackgroundTooltip title="This DOI link leads to the page you are currently viewing. Click to copy.">
+      <IconLink
+        href={doi_url}
+        onClick={(e) => {
+          e.preventDefault();
+          copy(doi_url);
+        }}
+        icon={<ContentCopyIcon />}
+      >
+        {doi_url}
+      </IconLink>
+    </SecondaryBackgroundTooltip>
   );
 }
 
