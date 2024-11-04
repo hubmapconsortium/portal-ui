@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { Document, Page } from 'react-pdf';
 import Modal from '@mui/material/Modal';
 import Button from '@mui/material/Button';
@@ -18,16 +18,45 @@ interface PDFFile {
   numPages: number;
 }
 
+interface PDFLoadingIndicatorProps {
+  isProcessingPDF: boolean;
+  onLoadSuccess: (pdfObj: PDFFile) => void;
+  pdfUrl: string;
+}
+function PDFLoadingIndicator({ isProcessingPDF, onLoadSuccess, pdfUrl }: PDFLoadingIndicatorProps) {
+  if (!isProcessingPDF) {
+    return null;
+  }
+  return (
+    <Document
+      file={pdfUrl}
+      onLoadSuccess={onLoadSuccess}
+      loading={<LinearProgress sx={{ maxWidth: '100px' }} />}
+      error={
+        <Box display="flex">
+          <ErrorIcon />
+          <Typography>Failed to load</Typography>
+        </Box>
+      }
+    />
+  );
+}
+
 function PDFViewer({ pdfUrl }: PDFViewerProps) {
   const [currentPageNum, setCurrentPageNum] = useState(1);
   const [open, setOpen] = useState(false);
   const [pdf, setPdf] = useState<PDFFile>();
   const [isProcessingPDF, setIsProcessingPDF] = useState(false);
 
-  const handleClose = () => {
+  const onLoadSuccess = useCallback((pdfObj: PDFFile) => {
+    setOpen(true);
+    setPdf(pdfObj);
+  }, []);
+
+  const handleClose = useCallback(() => {
     setOpen(false);
     setIsProcessingPDF(false);
-  };
+  }, []);
 
   return (
     <>
@@ -37,26 +66,11 @@ function PDFViewer({ pdfUrl }: PDFViewerProps) {
           View PDF
         </Button>
       </Box>
-      {isProcessingPDF && (
-        <Document
-          file={pdfUrl}
-          onLoadSuccess={(pdfObj) => {
-            setOpen(true);
-            setPdf(pdfObj);
-          }}
-          loading={<LinearProgress sx={{ maxWidth: '100px' }} />}
-          error={
-            <Box display="flex">
-              <ErrorIcon />
-              <Typography>Failed to load</Typography>
-            </Box>
-          }
-        />
-      )}
+      <PDFLoadingIndicator isProcessingPDF={isProcessingPDF} onLoadSuccess={onLoadSuccess} pdfUrl={pdfUrl} />
       <Modal open={open} onClose={handleClose} aria-labelledby="pdf-viewer-modal" aria-describedby="pdf-viewer-modal">
         <ModalContentWrapper>
           <Document file={pdfUrl}>
-            <Page pageNumber={currentPageNum} renderTextLayer={false} />
+            <Page pageNumber={currentPageNum} renderTextLayer={false} renderAnnotationLayer={false} />
           </Document>
           {pdf && (
             <PDFViewerControlButtons
