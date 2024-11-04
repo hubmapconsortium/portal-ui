@@ -31,14 +31,12 @@ function PDFViewer({ pdfUrl }: PDFViewerProps) {
 
   return (
     <>
-      {(!isProcessingPDF || open) && (
-        <Box minWidth="125px">
-          {/* We don't open the modal here because there may be an error processing the PDF. */}
-          <Button type="button" onClick={() => setIsProcessingPDF(true)} variant="outlined">
-            View PDF
-          </Button>
-        </Box>
-      )}
+      <Box minWidth="125px">
+        {/* We don't open the modal here because there may be an error processing the PDF. */}
+        <Button type="button" onClick={() => setIsProcessingPDF(true)} variant="outlined">
+          View PDF
+        </Button>
+      </Box>
       {isProcessingPDF && (
         <Document
           file={pdfUrl}
