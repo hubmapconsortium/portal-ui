@@ -17,7 +17,7 @@ function DerivedEntitiesSection() {
     entity: { uuid, entity_type: entityType },
   } = useFlaskDataContext();
   const [openIndex, setOpenIndex] = useState(0);
-  const { entities, datasets, isLoading } = useDerivedEntitiesSection(uuid);
+  const { entities, datasetUuids: uuids, isLoading } = useDerivedEntitiesSection(uuid);
 
   return (
     <RelatedEntitiesSectionWrapper
@@ -27,7 +27,7 @@ function DerivedEntitiesSection() {
       title="Derived Data"
       action={
         <RelatedEntitiesSectionActions
-          datasets={datasets}
+          uuids={uuids}
           searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }

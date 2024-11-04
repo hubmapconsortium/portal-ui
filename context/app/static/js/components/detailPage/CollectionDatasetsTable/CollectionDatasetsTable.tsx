@@ -12,6 +12,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 import Download from '@mui/icons-material/Download';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
 import { useCollectionsDatasets } from './hooks';
 
 interface CollectionDatasetsTableProps {
@@ -19,9 +20,14 @@ interface CollectionDatasetsTableProps {
 }
 
 function CollectionDatasetsTable({ datasets }: CollectionDatasetsTableProps) {
-  const { datasets: data, columns } = useCollectionsDatasets({
+  const {
+    datasets: data,
+    columns,
+    uuids,
+  } = useCollectionsDatasets({
     ids: datasets.map((d) => d.uuid),
   });
+  const { openDialog } = useBulkDownloadDialog();
 
   return (
     <CollapsibleDetailPageSection title="Datasets" id="datasets-table" icon={sectionIconMap.datasets}>
@@ -32,9 +38,7 @@ function CollectionDatasetsTable({ datasets }: CollectionDatasetsTableProps) {
           </Typography>
         }
         buttons={
-          // TODO: CLT modal
-          // eslint-disable-next-line @typescript-eslint/no-empty-function
-          <WhiteBackgroundIconTooltipButton tooltip="Download dataset manifest" onClick={() => {}}>
+          <WhiteBackgroundIconTooltipButton tooltip="Download dataset manifest" onClick={() => openDialog(uuids)}>
             <SvgIcon color="primary" component={Download} />
           </WhiteBackgroundIconTooltipButton>
         }

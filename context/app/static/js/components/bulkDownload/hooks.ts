@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -8,6 +8,9 @@ import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDown
 import { createDownloadUrl } from 'js/helpers/functions';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
+import { getIDsQuery } from 'js/helpers/queries';
+import { fetchSearchData } from 'js/hooks/useSearchData';
+import { useAppContext } from 'js/components/Contexts';
 
 export interface BulkDownloadFormTypes {
   bulkDownloadOptions: string;
@@ -48,9 +51,26 @@ function useBulkDownloadForm() {
 }
 
 function useBulkDownloadDialog() {
-  const { isOpen, datasets, open, close, setDatasets } = useBulkDownloadStore();
+  const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
   const { control, handleSubmit, reset } = useBulkDownloadForm();
   const { toastError } = useSnackbarActions();
+  const { elasticsearchEndpoint, groupsToken } = useAppContext();
+
+  const [datasets, setDatasets] = useState<BulkDownloadDataset[]>([]);
+
+  useEffect(() => {
+    const datasetQuery = {
+      query: getIDsQuery([...uuids]),
+      _source: ['hubmap_id', 'processing', 'uuid', 'files'],
+      size: 1000,
+    };
+    fetchSearchData(datasetQuery, elasticsearchEndpoint, groupsToken)
+      .then((response) => {
+        const results = response?.hits?.hits || [];
+        setDatasets(results.map(({ _source }) => _source as BulkDownloadDataset));
+      })
+      .catch((e) => console.error('Error fetching datasets:', e));
+  }, [uuids, elasticsearchEndpoint, groupsToken]);
 
   const handleClose = useCallback(() => {
     reset();
@@ -108,11 +128,11 @@ function useBulkDownloadDialog() {
   );
 
   const openDialog = useCallback(
-    (initialDatasets: BulkDownloadDataset[]) => {
-      setDatasets(initialDatasets);
+    (initialUuids: Set<string>) => {
+      setUuids(initialUuids);
       open();
     },
-    [setDatasets, open],
+    [setUuids, open],
   );
 
   const onSubmit = useCallback(

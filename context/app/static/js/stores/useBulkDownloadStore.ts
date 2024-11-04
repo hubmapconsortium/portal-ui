@@ -5,20 +5,20 @@ export type BulkDownloadDataset = Pick<Dataset, 'hubmap_id' | 'processing' | 'fi
 
 interface BulkDownloadStore {
   isOpen: boolean;
-  datasets: BulkDownloadDataset[];
+  uuids: Set<string>;
   open: () => void;
   close: () => void;
   reset: () => void;
-  setDatasets: (datasets: BulkDownloadDataset[]) => void;
+  setUuids: (uuids: Set<string>) => void;
 }
 
 const storeDefinition = (set: StoreApi<BulkDownloadStore>['setState']) => ({
   isOpen: false,
-  datasets: [],
+  uuids: new Set<string>(),
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
-  reset: () => set({ isOpen: false, datasets: [] }),
-  setDatasets: (datasets: BulkDownloadDataset[]) => set({ datasets }),
+  reset: () => set({ isOpen: false, uuids: new Set<string>() }),
+  setUuids: (uuids: Set<string>) => set({ uuids }),
 });
 
 export const useBulkDownloadStore = create<BulkDownloadStore>(storeDefinition);
