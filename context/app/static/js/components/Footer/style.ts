@@ -15,6 +15,7 @@ const Flex = styled('div')(({ theme }) => ({
   display: 'flex',
   marginBottom: theme.spacing(4),
   flexWrap: 'wrap',
+  gap: theme.spacing(1),
 }));
 
 interface FlexColumnProps {
