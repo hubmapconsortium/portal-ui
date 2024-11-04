@@ -12,6 +12,7 @@ import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOpt
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
 import { OutboundLink } from 'js/shared-styles/Links';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
+import BulkDownloadAdvancedSelections from 'js/components/bulkDownload/BulkDownloadAdvancedSelections';
 
 const links = {
   tutorial: 'TODO',
@@ -81,6 +82,7 @@ function BulkDownloadDialog() {
                   <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
                 </Stack>
               </SummaryPaper>
+              <BulkDownloadAdvancedSelections />
             </Step>
           </Stack>
         </form>
