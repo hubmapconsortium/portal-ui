@@ -1,0 +1,1 @@
+- Revise Collection DOI links to copy on click instead of opening a new tab that leads to the same page.

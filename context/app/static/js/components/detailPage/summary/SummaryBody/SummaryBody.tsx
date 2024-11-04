@@ -108,6 +108,7 @@ function CollectionCitation() {
       contributors={contributors}
       citationTitle={title}
       created_timestamp={created_timestamp}
+      internalDoi
     />
   );
 }
