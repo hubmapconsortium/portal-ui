@@ -191,6 +191,7 @@ function EntityHeaderActionButtons({
     return null;
   }
 
+  const isDataset = entity_type === 'Dataset';
   const disabled = mapped_data_access_level === 'Protected';
 
   return (
@@ -198,21 +199,23 @@ function EntityHeaderActionButtons({
       {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
       <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
       <JSONButton entity_type={entity_type} uuid={uuid} />
-      <ProcessedDataWorkspaceMenu
-        button={
-          <ActionButton
-            icon={WorkspaceSVGIcon}
-            tooltip={
-              disabled
-                ? 'Protected datasets are not available in workspaces.'
-                : 'Launch new workspace or add dataset to an existing workspace.'
-            }
-            disabled={disabled}
-          />
-        }
-        datasetDetails={{ hubmap_id, uuid, status, mapped_data_access_level }}
-        dialogType="ADD_DATASETS_FROM_HEADER"
-      />
+      {isDataset && (
+        <ProcessedDataWorkspaceMenu
+          button={
+            <ActionButton
+              icon={WorkspaceSVGIcon}
+              tooltip={
+                disabled
+                  ? 'Protected datasets are not available in workspaces.'
+                  : 'Launch new workspace or add dataset to an existing workspace.'
+              }
+              disabled={disabled}
+            />
+          }
+          datasetDetails={{ hubmap_id, uuid, status, mapped_data_access_level }}
+          dialogType="ADD_DATASETS_FROM_HEADER"
+        />
+      )}
     </Stack>
   );
 }
