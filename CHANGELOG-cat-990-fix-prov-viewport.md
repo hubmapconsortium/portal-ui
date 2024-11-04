@@ -1,0 +1,1 @@
+- Fix styling for provenance graph to avoid tall, difficult to read graphs.
