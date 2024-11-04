@@ -234,7 +234,7 @@ export function useAllSearchIDs(
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
   const { searchData } = useSearchData(
-    { ...query, track_total_hits: true, size: 0, ...sharedIDsQueryClauses },
+    { ...query, track_total_hits: true, size: 10000, ...sharedIDsQueryClauses },
     {
       useDefaultQuery,
       fetcher,
@@ -243,21 +243,14 @@ export function useAllSearchIDs(
   );
 
   const totalHitsCount = getTotalHitsCount(searchData);
-  const numberOfPagesToRequest = totalHitsCount ? Math.ceil(10000 / totalHitsCount) : undefined;
 
   const getKey: SWRInfiniteKeyLoader = useCallback(() => {
-    if (numberOfPagesToRequest === undefined) {
+    if (totalHitsCount === undefined) {
       return null;
     }
 
-    return [
-      { ...query, ...sharedIDsQueryClauses },
-      elasticsearchEndpoint,
-      groupsToken,
-      useDefaultQuery,
-      numberOfPagesToRequest,
-    ];
-  }, [query, elasticsearchEndpoint, groupsToken, useDefaultQuery, numberOfPagesToRequest]);
+    return [{ ...query, ...sharedIDsQueryClauses, size: 10000 }, elasticsearchEndpoint, groupsToken, useDefaultQuery];
+  }, [totalHitsCount, query, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
 
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
   // @ts-expect-error - revisit to make these keys more type safe
