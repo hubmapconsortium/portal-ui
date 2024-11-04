@@ -65,15 +65,20 @@ function getVitessceConfKey(uuid: string, groupsToken: string) {
   return `vitessce-conf-${uuid}-${groupsToken}`;
 }
 
-export function useVitessceConf(uuid: string, parentUuid?: string) {
-  const { groupsToken } = useAppContext();
+export function useVitessceConfLink(uuid: string, parentUuid?: string) {
   const base = `/browse/dataset/${uuid}.vitessce.json`;
   const urlParams = new URLSearchParams(window.location.search);
   if (parentUuid) {
     urlParams.set('parent', parentUuid);
   }
+  return `${base}?${urlParams.toString()}`;
+}
+
+export function useVitessceConf(uuid: string, parentUuid?: string) {
+  const { groupsToken } = useAppContext();
+  const url = useVitessceConfLink(uuid, parentUuid);
   const swr = useSWR<VitessceConf | VitessceConf[]>(getVitessceConfKey(uuid, groupsToken), (_key: unknown) =>
-    fetcher({ url: `${base}?${urlParams.toString()}`, requestInit: { headers: getAuthHeader(groupsToken) } }),
+    fetcher({ url, requestInit: { headers: getAuthHeader(groupsToken) } }),
   );
   if (parentUuid) {
     if (Array.isArray(swr.data)) {
