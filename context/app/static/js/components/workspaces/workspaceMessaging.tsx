@@ -10,7 +10,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
+import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { WorkspacesEventCategories, WorkspacesEventInfo } from 'js/components/workspaces/types';
@@ -98,7 +98,7 @@ const text = {
   ],
 };
 
-const pageLinks = [
+const pages = [
   {
     onClick: () => trackRelevantPage('Tutorials'),
     link: '/tutorials/workspaces',
@@ -179,13 +179,7 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
               {body}
             </LabelledSectionText>
           ))}
-          <LabelledSectionText label="Relevant Pages" spacing={1}>
-            <Stack direction="row" spacing={1}>
-              {pageLinks.map((page) => (
-                <OutlinedLinkButton key={page.link} {...page} />
-              ))}
-            </Stack>
-          </LabelledSectionText>
+          <RelevantPagesSection pages={pages} />
         </Stack>
       </Stack>
       {!isAuthenticated && (
