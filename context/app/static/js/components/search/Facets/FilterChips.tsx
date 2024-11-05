@@ -1,4 +1,5 @@
 import React, { ReactElement, useCallback } from 'react';
+import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
@@ -53,9 +54,11 @@ const HierarchichalTermChip = React.memo(function HierarchicalTermChip({
 function ResetFiltersButton() {
   const resetFilters = useSearchStore((state) => state.resetFilters);
   return (
-    <Button variant="outlined" onClick={resetFilters}>
-      Clear Filters
-    </Button>
+    <Box flexShrink={0}>
+      <Button variant="outlined" onClick={resetFilters}>
+        Clear Filters
+      </Button>
+    </Box>
   );
 }
 
