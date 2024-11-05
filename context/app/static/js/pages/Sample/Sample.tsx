@@ -18,9 +18,16 @@ import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/Der
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { useEntitiesData } from 'js/hooks/useEntityData';
+import { isSample, Sample } from 'js/components/types';
 
 function SampleDetail() {
   const { entity } = useFlaskDataContext();
+
+  if (!isSample(entity)) {
+    // This should never happen; the Flask API should only return a Sample entity for this page.
+    throw new Error(`Invalid entity type: expected Sample, got ${entity.entity_type}`);
+  }
+
   const {
     uuid,
     protocol_url,
@@ -30,9 +37,10 @@ function SampleDetail() {
     entity_type,
     descendant_counts,
     ancestor_ids,
+    mapped_data_access_level,
   } = entity;
 
-  const [entities, loadingEntities] = useEntitiesData([uuid, ...ancestor_ids]);
+  const [entities, loadingEntities] = useEntitiesData<Sample>([uuid, ...ancestor_ids]);
   const entitiesWithMetadata = entities.filter((e) =>
     hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
   );
@@ -53,7 +61,10 @@ function SampleDetail() {
 
   useTrackID({ entity_type, hubmap_id });
 
-  const detailContext = useMemo(() => ({ hubmap_id, uuid }), [hubmap_id, uuid]);
+  const detailContext = useMemo(
+    () => ({ hubmap_id, uuid, mapped_data_access_level }),
+    [hubmap_id, uuid, mapped_data_access_level],
+  );
 
   if (loadingEntities) {
     return null;

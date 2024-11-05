@@ -1,0 +1,1 @@
+- Converted sample detail page to TypeScript.
