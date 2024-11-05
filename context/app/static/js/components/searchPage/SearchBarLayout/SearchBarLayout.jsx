@@ -2,24 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle, SimpleQueryString } from 'searchkit';
 
-import SvgIcon from '@mui/material/SvgIcon';
-import Download from '@mui/icons-material/Download';
-
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
-import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
+import { BulkDownloadButton } from 'js/components/bulkDownload/BulkDownloadButton';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
 import MetadataMenu from '../MetadataMenu';
 import TilesSortDropdown from '../TilesSortDropdown';
 import SelectedFilter from '../SelectedFilter';
 import { Flex, CenteredDiv } from './style';
 
-function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analyticsCategory }) {
-  const { openDialog } = useBulkDownloadDialog();
-  const { selectedRows } = useSelectableTableStore();
+const bulkDownloadTooltip =
+  'Bulk download files for selected datasets. If no datasets are selected, all datasets given the current filters will be selected.';
 
+function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analyticsCategory }) {
+  const { selectedRows } = useSelectableTableStore();
   const SwitchComponent = withAnalyticsCategory(
     isDevSearch ? DevSearchViewSwitch : SearchViewSwitch,
     analyticsCategory,
@@ -43,15 +40,7 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
           />
           {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
           {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
-          {!isDevSearch && (
-            <WhiteBackgroundIconTooltipButton
-              tooltip="Download dataset manifest"
-              onClick={() => openDialog(selectedRows)}
-              sx={{ mr: 1 }}
-            >
-              <SvgIcon color="primary" component={Download} />
-            </WhiteBackgroundIconTooltipButton>
-          )}
+          {!isDevSearch && <BulkDownloadButton uuids={selectedRows} tooltip={bulkDownloadTooltip} />}
           <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
         </CenteredDiv>
       </Flex>

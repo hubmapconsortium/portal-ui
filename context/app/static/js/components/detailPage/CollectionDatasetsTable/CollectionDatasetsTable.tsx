@@ -7,12 +7,9 @@ import type { Entity } from 'js/components/types';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
 
-import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
-import SvgIcon from '@mui/material/SvgIcon';
-import Download from '@mui/icons-material/Download';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
-import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
+import { BulkDownloadButton } from 'js/components/bulkDownload/BulkDownloadButton';
 import { useCollectionsDatasets } from './hooks';
 
 interface CollectionDatasetsTableProps {
@@ -27,7 +24,6 @@ function CollectionDatasetsTable({ datasets }: CollectionDatasetsTableProps) {
   } = useCollectionsDatasets({
     ids: datasets.map((d) => d.uuid),
   });
-  const { openDialog } = useBulkDownloadDialog();
 
   return (
     <CollapsibleDetailPageSection title="Datasets" id="datasets-table" icon={sectionIconMap.datasets}>
@@ -37,11 +33,7 @@ function CollectionDatasetsTable({ datasets }: CollectionDatasetsTableProps) {
             {datasets.length} Datasets
           </Typography>
         }
-        buttons={
-          <WhiteBackgroundIconTooltipButton tooltip="Download dataset manifest" onClick={() => openDialog(uuids)}>
-            <SvgIcon color="primary" component={Download} />
-          </WhiteBackgroundIconTooltipButton>
-        }
+        buttons={<BulkDownloadButton uuids={uuids} tooltip="Bulk download files for datasets in this table." />}
       />
       <Paper>
         <RelatedEntitiesTable columns={columns} entities={data} entityType="dataset" />
