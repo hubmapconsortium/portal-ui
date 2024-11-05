@@ -69,6 +69,7 @@ type SourceFields = Record<string, string[]>;
 
 export interface SearchState<V> {
   filters: FiltersType<V>;
+  initialFilters: FiltersType<V>;
   facets: FacetsType;
   defaultQuery?: esb.Query;
   search: string;
@@ -134,6 +135,7 @@ export type SearchStoreState = SearchState<Set<string>>;
 export type SearchURLState = Partial<SearchState<string[]>>;
 
 export interface SearchStoreActions {
+  resetFilters: () => void;
   setSearch: (search: string) => void;
   setView: (view: string) => void;
   setSortField: (sortField: SortField) => void;
@@ -237,6 +239,12 @@ function replaceURLSearchParams(state: SearchStoreState) {
 export const createStore = ({ initialState }: { initialState: SearchStoreState }) =>
   createStoreImmer<SearchStore>((set) => ({
     ...initialState,
+    resetFilters: () => {
+      set((state) => {
+        state.filters = state.initialFilters;
+        replaceURLSearchParams(state);
+      });
+    },
     setSearch: (search) => {
       set((state) => {
         state.search = search;
