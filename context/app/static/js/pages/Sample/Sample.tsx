@@ -18,7 +18,7 @@ import DerivedDatasetsSection from 'js/components/detailPage/derivedEntities/Der
 import useTrackID from 'js/hooks/useTrackID';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { useEntitiesData } from 'js/hooks/useEntityData';
-import { Dataset, Donor, isSample, Sample } from 'js/components/types';
+import { isSample, Sample } from 'js/components/types';
 
 function SampleDetail() {
   const { entity } = useFlaskDataContext();
@@ -40,10 +40,10 @@ function SampleDetail() {
     mapped_data_access_level,
   } = entity;
 
-  const [entities, loadingEntities] = useEntitiesData([uuid, ...ancestor_ids]);
+  const [entities, loadingEntities] = useEntitiesData<Sample>([uuid, ...ancestor_ids]);
   const entitiesWithMetadata = entities.filter((e) =>
-    hasMetadata({ targetEntityType: e.entity_type as 'Sample', currentEntity: e as Sample }),
-  ) as (Sample | Donor | Dataset)[];
+    hasMetadata({ targetEntityType: e.entity_type, currentEntity: e }),
+  );
 
   // TODO: Update design to reflect samples and datasets which have multiple origin samples with different organs.
   const origin_sample = origin_samples[0];
