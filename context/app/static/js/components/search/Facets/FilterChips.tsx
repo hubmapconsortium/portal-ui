@@ -1,5 +1,6 @@
-import React, { useCallback } from 'react';
+import React, { ReactElement, useCallback } from 'react';
 import Chip, { ChipProps } from '@mui/material/Chip';
+import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import { trackEvent } from 'js/helpers/trackers';
@@ -49,16 +50,25 @@ const HierarchichalTermChip = React.memo(function HierarchicalTermChip({
   return <FilterChip label={`${getFieldLabel(parentField)}: ${value}`} key={value} onDelete={filter} />;
 });
 
+function ResetFiltersButton() {
+  const resetFilters = useSearchStore((state) => state.resetFilters);
+  return (
+    <Button variant="outlined" onClick={resetFilters}>
+      Clear Filters
+    </Button>
+  );
+}
+
 function FilterChips() {
   const filters = useSearchStore((state) => state.filters);
   const facets = useSearchStore((state) => state.facets);
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterRange = useSearchStore((state) => state.filterRange);
 
-  return (
-    <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+  const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
+    <>
       {Object.entries(filters).map(([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues]) => {
-        if (isTermFilter(v)) {
+        if (isTermFilter(v) && v.values.size) {
           return [...v.values].map((val) => (
             <FilterChip
               label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: val })}`}
@@ -84,7 +94,12 @@ function FilterChips() {
         }
 
         if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
-          return Object.entries(v.values).map(([parent, children]) => {
+          const parentValues = Object.entries(v.values);
+
+          if (!parentValues.length) {
+            return null;
+          }
+          return parentValues.map(([parent, children]) => {
             return [...children].map((child) => (
               <HierarchichalTermChip
                 key={`${parent}-${child}`}
@@ -97,6 +112,15 @@ function FilterChips() {
         }
         return null;
       })}
+    </>
+  );
+
+  return (
+    <Stack direction="row" spacing={2} justifyContent="space-between" sx={{ width: '100%' }}>
+      <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
+        {chips}
+      </Stack>
+      {Boolean(chips?.props?.children.filter((c) => c).length) && <ResetFiltersButton />}
     </Stack>
   );
 }
