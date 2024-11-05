@@ -211,13 +211,78 @@ function getTotalHitsCount(results?: SearchResponseBody<unknown, unknown>) {
   return total?.value;
 }
 
-function extractIDs(results?: SearchResponseBody<unknown, unknown>) {
-  return results?.hits?.hits?.map((hit) => hit._id);
+function extractIDs(results?: SearchResponseBody<unknown, unknown>): string[] {
+  return results?.hits?.hits?.map((hit) => hit._id) ?? [];
 }
 
-async function fetchAllIDs(...args: Parameters<typeof fetchSearchData>) {
-  const results = await fetchSearchData(...args);
-  return extractIDs(results);
+// Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
+function getSearchAfterSort(hits: SearchResponseBody<unknown, unknown>['hits']['hits']) {
+  const { sort } = hits.slice(-1)[0];
+  return sort;
+}
+
+/**
+ * Generator for sequentially fetching multiple pages of search data from the API
+ * while using the search_after parameter to paginate.
+ * @param query The search request to fetch
+ * @param elasticsearchEndpoint The endpoint to fetch the data from
+ * @param groupsToken The auth token to use for the request
+ * @param numberOfPagesToRequest The number of pages to fetch
+ */
+async function* fetchAllPages(
+  query: SearchRequest,
+  elasticsearchEndpoint: string,
+  groupsToken: string,
+  numberOfPagesToRequest: number,
+) {
+  const q = query;
+
+  try {
+    let i = 0;
+    while (i < numberOfPagesToRequest) {
+      // disabling eslint rule because that's the whole point of this generator
+      // eslint-disable-next-line no-await-in-loop
+      const firstPageResults = await fetchSearchData(q, elasticsearchEndpoint, groupsToken);
+      yield firstPageResults;
+      q.search_after = getSearchAfterSort(firstPageResults.hits.hits);
+      i += 1;
+    }
+  } catch (error) {
+    console.error("Error fetching all pages' data", error);
+  }
+}
+
+/**
+ * Fetcher for useAllSearchIDs
+ *
+ * @param args.query The search request to fetch
+ * @param args.elasticsearchEndpoint The endpoint to fetch the data from
+ * @param args.groupsToken The auth token to use for the request
+ * @param args.useDefaultQuery Whether to apply the default query restrictions
+ * @param args.numberOfPagesToRequest The number of pages to fetch
+ * @returns
+ */
+async function fetchAllIDs({
+  query: q,
+  elasticsearchEndpoint,
+  groupsToken,
+  useDefaultQuery,
+  numberOfPagesToRequest,
+}: {
+  query: SearchRequest;
+  elasticsearchEndpoint: string;
+  groupsToken: string;
+  useDefaultQuery: boolean;
+  numberOfPagesToRequest: number;
+}) {
+  const query = useDefaultQuery ? addRestrictionsToQuery(q) : q;
+  const ids = new Set<string>();
+  // For await loop is the clearest way to fetch all pages sequentially.
+  // eslint-disable-next-line no-restricted-syntax
+  for await (const results of fetchAllPages(query, elasticsearchEndpoint, groupsToken, numberOfPagesToRequest)) {
+    extractIDs(results).forEach((id) => ids.add(id));
+  }
+  return Array.from(ids);
 }
 
 // We do not want the query to revalidate when _source or sort change.
@@ -243,36 +308,33 @@ export function useAllSearchIDs(
   );
 
   const totalHitsCount = getTotalHitsCount(searchData);
-  const numberOfPagesToRequest = totalHitsCount ? Math.ceil(10000 / totalHitsCount) : undefined;
 
-  const getKey: SWRInfiniteKeyLoader = useCallback(() => {
-    if (numberOfPagesToRequest === undefined) {
+  // Creates a key object for useSWR to fetch the IDs
+  // The key is null if the totalHitsCount is undefined
+  // Otherwise, it returns an object with the query, endpoint, and token
+  const getKey = useCallback(() => {
+    if (totalHitsCount === undefined) {
       return null;
     }
 
-    return [
-      { ...query, ...sharedIDsQueryClauses },
+    const numberOfPagesToRequest = Math.ceil(totalHitsCount / 10_000);
+
+    const q = { ...query, ...sharedIDsQueryClauses, size: 10_000 } as SearchRequest;
+    return {
+      query: q,
       elasticsearchEndpoint,
       groupsToken,
       useDefaultQuery,
       numberOfPagesToRequest,
-    ];
-  }, [query, elasticsearchEndpoint, groupsToken, useDefaultQuery, numberOfPagesToRequest]);
+    };
+  }, [totalHitsCount, query, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
 
-  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument
-  // @ts-expect-error - revisit to make these keys more type safe
-  const { data } = useSWRInfinite(getKey, (args) => fetchAllIDs(...args), {
+  const { data } = useSWR(getKey, (args) => fetchAllIDs(args), {
     fallbackData: [],
     ...swrConfigRest,
   });
 
   return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount };
-}
-
-// Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
-function getSearchAfterSort(hits: SearchResponseBody<unknown, unknown>['hits']['hits']) {
-  const { sort } = hits.slice(-1)[0];
-  return sort;
 }
 
 function getCombinedHits(pagesResults: SearchResponseBody<unknown, unknown>[]) {
