@@ -1,4 +1,5 @@
 import React, { useState, useCallback } from 'react';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import IndeterminateCheckBoxOutlinedIcon from '@mui/icons-material/IndeterminateCheckBoxOutlined';
 import Accordion from '@mui/material/Accordion';
@@ -230,6 +231,22 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
 
   const hasChildBuckets = childBuckets?.length;
   const childValues = childBuckets.map((b) => b.key);
+
+  if (childValues.length === 1 && childBuckets[0].key === label) {
+    return (
+      // 26px is the width of the Accordion's expand icon.
+      <Box pr="26px">
+        <HierarchicalFacetParent
+          childValues={childValues}
+          label={label}
+          field={field}
+          title={title}
+          {...rest}
+          indeterminate={childState?.size > 0 && !childValues.every((v) => childState?.has(v))}
+        />
+      </Box>
+    );
+  }
 
   return (
     <Accordion
