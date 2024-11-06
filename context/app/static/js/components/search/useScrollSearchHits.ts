@@ -61,7 +61,7 @@ export function useScrollSearchHits<Doc, Aggs>({
   endpoint,
   swrConfig,
   ...rest
-}: Omit<SearchStoreState, 'view' | 'type' | 'analyticsCategory'>) {
+}: Omit<SearchStoreState, 'view' | 'type' | 'analyticsCategory' | 'initialFilters'>) {
   const authHeader = useAuthHeader();
 
   const getKey: SWRInfiniteKeyLoader = useCallback(

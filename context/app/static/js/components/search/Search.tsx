@@ -285,6 +285,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
   const initialState = {
     ...merge({ search, sortField, filters }, initialUrlState, options),
     ...rest,
+    initialFilters: filters,
   };
 
   return (
