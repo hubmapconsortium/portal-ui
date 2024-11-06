@@ -1,2 +1,0 @@
-- Adjust homepage queries to exclude donors/samples without descended datasets.
-- Adjust homepage queries to exclude datasets in a non-QA/Published state.

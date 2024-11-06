@@ -1,1 +1,0 @@
-- Adjust ID fetching for infinite scroll table to ensure "select all" functionality works as expected.

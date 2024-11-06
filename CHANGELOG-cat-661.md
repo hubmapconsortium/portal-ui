@@ -1,2 +1,0 @@
-- Fix View PDF button disappearing while PDF is processing.
-- Remove square white background behind PDF modal's close button.

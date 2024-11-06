@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.14.0 - 2024-11-06
+
+- Adjust ID fetching for infinite scroll table to ensure "select all" functionality works as expected.
+- Fix View PDF button disappearing while PDF is processing.
+- Remove square white background behind PDF modal's close button.
+- Converted sample detail page to TypeScript.
+- Add "View Vitessce Configuration" button to processed datasets with visualizations.
+- Add space between footer columns to improve readability.
+- Adjust homepage queries to exclude donors/samples without descended datasets.
+- Adjust homepage queries to exclude datasets in a non-QA/Published state.
+- Revise Collection DOI links to copy on click instead of opening a new tab that leads to the same page.
+- Remove workspace menu button from publication pages.
+- Fix styling for provenance graph to avoid tall, difficult to read graphs.
+
+
+
 ## v1.13.1 - 2024-10-31
 
 - Fix parent UUID handling for multi-vitessce conf datasets.

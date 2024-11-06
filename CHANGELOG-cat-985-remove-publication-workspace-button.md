@@ -1,1 +1,0 @@
-- Remove workspace menu button from publication pages.
