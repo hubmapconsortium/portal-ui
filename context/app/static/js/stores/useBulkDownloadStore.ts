@@ -1,7 +1,7 @@
 import { create, StoreApi } from 'zustand';
 import { Dataset } from 'js/components/types';
 
-export type BulkDownloadDataset = Pick<Dataset, 'hubmap_id' | 'processing' | 'files' | 'uuid'>;
+export type BulkDownloadDataset = Pick<Dataset, 'hubmap_id' | 'processing' | 'files' | 'uuid' | 'processing_type'>;
 
 interface BulkDownloadStore {
   isOpen: boolean;

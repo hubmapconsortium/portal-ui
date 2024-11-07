@@ -32,7 +32,7 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
             SimpleQueryString(query.match(/^\s*HBM\S+\s*$/i) ? `"${query}"` : query, options)
           }
         />
-        <CenteredDiv>
+        <CenteredDiv sx={{ marginX: '1rem' }}>
           <SortingSelector
             options={sortOptions}
             listComponent={withAnalyticsCategory(TilesSortDropdown, analyticsCategory)}
@@ -40,7 +40,13 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
           />
           {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
           {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
-          {!isDevSearch && <BulkDownloadButton uuids={selectedRows} tooltip={bulkDownloadTooltip} />}
+          {!isDevSearch && (
+            <BulkDownloadButton
+              uuids={selectedRows}
+              tooltip={bulkDownloadTooltip}
+              sx={(theme) => ({ margin: theme.spacing(0, 1) })}
+            />
+          )}
           <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
         </CenteredDiv>
       </Flex>

@@ -45,7 +45,7 @@ function BulkDownloadExplanation() {
           Choose download options to bulk download files from your selected datasets. Your selection of files will
           generate a manifest file, which can be used with the{' '}
           <OutboundLink href={links.documentation}>HuBMAP Command Line Transfer (CLT)</OutboundLink> tool for
-          downloading.
+          downloading. An option to download a tsv file of the metadata is also available.
         </Box>
         <Box>
           To download the files included in the manifest file,{' '}

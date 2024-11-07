@@ -97,6 +97,7 @@ export type CreationAction =
 export interface Dataset extends Entity {
   entity_type: 'Dataset';
   processing: 'raw' | 'processed';
+  processing_type?: string;
   pipeline?: string;
   assay_display_name: string[];
   is_component?: boolean;

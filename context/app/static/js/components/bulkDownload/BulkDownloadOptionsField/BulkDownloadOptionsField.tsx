@@ -1,17 +1,15 @@
 import React from 'react';
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form';
 
-import Radio from '@mui/material/Radio';
 import Box from '@mui/material/Box';
-import RadioGroup from '@mui/material/RadioGroup';
+import Stack from '@mui/material/Stack';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import FormLabel from '@mui/material/FormLabel';
+import FormGroup from '@mui/material/FormGroup';
+import Checkbox from '@mui/material/Checkbox';
+import Divider from '@mui/material/Divider';
 
-const downloadOptions = {
-  all: 'Select all files (raw and processed).',
-  raw: 'Select only raw files.',
-  processed: 'Select only processed files.',
-};
+import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
 
 type BulkDownloadOptionsFieldProps<FormType extends FieldValues> = Pick<
   UseControllerProps<FormType>,
@@ -21,6 +19,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
   control,
   name,
 }: BulkDownloadOptionsFieldProps<FormType>) {
+  const { downloadOptions } = useBulkDownloadDialog();
   const { field } = useController({
     name,
     control,
@@ -35,16 +34,43 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
       >
         Download Options
       </FormLabel>
-      <RadioGroup
-        aria-labelledby="bulk-download-options"
-        name="bulk-download-options-radio-buttons"
-        value={field.value}
-        onChange={(e, value) => field.onChange(value)}
-      >
-        {Object.entries(downloadOptions).map(([key, value]) => (
-          <FormControlLabel value={key} control={<Radio />} label={value} key={key} />
-        ))}
-      </RadioGroup>
+      <FormGroup aria-labelledby="bulk-download-options">
+        <FormControlLabel
+          key="all"
+          control={
+            <Checkbox
+              checked={downloadOptions.every((option) => (field.value as string[]).includes(option.key))}
+              onChange={(e) => {
+                const newValue = e.target.checked
+                  ? [...new Set([...(field.value as string[]), ...downloadOptions])]
+                  : (field.value as string[]).filter((item) => !downloadOptions.find((option) => option.key === item));
+                field.onChange(newValue);
+              }}
+            />
+          }
+          label="Select all files."
+        />
+        <Divider />
+        <Stack paddingLeft={2}>
+          {downloadOptions.map(({ key, label }) => (
+            <FormControlLabel
+              key={key}
+              control={
+                <Checkbox
+                  checked={(field.value as string[]).includes(key)}
+                  onChange={(e) => {
+                    const newValue = e.target.checked
+                      ? [...field.value, key]
+                      : (field.value as string[]).filter((item: string) => item !== key);
+                    field.onChange(newValue);
+                  }}
+                />
+              }
+              label={`Select all ${label} files.`}
+            />
+          ))}
+        </Stack>
+      </FormGroup>
     </Box>
   );
 }

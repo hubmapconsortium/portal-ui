@@ -12,8 +12,31 @@ import { getIDsQuery } from 'js/helpers/queries';
 import { fetchSearchData } from 'js/hooks/useSearchData';
 import { useAppContext } from 'js/components/Contexts';
 
+export const allBulkDownloadOptions: {
+  key: string;
+  label: string;
+  isIncluded: (dataset: BulkDownloadDataset) => boolean;
+}[] = [
+  {
+    key: 'raw',
+    label: 'raw',
+    isIncluded: (dataset: BulkDownloadDataset) => dataset.processing === 'raw',
+  },
+  {
+    key: 'central',
+    label: 'HuBMAP centrally processed',
+    isIncluded: (dataset: BulkDownloadDataset) => dataset.processing_type === 'hubmap',
+  },
+  {
+    key: 'external',
+    label: 'lab or externally processed',
+    isIncluded: (dataset: BulkDownloadDataset) =>
+      dataset.processing === 'processed' && dataset.processing_type !== 'hubmap',
+  },
+];
+
 export interface BulkDownloadFormTypes {
-  bulkDownloadOptions: string;
+  bulkDownloadOptions: string[];
   bulkDownloadMetadata: boolean;
 }
 
@@ -34,7 +57,7 @@ function useBulkDownloadForm() {
     formState: { errors },
   } = useForm<BulkDownloadFormTypes>({
     defaultValues: {
-      bulkDownloadOptions: 'all',
+      bulkDownloadOptions: [],
       bulkDownloadMetadata: false,
     },
     mode: 'onChange',
@@ -58,10 +81,14 @@ function useBulkDownloadDialog() {
 
   const [datasets, setDatasets] = useState<BulkDownloadDataset[]>([]);
 
+  const downloadOptions = allBulkDownloadOptions
+    .filter((option) => datasets.some((dataset) => option.isIncluded(dataset)))
+    .map(({ key, label }) => ({ key, label }));
+
   useEffect(() => {
     const datasetQuery = {
       query: getIDsQuery([...uuids]),
-      _source: ['hubmap_id', 'processing', 'uuid', 'files'],
+      _source: ['hubmap_id', 'processing', 'uuid', 'files', 'processing_type'],
       size: 1000,
     };
     fetchSearchData(datasetQuery, elasticsearchEndpoint, groupsToken)
@@ -106,12 +133,11 @@ function useBulkDownloadDialog() {
 
   const submit = useCallback(
     ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
-      const datasetsToDownload = datasets.filter((dataset) => {
-        if (bulkDownloadOptions === 'all') {
-          return true;
-        }
-        return bulkDownloadOptions === 'raw' ? dataset.processing === 'raw' : dataset.processing === 'processed';
-      });
+      const datasetsToDownload = datasets.filter((dataset) =>
+        bulkDownloadOptions.some((option) =>
+          allBulkDownloadOptions.find(({ key }) => key === option)?.isIncluded(dataset),
+        ),
+      );
 
       if (datasetsToDownload.length === 0) {
         toastError('No datasets were included in your download selection.');
@@ -153,6 +179,7 @@ function useBulkDownloadDialog() {
     control,
     isOpen,
     datasets,
+    downloadOptions,
     reset,
     close,
     submit,
