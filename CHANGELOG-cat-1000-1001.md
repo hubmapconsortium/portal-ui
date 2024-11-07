@@ -1,0 +1,1 @@
+- Fix minor graphical issues in homepage hero section.
