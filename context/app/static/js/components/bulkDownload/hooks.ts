@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -9,8 +9,7 @@ import { createDownloadUrl } from 'js/helpers/functions';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { getIDsQuery } from 'js/helpers/queries';
-import { fetchSearchData } from 'js/hooks/useSearchData';
-import { useAppContext } from 'js/components/Contexts';
+import { useSearchHits } from 'js/hooks/useSearchData';
 
 export const allBulkDownloadOptions: {
   key: string;
@@ -79,27 +78,19 @@ function useBulkDownloadDialog() {
   const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastError } = useSnackbarActions();
-  const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
-  const [datasets, setDatasets] = useState<BulkDownloadDataset[]>([]);
+  const datasetQuery = {
+    query: getIDsQuery([...uuids]),
+    _source: ['hubmap_id', 'processing', 'uuid', 'files', 'processing_type'],
+    size: 1000,
+  };
+
+  const { searchHits } = useSearchHits<BulkDownloadDataset>(datasetQuery);
+  const datasets = searchHits.map(({ _source }) => _source);
 
   const downloadOptions = allBulkDownloadOptions
     .filter((option) => datasets.some((dataset) => option.isIncluded(dataset)))
     .map(({ key, label }) => ({ key, label }));
-
-  useEffect(() => {
-    const datasetQuery = {
-      query: getIDsQuery([...uuids]),
-      _source: ['hubmap_id', 'processing', 'uuid', 'files', 'processing_type'],
-      size: 1000,
-    };
-    fetchSearchData(datasetQuery, elasticsearchEndpoint, groupsToken)
-      .then((response) => {
-        const results = response?.hits?.hits || [];
-        setDatasets(results.map(({ _source }) => _source as BulkDownloadDataset));
-      })
-      .catch((e) => console.error('Error fetching datasets:', e));
-  }, [uuids, elasticsearchEndpoint, groupsToken]);
 
   const handleClose = useCallback(() => {
     reset();
