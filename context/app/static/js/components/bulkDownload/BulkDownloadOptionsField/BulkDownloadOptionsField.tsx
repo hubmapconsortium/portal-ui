@@ -41,9 +41,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
             <Checkbox
               checked={downloadOptions.every((option) => (field.value as string[]).includes(option.key))}
               onChange={(e) => {
-                const newValue = e.target.checked
-                  ? [...new Set([...(field.value as string[]), ...downloadOptions])]
-                  : (field.value as string[]).filter((item) => !downloadOptions.find((option) => option.key === item));
+                const newValue = e.target.checked ? downloadOptions.map((option) => option.key) : [];
                 field.onChange(newValue);
               }}
             />
