@@ -3,7 +3,7 @@ import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 
 import Stack from '@mui/material/Stack';
 import FormLabel from '@mui/material/FormLabel';
-import Switch from '@mui/material/Switch';
+import { PrimarySwitch } from 'js/shared-styles/switches';
 
 type BulkDownloadMetadataFieldProps<FormType extends FieldValues> = Pick<
   UseControllerProps<FormType>,
@@ -26,7 +26,7 @@ function BulkDownloadMetadataField<FormType extends FieldValues>({
       >
         Download Metadata File (TSV)
       </FormLabel>
-      <Switch
+      <PrimarySwitch
         checked={field.value === true}
         onChange={(e) => field.onChange(!!e.target.checked)}
         inputProps={{ 'aria-labelledby': 'bulk-download-metadata' }}

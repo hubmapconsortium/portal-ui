@@ -42,7 +42,8 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
           {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
           {!isDevSearch && (
             <BulkDownloadButton
-              uuids={selectedRows}
+              // Empty list => download all hits (TODO)
+              uuids={selectedRows.size > 0 ? [...selectedRows] : []}
               tooltip={bulkDownloadTooltip}
               sx={(theme) => ({ margin: theme.spacing(0, 1) })}
             />

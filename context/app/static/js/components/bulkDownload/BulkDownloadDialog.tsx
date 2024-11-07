@@ -55,9 +55,9 @@ function BulkDownloadDescription() {
         <Box>
           To download the files included in the manifest file,{' '}
           <OutboundLink href={links.installation}>install the HuBMAP CLT</OutboundLink> (if not already installed) and
-          follow instructions for how to use it with the manifest file. A{' '}
-          <OutboundLink href={links.tutorial}>tutorial</OutboundLink> is available to guide you through the entire
-          process.
+          follow <OutboundLink href={links.documentation}>instructions</OutboundLink> for how to use it with the
+          manifest file. A <OutboundLink href={links.tutorial}>tutorial</OutboundLink> is available to guide you through
+          the entire process.
         </Box>
         <RelevantPagesSection pages={pages} />
       </Stack>
@@ -113,9 +113,11 @@ function DownloadSelection({
       <BulkDownloadAdvancedSelections />
     </Step>
   ) : (
-    <Alert severity="warning">
-      <Typography>Files are not available for any of the selected datasets.</Typography>
-    </Alert>
+    <Box marginTop={1}>
+      <Alert severity="warning">
+        <Typography>Files are not available for any of the selected datasets.</Typography>
+      </Alert>
+    </Box>
   );
 }
 

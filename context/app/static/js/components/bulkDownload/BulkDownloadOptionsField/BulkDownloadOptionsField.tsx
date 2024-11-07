@@ -26,6 +26,8 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
     rules: { required: true },
   });
 
+  const multipleOptions = downloadOptions.length > 1;
+
   return (
     <Box>
       <FormLabel
@@ -35,7 +37,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
         Download Options
       </FormLabel>
       <FormGroup aria-labelledby="bulk-download-options">
-        {downloadOptions.length > 1 && (
+        {multipleOptions && (
           <Stack>
             <FormControlLabel
               key="all"
@@ -53,7 +55,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
             <Divider />
           </Stack>
         )}
-        <Stack paddingLeft={2}>
+        <Stack paddingLeft={multipleOptions ? 2 : 1}>
           {downloadOptions.map(({ key, label }) => (
             <FormControlLabel
               key={key}
