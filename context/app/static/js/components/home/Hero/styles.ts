@@ -48,7 +48,7 @@ export const HeroTabContainer = styled(Box)<HeroSubContainerProps>(({ $index, $a
 
   [theme.breakpoints.up('md')]: {
     backgroundColor: $activeSlide === $index ? props.bgcolor : theme.palette.common.white,
-    ':not(:last-child)': {
+    '&:not(:last-child)': {
       borderRight: `1px solid ${theme.palette.grey[200]}`,
     },
   },
