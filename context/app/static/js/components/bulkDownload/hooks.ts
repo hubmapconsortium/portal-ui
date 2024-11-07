@@ -3,7 +3,7 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { bulkDownloadOptionsField } from 'js/components/bulkDownload/bulkDownloadFormFields';
+import { bulkDownloadOptionsField, bulkDownloadMetadataField } from 'js/components/bulkDownload/bulkDownloadFormFields';
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
@@ -42,8 +42,8 @@ export interface BulkDownloadFormTypes {
 
 const schema = z
   .object({
-    bulkDownloadOptions: bulkDownloadOptionsField.bulkDownloadOptions,
-    bulkDownloadMetadata: z.boolean().optional(),
+    ...bulkDownloadOptionsField,
+    ...bulkDownloadMetadataField,
   })
   .partial()
   .required({ bulkDownloadOptions: true });
@@ -55,6 +55,7 @@ function useBulkDownloadForm() {
     reset,
     setValue,
     formState: { errors },
+    trigger,
   } = useForm<BulkDownloadFormTypes>({
     defaultValues: {
       bulkDownloadOptions: [],
@@ -70,12 +71,13 @@ function useBulkDownloadForm() {
     control,
     errors,
     reset,
+    trigger,
   };
 }
 
 function useBulkDownloadDialog() {
   const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
-  const { control, handleSubmit, reset } = useBulkDownloadForm();
+  const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastError } = useSnackbarActions();
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
@@ -175,11 +177,21 @@ function useBulkDownloadDialog() {
     [submit, handleClose, toastError],
   );
 
+  // Trigger error on initial load for required fields, because no default options are given
+  useEffect(() => {
+    if (isOpen) {
+      trigger('bulkDownloadOptions').catch((e) => {
+        console.error(e);
+      });
+    }
+  }, [isOpen, trigger]);
+
   return {
     control,
     isOpen,
     datasets,
     downloadOptions,
+    errors,
     reset,
     close,
     submit,

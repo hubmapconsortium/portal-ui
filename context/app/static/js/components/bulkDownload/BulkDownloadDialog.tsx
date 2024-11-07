@@ -86,7 +86,7 @@ function DownloadOptionsDescription() {
 const formId = 'bulk-download-form';
 
 function BulkDownloadDialog() {
-  const { handleSubmit, onSubmit, isOpen, handleClose, control, downloadOptions } = useBulkDownloadDialog();
+  const { handleSubmit, onSubmit, handleClose, isOpen, errors, control, downloadOptions } = useBulkDownloadDialog();
 
   return (
     <DialogModal
@@ -123,7 +123,7 @@ function BulkDownloadDialog() {
           <Button type="button" onClick={handleClose}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" form={formId}>
+          <Button type="submit" variant="contained" form={formId} disabled={Object.keys(errors).length > 0}>
             Generate Download Manifest
           </Button>
         </Stack>

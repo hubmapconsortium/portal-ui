@@ -12,13 +12,13 @@ function withCustomMessage(message: string): z.ZodErrorMap {
 const bulkDownloadOptionsField = {
   bulkDownloadOptions: z
     .array(z.string(), {
-      errorMap: withCustomMessage('At least one template must be selected. Please select a template.'),
+      errorMap: withCustomMessage('My special error message'),
     })
-    .default([]),
+    .nonempty(),
 };
 
-const bulkDownloadMetadataField = z.object({
+const bulkDownloadMetadataField = {
   bulkDownloadMetadata: z.boolean().optional(),
-});
+};
 
 export { bulkDownloadOptionsField, bulkDownloadMetadataField };
