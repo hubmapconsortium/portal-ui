@@ -85,7 +85,7 @@ function useBulkDownloadDialog() {
     size: 1000,
   };
 
-  const { searchHits } = useSearchHits<BulkDownloadDataset>(datasetQuery);
+  const { searchHits, isLoading } = useSearchHits<BulkDownloadDataset>(datasetQuery);
   const datasets = searchHits.map(({ _source }) => _source);
 
   const downloadOptions = allBulkDownloadOptions
@@ -183,6 +183,7 @@ function useBulkDownloadDialog() {
     datasets,
     downloadOptions,
     errors,
+    isLoading,
     reset,
     close,
     submit,

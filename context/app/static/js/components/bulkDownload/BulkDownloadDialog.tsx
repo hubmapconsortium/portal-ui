@@ -2,6 +2,8 @@ import React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/DialogModal';
@@ -15,7 +17,6 @@ import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection
 import BulkDownloadAdvancedSelections from 'js/components/bulkDownload/BulkDownloadAdvancedSelections';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Alert } from 'js/shared-styles/alerts';
-import { Typography } from '@mui/material';
 
 const links = {
   tutorial: 'TODO',
@@ -83,10 +84,35 @@ function DownloadOptionsDescription() {
   );
 }
 
+function DownloadSelection() {
+  const { control, downloadOptions, isLoading } = useBulkDownloadDialog();
+
+  if (isLoading) {
+    return <Skeleton variant="text" height="20rem" />;
+  }
+
+  return downloadOptions.length > 0 ? (
+    <Step title="Download Options" hideRequiredText>
+      <DownloadOptionsDescription />
+      <SummaryPaper sx={{ marginBottom: 1 }}>
+        <Stack direction="column" spacing={2}>
+          <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" />
+          <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
+        </Stack>
+      </SummaryPaper>
+      <BulkDownloadAdvancedSelections />
+    </Step>
+  ) : (
+    <Alert severity="warning">
+      <Typography>Files are not available for any of the selected datasets.</Typography>
+    </Alert>
+  );
+}
+
 const formId = 'bulk-download-form';
 
 function BulkDownloadDialog() {
-  const { handleSubmit, onSubmit, handleClose, isOpen, errors, control, downloadOptions } = useBulkDownloadDialog();
+  const { handleSubmit, onSubmit, handleClose, isOpen, errors } = useBulkDownloadDialog();
 
   return (
     <DialogModal
@@ -95,24 +121,9 @@ function BulkDownloadDialog() {
       content={
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
-          <Stack direction="column" spacing={2}>
+          <Stack>
             <BulkDownloadDescription />
-            {downloadOptions.length > 0 ? (
-              <Step title="Download Options" hideRequiredText>
-                <DownloadOptionsDescription />
-                <SummaryPaper sx={{ marginBottom: 1 }}>
-                  <Stack direction="column" spacing={2}>
-                    <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" />
-                    <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
-                  </Stack>
-                </SummaryPaper>
-                <BulkDownloadAdvancedSelections />
-              </Step>
-            ) : (
-              <Alert severity="warning">
-                <Typography>Files are not available for any of the selected datasets.</Typography>
-              </Alert>
-            )}
+            <DownloadSelection />
           </Stack>
         </form>
       }
