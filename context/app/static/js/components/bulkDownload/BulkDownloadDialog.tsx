@@ -7,7 +7,7 @@ import Typography from '@mui/material/Typography';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/DialogModal';
-import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
+import { BulkDownloadFormTypes, useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import Step from 'js/shared-styles/surfaces/Step';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
@@ -17,6 +17,7 @@ import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection
 import BulkDownloadAdvancedSelections from 'js/components/bulkDownload/BulkDownloadAdvancedSelections';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Alert } from 'js/shared-styles/alerts';
+import { Control } from 'react-hook-form';
 
 const links = {
   tutorial: 'TODO',
@@ -84,9 +85,18 @@ function DownloadOptionsDescription() {
   );
 }
 
-function DownloadSelection() {
-  const { control, downloadOptions, isLoading } = useBulkDownloadDialog();
-
+function DownloadSelection({
+  control,
+  downloadOptions,
+  isLoading,
+}: {
+  control: Control<BulkDownloadFormTypes>;
+  downloadOptions: {
+    key: string;
+    label: string;
+  }[];
+  isLoading: boolean;
+}) {
   if (isLoading) {
     return <Skeleton variant="text" height="20rem" />;
   }
@@ -112,7 +122,8 @@ function DownloadSelection() {
 const formId = 'bulk-download-form';
 
 function BulkDownloadDialog() {
-  const { handleSubmit, onSubmit, handleClose, isOpen, errors } = useBulkDownloadDialog();
+  const { handleSubmit, onSubmit, handleClose, isOpen, errors, control, isLoading, downloadOptions } =
+    useBulkDownloadDialog();
 
   return (
     <DialogModal
@@ -123,7 +134,7 @@ function BulkDownloadDialog() {
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
           <Stack>
             <BulkDownloadDescription />
-            <DownloadSelection />
+            <DownloadSelection control={control} downloadOptions={downloadOptions} isLoading={isLoading} />
           </Stack>
         </form>
       }

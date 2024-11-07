@@ -35,22 +35,24 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
         Download Options
       </FormLabel>
       <FormGroup aria-labelledby="bulk-download-options">
-        {downloadOptions.length > 0 && (
-          <FormControlLabel
-            key="all"
-            control={
-              <Checkbox
-                checked={downloadOptions.every((option) => (field.value as string[]).includes(option.key))}
-                onChange={(e) => {
-                  const newValue = e.target.checked ? downloadOptions.map((option) => option.key) : [];
-                  field.onChange(newValue);
-                }}
-              />
-            }
-            label="Select all files."
-          />
+        {downloadOptions.length > 1 && (
+          <Stack>
+            <FormControlLabel
+              key="all"
+              control={
+                <Checkbox
+                  checked={downloadOptions.every((option) => (field.value as string[]).includes(option.key))}
+                  onChange={(e) => {
+                    const newValue = e.target.checked ? downloadOptions.map((option) => option.key) : [];
+                    field.onChange(newValue);
+                  }}
+                />
+              }
+              label="Select all files."
+            />
+            <Divider />
+          </Stack>
         )}
-        <Divider />
         <Stack paddingLeft={2}>
           {downloadOptions.map(({ key, label }) => (
             <FormControlLabel
