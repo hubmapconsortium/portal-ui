@@ -4,12 +4,12 @@ import { FieldValues, useController, UseControllerProps } from 'react-hook-form'
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import FormControlLabel from '@mui/material/FormControlLabel';
-import FormLabel from '@mui/material/FormLabel';
 import FormGroup from '@mui/material/FormGroup';
 import Checkbox from '@mui/material/Checkbox';
 import Divider from '@mui/material/Divider';
 
 import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
+import { StyledFormLabel } from 'js/components/bulkDownload/style';
 
 type BulkDownloadOptionsFieldProps<FormType extends FieldValues> = Pick<
   UseControllerProps<FormType>,
@@ -30,12 +30,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
 
   return (
     <Box>
-      <FormLabel
-        id="bulk-download-options"
-        sx={(theme) => ({ ...theme.typography.button, color: theme.palette.text.primary })}
-      >
-        Download Options
-      </FormLabel>
+      <StyledFormLabel id="bulk-download-options">Download Options</StyledFormLabel>
       <FormGroup aria-labelledby="bulk-download-options">
         {multipleOptions && (
           <Stack>

@@ -15,7 +15,6 @@ import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOpt
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
 import { OutboundLink } from 'js/shared-styles/Links';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
-import BulkDownloadAdvancedSelections from 'js/components/bulkDownload/BulkDownloadAdvancedSelections';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Alert } from 'js/shared-styles/alerts';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
@@ -30,10 +29,11 @@ const links = {
 };
 
 const pages = [
-  {
-    link: links.tutorial,
-    children: 'Tutorial',
-  },
+  // TODO: uncomment once tutorial is created
+  // {
+  //   link: links.tutorial,
+  //   children: 'Tutorial',
+  // },
   {
     link: links.installation,
     children: 'HuBMAP CLT Installation',
@@ -60,8 +60,10 @@ function DownloadDescription() {
           To download the files included in the manifest file,{' '}
           <OutboundLink href={links.installation}>install the HuBMAP CLT</OutboundLink> (if not already installed) and
           follow <OutboundLink href={links.documentation}>instructions</OutboundLink> for how to use it with the
-          manifest file. A <OutboundLink href={links.tutorial}>tutorial</OutboundLink> is available to guide you through
-          the entire process.
+          manifest file.
+          {/* TODO: uncomment once tutorial is created */}
+          {/* A <OutboundLink href={links.tutorial}>tutorial</OutboundLink> is available to guide you through
+          the entire process. */}
         </Box>
         <RelevantPagesSection pages={pages} />
       </Stack>
@@ -144,7 +146,6 @@ function DownloadSelection({
           <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
         </Stack>
       </SummaryPaper>
-      <BulkDownloadAdvancedSelections />
     </Step>
   ) : (
     <Box paddingTop={1}>

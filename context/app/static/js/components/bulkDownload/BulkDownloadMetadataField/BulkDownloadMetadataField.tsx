@@ -2,8 +2,8 @@ import React from 'react';
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form';
 
 import Stack from '@mui/material/Stack';
-import FormLabel from '@mui/material/FormLabel';
 import { PrimarySwitch } from 'js/shared-styles/switches';
+import { StyledFormLabel } from 'js/components/bulkDownload/style';
 
 type BulkDownloadMetadataFieldProps<FormType extends FieldValues> = Pick<
   UseControllerProps<FormType>,
@@ -20,12 +20,7 @@ function BulkDownloadMetadataField<FormType extends FieldValues>({
 
   return (
     <Stack>
-      <FormLabel
-        id="bulk-download-metadata"
-        sx={(theme) => ({ ...theme.typography.button, color: theme.palette.text.primary })}
-      >
-        Download Metadata File (TSV)
-      </FormLabel>
+      <StyledFormLabel id="bulk-download-metadata">Download Metadata File (TSV)</StyledFormLabel>
       <PrimarySwitch
         checked={field.value === true}
         onChange={(e) => field.onChange(!!e.target.checked)}
