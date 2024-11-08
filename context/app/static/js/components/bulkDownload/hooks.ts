@@ -10,6 +10,8 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
 import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
 import { getIDsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
+import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
+import { trackEvent } from 'js/helpers/trackers';
 
 export const allBulkDownloadOptions: {
   key: string;
@@ -177,6 +179,24 @@ function useBulkDownloadDialog() {
     }
   }, [isOpen, trigger]);
 
+  const { protectedRows, ...rest } = useProtectedDatasetsForm({
+    selectedRows: new Set(uuids),
+    deselectRows: (datasetUuids: string[]) => setUuids(new Set(datasetUuids)),
+    protectedDatasetsErrorMessage: (protectedDatasets) =>
+      `You have selected ${protectedDatasets.length} protected datasets.`,
+    trackEventHelper: (numProtectedDatasets) => {
+      trackEvent({
+        category: 'Bulk Download',
+        action: 'Protected datasets selected',
+        value: numProtectedDatasets,
+      });
+    },
+  });
+
+  const removeAndUnselectProtectedDatasets = useCallback(() => {
+    setUuids(new Set([...uuids].filter((uuid) => !protectedRows.find((row) => row._source?.uuid === uuid))));
+  }, [uuids, protectedRows, setUuids]);
+
   return {
     control,
     isOpen,
@@ -191,6 +211,9 @@ function useBulkDownloadDialog() {
     handleSubmit,
     handleClose,
     openDialog,
+    protectedRows,
+    removeAndUnselectProtectedDatasets,
+    ...rest,
   };
 }
 

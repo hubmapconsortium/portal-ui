@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle, SimpleQueryString } from 'searchkit';
+import Stack from '@mui/material/Stack';
 
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
@@ -32,23 +33,25 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
             SimpleQueryString(query.match(/^\s*HBM\S+\s*$/i) ? `"${query}"` : query, options)
           }
         />
-        <CenteredDiv sx={{ marginX: '1rem' }}>
+        <CenteredDiv>
           <SortingSelector
             options={sortOptions}
             listComponent={withAnalyticsCategory(TilesSortDropdown, analyticsCategory)}
             analyticsCategory={analyticsCategory}
           />
-          {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
-          {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
-          {!isDevSearch && (
-            <BulkDownloadButton
-              // Empty list => download all hits (TODO)
-              uuids={selectedRows.size > 0 ? [...selectedRows] : []}
-              tooltip={bulkDownloadTooltip}
-              sx={(theme) => ({ margin: theme.spacing(0, 1) })}
-            />
-          )}
-          <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
+          <Stack direction="row" spacing={1} marginLeft={1}>
+            {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
+            {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
+            {!isDevSearch && (
+              <BulkDownloadButton
+                // Empty list => download all hits (TODO)
+                uuids={selectedRows.size > 0 ? [...selectedRows] : []}
+                tooltip={bulkDownloadTooltip}
+                sx={(theme) => ({ margin: theme.spacing(0, 1) })}
+              />
+            )}
+            <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
+          </Stack>
         </CenteredDiv>
       </Flex>
       <SelectedFilters itemComponent={withAnalyticsCategory(SelectedFilter, analyticsCategory)} />

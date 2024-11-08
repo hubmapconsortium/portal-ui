@@ -18,6 +18,8 @@ import BulkDownloadAdvancedSelections from 'js/components/bulkDownload/BulkDownl
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Alert } from 'js/shared-styles/alerts';
 import { Control } from 'react-hook-form';
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
+import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemoveProtectedDatasetsFormField';
 
 const links = {
   tutorial: 'TODO',
@@ -124,8 +126,20 @@ function DownloadSelection({
 const formId = 'bulk-download-form';
 
 function BulkDownloadDialog() {
-  const { handleSubmit, onSubmit, handleClose, isOpen, errors, control, isLoading, downloadOptions } =
-    useBulkDownloadDialog();
+  const {
+    handleSubmit,
+    onSubmit,
+    handleClose,
+    isOpen,
+    errors,
+    control,
+    isLoading,
+    downloadOptions,
+    errorMessages,
+    protectedHubmapIds,
+    removeAndUnselectProtectedDatasets,
+    protectedRows,
+  } = useBulkDownloadDialog();
 
   return (
     <DialogModal
@@ -134,8 +148,17 @@ function BulkDownloadDialog() {
       content={
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
-          <Stack>
+          <Stack spacing={2}>
             <BulkDownloadDescription />
+            <Box>
+              <ErrorOrWarningMessages errorMessages={errorMessages} />
+              <RemoveProtectedDatasetsFormField
+                control={control}
+                protectedHubmapIds={protectedHubmapIds}
+                removeProtectedDatasets={removeAndUnselectProtectedDatasets}
+                protectedRows={protectedRows}
+              />
+            </Box>
             <DownloadSelection control={control} downloadOptions={downloadOptions} isLoading={isLoading} />
           </Stack>
         </form>
@@ -147,7 +170,12 @@ function BulkDownloadDialog() {
           <Button type="button" onClick={handleClose}>
             Cancel
           </Button>
-          <Button type="submit" variant="contained" form={formId} disabled={Object.keys(errors).length > 0}>
+          <Button
+            type="submit"
+            variant="contained"
+            form={formId}
+            disabled={Object.keys(errors).length > 0 || errorMessages.length > 0}
+          >
             Generate Download Manifest
           </Button>
         </Stack>
