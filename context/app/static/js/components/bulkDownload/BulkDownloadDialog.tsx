@@ -1,4 +1,5 @@
 import React from 'react';
+import { Control } from 'react-hook-form';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
@@ -17,9 +18,9 @@ import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection
 import BulkDownloadAdvancedSelections from 'js/components/bulkDownload/BulkDownloadAdvancedSelections';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Alert } from 'js/shared-styles/alerts';
-import { Control } from 'react-hook-form';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemoveProtectedDatasetsFormField';
+import { DatasetAccessLevelHits } from 'js/hooks/useProtectedDatasets';
 
 const links = {
   tutorial: 'TODO',
@@ -44,7 +45,7 @@ const pages = [
   },
 ];
 
-function BulkDownloadDescription() {
+function DownloadDescription() {
   return (
     <SectionDescription>
       <Stack spacing={2}>
@@ -64,6 +65,36 @@ function BulkDownloadDescription() {
         <RelevantPagesSection pages={pages} />
       </Stack>
     </SectionDescription>
+  );
+}
+
+function ProtectedDatasetsSection({
+  control,
+  errorMessages,
+  protectedHubmapIds,
+  protectedRows,
+  removeAndUnselectProtectedDatasets,
+}: {
+  control: Control<BulkDownloadFormTypes>;
+  errorMessages: string[];
+  protectedHubmapIds: string;
+  protectedRows: DatasetAccessLevelHits;
+  removeAndUnselectProtectedDatasets: () => void;
+}) {
+  if (errorMessages.length === 0) {
+    return null;
+  }
+
+  return (
+    <Stack paddingY={1}>
+      <ErrorOrWarningMessages errorMessages={errorMessages} />
+      <RemoveProtectedDatasetsFormField
+        control={control}
+        protectedHubmapIds={protectedHubmapIds}
+        removeProtectedDatasets={removeAndUnselectProtectedDatasets}
+        protectedRows={protectedRows}
+      />
+    </Stack>
   );
 }
 
@@ -115,7 +146,7 @@ function DownloadSelection({
       <BulkDownloadAdvancedSelections />
     </Step>
   ) : (
-    <Box marginTop={1}>
+    <Box paddingTop={1}>
       <Alert severity="warning">
         <Typography>Files are not available for any of the selected datasets.</Typography>
       </Alert>
@@ -136,9 +167,7 @@ function BulkDownloadDialog() {
     isLoading,
     downloadOptions,
     errorMessages,
-    protectedHubmapIds,
-    removeAndUnselectProtectedDatasets,
-    protectedRows,
+    ...rest
   } = useBulkDownloadDialog();
 
   return (
@@ -148,17 +177,9 @@ function BulkDownloadDialog() {
       content={
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing={2}>
-            <BulkDownloadDescription />
-            <Box>
-              <ErrorOrWarningMessages errorMessages={errorMessages} />
-              <RemoveProtectedDatasetsFormField
-                control={control}
-                protectedHubmapIds={protectedHubmapIds}
-                removeProtectedDatasets={removeAndUnselectProtectedDatasets}
-                protectedRows={protectedRows}
-              />
-            </Box>
+          <Stack spacing={1}>
+            <DownloadDescription />
+            <ProtectedDatasetsSection control={control} errorMessages={errorMessages} {...rest} />
             <DownloadSelection control={control} downloadOptions={downloadOptions} isLoading={isLoading} />
           </Stack>
         </form>
