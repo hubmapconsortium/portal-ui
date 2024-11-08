@@ -38,6 +38,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
               key="all"
               control={
                 <Checkbox
+                  size="small"
                   checked={downloadOptions.every((option) => (field.value as string[]).includes(option.key))}
                   onChange={(e) => {
                     const newValue = e.target.checked ? downloadOptions.map((option) => option.key) : [];
@@ -50,12 +51,13 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
             <Divider />
           </Stack>
         )}
-        <Stack paddingLeft={multipleOptions ? 2 : 1}>
+        <Stack paddingLeft={multipleOptions ? 4 : 0}>
           {downloadOptions.map(({ key, label, count }) => (
             <FormControlLabel
               key={key}
               control={
                 <Checkbox
+                  size="small"
                   checked={(field.value as string[]).includes(key)}
                   onChange={(e) => {
                     const newValue = e.target.checked
