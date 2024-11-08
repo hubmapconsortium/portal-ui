@@ -56,7 +56,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
           </Stack>
         )}
         <Stack paddingLeft={multipleOptions ? 2 : 1}>
-          {downloadOptions.map(({ key, label }) => (
+          {downloadOptions.map(({ key, label, count }) => (
             <FormControlLabel
               key={key}
               control={
@@ -70,7 +70,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
                   }}
                 />
               }
-              label={`Select all ${label} files.`}
+              label={`Select all ${label} files. (${count} Relevant Datasets)`}
             />
           ))}
         </Stack>

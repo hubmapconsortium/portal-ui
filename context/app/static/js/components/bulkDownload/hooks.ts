@@ -91,8 +91,8 @@ function useBulkDownloadDialog() {
   const datasets = searchHits.map(({ _source }) => _source);
 
   const downloadOptions = allBulkDownloadOptions
-    .filter((option) => datasets.some((dataset) => option.isIncluded(dataset)))
-    .map(({ key, label }) => ({ key, label }));
+    .map((option) => ({ ...option, count: datasets.filter((dataset) => option.isIncluded(dataset)).length }))
+    .filter((option) => option.count > 0);
 
   const handleClose = useCallback(() => {
     reset();

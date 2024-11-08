@@ -23,7 +23,8 @@ import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemovePro
 import { DatasetAccessLevelHits } from 'js/hooks/useProtectedDatasets';
 
 const links = {
-  tutorial: 'TODO',
+  // TODO: Update tutorial link once created
+  tutorial: '/tutorials',
   installation: 'https://docs.hubmapconsortium.org/clt/install-hubmap-clt.html',
   documentation: 'https://docs.hubmapconsortium.org/clt/index.html',
 };
