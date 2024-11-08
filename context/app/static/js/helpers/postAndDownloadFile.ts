@@ -1,8 +1,21 @@
 import { createDownloadUrl } from 'js/helpers/functions';
 
-interface PostAndDownloadFileArgs {
+interface DownloadFileProps {
+  url: string;
+  fileName: string;
+}
+export function downloadFile({ url, fileName }: DownloadFileProps) {
+  const tempLink = document.createElement('a');
+  tempLink.href = url;
+  tempLink.download = fileName;
+  tempLink.click();
+  tempLink.remove();
+}
+
+interface PostAndDownloadFileProps {
   url: RequestInfo | URL;
   body: unknown;
+  fileName?: string;
   defaultFileName?: string;
   defaultMimeType?: string;
 }
@@ -10,9 +23,10 @@ interface PostAndDownloadFileArgs {
 export default async function postAndDownloadFile({
   url,
   body,
+  fileName,
   defaultFileName = 'download',
   defaultMimeType = 'application/octet-stream',
-}: PostAndDownloadFileArgs) {
+}: PostAndDownloadFileProps) {
   const response = await fetch(url, {
     method: 'POST',
     body: JSON.stringify(body),
@@ -26,14 +40,10 @@ export default async function postAndDownloadFile({
   }
 
   const results = await response.blob();
-  // If the server doesn't send a filename, use a default one
-  const name = response.headers.get('content-disposition')?.split('=')[1] ?? defaultFileName;
+  // If no file name is provided, use the server's, otherwise use a default one
+  const name = fileName ?? response.headers.get('content-disposition')?.split('=')[1] ?? defaultFileName;
   const mime = response.headers.get('content-type') ?? defaultMimeType;
 
   const downloadUrl = createDownloadUrl(results, mime);
-  const tempLink = document.createElement('a');
-  tempLink.href = downloadUrl;
-  tempLink.download = name;
-  tempLink.click();
-  tempLink.remove();
+  downloadFile({ url: downloadUrl, fileName: name });
 }

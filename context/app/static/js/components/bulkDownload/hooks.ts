@@ -7,7 +7,7 @@ import { bulkDownloadOptionsField, bulkDownloadMetadataField } from 'js/componen
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
-import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
+import postAndDownloadFile, { downloadFile } from 'js/helpers/postAndDownloadFile';
 import { getIDsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
@@ -104,6 +104,7 @@ function useBulkDownloadDialog() {
       postAndDownloadFile({
         url: '/metadata/v0/datasets.tsv',
         body: { uuids: datasetsToDownload.map((dataset) => dataset.uuid) },
+        fileName: 'metadata.tsv',
       }).catch((e) => {
         toastError('Error downloading metadata.');
         console.error(e);
@@ -118,12 +119,7 @@ function useBulkDownloadDialog() {
       'text/plain',
     );
 
-    const downloadLink = document.createElement('a');
-    downloadLink.href = url;
-    downloadLink.download = 'manifest.txt';
-    downloadLink.click();
-
-    URL.revokeObjectURL(url);
+    downloadFile({ url, fileName: 'manifest.txt' });
   }, []);
 
   const submit = useCallback(
