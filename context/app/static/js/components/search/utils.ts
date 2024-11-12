@@ -10,6 +10,7 @@ import {
   isHierarchicalFacet,
   isTermFacet,
   isRangeFacet,
+  SortField,
 } from './store';
 import { getPortalESField } from './buildTypesMap';
 
@@ -41,6 +42,17 @@ function buildFilterAggregation({
   return esb.filterAggregation(field, otherFiltersQuery).agg(aggregation);
 }
 
+function buildSortField({ sortField }: { sortField: SortField }) {
+  const primarySort = esb.sort(getPortalESField(sortField.field), sortField.direction);
+  const secondarySortField = sortField?.secondarySort;
+
+  const secondarySort = secondarySortField
+    ? [esb.sort(getPortalESField(secondarySortField.field), secondarySortField.direction)]
+    : [];
+
+  return [primarySort, ...secondarySort];
+}
+
 export function buildQuery({
   filters,
   facets,
@@ -55,7 +67,7 @@ export function buildQuery({
     .requestBodySearch()
     .size(size)
     .source([...new Set(Object.values(sourceFields).flat())])
-    .sort(esb.sort(getPortalESField(sortField.field), sortField.direction));
+    .sorts(buildSortField({ sortField }));
 
   const hasTextQuery = search.length > 0;
 
