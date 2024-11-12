@@ -16,8 +16,9 @@ import { Flex, CenteredDiv } from './style';
 const bulkDownloadTooltip =
   'Bulk download files for selected datasets. If no datasets are selected, all datasets given the current filters will be selected.';
 
-function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analyticsCategory }) {
+function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analyticsCategory, allResultsUUIDs }) {
   const { selectedRows } = useSelectableTableStore();
+
   const SwitchComponent = withAnalyticsCategory(
     isDevSearch ? DevSearchViewSwitch : SearchViewSwitch,
     analyticsCategory,
@@ -44,8 +45,7 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
             {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
             {!isDevSearch && (
               <BulkDownloadButton
-                // Empty list => download all hits (TODO)
-                uuids={selectedRows.size > 0 ? [...selectedRows] : []}
+                uuids={selectedRows.size > 0 ? [...selectedRows] : [...allResultsUUIDs]}
                 tooltip={bulkDownloadTooltip}
                 sx={(theme) => ({ margin: theme.spacing(0, 1) })}
               />
