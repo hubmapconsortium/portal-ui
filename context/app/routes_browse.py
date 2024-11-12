@@ -113,8 +113,21 @@ def details_vitessce(type, uuid):
     parent_uuid = request.args.get('parent') or None
     marker = request.args.get('marker') or None
     parent = client.get_entity(parent_uuid) if parent_uuid else None
+    epic_uuid = None
+    if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get(
+            'status') != 'Error' and entity.get("pipeline") == "Segmentation Mask":
+        epic_uuid = uuid
+        if parent is None:
+            ancestors = entity.get('immediate_ancestor_ids')
+            if len(ancestors) > 0:
+                parent = ancestors[0]
+
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
-        entity, marker=marker, parent=parent).vitessce_conf
+        entity,
+        marker=marker,
+        parent=parent,
+        epic_uuid=epic_uuid,
+    ).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)
     response.headers.add("Access-Control-Allow-Origin", "*")
