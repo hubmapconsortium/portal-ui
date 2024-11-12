@@ -1,15 +1,36 @@
 import { createDownloadUrl } from 'js/helpers/functions';
 
-interface DownloadFileProps {
+interface CheckAndDownloadFileProps {
   url: string;
   fileName: string;
 }
-export function downloadFile({ url, fileName }: DownloadFileProps) {
-  const tempLink = document.createElement('a');
-  tempLink.href = url;
-  tempLink.download = fileName;
-  tempLink.click();
-  tempLink.remove();
+export async function checkAndDownloadFile({ url, fileName }: CheckAndDownloadFileProps) {
+  try {
+    // Check file status
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch file: ${response.status}`);
+    }
+
+    // Check that file type is as expected (e.g. not 'text/html' for error pages)
+    const contentType = response.headers.get('content-type');
+    if (contentType?.includes('text/html')) {
+      throw new Error('Unexpected content type.');
+    }
+
+    const blob = await response.blob();
+    const blobUrl = window.URL.createObjectURL(blob);
+
+    // Trigger download with validated url
+    const tempLink = document.createElement('a');
+    tempLink.href = blobUrl;
+    tempLink.download = fileName;
+    tempLink.click();
+    tempLink.remove();
+  } catch (error) {
+    console.error('Error:', error);
+    throw new Error('File download failed.');
+  }
 }
 
 interface PostAndDownloadFileProps {
@@ -45,5 +66,8 @@ export default async function postAndDownloadFile({
   const mime = response.headers.get('content-type') ?? defaultMimeType;
 
   const downloadUrl = createDownloadUrl(results, mime);
-  downloadFile({ url: downloadUrl, fileName: name });
+  checkAndDownloadFile({ url: downloadUrl, fileName: name }).catch((error) => {
+    console.error('Download failed', error);
+    throw error;
+  });
 }

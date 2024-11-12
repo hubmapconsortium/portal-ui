@@ -7,7 +7,7 @@ import { bulkDownloadOptionsField, bulkDownloadMetadataField } from 'js/componen
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
-import postAndDownloadFile, { downloadFile } from 'js/helpers/postAndDownloadFile';
+import postAndDownloadFile, { checkAndDownloadFile } from 'js/helpers/postAndDownloadFile';
 import { getIDsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
@@ -119,18 +119,19 @@ function useBulkDownloadDialog() {
 
   const downloadManifest = useCallback(
     (datasetsToDownload: BulkDownloadDataset[]) => {
-      try {
-        const url = createDownloadUrl(
-          `${datasetsToDownload.map((dataset) => dataset.hubmap_id).join('\t / \n')}\t / `,
-          'text/plain',
-        );
+      const url = createDownloadUrl(
+        `${datasetsToDownload.map((dataset) => dataset.hubmap_id).join('\t / \n')}\t / `,
+        'text/plain',
+      );
 
-        downloadFile({ url, fileName: 'manifest.txt' });
-        toastSuccess('Manifest file successfully downloaded.');
-      } catch (e) {
-        toastError('Manifest file failed to download.');
-        console.error(e);
-      }
+      checkAndDownloadFile({ url, fileName: 'manifest.txt' })
+        .then(() => {
+          toastSuccess('Manifest file successfully downloaded.');
+        })
+        .catch((e) => {
+          toastError('Manifest file failed to download.');
+          console.error(e);
+        });
     },
     [toastError, toastSuccess],
   );
