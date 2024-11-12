@@ -1,0 +1,1 @@
+- Updated MUI to v6.
