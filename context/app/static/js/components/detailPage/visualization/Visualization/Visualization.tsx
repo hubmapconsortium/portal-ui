@@ -70,8 +70,8 @@ function Visualization({
 
   const handleWarning = useCallback(
     (message: string) => {
-      // Suppress the "Node not found" message that appears when no zarr file was found
-      if (message.includes('Node not found')) {
+      // Suppress the "Node not found" and "Unexpected response status" messages related to zarr files
+      if (message.includes('Node not found') || message.includes('Unexpected response status')) {
         return;
       }
       toastError(message);
