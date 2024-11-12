@@ -168,6 +168,11 @@ const datasetConfig = {
     ],
     tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
   },
+  sortField: {
+    field: 'published_timestamp',
+    direction: 'desc' as const,
+    secondaryField: { field: 'mapped_status', direction: 'desc' as const },
+  },
   facets: datasetFacetGroups,
   ...buildDefaultQuery('Dataset'),
   // TODO: figure out how to make assertion unnecessary.
