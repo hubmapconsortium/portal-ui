@@ -30,6 +30,8 @@ const WhiteRectangularTooltipIconButton = styled(RectangularTooltipIconButton)((
   color: theme.palette.primary.main,
   border: `1px solid ${theme.palette.divider}`,
   borderRadius: theme.spacing(0.5),
+  height: theme.spacing(4.5),
+  display: 'flex',
 }));
 
 export { RectangularTooltipIconButton, WhiteRectangularTooltipIconButton };

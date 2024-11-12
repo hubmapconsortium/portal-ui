@@ -1,1 +1,0 @@
-- Fix EPIC Bulk Data Transfer section tabs and prevent these from crashing the page.

@@ -84,6 +84,7 @@ export interface Sample extends Entity {
   organ: string;
   origin_samples_unique_mapped_organs: string[];
   origin_samples: Sample[];
+  protocol_url: string;
 }
 
 export type CreationAction =
