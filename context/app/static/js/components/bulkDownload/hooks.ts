@@ -79,7 +79,7 @@ function useBulkDownloadForm() {
 function useBulkDownloadDialog() {
   const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
-  const { toastError } = useSnackbarActions();
+  const { toastError, toastSuccess } = useSnackbarActions();
 
   const datasetQuery = {
     query: getIDsQuery([...uuids]),
@@ -105,12 +105,16 @@ function useBulkDownloadDialog() {
         url: '/metadata/v0/datasets.tsv',
         body: { uuids: datasetsToDownload.map((dataset) => dataset.uuid) },
         fileName: 'metadata.tsv',
-      }).catch((e) => {
-        toastError('Metadata file failed to download.');
-        console.error(e);
-      });
+      })
+        .then(() => {
+          toastSuccess('Metadata file successfully downloaded.');
+        })
+        .catch((e) => {
+          toastError('Metadata file failed to download.');
+          console.error(e);
+        });
     },
-    [toastError],
+    [toastError, toastSuccess],
   );
 
   const downloadManifest = useCallback(
@@ -122,12 +126,13 @@ function useBulkDownloadDialog() {
         );
 
         downloadFile({ url, fileName: 'manifest.txt' });
+        toastSuccess('Manifest file successfully downloaded.');
       } catch (e) {
         toastError('Manifest file failed to download.');
         console.error(e);
       }
     },
-    [toastError],
+    [toastError, toastSuccess],
   );
 
   const openDialog = useCallback(

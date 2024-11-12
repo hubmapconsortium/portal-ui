@@ -36,7 +36,7 @@ export default async function postAndDownloadFile({
   });
   if (!response.ok) {
     console.error('Download failed', response);
-    return;
+    throw new Error(`Download failed with status: ${response.status}`);
   }
 
   const results = await response.blob();
