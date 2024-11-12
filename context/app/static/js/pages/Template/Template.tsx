@@ -99,7 +99,9 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
                             value: { templateName, name },
                           });
                         }}
-                        href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${assayToRawDatasetMap[name]}][0]=${encodeURI(name)}&entity_type[0]=Dataset`}
+                        href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${
+                          assayToRawDatasetMap[name]
+                        }][0]=${encodeURI(name)}&entity_type[0]=Dataset`}
                         key={name}
                       >
                         {idx === assay_display_name.length - 1 ? name : `${name}, `}
