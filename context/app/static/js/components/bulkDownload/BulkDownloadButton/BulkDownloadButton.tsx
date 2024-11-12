@@ -19,4 +19,4 @@ function BulkDownloadButton({ tooltip, uuids, ...rest }: BulkDownloadButtonProps
   );
 }
 
-export { BulkDownloadButton };
+export default BulkDownloadButton;

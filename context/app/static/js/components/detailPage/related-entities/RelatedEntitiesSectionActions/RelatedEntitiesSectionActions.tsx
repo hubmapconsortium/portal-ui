@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { BulkDownloadButton } from 'js/components/bulkDownload/BulkDownloadButton';
+import BulkDownloadButton from 'js/components/bulkDownload/BulkDownloadButton';
 
 interface RelatedEntitiesSectionHeaderProps {
   searchPageHref: string;

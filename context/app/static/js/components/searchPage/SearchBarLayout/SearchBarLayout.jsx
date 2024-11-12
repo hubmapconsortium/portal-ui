@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
-import { BulkDownloadButton } from 'js/components/bulkDownload/BulkDownloadButton';
+import BulkDownloadButton from 'js/components/bulkDownload/BulkDownloadButton';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
 import MetadataMenu from '../MetadataMenu';

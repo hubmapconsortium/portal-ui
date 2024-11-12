@@ -41,7 +41,7 @@ interface PostAndDownloadFileProps {
   defaultMimeType?: string;
 }
 
-export default async function postAndDownloadFile({
+export async function postAndDownloadFile({
   url,
   body,
   fileName,

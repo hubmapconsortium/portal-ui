@@ -6,12 +6,12 @@ import { z } from 'zod';
 import { bulkDownloadOptionsField, bulkDownloadMetadataField } from 'js/components/bulkDownload/bulkDownloadFormFields';
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { createDownloadUrl } from 'js/helpers/functions';
-import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
-import postAndDownloadFile, { checkAndDownloadFile } from 'js/helpers/postAndDownloadFile';
+import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
 import { getIDsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
 import { trackEvent } from 'js/helpers/trackers';
+import useBulkDownloadToasts from 'js/components/bulkDownload/toastHooks';
 
 export const allBulkDownloadOptions: {
   key: string;
@@ -79,7 +79,7 @@ function useBulkDownloadForm() {
 function useBulkDownloadDialog() {
   const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
-  const { toastError, toastSuccess } = useSnackbarActions();
+  const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
 
   const datasetQuery = {
     query: getIDsQuery([...uuids]),
@@ -107,14 +107,14 @@ function useBulkDownloadDialog() {
         fileName: 'metadata.tsv',
       })
         .then(() => {
-          toastSuccess('Metadata file successfully downloaded.');
+          toastSuccessDownloadFile('Metadata');
         })
         .catch((e) => {
-          toastError('Metadata file failed to download.');
+          toastErrorDownloadFile('Metadata');
           console.error(e);
         });
     },
-    [toastError, toastSuccess],
+    [toastSuccessDownloadFile, toastErrorDownloadFile],
   );
 
   const downloadManifest = useCallback(
@@ -126,14 +126,14 @@ function useBulkDownloadDialog() {
 
       checkAndDownloadFile({ url, fileName: 'manifest.txt' })
         .then(() => {
-          toastSuccess('Manifest file successfully downloaded.');
+          toastSuccessDownloadFile('Manifest');
         })
         .catch((e) => {
-          toastError('Manifest file failed to download.');
+          toastErrorDownloadFile('Manifest');
           console.error(e);
         });
     },
-    [toastError, toastSuccess],
+    [toastSuccessDownloadFile, toastErrorDownloadFile],
   );
 
   const openDialog = useCallback(

@@ -9,7 +9,7 @@ import RelatedEntitiesTable from 'js/components/detailPage/related-entities/Rela
 
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
-import { BulkDownloadButton } from 'js/components/bulkDownload/BulkDownloadButton';
+import BulkDownloadButton from 'js/components/bulkDownload/BulkDownloadButton';
 import { useCollectionsDatasets } from './hooks';
 
 interface CollectionDatasetsTableProps {

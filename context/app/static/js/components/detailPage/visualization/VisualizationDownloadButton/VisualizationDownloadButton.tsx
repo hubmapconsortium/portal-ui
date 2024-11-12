@@ -5,7 +5,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
+import { postAndDownloadFile } from 'js/helpers/download';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 
 const tooltip = 'Download Jupyter Notebook';

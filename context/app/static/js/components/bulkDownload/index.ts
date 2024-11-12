@@ -1,1 +1,1 @@
-export * from './BulkDownloadDialog';
+export * from './BulkDownloadDialog/BulkDownloadDialog';

@@ -13,7 +13,7 @@ import { StyledAlert, FlexContainer } from './style';
 import 'js/components/searchPage/Search.scss';
 import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
 import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
-import BulkDownloadDialog from './bulkDownload/BulkDownloadDialog';
+import BulkDownloadDialog from './bulkDownload/BulkDownloadDialog/BulkDownloadDialog';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
 
 // TODO: Delete this when workspaces are publicly released.

@@ -1,6 +1,6 @@
 import useSWRMutation from 'swr/mutation';
 
-import postAndDownloadFile from 'js/helpers/postAndDownloadFile';
+import { postAndDownloadFile } from 'js/helpers/download';
 import { trackEvent } from 'js/helpers/trackers';
 import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
