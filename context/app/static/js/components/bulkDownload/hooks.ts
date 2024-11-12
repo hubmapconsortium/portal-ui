@@ -106,42 +106,28 @@ function useBulkDownloadDialog() {
         body: { uuids: datasetsToDownload.map((dataset) => dataset.uuid) },
         fileName: 'metadata.tsv',
       }).catch((e) => {
-        toastError('Error downloading metadata.');
+        toastError('Metadata file failed to download.');
         console.error(e);
       });
     },
     [toastError],
   );
 
-  const downloadManifest = useCallback((datasetsToDownload: BulkDownloadDataset[]) => {
-    const url = createDownloadUrl(
-      `${datasetsToDownload.map((dataset) => dataset.hubmap_id).join('\t / \n')}\t / `,
-      'text/plain',
-    );
+  const downloadManifest = useCallback(
+    (datasetsToDownload: BulkDownloadDataset[]) => {
+      try {
+        const url = createDownloadUrl(
+          `${datasetsToDownload.map((dataset) => dataset.hubmap_id).join('\t / \n')}\t / `,
+          'text/plain',
+        );
 
-    downloadFile({ url, fileName: 'manifest.txt' });
-  }, []);
-
-  const submit = useCallback(
-    ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
-      const datasetsToDownload = datasets.filter((dataset) =>
-        bulkDownloadOptions.some((option) =>
-          allBulkDownloadOptions.find(({ key }) => key === option)?.isIncluded(dataset),
-        ),
-      );
-
-      if (datasetsToDownload.length === 0) {
-        toastError('No datasets were included in your download selection.');
-        return;
+        downloadFile({ url, fileName: 'manifest.txt' });
+      } catch (e) {
+        toastError('Manifest file failed to download.');
+        console.error(e);
       }
-
-      if (bulkDownloadMetadata) {
-        downloadMetadata(datasetsToDownload);
-      }
-
-      downloadManifest(datasetsToDownload);
     },
-    [datasets, downloadManifest, downloadMetadata, toastError],
+    [toastError],
   );
 
   const openDialog = useCallback(
@@ -154,16 +140,20 @@ function useBulkDownloadDialog() {
 
   const onSubmit = useCallback(
     ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
-      try {
-        submit({ bulkDownloadOptions, bulkDownloadMetadata });
-      } catch (e) {
-        toastError('Error creating bulk download manifest.');
-        console.error(e);
+      const datasetsToDownload = datasets.filter((dataset) =>
+        bulkDownloadOptions.some((option) =>
+          allBulkDownloadOptions.find(({ key }) => key === option)?.isIncluded(dataset),
+        ),
+      );
+
+      if (bulkDownloadMetadata) {
+        downloadMetadata(datasetsToDownload);
       }
 
+      downloadManifest(datasetsToDownload);
       handleClose();
     },
-    [submit, handleClose, toastError],
+    [handleClose, datasets, downloadMetadata, downloadManifest],
   );
 
   // Trigger error on initial load for required fields, because no default options are given
@@ -202,7 +192,6 @@ function useBulkDownloadDialog() {
     isLoading,
     reset,
     close,
-    submit,
     onSubmit,
     handleSubmit,
     handleClose,
