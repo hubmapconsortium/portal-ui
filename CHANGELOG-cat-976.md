@@ -1,0 +1,1 @@
+- Use `Image Pyramid` pipeline name as a heuristic for whether a visualization link should be present in unified dataset table of contents.
