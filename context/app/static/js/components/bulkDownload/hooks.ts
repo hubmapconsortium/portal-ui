@@ -4,42 +4,15 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { bulkDownloadOptionsField, bulkDownloadMetadataField } from 'js/components/bulkDownload/bulkDownloadFormFields';
+import useBulkDownloadToasts from 'js/components/bulkDownload/toastHooks';
+import { ALL_BULK_DOWNLOAD_OPTIONS } from 'js/components/bulkDownload/constants';
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
-import { createDownloadUrl } from 'js/helpers/functions';
-import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
-import { getIDsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
+import { createDownloadUrl } from 'js/helpers/functions';
+import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
 import { trackEvent } from 'js/helpers/trackers';
-import useBulkDownloadToasts from 'js/components/bulkDownload/toastHooks';
-
-export const allBulkDownloadOptions: {
-  key: string;
-  label: string;
-  isIncluded: (dataset: BulkDownloadDataset) => boolean;
-}[] = [
-  {
-    key: 'raw',
-    label: 'raw',
-    isIncluded: (dataset: BulkDownloadDataset) => dataset.processing === 'raw',
-  },
-  {
-    key: 'central',
-    label: 'HuBMAP centrally processed',
-    isIncluded: (dataset: BulkDownloadDataset) => dataset.processing_type === 'hubmap',
-  },
-  {
-    key: 'external',
-    label: 'lab or externally processed',
-    isIncluded: (dataset: BulkDownloadDataset) =>
-      dataset.processing === 'processed' && dataset.processing_type !== 'hubmap',
-  },
-];
-
-export interface BulkDownloadFormTypes {
-  bulkDownloadOptions: string[];
-  bulkDownloadMetadata: boolean;
-}
+import { getIDsQuery } from 'js/helpers/queries';
 
 const schema = z
   .object({
@@ -48,6 +21,11 @@ const schema = z
   })
   .partial()
   .required({ bulkDownloadOptions: true });
+
+export interface BulkDownloadFormTypes {
+  bulkDownloadOptions: string[];
+  bulkDownloadMetadata: boolean;
+}
 
 function useBulkDownloadForm() {
   const {
@@ -76,28 +54,53 @@ function useBulkDownloadForm() {
   };
 }
 
-function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string[]) => void }) {
+interface BulkDownloadDialogProps {
+  deselectRows?: (uuids: string[]) => void;
+}
+function useBulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
   const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
 
+  // Fetch datasets for the selected uuids
   const datasetQuery = {
     query: getIDsQuery([...uuids]),
     _source: ['hubmap_id', 'processing', 'uuid', 'files', 'processing_type'],
     size: 1000,
   };
-
   const { searchHits, isLoading } = useSearchHits<BulkDownloadDataset>(datasetQuery);
   const datasets = searchHits.map(({ _source }) => _source);
 
-  const downloadOptions = allBulkDownloadOptions
-    .map((option) => ({ ...option, count: datasets.filter((dataset) => option.isIncluded(dataset)).length }))
-    .filter((option) => option.count > 0);
+  // Which options to show in the dialog
+  const downloadOptions = ALL_BULK_DOWNLOAD_OPTIONS.map((option) => ({
+    ...option,
+    count: datasets.filter((dataset) => option.isIncluded(dataset)).length,
+  })).filter((option) => option.count > 0);
 
-  const handleClose = useCallback(() => {
-    reset();
-    close();
-  }, [close, reset]);
+  // Remove selected uuids from the list and deselect them in the table if needed
+  const removeUuidsOrRows = useCallback(
+    (uuidsToRemove: string[]) => {
+      if (deselectRows) {
+        deselectRows([...uuidsToRemove]);
+      }
+      setUuids(new Set([...uuids].filter((uuid) => !uuidsToRemove.includes(uuid))));
+    },
+    [deselectRows, setUuids, uuids],
+  );
+
+  const { ...protectedDatasetsFields } = useProtectedDatasetsForm({
+    selectedRows: new Set(uuids),
+    deselectRows: removeUuidsOrRows,
+    protectedDatasetsErrorMessage: (protectedDatasets) =>
+      `You have selected ${protectedDatasets.length} protected datasets.`,
+    trackEventHelper: (numProtectedDatasets) => {
+      trackEvent({
+        category: 'Bulk Download',
+        action: 'Protected datasets selected',
+        value: numProtectedDatasets,
+      });
+    },
+  });
 
   const downloadMetadata = useCallback(
     (datasetsToDownload: BulkDownloadDataset[]) => {
@@ -136,19 +139,16 @@ function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string
     [toastSuccessDownloadFile, toastErrorDownloadFile],
   );
 
-  const openDialog = useCallback(
-    (initialUuids: Set<string>) => {
-      setUuids(initialUuids);
-      open();
-    },
-    [setUuids, open],
-  );
+  const handleClose = useCallback(() => {
+    reset();
+    close();
+  }, [close, reset]);
 
   const onSubmit = useCallback(
     ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
       const datasetsToDownload = datasets.filter((dataset) =>
         bulkDownloadOptions.some((option) =>
-          allBulkDownloadOptions.find(({ key }) => key === option)?.isIncluded(dataset),
+          ALL_BULK_DOWNLOAD_OPTIONS.find(({ key }) => key === option)?.isIncluded(dataset),
         ),
       );
 
@@ -162,7 +162,15 @@ function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string
     [handleClose, datasets, downloadMetadata, downloadManifest],
   );
 
-  // Trigger error on initial load for required fields, because no default options are given
+  const openDialog = useCallback(
+    (initialUuids: Set<string>) => {
+      setUuids(initialUuids);
+      open();
+    },
+    [setUuids, open],
+  );
+
+  // Trigger error on initial load for required fields
   useEffect(() => {
     if (isOpen) {
       trigger('bulkDownloadOptions').catch((e) => {
@@ -170,30 +178,6 @@ function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string
       });
     }
   }, [isOpen, trigger]);
-
-  const removeUuidsOrRows = useCallback(
-    (uuidsToRemove: string[]) => {
-      if (deselectRows) {
-        deselectRows([...uuidsToRemove]);
-      }
-      setUuids(new Set([...uuids].filter((uuid) => !uuidsToRemove.includes(uuid))));
-    },
-    [deselectRows, setUuids, uuids],
-  );
-
-  const { protectedRows, ...rest } = useProtectedDatasetsForm({
-    selectedRows: new Set(uuids),
-    deselectRows: removeUuidsOrRows,
-    protectedDatasetsErrorMessage: (protectedDatasets) =>
-      `You have selected ${protectedDatasets.length} protected datasets.`,
-    trackEventHelper: (numProtectedDatasets) => {
-      trackEvent({
-        category: 'Bulk Download',
-        action: 'Protected datasets selected',
-        value: numProtectedDatasets,
-      });
-    },
-  });
 
   return {
     control,
@@ -210,8 +194,7 @@ function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string
     openDialog,
     downloadManifest,
     downloadMetadata,
-    protectedRows,
-    ...rest,
+    ...protectedDatasetsFields,
   };
 }
 

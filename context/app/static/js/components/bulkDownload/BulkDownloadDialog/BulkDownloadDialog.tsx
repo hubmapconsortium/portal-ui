@@ -6,45 +6,21 @@ import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
-import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
-import DialogModal from 'js/shared-styles/DialogModal';
+import { LINKS, PAGES } from 'js/components/bulkDownload/constants';
 import { BulkDownloadFormTypes, useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
-import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
-import Step from 'js/shared-styles/surfaces/Step';
+import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemoveProtectedDatasetsFormField';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
+import { DatasetAccessLevelHits } from 'js/hooks/useProtectedDatasets';
+import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
+import DialogModal from 'js/shared-styles/DialogModal';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import Step from 'js/shared-styles/surfaces/Step';
 import { OutboundLink } from 'js/shared-styles/Links';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Alert } from 'js/shared-styles/alerts';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
-import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemoveProtectedDatasetsFormField';
-import { DatasetAccessLevelHits } from 'js/hooks/useProtectedDatasets';
-
-const links = {
-  // TODO: Update tutorial link once created
-  tutorial: '/tutorials',
-  installation: 'https://docs.hubmapconsortium.org/clt/install-hubmap-clt.html',
-  documentation: 'https://docs.hubmapconsortium.org/clt/index.html',
-};
-
-const pages = [
-  // TODO: uncomment once tutorial is created
-  // {
-  //   link: links.tutorial,
-  //   children: 'Tutorial',
-  // },
-  {
-    link: links.installation,
-    children: 'HuBMAP CLT Installation',
-    external: true,
-  },
-  {
-    link: links.documentation,
-    children: 'HuBMAP CLT Documentation',
-    external: true,
-  },
-];
 
 function DownloadDescription() {
   return (
@@ -53,19 +29,19 @@ function DownloadDescription() {
         <Box>
           Choose download options to bulk download files from your selected datasets. Your selection of files will
           generate a manifest file, which can be used with the{' '}
-          <OutboundLink href={links.documentation}>HuBMAP Command Line Transfer (CLT)</OutboundLink> tool for
+          <OutboundLink href={LINKS.documentation}>HuBMAP Command Line Transfer (CLT)</OutboundLink> tool for
           downloading. An option to download a tsv file of the metadata is also available.
         </Box>
         <Box>
           To download the files included in the manifest file,{' '}
-          <OutboundLink href={links.installation}>install the HuBMAP CLT</OutboundLink> (if not already installed) and
-          follow <OutboundLink href={links.documentation}>instructions</OutboundLink> for how to use it with the
+          <OutboundLink href={LINKS.installation}>install the HuBMAP CLT</OutboundLink> (if not already installed) and
+          follow <OutboundLink href={LINKS.documentation}>instructions</OutboundLink> for how to use it with the
           manifest file.
           {/* TODO: uncomment once tutorial is created */}
-          {/* A <OutboundLink href={links.tutorial}>tutorial</OutboundLink> is available to guide you through
+          {/* A <OutboundLink href={LINKS.tutorial}>tutorial</OutboundLink> is available to guide you through
           the entire process. */}
         </Box>
-        <RelevantPagesSection pages={pages} />
+        <RelevantPagesSection pages={PAGES} />
       </Stack>
     </SectionDescription>
   );
@@ -142,10 +118,25 @@ function DownloadSelection({
   removeProtectedDatasets: () => void;
 }) {
   if (isLoading) {
-    return <Skeleton variant="text" height="20rem" />;
+    return (
+      <>
+        <Skeleton variant="rectangular" height={50} />
+        <Skeleton variant="rectangular" height={300} />
+        <Skeleton variant="rectangular" height={200} />
+      </>
+    );
+  }
+  if (downloadOptions.length === 0) {
+    return (
+      <Box paddingTop={1}>
+        <Alert severity="warning">
+          <Typography>Files are not available for any of the selected datasets.</Typography>
+        </Alert>
+      </Box>
+    );
   }
 
-  return downloadOptions.length > 0 ? (
+  return (
     <Box>
       <Step title="Download Options" hideRequiredText>
         <ProtectedDatasetsSection
@@ -163,12 +154,6 @@ function DownloadSelection({
           </Stack>
         </SummaryPaper>
       </Step>
-    </Box>
-  ) : (
-    <Box paddingTop={1}>
-      <Alert severity="warning">
-        <Typography>Files are not available for any of the selected datasets.</Typography>
-      </Alert>
     </Box>
   );
 }

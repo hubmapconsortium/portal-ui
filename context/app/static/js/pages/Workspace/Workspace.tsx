@@ -23,8 +23,8 @@ import { EditIcon, AddIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
-import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 
 const tooltips = {
   name: 'Edit workspace name.',
@@ -112,11 +112,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
               {format(new Date(workspace.datetime_created), 'yyyy-MM-dd')}
             </LabelledSectionText>
             <LabelledSectionText label="Relevant Pages" spacing={1}>
-              <Stack direction="row" spacing={1}>
-                {pageLinks.map((page) => (
-                  <OutlinedLinkButton key={page.link} {...page} />
-                ))}
-              </Stack>
+              <RelevantPagesSection pages={pageLinks} />
             </LabelledSectionText>
           </Stack>
         </SectionPaper>
