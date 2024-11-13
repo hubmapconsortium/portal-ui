@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.14.1 - 2024-11-13
+
+- Fix minor graphical issues in homepage hero section.
+- Use `Image Pyramid` pipeline name as a heuristic for whether a visualization link should be present in unified dataset table of contents.
+- Update portal-viz hash to reflect the view adjustment for EPIC segmentation mask.
+- Updated support for EPIC segmentation masks visualization. 
+
+
+
 ## v1.14.0 - 2024-11-06
 
 - Adjust ID fetching for infinite scroll table to ensure "select all" functionality works as expected.
