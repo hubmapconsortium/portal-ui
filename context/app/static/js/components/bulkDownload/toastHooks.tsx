@@ -1,4 +1,7 @@
-import { useCallback } from 'react';
+import React, { useCallback } from 'react';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 
 type fileType = 'Metadata' | 'Manifest';
@@ -11,7 +14,15 @@ const useBulkDownloadToasts = () => {
    ********************************** */
 
   const toastErrorDownloadFile = useCallback(
-    (type: fileType) => toastError(`${type} file failed to download.`),
+    (type: fileType, retry: () => void) =>
+      toastError(
+        <Stack spacing={3} direction="row" alignItems="center">
+          <Typography>{type} file failed to download.</Typography>
+          <Button onClick={retry} variant="text" color="inherit" sx={{ alignSelf: 'flex-end' }}>
+            Try Again
+          </Button>
+        </Stack>,
+      ),
     [toastError],
   );
 

@@ -110,7 +110,7 @@ function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string
           toastSuccessDownloadFile('Metadata');
         })
         .catch((e) => {
-          toastErrorDownloadFile('Metadata');
+          toastErrorDownloadFile('Metadata', () => downloadMetadata(datasetsToDownload));
           console.error(e);
         });
     },
@@ -129,7 +129,7 @@ function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string
           toastSuccessDownloadFile('Manifest');
         })
         .catch((e) => {
-          toastErrorDownloadFile('Manifest');
+          toastErrorDownloadFile('Manifest', () => downloadManifest(datasetsToDownload));
           console.error(e);
         });
     },
@@ -208,6 +208,8 @@ function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string
     handleSubmit,
     handleClose,
     openDialog,
+    downloadManifest,
+    downloadMetadata,
     protectedRows,
     ...rest,
   };
