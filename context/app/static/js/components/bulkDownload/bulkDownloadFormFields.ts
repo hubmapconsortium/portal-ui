@@ -4,7 +4,7 @@ import { withCustomMessage } from 'js/helpers/zod/withCustomMessage';
 const bulkDownloadOptionsField = {
   bulkDownloadOptions: z
     .array(z.string(), {
-      errorMap: withCustomMessage('My special error message'),
+      errorMap: withCustomMessage('A download option is required.'),
     })
     .nonempty(),
 };

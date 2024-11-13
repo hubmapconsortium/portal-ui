@@ -178,7 +178,7 @@ function BulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
     downloadOptions,
     errorMessages,
     ...rest
-  } = useBulkDownloadDialog({ deselectRows });
+  } = useBulkDownloadDialog(deselectRows);
 
   return (
     <DialogModal

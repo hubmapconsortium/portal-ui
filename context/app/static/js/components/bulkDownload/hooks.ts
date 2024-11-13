@@ -54,10 +54,7 @@ function useBulkDownloadForm() {
   };
 }
 
-interface BulkDownloadDialogProps {
-  deselectRows?: (uuids: string[]) => void;
-}
-function useBulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
+function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
@@ -81,14 +78,14 @@ function useBulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
   const removeUuidsOrRows = useCallback(
     (uuidsToRemove: string[]) => {
       if (deselectRows) {
-        deselectRows([...uuidsToRemove]);
+        deselectRows(uuidsToRemove);
       }
       setUuids(new Set([...uuids].filter((uuid) => !uuidsToRemove.includes(uuid))));
     },
     [deselectRows, setUuids, uuids],
   );
 
-  const { ...protectedDatasetsFields } = useProtectedDatasetsForm({
+  const protectedDatasetsFields = useProtectedDatasetsForm({
     selectedRows: new Set(uuids),
     deselectRows: removeUuidsOrRows,
     protectedDatasetsErrorMessage: (protectedDatasets) =>

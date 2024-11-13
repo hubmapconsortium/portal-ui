@@ -34,14 +34,12 @@ function useWorkspacesProtectedDatasetsForm() {
     return errorHelper.protectedDatasets(protectedRows);
   }, []);
 
-  const { ...rest } = useProtectedDatasetsForm({
+  return useProtectedDatasetsForm({
     selectedRows,
     deselectRows,
     protectedDatasetsErrorMessage,
     trackEventHelper,
   });
-
-  return { ...rest };
 }
 
 function useTooManyDatasetsErrors({ numWorkspaceDatasets }: { numWorkspaceDatasets: number }) {

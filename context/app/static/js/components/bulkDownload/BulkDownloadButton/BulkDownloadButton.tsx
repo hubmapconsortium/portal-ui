@@ -12,7 +12,7 @@ interface BulkDownloadButtonProps extends ButtonProps {
   deselectRows?: (uuids: string[]) => void;
 }
 function BulkDownloadButton({ tooltip, uuids, deselectRows, ...rest }: BulkDownloadButtonProps) {
-  const { openDialog } = useBulkDownloadDialog({});
+  const { openDialog } = useBulkDownloadDialog();
 
   return (
     <>

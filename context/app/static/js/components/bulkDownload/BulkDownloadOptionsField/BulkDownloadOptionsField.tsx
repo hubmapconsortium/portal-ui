@@ -19,7 +19,7 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
   control,
   name,
 }: BulkDownloadOptionsFieldProps<FormType>) {
-  const { downloadOptions } = useBulkDownloadDialog({});
+  const { downloadOptions } = useBulkDownloadDialog();
   const { field } = useController({
     name,
     control,
