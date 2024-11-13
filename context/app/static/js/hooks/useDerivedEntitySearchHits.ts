@@ -34,8 +34,6 @@ function useDerivedDatasetSearchHits(ancestorUUID: string) {
         'status',
         'descendant_counts',
         'last_modified_timestamp',
-        'files',
-        'processing',
       ],
       size: 10000,
     }),

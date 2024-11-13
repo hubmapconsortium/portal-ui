@@ -56,7 +56,7 @@ function useFetchAndDownloadFile({ lcPluralType, analyticsCategory }: UseFetchAn
       closeMenu,
       analyticsCategory,
     }).catch(() => {
-      toastError('File failed to download.');
+      toastError('Metadata file failed to download.');
     });
   });
   return swr;

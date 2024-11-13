@@ -1,6 +1,5 @@
 import React from 'react';
 import { FieldValues, useController, UseControllerProps } from 'react-hook-form';
-
 import Stack from '@mui/material/Stack';
 import { PrimarySwitch } from 'js/shared-styles/switches';
 import { StyledFormLabel } from 'js/components/bulkDownload/style';
@@ -22,9 +21,10 @@ function BulkDownloadMetadataField<FormType extends FieldValues>({
     <Stack>
       <StyledFormLabel id="bulk-download-metadata">Download Metadata File (TSV)</StyledFormLabel>
       <PrimarySwitch
-        checked={field.value === true}
+        checked={field.value}
         onChange={(e) => field.onChange(!!e.target.checked)}
         inputProps={{ 'aria-labelledby': 'bulk-download-metadata' }}
+        sx={(theme) => ({ marginLeft: theme.spacing(-1) })}
       />
     </Stack>
   );

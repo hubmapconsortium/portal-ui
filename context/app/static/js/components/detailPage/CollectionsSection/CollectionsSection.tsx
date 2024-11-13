@@ -10,8 +10,8 @@ import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useTabs } from 'js/shared-styles/tabs';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
-import { SectionDescription } from '../../../shared-styles/sections/SectionDescription';
 import CollectionsSectionProvider, { useCollectionsSectionContext } from './CollectionsSectionContext';
 
 interface CollectionTabProps {

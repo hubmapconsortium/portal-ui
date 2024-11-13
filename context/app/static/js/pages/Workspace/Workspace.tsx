@@ -35,7 +35,7 @@ const tooltips = {
 const noDatasetsText =
   'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
 
-const pageLinks = [
+const pages = [
   {
     link: '/workspaces',
     children: 'My Workspaces',
@@ -111,9 +111,7 @@ function WorkspaceContent({ workspaceId }: WorkspacePageProps) {
             <LabelledSectionText label="Creation Date">
               {format(new Date(workspace.datetime_created), 'yyyy-MM-dd')}
             </LabelledSectionText>
-            <LabelledSectionText label="Relevant Pages" spacing={1}>
-              <RelevantPagesSection pages={pageLinks} />
-            </LabelledSectionText>
+            <RelevantPagesSection pages={pages} />
           </Stack>
         </SectionPaper>
       </Box>

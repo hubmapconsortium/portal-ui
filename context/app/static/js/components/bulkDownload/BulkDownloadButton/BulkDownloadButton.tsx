@@ -1,12 +1,12 @@
 import React from 'react';
+import { ButtonProps } from '@mui/material/Button';
 import SvgIcon from '@mui/material/SvgIcon';
 import Download from '@mui/icons-material/Download';
 import { useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
-import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
-import { ButtonBaseProps } from '@mui/material';
 import BulkDownloadDialog from 'js/components/bulkDownload/BulkDownloadDialog';
+import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 
-interface BulkDownloadButtonProps extends ButtonBaseProps {
+interface BulkDownloadButtonProps extends ButtonProps {
   tooltip: string;
   uuids: Set<string>;
   deselectRows?: (uuids: string[]) => void;

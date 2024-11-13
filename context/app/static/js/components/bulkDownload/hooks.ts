@@ -180,14 +180,12 @@ function useBulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
   }, [isOpen, trigger]);
 
   return {
-    control,
     isOpen,
+    isLoading,
+    errors,
+    control,
     datasets,
     downloadOptions,
-    errors,
-    isLoading,
-    reset,
-    close,
     onSubmit,
     handleSubmit,
     handleClose,

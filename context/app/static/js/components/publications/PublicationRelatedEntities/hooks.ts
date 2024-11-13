@@ -9,9 +9,8 @@ import {
 } from 'js/components/detailPage/derivedEntities/columns';
 
 import { getAncestorsQuery } from 'js/helpers/queries';
-import { Dataset, Donor, ESEntityType, PartialEntity, Sample } from 'js/components/types';
+import { Dataset, Donor, PartialEntity, Sample } from 'js/components/types';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
-import { RelatedEntitiesColumn } from 'js/components/detailPage/related-entities/RelatedEntitiesTable/RelatedEntitiesTable';
 
 function useAncestorSearchHits(descendantUUID: string) {
   const query = useMemo(
@@ -37,13 +36,6 @@ function useAncestorSearchHits(descendantUUID: string) {
   return useSearchHits<Donor | Sample | Dataset>(query);
 }
 
-export interface PublicationsRelatedEntity {
-  tabLabel: string;
-  data: { _source: PartialEntity }[];
-  entityType: ESEntityType;
-  columns: RelatedEntitiesColumn[];
-}
-
 function usePublicationsRelatedEntities(uuid: string) {
   const { searchHits: ancestorHits, isLoading } = useAncestorSearchHits(uuid);
 
@@ -65,7 +57,7 @@ function usePublicationsRelatedEntities(uuid: string) {
 
   const datasetUuids = new Set(ancestorsSplitByEntityType.Dataset.map((hit) => hit._source.uuid));
 
-  const entities: PublicationsRelatedEntity[] = [
+  const entities = [
     {
       entityType: 'Donor' as const,
       tabLabel: 'Donors',

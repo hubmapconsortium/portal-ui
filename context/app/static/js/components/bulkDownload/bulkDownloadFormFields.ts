@@ -1,13 +1,5 @@
 import { z } from 'zod';
-
-function withCustomMessage(message: string): z.ZodErrorMap {
-  return function tooSmallErrorMap(issue, ctx) {
-    if (issue.code === z.ZodIssueCode.too_small) {
-      return { message };
-    }
-    return { message: ctx.defaultError };
-  };
-}
+import { withCustomMessage } from 'js/helpers/zod/withCustomMessage';
 
 const bulkDownloadOptionsField = {
   bulkDownloadOptions: z

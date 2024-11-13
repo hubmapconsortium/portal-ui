@@ -8,7 +8,6 @@ interface BulkDownloadStore {
   uuids: Set<string>;
   open: () => void;
   close: () => void;
-  reset: () => void;
   setUuids: (uuids: Set<string>) => void;
 }
 
@@ -17,7 +16,6 @@ const storeDefinition = (set: StoreApi<BulkDownloadStore>['setState']) => ({
   uuids: new Set<string>(),
   open: () => set({ isOpen: true }),
   close: () => set({ isOpen: false }),
-  reset: () => set({ isOpen: false, uuids: new Set<string>() }),
   setUuids: (uuids: Set<string>) => set({ uuids }),
 });
 

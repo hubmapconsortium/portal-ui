@@ -9,10 +9,10 @@ import { useMetadataFieldDescriptions } from 'js/hooks/useUBKG';
 import { Dataset, Donor, Sample, isDataset } from 'js/components/types';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { getTableEntities } from 'js/components/detailPage/MetadataSection/utils';
 import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
-import { SectionDescription } from '../../../shared-styles/sections/SectionDescription';
 import { Columns, defaultTSVColumns } from './columns';
 
 interface TableRow {

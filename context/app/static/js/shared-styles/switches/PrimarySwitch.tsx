@@ -2,7 +2,6 @@ import Switch from '@mui/material/Switch';
 import { styled } from '@mui/material/styles';
 
 const PrimarySwitch = styled(Switch)(({ theme }) => ({
-  marginLeft: theme.spacing(-1),
   '& .MuiSwitch-track': {
     backgroundColor: theme.palette.primary.lowEmphasis,
   },

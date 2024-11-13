@@ -47,19 +47,20 @@ function DownloadDescription() {
   );
 }
 
+interface ProtectedDatasetsSectionProps {
+  control: Control<BulkDownloadFormTypes>;
+  errorMessages: string[];
+  protectedHubmapIds: string;
+  protectedRows: DatasetAccessLevelHits;
+  removeProtectedDatasets: () => void;
+}
 function ProtectedDatasetsSection({
   control,
   errorMessages,
   protectedHubmapIds,
   protectedRows,
   removeProtectedDatasets,
-}: {
-  control: Control<BulkDownloadFormTypes>;
-  errorMessages: string[];
-  protectedHubmapIds: string;
-  protectedRows: DatasetAccessLevelHits;
-  removeProtectedDatasets: () => void;
-}) {
+}: ProtectedDatasetsSectionProps) {
   if (errorMessages.length === 0) {
     return null;
   }
@@ -97,15 +98,7 @@ function DownloadOptionsDescription() {
   );
 }
 
-function DownloadSelection({
-  control,
-  downloadOptions,
-  isLoading,
-  errorMessages,
-  protectedHubmapIds,
-  protectedRows,
-  removeProtectedDatasets,
-}: {
+interface DownloadOptionsSectionProps {
   control: Control<BulkDownloadFormTypes>;
   downloadOptions: {
     key: string;
@@ -116,7 +109,16 @@ function DownloadSelection({
   protectedHubmapIds: string;
   protectedRows: DatasetAccessLevelHits;
   removeProtectedDatasets: () => void;
-}) {
+}
+function DownloadOptionsSection({
+  control,
+  downloadOptions,
+  isLoading,
+  errorMessages,
+  protectedHubmapIds,
+  protectedRows,
+  removeProtectedDatasets,
+}: DownloadOptionsSectionProps) {
   if (isLoading) {
     return (
       <>
@@ -126,6 +128,7 @@ function DownloadSelection({
       </>
     );
   }
+
   if (downloadOptions.length === 0) {
     return (
       <Box paddingTop={1}>
@@ -160,7 +163,10 @@ function DownloadSelection({
 
 const formId = 'bulk-download-form';
 
-function BulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string[]) => void }) {
+interface BulkDownloadDialogProps {
+  deselectRows?: (uuids: string[]) => void;
+}
+function BulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
   const {
     handleSubmit,
     onSubmit,
@@ -183,7 +189,7 @@ function BulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string[])
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={2}>
             <DownloadDescription />
-            <DownloadSelection
+            <DownloadOptionsSection
               control={control}
               downloadOptions={downloadOptions}
               isLoading={isLoading}
