@@ -17,6 +17,7 @@
     "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
     "@mui/styled-engine-sc": "6.0.0",
     "@mui/system": "^5.16.7",
+    "@mui/x-date-pickers": "^7.22.2",
     "@react-spring/web": "^9.7.3",
     "@searchkit/client": "^3.0.0-canary.53",
     "@searchkit/sdk": "^3.0.0-canary.53",
