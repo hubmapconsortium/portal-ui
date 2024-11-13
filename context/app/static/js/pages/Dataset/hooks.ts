@@ -150,16 +150,16 @@ function useLabeledProcessedDatasets() {
 
 function getProcessedDatasetSection({
   dataset,
-  conf,
+  hasConf: conf,
 }: {
   dataset: ProcessedDatasetInfo & { label: string };
-  conf?: VitessceConf;
+  hasConf?: boolean;
 }) {
   const { files, metadata, visualization, creation_action, contributors } = dataset;
 
   const shouldDisplaySection = {
     summary: true,
-    visualization: visualization || Boolean(conf && 'data' in conf && conf?.data),
+    visualization: visualization || conf,
     files: Boolean(files?.length),
     analysis: Boolean(metadata?.dag_provenance_list),
     attribution: creation_action !== 'Central Process' && Boolean(contributors?.length),
@@ -191,7 +191,14 @@ function useProcessedDatasetsSections(): { sections: TableOfContentsItem | false
           items: searchHitsWithLabels.map((hit) =>
             getProcessedDatasetSection({
               dataset: hit._source,
-              conf: cache.get(getVitessceConfKey(hit._id, groupsToken)),
+              // Visualization section is present if there's a vitessce conf in the swr cache or
+              // if it's an image pyramid dataset.
+              // The latter condition is used as a heuristic since fetching those confs can take
+              // a little longer than usual, which leads to the UI either getting stuck without
+              // a visualization section, or having one flicker into existence after a delay.
+              hasConf:
+                Boolean(cache.get(getVitessceConfKey(hit._id, groupsToken))?.data) ||
+                hit._source.label === 'Image Pyramid',
             }),
           ),
         }
