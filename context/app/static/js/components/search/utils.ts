@@ -11,6 +11,8 @@ import {
   isTermFacet,
   isRangeFacet,
   SortField,
+  isDateFilter,
+  isDateFacet,
 } from './store';
 import { getPortalESField } from './buildTypesMap';
 
@@ -21,12 +23,12 @@ type FilterClauses = Record<string, esb.Query>;
 function buildFilterAggregation({
   field,
   portalFields,
-  aggregation,
+  aggregations,
   filters,
 }: {
   field: string;
   portalFields: string[];
-  aggregation: esb.Aggregation;
+  aggregations: esb.Aggregation[];
   filters: FilterClauses;
 }) {
   portalFields.forEach((f) => {
@@ -39,7 +41,7 @@ function buildFilterAggregation({
     ? esb.boolQuery().must(Object.values(filters))
     : esb.boolQuery().must([]);
 
-  return esb.filterAggregation(field, otherFiltersQuery).agg(aggregation);
+  return esb.filterAggregation(field, otherFiltersQuery).aggs(aggregations);
 }
 
 function buildSortField({ sortField }: { sortField: SortField }) {
@@ -91,7 +93,7 @@ export function buildQuery({
         }
       }
 
-      if (isRangeFilter(filter)) {
+      if (isRangeFilter(filter) || isDateFilter(filter)) {
         if (filterHasValues({ filter, facet: facetConfig })) {
           draft[portalField] = esb.rangeQuery(portalField).gte(filter.values.min).lte(filter.values.max);
         }
@@ -123,10 +125,12 @@ export function buildQuery({
       query.agg(
         buildFilterAggregation({
           portalFields: [portalField],
-          aggregation: esb
-            .termsAggregation(field, portalField)
-            .size(maxAggSize)
-            .order(order?.type ?? '_count', order?.dir ?? 'desc'),
+          aggregations: [
+            esb
+              .termsAggregation(field, portalField)
+              .size(maxAggSize)
+              .order(order?.type ?? '_count', order?.dir ?? 'desc'),
+          ],
           filters: { ...allFilters },
           field,
         }),
@@ -140,7 +144,21 @@ export function buildQuery({
       query.agg(
         buildFilterAggregation({
           portalFields: [portalField],
-          aggregation: esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max),
+          aggregations: [esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max)],
+          filters: { ...allFilters },
+          field,
+        }),
+      );
+    }
+
+    if (isDateFacet(facet)) {
+      query.agg(
+        buildFilterAggregation({
+          portalFields: [portalField],
+          aggregations: [
+            esb.maxAggregation(`${field}_max`, portalField),
+            esb.minAggregation(`${field}_min`, portalField),
+          ],
           filters: { ...allFilters },
           field,
         }),
@@ -158,16 +176,18 @@ export function buildQuery({
       query.agg(
         buildFilterAggregation({
           portalFields: [parentPortalField, childPortalField],
-          aggregation: esb
-            .termsAggregation(field, parentPortalField)
-            .size(maxAggSize)
-            .order(order?.type ?? '_count', order?.dir ?? 'desc')
-            .agg(
-              esb
-                .termsAggregation(childField, childPortalField)
-                .size(maxAggSize)
-                .order(order?.type ?? '_count', order?.dir ?? 'desc'),
-            ),
+          aggregations: [
+            esb
+              .termsAggregation(field, parentPortalField)
+              .size(maxAggSize)
+              .order(order?.type ?? '_count', order?.dir ?? 'desc')
+              .agg(
+                esb
+                  .termsAggregation(childField, childPortalField)
+                  .size(maxAggSize)
+                  .order(order?.type ?? '_count', order?.dir ?? 'desc'),
+              ),
+          ],
           filters: { ...allFilters },
           field,
         }),

@@ -1,5 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { AggregationsTermsAggregateBase } from '@elastic/elasticsearch/lib/api/types';
+import {
+  AggregationsTermsAggregateBase,
+  AggregationsSingleMetricAggregateBase,
+} from '@elastic/elasticsearch/lib/api/types';
 import { produce } from 'immer';
 import { styled } from '@mui/material/styles';
 import Stack from '@mui/material/Stack';
@@ -18,9 +21,6 @@ import {
   SearchStoreProvider,
   useSearchStore,
   SearchStoreState,
-  HierarchicalTermConfig,
-  TermConfig,
-  RangeConfig,
   FACETS,
   SearchURLState,
   FiltersType,
@@ -29,6 +29,8 @@ import {
   isRangeFilter,
   isHierarchicalFilter,
   parseURLState,
+  Facet,
+  isDateFilter,
 } from './store';
 import Results from './Results';
 import Facets from './Facets/Facets';
@@ -52,7 +54,11 @@ export interface InnerBucket extends OuterBucket {
 
 export type HierarchicalBucket = InnerBucket & Partial<Record<string, AggregationsTermsAggregateBase<InnerBucket>>>;
 
-type Aggregations = Record<string, OuterBucket & Record<string, AggregationsTermsAggregateBase<HierarchicalBucket>>>;
+type Aggregations = Record<
+  string,
+  OuterBucket &
+    Record<string, AggregationsTermsAggregateBase<HierarchicalBucket> | AggregationsSingleMetricAggregateBase>
+>;
 
 export function useSearch() {
   const {
@@ -82,9 +88,7 @@ export function useSearch() {
   });
 }
 
-type FacetOption = TermConfig | HierarchicalTermConfig | RangeConfig;
-
-export type FacetGroups = Record<string, FacetOption[]>;
+export type FacetGroups = Record<string, Facet[]>;
 
 function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
   const allFacets = Object.values(facetGroups).flat();
@@ -104,6 +108,11 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
 
         if (curr.type === FACETS.range) {
           draft.filters[curr.field] = { values: { min: curr.min, max: curr.max }, type: curr.type };
+          draft.facets[curr.field] = curr;
+        }
+
+        if (curr.type === FACETS.date) {
+          draft.filters[curr.field] = { values: { min: 0, max: 0 }, type: curr.type };
           draft.facets[curr.field] = curr;
         }
 
@@ -226,10 +235,14 @@ const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<stri
         };
       }
 
-      if (isRangeFilter<string[] | Set<string>>(v)) {
+      if (isRangeFilter<string[] | Set<string>>(v) || isDateFilter<string[] | Set<string>>(v)) {
         draft[k] = {
           ...v,
-          values: URLStateFilter && isRangeFilter<string[]>(URLStateFilter) ? URLStateFilter?.values : v.values,
+          values:
+            URLStateFilter &&
+            (isRangeFilter<string[]>(URLStateFilter) || isDateFilter<string[] | Set<string>>(URLStateFilter))
+              ? URLStateFilter?.values
+              : v.values,
         };
       }
 

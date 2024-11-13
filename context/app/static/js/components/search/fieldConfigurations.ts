@@ -93,6 +93,9 @@ const fieldConfigurationsMap: Record<
     label: 'Processing Type',
     valueTransformations: [mapProcessingType],
   },
+  published_timestamp: {
+    label: 'Published Date',
+  },
   race: {
     label: 'Race',
   },

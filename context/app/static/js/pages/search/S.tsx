@@ -128,6 +128,7 @@ const datasetFacetGroups = {
       type: FACETS.term,
     },
     { field: 'mapped_status', childField: 'mapped_data_access_level', type: FACETS.hierarchical },
+    { field: 'published_timestamp', type: FACETS.date },
   ],
   'Dataset Processing': [
     {

@@ -126,12 +126,16 @@ function TermFacetContent({ filter, field }: { filter: TermValues; field: string
   const { aggregations } = useSearch();
   const [showLessTerms, setShowLessTerms] = useState(true);
 
-  const innerAggregations = aggregations?.[field]?.[field];
-  const aggBuckets = innerAggregations?.buckets;
-
   const toggleTermsCount = useCallback(() => {
     setShowLessTerms((prev) => !prev);
   }, [setShowLessTerms]);
+
+  const innerAggregations = aggregations?.[field]?.[field];
+
+  if (!(innerAggregations && 'buckets' in innerAggregations)) {
+    return null;
+  }
+  const aggBuckets = innerAggregations?.buckets;
 
   if (!aggBuckets || !Array.isArray(aggBuckets)) {
     return null;
@@ -302,9 +306,15 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
 });
 
 export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
-  const parentBuckets = useSearch()?.aggregations?.[parentField]?.[parentField]?.buckets;
+  const parentAggs = useSearch()?.aggregations?.[parentField]?.[parentField];
 
   const filter = useSearchStore((state) => state.filters[parentField]);
+
+  if (!(parentAggs && 'buckets' in parentAggs)) {
+    return null;
+  }
+
+  const parentBuckets = parentAggs.buckets;
 
   if (!parentBuckets || !Array.isArray(parentBuckets)) {
     return [];
