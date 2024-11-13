@@ -76,7 +76,7 @@ function useBulkDownloadForm() {
   };
 }
 
-function useBulkDownloadDialog() {
+function useBulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string[]) => void }) {
   const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
@@ -120,7 +120,7 @@ function useBulkDownloadDialog() {
   const downloadManifest = useCallback(
     (datasetsToDownload: BulkDownloadDataset[]) => {
       const url = createDownloadUrl(
-        `${datasetsToDownload.map((dataset) => dataset.hubmap_id).join('\t / \n')}\t / `,
+        `${datasetsToDownload.map((dataset) => dataset.hubmap_id).join(' /\n')} /`,
         'text/plain',
       );
 
@@ -171,9 +171,19 @@ function useBulkDownloadDialog() {
     }
   }, [isOpen, trigger]);
 
+  const removeUuidsOrRows = useCallback(
+    (uuidsToRemove: string[]) => {
+      if (deselectRows) {
+        deselectRows([...uuidsToRemove]);
+      }
+      setUuids(new Set([...uuids].filter((uuid) => !uuidsToRemove.includes(uuid))));
+    },
+    [deselectRows, setUuids, uuids],
+  );
+
   const { protectedRows, ...rest } = useProtectedDatasetsForm({
     selectedRows: new Set(uuids),
-    deselectRows: (datasetUuids: string[]) => setUuids(new Set(datasetUuids)),
+    deselectRows: removeUuidsOrRows,
     protectedDatasetsErrorMessage: (protectedDatasets) =>
       `You have selected ${protectedDatasets.length} protected datasets.`,
     trackEventHelper: (numProtectedDatasets) => {
@@ -184,10 +194,6 @@ function useBulkDownloadDialog() {
       });
     },
   });
-
-  const removeAndUnselectProtectedDatasets = useCallback(() => {
-    setUuids(new Set([...uuids].filter((uuid) => !protectedRows.find((row) => row._source?.uuid === uuid))));
-  }, [uuids, protectedRows, setUuids]);
 
   return {
     control,
@@ -203,7 +209,6 @@ function useBulkDownloadDialog() {
     handleClose,
     openDialog,
     protectedRows,
-    removeAndUnselectProtectedDatasets,
     ...rest,
   };
 }

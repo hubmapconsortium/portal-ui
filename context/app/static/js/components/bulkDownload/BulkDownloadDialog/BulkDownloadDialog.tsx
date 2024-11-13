@@ -76,13 +76,13 @@ function ProtectedDatasetsSection({
   errorMessages,
   protectedHubmapIds,
   protectedRows,
-  removeAndUnselectProtectedDatasets,
+  removeProtectedDatasets,
 }: {
   control: Control<BulkDownloadFormTypes>;
   errorMessages: string[];
   protectedHubmapIds: string;
   protectedRows: DatasetAccessLevelHits;
-  removeAndUnselectProtectedDatasets: () => void;
+  removeProtectedDatasets: () => void;
 }) {
   if (errorMessages.length === 0) {
     return null;
@@ -94,7 +94,7 @@ function ProtectedDatasetsSection({
       <RemoveProtectedDatasetsFormField
         control={control}
         protectedHubmapIds={protectedHubmapIds}
-        removeProtectedDatasets={removeAndUnselectProtectedDatasets}
+        removeProtectedDatasets={removeProtectedDatasets}
         protectedRows={protectedRows}
       />
     </Stack>
@@ -125,6 +125,10 @@ function DownloadSelection({
   control,
   downloadOptions,
   isLoading,
+  errorMessages,
+  protectedHubmapIds,
+  protectedRows,
+  removeProtectedDatasets,
 }: {
   control: Control<BulkDownloadFormTypes>;
   downloadOptions: {
@@ -132,21 +136,34 @@ function DownloadSelection({
     label: string;
   }[];
   isLoading: boolean;
+  errorMessages: string[];
+  protectedHubmapIds: string;
+  protectedRows: DatasetAccessLevelHits;
+  removeProtectedDatasets: () => void;
 }) {
   if (isLoading) {
     return <Skeleton variant="text" height="20rem" />;
   }
 
   return downloadOptions.length > 0 ? (
-    <Step title="Download Options" hideRequiredText>
-      <DownloadOptionsDescription />
-      <SummaryPaper sx={{ marginBottom: 1 }}>
-        <Stack direction="column" spacing={2}>
-          <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" />
-          <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
-        </Stack>
-      </SummaryPaper>
-    </Step>
+    <Box>
+      <Step title="Download Options" hideRequiredText>
+        <ProtectedDatasetsSection
+          control={control}
+          errorMessages={errorMessages}
+          protectedHubmapIds={protectedHubmapIds}
+          protectedRows={protectedRows}
+          removeProtectedDatasets={removeProtectedDatasets}
+        />
+        <DownloadOptionsDescription />
+        <SummaryPaper>
+          <Stack direction="column" spacing={2}>
+            <BulkDownloadOptionsField control={control} name="bulkDownloadOptions" />
+            <BulkDownloadMetadataField control={control} name="bulkDownloadMetadata" />
+          </Stack>
+        </SummaryPaper>
+      </Step>
+    </Box>
   ) : (
     <Box paddingTop={1}>
       <Alert severity="warning">
@@ -158,7 +175,7 @@ function DownloadSelection({
 
 const formId = 'bulk-download-form';
 
-function BulkDownloadDialog() {
+function BulkDownloadDialog({ deselectRows }: { deselectRows?: (uuids: string[]) => void }) {
   const {
     handleSubmit,
     onSubmit,
@@ -170,7 +187,7 @@ function BulkDownloadDialog() {
     downloadOptions,
     errorMessages,
     ...rest
-  } = useBulkDownloadDialog();
+  } = useBulkDownloadDialog({ deselectRows });
 
   return (
     <DialogModal
@@ -179,10 +196,15 @@ function BulkDownloadDialog() {
       content={
         // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
-          <Stack spacing={1}>
+          <Stack spacing={2}>
             <DownloadDescription />
-            <ProtectedDatasetsSection control={control} errorMessages={errorMessages} {...rest} />
-            <DownloadSelection control={control} downloadOptions={downloadOptions} isLoading={isLoading} />
+            <DownloadSelection
+              control={control}
+              downloadOptions={downloadOptions}
+              isLoading={isLoading}
+              errorMessages={errorMessages}
+              {...rest}
+            />
           </Stack>
         </form>
       }
