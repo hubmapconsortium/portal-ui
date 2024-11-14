@@ -275,6 +275,7 @@ export function getEntityCreationInfo({
   return {
     creationLabel,
     creationVerb,
+    creationTimestamp: creationTimestamp ?? 0,
     creationDate: creationTimestamp ? format(creationTimestamp, 'yyyy-MM-dd') : 'N/A',
   };
 }

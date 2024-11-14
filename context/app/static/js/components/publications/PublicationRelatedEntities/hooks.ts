@@ -6,6 +6,7 @@ import {
   organCol,
   dataTypesCol,
   statusCol,
+  publishedTimestampCol,
 } from 'js/components/detailPage/derivedEntities/columns';
 
 import { getAncestorsQuery } from 'js/helpers/queries';
@@ -103,7 +104,7 @@ function usePublicationsRelatedEntities(uuid: string) {
       entityType: 'Dataset' as const,
       tabLabel: 'Datasets',
       data: ancestorsSplitByEntityType.Dataset,
-      columns: [dataTypesCol, organCol, statusCol, createdTimestampCol],
+      columns: [dataTypesCol, organCol, statusCol, publishedTimestampCol],
     },
   ];
 
