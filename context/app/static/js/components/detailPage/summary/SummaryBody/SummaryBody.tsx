@@ -121,7 +121,7 @@ function SummaryBodyContent({
 }: { isEntityHeader?: boolean } & Partial<StackProps>) {
   const { entity } = useFlaskDataContext();
   const { description } = entity;
-  const { creationLabel, creationTimestamp } = getEntityCreationInfo(entity);
+  const { creationLabel, creationDate } = getEntityCreationInfo(entity);
 
   if (isPublication(entity)) {
     return (
@@ -139,7 +139,7 @@ function SummaryBodyContent({
       <DatasetConsortium />
       <DatasetCitation />
       <CollectionCitation />
-      <StyledCreationDate label={creationLabel} timestamp={creationTimestamp} />
+      <StyledCreationDate label={creationLabel}>{creationDate}</StyledCreationDate>
     </Stack>
   );
 }

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { formatDate } from 'date-fns/format';
 
 import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import SummarizeRounded from '@mui/icons-material/SummarizeRounded';
@@ -72,7 +71,7 @@ function Contact() {
 function SummaryAccordion() {
   const { dataset } = useProcessedDatasetContext();
   const { group_name, mapped_consortium, creation_action } = dataset;
-  const { creationLabel, creationTimestamp } = getEntityCreationInfo(dataset);
+  const { creationLabel, creationDate } = getEntityCreationInfo(dataset);
 
   return (
     <Subsection title="Summary" icon={<SummarizeRounded />}>
@@ -83,9 +82,7 @@ function SummaryAccordion() {
         </LabelledSectionText>
         <LabelledSectionText label="Consortium">{mapped_consortium}</LabelledSectionText>
         <Contact />
-        <LabelledSectionText label={creationLabel}>
-          {creationTimestamp ? formatDate(new Date(creationTimestamp), 'yyyy-MM-dd') : 'N/A'}
-        </LabelledSectionText>
+        <LabelledSectionText label={creationLabel}>{creationDate}</LabelledSectionText>
       </Stack>
     </Subsection>
   );

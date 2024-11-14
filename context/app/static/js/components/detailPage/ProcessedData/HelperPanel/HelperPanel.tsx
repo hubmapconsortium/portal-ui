@@ -14,7 +14,6 @@ import { LineClampWithTooltip } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { getEntityCreationInfo } from 'js/helpers/functions';
 
-import { formatDate } from 'date-fns/format';
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import StatusIcon from '../../StatusIcon';
@@ -69,7 +68,7 @@ function HelperPanelBody() {
   if (!currentDataset) {
     return null;
   }
-  const { creationLabel, creationTimestamp } = getEntityCreationInfo(currentDataset);
+  const { creationLabel, creationDate } = getEntityCreationInfo(currentDataset);
 
   const { title, description, pipeline, assay_display_name, creation_action, group_name } = currentDataset;
   return (
@@ -88,9 +87,7 @@ function HelperPanelBody() {
       <HelperPanelBodyItem label="Group">
         <ProcessedDataGroup creation_action={creation_action} group_name={group_name} />
       </HelperPanelBodyItem>
-      <HelperPanelBodyItem label={creationLabel}>
-        {creationTimestamp && formatDate(creationTimestamp, 'yyyy-MM-dd')}
-      </HelperPanelBodyItem>
+      <HelperPanelBodyItem label={creationLabel}>{creationDate}</HelperPanelBodyItem>
     </>
   );
 }

@@ -135,38 +135,38 @@ test('getEntityCreationInfo', () => {
   expect(
     getEntityCreationInfo({
       entity_type: 'Dataset',
-      published_timestamp: 1,
-      last_modified_timestamp: 2,
-      created_timestamp: 3,
+      published_timestamp: 1572559603311,
+      last_modified_timestamp: 1721426610012,
+      created_timestamp: 1572558930500,
     }),
   ).toStrictEqual({
     creationLabel: 'Publication Date',
     creationVerb: 'Published',
-    creationTimestamp: 1,
+    creationDate: '2019-10-31',
   });
 
   expect(
     getEntityCreationInfo({
       entity_type: 'Dataset',
-      last_modified_timestamp: 1,
-      created_timestamp: 2,
+      last_modified_timestamp: 1572559603311,
+      created_timestamp: 1721426610012,
     }),
   ).toStrictEqual({
     creationLabel: 'Last Modified',
     creationVerb: 'Modified',
-    creationTimestamp: 1,
+    creationDate: '2019-10-31',
   });
 
   expect(
     getEntityCreationInfo({
       entity_type: 'Sample',
-      created_timestamp: 1,
-      published_timestamp: 2,
-      last_modified_timestamp: 3,
+      created_timestamp: 1572559603311,
+      published_timestamp: 1721426610012,
+      last_modified_timestamp: 1572558930500,
     }),
   ).toStrictEqual({
     creationLabel: 'Creation Date',
     creationVerb: 'Created',
-    creationTimestamp: 1,
+    creationDate: '2019-10-31',
   });
 });

@@ -1,4 +1,5 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { format } from 'date-fns/format';
 import { nodeIcons } from 'js/components/detailPage/DatasetRelationships/nodeTypes';
 import { Dataset, ESEntityType, Entity, isDataset } from 'js/components/types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
@@ -251,15 +252,29 @@ export function getEntityCreationInfo({
   last_modified_timestamp,
 }: Pick<Entity, 'entity_type'> &
   Partial<Pick<Dataset, 'published_timestamp' | 'last_modified_timestamp' | 'created_timestamp'>>) {
+  let creationLabel;
+  let creationVerb;
+  let creationTimestamp;
+
   if (entity_type === 'Dataset') {
     if (published_timestamp) {
-      return { creationLabel: 'Publication Date', creationVerb: 'Published', creationTimestamp: published_timestamp };
+      creationLabel = 'Publication Date';
+      creationVerb = 'Published';
+      creationTimestamp = published_timestamp;
+    } else {
+      creationLabel = 'Last Modified Date';
+      creationVerb = 'Modified';
+      creationTimestamp = last_modified_timestamp;
     }
-    return {
-      creationLabel: 'Last Modified Date',
-      creationVerb: 'Modified',
-      creationTimestamp: last_modified_timestamp,
-    };
+  } else {
+    creationLabel = 'Creation Date';
+    creationVerb = 'Created';
+    creationTimestamp = created_timestamp;
   }
-  return { creationLabel: 'Creation Date', creationVerb: 'Created', creationTimestamp: created_timestamp };
+
+  return {
+    creationLabel,
+    creationVerb,
+    creationDate: creationTimestamp ? format(creationTimestamp, 'yyyy-MM-dd') : 'N/A',
+  };
 }
