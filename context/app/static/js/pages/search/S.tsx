@@ -5,6 +5,7 @@ import Search from 'js/components/search';
 import { FACETS } from 'js/components/search/store';
 import { EntityWithType, isDonor } from 'js/components/types';
 import { getPortalESField } from 'js/components/search/buildTypesMap';
+import { useAppContext } from 'js/components/Contexts';
 
 const sharedConfig = {
   searchFields: ['all_text', 'description'],
@@ -50,7 +51,10 @@ function buildDefaultQuery(type: 'Dataset' | 'Donor' | 'Sample') {
 }
 
 const donorFacetGroups = {
-  'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Donor' }),
+  'Donor Metadata': [
+    ...makeDonorMetadataFilters({ entity_type: 'Donor' }),
+    { field: 'created_timestamp', type: FACETS.date },
+  ],
   Affiliation: sharedAffiliationFilters,
 };
 
@@ -64,7 +68,7 @@ const donorConfig = {
       'mapped_metadata.body_mass_index_value',
       'mapped_metadata.sex',
       'mapped_metadata.race',
-      'last_modified_timestamp',
+      'created_timestamp',
     ],
     tile: [...sharedTileFields, 'mapped_metadata.age_unit'],
   },
@@ -84,6 +88,7 @@ const sampleFacetGroups = {
       field: 'sample_category',
       type: FACETS.term,
     },
+    { field: 'created_timestamp', type: FACETS.date },
   ],
   'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Sample' }),
   Affiliation: sharedAffiliationFilters,
@@ -92,13 +97,7 @@ const sampleFacetGroups = {
 const sampleConfig = {
   ...sharedConfig,
   sourceFields: {
-    table: [
-      'hubmap_id',
-      'group_name',
-      'sample_category',
-      'origin_samples_unique_mapped_organs',
-      'last_modified_timestamp',
-    ],
+    table: ['hubmap_id', 'group_name', 'sample_category', 'origin_samples_unique_mapped_organs', 'created_timestamp'],
     tile: [...sharedTileFields, 'origin_samples_unique_mapped_organs'],
   },
   facets: sampleFacetGroups,
@@ -107,87 +106,102 @@ const sampleConfig = {
   type: 'Sample' as const,
 };
 
-const datasetFacetGroups = {
-  'Dataset Metadata': [
-    {
-      field: 'raw_dataset_type',
-      childField: 'assay_display_name',
-      type: FACETS.hierarchical,
-      order: { type: '_term', dir: 'asc' } as const,
-    },
-    {
-      field: 'origin_samples_unique_mapped_organs',
-      type: FACETS.term,
-    },
-    {
-      field: 'analyte_class',
-      type: FACETS.term,
-    },
-    {
-      field: 'source_samples.sample_category',
-      type: FACETS.term,
-    },
-    { field: 'mapped_status', childField: 'mapped_data_access_level', type: FACETS.hierarchical },
-    { field: 'published_timestamp', type: FACETS.date },
-  ],
-  'Dataset Processing': [
-    {
-      field: 'processing',
-      type: FACETS.term,
-    },
-    {
-      field: 'pipeline',
-      type: FACETS.term,
-    },
-    {
-      field: 'visualization',
-      type: FACETS.term,
-    },
-    {
-      field: 'processing_type',
-      type: FACETS.term,
-    },
-    {
-      field: 'assay_modality',
-      type: FACETS.term,
-    },
-  ],
-  'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Dataset' }),
-  Affiliation: [{ field: 'mapped_consortium', type: FACETS.term }, ...sharedAffiliationFilters],
-};
-
-const datasetConfig = {
-  ...sharedConfig,
-  sourceFields: {
-    table: [
-      'hubmap_id',
-      'group_name',
-      'assay_display_name',
-      'origin_samples_unique_mapped_organs',
-      'mapped_status',
-      'last_modified_timestamp',
+function buildDatasetFacetGroups(isHubmapUser: boolean) {
+  return {
+    'Dataset Metadata': [
+      {
+        field: 'raw_dataset_type',
+        childField: 'assay_display_name',
+        type: FACETS.hierarchical,
+        order: { type: '_term', dir: 'asc' } as const,
+      },
+      {
+        field: 'origin_samples_unique_mapped_organs',
+        type: FACETS.term,
+      },
+      {
+        field: 'analyte_class',
+        type: FACETS.term,
+      },
+      {
+        field: 'source_samples.sample_category',
+        type: FACETS.term,
+      },
+      { field: 'mapped_status', childField: 'mapped_data_access_level', type: FACETS.hierarchical },
+      { field: 'published_timestamp', type: FACETS.date },
+      ...(isHubmapUser ? [{ field: 'last_modified_timestamp', type: FACETS.date }] : []),
     ],
-    tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
-  },
-  sortField: {
-    field: 'published_timestamp',
-    direction: 'desc' as const,
-    secondaryField: { field: 'mapped_status', direction: 'desc' as const },
-  },
-  facets: datasetFacetGroups,
-  ...buildDefaultQuery('Dataset'),
-  // TODO: figure out how to make assertion unnecessary.
-  type: 'Dataset' as const,
-};
+    'Dataset Processing': [
+      {
+        field: 'processing',
+        type: FACETS.term,
+      },
+      {
+        field: 'pipeline',
+        type: FACETS.term,
+      },
+      {
+        field: 'visualization',
+        type: FACETS.term,
+      },
+      {
+        field: 'processing_type',
+        type: FACETS.term,
+      },
+      {
+        field: 'assay_modality',
+        type: FACETS.term,
+      },
+    ],
+    'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Dataset' }),
+    Affiliation: [{ field: 'mapped_consortium', type: FACETS.term }, ...sharedAffiliationFilters],
+  };
+}
+
+function buildDatasetConfig(isHubmapUser: boolean) {
+  return {
+    ...sharedConfig,
+    sourceFields: {
+      table: [
+        'hubmap_id',
+        'group_name',
+        'assay_display_name',
+        'origin_samples_unique_mapped_organs',
+        'mapped_status',
+        isHubmapUser ? 'last_modified_timestamp' : 'published_timestamp',
+      ],
+      tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
+    },
+    sortField: {
+      field: 'published_timestamp',
+      direction: 'desc' as const,
+      secondaryField: { field: 'mapped_status', direction: 'desc' as const },
+    },
+    facets: buildDatasetFacetGroups(isHubmapUser),
+    ...buildDefaultQuery('Dataset'),
+    // TODO: figure out how to make assertion unnecessary.
+    type: 'Dataset' as const,
+  };
+}
 
 const configs = {
   donors: donorConfig,
   samples: sampleConfig,
-  datasets: datasetConfig,
 };
 
-function S({ type }: { type: 'donors' | 'samples' | 'datasets' }) {
-  const config = configs[type];
+type SearchTypes = 'donors' | 'samples' | 'datasets';
+function useSearchConfig(type: SearchTypes) {
+  const { isHubmapUser } = useAppContext();
+
+  if (type === 'datasets') {
+    return buildDatasetConfig(isHubmapUser);
+  }
+
+  return configs[type];
+}
+
+function S({ type }: { type: SearchTypes }) {
+  const config = useSearchConfig(type);
   return <Search config={config} />;
 }
 export default S;
