@@ -11,6 +11,7 @@ import {
   shouldCapitalizeString,
   generateCommaList,
   isValidEmail,
+  getEntityCreationInfo,
 } from './functions';
 
 test('isEmptyArrayOrObject', () => {
@@ -127,5 +128,45 @@ test('isValidEmail', () => {
 
   invalidEmails.forEach((email) => {
     expect(isValidEmail(email)).toStrictEqual(false);
+  });
+});
+
+test('getEntityCreationInfo', () => {
+  expect(
+    getEntityCreationInfo({
+      entity_type: 'Dataset',
+      published_timestamp: 1,
+      last_modified_timestamp: 2,
+      created_timestamp: 3,
+    }),
+  ).toStrictEqual({
+    creationLabel: 'Publication Date',
+    creationVerb: 'Published',
+    creationTimestamp: 1,
+  });
+
+  expect(
+    getEntityCreationInfo({
+      entity_type: 'Dataset',
+      last_modified_timestamp: 1,
+      created_timestamp: 2,
+    }),
+  ).toStrictEqual({
+    creationLabel: 'Last Modified',
+    creationVerb: 'Modified',
+    creationTimestamp: 1,
+  });
+
+  expect(
+    getEntityCreationInfo({
+      entity_type: 'Sample',
+      created_timestamp: 1,
+      published_timestamp: 2,
+      last_modified_timestamp: 3,
+    }),
+  ).toStrictEqual({
+    creationLabel: 'Creation Date',
+    creationVerb: 'Created',
+    creationTimestamp: 1,
   });
 });

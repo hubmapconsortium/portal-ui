@@ -239,6 +239,11 @@ export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?
   return entityIconMap[entity.entity_type];
 }
 
+/**
+ * Find the creation information for a given entity. Datasets use the published date if available,
+ * otherwise the last modified date. Other entities use the creation date.
+ * @author Austen Money
+ */
 export function getEntityCreationInfo({
   entity_type,
   published_timestamp,
