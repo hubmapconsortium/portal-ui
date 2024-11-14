@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import Stack from '@mui/material/Stack';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 
@@ -14,6 +14,11 @@ interface DateRangeFacetProps {
 function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number; max: number }) {
   const filterRange = useSearchStore((state) => state.filterRange);
   const [values, setValues] = useState([min, max]);
+
+  // Reset slider position when filter chip is deleted.
+  useEffect(() => {
+    setValues([min, max]);
+  }, [min, max, setValues]);
 
   const filterMin = useCallback(
     (value: Date | null) => {
@@ -85,6 +90,10 @@ function DateRangeFacetGuard({ field, ...rest }: DateRangeFacetProps) {
   } = aggregations;
 
   if (!('value' in aggMin && 'value' in aggMax)) {
+    return null;
+  }
+
+  if (!aggMin?.value || !aggMax?.value) {
     return null;
   }
 

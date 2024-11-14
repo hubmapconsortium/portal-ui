@@ -112,7 +112,7 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
         }
 
         if (curr.type === FACETS.date) {
-          draft.filters[curr.field] = { values: { min: 0, max: 0 }, type: curr.type };
+          draft.filters[curr.field] = { values: { min: undefined, max: undefined }, type: curr.type };
           draft.facets[curr.field] = curr;
         }
 
@@ -235,14 +235,18 @@ const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<stri
         };
       }
 
-      if (isRangeFilter<string[] | Set<string>>(v) || isDateFilter<string[] | Set<string>>(v)) {
+      if (isRangeFilter<string[] | Set<string>>(v)) {
+        draft[k] = {
+          ...v,
+          values: URLStateFilter && isRangeFilter<string[]>(URLStateFilter) ? URLStateFilter?.values : v.values,
+        };
+      }
+
+      if (isDateFilter<string[] | Set<string>>(v)) {
         draft[k] = {
           ...v,
           values:
-            URLStateFilter &&
-            (isRangeFilter<string[]>(URLStateFilter) || isDateFilter<string[] | Set<string>>(URLStateFilter))
-              ? URLStateFilter?.values
-              : v.values,
+            URLStateFilter && isDateFilter<string[] | Set<string>>(URLStateFilter) ? URLStateFilter?.values : v.values,
         };
       }
 

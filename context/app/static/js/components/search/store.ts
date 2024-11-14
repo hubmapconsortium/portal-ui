@@ -63,10 +63,16 @@ export interface RangeValues {
 
 export interface DateConfig extends Omit<RangeConfig, 'type' | 'min' | 'max'> {
   type: typeof FACETS.date;
+  min?: number;
+  max?: number;
 }
 
-export interface DateValues extends Omit<RangeValues, 'type'> {
+export interface DateValues extends Omit<RangeValues, 'type' | 'values'> {
   type: typeof FACETS.date;
+  values: {
+    min?: number;
+    max?: number;
+  };
 }
 
 export type Filter<V = Set<string>> = TermValues<V> | HierarchicalTermValues<V> | RangeValues | DateValues;
@@ -177,6 +183,7 @@ export interface SearchStoreActions {
     value: string;
   }) => void;
   filterRange: ({ field, min, max }: { field: string; min: number; max: number }) => void;
+  filterDate: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -356,7 +363,19 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
       set((state) => {
         const filter = state?.filters[field];
 
-        if (!isRangeFilter(filter) && !isDateFilter(filter)) {
+        if (!isRangeFilter(filter)) {
+          return;
+        }
+
+        filter.values = { min, max };
+        replaceURLSearchParams(state);
+      });
+    },
+    filterDate: ({ field, min, max }) => {
+      set((state) => {
+        const filter = state?.filters[field];
+
+        if (!isDateFilter(filter)) {
           return;
         }
 

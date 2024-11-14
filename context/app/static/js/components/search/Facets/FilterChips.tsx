@@ -82,6 +82,7 @@ function FilterChips() {
   const facets = useSearchStore((state) => state.facets);
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterRange = useSearchStore((state) => state.filterRange);
+  const filterDate = useSearchStore((state) => state.filterDate);
 
   const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
     <>
@@ -121,7 +122,7 @@ function FilterChips() {
               <FilterChip
                 label={`${getFieldLabel(field)}: ${format(v.values.min, 'yyyy-MM')} - ${format(v.values.max, 'yyyy-MM')}`}
                 key={field}
-                onDelete={() => filterRange({ field, min: 0, max: 0 })}
+                onDelete={() => filterDate({ field, min: undefined, max: undefined })}
               />
             );
           }
