@@ -53,6 +53,11 @@ function buildDefaultQuery(type: 'Dataset' | 'Donor' | 'Sample') {
 const donorFacetGroups = {
   'Donor Metadata': [
     ...makeDonorMetadataFilters({ entity_type: 'Donor' }),
+    {
+      field: 'descendant_counts.entity_type.Dataset',
+      type: FACETS.exists,
+      default: true,
+    },
     { field: 'created_timestamp', type: FACETS.date },
   ],
   Affiliation: sharedAffiliationFilters,
@@ -87,6 +92,11 @@ const sampleFacetGroups = {
     {
       field: 'sample_category',
       type: FACETS.term,
+    },
+    {
+      field: 'descendant_counts.entity_type.Dataset',
+      type: FACETS.exists,
+      default: true,
     },
     { field: 'created_timestamp', type: FACETS.date },
   ],

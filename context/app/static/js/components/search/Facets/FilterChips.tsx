@@ -8,11 +8,13 @@ import { format } from 'date-fns/format';
 import { trackEvent } from 'js/helpers/trackers';
 import {
   DateValues,
+  ExistsValues,
   HierarchicalTermValues,
   RangeValues,
   TermValues,
   isDateFacet,
   isDateFilter,
+  isExistsFilter,
   isHierarchicalFacet,
   isHierarchicalFilter,
   isRangeFacet,
@@ -83,11 +85,12 @@ function FilterChips() {
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterRange = useSearchStore((state) => state.filterRange);
   const filterDate = useSearchStore((state) => state.filterDate);
+  const filterExists = useSearchStore((state) => state.filterExists);
 
   const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
     <>
       {Object.entries(filters).map(
-        ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues]) => {
+        ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues]) => {
           if (isTermFilter(v) && v.values.size) {
             return [...v.values].map((val) => (
               <FilterChip
@@ -144,6 +147,17 @@ function FilterChips() {
               ));
             });
           }
+
+          if (isExistsFilter(v) && v.values) {
+            return (
+              <FilterChip
+                label={`${getFieldLabel(field)}: ${v.values}`}
+                key={field}
+                onDelete={() => filterExists({ field })}
+              />
+            );
+          }
+
           return null;
         },
       )}

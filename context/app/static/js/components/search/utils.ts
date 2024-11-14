@@ -13,6 +13,7 @@ import {
   SortField,
   isDateFilter,
   isDateFacet,
+  isExistsFilter,
 } from './store';
 import { getPortalESField } from './buildTypesMap';
 
@@ -112,6 +113,12 @@ export function buildQuery({
             .map((v) => [...v])
             .flat();
           draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
+        }
+      }
+
+      if (isExistsFilter(filter)) {
+        if (filter.values) {
+          draft[portalField] = esb.existsQuery(field);
         }
       }
     });

@@ -41,6 +41,9 @@ const fieldConfigurationsMap: Record<
   dataset_type: {
     label: 'Dataset Type',
   },
+  'descendant_counts.entity_type.Dataset': {
+    label: 'Show Entities Without Datasets',
+  },
   descendant_ids: {
     label: 'Descendant ID',
   },

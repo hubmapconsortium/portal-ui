@@ -31,6 +31,7 @@ import {
   parseURLState,
   Facet,
   isDateFilter,
+  isExistsFilter,
 } from './store';
 import Results from './Results';
 import Facets from './Facets/Facets';
@@ -113,6 +114,11 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
 
         if (curr.type === FACETS.date) {
           draft.filters[curr.field] = { values: { min: undefined, max: undefined }, type: curr.type };
+          draft.facets[curr.field] = curr;
+        }
+
+        if (curr.type === FACETS.exists) {
+          draft.filters[curr.field] = { values: curr.default, type: curr.type };
           draft.facets[curr.field] = curr;
         }
 
@@ -247,6 +253,16 @@ const mergeFilters = (filterState: FiltersType, filterURLState: FiltersType<stri
           ...v,
           values:
             URLStateFilter && isDateFilter<string[] | Set<string>>(URLStateFilter) ? URLStateFilter?.values : v.values,
+        };
+      }
+
+      if (isExistsFilter<string[] | Set<string>>(v)) {
+        draft[k] = {
+          ...v,
+          values:
+            URLStateFilter && isExistsFilter<string[] | Set<string>>(URLStateFilter)
+              ? URLStateFilter?.values
+              : v.values,
         };
       }
 
