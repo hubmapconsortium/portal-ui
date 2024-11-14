@@ -1,6 +1,5 @@
 import React, { useCallback } from 'react';
 
-import { capitalizeString } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
 import { ExistsValues, isExistsFilter, useSearchStore } from '../store';
 import { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel } from './style';
@@ -38,7 +37,7 @@ function ExistsFacet({ filter, field }: { filter: ExistsValues; field: string })
             onChange={handleClick}
           />
         }
-        label={capitalizeString(active.toString())}
+        label="True"
       />
     </FacetAccordion>
   );

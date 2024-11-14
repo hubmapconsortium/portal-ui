@@ -39,6 +39,7 @@ export interface TermValues<V = Set<string>> {
 
 export interface ExistsConfig extends FacetConfig {
   default: boolean;
+  invert?: boolean;
   type: typeof FACETS.exists;
 }
 
@@ -265,6 +266,10 @@ export function filterHasValues({ filter, facet }: { filter: Filter; facet: Face
 
   if (isDateFilter(filter) && isDateFacet(facet)) {
     return filter.values.min && filter.values.max;
+  }
+
+  if (isExistsFilter(filter) && isExistsFacet(facet)) {
+    return facet?.invert ? !filter.values : filter.values;
   }
   return false;
 }

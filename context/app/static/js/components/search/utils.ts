@@ -14,6 +14,7 @@ import {
   isDateFilter,
   isDateFacet,
   isExistsFilter,
+  isExistsFacet,
 } from './store';
 import { getPortalESField } from './buildTypesMap';
 
@@ -116,9 +117,11 @@ export function buildQuery({
         }
       }
 
-      if (isExistsFilter(filter)) {
-        if (filter.values) {
-          draft[portalField] = esb.existsQuery(field);
+      if (isExistsFilter(filter) && isExistsFacet(facetConfig)) {
+        if (filterHasValues({ filter, facet: facetConfig })) {
+          draft[portalField] = facetConfig?.invert
+            ? esb.boolQuery().mustNot(esb.existsQuery(field))
+            : esb.existsQuery(field);
         }
       }
     });

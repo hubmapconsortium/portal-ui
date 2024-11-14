@@ -15,12 +15,14 @@ import {
   isDateFacet,
   isDateFilter,
   isExistsFilter,
+  isExistsFacet,
   isHierarchicalFacet,
   isHierarchicalFilter,
   isRangeFacet,
   isRangeFilter,
   isTermFilter,
   useSearchStore,
+  filterHasValues,
 } from '../store';
 import { getFieldLabel, getTransformedFieldValue } from '../fieldConfigurations';
 
@@ -148,7 +150,9 @@ function FilterChips() {
             });
           }
 
-          if (isExistsFilter(v) && v.values) {
+          const hasValues = filterHasValues({ filter: v, facet: facetConfig });
+
+          if (isExistsFilter(v) && isExistsFacet(facetConfig) && !hasValues && facetConfig?.invert) {
             return (
               <FilterChip
                 label={`${getFieldLabel(field)}: ${v.values}`}

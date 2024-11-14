@@ -56,7 +56,8 @@ const donorFacetGroups = {
     {
       field: 'descendant_counts.entity_type.Dataset',
       type: FACETS.exists,
-      default: true,
+      invert: true,
+      default: false,
     },
     { field: 'created_timestamp', type: FACETS.date },
   ],
@@ -96,7 +97,8 @@ const sampleFacetGroups = {
     {
       field: 'descendant_counts.entity_type.Dataset',
       type: FACETS.exists,
-      default: true,
+      invert: true,
+      default: false,
     },
     { field: 'created_timestamp', type: FACETS.date },
   ],
