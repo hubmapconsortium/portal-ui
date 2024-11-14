@@ -1,6 +1,6 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 import { nodeIcons } from 'js/components/detailPage/DatasetRelationships/nodeTypes';
-import { ESEntityType, isDataset } from 'js/components/types';
+import { Dataset, ESEntityType, Entity, isDataset } from 'js/components/types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { MergedWorkspace } from 'js/components/workspaces/types';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -220,7 +220,7 @@ export function isValidEmail(email: string) {
   // validation regex, sourced from HTML living standard: http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#e-mail-state-(type=email)
   const emailRegex =
     // eslint-disable-next-line
-    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
   const cleanedValue: string = email?.replace(/^\s+|\s+$/g, '');
   return emailRegex.test(cleanedValue);
@@ -237,4 +237,19 @@ export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?
     return nodeIcons.primaryDataset;
   }
   return entityIconMap[entity.entity_type];
+}
+
+export function getEntityCreationInfo({
+  published_timestamp,
+  created_timestamp,
+  last_modified_timestamp,
+}: Partial<Pick<Dataset, 'published_timestamp'> & Pick<Entity, 'created_timestamp' | 'last_modified_timestamp'>>) {
+  if (published_timestamp) {
+    return { creationLabel: 'Publication Date', creationVerb: 'Published', creationTimestamp: published_timestamp };
+  }
+  if (created_timestamp) {
+    return { creationLabel: 'Creation Date', creationVerb: 'Created', creationTimestamp: created_timestamp };
+  }
+
+  return { creationLabel: 'Last Modified Date', creationVerb: 'Modified', creationTimestamp: last_modified_timestamp };
 }

@@ -15,7 +15,8 @@ const source = [
   'is_component',
   'metadata',
   'descendant_counts',
-  'last_modified_timestamp',
+  'published_timestamp',
+  'created_timestamp',
 ];
 
 function getPrimaryMultiAssay(uuid: string) {
@@ -91,7 +92,8 @@ export type MultiAssayEntity = Pick<
   | 'is_component'
   | 'metadata'
   | 'descendant_counts'
-  | 'last_modified_timestamp'
+  | 'published_timestamp'
+  | 'created_timestamp'
 >;
 
 function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 'processing' | 'is_component'>) {
@@ -111,11 +113,11 @@ function buildRelatedDatasets({ entities }: { entities: MultiAssayEntity[] }) {
         const multiAssayType = getMultiAssayType({ processing: curr.processing, is_component: curr.is_component });
         if (draft[multiAssayType]) {
           draft[multiAssayType].push(curr);
-          // Sort by if pushlished, and then by last_modified_timestamp
+          // Sort by if pushlished, and then by published_timestamp
           draft[multiAssayType].sort((a, b) => {
             if (a.mapped_status === 'published' && b.mapped_status !== 'published') return -1;
             if (a.mapped_status !== 'published' && b.mapped_status === 'published') return 1;
-            return b.last_modified_timestamp - a.last_modified_timestamp;
+            return b.published_timestamp - a.published_timestamp;
           });
         }
       });

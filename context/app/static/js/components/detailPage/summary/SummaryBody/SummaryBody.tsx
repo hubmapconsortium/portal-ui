@@ -6,9 +6,10 @@ import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Citation from 'js/components/detailPage/Citation';
-import { Entity, isCollection, isDataset, isPublication } from 'js/components/types';
+import { Dataset, Entity, isCollection, isDataset, isPublication, isSupport } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { getCollectionDOI } from 'js/pages/Collection/utils';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 import { StyledCreationDate } from './style';
 import PublicationSummaryBody from './PublicationSummaryBody';
 import SummaryDescription from './SummaryDescription';
@@ -121,10 +122,9 @@ function SummaryBodyContent({
   description,
   ...stackProps
 }: { isEntityHeader?: boolean } & Partial<StackProps> &
-  Pick<Entity, 'description' | 'created_timestamp' | 'published_timestamp'>) {
-  const creationLabel = published_timestamp ? 'Publication Date' : 'Creation Date';
-  const creationTimestamp = published_timestamp ?? created_timestamp;
-
+  Pick<Entity, 'description' | 'created_timestamp'> &
+  Partial<Pick<Dataset, 'published_timestamp'>>) {
+  const { creationLabel, creationTimestamp } = getEntityCreationInfo({ published_timestamp, created_timestamp });
   const { entity } = useFlaskDataContext();
 
   if (isPublication(entity)) {
@@ -151,7 +151,9 @@ function SummaryBodyContent({
 function SummaryBody({ isEntityHeader = false, ...stackProps }: { isEntityHeader?: boolean } & Partial<StackProps>) {
   const { entity } = useFlaskDataContext();
 
-  const { created_timestamp, published_timestamp, description } = entity;
+  const { created_timestamp, description } = entity;
+  // Only datasets and supports have published_timestamp - prevent type from being unknown
+  const published_timestamp = isDataset(entity) || isSupport(entity) ? entity.published_timestamp : undefined;
 
   return (
     <SummaryBodyContent

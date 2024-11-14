@@ -24,7 +24,7 @@ interface EntityTileProps
   uuid: string;
   id: string;
   invertColors?: boolean;
-  entityData: Partial<Entity>;
+  entityData: Partial<Entity> & { published_timestamp?: number };
   descendantCounts: Record<string, number>;
 }
 
@@ -46,7 +46,8 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
       footerContent={
         <EntityTileFooter
           invertColors={invertColors}
-          last_modified_timestamp={entityData.last_modified_timestamp}
+          published_timestamp={entityData.published_timestamp}
+          created_timestamp={entityData.created_timestamp}
           descendantCounts={descendantCounts}
         />
       }
