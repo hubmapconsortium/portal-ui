@@ -3,25 +3,17 @@ import { format } from 'date-fns/format';
 
 import Tile from 'js/shared-styles/tiles/Tile';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { getEntityCreationInfo } from 'js/helpers/functions';
 import { FooterIcon } from './style';
 
 interface EntityTileFooterProps {
-  published_timestamp?: number;
-  created_timestamp?: number;
+  creationInfo?: { creationTimestamp?: number; creationVerb: string };
   descendantCounts: Record<string, number>;
   invertColors?: boolean;
 }
 
-function EntityTileFooter({
-  published_timestamp,
-  created_timestamp,
-  invertColors,
-  descendantCounts = {},
-}: EntityTileFooterProps) {
+function EntityTileFooter({ creationInfo, invertColors, descendantCounts = {} }: EntityTileFooterProps) {
   const entries = Object.entries(descendantCounts) as [keyof typeof entityIconMap, number][];
-  const { creationVerb, creationTimestamp } = getEntityCreationInfo({ published_timestamp, created_timestamp });
-
+  const { creationTimestamp, creationVerb } = creationInfo ?? {};
   return (
     <>
       {entries.map(([k, v]) => (

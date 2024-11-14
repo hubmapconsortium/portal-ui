@@ -6,7 +6,7 @@ import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Citation from 'js/components/detailPage/Citation';
-import { Dataset, Entity, isCollection, isDataset, isPublication, isSupport } from 'js/components/types';
+import { isCollection, isDataset, isPublication } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { getCollectionDOI } from 'js/pages/Collection/utils';
 import { getEntityCreationInfo } from 'js/helpers/functions';
@@ -117,15 +117,11 @@ function CollectionCitation() {
 function SummaryBodyContent({
   isEntityHeader = false,
   direction = 'column',
-  published_timestamp,
-  created_timestamp,
-  description,
   ...stackProps
-}: { isEntityHeader?: boolean } & Partial<StackProps> &
-  Pick<Entity, 'description' | 'created_timestamp'> &
-  Partial<Pick<Dataset, 'published_timestamp'>>) {
-  const { creationLabel, creationTimestamp } = getEntityCreationInfo({ published_timestamp, created_timestamp });
+}: { isEntityHeader?: boolean } & Partial<StackProps>) {
   const { entity } = useFlaskDataContext();
+  const { description } = entity;
+  const { creationLabel, creationTimestamp } = getEntityCreationInfo(entity);
 
   if (isPublication(entity)) {
     return (
@@ -149,21 +145,7 @@ function SummaryBodyContent({
 }
 
 function SummaryBody({ isEntityHeader = false, ...stackProps }: { isEntityHeader?: boolean } & Partial<StackProps>) {
-  const { entity } = useFlaskDataContext();
-
-  const { created_timestamp, description } = entity;
-  // Only datasets and supports have published_timestamp - prevent type from being unknown
-  const published_timestamp = isDataset(entity) || isSupport(entity) ? entity.published_timestamp : undefined;
-
-  return (
-    <SummaryBodyContent
-      created_timestamp={created_timestamp}
-      published_timestamp={published_timestamp}
-      description={description}
-      isEntityHeader={isEntityHeader}
-      {...stackProps}
-    />
-  );
+  return <SummaryBodyContent isEntityHeader={isEntityHeader} {...stackProps} />;
 }
 
 export { SummaryBodyContent };

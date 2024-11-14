@@ -12,6 +12,7 @@ import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import IconLink from 'js/shared-styles/Links/iconLinks/IconLink';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 import EntityTileFooter from '../EntityTileFooter/index';
 import EntityTileBody from '../EntityTileBody/index';
 import { StyledIcon } from './style';
@@ -30,6 +31,7 @@ interface EntityTileProps
 
 function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendantCounts, ...rest }: EntityTileProps) {
   const icon: ComponentType = entity_type in entityIconMap ? entityIconMap[entity_type] : DatasetIcon;
+  const creationInfo = getEntityCreationInfo({ entity_type, ...entityData });
   return (
     <Tile
       href={`/browse/${entity_type.toLowerCase()}/${uuid}`}
@@ -44,12 +46,7 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
         />
       }
       footerContent={
-        <EntityTileFooter
-          invertColors={invertColors}
-          published_timestamp={entityData.published_timestamp}
-          created_timestamp={entityData.created_timestamp}
-          descendantCounts={descendantCounts}
-        />
+        <EntityTileFooter invertColors={invertColors} creationInfo={creationInfo} descendantCounts={descendantCounts} />
       }
       tileWidth={tileWidth}
       {...rest}

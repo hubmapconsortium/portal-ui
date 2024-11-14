@@ -240,16 +240,21 @@ export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?
 }
 
 export function getEntityCreationInfo({
+  entity_type,
   published_timestamp,
   created_timestamp,
   last_modified_timestamp,
-}: Partial<Pick<Dataset, 'published_timestamp'> & Pick<Entity, 'created_timestamp' | 'last_modified_timestamp'>>) {
-  if (published_timestamp) {
-    return { creationLabel: 'Publication Date', creationVerb: 'Published', creationTimestamp: published_timestamp };
+}: Pick<Entity, 'entity_type'> &
+  Partial<Pick<Dataset, 'published_timestamp' | 'last_modified_timestamp' | 'created_timestamp'>>) {
+  if (entity_type === 'Dataset') {
+    if (published_timestamp) {
+      return { creationLabel: 'Publication Date', creationVerb: 'Published', creationTimestamp: published_timestamp };
+    }
+    return {
+      creationLabel: 'Last Modified Date',
+      creationVerb: 'Modified',
+      creationTimestamp: last_modified_timestamp,
+    };
   }
-  if (created_timestamp) {
-    return { creationLabel: 'Creation Date', creationVerb: 'Created', creationTimestamp: created_timestamp };
-  }
-
-  return { creationLabel: 'Last Modified Date', creationVerb: 'Modified', creationTimestamp: last_modified_timestamp };
+  return { creationLabel: 'Creation Date', creationVerb: 'Created', creationTimestamp: created_timestamp };
 }
