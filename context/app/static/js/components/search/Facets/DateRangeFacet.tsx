@@ -12,7 +12,7 @@ interface DateRangeFacetProps {
 }
 
 function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number; max: number }) {
-  const filterRange = useSearchStore((state) => state.filterRange);
+  const filterDate = useSearchStore((state) => state.filterDate);
   const [values, setValues] = useState([min, max]);
 
   // Reset slider position when filter chip is deleted.
@@ -25,10 +25,10 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
       if (value) {
         const newMin = value.getTime();
         setValues([newMin, values[1]]);
-        filterRange({ field, min: newMin, max });
+        filterDate({ field, min: newMin, max });
       }
     },
-    [filterRange, max, field, setValues, values],
+    [filterDate, max, field, setValues, values],
   );
 
   const filterMax = useCallback(
@@ -36,10 +36,10 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
       if (value) {
         const newMax = value.getTime();
         setValues([values[0], newMax]);
-        filterRange({ field, min, max: newMax });
+        filterDate({ field, min, max: newMax });
       }
     },
-    [filterRange, min, field, setValues, values],
+    [filterDate, min, field, setValues, values],
   );
 
   return (
