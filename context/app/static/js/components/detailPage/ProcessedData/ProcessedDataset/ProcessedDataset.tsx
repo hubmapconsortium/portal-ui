@@ -22,11 +22,11 @@ import DataProducts from 'js/components/detailPage/files/DataProducts';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import AnalysisDetails from 'js/components/detailPage/AnalysisDetails';
 import Protocol from 'js/components/detailPage/Protocol';
-import { getDateLabelAndValue } from 'js/components/detailPage/utils';
 import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
@@ -72,7 +72,7 @@ function Contact() {
 function SummaryAccordion() {
   const { dataset } = useProcessedDatasetContext();
   const { group_name, mapped_consortium, creation_action } = dataset;
-  const [dateLabel, dateValue] = getDateLabelAndValue(dataset);
+  const { creationLabel, creationTimestamp } = getEntityCreationInfo(dataset);
 
   return (
     <Subsection title="Summary" icon={<SummarizeRounded />}>
@@ -83,8 +83,8 @@ function SummaryAccordion() {
         </LabelledSectionText>
         <LabelledSectionText label="Consortium">{mapped_consortium}</LabelledSectionText>
         <Contact />
-        <LabelledSectionText label={dateLabel}>
-          {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
+        <LabelledSectionText label={creationLabel}>
+          {creationTimestamp ? formatDate(new Date(creationTimestamp), 'yyyy-MM-dd') : 'N/A'}
         </LabelledSectionText>
       </Stack>
     </Subsection>
