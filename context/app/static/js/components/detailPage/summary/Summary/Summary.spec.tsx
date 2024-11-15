@@ -83,7 +83,7 @@ describe('Summary', () => {
       </FlaskDataContext.Provider>,
     );
 
-    expect(screen.getByText('Creation Date')).toBeInTheDocument();
+    expect(screen.getByText('Publication Date')).toBeInTheDocument();
     expect(screen.getAllByText('Undefined')).toHaveLength(1);
   });
 
