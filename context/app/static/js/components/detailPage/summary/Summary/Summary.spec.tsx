@@ -84,7 +84,7 @@ describe('Summary', () => {
     );
 
     expect(screen.getByText('Last Modified')).toBeInTheDocument();
-    expect(screen.getAllByText('Undefined')).toHaveLength(1);
+    expect(screen.getAllByText('N/A')).toHaveLength(1);
   });
 
   test('collection name displays when defined', () => {
