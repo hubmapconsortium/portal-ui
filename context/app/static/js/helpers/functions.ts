@@ -262,7 +262,7 @@ export function getEntityCreationInfo({
       creationVerb = 'Published';
       creationTimestamp = published_timestamp;
     } else {
-      creationLabel = 'Last Modified Date';
+      creationLabel = 'Last Modified';
       creationVerb = 'Modified';
       creationTimestamp = last_modified_timestamp;
     }
