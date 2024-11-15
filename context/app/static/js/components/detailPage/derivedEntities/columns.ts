@@ -1,5 +1,5 @@
-import { format } from 'date-fns/format';
 import { Dataset, isDataset, isSample, PartialEntity } from 'js/components/types';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 
 interface Column {
   id: string;
@@ -16,14 +16,15 @@ const descendantCountsCol: Column = {
 const createdTimestampCol: Column = {
   id: 'created_timestamp',
   label: 'Creation Date',
-  renderColumnCell: ({ created_timestamp }) => (created_timestamp ? format(created_timestamp, 'yyyy-MM-dd') : 'N/A'),
+  renderColumnCell: ({ entity_type, created_timestamp }) =>
+    getEntityCreationInfo({ entity_type, created_timestamp }).creationDate,
 };
 
 const publishedTimestampCol: Column = {
   id: 'published_timestamp',
   label: 'Publication Date',
-  renderColumnCell: ({ published_timestamp }) =>
-    published_timestamp ? format(published_timestamp, 'yyyy-MM-dd') : 'N/A',
+  renderColumnCell: ({ entity_type, published_timestamp }) =>
+    getEntityCreationInfo({ entity_type, published_timestamp }).creationDate,
 };
 
 const organCol: Column = {
