@@ -7,22 +7,24 @@ const tooltip =
 
 interface BulkDownloadButtonFromSearchProps {
   type: string;
-  allResultsUUIDs: Set<string>;
+  allResultsUUIDs: string[];
 }
 function BulkDownloadButtonFromSearch({ type, allResultsUUIDs }: BulkDownloadButtonFromSearchProps) {
   const { selectedRows, deselectRows } = useSelectableTableStore();
 
+  const disabled = allResultsUUIDs.length === 0;
   const isDatasetSearch = type.toLowerCase() === 'dataset';
+
   if (!isDatasetSearch) {
     return null;
   }
 
   return (
     <BulkDownloadButton
-      tooltip={tooltip}
+      tooltip={disabled ? 'Loading datasets...' : tooltip}
       deselectRows={deselectRows}
-      uuids={selectedRows.size > 0 ? selectedRows : allResultsUUIDs}
-      sx={(theme) => ({ margin: theme.spacing(0, 1) })}
+      uuids={selectedRows.size > 0 ? selectedRows : new Set(allResultsUUIDs)}
+      disabled={disabled}
     />
   );
 }
