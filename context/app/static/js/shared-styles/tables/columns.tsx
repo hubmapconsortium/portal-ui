@@ -33,6 +33,16 @@ export const hubmapID = {
   cellContent: HubmapIDCell,
 };
 
+function LastModifiedTimestampCell({ hit: { last_modified_timestamp } }: CellContentProps<EntityDocument>) {
+  return format(last_modified_timestamp, 'yyyy-MM-dd');
+}
+
+export const lastModifiedTimestamp = {
+  id: 'last_modified_timestamp',
+  label: 'Last Modified',
+  cellContent: LastModifiedTimestampCell,
+};
+
 function CreatedTimestampCell({ hit: { created_timestamp } }: CellContentProps<EntityDocument>) {
   return format(created_timestamp, 'yyyy-MM-dd');
 }

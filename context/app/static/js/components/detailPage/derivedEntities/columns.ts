@@ -16,13 +16,14 @@ const descendantCountsCol: Column = {
 const createdTimestampCol: Column = {
   id: 'created_timestamp',
   label: 'Creation Date',
-  renderColumnCell: ({ created_timestamp }) => format(created_timestamp ?? 0, 'yyyy-MM-dd'),
+  renderColumnCell: ({ created_timestamp }) => (created_timestamp ? format(created_timestamp, 'yyyy-MM-dd') : 'N/A'),
 };
 
 const publishedTimestampCol: Column = {
   id: 'published_timestamp',
   label: 'Publication Date',
-  renderColumnCell: ({ published_timestamp }) => format(published_timestamp ?? 0, 'yyyy-MM-dd'),
+  renderColumnCell: ({ published_timestamp }) =>
+    published_timestamp ? format(published_timestamp, 'yyyy-MM-dd') : 'N/A',
 };
 
 const organCol: Column = {

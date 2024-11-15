@@ -7,7 +7,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { DatasetDocument } from 'js/typings/search';
 import { getIDsQuery } from 'js/helpers/queries';
-import { createdTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
+import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
 import { AddIcon } from 'js/shared-styles/icons';
 
@@ -16,7 +16,7 @@ import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
 import { MergedWorkspace, WorkspacesEventInfo } from '../types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
-const columns = [hubmapID, organ, assayTypes, status, createdTimestamp];
+const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 const tooltips = {
   add: 'Add datasets to this workspace.',
   delete: 'Remove selected datasets.',

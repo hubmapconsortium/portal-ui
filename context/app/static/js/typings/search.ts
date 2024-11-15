@@ -5,6 +5,7 @@ export interface DescendantCounts {
 export interface EntityDocument {
   uuid: string;
   hubmap_id: string;
+  last_modified_timestamp: number;
   created_timestamp: number;
   descendant_counts: DescendantCounts;
 }

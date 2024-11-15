@@ -142,6 +142,7 @@ test('getEntityCreationInfo', () => {
   ).toStrictEqual({
     creationLabel: 'Publication Date',
     creationVerb: 'Published',
+    creationTimestamp: 1572559603311,
     creationDate: '2019-10-31',
   });
 
@@ -154,6 +155,7 @@ test('getEntityCreationInfo', () => {
   ).toStrictEqual({
     creationLabel: 'Last Modified',
     creationVerb: 'Modified',
+    creationTimestamp: 1572559603311,
     creationDate: '2019-10-31',
   });
 
@@ -167,6 +169,7 @@ test('getEntityCreationInfo', () => {
   ).toStrictEqual({
     creationLabel: 'Creation Date',
     creationVerb: 'Created',
+    creationTimestamp: 1572559603311,
     creationDate: '2019-10-31',
   });
 });

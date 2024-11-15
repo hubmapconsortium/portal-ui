@@ -5,7 +5,7 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 import Tile from 'js/shared-styles/tiles/Tile/';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { Entity } from 'js/components/types';
+import { Dataset, Entity } from 'js/components/types';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
@@ -25,7 +25,7 @@ interface EntityTileProps
   uuid: string;
   id: string;
   invertColors?: boolean;
-  entityData: Partial<Entity> & { published_timestamp?: number };
+  entityData: Partial<Entity> & Partial<Pick<Dataset, 'published_timestamp'>>;
   descendantCounts: Record<string, number>;
 }
 
