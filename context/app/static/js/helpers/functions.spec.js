@@ -11,6 +11,7 @@ import {
   shouldCapitalizeString,
   generateCommaList,
   isValidEmail,
+  isValidStringValue,
 } from './functions';
 
 test('isEmptyArrayOrObject', () => {
@@ -128,4 +129,19 @@ test('isValidEmail', () => {
   invalidEmails.forEach((email) => {
     expect(isValidEmail(email)).toStrictEqual(false);
   });
+});
+
+test('isValidStringValue', () => {
+  expect(isValidStringValue('helloworld')).toBeTruthy();
+  expect(isValidStringValue('hello world')).toBeTruthy();
+  expect(isValidStringValue('  space before and after  ')).toBeTruthy();
+
+  expect(isValidStringValue('')).toBeFalsy();
+  expect(isValidStringValue(undefined)).toBeFalsy();
+  expect(isValidStringValue('n/a')).toBeFalsy();
+  expect(isValidStringValue('N/A')).toBeFalsy();
+  expect(isValidStringValue('n-a')).toBeFalsy();
+  expect(isValidStringValue('na')).toBeFalsy();
+  expect(isValidStringValue('nOnE')).toBeFalsy();
+  expect(isValidStringValue(' Na ')).toBeFalsy();
 });

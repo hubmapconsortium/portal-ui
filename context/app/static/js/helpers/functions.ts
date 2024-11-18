@@ -220,10 +220,27 @@ export function isValidEmail(email: string) {
   // validation regex, sourced from HTML living standard: http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#e-mail-state-(type=email)
   const emailRegex =
     // eslint-disable-next-line
-    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+  /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
   const cleanedValue: string = email?.replace(/^\s+|\s+$/g, '');
   return emailRegex.test(cleanedValue);
+}
+
+/**
+ * Checks if a string is valid, aka not empty, undefined, or any version of "n/a".
+ * @author Austen Money
+ * @param string the string to check.
+ * @returns true if the string is valid, false otherwise.
+ */
+export function isValidStringValue(string?: string): boolean {
+  if (typeof string !== 'string' || string.trim() === '') {
+    return false;
+  }
+
+  const invalidValues = ['n/a', 'n-a', 'na', 'none'];
+  const normalizedString = string.trim().toLowerCase();
+
+  return !invalidValues.includes(normalizedString);
 }
 
 export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
