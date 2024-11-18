@@ -1,0 +1,1 @@
+- Remove invalid ORCID IDs from Attribution tables.
