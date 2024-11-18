@@ -134,15 +134,13 @@ test('isValidEmail', () => {
 test('isValidOrcidId', () => {
   expect(isValidOrcidId('0000-0002-2451-0633')).toBeTruthy();
   expect(isValidOrcidId('0000000224510633')).toBeTruthy();
-  expect(isValidOrcidId('  0000-0002-2451-0633  ')).toBeTruthy();
-  expect(isValidOrcidId('0000 0002 2451 0633')).toBeTruthy();
-
   expect(isValidOrcidId('')).toBeFalsy();
   expect(isValidOrcidId(undefined)).toBeFalsy();
   expect(isValidOrcidId('n/a')).toBeFalsy();
+  expect(isValidOrcidId('  0000-0002-2451-0633  ')).toBeFalsy();
+  expect(isValidOrcidId('0000 0002 2451 0633')).toBeFalsy();
   expect(isValidOrcidId('abcd-1234-5678-9101')).toBeFalsy();
   expect(isValidOrcidId('1234-5678-9101')).toBeFalsy();
   expect(isValidOrcidId('12345678901234567')).toBeFalsy();
   expect(isValidOrcidId('0000-0002-2451-063X')).toBeFalsy();
-  expect(isValidOrcidId('0000-0002-2451')).toBeFalsy();
 });

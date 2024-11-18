@@ -220,14 +220,15 @@ export function isValidEmail(email: string) {
   // validation regex, sourced from HTML living standard: http://www.whatwg.org/specs/web-apps/current-work/multipage/forms.html#e-mail-state-(type=email)
   const emailRegex =
     // eslint-disable-next-line
-  /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
+    /^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/;
 
   const cleanedValue: string = email?.replace(/^\s+|\s+$/g, '');
   return emailRegex.test(cleanedValue);
 }
 
 /**
- * Checks if a string is a properly formatted ORCID ID or if it can be formatted to be valid.
+ * Checks if a string is a properly structured ORCID ID (aka, 16 digits with or without 4 dashes, which is what
+ * orcid.org permits in a URL.
  * @param orcidId the ORCID ID string to check.
  * @returns true if valid, false otherwise.
  */
@@ -236,12 +237,14 @@ export function isValidOrcidId(orcidId?: string) {
     return false;
   }
 
-  const cleaned = orcidId.replace(/[^0-9]/g, '');
-  if (cleaned.length !== 16 || !/^\d{16}$/.test(cleaned)) {
-    return false;
+  const orcidWithDashes = /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{4}$/;
+  const orcidNoDashes = /^[0-9]{16}$/;
+
+  if (orcidWithDashes.test(orcidId) || orcidNoDashes.test(orcidId)) {
+    return true;
   }
 
-  return true;
+  return false;
 }
 
 export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
