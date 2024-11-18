@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
@@ -63,16 +63,25 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   const datasetQuery = {
     query: getIDsQuery([...uuids]),
     _source: ['hubmap_id', 'processing', 'uuid', 'files', 'processing_type'],
-    size: 1000,
+    size: uuids.size,
   };
   const { searchHits, isLoading } = useSearchHits<BulkDownloadDataset>(datasetQuery);
   const datasets = searchHits.map(({ _source }) => _source);
 
-  // Which options to show in the dialog
-  const downloadOptions = ALL_BULK_DOWNLOAD_OPTIONS.map((option) => ({
-    ...option,
-    count: datasets.filter((dataset) => option.isIncluded(dataset)).length,
-  })).filter((option) => option.count > 0);
+  // Which options and datasets to show in the dialog
+  const downloadOptions = useMemo(
+    () =>
+      ALL_BULK_DOWNLOAD_OPTIONS.map((option) => {
+        const datasetsForOption = datasets.filter((dataset) => option.isIncluded(dataset));
+
+        return {
+          ...option,
+          count: datasetsForOption.length,
+          datasets: datasetsForOption,
+        };
+      }).filter((option) => option.count > 0),
+    [datasets],
+  );
 
   // Remove selected uuids from the list and deselect them in the table if needed
   const removeUuidsOrRows = useCallback(
@@ -143,11 +152,9 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
 
   const onSubmit = useCallback(
     ({ bulkDownloadOptions, bulkDownloadMetadata }: BulkDownloadFormTypes) => {
-      const datasetsToDownload = datasets.filter((dataset) =>
-        bulkDownloadOptions.some((option) =>
-          ALL_BULK_DOWNLOAD_OPTIONS.find(({ key }) => key === option)?.isIncluded(dataset),
-        ),
-      );
+      const datasetsToDownload = downloadOptions
+        .filter((option) => bulkDownloadOptions.includes(option.key))
+        .flatMap((option) => option.datasets);
 
       if (bulkDownloadMetadata) {
         downloadMetadata(datasetsToDownload);
@@ -156,7 +163,7 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
       downloadManifest(datasetsToDownload);
       handleClose();
     },
-    [handleClose, datasets, downloadMetadata, downloadManifest],
+    [handleClose, downloadOptions, downloadMetadata, downloadManifest],
   );
 
   const openDialog = useCallback(
@@ -181,7 +188,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     isLoading,
     errors,
     control,
-    datasets,
     downloadOptions,
     onSubmit,
     handleSubmit,

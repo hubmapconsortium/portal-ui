@@ -26,13 +26,13 @@ function DownloadDescription() {
   return (
     <SectionDescription>
       <Stack spacing={2}>
-        <Box>
+        <Typography>
           Choose download options to bulk download files from your selected datasets. Your selection of files will
           generate a manifest file, which can be used with the{' '}
           <OutboundLink href={LINKS.documentation}>HuBMAP Command Line Transfer (CLT)</OutboundLink> tool for
           downloading. An option to download a tsv file of the metadata is also available.
-        </Box>
-        <Box>
+        </Typography>
+        <Typography>
           To download the files included in the manifest file,{' '}
           <OutboundLink href={LINKS.installation}>install the HuBMAP CLT</OutboundLink> (if not already installed) and
           follow <OutboundLink href={LINKS.documentation}>instructions</OutboundLink> for how to use it with the
@@ -40,7 +40,7 @@ function DownloadDescription() {
           {/* TODO: uncomment once tutorial is created */}
           {/* A <OutboundLink href={LINKS.tutorial}>tutorial</OutboundLink> is available to guide you through
           the entire process. */}
-        </Box>
+        </Typography>
         <RelevantPagesSection pages={PAGES} />
       </Stack>
     </SectionDescription>
@@ -131,11 +131,9 @@ function DownloadOptionsSection({
 
   if (downloadOptions.length === 0) {
     return (
-      <Box paddingTop={1}>
-        <Alert severity="warning">
-          <Typography>Files are not available for any of the selected datasets.</Typography>
-        </Alert>
-      </Box>
+      <Alert severity="warning">
+        <Typography>Files are not available for any of the selected datasets.</Typography>
+      </Alert>
     );
   }
 
