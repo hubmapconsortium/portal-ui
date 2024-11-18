@@ -220,8 +220,8 @@ function SelectableHeaderCells() {
     <SelectableHeaderCell
       allTableRowKeys={allSearchIDs}
       disabled={isLoading}
-      selectTooltip={`Select all ${type.toLowerCase()}s in results`}
-      deselectTooltip="Deselect all results."
+      selectTooltip={`Select all ${type.toLowerCase()}s in results.`}
+      deselectTooltip="Reset all selections."
     />
   );
 }
