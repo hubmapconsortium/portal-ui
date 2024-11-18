@@ -1,5 +1,4 @@
 import React, { SyntheticEvent, useCallback, useEffect, useState } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 import { useTheme } from '@mui/material/styles';
 import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
@@ -21,7 +20,7 @@ function buildBins({ buckets }: { buckets: HistogramBucket[] }) {
 }
 
 function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: string; facet: RangeConfig }) {
-  const { aggregations } = useSearch();
+  const aggs = useSearch()?.aggregations?.[field]?.[field];
   const filterRange = useSearchStore((state) => state.filterRange);
   const theme = useTheme();
 
@@ -56,7 +55,11 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
     [filterRange, field],
   );
 
-  const aggBuckets = aggregations?.[field]?.[field]?.buckets;
+  if (!(aggs && 'buckets' in aggs)) {
+    return null;
+  }
+
+  const aggBuckets = aggs.buckets;
 
   if (!aggBuckets || !Array.isArray(aggBuckets)) {
     return null;
@@ -111,12 +114,8 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
 }
 
 function FacetGuard({ field }: { field: string }) {
-  const { filter, facet } = useSearchStore(
-    useShallow((state) => ({
-      filter: state.filters[field],
-      facet: state.facets[field],
-    })),
-  );
+  const filter = useSearchStore((state) => state.filters[field]);
+  const facet = useSearchStore((state) => state.facets[field]);
 
   if (!isRangeFilter(filter) || !isRangeFacet(facet)) {
     return null;

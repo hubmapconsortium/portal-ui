@@ -15,6 +15,7 @@ export const FACETS = {
   hierarchical: 'HIERARCHICAL',
   term: 'TERM',
   range: 'RANGE',
+  date: 'DATE',
 } as const;
 
 export interface FacetConfig {
@@ -60,8 +61,22 @@ export interface RangeValues {
   type: typeof FACETS.range;
 }
 
-export type Filter<V = Set<string>> = TermValues<V> | HierarchicalTermValues<V> | RangeValues;
-type Facet = TermConfig | HierarchicalTermConfig | RangeConfig;
+export interface DateConfig extends Omit<RangeConfig, 'type' | 'min' | 'max'> {
+  type: typeof FACETS.date;
+  min?: number;
+  max?: number;
+}
+
+export interface DateValues extends Omit<RangeValues, 'type' | 'values'> {
+  type: typeof FACETS.date;
+  values: {
+    min?: number;
+    max?: number;
+  };
+}
+
+export type Filter<V = Set<string>> = TermValues<V> | HierarchicalTermValues<V> | RangeValues | DateValues;
+export type Facet = TermConfig | HierarchicalTermConfig | RangeConfig | DateConfig;
 
 export type FiltersType<V = Set<string>> = Record<string, Filter<V>>;
 export type FacetsType = Record<string, Facet>;
@@ -95,6 +110,14 @@ const rangeFilterSchema = z.object({
   type: z.literal(FACETS.range),
 });
 
+const dateFilterSchema = z.object({
+  values: z.object({
+    min: z.number(),
+    max: z.number(),
+  }),
+  type: z.literal(FACETS.date),
+});
+
 const termFilterSchema = z.object({
   values: z.array(z.string()),
   type: z.literal(FACETS.term),
@@ -107,7 +130,7 @@ const hierarchicalTermFilterSchema = z.object({
 
 const filtersSchema = z.record(
   z.string(),
-  z.union([rangeFilterSchema, termFilterSchema, hierarchicalTermFilterSchema]),
+  z.union([dateFilterSchema, rangeFilterSchema, termFilterSchema, hierarchicalTermFilterSchema]),
 );
 
 const sortFieldSchema = z.object({
@@ -160,6 +183,7 @@ export interface SearchStoreActions {
     value: string;
   }) => void;
   filterRange: ({ field, min, max }: { field: string; min: number; max: number }) => void;
+  filterDate: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -178,6 +202,14 @@ export function isRangeFilter<V = Set<string>>(filter: Filter<V>): filter is Ran
 
 export function isRangeFacet(facet: Facet): facet is RangeConfig {
   return facet.type === 'RANGE';
+}
+
+export function isDateFacet(facet: Facet): facet is DateConfig {
+  return facet.type === 'DATE';
+}
+
+export function isDateFilter<V = Set<string>>(filter: Filter<V>): filter is DateValues {
+  return filter.type === 'DATE';
 }
 
 export function isHierarchicalFilter<V = Set<string>>(filter: Filter<V>): filter is HierarchicalTermValues<V> {
@@ -201,6 +233,9 @@ export function filterHasValues({ filter, facet }: { filter: Filter; facet: Face
     return filter.values.min !== facet.min || filter.values.max !== facet.max;
   }
 
+  if (isDateFilter(filter) && isDateFacet(facet)) {
+    return filter.values.min && filter.values.max;
+  }
   return false;
 }
 
@@ -329,6 +364,18 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         const filter = state?.filters[field];
 
         if (!isRangeFilter(filter)) {
+          return;
+        }
+
+        filter.values = { min, max };
+        replaceURLSearchParams(state);
+      });
+    },
+    filterDate: ({ field, min, max }) => {
+      set((state) => {
+        const filter = state?.filters[field];
+
+        if (!isDateFilter(filter)) {
           return;
         }
 

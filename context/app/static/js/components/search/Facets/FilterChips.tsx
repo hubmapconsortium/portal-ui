@@ -3,12 +3,16 @@ import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import { format } from 'date-fns/format';
 
 import { trackEvent } from 'js/helpers/trackers';
 import {
+  DateValues,
   HierarchicalTermValues,
   RangeValues,
   TermValues,
+  isDateFacet,
+  isDateFilter,
   isHierarchicalFacet,
   isHierarchicalFilter,
   isRangeFacet,
@@ -30,7 +34,18 @@ function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () =>
     });
   }, [onDelete, label, analyticsCategory]);
 
-  return <Chip variant="outlined" color="primary" label={label} onDelete={handleDelete} {...props} />;
+  return (
+    <Chip
+      variant="outlined"
+      color="primary"
+      label={label}
+      onDelete={handleDelete}
+      sx={(theme) => ({
+        borderColor: theme.palette.primary.main,
+      })}
+      {...props}
+    />
+  );
 }
 const HierarchichalTermChip = React.memo(function HierarchicalTermChip({
   parentField,
@@ -67,54 +82,71 @@ function FilterChips() {
   const facets = useSearchStore((state) => state.facets);
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterRange = useSearchStore((state) => state.filterRange);
+  const filterDate = useSearchStore((state) => state.filterDate);
 
   const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
     <>
-      {Object.entries(filters).map(([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues]) => {
-        if (isTermFilter(v) && v.values.size) {
-          return [...v.values].map((val) => (
-            <FilterChip
-              label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: val })}`}
-              key={val}
-              onDelete={() => filterTerm({ term: field, value: val })}
-            />
-          ));
-        }
-        const facetConfig = facets[field];
-
-        if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
-          const { min, max } = facetConfig;
-          if (v.values.min === min && v.values.max === max) {
-            return null;
-          }
-          return (
-            <FilterChip
-              label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
-              key={field}
-              onDelete={() => filterRange({ field, min, max })}
-            />
-          );
-        }
-
-        if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
-          const parentValues = Object.entries(v.values);
-
-          if (!parentValues.length) {
-            return null;
-          }
-          return parentValues.map(([parent, children]) => {
-            return [...children].map((child) => (
-              <HierarchichalTermChip
-                key={`${parent}-${child}`}
-                parentField={field}
-                value={child}
-                parentValue={parent}
+      {Object.entries(filters).map(
+        ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues]) => {
+          if (isTermFilter(v) && v.values.size) {
+            return [...v.values].map((val) => (
+              <FilterChip
+                label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: val })}`}
+                key={val}
+                onDelete={() => filterTerm({ term: field, value: val })}
               />
             ));
-          });
-        }
-        return null;
-      })}
+          }
+          const facetConfig = facets[field];
+
+          if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
+            const { min, max } = facetConfig;
+            if (v.values.min === min && v.values.max === max) {
+              return null;
+            }
+            return (
+              <FilterChip
+                label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
+                key={field}
+                onDelete={() => filterRange({ field, min, max })}
+              />
+            );
+          }
+
+          if (isDateFilter(v) && isDateFacet(facetConfig)) {
+            if (!(v.values.min && v.values.max)) {
+              return null;
+            }
+
+            return (
+              <FilterChip
+                label={`${getFieldLabel(field)}: ${format(v.values.min, 'yyyy-MM')} - ${format(v.values.max, 'yyyy-MM')}`}
+                key={field}
+                onDelete={() => filterDate({ field, min: undefined, max: undefined })}
+              />
+            );
+          }
+
+          if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
+            const parentValues = Object.entries(v.values);
+
+            if (!parentValues.length) {
+              return null;
+            }
+            return parentValues.map(([parent, children]) => {
+              return [...children].map((child) => (
+                <HierarchichalTermChip
+                  key={`${parent}-${child}`}
+                  parentField={field}
+                  value={child}
+                  parentValue={parent}
+                />
+              ));
+            });
+          }
+          return null;
+        },
+      )}
     </>
   );
 

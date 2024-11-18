@@ -35,6 +35,9 @@ const fieldConfigurationsMap: Record<
   created_by_user_displayname: {
     label: 'Registered By',
   },
+  created_timestamp: {
+    label: 'Creation Date',
+  },
   dataset_type: {
     label: 'Dataset Type',
   },
@@ -67,7 +70,7 @@ const fieldConfigurationsMap: Record<
     valueTransformations: [capitalizeString],
   },
   last_modified_timestamp: {
-    label: 'Last Modified',
+    label: 'Last Modified Date',
   },
   mapped_consortium: {
     label: 'Consortium',
@@ -92,6 +95,9 @@ const fieldConfigurationsMap: Record<
   processing_type: {
     label: 'Processing Type',
     valueTransformations: [mapProcessingType],
+  },
+  published_timestamp: {
+    label: 'Publication Date',
   },
   race: {
     label: 'Race',
