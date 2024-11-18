@@ -1,0 +1,1 @@
+- Add warning banner to empty columns in provenance tables.
