@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import Stack from '@mui/material/Stack';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import { DateValidationError } from '@mui/x-date-pickers/models';
@@ -18,9 +18,9 @@ function DatePickerComponent({
   maxDate,
   ...rest
 }: DatePickerProps<Date> & Required<Pick<DatePickerProps<Date>, 'minDate' | 'maxDate'>>) {
-  const [error, setError] = React.useState<DateValidationError | null>(null);
+  const [error, setError] = useState<DateValidationError | null>(null);
 
-  const errorMessage = React.useMemo(() => {
+  const errorMessage = useMemo(() => {
     switch (error) {
       case 'maxDate':
         return `Please select a date of ${format(maxDate, 'MMMM yyyy')} or before.`;
@@ -34,7 +34,7 @@ function DatePickerComponent({
       }
 
       default: {
-        return '';
+        return null;
       }
     }
   }, [error, minDate, maxDate]);
@@ -47,7 +47,7 @@ function DatePickerComponent({
         },
       })}
       views={['month', 'year']}
-      onError={(newError) => setError(newError)}
+      onError={setError}
       minDate={minDate}
       maxDate={maxDate}
       slotProps={{
