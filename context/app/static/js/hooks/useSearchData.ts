@@ -329,15 +329,15 @@ export function useAllSearchIDs(
     };
   }, [totalHitsCount, query, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
 
-  const { data } = useSWR(getKey, (args) => fetchAllIDs(args), {
+  const { data, isLoading } = useSWR(getKey, (args) => fetchAllIDs(args), {
     fallbackData: [],
     ...swrConfigRest,
   });
 
-  return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount };
+  return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount, isLoading };
 }
 
-function getCombinedHits<Doc = unknown, Aggs = unknown>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {
+export function getCombinedHits<Doc = unknown, Aggs = unknown>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {
   const hasData = pagesResults.length > 0;
 
   if (!hasData) {
