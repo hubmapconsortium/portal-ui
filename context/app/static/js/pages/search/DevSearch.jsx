@@ -118,7 +118,7 @@ function DevSearch() {
   );
   return (
     <>
-      <SearchHeader component="h1" variant="h2">
+      <SearchHeader component="h1" variant="h2" data-testid="dev-search-title">
         Dev Search
       </SearchHeader>
       <Alert severity="info" $marginBottom="16">

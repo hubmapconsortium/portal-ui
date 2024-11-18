@@ -101,7 +101,7 @@ function Organ({ organ }: OrganProps) {
 
   return (
     <DetailLayout sections={shouldDisplaySection}>
-      <Typography variant="subtitle1" component="h1" color="primary">
+      <Typography variant="subtitle1" component="h1" color="primary" data-testid="entity-title">
         Organ
       </Typography>
       <Typography variant="h1" component="h2">

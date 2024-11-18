@@ -35,7 +35,7 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
               id={hubmap_id}
               invertColors={uuid === currentEntityUUID}
               entityData={{
-                mapped_data_types: [assay_display_name],
+                mapped_data_types: [assay_display_name[0]],
                 origin_samples,
                 origin_samples_unique_mapped_organs,
                 last_modified_timestamp,

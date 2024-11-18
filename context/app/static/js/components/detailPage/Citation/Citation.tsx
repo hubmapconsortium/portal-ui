@@ -3,6 +3,10 @@ import Typography from '@mui/material/Typography';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
+import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
+import { useHandleCopyClick } from 'js/hooks/useCopyText';
+import IconLink from 'js/shared-styles/Links/iconLinks/IconLink';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 interface Contributor {
   last_name: string;
@@ -24,11 +28,43 @@ interface CitationProps {
   doi_url: string;
   doi: string;
   className?: string;
+  internalDoi?: boolean;
 }
 
-function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi, className }: CitationProps) {
+function ExternalDoiLink({ doi_url }: { doi_url: string }) {
+  return <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>;
+}
+
+function InternalDoiLink({ doi_url }: { doi_url: string }) {
+  const copy = useHandleCopyClick();
+  return (
+    <SecondaryBackgroundTooltip title="This DOI link leads to the page you are currently viewing. Click to copy.">
+      <IconLink
+        href={doi_url}
+        onClick={(e) => {
+          e.preventDefault();
+          copy(doi_url);
+        }}
+        icon={<ContentCopyIcon />}
+      >
+        {doi_url}
+      </IconLink>
+    </SecondaryBackgroundTooltip>
+  );
+}
+
+function Citation({
+  contributors,
+  citationTitle,
+  created_timestamp,
+  doi_url,
+  doi,
+  className,
+  internalDoi,
+}: CitationProps) {
   const citation = buildNLMCitation(contributors, citationTitle, created_timestamp);
 
+  const DOI = internalDoi ? InternalDoiLink : ExternalDoiLink;
   return (
     <LabelledSectionText
       label="Citation"
@@ -38,7 +74,7 @@ function Citation({ contributors, citationTitle, created_timestamp, doi_url, doi
       childContainerComponent="div"
     >
       <Typography variant="body1">
-        {citation} Available from: <OutboundIconLink href={doi_url}>{doi_url}</OutboundIconLink>
+        {citation} Available from: <DOI doi_url={doi_url} />
       </Typography>
       <OutboundIconLink href={`https://commons.datacite.org/doi.org/${doi}`}>View DataCite Page</OutboundIconLink>
     </LabelledSectionText>

@@ -10,10 +10,11 @@ import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 import { useIsDesktop } from 'js/hooks/media-queries';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
-import { LineClamp } from 'js/shared-styles/text';
+import { LineClampWithTooltip } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 import { formatDate } from 'date-fns/format';
+import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import StatusIcon from '../../StatusIcon';
 import { getDateLabelAndValue, useCurrentDataset } from '../../utils';
@@ -53,7 +54,7 @@ interface HelperPanelBodyItemProps extends PropsWithChildren {
 }
 
 function HelperPanelBodyItem({ label, children, noWrap }: HelperPanelBodyItemProps) {
-  const body = noWrap ? <LineClamp lines={3}>{children}</LineClamp> : children;
+  const body = noWrap ? <LineClampWithTooltip lines={3}>{children}</LineClampWithTooltip> : children;
   return (
     <Stack direction="column">
       <Typography variant="overline">{label}</Typography>
@@ -68,20 +69,24 @@ function HelperPanelBody() {
     return null;
   }
   const [dateLabel, date] = getDateLabelAndValue(currentDataset);
+
+  const { title, description, pipeline, assay_display_name, creation_action, group_name } = currentDataset;
   return (
     <>
-      {currentDataset.title && (
+      {title && (
         <HelperPanelBodyItem label="Title" noWrap>
-          {currentDataset.title}
+          {title}
         </HelperPanelBodyItem>
       )}
-      {currentDataset.description && (
+      {description && (
         <HelperPanelBodyItem label="Description" noWrap>
-          {currentDataset.description}
+          {description}
         </HelperPanelBodyItem>
       )}
-      <HelperPanelBodyItem label="Pipeline">{currentDataset.pipeline}</HelperPanelBodyItem>
-      <HelperPanelBodyItem label="Group">{currentDataset.group_name}</HelperPanelBodyItem>
+      <HelperPanelBodyItem label="Analysis Type">{pipeline ?? assay_display_name[0]}</HelperPanelBodyItem>
+      <HelperPanelBodyItem label="Group">
+        <ProcessedDataGroup creation_action={creation_action} group_name={group_name} />
+      </HelperPanelBodyItem>
       <HelperPanelBodyItem label={dateLabel}>{date && formatDate(date, 'yyyy-MM-dd')}</HelperPanelBodyItem>
     </>
   );

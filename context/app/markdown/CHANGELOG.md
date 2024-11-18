@@ -1,5 +1,54 @@
 # Changelog
 
+## v1.14.1 - 2024-11-13
+
+- Fix minor graphical issues in homepage hero section.
+- Use `Image Pyramid` pipeline name as a heuristic for whether a visualization link should be present in unified dataset table of contents.
+- Update portal-viz hash to reflect the view adjustment for EPIC segmentation mask.
+- Updated support for EPIC segmentation masks visualization. 
+
+
+
+## v1.14.0 - 2024-11-06
+
+- Adjust ID fetching for infinite scroll table to ensure "select all" functionality works as expected.
+- Fix View PDF button disappearing while PDF is processing.
+- Remove square white background behind PDF modal's close button.
+- Converted sample detail page to TypeScript.
+- Add "View Vitessce Configuration" button to processed datasets with visualizations.
+- Add space between footer columns to improve readability.
+- Adjust homepage queries to exclude donors/samples without descended datasets.
+- Adjust homepage queries to exclude datasets in a non-QA/Published state.
+- Revise Collection DOI links to copy on click instead of opening a new tab that leads to the same page.
+- Remove workspace menu button from publication pages.
+- Fix styling for provenance graph to avoid tall, difficult to read graphs.
+
+
+
+## v1.13.1 - 2024-10-31
+
+- Fix parent UUID handling for multi-vitessce conf datasets.
+- Fix EPIC Bulk Data Transfer section tabs and prevent these from crashing the page.
+- Update support entity and processed/component dataset redirects to go only to the appropriate primary datasets.
+- Fix bug causing table of contents on EPIC detail pages to show duplicate entries and not link to the correct sections.
+- Label centrally processed dataset groups as HIVE in the helper panel.
+- Fix typo in publication collections summary.
+- Add group name to raw dataset summary section.
+- Use assay_display_name instead of pipeline when labelling EPIC dataset sections.
+- Update language in processed dataset sections from "pipeline" to "analysis".
+- Display EPIC datasets as being generated via external processing in dataset relationship diagrams.
+
+
+
+## v1.13.0 - 2024-10-23
+
+- Add end-to-end tests that check whether all page types load successfully.
+- Fix bug where expanding a processed dataset section leads to a shaking viewport.
+- If a title or description in a processed dataset helper panel is truncated, show the full text on hover in a tooltip.
+- Updated HRA EUI and organ-info web components to latest version
+
+
+
 ## v1.12.2 - 2024-10-17
 
 - Add access levels to processed dataset helper panels.

@@ -14,7 +14,7 @@ function Services() {
   return (
     <>
       <SectionContainer>
-        <SectionHeader variant="h1" component="h1">
+        <SectionHeader variant="h1" component="h1" data-testid="services-title">
           Services
         </SectionHeader>
         <Description>

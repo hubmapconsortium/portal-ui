@@ -35,6 +35,7 @@ function OrganTile({ organ: { name, uberon_short, icon, descendantCounts }, path
       footerContent={<EntityTileFooter descendantCounts={descendantCounts} />}
       tileWidth={tileWidth}
       invertColors={selected}
+      data-testid="organ-tile"
     />
   );
 }

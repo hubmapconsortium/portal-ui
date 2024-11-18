@@ -39,7 +39,7 @@ function SavedLists() {
           Items successfully added to list.
         </StyledAlert>
       )}
-      <StyledHeader variant="h2" component="h1">
+      <StyledHeader variant="h2" component="h1" data-testid="my-lists-title">
         My Lists
       </StyledHeader>
       <SpacingDiv>

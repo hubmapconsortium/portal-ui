@@ -2,9 +2,8 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { isDataset, type Dataset } from 'js/components/types';
 import { excludeComponentDatasetsClause, getIDsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { useProcessedDatasets, type ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
+import { useLabeledProcessedDatasets, type ProcessedDatasetInfo } from 'js/pages/Dataset/hooks';
 import { ComponentType } from 'react';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { nodeIcons } from '../../DatasetRelationships/nodeTypes';
 
 export type ProcessedDatasetDetails = ProcessedDatasetInfo &
@@ -68,22 +67,8 @@ export function useProcessedDatasetDetails(uuid: string) {
   return { datasetDetails, isLoading };
 }
 
-function processDatasetLabel(dataset: ProcessedDatasetInfo, hits: Required<SearchHit<ProcessedDatasetInfo>>[]) {
-  const multipleHitsWithSamePipeline = hits.filter((h) => h._source.pipeline === dataset.pipeline).length > 1;
-  const multipleHitsWithSamePipelineAndStatus =
-    multipleHitsWithSamePipeline &&
-    hits.filter((h) => h._source.pipeline === dataset.pipeline && h._source.status === dataset.status).length > 1;
-  if (multipleHitsWithSamePipelineAndStatus) {
-    return `${dataset.pipeline} (${dataset.status}) [${dataset.hubmap_id}]`;
-  }
-  if (multipleHitsWithSamePipeline) {
-    return `${dataset.pipeline} (${dataset.status})`;
-  }
-  return dataset.pipeline;
-}
-
 export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: ComponentType | undefined }[] {
-  const { searchHits } = useProcessedDatasets();
+  const { searchHitsWithLabels } = useLabeledProcessedDatasets();
   const { entity } = useFlaskDataContext();
 
   if (!isDataset(entity)) {
@@ -100,7 +85,7 @@ export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: 
 
   // Include dataset status in the label if more than one processed dataset of this type exists.
   // This allows us to distinguish between published datasets and QA/New/other statuses.
-  const processedDatasetTabs = [...searchHits]
+  const processedDatasetTabs = [...searchHitsWithLabels]
     // Prioritize published datasets
     .sort((a, b) => {
       if (a._source.status === 'Published') {
@@ -111,8 +96,8 @@ export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: 
       }
       return 0;
     })
-    .map(({ _source }, _, hits) => ({
-      label: processDatasetLabel(_source, hits),
+    .map(({ _source }, _) => ({
+      label: _source.label,
       uuid: _source.uuid,
       icon: nodeIcons.processedDataset,
     }));

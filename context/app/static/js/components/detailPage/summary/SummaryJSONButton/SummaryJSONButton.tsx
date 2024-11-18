@@ -15,7 +15,6 @@ function SummaryJSONButton({ entity_type, uuid }: Props) {
   return (
     <WhiteRectangularTooltipIconButton
       tooltip="View JSON"
-      sx={{ height: '36px', display: 'flex' }}
       href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
       target="_blank"
       onClick={() => trackEntityPageEvent({ action: 'View JSON' })}

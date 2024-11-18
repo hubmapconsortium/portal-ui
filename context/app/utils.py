@@ -62,3 +62,57 @@ def get_organs():
     dir_path = Path(dirname(__file__) + '/organ')
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
+
+
+# Redirect to primary dataset if this entity is
+# - non-existent
+# - a support entity (e.g. an image pyramid)
+# - a processed or component dataset
+def should_redirect_entity(entity):
+    if not entity:
+        return True
+
+    actual_type = entity.get('entity_type').lower()
+    is_support_type = actual_type == 'support'
+    is_component = entity.get('is_component', False) is True
+    is_not_raw_dataset = entity.get('processing') != 'raw' and actual_type == 'dataset'
+
+    if is_support_type or is_component or is_not_raw_dataset:
+        return True
+
+    return False
+
+
+def find_raw_dataset_ancestor(client, ancestor_ids):
+    return client.get_entities(
+        'datasets',
+        query_override={
+            "bool": {
+                "must": [
+                    {
+                        "term": {
+                            "processing": "raw"
+                        }
+                    },
+                    {
+                        "terms": {
+                            "uuid": ancestor_ids
+                        }
+                    },
+                ],
+                "must_not": [
+                    {
+                        "exists": {
+                            "field": "ancestor_counts.entity_type.Dataset"
+                        }
+                    }
+                ]
+            }
+        },
+        non_metadata_fields=[
+            'uuid',
+            'processing',
+            'entity_type',
+            'is_component'
+        ]
+    )

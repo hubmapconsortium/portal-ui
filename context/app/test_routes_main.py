@@ -50,7 +50,7 @@ def assert_is_valid_html(response):
     try:
         ET.fromstring(xml)
     except ParseError as e:
-        numbered = '\n'.join([f'{n+1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
+        numbered = '\n'.join([f'{n + 1}: {line}' for (n, line) in enumerate(xml.split('\n'))])
         raise Exception(f'{e.msg}\n{numbered}')
 
 
