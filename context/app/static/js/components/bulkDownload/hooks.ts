@@ -62,7 +62,7 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   // Fetch datasets for the selected uuids
   const datasetQuery = {
     query: getIDsQuery([...uuids]),
-    _source: ['hubmap_id', 'processing', 'uuid', 'files', 'processing_type'],
+    _source: ['hubmap_id', 'processing', 'uuid', 'processing_type'],
     size: uuids.size,
   };
   const { searchHits, isLoading } = useSearchHits<BulkDownloadDataset>(datasetQuery);
