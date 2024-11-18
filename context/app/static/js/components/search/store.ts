@@ -8,6 +8,7 @@ import { z } from 'zod';
 export interface SortField {
   field: string;
   direction: 'asc' | 'desc';
+  secondarySort?: SortField;
 }
 
 export const FACETS = {
