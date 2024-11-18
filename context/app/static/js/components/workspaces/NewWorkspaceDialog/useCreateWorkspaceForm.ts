@@ -14,7 +14,7 @@ import {
   workspaceResourceOptionsField,
   datasetsField,
 } from '../workspaceFormFields';
-import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
+import { useWorkspacesProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_JOB_TYPE,
@@ -183,7 +183,7 @@ function useCreateWorkspaceForm({
 }
 
 function useCreateWorkspaceDatasets() {
-  const { errorMessages: protectedDatasetsErrorMessages, selectedRows, ...rest } = useProtectedDatasetsForm();
+  const { errorMessages: protectedDatasetsErrorMessages, selectedRows, ...rest } = useWorkspacesProtectedDatasetsForm();
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({ numWorkspaceDatasets: selectedRows.size });
   const tooManyDatasetsWarningMessages = useTooManyDatasetsWarnings({ numWorkspaceDatasets: selectedRows.size });
 

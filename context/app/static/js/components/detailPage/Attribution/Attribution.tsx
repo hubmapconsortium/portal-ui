@@ -6,10 +6,9 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useAttributionSections } from '../ContributorsTable/hooks';
-import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
 
 const tooltips = {
   group: 'This is the group that submitted the raw dataset to be published.',
