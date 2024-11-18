@@ -105,7 +105,7 @@ function ContributorsTable({
             <TableBody>
               {sortedContributors.map((contributor) => {
                 const { affiliation, name, email, isPrincipalInvestigator, orcid } = contributor;
-                const validatedOrcid = validateAndFormatOrcidId(orcid);
+                const validatedOrcidId = validateAndFormatOrcidId(orcid);
                 return (
                   <TableRow key={orcid} data-testid="contributor-row">
                     <TableCell>{`${name}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
@@ -114,9 +114,9 @@ function ContributorsTable({
                       <ContactCell isContact={contributorIsContact(contributor, normalizedContacts)} email={email} />
                     </TableCell>
                     <TableCell>
-                      {validatedOrcid && (
-                        <OutboundIconLink href={`https://orcid.org/${validatedOrcid}`} variant="body2">
-                          {validatedOrcid}
+                      {validatedOrcidId && (
+                        <OutboundIconLink href={`https://orcid.org/${validatedOrcidId}`} variant="body2">
+                          {validatedOrcidId}
                         </OutboundIconLink>
                       )}
                     </TableCell>

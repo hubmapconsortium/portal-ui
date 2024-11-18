@@ -10,13 +10,13 @@ function CorrespondingAuthorsList({ contacts }: { contacts: ContactAPIResponse[]
   return (
     <BulletedList>
       {normalizedContacts.map(({ name, orcid }) => {
-        const validatedOrcid = validateAndFormatOrcidId(orcid);
+        const validatedOrcidId = validateAndFormatOrcidId(orcid);
         return (
           <BulletedListItem key={name}>
             {name}
             &nbsp;
-            {validatedOrcid && (
-              <OutboundIconLink href={`https://orcid.org/${validatedOrcid}`}>{validatedOrcid}</OutboundIconLink>
+            {validatedOrcidId && (
+              <OutboundIconLink href={`https://orcid.org/${validatedOrcidId}`}>{validatedOrcidId}</OutboundIconLink>
             )}
           </BulletedListItem>
         );
