@@ -154,7 +154,7 @@ function FilterChips() {
 
           const hasValues = filterHasValues({ filter: v, facet: facetConfig });
 
-          if (isExistsFilter(v) && isExistsFacet(facetConfig) && !hasValues && facetConfig?.invert) {
+          if (isExistsFilter(v) && isExistsFacet(facetConfig) && hasValues) {
             return (
               <FilterChip
                 label={`${getFieldLabel(field)}: ${v.values}`}

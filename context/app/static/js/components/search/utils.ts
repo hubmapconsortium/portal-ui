@@ -118,7 +118,7 @@ export function buildQuery({
       }
 
       if (isExistsFilter(filter) && isExistsFacet(facetConfig)) {
-        if (filterHasValues({ filter, facet: facetConfig })) {
+        if (!(filterHasValues({ filter, facet: facetConfig }) && facetConfig?.invert)) {
           draft[portalField] = esb.existsQuery(field);
         }
       }

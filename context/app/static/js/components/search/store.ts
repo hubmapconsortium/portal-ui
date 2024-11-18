@@ -269,7 +269,7 @@ export function filterHasValues({ filter, facet }: { filter: Filter; facet: Face
   }
 
   if (isExistsFilter(filter) && isExistsFacet(facet)) {
-    return facet?.invert ? !filter.values : filter.values;
+    return filter.values;
   }
   return false;
 }
