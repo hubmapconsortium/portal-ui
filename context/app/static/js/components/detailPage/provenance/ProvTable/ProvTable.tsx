@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
@@ -35,13 +35,21 @@ function ProvEntityColumnContent({
   missingAncestors,
 }: ProvTableColumnProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
+  const handleCardSelect = useCallback(
+    (hubmap_id: string) => {
+      trackEntityPageEvent({
+        action: 'Provenance / Table / Select Card',
+        label: hubmap_id,
+      });
+    },
+    [trackEntityPageEvent],
+  );
 
   // Track expanded state for each sample category
   const [isExpanded, setIsExpanded] = useState<Record<string, boolean>>({});
 
   const displayMissingAncestors =
     missingAncestors && missingAncestors.length > 0 && entities.length === 0 && type !== 'Dataset';
-
   const noDisplayedContent = entities.length === 0 && !displayMissingAncestors && !descendantEntityCounts?.[type];
 
   if (noDisplayedContent) {
@@ -88,9 +96,7 @@ function ProvEntityColumnContent({
                 isSampleSibling={isSampleSibling}
                 isFirstTile={j === 0}
                 isLastTile={j === type.length - 1}
-                onClick={() =>
-                  trackEntityPageEvent({ action: 'Provenance / Table / Select Card', label: item.hubmap_id })
-                }
+                onClick={() => handleCardSelect(item.hubmap_id)}
                 entityData={item}
               />
             );
