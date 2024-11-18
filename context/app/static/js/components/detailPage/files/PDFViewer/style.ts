@@ -23,7 +23,7 @@ const StyledIconButton = styled(IconButton)({
 
 const StyledCloseIcon = styled(CancelRoundedIcon)({
   backgroundColor: '#fff',
-  borderCadius: '100%',
+  borderRadius: '100%',
 });
 
 const ErrorIcon = styled(ErrorRoundedIcon)(({ theme }) => ({

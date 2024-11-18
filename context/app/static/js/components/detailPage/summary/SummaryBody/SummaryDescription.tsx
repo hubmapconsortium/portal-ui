@@ -3,13 +3,13 @@ import Typography from '@mui/material/Typography';
 
 import { Entity } from 'js/components/types';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { LineClamp } from 'js/shared-styles/text';
+import { LineClampWithTooltip } from 'js/shared-styles/text';
 
 function CustomClamp({ children }: PropsWithChildren) {
   return (
-    <LineClamp lines={3} component={Typography}>
-      {children}
-    </LineClamp>
+    <LineClampWithTooltip lines={3}>
+      <Typography>{children}</Typography>
+    </LineClampWithTooltip>
   );
 }
 

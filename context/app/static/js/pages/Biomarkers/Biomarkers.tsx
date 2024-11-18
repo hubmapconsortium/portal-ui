@@ -10,7 +10,7 @@ import BiomarkersPanelList from 'js/components/biomarkers/BiomarkersPanelList';
 export default function Biomarkers() {
   return (
     <BiomarkersSearchProvider>
-      <PanelListLandingPage title="Biomarkers" description={<Description />} noIcon>
+      <PanelListLandingPage title="Biomarkers" description={<Description />} noIcon data-testid="biomarkers-title">
         <BiomarkerSearchBar />
         <BiomarkersPanelList />
       </PanelListLandingPage>

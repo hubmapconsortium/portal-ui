@@ -26,7 +26,7 @@ describe("Publication page", () => {
     });
     it("has a manuscript link", () => {
       cy.findByTestId("publication-manuscript-link").contains(
-        "https://osf.io/y8thv"
+        "https://www.nature.com/articles/s41592-024-02436-x"
       );
     });
     it("has a citation section", () => {
@@ -45,10 +45,10 @@ describe("Publication page", () => {
         .should("contain", "Kidney (Left)")
         .and("contain", "Spleen");
     });
-    it("has a publication date, which is labeled as a preprint date", () => {
+    it("has a publication date", () => {
       cy.findByTestId("publication-date")
-        .should("contain", "2021-10-18")
-        .and("contain", "Preprint");
+        .should("contain", "2024-09-27")
+        .and("contain", "Publication Date");
     });
     it("has a table of contents with links to the summary, data, visualizations, bulk data transfer, authors, and provenance sections", () => {
       

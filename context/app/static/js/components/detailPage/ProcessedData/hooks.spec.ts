@@ -1,6 +1,6 @@
 import { CreationAction } from 'js/components/types';
 import { renderHook } from 'test-utils/functions';
-import { useSortedSearchHits, createdByCentralProcess, datasetIsPublished, usePipelineCountsInfo } from './hooks';
+import { useSortedSearchHits, createdByCentralProcess, datasetIsPublished, useAnalysesCountInfo } from './hooks';
 
 const testDatasets: {
   _id: string;
@@ -94,8 +94,8 @@ it('checks if dataset is published', () => {
   expect(datasetIsPublished(testDatasets[2]._source)).toBe(true);
 });
 
-it('counts pipelines and their occurrences', () => {
-  const { pipelinesText, pipelineCountsText } = usePipelineCountsInfo(testDatasets.map((dataset) => dataset._source));
-  expect(pipelinesText).toBe('Pipelines (2)');
-  expect(pipelineCountsText).toBe('Cytokit + SPRM (2) and Segmentation Mask');
+it('counts analyses and their occurrences', () => {
+  const { analysesText, analysesCountText } = useAnalysesCountInfo(testDatasets.map((dataset) => dataset._source));
+  expect(analysesText).toBe('Analyses (2)');
+  expect(analysesCountText).toBe('Cytokit + SPRM (2) and Segmentation Mask');
 });

@@ -13,9 +13,18 @@ interface TileProps {
   tileWidth: number;
 }
 
-function Tile({ href, icon, invertColors = false, bodyContent, footerContent, tileWidth, onClick }: TileProps) {
+function Tile({
+  href,
+  icon,
+  invertColors = false,
+  bodyContent,
+  footerContent,
+  tileWidth,
+  onClick,
+  ...rest
+}: TileProps) {
   const tile = (
-    <StyledPaper $invertColors={invertColors} $tileWidth={tileWidth} onClick={onClick}>
+    <StyledPaper $invertColors={invertColors} $tileWidth={tileWidth} onClick={onClick} {...rest}>
       <Stack p={1} boxSizing="content-box" direction="row">
         {icon}
         <FlexGrow>{bodyContent}</FlexGrow>

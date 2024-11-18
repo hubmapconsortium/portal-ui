@@ -5,18 +5,23 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 import Stack from '@mui/material/Stack';
+import { useVitessceConfLink } from 'js/pages/Dataset/hooks';
 import StatusIcon from '../../StatusIcon';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
 import VersionSelect from '../../VersionSelect';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import SummaryJSONButton from '../../summary/SummaryJSONButton';
+import VisualizationIconButton from './VisualizationIconButton';
 
 export function DatasetTitle() {
   const {
     dataset: { hubmap_id, status, uuid, entity_type },
+    conf,
   } = useProcessedDatasetContext();
   const copyText = useHandleCopyClick();
   const track = useTrackEntityPageEvent();
+  const parentUuid = conf && 'parentUuid' in conf ? (conf.parentUuid as string) : undefined;
+  const vitessceConfUrl = useVitessceConfLink(uuid, parentUuid);
   return (
     <Typography variant="h5" display="flex" alignItems="center" gap={0.5}>
       <StatusIcon status={status} tooltip />
@@ -35,6 +40,7 @@ export function DatasetTitle() {
         </IconButton>
       </SecondaryBackgroundTooltip>
       <Stack ml="auto" direction="row" gap={1} alignItems="center">
+        {conf && <VisualizationIconButton href={vitessceConfUrl} />}
         <SummaryJSONButton entity_type={entity_type} uuid={uuid} />
         <VersionSelect />
       </Stack>

@@ -18,6 +18,7 @@ import useProcessedDataStore from '../store';
 import { DetailPageSection } from '../../DetailPageSection';
 
 const iconPlaceholder = <Skeleton variant="circular" width={24} height={24} animation="pulse" />;
+const inViewThreshold = 0.1;
 
 function LoadingFallback() {
   return <Skeleton variant="rectangular" height={200} />;
@@ -27,19 +28,22 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
   const { defaultExpanded, dataset, sectionDataset, conf, isLoading } = useProcessedDatasetContext();
   const visualizationIcon = conf ? <VisualizationIcon /> : null;
   const track = useTrackEntityPageEvent();
+  const [threshold, setThreshold] = useState(inViewThreshold);
 
   const { setCurrentDataset, removeVisibleDataset } = useProcessedDataStore((state) => ({
     setCurrentDataset: state.setCurrentDataset,
     removeVisibleDataset: state.removeFromVisibleDatasets,
   }));
   const { ref } = useInView({
-    threshold: 0,
+    threshold,
     initialInView: false,
     onChange: (visible) => {
       if (visible && dataset) {
+        setThreshold(0);
         setCurrentDataset(dataset);
       }
       if (!visible) {
+        setThreshold(inViewThreshold);
         removeVisibleDataset(sectionDataset.hubmap_id);
       }
     },
@@ -72,7 +76,7 @@ export function ProcessedDatasetAccordion({ children }: PropsWithChildren) {
         <AccordionSummary expandIcon={<ArrowDropDownRounded />}>
           {isLoading ? iconPlaceholder : visualizationIcon}
           <Typography variant="subtitle1" color="inherit" component="h4">
-            {sectionDataset.pipeline}
+            {sectionDataset.pipeline ?? sectionDataset.assay_display_name[0]}
           </Typography>
           <Typography variant="body1" ml="auto" component="div" display="flex" alignItems="center" gap={1}>
             <StatusIcon status={sectionDataset.status} noColor={isExpanded} tooltip />

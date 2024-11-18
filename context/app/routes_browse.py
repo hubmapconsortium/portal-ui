@@ -7,7 +7,8 @@ from flask import (
 
 from .utils import (
     get_default_flask_data, make_blueprint, get_client,
-    get_url_base_from_request, entity_types)
+    get_url_base_from_request, entity_types, find_raw_dataset_ancestor,
+    should_redirect_entity)
 
 
 blueprint = make_blueprint(__name__)
@@ -48,39 +49,24 @@ def details(type, uuid):
     entity = client.get_entity(uuid)
     actual_type = entity['entity_type'].lower()
 
-    # Redirect to primary dataset if this is
-    # - a support entity (e.g. an image pyramid)
-    # - a processed or component dataset
-    is_support = actual_type == 'support'
-    is_processed = entity.get('processing') != 'raw' and actual_type == 'dataset'
-    is_component = entity.get('is_component', False) is True
-    if (is_support or is_processed or is_component):
-        supported_entity = client.get_entities(
-            'datasets',
-            query_override={
-                "bool": {
-                    "must": {
-                        "terms": {
-                            "descendant_ids": [uuid]
-                        }
-                    }
-                }
-            },
-            non_metadata_fields=['hubmap_id', 'uuid']
-        )
+    if (should_redirect_entity(entity)):
+        raw_dataset = find_raw_dataset_ancestor(client, entity.get('ancestor_ids'))
 
         pipeline_anchor = entity.get('pipeline', entity.get('hubmap_id')).replace(' ', '')
         anchor = quote(f'section-{pipeline_anchor}-{entity.get("status")}').lower()
 
-        if len(supported_entity) > 0:
-            return redirect(
-                url_for('routes_browse.details',
-                        type='dataset',
-                        uuid=supported_entity[0]['uuid'],
-                        _anchor=anchor,
-                        redirected=True,
-                        redirectedFromId=entity.get('hubmap_id'),
-                        redirectedFromPipeline=entity.get('pipeline')))
+        if raw_dataset is None or len(raw_dataset) == 0:
+            abort(404)
+
+        # Redirect to the primary dataset
+        return redirect(
+            url_for('routes_browse.details',
+                    type='dataset',
+                    uuid=raw_dataset[0].get('uuid'),
+                    _anchor=anchor,
+                    redirected=True,
+                    redirectedFromId=entity.get('hubmap_id'),
+                    redirectedFromPipeline=entity.get('pipeline')))
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
@@ -127,8 +113,21 @@ def details_vitessce(type, uuid):
     parent_uuid = request.args.get('parent') or None
     marker = request.args.get('marker') or None
     parent = client.get_entity(parent_uuid) if parent_uuid else None
+    epic_uuid = None
+    if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get(
+            'status') != 'Error' and entity.get("pipeline") == "Segmentation Mask":
+        epic_uuid = uuid
+        if parent is None:
+            ancestors = entity.get('immediate_ancestor_ids')
+            if len(ancestors) > 0:
+                parent = ancestors[0]
+
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
-        entity, marker=marker, parent=parent).vitessce_conf
+        entity,
+        marker=marker,
+        parent=parent,
+        epic_uuid=epic_uuid,
+    ).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)
     response.headers.add("Access-Control-Allow-Origin", "*")

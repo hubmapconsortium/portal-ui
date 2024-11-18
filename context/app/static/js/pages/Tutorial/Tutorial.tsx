@@ -29,7 +29,7 @@ function Tutorial({ tutorialName }: TutorialProps) {
   const { title, description, iframeLink } = tutorials[tutorialName];
   return (
     <Stack spacing={2}>
-      <PageTitle>{title}</PageTitle>
+      <PageTitle data-testid="tutorial-title">{title}</PageTitle>
       <SectionPaper>{description}</SectionPaper>
       <StyledIframe src={iframeLink} title={title} />
     </Stack>
