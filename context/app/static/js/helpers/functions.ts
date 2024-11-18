@@ -227,24 +227,27 @@ export function isValidEmail(email: string) {
 }
 
 /**
- * Checks if a string is a properly structured ORCID ID - aka, 16 digits (the final digit may also be an 'X')
+ * Checks if a string is a properly formatted ORCID ID - aka, 16 digits (the final digit may also be an 'X')
  * with or without 4 dashes, which is what orcid.org permits in a URL.
- * @param orcidId the ORCID ID string to check.
- * @returns true if valid, false otherwise.
+ * @param orcidId the ORCID ID string to validate and format.
+ * @returns the formatted ORCID ID if valid, or null if invalid.
  */
-export function isValidOrcidId(orcidId?: string) {
+export function validateAndFormatOrcidId(orcidId?: string): string | null {
   if (typeof orcidId !== 'string' || orcidId.trim() === '') {
-    return false;
+    return null;
   }
 
   const orcidWithDashes = /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/;
   const orcidNoDashes = /^[0-9]{15}[0-9X]$/;
 
-  if (orcidWithDashes.test(orcidId) || orcidNoDashes.test(orcidId)) {
-    return true;
+  if (orcidWithDashes.test(orcidId)) {
+    return orcidId;
+  }
+  if (orcidNoDashes.test(orcidId)) {
+    return orcidId.replace(/(\d{4})(\d{4})(\d{4})(\d{3}[0-9X])/, '$1-$2-$3-$4');
   }
 
-  return false;
+  return null;
 }
 
 export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {

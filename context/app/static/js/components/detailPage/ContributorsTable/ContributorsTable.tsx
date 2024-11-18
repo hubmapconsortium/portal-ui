@@ -15,7 +15,7 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
-import { isValidEmail, isValidOrcidId } from 'js/helpers/functions';
+import { isValidEmail, validateAndFormatOrcidId } from 'js/helpers/functions';
 import IconPanel from 'js/shared-styles/panels/IconPanel';
 
 import { useNormalizedContacts, useNormalizedContributors } from './hooks';
@@ -105,6 +105,7 @@ function ContributorsTable({
             <TableBody>
               {sortedContributors.map((contributor) => {
                 const { affiliation, name, email, isPrincipalInvestigator, orcid } = contributor;
+                const validatedOrcid = validateAndFormatOrcidId(orcid);
                 return (
                   <TableRow key={orcid} data-testid="contributor-row">
                     <TableCell>{`${name}${isPrincipalInvestigator ? ' (PI)' : ''}`}</TableCell>
@@ -113,9 +114,9 @@ function ContributorsTable({
                       <ContactCell isContact={contributorIsContact(contributor, normalizedContacts)} email={email} />
                     </TableCell>
                     <TableCell>
-                      {isValidOrcidId(orcid) && (
-                        <OutboundIconLink href={`https://orcid.org/${orcid}`} variant="body2">
-                          {orcid}
+                      {validatedOrcid && (
+                        <OutboundIconLink href={`https://orcid.org/${validatedOrcid}`} variant="body2">
+                          {validatedOrcid}
                         </OutboundIconLink>
                       )}
                     </TableCell>

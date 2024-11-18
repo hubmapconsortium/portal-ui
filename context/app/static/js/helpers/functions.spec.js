@@ -11,7 +11,7 @@ import {
   shouldCapitalizeString,
   generateCommaList,
   isValidEmail,
-  isValidOrcidId,
+  validateAndFormatOrcidId,
 } from './functions';
 
 test('isEmptyArrayOrObject', () => {
@@ -131,17 +131,17 @@ test('isValidEmail', () => {
   });
 });
 
-test('isValidOrcidId', () => {
-  expect(isValidOrcidId('0000-0002-2451-0633')).toBeTruthy();
-  expect(isValidOrcidId('0000-0002-2451-063X')).toBeTruthy();
-  expect(isValidOrcidId('0000000224510633')).toBeTruthy();
-  expect(isValidOrcidId('000000022451063X')).toBeTruthy();
-  expect(isValidOrcidId('')).toBeFalsy();
-  expect(isValidOrcidId(undefined)).toBeFalsy();
-  expect(isValidOrcidId('n/a')).toBeFalsy();
-  expect(isValidOrcidId('  0000-0002-2451-0633  ')).toBeFalsy();
-  expect(isValidOrcidId('0000 0002 2451 0633')).toBeFalsy();
-  expect(isValidOrcidId('abcd-1234-5678-9101')).toBeFalsy();
-  expect(isValidOrcidId('1234-5678-9101')).toBeFalsy();
-  expect(isValidOrcidId('12345678901234567')).toBeFalsy();
+test('validateAndFormatOrcidId', () => {
+  expect(validateAndFormatOrcidId('0000-0002-2451-0633')).toEqual('0000-0002-2451-0633');
+  expect(validateAndFormatOrcidId('0000-0002-2451-063X')).toEqual('0000-0002-2451-063X');
+  expect(validateAndFormatOrcidId('0000000224510633')).toEqual('0000-0002-2451-0633');
+  expect(validateAndFormatOrcidId('000000022451063X')).toEqual('0000-0002-2451-063X');
+  expect(validateAndFormatOrcidId('')).toBeFalsy();
+  expect(validateAndFormatOrcidId(undefined)).toBeFalsy();
+  expect(validateAndFormatOrcidId('n/a')).toBeFalsy();
+  expect(validateAndFormatOrcidId('  0000-0002-2451-0633  ')).toBeFalsy();
+  expect(validateAndFormatOrcidId('0000 0002 2451 0633')).toBeFalsy();
+  expect(validateAndFormatOrcidId('abcd-1234-5678-9101')).toBeFalsy();
+  expect(validateAndFormatOrcidId('1234-5678-9101')).toBeFalsy();
+  expect(validateAndFormatOrcidId('12345678901234567')).toBeFalsy();
 });
