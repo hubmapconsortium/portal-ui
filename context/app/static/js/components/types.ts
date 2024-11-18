@@ -84,6 +84,7 @@ export interface Sample extends Entity {
   organ: string;
   origin_samples_unique_mapped_organs: string[];
   origin_samples: Sample[];
+  protocol_url: string;
 }
 
 export type CreationAction =
@@ -97,8 +98,8 @@ export type CreationAction =
 export interface Dataset extends Entity {
   entity_type: 'Dataset';
   processing: 'raw' | 'processed';
-  pipeline: string;
-  assay_display_name: string;
+  pipeline?: string;
+  assay_display_name: string[];
   is_component?: boolean;
   assay_modality: 'single' | 'multiple';
   donor: Donor;

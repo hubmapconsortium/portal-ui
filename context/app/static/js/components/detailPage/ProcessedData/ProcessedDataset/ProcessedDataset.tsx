@@ -26,7 +26,7 @@ import { getDateLabelAndValue } from 'js/components/detailPage/utils';
 import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
+import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
@@ -74,18 +74,12 @@ function SummaryAccordion() {
   const { group_name, mapped_consortium, creation_action } = dataset;
   const [dateLabel, dateValue] = getDateLabelAndValue(dataset);
 
-  const isHiveProcessed = creation_action === 'Central Process';
-
   return (
     <Subsection title="Summary" icon={<SummarizeRounded />}>
       <Stack spacing={1}>
         <ProcessedDatasetDescription />
         <LabelledSectionText label="Group">
-          {isHiveProcessed ? (
-            <InfoTextTooltip tooltipTitle="HuBMAP Integration, Visualization & Engagement.">HIVE</InfoTextTooltip>
-          ) : (
-            group_name
-          )}
+          <ProcessedDataGroup creation_action={creation_action} group_name={group_name} />
         </LabelledSectionText>
         <LabelledSectionText label="Consortium">{mapped_consortium}</LabelledSectionText>
         <Contact />

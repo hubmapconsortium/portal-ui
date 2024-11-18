@@ -1186,8 +1186,8 @@ platformdirs==2.5.1 \
     --hash=sha256:7535e70dfa32e84d4b34996ea99c5e432fa29a708d0f4e394bbcb2a8faa4f16d \
     --hash=sha256:bcae7cab893c2d310a711b70b24efb93334febe65f8de776ee320b517471e227
     # via black
-portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.6.zip \
-    --hash=sha256:57dd4befb940c167203f43dbcccb0814a3aefeb2ab372a74d606a83b14b59a6b
+portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.3.2.zip \
+    --hash=sha256:35fbe073dba04295b918275842cc78502be7a316b4da6870127c90d50619bb64
     # via -r context/requirements.in
 property==2.2 \
     --hash=sha256:d25e4da4e415408b9eb39b6521c088e4e2b8a9e2f9f96fb2d91680e97207ea19
@@ -1588,9 +1588,9 @@ urllib3==1.26.9 \
     #   botocore
     #   distributed
     #   requests
-vitessce==3.2.8 \
-    --hash=sha256:9155ca586a965fd6c20513506343955918b388e51ace85eb64fe440237f4f577 \
-    --hash=sha256:f95c59bd0062deb742634ca9b3e3eddb76342d2e50d83e2687f6001f2760f15e
+vitessce==3.4.0 \
+    --hash=sha256:b09088cd42bd671e0136f504dc69cc888af60e8b86ac62f51cf781ee84478e5c \
+    --hash=sha256:bb0f8420bab6273dcf6d5c3e48ff6a7ff7e8d97669078cabc4a3d67c6e04386d
     # via portal-visualization
 werkzeug==3.0.3 \
     --hash=sha256:097e5bfda9f0aba8da6b8545146def481d06aa7d3266e7448e2cccf67dd8bd18 \

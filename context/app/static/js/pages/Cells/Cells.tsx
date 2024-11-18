@@ -36,7 +36,9 @@ function Cells() {
   return (
     <AccordionStepsProvider stepsLength={steps.length}>
       <CellsTutorial setParametersButtonRef={setParametersButtonRef} runQueryButtonRef={runQueryButtonRef} />
-      <PageTitle color="primary">Datasets: Molecular Data Queries (BETA)</PageTitle>
+      <PageTitle data-testid="molecular-data-queries-title" color="primary">
+        Datasets: Molecular Data Queries (BETA)
+      </PageTitle>
       <Stack component={SectionPaper} direction="column" spacing={2}>
         <Typography>
           Retrieve datasets based on the abundance of transcriptomic, epigenomic, and proteomic biomarkers across cells,

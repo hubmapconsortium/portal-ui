@@ -26,7 +26,7 @@ function ResultsTable({ hits, resultFields, detailsUrlPrefix, idField, sortOptio
             {resultFields.map((field) => (
               <StyledTableCell key={field.id}>
                 {field.id === 'hubmap_id' ? (
-                  <InternalLink href={detailsUrlPrefix + hit._source[idField]}>
+                  <InternalLink href={detailsUrlPrefix + hit._source[idField]} data-testid="hubmap-id-link">
                     {getByPath(hit._source, field)}
                   </InternalLink>
                 ) : (

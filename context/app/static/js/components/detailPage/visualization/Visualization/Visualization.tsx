@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useCallback } from 'react';
 import { Vitessce } from 'vitessce';
 
 import Paper from '@mui/material/Paper';
@@ -68,6 +68,17 @@ function Visualization({
   useCanvasScrollFix();
   const { toastError, toastInfo } = useSnackbarActions();
 
+  const handleWarning = useCallback(
+    (message: string) => {
+      // Suppress the "Node not found" and "Unexpected response status" messages related to zarr files
+      if (message.includes('Node not found') || message.includes('Unexpected response status')) {
+        return;
+      }
+      toastError(message);
+    },
+    [toastError],
+  );
+
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
   // Propagate UUID to the store if there is a notebook so we can display the download button when the visualization is expanded
@@ -114,14 +125,6 @@ function Visualization({
   if (!vitessceConfig) {
     return null;
   }
-
-  const handleWarning = (message: string) => {
-    // Suppress the "Node not found" message that appears when no zarr file was found
-    if (message.includes('Node not found')) {
-      return;
-    }
-    toastError(message);
-  };
 
   return (
     // Don't render multi-datasets unless they have a selection from the list of options in vitessceConfig.

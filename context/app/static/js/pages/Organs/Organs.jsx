@@ -19,7 +19,7 @@ function Organs({ organs }) {
   return (
     <SectionContainer>
       <RedirectAlert messageTemplate={organNotFoundMessageTemplate} />
-      <SectionHeader variant="h1" component="h1">
+      <SectionHeader data-testid="organs-title" variant="h1" component="h1">
         Organs
       </SectionHeader>
       <StyledTypography variant="subtitle1" component="h2" color="primary">
