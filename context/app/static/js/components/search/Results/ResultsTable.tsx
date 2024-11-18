@@ -16,6 +16,7 @@ import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { trackEvent } from 'js/helpers/trackers';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
+import { useAllSearchIDs } from 'js/hooks/useSearchData';
 import { getByPath } from './utils';
 import {
   StyledTable,
@@ -31,6 +32,7 @@ import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 import ViewMoreResults from './ViewMoreResults';
+import { buildQuery } from '../utils';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -198,6 +200,32 @@ const HeaderCells = React.memo(function HeaderCells({ tableFields }: { tableFiel
     </>
   );
 });
+
+function SelectableHeaderCells() {
+  const filters = useSearchStore((state) => state.filters);
+  const facets = useSearchStore((state) => state.facets);
+  const search = useSearchStore((state) => state.search);
+  const size = useSearchStore((state) => state.size);
+  const searchFields = useSearchStore((state) => state.searchFields);
+  const sourceFields = useSearchStore((state) => state.sourceFields);
+  const sortField = useSearchStore((state) => state.sortField);
+  const defaultQuery = useSearchStore((state) => state.defaultQuery);
+  const type = useSearchStore((state) => state.type);
+
+  const query = buildQuery({ filters, facets, search, size, searchFields, sourceFields, sortField, defaultQuery });
+
+  const { allSearchIDs, isLoading } = useAllSearchIDs(query);
+
+  return (
+    <SelectableHeaderCell
+      allTableRowKeys={allSearchIDs}
+      disabled={isLoading}
+      selectTooltip={`Select all ${type.toLowerCase()}s in results`}
+      deselectTooltip="Deselect all results."
+    />
+  );
+}
+
 const Table = React.memo(function Table({
   isLoading,
   hits,
@@ -212,7 +240,7 @@ const Table = React.memo(function Table({
       <StyledTable data-testid="search-results-table">
         <TableHead>
           <TableRow>
-            <SelectableHeaderCell allTableRowKeys={hits.map((h) => h._id)} disabled={isLoading} />
+            <SelectableHeaderCells />
             <HeaderCells tableFields={tableFields} />
           </TableRow>
         </TableHead>
