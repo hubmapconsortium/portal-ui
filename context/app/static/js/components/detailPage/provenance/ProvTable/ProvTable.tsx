@@ -9,6 +9,7 @@ import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { ErrorTile } from 'js/components/entity-tile/EntityTile/EntityTile';
+import { Alert } from 'js/shared-styles/alerts';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
@@ -47,7 +48,11 @@ function ProvEntityColumn({
         <Typography variant="h5">{type}s</Typography>
       </ProvTableEntityHeader>
       <FlexColumn>
-        {entities.length > 0 &&
+        {entities.length === 0 ? (
+          <Alert severity="warning" $width="100%">
+            No {type.toLowerCase()}s available.
+          </Alert>
+        ) : (
           entities
             .sort((a, b) => a.created_timestamp - b.created_timestamp)
             .map((item, j, items) => {
@@ -87,7 +92,8 @@ function ProvEntityColumn({
                   entityData={item}
                 />
               );
-            })}
+            })
+        )}
         {descendantEntityCounts?.[type] && <ProvTableDerivedLink uuid={currentEntityUUID} type={type} />}
         {displayMissingAncestors && missingAncestors.map((id) => <ErrorTile key={id} entity_type={type} id={id} />)}
       </FlexColumn>
