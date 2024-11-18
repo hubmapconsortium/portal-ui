@@ -133,7 +133,9 @@ test('isValidEmail', () => {
 
 test('isValidOrcidId', () => {
   expect(isValidOrcidId('0000-0002-2451-0633')).toBeTruthy();
+  expect(isValidOrcidId('0000-0002-2451-063X')).toBeTruthy();
   expect(isValidOrcidId('0000000224510633')).toBeTruthy();
+  expect(isValidOrcidId('000000022451063X')).toBeTruthy();
   expect(isValidOrcidId('')).toBeFalsy();
   expect(isValidOrcidId(undefined)).toBeFalsy();
   expect(isValidOrcidId('n/a')).toBeFalsy();
