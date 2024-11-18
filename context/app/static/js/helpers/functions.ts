@@ -227,7 +227,7 @@ export function isValidEmail(email: string) {
 }
 
 /**
- * Checks if a string is a properly structured ORCID ID (aka, 16 digits (the final digit may also be an 'X')
+ * Checks if a string is a properly structured ORCID ID - aka, 16 digits (the final digit may also be an 'X')
  * with or without 4 dashes, which is what orcid.org permits in a URL.
  * @param orcidId the ORCID ID string to check.
  * @returns true if valid, false otherwise.
