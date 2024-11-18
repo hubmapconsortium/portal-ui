@@ -3,7 +3,7 @@ import React, { useCallback } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import { ExistsValues, isExistsFilter, useSearchStore } from '../store';
 import { StyledCheckBoxBlankIcon, StyledCheckBoxIcon, StyledCheckbox, StyledFormControlLabel } from './style';
-import { getFieldLabel } from '../fieldConfigurations';
+import { useGetFieldLabel } from '../fieldConfigurations';
 import FacetAccordion from './FacetAccordion';
 
 function ExistsFacet({ filter, field }: { filter: ExistsValues; field: string }) {
@@ -11,6 +11,7 @@ function ExistsFacet({ filter, field }: { filter: ExistsValues; field: string })
   const filterExists = useSearchStore((state) => state.filterExists);
 
   const active = filter.values;
+  const getFieldLabel = useGetFieldLabel();
   const fieldLabel = getFieldLabel(field);
 
   const handleClick = useCallback(() => {

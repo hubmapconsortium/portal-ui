@@ -22,7 +22,7 @@ import {
   HierarchicalAccordionSummary,
 } from './style';
 import FacetAccordion from './FacetAccordion';
-import { getFieldLabel, getTransformedFieldValue } from '../fieldConfigurations';
+import { useGetFieldLabel, useGetTransformedFieldValue } from '../fieldConfigurations';
 
 interface CheckboxItem {
   label: string;
@@ -60,7 +60,7 @@ function CheckboxFilterItem({
   field,
 }: CheckboxItem) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
-
+  const getTransformedFieldValue = useGetTransformedFieldValue();
   const handleClick = useCallback(() => {
     onClick();
 
@@ -125,6 +125,7 @@ function FacetSizeButton({ handleExpand, hasMoreBuckets }: { handleExpand: () =>
 function TermFacetContent({ filter, field }: { filter: TermValues; field: string }) {
   const { aggregations } = useSearch();
   const [showLessTerms, setShowLessTerms] = useState(true);
+  const getFieldLabel = useGetFieldLabel();
 
   const toggleTermsCount = useCallback(() => {
     setShowLessTerms((prev) => !prev);
@@ -307,6 +308,7 @@ export const HierarchicalTermFacetItem = React.memo(function HierarchicalTermFac
 
 export function HierarchicalTermFacet({ field: parentField, childField }: { field: string; childField: string }) {
   const parentAggs = useSearch()?.aggregations?.[parentField]?.[parentField];
+  const getFieldLabel = useGetFieldLabel();
 
   const filter = useSearchStore((state) => state.filters[parentField]);
 

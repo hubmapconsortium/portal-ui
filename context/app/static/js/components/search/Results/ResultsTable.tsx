@@ -29,7 +29,7 @@ import {
 } from './style';
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
-import { getFieldLabel } from '../fieldConfigurations';
+import { useGetFieldLabel } from '../fieldConfigurations';
 import ViewMoreResults from './ViewMoreResults';
 
 type SortDirection = 'asc' | 'desc';
@@ -189,6 +189,7 @@ const ResultRow = React.memo(function ResultRow({ hit, tableFields }: RowProps) 
 }, compareRowProps);
 
 const HeaderCells = React.memo(function HeaderCells({ tableFields }: { tableFields: string[] }) {
+  const getFieldLabel = useGetFieldLabel();
   return (
     <>
       {tableFields.map((field) => (
