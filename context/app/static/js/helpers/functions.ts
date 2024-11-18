@@ -227,20 +227,21 @@ export function isValidEmail(email: string) {
 }
 
 /**
- * Checks if a string is valid, aka not empty, undefined, or any version of "n/a".
- * @author Austen Money
- * @param string the string to check.
- * @returns true if the string is valid, false otherwise.
+ * Checks if a string is a properly formatted ORCID ID or if it can be formatted to be valid.
+ * @param orcidId the ORCID ID string to check.
+ * @returns true if valid, false otherwise.
  */
-export function isValidStringValue(string?: string): boolean {
-  if (typeof string !== 'string' || string.trim() === '') {
+export function isValidOrcidId(orcidId?: string) {
+  if (typeof orcidId !== 'string' || orcidId.trim() === '') {
     return false;
   }
 
-  const invalidValues = ['n/a', 'n-a', 'na', 'none'];
-  const normalizedString = string.trim().toLowerCase();
+  const cleaned = orcidId.replace(/[^0-9]/g, '');
+  if (cleaned.length !== 16 || !/^\d{16}$/.test(cleaned)) {
+    return false;
+  }
 
-  return !invalidValues.includes(normalizedString);
+  return true;
 }
 
 export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
