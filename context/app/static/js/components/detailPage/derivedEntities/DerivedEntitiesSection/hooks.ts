@@ -5,6 +5,8 @@ function useDerivedEntitiesSection(uuid: string) {
   const { searchHits: datasets, isLoading: derivedDatasetsAreLoading } = useDerivedDatasetSearchHits(uuid);
   const { searchHits: samples, isLoading: derivedSamplesAreLoading } = useDerivedSampleSearchHits(uuid);
 
+  const datasetUuids = new Set(datasets.map((dataset) => dataset._source.uuid));
+
   const isLoading = derivedDatasetsAreLoading || derivedSamplesAreLoading;
 
   const entities = [
@@ -22,7 +24,7 @@ function useDerivedEntitiesSection(uuid: string) {
     },
   ];
 
-  return { entities, isLoading };
+  return { entities, datasetUuids, isLoading };
 }
 
 export { useDerivedEntitiesSection };

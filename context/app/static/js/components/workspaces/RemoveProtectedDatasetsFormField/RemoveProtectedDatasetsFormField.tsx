@@ -8,12 +8,12 @@ import { Control, FieldValues, Path, PathValue } from 'react-hook-form';
 
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
-import { useProtectedDatasetsForm } from '../formHooks';
+import { useWorkspacesProtectedDatasetsForm } from '../formHooks';
 
 type Props<FormType extends FieldValues> = {
   control: Control<FormType>;
 } & Pick<
-  ReturnType<typeof useProtectedDatasetsForm>,
+  ReturnType<typeof useWorkspacesProtectedDatasetsForm>,
   'protectedHubmapIds' | 'removeProtectedDatasets' | 'protectedRows'
 >;
 function RemoveProtectedDatasetsFormField<FormType extends FieldValues>({

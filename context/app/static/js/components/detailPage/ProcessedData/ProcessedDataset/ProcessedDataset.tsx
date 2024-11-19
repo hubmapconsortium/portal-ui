@@ -30,7 +30,7 @@ import { getEntityCreationInfo } from 'js/helpers/functions';
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
 import { Subsection } from './Subsection';
-import { SectionDescription } from './SectionDescription';
+import { SectionDescription } from '../../../../shared-styles/sections/SectionDescription';
 import useProcessedDataStore from '../store';
 import {
   ProcessedDatasetContextProvider,

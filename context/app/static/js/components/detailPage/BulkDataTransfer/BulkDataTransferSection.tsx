@@ -6,7 +6,7 @@ import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
-import { SectionDescription } from '../ProcessedData/ProcessedDataset/SectionDescription';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 import { BULK_DATA_DESCRIPTION_TEXT } from './const';

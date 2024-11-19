@@ -11,7 +11,7 @@ import {
   protectedDatasetsField,
 } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
-import { useProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
+import { useWorkspacesProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 
 export interface AddDatasetsFromSearchFormTypes {
   datasets: string[];
@@ -83,7 +83,7 @@ function useAddDatasetsFromSearchDialog() {
     removeProtectedDatasets: removeProtectedDatasetsFromSearchSelections,
     protectedRows,
     ...restProtectedDatasets
-  } = useProtectedDatasetsForm();
+  } = useWorkspacesProtectedDatasetsForm();
 
   const datasetsFromSearch = useMemo(() => [...selectedRows], [selectedRows]);
 

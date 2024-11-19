@@ -9,7 +9,7 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import useProvData from '../hooks';
 import ProvTabs from '../ProvTabs';
-import { SectionDescription } from '../../ProcessedData/ProcessedDataset/SectionDescription';
+import { SectionDescription } from '../../../../shared-styles/sections/SectionDescription';
 
 const provenanceTooltipText = `The provenance shows the sequence of events and actions that led to this page creation.`;
 

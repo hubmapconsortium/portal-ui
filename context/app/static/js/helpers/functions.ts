@@ -227,6 +227,30 @@ export function isValidEmail(email: string) {
   return emailRegex.test(cleanedValue);
 }
 
+/**
+ * Checks if a string is a properly formatted ORCID ID - aka, 16 digits (the final digit may also be an 'X')
+ * with or without 4 dashes, which is what orcid.org permits in a URL.
+ * @param orcidId the ORCID ID string to validate and format.
+ * @returns the formatted ORCID ID if valid, or null if invalid.
+ */
+export function validateAndFormatOrcidId(orcidId?: string): string | null {
+  if (typeof orcidId !== 'string' || orcidId.trim() === '') {
+    return null;
+  }
+
+  const orcidWithDashes = /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/;
+  const orcidNoDashes = /^[0-9]{15}[0-9X]$/;
+
+  if (orcidWithDashes.test(orcidId)) {
+    return orcidId;
+  }
+  if (orcidNoDashes.test(orcidId)) {
+    return orcidId.replace(/(\d{4})(\d{4})(\d{4})(\d{3}[0-9X])/, '$1-$2-$3-$4');
+  }
+
+  return null;
+}
+
 export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
   if (isDataset(entity)) {
     if (entity.is_component) {

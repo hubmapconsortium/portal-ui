@@ -56,6 +56,8 @@ function usePublicationsRelatedEntities(uuid: string) {
     { Donor: [], Sample: [], Dataset: [] } as Record<string, Required<SearchHit<PartialEntity>>[]>,
   );
 
+  const datasetUuids = new Set(ancestorsSplitByEntityType.Dataset.map((hit) => hit._source.uuid));
+
   const entities = [
     {
       entityType: 'Donor' as const,
@@ -108,7 +110,7 @@ function usePublicationsRelatedEntities(uuid: string) {
     },
   ];
 
-  return { entities, isLoading };
+  return { entities, datasetUuids, isLoading };
 }
 
 export { usePublicationsRelatedEntities };
