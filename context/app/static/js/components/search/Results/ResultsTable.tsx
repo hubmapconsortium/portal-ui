@@ -103,7 +103,11 @@ function SortHeaderCell({ field, label }: { field: string; label: string }) {
 function CellContent({ field, fieldValue }: { field: string; fieldValue: string }) {
   switch (field.split('.').pop()) {
     case 'hubmap_id':
-      return <InternalLink href={`/browse/${fieldValue}`}>{fieldValue}</InternalLink>;
+      return (
+        <InternalLink href={`/browse/${fieldValue}`} data-testid="hubmap-id-link">
+          {fieldValue}
+        </InternalLink>
+      );
     case 'last_modified_timestamp':
     case 'published_timestamp':
     case 'created_timestamp':

@@ -167,7 +167,7 @@ function Header({ type }: TypeProps) {
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       <EntityIcon component={entityIconMap[type]} color="primary" />
-      <Typography component="h1" variant="h2">
+      <Typography component="h1" variant="h2" data-testid="search-header">
         {type}s
       </Typography>
     </Stack>

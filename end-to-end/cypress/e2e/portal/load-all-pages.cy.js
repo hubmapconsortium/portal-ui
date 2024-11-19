@@ -13,10 +13,10 @@ describe("Landing pages all load", () => {
   const pages = [
     { name: "Biomarkers", url: "/biomarkers", testId: "biomarkers-title" },
     { name: "Collections", url: "/collections", testId: "collections-title" },
-    { name: "Datasets", url: "/search?entity_type[0]=Dataset", testId: "search-header" },
+    { name: "Datasets", url: "/search/datasets", testId: "search-header" },
     { name: "Dev Search", url: "/dev-search", testId: "dev-search-title" },
     { name: "Donor Diversity", url: "/diversity", testId: "diversity-title" },
-    { name: "Donors", url: "/search?entity_type[0]=Donor", testId: "search-header" },
+    { name: "Donors", url: "/search/donors", testId: "search-header" },
     { name: "Home", url: "/", testId: "home-page-title" },
     { name: "My Lists", url: "/my-lists", testId: "my-lists-title" },
     { name: "My Workspaces", url: "/workspaces", testId: "my-workspaces-title" },
@@ -24,7 +24,7 @@ describe("Landing pages all load", () => {
     { name: "Organs", url: "/organ", testId: "organs-title" },
     { name: "Profile", url: "/profile", testId: "login-alert" },
     { name: "Publications", url: "/publications", testId: "publications-title" },
-    { name: "Samples", url: "/search?entity_type[0]=Sample", testId: "search-header" },
+    { name: "Samples", url: "/search/samples", testId: "search-header" },
     { name: "Services", url: "/services", testId: "services-title" },
     { name: "Templates", url: "/templates", testId: "templates-title" },
     { name: "Tutorials", url: "/tutorials", testId: "tutorials-title" },
@@ -47,11 +47,11 @@ describe("Landing pages all load", () => {
 describe("Entity detail page all load", () => {
   const pages = [
     { name: "Collection", url: "/collections", testId: "panel-title" },
-    { name: "Dataset", url: "/search?entity_type[0]=Dataset", testId: "hubmap-id-link" },
-    { name: "Donor", url: "/search?entity_type[0]=Donor", testId: "hubmap-id-link" },
+    { name: "Dataset", url: "/search/datasets", testId: "hubmap-id-link" },
+    { name: "Donor", url: "/search/donors", testId: "hubmap-id-link" },
     { name: "Organ", url: "/organ", testId: "organ-tile" },
     { name: "Publication", url: "/publications", testId: "panel-title" },
-    { name: "Sample", url: "/search?entity_type[0]=Sample", testId: "hubmap-id-link" },
+    { name: "Sample", url: "/search/samples", testId: "hubmap-id-link" },
   ];  
 
   context("macbook-size", () => {
