@@ -329,12 +329,12 @@ export function useAllSearchIDs(
     };
   }, [totalHitsCount, query, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
 
-  const { data } = useSWR(getKey, (args) => fetchAllIDs(args), {
+  const { data, isLoading } = useSWR(getKey, (args) => fetchAllIDs(args), {
     fallbackData: [],
     ...swrConfigRest,
   });
 
-  return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount };
+  return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount, isLoading };
 }
 
 export function getCombinedHits<Doc = unknown, Aggs = unknown>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {

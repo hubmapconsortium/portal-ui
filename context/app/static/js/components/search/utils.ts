@@ -66,7 +66,10 @@ export function buildQuery({
   sourceFields,
   sortField,
   defaultQuery,
-}: Omit<SearchStoreState, 'swrConfig' | 'view' | 'type' | 'analyticsCategory' | 'endpoint'>) {
+}: Pick<
+  SearchStoreState,
+  'filters' | 'facets' | 'search' | 'size' | 'searchFields' | 'sourceFields' | 'sortField' | 'defaultQuery'
+>) {
   const query = esb
     .requestBodySearch()
     .size(size)
