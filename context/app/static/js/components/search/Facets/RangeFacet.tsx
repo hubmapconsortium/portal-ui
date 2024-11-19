@@ -7,7 +7,7 @@ import Stack from '@mui/material/Stack';
 import { useSearch } from '../Search';
 import { RangeConfig, RangeValues, isRangeFacet, isRangeFilter, useSearchStore } from '../store';
 import FacetAccordion from './FacetAccordion';
-import { getFieldLabel } from '../fieldConfigurations';
+import { useGetFieldLabel } from '../fieldConfigurations';
 
 interface HistogramBucket {
   doc_count: number;
@@ -23,7 +23,7 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
   const aggs = useSearch()?.aggregations?.[field]?.[field];
   const filterRange = useSearchStore((state) => state.filterRange);
   const theme = useTheme();
-
+  const getFieldLabel = useGetFieldLabel();
   const { values } = filter;
   const { min, max } = facet;
 

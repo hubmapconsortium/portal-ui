@@ -8,19 +8,23 @@ import { format } from 'date-fns/format';
 import { trackEvent } from 'js/helpers/trackers';
 import {
   DateValues,
+  ExistsValues,
   HierarchicalTermValues,
   RangeValues,
   TermValues,
   isDateFacet,
   isDateFilter,
+  isExistsFilter,
+  isExistsFacet,
   isHierarchicalFacet,
   isHierarchicalFilter,
   isRangeFacet,
   isRangeFilter,
   isTermFilter,
   useSearchStore,
+  filterHasValues,
 } from '../store';
-import { getFieldLabel, getTransformedFieldValue } from '../fieldConfigurations';
+import { useGetFieldLabel, useGetTransformedFieldValue } from '../fieldConfigurations';
 
 function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () => void }) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
@@ -57,7 +61,7 @@ const HierarchichalTermChip = React.memo(function HierarchicalTermChip({
   value: string;
 }) {
   const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
-
+  const getFieldLabel = useGetFieldLabel();
   const filter = useCallback(
     () => filterHierarchicalChildTerm({ parentTerm: parentField, parentValue, value }),
     [parentField, value, parentValue, filterHierarchicalChildTerm],
@@ -83,11 +87,14 @@ function FilterChips() {
   const filterTerm = useSearchStore((state) => state.filterTerm);
   const filterRange = useSearchStore((state) => state.filterRange);
   const filterDate = useSearchStore((state) => state.filterDate);
+  const filterExists = useSearchStore((state) => state.filterExists);
+  const getFieldLabel = useGetFieldLabel();
+  const getTransformedFieldValue = useGetTransformedFieldValue();
 
   const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
     <>
       {Object.entries(filters).map(
-        ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues]) => {
+        ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues]) => {
           if (isTermFilter(v) && v.values.size) {
             return [...v.values].map((val) => (
               <FilterChip
@@ -144,6 +151,19 @@ function FilterChips() {
               ));
             });
           }
+
+          const hasValues = filterHasValues({ filter: v, facet: facetConfig });
+
+          if (isExistsFilter(v) && isExistsFacet(facetConfig) && hasValues) {
+            return (
+              <FilterChip
+                label={`${getFieldLabel(field)}: ${v.values}`}
+                key={field}
+                onDelete={() => filterExists({ field })}
+              />
+            );
+          }
+
           return null;
         },
       )}

@@ -6,7 +6,7 @@ import { format } from 'date-fns/format';
 
 import { useSearch } from '../Search';
 import { isDateFilter, useSearchStore } from '../store';
-import { getFieldLabel } from '../fieldConfigurations';
+import { useGetFieldLabel } from '../fieldConfigurations';
 import FacetAccordion from './FacetAccordion';
 
 interface DateRangeFacetProps {
@@ -69,7 +69,7 @@ function DateRangeFacet({
 }: DateRangeFacetProps & { min: number; max: number; aggMin: number; aggMax: number }) {
   const filterDate = useSearchStore((state) => state.filterDate);
   const [values, setValues] = useState([min, max]);
-
+  const getFieldLabel = useGetFieldLabel();
   // Reset slider position when filter chip is deleted.
   useEffect(() => {
     setValues([min, max]);

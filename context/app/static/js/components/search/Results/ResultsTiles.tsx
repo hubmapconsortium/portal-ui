@@ -17,7 +17,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import ViewMoreResults from './ViewMoreResults';
 import { useSearchStore } from '../store';
-import { getFieldLabel } from '../fieldConfigurations';
+import { useGetFieldLabel } from '../fieldConfigurations';
 
 function TilesSortSelect() {
   const { sortField, setSortField, sourceFields, analyticsCategory } = useSearchStore(
@@ -44,6 +44,8 @@ function TilesSortSelect() {
     },
     [setSortField, analyticsCategory],
   );
+
+  const getFieldLabel = useGetFieldLabel();
 
   return (
     <FormControl>

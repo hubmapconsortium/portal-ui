@@ -16,6 +16,7 @@ export const FACETS = {
   term: 'TERM',
   range: 'RANGE',
   date: 'DATE',
+  exists: 'EXISTS',
 } as const;
 
 export interface FacetConfig {
@@ -34,6 +35,17 @@ export interface TermConfig extends FacetConfig {
 export interface TermValues<V = Set<string>> {
   values: V;
   type: typeof FACETS.term;
+}
+
+export interface ExistsConfig extends FacetConfig {
+  default: boolean;
+  invert?: boolean;
+  type: typeof FACETS.exists;
+}
+
+export interface ExistsValues {
+  values: boolean;
+  type: typeof FACETS.exists;
 }
 
 export interface HierarchicalTermConfig extends FacetConfig {
@@ -75,8 +87,13 @@ export interface DateValues extends Omit<RangeValues, 'type' | 'values'> {
   };
 }
 
-export type Filter<V = Set<string>> = TermValues<V> | HierarchicalTermValues<V> | RangeValues | DateValues;
-export type Facet = TermConfig | HierarchicalTermConfig | RangeConfig | DateConfig;
+export type Filter<V = Set<string>> =
+  | TermValues<V>
+  | HierarchicalTermValues<V>
+  | RangeValues
+  | DateValues
+  | ExistsValues;
+export type Facet = TermConfig | HierarchicalTermConfig | RangeConfig | DateConfig | ExistsConfig;
 
 export type FiltersType<V = Set<string>> = Record<string, Filter<V>>;
 export type FacetsType = Record<string, Facet>;
@@ -128,9 +145,14 @@ const hierarchicalTermFilterSchema = z.object({
   type: z.literal(FACETS.hierarchical),
 });
 
+const existsFilterSchema = z.object({
+  values: z.boolean(),
+  type: z.literal(FACETS.exists),
+});
+
 const filtersSchema = z.record(
   z.string(),
-  z.union([dateFilterSchema, rangeFilterSchema, termFilterSchema, hierarchicalTermFilterSchema]),
+  z.union([dateFilterSchema, rangeFilterSchema, termFilterSchema, hierarchicalTermFilterSchema, existsFilterSchema]),
 );
 
 const sortFieldSchema = z.object({
@@ -184,6 +206,7 @@ export interface SearchStoreActions {
   }) => void;
   filterRange: ({ field, min, max }: { field: string; min: number; max: number }) => void;
   filterDate: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
+  filterExists: ({ field }: { field: string }) => void;
 }
 
 export interface SearchStore extends SearchStoreState, SearchStoreActions {}
@@ -220,6 +243,14 @@ export function isHierarchicalFacet(facet: Facet): facet is HierarchicalTermConf
   return facet.type === 'HIERARCHICAL';
 }
 
+export function isExistsFacet(facet: Facet): facet is ExistsConfig {
+  return facet.type === 'EXISTS';
+}
+
+export function isExistsFilter<V = Set<string>>(filter: Filter<V>): filter is ExistsValues {
+  return filter.type === 'EXISTS';
+}
+
 export function filterHasValues({ filter, facet }: { filter: Filter; facet: Facet }) {
   if (isTermFilter(filter)) {
     return filter.values.size;
@@ -235,6 +266,10 @@ export function filterHasValues({ filter, facet }: { filter: Filter; facet: Face
 
   if (isDateFilter(filter) && isDateFacet(facet)) {
     return filter.values.min && filter.values.max;
+  }
+
+  if (isExistsFilter(filter) && isExistsFacet(facet)) {
+    return filter.values;
   }
   return false;
 }
@@ -380,6 +415,18 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         }
 
         filter.values = { min, max };
+        replaceURLSearchParams(state);
+      });
+    },
+    filterExists: ({ field }) => {
+      set((state) => {
+        const filter = state?.filters[field];
+
+        if (!isExistsFilter(filter)) {
+          return;
+        }
+
+        filter.values = !filter.values;
         replaceURLSearchParams(state);
       });
     },

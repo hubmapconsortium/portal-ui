@@ -1,4 +1,6 @@
 import { capitalizeString } from 'js/helpers/functions';
+import { useCallback } from 'react';
+import { SearchStoreState, useSearchStore } from './store';
 
 function mapProcessingType(label: string) {
   if (label.toLowerCase() === 'hubmap') {
@@ -8,118 +10,135 @@ function mapProcessingType(label: string) {
   return capitalizeString(label);
 }
 
-const fieldConfigurationsMap: Record<
+type FieldConfigurations = Record<
   string,
   { label?: string; valueTransformations?: ((label: string) => string)[]; valueSort?: 'asc' | 'desc' | 'count' }
-> = {
-  age_value: {
-    label: 'Age',
-  },
-  analyte_class: {
-    label: 'Analyte Class',
-    valueTransformations: [capitalizeString],
-  },
-  ancestor_ids: {
-    label: 'Ancestor ID',
-  },
-  assay_display_name: {
-    label: 'Data Types',
-  },
-  assay_modality: {
-    label: 'Assay Modalities',
-    valueTransformations: [capitalizeString],
-  },
-  body_mass_index_value: {
-    label: 'BMI',
-  },
-  created_by_user_displayname: {
-    label: 'Registered By',
-  },
-  created_timestamp: {
-    label: 'Creation Date',
-  },
-  dataset_type: {
-    label: 'Dataset Type',
-  },
-  descendant_ids: {
-    label: 'Descendant ID',
-  },
-  'donor.mapped_metadata.age_value': {
-    label: 'Donor Age',
-  },
-  'donor.mapped_metadata.body_mass_index_value': {
-    label: 'Donor BMI',
-  },
-  'donor.mapped_metadata.race': {
-    label: 'Donor Race',
-  },
-  'donor.mapped_metadata.sex': {
-    label: 'Donor Sex',
-  },
-  entity_type: {
-    label: 'Entity Type',
-  },
-  group_name: {
-    label: 'Group',
-  },
-  hubmap_id: {
-    label: 'HuBMAP ID',
-  },
-  is_component: {
-    label: 'Component Dataset',
-    valueTransformations: [capitalizeString],
-  },
-  last_modified_timestamp: {
-    label: 'Last Modified Date',
-  },
-  mapped_consortium: {
-    label: 'Consortium',
-  },
-  mapped_organ: {
-    label: 'Organ',
-  },
-  mapped_status: {
-    label: 'Status',
-  },
-  origin_samples_unique_mapped_organs: {
-    label: 'Organ',
-  },
-  pipeline: {
-    label: 'Pipeline',
-    valueTransformations: [capitalizeString],
-  },
-  processing: {
-    label: 'Processing',
-    valueTransformations: [capitalizeString],
-  },
-  processing_type: {
-    label: 'Processing Type',
-    valueTransformations: [mapProcessingType],
-  },
-  published_timestamp: {
-    label: 'Publication Date',
-  },
-  race: {
-    label: 'Race',
-  },
-  raw_dataset_type: {
-    label: 'Dataset Type',
-    valueSort: 'asc',
-  },
-  sample_category: {
-    label: 'Sample Category',
-    valueTransformations: [capitalizeString],
-  },
-  sex: {
-    label: 'Sex',
-  },
-  visualization: {
-    label: 'Visualization Available',
-    valueTransformations: [capitalizeString],
-  },
-};
+>;
+function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigurations {
+  return {
+    age_value: {
+      label: 'Age',
+    },
+    analyte_class: {
+      label: 'Analyte Class',
+      valueTransformations: [capitalizeString],
+    },
+    ancestor_ids: {
+      label: 'Ancestor ID',
+    },
+    assay_display_name: {
+      label: 'Data Types',
+    },
+    assay_modality: {
+      label: 'Assay Modalities',
+      valueTransformations: [capitalizeString],
+    },
+    body_mass_index_value: {
+      label: 'BMI',
+    },
+    created_by_user_displayname: {
+      label: 'Registered By',
+    },
+    created_timestamp: {
+      label: 'Creation Date',
+    },
+    dataset_type: {
+      label: 'Dataset Type',
+    },
+    'descendant_counts.entity_type.Dataset': {
+      label: `Show ${type}s Without Datasets`,
+    },
+    descendant_ids: {
+      label: 'Descendant ID',
+    },
+    'donor.mapped_metadata.age_value': {
+      label: 'Donor Age',
+    },
+    'donor.mapped_metadata.body_mass_index_value': {
+      label: 'Donor BMI',
+    },
+    'donor.mapped_metadata.race': {
+      label: 'Donor Race',
+    },
+    'donor.mapped_metadata.sex': {
+      label: 'Donor Sex',
+    },
+    entity_type: {
+      label: 'Entity Type',
+    },
+    group_name: {
+      label: 'Group',
+    },
+    hubmap_id: {
+      label: 'HuBMAP ID',
+    },
+    is_component: {
+      label: 'Component Dataset',
+      valueTransformations: [capitalizeString],
+    },
+    last_modified_timestamp: {
+      label: 'Last Modified Date',
+    },
+    mapped_consortium: {
+      label: 'Consortium',
+    },
+    mapped_organ: {
+      label: 'Organ',
+    },
+    mapped_status: {
+      label: 'Status',
+    },
+    origin_samples_unique_mapped_organs: {
+      label: 'Organ',
+    },
+    pipeline: {
+      label: 'Pipeline',
+      valueTransformations: [capitalizeString],
+    },
+    processing: {
+      label: 'Processing',
+      valueTransformations: [capitalizeString],
+    },
+    processing_type: {
+      label: 'Processing Type',
+      valueTransformations: [mapProcessingType],
+    },
+    published_timestamp: {
+      label: 'Publication Date',
+    },
+    race: {
+      label: 'Race',
+    },
+    raw_dataset_type: {
+      label: 'Dataset Type',
+      valueSort: 'asc',
+    },
+    sample_category: {
+      label: 'Sample Category',
+      valueTransformations: [capitalizeString],
+    },
+    sex: {
+      label: 'Sex',
+    },
+    visualization: {
+      label: 'Visualization Available',
+      valueTransformations: [capitalizeString],
+    },
+  };
+}
 
-export function getFieldConfigurations(field: string) {
+export function useFieldConfigurations() {
+  const type = useSearchStore((state) => state.type);
+  return buildFieldConfigurations(type);
+}
+
+export function getFieldConfigurations({
+  field,
+  fieldConfigurationsMap,
+}: {
+  field: string;
+  fieldConfigurationsMap: FieldConfigurations;
+}) {
   const exactMatch = fieldConfigurationsMap?.[field];
 
   const stem = field.split('.').pop();
@@ -128,23 +147,53 @@ export function getFieldConfigurations(field: string) {
   return exactMatch ?? stemMatch ?? undefined;
 }
 
-export function getTransformedFieldValue({ value, field }: { value: string; field: string }) {
-  const valueTransformations = getFieldConfigurations(field)?.valueTransformations;
+export function useGetTransformedFieldValue() {
+  const fieldConfigurations = useFieldConfigurations();
 
-  if (!valueTransformations) {
-    return value;
-  }
-  return valueTransformations.reduce((l, transformFn) => transformFn(l), value);
+  return useCallback(
+    ({ value, field }: { value: string; field: string }) => {
+      const valueTransformations = getFieldConfigurations({
+        field,
+        fieldConfigurationsMap: fieldConfigurations,
+      })?.valueTransformations;
+
+      if (!valueTransformations) {
+        return value;
+      }
+      return valueTransformations.reduce((l, transformFn) => transformFn(l), value);
+    },
+    [fieldConfigurations],
+  );
 }
 
-export function getFieldLabel(field: string) {
-  const fieldLabel = getFieldConfigurations(field)?.label;
+export function useGetFieldLabel() {
+  const fieldConfigurations = useFieldConfigurations();
 
-  return fieldLabel ?? field;
+  return useCallback(
+    (field: string) => {
+      const fieldLabel = getFieldConfigurations({
+        field,
+        fieldConfigurationsMap: fieldConfigurations,
+      })?.label;
+
+      return fieldLabel ?? field;
+    },
+    [fieldConfigurations],
+  );
 }
 
-export function getFieldValueSort(field: string) {
-  const valueSort = getFieldConfigurations(field)?.valueSort;
+export function useFieldValueSort() {
+  const fieldConfigurations = useFieldConfigurations();
 
-  return valueSort ?? 'count';
+  return useCallback(
+    (field: string) => {
+      const valueSort = getFieldConfigurations({
+        field,
+        fieldConfigurationsMap: fieldConfigurations,
+      })?.valueSort;
+
+      return valueSort ?? 'count';
+    },
+    [fieldConfigurations],
+  );
 }

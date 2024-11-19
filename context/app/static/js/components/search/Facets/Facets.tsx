@@ -8,9 +8,10 @@ import Stack from '@mui/material/Stack';
 import { TermFacet, HierarchicalTermFacet } from './TermFacet';
 import RangeFacet from './RangeFacet';
 import { FacetGroups } from '../Search';
-import { isDateFacet, isHierarchicalFacet, isRangeFacet, isTermFacet } from '../store';
+import { isDateFacet, isExistsFacet, isHierarchicalFacet, isRangeFacet, isTermFacet } from '../store';
 import FacetAccordion from './FacetAccordion';
 import DateRangeFacet from './DateRangeFacet';
+import ExistsFacet from './ExistsFacet';
 
 export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
   return (
@@ -46,6 +47,10 @@ export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
 
                 if (isTermFacet(f)) {
                   return <TermFacet {...f} key={f.field} />;
+                }
+
+                if (isExistsFacet(f)) {
+                  return <ExistsFacet {...f} key={f.field} />;
                 }
 
                 return null;

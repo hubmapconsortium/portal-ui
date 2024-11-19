@@ -13,6 +13,8 @@ import {
   SortField,
   isDateFilter,
   isDateFacet,
+  isExistsFilter,
+  isExistsFacet,
 } from './store';
 import { getPortalESField } from './buildTypesMap';
 
@@ -64,7 +66,10 @@ export function buildQuery({
   sourceFields,
   sortField,
   defaultQuery,
-}: Omit<SearchStoreState, 'swrConfig' | 'view' | 'type' | 'analyticsCategory' | 'endpoint'>) {
+}: Pick<
+  SearchStoreState,
+  'filters' | 'facets' | 'search' | 'size' | 'searchFields' | 'sourceFields' | 'sortField' | 'defaultQuery'
+>) {
   const query = esb
     .requestBodySearch()
     .size(size)
@@ -112,6 +117,12 @@ export function buildQuery({
             .map((v) => [...v])
             .flat();
           draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
+        }
+      }
+
+      if (isExistsFilter(filter) && isExistsFacet(facetConfig)) {
+        if (!(filterHasValues({ filter, facet: facetConfig }) && facetConfig?.invert)) {
+          draft[portalField] = esb.existsQuery(field);
         }
       }
     });
