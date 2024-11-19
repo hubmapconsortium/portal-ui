@@ -60,26 +60,25 @@ export interface HierarchicalTermValues<V = Set<string>> {
 }
 
 export interface RangeConfig extends FacetConfig {
-  min: number;
-  max: number;
+  min?: number;
+  max?: number;
+  interval?: number;
   type: typeof FACETS.range;
 }
 
 export interface RangeValues {
   values: {
-    min: number;
-    max: number;
+    min?: number;
+    max?: number;
   };
   type: typeof FACETS.range;
 }
 
-export interface DateConfig extends Omit<RangeConfig, 'type' | 'min' | 'max'> {
+export interface DateConfig extends Omit<RangeConfig, 'type' | 'interval'> {
   type: typeof FACETS.date;
-  min?: number;
-  max?: number;
 }
 
-export interface DateValues extends Omit<RangeValues, 'type' | 'values'> {
+export interface DateValues extends Omit<RangeValues, 'type'> {
   type: typeof FACETS.date;
   values: {
     min?: number;
@@ -204,7 +203,7 @@ export interface SearchStoreActions {
     parentValue: string;
     value: string;
   }) => void;
-  filterRange: ({ field, min, max }: { field: string; min: number; max: number }) => void;
+  filterRange: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
   filterDate: ({ field, min, max }: { field: string; min?: number; max?: number }) => void;
   filterExists: ({ field }: { field: string }) => void;
 }
@@ -261,7 +260,7 @@ export function filterHasValues({ filter, facet }: { filter: Filter; facet: Face
   }
 
   if (isRangeFilter(filter) && isRangeFacet(facet)) {
-    return filter.values.min !== facet.min || filter.values.max !== facet.max;
+    return !(filter.values.min === undefined && filter.values.max === undefined);
   }
 
   if (isDateFilter(filter) && isDateFacet(facet)) {

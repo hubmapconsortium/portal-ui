@@ -107,15 +107,14 @@ function FilterChips() {
           const facetConfig = facets[field];
 
           if (isRangeFilter(v) && isRangeFacet(facetConfig)) {
-            const { min, max } = facetConfig;
-            if (v.values.min === min && v.values.max === max) {
+            if (v.values.min === undefined && v.values.max === undefined) {
               return null;
             }
             return (
               <FilterChip
                 label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
                 key={field}
-                onDelete={() => filterRange({ field, min, max })}
+                onDelete={() => filterRange({ field, min: undefined, max: undefined })}
               />
             );
           }

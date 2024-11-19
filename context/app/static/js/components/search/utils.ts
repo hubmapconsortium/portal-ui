@@ -154,13 +154,12 @@ export function buildQuery({
       }
 
       if (isRangeFacet(facet)) {
-        const { min, max } = facet;
-        const interval = Math.ceil((max - min) / 20);
+        const { interval } = facet;
 
         query.agg(
           buildFilterAggregation({
             portalFields: [portalField],
-            aggregations: [esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max)],
+            aggregations: [esb.histogramAggregation(field, portalField, interval ?? 5).extendedBounds(0, 0)],
             filters: { ...allFilters },
             field,
           }),
