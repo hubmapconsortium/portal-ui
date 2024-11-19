@@ -14,7 +14,7 @@ interface DerivedDatasetsSectionProps {
 
 function DerivedDatasetsSection({ uuid, entityType }: DerivedDatasetsSectionProps) {
   const [openIndex, setOpenIndex] = useState(0);
-  const { entities, isLoading } = useDerivedDatasetsSection(uuid);
+  const { entities, uuids, isLoading } = useDerivedDatasetsSection(uuid);
 
   return (
     <DerivedEntitiesSectionWrapper
@@ -32,6 +32,7 @@ function DerivedDatasetsSection({ uuid, entityType }: DerivedDatasetsSectionProp
               },
             },
           })}
+          uuids={uuids}
         />
       }
     >

@@ -1,0 +1,1 @@
+- Add dialog option to the Search, Publication, and Collection pages that generates a download manifest for files from selected datasets.

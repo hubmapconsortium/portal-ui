@@ -9,7 +9,8 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { StyledAccordion, StyledSwitch } from './style';
+import { PrimarySwitch } from 'js/shared-styles/switches';
+import { StyledAccordion } from './style';
 import { StyledSubtitle1, StyledSubtitle2 } from '../style';
 import {
   DEFAULT_GPU_ENABLED,
@@ -160,7 +161,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
           <StyledSubtitle2>Enable GPU</StyledSubtitle2>
           <Stack direction="row" component="label" alignItems="center">
             <Typography variant="caption">Disabled</Typography>
-            <StyledSwitch
+            <PrimarySwitch
               checked={field.value.gpu_enabled as boolean}
               onChange={(e, value) =>
                 field.onChange({

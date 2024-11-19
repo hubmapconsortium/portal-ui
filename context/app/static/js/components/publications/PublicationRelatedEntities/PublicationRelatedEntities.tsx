@@ -13,7 +13,7 @@ interface PublicationRelatedEntitiesProps {
 function PublicationRelatedEntities({ uuid }: PublicationRelatedEntitiesProps) {
   const [openIndex, setOpenIndex] = useState(0);
 
-  const { entities, isLoading } = usePublicationsRelatedEntities(uuid);
+  const { entities, datasetUuids, isLoading } = usePublicationsRelatedEntities(uuid);
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
@@ -31,6 +31,7 @@ function PublicationRelatedEntities({ uuid }: PublicationRelatedEntitiesProps) {
               },
             },
           })}
+          uuids={datasetUuids}
         />
       }
     >

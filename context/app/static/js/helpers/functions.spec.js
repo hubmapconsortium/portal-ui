@@ -11,6 +11,8 @@ import {
   shouldCapitalizeString,
   generateCommaList,
   isValidEmail,
+  getEntityCreationInfo,
+  validateAndFormatOrcidId,
 } from './functions';
 
 test('isEmptyArrayOrObject', () => {
@@ -128,4 +130,62 @@ test('isValidEmail', () => {
   invalidEmails.forEach((email) => {
     expect(isValidEmail(email)).toStrictEqual(false);
   });
+});
+
+test('getEntityCreationInfo', () => {
+  expect(
+    getEntityCreationInfo({
+      entity_type: 'Dataset',
+      published_timestamp: 1572559603311,
+      last_modified_timestamp: 1721426610012,
+      created_timestamp: 1572558930500,
+    }),
+  ).toStrictEqual({
+    creationLabel: 'Publication Date',
+    creationVerb: 'Published',
+    creationTimestamp: 1572559603311,
+    creationDate: '2019-10-31',
+  });
+
+  expect(
+    getEntityCreationInfo({
+      entity_type: 'Dataset',
+      last_modified_timestamp: 1572559603311,
+      created_timestamp: 1721426610012,
+    }),
+  ).toStrictEqual({
+    creationLabel: 'Last Modified',
+    creationVerb: 'Modified',
+    creationTimestamp: 1572559603311,
+    creationDate: '2019-10-31',
+  });
+
+  expect(
+    getEntityCreationInfo({
+      entity_type: 'Sample',
+      created_timestamp: 1572559603311,
+      published_timestamp: 1721426610012,
+      last_modified_timestamp: 1572558930500,
+    }),
+  ).toStrictEqual({
+    creationLabel: 'Creation Date',
+    creationVerb: 'Created',
+    creationTimestamp: 1572559603311,
+    creationDate: '2019-10-31',
+  });
+});
+
+test('validateAndFormatOrcidId', () => {
+  expect(validateAndFormatOrcidId('0000-0002-2451-0633')).toEqual('0000-0002-2451-0633');
+  expect(validateAndFormatOrcidId('0000-0002-2451-063X')).toEqual('0000-0002-2451-063X');
+  expect(validateAndFormatOrcidId('0000000224510633')).toEqual('0000-0002-2451-0633');
+  expect(validateAndFormatOrcidId('000000022451063X')).toEqual('0000-0002-2451-063X');
+  expect(validateAndFormatOrcidId('')).toBeFalsy();
+  expect(validateAndFormatOrcidId(undefined)).toBeFalsy();
+  expect(validateAndFormatOrcidId('n/a')).toBeFalsy();
+  expect(validateAndFormatOrcidId('  0000-0002-2451-0633  ')).toBeFalsy();
+  expect(validateAndFormatOrcidId('0000 0002 2451 0633')).toBeFalsy();
+  expect(validateAndFormatOrcidId('abcd-1234-5678-9101')).toBeFalsy();
+  expect(validateAndFormatOrcidId('1234-5678-9101')).toBeFalsy();
+  expect(validateAndFormatOrcidId('12345678901234567')).toBeFalsy();
 });

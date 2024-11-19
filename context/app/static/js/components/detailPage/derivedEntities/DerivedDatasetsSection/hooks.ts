@@ -4,6 +4,8 @@ import { derivedDatasetsColumns } from 'js/components/detailPage/derivedEntities
 function useDerivedDatasetsSection(uuid: string) {
   const { searchHits: datasets, isLoading } = useDerivedDatasetSearchHits(uuid);
 
+  const uuids = new Set(datasets.map((dataset) => dataset._source.uuid));
+
   const entities = [
     {
       entityType: 'Dataset' as const,
@@ -13,7 +15,7 @@ function useDerivedDatasetsSection(uuid: string) {
     },
   ];
 
-  return { entities, isLoading };
+  return { entities, uuids, isLoading };
 }
 
 export { useDerivedDatasetsSection };

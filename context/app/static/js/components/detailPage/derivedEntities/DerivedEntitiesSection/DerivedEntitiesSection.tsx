@@ -19,7 +19,7 @@ function DerivedEntitiesSection() {
     entity: { uuid, entity_type: entityType },
   } = useFlaskDataContext();
   const [openIndex, setOpenIndex] = useState(0);
-  const { entities, isLoading } = useDerivedEntitiesSection(uuid);
+  const { entities, datasetUuids, isLoading } = useDerivedEntitiesSection(uuid);
 
   return (
     <RelatedEntitiesSectionWrapper
@@ -38,6 +38,7 @@ function DerivedEntitiesSection() {
               },
             },
           })}
+          uuids={datasetUuids}
         />
       }
     >

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Skeleton from '@mui/material/Skeleton';
@@ -9,6 +9,7 @@ import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { ErrorTile } from 'js/components/entity-tile/EntityTile/EntityTile';
+import { Alert } from 'js/shared-styles/alerts';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
@@ -26,7 +27,7 @@ interface ProvTableColumnProps {
   missingAncestors?: string[];
 }
 
-function ProvEntityColumn({
+function ProvEntityColumnContent({
   type,
   entities,
   currentEntityUUID,
@@ -34,12 +35,79 @@ function ProvEntityColumn({
   missingAncestors,
 }: ProvTableColumnProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
+  const handleCardSelect = useCallback(
+    (hubmap_id: string) => {
+      trackEntityPageEvent({
+        action: 'Provenance / Table / Select Card',
+        label: hubmap_id,
+      });
+    },
+    [trackEntityPageEvent],
+  );
 
   // Track expanded state for each sample category
   const [isExpanded, setIsExpanded] = useState<Record<string, boolean>>({});
 
   const displayMissingAncestors =
     missingAncestors && missingAncestors.length > 0 && entities.length === 0 && type !== 'Dataset';
+  const noDisplayedContent = entities.length === 0 && !displayMissingAncestors && !descendantEntityCounts?.[type];
+
+  if (noDisplayedContent) {
+    return (
+      <Alert severity="warning" $width="100%">
+        No {type.toLowerCase()}s available.
+      </Alert>
+    );
+  }
+
+  return (
+    <>
+      {entities.length > 0 &&
+        entities
+          .sort((a, b) => a.created_timestamp - b.created_timestamp)
+          .map((item, j, items) => {
+            const isSampleSibling =
+              j > 0 && item.entity_type === 'Sample' && items[j - 1]?.sample_category === item.sample_category;
+            if (isSampleSibling && !isExpanded[item.sample_category as string]) {
+              const siblings = items.filter((i) => i.sample_category === item.sample_category);
+              const numberOfSiblings = siblings.length - 1;
+              // Only draw the button once for the first sibling in the list
+              // First element in the siblings list is the first item in the category,
+              // so the second item in the list is the first sibling.
+              const isFirstSibling = siblings.findIndex((i) => i.uuid === item.uuid) === 1;
+              if (!isFirstSibling) return null;
+              return (
+                <Button
+                  key={item.uuid}
+                  variant="contained"
+                  onClick={() => setIsExpanded((s) => ({ ...s, [item.sample_category as string]: true }))}
+                >
+                  View More in Category ({numberOfSiblings})
+                </Button>
+              );
+            }
+            return (
+              <ProvTableTile
+                key={item.uuid}
+                uuid={item.uuid}
+                id={item.hubmap_id}
+                entity_type={item.entity_type}
+                isCurrentEntity={currentEntityUUID === item.uuid}
+                isSampleSibling={isSampleSibling}
+                isFirstTile={j === 0}
+                isLastTile={j === type.length - 1}
+                onClick={() => handleCardSelect(item.hubmap_id)}
+                entityData={item}
+              />
+            );
+          })}
+      {descendantEntityCounts?.[type] && <ProvTableDerivedLink uuid={currentEntityUUID} type={type} />}
+      {displayMissingAncestors && missingAncestors.map((id) => <ErrorTile key={id} entity_type={type} id={id} />)}
+    </>
+  );
+}
+
+function ProvEntityColumn({ type, ...rest }: ProvTableColumnProps) {
   return (
     <TableColumn key={`provenance-list-${type.toLowerCase()}`}>
       <ProvTableEntityHeader>
@@ -47,49 +115,7 @@ function ProvEntityColumn({
         <Typography variant="h5">{type}s</Typography>
       </ProvTableEntityHeader>
       <FlexColumn>
-        {entities.length > 0 &&
-          entities
-            .sort((a, b) => a.created_timestamp - b.created_timestamp)
-            .map((item, j, items) => {
-              const isSampleSibling =
-                j > 0 && item.entity_type === 'Sample' && items[j - 1]?.sample_category === item.sample_category;
-              if (isSampleSibling && !isExpanded[item.sample_category as string]) {
-                const siblings = items.filter((i) => i.sample_category === item.sample_category);
-                const numberOfSiblings = siblings.length - 1;
-                // Only draw the button once for the first sibling in the list
-                // First element in the siblings list is the first item in the category,
-                // so the second item in the list is the first sibling.
-                const isFirstSibling = siblings.findIndex((i) => i.uuid === item.uuid) === 1;
-                if (!isFirstSibling) return null;
-                return (
-                  <Button
-                    key={item.uuid}
-                    variant="contained"
-                    onClick={() => setIsExpanded((s) => ({ ...s, [item.sample_category as string]: true }))}
-                  >
-                    View More in Category ({numberOfSiblings})
-                  </Button>
-                );
-              }
-              return (
-                <ProvTableTile
-                  key={item.uuid}
-                  uuid={item.uuid}
-                  id={item.hubmap_id}
-                  entity_type={item.entity_type}
-                  isCurrentEntity={currentEntityUUID === item.uuid}
-                  isSampleSibling={isSampleSibling}
-                  isFirstTile={j === 0}
-                  isLastTile={j === type.length - 1}
-                  onClick={() =>
-                    trackEntityPageEvent({ action: 'Provenance / Table / Select Card', label: item.hubmap_id })
-                  }
-                  entityData={item}
-                />
-              );
-            })}
-        {descendantEntityCounts?.[type] && <ProvTableDerivedLink uuid={currentEntityUUID} type={type} />}
-        {displayMissingAncestors && missingAncestors.map((id) => <ErrorTile key={id} entity_type={type} id={id} />)}
+        <ProvEntityColumnContent type={type} {...rest} />
       </FlexColumn>
     </TableColumn>
   );
@@ -101,7 +127,9 @@ const provTableSource = [
   'entity_type',
   'descendant_counts',
   'mapped_data_types',
+  'published_timestamp',
   'last_modified_timestamp',
+  'created_timestamp',
   'origin_samples_unique_mapped_organs',
   'mapped_metadata',
   'sample_category',

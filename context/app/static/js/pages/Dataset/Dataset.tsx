@@ -2,6 +2,7 @@ import React from 'react';
 import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import ProvSection from 'js/components/detailPage/provenance/ProvSection';
 import Summary from 'js/components/detailPage/summary/Summary';
@@ -53,9 +54,9 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChi
       </SummaryItem>
       <SummaryItem showDivider={false}>
         <InternalLink href={`/organ/${mapped_organ}`} underline="none">
-          <Stack direction="row" spacing={0.25} alignItems="center">
+          <Stack direction="row" spacing={0.5} alignItems="center">
             <OrganIcon organName={mapped_organ} />
-            {mapped_organ}
+            <Typography fontSize="inherit">{mapped_organ}</Typography>
           </Stack>
         </InternalLink>
       </SummaryItem>
