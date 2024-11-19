@@ -1,18 +1,18 @@
 import React from 'react';
-import { format } from 'date-fns/format';
 
 import Tile from 'js/shared-styles/tiles/Tile';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { FooterIcon } from './style';
 
 interface EntityTileFooterProps {
-  last_modified_timestamp?: number;
   descendantCounts: Record<string, number>;
+  creationInfo?: { creationDate: string; creationVerb: string };
   invertColors?: boolean;
 }
 
-function EntityTileFooter({ last_modified_timestamp, invertColors, descendantCounts = {} }: EntityTileFooterProps) {
+function EntityTileFooter({ creationInfo, invertColors, descendantCounts = {} }: EntityTileFooterProps) {
   const entries = Object.entries(descendantCounts) as [keyof typeof entityIconMap, number][];
+  const { creationDate, creationVerb } = creationInfo ?? {};
   return (
     <>
       {entries.map(([k, v]) => (
@@ -22,7 +22,7 @@ function EntityTileFooter({ last_modified_timestamp, invertColors, descendantCou
           <Tile.Divider invertColors={invertColors} />
         </React.Fragment>
       ))}
-      {last_modified_timestamp && <Tile.Text>Modified {format(last_modified_timestamp, 'yyyy-MM-dd')}</Tile.Text>}
+      {creationInfo && <Tile.Text>{`${creationVerb} ${creationDate}`}</Tile.Text>}
     </>
   );
 }

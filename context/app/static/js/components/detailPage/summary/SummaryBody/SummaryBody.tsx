@@ -6,9 +6,10 @@ import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Citation from 'js/components/detailPage/Citation';
-import { Entity, isCollection, isDataset, isPublication } from 'js/components/types';
+import { isCollection, isDataset, isPublication } from 'js/components/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { getCollectionDOI } from 'js/pages/Collection/utils';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 import { StyledCreationDate } from './style';
 import PublicationSummaryBody from './PublicationSummaryBody';
 import SummaryDescription from './SummaryDescription';
@@ -116,16 +117,11 @@ function CollectionCitation() {
 function SummaryBodyContent({
   isEntityHeader = false,
   direction = 'column',
-  published_timestamp,
-  created_timestamp,
-  description,
   ...stackProps
-}: { isEntityHeader?: boolean } & Partial<StackProps> &
-  Pick<Entity, 'description' | 'created_timestamp' | 'published_timestamp'>) {
-  const creationLabel = published_timestamp ? 'Publication Date' : 'Creation Date';
-  const creationTimestamp = published_timestamp ?? created_timestamp;
-
+}: { isEntityHeader?: boolean } & Partial<StackProps>) {
   const { entity } = useFlaskDataContext();
+  const { description } = entity;
+  const { creationLabel, creationDate } = getEntityCreationInfo(entity);
 
   if (isPublication(entity)) {
     return (
@@ -143,25 +139,13 @@ function SummaryBodyContent({
       <DatasetConsortium />
       <DatasetCitation />
       <CollectionCitation />
-      <StyledCreationDate label={creationLabel} timestamp={creationTimestamp} />
+      <StyledCreationDate label={creationLabel}>{creationDate}</StyledCreationDate>
     </Stack>
   );
 }
 
 function SummaryBody({ isEntityHeader = false, ...stackProps }: { isEntityHeader?: boolean } & Partial<StackProps>) {
-  const { entity } = useFlaskDataContext();
-
-  const { created_timestamp, published_timestamp, description } = entity;
-
-  return (
-    <SummaryBodyContent
-      created_timestamp={created_timestamp}
-      published_timestamp={published_timestamp}
-      description={description}
-      isEntityHeader={isEntityHeader}
-      {...stackProps}
-    />
-  );
+  return <SummaryBodyContent isEntityHeader={isEntityHeader} {...stackProps} />;
 }
 
 export { SummaryBodyContent };

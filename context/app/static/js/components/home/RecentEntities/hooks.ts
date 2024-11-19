@@ -1,5 +1,6 @@
 import useSearchData, { Hit, useSearchHits } from 'js/hooks/useSearchData';
 import { ContributorAPIResponse } from 'js/components/detailPage/ContributorsTable/utils';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 import { recentPublicationsQuery, recentDatasetsQuery } from './queries';
 
 export interface RecentPublication {
@@ -22,6 +23,7 @@ export interface RecentDataset {
   uuid: string;
   title: string;
   group_name: string;
+  published_timestamp: number;
   last_modified_timestamp: number;
   dataset_type: string;
   visualization: boolean;
@@ -48,9 +50,12 @@ export function useRecentDatasetsQuery() {
   const recentDatasets = searchData?.aggregations?.unique_dataset_types.buckets
     // Flatten the buckets
     .flatMap((bucket) => bucket.latest_datasets.hits.hits)
-    .flatMap((hit) => hit._source)
-    // Sort by last modified timestamp
-    .sort((a, b) => b.last_modified_timestamp - a.last_modified_timestamp)
+    .flatMap((hit) => ({
+      ...hit._source,
+      timestamp: getEntityCreationInfo({ entity_type: 'Dataset', ...hit._source }).creationTimestamp,
+    }))
+    // Sort by publication or last modified timestamp
+    .sort((a, b) => b.timestamp - a.timestamp)
     // Only keep one dataset for each organ mapping
     .filter(
       (dataset, index, datasets) =>

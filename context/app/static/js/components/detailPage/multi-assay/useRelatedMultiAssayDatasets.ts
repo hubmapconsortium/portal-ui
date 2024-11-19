@@ -3,6 +3,7 @@ import { produce } from 'immer';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Dataset, isDataset } from 'js/components/types';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 
 const source = [
   'uuid',
@@ -15,7 +16,8 @@ const source = [
   'is_component',
   'metadata',
   'descendant_counts',
-  'last_modified_timestamp',
+  'published_timestamp',
+  'created_timestamp',
 ];
 
 function getPrimaryMultiAssay(uuid: string) {
@@ -91,7 +93,8 @@ export type MultiAssayEntity = Pick<
   | 'is_component'
   | 'metadata'
   | 'descendant_counts'
-  | 'last_modified_timestamp'
+  | 'published_timestamp'
+  | 'created_timestamp'
 >;
 
 function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 'processing' | 'is_component'>) {
@@ -111,12 +114,17 @@ function buildRelatedDatasets({ entities }: { entities: MultiAssayEntity[] }) {
         const multiAssayType = getMultiAssayType({ processing: curr.processing, is_component: curr.is_component });
         if (draft[multiAssayType]) {
           draft[multiAssayType].push(curr);
-          // Sort by if pushlished, and then by last_modified_timestamp
-          draft[multiAssayType].sort((a, b) => {
-            if (a.mapped_status === 'published' && b.mapped_status !== 'published') return -1;
-            if (a.mapped_status !== 'published' && b.mapped_status === 'published') return 1;
-            return b.last_modified_timestamp - a.last_modified_timestamp;
-          });
+          draft[multiAssayType]
+            .map((item) => ({
+              ...item,
+              creationTimestamp: getEntityCreationInfo(item).creationTimestamp,
+            }))
+            // Sort by if published, and then by creation timestamp
+            .sort((a, b) => {
+              if (a.mapped_status === 'published' && b.mapped_status !== 'published') return -1;
+              if (a.mapped_status !== 'published' && b.mapped_status === 'published') return 1;
+              return b.creationTimestamp - a.creationTimestamp;
+            });
         }
       });
     },

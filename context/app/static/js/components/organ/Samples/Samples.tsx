@@ -8,7 +8,7 @@ import { SampleDocument } from 'js/typings/search';
 import {
   datasetDescendants,
   hubmapID,
-  lastModifiedTimestamp,
+  createdTimestamp,
   parentDonorAge,
   parentDonorSex,
   parentDonorRace,
@@ -16,7 +16,7 @@ import {
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { getSearchURL } from '../utils';
 
-const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, lastModifiedTimestamp];
+const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, createdTimestamp];
 
 interface OrganSamplesProps {
   organTerms: string[];

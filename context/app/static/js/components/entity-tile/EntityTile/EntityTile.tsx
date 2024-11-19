@@ -5,13 +5,14 @@ import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 import Tile from 'js/shared-styles/tiles/Tile/';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { Entity } from 'js/components/types';
+import { Dataset, Entity } from 'js/components/types';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import IconLink from 'js/shared-styles/Links/iconLinks/IconLink';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 import EntityTileFooter from '../EntityTileFooter/index';
 import EntityTileBody from '../EntityTileBody/index';
 import { StyledIcon } from './style';
@@ -24,12 +25,13 @@ interface EntityTileProps
   uuid: string;
   id: string;
   invertColors?: boolean;
-  entityData: Partial<Entity>;
+  entityData: Partial<Entity> & Partial<Pick<Dataset, 'published_timestamp'>>;
   descendantCounts: Record<string, number>;
 }
 
 function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendantCounts, ...rest }: EntityTileProps) {
   const icon: ComponentType = entity_type in entityIconMap ? entityIconMap[entity_type] : DatasetIcon;
+  const creationInfo = getEntityCreationInfo({ entity_type, ...entityData });
   return (
     <Tile
       href={`/browse/${entity_type.toLowerCase()}/${uuid}`}
@@ -44,11 +46,7 @@ function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendan
         />
       }
       footerContent={
-        <EntityTileFooter
-          invertColors={invertColors}
-          last_modified_timestamp={entityData.last_modified_timestamp}
-          descendantCounts={descendantCounts}
-        />
+        <EntityTileFooter invertColors={invertColors} creationInfo={creationInfo} descendantCounts={descendantCounts} />
       }
       tileWidth={tileWidth}
       {...rest}

@@ -15,8 +15,9 @@ export type ProcessedDatasetDetails = ProcessedDatasetInfo &
     | 'created_by_user_displayname'
     | 'created_by_user_email'
     | 'title'
-    | 'published_timestamp'
     | 'created_timestamp'
+    | 'published_timestamp'
+    | 'last_modified_timestamp'
     | 'metadata'
     | 'protocol_url' // TODO: This is present for non-dataset entities, but not for datasets.
     | 'dataset_type'
@@ -44,8 +45,9 @@ export function useProcessedDatasetDetails(uuid: string) {
       'created_by_user_displayname',
       'created_by_user_email',
       'title',
-      'published_timestamp',
       'created_timestamp',
+      'published_timestamp',
+      'last_modified_timestamp',
       'metadata.dag_provenance_list',
       'metadata.metadata',
       'protocol_url',

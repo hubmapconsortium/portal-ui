@@ -83,6 +83,7 @@ export const recentDatasetsQuery: SearchRequest = {
                 'title',
                 'hubmap_id',
                 'group_name',
+                'published_timestamp',
                 'last_modified_timestamp',
                 'dataset_type',
                 'visualization',
