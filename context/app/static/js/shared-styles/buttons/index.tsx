@@ -25,10 +25,13 @@ const svgStyles = {
   fontSize: '1.25rem',
 };
 
-const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
+const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme, disabled }) => ({
   ...whiteBackgroundCSS,
   ...border(theme),
   '& svg': svgStyles,
+  ...(disabled && {
+    backgroundColor: theme.palette.action.disabledBackground,
+  }),
 }));
 
 const WhiteBackgroundIconDropdownMenuButton = styled(IconDropdownMenuButton)(({ theme }) => ({

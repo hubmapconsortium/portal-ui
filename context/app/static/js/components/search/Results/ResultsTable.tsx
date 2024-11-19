@@ -216,7 +216,17 @@ function SelectableHeaderCells() {
   const defaultQuery = useSearchStore((state) => state.defaultQuery);
   const type = useSearchStore((state) => state.type);
 
-  const query = buildQuery({ filters, facets, search, size, searchFields, sourceFields, sortField, defaultQuery });
+  const query = buildQuery({
+    filters,
+    facets,
+    search,
+    size,
+    searchFields,
+    sourceFields,
+    sortField,
+    defaultQuery,
+    buildAggregations: false,
+  });
 
   const { allSearchIDs, isLoading } = useAllSearchIDs(query);
 

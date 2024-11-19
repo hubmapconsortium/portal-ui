@@ -15,7 +15,8 @@ import history from 'history/browser';
 
 import { useAppContext } from 'js/components/Contexts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
-import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
+import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
+import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/BulkDownloadButtonFromSearch';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import {
   SearchStoreProvider,
@@ -184,6 +185,7 @@ function Bar({ type }: TypeProps) {
       </Box>
       <MetadataMenu type={type} />
       <WorkspacesDropdownMenu type={type} />
+      <BulkDownloadButtonFromSearch type={type} />
       {view === 'tile' && <TilesSortSelect />}
       <DefaultSearchViewSwitch />
     </Stack>
@@ -325,6 +327,7 @@ function SearchWrapper({ config }: { config: Omit<SearchConfig, 'endpoint' | 'an
     <SelectableTableProvider tableLabel={type}>
       <SearchStoreProvider initialState={initialState}>
         <Search type={type} facetGroups={facets} />
+        <WorkspaceSearchDialogs />
       </SearchStoreProvider>
     </SelectableTableProvider>
   );

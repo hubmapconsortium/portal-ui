@@ -66,7 +66,8 @@ export function buildQuery({
   sourceFields,
   sortField,
   defaultQuery,
-}: Pick<
+  buildAggregations = true,
+}: { buildAggregations?: boolean } & Pick<
   SearchStoreState,
   'filters' | 'facets' | 'search' | 'size' | 'searchFields' | 'sourceFields' | 'sortField' | 'defaultQuery'
 >) {
@@ -130,84 +131,86 @@ export function buildQuery({
 
   query.postFilter(esb.boolQuery().must(Object.values(allFilters)));
 
-  Object.values(facets).forEach((facet) => {
-    const { field } = facet;
-    const portalField = getPortalESField(field);
+  if (buildAggregations) {
+    Object.values(facets).forEach((facet) => {
+      const { field } = facet;
+      const portalField = getPortalESField(field);
 
-    if (isTermFacet(facet)) {
-      const { order } = facet;
-      query.agg(
-        buildFilterAggregation({
-          portalFields: [portalField],
-          aggregations: [
-            esb
-              .termsAggregation(field, portalField)
-              .size(maxAggSize)
-              .order(order?.type ?? '_count', order?.dir ?? 'desc'),
-          ],
-          filters: { ...allFilters },
-          field,
-        }),
-      );
-    }
-
-    if (isRangeFacet(facet)) {
-      const { min, max } = facet;
-      const interval = Math.ceil((max - min) / 20);
-
-      query.agg(
-        buildFilterAggregation({
-          portalFields: [portalField],
-          aggregations: [esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max)],
-          filters: { ...allFilters },
-          field,
-        }),
-      );
-    }
-
-    if (isDateFacet(facet)) {
-      query.agg(
-        buildFilterAggregation({
-          portalFields: [portalField],
-          aggregations: [
-            esb.maxAggregation(`${field}_max`, portalField),
-            esb.minAggregation(`${field}_min`, portalField),
-          ],
-          filters: { ...allFilters },
-          field,
-        }),
-      );
-    }
-
-    if (isHierarchicalFacet(facet)) {
-      const { childField, order } = facet;
-      if (!childField) {
-        return;
+      if (isTermFacet(facet)) {
+        const { order } = facet;
+        query.agg(
+          buildFilterAggregation({
+            portalFields: [portalField],
+            aggregations: [
+              esb
+                .termsAggregation(field, portalField)
+                .size(maxAggSize)
+                .order(order?.type ?? '_count', order?.dir ?? 'desc'),
+            ],
+            filters: { ...allFilters },
+            field,
+          }),
+        );
       }
-      const parentPortalField = getPortalESField(field);
-      const childPortalField = getPortalESField(childField);
 
-      query.agg(
-        buildFilterAggregation({
-          portalFields: [parentPortalField, childPortalField],
-          aggregations: [
-            esb
-              .termsAggregation(field, parentPortalField)
-              .size(maxAggSize)
-              .order(order?.type ?? '_count', order?.dir ?? 'desc')
-              .agg(
-                esb
-                  .termsAggregation(childField, childPortalField)
-                  .size(maxAggSize)
-                  .order(order?.type ?? '_count', order?.dir ?? 'desc'),
-              ),
-          ],
-          filters: { ...allFilters },
-          field,
-        }),
-      );
-    }
-  });
+      if (isRangeFacet(facet)) {
+        const { min, max } = facet;
+        const interval = Math.ceil((max - min) / 20);
+
+        query.agg(
+          buildFilterAggregation({
+            portalFields: [portalField],
+            aggregations: [esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max)],
+            filters: { ...allFilters },
+            field,
+          }),
+        );
+      }
+
+      if (isDateFacet(facet)) {
+        query.agg(
+          buildFilterAggregation({
+            portalFields: [portalField],
+            aggregations: [
+              esb.maxAggregation(`${field}_max`, portalField),
+              esb.minAggregation(`${field}_min`, portalField),
+            ],
+            filters: { ...allFilters },
+            field,
+          }),
+        );
+      }
+
+      if (isHierarchicalFacet(facet)) {
+        const { childField, order } = facet;
+        if (!childField) {
+          return;
+        }
+        const parentPortalField = getPortalESField(field);
+        const childPortalField = getPortalESField(childField);
+
+        query.agg(
+          buildFilterAggregation({
+            portalFields: [parentPortalField, childPortalField],
+            aggregations: [
+              esb
+                .termsAggregation(field, parentPortalField)
+                .size(maxAggSize)
+                .order(order?.type ?? '_count', order?.dir ?? 'desc')
+                .agg(
+                  esb
+                    .termsAggregation(childField, childPortalField)
+                    .size(maxAggSize)
+                    .order(order?.type ?? '_count', order?.dir ?? 'desc'),
+                ),
+            ],
+            filters: { ...allFilters },
+            field,
+          }),
+        );
+      }
+    });
+  }
 
   return query.toJSON();
 }

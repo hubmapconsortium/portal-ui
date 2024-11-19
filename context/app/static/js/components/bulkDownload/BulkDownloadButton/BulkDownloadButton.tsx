@@ -11,15 +11,20 @@ interface BulkDownloadButtonProps extends ButtonProps {
   uuids: Set<string>;
   deselectRows?: (uuids: string[]) => void;
 }
-function BulkDownloadButton({ tooltip, uuids, deselectRows, ...rest }: BulkDownloadButtonProps) {
-  const { openDialog } = useBulkDownloadDialog();
+function BulkDownloadButton({ tooltip, uuids, deselectRows, disabled, ...rest }: BulkDownloadButtonProps) {
+  const { openDialog, isOpen } = useBulkDownloadDialog();
 
   return (
     <>
-      <WhiteBackgroundIconTooltipButton tooltip={tooltip} onClick={() => openDialog(uuids)} {...rest}>
-        <SvgIcon color="primary" component={Download} />
+      <WhiteBackgroundIconTooltipButton
+        tooltip={tooltip}
+        onClick={() => openDialog(uuids)}
+        disabled={disabled}
+        {...rest}
+      >
+        <SvgIcon color={disabled ? 'disabled' : 'primary'} component={Download} />
       </WhiteBackgroundIconTooltipButton>
-      <BulkDownloadDialog deselectRows={deselectRows} />
+      {isOpen && <BulkDownloadDialog deselectRows={deselectRows} />}
     </>
   );
 }
