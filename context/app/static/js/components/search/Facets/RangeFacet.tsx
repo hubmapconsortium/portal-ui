@@ -4,6 +4,7 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
+import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import { RangeConfig, RangeValues, isRangeFacet, isRangeFilter, useSearchStore } from '../store';
 import FacetAccordion from './FacetAccordion';
@@ -22,6 +23,8 @@ function buildBins({ buckets }: { buckets: HistogramBucket[] }) {
 function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: string; facet: RangeConfig }) {
   const aggs = useSearch()?.aggregations?.[field]?.[field];
   const filterRange = useSearchStore((state) => state.filterRange);
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
+
   const theme = useTheme();
   const getFieldLabel = useGetFieldLabel();
   const { values } = filter;
@@ -50,9 +53,15 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
         return;
       }
 
+      trackEvent({
+        category: analyticsCategory,
+        action: 'Set Range Facet',
+        label: field,
+      });
+
       filterRange({ field, min: value[0], max: value[1] });
     },
-    [filterRange, field],
+    [filterRange, field, analyticsCategory],
   );
 
   if (!(aggs && 'buckets' in aggs)) {
