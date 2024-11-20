@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useRef } from 'react';
 import useSWRInfinite, { SWRInfiniteKeyLoader } from 'swr/infinite';
 import { SearchRequest, SearchResponseBody, SortResults } from '@elastic/elasticsearch/lib/api/types';
 
@@ -9,6 +9,7 @@ import { SWRError } from 'js/helpers/swr/errors';
 import { getSearchAfterSort, getCombinedHits } from 'js/hooks/useSearchData';
 import { buildQuery } from './utils';
 import { SearchStoreState } from './store';
+import useESmapping, { isESMapping, Mappings } from './useEsMapping';
 
 function useAuthHeader() {
   const { groupsToken } = useAppContext();
@@ -31,17 +32,20 @@ function buildSearchRequestInit({ body, authHeader }: BuildSearchRequestInitArgs
   };
 }
 
+type FetchSearcHitTypes = {
+  endpoint: string;
+  authHeader: HeadersInit;
+  searchAfterSort?: SortResults;
+} & Omit<SearchStoreState, 'swrConfig' | 'view' | 'type' | 'analyticsCategory'>;
+
 async function fetchSearchHits<Doc, Aggs>({
   endpoint,
   authHeader,
   searchAfterSort,
+  mappings,
   ...rest
-}: {
-  endpoint: string;
-  authHeader: HeadersInit;
-  searchAfterSort?: SortResults;
-} & Omit<SearchStoreState, 'swrConfig' | 'view' | 'type' | 'analyticsCategory'>) {
-  const query = buildQuery({ ...rest });
+}: FetchSearcHitTypes & { mappings: Mappings | Record<string, never> }) {
+  const query = buildQuery({ mappings, ...rest });
 
   return fetcher<SearchResponseBody<Doc, Aggs>>({
     url: endpoint,
@@ -56,6 +60,10 @@ async function fetchSearchHits<Doc, Aggs>({
   });
 }
 
+function noLoadKey() {
+  return null;
+}
+
 // TODO: Conform search hooks to use elastic-builder and dedupe useScrollSearchHits hooks
 export function useScrollSearchHits<Doc, Aggs>({
   endpoint,
@@ -63,6 +71,7 @@ export function useScrollSearchHits<Doc, Aggs>({
   ...rest
 }: Omit<SearchStoreState, 'view' | 'type' | 'analyticsCategory' | 'initialFilters'>) {
   const authHeader = useAuthHeader();
+  const mappings = useESmapping();
 
   const getKey: SWRInfiniteKeyLoader = useCallback(
     (pageIndex: number, previousPageData: SearchResponseBody) => {
@@ -87,13 +96,15 @@ export function useScrollSearchHits<Doc, Aggs>({
   const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<
     SearchResponseBody<Doc, Aggs>,
     SWRError
-  >(getKey, fetchSearchHits, {
+  >(isESMapping(mappings) ? getKey : noLoadKey, (args: FetchSearcHitTypes) => fetchSearchHits({ ...args, mappings }), {
     fallbackData: [],
     revalidateAll: false,
     revalidateFirstPage: false,
     keepPreviousData: true,
     ...swrConfig,
   });
+
+  const hasRun = useRef<boolean>(false);
 
   const { searchHits, totalHitsCount, aggregations } = useMemo(() => getCombinedHits<Doc, Aggs>(data ?? []), [data]);
 
@@ -106,11 +117,17 @@ export function useScrollSearchHits<Doc, Aggs>({
     setSize(size + 1).catch(console.error);
   }, [size, setSize, isReachingEnd, isLoading, isValidating]);
 
+  if (data?.length) {
+    hasRun.current = true;
+  }
+
+  const z = isLoading || !hasRun.current;
+
   return {
     aggregations,
     searchHits,
     error,
-    isLoading,
+    isLoading: z,
     setSize,
     loadMore,
     totalHitsCount,

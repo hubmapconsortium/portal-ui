@@ -108,12 +108,7 @@ function buildFacets({ facetGroups }: { facetGroups: FacetGroups }) {
           draft.facets[curr.field] = curr;
         }
 
-        if (curr.type === FACETS.range) {
-          draft.filters[curr.field] = { values: { min: curr.min, max: curr.max }, type: curr.type };
-          draft.facets[curr.field] = curr;
-        }
-
-        if (curr.type === FACETS.date) {
+        if (curr.type === FACETS.range || curr.type === FACETS.date) {
           draft.filters[curr.field] = { values: { min: undefined, max: undefined }, type: curr.type };
           draft.facets[curr.field] = curr;
         }
@@ -177,7 +172,6 @@ function Header({ type }: TypeProps) {
 
 function Bar({ type }: TypeProps) {
   const view = useSearchStore((state) => state.view);
-
   return (
     <Stack direction="row" spacing={1}>
       <Box flexGrow={1}>

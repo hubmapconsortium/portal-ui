@@ -37,7 +37,7 @@ interface BuildSearchRequestInitArgs {
  * Builds the auth header for the request
  * @returns The auth header if logged in, an empty object otherwise
  */
-function useAuthHeader() {
+export function useAuthHeader() {
   const { groupsToken } = useAppContext();
   return useMemo(() => getAuthHeader(groupsToken), [groupsToken]);
 }
@@ -289,7 +289,7 @@ async function fetchAllIDs({
 const sharedIDsQueryClauses = { _source: false, sort: [{ _id: 'asc' }] };
 
 export function useAllSearchIDs(
-  query: SearchRequest,
+  query: SearchRequest | null,
   {
     useDefaultQuery = defaultConfig.useDefaultQuery,
     fetcher = defaultConfig.fetcher,
@@ -298,10 +298,13 @@ export function useAllSearchIDs(
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
+  const shouldFetch = Boolean(query);
+
   const { searchData } = useSearchData(
     { ...query, track_total_hits: true, size: 0, ...sharedIDsQueryClauses },
     {
       useDefaultQuery,
+      shouldFetch,
       fetcher,
       ...swrConfigRest,
     },

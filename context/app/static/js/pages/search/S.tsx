@@ -4,7 +4,6 @@ import esb from 'elastic-builder';
 import Search from 'js/components/search';
 import { FACETS } from 'js/components/search/store';
 import { EntityWithType, isDonor } from 'js/components/types';
-import { getPortalESField } from 'js/components/search/buildTypesMap';
 import { useAppContext } from 'js/components/Contexts';
 
 const sharedConfig = {
@@ -33,9 +32,9 @@ function makeDonorMetadataFilters(e: EntityWithType) {
   const pathPrefix = isDonorEntity ? '' : 'donor.';
   return [
     { field: `${pathPrefix}mapped_metadata.sex`, type: FACETS.term },
-    { field: `${pathPrefix}mapped_metadata.age_value`, min: 0, max: 90, type: FACETS.range },
+    { field: `${pathPrefix}mapped_metadata.age_value`, type: FACETS.range },
     { field: `${pathPrefix}mapped_metadata.race`, type: FACETS.term },
-    { field: `${pathPrefix}mapped_metadata.body_mass_index_value`, min: 0, max: 50, type: FACETS.range },
+    { field: `${pathPrefix}mapped_metadata.body_mass_index_value`, type: FACETS.range },
   ];
 }
 
@@ -44,7 +43,7 @@ function buildDefaultQuery(type: 'Dataset' | 'Donor' | 'Sample') {
     defaultQuery: esb
       .boolQuery()
       .must([
-        esb.termsQuery(getPortalESField('entity_type'), [type]),
+        esb.termsQuery('entity_type.keyword', [type]),
         esb.boolQuery().mustNot([esb.existsQuery('next_revision_uuid'), esb.existsQuery('sub_status')]),
       ]),
   };

@@ -4,6 +4,7 @@ import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import { DateValidationError } from '@mui/x-date-pickers/models';
 import { format } from 'date-fns/format';
 
+import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import { isDateFilter, useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
@@ -68,8 +69,11 @@ function DateRangeFacet({
   aggMax,
 }: DateRangeFacetProps & { min: number; max: number; aggMin: number; aggMax: number }) {
   const filterDate = useSearchStore((state) => state.filterDate);
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
+
   const [values, setValues] = useState([min, max]);
   const getFieldLabel = useGetFieldLabel();
+
   // Reset slider position when filter chip is deleted.
   useEffect(() => {
     setValues([min, max]);
@@ -78,6 +82,12 @@ function DateRangeFacet({
   const filterMin = useCallback(
     (value: Date | null) => {
       if (value) {
+        trackEvent({
+          category: analyticsCategory,
+          action: 'Set Min Date Facet',
+          label: field,
+        });
+
         const newMin = value.getTime();
         setValues([newMin, values[1]]);
         if (newMin >= aggMin && newMin <= values[1]) {
@@ -85,12 +95,18 @@ function DateRangeFacet({
         }
       }
     },
-    [filterDate, max, field, setValues, values, aggMin],
+    [filterDate, max, field, setValues, values, aggMin, analyticsCategory],
   );
 
   const filterMax = useCallback(
     (value: Date | null) => {
       if (value) {
+        trackEvent({
+          category: analyticsCategory,
+          action: 'Set Max Date Facet',
+          label: field,
+        });
+
         const newMax = value.getTime();
         setValues([values[0], newMax]);
         if (newMax >= values[0] && newMax <= aggMax) {
@@ -98,7 +114,7 @@ function DateRangeFacet({
         }
       }
     },
-    [filterDate, min, field, setValues, values, aggMax],
+    [filterDate, min, field, setValues, values, aggMax, analyticsCategory],
   );
 
   return (

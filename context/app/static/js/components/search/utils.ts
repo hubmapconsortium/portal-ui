@@ -16,7 +16,7 @@ import {
   isExistsFilter,
   isExistsFacet,
 } from './store';
-import { getPortalESField } from './buildTypesMap';
+import { getESField, isESMapping, Mappings, UseESMappingType } from './useEsMapping';
 
 const maxAggSize = 10000;
 
@@ -46,12 +46,12 @@ function buildFilterAggregation({
   return esb.filterAggregation(field, otherFiltersQuery).aggs(aggregations);
 }
 
-function buildSortField({ sortField }: { sortField: SortField }) {
-  const primarySort = esb.sort(getPortalESField(sortField.field), sortField.direction);
+function buildSortField({ sortField, mappings }: { sortField: SortField; mappings: Mappings }) {
+  const primarySort = esb.sort(getESField({ field: sortField.field, mappings }), sortField.direction);
   const secondarySortField = sortField?.secondarySort;
 
   const secondarySort = secondarySortField
-    ? [esb.sort(getPortalESField(secondarySortField.field), secondarySortField.direction)]
+    ? [esb.sort(getESField({ field: secondarySortField.field, mappings }), secondarySortField.direction)]
     : [];
 
   return [primarySort, ...secondarySort];
@@ -66,16 +66,20 @@ export function buildQuery({
   sourceFields,
   sortField,
   defaultQuery,
+  mappings,
   buildAggregations = true,
-}: { buildAggregations?: boolean } & Pick<
+}: { buildAggregations?: boolean; mappings: UseESMappingType } & Pick<
   SearchStoreState,
   'filters' | 'facets' | 'search' | 'size' | 'searchFields' | 'sourceFields' | 'sortField' | 'defaultQuery'
 >) {
+  if (!isESMapping(mappings)) {
+    return null;
+  }
   const query = esb
     .requestBodySearch()
     .size(size)
     .source([...new Set(Object.values(sourceFields).flat())])
-    .sorts(buildSortField({ sortField }));
+    .sorts(buildSortField({ sortField, mappings }));
 
   const hasTextQuery = search.length > 0;
 
@@ -90,7 +94,7 @@ export function buildQuery({
 
   const allFilters = Object.entries(filters).reduce<FilterClauses>((acc, [field, filter]) => {
     return produce(acc, (draft) => {
-      const portalField = getPortalESField(field);
+      const portalField = getESField({ field, mappings });
       const facetConfig = facets[field];
 
       if (isTermFilter(filter)) {
@@ -110,7 +114,7 @@ export function buildQuery({
 
       if (isHierarchicalFilter(filter) && isHierarchicalFacet(facetConfig)) {
         if (filterHasValues({ filter, facet: facetConfig })) {
-          const childPortalField = getPortalESField(facetConfig.childField);
+          const childPortalField = getESField({ field: facetConfig.childField, mappings });
 
           draft[portalField] = esb.termsQuery(portalField, Object.keys(filter.values));
 
@@ -134,7 +138,7 @@ export function buildQuery({
   if (buildAggregations) {
     Object.values(facets).forEach((facet) => {
       const { field } = facet;
-      const portalField = getPortalESField(field);
+      const portalField = getESField({ field, mappings });
 
       if (isTermFacet(facet)) {
         const { order } = facet;
@@ -154,13 +158,12 @@ export function buildQuery({
       }
 
       if (isRangeFacet(facet)) {
-        const { min, max } = facet;
-        const interval = Math.ceil((max - min) / 20);
+        const { interval } = facet;
 
         query.agg(
           buildFilterAggregation({
             portalFields: [portalField],
-            aggregations: [esb.histogramAggregation(field, portalField, interval).extendedBounds(min, max)],
+            aggregations: [esb.histogramAggregation(field, portalField, interval ?? 5).extendedBounds(0, 0)],
             filters: { ...allFilters },
             field,
           }),
@@ -186,8 +189,8 @@ export function buildQuery({
         if (!childField) {
           return;
         }
-        const parentPortalField = getPortalESField(field);
-        const childPortalField = getPortalESField(childField);
+        const parentPortalField = getESField({ field, mappings });
+        const childPortalField = getESField({ field: childField, mappings });
 
         query.agg(
           buildFilterAggregation({

@@ -4,6 +4,7 @@ import Slider from '@mui/material/Slider';
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 
+import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import { RangeConfig, RangeValues, isRangeFacet, isRangeFilter, useSearchStore } from '../store';
 import FacetAccordion from './FacetAccordion';
@@ -19,15 +20,25 @@ function buildBins({ buckets }: { buckets: HistogramBucket[] }) {
   return buckets.map((b) => ({ ...b, height: b.doc_count / maxCount }));
 }
 
+function isSelectedBin({ key, min, max }: { key: number; min?: number; max?: number }) {
+  if (min === undefined || max === undefined) {
+    return true;
+  }
+
+  return key >= min && key <= max;
+}
+
 function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: string; facet: RangeConfig }) {
   const aggs = useSearch()?.aggregations?.[field]?.[field];
   const filterRange = useSearchStore((state) => state.filterRange);
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
+
   const theme = useTheme();
   const getFieldLabel = useGetFieldLabel();
   const { values } = filter;
   const { min, max } = facet;
 
-  const [selectedValues, setSelectedValues] = useState<number[]>([min, max]);
+  const [selectedValues, setSelectedValues] = useState<(number | undefined)[]>([min, max]);
 
   // Reset slider position when filter chip is deleted.
   useEffect(() => {
@@ -50,9 +61,15 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
         return;
       }
 
+      trackEvent({
+        category: analyticsCategory,
+        action: 'Set Range Facet',
+        label: field,
+      });
+
       filterRange({ field, min: value[0], max: value[1] });
     },
-    [filterRange, field],
+    [filterRange, field, analyticsCategory],
   );
 
   if (!(aggs && 'buckets' in aggs)) {
@@ -67,6 +84,9 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
 
   const bins = buildBins({ buckets: aggBuckets });
 
+  const actualMin = 0 ?? min;
+  const actualMax = Math.max(...bins.map((b) => parseInt(b.key, 10))) ?? max;
+
   return (
     <FacetAccordion title={getFieldLabel(field)} position="inner">
       <Box sx={{ width: '90%' }}>
@@ -79,8 +99,9 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
                 sx={{
                   width: `${100 / bins.length}%`,
                   height: `${bin.height * 100}%`,
-                  backgroundColor:
-                    key >= values.min && key <= values.max ? theme.palette.success.light : theme.palette.secondary.main,
+                  backgroundColor: isSelectedBin({ min: values.min, max: values.max, key })
+                    ? theme.palette.success.light
+                    : theme.palette.secondary.main,
                   pointerEvents: 'none',
                 }}
               />
@@ -91,15 +112,15 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
           size="small"
           getAriaLabel={(index) => (index === 0 ? 'Minimum value' : 'Maximum value')}
           id={field}
-          value={[selectedValues[0], selectedValues[1]]}
-          min={min}
-          max={max}
+          value={[selectedValues[0] ?? actualMin, selectedValues[1] ?? actualMax]}
+          min={actualMin}
+          max={actualMax}
           valueLabelDisplay="auto"
           onChange={handleChange}
           onChangeCommitted={handleCommittedChange}
           marks={[
-            { value: min, label: min },
-            { value: max, label: max },
+            { value: actualMin, label: actualMin },
+            { value: actualMax, label: actualMax },
           ]}
           sx={{
             width: '100%',
