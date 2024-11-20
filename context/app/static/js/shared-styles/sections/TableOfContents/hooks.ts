@@ -39,10 +39,21 @@ function useFindActiveIndex({
     let active;
     const d = document.documentElement;
 
-    for (let i = itemsWithNodeRef.current.length - 1; i >= 0; i -= 1) {
-      const item = itemsWithNodeRef.current[i];
+    const itemsWithAdjustedOffsetTop = [...itemsWithNodeRef.current].map((item) => {
+      const element = document.getElementById(item.hash);
+      const rect = element?.getBoundingClientRect();
+      const adjustedOffsetTop = rect ? rect.top / 4 + window.scrollY : 0;
 
-      if (item.node && item.node.offsetTop < d.scrollTop + d.clientHeight / 8) {
+      return {
+        ...item,
+        adjustedOffsetTop,
+      };
+    });
+
+    for (let i = itemsWithAdjustedOffsetTop.length - 1; i >= 0; i -= 1) {
+      const item = itemsWithAdjustedOffsetTop[i];
+
+      if (item.adjustedOffsetTop < d.scrollTop + d.clientHeight / 8) {
         active = item;
         break;
       }
