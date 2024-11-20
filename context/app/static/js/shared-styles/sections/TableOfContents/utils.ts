@@ -29,8 +29,26 @@ function getSections(sectionOrder: SectionOrder) {
   });
 }
 
+const flattenSections = (sections: TableOfContentsItem[]): TableOfContentsItem[] => {
+  const flattenedSections: TableOfContentsItem[] = [];
+
+  const flatten = (nestedItems: TableOfContentsItem[]) => {
+    nestedItems.forEach((item) => {
+      flattenedSections.push({ ...item, items: undefined });
+      if (item.items) {
+        flatten(item.items);
+      }
+    });
+  };
+
+  flatten(sections);
+  return flattenedSections;
+};
+
 function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<TableOfContentsItemWithNode> {
-  return items.map((item) => ({
+  const flattenedItems = flattenSections(items);
+
+  return flattenedItems.map((item) => ({
     text: item.text,
     hash: item.hash,
     node: document.getElementById(item.hash),
@@ -40,4 +58,4 @@ function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<Table
   }));
 }
 
-export { getSections, getSectionFromString, getItemsClient, formatSectionHash };
+export { getSections, flattenSections, getSectionFromString, getItemsClient, formatSectionHash };

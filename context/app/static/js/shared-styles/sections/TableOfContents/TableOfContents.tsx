@@ -102,30 +102,14 @@ function ItemSkeleton() {
   );
 }
 
-const flattenTableOfContentsItems = (items: TableOfContentsItem[]): TableOfContentsItem[] => {
-  const result: TableOfContentsItem[] = [];
-
-  const flatten = (nestedItems: TableOfContentsItem[]) => {
-    nestedItems.forEach((item) => {
-      result.push({ ...item, items: undefined });
-      if (item.items) {
-        flatten(item.items);
-      }
-    });
-  };
-
-  flatten(items);
-  return result;
-};
-
 function TableOfContents({ items, isLoading = false }: { items: TableOfContentsItems; isLoading?: boolean }) {
   const [currentSection, setCurrentSection] = useState(items[0].hash);
 
   const itemsWithNodeRef = React.useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
 
   React.useEffect(() => {
-    itemsWithNodeRef.current = getItemsClient(flattenTableOfContentsItems(items));
-  }, [items, isLoading]);
+    itemsWithNodeRef.current = getItemsClient(items);
+  }, [items]);
 
   const clickedRef = React.useRef(false);
   const unsetClickedRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
