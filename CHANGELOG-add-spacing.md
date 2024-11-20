@@ -1,1 +1,0 @@
-- Fix spacing between organ icon and name on detail pages.
