@@ -30,7 +30,8 @@ def get_default_flask_data():
     return {
         'endpoints': {
             'gatewayEndpoint': current_app.config['GATEWAY_ENDPOINT'],
-            'baseElasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'] + '/' + current_app.config['VERSION'],
+            'baseElasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT'] +
+            '/' + current_app.config['VERSION'],
             'elasticsearchEndpoint': current_app.config['ELASTICSEARCH_ENDPOINT']
             + current_app.config['PORTAL_INDEX_PATH'],
             'assetsEndpoint': current_app.config['ASSETS_ENDPOINT'],
