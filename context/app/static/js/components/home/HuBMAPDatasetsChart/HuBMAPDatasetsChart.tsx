@@ -132,7 +132,7 @@ function HuBMAPDatasetsChart() {
         return getSearchURL({
           entityType: 'Dataset',
           organTerms,
-          donorSex: d.key,
+          analyteClass: d.key,
         });
       },
     },

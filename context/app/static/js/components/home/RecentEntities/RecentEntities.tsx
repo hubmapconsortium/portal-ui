@@ -3,6 +3,8 @@ import Grid from '@mui/material/Grid';
 import Panel from 'js/shared-styles/panels/Panel';
 import { useOrgan } from 'js/hooks/useOrgansApi';
 import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
+
+import { buildSearchLink } from 'js/components/search/store';
 import { getEntityCreationInfo } from 'js/helpers/functions';
 import { buildPublicationPanelProps } from 'js/components/publications/PublicationsPanelList/utils';
 import {
@@ -45,7 +47,9 @@ function RecentDatasets() {
       entityName="Dataset"
       entities={recentDatasets}
       entityComponent={DatasetPanel}
-      viewAllLink="/search?entity_type[0]=Dataset"
+      viewAllLink={buildSearchLink({
+        entity_type: 'Dataset',
+      })}
     />
   );
 }

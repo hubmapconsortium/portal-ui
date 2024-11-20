@@ -7,12 +7,15 @@ import Typography from '@mui/material/Typography';
 import Step from 'js/shared-styles/surfaces/Step';
 import { InternalLink } from 'js/shared-styles/Links';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
+import { buildSearchLink } from 'js/components/search/store';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { useAddDatasetsDialog } from './hooks';
 
-const searchPageRoute = '/search?entity_type[0]=Dataset';
+const searchPageRoute = buildSearchLink({
+  entity_type: 'Dataset',
+});
 
 function SearchPagePrompt() {
   return (

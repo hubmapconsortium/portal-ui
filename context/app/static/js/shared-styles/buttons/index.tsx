@@ -25,10 +25,13 @@ const svgStyles = {
   fontSize: '1.25rem',
 };
 
-const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme }) => ({
+const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme, disabled }) => ({
   ...whiteBackgroundCSS,
   ...border(theme),
   '& svg': svgStyles,
+  ...(disabled && {
+    backgroundColor: theme.palette.action.disabledBackground,
+  }),
 }));
 
 const WhiteBackgroundIconDropdownMenuButton = styled(IconDropdownMenuButton)(({ theme }) => ({
@@ -66,9 +69,11 @@ function TooltipToggleButton({
 
   return (
     <Tooltip title={tooltipTitle}>
-      <WhiteBackgroundToggleButton {...rest} id={id} data-testid={id}>
-        {children}
-      </WhiteBackgroundToggleButton>
+      <span>
+        <WhiteBackgroundToggleButton {...rest} id={id} data-testid={id}>
+          {children}
+        </WhiteBackgroundToggleButton>
+      </span>
     </Tooltip>
   );
 }

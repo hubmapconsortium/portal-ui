@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+
 import { useFlaskDataContext } from 'js/components/Contexts';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
+import { buildSearchLink } from 'js/components/search/store';
 import { useDerivedEntitiesSection } from './hooks';
 
 const tooltipTexts = {
@@ -27,8 +29,16 @@ function DerivedEntitiesSection() {
       title="Derived Data"
       action={
         <RelatedEntitiesSectionActions
+          searchPageHref={buildSearchLink({
+            entity_type: entities[openIndex].entityType,
+            filters: {
+              ancestor_ids: {
+                values: [uuid],
+                type: 'TERM',
+              },
+            },
+          })}
           uuids={datasetUuids}
-          searchPageHref={`/search?ancestor_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
         />
       }
     >

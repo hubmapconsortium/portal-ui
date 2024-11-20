@@ -2,17 +2,16 @@ import React from 'react';
 import BulkDownloadButton from 'js/components/bulkDownload/BulkDownloadButton/BulkDownloadButton';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
-const tooltip =
-  'Bulk download files for selected datasets. If no datasets are selected, all datasets given the current filters will be selected.';
+const tooltip = 'Bulk download files for selected datasets.';
 
 interface BulkDownloadButtonFromSearchProps {
   type: string;
-  allResultsUUIDs: string[];
 }
-function BulkDownloadButtonFromSearch({ type, allResultsUUIDs }: BulkDownloadButtonFromSearchProps) {
+
+function BulkDownloadButtonFromSearch({ type }: BulkDownloadButtonFromSearchProps) {
   const { selectedRows, deselectRows } = useSelectableTableStore();
 
-  const disabled = allResultsUUIDs.length === 0;
+  const disabled = selectedRows.size === 0;
   const isDatasetSearch = type.toLowerCase() === 'dataset';
 
   if (!isDatasetSearch) {
@@ -21,9 +20,9 @@ function BulkDownloadButtonFromSearch({ type, allResultsUUIDs }: BulkDownloadBut
 
   return (
     <BulkDownloadButton
-      tooltip={disabled ? 'Loading datasets...' : tooltip}
+      tooltip={disabled ? 'Select datasets for download.' : tooltip}
       deselectRows={deselectRows}
-      uuids={selectedRows.size > 0 ? selectedRows : new Set(allResultsUUIDs)}
+      uuids={selectedRows}
       disabled={disabled}
     />
   );

@@ -16,7 +16,7 @@ const config = {
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes|uuid|chart-js)/)',
+    'node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes|uuid|chart-js|history)/)',
   ],
   transform: {
     '^.+\\.(t|j)sx?$': [

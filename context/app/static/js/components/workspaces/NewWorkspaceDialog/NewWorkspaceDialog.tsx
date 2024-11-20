@@ -16,6 +16,7 @@ import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
+import { buildSearchLink } from 'js/components/search/store';
 
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
 import { useWorkspaceTemplates } from './hooks';
@@ -45,15 +46,25 @@ const text = {
         <span key="datasets-step">
           {' '}
           Add datasets by HuBMAP ID below or navigate to the{' '}
-          <InternalLink href="/search?entity_type[0]=Dataset">dataset search page</InternalLink>, select datasets and
-          follow steps to launch a workspace.
+          <InternalLink
+            href={buildSearchLink({
+              entity_type: 'Dataset',
+            })}
+          >
+            dataset search page
+          </InternalLink>
+          , select datasets and follow steps to launch a workspace.
         </span>,
       ],
       all: [
         'To remove a dataset, select the dataset and press the delete button. If all datasets are removed, an empty workspace will be launched.',
         'Once you navigate away from this page, all progress will be lost. You can copy IDs to your clipboard by selecting datasets in the table below and pressing the copy button. You can also save datasets to “My Lists”.',
         <Button variant="outlined" key="datasets-button">
-          <InternalLink href="/search?entity_type[0]=Dataset">
+          <InternalLink
+            href={buildSearchLink({
+              entity_type: 'Dataset',
+            })}
+          >
             <Typography color="primary" variant="button">
               Select Additional Datasets
             </Typography>

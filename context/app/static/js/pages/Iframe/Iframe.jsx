@@ -17,10 +17,7 @@ function Switch({ organs_count }) {
       return <HuBMAPDatasetsChart />;
     case '/iframe/organ':
       return (
-        <ccf-organ-info
-          organ-iri={iri}
-          data-sources='["https://apps.humanatlas.io/api/ds-graph/hubmap?token="]'
-        />
+        <ccf-organ-info organ-iri={iri} data-sources='["https://apps.humanatlas.io/api/ds-graph/hubmap?token="]' />
       );
     default:
       throw new Error(`No iframe ${pathname}`);

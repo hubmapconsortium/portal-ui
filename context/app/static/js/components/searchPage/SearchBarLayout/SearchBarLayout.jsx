@@ -12,7 +12,7 @@ import TilesSortDropdown from '../TilesSortDropdown';
 import SelectedFilter from '../SelectedFilter';
 import { Flex, CenteredDiv } from './style';
 
-function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analyticsCategory, allResultsUUIDs }) {
+function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analyticsCategory }) {
   const SwitchComponent = withAnalyticsCategory(
     isDevSearch ? DevSearchViewSwitch : SearchViewSwitch,
     analyticsCategory,
@@ -37,7 +37,7 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
           <Stack direction="row" spacing={1} marginLeft={1}>
             {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
             {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
-            {!isDevSearch && <BulkDownloadButtonFromSearch type={type} allResultsUUIDs={allResultsUUIDs} />}
+            {!isDevSearch && <BulkDownloadButtonFromSearch type={type} />}
             <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
           </Stack>
         </CenteredDiv>

@@ -15,7 +15,7 @@ import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { WorkspacesEventCategories, WorkspacesEventInfo } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
-
+import { buildSearchLink } from '../search/store';
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 import TemplateTagsAutocomplete from './TemplateTagsAutocomplete/TemplateTagsAutocomplete';
@@ -50,9 +50,15 @@ const workspacesUsage = {
         workspace tutorials
       </InternalLink>{' '}
       to optimize your experience with workspaces. To begin a new workspace, find datasets on our{' '}
-      <InternalLink href="/search?entity_type[0]=Dataset">search page</InternalLink> and launch a workspace from them.
-      To learn more about getting started, explore <InternalLink href="/templates">workspace templates</InternalLink> to
-      help you start analyzing HuBMAP data.
+      <InternalLink
+        href={buildSearchLink({
+          entity_type: 'Dataset',
+        })}
+      >
+        search page
+      </InternalLink>{' '}
+      and launch a workspace from them. To learn more about getting started, explore{' '}
+      <InternalLink href="/templates">workspace templates</InternalLink> to help you start analyzing HuBMAP data.
     </>
   ),
 };
@@ -111,7 +117,9 @@ const pages = [
   },
   {
     onClick: () => trackRelevantPage('Dataset Search Page'),
-    link: '/search?entity_type[0]=Dataset',
+    link: buildSearchLink({
+      entity_type: 'Dataset',
+    }),
     children: 'Dataset Search Page',
   },
 ];

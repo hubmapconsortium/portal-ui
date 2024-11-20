@@ -4,6 +4,7 @@ import { InternalLink } from 'js/shared-styles/Links';
 import Typography from '@mui/material/Typography';
 
 import { DetailPageAlert } from 'js/components/detailPage/style';
+import { buildSearchLink } from 'js/components/search/store';
 
 interface SupportAlertProps {
   uuid: string;
@@ -19,7 +20,17 @@ function SupportAlert({ uuid, isSupport }: SupportAlertProps) {
     <DetailPageAlert severity="warning">
       <Typography variant="body2">
         “Support” entities provide derived, low-level data for visualizations. Navigate to{' '}
-        <InternalLink href={`/search?descendant_ids[0]=${uuid}&entity_type[0]=Dataset`}>
+        <InternalLink
+          href={buildSearchLink({
+            entity_type: 'Dataset',
+            filters: {
+              descendant_ids: {
+                values: [uuid],
+                type: 'TERM',
+              },
+            },
+          })}
+        >
           the parent dataset
         </InternalLink>{' '}
         for a view of this information in context.

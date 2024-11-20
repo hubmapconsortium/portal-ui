@@ -2,14 +2,37 @@ import React from 'react';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import Description from 'js/shared-styles/sections/Description';
+import { buildSearchLink } from 'js/components/search/store';
 
 function SearchPagesPrompt() {
   // Inserted in the middle of the message, so it shouldn't be capitalized.
   return (
     <>
-      navigate to <InternalLink href="/search?entity_type[0]=Donor">donors</InternalLink>,{' '}
-      <InternalLink href="/search?entity_type[0]=Sample">samples</InternalLink> or{' '}
-      <InternalLink href="/search?entity_type[0]=Dataset">datasets</InternalLink> search pages
+      navigate to{' '}
+      <InternalLink
+        href={buildSearchLink({
+          entity_type: 'Donor',
+        })}
+      >
+        donors
+      </InternalLink>
+      ,{' '}
+      <InternalLink
+        href={buildSearchLink({
+          entity_type: 'Sample',
+        })}
+      >
+        samples
+      </InternalLink>{' '}
+      or{' '}
+      <InternalLink
+        href={buildSearchLink({
+          entity_type: 'Dataset',
+        })}
+      >
+        datasets
+      </InternalLink>{' '}
+      search pages
     </>
   );
 }
