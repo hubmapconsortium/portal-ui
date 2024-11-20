@@ -30,19 +30,7 @@ function getSections(sectionOrder: SectionOrder) {
 }
 
 const flattenSections = (sections: TableOfContentsItem[]): TableOfContentsItem[] => {
-  const flattenedSections: TableOfContentsItem[] = [];
-
-  const flatten = (nestedItems: TableOfContentsItem[]) => {
-    nestedItems.forEach((item) => {
-      flattenedSections.push(item);
-      if (item.items) {
-        flatten(item.items);
-      }
-    });
-  };
-
-  flatten(sections);
-  return flattenedSections;
+  return sections.flatMap((item) => (item.items ? [item, ...flattenSections(item.items)] : [item]));
 };
 
 function getItemsClient(items: TableOfContentsItems): TableOfContentsItems<TableOfContentsItemWithNode> {
