@@ -46,7 +46,7 @@ function useFindActiveIndex({
       const rect = element?.getBoundingClientRect();
       const adjustedOffset = rect ? rect.top / 4 + window.scrollY : 0;
 
-      if (adjustedOffset < d.scrollTop + d.clientHeight / 8) {
+      if (element && adjustedOffset < d.scrollTop + d.clientHeight / 8) {
         active = item;
         break;
       }
