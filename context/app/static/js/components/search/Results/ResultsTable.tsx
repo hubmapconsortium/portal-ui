@@ -33,6 +33,7 @@ import { useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 import ViewMoreResults from './ViewMoreResults';
 import { buildQuery } from '../utils';
+import useESmapping from '../useEsMapping';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -216,6 +217,8 @@ function SelectableHeaderCells() {
   const defaultQuery = useSearchStore((state) => state.defaultQuery);
   const type = useSearchStore((state) => state.type);
 
+  const mappings = useESmapping();
+
   const query = buildQuery({
     filters,
     facets,
@@ -225,6 +228,7 @@ function SelectableHeaderCells() {
     sourceFields,
     sortField,
     defaultQuery,
+    mappings,
     buildAggregations: false,
   });
 

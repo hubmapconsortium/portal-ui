@@ -19,7 +19,7 @@ class DefaultConfig(object):
     SESSION_COOKIE_SAMESITE = 'Lax'
 
     # These app-wide configurations do not vary between environments:
-
+    VERSION = version
     PORTAL_INDEX_PATH = f'/{version}/portal/search'
     CCF_INDEX_PATH = f'{version}/entities/search'
     GLOBUS_GROUPS_URL = 'https://raw.githubusercontent.com' + \

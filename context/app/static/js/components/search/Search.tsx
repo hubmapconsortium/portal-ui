@@ -172,7 +172,6 @@ function Header({ type }: TypeProps) {
 
 function Bar({ type }: TypeProps) {
   const view = useSearchStore((state) => state.view);
-
   return (
     <Stack direction="row" spacing={1}>
       <Box flexGrow={1}>
