@@ -25,6 +25,7 @@ function useAncestorSearchHits(descendantUUID: string) {
         'mapped_status',
         'descendant_counts',
         'created_timestamp',
+        'published_timestamp',
         'mapped_metadata',
         'origin_samples_unique_mapped_organs',
         'sample_category',
