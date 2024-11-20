@@ -34,7 +34,7 @@ const flattenSections = (sections: TableOfContentsItem[]): TableOfContentsItem[]
 
   const flatten = (nestedItems: TableOfContentsItem[]) => {
     nestedItems.forEach((item) => {
-      flattenedSections.push({ ...item, items: undefined });
+      flattenedSections.push(item);
       if (item.items) {
         flatten(item.items);
       }
