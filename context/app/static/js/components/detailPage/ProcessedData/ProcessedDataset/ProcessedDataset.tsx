@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { formatDate } from 'date-fns/format';
 
 import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import SummarizeRounded from '@mui/icons-material/SummarizeRounded';
@@ -22,16 +21,16 @@ import DataProducts from 'js/components/detailPage/files/DataProducts';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import AnalysisDetails from 'js/components/detailPage/AnalysisDetails';
 import Protocol from 'js/components/detailPage/Protocol';
-import { getDateLabelAndValue } from 'js/components/detailPage/utils';
 import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
 import { Subsection } from './Subsection';
-import { SectionDescription } from './SectionDescription';
+import { SectionDescription } from '../../../../shared-styles/sections/SectionDescription';
 import useProcessedDataStore from '../store';
 import {
   ProcessedDatasetContextProvider,
@@ -72,7 +71,7 @@ function Contact() {
 function SummaryAccordion() {
   const { dataset } = useProcessedDatasetContext();
   const { group_name, mapped_consortium, creation_action } = dataset;
-  const [dateLabel, dateValue] = getDateLabelAndValue(dataset);
+  const { creationLabel, creationDate } = getEntityCreationInfo(dataset);
 
   return (
     <Subsection title="Summary" icon={<SummarizeRounded />}>
@@ -83,9 +82,7 @@ function SummaryAccordion() {
         </LabelledSectionText>
         <LabelledSectionText label="Consortium">{mapped_consortium}</LabelledSectionText>
         <Contact />
-        <LabelledSectionText label={dateLabel}>
-          {dateValue ? formatDate(new Date(dateValue), 'yyyy-MM-dd') : 'N/A'}
-        </LabelledSectionText>
+        <LabelledSectionText label={creationLabel}>{creationDate}</LabelledSectionText>
       </Stack>
     </Subsection>
   );

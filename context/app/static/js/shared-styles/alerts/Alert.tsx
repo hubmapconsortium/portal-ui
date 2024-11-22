@@ -24,10 +24,11 @@ function OutlinedAlert(props: AlertProps) {
 interface StyledAlertProps extends AlertProps {
   $marginBottom?: number;
   $marginTop?: number;
+  $width?: string;
 }
 
 // TODO: Figure out why `sx` doesn't work with this component. https://hms-dbmi.atlassian.net/browse/CAT-650
-const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBottom, $marginTop }) => ({
+const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBottom, $marginTop, $width }) => ({
   '> &:not(svg)': {
     color: theme.palette.text.primary,
   },
@@ -36,6 +37,7 @@ const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBot
   },
   marginBottom: $marginBottom ?? 0,
   marginTop: $marginTop ?? 0,
+  width: $width ?? 'auto',
 }));
 
 export { StyledAlert as Alert };

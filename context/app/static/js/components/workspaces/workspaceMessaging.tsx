@@ -10,12 +10,12 @@ import { Alert } from 'js/shared-styles/alerts';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
+import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import { WorkspacesEventCategories, WorkspacesEventInfo } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
-
+import { buildSearchLink } from '../search/store';
 import TemplateGrid from './TemplateGrid';
 import { useWorkspaceTemplates } from './NewWorkspaceDialog/hooks';
 import TemplateTagsAutocomplete from './TemplateTagsAutocomplete/TemplateTagsAutocomplete';
@@ -50,9 +50,15 @@ const workspacesUsage = {
         workspace tutorials
       </InternalLink>{' '}
       to optimize your experience with workspaces. To begin a new workspace, find datasets on our{' '}
-      <InternalLink href="/search?entity_type[0]=Dataset">search page</InternalLink> and launch a workspace from them.
-      To learn more about getting started, explore <InternalLink href="/templates">workspace templates</InternalLink> to
-      help you start analyzing HuBMAP data.
+      <InternalLink
+        href={buildSearchLink({
+          entity_type: 'Dataset',
+        })}
+      >
+        search page
+      </InternalLink>{' '}
+      and launch a workspace from them. To learn more about getting started, explore{' '}
+      <InternalLink href="/templates">workspace templates</InternalLink> to help you start analyzing HuBMAP data.
     </>
   ),
 };
@@ -98,7 +104,7 @@ const text = {
   ],
 };
 
-const pageLinks = [
+const pages = [
   {
     onClick: () => trackRelevantPage('Tutorials'),
     link: '/tutorials/workspaces',
@@ -111,7 +117,9 @@ const pageLinks = [
   },
   {
     onClick: () => trackRelevantPage('Dataset Search Page'),
-    link: '/search?entity_type[0]=Dataset',
+    link: buildSearchLink({
+      entity_type: 'Dataset',
+    }),
     children: 'Dataset Search Page',
   },
 ];
@@ -179,13 +187,7 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
               {body}
             </LabelledSectionText>
           ))}
-          <LabelledSectionText label="Relevant Pages" spacing={1}>
-            <Stack direction="row" spacing={1}>
-              {pageLinks.map((page) => (
-                <OutlinedLinkButton key={page.link} {...page} />
-              ))}
-            </Stack>
-          </LabelledSectionText>
+          <RelevantPagesSection pages={pages} />
         </Stack>
       </Stack>
       {!isAuthenticated && (

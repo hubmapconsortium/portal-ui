@@ -27,7 +27,15 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
       </Stack>
       <Stack direction="row" justifyContent="center" spacing={1} flexWrap="wrap">
         {datasets?.map(
-          ({ uuid, entity_type, hubmap_id, assay_display_name, descendant_counts, last_modified_timestamp }) => (
+          ({
+            uuid,
+            entity_type,
+            hubmap_id,
+            assay_display_name,
+            descendant_counts,
+            published_timestamp,
+            created_timestamp,
+          }) => (
             <EntityTile
               key={uuid}
               uuid={uuid}
@@ -38,7 +46,8 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
                 mapped_data_types: [assay_display_name[0]],
                 origin_samples,
                 origin_samples_unique_mapped_organs,
-                last_modified_timestamp,
+                published_timestamp,
+                created_timestamp,
                 entity_type,
                 descendant_counts,
               }}

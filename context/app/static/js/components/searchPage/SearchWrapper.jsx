@@ -18,6 +18,7 @@ import { SearchTransport } from './SearchTransport';
 
 const setSearchHitsCountSelector = (state) => state.setSearchHitsCount;
 const setAllResultsUUIDsSelector = (state) => state.setAllResultsUUIDs;
+const allResultsUUIDsSelector = (state) => state.allResultsUUIDs;
 
 function SearchWrapper({
   apiUrl,
@@ -40,6 +41,7 @@ function SearchWrapper({
   const resultFieldIds = [...resultFields.table, ...resultFields.tile, ...resultFields.ccf]
     .map((field) => field.id)
     .concat(idField);
+
   const searchkit = useMemo(
     () =>
       new SearchkitManager(apiUrl, {
@@ -58,6 +60,7 @@ function SearchWrapper({
 
   const setSearchHitsCount = useSearchViewStore(setSearchHitsCountSelector);
   const setAllResultsUUIDs = useSearchViewStore(setAllResultsUUIDsSelector);
+  const allResultsUUIDs = useSearchViewStore(allResultsUUIDsSelector);
 
   const queryString = useRef(false);
   useEffect(() => {
@@ -109,6 +112,7 @@ function SearchWrapper({
           sortOptions={sortOptions}
           isDevSearch={isDevSearch}
           analyticsCategory={analyticsCategory}
+          allResultsUUIDs={allResultsUUIDs}
         />
         <LayoutBody>
           <StyledSideBar>

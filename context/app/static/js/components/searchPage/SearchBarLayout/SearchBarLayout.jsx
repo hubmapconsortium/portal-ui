@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle, SimpleQueryString } from 'searchkit';
+import Stack from '@mui/material/Stack';
 
+import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/BulkDownloadButtonFromSearch';
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';
@@ -15,6 +17,7 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
     isDevSearch ? DevSearchViewSwitch : SearchViewSwitch,
     analyticsCategory,
   );
+
   return (
     <>
       <Flex>
@@ -31,9 +34,12 @@ function SearchBarLayout({ type, queryFields, sortOptions, isDevSearch, analytic
             listComponent={withAnalyticsCategory(TilesSortDropdown, analyticsCategory)}
             analyticsCategory={analyticsCategory}
           />
-          {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
-          {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
-          <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
+          <Stack direction="row" spacing={1} marginLeft={1}>
+            {!isDevSearch && <MetadataMenu type={type} analyticsCategory={analyticsCategory} />}
+            {!isDevSearch && <WorkspacesDropdownMenu type={type} />}
+            {!isDevSearch && <BulkDownloadButtonFromSearch type={type} />}
+            <ViewSwitcherToggle listComponent={SwitchComponent} analyticsCategory={analyticsCategory} />
+          </Stack>
         </CenteredDiv>
       </Flex>
       <SelectedFilters itemComponent={withAnalyticsCategory(SelectedFilter, analyticsCategory)} />

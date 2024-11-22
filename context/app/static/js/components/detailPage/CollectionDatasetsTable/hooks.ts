@@ -20,7 +20,9 @@ function useCollectionsDatasets({ ids }: CollectionDatasetsHook) {
   };
 
   const { searchHits: datasets } = useSearchHits<Dataset>(query);
-  return { columns, datasets };
+  const uuids = new Set(datasets.map((dataset) => dataset._source.uuid));
+
+  return { columns, datasets, uuids };
 }
 
 export { useCollectionsDatasets };

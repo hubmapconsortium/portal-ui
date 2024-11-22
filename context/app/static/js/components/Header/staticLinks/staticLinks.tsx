@@ -19,6 +19,7 @@ import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { contactUsUrl } from 'js/shared-styles/Links/ContactUsLink';
 import { DrawerTitle } from 'js/shared-styles/Drawer/styles';
+import { buildSearchLink } from 'js/components/search/store';
 import AuthButton from '../AuthButton';
 
 export const resourceLinks: DrawerSection[] = [
@@ -99,7 +100,9 @@ export const dataLinks: DrawerSection[] = [
       {
         label: 'Datasets',
         description: 'Find datasets by dataset type, organs, pipelines and other metadata.',
-        href: '/search?entity_type[0]=Dataset',
+        href: buildSearchLink({
+          entity_type: 'Dataset',
+        }),
         icon: <entityIconMap.Dataset color="primary" />,
       },
       {
@@ -158,13 +161,17 @@ export const dataLinks: DrawerSection[] = [
       {
         label: 'Samples',
         description: 'Find samples by organ and other metadata, and discover derived datasets.',
-        href: '/search?entity_type[0]=Sample',
+        href: buildSearchLink({
+          entity_type: 'Sample',
+        }),
         icon: <entityIconMap.Sample color="primary" />,
       },
       {
         label: 'Donors',
         description: 'Find donors by age, race and other metadata, and discover derived samples and datasets.',
-        href: '/search?entity_type[0]=Donor',
+        href: buildSearchLink({
+          entity_type: 'Donor',
+        }),
         icon: <entityIconMap.Donor color="primary" />,
       },
     ],

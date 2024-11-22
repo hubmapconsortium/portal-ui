@@ -1,6 +1,7 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import { format } from 'date-fns/format';
 import { nodeIcons } from 'js/components/detailPage/DatasetRelationships/nodeTypes';
-import { ESEntityType, isDataset } from 'js/components/types';
+import { Dataset, ESEntityType, Entity, isDataset } from 'js/components/types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { MergedWorkspace } from 'js/components/workspaces/types';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -226,6 +227,30 @@ export function isValidEmail(email: string) {
   return emailRegex.test(cleanedValue);
 }
 
+/**
+ * Checks if a string is a properly formatted ORCID ID - aka, 16 digits (the final digit may also be an 'X')
+ * with or without 4 dashes, which is what orcid.org permits in a URL.
+ * @param orcidId the ORCID ID string to validate and format.
+ * @returns the formatted ORCID ID if valid, or null if invalid.
+ */
+export function validateAndFormatOrcidId(orcidId?: string): string | null {
+  if (typeof orcidId !== 'string' || orcidId.trim() === '') {
+    return null;
+  }
+
+  const orcidWithDashes = /^[0-9]{4}-[0-9]{4}-[0-9]{4}-[0-9]{3}[0-9X]$/;
+  const orcidNoDashes = /^[0-9]{15}[0-9X]$/;
+
+  if (orcidWithDashes.test(orcidId)) {
+    return orcidId;
+  }
+  if (orcidNoDashes.test(orcidId)) {
+    return orcidId.replace(/(\d{4})(\d{4})(\d{4})(\d{3}[0-9X])/, '$1-$2-$3-$4');
+  }
+
+  return null;
+}
+
 export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?: boolean; processing?: string }) {
   if (isDataset(entity)) {
     if (entity.is_component) {
@@ -237,4 +262,44 @@ export function getEntityIcon(entity: { entity_type: ESEntityType; is_component?
     return nodeIcons.primaryDataset;
   }
   return entityIconMap[entity.entity_type];
+}
+
+/**
+ * Find the creation information for a given entity. Datasets use the published date if available,
+ * otherwise the last modified date. Other entities use the creation date.
+ * @author Austen Money
+ */
+export function getEntityCreationInfo({
+  entity_type,
+  published_timestamp,
+  created_timestamp,
+  last_modified_timestamp,
+}: Pick<Entity, 'entity_type'> &
+  Partial<Pick<Dataset, 'published_timestamp' | 'last_modified_timestamp' | 'created_timestamp'>>) {
+  let creationLabel;
+  let creationVerb;
+  let creationTimestamp;
+
+  if (entity_type === 'Dataset') {
+    if (published_timestamp) {
+      creationLabel = 'Publication Date';
+      creationVerb = 'Published';
+      creationTimestamp = published_timestamp;
+    } else {
+      creationLabel = 'Last Modified';
+      creationVerb = 'Modified';
+      creationTimestamp = last_modified_timestamp;
+    }
+  } else {
+    creationLabel = 'Creation Date';
+    creationVerb = 'Created';
+    creationTimestamp = created_timestamp;
+  }
+
+  return {
+    creationLabel,
+    creationVerb,
+    creationTimestamp: creationTimestamp ?? 0,
+    creationDate: creationTimestamp ? format(creationTimestamp, 'yyyy-MM-dd') : 'N/A',
+  };
 }

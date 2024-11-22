@@ -11,9 +11,8 @@ const Dataset = lazy(() => import('js/pages/Dataset'));
 const Sample = lazy(() => import('js/pages/Sample'));
 const Collection = lazy(() => import('js/pages/Collection'));
 const Home = lazy(() => import('js/pages/Home/Home'));
-const Search = lazy(() => import('js/pages/search/Search'));
-const CellsSearch = lazy(() => import('js/pages/search/CellsSearch'));
 const DevSearch = lazy(() => import('js/pages/search/DevSearch'));
+const Search = lazy(() => import('js/pages/search/S'));
 const Diversity = lazy(() => import('js/pages/Diversity'));
 const Preview = lazy(() => import('js/pages/Preview'));
 const Publications = lazy(() => import('js/pages/Publications'));
@@ -55,6 +54,7 @@ function Routes({ flaskData }) {
     geneSymbol,
     cell_type: cellId,
     tutorialName,
+    type,
   } = flaskData;
   const urlPath = window.location.pathname;
   const url = window.location.href;
@@ -118,15 +118,7 @@ function Routes({ flaskData }) {
   if (urlPath.startsWith('/search')) {
     return (
       <Route>
-        <Search title={title} />
-      </Route>
-    );
-  }
-
-  if (urlPath.startsWith('/cells-search')) {
-    return (
-      <Route>
-        <CellsSearch title={title} />
+        <Search type={type} />
       </Route>
     );
   }
@@ -354,6 +346,7 @@ Routes.propTypes = {
     cell_type: PropTypes.string,
     globusGroups: PropTypes.object,
     redirected: PropTypes.bool,
+    type: PropTypes.string,
   }),
 };
 

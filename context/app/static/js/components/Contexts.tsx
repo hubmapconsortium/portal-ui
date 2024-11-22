@@ -29,6 +29,7 @@ export const useFlaskDataContext = () => useContext(FlaskDataContext);
 interface AppContextType {
   assetsEndpoint: string;
   entityEndpoint: string;
+  baseElasticsearchEndpoint: string;
   elasticsearchEndpoint: string;
   softAssayEndpoint: string;
   groupsToken: string;

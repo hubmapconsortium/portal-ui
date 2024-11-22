@@ -43,6 +43,16 @@ export const lastModifiedTimestamp = {
   cellContent: LastModifiedTimestampCell,
 };
 
+function CreatedTimestampCell({ hit: { created_timestamp } }: CellContentProps<EntityDocument>) {
+  return format(created_timestamp, 'yyyy-MM-dd');
+}
+
+export const createdTimestamp = {
+  id: 'created_timestamp',
+  label: 'Creation Date',
+  cellContent: CreatedTimestampCell,
+};
+
 function AssayTypesCell({ hit: { mapped_data_types } }: CellContentProps<DatasetDocument>) {
   return mapped_data_types.join(', ');
 }

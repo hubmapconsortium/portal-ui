@@ -2,10 +2,11 @@ import { useMemo } from 'react';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import {
-  lastModifiedTimestampCol,
+  createdTimestampCol,
   organCol,
   dataTypesCol,
   statusCol,
+  publishedTimestampCol,
 } from 'js/components/detailPage/derivedEntities/columns';
 
 import { getAncestorsQuery } from 'js/helpers/queries';
@@ -23,7 +24,8 @@ function useAncestorSearchHits(descendantUUID: string) {
         'mapped_data_types',
         'mapped_status',
         'descendant_counts',
-        'last_modified_timestamp',
+        'created_timestamp',
+        'published_timestamp',
         'mapped_metadata',
         'origin_samples_unique_mapped_organs',
         'sample_category',
@@ -55,6 +57,8 @@ function usePublicationsRelatedEntities(uuid: string) {
     { Donor: [], Sample: [], Dataset: [] } as Record<string, Required<SearchHit<PartialEntity>>[]>,
   );
 
+  const datasetUuids = new Set(ancestorsSplitByEntityType.Dataset.map((hit) => hit._source.uuid));
+
   const entities = [
     {
       entityType: 'Donor' as const,
@@ -81,7 +85,7 @@ function usePublicationsRelatedEntities(uuid: string) {
           label: 'Race',
           renderColumnCell: ({ mapped_metadata }: PartialEntity) => mapped_metadata?.race as string,
         },
-        lastModifiedTimestampCol,
+        createdTimestampCol,
       ],
     },
     {
@@ -95,7 +99,7 @@ function usePublicationsRelatedEntities(uuid: string) {
           label: 'Sample Category',
           renderColumnCell: ({ sample_category }: PartialEntity) => sample_category as string,
         },
-        lastModifiedTimestampCol,
+        createdTimestampCol,
       ],
     },
 
@@ -103,11 +107,11 @@ function usePublicationsRelatedEntities(uuid: string) {
       entityType: 'Dataset' as const,
       tabLabel: 'Datasets',
       data: ancestorsSplitByEntityType.Dataset,
-      columns: [dataTypesCol, organCol, statusCol, lastModifiedTimestampCol],
+      columns: [dataTypesCol, organCol, statusCol, publishedTimestampCol],
     },
   ];
 
-  return { entities, isLoading };
+  return { entities, datasetUuids, isLoading };
 }
 
 export { usePublicationsRelatedEntities };

@@ -1,5 +1,25 @@
 # Changelog
 
+## v1.15.0 - 2024-11-20
+
+- Fix spacing between organ icon and name on detail pages.
+- Add dialog option to the Search, Publication, and Collection pages that generates a download manifest for files from selected datasets.
+- Add warning banner to empty columns in provenance tables.
+- Switch to using "Creation Date" for samples/donors and switch to using "Publication Date" or "Last Modified" for datasets.
+- Remove invalid ORCID IDs from Attribution tables.
+- Replace searchkit.
+
+
+
+## v1.14.1 - 2024-11-13
+
+- Fix minor graphical issues in homepage hero section.
+- Use `Image Pyramid` pipeline name as a heuristic for whether a visualization link should be present in unified dataset table of contents.
+- Update portal-viz hash to reflect the view adjustment for EPIC segmentation mask.
+- Updated support for EPIC segmentation masks visualization. 
+
+
+
 ## v1.14.0 - 2024-11-06
 
 - Adjust ID fetching for infinite scroll table to ensure "select all" functionality works as expected.

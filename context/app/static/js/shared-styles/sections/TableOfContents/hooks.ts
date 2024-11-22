@@ -42,7 +42,11 @@ function useFindActiveIndex({
     for (let i = itemsWithNodeRef.current.length - 1; i >= 0; i -= 1) {
       const item = itemsWithNodeRef.current[i];
 
-      if (item.node && item.node.offsetTop < d.scrollTop + d.clientHeight / 8) {
+      const element = document.getElementById(item.hash);
+      const rect = element?.getBoundingClientRect();
+      const adjustedOffset = rect ? rect.top / 4 + window.scrollY : 0;
+
+      if (element && adjustedOffset < d.scrollTop + d.clientHeight / 8) {
         active = item;
         break;
       }

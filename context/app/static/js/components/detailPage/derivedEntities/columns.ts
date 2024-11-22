@@ -1,10 +1,10 @@
-import { format } from 'date-fns/format';
-import { isDataset, isSample, PartialEntity } from 'js/components/types';
+import { Dataset, isDataset, isSample, PartialEntity } from 'js/components/types';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 
 interface Column {
   id: string;
   label: string;
-  renderColumnCell: (entity: PartialEntity) => string | number;
+  renderColumnCell: (entity: PartialEntity & Partial<Pick<Dataset, 'published_timestamp'>>) => string | number;
 }
 
 const descendantCountsCol: Column = {
@@ -13,10 +13,18 @@ const descendantCountsCol: Column = {
   renderColumnCell: ({ descendant_counts }) => descendant_counts?.entity_type?.Dataset ?? 0,
 };
 
-const lastModifiedTimestampCol: Column = {
-  id: 'last_modified_timestamp',
-  label: 'Last Modified',
-  renderColumnCell: ({ last_modified_timestamp }) => format(last_modified_timestamp ?? 0, 'yyyy-MM-dd'),
+const createdTimestampCol: Column = {
+  id: 'created_timestamp',
+  label: 'Creation Date',
+  renderColumnCell: ({ entity_type, created_timestamp }) =>
+    getEntityCreationInfo({ entity_type, created_timestamp }).creationDate,
+};
+
+const publishedTimestampCol: Column = {
+  id: 'published_timestamp',
+  label: 'Publication Date',
+  renderColumnCell: ({ entity_type, published_timestamp }) =>
+    getEntityCreationInfo({ entity_type, published_timestamp }).creationDate,
 };
 
 const organCol: Column = {
@@ -46,9 +54,17 @@ const derivedSamplesColumns: Column[] = [
     renderColumnCell: (entity) => (isSample(entity) ? entity.sample_category : ''),
   },
   descendantCountsCol,
-  lastModifiedTimestampCol,
+  createdTimestampCol,
 ];
 
-const derivedDatasetsColumns = [dataTypesCol, statusCol, descendantCountsCol, lastModifiedTimestampCol];
+const derivedDatasetsColumns = [dataTypesCol, statusCol, descendantCountsCol, publishedTimestampCol];
 
-export { derivedSamplesColumns, derivedDatasetsColumns, lastModifiedTimestampCol, organCol, dataTypesCol, statusCol };
+export {
+  derivedSamplesColumns,
+  derivedDatasetsColumns,
+  createdTimestampCol,
+  publishedTimestampCol,
+  organCol,
+  dataTypesCol,
+  statusCol,
+};

@@ -12,12 +12,12 @@ import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
 import { LineClampWithTooltip } from 'js/shared-styles/text';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 
-import { formatDate } from 'date-fns/format';
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 import { HelperPanelPortal } from '../../DetailLayout/DetailLayout';
 import StatusIcon from '../../StatusIcon';
-import { getDateLabelAndValue, useCurrentDataset } from '../../utils';
+import { useCurrentDataset } from '../../utils';
 import { HelperPanelButton } from './styles';
 import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
 import ProcessedDataWorkspaceMenu from '../ProcessedDataWorkspaceMenu';
@@ -68,7 +68,7 @@ function HelperPanelBody() {
   if (!currentDataset) {
     return null;
   }
-  const [dateLabel, date] = getDateLabelAndValue(currentDataset);
+  const { creationLabel, creationDate } = getEntityCreationInfo(currentDataset);
 
   const { title, description, pipeline, assay_display_name, creation_action, group_name } = currentDataset;
   return (
@@ -87,7 +87,7 @@ function HelperPanelBody() {
       <HelperPanelBodyItem label="Group">
         <ProcessedDataGroup creation_action={creation_action} group_name={group_name} />
       </HelperPanelBodyItem>
-      <HelperPanelBodyItem label={dateLabel}>{date && formatDate(date, 'yyyy-MM-dd')}</HelperPanelBodyItem>
+      <HelperPanelBodyItem label={creationLabel}>{creationDate}</HelperPanelBodyItem>
     </>
   );
 }

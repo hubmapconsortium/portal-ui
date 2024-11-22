@@ -1,5 +1,5 @@
 from flask import (render_template, current_app, abort,
-                   session, request)
+                   session, request, redirect, url_for)
 
 from .utils import get_default_flask_data, make_blueprint, get_organs
 
@@ -42,28 +42,13 @@ def ccf_eui():
     )
 
 
-@blueprint.route('/search')
-@blueprint.route('/cells-search')
-def search():
-    entity_type = request.args.get('entity_type[0]')
-    title = f'{entity_type}s' if entity_type else 'Search'
-    flask_data = {
-        **get_default_flask_data(),
-        'title': title,
-    }
-    return render_template(
-        'base-pages/react-content.html',
-        title=title,
-        flask_data=flask_data,
-    )
-
-
-@blueprint.route('/test-search/<type>')
-def test_search(type):
+@blueprint.route('/search/<type>')
+def search(type):
     if type not in ['donors', 'samples', 'datasets']:
         abort(404)
-    title = f'{type.capitalize()} Test Search'
+    title = f'{type.capitalize()} Search'
     flask_data = {
+        'type': type,
         **get_default_flask_data(),
         'title': title,
     }
@@ -74,7 +59,14 @@ def test_search(type):
     )
 
 
-@blueprint.route('/dev-search')
+@blueprint.route('/search')
+def search_redirect():
+    entity_type = request.args.get('entity_type[0]')
+    return redirect(
+        url_for('routes_main.search', type=f'{entity_type}s'.lower()))
+
+
+@ blueprint.route('/dev-search')
 def dev_search():
     title = 'Dev Search'
     flask_data = {
@@ -88,7 +80,7 @@ def dev_search():
     )
 
 
-@blueprint.route('/diversity')
+@ blueprint.route('/diversity')
 def vis():
     title = 'Donor Diversity'
     flask_data = {
@@ -102,7 +94,7 @@ def vis():
     )
 
 
-@blueprint.route('/collections')
+@ blueprint.route('/collections')
 def collections():
     flask_data = {**get_default_flask_data()}
     return render_template(
@@ -112,7 +104,7 @@ def collections():
     )
 
 
-@blueprint.route('/publications')
+@ blueprint.route('/publications')
 def publications():
     flask_data = {**get_default_flask_data()}
     return render_template(
@@ -122,7 +114,7 @@ def publications():
     )
 
 
-@blueprint.route('/my-lists')
+@ blueprint.route('/my-lists')
 def my_lists():
     flask_data = {**get_default_flask_data()}
     return render_template(
@@ -132,7 +124,7 @@ def my_lists():
     )
 
 
-@blueprint.route('/my-lists/<saved_list_uuid>')
+@ blueprint.route('/my-lists/<saved_list_uuid>')
 def list_page(saved_list_uuid):
     flask_data = {
         **get_default_flask_data(),
@@ -145,7 +137,7 @@ def list_page(saved_list_uuid):
     )
 
 
-@blueprint.route('/iframe/<path:path>')
+@ blueprint.route('/iframe/<path:path>')
 def iframe_page(path):
     flask_data = {
         **get_default_flask_data(),
@@ -158,7 +150,7 @@ def iframe_page(path):
     )
 
 
-@blueprint.route('/tutorials')
+@ blueprint.route('/tutorials')
 def tutorials():
     flask_data = {
         **get_default_flask_data(),
@@ -170,7 +162,7 @@ def tutorials():
     )
 
 
-@blueprint.route('/tutorials/<tutorial_name>')
+@ blueprint.route('/tutorials/<tutorial_name>')
 def tutorial_detail(tutorial_name):
     flask_data = {
         **get_default_flask_data(),
@@ -183,7 +175,7 @@ def tutorial_detail(tutorial_name):
     )
 
 
-@blueprint.route('/profile')
+@ blueprint.route('/profile')
 def profile():
     flask_data = {**get_default_flask_data()}
     return render_template(

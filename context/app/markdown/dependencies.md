@@ -26,7 +26,7 @@ hubmap-commons>=2.1.15
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.2.6.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.3.2.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -52,6 +52,7 @@ lxml>=4.9.1
 "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
 "@mui/styled-engine-sc": "6.0.0",
 "@mui/system": "^5.16.7",
+"@mui/x-date-pickers": "^7.22.2",
 "@react-spring/web": "^9.7.3",
 "@searchkit/client": "^3.0.0-canary.53",
 "@searchkit/sdk": "^3.0.0-canary.53",
@@ -71,13 +72,17 @@ lxml>=4.9.1
 "d3": "^7.9.0",
 "d3-array": "^3.2.4",
 "date-fns": "^3.6.0",
+"deepmerge": "^4.3.1",
+"elastic-builder": "^2.29.0",
 "fast-deep-equal": "^3.1.3",
+"history": "^5.3.0",
+"html-react-parser": "^5.1.10",
 "immer": "^10.0.4",
+"isomorphic-dompurify": "^2.12.0",
 "lineupjsx": "^4.6.0",
 "lz-string": "^1.5.0",
 "pretty-bytes": "^6.1.1",
 "prop-types": "^15.8.1",
-"qs": "^6.12.0",
 "react": "^18.2.0",
 "react-chartjs-2": "^5.2.0",
 "react-device-detect": "^2.2.3",

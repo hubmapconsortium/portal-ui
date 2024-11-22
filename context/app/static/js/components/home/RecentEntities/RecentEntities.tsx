@@ -1,9 +1,11 @@
 import React from 'react';
+import Grid from '@mui/material/Grid';
 import Panel from 'js/shared-styles/panels/Panel';
 import { useOrgan } from 'js/hooks/useOrgansApi';
 import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
-import Grid from '@mui/material/Grid';
-import { format } from 'date-fns/format';
+
+import { buildSearchLink } from 'js/components/search/store';
+import { getEntityCreationInfo } from 'js/helpers/functions';
 import { buildPublicationPanelProps } from 'js/components/publications/PublicationsPanelList/utils';
 import {
   useRecentDatasetsQuery,
@@ -17,9 +19,10 @@ interface EntityPanelProps<T> {
   entity: T;
 }
 
-function DatasetPanel({
-  entity: { title, uuid, hubmap_id, group_name, last_modified_timestamp, origin_samples_unique_mapped_organs: organs },
-}: EntityPanelProps<RecentDataset>) {
+function DatasetPanel({ entity }: EntityPanelProps<RecentDataset>) {
+  const { title, uuid, hubmap_id, group_name, origin_samples_unique_mapped_organs: organs } = entity;
+  const { creationDate } = getEntityCreationInfo({ entity_type: 'Dataset', ...entity });
+
   const organ = organs.length ? organs[0] : '';
   const data = useOrgan(organ);
   const iconUrl = data?.data?.icon ?? '';
@@ -27,7 +30,7 @@ function DatasetPanel({
     <Panel
       title={title}
       href={`/browse/dataset/${uuid}`}
-      secondaryText={`${hubmap_id} | ${group_name} | ${format(last_modified_timestamp, 'yyyy-MM-dd')}`}
+      secondaryText={`${hubmap_id} | ${group_name} | ${creationDate}`}
       small
       icon={<URLSvgIcon iconURL={iconUrl} ariaLabel={`Dataset containing ${organ}`} display="inline-block" />}
     />
@@ -44,7 +47,9 @@ function RecentDatasets() {
       entityName="Dataset"
       entities={recentDatasets}
       entityComponent={DatasetPanel}
-      viewAllLink="/search?entity_type[0]=Dataset"
+      viewAllLink={buildSearchLink({
+        entity_type: 'Dataset',
+      })}
     />
   );
 }

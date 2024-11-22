@@ -23,6 +23,7 @@ import PrimaryColorAccordion from 'js/shared-styles/accordions/PrimaryColorAccor
 import { trackEvent } from 'js/helpers/trackers';
 import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
 import { useAppContext } from 'js/components/Contexts';
+import { buildSearchLink } from 'js/components/search/store';
 
 interface ExampleAccordionProps {
   example: TemplateExample;
@@ -99,9 +100,17 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
                             value: { templateName, name },
                           });
                         }}
-                        href={`/search?raw_dataset_type_keyword-assay_display_name_keyword[${
-                          assayToRawDatasetMap[name]
-                        }][0]=${encodeURI(name)}&entity_type[0]=Dataset`}
+                        href={buildSearchLink({
+                          entity_type: 'Dataset',
+                          filters: {
+                            raw_dataset_type: {
+                              type: 'HIERARCHICAL',
+                              values: {
+                                [assayToRawDatasetMap[name]]: [name],
+                              },
+                            },
+                          },
+                        })}
                         key={name}
                       >
                         {idx === assay_display_name.length - 1 ? name : `${name}, `}

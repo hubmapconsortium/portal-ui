@@ -1,4 +1,5 @@
 import React from 'react';
+import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { StyledMenuItem } from './style';
 import { useFetchAndDownloadFile } from './hooks';
 
@@ -8,13 +9,17 @@ interface DownloadTSVItemProps {
 }
 
 export function DownloadTSVItem({ lcPluralType, analyticsCategory }: DownloadTSVItemProps) {
+  const { toastError } = useSnackbarActions();
   const { trigger, isMutating } = useFetchAndDownloadFile({
     lcPluralType,
     analyticsCategory,
   });
 
   const handleClick: React.MouseEventHandler<HTMLElement> = () => {
-    trigger().catch(console.error);
+    trigger().catch((e) => {
+      toastError('Download failed.');
+      console.error('Download failed', e);
+    });
   };
 
   return (

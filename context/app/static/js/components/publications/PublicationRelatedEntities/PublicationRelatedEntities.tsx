@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import RelatedEntitiesSectionWrapper from 'js/components/detailPage/related-entities/RelatedEntitiesSectionWrapper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
+import { buildSearchLink } from 'js/components/search/store';
 import { usePublicationsRelatedEntities } from './hooks';
 
 interface PublicationRelatedEntitiesProps {
@@ -12,7 +13,7 @@ interface PublicationRelatedEntitiesProps {
 function PublicationRelatedEntities({ uuid }: PublicationRelatedEntitiesProps) {
   const [openIndex, setOpenIndex] = useState(0);
 
-  const { entities, isLoading } = usePublicationsRelatedEntities(uuid);
+  const { entities, datasetUuids, isLoading } = usePublicationsRelatedEntities(uuid);
   return (
     <RelatedEntitiesSectionWrapper
       isLoading={isLoading}
@@ -21,7 +22,16 @@ function PublicationRelatedEntities({ uuid }: PublicationRelatedEntitiesProps) {
       iconTooltipText="HuBMAP data created or used by the publication."
       action={
         <RelatedEntitiesSectionActions
-          searchPageHref={`/search?descendant_ids[0]=${uuid}&entity_type[0]=${entities[openIndex].entityType}`}
+          searchPageHref={buildSearchLink({
+            entity_type: entities[openIndex].entityType,
+            filters: {
+              descendant_ids: {
+                values: [uuid],
+                type: 'TERM',
+              },
+            },
+          })}
+          uuids={datasetUuids}
         />
       }
     >

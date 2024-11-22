@@ -37,7 +37,7 @@ interface BuildSearchRequestInitArgs {
  * Builds the auth header for the request
  * @returns The auth header if logged in, an empty object otherwise
  */
-function useAuthHeader() {
+export function useAuthHeader() {
   const { groupsToken } = useAppContext();
   return useMemo(() => getAuthHeader(groupsToken), [groupsToken]);
 }
@@ -216,7 +216,7 @@ function extractIDs(results?: SearchResponseBody<unknown, unknown>): string[] {
 }
 
 // Get the sort array from the last hit. https://www.elastic.co/guide/en/elasticsearch/reference/current/paginate-search-results.html#search-after.
-function getSearchAfterSort(hits: SearchResponseBody<unknown, unknown>['hits']['hits']) {
+export function getSearchAfterSort(hits: SearchResponseBody<unknown, unknown>['hits']['hits']) {
   const { sort } = hits.slice(-1)[0];
   return sort;
 }
@@ -289,7 +289,7 @@ async function fetchAllIDs({
 const sharedIDsQueryClauses = { _source: false, sort: [{ _id: 'asc' }] };
 
 export function useAllSearchIDs(
-  query: SearchRequest,
+  query: SearchRequest | null,
   {
     useDefaultQuery = defaultConfig.useDefaultQuery,
     fetcher = defaultConfig.fetcher,
@@ -298,10 +298,13 @@ export function useAllSearchIDs(
 ) {
   const { elasticsearchEndpoint, groupsToken } = useAppContext();
 
+  const shouldFetch = Boolean(query);
+
   const { searchData } = useSearchData(
     { ...query, track_total_hits: true, size: 0, ...sharedIDsQueryClauses },
     {
       useDefaultQuery,
+      shouldFetch,
       fetcher,
       ...swrConfigRest,
     },
@@ -329,15 +332,15 @@ export function useAllSearchIDs(
     };
   }, [totalHitsCount, query, elasticsearchEndpoint, groupsToken, useDefaultQuery]);
 
-  const { data } = useSWR(getKey, (args) => fetchAllIDs(args), {
+  const { data, isLoading } = useSWR(getKey, (args) => fetchAllIDs(args), {
     fallbackData: [],
     ...swrConfigRest,
   });
 
-  return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount };
+  return { allSearchIDs: data?.flat?.() ?? [], totalHitsCount, isLoading };
 }
 
-function getCombinedHits(pagesResults: SearchResponseBody<unknown, unknown>[]) {
+export function getCombinedHits<Doc = unknown, Aggs = unknown>(pagesResults: SearchResponseBody<Doc, Aggs>[]) {
   const hasData = pagesResults.length > 0;
 
   if (!hasData) {
@@ -346,6 +349,7 @@ function getCombinedHits(pagesResults: SearchResponseBody<unknown, unknown>[]) {
 
   return {
     totalHitsCount: getTotalHitsCount(pagesResults[0]),
+    aggregations: pagesResults[0]?.aggregations,
     searchHits: pagesResults.map((d) => d?.hits?.hits).flat(),
   };
 }
