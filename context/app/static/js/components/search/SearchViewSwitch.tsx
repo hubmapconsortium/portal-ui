@@ -42,6 +42,7 @@ function SearchViewSwitch({ views }: { views: { label: string; icon: typeof SvgI
           id={`${label.toLowerCase()}-view-toggle-button`}
           disabled={view === label.toLowerCase()}
           key={label}
+          aria-label={label.toLowerCase()}
         >
           <Icon color={view === label.toLowerCase() ? 'primary' : 'secondary'} />
         </TooltipToggleButton>

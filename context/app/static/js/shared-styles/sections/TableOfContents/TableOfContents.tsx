@@ -76,7 +76,11 @@ function ItemLinks({
         <ItemLink item={item} {...rest} />
         {subItems && (
           <IconButton size="small" onClick={() => setOpen((value) => !value)} color="primary">
-            {open ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
+            {open ? (
+              <ExpandLess fontSize="small" aria-label="Collapse" />
+            ) : (
+              <ExpandMore fontSize="small" aria-label="Expand" />
+            )}
           </IconButton>
         )}
       </ListItem>
