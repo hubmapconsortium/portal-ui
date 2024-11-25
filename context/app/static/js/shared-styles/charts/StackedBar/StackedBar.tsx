@@ -1,6 +1,6 @@
 import React, { SVGProps } from 'react';
 
-import LZString from 'lz-string';
+import { decompressFromEncodedURIComponent } from 'lz-string';
 import { FiltersType } from 'js/components/search/store';
 import { StyledRect } from './style';
 
@@ -63,7 +63,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href }: StackedBa
       filters: FiltersType;
     }
 
-    const decodedHref = JSON.parse(LZString.decompressFromEncodedURIComponent(encodedURI)) as searchObj;
+    const decodedHref = JSON.parse(decompressFromEncodedURIComponent(encodedURI)) as searchObj;
 
     // Extracting the filters from the searchURI
     const extractedValues = (() => {
@@ -79,7 +79,6 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href }: StackedBa
     })();
 
     const labelString = `${page} page for the selected bar representing ${extractedValues.join(', ')}`;
-
     return (
       <a href={href} target="_parent" aria-label={labelString}>
         {rect}
