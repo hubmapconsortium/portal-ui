@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { FilesContextProvider } from 'js/components/detailPage/files/FilesContext';
@@ -8,13 +10,12 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import BulkDownloadTextButton from 'js/components/bulkDownload/buttons/BulkDownloadTextButton';
-import Stack from '@mui/material/Stack';
-import { Typography } from '@mui/material';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 
 function BulkDataTransfer() {
   const tabs = useProcessedDatasetTabs();
+  const uuids = new Set(tabs.map((tab) => tab.uuid));
 
   const [openTabIndex, setOpenTabIndex] = useState(0);
 
@@ -35,7 +36,7 @@ function BulkDataTransfer() {
               Tool. Note that processed data has separate download directories in Globus or dbGaP, distinct from the raw
               data directory.
             </Typography>
-            <BulkDownloadTextButton uuids={new Set()} />
+            <BulkDownloadTextButton uuids={uuids} />
           </Stack>
         </SectionDescription>
         <Tabs
