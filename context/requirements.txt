@@ -569,9 +569,9 @@ jsonschema==4.4.0 \
     #   hubmap-commons
     #   nbformat
     #   vitessce
-jupyter-core==4.9.2 \
-    --hash=sha256:d69baeb9ffb128b8cd2657fcf2703f89c769d1673c851812119e3a2a0e93ad9a \
-    --hash=sha256:f875e4d27e202590311d468fa55f90c575f201490bd0c18acabe4e318db4a46d
+jupyter-core==4.11.2 \
+    --hash=sha256:3815e80ec5272c0c19aad087a0d2775df2852cfca8f5a17069e99c9350cecff8 \
+    --hash=sha256:c2909b9bc7dca75560a6c5ae78c34fd305ede31cd864da3c0d0bb2ed89aa9337
     # via nbformat
 kiwisolver==1.4.4 \
     --hash=sha256:02f79693ec433cb4b5f51694e8477ae83b3205768a6fb48ffba60549080e295b \
