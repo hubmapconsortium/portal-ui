@@ -15,7 +15,7 @@ import { LINKS } from 'js/components/bulkDownload/constants';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 
-const sectionDescription = (
+const description = (
   <Typography>
     This section explains how to bulk download the raw and processed data for this dataset. Files for individual raw or
     processed data can be downloaded via Globus or dbGaP from the respective tabs. To download files from multiple
@@ -41,7 +41,7 @@ function BulkDataTransfer() {
       <FilesContextProvider>
         <SectionDescription>
           <Stack spacing={1}>
-            {sectionDescription}
+            {description}
             <BulkDownloadTextButton uuids={uuids} />
           </Stack>
         </SectionDescription>
