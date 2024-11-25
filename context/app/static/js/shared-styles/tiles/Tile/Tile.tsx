@@ -33,7 +33,11 @@ function Tile({
     </StyledPaper>
   );
   if (href) {
-    return <a href={href}>{tile}</a>;
+    return (
+      <a href={href} aria-label={href}>
+        {tile}
+      </a>
+    );
   }
   return tile;
 }

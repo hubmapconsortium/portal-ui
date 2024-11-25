@@ -1,5 +1,7 @@
 import React, { SVGProps } from 'react';
 
+import LZString from 'lz-string';
+import { FiltersType } from 'js/components/search/store';
 import { StyledRect } from './style';
 
 type Direction = 'vertical' | 'horizontal';
@@ -55,8 +57,31 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href }: StackedBa
     <StyledRect fill={bar.color} {...mappedProps} $showHover={Boolean(hoverProps) || Boolean(href)} {...hoverProps} />
   );
   if (href) {
+    const page = href.split('?')[0].replace('/search/', '');
+    const encodedURI = href.split('?')[1];
+    interface searchObj {
+      filters: FiltersType;
+    }
+
+    const decodedHref = JSON.parse(LZString.decompressFromEncodedURIComponent(encodedURI)) as searchObj;
+
+    // Extracting the filters from the searchURI
+    const extractedValues = (() => {
+      const results: string[] = [];
+      Object.values(decodedHref.filters).forEach(({ values }) => {
+        if (Array.isArray(values)) {
+          results.push(...values);
+        } else if (typeof values === 'object' && values !== null) {
+          results.push(...Object.keys(values));
+        }
+      });
+      return results;
+    })();
+
+    const labelString = `${page} page for the selected bar representing ${extractedValues.join(', ')}`;
+
     return (
-      <a href={href} target="_parent">
+      <a href={href} target="_parent" aria-label={labelString}>
         {rect}
       </a>
     );

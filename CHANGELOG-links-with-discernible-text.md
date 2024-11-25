@@ -1,0 +1,1 @@
+- Added discernible text to the links on stacked barcharts.
