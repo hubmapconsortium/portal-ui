@@ -1,5 +1,5 @@
 import React from 'react';
-import BulkDownloadButton from 'js/components/bulkDownload/BulkDownloadButton/BulkDownloadButton';
+import BulkDownloadButton from 'js/components/bulkDownload/buttons/BulkDownloadButton/BulkDownloadButton';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
 const tooltip = 'Bulk download files for selected datasets.';

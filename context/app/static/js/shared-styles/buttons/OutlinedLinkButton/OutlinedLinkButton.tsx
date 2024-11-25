@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import LinkIcon from '@mui/icons-material/Link';
 import LaunchRounded from '@mui/icons-material/LaunchRounded';
-import { StyledButton } from 'js/shared-styles/buttons/OutlinedLinkButton/style';
+import OutlinedButton from 'js/shared-styles/buttons/OutlinedButton';
 
 interface OutlinedLinkButtonProps extends PropsWithChildren {
   link: string;
@@ -13,15 +13,14 @@ function OutlinedLinkButton({ link, onClick, external, children }: OutlinedLinkB
   const EndIcon = external ? LaunchRounded : LinkIcon;
 
   return (
-    <StyledButton
-      variant="outlined"
+    <OutlinedButton
       color="info"
       href={link}
       onClick={onClick}
       endIcon={<EndIcon color="info" sx={{ width: '1rem' }} />}
     >
       {children}
-    </StyledButton>
+    </OutlinedButton>
   );
 }
 

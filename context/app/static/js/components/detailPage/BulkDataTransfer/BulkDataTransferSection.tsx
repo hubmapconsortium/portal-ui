@@ -7,9 +7,11 @@ import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import BulkDownloadTextButton from 'js/components/bulkDownload/buttons/BulkDownloadTextButton';
+import Stack from '@mui/material/Stack';
+import { Typography } from '@mui/material';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
-import { BULK_DATA_DESCRIPTION_TEXT } from './const';
 
 function BulkDataTransfer() {
   const tabs = useProcessedDatasetTabs();
@@ -24,7 +26,18 @@ function BulkDataTransfer() {
       icon={sectionIconMap['bulk-data-transfer']}
     >
       <FilesContextProvider>
-        <SectionDescription>{BULK_DATA_DESCRIPTION_TEXT}</SectionDescription>
+        <SectionDescription>
+          <Stack spacing={1}>
+            <Typography>
+              This section explains how to bulk download the raw and processed data for this dataset. Files for
+              individual raw or processed data can be downloaded via Globus or dbGaP from the respective tabs. To
+              download files from multiple Globus directories simultaneously, use the HuBMAP Command Line Transfer (CLT)
+              Tool. Note that processed data has separate download directories in Globus or dbGaP, distinct from the raw
+              data directory.
+            </Typography>
+            <BulkDownloadTextButton uuids={new Set()} />
+          </Stack>
+        </SectionDescription>
         <Tabs
           value={openTabIndex}
           onChange={(_, newValue) => {
