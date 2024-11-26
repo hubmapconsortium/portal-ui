@@ -17,6 +17,8 @@ const sharedTileFields = [
   'hubmap_id',
   'uuid',
   'last_modified_timestamp',
+  'created_timestamp',
+  'published_timestamp',
   'entity_type',
   'descendant_counts.entity_type',
 ];
@@ -183,11 +185,13 @@ function buildDatasetConfig(isHubmapUser: boolean) {
       ],
       tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
     },
-    sortField: {
-      field: 'published_timestamp',
-      direction: 'desc' as const,
-      secondaryField: { field: 'mapped_status', direction: 'desc' as const },
-    },
+    sortField: isHubmapUser
+      ? sharedConfig.sortField
+      : {
+          field: 'published_timestamp',
+          direction: 'desc' as const,
+          secondaryField: { field: 'mapped_status', direction: 'desc' as const },
+        },
     facets: buildDatasetFacetGroups(isHubmapUser),
     ...buildDefaultQuery('Dataset'),
     // TODO: figure out how to make assertion unnecessary.
