@@ -55,6 +55,15 @@ function DatePickerComponent({
         textField: {
           helperText: errorMessage,
         },
+        popper: {
+          sx: (theme) => ({
+            '.MuiDateCalendar-root': {
+              height: 'auto',
+              padding: theme.spacing(1.25),
+              paddingBottom: theme.spacing(2.5),
+            },
+          }),
+        },
       }}
       {...rest}
     />
