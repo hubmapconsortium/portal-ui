@@ -1,3 +1,3 @@
-import OutlinedButton from './OutlinedButton';
+import OutlinedButton from './style';
 
 export default OutlinedButton;
