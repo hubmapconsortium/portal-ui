@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { SearchBox, SelectedFilters, SortingSelector, ViewSwitcherToggle, SimpleQueryString } from 'searchkit';
 import Stack from '@mui/material/Stack';
 
-import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/BulkDownloadButtonFromSearch';
+import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
 import { withAnalyticsCategory } from 'js/components/searchPage/hooks';
 import WorkspacesDropdownMenu from 'js/components/workspaces/WorkspacesDropdownMenu';
 import SearchViewSwitch, { DevSearchViewSwitch } from './SearchViewSwitch';

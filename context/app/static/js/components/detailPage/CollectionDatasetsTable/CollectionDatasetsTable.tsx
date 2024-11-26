@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import type { Entity } from 'js/components/types';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
-import BulkDownloadButton from 'js/components/bulkDownload/BulkDownloadButton';
+import BulkDownloadButton from 'js/components/bulkDownload/buttons/BulkDownloadButton';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 
