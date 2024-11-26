@@ -9,7 +9,6 @@ import { useAppContext } from 'js/components/Contexts';
 const sharedConfig = {
   searchFields: ['all_text', 'description'],
   // TODO: figure out how to make assertion unnecessary.
-  sortField: { field: 'last_modified_timestamp', direction: 'desc' as const },
   size: 18,
 };
 
@@ -17,6 +16,8 @@ const sharedTileFields = [
   'hubmap_id',
   'uuid',
   'last_modified_timestamp',
+  'created_timestamp',
+  'published_timestamp',
   'entity_type',
   'descendant_counts.entity_type',
 ];
@@ -65,6 +66,7 @@ const donorFacetGroups = {
 
 const donorConfig = {
   ...sharedConfig,
+  sortField: { field: 'last_modified_timestamp', direction: 'desc' as const },
   sourceFields: {
     table: [
       'hubmap_id',
@@ -107,6 +109,7 @@ const sampleFacetGroups = {
 
 const sampleConfig = {
   ...sharedConfig,
+  sortField: { field: 'created_timestamp', direction: 'desc' as const },
   sourceFields: {
     table: ['hubmap_id', 'group_name', 'sample_category', 'origin_samples_unique_mapped_organs', 'created_timestamp'],
     tile: [...sharedTileFields, 'origin_samples_unique_mapped_organs'],
@@ -183,11 +186,13 @@ function buildDatasetConfig(isHubmapUser: boolean) {
       ],
       tile: [...sharedTileFields, 'thumbnail_file.file_uuid', 'origin_samples_unique_mapped_organs'],
     },
-    sortField: {
-      field: 'published_timestamp',
-      direction: 'desc' as const,
-      secondaryField: { field: 'mapped_status', direction: 'desc' as const },
-    },
+    sortField: isHubmapUser
+      ? { field: 'last_modified_timestamp', direction: 'desc' as const }
+      : {
+          field: 'published_timestamp',
+          direction: 'desc' as const,
+          secondaryField: { field: 'mapped_status', direction: 'desc' as const },
+        },
     facets: buildDatasetFacetGroups(isHubmapUser),
     ...buildDefaultQuery('Dataset'),
     // TODO: figure out how to make assertion unnecessary.

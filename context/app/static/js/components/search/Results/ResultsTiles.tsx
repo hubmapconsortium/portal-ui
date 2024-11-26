@@ -1,5 +1,4 @@
 import React, { useCallback } from 'react';
-import { useShallow } from 'zustand/react/shallow';
 import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
@@ -20,14 +19,10 @@ import { useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 
 function TilesSortSelect() {
-  const { sortField, setSortField, sourceFields, analyticsCategory } = useSearchStore(
-    useShallow((state) => ({
-      sortField: state.sortField,
-      setSortField: state.setSortField,
-      sourceFields: state.sourceFields,
-      analyticsCategory: state.analyticsCategory,
-    })),
-  );
+  const sortField = useSearchStore((state) => state.sortField);
+  const setSortField = useSearchStore((state) => state.setSortField);
+  const sourceFields = useSearchStore((state) => state.sourceFields);
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
   const { table: tableFields } = sourceFields;
 

@@ -179,8 +179,8 @@ function Bar({ type }: TypeProps) {
       </Box>
       <MetadataMenu type={type} />
       <WorkspacesDropdownMenu type={type} />
-      <BulkDownloadButtonFromSearch type={type} />
       {view === 'tile' && <TilesSortSelect />}
+      <BulkDownloadButtonFromSearch type={type} />
       <DefaultSearchViewSwitch />
     </Stack>
   );

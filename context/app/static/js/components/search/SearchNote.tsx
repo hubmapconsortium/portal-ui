@@ -4,7 +4,7 @@ import Typography from '@mui/material/Typography';
 import { InternalLink } from 'js/shared-styles/Links';
 import useEntityData from 'js/hooks/useEntityData';
 import Skeleton from '@mui/material/Skeleton';
-import { Filter, isTermFilter, useSearchStore } from './store';
+import { Filter, filterHasValues, isTermFilter, useSearchStore } from './store';
 
 interface MessageProps {
   label: string;
@@ -54,11 +54,14 @@ const paramNotes = [
 
 function SearchNote() {
   const filters = useSearchStore((state) => state.filters);
-  const notesToDisplay = paramNotes.filter(({ filter }) => filters?.[filter]);
+  const notesToDisplay = paramNotes.filter(
+    ({ filter }) => filters?.[filter] && filterHasValues({ filter: filters?.[filter] }),
+  );
 
   if (notesToDisplay.length === 0) {
     return null;
   }
+
   return (
     <Typography component="h2">
       {notesToDisplay.map(({ filter, label, Component }) => (
