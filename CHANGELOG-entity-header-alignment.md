@@ -1,1 +1,0 @@
-- Ensure that helper menu/table of contents only appear when the browser is wide enough to show both fully.

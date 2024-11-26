@@ -1,1 +1,0 @@
-- Add bulk file download option to the Bulk Download section of dataset detail pages.

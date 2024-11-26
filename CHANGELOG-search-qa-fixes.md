@@ -1,4 +1,0 @@
-- Fix bug where tile dropdown on search pages was not displaying the selected field.
-- Fix bug with date facet validation.
-- Improve date picker styles.
-- Fix order of search menus.
