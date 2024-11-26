@@ -62,6 +62,9 @@ function DatePickerComponent({
               padding: theme.spacing(1.25),
               paddingBottom: theme.spacing(2.5),
             },
+            '.MuiPickersMonth-monthButton.Mui-disabled, .MuiPickersYear-yearButton.Mui-disabled': {
+              color: theme.palette.text.disabled,
+            },
           }),
         },
       }}
