@@ -98,13 +98,13 @@ export function buildQuery({
       const facetConfig = facets[field];
 
       if (isTermFilter(filter)) {
-        if (filterHasValues({ filter, facet: facetConfig })) {
+        if (filterHasValues({ filter })) {
           draft[portalField] = esb.termsQuery(portalField, [...filter.values]);
         }
       }
 
       if (isRangeFilter(filter) || isDateFilter(filter)) {
-        if (filterHasValues({ filter, facet: facetConfig })) {
+        if (filterHasValues({ filter })) {
           if (filter.values.min && filter.values.max) {
             // TODO: consider using zod in filterHasValues for validation.
             draft[portalField] = esb.rangeQuery(portalField).gte(filter.values.min).lte(filter.values.max);
@@ -113,7 +113,7 @@ export function buildQuery({
       }
 
       if (isHierarchicalFilter(filter) && isHierarchicalFacet(facetConfig)) {
-        if (filterHasValues({ filter, facet: facetConfig })) {
+        if (filterHasValues({ filter })) {
           const childPortalField = getESField({ field: facetConfig.childField, mappings });
 
           draft[portalField] = esb.termsQuery(portalField, Object.keys(filter.values));
@@ -126,7 +126,7 @@ export function buildQuery({
       }
 
       if (isExistsFilter(filter) && isExistsFacet(facetConfig)) {
-        if (!(filterHasValues({ filter, facet: facetConfig }) && facetConfig?.invert)) {
+        if (!(filterHasValues({ filter }) && facetConfig?.invert)) {
           draft[portalField] = esb.existsQuery(field);
         }
       }
