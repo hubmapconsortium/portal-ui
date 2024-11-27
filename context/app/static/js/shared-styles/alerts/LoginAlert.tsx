@@ -34,6 +34,7 @@ export default function LoginAlert({ featureName, trackingInfo }: LoginAlertProp
       You must be logged in to access {featureName}.
       {featureName === 'workspaces' ? (
         <>
+          {' '}
           You can request access to workspaces by contacting the <ContactUsLink>HuBMAP Help Desk.</ContactUsLink>
         </>
       ) : (
