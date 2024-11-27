@@ -151,7 +151,7 @@ function FilterChips() {
             });
           }
 
-          const hasValues = filterHasValues({ filter: v, facet: facetConfig });
+          const hasValues = filterHasValues({ filter: v });
 
           if (isExistsFilter(v) && isExistsFacet(facetConfig) && hasValues) {
             return (

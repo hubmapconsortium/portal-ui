@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.15.1 - 2024-11-26
+
+- Add bulk file download option to the Bulk Download section of dataset detail pages.
+- Ensure that helper menu/table of contents only appear when the browser is wide enough to show both fully.
+- Fix missing publication dates for datasets on Publication pages.
+- Fix scroll tracking on detail page table of contents so that processed dataset subsections are properly selected.
+- Fix bug where tile dropdown on search pages was not displaying the selected field.
+- Fix bug with date facet validation.
+- Improve date picker styles.
+- Fix order of search menus.
+
+
+
 ## v1.15.0 - 2024-11-20
 
 - Fix spacing between organ icon and name on detail pages.

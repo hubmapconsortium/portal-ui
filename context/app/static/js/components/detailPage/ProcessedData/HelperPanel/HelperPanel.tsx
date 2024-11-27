@@ -7,7 +7,7 @@ import Fade from '@mui/material/Fade';
 import SchemaRounded from '@mui/icons-material/SchemaRounded';
 import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 
-import { useIsDesktop } from 'js/hooks/media-queries';
+import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { useAnimatedSidebarPosition } from 'js/shared-styles/sections/TableOfContents/hooks';
 import { LineClampWithTooltip } from 'js/shared-styles/text';
@@ -134,8 +134,9 @@ const AnimatedStack = animated(Stack);
 
 export default function HelperPanel() {
   const currentDataset = useCurrentDataset();
-  const isDesktop = useIsDesktop();
+  const isDesktop = useIsLargeDesktop();
   const style = useAnimatedSidebarPosition();
+
   return (
     <HelperPanelPortal>
       <Fade

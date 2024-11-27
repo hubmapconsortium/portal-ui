@@ -18,16 +18,16 @@ function DatePickerComponent({
   minDate,
   maxDate,
   ...rest
-}: DatePickerProps<Date> & Required<Pick<DatePickerProps<Date>, 'minDate' | 'maxDate'>>) {
+}: DatePickerProps<Date> & Partial<Pick<DatePickerProps<Date>, 'minDate' | 'maxDate'>>) {
   const [error, setError] = useState<DateValidationError | null>(null);
 
   const errorMessage = useMemo(() => {
     switch (error) {
       case 'maxDate':
-        return `Please select a date of ${format(maxDate, 'MMMM yyyy')} or before.`;
+        return maxDate ? `Please select a date of ${format(maxDate, 'MMMM yyyy')} or before.` : null;
 
       case 'minDate': {
-        return `Please select a date of ${format(minDate, 'MMMM yyyy')} or after.`;
+        return minDate ? `Please select a date of ${format(minDate, 'MMMM yyyy')} or after.` : null;
       }
 
       case 'invalidDate': {
@@ -55,19 +55,25 @@ function DatePickerComponent({
         textField: {
           helperText: errorMessage,
         },
+        popper: {
+          sx: (theme) => ({
+            '.MuiDateCalendar-root': {
+              height: 'auto',
+              padding: theme.spacing(1.25),
+              paddingBottom: theme.spacing(2.5),
+            },
+            '.MuiPickersMonth-monthButton.Mui-disabled, .MuiPickersYear-yearButton.Mui-disabled': {
+              color: theme.palette.text.disabled,
+            },
+          }),
+        },
       }}
       {...rest}
     />
   );
 }
 
-function DateRangeFacet({
-  field,
-  min,
-  max,
-  aggMin,
-  aggMax,
-}: DateRangeFacetProps & { min: number; max: number; aggMin: number; aggMax: number }) {
+function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number; max: number }) {
   const filterDate = useSearchStore((state) => state.filterDate);
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
 
@@ -90,12 +96,12 @@ function DateRangeFacet({
 
         const newMin = value.getTime();
         setValues([newMin, values[1]]);
-        if (newMin >= aggMin && newMin <= values[1]) {
+        if (newMin <= values[1]) {
           filterDate({ field, min: newMin, max });
         }
       }
     },
-    [filterDate, max, field, setValues, values, aggMin, analyticsCategory],
+    [filterDate, max, field, setValues, values, analyticsCategory],
   );
 
   const filterMax = useCallback(
@@ -109,12 +115,12 @@ function DateRangeFacet({
 
         const newMax = value.getTime();
         setValues([values[0], newMax]);
-        if (newMax >= values[0] && newMax <= aggMax) {
+        if (newMax >= values[0]) {
           filterDate({ field, min, max: newMax });
         }
       }
     },
-    [filterDate, min, field, setValues, values, aggMax, analyticsCategory],
+    [filterDate, min, field, setValues, values, analyticsCategory],
   );
 
   return (
@@ -124,7 +130,6 @@ function DateRangeFacet({
           label="Start"
           value={new Date(values[0])}
           onAccept={filterMin}
-          minDate={new Date(aggMin)}
           maxDate={new Date(values[1])}
         />
         <DatePickerComponent
@@ -133,7 +138,7 @@ function DateRangeFacet({
           views={['month', 'year']}
           onAccept={filterMax}
           minDate={new Date(values[0])}
-          maxDate={new Date(aggMax)}
+          maxDate={new Date()}
         />
       </Stack>
     </FacetAccordion>
@@ -165,16 +170,7 @@ function DateRangeFacetGuard({ field, ...rest }: DateRangeFacetProps) {
     return null;
   }
 
-  return (
-    <DateRangeFacet
-      field={field}
-      min={min ?? aggMin.value}
-      max={max ?? aggMax.value}
-      aggMin={aggMin.value}
-      aggMax={aggMax.value}
-      {...rest}
-    />
-  );
+  return <DateRangeFacet field={field} min={min ?? aggMin.value} max={max ?? aggMax.value} {...rest} />;
 }
 
 export default DateRangeFacetGuard;
