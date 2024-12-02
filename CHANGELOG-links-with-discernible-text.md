@@ -1,1 +1,1 @@
-- Added discernible text to the links on stacked barcharts.
+- Added discernible text to the links on stacked barcharts and tiles.
