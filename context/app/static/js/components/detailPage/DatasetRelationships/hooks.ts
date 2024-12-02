@@ -1,7 +1,6 @@
 import { useCallback, useMemo } from 'react';
-import useSWR from 'swr';
-import { useAppContext } from 'js/components/Contexts';
-import { fetchSoftAssay } from 'js/hooks/useSoftAssay';
+import { useSearchHits } from 'js/hooks/useSearchData';
+import { getIDsQuery } from 'js/helpers/queries';
 import { NodeWithoutPosition } from './types';
 import useProvData from '../provenance/hooks';
 import { convertProvDataToNodesAndEdges } from './utils';
@@ -31,38 +30,16 @@ export function useDatasetRelationships(uuid: string, processing = 'raw') {
   return { isLoading, nodes, edges, shouldDisplay };
 }
 
-interface PipelineInfoRequest {
-  url: string;
-  datasets: string[];
-  groupsToken: string;
-}
-
-async function fetchPipelineInfo({ url, datasets, groupsToken }: PipelineInfoRequest) {
-  // Only fetch pipeline info if there is one dataset descendant
-  if (datasets.length !== 1) {
-    return Promise.resolve('');
-  }
-  const result = await fetchSoftAssay({ url, dataset: datasets[0], groupsToken });
-
-  // Handle epics separately since their pipeline-shorthand is blank
-  if (result.process_state === 'epic') {
-    return result.description;
-  }
-
-  // Also handle image pyramids separately since their pipeline-shorthand is blank
-  if (result['vitessce-hints'].includes('pyramid') && result['vitessce-hints'].includes('is_image')) {
-    return 'Image Pyramid Generation';
-  }
-
-  return result['pipeline-shorthand'];
-}
-
-export function usePipelineInfo(datasets: string[]) {
-  const { groupsToken, softAssayEndpoint } = useAppContext();
-  const url = `${softAssayEndpoint}/assaytype`;
-  const { data: pipelineInfo, ...rest } = useSWR<string>({ url, datasets, groupsToken }, () =>
-    fetchPipelineInfo({ url, datasets, groupsToken }),
+export function usePipelineInfo(datasetUUIDs: string[]) {
+  const { searchHits, ...rest } = useSearchHits<{ pipeline: string }>(
+    {
+      query: getIDsQuery([...datasetUUIDs]),
+      _source: ['pipeline'],
+    },
+    { shouldFetch: datasetUUIDs.length === 1 },
   );
+
+  const pipelineInfo = searchHits?.[0]?._source?.pipeline;
   return { pipelineInfo, ...rest };
 }
 
