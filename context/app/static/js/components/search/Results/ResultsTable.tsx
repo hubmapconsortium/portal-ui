@@ -90,6 +90,7 @@ function SortHeaderCell({ field, label }: { field: string; label: string }) {
     <StyledHeaderCell>
       {label}
       <IconButton
+        aria-label="Sort Column"
         onClick={handleClick}
         sx={(theme) => ({
           color: theme.palette.text.primary,

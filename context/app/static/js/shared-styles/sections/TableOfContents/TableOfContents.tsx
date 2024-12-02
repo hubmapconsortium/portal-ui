@@ -75,7 +75,12 @@ function ItemLinks({
       >
         <ItemLink item={item} {...rest} />
         {subItems && (
-          <IconButton size="small" onClick={() => setOpen((value) => !value)} color="primary">
+          <IconButton
+            size="small"
+            onClick={() => setOpen((value) => !value)}
+            color="primary"
+            aria-label={open ? `Collapse section for ${item.text}` : `Expand section for ${item.text}`}
+          >
             {open ? <ExpandLess fontSize="small" /> : <ExpandMore fontSize="small" />}
           </IconButton>
         )}
