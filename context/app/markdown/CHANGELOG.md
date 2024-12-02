@@ -5,6 +5,7 @@
 - Disable date facet text input and update button color.
 - Get dataset pipeline info from search-api not the soft assay endpoint.
 - Update Workspaces feature access instructions.
+- Add discernible text to buttons to support accessibility.
 
 
 
