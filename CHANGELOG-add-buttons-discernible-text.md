@@ -1,1 +1,0 @@
-- Add discernible text to buttons to support accessibility.
