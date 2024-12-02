@@ -1,1 +1,0 @@
-- Fix scroll tracking on detail page table of contents so that processed dataset subsections are properly selected.

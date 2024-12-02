@@ -250,7 +250,7 @@ export function isExistsFilter<V = Set<string>>(filter: Filter<V>): filter is Ex
   return filter.type === 'EXISTS';
 }
 
-export function filterHasValues({ filter, facet }: { filter: Filter; facet: Facet }) {
+export function filterHasValues({ filter }: { filter: Filter }) {
   if (isTermFilter(filter)) {
     return filter.values.size;
   }
@@ -259,15 +259,15 @@ export function filterHasValues({ filter, facet }: { filter: Filter; facet: Face
     return Object.keys(filter.values).length;
   }
 
-  if (isRangeFilter(filter) && isRangeFacet(facet)) {
+  if (isRangeFilter(filter)) {
     return !(filter.values.min === undefined && filter.values.max === undefined);
   }
 
-  if (isDateFilter(filter) && isDateFacet(facet)) {
+  if (isDateFilter(filter)) {
     return filter.values.min && filter.values.max;
   }
 
-  if (isExistsFilter(filter) && isExistsFacet(facet)) {
+  if (isExistsFilter(filter)) {
     return filter.values;
   }
   return false;
@@ -285,10 +285,10 @@ export function buildSearchLink({
 }
 
 function replaceURLSearchParams(state: SearchStoreState) {
-  const { search, sortField, filters, facets } = state;
+  const { search, sortField, filters } = state;
 
   const filtersWithValues = Object.fromEntries(
-    Object.entries(filters).filter(([k, v]) => filterHasValues({ filter: v, facet: facets[k] })),
+    Object.entries(filters).filter(([, v]) => filterHasValues({ filter: v })),
   );
 
   const urlState = {

@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 import { ContainerProps } from '@mui/material/Container';
 
-import { useIsDesktop } from 'js/hooks/media-queries';
+import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import RouteLoader from '../RouteLoader';
 import { StyledContainer } from './style';
 
@@ -25,7 +25,7 @@ function Route({ children, disableWidthConstraint = false }: PropsWithChildren<{
     ? { maxWidth: false, disableGutters: true }
     : { maxWidth: 'lg' };
 
-  const isDesktop = useIsDesktop();
+  const isDesktop = useIsLargeDesktop();
   const shouldShowBoundaries = !disableWidthConstraint && isDesktop;
 
   return (
