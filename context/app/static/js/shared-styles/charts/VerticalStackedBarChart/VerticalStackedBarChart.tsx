@@ -7,7 +7,7 @@ import type { WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers
 import type { AnyD3Scale, ScaleInput } from '@visx/scale';
 import type { Accessor, SeriesPoint } from '@visx/shape/lib/types';
 
-import { type OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
+import { type OrdinalScale, useChartTooltip, useVerticalChart, useAriaLabelText } from 'js/shared-styles/charts/hooks';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGridRowsGroup';
 
@@ -92,6 +92,8 @@ function VerticalStackedBarChart<
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
 
+  const ariaLabelText = useAriaLabelText(tooltipData);
+
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
@@ -123,6 +125,7 @@ function VerticalStackedBarChart<
                           key={`${bar.key}-${bar.index}`}
                           direction="vertical"
                           bar={bar}
+                          ariaLabelText={ariaLabelText}
                           hoverProps={{
                             onMouseEnter: handleMouseEnter(bar),
                             onMouseLeave: handleMouseLeave,

@@ -15,6 +15,7 @@ import {
 import { useTheme } from '@mui/material/styles';
 
 import { getChartDimensions, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
+import { TooltipData, tooltipHasBarData } from './types';
 
 function useChartTooltip<T>() {
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip<T>();
@@ -154,6 +155,21 @@ function useOrdinalScale(domain: string[], config: Omit<OrdinalScaleConfig<strin
   return useMemo(() => scaleOrdinal<string, string>({ ...config, domain }), [domain, config]);
 }
 
+const useAriaLabelText = (tooltipData: TooltipData<unknown> | undefined) => {
+  return useMemo(() => {
+    if (!tooltipData || !tooltipHasBarData(tooltipData)) {
+      return `Bar represents`;
+    }
+    const extractedValues = Object.entries(tooltipData.bar.data)
+      .filter(([, value]) => typeof value === 'string')
+      .map(([key, value]) => [key, value as string]);
+    const extractedValuesString = extractedValues.join('  ');
+    const count = tooltipData.bar.data[tooltipData.key] ?? '';
+
+    return `Bar represents ${extractedValuesString} with count ${String(count)}`;
+  }, [tooltipData]);
+};
+
 export type OrdinalScale = ReturnType<typeof useOrdinalScale>;
 
 export {
@@ -165,4 +181,5 @@ export {
   useLogScale,
   useBandScale,
   useOrdinalScale,
+  useAriaLabelText,
 };

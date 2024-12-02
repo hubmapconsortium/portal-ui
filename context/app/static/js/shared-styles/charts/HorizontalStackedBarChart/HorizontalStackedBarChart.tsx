@@ -8,7 +8,7 @@ import { GridColumns } from '@visx/grid';
 import { AnyD3Scale, ScaleInput } from '@visx/scale';
 import { Accessor, BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
 
-import { OrdinalScale, useChartTooltip, useHorizontalChart } from 'js/shared-styles/charts/hooks';
+import { OrdinalScale, useChartTooltip, useHorizontalChart, useAriaLabelText } from 'js/shared-styles/charts/hooks';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import { TextProps } from '@visx/text';
@@ -103,6 +103,8 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
 
+  const ariaLabelText = useAriaLabelText(tooltipData);
+
   if (visxData.length === 0) {
     return null;
   }
@@ -142,6 +144,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                         direction="horizontal"
                         bar={bar}
                         href={getBarHref?.(bar)}
+                        ariaLabelText={ariaLabelText}
                         hoverProps={
                           showTooltipAndHover
                             ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }

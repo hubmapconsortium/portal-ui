@@ -92,6 +92,7 @@ function ProvEntityColumnContent({
                 uuid={item.uuid}
                 id={item.hubmap_id}
                 entity_type={item.entity_type}
+                ariaLabelText={`Tile representing ${item.entity_type} ${item.uuid}`}
                 isCurrentEntity={currentEntityUUID === item.uuid}
                 isSampleSibling={isSampleSibling}
                 isFirstTile={j === 0}

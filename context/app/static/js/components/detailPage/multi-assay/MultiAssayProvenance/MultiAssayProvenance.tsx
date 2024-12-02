@@ -40,6 +40,7 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
               key={uuid}
               uuid={uuid}
               entity_type={entity_type}
+              ariaLabelText={`Tile representing ${entity_type.toLowerCase()} ${uuid}`}
               id={hubmap_id}
               invertColors={uuid === currentEntityUUID}
               entityData={{

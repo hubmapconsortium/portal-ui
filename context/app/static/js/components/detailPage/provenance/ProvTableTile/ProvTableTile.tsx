@@ -15,6 +15,7 @@ interface ProvTableTileProps extends Omit<ComponentProps<typeof EntityTile>, 'de
 function ProvTableTile({
   uuid,
   entity_type,
+  ariaLabelText,
   entityData,
   isCurrentEntity,
   isSampleSibling,
@@ -33,6 +34,7 @@ function ProvTableTile({
           uuid={uuid}
           entity_type={entity_type}
           invertColors={isCurrentEntity}
+          ariaLabelText={ariaLabelText}
           entityData={entityData}
           descendantCounts={descendantCountsToDisplay}
           {...rest}

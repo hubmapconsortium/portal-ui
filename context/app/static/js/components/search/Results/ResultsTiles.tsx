@@ -102,6 +102,7 @@ function Tile({ hit }: { hit: SearchHit<Partial<Entity>> }) {
       uuid={hit?._source?.uuid}
       id={hit?._source?.hubmap_id}
       entityData={hit?._source}
+      ariaLabelText={`Tile representing ${hit?._source?.entity_type} ${hit?._source?.uuid}`}
       descendantCounts={getTileDescendantCounts(hit?._source, capitalizeString(hit?._source?.entity_type))}
     />
   );
