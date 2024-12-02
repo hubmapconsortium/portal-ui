@@ -1,0 +1,1 @@
+- Disable date facet text input and update button color.
