@@ -14,7 +14,7 @@ interface StackedBarProps extends SVGProps<SVGRectElement> {
   };
   hoverProps?: Record<string, unknown>;
   href?: string;
-  ariaLabelText: string;
+  ariaLabelText?: string;
 }
 
 interface MappableProps {

@@ -8,7 +8,7 @@ import { GridColumns } from '@visx/grid';
 import { AnyD3Scale, ScaleInput } from '@visx/scale';
 import { Accessor, BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
 
-import { OrdinalScale, useChartTooltip, useHorizontalChart, useAriaLabelText } from 'js/shared-styles/charts/hooks';
+import { OrdinalScale, useChartTooltip, useHorizontalChart } from 'js/shared-styles/charts/hooks';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import { TextProps } from '@visx/text';
@@ -56,6 +56,7 @@ interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, Y
       key: string;
     },
   ) => string;
+  getAriaLabel?: (d: TooltipData<Datum>) => string;
 }
 
 function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>({
@@ -79,6 +80,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   // getTickValues,
   showTooltipAndHover = true,
   getBarHref,
+  getAriaLabel,
   srOnlyLabels,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
@@ -102,8 +104,6 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
-
-  const ariaLabelText = useAriaLabelText(tooltipData);
 
   if (visxData.length === 0) {
     return null;
@@ -144,7 +144,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                         direction="horizontal"
                         bar={bar}
                         href={getBarHref?.(bar)}
-                        ariaLabelText={ariaLabelText}
+                        ariaLabelText={getAriaLabel?.(bar)}
                         hoverProps={
                           showTooltipAndHover
                             ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }

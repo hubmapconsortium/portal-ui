@@ -7,7 +7,7 @@ import type { WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers
 import type { AnyD3Scale, ScaleInput } from '@visx/scale';
 import type { Accessor, SeriesPoint } from '@visx/shape/lib/types';
 
-import { type OrdinalScale, useChartTooltip, useVerticalChart, useAriaLabelText } from 'js/shared-styles/charts/hooks';
+import { type OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGridRowsGroup';
 
@@ -42,6 +42,7 @@ interface VerticalStackedBarChartProps<
   y1?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
   y0?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
   getTickValues?: (yScale: YAxisScale) => number[];
+  getAriaLabel?: (d: TooltipData<Datum>) => string;
 }
 
 function VerticalStackedBarChart<
@@ -69,6 +70,7 @@ function VerticalStackedBarChart<
   y0,
   y1,
   getTickValues,
+  getAriaLabel,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
@@ -91,8 +93,6 @@ function VerticalStackedBarChart<
     handleMouseEnter,
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
-
-  const ariaLabelText = useAriaLabelText(tooltipData);
 
   return (
     <>
@@ -125,7 +125,7 @@ function VerticalStackedBarChart<
                           key={`${bar.key}-${bar.index}`}
                           direction="vertical"
                           bar={bar}
-                          ariaLabelText={ariaLabelText}
+                          ariaLabelText={getAriaLabel?.(bar)}
                           hoverProps={{
                             onMouseEnter: handleMouseEnter(bar),
                             onMouseLeave: handleMouseLeave,

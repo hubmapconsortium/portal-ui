@@ -60,6 +60,7 @@ interface ColorOption {
   dropdownLabel: string;
   keys: string[];
   getBarHref?: ComponentProps<typeof HorizontalStackedBarChart<AggregatedDatum, AnyD3Scale, AnyD3Scale>>['getBarHref'];
+  getAriaLabel?: (d: TooltipData<AggregatedDatum>) => string;
 }
 
 function HuBMAPDatasetsChart() {
@@ -93,6 +94,12 @@ function HuBMAPDatasetsChart() {
           assayTypeMap: datasetTypeMap,
         });
       },
+      getAriaLabel: (d) => {
+        const organ = String(d?.bar?.data?.organ);
+        const assay = d.key;
+        const count = d.key ? d?.bar?.data[d.key] : null;
+        return `${count} ${organ} datasets with assay type ${assay}.`;
+      },
     },
     {
       key: 'donor_sex',
@@ -106,6 +113,12 @@ function HuBMAPDatasetsChart() {
           organTerms,
           donorSex: d.key,
         });
+      },
+      getAriaLabel: (d) => {
+        const organ = String(d?.bar?.data?.organ);
+        const donorSex = d.key;
+        const count = d.key ? d?.bar?.data[d.key] : null;
+        return `${count} ${organ} datasets with donor sex ${donorSex}.`;
       },
     },
     {
@@ -121,6 +134,12 @@ function HuBMAPDatasetsChart() {
           donorRace: d.key,
         });
       },
+      getAriaLabel: (d) => {
+        const organ = String(d?.bar?.data?.organ);
+        const donorRace = d.key;
+        const count = d.key ? d?.bar?.data[d.key] : null;
+        return `${count} ${organ} datasets with donor race ${donorRace}.`;
+      },
     },
     {
       key: 'analyte_class',
@@ -135,6 +154,12 @@ function HuBMAPDatasetsChart() {
           analyteClass: d.key,
         });
       },
+      getAriaLabel: (d) => {
+        const organ = String(d?.bar?.data?.organ);
+        const analyteClass = d.key;
+        const count = d.key ? d?.bar?.data[d.key] : null;
+        return `${count} ${organ} datasets with analyte class ${analyteClass}.`;
+      },
     },
     {
       key: 'processing_status',
@@ -148,6 +173,12 @@ function HuBMAPDatasetsChart() {
           organTerms,
           processingStatus: d.key,
         });
+      },
+      getAriaLabel: (d) => {
+        const organ = String(d?.bar?.data?.organ);
+        const processingStatus = d.key;
+        const count = d.key ? d?.bar?.data[d.key] : null;
+        return `${count} ${organ} datasets with ${processingStatus} status.`;
       },
     },
   ];
@@ -193,6 +224,7 @@ function HuBMAPDatasetsChart() {
             showTooltipAndHover
             TooltipContent={HuBMAPDatasetsChartTooltip}
             getBarHref={selectedColor.getBarHref}
+            getAriaLabel={selectedColor.getAriaLabel}
           />
         </ChartWrapper>
       </ChartArea>
