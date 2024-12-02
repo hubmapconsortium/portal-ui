@@ -54,6 +54,14 @@ function DatePickerComponent({
       slotProps={{
         textField: {
           helperText: errorMessage,
+          sx: (theme) => ({
+            svg: {
+              color: theme.palette.primary.main,
+            },
+          }),
+        },
+        field: {
+          readOnly: true,
         },
         popper: {
           sx: (theme) => ({
