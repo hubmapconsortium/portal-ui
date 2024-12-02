@@ -19,8 +19,8 @@ function SecondaryBackgroundTooltip({ disabled, children, ...rest }: SecondaryBa
           },
         }),
       }}
-      {...rest}
       arrow
+      {...rest}
     >
       {children}
     </Tooltip>
