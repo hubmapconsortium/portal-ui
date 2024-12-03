@@ -54,12 +54,14 @@ function ProvEntityColumnContent({
   const noDisplayedContent = entities.length === 0 && !displayMissingAncestors && !descendantEntityCounts?.[type];
 
   const ariaLabelText = useEntityTileAriaLabelText(
-    entities.map(({ entity_type, hubmap_id, origin_samples_unique_mapped_organs = [], sample_category = '' }) => ({
-      entity_type,
-      hubmap_id,
-      origin_samples_unique_mapped_organs: (origin_samples_unique_mapped_organs as string[]) || [],
-      sample_category: sample_category as string,
-    })),
+    entities
+      .sort((a, b) => a.created_timestamp - b.created_timestamp)
+      .map(({ entity_type, hubmap_id, origin_samples_unique_mapped_organs = [], sample_category = '' }) => ({
+        entity_type,
+        hubmap_id,
+        origin_samples_unique_mapped_organs: (origin_samples_unique_mapped_organs as string[]) || [],
+        sample_category: sample_category as string,
+      })),
   );
 
   if (noDisplayedContent) {
