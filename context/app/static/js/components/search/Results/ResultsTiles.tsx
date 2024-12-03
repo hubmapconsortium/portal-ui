@@ -12,6 +12,7 @@ import EntityTile, { tileWidth } from 'js/components/entity-tile/EntityTile';
 import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/utils';
 import { capitalizeString } from 'js/helpers/functions';
 import TileGrid from 'js/shared-styles/tiles/TileGrid';
+import { useEntityTileAriaLabelText } from 'js/hooks/useEntityTileAriaLabel';
 import { trackEvent } from 'js/helpers/trackers';
 import { useSearch } from '../Search';
 import ViewMoreResults from './ViewMoreResults';
@@ -86,6 +87,17 @@ function TilesSortSelect() {
 }
 
 function Tile({ hit }: { hit: SearchHit<Partial<Entity>> }) {
+  const ariaLabelText = useEntityTileAriaLabelText({
+    entity_type: hit?._source?.entity_type ?? '',
+    hubmap_id: hit?._source?.hubmap_id ?? '',
+    group_name: hit?._source?.group_name ?? '',
+    origin_samples_unique_mapped_organs: Array.isArray(hit?._source?.origin_samples_unique_mapped_organs)
+      ? hit?._source?.origin_samples_unique_mapped_organs
+      : [],
+    sample_category: String(hit?._source?.sample_category),
+    assay_display_name: Array.isArray(hit?._source?.assay_display_name) ? hit?._source?.assay_display_name : [],
+  }) as string;
+
   if (!(hit?._source?.hubmap_id && hit?._source.uuid && hit?._source?.entity_type)) {
     return null;
   }
@@ -97,7 +109,7 @@ function Tile({ hit }: { hit: SearchHit<Partial<Entity>> }) {
       uuid={hit?._source?.uuid}
       id={hit?._source?.hubmap_id}
       entityData={hit?._source}
-      ariaLabelText={`Tile representing ${hit?._source?.entity_type} ${hit?._source?.uuid}`}
+      ariaLabelText={ariaLabelText}
       descendantCounts={getTileDescendantCounts(hit?._source, capitalizeString(hit?._source?.entity_type))}
     />
   );

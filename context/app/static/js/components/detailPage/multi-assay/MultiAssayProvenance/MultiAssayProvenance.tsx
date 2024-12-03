@@ -9,6 +9,7 @@ import Icon from '@mui/material/Icon';
 import EntityTile from 'js/components/entity-tile/EntityTile';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { useEntityTileAriaLabelText } from 'js/hooks/useEntityTileAriaLabel';
 import useRelatedMultiAssayDatasets, { MultiAssayEntity } from '../useRelatedMultiAssayDatasets';
 
 function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; title: string }) {
@@ -16,9 +17,19 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
     entity: { uuid: currentEntityUUID, origin_samples, origin_samples_unique_mapped_organs },
   } = useFlaskDataContext();
 
+  const ariaLabelTexts = useEntityTileAriaLabelText(
+    datasets.map((dataset) => ({
+      entity_type: dataset.entity_type,
+      hubmap_id: dataset.hubmap_id,
+      origin_samples_unique_mapped_organs: dataset.origin_samples_unique_mapped_organs,
+      assay_display_name: dataset.assay_display_name,
+    })),
+  );
+
   if (datasets.length === 0) {
     return null;
   }
+
   return (
     <>
       <Stack direction="row" alignItems="center" spacing={1}>
@@ -26,36 +37,26 @@ function MultiTileStack({ datasets, title }: { datasets: MultiAssayEntity[]; tit
         <Typography variant="h5">{title}</Typography>
       </Stack>
       <Stack direction="row" justifyContent="center" spacing={1} flexWrap="wrap">
-        {datasets?.map(
-          ({
-            uuid,
-            entity_type,
-            hubmap_id,
-            assay_display_name,
-            descendant_counts,
-            published_timestamp,
-            created_timestamp,
-          }) => (
-            <EntityTile
-              key={uuid}
-              uuid={uuid}
-              entity_type={entity_type}
-              ariaLabelText={`Tile representing ${entity_type.toLowerCase()} ${uuid}`}
-              id={hubmap_id}
-              invertColors={uuid === currentEntityUUID}
-              entityData={{
-                mapped_data_types: [assay_display_name[0]],
-                origin_samples,
-                origin_samples_unique_mapped_organs,
-                published_timestamp,
-                created_timestamp,
-                entity_type,
-                descendant_counts,
-              }}
-              descendantCounts={descendant_counts?.entity_type ?? { Dataset: 0 }}
-            />
-          ),
-        )}
+        {datasets.map((dataset, index) => (
+          <EntityTile
+            key={dataset.uuid}
+            uuid={dataset.uuid}
+            entity_type={dataset.entity_type}
+            ariaLabelText={ariaLabelTexts[index]}
+            id={dataset.hubmap_id}
+            invertColors={dataset.uuid === currentEntityUUID}
+            entityData={{
+              mapped_data_types: [dataset.assay_display_name[0]],
+              origin_samples,
+              origin_samples_unique_mapped_organs,
+              published_timestamp: dataset.published_timestamp,
+              created_timestamp: dataset.created_timestamp,
+              entity_type: dataset.entity_type,
+              descendant_counts: dataset.descendant_counts,
+            }}
+            descendantCounts={dataset.descendant_counts?.entity_type ?? { Dataset: 0 }}
+          />
+        ))}
       </Stack>
     </>
   );

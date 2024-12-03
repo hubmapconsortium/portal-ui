@@ -21,7 +21,7 @@ function OrganTile({ organ: { name, uberon_short, icon, descendantCounts }, path
     <Tile
       href={path ? `/organ/${path}` : undefined}
       onClick={onClick}
-      ariaLabelText={`Tile representing Organ ${path}`}
+      ariaLabelText={`Tile representing organ ${path}`}
       icon={
         <Box mr={1}>
           <URLSvgIcon invertColors={selected} iconURL={icon} ariaLabel={`Icon for ${name}`} />
