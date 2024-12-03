@@ -13,6 +13,8 @@ import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/ut
 import { capitalizeString } from 'js/helpers/functions';
 import TileGrid from 'js/shared-styles/tiles/TileGrid';
 import { trackEvent } from 'js/helpers/trackers';
+import InputLabel from '@mui/material/InputLabel';
+import { StyledDownIcon } from 'js/shared-styles/dropdowns/DropdownMenuButton/style';
 import { useSearch } from '../Search';
 import ViewMoreResults from './ViewMoreResults';
 import { useSearchStore } from '../store';
@@ -44,10 +46,16 @@ function TilesSortSelect() {
 
   return (
     <FormControl>
+      <InputLabel id="sort-select-label" sx={{ display: 'none' }}>
+        Sort by
+      </InputLabel>
       <Select
         value={sortField.field}
         onChange={handleChange}
+        labelId="sort-select-label"
         color="primary"
+        variant="outlined"
+        IconComponent={StyledDownIcon}
         sx={(theme) => ({
           backgroundColor: theme.palette.primary.main,
           color: theme.palette.white.main,
