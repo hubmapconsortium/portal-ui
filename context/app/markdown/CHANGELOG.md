@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.15.2 - 2024-12-02
+
+- Disable date facet text input and update button color.
+- Get dataset pipeline info from search-api not the soft assay endpoint.
+- Update Workspaces feature access instructions.
+- Add discernible text to buttons to support accessibility.
+
+
+
 ## v1.15.1 - 2024-11-26
 
 - Add bulk file download option to the Bulk Download section of dataset detail pages.
