@@ -1,11 +1,11 @@
 import React, { useCallback, useState, useEffect, useMemo } from 'react';
 import Stack from '@mui/material/Stack';
+import Popper from '@mui/material/Popper';
 import { DatePicker, DatePickerProps } from '@mui/x-date-pickers/DatePicker';
 import { DateValidationError } from '@mui/x-date-pickers/models';
 import { format } from 'date-fns/format';
 
 import { trackEvent } from 'js/helpers/trackers';
-import Popper from '@mui/material/Popper';
 import { useSearch } from '../Search';
 import { isDateFilter, useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
