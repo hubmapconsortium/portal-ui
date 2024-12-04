@@ -5,6 +5,7 @@ import { DateValidationError } from '@mui/x-date-pickers/models';
 import { format } from 'date-fns/format';
 
 import { trackEvent } from 'js/helpers/trackers';
+import Popper from '@mui/material/Popper';
 import { useSearch } from '../Search';
 import { isDateFilter, useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
@@ -51,7 +52,30 @@ function DatePickerComponent({
       onError={setError}
       minDate={minDate}
       maxDate={maxDate}
+      slots={{
+        popper: Popper,
+      }}
       slotProps={{
+        popper: {
+          modifiers: [
+            {
+              name: 'flip',
+              enabled: false,
+            },
+          ],
+          placement: 'top',
+          sx: (theme) => ({
+            zIndex: theme.zIndex.modal,
+            '.MuiDateCalendar-root': {
+              height: 'auto',
+              padding: theme.spacing(1.25),
+              paddingBottom: theme.spacing(2.5),
+            },
+            '.MuiPickersMonth-monthButton.Mui-disabled, .MuiPickersYear-yearButton.Mui-disabled': {
+              color: theme.palette.text.disabled,
+            },
+          }),
+        },
         textField: {
           helperText: errorMessage,
           sx: (theme) => ({
@@ -62,18 +86,6 @@ function DatePickerComponent({
         },
         field: {
           readOnly: true,
-        },
-        popper: {
-          sx: (theme) => ({
-            '.MuiDateCalendar-root': {
-              height: 'auto',
-              padding: theme.spacing(1.25),
-              paddingBottom: theme.spacing(2.5),
-            },
-            '.MuiPickersMonth-monthButton.Mui-disabled, .MuiPickersYear-yearButton.Mui-disabled': {
-              color: theme.palette.text.disabled,
-            },
-          }),
         },
       }}
       {...rest}
