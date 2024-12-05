@@ -1,1 +1,0 @@
-- Fix date picker bug on search page that prevented the user from selecting a year.

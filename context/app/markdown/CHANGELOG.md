@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.16.0 - 2024-12-05
+
+- Fix date picker bug on search page that prevented the user from selecting a year.
+
+
+
 ## v1.15.2 - 2024-12-02
 
 - Disable date facet text input and update button color.
