@@ -3,7 +3,7 @@ import React, { PropsWithChildren } from 'react';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
 
 import { animated, useTransition } from '@react-spring/web';
 

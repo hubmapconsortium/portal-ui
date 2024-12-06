@@ -2,19 +2,21 @@ import { styled } from '@mui/material/styles';
 import Accordion from '@mui/material/Accordion';
 
 const PrimaryColorAccordion = styled(Accordion)(({ theme }) => ({
-  '& > .MuiAccordionSummary-root': {
+  '& .MuiAccordionSummary-root': {
     backgroundColor: theme.palette.secondaryContainer.main,
-    '& > .MuiAccordionSummary-content': {
+    flexDirection: 'row',
+    '& .MuiAccordionSummary-content': {
       display: 'flex',
       alignItems: 'center',
       gap: theme.spacing(1),
+      margin: theme.spacing(2),
       color: theme.palette.primary.main,
       '&.Mui-expanded': {
         color: theme.palette.common.white,
       },
     },
-    '& > .MuiAccordionSummary-expandIconWrapper': {
-      marginRight: theme.spacing(1),
+    '& .MuiAccordionSummary-expandIconWrapper': {
+      marginRight: theme.spacing(2),
       color: theme.palette.primary.main,
       '&.Mui-expanded': {
         color: theme.palette.common.white,

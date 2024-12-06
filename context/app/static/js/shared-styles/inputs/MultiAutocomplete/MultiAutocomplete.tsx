@@ -31,7 +31,6 @@ function MultiAutocomplete<Value>({
       {...rest}
       renderInput={({ InputLabelProps, ...textFieldProps }) => (
         <TextField
-          InputLabelProps={{ shrink: true, ...InputLabelProps }}
           value={substring}
           variant="outlined"
           name="substring"
@@ -41,6 +40,9 @@ function MultiAutocomplete<Value>({
           }}
           {...textFieldProps}
           {...renderInputProps}
+          slotProps={{
+            inputLabel: { shrink: true, ...InputLabelProps },
+          }}
         />
       )}
     />

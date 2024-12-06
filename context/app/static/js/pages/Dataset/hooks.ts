@@ -82,7 +82,16 @@ export function useVitessceConf(uuid: string, parentUuid?: string) {
   );
   if (parentUuid) {
     if (Array.isArray(swr.data)) {
-      return { ...swr, data: swr.data.map((conf) => ({ ...conf, parentUuid }) as VitessceConf) };
+      return {
+        ...swr,
+        data: swr.data.map(
+          (conf) =>
+            ({
+              ...conf,
+              parentUuid,
+            }) as VitessceConf,
+        ),
+      };
     }
     return { ...swr, data: { ...swr.data, parentUuid } };
   }

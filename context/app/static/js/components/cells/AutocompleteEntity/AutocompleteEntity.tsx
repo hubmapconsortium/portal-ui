@@ -89,7 +89,6 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, setter, default
       }}
       renderInput={({ InputLabelProps, ...params }) => (
         <TextField
-          InputLabelProps={{ shrink: true, ...InputLabelProps }}
           {...labelAndHelperTextProps[targetEntity]}
           placeholder={`Select ${queryTypes[targetEntity].label.toLowerCase()} to query`}
           value={substring}
@@ -97,6 +96,9 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, setter, default
           variant="outlined"
           onChange={handleChange}
           {...params}
+          slotProps={{
+            inputLabel: { shrink: true, ...InputLabelProps },
+          }}
         />
       )}
     />

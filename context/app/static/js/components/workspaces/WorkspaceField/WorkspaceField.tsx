@@ -27,13 +27,15 @@ function WorkspaceField<FormType extends FieldValues>({
   return (
     <Box display="flex" alignItems="center">
       <TextField
-        InputLabelProps={{ shrink: true }}
         label={label || name}
         fullWidth
         error={fieldState.error !== undefined}
         helperText={fieldState?.error?.message}
         {...field}
         {...rest}
+        slotProps={{
+          inputLabel: { shrink: true },
+        }}
       />
     </Box>
   );
