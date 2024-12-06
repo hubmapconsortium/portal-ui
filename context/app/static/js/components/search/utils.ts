@@ -54,7 +54,10 @@ function buildSortField({ sortField, mappings }: { sortField: SortField; mapping
     ? [esb.sort(getESField({ field: secondarySortField.field, mappings }), secondarySortField.direction)]
     : [];
 
-  return [primarySort, ...secondarySort];
+  // Sort values need to be unique for
+  const scoreSort = esb.sort('uuid.keyword', 'desc');
+
+  return [primarySort, ...secondarySort, scoreSort];
 }
 
 export function buildQuery({
