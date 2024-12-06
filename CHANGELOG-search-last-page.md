@@ -1,1 +1,0 @@
-- Fix bug where you could not scroll to deeper search pages.

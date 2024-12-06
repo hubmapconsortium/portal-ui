@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.16.1 - 2024-12-06
+
+- Fix bug where you could not scroll to deeper search pages.
+
+
+
 ## v1.16.0 - 2024-12-05
 
 - Fix date picker bug on search page that prevented the user from selecting a year.
