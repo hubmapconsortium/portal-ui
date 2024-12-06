@@ -55,9 +55,9 @@ function buildSortField({ sortField, mappings }: { sortField: SortField; mapping
     : [];
 
   // Sort values need to be unique for search_after.
-  const scoreSort = esb.sort('uuid.keyword', 'desc');
+  const uniqueSort = esb.sort('uuid.keyword', 'desc');
 
-  return [primarySort, ...secondarySort, scoreSort];
+  return [primarySort, ...secondarySort, uniqueSort];
 }
 
 export function buildQuery({
