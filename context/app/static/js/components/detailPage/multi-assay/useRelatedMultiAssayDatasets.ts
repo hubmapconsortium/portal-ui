@@ -95,6 +95,7 @@ export type MultiAssayEntity = Pick<
   | 'descendant_counts'
   | 'published_timestamp'
   | 'created_timestamp'
+  | 'origin_samples_unique_mapped_organs'
 >;
 
 function getMultiAssayType({ processing, is_component }: Pick<MultiAssayEntity, 'processing' | 'is_component'>) {
