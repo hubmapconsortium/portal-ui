@@ -167,24 +167,18 @@ function TemplateComponent(args: ComponentProps<typeof DatasetRelationshipsVisua
   );
 }
 
-const salmonScanpySoftAssayResponse = () =>
+const salmonScanpyResponse = () =>
   HttpResponse.json({
-    assaytype: 'salmon-scanpy',
-    'contains-pii': false,
-    description: 'Salmon + Scanpy',
-    'pipeline-shorthand': 'Salmon + Scanpy',
-    primary: false,
-    'vitessce-hints': [],
+    _source: {
+      pipeline: 'Salmon + Scanpy',
+    },
   });
 
 const codexSPRMresponse = () =>
   HttpResponse.json({
-    assaytype: 'codex_cytokit',
-    'contains-pii': false,
-    description: 'CODEX [Cytokit + SPRM]',
-    'pipeline-shorthand': 'Cytokit + SPRM',
-    primary: false,
-    'vitessce-hints': ['sprm', 'anndata', 'is_image', 'is_tiled'],
+    _source: {
+      pipeline: 'Cytokit + SPRM',
+    },
   });
 
 const meta: Meta = {
@@ -196,7 +190,7 @@ const meta: Meta = {
   },
   parameters: {
     msw: {
-      handlers: [http.get('/soft-assay-endpoint/assaytype/HBM123.ABCD.456', codexSPRMresponse)],
+      handlers: [http.post('/search', codexSPRMresponse)],
     },
   },
 };
@@ -208,7 +202,7 @@ export const SingleAssay: StoryObj<typeof TemplateComponent> = {
   },
   parameters: {
     msw: {
-      handlers: [http.get('/soft-assay-endpoint/assaytype/HBM123.ABCD.456', codexSPRMresponse)],
+      handlers: [http.post('/search', codexSPRMresponse)],
     },
   },
 };
@@ -220,7 +214,7 @@ export const MultiAssay: StoryObj<typeof TemplateComponent> = {
   },
   parameters: {
     msw: {
-      handlers: [http.get('/soft-assay-endpoint/assaytype/HBM123.ABCD.999', salmonScanpySoftAssayResponse)],
+      handlers: [http.post('/search', salmonScanpyResponse)],
     },
   },
 };
@@ -233,8 +227,8 @@ export const RealProv: StoryObj<typeof TemplateComponent> = {
   parameters: {
     msw: {
       handlers: [
-        http.get<{ id: string }>(`/soft-assay-endpoint/assaytype/d8f851efb54f84d7ee0952e10d4c449e`, codexSPRMresponse),
-        http.get<{ id: string }>(`/soft-assay-endpoint/assaytype/ff77fcae7f6d9b5b7b8741c282677eef`, codexSPRMresponse),
+        http.post<{ id: string }>(`/search`, codexSPRMresponse),
+        http.post<{ id: string }>(`/search`, codexSPRMresponse),
       ],
     },
   },
