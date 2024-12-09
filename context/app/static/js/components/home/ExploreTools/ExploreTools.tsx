@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import Grid from '@mui/material/Unstable_Grid2';
+import Grid from '@mui/material/Grid2';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import theme from 'js/theme/theme';
 import { VisualizationIcon } from 'js/shared-styles/icons';

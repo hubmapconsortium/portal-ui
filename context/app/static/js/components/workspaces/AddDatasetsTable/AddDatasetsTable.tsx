@@ -32,14 +32,16 @@ function HubmapIDTextField(params: AutocompleteRenderInputParams) {
       {...params}
       label="Enter HuBMAP ID"
       helperText="HuBMAP IDs follow the pattern HBM123.ABCD.456. Only one dataset can be added at a time."
-      InputProps={{
-        ...InputProps,
-        startAdornment: (
-          <>
-            <InputAdornment position="start">HBM</InputAdornment>
-            {InputProps.startAdornment}
-          </>
-        ),
+      slotProps={{
+        input: {
+          ...InputProps,
+          startAdornment: (
+            <>
+              <InputAdornment position="start">HBM</InputAdornment>
+              {InputProps.startAdornment}
+            </>
+          ),
+        },
       }}
     />
   );
