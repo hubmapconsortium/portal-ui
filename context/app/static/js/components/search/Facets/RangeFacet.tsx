@@ -84,7 +84,7 @@ function RangeFacet({ filter, field, facet }: { filter: RangeValues; field: stri
 
   const bins = buildBins({ buckets: aggBuckets });
 
-  const actualMin = 0 ?? min;
+  const actualMin = 0;
   const actualMax = Math.max(...bins.map((b) => parseInt(b.key, 10))) ?? max;
 
   return (

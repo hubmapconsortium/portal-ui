@@ -137,7 +137,7 @@ async function fetchJobs(url: string, headers: APIAction['headers']) {
   const response = await fetch(url, { headers });
   const result = (await response.json()) as WorkspaceAPIResponse<{ jobs: WorkspaceJob[] }>;
   if (!result.success) {
-    throw Error(`Failed to get jobs: ${result.message}` ?? 'Unknown error');
+    throw Error(result?.message ? `Failed to get jobs: ${result.message}` : 'Unknown error');
   }
   return result;
 }

@@ -1,0 +1,5 @@
+- Updated Storybook and related dependencies to latest version (8.4.7)
+- Updated SWC and plugins to support Storybook 8.4.7.
+- Updated React Testing Library to v16.
+- Updated `msw` to 2.6.8.
+- Updated TypeScript to 5.7.2.

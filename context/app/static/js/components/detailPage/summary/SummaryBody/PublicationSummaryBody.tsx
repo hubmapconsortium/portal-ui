@@ -9,12 +9,14 @@ import PublicationCitation from 'js/components/publications/PublicationCitation'
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { isPublication } from 'js/components/types';
 import SummaryDescription from './SummaryDescription';
+import { useNormalizedContributors } from '../../ContributorsTable/hooks';
 
 const publishedTooltip = 'Date when article was published in the journal.';
 const preprintTooltip = 'Date when article was posted as a preprint.';
 
 function PublicationSummaryBody({ isEntityHeader = false }: { isEntityHeader?: boolean }) {
   const { entity } = useFlaskDataContext();
+  const normalizedContributors = useNormalizedContributors(entity.contributors);
 
   if (!isPublication(entity)) {
     return null;
@@ -26,7 +28,6 @@ function PublicationSummaryBody({ isEntityHeader = false }: { isEntityHeader?: b
     description,
     publication_venue,
     publication_url,
-    contributors,
     contacts,
     publication_doi,
     publication_date,
@@ -48,7 +49,7 @@ function PublicationSummaryBody({ isEntityHeader = false }: { isEntityHeader?: b
       </LabelledSectionText>
       {!isEntityHeader && (
         <PublicationCitation
-          contributors={contributors}
+          contributors={normalizedContributors}
           publication_date={publication_date}
           publication_venue={publication_venue}
           title={title}

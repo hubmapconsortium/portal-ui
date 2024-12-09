@@ -14,6 +14,6 @@ const PrimarySwitch = styled(Switch)(({ theme }) => ({
   '& .Mui-checked .MuiSwitch-thumb': {
     backgroundColor: theme.palette.primary.main,
   },
-}));
+})) as typeof Switch;
 
 export default PrimarySwitch;

@@ -1,5 +1,5 @@
 import React, { ChangeEvent, useMemo } from 'react';
-import Grid from '@mui/material/Grid';
+import Grid from '@mui/material/Grid2';
 import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard';
 import { InternalLink } from 'js/shared-styles/Links';
 import { sortTemplates } from 'js/components/workspaces/utils';
@@ -42,7 +42,7 @@ function TemplateGrid({
   return (
     <Grid container alignItems="stretch" sx={{ maxHeight: '625px', overflowY: 'auto' }}>
       {Object.entries(sortedTemplates).map(([templateKey, { title, description, tags, job_types }]) => (
-        <Grid item md={4} xs={12} key={templateKey} paddingBottom={2} paddingX={1}>
+        <Grid size={{ md: 4, xs: 12 }} key={templateKey} paddingBottom={2} paddingX={1}>
           <SelectableCard
             title={
               <InternalLink
