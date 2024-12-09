@@ -30,7 +30,7 @@ export function useDatasetRelationships(uuid: string, processing = 'raw') {
   return { isLoading, nodes, edges, shouldDisplay };
 }
 
-export function usePipelineInfo(datasetUUIDs: string[]) {
+export function usePipelineInfo(datasetUUIDs: string[] = []) {
   const { searchHits, ...rest } = useSearchHits<{ pipeline: string }>(
     {
       query: getIDsQuery([...datasetUUIDs]),

@@ -210,7 +210,33 @@ export function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provD
       });
     }
   }
+
   return { nodes, edges };
+}
+
+/**
+ * Generates a descriptive aria-label for the dataset relationships graph
+ * @param nodes the nodes in the graph
+ * @returns string
+ */
+export function makeAriaLabel(nodes: NodeWithoutPosition[]) {
+  return nodes.reduce((acc, node) => {
+    const { data } = node;
+    if (!data) {
+      return acc;
+    }
+    const { status, datasetType, name } = data as { status: string; datasetType: string; name: string };
+    switch (node.type) {
+      case 'primaryDataset':
+        return `${status} Primary ${datasetType} Dataset ${name} has the following descendants:`;
+      case 'componentDataset':
+        return `${acc} ${status} Component ${datasetType} Dataset ${name}.`;
+      case 'processedDataset':
+        return `${acc} ${status} Processed ${datasetType} Dataset ${name}.`;
+      default:
+        return acc;
+    }
+  }, '');
 }
 
 export function makeNodeHref(data?: Parameters<typeof datasetSectionId>[0]) {

@@ -16,7 +16,6 @@ import BulkDataTransfer from 'js/components/detailPage/BulkDataTransfer';
 import { DetailContextProvider } from 'js/components/detailPage/DetailContext';
 import { getCombinedDatasetStatus } from 'js/components/detailPage/utils';
 import ComponentAlert from 'js/components/detailPage/multi-assay/ComponentAlert';
-import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import MetadataSection from 'js/components/detailPage/MetadataSection';
 import { Dataset, Donor, Entity, Sample, isDataset } from 'js/components/types';
 import DatasetRelationships from 'js/components/detailPage/DatasetRelationships';
@@ -134,6 +133,10 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     return null;
   }
 
+  // Since multi-assay datasets have component datasets, their diagrams tend to be more complex
+  // and require more space to display.
+  const datasetRelationshipsContainerHeight = assay_modality === 'multiple' ? 500 : 400;
+
   return (
     <DetailContextProvider hubmap_id={hubmap_id} uuid={uuid} mapped_data_access_level={mapped_data_access_level}>
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
@@ -146,14 +149,11 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
             mapped_data_access_level={mapped_data_access_level}
             mapped_external_group_name={mapped_external_group_name}
             bottomFold={
-              <>
-                <MultiAssayRelationship assay_modality={assay_modality} />
-                {shouldDisplayRelationships && (
-                  <Box height={400} width="100%" component={Paper} p={2}>
-                    <DatasetRelationships uuid={uuid} processing={processing} />
-                  </Box>
-                )}
-              </>
+              shouldDisplayRelationships ? (
+                <Box height={datasetRelationshipsContainerHeight} width="100%" component={Paper} p={2}>
+                  <DatasetRelationships uuid={uuid} processing={processing} />
+                </Box>
+              ) : null
             }
           >
             <SummaryDataChildren mapped_data_types={mapped_data_types} mapped_organ={mapped_organ} />
