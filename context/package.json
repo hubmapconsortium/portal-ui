@@ -126,6 +126,7 @@
     "intersection-observer": "^0.12.2",
     "jest": "^29.7.0",
     "jest-environment-jsdom": "^29.7.0",
+    "jest-fixed-jsdom": "^0.0.9",
     "lint-staged": "^15.2.2",
     "msw": "^2.6.8",
     "msw-storybook-addon": "^2.0.4",
