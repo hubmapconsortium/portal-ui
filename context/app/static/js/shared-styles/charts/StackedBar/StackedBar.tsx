@@ -1,5 +1,4 @@
 import React, { SVGProps } from 'react';
-
 import { StyledRect } from './style';
 
 type Direction = 'vertical' | 'horizontal';
@@ -15,6 +14,7 @@ interface StackedBarProps extends SVGProps<SVGRectElement> {
   };
   hoverProps?: Record<string, unknown>;
   href?: string;
+  ariaLabelText?: string;
 }
 
 interface MappableProps {
@@ -39,7 +39,7 @@ const propMap: Record<Direction, MappableProps> = {
   },
 };
 
-function StackedBar({ direction = 'vertical', bar, hoverProps, href }: StackedBarProps) {
+function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelText }: StackedBarProps) {
   const maxBarThickness = 65;
 
   const { length, thickness, discreteAxis, categoricalAxis } = propMap[direction];
@@ -56,7 +56,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href }: StackedBa
   );
   if (href) {
     return (
-      <a href={href} target="_parent">
+      <a href={href} target="_parent" aria-label={ariaLabelText}>
         {rect}
       </a>
     );
