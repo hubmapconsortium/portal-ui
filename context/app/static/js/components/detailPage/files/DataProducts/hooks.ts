@@ -57,7 +57,7 @@ function usePipelineInfo(): PipelineInfo {
   if (!isDataset(entity)) {
     return defaultPipeline;
   }
-  const dagList = entity.metadata.dag_provenance_list ?? [];
+  const dagList = entity.ingest_metadata.dag_provenance_list ?? [];
   // Iterate over the list of DAGs and extract the latest origin and name
   const pipelineInfo = dagList.reduce<PipelineInfo>(processDagList, defaultPipeline);
   return pipelineInfo;

@@ -47,6 +47,7 @@ export type ProcessedDatasetInfo = Pick<
   | 'files'
   | 'pipeline'
   | 'status'
+  | 'ingest_metadata'
   | 'metadata'
   | 'creation_action'
   | 'created_timestamp'
@@ -164,13 +165,13 @@ function getProcessedDatasetSection({
   dataset: ProcessedDatasetInfo & { label: string };
   hasConf?: boolean;
 }) {
-  const { files, metadata, visualization, creation_action, contributors } = dataset;
+  const { files, ingest_metadata, visualization, creation_action, contributors } = dataset;
 
   const shouldDisplaySection = {
     summary: true,
     visualization: visualization || conf,
     files: Boolean(files?.length),
-    analysis: Boolean(metadata?.dag_provenance_list),
+    analysis: Boolean(ingest_metadata?.dag_provenance_list),
     attribution: creation_action !== 'Central Process' && Boolean(contributors?.length),
   };
 

@@ -10,7 +10,7 @@ import {
 import { get } from './nodash';
 
 const donorMetadataPath = 'mapped_metadata';
-const sampleMetadataPath = 'metadata';
+const sampleAndDatasetMetadataPath = 'metadata';
 
 type ESEntityTypesWithIcons = Extract<ESEntityType, 'Donor' | 'Sample' | 'Dataset'>;
 
@@ -20,11 +20,11 @@ const paths: Record<ESEntityTypesWithIcons, Partial<Record<ESEntityType, string>
   },
   Sample: {
     Donor: `donor.${donorMetadataPath}`,
-    Sample: sampleMetadataPath,
+    Sample: sampleAndDatasetMetadataPath,
   },
   Dataset: {
     Donor: `donor.${donorMetadataPath}`,
-    Dataset: 'metadata.metadata',
+    Dataset: sampleAndDatasetMetadataPath,
   },
 };
 
