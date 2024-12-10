@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { render, RenderOptions } from '@testing-library/react';
+import { render, RenderOptions, act } from '@testing-library/react';
 import { renderHook } from '@testing-library/react-hooks';
 import Providers from 'js/components/Providers';
 import { enableMapSet } from 'immer';
@@ -71,8 +71,17 @@ const customRenderHook = <TProps, TResult>(
     ...options,
   });
 
-// re-export everything
+// re-export everything from testing-library
 export * from '@testing-library/react';
 
+// Workaround for act warning
+const customAct = act as (callback: () => void | Promise<void>) => void;
+
 // override render method
-export { customRender as render, customRenderHook as renderHook, appProviderEndpoints, appProviderToken };
+export {
+  customRender as render,
+  customRenderHook as renderHook,
+  appProviderEndpoints,
+  appProviderToken,
+  customAct as act,
+};

@@ -43,7 +43,7 @@ const config = {
       },
     ],
   },
-  testEnvironment: 'jsdom',
+  testEnvironment: 'jest-fixed-jsdom',
   testEnvironmentOptions: {
     // fix for `Cannot find module 'msw/node'`
     customExportConditions: [''],

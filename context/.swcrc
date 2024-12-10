@@ -12,7 +12,6 @@
       "decoratorsBeforeExport": false
     },
     "externalHelpers": true,
-    "target": "es2019",
     "loose": false,
     "experimental": {
       "plugins": [
