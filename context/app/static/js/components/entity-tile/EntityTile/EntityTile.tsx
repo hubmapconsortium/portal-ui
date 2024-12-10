@@ -27,15 +27,26 @@ interface EntityTileProps
   invertColors?: boolean;
   entityData: Partial<Entity> & Partial<Pick<Dataset, 'published_timestamp'>>;
   descendantCounts: Record<string, number>;
+  ariaLabelText: string;
 }
 
-function EntityTile({ uuid, entity_type, id, invertColors, entityData, descendantCounts, ...rest }: EntityTileProps) {
+function EntityTile({
+  uuid,
+  entity_type,
+  ariaLabelText,
+  id,
+  invertColors,
+  entityData,
+  descendantCounts,
+  ...rest
+}: EntityTileProps) {
   const icon: ComponentType = entity_type in entityIconMap ? entityIconMap[entity_type] : DatasetIcon;
   const creationInfo = getEntityCreationInfo({ entity_type, ...entityData });
   return (
     <Tile
       href={`/browse/${entity_type.toLowerCase()}/${uuid}`}
       invertColors={invertColors}
+      ariaLabelText={ariaLabelText}
       icon={<StyledIcon as={icon} />}
       bodyContent={
         <EntityTileBody
