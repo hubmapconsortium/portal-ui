@@ -1,0 +1,1 @@
+- Update portal-visualization to 0.3.3 which replaces calls to ingest-api with calls to search-api.
