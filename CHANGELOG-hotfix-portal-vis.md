@@ -1,0 +1,1 @@
+- Fix a regression in portal-visualization which broke Vitessce view config generation.
