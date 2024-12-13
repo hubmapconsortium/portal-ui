@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.16.3 - 2024-12-13
+
+- Fix a regression in portal-visualization which broke Vitessce view config generation.
+
+
+
 ## v1.16.2 - 2024-12-12
 
 - Remove Multi-Assay Relationship section in favor of Dataset Relationships diagram.
