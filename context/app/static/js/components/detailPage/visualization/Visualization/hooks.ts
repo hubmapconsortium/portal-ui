@@ -62,7 +62,7 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }: Use
       let vitessceURLConf;
       try {
         vitessceURLConf = fragment.length > 0 ? decodeURLParamsToConf(fragment) : null;
-      } catch (err) {
+      } catch {
         // If URL cannot be parsed, display error and show Vitessce.
         toastError('View configuration from URL was not able to be parsed.');
         setVitessceDefaults(vitData);

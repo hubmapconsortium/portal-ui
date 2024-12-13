@@ -4,7 +4,6 @@ import VisualizationErrorBoundary from './VisualizationError';
 import { VizContainerStyleContext } from './ContainerStylingContext';
 import { VisualizationSuspenseFallback } from './VisualizationSuspenseFallback';
 
-// eslint-disable-next-line @typescript-eslint/no-unsafe-return
 const Visualization = React.lazy(() => import('../Visualization'));
 
 interface VisualizationWrapperProps {

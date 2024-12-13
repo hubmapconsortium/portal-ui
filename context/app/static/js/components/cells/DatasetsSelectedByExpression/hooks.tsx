@@ -115,7 +115,6 @@ function useDatasetsSelectedByExpression() {
     };
     try {
       completeStep(createStepText(queryType, cellVariableNames, minExpressionLog, minCellPercentage));
-      /* eslint-disable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
       const serviceResults = await new CellsService().getDatasets(queryParams);
       const datasets = 'list' in serviceResults ? serviceResults.list : serviceResults;
 
@@ -136,7 +135,7 @@ function useDatasetsSelectedByExpression() {
           return acc;
         }, [] as WrappedCellsResultsDataset[]),
       );
-      /* eslint-enable @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-argument, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-call */
+
       if ('list' in serviceResults) {
         setResultCounts(serviceResults);
       }
@@ -150,7 +149,7 @@ function useDatasetsSelectedByExpression() {
         // but after the user submits their data, the component collapses,
         // so the message is hidden, and the user just sees the please wait.
         // Not sure what the best long term solution is, but this unblocks Nils.
-        // eslint-disable-next-line no-alert
+
         // alert(e.message);
       }
     }

@@ -34,7 +34,7 @@ async function f({
       let errorBody: Record<string, unknown> = { error: rawText };
       try {
         errorBody = JSON.parse(rawText) as Record<string, unknown>;
-      } catch (e) {
+      } catch {
         // Ignore and use the raw text instead since error was not returned as json
       }
       const message = errorMessages[response.status] ?? `The request to ${url} failed.`;
@@ -48,7 +48,7 @@ async function f({
     if (returnResponse) {
       return response;
     }
-    return response.json();
+    return response.json() as Promise<unknown>;
   });
 }
 

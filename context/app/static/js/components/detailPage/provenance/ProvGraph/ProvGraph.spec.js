@@ -3,7 +3,6 @@ import { fireEvent, waitFor } from '@testing-library/react';
 import { http, HttpResponse } from 'msw';
 import { setupServer } from 'msw/node';
 
-// eslint-disable-next-line
 import { render, screen, appProviderEndpoints } from 'test-utils/functions';
 import sampleProv, { sampleDescendantsProv } from './fixtures/sample_prov';
 import donorProv from './fixtures/donor_prov';

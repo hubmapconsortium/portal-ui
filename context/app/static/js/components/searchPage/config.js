@@ -1,5 +1,5 @@
 /* eslint-disable prettier/prettier */
-// eslint-disable-next-line import/named
+ 
 import { capitalizeString } from 'js/helpers/functions';
 import { listFilter, rangeFilter, field, hierarchicalFilter, boolListFilter } from './utils';
 
