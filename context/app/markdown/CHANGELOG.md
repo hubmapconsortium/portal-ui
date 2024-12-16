@@ -1,5 +1,52 @@
 # Changelog
 
+## v1.16.3 - 2024-12-13
+
+- Fix a regression in portal-visualization which broke Vitessce view config generation.
+
+
+
+## v1.16.2 - 2024-12-12
+
+- Remove Multi-Assay Relationship section in favor of Dataset Relationships diagram.
+- Updated Storybook and related dependencies to latest version (8.4.7)
+- Updated SWC and plugins to support Storybook 8.4.7.
+- Updated React Testing Library to v16.
+- Updated `msw` to 2.6.8.
+- Updated TypeScript to 5.7.2.
+- Updated MUI to v6.
+- Updated pillow to v11.
+- Updated aiohttp to v3.10.11.
+- Updated tornado to v6.4.
+- Updated setuptools to v75.6.0.
+- Updated react-pdf to v7.7.3.
+- Updated cryptography to v43.0.1.
+- Updated fonttools to v4.43.0.
+- Updated urllib3 to v1.26.17.
+- Updated certifi to v2023.7.22.
+- Updated jupyterapp to v4.11.2.
+- Updated wheel to v0.38.1.
+- Updated werkzeug to v3.0.6.
+- Updated zipp to v3.19.2.
+- Updated scikit-learn to v1.5.0.
+- Updated jinja2 to v3.1.4.
+- Updated black to v24.3.0.
+- Update portal-visualization to 0.3.3 which replaces calls to ingest-api with calls to search-api.
+
+
+
+## v1.16.1 - 2024-12-06
+
+- Fix bug where you could not scroll to deeper search pages.
+
+
+
+## v1.16.0 - 2024-12-05
+
+- Fix date picker bug on search page that prevented the user from selecting a year.
+
+
+
 ## v1.15.2 - 2024-12-02
 
 - Disable date facet text input and update button color.

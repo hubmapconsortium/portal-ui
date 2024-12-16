@@ -28,7 +28,7 @@ export const parameters = {
   },
 };
 
-export const mockEndpoints = { assetsEndpoint: 'https://assets.hubmapconsortium.org', softAssayEndpoint: '/soft-assay-endpoint' };
+export const mockEndpoints = { assetsEndpoint: 'https://assets.hubmapconsortium.org', softAssayEndpoint: '/soft-assay-endpoint', elasticsearchEndpoint: '/search' };
 export const mockGroupsToken = '';
 
 export const decorators = [

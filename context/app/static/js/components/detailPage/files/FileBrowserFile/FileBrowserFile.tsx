@@ -26,7 +26,7 @@ function FileBrowserFile({ fileObj, depth }: FileBrowserFileProps) {
   const chipLabels = useMemo(() => {
     const labels = [fileObj.is_qa_qc ? 'QA' : null, fileObj.is_data_product ? 'Data Product' : null].filter(
       (l) => l !== null,
-    ) as string[];
+    );
     return labels;
   }, [fileObj.is_qa_qc, fileObj.is_data_product]);
 

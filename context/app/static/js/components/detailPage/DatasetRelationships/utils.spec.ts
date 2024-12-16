@@ -1,4 +1,10 @@
-import { convertProvDataToNodesAndEdges, generatePrefix, getCurrentEntityNodeType, makeNodeHref } from './utils';
+import {
+  convertProvDataToNodesAndEdges,
+  generatePrefix,
+  getCurrentEntityNodeType,
+  makeAriaLabel,
+  makeNodeHref,
+} from './utils';
 
 import { provData, nodes, edges } from './prov.fixtures';
 
@@ -46,5 +52,16 @@ describe('makeNodeHref', () => {
   });
   it('should handle missing data by returning undefined', () => {
     expect(makeNodeHref(undefined)).toBe(undefined);
+  });
+});
+
+describe('makeAriaLabel', () => {
+  it('should return an empty string if no nodes are provided', () => {
+    expect(makeAriaLabel([])).toBe('');
+  });
+  it('should return a string with the names of all nodes, their relationship to the primary dataset, and their dataset types', () => {
+    expect(makeAriaLabel(nodes)).toBe(
+      'Published Primary CODEX Dataset HBM749.SMWP.555 has the following descendants: QA Processed CODEX [Cytokit + SPRM] Dataset HBM878.HRPG.642. Published Processed CODEX [Cytokit + SPRM] Dataset HBM398.SWKV.256.',
+    );
   });
 });

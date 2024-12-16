@@ -9,7 +9,7 @@ import { InfoIcon } from 'js/shared-styles/icons';
 import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { nodeTypes } from './nodeTypes';
-import { applyLayout } from './utils';
+import { applyLayout, makeAriaLabel } from './utils';
 import { NodeLegend, StatusLegend } from './Legend';
 import { useDatasetRelationships, useDatasetRelationshipsTracking, useDatasetStatuses, useDatasetTypes } from './hooks';
 import { NodeWithoutPosition } from './types';
@@ -48,8 +48,9 @@ function ReactFlowBody({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) {
   if (!nodes.length) {
     return <Skeleton height="100%" width="100%" />;
   }
+  const label = makeAriaLabel(nodes);
   return (
-    <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges}>
+    <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges} aria-label={label}>
       <Controls showInteractive={false} onFitView={trackFitView} onZoomIn={trackZoomIn} onZoomOut={trackZoomOut} />
     </ReactFlow>
   );

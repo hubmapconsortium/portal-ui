@@ -4,14 +4,14 @@ import { Stack } from '@mui/material';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { ContributorAPIResponse, ContactAPIResponse, normalizeContributor, normalizeContact } from './utils';
 
-export function useNormalizedContributors(contributors: ContributorAPIResponse[]) {
+export function useNormalizedContributors(contributors: ContributorAPIResponse[] = []) {
   const normalizedContributors = useMemo(() => {
     return contributors.map(normalizeContributor);
   }, [contributors]);
   return normalizedContributors;
 }
 
-export function useNormalizedContacts(contacts: ContactAPIResponse[]) {
+export function useNormalizedContacts(contacts: ContactAPIResponse[] = []) {
   const normalizedContacts = useMemo(() => {
     return contacts.map(normalizeContact);
   }, [contacts]);

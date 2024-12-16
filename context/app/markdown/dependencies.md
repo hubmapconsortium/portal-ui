@@ -26,7 +26,7 @@ hubmap-commons>=2.1.15
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.3.2.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.3.5.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -46,12 +46,12 @@ lxml>=4.9.1
 "@grafana/faro-web-tracing": "^1.5.0",
 "@hms-dbmi-bgm/react-workflow-viz": "^0.1.10",
 "@hookform/resolvers": "^3.3.4",
-"@mui/icons-material": "^5.16.7",
-"@mui/lab": "^5.0.0-alpha.169",
-"@mui/material": "^5.16.7",
+"@mui/icons-material": "^6.1.6",
+"@mui/lab": "^6.0.0-beta.14",
+"@mui/material": "^6.1.6",
 "@mui/styled-engine": "npm:@mui/styled-engine-sc@latest",
-"@mui/styled-engine-sc": "6.0.0",
-"@mui/system": "^5.16.7",
+"@mui/styled-engine-sc": "^6.1.6",
+"@mui/system": "^6.1.6",
 "@mui/x-date-pickers": "^7.22.2",
 "@react-spring/web": "^9.7.3",
 "@searchkit/client": "^3.0.0-canary.53",
@@ -92,7 +92,7 @@ lxml>=4.9.1
 "react-intersection-observer": "^9.8.1",
 "react-joyride": "^2.8.0",
 "react-markdown": "^9.0.1",
-"react-pdf": "^7.7.1",
+"react-pdf": "^7.7.3",
 "reactify-wc": "^4.0.0",
 "rehype-raw": "^7.0.0",
 "sass": "^1.72.0",
