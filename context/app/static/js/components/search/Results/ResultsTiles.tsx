@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import InputLabel from '@mui/material/InputLabel';
 import Check from '@mui/icons-material/Check';
 
 import { Entity } from 'js/components/types';
@@ -13,7 +14,6 @@ import { getTileDescendantCounts } from 'js/components/entity-tile/EntityTile/ut
 import { capitalizeString } from 'js/helpers/functions';
 import TileGrid from 'js/shared-styles/tiles/TileGrid';
 import { trackEvent } from 'js/helpers/trackers';
-import InputLabel from '@mui/material/InputLabel';
 import { StyledDownIcon } from 'js/shared-styles/dropdowns/DropdownMenuButton/style';
 import { useSearch } from '../Search';
 import ViewMoreResults from './ViewMoreResults';
