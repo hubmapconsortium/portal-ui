@@ -95,10 +95,11 @@ function HuBMAPDatasetsChart() {
         });
       },
       getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ);
+        const organ = String(d?.bar?.data?.organ ?? '');
         const assay = d.key;
         const count = d.key ? d?.bar?.data[d.key] : null;
-        return `${count} ${organ} datasets with assay type ${assay}.`;
+        if (count) return `${count} ${organ} datasets with assay type ${assay}.`;
+        return `${organ} datasets with assay type ${assay}.`;
       },
     },
     {
@@ -115,10 +116,11 @@ function HuBMAPDatasetsChart() {
         });
       },
       getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ);
+        const organ = String(d?.bar?.data?.organ ?? '');
         const donorSex = d.key;
         const count = d.key ? d?.bar?.data[d.key] : null;
-        return `${count} ${organ} datasets with donor sex ${donorSex}.`;
+        if (count) return `${count} ${organ} datasets with donor sex ${donorSex}.`;
+        return `${organ} datasets with donor sex ${donorSex}.`;
       },
     },
     {
@@ -135,10 +137,11 @@ function HuBMAPDatasetsChart() {
         });
       },
       getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ);
+        const organ = String(d?.bar?.data?.organ ?? '');
         const donorRace = d.key;
         const count = d.key ? d?.bar?.data[d.key] : null;
-        return `${count} ${organ} datasets with donor race ${donorRace}.`;
+        if (count) return `${count} ${organ} datasets with donor race ${donorRace}.`;
+        return `${organ} datasets with donor race ${donorRace}.`;
       },
     },
     {
@@ -155,10 +158,11 @@ function HuBMAPDatasetsChart() {
         });
       },
       getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ);
+        const organ = String(d?.bar?.data?.organ ?? '');
         const analyteClass = d.key;
         const count = d.key ? d?.bar?.data[d.key] : null;
-        return `${count} ${organ} datasets with analyte class ${analyteClass}.`;
+        if (count) return `${count} ${organ} datasets with analyte class ${analyteClass}.`;
+        return `${organ} datasets with analyte class ${analyteClass}.`;
       },
     },
     {
@@ -175,10 +179,11 @@ function HuBMAPDatasetsChart() {
         });
       },
       getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ);
+        const organ = String(d?.bar?.data?.organ ?? '');
         const processingStatus = d.key;
         const count = d.key ? d?.bar?.data[d.key] : null;
-        return `${count} ${organ} datasets with ${processingStatus} status.`;
+        if (count) return `${count} ${organ} datasets with ${processingStatus} status.`;
+        return `${organ} datasets with ${processingStatus} status.`;
       },
     },
   ];
