@@ -6,11 +6,12 @@ import TooltipButtonBase from './TooltipButtonBase';
 
 export type TooltipButtonProps<E extends ElementType = IconButtonTypeMap['defaultComponent']> = {
   tooltip: React.ReactNode;
+  placement?: 'top' | 'bottom' | 'left' | 'right';
 } & IconButtonProps<E>;
 
 function TooltipIconButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>(
   { children, ...props }: TooltipButtonProps<E>,
-  ref: React.Ref<HTMLButtonElement>,
+  ref: React.ForwardedRef<HTMLButtonElement>,
 ) {
   return (
     <TooltipButtonBase {...props} ref={ref} isIconButton>
@@ -19,7 +20,8 @@ function TooltipIconButton<E extends ElementType = IconButtonTypeMap['defaultCom
   );
 }
 
-const ForwardedTooltipIconButton = React.forwardRef(TooltipIconButton);
+// @ts-expect-error Forwarded refs break button/link polymorphism, so we need to cast the forwarded ref to the correct type
+const ForwardedTooltipIconButton = React.forwardRef(TooltipIconButton) as typeof TooltipIconButton;
 
 const RectangularTooltipIconButton = styled(ForwardedTooltipIconButton)(() => ({
   borderRadius: '0px',

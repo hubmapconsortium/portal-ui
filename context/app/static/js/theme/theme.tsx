@@ -89,7 +89,8 @@ declare module '@mui/material/styles' {
     palette: Palette;
     zIndex: ZIndex;
   }
-  // eslint-disable-next-line @typescript-eslint/no-empty-interface
+
+  // eslint-disable-next-line @typescript-eslint/no-empty-object-type -- this is necessary to extend the module
   export interface DefaultTheme extends Theme {}
 }
 

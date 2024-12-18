@@ -13,7 +13,6 @@ function TitleTextField({ handleChange, title }) {
       label="Title"
       fullWidth
       variant="outlined"
-      // eslint-disable-next-line prettier/prettier
       placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
       inputProps={{ maxLength: maxTitleLength }}
       onChange={handleChange}

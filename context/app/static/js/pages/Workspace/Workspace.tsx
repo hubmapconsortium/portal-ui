@@ -54,6 +54,7 @@ interface WorkspacePageProps {
 }
 
 function LaunchStopButton(props: ButtonProps) {
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string -- this is a valid use case
   const variant = props?.children?.toString() === 'Stop Jobs' ? 'outlined' : 'contained';
   return <Button {...props} variant={variant} />;
 }

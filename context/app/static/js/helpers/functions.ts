@@ -30,7 +30,7 @@ export function shouldCapitalizeString(s: string, idx = 1) {
   if (idx === 0) {
     return true;
   }
-  return NOT_CAPITALIZED_WORDS.indexOf(lowerCase) === -1;
+  return !NOT_CAPITALIZED_WORDS.includes(lowerCase);
 }
 
 export function capitalizeAndReplaceDashes(s: string) {

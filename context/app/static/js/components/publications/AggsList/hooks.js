@@ -27,7 +27,6 @@ function usePublicationDatasetsAggs({ descendantUUID, aggsField, associatedColle
   const { searchHits: collectionDatasets } = useSearchHits(getCollectionDatasetsQuery(associatedCollectionUUID));
 
   const collectionDatasetsUUIDs =
-    // eslint-disable-next-line no-underscore-dangle
     collectionDatasets.length > 0 ? collectionDatasets[0]?._source?.datasets.map(({ uuid }) => uuid) : [];
 
   const query = associatedCollectionUUID
