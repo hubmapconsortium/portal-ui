@@ -16,7 +16,7 @@ async function getEntityData(hubmapID, elasticsearchEndpoint, groupsToken) {
     return {};
   }
   const results = await response.json();
-  // eslint-disable-next-line no-underscore-dangle
+
   return results.hits.hits[0]._source;
 }
 

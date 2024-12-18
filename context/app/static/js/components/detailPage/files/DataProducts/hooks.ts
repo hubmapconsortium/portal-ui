@@ -24,7 +24,7 @@ const originDenylist = ['https://github.com/hubmapconsortium/portal-containers']
 const nameDenylist = ['pipeline.cwl'];
 
 export function getGithubRepoName(origin: string) {
-  const match = origin.match(/github.com\/([^/]+)\/([^/]+)(\/|$)/);
+  const match = /github.com\/([^/]+)\/([^/]+)(\/|$)/.exec(origin);
   if (match) {
     return match[2];
   }

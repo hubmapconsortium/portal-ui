@@ -154,7 +154,7 @@ function useMatchingWorkspaceTemplates(workspace: MergedWorkspace | Record<strin
   const matchingTemplates = workspaceFiles.reduce((acc, file) => {
     // match the filename without extension given a file path.
     const regex = /[\w-]+?(?=\.)/;
-    const fileNameMatch = getWorkspaceFileName(file).match(regex);
+    const fileNameMatch = regex.exec(getWorkspaceFileName(file));
     const templateName = fileNameMatch ? fileNameMatch[0] : '';
     if (templateName && templateName in templates) {
       return { ...acc, [templateName]: templates[templateName] };
@@ -284,7 +284,7 @@ export function useCreateAndLaunchWorkspace() {
 
       try {
         workspace = await createWorkspace(body);
-      } catch (e) {
+      } catch {
         toastErrorCreateWorkspace();
         return;
       }
@@ -298,7 +298,7 @@ export function useCreateAndLaunchWorkspace() {
           templatePath,
           resourceOptions,
         });
-      } catch (e) {
+      } catch {
         toastErrorLaunchWorkspace();
       }
     },

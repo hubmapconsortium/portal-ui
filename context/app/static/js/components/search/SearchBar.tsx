@@ -20,7 +20,7 @@ function SearchBar() {
     (e: React.FormEvent<HTMLFormElement>) => {
       e.preventDefault();
 
-      setSearch(input.match(/^\s*HBM\S+\s*$/i) ? `"${input}"` : input);
+      setSearch(/^\s*HBM\S+\s*$/i.exec(input) ? `"${input}"` : input);
 
       const category = 'Free Text Search';
 

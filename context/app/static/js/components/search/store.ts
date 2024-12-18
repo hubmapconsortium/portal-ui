@@ -171,7 +171,7 @@ export function parseURLState(stateJSON: string) {
   try {
     const parsed = searchURLStateSchema.parse(JSON.parse(stateJSON));
     return parsed;
-  } catch (e) {
+  } catch {
     return {};
   }
 }
