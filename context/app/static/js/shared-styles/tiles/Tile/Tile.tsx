@@ -11,10 +11,12 @@ interface TileProps {
   bodyContent: React.ReactNode;
   footerContent: React.ReactNode;
   tileWidth: number;
+  ariaLabelText: string;
 }
 
 function Tile({
   href,
+  ariaLabelText,
   icon,
   invertColors = false,
   bodyContent,
@@ -33,7 +35,11 @@ function Tile({
     </StyledPaper>
   );
   if (href) {
-    return <a href={href}>{tile}</a>;
+    return (
+      <a href={href} aria-label={ariaLabelText}>
+        {tile}
+      </a>
+    );
   }
   return tile;
 }

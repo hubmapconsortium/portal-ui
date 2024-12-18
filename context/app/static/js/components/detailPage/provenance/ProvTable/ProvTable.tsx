@@ -10,6 +10,7 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { ErrorTile } from 'js/components/entity-tile/EntityTile/EntityTile';
 import { Alert } from 'js/shared-styles/alerts';
+import { useEntityTileAriaLabelText } from 'js/hooks/useEntityTileAriaLabel';
 import { FlexContainer, FlexColumn, TableColumn, StyledSvgIcon, ProvTableEntityHeader } from './style';
 import ProvTableTile from '../ProvTableTile';
 import ProvTableDerivedLink from '../ProvTableDerivedLink';
@@ -52,6 +53,17 @@ function ProvEntityColumnContent({
     missingAncestors && missingAncestors.length > 0 && entities.length === 0 && type !== 'Dataset';
   const noDisplayedContent = entities.length === 0 && !displayMissingAncestors && !descendantEntityCounts?.[type];
 
+  const ariaLabelText = useEntityTileAriaLabelText(
+    entities
+      .sort((a, b) => a.created_timestamp - b.created_timestamp)
+      .map(({ entity_type, hubmap_id, origin_samples_unique_mapped_organs = [], sample_category = '' }) => ({
+        entity_type,
+        hubmap_id,
+        origin_samples_unique_mapped_organs: (origin_samples_unique_mapped_organs as string[]) || [],
+        sample_category: sample_category as string,
+      })),
+  );
+
   if (noDisplayedContent) {
     return (
       <Alert severity="warning" $width="100%">
@@ -92,6 +104,7 @@ function ProvEntityColumnContent({
                 uuid={item.uuid}
                 id={item.hubmap_id}
                 entity_type={item.entity_type}
+                ariaLabelText={ariaLabelText[j]}
                 isCurrentEntity={currentEntityUUID === item.uuid}
                 isSampleSibling={isSampleSibling}
                 isFirstTile={j === 0}

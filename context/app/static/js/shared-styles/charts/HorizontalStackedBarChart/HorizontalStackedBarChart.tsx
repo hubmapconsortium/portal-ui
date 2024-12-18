@@ -56,6 +56,7 @@ interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, Y
       key: string;
     },
   ) => string;
+  getAriaLabel?: (d: TooltipData<Datum>) => string;
 }
 
 function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>({
@@ -79,6 +80,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   // getTickValues,
   showTooltipAndHover = true,
   getBarHref,
+  getAriaLabel,
   srOnlyLabels,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
@@ -142,6 +144,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                         direction="horizontal"
                         bar={bar}
                         href={getBarHref?.(bar)}
+                        ariaLabelText={getAriaLabel?.(bar)}
                         hoverProps={
                           showTooltipAndHover
                             ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }

@@ -80,6 +80,12 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
           assayTypeMap: datasetTypeMap,
         })
       }
+      getAriaLabel={(d) => {
+        const organ = d?.key;
+        const assay = d?.bar?.data.datasetType;
+        const count = d?.bar?.data.total;
+        return `${count} ${organ} datasets with assay type ${assay}.`;
+      }}
     />
   );
 

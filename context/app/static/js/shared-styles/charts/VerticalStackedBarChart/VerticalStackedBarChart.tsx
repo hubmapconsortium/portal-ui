@@ -42,6 +42,7 @@ interface VerticalStackedBarChartProps<
   y1?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
   y0?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
   getTickValues?: (yScale: YAxisScale) => number[];
+  getAriaLabel?: (d: TooltipData<Datum>) => string;
 }
 
 function VerticalStackedBarChart<
@@ -69,6 +70,7 @@ function VerticalStackedBarChart<
   y0,
   y1,
   getTickValues,
+  getAriaLabel,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
@@ -123,6 +125,7 @@ function VerticalStackedBarChart<
                           key={`${bar.key}-${bar.index}`}
                           direction="vertical"
                           bar={bar}
+                          ariaLabelText={getAriaLabel?.(bar)}
                           hoverProps={{
                             onMouseEnter: handleMouseEnter(bar),
                             onMouseLeave: handleMouseLeave,
