@@ -69,7 +69,7 @@ function TooltipToggleButton({
 
   return (
     <Tooltip title={tooltipTitle}>
-      <span>
+      <span role="tooltip">
         <WhiteBackgroundToggleButton {...rest} id={id} data-testid={id}>
           {children}
         </WhiteBackgroundToggleButton>

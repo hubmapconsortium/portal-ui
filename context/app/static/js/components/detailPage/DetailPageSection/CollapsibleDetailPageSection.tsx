@@ -64,6 +64,8 @@ export default function CollapsibleDetailPageSection({
               <StyledInfoIcon color="primary" />
             </SecondaryBackgroundTooltip>
           )}
+        </AccordionSummary>
+        <AccordionDetails sx={{ padding: 0 }}>
           {action && (
             <Box
               onClick={(e) => {
@@ -72,12 +74,13 @@ export default function CollapsibleDetailPageSection({
               }}
               ml="auto"
               className="accordion-section-action"
+              sx={{ position: 'absolute', right: 0, top: 0 }}
             >
               {action}
             </Box>
           )}
-        </AccordionSummary>
-        <AccordionDetails sx={{ padding: 0 }}>{children}</AccordionDetails>
+          {children}
+        </AccordionDetails>
       </DetailPageSectionAccordion>
     </DetailPageSection>
   );
