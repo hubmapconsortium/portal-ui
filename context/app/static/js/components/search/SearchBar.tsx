@@ -5,7 +5,7 @@ import { trackSiteSearch, trackEvent } from 'js/helpers/trackers';
 import SearchBarComponent from 'js/shared-styles/inputs/SearchBar';
 import { useSearchStore } from './store';
 
-function SearchBar() {
+function SearchBar({ type }: { type: string }) {
   const { setSearch, search, analyticsCategory } = useSearchStore(
     useShallow((state) => ({
       setSearch: state.setSearch,
@@ -41,6 +41,7 @@ function SearchBar() {
       <SearchBarComponent
         id="free-text-search"
         fullWidth
+        placeholder={`Search ${type.toLowerCase()}s`}
         value={input}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setInput(event.target.value);

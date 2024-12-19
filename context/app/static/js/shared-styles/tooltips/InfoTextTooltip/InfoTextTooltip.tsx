@@ -11,7 +11,7 @@ function InfoTextTooltip({ tooltipTitle, children }: InfoTextTooltipProps) {
   return (
     <StyledOuterStack>
       {children}
-      <SecondaryBackgroundTooltip title={tooltipTitle}>
+      <SecondaryBackgroundTooltip title={tooltipTitle} role="definition">
         <StyledInnerStack>
           <StyledInfoIcon />
         </StyledInnerStack>
