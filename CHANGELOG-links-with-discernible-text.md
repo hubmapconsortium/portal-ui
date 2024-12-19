@@ -1,2 +1,0 @@
-- Added discernible text to the links on stacked barcharts and tiles.
-- Fixed accessibility issue regarding html element having a lang attribute.

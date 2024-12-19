@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.17.0 - 2024-12-19
+
+- Update to ESLint v9.
+- Update minor versions of development dependencies to resolve security concerns.
+- Added discernible text to the links on stacked barcharts and tiles.
+- Fixed accessibility issue regarding html element having a lang attribute.
+- Bump portal-visualization version to 0.3.6 to resolve regression with vis-lifting image pyramid assays.
+
+
+
 ## v1.16.3 - 2024-12-13
 
 - Fix a regression in portal-visualization which broke Vitessce view config generation.
