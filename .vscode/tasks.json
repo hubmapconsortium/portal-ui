@@ -4,7 +4,7 @@
     {
       "label": "pip install",
       "type": "shell",
-      "command": "PIP_CONSTRAINT=context/constraints.txt pip install -r context/requirements.txt --use-deprecated=legacy-resolver",
+      "command": "PIP_CONSTRAINT=context/constraints.txt uv pip sync context/requirements.txt",
       "group": {
         "kind": "build",
         "isDefault": false
@@ -48,19 +48,14 @@
         "kind": "build",
         "isDefault": false
       },
-      "dependsOn": [
-        "pip install",
-        "npm install"
-      ],
+      "dependsOn": ["pip install", "npm install"],
       "dependsOrder": "parallel"
     },
     {
       "label": "Flask Server",
       "type": "shell",
       "command": "${command:python.interpreterPath} -m flask run --debug",
-      "dependsOn": [
-        "Copy app configuration"
-      ],
+      "dependsOn": ["Copy app configuration"],
       "options": {
         "cwd": "${workspaceFolder}/context",
         "env": {
@@ -74,7 +69,7 @@
       "isBackground": true,
       "problemMatcher": {
         "pattern": {
-          "regexp": "",
+          "regexp": ""
         },
         "background": {
           "activeOnStart": true,
@@ -85,19 +80,15 @@
     },
     {
       "label": "Flask Server (+ pip install)",
-      "dependsOn": [
-        "pip install",
-        "Flask Server"
-      ],
-      "dependsOrder": "sequence"
+      "dependsOn": ["pip install", "Flask Server"],
+      "dependsOrder": "sequence",
+      "problemMatcher": []
     },
     {
       "label": "npm run lint",
       "type": "npm",
       "script": "lint",
-      "problemMatcher": [
-        "$eslint-stylish"
-      ],
+      "problemMatcher": ["$eslint-stylish"],
       "options": {
         "cwd": "${workspaceFolder}/context"
       },
@@ -133,10 +124,7 @@
     },
     {
       "label": "React Dev Server (+ lint)",
-      "dependsOn": [
-        "npm run lint",
-        "React Dev Server"
-      ],
+      "dependsOn": ["npm run lint", "React Dev Server"],
       "dependsOrder": "sequence"
     },
     {
@@ -163,41 +151,25 @@
     },
     {
       "label": "dev-start (no install)",
-      "dependsOn": [
-        "Flask Server",
-        "React Dev Server (+ lint)",
-        "Storybook"
-      ],
+      "dependsOn": ["Flask Server", "React Dev Server (+ lint)", "Storybook"],
       "dependsOrder": "parallel",
-      "problemMatcher": [
-        "$eslint-stylish"
-      ]
+      "problemMatcher": ["$eslint-stylish"]
     },
     {
       "label": "dev-start",
-      "dependsOn": [
-        "Install dependencies",
-        "dev-start (no install)"
-      ],
+      "dependsOn": ["Install dependencies", "dev-start (no install)"],
       "group": {
         "kind": "build",
         "isDefault": true
       },
       "dependsOrder": "sequence",
-      "problemMatcher": [
-        "$eslint-stylish"
-      ]
+      "problemMatcher": ["$eslint-stylish"]
     },
     {
       "label": "dev-start (no storybook, no install)",
-      "dependsOn": [
-        "Flask Server",
-        "React Dev Server (+ lint)"
-      ],
+      "dependsOn": ["Flask Server", "React Dev Server (+ lint)"],
       "dependsOrder": "parallel",
-      "problemMatcher": [
-        "$eslint-stylish"
-      ]
+      "problemMatcher": ["$eslint-stylish"]
     },
     {
       "label": "dev-start (no storybook)",
@@ -206,20 +178,13 @@
         "dev-start (no storybook, no install)"
       ],
       "dependsOrder": "sequence",
-      "problemMatcher": [
-        "$eslint-stylish"
-      ]
+      "problemMatcher": ["$eslint-stylish"]
     },
     {
       "label": "dev-start (no storybook, no install, no lint)",
-      "dependsOn": [
-        "Flask Server",
-        "React Dev Server"
-      ],
+      "dependsOn": ["Flask Server", "React Dev Server"],
       "dependsOrder": "parallel",
-      "problemMatcher": [
-        "$eslint-stylish"
-      ]
+      "problemMatcher": ["$eslint-stylish"]
     },
     {
       "label": "Kill project ports",
