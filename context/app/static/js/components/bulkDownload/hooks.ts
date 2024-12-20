@@ -55,7 +55,7 @@ function useBulkDownloadForm() {
 }
 
 function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
-  const { isOpen, uuids, open, close, setUuids } = useBulkDownloadStore();
+  const { isOpen, uuids, open, close, setUuids, setDownloadSuccess } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
 
@@ -135,14 +135,14 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
 
       checkAndDownloadFile({ url, fileName: 'manifest.txt' })
         .then(() => {
-          toastSuccessDownloadFile('Manifest');
+          setDownloadSuccess(true);
         })
         .catch((e) => {
           toastErrorDownloadFile('Manifest', () => downloadManifest(datasetsToDownload));
           console.error(e);
         });
     },
-    [toastSuccessDownloadFile, toastErrorDownloadFile],
+    [toastErrorDownloadFile, setDownloadSuccess],
   );
 
   const handleClose = useCallback(() => {

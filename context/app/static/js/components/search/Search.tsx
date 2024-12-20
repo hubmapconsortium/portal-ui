@@ -14,9 +14,10 @@ import merge from 'deepmerge';
 import history from 'history/browser';
 
 import { useAppContext } from 'js/components/Contexts';
-import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
+import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
 import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
 import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import {
   SearchStoreProvider,
@@ -200,6 +201,7 @@ function Body({ facetGroups }: { facetGroups: FacetGroups }) {
 const Search = React.memo(function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
   return (
     <Stack spacing={2} mb={4}>
+      <BulkDownloadSuccessAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <Box>
