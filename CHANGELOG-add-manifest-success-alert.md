@@ -1,0 +1,1 @@
+- Added informative alert upon successful bulk download manifest download.
