@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, ComponentProps } from 'react';
+import React, { PropsWithChildren, ComponentProps, useId } from 'react';
 import { Theme, styled } from '@mui/material/styles';
 import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import ToggleButton from '@mui/material/ToggleButton';
@@ -66,10 +66,11 @@ function TooltipToggleButton({
   ...rest
 }: TooltipToggleButtonProps) {
   const Tooltip = tooltipComponent;
+  const tooltipId = useId();
 
   return (
-    <Tooltip title={tooltipTitle}>
-      <span role="tooltip">
+    <Tooltip title={tooltipTitle} id={tooltipId}>
+      <span aria-describedby={tooltipId}>
         <WhiteBackgroundToggleButton {...rest} id={id} data-testid={id}>
           {children}
         </WhiteBackgroundToggleButton>

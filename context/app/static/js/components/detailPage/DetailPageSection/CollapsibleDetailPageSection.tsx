@@ -74,7 +74,7 @@ export default function CollapsibleDetailPageSection({
               }}
               ml="auto"
               className="accordion-section-action"
-              sx={{ position: 'absolute', right: 0, top: 0 }}
+              sx={{ position: 'absolute', right: 0, top: 7 }}
             >
               {action}
             </Box>
