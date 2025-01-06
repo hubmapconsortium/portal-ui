@@ -6,6 +6,7 @@ import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/Relat
 import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { buildSearchLink } from 'js/components/search/store';
+import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
 import { useDerivedEntitiesSection } from './hooks';
 
 const tooltipTexts = {
@@ -42,6 +43,7 @@ function DerivedEntitiesSection() {
         />
       }
     >
+      <BulkDownloadSuccessAlert />
       <RelatedEntitiesTabs
         entities={entities}
         openIndex={openIndex}
