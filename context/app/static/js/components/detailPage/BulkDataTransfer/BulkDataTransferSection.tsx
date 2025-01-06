@@ -12,6 +12,7 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import BulkDownloadTextButton from 'js/components/bulkDownload/buttons/BulkDownloadTextButton';
 import { LINKS } from 'js/components/bulkDownload/constants';
+import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 
@@ -39,6 +40,7 @@ function BulkDataTransfer() {
       icon={sectionIconMap['bulk-data-transfer']}
     >
       <FilesContextProvider>
+        <BulkDownloadSuccessAlert />
         <SectionDescription>
           <Stack spacing={1}>
             {description}
