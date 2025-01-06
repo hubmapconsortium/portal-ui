@@ -16,7 +16,7 @@ const paths = {
   dataset: {
     donor: `donor.${donorMetadataPath}`,
     sample: `source_samples.${sampleMetdataPath}`,
-    dataset: 'metadata.metadata',
+    dataset: 'metadata',
   },
 };
 

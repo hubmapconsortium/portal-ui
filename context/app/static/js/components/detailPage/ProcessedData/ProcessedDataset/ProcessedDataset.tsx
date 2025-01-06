@@ -183,7 +183,7 @@ function AnalysisDetailsAccordion() {
   }
 
   const {
-    metadata: { dag_provenance_list },
+    ingest_metadata: { dag_provenance_list },
     protocol_url,
   } = dataset;
 

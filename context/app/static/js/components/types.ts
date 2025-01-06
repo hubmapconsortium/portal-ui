@@ -45,10 +45,11 @@ export interface Entity {
   donor: Donor;
   descendant_counts: { entity_type: Record<string, number> };
   descendant_ids: string[];
-  metadata: {
+  ingest_metadata: {
     dag_provenance_list: DagProvenanceType[];
     [key: string]: unknown;
   };
+  metadata: Record<string, unknown>;
   /** @deprecated Use `descendant_ids` and `useEntitiesData` instead */
   descendants: Entity[];
   group_name: string;
