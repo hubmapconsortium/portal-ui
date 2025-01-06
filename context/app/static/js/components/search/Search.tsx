@@ -176,7 +176,7 @@ function Bar({ type }: TypeProps) {
   return (
     <Stack direction="row" spacing={1}>
       <Box flexGrow={1}>
-        <SearchBar />
+        <SearchBar type={type} />
       </Box>
       <MetadataMenu type={type} />
       <WorkspacesDropdownMenu type={type} />

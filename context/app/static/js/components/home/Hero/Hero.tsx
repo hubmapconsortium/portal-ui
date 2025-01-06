@@ -80,7 +80,7 @@ const heroTabs = [
 export default function Hero() {
   const [activeTab, setActiveTab] = useState(0);
   return (
-    <Paper component="section" role="tablist" aria-label="HuBMAP Introduction">
+    <Paper component="section" aria-label="HuBMAP Introduction">
       <HeroTabContextProvider activeTab={activeTab} setActiveTab={setActiveTab}>
         <HeroGridContainer $activeSlide={activeTab} role="tablist">
           {heroTabs.map((tab, index) => (

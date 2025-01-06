@@ -1,12 +1,12 @@
-import { styled } from '@mui/material/styles';
+import { Theme, styled } from '@mui/material/styles';
 import { UpIcon, DownIcon } from 'js/shared-styles/icons';
 
-const StyledUpIcon = styled(UpIcon)(({ theme }) => ({
+const sharedIconStyles = ({ theme }: { theme: Theme }) => ({
   marginLeft: theme.spacing(0.5),
-}));
+  fontSize: '1.5rem',
+});
 
-const StyledDownIcon = styled(DownIcon)(({ theme }) => ({
-  marginLeft: theme.spacing(0.5),
-}));
+const StyledUpIcon = styled(UpIcon)(sharedIconStyles);
+const StyledDownIcon = styled(DownIcon)(sharedIconStyles);
 
 export { StyledUpIcon, StyledDownIcon };
