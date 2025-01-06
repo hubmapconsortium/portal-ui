@@ -127,6 +127,7 @@ function useProcessedDatasets(includeComponents?: boolean) {
       'created_timestamp',
       'dbgap_study_url',
       'dbgap_sra_experiment_url',
+      'ingest_metadata',
       'is_component',
       'visualization',
       'contributors',
