@@ -34,7 +34,7 @@ function ChartWrapper({ children, chartTitle, margin, colorScale, dropdown, allK
       </Box>
       <Stack sx={{ paddingTop: `${margin.top}px`, height: `calc(100% - ${margin.bottom}px)`, maxWidth: 175 }}>
         {dropdown && <Box sx={{ marginBottom: 1, minWidth: 0 }}>{dropdown}</Box>}
-        <Box sx={{ flex: 1, overflowY: 'auto' }}>
+        <Box sx={{ flex: 1, overflowY: 'auto' }} tabIndex={0}>
           <LegendOrdinal
             scale={colorScale}
             labelMargin="0 15px 0 0"
