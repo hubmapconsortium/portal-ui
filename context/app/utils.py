@@ -44,6 +44,7 @@ def get_default_flask_data():
             'protocolsClientToken': current_app.config['PROTOCOLS_IO_CLIENT_AUTH_TOKEN'],
             'ubkgEndpoint': current_app.config['UBKG_ENDPOINT'],
             'softAssayEndpoint': current_app.config['SOFT_ASSAY_ENDPOINT'],
+            'ukvEndpoint': current_app.config['UKV_ENDPOINT'],
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
