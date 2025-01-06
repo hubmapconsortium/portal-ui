@@ -1,1 +1,0 @@
-- Update portal to account for refactored metadata from search api.

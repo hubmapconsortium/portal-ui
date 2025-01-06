@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.18.0 - 2025-01-06
+
+- Added informative alert upon successful bulk download manifest download.
+- Update portal to account for refactored metadata from search api.
+
+
+
 ## v1.17.0 - 2024-12-19
 
 - Update to ESLint v9.
