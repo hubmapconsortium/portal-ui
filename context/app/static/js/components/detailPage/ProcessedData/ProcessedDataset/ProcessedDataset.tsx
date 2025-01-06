@@ -92,17 +92,19 @@ function FilesAccordion() {
   const {
     dataset: { files, hubmap_id },
   } = useProcessedDatasetContext();
-  const hasDataProducts = Boolean(files.filter((file) => file.is_data_product).length);
   const [openTabIndex, setOpenTabIndex] = useState(0);
-  const fileBrowserIndex = hasDataProducts ? 1 : 0;
   const track = useTrackEntityPageEvent();
-  if (files.length === 0) {
+
+  if (!files || files.length === 0) {
     return (
       <Subsection title="Files" icon={<InsertDriveFileRounded />}>
         <SectionDescription subsection>No files are available for this dataset.</SectionDescription>
       </Subsection>
     );
   }
+
+  const hasDataProducts = Boolean(files.filter((file) => file.is_data_product).length);
+  const fileBrowserIndex = hasDataProducts ? 1 : 0;
   return (
     <Subsection title="Files" icon={<InsertDriveFileRounded />}>
       <SectionDescription subsection>
@@ -172,7 +174,7 @@ function AnalysisDetailsAccordion() {
     return <Skeleton variant="rectangular" height={200} />;
   }
 
-  if (!dataset.metadata) {
+  if (!dataset.ingest_metadata) {
     return (
       <Subsection title="Analysis Details & Protocols" idTitleOverride="analysis" icon={<FactCheckRounded />}>
         <SectionDescription subsection>
