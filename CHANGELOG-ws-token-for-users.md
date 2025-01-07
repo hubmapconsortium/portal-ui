@@ -1,0 +1,1 @@
+- Only request workspaces token for workspaces users during auth routine.
