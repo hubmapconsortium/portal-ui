@@ -85,7 +85,7 @@ function DevSearch() {
         checkboxFilter('is_living_donor', 'Is living donor?', ExistsQuery('metadata.living_donor_data')),
         checkboxFilter('is_organ_donor', 'Is organ donor?', ExistsQuery('metadata.organ_donor_data')),
         checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata')),
-        checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
+        checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata'))),
         checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
         checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
         checkboxFilter('is_spatial', 'Spatial?', ExistsQuery('rui_location')),
