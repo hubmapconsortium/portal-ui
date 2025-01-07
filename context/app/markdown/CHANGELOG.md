@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.18.2 - 2025-01-07
+
+- Fix metadata filter on dev-search.
+- Only request workspaces token for workspaces users during auth routine.
+
+
+
 ## v1.18.1 - 2025-01-07
 
 - Resolve accessibility issues related to arias and interactive controls throughout the portal.
