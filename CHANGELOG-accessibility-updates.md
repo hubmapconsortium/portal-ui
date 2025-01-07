@@ -1,1 +1,0 @@
-- Resolve accessibility issues related to arias and interactive controls throughout the portal.

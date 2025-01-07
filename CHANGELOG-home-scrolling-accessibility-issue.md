@@ -1,1 +1,0 @@
- - Addressed accessibility issue on home page to ensure elements with scrollable content are accessible by keyboard.

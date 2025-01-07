@@ -1,1 +1,0 @@
-- Fix issue in push script where if the number of days since the last release is 0 the script returns early.

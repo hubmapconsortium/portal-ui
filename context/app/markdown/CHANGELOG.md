@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.18.1 - 2025-01-07
+
+- Resolve accessibility issues related to arias and interactive controls throughout the portal.
+- Update processed dataset files and analysis sections to match updated ingest metadata.
+- Fix issue in push script where if the number of days since the last release is 0 the script returns early.
+ - Addressed accessibility issue on home page to ensure elements with scrollable content are accessible by keyboard.
+ - Addressed accessibility issue to ensure elements with scrollable content are accessible by keyboard.
+
+
+
 ## v1.18.0 - 2025-01-06
 
 - Added informative alert upon successful bulk download manifest download.
