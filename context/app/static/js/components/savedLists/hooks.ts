@@ -8,6 +8,7 @@ const usedSavedEntitiesSelector = (state: SavedEntitiesStore) => ({
   savedEntities: state.savedEntities,
   listsToBeDeleted: state.listsToBeDeleted,
   deleteQueuedLists: state.deleteQueuedLists,
+  deleteEntity: state.deleteEntity,
   deleteEntities: state.deleteEntities,
   saveEntity: state.saveEntity,
   createList: state.createList,

@@ -59,21 +59,24 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken }: SavedListsDataProp
   return { savedLists, savedEntities, isLoading };
 }
 
-function useSaveEntity({
+function useEntityAction({
   urls,
   groupsToken,
   savedEntities,
-}: SavedListsDataProps & { savedEntities: Record<string, SavedEntity> }) {
+  method,
+  action,
+}: SavedListsDataProps & {
+  savedEntities: Record<string, SavedEntity>;
+  method: 'PUT' | 'DELETE';
+  action: (savedEntities: Record<string, SavedEntity>, entityUUID: string) => void;
+}) {
   const { trigger, isMutating } = useSWRMutation(
     [urls.key('savedEntities'), groupsToken],
     async ([url, token]: string[], { arg: { entityUUID } }: { arg: { entityUUID: string } }) => {
-      savedEntities[entityUUID] = {
-        dateSaved: Date.now(),
-        dateAddedToList: Date.now(),
-      };
+      action(savedEntities, entityUUID);
 
       const response = await fetch(url, {
-        method: 'PUT',
+        method,
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -82,15 +85,50 @@ function useSaveEntity({
       });
 
       if (!response.ok) {
-        console.error(`Failed to save entity ${entityUUID}`, await response.text());
+        console.error(`Failed to update entity ${entityUUID}`, await response.text());
       }
     },
   );
 
   return {
-    saveEntity: (entityUUID: string) => trigger({ entityUUID }),
-    isSaving: isMutating,
+    triggerAction: (entityUUID: string) => trigger({ entityUUID }),
+    isMutating,
   };
+}
+
+function useDeleteEntity({
+  urls,
+  groupsToken,
+  savedEntities,
+}: SavedListsDataProps & { savedEntities: Record<string, SavedEntity> }) {
+  return useEntityAction({
+    urls,
+    groupsToken,
+    savedEntities,
+    method: 'DELETE',
+    action: (entities, entityUUID) => {
+      delete entities[entityUUID];
+    },
+  });
+}
+
+function useSaveEntity({
+  urls,
+  groupsToken,
+  savedEntities,
+}: SavedListsDataProps & { savedEntities: Record<string, SavedEntity> }) {
+  return useEntityAction({
+    urls,
+    groupsToken,
+    savedEntities,
+    method: 'PUT',
+    action: (entities, entityUUID) => {
+      entities[entityUUID] = {
+        dateSaved: Date.now(),
+        dateAddedToList: Date.now(),
+      };
+    },
+  });
 }
 
 export function useRemoteSavedEntities() {
@@ -98,7 +136,16 @@ export function useRemoteSavedEntities() {
   const { groupsToken } = useAppContext();
   const { savedLists, savedEntities, isLoading } = useFetchSavedEntitiesAndLists({ urls, groupsToken });
 
-  const { saveEntity } = useSaveEntity({ urls, groupsToken, savedEntities });
+  const { triggerAction: saveEntity } = useSaveEntity({
+    urls,
+    groupsToken,
+    savedEntities,
+  });
+  const { triggerAction: deleteEntity } = useDeleteEntity({
+    urls,
+    groupsToken,
+    savedEntities,
+  });
 
   return {
     savedLists,
@@ -106,6 +153,7 @@ export function useRemoteSavedEntities() {
     isLoading,
     listsToBeDeleted: [] as string[],
     saveEntity,
+    deleteEntity,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     deleteQueuedLists: () => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
