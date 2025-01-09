@@ -1,10 +1,8 @@
 import React from 'react';
 
-import useSavedEntitiesStore, { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import AddToListItem from 'js/components/savedLists/AddToListItem';
+import { useSavedLists } from 'js/components/savedLists/hooks';
 import { MaxHeightList } from './style';
-
-const usedSavedEntitiesStoreSelector = (state: SavedEntitiesStore) => state.savedLists;
 
 interface AddToListProps {
   selectedLists: Set<string>;
@@ -13,7 +11,7 @@ interface AddToListProps {
 }
 
 function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists }: AddToListProps) {
-  const savedLists = useSavedEntitiesStore(usedSavedEntitiesStoreSelector);
+  const { savedLists } = useSavedLists();
 
   return (
     <MaxHeightList>

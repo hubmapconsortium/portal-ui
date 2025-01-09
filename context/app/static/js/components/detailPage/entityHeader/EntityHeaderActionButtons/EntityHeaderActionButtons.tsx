@@ -10,7 +10,6 @@ import { CheckIcon, EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/sha
 import useEntityStore, { savedAlertStatus, SummaryViewsType } from 'js/stores/useEntityStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
-import useSavedEntitiesStore, { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import { Entity } from 'js/components/types';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { useFlaskDataContext } from 'js/components/Contexts';
@@ -18,6 +17,7 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
+import { useSavedLists } from 'js/components/savedLists/hooks';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -44,15 +44,20 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
 }
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
-  const saveEntity = useSavedEntitiesStore((state) => state.saveEntity);
-  const setShouldDisplaySavedOrEditedAlert = useEntityStore((state) => state.setShouldDisplaySavedOrEditedAlert);
+  const { saveEntity } = useSavedLists();
+  async function handleSaveEntity(entityUUID: string) {
+    await saveEntity(entityUUID);
+  }
 
+  const setShouldDisplaySavedOrEditedAlert = useEntityStore((state) => state.setShouldDisplaySavedOrEditedAlert);
   const trackSave = useTrackEntityPageEvent();
 
   return (
     <ActionButton
       onClick={() => {
-        saveEntity(uuid);
+        handleSaveEntity(uuid).catch((err) => {
+          console.error(err);
+        });
         trackSave({ action: 'Save To List', label: uuid });
         setShouldDisplaySavedOrEditedAlert(savedAlertStatus);
       }}
@@ -88,10 +93,8 @@ function WorkspaceSVGIcon({ color = 'primary', ...props }: SvgIconProps) {
   return <SvgIcon component={WorkspacesIcon} color={color} {...props} />;
 }
 
-const useSavedEntitiesSelector = (state: SavedEntitiesStore) => state.savedEntities;
-
 function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }) {
-  const savedEntities = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const { savedEntities } = useSavedLists();
 
   return uuid in savedEntities ? (
     <EditSavedEntityButton uuid={uuid} entity_type={entity_type} />

@@ -1,42 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
-
+import { SavedEntitiesStore } from 'js/components/savedLists/types';
 import { createImmerPersist } from 'js/helpers/zustand';
-
-export interface SavedEntity {
-  dateSaved?: number;
-  dateAddedToList?: number;
-}
-
-export interface SavedEntitiesList {
-  title: string;
-  description: string;
-  dateSaved: number;
-  dateLastModified: number;
-  savedEntities: Record<string, SavedEntity>;
-}
-
-interface SavedEntitiesState {
-  savedEntities: Record<string, SavedEntity>;
-  savedLists: Record<string, SavedEntitiesList>;
-  listsToBeDeleted: string[];
-}
-
-interface SavedEntitiesActions {
-  saveEntity: (entityUUID: string) => void;
-  deleteEntity: (entityUUID: string) => void;
-  deleteEntities: (entityUUIDs: Set<string>) => void;
-  createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => void;
-  addEntityToList: (listUUID: string, entityUUID: string) => void;
-  addEntitiesToList: (listUUID: string, entityUUIDs: string[]) => void;
-  removeEntityFromList: (listUUID: string, entityUUID: string) => void;
-  removeEntitiesFromList: (listUUID: string, entityUUIDs: string[]) => void;
-  queueListToBeDeleted: (listUUID: string) => void;
-  deleteQueuedLists: () => void;
-  deleteList: (listUUID: string) => void;
-  editList: (list: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => void;
-}
-
-export type SavedEntitiesStore = SavedEntitiesState & SavedEntitiesActions;
 
 const useSavedEntitiesStore = createImmerPersist<SavedEntitiesStore>(
   (set, get) => ({

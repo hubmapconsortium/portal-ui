@@ -1,12 +1,10 @@
 import React, { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 
+import { useSavedLists } from 'js/components/savedLists/hooks';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
-import useSavedEntitiesStore, { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
-
-const useSavedEntitiesStoreSelector = (state: SavedEntitiesStore) => state.createList;
 
 interface CreateListDialogProps {
   secondaryText?: string;
@@ -17,7 +15,7 @@ interface CreateListDialogProps {
 function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: CreateListDialogProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const createList = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
+  const { createList } = useSavedLists();
 
   function handleTitleChange(event: ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);

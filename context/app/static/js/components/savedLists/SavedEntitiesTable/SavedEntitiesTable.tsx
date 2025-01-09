@@ -10,7 +10,7 @@ import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 
 import { format } from 'date-fns/format';
 
-import { SavedEntity } from 'js/stores/useSavedEntitiesStore';
+import { SavedEntity } from 'js/components/savedLists/types';
 import { InternalLink } from 'js/shared-styles/Links';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';

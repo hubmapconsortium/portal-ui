@@ -1,17 +1,35 @@
-interface UkvAPIFailure {
-  success: false;
-  message: string;
-  data: undefined;
+export interface SavedEntity {
+  dateSaved?: number;
+  dateAddedToList?: number;
 }
 
-interface UkvAPISuccess<Data> {
-  success: true;
-  message: string;
-  data: Data;
+export interface SavedEntitiesList {
+  title: string;
+  description: string;
+  dateSaved: number;
+  dateLastModified: number;
+  savedEntities: Record<string, SavedEntity>;
 }
 
-type UkvAPIResponse<Data> = UkvAPIFailure | UkvAPISuccess<Data>;
+interface SavedEntitiesState {
+  savedEntities: Record<string, SavedEntity>;
+  savedLists: Record<string, SavedEntitiesList>;
+  listsToBeDeleted: string[];
+}
 
-type UkvAPIResponseWithoutData = Omit<UkvAPIResponse<undefined>, 'data'>;
+interface SavedEntitiesActions {
+  saveEntity: (entityUUID: string) => void;
+  deleteEntity: (entityUUID: string) => void;
+  deleteEntities: (entityUUIDs: Set<string>) => void;
+  createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => void;
+  addEntityToList: (listUUID: string, entityUUID: string) => void;
+  addEntitiesToList: (listUUID: string, entityUUIDs: string[]) => void;
+  removeEntityFromList: (listUUID: string, entityUUID: string) => void;
+  removeEntitiesFromList: (listUUID: string, entityUUIDs: string[]) => void;
+  queueListToBeDeleted: (listUUID: string) => void;
+  deleteQueuedLists: () => void;
+  deleteList: (listUUID: string) => void;
+  editList: (list: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => void;
+}
 
-export type { UkvAPIResponse, UkvAPIResponseWithoutData };
+export type SavedEntitiesStore = SavedEntitiesState & SavedEntitiesActions;

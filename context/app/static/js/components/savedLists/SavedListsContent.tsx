@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import Skeleton from '@mui/material/Skeleton';
-import { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
+import { SavedEntitiesStore } from 'js/components/savedLists/types';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import SavedListScrollbox from 'js/components/savedLists/SavedListScrollbox';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
