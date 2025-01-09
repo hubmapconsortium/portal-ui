@@ -2,12 +2,12 @@ import { v4 as uuidv4 } from 'uuid';
 
 import { createImmerPersist } from 'js/helpers/zustand';
 
-interface SavedEntity {
+export interface SavedEntity {
   dateSaved?: number;
   dateAddedToList?: number;
 }
 
-interface SavedEntitiesList {
+export interface SavedEntitiesList {
   title: string;
   description: string;
   dateSaved: number;
@@ -24,7 +24,7 @@ interface SavedEntitiesState {
 interface SavedEntitiesActions {
   saveEntity: (entityUUID: string) => void;
   deleteEntity: (entityUUID: string) => void;
-  deleteEntities: (entityUUIDs: string[]) => void;
+  deleteEntities: (entityUUIDs: Set<string>) => void;
   createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => void;
   addEntityToList: (listUUID: string, entityUUID: string) => void;
   addEntitiesToList: (listUUID: string, entityUUIDs: string[]) => void;

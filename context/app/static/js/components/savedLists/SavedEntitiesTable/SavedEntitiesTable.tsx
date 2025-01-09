@@ -10,6 +10,7 @@ import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 
 import { format } from 'date-fns/format';
 
+import { SavedEntity } from 'js/stores/useSavedEntitiesStore';
 import { InternalLink } from 'js/shared-styles/Links';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
@@ -33,10 +34,10 @@ const defaultColumns = [
 const source = ['hubmap_id', 'group_name', 'entity_type'];
 
 interface SavedEntitiesTableProps {
-  savedEntities: Record<string, { dateSaved: string; dateAddedToList: string }>;
+  savedEntities: Record<string, SavedEntity>;
   deleteCallback: (selectedRows: Set<string>) => void;
   setShouldDisplaySaveAlert: (shouldDisplay: boolean) => void;
-  isSavedListPage: boolean;
+  isSavedListPage?: boolean;
 }
 
 function SavedEntitiesTable({
@@ -109,8 +110,9 @@ function SavedEntitiesTable({
               {isLoading ? (
                 <LoadingTableRows numberOfRows={Object.keys(savedEntities).length} numberOfCols={5} />
               ) : (
-                searchHits.map(
-                  ({ _id, _source: { hubmap_id, group_name, entity_type } }) =>
+                searchHits.map(({ _id, _source: { hubmap_id, group_name, entity_type } }) => {
+                  const dateToFormat = savedEntities[_id]?.dateSaved ?? savedEntities[_id]?.dateAddedToList;
+                  return (
                     _id in savedEntities && ( // on item deletion savedEntites will update before searchHits
                       <TableRow key={_id}>
                         <SelectableRowCell rowKey={_id} />
@@ -119,12 +121,11 @@ function SavedEntitiesTable({
                         </TableCell>
                         <TableCell>{group_name}</TableCell>
                         <TableCell>{entity_type}</TableCell>
-                        <TableCell>
-                          {format(savedEntities[_id]?.dateSaved || savedEntities[_id]?.dateAddedToList, 'yyyy-MM-dd')}
-                        </TableCell>
+                        <TableCell>{dateToFormat && format(dateToFormat, 'yyyy-MM-dd')}</TableCell>
                       </TableRow>
-                    ),
-                )
+                    )
+                  );
+                })
               )}
             </TableBody>
           </Table>
