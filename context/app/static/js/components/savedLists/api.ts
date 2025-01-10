@@ -68,12 +68,12 @@ function useEntityAction({
 }: SavedListsDataProps & {
   savedEntities: Record<string, SavedEntity>;
   method: 'PUT' | 'DELETE';
-  action: (savedEntities: Record<string, SavedEntity>, entityUUID: string) => void;
+  action: (savedEntities: Record<string, SavedEntity>, entityUUIDs: string | Set<string>) => void;
 }) {
   const { trigger, isMutating } = useSWRMutation(
     [urls.key('savedEntities'), groupsToken],
-    async ([url, token]: string[], { arg: { entityUUID } }: { arg: { entityUUID: string } }) => {
-      action(savedEntities, entityUUID);
+    async ([url, token]: string[], { arg: { entityUUIDs } }: { arg: { entityUUIDs: string | Set<string> } }) => {
+      action(savedEntities, entityUUIDs);
 
       const response = await fetch(url, {
         method,
@@ -85,18 +85,18 @@ function useEntityAction({
       });
 
       if (!response.ok) {
-        console.error(`Failed to update entity ${entityUUID}`, await response.text());
+        console.error(`Failed to update entities`, await response.text());
       }
     },
   );
 
   return {
-    triggerAction: (entityUUID: string) => trigger({ entityUUID }),
+    triggerAction: (entityUUIDs: string | Set<string>) => trigger({ entityUUIDs }),
     isMutating,
   };
 }
 
-function useDeleteEntity({
+function useDeleteEntities({
   urls,
   groupsToken,
   savedEntities,
@@ -105,10 +105,26 @@ function useDeleteEntity({
     urls,
     groupsToken,
     savedEntities,
-    method: 'DELETE',
-    action: (entities, entityUUID) => {
-      delete entities[entityUUID];
+    method: 'PUT',
+    action: (entities, entityUUIDs) => {
+      const uuids = entityUUIDs instanceof Set ? Array.from(entityUUIDs) : [entityUUIDs];
+
+      uuids.forEach((uuid) => {
+        delete entities[uuid];
+      });
     },
+  });
+}
+
+function useDeleteEntity({
+  urls,
+  groupsToken,
+  savedEntities,
+}: SavedListsDataProps & { savedEntities: Record<string, SavedEntity> }) {
+  return useDeleteEntities({
+    urls,
+    groupsToken,
+    savedEntities,
   });
 }
 
@@ -122,11 +138,15 @@ function useSaveEntity({
     groupsToken,
     savedEntities,
     method: 'PUT',
-    action: (entities, entityUUID) => {
-      entities[entityUUID] = {
-        dateSaved: Date.now(),
-        dateAddedToList: Date.now(),
-      };
+    action: (entities, entityUUIDs) => {
+      const uuids = entityUUIDs instanceof Set ? Array.from(entityUUIDs) : [entityUUIDs];
+
+      uuids.forEach((uuid) => {
+        entities[uuid] = {
+          dateSaved: Date.now(),
+          dateAddedToList: Date.now(),
+        };
+      });
     },
   });
 }
@@ -146,6 +166,11 @@ export function useRemoteSavedEntities() {
     groupsToken,
     savedEntities,
   });
+  const { triggerAction: deleteEntities } = useDeleteEntities({
+    urls,
+    groupsToken,
+    savedEntities,
+  });
 
   return {
     savedLists,
@@ -154,13 +179,12 @@ export function useRemoteSavedEntities() {
     listsToBeDeleted: [] as string[],
     saveEntity,
     deleteEntity,
+    deleteEntities,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     deleteQueuedLists: () => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
     editList: (list: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
     createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => {},
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    deleteEntities: (entityUUIDs: Set<string>) => {},
   };
 }
