@@ -1,1 +1,0 @@
-- Fix provenance graph for datasets without descendants.

@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.18.3 - 2025-01-10
+
+- Fix provenance graph for datasets without descendants.
+
+
+
 ## v1.18.2 - 2025-01-07
 
 - Fix metadata filter on dev-search.
