@@ -1,5 +1,45 @@
 # Changelog
 
+## v1.18.3 - 2025-01-10
+
+- Fix provenance graph for datasets without descendants.
+
+
+
+## v1.18.2 - 2025-01-07
+
+- Fix metadata filter on dev-search.
+- Only request workspaces token for workspaces users during auth routine.
+
+
+
+## v1.18.1 - 2025-01-07
+
+- Resolve accessibility issues related to arias and interactive controls throughout the portal.
+- Update processed dataset files and analysis sections to match updated ingest metadata.
+- Fix issue in push script where if the number of days since the last release is 0 the script returns early.
+ - Addressed accessibility issue on home page to ensure elements with scrollable content are accessible by keyboard.
+ - Addressed accessibility issue to ensure elements with scrollable content are accessible by keyboard.
+
+
+
+## v1.18.0 - 2025-01-06
+
+- Added informative alert upon successful bulk download manifest download.
+- Update portal to account for refactored metadata from search api.
+
+
+
+## v1.17.0 - 2024-12-19
+
+- Update to ESLint v9.
+- Update minor versions of development dependencies to resolve security concerns.
+- Added discernible text to the links on stacked barcharts and tiles.
+- Fixed accessibility issue regarding html element having a lang attribute.
+- Bump portal-visualization version to 0.3.6 to resolve regression with vis-lifting image pyramid assays.
+
+
+
 ## v1.16.3 - 2024-12-13
 
 - Fix a regression in portal-visualization which broke Vitessce view config generation.

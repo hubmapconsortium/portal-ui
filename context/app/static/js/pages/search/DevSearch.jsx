@@ -50,20 +50,20 @@ function DevSearch() {
       'Assay Types': [
         listFilter('data_types', 'data_types'),
         listFilter('mapped_data_types', 'mapped_data_types'),
-        listFilter('metadata.metadata.assay_category', 'assay_category'),
-        listFilter('metadata.metadata.assay_type', 'assay_type'),
+        listFilter('metadata.assay_category', 'assay_category'),
+        listFilter('metadata.assay_type', 'assay_type'),
         checkboxFilter('is_derived', 'Is derived?', BoolMust(TermQuery('processing.keyword', 'processed'))),
         checkboxFilter('is_raw', 'Is raw?', BoolMust(TermQuery('processing.keyword', 'raw'))),
         hierarchicalFilter({
           fields: {
-            parent: { id: 'metadata.metadata.analyte_class.keyword' },
+            parent: { id: 'metadata.analyte_class.keyword' },
             child: { id: 'mapped_data_types.keyword' },
           },
           name: 'By analyte',
         }),
         hierarchicalFilter({
           fields: {
-            parent: { id: 'metadata.metadata.assay_category.keyword' },
+            parent: { id: 'metadata.assay_category.keyword' },
             child: { id: 'mapped_data_types.keyword' },
           },
           name: 'By category',
@@ -84,8 +84,8 @@ function DevSearch() {
         checkboxFilter('has_substatus', 'Has substatus?', ExistsQuery('sub_status')),
         checkboxFilter('is_living_donor', 'Is living donor?', ExistsQuery('metadata.living_donor_data')),
         checkboxFilter('is_organ_donor', 'Is organ donor?', ExistsQuery('metadata.organ_donor_data')),
-        checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata.metadata')),
-        checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata.metadata'))),
+        checkboxFilter('has_metadata', 'Has metadata?', ExistsQuery('metadata')),
+        checkboxFilter('no_metadata', 'No metadata?', BoolMustNot(ExistsQuery('metadata'))),
         checkboxFilter('has_files', 'Has files?', ExistsQuery('files')),
         checkboxFilter('no_files', 'No files?', BoolMustNot(ExistsQuery('files'))),
         checkboxFilter('is_spatial', 'Spatial?', ExistsQuery('rui_location')),

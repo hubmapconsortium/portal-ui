@@ -20,7 +20,7 @@ interface MetadataTableRow {
 function MetadataTable({ tableRows = [] as MetadataTableRow[], columns = defaultColumns }) {
   return (
     <Paper sx={{ width: '100%' }}>
-      <StyledTableContainer>
+      <StyledTableContainer tabIndex={0} role="region" aria-label="Scrollable table container for Metadata">
         <Table stickyHeader>
           <TableHead>
             <TableRow>

@@ -29,8 +29,7 @@ if [[ -z "$MAJOR" ]]; then
  
   echo "Now epoch day: $NOW_EPOCH_DAY"
 
-  DAYS_PAST_REF=`expr $NOW_EPOCH_DAY - $REF_EPOCH_DAY`
-
+  DAYS_PAST_REF=$(($NOW_EPOCH_DAY - $REF_EPOCH_DAY))
   echo "Days since last minor version: $DAYS_PAST_REF"
 
   if [[ $DAYS_PAST_REF -lt 14 ]]; then

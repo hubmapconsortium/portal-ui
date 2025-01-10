@@ -11,7 +11,8 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { getTableEntities } from 'js/components/detailPage/MetadataSection/utils';
-import { DownloadIcon, StyledWhiteBackgroundIconButton } from '../MetadataTable/style';
+import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
+import { DownloadIcon } from '../MetadataTable/style';
 import MetadataTabs from '../multi-assay/MultiAssayMetadataTabs';
 import { Columns, defaultTSVColumns } from './columns';
 
@@ -54,12 +55,12 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
       action={
         <SecondaryBackgroundTooltip title="Download">
           <a href={downloadUrl} download={`${hubmap_id}.tsv`}>
-            <StyledWhiteBackgroundIconButton
+            <WhiteBackgroundIconButton
               aria-label="Download TSV of selected items' metadata"
               onClick={() => trackEntityPageEvent({ action: `Metadata / Download Metadata` })}
             >
               <DownloadIcon color="primary" />
-            </StyledWhiteBackgroundIconButton>
+            </WhiteBackgroundIconButton>
           </a>
         </SecondaryBackgroundTooltip>
       }

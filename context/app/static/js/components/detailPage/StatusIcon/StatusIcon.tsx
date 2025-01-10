@@ -44,7 +44,7 @@ const StatusIcon = forwardRef(function StatusIcon(
 
   if (tooltip) {
     return (
-      <SecondaryBackgroundTooltip title={irregularCaseStatus}>
+      <SecondaryBackgroundTooltip title={irregularCaseStatus} role="status">
         {/* The wrapper is required for the tooltip to work */}
         <Box display="flex">{content}</Box>
       </SecondaryBackgroundTooltip>

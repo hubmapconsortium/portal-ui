@@ -1,2 +1,0 @@
-- Update to ESLint v9.
-- Update minor versions of development dependencies to resolve security concerns.

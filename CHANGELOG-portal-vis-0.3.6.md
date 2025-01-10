@@ -1,1 +1,0 @@
-- Bump portal-visualization version to 0.3.6 to resolve regression with vis-lifting image pyramid assays.
