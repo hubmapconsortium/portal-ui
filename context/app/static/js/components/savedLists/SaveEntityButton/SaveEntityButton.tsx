@@ -13,18 +13,12 @@ function SaveEntityButton({ uuid, ...rest }: SaveEntityButtonProps) {
   const setShouldDisplaySavedOrEditedAlert = useEntityStore((state) => state.setShouldDisplaySavedOrEditedAlert);
   const trackSave = useTrackEntityPageEvent();
 
-  async function handleSaveEntity(entityUUID: string) {
-    await saveEntity(entityUUID);
-  }
-
   return (
     <Button
       color="primary"
       variant="contained"
       onClick={() => {
-        handleSaveEntity(uuid).catch((err) => {
-          console.error(err);
-        });
+        saveEntity(uuid);
         trackSave({ action: 'Save To List', label: uuid });
         setShouldDisplaySavedOrEditedAlert(savedAlertStatus);
       }}

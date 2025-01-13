@@ -45,19 +45,13 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { saveEntity } = useSavedLists();
-  async function handleSaveEntity(entityUUID: string) {
-    await saveEntity(entityUUID);
-  }
-
   const setShouldDisplaySavedOrEditedAlert = useEntityStore((state) => state.setShouldDisplaySavedOrEditedAlert);
   const trackSave = useTrackEntityPageEvent();
 
   return (
     <ActionButton
       onClick={() => {
-        handleSaveEntity(uuid).catch((err) => {
-          console.error(err);
-        });
+        saveEntity(uuid);
         trackSave({ action: 'Save To List', label: uuid });
         setShouldDisplaySavedOrEditedAlert(savedAlertStatus);
       }}

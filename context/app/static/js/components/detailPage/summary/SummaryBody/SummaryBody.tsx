@@ -7,6 +7,7 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Citation from 'js/components/detailPage/Citation';
 import { isCollection, isDataset, isPublication } from 'js/components/types';
+import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { getCollectionDOI } from 'js/pages/Collection/utils';
 import { getEntityCreationInfo } from 'js/helpers/functions';
@@ -118,7 +119,7 @@ function SummaryBodyContent({
   isEntityHeader = false,
   direction = 'column',
   ...stackProps
-}: { isEntityHeader?: boolean } & Partial<StackProps>) {
+}: { isEntityHeader?: boolean } & Partial<StackProps> & Partial<SavedEntitiesList>) {
   const { entity } = useFlaskDataContext();
   const { description } = entity;
   const { creationLabel, creationDate } = getEntityCreationInfo(entity);

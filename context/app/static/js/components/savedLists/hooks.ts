@@ -10,6 +10,7 @@ const usedSavedEntitiesSelector = (state: SavedEntitiesStore) => ({
   deleteQueuedLists: state.deleteQueuedLists,
   deleteEntity: state.deleteEntity,
   deleteEntities: state.deleteEntities,
+  removeEntitiesFromList: state.removeEntitiesFromList,
   saveEntity: state.saveEntity,
   createList: state.createList,
   editList: state.editList,
@@ -17,7 +18,10 @@ const usedSavedEntitiesSelector = (state: SavedEntitiesStore) => ({
 
 function useSavedLists() {
   const { groupsToken } = useAppContext();
-  const unauthenticatedListsData = useSavedEntitiesStore(usedSavedEntitiesSelector);
+  const unauthenticatedListsData = {
+    ...useSavedEntitiesStore(usedSavedEntitiesSelector),
+    isLoading: false,
+  };
   const authenticatedListsData = useRemoteSavedEntities();
 
   const isAuthenticated = groupsToken !== '';

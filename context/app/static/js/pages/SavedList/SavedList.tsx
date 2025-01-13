@@ -1,23 +1,31 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+import Skeleton from '@mui/material/Skeleton';
 
-import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import { SummaryBodyContent } from 'js/components/detailPage/summary/SummaryBody';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
+import { useSavedLists } from 'js/components/savedLists/hooks';
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
-const usedSavedEntitiesSelector = (state) => ({
-  savedLists: state.savedLists,
-  removeEntitiesFromList: state.removeEntitiesFromList,
-});
-
-function SavedList({ listUUID }) {
-  const { savedLists, removeEntitiesFromList } = useSavedEntitiesStore(usedSavedEntitiesSelector);
+function SavedList({ listUUID }: { listUUID: string }) {
+  const { savedLists, isLoading, removeEntitiesFromList } = useSavedLists();
   const savedList = savedLists[listUUID];
+
+  if (isLoading) {
+    return (
+      <Stack>
+        <Skeleton variant="rectangular" height={100} />;
+        <Skeleton variant="rectangular" height={100} />;
+        <Skeleton variant="rectangular" height={100} />;
+        <Skeleton variant="rectangular" height={200} />;
+      </Stack>
+    );
+  }
 
   if (!savedList) {
     throw new Error('This list does not exist.');
@@ -29,8 +37,8 @@ function SavedList({ listUUID }) {
 
   const { title, description } = savedList;
 
-  function deleteCallback(uuids) {
-    removeEntitiesFromList(listUUID, uuids);
+  function deleteCallback(uuids: Set<string>) {
+    removeEntitiesFromList(listUUID, [...uuids]);
   }
 
   return (
@@ -58,13 +66,11 @@ function SavedList({ listUUID }) {
       <SpacingDiv>
         <SummaryBodyContent
           description={savedList.description}
-          created_timestamp={savedList.dateSaved}
-          last_modified_timestamp={savedList.dateLastModified}
+          dateSaved={savedList.dateSaved}
+          dateLastModified={savedList.dateLastModified}
         />
       </SpacingDiv>
-      <StyledHeader variant="h3" component="h2">
-        Items
-      </StyledHeader>
+      <StyledHeader variant="h3">Items</StyledHeader>
       <SavedEntitiesTable savedEntities={listEntities} deleteCallback={deleteCallback} isSavedListPage />
     </PageSpacing>
   );

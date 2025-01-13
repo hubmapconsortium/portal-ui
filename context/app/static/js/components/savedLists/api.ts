@@ -1,7 +1,8 @@
 import useSWR from 'swr';
 import useSWRMutation from 'swr/mutation';
+import { v4 as uuidv4 } from 'uuid';
 import { fetcher } from 'js/helpers/swr';
-import { SavedEntitiesList, SavedEntity } from 'js/components/savedLists/types';
+import { SavedEntitiesList, SavedEntitiesStore, SavedEntity } from 'js/components/savedLists/types';
 import { useAppContext } from '../Contexts';
 
 /**
@@ -26,8 +27,6 @@ export function useUkvApiURLs() {
   return apiUrls(ukvEndpoint);
 }
 
-type EntitiesListValue = Record<string, SavedEntitiesList> | Record<string, SavedEntity>;
-
 interface SavedListsDataProps {
   urls: ReturnType<typeof apiUrls>;
   groupsToken: string;
@@ -35,31 +34,63 @@ interface SavedListsDataProps {
 
 function useFetchSavedEntitiesAndLists({ urls, groupsToken }: SavedListsDataProps) {
   const { data, isLoading } = useSWR([urls.keys, groupsToken], ([url, token]: string[]) =>
-    fetcher<
-      {
-        key: string;
-        value: EntitiesListValue;
-      }[]
-    >({ url, requestInit: { headers: { Authorization: `Bearer ${token}` } } }),
+    fetcher<Record<string, SavedEntitiesList>>({
+      url,
+      requestInit: { headers: { Authorization: `Bearer ${token}` } },
+    }),
   );
 
-  let savedLists = {};
-  let savedEntities = {};
+  let savedEntities: Record<string, SavedEntity> = {};
+  let savedLists: Record<string, SavedEntitiesList> = {};
 
   if (data && !isLoading) {
-    savedEntities = data.find(({ key }: { key: string }) => key === 'savedEntities')?.value ?? {};
-    savedLists = data
-      .filter(({ key }: { key: string }) => key !== 'savedEntities')
-      .reduce((acc: EntitiesListValue, { key, value }: { key: string; value: EntitiesListValue }) => {
-        acc[key] = value;
-        return acc;
-      }, {});
+    if (data.savedEntities) {
+      savedEntities = { savedEntities: data.savedEntities };
+    }
+
+    savedLists = Object.entries(data)
+      .filter(([key]) => key !== 'savedEntities')
+      .reduce((acc, [_, value]) => ({ ...acc, ...value }), {});
   }
 
   return { savedLists, savedEntities, isLoading };
 }
 
-function useEntityAction({
+function useCreateList({ urls, groupsToken }: SavedListsDataProps) {
+  const uuid = uuidv4();
+  const { trigger, isMutating } = useSWRMutation(
+    [urls.key(uuid), groupsToken],
+    async (
+      [url, token]: string[],
+      { arg: { list } }: { arg: { list: Pick<SavedEntitiesList, 'title' | 'description'> } },
+    ) => {
+      const response = await fetch(url, {
+        method: 'PUT',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          ...list,
+          dateSaved: Date.now(),
+          dateLastModified: Date.now(),
+          savedEntities: {},
+        }),
+      });
+
+      if (!response.ok) {
+        console.error(`Failed to create list`, await response.text());
+      }
+    },
+  );
+
+  return {
+    triggerAction: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => trigger({ list }),
+    isMutating,
+  };
+}
+
+function useUpdateEntityAction({
   urls,
   groupsToken,
   savedEntities,
@@ -81,7 +112,13 @@ function useEntityAction({
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(savedEntities),
+        body: JSON.stringify({
+          title: 'Saved Entities',
+          description: 'Entities saved by the user',
+          dateSaved: Date.now(),
+          dateModified: Date.now(),
+          savedEntities,
+        }),
       });
 
       if (!response.ok) {
@@ -101,7 +138,7 @@ function useDeleteEntities({
   groupsToken,
   savedEntities,
 }: SavedListsDataProps & { savedEntities: Record<string, SavedEntity> }) {
-  return useEntityAction({
+  return useUpdateEntityAction({
     urls,
     groupsToken,
     savedEntities,
@@ -133,7 +170,7 @@ function useSaveEntity({
   groupsToken,
   savedEntities,
 }: SavedListsDataProps & { savedEntities: Record<string, SavedEntity> }) {
-  return useEntityAction({
+  return useUpdateEntityAction({
     urls,
     groupsToken,
     savedEntities,
@@ -151,40 +188,59 @@ function useSaveEntity({
   });
 }
 
-export function useRemoteSavedEntities() {
+function createActionHandler<T>(triggerAction: (arg: T) => Promise<void>, errorMessage: string): (arg: T) => void {
+  return (arg: T) => {
+    triggerAction(arg).catch((error) => {
+      console.error(errorMessage, error);
+    });
+  };
+}
+
+export function useRemoteSavedEntities(): SavedEntitiesStore & { isLoading: boolean } {
   const urls = useUkvApiURLs();
   const { groupsToken } = useAppContext();
   const { savedLists, savedEntities, isLoading } = useFetchSavedEntitiesAndLists({ urls, groupsToken });
+  const params = { urls, groupsToken, savedEntities };
 
-  const { triggerAction: saveEntity } = useSaveEntity({
+  const { triggerAction: saveTrigger } = useSaveEntity(params);
+  const saveEntity = createActionHandler(saveTrigger, 'Failed to save entity');
+
+  const { triggerAction: deleteTrigger } = useDeleteEntity(params);
+  const deleteEntity = createActionHandler(deleteTrigger, 'Failed to delete entity');
+
+  const { triggerAction: deleteEntitiesTrigger } = useDeleteEntities(params);
+  const deleteEntities = createActionHandler(deleteEntitiesTrigger, 'Failed to delete entities');
+
+  const { triggerAction: createListTrigger } = useCreateList({
     urls,
     groupsToken,
-    savedEntities,
   });
-  const { triggerAction: deleteEntity } = useDeleteEntity({
-    urls,
-    groupsToken,
-    savedEntities,
-  });
-  const { triggerAction: deleteEntities } = useDeleteEntities({
-    urls,
-    groupsToken,
-    savedEntities,
-  });
+  const createList = createActionHandler(createListTrigger, 'Failed to create list');
 
   return {
-    savedLists,
     savedEntities,
-    isLoading,
+    savedLists,
     listsToBeDeleted: [] as string[],
     saveEntity,
     deleteEntity,
     deleteEntities,
+    createList,
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+    addEntityToList: (listUUID: string, entityUUID: string) => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+    addEntitiesToList: (listUUID: string, entityUUIDs: string[]) => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+    removeEntityFromList: (listUUID: string, entityUUID: string) => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+    removeEntitiesFromList: (listUUID: string, entityUUIDs: string[]) => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
+    queueListToBeDeleted: (listUUID: string) => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     deleteQueuedLists: () => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    editList: (list: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => {},
+    deleteList: (listUUID: string) => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => {},
+    editList: (list: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => {},
+    isLoading,
   };
 }

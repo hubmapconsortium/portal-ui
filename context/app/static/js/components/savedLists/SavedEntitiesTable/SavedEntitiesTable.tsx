@@ -36,7 +36,7 @@ const source = ['hubmap_id', 'group_name', 'entity_type'];
 interface SavedEntitiesTableProps {
   savedEntities: Record<string, SavedEntity>;
   deleteCallback: (selectedRows: Set<string>) => void;
-  setShouldDisplaySaveAlert: (shouldDisplay: boolean) => void;
+  setShouldDisplaySaveAlert?: (shouldDisplay: boolean) => void;
   isSavedListPage?: boolean;
 }
 
@@ -59,7 +59,9 @@ function SavedEntitiesTable({
   }
 
   function onSaveCallback() {
-    setShouldDisplaySaveAlert(true);
+    if (setShouldDisplaySaveAlert) {
+      setShouldDisplaySaveAlert(true);
+    }
     deselectHeaderAndRows();
   }
   const selectedRowsSize = selectedRows.size;
