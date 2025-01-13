@@ -6,15 +6,9 @@ import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
-import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import useEntityStore, { editedAlertStatus } from 'js/stores/useEntityStore';
 import { InternalLink } from 'js/shared-styles/Links';
-
-const useSavedEntitiesSelector = (state) => ({
-  addEntityToList: state.addEntityToList,
-  savedLists: state.savedLists,
-  removeEntityFromList: state.removeEntityFromList,
-});
+import { useSavedLists } from 'js/components/savedLists/hooks';
 
 function getSavedListsWhichContainEntity(savedLists, savedEntity) {
   return Object.entries(savedLists).reduce((acc, [title, obj]) => {
@@ -25,7 +19,7 @@ function getSavedListsWhichContainEntity(savedLists, savedEntity) {
 const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_type }) {
-  const { addEntityToList, savedLists, removeEntityFromList } = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const { addEntityToList, savedLists, removeEntityFromList } = useSavedLists();
   const [selectedLists, addToSelectedLists, removeFromSelectedLists, setSelectedLists] = useStateSet(
     getSavedListsWhichContainEntity(savedLists, uuid),
   );

@@ -125,11 +125,11 @@ function useUpdateListAction({
 }: SavedListsDataProps & {
   method: 'PUT' | 'DELETE';
   savedLists: Record<string, SavedEntitiesList>;
-  action: (listUUID: string, entityUUIDs: string | string[]) => void;
+  action: (listUUID: string, entityUUIDs?: string | string[]) => void;
 }) {
   let isMutating = false;
 
-  const triggerAction = async (listUUID: string, entityUUIDs: string | string[]) => {
+  const triggerAction = async (listUUID: string, entityUUIDs?: string | string[]) => {
     isMutating = true;
 
     try {
@@ -267,6 +267,65 @@ function useAddEntitiesToList({
   });
 }
 
+function useEditList({
+  urls,
+  groupsToken,
+  savedLists,
+}: SavedListsDataProps & { savedLists: Record<string, SavedEntitiesList> }) {
+  const editList = async ({
+    listUUID,
+    title,
+    description,
+  }: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => {
+    const url = urls.key(listUUID);
+    savedLists[listUUID] = {
+      ...savedLists[listUUID],
+      title,
+      description,
+      dateLastModified: Date.now(),
+    };
+
+    try {
+      await sendResponse({
+        url,
+        token: groupsToken,
+        method: 'PUT',
+        body: JSON.stringify(savedLists[listUUID]),
+      });
+    } catch (error) {
+      console.error('Failed to edit list:', error);
+    }
+  };
+
+  return {
+    editList,
+  };
+}
+
+function useRemoveEntitiesFromList({
+  urls,
+  groupsToken,
+  savedLists,
+}: SavedListsDataProps & { savedLists: Record<string, SavedEntitiesList> }) {
+  return useUpdateListAction({
+    urls,
+    groupsToken,
+    savedLists,
+    method: 'PUT',
+    action: (listUUID, entityUUIDs) => {
+      const uuids = entityUUIDs instanceof Set ? Array.from(entityUUIDs) : [entityUUIDs];
+
+      uuids.forEach((uuid) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        if (savedLists[listUUID]?.savedEntities[uuid]) {
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+          delete savedLists[listUUID].savedEntities[uuid];
+        }
+      });
+    },
+  });
+}
+
 function createActionHandler<Args extends unknown[]>(
   triggerAction: (...args: Args) => Promise<void>,
   errorMessage: string,
@@ -302,6 +361,12 @@ export function useRemoteSavedEntities(): SavedEntitiesStore & { isLoading: bool
   const { triggerAction: addEntitiesToListTrigger } = useAddEntitiesToList({ urls, groupsToken, savedLists });
   const addEntitiesToList = createActionHandler(addEntitiesToListTrigger, 'Failed to add entities to list');
 
+  const { triggerAction: removeEntitiesFromListTrigger } = useRemoveEntitiesFromList({ urls, groupsToken, savedLists });
+  const removeEntitiesFromList = createActionHandler(removeEntitiesFromListTrigger, 'Failed to add entities to list');
+
+  const { editList: editListTrigger } = useEditList({ urls, groupsToken, savedLists });
+  const editList = createActionHandler(editListTrigger, 'Failed to edit list');
+
   return {
     savedEntities,
     savedLists,
@@ -311,20 +376,16 @@ export function useRemoteSavedEntities(): SavedEntitiesStore & { isLoading: bool
     deleteEntities,
     createList,
     addEntitiesToList,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    addEntityToList: (listUUID: string, entityUUID: string) => {},
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    removeEntityFromList: (listUUID: string, entityUUID: string) => {},
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    removeEntitiesFromList: (listUUID: string, entityUUIDs: string[]) => {},
+    addEntityToList: addEntitiesToList,
+    removeEntitiesFromList,
+    removeEntityFromList: removeEntitiesFromList,
+    editList,
+    isLoading,
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
     queueListToBeDeleted: (listUUID: string) => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     deleteQueuedLists: () => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
     deleteList: (listUUID: string) => {},
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    editList: (list: Pick<SavedEntitiesList, 'title' | 'description'> & { listUUID: string }) => {},
-    isLoading,
   };
 }
