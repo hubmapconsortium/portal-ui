@@ -1,11 +1,12 @@
 import React from 'react';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { SearchIcon, DonorIcon } from 'js/shared-styles/icons';
+import { SearchIcon, DonorIcon, DownloadIcon } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { buildSearchLink } from 'js/components/search/store';
+import { InternalLink } from 'js/shared-styles/Links';
 
 const timelineIconProps = {
   fontSize: '1.5rem',
@@ -14,6 +15,38 @@ const timelineIconProps = {
 } as const;
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
+  {
+    title: 'Bulk Download Files Through HuBMAP CLT',
+    titleHref: '/search/datasets',
+    description: (
+      <>
+        Bulk downloading files from multiple datasets is now available on dataset search pages and individual dataset
+        pages. The download produces a manifest file that can be used with the{' '}
+        <OutboundIconLink href="https://docs.hubmapconsortium.org/clt/index.html">
+          HuBMAP Command Line Transfer (CLT)
+        </OutboundIconLink>{' '}
+        tool.
+      </>
+    ),
+    date: 'December 2024',
+    img: <DownloadIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'New Workspaces templates and examples',
+    titleHref: '/templates',
+    description: (
+      <>
+        New workspace templates are available:
+        <InternalLink href="/templates/scalable_cell_populations">
+          “Scalable Cell Population Explorer”
+        </InternalLink> and{' '}
+        <InternalLink href="/templates/scfind">“Index and search single cell data with scfind”</InternalLink>. Explore a
+        sample workspace for either template.
+      </>
+    ),
+    date: 'September 2024',
+    img: <entityIconMap.Workspace {...timelineIconProps} />,
+  },
   {
     title: 'Raw & Processed Unified Datasets Page',
     titleHref: '/browse/dataset/8690897fced9931da34d66d669c1d698',
