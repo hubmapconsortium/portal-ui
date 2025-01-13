@@ -32,6 +32,31 @@ interface SavedListsDataProps {
   groupsToken: string;
 }
 
+async function sendResponse({
+  url,
+  token,
+  method,
+  body,
+}: {
+  url: string;
+  token: string;
+  method: 'PUT' | 'DELETE';
+  body: string;
+}) {
+  const response = await fetch(url, {
+    method,
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Content-Type': 'application/json',
+    },
+    body,
+  });
+
+  if (!response.ok) {
+    console.error('Error: ', await response.text());
+  }
+}
+
 function useFetchSavedEntitiesAndLists({ urls, groupsToken }: SavedListsDataProps) {
   const { data, isLoading } = useSWR([urls.keys, groupsToken], ([url, token]: string[]) =>
     fetcher<{ key: string; value: SavedEntitiesList }[]>({
@@ -40,14 +65,14 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken }: SavedListsDataProp
     }),
   );
 
-  const savedEntities: Record<string, SavedEntity> = {};
+  let savedEntities: Record<string, SavedEntity> = {};
   let savedLists: Record<string, SavedEntitiesList> = {};
 
   if (data && !isLoading) {
     const savedEntitiesObject = data.find((item) => item.key === 'savedEntities');
 
     if (savedEntitiesObject) {
-      savedEntities.savedEntities = savedEntitiesObject.value;
+      savedEntities = savedEntitiesObject.value.savedEntities;
     }
 
     savedLists = data
@@ -71,12 +96,10 @@ function useCreateList({ urls, groupsToken }: SavedListsDataProps) {
       [url, token]: string[],
       { arg: { list } }: { arg: { list: Pick<SavedEntitiesList, 'title' | 'description'> } },
     ) => {
-      const response = await fetch(url, {
+      await sendResponse({
+        url,
+        token,
         method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           ...list,
           dateSaved: Date.now(),
@@ -84,10 +107,6 @@ function useCreateList({ urls, groupsToken }: SavedListsDataProps) {
           savedEntities: {},
         }),
       });
-
-      if (!response.ok) {
-        console.error(`Failed to create list`, await response.text());
-      }
     },
   );
 
@@ -95,6 +114,42 @@ function useCreateList({ urls, groupsToken }: SavedListsDataProps) {
     triggerAction: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => trigger({ list }),
     isMutating,
   };
+}
+
+function useUpdateListAction({
+  urls,
+  groupsToken,
+  method,
+  savedLists,
+  action,
+}: SavedListsDataProps & {
+  method: 'PUT' | 'DELETE';
+  savedLists: Record<string, SavedEntitiesList>;
+  action: (listUUID: string, entityUUIDs: string | string[]) => void;
+}) {
+  let isMutating = false;
+
+  const triggerAction = async (listUUID: string, entityUUIDs: string | string[]) => {
+    isMutating = true;
+
+    try {
+      action(listUUID, entityUUIDs);
+
+      const url = urls.key(listUUID);
+      await sendResponse({
+        url,
+        token: groupsToken,
+        method,
+        body: JSON.stringify(savedLists[listUUID]),
+      });
+    } catch (error) {
+      console.error('Error performing action:', error);
+    } finally {
+      isMutating = false;
+    }
+  };
+
+  return { triggerAction, isMutating };
 }
 
 function useUpdateEntityAction({
@@ -113,12 +168,10 @@ function useUpdateEntityAction({
     async ([url, token]: string[], { arg: { entityUUIDs } }: { arg: { entityUUIDs: string | Set<string> } }) => {
       action(savedEntities, entityUUIDs);
 
-      const response = await fetch(url, {
+      await sendResponse({
+        url,
+        token,
         method,
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
         body: JSON.stringify({
           title: 'Saved Entities',
           description: 'Entities saved by the user',
@@ -127,10 +180,6 @@ function useUpdateEntityAction({
           savedEntities,
         }),
       });
-
-      if (!response.ok) {
-        console.error(`Failed to update entities`, await response.text());
-      }
     },
   );
 
@@ -195,9 +244,35 @@ function useSaveEntity({
   });
 }
 
-function createActionHandler<T>(triggerAction: (arg: T) => Promise<void>, errorMessage: string): (arg: T) => void {
-  return (arg: T) => {
-    triggerAction(arg).catch((error) => {
+function useAddEntitiesToList({
+  urls,
+  groupsToken,
+  savedLists,
+}: SavedListsDataProps & { savedLists: Record<string, SavedEntitiesList> }) {
+  return useUpdateListAction({
+    urls,
+    groupsToken,
+    savedLists,
+    method: 'PUT',
+    action: (listUUID, entityUUIDs) => {
+      const uuids = entityUUIDs instanceof Set ? Array.from(entityUUIDs) : [entityUUIDs];
+
+      uuids.forEach((uuid) => {
+        // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        savedLists[listUUID].savedEntities[uuid] = {
+          dateAddedToList: Date.now(),
+        };
+      });
+    },
+  });
+}
+
+function createActionHandler<Args extends unknown[]>(
+  triggerAction: (...args: Args) => Promise<void>,
+  errorMessage: string,
+): (...args: Args) => void {
+  return (...args: Args) => {
+    triggerAction(...args).catch((error) => {
       console.error(errorMessage, error);
     });
   };
@@ -224,6 +299,9 @@ export function useRemoteSavedEntities(): SavedEntitiesStore & { isLoading: bool
   });
   const createList = createActionHandler(createListTrigger, 'Failed to create list');
 
+  const { triggerAction: addEntitiesToListTrigger } = useAddEntitiesToList({ urls, groupsToken, savedLists });
+  const addEntitiesToList = createActionHandler(addEntitiesToListTrigger, 'Failed to add entities to list');
+
   return {
     savedEntities,
     savedLists,
@@ -232,10 +310,9 @@ export function useRemoteSavedEntities(): SavedEntitiesStore & { isLoading: bool
     deleteEntity,
     deleteEntities,
     createList,
+    addEntitiesToList,
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
     addEntityToList: (listUUID: string, entityUUID: string) => {},
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    addEntitiesToList: (listUUID: string, entityUUIDs: string[]) => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
     removeEntityFromList: (listUUID: string, entityUUID: string) => {},
     // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
