@@ -34,23 +34,30 @@ interface SavedListsDataProps {
 
 function useFetchSavedEntitiesAndLists({ urls, groupsToken }: SavedListsDataProps) {
   const { data, isLoading } = useSWR([urls.keys, groupsToken], ([url, token]: string[]) =>
-    fetcher<Record<string, SavedEntitiesList>>({
+    fetcher<{ key: string; value: SavedEntitiesList }[]>({
       url,
       requestInit: { headers: { Authorization: `Bearer ${token}` } },
     }),
   );
 
-  let savedEntities: Record<string, SavedEntity> = {};
+  const savedEntities: Record<string, SavedEntity> = {};
   let savedLists: Record<string, SavedEntitiesList> = {};
 
   if (data && !isLoading) {
-    if (data.savedEntities) {
-      savedEntities = { savedEntities: data.savedEntities };
+    const savedEntitiesObject = data.find((item) => item.key === 'savedEntities');
+
+    if (savedEntitiesObject) {
+      savedEntities.savedEntities = savedEntitiesObject.value;
     }
 
-    savedLists = Object.entries(data)
-      .filter(([key]) => key !== 'savedEntities')
-      .reduce((acc, [_, value]) => ({ ...acc, ...value }), {});
+    savedLists = data
+      .filter((item) => item.key !== 'savedEntities')
+      .reduce((acc, item) => {
+        return {
+          ...acc,
+          [item.key]: item.value,
+        };
+      }, {});
   }
 
   return { savedLists, savedEntities, isLoading };
