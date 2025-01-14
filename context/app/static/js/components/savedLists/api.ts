@@ -41,7 +41,7 @@ async function sendResponse({
   url: string;
   token: string;
   method: 'PUT' | 'DELETE';
-  body: string;
+  body?: string;
 }) {
   const response = await fetch(url, {
     method,
@@ -302,6 +302,25 @@ function useEditList({
   };
 }
 
+function useDeleteList({ urls, groupsToken }: SavedListsDataProps) {
+  const deleteList = async (listUUID: string) => {
+    const url = urls.key(listUUID);
+    try {
+      await sendResponse({
+        url,
+        token: groupsToken,
+        method: 'DELETE',
+      });
+    } catch (error) {
+      console.error('Failed to delete list:', error);
+    }
+  };
+
+  return {
+    deleteList,
+  };
+}
+
 function useRemoveEntitiesFromList({
   urls,
   groupsToken,
@@ -367,6 +386,9 @@ export function useRemoteSavedEntities(): SavedEntitiesStore & { isLoading: bool
   const { editList: editListTrigger } = useEditList({ urls, groupsToken, savedLists });
   const editList = createActionHandler(editListTrigger, 'Failed to edit list');
 
+  const { deleteList: deleteListTrigger } = useDeleteList({ urls, groupsToken });
+  const deleteList = createActionHandler(deleteListTrigger, 'Failed to edit list');
+
   return {
     savedEntities,
     savedLists,
@@ -381,11 +403,9 @@ export function useRemoteSavedEntities(): SavedEntitiesStore & { isLoading: bool
     removeEntityFromList: removeEntitiesFromList,
     editList,
     isLoading,
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    queueListToBeDeleted: (listUUID: string) => {},
+    deleteList,
+    queueListToBeDeleted: deleteList,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     deleteQueuedLists: () => {},
-    // eslint-disable-next-line @typescript-eslint/no-empty-function, @typescript-eslint/no-unused-vars
-    deleteList: (listUUID: string) => {},
   };
 }

@@ -4,20 +4,18 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { MoreIcon, DeleteIcon } from 'js/shared-styles/icons';
 import DialogModal from 'js/shared-styles/DialogModal';
-
-const useSavedEnitiesSelector = (state) => state.queueListToBeDeleted;
+import { useSavedLists } from 'js/components/savedLists/hooks';
 
 function DeleteListButton({ listUUID }) {
   const anchorEl = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [deleteListDialogIsOpen, setDeleteListDialogIsOpen] = useState(false);
 
-  const queueListToBeDeleted = useSavedEntitiesStore(useSavedEnitiesSelector);
+  const  { queueListToBeDeleted } = useSavedLists();
 
   function closeMenuAndDeleteDialog() {
     setMenuIsOpen(false);
