@@ -1,7 +1,5 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
-import Skeleton from '@mui/material/Skeleton';
 
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import { SummaryBodyContent } from 'js/components/detailPage/summary/SummaryBody';
@@ -13,19 +11,8 @@ import { useSavedLists } from 'js/components/savedLists/hooks';
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 function SavedList({ listUUID }: { listUUID: string }) {
-  const { savedLists, isLoading, removeEntitiesFromList } = useSavedLists();
+  const { savedLists, removeEntitiesFromList } = useSavedLists();
   const savedList = savedLists[listUUID];
-
-  if (isLoading) {
-    return (
-      <Stack>
-        <Skeleton variant="rectangular" height={100} />;
-        <Skeleton variant="rectangular" height={100} />;
-        <Skeleton variant="rectangular" height={100} />;
-        <Skeleton variant="rectangular" height={200} />;
-      </Stack>
-    );
-  }
 
   if (!savedList) {
     throw new Error('This list does not exist.');

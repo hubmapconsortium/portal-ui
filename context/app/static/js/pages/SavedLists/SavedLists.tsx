@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 
-import Skeleton from '@mui/material/Skeleton';
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import SavedListScrollbox from 'js/components/savedLists/SavedListScrollbox';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
@@ -8,7 +7,7 @@ import { useSavedLists } from 'js/components/savedLists/hooks';
 import { StyledAlert, StyledHeader, SpacingDiv, PageSpacing } from './style';
 
 function SavedLists() {
-  const { savedEntities, savedLists, listsToBeDeleted, isLoading, deleteEntities, deleteQueuedLists } = useSavedLists();
+  const { savedEntities, savedLists, listsToBeDeleted, deleteEntities, deleteQueuedLists } = useSavedLists();
   const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
   const [shouldDisplaySaveAlert, setShouldDisplaySaveAlert] = useState(false);
 
@@ -18,10 +17,6 @@ function SavedLists() {
       setShouldDisplayDeleteAlert(true);
     }
   }, [listsToBeDeleted, deleteQueuedLists]);
-
-  if (isLoading) {
-    return <Skeleton variant="rectangular" height={400} />;
-  }
 
   return (
     <PageSpacing>

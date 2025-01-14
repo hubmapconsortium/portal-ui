@@ -1,14 +1,15 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import SectionPaper from 'js/shared-styles/sections/SectionPaper';
-import { InternalLink } from 'js/shared-styles/Links';
-import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import SectionPaper from 'js/shared-styles/sections/SectionPaper';
+import { InternalLink } from 'js/shared-styles/Links';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import { useSavedLists } from 'js/components/savedLists/hooks';
 
 export function MyLists() {
-  const savedListCount = useSavedEntitiesStore((s) => Object.keys(s.savedLists).length);
+  const savedListCount = Object.keys(useSavedLists().savedLists).length;
+
   const buttonText = savedListCount === 0 ? 'Create List' : `Manage Lists (${savedListCount})`;
   return (
     <CollapsibleDetailPageSection id="my-lists" title="My Lists" component="h2" variant="h2">

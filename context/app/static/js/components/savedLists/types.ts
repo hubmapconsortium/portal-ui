@@ -18,6 +18,7 @@ interface SavedEntitiesState {
 }
 
 interface SavedEntitiesActions {
+  setEntities: (entities: Record<string, SavedEntity>) => void;
   saveEntity: (entityUUID: string) => void;
   deleteEntity: (entityUUID: string) => void;
   deleteEntities: (entityUUIDs: Set<string>) => void;

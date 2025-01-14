@@ -407,5 +407,7 @@ export function useRemoteSavedEntities(): SavedEntitiesStore & { isLoading: bool
     queueListToBeDeleted: deleteList,
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     deleteQueuedLists: () => {},
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    setEntities: () => {},
   };
 }
