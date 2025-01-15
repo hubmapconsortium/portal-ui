@@ -1,2 +1,0 @@
-- Upgrade to Python 3.10.
-- Introduce `uv` for python package management.

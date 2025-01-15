@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.18.4 - 2025-01-15
+
+- Updated homepage news items.
+- Fix persistence of selected marker genes after redirect to primary dataset.
+- Upgrade to Python 3.10.
+- Introduce `uv` for python package management.
+
+
+
 ## v1.18.3 - 2025-01-10
 
 - Fix provenance graph for datasets without descendants.
