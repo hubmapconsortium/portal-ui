@@ -114,26 +114,37 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken }: RemoteEntitiesProp
   return { savedLists, savedEntities, isLoading };
 }
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function CopySavedItemsToRemoteStore({
-  savedEntities,
   urls,
   groupsToken,
+  savedEntitiesLocal,
+  savedListsLocal,
 }: RemoteEntitiesProps & {
-  savedEntities: Record<string, SavedEntity>;
+  savedEntitiesLocal: Record<string, SavedEntity>;
+  savedListsLocal: Record<string, SavedEntitiesList>;
 }) {
-  const url = urls.key('savedEntities');
-  const body = JSON.stringify({
+  const entitiesUrl = urls.key('savedEntities');
+  const entitiesBody = JSON.stringify({
     title: 'Saved Entities',
     description: 'Entities saved by the user',
     dateSaved: Date.now(),
     dateModified: Date.now(),
-    savedEntities,
+    savedEntities: savedEntitiesLocal,
   });
 
-  sendResponse({ url, token: groupsToken, method: 'PUT', body }).catch((err) =>
+  sendResponse({ url: entitiesUrl, token: groupsToken, method: 'PUT', body: entitiesBody }).catch((err) =>
     console.error('Failed to copy saved entities to remote store:', err),
   );
+
+  // Send each saved list to the remote store
+  Object.entries(savedListsLocal).forEach(([key, list]) => {
+    const listUrl = urls.key(key);
+    const listBody = JSON.stringify(list);
+
+    sendResponse({ url: listUrl, token: groupsToken, method: 'PUT', body: listBody }).catch((err) =>
+      console.error(`Failed to copy saved list "${key}" to remote store:`, err),
+    );
+  });
 }
 
 function saveEntitiesRemote({
@@ -324,30 +335,24 @@ function useSavedLists() {
   const { groupsToken, isAuthenticated } = useAppContext();
   const { savedEntities, savedLists, isLoading } = useFetchSavedEntitiesAndLists({ urls, groupsToken });
 
-  // const initializer = savedEntitiesStoreInitializer;
-
-  // Potentially where some of the weirdness lies - using createImmerPersist instead for the authenticated
-  // user store helps a bit with the state not being updated properly, but not in all cases.
-  // const useSavedEntitiesStore = isAuthenticated
-  //   ? createImmer<SavedEntitiesStore>((set, get) => ({
-  //       ...savedEntitiesStoreInitializer(set, get),
-  //       savedEntities: savedEntities || {},
-  //       savedLists: savedLists || {},
-  //     }))
-  //   : createImmerPersist<SavedEntitiesStore>(initializer, { name: 'saved_entities' });
-
-  // Also a potential cause of weirdness - typically each component consuming this store would pass
-  // in the selector, but I've had issues getting the useSavedLists hook to accept a partial state
-  // without complaining about incomplete types. This is a workaround, but may be contributing to the
-  // state not updating properly.
   const store = useSavedEntitiesStore(savedEntitiesSelector);
   const storeHasBeenSetRef = useRef(false);
   const wasLoadingRef = useRef(isLoading);
 
-  // Needed to set the saved entities and lists in the store after they are fetched
   useEffect(() => {
-    // Check if isLoading transitioned from true to false
-    if (isAuthenticated && !isLoading && wasLoadingRef.current) {
+    if (!isAuthenticated || isLoading) {
+      return;
+    }
+
+    // If a user logs into their account for the first time since the My Lists update
+    // on a device that has saved entities and lists, we need to copy those over to their remote store.
+    // This only happens once.
+    if (Object.keys(savedEntities).length === 0) {
+      const { savedEntities: savedEntitiesLocal, savedLists: savedListsLocal } = useSavedEntitiesStore.getState();
+      CopySavedItemsToRemoteStore({ savedEntitiesLocal, savedListsLocal, urls, groupsToken });
+      storeHasBeenSetRef.current = true;
+      // If the user already has saved entities and lists in their remote store, we need to copy those over to the local store.
+    } else if (wasLoadingRef.current) {
       store.setEntities(savedEntities);
       store.setLists(savedLists);
       storeHasBeenSetRef.current = true;
@@ -355,19 +360,6 @@ function useSavedLists() {
     wasLoadingRef.current = isLoading;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isLoading]);
-
-  // If a user logs into their account for the first time since the My Lists update
-  // on a device that has saved entities and lists, we need to copy those over to their remote store.
-  // This only happens once.
-  // useEffect(() => {
-  //   if (isAuthenticated && !isLoading && Object.keys(savedEntities).length === 0) {
-  //     const { savedEntities: savedEntitiesObject } = useSavedEntitiesStore.getState();
-  //     console.log('Copying saved entities to remote store');
-  //     console.log(savedEntitiesObject);
-  //     CopySavedItemsToRemoteStore({ savedEntitiesObject, urls, groupsToken });
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isAuthenticated, isLoading]);
 
   const params = { urls, groupsToken, savedEntities, savedLists };
 
