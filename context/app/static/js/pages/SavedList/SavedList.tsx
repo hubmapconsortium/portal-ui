@@ -1,4 +1,5 @@
 import React from 'react';
+import { format } from 'date-fns/format';
 import Typography from '@mui/material/Typography';
 
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
@@ -53,8 +54,8 @@ function SavedList({ listUUID }: { listUUID: string }) {
       <SpacingDiv>
         <SummaryBodyContent
           description={savedList.description}
-          dateSaved={savedList.dateSaved}
-          dateLastModified={savedList.dateLastModified}
+          creationDate={format(new Date(savedList.dateSaved), 'yyyy-MM-dd')}
+          creationLabel="Date Saved"
         />
       </SpacingDiv>
       <StyledHeader variant="h3">Items</StyledHeader>

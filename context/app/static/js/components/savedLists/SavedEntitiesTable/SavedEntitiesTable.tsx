@@ -91,7 +91,7 @@ function SavedEntitiesTable({
                 deleteSelectedSavedEntities={deleteSelectedSavedEntities}
               />
               {!isSavedListPage && (
-                <AddItemsToListDialog itemsToAddUUIDS={selectedRows} onSaveCallback={onSaveCallback} />
+                <AddItemsToListDialog itemsToAddUUIDS={Array.from(selectedRows)} onSaveCallback={onSaveCallback} />
               )}
             </div>
           )

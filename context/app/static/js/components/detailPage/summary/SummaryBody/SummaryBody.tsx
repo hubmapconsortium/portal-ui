@@ -118,11 +118,24 @@ function CollectionCitation() {
 function SummaryBodyContent({
   isEntityHeader = false,
   direction = 'column',
+  description: propDescription,
+  creationLabel: propCreationLabel,
+  creationDate: propCreationDate,
   ...stackProps
-}: { isEntityHeader?: boolean } & Partial<StackProps> & Partial<SavedEntitiesList>) {
+}: {
+  isEntityHeader?: boolean;
+  description?: string;
+  creationLabel?: string;
+  creationDate?: string;
+} & Partial<StackProps> &
+  Partial<SavedEntitiesList>) {
   const { entity } = useFlaskDataContext();
-  const { description } = entity;
-  const { creationLabel, creationDate } = getEntityCreationInfo(entity);
+
+  const description = propDescription ?? entity.description;
+  const { creationLabel, creationDate } =
+    propCreationLabel && propCreationDate
+      ? { creationLabel: propCreationLabel, creationDate: propCreationDate }
+      : getEntityCreationInfo(entity);
 
   if (isPublication(entity)) {
     return (
