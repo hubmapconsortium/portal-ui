@@ -3,12 +3,13 @@ import React from 'react';
 import { InternalLink } from 'js/shared-styles/Links';
 import Description from 'js/shared-styles/sections/Description';
 import { buildSearchLink } from 'js/components/search/store';
+import { useAppContext } from 'js/components/Contexts';
 
-function SearchPagesPrompt() {
+function SearchPagesPrompt({ capitalize }: { capitalize?: boolean }) {
   // Inserted in the middle of the message, so it shouldn't be capitalized.
   return (
     <>
-      navigate to{' '}
+      {capitalize ? 'N' : 'n'}avigate to{' '}
       <InternalLink
         href={buildSearchLink({
           entity_type: 'Donor',
@@ -37,10 +38,16 @@ function SearchPagesPrompt() {
   );
 }
 
-function LoginPrompt() {
+function LoginPrompt({ endingText }: { endingText: string }) {
+  const { isAuthenticated } = useAppContext();
+
+  if (isAuthenticated) {
+    return null;
+  }
+
   return (
     <>
-      <InternalLink href="/login">Login</InternalLink> to view additional saved items
+      <InternalLink href="/login">Login</InternalLink> to view additional saved items{endingText}
     </>
   );
 }
@@ -48,26 +55,24 @@ function LoginPrompt() {
 function SavedListMessage() {
   return (
     <>
-      <LoginPrompt />. To explore data to add to this list, <SearchPagesPrompt />, or add items from{' '}
+      <LoginPrompt endingText="." /> To explore data to add to this list, <SearchPagesPrompt />, or add items from{' '}
       <InternalLink href="/my-lists">My Lists</InternalLink>{' '}
     </>
   );
 }
 
 function SavedListsMessage() {
+  const { isAuthenticated } = useAppContext();
+
   return (
     <>
-      <LoginPrompt /> or <SearchPagesPrompt /> to explore data to save
+      <LoginPrompt endingText=" or " /> <SearchPagesPrompt capitalize={isAuthenticated} /> to explore data to save
     </>
   );
 }
 
-function NoItemsSaved({ isSavedListPage }) {
-  return (
-    <Description padding="20px 20px">
-      No items saved. {isSavedListPage ? <SavedListMessage /> : <SavedListsMessage />}.
-    </Description>
-  );
+function NoItemsSaved({ isSavedListPage }: { isSavedListPage: boolean }) {
+  return <Description>No items saved. {isSavedListPage ? <SavedListMessage /> : <SavedListsMessage />}.</Description>;
 }
 
 export default NoItemsSaved;

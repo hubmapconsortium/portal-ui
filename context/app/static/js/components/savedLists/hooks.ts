@@ -312,7 +312,7 @@ function useSavedLists() {
       store.setLists(savedLists);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isAuthenticated, isLoading, savedEntities]);
+  }, [isAuthenticated, isLoading]);
 
   const params = { urls, groupsToken, savedEntities, savedLists };
 

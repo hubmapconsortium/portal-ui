@@ -44,7 +44,7 @@ function SavedEntitiesTable({
   savedEntities,
   deleteCallback,
   setShouldDisplaySaveAlert,
-  isSavedListPage,
+  isSavedListPage = false,
 }: SavedEntitiesTableProps) {
   const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);

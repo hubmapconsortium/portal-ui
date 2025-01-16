@@ -1,9 +1,8 @@
 import React, { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
-
-import { useSavedLists } from 'js/components/savedLists/hooks';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import DialogModal from 'js/shared-styles/DialogModal';
+import { useSavedLists } from 'js/components/savedLists/hooks';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
 interface CreateListDialogProps {
@@ -39,26 +38,30 @@ function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: Crea
     setDialogIsOpen(false);
   }
 
+  const dialogContent = (
+    <>
+      <StyledTitleTextField handleChange={handleTitleChange} title={title} />
+      <StyledDescriptionTextField handleChange={handleDescriptionChange} description={description} />
+    </>
+  );
+
+  const dialogActions = (
+    <>
+      <Button onClick={handleClose} color="primary">
+        Cancel
+      </Button>
+      <OptDisabledButton onClick={handleSubmit} color="primary" disabled={title.length === 0}>
+        Save
+      </OptDisabledButton>
+    </>
+  );
+
   return (
     <DialogModal
       title="Create New List"
       secondaryText={secondaryText}
-      content={
-        <>
-          <StyledTitleTextField handleChange={handleTitleChange} title={title} />
-          <StyledDescriptionTextField handleChange={handleDescriptionChange} description={description} />
-        </>
-      }
-      actions={
-        <>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <OptDisabledButton onClick={handleSubmit} color="primary" disabled={title.length === 0}>
-            Save
-          </OptDisabledButton>
-        </>
-      }
+      content={dialogContent}
+      actions={dialogActions}
       isOpen={dialogIsOpen}
       handleClose={() => {
         handleClose();
