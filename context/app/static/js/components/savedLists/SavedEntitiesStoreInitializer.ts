@@ -24,15 +24,20 @@ const savedEntitiiesStoreInitializer: StoreInitializer = (set, get) => ({
     set((state) => {
       state.savedEntities[entityUUID] = { dateSaved: Date.now() };
     }),
-  deleteEntity: (entityUUID) =>
+  deleteEntity: (entityUUID) => {
     set((state) => {
-      delete state.savedEntities[entityUUID];
-    }),
+      const updatedSavedEntities = { ...state.savedEntities };
+      delete updatedSavedEntities[entityUUID];
+      return { savedEntities: updatedSavedEntities };
+    });
+  },
   deleteEntities: (entityUUIDs) => {
-    entityUUIDs.forEach((uuid) => {
-      set((state) => {
-        delete state.savedEntities[uuid];
+    set((state) => {
+      const updatedSavedEntities = { ...state.savedEntities };
+      entityUUIDs.forEach((uuid) => {
+        delete updatedSavedEntities[uuid];
       });
+      return { savedEntities: updatedSavedEntities };
     });
   },
   savedLists: {},

@@ -4,8 +4,8 @@ import { SavedEntitiesList, SavedEntitiesStore, SavedEntity } from 'js/component
 import { fetcher } from 'js/helpers/swr/fetchers';
 import { v4 as uuidv4 } from 'uuid';
 import useSWR from 'swr';
-import { useEffect } from 'react';
-import { createImmer, createImmerPersist } from 'js/helpers/zustand/middleware';
+import { useEffect, useRef } from 'react';
+import { createImmerPersist } from 'js/helpers/zustand/middleware';
 
 const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
   savedLists: state.savedLists,
@@ -315,34 +315,44 @@ function editListRemote({
 
 // Main exported hook
 
+const useSavedEntitiesStore = createImmerPersist<SavedEntitiesStore>(savedEntitiesStoreInitializer, {
+  name: 'saved_entities',
+});
+
 function useSavedLists() {
   const urls = useUkvApiURLs();
   const { groupsToken, isAuthenticated } = useAppContext();
   const { savedEntities, savedLists, isLoading } = useFetchSavedEntitiesAndLists({ urls, groupsToken });
 
-  const initializer = savedEntitiesStoreInitializer;
+  // const initializer = savedEntitiesStoreInitializer;
+
   // Potentially where some of the weirdness lies - using createImmerPersist instead for the authenticated
   // user store helps a bit with the state not being updated properly, but not in all cases.
-  const useSavedEntitiesStore = isAuthenticated
-    ? createImmer<SavedEntitiesStore>((set, get) => ({
-        ...savedEntitiesStoreInitializer(set, get),
-        savedEntities: savedEntities || {},
-        savedLists: savedLists || {},
-      }))
-    : createImmerPersist<SavedEntitiesStore>(initializer, { name: 'saved_entities' });
+  // const useSavedEntitiesStore = isAuthenticated
+  //   ? createImmer<SavedEntitiesStore>((set, get) => ({
+  //       ...savedEntitiesStoreInitializer(set, get),
+  //       savedEntities: savedEntities || {},
+  //       savedLists: savedLists || {},
+  //     }))
+  //   : createImmerPersist<SavedEntitiesStore>(initializer, { name: 'saved_entities' });
 
   // Also a potential cause of weirdness - typically each component consuming this store would pass
   // in the selector, but I've had issues getting the useSavedLists hook to accept a partial state
   // without complaining about incomplete types. This is a workaround, but may be contributing to the
   // state not updating properly.
   const store = useSavedEntitiesStore(savedEntitiesSelector);
+  const storeHasBeenSetRef = useRef(false);
+  const wasLoadingRef = useRef(isLoading);
 
   // Needed to set the saved entities and lists in the store after they are fetched
   useEffect(() => {
-    if (isAuthenticated && !isLoading && savedEntities && savedLists) {
+    // Check if isLoading transitioned from true to false
+    if (isAuthenticated && !isLoading && wasLoadingRef.current) {
       store.setEntities(savedEntities);
       store.setLists(savedLists);
+      storeHasBeenSetRef.current = true;
     }
+    wasLoadingRef.current = isLoading;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isLoading]);
 

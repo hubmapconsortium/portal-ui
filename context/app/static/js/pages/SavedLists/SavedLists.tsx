@@ -6,26 +6,6 @@ import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { useSavedLists } from 'js/components/savedLists/hooks';
 import { StyledAlert, StyledHeader, SpacingDiv, PageSpacing } from './style';
 
-// const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
-//   savedLists: state.savedLists,
-//   savedEntities: state.savedEntities,
-//   listsToBeDeleted: state.listsToBeDeleted,
-//   setEntities: state.setEntities,
-//   setLists: state.setLists,
-//   saveEntity: state.saveEntity,
-//   deleteEntity: state.deleteEntity,
-//   deleteEntities: state.deleteEntities,
-//   createList: state.createList,
-//   addEntityToList: state.addEntityToList,
-//   addEntitiesToList: state.addEntitiesToList,
-//   removeEntityFromList: state.removeEntityFromList,
-//   removeEntitiesFromList: state.removeEntitiesFromList,
-//   queueListToBeDeleted: state.queueListToBeDeleted,
-//   deleteQueuedLists: state.deleteQueuedLists,
-//   deleteList: state.deleteList,
-//   editList: state.editList,
-// });
-
 function SavedLists() {
   const { savedEntities, savedLists, listsToBeDeleted, deleteEntities, deleteQueuedLists } = useSavedLists();
   const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
