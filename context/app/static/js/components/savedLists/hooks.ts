@@ -5,7 +5,7 @@ import { fetcher } from 'js/helpers/swr/fetchers';
 import { v4 as uuidv4 } from 'uuid';
 import useSWR from 'swr';
 import { useEffect } from 'react';
-import { createImmerPersist } from 'js/helpers/zustand/middleware';
+import { createImmer, createImmerPersist } from 'js/helpers/zustand/middleware';
 
 const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
   savedLists: state.savedLists,
@@ -114,17 +114,41 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken }: RemoteEntitiesProp
   return { savedLists, savedEntities, isLoading };
 }
 
-function saveEntityRemote({
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+function CopySavedItemsToRemoteStore({
+  savedEntities,
+  urls,
+  groupsToken,
+}: RemoteEntitiesProps & {
+  savedEntities: Record<string, SavedEntity>;
+}) {
+  const url = urls.key('savedEntities');
+  const body = JSON.stringify({
+    title: 'Saved Entities',
+    description: 'Entities saved by the user',
+    dateSaved: Date.now(),
+    dateModified: Date.now(),
+    savedEntities,
+  });
+
+  sendResponse({ url, token: groupsToken, method: 'PUT', body }).catch((err) =>
+    console.error('Failed to copy saved entities to remote store:', err),
+  );
+}
+
+function saveEntitiesRemote({
   urls,
   groupsToken,
   savedEntities,
-  entityUUID,
-}: RemoteEntitiesProps & { entityUUID: string }) {
+  entityUUIDs,
+}: RemoteEntitiesProps & { entityUUIDs: string[] }) {
   const savedEntitiesCopy = { ...savedEntities };
-  savedEntitiesCopy[entityUUID] = {
-    dateSaved: Date.now(),
-    dateAddedToList: Date.now(),
-  };
+  entityUUIDs.forEach((entityUUID) => {
+    savedEntitiesCopy[entityUUID] = {
+      dateSaved: Date.now(),
+      dateAddedToList: Date.now(),
+    };
+  });
 
   const url = urls.key('savedEntities');
   const body = JSON.stringify({
@@ -136,6 +160,10 @@ function saveEntityRemote({
   });
 
   return sendResponse({ url, token: groupsToken, method: 'PUT', body });
+}
+
+function saveEntityRemote({ entityUUID, ...props }: RemoteEntitiesProps & { entityUUID: string }) {
+  return saveEntitiesRemote({ ...props, entityUUIDs: [entityUUID] });
 }
 
 function deleteEntitiesRemote({
@@ -285,7 +313,7 @@ function editListRemote({
   return sendResponse({ url, token: groupsToken, method: 'PUT', body });
 }
 
-// Hook
+// Main exported hook
 
 function useSavedLists() {
   const urls = useUkvApiURLs();
@@ -293,19 +321,23 @@ function useSavedLists() {
   const { savedEntities, savedLists, isLoading } = useFetchSavedEntitiesAndLists({ urls, groupsToken });
 
   const initializer = savedEntitiesStoreInitializer;
+  // Potentially where some of the weirdness lies - using createImmerPersist instead for the authenticated
+  // user store helps a bit with the state not being updated properly, but not in all cases.
   const useSavedEntitiesStore = isAuthenticated
-    ? createImmerPersist<SavedEntitiesStore>(
-        (set, get) => ({
-          ...savedEntitiesStoreInitializer(set, get),
-          savedEntities: savedEntities || {},
-          savedLists: savedLists || {},
-        }),
-        { name: 'saved_entities_remote' },
-      )
+    ? createImmer<SavedEntitiesStore>((set, get) => ({
+        ...savedEntitiesStoreInitializer(set, get),
+        savedEntities: savedEntities || {},
+        savedLists: savedLists || {},
+      }))
     : createImmerPersist<SavedEntitiesStore>(initializer, { name: 'saved_entities' });
 
+  // Also a potential cause of weirdness - typically each component consuming this store would pass
+  // in the selector, but I've had issues getting the useSavedLists hook to accept a partial state
+  // without complaining about incomplete types. This is a workaround, but may be contributing to the
+  // state not updating properly.
   const store = useSavedEntitiesStore(savedEntitiesSelector);
 
+  // Needed to set the saved entities and lists in the store after they are fetched
   useEffect(() => {
     if (isAuthenticated && !isLoading && savedEntities && savedLists) {
       store.setEntities(savedEntities);
@@ -313,6 +345,19 @@ function useSavedLists() {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isLoading]);
+
+  // If a user logs into their account for the first time since the My Lists update
+  // on a device that has saved entities and lists, we need to copy those over to their remote store.
+  // This only happens once.
+  // useEffect(() => {
+  //   if (isAuthenticated && !isLoading && Object.keys(savedEntities).length === 0) {
+  //     const { savedEntities: savedEntitiesObject } = useSavedEntitiesStore.getState();
+  //     console.log('Copying saved entities to remote store');
+  //     console.log(savedEntitiesObject);
+  //     CopySavedItemsToRemoteStore({ savedEntitiesObject, urls, groupsToken });
+  //   }
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isAuthenticated, isLoading]);
 
   const params = { urls, groupsToken, savedEntities, savedLists };
 

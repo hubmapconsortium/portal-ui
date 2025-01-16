@@ -1,6 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns/format';
 import Typography from '@mui/material/Typography';
+import Skeleton from '@mui/material/Skeleton';
 
 import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
 import { SummaryBodyContent } from 'js/components/detailPage/summary/SummaryBody';
@@ -16,7 +17,7 @@ function SavedList({ listUUID }: { listUUID: string }) {
   const savedList = savedLists[listUUID];
 
   if (!savedList) {
-    throw new Error('This list does not exist.');
+    return <Skeleton variant="rectangular" width="100%" height={400} />;
   }
 
   const { savedEntities: listEntities } = savedList;
