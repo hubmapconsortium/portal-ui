@@ -58,6 +58,8 @@ def details(type, uuid):
         if raw_dataset is None or len(raw_dataset) == 0:
             abort(404)
 
+        marker = request.args.get('marker') or None
+
         # Redirect to the primary dataset
         return redirect(
             url_for('routes_browse.details',
@@ -66,7 +68,8 @@ def details(type, uuid):
                     _anchor=anchor,
                     redirected=True,
                     redirectedFromId=entity.get('hubmap_id'),
-                    redirectedFromPipeline=entity.get('pipeline')))
+                    redirectedFromPipeline=entity.get('pipeline'),
+                    marker=marker))
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
