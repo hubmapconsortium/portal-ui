@@ -1,0 +1,1 @@
+- Updated logic to access the builder for EPIC Segmentation masks using the epic vitessce-hint.
