@@ -15,6 +15,10 @@ const savedEntitiiesStoreInitializer: StoreInitializer = (set, get) => ({
     set((state) => {
       state.savedEntities = entities;
     }),
+  setLists: (lists) =>
+    set((state) => {
+      state.savedLists = lists;
+    }),
   saveEntity: (entityUUID) =>
     !(entityUUID in get().savedEntities) &&
     set((state) => {
@@ -35,13 +39,17 @@ const savedEntitiiesStoreInitializer: StoreInitializer = (set, get) => ({
   createList: ({ title, description }) => {
     const uuid = uuidv4();
     set((state) => {
-      state.savedLists[uuid] = {
-        // the Donor, Sample, and Datasets are objects to avoid duplicates. Normally they would be sets, but objects work better with local storage
-        title,
-        savedEntities: {},
-        description,
-        dateSaved: Date.now(),
-        dateLastModified: Date.now(),
+      return {
+        savedLists: {
+          ...state.savedLists,
+          [uuid]: {
+            title,
+            savedEntities: {},
+            description,
+            dateSaved: Date.now(),
+            dateLastModified: Date.now(),
+          },
+        },
       };
     });
   },

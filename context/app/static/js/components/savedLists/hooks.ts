@@ -1,22 +1,29 @@
-import savedEntitiiesStoreInitializer from 'js/components/savedLists/SavedEntitiesStoreInitializer';
+import savedEntitiesStoreInitializer from 'js/components/savedLists/SavedEntitiesStoreInitializer';
 import { useAppContext } from 'js/components/Contexts';
 import { SavedEntitiesList, SavedEntitiesStore, SavedEntity } from 'js/components/savedLists/types';
 import { fetcher } from 'js/helpers/swr/fetchers';
+import { v4 as uuidv4 } from 'uuid';
 import useSWR from 'swr';
 import { useEffect } from 'react';
-import { createImmer, createImmerPersist } from 'js/helpers/zustand/middleware';
+import { createImmerPersist } from 'js/helpers/zustand/middleware';
 
-const useSavedEntitiesSelector = (state: SavedEntitiesStore) => ({
+const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
   savedLists: state.savedLists,
   savedEntities: state.savedEntities,
   listsToBeDeleted: state.listsToBeDeleted,
   setEntities: state.setEntities,
-  deleteQueuedLists: state.deleteQueuedLists,
+  setLists: state.setLists,
+  saveEntity: state.saveEntity,
   deleteEntity: state.deleteEntity,
   deleteEntities: state.deleteEntities,
-  removeEntitiesFromList: state.removeEntitiesFromList,
-  saveEntity: state.saveEntity,
   createList: state.createList,
+  addEntityToList: state.addEntityToList,
+  addEntitiesToList: state.addEntitiesToList,
+  removeEntityFromList: state.removeEntityFromList,
+  removeEntitiesFromList: state.removeEntitiesFromList,
+  queueListToBeDeleted: state.queueListToBeDeleted,
+  deleteQueuedLists: state.deleteQueuedLists,
+  deleteList: state.deleteList,
   editList: state.editList,
 });
 
@@ -67,15 +74,16 @@ async function sendResponse({
   }
 }
 
-// REMOTE FUNCTIONS
-
-function useFetchSavedEntitiesAndLists({
-  urls,
-  groupsToken,
-}: {
+interface RemoteEntitiesProps {
   urls: ReturnType<typeof apiUrls>;
   groupsToken: string;
-}) {
+  savedEntities?: Record<string, SavedEntity>;
+  savedLists?: Record<string, SavedEntitiesList>;
+}
+
+// REMOTE FUNCTIONS
+
+function useFetchSavedEntitiesAndLists({ urls, groupsToken }: RemoteEntitiesProps) {
   const { data, isLoading } = useSWR([urls.keys, groupsToken], ([url, token]: string[]) =>
     fetcher<{ key: string; value: SavedEntitiesList }[]>({
       url,
@@ -111,12 +119,7 @@ function saveEntityRemote({
   groupsToken,
   savedEntities,
   entityUUID,
-}: {
-  urls: ReturnType<typeof apiUrls>;
-  groupsToken: string;
-  savedEntities: Record<string, SavedEntity>;
-  entityUUID: string;
-}): void {
+}: RemoteEntitiesProps & { entityUUID: string }) {
   const savedEntitiesCopy = { ...savedEntities };
   savedEntitiesCopy[entityUUID] = {
     dateSaved: Date.now(),
@@ -132,44 +135,260 @@ function saveEntityRemote({
     savedEntities: savedEntitiesCopy,
   });
 
-  (async () => {
-    await sendResponse({ url, token: groupsToken, method: 'PUT', body });
-  })().catch((error) => {
-    console.error('Failed to save entity:', error);
+  return sendResponse({ url, token: groupsToken, method: 'PUT', body });
+}
+
+function deleteEntitiesRemote({
+  urls,
+  groupsToken,
+  savedEntities,
+  entityUUIDs,
+}: RemoteEntitiesProps & { entityUUIDs: Set<string> }) {
+  const savedEntitiesCopy = { ...savedEntities };
+  entityUUIDs.forEach((uuid) => {
+    delete savedEntitiesCopy[uuid];
+  });
+
+  const url = urls.key('savedEntities');
+  const body = JSON.stringify({
+    title: 'Saved Entities',
+    description: 'Entities saved by the user',
+    dateSaved: Date.now(),
+    dateModified: Date.now(),
+    savedEntities: savedEntitiesCopy,
+  });
+
+  return sendResponse({ url, token: groupsToken, method: 'PUT', body });
+}
+
+function deleteEntityRemote({ entityUUID, ...props }: RemoteEntitiesProps & { entityUUID: string }) {
+  return deleteEntitiesRemote({
+    entityUUIDs: new Set([entityUUID]),
+    ...props,
   });
 }
+
+function createListRemote({
+  urls,
+  groupsToken,
+  list,
+}: {
+  urls: { key: (uuid: string) => string };
+  groupsToken: string;
+  list: Pick<SavedEntitiesList, 'title' | 'description'>;
+}) {
+  const uuid = uuidv4();
+
+  const url = urls.key(uuid);
+  const body = JSON.stringify({
+    ...list,
+    dateSaved: Date.now(),
+    dateLastModified: Date.now(),
+    savedEntities: {},
+  });
+
+  return sendResponse({ url, token: groupsToken, method: 'PUT', body });
+}
+
+function addEntitiesToListRemote({
+  urls,
+  groupsToken,
+  savedLists,
+  listUUID,
+  entityUUIDs,
+}: RemoteEntitiesProps & { savedLists: Record<string, SavedEntitiesList>; listUUID: string; entityUUIDs: string[] }) {
+  const updatedSavedEntities = { ...savedLists[listUUID].savedEntities };
+  entityUUIDs.forEach((uuid) => {
+    updatedSavedEntities[uuid] = {
+      dateAddedToList: Date.now(),
+    };
+  });
+
+  const updatedList = {
+    ...savedLists[listUUID],
+    savedEntities: updatedSavedEntities,
+    dateLastModified: Date.now(),
+  };
+
+  const url = urls.key(listUUID);
+  const body = JSON.stringify(updatedList);
+
+  return sendResponse({ url, token: groupsToken, method: 'PUT', body });
+}
+
+function addEntityToListRemote({
+  entityUUID,
+  ...props
+}: RemoteEntitiesProps & { savedLists: Record<string, SavedEntitiesList>; listUUID: string; entityUUID: string }) {
+  return addEntitiesToListRemote({ ...props, entityUUIDs: [entityUUID] });
+}
+
+function deleteListRemote({ urls, groupsToken, listUUID }: RemoteEntitiesProps & { listUUID: string }) {
+  const url = urls.key(listUUID);
+  return sendResponse({ url, token: groupsToken, method: 'DELETE' });
+}
+
+function removeEntitiesFromListRemote({
+  urls,
+  groupsToken,
+  savedLists,
+  listUUID,
+  entityUUIDs,
+}: RemoteEntitiesProps & { savedLists: Record<string, SavedEntitiesList>; listUUID: string; entityUUIDs: string[] }) {
+  const updatedSavedEntities = { ...savedLists[listUUID].savedEntities };
+  entityUUIDs.forEach((uuid) => {
+    delete updatedSavedEntities[uuid];
+  });
+
+  const updatedList = {
+    ...savedLists[listUUID],
+    savedEntities: updatedSavedEntities,
+    dateLastModified: Date.now(),
+  };
+
+  const url = urls.key(listUUID);
+  const body = JSON.stringify(updatedList);
+
+  return sendResponse({ url, token: groupsToken, method: 'PUT', body });
+}
+
+function removeEntityFromListRemote({
+  entityUUID,
+  ...props
+}: RemoteEntitiesProps & { savedLists: Record<string, SavedEntitiesList>; listUUID: string; entityUUID: string }) {
+  return removeEntitiesFromListRemote({ ...props, entityUUIDs: [entityUUID] });
+}
+
+function editListRemote({
+  urls,
+  groupsToken,
+  savedLists,
+  listUUID,
+  title,
+  description,
+}: RemoteEntitiesProps & {
+  savedLists: Record<string, SavedEntitiesList>;
+  listUUID: string;
+  title: string;
+  description: string;
+}) {
+  savedLists[listUUID] = {
+    ...savedLists[listUUID],
+    title,
+    description,
+    dateLastModified: Date.now(),
+  };
+
+  const url = urls.key(listUUID);
+  const body = JSON.stringify(savedLists[listUUID]);
+
+  return sendResponse({ url, token: groupsToken, method: 'PUT', body });
+}
+
+// Hook
 
 function useSavedLists() {
   const urls = useUkvApiURLs();
   const { groupsToken, isAuthenticated } = useAppContext();
-  const { savedEntities, isLoading } = useFetchSavedEntitiesAndLists({ urls, groupsToken });
+  const { savedEntities, savedLists, isLoading } = useFetchSavedEntitiesAndLists({ urls, groupsToken });
 
-  const initializer = savedEntitiiesStoreInitializer;
+  const initializer = savedEntitiesStoreInitializer;
   const useSavedEntitiesStore = isAuthenticated
-    ? createImmer<SavedEntitiesStore>((set, get) => ({
-        ...savedEntitiiesStoreInitializer(set, get),
-        savedEntities: savedEntities || {},
-      }))
+    ? createImmerPersist<SavedEntitiesStore>(
+        (set, get) => ({
+          ...savedEntitiesStoreInitializer(set, get),
+          savedEntities: savedEntities || {},
+          savedLists: savedLists || {},
+        }),
+        { name: 'saved_entities_remote' },
+      )
     : createImmerPersist<SavedEntitiesStore>(initializer, { name: 'saved_entities' });
 
-  const store = useSavedEntitiesStore(useSavedEntitiesSelector);
+  const store = useSavedEntitiesStore(savedEntitiesSelector);
 
   useEffect(() => {
-    if (isAuthenticated && !isLoading && savedEntities) {
+    if (isAuthenticated && !isLoading && savedEntities && savedLists) {
       store.setEntities(savedEntities);
+      store.setLists(savedLists);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isLoading, savedEntities]);
 
-  const params = { urls, groupsToken, savedEntities };
+  const params = { urls, groupsToken, savedEntities, savedLists };
+
+  const handleStoreOperation = async <T>(remoteOperation: () => Promise<T>, localOperation: () => void) => {
+    if (isAuthenticated) {
+      await remoteOperation();
+      localOperation();
+    } else {
+      localOperation();
+    }
+  };
 
   return {
     ...store,
     saveEntity: (entityUUID: string) => {
-      store.saveEntity(entityUUID);
-      if (isAuthenticated) {
-        saveEntityRemote({ ...params, entityUUID });
-      }
+      handleStoreOperation(
+        () => saveEntityRemote({ ...params, entityUUID }),
+        () => store.saveEntity(entityUUID),
+      ).catch((err) => console.error('Failed to save entity:', err));
+    },
+    deleteEntity: (entityUUID: string) => {
+      handleStoreOperation(
+        () => deleteEntityRemote({ ...params, entityUUID }),
+        () => store.deleteEntity(entityUUID),
+      ).catch((err) => console.error('Failed to delete entity:', err));
+    },
+    deleteEntities: (entityUUIDs: Set<string>) => {
+      handleStoreOperation(
+        () => deleteEntitiesRemote({ ...params, entityUUIDs }),
+        () => store.deleteEntities(entityUUIDs),
+      ).catch((err) => console.error('Failed to delete entities:', err));
+    },
+    createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => {
+      handleStoreOperation(
+        () => createListRemote({ ...params, list }),
+        () => store.createList(list),
+      ).catch((err) => console.error('Failed to create list:', err));
+    },
+    addEntityToList: (listUUID: string, entityUUID: string) => {
+      handleStoreOperation(
+        () => addEntityToListRemote({ ...params, listUUID, entityUUID }),
+        () => store.addEntityToList(listUUID, entityUUID),
+      ).catch((err) => console.error('Failed to add entity to list:', err));
+    },
+    addEntitiesToList: (listUUID: string, entityUUIDs: string[]) => {
+      handleStoreOperation(
+        () => addEntitiesToListRemote({ ...params, listUUID, entityUUIDs }),
+        () => store.addEntitiesToList(listUUID, entityUUIDs),
+      ).catch((err) => console.error('Failed to add entity to list:', err));
+    },
+    removeEntityFromList: (listUUID: string, entityUUID: string) => {
+      handleStoreOperation(
+        () => removeEntityFromListRemote({ ...params, listUUID, entityUUID }),
+        () => store.removeEntityFromList(listUUID, entityUUID),
+      ).catch((err) => console.error('Failed to remove entity from list:', err));
+    },
+    removeEntitiesFromList: (listUUID: string, entityUUIDs: string[]) => {
+      handleStoreOperation(
+        () => removeEntitiesFromListRemote({ ...params, listUUID, entityUUIDs }),
+        () => store.removeEntitiesFromList(listUUID, entityUUIDs),
+      ).catch((err) => console.error('Failed to remove entities from list:', err));
+    },
+    queueListToBeDeleted: (listUUID: string) => {
+      handleStoreOperation(
+        () => deleteListRemote({ ...params, listUUID }),
+        () => store.queueListToBeDeleted(listUUID),
+      ).catch((err) => console.error('Failed to queue list for deletion:', err));
+    },
+    deleteQueuedLists: () => {
+      store.deleteQueuedLists();
+    },
+    editList: ({ title, description, listUUID }: { title: string; description: string; listUUID: string }) => {
+      handleStoreOperation(
+        () => editListRemote({ ...params, title, description, listUUID }),
+        () => store.editList({ title, description, listUUID }),
+      ).catch((err) => console.error('Failed to edit list:', err));
     },
   };
 }
