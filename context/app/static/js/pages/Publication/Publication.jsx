@@ -30,7 +30,7 @@ function Publication({ publication, vignette_json }) {
   const shouldDisplaySection = {
     summary: true,
     data: true,
-    visualizations: Boolean(Object.keys(vignette_json).length),
+    visualizations: vignette_json?.vignettes.length > 0 && Boolean(Object.keys(vignette_json).length),
     files: Boolean(files?.length),
     'bulk-data-transfer': true,
     authors: true,
