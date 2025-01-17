@@ -1,21 +1,20 @@
 import React from 'react';
 
 import AddToListItem from 'js/components/savedLists/AddToListItem';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { MaxHeightList } from './style';
 
 interface AddToListProps {
   selectedLists: Set<string>;
+  allLists: Record<string, SavedEntitiesList>;
   addToSelectedLists: (listUUID: string) => void;
   removeFromSelectedLists: (listUUID: string) => void;
 }
 
-function AddToList({ selectedLists, addToSelectedLists, removeFromSelectedLists }: AddToListProps) {
-  const { savedLists } = useSavedLists();
-
+function AddToList({ selectedLists, allLists, addToSelectedLists, removeFromSelectedLists }: AddToListProps) {
   return (
     <MaxHeightList>
-      {Object.entries(savedLists).map(([listUUID, value]) => (
+      {Object.entries(allLists).map(([listUUID, value]) => (
         <AddToListItem
           key={listUUID}
           title={value.title}

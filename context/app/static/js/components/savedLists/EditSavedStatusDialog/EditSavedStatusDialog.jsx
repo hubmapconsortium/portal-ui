@@ -1,14 +1,11 @@
 import React from 'react';
 import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 
-import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
 import useEntityStore, { editedAlertStatus } from 'js/stores/useEntityStore';
-import { InternalLink } from 'js/shared-styles/Links';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import { useSavedLists, useSavedListsAndEntities } from 'js/components/savedLists/hooks';
 
 function getSavedListsWhichContainEntity(savedLists, savedEntity) {
   return Object.entries(savedLists).reduce((acc, [title, obj]) => {
@@ -19,17 +16,32 @@ function getSavedListsWhichContainEntity(savedLists, savedEntity) {
 const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
 
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_type }) {
-  const { addEntityToList, savedLists, removeEntityFromList } = useSavedLists();
+  const { addEntityToList, deleteEntity, saveEntity, removeEntityFromList } = useSavedLists();
+  const { savedListsAndEntities } = useSavedListsAndEntities();
+
   const [selectedLists, addToSelectedLists, removeFromSelectedLists, setSelectedLists] = useStateSet(
-    getSavedListsWhichContainEntity(savedLists, uuid),
+    getSavedListsWhichContainEntity(savedListsAndEntities, uuid),
   );
 
   const setShouldDisplaySavedOrEditedAlert = useEntityStore(entityStoreSelector);
 
   function addSavedEntitiesToList() {
-    selectedLists.forEach((listUUID) => addEntityToList(listUUID, uuid));
-    const unselectedLists = Object.keys(savedLists).filter((listUUID) => !selectedLists.has(listUUID));
-    unselectedLists.forEach((listUUID) => removeEntityFromList(listUUID, uuid));
+    selectedLists.forEach((listUUID) => {
+      if (listUUID === "savedEntities") {
+        saveEntity(uuid);
+      } else {
+        addEntityToList(listUUID, uuid)
+      }
+    });
+
+    const unselectedLists = Object.keys(savedListsAndEntities).filter((listUUID) => !selectedLists.has(listUUID));
+    unselectedLists.forEach((listUUID) => {
+      if (listUUID === "savedEntities") {
+        deleteEntity(uuid);
+      } else {
+        removeEntityFromList(listUUID, uuid)
+      }
+    });
   }
 
   function handleSave() {
@@ -39,37 +51,29 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
   }
 
   function handleClose() {
-    setSelectedLists(new Set(getSavedListsWhichContainEntity(savedLists, uuid)));
+    setSelectedLists(new Set(getSavedListsWhichContainEntity(savedListsAndEntities, uuid)));
     setDialogIsOpen(false);
   }
-
-  const savedListsExist = Object.keys(savedLists).length > 0;
 
   return (
     <DialogModal
       title="Edit Saved Status"
       content={
-        savedListsExist ? (
-          <AddToList
-            selectedLists={selectedLists}
-            addToSelectedLists={addToSelectedLists}
-            removeFromSelectedLists={removeFromSelectedLists}
-          />
-        ) : (
-          <Typography>
-            {`You don't have any lists. To assign this ${entity_type.toLowerCase()} to one or more lists, create a list in `}
-            <InternalLink href="/my-lists">My Lists</InternalLink>.
-          </Typography>
-        )
+        <AddToList
+          selectedLists={selectedLists}
+          allLists={savedListsAndEntities}
+          addToSelectedLists={addToSelectedLists}
+          removeFromSelectedLists={removeFromSelectedLists}
+        />
       }
       actions={
         <>
           <Button onClick={() => handleClose()} color="primary">
             Cancel
           </Button>
-          <OptDisabledButton onClick={() => handleSave()} color="primary" disabled={!savedListsExist}>
+          <Button onClick={() => handleSave()} color="primary">
             Save
-          </OptDisabledButton>
+          </Button>
         </>
       }
       isOpen={dialogIsOpen}

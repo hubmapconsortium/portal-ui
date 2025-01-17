@@ -50,7 +50,7 @@ function SavedEntitiesTable({
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
 
   const columns = isSavedListPage
-    ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To Collection' }]
+    ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To List' }]
     : [...defaultColumns, { id: 'dateSaved', label: 'Date Saved' }];
 
   function deleteSelectedSavedEntities() {

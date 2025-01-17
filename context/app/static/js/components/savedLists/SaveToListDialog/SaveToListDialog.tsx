@@ -42,6 +42,7 @@ function SaveToListDialog({
       title={title}
       content={
         <AddToList
+          allLists={savedLists}
           selectedLists={selectedLists}
           addToSelectedLists={addToSelectedLists}
           removeFromSelectedLists={removeFromSelectedLists}

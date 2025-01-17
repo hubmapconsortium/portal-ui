@@ -27,12 +27,19 @@ const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
   editList: state.editList,
 });
 
+const savedEntitiesDefaultObject = {
+  title: 'My Saved Items',
+  description: '',
+  dateSaved: Date.now(),
+  dateModified: Date.now(),
+};
+
 /**
  * Generates API URLs for various saved list API actions
  * @param ukvEndpoint endpoint to use as the base for API URLs
  * @returns an API URL generator
  */
-export const apiUrls = (ukvEndpoint: string) => ({
+const apiUrls = (ukvEndpoint: string) => ({
   get keys(): string {
     return `${ukvEndpoint}/user/keys`;
   },
@@ -44,7 +51,7 @@ export const apiUrls = (ukvEndpoint: string) => ({
   },
 });
 
-export function useUkvApiURLs() {
+function useUkvApiURLs() {
   const { ukvEndpoint } = useAppContext();
   return apiUrls(ukvEndpoint);
 }
@@ -93,13 +100,13 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken }: RemoteEntitiesProp
 
   let savedEntities: Record<string, SavedEntity> = {};
   let savedLists: Record<string, SavedEntitiesList> = {};
-  let isFirstRemoteFetch = false;
+  let isFirstRemoteFetch = true;
 
   if (data && !isLoading) {
     const savedEntitiesObject = data.find((item) => item.key === 'savedEntities');
 
     if (savedEntitiesObject) {
-      isFirstRemoteFetch = Object.keys(savedEntitiesObject).length === 0;
+      isFirstRemoteFetch = false;
       savedEntities = savedEntitiesObject.value.savedEntities;
     }
 
@@ -353,11 +360,12 @@ function useSavedLists() {
       return;
     }
 
-    // If a user logs into their account for the first time since the My Lists update
-    // on a device that has saved entities and lists, we need to copy those over to their remote store.
-    // This only happens once.
     if (isFirstRemoteFetch) {
+      // If a user logs into their account for the first time since the My Lists update
+      // on a device that has saved entities and lists, we copy those to their remote store.
+      // This only happens once.
       const { savedEntities: savedEntitiesLocal, savedLists: savedListsLocal } = useLocalSavedEntitiesStore.getState();
+
       CopySavedItemsToRemoteStore({ savedEntitiesLocal, savedListsLocal, urls, groupsToken });
       store.setEntities(savedEntitiesLocal);
       store.setLists(savedListsLocal);
@@ -450,4 +458,17 @@ function useSavedLists() {
   };
 }
 
-export { useSavedLists };
+function useSavedListsAndEntities() {
+  const { savedLists, savedEntities } = useSavedLists();
+  return {
+    savedListsAndEntities: {
+      savedEntities: {
+        ...savedEntitiesDefaultObject,
+        savedEntities,
+      },
+      ...savedLists,
+    },
+  };
+}
+
+export { useSavedLists, useSavedListsAndEntities };
