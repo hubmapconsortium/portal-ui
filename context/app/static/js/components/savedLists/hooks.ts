@@ -5,7 +5,7 @@ import { fetcher } from 'js/helpers/swr/fetchers';
 import { v4 as uuidv4 } from 'uuid';
 import useSWR from 'swr';
 import { useEffect, useRef } from 'react';
-import { createImmerPersist } from 'js/helpers/zustand/middleware';
+import { createImmer, createImmerPersist } from 'js/helpers/zustand/middleware';
 
 const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
   savedLists: state.savedLists,
@@ -93,11 +93,13 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken }: RemoteEntitiesProp
 
   let savedEntities: Record<string, SavedEntity> = {};
   let savedLists: Record<string, SavedEntitiesList> = {};
+  let isFirstRemoteFetch = false;
 
   if (data && !isLoading) {
     const savedEntitiesObject = data.find((item) => item.key === 'savedEntities');
 
     if (savedEntitiesObject) {
+      isFirstRemoteFetch = Object.keys(savedEntitiesObject).length === 0;
       savedEntities = savedEntitiesObject.value.savedEntities;
     }
 
@@ -111,7 +113,7 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken }: RemoteEntitiesProp
       }, {});
   }
 
-  return { savedLists, savedEntities, isLoading };
+  return { savedLists, savedEntities, isFirstRemoteFetch, isLoading };
 }
 
 function CopySavedItemsToRemoteStore({
@@ -326,37 +328,45 @@ function editListRemote({
 
 // Main exported hook
 
-const useSavedEntitiesStore = createImmerPersist<SavedEntitiesStore>(savedEntitiesStoreInitializer, {
-  name: 'saved_entities',
+const useLocalSavedEntitiesStore = createImmerPersist<SavedEntitiesStore>(savedEntitiesStoreInitializer, {
+  name: 'local_saved_entities',
 });
+const useRemoteSavedEntitiesStore = createImmer<SavedEntitiesStore>(savedEntitiesStoreInitializer);
 
 function useSavedLists() {
   const urls = useUkvApiURLs();
   const { groupsToken, isAuthenticated } = useAppContext();
-  const { savedEntities, savedLists, isLoading } = useFetchSavedEntitiesAndLists({ urls, groupsToken });
+  const { savedEntities, savedLists, isFirstRemoteFetch, isLoading } = useFetchSavedEntitiesAndLists({
+    urls,
+    groupsToken,
+  });
 
-  const store = useSavedEntitiesStore(savedEntitiesSelector);
+  const localStore = useLocalSavedEntitiesStore(savedEntitiesSelector);
+  const remoteStore = useRemoteSavedEntitiesStore(savedEntitiesSelector);
+  const store = isAuthenticated ? remoteStore : localStore;
+
   const storeHasBeenSetRef = useRef(false);
   const wasLoadingRef = useRef(isLoading);
 
   useEffect(() => {
-    if (!isAuthenticated || isLoading) {
+    if (!isAuthenticated || isLoading || !wasLoadingRef.current) {
       return;
     }
 
     // If a user logs into their account for the first time since the My Lists update
     // on a device that has saved entities and lists, we need to copy those over to their remote store.
     // This only happens once.
-    if (Object.keys(savedEntities).length === 0) {
-      const { savedEntities: savedEntitiesLocal, savedLists: savedListsLocal } = useSavedEntitiesStore.getState();
+    if (isFirstRemoteFetch) {
+      const { savedEntities: savedEntitiesLocal, savedLists: savedListsLocal } = useLocalSavedEntitiesStore.getState();
       CopySavedItemsToRemoteStore({ savedEntitiesLocal, savedListsLocal, urls, groupsToken });
-      storeHasBeenSetRef.current = true;
+      store.setEntities(savedEntitiesLocal);
+      store.setLists(savedListsLocal);
+    } else {
       // If the user already has saved entities and lists in their remote store, we need to copy those over to the local store.
-    } else if (wasLoadingRef.current) {
       store.setEntities(savedEntities);
       store.setLists(savedLists);
-      storeHasBeenSetRef.current = true;
     }
+    storeHasBeenSetRef.current = true;
     wasLoadingRef.current = isLoading;
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isAuthenticated, isLoading]);
