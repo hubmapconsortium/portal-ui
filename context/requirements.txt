@@ -237,14 +237,7 @@ packaging==23.1
     #   scanpy
     #   scikit-image
     #   statsmodels
-pandas==2.1.0 ; python_full_version >= '3.12'
-    # via
-    #   anndata
-    #   scanpy
-    #   seaborn
-    #   statsmodels
-    #   vitessce
-pandas==2.2.3 ; python_full_version < '3.12'
+pandas==2.1.0
     # via
     #   anndata
     #   scanpy
