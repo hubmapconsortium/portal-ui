@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 import useSWR from 'swr';
 import { useEffect, useRef } from 'react';
 import { createImmer, createImmerPersist } from 'js/helpers/zustand/middleware';
+import { useSavedListsAlerts } from 'js/stores/useSavedListsAlertsStore';
 
 const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
   savedLists: state.savedLists,
@@ -100,24 +101,27 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken }: RemoteEntitiesProp
 
   let savedEntities: Record<string, SavedEntity> = {};
   let savedLists: Record<string, SavedEntitiesList> = {};
-  let isFirstRemoteFetch = true;
+  let isFirstRemoteFetch = false;
 
-  if (data && !isLoading) {
-    const savedEntitiesObject = data.find((item) => item.key === 'savedEntities');
+  if (!isLoading) {
+    if (!data) {
+      isFirstRemoteFetch = true;
+    } else {
+      const savedEntitiesObject = data.find((item) => item.key === 'savedEntities');
 
-    if (savedEntitiesObject) {
-      isFirstRemoteFetch = false;
-      savedEntities = savedEntitiesObject.value.savedEntities;
+      if (savedEntitiesObject) {
+        savedEntities = savedEntitiesObject.value.savedEntities;
+      }
+
+      savedLists = data
+        .filter((item) => item.key !== 'savedEntities')
+        .reduce((acc, item) => {
+          return {
+            ...acc,
+            [item.key]: item.value,
+          };
+        }, {});
     }
-
-    savedLists = data
-      .filter((item) => item.key !== 'savedEntities')
-      .reduce((acc, item) => {
-        return {
-          ...acc,
-          [item.key]: item.value,
-        };
-      }, {});
   }
 
   return { savedLists, savedEntities, isFirstRemoteFetch, isLoading };
@@ -343,6 +347,7 @@ const useRemoteSavedEntitiesStore = createImmer<SavedEntitiesStore>(savedEntitie
 function useSavedLists() {
   const urls = useUkvApiURLs();
   const { groupsToken, isAuthenticated } = useAppContext();
+  const { setTransferredToProfile } = useSavedListsAlerts();
   const { savedEntities, savedLists, isFirstRemoteFetch, isLoading } = useFetchSavedEntitiesAndLists({
     urls,
     groupsToken,
@@ -362,8 +367,9 @@ function useSavedLists() {
 
     if (isFirstRemoteFetch) {
       // If a user logs into their account for the first time since the My Lists update
-      // on a device that has saved entities and lists, we copy those to their remote store.
+      // on a device that has saved entities and lists, we copy those to their remote store and show them an alert.
       // This only happens once.
+      setTransferredToProfile(true);
       const { savedEntities: savedEntitiesLocal, savedLists: savedListsLocal } = useLocalSavedEntitiesStore.getState();
 
       CopySavedItemsToRemoteStore({ savedEntitiesLocal, savedListsLocal, urls, groupsToken });
