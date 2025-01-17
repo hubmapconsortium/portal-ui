@@ -117,8 +117,8 @@ def details_vitessce(type, uuid):
     marker = request.args.get('marker') or None
     parent = client.get_entity(parent_uuid) if parent_uuid else None
     epic_uuid = None
-    if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get(
-            'status') != 'Error' and entity.get("pipeline") == "Segmentation Mask":
+    if 'epic' in entity.get('vitessce-hints') and entity.get(
+            'status') != 'Error':
         epic_uuid = uuid
         if parent is None:
             ancestors = entity.get('immediate_ancestor_ids')
