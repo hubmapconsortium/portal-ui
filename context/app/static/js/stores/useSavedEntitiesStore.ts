@@ -131,7 +131,7 @@ const savedEntitiesStoreInitializer: StoreInitializer = (set, get) => ({
 });
 
 const useLocalSavedEntitiesStore = createImmerPersist<SavedEntitiesStore>(savedEntitiesStoreInitializer, {
-  name: 'local_saved_entities',
+  name: 'saved_entities',
 });
 const useRemoteSavedEntitiesStore = createImmer<SavedEntitiesStore>(savedEntitiesStoreInitializer);
 
