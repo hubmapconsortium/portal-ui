@@ -14,6 +14,7 @@ import {
   parentDonorRace,
 } from 'js/shared-styles/tables/columns';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { getSearchURL } from '../utils';
 
 const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, createdTimestamp];
@@ -75,4 +76,4 @@ function Samples({ organTerms, id }: OrganSamplesProps) {
   );
 }
 
-export default withSelectableTableProvider(Samples, 'organ-samples');
+export default withShouldDisplay(withSelectableTableProvider(Samples, 'organ-samples'));

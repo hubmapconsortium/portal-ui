@@ -14,6 +14,7 @@ import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks'
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { DatasetIcon } from 'js/shared-styles/icons';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { getSearchURL } from '../utils';
 
 interface AssaysProps {
@@ -70,4 +71,4 @@ function Assays({ organTerms, bucketData, id: sectionId }: AssaysProps) {
   );
 }
 
-export default Assays;
+export default withShouldDisplay(Assays);

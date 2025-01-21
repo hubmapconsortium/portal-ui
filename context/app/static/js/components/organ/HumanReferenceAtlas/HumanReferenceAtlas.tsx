@@ -4,6 +4,7 @@ import Paper from '@mui/material/Paper';
 
 import CCFOrganInfo from 'js/components/HRA/CCFOrganInfo';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 
 interface HumanReferenceAtlasProps {
   uberonIri: string;
@@ -24,4 +25,4 @@ function HumanReferenceAtlas({ uberonIri, id }: HumanReferenceAtlasProps) {
   );
 }
 
-export default HumanReferenceAtlas;
+export default withShouldDisplay(HumanReferenceAtlas);
