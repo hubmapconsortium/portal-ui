@@ -1,5 +1,6 @@
 import { v4 as uuidv4 } from 'uuid';
 import { SavedEntitiesStore } from 'js/components/savedLists/types';
+import { createImmer, createImmerPersist } from 'js/helpers/zustand';
 
 type StoreInitializer = (
   set: (
@@ -9,7 +10,7 @@ type StoreInitializer = (
   get: () => SavedEntitiesStore,
 ) => SavedEntitiesStore;
 
-const savedEntitiiesStoreInitializer: StoreInitializer = (set, get) => ({
+const savedEntitiesStoreInitializer: StoreInitializer = (set, get) => ({
   savedEntities: {},
   setEntities: (entities) =>
     set((state) => {
@@ -129,4 +130,9 @@ const savedEntitiiesStoreInitializer: StoreInitializer = (set, get) => ({
   },
 });
 
-export default savedEntitiiesStoreInitializer;
+const useLocalSavedEntitiesStore = createImmerPersist<SavedEntitiesStore>(savedEntitiesStoreInitializer, {
+  name: 'local_saved_entities',
+});
+const useRemoteSavedEntitiesStore = createImmer<SavedEntitiesStore>(savedEntitiesStoreInitializer);
+
+export { useLocalSavedEntitiesStore, useRemoteSavedEntitiesStore };
