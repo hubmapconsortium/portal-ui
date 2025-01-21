@@ -1,7 +1,6 @@
 import { useAppContext } from 'js/components/Contexts';
 import { SavedEntitiesList, SavedEntity } from 'js/components/savedLists/types';
 import { fetcher } from 'js/helpers/swr/fetchers';
-import { v4 as uuidv4 } from 'uuid';
 import useSWR from 'swr';
 
 /** **************************************************
@@ -199,13 +198,13 @@ function createListRemote({
   urls,
   groupsToken,
   list,
+  uuid,
 }: {
   urls: { key: (uuid: string) => string };
   groupsToken: string;
   list: Pick<SavedEntitiesList, 'title' | 'description'>;
+  uuid: string;
 }) {
-  const uuid = uuidv4();
-
   const url = urls.key(uuid);
   const body = JSON.stringify({
     ...list,

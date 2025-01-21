@@ -1,4 +1,3 @@
-import { v4 as uuidv4 } from 'uuid';
 import { SavedEntitiesStore } from 'js/components/savedLists/types';
 import { createImmer, createImmerPersist } from 'js/helpers/zustand';
 
@@ -49,8 +48,7 @@ const savedEntitiesStoreInitializer: StoreInitializer = (set, get) => ({
     });
   },
   savedLists: {},
-  createList: ({ title, description }) => {
-    const uuid = uuidv4();
+  createList: ({ title, description }, uuid) => {
     set((state) => {
       return {
         savedLists: {

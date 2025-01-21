@@ -24,7 +24,7 @@ interface SavedEntitiesActions {
   saveEntities: (entityUUIDs: Set<string>) => void;
   deleteEntity: (entityUUID: string) => void;
   deleteEntities: (entityUUIDs: Set<string>) => void;
-  createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => void;
+  createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>, uuid: string) => void;
   addEntityToList: (listUUID: string, entityUUID: string) => void;
   addEntitiesToList: (listUUID: string, entityUUIDs: string[]) => void;
   removeEntityFromList: (listUUID: string, entityUUID: string) => void;

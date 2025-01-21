@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import { v4 as uuidv4 } from 'uuid';
 import { useLocalSavedEntitiesStore, useRemoteSavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import { useAppContext } from 'js/components/Contexts';
 import { SavedEntitiesList, SavedEntitiesStore } from 'js/components/savedLists/types';
@@ -121,9 +122,10 @@ function useSavedLists() {
       ).catch((err) => console.error('Failed to delete entities:', err));
     },
     createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => {
+      const uuid = uuidv4();
       handleStoreOperation(
-        () => createListRemote({ ...params, list }),
-        () => store.createList(list),
+        () => createListRemote({ ...params, list, uuid }),
+        () => store.createList(list, uuid),
       ).catch((err) => console.error('Failed to create list:', err));
     },
     addEntityToList: (listUUID: string, entityUUID: string) => {

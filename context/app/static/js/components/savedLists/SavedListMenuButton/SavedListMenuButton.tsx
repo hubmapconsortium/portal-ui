@@ -3,6 +3,7 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -42,8 +43,10 @@ function DeleteListButton({ listUUID }: { listUUID: string }) {
         onClose={() => setMenuIsOpen(false)}
       >
         <MenuItem onClick={() => setDeleteListDialogIsOpen(true)}>
-          <DeleteIcon color="primary" />
-          <Typography>Delete List</Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <DeleteIcon color="primary" />
+            <Typography>Delete List</Typography>
+          </Stack>
         </MenuItem>
       </Menu>
       <DialogModal
