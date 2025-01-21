@@ -33,7 +33,7 @@ const savedEntitiesDefaultObject = {
   title: 'My Saved Items',
   description: '',
   dateSaved: Date.now(),
-  dateModified: Date.now(),
+  dateLastModified: Date.now(),
 };
 
 /**
@@ -473,14 +473,17 @@ function useSavedLists() {
 
 function useSavedListsAndEntities() {
   const { savedLists, savedEntities } = useSavedLists();
-  return {
-    savedListsAndEntities: {
-      savedEntities: {
-        ...savedEntitiesDefaultObject,
-        savedEntities,
-      },
-      ...savedLists,
+
+  const savedListsAndEntities: Record<string, SavedEntitiesList> = {
+    savedEntities: {
+      ...savedEntitiesDefaultObject,
+      savedEntities,
     },
+    ...savedLists,
+  };
+
+  return {
+    savedListsAndEntities,
   };
 }
 

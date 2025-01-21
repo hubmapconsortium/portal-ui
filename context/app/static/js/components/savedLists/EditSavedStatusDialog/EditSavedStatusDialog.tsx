@@ -4,18 +4,24 @@ import Button from '@mui/material/Button';
 import useStateSet from 'js/hooks/useStateSet';
 import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
-import useEntityStore, { editedAlertStatus } from 'js/stores/useEntityStore';
+import useEntityStore, { EntityStore, editedAlertStatus } from 'js/stores/useEntityStore';
 import { useSavedLists, useSavedListsAndEntities } from 'js/components/savedLists/hooks';
+import { SavedEntitiesList } from 'js/components/savedLists/types';
 
-function getSavedListsWhichContainEntity(savedLists, savedEntity) {
-  return Object.entries(savedLists).reduce((acc, [title, obj]) => {
-    return savedEntity in obj.savedEntities ? [...acc, title] : acc;
+function getSavedListsWhichContainEntity(savedLists: Record<string, SavedEntitiesList>, entityUUID: string): string[] {
+  return Object.entries(savedLists).reduce<string[]>((acc, [title, obj]) => {
+    return entityUUID in obj.savedEntities ? [...acc, title] : acc;
   }, []);
 }
 
-const entityStoreSelector = (state) => state.setShouldDisplaySavedOrEditedAlert;
+const entityStoreSelector = (state: EntityStore) => state.setShouldDisplaySavedOrEditedAlert;
 
-function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_type }) {
+interface EditSavedStatusDialogProps {
+  dialogIsOpen: boolean;
+  setDialogIsOpen: (isOpen: boolean) => void;
+  uuid: string;
+}
+function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSavedStatusDialogProps) {
   const { addEntityToList, deleteEntity, saveEntity, removeEntityFromList } = useSavedLists();
   const { savedListsAndEntities } = useSavedListsAndEntities();
 
@@ -27,19 +33,19 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid, entity_typ
 
   function addSavedEntitiesToList() {
     selectedLists.forEach((listUUID) => {
-      if (listUUID === "savedEntities") {
+      if (listUUID === 'savedEntities') {
         saveEntity(uuid);
       } else {
-        addEntityToList(listUUID, uuid)
+        addEntityToList(listUUID, uuid);
       }
     });
 
     const unselectedLists = Object.keys(savedListsAndEntities).filter((listUUID) => !selectedLists.has(listUUID));
     unselectedLists.forEach((listUUID) => {
-      if (listUUID === "savedEntities") {
+      if (listUUID === 'savedEntities') {
         deleteEntity(uuid);
       } else {
-        removeEntityFromList(listUUID, uuid)
+        removeEntityFromList(listUUID, uuid);
       }
     });
   }

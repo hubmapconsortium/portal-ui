@@ -61,7 +61,7 @@ function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   );
 }
 
-function EditSavedEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }) {
+function EditSavedEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
@@ -73,12 +73,7 @@ function EditSavedEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { e
         icon={EditSavedEntityIcon}
         tooltip="Edit saved status"
       />
-      <EditSavedStatusDialog
-        dialogIsOpen={dialogIsOpen}
-        setDialogIsOpen={setDialogIsOpen}
-        uuid={uuid}
-        entity_type={entity_type}
-      />
+      <EditSavedStatusDialog dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} uuid={uuid} />
     </>
   );
 }
@@ -87,14 +82,10 @@ function WorkspaceSVGIcon({ color = 'primary', ...props }: SvgIconProps) {
   return <SvgIcon component={WorkspacesIcon} color={color} {...props} />;
 }
 
-function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }) {
+function SaveEditEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { savedEntities } = useSavedLists();
 
-  return uuid in savedEntities ? (
-    <EditSavedEntityButton uuid={uuid} entity_type={entity_type} />
-  ) : (
-    <SaveEntityButton uuid={uuid} />
-  );
+  return uuid in savedEntities ? <EditSavedEntityButton uuid={uuid} /> : <SaveEntityButton uuid={uuid} />;
 }
 
 function ViewSelectChip({
@@ -194,7 +185,7 @@ function EntityHeaderActionButtons({
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
-      <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
+      <SaveEditEntityButton uuid={uuid} />
       <JSONButton entity_type={entity_type} uuid={uuid} />
       {isDataset && (
         <ProcessedDataWorkspaceMenu
