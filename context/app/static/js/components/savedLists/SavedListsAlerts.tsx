@@ -54,7 +54,7 @@ function SavedListsEntityDetailAlerts() {
       ) : (
         'updated lists'
       )}{' '}
-      locally. <InternalLink href="/login">Log in</InternalLink> to save it to your profile for easy access across
+      locally. <InternalLink href="/login">Log in</InternalLink> to save lists to your profile for easy access across
       devices.
     </StyledAlert>
   );

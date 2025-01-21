@@ -15,6 +15,7 @@ const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
   setEntities: state.setEntities,
   setLists: state.setLists,
   saveEntity: state.saveEntity,
+  saveEntities: state.saveEntities,
   deleteEntity: state.deleteEntity,
   deleteEntities: state.deleteEntities,
   createList: state.createList,
@@ -165,7 +166,7 @@ function saveEntitiesRemote({
   groupsToken,
   savedEntities,
   entityUUIDs,
-}: RemoteEntitiesProps & { entityUUIDs: string[] }) {
+}: RemoteEntitiesProps & { entityUUIDs: Set<string> }) {
   const savedEntitiesCopy = { ...savedEntities };
   entityUUIDs.forEach((entityUUID) => {
     savedEntitiesCopy[entityUUID] = {
@@ -187,7 +188,7 @@ function saveEntitiesRemote({
 }
 
 function saveEntityRemote({ entityUUID, ...props }: RemoteEntitiesProps & { entityUUID: string }) {
-  return saveEntitiesRemote({ ...props, entityUUIDs: [entityUUID] });
+  return saveEntitiesRemote({ ...props, entityUUIDs: new Set([entityUUID]) });
 }
 
 function deleteEntitiesRemote({
@@ -402,6 +403,12 @@ function useSavedLists() {
       handleStoreOperation(
         () => saveEntityRemote({ ...params, entityUUID }),
         () => store.saveEntity(entityUUID),
+      ).catch((err) => console.error('Failed to save entity:', err));
+    },
+    saveEntities: (entityUUIDs: Set<string>) => {
+      handleStoreOperation(
+        () => saveEntitiesRemote({ ...params, entityUUIDs }),
+        () => store.saveEntities(entityUUIDs),
       ).catch((err) => console.error('Failed to save entity:', err));
     },
     deleteEntity: (entityUUID: string) => {

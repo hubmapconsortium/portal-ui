@@ -24,6 +24,13 @@ const savedEntitiiesStoreInitializer: StoreInitializer = (set, get) => ({
     set((state) => {
       state.savedEntities[entityUUID] = { dateSaved: Date.now() };
     }),
+  saveEntities: (entityUUIDs: Set<string>) => {
+    set((state) => {
+      Array.from(entityUUIDs).forEach((uuid) => {
+        state.savedEntities[uuid] = { dateSaved: Date.now() };
+      });
+    });
+  },
   deleteEntity: (entityUUID) => {
     set((state) => {
       const updatedSavedEntities = { ...state.savedEntities };

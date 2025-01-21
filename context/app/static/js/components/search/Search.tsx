@@ -16,6 +16,7 @@ import history from 'history/browser';
 import { useAppContext } from 'js/components/Contexts';
 import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
 import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
+import SaveEntitiesButton from 'js/components/savedLists/SaveEntitiesButton';
 import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -181,6 +182,7 @@ function Bar({ type }: TypeProps) {
       <MetadataMenu type={type} />
       <WorkspacesDropdownMenu type={type} />
       {view === 'tile' && <TilesSortSelect />}
+      <SaveEntitiesButton entity_type={type} />
       <BulkDownloadButtonFromSearch type={type} />
       <DefaultSearchViewSwitch />
     </Stack>
