@@ -10,12 +10,12 @@ import { MoreIcon, DeleteIcon } from 'js/shared-styles/icons';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { useSavedLists } from 'js/components/savedLists/hooks';
 
-function DeleteListButton({ listUUID }) {
+function DeleteListButton({ listUUID }: { listUUID: string }) {
   const anchorEl = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [deleteListDialogIsOpen, setDeleteListDialogIsOpen] = useState(false);
 
-  const  { queueListToBeDeleted } = useSavedLists();
+  const { queueListToBeDeleted } = useSavedLists();
 
   function closeMenuAndDeleteDialog() {
     setMenuIsOpen(false);

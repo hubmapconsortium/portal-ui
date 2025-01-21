@@ -4,7 +4,13 @@ import { PrimaryOutlinedTextField } from 'js/shared-styles/formFields';
 
 const maxTitleLength = 50;
 
-function TitleTextField({ handleChange, title }) {
+function TitleTextField({
+  handleChange,
+  title,
+}: {
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  title: string;
+}) {
   return (
     <PrimaryOutlinedTextField
       autoFocus
@@ -23,7 +29,13 @@ function TitleTextField({ handleChange, title }) {
   );
 }
 
-function DescriptionTextField({ handleChange, description }) {
+function DescriptionTextField({
+  handleChange,
+  description,
+}: {
+  handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  description: string;
+}) {
   return (
     <PrimaryOutlinedTextField
       id="description"
