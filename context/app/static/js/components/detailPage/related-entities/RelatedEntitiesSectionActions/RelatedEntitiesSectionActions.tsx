@@ -20,7 +20,7 @@ export function RelatedEntitiesSectionActions({ searchPageHref, uuids }: Related
 
   return (
     <Stack direction="row" spacing={1}>
-      <SaveEntitiesButton uuids={uuids} entity_type="Dataset" tooltip="Save datasets in this table." />
+      <SaveEntitiesButton uuids={uuids} entity_type="Dataset" />
       <BulkDownloadButton uuids={uuids} tooltip="Bulk download files for datasets in this table." />
       <Button
         variant="contained"

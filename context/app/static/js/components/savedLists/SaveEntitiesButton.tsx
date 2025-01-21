@@ -11,11 +11,11 @@ import { generateCommaList } from 'js/helpers/functions';
 export default function SaveEntitiesButton({
   entity_type,
   uuids,
-  tooltip,
+  useSelectableTableTooltips,
 }: {
   entity_type: AllEntityTypes;
   uuids: Set<string>;
-  tooltip?: string;
+  useSelectableTableTooltips?: boolean;
 }) {
   const { savedEntities, saveEntities } = useSavedLists();
 
@@ -26,10 +26,16 @@ export default function SaveEntitiesButton({
   const allInSavedEntities = !noEntities && Array.from(uuids).every((uuid) => savedEntities[uuid]);
 
   const disabled = noEntities || allInSavedEntities;
-  const disabledTooltip = allInSavedEntities
-    ? `All ${entity_type.toLowerCase()}s are already saved.`
-    : `Select ${entity_type.toLowerCase()}s to save.`;
-  const enabledTooltip = tooltip ?? `Save ${entity_type.toLowerCase()}s.`;
+  const entityTypes = `${entity_type.toLowerCase()}s`;
+
+  let tooltip = '';
+  const entityLabel = useSelectableTableTooltips ? `selected ${entityTypes}` : entityTypes;
+
+  if (disabled) {
+    tooltip = allInSavedEntities ? `All ${entityLabel} are already saved.` : `Select ${entityTypes} to save.`;
+  } else {
+    tooltip = `Save ${entityLabel}.`;
+  }
 
   return (
     <WhiteBackgroundIconTooltipButton
@@ -38,7 +44,7 @@ export default function SaveEntitiesButton({
         trackSave({ action: 'Save To List', label: generateCommaList(Array.from(uuids)) });
         setShouldDisplaySavedOrEditedAlert(savedAlertStatus);
       }}
-      tooltip={disabled ? disabledTooltip : enabledTooltip}
+      tooltip={tooltip}
       disabled={disabled}
     >
       <SvgIcon

@@ -183,8 +183,8 @@ function Bar({ type }: TypeProps) {
       <MetadataMenu type={type} />
       <WorkspacesDropdownMenu type={type} />
       {view === 'tile' && <TilesSortSelect />}
-      <SaveEntitiesButtonFromSearch entity_type={type} />
-      <BulkDownloadButtonFromSearch type={type} />
+      {view === 'table' && <SaveEntitiesButtonFromSearch entity_type={type} />}
+      {view === 'table' && <BulkDownloadButtonFromSearch type={type} />}
       <DefaultSearchViewSwitch />
     </Stack>
   );
