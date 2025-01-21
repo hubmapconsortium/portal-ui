@@ -5,6 +5,7 @@ import Stack from '@mui/material/Stack';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import BulkDownloadButton from 'js/components/bulkDownload/buttons/BulkDownloadButton';
+import SaveEntitiesButton from 'js/components/savedLists/SaveEntitiesButton';
 
 interface RelatedEntitiesSectionHeaderProps {
   searchPageHref: string;
@@ -19,6 +20,7 @@ export function RelatedEntitiesSectionActions({ searchPageHref, uuids }: Related
 
   return (
     <Stack direction="row" spacing={1}>
+      <SaveEntitiesButton uuids={uuids} entity_type="Dataset" tooltip="Save datasets in this table." />
       <BulkDownloadButton uuids={uuids} tooltip="Bulk download files for datasets in this table." />
       <Button
         variant="contained"

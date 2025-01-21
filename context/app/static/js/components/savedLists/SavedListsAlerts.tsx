@@ -10,7 +10,7 @@ const entityStoreSelector = (state: EntityStore) => ({
   setShouldDisplaySavedOrEditedAlert: state.setShouldDisplaySavedOrEditedAlert,
 });
 
-function SavedListsEntityDetailAlerts() {
+function SavedListsSuccessAlert() {
   const { shouldDisplaySavedOrEditedAlert, setShouldDisplaySavedOrEditedAlert } = useEntityStore(entityStoreSelector);
   const { isAuthenticated } = useAppContext();
 
@@ -60,4 +60,4 @@ function SavedListsEntityDetailAlerts() {
   );
 }
 
-export { SavedListsEntityDetailAlerts };
+export { SavedListsSuccessAlert };

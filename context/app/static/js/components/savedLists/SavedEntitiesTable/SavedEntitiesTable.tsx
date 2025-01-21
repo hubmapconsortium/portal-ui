@@ -64,16 +64,18 @@ function SavedEntitiesTable({
     }
     deselectHeaderAndRows();
   }
-  const selectedRowsSize = selectedRows.size;
 
   const { searchHits, isLoading } = useSavedEntityData(savedEntities, source);
+
+  const selectedRowsSize = selectedRows.size;
+  const savedEntitiesSize = Object.keys(savedEntities).length;
 
   return (
     <>
       <SpacedSectionButtonRow
         leftText={
           <BottomAlignedTypography variant="subtitle1">
-            {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected
+            {savedEntitiesSize} {savedEntitiesSize === 1 ? 'Item' : 'Items'}
           </BottomAlignedTypography>
         }
         buttons={

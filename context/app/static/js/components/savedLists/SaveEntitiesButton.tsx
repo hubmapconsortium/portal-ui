@@ -7,31 +7,38 @@ import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 import { SvgIcon } from '@mui/material';
 import { generateCommaList } from 'js/helpers/functions';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
-export default function SaveEntitiesButton({ entity_type }: { entity_type: AllEntityTypes }) {
-  const { selectedRows } = useSelectableTableStore();
+export default function SaveEntitiesButton({
+  entity_type,
+  uuids,
+  tooltip,
+}: {
+  entity_type: AllEntityTypes;
+  uuids: Set<string>;
+  tooltip?: string;
+}) {
   const { savedEntities, saveEntities } = useSavedLists();
 
   const setShouldDisplaySavedOrEditedAlert = useEntityStore((state) => state.setShouldDisplaySavedOrEditedAlert);
   const trackSave = useTrackEntityPageEvent();
 
-  const noSelectedRows = selectedRows.size === 0;
-  const allInSavedEntities = !noSelectedRows && Array.from(selectedRows).every((uuid) => savedEntities[uuid]);
+  const noEntities = uuids.size === 0;
+  const allInSavedEntities = !noEntities && Array.from(uuids).every((uuid) => savedEntities[uuid]);
 
-  const disabled = noSelectedRows || allInSavedEntities;
+  const disabled = noEntities || allInSavedEntities;
   const disabledTooltip = allInSavedEntities
-    ? `All selected ${entity_type.toLowerCase()}s are already saved.`
+    ? `All ${entity_type.toLowerCase()}s are already saved.`
     : `Select ${entity_type.toLowerCase()}s to save.`;
+  const enabledTooltip = tooltip ?? `Save ${entity_type.toLowerCase()}s.`;
 
   return (
     <WhiteBackgroundIconTooltipButton
       onClick={() => {
-        saveEntities(selectedRows);
-        trackSave({ action: 'Save To List', label: generateCommaList(Array.from(selectedRows)) });
+        saveEntities(uuids);
+        trackSave({ action: 'Save To List', label: generateCommaList(Array.from(uuids)) });
         setShouldDisplaySavedOrEditedAlert(savedAlertStatus);
       }}
-      tooltip={disabled ? disabledTooltip : `Save selected ${entity_type.toLowerCase()}s.`}
+      tooltip={disabled ? disabledTooltip : enabledTooltip}
       disabled={disabled}
     >
       <SvgIcon

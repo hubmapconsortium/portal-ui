@@ -10,11 +10,12 @@ function useSavedEntityData(savedEntities: SavedEntities, source: string[]) {
     () => ({
       query: getIDsQuery(Object.keys(savedEntities)),
       _source: source,
+      size: Object.keys(savedEntities).length,
     }),
     [savedEntities, source],
   );
-  const { searchHits, isLoading } = useSearchHits<Entity>(query);
 
+  const { searchHits, isLoading } = useSearchHits<Entity>(query);
   return { searchHits, isLoading };
 }
 

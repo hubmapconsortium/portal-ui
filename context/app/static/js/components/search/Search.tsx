@@ -16,8 +16,9 @@ import history from 'history/browser';
 import { useAppContext } from 'js/components/Contexts';
 import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
 import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
-import SaveEntitiesButton from 'js/components/savedLists/SaveEntitiesButton';
 import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
+import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
+import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import {
@@ -182,7 +183,7 @@ function Bar({ type }: TypeProps) {
       <MetadataMenu type={type} />
       <WorkspacesDropdownMenu type={type} />
       {view === 'tile' && <TilesSortSelect />}
-      <SaveEntitiesButton entity_type={type} />
+      <SaveEntitiesButtonFromSearch entity_type={type} />
       <BulkDownloadButtonFromSearch type={type} />
       <DefaultSearchViewSwitch />
     </Stack>
@@ -204,6 +205,7 @@ const Search = React.memo(function Search({ type, facetGroups }: TypeProps & { f
   return (
     <Stack spacing={2} mb={4}>
       <BulkDownloadSuccessAlert />
+      <SavedListsSuccessAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <Box>
