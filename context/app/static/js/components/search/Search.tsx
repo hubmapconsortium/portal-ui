@@ -18,7 +18,7 @@ import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuc
 import WorkspacesDropdownMenu, { WorkspaceSearchDialogs } from 'js/components/workspaces/WorkspacesDropdownMenu';
 import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
 import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
-import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
+import SavedListsSuccessAlert from 'js/components/savedLists/SavedListsSuccessAlert';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import {

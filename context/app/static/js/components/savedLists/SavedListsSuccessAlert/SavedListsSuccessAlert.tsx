@@ -3,14 +3,14 @@ import useEntityStore, { EntityStore, savedAlertStatus } from 'js/stores/useEnti
 import { useAppContext } from 'js/components/Contexts';
 import Button from '@mui/material/Button';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
-import { StyledAlert } from './style';
+import { StyledAlert } from '../style';
 
 const entityStoreSelector = (state: EntityStore) => ({
   shouldDisplaySavedOrEditedAlert: state.shouldDisplaySavedOrEditedAlert,
   setShouldDisplaySavedOrEditedAlert: state.setShouldDisplaySavedOrEditedAlert,
 });
 
-function SavedListsSuccessAlert() {
+export default function SavedListsSuccessAlert() {
   const { shouldDisplaySavedOrEditedAlert, setShouldDisplaySavedOrEditedAlert } = useEntityStore(entityStoreSelector);
   const { isAuthenticated } = useAppContext();
 
@@ -59,5 +59,3 @@ function SavedListsSuccessAlert() {
     </StyledAlert>
   );
 }
-
-export { SavedListsSuccessAlert };
