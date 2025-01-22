@@ -1,61 +1,53 @@
 import React from 'react';
-import useEntityStore, { EntityStore, savedAlertStatus } from 'js/stores/useEntityStore';
-import { useAppContext } from 'js/components/Contexts';
 import Button from '@mui/material/Button';
+
+import { SavedListsAlertsState, useSavedListsAlertsStore, savedAlertStatus } from 'js/stores/useSavedListsAlertsStore';
+import { useAppContext } from 'js/components/Contexts';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import { StyledAlert } from '../style';
 
-const entityStoreSelector = (state: EntityStore) => ({
-  shouldDisplaySavedOrEditedAlert: state.shouldDisplaySavedOrEditedAlert,
-  setShouldDisplaySavedOrEditedAlert: state.setShouldDisplaySavedOrEditedAlert,
+const savedListsStoreSelector = (state: SavedListsAlertsState) => ({
+  savedOrEditedList: state.savedOrEditedList,
+  setSavedOrEditedList: state.setSavedOrEditedList,
 });
 
 export default function SavedListsSuccessAlert() {
-  const { shouldDisplaySavedOrEditedAlert, setShouldDisplaySavedOrEditedAlert } = useEntityStore(entityStoreSelector);
+  const { savedOrEditedList, setSavedOrEditedList } = useSavedListsAlertsStore(savedListsStoreSelector);
   const { isAuthenticated } = useAppContext();
 
-  const showSavedAlert = shouldDisplaySavedOrEditedAlert === savedAlertStatus;
+  if (!savedOrEditedList) return null;
 
-  if (!shouldDisplaySavedOrEditedAlert) {
-    return null;
-  }
+  const isSaved = savedOrEditedList === savedAlertStatus;
+  const alertMessage = isSaved ? (
+    <>
+      saved to <InternalLink href="/my-lists">My Saved Items</InternalLink>
+    </>
+  ) : (
+    'updated lists'
+  );
 
-  if (isAuthenticated) {
-    return (
-      <StyledAlert
-        severity="success"
-        onClose={() => setShouldDisplaySavedOrEditedAlert(false)}
-        action={<Button href="/my-lists">My Lists</Button>}
-      >
-        Successfully{' '}
-        {showSavedAlert ? (
-          <>
-            added to <InternalLink href="/my-lists">My Saved Items</InternalLink>
-          </>
-        ) : (
-          'updated lists'
-        )}
-        . Visit your <InternalLink href="/my-lists">lists</InternalLink> to view your saved items.
-      </StyledAlert>
-    );
-  }
+  const actionButton = isAuthenticated ? (
+    <Button href="/my-lists">My Lists</Button>
+  ) : (
+    <Button href="/login">Log in</Button>
+  );
 
-  return (
-    <StyledAlert
-      severity="success"
-      onClose={() => setShouldDisplaySavedOrEditedAlert(false)}
-      action={<Button href="/login">Log in</Button>}
-    >
-      Successfully{' '}
-      {showSavedAlert ? (
-        <>
-          saved to <InternalLink href="/my-lists">My Saved Items</InternalLink>
-        </>
-      ) : (
-        'updated lists'
-      )}{' '}
+  const additionalMessage = isAuthenticated ? (
+    <>
+      . Visit your <InternalLink href="/my-lists">lists</InternalLink> to view your saved items.
+    </>
+  ) : (
+    <>
+      {' '}
       locally. <InternalLink href="/login">Log in</InternalLink> to save lists to your profile for easy access across
       devices.
+    </>
+  );
+
+  return (
+    <StyledAlert severity="success" onClose={() => setSavedOrEditedList(false)} action={actionButton}>
+      Successfully {alertMessage}
+      {additionalMessage}
     </StyledAlert>
   );
 }

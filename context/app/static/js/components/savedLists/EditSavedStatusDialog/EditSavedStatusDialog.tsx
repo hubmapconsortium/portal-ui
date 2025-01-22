@@ -1,12 +1,12 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
+import { SavedListsAlertsState, useSavedListsAlertsStore, editedAlertStatus } from 'js/stores/useSavedListsAlertsStore';
 import useStateSet from 'js/hooks/useStateSet';
-import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
-import useEntityStore, { EntityStore, editedAlertStatus } from 'js/stores/useEntityStore';
 import { useSavedLists, useSavedListsAndEntities } from 'js/components/savedLists/hooks';
 import { SavedEntitiesList } from 'js/components/savedLists/types';
+import DialogModal from 'js/shared-styles/DialogModal';
 
 function getSavedListsWhichContainEntity(savedLists: Record<string, SavedEntitiesList>, entityUUID: string): string[] {
   return Object.entries(savedLists).reduce<string[]>((acc, [title, obj]) => {
@@ -14,7 +14,7 @@ function getSavedListsWhichContainEntity(savedLists: Record<string, SavedEntitie
   }, []);
 }
 
-const entityStoreSelector = (state: EntityStore) => state.setShouldDisplaySavedOrEditedAlert;
+const savedListsAlertsSelector = (state: SavedListsAlertsState) => state.setSavedOrEditedList;
 
 interface EditSavedStatusDialogProps {
   dialogIsOpen: boolean;
@@ -29,7 +29,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
     getSavedListsWhichContainEntity(savedListsAndEntities, uuid),
   );
 
-  const setShouldDisplaySavedOrEditedAlert = useEntityStore(entityStoreSelector);
+  const setSavedOrEditedList = useSavedListsAlertsStore(savedListsAlertsSelector);
 
   function addSavedEntitiesToList() {
     selectedLists.forEach((listUUID) => {
@@ -52,7 +52,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
 
   function handleSave() {
     addSavedEntitiesToList();
-    setShouldDisplaySavedOrEditedAlert(editedAlertStatus);
+    setSavedOrEditedList(editedAlertStatus);
     setDialogIsOpen(false);
   }
 

@@ -6,7 +6,6 @@ import { buildSearchLink } from 'js/components/search/store';
 import { useAppContext } from 'js/components/Contexts';
 
 function SearchPagesPrompt({ capitalize }: { capitalize?: boolean }) {
-  // Inserted in the middle of the message, so it shouldn't be capitalized.
   return (
     <>
       {capitalize ? 'N' : 'n'}avigate to{' '}
@@ -56,7 +55,7 @@ function SavedListMessage() {
   return (
     <>
       <LoginPrompt endingText="." /> To explore data to add to this list, <SearchPagesPrompt />, or add items from{' '}
-      <InternalLink href="/my-lists">My Lists</InternalLink>{' '}
+      <InternalLink href="/my-lists">My Lists</InternalLink>
     </>
   );
 }

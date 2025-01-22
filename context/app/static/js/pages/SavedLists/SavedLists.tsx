@@ -4,12 +4,12 @@ import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescri
 import SavedListScrollbox from 'js/components/savedLists/SavedListScrollbox';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import { useSavedLists } from 'js/components/savedLists/hooks';
-import { useSavedListsAlerts } from 'js/stores/useSavedListsAlertsStore';
+import { useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
 import { StyledAlert, StyledHeader, SpacingDiv, PageSpacing } from './style';
 
 function SavedLists() {
   const { savedEntities, savedLists, listsToBeDeleted, deleteEntities, deleteQueuedLists } = useSavedLists();
-  const { transferredToProfile, setTransferredToProfile } = useSavedListsAlerts();
+  const { transferredToProfile, setTransferredToProfile } = useSavedListsAlertsStore();
   const [shouldDisplayDeleteAlert, setShouldDisplayDeleteAlert] = useState(false);
   const [shouldDisplaySaveAlert, setShouldDisplaySaveAlert] = useState(false);
 

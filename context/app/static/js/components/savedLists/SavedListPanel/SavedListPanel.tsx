@@ -4,8 +4,13 @@ import { Panel } from 'js/shared-styles/panels';
 
 import { useSavedEntityTypeCounts } from './hooks';
 
-function SavedListPanel({ list, listUUID }: { list: SavedEntitiesList; listUUID: string }) {
-  const { savedEntities, description, title } = list;
+function SavedListPanel({
+  list: { savedEntities, description, title },
+  listUUID,
+}: {
+  list: SavedEntitiesList;
+  listUUID: string;
+}) {
   const entityCounts = useSavedEntityTypeCounts(savedEntities);
 
   return <Panel title={title} href={`/my-lists/${listUUID}`} secondaryText={description} entityCounts={entityCounts} />;

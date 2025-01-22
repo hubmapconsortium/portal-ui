@@ -3,11 +3,12 @@ import { v4 as uuidv4 } from 'uuid';
 import { useLocalSavedEntitiesStore, useRemoteSavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import { useAppContext } from 'js/components/Contexts';
 import { SavedEntitiesList, SavedEntitiesStore } from 'js/components/savedLists/types';
-import { useSavedListsAlerts } from 'js/stores/useSavedListsAlertsStore';
+import { useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
 import { SAVED_ENTITIES_DEFAULT } from 'js/components/savedLists/constants';
 import {
   useUkvApiURLs,
   useFetchSavedEntitiesAndLists,
+  copySavedItemsToRemoteStore,
   saveEntityRemote,
   saveEntitiesRemote,
   deleteEntityRemote,
@@ -19,7 +20,6 @@ import {
   removeEntitiesFromListRemote,
   deleteListRemote,
   editListRemote,
-  CopySavedItemsToRemoteStore,
 } from 'js/components/savedLists/api';
 
 const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
@@ -43,10 +43,11 @@ const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
   editList: state.editList,
 });
 
+/* Hook that wraps the savedEntities store and provides functions for saving, deleting, and managing lists. */
 function useSavedLists() {
   const urls = useUkvApiURLs();
   const { groupsToken, isAuthenticated } = useAppContext();
-  const { setTransferredToProfile } = useSavedListsAlerts();
+  const { setTransferredToProfile } = useSavedListsAlertsStore();
   const { savedEntities, savedLists, isFirstRemoteFetch, isLoading } = useFetchSavedEntitiesAndLists({
     urls,
     groupsToken,
@@ -72,7 +73,7 @@ function useSavedLists() {
       setTransferredToProfile(true);
       const { savedEntities: savedEntitiesLocal, savedLists: savedListsLocal } = useLocalSavedEntitiesStore.getState();
 
-      CopySavedItemsToRemoteStore({ savedEntitiesLocal, savedListsLocal, urls, groupsToken });
+      copySavedItemsToRemoteStore({ savedEntitiesLocal, savedListsLocal, urls, groupsToken });
       store.setEntities(savedEntitiesLocal);
       store.setLists(savedListsLocal);
     } else {
@@ -96,8 +97,9 @@ function useSavedLists() {
     }
   };
 
+  // Sort saved lists with most recently saved first
   const sortedSavedLists = Object.entries(store.savedLists)
-    .sort(([, a], [, b]) => b.dateSaved - a.dateSaved) // Sort based on dateSaved (newest first)
+    .sort(([, a], [, b]) => b.dateSaved - a.dateSaved)
     .reduce(
       (acc, [key, value]) => {
         acc[key] = value;
@@ -119,7 +121,7 @@ function useSavedLists() {
       handleStoreOperation(
         () => saveEntitiesRemote({ ...params, entityUUIDs }),
         () => store.saveEntities(entityUUIDs),
-      ).catch((err) => console.error('Failed to save entity:', err));
+      ).catch((err) => console.error('Failed to save entities:', err));
     },
     deleteEntity: (entityUUID: string) => {
       handleStoreOperation(
@@ -150,7 +152,7 @@ function useSavedLists() {
       handleStoreOperation(
         () => addEntitiesToListRemote({ ...params, listUUID, entityUUIDs }),
         () => store.addEntitiesToList(listUUID, entityUUIDs),
-      ).catch((err) => console.error('Failed to add entity to list:', err));
+      ).catch((err) => console.error('Failed to add entities to list:', err));
     },
     removeEntityFromList: (listUUID: string, entityUUID: string) => {
       handleStoreOperation(
@@ -182,6 +184,8 @@ function useSavedLists() {
   };
 }
 
+/* Hook that combines the savedLists and savedEntities stores into a single object, for instances where
+   savedEntities needs to be handled as if it were a list. */
 function useSavedListsAndEntities() {
   const { savedLists, savedEntities } = useSavedLists();
 

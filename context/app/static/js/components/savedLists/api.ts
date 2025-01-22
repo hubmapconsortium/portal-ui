@@ -1,7 +1,8 @@
+import useSWR from 'swr';
+import { fetcher } from 'js/helpers/swr/fetchers';
 import { useAppContext } from 'js/components/Contexts';
 import { SavedEntitiesList, SavedEntity } from 'js/components/savedLists/types';
-import { fetcher } from 'js/helpers/swr/fetchers';
-import useSWR from 'swr';
+import { SAVED_ENTITIES_DEFAULT } from 'js/components/savedLists/constants';
 
 /** **************************************************
  *                  UKV API Helpers                  *
@@ -50,7 +51,7 @@ async function fetchResponse({
   });
 
   if (!response.ok) {
-    console.error('Error: ', await response.text());
+    console.error('UKV API failed with error: ', await response.text());
   }
 }
 
@@ -66,6 +67,7 @@ interface RemoteEntitiesProps {
   savedLists?: Record<string, SavedEntitiesList>;
 }
 
+/* If the user is authenticated, fetch their saved entities and lists from the remote store */
 function useFetchSavedEntitiesAndLists({ urls, groupsToken, isAuthenticated }: RemoteEntitiesProps) {
   const { data, isLoading } = useSWR(isAuthenticated ? [urls.keys, groupsToken] : null, ([url, token]: string[]) =>
     fetcher<{ key: string; value: SavedEntitiesList }[]>({
@@ -80,6 +82,8 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken, isAuthenticated }: R
 
   if (!isLoading) {
     if (!data) {
+      // If a "savedEntities" key is not found, this is the user's first time logging in since the update and
+      // we need to copy their locally saved entities and lists over to the remote store.
       isFirstRemoteFetch = true;
     } else {
       const savedEntitiesObject = data.find((item) => item.key === 'savedEntities');
@@ -102,7 +106,7 @@ function useFetchSavedEntitiesAndLists({ urls, groupsToken, isAuthenticated }: R
   return { savedLists, savedEntities, isFirstRemoteFetch, isLoading };
 }
 
-function CopySavedItemsToRemoteStore({
+function copySavedItemsToRemoteStore({
   urls,
   groupsToken,
   savedEntitiesLocal,
@@ -113,15 +117,12 @@ function CopySavedItemsToRemoteStore({
 }) {
   const entitiesUrl = urls.key('savedEntities');
   const entitiesBody = JSON.stringify({
-    title: 'Saved Entities',
-    description: 'Entities saved by the user',
-    dateSaved: Date.now(),
-    dateModified: Date.now(),
+    ...SAVED_ENTITIES_DEFAULT,
     savedEntities: savedEntitiesLocal,
   });
 
   fetchResponse({ url: entitiesUrl, token: groupsToken, method: 'PUT', body: entitiesBody }).catch((err) =>
-    console.error('Failed to copy saved entities to remote store:', err),
+    console.error('Failed to copy local entities to remote store:', err),
   );
 
   // Send each saved list to the remote store
@@ -130,10 +131,12 @@ function CopySavedItemsToRemoteStore({
     const listBody = JSON.stringify(list);
 
     fetchResponse({ url: listUrl, token: groupsToken, method: 'PUT', body: listBody }).catch((err) =>
-      console.error(`Failed to copy saved list "${key}" to remote store:`, err),
+      console.error(`Failed to copy local list "${key}" to remote store:`, err),
     );
   });
 }
+
+/* *************** Saved Entities Actions *************** */
 
 function saveEntitiesRemote({
   urls,
@@ -142,8 +145,8 @@ function saveEntitiesRemote({
   entityUUIDs,
 }: RemoteEntitiesProps & { entityUUIDs: Set<string> }) {
   const savedEntitiesCopy = { ...savedEntities };
-  entityUUIDs.forEach((entityUUID) => {
-    savedEntitiesCopy[entityUUID] = {
+  entityUUIDs.forEach((uuid) => {
+    savedEntitiesCopy[uuid] = {
       dateSaved: Date.now(),
       dateAddedToList: Date.now(),
     };
@@ -151,10 +154,7 @@ function saveEntitiesRemote({
 
   const url = urls.key('savedEntities');
   const body = JSON.stringify({
-    title: 'Saved Entities',
-    description: 'Entities saved by the user',
-    dateSaved: Date.now(),
-    dateModified: Date.now(),
+    ...SAVED_ENTITIES_DEFAULT,
     savedEntities: savedEntitiesCopy,
   });
 
@@ -178,10 +178,7 @@ function deleteEntitiesRemote({
 
   const url = urls.key('savedEntities');
   const body = JSON.stringify({
-    title: 'Saved Entities',
-    description: 'Entities saved by the user',
-    dateSaved: Date.now(),
-    dateModified: Date.now(),
+    ...SAVED_ENTITIES_DEFAULT,
     savedEntities: savedEntitiesCopy,
   });
 
@@ -194,6 +191,8 @@ function deleteEntityRemote({ entityUUID, ...props }: RemoteEntitiesProps & { en
     ...props,
   });
 }
+
+/* *************** Lists Actions *************** */
 
 function createListRemote({
   urls,
@@ -213,6 +212,37 @@ function createListRemote({
     dateLastModified: Date.now(),
     savedEntities: {},
   });
+
+  return fetchResponse({ url, token: groupsToken, method: 'PUT', body });
+}
+
+function deleteListRemote({ urls, groupsToken, listUUID }: RemoteEntitiesProps & { listUUID: string }) {
+  const url = urls.key(listUUID);
+  return fetchResponse({ url, token: groupsToken, method: 'DELETE' });
+}
+
+function editListRemote({
+  urls,
+  groupsToken,
+  savedLists,
+  listUUID,
+  title,
+  description,
+}: RemoteEntitiesProps & {
+  savedLists: Record<string, SavedEntitiesList>;
+  listUUID: string;
+  title: string;
+  description: string;
+}) {
+  savedLists[listUUID] = {
+    ...savedLists[listUUID],
+    title,
+    description,
+    dateLastModified: Date.now(),
+  };
+
+  const url = urls.key(listUUID);
+  const body = JSON.stringify(savedLists[listUUID]);
 
   return fetchResponse({ url, token: groupsToken, method: 'PUT', body });
 }
@@ -250,11 +280,6 @@ function addEntityToListRemote({
   return addEntitiesToListRemote({ ...props, entityUUIDs: [entityUUID] });
 }
 
-function deleteListRemote({ urls, groupsToken, listUUID }: RemoteEntitiesProps & { listUUID: string }) {
-  const url = urls.key(listUUID);
-  return fetchResponse({ url, token: groupsToken, method: 'DELETE' });
-}
-
 function removeEntitiesFromListRemote({
   urls,
   groupsToken,
@@ -286,36 +311,10 @@ function removeEntityFromListRemote({
   return removeEntitiesFromListRemote({ ...props, entityUUIDs: [entityUUID] });
 }
 
-function editListRemote({
-  urls,
-  groupsToken,
-  savedLists,
-  listUUID,
-  title,
-  description,
-}: RemoteEntitiesProps & {
-  savedLists: Record<string, SavedEntitiesList>;
-  listUUID: string;
-  title: string;
-  description: string;
-}) {
-  savedLists[listUUID] = {
-    ...savedLists[listUUID],
-    title,
-    description,
-    dateLastModified: Date.now(),
-  };
-
-  const url = urls.key(listUUID);
-  const body = JSON.stringify(savedLists[listUUID]);
-
-  return fetchResponse({ url, token: groupsToken, method: 'PUT', body });
-}
-
 export {
   useUkvApiURLs,
   useFetchSavedEntitiesAndLists,
-  CopySavedItemsToRemoteStore,
+  copySavedItemsToRemoteStore,
   saveEntitiesRemote,
   saveEntityRemote,
   deleteEntitiesRemote,

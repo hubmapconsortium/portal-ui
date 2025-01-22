@@ -7,7 +7,8 @@ import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 
 import { TooltipButtonProps, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { CheckIcon, EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/shared-styles/icons';
-import useEntityStore, { savedAlertStatus, SummaryViewsType } from 'js/stores/useEntityStore';
+import { SummaryViewsType } from 'js/stores/useEntityStore';
+import { useSavedListsAlertsStore, savedAlertStatus } from 'js/stores/useSavedListsAlertsStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
 import { Entity } from 'js/components/types';
@@ -16,8 +17,8 @@ import { useFlaskDataContext } from 'js/components/Contexts';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { useSavedLists } from 'js/components/savedLists/hooks';
+import WorkspacesIcon from 'assets/svg/workspaces.svg';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -45,7 +46,7 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { saveEntity } = useSavedLists();
-  const setShouldDisplaySavedOrEditedAlert = useEntityStore((state) => state.setShouldDisplaySavedOrEditedAlert);
+  const setSavedOrEditedAlert = useSavedListsAlertsStore((state) => state.setSavedOrEditedList);
   const trackSave = useTrackEntityPageEvent();
 
   return (
@@ -53,7 +54,7 @@ function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
       onClick={() => {
         saveEntity(uuid);
         trackSave({ action: 'Save To List', label: uuid });
-        setShouldDisplaySavedOrEditedAlert(savedAlertStatus);
+        setSavedOrEditedAlert(savedAlertStatus);
       }}
       icon={SaveEntityIcon}
       tooltip="Save to list"

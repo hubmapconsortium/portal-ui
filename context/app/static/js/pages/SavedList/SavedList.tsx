@@ -8,8 +8,8 @@ import { SummaryBodyContent } from 'js/components/detailPage/summary/SummaryBody
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
-import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 import { useSavedLists } from 'js/components/savedLists/hooks';
+import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 function SavedList({ listUUID }: { listUUID: string }) {
@@ -20,11 +20,8 @@ function SavedList({ listUUID }: { listUUID: string }) {
     return <Skeleton variant="rectangular" width="100%" height={400} />;
   }
 
-  const { savedEntities: listEntities } = savedList;
-
+  const { savedEntities: listEntities, title, description } = savedList;
   const entitiesLength = Object.keys(listEntities).length;
-
-  const { title, description } = savedList;
 
   function deleteCallback(uuids: Set<string>) {
     removeEntitiesFromList(listUUID, [...uuids]);

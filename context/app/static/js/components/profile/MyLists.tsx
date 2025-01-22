@@ -7,7 +7,8 @@ import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPag
 import { useSavedLists } from 'js/components/savedLists/hooks';
 
 export function MyLists() {
-  const savedListCount = Object.keys(useSavedLists().savedLists).length;
+  const { savedLists } = useSavedLists();
+  const savedListCount = Object.keys(savedLists).length;
 
   const buttonText = savedListCount === 0 ? 'Create List' : `Manage Lists (${savedListCount})`;
   return (

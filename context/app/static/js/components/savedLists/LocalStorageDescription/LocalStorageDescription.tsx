@@ -1,9 +1,12 @@
 import React from 'react';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { useAppContext } from 'js/components/Contexts';
 import Description from 'js/shared-styles/sections/Description';
 import { InternalLink } from 'js/shared-styles/Links';
-import { Box, Button, Stack, Typography } from '@mui/material';
 
 function LocalStorageDescription() {
   const { isAuthenticated } = useAppContext();
