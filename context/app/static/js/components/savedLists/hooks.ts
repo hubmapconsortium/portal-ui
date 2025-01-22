@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useLocalSavedEntitiesStore, useRemoteSavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import { useAppContext } from 'js/components/Contexts';
@@ -88,29 +88,35 @@ function useSavedLists() {
 
   const params = { urls, groupsToken, savedEntities, savedLists };
 
-  const handleStoreOperation = async <T>(remoteOperation: () => Promise<T>, localOperation: () => void) => {
-    if (isAuthenticated) {
-      await remoteOperation();
-      localOperation();
-    } else {
-      localOperation();
-    }
-  };
+  const handleStoreOperation = useCallback(
+    async <T>(remoteOperation: () => Promise<T>, localOperation: () => void) => {
+      if (isAuthenticated) {
+        await remoteOperation();
+        localOperation();
+      } else {
+        localOperation();
+      }
+    },
+    [isAuthenticated],
+  );
 
   // Sort saved lists with most recently saved first
-  const sortedSavedLists = Object.entries(store.savedLists)
-    .sort(([, a], [, b]) => b.dateSaved - a.dateSaved)
-    .reduce(
-      (acc, [key, value]) => {
-        acc[key] = value;
-        return acc;
-      },
-      {} as Record<string, SavedEntitiesList>,
-    );
+  const sortedSavedLists = useMemo(() => {
+    return Object.entries(store.savedLists)
+      .sort(([, a], [, b]) => b.dateSaved - a.dateSaved)
+      .reduce(
+        (acc, [key, value]) => {
+          acc[key] = value;
+          return acc;
+        },
+        {} as Record<string, SavedEntitiesList>,
+      );
+  }, [store.savedLists]);
 
   return {
     ...store,
-    isLoading: isLoading || !storeHasBeenSetRef.current,
+    // Ensure data has been loaded into the store before trying to access it (for authenticated users)
+    isLoading: isAuthenticated ? isLoading || !storeHasBeenSetRef.current : false,
     savedLists: sortedSavedLists,
     saveEntity: (entityUUID: string) => {
       handleStoreOperation(

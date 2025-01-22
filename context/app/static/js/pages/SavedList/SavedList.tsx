@@ -14,11 +14,12 @@ import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 function SavedList({ listUUID }: { listUUID: string }) {
   const { isLoading, savedLists, removeEntitiesFromList } = useSavedLists();
-  const savedList = savedLists[listUUID];
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={400} />;
   }
+
+  const savedList = savedLists[listUUID];
 
   if (!savedList) {
     throw new Error('This list does not exist.');
