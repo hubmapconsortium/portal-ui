@@ -110,6 +110,7 @@ function useSavedLists() {
 
   return {
     ...store,
+    isLoading: isLoading || !storeHasBeenSetRef.current,
     savedLists: sortedSavedLists,
     saveEntity: (entityUUID: string) => {
       handleStoreOperation(

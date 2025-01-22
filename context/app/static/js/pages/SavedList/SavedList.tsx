@@ -13,11 +13,15 @@ import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-style
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 function SavedList({ listUUID }: { listUUID: string }) {
-  const { savedLists, removeEntitiesFromList } = useSavedLists();
+  const { isLoading, savedLists, removeEntitiesFromList } = useSavedLists();
   const savedList = savedLists[listUUID];
 
-  if (!savedList) {
+  if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={400} />;
+  }
+
+  if (!savedList) {
+    throw new Error('This list does not exist.');
   }
 
   const { savedEntities: listEntities, title, description } = savedList;
