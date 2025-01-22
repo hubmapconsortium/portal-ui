@@ -50,6 +50,7 @@ function useSavedLists() {
   const { savedEntities, savedLists, isFirstRemoteFetch, isLoading } = useFetchSavedEntitiesAndLists({
     urls,
     groupsToken,
+    isAuthenticated,
   });
 
   const localStore = useLocalSavedEntitiesStore(savedEntitiesSelector);

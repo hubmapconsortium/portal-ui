@@ -61,12 +61,13 @@ async function fetchResponse({
 interface RemoteEntitiesProps {
   urls: ReturnType<typeof apiUrls>;
   groupsToken: string;
+  isAuthenticated?: boolean;
   savedEntities?: Record<string, SavedEntity>;
   savedLists?: Record<string, SavedEntitiesList>;
 }
 
-function useFetchSavedEntitiesAndLists({ urls, groupsToken }: RemoteEntitiesProps) {
-  const { data, isLoading } = useSWR([urls.keys, groupsToken], ([url, token]: string[]) =>
+function useFetchSavedEntitiesAndLists({ urls, groupsToken, isAuthenticated }: RemoteEntitiesProps) {
+  const { data, isLoading } = useSWR(isAuthenticated ? [urls.keys, groupsToken] : null, ([url, token]: string[]) =>
     fetcher<{ key: string; value: SavedEntitiesList }[]>({
       url,
       requestInit: { headers: { Authorization: `Bearer ${token}` } },
