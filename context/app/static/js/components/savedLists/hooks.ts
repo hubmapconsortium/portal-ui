@@ -96,8 +96,19 @@ function useSavedLists() {
     }
   };
 
+  const sortedSavedLists = Object.entries(store.savedLists)
+    .sort(([, a], [, b]) => b.dateSaved - a.dateSaved) // Sort based on dateSaved (newest first)
+    .reduce(
+      (acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+      },
+      {} as Record<string, SavedEntitiesList>,
+    );
+
   return {
     ...store,
+    savedLists: sortedSavedLists,
     saveEntity: (entityUUID: string) => {
       handleStoreOperation(
         () => saveEntityRemote({ ...params, entityUUID }),

@@ -35,11 +35,9 @@ function SavedListScrollbox({ savedLists }: SavedListScrollboxProps) {
         <Description>No lists created yet.</Description>
       ) : (
         <MaxHeightScrollbox>
-          {Object.entries(savedLists)
-            .toReversed()
-            .map(([key, value]) => {
-              return <SavedListPanel key={key} list={value} listUUID={key} />;
-            })}
+          {Object.entries(savedLists).map(([key, value]) => {
+            return <SavedListPanel key={key} list={value} listUUID={key} />;
+          })}
         </MaxHeightScrollbox>
       )}
     </>
