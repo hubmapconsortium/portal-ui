@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.19.1 - 2025-01-23
+
+- Fix publications page crashing when supporting json data is completely missing.
+
+
+
+## v1.19.0 - 2025-01-22
+
+- Improve handling of empty vignette lists so that the publication page does not crash if an empty list is provided.
+- Updated logic to access the builder for EPIC Segmentation masks using the epic vitessce-hint.
+
+
+
 ## v1.18.4 - 2025-01-15
 
 - Updated homepage news items.
