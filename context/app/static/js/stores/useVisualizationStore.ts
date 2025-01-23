@@ -9,11 +9,12 @@ interface VisualizationStoreState {
   vitessceState: unknown;
   onCopyUrlWarning: string;
   vizNotebookId: string | null;
+  vitessceVisualization?: boolean;
 }
 
 interface VisualizationStoreActions {
   setVizEscSnackbarIsOpen: (val: boolean) => void;
-  expandViz: (vizId: string) => void;
+  expandViz: (vizId: string, isVitessce?: boolean) => void;
   collapseViz: () => void;
   setVizTheme: (theme: VizTheme) => void;
   setVitessceState: (val: unknown) => void;
@@ -26,16 +27,17 @@ export type VisualizationStore = VisualizationStoreState & VisualizationStoreAct
 
 export const useVisualizationStore = create<VisualizationStore>((set) => ({
   fullscreenVizId: null,
+  vitessceVisualization: false,
   vizEscSnackbarIsOpen: false,
   setVizEscSnackbarIsOpen: (val) => set({ vizEscSnackbarIsOpen: val }),
-  expandViz: (vizId: string) => {
-    set({ fullscreenVizId: vizId, vizEscSnackbarIsOpen: true });
+  expandViz: (vizId: string, isVitessce) => {
+    set({ fullscreenVizId: vizId, vizEscSnackbarIsOpen: true, vitessceVisualization: isVitessce });
     document.onkeydown = function preventDefault(evt) {
       if (evt.keyCode === 27) evt.preventDefault();
     };
   },
   collapseViz: () => {
-    set({ fullscreenVizId: null, vizEscSnackbarIsOpen: false });
+    set({ fullscreenVizId: null, vizEscSnackbarIsOpen: false, vitessceVisualization: false });
     document.onkeydown = null;
   },
   vizTheme: 'light',

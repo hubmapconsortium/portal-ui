@@ -6,7 +6,8 @@ import { SectionDescription } from 'js/shared-styles/sections/SectionDescription
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutlinedButton from 'js/shared-styles/buttons/OutlinedButton';
 import { CellTypeIcon, DatasetIcon } from 'js/shared-styles/icons';
-import { Paper, Stack, useTheme } from '@mui/material';
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
 import {
   bodyExpandedCSS,
   ExpandableDiv,
@@ -17,6 +18,7 @@ import FullscreenRoundedIcon from '@mui/icons-material/FullscreenRounded';
 import VisualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
+import theme, { darkTheme } from 'js/theme/theme';
 
 interface CellPopulationPlotProps {
   id: string;
@@ -32,7 +34,6 @@ function visualizationSelector(store: VisualizationStore) {
 }
 
 function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
-  const theme = useTheme();
   const { fullscreenVizId, theme: vizTheme, expandViz } = useVisualizationStore(visualizationSelector);
   const vizIsFullscreen = fullscreenVizId === id;
   return (
@@ -75,11 +76,11 @@ function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
           </Stack>
         }
       />
-      <Paper sx={{ zIndex: vizIsFullscreen ? 1000 : 0 }}>
-        <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme} $nonExpandedHeight={900}>
+      <Paper>
+        <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={vizTheme} $nonExpandedHeight={1000}>
           <CellPopHuBMAPLoader
             uuids={uuids}
-            theme="light"
+            theme={vizTheme}
             yAxis={{
               label: 'Dataset',
               createHref: (row) => `https://portal.hubmapconsortium.org/browse/${row}`,
@@ -108,11 +109,11 @@ function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
               [0.4, 0.5, 0.1],
               [0.3, 0.6, 0.1],
             ]}
-            customTheme={theme}
+            customTheme={vizTheme === 'dark' ? darkTheme : theme}
             disabledControls={['theme']}
           />
+          <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
         </ExpandableDiv>
-        <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
       </Paper>
     </CollapsibleDetailPageSection>
   );

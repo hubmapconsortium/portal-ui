@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 
-import VizualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
+import VisualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationCollapseButton from 'js/components/detailPage/visualization/VisualizationCollapseButton';
 import VisualizationWorkspaceButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
@@ -188,8 +188,9 @@ const entityStoreSelector = (state: EntityStore) => ({
 });
 
 const visualizationSelector = (state: VisualizationStore) => ({
-  vizIsFullscreen: state.vizIsFullscreen,
+  vizIsFullscreen: Boolean(state.fullscreenVizId),
   vizNotebookId: state.vizNotebookId,
+  isVitessce: Boolean(state.vitessceVisualization),
 });
 
 function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setView: (v: SummaryViewsType) => void }) {
@@ -201,7 +202,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
   const { entity } = useFlaskDataContext();
   const { hubmap_id, entity_type } = entity;
 
-  const { vizIsFullscreen, vizNotebookId } = useVisualizationStore(visualizationSelector);
+  const { vizIsFullscreen, vizNotebookId, isVitessce } = useVisualizationStore(visualizationSelector);
 
   const styles = useSpring({
     from: { opacity: 1 },
@@ -238,8 +239,8 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
         {vizIsFullscreen ? (
           <>
             {vizNotebookId && <VisualizationWorkspaceButton />}
-            <VisualizationShareButtonWrapper />
-            <VizualizationThemeSwitch />
+            {isVitessce && <VisualizationShareButtonWrapper />}
+            <VisualizationThemeSwitch />
             <VisualizationCollapseButton />
           </>
         ) : (

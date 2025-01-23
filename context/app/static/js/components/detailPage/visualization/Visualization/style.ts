@@ -41,6 +41,7 @@ const ExpandableDiv = styled('div')<ExpandableDivProps>(
     top: $isExpanded ? `${totalHeightOffset}px` : 'auto',
     left: $isExpanded ? '0' : 'auto',
     position: $isExpanded ? 'fixed' : 'relative',
+    zIndex: $isExpanded ? theme.zIndex.modal : 'auto',
     height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${$nonExpandedHeight}px`,
     backgroundColor: $theme === 'dark' ? '#333333' : theme.palette.white.main,
     width: '100%',

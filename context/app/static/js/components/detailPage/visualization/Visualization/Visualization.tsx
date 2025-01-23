@@ -145,7 +145,7 @@ function Visualization({
                 <ExpandButton
                   size="small"
                   onClick={() => {
-                    expandViz(id);
+                    expandViz(id, true);
                     trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
                   }}
                   variant="contained"
