@@ -4,6 +4,7 @@ import {
   AnalysisDetailsIcon,
   AttributionIcon,
   BulkDataIcon,
+  CellTypeIcon,
   CollectionIcon,
   DatasetIcon,
   FileIcon,
@@ -44,6 +45,7 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   'reference-based-analysis': VisualizationIcon,
   assays: DatasetIcon,
   samples: SampleIcon,
+  'cell-population': CellTypeIcon,
 } as const;
 
 export const sectionImageIconMap: Record<string, keyof typeof externalIconMap> = {

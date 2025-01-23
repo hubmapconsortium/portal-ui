@@ -3,7 +3,7 @@ import { create } from 'zustand';
 
 type VizTheme = 'light' | 'dark';
 interface VisualizationStoreState {
-  vizIsFullscreen: boolean;
+  fullscreenVizId: string | null;
   vizEscSnackbarIsOpen: boolean;
   vizTheme: VizTheme;
   vitessceState: unknown;
@@ -13,7 +13,7 @@ interface VisualizationStoreState {
 
 interface VisualizationStoreActions {
   setVizEscSnackbarIsOpen: (val: boolean) => void;
-  expandViz: () => void;
+  expandViz: (vizId: string) => void;
   collapseViz: () => void;
   setVizTheme: (theme: VizTheme) => void;
   setVitessceState: (val: unknown) => void;
@@ -25,17 +25,17 @@ interface VisualizationStoreActions {
 export type VisualizationStore = VisualizationStoreState & VisualizationStoreActions;
 
 export const useVisualizationStore = create<VisualizationStore>((set) => ({
-  vizIsFullscreen: false,
+  fullscreenVizId: null,
   vizEscSnackbarIsOpen: false,
   setVizEscSnackbarIsOpen: (val) => set({ vizEscSnackbarIsOpen: val }),
-  expandViz: () => {
-    set({ vizIsFullscreen: true, vizEscSnackbarIsOpen: true });
+  expandViz: (vizId: string) => {
+    set({ fullscreenVizId: vizId, vizEscSnackbarIsOpen: true });
     document.onkeydown = function preventDefault(evt) {
       if (evt.keyCode === 27) evt.preventDefault();
     };
   },
   collapseViz: () => {
-    set({ vizIsFullscreen: false, vizEscSnackbarIsOpen: false });
+    set({ fullscreenVizId: null, vizEscSnackbarIsOpen: false });
     document.onkeydown = null;
   },
   vizTheme: 'light',

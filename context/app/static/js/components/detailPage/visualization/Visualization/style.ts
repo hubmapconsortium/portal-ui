@@ -33,23 +33,26 @@ const SelectionButton = styled(Button)(({ theme }) => ({
 interface ExpandableDivProps {
   $isExpanded: boolean;
   $theme: 'dark' | 'light';
+  $nonExpandedHeight?: number;
 }
 
-const ExpandableDiv = styled('div')<ExpandableDivProps>(({ $isExpanded, theme, $theme }) => ({
-  top: $isExpanded ? `${totalHeightOffset}px` : 'auto',
-  left: $isExpanded ? '0' : 'auto',
-  position: $isExpanded ? 'fixed' : 'relative',
-  height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${vitessceFixedHeight}px`,
-  backgroundColor: $theme === 'dark' ? '#333333' : theme.palette.white.main,
-  width: '100%',
-  overflow: 'scroll',
-  '.vitessce-container': {
-    display: 'block',
-    height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : 'auto',
+const ExpandableDiv = styled('div')<ExpandableDivProps>(
+  ({ $isExpanded, theme, $theme, $nonExpandedHeight = vitessceFixedHeight }) => ({
+    top: $isExpanded ? `${totalHeightOffset}px` : 'auto',
+    left: $isExpanded ? '0' : 'auto',
+    position: $isExpanded ? 'fixed' : 'relative',
+    height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : `${$nonExpandedHeight}px`,
+    backgroundColor: $theme === 'dark' ? '#333333' : theme.palette.white.main,
     width: '100%',
-    position: 'static',
-  },
-}));
+    overflow: 'scroll',
+    '.vitessce-container': {
+      display: 'block',
+      height: $isExpanded ? `calc(100vh - ${totalHeightOffset}px)` : 'auto',
+      width: '100%',
+      position: 'static',
+    },
+  }),
+);
 
 interface StyledDetailPageSectionProps {
   $vizIsFullscreen: boolean;

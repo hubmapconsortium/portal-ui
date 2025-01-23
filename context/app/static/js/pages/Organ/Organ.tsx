@@ -8,7 +8,8 @@ import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
 import { OrganFile } from 'js/components/organ/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import { useAssayBucketsQuery, useHasSamplesQuery } from './hooks';
+import CellPopulationPlot from 'js/components/organ/CellPop';
+import { useAssayBucketsQuery, useHasSamplesQuery, useLabelledDatasetsQuery } from './hooks';
 
 interface OrganProps {
   organ: OrganFile;
@@ -19,6 +20,7 @@ const hraId = 'human-reference-atlas';
 const referenceId = 'reference-based-analysis';
 const assaysId = 'assays';
 const samplesId = 'samples';
+const cellpopId = 'cell-population';
 
 function Organ({ organ }: OrganProps) {
   const searchItems = useMemo(
@@ -28,10 +30,12 @@ function Organ({ organ }: OrganProps) {
 
   const assayBuckets = useAssayBucketsQuery(searchItems);
   const samplesHits = useHasSamplesQuery(searchItems);
+  const labeledDatasetUuids = useLabelledDatasetsQuery(searchItems);
 
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
     [hraId]: Boolean(organ.has_iu_component),
+    [cellpopId]: labeledDatasetUuids.length > 0,
     [referenceId]: Boolean(organ?.azimuth),
     [assaysId]: assayBuckets.length > 0,
     [samplesId]: samplesHits.length > 0,
@@ -55,6 +59,7 @@ function Organ({ organ }: OrganProps) {
         {organ.description}
       </Description>
       <HumanReferenceAtlas id={hraId} uberonIri={organ.uberon} shouldDisplay={shouldDisplaySection[hraId]} />
+      <CellPopulationPlot id={cellpopId} uuids={labeledDatasetUuids} shouldDisplay={shouldDisplaySection[cellpopId]} />
       <Azimuth id={referenceId} config={organ.azimuth!} shouldDisplay={shouldDisplaySection[referenceId]} />
       <Assays
         id={assaysId}

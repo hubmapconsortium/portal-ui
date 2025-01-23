@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback, useId } from 'react';
 import { Vitessce } from 'vitessce';
 
 import Paper from '@mui/material/Paper';
@@ -31,7 +31,7 @@ import {
 } from './style';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
-  vizIsFullscreen: state.vizIsFullscreen,
+  fullscreenVizId: state.fullscreenVizId,
   expandViz: state.expandViz,
   collapseViz: state.collapseViz,
   vizTheme: state.vizTheme,
@@ -57,8 +57,11 @@ function Visualization({
   shouldMountVitessce = true,
   markerGene,
 }: VisualizationProps) {
-  const { vizIsFullscreen, expandViz, vizTheme, setVitessceState, setVitessceStateDebounced, setVizNotebookId } =
+  const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVitessceStateDebounced, setVizNotebookId } =
     useVisualizationStore(visualizationStoreSelector);
+
+  const id = useId();
+  const vizIsFullscreen = fullscreenVizId === id;
 
   // Add event listeners to the document to handle the full screen mode.
   useCollapseViz();
@@ -142,7 +145,7 @@ function Visualization({
                 <ExpandButton
                   size="small"
                   onClick={() => {
-                    expandViz();
+                    expandViz(id);
                     trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
                   }}
                   variant="contained"

@@ -15,7 +15,7 @@ import SummaryBody from '../../summary/SummaryBody';
 const AnimatedPaper = animated(StyledPaper);
 
 const visualizationSelector = (state: VisualizationStore) => ({
-  vizIsFullscreen: state.vizIsFullscreen,
+  vizIsFullscreen: Boolean(state.fullscreenVizId),
 });
 
 function Header() {
