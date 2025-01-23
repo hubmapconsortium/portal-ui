@@ -1,1 +1,0 @@
-- Fix publications page crashing when supporting json data is completely missing.
