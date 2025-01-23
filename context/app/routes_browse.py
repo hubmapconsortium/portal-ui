@@ -117,13 +117,14 @@ def details_vitessce(type, uuid):
     marker = request.args.get('marker') or None
     parent = client.get_entity(parent_uuid) if parent_uuid else None
     epic_uuid = None
-    if 'epic' in entity.get('vitessce-hints') and entity.get(
+    if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get(
             'status') != 'Error':
-        epic_uuid = uuid
         if parent is None:
             ancestors = entity.get('immediate_ancestor_ids')
             if len(ancestors) > 0:
                 parent = ancestors[0]
+        if 'epic' in entity.get('vitessce-hints'):
+            epic_uuid = uuid
 
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
         entity,
