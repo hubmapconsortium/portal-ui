@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 
 import Grid from '@mui/material/Grid2';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import lightTheme from 'js/theme/theme';
+import theme from 'js/theme/theme';
 import { VisualizationIcon } from 'js/shared-styles/icons';
 import { ToolsCard } from './ToolsCard';
 import { CardGridContextProvider } from './CardGridContext';
@@ -73,9 +73,9 @@ export default function ExploreTools() {
         rowGap={2}
         gridTemplateColumns={{ xs: '1fr', md: gridTemplateColumns }}
         style={{
-          transition: lightTheme.transitions.create('all', {
-            easing: lightTheme.transitions.easing.easeIn,
-            duration: lightTheme.transitions.duration.shortest,
+          transition: theme.transitions.create('all', {
+            easing: theme.transitions.easing.easeIn,
+            duration: theme.transitions.duration.shortest,
           }),
         }}
         onMouseLeave={resetExpandedCardIndex}
