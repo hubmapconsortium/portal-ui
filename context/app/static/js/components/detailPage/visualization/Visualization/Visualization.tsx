@@ -106,9 +106,17 @@ function Visualization({
     markerGene,
   });
 
-  function setSelectionAndClearErrors({ i }: { i: number }) {
-    setVitessceSelection(i);
-  }
+  const setSelectionAndClearErrors = useCallback(
+    ({ i }: { i: number }) => {
+      setVitessceSelection(i);
+    },
+    [setVitessceSelection],
+  );
+
+  const expandVisualization = useCallback(() => {
+    expandViz(id);
+    trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
+  }, [expandViz, id, trackEntityPageEvent]);
 
   const isMultiDataset = Array.isArray(vitessceConfig);
 
@@ -142,14 +150,7 @@ function Visualization({
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-                <ExpandButton
-                  size="small"
-                  onClick={() => {
-                    expandViz(id, true);
-                    trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
-                  }}
-                  variant="contained"
-                >
+                <ExpandButton size="small" onClick={expandVisualization} variant="contained">
                   <FullscreenRoundedIcon color="primary" />
                 </ExpandButton>
               </SecondaryBackgroundTooltip>
