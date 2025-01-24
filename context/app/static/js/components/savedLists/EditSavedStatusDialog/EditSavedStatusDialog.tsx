@@ -1,7 +1,11 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
-import { SavedListsAlertsState, useSavedListsAlertsStore, editedAlertStatus } from 'js/stores/useSavedListsAlertsStore';
+import {
+  SavedListsAlertsState,
+  SavedListsSuccessAlertType,
+  useSavedListsAlertsStore,
+} from 'js/stores/useSavedListsAlertsStore';
 import useStateSet from 'js/hooks/useStateSet';
 import AddToList from 'js/components/savedLists/AddToList';
 import { useSavedLists, useSavedListsAndEntities } from 'js/components/savedLists/hooks';
@@ -14,7 +18,7 @@ function getSavedListsWhichContainEntity(savedLists: Record<string, SavedEntitie
   }, []);
 }
 
-const savedListsAlertsSelector = (state: SavedListsAlertsState) => state.setSavedOrEditedList;
+const savedListsAlertsSelector = (state: SavedListsAlertsState) => state.setSuccessAlert;
 
 interface EditSavedStatusDialogProps {
   dialogIsOpen: boolean;
@@ -29,7 +33,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
     getSavedListsWhichContainEntity(savedListsAndEntities, uuid),
   );
 
-  const setSavedOrEditedList = useSavedListsAlertsStore(savedListsAlertsSelector);
+  const setSuccessAlert = useSavedListsAlertsStore(savedListsAlertsSelector);
 
   function addSavedEntitiesToList() {
     selectedLists.forEach((listUUID) => {
@@ -52,7 +56,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
 
   function handleSave() {
     addSavedEntitiesToList();
-    setSavedOrEditedList(editedAlertStatus);
+    setSuccessAlert(SavedListsSuccessAlertType.Updated);
     setDialogIsOpen(false);
   }
 

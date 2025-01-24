@@ -6,7 +6,7 @@ import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/types';
 import { leftRouteBoundaryID, rightRouteBoundaryID } from 'js/components/Routes/Route/Route';
 import { SectionOrder, getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-import SavedListsSuccessAlert from 'js/components/savedLists/SavedListsSuccessAlert';
+import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 
 interface DetailLayoutProps extends PropsWithChildren {
   sections: SectionOrder;

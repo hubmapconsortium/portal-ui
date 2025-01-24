@@ -47,7 +47,7 @@ const savedEntitiesSelector = (state: SavedEntitiesStore) => ({
 function useSavedLists() {
   const urls = useUkvApiURLs();
   const { groupsToken, isAuthenticated } = useAppContext();
-  const { setTransferredToProfile } = useSavedListsAlertsStore();
+  const { setTransferredToProfileAlert } = useSavedListsAlertsStore();
   const { savedEntities, savedLists, isFirstRemoteFetch, isLoading } = useFetchSavedEntitiesAndLists({
     urls,
     groupsToken,
@@ -70,7 +70,7 @@ function useSavedLists() {
       // If a user logs into their account for the first time since the My Lists update
       // on a device that has saved entities and lists, we copy those to their remote store and show them an alert.
       // This only happens once.
-      setTransferredToProfile(true);
+      setTransferredToProfileAlert(true);
       const { savedEntities: savedEntitiesLocal, savedLists: savedListsLocal } = useLocalSavedEntitiesStore.getState();
 
       copySavedItemsToRemoteStore({ savedEntitiesLocal, savedListsLocal, urls, groupsToken });

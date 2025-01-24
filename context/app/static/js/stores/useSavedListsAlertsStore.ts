@@ -1,19 +1,22 @@
 import { create, StoreApi } from 'zustand';
 
-export const savedAlertStatus = 'savedAlert';
-export const editedAlertStatus = 'editedAlert';
+export enum SavedListsSuccessAlertType {
+  Saved = 'Saved',
+  Updated = 'Updated',
+  Deleted = 'Deleted',
+}
 export interface SavedListsAlertsState {
-  transferredToProfile: boolean;
-  setTransferredToProfile: (transferredToProfile: boolean) => void;
-  savedOrEditedList: boolean | string;
-  setSavedOrEditedList: (val: boolean | string) => void;
+  transferredToProfileAlert: boolean;
+  setTransferredToProfileAlert: (transferredToProfileAlert: boolean) => void;
+  successAlert?: SavedListsSuccessAlertType;
+  setSuccessAlert: (val: SavedListsSuccessAlertType | undefined) => void;
 }
 
 const storeDefinition = (set: StoreApi<SavedListsAlertsState>['setState']) => ({
-  transferredToProfile: false,
-  setTransferredToProfile: (transferredToProfile: boolean) => set({ transferredToProfile }),
-  savedOrEditedList: false,
-  setSavedOrEditedList: (val: boolean | string) => set({ savedOrEditedList: val }),
+  transferredToProfileAlert: false,
+  setTransferredToProfileAlert: (transferredToProfileAlert: boolean) => set({ transferredToProfileAlert }),
+  successAlert: undefined,
+  setSuccessAlert: (val: SavedListsSuccessAlertType | undefined) => set({ successAlert: val }),
 });
 
 export const useSavedListsAlertsStore = create<SavedListsAlertsState>(storeDefinition);

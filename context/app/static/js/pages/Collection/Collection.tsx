@@ -3,7 +3,7 @@ import React from 'react';
 import Summary from 'js/components/detailPage/summary/Summary';
 import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasetsTable';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
-import SavedListsSuccessAlert from 'js/components/savedLists/SavedListsSuccessAlert';
+import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import useTrackID from 'js/hooks/useTrackID';
 import { Collection } from 'js/components/types';
 

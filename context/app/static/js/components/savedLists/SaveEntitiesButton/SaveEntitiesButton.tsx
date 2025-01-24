@@ -4,7 +4,7 @@ import SvgIcon from '@mui/material/SvgIcon';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { useSavedLists } from 'js/components/savedLists/hooks';
 import { generateCommaList } from 'js/helpers/functions';
-import { useSavedListsAlertsStore, savedAlertStatus } from 'js/stores/useSavedListsAlertsStore';
+import { useSavedListsAlertsStore, SavedListsSuccessAlertType } from 'js/stores/useSavedListsAlertsStore';
 import { EditSavedEntityIcon, SaveEntityIcon } from 'js/shared-styles/icons';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
@@ -20,7 +20,7 @@ export default function SaveEntitiesButton({
 }) {
   const { savedEntities, saveEntities } = useSavedLists();
 
-  const setSavedOrEditedList = useSavedListsAlertsStore((state) => state.setSavedOrEditedList);
+  const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
   const trackSave = useTrackEntityPageEvent();
 
   const noEntities = uuids.size === 0;
@@ -43,7 +43,7 @@ export default function SaveEntitiesButton({
       onClick={() => {
         saveEntities(uuids);
         trackSave({ action: 'Save To List', label: generateCommaList(Array.from(uuids)) });
-        setSavedOrEditedList(savedAlertStatus);
+        setSuccessAlert(SavedListsSuccessAlertType.Saved);
       }}
       tooltip={tooltip}
       disabled={disabled}
