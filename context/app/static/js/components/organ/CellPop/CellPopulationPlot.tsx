@@ -10,6 +10,7 @@ import lightTheme, { darkTheme } from 'js/theme/theme';
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import CellPopDescription from './CellPopDescription';
 import CellPopActions from './CellPopActions';
+import { useTrackCellpop } from './hooks';
 
 interface CellPopulationPlotProps {
   id: string;
@@ -26,6 +27,8 @@ function visualizationSelector(store: VisualizationStore) {
 function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
   const { fullscreenVizId, theme } = useVisualizationStore(visualizationSelector);
   const vizIsFullscreen = fullscreenVizId === id;
+
+  const trackEvent = useTrackCellpop();
 
   return (
     <CollapsibleDetailPageSection title="Cell Population Plot" id={id} icon={CellTypeIcon}>
@@ -66,6 +69,7 @@ function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
             ]}
             customTheme={theme === 'dark' ? darkTheme : lightTheme}
             disabledControls={['theme']}
+            trackEvent={trackEvent}
           />
           <BodyExpandedCSS id={id} />
         </ExpandableDiv>
