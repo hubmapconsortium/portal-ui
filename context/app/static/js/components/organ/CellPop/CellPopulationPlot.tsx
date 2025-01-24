@@ -4,9 +4,10 @@ import React from 'react';
 import { CellPopHuBMAPLoader } from 'cellpop';
 import { CellTypeIcon, DatasetIcon } from 'js/shared-styles/icons';
 import Paper from '@mui/material/Paper';
-import { bodyExpandedCSS, ExpandableDiv } from 'js/components/detailPage/visualization/Visualization/style';
+import { ExpandableDiv } from 'js/components/detailPage/visualization/Visualization/style';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import lightTheme, { darkTheme } from 'js/theme/theme';
+import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import CellPopDescription from './CellPopDescription';
 import CellPopActions from './CellPopActions';
 
@@ -66,7 +67,7 @@ function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
             customTheme={theme === 'dark' ? darkTheme : lightTheme}
             disabledControls={['theme']}
           />
-          <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
+          <BodyExpandedCSS id={id} />
         </ExpandableDiv>
       </Paper>
     </CollapsibleDetailPageSection>

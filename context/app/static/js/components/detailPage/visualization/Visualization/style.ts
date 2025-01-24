@@ -67,15 +67,8 @@ const StyledDetailPageSection = styled(DetailPageSection)<StyledDetailPageSectio
   }),
 );
 
-const bodyExpandedCSS = `
-  body {
-    overflow: hidden;
-  }
-`;
-
 export {
   vitessceFixedHeight,
-  bodyExpandedCSS,
   StyledHeader,
   StyledSectionHeader,
   ExpandButton,

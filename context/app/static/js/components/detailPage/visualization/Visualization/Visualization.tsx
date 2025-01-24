@@ -19,6 +19,7 @@ import VisualizationThemeSwitch from 'js/components/detailPage/visualization/Vis
 import VisualizationFooter from 'js/components/detailPage/visualization/VisualizationFooter';
 import VisualizationTracker from 'js/components/detailPage/visualization/VisualizationTracker';
 
+import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
 import {
   ExpandButton,
@@ -26,7 +27,6 @@ import {
   SelectionButton,
   StyledDetailPageSection,
   StyledSectionHeader,
-  bodyExpandedCSS,
   vitessceFixedHeight,
 } from './style';
 
@@ -185,7 +185,7 @@ function Visualization({
           </ExpandableDiv>
         </Paper>
         <VisualizationFooter />
-        <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
+        <BodyExpandedCSS id={id} />
       </StyledDetailPageSection>
     )
   );
