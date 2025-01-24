@@ -339,10 +339,7 @@ const theme = createTheme({
             margin: 0,
             border: 'none',
             boxShadow: 'none',
-            '& .MuiButtonBase-root': {
-              minHeight: 0,
-            },
-            '& .MuiAccordionSummary-root .MuiAccordionSummary-content': {
+            '& .MuiAccordionSummary-root': {
               minHeight: 0,
               margin: 0,
               border: 'none',
