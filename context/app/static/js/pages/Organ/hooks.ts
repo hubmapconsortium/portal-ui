@@ -1,6 +1,7 @@
 import { useMemo } from 'react';
 import useSearchData, { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
+import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { mustHaveOrganClause } from './queries';
 
 export function useHasSamplesQuery(searchItems: string[]) {
@@ -78,7 +79,7 @@ export function useAssayBucketsQuery(searchItems: string[]) {
 // TODO:  This is a placeholder for the actual implementation.
 //        We do not currently have a programmatic way to tell
 //        whether a dataset actually has labels yet.
-const DATASETS_WITH_LABELS = [
+export const DATASETS_WITH_LABELS = [
   'ad693f99fb9006e68a53e97598da1509',
   '173de2e80adf6a73ac8cff5ccce20dfc',
   'b95f34761c252ebbd1e482cd9afae73f',
@@ -113,6 +114,10 @@ const DATASETS_WITH_LABELS = [
   'a48ab0bf5d8084da24859c4e64336e9c',
 ];
 
+export function filterDatasets(hit: Pick<SearchHit, '_id'>) {
+  return DATASETS_WITH_LABELS.includes(hit._id);
+}
+
 export function useLabelledDatasetsQuery(searchItems: string[]) {
   const datasetsQuery = useMemo(
     () => ({
@@ -144,6 +149,6 @@ export function useLabelledDatasetsQuery(searchItems: string[]) {
     [searchItems],
   );
   const { searchHits: datasetsHits } = useSearchHits<Pick<Dataset, 'uuid'>>(datasetsQuery, { useDefaultQuery: false });
-  const filteredDatasets = datasetsHits.filter((hit) => DATASETS_WITH_LABELS.includes(hit._id));
+  const filteredDatasets = datasetsHits.filter(filterDatasets);
   return filteredDatasets.map((hit) => hit._source.uuid);
 }

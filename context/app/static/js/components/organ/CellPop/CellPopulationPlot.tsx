@@ -1,6 +1,6 @@
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
-import React from 'react';
+import React, { useCallback } from 'react';
 import { CellPopHuBMAPLoader } from 'cellpop';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
@@ -19,6 +19,7 @@ import VisualizationThemeSwitch from 'js/components/detailPage/visualization/Vis
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import theme, { darkTheme } from 'js/theme/theme';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface CellPopulationPlotProps {
   id: string;
@@ -36,6 +37,10 @@ function visualizationSelector(store: VisualizationStore) {
 function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
   const { fullscreenVizId, theme: vizTheme, expandViz } = useVisualizationStore(visualizationSelector);
   const vizIsFullscreen = fullscreenVizId === id;
+  const expand = useCallback(() => {
+    trackEvent({ category: 'Organ Page', action: 'Expand Cell Population Plot' });
+    expandViz(id);
+  }, [expandViz, id]);
   return (
     <CollapsibleDetailPageSection title="Cell Population Plot" id={id} icon={CellTypeIcon}>
       <SectionDescription
@@ -63,13 +68,7 @@ function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
           <Stack direction="row" spacing={1}>
             <VisualizationThemeSwitch />
             <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-              <ExpandButton
-                size="small"
-                onClick={() => {
-                  expandViz(id);
-                }}
-                variant="contained"
-              >
+              <ExpandButton size="small" onClick={expand} variant="contained">
                 <FullscreenRoundedIcon color="primary" />
               </ExpandButton>
             </SecondaryBackgroundTooltip>
