@@ -61,7 +61,7 @@ export function useAssayBucketsQuery(searchItems: string[]) {
             },
           },
           aggs: {
-            'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 100 } },
+            'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 1000 } },
           },
         },
       },
