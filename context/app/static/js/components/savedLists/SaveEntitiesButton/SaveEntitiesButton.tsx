@@ -8,6 +8,7 @@ import { useSavedListsAlertsStore, SavedListsSuccessAlertType } from 'js/stores/
 import { EditSavedEntityIcon, SaveEntityIcon } from 'js/shared-styles/icons';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
+import { useAppContext } from 'js/components/Contexts';
 
 export default function SaveEntitiesButton({
   entity_type,
@@ -18,10 +19,14 @@ export default function SaveEntitiesButton({
   uuids: Set<string>;
   useSelectableTableTooltips?: boolean;
 }) {
+  const { isAuthenticated } = useAppContext();
   const { savedEntities, saveEntities } = useSavedLists();
-
-  const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
   const trackSave = useTrackEntityPageEvent();
+  const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const noEntities = uuids.size === 0;
   const allInSavedEntities = !noEntities && Array.from(uuids).every((uuid) => savedEntities[uuid]);

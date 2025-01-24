@@ -13,7 +13,7 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
 import { Entity } from 'js/components/types';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
-import { useFlaskDataContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
@@ -85,6 +85,11 @@ function WorkspaceSVGIcon({ color = 'primary', ...props }: SvgIconProps) {
 
 function SaveEditEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { savedEntities } = useSavedLists();
+  const { isAuthenticated } = useAppContext();
+
+  if (!isAuthenticated) {
+    return null;
+  }
 
   return uuid in savedEntities ? <EditSavedEntityButton uuid={uuid} /> : <SaveEntityButton uuid={uuid} />;
 }
