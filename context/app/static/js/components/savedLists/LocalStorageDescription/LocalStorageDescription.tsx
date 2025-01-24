@@ -19,8 +19,8 @@ function LocalStorageDescription() {
     <Description>
       <Stack spacing={1}>
         <Typography>
-          Your lists are saved locally on your device and are not associated with your profile.{' '}
-          <InternalLink href="/login">Log in</InternalLink> to access and manage lists linked to your profile.
+          You must be logged in to access lists. <InternalLink href="/login">Log in</InternalLink> to access and manage
+          lists linked to your profile.
         </Typography>
         <Box>
           <Button variant="contained" href="/login">
