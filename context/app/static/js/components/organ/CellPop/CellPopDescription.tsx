@@ -1,7 +1,26 @@
 import React from 'react';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import OutlinedButton from 'js/shared-styles/buttons/OutlinedButton';
+
+// TODO: Once there is a cellpop tutorial to link to,
+// uncomment the below code and add RelevantPages to the SectionDescription addendum
+
+// import OutlinedButton from 'js/shared-styles/buttons/OutlinedButton';
+// import Link from '@mui/icons-material/Link';
+// function RelevantPages() {
+//   return (
+//     <LabelledSectionText label="Relevant Pages" key="relevant-pages">
+//       <OutlinedButton
+//         color="info"
+//         endIcon={
+//           <Link />
+//         }
+//       >
+//         Tutorial
+//       </OutlinedButton>
+//     </LabelledSectionText>
+//   );
+// }
 
 export default function CellPopDescription() {
   return (
@@ -16,9 +35,6 @@ export default function CellPopDescription() {
           Use the plot controls to modify sorting preferences or display options. Display options include toggling the
           visibility of a specific column or row, or embedding a bar chart to compare the amounts of cell types within a
           dataset.
-        </LabelledSectionText>,
-        <LabelledSectionText label="Relevant Pages" key="relevant-pages">
-          <OutlinedButton color="info">Tutorial</OutlinedButton>
         </LabelledSectionText>,
       ]}
     >
