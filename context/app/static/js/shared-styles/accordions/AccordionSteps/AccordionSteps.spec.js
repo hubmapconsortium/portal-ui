@@ -57,13 +57,14 @@ test('accordions are disabled until previous step is completed', async () => {
         }))}
     />,
   );
-  expect(screen.getByTestId('accordion-summary-1')).toHaveAttribute('aria-disabled', 'true');
+
+  expect(screen.getByTestId('accordion-summary-1')).toHaveClass('Mui-disabled');
 
   await clickOpenAccordion(step0);
   await clickCompleteStep(step0);
 
   expect(screen.getByText(step1.contentButton)).toBeVisible();
-  expect(screen.getByTestId('accordion-summary-1')).not.toHaveAttribute('aria-disabled');
+  expect(screen.getByTestId('accordion-summary-1')).not.toHaveClass('Mui-disabled');
 });
 
 test("an accordion is closed when step is completed and the next step's accordion is opened", async () => {
