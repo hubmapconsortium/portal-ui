@@ -15,8 +15,14 @@ import {
 function useListSavedListsAndEntities() {
   const { savedListsAndEntities, isLoading, mutate } = useFetchSavedListsAndEntities();
 
-  savedListsAndEntities.sort((a, b) => b.value.dateSaved - a.value.dateSaved);
+  // Saved entities should always be first, then the rest should be sorted by date saved
+  savedListsAndEntities.sort((a, b) => {
+    if (a.key === 'savedEntities') return -1;
+    if (b.key === 'savedEntities') return 1;
+    return b.value.dateSaved - a.value.dateSaved;
+  });
 
+  // Convert savedListsAndEntities to a record
   const savedListsAndEntitiesRecord = useMemo(() => {
     return savedListsAndEntities.reduce<Record<string, SavedEntitiesList>>((acc, item) => {
       acc[item.key] = item.value;

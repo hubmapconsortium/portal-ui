@@ -1,27 +1,26 @@
 import React from 'react';
-import { render } from 'test-utils/functions';
-import { useLocalSavedEntitiesStore, useRemoteSavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
+import { render, waitFor } from 'test-utils/functions';
+import { useSavedLists } from 'js/components/savedLists/hooks';
 import SavedList from './SavedList';
 
-jest.mock('js/stores/useSavedEntitiesStore', () => ({
-  useLocalSavedEntitiesStore: jest.fn(),
-  useRemoteSavedEntitiesStore: jest.fn(),
+jest.mock('js/components/savedLists/hooks', () => ({
+  useSavedLists: jest.fn(),
 })); // Mock the hook
 
 describe('SavedList component', () => {
   beforeEach(() => {
-    useLocalSavedEntitiesStore.mockClear(); // Clear all instances and calls to the mock
-    useRemoteSavedEntitiesStore.mockClear();
+    jest.clearAllMocks(); // Clear all mock instances and calls
   });
 
-  test('throws error when listUUID is not in savedLists', () => {
-    // Setup the mock to return savedLists as an empty object
-    useLocalSavedEntitiesStore.mockImplementation(() => ({
-      savedLists: {},
-      removeEntitiesFromList: jest.fn(),
-    }));
-
+  test('throws error when listUUID is not in savedLists', async () => {
     const listUUID = 'any-uuid';
+
+    // Setup the mock to return savedLists as an empty object
+    useSavedLists.mockReturnValue({
+      savedLists: {},
+      isLoading: false,
+      mutate: jest.fn(),
+    });
 
     // Suppress console.error for this test since we're testing an error scenario
     const originalConsoleError = console.error;
@@ -33,10 +32,11 @@ describe('SavedList component', () => {
     console.error = originalConsoleError;
   });
 
-  test('renders without error when listUUID is in savedLists', () => {
+  test('renders without error when listUUID is in savedLists', async () => {
     const listUUID = 'any-uuid';
 
-    useLocalSavedEntitiesStore.mockImplementation(() => ({
+    // Mock the hook to return savedLists with a list
+    useSavedLists.mockReturnValue({
       savedLists: {
         [listUUID]: {
           title: 'test title',
@@ -45,12 +45,16 @@ describe('SavedList component', () => {
           dateSaved: Date.now(),
           dateLastModified: Date.now(),
         },
-      }, // Setup the mock to return savedLists with a list
-      removeEntitiesFromList: jest.fn(),
-    }));
+      },
+      isLoading: false,
+      mutate: jest.fn(),
+    });
 
     const { container } = render(<SavedList listUUID={listUUID} />);
 
-    expect(container).toBeInTheDocument();
+    // Wait for the component to render with fetched data
+    await waitFor(() => {
+      expect(container).toBeInTheDocument();
+    });
   });
 });
