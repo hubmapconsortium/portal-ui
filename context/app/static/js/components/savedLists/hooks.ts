@@ -1,5 +1,7 @@
 import { useCallback, useMemo } from 'react';
+import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 import { v4 as uuidv4 } from 'uuid';
+
 import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { SAVED_ENTITIES_DEFAULT, SAVED_ENTITIES_KEY } from 'js/components/savedLists/constants';
 import {
@@ -9,10 +11,11 @@ import {
   useUkvApiURLs,
   useUpdateSavedList,
 } from 'js/components/savedLists/api';
-import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 
 function useListSavedListsAndEntities() {
   const { savedListsAndEntities, isLoading, mutate } = useFetchSavedListsAndEntities();
+
+  savedListsAndEntities.sort((a, b) => b.value.dateSaved - a.value.dateSaved);
 
   const savedListsAndEntitiesRecord = useMemo(() => {
     return savedListsAndEntities.reduce<Record<string, SavedEntitiesList>>((acc, item) => {
@@ -246,125 +249,4 @@ function useSavedLists() {
   };
 }
 
-// function useSavedLists() {
-//   const urls = useUkvApiURLs();
-//   const { groupsToken, isAuthenticated } = useAppContext();
-//   const { setTransferredToProfileAlert } = useSavedListsAlertsStore();
-//   const { savedEntities, savedLists, isFirstRemoteFetch, isLoading } = useFetchSavedEntitiesAndLists({
-//     urls,
-//     groupsToken,
-//     isAuthenticated,
-//   });
-
-//   const response = useSavedListsTest();
-//   console.log(response);
-
-//   const wasLoadingRef = useRef(isLoading);
-
-//   useEffect(() => {
-//     if (!isAuthenticated || isLoading || !wasLoadingRef.current) {
-//       return;
-//     }
-
-//     if (isFirstRemoteFetch) {
-//       // If a user logs into their account for the first time since the My Lists update
-//       // on a device that has saved entities and lists, we copy those to their remote store and show them an alert.
-//       // This only happens once.
-//       setTransferredToProfileAlert(true);
-//       const { savedEntities: savedEntitiesLocal, savedLists: savedListsLocal } = useLocalSavedEntitiesStore.getState();
-
-//       copySavedItemsToRemoteStore({ savedEntitiesLocal, savedListsLocal, urls, groupsToken });
-//     }
-//     wasLoadingRef.current = isLoading;
-//     // eslint-disable-next-line react-hooks/exhaustive-deps
-//   }, [isAuthenticated, isLoading]);
-
-//   const params = { urls, groupsToken, savedEntities, savedLists };
-
-//   // Sort saved lists with most recently saved first
-//   const sortedSavedLists = useMemo(() => {
-//     return Object.entries(savedLists)
-//       .sort(([, a], [, b]) => b.dateSaved - a.dateSaved)
-//       .reduce(
-//         (acc, [key, value]) => {
-//           acc[key] = value;
-//           return acc;
-//         },
-//         {} as Record<string, SavedEntitiesList>,
-//       );
-//   }, [savedLists]);
-
-//   return {
-//     isLoading,
-//     savedLists: sortedSavedLists,
-//     savedEntities,
-//     saveEntity: (entityUUID: string) =>
-//       saveEntityRemote({ ...params, entityUUID }).catch((err) => console.error('Failed to save entity:', err)),
-//   saveEntities: (entityUUIDs: Set<string>) => {
-//     handleStoreOperation(
-//       () => saveEntitiesRemote({ ...params, entityUUIDs }),
-//       () => store.saveEntities(entityUUIDs),
-//     ).catch((err) => console.error('Failed to save entities:', err));
-//   },
-//   deleteEntity: (entityUUID: string) => {
-//     handleStoreOperation(
-//       () => deleteEntityRemote({ ...params, entityUUID }),
-//       () => store.deleteEntity(entityUUID),
-//     ).catch((err) => console.error('Failed to delete entity:', err));
-//   },
-//   deleteEntities: (entityUUIDs: Set<string>) => {
-//     handleStoreOperation(
-//       () => deleteEntitiesRemote({ ...params, entityUUIDs }),
-//       () => store.deleteEntities(entityUUIDs),
-//     ).catch((err) => console.error('Failed to delete entities:', err));
-//   },
-//   createList: (list: Pick<SavedEntitiesList, 'title' | 'description'>) => {
-//     const uuid = uuidv4();
-//     handleStoreOperation(
-//       () => createListRemote({ ...params, list, uuid }),
-//       () => store.createList(list, uuid),
-//     ).catch((err) => console.error('Failed to create list:', err));
-//   },
-//   addEntityToList: (listUUID: string, entityUUID: string) => {
-//     handleStoreOperation(
-//       () => addEntityToListRemote({ ...params, listUUID, entityUUID }),
-//       () => store.addEntityToList(listUUID, entityUUID),
-//     ).catch((err) => console.error('Failed to add entity to list:', err));
-//   },
-//   addEntitiesToList: (listUUID: string, entityUUIDs: string[]) => {
-//     handleStoreOperation(
-//       () => addEntitiesToListRemote({ ...params, listUUID, entityUUIDs }),
-//       () => store.addEntitiesToList(listUUID, entityUUIDs),
-//     ).catch((err) => console.error('Failed to add entities to list:', err));
-//   },
-//   removeEntityFromList: (listUUID: string, entityUUID: string) => {
-//     handleStoreOperation(
-//       () => removeEntityFromListRemote({ ...params, listUUID, entityUUID }),
-//       () => store.removeEntityFromList(listUUID, entityUUID),
-//     ).catch((err) => console.error('Failed to remove entity from list:', err));
-//   },
-//   removeEntitiesFromList: (listUUID: string, entityUUIDs: string[]) => {
-//     handleStoreOperation(
-//       () => removeEntitiesFromListRemote({ ...params, listUUID, entityUUIDs }),
-//       () => store.removeEntitiesFromList(listUUID, entityUUIDs),
-//     ).catch((err) => console.error('Failed to remove entities from list:', err));
-//   },
-//   queueListToBeDeleted: (listUUID: string) => {
-//     handleStoreOperation(
-//       () => deleteListRemote({ ...params, listUUID }),
-//       () => store.queueListToBeDeleted(listUUID),
-//     ).catch((err) => console.error('Failed to queue list for deletion:', err));
-//   },
-//   deleteQueuedLists: () => {
-//     store.deleteQueuedLists();
-//   },
-//   editList: ({ title, description, listUUID }: { title: string; description: string; listUUID: string }) => {
-//     handleStoreOperation(
-//       () => editListRemote({ ...params, title, description, listUUID }),
-//       () => store.editList({ title, description, listUUID }),
-//     ).catch((err) => console.error('Failed to edit list:', err));
-//   },
-//   };
-// }
-
-export { useHandleUpdateSavedList, useSavedLists };
+export { useSavedLists };

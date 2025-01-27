@@ -12,9 +12,9 @@ interface CreateListDialogProps {
 }
 
 function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: CreateListDialogProps) {
+  const { handleCreateList } = useSavedLists();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const { handleCreateList } = useSavedLists();
 
   function handleTitleChange(event: ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
@@ -26,18 +26,15 @@ function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: Crea
 
   const handleClose = () => {
     setDialogIsOpen(false);
-  };
-
-  function handleExit() {
     setTitle('');
     setDescription('');
-  }
+  };
 
   function handleSubmit() {
     handleCreateList({ title, description }).catch((error) => {
       console.error(error);
     });
-    setDialogIsOpen(false);
+    handleClose();
   }
 
   const dialogContent = (
@@ -65,10 +62,7 @@ function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: Crea
       content={dialogContent}
       actions={dialogActions}
       isOpen={dialogIsOpen}
-      handleClose={() => {
-        handleClose();
-        handleExit();
-      }}
+      handleClose={handleClose}
     />
   );
 }
