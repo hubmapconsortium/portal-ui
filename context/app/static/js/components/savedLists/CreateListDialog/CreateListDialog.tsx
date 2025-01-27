@@ -14,7 +14,7 @@ interface CreateListDialogProps {
 function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: CreateListDialogProps) {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const { createList } = useSavedLists();
+  const { handleCreateList } = useSavedLists();
 
   function handleTitleChange(event: ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
@@ -34,7 +34,9 @@ function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: Crea
   }
 
   function handleSubmit() {
-    createList({ title, description });
+    handleCreateList({ title, description }).catch((error) => {
+      console.error(error);
+    });
     setDialogIsOpen(false);
   }
 

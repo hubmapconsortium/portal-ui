@@ -9,7 +9,7 @@ interface SaveEntityButtonProps extends ButtonProps {
 }
 
 function SaveEntityButton({ uuid, ...rest }: SaveEntityButtonProps) {
-  const { saveEntity } = useSavedLists();
+  const { handleSaveEntities } = useSavedLists();
   const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
   const trackSave = useTrackEntityPageEvent();
 
@@ -18,7 +18,9 @@ function SaveEntityButton({ uuid, ...rest }: SaveEntityButtonProps) {
       color="primary"
       variant="contained"
       onClick={() => {
-        saveEntity(uuid);
+        handleSaveEntities({ entityUUIDs: new Set([uuid]) }).catch((error) => {
+          console.error(error);
+        });
         trackSave({ action: 'Save To List', label: uuid });
         setSuccessAlert(SavedListsSuccessAlertType.Saved);
       }}

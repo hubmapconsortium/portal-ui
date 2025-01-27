@@ -20,7 +20,7 @@ export default function SaveEntitiesButton({
   useSelectableTableTooltips?: boolean;
 }) {
   const { isAuthenticated } = useAppContext();
-  const { savedEntities, saveEntities } = useSavedLists();
+  const { savedEntities, handleSaveEntities } = useSavedLists();
   const trackSave = useTrackEntityPageEvent();
   const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
 
@@ -29,7 +29,7 @@ export default function SaveEntitiesButton({
   }
 
   const noEntities = uuids.size === 0;
-  const allInSavedEntities = !noEntities && Array.from(uuids).every((uuid) => savedEntities[uuid]);
+  const allInSavedEntities = !noEntities && Array.from(uuids).every((uuid) => savedEntities.savedEntities[uuid]);
 
   const disabled = noEntities || allInSavedEntities;
   const entityTypes = `${entity_type.toLowerCase()}s`;
@@ -46,8 +46,10 @@ export default function SaveEntitiesButton({
   return (
     <WhiteBackgroundIconTooltipButton
       onClick={() => {
-        saveEntities(uuids);
         trackSave({ action: 'Save To List', label: generateCommaList(Array.from(uuids)) });
+        handleSaveEntities({ entityUUIDs: uuids }).catch((error) => {
+          console.error(error);
+        });
         setSuccessAlert(SavedListsSuccessAlertType.Saved);
       }}
       tooltip={tooltip}

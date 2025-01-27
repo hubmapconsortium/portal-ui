@@ -1,8 +1,11 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr/fetchers';
+import { v4 as uuidv4 } from 'uuid';
 import { useAppContext } from 'js/components/Contexts';
 import { SavedEntitiesList, SavedEntity } from 'js/components/savedLists/types';
 import { SAVED_ENTITIES_DEFAULT } from 'js/components/savedLists/constants';
+import { useCallback } from 'react';
+import useSWRMutation from 'swr/mutation';
 
 /** **************************************************
  *                  UKV API Helpers                  *
@@ -53,6 +56,284 @@ async function fetchResponse({
   if (!response.ok) {
     console.error('UKV API failed with error: ', await response.text());
   }
+}
+
+/** **************************************************
+ *                          New                      *
+ * ************************************************* */
+
+interface APIAction {
+  url: string;
+  headers?: HeadersInit;
+}
+
+export function useUkvHeaders(): HeadersInit {
+  const { groupsToken } = useAppContext();
+  return {
+    Authorization: `Bearer ${groupsToken}`,
+    'Content-Type': 'application/json',
+  };
+}
+
+export function useHasUkvAccess() {
+  const { isAuthenticated } = useAppContext();
+  return Boolean(isAuthenticated);
+}
+
+export function useBuildUkvSWRKey(): {
+  buildKey: ({ url }: { url: string }) => [string, HeadersInit] | null;
+  hasAccess: boolean;
+} {
+  const hasAccess = useHasUkvAccess();
+  const headers = useUkvHeaders();
+
+  return {
+    buildKey: useCallback(
+      ({ url }: { url: string }) => {
+        return hasAccess ? [url, headers] : null;
+      },
+      [hasAccess, headers],
+    ),
+    hasAccess,
+  };
+}
+
+export function useFetchSavedListsAndEntities(listUUID?: string) {
+  const urls = useUkvApiURLs();
+  const listsURL = listUUID ? urls.key(listUUID) : urls.keys;
+  const { buildKey, hasAccess } = useBuildUkvSWRKey();
+
+  const { data, isLoading, ...rest } = useSWR(
+    buildKey({ url: listsURL }),
+    ([url, head]) =>
+      fetcher<{ key: string; value: SavedEntitiesList }[]>({
+        url,
+        requestInit: { headers: head },
+        errorMessages: {
+          404: listUUID ? `No list with UUID ${listUUID} found.` : 'No lists for the current user were found.',
+        },
+      }),
+    { revalidateOnFocus: hasAccess, refreshInterval: 1000 * 60 },
+  );
+  const savedListsAndEntities = data ?? [];
+  return { savedListsAndEntities, isLoading, ...rest };
+}
+
+export interface UpdateSavedListArgs extends APIAction {
+  body: SavedEntitiesList;
+}
+
+async function updateSavedListFetcher(_key: string, { arg: { body, url, headers } }: { arg: UpdateSavedListArgs }) {
+  const response = await fetch(url, {
+    method: 'PUT',
+    body: JSON.stringify(body),
+    headers,
+  });
+  if (!response.ok) {
+    console.error('Updating saved list failed', response);
+  }
+}
+
+export function useUpdateSavedList() {
+  const api = useUkvApiURLs();
+  const headers = useUkvHeaders();
+  const { trigger, isMutating } = useSWRMutation('update-list', updateSavedListFetcher);
+
+  const updateSavedList = useCallback(
+    ({ body, listUUID }: { body: SavedEntitiesList; listUUID: string }) => {
+      return trigger({
+        url: api.key(listUUID),
+        body,
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { updateSavedList, isUpdating: isMutating };
+}
+
+async function fetchUpdateList(
+  _key: string,
+  { arg: { body, headers, url } }: { arg: { body: SavedEntitiesList; headers: HeadersInit; url: string } },
+) {
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers,
+  });
+  if (!response.ok) {
+    console.error('List update failed', response);
+  }
+}
+
+export function useEditList() {
+  const { trigger, isMutating } = useSWRMutation('edit-list', fetchUpdateList);
+  const api = useUkvApiURLs();
+  const headers = useUkvHeaders();
+
+  const editList = useCallback(
+    async ({
+      listUUID,
+      list,
+      title,
+      description,
+    }: {
+      listUUID: string;
+      list: SavedEntitiesList;
+      title: string;
+      description: string;
+    }) => {
+      await trigger({
+        url: api.key(listUUID),
+        body: {
+          ...list,
+          title,
+          description,
+          dateLastModified: Date.now(),
+        },
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { editList, isEditing: isMutating };
+}
+
+export function useCreateList() {
+  const { trigger, isMutating } = useSWRMutation('create-list', fetchUpdateList);
+  const api = useUkvApiURLs();
+  const headers = useUkvHeaders();
+
+  const uuid = uuidv4();
+
+  const createList = useCallback(
+    async ({ title, description }: { title: string; description: string }) => {
+      await trigger({
+        url: api.key(uuid),
+        body: {
+          title,
+          description,
+          dateSaved: Date.now(),
+          dateLastModified: Date.now(),
+          savedEntities: {},
+        },
+        headers,
+      });
+    },
+    [trigger, api, headers, uuid],
+  );
+
+  return { createList, isCreating: isMutating };
+}
+
+export function useAddEntitiesToList() {
+  const { trigger, isMutating } = useSWRMutation('add-entities-to-list', fetchUpdateList);
+  const api = useUkvApiURLs();
+  const headers = useUkvHeaders();
+
+  const addEntitiesToList = useCallback(
+    async ({
+      listUUID,
+      list,
+      entityUUIDs,
+    }: {
+      listUUID: string;
+      list: SavedEntitiesList;
+      entityUUIDs: Set<string>;
+    }) => {
+      await trigger({
+        url: api.key(listUUID),
+        body: {
+          ...list,
+          dateLastModified: Date.now(),
+          savedEntities: {
+            ...list.savedEntities,
+            ...Array.from(entityUUIDs).reduce(
+              (acc, entityUUID) => {
+                acc[entityUUID] = {};
+                return acc;
+              },
+              {} as Record<string, SavedEntity>,
+            ),
+          },
+        },
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { addEntitiesToList, isAdding: isMutating };
+}
+
+export function useRemoveEntitiesFromList() {
+  const { trigger, isMutating } = useSWRMutation('remove-entities-to-list', fetchUpdateList);
+  const api = useUkvApiURLs();
+  const headers = useUkvHeaders();
+
+  const removeEntitiesFromList = useCallback(
+    async ({
+      listUUID,
+      list,
+      entityUUIDs,
+    }: {
+      listUUID: string;
+      list: SavedEntitiesList;
+      entityUUIDs: Set<string>;
+    }) => {
+      const updatedEntities = { ...list.savedEntities };
+      entityUUIDs.forEach((entityUUID) => {
+        delete updatedEntities[entityUUID];
+      });
+
+      await trigger({
+        url: api.key(listUUID),
+        body: {
+          ...list,
+          dateLastModified: Date.now(),
+          savedEntities: updatedEntities,
+        },
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { removeEntitiesFromList, isRemoving: isMutating };
+}
+
+async function fetchDeleteList(
+  _key: string,
+  { arg: { headers, url, listUUID } }: { arg: { headers: HeadersInit; url: string; listUUID: string } },
+) {
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers,
+  });
+  if (!response.ok) {
+    throw Error(`List deletion for list #${listUUID} failed`);
+  }
+}
+
+export function useDeleteList() {
+  const { trigger, isMutating } = useSWRMutation('delete-list', fetchDeleteList);
+  const api = useUkvApiURLs();
+  const headers = useUkvHeaders();
+
+  const deleteList = useCallback(
+    async ({ listUUID }: { listUUID: string }) => {
+      await trigger({
+        listUUID,
+        url: api.key(listUUID),
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { deleteList, isDeleting: isMutating };
 }
 
 /** **************************************************

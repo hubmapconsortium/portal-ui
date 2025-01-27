@@ -10,7 +10,7 @@ import { useSavedLists } from 'js/components/savedLists/hooks';
 import { StyledHeader, SpacingDiv, PageSpacing } from './style';
 
 function SavedListsContent() {
-  const { savedEntities, savedLists, deleteEntities } = useSavedLists();
+  const { savedEntities, savedLists, handleDeleteEntities } = useSavedLists();
 
   return (
     <PageSpacing>
@@ -18,7 +18,14 @@ function SavedListsContent() {
       <SavedListsSuccessAlert fromSavedLists />
       <SpacingDiv>
         <StyledHeader variant="h3">My Saved Items</StyledHeader>
-        <SavedEntitiesTable savedEntities={savedEntities} deleteCallback={deleteEntities} />
+        <SavedEntitiesTable
+          savedEntities={savedEntities.savedEntities}
+          deleteCallback={(entities) => {
+            handleDeleteEntities(entities).catch((error) => {
+              console.error(error);
+            });
+          }}
+        />
       </SpacingDiv>
       <SavedListScrollbox savedLists={savedLists} />
     </PageSpacing>

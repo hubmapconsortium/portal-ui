@@ -25,14 +25,18 @@ function SaveToListDialog({
 }: SaveToListDialogProps) {
   const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet<string>([]);
 
-  const { addEntitiesToList, savedLists } = useSavedLists();
+  const { savedLists, handleAddEntitiesToList } = useSavedLists();
 
-  function addSavedEntitiesToList() {
-    selectedLists.forEach((list) => addEntitiesToList(list, entitiesToAdd));
+  async function addSavedEntitiesToList() {
+    await Promise.all(
+      Array.from(selectedLists).map((list) =>
+        handleAddEntitiesToList({ listUUID: list, entityUUIDs: new Set(entitiesToAdd) }),
+      ),
+    );
   }
 
-  function handleSubmit() {
-    addSavedEntitiesToList();
+  async function handleSubmit() {
+    await addSavedEntitiesToList();
     setDialogIsOpen(false);
     onSaveCallback();
   }

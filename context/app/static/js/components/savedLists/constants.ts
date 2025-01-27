@@ -1,3 +1,5 @@
+export const SAVED_ENTITIES_KEY = 'savedEntities';
+
 export const SAVED_ENTITIES_DEFAULT = {
   title: 'My Saved Items',
   description: '',

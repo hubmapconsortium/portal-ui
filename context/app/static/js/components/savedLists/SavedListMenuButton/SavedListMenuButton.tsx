@@ -16,7 +16,7 @@ function DeleteListButton({ listUUID }: { listUUID: string }) {
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [deleteListDialogIsOpen, setDeleteListDialogIsOpen] = useState(false);
 
-  const { queueListToBeDeleted } = useSavedLists();
+  const { handleDeleteList } = useSavedLists();
 
   function closeMenuAndDeleteDialog() {
     setMenuIsOpen(false);
@@ -60,7 +60,9 @@ function DeleteListButton({ listUUID }: { listUUID: string }) {
             <Button
               href="/my-lists"
               onClick={() => {
-                queueListToBeDeleted(listUUID);
+                handleDeleteList({ listUUID }).catch((error) => {
+                  console.error(error);
+                });
               }}
               color="primary"
             >

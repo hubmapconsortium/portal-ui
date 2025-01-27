@@ -19,7 +19,7 @@ function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTi
   const [description, setDescription] = useState(listDescription);
   const [shouldDisplayWarning, setShouldDisplayWarning] = useState(false);
 
-  const { editList, savedLists } = useSavedLists();
+  const { handleEditList, savedLists } = useSavedLists();
 
   function handleTitleChange(event: ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
@@ -40,7 +40,9 @@ function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTi
 
   function handleSubmit() {
     if (!(title in savedLists)) {
-      editList({ listUUID, title, description });
+      handleEditList({ listUUID, title, description }).catch((error) => {
+        console.error(error);
+      });
       setDialogIsOpen(false);
     } else {
       setShouldDisplayWarning(true);

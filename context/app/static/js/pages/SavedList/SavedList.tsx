@@ -13,7 +13,7 @@ import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-style
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 
 function SavedList({ listUUID }: { listUUID: string }) {
-  const { isLoading, savedLists, removeEntitiesFromList } = useSavedLists();
+  const { isLoading, savedLists, handleRemoveEntitiesFromList } = useSavedLists();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={400} />;
@@ -28,8 +28,10 @@ function SavedList({ listUUID }: { listUUID: string }) {
   const { savedEntities: listEntities, title, description } = savedList;
   const entitiesLength = Object.keys(listEntities).length;
 
-  function deleteCallback(uuids: Set<string>) {
-    removeEntitiesFromList(listUUID, [...uuids]);
+  function deleteCallback({ entityUUIDs }: { entityUUIDs: Set<string> }) {
+    handleRemoveEntitiesFromList({ listUUID, entityUUIDs }).catch((error) => {
+      console.error(error);
+    });
   }
 
   return (

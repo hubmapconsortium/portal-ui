@@ -8,7 +8,7 @@ import {
 } from 'js/stores/useSavedListsAlertsStore';
 import useStateSet from 'js/hooks/useStateSet';
 import AddToList from 'js/components/savedLists/AddToList';
-import { useSavedLists, useSavedListsAndEntities } from 'js/components/savedLists/hooks';
+import { useSavedLists } from 'js/components/savedLists/hooks';
 import { SavedEntitiesList } from 'js/components/savedLists/types';
 import DialogModal from 'js/shared-styles/DialogModal';
 
@@ -26,8 +26,7 @@ interface EditSavedStatusDialogProps {
   uuid: string;
 }
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSavedStatusDialogProps) {
-  const { addEntityToList, deleteEntity, saveEntity, removeEntityFromList } = useSavedLists();
-  const { savedListsAndEntities } = useSavedListsAndEntities();
+  const { savedListsAndEntities, handleAddEntitiesToList, handleRemoveEntitiesFromList } = useSavedLists();
 
   const [selectedLists, addToSelectedLists, removeFromSelectedLists, setSelectedLists] = useStateSet(
     getSavedListsWhichContainEntity(savedListsAndEntities, uuid),
@@ -37,20 +36,16 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
 
   function addSavedEntitiesToList() {
     selectedLists.forEach((listUUID) => {
-      if (listUUID === 'savedEntities') {
-        saveEntity(uuid);
-      } else {
-        addEntityToList(listUUID, uuid);
-      }
+      handleAddEntitiesToList({ listUUID, entityUUIDs: new Set([uuid]) }).catch((error) => {
+        console.error(error);
+      });
     });
 
     const unselectedLists = Object.keys(savedListsAndEntities).filter((listUUID) => !selectedLists.has(listUUID));
     unselectedLists.forEach((listUUID) => {
-      if (listUUID === 'savedEntities') {
-        deleteEntity(uuid);
-      } else {
-        removeEntityFromList(listUUID, uuid);
-      }
+      handleRemoveEntitiesFromList({ listUUID, entityUUIDs: new Set([uuid]) }).catch((error) => {
+        console.error(error);
+      });
     });
   }
 

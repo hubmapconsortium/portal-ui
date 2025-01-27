@@ -44,7 +44,7 @@ const savedListsStoreSelector = (state: SavedListsAlertsState) => ({
 
 interface SavedEntitiesTableProps {
   savedEntities: Record<string, SavedEntity>;
-  deleteCallback: (selectedRows: Set<string>) => void;
+  deleteCallback: (args: { entityUUIDs: Set<string> }) => void;
   isSavedListPage?: boolean;
 }
 
@@ -58,7 +58,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
     : [...defaultColumns, { id: 'dateSaved', label: 'Date Saved' }];
 
   function deleteSelectedSavedEntities() {
-    deleteCallback(selectedRows);
+    deleteCallback({ entityUUIDs: selectedRows });
     deselectHeaderAndRows();
   }
 

@@ -1,3 +1,19 @@
+interface UkvAPIFailure {
+  success: false;
+  message: string;
+  data: undefined;
+}
+
+interface UkvAPISuccess<Data> {
+  success: true;
+  message: string;
+  data: Data;
+}
+
+export type UkvAPIResponse<Data> = UkvAPIFailure | UkvAPISuccess<Data>;
+
+export type UkvAPIResponseWithoutData = Omit<UkvAPIResponse<undefined>, 'data'>;
+
 export interface SavedEntity {
   dateSaved?: number;
   dateAddedToList?: number;

@@ -45,14 +45,16 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
 }
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
-  const { saveEntity } = useSavedLists();
+  const { handleSaveEntities } = useSavedLists();
   const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
   const trackSave = useTrackEntityPageEvent();
 
   return (
     <ActionButton
       onClick={() => {
-        saveEntity(uuid);
+        handleSaveEntities({ entityUUIDs: new Set([uuid]) }).catch((error) => {
+          console.error(error);
+        });
         trackSave({ action: 'Save To List', label: uuid });
         setSuccessAlert(SavedListsSuccessAlertType.Saved);
       }}
