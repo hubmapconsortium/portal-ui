@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.19.2 - 2025-01-27
+
+- Fixes logic to provide parent uuid to the config builder.
+
+
+
 ## v1.19.1 - 2025-01-23
 
 - Fix publications page crashing when supporting json data is completely missing.
