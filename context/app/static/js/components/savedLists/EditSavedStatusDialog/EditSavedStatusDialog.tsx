@@ -51,7 +51,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
 
   function handleSave() {
     addSavedEntitiesToList();
-    setSuccessAlert(SavedListsSuccessAlertType.Updated);
+    setSuccessAlert(SavedListsSuccessAlertType.UpdatedLists);
     setDialogIsOpen(false);
   }
 

@@ -1,9 +1,10 @@
 import { create, StoreApi } from 'zustand';
 
 export enum SavedListsSuccessAlertType {
-  Saved = 'Saved',
-  Updated = 'Updated',
-  Deleted = 'Deleted',
+  SavedEntity = 'SavedEntity',
+  DeletedEntity = 'DeletedEntity',
+  DeletedList = 'DeletedList',
+  UpdatedLists = 'UpdatedLists',
 }
 export interface SavedListsAlertsState {
   transferredToProfileAlert: boolean;

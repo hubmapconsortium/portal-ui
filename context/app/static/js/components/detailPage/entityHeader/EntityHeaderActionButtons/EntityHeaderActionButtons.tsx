@@ -56,7 +56,7 @@ function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
           console.error(error);
         });
         trackSave({ action: 'Save To List', label: uuid });
-        setSuccessAlert(SavedListsSuccessAlertType.Saved);
+        setSuccessAlert(SavedListsSuccessAlertType.SavedEntity);
       }}
       icon={SaveEntityIcon}
       tooltip="Save to list"
@@ -93,7 +93,7 @@ function SaveEditEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
     return null;
   }
 
-  return uuid in savedEntities ? <EditSavedEntityButton uuid={uuid} /> : <SaveEntityButton uuid={uuid} />;
+  return uuid in savedEntities.savedEntities ? <EditSavedEntityButton uuid={uuid} /> : <SaveEntityButton uuid={uuid} />;
 }
 
 function ViewSelectChip({

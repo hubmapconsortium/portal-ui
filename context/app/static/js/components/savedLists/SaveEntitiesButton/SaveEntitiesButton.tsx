@@ -50,7 +50,7 @@ export default function SaveEntitiesButton({
         handleSaveEntities({ entityUUIDs: uuids }).catch((error) => {
           console.error(error);
         });
-        setSuccessAlert(SavedListsSuccessAlertType.Saved);
+        setSuccessAlert(SavedListsSuccessAlertType.SavedEntity);
       }}
       tooltip={tooltip}
       disabled={disabled}

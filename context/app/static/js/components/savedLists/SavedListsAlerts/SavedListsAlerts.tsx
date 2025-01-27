@@ -22,13 +22,14 @@ function SavedListsSuccessAlert({ fromSavedLists }: { fromSavedLists?: boolean }
   if (!successAlert) return null;
 
   const messages = {
-    [SavedListsSuccessAlertType.Saved]: (
+    [SavedListsSuccessAlertType.SavedEntity]: (
       <>
         saved to <InternalLink href="/my-lists">My Saved Items</InternalLink>
       </>
     ),
-    [SavedListsSuccessAlertType.Updated]: 'updated lists',
-    [SavedListsSuccessAlertType.Deleted]: 'deleted list',
+    [SavedListsSuccessAlertType.DeletedEntity]: 'deleted from your saved items',
+    [SavedListsSuccessAlertType.UpdatedLists]: 'updated lists',
+    [SavedListsSuccessAlertType.DeletedList]: 'deleted list',
   };
 
   return (

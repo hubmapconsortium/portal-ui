@@ -147,7 +147,10 @@ function useSavedListActions() {
       const updatedEntities = { ...list.savedEntities };
       if (action === 'Add') {
         entityUUIDs.forEach((uuid) => {
-          updatedEntities[uuid] = {};
+          updatedEntities[uuid] = {
+            dateAddedToList: Date.now(),
+            dateSaved: Date.now(),
+          };
         });
       } else {
         entityUUIDs.forEach((uuid) => delete updatedEntities[uuid]);

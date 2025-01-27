@@ -22,7 +22,7 @@ function SaveEntityButton({ uuid, ...rest }: SaveEntityButtonProps) {
           console.error(error);
         });
         trackSave({ action: 'Save To List', label: uuid });
-        setSuccessAlert(SavedListsSuccessAlertType.Saved);
+        setSuccessAlert(SavedListsSuccessAlertType.SavedEntity);
       }}
       {...rest}
     >

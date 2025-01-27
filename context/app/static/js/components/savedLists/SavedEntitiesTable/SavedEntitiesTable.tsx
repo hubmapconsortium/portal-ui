@@ -59,11 +59,12 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
 
   function deleteSelectedSavedEntities() {
     deleteCallback({ entityUUIDs: selectedRows });
+    setSuccessAlert(SavedListsSuccessAlertType.DeletedEntity);
     deselectHeaderAndRows();
   }
 
   function onSaveCallback() {
-    setSuccessAlert(SavedListsSuccessAlertType.Saved);
+    setSuccessAlert(SavedListsSuccessAlertType.UpdatedLists);
     deselectHeaderAndRows();
   }
 
