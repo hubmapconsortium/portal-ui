@@ -75,8 +75,11 @@ export function useAssayBucketsQuery(searchItems: string[]) {
 }
 
 // TODO:  This is a placeholder for the actual implementation.
-//        We do not currently have a programmatic way to tell
-//        whether a dataset actually has labels yet.
+//        These are all of the publicly accessible datasets with complete Azimuth annotations.
+//        They are all rna-seq and either kidney or heart, however,
+//        there are also unannotated datasets that fall into those categories.
+//        Thus, since we do not currently have a programmatic way to tell
+//        whether a dataset actually has labels yet, we are using this hardcoded list.
 export const DATASETS_WITH_LABELS = [
   'ad693f99fb9006e68a53e97598da1509',
   '173de2e80adf6a73ac8cff5ccce20dfc',
