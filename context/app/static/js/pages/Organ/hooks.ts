@@ -1,7 +1,5 @@
 import { useMemo } from 'react';
 import useSearchData, { useSearchHits } from 'js/hooks/useSearchData';
-import { Dataset } from 'js/components/types';
-import { SearchHit } from '@elastic/elasticsearch/lib/api/types';
 import { mustHaveOrganClause } from './queries';
 
 export function useHasSamplesQuery(searchItems: string[]) {
@@ -61,7 +59,7 @@ export function useAssayBucketsQuery(searchItems: string[]) {
             },
           },
           aggs: {
-            'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 1000 } },
+            'assay_display_name.keyword': { terms: { field: 'assay_display_name.keyword', size: 10_000 } },
           },
         },
       },
@@ -114,16 +112,17 @@ export const DATASETS_WITH_LABELS = [
   'a48ab0bf5d8084da24859c4e64336e9c',
 ];
 
-export function filterDatasets(hit: Pick<SearchHit, '_id'>) {
-  return DATASETS_WITH_LABELS.includes(hit._id);
-}
-
 export function useLabelledDatasetsQuery(searchItems: string[]) {
   const datasetsQuery = useMemo(
     () => ({
       post_filter: {
         bool: {
           must: [
+            {
+              ids: {
+                values: DATASETS_WITH_LABELS,
+              },
+            },
             {
               terms: {
                 'origin_samples_unique_mapped_organs.keyword': searchItems,
@@ -143,12 +142,11 @@ export function useLabelledDatasetsQuery(searchItems: string[]) {
           ],
         },
       },
-      _source: ['uuid'],
+      _source: false,
       size: 10000,
     }),
     [searchItems],
   );
-  const { searchHits: datasetsHits } = useSearchHits<Pick<Dataset, 'uuid'>>(datasetsQuery, { useDefaultQuery: false });
-  const filteredDatasets = datasetsHits.filter(filterDatasets);
-  return filteredDatasets.map((hit) => hit._source.uuid);
+  const { searchHits: datasetsHits } = useSearchHits<never>(datasetsQuery, { useDefaultQuery: false });
+  return datasetsHits.map((hit) => hit._id);
 }
