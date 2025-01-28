@@ -193,6 +193,14 @@
         "cwd": "${workspaceFolder}/context"
       },
       "command": "npx --yes kill-port 5000 5001 6006"
+    },
+    {
+      "label": "npm test:watch",
+      "type": "npm",
+      "script": "test:watch",
+      "options": {
+        "cwd": "${workspaceFolder}/context"
+      },
     }
   ]
 }

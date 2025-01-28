@@ -2,7 +2,9 @@ import { grey } from '@mui/material/colors';
 import { createTheme } from '@mui/material/styles';
 
 const purple = '#444A65';
+const purpleDarkMode = '#BFC2D4'; // same hue as purple, but with AAA-compliant contrast ratio on #333 background
 const blue = '#2A6FB8';
+const blueDarkMode = '#A3C5EB'; // same hue as blue, but with AAA-compliant contrast ratio on #333 background
 
 interface ProvenanceColors {
   step: string;
@@ -126,6 +128,7 @@ declare module '@mui/material' {
 // default HuBMAP color and font theme
 const theme = createTheme({
   palette: {
+    mode: 'light',
     common: {
       link: blue,
       halfShadow: 'rgb(0, 0, 0, 0.54)',
@@ -361,6 +364,59 @@ const theme = createTheme({
           },
         },
       ],
+    },
+  },
+});
+
+export const darkTheme = createTheme(theme, {
+  palette: {
+    mode: 'dark',
+    common: {
+      link: blueDarkMode,
+    },
+    background: {
+      default: '#333333',
+      paper: '#333333',
+    },
+    primary: {
+      main: purpleDarkMode,
+      hover: 'brightness(108%)',
+      contrastText: '#000000',
+      lowEmphasis: `${purpleDarkMode}61`, // 38% opacity
+    },
+    text: {
+      primary: '#FFFFFF',
+      secondary: 'rgba(255, 255, 255, 0.7)',
+      disabled: 'rgba(255, 255, 255, 0.5)',
+    },
+    action: {
+      disabled: 'rgba(255, 255, 255, 0.38)',
+    },
+  },
+  typography: {
+    subtitle1: {
+      color: purpleDarkMode,
+    },
+    subtitle2: {
+      color: purpleDarkMode,
+    },
+    link: {
+      color: blueDarkMode,
+    },
+  },
+  components: {
+    MuiAccordion: {
+      styleOverrides: {
+        root: {
+          color: purpleDarkMode,
+          '.MuiAccordionSummary-content': {
+            color: `${purpleDarkMode} !important`,
+          },
+          '.MuiAccordionSummary-expandIconWrapper': {
+            color: `${purpleDarkMode} !important`,
+          },
+        },
+      },
     },
   },
 });
