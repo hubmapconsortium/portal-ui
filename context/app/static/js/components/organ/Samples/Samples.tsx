@@ -63,7 +63,7 @@ function Samples({ organTerms, id }: OrganSamplesProps) {
             View Data on Search Page
           </Button>
           <AddItemsToListDialog
-            itemsToAddUUIDS={Array.from(selectedRows)}
+            itemsToAddUUIDS={selectedRows}
             onSaveCallback={deselectHeaderAndRows}
             disabled={selectedRows.size === 0}
           />

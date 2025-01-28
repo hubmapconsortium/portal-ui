@@ -7,7 +7,7 @@ import { StyledListsIcon } from './style';
 const prompt = 'Add To List';
 
 interface AddItemsToListDialogProps extends React.ComponentProps<typeof LeftMarginButton> {
-  itemsToAddUUIDS: string[];
+  itemsToAddUUIDS: Set<string>;
   onSaveCallback: () => void;
 }
 

@@ -12,7 +12,7 @@ interface SaveToListDialogProps {
   title: string;
   dialogIsOpen: boolean;
   setDialogIsOpen: (isOpen: boolean) => void;
-  entitiesToAdd: string[];
+  entitiesToAdd: Set<string>;
   onSaveCallback: () => void;
 }
 
@@ -29,9 +29,7 @@ function SaveToListDialog({
 
   async function addSavedEntitiesToList() {
     await Promise.all(
-      Array.from(selectedLists).map((list) =>
-        handleAddEntitiesToList({ listUUID: list, entityUUIDs: new Set(entitiesToAdd) }),
-      ),
+      Array.from(selectedLists).map((list) => handleAddEntitiesToList({ listUUID: list, entityUUIDs: entitiesToAdd })),
     );
   }
 

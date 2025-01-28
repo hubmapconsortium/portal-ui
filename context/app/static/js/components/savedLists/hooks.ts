@@ -15,7 +15,7 @@ import {
   useUkvApiURLs,
   useUpdateSavedList,
 } from 'js/components/savedLists/api';
-import { useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
+import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
 
 function useGlobalMutateSavedList() {
   const { buildKey } = useBuildUkvSWRKey();
@@ -243,6 +243,7 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
   const mutate = useMutateSavedListsAndEntities();
   const { createList, editList, modifyEntities, isUpdating } = useSavedListActions();
   const { deleteList, isDeleting } = useDeleteList();
+  const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
 
   async function handleCreateList({ title, description }: { title: string; description: string }) {
     await createList({ title, description });
@@ -265,6 +266,7 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
   async function handleAddEntitiesToList({ listUUID, entityUUIDs }: { listUUID: string; entityUUIDs: Set<string> }) {
     await modifyEntities({ listUUID, list: savedListsAndEntities[listUUID], entityUUIDs, action: 'Add' });
     await mutate();
+    setSuccessAlert(SavedListsSuccessAlertType.UpdatedLists);
   }
 
   async function handleRemoveEntitiesFromList({
@@ -276,11 +278,13 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
   }) {
     await modifyEntities({ listUUID, list: savedListsAndEntities[listUUID], entityUUIDs, action: 'Remove' });
     await mutate();
+    setSuccessAlert(SavedListsSuccessAlertType.UpdatedLists);
   }
 
   async function handleDeleteList({ listUUID }: { listUUID: string }) {
     await deleteList({ listUUID });
     await mutate();
+    setSuccessAlert(SavedListsSuccessAlertType.DeletedList);
   }
 
   return {
@@ -297,15 +301,18 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
 function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntitiesList }) {
   const mutate = useMutateSavedListsAndEntities();
   const { modifyEntities, isUpdating } = useSavedListActions();
+  const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
 
   async function handleSaveEntities({ entityUUIDs }: { entityUUIDs: Set<string> }) {
     await modifyEntities({ listUUID: SAVED_ENTITIES_KEY, list: savedEntities, entityUUIDs, action: 'Add' });
     await mutate();
+    setSuccessAlert(SavedListsSuccessAlertType.SavedEntity);
   }
 
   async function handleDeleteEntities({ entityUUIDs }: { entityUUIDs: Set<string> }) {
     await modifyEntities({ listUUID: SAVED_ENTITIES_KEY, list: savedEntities, entityUUIDs, action: 'Remove' });
     await mutate();
+    setSuccessAlert(SavedListsSuccessAlertType.DeletedEntity);
   }
 
   return {

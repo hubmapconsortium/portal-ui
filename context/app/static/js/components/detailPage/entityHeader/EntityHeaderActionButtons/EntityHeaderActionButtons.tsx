@@ -8,7 +8,6 @@ import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 import { TooltipButtonProps, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { CheckIcon, EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/shared-styles/icons';
 import { SummaryViewsType } from 'js/stores/useEntityStore';
-import { useSavedListsAlertsStore, SavedListsSuccessAlertType } from 'js/stores/useSavedListsAlertsStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
 import { Entity } from 'js/components/types';
@@ -46,7 +45,6 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { handleSaveEntities } = useSavedLists();
-  const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
   const trackSave = useTrackEntityPageEvent();
 
   return (
@@ -56,7 +54,6 @@ function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
           console.error(error);
         });
         trackSave({ action: 'Save To List', label: uuid });
-        setSuccessAlert(SavedListsSuccessAlertType.SavedEntity);
       }}
       icon={SaveEntityIcon}
       tooltip="Save to list"

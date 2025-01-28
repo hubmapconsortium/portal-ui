@@ -1,11 +1,6 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
-import {
-  SavedListsAlertsState,
-  SavedListsSuccessAlertType,
-  useSavedListsAlertsStore,
-} from 'js/stores/useSavedListsAlertsStore';
 import useStateSet from 'js/hooks/useStateSet';
 import AddToList from 'js/components/savedLists/AddToList';
 import useSavedLists from 'js/components/savedLists/hooks';
@@ -18,8 +13,6 @@ function getSavedListsWhichContainEntity(savedLists: Record<string, SavedEntitie
   }, []);
 }
 
-const savedListsAlertsSelector = (state: SavedListsAlertsState) => state.setSuccessAlert;
-
 interface EditSavedStatusDialogProps {
   dialogIsOpen: boolean;
   setDialogIsOpen: (isOpen: boolean) => void;
@@ -27,12 +20,9 @@ interface EditSavedStatusDialogProps {
 }
 function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSavedStatusDialogProps) {
   const { savedListsAndEntities, handleAddEntitiesToList, handleRemoveEntitiesFromList } = useSavedLists();
-
   const [selectedLists, addToSelectedLists, removeFromSelectedLists, setSelectedLists] = useStateSet(
     getSavedListsWhichContainEntity(savedListsAndEntities, uuid),
   );
-
-  const setSuccessAlert = useSavedListsAlertsStore(savedListsAlertsSelector);
 
   function addSavedEntitiesToList() {
     selectedLists.forEach((listUUID) => {
@@ -51,7 +41,6 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
 
   function handleSave() {
     addSavedEntitiesToList();
-    setSuccessAlert(SavedListsSuccessAlertType.UpdatedLists);
     setDialogIsOpen(false);
   }
 
@@ -60,27 +49,31 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
     setDialogIsOpen(false);
   }
 
+  const dialogContent = (
+    <AddToList
+      selectedLists={selectedLists}
+      allLists={savedListsAndEntities}
+      addToSelectedLists={addToSelectedLists}
+      removeFromSelectedLists={removeFromSelectedLists}
+    />
+  );
+
+  const dialogActions = (
+    <>
+      <Button onClick={() => handleClose()} color="primary">
+        Cancel
+      </Button>
+      <Button onClick={() => handleSave()} color="primary">
+        Save
+      </Button>
+    </>
+  );
+
   return (
     <DialogModal
       title="Edit Saved Status"
-      content={
-        <AddToList
-          selectedLists={selectedLists}
-          allLists={savedListsAndEntities}
-          addToSelectedLists={addToSelectedLists}
-          removeFromSelectedLists={removeFromSelectedLists}
-        />
-      }
-      actions={
-        <>
-          <Button onClick={() => handleClose()} color="primary">
-            Cancel
-          </Button>
-          <Button onClick={() => handleSave()} color="primary">
-            Save
-          </Button>
-        </>
-      }
+      content={dialogContent}
+      actions={dialogActions}
       isOpen={dialogIsOpen}
       handleClose={() => handleClose()}
     />

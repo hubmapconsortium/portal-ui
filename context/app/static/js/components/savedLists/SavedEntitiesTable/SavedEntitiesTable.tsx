@@ -18,11 +18,6 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import DeleteSavedEntitiesDialog from 'js/components/savedLists/DeleteSavedEntitiesDialog';
 import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
-import {
-  SavedListsAlertsState,
-  SavedListsSuccessAlertType,
-  useSavedListsAlertsStore,
-} from 'js/stores/useSavedListsAlertsStore';
 import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import DeselectAllRowsButton from 'js/shared-styles/tables/DeselectAllRowsButton';
@@ -38,10 +33,6 @@ const defaultColumns = [
 
 const source = ['hubmap_id', 'group_name', 'entity_type'];
 
-const savedListsStoreSelector = (state: SavedListsAlertsState) => ({
-  setSuccessAlert: state.setSuccessAlert,
-});
-
 interface SavedEntitiesTableProps {
   savedEntities: Record<string, SavedEntity>;
   deleteCallback: (args: { entityUUIDs: Set<string> }) => void;
@@ -50,7 +41,6 @@ interface SavedEntitiesTableProps {
 
 function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = false }: SavedEntitiesTableProps) {
   const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
-  const { setSuccessAlert } = useSavedListsAlertsStore(savedListsStoreSelector);
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
 
   const columns = isSavedListPage
@@ -59,12 +49,6 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
 
   function deleteSelectedSavedEntities() {
     deleteCallback({ entityUUIDs: selectedRows });
-    setSuccessAlert(SavedListsSuccessAlertType.DeletedEntity);
-    deselectHeaderAndRows();
-  }
-
-  function onSaveCallback() {
-    setSuccessAlert(SavedListsSuccessAlertType.UpdatedLists);
     deselectHeaderAndRows();
   }
 
@@ -96,7 +80,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
                 deleteSelectedSavedEntities={deleteSelectedSavedEntities}
               />
               {!isSavedListPage && (
-                <AddItemsToListDialog itemsToAddUUIDS={Array.from(selectedRows)} onSaveCallback={onSaveCallback} />
+                <AddItemsToListDialog itemsToAddUUIDS={selectedRows} onSaveCallback={deselectHeaderAndRows} />
               )}
             </div>
           )
