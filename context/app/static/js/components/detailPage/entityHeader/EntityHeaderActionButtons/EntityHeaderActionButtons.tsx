@@ -17,7 +17,7 @@ import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import useSavedLists from 'js/components/savedLists/hooks';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({

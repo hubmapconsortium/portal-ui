@@ -1,10 +1,11 @@
 import React from 'react';
 import { render, waitFor } from 'test-utils/functions';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import useSavedLists from 'js/components/savedLists/hooks';
 import SavedList from './SavedList';
 
 jest.mock('js/components/savedLists/hooks', () => ({
-  useSavedLists: jest.fn(),
+  __esModule: true,
+  default: jest.fn(),
 })); // Mock the hook
 
 describe('SavedList component', () => {

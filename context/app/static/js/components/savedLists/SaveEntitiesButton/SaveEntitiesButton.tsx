@@ -2,13 +2,13 @@ import React from 'react';
 import SvgIcon from '@mui/material/SvgIcon';
 
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import { useAppContext } from 'js/components/Contexts';
+import useSavedLists from 'js/components/savedLists/hooks';
 import { generateCommaList } from 'js/helpers/functions';
 import { useSavedListsAlertsStore, SavedListsSuccessAlertType } from 'js/stores/useSavedListsAlertsStore';
 import { EditSavedEntityIcon, SaveEntityIcon } from 'js/shared-styles/icons';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
-import { useAppContext } from 'js/components/Contexts';
 
 export default function SaveEntitiesButton({
   entity_type,

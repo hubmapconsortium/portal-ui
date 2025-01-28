@@ -315,7 +315,7 @@ function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntiti
   };
 }
 
-function useSavedLists() {
+export default function useSavedLists() {
   const { isLoading, savedLists, savedEntities, savedListsAndEntities } = useListSavedListsAndEntities();
 
   return {
@@ -327,5 +327,3 @@ function useSavedLists() {
     ...useSavedEntitiesActions({ savedEntities }),
   };
 }
-
-export { useSavedLists };

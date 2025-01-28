@@ -2,7 +2,7 @@ import React from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
 import { useSavedListsAlertsStore, SavedListsSuccessAlertType } from 'js/stores/useSavedListsAlertsStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import useSavedLists from 'js/components/savedLists/hooks';
 
 interface SaveEntityButtonProps extends ButtonProps {
   uuid: string;

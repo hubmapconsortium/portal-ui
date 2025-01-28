@@ -1,8 +1,8 @@
 import React, { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
+import useSavedLists from 'js/components/savedLists/hooks';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import DialogModal from 'js/shared-styles/DialogModal';
-import { useSavedLists } from 'js/components/savedLists/hooks';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
 interface CreateListDialogProps {

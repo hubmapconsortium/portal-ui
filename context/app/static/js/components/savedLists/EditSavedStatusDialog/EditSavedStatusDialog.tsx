@@ -8,7 +8,7 @@ import {
 } from 'js/stores/useSavedListsAlertsStore';
 import useStateSet from 'js/hooks/useStateSet';
 import AddToList from 'js/components/savedLists/AddToList';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import useSavedLists from 'js/components/savedLists/hooks';
 import { SavedEntitiesList } from 'js/components/savedLists/types';
 import DialogModal from 'js/shared-styles/DialogModal';
 

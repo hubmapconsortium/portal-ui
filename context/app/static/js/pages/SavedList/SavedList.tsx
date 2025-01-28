@@ -8,7 +8,7 @@ import { SummaryBodyContent } from 'js/components/detailPage/summary/SummaryBody
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import useSavedLists from 'js/components/savedLists/hooks';
 import { SpacedSectionButtonRow, BottomAlignedTypography } from 'js/shared-styles/sections/SectionButtonRow';
 import { SpacingDiv, PageSpacing, StyledHeader } from './style';
 

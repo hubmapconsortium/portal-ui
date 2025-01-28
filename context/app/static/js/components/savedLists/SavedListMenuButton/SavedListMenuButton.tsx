@@ -5,11 +5,11 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
+import useSavedLists from 'js/components/savedLists/hooks';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { MoreIcon, DeleteIcon } from 'js/shared-styles/icons';
 import DialogModal from 'js/shared-styles/DialogModal';
-import { useSavedLists } from 'js/components/savedLists/hooks';
 
 function DeleteListButton({ listUUID }: { listUUID: string }) {
   const anchorEl = useRef(null);

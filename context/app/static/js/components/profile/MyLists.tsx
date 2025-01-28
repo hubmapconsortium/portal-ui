@@ -2,9 +2,10 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
-import SectionPaper from 'js/shared-styles/sections/SectionPaper';
+
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
-import { useSavedLists } from 'js/components/savedLists/hooks';
+import useSavedLists from 'js/components/savedLists/hooks';
+import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 
 export function MyLists() {
   const { savedLists } = useSavedLists();
