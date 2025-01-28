@@ -3,7 +3,7 @@ import { format } from 'date-fns/format';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 
-import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
+import SavedListsDescription from 'js/components/savedLists/SavedListsDescription';
 import { SummaryBodyContent } from 'js/components/detailPage/summary/SummaryBody';
 import SavedListMenuButton from 'js/components/savedLists/SavedListMenuButton';
 import EditListButton from 'js/components/savedLists/EditListButton';
@@ -54,7 +54,7 @@ function SavedList({ listUUID }: { listUUID: string }) {
         }
       />
       <SpacingDiv>
-        <LocalStorageDescription />
+        <SavedListsDescription />
       </SpacingDiv>
       <SpacingDiv>
         <SummaryBodyContent

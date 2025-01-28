@@ -131,6 +131,7 @@ function SummaryBodyContent({
   Partial<SavedEntitiesList>) {
   const { entity } = useFlaskDataContext();
 
+  // Use description and creation info from props if provided, otherwise use entity data
   const description = propDescription ?? entity.description;
   const { creationLabel, creationDate } =
     propCreationLabel && propCreationDate

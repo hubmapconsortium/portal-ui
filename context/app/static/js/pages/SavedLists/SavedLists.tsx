@@ -1,6 +1,6 @@
 import React from 'react';
 
-import LocalStorageDescription from 'js/components/savedLists/LocalStorageDescription';
+import SavedListsDescription from 'js/components/savedLists/SavedListsDescription';
 import { useAppContext } from 'js/components/Contexts';
 import SavedListsContent from 'js/components/savedLists/SavedListsContent';
 import { StyledHeader, SpacingDiv, PageSpacing } from 'js/components/savedLists/SavedListsContent/style';
@@ -14,7 +14,7 @@ function SavedLists() {
         My Lists
       </StyledHeader>
       <SpacingDiv>
-        <LocalStorageDescription />
+        <SavedListsDescription />
       </SpacingDiv>
       {isAuthenticated && <SavedListsContent />}
     </PageSpacing>
