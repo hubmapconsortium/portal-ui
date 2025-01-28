@@ -2,8 +2,12 @@ import { useCallback, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SavedEntitiesList } from 'js/components/savedLists/types';
-import { SAVED_ENTITIES_DEFAULT, SAVED_ENTITIES_KEY } from 'js/components/savedLists/constants';
+import { SavedEntitiesList, SavedEntity } from 'js/components/savedLists/types';
+import {
+  SAVED_ENTITIES_DEFAULT,
+  SAVED_ENTITIES_KEY,
+  SAVED_ENTITIES_LOCAL_STORAGE_KEY,
+} from 'js/components/savedLists/constants';
 import {
   useBuildUkvSWRKey,
   useDeleteList,
@@ -11,8 +15,108 @@ import {
   useUkvApiURLs,
   useUpdateSavedList,
 } from 'js/components/savedLists/api';
+import { useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
+
+function useGlobalMutateSavedList() {
+  const { buildKey } = useBuildUkvSWRKey();
+  const urls = useUkvApiURLs();
+  const { mutate } = useSWRConfig();
+
+  return useCallback(
+    async (entityUUID: string) => {
+      await mutate(buildKey({ url: urls.key(entityUUID) }));
+    },
+    [buildKey, urls, mutate],
+  );
+}
+
+function useHandleUpdateSavedList() {
+  const { updateSavedList, isUpdating } = useUpdateSavedList();
+  const globalMutateSavedList = useGlobalMutateSavedList();
+
+  const handleUpdateSavedList = useCallback(
+    async ({ body, listUUID }: { body: SavedEntitiesList; listUUID: string }) => {
+      try {
+        await updateSavedList({ body, listUUID });
+        await globalMutateSavedList(listUUID);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [updateSavedList, globalMutateSavedList],
+  );
+
+  return { handleUpdateSavedList, isUpdating };
+}
+
+function useSetListsAndEntities() {
+  const { handleUpdateSavedList } = useHandleUpdateSavedList();
+
+  return useCallback(
+    async ({
+      savedLists,
+      savedEntities,
+    }: {
+      savedLists: Record<string, SavedEntitiesList>;
+      savedEntities: Record<string, SavedEntity>;
+    }) => {
+      // Update the saved entities list
+      await handleUpdateSavedList({
+        listUUID: SAVED_ENTITIES_KEY,
+        body: {
+          ...SAVED_ENTITIES_DEFAULT,
+          savedEntities,
+        },
+      });
+
+      // Update each saved list
+      await Promise.all(
+        Object.entries(savedLists).map(([listUUID, list]) =>
+          handleUpdateSavedList({ body: list, listUUID }).catch((e) => console.error(e)),
+        ),
+      );
+    },
+    [handleUpdateSavedList],
+  );
+}
+
+interface LocalSavedEntities {
+  state: {
+    savedLists: Record<string, SavedEntitiesList>;
+    savedEntities: Record<string, SavedEntity>;
+  };
+}
+
+function useCheckForLocalSavedEntities() {
+  const setListsAndEntities = useSetListsAndEntities();
+  const setTransferredToProfileAlert = useSavedListsAlertsStore((state) => state.setTransferredToProfileAlert);
+
+  const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+  if (!localEntities) {
+    return;
+  }
+
+  // If there are saved_entities in local storage, copy them over to the remote savedListsAndEntities, then
+  // remove them from local storage.
+  try {
+    const parsedEntities: unknown = JSON.parse(localEntities);
+    const { savedLists, savedEntities } = (parsedEntities as LocalSavedEntities).state;
+
+    if (savedLists && savedEntities) {
+      setListsAndEntities({ savedLists, savedEntities })
+        .then(() => {
+          setTransferredToProfileAlert(true);
+          localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+        })
+        .catch((e) => console.error(e));
+    }
+  } catch (error) {
+    console.error('Failed to parse saved_entities from local storage:', error);
+  }
+}
 
 function useListSavedListsAndEntities() {
+  useCheckForLocalSavedEntities();
   const { savedListsAndEntities, isLoading, mutate } = useFetchSavedListsAndEntities();
 
   // Saved entities should always be first, then the rest should be sorted by date saved
@@ -42,49 +146,6 @@ function useListSavedListsAndEntities() {
   }
 
   return { savedLists, savedEntities, savedListsAndEntities: savedListsAndEntitiesRecord, isLoading, mutate };
-}
-
-function useMutateSavedListsAndEntities<T>(mutateSavedList?: KeyedMutator<T>) {
-  const { mutate: mutateSavedLists } = useListSavedListsAndEntities();
-  const mutate = useCallback(async () => {
-    await Promise.all([mutateSavedLists(), mutateSavedList?.()]);
-  }, [mutateSavedLists, mutateSavedList]);
-
-  return mutate;
-}
-
-function useGlobalMutateSavedList() {
-  const { buildKey } = useBuildUkvSWRKey();
-  const urls = useUkvApiURLs();
-  const { mutate } = useSWRConfig();
-
-  return useCallback(
-    async (entityUUID: string) => {
-      await mutate(buildKey({ url: urls.key(entityUUID) }));
-    },
-    [buildKey, urls, mutate],
-  );
-}
-
-function useHandleUpdateSavedList() {
-  const { updateSavedList, isUpdating } = useUpdateSavedList();
-  const mutateSavedLists = useMutateSavedListsAndEntities();
-  const globalMutateSavedList = useGlobalMutateSavedList();
-
-  const handleUpdateSavedList = useCallback(
-    async ({ body, listUUID }: { body: SavedEntitiesList; listUUID: string }) => {
-      try {
-        await updateSavedList({ body, listUUID });
-        await mutateSavedLists();
-        await globalMutateSavedList(listUUID);
-      } catch (e) {
-        console.error(e);
-      }
-    },
-    [updateSavedList, mutateSavedLists, globalMutateSavedList],
-  );
-
-  return { handleUpdateSavedList, isUpdating };
 }
 
 function useSavedListActions() {
@@ -167,6 +228,15 @@ function useSavedListActions() {
   );
 
   return { createList, editList, modifyEntities, isUpdating };
+}
+
+function useMutateSavedListsAndEntities<T>(mutateSavedList?: KeyedMutator<T>) {
+  const { mutate: mutateSavedLists } = useListSavedListsAndEntities();
+  const mutate = useCallback(async () => {
+    await Promise.all([mutateSavedLists(), mutateSavedList?.()]);
+  }, [mutateSavedLists, mutateSavedList]);
+
+  return mutate;
 }
 
 function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities: Record<string, SavedEntitiesList> }) {

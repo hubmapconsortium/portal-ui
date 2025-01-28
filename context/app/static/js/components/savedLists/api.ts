@@ -95,14 +95,19 @@ function useFetchSavedListsAndEntities(listUUID?: string) {
 
 interface UpdateSavedListArgs extends APIAction {
   body: SavedEntitiesList;
+  method: 'PUT' | 'POST';
 }
 
-async function updateSavedListFetcher(_key: string, { arg: { body, url, headers } }: { arg: UpdateSavedListArgs }) {
+async function updateSavedListFetcher(
+  _key: string,
+  { arg: { body, url, headers, method } }: { arg: UpdateSavedListArgs },
+) {
   const response = await fetch(url, {
-    method: 'PUT',
+    method,
     body: JSON.stringify(body),
     headers,
   });
+
   if (!response.ok) {
     console.error('Updating saved list failed', response);
   }
@@ -113,18 +118,25 @@ function useUpdateSavedList() {
   const headers = useUkvHeaders();
   const { trigger, isMutating } = useSWRMutation('update-list', updateSavedListFetcher);
 
-  const updateSavedList = useCallback(
-    ({ body, listUUID }: { body: SavedEntitiesList; listUUID: string }) => {
+  const handleSavedList = useCallback(
+    ({ body, listUUID, method }: { body: SavedEntitiesList; listUUID: string; method: 'PUT' | 'POST' }) => {
       return trigger({
         url: api.key(listUUID),
         body,
         headers,
+        method,
       });
     },
     [trigger, api, headers],
   );
 
-  return { updateSavedList, isUpdating: isMutating };
+  return {
+    updateSavedList: (args: { body: SavedEntitiesList; listUUID: string }) =>
+      handleSavedList({ ...args, method: 'PUT' }),
+    createSavedList: (args: { body: SavedEntitiesList; listUUID: string }) =>
+      handleSavedList({ ...args, method: 'POST' }),
+    isUpdating: isMutating,
+  };
 }
 
 async function fetchDeleteList(
