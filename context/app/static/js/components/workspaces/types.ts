@@ -98,6 +98,7 @@ interface WorkspaceAPISuccess<Data> {
 }
 
 type WorkspaceAPIResponse<Data> = WorkspaceAPIFailure | WorkspaceAPISuccess<Data>;
+
 type WorkspaceAPIResponseWithoutData = Omit<WorkspaceAPIResponse<undefined>, 'data'>;
 
 interface TemplateExample {

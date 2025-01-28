@@ -32,15 +32,6 @@ function useUkvApiURLs() {
   return apiUrls(ukvEndpoint);
 }
 
-/** **************************************************
- *                          New                      *
- * ************************************************* */
-
-interface APIAction {
-  url: string;
-  headers?: HeadersInit;
-}
-
 function useUkvHeaders(): HeadersInit {
   const { groupsToken } = useAppContext();
   return {
@@ -72,6 +63,10 @@ function useBuildUkvSWRKey(): {
   };
 }
 
+/** **************************************************
+ *                Saved Lists Helpers                *
+ * ************************************************* */
+
 function useFetchSavedListsAndEntities(listUUID?: string) {
   const urls = useUkvApiURLs();
   const listsURL = listUUID ? urls.key(listUUID) : urls.keys;
@@ -93,11 +88,12 @@ function useFetchSavedListsAndEntities(listUUID?: string) {
   return { savedListsAndEntities, isLoading, ...rest };
 }
 
-interface UpdateSavedListArgs extends APIAction {
+interface UpdateSavedListArgs {
+  url: string;
   body: SavedEntitiesList;
   method: 'PUT' | 'POST';
+  headers?: HeadersInit;
 }
-
 async function updateSavedListFetcher(
   _key: string,
   { arg: { body, url, headers, method } }: { arg: UpdateSavedListArgs },
@@ -118,23 +114,20 @@ function useUpdateSavedList() {
   const headers = useUkvHeaders();
   const { trigger, isMutating } = useSWRMutation('update-list', updateSavedListFetcher);
 
-  const handleSavedList = useCallback(
-    ({ body, listUUID, method }: { body: SavedEntitiesList; listUUID: string; method: 'PUT' | 'POST' }) => {
+  const updateSavedList = useCallback(
+    ({ body, listUUID }: { body: SavedEntitiesList; listUUID: string }) => {
       return trigger({
         url: api.key(listUUID),
         body,
         headers,
-        method,
+        method: 'PUT',
       });
     },
     [trigger, api, headers],
   );
 
   return {
-    updateSavedList: (args: { body: SavedEntitiesList; listUUID: string }) =>
-      handleSavedList({ ...args, method: 'PUT' }),
-    createSavedList: (args: { body: SavedEntitiesList; listUUID: string }) =>
-      handleSavedList({ ...args, method: 'POST' }),
+    updateSavedList,
     isUpdating: isMutating,
   };
 }

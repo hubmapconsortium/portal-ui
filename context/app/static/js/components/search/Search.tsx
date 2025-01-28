@@ -204,8 +204,8 @@ function Body({ facetGroups }: { facetGroups: FacetGroups }) {
 const Search = React.memo(function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
   return (
     <Stack spacing={2} mb={4}>
-      <BulkDownloadSuccessAlert />
       <SavedListsSuccessAlert />
+      <BulkDownloadSuccessAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <Box>
