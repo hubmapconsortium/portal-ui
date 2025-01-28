@@ -5,10 +5,11 @@ import Typography from '@mui/material/Typography';
 import Description from 'js/shared-styles/sections/Description';
 import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import SavedListPanel from 'js/components/savedLists/SavedListPanel';
+import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { SeparatedFlexRow, FlexBottom, MaxHeightScrollbox } from './style';
 
 interface SavedListScrollboxProps {
-  savedLists: Record<string, unknown>;
+  savedLists: Record<string, SavedEntitiesList>;
 }
 
 function SavedListScrollbox({ savedLists }: SavedListScrollboxProps) {
@@ -18,7 +19,7 @@ function SavedListScrollbox({ savedLists }: SavedListScrollboxProps) {
     <>
       <SeparatedFlexRow>
         <div>
-          <Typography variant="h3" component="h2">
+          <Typography variant="h3" component="h2" marginBottom={2}>
             All Created Lists
           </Typography>
           <Typography variant="subtitle1">{Object.keys(savedLists).length} Lists</Typography>
@@ -35,7 +36,7 @@ function SavedListScrollbox({ savedLists }: SavedListScrollboxProps) {
       ) : (
         <MaxHeightScrollbox>
           {Object.entries(savedLists).map(([key, value]) => {
-            return <SavedListPanel key={key} entityObject={value} listUUID={key} />;
+            return <SavedListPanel key={key} list={value} listUUID={key} />;
           })}
         </MaxHeightScrollbox>
       )}
