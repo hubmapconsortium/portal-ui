@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.19.3 - 2025-01-29
+
+- Add scalable cell population plots to organ pages with compatible labeled datasets.
+
+
+
 ## v1.19.2 - 2025-01-27
 
 - Fixes logic to provide parent uuid to the config builder.
