@@ -45,7 +45,7 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   'reference-based-analysis': VisualizationIcon,
   assays: DatasetIcon,
   samples: SampleIcon,
-  'cell-population': CellTypeIcon,
+  'cell-population-plot': CellTypeIcon,
 } as const;
 
 export const sectionImageIconMap: Record<string, keyof typeof externalIconMap> = {

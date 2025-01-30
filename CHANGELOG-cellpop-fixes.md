@@ -1,0 +1,3 @@
+- Fix Cell Population Plot table of contents title.
+- Improve Cell Population Plot padding.
+- Fix Cell Population Plot violin graph behavior.
