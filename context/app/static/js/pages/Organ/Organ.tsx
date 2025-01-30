@@ -20,7 +20,7 @@ const hraId = 'human-reference-atlas';
 const referenceId = 'reference-based-analysis';
 const assaysId = 'assays';
 const samplesId = 'samples';
-const cellpopId = 'cell-population';
+const cellpopId = 'cell-population-plot';
 
 function Organ({ organ }: OrganProps) {
   const searchItems = useMemo(
