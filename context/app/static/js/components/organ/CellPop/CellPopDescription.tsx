@@ -1,6 +1,7 @@
 import React from 'react';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 
 // TODO: Once there is a cellpop tutorial to link to,
 // uncomment the below code and add RelevantPages to the SectionDescription addendum
@@ -39,7 +40,8 @@ export default function CellPopDescription() {
       ]}
     >
       This interactive heatmap visualizes cell populations in datasets from this organ. Cell type annotations are from
-      Azimuth. Key features are highlighted below and a tutorial is available.
+      <OutboundIconLink href="https://azimuth.hubmapconsortium.org/">Azimuth.</OutboundIconLink> Key features are
+      highlighted below and a tutorial is available.
     </SectionDescription>
   );
 }
