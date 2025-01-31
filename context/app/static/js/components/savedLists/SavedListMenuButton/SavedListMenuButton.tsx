@@ -3,21 +3,20 @@ import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
-import useSavedEntitiesStore from 'js/stores/useSavedEntitiesStore';
+import useSavedLists from 'js/components/savedLists/hooks';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { MoreIcon, DeleteIcon } from 'js/shared-styles/icons';
 import DialogModal from 'js/shared-styles/DialogModal';
 
-const useSavedEnitiesSelector = (state) => state.queueListToBeDeleted;
-
-function DeleteListButton({ listUUID }) {
+function DeleteListButton({ listUUID }: { listUUID: string }) {
   const anchorEl = useRef(null);
   const [menuIsOpen, setMenuIsOpen] = useState(false);
   const [deleteListDialogIsOpen, setDeleteListDialogIsOpen] = useState(false);
 
-  const queueListToBeDeleted = useSavedEntitiesStore(useSavedEnitiesSelector);
+  const { handleDeleteList } = useSavedLists();
 
   function closeMenuAndDeleteDialog() {
     setMenuIsOpen(false);
@@ -44,8 +43,10 @@ function DeleteListButton({ listUUID }) {
         onClose={() => setMenuIsOpen(false)}
       >
         <MenuItem onClick={() => setDeleteListDialogIsOpen(true)}>
-          <DeleteIcon color="primary" />
-          <Typography>Delete List</Typography>
+          <Stack direction="row" spacing={1} alignItems="center">
+            <DeleteIcon color="primary" />
+            <Typography>Delete List</Typography>
+          </Stack>
         </MenuItem>
       </Menu>
       <DialogModal
@@ -59,7 +60,9 @@ function DeleteListButton({ listUUID }) {
             <Button
               href="/my-lists"
               onClick={() => {
-                queueListToBeDeleted(listUUID);
+                handleDeleteList({ listUUID }).catch((error) => {
+                  console.error(error);
+                });
               }}
               color="primary"
             >
