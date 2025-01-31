@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.19.4 - 2025-01-31
+
+- Fix Cell Population Plot table of contents title.
+- Improve Cell Population Plot padding.
+- Fix Cell Population Plot violin graph behavior.
+
+
+
 ## v1.19.3 - 2025-01-29
 
 - Add scalable cell population plots to organ pages with compatible labeled datasets.
