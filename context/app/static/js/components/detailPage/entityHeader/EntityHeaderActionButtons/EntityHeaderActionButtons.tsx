@@ -2,6 +2,7 @@ import React, { useState, ElementType, useCallback } from 'react';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { IconButtonTypeMap } from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
+import { useEventCallback } from '@mui/material/utils';
 import Button, { ButtonProps } from '@mui/material/Button';
 import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 
@@ -18,7 +19,6 @@ import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
 import useSavedLists from 'js/components/savedLists/hooks';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
-import { useEventCallback } from '@mui/material';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
