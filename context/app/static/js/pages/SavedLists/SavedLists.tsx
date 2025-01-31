@@ -1,23 +1,24 @@
 import React from 'react';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import SavedListsDescription from 'js/components/savedLists/SavedListsDescription';
 import { useAppContext } from 'js/components/Contexts';
 import SavedListsContent from 'js/components/savedLists/SavedListsContent';
-import { StyledHeader, SpacingDiv, PageSpacing } from 'js/components/savedLists/SavedListsContent/style';
 
 function SavedLists() {
   const { isAuthenticated } = useAppContext();
 
   return (
-    <PageSpacing>
-      <StyledHeader variant="h2" data-testid="my-lists-title">
+    <Stack spacing={1} marginBottom={10}>
+      <Typography variant="h2" data-testid="my-lists-title">
         My Lists
-      </StyledHeader>
-      <SpacingDiv>
+      </Typography>
+      <Stack spacing={3}>
         <SavedListsDescription />
-      </SpacingDiv>
-      {isAuthenticated && <SavedListsContent />}
-    </PageSpacing>
+        {isAuthenticated && <SavedListsContent />}
+      </Stack>
+    </Stack>
   );
 }
 

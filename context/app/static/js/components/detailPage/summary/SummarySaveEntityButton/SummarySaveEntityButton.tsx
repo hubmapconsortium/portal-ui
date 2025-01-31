@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+import useEventCallback from '@mui/material/utils/useEventCallback';
 import { useAppContext } from 'js/components/Contexts';
-import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import useSavedLists from 'js/components/savedLists/hooks';
 import { Entity } from 'js/components/types';
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
@@ -9,18 +9,15 @@ import { EditSavedEntityIcon, SaveEntityIcon } from 'js/shared-styles/icons';
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { handleSaveEntities } = useSavedLists();
-  const trackSave = useTrackEntityPageEvent();
+
+  const handleClick = useEventCallback(() => {
+    handleSaveEntities({ entityUUIDs: new Set([uuid]) }).catch((error) => {
+      console.error(error);
+    });
+  });
 
   return (
-    <WhiteRectangularTooltipIconButton
-      onClick={() => {
-        handleSaveEntities({ entityUUIDs: new Set([uuid]) }).catch((error) => {
-          console.error(error);
-        });
-        trackSave({ action: 'Save To List', label: uuid });
-      }}
-      tooltip="Save to list"
-    >
+    <WhiteRectangularTooltipIconButton onClick={handleClick} tooltip="Save to list">
       <SaveEntityIcon color="primary" />
     </WhiteRectangularTooltipIconButton>
   );

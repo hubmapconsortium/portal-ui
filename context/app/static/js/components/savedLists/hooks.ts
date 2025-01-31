@@ -15,7 +15,9 @@ import {
   useUkvApiURLs,
   useUpdateSavedList,
 } from 'js/components/savedLists/api';
+import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
+import { generateCommaList } from 'js/helpers/functions';
 
 function useGlobalMutateSavedList() {
   const { buildKey } = useBuildUkvSWRKey();
@@ -134,16 +136,13 @@ function useListSavedListsAndEntities() {
     }, {});
   }, [savedListsAndEntities]);
 
-  let savedEntities: SavedEntitiesList = { ...SAVED_ENTITIES_DEFAULT };
-  let savedLists: Record<string, SavedEntitiesList> = {};
+  const savedEntities = !isLoading
+    ? savedListsAndEntitiesRecord.savedEntities || { ...SAVED_ENTITIES_DEFAULT }
+    : { ...SAVED_ENTITIES_DEFAULT };
 
-  if (!isLoading) {
-    savedEntities = savedListsAndEntitiesRecord.savedEntities || { ...SAVED_ENTITIES_DEFAULT };
-
-    savedLists = Object.fromEntries(
-      Object.entries(savedListsAndEntitiesRecord).filter(([key]) => key !== 'savedEntities'),
-    );
-  }
+  const savedLists = !isLoading
+    ? Object.fromEntries(Object.entries(savedListsAndEntitiesRecord).filter(([key]) => key !== 'savedEntities'))
+    : {};
 
   return { savedLists, savedEntities, savedListsAndEntities: savedListsAndEntitiesRecord, isLoading, mutate };
 }
@@ -302,11 +301,13 @@ function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntiti
   const mutate = useMutateSavedListsAndEntities();
   const { modifyEntities, isUpdating } = useSavedListActions();
   const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
+  const trackSave = useTrackEntityPageEvent();
 
   async function handleSaveEntities({ entityUUIDs }: { entityUUIDs: Set<string> }) {
     await modifyEntities({ listUUID: SAVED_ENTITIES_KEY, list: savedEntities, entityUUIDs, action: 'Add' });
     await mutate();
     setSuccessAlert(SavedListsSuccessAlertType.SavedEntity);
+    trackSave({ action: 'Save To List', label: generateCommaList(Array.from(entityUUIDs)) });
   }
 
   async function handleDeleteEntities({ entityUUIDs }: { entityUUIDs: Set<string> }) {

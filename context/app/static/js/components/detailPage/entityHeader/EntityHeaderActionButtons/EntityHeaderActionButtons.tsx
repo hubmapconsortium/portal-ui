@@ -18,6 +18,7 @@ import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
 import useSavedLists from 'js/components/savedLists/hooks';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
+import { useEventCallback } from '@mui/material';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -45,20 +46,14 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { handleSaveEntities } = useSavedLists();
-  const trackSave = useTrackEntityPageEvent();
 
-  return (
-    <ActionButton
-      onClick={() => {
-        handleSaveEntities({ entityUUIDs: new Set([uuid]) }).catch((error) => {
-          console.error(error);
-        });
-        trackSave({ action: 'Save To List', label: uuid });
-      }}
-      icon={SaveEntityIcon}
-      tooltip="Save to list"
-    />
-  );
+  const handleClick = useEventCallback(() => {
+    handleSaveEntities({ entityUUIDs: new Set([uuid]) }).catch((error) => {
+      console.error(error);
+    });
+  });
+
+  return <ActionButton onClick={handleClick} icon={SaveEntityIcon} tooltip="Save to list" />;
 }
 
 function EditSavedEntityButton({ uuid }: Pick<Entity, 'uuid'>) {

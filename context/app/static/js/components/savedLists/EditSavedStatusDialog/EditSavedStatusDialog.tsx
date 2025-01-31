@@ -8,8 +8,8 @@ import { SavedEntitiesList } from 'js/components/savedLists/types';
 import DialogModal from 'js/shared-styles/DialogModal';
 
 function getSavedListsWhichContainEntity(savedLists: Record<string, SavedEntitiesList>, entityUUID: string): string[] {
-  return Object.entries(savedLists).reduce<string[]>((acc, [title, obj]) => {
-    return entityUUID in obj.savedEntities ? [...acc, title] : acc;
+  return Object.entries(savedLists).reduce<string[]>((acc, [id, obj]) => {
+    return entityUUID in obj.savedEntities ? [...acc, id] : acc;
   }, []);
 }
 
@@ -24,13 +24,15 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
     getSavedListsWhichContainEntity(savedListsAndEntities, uuid),
   );
 
-  function addSavedEntitiesToList() {
+  function updateLists() {
+    // Add entities to selected lists
     selectedLists.forEach((listUUID) => {
       handleAddEntitiesToList({ listUUID, entityUUIDs: new Set([uuid]) }).catch((error) => {
         console.error(error);
       });
     });
 
+    // Remove entities from lists that are no longer selected
     const unselectedLists = Object.keys(savedListsAndEntities).filter((listUUID) => !selectedLists.has(listUUID));
     unselectedLists.forEach((listUUID) => {
       handleRemoveEntitiesFromList({ listUUID, entityUUIDs: new Set([uuid]) }).catch((error) => {
@@ -40,7 +42,7 @@ function EditSavedStatusDialog({ dialogIsOpen, setDialogIsOpen, uuid }: EditSave
   }
 
   function handleSave() {
-    addSavedEntitiesToList();
+    updateLists();
     setDialogIsOpen(false);
   }
 

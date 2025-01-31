@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
+import Stack from '@mui/material/Stack';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
@@ -58,7 +59,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
   const savedEntitiesSize = Object.keys(savedEntities).length;
 
   return (
-    <>
+    <Stack>
       <SpacedSectionButtonRow
         leftText={
           <BottomAlignedTypography variant="subtitle1">
@@ -125,7 +126,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
           )}
         </StyledTableContainer>
       </Paper>
-    </>
+    </Stack>
   );
 }
 

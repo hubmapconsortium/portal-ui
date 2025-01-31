@@ -82,7 +82,7 @@ function useFetchSavedListsAndEntities(listUUID?: string) {
           404: listUUID ? `No list with UUID ${listUUID} found.` : 'No lists for the current user were found.',
         },
       }),
-    { revalidateOnFocus: hasAccess, refreshInterval: 1000 * 60 },
+    { revalidateOnFocus: hasAccess },
   );
   const savedListsAndEntities = data ?? [];
   return { savedListsAndEntities, isLoading, ...rest };

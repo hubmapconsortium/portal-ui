@@ -1,5 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
+import useEventCallback from '@mui/material/utils/useEventCallback';
 import useSavedLists from 'js/components/savedLists/hooks';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import DialogModal from 'js/shared-styles/DialogModal';
@@ -24,18 +25,18 @@ function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: Crea
     setDescription(event.target.value);
   }
 
-  const handleClose = () => {
+  const handleClose = useEventCallback(() => {
     setDialogIsOpen(false);
     setTitle('');
     setDescription('');
-  };
+  });
 
-  function handleSubmit() {
+  const handleSubmit = useEventCallback(() => {
     handleCreateList({ title, description }).catch((error) => {
       console.error(error);
     });
     handleClose();
-  }
+  });
 
   const dialogContent = (
     <>

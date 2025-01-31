@@ -27,7 +27,7 @@ function useSavedEntityData(savedEntities: SavedEntities, source: string[]) {
     () => ({
       query: getIDsQuery(Object.keys(savedEntities)),
       _source: source,
-      size: Object.keys(savedEntities).length,
+      size: 10000,
     }),
     [savedEntities, source],
   );

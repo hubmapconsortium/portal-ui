@@ -1,4 +1,6 @@
 import React from 'react';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import {
   SavedListsSuccessAlert,
@@ -7,28 +9,29 @@ import {
 import SavedListScrollbox from 'js/components/savedLists/SavedListScrollbox';
 import SavedEntitiesTable from 'js/components/savedLists/SavedEntitiesTable';
 import useSavedLists from 'js/components/savedLists/hooks';
-import { StyledHeader, SpacingDiv, PageSpacing } from './style';
 
 function SavedListsContent() {
   const { savedEntities, savedLists, handleDeleteEntities } = useSavedLists();
 
   return (
-    <PageSpacing>
+    <Stack>
       <SavedListsTransferAlert />
       <SavedListsSuccessAlert fromSavedLists />
-      <SpacingDiv>
-        <StyledHeader variant="h3">My Saved Items</StyledHeader>
-        <SavedEntitiesTable
-          savedEntities={savedEntities.savedEntities}
-          deleteCallback={(entities) => {
-            handleDeleteEntities(entities).catch((error) => {
-              console.error(error);
-            });
-          }}
-        />
-      </SpacingDiv>
-      <SavedListScrollbox savedLists={savedLists} />
-    </PageSpacing>
+      <Stack spacing={3}>
+        <Stack spacing={1}>
+          <Typography variant="h3">My Saved Items</Typography>
+          <SavedEntitiesTable
+            savedEntities={savedEntities.savedEntities}
+            deleteCallback={(entities) => {
+              handleDeleteEntities(entities).catch((error) => {
+                console.error(error);
+              });
+            }}
+          />
+        </Stack>
+        <SavedListScrollbox savedLists={savedLists} />
+      </Stack>
+    </Stack>
   );
 }
 

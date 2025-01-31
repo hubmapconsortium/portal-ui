@@ -12,7 +12,7 @@ function LocalStorageDescription() {
   const { isAuthenticated } = useAppContext();
 
   if (isAuthenticated) {
-    return <Description>Lists saved here are stored to your profile and accessible across devices.</Description>;
+    return <Description>Lists saved here are stored to your profile and are accessible across devices.</Description>;
   }
 
   return (
