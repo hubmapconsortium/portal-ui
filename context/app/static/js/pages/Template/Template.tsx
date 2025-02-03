@@ -25,6 +25,9 @@ import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
 import { useAppContext } from 'js/components/Contexts';
 import { buildSearchLink } from 'js/components/search/store';
 
+const sampleWorkspacesDescription =
+  'Sample workspaces are provided to help you get started with this template and to better understand the types of data that are compatible with it.';
+
 interface SampleWorkspacesInfoBannerProps {
   hasSampleWorkspaces: boolean;
 }
@@ -33,15 +36,14 @@ function SampleWorkspacesInfoBanner({ hasSampleWorkspaces }: SampleWorkspacesInf
     return <IconPanel status="info">No sample workspaces are currently available for this template.</IconPanel>;
   }
 
-  return isAuthenticated ? (
-    <IconPanel status="info">
-      Sample workspaces are provided to help you get started with this template and to better understand the types of
-      data that are compatible with it.
-    </IconPanel>
-  ) : (
+  if (isAuthenticated) {
+    return <IconPanel status="info">{sampleWorkspacesDescription}</IconPanel>;
+  }
+
+  return (
     <LogInPanel trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage }}>
-      Sample workspaces are available to help you get started with this template and better understand the types of
-      compatible data. Please <InternalLink href="/login">log in</InternalLink> to explore a sample workspace.
+      {sampleWorkspacesDescription} Please <InternalLink href="/login">log in</InternalLink> to explore a sample
+      workspace.
     </LogInPanel>
   );
 }
