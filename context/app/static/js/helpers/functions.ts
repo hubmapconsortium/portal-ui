@@ -208,7 +208,7 @@ export function generateCommaList(list: string[]): string {
  * @returns true if the workspace has reached the maximum number of datasets allowed, false otherwise.
  */
 export function isWorkspaceAtDatasetLimit(workspace: MergedWorkspace) {
-  return workspace.workspace_details.current_workspace_details.symlinks.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
+  return workspace.workspace_details?.current_workspace_details?.symlinks?.length >= MAX_NUMBER_OF_WORKSPACE_DATASETS;
 }
 
 /**
