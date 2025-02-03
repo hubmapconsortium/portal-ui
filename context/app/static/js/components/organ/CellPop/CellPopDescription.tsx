@@ -39,8 +39,8 @@ export default function CellPopDescription() {
         </LabelledSectionText>,
       ]}
     >
-      This interactive heatmap visualizes cell populations in datasets from this organ. Cell type annotations are from
-      <OutboundIconLink href="https://azimuth.hubmapconsortium.org/">Azimuth.</OutboundIconLink> Key features are
+      This interactive heatmap visualizes cell populations in datasets from this organ. Cell type annotations are from{' '}
+      <OutboundIconLink href="https://azimuth.hubmapconsortium.org/">Azimuth</OutboundIconLink>. Key features are
       highlighted below and a tutorial is available.
     </SectionDescription>
   );
