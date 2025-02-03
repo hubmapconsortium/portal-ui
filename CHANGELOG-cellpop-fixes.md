@@ -1,3 +1,4 @@
+- Fix missing space and period in Azimuth link above cell population chart.
 - Fix organ page crashing when marking dataset as visible while another dataset is expanded.
 - Fix field outline overlapping with label of heatmap normalization control.
 - Fix overlapping between violins in Cellpop visualizations.
