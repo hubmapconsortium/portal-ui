@@ -1,0 +1,1 @@
+- Add checks before trying to access a workspace's symlinked files (resolves 2023 workspaces API bug).
