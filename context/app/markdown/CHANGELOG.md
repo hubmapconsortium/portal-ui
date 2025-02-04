@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.19.5 - 2025-02-04
+
+- Add an info banner to template pages without sample workspaces.
+- Fix missing space and period in Azimuth link above cell population chart.
+- Fix organ page crashing when marking dataset as visible while another dataset is expanded.
+- Fix field outline overlapping with label of heatmap normalization control.
+- Fix overlapping between violins in Cellpop visualizations.
+- Add checks before trying to access a workspace's symlinked files (resolves 2023 workspaces API bug).
+
+
+
 ## v1.19.4 - 2025-01-31
 
 - Fix Cell Population Plot table of contents title.

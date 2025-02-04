@@ -1,1 +1,0 @@
-- Add an info banner to template pages without sample workspaces.
