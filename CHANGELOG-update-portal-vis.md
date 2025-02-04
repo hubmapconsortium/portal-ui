@@ -1,0 +1,1 @@
+- Updated portal-viz version to address the scaling issue on kaggle datasets visualizations.
