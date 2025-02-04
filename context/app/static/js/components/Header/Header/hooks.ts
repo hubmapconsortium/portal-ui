@@ -1,7 +1,7 @@
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import useEntityStore from 'js/stores/useEntityStore';
 
-const pathsWithEntityHeader = ['/browse', '/cell-types', '/genes'];
+const pathsWithEntityHeader = ['/browse', '/cell-types', '/genes', '/organ/'];
 
 const exceptionPaths = ['/browse/collection'];
 
@@ -11,7 +11,7 @@ function locationStartsWithPath(path: string) {
 
 export function useEntityHeaderVisibility() {
   const { summaryInView, summaryEntry } = useEntityStore((state) => state.summaryComponentObserver);
-  const vizIsFullscreen = useVisualizationStore((state) => state.vizIsFullscreen);
+  const vizIsFullscreen = useVisualizationStore((state) => Boolean(state.fullscreenVizId));
 
   const matchesPath = pathsWithEntityHeader.some(locationStartsWithPath);
   const isExceptionPath = exceptionPaths.some(locationStartsWithPath);

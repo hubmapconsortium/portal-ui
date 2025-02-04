@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "1.18.0",
+  "version": "1.19.5",
   "dependencies": {
     "@dagrejs/dagre": "^1.1.3",
     "@datapunt/matomo-tracker-js": "^0.5.1",
@@ -33,6 +33,7 @@
     "@visx/text": "^3.3.0",
     "@visx/tooltip": "^3.3.0",
     "@xyflow/react": "^12.0.3",
+    "cellpop": "^0.0.8",
     "chart.js": "^4.4.2",
     "d3": "^7.9.0",
     "d3-array": "^3.2.4",
@@ -48,10 +49,10 @@
     "lz-string": "^1.5.0",
     "pretty-bytes": "^6.1.1",
     "prop-types": "^15.8.1",
-    "react": "^18.2.0",
+    "react": "^18.3.1",
     "react-chartjs-2": "^5.2.0",
     "react-device-detect": "^2.2.3",
-    "react-dom": "^18.2.0",
+    "react-dom": "^18.3.1",
     "react-ga4": "^2.1.0",
     "react-hook-form": "^7.51.2",
     "react-intersection-observer": "^9.8.1",

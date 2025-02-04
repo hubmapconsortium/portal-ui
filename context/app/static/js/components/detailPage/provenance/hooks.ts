@@ -43,6 +43,13 @@ async function getCombinedProvData(
 
   const descendantIds = descendants.hits.hits.map((hit) => hit._id);
 
+  if (descendantIds.length === 0) {
+    return fetcher({
+      url: createProvDataURL(uuid, entityEndpoint),
+      requestInit: { headers: getAuthHeader(groupsToken) },
+    });
+  }
+
   const descendantProvenance = await multiFetcher<ProvData>({
     urls: descendantIds.map((id) => createProvDataURL(id, entityEndpoint)),
     requestInits: [{ headers: getAuthHeader(groupsToken) }],

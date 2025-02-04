@@ -19,6 +19,9 @@ function FacetAccordion({
       variant="unstyled"
       sx={(theme) => ({
         width: '100%',
+        '& .MuiAccordionSummary-content': {
+          margin: 0,
+        },
         ...(position === 'outer' && !isLast && { borderBottom: `1px solid ${theme.palette.divider}` }),
       })}
     >

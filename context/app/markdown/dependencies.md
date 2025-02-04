@@ -10,23 +10,23 @@ The services the portal relies on are [listed separately](/services).
 ```
 # Update requirements.txt if this file changes:
 # pip install pip-tools
-# pip-compile --allow-unsafe --generate-hashes --output-file=context/requirements.txt context/requirements.in
-Flask>=3.0.3
-Flask[async]>=3.0.3
+# uv pip compile context/requirements.in --universal --output-file context/requirements.txt
+Flask>=3.1.0
+Flask[async]>=3.1.0
 globus-sdk>=3.9.0
 requests>=2.32.3
 pyyaml>=6.0.1
 python-datauri>=2.2.0
 python-frontmatter>=1.1.0
 hubmap-api-py-client>=0.0.11
-hubmap-commons>=2.1.15
+hubmap-commons>=2.1.18
 # As of 2023-08-24, this is the version of boto3 which is compatible with both the 
 # portal-visualization->vitessce->ome-zarr dependency on aiobotocore~=2.5
 # and the hubmap-commons dependency on boto3>=1.24.47
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.3.6.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.3.8.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -68,6 +68,7 @@ lxml>=4.9.1
 "@visx/text": "^3.3.0",
 "@visx/tooltip": "^3.3.0",
 "@xyflow/react": "^12.0.3",
+"cellpop": "^0.0.8",
 "chart.js": "^4.4.2",
 "d3": "^7.9.0",
 "d3-array": "^3.2.4",
@@ -83,10 +84,10 @@ lxml>=4.9.1
 "lz-string": "^1.5.0",
 "pretty-bytes": "^6.1.1",
 "prop-types": "^15.8.1",
-"react": "^18.2.0",
+"react": "^18.3.1",
 "react-chartjs-2": "^5.2.0",
 "react-device-detect": "^2.2.3",
-"react-dom": "^18.2.0",
+"react-dom": "^18.3.1",
 "react-ga4": "^2.1.0",
 "react-hook-form": "^7.51.2",
 "react-intersection-observer": "^9.8.1",

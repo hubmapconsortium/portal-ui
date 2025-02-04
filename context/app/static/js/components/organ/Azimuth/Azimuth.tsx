@@ -5,6 +5,7 @@ import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper/VisualizationWrapper';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import ReferenceBasedAnalysis from './ReferenceBasedAnalysis';
 import { AzimuthConfig } from '../types';
 
@@ -33,4 +34,4 @@ function Azimuth({ config, id }: AzimuthProps) {
   );
 }
 
-export default Azimuth;
+export default withShouldDisplay(Azimuth);

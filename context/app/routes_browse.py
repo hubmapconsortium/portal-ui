@@ -58,6 +58,8 @@ def details(type, uuid):
         if raw_dataset is None or len(raw_dataset) == 0:
             abort(404)
 
+        marker = request.args.get('marker') or None
+
         # Redirect to the primary dataset
         return redirect(
             url_for('routes_browse.details',
@@ -66,7 +68,8 @@ def details(type, uuid):
                     _anchor=anchor,
                     redirected=True,
                     redirectedFromId=entity.get('hubmap_id'),
-                    redirectedFromPipeline=entity.get('pipeline')))
+                    redirectedFromPipeline=entity.get('pipeline'),
+                    marker=marker))
 
     if type != actual_type:
         return redirect(url_for('routes_browse.details', type=actual_type, uuid=uuid))
@@ -115,12 +118,13 @@ def details_vitessce(type, uuid):
     parent = client.get_entity(parent_uuid) if parent_uuid else None
     epic_uuid = None
     if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get(
-            'status') != 'Error' and entity.get("pipeline") == "Segmentation Mask":
-        epic_uuid = uuid
+            'status') != 'Error':
         if parent is None:
             ancestors = entity.get('immediate_ancestor_ids')
             if len(ancestors) > 0:
                 parent = ancestors[0]
+        if 'epic' in entity.get('vitessce-hints'):
+            epic_uuid = uuid
 
     vitessce_conf = client.get_vitessce_conf_cells_and_lifted_uuid(
         entity,

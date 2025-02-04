@@ -1,5 +1,81 @@
 # Changelog
 
+## v1.19.5 - 2025-02-04
+
+- Add an info banner to template pages without sample workspaces.
+- Fix missing space and period in Azimuth link above cell population chart.
+- Fix organ page crashing when marking dataset as visible while another dataset is expanded.
+- Fix field outline overlapping with label of heatmap normalization control.
+- Fix overlapping between violins in Cellpop visualizations.
+- Add checks before trying to access a workspace's symlinked files (resolves 2023 workspaces API bug).
+
+
+
+## v1.19.4 - 2025-01-31
+
+- Fix Cell Population Plot table of contents title.
+- Improve Cell Population Plot padding.
+- Fix Cell Population Plot violin graph behavior.
+
+
+
+## v1.19.3 - 2025-01-29
+
+- Add scalable cell population plots to organ pages with compatible labeled datasets.
+
+
+
+## v1.19.2 - 2025-01-27
+
+- Fixes logic to provide parent uuid to the config builder.
+
+
+
+## v1.19.1 - 2025-01-23
+
+- Fix publications page crashing when supporting json data is completely missing.
+
+
+
+## v1.19.0 - 2025-01-22
+
+- Improve handling of empty vignette lists so that the publication page does not crash if an empty list is provided.
+- Updated logic to access the builder for EPIC Segmentation masks using the epic vitessce-hint.
+
+
+
+## v1.18.4 - 2025-01-15
+
+- Updated homepage news items.
+- Fix persistence of selected marker genes after redirect to primary dataset.
+- Upgrade to Python 3.10.
+- Introduce `uv` for python package management.
+
+
+
+## v1.18.3 - 2025-01-10
+
+- Fix provenance graph for datasets without descendants.
+
+
+
+## v1.18.2 - 2025-01-07
+
+- Fix metadata filter on dev-search.
+- Only request workspaces token for workspaces users during auth routine.
+
+
+
+## v1.18.1 - 2025-01-07
+
+- Resolve accessibility issues related to arias and interactive controls throughout the portal.
+- Update processed dataset files and analysis sections to match updated ingest metadata.
+- Fix issue in push script where if the number of days since the last release is 0 the script returns early.
+ - Addressed accessibility issue on home page to ensure elements with scrollable content are accessible by keyboard.
+ - Addressed accessibility issue to ensure elements with scrollable content are accessible by keyboard.
+
+
+
 ## v1.18.0 - 2025-01-06
 
 - Added informative alert upon successful bulk download manifest download.

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback } from 'react';
+import React, { useEffect, useMemo, useCallback, useId } from 'react';
 import { Vitessce } from 'vitessce';
 
 import Paper from '@mui/material/Paper';
@@ -19,6 +19,7 @@ import VisualizationThemeSwitch from 'js/components/detailPage/visualization/Vis
 import VisualizationFooter from 'js/components/detailPage/visualization/VisualizationFooter';
 import VisualizationTracker from 'js/components/detailPage/visualization/VisualizationTracker';
 
+import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
 import {
   ExpandButton,
@@ -26,12 +27,11 @@ import {
   SelectionButton,
   StyledDetailPageSection,
   StyledSectionHeader,
-  bodyExpandedCSS,
   vitessceFixedHeight,
 } from './style';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
-  vizIsFullscreen: state.vizIsFullscreen,
+  fullscreenVizId: state.fullscreenVizId,
   expandViz: state.expandViz,
   collapseViz: state.collapseViz,
   vizTheme: state.vizTheme,
@@ -57,8 +57,11 @@ function Visualization({
   shouldMountVitessce = true,
   markerGene,
 }: VisualizationProps) {
-  const { vizIsFullscreen, expandViz, vizTheme, setVitessceState, setVitessceStateDebounced, setVizNotebookId } =
+  const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVitessceStateDebounced, setVizNotebookId } =
     useVisualizationStore(visualizationStoreSelector);
+
+  const id = useId();
+  const vizIsFullscreen = fullscreenVizId === id;
 
   // Add event listeners to the document to handle the full screen mode.
   useCollapseViz();
@@ -103,9 +106,17 @@ function Visualization({
     markerGene,
   });
 
-  function setSelectionAndClearErrors({ i }: { i: number }) {
-    setVitessceSelection(i);
-  }
+  const setSelectionAndClearErrors = useCallback(
+    ({ i }: { i: number }) => {
+      setVitessceSelection(i);
+    },
+    [setVitessceSelection],
+  );
+
+  const expandVisualization = useCallback(() => {
+    expandViz(id);
+    trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
+  }, [expandViz, id, trackEntityPageEvent]);
 
   const isMultiDataset = Array.isArray(vitessceConfig);
 
@@ -139,14 +150,7 @@ function Visualization({
               <VisualizationShareButton />
               <VisualizationThemeSwitch />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
-                <ExpandButton
-                  size="small"
-                  onClick={() => {
-                    expandViz();
-                    trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
-                  }}
-                  variant="contained"
-                >
+                <ExpandButton size="small" onClick={expandVisualization} variant="contained">
                   <FullscreenRoundedIcon color="primary" />
                 </ExpandButton>
               </SecondaryBackgroundTooltip>
@@ -182,7 +186,7 @@ function Visualization({
           </ExpandableDiv>
         </Paper>
         <VisualizationFooter />
-        <style type="text/css">{vizIsFullscreen && bodyExpandedCSS}</style>
+        <BodyExpandedCSS id={id} />
       </StyledDetailPageSection>
     )
   );
