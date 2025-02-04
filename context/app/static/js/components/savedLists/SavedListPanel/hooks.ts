@@ -15,7 +15,7 @@ function useSavedEntityCountsData(savedEntities: Record<string, SavedEntity>) {
       query: getIDsQuery(Object.keys(savedEntities)),
       aggs: {
         entity_counts: {
-          terms: { field: 'entity_type.keyword', size: 10 },
+          terms: { field: 'entity_type.keyword', size: 10000 },
         },
       },
     }),
@@ -29,12 +29,15 @@ function useSavedEntityCountsData(savedEntities: Record<string, SavedEntity>) {
 function useSavedEntityTypeCounts(listSavedEntities: Record<string, SavedEntity>) {
   const { searchData } = useSavedEntityCountsData(listSavedEntities);
 
-  const buckets = searchData?.aggregations?.entity_counts?.buckets ?? [];
-  return {
-    donors: buckets.find((bucket) => bucket.key === 'Donor')?.doc_count ?? 0,
-    samples: buckets.find((bucket) => bucket.key === 'Sample')?.doc_count ?? 0,
-    datasets: buckets.find((bucket) => bucket.key === 'Dataset')?.doc_count ?? 0,
-  };
+  const counts = { donors: 0, samples: 0, datasets: 0 };
+
+  searchData?.aggregations?.entity_counts?.buckets?.forEach((bucket) => {
+    if (bucket.key === 'Donor') counts.donors = bucket.doc_count;
+    else if (bucket.key === 'Sample') counts.samples = bucket.doc_count;
+    else if (bucket.key === 'Dataset') counts.datasets = bucket.doc_count;
+  });
+
+  return counts;
 }
 
 export { useSavedEntityTypeCounts };

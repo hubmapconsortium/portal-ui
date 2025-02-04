@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -93,28 +93,34 @@ function useCheckForLocalSavedEntities() {
   const setListsAndEntities = useSetListsAndEntities();
   const setTransferredToProfileAlert = useSavedListsAlertsStore((state) => state.setTransferredToProfileAlert);
 
-  const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
-  if (!localEntities) {
-    return;
-  }
-
-  // If there are saved_entities in local storage, copy them over to the remote savedListsAndEntities, then
-  // remove them from local storage.
-  try {
-    const parsedEntities: unknown = JSON.parse(localEntities);
-    const { savedLists, savedEntities } = (parsedEntities as LocalSavedEntities).state;
-
-    if (savedLists && savedEntities) {
-      setListsAndEntities({ savedLists, savedEntities })
-        .then(() => {
-          setTransferredToProfileAlert(true);
-          localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
-        })
-        .catch((e) => console.error(e));
+  const updateList = useCallback(() => {
+    const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+    if (!localEntities) {
+      return;
     }
-  } catch (error) {
-    console.error('Failed to parse saved_entities from local storage:', error);
-  }
+
+    // If there are saved_entities in local storage, copy them over to the remote savedListsAndEntities, then
+    // remove them from local storage.
+    try {
+      const parsedEntities: unknown = JSON.parse(localEntities);
+      const { savedLists, savedEntities } = (parsedEntities as LocalSavedEntities).state;
+
+      if (savedLists && savedEntities) {
+        setListsAndEntities({ savedLists, savedEntities })
+          .then(() => {
+            setTransferredToProfileAlert(true);
+            localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+          })
+          .catch((e) => console.error(e));
+      }
+    } catch (error) {
+      console.error('Failed to parse saved_entities from local storage:', error);
+    }
+  }, [setListsAndEntities, setTransferredToProfileAlert]);
+
+  useEffect(() => {
+    updateList();
+  }, [updateList]);
 }
 
 function useListSavedListsAndEntities() {
