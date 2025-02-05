@@ -4,9 +4,12 @@ import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import SummarizeRounded from '@mui/icons-material/SummarizeRounded';
 import AttributionRoundedIcon from '@mui/icons-material/AttributionRounded';
 import InsertDriveFileRounded from '@mui/icons-material/InsertDriveFileRounded';
+import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
+import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { VisualizationIcon } from 'js/shared-styles/icons';
@@ -27,9 +30,6 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 import { getEntityCreationInfo } from 'js/helpers/functions';
 
-import { Button } from '@mui/material';
-import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
-import { InternalLink } from 'js/shared-styles/Links';
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
 import { Subsection } from './Subsection';
