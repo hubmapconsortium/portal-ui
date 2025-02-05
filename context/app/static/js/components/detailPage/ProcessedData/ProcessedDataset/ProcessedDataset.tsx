@@ -8,6 +8,7 @@ import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import { useEventCallback } from '@mui/material/utils';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
@@ -98,22 +99,27 @@ function FilesAccordion() {
   const [openTabIndex, setOpenTabIndex] = useState(0);
   const track = useTrackEntityPageEvent();
 
+  const handleTrack = useEventCallback(() => {
+    track({
+      action: 'Navigate to Bulk Download',
+      label: hubmap_id,
+    });
+  });
+
   if (!files || files.length === 0) {
     return (
       <Subsection title="Files" icon={<InsertDriveFileRounded />}>
         <SectionDescription subsection>
-          Files are available via <InternalLink href="#bulk-data-transfer">bulk data transfer.</InternalLink>
+          Files are available via{' '}
+          <InternalLink onClick={handleTrack} href="#bulk-data-transfer">
+            bulk data transfer.
+          </InternalLink>
         </SectionDescription>
         <Button
           startIcon={<CloudDownloadRounded />}
           variant="contained"
           href="#bulk-data-transfer"
-          onClick={() => {
-            track({
-              action: 'Navigate to Bulk Download',
-              label: hubmap_id,
-            });
-          }}
+          onClick={handleTrack}
         >
           Scroll to Bulk Data Transfer
         </Button>
