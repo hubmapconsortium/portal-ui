@@ -3,6 +3,7 @@ import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { InfoIcon } from 'js/shared-styles/icons';
+import { Box } from '@mui/material';
 
 interface SectionDescriptionProps extends PropsWithChildren {
   addendum?: React.ReactNode;
@@ -14,7 +15,9 @@ export function SectionDescription({ addendum, children, subsection }: SectionDe
   const contents = (
     <Stack direction="column" gap={1} marginBottom={subsection ? 2 : 0}>
       <Stack direction="row" gap={1} alignItems="start">
-        <InfoIcon color="primary" fontSize={iconSize} />
+        <Box marginTop={0.4}>
+          <InfoIcon color="primary" fontSize={iconSize} />
+        </Box>
         <Typography variant="body1">{children}</Typography>
       </Stack>
       {addendum}
