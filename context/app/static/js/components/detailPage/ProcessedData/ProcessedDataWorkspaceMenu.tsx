@@ -50,7 +50,6 @@ function ProcessedDataWorkspaceMenu({
     dialogIsOpen: createWorkspaceIsOpen,
     ...rest
   } = useCreateWorkspaceForm({
-    defaultName: hubmap_id,
     initialSelectedDatasets: [uuid].filter(Boolean),
   });
 
