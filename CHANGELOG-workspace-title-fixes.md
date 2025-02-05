@@ -1,0 +1,1 @@
+- Fix bug causing workspace title field in new workspace dialog to be cleared.
