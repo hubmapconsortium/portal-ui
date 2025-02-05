@@ -1,0 +1,3 @@
+- Fix overlap between expanded rows and violins when there are few datasets in cellpop visualization.
+- Fix cellpop control position breaking on scroll.
+- Fix cellpop expanded rows handling when data is being normalized.

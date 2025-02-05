@@ -33,7 +33,7 @@
     "@visx/text": "^3.3.0",
     "@visx/tooltip": "^3.3.0",
     "@xyflow/react": "^12.0.3",
-    "cellpop": "^0.0.8",
+    "cellpop": "^0.0.10",
     "chart.js": "^4.4.2",
     "d3": "^7.9.0",
     "d3-array": "^3.2.4",
