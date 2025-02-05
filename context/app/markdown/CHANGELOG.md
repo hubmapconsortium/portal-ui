@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.20.0 - 2025-02-05
+
+- Fix overlap between expanded rows and violins when there are few datasets in cellpop visualization.
+- Fix cellpop control position breaking on scroll.
+- Fix cellpop expanded rows handling when data is being normalized.
+- Updated portal-viz version to address the scaling issue on kaggle datasets visualizations.
+
+
+
 ## v1.19.5 - 2025-02-04
 
 - Add an info banner to template pages without sample workspaces.
