@@ -27,6 +27,9 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 import { getEntityCreationInfo } from 'js/helpers/functions';
 
+import { Button } from '@mui/material';
+import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
+import { InternalLink } from 'js/shared-styles/Links';
 import { DatasetTitle } from './DatasetTitle';
 import { ProcessedDatasetAccordion } from './ProcessedDatasetAccordion';
 import { Subsection } from './Subsection';
@@ -98,7 +101,22 @@ function FilesAccordion() {
   if (!files || files.length === 0) {
     return (
       <Subsection title="Files" icon={<InsertDriveFileRounded />}>
-        <SectionDescription subsection>No files are available for this dataset.</SectionDescription>
+        <SectionDescription subsection>
+          Files are available via <InternalLink href="#bulk-data-transfer">bulk data transfer.</InternalLink>
+        </SectionDescription>
+        <Button
+          startIcon={<CloudDownloadRounded />}
+          variant="contained"
+          href="#bulk-data-transfer"
+          onClick={() => {
+            track({
+              action: 'Navigate to Bulk Download',
+              label: hubmap_id,
+            });
+          }}
+        >
+          Scroll to Bulk Data Transfer
+        </Button>
       </Subsection>
     );
   }
