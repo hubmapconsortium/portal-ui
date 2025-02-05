@@ -1,9 +1,9 @@
 import React, { PropsWithChildren } from 'react';
-import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import { DetailSectionPaper } from 'js/shared-styles/surfaces';
 import { InfoIcon } from 'js/shared-styles/icons';
-import { Box } from '@mui/material';
 
 interface SectionDescriptionProps extends PropsWithChildren {
   addendum?: React.ReactNode;
