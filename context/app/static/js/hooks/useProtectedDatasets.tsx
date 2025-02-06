@@ -11,7 +11,8 @@ function useDatasetsAccessLevel(ids: string[]) {
   const query = {
     query: {
       bool: {
-        must: [getIDsQuery(ids), getTermClause('mapped_data_access_level.keyword', 'Protected')],
+        must: [getIDsQuery(ids)],
+        must_not: [getTermClause('mapped_data_access_level.keyword', 'Public')],
       },
     },
     _source: ['mapped_data_access_level', 'hubmap_id', 'uuid'],
@@ -35,6 +36,7 @@ function useProtectedDatasetsForm({
 }: useProtectedDatasetsFormProps) {
   const { toastSuccessRemoveProtectedDatasets } = useWorkspaceToasts();
   const protectedRows = useDatasetsAccessLevel(selectedRows.size > 0 ? [...selectedRows] : []).datasets;
+
   const containsProtectedDataset = protectedRows.length > 0;
 
   const reportedProtectedRows = useRef(false);
