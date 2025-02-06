@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.20.1 - 2025-02-06
+
+- Fix cell population plot controls drawer positioning and scroll issues.
+- Fix cell oppulation plot controls drawer not appearing when visualization is expanded.
+- Improve position of metadata value bars in cell population plot.
+- Updated Vitessce to fix the infinite loops happening for EPIC segmentation mask.
+- Fix bug causing workspace title field in new workspace dialog to be cleared.
+
+
+
 ## v1.20.0 - 2025-02-05
 
 - Fix overlap between expanded rows and violins when there are few datasets in cellpop visualization.

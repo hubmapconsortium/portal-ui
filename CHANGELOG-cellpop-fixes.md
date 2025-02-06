@@ -1,3 +1,0 @@
-- Fix cell population plot controls drawer positioning and scroll issues.
-- Fix cell oppulation plot controls drawer not appearing when visualization is expanded.
-- Improve position of metadata value bars in cell population plot.

@@ -1,1 +1,0 @@
-- Updated Vitessce to fix the infinite loops happening for EPIC segmentation mask.
