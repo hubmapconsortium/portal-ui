@@ -1,0 +1,3 @@
+- Fix plot controls drawer positioning and scroll issues.
+- Fix plot controls drawer not appearing when visualization is expanded.
+- Improve position of metadata value bars.
