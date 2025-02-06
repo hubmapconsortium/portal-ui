@@ -4,9 +4,13 @@ import FactCheckRounded from '@mui/icons-material/FactCheckRounded';
 import SummarizeRounded from '@mui/icons-material/SummarizeRounded';
 import AttributionRoundedIcon from '@mui/icons-material/AttributionRounded';
 import InsertDriveFileRounded from '@mui/icons-material/InsertDriveFileRounded';
+import CloudDownloadRounded from '@mui/icons-material/CloudDownloadRounded';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+import { useEventCallback } from '@mui/material/utils';
 
+import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { VisualizationIcon } from 'js/shared-styles/icons';
@@ -95,10 +99,30 @@ function FilesAccordion() {
   const [openTabIndex, setOpenTabIndex] = useState(0);
   const track = useTrackEntityPageEvent();
 
+  const handleTrack = useEventCallback(() => {
+    track({
+      action: 'Navigate to Bulk Download',
+      label: hubmap_id,
+    });
+  });
+
   if (!files || files.length === 0) {
     return (
       <Subsection title="Files" icon={<InsertDriveFileRounded />}>
-        <SectionDescription subsection>No files are available for this dataset.</SectionDescription>
+        <SectionDescription subsection>
+          Files are available via{' '}
+          <InternalLink onClick={handleTrack} href="#bulk-data-transfer">
+            bulk data transfer.
+          </InternalLink>
+        </SectionDescription>
+        <Button
+          startIcon={<CloudDownloadRounded />}
+          variant="contained"
+          href="#bulk-data-transfer"
+          onClick={handleTrack}
+        >
+          Scroll to Bulk Data Transfer
+        </Button>
       </Subsection>
     );
   }

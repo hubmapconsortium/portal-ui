@@ -123,7 +123,7 @@ function HelperPanelActions() {
             });
           }}
         >
-          Bulk Download
+          Bulk Data Transfer
         </HelperPanelButton>
       </SecondaryBackgroundTooltip>
     </>
