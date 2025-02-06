@@ -3,6 +3,7 @@ import React from 'react';
 import Summary from 'js/components/detailPage/summary/Summary';
 import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasetsTable';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
+import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import useTrackID from 'js/hooks/useTrackID';
 import { Collection } from 'js/components/types';
 
@@ -15,6 +16,7 @@ function CollectionDetail({ collection: collectionData }: { collection: Collecti
     <div>
       {collectionData && (
         <>
+          <SavedListsSuccessAlert />
           <Summary title={hubmap_id} />
           {'datasets' in collectionData && <CollectionDatasetsTable datasets={datasets} />}
           {contributors && Boolean(contributors.length) && (

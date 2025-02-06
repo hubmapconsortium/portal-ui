@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import Table from '@mui/material/Table';
+import Stack from '@mui/material/Stack';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableRow from '@mui/material/TableRow';
@@ -10,6 +11,7 @@ import NoItemsSaved from 'js/components/savedLists/NoItemsSaved';
 
 import { format } from 'date-fns/format';
 
+import { SavedEntity } from 'js/components/savedLists/types';
 import { InternalLink } from 'js/shared-styles/Links';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
@@ -33,44 +35,35 @@ const defaultColumns = [
 const source = ['hubmap_id', 'group_name', 'entity_type'];
 
 interface SavedEntitiesTableProps {
-  savedEntities: Record<string, { dateSaved: string; dateAddedToList: string }>;
-  deleteCallback: (selectedRows: Set<string>) => void;
-  setShouldDisplaySaveAlert: (shouldDisplay: boolean) => void;
-  isSavedListPage: boolean;
+  savedEntities: Record<string, SavedEntity>;
+  deleteCallback: (args: { entityUUIDs: Set<string> }) => void;
+  isSavedListPage?: boolean;
 }
 
-function SavedEntitiesTable({
-  savedEntities,
-  deleteCallback,
-  setShouldDisplaySaveAlert,
-  isSavedListPage,
-}: SavedEntitiesTableProps) {
+function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = false }: SavedEntitiesTableProps) {
   const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   const [deleteDialogIsOpen, setDeleteDialogIsOpen] = useState(false);
 
   const columns = isSavedListPage
-    ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To Collection' }]
+    ? [...defaultColumns, { id: 'dateAddedToCollection', label: 'Date Added To List' }]
     : [...defaultColumns, { id: 'dateSaved', label: 'Date Saved' }];
 
   function deleteSelectedSavedEntities() {
-    deleteCallback(selectedRows);
+    deleteCallback({ entityUUIDs: selectedRows });
     deselectHeaderAndRows();
   }
-
-  function onSaveCallback() {
-    setShouldDisplaySaveAlert(true);
-    deselectHeaderAndRows();
-  }
-  const selectedRowsSize = selectedRows.size;
 
   const { searchHits, isLoading } = useSavedEntityData(savedEntities, source);
 
+  const selectedRowsSize = selectedRows.size;
+  const savedEntitiesSize = Object.keys(savedEntities).length;
+
   return (
-    <>
+    <Stack>
       <SpacedSectionButtonRow
         leftText={
           <BottomAlignedTypography variant="subtitle1">
-            {selectedRowsSize} {selectedRowsSize === 1 ? 'Item' : 'Items'} Selected
+            {savedEntitiesSize} {savedEntitiesSize === 1 ? 'Item' : 'Items'}
           </BottomAlignedTypography>
         }
         buttons={
@@ -88,7 +81,7 @@ function SavedEntitiesTable({
                 deleteSelectedSavedEntities={deleteSelectedSavedEntities}
               />
               {!isSavedListPage && (
-                <AddItemsToListDialog itemsToAddUUIDS={selectedRows} onSaveCallback={onSaveCallback} />
+                <AddItemsToListDialog itemsToAddUUIDS={selectedRows} onSaveCallback={deselectHeaderAndRows} />
               )}
             </div>
           )
@@ -109,8 +102,9 @@ function SavedEntitiesTable({
               {isLoading ? (
                 <LoadingTableRows numberOfRows={Object.keys(savedEntities).length} numberOfCols={5} />
               ) : (
-                searchHits.map(
-                  ({ _id, _source: { hubmap_id, group_name, entity_type } }) =>
+                searchHits.map(({ _id, _source: { hubmap_id, group_name, entity_type } }) => {
+                  const dateToFormat = savedEntities[_id]?.dateSaved ?? savedEntities[_id]?.dateAddedToList;
+                  return (
                     _id in savedEntities && ( // on item deletion savedEntites will update before searchHits
                       <TableRow key={_id}>
                         <SelectableRowCell rowKey={_id} />
@@ -119,12 +113,11 @@ function SavedEntitiesTable({
                         </TableCell>
                         <TableCell>{group_name}</TableCell>
                         <TableCell>{entity_type}</TableCell>
-                        <TableCell>
-                          {format(savedEntities[_id]?.dateSaved || savedEntities[_id]?.dateAddedToList, 'yyyy-MM-dd')}
-                        </TableCell>
+                        <TableCell>{dateToFormat && format(dateToFormat, 'yyyy-MM-dd')}</TableCell>
                       </TableRow>
-                    ),
-                )
+                    )
+                  );
+                })
               )}
             </TableBody>
           </Table>
@@ -133,7 +126,7 @@ function SavedEntitiesTable({
           )}
         </StyledTableContainer>
       </Paper>
-    </>
+    </Stack>
   );
 }
 

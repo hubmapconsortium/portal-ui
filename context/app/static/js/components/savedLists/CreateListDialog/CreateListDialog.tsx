@@ -1,12 +1,10 @@
 import React, { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
-
+import useEventCallback from '@mui/material/utils/useEventCallback';
+import useSavedLists from 'js/components/savedLists/hooks';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
-import useSavedEntitiesStore, { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import DialogModal from 'js/shared-styles/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
-
-const useSavedEntitiesStoreSelector = (state: SavedEntitiesStore) => state.createList;
 
 interface CreateListDialogProps {
   secondaryText?: string;
@@ -15,9 +13,9 @@ interface CreateListDialogProps {
 }
 
 function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: CreateListDialogProps) {
+  const { handleCreateList } = useSavedLists();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const createList = useSavedEntitiesStore(useSavedEntitiesStoreSelector);
 
   function handleTitleChange(event: ChangeEvent<HTMLInputElement>) {
     setTitle(event.target.value);
@@ -27,45 +25,45 @@ function CreateListDialog({ secondaryText, dialogIsOpen, setDialogIsOpen }: Crea
     setDescription(event.target.value);
   }
 
-  const handleClose = () => {
+  const handleClose = useEventCallback(() => {
     setDialogIsOpen(false);
-  };
-
-  function handleExit() {
     setTitle('');
     setDescription('');
-  }
+  });
 
-  function handleSubmit() {
-    createList({ title, description });
-    setDialogIsOpen(false);
-  }
+  const handleSubmit = useEventCallback(() => {
+    handleCreateList({ title, description }).catch((error) => {
+      console.error(error);
+    });
+    handleClose();
+  });
+
+  const dialogContent = (
+    <>
+      <StyledTitleTextField handleChange={handleTitleChange} title={title} />
+      <StyledDescriptionTextField handleChange={handleDescriptionChange} description={description} />
+    </>
+  );
+
+  const dialogActions = (
+    <>
+      <Button onClick={handleClose} color="primary">
+        Cancel
+      </Button>
+      <OptDisabledButton onClick={handleSubmit} color="primary" disabled={title.length === 0}>
+        Save
+      </OptDisabledButton>
+    </>
+  );
 
   return (
     <DialogModal
       title="Create New List"
       secondaryText={secondaryText}
-      content={
-        <>
-          <StyledTitleTextField handleChange={handleTitleChange} title={title} />
-          <StyledDescriptionTextField handleChange={handleDescriptionChange} description={description} />
-        </>
-      }
-      actions={
-        <>
-          <Button onClick={handleClose} color="primary">
-            Cancel
-          </Button>
-          <OptDisabledButton onClick={handleSubmit} color="primary" disabled={title.length === 0}>
-            Save
-          </OptDisabledButton>
-        </>
-      }
+      content={dialogContent}
+      actions={dialogActions}
       isOpen={dialogIsOpen}
-      handleClose={() => {
-        handleClose();
-        handleExit();
-      }}
+      handleClose={handleClose}
     />
   );
 }

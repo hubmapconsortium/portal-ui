@@ -5,6 +5,7 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 import Stack from '@mui/material/Stack';
+import SummarySaveEntityButton from 'js/components/detailPage/summary/SummarySaveEntityButton/SummarySaveEntityButton';
 import { useVitessceConfLink } from 'js/pages/Dataset/hooks';
 import StatusIcon from '../../StatusIcon';
 import { useProcessedDatasetContext } from './ProcessedDatasetContext';
@@ -41,6 +42,7 @@ export function DatasetTitle() {
       </SecondaryBackgroundTooltip>
       <Stack ml="auto" direction="row" gap={1} alignItems="center">
         {conf && <VisualizationIconButton href={vitessceConfUrl} />}
+        <SummarySaveEntityButton uuid={uuid} />
         <SummaryJSONButton entity_type={entity_type} uuid={uuid} />
         <VersionSelect />
       </Stack>
