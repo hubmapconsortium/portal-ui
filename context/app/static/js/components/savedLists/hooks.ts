@@ -7,6 +7,7 @@ import {
   SAVED_ENTITIES_DEFAULT,
   SAVED_ENTITIES_KEY,
   SAVED_ENTITIES_LOCAL_STORAGE_KEY,
+  SavedListsEventCategories,
 } from 'js/components/savedLists/constants';
 import {
   useBuildUkvSWRKey,
@@ -18,6 +19,7 @@ import {
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
 import { generateCommaList } from 'js/helpers/functions';
+import { trackEvent } from 'js/helpers/trackers';
 
 function useGlobalMutateSavedList() {
   const { buildKey } = useBuildUkvSWRKey();
@@ -110,6 +112,14 @@ function useCheckForLocalSavedEntities() {
           .then(() => {
             setTransferredToProfileAlert(true);
             localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+            trackEvent({
+              category: SavedListsEventCategories.LandingPage,
+              action: 'Transfer Lists',
+              label: {
+                savedListsCount: Object.keys(savedLists).length,
+                savedEntitiesCount: Object.keys(savedEntities).length,
+              },
+            });
           })
           .catch((e) => console.error(e));
       }

@@ -1,8 +1,9 @@
 import React, { useMemo } from 'react';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
-import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog';
+import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
+import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { SampleDocument } from 'js/typings/search';
 import {
@@ -25,7 +26,6 @@ interface OrganSamplesProps {
 }
 
 function Samples({ organTerms, id }: OrganSamplesProps) {
-  const { selectedRows, deselectHeaderAndRows } = useSelectableTableStore();
   const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
 
   const query = useMemo(
@@ -59,16 +59,12 @@ function Samples({ organTerms, id }: OrganSamplesProps) {
       id={id}
       title="Samples"
       action={
-        <>
+        <Stack direction="row" spacing={1}>
           <Button color="primary" variant="outlined" component="a" href={searchUrl}>
             View Data on Search Page
           </Button>
-          <AddItemsToListDialog
-            itemsToAddUUIDS={selectedRows}
-            onSaveCallback={deselectHeaderAndRows}
-            disabled={selectedRows.size === 0}
-          />
-        </>
+          <SaveEntitiesButtonFromSearch entity_type="Sample" />
+        </Stack>
       }
     >
       <EntitiesTables<SampleDocument> entities={[{ query, columns, entityType: 'Sample' }]} />

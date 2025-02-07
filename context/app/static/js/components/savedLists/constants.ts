@@ -13,3 +13,11 @@ export const SAVED_ENTITIES_DEFAULT: SavedEntitiesList = {
   dateLastModified: Date.now(),
   savedEntities: {},
 };
+
+export const SavedListsEventCategories = {
+  Functionality: 'My Lists Functionality',
+  LandingPage: 'My Lists Landing Page',
+  DetailPage: 'My Lists Detail Page',
+  EntityDetailPage: (entity_type: string) => `${entity_type} Page`,
+  EntitySearchPage: (entity_type: string) => `${entity_type} Search Page Interactions`,
+} as const;

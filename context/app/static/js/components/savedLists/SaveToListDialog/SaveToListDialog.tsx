@@ -7,6 +7,8 @@ import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
 import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import useSavedLists from 'js/components/savedLists/hooks';
+import { trackEvent } from 'js/helpers/trackers';
+import { SavedListsEventCategories } from 'js/components/savedLists/constants';
 
 interface SaveToListDialogProps {
   title: string;
@@ -31,6 +33,14 @@ function SaveToListDialog({
     await Promise.all(
       Array.from(selectedLists).map((list) => handleAddEntitiesToList({ listUUID: list, entityUUIDs: entitiesToAdd })),
     );
+
+    entitiesToAdd.forEach((entityUUID) => {
+      trackEvent({
+        category: SavedListsEventCategories.LandingPage,
+        action: 'Save Entity',
+        label: entityUUID,
+      });
+    });
   }
 
   async function handleSubmit() {

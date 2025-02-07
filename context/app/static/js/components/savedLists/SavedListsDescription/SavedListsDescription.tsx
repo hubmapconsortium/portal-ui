@@ -7,6 +7,16 @@ import Typography from '@mui/material/Typography';
 import { useAppContext } from 'js/components/Contexts';
 import Description from 'js/shared-styles/sections/Description';
 import { InternalLink } from 'js/shared-styles/Links';
+import { trackEvent } from 'js/helpers/trackers';
+import { SavedListsEventCategories } from 'js/components/savedLists/constants';
+
+const handleTrack = () => {
+  trackEvent({
+    category: SavedListsEventCategories.LandingPage,
+    action: 'Log In / From alert',
+    label: 'alert banner',
+  });
+};
 
 function LocalStorageDescription() {
   const { isAuthenticated } = useAppContext();
@@ -19,11 +29,14 @@ function LocalStorageDescription() {
     <Description>
       <Stack spacing={1}>
         <Typography>
-          <InternalLink href="/login">Log in</InternalLink> to access and manage your saved lists. Any lists previously
-          stored locally will be linked to your profile once you <InternalLink href="/login">log in</InternalLink>.
+          <InternalLink href="/login" onClick={handleTrack}>
+            Log in
+          </InternalLink>{' '}
+          to access and manage your saved lists. Any lists previously stored locally will be linked to your profile once
+          you <InternalLink href="/login">log in</InternalLink>.
         </Typography>
         <Box>
-          <Button variant="contained" href="/login">
+          <Button variant="contained" href="/login" onClick={handleTrack}>
             Log In
           </Button>
         </Box>
