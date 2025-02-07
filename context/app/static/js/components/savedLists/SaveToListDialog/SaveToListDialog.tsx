@@ -9,6 +9,9 @@ import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import useSavedLists from 'js/components/savedLists/hooks';
 import { trackEvent } from 'js/helpers/trackers';
 import { SavedListsEventCategories } from 'js/components/savedLists/constants';
+import { useEntitiesData } from 'js/hooks/useEntityData';
+
+const source = ['hubmap_id'];
 
 interface SaveToListDialogProps {
   title: string;
@@ -26,19 +29,23 @@ function SaveToListDialog({
   onSaveCallback,
 }: SaveToListDialogProps) {
   const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet<string>([]);
-
   const { savedLists, handleAddEntitiesToList } = useSavedLists();
+  const [entitiesData, isLoadingEntitiesData] = useEntitiesData(Array.from(entitiesToAdd), source);
 
   async function addSavedEntitiesToList() {
     await Promise.all(
       Array.from(selectedLists).map((list) => handleAddEntitiesToList({ listUUID: list, entityUUIDs: entitiesToAdd })),
     );
 
-    entitiesToAdd.forEach((entityUUID) => {
+    if (isLoadingEntitiesData) {
+      return;
+    }
+
+    entitiesData.forEach((entity) => {
       trackEvent({
         category: SavedListsEventCategories.LandingPage,
         action: 'Save Entity',
-        label: entityUUID,
+        label: entity.hubmap_id,
       });
     });
   }

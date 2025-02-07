@@ -16,9 +16,7 @@ import {
   useUkvApiURLs,
   useUpdateSavedList,
 } from 'js/components/savedLists/api';
-import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
-import { generateCommaList } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
 
 function useGlobalMutateSavedList() {
@@ -193,6 +191,12 @@ function useSavedListActions() {
       const listUUID = uuidv4();
       const list = { title, description, dateSaved: Date.now(), dateLastModified: Date.now(), savedEntities: {} };
       await updateList({ listUUID, list });
+
+      trackEvent({
+        category: SavedListsEventCategories.LandingPage,
+        action: 'Create List',
+        label: listUUID,
+      });
     },
     [updateList],
   );
@@ -276,6 +280,11 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
   }) {
     await editList({ listUUID, list: savedListsAndEntities[listUUID], title, description });
     await mutate();
+    trackEvent({
+      category: SavedListsEventCategories.DetailPage,
+      action: 'Edit List',
+      label: listUUID,
+    });
   }
 
   async function handleAddEntitiesToList({ listUUID, entityUUIDs }: { listUUID: string; entityUUIDs: Set<string> }) {
@@ -300,6 +309,11 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
     await deleteList({ listUUID });
     await mutate();
     setSuccessAlert(SavedListsSuccessAlertType.DeletedList);
+    trackEvent({
+      category: SavedListsEventCategories.DetailPage,
+      action: 'Delete List',
+      label: listUUID,
+    });
   }
 
   return {
@@ -317,13 +331,11 @@ function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntiti
   const mutate = useMutateSavedListsAndEntities();
   const { modifyEntities, isUpdating } = useSavedListActions();
   const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
-  const trackSave = useTrackEntityPageEvent();
 
   async function handleSaveEntities({ entityUUIDs }: { entityUUIDs: Set<string> }) {
     await modifyEntities({ listUUID: SAVED_ENTITIES_KEY, list: savedEntities, entityUUIDs, action: 'Add' });
     await mutate();
     setSuccessAlert(SavedListsSuccessAlertType.SavedEntity);
-    trackSave({ action: 'Save To List', label: generateCommaList(Array.from(entityUUIDs)) });
   }
 
   async function handleDeleteEntities({ entityUUIDs }: { entityUUIDs: Set<string> }) {
