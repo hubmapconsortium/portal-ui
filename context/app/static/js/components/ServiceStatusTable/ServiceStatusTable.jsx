@@ -16,6 +16,7 @@ import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(args) {
   const { apiName, endpointUrl, githubUrl, response = {}, noteFunction = () => '' } = args;
+  console.log('buildServiceStatus response', response);
   const { build, version: apiVersion } = response;
   const isUp = Boolean(Object.keys(response).length);
   // The gateway is implicit: If it's not up, you wouldn't get anything at all,
@@ -40,8 +41,11 @@ function ServiceStatusTable({
   workspacesEndpoint,
   ubkgEndpoint,
   softAssayEndpoint,
+  ukvEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
+  console.log('gatewayStatus', gatewayStatus);
+  console.log('gatewayEndpoint', gatewayEndpoint);
 
   const apiStatuses = gatewayStatus
     ? [
@@ -104,6 +108,12 @@ function ServiceStatusTable({
           response: gatewayStatus.ontology_api,
           endpointUrl: ubkgEndpoint,
           githubUrl: 'https://github.com/x-atlas-consortia/hs-ontology-api',
+        }),
+        buildServiceStatus({
+          apiName: 'ukv-api',
+          response: gatewayStatus.ukv_api,
+          endpointUrl: ukvEndpoint,
+          githubUrl: 'https://github.com/x-atlas-consortia/user-key-value-api',
         }),
       ]
     : [];
