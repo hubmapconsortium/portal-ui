@@ -48,15 +48,7 @@ export const recentPublicationsQuery: SearchRequest = {
     },
   ],
   size: 6,
-  _source: [
-    'uuid',
-    'title',
-    'contributors',
-    'publication_status',
-    'publication_venue',
-    'publication_date',
-    'published_timestamp',
-  ],
+  _source: ['uuid', 'title', 'contributors', 'publication_status', 'publication_venue', 'publication_date'],
 };
 
 // Fetches the most recent datasets with a visualization
