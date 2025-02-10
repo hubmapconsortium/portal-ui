@@ -2,7 +2,6 @@ import React, { useState, ElementType, useCallback } from 'react';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { IconButtonTypeMap } from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import { useEventCallback } from '@mui/material/utils';
 import Button, { ButtonProps } from '@mui/material/Button';
 import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 
@@ -19,9 +18,6 @@ import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
 import useSavedLists from 'js/components/savedLists/hooks';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
-import { useEntitiesData } from 'js/hooks/useEntityData';
-import { trackEvent } from 'js/helpers/trackers';
-import { SavedListsEventCategories } from 'js/components/savedLists/constants';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -47,27 +43,11 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
   );
 }
 
-function SaveEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }) {
-  const { handleSaveEntities } = useSavedLists();
-  const [entityData] = useEntitiesData([uuid], ['hubmap_id']);
+function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
+  const { useHandleSaveEntity } = useSavedLists();
+  const handleSaveEntity = useHandleSaveEntity({ entityUUID: uuid });
 
-  const handleClick = useEventCallback(() => {
-    handleSaveEntities({ entityUUIDs: new Set([uuid]) }).catch((error) => {
-      console.error(error);
-    });
-
-    if (!entityData?.length) {
-      return;
-    }
-
-    trackEvent({
-      category: SavedListsEventCategories.EntityDetailPage(entity_type),
-      action: 'Save Entity to Items',
-      label: entityData[0].hubmap_id,
-    });
-  });
-
-  return <ActionButton onClick={handleClick} icon={SaveEntityIcon} tooltip="Save to list" />;
+  return <ActionButton onClick={() => handleSaveEntity()} icon={SaveEntityIcon} tooltip="Save to list" />;
 }
 
 function EditSavedEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
@@ -91,7 +71,7 @@ function WorkspaceSVGIcon({ color = 'primary', ...props }: SvgIconProps) {
   return <SvgIcon component={WorkspacesIcon} color={color} {...props} />;
 }
 
-function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }) {
+function SaveEditEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { savedEntities } = useSavedLists();
   const { isAuthenticated } = useAppContext();
 
@@ -99,11 +79,7 @@ function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { en
     return null;
   }
 
-  return uuid in savedEntities.savedEntities ? (
-    <EditSavedEntityButton uuid={uuid} />
-  ) : (
-    <SaveEntityButton entity_type={entity_type} uuid={uuid} />
-  );
+  return uuid in savedEntities.savedEntities ? <EditSavedEntityButton uuid={uuid} /> : <SaveEntityButton uuid={uuid} />;
 }
 
 function ViewSelectChip({
@@ -203,7 +179,7 @@ function EntityHeaderActionButtons({
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
-      <SaveEditEntityButton entity_type={entity_type} uuid={uuid} />
+      <SaveEditEntityButton uuid={uuid} />
       <JSONButton entity_type={entity_type} uuid={uuid} />
       {isDataset && (
         <ProcessedDataWorkspaceMenu

@@ -18,6 +18,8 @@ import {
 } from 'js/components/savedLists/api';
 import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
 import { trackEvent } from 'js/helpers/trackers';
+import { useEntitiesData } from 'js/hooks/useEntityData';
+import { useFlaskDataContext } from 'js/components/Contexts';
 
 function useGlobalMutateSavedList() {
   const { buildKey } = useBuildUkvSWRKey();
@@ -345,8 +347,32 @@ function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntiti
     setSuccessAlert(SavedListsSuccessAlertType.DeletedEntity);
   }
 
+  function useHandleSaveEntity({ entityUUID }: { entityUUID: string }) {
+    const {
+      entity: { entity_type },
+    } = useFlaskDataContext();
+    const [entityData] = useEntitiesData([entityUUID], ['hubmap_id']);
+
+    return useCallback(() => {
+      handleSaveEntities({ entityUUIDs: new Set([entityUUID]) }).catch((error) => {
+        console.error(error);
+      });
+
+      if (!entityData?.length) {
+        return;
+      }
+
+      trackEvent({
+        category: SavedListsEventCategories.EntityDetailPage(entity_type),
+        action: 'Save Entity to Items',
+        label: entityData[0].hubmap_id,
+      });
+    }, [entityUUID, entityData, entity_type]);
+  }
+
   return {
     handleSaveEntities,
+    useHandleSaveEntity,
     handleDeleteEntities,
     isUpdating,
   };
