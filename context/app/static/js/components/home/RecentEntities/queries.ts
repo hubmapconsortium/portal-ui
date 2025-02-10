@@ -42,7 +42,7 @@ export const recentPublicationsQuery: SearchRequest = {
   },
   sort: [
     {
-      last_modified_timestamp: {
+      'publication_date.keyword': {
         order: 'desc',
       },
     },
@@ -55,7 +55,7 @@ export const recentPublicationsQuery: SearchRequest = {
     'publication_status',
     'publication_venue',
     'publication_date',
-    'last_modified_timestamp',
+    'published_timestamp',
   ],
 };
 
