@@ -47,7 +47,7 @@ function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { useHandleSaveEntity } = useSavedLists();
   const handleSaveEntity = useHandleSaveEntity({ entityUUID: uuid });
 
-  return <ActionButton onClick={() => handleSaveEntity()} icon={SaveEntityIcon} tooltip="Save to list" />;
+  return <ActionButton onClick={handleSaveEntity} icon={SaveEntityIcon} tooltip="Save to list" />;
 }
 
 function EditSavedEntityButton({ uuid }: Pick<Entity, 'uuid'>) {

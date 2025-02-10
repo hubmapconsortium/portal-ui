@@ -5,7 +5,7 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import { trackEvent } from 'js/helpers/trackers';
-import { SavedListsEventCategories } from 'js/components/savedLists/constants';
+import { SavedListsEventCategories } from 'js/components/savedLists/types';
 import { useAppContext } from 'js/components/Contexts';
 import Description from 'js/shared-styles/sections/Description';
 import { InternalLink } from 'js/shared-styles/Links';

@@ -2,12 +2,11 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SavedEntitiesList, SavedEntity } from 'js/components/savedLists/types';
+import { SavedEntitiesList, SavedEntity, SavedListsEventCategories } from 'js/components/savedLists/types';
 import {
   SAVED_ENTITIES_DEFAULT,
   SAVED_ENTITIES_KEY,
   SAVED_ENTITIES_LOCAL_STORAGE_KEY,
-  SavedListsEventCategories,
 } from 'js/components/savedLists/constants';
 import {
   useBuildUkvSWRKey,
@@ -372,8 +371,8 @@ function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntiti
 
   return {
     handleSaveEntities,
-    useHandleSaveEntity,
     handleDeleteEntities,
+    useHandleSaveEntity,
     isUpdating,
   };
 }

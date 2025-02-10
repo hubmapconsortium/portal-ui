@@ -8,7 +8,7 @@ import { EditSavedEntityIcon, SaveEntityIcon } from 'js/shared-styles/icons';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { WhiteBackgroundIconTooltipButton } from 'js/shared-styles/buttons';
 import { trackEvent } from 'js/helpers/trackers';
-import { SavedListsEventCategories } from 'js/components/savedLists/constants';
+import { SavedListsEventCategories } from 'js/components/savedLists/types';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { generateCommaList } from 'js/helpers/functions';
 

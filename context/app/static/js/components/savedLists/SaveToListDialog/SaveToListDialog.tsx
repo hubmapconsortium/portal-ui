@@ -7,8 +7,8 @@ import DialogModal from 'js/shared-styles/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
 import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import useSavedLists from 'js/components/savedLists/hooks';
+import { SavedListsEventCategories } from 'js/components/savedLists/types';
 import { trackEvent } from 'js/helpers/trackers';
-import { SavedListsEventCategories } from 'js/components/savedLists/constants';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { generateCommaList } from 'js/helpers/functions';
 
