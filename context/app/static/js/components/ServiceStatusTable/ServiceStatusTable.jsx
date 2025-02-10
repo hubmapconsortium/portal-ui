@@ -16,7 +16,6 @@ import { useGatewayStatus } from './hooks';
 
 function buildServiceStatus(args) {
   const { apiName, endpointUrl, githubUrl, response = {}, noteFunction = () => '' } = args;
-  console.log('buildServiceStatus response', response);
   const { build, version: apiVersion } = response;
   const isUp = Boolean(Object.keys(response).length);
   // The gateway is implicit: If it's not up, you wouldn't get anything at all,
@@ -44,8 +43,6 @@ function ServiceStatusTable({
   ukvEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
-  console.log('gatewayStatus', gatewayStatus);
-  console.log('gatewayEndpoint', gatewayEndpoint);
 
   const apiStatuses = gatewayStatus
     ? [
