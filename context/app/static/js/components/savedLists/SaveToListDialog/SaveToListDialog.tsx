@@ -10,8 +10,7 @@ import useSavedLists from 'js/components/savedLists/hooks';
 import { trackEvent } from 'js/helpers/trackers';
 import { SavedListsEventCategories } from 'js/components/savedLists/constants';
 import { useEntitiesData } from 'js/hooks/useEntityData';
-
-const source = ['hubmap_id'];
+import { generateCommaList } from 'js/helpers/functions';
 
 interface SaveToListDialogProps {
   title: string;
@@ -30,23 +29,21 @@ function SaveToListDialog({
 }: SaveToListDialogProps) {
   const [selectedLists, addToSelectedLists, removeFromSelectedLists] = useStateSet<string>([]);
   const { savedLists, handleAddEntitiesToList } = useSavedLists();
-  const [entitiesData, isLoadingEntitiesData] = useEntitiesData(Array.from(entitiesToAdd), source);
+  const [entitiesData] = useEntitiesData(Array.from(entitiesToAdd), ['hubmap_id']);
 
   async function addSavedEntitiesToList() {
     await Promise.all(
       Array.from(selectedLists).map((list) => handleAddEntitiesToList({ listUUID: list, entityUUIDs: entitiesToAdd })),
     );
 
-    if (isLoadingEntitiesData) {
+    if (!entitiesData) {
       return;
     }
 
-    entitiesData.forEach((entity) => {
-      trackEvent({
-        category: SavedListsEventCategories.LandingPage,
-        action: 'Save Entity',
-        label: entity.hubmap_id,
-      });
+    trackEvent({
+      category: SavedListsEventCategories.LandingPage,
+      action: 'Save Entity',
+      label: generateCommaList(entitiesData.map((entity) => entity.hubmap_id)),
     });
   }
 

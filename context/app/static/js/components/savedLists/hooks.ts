@@ -95,6 +95,7 @@ function useCheckForLocalSavedEntities() {
 
   const updateList = useCallback(() => {
     const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+
     if (!localEntities) {
       return;
     }
@@ -278,13 +279,13 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
     title: string;
     description: string;
   }) {
-    await editList({ listUUID, list: savedListsAndEntities[listUUID], title, description });
-    await mutate();
     trackEvent({
       category: SavedListsEventCategories.DetailPage,
       action: 'Edit List',
       label: listUUID,
     });
+    await editList({ listUUID, list: savedListsAndEntities[listUUID], title, description });
+    await mutate();
   }
 
   async function handleAddEntitiesToList({ listUUID, entityUUIDs }: { listUUID: string; entityUUIDs: Set<string> }) {
@@ -306,14 +307,14 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
   }
 
   async function handleDeleteList({ listUUID }: { listUUID: string }) {
-    await deleteList({ listUUID });
-    await mutate();
-    setSuccessAlert(SavedListsSuccessAlertType.DeletedList);
     trackEvent({
       category: SavedListsEventCategories.DetailPage,
       action: 'Delete List',
       label: listUUID,
     });
+    await deleteList({ listUUID });
+    await mutate();
+    setSuccessAlert(SavedListsSuccessAlertType.DeletedList);
   }
 
   return {
