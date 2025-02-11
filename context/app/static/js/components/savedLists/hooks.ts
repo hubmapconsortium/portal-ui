@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -19,6 +19,7 @@ import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/
 import { trackEvent } from 'js/helpers/trackers';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { useFlaskDataContext } from 'js/components/Contexts';
+import { useEventCallback } from '@mui/material';
 
 function useGlobalMutateSavedList() {
   const { buildKey } = useBuildUkvSWRKey();
@@ -94,9 +95,7 @@ function useCheckForLocalSavedEntities() {
   const setListsAndEntities = useSetListsAndEntities();
   const setTransferredToProfileAlert = useSavedListsAlertsStore((state) => state.setTransferredToProfileAlert);
 
-  const hasTransferred = useRef(false);
-
-  const updateList = useCallback(() => {
+  return useEventCallback(() => {
     const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
 
     if (!localEntities) {
@@ -112,36 +111,36 @@ function useCheckForLocalSavedEntities() {
       if (savedLists && savedEntities) {
         setListsAndEntities({ savedLists, savedEntities })
           .then(() => {
-            if (hasTransferred.current) {
-              return;
-            }
-            hasTransferred.current = true;
-            setTransferredToProfileAlert(true);
-            localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+            // Necessary to do an explicit check here to ensure the event is tracked only once
+            if (localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY) !== null) {
+              setTransferredToProfileAlert(true);
+              localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
 
-            trackEvent({
-              category: SavedListsEventCategories.LandingPage,
-              action: 'Transfer Lists',
-              label: {
-                savedListsCount: Object.keys(savedLists).length,
-                savedEntitiesCount: Object.keys(savedEntities).length,
-              },
-            });
+              trackEvent({
+                category: SavedListsEventCategories.LandingPage,
+                action: 'Transfer Lists',
+                label: {
+                  savedListsCount: Object.keys(savedLists).length,
+                  savedEntitiesCount: Object.keys(savedEntities).length,
+                },
+              });
+            }
           })
           .catch((e) => console.error(e));
       }
     } catch (error) {
       console.error('Failed to parse saved_entities from local storage:', error);
     }
-  }, [setListsAndEntities, setTransferredToProfileAlert]);
-
-  useEffect(() => {
-    updateList();
-  }, [updateList]);
+  });
 }
 
 function useListSavedListsAndEntities() {
-  useCheckForLocalSavedEntities();
+  const checkForLocalSavedEntities = useCheckForLocalSavedEntities();
+
+  useEffect(() => {
+    checkForLocalSavedEntities();
+  }, [checkForLocalSavedEntities]);
+
   const { savedListsAndEntities, isLoading, mutate } = useFetchSavedListsAndEntities();
 
   // Saved entities should always be first, then the rest should be sorted by date saved
