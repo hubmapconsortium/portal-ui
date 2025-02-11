@@ -14,7 +14,7 @@ function buildCollectionsWithDatasetQuery(datasetUUIDs: string[]): SearchRequest
         'datasets.uuid': datasetUUIDs,
       },
     },
-    _source: ['uuid', 'title', 'hubmap_id', 'datasets'],
+    _source: ['uuid', 'title', 'hubmap_id', 'datasets.uuid'],
   };
 }
 
@@ -55,16 +55,20 @@ function useDatasetsCollectionsTabs() {
   );
 
   return useMemo(() => {
+    let atLeastOneCollection = false;
     return processedDatasetTabs
       .map((processedDatasetTab) => {
         const { uuid } = processedDatasetTab;
         const collectionsForDataset = collectionsMap[uuid];
+        if (collectionsForDataset?.length > 0) {
+          atLeastOneCollection = true;
+        }
         return {
           ...processedDatasetTab,
           collections: collectionsForDataset,
         };
       })
-      .filter((tab) => tab.collections?.length > 0 || tab.uuid === primaryDatasetId);
+      .filter((tab) => tab.collections?.length > 0 || (atLeastOneCollection && tab.uuid === primaryDatasetId));
   }, [collectionsMap, processedDatasetTabs, primaryDatasetId]);
 }
 

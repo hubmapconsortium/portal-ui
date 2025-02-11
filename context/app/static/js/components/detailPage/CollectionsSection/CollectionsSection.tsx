@@ -26,7 +26,7 @@ function CollectionPanel({
   const panelsProps = buildCollectionsPanelsProps(collections);
   if (panelsProps.length === 0) {
     return (
-      <TabPanel value={value} index={index}>
+      <TabPanel value={value} index={index} sx={{ '> .MuiPaper-root': { width: '100%' } }}>
         <OutlinedAlert severity="info">The raw dataset is not referenced in any existing collections.</OutlinedAlert>
       </TabPanel>
     );
