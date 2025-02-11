@@ -40,6 +40,7 @@ function ServiceStatusTable({
   workspacesEndpoint,
   ubkgEndpoint,
   softAssayEndpoint,
+  ukvEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
 
@@ -104,6 +105,12 @@ function ServiceStatusTable({
           response: gatewayStatus.ontology_api,
           endpointUrl: ubkgEndpoint,
           githubUrl: 'https://github.com/x-atlas-consortia/hs-ontology-api',
+        }),
+        buildServiceStatus({
+          apiName: 'ukv-api',
+          response: gatewayStatus.ukv_api,
+          endpointUrl: ukvEndpoint,
+          githubUrl: 'https://github.com/x-atlas-consortia/user-key-value-api',
         }),
       ]
     : [];
