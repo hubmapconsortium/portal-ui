@@ -42,21 +42,13 @@ export const recentPublicationsQuery: SearchRequest = {
   },
   sort: [
     {
-      last_modified_timestamp: {
+      'publication_date.keyword': {
         order: 'desc',
       },
     },
   ],
   size: 6,
-  _source: [
-    'uuid',
-    'title',
-    'contributors',
-    'publication_status',
-    'publication_venue',
-    'publication_date',
-    'last_modified_timestamp',
-  ],
+  _source: ['uuid', 'title', 'contributors', 'publication_status', 'publication_venue', 'publication_date'],
 };
 
 // Fetches the most recent datasets with a visualization
