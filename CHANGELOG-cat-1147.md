@@ -1,0 +1,1 @@
+- Fix display of provenance table for datasets with large ancestor trees.
