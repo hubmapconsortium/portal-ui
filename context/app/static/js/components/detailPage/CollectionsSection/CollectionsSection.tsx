@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { SyntheticEvent, useEffect } from 'react';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { useFlaskDataContext } from 'js/components/Contexts';
@@ -11,6 +11,8 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useTabs } from 'js/shared-styles/tabs';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
+import Skeleton from '@mui/material/Skeleton';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
 import CollectionsSectionProvider, { useCollectionsSectionContext } from './CollectionsSectionContext';
 
@@ -19,9 +21,11 @@ interface CollectionTabProps {
   uuid: string;
   index: number;
   icon?: React.ComponentType;
+  onClick?: (e: SyntheticEvent<Element, Event>) => void;
+  value: number;
 }
 
-function CollectionTab({ label, uuid, index, icon: Icon }: CollectionTabProps) {
+function CollectionTab({ label, uuid, index, icon: Icon, onClick, value }: CollectionTabProps) {
   const collectionsData = useDatasetsCollections([uuid]);
   const {
     entity: { uuid: primaryDatasetId },
@@ -34,6 +38,7 @@ function CollectionTab({ label, uuid, index, icon: Icon }: CollectionTabProps) {
     return null;
   }
   const isSingleTab = !processedDatasetHasCollections && isPrimaryDataset;
+  const isSelected = value === index;
 
   return (
     <Tab
@@ -42,6 +47,12 @@ function CollectionTab({ label, uuid, index, icon: Icon }: CollectionTabProps) {
       index={index}
       icon={Icon ? <Icon /> : undefined}
       iconPosition="start"
+      onClick={onClick}
+      value={index}
+      className={isSelected ? 'Mui-selected' : ''}
+      classes={{
+        root: isSelected ? 'Mui-selected' : '',
+      }}
     />
   );
 }
@@ -84,8 +95,18 @@ const collectionsSectionDescription =
 
 function CollectionsSection() {
   const processedDatasetTabs = useProcessedDatasetTabs();
+  const { isLoading } = useProcessedDatasets();
 
   const { openTabIndex, handleTabChange } = useTabs();
+
+  if (isLoading) {
+    return (
+      <CollapsibleDetailPageSection id="collections" title="Collections" icon={sectionIconMap.collections}>
+        <SectionDescription>{collectionsSectionDescription}</SectionDescription>
+        <Skeleton variant="rectangular" height={200} />
+      </CollapsibleDetailPageSection>
+    );
+  }
 
   return (
     <CollapsibleDetailPageSection id="collections" title="Collections" icon={sectionIconMap.collections}>
@@ -93,7 +114,15 @@ function CollectionsSection() {
         <SectionDescription>{collectionsSectionDescription}</SectionDescription>
         <Tabs value={openTabIndex} onChange={handleTabChange} aria-label="Dataset collections">
           {processedDatasetTabs.map(({ label, uuid, icon }, index) => (
-            <CollectionTab key={uuid} label={label} uuid={uuid} index={index} icon={icon} />
+            <CollectionTab
+              key={uuid}
+              label={label}
+              uuid={uuid}
+              index={index}
+              icon={icon}
+              value={openTabIndex}
+              onClick={(e) => handleTabChange(e, index)}
+            />
           ))}
         </Tabs>
         {processedDatasetTabs.map(({ uuid }, index) => (
