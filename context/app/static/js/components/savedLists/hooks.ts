@@ -352,35 +352,39 @@ function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntiti
     setSuccessAlert(SavedListsSuccessAlertType.DeletedEntity);
   }
 
-  function useHandleSaveEntity({ entityUUID }: { entityUUID: string }) {
-    const {
-      entity: { entity_type },
-    } = useFlaskDataContext();
-    const [entityData] = useEntitiesData([entityUUID], ['hubmap_id']);
-
-    return useCallback(() => {
-      handleSaveEntities({ entityUUIDs: new Set([entityUUID]) }).catch((error) => {
-        console.error(error);
-      });
-
-      if (!entityData?.length) {
-        return;
-      }
-
-      trackEvent({
-        category: SavedListsEventCategories.EntityDetailPage(entity_type),
-        action: 'Save Entity to Items',
-        label: entityData[0].hubmap_id,
-      });
-    }, [entityUUID, entityData, entity_type]);
-  }
-
   return {
     handleSaveEntities,
     handleDeleteEntities,
-    useHandleSaveEntity,
     isUpdating,
   };
+}
+
+function useHandleSaveEntity({ entityUUID }: { entityUUID: string }) {
+  const { savedEntities } = useListSavedListsAndEntities();
+  const { handleSaveEntities } = useSavedEntitiesActions({ savedEntities });
+
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
+  const [entityData] = useEntitiesData([entityUUID], ['hubmap_id']);
+
+  const handleSaveEntity = useEventCallback(() => {
+    handleSaveEntities({ entityUUIDs: new Set([entityUUID]) }).catch((error) => {
+      console.error(error);
+    });
+
+    if (!entityData?.length) {
+      return;
+    }
+
+    trackEvent({
+      category: SavedListsEventCategories.EntityDetailPage(entity_type),
+      action: 'Save Entity to Items',
+      label: entityData[0].hubmap_id,
+    });
+  });
+
+  return handleSaveEntity;
 }
 
 export default function useSavedLists() {
@@ -391,6 +395,7 @@ export default function useSavedLists() {
     savedLists,
     savedEntities,
     savedListsAndEntities,
+    useHandleSaveEntity,
     ...useSavedListsActions({ savedListsAndEntities }),
     ...useSavedEntitiesActions({ savedEntities }),
   };
