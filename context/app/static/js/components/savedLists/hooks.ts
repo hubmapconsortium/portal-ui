@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -94,6 +94,8 @@ function useCheckForLocalSavedEntities() {
   const setListsAndEntities = useSetListsAndEntities();
   const setTransferredToProfileAlert = useSavedListsAlertsStore((state) => state.setTransferredToProfileAlert);
 
+  const hasTransferred = useRef(false);
+
   const updateList = useCallback(() => {
     const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
 
@@ -110,8 +112,13 @@ function useCheckForLocalSavedEntities() {
       if (savedLists && savedEntities) {
         setListsAndEntities({ savedLists, savedEntities })
           .then(() => {
+            if (hasTransferred.current) {
+              return;
+            }
+            hasTransferred.current = true;
             setTransferredToProfileAlert(true);
             localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+
             trackEvent({
               category: SavedListsEventCategories.LandingPage,
               action: 'Transfer Lists',
