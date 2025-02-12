@@ -75,7 +75,6 @@ def get_organ_name_mapping():
         if len(search) > 0:
             for s in search:
                 organ_file_names[s.lower()] = k
-    print(organ_file_names)
     return organ_file_names
 
 
