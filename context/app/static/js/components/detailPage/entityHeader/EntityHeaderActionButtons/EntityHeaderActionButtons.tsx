@@ -2,7 +2,6 @@ import React, { useState, ElementType, useCallback } from 'react';
 import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
 import { IconButtonTypeMap } from '@mui/material/IconButton';
 import Stack from '@mui/material/Stack';
-import { useEventCallback } from '@mui/material/utils';
 import Button, { ButtonProps } from '@mui/material/Button';
 import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 
@@ -45,15 +44,10 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
 }
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
-  const { handleSaveEntities } = useSavedLists();
+  const { useHandleSaveEntity } = useSavedLists();
+  const handleSaveEntity = useHandleSaveEntity({ entityUUID: uuid });
 
-  const handleClick = useEventCallback(() => {
-    handleSaveEntities({ entityUUIDs: new Set([uuid]) }).catch((error) => {
-      console.error(error);
-    });
-  });
-
-  return <ActionButton onClick={handleClick} icon={SaveEntityIcon} tooltip="Save to list" />;
+  return <ActionButton onClick={handleSaveEntity} icon={SaveEntityIcon} tooltip="Save to list" />;
 }
 
 function EditSavedEntityButton({ uuid }: Pick<Entity, 'uuid'>) {

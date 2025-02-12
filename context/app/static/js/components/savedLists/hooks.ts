@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SavedEntitiesList, SavedEntity } from 'js/components/savedLists/types';
+import { SavedEntitiesList, SavedEntity, SavedListsEventCategories } from 'js/components/savedLists/types';
 import {
   SAVED_ENTITIES_DEFAULT,
   SAVED_ENTITIES_KEY,
@@ -15,9 +15,11 @@ import {
   useUkvApiURLs,
   useUpdateSavedList,
 } from 'js/components/savedLists/api';
-import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
-import { generateCommaList } from 'js/helpers/functions';
+import { trackEvent } from 'js/helpers/trackers';
+import { useEntitiesData } from 'js/hooks/useEntityData';
+import { useFlaskDataContext } from 'js/components/Contexts';
+import { useEventCallback } from '@mui/material';
 
 function useGlobalMutateSavedList() {
   const { buildKey } = useBuildUkvSWRKey();
@@ -93,8 +95,9 @@ function useCheckForLocalSavedEntities() {
   const setListsAndEntities = useSetListsAndEntities();
   const setTransferredToProfileAlert = useSavedListsAlertsStore((state) => state.setTransferredToProfileAlert);
 
-  const updateList = useCallback(() => {
+  return useEventCallback(() => {
     const localEntities = localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+
     if (!localEntities) {
       return;
     }
@@ -108,23 +111,36 @@ function useCheckForLocalSavedEntities() {
       if (savedLists && savedEntities) {
         setListsAndEntities({ savedLists, savedEntities })
           .then(() => {
-            setTransferredToProfileAlert(true);
-            localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+            // Necessary to do an explicit check here to ensure the event is tracked only once
+            if (localStorage.getItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY) !== null) {
+              setTransferredToProfileAlert(true);
+              localStorage.removeItem(SAVED_ENTITIES_LOCAL_STORAGE_KEY);
+
+              trackEvent({
+                category: SavedListsEventCategories.LandingPage,
+                action: 'Transfer Lists',
+                label: {
+                  savedListsCount: Object.keys(savedLists).length,
+                  savedEntitiesCount: Object.keys(savedEntities).length,
+                },
+              });
+            }
           })
           .catch((e) => console.error(e));
       }
     } catch (error) {
       console.error('Failed to parse saved_entities from local storage:', error);
     }
-  }, [setListsAndEntities, setTransferredToProfileAlert]);
-
-  useEffect(() => {
-    updateList();
-  }, [updateList]);
+  });
 }
 
 function useListSavedListsAndEntities() {
-  useCheckForLocalSavedEntities();
+  const checkForLocalSavedEntities = useCheckForLocalSavedEntities();
+
+  useEffect(() => {
+    checkForLocalSavedEntities();
+  }, [checkForLocalSavedEntities]);
+
   const { savedListsAndEntities, isLoading, mutate } = useFetchSavedListsAndEntities();
 
   // Saved entities should always be first, then the rest should be sorted by date saved
@@ -183,6 +199,12 @@ function useSavedListActions() {
       const listUUID = uuidv4();
       const list = { title, description, dateSaved: Date.now(), dateLastModified: Date.now(), savedEntities: {} };
       await updateList({ listUUID, list });
+
+      trackEvent({
+        category: SavedListsEventCategories.LandingPage,
+        action: 'Create List',
+        label: listUUID,
+      });
     },
     [updateList],
   );
@@ -264,6 +286,11 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
     title: string;
     description: string;
   }) {
+    trackEvent({
+      category: SavedListsEventCategories.DetailPage,
+      action: 'Edit List',
+      label: listUUID,
+    });
     await editList({ listUUID, list: savedListsAndEntities[listUUID], title, description });
     await mutate();
   }
@@ -287,6 +314,11 @@ function useSavedListsActions({ savedListsAndEntities }: { savedListsAndEntities
   }
 
   async function handleDeleteList({ listUUID }: { listUUID: string }) {
+    trackEvent({
+      category: SavedListsEventCategories.DetailPage,
+      action: 'Delete List',
+      label: listUUID,
+    });
     await deleteList({ listUUID });
     await mutate();
     setSuccessAlert(SavedListsSuccessAlertType.DeletedList);
@@ -307,13 +339,11 @@ function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntiti
   const mutate = useMutateSavedListsAndEntities();
   const { modifyEntities, isUpdating } = useSavedListActions();
   const setSuccessAlert = useSavedListsAlertsStore((state) => state.setSuccessAlert);
-  const trackSave = useTrackEntityPageEvent();
 
   async function handleSaveEntities({ entityUUIDs }: { entityUUIDs: Set<string> }) {
     await modifyEntities({ listUUID: SAVED_ENTITIES_KEY, list: savedEntities, entityUUIDs, action: 'Add' });
     await mutate();
     setSuccessAlert(SavedListsSuccessAlertType.SavedEntity);
-    trackSave({ action: 'Save To List', label: generateCommaList(Array.from(entityUUIDs)) });
   }
 
   async function handleDeleteEntities({ entityUUIDs }: { entityUUIDs: Set<string> }) {
@@ -329,6 +359,34 @@ function useSavedEntitiesActions({ savedEntities }: { savedEntities: SavedEntiti
   };
 }
 
+function useHandleSaveEntity({ entityUUID }: { entityUUID: string }) {
+  const { savedEntities } = useListSavedListsAndEntities();
+  const { handleSaveEntities } = useSavedEntitiesActions({ savedEntities });
+
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
+  const [entityData] = useEntitiesData([entityUUID], ['hubmap_id']);
+
+  const handleSaveEntity = useEventCallback(() => {
+    handleSaveEntities({ entityUUIDs: new Set([entityUUID]) }).catch((error) => {
+      console.error(error);
+    });
+
+    if (!entityData?.length) {
+      return;
+    }
+
+    trackEvent({
+      category: SavedListsEventCategories.EntityDetailPage(entity_type),
+      action: 'Save Entity to Items',
+      label: entityData[0].hubmap_id,
+    });
+  });
+
+  return handleSaveEntity;
+}
+
 export default function useSavedLists() {
   const { isLoading, savedLists, savedEntities, savedListsAndEntities } = useListSavedListsAndEntities();
 
@@ -337,6 +395,7 @@ export default function useSavedLists() {
     savedLists,
     savedEntities,
     savedListsAndEntities,
+    useHandleSaveEntity,
     ...useSavedListsActions({ savedListsAndEntities }),
     ...useSavedEntitiesActions({ savedEntities }),
   };
