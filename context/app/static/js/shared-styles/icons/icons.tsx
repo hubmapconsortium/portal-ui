@@ -40,6 +40,8 @@ import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
 import BookmarkAddRounded from '@mui/icons-material/BookmarkAddRounded';
 import BookmarkAddedRounded from '@mui/icons-material/BookmarkAddedRounded';
 import BiotechRounded from '@mui/icons-material/BiotechRounded';
+import InboxRounded from '@mui/icons-material/InboxRounded';
+import SendIcon from '@mui/icons-material/Send';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -135,6 +137,10 @@ const CheckIcon = withIconStyles(CheckRoundedIcon);
 
 const SampleCategoryIcon = withIconStyles(BiotechRounded);
 
+const ReceivedIcon = withIconStyles(InboxRounded);
+
+const SentIcon = withIconStyles(SendIcon);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -194,4 +200,6 @@ export {
   EditSavedEntityIcon,
   CheckIcon,
   SampleCategoryIcon,
+  ReceivedIcon,
+  SentIcon,
 };

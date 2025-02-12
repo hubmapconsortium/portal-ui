@@ -195,8 +195,10 @@ function useFetchInvitations(invitationId?: number) {
       }),
     { revalidateOnFocus: hasAccess },
   );
-  const invitations = data?.data ?? [];
-  return { invitations, isLoading, ...rest };
+  const sentInvitations = data?.data?.invitations?.original_workspaces ?? [];
+  const recievedInvitations = data?.data?.invitations?.shared_workspaces ?? [];
+
+  return { sentInvitations, recievedInvitations, isLoading, ...rest };
 }
 
 export function useInvitations() {

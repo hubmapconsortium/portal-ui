@@ -19,10 +19,7 @@ import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
 function WorkspacesList() {
   const { workspacesList, handleDeleteWorkspace, isDeleting } = useWorkspacesList();
   const { selectedItems, toggleItem } = useSelectItems();
-
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
-
-  const { invitations } = useInvitationsList();
 
   return (
     <>
@@ -35,9 +32,7 @@ function WorkspacesList() {
       />
       <SpacedSectionButtonRow
         leftText={
-          <Typography variant="subtitle1">
-            {workspacesList.length} Workspace{workspacesList.length !== 1 && 's'}
-          </Typography>
+          <Typography variant="h4">My Workspaces</Typography>
         }
         buttons={
           <Stack direction="row" gap={1}>

@@ -137,9 +137,10 @@ function useWorkspacesList() {
 }
 
 function useInvitationsList() {
-  const { invitations, isLoading: invitationsLoading } = useInvitations();
+  const { sentInvitations, recievedInvitations, isLoading: invitationsLoading } = useInvitations();
   return {
-    invitations,
+    sentInvitations,
+    recievedInvitations,
     invitationsLoading,
   };
 }
