@@ -70,6 +70,16 @@ export const includeOnlyDatasetsClause: QueryDslQueryContainer = {
   },
 };
 
+export const includeOnlyCollectionsClause: QueryDslQueryContainer = {
+  bool: {
+    must: {
+      term: {
+        'entity_type.keyword': 'Collection',
+      },
+    },
+  },
+};
+
 export function getAncestorsQuery(descendantUUID: string): QueryDslQueryContainer {
   return {
     bool: {

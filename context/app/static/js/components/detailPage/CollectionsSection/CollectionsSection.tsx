@@ -1,76 +1,35 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
-import { useFlaskDataContext } from 'js/components/Contexts';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
-import { useDatasetsCollections } from 'js/hooks/useDatasetsCollections';
+import { useDatasetsCollectionsTabs } from 'js/hooks/useDatasetsCollections';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useTabs } from 'js/shared-styles/tabs';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
-import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
-import CollectionsSectionProvider, { useCollectionsSectionContext } from './CollectionsSectionContext';
+import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
+import Skeleton from '@mui/material/Skeleton';
+import { CollectionHit } from 'js/pages/Collections/types';
 
-interface CollectionTabProps {
-  label: string;
-  uuid: string;
+function CollectionPanel({
+  index,
+  value,
+  collections = [],
+}: {
   index: number;
-  icon?: React.ComponentType;
-}
-
-function CollectionTab({ label, uuid, index, icon: Icon }: CollectionTabProps) {
-  const collectionsData = useDatasetsCollections([uuid]);
-  const {
-    entity: { uuid: primaryDatasetId },
-  } = useFlaskDataContext();
-  const { processedDatasetHasCollections } = useCollectionsSectionContext();
-
-  const isPrimaryDataset = uuid === primaryDatasetId;
-
-  if (!collectionsData || (collectionsData.length === 0 && uuid !== primaryDatasetId)) {
-    return null;
-  }
-  const isSingleTab = !processedDatasetHasCollections && isPrimaryDataset;
-
-  return (
-    <Tab
-      label={label}
-      isSingleTab={isSingleTab}
-      index={index}
-      icon={Icon ? <Icon /> : undefined}
-      iconPosition="start"
-    />
-  );
-}
-
-function CollectionPanel({ uuid, index, value }: { uuid: string; index: number; value: number }) {
-  const collectionsData = useDatasetsCollections([uuid]);
-  const { setProcessedDatasetHasCollections } = useCollectionsSectionContext();
-  const {
-    entity: { uuid: primaryDatasetId },
-  } = useFlaskDataContext();
-
-  useEffect(() => {
-    if (uuid !== primaryDatasetId && collectionsData?.length > 0) {
-      setProcessedDatasetHasCollections(true);
-    }
-  }, [collectionsData?.length, primaryDatasetId, setProcessedDatasetHasCollections, uuid]);
-  if (!collectionsData) {
-    return null;
-  }
-  const panelsProps = buildCollectionsPanelsProps(collectionsData);
+  value: number;
+  collections: CollectionHit[];
+}) {
+  const panelsProps = buildCollectionsPanelsProps(collections);
   if (panelsProps.length === 0) {
-    if (uuid === primaryDatasetId) {
-      return (
-        <TabPanel value={value} index={index}>
-          <OutlinedAlert severity="info">The raw dataset is not referenced in any existing collections.</OutlinedAlert>
-        </TabPanel>
-      );
-    }
-    return null;
+    return (
+      <TabPanel value={value} index={index} sx={{ '> .MuiPaper-root': { width: '100%' } }}>
+        <OutlinedAlert severity="info">The raw dataset is not referenced in any existing collections.</OutlinedAlert>
+      </TabPanel>
+    );
   }
   return (
     <TabPanel value={value} index={index}>
@@ -83,23 +42,51 @@ const collectionsSectionDescription =
   'Collections may contain references to either raw or processed datasets. If a processed dataset is not included in any collection, there will be no corresponding tabs in the table below.';
 
 function CollectionsSection() {
-  const processedDatasetTabs = useProcessedDatasetTabs();
+  const datasetCollectionsTabs = useDatasetsCollectionsTabs();
 
-  const { openTabIndex, handleTabChange } = useTabs();
+  const { isLoading } = useProcessedDatasets();
+
+  const { openTabIndex, handleTabChange, setOpenTabIndex } = useTabs(0);
+
+  if (isLoading) {
+    return (
+      <CollapsibleDetailPageSection id="collections" title="Collections" icon={sectionIconMap.collections}>
+        <SectionDescription>{collectionsSectionDescription}</SectionDescription>
+        <Skeleton variant="rectangular" height={200} />
+      </CollapsibleDetailPageSection>
+    );
+  }
+
+  if (datasetCollectionsTabs.length === 0) {
+    return null;
+  }
 
   return (
     <CollapsibleDetailPageSection id="collections" title="Collections" icon={sectionIconMap.collections}>
-      <CollectionsSectionProvider>
-        <SectionDescription>{collectionsSectionDescription}</SectionDescription>
-        <Tabs value={openTabIndex} onChange={handleTabChange} aria-label="Dataset collections">
-          {processedDatasetTabs.map(({ label, uuid, icon }, index) => (
-            <CollectionTab key={uuid} label={label} uuid={uuid} index={index} icon={icon} />
-          ))}
-        </Tabs>
-        {processedDatasetTabs.map(({ uuid }, index) => (
-          <CollectionPanel key={uuid} uuid={uuid} index={index} value={openTabIndex} />
+      <SectionDescription>{collectionsSectionDescription}</SectionDescription>
+      <Tabs
+        value={openTabIndex}
+        onChange={(e, newValue) => {
+          handleTabChange(e, newValue as number);
+        }}
+        aria-label="Dataset collections"
+      >
+        {datasetCollectionsTabs.map(({ label, uuid, icon: Icon }, index) => (
+          <Tab
+            key={uuid}
+            label={label}
+            isSingleTab={datasetCollectionsTabs.length === 1}
+            index={index}
+            icon={Icon ? <Icon /> : undefined}
+            iconPosition="start"
+            onClick={() => setOpenTabIndex(index)}
+            value={index}
+          />
         ))}
-      </CollectionsSectionProvider>
+      </Tabs>
+      {datasetCollectionsTabs.map(({ uuid, collections }, index) => (
+        <CollectionPanel key={uuid} index={index} value={openTabIndex} collections={collections} />
+      ))}
     </CollapsibleDetailPageSection>
   );
 }

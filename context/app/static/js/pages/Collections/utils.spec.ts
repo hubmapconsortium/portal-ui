@@ -8,7 +8,11 @@ test('should return the props require for the panel list', () => {
         uuid: 'abc123',
         title: 'Collection ABC',
         hubmap_id: 'HBM_ABC123',
-        datasets: [{ hubmap_id: 'a' }, { hubmap_id: 'b' }, { hubmap_id: 'c' }],
+        datasets: [
+          { hubmap_id: 'a', uuid: 'a123' },
+          { hubmap_id: 'b', uuid: 'b234' },
+          { hubmap_id: 'c', uuid: 'c345' },
+        ],
       },
     },
   ];
