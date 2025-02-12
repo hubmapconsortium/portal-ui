@@ -7,12 +7,12 @@ type MarkerGenesKey = string;
 
 type MarkerGenesResponse = object[];
 
-interface MarkerGenesParams {
+export interface MarkerGenesParams {
   markerGenes: string | string[];
   datasetName?: string;
   annotationNames?: AnnotationNamesList;
   exhaustive?: boolean;
-  support_cutoff?: number;
+  supportCutoff?: number;
 }
 
 function createMarkerGenesKey({
@@ -20,14 +20,14 @@ function createMarkerGenesKey({
   datasetName,
   annotationNames,
   exhaustive,
-  support_cutoff,
+  supportCutoff,
 }: MarkerGenesParams): MarkerGenesKey {
   return createScfindKey('markerGenes', {
     marker_genes: Array.isArray(markerGenes) ? markerGenes.join(',') : markerGenes,
     dataset_name: datasetName,
     annotation_names: annotationNamesToGetParams(annotationNames),
     exhaustive: exhaustive !== undefined ? String(exhaustive) : undefined,
-    support_cutoff: support_cutoff !== undefined ? String(support_cutoff) : undefined,
+    support_cutoff: supportCutoff !== undefined ? String(supportCutoff) : undefined,
   });
 }
 

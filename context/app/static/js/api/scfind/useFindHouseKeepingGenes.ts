@@ -3,7 +3,7 @@ import { fetcher } from 'js/helpers/swr';
 import { createScfindKey, annotationNamesToGetParams } from './utils';
 import { AnnotationNamesList } from './types';
 
-interface FindHouseKeepingGenesParams {
+export interface FindHouseKeepingGenesParams {
   cellTypes?: string | string[];
   annotationNames?: AnnotationNamesList;
   minRecall?: number;

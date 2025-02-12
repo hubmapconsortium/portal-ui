@@ -3,7 +3,7 @@ import { fetcher } from 'js/helpers/swr';
 import { createScfindKey, annotationNamesToGetParams } from './utils';
 import { AnnotationNamesList } from './types';
 
-interface EvaluateMarkersParams {
+export interface FindCellTypeSpecificitiesParams {
   geneList?: string | string[];
   annotationNames?: AnnotationNamesList;
   minCells?: number;
@@ -12,7 +12,7 @@ interface EvaluateMarkersParams {
 
 type EvaluateMarkersKey = string;
 
-interface EvaluateMarkersResponse {
+interface FindCellTypeSpecificitiesResponse {
   evaluateMarkers: unknown;
 }
 
@@ -21,7 +21,7 @@ export function createCellTypeSpecificitiesKey({
   annotationNames,
   minCells,
   minFraction,
-}: EvaluateMarkersParams): EvaluateMarkersKey {
+}: FindCellTypeSpecificitiesParams): EvaluateMarkersKey {
   return createScfindKey('findCellTypeSpecificities', {
     annotation_names: annotationNamesToGetParams(annotationNames),
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
@@ -30,7 +30,7 @@ export function createCellTypeSpecificitiesKey({
   });
 }
 
-export default function useFindCellTypeSpecificities(params: EvaluateMarkersParams) {
+export default function useFindCellTypeSpecificities(params: FindCellTypeSpecificitiesParams) {
   const key = createCellTypeSpecificitiesKey(params);
-  return useSWR<EvaluateMarkersResponse, unknown, EvaluateMarkersKey>(key, (url) => fetcher({ url }));
+  return useSWR<FindCellTypeSpecificitiesResponse, unknown, EvaluateMarkersKey>(key, (url) => fetcher({ url }));
 }

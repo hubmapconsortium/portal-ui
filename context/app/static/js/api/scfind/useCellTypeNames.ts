@@ -5,7 +5,7 @@ import { AnnotationNamesList } from './types';
 
 type CellTypeNamesKey = string;
 
-interface CellTypeNamesParams {
+export interface CellTypeNamesParams {
   annotationNames: AnnotationNamesList;
 }
 

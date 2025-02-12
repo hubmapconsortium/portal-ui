@@ -3,10 +3,10 @@ import { fetcher } from 'js/helpers/swr';
 import { createScfindKey, annotationNamesToGetParams } from './utils';
 import { AnnotationNamesList } from './types';
 
-interface CellTypeNamesParams {
+export interface CellTypeNamesParams {
   geneList: string | string[];
-  annotationNames: AnnotationNamesList;
-  includePrefix: boolean;
+  annotationNames?: AnnotationNamesList;
+  includePrefix?: boolean;
 }
 
 interface CellTypeNamesResponse {

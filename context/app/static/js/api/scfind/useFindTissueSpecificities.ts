@@ -2,7 +2,7 @@ import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { createScfindKey } from './utils';
 
-interface FindTissueSpecificitiesParams {
+export interface FindTissueSpecificitiesParams {
   geneList?: string | string[];
   minCells?: number;
 }

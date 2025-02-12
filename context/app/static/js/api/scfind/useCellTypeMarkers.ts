@@ -14,9 +14,9 @@ interface CellTypeMarkerInfo {
   tp: number;
 }
 
-interface CellTypeMarkersParams {
+export interface CellTypeMarkersParams {
   cellTypes: string | string[];
-  annotationNames: AnnotationNamesList;
+  annotationNames?: AnnotationNamesList;
   backgroundCellTypes?: string[];
   backgroundAnnotationNames?: AnnotationNamesList;
   topK?: number;

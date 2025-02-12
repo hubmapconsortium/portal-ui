@@ -1,7 +1,12 @@
 import { AnnotationNamesList } from './types';
 
-// Current URL for SCFind as of 1/13/2025
-export const SCFIND_BASE = 'http://44.197.120.34/api';
+// Current URL for SCFind as of 2/12/2025
+// PROD
+export const SCFIND_BASE = 'http://scfind.hubmapconsortium.org/api';
+// DEV
+// export const SCFIND_BASE = 'http://18.219.167.106:8080/api';
+
+// TODO: Transfer to app config
 
 /**
  * Helper method to form URLs for SCFind API requests

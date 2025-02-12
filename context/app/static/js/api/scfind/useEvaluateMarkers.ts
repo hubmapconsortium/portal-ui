@@ -3,7 +3,7 @@ import { fetcher } from 'js/helpers/swr';
 import { createScfindKey, annotationNamesToGetParams } from './utils';
 import { AnnotationNamesList } from './types';
 
-interface EvaluateMarkersParams {
+export interface EvaluateMarkersParams {
   geneList: string | string[];
   cellTypes: string | string[];
   annotationNames?: AnnotationNamesList;
