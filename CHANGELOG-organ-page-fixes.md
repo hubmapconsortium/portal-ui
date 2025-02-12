@@ -1,4 +1,0 @@
-- Ensure ovary and fallopian tube organ pages are properly populated with left/right laterality datasets.
-- Ensure urinary bladder organ page includes Bladder datasets.
-- Ensure bladder organ icon displays appropriately.
-- Ensure cell population plot controls drawer does not overlap the app bar.

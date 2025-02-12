@@ -1,1 +1,0 @@
-- Fix collections tabs being unselectable.

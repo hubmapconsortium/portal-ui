@@ -1,1 +1,0 @@
-- Fix bug allowing non-public datasets to be added to workspaces.

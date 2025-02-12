@@ -1,1 +1,0 @@
-- Sort "Recent Publications" on home page by publication date.
