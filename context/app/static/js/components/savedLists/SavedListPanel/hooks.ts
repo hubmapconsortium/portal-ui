@@ -29,13 +29,31 @@ function useSavedEntityCountsData(savedEntities: Record<string, SavedEntity>) {
 function useSavedEntityTypeCounts(listSavedEntities: Record<string, SavedEntity>) {
   const { searchData } = useSavedEntityCountsData(listSavedEntities);
 
-  const counts = { donors: 0, samples: 0, datasets: 0 };
+  const counts = useMemo(() => {
+    if (!searchData?.aggregations?.entity_counts?.buckets) {
+      return { donors: 0, samples: 0, datasets: 0 };
+    }
 
-  searchData?.aggregations?.entity_counts?.buckets?.forEach((bucket) => {
-    if (bucket.key === 'Donor') counts.donors = bucket.doc_count;
-    else if (bucket.key === 'Sample') counts.samples = bucket.doc_count;
-    else if (bucket.key === 'Dataset') counts.datasets = bucket.doc_count;
-  });
+    return searchData.aggregations.entity_counts.buckets.reduce(
+      (acc, { key, doc_count }) => {
+        switch (key) {
+          case 'Donor':
+            acc.donors = doc_count;
+            break;
+          case 'Sample':
+            acc.samples = doc_count;
+            break;
+          case 'Dataset':
+            acc.datasets = doc_count;
+            break;
+          default:
+            break;
+        }
+        return acc;
+      },
+      { donors: 0, samples: 0, datasets: 0 },
+    );
+  }, [searchData]);
 
   return counts;
 }
