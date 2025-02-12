@@ -10,7 +10,7 @@ function FindTissueSpecificitiesControl(params: FindTissueSpecificitiesParams) {
   const result = useFindTissueSpecificities(params);
   return (
     <Stack>
-      <Typography variant="h6">Find Similar Genes</Typography>
+      <Typography variant="h6">Find Tissue Specificities</Typography>
       <Typography variant="body1">Params:</Typography>
       <pre>{JSON.stringify(params, null, 2)}</pre>
       <Typography variant="body1">Results:</Typography>

@@ -10,7 +10,7 @@ function FindCellTypeSpecificitiesControl(params: FindCellTypeSpecificitiesParam
   const result = useFindCellTypeSpecificities(params);
   return (
     <Stack>
-      <Typography variant="h6">Cell Type Names</Typography>
+      <Typography variant="h6">Find Cell Type Specificities</Typography>
       <Typography variant="body1">Params:</Typography>
       <pre>{JSON.stringify(params, null, 2)}</pre>
       <Typography variant="body1">Results:</Typography>
