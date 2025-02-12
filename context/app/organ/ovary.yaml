@@ -7,4 +7,6 @@ asctb: ovary-v1.2
 description: The gonad of a female organism which contains germ cells.
 icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-ovaries.svg
 has_iu_component: true
-search: []
+search:
+  - Ovary (Left)
+  - Ovary (Right)

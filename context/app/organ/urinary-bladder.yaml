@@ -8,4 +8,5 @@ description: Distensible musculomembranous organ situated in the anterior part o
   the pelvic cavity in which urine collects before excretion[MP].
 icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-bladder.svg
 has_iu_component: true
-search: []
+search:
+  - Bladder
