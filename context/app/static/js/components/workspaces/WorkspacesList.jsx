@@ -11,7 +11,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
 
-import { useWorkspacesList } from './hooks';
+import { useInvitationsList, useWorkspacesList } from './hooks';
 import WorkspaceButton from './WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from './NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
@@ -21,6 +21,8 @@ function WorkspacesList() {
   const { selectedItems, toggleItem } = useSelectItems();
 
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
+  const { invitations } = useInvitationsList();
 
   return (
     <>

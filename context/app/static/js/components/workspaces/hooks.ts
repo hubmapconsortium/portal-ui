@@ -28,6 +28,7 @@ import {
   UpdateWorkspaceBody,
   useWorkspacesApiURLs,
   useBuildWorkspacesSWRKey,
+  useInvitations,
 } from './api';
 import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
 
@@ -57,17 +58,18 @@ interface createAndLaunchWorkspaceProps {
 }
 
 /**
- * Returns a function that will mutate workspaces, jobs, and optionally a single workspace's details
+ * Returns a function that will mutate workspaces, jobs, invitations, and optionally a single workspace's details
  *
  * @param mutateWorkspace The mutate function for a single workspace
- * @returns A function that will revalidate workspaces, jobs, and optionally a workspace
+ * @returns A function that will revalidate workspaces, jobs, invitations, and optionally a workspace
  */
 function useMutateWorkspacesAndJobs<T>(mutateWorkspace?: KeyedMutator<T>) {
   const { mutate: mutateJobs } = useJobs();
   const { mutate: mutateWorkspaces } = useWorkspaces();
+  const { mutate: mutateInvitations } = useInvitations();
   const mutate = useCallback(async () => {
-    await Promise.all([mutateWorkspaces(), mutateJobs(), mutateWorkspace?.()]);
-  }, [mutateWorkspaces, mutateJobs, mutateWorkspace]);
+    await Promise.all([mutateWorkspaces(), mutateJobs(), mutateInvitations(), mutateWorkspace?.()]);
+  }, [mutateWorkspaces, mutateJobs, mutateInvitations, mutateWorkspace]);
 
   return mutate;
 }
@@ -132,6 +134,14 @@ function useWorkspacesList() {
     workspaces,
     workspacesLoading,
   });
+}
+
+function useInvitationsList() {
+  const { invitations, isLoading: invitationsLoading } = useInvitations();
+  return {
+    invitations,
+    invitationsLoading,
+  };
 }
 
 function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, never> = {}) {
@@ -413,6 +423,7 @@ function useUpdateWorkspaceDatasets({ workspaceId }: { workspaceId: number }) {
 
 export {
   useWorkspacesList,
+  useInvitationsList,
   useHasRunningWorkspace,
   useRunningWorkspace,
   useLaunchWorkspace,
