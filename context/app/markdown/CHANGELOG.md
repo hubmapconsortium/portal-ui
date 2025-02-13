@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.20.3 - 2025-02-13
+
+- Add metrics for the "My Lists" feature.
+- Update "My Lists" feature to persist across devices for logged-in users.
+- Update "My Lists" UI and messaging.
+- Update services page to include new UKV endpoint.
+
+
+
 ## v1.20.2 - 2025-02-12
 
 - Fix collections tabs being unselectable.
