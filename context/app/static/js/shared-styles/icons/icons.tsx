@@ -44,6 +44,7 @@ import InboxRounded from '@mui/icons-material/InboxRounded';
 import SendIcon from '@mui/icons-material/Send';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CancelIcon from '@mui/icons-material/Cancel';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -147,6 +148,8 @@ const EyeIcon = withIconStyles(VisibilityIcon);
 
 const DotMenuIcon = withIconStyles(MoreVertIcon);
 
+const CloseFilledIcon = withIconStyles(CancelIcon);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -210,4 +213,5 @@ export {
   SentIcon,
   EyeIcon,
   DotMenuIcon,
+  CloseFilledIcon,
 };

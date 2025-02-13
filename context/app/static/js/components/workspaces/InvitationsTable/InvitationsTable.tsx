@@ -9,26 +9,27 @@ import { format } from 'date-fns/format';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { WorkspaceInvitation } from 'js/components/workspaces/types';
-import {
-  StyledTable,
-  StyledTableBody,
-  StyledTableRow,
-  StyledTableCell,
-  ArrowUpOn,
-  ArrowDownOn,
-  ArrowDownOff,
-  StyledHeaderCell,
-} from 'js/components/search/Results/style';
-import { Button, TableCell, Typography, useEventCallback } from '@mui/material';
+
+import { Button, Typography, useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { CheckIcon, CloseIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
+import { CheckIcon, CloseFilledIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { SortDirection, TableField, useInvitationsTable, getInvitationFieldValue } from './hooks';
-import { ChipWrapper } from './style';
+import {
+  StyledTable,
+  StyledTableBody,
+  CompactTableRow,
+  StyledTableCell,
+  ArrowUpOn,
+  ArrowDownOn,
+  ArrowDownOff,
+  StyledHeaderCell,
+  ChipWrapper,
+} from './style';
 
 export function OrderIcon({
   direction,
@@ -113,7 +114,7 @@ function CellContent({ invitation, field }: { field: string; invitation: Workspa
 
       return (
         <Stack direction="row" alignItems="center">
-          <Typography>{`${firstName} ${lastName} (${email})`}</Typography>
+          <Typography>{`${firstName} ${lastName}`}</Typography>
           <Button href={`mailto:${email}`} sx={{ minWidth: 0 }}>
             <EmailIcon color="info" />
           </Button>
@@ -154,13 +155,13 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
       children: 'Decline Invitation',
       // eslint-disable-next-line @typescript-eslint/no-empty-function
       onClick: () => {},
-      icon: CloseIcon,
+      icon: CloseFilledIcon,
     },
   ];
 
   return (
-    <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-      <StyledTableCell size="small">
+    <CompactTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <StyledTableCell width="0">
         <IconButton aria-label="expand row" size="small" onClick={() => setIsExpanded(!isExpanded)}>
           {isExpanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
         </IconButton>
@@ -171,7 +172,7 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
         </StyledTableCell>
       ))}
       <StyledTableCell>
-        <Stack direction="row" alignItems="center">
+        <Stack direction="row" justifyContent="end" alignItems="center">
           <IconDropdownMenu tooltip="More options" icon={MoreIcon} button={RotatedTooltipButton}>
             {options.map((props) => (
               <IconDropdownMenuItem key={props.children} {...props} />
@@ -185,7 +186,7 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
           </IconButton>
         </Stack>
       </StyledTableCell>
-    </StyledTableRow>
+    </CompactTableRow>
   );
 });
 
@@ -231,26 +232,24 @@ const InvitationsTable = React.memo(function InvitationsTable({
 
   return (
     <Box>
+      <ChipWrapper>
+        <SelectableChip
+          label={`Show Pending (${pendingCount})`}
+          isSelected={showPending}
+          onClick={() => setShowPending((prev) => !prev)}
+          disabled={!pendingCount}
+        />
+        <SelectableChip
+          label={`Show Accepted (${acceptedCount})`}
+          isSelected={showAccepted}
+          onClick={() => setShowAccepted((prev) => !prev)}
+          disabled={!acceptedCount}
+        />
+      </ChipWrapper>
       <StyledTable>
-        <TableHead sx={(theme) => ({ borderBottom: `1px solid ${theme.palette.grey[300]}` })}>
-          <ChipWrapper>
-            <SelectableChip
-              label={`Show Pending (${pendingCount})`}
-              isSelected={showPending}
-              onClick={() => setShowPending((prev) => !prev)}
-              disabled={!pendingCount}
-            />
-            <SelectableChip
-              label={`Show Accepted (${acceptedCount})`}
-              isSelected={showAccepted}
-              onClick={() => setShowAccepted((prev) => !prev)}
-              disabled={!acceptedCount}
-            />
-          </ChipWrapper>
-        </TableHead>
         <TableHead>
           <TableRow>
-            <TableCell size="small" />
+            <StyledTableCell width="0" />
             <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
             <StyledTableCell />
           </TableRow>
