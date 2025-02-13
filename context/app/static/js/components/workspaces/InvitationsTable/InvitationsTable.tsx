@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
@@ -22,13 +22,7 @@ import {
 import { Button, Typography, useEventCallback } from '@mui/material';
 import { getInvitationFieldValue } from 'js/components/workspaces/InvitationsTable/utils';
 import { EmailIcon } from 'js/shared-styles/icons';
-
-type SortDirection = 'asc' | 'desc';
-
-interface TableField {
-  field: string;
-  label: string;
-}
+import { SortDirection, TableField, useInvitationsTable } from './hooks';
 
 export function OrderIcon({
   direction,
@@ -56,17 +50,21 @@ export function getSortOrder({
   return direction === 'desc' ? 'asc' : 'desc';
 }
 
-function SortHeaderCell({ field, label }: { field: string; label: string }) {
-  const [sortField, setSortField] = useState<{ direction: SortDirection; field: string }>({
-    direction: 'desc',
-    field: '',
-  });
-
-  const { direction, field: currentSortField } = sortField;
-  const isCurrentSortField = field === currentSortField;
+function SortHeaderCell({
+  field,
+  label,
+  sortField,
+  setSortField,
+}: {
+  field: string;
+  label: string;
+  sortField: { direction: SortDirection; field: string };
+  setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
+}) {
+  const isCurrentSortField = field === sortField.field;
 
   const handleClick = useEventCallback(() => {
-    const newSortDirection = getSortOrder({ direction, isCurrentSortField });
+    const newSortDirection = getSortOrder({ direction: sortField.direction, isCurrentSortField });
     setSortField({ direction: newSortDirection, field });
   });
 
@@ -80,7 +78,7 @@ function SortHeaderCell({ field, label }: { field: string; label: string }) {
           color: theme.palette.text.primary,
         })}
       >
-        <OrderIcon direction={direction} isCurrentSortField={isCurrentSortField} />
+        <OrderIcon direction={sortField.direction} isCurrentSortField={isCurrentSortField} />
       </IconButton>
     </StyledHeaderCell>
   );
@@ -154,11 +152,19 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
   );
 });
 
-const HeaderCells = React.memo(function HeaderCells({ tableFields }: { tableFields: TableField[] }) {
+const HeaderCells = React.memo(function HeaderCells({
+  tableFields,
+  sortField,
+  setSortField,
+}: {
+  tableFields: TableField[];
+  sortField: { direction: SortDirection; field: string };
+  setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
+}) {
   return (
     <>
       {tableFields.map(({ field, label }) => (
-        <SortHeaderCell key={field} field={field} label={label} />
+        <SortHeaderCell key={field} field={field} label={label} sortField={sortField} setSortField={setSortField} />
       ))}
     </>
   );
@@ -173,32 +179,19 @@ const InvitationsTable = React.memo(function InvitationsTable({
   invitations: WorkspaceInvitation[];
   status: 'Received' | 'Sent';
 }) {
-  const tableFields: TableField[] = [
-    {
-      field: 'original_workspace_id.name',
-      label: 'Name',
-    },
-    {
-      field: status === 'Received' ? 'original_workspace_id.user_id.username' : 'shared_workspace_id.user_id.username',
-      label: status === 'Received' ? 'Shared By' : 'Recipient',
-    },
-    {
-      field: 'datetime_share_created',
-      label: 'Shared Date',
-    },
-  ];
+  const { tableFields, sortField, setSortField, sortedInvitations } = useInvitationsTable({ invitations, status });
 
   return (
     <Box>
       <StyledTable>
         <TableHead>
           <TableRow>
-            <HeaderCells tableFields={tableFields} />
+            <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
           </TableRow>
         </TableHead>
         <StyledTableBody>
           {isLoading && !invitations?.length && <LoadingRows tableWidth={tableFields.length} />}
-          {invitations.map((invitation) => (
+          {sortedInvitations.map((invitation) => (
             <ResultRow invitation={invitation} key={invitation.datetime_share_created} tableFields={tableFields} />
           ))}
         </StyledTableBody>
