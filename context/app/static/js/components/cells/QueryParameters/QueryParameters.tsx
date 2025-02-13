@@ -13,7 +13,6 @@ import { useDatasetsSelectedByExpression } from './hooks';
 import GenomicModality from './GenomicModality';
 
 interface DatasetsSelectedByExpressionProps {
-  runQueryButtonRef: React.RefObject<HTMLButtonElement>;
   defaultEntity?: string;
 }
 
@@ -55,7 +54,7 @@ function BiomarkerParameters() {
   );
 }
 
-function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: DatasetsSelectedByExpressionProps) {
+function DatasetsSelectedByExpression({ defaultEntity }: DatasetsSelectedByExpressionProps) {
   const { message, queryType, setCellVariableNames, handleSubmit, cellVariableNames } =
     useDatasetsSelectedByExpression();
 
@@ -76,7 +75,6 @@ function DatasetsSelectedByExpression({ runQueryButtonRef, defaultEntity }: Data
           variant="contained"
           color="primary"
           id="run-query-button"
-          ref={runQueryButtonRef}
         >
           Run Query
         </Button>

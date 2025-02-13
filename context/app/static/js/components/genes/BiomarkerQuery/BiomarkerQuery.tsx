@@ -1,5 +1,5 @@
 import CellsResults from 'js/components/cells/CellsResults';
-import DatasetsSelectedByExpression from 'js/components/cells/DatasetsSelectedByExpression';
+import QueryParameters from 'js/components/cells/QueryParameters';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
@@ -11,17 +11,11 @@ import { biomarkerQuery } from '../constants';
 export default function BiomarkerQuery() {
   const { geneSymbol } = useGenePageContext();
   const { data } = useGeneOntology();
-  const runQueryButtonRef = React.useRef<HTMLButtonElement>(null);
   const steps = useMemo(() => {
     return [
       {
         heading: '1. Parameters',
-        content: (
-          <DatasetsSelectedByExpression
-            runQueryButtonRef={runQueryButtonRef}
-            defaultEntity={data?.approved_symbol ?? geneSymbol.toUpperCase()}
-          />
-        ),
+        content: <QueryParameters defaultEntity={data?.approved_symbol ?? geneSymbol.toUpperCase()} />,
       },
       {
         heading: '2. Results',
