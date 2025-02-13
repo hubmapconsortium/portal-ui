@@ -4,10 +4,10 @@ import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
+import Stack from '@mui/system/Stack';
 import { format } from 'date-fns/format';
 
 import { InternalLink } from 'js/shared-styles/Links';
-import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { WorkspaceInvitation } from 'js/components/workspaces/types';
 import {
   StyledTable,
@@ -19,8 +19,9 @@ import {
   ArrowDownOff,
   StyledHeaderCell,
 } from 'js/components/search/Results/style';
-import { useEventCallback } from '@mui/material';
+import { Button, Typography, useEventCallback } from '@mui/material';
 import { getInvitationFieldValue } from 'js/components/workspaces/InvitationsTable/utils';
+import { EmailIcon } from 'js/shared-styles/icons';
 
 type SortDirection = 'asc' | 'desc';
 
@@ -85,37 +86,41 @@ function SortHeaderCell({ field, label }: { field: string; label: string }) {
   );
 }
 
-function CellContent({ field, fieldValue }: { field: string; fieldValue: string }) {
-  switch (field) {
-    case 'hubmap_id':
-      return (
-        <InternalLink href={`/browse/${fieldValue}`} data-testid="hubmap-id-link">
-          {fieldValue}
-        </InternalLink>
-      );
-    case 'last_modified_timestamp':
-    case 'published_timestamp':
-    case 'created_timestamp':
-      // Handle datasets without published timestamps.
-      if (!fieldValue) {
-        return null;
-      }
-      return format(fieldValue, 'yyyy-MM-dd');
-    case 'age':
-      return <DonorAgeTooltip donorAge={fieldValue}>{fieldValue}</DonorAgeTooltip>;
-    default:
-      return fieldValue;
-  }
-}
-
-function ResultCell({ invitation, field }: { field: string; invitation: WorkspaceInvitation }) {
+function CellContent({ invitation, field }: { field: string; invitation: WorkspaceInvitation }) {
   const fieldValue = getInvitationFieldValue(invitation, field);
 
-  return (
-    <StyledTableCell key={field}>
-      <CellContent field={field} fieldValue={fieldValue} />
-    </StyledTableCell>
-  );
+  switch (field) {
+    case 'original_workspace_id.name': {
+      const workspaceId = getInvitationFieldValue(invitation, 'original_workspace_id.id');
+      return (
+        <>
+          {/* TODO: Add link to workspace preview */}
+          <InternalLink href="/workspaces">{fieldValue}</InternalLink>
+          {` (ID: ${workspaceId})`}
+        </>
+      );
+    }
+    case 'original_workspace_id.user_id.username':
+    case 'shared_workspace_id.user_id.username': {
+      const prefix = field.startsWith('original_workspace_id') ? 'original_workspace_id' : 'shared_workspace_id';
+      const firstName = getInvitationFieldValue(invitation, `${prefix}.user_id.first_name`);
+      const lastName = getInvitationFieldValue(invitation, `${prefix}.user_id.last_name`);
+      const email = getInvitationFieldValue(invitation, `${prefix}.user_id.email`);
+
+      return (
+        <Stack direction="row" alignItems="center">
+          <Typography>{`${firstName} ${lastName} (${email})`}</Typography>
+          <Button href={`mailto:${email}`} sx={{ minWidth: 0 }}>
+            <EmailIcon color="info" />
+          </Button>
+        </Stack>
+      );
+    }
+    case 'datetime_share_created':
+      return format(fieldValue, 'yyyy-MM-dd');
+    default:
+      return <Typography>{fieldValue}</Typography>;
+  }
 }
 
 function LoadingRows({ tableWidth }: { tableWidth: number }) {
@@ -141,7 +146,9 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
   return (
     <StyledTableRow>
       {tableFields.map(({ field }) => (
-        <ResultCell invitation={invitation} field={field} key={field} />
+        <StyledTableCell key={field}>
+          <CellContent field={field} invitation={invitation} />
+        </StyledTableCell>
       ))}
     </StyledTableRow>
   );

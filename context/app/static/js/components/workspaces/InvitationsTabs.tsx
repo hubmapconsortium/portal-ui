@@ -40,15 +40,15 @@ function InvitationTabs({
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange} variant="fullWidth">
-        {receivedInvitations && <InvitationTab label="Received" index={1} key={1} icon={ReceivedIcon} />}
-        <InvitationTab label="Sent" index={0} key={0} icon={SentIcon} />
+        {receivedInvitations && <InvitationTab label="Received" index={0} key={0} icon={ReceivedIcon} />}
+        <InvitationTab label="Sent" index={1} key={1} icon={SentIcon} />
       </Tabs>
-      <TabPanel value={openTabIndex} index={1} key={1}>
+      <TabPanel value={openTabIndex} index={0} key={0}>
         {receivedInvitations && (
           <InvitationsTable status="Received" invitations={receivedInvitations} isLoading={isLoading} />
         )}
       </TabPanel>
-      <TabPanel value={openTabIndex} index={0} key={0}>
+      <TabPanel value={openTabIndex} index={1} key={1}>
         <InvitationsTable status="Sent" invitations={sentInvitations} isLoading={isLoading} />
       </TabPanel>
     </Box>
