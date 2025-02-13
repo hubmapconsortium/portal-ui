@@ -1,8 +1,9 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 
-import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
-import { useTabs } from 'js/shared-styles/tabs';
+import InvitationsTable from 'js/components/workspaces/InvitationsTable';
+import { Tabs, Tab } from 'js/shared-styles/tables/TableTabs';
+import { useTabs, TabPanel } from 'js/shared-styles/tabs';
 import { WorkspaceInvitation } from 'js/components/workspaces/types';
 import { ReceivedIcon, SentIcon } from 'js/shared-styles/icons';
 
@@ -27,24 +28,28 @@ function InvitationTab({ label, index, icon: Icon, ...props }: InvitationTabProp
 
 function InvitationTabs({
   sentInvitations,
-  recievedInvitations,
+  receivedInvitations,
+  isLoading,
 }: {
   sentInvitations: WorkspaceInvitation[];
-  recievedInvitations?: WorkspaceInvitation[];
+  receivedInvitations?: WorkspaceInvitation[];
+  isLoading: boolean;
 }) {
   const { openTabIndex, handleTabChange } = useTabs();
 
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange} variant="fullWidth">
-        {recievedInvitations && <InvitationTab label="Received" index={0} key={0} icon={ReceivedIcon} />}
-        {sentInvitations && <InvitationTab label="Sent" index={1} key={1} icon={SentIcon} />}
+        {receivedInvitations && <InvitationTab label="Received" index={1} key={1} icon={ReceivedIcon} />}
+        <InvitationTab label="Sent" index={0} key={0} icon={SentIcon} />
       </Tabs>
-      <TabPanel value={openTabIndex} index={0} key={0}>
-        inner stuff
-      </TabPanel>
       <TabPanel value={openTabIndex} index={1} key={1}>
-        inner stuff
+        {receivedInvitations && (
+          <InvitationsTable status="Received" invitations={receivedInvitations} isLoading={isLoading} />
+        )}
+      </TabPanel>
+      <TabPanel value={openTabIndex} index={0} key={0}>
+        <InvitationsTable status="Sent" invitations={sentInvitations} isLoading={isLoading} />
       </TabPanel>
     </Box>
   );

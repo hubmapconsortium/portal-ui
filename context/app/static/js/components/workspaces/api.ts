@@ -184,7 +184,7 @@ function useFetchInvitations(invitationId?: number) {
   const { data, isLoading, ...rest } = useSWR(
     buildKey({ url: invitationUrl }),
     ([url, head]) =>
-      fetcher<WorkspaceAPIResponse<{ invitations: AllWorkspaceInvitations }>>({
+      fetcher<WorkspaceAPIResponse<AllWorkspaceInvitations>>({
         url,
         requestInit: { headers: head },
         errorMessages: {
@@ -195,10 +195,11 @@ function useFetchInvitations(invitationId?: number) {
       }),
     { revalidateOnFocus: hasAccess },
   );
-  const sentInvitations = data?.data?.invitations?.original_workspaces ?? [];
-  const recievedInvitations = data?.data?.invitations?.shared_workspaces ?? [];
 
-  return { sentInvitations, recievedInvitations, isLoading, ...rest };
+  const sentInvitations = data?.data?.original_workspaces ?? [];
+  const receivedInvitations = data?.data?.shared_workspaces ?? [];
+
+  return { sentInvitations, receivedInvitations, isLoading, ...rest };
 }
 
 export function useInvitations() {
