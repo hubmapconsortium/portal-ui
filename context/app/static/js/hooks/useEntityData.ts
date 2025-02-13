@@ -7,6 +7,7 @@ export const useEntityQuery = (uuid: string | string[], source?: string[]) => {
     () => ({
       query: { ids: { values: typeof uuid === 'string' ? [uuid] : uuid } },
       _source: source,
+      size: 10000,
     }),
     [uuid, source],
   );

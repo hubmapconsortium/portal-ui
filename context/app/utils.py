@@ -66,6 +66,18 @@ def get_organs():
     return organs
 
 
+def get_organ_name_mapping():
+    organs = get_organs()
+    organ_file_names = {k: k for k, _ in organs.items()}
+    # Add search field for each organ as additional keys
+    for k, v in organs.items():
+        search = v['search']
+        if len(search) > 0:
+            for s in search:
+                organ_file_names[s.lower()] = k
+    return organ_file_names
+
+
 # Redirect to primary dataset if this entity is
 # - non-existent
 # - a support entity (e.g. an image pyramid)

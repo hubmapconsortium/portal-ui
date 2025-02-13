@@ -8,7 +8,7 @@ function useTabs(initialTabIndex = 0) {
     setOpenTabIndex(newValue);
   });
 
-  return { openTabIndex, handleTabChange };
+  return { openTabIndex, handleTabChange, setOpenTabIndex };
 }
 
 export { useTabs };

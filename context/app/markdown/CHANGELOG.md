@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.20.2 - 2025-02-12
+
+- Fix collections tabs being unselectable.
+- Fix display of provenance table for datasets with large ancestor trees.
+- Fix bug allowing non-public datasets to be added to workspaces.
+- Ensure ovary and fallopian tube organ pages are properly populated with left/right laterality datasets.
+- Ensure urinary bladder organ page includes Bladder datasets.
+- Ensure bladder organ icon displays appropriately.
+- Ensure cell population plot controls drawer does not overlap the app bar.
+- Sort "Recent Publications" on home page by publication date.
+- Update processed dataset files section with link to Bulk Data Transfer section.
+
+
+
 ## v1.20.1 - 2025-02-06
 
 - Fix cell population plot controls drawer positioning and scroll issues.
