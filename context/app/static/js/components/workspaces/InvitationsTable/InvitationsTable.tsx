@@ -19,8 +19,12 @@ import {
   ArrowDownOff,
   StyledHeaderCell,
 } from 'js/components/search/Results/style';
-import { Button, Typography, useEventCallback } from '@mui/material';
-import { EmailIcon } from 'js/shared-styles/icons';
+import { Button, TableCell, Typography, useEventCallback } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { CheckIcon, CloseIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
+import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
+import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { ChipWrapper } from './style';
 import { SortDirection, TableField, useInvitationsTable, getInvitationFieldValue } from './hooks';
@@ -142,13 +146,44 @@ interface RowProps {
 }
 
 const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: RowProps) {
+  const [isExpanded, setIsExpanded] = React.useState(false);
+
+  const options = [
+    {
+      children: 'Decline Invitation',
+      // eslint-disable-next-line @typescript-eslint/no-empty-function
+      onClick: () => {},
+      icon: CloseIcon,
+    },
+  ];
+
   return (
-    <StyledTableRow>
+    <StyledTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <StyledTableCell size="small">
+        <IconButton aria-label="expand row" size="small" onClick={() => setIsExpanded(!isExpanded)}>
+          {isExpanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
+        </IconButton>
+      </StyledTableCell>
       {tableFields.map(({ field }) => (
         <StyledTableCell key={field}>
           <CellContent field={field} invitation={invitation} />
         </StyledTableCell>
       ))}
+      <StyledTableCell>
+        <Stack direction="row" spacing={1}>
+          <IconDropdownMenu tooltip="More options" icon={MoreIcon}>
+            {options.map((props) => (
+              <IconDropdownMenuItem key={props.children} {...props} />
+            ))}
+          </IconDropdownMenu>
+          <IconButton>
+            <EyeIcon color="primary" fontSize="1.5rem" />
+          </IconButton>
+          <IconButton>
+            <CheckIcon color="success" fontSize="1.5rem" />
+          </IconButton>
+        </Stack>
+      </StyledTableCell>
     </StyledTableRow>
   );
 });
@@ -214,7 +249,9 @@ const InvitationsTable = React.memo(function InvitationsTable({
         </TableHead>
         <TableHead>
           <TableRow>
+            <TableCell size="small" />
             <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
+            <StyledTableCell />
           </TableRow>
         </TableHead>
         <StyledTableBody>
