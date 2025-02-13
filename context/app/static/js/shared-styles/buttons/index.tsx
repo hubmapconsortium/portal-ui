@@ -35,16 +35,21 @@ const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme, 
 }));
 
 const WhiteBackgroundIconDropdownMenuButton = styled(IconDropdownMenuButton)(({ theme }) => ({
-  ...whiteBackgroundCSS,
   ...border(theme),
+}));
+
+const RotatedTooltipButton = styled(IconDropdownMenuButton)(({ theme }) => ({
+  ...whiteBackgroundCSS,
+  color: theme.palette.primary.main,
+  transform: 'rotate(90deg)',
+  fontSize: '1.5rem',
   '& svg': svgStyles,
 }));
 
-const WhiteBackgroundIconTooltipButton = styled(TooltipIconButton)(({ theme }) => ({
+const WhiteBackgroundIconTooltipButton = styled(TooltipIconButton)({
   ...whiteBackgroundCSS,
-  ...border(theme),
   '& svg': svgStyles,
-}));
+});
 
 const WhiteBackgroundToggleButton = styled(ToggleButton)({
   ...whiteBackgroundCSS,
@@ -89,6 +94,7 @@ export {
   WhiteBackgroundIconButton,
   WhiteBackgroundIconDropdownMenuButton,
   WhiteBackgroundIconTooltipButton,
+  RotatedTooltipButton,
   TooltipToggleButton,
   iconButtonHeight,
   WhiteTextButton,

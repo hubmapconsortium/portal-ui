@@ -26,8 +26,9 @@ import { CheckIcon, CloseIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-st
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
-import { ChipWrapper } from './style';
+import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { SortDirection, TableField, useInvitationsTable, getInvitationFieldValue } from './hooks';
+import { ChipWrapper } from './style';
 
 export function OrderIcon({
   direction,
@@ -170,8 +171,8 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
         </StyledTableCell>
       ))}
       <StyledTableCell>
-        <Stack direction="row" spacing={1}>
-          <IconDropdownMenu tooltip="More options" icon={MoreIcon}>
+        <Stack direction="row" alignItems="center">
+          <IconDropdownMenu tooltip="More options" icon={MoreIcon} button={RotatedTooltipButton}>
             {options.map((props) => (
               <IconDropdownMenuItem key={props.children} {...props} />
             ))}
