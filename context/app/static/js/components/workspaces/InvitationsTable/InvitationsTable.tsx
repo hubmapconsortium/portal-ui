@@ -188,8 +188,8 @@ const InvitationsTable = React.memo(function InvitationsTable({
     showPending,
     setShowAccepted,
     setShowPending,
-    hasAcceptedInvitations,
-    hasPendingInvitations,
+    acceptedCount,
+    pendingCount,
     sortedInvitations,
   } = useInvitationsTable({ invitations, status });
 
@@ -199,16 +199,16 @@ const InvitationsTable = React.memo(function InvitationsTable({
         <TableHead sx={(theme) => ({ borderBottom: `1px solid ${theme.palette.grey[300]}` })}>
           <ChipWrapper>
             <SelectableChip
-              label="Show Pending"
+              label={`Show Pending (${pendingCount})`}
               isSelected={showPending}
               onClick={() => setShowPending((prev) => !prev)}
-              disabled={!hasPendingInvitations}
+              disabled={!pendingCount}
             />
             <SelectableChip
-              label="Show Accepted"
+              label={`Show Accepted (${acceptedCount})`}
               isSelected={showAccepted}
               onClick={() => setShowAccepted((prev) => !prev)}
-              disabled={!hasAcceptedInvitations}
+              disabled={!acceptedCount}
             />
           </ChipWrapper>
         </TableHead>

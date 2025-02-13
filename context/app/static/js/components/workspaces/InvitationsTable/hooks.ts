@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { WorkspaceInvitation } from 'js/components/workspaces/types';
 import { get } from 'js/helpers/nodash';
 
@@ -19,16 +19,17 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
     field: 'datetime_share_created',
   });
 
-  const { hasPendingInvitations, hasAcceptedInvitations } = useMemo(
-    () => ({
-      hasPendingInvitations: invitations.some((inv) => !inv.is_accepted),
-      hasAcceptedInvitations: invitations.some((inv) => inv.is_accepted),
-    }),
-    [invitations],
-  );
+  const { pendingCount, acceptedCount } = useMemo(() => {
+    const pending = invitations.filter((inv) => !inv.is_accepted).length;
+    return { pendingCount: pending, acceptedCount: invitations.length - pending };
+  }, [invitations]);
 
-  const [showPending, setShowPending] = useState(hasPendingInvitations);
+  const [showPending, setShowPending] = useState(false);
   const [showAccepted, setShowAccepted] = useState(false);
+
+  useEffect(() => {
+    setShowPending(pendingCount > 0);
+  }, [pendingCount]);
 
   const sortedInvitations = useMemo(
     () =>
@@ -76,8 +77,8 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
     setShowAccepted,
     sortField,
     setSortField,
-    hasPendingInvitations,
-    hasAcceptedInvitations,
+    pendingCount,
+    acceptedCount,
     sortedInvitations,
   };
 }
