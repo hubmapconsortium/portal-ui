@@ -7,6 +7,7 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Citation from 'js/components/detailPage/Citation';
 import { isCollection, isDataset, isPublication } from 'js/components/types';
+import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { getCollectionDOI } from 'js/pages/Collection/utils';
 import { getEntityCreationInfo } from 'js/helpers/functions';
@@ -117,11 +118,25 @@ function CollectionCitation() {
 function SummaryBodyContent({
   isEntityHeader = false,
   direction = 'column',
+  description: propDescription,
+  creationLabel: propCreationLabel,
+  creationDate: propCreationDate,
   ...stackProps
-}: { isEntityHeader?: boolean } & Partial<StackProps>) {
+}: {
+  isEntityHeader?: boolean;
+  description?: string;
+  creationLabel?: string;
+  creationDate?: string;
+} & Partial<StackProps> &
+  Partial<SavedEntitiesList>) {
   const { entity } = useFlaskDataContext();
-  const { description } = entity;
-  const { creationLabel, creationDate } = getEntityCreationInfo(entity);
+
+  // Use description and creation info from props if provided, otherwise use entity data
+  const description = propDescription ?? entity.description;
+  const { creationLabel, creationDate } =
+    propCreationLabel && propCreationDate
+      ? { creationLabel: propCreationLabel, creationDate: propCreationDate }
+      : getEntityCreationInfo(entity);
 
   if (isPublication(entity)) {
     return (
