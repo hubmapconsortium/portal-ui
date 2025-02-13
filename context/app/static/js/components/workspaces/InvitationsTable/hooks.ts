@@ -19,17 +19,34 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
     field: 'datetime_share_created',
   });
 
+  const { hasPendingInvitations, hasAcceptedInvitations } = useMemo(
+    () => ({
+      hasPendingInvitations: invitations.some((inv) => !inv.is_accepted),
+      hasAcceptedInvitations: invitations.some((inv) => inv.is_accepted),
+    }),
+    [invitations],
+  );
+
+  const [showPending, setShowPending] = useState(hasPendingInvitations);
+  const [showAccepted, setShowAccepted] = useState(false);
+
   const sortedInvitations = useMemo(
     () =>
-      [...invitations].sort((a, b) => {
-        const aValue = getInvitationFieldValue(a, sortField.field);
-        const bValue = getInvitationFieldValue(b, sortField.field);
+      [...invitations]
+        .filter((invitation) => {
+          if (showPending && !invitation.is_accepted) return true;
+          if (showAccepted && invitation.is_accepted) return true;
+          return false;
+        })
+        .sort((a, b) => {
+          const aValue = getInvitationFieldValue(a, sortField.field);
+          const bValue = getInvitationFieldValue(b, sortField.field);
 
-        if (aValue < bValue) return sortField.direction === 'asc' ? -1 : 1;
-        if (aValue > bValue) return sortField.direction === 'asc' ? 1 : -1;
-        return 0;
-      }),
-    [invitations, sortField],
+          if (aValue < bValue) return sortField.direction === 'asc' ? -1 : 1;
+          if (aValue > bValue) return sortField.direction === 'asc' ? 1 : -1;
+          return 0;
+        }),
+    [invitations, sortField, showPending, showAccepted],
   );
 
   const tableFields: TableField[] = useMemo(
@@ -53,8 +70,14 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
 
   return {
     tableFields,
+    showPending,
+    setShowPending,
+    showAccepted,
+    setShowAccepted,
     sortField,
     setSortField,
+    hasPendingInvitations,
+    hasAcceptedInvitations,
     sortedInvitations,
   };
 }

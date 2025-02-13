@@ -20,9 +20,10 @@ import {
   StyledHeaderCell,
 } from 'js/components/search/Results/style';
 import { Button, Typography, useEventCallback } from '@mui/material';
-import { getInvitationFieldValue } from 'js/components/workspaces/InvitationsTable/utils';
 import { EmailIcon } from 'js/shared-styles/icons';
-import { SortDirection, TableField, useInvitationsTable } from './hooks';
+import SelectableChip from 'js/shared-styles/chips/SelectableChip';
+import { ChipWrapper } from './style';
+import { SortDirection, TableField, useInvitationsTable, getInvitationFieldValue } from './hooks';
 
 export function OrderIcon({
   direction,
@@ -179,11 +180,38 @@ const InvitationsTable = React.memo(function InvitationsTable({
   invitations: WorkspaceInvitation[];
   status: 'Received' | 'Sent';
 }) {
-  const { tableFields, sortField, setSortField, sortedInvitations } = useInvitationsTable({ invitations, status });
+  const {
+    tableFields,
+    sortField,
+    setSortField,
+    showAccepted,
+    showPending,
+    setShowAccepted,
+    setShowPending,
+    hasAcceptedInvitations,
+    hasPendingInvitations,
+    sortedInvitations,
+  } = useInvitationsTable({ invitations, status });
 
   return (
     <Box>
       <StyledTable>
+        <TableHead sx={(theme) => ({ borderBottom: `1px solid ${theme.palette.grey[300]}` })}>
+          <ChipWrapper>
+            <SelectableChip
+              label="Show Pending"
+              isSelected={showPending}
+              onClick={() => setShowPending((prev) => !prev)}
+              disabled={!hasPendingInvitations}
+            />
+            <SelectableChip
+              label="Show Accepted"
+              isSelected={showAccepted}
+              onClick={() => setShowAccepted((prev) => !prev)}
+              disabled={!hasAcceptedInvitations}
+            />
+          </ChipWrapper>
+        </TableHead>
         <TableHead>
           <TableRow>
             <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
