@@ -20,6 +20,7 @@ import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMen
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { LineClamp } from 'js/shared-styles/text';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { SortDirection, TableField, useInvitationsTable, getInvitationFieldValue } from './hooks';
 import {
   StyledTable,
@@ -35,6 +36,11 @@ import {
   ExpandedTableCell,
   StyledButton,
 } from './style';
+
+const acceptInviteTooltip =
+  'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
+const previewInviteTooltip = 'Preview the details of this workspace such as the attached datasets and templates.';
+const moreOptionsTooltip = 'View additional actions including declining this workspace copy invitation.';
 
 export function OrderIcon({
   direction,
@@ -184,17 +190,21 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
         ))}
         <StyledTableCell>
           <Stack direction="row" justifyContent="end" alignItems="center">
-            <IconDropdownMenu tooltip="More options" icon={MoreIcon} button={RotatedTooltipButton}>
+            <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
               {options.map((props) => (
                 <IconDropdownMenuItem key={props.children} {...props} />
               ))}
             </IconDropdownMenu>
-            <IconButton>
-              <EyeIcon color="primary" fontSize="1.5rem" />
-            </IconButton>
-            <IconButton>
-              <CheckIcon color="success" fontSize="1.5rem" />
-            </IconButton>
+            <SecondaryBackgroundTooltip title={previewInviteTooltip}>
+              <IconButton>
+                <EyeIcon color="primary" fontSize="1.5rem" />
+              </IconButton>
+            </SecondaryBackgroundTooltip>
+            <SecondaryBackgroundTooltip title={acceptInviteTooltip}>
+              <IconButton>
+                <CheckIcon color="success" fontSize="1.5rem" />
+              </IconButton>
+            </SecondaryBackgroundTooltip>
           </Stack>
         </StyledTableCell>
       </CompactTableRow>
