@@ -7,6 +7,7 @@ import ArrowUpward from '@mui/icons-material/ArrowUpwardRounded';
 import ArrowDownward from '@mui/icons-material/ArrowDownwardRounded';
 
 import { HeaderCell } from 'js/shared-styles/tables';
+import { Button } from '@mui/material';
 
 const ChipWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(1.5, 2),
@@ -80,6 +81,11 @@ const StyledHeaderCell = styled(HeaderCell)({
   whiteSpace: 'nowrap',
 });
 
+const StyledButton = styled(Button)(({ theme }) => ({
+  color: theme.palette.primaryContainer.contrastText,
+  backgroundColor: theme.palette.primaryContainer.main,
+}));
+
 export {
   ChipWrapper,
   StyledTable,
@@ -93,4 +99,5 @@ export {
   CompactTableRow,
   ExpandedTableRow,
   ExpandedTableCell,
+  StyledButton,
 };

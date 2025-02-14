@@ -14,7 +14,7 @@ import { WorkspaceInvitation } from 'js/components/workspaces/types';
 import { Button, Collapse, Typography, useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { CheckIcon, CloseFilledIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
+import { CheckIcon, CloseFilledIcon, DownIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
@@ -33,6 +33,7 @@ import {
   ChipWrapper,
   ExpandedTableRow,
   ExpandedTableCell,
+  StyledButton,
 } from './style';
 
 export function OrderIcon({
@@ -231,6 +232,29 @@ const HeaderCells = React.memo(function HeaderCells({
   );
 });
 
+export function SeeMoreRows({
+  numVisibleInvitations,
+  setNumVisibleInvitations,
+  totalInvitations,
+}: {
+  numVisibleInvitations: number;
+  setNumVisibleInvitations: React.Dispatch<React.SetStateAction<number>>;
+  totalInvitations: number;
+}) {
+  if (numVisibleInvitations >= totalInvitations) {
+    return null;
+  }
+
+  return (
+    <StyledButton variant="text" onClick={() => setNumVisibleInvitations((prev) => prev + 3)} fullWidth>
+      <Stack direction="row" spacing={1} marginY={0.5} alignItems="center">
+        <Typography variant="button">See More</Typography>
+        <DownIcon />
+      </Stack>
+    </StyledButton>
+  );
+}
+
 const InvitationsTable = React.memo(function InvitationsTable({
   isLoading,
   invitations,
@@ -250,6 +274,8 @@ const InvitationsTable = React.memo(function InvitationsTable({
     setShowPending,
     acceptedCount,
     pendingCount,
+    numVisibleInvitations,
+    setNumVisibleInvitations,
     sortedInvitations,
   } = useInvitationsTable({ invitations, status });
 
@@ -276,21 +302,28 @@ const InvitationsTable = React.memo(function InvitationsTable({
       {!isLoading && !showPending && !showAccepted ? (
         <Alert severity="info">No invitations to display based on current filters.</Alert>
       ) : (
-        <StyledTable>
-          <TableHead>
-            <TableRow>
-              <StyledTableCell width="0" />
-              <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
-              <StyledTableCell />
-            </TableRow>
-          </TableHead>
-          <StyledTableBody>
-            {isLoading && !invitations?.length && <LoadingRows tableWidth={tableFields.length} />}
-            {sortedInvitations.map((invitation) => (
-              <ResultRow invitation={invitation} key={invitation.datetime_share_created} tableFields={tableFields} />
-            ))}
-          </StyledTableBody>
-        </StyledTable>
+        <>
+          <StyledTable>
+            <TableHead>
+              <TableRow>
+                <StyledTableCell width="0" />
+                <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
+                <StyledTableCell />
+              </TableRow>
+            </TableHead>
+            <StyledTableBody>
+              {isLoading && !invitations?.length && <LoadingRows tableWidth={tableFields.length} />}
+              {sortedInvitations.slice(0, numVisibleInvitations).map((invitation) => (
+                <ResultRow invitation={invitation} key={invitation.datetime_share_created} tableFields={tableFields} />
+              ))}
+            </StyledTableBody>
+          </StyledTable>
+          <SeeMoreRows
+            numVisibleInvitations={numVisibleInvitations}
+            setNumVisibleInvitations={setNumVisibleInvitations}
+            totalInvitations={sortedInvitations.length}
+          />
+        </>
       )}
     </Box>
   );

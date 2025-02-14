@@ -50,6 +50,8 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
     [invitations, sortField, showPending, showAccepted],
   );
 
+  const [numVisibleInvitations, setNumVisibleInvitations] = useState(3);
+
   const tableFields: TableField[] = useMemo(
     () => [
       {
@@ -79,6 +81,8 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
     setSortField,
     pendingCount,
     acceptedCount,
+    numVisibleInvitations,
+    setNumVisibleInvitations,
     sortedInvitations,
   };
 }
