@@ -7,10 +7,11 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/system/Stack';
 import { format } from 'date-fns/format';
 
+import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
 import { WorkspaceInvitation } from 'js/components/workspaces/types';
 
-import { Button, Typography, useEventCallback } from '@mui/material';
+import { Button, Collapse, Typography, useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { CheckIcon, CloseFilledIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
@@ -29,6 +30,8 @@ import {
   ArrowDownOff,
   StyledHeaderCell,
   ChipWrapper,
+  ExpandedTableRow,
+  ExpandedTableCell,
 } from './style';
 
 export function OrderIcon({
@@ -149,6 +152,7 @@ interface RowProps {
 
 const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: RowProps) {
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const description = getInvitationFieldValue(invitation, 'shared_workspace_id.description');
 
   const options = [
     {
@@ -160,33 +164,49 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
   ];
 
   return (
-    <CompactTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-      <StyledTableCell width="0">
-        <IconButton aria-label="expand row" size="small" onClick={() => setIsExpanded(!isExpanded)}>
-          {isExpanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
-        </IconButton>
-      </StyledTableCell>
-      {tableFields.map(({ field }) => (
-        <StyledTableCell key={field}>
-          <CellContent field={field} invitation={invitation} />
+    <>
+      <CompactTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+        <StyledTableCell width="0">
+          {description && (
+            <IconButton aria-label="expand row" size="small" onClick={() => setIsExpanded(!isExpanded)}>
+              {isExpanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
+            </IconButton>
+          )}
         </StyledTableCell>
-      ))}
-      <StyledTableCell>
-        <Stack direction="row" justifyContent="end" alignItems="center">
-          <IconDropdownMenu tooltip="More options" icon={MoreIcon} button={RotatedTooltipButton}>
-            {options.map((props) => (
-              <IconDropdownMenuItem key={props.children} {...props} />
-            ))}
-          </IconDropdownMenu>
-          <IconButton>
-            <EyeIcon color="primary" fontSize="1.5rem" />
-          </IconButton>
-          <IconButton>
-            <CheckIcon color="success" fontSize="1.5rem" />
-          </IconButton>
-        </Stack>
-      </StyledTableCell>
-    </CompactTableRow>
+        {tableFields.map(({ field }) => (
+          <StyledTableCell key={field}>
+            <CellContent field={field} invitation={invitation} />
+          </StyledTableCell>
+        ))}
+        <StyledTableCell>
+          <Stack direction="row" justifyContent="end" alignItems="center">
+            <IconDropdownMenu tooltip="More options" icon={MoreIcon} button={RotatedTooltipButton}>
+              {options.map((props) => (
+                <IconDropdownMenuItem key={props.children} {...props} />
+              ))}
+            </IconDropdownMenu>
+            <IconButton>
+              <EyeIcon color="primary" fontSize="1.5rem" />
+            </IconButton>
+            <IconButton>
+              <CheckIcon color="success" fontSize="1.5rem" />
+            </IconButton>
+          </Stack>
+        </StyledTableCell>
+      </CompactTableRow>
+      {description && (
+        <ExpandedTableRow>
+          <ExpandedTableCell />
+          <ExpandedTableCell colSpan={tableFields.length + 1}>
+            <Collapse in={isExpanded} timeout="auto" unmountOnExit>
+              <Box paddingTop={0.5} paddingBottom={1}>
+                {description}
+              </Box>
+            </Collapse>
+          </ExpandedTableCell>
+        </ExpandedTableRow>
+      )}
+    </>
   );
 });
 
@@ -230,6 +250,10 @@ const InvitationsTable = React.memo(function InvitationsTable({
     sortedInvitations,
   } = useInvitationsTable({ invitations, status });
 
+  if (!isLoading && !invitations.length) {
+    return <Alert severity="info"> {`You currently have no ${status.toLocaleLowerCase()} invitations.`} </Alert>;
+  }
+
   return (
     <Box>
       <ChipWrapper>
@@ -246,21 +270,25 @@ const InvitationsTable = React.memo(function InvitationsTable({
           disabled={!acceptedCount}
         />
       </ChipWrapper>
-      <StyledTable>
-        <TableHead>
-          <TableRow>
-            <StyledTableCell width="0" />
-            <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
-            <StyledTableCell />
-          </TableRow>
-        </TableHead>
-        <StyledTableBody>
-          {isLoading && !invitations?.length && <LoadingRows tableWidth={tableFields.length} />}
-          {sortedInvitations.map((invitation) => (
-            <ResultRow invitation={invitation} key={invitation.datetime_share_created} tableFields={tableFields} />
-          ))}
-        </StyledTableBody>
-      </StyledTable>
+      {!isLoading && !showPending && !showAccepted ? (
+        <Alert severity="info">No invitations to display.</Alert>
+      ) : (
+        <StyledTable>
+          <TableHead>
+            <TableRow>
+              <StyledTableCell width="0" />
+              <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
+              <StyledTableCell />
+            </TableRow>
+          </TableHead>
+          <StyledTableBody>
+            {isLoading && !invitations?.length && <LoadingRows tableWidth={tableFields.length} />}
+            {sortedInvitations.map((invitation) => (
+              <ResultRow invitation={invitation} key={invitation.datetime_share_created} tableFields={tableFields} />
+            ))}
+          </StyledTableBody>
+        </StyledTable>
+      )}
     </Box>
   );
 });

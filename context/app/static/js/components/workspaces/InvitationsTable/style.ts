@@ -16,6 +16,7 @@ const ChipWrapper = styled('div')(({ theme }) => ({
   zIndex: theme.zIndex.fileBrowserHeader,
   display: 'flex',
   gap: theme.spacing(1),
+  borderBottom: `1px solid ${theme.palette.grey[300]}`,
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -29,61 +30,35 @@ const StyledTableBody = styled(TableBody)({
   borderRight: 'none',
 });
 
-const interPadding = '.6rem';
-const sidePadding = '4rem';
-
-const StyledTableRow = styled(TableRow)<{ $beforeHighlight?: boolean; $highlight?: boolean }>(
-  ({ theme, $beforeHighlight, $highlight }) => ({
-    border: `1px solid ${theme.palette.divider}`,
-
-    // NOTE: If we want to darken on hover, we need to give an explicit background to all rows.
-    // What looks white is actually transparent and brightness() has no effect.
-    backgroundColor: theme.palette.white.main,
-
-    '&:hover': {
-      filter: theme.palette.white.hover,
-    },
-    ...($beforeHighlight && {
-      borderBottom: 'none',
-      td: {
-        paddingBottom: 0,
-      },
-      '&:hover + tr': {
-        filter: theme.palette.white.hover,
-      },
-      ':has(+ &:hover)': {
-        filter: theme.palette.white.hover,
-      },
-    }),
-
-    ...($highlight && {
-      borderTop: 'none',
-      td: {
-        paddingTop: interPadding,
-        paddingLeft: sidePadding,
-        paddingRight: sidePadding,
-        color: theme.palette.common.halfShadow,
-        margin: 0,
-      },
-    }),
-  }),
-);
+const StyledTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: theme.palette.white.main,
+  border: `1px solid ${theme.palette.grey[300]}`,
+}));
 
 const CompactTableRow = styled(StyledTableRow)(({ theme }) => ({
   td: {
     padding: theme.spacing(1),
   },
+  borderBottom: 'none',
 }));
 
-const StyledTableCell = styled(TableCell)({
-  // Borders handled by tbody.
-  border: 'none',
-  // Elastic search injects <em> when showing matches in context.
+const ExpandedTableRow = styled(StyledTableRow)({
+  paddingBottom: 0,
+  paddingTop: 0,
+  borderTop: 'none',
+});
 
+const StyledTableCell = styled(TableCell)({
+  border: 'none',
   em: {
     fontWeight: 'bold',
     fontStyle: 'normal',
   },
+});
+
+const ExpandedTableCell = styled(StyledTableCell)({
+  paddingBottom: 0,
+  paddingTop: 0,
 });
 
 const sharedArrowStyles = {
@@ -115,4 +90,6 @@ export {
   ArrowDownOff,
   StyledHeaderCell,
   CompactTableRow,
+  ExpandedTableRow,
+  ExpandedTableCell,
 };
