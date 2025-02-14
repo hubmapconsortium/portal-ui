@@ -56,10 +56,11 @@ const StyledTableCell = styled(TableCell)({
   },
 });
 
-const ExpandedTableCell = styled(StyledTableCell)({
+const ExpandedTableCell = styled(StyledTableCell)(({ theme }) => ({
   paddingBottom: 0,
   paddingTop: 0,
-});
+  paddingLeft: theme.spacing(1),
+}));
 
 const sharedArrowStyles = {
   verticalAlign: 'text-top',

@@ -19,6 +19,7 @@ import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
+import { LineClamp } from 'js/shared-styles/text';
 import { SortDirection, TableField, useInvitationsTable, getInvitationFieldValue } from './hooks';
 import {
   StyledTable,
@@ -101,11 +102,13 @@ function CellContent({ invitation, field }: { field: string; invitation: Workspa
     case 'original_workspace_id.name': {
       const workspaceId = getInvitationFieldValue(invitation, 'original_workspace_id.id');
       return (
-        <>
+        <Stack direction="row" spacing={1}>
           {/* TODO: Add link to workspace preview */}
-          <InternalLink href="/workspaces">{fieldValue}</InternalLink>
-          {` (ID: ${workspaceId})`}
-        </>
+          <InternalLink href="/workspaces">
+            <LineClamp lines={1}>{fieldValue}</LineClamp>
+          </InternalLink>
+          <Box>{`(ID: ${workspaceId})`}</Box>
+        </Stack>
       );
     }
     case 'original_workspace_id.user_id.username':
@@ -271,7 +274,7 @@ const InvitationsTable = React.memo(function InvitationsTable({
         />
       </ChipWrapper>
       {!isLoading && !showPending && !showAccepted ? (
-        <Alert severity="info">No invitations to display.</Alert>
+        <Alert severity="info">No invitations to display based on current filters.</Alert>
       ) : (
         <StyledTable>
           <TableHead>
