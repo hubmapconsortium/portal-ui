@@ -13,13 +13,13 @@ interface CellTypeNamesResponse {
   cellTypeNames: string[];
 }
 
-export function createCellTypeNamesKey(annotationNames?: AnnotationNamesList): CellTypeNamesKey {
+export function createCellTypeNamesKey(params?: CellTypeNamesParams): CellTypeNamesKey {
   return createScfindKey('cellTypeNames', {
-    annotation_names: annotationNames ? annotationNamesToGetParams(annotationNames) : undefined,
+    annotation_names: annotationNamesToGetParams(params?.annotationNames),
   });
 }
 
-export default function useCellTypeNames({ annotationNames }: CellTypeNamesParams) {
-  const key = createCellTypeNamesKey(annotationNames);
+export default function useCellTypeNames(params?: CellTypeNamesParams) {
+  const key = createCellTypeNamesKey(params);
   return useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
 }

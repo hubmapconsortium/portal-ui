@@ -7,6 +7,7 @@ import useHyperQueryCellTypes, { CellTypeNamesParams } from './useHyperQueryCell
 import { SCFIND_BASE } from './utils';
 
 function HyperQueryCellTypesControl(params: CellTypeNamesParams) {
+  console.log({ params });
   const result = useHyperQueryCellTypes(params);
   return (
     <Stack>
@@ -39,7 +40,12 @@ const meta: Meta = {
     },
     annotationNames: {
       control: {
-        type: 'text',
+        type: 'select',
+        options: ['lung', 'kidney'],
+        mapping: {
+          lung: [{ Organ: 'lung' }],
+          kidney: [{ Organ: 'kidney' }],
+        },
       },
     },
     includePrefix: {
@@ -53,7 +59,10 @@ const meta: Meta = {
 type Story = StoryObj<typeof HyperQueryCellTypesControl>;
 
 export const HyperQueryCellTypes: Story = {
-  args: {},
+  args: {
+    geneList: 'UMOD',
+    annotationNames: [{ Organ: 'Kidney', Tissue: 'Kidney' }],
+  },
 };
 
 export default meta;

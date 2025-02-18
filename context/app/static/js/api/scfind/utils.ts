@@ -2,9 +2,9 @@ import { AnnotationNamesList } from './types';
 
 // Current URL for SCFind as of 2/12/2025
 // PROD
-export const SCFIND_BASE = 'http://scfind.hubmapconsortium.org/api';
+// export const SCFIND_BASE = 'http://scfind.hubmapconsortium.org/api';
 // DEV
-// export const SCFIND_BASE = 'http://18.219.167.106:8080/api';
+export const SCFIND_BASE = 'http://18.219.167.106:8080/api';
 
 // TODO: Transfer to app config
 
@@ -38,6 +38,9 @@ export function annotationNamesToGetParams(annotationNames?: AnnotationNamesList
   if (!annotationNames) {
     return undefined;
   }
-  const list = annotationNames.map(({ Organ, Tissue }) => `{"Organ": "${Organ}", "Tissue": "${Tissue}"}`).join(',');
+  if (typeof annotationNames === 'string') {
+    return annotationNames;
+  }
+  const list = annotationNames.map(({ Organ, Tissue }) => `{"Organ":"${Organ}","Tissue":"${Tissue}"}`).join(',');
   return `[${list}]`;
 }

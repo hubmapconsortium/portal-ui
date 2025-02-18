@@ -39,3 +39,17 @@ export interface CellTypeQueryFormState {
   queryType: 'cell-type';
   cellTypes: string[];
 }
+
+export type MolecularDataQueryFormSteps = 'queryType' | 'results';
+
+export type MolecularDataQueryFormState = {
+  queryType: QueryType;
+  geneQueryMethod: GeneQueryMethod;
+  step: MolecularDataQueryFormSteps;
+} & (
+  | SCFindGeneQueryFormState
+  | SCFindCellTypeQueryFormState
+  | CrossModalityGeneQueryFormState
+  | CrossModalityProteinQueryFormState
+  | CellTypeQueryFormState
+);

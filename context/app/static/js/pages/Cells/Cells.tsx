@@ -1,34 +1,18 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
 
-import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import PageTitle from 'js/shared-styles/pages/PageTitle';
-import QueryParameters from 'js/components/cells/QueryParameters';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
-import QueryType from 'js/components/cells/QueryType';
-import CellsResults from 'js/components/cells/CellsResults';
-import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
+import MolecularDataQueryForm from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryForm';
+import { MolecularDataQueryFormState } from 'js/components/cells/MolecularDataQueryForm/types';
+import QueryType from 'js/components/cells/MolecularDataQueryForm/QueryType';
+import QueryParametersFieldset from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
 
 function Cells() {
-  const steps = [
-    {
-      heading: '1. Query Type',
-      content: <QueryType />,
-    },
-    {
-      heading: '2. Parameters',
-      content: <QueryParameters />,
-    },
-    {
-      heading: '3. Results',
-      content: <CellsResults />,
-    },
-  ];
-
   return (
-    <AccordionStepsProvider stepsLength={steps.length}>
+    <>
       <PageTitle data-testid="molecular-data-queries-title" color="primary">
         Datasets: Molecular Data Queries (BETA)
       </PageTitle>
@@ -48,8 +32,15 @@ function Cells() {
           <ContactUsLink>Contact us</ContactUsLink> with any questions and issues that may arise during your experience.
         </LabelledSectionText>
       </Stack>
-      <AccordionSteps id="cells-steps" steps={steps} />
-    </AccordionStepsProvider>
+      <MolecularDataQueryForm
+        onSubmit={function (data: MolecularDataQueryFormState): void {
+          alert('Submit not yet implemented.');
+        }}
+      >
+        <QueryType />
+        <QueryParametersFieldset />
+      </MolecularDataQueryForm>
+    </>
   );
 }
 

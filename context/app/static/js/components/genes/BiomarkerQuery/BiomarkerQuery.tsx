@@ -1,10 +1,9 @@
 import CellsResults from 'js/components/cells/CellsResults';
-import QueryParameters from 'js/components/cells/QueryParameters';
+import QueryParameters from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import React, { useMemo } from 'react';
-import TutorialProvider from 'js/shared-styles/tutorials/TutorialProvider';
 import { useGeneOntology, useGenePageContext } from '../hooks';
 import { biomarkerQuery } from '../constants';
 
@@ -19,11 +18,7 @@ export default function BiomarkerQuery() {
       },
       {
         heading: '2. Results',
-        content: (
-          <TutorialProvider tutorial_key="cells">
-            <CellsResults />
-          </TutorialProvider>
-        ),
+        content: <CellsResults />,
       },
     ];
   }, [geneSymbol, data?.approved_symbol]);
