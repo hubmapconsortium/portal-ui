@@ -7,7 +7,7 @@ import { useTheme } from '@mui/material/styles';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import useSearchData from 'js/hooks/useSearchData';
 import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
-import { getKeyValues, getAgeLabels, makeCompositeQuery, makeHistogramSource, makeTermSource } from './utils';
+import { getKeyValues, getAgeLabels, makeCompositeQuery, makeHistogramSource, makeTermSource, getBloodTypeLabels } from './utils';
 
 ChartJS.register(LinearScale, CategoryScale, BarElement);
 defaults.font.size = 18;
@@ -36,6 +36,11 @@ function BloodTypeDescription() {
   );
 }
 
+const labelsMap = {
+  "mapped_metadata.age" : getAgeLabels,
+  "mapped_metadata.abo_blood_group_system": getBloodTypeLabels,
+}
+
 function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, description, xAxisLabel }) {
   const { palette } = useTheme();
   const colors = [palette.primary.main, palette.success.main, palette.error.main];
@@ -53,7 +58,7 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
   }
 
   const { buckets } = searchData?.aggregations?.composite_data || {};
-  const labels = xKey === 'mapped_metadata.age' ? getAgeLabels(buckets, xKey) : getKeyValues(buckets, xKey);
+  const labels = (labelsMap?.[xKey] ?? getKeyValues)(buckets, xKey);
   const graphdata = {
     labels,
     datasets: colorKeys.map((colorKey, i) => ({
@@ -101,6 +106,10 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
   );
 }
 
+const xAxisLabelMap = {
+  'mapped_metadata.abo_blood_group_system' : 'ABO Blood Group'
+}
+
 function DonorChart({ xAxis, groups }) {
   const xSource = xAxis === 'age' ? makeHistogramSource(xAxis) : makeTermSource(xAxis);
   const ySource = groups === 'age' ? makeHistogramSource(groups) : makeTermSource(groups);
@@ -110,12 +119,11 @@ function DonorChart({ xAxis, groups }) {
   const colorKeysMap = {
     race: ['White', 'Black or African American', 'Hispanic'],
     sex: ['Male', 'Female'],
-    blood_type: ['A', 'B', 'AB', 'O'],
   };
   const colorKeys = colorKeysMap[groups];
-  const xAxisLabel = pretty(xAxis);
+  const xAxisLabel = xAxisLabelMap?.[xKey] ?? pretty(xAxis);
   const title = `${pretty(xAxis)} & ${pretty(groups)}`;
-  const description = [xAxis, groups].includes('blood_type') ? <BloodTypeDescription /> : null;
+  const description = [xAxis, groups].includes('abo_blood_group_system') ? <BloodTypeDescription /> : null;
 
   return (
     <LowLevelDonorChart
