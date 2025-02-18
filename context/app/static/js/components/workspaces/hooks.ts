@@ -145,6 +145,27 @@ function useInvitationsList() {
   };
 }
 
+function useWorkspacesListWithSharerInfo() {
+  const { workspacesList, isLoading, ...rest } = useWorkspacesList();
+  const { receivedInvitations, invitationsLoading } = useInvitationsList();
+
+  const workspacesWithInvitationInfo = workspacesList.map((workspace) => {
+    const sharerInfo = receivedInvitations.find((invitation) => invitation.original_workspace_id.id === workspace.id)
+      ?.shared_workspace_id.user_id;
+
+    return {
+      ...workspace,
+      sharerInfo,
+    };
+  });
+
+  return {
+    workspacesList: workspacesWithInvitationInfo,
+    isLoading: isLoading || invitationsLoading,
+    ...rest,
+  };
+}
+
 function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, never> = {}) {
   // TODO: Update to use dataset IDs once workspace API makes them available
   const symlinks = workspace?.workspace_details?.current_workspace_details?.symlinks ?? [];
@@ -434,4 +455,5 @@ export {
   useHandleUpdateWorkspace,
   useCreateTemplates,
   useUpdateWorkspaceDatasets,
+  useWorkspacesListWithSharerInfo,
 };

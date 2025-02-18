@@ -1,21 +1,17 @@
 import React, { useState } from 'react';
 
 import { Box, useEventCallback } from '@mui/material';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
 import ShareIcon from '@mui/icons-material/Share';
-import Checkbox from '@mui/material/Checkbox';
 
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import WorkspaceListItem from 'js/components/workspaces/WorkspaceListItem';
-import Description from 'js/shared-styles/sections/Description';
 import SearchBarComponent from 'js/shared-styles/inputs/SearchBar';
-
 import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
-import { useWorkspacesList } from './hooks';
+import WorkspacesTable from 'js/components/workspaces/Tables/WorkspacesTable';
+import { useWorkspacesListWithSharerInfo } from './hooks';
 import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
 
 function SearchBar() {
@@ -71,7 +67,7 @@ function ShareWorkspaceButton({ selectedItems }: { selectedItems: Set<string> })
 }
 
 function WorkspacesList() {
-  const { workspacesList, handleDeleteWorkspace, isDeleting } = useWorkspacesList();
+  const { workspacesList, handleDeleteWorkspace, isDeleting, isLoading } = useWorkspacesListWithSharerInfo();
   const { selectedItems, toggleItem } = useSelectItems();
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
@@ -99,25 +95,12 @@ function WorkspacesList() {
             <NewWorkspaceDialogFromWorkspaceList />
           </Stack>
         </Stack>
-        {/* Instructed to show 5.5 workspace list items before scrolling. */}
-        <Paper sx={{ maxHeight: '435px', overflowY: 'auto' }}>
-          {Object.keys(workspacesList).length === 0 ? (
-            <Description>No workspaces created yet.</Description>
-          ) : (
-            workspacesList.map((workspace) => (
-              /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
-              <WorkspaceListItem
-                workspace={workspace}
-                key={workspace.id}
-                toggleItem={(item: number) => toggleItem(item.toString())}
-                selected={selectedItems.has(workspace.id.toString())}
-                ToggleComponent={Checkbox}
-                showLaunch
-                showStop
-              />
-            ))
-          )}
-        </Paper>
+        <WorkspacesTable
+          workspacesList={workspacesList}
+          selectedItems={selectedItems}
+          toggleItem={toggleItem}
+          isLoading={isLoading}
+        />
       </Stack>
     </>
   );

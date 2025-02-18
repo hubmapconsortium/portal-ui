@@ -14,7 +14,7 @@ function WorkspacesAuthenticated() {
   }
 
   return (
-    <Stack spacing={2}>
+    <Stack spacing={3}>
       <WorkspaceInvitations />
       <WorkspacesList />
     </Stack>

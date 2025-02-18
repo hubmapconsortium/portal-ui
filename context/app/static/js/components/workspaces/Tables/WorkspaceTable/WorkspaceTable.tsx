@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import TableRow from '@mui/material/TableRow';
 import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
@@ -6,41 +6,37 @@ import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import Stack from '@mui/system/Stack';
 import { format } from 'date-fns/format';
+import { get } from 'js/helpers/nodash';
 
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
-import { WorkspaceInvitation } from 'js/components/workspaces/types';
+import { MergedWorkspace, WorkspaceInvitation } from 'js/components/workspaces/types';
 
 import { Button, Collapse, Typography, useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { CheckIcon, CloseFilledIcon, DownIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
-import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
-import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
+import { DownIcon, EmailIcon } from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
-import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { LineClamp } from 'js/shared-styles/text';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { SortDirection, TableField, useInvitationsTable, getInvitationFieldValue } from './hooks';
+import { SortField, SortDirection, TableField, TableFilter } from './types';
 import {
+  ArrowDownOff,
+  ArrowDownOn,
+  ArrowUpOn,
+  ChipWrapper,
+  CompactTableRow,
+  ExpandedTableCell,
+  ExpandedTableRow,
+  StyledHeaderCell,
   StyledTable,
   StyledTableBody,
-  CompactTableRow,
   StyledTableCell,
-  ArrowUpOn,
-  ArrowDownOn,
-  ArrowDownOff,
-  StyledHeaderCell,
-  ChipWrapper,
-  ExpandedTableRow,
-  ExpandedTableCell,
   StyledButton,
 } from './style';
 
-const acceptInviteTooltip =
-  'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
-const previewInviteTooltip = 'Preview the details of this workspace such as the attached datasets and templates.';
-const moreOptionsTooltip = 'View additional actions including declining this workspace copy invitation.';
+export function getFieldValue(item: WorkspaceInvitation | MergedWorkspace, field: string) {
+  return get(item, field, '');
+}
 
 export function OrderIcon({
   direction,
@@ -102,12 +98,12 @@ function SortHeaderCell({
   );
 }
 
-function CellContent({ invitation, field }: { field: string; invitation: WorkspaceInvitation }) {
-  const fieldValue = getInvitationFieldValue(invitation, field);
+function CellContent({ item, field }: { field: string; item: WorkspaceInvitation | MergedWorkspace }) {
+  const fieldValue = getFieldValue(item, field);
 
   switch (field) {
     case 'original_workspace_id.name': {
-      const workspaceId = getInvitationFieldValue(invitation, 'original_workspace_id.id');
+      const workspaceId = getFieldValue(item, 'original_workspace_id.id');
       return (
         <Stack direction="row" spacing={1}>
           {/* TODO: Add link to workspace preview */}
@@ -121,9 +117,9 @@ function CellContent({ invitation, field }: { field: string; invitation: Workspa
     case 'original_workspace_id.user_id.username':
     case 'shared_workspace_id.user_id.username': {
       const prefix = field.startsWith('original_workspace_id') ? 'original_workspace_id' : 'shared_workspace_id';
-      const firstName = getInvitationFieldValue(invitation, `${prefix}.user_id.first_name`);
-      const lastName = getInvitationFieldValue(invitation, `${prefix}.user_id.last_name`);
-      const email = getInvitationFieldValue(invitation, `${prefix}.user_id.email`);
+      const firstName = getFieldValue(item, `${prefix}.user_id.first_name`);
+      const lastName = getFieldValue(item, `${prefix}.user_id.last_name`);
+      const email = getFieldValue(item, `${prefix}.user_id.email`);
 
       return (
         <Stack direction="row" alignItems="center">
@@ -156,22 +152,14 @@ function LoadingRows({ tableWidth }: { tableWidth: number }) {
 }
 
 interface RowProps {
-  invitation: WorkspaceInvitation;
+  item: WorkspaceInvitation | MergedWorkspace;
   tableFields: TableField[];
+  endButtons?: React.ReactNode;
 }
 
-const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: RowProps) {
+const ResultRow = React.memo(function ResultRow({ item, tableFields, endButtons }: RowProps) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const description = getInvitationFieldValue(invitation, 'shared_workspace_id.description');
-
-  const options = [
-    {
-      children: 'Decline Invitation',
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      onClick: () => {},
-      icon: CloseFilledIcon,
-    },
-  ];
+  const description = getFieldValue(item, 'description');
 
   return (
     <>
@@ -185,28 +173,10 @@ const ResultRow = React.memo(function ResultRow({ invitation, tableFields }: Row
         </StyledTableCell>
         {tableFields.map(({ field }) => (
           <StyledTableCell key={field}>
-            <CellContent field={field} invitation={invitation} />
+            <CellContent field={field} item={item} />
           </StyledTableCell>
         ))}
-        <StyledTableCell>
-          <Stack direction="row" justifyContent="end" alignItems="center">
-            <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
-              {options.map((props) => (
-                <IconDropdownMenuItem key={props.children} {...props} />
-              ))}
-            </IconDropdownMenu>
-            <SecondaryBackgroundTooltip title={previewInviteTooltip}>
-              <IconButton>
-                <EyeIcon color="primary" fontSize="1.5rem" />
-              </IconButton>
-            </SecondaryBackgroundTooltip>
-            <SecondaryBackgroundTooltip title={acceptInviteTooltip}>
-              <IconButton>
-                <CheckIcon color="success" fontSize="1.5rem" />
-              </IconButton>
-            </SecondaryBackgroundTooltip>
-          </Stack>
-        </StyledTableCell>
+        <StyledTableCell>{endButtons}</StyledTableCell>
       </CompactTableRow>
       {description && (
         <ExpandedTableRow>
@@ -242,21 +212,23 @@ const HeaderCells = React.memo(function HeaderCells({
   );
 });
 
-export function SeeMoreRows({
-  numVisibleInvitations,
-  setNumVisibleInvitations,
-  totalInvitations,
+function SeeMoreRows({
+  showSeeMoreOption,
+  numVisibleItems,
+  setNumVisibleItems,
+  totalItems,
 }: {
-  numVisibleInvitations: number;
-  setNumVisibleInvitations: React.Dispatch<React.SetStateAction<number>>;
-  totalInvitations: number;
+  showSeeMoreOption?: boolean;
+  numVisibleItems: number;
+  setNumVisibleItems: React.Dispatch<React.SetStateAction<number>>;
+  totalItems: number;
 }) {
-  if (numVisibleInvitations >= totalInvitations) {
+  if (!showSeeMoreOption || numVisibleItems >= totalItems) {
     return null;
   }
 
   return (
-    <StyledButton variant="text" onClick={() => setNumVisibleInvitations((prev) => prev + 3)} fullWidth>
+    <StyledButton variant="text" onClick={() => setNumVisibleItems((prev) => prev + 3)} fullWidth>
       <Stack direction="row" spacing={1} marginY={0.5} alignItems="center">
         <Typography variant="button">See More</Typography>
         <DownIcon />
@@ -265,52 +237,58 @@ export function SeeMoreRows({
   );
 }
 
-const InvitationsTable = React.memo(function InvitationsTable({
+const WorkspaceTable = React.memo(function WorkspaceTable({
+  items,
   isLoading,
-  invitations,
-  status,
+  itemType,
+  filters,
+  tableFields,
+  initialSortField,
+  endButtons,
+  showSeeMoreOption,
 }: {
+  items: WorkspaceInvitation[] | MergedWorkspace[];
   isLoading: boolean;
-  invitations: WorkspaceInvitation[];
-  status: 'Received' | 'Sent';
+  itemType: string;
+  filters: TableFilter[];
+  tableFields: TableField[];
+  initialSortField: SortField;
+  endButtons?: React.ReactNode;
+  showSeeMoreOption?: boolean;
 }) {
-  const {
-    tableFields,
-    sortField,
-    setSortField,
-    showAccepted,
-    showPending,
-    setShowAccepted,
-    setShowPending,
-    acceptedCount,
-    pendingCount,
-    numVisibleInvitations,
-    setNumVisibleInvitations,
-    sortedInvitations,
-  } = useInvitationsTable({ invitations, status });
+  const [sortField, setSortField] = useState<SortField>(initialSortField);
+  const [numVisibleItems, setNumVisibleItems] = useState(showSeeMoreOption ? 3 : items.length);
 
-  if (!isLoading && !invitations.length) {
-    return <Alert severity="info"> {`You currently have no ${status.toLocaleLowerCase()} invitations.`} </Alert>;
-  }
+  const noFiltersSelected = filters.every(({ show }) => !show);
+
+  const sortedItems = useMemo(
+    () =>
+      [...items].sort((a, b) => {
+        const aValue = getFieldValue(a, sortField.field);
+        const bValue = getFieldValue(b, sortField.field);
+
+        if (aValue < bValue) return sortField.direction === 'asc' ? -1 : 1;
+        if (aValue > bValue) return sortField.direction === 'asc' ? 1 : -1;
+        return 0;
+      }),
+    [items, sortField],
+  );
 
   return (
     <Box>
       <ChipWrapper>
-        <SelectableChip
-          label={`Show Pending (${pendingCount})`}
-          isSelected={showPending}
-          onClick={() => setShowPending((prev) => !prev)}
-          disabled={!pendingCount}
-        />
-        <SelectableChip
-          label={`Show Accepted (${acceptedCount})`}
-          isSelected={showAccepted}
-          onClick={() => setShowAccepted((prev) => !prev)}
-          disabled={!acceptedCount}
-        />
+        {filters.map(({ label, show, setShow, disabled }) => (
+          <SelectableChip
+            key={label}
+            label={label}
+            isSelected={show}
+            onClick={() => setShow((prev) => !prev)}
+            disabled={disabled}
+          />
+        ))}
       </ChipWrapper>
-      {!isLoading && !showPending && !showAccepted ? (
-        <Alert severity="info">No invitations to display based on current filters.</Alert>
+      {!isLoading && noFiltersSelected ? (
+        <Alert severity="info">{`No ${itemType}s to display based on current filters.`}</Alert>
       ) : (
         <>
           <StyledTable>
@@ -322,16 +300,22 @@ const InvitationsTable = React.memo(function InvitationsTable({
               </TableRow>
             </TableHead>
             <StyledTableBody>
-              {isLoading && !invitations?.length && <LoadingRows tableWidth={tableFields.length} />}
-              {sortedInvitations.slice(0, numVisibleInvitations).map((invitation) => (
-                <ResultRow invitation={invitation} key={invitation.datetime_share_created} tableFields={tableFields} />
+              {isLoading && <LoadingRows tableWidth={tableFields.length} />}
+              {sortedItems.slice(0, numVisibleItems).map((item) => (
+                <ResultRow
+                  key={'id' in item ? item.id : item.original_workspace_id.id}
+                  item={item}
+                  tableFields={tableFields}
+                  endButtons={endButtons}
+                />
               ))}
             </StyledTableBody>
           </StyledTable>
           <SeeMoreRows
-            numVisibleInvitations={numVisibleInvitations}
-            setNumVisibleInvitations={setNumVisibleInvitations}
-            totalInvitations={sortedInvitations.length}
+            showSeeMoreOption={showSeeMoreOption}
+            numVisibleItems={numVisibleItems}
+            setNumVisibleItems={setNumVisibleItems}
+            totalItems={items.length}
           />
         </>
       )}
@@ -339,4 +323,4 @@ const InvitationsTable = React.memo(function InvitationsTable({
   );
 });
 
-export default InvitationsTable;
+export default WorkspaceTable;
