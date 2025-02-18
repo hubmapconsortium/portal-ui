@@ -32,6 +32,7 @@ import {
   StyledTableBody,
   StyledTableCell,
   StyledButton,
+  StyledTableContainer,
 } from './style';
 
 export function getFieldValue(item: WorkspaceInvitation | MergedWorkspace, field: string) {
@@ -291,26 +292,28 @@ const WorkspaceTable = React.memo(function WorkspaceTable({
         <Alert severity="info">{`No ${itemType}s to display based on current filters.`}</Alert>
       ) : (
         <>
-          <StyledTable>
-            <TableHead>
-              <TableRow>
-                <StyledTableCell width="0" />
-                <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
-                <StyledTableCell />
-              </TableRow>
-            </TableHead>
-            <StyledTableBody>
-              {isLoading && <LoadingRows tableWidth={tableFields.length} />}
-              {sortedItems.slice(0, numVisibleItems).map((item) => (
-                <ResultRow
-                  key={'id' in item ? item.id : item.original_workspace_id.id}
-                  item={item}
-                  tableFields={tableFields}
-                  endButtons={endButtons}
-                />
-              ))}
-            </StyledTableBody>
-          </StyledTable>
+          <StyledTableContainer>
+            <StyledTable>
+              <TableHead>
+                <TableRow>
+                  <StyledTableCell width="0" />
+                  <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
+                  <StyledTableCell />
+                </TableRow>
+              </TableHead>
+              <StyledTableBody>
+                {isLoading && <LoadingRows tableWidth={tableFields.length} />}
+                {sortedItems.slice(0, numVisibleItems).map((item) => (
+                  <ResultRow
+                    key={'id' in item ? item.id : item.original_workspace_id.id}
+                    item={item}
+                    tableFields={tableFields}
+                    endButtons={endButtons}
+                  />
+                ))}
+              </StyledTableBody>
+            </StyledTable>
+          </StyledTableContainer>
           <SeeMoreRows
             showSeeMoreOption={showSeeMoreOption}
             numVisibleItems={numVisibleItems}

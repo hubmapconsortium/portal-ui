@@ -7,7 +7,7 @@ import ArrowUpward from '@mui/icons-material/ArrowUpwardRounded';
 import ArrowDownward from '@mui/icons-material/ArrowDownwardRounded';
 
 import { HeaderCell } from 'js/shared-styles/tables';
-import { Button } from '@mui/material';
+import { Box, Button } from '@mui/material';
 
 const ChipWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(1.5, 2),
@@ -29,6 +29,7 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const StyledTableBody = styled(TableBody)({
   borderLeft: 'none',
   borderRight: 'none',
+  width: '100%',
 });
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
@@ -86,6 +87,13 @@ const StyledButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primaryContainer.main,
 }));
 
+const StyledTableContainer = styled(Box)({
+  maxHeight: '400px',
+  width: '100%',
+  overflowY: 'auto',
+  overflowX: 'hidden',
+});
+
 export {
   ChipWrapper,
   StyledTable,
@@ -100,4 +108,5 @@ export {
   ExpandedTableRow,
   ExpandedTableCell,
   StyledButton,
+  StyledTableContainer,
 };
