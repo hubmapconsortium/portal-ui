@@ -150,12 +150,12 @@ function useWorkspacesListWithSharerInfo() {
   const { receivedInvitations, invitationsLoading } = useInvitationsList();
 
   const workspacesWithInvitationInfo = workspacesList.map((workspace) => {
-    const sharerInfo = receivedInvitations.find((invitation) => invitation.original_workspace_id.id === workspace.id)
+    const user_id = receivedInvitations.find((invitation) => invitation.original_workspace_id.id === workspace.id)
       ?.shared_workspace_id.user_id;
 
     return {
       ...workspace,
-      sharerInfo,
+      user_id,
     };
   });
 

@@ -17,7 +17,8 @@ const ChipWrapper = styled('div')(({ theme }) => ({
   zIndex: theme.zIndex.fileBrowserHeader,
   display: 'flex',
   gap: theme.spacing(1),
-  borderBottom: `1px solid ${theme.palette.grey[300]}`,
+  border: `1px solid ${theme.palette.grey[300]}`,
+  borderBottom: 'none',
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -87,12 +88,13 @@ const StyledButton = styled(Button)(({ theme }) => ({
   backgroundColor: theme.palette.primaryContainer.main,
 }));
 
-const StyledTableContainer = styled(Box)({
+const StyledTableContainer = styled(Box)(({ theme }) => ({
   maxHeight: '400px',
   width: '100%',
+  border: `1px solid ${theme.palette.grey[300]}`,
   overflowY: 'auto',
   overflowX: 'hidden',
-});
+}));
 
 export {
   ChipWrapper,

@@ -16,7 +16,7 @@ const tableFields: TableField[] = [
     label: 'Status',
   },
   {
-    field: 'sharerInfo.username',
+    field: 'user_id.username',
     label: 'Created By',
   },
   {

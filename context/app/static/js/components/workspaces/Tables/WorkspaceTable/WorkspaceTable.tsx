@@ -102,9 +102,14 @@ function SortHeaderCell({
 function CellContent({ item, field }: { field: string; item: WorkspaceInvitation | MergedWorkspace }) {
   const fieldValue = getFieldValue(item, field);
 
+  // Get appropriate prefix if this is an invitation
+  const regex = /^(original_workspace_id|shared_workspace_id)/;
+  const match = regex.exec(field);
+  const prefix = match ? `${match[0]}.` : '';
+
   switch (field) {
-    case 'original_workspace_id.name': {
-      const workspaceId = getFieldValue(item, 'original_workspace_id.id');
+    case `${prefix}name`: {
+      const workspaceId = getFieldValue(item, `${prefix}id`);
       return (
         <Stack direction="row" spacing={1}>
           {/* TODO: Add link to workspace preview */}
@@ -115,12 +120,14 @@ function CellContent({ item, field }: { field: string; item: WorkspaceInvitation
         </Stack>
       );
     }
-    case 'original_workspace_id.user_id.username':
-    case 'shared_workspace_id.user_id.username': {
-      const prefix = field.startsWith('original_workspace_id') ? 'original_workspace_id' : 'shared_workspace_id';
-      const firstName = getFieldValue(item, `${prefix}.user_id.first_name`);
-      const lastName = getFieldValue(item, `${prefix}.user_id.last_name`);
-      const email = getFieldValue(item, `${prefix}.user_id.email`);
+    case `${prefix}user_id.username`: {
+      if ('user_id' in item && !item.user_id) {
+        return <Typography>Me</Typography>;
+      }
+
+      const firstName = getFieldValue(item, `${prefix}user_id.first_name`);
+      const lastName = getFieldValue(item, `${prefix}user_id.last_name`);
+      const email = getFieldValue(item, `${prefix}user_id.email`);
 
       return (
         <Stack direction="row" alignItems="center">
@@ -131,6 +138,7 @@ function CellContent({ item, field }: { field: string; item: WorkspaceInvitation
         </Stack>
       );
     }
+    case 'datetime_created':
     case 'datetime_share_created':
       return format(fieldValue, 'yyyy-MM-dd');
     default:
