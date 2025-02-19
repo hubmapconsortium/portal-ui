@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { WorkspaceWithUserInfo } from 'js/components/workspaces/types';
+import React, { useMemo, useState } from 'react';
+import { WorkspaceWithUserId } from 'js/components/workspaces/types';
 import Description from 'js/shared-styles/sections/Description';
 import WorkspaceTable from 'js/components/workspaces/Tables/WorkspaceTable/WorkspaceTable';
 import { SortField, TableFilter, TableField } from 'js/components/workspaces/Tables/WorkspaceTable/types';
@@ -38,22 +38,26 @@ export default function WorkspacesTable({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   toggleItem,
 }: {
-  workspacesList: WorkspaceWithUserInfo[];
+  workspacesList: WorkspaceWithUserId[];
   selectedItems: Set<string>;
   isLoading: boolean;
   toggleItem: (item: string) => void;
 }) {
   const { ownCount, sharedCount } = useMemo(() => {
-    const own = workspacesList.filter((workspace) => !workspace.sharerInfo).length;
+    const own = workspacesList.filter((workspace) => !workspace.user_id).length;
     return { ownCount: own, sharedCount: workspacesList.length - own };
   }, [workspacesList]);
 
-  const [showOwn, setShowOwn] = useState(false);
-  const [showShared, setShowShared] = useState(false);
+  const [showOwn, setShowOwn] = useState(true);
+  const [showShared, setShowShared] = useState(true);
 
-  useEffect(() => {
-    setShowOwn(ownCount > 0);
-  }, [ownCount]);
+  const filteredWorkspaces = useMemo(
+    () =>
+      [...workspacesList].filter((workspace) => {
+        return (showOwn && !workspace.user_id) || (showShared && !!workspace.user_id);
+      }),
+    [workspacesList, showOwn, showShared],
+  );
 
   const filters: TableFilter[] = useMemo(
     () => [
@@ -79,7 +83,7 @@ export default function WorkspacesTable({
     <Stack>
       <ChipWrapper>{`${selectedItems.size} selected`}</ChipWrapper>
       <WorkspaceTable
-        items={workspacesList}
+        items={filteredWorkspaces}
         isLoading={isLoading}
         itemType="workspace"
         filters={filters}

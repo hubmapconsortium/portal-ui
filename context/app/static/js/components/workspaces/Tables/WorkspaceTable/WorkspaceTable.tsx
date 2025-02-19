@@ -112,8 +112,7 @@ function CellContent({ item, field }: { field: string; item: WorkspaceInvitation
       const workspaceId = getFieldValue(item, `${prefix}id`);
       return (
         <Stack direction="row" spacing={1}>
-          {/* TODO: Add link to workspace preview */}
-          <InternalLink href="/workspaces">
+          <InternalLink href={`/workspaces/${workspaceId}`}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
           <Box>{`(ID: ${workspaceId})`}</Box>
@@ -265,6 +264,7 @@ const WorkspaceTable = React.memo(function WorkspaceTable({
   endButtons?: React.ReactNode;
   showSeeMoreOption?: boolean;
 }) {
+  console.error('items', items);
   const [sortField, setSortField] = useState<SortField>(initialSortField);
   const [numVisibleItems, setNumVisibleItems] = useState(showSeeMoreOption ? 3 : items.length);
 
