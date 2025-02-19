@@ -1,0 +1,1 @@
+- Use new `abo_blood_group_system` field in donor charts.

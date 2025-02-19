@@ -22,9 +22,9 @@ function Diversity() {
       </PageTitleWrapper>
 
       <DonorChart xAxis="age" groups="race" />
-      <DonorChart xAxis="blood_type" groups="race" />
+      <DonorChart xAxis="abo_blood_group_system" groups="race" />
       <DonorChart xAxis="sex" groups="race" />
-      <DonorChart xAxis="blood_type" groups="sex" />
+      <DonorChart xAxis="abo_blood_group_system" groups="sex" />
       <DonorChart xAxis="age" groups="sex" />
 
       <ProjectAttribution />
