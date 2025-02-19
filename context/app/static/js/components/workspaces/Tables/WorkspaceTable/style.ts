@@ -96,6 +96,12 @@ const StyledTableContainer = styled(Box)(({ theme }) => ({
   overflowX: 'hidden',
 }));
 
+const StyledLaunchButton = styled(Button)(({ theme }) => ({
+  border: `1px solid ${theme.palette.grey[300]}`,
+  borderRadius: theme.spacing(0.5),
+  padding: theme.spacing(1, 3),
+}));
+
 export {
   ChipWrapper,
   StyledTable,
@@ -111,4 +117,5 @@ export {
   ExpandedTableCell,
   StyledButton,
   StyledTableContainer,
+  StyledLaunchButton,
 };

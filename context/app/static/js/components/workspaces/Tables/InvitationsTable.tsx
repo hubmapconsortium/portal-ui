@@ -3,7 +3,7 @@ import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/system/Stack';
 
 import { Alert } from 'js/shared-styles/alerts/Alert';
-import { WorkspaceInvitation } from 'js/components/workspaces/types';
+import { WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
 
 import { CheckIcon, CloseFilledIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
@@ -100,25 +100,31 @@ const InvitationsTable = React.memo(function InvitationsTable({
     },
   ];
 
-  const endButtons = (
-    <Stack direction="row" justifyContent="end" alignItems="center">
-      <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
-        {options.map((props) => (
-          <IconDropdownMenuItem key={props.children} {...props} />
-        ))}
-      </IconDropdownMenu>
-      <SecondaryBackgroundTooltip title={previewInviteTooltip}>
-        <IconButton>
-          <EyeIcon color="primary" fontSize="1.5rem" />
-        </IconButton>
-      </SecondaryBackgroundTooltip>
-      <SecondaryBackgroundTooltip title={acceptInviteTooltip}>
-        <IconButton>
-          <CheckIcon color="success" fontSize="1.5rem" />
-        </IconButton>
-      </SecondaryBackgroundTooltip>
-    </Stack>
-  );
+  const endButtons = (item: WorkspaceInvitation | WorkspaceWithUserId) => {
+    if ('id' in item) {
+      return null;
+    }
+
+    return (
+      <Stack direction="row" justifyContent="end" alignItems="center">
+        <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
+          {options.map((props) => (
+            <IconDropdownMenuItem key={props.children} {...props} />
+          ))}
+        </IconDropdownMenu>
+        <SecondaryBackgroundTooltip title={previewInviteTooltip}>
+          <IconButton>
+            <EyeIcon color="primary" fontSize="1.5rem" />
+          </IconButton>
+        </SecondaryBackgroundTooltip>
+        <SecondaryBackgroundTooltip title={acceptInviteTooltip}>
+          <IconButton>
+            <CheckIcon color="success" fontSize="1.5rem" />
+          </IconButton>
+        </SecondaryBackgroundTooltip>
+      </Stack>
+    );
+  };
 
   if (!isLoading && !invitations.length) {
     return <Alert severity="info"> {`You currently have no ${status.toLocaleLowerCase()} invitations.`} </Alert>;

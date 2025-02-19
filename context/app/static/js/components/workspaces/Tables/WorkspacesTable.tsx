@@ -1,10 +1,13 @@
 import React, { useMemo, useState } from 'react';
-import { WorkspaceWithUserId } from 'js/components/workspaces/types';
+import { WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
 import Description from 'js/shared-styles/sections/Description';
 import WorkspaceTable from 'js/components/workspaces/Tables/WorkspaceTable/WorkspaceTable';
 import { SortField, TableFilter, TableField } from 'js/components/workspaces/Tables/WorkspaceTable/types';
 import Stack from '@mui/material/Stack';
-import { ChipWrapper } from 'js/components/workspaces/Tables/WorkspaceTable/style';
+import { ChipWrapper, StyledLaunchButton } from 'js/components/workspaces/Tables/WorkspaceTable/style';
+import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
+import { useWorkspacesList } from 'js/components/workspaces/hooks';
+import { ButtonProps } from '@mui/material/Button';
 
 const tableFields: TableField[] = [
   {
@@ -30,9 +33,12 @@ const initialSortField: SortField = {
   field: 'datetime_created',
 };
 
+function LaunchStopButton(props: ButtonProps) {
+  return <StyledLaunchButton {...props} />;
+}
+
 export default function WorkspacesTable({
   workspacesList,
-
   selectedItems,
   isLoading,
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -50,6 +56,25 @@ export default function WorkspacesTable({
 
   const [showOwn, setShowOwn] = useState(true);
   const [showShared, setShowShared] = useState(true);
+
+  const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
+
+  const endButtons = (item: WorkspaceWithUserId | WorkspaceInvitation) => {
+    if ('original_workspace_id' in item) {
+      return null;
+    }
+
+    return (
+      <WorkspaceLaunchStopButtons
+        workspace={item}
+        button={LaunchStopButton}
+        handleStopWorkspace={handleStopWorkspace}
+        isStoppingWorkspace={isStoppingWorkspace}
+        showLaunch
+        showStop
+      />
+    );
+  };
 
   const filteredWorkspaces = useMemo(
     () =>
@@ -89,20 +114,8 @@ export default function WorkspacesTable({
         filters={filters}
         tableFields={tableFields}
         initialSortField={initialSortField}
-        endButtons={[]}
+        endButtons={endButtons}
       />
     </Stack>
-    // workspacesList.map((workspace) => (
-    //   /* TODO: Inbound links have fragments like "#workspace-123": Highlight? */
-    //   <WorkspaceListItem
-    //     workspace={workspace}
-    //     key={workspace.id}
-    //     toggleItem={(item: number) => toggleItem(item.toString())}
-    //     selected={selectedItems.has(workspace.id.toString())}
-    //     ToggleComponent={Checkbox}
-    //     showLaunch
-    //     showStop
-    //   />
-    // ))
   );
 }

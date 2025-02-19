@@ -106,10 +106,7 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
     <Stack direction="row" spacing={2}>
       {showStop && <StopWorkspaceButton {...props} />}
       {showLaunch && (
-        <Button
-          type="button"
-          variant="contained"
-          color="primary"
+        <ButtonComponent
           onClick={() => {
             if (trackingInfo) {
               trackEvent({
@@ -121,8 +118,8 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
             launchOrOpenDialog(workspace);
           }}
         >
-          Launch Workspace
-        </Button>
+          Launch
+        </ButtonComponent>
       )}
     </Stack>
   );

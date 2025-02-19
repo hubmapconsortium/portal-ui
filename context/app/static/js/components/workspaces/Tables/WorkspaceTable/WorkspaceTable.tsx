@@ -6,11 +6,11 @@ import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import Stack from '@mui/system/Stack';
 import { format } from 'date-fns/format';
-import { get } from 'js/helpers/nodash';
 
+import { get } from 'js/helpers/nodash';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
-import { MergedWorkspace, WorkspaceInvitation } from 'js/components/workspaces/types';
+import { WorkspaceWithUserId, WorkspaceInvitation } from 'js/components/workspaces/types';
 
 import { Button, Collapse, Typography, useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -35,7 +35,7 @@ import {
   StyledTableContainer,
 } from './style';
 
-export function getFieldValue(item: WorkspaceInvitation | MergedWorkspace, field: string) {
+export function getFieldValue(item: WorkspaceInvitation | WorkspaceWithUserId, field: string) {
   return get(item, field, '');
 }
 
@@ -99,7 +99,7 @@ function SortHeaderCell({
   );
 }
 
-function CellContent({ item, field }: { field: string; item: WorkspaceInvitation | MergedWorkspace }) {
+function CellContent({ item, field }: { field: string; item: WorkspaceInvitation | WorkspaceWithUserId }) {
   const fieldValue = getFieldValue(item, field);
 
   // Get appropriate prefix if this is an invitation
@@ -159,13 +159,17 @@ function LoadingRows({ tableWidth }: { tableWidth: number }) {
   ));
 }
 
-interface RowProps {
-  item: WorkspaceInvitation | MergedWorkspace;
+interface RowProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
+  item: T;
   tableFields: TableField[];
-  endButtons?: React.ReactNode;
+  endButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
 }
 
-const ResultRow = React.memo(function ResultRow({ item, tableFields, endButtons }: RowProps) {
+const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | WorkspaceWithUserId>({
+  item,
+  tableFields,
+  endButtons,
+}: RowProps<T>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const description = getFieldValue(item, 'description');
 
@@ -184,7 +188,7 @@ const ResultRow = React.memo(function ResultRow({ item, tableFields, endButtons 
             <CellContent field={field} item={item} />
           </StyledTableCell>
         ))}
-        <StyledTableCell>{endButtons}</StyledTableCell>
+        <StyledTableCell>{endButtons ? endButtons(item) : undefined}</StyledTableCell>
       </CompactTableRow>
       {description && (
         <ExpandedTableRow>
@@ -245,7 +249,7 @@ function SeeMoreRows({
   );
 }
 
-const WorkspaceTable = React.memo(function WorkspaceTable({
+const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInvitation | WorkspaceWithUserId>({
   items,
   isLoading,
   itemType,
@@ -255,16 +259,15 @@ const WorkspaceTable = React.memo(function WorkspaceTable({
   endButtons,
   showSeeMoreOption,
 }: {
-  items: WorkspaceInvitation[] | MergedWorkspace[];
+  items: T[];
   isLoading: boolean;
   itemType: string;
   filters: TableFilter[];
   tableFields: TableField[];
   initialSortField: SortField;
-  endButtons?: React.ReactNode;
+  endButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
   showSeeMoreOption?: boolean;
 }) {
-  console.error('items', items);
   const [sortField, setSortField] = useState<SortField>(initialSortField);
   const [numVisibleItems, setNumVisibleItems] = useState(showSeeMoreOption ? 3 : items.length);
 

@@ -44,10 +44,11 @@ function ShareWorkspaceButton({ selectedItems }: { selectedItems: Set<string> })
 function WorkspacesList() {
   const { workspacesList, handleDeleteWorkspace, isDeleting, isLoading } = useWorkspacesListWithSharerInfo();
   const { selectedItems, toggleItem } = useSelectItems();
-  const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
+  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
+  // Filter workspaces in list based on search input
   const filteredWorkspaces = useMemo(() => {
     if (!inputValue.trim()) return workspacesList;
     return workspacesList.filter(
