@@ -1,17 +1,17 @@
 import React, { useMemo, useState } from 'react';
 
-import { Autocomplete, AutocompleteRenderInputParams, Box } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, Box, InputAdornment } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
 import ShareIcon from '@mui/icons-material/Share';
 
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import SearchBarComponent from 'js/shared-styles/inputs/SearchBar';
 import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 import WorkspacesTable from 'js/components/workspaces/Tables/WorkspacesTable';
 import { WorkspaceWithUserId } from 'js/components/workspaces/types';
+import { StyledSearchIcon, StyledTextField } from 'js/components/workspaces/style';
 import { useWorkspacesListWithSharerInfo } from './hooks';
 import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
 
@@ -47,7 +47,7 @@ function WorkspaceOption(props: React.HTMLAttributes<HTMLLIElement>, option: Wor
   const { name, id } = option;
 
   return (
-    <li {...props}>
+    <li {...props} key={id}>
       <div>
         <Typography variant="subtitle1">{name}</Typography>
         <Typography variant="body2">{`ID: ${id}`}</Typography>
@@ -59,19 +59,22 @@ function WorkspaceOption(props: React.HTMLAttributes<HTMLLIElement>, option: Wor
 function WorkspaceSearchField(params: AutocompleteRenderInputParams) {
   const { InputProps } = params;
   return (
-    <Box flex={1} maxWidth="50%">
-      <SearchBarComponent
-        {...params}
-        id="free-text-search"
-        fullWidth
-        placeholder="Search workspace by name or ID"
-        slotProps={{
-          input: {
-            ...InputProps,
-          },
-        }}
-      />
-    </Box>
+    <StyledTextField
+      {...params}
+      fullWidth
+      size="small"
+      placeholder="Search workspace by name or ID"
+      slotProps={{
+        input: {
+          ...InputProps,
+          startAdornment: (
+            <InputAdornment position="start">
+              <StyledSearchIcon />
+            </InputAdornment>
+          ),
+        },
+      }}
+    />
   );
 }
 
@@ -116,20 +119,22 @@ function WorkspacesList() {
       <Stack spacing={2}>
         <Typography variant="h4">{`My Workspaces (${workspacesList.length})`}</Typography>
         <Stack spacing={1} direction="row" alignItems="center" justifyContent="space-between">
-          <Autocomplete
-            value={autocompleteValue}
-            inputValue={inputValue}
-            onInputChange={(event, newInputValue) => {
-              setInputValue(newInputValue);
-            }}
-            filterOptions={(x) => x}
-            options={filteredWorkspaces}
-            renderOption={WorkspaceOption}
-            getOptionLabel={(option) => (typeof option === 'string' ? option : option.name)}
-            freeSolo
-            fullWidth
-            renderInput={WorkspaceSearchField}
-          />
+          <Box flex={1} maxWidth="50%">
+            <Autocomplete
+              value={autocompleteValue}
+              inputValue={inputValue}
+              onInputChange={(event, newInputValue) => {
+                setInputValue(newInputValue);
+              }}
+              filterOptions={(x) => x}
+              options={filteredWorkspaces}
+              renderOption={WorkspaceOption}
+              getOptionLabel={(option) => (typeof option === 'string' ? option : option.name)}
+              freeSolo
+              fullWidth
+              renderInput={WorkspaceSearchField}
+            />
+          </Box>
           <Stack display="flex" direction="row" spacing={2}>
             <DeleteWorkspaceButton
               disabled={isDeleting || selectedItems.size === 0}
