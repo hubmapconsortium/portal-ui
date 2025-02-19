@@ -108,7 +108,7 @@ export function buildQuery({
 
       if (isRangeFilter(filter) || isDateFilter(filter)) {
         if (filterHasValues({ filter })) {
-          if (filter.values.min && filter.values.max) {
+          if (filter?.values?.min !== undefined && filter?.values?.max) {
             // TODO: consider using zod in filterHasValues for validation.
             draft[portalField] = esb.rangeQuery(portalField).gte(filter.values.min).lte(filter.values.max);
           }
