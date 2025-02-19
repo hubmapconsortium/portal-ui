@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
-import { Box, useEventCallback } from '@mui/material';
+import { Autocomplete, AutocompleteRenderInputParams, Box } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
@@ -11,32 +11,9 @@ import SearchBarComponent from 'js/shared-styles/inputs/SearchBar';
 import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 import WorkspacesTable from 'js/components/workspaces/Tables/WorkspacesTable';
+import { WorkspaceWithUserId } from 'js/components/workspaces/types';
 import { useWorkspacesListWithSharerInfo } from './hooks';
 import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
-
-function SearchBar() {
-  const [search, setSearch] = useState('');
-  const [input, setInput] = useState(search);
-
-  const handleSubmit = useEventCallback((e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setSearch(/^\s*HBM\S+\s*$/i.exec(input) ? `"${input}"` : input);
-  });
-
-  return (
-    <form onSubmit={handleSubmit}>
-      <SearchBarComponent
-        id="free-text-search"
-        fullWidth
-        placeholder="Search workspace by name or ID"
-        value={input}
-        onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-          setInput(event.target.value);
-        }}
-      />
-    </form>
-  );
-}
 
 function DeleteWorkspaceButton({
   disabled,
@@ -66,10 +43,66 @@ function ShareWorkspaceButton({ selectedItems }: { selectedItems: Set<string> })
   );
 }
 
+function WorkspaceOption(props: React.HTMLAttributes<HTMLLIElement>, option: WorkspaceWithUserId) {
+  const { name, id } = option;
+
+  return (
+    <li {...props}>
+      <div>
+        <Typography variant="subtitle1">{name}</Typography>
+        <Typography variant="body2">{`ID: ${id}`}</Typography>
+      </div>
+    </li>
+  );
+}
+
+function WorkspaceSearchField(params: AutocompleteRenderInputParams) {
+  const { InputProps } = params;
+  return (
+    <Box flex={1} maxWidth="50%">
+      <SearchBarComponent
+        {...params}
+        id="free-text-search"
+        fullWidth
+        placeholder="Search workspace by name or ID"
+        slotProps={{
+          input: {
+            ...InputProps,
+          },
+        }}
+      />
+    </Box>
+  );
+}
+
+function useWorkspacesAutocomplete({ workspaces = [] }: { workspaces: WorkspaceWithUserId[] }) {
+  const [inputValue, setInputValue] = useState('');
+  const autocompleteValue = '';
+
+  const filteredWorkspaces = useMemo(() => {
+    if (!inputValue.trim()) return workspaces;
+    return workspaces.filter(
+      (ws) =>
+        ws.name.toLowerCase().includes(inputValue.toLowerCase()) || ws.id.toString().includes(inputValue.toLowerCase()),
+    );
+  }, [inputValue, workspaces]);
+
+  return {
+    inputValue,
+    setInputValue,
+    autocompleteValue,
+    filteredWorkspaces,
+  };
+}
+
 function WorkspacesList() {
   const { workspacesList, handleDeleteWorkspace, isDeleting, isLoading } = useWorkspacesListWithSharerInfo();
   const { selectedItems, toggleItem } = useSelectItems();
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
+
+  const { inputValue, setInputValue, autocompleteValue, filteredWorkspaces } = useWorkspacesAutocomplete({
+    workspaces: workspacesList,
+  });
 
   return (
     <>
@@ -83,9 +116,20 @@ function WorkspacesList() {
       <Stack spacing={2}>
         <Typography variant="h4">{`My Workspaces (${workspacesList.length})`}</Typography>
         <Stack spacing={1} direction="row" alignItems="center" justifyContent="space-between">
-          <Box flex={1} maxWidth="50%">
-            <SearchBar />
-          </Box>
+          <Autocomplete
+            value={autocompleteValue}
+            inputValue={inputValue}
+            onInputChange={(event, newInputValue) => {
+              setInputValue(newInputValue);
+            }}
+            filterOptions={(x) => x}
+            options={filteredWorkspaces}
+            renderOption={WorkspaceOption}
+            getOptionLabel={(option) => (typeof option === 'string' ? option : option.name)}
+            freeSolo
+            fullWidth
+            renderInput={WorkspaceSearchField}
+          />
           <Stack display="flex" direction="row" spacing={2}>
             <DeleteWorkspaceButton
               disabled={isDeleting || selectedItems.size === 0}
@@ -96,7 +140,7 @@ function WorkspacesList() {
           </Stack>
         </Stack>
         <WorkspacesTable
-          workspacesList={workspacesList}
+          workspacesList={filteredWorkspaces}
           selectedItems={selectedItems}
           toggleItem={toggleItem}
           isLoading={isLoading}
