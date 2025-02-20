@@ -47,7 +47,7 @@ function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: Workspa
   const onClick = useOpenDialog(dialogType);
   return (
     <MenuItem onClick={onClick}>
-      <Icon sx={{ mr: 1, fontSize: '1.25rem' }} />
+      <Icon sx={{ mr: 1, fontSize: '1.25rem' }} color="primary" />
       {children}
     </MenuItem>
   );
@@ -68,7 +68,7 @@ function WorkspaceDropdownMenu({ type }: MetadataMenuProps) {
   }
   return (
     <>
-      <StyledDropdownMenuButton menuID={menuID} variant="contained">
+      <StyledDropdownMenuButton menuID={menuID} variant="outlined">
         <SvgIcon component={WorkspacesIcon} sx={{ mr: 1, fontSize: '1.25rem' }} />
         Workspaces
       </StyledDropdownMenuButton>
