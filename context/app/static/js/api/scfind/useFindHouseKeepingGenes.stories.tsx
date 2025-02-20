@@ -20,7 +20,7 @@ function FindHousekeepingGenes(params: FindHouseKeepingGenesParams) {
 }
 
 const meta: Meta = {
-  title: 'SCFind/FindHousekeepingGenes',
+  title: 'SCFind/FindHouseKeepingGenes',
   component: FindHousekeepingGenes,
   parameters: {
     msw: {
@@ -33,11 +33,6 @@ const meta: Meta = {
   },
   argTypes: {
     cellTypes: {
-      control: {
-        type: 'text',
-      },
-    },
-    annotationNames: {
       control: {
         type: 'text',
       },
@@ -57,8 +52,10 @@ const meta: Meta = {
 
 type Story = StoryObj<typeof FindHousekeepingGenes>;
 
-export const FindGeneSignatures: Story = {
-  args: {},
+export const FindHouseKeepingGenes: Story = {
+  args: {
+    cellTypes: 'Kidney.B cell,Kidney.conventional dendritic cell',
+  },
 };
 
 export default meta;

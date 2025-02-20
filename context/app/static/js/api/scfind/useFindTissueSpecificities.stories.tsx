@@ -48,7 +48,9 @@ const meta: Meta = {
 type Story = StoryObj<typeof FindTissueSpecificitiesControl>;
 
 export const FindTissueSpecificities: Story = {
-  args: {},
+  args: {
+    geneList: 'PKHD1L1,MMRN1,PPFIBP1',
+  },
 };
 
 export default meta;

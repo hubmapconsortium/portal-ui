@@ -1,4 +1,4 @@
-import { createScfindKey, annotationNamesToGetParams, SCFIND_BASE } from './utils';
+import { createScfindKey, SCFIND_BASE } from './utils';
 
 describe('createScfindKey', () => {
   function expectURLIsValid(key: string) {
@@ -39,23 +39,5 @@ describe('createScfindKey', () => {
       expect(!key.includes(k));
     });
     expectURLIsValid(key);
-  });
-});
-
-describe('annotationNamesToGetParams', () => {
-  it('should return undefined if annotationNames is undefined', () => {
-    expect(annotationNamesToGetParams(undefined)).toBeUndefined();
-  });
-
-  it.each([
-    {
-      obj: [
-        { Organ: 'organ1', Tissue: 'tissue1' },
-        { Organ: 'organ1', Tissue: 'tissue2' },
-      ],
-      expected: '[{"Organ": "organ1", "Tissue": "tissue1"},{"Organ": "organ1", "Tissue": "tissue2"}]',
-    },
-  ])('should format annotation names correctly', ({ obj, expected }) => {
-    expect(annotationNamesToGetParams(obj)).toBe(expected);
   });
 });

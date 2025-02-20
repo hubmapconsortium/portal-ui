@@ -1,11 +1,10 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey, annotationNamesToGetParams } from './utils';
-import { AnnotationNamesList } from './types';
+import { createScfindKey } from './utils';
 
 export interface FindCellTypeSpecificitiesParams {
   geneList?: string | string[];
-  annotationNames?: AnnotationNamesList;
+  datasets?: string | string[];
   minCells?: number;
   minFraction?: number;
 }
@@ -18,13 +17,13 @@ interface FindCellTypeSpecificitiesResponse {
 
 export function createCellTypeSpecificitiesKey({
   geneList,
-  annotationNames,
+  datasets,
   minCells,
   minFraction,
 }: FindCellTypeSpecificitiesParams): EvaluateMarkersKey {
   return createScfindKey('findCellTypeSpecificities', {
-    annotation_names: annotationNamesToGetParams(annotationNames),
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+    datasets: Array.isArray(datasets) ? datasets.join(',') : datasets,
     min_cells: minCells ? String(minCells) : undefined,
     min_fraction: minFraction ? String(minFraction) : undefined,
   });

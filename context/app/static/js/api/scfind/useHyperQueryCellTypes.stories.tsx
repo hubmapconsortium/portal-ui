@@ -2,12 +2,11 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Typography, Stack } from '@mui/material';
 import { http, passthrough } from 'msw';
-import useHyperQueryCellTypes, { CellTypeNamesParams } from './useHyperQueryCellTypes';
+import useHyperQueryCellTypes, { HyperQueryCellTypesParams } from './useHyperQueryCellTypes';
 
 import { SCFIND_BASE } from './utils';
 
-function HyperQueryCellTypesControl(params: CellTypeNamesParams) {
-  console.log({ params });
+function HyperQueryCellTypesControl(params: HyperQueryCellTypesParams) {
   const result = useHyperQueryCellTypes(params);
   return (
     <Stack>
@@ -38,14 +37,9 @@ const meta: Meta = {
         type: 'text',
       },
     },
-    annotationNames: {
+    datasetName: {
       control: {
-        type: 'select',
-        options: ['lung', 'kidney'],
-        mapping: {
-          lung: [{ Organ: 'lung' }],
-          kidney: [{ Organ: 'kidney' }],
-        },
+        type: 'text',
       },
     },
     includePrefix: {
@@ -61,7 +55,7 @@ type Story = StoryObj<typeof HyperQueryCellTypesControl>;
 export const HyperQueryCellTypes: Story = {
   args: {
     geneList: 'UMOD',
-    annotationNames: [{ Organ: 'Kidney', Tissue: 'Kidney' }],
+    datasetName: 'kidney',
   },
 };
 

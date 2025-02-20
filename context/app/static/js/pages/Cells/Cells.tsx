@@ -33,8 +33,9 @@ function Cells() {
         </LabelledSectionText>
       </Stack>
       <MolecularDataQueryForm
-        onSubmit={function (data: MolecularDataQueryFormState): void {
-          alert('Submit not yet implemented.');
+        onSubmit={function todo(data: MolecularDataQueryFormState): void {
+          console.error('Not yet implemented', data);
+          // Check handleSubmit implementation in https://github.com/hubmapconsortium/portal-ui/blob/16b3dbab901f2003fea0b1bc1f07ab8d77c2d79f/context/app/static/js/components/cells/DatasetsSelectedByExpression/hooks.tsx
         }}
       >
         <QueryType />

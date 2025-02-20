@@ -42,17 +42,7 @@ const meta: Meta = {
         type: 'text',
       },
     },
-    annotationNames: {
-      control: {
-        type: 'text',
-      },
-    },
     backgroundCellTypes: {
-      control: {
-        type: 'text',
-      },
-    },
-    backgroundAnnotationNames: {
       control: {
         type: 'text',
       },
@@ -73,7 +63,10 @@ const meta: Meta = {
 type Story = StoryObj<typeof EvaluateMarkersControl>;
 
 export const EvaluateMarkers: Story = {
-  args: {},
+  args: {
+    geneList: ['PRKCB', 'PAX5', 'SP140'],
+    cellTypes: 'Kidney.B cell',
+  },
 };
 
 export default meta;

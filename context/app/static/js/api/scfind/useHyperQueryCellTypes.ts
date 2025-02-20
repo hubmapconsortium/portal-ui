@@ -1,33 +1,27 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey, annotationNamesToGetParams } from './utils';
-import { AnnotationNamesList } from './types';
+import { createScfindKey } from './utils';
 
-export interface CellTypeNamesParams {
+export interface HyperQueryCellTypesParams {
   geneList: string | string[];
-  annotationNames?: AnnotationNamesList;
-  includePrefix?: boolean;
+  datasetName: string | string[];
+  includePrefix: boolean;
 }
 
 interface CellTypeNamesResponse {
   cellTypeNames: string[];
 }
 
-type CellTypeNamesKey = string;
+type HyperQueryCellTypesKey = string;
 
-export function createCellTypeNamesKey({
-  geneList,
-  annotationNames,
-  includePrefix,
-}: CellTypeNamesParams): CellTypeNamesKey {
+export function createCellTypeNamesKey({ geneList, includePrefix }: HyperQueryCellTypesParams): HyperQueryCellTypesKey {
   return createScfindKey('hyperQueryCellTypes', {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-    annotation_names: annotationNamesToGetParams(annotationNames),
     include_prefix: includePrefix ? 'true' : 'false',
   });
 }
 
-export default function useHyperQueryCellTypes(params: CellTypeNamesParams) {
+export default function useHyperQueryCellTypes(params: HyperQueryCellTypesParams) {
   const key = createCellTypeNamesKey(params);
-  return useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
+  return useSWR<CellTypeNamesResponse, unknown, HyperQueryCellTypesKey>(key, (url) => fetcher({ url }));
 }

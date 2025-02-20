@@ -42,28 +42,16 @@ const meta: Meta = {
         type: 'text',
       },
     },
-    annotationNames: {
-      control: {
-        type: 'text',
-      },
-    },
-    exhaustive: {
-      control: {
-        type: 'boolean',
-      },
-    },
-    support_cutoff: {
-      control: {
-        type: 'number',
-      },
-    },
   },
 };
 
 type Story = StoryObj<typeof MarkerGenesControl>;
 
 export const MarkerGenes: Story = {
-  args: {},
+  args: {
+    markerGenes: 'PKHD1L1,MMRN1,PPFIBP1,PLCG2',
+    datasetName: 'Kidney',
+  },
 };
 
 export default meta;

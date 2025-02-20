@@ -58,7 +58,9 @@ const meta: Meta = {
 type Story = StoryObj<typeof FindSimilarGenesControl>;
 
 export const FindSimilarGenes: Story = {
-  args: {},
+  args: {
+    geneList: 'MMRN1,PKHD1L1',
+  },
 };
 
 export default meta;

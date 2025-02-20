@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { AnnotationNamesList } from './types';
-import { createScfindKey, annotationNamesToGetParams } from './utils';
+import { createScfindKey } from './utils';
 
 interface CellTypeMarkerInfo {
   cellType: string;
@@ -16,9 +15,7 @@ interface CellTypeMarkerInfo {
 
 export interface CellTypeMarkersParams {
   cellTypes: string | string[];
-  annotationNames?: AnnotationNamesList;
   backgroundCellTypes?: string[];
-  backgroundAnnotationNames?: AnnotationNamesList;
   topK?: number;
   sortField?: keyof CellTypeMarkerInfo;
   includePrefix?: boolean;
@@ -32,18 +29,14 @@ interface CellTypeMarkersResponse {
 
 export function createCellTypeMarkersKey({
   cellTypes,
-  annotationNames,
-  backgroundCellTypes,
-  backgroundAnnotationNames,
   topK,
+  backgroundCellTypes,
   sortField,
   includePrefix,
 }: CellTypeMarkersParams): CellTypeMarkersKey {
   return createScfindKey('cellTypeMarkers', {
     cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
-    annotation_names: annotationNames ? annotationNamesToGetParams(annotationNames) : undefined,
     background_cell_types: Array.isArray(backgroundCellTypes) ? backgroundCellTypes.join(',') : backgroundCellTypes,
-    background_annotation_names: annotationNamesToGetParams(backgroundAnnotationNames),
     top_k: topK ? topK.toString() : undefined,
     include_prefix: includePrefix ? String(includePrefix) : undefined,
     sort_field: sortField,

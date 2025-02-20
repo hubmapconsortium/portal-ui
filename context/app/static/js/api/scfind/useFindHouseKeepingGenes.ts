@@ -1,11 +1,9 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey, annotationNamesToGetParams } from './utils';
-import { AnnotationNamesList } from './types';
+import { createScfindKey } from './utils';
 
 export interface FindHouseKeepingGenesParams {
   cellTypes?: string | string[];
-  annotationNames?: AnnotationNamesList;
   minRecall?: number;
   maxGenes?: number;
 }
@@ -18,13 +16,11 @@ interface FindHouseKeepingGenesResponse {
 
 export function createFindHouseKeepingGenesKey({
   cellTypes,
-  annotationNames,
   minRecall,
   maxGenes,
 }: FindHouseKeepingGenesParams): FindHouseKeepingGenesKey {
   return createScfindKey('findHouseKeepingGenes', {
     cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
-    annotation_names: annotationNamesToGetParams(annotationNames),
     min_recall: minRecall ? String(minRecall) : undefined,
     max_genes: maxGenes ? String(maxGenes) : undefined,
   });

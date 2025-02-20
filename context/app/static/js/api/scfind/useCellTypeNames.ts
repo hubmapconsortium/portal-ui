@@ -1,25 +1,18 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey, annotationNamesToGetParams } from './utils';
-import { AnnotationNamesList } from './types';
+import { createScfindKey } from './utils';
 
 type CellTypeNamesKey = string;
-
-export interface CellTypeNamesParams {
-  annotationNames: AnnotationNamesList;
-}
 
 interface CellTypeNamesResponse {
   cellTypeNames: string[];
 }
 
-export function createCellTypeNamesKey(params?: CellTypeNamesParams): CellTypeNamesKey {
-  return createScfindKey('cellTypeNames', {
-    annotation_names: annotationNamesToGetParams(params?.annotationNames),
-  });
+export function createCellTypeNamesKey(): CellTypeNamesKey {
+  return createScfindKey('cellTypeNames', {});
 }
 
-export default function useCellTypeNames(params?: CellTypeNamesParams) {
-  const key = createCellTypeNamesKey(params);
+export default function useCellTypeNames() {
+  const key = createCellTypeNamesKey();
   return useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
 }

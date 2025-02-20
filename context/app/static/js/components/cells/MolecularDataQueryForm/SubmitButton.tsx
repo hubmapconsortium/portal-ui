@@ -1,22 +1,26 @@
 import React from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
 
-import { useCellVariableNames } from './hooks';
+import LoadingButton from '@mui/lab/LoadingButton';
+import { useCellVariableNames, useMolecularDataQueryFormState } from './hooks';
 
 export default function SubmitButton() {
   const cellVariableNames = useCellVariableNames();
+  const {
+    formState: { isSubmitting },
+  } = useMolecularDataQueryFormState();
   return (
-    <Box mt={2}>
-      <Button
-        disabled={cellVariableNames.length === 0}
-        variant="contained"
-        color="primary"
-        id="run-query-button"
-        type="submit"
-      >
-        Run Query
-      </Button>
-    </Box>
+    <LoadingButton
+      disabled={cellVariableNames.length === 0 || isSubmitting}
+      loading={isSubmitting}
+      variant="contained"
+      color="primary"
+      id="run-query-button"
+      type="submit"
+      sx={{
+        maxWidth: 'fit-content',
+      }}
+    >
+      Run Query
+    </LoadingButton>
   );
 }

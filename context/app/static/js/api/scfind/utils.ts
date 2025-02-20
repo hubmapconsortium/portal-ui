@@ -1,5 +1,3 @@
-import { AnnotationNamesList } from './types';
-
 // Current URL for SCFind as of 2/12/2025
 // PROD
 // export const SCFIND_BASE = 'http://scfind.hubmapconsortium.org/api';
@@ -22,25 +20,4 @@ export function createScfindKey(endpoint: string, params: Record<string, string 
     .forEach(([key, value]) => urlParams.append(key, value!));
   const fullUrl = new URL(`${SCFIND_BASE}/${endpoint}?${urlParams.toString()}`);
   return fullUrl.toString();
-}
-
-/**
- * Helper method to format annotation names for SCFind API requests
- * Formats annotation names to [
- *  {"Organ": "organ1", "Tissue": "tissue1"},
- *  {"Organ": "organ1", "Tissue": "tissue2"},
- * ].
- *
- * @param annotationNames  - The annotation names to format
- * @returns The formatted annotation names, or undefined if annotationNames is undefined
- */
-export function annotationNamesToGetParams(annotationNames?: AnnotationNamesList): string | undefined {
-  if (!annotationNames) {
-    return undefined;
-  }
-  if (typeof annotationNames === 'string') {
-    return annotationNames;
-  }
-  const list = annotationNames.map(({ Organ, Tissue }) => `{"Organ":"${Organ}","Tissue":"${Tissue}"}`).join(',');
-  return `[${list}]`;
 }

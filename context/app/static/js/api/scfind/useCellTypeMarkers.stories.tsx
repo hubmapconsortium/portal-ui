@@ -39,17 +39,7 @@ const meta: Meta = {
         defaultValue: 'immature B cell',
       },
     },
-    annotationNames: {
-      control: {
-        type: 'text',
-      },
-    },
     backgroundCellTypes: {
-      control: {
-        type: 'text',
-      },
-    },
-    backgroundAnnotationNames: {
       control: {
         type: 'text',
       },
@@ -79,7 +69,7 @@ type Story = StoryObj<typeof CellTypeMarkersControl>;
 
 export const CellTypeMarkers: Story = {
   args: {
-    cellTypes: 'immature B cell',
+    cellTypes: 'Kidney.B cell',
   },
 };
 

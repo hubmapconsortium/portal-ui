@@ -2,17 +2,17 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Typography, Stack } from '@mui/material';
 import { http, passthrough } from 'msw';
-import useCellTypeNames, { CellTypeNamesParams } from './useCellTypeNames';
+import useCellTypeNames from './useCellTypeNames';
 
 import { SCFIND_BASE } from './utils';
 
-function CellTypeNamesControl(params: CellTypeNamesParams) {
-  const result = useCellTypeNames(params);
+function CellTypeNamesControl() {
+  const result = useCellTypeNames();
   return (
     <Stack>
       <Typography variant="h6">Cell Type Names</Typography>
       <Typography variant="body1">Params:</Typography>
-      <pre>{JSON.stringify(params, null, 2)}</pre>
+      <pre>(None)</pre>
       <Typography variant="body1">Results:</Typography>
       <pre>{JSON.stringify(result, null, 2)}</pre>
     </Stack>
@@ -29,13 +29,6 @@ const meta: Meta = {
           return passthrough();
         }),
       ],
-    },
-  },
-  argTypes: {
-    annotationNames: {
-      control: {
-        type: 'text',
-      },
     },
   },
 };

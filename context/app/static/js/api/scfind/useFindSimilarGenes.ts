@@ -1,13 +1,11 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey, annotationNamesToGetParams } from './utils';
-import { AnnotationNamesList } from './types';
+import { createScfindKey } from './utils';
 
 export interface FindSimilarGenesParams {
-  cellTypes?: string | string[];
-  annotationNames?: AnnotationNamesList;
-  minRecall?: number;
-  maxGenes?: number;
+  geneList: string | string[];
+  datasetName: string | string[];
+  topK?: number;
 }
 
 type FindSimilarGenesKey = string;
@@ -17,16 +15,14 @@ interface FindSimilarGenesResponse {
 }
 
 export function createFindSimilarGenesKey({
-  cellTypes,
-  annotationNames,
-  minRecall,
-  maxGenes,
+  geneList,
+  datasetName,
+  topK,
 }: FindSimilarGenesParams): FindSimilarGenesKey {
   return createScfindKey('findSimilarGenes', {
-    cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
-    annotation_names: annotationNamesToGetParams(annotationNames),
-    min_recall: minRecall ? String(minRecall) : undefined,
-    max_genes: maxGenes ? String(maxGenes) : undefined,
+    gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+    dataset_name: Array.isArray(datasetName) ? datasetName.join(',') : datasetName,
+    top_k: topK ? topK.toString() : undefined,
   });
 }
 

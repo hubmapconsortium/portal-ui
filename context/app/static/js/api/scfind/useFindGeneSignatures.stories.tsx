@@ -37,11 +37,6 @@ const meta: Meta = {
         type: 'text',
       },
     },
-    annotationNames: {
-      control: {
-        type: 'text',
-      },
-    },
     minCells: {
       control: {
         type: 'number',
@@ -58,7 +53,9 @@ const meta: Meta = {
 type Story = StoryObj<typeof FindGeneSignaturesControl>;
 
 export const FindGeneSignatures: Story = {
-  args: {},
+  args: {
+    cellTypes: 'Lung.B cell',
+  },
 };
 
 export default meta;
