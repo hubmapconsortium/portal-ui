@@ -1,6 +1,5 @@
 import React, { useMemo, useState } from 'react';
 import TableRow from '@mui/material/TableRow';
-import TableHead from '@mui/material/TableHead';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
@@ -33,6 +32,8 @@ import {
   StyledTableCell,
   StyledButton,
   StyledTableContainer,
+  StyledTableRow,
+  StyledTableHead,
 } from './style';
 
 export function getFieldValue(item: WorkspaceInvitation | WorkspaceWithUserId, field: string) {
@@ -305,13 +306,13 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
         <>
           <StyledTableContainer>
             <StyledTable>
-              <TableHead>
-                <TableRow>
+              <StyledTableHead>
+                <StyledTableRow>
                   <StyledTableCell width="0" />
                   <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
                   <StyledTableCell />
-                </TableRow>
-              </TableHead>
+                </StyledTableRow>
+              </StyledTableHead>
               <StyledTableBody>
                 {isLoading && <LoadingRows tableWidth={tableFields.length} />}
                 {sortedItems.slice(0, numVisibleItems).map((item) => (
