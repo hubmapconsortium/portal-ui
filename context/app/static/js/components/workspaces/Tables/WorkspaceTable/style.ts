@@ -85,6 +85,13 @@ const StyledHeaderCell = styled(HeaderCell)({
   whiteSpace: 'nowrap',
 });
 
+const StyledCheckboxCell = styled(StyledTableCell)(({ theme }) => ({
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  paddingTop: theme.spacing(1.25),
+}));
+
 const StyledButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primaryContainer.contrastText,
   backgroundColor: theme.palette.primaryContainer.main,
@@ -128,4 +135,5 @@ export {
   StyledTableContainer,
   StyledTableHead,
   StyledLaunchButton,
+  StyledCheckboxCell,
 };

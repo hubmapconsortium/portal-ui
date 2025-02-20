@@ -35,6 +35,7 @@ import {
   StyledTableContainer,
   StyledTableRow,
   StyledTableHead,
+  StyledCheckboxCell,
 } from './style';
 
 export function getFieldValue(item: WorkspaceInvitation | WorkspaceWithUserId, field: string) {
@@ -185,9 +186,9 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | 
     <>
       <CompactTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         {selectedItemIds && toggleItem && (
-          <StyledTableCell width="0">
+          <StyledCheckboxCell width="0">
             <Checkbox checked={selectedItemIds.has(itemId)} onChange={() => toggleItem(itemId)} />
-          </StyledTableCell>
+          </StyledCheckboxCell>
         )}
         <StyledTableCell width="0">
           {description && (
@@ -340,9 +341,9 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
               <StyledTableHead>
                 <StyledTableRow>
                   {selectedItemIds && toggleItem && (
-                    <StyledTableCell width="0">
+                    <StyledCheckboxCell width="0" size="small">
                       <Checkbox checked={selectedItemIds.size === items.length} onChange={onToggleCheckboxHeader} />
-                    </StyledTableCell>
+                    </StyledCheckboxCell>
                   )}
                   <StyledTableCell width="0" />
                   <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
