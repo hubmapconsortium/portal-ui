@@ -127,7 +127,7 @@ const InvitationsTable = React.memo(function InvitationsTable({
   };
 
   if (!isLoading && !invitations.length) {
-    return <Alert severity="info"> {`You currently have no ${status.toLocaleLowerCase()} invitations.`} </Alert>;
+    return <Alert severity="info"> {`No ${status.toLocaleLowerCase()} workspace invitations.`} </Alert>;
   }
 
   return (

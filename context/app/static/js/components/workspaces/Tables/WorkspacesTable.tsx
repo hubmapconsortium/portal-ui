@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
 import Description from 'js/shared-styles/sections/Description';
 import WorkspaceTable from 'js/components/workspaces/Tables/WorkspaceTable/WorkspaceTable';
@@ -57,6 +57,10 @@ export default function WorkspacesTable({
 
   const [showOwn, setShowOwn] = useState(true);
   const [showShared, setShowShared] = useState(true);
+
+  useEffect(() => {
+    setShowShared(sharedCount > 0);
+  }, [sharedCount]);
 
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
 
