@@ -4,7 +4,21 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Checkbox from '@mui/material/Checkbox';
 
-function AddToListItem({ isSelected, addToSelectedLists, removeFromSelectedLists, title, listUUID }) {
+interface AddToListItemProps {
+  isSelected: boolean;
+  addToSelectedLists: (listUUID: string) => void;
+  removeFromSelectedLists: (listUUID: string) => void;
+  title: string;
+  listUUID: string;
+}
+
+function AddToListItem({
+  isSelected,
+  addToSelectedLists,
+  removeFromSelectedLists,
+  title,
+  listUUID,
+}: AddToListItemProps) {
   const labelId = `checkbox-list-${title}`;
 
   const handleClick = isSelected ? removeFromSelectedLists : addToSelectedLists;

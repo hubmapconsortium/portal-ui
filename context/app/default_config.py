@@ -41,6 +41,7 @@ class DefaultConfig(object):
     USER_TEMPLATES_ENDPOINT = 'should-be-overriden'
     UBKG_ENDPOINT = 'should-be-overridden'
     SOFT_ASSAY_ENDPOINT = 'should-be-overridden'
+    UKV_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'
     APP_CLIENT_ID = 'should-be-overridden'

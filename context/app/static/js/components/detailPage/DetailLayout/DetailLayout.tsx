@@ -2,17 +2,11 @@ import React, { PropsWithChildren } from 'react';
 import { createPortal } from 'react-dom';
 import Stack from '@mui/material/Stack';
 
-import useEntityStore, { savedAlertStatus, editedAlertStatus, EntityStore } from 'js/stores/useEntityStore';
+import { leftRouteBoundaryID, rightRouteBoundaryID } from 'js/components/Routes/Route/Route';
+import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/types';
-import { leftRouteBoundaryID, rightRouteBoundaryID } from 'js/components/Routes/Route/Route';
 import { SectionOrder, getSections } from 'js/shared-styles/sections/TableOfContents/utils';
-import { StyledAlert } from './style';
-
-const entityStoreSelector = (state: EntityStore) => ({
-  shouldDisplaySavedOrEditedAlert: state.shouldDisplaySavedOrEditedAlert,
-  setShouldDisplaySavedOrEditedAlert: state.setShouldDisplaySavedOrEditedAlert,
-});
 
 interface DetailLayoutProps extends PropsWithChildren {
   sections: SectionOrder;
@@ -46,34 +40,12 @@ export function HelperPanelPortal({ children }: PropsWithChildren) {
   );
 }
 
-function DetailAlert() {
-  const { shouldDisplaySavedOrEditedAlert, setShouldDisplaySavedOrEditedAlert } = useEntityStore(entityStoreSelector);
-
-  if (shouldDisplaySavedOrEditedAlert === savedAlertStatus) {
-    return (
-      <StyledAlert severity="success" onClose={() => setShouldDisplaySavedOrEditedAlert(false)}>
-        Successfully added to My Saves List. All lists are currently stored on local storage and are not transferable
-        between devices.
-      </StyledAlert>
-    );
-  }
-
-  if (shouldDisplaySavedOrEditedAlert === editedAlertStatus) {
-    return (
-      <StyledAlert severity="success" onClose={() => setShouldDisplaySavedOrEditedAlert(false)}>
-        Successfully updated save status. All lists are currently stored on local storage and are not transferable
-        between devices.
-      </StyledAlert>
-    );
-  }
-}
-
 function DetailLayout({ sections, children, isLoading = false }: DetailLayoutProps) {
   const items = getSections(sections);
 
   return (
     <>
-      <DetailAlert />
+      <SavedListsSuccessAlert />
       <TableOfContentsPortal items={items} isLoading={isLoading} />
       {children}
     </>

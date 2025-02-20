@@ -3,6 +3,7 @@ import { Alert } from 'js/shared-styles/alerts';
 
 const StyledAlert = styled(Alert)(({ theme }) => ({
   marginBottom: theme.spacing(1.5),
+  alignItems: 'center',
 }));
 
 export { StyledAlert };
