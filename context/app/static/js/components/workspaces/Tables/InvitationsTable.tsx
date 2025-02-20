@@ -14,8 +14,8 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 const acceptInviteTooltip =
   'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
-const previewInviteTooltip = 'Preview the details of this workspace such as the attached datasets and templates.';
-const moreOptionsTooltip = 'View additional actions including declining this workspace copy invitation.';
+const previewInviteTooltip = 'Preview the details of this workspace.';
+const moreOptionsTooltip = 'View additional actions.';
 
 const InvitationsTable = React.memo(function InvitationsTable({
   isLoading,

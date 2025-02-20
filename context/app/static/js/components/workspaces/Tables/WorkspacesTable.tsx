@@ -24,14 +24,14 @@ const tableFields: TableField[] = [
     label: 'Created By',
   },
   {
-    field: 'datetime_created',
-    label: 'Creation Date',
+    field: 'datetime_last_job_launch',
+    label: 'Last Launched',
   },
 ];
 
 const initialSortField: SortField = {
   direction: 'desc',
-  field: 'datetime_created',
+  field: 'datetime_last_job_launch',
 };
 
 function LaunchStopButton(props: ButtonProps) {

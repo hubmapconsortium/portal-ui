@@ -12,12 +12,13 @@ import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
 import { WorkspaceWithUserId, WorkspaceInvitation } from 'js/components/workspaces/types';
 
-import { Button, Collapse, Typography, useEventCallback } from '@mui/material';
+import { Collapse, Typography, useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { DownIcon, EmailIcon } from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
+import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SortField, SortDirection, TableField, TableFilter } from './types';
 import {
   ArrowDownOff,
@@ -38,8 +39,25 @@ import {
   StyledCheckboxCell,
 } from './style';
 
-export function getFieldValue(item: WorkspaceInvitation | WorkspaceWithUserId, field: string) {
-  return get(item, field, '');
+export function getFieldValue({
+  item,
+  field,
+  prefix,
+}: {
+  item: WorkspaceInvitation | WorkspaceWithUserId;
+  field: string;
+  prefix?: string;
+}) {
+  if (field === 'datetime_last_job_launch') {
+    const launchDate = get(item, field, '');
+    const createdDate = get(item, `datetime_created`, '');
+
+    return launchDate || createdDate;
+  }
+
+  const fieldWithPrefix = prefix ? `${prefix}${field}` : field;
+
+  return get(item, fieldWithPrefix, '');
 }
 
 export function OrderIcon({
@@ -103,16 +121,16 @@ function SortHeaderCell({
 }
 
 function CellContent({ item, field }: { field: string; item: WorkspaceInvitation | WorkspaceWithUserId }) {
-  const fieldValue = getFieldValue(item, field);
-
   // Get appropriate prefix if this is an invitation
   const regex = /^(original_workspace_id|shared_workspace_id)/;
   const match = regex.exec(field);
   const prefix = match ? `${match[0]}.` : '';
 
+  const fieldValue = getFieldValue({ item, field, prefix });
+
   switch (field) {
     case `${prefix}name`: {
-      const workspaceId = getFieldValue(item, `${prefix}id`);
+      const workspaceId = getFieldValue({ item, field: 'id', prefix });
       return (
         <Stack direction="row" spacing={1}>
           <InternalLink href={`/workspaces/${workspaceId}`}>
@@ -127,22 +145,24 @@ function CellContent({ item, field }: { field: string; item: WorkspaceInvitation
         return <Typography>Me</Typography>;
       }
 
-      const firstName = getFieldValue(item, `${prefix}user_id.first_name`);
-      const lastName = getFieldValue(item, `${prefix}user_id.last_name`);
-      const email = getFieldValue(item, `${prefix}user_id.email`);
+      const firstName = getFieldValue({ item, field: 'user_id.first_name', prefix });
+      const lastName = getFieldValue({ item, field: 'user_id.last_name', prefix });
+      const email = getFieldValue({ item, field: 'user_id.email', prefix });
 
       return (
         <Stack direction="row" alignItems="center">
           <Typography>{`${firstName} ${lastName}`}</Typography>
-          <Button href={`mailto:${email}`} sx={{ minWidth: 0 }}>
+          <TooltipButton href={`mailto:${email}`} sx={{ minWidth: 0 }} tooltip={`Mail to ${email}`}>
             <EmailIcon color="info" />
-          </Button>
+          </TooltipButton>
         </Stack>
       );
     }
-    case 'datetime_created':
-    case 'datetime_share_created':
-      return format(fieldValue, 'yyyy-MM-dd');
+    case `${prefix}datetime_created`:
+    case `${prefix}datetime_last_job_launch`: {
+      const date = fieldValue ?? getFieldValue({ item, field: 'datetime_created', prefix });
+      return format(date, 'yyyy-MM-dd');
+    }
     default:
       return <Typography>{fieldValue}</Typography>;
   }
@@ -178,7 +198,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | 
   toggleItem,
 }: RowProps<T>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const description = getFieldValue(item, 'description');
+  const description = getFieldValue({ item, field: 'description' });
 
   const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
 
@@ -295,8 +315,8 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
   const sortedItems = useMemo(
     () =>
       [...items].sort((a, b) => {
-        const aValue = getFieldValue(a, sortField.field);
-        const bValue = getFieldValue(b, sortField.field);
+        const aValue = getFieldValue({ item: a, field: sortField.field });
+        const bValue = getFieldValue({ item: b, field: sortField.field });
 
         if (aValue < bValue) return sortField.direction === 'asc' ? -1 : 1;
         if (aValue > bValue) return sortField.direction === 'asc' ? 1 : -1;

@@ -39,6 +39,7 @@ function StopWorkspaceButton({
     <ButtonComponent
       type="button"
       disabled={isStoppingWorkspace}
+      variant="contained"
       onClick={() => {
         handleStopWorkspace(workspace.id).catch((err) => {
           toastErrorStopWorkspace(workspace.name);
