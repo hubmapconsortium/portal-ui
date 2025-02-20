@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 
 import { useAppContext } from 'js/components/Contexts';
 
-import WorkspaceInvitations from './WorkspaceInvitations';
+import InvitationsList from './InvitationsList';
 import WorkspacesList from './WorkspacesList';
 
 function WorkspacesAuthenticated() {
@@ -15,7 +15,7 @@ function WorkspacesAuthenticated() {
 
   return (
     <Stack spacing={3}>
-      <WorkspaceInvitations />
+      <InvitationsList />
       <WorkspacesList />
     </Stack>
   );

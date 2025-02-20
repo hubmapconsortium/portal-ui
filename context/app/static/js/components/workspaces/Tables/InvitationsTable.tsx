@@ -2,16 +2,15 @@ import React, { useEffect, useMemo, useState } from 'react';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/system/Stack';
 
-import { Alert } from 'js/shared-styles/alerts/Alert';
 import { WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
-
+import { SortField, TableFilter, TableField } from 'js/components/workspaces/Tables/WorkspaceTable/types';
+import WorkspaceTable from 'js/components/workspaces/Tables/WorkspaceTable/WorkspaceTable';
+import { Alert } from 'js/shared-styles/alerts/Alert';
 import { CheckIcon, CloseFilledIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { SortField, TableFilter, TableField } from 'js/components/workspaces/Tables/WorkspaceTable/types';
-import WorkspaceTable from 'js/components/workspaces/Tables/WorkspaceTable/WorkspaceTable';
 
 const acceptInviteTooltip =
   'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
