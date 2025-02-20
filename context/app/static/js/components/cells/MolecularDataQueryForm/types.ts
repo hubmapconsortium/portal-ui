@@ -1,3 +1,5 @@
+import { AutocompleteResult } from './AutocompleteEntity/types';
+
 export const QUERY_TYPES = ['gene', 'protein', 'cell-type'] as const;
 export type QueryType = (typeof QUERY_TYPES)[number];
 
@@ -12,12 +14,12 @@ export type GeneQueryMethod = keyof typeof GENE_QUERY_METHODS;
 export interface SCFindGeneQueryFormState {
   queryType: 'gene';
   queryMethod: 'scFind';
-  genes: string[];
+  genes: AutocompleteResult[];
   threshold: number;
 }
 
 export interface SCFindCellTypeQueryFormState {
-  cellTypes: string[];
+  cellTypes: AutocompleteResult[];
 }
 
 export interface CrossModalityGeneQueryFormState {
@@ -25,27 +27,25 @@ export interface CrossModalityGeneQueryFormState {
   queryMethod: 'crossModalityRNA' | 'crossModalityATAC';
   minimumExpressionLevel: number;
   minimumCellPercentage: number;
-  genes: string[];
+  genes: AutocompleteResult[];
 }
 
 export interface CrossModalityProteinQueryFormState {
   queryType: 'protein';
-  proteins: string[];
+  proteins: AutocompleteResult[];
   minimumAbundance: number;
   minimumCellPercentage: number;
 }
 
 export interface CellTypeQueryFormState {
   queryType: 'cell-type';
-  cellTypes: string[];
+  queryMethod: 'scFind' | 'crossModality';
+  cellTypes: AutocompleteResult[];
 }
-
-export type MolecularDataQueryFormSteps = 'queryType' | 'results';
 
 export type MolecularDataQueryFormState = {
   queryType: QueryType;
   geneQueryMethod: GeneQueryMethod;
-  step: MolecularDataQueryFormSteps;
 } & (
   | SCFindGeneQueryFormState
   | SCFindCellTypeQueryFormState

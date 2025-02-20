@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
 import { useController } from 'react-hook-form';
 import { useAutocompleteQuery } from './hooks';
-import { AutocompleteQueryResponse } from './types';
+import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
 import { QueryType, queryTypes } from '../../queryTypes';
 import { PreserveWhiteSpaceListItem } from './styles';
@@ -34,18 +34,10 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
   const { field } = useController({
     name: fieldName,
     control,
-    defaultValue: createInitialValue(defaultValue).map((v) => v.full),
+    defaultValue: createInitialValue(defaultValue),
   });
 
-  // If default value or target entity changes, reset selected options and substring to default value
-  // useEffect(() => {
-  //   setSubstring('');
-  //   setSelectedOptions(createInitialValue(defaultValue));
-  // }, [defaultValue, targetEntity]);
-
-  const { data, isLoading } = useAutocompleteQuery({ targetEntity, substring });
-
-  // Include currently selected options to avoid invalid value errors in console
+  const { data: options = [], isLoading } = useAutocompleteQuery({ targetEntity, substring });
 
   function handleChange({ target: { value } }: React.ChangeEvent<HTMLInputElement>) {
     setSubstring(value);
@@ -53,7 +45,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
 
   return (
     <Autocomplete
-      options={data}
+      options={options}
       multiple
       filterSelectedOptions
       getOptionLabel={(option) => option.full}
@@ -96,13 +88,8 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
         />
       )}
       {...field}
-      onChange={(_, value) => {
-        if (defaultValue && !value.map((match) => match.full).includes(defaultValue)) {
-          // If default value is set and not included in selected options, add it
-          setSelectedOptions([...createInitialValue(defaultValue), ...value]);
-          return;
-        }
-        setSelectedOptions(value);
+      onChange={(_, value: AutocompleteResult[]) => {
+        field.onChange(value);
       }}
     />
   );

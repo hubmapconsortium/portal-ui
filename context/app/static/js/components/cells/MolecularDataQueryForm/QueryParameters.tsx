@@ -1,16 +1,13 @@
 import React from 'react';
 
-import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
-
 import LogSlider from 'js/shared-styles/inputs/LogSlider';
 import MarkedSlider from 'js/shared-styles/inputs/MarkedSlider';
 import { useFormContext } from 'react-hook-form';
-import { useEventCallback } from '@mui/material';
-import GenomicModality from './GenomicModality';
+import QueryMethod from './QueryMethod';
 import { MolecularDataQueryFormState } from './types';
 import AutocompleteEntity from './AutocompleteEntity';
-import { useCellVariableNames, useIsQueryType, useMolecularDataQueryFormState, useQueryType } from './hooks';
+import { useIsQueryType, useMolecularDataQueryFormState, useQueryType } from './hooks';
+import { FormFieldContainer } from './FormField';
 
 function CellPercentageInput() {
   const { register } = useFormContext<MolecularDataQueryFormState>();
@@ -22,17 +19,15 @@ function CellPercentageInput() {
   }
 
   return (
-    <div>
-      <MarkedSlider
-        label="Minimum Cell Percentage (%)"
-        helperText={`Set the minimum cell percentage for cells in the datasets to represent the minimum ${measurement.toLowerCase()}.`}
-        marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m || '>0' }))}
-        id="min-cell-percentage"
-        {...register('minimumCellPercentage')}
-        min={0}
-        max={10}
-      />
-    </div>
+    <MarkedSlider
+      label="Minimum Cell Percentage (%)"
+      helperText={`Set the minimum cell percentage for cells in the datasets to represent the minimum ${measurement.toLowerCase()}.`}
+      marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m || '>0' }))}
+      id="min-cell-percentage"
+      {...register('minimumCellPercentage')}
+      min={0}
+      max={10}
+    />
   );
 }
 
@@ -46,45 +41,73 @@ function ExpressionInput() {
   }
 
   return (
-    <div>
-      <LogSlider
-        label={`Minimum ${measurement}`}
-        helperText={`Set the minimum ${queryType} ${measurement.toLowerCase()} to refine your dataset selections.`}
-        minLog={-4}
-        maxLog={5}
-        id="min-measurement"
-        {...register(fieldName)}
-      />
-    </div>
+    <LogSlider
+      label={`Minimum ${measurement}`}
+      helperText={`Set the minimum ${queryType} ${measurement.toLowerCase()} to refine your dataset selections.`}
+      minLog={-4}
+      maxLog={5}
+      id="min-measurement"
+      {...register(fieldName)}
+    />
   );
 }
-function QueryParametersFieldset() {
-  const cellVariableNames = useCellVariableNames();
-  const queryType = useQueryType();
-  const { setValue } = useMolecularDataQueryFormState();
-  const runQuery = useEventCallback(() => {
-    setValue('step', 'results');
-  });
 
+function GeneParameters() {
+  const queryMethod = useMolecularDataQueryFormState().watch('queryMethod');
   return (
-    <Box sx={{ width: '100%' }}>
-      <AutocompleteEntity targetEntity={queryType.value} />
-      <GenomicModality />
-      <CellPercentageInput />
-      <ExpressionInput />
-      <Box mt={2}>
-        <Button
-          disabled={cellVariableNames.length === 0}
-          variant="contained"
-          color="primary"
-          id="run-query-button"
-          onClick={runQuery}
-        >
-          Run Query
-        </Button>
-      </Box>
-    </Box>
+    <>
+      <QueryMethod />
+      <FormFieldContainer title="Gene and Pathway Selection">
+        <AutocompleteEntity targetEntity="gene" />
+      </FormFieldContainer>
+      {queryMethod !== 'scFind' && (
+        <FormFieldContainer title="Threshold Options">
+          <CellPercentageInput />
+          <ExpressionInput />
+        </FormFieldContainer>
+      )}
+    </>
   );
+}
+
+function ProteinParameters() {
+  return (
+    <>
+      <QueryMethod />
+      <FormFieldContainer title="Protein Selection">
+        <AutocompleteEntity targetEntity="protein" />
+      </FormFieldContainer>
+      <FormFieldContainer title="Threshold Options">
+        <ExpressionInput />
+        <CellPercentageInput />
+      </FormFieldContainer>
+    </>
+  );
+}
+
+function CellTypeParameters() {
+  return (
+    <>
+      <QueryMethod />
+      <FormFieldContainer title="Cell Type Selection">
+        <AutocompleteEntity targetEntity="cell-type" />
+      </FormFieldContainer>
+    </>
+  );
+}
+
+function QueryParametersFieldset() {
+  const queryType = useQueryType();
+
+  if (queryType.value === 'gene') {
+    return <GeneParameters />;
+  }
+
+  if (queryType.value === 'protein') {
+    return <ProteinParameters />;
+  }
+
+  return <CellTypeParameters />;
 }
 
 export default QueryParametersFieldset;

@@ -1,8 +1,12 @@
-import React, { PropsWithChildren, useEffect } from 'react';
+import React, { PropsWithChildren, useEffect, useId } from 'react';
 import { useForm, FormProvider, FieldErrors } from 'react-hook-form';
 import { useEventCallback } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
+import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import { MolecularDataQueryFormState } from './types';
+import SubmitButton from './SubmitButton';
 
 interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
@@ -12,12 +16,14 @@ interface MolecularDataQueryFormProps extends PropsWithChildren {
 export default function MolecularDataQueryForm({ children, onSubmit, initialValues }: MolecularDataQueryFormProps) {
   const methods = useForm<MolecularDataQueryFormState>({
     defaultValues: {
-      step: 'queryType',
       queryType: 'gene',
+      queryMethod: 'scFind',
       genes: [],
       ...initialValues,
     },
   });
+  const { setValue, watch } = methods;
+
   const { toastError } = useSnackbarActions();
   const onError = useEventCallback((errors: FieldErrors<MolecularDataQueryFormState>) => {
     const error = Object.values(errors)
@@ -26,14 +32,20 @@ export default function MolecularDataQueryForm({ children, onSubmit, initialValu
     toastError(error);
   });
 
-  const queryType = methods.watch('queryType');
-  const { setValue } = methods;
+  const queryType = watch('queryType');
 
   // Reset selected options when query type changes
   useEffect(() => {
     setValue('genes', []);
     setValue('proteins', []);
     setValue('cellTypes', []);
+    switch (queryType) {
+      case 'gene':
+        setValue('queryMethod', 'scFind');
+        break;
+      default:
+        break;
+    }
   }, [queryType, setValue]);
 
   const handleSubmit: React.FormEventHandler = useEventCallback((event) => {
@@ -41,9 +53,24 @@ export default function MolecularDataQueryForm({ children, onSubmit, initialValu
     methods.handleSubmit(onSubmit, onError);
   });
 
+  const id = `${useId()}-molecular-data-query`;
+
   return (
     <FormProvider {...methods}>
-      <form onSubmit={handleSubmit}>{children}</form>
+      <AccordionStepsProvider stepsLength={2}>
+        <StepAccordion
+          index={0}
+          summaryHeading="Parameters"
+          id={`${id}-parameters`}
+          content={
+            <Stack component="form" onSubmit={handleSubmit} gap={2}>
+              {children}
+              <SubmitButton />
+            </Stack>
+          }
+        />
+        <StepAccordion index={1} summaryHeading="Results" id={`${id}-results`} />
+      </AccordionStepsProvider>
     </FormProvider>
   );
 }

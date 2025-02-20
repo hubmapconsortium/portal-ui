@@ -1,35 +1,35 @@
 import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+import TextField from '@mui/material/TextField';
 
 import { queryTypes } from 'js/components/cells/queryTypes';
-import { TextField, Typography } from '@mui/material';
 import { useMolecularDataQueryFormState } from './hooks';
+import { FormFieldContainer, FormFieldSubtitle } from './FormField';
 
 function QueryType() {
-  const { register } = useMolecularDataQueryFormState();
+  const { register, watch } = useMolecularDataQueryFormState();
   return (
-    <Stack gap={2} py={2}>
-      <Paper
-        sx={{
-          p: 2,
-          display: 'flex',
-          flexDirection: 'column',
-          gap: 2,
-        }}
+    <FormFieldContainer title="Query Type">
+      <FormFieldSubtitle>
+        Choose to retrieve gene, protein or cell type data. Gene and cell type data will have a selection of methods to
+        choose from, while protein data will be retrieved with the Cells Cross-Modality method.
+      </FormFieldSubtitle>
+      <TextField
+        id="query-select"
+        label="Query Type"
+        variant="outlined"
+        select
+        fullWidth
+        {...register('queryType')}
+        value={watch('queryType')}
       >
-        <Typography variant="subtitle1">Query Type</Typography>
-        <Typography variant="body2">Choose the query method to retrieve gene, protein, or cell type data.</Typography>
-        <TextField id="query-select" label="Query Type" variant="outlined" select fullWidth {...register('queryType')}>
-          {Object.values(queryTypes).map((type) => (
-            <MenuItem value={type.value} key={type.value}>
-              {type.label}
-            </MenuItem>
-          ))}
-        </TextField>
-      </Paper>
-    </Stack>
+        {Object.values(queryTypes).map((type) => (
+          <MenuItem value={type.value} key={type.value}>
+            {type.label}
+          </MenuItem>
+        ))}
+      </TextField>
+    </FormFieldContainer>
   );
 }
 
