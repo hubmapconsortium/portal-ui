@@ -1,0 +1,1 @@
+- Restrict "My Lists" feature to HuBMAP users only.
