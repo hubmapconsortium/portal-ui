@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.21.0 - 2025-02-20
+
+- Use new `abo_blood_group_system` field in donor charts.
+- Fix bug on search pages where range filter was not applied if the min value is zero.
+- Update search page menu styles.
+
+
+
 ## v1.20.3 - 2025-02-13
 
 - Add metrics for the "My Lists" feature.

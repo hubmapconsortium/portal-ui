@@ -1,1 +1,0 @@
-- Update search page menu styles.

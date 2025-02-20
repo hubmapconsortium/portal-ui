@@ -1,1 +1,0 @@
-- Fix bug on search pages where range filter was not applied if the min value is zero.
