@@ -3,6 +3,7 @@ import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
+import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/system/Stack';
 import { format } from 'date-fns/format';
 
@@ -164,19 +165,30 @@ interface RowProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
   item: T;
   tableFields: TableField[];
   endButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
+  selectedItemIds?: Set<string>;
+  toggleItem?: (itemId: string) => void;
 }
 
 const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | WorkspaceWithUserId>({
   item,
   tableFields,
   endButtons,
+  selectedItemIds,
+  toggleItem,
 }: RowProps<T>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
   const description = getFieldValue(item, 'description');
 
+  const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
+
   return (
     <>
       <CompactTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+        {selectedItemIds && toggleItem && (
+          <StyledTableCell width="0">
+            <Checkbox checked={selectedItemIds.has(itemId)} onChange={() => toggleItem(itemId)} />
+          </StyledTableCell>
+        )}
         <StyledTableCell width="0">
           {description && (
             <IconButton aria-label="expand row" size="small" onClick={() => setIsExpanded(!isExpanded)}>
@@ -258,6 +270,8 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
   tableFields,
   initialSortField,
   endButtons,
+  toggleItem,
+  selectedItemIds,
   showSeeMoreOption,
 }: {
   items: T[];
@@ -267,6 +281,8 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
   tableFields: TableField[];
   initialSortField: SortField;
   endButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
+  toggleItem?: (itemId: string) => void;
+  selectedItemIds?: Set<string>;
   showSeeMoreOption?: boolean;
 }) {
   const [sortField, setSortField] = useState<SortField>(initialSortField);
@@ -286,6 +302,21 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
       }),
     [items, sortField],
   );
+
+  const onToggleCheckboxHeader = useEventCallback(() => {
+    if (!selectedItemIds || !toggleItem) {
+      return;
+    }
+
+    items.forEach((item) => {
+      const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
+      if (selectedItemIds.size === items.length) {
+        toggleItem(itemId);
+      } else if (!selectedItemIds.has(itemId)) {
+        toggleItem(itemId);
+      }
+    });
+  });
 
   return (
     <Box>
@@ -308,6 +339,11 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
             <StyledTable>
               <StyledTableHead>
                 <StyledTableRow>
+                  {selectedItemIds && toggleItem && (
+                    <StyledTableCell width="0">
+                      <Checkbox checked={selectedItemIds.size === items.length} onChange={onToggleCheckboxHeader} />
+                    </StyledTableCell>
+                  )}
                   <StyledTableCell width="0" />
                   <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
                   <StyledTableCell />
@@ -321,6 +357,8 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
                     item={item}
                     tableFields={tableFields}
                     endButtons={endButtons}
+                    selectedItemIds={selectedItemIds}
+                    toggleItem={toggleItem}
                   />
                 ))}
               </StyledTableBody>

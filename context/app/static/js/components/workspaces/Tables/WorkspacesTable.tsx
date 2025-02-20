@@ -41,7 +41,7 @@ export default function WorkspacesTable({
   workspacesList,
   selectedItems,
   isLoading,
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+
   toggleItem,
 }: {
   workspacesList: WorkspaceWithUserId[];
@@ -115,6 +115,8 @@ export default function WorkspacesTable({
         tableFields={tableFields}
         initialSortField={initialSortField}
         endButtons={endButtons}
+        selectedItemIds={selectedItems}
+        toggleItem={toggleItem}
       />
     </Stack>
   );
