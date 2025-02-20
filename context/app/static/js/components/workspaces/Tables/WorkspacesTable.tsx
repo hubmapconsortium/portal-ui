@@ -8,6 +8,7 @@ import { ChipWrapper, StyledLaunchButton } from 'js/components/workspaces/Tables
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { ButtonProps } from '@mui/material/Button';
+import { Typography } from '@mui/material';
 
 const tableFields: TableField[] = [
   {
@@ -106,7 +107,14 @@ export default function WorkspacesTable({
     <Description>No workspaces created yet.</Description>
   ) : (
     <Stack>
-      <ChipWrapper>{`${selectedItems.size} selected`}</ChipWrapper>
+      <ChipWrapper>
+        <Typography
+          fontWeight="500"
+          sx={(theme) => ({ color: selectedItems.size === 0 ? theme.palette.grey[500] : theme.palette.primary.main })}
+        >
+          {`${selectedItems.size} selected`}
+        </Typography>
+      </ChipWrapper>
       <WorkspaceTable
         items={filteredWorkspaces}
         isLoading={isLoading}

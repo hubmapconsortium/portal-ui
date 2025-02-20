@@ -69,7 +69,7 @@ const ExpandedTableCell = styled(StyledTableCell)(({ theme }) => ({
 
 const sharedArrowStyles = {
   verticalAlign: 'text-top',
-  fontSize: '1.1rem',
+  fontSize: '1rem',
 } as const;
 
 const ArrowUpOn = styled(ArrowUpward)(sharedArrowStyles);

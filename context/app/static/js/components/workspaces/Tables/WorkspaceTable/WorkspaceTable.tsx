@@ -186,7 +186,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | 
     <>
       <CompactTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
         {selectedItemIds && toggleItem && (
-          <StyledCheckboxCell width="0">
+          <StyledCheckboxCell>
             <Checkbox checked={selectedItemIds.has(itemId)} onChange={() => toggleItem(itemId)} />
           </StyledCheckboxCell>
         )}
@@ -206,6 +206,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | 
       </CompactTableRow>
       {description && (
         <ExpandedTableRow>
+          {selectedItemIds && toggleItem && <ExpandedTableCell />}
           <ExpandedTableCell />
           <ExpandedTableCell colSpan={tableFields.length + 1}>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
@@ -341,7 +342,7 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
               <StyledTableHead>
                 <StyledTableRow>
                   {selectedItemIds && toggleItem && (
-                    <StyledCheckboxCell width="0" size="small">
+                    <StyledCheckboxCell>
                       <Checkbox checked={selectedItemIds.size === items.length} onChange={onToggleCheckboxHeader} />
                     </StyledCheckboxCell>
                   )}
