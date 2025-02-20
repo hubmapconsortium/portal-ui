@@ -2,6 +2,10 @@ function getAgeLabels(buckets, key) {
   return [...new Set(buckets.map((b) => (b.key[key] === 0 ? '<10' : `${b.key[key]}-${b.key[key] + 9}`)))];
 }
 
+function getBloodTypeLabels(buckets, key) {
+  return [...new Set(buckets.map((b) => b.key[key].replace('Blood Type', '')))];
+}
+
 function getKeyValues(buckets, key) {
   return [...new Set(buckets.map((b) => b.key[key]))];
 }
@@ -43,4 +47,4 @@ function makeCompositeQuery(source1, source2) {
   };
 }
 
-export { getAgeLabels, getKeyValues, makeHistogramSource, makeTermSource, makeCompositeQuery };
+export { getAgeLabels, getBloodTypeLabels, getKeyValues, makeHistogramSource, makeTermSource, makeCompositeQuery };

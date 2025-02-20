@@ -38,6 +38,6 @@ const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBot
   marginBottom: $marginBottom ?? 0,
   marginTop: $marginTop ?? 0,
   width: $width ?? 'auto',
-}));
+})) as React.ComponentType<StyledAlertProps>;
 
 export { StyledAlert as Alert };

@@ -7,7 +7,7 @@ from werkzeug.utils import secure_filename
 
 import frontmatter
 
-from .utils import get_default_flask_data, make_blueprint, get_organs
+from .utils import get_default_flask_data, get_organ_name_mapping, make_blueprint, get_organs
 
 
 blueprint = make_blueprint(__name__)
@@ -80,13 +80,15 @@ def organ_details_view(name):
 @blueprint.route('/organ/<name>.json')
 def get_organ_details(name):
     organs = get_organs()
+    organ_names = get_organ_name_mapping()
     # Remove all spaces, underscores, and any text in parentheses
     normalized_name = name.lower().strip()
     normalized_name = normalized_name.split('(')[0].strip().replace(
         ' ', '-').replace('_', '-')
-    if normalized_name not in organs:
+    safe_organ_name = organ_names.get(normalized_name)
+    if safe_organ_name not in organs:
         return {}
-    filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(normalized_name)}.yaml'
+    filename = Path(dirname(__file__)) / 'organ' / f'{secure_filename(safe_organ_name)}.yaml'
     organ = safe_load(filename.read_text())
     return organ
 

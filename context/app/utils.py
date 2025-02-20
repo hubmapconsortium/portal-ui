@@ -44,6 +44,7 @@ def get_default_flask_data():
             'protocolsClientToken': current_app.config['PROTOCOLS_IO_CLIENT_AUTH_TOKEN'],
             'ubkgEndpoint': current_app.config['UBKG_ENDPOINT'],
             'softAssayEndpoint': current_app.config['SOFT_ASSAY_ENDPOINT'],
+            'ukvEndpoint': current_app.config['UKV_ENDPOINT'],
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
@@ -64,6 +65,18 @@ def get_organs():
     dir_path = Path(dirname(__file__) + '/organ')
     organs = {p.stem: safe_load(p.read_text()) for p in dir_path.glob('*.yaml')}
     return organs
+
+
+def get_organ_name_mapping():
+    organs = get_organs()
+    organ_file_names = {k: k for k, _ in organs.items()}
+    # Add search field for each organ as additional keys
+    for k, v in organs.items():
+        search = v['search']
+        if len(search) > 0:
+            for s in search:
+                organ_file_names[s.lower()] = k
+    return organ_file_names
 
 
 # Redirect to primary dataset if this entity is

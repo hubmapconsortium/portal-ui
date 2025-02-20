@@ -30,7 +30,7 @@ function NewWorkspaceDialogFromSelections() {
   return (
     <>
       <MenuItem onClick={() => setDialogIsOpen(true)}>
-        <SvgIcon component={WorkspacesIcon} sx={{ mr: 1, fontSize: '1.25rem' }} />
+        <SvgIcon component={WorkspacesIcon} sx={{ mr: 1, fontSize: '1.25rem' }} color="primary" />
         Create New Workspace
       </MenuItem>
       <NewWorkspaceDialog

@@ -7,16 +7,16 @@ import UnfoldLessRoundedIcon from '@mui/icons-material/UnfoldLessRounded';
 
 import { TooltipButtonProps, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { CheckIcon, EditSavedEntityIcon, FileIcon, SaveEntityIcon } from 'js/shared-styles/icons';
-import useEntityStore, { savedAlertStatus, SummaryViewsType } from 'js/stores/useEntityStore';
+import { SummaryViewsType } from 'js/stores/useEntityStore';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import EditSavedStatusDialog from 'js/components/savedLists/EditSavedStatusDialog';
-import useSavedEntitiesStore, { SavedEntitiesStore } from 'js/stores/useSavedEntitiesStore';
 import { Entity } from 'js/components/types';
 import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
-import { useFlaskDataContext } from 'js/components/Contexts';
+import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
+import useSavedLists from 'js/components/savedLists/hooks';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
@@ -44,25 +44,13 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
 }
 
 function SaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
-  const saveEntity = useSavedEntitiesStore((state) => state.saveEntity);
-  const setShouldDisplaySavedOrEditedAlert = useEntityStore((state) => state.setShouldDisplaySavedOrEditedAlert);
+  const { useHandleSaveEntity } = useSavedLists();
+  const handleSaveEntity = useHandleSaveEntity({ entityUUID: uuid });
 
-  const trackSave = useTrackEntityPageEvent();
-
-  return (
-    <ActionButton
-      onClick={() => {
-        saveEntity(uuid);
-        trackSave({ action: 'Save To List', label: uuid });
-        setShouldDisplaySavedOrEditedAlert(savedAlertStatus);
-      }}
-      icon={SaveEntityIcon}
-      tooltip="Save to list"
-    />
-  );
+  return <ActionButton onClick={handleSaveEntity} icon={SaveEntityIcon} tooltip="Save to list" />;
 }
 
-function EditSavedEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }) {
+function EditSavedEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
 
   return (
@@ -74,12 +62,7 @@ function EditSavedEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { e
         icon={EditSavedEntityIcon}
         tooltip="Edit saved status"
       />
-      <EditSavedStatusDialog
-        dialogIsOpen={dialogIsOpen}
-        setDialogIsOpen={setDialogIsOpen}
-        uuid={uuid}
-        entity_type={entity_type}
-      />
+      <EditSavedStatusDialog dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} uuid={uuid} />
     </>
   );
 }
@@ -88,16 +71,15 @@ function WorkspaceSVGIcon({ color = 'primary', ...props }: SvgIconProps) {
   return <SvgIcon component={WorkspacesIcon} color={color} {...props} />;
 }
 
-const useSavedEntitiesSelector = (state: SavedEntitiesStore) => state.savedEntities;
+function SaveEditEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
+  const { savedEntities } = useSavedLists();
+  const { isAuthenticated } = useAppContext();
 
-function SaveEditEntityButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type: AllEntityTypes }) {
-  const savedEntities = useSavedEntitiesStore(useSavedEntitiesSelector);
+  if (!isAuthenticated) {
+    return null;
+  }
 
-  return uuid in savedEntities ? (
-    <EditSavedEntityButton uuid={uuid} entity_type={entity_type} />
-  ) : (
-    <SaveEntityButton uuid={uuid} />
-  );
+  return uuid in savedEntities.savedEntities ? <EditSavedEntityButton uuid={uuid} /> : <SaveEntityButton uuid={uuid} />;
 }
 
 function ViewSelectChip({
@@ -197,7 +179,7 @@ function EntityHeaderActionButtons({
   return (
     <Stack direction="row" spacing={1} alignItems="center">
       {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
-      <SaveEditEntityButton uuid={uuid} entity_type={entity_type} />
+      <SaveEditEntityButton uuid={uuid} />
       <JSONButton entity_type={entity_type} uuid={uuid} />
       {isDataset && (
         <ProcessedDataWorkspaceMenu

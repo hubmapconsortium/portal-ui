@@ -37,6 +37,7 @@ interface AppContextType {
   workspacesEndpoint: string;
   userTemplatesEndpoint: string;
   ubkgEndpoint: string;
+  ukvEndpoint: string;
   protocolsClientToken: string;
   isAuthenticated: boolean;
   isWorkspacesUser: boolean;
