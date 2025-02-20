@@ -38,9 +38,9 @@ function SearchPagesPrompt({ capitalize }: { capitalize?: boolean }) {
 }
 
 function LoginPrompt({ endingText }: { endingText: string }) {
-  const { isAuthenticated } = useAppContext();
+  const { isHubmapUser } = useAppContext();
 
-  if (isAuthenticated) {
+  if (isHubmapUser) {
     return null;
   }
 
@@ -61,11 +61,11 @@ function SavedListMessage() {
 }
 
 function SavedListsMessage() {
-  const { isAuthenticated } = useAppContext();
+  const { isHubmapUser } = useAppContext();
 
   return (
     <>
-      <LoginPrompt endingText=" or " /> <SearchPagesPrompt capitalize={isAuthenticated} /> to explore data to save
+      <LoginPrompt endingText=" or " /> <SearchPagesPrompt capitalize={isHubmapUser} /> to explore data to save
     </>
   );
 }
