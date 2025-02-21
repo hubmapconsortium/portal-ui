@@ -34,7 +34,7 @@ const initialSortField: SortField = {
   field: 'datetime_last_job_launch',
 };
 
-function LaunchStopButton(props: ButtonProps) {
+export function LaunchStopButton(props: ButtonProps) {
   return <StyledLaunchButton {...props} />;
 }
 

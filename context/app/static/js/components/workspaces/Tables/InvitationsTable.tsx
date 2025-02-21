@@ -4,18 +4,84 @@ import Stack from '@mui/system/Stack';
 
 import { WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
 import { SortField, TableFilter, TableField } from 'js/components/workspaces/Tables/WorkspaceTable/types';
-import WorkspaceTable from 'js/components/workspaces/Tables/WorkspaceTable/WorkspaceTable';
+import WorkspaceTable, { getFieldValue } from 'js/components/workspaces/Tables/WorkspaceTable/WorkspaceTable';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { CheckIcon, CloseFilledIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
+import { useWorkspacesList } from 'js/components/workspaces/hooks';
+import { LaunchStopButton } from 'js/components/workspaces/Tables/WorkspacesTable';
 
 const acceptInviteTooltip =
   'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
 const previewInviteTooltip = 'Preview the details of this workspace.';
 const moreOptionsTooltip = 'View additional actions.';
+
+const initialSortField: SortField = {
+  field: 'datetime_share_created',
+  direction: 'desc',
+};
+
+const options = [
+  {
+    children: 'Decline Invitation',
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onClick: () => {},
+    icon: CloseFilledIcon,
+  },
+];
+
+function EndButtons(item: WorkspaceInvitation | WorkspaceWithUserId) {
+  const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
+  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
+
+  // If the invite has been accepted, show the launch/stop workspace buttons
+  if (isAccepted && 'shared_workspace_id' in item) {
+    const { shared_workspace_id } = item;
+    const workspace = workspacesList.find((w) => w.id === shared_workspace_id.id);
+
+    if (!workspace) {
+      return null;
+    }
+
+    return (
+      <Stack alignItems="end" marginRight={2}>
+        <WorkspaceLaunchStopButtons
+          workspace={workspace}
+          button={LaunchStopButton}
+          handleStopWorkspace={handleStopWorkspace}
+          isStoppingWorkspace={isStoppingWorkspace}
+          showLaunch
+          showStop
+        />
+      </Stack>
+    );
+  }
+
+  // If the invite has not been accepted, show the accept/decline/preview buttons
+  return (
+    <Stack direction="row" justifyContent="end" alignItems="center">
+      <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
+        {options.map((props) => (
+          <IconDropdownMenuItem key={props.children} {...props} />
+        ))}
+      </IconDropdownMenu>
+      <SecondaryBackgroundTooltip title={previewInviteTooltip}>
+        <IconButton>
+          <EyeIcon color="primary" fontSize="1.5rem" />
+        </IconButton>
+      </SecondaryBackgroundTooltip>
+      <SecondaryBackgroundTooltip title={acceptInviteTooltip}>
+        <IconButton>
+          <CheckIcon color="success" fontSize="1.5rem" />
+        </IconButton>
+      </SecondaryBackgroundTooltip>
+    </Stack>
+  );
+}
 
 const InvitationsTable = React.memo(function InvitationsTable({
   isLoading,
@@ -85,46 +151,6 @@ const InvitationsTable = React.memo(function InvitationsTable({
     [acceptedCount, pendingCount, showAccepted, showPending],
   );
 
-  const initialSortField: SortField = {
-    field: 'datetime_share_created',
-    direction: 'desc',
-  };
-
-  const options = [
-    {
-      children: 'Decline Invitation',
-      // eslint-disable-next-line @typescript-eslint/no-empty-function
-      onClick: () => {},
-      icon: CloseFilledIcon,
-    },
-  ];
-
-  const endButtons = (item: WorkspaceInvitation | WorkspaceWithUserId) => {
-    if ('id' in item) {
-      return null;
-    }
-
-    return (
-      <Stack direction="row" justifyContent="end" alignItems="center">
-        <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
-          {options.map((props) => (
-            <IconDropdownMenuItem key={props.children} {...props} />
-          ))}
-        </IconDropdownMenu>
-        <SecondaryBackgroundTooltip title={previewInviteTooltip}>
-          <IconButton>
-            <EyeIcon color="primary" fontSize="1.5rem" />
-          </IconButton>
-        </SecondaryBackgroundTooltip>
-        <SecondaryBackgroundTooltip title={acceptInviteTooltip}>
-          <IconButton>
-            <CheckIcon color="success" fontSize="1.5rem" />
-          </IconButton>
-        </SecondaryBackgroundTooltip>
-      </Stack>
-    );
-  };
-
   if (!isLoading && !invitations.length) {
     return <Alert severity="info"> {`No ${status.toLocaleLowerCase()} workspace invitations.`} </Alert>;
   }
@@ -137,7 +163,7 @@ const InvitationsTable = React.memo(function InvitationsTable({
       filters={filters}
       tableFields={tableFields}
       initialSortField={initialSortField}
-      endButtons={endButtons}
+      endButtons={EndButtons}
       showSeeMoreOption
     />
   );

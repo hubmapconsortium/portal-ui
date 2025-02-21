@@ -15,10 +15,11 @@ import { WorkspaceWithUserId, WorkspaceInvitation } from 'js/components/workspac
 import { Collapse, Typography, useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import { DownIcon, EmailIcon } from 'js/shared-styles/icons';
+import { CheckIcon, DownIcon, EmailIcon } from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
 import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { SortField, SortDirection, TableField, TableFilter } from './types';
 import {
   ArrowDownOff,
@@ -56,7 +57,6 @@ export function getFieldValue({
   }
 
   const fieldWithPrefix = prefix ? `${prefix}${field}` : field;
-
   return get(item, fieldWithPrefix, '');
 }
 
@@ -126,13 +126,20 @@ function CellContent({ item, field }: { field: string; item: WorkspaceInvitation
   const match = regex.exec(field);
   const prefix = match ? `${match[0]}.` : '';
 
-  const fieldValue = getFieldValue({ item, field, prefix });
+  const fieldValue = getFieldValue({ item, field });
 
   switch (field) {
     case `${prefix}name`: {
       const workspaceId = getFieldValue({ item, field: 'id', prefix });
+      const isAccepted = getFieldValue({ item, field: 'is_accepted' });
+
       return (
-        <Stack direction="row" spacing={1}>
+        <Stack direction="row" spacing={1} alignItems="center">
+          {isAccepted && (
+            <SecondaryBackgroundTooltip title="Accepted workspace invitation">
+              <CheckIcon color="success" fontSize="0.75rem" />
+            </SecondaryBackgroundTooltip>
+          )}
           <InternalLink href={`/workspaces/${workspaceId}`}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
@@ -159,6 +166,7 @@ function CellContent({ item, field }: { field: string; item: WorkspaceInvitation
       );
     }
     case `${prefix}datetime_created`:
+    case `${prefix}datetime_share_created`:
     case `${prefix}datetime_last_job_launch`: {
       const date = fieldValue ?? getFieldValue({ item, field: 'datetime_created', prefix });
       return format(date, 'yyyy-MM-dd');
