@@ -18,7 +18,7 @@ const ChipWrapper = styled('div')(({ theme }) => ({
   display: 'flex',
   gap: theme.spacing(1),
   border: `1px solid ${theme.palette.grey[300]}`,
-  borderBottom: 'none',
+  borderTop: 'none',
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -28,8 +28,7 @@ const StyledTable = styled(Table)(({ theme }) => ({
 }));
 
 const StyledTableBody = styled(TableBody)({
-  borderLeft: 'none',
-  borderRight: 'none',
+  border: 'none',
   width: '100%',
   maxHeight: '400px',
   overflowY: 'auto',
@@ -38,6 +37,7 @@ const StyledTableBody = styled(TableBody)({
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
   border: `1px solid ${theme.palette.grey[300]}`,
+  borderBottom: 'none',
 }));
 
 const CompactTableRow = styled(StyledTableRow)(({ theme }) => ({
@@ -101,6 +101,8 @@ const StyledTableContainer = styled(Box)(({ theme }) => ({
   maxHeight: '400px',
   width: '100%',
   border: `1px solid ${theme.palette.grey[300]}`,
+  borderTop: 'none',
+  borderLeft: 'none',
   overflowY: 'auto',
   overflowX: 'hidden',
 }));

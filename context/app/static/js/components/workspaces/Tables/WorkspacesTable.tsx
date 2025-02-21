@@ -4,11 +4,11 @@ import Description from 'js/shared-styles/sections/Description';
 import WorkspaceTable from 'js/components/workspaces/Tables/WorkspaceTable/WorkspaceTable';
 import { SortField, TableFilter, TableField } from 'js/components/workspaces/Tables/WorkspaceTable/types';
 import Stack from '@mui/material/Stack';
-import { ChipWrapper, StyledLaunchButton } from 'js/components/workspaces/Tables/WorkspaceTable/style';
+import { StyledLaunchButton } from 'js/components/workspaces/Tables/WorkspaceTable/style';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { ButtonProps } from '@mui/material/Button';
-import { Typography } from '@mui/material';
+import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 
 const tableFields: TableField[] = [
   {
@@ -111,14 +111,7 @@ export default function WorkspacesTable({
     <Description>No workspaces created yet.</Description>
   ) : (
     <Stack>
-      <ChipWrapper>
-        <Typography
-          fontWeight="500"
-          sx={(theme) => ({ color: selectedItems.size === 0 ? theme.palette.grey[500] : theme.palette.primary.main })}
-        >
-          {`${selectedItems.size} selected`}
-        </Typography>
-      </ChipWrapper>
+      <NumSelectedHeader numSelected={selectedItems.size} />
       <WorkspaceTable
         items={filteredWorkspaces}
         isLoading={isLoading}

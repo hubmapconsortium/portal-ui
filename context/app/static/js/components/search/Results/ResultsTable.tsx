@@ -16,6 +16,8 @@ import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { trackEvent } from 'js/helpers/trackers';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
+import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { useAllSearchIDs } from 'js/hooks/useSearchData';
 import { getByPath } from './utils';
 import {
@@ -253,9 +255,11 @@ const Table = React.memo(function Table({
   hits: never[] | SearchHit<Partial<Entity>>[];
 }) {
   const tableFields = useSearchStore((state) => state.sourceFields?.table);
+  const { selectedRows } = useSelectableTableStore();
 
   return (
     <Box>
+      <NumSelectedHeader numSelected={selectedRows.size} />
       <StyledTable data-testid="search-results-table">
         <TableHead>
           <TableRow>
