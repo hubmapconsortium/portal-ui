@@ -18,52 +18,16 @@ import { trackEvent } from 'js/helpers/trackers';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
+import { OrderIcon, getSortOrder } from 'js/shared-styles/tables/TableOrdering';
 import { useAllSearchIDs } from 'js/hooks/useSearchData';
 import { getByPath } from './utils';
-import {
-  StyledTable,
-  StyledTableBody,
-  StyledTableRow,
-  StyledTableCell,
-  ArrowUpOn,
-  ArrowDownOn,
-  ArrowDownOff,
-  StyledHeaderCell,
-} from './style';
+import { StyledTable, StyledTableBody, StyledTableRow, StyledTableCell, StyledHeaderCell } from './style';
 import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 import ViewMoreResults from './ViewMoreResults';
 import { buildQuery } from '../utils';
 import useESmapping from '../useEsMapping';
-
-type SortDirection = 'asc' | 'desc';
-
-export function OrderIcon({
-  direction,
-  isCurrentSortField,
-}: {
-  direction: SortDirection;
-  isCurrentSortField: boolean;
-}) {
-  if (!isCurrentSortField) return <ArrowDownOff />;
-  if (direction === 'asc') return <ArrowUpOn />;
-  if (direction === 'desc') return <ArrowDownOn />;
-}
-
-export function getSortOrder({
-  direction,
-  isCurrentSortField,
-}: {
-  direction: SortDirection;
-  isCurrentSortField: boolean;
-}) {
-  if (!isCurrentSortField) {
-    return 'desc';
-  }
-
-  return direction === 'desc' ? 'asc' : 'desc';
-}
 
 function SortHeaderCell({ field, label }: { field: string; label: string }) {
   const { sortField, setSortField, analyticsCategory } = useSearchStore(

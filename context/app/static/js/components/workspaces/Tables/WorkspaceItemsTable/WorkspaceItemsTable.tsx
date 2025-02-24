@@ -24,16 +24,14 @@ import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import { LaunchStopButton } from 'js/components/workspaces/WorkspaceLaunchStopButtons/WorkspaceLaunchStopButtons';
+import useWorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
+import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 
-import useWorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
-import { SortField, SortDirection, TableField, TableFilter } from './types';
+import { SortField, TableField, TableFilter } from './types';
 import {
-  ArrowDownOff,
-  ArrowDownOn,
-  ArrowUpOn,
   ChipWrapper,
   CompactTableRow,
   ExpandedTableCell,
@@ -119,32 +117,6 @@ function EndButtons({ item }: { item: WorkspaceInvitation | WorkspaceWithUserId 
       </TooltipIconButton>
     </Stack>
   );
-}
-
-export function OrderIcon({
-  direction,
-  isCurrentSortField,
-}: {
-  direction: SortDirection;
-  isCurrentSortField: boolean;
-}) {
-  if (!isCurrentSortField) return <ArrowDownOff />;
-  if (direction === 'asc') return <ArrowUpOn />;
-  if (direction === 'desc') return <ArrowDownOn />;
-}
-
-export function getSortOrder({
-  direction,
-  isCurrentSortField,
-}: {
-  direction: SortDirection;
-  isCurrentSortField: boolean;
-}) {
-  if (!isCurrentSortField) {
-    return 'desc';
-  }
-
-  return direction === 'desc' ? 'asc' : 'desc';
 }
 
 function SortHeaderCell({

@@ -1,4 +1,4 @@
-export type SortDirection = 'asc' | 'desc';
+import { SortDirection } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 
 export interface SortField {
   field: string;

@@ -6,8 +6,6 @@ import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
-import ArrowUpward from '@mui/icons-material/ArrowUpwardRounded';
-import ArrowDownward from '@mui/icons-material/ArrowDownwardRounded';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
@@ -70,20 +68,6 @@ const ExpandedTableCell = styled(StyledTableCell)(({ theme }) => ({
   paddingLeft: theme.spacing(1),
 }));
 
-const sharedArrowStyles = {
-  verticalAlign: 'text-top',
-  fontSize: '1rem',
-} as const;
-
-const ArrowUpOn = styled(ArrowUpward)(sharedArrowStyles);
-
-const ArrowDownOn = styled(ArrowDownward)(sharedArrowStyles);
-
-const ArrowDownOff = styled(ArrowDownward)({
-  ...sharedArrowStyles,
-  opacity: '40%',
-});
-
 const StyledHeaderCell = styled(HeaderCell)({
   whiteSpace: 'nowrap',
 });
@@ -127,9 +111,6 @@ export {
   StyledTableRow,
   StyledTableBody,
   StyledTableCell,
-  ArrowUpOn,
-  ArrowDownOn,
-  ArrowDownOff,
   StyledHeaderCell,
   CompactTableRow,
   ExpandedTableRow,
