@@ -1,0 +1,1 @@
+- Fix casing of ABO blood group chart titles on diversity page.
