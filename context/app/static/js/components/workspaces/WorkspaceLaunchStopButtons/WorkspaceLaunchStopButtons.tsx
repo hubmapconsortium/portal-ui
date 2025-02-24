@@ -10,8 +10,8 @@ import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { MergedWorkspace, WorkspacesEventInfo } from 'js/components/workspaces/types';
 import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { StyledLaunchButton } from 'js/components/workspaces/style';
 import { trackEvent } from 'js/helpers/trackers';
-import { StyledLaunchButton } from 'js/components/style';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;

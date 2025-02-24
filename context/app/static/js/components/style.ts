@@ -1,6 +1,5 @@
 import { styled } from '@mui/material/styles';
 import Container from '@mui/material/Container';
-import Button from '@mui/material/Button';
 
 import { Alert } from 'js/shared-styles/alerts';
 
@@ -18,10 +17,4 @@ const FlexContainer = styled(Container)({
   alignItems: 'center',
 });
 
-const StyledLaunchButton = styled(Button)(({ theme }) => ({
-  border: `1px solid ${theme.palette.grey[300]}`,
-  borderRadius: theme.spacing(0.5),
-  padding: theme.spacing(1, 3),
-}));
-
-export { StyledAlert, FlexContainer, StyledLaunchButton };
+export { StyledAlert, FlexContainer };

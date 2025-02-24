@@ -415,6 +415,14 @@ function getFieldValue({
   return get(item, fieldWithPrefix, '');
 }
 
+function isInvitation(item: WorkspaceInvitation | WorkspaceWithUserId): item is WorkspaceInvitation {
+  return 'shared_workspace_id' in item;
+}
+
+function isWorkspace(item: WorkspaceInvitation | WorkspaceWithUserId): item is WorkspaceWithUserId {
+  return 'id' in item;
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -437,4 +445,6 @@ export {
   unconvert,
   getFieldPrefix,
   getFieldValue,
+  isInvitation,
+  isWorkspace,
 };

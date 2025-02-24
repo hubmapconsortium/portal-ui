@@ -7,7 +7,6 @@ import ArrowUpward from '@mui/icons-material/ArrowUpwardRounded';
 import ArrowDownward from '@mui/icons-material/ArrowDownwardRounded';
 
 import { HeaderCell } from 'js/shared-styles/tables';
-import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 
 const StyledTable = styled(Table)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
@@ -89,12 +88,6 @@ const StyledHeaderCell = styled(HeaderCell)({
   whiteSpace: 'nowrap',
 });
 
-const StyledNumSelectedHeader = styled(NumSelectedHeader)({
-  borderTop: 'none',
-  borderLeft: 'none',
-  borderRight: 'none',
-});
-
 export {
   StyledTable,
   StyledTableRow,
@@ -104,5 +97,4 @@ export {
   ArrowDownOn,
   ArrowDownOff,
   StyledHeaderCell,
-  StyledNumSelectedHeader,
 };

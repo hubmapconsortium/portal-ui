@@ -22,9 +22,10 @@ import AddItemsToListDialog from 'js/components/savedLists/AddItemsToListDialog'
 import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import DeselectAllRowsButton from 'js/shared-styles/tables/DeselectAllRowsButton';
+import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import useSavedEntityData from 'js/hooks/useSavedEntityData';
-import { LeftMarginIconButton, StyledNumSelectedHeader } from './style';
+import { LeftMarginIconButton } from './style';
 
 const defaultColumns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -89,7 +90,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
       />
       <Paper>
         <StyledTableContainer>
-          <StyledNumSelectedHeader numSelected={selectedRowsSize} />
+          <NumSelectedHeader numSelected={selectedRowsSize} />
           <Table stickyHeader>
             <TableHead>
               <TableRow>

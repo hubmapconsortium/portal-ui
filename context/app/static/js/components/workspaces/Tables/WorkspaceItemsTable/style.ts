@@ -1,3 +1,6 @@
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import TableHead from '@mui/material/TableHead';
 import { styled } from '@mui/material/styles';
 import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
@@ -7,7 +10,7 @@ import ArrowUpward from '@mui/icons-material/ArrowUpwardRounded';
 import ArrowDownward from '@mui/icons-material/ArrowDownwardRounded';
 
 import { HeaderCell } from 'js/shared-styles/tables';
-import { Box, Button, TableHead } from '@mui/material';
+import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 
 const ChipWrapper = styled('div')(({ theme }) => ({
   padding: theme.spacing(1.5, 2),
@@ -114,6 +117,10 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
   background: theme.palette.white.main,
 }));
 
+const StyledNumSelectedHeader = styled(NumSelectedHeader)(({ theme }) => ({
+  border: `1px solid ${theme.palette.grey[300]}`,
+}));
+
 export {
   ChipWrapper,
   StyledTable,
@@ -131,4 +138,5 @@ export {
   StyledTableContainer,
   StyledTableHead,
   StyledCheckboxCell,
+  StyledNumSelectedHeader,
 };

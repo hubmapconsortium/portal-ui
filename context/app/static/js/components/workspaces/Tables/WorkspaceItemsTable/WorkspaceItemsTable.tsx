@@ -15,12 +15,18 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
 import { WorkspaceWithUserId, WorkspaceInvitation } from 'js/components/workspaces/types';
-import { getFieldPrefix, getFieldValue } from 'js/components/workspaces/utils';
-import { CheckIcon, DownIcon, EmailIcon } from 'js/shared-styles/icons';
+import { getFieldPrefix, getFieldValue, isWorkspace } from 'js/components/workspaces/utils';
+import { CheckIcon, CloseFilledIcon, DownIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
-import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
+import { TooltipButton, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { useWorkspacesList } from 'js/components/workspaces/hooks';
+import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
+import { LaunchStopButton } from 'js/components/workspaces/WorkspaceLaunchStopButtons/WorkspaceLaunchStopButtons';
+import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
+import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
+import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 
 import { SortField, SortDirection, TableField, TableFilter } from './types';
 import {
@@ -41,6 +47,78 @@ import {
   StyledTableHead,
   StyledCheckboxCell,
 } from './style';
+
+const options = [
+  {
+    children: 'Decline Invitation',
+    // TODO: update once dialog is implemented
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onClick: () => {},
+    icon: CloseFilledIcon,
+  },
+];
+
+const acceptInviteTooltip =
+  'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
+const previewInviteTooltip = 'Preview the details of this workspace.';
+const moreOptionsTooltip = 'View additional actions.';
+
+function EndButtons({ item }: { item: WorkspaceInvitation | WorkspaceWithUserId }) {
+  const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
+
+  // If the item is a workspace
+  if (isWorkspace(item)) {
+    return (
+      <WorkspaceLaunchStopButtons
+        workspace={item}
+        button={LaunchStopButton}
+        handleStopWorkspace={handleStopWorkspace}
+        isStoppingWorkspace={isStoppingWorkspace}
+        showLaunch
+        showStop
+      />
+    );
+  }
+
+  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
+  const sharedWorkspaceId = item?.shared_workspace_id?.id;
+
+  // If the item is an accepted invitation
+  if (isAccepted && sharedWorkspaceId) {
+    const workspace = workspacesList.find((w) => w.id === sharedWorkspaceId);
+    if (!workspace) return null;
+
+    return (
+      <Stack alignItems="end" marginRight={2}>
+        <WorkspaceLaunchStopButtons
+          workspace={workspace}
+          button={LaunchStopButton}
+          handleStopWorkspace={handleStopWorkspace}
+          isStoppingWorkspace={isStoppingWorkspace}
+          showLaunch
+          showStop
+        />
+      </Stack>
+    );
+  }
+
+  // If the item is a pending invitation
+  return (
+    <Stack direction="row" justifyContent="end" alignItems="center">
+      <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
+        {options.map((props) => (
+          <IconDropdownMenuItem key={props.children} {...props} />
+        ))}
+      </IconDropdownMenu>
+      <TooltipIconButton tooltip={previewInviteTooltip}>
+        <EyeIcon color="primary" fontSize="1.5rem" />
+      </TooltipIconButton>
+      <TooltipIconButton tooltip={acceptInviteTooltip}>
+        <CheckIcon color="success" fontSize="1.5rem" />
+      </TooltipIconButton>
+    </Stack>
+  );
+}
 
 export function OrderIcon({
   direction,
@@ -171,7 +249,6 @@ function LoadingRows({ tableWidth }: { tableWidth: number }) {
 interface RowProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
   item: T;
   tableFields: TableField[];
-  EndButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
   selectedItemIds?: Set<string>;
   toggleItem?: (itemId: string) => void;
 }
@@ -179,7 +256,6 @@ interface RowProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
 const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | WorkspaceWithUserId>({
   item,
   tableFields,
-  EndButtons,
   selectedItemIds,
   toggleItem,
 }: RowProps<T>) {
@@ -209,7 +285,9 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | 
             <CellContent field={field} item={item} />
           </StyledTableCell>
         ))}
-        <StyledTableCell>{EndButtons ? EndButtons(item) : undefined}</StyledTableCell>
+        <StyledTableCell>
+          <EndButtons item={item} />
+        </StyledTableCell>
       </CompactTableRow>
       {description && (
         <ExpandedTableRow>
@@ -280,7 +358,6 @@ const WorkspaceItemsTable = React.memo(function WorkspaceItemsTable<
   filters,
   tableFields,
   initialSortField,
-  EndButtons,
   toggleItem,
   selectedItemIds,
   showSeeMoreOption,
@@ -291,7 +368,6 @@ const WorkspaceItemsTable = React.memo(function WorkspaceItemsTable<
   filters: TableFilter[];
   tableFields: TableField[];
   initialSortField: SortField;
-  EndButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
   toggleItem?: (itemId: string) => void;
   selectedItemIds?: Set<string>;
   showSeeMoreOption?: boolean;
@@ -367,7 +443,6 @@ const WorkspaceItemsTable = React.memo(function WorkspaceItemsTable<
                     key={'id' in item ? item.id : item.original_workspace_id.id}
                     item={item}
                     tableFields={tableFields}
-                    EndButtons={EndButtons}
                     selectedItemIds={selectedItemIds}
                     toggleItem={toggleItem}
                   />

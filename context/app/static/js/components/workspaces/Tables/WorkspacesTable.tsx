@@ -1,13 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react';
-import { WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
+import Stack from '@mui/material/Stack';
+import { WorkspaceWithUserId } from 'js/components/workspaces/types';
 import Description from 'js/shared-styles/sections/Description';
 import WorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/WorkspaceItemsTable';
 import { SortField, TableFilter, TableField } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
-import Stack from '@mui/material/Stack';
-import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
-import { useWorkspacesList } from 'js/components/workspaces/hooks';
-import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
-import { LaunchStopButton } from 'js/components/workspaces/WorkspaceLaunchStopButtons/WorkspaceLaunchStopButtons';
+import { StyledNumSelectedHeader } from 'js/components/workspaces/Tables/WorkspaceItemsTable/style';
 
 const tableFields: TableField[] = [
   {
@@ -32,24 +29,6 @@ const initialSortField: SortField = {
   direction: 'desc',
   field: 'datetime_last_job_launch',
 };
-
-function EndButtons(item: WorkspaceWithUserId | WorkspaceInvitation) {
-  const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
-  if ('original_workspace_id' in item) {
-    return null;
-  }
-
-  return (
-    <WorkspaceLaunchStopButtons
-      workspace={item}
-      button={LaunchStopButton}
-      handleStopWorkspace={handleStopWorkspace}
-      isStoppingWorkspace={isStoppingWorkspace}
-      showLaunch
-      showStop
-    />
-  );
-}
 
 export default function WorkspacesTable({
   workspacesList,
@@ -104,7 +83,7 @@ export default function WorkspacesTable({
     <Description>No workspaces created yet.</Description>
   ) : (
     <Stack>
-      <NumSelectedHeader numSelected={selectedItems.size} />
+      <StyledNumSelectedHeader numSelected={selectedItems.size} />
       <WorkspaceItemsTable
         items={filteredWorkspaces}
         isLoading={isLoading}
@@ -112,7 +91,6 @@ export default function WorkspacesTable({
         filters={filters}
         tableFields={tableFields}
         initialSortField={initialSortField}
-        EndButtons={EndButtons}
         selectedItemIds={selectedItems}
         toggleItem={toggleItem}
       />
