@@ -122,7 +122,7 @@ function DonorChart({ xAxis, groups }) {
   };
   const colorKeys = colorKeysMap[groups];
   const xAxisLabel = xAxisLabelMap?.[xKey] ?? pretty(xAxis);
-  const title = `${pretty(xAxis)} & ${pretty(groups)}`;
+  const title = `${xAxisLabel} & ${pretty(groups)}`;
   const description = [xAxis, groups].includes('abo_blood_group_system') ? <BloodTypeDescription /> : null;
 
   return (
