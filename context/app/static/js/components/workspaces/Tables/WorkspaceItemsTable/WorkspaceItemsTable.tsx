@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import { format } from 'date-fns/format';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
@@ -28,6 +28,7 @@ import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 
+import useWorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
 import { SortField, SortDirection, TableField, TableFilter } from './types';
 import {
   ArrowDownOff,
@@ -349,61 +350,30 @@ function SeeMoreRows({
   );
 }
 
-const WorkspaceItemsTable = React.memo(function WorkspaceItemsTable<
-  T extends WorkspaceInvitation | WorkspaceWithUserId,
->({
-  items,
-  isLoading,
-  itemType,
-  filters,
-  tableFields,
-  initialSortField,
-  toggleItem,
-  selectedItemIds,
-  showSeeMoreOption,
-}: {
+export interface WorkspaceItemsTableProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
   items: T[];
   isLoading: boolean;
   itemType: string;
   filters: TableFilter[];
   tableFields: TableField[];
+  // eslint-disable-next-line react/no-unused-prop-types
   initialSortField: SortField;
   toggleItem?: (itemId: string) => void;
   selectedItemIds?: Set<string>;
   showSeeMoreOption?: boolean;
-}) {
-  const [sortField, setSortField] = useState<SortField>(initialSortField);
-  const [numVisibleItems, setNumVisibleItems] = useState(showSeeMoreOption ? 3 : items.length);
+}
+function WorkspaceItemsTable<T extends WorkspaceInvitation | WorkspaceWithUserId>(props: WorkspaceItemsTableProps<T>) {
+  const { items, isLoading, itemType, filters, tableFields, toggleItem, selectedItemIds, showSeeMoreOption } = props;
 
-  const noFiltersSelected = filters.every(({ show }) => !show);
-
-  const sortedItems = useMemo(
-    () =>
-      [...items].sort((a, b) => {
-        const aValue = getFieldValue({ item: a, field: sortField.field });
-        const bValue = getFieldValue({ item: b, field: sortField.field });
-
-        if (aValue < bValue) return sortField.direction === 'asc' ? -1 : 1;
-        if (aValue > bValue) return sortField.direction === 'asc' ? 1 : -1;
-        return 0;
-      }),
-    [items, sortField],
-  );
-
-  const onToggleCheckboxHeader = useEventCallback(() => {
-    if (!selectedItemIds || !toggleItem) {
-      return;
-    }
-
-    items.forEach((item) => {
-      const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
-      if (selectedItemIds.size === items.length) {
-        toggleItem(itemId);
-      } else if (!selectedItemIds.has(itemId)) {
-        toggleItem(itemId);
-      }
-    });
-  });
+  const {
+    noFiltersSelected,
+    sortedItems,
+    sortField,
+    setSortField,
+    numVisibleItems,
+    setNumVisibleItems,
+    onToggleCheckboxHeader,
+  } = useWorkspaceItemsTable<T>(props);
 
   return (
     <Box>
@@ -460,6 +430,6 @@ const WorkspaceItemsTable = React.memo(function WorkspaceItemsTable<
       )}
     </Box>
   );
-});
+}
 
 export default WorkspaceItemsTable;
