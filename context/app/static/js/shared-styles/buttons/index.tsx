@@ -43,13 +43,16 @@ const RotatedTooltipButton = styled(IconDropdownMenuButton)(({ theme }) => ({
   color: theme.palette.primary.main,
   transform: 'rotate(90deg)',
   fontSize: '1.5rem',
+  border: 'none',
+  sx: { border: 0 },
   '& svg': svgStyles,
 }));
 
-const WhiteBackgroundIconTooltipButton = styled(TooltipIconButton)({
+const WhiteBackgroundIconTooltipButton = styled(TooltipIconButton)(({ theme }) => ({
+  ...border(theme),
   ...whiteBackgroundCSS,
   '& svg': svgStyles,
-});
+}));
 
 const WhiteBackgroundToggleButton = styled(ToggleButton)({
   ...whiteBackgroundCSS,

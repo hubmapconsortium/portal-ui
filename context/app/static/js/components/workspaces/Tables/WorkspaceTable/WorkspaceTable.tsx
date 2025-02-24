@@ -40,6 +40,15 @@ import {
   StyledCheckboxCell,
 } from './style';
 
+export function getFieldPrefix(field: string) {
+  // Get appropriate prefix if this is an invitation
+  const regex = /^(original_workspace_id|shared_workspace_id)/;
+  const match = regex.exec(field);
+  const prefix = match ? `${match[0]}.` : '';
+
+  return prefix;
+}
+
 export function getFieldValue({
   item,
   field,
@@ -121,11 +130,7 @@ function SortHeaderCell({
 }
 
 function CellContent({ item, field }: { field: string; item: WorkspaceInvitation | WorkspaceWithUserId }) {
-  // Get appropriate prefix if this is an invitation
-  const regex = /^(original_workspace_id|shared_workspace_id)/;
-  const match = regex.exec(field);
-  const prefix = match ? `${match[0]}.` : '';
-
+  const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
 
   switch (field) {
@@ -206,8 +211,9 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | 
   toggleItem,
 }: RowProps<T>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const description = getFieldValue({ item, field: 'description' });
 
+  const prefix = getFieldPrefix(tableFields[0].field);
+  const description = getFieldValue({ item, field: 'description', prefix });
   const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
 
   return (
