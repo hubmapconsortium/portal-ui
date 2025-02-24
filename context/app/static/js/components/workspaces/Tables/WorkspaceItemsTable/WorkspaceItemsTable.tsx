@@ -30,7 +30,7 @@ import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMen
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 
-import { SortField, TableField, TableFilter } from './types';
+import { TableField, WorkspaceItemsTableProps } from './types';
 import {
   ChipWrapper,
   CompactTableRow,
@@ -116,6 +116,26 @@ function EndButtons({ item }: { item: WorkspaceInvitation | WorkspaceWithUserId 
         <CheckIcon color="success" fontSize="1.5rem" />
       </TooltipIconButton>
     </Stack>
+  );
+}
+
+function ItemCheckbox({
+  showCheckbox,
+  checked,
+  onChange,
+}: {
+  showCheckbox: boolean;
+  checked?: boolean;
+  onChange: () => void;
+}) {
+  if (!showCheckbox) {
+    return null;
+  }
+
+  return (
+    <StyledCheckboxCell>
+      <Checkbox checked={checked} onChange={onChange} />
+    </StyledCheckboxCell>
   );
 }
 
@@ -241,11 +261,11 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | 
   return (
     <>
       <CompactTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
-        {selectedItemIds && toggleItem && (
-          <StyledCheckboxCell>
-            <Checkbox checked={selectedItemIds.has(itemId)} onChange={() => toggleItem(itemId)} />
-          </StyledCheckboxCell>
-        )}
+        <ItemCheckbox
+          showCheckbox={!!selectedItemIds}
+          checked={selectedItemIds?.has(itemId)}
+          onChange={() => toggleItem?.(itemId)}
+        />
         <StyledTableCell width="0">
           {description && (
             <IconButton aria-label="expand row" size="small" onClick={() => setIsExpanded(!isExpanded)}>
@@ -322,20 +342,36 @@ function SeeMoreRows({
   );
 }
 
-export interface WorkspaceItemsTableProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
-  items: T[];
-  isLoading: boolean;
-  itemType: string;
-  filters: TableFilter[];
-  tableFields: TableField[];
-  // eslint-disable-next-line react/no-unused-prop-types
-  initialSortField: SortField;
-  toggleItem?: (itemId: string) => void;
-  selectedItemIds?: Set<string>;
-  showSeeMoreOption?: boolean;
+function TableResults<T extends WorkspaceInvitation | WorkspaceWithUserId>({
+  isLoading,
+  sortedItems,
+  tableFields,
+  numVisibleItems,
+  selectedItemIds,
+  toggleItem,
+}: {
+  sortedItems: T[];
+  numVisibleItems: number;
+} & Pick<WorkspaceItemsTableProps<T>, 'isLoading' | 'tableFields' | 'selectedItemIds' | 'toggleItem'>) {
+  if (isLoading) {
+    return <LoadingRows tableWidth={tableFields.length} />;
+  }
+
+  return sortedItems
+    .slice(0, numVisibleItems)
+    .map((item) => (
+      <ResultRow
+        key={'id' in item ? item.id : item.original_workspace_id.id}
+        item={item}
+        tableFields={tableFields}
+        selectedItemIds={selectedItemIds}
+        toggleItem={toggleItem}
+      />
+    ));
 }
-function WorkspaceItemsTable<T extends WorkspaceInvitation | WorkspaceWithUserId>(props: WorkspaceItemsTableProps<T>) {
-  const { items, isLoading, itemType, filters, tableFields, toggleItem, selectedItemIds, showSeeMoreOption } = props;
+
+function TableContent<T extends WorkspaceInvitation | WorkspaceWithUserId>(props: WorkspaceItemsTableProps<T>) {
+  const { items, isLoading, itemType, tableFields, toggleItem, selectedItemIds, showSeeMoreOption } = props;
 
   const {
     noFiltersSelected,
@@ -346,6 +382,51 @@ function WorkspaceItemsTable<T extends WorkspaceInvitation | WorkspaceWithUserId
     setNumVisibleItems,
     onToggleCheckboxHeader,
   } = useWorkspaceItemsTable<T>(props);
+
+  if (!isLoading && noFiltersSelected) {
+    return <Alert severity="info">{`No ${itemType}s to display based on current filters.`}</Alert>;
+  }
+
+  return (
+    <>
+      <StyledTableContainer>
+        <StyledTable>
+          <StyledTableHead>
+            <StyledTableRow>
+              <ItemCheckbox
+                showCheckbox={!!selectedItemIds}
+                checked={selectedItemIds?.size === items.length}
+                onChange={onToggleCheckboxHeader}
+              />
+              <StyledTableCell width="0" />
+              <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
+              <StyledTableCell />
+            </StyledTableRow>
+          </StyledTableHead>
+          <StyledTableBody>
+            <TableResults
+              isLoading={isLoading}
+              sortedItems={sortedItems}
+              tableFields={tableFields}
+              numVisibleItems={numVisibleItems}
+              selectedItemIds={selectedItemIds}
+              toggleItem={toggleItem}
+            />
+          </StyledTableBody>
+        </StyledTable>
+      </StyledTableContainer>
+      <SeeMoreRows
+        showSeeMoreOption={showSeeMoreOption}
+        numVisibleItems={numVisibleItems}
+        setNumVisibleItems={setNumVisibleItems}
+        totalItems={items.length}
+      />
+    </>
+  );
+}
+
+function WorkspaceItemsTable<T extends WorkspaceInvitation | WorkspaceWithUserId>(props: WorkspaceItemsTableProps<T>) {
+  const { filters, ...rest } = props;
 
   return (
     <Box>
@@ -360,46 +441,7 @@ function WorkspaceItemsTable<T extends WorkspaceInvitation | WorkspaceWithUserId
           />
         ))}
       </ChipWrapper>
-      {!isLoading && noFiltersSelected ? (
-        <Alert severity="info">{`No ${itemType}s to display based on current filters.`}</Alert>
-      ) : (
-        <>
-          <StyledTableContainer>
-            <StyledTable>
-              <StyledTableHead>
-                <StyledTableRow>
-                  {selectedItemIds && toggleItem && (
-                    <StyledCheckboxCell>
-                      <Checkbox checked={selectedItemIds.size === items.length} onChange={onToggleCheckboxHeader} />
-                    </StyledCheckboxCell>
-                  )}
-                  <StyledTableCell width="0" />
-                  <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
-                  <StyledTableCell />
-                </StyledTableRow>
-              </StyledTableHead>
-              <StyledTableBody>
-                {isLoading && <LoadingRows tableWidth={tableFields.length} />}
-                {sortedItems.slice(0, numVisibleItems).map((item) => (
-                  <ResultRow
-                    key={'id' in item ? item.id : item.original_workspace_id.id}
-                    item={item}
-                    tableFields={tableFields}
-                    selectedItemIds={selectedItemIds}
-                    toggleItem={toggleItem}
-                  />
-                ))}
-              </StyledTableBody>
-            </StyledTable>
-          </StyledTableContainer>
-          <SeeMoreRows
-            showSeeMoreOption={showSeeMoreOption}
-            numVisibleItems={numVisibleItems}
-            setNumVisibleItems={setNumVisibleItems}
-            totalItems={items.length}
-          />
-        </>
-      )}
+      <TableContent filters={filters} {...rest} />
     </Box>
   );
 }

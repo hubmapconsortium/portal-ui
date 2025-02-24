@@ -1,11 +1,13 @@
 import { useMemo, useState } from 'react';
 import useEventCallback from '@mui/material/utils/useEventCallback';
-import { SortField } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
+import {
+  SortField,
+  WorkspaceItem,
+  WorkspaceItemsTableProps,
+} from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import { getFieldValue } from 'js/components/workspaces/utils';
-import { WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
-import { WorkspaceItemsTableProps } from 'js/components/workspaces/Tables/WorkspaceItemsTable/WorkspaceItemsTable';
 
-function useWorkspaceItemsTable<T extends WorkspaceInvitation | WorkspaceWithUserId>({
+function useWorkspaceItemsTable<T extends WorkspaceItem>({
   items,
   initialSortField,
   showSeeMoreOption,
