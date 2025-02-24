@@ -146,7 +146,7 @@ function useInvitationsList() {
 }
 
 function useWorkspacesListWithSharerInfo() {
-  const { workspacesList, isLoading, ...rest } = useWorkspacesList();
+  const { workspacesList, isLoading: workspacesLoading, ...rest } = useWorkspacesList();
   const { receivedInvitations, invitationsLoading } = useInvitationsList();
 
   const workspacesWithInvitationInfo = workspacesList.map((workspace) => {
@@ -161,7 +161,7 @@ function useWorkspacesListWithSharerInfo() {
 
   return {
     workspacesList: workspacesWithInvitationInfo,
-    isLoading: isLoading || invitationsLoading,
+    isLoading: workspacesLoading || invitationsLoading,
     ...rest,
   };
 }

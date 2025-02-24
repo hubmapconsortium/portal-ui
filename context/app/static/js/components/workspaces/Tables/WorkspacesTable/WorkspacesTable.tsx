@@ -44,9 +44,11 @@ export default function WorkspacesTable({
 }) {
   const { filteredWorkspaces, filters } = useWorkspacesTable(workspacesList);
 
-  return Object.keys(workspacesList).length === 0 ? (
-    <Description>No workspaces created yet.</Description>
-  ) : (
+  if (!workspacesList.length) {
+    return <Description>No workspaces created yet.</Description>;
+  }
+
+  return (
     <Stack>
       <StyledNumSelectedHeader numSelected={selectedItems.size} />
       <WorkspaceItemsTable

@@ -50,12 +50,10 @@ function WorkspacesAutocomplete({
   setInputValue: (value: string) => void;
   filteredWorkspaces: WorkspaceWithUserId[];
 }) {
-  const autocompleteValue = '';
-
   return (
     <Box flex={1} maxWidth="50%">
       <Autocomplete
-        value={autocompleteValue}
+        value=""
         inputValue={inputValue}
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);

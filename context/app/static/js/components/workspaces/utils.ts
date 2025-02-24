@@ -1,4 +1,5 @@
 import { get } from 'js/helpers/nodash';
+import type { WorkspaceItem } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_JOB_TYPE,
@@ -394,15 +395,7 @@ function getFieldPrefix(field: string) {
  * @param prefix The prefix to use if the field is a workspace invitation.
  * @returns The value of the field.
  */
-function getFieldValue({
-  item,
-  field,
-  prefix,
-}: {
-  item: WorkspaceInvitation | WorkspaceWithUserId;
-  field: string;
-  prefix?: string;
-}) {
+function getFieldValue({ item, field, prefix }: { item: WorkspaceItem; field: string; prefix?: string }) {
   // datetime_last_job_launch starts as null, so we fall back to datetime_created if the workspace has never been launched
   if (field === 'datetime_last_job_launch') {
     const launchDate = get(item, field, '');
@@ -415,11 +408,11 @@ function getFieldValue({
   return get(item, fieldWithPrefix, '');
 }
 
-function isInvitation(item: WorkspaceInvitation | WorkspaceWithUserId): item is WorkspaceInvitation {
+function isInvitation(item: WorkspaceItem): item is WorkspaceInvitation {
   return 'shared_workspace_id' in item;
 }
 
-function isWorkspace(item: WorkspaceInvitation | WorkspaceWithUserId): item is WorkspaceWithUserId {
+function isWorkspace(item: WorkspaceItem): item is WorkspaceWithUserId {
   return 'id' in item;
 }
 

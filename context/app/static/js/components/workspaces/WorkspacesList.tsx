@@ -10,6 +10,7 @@ import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 import WorkspacesTable from 'js/components/workspaces/Tables/WorkspacesTable';
 import WorkspacesAutocomplete from 'js/components/workspaces/WorkspacesAutocomplete';
+
 import { useWorkspacesListWithSharerInfo } from './hooks';
 import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
 
@@ -34,6 +35,7 @@ function ShareWorkspaceButton({ selectedItems }: { selectedItems: Set<string> })
     : 'Share copies of the selected workspaces with users with the required workspace permissions.';
 
   return (
+    // TODO: update after dialog is implemented
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     <WorkspaceButton onClick={() => {}} disabled={disabled} tooltip={tooltip}>
       <ShareIcon />
