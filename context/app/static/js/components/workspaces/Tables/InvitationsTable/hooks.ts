@@ -1,24 +1,8 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { InvitationType, WorkspaceInvitation } from 'js/components/workspaces/types';
+import { TableField, TableFilter } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 
-import { WorkspaceInvitation } from 'js/components/workspaces/types';
-import { SortField, TableFilter, TableField } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
-import WorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/WorkspaceItemsTable';
-import { Alert } from 'js/shared-styles/alerts/Alert';
-
-const initialSortField: SortField = {
-  field: 'datetime_share_created',
-  direction: 'desc',
-};
-
-const InvitationsTable = React.memo(function InvitationsTable({
-  isLoading,
-  invitations,
-  status,
-}: {
-  isLoading: boolean;
-  invitations: WorkspaceInvitation[];
-  status: 'Received' | 'Sent';
-}) {
+function useInvitationsTable({ invitations, status }: { invitations: WorkspaceInvitation[]; status: InvitationType }) {
   const { pendingCount, acceptedCount } = useMemo(() => {
     const pending = invitations.filter((inv) => !inv.is_accepted).length;
     return { pendingCount: pending, acceptedCount: invitations.length - pending };
@@ -78,21 +62,11 @@ const InvitationsTable = React.memo(function InvitationsTable({
     [acceptedCount, pendingCount, showAccepted, showPending],
   );
 
-  if (!isLoading && !invitations.length) {
-    return <Alert severity="info"> {`No ${status.toLocaleLowerCase()} workspace invitations.`} </Alert>;
-  }
+  return {
+    filteredInvitations,
+    tableFields,
+    filters,
+  };
+}
 
-  return (
-    <WorkspaceItemsTable
-      items={filteredInvitations}
-      isLoading={isLoading}
-      itemType="invitation"
-      filters={filters}
-      tableFields={tableFields}
-      initialSortField={initialSortField}
-      showSeeMoreOption
-    />
-  );
-});
-
-export default InvitationsTable;
+export default useInvitationsTable;

@@ -103,6 +103,8 @@ export interface SharedWorkspace {
   user_id: WorkspaceUser;
 }
 
+export type InvitationType = 'Sent' | 'Received';
+
 export interface WorkspaceInvitation {
   original_workspace_id: SharedWorkspace;
   shared_workspace_id: SharedWorkspace;
