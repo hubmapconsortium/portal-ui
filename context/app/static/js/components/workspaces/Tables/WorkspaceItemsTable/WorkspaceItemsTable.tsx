@@ -14,7 +14,6 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
-import { WorkspaceWithUserId, WorkspaceInvitation } from 'js/components/workspaces/types';
 import { getFieldPrefix, getFieldValue, isWorkspace } from 'js/components/workspaces/utils';
 import { CheckIcon, CloseFilledIcon, DownIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
@@ -30,7 +29,7 @@ import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMen
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 
-import { TableField, WorkspaceItemsTableProps } from './types';
+import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
 import {
   ChipWrapper,
   CompactTableRow,
@@ -62,7 +61,7 @@ const acceptInviteTooltip =
 const previewInviteTooltip = 'Preview the details of this workspace.';
 const moreOptionsTooltip = 'View additional actions.';
 
-function EndButtons({ item }: { item: WorkspaceInvitation | WorkspaceWithUserId }) {
+function EndButtons({ item }: { item: WorkspaceItem }) {
   const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
 
   // If the item is a workspace
@@ -173,7 +172,7 @@ function SortHeaderCell({
   );
 }
 
-function CellContent({ item, field }: { field: string; item: WorkspaceInvitation | WorkspaceWithUserId }) {
+function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
 
@@ -225,28 +224,14 @@ function CellContent({ item, field }: { field: string; item: WorkspaceInvitation
   }
 }
 
-function LoadingRows({ tableWidth }: { tableWidth: number }) {
-  return Array.from({ length: 3 }).map((_, i) => (
-    // eslint-disable-next-line react/no-array-index-key
-    <TableRow key={i}>
-      {Array.from({ length: tableWidth }).map(() => (
-        // eslint-disable-next-line react/no-array-index-key
-        <StyledTableCell key={i}>
-          <Skeleton variant="text" />
-        </StyledTableCell>
-      ))}
-    </TableRow>
-  ));
-}
-
-interface RowProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
+interface RowProps<T extends WorkspaceItem> {
   item: T;
   tableFields: TableField[];
   selectedItemIds?: Set<string>;
   toggleItem?: (itemId: string) => void;
 }
 
-const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | WorkspaceWithUserId>({
+const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   item,
   tableFields,
   selectedItemIds,
@@ -342,7 +327,19 @@ function SeeMoreRows({
   );
 }
 
-function TableResults<T extends WorkspaceInvitation | WorkspaceWithUserId>({
+function LoadingRows({ tableWidth }: { tableWidth: number }) {
+  return Array.from({ length: 3 }, (i, rowIndex) => (
+    <TableRow key={`row-${rowIndex}`}>
+      {Array.from({ length: tableWidth }, (j, cellIndex) => (
+        <StyledTableCell key={`cell-${rowIndex}-${cellIndex}`}>
+          <Skeleton variant="text" />
+        </StyledTableCell>
+      ))}
+    </TableRow>
+  ));
+}
+
+function TableResults<T extends WorkspaceItem>({
   isLoading,
   sortedItems,
   tableFields,
@@ -370,7 +367,7 @@ function TableResults<T extends WorkspaceInvitation | WorkspaceWithUserId>({
     ));
 }
 
-function TableContent<T extends WorkspaceInvitation | WorkspaceWithUserId>(props: WorkspaceItemsTableProps<T>) {
+function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
   const { items, isLoading, itemType, tableFields, toggleItem, selectedItemIds, showSeeMoreOption } = props;
 
   const {
@@ -425,7 +422,7 @@ function TableContent<T extends WorkspaceInvitation | WorkspaceWithUserId>(props
   );
 }
 
-function WorkspaceItemsTable<T extends WorkspaceInvitation | WorkspaceWithUserId>(props: WorkspaceItemsTableProps<T>) {
+function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
   const { filters, ...rest } = props;
 
   return (
