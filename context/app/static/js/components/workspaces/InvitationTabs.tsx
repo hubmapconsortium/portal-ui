@@ -33,23 +33,21 @@ interface InvitationTabsProps {
 function InvitationTabs({ sentInvitations, receivedInvitations, isLoading }: InvitationTabsProps) {
   const { openTabIndex, handleTabChange } = useTabs();
 
-  const ownTabIndex = 0;
-  const sentTabIndex = 1;
+  const ownIdx = 0;
+  const sentIdx = 1;
 
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange} variant="fullWidth">
-        {receivedInvitations && (
-          <InvitationTab label="Received" index={ownTabIndex} key={ownTabIndex} icon={ReceivedIcon} />
-        )}
-        <InvitationTab label="Sent" index={sentTabIndex} key={sentTabIndex} icon={SentIcon} />
+        {receivedInvitations && <InvitationTab label="Received" index={ownIdx} key={ownIdx} icon={ReceivedIcon} />}
+        <InvitationTab label="Sent" index={sentIdx} key={sentIdx} icon={SentIcon} />
       </Tabs>
-      <TabPanel value={openTabIndex} index={ownTabIndex} key={ownTabIndex}>
+      <TabPanel value={openTabIndex} index={ownIdx} key={ownIdx}>
         {receivedInvitations && (
           <InvitationsTable status="Received" invitations={receivedInvitations} isLoading={isLoading} />
         )}
       </TabPanel>
-      <TabPanel value={openTabIndex} index={sentTabIndex} key={sentTabIndex}>
+      <TabPanel value={openTabIndex} index={sentIdx} key={sentIdx}>
         <InvitationsTable status="Sent" invitations={sentInvitations} isLoading={isLoading} />
       </TabPanel>
     </Box>

@@ -23,9 +23,8 @@ import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import DeselectAllRowsButton from 'js/shared-styles/tables/DeselectAllRowsButton';
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
-import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import useSavedEntityData from 'js/hooks/useSavedEntityData';
-import { LeftMarginIconButton } from './style';
+import { LeftMarginIconButton, StyledNumSelectedHeader } from './style';
 
 const defaultColumns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -90,7 +89,7 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
       />
       <Paper>
         <StyledTableContainer>
-          <NumSelectedHeader numSelected={selectedRowsSize} style={{ border: 'none' }} />
+          <StyledNumSelectedHeader numSelected={selectedRowsSize} />
           <Table stickyHeader>
             <TableHead>
               <TableRow>

@@ -11,6 +11,7 @@ import { MergedWorkspace, WorkspacesEventInfo } from 'js/components/workspaces/t
 import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { trackEvent } from 'js/helpers/trackers';
+import { StyledLaunchButton } from 'js/components/style';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -126,5 +127,9 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
   );
 }
 
-export { StopWorkspaceAlert };
+function LaunchStopButton(props: ButtonProps) {
+  return <StyledLaunchButton {...props} />;
+}
+
+export { StopWorkspaceAlert, LaunchStopButton };
 export default WorkspaceLaunchStopButtons;

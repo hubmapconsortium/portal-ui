@@ -1,13 +1,13 @@
 import React from 'react';
-
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import Description from 'js/shared-styles/sections/Description';
+
 import { useInvitationsList } from 'js/components/workspaces/hooks';
 import InvitationTabs from 'js/components/workspaces/InvitationTabs';
+import Description from 'js/shared-styles/sections/Description';
 
 function InvitationsList() {
-  const { sentInvitations, receivedInvitations, invitationsLoading: isLoading } = useInvitationsList();
+  const { sentInvitations, receivedInvitations, invitationsLoading } = useInvitationsList();
 
   return (
     <Stack spacing={1}>
@@ -19,7 +19,7 @@ function InvitationsList() {
       <InvitationTabs
         sentInvitations={sentInvitations}
         receivedInvitations={receivedInvitations}
-        isLoading={isLoading}
+        isLoading={invitationsLoading}
       />
     </Stack>
   );

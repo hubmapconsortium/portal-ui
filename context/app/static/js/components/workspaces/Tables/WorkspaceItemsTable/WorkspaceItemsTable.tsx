@@ -1,25 +1,27 @@
 import React, { useMemo, useState } from 'react';
+import { format } from 'date-fns/format';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
 import Skeleton from '@mui/material/Skeleton';
 import Box from '@mui/material/Box';
 import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/system/Stack';
-import { format } from 'date-fns/format';
+import Collapse from '@mui/material/Collapse';
+import Typography from '@mui/material/Typography';
+import { useEventCallback } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
-import { get } from 'js/helpers/nodash';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
 import { WorkspaceWithUserId, WorkspaceInvitation } from 'js/components/workspaces/types';
-
-import { Collapse, Typography, useEventCallback } from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import ExpandLessIcon from '@mui/icons-material/ExpandLess';
+import { getFieldPrefix, getFieldValue } from 'js/components/workspaces/utils';
 import { CheckIcon, DownIcon, EmailIcon } from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
 import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+
 import { SortField, SortDirection, TableField, TableFilter } from './types';
 import {
   ArrowDownOff,
@@ -39,35 +41,6 @@ import {
   StyledTableHead,
   StyledCheckboxCell,
 } from './style';
-
-export function getFieldPrefix(field: string) {
-  // Get appropriate prefix if this is an invitation
-  const regex = /^(original_workspace_id|shared_workspace_id)/;
-  const match = regex.exec(field);
-  const prefix = match ? `${match[0]}.` : '';
-
-  return prefix;
-}
-
-export function getFieldValue({
-  item,
-  field,
-  prefix,
-}: {
-  item: WorkspaceInvitation | WorkspaceWithUserId;
-  field: string;
-  prefix?: string;
-}) {
-  if (field === 'datetime_last_job_launch') {
-    const launchDate = get(item, field, '');
-    const createdDate = get(item, `datetime_created`, '');
-
-    return launchDate || createdDate;
-  }
-
-  const fieldWithPrefix = prefix ? `${prefix}${field}` : field;
-  return get(item, fieldWithPrefix, '');
-}
 
 export function OrderIcon({
   direction,
@@ -198,7 +171,7 @@ function LoadingRows({ tableWidth }: { tableWidth: number }) {
 interface RowProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
   item: T;
   tableFields: TableField[];
-  endButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
+  EndButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
   selectedItemIds?: Set<string>;
   toggleItem?: (itemId: string) => void;
 }
@@ -206,7 +179,7 @@ interface RowProps<T extends WorkspaceInvitation | WorkspaceWithUserId> {
 const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | WorkspaceWithUserId>({
   item,
   tableFields,
-  endButtons,
+  EndButtons,
   selectedItemIds,
   toggleItem,
 }: RowProps<T>) {
@@ -236,7 +209,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceInvitation | 
             <CellContent field={field} item={item} />
           </StyledTableCell>
         ))}
-        <StyledTableCell>{endButtons ? endButtons(item) : undefined}</StyledTableCell>
+        <StyledTableCell>{EndButtons ? EndButtons(item) : undefined}</StyledTableCell>
       </CompactTableRow>
       {description && (
         <ExpandedTableRow>
@@ -298,14 +271,16 @@ function SeeMoreRows({
   );
 }
 
-const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInvitation | WorkspaceWithUserId>({
+const WorkspaceItemsTable = React.memo(function WorkspaceItemsTable<
+  T extends WorkspaceInvitation | WorkspaceWithUserId,
+>({
   items,
   isLoading,
   itemType,
   filters,
   tableFields,
   initialSortField,
-  endButtons,
+  EndButtons,
   toggleItem,
   selectedItemIds,
   showSeeMoreOption,
@@ -316,7 +291,7 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
   filters: TableFilter[];
   tableFields: TableField[];
   initialSortField: SortField;
-  endButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
+  EndButtons: (item: WorkspaceInvitation | WorkspaceWithUserId) => React.ReactNode;
   toggleItem?: (itemId: string) => void;
   selectedItemIds?: Set<string>;
   showSeeMoreOption?: boolean;
@@ -392,7 +367,7 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
                     key={'id' in item ? item.id : item.original_workspace_id.id}
                     item={item}
                     tableFields={tableFields}
-                    endButtons={endButtons}
+                    EndButtons={EndButtons}
                     selectedItemIds={selectedItemIds}
                     toggleItem={toggleItem}
                   />
@@ -412,4 +387,4 @@ const WorkspaceTable = React.memo(function WorkspaceTable<T extends WorkspaceInv
   );
 });
 
-export default WorkspaceTable;
+export default WorkspaceItemsTable;

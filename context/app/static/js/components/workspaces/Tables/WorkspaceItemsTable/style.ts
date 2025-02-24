@@ -98,7 +98,7 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 const StyledTableContainer = styled(Box)(({ theme }) => ({
-  maxHeight: '400px',
+  maxHeight: '425px',
   width: '100%',
   border: `1px solid ${theme.palette.grey[300]}`,
   borderTop: 'none',
@@ -112,12 +112,6 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
   top: 0,
   zIndex: theme.zIndex.fileBrowserHeader,
   background: theme.palette.white.main,
-}));
-
-const StyledLaunchButton = styled(Button)(({ theme }) => ({
-  border: `1px solid ${theme.palette.grey[300]}`,
-  borderRadius: theme.spacing(0.5),
-  padding: theme.spacing(1, 3),
 }));
 
 export {
@@ -136,6 +130,5 @@ export {
   StyledButton,
   StyledTableContainer,
   StyledTableHead,
-  StyledLaunchButton,
   StyledCheckboxCell,
 };
