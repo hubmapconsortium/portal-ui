@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.21.1 - 2025-02-24
+
+- Fix casing of ABO blood group chart titles on diversity page.
+- Restrict "My Lists" feature to HuBMAP users only.
+
+
+
 ## v1.21.0 - 2025-02-20
 
 - Use new `abo_blood_group_system` field in donor charts.
