@@ -54,12 +54,13 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
     handleClose,
   ]);
 
+  const multipleSelected = selectedWorkspaceIds.size > 1;
+
   return (
-    <Dialog open onClose={handleClose} scroll="paper" aria-labelledby="delete-workspace-dialog" maxWidth="lg">
+    <Dialog open onClose={handleClose} scroll="paper" aria-labelledby="share-workspace-dialog" maxWidth="lg">
       <Stack display="flex" flexDirection="row" justifyContent="space-between" marginRight={1}>
-        <DialogTitle id="delete-workspace-dialog-title" variant="h3">
-          Delete Workspace
-          {selectedWorkspaceIds.size > 1 ? 's' : ''}
+        <DialogTitle id="share-workspace-dialog-title" variant="h3">
+          {`Share Workspace${multipleSelected ? 's' : ''} Cop${multipleSelected ? 'ies' : 'y'}`}
         </DialogTitle>
         <Box alignContent="center">
           <IconButton aria-label="Close" onClick={handleClose} size="large">

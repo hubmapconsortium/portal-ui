@@ -14,33 +14,6 @@ import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialog
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspacesListWithSharerInfo } from './hooks';
 
-function DeleteWorkspaceButton({
-  disabled,
-  setDialogIsOpen,
-}: {
-  disabled: boolean;
-  setDialogIsOpen: (isOpen: boolean) => void;
-}) {
-  return (
-    <WorkspaceButton onClick={() => setDialogIsOpen(true)} disabled={disabled} tooltip="Delete selected workspaces.">
-      <DeleteRounded />
-    </WorkspaceButton>
-  );
-}
-
-function ShareWorkspaceButton({ selectedItems }: { selectedItems: Set<string> }) {
-  const disabled = selectedItems.size === 0;
-  const tooltip = disabled ? 'Select workspace to share a copy.' : 'Share copies of the selected workspaces.';
-
-  return (
-    // TODO: update after dialog is implemented
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    <WorkspaceButton onClick={() => {}} disabled={disabled} tooltip={tooltip}>
-      <ShareIcon />
-    </WorkspaceButton>
-  );
-}
-
 function WorkspacesList() {
   const { workspacesList, isDeleting, isLoading } = useWorkspacesListWithSharerInfo();
   const { setDialogType } = useEditWorkspaceStore();
@@ -56,6 +29,10 @@ function WorkspacesList() {
     );
   }, [inputValue, workspacesList]);
 
+  const disabled = !selectedItems.size || isDeleting;
+  const shareTooltip = disabled ? 'Select workspace to share a copy.' : 'Share copies of the selected workspaces.';
+  const deleteTooltip = disabled ? 'Select workspace to delete.' : 'Delete selected workspaces.';
+
   return (
     <>
       <WorkspacesListDialogs selectedWorkspaceIds={selectedItems} />
@@ -68,11 +45,20 @@ function WorkspacesList() {
             filteredWorkspaces={filteredWorkspaces}
           />
           <Stack display="flex" direction="row" spacing={2}>
-            <DeleteWorkspaceButton
-              disabled={isDeleting || selectedItems.size === 0}
-              setDialogIsOpen={() => setDialogType('DELETE_WORKSPACE')}
-            />
-            <ShareWorkspaceButton selectedItems={selectedItems} />
+            <WorkspaceButton
+              onClick={() => setDialogType('DELETE_WORKSPACE')}
+              disabled={disabled}
+              tooltip={deleteTooltip}
+            >
+              <DeleteRounded />
+            </WorkspaceButton>
+            <WorkspaceButton
+              onClick={() => setDialogType('SHARE_WORKSPACE')}
+              disabled={disabled}
+              tooltip={shareTooltip}
+            >
+              <ShareIcon />
+            </WorkspaceButton>
             <NewWorkspaceDialogFromWorkspaceList />
           </Stack>
         </Stack>
