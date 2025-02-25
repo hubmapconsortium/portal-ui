@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -15,6 +15,7 @@ import { SelectedItems } from 'js/hooks/useSelectItems';
 import { generateCommaList } from 'js/helpers/functions';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
+import { StepDescription } from 'js/shared-styles/surfaces/Step';
 
 interface ShareWorkspacesDialogProps {
   handleClose: () => void;
@@ -54,6 +55,14 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
     handleClose,
   ]);
 
+  const description = useMemo(
+    () => [
+      `Select recipients to share a copy of the selected workspaces: ${selectedWorkspaceNamesList}. Only users with the necessary workspace permissions will appear in the list. If someone lacks these permissions, they must contact the HuBMAP help desk for assistance.`,
+      'You can search for recipients by first name, last name, or email address. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at it exists at the time of sharing. When sharing multiple workspaces or sharing to multiple recipients, each invitation is sent separately.',
+    ],
+    [selectedWorkspaceNamesList],
+  );
+
   const multipleSelected = selectedWorkspaceIds.size > 1;
 
   return (
@@ -68,6 +77,9 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
           </IconButton>
         </Box>
       </Stack>
+      <Box sx={{ px: 3 }}>
+        <StepDescription blocks={description} />
+      </Box>
       <DialogContent>
         You have selected to delete {selectedWorkspaceNamesList}. You cannot undo this action.
       </DialogContent>
