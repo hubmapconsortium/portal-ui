@@ -1,0 +1,1 @@
+- Update description on My Lists page for non-HuBMAP users.
