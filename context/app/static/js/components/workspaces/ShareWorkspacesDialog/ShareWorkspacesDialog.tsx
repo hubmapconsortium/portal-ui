@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -16,6 +16,8 @@ import { generateCommaList } from 'js/helpers/functions';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { StepDescription } from 'js/shared-styles/surfaces/Step';
+import UsersAutocomplete from 'js/components/workspaces/UsersAutocomplete';
+import { WorkspaceUser } from 'js/components/workspaces/types';
 
 interface ShareWorkspacesDialogProps {
   handleClose: () => void;
@@ -24,6 +26,7 @@ interface ShareWorkspacesDialogProps {
 export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceIds }: ShareWorkspacesDialogProps) {
   const { toastErrorDeleteWorkspaces, toastSuccessDeleteWorkspaces } = useWorkspaceToasts();
   const { workspacesList, handleDeleteWorkspace } = useWorkspacesList();
+  const [selectedUsers, setSelectedUsers] = useState<WorkspaceUser[]>([]);
 
   const selectedWorkspaceNames = Array.from(selectedWorkspaceIds).map((id) => {
     const workspace = workspacesList.find((w) => w.id === Number(id));
@@ -81,13 +84,13 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
         <StepDescription blocks={description} />
       </Box>
       <DialogContent>
-        You have selected to delete {selectedWorkspaceNamesList}. You cannot undo this action.
+        <UsersAutocomplete selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
       </DialogContent>
       <Divider />
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleDeleteAndClose} variant="contained" color="warning">
-          Delete
+        <Button onClick={handleDeleteAndClose} variant="contained">
+          Share
         </Button>
       </DialogActions>
     </Dialog>

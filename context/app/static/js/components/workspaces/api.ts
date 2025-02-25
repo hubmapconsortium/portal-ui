@@ -14,6 +14,7 @@ import {
   WorkspaceJob,
   WorkspaceJobType,
   WorkspaceResourceOptions,
+  WorkspaceUser,
   WorkspacesEventCategories,
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
@@ -63,6 +64,7 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   acceptInvitation(invitationId: number): string {
     return `${workspacesEndpoint}/shared_workspaces/${invitationId}/accept`;
   },
+  // Users
   users(query: string): string {
     return `${workspacesEndpoint}/users?search=${query}`;
   },
@@ -174,6 +176,41 @@ export function useJobs() {
 export function useWorkspaceJobs(workspaceId: number) {
   const { jobs, isLoading } = useJobs();
   return { jobs: jobs.filter((j) => j.workspace_id === workspaceId), isLoading };
+}
+
+function useFetchUsers(query: string) {
+  const urls = useWorkspacesApiURLs();
+  const usersURL = urls.users(query);
+  const { buildKey, hasAccess } = useBuildWorkspacesSWRKey();
+
+  const { data, isLoading, ...rest } = useSWR(
+    buildKey({ url: usersURL }),
+    ([url, head]) =>
+      fetcher<WorkspaceAPIResponse<{ users: WorkspaceUser[] }>>({
+        url,
+        requestInit: { headers: head },
+        errorMessages: {
+          404: `No user matching query '${query}' found.`,
+        },
+      }),
+    { revalidateOnFocus: hasAccess },
+  );
+
+  const users = data?.data?.users ?? [];
+
+  return { users, isLoading, ...rest };
+}
+
+export function useAllWorkspaceUsers() {
+  return useFetchUsers('');
+}
+
+export function useWorkspaceUsers(query: string) {
+  const { users, ...rest } = useFetchUsers(query);
+  if (rest.error) {
+    throw rest.error;
+  }
+  return { users, ...rest };
 }
 
 function useFetchInvitations(invitationId?: number) {

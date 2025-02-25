@@ -86,6 +86,7 @@ export interface MergedWorkspace extends Workspace {
 }
 
 export interface WorkspaceUser {
+  id: number;
   username: string;
   first_name: string;
   last_name: string;
