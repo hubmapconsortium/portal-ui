@@ -9,6 +9,7 @@ import Samples from 'js/components/organ/Samples';
 import { OrganFile } from 'js/components/organ/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import CellPopulationPlot from 'js/components/organ/CellPop';
+import DataProducts from 'js/components/organ/DataProducts';
 import { useAssayBucketsQuery, useHasSamplesQuery, useLabelledDatasetsQuery } from './hooks';
 
 interface OrganProps {
@@ -19,6 +20,7 @@ const summaryId = 'summary';
 const hraId = 'human-reference-atlas';
 const referenceId = 'reference-based-analysis';
 const assaysId = 'assays';
+const dataProductsId = 'data-products';
 const samplesId = 'samples';
 const cellpopId = 'cell-population-plot';
 
@@ -38,6 +40,7 @@ function Organ({ organ }: OrganProps) {
     [cellpopId]: labeledDatasetUuids.length > 0,
     [referenceId]: Boolean(organ?.azimuth),
     [assaysId]: assayBuckets.length > 0,
+    [dataProductsId]: true,
     [samplesId]: samplesHits.length > 0,
   };
 
@@ -67,6 +70,7 @@ function Organ({ organ }: OrganProps) {
         bucketData={assayBuckets}
         shouldDisplay={shouldDisplaySection[assaysId]}
       />
+      <DataProducts id={dataProductsId} />
       <Samples id={samplesId} organTerms={searchItems} shouldDisplay={shouldDisplaySection[samplesId]} />
     </DetailLayout>
   );
