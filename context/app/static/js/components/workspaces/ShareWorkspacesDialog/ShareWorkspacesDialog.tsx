@@ -16,14 +16,11 @@ import { generateCommaList } from 'js/helpers/functions';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 
-interface ConfirmDeleteWorkspacesDialogProps {
+interface ShareWorkspacesDialogProps {
   handleClose: () => void;
   selectedWorkspaceIds: SelectedItems;
 }
-export default function ConfirmDeleteWorkspacesDialog({
-  handleClose,
-  selectedWorkspaceIds,
-}: ConfirmDeleteWorkspacesDialogProps) {
+export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceIds }: ShareWorkspacesDialogProps) {
   const { toastErrorDeleteWorkspaces, toastSuccessDeleteWorkspaces } = useWorkspaceToasts();
   const { workspacesList, handleDeleteWorkspace } = useWorkspacesList();
 

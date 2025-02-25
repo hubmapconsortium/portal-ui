@@ -10,9 +10,9 @@ import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 import WorkspacesTable from 'js/components/workspaces/Tables/WorkspacesTable';
 import WorkspacesAutocomplete from 'js/components/workspaces/WorkspacesAutocomplete';
-
+import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
+import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspacesListWithSharerInfo } from './hooks';
-import ConfirmDeleteWorkspacesDialog from './ConfirmDeleteWorkspacesDialog';
 
 function DeleteWorkspaceButton({
   disabled,
@@ -22,7 +22,7 @@ function DeleteWorkspaceButton({
   setDialogIsOpen: (isOpen: boolean) => void;
 }) {
   return (
-    <WorkspaceButton onClick={() => setDialogIsOpen(true)} disabled={disabled} tooltip="Delete selected workspaces">
+    <WorkspaceButton onClick={() => setDialogIsOpen(true)} disabled={disabled} tooltip="Delete selected workspaces.">
       <DeleteRounded />
     </WorkspaceButton>
   );
@@ -30,9 +30,7 @@ function DeleteWorkspaceButton({
 
 function ShareWorkspaceButton({ selectedItems }: { selectedItems: Set<string> }) {
   const disabled = selectedItems.size === 0;
-  const tooltip = disabled
-    ? 'Select workspace to share a copy. Copies can only be shared to users with required workspace permissions.'
-    : 'Share copies of the selected workspaces with users with the required workspace permissions.';
+  const tooltip = disabled ? 'Select workspace to share a copy.' : 'Share copies of the selected workspaces.';
 
   return (
     // TODO: update after dialog is implemented
@@ -44,10 +42,9 @@ function ShareWorkspaceButton({ selectedItems }: { selectedItems: Set<string> })
 }
 
 function WorkspacesList() {
-  const { workspacesList, handleDeleteWorkspace, isDeleting, isLoading } = useWorkspacesListWithSharerInfo();
+  const { workspacesList, isDeleting, isLoading } = useWorkspacesListWithSharerInfo();
+  const { setDialogType } = useEditWorkspaceStore();
   const { selectedItems, toggleItem } = useSelectItems();
-
-  const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
   // Filter workspaces in list based on search input
@@ -61,13 +58,7 @@ function WorkspacesList() {
 
   return (
     <>
-      <ConfirmDeleteWorkspacesDialog
-        dialogIsOpen={dialogIsOpen}
-        handleClose={() => setDialogIsOpen(false)}
-        handleDeleteWorkspace={handleDeleteWorkspace}
-        selectedWorkspaceIds={selectedItems}
-        workspacesList={workspacesList}
-      />
+      <WorkspacesListDialogs selectedWorkspaceIds={selectedItems} />
       <Stack spacing={2}>
         <Typography variant="h4">{`My Workspaces (${workspacesList.length})`}</Typography>
         <Stack spacing={1} direction="row" alignItems="center" justifyContent="space-between">
@@ -79,7 +70,7 @@ function WorkspacesList() {
           <Stack display="flex" direction="row" spacing={2}>
             <DeleteWorkspaceButton
               disabled={isDeleting || selectedItems.size === 0}
-              setDialogIsOpen={setDialogIsOpen}
+              setDialogIsOpen={() => setDialogType('DELETE_WORKSPACE')}
             />
             <ShareWorkspaceButton selectedItems={selectedItems} />
             <NewWorkspaceDialogFromWorkspaceList />
