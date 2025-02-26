@@ -70,7 +70,7 @@ function Organ({ organ }: OrganProps) {
         bucketData={assayBuckets}
         shouldDisplay={shouldDisplaySection[assaysId]}
       />
-      <DataProducts id={dataProductsId} />
+      <DataProducts id={dataProductsId} organName={organ.name} />
       <Samples id={samplesId} organTerms={searchItems} shouldDisplay={shouldDisplaySection[samplesId]} />
     </DetailLayout>
   );
