@@ -29,8 +29,16 @@ import {
   useWorkspacesApiURLs,
   useBuildWorkspacesSWRKey,
   useInvitations,
+  useDeleteInvitation,
+  useShareInvitation,
 } from './api';
-import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
+import {
+  MergedWorkspace,
+  Workspace,
+  CreateTemplatesResponse,
+  WorkspaceResourceOptions,
+  WorkspaceInvitation,
+} from './types';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -136,13 +144,52 @@ function useWorkspacesList() {
   });
 }
 
-function useInvitationsList() {
-  const { sentInvitations, receivedInvitations, isLoading: invitationsLoading } = useInvitations();
+function useInvitationsActions({
+  sentInvitations,
+  receivedInvitations,
+  invitationsLoading,
+}: {
+  sentInvitations: WorkspaceInvitation[];
+  receivedInvitations: WorkspaceInvitation[];
+  invitationsLoading: boolean;
+}) {
+  const mutate = useMutateWorkspacesAndJobs();
+
+  const { deleteInvitation, isDeleting } = useDeleteInvitation();
+  const { shareInvitation, isSharing } = useShareInvitation();
+
+  async function handleDeleteInvitation(invitationId: number) {
+    await deleteInvitation(invitationId);
+    await mutate();
+  }
+
+  async function handleShareInvitations({ workspaceIds, userIds }: { workspaceIds: string[]; userIds: number[] }) {
+    await Promise.all(
+      workspaceIds.map((workspaceId) =>
+        shareInvitation({ original_workspace_id: workspaceId, shared_user_ids: userIds }),
+      ),
+    );
+    await mutate();
+  }
+
   return {
     sentInvitations,
     receivedInvitations,
     invitationsLoading,
+    handleDeleteInvitation,
+    isDeleting,
+    handleShareInvitations,
+    isSharing,
   };
+}
+
+function useInvitationsList() {
+  const { sentInvitations, receivedInvitations, isLoading: invitationsLoading } = useInvitations();
+  return useInvitationsActions({
+    sentInvitations,
+    receivedInvitations,
+    invitationsLoading,
+  });
 }
 
 function useWorkspacesListWithSharerInfo() {

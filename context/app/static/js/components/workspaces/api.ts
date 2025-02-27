@@ -11,6 +11,7 @@ import {
   Workspace,
   WorkspaceAPIResponse,
   WorkspaceAPIResponseWithoutData,
+  WorkspaceInvitation,
   WorkspaceJob,
   WorkspaceJobType,
   WorkspaceResourceOptions,
@@ -57,6 +58,9 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   // Invitations
   get invitations(): string {
     return `${workspacesEndpoint}/shared_workspaces`;
+  },
+  get shareInvitations(): string {
+    return `${workspacesEndpoint}/shared_workspaces/`;
   },
   invitation(invitationId: number): string {
     return `${workspacesEndpoint}/shared_workspaces/${invitationId}`;
@@ -241,6 +245,82 @@ function useFetchInvitations(invitationId?: number) {
 
 export function useInvitations() {
   return useFetchInvitations();
+}
+
+async function fetchDeleteInvitation(
+  _key: string,
+  { arg: { invitationId, headers, url } }: { arg: { headers: HeadersInit; invitationId: number; url: string } },
+) {
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers,
+  });
+  if (!response.ok) {
+    throw Error(`Deletion for invitation #${invitationId} failed`);
+  }
+}
+
+export function useDeleteInvitation() {
+  const { trigger, isMutating } = useSWRMutation('delete-invitation', fetchDeleteInvitation);
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+
+  const deleteInvitation = useCallback(
+    async (invitationId: number) => {
+      await trigger({
+        invitationId,
+        url: api.invitation(invitationId),
+        headers,
+      });
+    },
+    [headers, api, trigger],
+  );
+
+  return { deleteInvitation, isDeleting: isMutating };
+}
+
+export interface ShareInvitationBody {
+  original_workspace_id: string;
+  shared_user_ids: number[];
+}
+
+export interface ShareInvitationArgs extends APIAction {
+  body: ShareInvitationBody;
+}
+
+async function shareInvitationFetcher(_key: string, { arg: { body, url, headers } }: { arg: ShareInvitationArgs }) {
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers,
+  });
+  if (!response.ok) {
+    console.error('Share workspace failed', response);
+  }
+  const responseJson = (await response.json()) as WorkspaceAPIResponse<{ invitation: WorkspaceInvitation }>;
+  if (!responseJson.success) {
+    throw new Error(`Failed to share workspace: ${responseJson.message}`);
+  }
+  return responseJson.data.invitation;
+}
+
+export function useShareInvitation() {
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+  const { trigger, isMutating } = useSWRMutation('share-invitation', shareInvitationFetcher);
+
+  const shareInvitation = useCallback(
+    (body: ShareInvitationBody) => {
+      return trigger({
+        url: api.shareInvitations,
+        body,
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { shareInvitation, isSharing: isMutating };
 }
 
 function useFetchWorkspaces(workspaceId?: number) {

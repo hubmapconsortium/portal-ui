@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
@@ -13,12 +13,11 @@ import CloseRounded from '@mui/icons-material/CloseRounded';
 
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import { generateCommaList } from 'js/helpers/functions';
-import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
-import { useWorkspacesList } from 'js/components/workspaces/hooks';
+import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/hooks';
 import { StepDescription } from 'js/shared-styles/surfaces/Step';
 import UsersAutocomplete from 'js/components/workspaces/UsersAutocomplete';
 import { WorkspaceUser } from 'js/components/workspaces/types';
-import { Typography } from '@mui/material';
+import { Typography, useEventCallback } from '@mui/material';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 
 interface ShareWorkspacesDialogProps {
@@ -26,8 +25,8 @@ interface ShareWorkspacesDialogProps {
   selectedWorkspaceIds: SelectedItems;
 }
 export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceIds }: ShareWorkspacesDialogProps) {
-  const { toastErrorDeleteWorkspaces, toastSuccessDeleteWorkspaces } = useWorkspaceToasts();
-  const { workspacesList, handleDeleteWorkspace } = useWorkspacesList();
+  const { workspacesList } = useWorkspacesList();
+  const { handleShareInvitations } = useInvitationsList();
   const [selectedUsers, setSelectedUsers] = useState<WorkspaceUser[]>([]);
 
   const selectedWorkspaceNames = Array.from(selectedWorkspaceIds).map((id) => {
@@ -37,28 +36,16 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
 
   const selectedWorkspaceNamesList = generateCommaList(selectedWorkspaceNames);
 
-  const handleDeleteAndClose = useCallback(() => {
+  const handleShareAndClose = useEventCallback(() => {
     const workspaceIds = [...selectedWorkspaceIds];
+    const userIds = selectedUsers.map((user) => user.id);
 
-    Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId))))
-      .then(() => {
-        toastSuccessDeleteWorkspaces(selectedWorkspaceNamesList);
-        selectedWorkspaceIds.clear();
-      })
-      .catch((e) => {
-        toastErrorDeleteWorkspaces(selectedWorkspaceNamesList);
-        console.error(e);
-      });
+    handleShareInvitations({ workspaceIds, userIds }).catch((error) => {
+      console.error('Error sharing workspace:', error);
+    });
 
     handleClose();
-  }, [
-    handleDeleteWorkspace,
-    selectedWorkspaceIds,
-    toastSuccessDeleteWorkspaces,
-    toastErrorDeleteWorkspaces,
-    selectedWorkspaceNamesList,
-    handleClose,
-  ]);
+  });
 
   const description = useMemo(
     () => [
@@ -71,13 +58,11 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
     [selectedWorkspaceNamesList],
   );
 
-  const multipleSelected = selectedWorkspaceIds.size > 1;
-
   return (
     <Dialog open onClose={handleClose} scroll="paper" aria-labelledby="share-workspace-dialog" maxWidth="lg">
       <Stack display="flex" flexDirection="row" justifyContent="space-between" marginRight={1}>
         <DialogTitle id="share-workspace-dialog-title" variant="h3">
-          {`Share Workspace${multipleSelected ? 's' : ''} Cop${multipleSelected ? 'ies' : 'y'}`}
+          {`Share Workspace Cop${selectedWorkspaceIds.size > 1 ? 'ies' : 'y'}`}
         </DialogTitle>
         <Box alignContent="center">
           <IconButton aria-label="Close" onClick={handleClose} size="large">
@@ -94,7 +79,7 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
       <Divider />
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleDeleteAndClose} variant="contained">
+        <Button onClick={handleShareAndClose} disabled={!selectedUsers.length} variant="contained">
           Share
         </Button>
       </DialogActions>
