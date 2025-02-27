@@ -304,3 +304,12 @@ export function getEntityCreationInfo({
     creationDate: creationTimestamp ? format(creationTimestamp, 'yyyy-MM-dd') : 'N/A',
   };
 }
+
+/**
+ * Get the file name without the extension from a URL.
+ * ex: 'https://example.com/file.txt' => 'file'
+ * @author Austen Money
+ */
+export function getFileName(url: string) {
+  return url.split('/').pop()?.split('.')[0] ?? '';
+}

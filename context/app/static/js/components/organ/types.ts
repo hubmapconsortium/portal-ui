@@ -56,6 +56,7 @@ export interface OrganDataProducts {
   assay: {
     assayName: string;
   };
+  shiny_app: string;
   download: string;
   download_raw: string;
   raw_file_size_bytes: number;

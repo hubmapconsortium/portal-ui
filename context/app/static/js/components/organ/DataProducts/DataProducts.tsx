@@ -15,6 +15,8 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { buildSearchLink } from 'js/components/search/store';
 import { useDataProducts } from 'js/components/organ/hooks';
+import { InternalLink } from 'js/shared-styles/Links';
+import { getFileName } from 'js/helpers/functions';
 
 interface DataProductsProps {
   id: string;
@@ -32,27 +34,33 @@ function DataProducts({ id, organName }: DataProductsProps) {
           <EntitiesTable
             headerCells={[
               { headerId: 'organ', label: 'Organ' },
-              { headerId: 'data-type', label: 'Data Type' },
+              { headerId: 'assay-type', label: 'Assay Type' },
               { headerId: 'raw-download', label: 'Raw Download' },
               { headerId: 'processed-download', label: 'Processed Download' },
+              { headerId: 'shiny-app', label: 'Shiny App' },
               { headerId: 'creation-date', label: 'Creation Date' },
               { headerId: '', label: '' },
             ].map(({ headerId, label }) => (
               <HeaderCell key={headerId}>{label}</HeaderCell>
             ))}
             tableRows={dataProducts.map(
-              ({ data_product_id, tissue, assay, download_raw, download, creation_time, datasetUUIDs }) => (
+              ({ data_product_id, tissue, assay, download_raw, download, shiny_app, creation_time, datasetUUIDs }) => (
                 <TableRow key={data_product_id}>
                   <TableCell>{tissue.tissuetype}</TableCell>
                   <TableCell>{assay.assayName}</TableCell>
                   <TableCell>
-                    <OutboundIconLink href={download_raw} variant="body2">
-                      {'Raw<File>'}
-                    </OutboundIconLink>
+                    <InternalLink href={download_raw} variant="body2">
+                      {getFileName(download_raw)}
+                    </InternalLink>
                   </TableCell>
                   <TableCell>
-                    <OutboundIconLink href={download} variant="body2">
-                      {'Processed<File>'}
+                    <InternalLink href={download} variant="body2">
+                      {getFileName(download)}
+                    </InternalLink>
+                  </TableCell>
+                  <TableCell>
+                    <OutboundIconLink href={shiny_app} variant="body2">
+                      View
                     </OutboundIconLink>
                   </TableCell>
                   <TableCell>{format(new Date(creation_time), 'yyyy-MM-dd')}</TableCell>
