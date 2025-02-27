@@ -1,4 +1,4 @@
-import React, { SyntheticEvent, useState } from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { WorkspaceUser } from 'js/components/workspaces/types';
@@ -19,12 +19,10 @@ function UserOption(props: React.HTMLAttributes<HTMLLIElement>, option: Workspac
   );
 }
 
-export interface TagTypes {
-  option: string;
-}
+function TagComponent({ option, ...rest }: { option: WorkspaceUser }) {
+  const { first_name, last_name } = option;
 
-function TagComponent({ option, ...rest }: TagTypes) {
-  return <Chip label={option} {...rest} />;
+  return <Chip label={`${first_name} ${last_name}`} {...rest} />;
 }
 
 function UsersAutocomplete({
@@ -35,19 +33,11 @@ function UsersAutocomplete({
   setSelectedUsers: (users: WorkspaceUser[]) => void;
 }) {
   const [inputValue, setInputValue] = useState('');
-  // const [autocompleteValue, setAutocompleteValue] = useState<WorkspaceUser[] | undefined>(undefined);
   const { users: usersMatchingQuery } = useWorkspaceUsers(inputValue);
 
-  const resetAutocompleteState = useEventCallback(() => {
+  const handleChange = useEventCallback((_, value: WorkspaceUser[]) => {
+    setSelectedUsers(value);
     setInputValue('');
-    // setAutocompleteValue(undefined);
-  });
-
-  const handleChange = useEventCallback((e: SyntheticEvent<Element, Event>, newValue: WorkspaceUser[] | undefined) => {
-    if (newValue?.at(0)?.id) {
-      setSelectedUsers([...selectedUsers, ...newValue]);
-      resetAutocompleteState();
-    }
   });
 
   return (
@@ -57,6 +47,8 @@ function UsersAutocomplete({
         options={usersMatchingQuery}
         multiple
         filterSelectedOptions
+        isOptionEqualToValue={(option, value) => option === value}
+        tagComponent={TagComponent}
         onChange={handleChange}
         inputValue={inputValue}
         onInputChange={(event, newInputValue) => {
@@ -66,10 +58,8 @@ function UsersAutocomplete({
         renderInputProps={{
           variant: 'outlined',
           label: 'Share With',
-          placeholder: 'Search here',
         }}
         renderOption={UserOption}
-        tagComponent={TagComponent}
         getOptionLabel={(option) => option.username}
         fullWidth
       />
