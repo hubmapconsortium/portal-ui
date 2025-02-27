@@ -3,7 +3,6 @@ import { format } from 'date-fns/format';
 import Paper from '@mui/material/Paper';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
@@ -12,11 +11,10 @@ import Description from 'js/shared-styles/sections/Description';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { HeaderCell } from 'js/shared-styles/tables';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { DatasetIcon } from 'js/shared-styles/icons';
-import { buildSearchLink } from 'js/components/search/store';
 import { useDataProducts } from 'js/components/organ/hooks';
 import { InternalLink } from 'js/shared-styles/Links';
 import { getFileName } from 'js/helpers/functions';
+import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 
 interface DataProductsProps {
   id: string;
@@ -65,23 +63,7 @@ function DataProducts({ id, organName }: DataProductsProps) {
                   </TableCell>
                   <TableCell>{format(new Date(creation_time), 'yyyy-MM-dd')}</TableCell>
                   <TableCell>
-                    <Button
-                      color="primary"
-                      variant="outlined"
-                      component="a"
-                      href={buildSearchLink({
-                        entity_type: 'Dataset',
-                        filters: {
-                          uuid: {
-                            values: datasetUUIDs,
-                            type: 'TERM',
-                          },
-                        },
-                      })}
-                      startIcon={<DatasetIcon />}
-                    >
-                      View Datasets
-                    </Button>
+                    <ViewEntitiesButton entityType="Dataset" filters={{ datasetUUIDs }} />
                   </TableCell>
                 </TableRow>
               ),
