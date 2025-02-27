@@ -18,6 +18,8 @@ import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { StepDescription } from 'js/shared-styles/surfaces/Step';
 import UsersAutocomplete from 'js/components/workspaces/UsersAutocomplete';
 import { WorkspaceUser } from 'js/components/workspaces/types';
+import { Typography } from '@mui/material';
+import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 
 interface ShareWorkspacesDialogProps {
   handleClose: () => void;
@@ -60,7 +62,10 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
 
   const description = useMemo(
     () => [
-      `Select recipients to share a copy of the selected workspaces: ${selectedWorkspaceNamesList}. Only users with the necessary workspace permissions will appear in the list. If someone lacks these permissions, they must contact the HuBMAP help desk for assistance.`,
+      <Typography key={0}>
+        {`Select recipients to share a copy of the selected workspaces: ${selectedWorkspaceNamesList}. Only users with the necessary workspace permissions will appear in the list. If someone lacks these permissions, they must contact the `}
+        <ContactUsLink>HuBMAP help desk</ContactUsLink> for assistance.
+      </Typography>,
       'You can search for recipients by first name, last name, or email address. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at it exists at the time of sharing. When sharing multiple workspaces or sharing to multiple recipients, each invitation is sent separately.',
     ],
     [selectedWorkspaceNamesList],

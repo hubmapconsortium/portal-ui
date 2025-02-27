@@ -22,7 +22,7 @@ function UserOption(props: React.HTMLAttributes<HTMLLIElement>, option: Workspac
 function TagComponent({ option, ...rest }: { option: WorkspaceUser }) {
   const { first_name, last_name } = option;
 
-  return <Chip label={`${first_name} ${last_name}`} {...rest} />;
+  return <Chip label={`${first_name} ${last_name}`} variant="outlined" color="primary" {...rest} />;
 }
 
 function UsersAutocomplete({
@@ -41,7 +41,7 @@ function UsersAutocomplete({
   });
 
   return (
-    <Box flex={1} maxWidth="50%">
+    <Box>
       <MultiAutocomplete
         value={selectedUsers}
         options={usersMatchingQuery}
@@ -58,6 +58,9 @@ function UsersAutocomplete({
         renderInputProps={{
           variant: 'outlined',
           label: 'Share With',
+          helperText:
+            'Search for recipients by first name, last name, or email address. Only users with the necessary workspace permissions will appear in the results.',
+          sx: { color: 'red' },
         }}
         renderOption={UserOption}
         getOptionLabel={(option) => option.username}
