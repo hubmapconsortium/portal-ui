@@ -37,3 +37,29 @@ export interface OrganFile {
 export interface OrganFileWithDescendants extends OrganFile {
   descendantCounts: Record<string, number>;
 }
+
+export interface OrganDataProducts {
+  data_product_id: string;
+  creation_time: string;
+  tissue: {
+    tissuetype: string;
+    tissuecode: string;
+    uberoncode: string;
+  };
+  dataSets: {
+    uuid: string;
+    hubmap_id: string;
+    annotation_metadata: {
+      is_annotated: boolean;
+    };
+  }[];
+  assay: {
+    assayName: string;
+  };
+  download: string;
+  download_raw: string;
+  raw_file_size_bytes: number;
+  processed_file_sizes_bytes: number;
+  raw_cell_type_counts: Record<string, number>;
+  processed_cell_type_counts: Record<string, number>;
+}

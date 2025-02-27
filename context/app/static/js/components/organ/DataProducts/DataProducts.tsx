@@ -9,12 +9,12 @@ import Stack from '@mui/material/Stack';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import Description from 'js/shared-styles/sections/Description';
-import { getOrganDataProducts } from 'js/components/organ/utils';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { HeaderCell } from 'js/shared-styles/tables';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { buildSearchLink } from 'js/components/search/store';
+import { useDataProducts } from 'js/components/organ/hooks';
 
 interface DataProductsProps {
   id: string;
@@ -22,7 +22,7 @@ interface DataProductsProps {
 }
 
 function DataProducts({ id, organName }: DataProductsProps) {
-  const { dataProducts } = getOrganDataProducts(organName);
+  const { dataProducts } = useDataProducts(organName);
 
   return (
     <CollapsibleDetailPageSection id={id} title="Data Products">
