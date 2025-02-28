@@ -78,18 +78,16 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
     );
   }
 
-  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
-  const sharedWorkspaceId = item?.shared_workspace_id?.id;
+  const workspaceMatchingItem = workspacesList.find(
+    (w) => w.id === item?.shared_workspace_id?.id || w.id === item?.original_workspace_id?.id,
+  );
 
-  // If the item is an accepted invitation
-  if (isAccepted && sharedWorkspaceId) {
-    const workspace = workspacesList.find((w) => w.id === sharedWorkspaceId);
-    if (!workspace) return null;
-
+  // If the item is an accepted invitation or a sent invitation (a copy of the workspace is already owned by the user)
+  if (workspaceMatchingItem) {
     return (
       <Stack alignItems="end" marginRight={2}>
         <WorkspaceLaunchStopButtons
-          workspace={workspace}
+          workspace={workspaceMatchingItem}
           button={LaunchStopButton}
           handleStopWorkspace={handleStopWorkspace}
           isStoppingWorkspace={isStoppingWorkspace}

@@ -34,7 +34,6 @@ const StyledTable = styled(Table)(({ theme }) => ({
 
 const StyledTableBody = styled(TableBody)({
   width: '100%',
-  maxHeight: '400px',
   overflowY: 'auto',
   border: 'none',
 });

@@ -41,6 +41,7 @@ function StopWorkspaceButton({
       type="button"
       disabled={isStoppingWorkspace}
       variant="contained"
+      sx={{ border: 'none' }}
       onClick={() => {
         handleStopWorkspace(workspace.id).catch((err) => {
           toastErrorStopWorkspace(workspace.name);
@@ -48,7 +49,7 @@ function StopWorkspaceButton({
         });
       }}
     >
-      Stop Jobs
+      Stop
     </ButtonComponent>
   );
 }
