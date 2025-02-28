@@ -14,7 +14,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
-import { getFieldPrefix, getFieldValue, isWorkspace } from 'js/components/workspaces/utils';
+import { getFieldPrefix, getFieldValue, isInvitation, isWorkspace } from 'js/components/workspaces/utils';
 import { CheckIcon, CloseFilledIcon, DownIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
@@ -24,6 +24,7 @@ import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import { LaunchStopButton } from 'js/components/workspaces/WorkspaceLaunchStopButtons/WorkspaceLaunchStopButtons';
 import useWorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
+import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
@@ -46,16 +47,6 @@ import {
   StyledCheckboxCell,
 } from './style';
 
-const options = [
-  {
-    children: 'Decline Invitation',
-    // TODO: update once dialog is implemented
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onClick: () => {},
-    icon: CloseFilledIcon,
-  },
-];
-
 const acceptInviteTooltip =
   'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
 const previewInviteTooltip = 'Preview the details of this workspace.';
@@ -63,6 +54,20 @@ const moreOptionsTooltip = 'View additional actions.';
 
 function EndButtons({ item }: { item: WorkspaceItem }) {
   const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
+  const { setDialogType, setInvitation } = useEditWorkspaceStore();
+
+  const options = [
+    {
+      children: 'Decline Invitation',
+      onClick: () => {
+        if (isInvitation(item)) {
+          setInvitation(item);
+          setDialogType('DECLINE_INVITATION');
+        }
+      },
+      icon: CloseFilledIcon,
+    },
+  ];
 
   // If the item is a workspace
   if (isWorkspace(item)) {
@@ -384,7 +389,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
 
   return (
     <>
-      <StyledTableContainer>
+      <StyledTableContainer sx={{ maxHeight: showSeeMoreOption ? 'inherit' : '425px' }}>
         <StyledTable>
           <StyledTableHead>
             <StyledTableRow>

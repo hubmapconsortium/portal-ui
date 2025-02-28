@@ -21,6 +21,12 @@ function WorkspacesListDialogs({ selectedWorkspaceIds }: { selectedWorkspaceIds:
     );
   }
 
+  if (dialogType === 'DECLINE_INVITATION') {
+    return (
+      <ShareWorkspacesDialog handleClose={() => setDialogType(null)} selectedWorkspaceIds={selectedWorkspaceIds} />
+    );
+  }
+
   return null;
 }
 

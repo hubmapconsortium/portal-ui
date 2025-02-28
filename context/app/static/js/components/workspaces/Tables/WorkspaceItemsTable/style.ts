@@ -88,7 +88,6 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 const StyledTableContainer = styled(Box)(({ theme }) => ({
-  maxHeight: '425px',
   width: '100%',
   borderTop: 'none',
   borderLeft: 'none',
