@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import useEventCallback from '@mui/material/utils/useEventCallback';
 import useSavedLists from 'js/components/savedLists/hooks';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
-import DialogModal from 'js/shared-styles/DialogModal';
+import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { StyledTitleTextField, StyledDescriptionTextField } from './style';
 
 interface CreateListDialogProps {
