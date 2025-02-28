@@ -1,4 +1,6 @@
-import { createScfindKey, SCFIND_BASE } from './utils';
+import { createScFindKey, SCFIND_BASE } from './utils';
+
+const scFindEndpoint = 'http://example.com';
 
 describe('createScfindKey', () => {
   function expectURLIsValid(key: string) {
@@ -6,7 +8,7 @@ describe('createScfindKey', () => {
   }
 
   it('should use the appropriate scfind base URL', () => {
-    const key = createScfindKey('endpoint', {});
+    const key = createScFindKey(scFindEndpoint, 'endpoint', {});
     expect(key).toContain(SCFIND_BASE);
     expectURLIsValid(key);
   });
@@ -14,7 +16,7 @@ describe('createScfindKey', () => {
   it.each(['endpoint1', 'endpoint2', 'endpoint3', 'my-weird-endpoint'])(
     'should use the appropriate provided endpoint',
     (endpoint) => {
-      const key = createScfindKey(endpoint, {});
+      const key = createScFindKey(scFindEndpoint, endpoint, {});
       expect(key).toContain(endpoint);
       expectURLIsValid(key);
     },
@@ -31,7 +33,7 @@ describe('createScfindKey', () => {
       undefinedKeys: ['param3'],
     },
   ])('should filter out undefined passed params', ({ params, definedKeys, undefinedKeys }) => {
-    const key = createScfindKey('endpoint', params);
+    const key = createScFindKey(scFindEndpoint, 'endpoint', params);
     definedKeys.forEach((k) => {
       expect(key.includes(k));
     });

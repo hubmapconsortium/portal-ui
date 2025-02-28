@@ -6,7 +6,6 @@ import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import MolecularDataQueryForm from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryForm';
-import { MolecularDataQueryFormState } from 'js/components/cells/MolecularDataQueryForm/types';
 import QueryType from 'js/components/cells/MolecularDataQueryForm/QueryType';
 import QueryParametersFieldset from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
 
@@ -32,12 +31,7 @@ function Cells() {
           <ContactUsLink>Contact us</ContactUsLink> with any questions and issues that may arise during your experience.
         </LabelledSectionText>
       </Stack>
-      <MolecularDataQueryForm
-        onSubmit={function todo(data: MolecularDataQueryFormState): void {
-          console.error('Not yet implemented', data);
-          // Check handleSubmit implementation in https://github.com/hubmapconsortium/portal-ui/blob/16b3dbab901f2003fea0b1bc1f07ab8d77c2d79f/context/app/static/js/components/cells/DatasetsSelectedByExpression/hooks.tsx
-        }}
-      >
+      <MolecularDataQueryForm>
         <QueryType />
         <QueryParametersFieldset />
       </MolecularDataQueryForm>

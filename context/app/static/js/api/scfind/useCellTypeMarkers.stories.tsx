@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Typography, Stack, FormControl, TextField } from '@mui/material';
-import { cellTypes } from 'js/components/genes/constants';
 import { http, passthrough } from 'msw';
 import useCellTypeMarkers, { CellTypeMarkersParams } from './useCellTypeMarkers';
 
-import { SCFIND_BASE } from './utils';
+import { SCFIND_BASE_STORYBOOK } from './utils';
 
 function CellTypeMarkersControl(params: CellTypeMarkersParams) {
   const result = useCellTypeMarkers(params);
@@ -26,7 +25,7 @@ const meta: Meta = {
   parameters: {
     msw: {
       handlers: [
-        http.get(`${SCFIND_BASE}/*`, () => {
+        http.get(`${SCFIND_BASE_STORYBOOK}/api/*`, () => {
           return passthrough();
         }),
       ],

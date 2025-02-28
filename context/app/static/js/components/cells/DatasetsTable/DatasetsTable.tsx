@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useRef } from 'react';
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
@@ -7,7 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import { animated } from '@react-spring/web';
 
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
-import { initialHeight } from 'js/components/cells/CellsResults/style';
+import { initialHeight } from 'js/components/cells/MolecularDataQueryResults/style';
 import { useExpandSpring } from 'js/hooks/useExpand';
 import { WrappedCellsResultsDataset } from '../types';
 import CellsCharts from '../CellsCharts';
@@ -16,7 +16,7 @@ import { DatasetCellsChartsProps } from '../CellsCharts/types';
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
   { id: 'origin_samples_unique_mapped_organs', label: 'Organ' },
-  { id: 'mapped_data_types', label: 'Mapped Data Types' },
+  { id: 'dataset_type', label: 'Dataset Type' },
   { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
   { id: 'donor.mapped_metadata.body_mass_index_value', label: 'Donor BMI' },
   { id: 'donor.mapped_metadata.sex', label: 'Donor Sex' },
@@ -30,7 +30,7 @@ interface DatasetsTableProps {
   expandedContent?: React.ComponentType<DatasetCellsChartsProps>;
 }
 
-function DatasetsTable({ datasets, expandedContent = CellsCharts }: DatasetsTableProps) {
+function DatasetsTable({ datasets = [], expandedContent = CellsCharts }: DatasetsTableProps) {
   const heightRef = useRef<HTMLTableElement>(null);
 
   const props = useExpandSpring(heightRef, initialHeight, datasets?.length > 0);

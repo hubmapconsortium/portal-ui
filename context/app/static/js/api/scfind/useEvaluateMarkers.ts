@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey } from './utils';
+import { useAppContext } from 'js/components/Contexts';
+import { createScFindKey } from './utils';
 
 export interface EvaluateMarkersParams {
   geneList: string | string[];
@@ -16,14 +17,11 @@ interface EvaluateMarkersResponse {
   evaluateMarkers: unknown;
 }
 
-export function createCellTypeMarkersKey({
-  geneList,
-  cellTypes,
-  backgroundCellTypes,
-  sortField,
-  includePrefix,
-}: EvaluateMarkersParams): EvaluateMarkersKey {
-  return createScfindKey('evaluateMarkers', {
+export function createCellTypeMarkersKey(
+  scFindEndpoint: string,
+  { geneList, cellTypes, backgroundCellTypes, sortField, includePrefix }: EvaluateMarkersParams,
+): EvaluateMarkersKey {
+  return createScFindKey(scFindEndpoint, 'evaluateMarkers', {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
     cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
     background_cell_types: Array.isArray(backgroundCellTypes) ? backgroundCellTypes.join(',') : backgroundCellTypes,
@@ -33,6 +31,7 @@ export function createCellTypeMarkersKey({
 }
 
 export default function useEvaluateMarkers(params: EvaluateMarkersParams) {
-  const key = createCellTypeMarkersKey(params);
+  const { scFindEndpoint } = useAppContext();
+  const key = createCellTypeMarkersKey(scFindEndpoint, params);
   return useSWR<EvaluateMarkersResponse, unknown, EvaluateMarkersKey>(key, (url) => fetcher({ url }));
 }

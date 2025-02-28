@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey } from './utils';
+import { useAppContext } from 'js/components/Contexts';
+import { createScFindKey } from './utils';
 
 export interface FindCellTypeSpecificitiesParams {
   geneList?: string | string[];
@@ -15,13 +16,11 @@ interface FindCellTypeSpecificitiesResponse {
   evaluateMarkers: unknown;
 }
 
-export function createCellTypeSpecificitiesKey({
-  geneList,
-  datasets,
-  minCells,
-  minFraction,
-}: FindCellTypeSpecificitiesParams): EvaluateMarkersKey {
-  return createScfindKey('findCellTypeSpecificities', {
+export function createCellTypeSpecificitiesKey(
+  scFindEndpoint: string,
+  { geneList, datasets, minCells, minFraction }: FindCellTypeSpecificitiesParams,
+): EvaluateMarkersKey {
+  return createScFindKey(scFindEndpoint, 'findCellTypeSpecificities', {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
     datasets: Array.isArray(datasets) ? datasets.join(',') : datasets,
     min_cells: minCells ? String(minCells) : undefined,
@@ -30,6 +29,7 @@ export function createCellTypeSpecificitiesKey({
 }
 
 export default function useFindCellTypeSpecificities(params: FindCellTypeSpecificitiesParams) {
-  const key = createCellTypeSpecificitiesKey(params);
+  const { scFindEndpoint } = useAppContext();
+  const key = createCellTypeSpecificitiesKey(scFindEndpoint, params);
   return useSWR<FindCellTypeSpecificitiesResponse, unknown, EvaluateMarkersKey>(key, (url) => fetcher({ url }));
 }

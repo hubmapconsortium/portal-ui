@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey } from './utils';
+import { useAppContext } from 'js/components/Contexts';
+import { createScFindKey } from './utils';
 
 export interface FindTissueSpecificitiesParams {
   geneList?: string | string[];
@@ -13,17 +14,18 @@ interface FindTissueSpecificitiesResponse {
   evaluateMarkers: unknown;
 }
 
-export function FindTissueSpecificitiesKey({
-  geneList,
-  minCells,
-}: FindTissueSpecificitiesParams): FindTissueSpecificitiesKey {
-  return createScfindKey('findTissueSpecificities', {
+export function FindTissueSpecificitiesKey(
+  scFindEndpoint: string,
+  { geneList, minCells }: FindTissueSpecificitiesParams,
+): FindTissueSpecificitiesKey {
+  return createScFindKey(scFindEndpoint, 'findTissueSpecificities', {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
     min_cells: minCells ? String(minCells) : undefined,
   });
 }
 
 export default function useFindTissueSpecificities(params: FindTissueSpecificitiesParams) {
-  const key = FindTissueSpecificitiesKey(params);
+  const { scFindEndpoint } = useAppContext();
+  const key = FindTissueSpecificitiesKey(scFindEndpoint, params);
   return useSWR<FindTissueSpecificitiesResponse, unknown, FindTissueSpecificitiesKey>(key, (url) => fetcher({ url }));
 }

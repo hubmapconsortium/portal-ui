@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey } from './utils';
+import { useAppContext } from 'js/components/Contexts';
+import { createScFindKey } from './utils';
 
 type CellTypeNamesKey = string;
 
@@ -8,11 +9,12 @@ interface CellTypeNamesResponse {
   cellTypeNames: string[];
 }
 
-export function createCellTypeNamesKey(): CellTypeNamesKey {
-  return createScfindKey('cellTypeNames', {});
+export function createCellTypeNamesKey(scFindEndpoint: string): CellTypeNamesKey {
+  return createScFindKey(scFindEndpoint, 'cellTypeNames', {});
 }
 
 export default function useCellTypeNames() {
-  const key = createCellTypeNamesKey();
+  const { scFindEndpoint } = useAppContext();
+  const key = createCellTypeNamesKey(scFindEndpoint);
   return useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
 }

@@ -1,19 +1,18 @@
-import React, { PropsWithChildren, useEffect, useId } from 'react';
+import React, { PropsWithChildren, useEffect, useId, useState } from 'react';
 import { useForm, FormProvider, FieldErrors } from 'react-hook-form';
 import { useEventCallback } from '@mui/material';
 import Stack from '@mui/material/Stack';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
-import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
+import IndependentStepAccordion from 'js/shared-styles/accordions/StepAccordion/IndependentStepAccordion';
 import { MolecularDataQueryFormState } from './types';
 import SubmitButton from './SubmitButton';
+import Results from '../MolecularDataQueryResults';
 
 interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
-  onSubmit: (data: MolecularDataQueryFormState) => void;
 }
 
-export default function MolecularDataQueryForm({ children, onSubmit, initialValues }: MolecularDataQueryFormProps) {
+export default function MolecularDataQueryForm({ children, initialValues }: MolecularDataQueryFormProps) {
   const methods = useForm<MolecularDataQueryFormState>({
     defaultValues: {
       queryType: 'gene',
@@ -43,34 +42,51 @@ export default function MolecularDataQueryForm({ children, onSubmit, initialValu
       case 'gene':
         setValue('queryMethod', 'scFind');
         break;
+      case 'protein':
+        setValue('queryMethod', 'crossModality');
+        break;
       default:
         break;
     }
   }, [queryType, setValue]);
 
-  const handleSubmit: React.FormEventHandler = useEventCallback((event) => {
-    event.preventDefault();
-    methods.handleSubmit(onSubmit, onError);
+  const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
+    methods.reset({}, { keepValues: true, keepDirty: false });
+    console.log(data);
   });
 
   const id = `${useId()}-molecular-data-query`;
 
+  const [formIsExpanded, setFormIsExpanded] = useState(true);
+  const [resultsAreExpanded, setResultsAreExpanded] = useState(false);
+
   return (
     <FormProvider {...methods}>
-      <AccordionStepsProvider stepsLength={2}>
-        <StepAccordion
-          index={0}
-          summaryHeading="Parameters"
-          id={`${id}-parameters`}
-          content={
-            <Stack component="form" onSubmit={handleSubmit} gap={2}>
-              {children}
-              <SubmitButton />
-            </Stack>
-          }
-        />
-        <StepAccordion index={1} summaryHeading="Results" id={`${id}-results`} />
-      </AccordionStepsProvider>
+      <IndependentStepAccordion
+        index={0}
+        summaryHeading="Parameters"
+        id={`${id}-parameters`}
+        content={
+          // TODO fix eslint rule
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          <Stack component="form" onSubmit={methods.handleSubmit(onSubmit, onError)} gap={2}>
+            {children}
+            <SubmitButton />
+          </Stack>
+        }
+        isExpanded={formIsExpanded || !methods.formState.isSubmitted}
+        onChange={() => setFormIsExpanded(!formIsExpanded)}
+        noProvider
+      />
+      <IndependentStepAccordion
+        index={1}
+        summaryHeading="Results"
+        id={`${id}-results`}
+        content={<Results />}
+        isExpanded={resultsAreExpanded || methods.formState.isSubmitSuccessful}
+        noProvider
+        disabled={!methods.formState.isSubmitSuccessful}
+      />
     </FormProvider>
   );
 }

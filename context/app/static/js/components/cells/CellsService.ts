@@ -36,16 +36,16 @@ interface GetClusterCellMatchesInDatasetProps {
   minExpression: string | number;
 }
 
-interface DatasetsSelectedByExpressionResponse {
+export interface DatasetsSelectedByExpressionResponse {
   uuid: string;
   // TODO: Add more fields if they exist
 }
 
-interface DatasetsSelectedByCellTypeResponse extends ResultCounts {
+export interface DatasetsSelectedByCellTypeResponse extends ResultCounts {
   list: DatasetsSelectedByExpressionResponse[];
 }
 
-type GetDatasetsResponse<T extends QueryType> = T extends 'cell-type'
+export type GetDatasetsResponse<T extends QueryType> = T extends 'cell-type'
   ? DatasetsSelectedByCellTypeResponse
   : DatasetsSelectedByExpressionResponse[];
 

@@ -1,4 +1,4 @@
-import CellsResults from 'js/components/cells/CellsResults';
+import MolecularDataQueryResults from 'js/components/cells/MolecularDataQueryResults';
 import QueryParameters from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
@@ -18,7 +18,7 @@ export default function BiomarkerQuery() {
       },
       {
         heading: '2. Results',
-        content: <CellsResults />,
+        content: <MolecularDataQueryResults />,
       },
     ];
   }, [geneSymbol, data?.approved_symbol]);

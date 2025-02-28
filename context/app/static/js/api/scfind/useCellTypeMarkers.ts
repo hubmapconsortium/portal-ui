@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { createScfindKey } from './utils';
+import { useAppContext } from 'js/components/Contexts';
+import { createScFindKey } from './utils';
 
 interface CellTypeMarkerInfo {
   cellType: string;
@@ -27,14 +28,11 @@ interface CellTypeMarkersResponse {
   cellTypeMarkers: CellTypeMarkerInfo[];
 }
 
-export function createCellTypeMarkersKey({
-  cellTypes,
-  topK,
-  backgroundCellTypes,
-  sortField,
-  includePrefix,
-}: CellTypeMarkersParams): CellTypeMarkersKey {
-  return createScfindKey('cellTypeMarkers', {
+export function createCellTypeMarkersKey(
+  scFindEndpoint: string,
+  { cellTypes, topK, backgroundCellTypes, sortField, includePrefix }: CellTypeMarkersParams,
+): CellTypeMarkersKey {
+  return createScFindKey(scFindEndpoint, 'cellTypeMarkers', {
     cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
     background_cell_types: Array.isArray(backgroundCellTypes) ? backgroundCellTypes.join(',') : backgroundCellTypes,
     top_k: topK ? topK.toString() : undefined,
@@ -49,6 +47,7 @@ export default function useCellTypeMarkers({
   includePrefix = true,
   ...params
 }: CellTypeMarkersParams) {
-  const key = createCellTypeMarkersKey({ topK, sortField, includePrefix, ...params });
+  const { scFindEndpoint } = useAppContext();
+  const key = createCellTypeMarkersKey(scFindEndpoint, { topK, sortField, includePrefix, ...params });
   return useSWR<CellTypeMarkersResponse, unknown, CellTypeMarkersKey>(key, (url) => fetcher({ url }));
 }

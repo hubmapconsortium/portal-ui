@@ -9,12 +9,12 @@ import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
 
 import { Tab, TabPanel, Tabs } from 'js/shared-styles/tables/TableTabs';
 import { useTabs } from 'js/shared-styles/tabs';
-import { useStore } from '../store';
 import { DisambiguationTextbox } from './DisambiguationTextbox';
-import { useCellTypeOrgans } from './hooks';
+import { useCellTypeOrgans, useCrossModalityResults } from './hooks';
 import { extractCLID } from './utils';
 import DatasetsTable from '../DatasetsTable';
 import CellTypesChart from '../CellsCharts/CellTypesCharts';
+import { useAugmentedResults } from '../MolecularDataQueryResults/hooks';
 
 function CellTypeResult({ cellType }: { cellType: string }) {
   const { organs = [], error } = useCellTypeOrgans(cellType);
@@ -44,13 +44,18 @@ function CellTypeResult({ cellType }: { cellType: string }) {
   );
 }
 
-function CellTypeResults() {
+function CrossModalityCellTypeResults() {
   // For cell type queries, the results are displayed differently than for other queries.
   // The total number of datasets that match the query is displayed, out of all datasets.
   // A disambiguation textbox is displayed if a CLID resolves to multiple variants of a cell type.
   // A graph is displayed showing the distribution of the cell type across different organs.
 
-  const { results, resultCounts, cellVariableNames } = useStore();
+  const {
+    data: results,
+    parameters: { cellVariableNames },
+  } = useCrossModalityResults();
+
+  const { list: resultsList, length: resultCounts } = useAugmentedResults(results.list);
 
   const { openTabIndex, handleTabChange } = useTabs();
 
@@ -75,14 +80,10 @@ function CellTypeResults() {
       <Divider sx={{ my: 2 }} />
       <div>
         <Typography variant="h3">Relevant Datasets</Typography>
-        <DatasetsTable
-          stepText={`${resultCounts.matching} out of ${resultCounts.total} indexed datasets match the query.`}
-          datasets={results}
-          expandedContent={CellTypesChart}
-        />
+        <DatasetsTable datasets={resultsList} expandedContent={CellTypesChart} />
       </div>
     </div>
   );
 }
 
-export default CellTypeResults;
+export default CrossModalityCellTypeResults;

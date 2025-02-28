@@ -52,20 +52,28 @@ function ExpressionInput() {
   );
 }
 
-function GeneParameters() {
+function ThresholdOptions() {
   const queryMethod = useMolecularDataQueryFormState().watch('queryMethod');
+  const queryType = useQueryType();
+  if (queryType.value === 'protein' && queryMethod === 'scFind') {
+    return null;
+  }
+  return (
+    <FormFieldContainer title="Threshold Options">
+      <CellPercentageInput />
+      <ExpressionInput />
+    </FormFieldContainer>
+  );
+}
+
+function GeneParameters() {
   return (
     <>
       <QueryMethod />
       <FormFieldContainer title="Gene and Pathway Selection">
         <AutocompleteEntity targetEntity="gene" />
       </FormFieldContainer>
-      {queryMethod !== 'scFind' && (
-        <FormFieldContainer title="Threshold Options">
-          <CellPercentageInput />
-          <ExpressionInput />
-        </FormFieldContainer>
-      )}
+      <ThresholdOptions />
     </>
   );
 }
@@ -77,10 +85,7 @@ function ProteinParameters() {
       <FormFieldContainer title="Protein Selection">
         <AutocompleteEntity targetEntity="protein" />
       </FormFieldContainer>
-      <FormFieldContainer title="Threshold Options">
-        <ExpressionInput />
-        <CellPercentageInput />
-      </FormFieldContainer>
+      <ThresholdOptions />
     </>
   );
 }

@@ -4,7 +4,7 @@ import { Typography, Stack } from '@mui/material';
 import { http, passthrough } from 'msw';
 import useFindCellTypeSpecificities, { FindCellTypeSpecificitiesParams } from './useFindCellTypeSpecificities';
 
-import { SCFIND_BASE } from './utils';
+import { SCFIND_BASE_STORYBOOK } from './utils';
 
 function FindCellTypeSpecificitiesControl(params: FindCellTypeSpecificitiesParams) {
   const result = useFindCellTypeSpecificities(params);
@@ -25,7 +25,7 @@ const meta: Meta = {
   parameters: {
     msw: {
       handlers: [
-        http.get(`${SCFIND_BASE}/*`, () => {
+        http.get(`${SCFIND_BASE_STORYBOOK}/api/*`, () => {
           return passthrough();
         }),
       ],
