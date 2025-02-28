@@ -1,6 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns/format';
 import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Stack from '@mui/material/Stack';
@@ -16,6 +17,11 @@ import { InternalLink } from 'js/shared-styles/Links';
 import { getFileName } from 'js/helpers/functions';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 
+const description = [
+  'Download HuBMAP-wide data products that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. You can also explore the datasets that contribute to each data product.',
+  'Both raw and processed data products may be available. Raw data products are concatenated datasets, while processed data products have undergone clustering and other analytical processes.',
+];
+
 interface DataProductsProps {
   id: string;
   organName: string;
@@ -27,7 +33,13 @@ function DataProducts({ id, organName }: DataProductsProps) {
   return (
     <CollapsibleDetailPageSection id={id} title="Data Products">
       <Stack spacing={1}>
-        <Description>Description here</Description>
+        <Description>
+          <Stack spacing={1} direction="column">
+            {description.map((block) => (
+              <Typography key={block}>{block}</Typography>
+            ))}
+          </Stack>
+        </Description>
         <Paper>
           <EntitiesTable
             headerCells={[

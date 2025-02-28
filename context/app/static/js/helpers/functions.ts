@@ -306,10 +306,17 @@ export function getEntityCreationInfo({
 }
 
 /**
- * Get the file name without the extension from a URL.
- * ex: 'https://example.com/file.txt' => 'file'
+ * Get the file name with the extension from a URL. In the case of a placeholder, returns an empty string.
+ * ex: 'https://example.com/file.txt' => 'file.txt'
+ * ex: 'None' => ''
  * @author Austen Money
  */
 export function getFileName(url: string) {
-  return url.split('/').pop()?.split('.')[0] ?? '';
+  const name = url.split('/').pop() ?? '';
+
+  if (name.toLowerCase() === 'none') {
+    return '';
+  }
+
+  return name;
 }

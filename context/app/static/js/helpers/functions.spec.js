@@ -193,8 +193,8 @@ test('validateAndFormatOrcidId', () => {
 
 test('getFileName', () => {
   expect(getFileName('')).toStrictEqual('');
-  expect(getFileName('file')).toStrictEqual('file');
-  expect(getFileName('file.txt')).toStrictEqual('file');
-  expect(getFileName('directory/file.txt')).toStrictEqual('file');
-  expect(getFileName('firstDirectory/anotherDirectory/directory/file.txt')).toStrictEqual('file');
+  expect(getFileName('None')).toStrictEqual('');
+  expect(getFileName('file.txt')).toStrictEqual('file.txt');
+  expect(getFileName('directory/file.txt')).toStrictEqual('file.txt');
+  expect(getFileName('firstDirectory/anotherDirectory/directory/file.txt')).toStrictEqual('file.txt');
 });
