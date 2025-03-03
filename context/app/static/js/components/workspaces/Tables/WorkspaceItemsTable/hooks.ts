@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import useEventCallback from '@mui/material/utils/useEventCallback';
 import {
   SortField,
@@ -17,6 +17,10 @@ function useWorkspaceItemsTable<T extends WorkspaceItem>({
 }: WorkspaceItemsTableProps<T>) {
   const [sortField, setSortField] = useState<SortField>(initialSortField);
   const [numVisibleItems, setNumVisibleItems] = useState(showSeeMoreOption ? 3 : items.length);
+
+  useEffect(() => {
+    setNumVisibleItems(showSeeMoreOption ? 3 : items.length);
+  }, [items, showSeeMoreOption]);
 
   const noFiltersSelected = useMemo(() => filters.every(({ show }) => !show), [filters]);
 

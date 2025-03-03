@@ -20,7 +20,7 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
 import { TooltipButton, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { useWorkspacesList } from 'js/components/workspaces/hooks';
+import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import { LaunchStopButton } from 'js/components/workspaces/WorkspaceLaunchStopButtons/WorkspaceLaunchStopButtons';
 import useWorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
@@ -54,6 +54,7 @@ const moreOptionsTooltip = 'View additional actions.';
 
 function EndButtons({ item }: { item: WorkspaceItem }) {
   const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
+  const { handleAcceptInvitation } = useInvitationsList();
   const { setDialogType, setInvitation } = useEditWorkspaceStore();
 
   const options = [
@@ -68,6 +69,14 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
       icon: CloseFilledIcon,
     },
   ];
+
+  const onAcceptInvite = useEventCallback(() => {
+    if (isInvitation(item)) {
+      handleAcceptInvitation(item.shared_workspace_id.id).catch((error) => {
+        console.error('Error accepting invitation:', error);
+      });
+    }
+  });
 
   // If the item is a workspace
   if (isWorkspace(item)) {
@@ -114,7 +123,7 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
       <TooltipIconButton tooltip={previewInviteTooltip}>
         <EyeIcon color="primary" fontSize="1.5rem" />
       </TooltipIconButton>
-      <TooltipIconButton tooltip={acceptInviteTooltip}>
+      <TooltipIconButton tooltip={acceptInviteTooltip} onClick={onAcceptInvite}>
         <CheckIcon color="success" fontSize="1.5rem" />
       </TooltipIconButton>
     </Stack>

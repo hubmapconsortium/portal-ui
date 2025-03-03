@@ -66,7 +66,7 @@ export const apiUrls = (workspacesEndpoint: string) => ({
     return `${workspacesEndpoint}/shared_workspaces/${invitationId}`;
   },
   acceptInvitation(invitationId: number): string {
-    return `${workspacesEndpoint}/shared_workspaces/${invitationId}/accept`;
+    return `${workspacesEndpoint}/shared_workspaces/${invitationId}/accept/`;
   },
   // Users
   users(query: string): string {
@@ -277,6 +277,38 @@ export function useDeleteInvitation() {
   );
 
   return { deleteInvitation, isDeleting: isMutating };
+}
+
+async function fetchAcceptInvitation(
+  _key: string,
+  { arg: { invitationId, headers, url } }: { arg: { headers: HeadersInit; invitationId: number; url: string } },
+) {
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers,
+  });
+  if (!response.ok) {
+    throw Error(`Failed to accept invitation #${invitationId}`);
+  }
+}
+
+export function useAcceptInvitation() {
+  const { trigger, isMutating } = useSWRMutation('accept-invitation', fetchAcceptInvitation);
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+
+  const acceptInvitation = useCallback(
+    async (invitationId: number) => {
+      await trigger({
+        invitationId,
+        url: api.acceptInvitation(invitationId),
+        headers,
+      });
+    },
+    [headers, api, trigger],
+  );
+
+  return { acceptInvitation, isAccepting: isMutating };
 }
 
 export interface ShareInvitationBody {

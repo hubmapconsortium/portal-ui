@@ -31,6 +31,7 @@ import {
   useInvitations,
   useDeleteInvitation,
   useShareInvitation,
+  useAcceptInvitation,
 } from './api';
 import {
   MergedWorkspace,
@@ -156,10 +157,16 @@ function useInvitationsActions({
   const mutate = useMutateWorkspacesAndJobs();
 
   const { deleteInvitation, isDeleting } = useDeleteInvitation();
+  const { acceptInvitation, isAccepting } = useAcceptInvitation();
   const { shareInvitation, isSharing } = useShareInvitation();
 
   async function handleDeleteInvitation(invitationId: number) {
     await deleteInvitation(invitationId);
+    await mutate();
+  }
+
+  async function handleAcceptInvitation(invitationId: number) {
+    await acceptInvitation(invitationId);
     await mutate();
   }
 
@@ -178,6 +185,8 @@ function useInvitationsActions({
     invitationsLoading,
     handleDeleteInvitation,
     isDeleting,
+    handleAcceptInvitation,
+    isAccepting,
     handleShareInvitations,
     isSharing,
   };
