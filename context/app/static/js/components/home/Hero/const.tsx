@@ -1,6 +1,6 @@
 import React from 'react';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { SearchIcon, DonorIcon, DownloadIcon, ListsIcon, CellTypeIcon } from 'js/shared-styles/icons';
+import { SearchIcon, DonorIcon, DownloadIcon, ListsIcon } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
@@ -42,7 +42,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
       </>
     ),
     date: 'February 2025',
-    img: <CellTypeIcon {...timelineIconProps} />,
+    img: <entityIconMap.CellType {...timelineIconProps} />,
   },
   {
     title: 'New SNARE-seq2 Datasets Available',
@@ -53,7 +53,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
       </>
     ),
     date: 'February 2025',
-    img: <CellTypeIcon {...timelineIconProps} />,
+    img: <entityIconMap.Dataset {...timelineIconProps} />,
   },
   {
     title: 'Bulk Download Files Through HuBMAP CLT',
