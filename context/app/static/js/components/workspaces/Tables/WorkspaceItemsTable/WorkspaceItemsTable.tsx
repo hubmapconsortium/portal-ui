@@ -15,7 +15,16 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
 import { getFieldPrefix, getFieldValue, isInvitation, isWorkspace } from 'js/components/workspaces/utils';
-import { CheckIcon, CloseFilledIcon, DownIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
+import {
+  CheckIcon,
+  CloseFilledIcon,
+  DownIcon,
+  EmailIcon,
+  EyeIcon,
+  MoreIcon,
+  PendingRoundIcon,
+  SuccessRoundIcon,
+} from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
 import { TooltipButton, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
@@ -29,8 +38,9 @@ import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
-
+import { useAppContext } from 'js/components/Contexts';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
 import {
   ChipWrapper,
@@ -54,18 +64,23 @@ const previewInviteTooltip = 'Preview the details of this workspace.';
 const moreOptionsTooltip = 'View additional actions.';
 
 function EndButtons({ item }: { item: WorkspaceItem }) {
-  const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
+  const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
   const { handleAcceptInvitation } = useInvitationsList();
   const { setDialogType, setInvitation } = useEditWorkspaceStore();
   const { toastErrorAcceptInvitation, toastSuccessAcceptInvitation } = useWorkspaceToasts();
+  const { userEmail } = useAppContext();
+
+  const isSender = isInvitation(item) && item.original_workspace_id.user_id.email === userEmail;
+  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
 
   const options = [
     {
-      children: 'Decline Invitation',
+      children: `${isSender ? 'Delete' : 'Decline'} Invitation`,
       onClick: () => {
+        const dialogType = isSender ? 'DELETE_INVITATION' : 'DECLINE_INVITATION';
         if (isInvitation(item)) {
           setInvitation(item);
-          setDialogType('DECLINE_INVITATION');
+          setDialogType(dialogType);
         }
       },
       icon: CloseFilledIcon,
@@ -99,27 +114,11 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
     );
   }
 
-  const workspaceMatchingItem = workspacesList.find(
-    (w) => w.id === item?.shared_workspace_id?.id || w.id === item?.original_workspace_id?.id,
-  );
-
-  // If the item is an accepted invitation or a sent invitation (a copy of the workspace is already owned by the user)
-  if (workspaceMatchingItem) {
-    return (
-      <Stack alignItems="end" marginRight={2}>
-        <WorkspaceLaunchStopButtons
-          workspace={workspaceMatchingItem}
-          button={LaunchStopButton}
-          handleStopWorkspace={handleStopWorkspace}
-          isStoppingWorkspace={isStoppingWorkspace}
-          showLaunch
-          showStop
-        />
-      </Stack>
-    );
+  if (isAccepted) {
+    return null;
   }
 
-  // If the item is a pending invitation
+  // If the item is a pending received invitation
   return (
     <Stack direction="row" justifyContent="end" alignItems="center">
       <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
@@ -127,12 +126,16 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
           <IconDropdownMenuItem key={props.children} {...props} />
         ))}
       </IconDropdownMenu>
-      <TooltipIconButton tooltip={previewInviteTooltip}>
-        <EyeIcon color="primary" fontSize="1.5rem" />
-      </TooltipIconButton>
-      <TooltipIconButton tooltip={acceptInviteTooltip} onClick={onAcceptInvite}>
-        <CheckIcon color="success" fontSize="1.5rem" />
-      </TooltipIconButton>
+      {!isSender && (
+        <Stack direction="row">
+          <TooltipIconButton tooltip={previewInviteTooltip}>
+            <EyeIcon color="primary" fontSize="1.5rem" />
+          </TooltipIconButton>
+          <TooltipIconButton tooltip={acceptInviteTooltip} onClick={onAcceptInvite}>
+            <CheckIcon color="success" fontSize="1.5rem" />
+          </TooltipIconButton>
+        </Stack>
+      )}
     </Stack>
   );
 }
@@ -191,6 +194,28 @@ function SortHeaderCell({
   );
 }
 
+function InvitationStatusIcon({ item }: { item: WorkspaceItem }) {
+  if (isWorkspace(item)) {
+    return null;
+  }
+
+  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
+
+  if (isAccepted) {
+    return (
+      <SecondaryBackgroundTooltip title="Accepted workspace invitation">
+        <SuccessRoundIcon color="success" fontSize=".9rem" />
+      </SecondaryBackgroundTooltip>
+    );
+  }
+
+  return (
+    <SecondaryBackgroundTooltip title="Pending workspace invitation">
+      <PendingRoundIcon color="info" fontSize=".9rem" />
+    </SecondaryBackgroundTooltip>
+  );
+}
+
 function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
@@ -198,19 +223,14 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   switch (field) {
     case `${prefix}name`: {
       const workspaceId = getFieldValue({ item, field: 'id', prefix });
-      const isAccepted = getFieldValue({ item, field: 'is_accepted' });
 
       return (
         <Stack direction="row" spacing={1} alignItems="center">
-          {isAccepted && (
-            <SecondaryBackgroundTooltip title="Accepted workspace invitation">
-              <CheckIcon color="success" fontSize="0.75rem" />
-            </SecondaryBackgroundTooltip>
-          )}
           <InternalLink href={`/workspaces/${workspaceId}`}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
           <Box>{`(ID: ${workspaceId})`}</Box>
+          <InvitationStatusIcon item={item} />
         </Stack>
       );
     }

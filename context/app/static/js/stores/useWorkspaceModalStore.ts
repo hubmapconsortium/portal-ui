@@ -11,6 +11,7 @@ export type DialogType =
   | 'DELETE_WORKSPACE'
   | 'SHARE_WORKSPACE'
   | 'DECLINE_INVITATION'
+  | 'DELETE_INVITATION'
   | 'LAUNCH_NEW_WORKSPACE'
   | null;
 
