@@ -40,6 +40,21 @@ export const useWorkspaceToasts = () => {
     [toastError],
   );
 
+  const toastErrorShareInvitation = useCallback(
+    (workspaceName?: string) => toastError(`Failed to share ${workspaceName ?? 'workspace'}. Please try again.`),
+    [toastError],
+  );
+
+  const toastErrorInvitation = useCallback(
+    (action: 'accept' | 'decline' | 'delete', workspaceName?: string) =>
+      toastError(`Failed to ${action} ${workspaceName ?? 'this'} workspace copy invitation. Please try again.`),
+    [toastError],
+  );
+
+  const toastErrorAcceptInvitation = (workspaceName?: string) => toastErrorInvitation('accept', workspaceName);
+  const toastErrorDeclineInvitation = (workspaceName?: string) => toastErrorInvitation('decline', workspaceName);
+  const toastErrorDeleteInvitation = (workspaceName?: string) => toastErrorInvitation('delete', workspaceName);
+
   /** *********************************
    *          Success Toasts         *
    ********************************* */
@@ -87,6 +102,24 @@ export const useWorkspaceToasts = () => {
     [toastSuccess],
   );
 
+  const toastSuccessShareInvitation = useCallback(
+    (names: string) => toastSuccess(`Successfully shared workspaces: ${names}`),
+    [toastSuccess],
+  );
+
+  const toastSuccessAcceptInvitation = useCallback(
+    (workspaceName: string) => toastSuccess(`${workspaceName} copy created.`),
+    [toastSuccess],
+  );
+
+  const toastSuccessInvitation = useCallback(
+    (action: 'declined' | 'deleted', workspaceName: string) => toastSuccess(`${workspaceName} invite ${action}.`),
+    [toastSuccess],
+  );
+
+  const toastSuccessDeclineInvitation = (workspaceName: string) => toastSuccessInvitation('declined', workspaceName);
+  const toastSuccessDeleteInvitation = (workspaceName: string) => toastSuccessInvitation('deleted', workspaceName);
+
   return {
     toastErrorDeleteWorkspaces,
     toastErrorUpdateWorkspace,
@@ -94,6 +127,10 @@ export const useWorkspaceToasts = () => {
     toastErrorLaunchWorkspace,
     toastErrorCreateWorkspace,
     toastErrorWorkspaceTemplate,
+    toastErrorShareInvitation,
+    toastErrorAcceptInvitation,
+    toastErrorDeclineInvitation,
+    toastErrorDeleteInvitation,
     toastSuccessRenewSession,
     toastSuccessRemoveProtectedDatasets,
     toastSuccessUpdateWorkspace,
@@ -101,5 +138,9 @@ export const useWorkspaceToasts = () => {
     toastSuccessDeleteWorkspaces,
     toastSuccessAddDataset,
     toastSuccessLaunchWorkspace,
+    toastSuccessShareInvitation,
+    toastSuccessAcceptInvitation,
+    toastSuccessDeclineInvitation,
+    toastSuccessDeleteInvitation,
   };
 };

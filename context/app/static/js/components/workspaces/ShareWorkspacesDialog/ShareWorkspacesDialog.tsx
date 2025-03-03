@@ -10,6 +10,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import CloseRounded from '@mui/icons-material/CloseRounded';
+import Typography from '@mui/material/Typography';
+import { useEventCallback } from '@mui/material/utils';
 
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import { generateCommaList } from 'js/helpers/functions';
@@ -17,8 +19,8 @@ import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/
 import { StepDescription } from 'js/shared-styles/surfaces/Step';
 import UsersAutocomplete from 'js/components/workspaces/UsersAutocomplete';
 import { WorkspaceUser } from 'js/components/workspaces/types';
-import { Typography, useEventCallback } from '@mui/material';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 interface ShareWorkspacesDialogProps {
   handleClose: () => void;
@@ -27,6 +29,8 @@ interface ShareWorkspacesDialogProps {
 export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceIds }: ShareWorkspacesDialogProps) {
   const { workspacesList } = useWorkspacesList();
   const { handleShareInvitations } = useInvitationsList();
+  const { toastErrorShareInvitation, toastSuccessShareInvitation } = useWorkspaceToasts();
+
   const [selectedUsers, setSelectedUsers] = useState<WorkspaceUser[]>([]);
 
   const selectedWorkspaceNames = Array.from(selectedWorkspaceIds).map((id) => {
@@ -40,9 +44,14 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
     const workspaceIds = [...selectedWorkspaceIds];
     const userIds = selectedUsers.map((user) => user.id);
 
-    handleShareInvitations({ workspaceIds, userIds }).catch((error) => {
-      console.error('Error sharing workspace:', error);
-    });
+    handleShareInvitations({ workspaceIds, userIds })
+      .then(() => {
+        toastSuccessShareInvitation(selectedWorkspaceNamesList);
+      })
+      .catch((e) => {
+        console.error(e);
+        toastErrorShareInvitation(selectedWorkspaceNamesList);
+      });
 
     handleClose();
   });

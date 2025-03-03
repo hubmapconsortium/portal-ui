@@ -3,19 +3,30 @@ import React from 'react';
 import { useInvitationsList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 export default function ConfirmDeclineInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
   const { invitation, reset } = useEditWorkspaceStore();
+  const { toastSuccessDeclineInvitation, toastErrorDeclineInvitation } = useWorkspaceToasts();
 
   if (!invitation) {
     return null;
   }
 
   const handleDeleteAndClose = () => {
-    handleDeleteInvitation(invitation.shared_workspace_id.id).catch((e) => {
-      console.error(e);
-    });
+    const {
+      shared_workspace_id: { id, name },
+    } = invitation;
+
+    handleDeleteInvitation(id)
+      .then(() => {
+        toastSuccessDeclineInvitation(name);
+      })
+      .catch((e) => {
+        console.error(e);
+        toastErrorDeclineInvitation(name);
+      });
     reset();
   };
 

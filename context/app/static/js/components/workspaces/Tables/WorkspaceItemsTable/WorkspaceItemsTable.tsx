@@ -30,6 +30,7 @@ import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMen
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
 import {
   ChipWrapper,
@@ -56,6 +57,7 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
   const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
   const { handleAcceptInvitation } = useInvitationsList();
   const { setDialogType, setInvitation } = useEditWorkspaceStore();
+  const { toastErrorAcceptInvitation, toastSuccessAcceptInvitation } = useWorkspaceToasts();
 
   const options = [
     {
@@ -72,9 +74,14 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
 
   const onAcceptInvite = useEventCallback(() => {
     if (isInvitation(item)) {
-      handleAcceptInvitation(item.shared_workspace_id.id).catch((error) => {
-        console.error('Error accepting invitation:', error);
-      });
+      handleAcceptInvitation(item.shared_workspace_id.id)
+        .then(() => {
+          toastSuccessAcceptInvitation(item.shared_workspace_id.name);
+        })
+        .catch((e) => {
+          console.error(e);
+          toastErrorAcceptInvitation(item.shared_workspace_id.name);
+        });
     }
   });
 
