@@ -63,7 +63,7 @@ export const apiUrls = (workspacesEndpoint: string) => ({
     return `${workspacesEndpoint}/shared_workspaces/`;
   },
   invitation(invitationId: number): string {
-    return `${workspacesEndpoint}/shared_workspaces/${invitationId}`;
+    return `${workspacesEndpoint}/shared_workspaces/${invitationId}/`;
   },
   acceptInvitation(invitationId: number): string {
     return `${workspacesEndpoint}/shared_workspaces/${invitationId}/accept/`;

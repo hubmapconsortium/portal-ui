@@ -25,23 +25,24 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
     [invitations, showPending, showAccepted],
   );
 
+  const isReceived = status === 'Received';
+
   const tableFields: TableField[] = useMemo(
     () => [
       {
-        field: 'original_workspace_id.name',
+        field: `${isReceived ? 'shared_workspace_id' : 'original_workspace_id'}.name`,
         label: 'Name',
       },
       {
-        field:
-          status === 'Received' ? 'original_workspace_id.user_id.username' : 'shared_workspace_id.user_id.username',
-        label: status === 'Received' ? 'Shared By' : 'Recipient',
+        field: `${isReceived ? 'original_workspace_id' : 'shared_workspace_id'}.user_id.username`,
+        label: isReceived ? 'Shared By' : 'Recipient',
       },
       {
         field: 'datetime_share_created',
         label: 'Shared Date',
       },
     ],
-    [status],
+    [isReceived],
   );
 
   const filters: TableFilter[] = useMemo(
