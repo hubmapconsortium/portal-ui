@@ -136,6 +136,7 @@ function NewWorkspaceDialog({
   const submit = useCallback(
     ({
       'workspace-name': workspaceName,
+      'workspace-description': workspaceDescription,
       templates: templateKeys,
       workspaceJobTypeId,
       datasets,
@@ -143,6 +144,7 @@ function NewWorkspaceDialog({
     }: CreateWorkspaceFormTypes) => {
       onSubmit({
         workspaceName,
+        workspaceDescription,
         templateKeys,
         uuids: datasets,
         workspaceJobTypeId,
@@ -217,6 +219,16 @@ function NewWorkspaceDialog({
               name="workspace-name"
               label="Workspace Name"
               placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
+              autoFocus
+              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
+                e.stopPropagation();
+              }}
+            />
+            <WorkspaceField
+              control={control}
+              name="workspace-description"
+              label="Workspace Description (Optional)"
+              placeholder="Add workspace description to describe your workspace"
               autoFocus
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 e.stopPropagation();

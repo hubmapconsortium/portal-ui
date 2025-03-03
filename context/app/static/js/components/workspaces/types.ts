@@ -198,6 +198,7 @@ interface CreateTemplateNotebooksTypes {
   templateKeys: string[];
   uuids: string[];
   workspaceName: string;
+  workspaceDescription: string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
   trackingInfo?: WorkspacesEventInfo;

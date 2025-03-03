@@ -80,6 +80,7 @@ function NewWorkspaceDialogFromExample({
   const submit = useCallback(
     ({
       'workspace-name': workspaceName,
+      'workspace-description': workspaceDescription,
       templates: templateKeys,
       workspaceJobTypeId,
       datasets,
@@ -87,6 +88,7 @@ function NewWorkspaceDialogFromExample({
     }: CreateWorkspaceFormTypes) => {
       onSubmit({
         workspaceName,
+        workspaceDescription,
         templateKeys,
         uuids: datasets,
         workspaceJobTypeId,

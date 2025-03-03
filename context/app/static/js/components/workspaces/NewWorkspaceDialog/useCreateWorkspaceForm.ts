@@ -13,6 +13,7 @@ import {
   workspaceJobTypeIdField,
   workspaceResourceOptionsField,
   datasetsField,
+  workspaceDescriptionField,
 } from '../workspaceFormFields';
 import { useWorkspacesProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
 import {
@@ -30,6 +31,7 @@ export interface FormWithTemplates {
 }
 interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
+  'workspace-description': string;
   'protected-datasets': string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
@@ -38,6 +40,7 @@ interface CreateWorkspaceFormTypes extends FormWithTemplates {
 
 interface UseCreateWorkspaceTypes {
   defaultName?: string;
+  defaultDescription?: string;
   defaultTemplate?: string;
   defaultJobType?: string;
   defaultResourceOptions?: Partial<WorkspaceResourceOptions>;
@@ -48,6 +51,7 @@ interface UseCreateWorkspaceTypes {
 const schema = z
   .object({
     ...workspaceNameField,
+    ...workspaceDescriptionField,
     ...protectedDatasetsField,
     ...templatesField,
     ...workspaceJobTypeIdField,
@@ -59,6 +63,7 @@ const schema = z
 
 function useCreateWorkspaceForm({
   defaultName,
+  defaultDescription = '',
   defaultTemplate = DEFAULT_PYTHON_TEMPLATE_KEY,
   defaultJobType = DEFAULT_JOB_TYPE,
   defaultResourceOptions = {},
@@ -90,6 +95,7 @@ function useCreateWorkspaceForm({
   } = useForm({
     defaultValues: {
       'workspace-name': checkedWorkspaceName,
+      'workspace-description': defaultDescription,
       'protected-datasets': checkedProtectedDatasets,
       templates: [defaultTemplate],
       workspaceJobTypeId: defaultJobType,
@@ -124,6 +130,7 @@ function useCreateWorkspaceForm({
     templateKeys,
     uuids,
     workspaceName,
+    workspaceDescription,
     workspaceJobTypeId,
     workspaceResourceOptions,
     trackingInfo,
@@ -134,6 +141,7 @@ function useCreateWorkspaceForm({
       templateKeys,
       uuids,
       workspaceName,
+      workspaceDescription,
       workspaceJobTypeId,
       workspaceResourceOptions,
       trackingInfo,

@@ -88,12 +88,12 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 const StyledTableContainer = styled(Box)(({ theme }) => ({
+  ...border(theme),
   width: '100%',
   borderTop: 'none',
   borderLeft: 'none',
   overflowY: 'auto',
   overflowX: 'hidden',
-  ...border(theme),
 }));
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({

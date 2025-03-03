@@ -5,7 +5,11 @@ const workspaceNameField = {
   'workspace-name': z
     .string({ errorMap: withCustomMessage('A workspace name is required. Please enter a workspace name.') })
     .min(1)
-    .max(150),
+    .max(50),
+};
+
+const workspaceDescriptionField = {
+  'workspace-description': z.string().max(500),
 };
 
 const protectedDatasetsField = { 'protected-datasets': z.string() };
@@ -49,6 +53,7 @@ const workspaceResourceOptionsField = {
 
 export {
   workspaceNameField,
+  workspaceDescriptionField,
   protectedDatasetsField,
   templatesField,
   datasetsField,

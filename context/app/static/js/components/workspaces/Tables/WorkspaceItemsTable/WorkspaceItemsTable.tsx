@@ -114,6 +114,7 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
     );
   }
 
+  // If the item is an accepted invitation
   if (isAccepted) {
     return null;
   }
