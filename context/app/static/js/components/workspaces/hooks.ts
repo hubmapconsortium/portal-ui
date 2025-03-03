@@ -196,9 +196,10 @@ function useWorkspacesListWithSharerInfo() {
   const { workspacesList, isLoading: workspacesLoading, ...rest } = useWorkspacesList();
   const { receivedInvitations, invitationsLoading } = useInvitationsList();
 
+  // If the workspace was shared, find the user who shared it
   const workspacesWithInvitationInfo = workspacesList.map((workspace) => {
-    const user_id = receivedInvitations.find((invitation) => invitation.original_workspace_id.id === workspace.id)
-      ?.shared_workspace_id.user_id;
+    const user_id = receivedInvitations.find((invitation) => invitation.shared_workspace_id.id === workspace.id)
+      ?.original_workspace_id.user_id;
 
     return {
       ...workspace,
