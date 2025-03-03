@@ -1,6 +1,6 @@
 import React from 'react';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { SearchIcon, DonorIcon, DownloadIcon } from 'js/shared-styles/icons';
+import { SearchIcon, DonorIcon, DownloadIcon, ListsIcon, CellTypeIcon } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
@@ -14,7 +14,47 @@ const timelineIconProps = {
   width: '1.5rem',
 } as const;
 
+const SNARE_SEQ2_LINK =
+  '/search/datasets?N4IgzgpghgTgxgCxALhCANOA9jALgMQEsIAbAExVADNjyUQAHAVwCMTCwEIyB9XQgLYQwuKAIYYQZQjAhx+WAHb0ywuJMhwlZWAE8ipCsmq0jIAVAYNuPEVFxMwk6bPmElKtSAC+3zDRJcCBgnYxAYKAB3Hh1RSFw+XWtKEAA3KBImYRSAZQA5AEEAJQBRAFpIAEcAJhQAbRB84vKq2swm0oqIGoACOpyMgSUegGoegvgEItGegFkmJQBdEEW-EFwkiHoACQBJEqLigGE9o4KAGR9fIA';
+
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
+  {
+    title: 'My Lists Now Saved in Your User Profile',
+    titleHref: '/my-lists',
+    description: (
+      <>
+        <InternalLink href="/my-lists">My Lists</InternalLink> are now saved in your user profile.{' '}
+        <InternalLink href="/login">Log in</InternalLink> to save new items and transfer any previously saved lists from
+        local storage to your profile.
+      </>
+    ),
+    date: 'February 2025',
+    img: <ListsIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'New Cell Population Plot Visualization Tool',
+    titleHref: '/organ/kidney',
+    description: (
+      <>
+        Visualize cell populations of the datasets in an organ using the new interactive cell population plot
+        visualization tool, now available on <InternalLink href="/organ/kidney">kidney</InternalLink> and{' '}
+        <InternalLink href="/organ/heart">heart</InternalLink> pages.
+      </>
+    ),
+    date: 'February 2025',
+    img: <CellTypeIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'New SNARE-seq2 Datasets Available',
+    titleHref: SNARE_SEQ2_LINK,
+    description: (
+      <>
+        Explore and download <InternalLink href="SNARE_SEQ2_LINK">SNARE-seq2</InternalLink> datasets.
+      </>
+    ),
+    date: 'February 2025',
+    img: <CellTypeIcon {...timelineIconProps} />,
+  },
   {
     title: 'Bulk Download Files Through HuBMAP CLT',
     titleHref: '/search/datasets',
