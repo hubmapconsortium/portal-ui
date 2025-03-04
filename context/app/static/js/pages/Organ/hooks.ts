@@ -1,5 +1,10 @@
 import { useMemo } from 'react';
+import useSWR from 'swr';
+
+import { fetcher } from 'js/helpers/swr/fetchers';
 import useSearchData, { useSearchHits } from 'js/hooks/useSearchData';
+import { useAppContext } from 'js/components/Contexts';
+import { OrganDataProducts } from 'js/components/organ/types';
 import { mustHaveOrganClause } from './queries';
 
 export function useHasSamplesQuery(searchItems: string[]) {
@@ -152,4 +157,27 @@ export function useLabelledDatasetsQuery(searchItems: string[]) {
   );
   const { searchHits: datasetsHits } = useSearchHits<never>(datasetsQuery, { useDefaultQuery: false });
   return datasetsHits.map((hit) => hit._id);
+}
+
+export function useDataProducts(organName: string) {
+  const { dataProductsEndpoint } = useAppContext();
+  const dataProductsUrl = `${dataProductsEndpoint}/api/data_products/${organName}`;
+
+  const { data, isLoading } = useSWR<OrganDataProducts[]>(
+    dataProductsUrl,
+    (url: string) =>
+      fetcher({
+        url,
+      }),
+    { fallbackData: [] },
+  );
+
+  const dataProducts = data ?? [];
+
+  const dataProductsWithUUIDs = dataProducts.map((product) => {
+    const datasetUUIDs = product.dataSets.map((dataset) => dataset.uuid);
+    return { ...product, datasetUUIDs };
+  });
+
+  return { dataProducts: dataProductsWithUUIDs, isLoading };
 }

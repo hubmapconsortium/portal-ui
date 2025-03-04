@@ -13,6 +13,7 @@ import {
   isValidEmail,
   getEntityCreationInfo,
   validateAndFormatOrcidId,
+  getFileName,
 } from './functions';
 
 test('isEmptyArrayOrObject', () => {
@@ -188,4 +189,12 @@ test('validateAndFormatOrcidId', () => {
   expect(validateAndFormatOrcidId('abcd-1234-5678-9101')).toBeFalsy();
   expect(validateAndFormatOrcidId('1234-5678-9101')).toBeFalsy();
   expect(validateAndFormatOrcidId('12345678901234567')).toBeFalsy();
+});
+
+test('getFileName', () => {
+  expect(getFileName('')).toStrictEqual('');
+  expect(getFileName('None', 'None')).toStrictEqual('');
+  expect(getFileName('file.txt')).toStrictEqual('file.txt');
+  expect(getFileName('directory/file.txt')).toStrictEqual('file.txt');
+  expect(getFileName('firstDirectory/anotherDirectory/directory/file.txt')).toStrictEqual('file.txt');
 });
