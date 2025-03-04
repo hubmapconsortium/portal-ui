@@ -311,10 +311,10 @@ export function getEntityCreationInfo({
  * ex: 'None' => ''
  * @author Austen Money
  */
-export function getFileName(url: string) {
+export function getFileName(url: string, placeholder?: string) {
   const name = url.split('/').pop() ?? '';
 
-  if (name.toLowerCase() === 'none') {
+  if (name.toLowerCase() === placeholder?.toLowerCase()) {
     return '';
   }
 

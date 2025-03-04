@@ -73,12 +73,12 @@ function DataProducts({ id, dataProducts, isLoading }: DataProductsProps) {
                   <TableCell>{assay.assayName}</TableCell>
                   <TableCell>
                     <InternalLink href={download_raw} variant="body2">
-                      {getFileName(download_raw)}
+                      {getFileName(download_raw, 'none')}
                     </InternalLink>
                   </TableCell>
                   <TableCell>
                     <InternalLink href={download} variant="body2">
-                      {getFileName(download)}
+                      {getFileName(download, 'none')}
                     </InternalLink>
                   </TableCell>
                   <TableCell>
