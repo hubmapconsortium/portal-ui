@@ -163,7 +163,7 @@ export function useDataProducts(organName: string) {
   const { dataProductsEndpoint } = useAppContext();
   const dataProductsUrl = `${dataProductsEndpoint}/api/data_products/${organName}`;
 
-  const { data } = useSWR<OrganDataProducts[]>(
+  const { data, isLoading } = useSWR<OrganDataProducts[]>(
     dataProductsUrl,
     (url: string) =>
       fetcher({
@@ -179,5 +179,5 @@ export function useDataProducts(organName: string) {
     return { ...product, datasetUUIDs };
   });
 
-  return dataProductsWithUUIDs;
+  return { dataProducts: dataProductsWithUUIDs, isLoading };
 }

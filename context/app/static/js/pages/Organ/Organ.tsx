@@ -33,7 +33,7 @@ function Organ({ organ }: OrganProps) {
   const assayBuckets = useAssayBucketsQuery(searchItems);
   const samplesHits = useHasSamplesQuery(searchItems);
   const labeledDatasetUuids = useLabelledDatasetsQuery(searchItems);
-  const dataProducts = useDataProducts(organ.name);
+  const { dataProducts, isLoading } = useDataProducts(organ.name);
 
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
@@ -46,7 +46,7 @@ function Organ({ organ }: OrganProps) {
   };
 
   return (
-    <DetailLayout sections={shouldDisplaySection}>
+    <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
       <Typography variant="subtitle1" component="h1" color="primary" data-testid="entity-title">
         Organ
       </Typography>
@@ -74,6 +74,7 @@ function Organ({ organ }: OrganProps) {
       <DataProducts
         id={dataProductsId}
         dataProducts={dataProducts}
+        isLoading={isLoading}
         shouldDisplay={shouldDisplaySection[dataProductsId]}
       />
       <Samples id={samplesId} organTerms={searchItems} shouldDisplay={shouldDisplaySection[samplesId]} />
