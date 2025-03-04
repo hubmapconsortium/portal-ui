@@ -17,7 +17,7 @@ function WorkspaceField<FormType extends FieldValues>({
   name,
   label,
   value,
-  maxLength = 150,
+  maxLength = 2000,
   ...rest
 }: WorkspaceFieldProps<FormType>) {
   const { field, fieldState } = useController({

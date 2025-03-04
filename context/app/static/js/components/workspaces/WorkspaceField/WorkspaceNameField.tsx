@@ -9,6 +9,7 @@ function WorkspaceNameField<FormType extends FieldValues>({ control, name }: Use
       name={name}
       label="Workspace Name"
       placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
+      maxLength={50}
       autoFocus
       onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => e.stopPropagation()}
     />

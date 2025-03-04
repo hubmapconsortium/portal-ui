@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
-import WorkspaceField, { WorkspaceNameField } from 'js/components/workspaces/WorkspaceField';
+import { WorkspaceDescriptionField, WorkspaceNameField } from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
@@ -215,15 +215,7 @@ function NewWorkspaceDialog({
             onSubmit={handleSubmit(submit)}
           >
             <WorkspaceNameField control={control} name="workspace-name" />
-            <WorkspaceField
-              control={control}
-              name="workspace-description"
-              label="Workspace Description (Optional)"
-              placeholder="Add workspace description to describe your workspace"
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                e.stopPropagation();
-              }}
-            />
+            <WorkspaceDescriptionField control={control} name="workspace-description" />
             <Stack spacing={2} p={2} component={Paper} direction="column">
               <StyledSubtitle1>Environment Selection</StyledSubtitle1>
               {text.configure.description}
