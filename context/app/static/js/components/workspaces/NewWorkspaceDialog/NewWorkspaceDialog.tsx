@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
-import WorkspaceField from 'js/components/workspaces/WorkspaceField';
+import WorkspaceField, { WorkspaceNameField } from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
@@ -214,22 +214,12 @@ function NewWorkspaceDialog({
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={handleSubmit(submit)}
           >
-            <WorkspaceField
-              control={control}
-              name="workspace-name"
-              label="Workspace Name"
-              placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
-              autoFocus
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                e.stopPropagation();
-              }}
-            />
+            <WorkspaceNameField control={control} name="workspace-name" />
             <WorkspaceField
               control={control}
               name="workspace-description"
               label="Workspace Description (Optional)"
               placeholder="Add workspace description to describe your workspace"
-              autoFocus
               onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
                 e.stopPropagation();
               }}

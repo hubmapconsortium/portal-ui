@@ -139,6 +139,7 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
 
 function useWorkspacesList() {
   const { workspaces, isLoading: workspacesLoading } = useWorkspaces();
+
   return useWorkspacesActions({
     workspaces,
     workspacesLoading,

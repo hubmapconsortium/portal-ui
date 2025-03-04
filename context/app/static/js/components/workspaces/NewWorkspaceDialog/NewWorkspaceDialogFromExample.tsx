@@ -17,7 +17,7 @@ import AccordionDetails from '@mui/material/AccordionDetails';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 
 import Step from 'js/shared-styles/surfaces/Step';
-import WorkspaceField from 'js/components/workspaces/WorkspaceField';
+import { WorkspaceNameField } from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { CreateTemplateNotebooksTypes, TemplateExample } from 'js/components/workspaces/types';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
@@ -135,16 +135,7 @@ function NewWorkspaceDialogFromExample({
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={handleSubmit(submit)}
           >
-            <WorkspaceField
-              control={control}
-              name="workspace-name"
-              label="Workspace Name"
-              placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
-              autoFocus
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                e.stopPropagation();
-              }}
-            />
+            <WorkspaceNameField control={control} name="workspace-name" />
             <Accordion>
               <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
                 <StyledSubtitle1>{text.configure.selected.title}</StyledSubtitle1>

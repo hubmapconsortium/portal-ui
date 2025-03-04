@@ -1,10 +1,10 @@
 import React, { useCallback } from 'react';
 
+import WorkspaceNameField from 'js/components/workspaces/WorkspaceField/WorkspaceNameField';
 import Step from 'js/shared-styles/surfaces/Step';
-import { useEditWorkspaceForm, EditWorkspaceFormTypes } from './hooks';
-import WorkspaceField from '../WorkspaceField/WorkspaceField';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
+import { useEditWorkspaceForm, EditWorkspaceFormTypes } from './hooks';
 
 function EditWorkspaceNameDialog({ workspace }: { workspace: Workspace }) {
   const workspaceName = workspace.name;
@@ -33,16 +33,7 @@ function EditWorkspaceNameDialog({ workspace }: { workspace: Workspace }) {
       isSubmitting={isSubmitting}
     >
       <Step title="Rename Workspace">
-        <WorkspaceField
-          control={control}
-          name="workspace-name"
-          label="Name"
-          placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
-          autoFocus
-          onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-            e.stopPropagation();
-          }}
-        />
+        <WorkspaceNameField control={control} name="workspace-name" />
       </Step>
     </EditWorkspaceDialogContent>
   );
