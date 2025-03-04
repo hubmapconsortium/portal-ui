@@ -63,4 +63,5 @@ export interface OrganDataProducts {
   processed_file_sizes_bytes: number;
   raw_cell_type_counts: Record<string, number>;
   processed_cell_type_counts: Record<string, number>;
+  datasetUUIDs?: string[];
 }

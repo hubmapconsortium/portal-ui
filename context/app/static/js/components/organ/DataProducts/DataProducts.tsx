@@ -12,24 +12,22 @@ import Description from 'js/shared-styles/sections/Description';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { HeaderCell } from 'js/shared-styles/tables';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
-import { useDataProducts } from 'js/components/organ/hooks';
 import { InternalLink } from 'js/shared-styles/Links';
 import { getFileName } from 'js/helpers/functions';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
+import { OrganDataProducts } from 'js/components/organ/types';
 
 const description = [
   'Download HuBMAP-wide data products that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. You can also explore the datasets that contribute to each data product.',
-  'Both raw and processed data products may be available. Raw data products are concatenated datasets, while processed data products have undergone clustering and other analytical processes.',
+  'Both raw and processed data products may be available. Raw data products are the concatenated results of HIVE processing without filtering or normalization. Processed data products have undergone clustering and other analytical processes.',
 ];
 
 interface DataProductsProps {
   id: string;
-  organName: string;
+  dataProducts: OrganDataProducts[];
 }
 
-function DataProducts({ id, organName }: DataProductsProps) {
-  const { dataProducts } = useDataProducts(organName);
-
+function DataProducts({ id, dataProducts }: DataProductsProps) {
   return (
     <CollapsibleDetailPageSection id={id} title="Data Products">
       <Stack spacing={1}>
