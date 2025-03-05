@@ -1,23 +1,28 @@
 import React, { useCallback } from 'react';
 
 import WorkspaceNameField from 'js/components/workspaces/WorkspaceField/WorkspaceNameField';
+import { WorkspaceDescriptionField } from 'js/components/workspaces/WorkspaceField';
 import Step from 'js/shared-styles/surfaces/Step';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import { Workspace } from '../types';
 import { useEditWorkspaceForm, EditWorkspaceFormTypes } from './hooks';
 
 function EditWorkspaceNameDialog({ workspace }: { workspace: Workspace }) {
-  const workspaceName = workspace.name;
-  const workspaceId = workspace.id;
+  const { name, id, description } = workspace;
   const { onSubmit, control, handleSubmit, isSubmitting, errors, reset } = useEditWorkspaceForm({
-    defaultName: workspaceName,
-    workspaceId,
+    defaultName: name,
+    defaultDescription: description,
+    workspaceId: id,
   });
 
   const submit = useCallback(
-    async ({ 'workspace-name': wsName }: EditWorkspaceFormTypes) => {
+    async ({
+      'workspace-name': workspaceName,
+      'workspace-description': workspaceDescription,
+    }: EditWorkspaceFormTypes) => {
       await onSubmit({
-        workspaceName: wsName,
+        workspaceName,
+        workspaceDescription,
       });
     },
     [onSubmit],
@@ -25,15 +30,16 @@ function EditWorkspaceNameDialog({ workspace }: { workspace: Workspace }) {
 
   return (
     <EditWorkspaceDialogContent
-      title="Edit Workspace Name"
+      title="Edit Workspace Details"
       reset={reset}
       handleSubmit={handleSubmit}
       onSubmit={submit}
       errors={errors}
       isSubmitting={isSubmitting}
     >
-      <Step title="Rename Workspace">
+      <Step title="Edit Workspace Name or Description (Optional)">
         <WorkspaceNameField control={control} name="workspace-name" />
+        <WorkspaceDescriptionField control={control} name="workspace-description" />
       </Step>
     </EditWorkspaceDialogContent>
   );

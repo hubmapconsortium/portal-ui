@@ -4,29 +4,32 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useHandleUpdateWorkspace } from '../hooks';
-import { workspaceNameField } from '../workspaceFormFields';
+import { workspaceDescriptionField, workspaceNameField } from '../workspaceFormFields';
 
 interface EditWorkspaceFormTypes {
   'workspace-name': string;
+  'workspace-description': string;
 }
 
 interface UseEditWorkspaceNameFormTypes {
   defaultName: string;
+  defaultDescription: string;
   workspaceId: number;
 }
 
 interface SubmitEditWorkspaceNameTypes {
   workspaceName: string;
+  workspaceDescription: string;
 }
 
 const schema = z
   .object({
     ...workspaceNameField,
+    ...workspaceDescriptionField,
   })
-  .partial()
-  .required({ 'workspace-name': true });
+  .partial();
 
-function useEditWorkspaceForm({ defaultName, workspaceId }: UseEditWorkspaceNameFormTypes) {
+function useEditWorkspaceForm({ defaultName, defaultDescription, workspaceId }: UseEditWorkspaceNameFormTypes) {
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
 
   const {
@@ -37,14 +40,15 @@ function useEditWorkspaceForm({ defaultName, workspaceId }: UseEditWorkspaceName
   } = useForm({
     defaultValues: {
       'workspace-name': defaultName,
+      'workspace-description': defaultDescription,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
   });
 
   const onSubmit = useCallback(
-    async ({ workspaceName }: SubmitEditWorkspaceNameTypes) => {
-      await handleUpdateWorkspace({ body: { name: workspaceName }, workspaceId });
+    async ({ workspaceName, workspaceDescription }: SubmitEditWorkspaceNameTypes) => {
+      await handleUpdateWorkspace({ body: { name: workspaceName, description: workspaceDescription }, workspaceId });
     },
     [handleUpdateWorkspace, workspaceId],
   );

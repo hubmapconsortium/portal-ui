@@ -27,7 +27,7 @@ function WorkspaceField<FormType extends FieldValues>({
     defaultValue: value,
   });
 
-  const [charCount, setCharCount] = useState(value ?? 0);
+  const [charCount, setCharCount] = useState((field?.value as string)?.length ?? 0);
 
   return (
     <Box display="flex" flexDirection="column">
