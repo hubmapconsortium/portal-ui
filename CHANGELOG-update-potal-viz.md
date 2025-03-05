@@ -1,0 +1,1 @@
+- Update portal-viz version to address the scaling issue for EPIC segmentation masks.
