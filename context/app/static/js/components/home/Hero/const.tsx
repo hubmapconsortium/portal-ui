@@ -14,8 +14,15 @@ const timelineIconProps = {
   width: '1.5rem',
 } as const;
 
-const SNARE_SEQ2_LINK =
-  '/search/datasets?N4IgzgpghgTgxgCxALhCANOA9jALgMQEsIAbAExVADNjyUQAHAVwCMTCwEIyB9XQgLYQwuKAIYYQZQjAhx+WAHb0ywuJMhwlZWAE8ipCsmq0jIAVAYNuPEVFxMwk6bPmElKtSAC+3zDRJcCBgnYxAYKAB3Hh1RSFw+XWtKEAA3KBImYRSAZQA5AEEAJQBRAFpIAEcAJhQAbRB84vKq2swm0oqIGoACOpyMgSUegGoegvgEItGegFkmJQBdEEW-EFwkiHoACQBJEqLigGE9o4KAGR9fIA';
+const SNARE_SEQ2_LINK = buildSearchLink({
+  entity_type: 'Dataset',
+  filters: {
+    raw_dataset_type: {
+      type: 'HIERARCHICAL',
+      values: { 'SNARE-seq2': ['SNARE-seq2', 'SNARE-seq2 [Salmon + ArchR + Muon]'] },
+    },
+  },
+});
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   {
@@ -49,7 +56,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     titleHref: SNARE_SEQ2_LINK,
     description: (
       <>
-        Explore and download <InternalLink href="SNARE_SEQ2_LINK">SNARE-seq2</InternalLink> datasets.
+        Explore and download <InternalLink href={SNARE_SEQ2_LINK}>SNARE-seq2</InternalLink> datasets.
       </>
     ),
     date: 'February 2025',
