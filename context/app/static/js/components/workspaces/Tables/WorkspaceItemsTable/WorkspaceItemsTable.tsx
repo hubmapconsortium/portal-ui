@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { format } from 'date-fns/format';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
@@ -73,19 +73,22 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
   const isSender = isInvitation(item) && item.original_workspace_id.user_id.email === userEmail;
   const isAccepted = getFieldValue({ item, field: 'is_accepted' });
 
-  const options = [
-    {
-      children: `${isSender ? 'Delete' : 'Decline'} Invitation`,
-      onClick: () => {
-        const dialogType = isSender ? 'DELETE_INVITATION' : 'DECLINE_INVITATION';
-        if (isInvitation(item)) {
-          setInvitation(item);
-          setDialogType(dialogType);
-        }
+  const options = useMemo(
+    () => [
+      {
+        children: `${isSender ? 'Delete' : 'Decline'} Invitation`,
+        onClick: () => {
+          const dialogType = isSender ? 'DELETE_INVITATION' : 'DECLINE_INVITATION';
+          if (isInvitation(item)) {
+            setInvitation(item);
+            setDialogType(dialogType);
+          }
+        },
+        icon: CloseFilledIcon,
       },
-      icon: CloseFilledIcon,
-    },
-  ];
+    ],
+    [isSender, item, setDialogType, setInvitation],
+  );
 
   const onAcceptInvite = useEventCallback(() => {
     if (isInvitation(item)) {

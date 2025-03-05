@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
+import Chip from '@mui/material/Chip';
+import { useEventCallback } from '@mui/material/utils';
+
 import { WorkspaceUser } from 'js/components/workspaces/types';
-import { Chip, useEventCallback } from '@mui/material';
 import { useWorkspaceUsers } from 'js/components/workspaces/api';
 import MultiAutocomplete from 'js/shared-styles/inputs/MultiAutocomplete';
 
@@ -51,7 +53,7 @@ function UsersAutocomplete({
         tagComponent={TagComponent}
         onChange={handleChange}
         inputValue={inputValue}
-        onInputChange={(event, newInputValue) => {
+        onInputChange={(_, newInputValue) => {
           setInputValue(newInputValue);
         }}
         filterOptions={(x) => x}
@@ -60,7 +62,6 @@ function UsersAutocomplete({
           label: 'Share With',
           helperText:
             'Search for recipients by first name, last name, or email address. Only users with the necessary workspace permissions will appear in the results.',
-          sx: { color: 'red' },
         }}
         renderOption={UserOption}
         getOptionLabel={(option) => option.username}

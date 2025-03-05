@@ -14,13 +14,13 @@ import Typography from '@mui/material/Typography';
 import { useEventCallback } from '@mui/material/utils';
 
 import { SelectedItems } from 'js/hooks/useSelectItems';
-import { generateCommaList } from 'js/helpers/functions';
 import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/hooks';
 import { StepDescription } from 'js/shared-styles/surfaces/Step';
 import UsersAutocomplete from 'js/components/workspaces/UsersAutocomplete';
 import { WorkspaceUser } from 'js/components/workspaces/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { getSelectedWorkspaceNames } from 'js/components/workspaces/utils';
 
 interface ShareWorkspacesDialogProps {
   handleClose: () => void;
@@ -33,24 +33,19 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
 
   const [selectedUsers, setSelectedUsers] = useState<WorkspaceUser[]>([]);
 
-  const selectedWorkspaceNames = Array.from(selectedWorkspaceIds).map((id) => {
-    const workspace = workspacesList.find((w) => w.id === Number(id));
-    return workspace ? workspace.name : '';
-  });
-
-  const selectedWorkspaceNamesList = generateCommaList(selectedWorkspaceNames);
+  const selectedWorkspaceNames = getSelectedWorkspaceNames({ selectedWorkspaceIds, workspacesList });
 
   const handleShareAndClose = useEventCallback(() => {
     const workspaceIds = [...selectedWorkspaceIds];
-    const userIds = selectedUsers.map((user) => user.id);
+    const userIds = [...selectedUsers].map((user) => user.id);
 
     handleShareInvitations({ workspaceIds, userIds })
       .then(() => {
-        toastSuccessShareInvitation(selectedWorkspaceNamesList);
+        toastSuccessShareInvitation(selectedWorkspaceNames);
       })
       .catch((e) => {
         console.error(e);
-        toastErrorShareInvitation(selectedWorkspaceNamesList);
+        toastErrorShareInvitation(selectedWorkspaceNames);
       });
 
     handleClose();
@@ -59,12 +54,12 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
   const description = useMemo(
     () => [
       <Typography key={0}>
-        {`Select recipients to share a copy of the selected workspaces: ${selectedWorkspaceNamesList}. Only users with the necessary workspace permissions will appear in the list. If someone lacks these permissions, they must contact the `}
+        {`Select recipients to share a copy of the selected workspaces: ${selectedWorkspaceNames}. Only users with the necessary workspace permissions will appear in the list. If someone lacks these permissions, they must contact the `}
         <ContactUsLink>HuBMAP help desk</ContactUsLink> for assistance.
       </Typography>,
       'You can search for recipients by first name, last name, or email address. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at it exists at the time of sharing. When sharing multiple workspaces or sharing to multiple recipients, each invitation is sent separately.',
     ],
-    [selectedWorkspaceNamesList],
+    [selectedWorkspaceNames],
   );
 
   return (

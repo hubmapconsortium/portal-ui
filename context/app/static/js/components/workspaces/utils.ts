@@ -1,4 +1,6 @@
 import { get } from 'js/helpers/nodash';
+import { generateCommaList } from 'js/helpers/functions';
+import { SelectedItems } from 'js/hooks/useSelectItems';
 import type { WorkspaceItem } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import {
   DEFAULT_GPU_ENABLED,
@@ -416,6 +418,21 @@ function isWorkspace(item: WorkspaceItem): item is WorkspaceWithUserId {
   return 'id' in item;
 }
 
+function getSelectedWorkspaceNames({
+  selectedWorkspaceIds,
+  workspacesList,
+}: {
+  selectedWorkspaceIds: SelectedItems;
+  workspacesList: MergedWorkspace[];
+}) {
+  return generateCommaList(
+    Array.from(selectedWorkspaceIds).map((id) => {
+      const workspace = workspacesList.find((w) => w.id === Number(id));
+      return workspace ? workspace.name : '';
+    }),
+  );
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -440,4 +457,5 @@ export {
   getFieldValue,
   isInvitation,
   isWorkspace,
+  getSelectedWorkspaceNames,
 };

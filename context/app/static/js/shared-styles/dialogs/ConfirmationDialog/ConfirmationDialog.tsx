@@ -11,19 +11,19 @@ import Divider from '@mui/material/Divider';
 import IconButton from '@mui/material/IconButton';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 
-interface ConfirmDeclineInvitationDialogProps extends PropsWithChildren {
+interface ConfirmationDialogProps extends PropsWithChildren {
   handleClose: () => void;
   handleConfirmAndClose: () => void;
   title: string;
   buttonTitle: string;
 }
-export default function ConfirmDeclineInvitationDialog({
+export default function ConfirmationDialog({
   handleClose,
   handleConfirmAndClose,
   title,
   buttonTitle = 'Confirm',
   children,
-}: ConfirmDeclineInvitationDialogProps) {
+}: ConfirmationDialogProps) {
   return (
     <Dialog open onClose={handleClose} scroll="paper" aria-labelledby={`${title}-dialog`} maxWidth="md">
       <Stack display="flex" flexDirection="row" justifyContent="space-between" marginRight={1}>

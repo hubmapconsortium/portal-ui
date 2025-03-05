@@ -2,10 +2,10 @@ import React from 'react';
 import { useEventCallback } from '@mui/material/utils';
 
 import { SelectedItems } from 'js/hooks/useSelectItems';
-import { generateCommaList } from 'js/helpers/functions';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
+import { getSelectedWorkspaceNames } from 'js/components/workspaces/utils';
 
 interface ConfirmDeleteWorkspacesDialogProps {
   handleClose: () => void;
@@ -18,23 +18,18 @@ export default function ConfirmDeleteWorkspacesDialog({
   const { toastErrorDeleteWorkspaces, toastSuccessDeleteWorkspaces } = useWorkspaceToasts();
   const { workspacesList, handleDeleteWorkspace } = useWorkspacesList();
 
-  const selectedWorkspaceNames = Array.from(selectedWorkspaceIds).map((id) => {
-    const workspace = workspacesList.find((w) => w.id === Number(id));
-    return workspace ? workspace.name : '';
-  });
-
-  const selectedWorkspaceNamesList = generateCommaList(selectedWorkspaceNames);
+  const selectedWorkspaceNames = getSelectedWorkspaceNames({ selectedWorkspaceIds, workspacesList });
 
   const handleDeleteAndClose = useEventCallback(() => {
     const workspaceIds = [...selectedWorkspaceIds];
 
     Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId))))
       .then(() => {
-        toastSuccessDeleteWorkspaces(selectedWorkspaceNamesList);
+        toastSuccessDeleteWorkspaces(selectedWorkspaceNames);
         selectedWorkspaceIds.clear();
       })
       .catch((e) => {
-        toastErrorDeleteWorkspaces(selectedWorkspaceNamesList);
+        toastErrorDeleteWorkspaces(selectedWorkspaceNames);
         console.error(e);
       });
 
@@ -48,7 +43,7 @@ export default function ConfirmDeleteWorkspacesDialog({
       handleConfirmAndClose={handleDeleteAndClose}
       buttonTitle="Delete"
     >
-      You have selected to delete {selectedWorkspaceNamesList}. You cannot undo this action.
+      You have selected to delete {selectedWorkspaceNames}. You cannot undo this action.
     </ConfirmationDialog>
   );
 }

@@ -14,11 +14,16 @@ export default function ConfirmDeclineInvitationDialog() {
     return null;
   }
 
-  const handleDeleteAndClose = () => {
-    const {
-      shared_workspace_id: { id, name },
-    } = invitation;
+  const {
+    shared_workspace_id: { id, name },
+  } = invitation;
+  const {
+    original_workspace_id: {
+      user_id: { first_name, last_name },
+    },
+  } = invitation;
 
+  const handleDeleteAndClose = () => {
     handleDeleteInvitation(id)
       .then(() => {
         toastSuccessDeclineInvitation(name);
@@ -29,15 +34,6 @@ export default function ConfirmDeclineInvitationDialog() {
       });
     reset();
   };
-
-  const {
-    shared_workspace_id: { name },
-  } = invitation;
-  const {
-    original_workspace_id: {
-      user_id: { first_name, last_name },
-    },
-  } = invitation;
 
   return (
     <ConfirmationDialog

@@ -16,7 +16,7 @@ function useWorkspaceItemsTable<T extends WorkspaceItem>({
   toggleItem,
 }: WorkspaceItemsTableProps<T>) {
   const [sortField, setSortField] = useState<SortField>(initialSortField);
-  const [numVisibleItems, setNumVisibleItems] = useState(showSeeMoreOption ? 3 : items.length);
+  const [numVisibleItems, setNumVisibleItems] = useState(3);
 
   useEffect(() => {
     setNumVisibleItems(showSeeMoreOption ? 3 : items.length);
