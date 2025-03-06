@@ -1,3 +1,3 @@
-import WorkspaceButton from './WorkspaceButton';
+import { WorkspaceButton, WorkspaceTooltipButton } from './WorkspaceButton';
 
-export default WorkspaceButton;
+export { WorkspaceButton, WorkspaceTooltipButton };

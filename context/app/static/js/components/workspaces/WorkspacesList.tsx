@@ -7,12 +7,12 @@ import ShareIcon from '@mui/icons-material/Share';
 import debounce from '@mui/material/utils/debounce';
 
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 import WorkspacesTable from 'js/components/workspaces/Tables/WorkspacesTable';
 import WorkspacesAutocomplete from 'js/components/workspaces/WorkspacesAutocomplete';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { WorkspaceTooltipButton } from 'js/components/workspaces/WorkspaceButton/WorkspaceButton';
 import { useWorkspacesListWithSharerInfo } from './hooks';
 
 function WorkspacesList() {
@@ -52,20 +52,20 @@ function WorkspacesList() {
             filteredWorkspaces={filteredWorkspaces}
           />
           <Stack display="flex" direction="row" spacing={2}>
-            <WorkspaceButton
+            <WorkspaceTooltipButton
               onClick={() => setDialogType('DELETE_WORKSPACE')}
               disabled={disabled}
               tooltip={deleteTooltip}
             >
               <DeleteRounded />
-            </WorkspaceButton>
-            <WorkspaceButton
+            </WorkspaceTooltipButton>
+            <WorkspaceTooltipButton
               onClick={() => setDialogType('SHARE_WORKSPACE')}
               disabled={disabled}
               tooltip={shareTooltip}
             >
               <ShareIcon />
-            </WorkspaceButton>
+            </WorkspaceTooltipButton>
             <NewWorkspaceDialogFromWorkspaceList />
           </Stack>
         </Stack>

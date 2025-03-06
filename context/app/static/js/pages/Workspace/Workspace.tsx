@@ -3,8 +3,8 @@ import { format } from 'date-fns/format';
 
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import ShareIcon from '@mui/icons-material/Share';
 import Button, { ButtonProps } from '@mui/material/Button';
-import Box from '@mui/material/Box';
 
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
@@ -22,6 +22,9 @@ import { buildSearchLink } from 'js/components/search/store';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import { DetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { StyledSvgIcon } from 'js/components/workspaces/style';
+import { WorkspaceButton } from 'js/components/workspaces/WorkspaceButton';
 
 const tooltips = {
   name: 'Edit workspace name or description.',
@@ -64,6 +67,7 @@ function SummaryTitle({
   handleStopWorkspace: (id: number) => Promise<void>;
   isStoppingWorkspace: boolean;
 }) {
+  const { setDialogType } = useEditWorkspaceStore();
   const { name, jobs } = workspace;
   const job = condenseJobs(jobs);
 
@@ -86,6 +90,12 @@ function SummaryTitle({
           >
             <EditIcon />
           </WorkspacesUpdateButton>
+          <WorkspaceButton
+            onClick={() => setDialogType('SHARE_WORKSPACE')}
+            startIcon={<StyledSvgIcon as={ShareIcon} />}
+          >
+            Share
+          </WorkspaceButton>
           <WorkspaceLaunchStopButtons
             workspace={workspace}
             button={LaunchStopButton}
@@ -133,14 +143,14 @@ function Summary({
 }) {
   return (
     <DetailPageSection id="summary">
-      <Box>
+      <Stack spacing={1}>
         <SummaryTitle
           workspace={workspace}
           handleStopWorkspace={handleStopWorkspace}
           isStoppingWorkspace={isStoppingWorkspace}
         />
         <SummaryBody workspace={workspace} />
-      </Box>
+      </Stack>
     </DetailPageSection>
   );
 }
