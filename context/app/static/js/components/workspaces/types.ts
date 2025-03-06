@@ -28,6 +28,8 @@ export interface Workspace {
   disk_space: number;
   default_job_type?: string;
   datetime_created: string;
+  datetime_last_modified?: string;
+  datetime_last_job_launch?: string;
   workspace_details: WorkspaceDetails;
 }
 

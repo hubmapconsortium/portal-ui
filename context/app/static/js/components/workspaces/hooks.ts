@@ -276,6 +276,24 @@ function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
   };
 }
 
+function useInvitationWorkspaceDetails({ workspaceId }: { workspaceId: number }) {
+  const { workspace, ...rest } = useWorkspaceDetail({ workspaceId });
+  const { sentInvitations, receivedInvitations } = useInvitationsList();
+
+  const creatorInfo = receivedInvitations.find((invitation) => invitation.shared_workspace_id.id === workspaceId)
+    ?.original_workspace_id.user_id;
+  const workspaceSentInvitations = sentInvitations.filter(
+    (invitation) => invitation.original_workspace_id.id === workspaceId,
+  );
+
+  return {
+    workspace,
+    creatorInfo,
+    workspaceSentInvitations,
+    ...rest,
+  };
+}
+
 function useRunningWorkspace() {
   const { workspacesList } = useWorkspacesList();
   return workspacesList.find((workspace) =>
@@ -510,6 +528,7 @@ export {
   useRunningWorkspace,
   useLaunchWorkspace,
   useWorkspaceDetail,
+  useInvitationWorkspaceDetails,
   useSessionWarning,
   useRefreshSession,
   useHandleUpdateWorkspace,

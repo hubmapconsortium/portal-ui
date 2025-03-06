@@ -11,13 +11,13 @@ import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { condenseJobs } from 'js/components/workspaces/utils';
 import JobStatus from 'js/components/workspaces/JobStatus';
-import { useWorkspaceDetail } from 'js/components/workspaces/hooks';
+import { useInvitationWorkspaceDetails } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
-import { EditIcon } from 'js/shared-styles/icons';
+import { EditIcon, EmailIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
-import { MergedWorkspace, WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { MergedWorkspace, WorkspaceUser, WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { buildSearchLink } from 'js/components/search/store';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
@@ -25,9 +25,12 @@ import { DetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { StyledSvgIcon } from 'js/components/workspaces/style';
 import { WorkspaceButton } from 'js/components/workspaces/WorkspaceButton';
+import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
 
 const tooltips = {
-  name: 'Edit workspace name or description.',
+  update: 'Edit workspace name or description.',
+  lastLaunched: 'Date of the last launched session.',
+  lastModified: 'Date of the last modification to the content of the workspace.',
   templates: 'Add templates to this workspace.',
   currentTemplates: 'Templates that are currently in this workspace.',
 };
@@ -81,7 +84,7 @@ function SummaryTitle({
           <WorkspacesUpdateButton
             workspace={workspace}
             dialogType="UPDATE_NAME"
-            tooltip={tooltips.name}
+            tooltip={tooltips.update}
             trackingInfo={{
               category: WorkspacesEventCategories.WorkspaceDetailPage,
               action: 'Launch Edit Workspace Dialog',
@@ -116,16 +119,44 @@ function SummaryTitle({
   );
 }
 
-function SummaryBody({ workspace }: { workspace: MergedWorkspace }) {
-  const { datetime_created, description } = workspace;
+function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; creatorInfo?: WorkspaceUser }) {
+  const { description, datetime_created, datetime_last_job_launch, datetime_last_modified } = workspace;
 
   return (
     <SectionPaper>
       <Stack spacing={2}>
         <LabelledSectionText label="Description">{description}</LabelledSectionText>
-        <LabelledSectionText label="Creation Date">
-          {format(new Date(datetime_created), 'yyyy-MM-dd')}
+        <LabelledSectionText label="Created By">
+          {creatorInfo ? (
+            <Stack direction="row" alignItems="center">
+              <Typography>{`${creatorInfo.first_name} ${creatorInfo.last_name} | ${creatorInfo.email}`}</Typography>
+              <TooltipButton
+                href={`mailto:${creatorInfo.email}`}
+                sx={{ minWidth: 0 }}
+                tooltip={`Mail to ${creatorInfo.email}`}
+              >
+                <EmailIcon color="info" />
+              </TooltipButton>
+            </Stack>
+          ) : (
+            'Me'
+          )}
         </LabelledSectionText>
+        <Stack spacing={15} direction="row">
+          <LabelledSectionText label="Creation Date">
+            {format(new Date(datetime_created), 'yyyy-MM-dd')}
+          </LabelledSectionText>
+          {datetime_last_job_launch && (
+            <LabelledSectionText label="Last Launched" iconTooltipText={tooltips.lastLaunched}>
+              {format(new Date(datetime_last_job_launch), 'yyyy-MM-dd')}
+            </LabelledSectionText>
+          )}
+          {datetime_last_modified && (
+            <LabelledSectionText label="Last Modified" iconTooltipText={tooltips.lastModified}>
+              {format(new Date(datetime_last_modified), 'yyyy-MM-dd')}
+            </LabelledSectionText>
+          )}
+        </Stack>
         <RelevantPagesSection pages={pages} />
       </Stack>
     </SectionPaper>
@@ -134,10 +165,12 @@ function SummaryBody({ workspace }: { workspace: MergedWorkspace }) {
 
 function Summary({
   workspace,
+  creatorInfo,
   handleStopWorkspace,
   isStoppingWorkspace,
 }: {
   workspace: MergedWorkspace;
+  creatorInfo?: WorkspaceUser;
   handleStopWorkspace: (id: number) => Promise<void>;
   isStoppingWorkspace: boolean;
 }) {
@@ -149,14 +182,16 @@ function Summary({
           handleStopWorkspace={handleStopWorkspace}
           isStoppingWorkspace={isStoppingWorkspace}
         />
-        <SummaryBody workspace={workspace} />
+        <SummaryBody workspace={workspace} creatorInfo={creatorInfo} />
       </Stack>
     </DetailPageSection>
   );
 }
 
 function WorkspacePage({ workspaceId }: WorkspacePageProps) {
-  const { workspace, isLoading, handleStopWorkspace, isStoppingWorkspace } = useWorkspaceDetail({ workspaceId });
+  const { workspace, creatorInfo, isLoading, handleStopWorkspace, isStoppingWorkspace } = useInvitationWorkspaceDetails(
+    { workspaceId },
+  );
 
   if (isLoading || Object.keys(workspace).length === 0) {
     return null;
@@ -177,6 +212,7 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
           <WorkspaceSessionWarning workspaces={[workspace]} />
           <Summary
             workspace={workspace}
+            creatorInfo={creatorInfo}
             handleStopWorkspace={handleStopWorkspace}
             isStoppingWorkspace={isStoppingWorkspace}
           />
