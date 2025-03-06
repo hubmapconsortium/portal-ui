@@ -14,8 +14,10 @@ import {
   ProcessedDataIcon,
   ProvenanceIcon,
   SampleIcon,
+  SentIcon,
   SummaryIcon,
   VisualizationIcon,
+  WorkspacesIcon,
 } from './icons';
 import { externalIconMap } from './externalImageIcons';
 
@@ -46,6 +48,8 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   assays: DatasetIcon,
   samples: SampleIcon,
   'cell-population-plot': CellTypeIcon,
+  'sent-invitations-status': SentIcon,
+  templates: WorkspacesIcon,
 } as const;
 
 export const sectionImageIconMap: Record<string, keyof typeof externalIconMap> = {
