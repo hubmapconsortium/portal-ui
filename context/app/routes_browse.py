@@ -133,7 +133,12 @@ def details_vitessce(type, uuid):
         epic_uuid=epic_uuid,
     ).vitessce_conf
     # Returns a JSON null if there is no visualization.
-    response = jsonify(vitessce_conf.conf)
+    extracted_conf = None
+    if len(vitessce_conf) == 1:
+        extracted_conf = vitessce_conf[0].conf
+    else:
+        extracted_conf = vitessce_conf.conf
+    response = jsonify(extracted_conf)
     response.headers.add("Access-Control-Allow-Origin", "*")
     return response
 
