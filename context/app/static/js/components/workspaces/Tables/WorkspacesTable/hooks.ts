@@ -3,42 +3,52 @@ import { WorkspaceWithUserId } from 'js/components/workspaces/types';
 import { TableFilter } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 
 function useWorkspacesTable(workspacesList: WorkspaceWithUserId[]) {
-  const { ownCount, sharedCount } = useMemo(() => {
-    const own = workspacesList.filter((workspace) => !workspace.user_id).length;
-    return { ownCount: own, sharedCount: workspacesList.length - own };
+  const { ownWorkspaces, sharedWorkspaces } = useMemo(() => {
+    const own = workspacesList.filter((workspace) => {
+      return !workspace.user_id;
+    });
+    const shared = workspacesList.filter((workspace) => {
+      return !!workspace.user_id;
+    });
+    return { ownWorkspaces: own, sharedWorkspaces: shared };
   }, [workspacesList]);
 
   const [showOwn, setShowOwn] = useState(true);
   const [showShared, setShowShared] = useState(true);
 
   useEffect(() => {
-    setShowShared(sharedCount > 0);
-  }, [sharedCount]);
+    setShowShared(sharedWorkspaces.length > 0);
+  }, [sharedWorkspaces.length]);
 
-  const filteredWorkspaces = useMemo(
-    () =>
-      [...workspacesList].filter((workspace) => {
-        return (showOwn && !workspace.user_id) || (showShared && !!workspace.user_id);
-      }),
-    [workspacesList, showOwn, showShared],
-  );
+  const filteredWorkspaces = useMemo(() => {
+    if (showOwn && showShared) {
+      return workspacesList;
+    }
+    if (showOwn) {
+      return ownWorkspaces;
+    }
+    if (showShared) {
+      return sharedWorkspaces;
+    }
+    return [];
+  }, [ownWorkspaces, sharedWorkspaces, showOwn, showShared, workspacesList]);
 
   const filters: TableFilter[] = useMemo(
     () => [
       {
-        label: `Created by Me (${ownCount})`,
+        label: `Created by Me (${ownWorkspaces.length})`,
         setShow: setShowOwn,
         show: showOwn,
-        disabled: !ownCount,
+        disabled: !ownWorkspaces.length,
       },
       {
-        label: `Created by Other (${sharedCount})`,
+        label: `Created by Other (${sharedWorkspaces.length})`,
         setShow: setShowShared,
         show: showShared,
-        disabled: !sharedCount,
+        disabled: !sharedWorkspaces.length,
       },
     ],
-    [ownCount, sharedCount, showOwn, showShared],
+    [ownWorkspaces.length, sharedWorkspaces.length, showOwn, showShared],
   );
 
   return {

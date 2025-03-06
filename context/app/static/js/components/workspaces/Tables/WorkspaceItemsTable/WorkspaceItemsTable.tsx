@@ -377,7 +377,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
     setSortField,
     numVisibleItems,
     setNumVisibleItems,
-    onToggleCheckboxHeader,
+    onToggleAllItems,
   } = useWorkspaceItemsTable<T>(props);
 
   if (!isLoading && noFiltersSelected) {
@@ -393,7 +393,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
               <ItemCheckbox
                 showCheckbox={!!selectedItemIds}
                 checked={selectedItemIds?.size === items.length}
-                onChange={onToggleCheckboxHeader}
+                onChange={onToggleAllItems}
               />
               <StyledTableCell width="0" />
               <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />

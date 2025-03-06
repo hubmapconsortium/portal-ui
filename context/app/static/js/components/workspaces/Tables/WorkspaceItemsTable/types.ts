@@ -28,6 +28,7 @@ export interface WorkspaceItemsTableProps<T extends WorkspaceItem> {
   tableFields: TableField[];
   initialSortField: SortField;
   toggleItem?: (itemId: string) => void;
+  toggleAllItems?: (itemIds: string[]) => void;
   selectedItemIds?: Set<string>;
   showSeeMoreOption?: boolean;
 }

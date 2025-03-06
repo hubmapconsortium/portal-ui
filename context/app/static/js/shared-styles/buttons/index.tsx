@@ -44,7 +44,6 @@ const RotatedTooltipButton = styled(IconDropdownMenuButton)(({ theme }) => ({
   transform: 'rotate(90deg)',
   fontSize: '1.5rem',
   border: 'none',
-  sx: { border: 0 },
   '& svg': svgStyles,
 }));
 

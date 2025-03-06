@@ -1,19 +1,18 @@
 import { useMemo, useState } from 'react';
-import useEventCallback from '@mui/material/utils/useEventCallback';
 import {
   SortField,
   WorkspaceItem,
   WorkspaceItemsTableProps,
 } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
-import { getFieldValue } from 'js/components/workspaces/utils';
+import { getFieldValue, isWorkspace } from 'js/components/workspaces/utils';
+import { useEventCallback } from '@mui/material';
 
 function useWorkspaceItemsTable<T extends WorkspaceItem>({
   items,
   initialSortField,
   showSeeMoreOption,
   filters,
-  selectedItemIds,
-  toggleItem,
+  toggleAllItems,
 }: WorkspaceItemsTableProps<T>) {
   const [sortField, setSortField] = useState<SortField>(initialSortField);
   const [numVisibleItems, setNumVisibleItems] = useState(showSeeMoreOption ? 3 : items.length);
@@ -33,29 +32,21 @@ function useWorkspaceItemsTable<T extends WorkspaceItem>({
     [items, sortField],
   );
 
-  const onToggleCheckboxHeader = useEventCallback(() => {
-    if (!selectedItemIds || !toggleItem) {
-      return;
-    }
-
-    items.forEach((item) => {
-      const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
-      if (selectedItemIds.size === items.length) {
-        toggleItem(itemId);
-      } else if (!selectedItemIds.has(itemId)) {
-        toggleItem(itemId);
-      }
-    });
+  const onToggleAllItems = useEventCallback(() => {
+    const itemIds = items.map((item) =>
+      isWorkspace(item) ? item.id.toString() : item.original_workspace_id.id.toString(),
+    );
+    toggleAllItems?.(itemIds);
   });
 
   return {
     numVisibleItems,
     setNumVisibleItems,
     noFiltersSelected,
-    onToggleCheckboxHeader,
     sortedItems,
     sortField,
     setSortField,
+    onToggleAllItems,
   };
 }
 

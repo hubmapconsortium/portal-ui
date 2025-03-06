@@ -3,27 +3,35 @@ import { InvitationType, WorkspaceInvitation } from 'js/components/workspaces/ty
 import { TableField, TableFilter } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 
 function useInvitationsTable({ invitations, status }: { invitations: WorkspaceInvitation[]; status: InvitationType }) {
-  const { pendingCount, acceptedCount } = useMemo(() => {
-    const pending = invitations.filter((inv) => !inv.is_accepted).length;
-    return { pendingCount: pending, acceptedCount: invitations.length - pending };
+  const { pendingInvites, acceptedInvites } = useMemo(() => {
+    const pending = invitations.filter((invite) => {
+      return !invite.is_accepted;
+    });
+    const accepted = invitations.filter((invite) => {
+      return !!invite.is_accepted;
+    });
+    return { pendingInvites: pending, acceptedInvites: accepted };
   }, [invitations]);
 
   const [showPending, setShowPending] = useState(false);
   const [showAccepted, setShowAccepted] = useState(false);
 
   useEffect(() => {
-    setShowPending(pendingCount > 0);
-  }, [pendingCount]);
+    setShowPending(pendingInvites.length > 0);
+  }, [pendingInvites.length]);
 
-  const filteredInvitations = useMemo(
-    () =>
-      [...invitations].filter((invitation) => {
-        if (showPending && !invitation.is_accepted) return true;
-        if (showAccepted && invitation.is_accepted) return true;
-        return false;
-      }),
-    [invitations, showPending, showAccepted],
-  );
+  const filteredInvitations = useMemo(() => {
+    if (showPending && showAccepted) {
+      return invitations;
+    }
+    if (showPending) {
+      return pendingInvites;
+    }
+    if (showAccepted) {
+      return acceptedInvites;
+    }
+    return [];
+  }, [showPending, showAccepted, pendingInvites, acceptedInvites, invitations]);
 
   const tableFields: TableField[] = useMemo(
     () => [
@@ -47,19 +55,19 @@ function useInvitationsTable({ invitations, status }: { invitations: WorkspaceIn
   const filters: TableFilter[] = useMemo(
     () => [
       {
-        label: `Show Pending (${pendingCount})`,
+        label: `Show Pending (${pendingInvites.length})`,
         setShow: setShowPending,
         show: showPending,
-        disabled: !pendingCount,
+        disabled: !pendingInvites.length,
       },
       {
-        label: `Show Accepted (${acceptedCount})`,
+        label: `Show Accepted (${acceptedInvites.length})`,
         setShow: setShowAccepted,
         show: showAccepted,
-        disabled: !acceptedCount,
+        disabled: !acceptedInvites.length,
       },
     ],
-    [acceptedCount, pendingCount, showAccepted, showPending],
+    [acceptedInvites.length, pendingInvites.length, showAccepted, showPending],
   );
 
   return {

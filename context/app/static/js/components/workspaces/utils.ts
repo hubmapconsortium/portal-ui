@@ -395,7 +395,7 @@ function getFieldPrefix(field: string) {
  * @param prefix The prefix to use if the field is a workspace invitation.
  * @returns The value of the field.
  */
-function getFieldValue({ item, field, prefix }: { item: WorkspaceItem; field: string; prefix?: string }) {
+function getFieldValue({ item, field, prefix = '' }: { item: WorkspaceItem; field: string; prefix?: string }) {
   // datetime_last_job_launch starts as null, so we fall back to datetime_created if the workspace has never been launched
   if (field === 'datetime_last_job_launch') {
     const launchDate = get(item, field, '');
@@ -404,8 +404,7 @@ function getFieldValue({ item, field, prefix }: { item: WorkspaceItem; field: st
     return launchDate || createdDate;
   }
 
-  const fieldWithPrefix = prefix ? `${prefix}${field}` : field;
-  return get(item, fieldWithPrefix, '');
+  return get(item, `${prefix}${field}`, '');
 }
 
 function isInvitation(item: WorkspaceItem): item is WorkspaceInvitation {
