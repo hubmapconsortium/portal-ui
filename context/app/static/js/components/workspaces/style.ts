@@ -6,6 +6,7 @@ import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import TextField from '@mui/material/TextField';
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import Button from '@mui/material/Button';
+import SvgIcon from '@mui/material/SvgIcon';
 
 const StyledButton = styled(WhiteBackgroundIconButton)(({ theme }) => ({
   height: theme.spacing(4.5),
@@ -54,6 +55,12 @@ const StyledLaunchButton = styled(Button)(({ theme }) => ({
   padding: theme.spacing(1, 3),
 }));
 
+const StyledSvgIcon = styled(SvgIcon)(({ theme }) => ({
+  width: '1rem',
+  // Weirdly specific to visually align with the launch button text
+  marginBottom: theme.spacing(0.16),
+}));
+
 export {
   StyledButton,
   LinkButton,
@@ -64,4 +71,5 @@ export {
   StyledTextField,
   StyledSearchIcon,
   StyledLaunchButton,
+  StyledSvgIcon,
 };

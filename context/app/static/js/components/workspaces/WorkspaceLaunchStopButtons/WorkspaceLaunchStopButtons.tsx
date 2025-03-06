@@ -10,8 +10,9 @@ import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { MergedWorkspace, WorkspacesEventInfo } from 'js/components/workspaces/types';
 import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
-import { StyledLaunchButton } from 'js/components/workspaces/style';
+import { StyledLaunchButton, StyledSvgIcon } from 'js/components/workspaces/style';
 import { trackEvent } from 'js/helpers/trackers';
+import { StartJobIcon, StopJobIcon } from 'js/shared-styles/icons';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -20,6 +21,7 @@ interface WorkspaceButtonProps {
   isStoppingWorkspace: boolean;
   showLaunch?: boolean;
   showStop?: boolean;
+  showIcons?: boolean;
   trackingInfo?: WorkspacesEventInfo;
 }
 
@@ -28,6 +30,7 @@ function StopWorkspaceButton({
   handleStopWorkspace,
   button: ButtonComponent,
   isStoppingWorkspace,
+  showIcons,
 }: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
   const { toastErrorStopWorkspace } = useWorkspaceToasts();
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
@@ -48,6 +51,7 @@ function StopWorkspaceButton({
           console.error(err);
         });
       }}
+      startIcon={showIcons ? <StyledSvgIcon as={StopJobIcon} /> : undefined}
     >
       Stop
     </ButtonComponent>
@@ -94,7 +98,14 @@ function StopWorkspaceAlert() {
 }
 
 function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const { workspace, button: ButtonComponent, trackingInfo, showLaunch = false, showStop = false } = props;
+  const {
+    workspace,
+    button: ButtonComponent,
+    trackingInfo,
+    showLaunch = false,
+    showStop = false,
+    showIcons = false,
+  } = props;
   const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
 
   if (workspace.status === 'deleting') {
@@ -120,6 +131,7 @@ function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
             }
             launchOrOpenDialog(workspace);
           }}
+          startIcon={showIcons ? <StyledSvgIcon as={StartJobIcon} /> : undefined}
         >
           Launch
         </ButtonComponent>

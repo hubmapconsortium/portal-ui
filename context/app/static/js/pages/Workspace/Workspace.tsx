@@ -24,7 +24,7 @@ import DetailLayout from 'js/components/detailPage/DetailLayout';
 import { DetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
 const tooltips = {
-  name: 'Edit workspace name.',
+  name: 'Edit workspace name or description.',
   templates: 'Add templates to this workspace.',
   currentTemplates: 'Templates that are currently in this workspace.',
 };
@@ -73,13 +73,10 @@ function SummaryTitle({
       entity_type="Workspace"
       entityTypeDisplay={undefined}
       otherButtons={
-        <>
+        <Stack direction="row" alignItems="center" spacing={1}>
           <WorkspacesUpdateButton
             workspace={workspace}
             dialogType="UPDATE_NAME"
-            sx={(theme) => ({
-              marginRight: theme.spacing(1),
-            })}
             tooltip={tooltips.name}
             trackingInfo={{
               category: WorkspacesEventCategories.WorkspaceDetailPage,
@@ -97,8 +94,9 @@ function SummaryTitle({
             trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
             showLaunch
             showStop
+            showIcons
           />
-        </>
+        </Stack>
       }
     >
       <Typography variant="subtitle1" component="p" marginTop={2}>

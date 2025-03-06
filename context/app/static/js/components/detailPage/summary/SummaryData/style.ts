@@ -12,15 +12,8 @@ const StyledTypography = styled(Typography)(({ theme }) => ({
   marginBottom: theme.spacing(0.5),
 }));
 
-const StyledSvgIcon = styled(SvgIcon)(({ theme }) => ({
-  fontSize: '1.25rem',
-  marginRight: theme.spacing(0.5),
-}));
+const StyledSvgIcon = styled(SvgIcon)({
+  fontSize: '1rem',
+});
 
-const SummaryDataHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  marginBottom: theme.spacing(1),
-}));
-
-export { FlexEnd, StyledTypography, StyledSvgIcon, SummaryDataHeader };
+export { FlexEnd, StyledTypography, StyledSvgIcon };
