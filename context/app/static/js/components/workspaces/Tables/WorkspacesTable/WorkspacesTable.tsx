@@ -36,11 +36,13 @@ export default function WorkspacesTable({
   selectedItems,
   isLoading,
   toggleItem,
+  toggleAllItems,
 }: {
   workspacesList: WorkspaceWithUserId[];
   selectedItems: Set<string>;
   isLoading: boolean;
   toggleItem: (item: string) => void;
+  toggleAllItems: (items: string[]) => void;
 }) {
   const { filteredWorkspaces, filters } = useWorkspacesTable(workspacesList);
 
@@ -60,6 +62,7 @@ export default function WorkspacesTable({
         initialSortField={initialSortField}
         selectedItemIds={selectedItems}
         toggleItem={toggleItem}
+        toggleAllItems={toggleAllItems}
       />
     </Stack>
   );

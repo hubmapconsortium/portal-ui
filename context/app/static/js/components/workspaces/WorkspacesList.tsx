@@ -1,9 +1,10 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import DeleteRounded from '@mui/icons-material/DeleteRounded';
 import ShareIcon from '@mui/icons-material/Share';
+import debounce from '@mui/material/utils/debounce';
 
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
@@ -17,17 +18,23 @@ import { useWorkspacesListWithSharerInfo } from './hooks';
 function WorkspacesList() {
   const { workspacesList, isDeleting, isLoading } = useWorkspacesListWithSharerInfo();
   const { setDialogType } = useEditWorkspaceStore();
-  const { selectedItems, toggleItem } = useSelectItems();
+  const { selectedItems, toggleItem, toggleAllItems } = useSelectItems();
   const [inputValue, setInputValue] = useState('');
+  const [debouncedInput, setDebouncedInput] = useState<string>(inputValue);
 
-  // Filter workspaces in list based on search input
+  useEffect(() => {
+    const handler = debounce((value: string) => setDebouncedInput(value), 100);
+    handler(inputValue);
+  }, [inputValue]);
+
   const filteredWorkspaces = useMemo(() => {
-    if (!inputValue.trim()) return workspacesList;
+    if (!debouncedInput.trim()) return workspacesList;
     return workspacesList.filter(
       (ws) =>
-        ws.name.toLowerCase().includes(inputValue.toLowerCase()) || ws.id.toString().includes(inputValue.toLowerCase()),
+        ws.name.toLowerCase().includes(debouncedInput.toLowerCase()) ||
+        ws.id.toString().includes(debouncedInput.toLowerCase()),
     );
-  }, [inputValue, workspacesList]);
+  }, [workspacesList, debouncedInput]);
 
   const disabled = !selectedItems.size || isDeleting;
   const shareTooltip = disabled ? 'Select workspace to share a copy.' : 'Share copies of the selected workspaces.';
@@ -66,6 +73,7 @@ function WorkspacesList() {
           workspacesList={filteredWorkspaces}
           selectedItems={selectedItems}
           toggleItem={toggleItem}
+          toggleAllItems={toggleAllItems}
           isLoading={isLoading}
         />
       </Stack>
