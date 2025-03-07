@@ -26,7 +26,7 @@ hubmap-commons>=2.1.18
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.3.9.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.1.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
