@@ -28,6 +28,7 @@ const Organs = lazy(() => import('js/pages/Organs'));
 const Organ = lazy(() => import('js/pages/Organ'));
 const Workspaces = lazy(() => import('js/pages/Workspaces'));
 const Workspace = lazy(() => import('js/pages/Workspace'));
+const Invitation = lazy(() => import('js/pages/Invitation'));
 const WorkspacePleaseWait = lazy(() => import('js/pages/WorkspacePleaseWait'));
 const Templates = lazy(() => import('js/pages/Templates'));
 const Template = lazy(() => import('js/pages/Template'));
@@ -233,6 +234,15 @@ function Routes({ flaskData }) {
     return (
       <Route>
         <Workspace workspaceId={workspaceId} />
+      </Route>
+    );
+  }
+
+  if (urlPath.startsWith('/invitations/')) {
+    const invitationId = parseInt(urlPath.split('/').pop(), 10);
+    return (
+      <Route>
+        <Invitation invitationId={invitationId} />
       </Route>
     );
   }

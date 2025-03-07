@@ -226,14 +226,15 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
 
   switch (field) {
     case `${prefix}name`: {
-      const workspaceId = getFieldValue({ item, field: 'id', prefix });
+      const itemId = getFieldValue({ item, field: 'id', prefix });
+      const href = isWorkspace(item) ? `/workspaces/${itemId}` : `/invitations/${itemId}`;
 
       return (
         <Stack direction="row" spacing={1} alignItems="center">
-          <InternalLink href={`/workspaces/${workspaceId}`}>
+          <InternalLink href={href}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
-          <Box>{`(ID: ${workspaceId})`}</Box>
+          <Box>{`(ID: ${itemId})`}</Box>
           <InvitationStatusIcon item={item} />
         </Stack>
       );

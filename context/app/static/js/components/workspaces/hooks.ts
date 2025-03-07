@@ -32,6 +32,7 @@ import {
   useDeleteInvitation,
   useShareInvitation,
   useAcceptInvitation,
+  useInvitation,
 } from './api';
 import {
   MergedWorkspace,
@@ -273,6 +274,25 @@ function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
     workspaceDatasets: getWorkspaceDatasetUUIDs(mergedWorkspace),
     workspaceTemplates,
     ...rest,
+  };
+}
+
+function useInvitationDetail({ invitationId }: { invitationId: number }) {
+  const {
+    invitation,
+    sentInvitations,
+    receivedInvitations,
+    isLoading: invitationsLoading,
+  } = useInvitation(invitationId);
+  const invitationsActions = useInvitationsActions({
+    sentInvitations,
+    receivedInvitations,
+    invitationsLoading,
+  });
+
+  return {
+    invitation,
+    ...invitationsActions,
   };
 }
 
@@ -528,6 +548,7 @@ export {
   useRunningWorkspace,
   useLaunchWorkspace,
   useWorkspaceDetail,
+  useInvitationDetail,
   useInvitationWorkspaceDetails,
   useSessionWarning,
   useRefreshSession,
