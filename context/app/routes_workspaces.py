@@ -36,6 +36,16 @@ def workspace_detail(workspace_id):
     )
 
 
+@blueprint.route('/invitations/<invitation_id>')
+def invitation_detail(invitation_id):
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html',
+        flask_data=flask_data,
+        title='Invitation'
+    )
+
+
 @blueprint.route('/templates')
 def templates():
     flask_data = {**get_default_flask_data()}
