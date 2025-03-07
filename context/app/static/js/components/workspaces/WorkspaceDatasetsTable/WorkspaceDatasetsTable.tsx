@@ -114,6 +114,7 @@ function WorkspaceDatasetsTable({
           disabledIDs={disabledIDs}
           emptyAlert={emptyAlert}
           isSelectable={isSelectable}
+          numSelected={selectedRows.size}
           trackingInfo={trackingInfo}
         />
       )}

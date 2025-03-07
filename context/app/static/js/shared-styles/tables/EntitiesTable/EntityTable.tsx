@@ -16,6 +16,7 @@ import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTabl
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
 import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { Column, EntitiesTabTypes } from './types';
 
 interface EntityHeaderCellTypes<Doc> {
@@ -69,13 +70,21 @@ function TablePaddingRow({ padding }: { padding: number }) {
 
 interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns'> {
   isSelectable: boolean;
+  numSelected?: number;
   disabledIDs?: Set<string>;
   trackingInfo?: WorkspacesEventInfo;
 }
 
 const headerRowHeight = 60;
 
-function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, trackingInfo }: EntityTableProps<Doc>) {
+function EntityTable<Doc>({
+  query,
+  columns,
+  disabledIDs,
+  isSelectable = true,
+  trackingInfo,
+  numSelected,
+}: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
 
   const {
@@ -100,6 +109,7 @@ function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, tr
       ref={tableContainerRef}
       onScroll={(event) => fetchMoreOnBottomReached(event)}
     >
+      {numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>
           <TableRow sx={{ height: headerRowHeight }}>

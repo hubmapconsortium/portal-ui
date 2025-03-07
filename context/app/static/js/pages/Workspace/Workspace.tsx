@@ -32,12 +32,15 @@ import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { StyledSvgIcon } from 'js/components/workspaces/style';
 import { WorkspaceButton } from 'js/components/workspaces/WorkspaceButton';
 import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
-import { OutboundLink } from 'js/shared-styles/Links';
+import { InternalLink, OutboundLink } from 'js/shared-styles/Links';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import Description from 'js/shared-styles/sections/Description';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import InvitationTabs from 'js/components/workspaces/InvitationTabs';
+import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
+import { Alert } from 'js/shared-styles/alerts/Alert';
+import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 
 const tooltips = {
   update: 'Edit workspace name or description.',
@@ -52,22 +55,25 @@ const descriptions = {
     'View the status of invitations you have sent for this workspace. You can cancel pending invitations, but canceling pending invitations will prevent the recipient from accepting. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at the version sent at the shared date.',
   sentInvitationsPresent:
     'View the status of invitations you have sent for this workspace. You can cancel pending invitations, but canceling pending invitations will prevent the recipient from accepting. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at the version sent at the shared date. ',
+  datasetsAbsent:
+    'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.',
+  datasetsPresent:
+    'These are the datasets included in this workspace. You can add more datasets by navigating to the search page or by using the add button to input datasets via HuBMAP IDs.',
 };
 
-// const noDatasetsText =
-//   'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.';
+const datasetsPage = {
+  link: buildSearchLink({
+    entity_type: 'Dataset',
+  }),
+  children: 'Dataset Search Page',
+};
 
 const pages = [
   {
     link: '/workspaces',
     children: 'My Workspaces',
   },
-  {
-    link: buildSearchLink({
-      entity_type: 'Dataset',
-    }),
-    children: 'Dataset Search Page',
-  },
+  datasetsPage,
 ];
 
 interface WorkspacePageProps {
@@ -244,9 +250,63 @@ function SentInvitationsStatus({ sentInvitations }: { sentInvitations: Workspace
   );
 }
 
+function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace; workspaceDatasets: string[] }) {
+  return (
+    <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
+      <Stack spacing={1}>
+        <SectionDescription>
+          <Stack spacing={1}>
+            <Typography>{descriptions.datasetsPresent}</Typography>
+            <Box>
+              <OutlinedLinkButton key={datasetsPage.link} {...datasetsPage} />
+            </Box>
+          </Stack>
+        </SectionDescription>
+        <WorkspaceDatasetsTable
+          datasetsUUIDs={workspaceDatasets}
+          hideTableIfEmpty
+          addDatasets={workspace}
+          copyDatasets
+          trackingInfo={{
+            category: WorkspacesEventCategories.WorkspaceDetailPage,
+            label: workspace.name,
+          }}
+          emptyAlert={
+            <Alert
+              severity="info"
+              action={
+                <Button>
+                  <InternalLink
+                    href={buildSearchLink({
+                      entity_type: 'Dataset',
+                    })}
+                  >
+                    <Typography color="primary" variant="button">
+                      Dataset Search Page
+                    </Typography>
+                  </InternalLink>
+                </Button>
+              }
+            >
+              {descriptions.datasetsAbsent}
+            </Alert>
+          }
+        />
+      </Stack>
+    </CollapsibleDetailPageSection>
+  );
+}
+
 function WorkspacePage({ workspaceId }: WorkspacePageProps) {
-  const { workspace, creatorInfo, workspaceSentInvitations, isLoading, handleStopWorkspace, isStoppingWorkspace } =
-    useInvitationWorkspaceDetails({ workspaceId });
+  const {
+    workspace,
+    creatorInfo,
+    workspaceSentInvitations,
+    workspaceDatasets,
+    isLoading,
+    handleStopWorkspace,
+    isStoppingWorkspace,
+  } = useInvitationWorkspaceDetails({ workspaceId });
 
   if (isLoading || Object.keys(workspace).length === 0) {
     return null;
@@ -273,37 +333,8 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
             isStoppingWorkspace={isStoppingWorkspace}
           />
           <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
-          {/* <WorkspaceDatasetsTable
-            datasetsUUIDs={workspaceDatasets}
-            label={<SectionHeader>Datasets</SectionHeader>}
-            hideTableIfEmpty
-            addDatasets={workspace}
-            copyDatasets
-            trackingInfo={{
-              category: WorkspacesEventCategories.WorkspaceDetailPage,
-              label: workspace.name,
-            }}
-            emptyAlert={
-              <Alert
-                severity="info"
-                action={
-                  <Button>
-                    <InternalLink
-                      href={buildSearchLink({
-                        entity_type: 'Dataset',
-                      })}
-                    >
-                      <Typography color="primary" variant="button">
-                        Dataset Search Page
-                      </Typography>
-                    </InternalLink>
-                  </Button>
-                }
-              >
-                {noDatasetsText}
-              </Alert>
-            }
-          />
+          <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
+          {/* 
           <Box>
             <SpacedSectionButtonRow
               leftText={<SectionHeader iconTooltipText={tooltips.currentTemplates}>Current Templates</SectionHeader>}
