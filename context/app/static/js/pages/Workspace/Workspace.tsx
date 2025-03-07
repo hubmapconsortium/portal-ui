@@ -16,10 +16,11 @@ import { useInvitationWorkspaceDetails } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
-import { EditIcon, EmailIcon } from 'js/shared-styles/icons';
+import { AddIcon, EditIcon, EmailIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 import {
   MergedWorkspace,
+  TemplatesTypes,
   WorkspaceInvitation,
   WorkspaceUser,
   WorkspacesEventCategories,
@@ -41,6 +42,7 @@ import InvitationTabs from 'js/components/workspaces/InvitationTabs';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
+import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 
 const tooltips = {
   update: 'Edit workspace name or description.',
@@ -59,6 +61,8 @@ const descriptions = {
     'There are no datasets in this workspace. Navigate to the dataset search page to find and add datasets to your workspace.',
   datasetsPresent:
     'These are the datasets included in this workspace. You can add more datasets by navigating to the search page or by using the add button to input datasets via HuBMAP IDs.',
+  templates:
+    'These are the templates that are in this workspace. You can add more templates to this workspace by using the add button.',
 };
 
 const datasetsPage = {
@@ -297,15 +301,45 @@ function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace
   );
 }
 
+function Templates({
+  workspace,
+  workspaceTemplates,
+}: {
+  workspace: MergedWorkspace;
+  workspaceTemplates: TemplatesTypes;
+}) {
+  return (
+    <CollapsibleDetailPageSection
+      id="templates"
+      title="Templates"
+      icon={sectionIconMap.templates}
+      action={
+        <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES" tooltip={tooltips.templates}>
+          <AddIcon />
+        </WorkspacesUpdateButton>
+      }
+    >
+      <Stack>
+        <SectionDescription>{descriptions.templates}</SectionDescription>
+        <TemplateGrid
+          templates={workspaceTemplates}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
+        />
+      </Stack>
+    </CollapsibleDetailPageSection>
+  );
+}
+
 function WorkspacePage({ workspaceId }: WorkspacePageProps) {
   const {
     workspace,
     creatorInfo,
     workspaceSentInvitations,
     workspaceDatasets,
+    workspaceTemplates,
     isLoading,
-    handleStopWorkspace,
     isStoppingWorkspace,
+    handleStopWorkspace,
   } = useInvitationWorkspaceDetails({ workspaceId });
 
   if (isLoading || Object.keys(workspace).length === 0) {
@@ -323,7 +357,6 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
     <WorkspacesAuthGuard>
       <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
       <DetailLayout sections={shouldDisplaySection}>
-        {/* <WorkspaceContent workspaceId={workspaceId} /> */}
         <Stack gap={1} sx={{ marginBottom: 5 }}>
           <WorkspaceSessionWarning workspaces={[workspace]} />
           <Summary
@@ -334,21 +367,7 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
           />
           <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
           <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
-          {/* 
-          <Box>
-            <SpacedSectionButtonRow
-              leftText={<SectionHeader iconTooltipText={tooltips.currentTemplates}>Current Templates</SectionHeader>}
-              buttons={
-                <WorkspacesUpdateButton workspace={workspace} dialogType="UPDATE_TEMPLATES" tooltip={tooltips.templates}>
-                  <AddIcon />
-                </WorkspacesUpdateButton>
-              }
-            />
-            <TemplateGrid
-              templates={workspaceTemplates}
-              trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
-            />
-          </Box> */}
+          <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
         </Stack>
       </DetailLayout>
     </WorkspacesAuthGuard>
