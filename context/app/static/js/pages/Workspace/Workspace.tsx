@@ -26,6 +26,8 @@ import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { StyledSvgIcon } from 'js/components/workspaces/style';
 import { WorkspaceButton } from 'js/components/workspaces/WorkspaceButton';
 import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
+import { OutboundLink } from 'js/shared-styles/Links';
+import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 
 const tooltips = {
   update: 'Edit workspace name or description.',
@@ -129,7 +131,10 @@ function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; c
         <LabelledSectionText label="Created By">
           {creatorInfo ? (
             <Stack direction="row" alignItems="center">
-              <Typography>{`${creatorInfo.first_name} ${creatorInfo.last_name} | ${creatorInfo.email}`}</Typography>
+              <Typography>
+                {creatorInfo.first_name} {creatorInfo.last_name} |&nbsp;
+              </Typography>
+              <OutboundLink href={`mailto:${creatorInfo.email}`}>{creatorInfo.email}</OutboundLink>
               <TooltipButton
                 href={`mailto:${creatorInfo.email}`}
                 sx={{ minWidth: 0 }}
@@ -206,6 +211,7 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
 
   return (
     <WorkspacesAuthGuard>
+      <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
       <DetailLayout sections={shouldDisplaySection}>
         {/* <WorkspaceContent workspaceId={workspaceId} /> */}
         <Stack gap={6} sx={{ marginBottom: 5 }}>
