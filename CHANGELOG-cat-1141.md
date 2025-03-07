@@ -1,1 +1,0 @@
-- Update homepage timeline items to include SNARE-seq2, Cell Population Tool, and My Lists-related announcements.

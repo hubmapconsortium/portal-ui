@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.22.0 - 2025-03-07
+
+- Add data products section to Organ pages.
+- Update homepage timeline items to include SNARE-seq2, Cell Population Tool, and My Lists-related announcements.
+- Update description on My Lists page for non-HuBMAP users.
+- Update portal-viz version to address the scaling issue for EPIC segmentation masks.
+- Update Ubuntu version used by GitHub CI.
+
+
+
 ## v1.21.1 - 2025-02-24
 
 - Fix casing of ABO blood group chart titles on diversity page.
