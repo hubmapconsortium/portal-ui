@@ -5,6 +5,7 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import ShareIcon from '@mui/icons-material/Share';
 import Button, { ButtonProps } from '@mui/material/Button';
+import Box from '@mui/material/Box';
 
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
@@ -17,17 +18,26 @@ import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import { EditIcon, EmailIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
-import { MergedWorkspace, WorkspaceUser, WorkspacesEventCategories } from 'js/components/workspaces/types';
+import {
+  MergedWorkspace,
+  WorkspaceInvitation,
+  WorkspaceUser,
+  WorkspacesEventCategories,
+} from 'js/components/workspaces/types';
 import { buildSearchLink } from 'js/components/search/store';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import { DetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection, DetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { StyledSvgIcon } from 'js/components/workspaces/style';
 import { WorkspaceButton } from 'js/components/workspaces/WorkspaceButton';
 import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
 import { OutboundLink } from 'js/shared-styles/Links';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
+import Description from 'js/shared-styles/sections/Description';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import InvitationTabs from 'js/components/workspaces/InvitationTabs';
 
 const tooltips = {
   update: 'Edit workspace name or description.',
@@ -35,6 +45,13 @@ const tooltips = {
   lastModified: 'Date of the last modification to the content of the workspace.',
   templates: 'Add templates to this workspace.',
   currentTemplates: 'Templates that are currently in this workspace.',
+};
+
+const descriptions = {
+  sentInvitationsAbsent:
+    'View the status of invitations you have sent for this workspace. You can cancel pending invitations, but canceling pending invitations will prevent the recipient from accepting. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at the version sent at the shared date.',
+  sentInvitationsPresent:
+    'View the status of invitations you have sent for this workspace. You can cancel pending invitations, but canceling pending invitations will prevent the recipient from accepting. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at the version sent at the shared date. ',
 };
 
 // const noDatasetsText =
@@ -193,10 +210,43 @@ function Summary({
   );
 }
 
-function WorkspacePage({ workspaceId }: WorkspacePageProps) {
-  const { workspace, creatorInfo, isLoading, handleStopWorkspace, isStoppingWorkspace } = useInvitationWorkspaceDetails(
-    { workspaceId },
+function SentInvitationsStatus({ sentInvitations }: { sentInvitations: WorkspaceInvitation[] }) {
+  const { setDialogType } = useEditWorkspaceStore();
+
+  return (
+    <CollapsibleDetailPageSection
+      id="sent-invitations-status"
+      title="Sent Invitations Status"
+      icon={sectionIconMap['sent-invitations-status']}
+    >
+      {sentInvitations.length === 0 ? (
+        <Description>
+          <Stack spacing={1}>
+            <Typography>{descriptions.sentInvitationsAbsent}</Typography>
+            <Box>
+              <Button
+                onClick={() => setDialogType('SHARE_WORKSPACE')}
+                startIcon={<StyledSvgIcon as={ShareIcon} />}
+                variant="contained"
+              >
+                Share
+              </Button>
+            </Box>
+          </Stack>
+        </Description>
+      ) : (
+        <Stack spacing={1}>
+          <SectionDescription>{descriptions.sentInvitationsPresent}</SectionDescription>
+          <InvitationTabs sentInvitations={sentInvitations} />
+        </Stack>
+      )}
+    </CollapsibleDetailPageSection>
   );
+}
+
+function WorkspacePage({ workspaceId }: WorkspacePageProps) {
+  const { workspace, creatorInfo, workspaceSentInvitations, isLoading, handleStopWorkspace, isStoppingWorkspace } =
+    useInvitationWorkspaceDetails({ workspaceId });
 
   if (isLoading || Object.keys(workspace).length === 0) {
     return null;
@@ -214,7 +264,7 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
       <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
       <DetailLayout sections={shouldDisplaySection}>
         {/* <WorkspaceContent workspaceId={workspaceId} /> */}
-        <Stack gap={6} sx={{ marginBottom: 5 }}>
+        <Stack gap={1} sx={{ marginBottom: 5 }}>
           <WorkspaceSessionWarning workspaces={[workspace]} />
           <Summary
             workspace={workspace}
@@ -222,6 +272,7 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
             handleStopWorkspace={handleStopWorkspace}
             isStoppingWorkspace={isStoppingWorkspace}
           />
+          <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
           {/* <WorkspaceDatasetsTable
             datasetsUUIDs={workspaceDatasets}
             label={<SectionHeader>Datasets</SectionHeader>}
