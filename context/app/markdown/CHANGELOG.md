@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.22.1 - 2025-03-10
+
+- Show data products on pages for organs with laterality.
+
+
+
 ## v1.22.0 - 2025-03-07
 
 - Add data products section to Organ pages.
