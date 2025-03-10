@@ -290,8 +290,12 @@ function useInvitationDetail({ invitationId }: { invitationId: number }) {
     invitationsLoading,
   });
 
+  const workspaceId = invitation?.original_workspace_id?.id ?? null;
+  const { workspaceDatasets } = useWorkspaceDetail(workspaceId ? { workspaceId } : { workspaceId: invitationId });
+
   return {
     invitation,
+    invitationDatasets: workspaceDatasets,
     ...invitationsActions,
   };
 }

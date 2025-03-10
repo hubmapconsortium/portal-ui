@@ -5,13 +5,22 @@ import { useInvitationDetail } from 'js/components/workspaces/hooks';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import { WorkspaceInvitation } from 'js/components/workspaces/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import { DetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import { CollapsibleDetailPageSection, DetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { format } from 'date-fns/format';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+
+const descriptions = {
+  datasetsAbsent: 'There are no datasets in this workspace.',
+  datasetsPresent: 'These are the datasets included in this workspace.',
+  templates: 'These are the templates that are in this workspace.',
+};
 
 const pages = [
   {
@@ -50,12 +59,23 @@ function Summary({ invitation }: { invitation: WorkspaceInvitation }) {
   );
 }
 
+function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
+  return (
+    <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
+      <Stack spacing={1}>
+        <SectionDescription>{descriptions.datasetsPresent}</SectionDescription>
+        <WorkspaceDatasetsTable datasetsUUIDs={invitationDatasets} hideTableIfEmpty />
+      </Stack>
+    </CollapsibleDetailPageSection>
+  );
+}
+
 interface InvitationPageProps {
   invitationId: number;
 }
 
 function InvitationPage({ invitationId }: InvitationPageProps) {
-  const { invitation, invitationsLoading } = useInvitationDetail({
+  const { invitation, invitationDatasets, invitationsLoading } = useInvitationDetail({
     invitationId,
   });
 
@@ -74,9 +94,8 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
       <DetailLayout sections={shouldDisplaySection}>
         <Stack gap={1} sx={{ marginBottom: 5 }}>
           <Summary invitation={invitation} />
-          {/* <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
-          <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
-          <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} /> */}
+          <Datasets invitationDatasets={invitationDatasets} />
+          {/* <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} /> */}
         </Stack>
       </DetailLayout>
     </WorkspacesAuthGuard>
