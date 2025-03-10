@@ -163,7 +163,7 @@ export function useDataProducts(organ: OrganFile) {
   const { name, search } = organ;
   const { dataProductsEndpoint } = useAppContext();
 
-  const isLateral = search.length > 1;
+  const isLateral = search?.length > 1;
 
   const possibleNames = isLateral ? [`${name} (Right)`, `${name} (Left)`] : [name];
   const urls = possibleNames.map((n) => `${dataProductsEndpoint}/api/data_products/${n}`);
@@ -172,8 +172,7 @@ export function useDataProducts(organ: OrganFile) {
     fallbackData: [],
   });
 
-  const dataProducts = (data ?? []).filter(Boolean).flat();
-
+  const dataProducts = (data ?? []).flat();
   const dataProductsWithUUIDs = dataProducts.map((product) => ({
     ...product,
     datasetUUIDs: product.dataSets.map((dataset) => dataset.uuid),
