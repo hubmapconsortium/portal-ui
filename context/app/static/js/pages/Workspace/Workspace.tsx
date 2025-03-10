@@ -16,7 +16,7 @@ import { useInvitationWorkspaceDetails } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
-import { AddIcon, EditIcon, EmailIcon } from 'js/shared-styles/icons';
+import { AddIcon, EditIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
 import {
   MergedWorkspace,
@@ -32,8 +32,7 @@ import { CollapsibleDetailPageSection, DetailPageSection } from 'js/components/d
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { StyledSvgIcon } from 'js/components/workspaces/style';
 import { WorkspaceButton } from 'js/components/workspaces/WorkspaceButton';
-import { TooltipButton } from 'js/shared-styles/buttons/TooltipButton';
-import { InternalLink, OutboundLink } from 'js/shared-styles/Links';
+import { InternalLink } from 'js/shared-styles/Links';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import Description from 'js/shared-styles/sections/Description';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
@@ -43,6 +42,7 @@ import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTa
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
+import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
 
 const tooltips = {
   update: 'Edit workspace name or description.',
@@ -107,7 +107,6 @@ function SummaryTitle({
     <SummaryData
       title={name}
       entity_type="Workspace"
-      entityTypeDisplay={undefined}
       otherButtons={
         <Stack direction="row" alignItems="center" spacing={1}>
           <WorkspacesUpdateButton
@@ -157,19 +156,11 @@ function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; c
         <LabelledSectionText label="Description">{description}</LabelledSectionText>
         <LabelledSectionText label="Created By">
           {creatorInfo ? (
-            <Stack direction="row" alignItems="center">
-              <Typography>
-                {creatorInfo.first_name} {creatorInfo.last_name} |&nbsp;
-              </Typography>
-              <OutboundLink href={`mailto:${creatorInfo.email}`}>{creatorInfo.email}</OutboundLink>
-              <TooltipButton
-                href={`mailto:${creatorInfo.email}`}
-                sx={{ minWidth: 0 }}
-                tooltip={`Mail to ${creatorInfo.email}`}
-              >
-                <EmailIcon color="info" />
-              </TooltipButton>
-            </Stack>
+            <NameAndEmailLink
+              first_name={creatorInfo.first_name}
+              last_name={creatorInfo.last_name}
+              email={creatorInfo.email}
+            />
           ) : (
             'Me'
           )}
