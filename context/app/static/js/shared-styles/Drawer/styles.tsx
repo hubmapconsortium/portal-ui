@@ -13,7 +13,7 @@ import { headerHeight } from 'js/components/Header/HeaderAppBar/style';
 export const StyledDrawer = styled(Drawer)(({ theme, anchor }) => ({
   '& .MuiDrawer-paper': {
     borderRadius: anchor === 'left' ? theme.spacing(0, 2, 2, 0) : theme.spacing(2, 0, 0, 2),
-    maxWidth: theme.breakpoints.values.sm,
+    maxWidth: theme.breakpoints.values.md,
     padding: theme.spacing(2),
     display: 'flex',
     flexDirection: 'column',

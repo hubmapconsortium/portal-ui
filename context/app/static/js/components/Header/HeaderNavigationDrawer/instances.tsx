@@ -5,6 +5,7 @@ import AppsRounded from '@mui/icons-material/AppsRounded';
 import MenuRounded from '@mui/icons-material/MenuRounded';
 import { useAppContext } from 'js/components/Contexts';
 
+import { useInvitationsList } from 'js/components/workspaces/hooks';
 import UserIcon from '../UserIcon';
 import HeaderNavigationDrawer from './HeaderNavigationDrawer';
 import { dataLinks, resourceLinks, toolsAndAppsLinks, userLinks, mobileMenuLinks } from '../staticLinks';
@@ -32,10 +33,14 @@ export function ToolsAndApplicationLinks() {
 
 export function UserLinks() {
   const { isAuthenticated, isHubmapUser, userEmail } = useAppContext();
+  const { receivedInvitations } = useInvitationsList();
+
+  const numPendingInvitations = receivedInvitations.filter((invitation) => !invitation.is_accepted).length;
+
   return (
     <HeaderNavigationDrawer
       title="Your Profile"
-      sections={userLinks(isAuthenticated, isHubmapUser, userEmail)}
+      sections={userLinks({ isAuthenticated, isHubmapUser, userEmail, numPendingInvitations })}
       icon={<UserIcon />}
       direction="right"
       altOnlyTitle
