@@ -60,8 +60,8 @@ import {
 
 const acceptInviteTooltip =
   'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
-const previewInviteTooltip = 'Preview the details of this workspace.';
-const moreOptionsTooltip = 'View additional actions.';
+const previewInviteTooltip = 'Preview the details of this workspace';
+const moreOptionsTooltip = 'View additional actions';
 
 function EndButtons({ item }: { item: WorkspaceItem }) {
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
@@ -132,7 +132,12 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
       </IconDropdownMenu>
       {!isSender && (
         <Stack direction="row">
-          <TooltipIconButton tooltip={previewInviteTooltip}>
+          <TooltipIconButton
+            tooltip={previewInviteTooltip}
+            onClick={() => {
+              window.location.href = `/invitations/${item.shared_workspace_id.id}`;
+            }}
+          >
             <EyeIcon color="primary" fontSize="1.5rem" />
           </TooltipIconButton>
           <TooltipIconButton tooltip={acceptInviteTooltip} onClick={onAcceptInvite}>

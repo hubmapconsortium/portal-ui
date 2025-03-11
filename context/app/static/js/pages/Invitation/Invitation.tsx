@@ -115,8 +115,7 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
     handleAcceptInvitation(invitationId)
       .then(() => {
         // Redirect to the newly created workspace page
-        // eslint-disable-next-line no-restricted-globals
-        location.href = `/workspaces/${invitationId}`;
+        window.location.href = `/workspaces/${invitationId}`;
         toastSuccessAcceptInvitation(invitation.shared_workspace_id.name);
       })
       .catch((e) => {

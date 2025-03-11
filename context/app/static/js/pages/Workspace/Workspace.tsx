@@ -45,11 +45,11 @@ import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
 
 const tooltips = {
-  update: 'Edit workspace name or description.',
-  lastLaunched: 'Date of the last launched session.',
-  lastModified: 'Date of the last modification to the content of the workspace.',
-  templates: 'Add templates to this workspace.',
-  currentTemplates: 'Templates that are currently in this workspace.',
+  update: 'Edit workspace name or description',
+  lastLaunched: 'Date of the last launched session',
+  lastModified: 'Date of the last modification to the content of the workspace',
+  templates: 'Add templates to this workspace',
+  currentTemplates: 'Templates that are currently in this workspace',
 };
 
 const descriptions = {
