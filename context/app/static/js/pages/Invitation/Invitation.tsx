@@ -16,8 +16,15 @@ import { SectionDescription } from 'js/shared-styles/sections/SectionDescription
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
+import Button from '@mui/material/Button';
+import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
+import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { StyledAlert } from './style';
 
 const descriptions = {
+  acceptInvite:
+    'Accept this invitation to access a copy of the workspace at its current version. Any future changes to the workspace will not be synchronized.',
   datasetsAbsent: 'There are no datasets in this workspace.',
   datasetsPresent: 'These are the datasets included in this workspace.',
   templates: 'These are the templates that are in this workspace.',
@@ -93,13 +100,35 @@ interface InvitationPageProps {
 }
 
 function InvitationPage({ invitationId }: InvitationPageProps) {
-  const { invitation, invitationDatasets, invitationTemplates, invitationsLoading } = useInvitationDetail({
-    invitationId,
-  });
+  const { invitation, invitationDatasets, invitationTemplates, invitationsLoading, handleAcceptInvitation } =
+    useInvitationDetail({
+      invitationId,
+    });
+  const { setDialogType, setInvitation } = useEditWorkspaceStore();
+  const { toastSuccessAcceptInvitation, toastErrorAcceptInvitation } = useWorkspaceToasts();
 
   if (invitationsLoading || !invitation) {
     return null;
   }
+
+  const handleAccept = () => {
+    handleAcceptInvitation(invitationId)
+      .then(() => {
+        // Redirect to the newly created workspace page
+        // eslint-disable-next-line no-restricted-globals
+        location.href = `/workspaces/${invitationId}`;
+        toastSuccessAcceptInvitation(invitation.shared_workspace_id.name);
+      })
+      .catch((e) => {
+        console.error(e);
+        toastErrorAcceptInvitation(invitation.shared_workspace_id.name);
+      });
+  };
+
+  const handleDecline = () => {
+    setInvitation(invitation);
+    setDialogType('DECLINE_INVITATION');
+  };
 
   const shouldDisplaySection = {
     summary: true,
@@ -109,7 +138,21 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
 
   return (
     <WorkspacesAuthGuard>
+      <WorkspacesListDialogs selectedWorkspaceIds={new Set([invitationId.toString()])} />
       <DetailLayout sections={shouldDisplaySection}>
+        <StyledAlert
+          severity="info"
+          action={
+            <Stack direction="row" gap={1}>
+              <Button onClick={handleDecline}>Decline</Button>
+              <Button onClick={handleAccept} color="success">
+                Accept
+              </Button>
+            </Stack>
+          }
+        >
+          {descriptions.acceptInvite}
+        </StyledAlert>
         <Stack gap={1} sx={{ marginBottom: 5 }}>
           <Summary invitation={invitation} />
           <Datasets invitationDatasets={invitationDatasets} />
