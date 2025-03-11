@@ -68,10 +68,8 @@ interface createAndLaunchWorkspaceProps {
 
 /**
  * Returns a function that will mutate workspaces, jobs, invitations, and optionally a single workspace's details
- * Returns a function that will mutate workspaces, jobs, invitations, and optionally a single workspace's details
  *
  * @param mutateWorkspace The mutate function for a single workspace
- * @returns A function that will revalidate workspaces, jobs, invitations, and optionally a workspace
  * @returns A function that will revalidate workspaces, jobs, invitations, and optionally a workspace
  */
 function useMutateWorkspacesAndJobs<T>(mutateWorkspace?: KeyedMutator<T>) {

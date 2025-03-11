@@ -424,12 +424,9 @@ function getSelectedWorkspaceNames({
   selectedWorkspaceIds: SelectedItems;
   workspacesList: MergedWorkspace[];
 }) {
-  return generateCommaList(
-    Array.from(selectedWorkspaceIds).map((id) => {
-      const workspace = workspacesList.find((w) => w.id === Number(id));
-      return workspace ? workspace.name : '';
-    }),
-  );
+  const workspacesMap = new Map(workspacesList.map((workspace) => [workspace.id, workspace.name]));
+
+  return generateCommaList(Array.from(selectedWorkspaceIds).map((id) => workspacesMap.get(Number(id)) ?? ''));
 }
 
 export {
