@@ -7,7 +7,7 @@ import { useAppContext } from 'js/components/Contexts';
 import SavedListsContent from 'js/components/savedLists/SavedListsContent';
 
 function SavedLists() {
-  const { isAuthenticated } = useAppContext();
+  const { isHubmapUser } = useAppContext();
 
   return (
     <Stack spacing={1} marginBottom={10}>
@@ -16,7 +16,7 @@ function SavedLists() {
       </Typography>
       <Stack spacing={3}>
         <SavedListsDescription />
-        {isAuthenticated && <SavedListsContent />}
+        {isHubmapUser && <SavedListsContent />}
       </Stack>
     </Stack>
   );

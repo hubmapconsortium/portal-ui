@@ -9,7 +9,8 @@ import Samples from 'js/components/organ/Samples';
 import { OrganFile } from 'js/components/organ/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import CellPopulationPlot from 'js/components/organ/CellPop';
-import { useAssayBucketsQuery, useHasSamplesQuery, useLabelledDatasetsQuery } from './hooks';
+import DataProducts from 'js/components/organ/DataProducts';
+import { useAssayBucketsQuery, useDataProducts, useHasSamplesQuery, useLabelledDatasetsQuery } from './hooks';
 
 interface OrganProps {
   organ: OrganFile;
@@ -19,6 +20,7 @@ const summaryId = 'summary';
 const hraId = 'human-reference-atlas';
 const referenceId = 'reference-based-analysis';
 const assaysId = 'assays';
+const dataProductsId = 'data-products';
 const samplesId = 'samples';
 const cellpopId = 'cell-population-plot';
 
@@ -31,6 +33,7 @@ function Organ({ organ }: OrganProps) {
   const assayBuckets = useAssayBucketsQuery(searchItems);
   const samplesHits = useHasSamplesQuery(searchItems);
   const labeledDatasetUuids = useLabelledDatasetsQuery(searchItems);
+  const { dataProducts, isLoading } = useDataProducts(organ);
 
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
@@ -38,11 +41,12 @@ function Organ({ organ }: OrganProps) {
     [cellpopId]: labeledDatasetUuids.length > 0,
     [referenceId]: Boolean(organ?.azimuth),
     [assaysId]: assayBuckets.length > 0,
+    [dataProductsId]: dataProducts.length > 0,
     [samplesId]: samplesHits.length > 0,
   };
 
   return (
-    <DetailLayout sections={shouldDisplaySection}>
+    <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
       <Typography variant="subtitle1" component="h1" color="primary" data-testid="entity-title">
         Organ
       </Typography>
@@ -66,6 +70,12 @@ function Organ({ organ }: OrganProps) {
         organTerms={searchItems}
         bucketData={assayBuckets}
         shouldDisplay={shouldDisplaySection[assaysId]}
+      />
+      <DataProducts
+        id={dataProductsId}
+        dataProducts={dataProducts}
+        isLoading={isLoading}
+        shouldDisplay={shouldDisplaySection[dataProductsId]}
       />
       <Samples id={samplesId} organTerms={searchItems} shouldDisplay={shouldDisplaySection[samplesId]} />
     </DetailLayout>

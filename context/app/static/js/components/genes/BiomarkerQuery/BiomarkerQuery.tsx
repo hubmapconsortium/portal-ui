@@ -4,24 +4,21 @@ import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPag
 import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import React, { useMemo } from 'react';
-import { useGeneOntology, useGenePageContext } from '../hooks';
 import { biomarkerQuery } from '../constants';
 
 export default function BiomarkerQuery() {
-  const { geneSymbol } = useGenePageContext();
-  const { data } = useGeneOntology();
   const steps = useMemo(() => {
     return [
       {
         heading: '1. Parameters',
-        content: <QueryParameters defaultEntity={data?.approved_symbol ?? geneSymbol.toUpperCase()} />,
+        content: <QueryParameters />,
       },
       {
         heading: '2. Results',
         content: <MolecularDataQueryResults />,
       },
     ];
-  }, [geneSymbol, data?.approved_symbol]);
+  }, []);
 
   return (
     <CollapsibleDetailPageSection

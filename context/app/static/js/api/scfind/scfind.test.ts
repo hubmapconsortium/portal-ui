@@ -1,4 +1,4 @@
-import { createScFindKey, SCFIND_BASE } from './utils';
+import { createScFindKey } from './utils';
 
 const scFindEndpoint = 'http://example.com';
 
@@ -9,7 +9,7 @@ describe('createScfindKey', () => {
 
   it('should use the appropriate scfind base URL', () => {
     const key = createScFindKey(scFindEndpoint, 'endpoint', {});
-    expect(key).toContain(SCFIND_BASE);
+    expect(key).toContain(scFindEndpoint);
     expectURLIsValid(key);
   });
 

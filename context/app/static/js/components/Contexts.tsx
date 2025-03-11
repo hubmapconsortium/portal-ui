@@ -39,6 +39,7 @@ interface AppContextType {
   ubkgEndpoint: string;
   ukvEndpoint: string;
   scFindEndpoint: string;
+  dataProductsEndpoint: string;
   protocolsClientToken: string;
   isAuthenticated: boolean;
   isWorkspacesUser: boolean;

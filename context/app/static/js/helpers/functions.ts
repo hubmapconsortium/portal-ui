@@ -304,3 +304,19 @@ export function getEntityCreationInfo({
     creationDate: creationTimestamp ? format(creationTimestamp, 'yyyy-MM-dd') : 'N/A',
   };
 }
+
+/**
+ * Get the file name with the extension from a URL. In the case of a placeholder, returns an empty string.
+ * ex: 'https://example.com/file.txt' => 'file.txt'
+ * ex: 'None' => ''
+ * @author Austen Money
+ */
+export function getFileName(url: string, placeholder?: string) {
+  const name = url.split('/').pop() ?? '';
+
+  if (name.toLowerCase() === placeholder?.toLowerCase()) {
+    return '';
+  }
+
+  return name;
+}

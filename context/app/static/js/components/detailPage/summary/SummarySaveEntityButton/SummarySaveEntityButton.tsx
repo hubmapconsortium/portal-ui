@@ -37,9 +37,9 @@ function EditSavedEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
 
 export default function SummarySaveEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { savedEntities } = useSavedLists();
-  const { isAuthenticated } = useAppContext();
+  const { isHubmapUser } = useAppContext();
 
-  if (!isAuthenticated) {
+  if (!isHubmapUser) {
     return null;
   }
 

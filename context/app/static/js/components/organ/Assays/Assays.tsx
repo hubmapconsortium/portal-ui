@@ -3,17 +3,14 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
 
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { InternalLink } from 'js/shared-styles/Links';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
-
 import { HeaderCell } from 'js/shared-styles/tables';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
-
+import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
-import { DatasetIcon } from 'js/shared-styles/icons';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { getSearchURL } from '../utils';
 
@@ -31,17 +28,7 @@ function Assays({ organTerms, bucketData, id: sectionId }: AssaysProps) {
       id={sectionId}
       title="Assays"
       iconTooltipText="Experiments related to this organ"
-      action={
-        <Button
-          color="primary"
-          variant="contained"
-          component="a"
-          href={getSearchURL({ entityType: 'Dataset', organTerms })}
-          startIcon={<DatasetIcon />}
-        >
-          View All Datasets
-        </Button>
-      }
+      action={<ViewEntitiesButton entityType="Dataset" filters={{ organTerms }} />}
     >
       <Paper>
         <EntitiesTable

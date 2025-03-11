@@ -1,5 +1,10 @@
 import { useMemo } from 'react';
+import useSWR from 'swr';
+
+import { multiFetcher } from 'js/helpers/swr/fetchers';
 import useSearchData, { useSearchHits } from 'js/hooks/useSearchData';
+import { useAppContext } from 'js/components/Contexts';
+import { OrganDataProducts, OrganFile } from 'js/components/organ/types';
 import { mustHaveOrganClause } from './queries';
 
 export function useHasSamplesQuery(searchItems: string[]) {
@@ -152,4 +157,26 @@ export function useLabelledDatasetsQuery(searchItems: string[]) {
   );
   const { searchHits: datasetsHits } = useSearchHits<never>(datasetsQuery, { useDefaultQuery: false });
   return datasetsHits.map((hit) => hit._id);
+}
+
+export function useDataProducts(organ: OrganFile) {
+  const { name, search } = organ;
+  const { dataProductsEndpoint } = useAppContext();
+
+  const isLateral = search?.length > 1;
+
+  const possibleNames = isLateral ? [`${name} (Right)`, `${name} (Left)`] : [name];
+  const urls = possibleNames.map((n) => `${dataProductsEndpoint}/api/data_products/${n}`);
+
+  const { data, isLoading } = useSWR<OrganDataProducts[]>(urls, (u: string[]) => multiFetcher({ urls: u }), {
+    fallbackData: [],
+  });
+
+  const dataProducts = (data ?? []).flat();
+  const dataProductsWithUUIDs = dataProducts.map((product) => ({
+    ...product,
+    datasetUUIDs: product.dataSets.map((dataset) => dataset.uuid),
+  }));
+
+  return { dataProducts: dataProductsWithUUIDs, isLoading };
 }
