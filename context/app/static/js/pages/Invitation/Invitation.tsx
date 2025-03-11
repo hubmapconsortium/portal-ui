@@ -67,7 +67,7 @@ function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
         <SectionDescription>
           {invitationDatasets.length > 0 ? descriptions.datasetsPresent : descriptions.datasetsAbsent}
         </SectionDescription>
-        <WorkspaceDatasetsTable datasetsUUIDs={invitationDatasets} hideTableIfEmpty />
+        <WorkspaceDatasetsTable datasetsUUIDs={invitationDatasets} hideTableIfEmpty openLinksInNewTab />
       </Stack>
     </CollapsibleDetailPageSection>
   );
@@ -81,6 +81,7 @@ function Templates({ invitationTemplates }: { invitationTemplates: TemplatesType
         <TemplateGrid
           templates={invitationTemplates}
           trackingInfo={{ category: WorkspacesEventCategories.WorkspacePreviewPage }}
+          openLinksInNewTab
         />
       </Stack>
     </CollapsibleDetailPageSection>
