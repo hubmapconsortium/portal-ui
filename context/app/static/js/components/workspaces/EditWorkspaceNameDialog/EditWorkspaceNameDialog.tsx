@@ -37,7 +37,7 @@ function EditWorkspaceNameDialog({ workspace }: { workspace: Workspace }) {
       errors={errors}
       isSubmitting={isSubmitting}
     >
-      <Step title="Edit Workspace Name or Description (Optional)">
+      <Step title="Edit Workspace Name or Description">
         <WorkspaceNameField control={control} name="workspace-name" />
         <WorkspaceDescriptionField control={control} name="workspace-description" />
       </Step>
