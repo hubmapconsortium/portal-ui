@@ -186,6 +186,7 @@ export enum WorkspacesEventCategories {
   WorkspaceDialog = 'Workspace Dialog',
   WorkspaceLandingPage = 'Workspace Landing Page',
   WorkspaceDetailPage = 'Workspace Detail Page',
+  WorkspacePreviewPage = 'Workspace Preview Page',
   WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
   WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
 }

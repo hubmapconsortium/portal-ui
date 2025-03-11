@@ -291,11 +291,14 @@ function useInvitationDetail({ invitationId }: { invitationId: number }) {
   });
 
   const workspaceId = invitation?.original_workspace_id?.id ?? null;
-  const { workspaceDatasets } = useWorkspaceDetail(workspaceId ? { workspaceId } : { workspaceId: invitationId });
+  const { workspaceDatasets, workspaceTemplates } = useWorkspaceDetail(
+    workspaceId ? { workspaceId } : { workspaceId: invitationId },
+  );
 
   return {
     invitation,
     invitationDatasets: workspaceDatasets,
+    invitationTemplates: workspaceTemplates,
     ...invitationsActions,
   };
 }

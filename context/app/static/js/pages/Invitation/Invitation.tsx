@@ -3,7 +3,7 @@ import Stack from '@mui/material/Stack';
 
 import { useInvitationDetail } from 'js/components/workspaces/hooks';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
-import { WorkspaceInvitation } from 'js/components/workspaces/types';
+import { TemplatesTypes, WorkspaceInvitation, WorkspacesEventCategories } from 'js/components/workspaces/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import { CollapsibleDetailPageSection, DetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
@@ -15,6 +15,7 @@ import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 
 const descriptions = {
   datasetsAbsent: 'There are no datasets in this workspace.',
@@ -63,8 +64,24 @@ function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
   return (
     <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
       <Stack spacing={1}>
-        <SectionDescription>{descriptions.datasetsPresent}</SectionDescription>
+        <SectionDescription>
+          {invitationDatasets.length > 0 ? descriptions.datasetsPresent : descriptions.datasetsAbsent}
+        </SectionDescription>
         <WorkspaceDatasetsTable datasetsUUIDs={invitationDatasets} hideTableIfEmpty />
+      </Stack>
+    </CollapsibleDetailPageSection>
+  );
+}
+
+function Templates({ invitationTemplates }: { invitationTemplates: TemplatesTypes }) {
+  return (
+    <CollapsibleDetailPageSection id="templates" title="Templates" icon={sectionIconMap.templates}>
+      <Stack>
+        <SectionDescription>{descriptions.templates}</SectionDescription>
+        <TemplateGrid
+          templates={invitationTemplates}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspacePreviewPage }}
+        />
       </Stack>
     </CollapsibleDetailPageSection>
   );
@@ -75,7 +92,7 @@ interface InvitationPageProps {
 }
 
 function InvitationPage({ invitationId }: InvitationPageProps) {
-  const { invitation, invitationDatasets, invitationsLoading } = useInvitationDetail({
+  const { invitation, invitationDatasets, invitationTemplates, invitationsLoading } = useInvitationDetail({
     invitationId,
   });
 
@@ -95,7 +112,7 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
         <Stack gap={1} sx={{ marginBottom: 5 }}>
           <Summary invitation={invitation} />
           <Datasets invitationDatasets={invitationDatasets} />
-          {/* <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} /> */}
+          <Templates invitationTemplates={invitationTemplates} />
         </Stack>
       </DetailLayout>
     </WorkspacesAuthGuard>
