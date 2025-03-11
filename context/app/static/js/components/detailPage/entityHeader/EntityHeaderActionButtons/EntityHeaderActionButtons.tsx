@@ -73,9 +73,9 @@ function WorkspaceSVGIcon({ color = 'primary', ...props }: SvgIconProps) {
 
 function SaveEditEntityButton({ uuid }: Pick<Entity, 'uuid'>) {
   const { savedEntities } = useSavedLists();
-  const { isAuthenticated } = useAppContext();
+  const { isHubmapUser } = useAppContext();
 
-  if (!isAuthenticated) {
+  if (!isHubmapUser) {
     return null;
   }
 

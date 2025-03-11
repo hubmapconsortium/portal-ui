@@ -19,9 +19,9 @@ const handleTrack = () => {
 };
 
 function LocalStorageDescription() {
-  const { isAuthenticated } = useAppContext();
+  const { isHubmapUser } = useAppContext();
 
-  if (isAuthenticated) {
+  if (isHubmapUser) {
     return <Description>Lists saved here are stored to your profile and are accessible across devices.</Description>;
   }
 
