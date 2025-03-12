@@ -40,7 +40,8 @@ export default function ConfirmDeleteInvitationDialog() {
       handleConfirmAndClose={handleDeleteAndClose}
       buttonTitle="Delete"
     >
-      {`You have selected to cancel the pending invitation for ${name}, sent to ${first_name} ${last_name}. This action will cancel the invitation, preventing the recipient from accepting it.`}
+      You have selected to cancel the pending invitation for {name}, sent to {first_name} {last_name}. This action will
+      cancel the invitation, preventing the recipient from accepting it.
     </ConfirmationDialog>
   );
 }

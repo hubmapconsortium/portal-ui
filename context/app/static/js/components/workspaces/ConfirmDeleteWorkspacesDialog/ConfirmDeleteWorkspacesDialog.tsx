@@ -38,7 +38,7 @@ export default function ConfirmDeleteWorkspacesDialog({
 
   return (
     <ConfirmationDialog
-      title={`Delete Workspace ${selectedWorkspaceIds.size > 1 ? 's' : ''}`}
+      title={`Delete Workspace${selectedWorkspaceIds.size > 1 ? 's' : ''}`}
       handleClose={handleClose}
       handleConfirmAndClose={handleDeleteAndClose}
       buttonTitle="Delete"
