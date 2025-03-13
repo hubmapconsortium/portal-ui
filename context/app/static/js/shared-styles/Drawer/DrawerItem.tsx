@@ -17,13 +17,14 @@ function formatPrimaryText(label: string, href: string): [React.ReactNode, typeo
   return [primaryText, LinkComponent];
 }
 
-export default function DrawerItem({ href, label, description, icon }: DrawerItemProps) {
+export default function DrawerItem({ href, label, description, icon, endIcon }: DrawerItemProps) {
   const [primaryText, LinkComponent] = formatPrimaryText(label, href);
   return (
     <LinkComponent href={href}>
       <DrawerListItem disablePadding>
         <DrawerListItemIcon>{icon}</DrawerListItemIcon>
         <StyledListItemText primary={primaryText} secondary={description} />
+        {endIcon}
       </DrawerListItem>
     </LinkComponent>
   );

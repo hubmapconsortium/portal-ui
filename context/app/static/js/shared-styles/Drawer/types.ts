@@ -6,6 +6,7 @@ export interface DrawerItemProps {
   label: string;
   description: string;
   icon?: React.ReactNode;
+  endIcon?: React.ReactNode;
 }
 
 export interface DrawerSectionProps {

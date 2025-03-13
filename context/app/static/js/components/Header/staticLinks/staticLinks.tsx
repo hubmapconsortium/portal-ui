@@ -21,6 +21,7 @@ import { contactUsUrl } from 'js/shared-styles/Links/ContactUsLink';
 import { DrawerTitle } from 'js/shared-styles/Drawer/styles';
 import { buildSearchLink } from 'js/components/search/store';
 import { CenteredAlert } from 'js/components/style';
+import HeaderNotification from 'js/components/Header/HeaderNotification/HeaderNotification';
 import AuthButton from '../AuthButton';
 
 export const resourceLinks: DrawerSection[] = [
@@ -275,7 +276,7 @@ export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
 
   const pendingInvitationsAlert =
     numPendingInvitations > 0 ? (
-      <CenteredAlert severity="info" action={<Button href="/workspaces">View Invites</Button>}>
+      <CenteredAlert severity="info" action={<Button href="/workspaces">View Invites</Button>} $marginBottom={10}>
         {`You have ${numPendingInvitations} pending workspace copy invitation${numPendingInvitations > 1 ? 's' : ''} to review and accept.`}
       </CenteredAlert>
     ) : (
@@ -309,6 +310,7 @@ export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
           label: 'My Workspaces',
           description: 'Find your workspaces.',
           icon: <entityIconMap.Workspace color="primary" />,
+          endIcon: <HeaderNotification numNotifications={numPendingInvitations} />,
         },
       ],
     },

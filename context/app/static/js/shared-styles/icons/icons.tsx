@@ -49,6 +49,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import PendingIcon from '@mui/icons-material/Pending';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import StopIcon from '@mui/icons-material/Stop';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -162,6 +163,8 @@ const StartJobIcon = withIconStyles(PlayArrowIcon);
 
 const StopJobIcon = withIconStyles(StopIcon);
 
+const NotificationIcon = withIconStyles(NotificationsIcon);
+
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
 const DatabaseIcon = withIconStyles(createSvgIcon(<DatabaseIconSVG />, 'Database'));
@@ -230,4 +233,5 @@ export {
   PendingRoundIcon,
   StartJobIcon,
   StopJobIcon,
+  NotificationIcon,
 };
