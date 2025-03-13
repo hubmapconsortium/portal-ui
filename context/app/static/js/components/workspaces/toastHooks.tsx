@@ -14,7 +14,7 @@ export const useWorkspaceToasts = () => {
    ********************************** */
 
   const toastErrorDeleteWorkspaces = useCallback(
-    (names: string) => toastError(`Error deleting workspaces: ${names}`),
+    (names: string | React.ReactElement) => toastError(<Typography>Error deleting workspaces: {names}</Typography>),
     [toastError],
   );
 
@@ -41,7 +41,8 @@ export const useWorkspaceToasts = () => {
   );
 
   const toastErrorShareInvitation = useCallback(
-    (workspaceName?: string) => toastError(`Failed to share ${workspaceName ?? 'workspace'}. Please try again.`),
+    (workspaceName?: React.ReactElement | string) =>
+      toastError(<Typography>Failed to share {workspaceName ?? 'workspace'}. Please try again.</Typography>),
     [toastError],
   );
 
@@ -80,7 +81,8 @@ export const useWorkspaceToasts = () => {
   );
 
   const toastSuccessDeleteWorkspaces = useCallback(
-    (names: string) => toastSuccess(`Successfully deleted workspaces: ${names}`),
+    (names: string | React.ReactElement) =>
+      toastSuccess(<Typography>Successfully deleted workspaces: {names}</Typography>),
     [toastSuccess],
   );
 
@@ -103,7 +105,8 @@ export const useWorkspaceToasts = () => {
   );
 
   const toastSuccessShareInvitation = useCallback(
-    (names: string) => toastSuccess(`Successfully shared workspaces: ${names}`),
+    (names: string | React.ReactElement) =>
+      toastSuccess(<Typography>Successfully shared workspaces: {names}</Typography>),
     [toastSuccess],
   );
 

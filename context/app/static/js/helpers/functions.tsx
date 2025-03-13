@@ -1,3 +1,4 @@
+import React from 'react';
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 import { format } from 'date-fns/format';
 import { nodeIcons } from 'js/components/detailPage/DatasetRelationships/nodeTypes';
@@ -199,6 +200,37 @@ export function generateCommaList(list: string[]): string {
   return length < 2
     ? list.join('')
     : `${list.slice(0, length - 1).join(', ')}${length < 3 ? ' and ' : ', and '}${list[length - 1]}`;
+}
+
+/**
+ * Given an array of strings, create a single comma-separated string that includes
+ * 'and' as well as an oxford comma. All list items are wrapped in a <strong> tag.
+ * @author Austen Money
+ * @param list an array of elements to be made into a single comma-separated string.
+ * @returns a bolded comma-separated string.
+ */
+export function generateBoldCommaList(list: string[]): JSX.Element | string {
+  const { length } = list;
+
+  if (length === 0) return '';
+  if (length === 1) return <strong>{list[0]}</strong>;
+  if (length === 2)
+    return (
+      <>
+        <strong>{list[0]}</strong> and <strong>{list[1]}</strong>
+      </>
+    );
+
+  return (
+    <>
+      {list.slice(0, length - 1).map((item) => (
+        <React.Fragment key={item}>
+          <strong>{item}</strong>,{' '}
+        </React.Fragment>
+      ))}
+      and <strong>{list[length - 1]}</strong>
+    </>
+  );
 }
 
 /**

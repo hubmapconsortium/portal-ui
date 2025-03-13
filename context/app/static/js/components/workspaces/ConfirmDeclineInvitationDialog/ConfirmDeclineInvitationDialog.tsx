@@ -4,6 +4,7 @@ import { useInvitationsList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { Typography } from '@mui/material';
 
 export default function ConfirmDeclineInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
@@ -46,9 +47,14 @@ export default function ConfirmDeclineInvitationDialog() {
       handleConfirmAndClose={handleDeleteAndClose}
       buttonTitle="Decline"
     >
-      You have selected to decline {name} workspace copy invitation, shared by {first_name} {last_name}. This action is
-      permanent and cannot be undone. If you need a copy of this workspace in the future, you will need to request a new
-      invite.
+      <Typography>
+        You have selected to decline a workspace copy invitation titled <strong>{name}</strong>, shared by{' '}
+        <strong>
+          {first_name} {last_name}
+        </strong>
+        . This action is permanent and cannot be undone. If you need a copy of this workspace in the future, you will
+        need to request a new invite.
+      </Typography>
     </ConfirmationDialog>
   );
 }

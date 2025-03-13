@@ -1,5 +1,5 @@
 import { get } from 'js/helpers/nodash';
-import { generateCommaList } from 'js/helpers/functions';
+import { generateBoldCommaList } from 'js/helpers/functions';
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import type { WorkspaceItem } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import {
@@ -424,7 +424,7 @@ function getSelectedWorkspaceNames({
   selectedWorkspaceIds: SelectedItems;
   workspacesList: MergedWorkspace[];
 }) {
-  return generateCommaList(
+  return generateBoldCommaList(
     Array.from(selectedWorkspaceIds).map((id) => {
       const workspace = workspacesList.find((w) => w.id === Number(id));
       return workspace ? workspace.name : '';

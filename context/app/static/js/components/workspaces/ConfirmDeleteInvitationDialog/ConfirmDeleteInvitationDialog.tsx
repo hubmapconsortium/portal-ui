@@ -4,6 +4,7 @@ import { useInvitationsList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { Typography } from '@mui/material';
 
 export default function ConfirmDeleteInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
@@ -40,7 +41,13 @@ export default function ConfirmDeleteInvitationDialog() {
       handleConfirmAndClose={handleDeleteAndClose}
       buttonTitle="Delete"
     >
-      {`You have selected to cancel the pending invitation for ${name}, sent to ${first_name} ${last_name}. This action will cancel the invitation, preventing the recipient from accepting it.`}
+      <Typography>
+        You have selected to cancel the pending invitation for <strong>{name}</strong>, sent to{' '}
+        <strong>
+          {first_name} {last_name}
+        </strong>
+        . This action will cancel the invitation, preventing the recipient from accepting it.
+      </Typography>
     </ConfirmationDialog>
   );
 }

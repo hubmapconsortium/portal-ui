@@ -400,7 +400,7 @@ function TableResults<T extends WorkspaceItem>({
   numVisibleItems: number;
 } & Pick<WorkspaceItemsTableProps<T>, 'isLoading' | 'tableFields' | 'selectedItemIds' | 'toggleItem'>) {
   if (isLoading) {
-    return <LoadingRows tableWidth={tableFields.length} />;
+    return <LoadingRows tableWidth={tableFields.length + 1} />;
   }
 
   return sortedItems
