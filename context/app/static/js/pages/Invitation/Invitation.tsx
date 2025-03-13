@@ -119,9 +119,9 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
   const handleAccept = () => {
     handleAcceptInvitation(invitationId)
       .then(() => {
+        toastSuccessAcceptInvitation(invitation.shared_workspace_id.name);
         // Redirect to the newly created workspace page
         window.location.href = `/workspaces/${invitationId}`;
-        toastSuccessAcceptInvitation(invitation.shared_workspace_id.name);
       })
       .catch((e) => {
         console.error(e);

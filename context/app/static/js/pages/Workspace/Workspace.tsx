@@ -32,14 +32,12 @@ import { CollapsibleDetailPageSection, DetailPageSection } from 'js/components/d
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { StyledSvgIcon } from 'js/components/workspaces/style';
 import { WorkspaceButton } from 'js/components/workspaces/WorkspaceButton';
-import { InternalLink } from 'js/shared-styles/Links';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import Description from 'js/shared-styles/sections/Description';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import InvitationTabs from 'js/components/workspaces/InvitationTabs';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
-import { Alert } from 'js/shared-styles/alerts/Alert';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
@@ -54,7 +52,7 @@ const tooltips = {
 
 const descriptions = {
   sentInvitationsAbsent:
-    'View the status of invitations you have sent for this workspace. You can cancel pending invitations, but canceling pending invitations will prevent the recipient from accepting. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at the version sent at the shared date.',
+    'You have no sent invitations for this workspace. To share a copy of this workspace, click the share button. This is not a synchronous sharing feature, so the recipients will receive a copy of the workspace at its current version.',
   sentInvitationsPresent:
     'View the status of invitations you have sent for this workspace. You can cancel pending invitations, but canceling pending invitations will prevent the recipient from accepting. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at the version sent at the shared date. ',
   datasetsAbsent:
@@ -251,7 +249,9 @@ function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace
       <Stack spacing={1}>
         <SectionDescription>
           <Stack spacing={1}>
-            <Typography>{descriptions.datasetsPresent}</Typography>
+            <Typography>
+              {workspaceDatasets.length > 0 ? descriptions.datasetsPresent : descriptions.datasetsAbsent}
+            </Typography>
             <Box>
               <OutlinedLinkButton key={datasetsPage.link} {...datasetsPage} />
             </Box>
@@ -266,26 +266,6 @@ function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace
             category: WorkspacesEventCategories.WorkspaceDetailPage,
             label: workspace.name,
           }}
-          emptyAlert={
-            <Alert
-              severity="info"
-              action={
-                <Button>
-                  <InternalLink
-                    href={buildSearchLink({
-                      entity_type: 'Dataset',
-                    })}
-                  >
-                    <Typography color="primary" variant="button">
-                      Dataset Search Page
-                    </Typography>
-                  </InternalLink>
-                </Button>
-              }
-            >
-              {descriptions.datasetsAbsent}
-            </Alert>
-          }
         />
       </Stack>
     </CollapsibleDetailPageSection>
