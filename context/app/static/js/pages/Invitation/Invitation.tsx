@@ -74,7 +74,12 @@ function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
         <SectionDescription>
           {invitationDatasets.length > 0 ? descriptions.datasetsPresent : descriptions.datasetsAbsent}
         </SectionDescription>
-        <WorkspaceDatasetsTable datasetsUUIDs={invitationDatasets} hideTableIfEmpty openLinksInNewTab />
+        <WorkspaceDatasetsTable
+          datasetsUUIDs={invitationDatasets}
+          isSelectable={false}
+          hideTableIfEmpty
+          openLinksInNewTab
+        />
       </Stack>
     </CollapsibleDetailPageSection>
   );

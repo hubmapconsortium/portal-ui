@@ -109,7 +109,7 @@ function EntityTable<Doc>({
       ref={tableContainerRef}
       onScroll={(event) => fetchMoreOnBottomReached(event)}
     >
-      {numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
+      {isSelectable && numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>
           <TableRow sx={{ height: headerRowHeight }}>

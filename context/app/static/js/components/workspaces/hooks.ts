@@ -40,6 +40,7 @@ import {
   CreateTemplatesResponse,
   WorkspaceResourceOptions,
   WorkspaceInvitation,
+  WorkspaceFile,
 } from './types';
 
 interface UseWorkspacesListTypes<T> {
@@ -239,9 +240,8 @@ function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, ne
   }, []);
 }
 
-function useMatchingWorkspaceTemplates(workspace: MergedWorkspace | Record<string, never> = {}) {
+function useMatchingWorkspaceTemplates(workspaceFiles: WorkspaceFile[] = []) {
   // TODO: Update to use template IDs once workspace API makes them available
-  const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();
 
   const matchingTemplates = workspaceFiles.reduce((acc, file) => {
@@ -267,7 +267,9 @@ function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
 
   const mergedWorkspace = workspacesList[0] ?? {};
 
-  const workspaceTemplates = useMatchingWorkspaceTemplates(mergedWorkspace);
+  const workspaceTemplates = useMatchingWorkspaceTemplates(
+    mergedWorkspace.workspace_details?.current_workspace_details?.files,
+  );
 
   return {
     workspace: mergedWorkspace,
@@ -290,15 +292,17 @@ function useInvitationDetail({ invitationId }: { invitationId: number }) {
     invitationsLoading,
   });
 
-  const workspaceId = invitation?.original_workspace_id?.id ?? null;
-  const { workspaceDatasets, workspaceTemplates } = useWorkspaceDetail(
-    workspaceId ? { workspaceId } : { workspaceId: invitationId },
-  );
+  const workspaceDetails = invitation?.shared_workspace_id?.workspace_details;
+  const invitationTemplates = useMatchingWorkspaceTemplates(workspaceDetails?.current_workspace_details?.files);
+  const invitationDatasets: string[] =
+    workspaceDetails?.request_workspace_details?.symlinks?.flatMap((symlink) =>
+      symlink.dataset_uuid ? [symlink.dataset_uuid] : [],
+    ) ?? [];
 
   return {
     invitation,
-    invitationDatasets: workspaceDatasets,
-    invitationTemplates: workspaceTemplates,
+    invitationDatasets,
+    invitationTemplates,
     ...invitationsActions,
   };
 }

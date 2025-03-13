@@ -103,6 +103,7 @@ export interface SharedWorkspace {
   id: number;
   name: string;
   description: string;
+  workspace_details: WorkspaceDetails;
   user_id: WorkspaceUser;
 }
 
