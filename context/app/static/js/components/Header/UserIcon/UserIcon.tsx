@@ -1,11 +1,12 @@
-import { useAppContext } from 'js/components/Contexts';
 import React from 'react';
 import Avatar from '@mui/material/Avatar';
+import Typography from '@mui/material/Typography';
 import PersonRounded from '@mui/icons-material/PersonRounded';
-import { Typography } from '@mui/material';
+
+import { useAppContext } from 'js/components/Contexts';
 import { useInvitationsList } from 'js/components/workspaces/hooks';
-import { StyledContainer, StyledNotificationContainer } from 'js/components/Header/UserIcon/style';
 import HeaderNotification from 'js/components/Header/HeaderNotification';
+import { StyledContainer, StyledNotificationContainer } from './style';
 
 function Authenticated({ userEmail }: { userEmail: string }) {
   return <Typography variant="subtitle2">{userEmail[0].toUpperCase()}</Typography>;
@@ -26,8 +27,8 @@ export default function UserIcon() {
     <StyledContainer>
       <Avatar
         sx={{
-          width: '30px',
-          height: '30px',
+          width: '28px',
+          height: '28px',
           bgcolor: '#c5c7cf', // primary-container
           color: (theme) => theme.palette.common.black,
         }}
@@ -35,11 +36,9 @@ export default function UserIcon() {
       >
         {content}
       </Avatar>
-      {numPendingInvitations > 0 && (
-        <StyledNotificationContainer>
-          <HeaderNotification numNotifications={numPendingInvitations} />
-        </StyledNotificationContainer>
-      )}
+      <StyledNotificationContainer>
+        <HeaderNotification numNotifications={numPendingInvitations} />
+      </StyledNotificationContainer>
     </StyledContainer>
   );
 }

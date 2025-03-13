@@ -1,5 +1,5 @@
 import { styled } from '@mui/material/styles';
-import { Box } from '@mui/material';
+import Box from '@mui/material/Box';
 
 const StyledContainer = styled(Box)({
   position: 'relative',
@@ -10,7 +10,7 @@ const StyledNotificationContainer = styled(Box)({
   position: 'absolute',
   top: 0,
   right: 0,
-  transform: 'translate(65%, -40%)',
+  transform: 'translate(70%, -45%)',
 });
 
 export { StyledContainer, StyledNotificationContainer };

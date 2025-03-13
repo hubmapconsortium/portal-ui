@@ -11,7 +11,7 @@ const sharedButtonStyles = (theme: Theme) => ({
 });
 
 const WorkspaceTooltipButton = styled((props: React.ComponentProps<typeof TooltipIconButton>) => (
-  <TooltipIconButton size="small" {...props} />
+  <TooltipIconButton size="medium" {...props} />
 ))(({ theme }) => ({
   ...sharedButtonStyles(theme),
   svg: {
