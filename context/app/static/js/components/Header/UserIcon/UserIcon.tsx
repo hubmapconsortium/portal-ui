@@ -5,7 +5,7 @@ import PersonRounded from '@mui/icons-material/PersonRounded';
 
 import { useAppContext } from 'js/components/Contexts';
 import { useInvitationsList } from 'js/components/workspaces/hooks';
-import HeaderNotification from 'js/components/Header/HeaderNotification';
+import NotificationBell from 'js/shared-styles/alerts/NotificationBell';
 import { StyledContainer, StyledNotificationContainer } from './style';
 
 function Authenticated({ userEmail }: { userEmail: string }) {
@@ -37,7 +37,7 @@ export default function UserIcon() {
         {content}
       </Avatar>
       <StyledNotificationContainer>
-        <HeaderNotification numNotifications={numPendingInvitations} />
+        <NotificationBell numNotifications={numPendingInvitations} />
       </StyledNotificationContainer>
     </StyledContainer>
   );

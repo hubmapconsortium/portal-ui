@@ -2,7 +2,11 @@ import React from 'react';
 import { NotificationIcon } from 'js/shared-styles/icons';
 import { StyledContainer, StyledTypography } from './style';
 
-function HeaderNotification({ numNotifications }: { numNotifications: number }) {
+interface NotificationBellProps {
+  numNotifications: number;
+  notificationTitle?: string;
+}
+function NotificationBell({ numNotifications, notificationTitle }: NotificationBellProps) {
   if (numNotifications === 0) {
     return null;
   }
@@ -10,9 +14,11 @@ function HeaderNotification({ numNotifications }: { numNotifications: number }) 
   return (
     <StyledContainer direction="row">
       <NotificationIcon fontSize="0.65rem" />
-      <StyledTypography>{numNotifications}</StyledTypography>
+      <StyledTypography>
+        {numNotifications} {notificationTitle}
+      </StyledTypography>
     </StyledContainer>
   );
 }
 
-export default HeaderNotification;
+export default NotificationBell;
