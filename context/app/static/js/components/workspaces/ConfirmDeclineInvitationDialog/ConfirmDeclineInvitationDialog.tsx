@@ -26,6 +26,10 @@ export default function ConfirmDeclineInvitationDialog() {
   const handleDeleteAndClose = () => {
     handleDeleteInvitation(id)
       .then(() => {
+        // Redirect to the workspaces page if on the invitation detail page
+        if (window.location.href.includes('/invitations')) {
+          window.location.href = `/workspaces`;
+        }
         toastSuccessDeclineInvitation(name);
       })
       .catch((e) => {

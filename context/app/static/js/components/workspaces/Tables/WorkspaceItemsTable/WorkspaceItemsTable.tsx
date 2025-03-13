@@ -407,7 +407,7 @@ function TableResults<T extends WorkspaceItem>({
     .slice(0, numVisibleItems)
     .map((item) => (
       <ResultRow
-        key={'id' in item ? item.id : item.original_workspace_id.id}
+        key={isWorkspace(item) ? item.id : item.shared_workspace_id.id}
         item={item}
         tableFields={tableFields}
         selectedItemIds={selectedItemIds}
