@@ -12,12 +12,18 @@ import { useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
-import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
-import { getFieldPrefix, getFieldValue, isInvitation, isWorkspace } from 'js/components/workspaces/utils';
+import {
+  getFieldPrefix,
+  getFieldValue,
+  isInvitation,
+  isSentInvitation,
+  isWorkspace,
+} from 'js/components/workspaces/utils';
 import {
   CheckIcon,
   CloseFilledIcon,
+  CloseIcon,
   DownIcon,
   EmailIcon,
   EyeIcon,
@@ -38,8 +44,8 @@ import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
-import { useAppContext } from 'js/components/Contexts';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { CenteredAlert } from 'js/components/style';
 
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
 import {
@@ -56,11 +62,14 @@ import {
   StyledTableRow,
   StyledTableHead,
   StyledCheckboxCell,
+  StyledSvgIcon,
 } from './style';
 
 const tooltips = {
   expandRow: 'Show description',
   acceptInvite: 'Accept workspace copy invitation. This will create a copy of this workspace to your profile.',
+  declineInvite: 'Decline invitation',
+  deleteInvite: 'Delete invitation',
   previewInvite: 'Preview the details of this workspace',
   moreOptions: 'View additional actions',
 };
@@ -70,9 +79,8 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
   const { handleAcceptInvitation } = useInvitationsList();
   const { setDialogType, setInvitation } = useEditWorkspaceStore();
   const { toastErrorAcceptInvitation, toastSuccessAcceptInvitation } = useWorkspaceToasts();
-  const { userEmail } = useAppContext();
 
-  const isSender = isInvitation(item) && item.original_workspace_id.user_id.email === userEmail;
+  const isSender = isSentInvitation(item);
   const isAccepted = getFieldValue({ item, field: 'is_accepted' });
 
   const options = useMemo(
@@ -105,6 +113,19 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
     }
   });
 
+  const onPreviewInvite = useEventCallback(() => {
+    if (isInvitation(item)) {
+      window.location.href = `/invitations/${item.shared_workspace_id.id}`;
+    }
+  });
+
+  const onDeclineInvite = useEventCallback(() => {
+    if (isInvitation(item)) {
+      setInvitation(item);
+      setDialogType('DECLINE_INVITATION');
+    }
+  });
+
   // If the item is a workspace
   if (isWorkspace(item)) {
     return (
@@ -124,29 +145,31 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
     return null;
   }
 
+  // If the item is a pending sent invitation
+  if (isSender) {
+    return (
+      <Stack direction="row" justifyContent="end" alignItems="center">
+        <IconDropdownMenu tooltip={tooltips.moreOptions} icon={MoreIcon} button={RotatedTooltipButton}>
+          {options.map((props) => (
+            <IconDropdownMenuItem key={props.children} {...props} />
+          ))}
+        </IconDropdownMenu>
+      </Stack>
+    );
+  }
+
   // If the item is a pending received invitation
   return (
     <Stack direction="row" justifyContent="end" alignItems="center">
-      <IconDropdownMenu tooltip={tooltips.moreOptions} icon={MoreIcon} button={RotatedTooltipButton}>
-        {options.map((props) => (
-          <IconDropdownMenuItem key={props.children} {...props} />
-        ))}
-      </IconDropdownMenu>
-      {!isSender && (
-        <Stack direction="row">
-          <TooltipIconButton
-            tooltip={tooltips.previewInvite}
-            onClick={() => {
-              window.location.href = `/invitations/${item.shared_workspace_id.id}`;
-            }}
-          >
-            <EyeIcon color="primary" fontSize="1.5rem" />
-          </TooltipIconButton>
-          <TooltipIconButton tooltip={tooltips.acceptInvite} onClick={onAcceptInvite}>
-            <CheckIcon color="success" fontSize="1.5rem" />
-          </TooltipIconButton>
-        </Stack>
-      )}
+      <TooltipIconButton tooltip={tooltips.declineInvite} onClick={onDeclineInvite}>
+        <StyledSvgIcon as={CloseIcon} />
+      </TooltipIconButton>
+      <TooltipIconButton tooltip={tooltips.previewInvite} onClick={onPreviewInvite}>
+        <StyledSvgIcon as={EyeIcon} color="primary" />
+      </TooltipIconButton>
+      <TooltipIconButton tooltip={tooltips.acceptInvite} onClick={onAcceptInvite}>
+        <StyledSvgIcon as={CheckIcon} color="success" />
+      </TooltipIconButton>
     </Stack>
   );
 }
@@ -230,11 +253,12 @@ function InvitationStatusIcon({ item }: { item: WorkspaceItem }) {
 function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
+  const hasWorkspacePage = isWorkspace(item) || isSentInvitation(item) || getFieldValue({ item, field: 'is_accepted' });
 
   switch (field) {
     case `${prefix}name`: {
       const itemId = getFieldValue({ item, field: 'id', prefix });
-      const href = isWorkspace(item) ? `/workspaces/${itemId}` : `/invitations/${itemId}`;
+      const href = hasWorkspacePage ? `/workspaces/${itemId}` : `/invitations/${itemId}`;
 
       return (
         <Stack direction="row" spacing={1} alignItems="center">
@@ -437,7 +461,13 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
   } = useWorkspaceItemsTable<T>(props);
 
   if (!isLoading && noFiltersSelected) {
-    return <Alert severity="info">{`No ${itemType}s to display based on current filters.`}</Alert>;
+    return (
+      <StyledTableContainer sx={(theme) => ({ padding: theme.spacing(2) })}>
+        <StyledTable>
+          <CenteredAlert severity="info">{`No ${itemType}s to display based on current filters.`}</CenteredAlert>
+        </StyledTable>
+      </StyledTableContainer>
+    );
   }
 
   return (

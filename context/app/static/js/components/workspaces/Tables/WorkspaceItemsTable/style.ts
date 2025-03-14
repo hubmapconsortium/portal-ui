@@ -9,6 +9,7 @@ import TableCell from '@mui/material/TableCell';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
+import { SvgIcon } from '@mui/material';
 
 const border = (theme: Theme) => ({
   border: `1px solid ${theme.palette.grey[300]}`,
@@ -107,6 +108,10 @@ const StyledNumSelectedHeader = styled(NumSelectedHeader)(({ theme }) => ({
   ...border(theme),
 }));
 
+const StyledSvgIcon = styled(SvgIcon)({
+  fontSize: '1.5rem',
+});
+
 export {
   ChipWrapper,
   CompactTableRow,
@@ -122,4 +127,5 @@ export {
   StyledTableHead,
   StyledCheckboxCell,
   StyledNumSelectedHeader,
+  StyledSvgIcon,
 };

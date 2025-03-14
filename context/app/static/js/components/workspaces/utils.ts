@@ -417,6 +417,10 @@ function isWorkspace(item: WorkspaceItem): item is WorkspaceWithUserId {
   return 'id' in item;
 }
 
+function isSentInvitation(item: WorkspaceItem): item is WorkspaceInvitation {
+  return isInvitation(item) && item.original_workspace_id.user_id.email === userEmail;
+}
+
 function getSelectedWorkspaceNames({
   selectedWorkspaceIds,
   workspacesList,
@@ -456,5 +460,6 @@ export {
   getFieldValue,
   isInvitation,
   isWorkspace,
+  isSentInvitation,
   getSelectedWorkspaceNames,
 };
