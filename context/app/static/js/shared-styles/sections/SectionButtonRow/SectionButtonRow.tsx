@@ -2,6 +2,7 @@ import React, { ComponentProps } from 'react';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 
+import { Stack } from '@mui/material';
 import { Flex } from './style';
 
 interface SectionButtonRowProps extends ComponentProps<typeof Flex> {
@@ -19,7 +20,7 @@ function SectionButtonRow({ leftText = <div />, buttons, ...props }: SectionButt
   return (
     <Flex {...props}>
       {leftText}
-      {buttons && <div>{buttons}</div>}
+      {buttons && <Stack direction="row">{buttons}</Stack>}
     </Flex>
   );
 }

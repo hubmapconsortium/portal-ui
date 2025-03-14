@@ -67,7 +67,13 @@ function Summary({ invitation }: { invitation: WorkspaceInvitation }) {
   );
 }
 
-function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
+function Datasets({
+  invitation,
+  invitationDatasets,
+}: {
+  invitation: WorkspaceInvitation;
+  invitationDatasets: string[];
+}) {
   return (
     <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
       <Stack spacing={1}>
@@ -77,6 +83,10 @@ function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
         <WorkspaceDatasetsTable
           datasetsUUIDs={invitationDatasets}
           isSelectable={false}
+          trackingInfo={{
+            category: WorkspacesEventCategories.WorkspaceDetailPage,
+            label: invitation.shared_workspace_id.id.toString(),
+          }}
           hideTableIfEmpty
           openLinksInNewTab
         />
@@ -159,7 +169,7 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
         </StyledAlert>
         <Stack gap={1} sx={{ marginBottom: 5 }}>
           <Summary invitation={invitation} />
-          <Datasets invitationDatasets={invitationDatasets} />
+          <Datasets invitation={invitation} invitationDatasets={invitationDatasets} />
           <Templates invitationTemplates={invitationTemplates} />
         </Stack>
       </DetailLayout>

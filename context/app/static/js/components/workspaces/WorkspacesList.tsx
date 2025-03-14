@@ -51,7 +51,7 @@ function WorkspacesList() {
             setInputValue={setInputValue}
             filteredWorkspaces={filteredWorkspaces}
           />
-          <Stack display="flex" direction="row" spacing={1}>
+          <Stack display="flex" direction="row" spacing={1.5}>
             <WorkspaceTooltipButton
               onClick={() => setDialogType('DELETE_WORKSPACE')}
               disabled={disabled}

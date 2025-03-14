@@ -55,7 +55,7 @@ function SummaryData({
           </LeftTextContainer>
         }
         buttons={
-          <FlexEnd>
+          <>
             {entitiesWithStatus.includes(entity_type) && (
               <>
                 <SummaryItem
@@ -68,7 +68,7 @@ function SummaryData({
               </>
             )}
             {otherButtons}
-          </FlexEnd>
+          </>
         }
       />
     </Stack>

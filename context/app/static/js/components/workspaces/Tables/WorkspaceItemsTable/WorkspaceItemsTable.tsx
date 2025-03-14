@@ -60,7 +60,6 @@ import {
 
 const tooltips = {
   expandRow: 'Show description',
-  collapseRow: 'Hide description',
   acceptInvite: 'Accept workspace copy invitation. This will create a copy of this workspace to your profile.',
   previewInvite: 'Preview the details of this workspace',
   moreOptions: 'View additional actions',
@@ -306,7 +305,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
         <StyledTableCell width="0">
           {description && (
             <TooltipIconButton
-              tooltip={isExpanded ? tooltips.collapseRow : tooltips.expandRow}
+              tooltip={!isExpanded && tooltips.expandRow}
               aria-label="expand row"
               size="small"
               onClick={() => setIsExpanded(!isExpanded)}
