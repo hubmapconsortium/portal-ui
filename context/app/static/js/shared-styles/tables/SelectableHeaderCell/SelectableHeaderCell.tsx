@@ -34,14 +34,13 @@ function SelectableHeaderCell({
   disabled = false,
   ...rest
 }: SelectableHeaderCellProps) {
-  const { toggleHeaderAndRows, headerRowIsSelected, tableLabel } = useSelectableTableStore();
-
+  const { toggleHeaderAndRows, selectedRows, headerRowIsSelected, tableLabel } = useSelectableTableStore();
   const filteredKeys = filterDisabledRows({ allTableRowKeys, disabledTableRowKeys });
 
   const content = (
     <Checkbox
       color="secondary"
-      checked={headerRowIsSelected}
+      checked={selectedRows.size === filteredKeys.length && filteredKeys.length > 0}
       inputProps={{ 'aria-label': `${tableLabel}-header-row-checkbox` }}
       disabled={disabled || filteredKeys.length === 0}
       onChange={() => toggleHeaderAndRows(filteredKeys)}
