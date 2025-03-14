@@ -37,8 +37,8 @@ function WorkspacesList() {
   }, [workspacesList, debouncedInput]);
 
   const disabled = !selectedItems.size || isDeleting;
-  const shareTooltip = disabled ? 'Select workspace to share a copy.' : 'Share copies of the selected workspaces.';
-  const deleteTooltip = disabled ? 'Select workspace to delete.' : 'Delete selected workspaces.';
+  const shareTooltip = disabled ? 'Select workspace to share a copy' : 'Share copies of the selected workspaces';
+  const deleteTooltip = disabled ? 'Select workspace to delete' : 'Delete selected workspaces';
 
   return (
     <>
@@ -51,7 +51,7 @@ function WorkspacesList() {
             setInputValue={setInputValue}
             filteredWorkspaces={filteredWorkspaces}
           />
-          <Stack display="flex" direction="row" spacing={2}>
+          <Stack display="flex" direction="row" spacing={1}>
             <WorkspaceTooltipButton
               onClick={() => setDialogType('DELETE_WORKSPACE')}
               disabled={disabled}

@@ -58,10 +58,13 @@ import {
   StyledCheckboxCell,
 } from './style';
 
-const acceptInviteTooltip =
-  'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
-const previewInviteTooltip = 'Preview the details of this workspace';
-const moreOptionsTooltip = 'View additional actions';
+const tooltips = {
+  expandRow: 'Show description',
+  collapseRow: 'Hide description',
+  acceptInvite: 'Accept workspace copy invitation. This will create a copy of this workspace to your profile.',
+  previewInvite: 'Preview the details of this workspace',
+  moreOptions: 'View additional actions',
+};
 
 function EndButtons({ item }: { item: WorkspaceItem }) {
   const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
@@ -125,7 +128,7 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
   // If the item is a pending received invitation
   return (
     <Stack direction="row" justifyContent="end" alignItems="center">
-      <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
+      <IconDropdownMenu tooltip={tooltips.moreOptions} icon={MoreIcon} button={RotatedTooltipButton}>
         {options.map((props) => (
           <IconDropdownMenuItem key={props.children} {...props} />
         ))}
@@ -133,14 +136,14 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
       {!isSender && (
         <Stack direction="row">
           <TooltipIconButton
-            tooltip={previewInviteTooltip}
+            tooltip={tooltips.previewInvite}
             onClick={() => {
               window.location.href = `/invitations/${item.shared_workspace_id.id}`;
             }}
           >
             <EyeIcon color="primary" fontSize="1.5rem" />
           </TooltipIconButton>
-          <TooltipIconButton tooltip={acceptInviteTooltip} onClick={onAcceptInvite}>
+          <TooltipIconButton tooltip={tooltips.acceptInvite} onClick={onAcceptInvite}>
             <CheckIcon color="success" fontSize="1.5rem" />
           </TooltipIconButton>
         </Stack>
@@ -302,9 +305,14 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
         />
         <StyledTableCell width="0">
           {description && (
-            <IconButton aria-label="expand row" size="small" onClick={() => setIsExpanded(!isExpanded)}>
+            <TooltipIconButton
+              tooltip={isExpanded ? tooltips.collapseRow : tooltips.expandRow}
+              aria-label="expand row"
+              size="small"
+              onClick={() => setIsExpanded(!isExpanded)}
+            >
               {isExpanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
-            </IconButton>
+            </TooltipIconButton>
           )}
         </StyledTableCell>
         {tableFields.map(({ field }) => (

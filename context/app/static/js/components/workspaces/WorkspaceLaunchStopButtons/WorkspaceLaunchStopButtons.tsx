@@ -58,6 +58,53 @@ function StopWorkspaceButton({
   );
 }
 
+function LaunchWorkspaceButton({
+  workspace,
+  trackingInfo,
+  button: ButtonComponent,
+  showIcons = false,
+}: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
+  const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
+  const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
+
+  return (
+    <ButtonComponent
+      onClick={() => {
+        if (trackingInfo) {
+          trackEvent({
+            ...trackingInfo,
+            action: 'Launch Open Workspace Dialog',
+            label: workspace.name,
+          });
+        }
+        launchOrOpenDialog(workspace);
+      }}
+      startIcon={showIcons ? <StyledSvgIcon as={StartJobIcon} /> : undefined}
+    >
+      {currentWorkspaceIsRunning ? 'Re-Launch' : 'Launch'}
+    </ButtonComponent>
+  );
+}
+
+function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
+  const { workspace, button: ButtonComponent, showLaunch = false, showStop = false } = props;
+
+  if (workspace.status === 'deleting') {
+    return (
+      <ButtonComponent type="button" disabled size="small">
+        Deleting...
+      </ButtonComponent>
+    );
+  }
+
+  return (
+    <Stack direction="row" spacing={1}>
+      {showStop && <StopWorkspaceButton {...props} />}
+      {showLaunch && <LaunchWorkspaceButton {...props} />}
+    </Stack>
+  );
+}
+
 function StopWorkspaceAlertButton(props: ButtonProps) {
   return <Button {...props}>Stop Jobs</Button>;
 }
@@ -94,49 +141,6 @@ function StopWorkspaceAlert() {
         />
       </Stack>
     </Alert>
-  );
-}
-
-function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const {
-    workspace,
-    button: ButtonComponent,
-    trackingInfo,
-    showLaunch = false,
-    showStop = false,
-    showIcons = false,
-  } = props;
-  const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
-
-  if (workspace.status === 'deleting') {
-    return (
-      <ButtonComponent type="button" disabled size="small">
-        Deleting...
-      </ButtonComponent>
-    );
-  }
-
-  return (
-    <Stack direction="row" spacing={2}>
-      {showStop && <StopWorkspaceButton {...props} />}
-      {showLaunch && (
-        <ButtonComponent
-          onClick={() => {
-            if (trackingInfo) {
-              trackEvent({
-                ...trackingInfo,
-                action: 'Launch Open Workspace Dialog',
-                label: workspace.name,
-              });
-            }
-            launchOrOpenDialog(workspace);
-          }}
-          startIcon={showIcons ? <StyledSvgIcon as={StartJobIcon} /> : undefined}
-        >
-          Launch
-        </ButtonComponent>
-      )}
-    </Stack>
   );
 }
 
