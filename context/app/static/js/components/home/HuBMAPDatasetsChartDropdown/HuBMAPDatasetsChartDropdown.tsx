@@ -1,32 +1,36 @@
-import React from 'react';
+import React, { useId } from 'react';
 
-import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
-import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
-import { SelectionButton } from './style';
+import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
-interface DatasetsChartDropdownProps {
-  colorDataOptions: string[];
-  selectedColorDataIndex: number;
-  setSelectedColorDataIndex: ({ i }: { i: number }) => void;
+interface DatasetsChartDropdownProps<T extends string> {
+  options: T[];
+  value: T;
+  label: string;
+  onChange: (e: SelectChangeEvent<T>) => void;
+  fullWidth?: boolean;
 }
 
-function HuBMAPDatasetsChartDropdown({
-  colorDataOptions,
-  selectedColorDataIndex,
-  setSelectedColorDataIndex,
-}: DatasetsChartDropdownProps) {
+function ChartDropdown<T extends string>({
+  options,
+  value,
+  onChange,
+  label,
+  fullWidth,
+}: DatasetsChartDropdownProps<T>) {
+  const id = useId();
+  const labelId = `${id}-label`;
   return (
-    <DropdownListbox
-      id="bar-fill-dropdown"
-      buttonComponent={SelectionButton}
-      optionComponent={DropdownListboxOption}
-      selectedOptionIndex={selectedColorDataIndex}
-      options={colorDataOptions}
-      selectOnClick={setSelectedColorDataIndex}
-      getOptionLabel={(v) => v}
-      buttonProps={{ variant: 'outlined', color: 'primary', fullWidth: true }}
-    />
+    <FormControl fullWidth={fullWidth}>
+      <InputLabel id={labelId}>{label}</InputLabel>
+      <Select id={id} label={label} labelId={labelId} value={value} onChange={onChange} fullWidth={fullWidth}>
+        {options.map((option) => (
+          <MenuItem key={option} value={option}>
+            {option}
+          </MenuItem>
+        ))}
+      </Select>
+    </FormControl>
   );
 }
 
-export default HuBMAPDatasetsChartDropdown;
+export default ChartDropdown;

@@ -12,7 +12,7 @@ import { TooltipData } from 'js/shared-styles/charts/types';
 import Typography from '@mui/material/Typography';
 import { AnyD3Scale } from '@visx/scale';
 import { getSearchURL } from 'js/components/organ/utils';
-import HuBMAPDatasetsChartDropdown from '../HuBMAPDatasetsChartDropdown';
+import ChartDropdown from '../HuBMAPDatasetsChartDropdown';
 import {
   assayTypeQuery,
   donorSexQuery,
@@ -207,10 +207,25 @@ function HuBMAPDatasetsChart() {
           colorScale={colorScale}
           allKeysScale={allKeysScale}
           dropdown={
-            <HuBMAPDatasetsChartDropdown
-              colorDataOptions={colorOptions.map((c) => c.dropdownLabel)}
-              selectedColorDataIndex={selectedColorDataIndex}
-              setSelectedColorDataIndex={setSelectedColorDataIndex}
+            <ChartDropdown
+              options={colorOptions.map((c) => c.dropdownLabel)}
+              value={selectedColor.dropdownLabel}
+              label="Compare by"
+              onChange={(e) =>
+                setSelectedColorDataIndex(colorOptions.findIndex((c) => c.dropdownLabel === e.target.value))
+              }
+              fullWidth
+            />
+          }
+          xAxisDropdown={
+            <ChartDropdown
+              options={['Datasets (TOTAL)', 'Donors (TOTAL)']}
+              value="Datasets (TOTAL)"
+              label="X-Axis"
+              fullWidth
+              onChange={() => {
+                console.error('TODO');
+              }}
             />
           }
         >

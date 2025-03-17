@@ -12,6 +12,7 @@ import { OrdinalScale, useChartTooltip, useHorizontalChart } from 'js/shared-sty
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import { TextProps } from '@visx/text';
+import { Skeleton } from '@mui/material';
 import { TICK_LABEL_SIZE } from '../constants';
 import { TooltipData, tooltipHasBarData } from '../types';
 
@@ -106,87 +107,85 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   } = useChartTooltip<TooltipData<Datum>>();
 
   if (visxData.length === 0) {
-    return null;
+    return <Skeleton variant="rectangular" width={parentWidth} height={parentHeight} />;
   }
 
   const axisLabelProps = srOnlyLabels ? srOnlyLabelStyles : undefined;
 
   return (
-    <>
-      <svg width={parentWidth} height={parentHeight} ref={containerRef}>
-        <GridColumns
-          top={updatedMargin.top}
-          left={updatedMargin.left}
-          scale={xScale}
+    <svg width={parentWidth} height={parentHeight} ref={containerRef}>
+      <GridColumns
+        top={updatedMargin.top}
+        left={updatedMargin.left}
+        scale={xScale}
+        height={yHeight}
+        stroke="black"
+        opacity={0.38}
+      />
+      <Group top={updatedMargin.top} left={updatedMargin.left}>
+        <BarStackHorizontal
+          data={visxData}
+          keys={keys}
           height={yHeight}
+          y={getY}
+          xScale={xScale}
+          yScale={yScale}
+          color={colorScale}
+          x0={x0}
+          x1={x1}
+        >
+          {(barStacks) => {
+            return barStacks.map((barStack) =>
+              barStack.bars.map(
+                (bar) =>
+                  bar.width > 0 && (
+                    <StackedBar
+                      key={`${bar.key}-${bar.index}`}
+                      direction="horizontal"
+                      bar={bar}
+                      href={getBarHref?.(bar)}
+                      ariaLabelText={getAriaLabel?.(bar)}
+                      hoverProps={
+                        showTooltipAndHover
+                          ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
+                          : undefined
+                      }
+                    />
+                  ),
+              ),
+            );
+          }}
+        </BarStackHorizontal>
+        <AxisLeft
+          hideTicks
+          scale={yScale}
           stroke="black"
-          opacity={0.38}
+          numTicks={yAxisTickLabels.length}
+          label={yAxisLabel}
+          labelProps={axisLabelProps}
+          labelOffset={longestLabelSize + 10}
+          tickLabelProps={() => ({
+            fill: 'black',
+            fontSize: TICK_LABEL_SIZE,
+            textAnchor: 'end',
+            dy: '0.33em',
+          })}
         />
-        <Group top={updatedMargin.top} left={updatedMargin.left}>
-          <BarStackHorizontal
-            data={visxData}
-            keys={keys}
-            height={yHeight}
-            y={getY}
-            xScale={xScale}
-            yScale={yScale}
-            color={colorScale}
-            x0={x0}
-            x1={x1}
-          >
-            {(barStacks) => {
-              return barStacks.map((barStack) =>
-                barStack.bars.map(
-                  (bar) =>
-                    bar.width > 0 && (
-                      <StackedBar
-                        key={`${bar.key}-${bar.index}`}
-                        direction="horizontal"
-                        bar={bar}
-                        href={getBarHref?.(bar)}
-                        ariaLabelText={getAriaLabel?.(bar)}
-                        hoverProps={
-                          showTooltipAndHover
-                            ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
-                            : undefined
-                        }
-                      />
-                    ),
-                ),
-              );
-            }}
-          </BarStackHorizontal>
-          <AxisLeft
-            hideTicks
-            scale={yScale}
-            stroke="black"
-            numTicks={yAxisTickLabels.length}
-            label={yAxisLabel}
-            labelProps={axisLabelProps}
-            labelOffset={longestLabelSize + 10}
-            tickLabelProps={() => ({
-              fill: 'black',
-              fontSize: TICK_LABEL_SIZE,
-              textAnchor: 'end',
-              dy: '0.33em',
-            })}
-          />
-          <AxisTop
-            hideTicks
-            top={1}
-            scale={xScale}
-            stroke="black"
-            tickStroke="black"
-            label={xAxisLabel}
-            labelProps={axisLabelProps}
-            tickLabelProps={() => ({
-              fill: 'black',
-              fontSize: TICK_LABEL_SIZE,
-              textAnchor: 'middle',
-            })}
-          />
-        </Group>
-      </svg>
+        <AxisTop
+          hideTicks
+          top={1}
+          scale={xScale}
+          stroke="black"
+          tickStroke="black"
+          label={xAxisLabel}
+          labelProps={axisLabelProps}
+          tickLabelProps={() => ({
+            fill: 'black',
+            fontSize: TICK_LABEL_SIZE,
+            textAnchor: 'middle',
+          })}
+        />
+      </Group>
       {showTooltipAndHover && tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
           {TooltipContent ? (
@@ -203,7 +202,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
           )}
         </TooltipInPortal>
       )}
-    </>
+    </svg>
   );
 }
 

@@ -1,3 +1,3 @@
-import HuBMAPDatasetsChartDropdown from './HuBMAPDatasetsChartDropdown';
+import ChartDropdown from './HuBMAPDatasetsChartDropdown';
 
-export default HuBMAPDatasetsChartDropdown;
+export default ChartDropdown;

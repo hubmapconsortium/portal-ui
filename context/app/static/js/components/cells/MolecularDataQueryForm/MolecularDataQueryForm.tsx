@@ -12,18 +12,20 @@ interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
 }
 
-export default function MolecularDataQueryForm({ children, initialValues }: MolecularDataQueryFormProps) {
+export default function MolecularDataQueryForm({
+  children,
+  initialValues = {
+    queryType: 'gene',
+    queryMethod: 'scFind',
+    genes: [],
+  },
+}: MolecularDataQueryFormProps) {
   const methods = useForm<MolecularDataQueryFormState>({
-    defaultValues: {
-      queryType: 'gene',
-      queryMethod: 'scFind',
-      genes: [],
-      ...initialValues,
-    },
+    defaultValues: initialValues,
   });
   const { setValue, watch } = methods;
 
-  const { toastError } = useSnackbarActions();
+  const { toastError, toastInfo } = useSnackbarActions();
   const onError = useEventCallback((errors: FieldErrors<MolecularDataQueryFormState>) => {
     const error = Object.values(errors)
       .map((field) => field.message)
@@ -52,13 +54,13 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
     methods.reset({}, { keepValues: true, keepDirty: false });
-    console.log(data);
+    toastInfo(`Query submitted: ${JSON.stringify(data)}`);
   });
 
   const id = `${useId()}-molecular-data-query`;
 
   const [formIsExpanded, setFormIsExpanded] = useState(true);
-  const [resultsAreExpanded, setResultsAreExpanded] = useState(false);
+  const [resultsAreExpanded] = useState(false);
 
   return (
     <FormProvider {...methods}>
