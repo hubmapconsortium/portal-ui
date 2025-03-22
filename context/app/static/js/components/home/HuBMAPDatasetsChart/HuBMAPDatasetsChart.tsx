@@ -24,6 +24,8 @@ import {
   ProcessingStatusQueryKey,
   donorRaceQuery,
   DonorRaceQueryKey,
+  SELECTED_ENTITY_TYPES,
+  useSelectedEntityType,
 } from './queries';
 import {
   AggregatedDatum,
@@ -68,6 +70,8 @@ function HuBMAPDatasetsChart() {
   const [selectedColorDataIndex, setSelectedColorDataIndex] = useSelectedDropdownIndex(0);
 
   const { organOrder } = useOrganOrder();
+
+  const { selectedEntityType, setSelectedEntityType } = useSelectedEntityType();
 
   const assayBuckets = useAggregatedChartData<AssaysQueryKey>(assayTypeQuery);
   const donorSexBuckets = useAggregatedChartData<DonorSexQueryKey>(donorSexQuery);
@@ -200,7 +204,7 @@ function HuBMAPDatasetsChart() {
   if (!selectedColor.data.length || !organOrder) return <Skeleton height="500px" />;
 
   return (
-    <Paper sx={{ pr: 4 }}>
+    <Paper sx={{ px: 2 }}>
       <ChartArea>
         <ChartWrapper
           margin={margin}
@@ -219,12 +223,12 @@ function HuBMAPDatasetsChart() {
           }
           xAxisDropdown={
             <ChartDropdown
-              options={['Datasets (TOTAL)', 'Donors (TOTAL)']}
-              value="Datasets (TOTAL)"
+              options={SELECTED_ENTITY_TYPES}
+              value={selectedEntityType}
               label="X-Axis"
               fullWidth
-              onChange={() => {
-                console.error('TODO');
+              onChange={(e) => {
+                setSelectedEntityType(e.target.value as (typeof SELECTED_ENTITY_TYPES)[number]);
               }}
             />
           }

@@ -3,7 +3,7 @@ import React, { useId } from 'react';
 import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
 
 interface DatasetsChartDropdownProps<T extends string> {
-  options: T[];
+  options: readonly T[];
   value: T;
   label: string;
   onChange: (e: SelectChangeEvent<T>) => void;

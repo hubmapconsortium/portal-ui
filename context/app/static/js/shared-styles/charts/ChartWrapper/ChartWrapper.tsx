@@ -17,16 +17,6 @@ interface ChartWrapperProps extends PropsWithChildren {
   allKeysScale?: OrdinalScale;
 }
 
-const useMaxGraphHeight = (xAxisDropdown: React.ReactNode, yAxisDropdown: React.ReactNode) => {
-  if (!xAxisDropdown && !yAxisDropdown) {
-    return '500px';
-  }
-  if (xAxisDropdown && yAxisDropdown) {
-    return '300px';
-  }
-  return '400px';
-};
-
 function ChartWrapper({
   children,
   chartTitle,
@@ -38,7 +28,6 @@ function ChartWrapper({
   additionalControls,
   allKeysScale,
 }: ChartWrapperProps) {
-  const maxGraphHeight = useMaxGraphHeight(xAxisDropdown, yAxisDropdown);
   return (
     <Box
       sx={{
@@ -52,7 +41,7 @@ function ChartWrapper({
         `,
         overflow: 'none',
         gridTemplateColumns: 'auto auto auto fit-content(175px)',
-        gridTemplateRows: `auto auto auto ${maxGraphHeight} auto`,
+        gridTemplateRows: 'auto auto minmax(0, auto) 500px minmax(0, auto)',
       }}
     >
       {chartTitle && (
@@ -60,9 +49,9 @@ function ChartWrapper({
           {chartTitle && <Typography>{chartTitle}</Typography>}
         </TitleWrapper>
       )}
-      <Box sx={{ gridArea: 'y-axis', p: 1 }}>{yAxisDropdown}</Box>
+      <Box sx={{ gridArea: 'y-axis', p: yAxisDropdown ? 1 : 0 }}>{yAxisDropdown}</Box>
       <Box sx={{ gridArea: 'chart' }}>{children}</Box>
-      <Box sx={{ gridArea: 'x-axis', p: 1 }}>{xAxisDropdown}</Box>
+      <Box sx={{ gridArea: 'x-axis', p: xAxisDropdown ? 1 : 0 }}>{xAxisDropdown}</Box>
       <Box sx={{ gridArea: 'legend', display: 'flex', flexDirection: 'column', maxHeight: '100%', overflow: 'none' }}>
         {dropdown && <Box sx={{ marginY: 1, minWidth: 0 }}>{dropdown}</Box>}
         <Box sx={{ flex: 1, overflowY: 'auto' }} tabIndex={0}>
@@ -86,7 +75,6 @@ function ChartWrapper({
         </Box>
       </Box>
       <Box sx={{ gridArea: 'top-controls' }}>{additionalControls}</Box>
-      <Box sx={{ gridArea: 'y-axis' }}>{yAxisDropdown}</Box>
     </Box>
   );
 }

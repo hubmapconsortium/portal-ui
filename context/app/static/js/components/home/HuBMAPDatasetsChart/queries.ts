@@ -1,4 +1,5 @@
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
+import { useState } from 'react';
 
 import type { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 import { getOrganTypesCompositeAggsQuery } from 'js/shared-styles/charts/HorizontalStackedBarChart/utils';
@@ -102,6 +103,18 @@ const processingStatusQuery: SearchRequest = {
 //   query: includeOnlyDatasetsClause,
 //   ...getOrganTypesCompositeAggsQuery('donor.mapped_metadata.age', 'donor_age'),
 // };
+
+export const SELECTED_ENTITY_TYPES = ['Dataset', 'Donor'] as const;
+
+type SelectedEntityType = (typeof SELECTED_ENTITY_TYPES)[number];
+
+export const useSelectedEntityType = () => {
+  const [selectedEntityType, setSelectedEntityType] = useState<SelectedEntityType>('Dataset');
+  return {
+    selectedEntityType,
+    setSelectedEntityType,
+  };
+};
 
 interface QueryAggs<T> {
   organs: {
