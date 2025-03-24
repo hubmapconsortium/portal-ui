@@ -41,8 +41,8 @@ function useUkvHeaders(): HeadersInit {
 }
 
 function useHasUkvAccess() {
-  const { isAuthenticated } = useAppContext();
-  return Boolean(isAuthenticated);
+  const { isHubmapUser } = useAppContext();
+  return Boolean(isHubmapUser);
 }
 
 function useBuildUkvSWRKey(): {

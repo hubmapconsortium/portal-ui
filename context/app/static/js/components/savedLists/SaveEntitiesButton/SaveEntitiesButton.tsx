@@ -44,7 +44,7 @@ export default function SaveEntitiesButton({
   uuids: Set<string>;
   fromSelectableTable?: boolean;
 }) {
-  const { isAuthenticated } = useAppContext();
+  const { isHubmapUser } = useAppContext();
   const { savedEntities, handleSaveEntities } = useSavedLists();
   const {
     entity: { entity_type: page_entity_type },
@@ -70,7 +70,7 @@ export default function SaveEntitiesButton({
     });
   });
 
-  if (!isAuthenticated) {
+  if (!isHubmapUser) {
     return null;
   }
 
