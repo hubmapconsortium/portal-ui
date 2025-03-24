@@ -14,14 +14,7 @@ interface InvitationTabProps {
 }
 function InvitationTab({ label, index, icon: Icon, ...props }: InvitationTabProps) {
   return (
-    <Tab
-      icon={<Icon fontSize="1.5rem" color="primary" />}
-      label={label}
-      key={index}
-      index={index}
-      iconPosition="start"
-      {...props}
-    />
+    <Tab icon={<Icon fontSize="1.5rem" />} label={label} key={index} index={index} iconPosition="start" {...props} />
   );
 }
 

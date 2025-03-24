@@ -8,7 +8,7 @@ import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/system/Stack';
 import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
-import { useEventCallback } from '@mui/material';
+import { SvgIcon, useEventCallback } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
@@ -44,6 +44,7 @@ import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
+import { workspaceStatusIconMap } from 'js/shared-styles/icons/workspaceStatusIconMap';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { CenteredAlert } from 'js/components/style';
 
@@ -295,6 +296,15 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
     case `${prefix}datetime_last_job_launch`: {
       const date = fieldValue ?? getFieldValue({ item, field: 'datetime_created', prefix });
       return format(date, 'yyyy-MM-dd');
+    }
+    case 'status': {
+      const { icon, color } = workspaceStatusIconMap[fieldValue];
+      return (
+        <Stack direction="row" alignItems="center" spacing={1}>
+          <Typography>{fieldValue}</Typography>
+          <SvgIcon fontSize=".9rem" component={icon} color={color} />
+        </Stack>
+      );
     }
     default:
       return <Typography>{fieldValue}</Typography>;
