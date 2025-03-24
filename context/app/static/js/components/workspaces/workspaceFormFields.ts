@@ -4,8 +4,11 @@ import { withCustomMessage } from 'js/helpers/zod/withCustomMessage';
 const workspaceNameField = {
   'workspace-name': z
     .string({ errorMap: withCustomMessage('A workspace name is required. Please enter a workspace name.') })
-    .min(1)
-    .max(150),
+    .min(1),
+};
+
+const workspaceDescriptionField = {
+  'workspace-description': z.string(),
 };
 
 const protectedDatasetsField = { 'protected-datasets': z.string() };
@@ -49,6 +52,7 @@ const workspaceResourceOptionsField = {
 
 export {
   workspaceNameField,
+  workspaceDescriptionField,
   protectedDatasetsField,
   templatesField,
   datasetsField,

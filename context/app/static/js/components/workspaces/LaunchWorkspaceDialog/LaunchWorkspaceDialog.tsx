@@ -5,7 +5,7 @@ import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
-import DialogModal from 'js/shared-styles/DialogModal';
+import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { Alert } from 'js/shared-styles/alerts';
 import WorkspaceJobTypeField from 'js/components/workspaces/WorkspaceJobTypeField';
 import AdvancedConfigOptions from 'js/components/workspaces/AdvancedConfigOptions';

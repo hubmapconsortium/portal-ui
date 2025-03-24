@@ -29,8 +29,17 @@ import {
   useWorkspacesApiURLs,
   useBuildWorkspacesSWRKey,
   useInvitations,
+  useDeleteInvitation,
+  useShareInvitation,
+  useAcceptInvitation,
 } from './api';
-import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
+import {
+  MergedWorkspace,
+  Workspace,
+  CreateTemplatesResponse,
+  WorkspaceResourceOptions,
+  WorkspaceInvitation,
+} from './types';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -130,19 +139,67 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
 
 function useWorkspacesList() {
   const { workspaces, isLoading: workspacesLoading } = useWorkspaces();
+
   return useWorkspacesActions({
     workspaces,
     workspacesLoading,
   });
 }
 
-function useInvitationsList() {
-  const { sentInvitations, receivedInvitations, isLoading: invitationsLoading } = useInvitations();
+function useInvitationsActions({
+  sentInvitations,
+  receivedInvitations,
+  invitationsLoading,
+}: {
+  sentInvitations: WorkspaceInvitation[];
+  receivedInvitations: WorkspaceInvitation[];
+  invitationsLoading: boolean;
+}) {
+  const mutate = useMutateWorkspacesAndJobs();
+
+  const { deleteInvitation, isDeleting } = useDeleteInvitation();
+  const { acceptInvitation, isAccepting } = useAcceptInvitation();
+  const { shareInvitation, isSharing } = useShareInvitation();
+
+  async function handleDeleteInvitation(invitationId: number) {
+    await deleteInvitation(invitationId);
+    await mutate();
+  }
+
+  async function handleAcceptInvitation(invitationId: number) {
+    await acceptInvitation(invitationId);
+    await mutate();
+  }
+
+  async function handleShareInvitations({ workspaceIds, userIds }: { workspaceIds: string[]; userIds: number[] }) {
+    await Promise.all(
+      workspaceIds.map((workspaceId) =>
+        shareInvitation({ original_workspace_id: workspaceId, shared_user_ids: userIds }),
+      ),
+    );
+    await mutate();
+  }
+
   return {
     sentInvitations,
     receivedInvitations,
     invitationsLoading,
+    handleDeleteInvitation,
+    isDeleting,
+    handleAcceptInvitation,
+    isAccepting,
+    handleShareInvitations,
+    isSharing,
   };
+}
+
+function useInvitationsList() {
+  const { sentInvitations, receivedInvitations, isLoading: invitationsLoading } = useInvitations();
+  return useInvitationsActions({
+    sentInvitations,
+    receivedInvitations,
+    invitationsLoading,
+  });
 }
 
 function useWorkspacesListWithSharerInfo() {

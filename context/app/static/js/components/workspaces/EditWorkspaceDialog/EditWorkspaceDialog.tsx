@@ -4,7 +4,7 @@ import Stack from '@mui/material/Stack';
 import LoadingButton from '@mui/lab/LoadingButton';
 import { UseFormReturn, FormState, FieldValues } from 'react-hook-form';
 
-import DialogModal from 'js/shared-styles/DialogModal';
+import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import EditWorkspaceTemplatesDialog from 'js/components/workspaces/EditWorkspaceTemplatesDialog';
 import EditWorkspaceNameDialog from 'js/components/workspaces/EditWorkspaceNameDialog';

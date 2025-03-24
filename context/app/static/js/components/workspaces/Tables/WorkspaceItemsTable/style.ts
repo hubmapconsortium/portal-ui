@@ -34,7 +34,6 @@ const StyledTable = styled(Table)(({ theme }) => ({
 
 const StyledTableBody = styled(TableBody)({
   width: '100%',
-  maxHeight: '400px',
   overflowY: 'auto',
   border: 'none',
 });
@@ -89,13 +88,12 @@ const StyledButton = styled(Button)(({ theme }) => ({
 }));
 
 const StyledTableContainer = styled(Box)(({ theme }) => ({
-  maxHeight: '425px',
+  ...border(theme),
   width: '100%',
   borderTop: 'none',
   borderLeft: 'none',
   overflowY: 'auto',
   overflowX: 'hidden',
-  ...border(theme),
 }));
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({

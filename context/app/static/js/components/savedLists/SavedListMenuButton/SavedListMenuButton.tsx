@@ -9,7 +9,7 @@ import useSavedLists from 'js/components/savedLists/hooks';
 import { WhiteBackgroundIconButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { MoreIcon, DeleteIcon } from 'js/shared-styles/icons';
-import DialogModal from 'js/shared-styles/DialogModal';
+import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 
 function DeleteListButton({ listUUID }: { listUUID: string }) {
   const anchorEl = useRef(null);

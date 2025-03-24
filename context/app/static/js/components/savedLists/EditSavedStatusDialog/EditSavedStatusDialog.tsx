@@ -5,7 +5,7 @@ import useStateSet from 'js/hooks/useStateSet';
 import AddToList from 'js/components/savedLists/AddToList';
 import useSavedLists from 'js/components/savedLists/hooks';
 import { SavedEntitiesList } from 'js/components/savedLists/types';
-import DialogModal from 'js/shared-styles/DialogModal';
+import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 
 function getSavedListsWhichContainEntity(savedLists: Record<string, SavedEntitiesList>, entityUUID: string): string[] {
   return Object.entries(savedLists).reduce<string[]>((acc, [id, obj]) => {

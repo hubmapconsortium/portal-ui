@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { format } from 'date-fns/format';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
@@ -14,20 +14,32 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { Alert } from 'js/shared-styles/alerts/Alert';
 import { InternalLink } from 'js/shared-styles/Links';
-import { getFieldPrefix, getFieldValue, isWorkspace } from 'js/components/workspaces/utils';
-import { CheckIcon, CloseFilledIcon, DownIcon, EmailIcon, EyeIcon, MoreIcon } from 'js/shared-styles/icons';
+import { getFieldPrefix, getFieldValue, isInvitation, isWorkspace } from 'js/components/workspaces/utils';
+import {
+  CheckIcon,
+  CloseFilledIcon,
+  DownIcon,
+  EmailIcon,
+  EyeIcon,
+  MoreIcon,
+  PendingRoundIcon,
+  SuccessRoundIcon,
+} from 'js/shared-styles/icons';
 import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
 import { TooltipButton, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { useWorkspacesList } from 'js/components/workspaces/hooks';
+import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import { LaunchStopButton } from 'js/components/workspaces/WorkspaceLaunchStopButtons/WorkspaceLaunchStopButtons';
 import useWorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
+import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
+import { useAppContext } from 'js/components/Contexts';
+import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
 import {
@@ -46,23 +58,50 @@ import {
   StyledCheckboxCell,
 } from './style';
 
-const options = [
-  {
-    children: 'Decline Invitation',
-    // TODO: update once dialog is implemented
-    // eslint-disable-next-line @typescript-eslint/no-empty-function
-    onClick: () => {},
-    icon: CloseFilledIcon,
-  },
-];
-
 const acceptInviteTooltip =
   'Accept workspace copy invitation. This will create a copy of this workspace to your profile.';
 const previewInviteTooltip = 'Preview the details of this workspace.';
 const moreOptionsTooltip = 'View additional actions.';
 
 function EndButtons({ item }: { item: WorkspaceItem }) {
-  const { handleStopWorkspace, isStoppingWorkspace, workspacesList } = useWorkspacesList();
+  const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
+  const { handleAcceptInvitation } = useInvitationsList();
+  const { setDialogType, setInvitation } = useEditWorkspaceStore();
+  const { toastErrorAcceptInvitation, toastSuccessAcceptInvitation } = useWorkspaceToasts();
+  const { userEmail } = useAppContext();
+
+  const isSender = isInvitation(item) && item.original_workspace_id.user_id.email === userEmail;
+  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
+
+  const options = useMemo(
+    () => [
+      {
+        children: `${isSender ? 'Delete' : 'Decline'} Invitation`,
+        onClick: () => {
+          const dialogType = isSender ? 'DELETE_INVITATION' : 'DECLINE_INVITATION';
+          if (isInvitation(item)) {
+            setInvitation(item);
+            setDialogType(dialogType);
+          }
+        },
+        icon: CloseFilledIcon,
+      },
+    ],
+    [isSender, item, setDialogType, setInvitation],
+  );
+
+  const onAcceptInvite = useEventCallback(() => {
+    if (isInvitation(item)) {
+      handleAcceptInvitation(item.shared_workspace_id.id)
+        .then(() => {
+          toastSuccessAcceptInvitation(item.shared_workspace_id.name);
+        })
+        .catch((e) => {
+          console.error(e);
+          toastErrorAcceptInvitation(item.shared_workspace_id.name);
+        });
+    }
+  });
 
   // If the item is a workspace
   if (isWorkspace(item)) {
@@ -78,29 +117,12 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
     );
   }
 
-  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
-  const sharedWorkspaceId = item?.shared_workspace_id?.id;
-
   // If the item is an accepted invitation
-  if (isAccepted && sharedWorkspaceId) {
-    const workspace = workspacesList.find((w) => w.id === sharedWorkspaceId);
-    if (!workspace) return null;
-
-    return (
-      <Stack alignItems="end" marginRight={2}>
-        <WorkspaceLaunchStopButtons
-          workspace={workspace}
-          button={LaunchStopButton}
-          handleStopWorkspace={handleStopWorkspace}
-          isStoppingWorkspace={isStoppingWorkspace}
-          showLaunch
-          showStop
-        />
-      </Stack>
-    );
+  if (isAccepted) {
+    return null;
   }
 
-  // If the item is a pending invitation
+  // If the item is a pending received invitation
   return (
     <Stack direction="row" justifyContent="end" alignItems="center">
       <IconDropdownMenu tooltip={moreOptionsTooltip} icon={MoreIcon} button={RotatedTooltipButton}>
@@ -108,12 +130,16 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
           <IconDropdownMenuItem key={props.children} {...props} />
         ))}
       </IconDropdownMenu>
-      <TooltipIconButton tooltip={previewInviteTooltip}>
-        <EyeIcon color="primary" fontSize="1.5rem" />
-      </TooltipIconButton>
-      <TooltipIconButton tooltip={acceptInviteTooltip}>
-        <CheckIcon color="success" fontSize="1.5rem" />
-      </TooltipIconButton>
+      {!isSender && (
+        <Stack direction="row">
+          <TooltipIconButton tooltip={previewInviteTooltip}>
+            <EyeIcon color="primary" fontSize="1.5rem" />
+          </TooltipIconButton>
+          <TooltipIconButton tooltip={acceptInviteTooltip} onClick={onAcceptInvite}>
+            <CheckIcon color="success" fontSize="1.5rem" />
+          </TooltipIconButton>
+        </Stack>
+      )}
     </Stack>
   );
 }
@@ -172,6 +198,28 @@ function SortHeaderCell({
   );
 }
 
+function InvitationStatusIcon({ item }: { item: WorkspaceItem }) {
+  if (isWorkspace(item)) {
+    return null;
+  }
+
+  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
+
+  if (isAccepted) {
+    return (
+      <SecondaryBackgroundTooltip title="Accepted workspace invitation">
+        <SuccessRoundIcon color="success" fontSize=".9rem" />
+      </SecondaryBackgroundTooltip>
+    );
+  }
+
+  return (
+    <SecondaryBackgroundTooltip title="Pending workspace invitation">
+      <PendingRoundIcon color="info" fontSize=".9rem" />
+    </SecondaryBackgroundTooltip>
+  );
+}
+
 function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
@@ -179,19 +227,14 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   switch (field) {
     case `${prefix}name`: {
       const workspaceId = getFieldValue({ item, field: 'id', prefix });
-      const isAccepted = getFieldValue({ item, field: 'is_accepted' });
 
       return (
         <Stack direction="row" spacing={1} alignItems="center">
-          {isAccepted && (
-            <SecondaryBackgroundTooltip title="Accepted workspace invitation">
-              <CheckIcon color="success" fontSize="0.75rem" />
-            </SecondaryBackgroundTooltip>
-          )}
           <InternalLink href={`/workspaces/${workspaceId}`}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
           <Box>{`(ID: ${workspaceId})`}</Box>
+          <InvitationStatusIcon item={item} />
         </Stack>
       );
     }
@@ -386,7 +429,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
 
   return (
     <>
-      <StyledTableContainer>
+      <StyledTableContainer sx={{ maxHeight: showSeeMoreOption ? 'inherit' : '425px' }}>
         <StyledTable>
           <StyledTableHead>
             <StyledTableRow>

@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import useStateSet from 'js/hooks/useStateSet';
-import DialogModal from 'js/shared-styles/DialogModal';
+import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import AddToList from 'js/components/savedLists/AddToList';
 import CreateListDialog from 'js/components/savedLists/CreateListDialog';
 import useSavedLists from 'js/components/savedLists/hooks';

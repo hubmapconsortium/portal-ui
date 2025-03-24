@@ -11,9 +11,11 @@ import {
   Workspace,
   WorkspaceAPIResponse,
   WorkspaceAPIResponseWithoutData,
+  WorkspaceInvitation,
   WorkspaceJob,
   WorkspaceJobType,
   WorkspaceResourceOptions,
+  WorkspaceUser,
   WorkspacesEventCategories,
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
@@ -57,12 +59,16 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   get invitations(): string {
     return `${workspacesEndpoint}/shared_workspaces`;
   },
+  get shareInvitations(): string {
+    return `${workspacesEndpoint}/shared_workspaces/`;
+  },
   invitation(invitationId: number): string {
-    return `${workspacesEndpoint}/shared_workspaces/${invitationId}`;
+    return `${workspacesEndpoint}/shared_workspaces/${invitationId}/`;
   },
   acceptInvitation(invitationId: number): string {
-    return `${workspacesEndpoint}/shared_workspaces/${invitationId}/accept`;
+    return `${workspacesEndpoint}/shared_workspaces/${invitationId}/accept/`;
   },
+  // Users
   users(query: string): string {
     return `${workspacesEndpoint}/users?search=${query}`;
   },
@@ -176,6 +182,41 @@ export function useWorkspaceJobs(workspaceId: number) {
   return { jobs: jobs.filter((j) => j.workspace_id === workspaceId), isLoading };
 }
 
+function useFetchUsers(query: string) {
+  const urls = useWorkspacesApiURLs();
+  const usersURL = urls.users(query);
+  const { buildKey, hasAccess } = useBuildWorkspacesSWRKey();
+
+  const { data, isLoading, ...rest } = useSWR(
+    buildKey({ url: usersURL }),
+    ([url, head]) =>
+      fetcher<WorkspaceAPIResponse<{ users: WorkspaceUser[] }>>({
+        url,
+        requestInit: { headers: head },
+        errorMessages: {
+          404: `No user matching query '${query}' found.`,
+        },
+      }),
+    { revalidateOnFocus: hasAccess },
+  );
+
+  const users = data?.data?.users ?? [];
+
+  return { users, isLoading, ...rest };
+}
+
+export function useAllWorkspaceUsers() {
+  return useFetchUsers('');
+}
+
+export function useWorkspaceUsers(query: string) {
+  const { users, ...rest } = useFetchUsers(query);
+  if (rest.error) {
+    throw rest.error;
+  }
+  return { users, ...rest };
+}
+
 function useFetchInvitations(invitationId?: number) {
   const urls = useWorkspacesApiURLs();
   const invitationUrl = invitationId ? urls.invitation(invitationId) : urls.invitations;
@@ -204,6 +245,114 @@ function useFetchInvitations(invitationId?: number) {
 
 export function useInvitations() {
   return useFetchInvitations();
+}
+
+async function fetchDeleteInvitation(
+  _key: string,
+  { arg: { invitationId, headers, url } }: { arg: { headers: HeadersInit; invitationId: number; url: string } },
+) {
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers,
+  });
+  if (!response.ok) {
+    throw Error(`Deletion for invitation #${invitationId} failed`);
+  }
+}
+
+export function useDeleteInvitation() {
+  const { trigger, isMutating } = useSWRMutation('delete-invitation', fetchDeleteInvitation);
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+
+  const deleteInvitation = useCallback(
+    async (invitationId: number) => {
+      await trigger({
+        invitationId,
+        url: api.invitation(invitationId),
+        headers,
+      });
+    },
+    [headers, api, trigger],
+  );
+
+  return { deleteInvitation, isDeleting: isMutating };
+}
+
+async function fetchAcceptInvitation(
+  _key: string,
+  { arg: { invitationId, headers, url } }: { arg: { headers: HeadersInit; invitationId: number; url: string } },
+) {
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers,
+  });
+  if (!response.ok) {
+    throw Error(`Failed to accept invitation #${invitationId}`);
+  }
+}
+
+export function useAcceptInvitation() {
+  const { trigger, isMutating } = useSWRMutation('accept-invitation', fetchAcceptInvitation);
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+
+  const acceptInvitation = useCallback(
+    async (invitationId: number) => {
+      await trigger({
+        invitationId,
+        url: api.acceptInvitation(invitationId),
+        headers,
+      });
+    },
+    [headers, api, trigger],
+  );
+
+  return { acceptInvitation, isAccepting: isMutating };
+}
+
+export interface ShareInvitationBody {
+  original_workspace_id: string;
+  shared_user_ids: number[];
+}
+
+export interface ShareInvitationArgs extends APIAction {
+  body: ShareInvitationBody;
+}
+
+async function shareInvitationFetcher(_key: string, { arg: { body, url, headers } }: { arg: ShareInvitationArgs }) {
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers,
+  });
+  if (!response.ok) {
+    console.error('Share workspace failed', response);
+  }
+  const responseJson = (await response.json()) as WorkspaceAPIResponse<{ invitation: WorkspaceInvitation }>;
+  if (!responseJson.success) {
+    throw new Error(`Failed to share workspace: ${responseJson.message}`);
+  }
+  return responseJson.data.invitation;
+}
+
+export function useShareInvitation() {
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+  const { trigger, isMutating } = useSWRMutation('share-invitation', shareInvitationFetcher);
+
+  const shareInvitation = useCallback(
+    (body: ShareInvitationBody) => {
+      return trigger({
+        url: api.shareInvitations,
+        body,
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { shareInvitation, isSharing: isMutating };
 }
 
 function useFetchWorkspaces(workspaceId?: number) {

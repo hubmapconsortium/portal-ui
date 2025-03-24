@@ -12,7 +12,7 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
-import WorkspaceField from 'js/components/workspaces/WorkspaceField';
+import { WorkspaceDescriptionField, WorkspaceNameField } from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
@@ -136,6 +136,7 @@ function NewWorkspaceDialog({
   const submit = useCallback(
     ({
       'workspace-name': workspaceName,
+      'workspace-description': workspaceDescription,
       templates: templateKeys,
       workspaceJobTypeId,
       datasets,
@@ -143,6 +144,7 @@ function NewWorkspaceDialog({
     }: CreateWorkspaceFormTypes) => {
       onSubmit({
         workspaceName,
+        workspaceDescription,
         templateKeys,
         uuids: datasets,
         workspaceJobTypeId,
@@ -212,16 +214,8 @@ function NewWorkspaceDialog({
             // eslint-disable-next-line @typescript-eslint/no-misused-promises
             onSubmit={handleSubmit(submit)}
           >
-            <WorkspaceField
-              control={control}
-              name="workspace-name"
-              label="Workspace Name"
-              placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
-              autoFocus
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                e.stopPropagation();
-              }}
-            />
+            <WorkspaceNameField control={control} name="workspace-name" />
+            <WorkspaceDescriptionField control={control} name="workspace-description" />
             <Stack spacing={2} p={2} component={Paper} direction="column">
               <StyledSubtitle1>Environment Selection</StyledSubtitle1>
               {text.configure.description}

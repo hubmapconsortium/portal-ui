@@ -9,6 +9,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalanceRounded';
 import LaunchRoundedIcon from '@mui/icons-material/LaunchRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
@@ -45,6 +46,7 @@ import SendIcon from '@mui/icons-material/Send';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import CancelIcon from '@mui/icons-material/Cancel';
+import PendingIcon from '@mui/icons-material/Pending';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -85,6 +87,10 @@ const ExternalLinkIcon = withIconStyles(LaunchRoundedIcon);
 const InfoIcon = withIconStyles(InfoRoundedIcon);
 
 const SuccessIcon = withIconStyles(CheckCircleRoundedIcon);
+
+const SuccessRoundIcon = withIconStyles(CheckCircleIcon);
+
+const PendingRoundIcon = withIconStyles(PendingIcon);
 
 const FileIcon = withIconStyles(InsertDriveFileRoundedIcon);
 
@@ -214,4 +220,6 @@ export {
   EyeIcon,
   DotMenuIcon,
   CloseFilledIcon,
+  SuccessRoundIcon,
+  PendingRoundIcon,
 };
