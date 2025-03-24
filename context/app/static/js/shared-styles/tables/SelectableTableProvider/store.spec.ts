@@ -2,7 +2,7 @@ import { act, renderHook } from 'test-utils/functions';
 import { RenderHookResult, Renderer } from '@testing-library/react-hooks';
 import { InitialSelectableTableState, createStore } from './store';
 
-const defaultState = { selectedRows: new Set([]), headerRowIsSelected: false };
+const defaultState = { selectedRows: new Set([]), totalNumRows: 2, headerRowIsSelected: false };
 const selectedState = { ...defaultState, selectedRows: new Set(['apple', 'pear']) };
 
 type StoreType = ReturnType<typeof createStore>;

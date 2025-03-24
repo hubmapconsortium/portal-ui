@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Checkbox from '@mui/material/Checkbox';
 import TableCell, { TableCellProps } from '@mui/material/TableCell';
 
@@ -34,13 +34,17 @@ function SelectableHeaderCell({
   disabled = false,
   ...rest
 }: SelectableHeaderCellProps) {
-  const { toggleHeaderAndRows, selectedRows, headerRowIsSelected, tableLabel } = useSelectableTableStore();
+  const { toggleHeaderAndRows, setTotalNumRows, headerRowIsSelected, tableLabel } = useSelectableTableStore();
   const filteredKeys = filterDisabledRows({ allTableRowKeys, disabledTableRowKeys });
+
+  useEffect(() => {
+    setTotalNumRows(filteredKeys.length);
+  }, [filteredKeys.length, setTotalNumRows]);
 
   const content = (
     <Checkbox
       color="secondary"
-      checked={selectedRows.size === filteredKeys.length && filteredKeys.length > 0}
+      checked={headerRowIsSelected}
       inputProps={{ 'aria-label': `${tableLabel}-header-row-checkbox` }}
       disabled={disabled || filteredKeys.length === 0}
       onChange={() => toggleHeaderAndRows(filteredKeys)}
