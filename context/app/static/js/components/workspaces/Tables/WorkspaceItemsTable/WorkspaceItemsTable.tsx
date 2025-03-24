@@ -129,14 +129,16 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
   // If the item is a workspace
   if (isWorkspace(item)) {
     return (
-      <WorkspaceLaunchStopButtons
-        workspace={item}
-        button={LaunchStopButton}
-        handleStopWorkspace={handleStopWorkspace}
-        isStoppingWorkspace={isStoppingWorkspace}
-        showLaunch
-        showStop
-      />
+      <Stack direction="row" justifyContent="end" marginRight={2}>
+        <WorkspaceLaunchStopButtons
+          workspace={item}
+          button={LaunchStopButton}
+          handleStopWorkspace={handleStopWorkspace}
+          isStoppingWorkspace={isStoppingWorkspace}
+          showLaunch
+          showStop
+        />
+      </Stack>
     );
   }
 

@@ -52,7 +52,7 @@ const StyledSearchIcon = styled(SearchRoundedIcon)(({ theme }) => ({
 const StyledLaunchButton = styled(Button)(({ theme }) => ({
   border: `1px solid ${theme.palette.grey[300]}`,
   borderRadius: theme.spacing(0.5),
-  padding: theme.spacing(1, 3),
+  padding: theme.spacing(1, 2.5),
 }));
 
 const StyledSvgIcon = styled(SvgIcon)(({ theme }) => ({
