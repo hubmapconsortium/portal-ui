@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.23.0 - 2025-03-24
+
+- Add support for additional deepcell annotations by updating to portal-visualization 0.4.2.
+
+
+
 ## v1.22.1 - 2025-03-10
 
 - Show data products on pages for organs with laterality.
