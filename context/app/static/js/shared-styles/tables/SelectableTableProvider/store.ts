@@ -1,3 +1,4 @@
+import { Draft } from 'immer';
 import { createStoreImmer } from 'js/helpers/zustand';
 
 interface SelectableTableStoreState {
@@ -34,87 +35,94 @@ export interface CreateSelectableTableStoreInput extends Partial<InitialSelectab
 }
 
 export const createStore = ({ tableLabel, ...initialState }: CreateSelectableTableStoreInput) =>
-  createStoreImmer<SelectableTableStore>((set) => ({
-    ...defaultInitialState,
-    ...initialState,
-    tableLabel,
-    selectRow: (rowKey) => {
-      set((state) => {
-        state.selectedRows.add(rowKey);
-        state.headerRowIsSelected = state.selectedRows.size === state.totalNumRows && state.totalNumRows > 0;
-      });
-    },
+  createStoreImmer<SelectableTableStore>((set) => {
+    const updateHeaderRowIsSelected = (state: Draft<SelectableTableStore>) => {
+      state.headerRowIsSelected = state.selectedRows.size === state.totalNumRows && state.totalNumRows > 0;
+    };
 
-    deselectRow: (rowKey) => {
-      set((state) => {
-        state.selectedRows.delete(rowKey);
-        state.headerRowIsSelected = false;
-      });
-    },
+    return {
+      ...defaultInitialState,
+      ...initialState,
+      tableLabel,
 
-    deselectRows: (rowKeys) => {
-      set((state) => {
-        rowKeys.forEach((rowKey) => {
-          state.selectedRows.delete(rowKey);
-        });
-        state.headerRowIsSelected = false;
-      });
-    },
-
-    toggleRow: (rowKey) => {
-      set((state) => {
-        if (state.selectedRows.has(rowKey)) {
-          state.selectedRows.delete(rowKey);
-          state.headerRowIsSelected = false;
-        } else {
+      selectRow: (rowKey) => {
+        set((state) => {
           state.selectedRows.add(rowKey);
-          state.headerRowIsSelected = state.selectedRows.size === state.totalNumRows && state.totalNumRows > 0;
-        }
-      });
-    },
+          updateHeaderRowIsSelected(state);
+        });
+      },
 
-    setSelectedRows: (rowKeys) => {
-      set((state) => {
-        state.selectedRows = new Set(rowKeys);
-        state.headerRowIsSelected = state.selectedRows.size === state.totalNumRows && state.totalNumRows > 0;
-      });
-    },
-    setTotalNumRows: (totalNumRows) => {
-      set((state) => {
-        state.totalNumRows = totalNumRows;
-        state.headerRowIsSelected = state.selectedRows.size === state.totalNumRows && state.totalNumRows > 0;
-      });
-    },
-    deselectAllRows: () => {
-      set((state) => {
-        state.selectedRows.clear();
-        state.headerRowIsSelected = false;
-      });
-    },
+      deselectRow: (rowKey) => {
+        set((state) => {
+          state.selectedRows.delete(rowKey);
+          updateHeaderRowIsSelected(state);
+        });
+      },
 
-    selectHeaderAndRows: (rowKeys) => {
-      set((state) => {
-        state.headerRowIsSelected = true;
-        state.selectedRows = new Set(rowKeys);
-      });
-    },
+      deselectRows: (rowKeys) => {
+        set((state) => {
+          rowKeys.forEach((rowKey) => {
+            state.selectedRows.delete(rowKey);
+          });
+          updateHeaderRowIsSelected(state);
+        });
+      },
 
-    deselectHeaderAndRows: () => {
-      set((state) => {
-        state.headerRowIsSelected = false;
-        state.selectedRows.clear();
-      });
-    },
+      toggleRow: (rowKey) => {
+        set((state) => {
+          if (state.selectedRows.has(rowKey)) {
+            state.selectedRows.delete(rowKey);
+          } else {
+            state.selectedRows.add(rowKey);
+          }
+          updateHeaderRowIsSelected(state);
+        });
+      },
 
-    toggleHeaderAndRows: (rowKeys) => {
-      set((state) => {
-        if (state.headerRowIsSelected) {
-          state.headerRowIsSelected = false;
-          state.selectedRows.clear();
-        } else {
-          state.headerRowIsSelected = true;
+      setSelectedRows: (rowKeys) => {
+        set((state) => {
           state.selectedRows = new Set(rowKeys);
-        }
-      });
-    },
-  }));
+          updateHeaderRowIsSelected(state);
+        });
+      },
+
+      setTotalNumRows: (totalNumRows) => {
+        set((state) => {
+          state.totalNumRows = totalNumRows;
+          updateHeaderRowIsSelected(state);
+        });
+      },
+
+      deselectAllRows: () => {
+        set((state) => {
+          state.selectedRows.clear();
+          updateHeaderRowIsSelected(state);
+        });
+      },
+
+      selectHeaderAndRows: (rowKeys) => {
+        set((state) => {
+          state.selectedRows = new Set(rowKeys);
+          updateHeaderRowIsSelected(state);
+        });
+      },
+
+      deselectHeaderAndRows: () => {
+        set((state) => {
+          state.selectedRows.clear();
+          updateHeaderRowIsSelected(state);
+        });
+      },
+
+      toggleHeaderAndRows: (rowKeys) => {
+        set((state) => {
+          if (state.headerRowIsSelected) {
+            state.selectedRows.clear();
+          } else {
+            state.selectedRows = new Set(rowKeys);
+          }
+          updateHeaderRowIsSelected(state);
+        });
+      },
+    };
+  });
