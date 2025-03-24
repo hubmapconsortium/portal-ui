@@ -60,7 +60,6 @@ import {
   StyledTableCell,
   StyledButton,
   StyledTableContainer,
-  StyledTableRow,
   StyledTableHead,
   StyledCheckboxCell,
   StyledSvgIcon,
@@ -487,16 +486,14 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
       <StyledTableContainer sx={{ maxHeight: showSeeMoreOption ? 'inherit' : '425px' }}>
         <StyledTable>
           <StyledTableHead>
-            <StyledTableRow>
-              <ItemCheckbox
-                showCheckbox={!!selectedItemIds}
-                checked={selectedItemIds?.size === items.length}
-                onChange={onToggleAllItems}
-              />
-              <StyledTableCell width="0" />
-              <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
-              <StyledTableCell />
-            </StyledTableRow>
+            {!!selectedItemIds && (
+              <StyledHeaderCell>
+                <Checkbox checked={selectedItemIds?.size === items.length} onChange={onToggleAllItems} />
+              </StyledHeaderCell>
+            )}
+            <StyledTableCell width="0" />
+            <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
+            <StyledTableCell />
           </StyledTableHead>
           <StyledTableBody>
             <TableResults

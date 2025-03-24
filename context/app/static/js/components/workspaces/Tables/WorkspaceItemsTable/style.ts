@@ -16,6 +16,8 @@ const border = (theme: Theme) => ({
 });
 
 const ChipWrapper = styled('div')(({ theme }) => ({
+  ...border(theme),
+  borderTop: 'none',
   position: 'sticky',
   display: 'flex',
   top: 0,
@@ -23,8 +25,6 @@ const ChipWrapper = styled('div')(({ theme }) => ({
   gap: theme.spacing(1),
   zIndex: theme.zIndex.fileBrowserHeader,
   backgroundColor: theme.palette.white.main,
-  borderTop: 'none',
-  ...border(theme),
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -36,30 +36,24 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const StyledTableBody = styled(TableBody)({
   width: '100%',
   overflowY: 'auto',
-  border: 'none',
 });
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
-  borderBottom: 'none',
-  ...border(theme),
 }));
 
 const CompactTableRow = styled(StyledTableRow)(({ theme }) => ({
   td: {
     padding: theme.spacing(1),
   },
-  borderBottom: 'none',
 }));
 
 const ExpandedTableRow = styled(StyledTableRow)({
   paddingBottom: 0,
   paddingTop: 0,
-  borderTop: 'none',
 });
 
 const StyledTableCell = styled(TableCell)({
-  border: 'none',
   em: {
     fontWeight: 'bold',
     fontStyle: 'normal',
@@ -90,14 +84,14 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const StyledTableContainer = styled(Box)(({ theme }) => ({
   ...border(theme),
-  width: '100%',
   borderTop: 'none',
-  borderLeft: 'none',
+  width: '100%',
   overflowY: 'auto',
   overflowX: 'hidden',
 }));
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
+  ...border(theme),
   position: 'sticky',
   top: 0,
   zIndex: theme.zIndex.fileBrowserHeader,
