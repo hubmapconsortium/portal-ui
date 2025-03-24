@@ -1,0 +1,1 @@
+- Add support for additional deepcell annotations by updating to portal-visualization 0.4.2.
