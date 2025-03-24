@@ -63,6 +63,7 @@ import {
   StyledTableHead,
   StyledCheckboxCell,
   StyledSvgIcon,
+  BorderedTableRow,
 } from './style';
 
 const tooltips = {
@@ -328,10 +329,11 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   const prefix = getFieldPrefix(tableFields[0].field);
   const description = getFieldValue({ item, field: 'description', prefix });
   const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
+  const TableRowComponent: React.ElementType = description ? CompactTableRow : BorderedTableRow;
 
   return (
     <>
-      <CompactTableRow sx={{ '& > *': { borderBottom: 'unset' } }}>
+      <TableRowComponent sx={{ '& > *': { borderBottom: 'unset' } }}>
         <ItemCheckbox
           showCheckbox={!!selectedItemIds}
           checked={selectedItemIds?.has(itemId)}
@@ -357,14 +359,14 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
         <StyledTableCell>
           <EndButtons item={item} />
         </StyledTableCell>
-      </CompactTableRow>
+      </TableRowComponent>
       {description && (
         <ExpandedTableRow>
           {selectedItemIds && toggleItem && <ExpandedTableCell />}
           <ExpandedTableCell />
           <ExpandedTableCell colSpan={tableFields.length + 1}>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <Box paddingTop={0.5} paddingBottom={1}>
+              <Box paddingTop={0.5} paddingBottom={1.5}>
                 {description}
               </Box>
             </Collapse>

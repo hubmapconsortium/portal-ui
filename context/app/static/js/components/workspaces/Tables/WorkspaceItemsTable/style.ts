@@ -42,15 +42,22 @@ const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
 }));
 
+const BorderedTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: theme.palette.white.main,
+  borderBottom: `1px solid ${theme.palette.grey[300]}`,
+}));
+
 const CompactTableRow = styled(StyledTableRow)(({ theme }) => ({
   td: {
     padding: theme.spacing(1),
   },
+  border: 'none',
 }));
 
 const ExpandedTableRow = styled(StyledTableRow)({
   paddingBottom: 0,
   paddingTop: 0,
+  border: 'none',
 });
 
 const StyledTableCell = styled(TableCell)({
@@ -64,6 +71,7 @@ const ExpandedTableCell = styled(StyledTableCell)(({ theme }) => ({
   paddingBottom: 0,
   paddingTop: 0,
   paddingLeft: theme.spacing(1),
+  borderTop: 'none',
 }));
 
 const StyledHeaderCell = styled(HeaderCell)({
@@ -122,4 +130,5 @@ export {
   StyledCheckboxCell,
   StyledNumSelectedHeader,
   StyledSvgIcon,
+  BorderedTableRow,
 };
