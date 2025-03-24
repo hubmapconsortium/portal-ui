@@ -49,7 +49,7 @@ const BorderedTableRow = styled(TableRow)(({ theme }) => ({
 
 const CompactTableRow = styled(StyledTableRow)(({ theme }) => ({
   td: {
-    padding: theme.spacing(1),
+    paddingY: theme.spacing(1.25),
   },
   border: 'none',
 }));
