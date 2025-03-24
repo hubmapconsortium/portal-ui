@@ -247,14 +247,13 @@ export function useInvitations() {
   return useFetchInvitations();
 }
 
-// TODO: figure out why this endpoint is not working
 export function useInvitation(invitationId: number) {
-  const { receivedInvitations, ...rest } = useFetchInvitations();
+  const { receivedInvitations, sentInvitations, ...rest } = useFetchInvitations(invitationId);
   if (rest.error) {
     throw rest.error;
   }
-  const invitation = receivedInvitations.find((invite) => invite.shared_workspace_id.id === invitationId);
-  return { invitation, receivedInvitations, ...rest };
+  const invitation = receivedInvitations[0] ?? sentInvitations[0] ?? undefined;
+  return { invitation, receivedInvitations, sentInvitations, ...rest };
 }
 
 async function fetchDeleteInvitation(
