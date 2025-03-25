@@ -2,8 +2,8 @@ import { act, renderHook } from 'test-utils/functions';
 import { RenderHookResult, Renderer } from '@testing-library/react-hooks';
 import { InitialSelectableTableState, createStore } from './store';
 
-const defaultState = { selectedRows: new Set([]), totalNumRows: 2, headerRowIsSelected: false };
-const selectedState = { ...defaultState, selectedRows: new Set(['apple', 'pear']) };
+const defaultState = { selectedRows: new Set([]), totalNumRows: 0, headerRowIsSelected: false };
+const selectedState = { ...defaultState, selectedRows: new Set(['apple', 'pear']), totalNumRows: 2 };
 
 type StoreType = ReturnType<typeof createStore>;
 
@@ -53,7 +53,7 @@ test('should toggle row', () => {
 });
 
 test('should set selected rows', () => {
-  const keysToSet = ['apple', 'pear', 'lime'];
+  const keysToSet = ['apple', 'pear'];
   const store = setupStore(selectedState);
   const { setSelectedRows } = getState(store);
   act(() => setSelectedRows(keysToSet));
@@ -68,7 +68,7 @@ test('should deselect all rows', () => {
 });
 
 test('should select header and rows', () => {
-  const keysToSet = ['apple', 'pear', 'lime'];
+  const keysToSet = ['apple', 'pear'];
   const store = setupStore();
   const { selectHeaderAndRows } = getState(store);
   act(() => selectHeaderAndRows(keysToSet));
