@@ -6,10 +6,10 @@ import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
+import SvgIcon from '@mui/material/SvgIcon';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
-import { SvgIcon } from '@mui/material';
 
 const border = (theme: Theme) => ({
   border: `1px solid ${theme.palette.grey[300]}`,

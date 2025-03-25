@@ -1,11 +1,10 @@
 import React from 'react';
-
-import { DatabaseIcon, InfoIcon } from 'js/shared-styles/icons';
 import AppsRounded from '@mui/icons-material/AppsRounded';
 import MenuRounded from '@mui/icons-material/MenuRounded';
-import { useAppContext } from 'js/components/Contexts';
 
+import { useAppContext } from 'js/components/Contexts';
 import { useInvitationsList } from 'js/components/workspaces/hooks';
+import { DatabaseIcon, InfoIcon } from 'js/shared-styles/icons';
 import UserIcon from '../UserIcon';
 import HeaderNavigationDrawer from './HeaderNavigationDrawer';
 import { dataLinks, resourceLinks, toolsAndAppsLinks, userLinks, mobileMenuLinks } from '../staticLinks';
@@ -33,14 +32,12 @@ export function ToolsAndApplicationLinks() {
 
 export function UserLinks() {
   const { isAuthenticated, isHubmapUser, userEmail } = useAppContext();
-  const { receivedInvitations } = useInvitationsList();
-
-  const numPendingInvitations = receivedInvitations.filter((invitation) => !invitation.is_accepted).length;
+  const { numPendingReceivedInvitations } = useInvitationsList();
 
   return (
     <HeaderNavigationDrawer
       title="Your Profile"
-      sections={userLinks({ isAuthenticated, isHubmapUser, userEmail, numPendingInvitations })}
+      sections={userLinks({ isAuthenticated, isHubmapUser, userEmail, numPendingReceivedInvitations })}
       icon={<UserIcon />}
       direction="right"
       altOnlyTitle

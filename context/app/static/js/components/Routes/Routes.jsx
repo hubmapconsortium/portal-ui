@@ -65,10 +65,7 @@ function Routes({ flaskData }) {
 
   const { isAuthenticated } = useAppContext();
 
-  console.log('urlPath', urlPath);
-
   if (errorCode !== undefined) {
-    console.log('uh oh', errorCode);
     return <Error errorCode={errorCode} urlPath={urlPath} isAuthenticated={isAuthenticated} />;
   }
 
@@ -233,7 +230,6 @@ function Routes({ flaskData }) {
   }
 
   if (urlPath.startsWith('/workspaces/')) {
-    console.log('workspaces');
     const workspaceId = parseInt(urlPath.split('/').pop(), 10);
     return (
       <Route>
@@ -243,7 +239,6 @@ function Routes({ flaskData }) {
   }
 
   if (urlPath.startsWith('/invitations/')) {
-    console.log('invitations');
     const invitationId = parseInt(urlPath.split('/').pop(), 10);
     return (
       <Route>

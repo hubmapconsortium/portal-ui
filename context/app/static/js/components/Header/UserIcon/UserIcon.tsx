@@ -17,12 +17,12 @@ function Anonymous() {
 }
 
 export default function UserIcon() {
-  const { receivedInvitations } = useInvitationsList();
-  const numPendingInvitations = receivedInvitations.filter((invitation) => !invitation.is_accepted).length;
-
+  const { numPendingReceivedInvitations } = useInvitationsList();
   const { userEmail, isAuthenticated } = useAppContext();
+
   const alt = isAuthenticated ? userEmail : 'Anonymous User';
   const content = isAuthenticated ? <Authenticated userEmail={userEmail} /> : <Anonymous />;
+
   return (
     <StyledContainer>
       <Avatar
@@ -37,7 +37,7 @@ export default function UserIcon() {
         {content}
       </Avatar>
       <StyledNotificationContainer>
-        <NotificationBell numNotifications={numPendingInvitations} />
+        <NotificationBell numNotifications={numPendingReceivedInvitations} />
       </StyledNotificationContainer>
     </StyledContainer>
   );

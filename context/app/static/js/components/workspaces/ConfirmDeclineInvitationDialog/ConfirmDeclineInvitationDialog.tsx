@@ -1,10 +1,10 @@
 import React from 'react';
+import Typography from '@mui/material/Typography';
 
 import { useInvitationsList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
-import { Typography } from '@mui/material';
 
 export default function ConfirmDeclineInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
@@ -27,7 +27,7 @@ export default function ConfirmDeclineInvitationDialog() {
   const handleDeleteAndClose = () => {
     handleDeleteInvitation(id)
       .then(() => {
-        // Redirect to the workspaces page if on the invitation detail page
+        // Redirect to the workspaces landing page if on a deleted invitation detail page
         if (window.location.href.includes('/invitations')) {
           window.location.href = `/workspaces`;
         }

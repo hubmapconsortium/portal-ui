@@ -260,13 +260,13 @@ interface userLinksProps {
   isAuthenticated: boolean;
   isHubmapUser: boolean;
   userEmail: string;
-  numPendingInvitations: number;
+  numPendingReceivedInvitations: number;
 }
 export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
   isAuthenticated,
   isHubmapUser,
   userEmail,
-  numPendingInvitations,
+  numPendingReceivedInvitations,
 }) => {
   const profileLabel = isAuthenticated ? userEmail : 'My Profile';
   const profileDescription = isHubmapUser
@@ -275,9 +275,9 @@ export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
   const ProfileIcon = isHubmapUser ? VerifiedIcon : UserIcon;
 
   const pendingInvitationsAlert =
-    numPendingInvitations > 0 ? (
+    numPendingReceivedInvitations > 0 ? (
       <CenteredAlert severity="info" action={<Button href="/workspaces">View Invites</Button>} $marginBottom={10}>
-        {`You have ${numPendingInvitations} pending workspace copy invitation${numPendingInvitations > 1 ? 's' : ''} to review and accept.`}
+        {`You have ${numPendingReceivedInvitations} pending workspace copy invitation${numPendingReceivedInvitations > 1 ? 's' : ''} to review and accept.`}
       </CenteredAlert>
     ) : (
       <span />
@@ -310,7 +310,7 @@ export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
           label: 'My Workspaces',
           description: 'Find your workspaces.',
           icon: <entityIconMap.Workspace color="primary" />,
-          endIcon: <NotificationBell numNotifications={numPendingInvitations} />,
+          endIcon: <NotificationBell numNotifications={numPendingReceivedInvitations} />,
         },
       ],
     },

@@ -8,7 +8,8 @@ import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/system/Stack';
 import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
-import { SvgIcon, useEventCallback } from '@mui/material';
+import { useEventCallback } from '@mui/material/utils';
+import SvgIcon from '@mui/material/SvgIcon';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
@@ -476,7 +477,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
     return (
       <StyledTableContainer sx={(theme) => ({ padding: theme.spacing(2) })}>
         <StyledTable>
-          <CenteredAlert severity="info">{`No ${itemType}s to display based on current filters.`}</CenteredAlert>
+          <CenteredAlert severity="info">No {itemType}s to display based on current filters.</CenteredAlert>
         </StyledTable>
       </StyledTableContainer>
     );

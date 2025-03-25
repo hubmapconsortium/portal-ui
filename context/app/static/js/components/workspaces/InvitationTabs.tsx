@@ -26,8 +26,7 @@ interface InvitationTabsProps {
 function InvitationTabs({ sentInvitations, receivedInvitations, isLoading }: InvitationTabsProps) {
   const { openTabIndex, handleTabChange } = useTabs();
 
-  const receivedIdx = receivedInvitations ? 0 : 1;
-  const sentIdx = receivedInvitations ? 1 : 0;
+  const [receivedIdx, sentIdx] = receivedInvitations ? [0, 1] : [1, 0];
 
   return (
     <Box sx={{ width: '100%' }}>

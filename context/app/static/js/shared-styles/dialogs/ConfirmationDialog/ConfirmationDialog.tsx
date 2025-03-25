@@ -2,7 +2,7 @@ import React, { PropsWithChildren } from 'react';
 
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
+import Button, { ButtonProps } from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
@@ -16,16 +16,18 @@ interface ConfirmationDialogProps extends PropsWithChildren {
   handleConfirmAndClose: () => void;
   title: string;
   buttonTitle: string;
+  buttonProps?: ButtonProps;
 }
 export default function ConfirmationDialog({
   handleClose,
   handleConfirmAndClose,
   title,
   buttonTitle = 'Confirm',
+  buttonProps,
   children,
 }: ConfirmationDialogProps) {
   return (
-    <Dialog open onClose={handleClose} scroll="paper" aria-labelledby={`${title}-dialog`} maxWidth="md">
+    <Dialog open onClose={handleClose} scroll="paper" aria-labelledby={`${title}-dialog`} maxWidth="lg">
       <Stack display="flex" flexDirection="row" justifyContent="space-between" marginRight={1}>
         <DialogTitle id={`${title}-title`} variant="h3">
           {title}
@@ -40,7 +42,7 @@ export default function ConfirmationDialog({
       <Divider />
       <DialogActions>
         <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleConfirmAndClose} variant="contained" color="warning">
+        <Button onClick={handleConfirmAndClose} variant="contained" color="warning" {...buttonProps}>
           {buttonTitle}
         </Button>
       </DialogActions>

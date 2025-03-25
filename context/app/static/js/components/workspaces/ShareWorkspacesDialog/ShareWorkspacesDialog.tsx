@@ -1,15 +1,5 @@
 import React, { useMemo, useState } from 'react';
-
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import Divider from '@mui/material/Divider';
-import IconButton from '@mui/material/IconButton';
-import CloseRounded from '@mui/icons-material/CloseRounded';
 import Typography from '@mui/material/Typography';
 import { useEventCallback } from '@mui/material/utils';
 
@@ -21,6 +11,7 @@ import { WorkspaceUser } from 'js/components/workspaces/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { getSelectedWorkspaceNames } from 'js/components/workspaces/utils';
+import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 
 interface ShareWorkspacesDialogProps {
   handleClose: () => void;
@@ -64,30 +55,17 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
   );
 
   return (
-    <Dialog open onClose={handleClose} scroll="paper" aria-labelledby="share-workspace-dialog" maxWidth="lg">
-      <Stack display="flex" flexDirection="row" justifyContent="space-between" marginRight={1}>
-        <DialogTitle id="share-workspace-dialog-title" variant="h3">
-          {`Share Workspace Cop${selectedWorkspaceIds.size > 1 ? 'ies' : 'y'}`}
-        </DialogTitle>
-        <Box alignContent="center">
-          <IconButton aria-label="Close" onClick={handleClose} size="large">
-            <CloseRounded />
-          </IconButton>
-        </Box>
-      </Stack>
-      <Box sx={{ px: 3 }}>
+    <ConfirmationDialog
+      title={`Share Workspace Cop${selectedWorkspaceIds.size > 1 ? 'ies' : 'y'}`}
+      buttonTitle="Share"
+      buttonProps={{ color: 'primary' }}
+      handleClose={handleClose}
+      handleConfirmAndClose={handleShareAndClose}
+    >
+      <Stack spacing={3} marginBottom={10}>
         <StepDescription blocks={description} />
-      </Box>
-      <DialogContent>
         <UsersAutocomplete selectedUsers={selectedUsers} setSelectedUsers={setSelectedUsers} />
-      </DialogContent>
-      <Divider />
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <Button onClick={handleShareAndClose} disabled={!selectedUsers.length} variant="contained">
-          Share
-        </Button>
-      </DialogActions>
-    </Dialog>
+      </Stack>
+    </ConfirmationDialog>
   );
 }

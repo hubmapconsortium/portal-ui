@@ -182,6 +182,8 @@ function useInvitationsActions({
     await mutate();
   }
 
+  const numPendingReceivedInvitations = receivedInvitations.filter((invitation) => !invitation.is_accepted).length;
+
   return {
     sentInvitations,
     receivedInvitations,
@@ -192,6 +194,7 @@ function useInvitationsActions({
     isAccepting,
     handleShareInvitations,
     isSharing,
+    numPendingReceivedInvitations,
   };
 }
 
