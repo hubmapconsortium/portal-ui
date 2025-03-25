@@ -64,6 +64,7 @@ import {
   StyledCheckboxCell,
   StyledSvgIcon,
   BorderedTableRow,
+  StyledDescriptionContainer,
 } from './style';
 
 const tooltips = {
@@ -366,9 +367,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
           <ExpandedTableCell />
           <ExpandedTableCell colSpan={tableFields.length + 1}>
             <Collapse in={isExpanded} timeout="auto" unmountOnExit>
-              <Box paddingTop={0.5} paddingBottom={1.5}>
-                {description}
-              </Box>
+              <StyledDescriptionContainer>{description}</StyledDescriptionContainer>
             </Collapse>
           </ExpandedTableCell>
         </ExpandedTableRow>

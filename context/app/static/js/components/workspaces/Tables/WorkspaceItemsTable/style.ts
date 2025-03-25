@@ -74,6 +74,12 @@ const ExpandedTableCell = styled(StyledTableCell)(({ theme }) => ({
   borderTop: 'none',
 }));
 
+const StyledDescriptionContainer = styled(Box)(({ theme }) => ({
+  paddingLeft: theme.spacing(1),
+  paddingBottom: theme.spacing(1.5),
+  paddingTop: theme.spacing(0.5),
+}));
+
 const StyledHeaderCell = styled(HeaderCell)({
   whiteSpace: 'nowrap',
 });
@@ -131,4 +137,5 @@ export {
   StyledNumSelectedHeader,
   StyledSvgIcon,
   BorderedTableRow,
+  StyledDescriptionContainer,
 };

@@ -65,7 +65,6 @@ function LaunchWorkspaceButton({
   showIcons = false,
 }: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
   const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
-  const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
 
   return (
     <ButtonComponent
@@ -81,7 +80,7 @@ function LaunchWorkspaceButton({
       }}
       startIcon={showIcons ? <StyledSvgIcon as={StartJobIcon} /> : undefined}
     >
-      {currentWorkspaceIsRunning ? 'Re-Launch' : 'Launch'}
+      Launch
     </ButtonComponent>
   );
 }
