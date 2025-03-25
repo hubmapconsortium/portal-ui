@@ -68,8 +68,8 @@ test('should deselect all rows', () => {
 });
 
 test('should select header and rows', () => {
-  const keysToSet = ['apple', 'pear'];
-  const store = setupStore();
+  const keysToSet = ['apple', 'pear', 'lime'];
+  const store = setupStore({ ...defaultState, totalNumRows: keysToSet.length });
   const { selectHeaderAndRows } = getState(store);
   act(() => selectHeaderAndRows(keysToSet));
   expect(getState(store).selectedRows).toEqual(new Set(keysToSet));
@@ -86,7 +86,7 @@ test('should deselect header and rows', () => {
 
 test('should toggle rows and header', () => {
   const keysToToggle = ['apple', 'pear', 'lime'];
-  const store = setupStore();
+  const store = setupStore({ ...defaultState, totalNumRows: keysToToggle.length });
   const { toggleHeaderAndRows } = getState(store);
   act(() => toggleHeaderAndRows(keysToToggle));
   expect(getState(store).selectedRows).toEqual(new Set(keysToToggle));
