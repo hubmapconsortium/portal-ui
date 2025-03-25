@@ -1,7 +1,7 @@
 import React from 'react';
 import { Theme, styled } from '@mui/material/styles';
-import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import Button from '@mui/material/Button';
+import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 
 const sharedButtonStyles = (theme: Theme) => ({
   backgroundColor: theme.palette.white.main,

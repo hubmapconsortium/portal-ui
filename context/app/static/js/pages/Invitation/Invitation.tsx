@@ -1,5 +1,7 @@
 import React from 'react';
+import { format } from 'date-fns/format';
 import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
 
 import { useInvitationDetail } from 'js/components/workspaces/hooks';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
@@ -9,17 +11,16 @@ import { CollapsibleDetailPageSection, DetailPageSection } from 'js/components/d
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
-import { format } from 'date-fns/format';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
-import Button from '@mui/material/Button';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+
 import { StyledAlert } from './style';
 
 const descriptions = {
@@ -36,6 +37,12 @@ const pages = [
     children: 'My Workspaces',
   },
 ];
+
+const shouldDisplaySection = {
+  summary: true,
+  datasets: true,
+  templates: true,
+};
 
 function Summary({ invitation }: { invitation: WorkspaceInvitation }) {
   const {
@@ -113,7 +120,6 @@ function Templates({ invitationTemplates }: { invitationTemplates: TemplatesType
 interface InvitationPageProps {
   invitationId: number;
 }
-
 function InvitationPage({ invitationId }: InvitationPageProps) {
   const { invitation, invitationDatasets, invitationTemplates, invitationsLoading, handleAcceptInvitation } =
     useInvitationDetail({
@@ -142,12 +148,6 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
   const handleDecline = () => {
     setInvitation(invitation);
     setDialogType('DECLINE_INVITATION');
-  };
-
-  const shouldDisplaySection = {
-    summary: true,
-    datasets: true,
-    templates: true,
   };
 
   return (

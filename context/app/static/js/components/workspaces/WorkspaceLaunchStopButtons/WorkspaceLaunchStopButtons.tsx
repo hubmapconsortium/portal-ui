@@ -62,7 +62,7 @@ function LaunchWorkspaceButton({
   workspace,
   trackingInfo,
   button: ButtonComponent,
-  showIcons = false,
+  showIcons,
 }: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
   const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
 

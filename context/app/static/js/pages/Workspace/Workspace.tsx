@@ -78,6 +78,13 @@ const pages = [
   datasetsPage,
 ];
 
+const shouldDisplaySection = {
+  summary: true,
+  'sent-invitations-status': true,
+  datasets: true,
+  templates: true,
+};
+
 interface WorkspacePageProps {
   workspaceId: number;
 }
@@ -316,13 +323,6 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
   if (isLoading || Object.keys(workspace).length === 0) {
     return null;
   }
-
-  const shouldDisplaySection = {
-    summary: true,
-    'sent-invitations-status': true,
-    datasets: true,
-    templates: true,
-  };
 
   return (
     <WorkspacesAuthGuard>

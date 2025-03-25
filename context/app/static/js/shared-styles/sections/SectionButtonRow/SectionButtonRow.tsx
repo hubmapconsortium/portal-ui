@@ -1,8 +1,7 @@
 import React, { ComponentProps } from 'react';
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import { Flex } from './style';
 
 interface SectionButtonRowProps extends ComponentProps<typeof Flex> {
