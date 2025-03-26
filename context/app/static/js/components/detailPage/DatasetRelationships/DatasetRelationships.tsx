@@ -50,7 +50,7 @@ function ReactFlowBody({ nodes, edges }: { nodes: Node[]; edges: Edge[] }) {
   }
   const label = makeAriaLabel(nodes);
   return (
-    <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges} aria-label={label}>
+    <ReactFlow {...reactFlowConfig} nodes={nodes} edges={edges} aria-label={label} fitView>
       <Controls showInteractive={false} onFitView={trackFitView} onZoomIn={trackZoomIn} onZoomOut={trackZoomOut} />
     </ReactFlow>
   );
