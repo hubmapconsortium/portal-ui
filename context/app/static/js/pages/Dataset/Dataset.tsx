@@ -30,6 +30,7 @@ import { InternalLink } from 'js/shared-styles/Links';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { hasMetadata } from 'js/helpers/metadata';
+import SnareSeq2Alert from 'js/components/detailPage/multi-assay/SnareSeq2Alert';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
 interface SummaryDataChildrenProps {
@@ -142,6 +143,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
         <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
         {Boolean(is_component) && <ComponentAlert />}
+        <SnareSeq2Alert />
         <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
           <Summary
             entityTypeDisplay="Dataset"
