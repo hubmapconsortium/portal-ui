@@ -31,6 +31,7 @@ import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { hasMetadata } from 'js/helpers/metadata';
 import SnareSeq2Alert from 'js/components/detailPage/multi-assay/SnareSeq2Alert';
+import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
 interface SummaryDataChildrenProps {
@@ -152,9 +153,12 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
             mapped_external_group_name={mapped_external_group_name}
             bottomFold={
               shouldDisplayRelationships ? (
-                <Box height={datasetRelationshipsContainerHeight} width="100%" component={Paper} p={2}>
-                  <DatasetRelationships uuid={uuid} processing={processing} />
-                </Box>
+                <>
+                  <MultiAssayRelationship />
+                  <Box height={datasetRelationshipsContainerHeight} width="100%" component={Paper} p={2}>
+                    <DatasetRelationships uuid={uuid} processing={processing} />
+                  </Box>
+                </>
               ) : null
             }
           >

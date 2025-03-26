@@ -4,13 +4,12 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
 import RelatedMultiAssayLinks from '../RelatedMultiAssayLinks';
+import { useIsMultiAssay } from '../hooks';
 
-interface Props {
-  assay_modality: 'single' | 'multiple';
-}
+function MultiAssayRelationship() {
+  const { isMultiAssay } = useIsMultiAssay();
 
-function MultiAssayRelationship({ assay_modality }: Props) {
-  if (assay_modality === 'single') {
+  if (!isMultiAssay) {
     return null;
   }
   return (
