@@ -136,7 +136,6 @@ def find_raw_dataset_ancestor(client, ancestor_ids):
 
 def find_sibling_datasets(client, dataset):
     if (dataset.get("dataset_type").lower() != "snare-seq2"):
-        print("actual type: ", dataset.get("dataset_type").lower())
         return []
 
     main_raw_dataset_uuid = dataset.get("uuid", None)
