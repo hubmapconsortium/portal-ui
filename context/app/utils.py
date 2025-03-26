@@ -132,3 +132,75 @@ def find_raw_dataset_ancestor(client, ancestor_ids):
             'is_component'
         ]
     )
+
+
+def find_sibling_datasets(client, dataset):
+    if (dataset.get("dataset_type").lower() != "snare-seq2"):
+        print("actual type: ", dataset.get("dataset_type").lower())
+        return []
+
+    main_raw_dataset_uuid = dataset.get("uuid", None)
+    if not main_raw_dataset_uuid:
+        return []
+
+    processed_descendants = client.get_entities(
+        'datasets',
+        query_override={
+            "bool": {
+                "must": [
+                    {
+                        "term": {
+                            "ancestor_ids": main_raw_dataset_uuid
+                        }
+                    },
+                    {
+                        "term": {
+                            "processing": "processed"
+                        }
+                    }
+                ]
+            }
+        },
+        non_metadata_fields=[
+            'uuid',
+            'processing',
+            'entity_type',
+            'is_component'
+        ]
+    )
+    print("processed_descendants: ", processed_descendants)
+    if len(processed_descendants) == 0:
+        return []
+    # Get the first processed dataset
+    processed_dataset = processed_descendants[0]
+
+    # Get the siblings of the raw dataset by finding datasets with the same processed descendant
+
+    processed_dataset_uuid = processed_dataset.get("uuid", None)
+
+    if not processed_dataset_uuid:
+        return []
+
+    siblings = client.get_entities(
+        'datasets',
+        query_override={
+            "bool": {
+                "must": [
+                    {
+                        "term": {
+                            "descendant_ids": processed_dataset_uuid,
+                        },
+                    },
+                ],
+            },
+        },
+        non_metadata_fields=[
+            'uuid',
+        ]
+    )
+
+    # Filter out the original dataset
+    sibling_ids = [sibling.get("uuid")
+                   for sibling in siblings if sibling.get("uuid") != main_raw_dataset_uuid]
+
+    return sibling_ids

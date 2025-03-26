@@ -59,6 +59,25 @@ export type ProcessedDatasetInfo = Pick<
   | 'contacts'
 >;
 
+const ProcessedDatasetInfoSource = [
+  'hubmap_id',
+  'entity_type',
+  'uuid',
+  'assay_display_name',
+  'files',
+  'pipeline',
+  'status',
+  'metadata',
+  'creation_action',
+  'created_timestamp',
+  'dbgap_study_url',
+  'dbgap_sra_experiment_url',
+  'ingest_metadata',
+  'is_component',
+  'visualization',
+  'contributors',
+];
+
 type VitessceConf = object | undefined;
 
 // Helper function to access the result in the cache.
@@ -99,6 +118,24 @@ export function useVitessceConf(uuid: string, parentUuid?: string) {
   return swr;
 }
 
+export function useSiblingDatasets() {
+  const { siblingIds } = useFlaskDataContext();
+  return useSearchHits<ProcessedDatasetInfo>(
+    {
+      query: {
+        bool: {
+          must: [getIDsQuery(siblingIds ?? [])],
+        },
+      },
+      _source: ProcessedDatasetInfoSource,
+      size: 10000,
+    },
+    {
+      shouldFetch: Boolean(siblingIds?.length),
+    },
+  );
+}
+
 function useProcessedDatasets(includeComponents?: boolean) {
   const { entity } = useFlaskDataContext();
   const entityIsDataset = isDataset(entity);
@@ -114,24 +151,7 @@ function useProcessedDatasets(includeComponents?: boolean) {
           : [getIDsQuery(descendant_ids), includeDatasetsAndImageSupports, excludeComponentDatasetsClause],
       },
     },
-    _source: [
-      'hubmap_id',
-      'entity_type',
-      'uuid',
-      'assay_display_name',
-      'files',
-      'pipeline',
-      'status',
-      'metadata',
-      'creation_action',
-      'created_timestamp',
-      'dbgap_study_url',
-      'dbgap_sra_experiment_url',
-      'ingest_metadata',
-      'is_component',
-      'visualization',
-      'contributors',
-    ],
+    _source: ProcessedDatasetInfoSource,
     size: 10000,
   };
 
