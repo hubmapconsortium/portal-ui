@@ -50,7 +50,7 @@ function SnareSeq2Alert() {
 }
 
 function BulkDataTransfer() {
-  const tabs = useProcessedDatasetTabs();
+  const tabs = useProcessedDatasetTabs(true);
   const uuids = new Set(tabs.map((tab) => tab.uuid));
 
   const [openTabIndex, setOpenTabIndex] = useState(0);
@@ -76,6 +76,8 @@ function BulkDataTransfer() {
           onChange={(_, newValue) => {
             setOpenTabIndex(newValue as number);
           }}
+          variant="scrollable"
+          scrollButtons="auto"
         >
           {tabs.map(({ label, icon: Icon }, index) => (
             <Tab key={label} label={label} index={index} icon={Icon ? <Icon /> : undefined} iconPosition="start" />

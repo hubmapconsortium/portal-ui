@@ -146,8 +146,8 @@ function useProcessedDatasets(includeComponents?: boolean) {
   return { searchHits, isLoading };
 }
 
-function useLabeledProcessedDatasets() {
-  const { searchHits, isLoading } = useProcessedDatasets();
+function useLabeledProcessedDatasets(includeComponents?: boolean) {
+  const { searchHits, isLoading } = useProcessedDatasets(includeComponents);
   const searchHitsWithLabels = searchHits.map((hit) => ({
     ...hit,
     _source: {
