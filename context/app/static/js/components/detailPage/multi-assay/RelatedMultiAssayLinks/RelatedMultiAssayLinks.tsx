@@ -13,17 +13,17 @@ import useRelatedMultiAssayDatasets, { MultiAssayEntity } from '../useRelatedMul
 const text = {
   component: {
     label: 'Component Datasets (Raw)',
-    tooltip: 'Listed are the component datasets that comprise the multi-assay dataset.',
+    tooltip: 'A component dataset is a dataset that comprises the multi-assay dataset.',
   },
   raw: {
     label: 'Primary Dataset (Raw)',
     tooltip:
-      'Listed is the primary multi-assay dataset, which contains comprehensive information about the multi-assay.',
+      'Primary (raw) datasets contain comprehensive information about the multi-assay, as provided by the data providers, and are composed of the component datasets.',
   },
   processed: {
     label: 'Primary Dataset (Processed)',
     tooltip:
-      'Listed is the processed primary multi-assay dataset, which may contain additional multi-assay information including visualizations.',
+      'Processed primary datasets are analyses generated based on primary (raw) datasets by either HuBMAP using uniform processing pipelines or by an external processing approach.',
   },
   current: {
     tooltip: 'Current Dataset | ',
