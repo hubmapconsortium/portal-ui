@@ -167,7 +167,6 @@ def find_sibling_datasets(client, dataset):
             'is_component'
         ]
     )
-    print("processed_descendants: ", processed_descendants)
     if len(processed_descendants) == 0:
         return []
     # Get the first processed dataset
