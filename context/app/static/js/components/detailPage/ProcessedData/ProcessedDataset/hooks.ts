@@ -72,8 +72,9 @@ export function useProcessedDatasetDetails(uuid: string) {
 
 export function useProcessedDatasetTabs(
   includeComponents?: boolean,
+  includeSiblings?: boolean,
 ): { label: string; uuid: string; icon: ComponentType | undefined }[] {
-  const { searchHitsWithLabels } = useLabeledProcessedDatasets(includeComponents);
+  const { searchHitsWithLabels } = useLabeledProcessedDatasets(includeComponents, includeSiblings);
   const { entity } = useFlaskDataContext();
 
   if (!isDataset(entity)) {

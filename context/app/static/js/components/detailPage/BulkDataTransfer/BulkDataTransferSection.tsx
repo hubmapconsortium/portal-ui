@@ -50,7 +50,7 @@ function SnareSeq2Alert() {
 }
 
 function BulkDataTransfer() {
-  const tabs = useProcessedDatasetTabs(true);
+  const tabs = useProcessedDatasetTabs(true, true);
   const uuids = new Set(tabs.map((tab) => tab.uuid));
 
   const [openTabIndex, setOpenTabIndex] = useState(0);

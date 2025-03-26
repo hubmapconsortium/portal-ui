@@ -11,32 +11,8 @@ import { TableOfContentsItem } from 'js/shared-styles/sections/TableOfContents/t
 import { getAuthHeader } from 'js/helpers/functions';
 import { useEffect } from 'react';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
+import { useIsMultiAssay } from 'js/components/detailPage/multi-assay/hooks';
 import { datasetSectionId, processDatasetLabel } from './utils';
-
-function useDatasetLabelPrefix() {
-  const {
-    entity: { processing, is_component },
-  } = useFlaskDataContext();
-
-  if (is_component) {
-    return 'Component';
-  }
-
-  switch (processing) {
-    case 'processed':
-      return 'Processed';
-    case 'raw':
-      return 'Primary';
-    default:
-      return '';
-  }
-}
-
-function useDatasetLabel() {
-  const prefix = useDatasetLabelPrefix();
-
-  return [prefix, 'Dataset'].join(' ');
-}
 
 export type ProcessedDatasetInfo = Pick<
   Dataset,
@@ -57,6 +33,11 @@ export type ProcessedDatasetInfo = Pick<
   | 'visualization'
   | 'contributors'
   | 'contacts'
+  | 'mapped_status'
+  | 'processing'
+  | 'descendant_counts'
+  | 'published_timestamp'
+  | 'origin_samples_unique_mapped_organs'
 >;
 
 const ProcessedDatasetInfoSource = [
@@ -76,6 +57,11 @@ const ProcessedDatasetInfoSource = [
   'is_component',
   'visualization',
   'contributors',
+  'mapped_status',
+  'processing',
+  'descendant_counts',
+  'published_timestamp',
+  'origin_samples_unique_mapped_organs',
 ];
 
 type VitessceConf = object | undefined;
@@ -120,6 +106,7 @@ export function useVitessceConf(uuid: string, parentUuid?: string) {
 
 export function useSiblingDatasets() {
   const { siblingIds } = useFlaskDataContext();
+  const { isSnareSeq2 } = useIsMultiAssay();
   return useSearchHits<ProcessedDatasetInfo>(
     {
       query: {
@@ -131,7 +118,7 @@ export function useSiblingDatasets() {
       size: 10000,
     },
     {
-      shouldFetch: Boolean(siblingIds?.length),
+      shouldFetch: Boolean(siblingIds?.length) && isSnareSeq2,
     },
   );
 }
@@ -166,8 +153,12 @@ function useProcessedDatasets(includeComponents?: boolean) {
   return { searchHits, isLoading };
 }
 
-function useLabeledProcessedDatasets(includeComponents?: boolean) {
-  const { searchHits, isLoading } = useProcessedDatasets(includeComponents);
+function useLabeledProcessedDatasets(includeComponents?: boolean, includeSiblings?: boolean) {
+  const { searchHits: processedHits, isLoading } = useProcessedDatasets(includeComponents);
+  const { searchHits: siblingSearchHits = [] } = useSiblingDatasets();
+
+  const searchHits = includeSiblings ? [...processedHits, ...siblingSearchHits] : processedHits;
+
   const searchHitsWithLabels = searchHits.map((hit) => ({
     ...hit,
     _source: {
@@ -259,4 +250,3 @@ export function useRedirectAlert() {
 }
 
 export { useProcessedDatasets, useLabeledProcessedDatasets, useProcessedDatasetsSections };
-export default useDatasetLabel;
