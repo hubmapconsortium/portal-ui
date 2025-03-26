@@ -22,7 +22,7 @@ interface DatasetRelationshipsVisualizationProps {
 
 function DatasetRelationshipsHeader() {
   return (
-    <Stack direction="column" gap={1} px={1}>
+    <Stack direction="column" gap={1} px={1} id="section-dataset-relationships">
       <Typography variant="subtitle1">Dataset Relationship Diagram</Typography>
       <Stack direction="row" gap={1} alignItems="center">
         <InfoIcon color="primary" />
