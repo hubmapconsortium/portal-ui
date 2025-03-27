@@ -70,8 +70,11 @@ export function useProcessedDatasetDetails(uuid: string) {
   return { datasetDetails, isLoading };
 }
 
-export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: ComponentType | undefined }[] {
-  const { searchHitsWithLabels } = useLabeledProcessedDatasets();
+export function useProcessedDatasetTabs(
+  includeComponents?: boolean,
+  includeSiblings?: boolean,
+): { label: string; uuid: string; icon: ComponentType | undefined }[] {
+  const { searchHitsWithLabels } = useLabeledProcessedDatasets(includeComponents, includeSiblings);
   const { entity } = useFlaskDataContext();
 
   if (!isDataset(entity)) {
@@ -102,7 +105,7 @@ export function useProcessedDatasetTabs(): { label: string; uuid: string; icon: 
     .map(({ _source }, _) => ({
       label: _source.label,
       uuid: _source.uuid,
-      icon: nodeIcons.processedDataset,
+      icon: _source.is_component ? nodeIcons.componentDataset : nodeIcons.processedDataset,
     }));
 
   return [primaryDatasetTab, ...processedDatasetTabs];

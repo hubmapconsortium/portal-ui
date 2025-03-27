@@ -12,6 +12,7 @@ export interface FlaskDataContextType {
   redirected?: boolean;
   redirectedFromId?: string | null;
   redirectedFromPipeline?: string | null;
+  siblingIds?: string[];
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');

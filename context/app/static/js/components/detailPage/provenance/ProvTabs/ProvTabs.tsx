@@ -3,7 +3,6 @@ import Paper from '@mui/material/Paper';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tabs';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import MultiAssayProvenance from 'js/components/detailPage/multi-assay/MultiAssayProvenance';
 import ProvGraph from '../ProvGraph';
 import ProvTable from '../ProvTable';
 import { hasDataTypes } from './utils';
@@ -12,7 +11,6 @@ import { ProvData } from '../types';
 import ProvGraphErrorBoundary from '../ProvGraph/ProvGraphErrorBoundary';
 
 const availableTabDetails = {
-  multi: { label: 'Multi-Assay', 'data-testid': 'multi-prov-tab' },
   table: { label: 'Table', 'data-testid': 'prov-table-tab' },
   graph: { label: 'Graph', 'data-testid': 'prov-graph-tab' },
 };
@@ -23,14 +21,13 @@ interface ProvTabsProps {
 
 function ProvTabs({ provData }: ProvTabsProps) {
   const {
-    entity: { uuid, entity_type, data_types, assay_modality },
+    entity: { uuid, entity_type, data_types },
   } = useFlaskDataContext();
 
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const [open, setOpen] = React.useState(0);
 
   const tabsToDisplay = {
-    multi: assay_modality === 'multiple',
     table:
       entity_type !== 'Publication' &&
       !hasDataTypes(data_types, [
@@ -56,11 +53,6 @@ function ProvTabs({ provData }: ProvTabsProps) {
           <Tab label={label} index={index} data-testid={dataTestID} key={label} />
         ))}
       </Tabs>
-      {filteredTabs?.multi && (
-        <TabPanel value={open} index={filteredTabs.multi.index}>
-          <MultiAssayProvenance />
-        </TabPanel>
-      )}
       {filteredTabs?.table && (
         <TabPanel value={open} index={filteredTabs.table.index} pad>
           <ProvTable />

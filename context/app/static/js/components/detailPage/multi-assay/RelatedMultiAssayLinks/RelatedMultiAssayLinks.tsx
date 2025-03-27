@@ -7,23 +7,25 @@ import { InternalLink } from 'js/shared-styles/Links';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useFlaskDataContext } from 'js/components/Contexts';
+import { datasetSectionId } from 'js/pages/Dataset/utils';
 import StatusIcon from '../../StatusIcon';
 import useRelatedMultiAssayDatasets, { MultiAssayEntity } from '../useRelatedMultiAssayDatasets';
 
 const text = {
   component: {
     label: 'Component Datasets (Raw)',
-    tooltip: 'Listed are the component datasets that comprise the multi-assay dataset.',
+    tooltip: 'A component dataset is a dataset that comprises the multi-assay dataset.',
   },
   raw: {
     label: 'Primary Dataset (Raw)',
     tooltip:
-      'Listed is the primary multi-assay dataset, which contains comprehensive information about the multi-assay.',
+      'Primary (raw) datasets contain comprehensive information about the multi-assay, as provided by the data providers, and are composed of the component datasets.',
   },
   processed: {
     label: 'Primary Dataset (Processed)',
     tooltip:
-      'Listed is the processed primary multi-assay dataset, which may contain additional multi-assay information including visualizations.',
+      'Processed primary datasets are analyses generated based on primary (raw) datasets by either HuBMAP using uniform processing pipelines or by an external processing approach.',
+    linkTooltip: (status: string) => `Scroll down to the processed dataset. Status: ${status}`,
   },
   current: {
     tooltip: 'Current Dataset | ',
@@ -37,21 +39,30 @@ type Entries<T> = {
 interface MultiAssayLinkProps {
   dataset: MultiAssayEntity;
   tooltipText?: string;
+  href?: string | null;
 }
 
 function MultiAssayLink({
-  dataset: { assay_display_name, uuid, hubmap_id, status },
+  dataset: { assay_display_name, hubmap_id, status },
   tooltipText,
+  href,
 }: MultiAssayLinkProps) {
+  const link = href ? <InternalLink href={href}>{hubmap_id}</InternalLink> : hubmap_id;
   return (
-    <SecondaryBackgroundTooltip title={tooltipText ?? status}>
-      <Typography>
-        <Stack direction="row" useFlexGap gap={0.5} alignItems="center">
-          {assay_display_name}:<InternalLink href={`/browse/dataset/${uuid}`}>{hubmap_id}</InternalLink>
-          <StatusIcon status={status} />
-        </Stack>
-      </Typography>
-    </SecondaryBackgroundTooltip>
+    <Typography>
+      <Stack direction="row" useFlexGap gap={0.5} alignItems="center">
+        <SecondaryBackgroundTooltip title={tooltipText} disabled={!tooltipText}>
+          <Box display="inline-block" component="span">
+            {assay_display_name}: {link}
+          </Box>
+        </SecondaryBackgroundTooltip>
+        <SecondaryBackgroundTooltip title={`Status: ${status}`}>
+          <Box display="inline-block" component="span">
+            <StatusIcon status={status} />
+          </Box>
+        </SecondaryBackgroundTooltip>
+      </Stack>
+    </Typography>
   );
 }
 
@@ -61,6 +72,24 @@ function CurrentMultiAssayLink({ dataset }: Pick<MultiAssayLinkProps, 'dataset'>
       <MultiAssayLink dataset={dataset} tooltipText={`${text.current.tooltip} ${dataset.status}`} />
     </Box>
   );
+}
+
+function createLinkHref(dataset: MultiAssayEntity) {
+  if (dataset.is_component) {
+    return null;
+  }
+  if (dataset.processing === 'raw') {
+    return `/browse/dataset/${dataset.uuid}`;
+  }
+
+  return `#${datasetSectionId(dataset, 'section')}`;
+}
+
+function createTooltipText(dataset: MultiAssayEntity) {
+  if (dataset.processing !== 'raw') {
+    return text.processed.linkTooltip(dataset.status);
+  }
+  return undefined;
 }
 
 function RelatedMultiAssayLinks() {
@@ -75,6 +104,7 @@ function RelatedMultiAssayLinks() {
     if (v.length === 0) {
       return null;
     }
+
     return (
       <LabelledSectionText label={text?.[key]?.label} key={key} iconTooltipText={text?.[key]?.tooltip}>
         <Stack>
@@ -82,7 +112,12 @@ function RelatedMultiAssayLinks() {
             dataset.uuid === uuid ? (
               <CurrentMultiAssayLink dataset={dataset} key={dataset.uuid} />
             ) : (
-              <MultiAssayLink dataset={dataset} key={dataset.uuid} />
+              <MultiAssayLink
+                dataset={dataset}
+                key={dataset.uuid}
+                href={createLinkHref(dataset)}
+                tooltipText={createTooltipText(dataset)}
+              />
             ),
           )}
         </Stack>
