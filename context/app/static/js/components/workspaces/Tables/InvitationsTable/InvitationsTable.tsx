@@ -12,14 +12,14 @@ const initialSortField: SortField = {
 };
 
 interface InvitationsTableProps {
-  isLoading: boolean;
   invitations: WorkspaceInvitation[];
   status: InvitationType;
+  isLoading?: boolean;
 }
 const InvitationsTable = React.memo(function InvitationsTable({
-  isLoading,
   invitations,
   status,
+  isLoading,
 }: InvitationsTableProps) {
   const { filteredInvitations, filters, tableFields } = useInvitationsTable({ invitations, status });
 

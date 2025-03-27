@@ -14,7 +14,7 @@ function NewWorkspaceDialogFromWorkspaceList() {
         onClick={() => setDialogIsOpen(true)}
         variant="contained"
         startIcon={<AddRounded sx={{ width: '1rem' }} />}
-        sx={{ height: '2.5rem' }}
+        size="medium"
       >
         Create New
       </Button>

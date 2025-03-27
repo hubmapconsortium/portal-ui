@@ -14,35 +14,29 @@ interface InvitationTabProps {
 }
 function InvitationTab({ label, index, icon: Icon, ...props }: InvitationTabProps) {
   return (
-    <Tab
-      icon={<Icon fontSize="1.5rem" color="primary" />}
-      label={label}
-      key={index}
-      index={index}
-      iconPosition="start"
-      {...props}
-    />
+    <Tab icon={<Icon fontSize="1.5rem" />} label={label} key={index} index={index} iconPosition="start" {...props} />
   );
 }
 
 interface InvitationTabsProps {
   sentInvitations: WorkspaceInvitation[];
   receivedInvitations?: WorkspaceInvitation[];
-  isLoading: boolean;
+  isLoading?: boolean;
 }
 function InvitationTabs({ sentInvitations, receivedInvitations, isLoading }: InvitationTabsProps) {
   const { openTabIndex, handleTabChange } = useTabs();
 
-  const ownIdx = 0;
-  const sentIdx = 1;
+  const [receivedIdx, sentIdx] = receivedInvitations ? [0, 1] : [1, 0];
 
   return (
     <Box sx={{ width: '100%' }}>
       <Tabs value={openTabIndex} onChange={handleTabChange} variant="fullWidth">
-        {receivedInvitations && <InvitationTab label="Received" index={ownIdx} key={ownIdx} icon={ReceivedIcon} />}
+        {receivedInvitations && (
+          <InvitationTab label="Received" index={receivedIdx} key={receivedIdx} icon={ReceivedIcon} />
+        )}
         <InvitationTab label="Sent" index={sentIdx} key={sentIdx} icon={SentIcon} />
       </Tabs>
-      <TabPanel value={openTabIndex} index={ownIdx} key={ownIdx}>
+      <TabPanel value={openTabIndex} index={receivedIdx} key={receivedIdx}>
         {receivedInvitations && (
           <InvitationsTable status="Received" invitations={receivedInvitations} isLoading={isLoading} />
         )}

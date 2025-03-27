@@ -247,6 +247,15 @@ export function useInvitations() {
   return useFetchInvitations();
 }
 
+export function useInvitation(invitationId: number) {
+  const { receivedInvitations, sentInvitations, ...rest } = useFetchInvitations(invitationId);
+  if (rest.error) {
+    throw rest.error;
+  }
+  const invitation = receivedInvitations[0] ?? sentInvitations[0] ?? undefined;
+  return { invitation, receivedInvitations, sentInvitations, ...rest };
+}
+
 async function fetchDeleteInvitation(
   _key: string,
   { arg: { invitationId, headers, url } }: { arg: { headers: HeadersInit; invitationId: number; url: string } },

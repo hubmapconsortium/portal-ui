@@ -28,6 +28,8 @@ export interface Workspace {
   disk_space: number;
   default_job_type?: string;
   datetime_created: string;
+  datetime_last_modified?: string;
+  datetime_last_job_launch?: string;
   workspace_details: WorkspaceDetails;
 }
 
@@ -101,6 +103,7 @@ export interface SharedWorkspace {
   id: number;
   name: string;
   description: string;
+  workspace_details: WorkspaceDetails;
   user_id: WorkspaceUser;
 }
 
@@ -184,6 +187,7 @@ export enum WorkspacesEventCategories {
   WorkspaceDialog = 'Workspace Dialog',
   WorkspaceLandingPage = 'Workspace Landing Page',
   WorkspaceDetailPage = 'Workspace Detail Page',
+  WorkspacePreviewPage = 'Workspace Preview Page',
   WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
   WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
 }

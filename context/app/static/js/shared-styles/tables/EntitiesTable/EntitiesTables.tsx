@@ -13,6 +13,7 @@ import { StyledPaper } from './style';
 
 interface EntitiesTablesProps<Doc> {
   isSelectable?: boolean;
+  numSelected?: number;
   initialTabIndex?: number;
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
@@ -22,6 +23,7 @@ interface EntitiesTablesProps<Doc> {
 
 function EntitiesTables<Doc>({
   isSelectable = true,
+  numSelected,
   initialTabIndex = 0,
   entities,
   disabledIDs,
@@ -63,6 +65,7 @@ function EntitiesTables<Doc>({
               query={query}
               columns={columns}
               isSelectable={isSelectable}
+              numSelected={numSelected}
               disabledIDs={disabledIDs}
               trackingInfo={trackingInfo}
             />

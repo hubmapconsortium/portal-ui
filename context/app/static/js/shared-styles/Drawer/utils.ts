@@ -7,7 +7,7 @@ export function sectionIsProps(section: unknown): section is DrawerSectionProps 
 }
 
 export function itemIsProps(item: unknown): item is DrawerItemProps {
-  if (isValidElement(item)) return false;
+  if (!item || isValidElement(item)) return false;
   return true;
 }
 

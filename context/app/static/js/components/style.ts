@@ -3,12 +3,15 @@ import Container from '@mui/material/Container';
 
 import { Alert } from 'js/shared-styles/alerts';
 
-const StyledAlert = styled(Alert)(({ theme }) => ({
+const CenteredAlert = styled(Alert)({
+  display: 'flex',
+  alignItems: 'center',
+});
+
+const StyledAlert = styled(CenteredAlert)(({ theme }) => ({
   width: theme.breakpoints.values.lg,
   marginTop: theme.spacing(3),
   zIndex: 0, // Does not display on preview pages without this; Not sure sure why not.
-  display: 'flex',
-  alignItems: 'center',
 }));
 
 const FlexContainer = styled(Container)({
@@ -17,4 +20,4 @@ const FlexContainer = styled(Container)({
   alignItems: 'center',
 });
 
-export { StyledAlert, FlexContainer };
+export { CenteredAlert, StyledAlert, FlexContainer };

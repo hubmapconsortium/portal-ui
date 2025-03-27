@@ -1,4 +1,5 @@
 import React from 'react';
+import Typography from '@mui/material/Typography';
 
 import { useInvitationsList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
@@ -40,8 +41,13 @@ export default function ConfirmDeleteInvitationDialog() {
       handleConfirmAndClose={handleDeleteAndClose}
       buttonTitle="Delete"
     >
-      You have selected to cancel the pending invitation for {name}, sent to {first_name} {last_name}. This action will
-      cancel the invitation, preventing the recipient from accepting it.
+      <Typography>
+        You have selected to cancel the pending invitation for <strong>{name}</strong>, sent to{' '}
+        <strong>
+          {first_name} {last_name}
+        </strong>
+        . This action will cancel the invitation, preventing the recipient from accepting it.
+      </Typography>
     </ConfirmationDialog>
   );
 }

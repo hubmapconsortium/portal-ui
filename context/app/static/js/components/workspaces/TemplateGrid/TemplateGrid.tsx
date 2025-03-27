@@ -15,6 +15,7 @@ interface TemplateGridProps {
   trackingInfo: WorkspacesEventInfo;
   jobType?: string;
   showJobTooltip?: boolean;
+  openLinksInNewTab?: boolean;
 }
 
 function TemplateGrid({
@@ -25,6 +26,7 @@ function TemplateGrid({
   trackingInfo,
   jobType,
   showJobTooltip,
+  openLinksInNewTab,
 }: TemplateGridProps) {
   const getTooltip = (templateKey: string, job_types?: string[]) => {
     if (templateKey in disabledTemplates) {
@@ -47,6 +49,7 @@ function TemplateGrid({
             title={
               <InternalLink
                 href={`/templates/${templateKey}`}
+                target={openLinksInNewTab ? '_blank' : '_self'}
                 onClick={() =>
                   trackEvent({
                     ...trackingInfo,

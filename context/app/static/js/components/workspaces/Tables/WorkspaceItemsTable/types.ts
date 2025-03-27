@@ -22,7 +22,6 @@ export interface TableFilter {
 
 export interface WorkspaceItemsTableProps<T extends WorkspaceItem> {
   items: T[];
-  isLoading: boolean;
   itemType: string;
   filters: TableFilter[];
   tableFields: TableField[];
@@ -31,4 +30,5 @@ export interface WorkspaceItemsTableProps<T extends WorkspaceItem> {
   toggleAllItems?: (itemIds: string[]) => void;
   selectedItemIds?: Set<string>;
   showSeeMoreOption?: boolean;
+  isLoading?: boolean;
 }

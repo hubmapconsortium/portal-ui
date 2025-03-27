@@ -6,6 +6,7 @@ import Table from '@mui/material/Table';
 import TableRow from '@mui/material/TableRow';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
+import SvgIcon from '@mui/material/SvgIcon';
 
 import { HeaderCell } from 'js/shared-styles/tables';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
@@ -15,6 +16,8 @@ const border = (theme: Theme) => ({
 });
 
 const ChipWrapper = styled('div')(({ theme }) => ({
+  ...border(theme),
+  borderTop: 'none',
   position: 'sticky',
   display: 'flex',
   top: 0,
@@ -22,8 +25,6 @@ const ChipWrapper = styled('div')(({ theme }) => ({
   gap: theme.spacing(1),
   zIndex: theme.zIndex.fileBrowserHeader,
   backgroundColor: theme.palette.white.main,
-  borderTop: 'none',
-  ...border(theme),
 }));
 
 const StyledTable = styled(Table)(({ theme }) => ({
@@ -35,30 +36,31 @@ const StyledTable = styled(Table)(({ theme }) => ({
 const StyledTableBody = styled(TableBody)({
   width: '100%',
   overflowY: 'auto',
-  border: 'none',
 });
 
 const StyledTableRow = styled(TableRow)(({ theme }) => ({
   backgroundColor: theme.palette.white.main,
-  borderBottom: 'none',
-  ...border(theme),
+}));
+
+const BorderedTableRow = styled(TableRow)(({ theme }) => ({
+  backgroundColor: theme.palette.white.main,
+  borderBottom: `1px solid ${theme.palette.grey[300]}`,
 }));
 
 const CompactTableRow = styled(StyledTableRow)(({ theme }) => ({
   td: {
-    padding: theme.spacing(1),
+    paddingY: theme.spacing(1.25),
   },
-  borderBottom: 'none',
+  border: 'none',
 }));
 
 const ExpandedTableRow = styled(StyledTableRow)({
   paddingBottom: 0,
   paddingTop: 0,
-  borderTop: 'none',
+  border: 'none',
 });
 
 const StyledTableCell = styled(TableCell)({
-  border: 'none',
   em: {
     fontWeight: 'bold',
     fontStyle: 'normal',
@@ -69,6 +71,13 @@ const ExpandedTableCell = styled(StyledTableCell)(({ theme }) => ({
   paddingBottom: 0,
   paddingTop: 0,
   paddingLeft: theme.spacing(1),
+  borderTop: 'none',
+}));
+
+const StyledDescriptionContainer = styled(Box)(({ theme }) => ({
+  paddingLeft: theme.spacing(1),
+  paddingBottom: theme.spacing(1.5),
+  paddingTop: theme.spacing(0.5),
 }));
 
 const StyledHeaderCell = styled(HeaderCell)({
@@ -89,14 +98,14 @@ const StyledButton = styled(Button)(({ theme }) => ({
 
 const StyledTableContainer = styled(Box)(({ theme }) => ({
   ...border(theme),
-  width: '100%',
   borderTop: 'none',
-  borderLeft: 'none',
+  width: '100%',
   overflowY: 'auto',
   overflowX: 'hidden',
 }));
 
 const StyledTableHead = styled(TableHead)(({ theme }) => ({
+  ...border(theme),
   position: 'sticky',
   top: 0,
   zIndex: theme.zIndex.fileBrowserHeader,
@@ -106,6 +115,10 @@ const StyledTableHead = styled(TableHead)(({ theme }) => ({
 const StyledNumSelectedHeader = styled(NumSelectedHeader)(({ theme }) => ({
   ...border(theme),
 }));
+
+const StyledSvgIcon = styled(SvgIcon)({
+  fontSize: '1.5rem',
+});
 
 export {
   ChipWrapper,
@@ -122,4 +135,7 @@ export {
   StyledTableHead,
   StyledCheckboxCell,
   StyledNumSelectedHeader,
+  StyledSvgIcon,
+  BorderedTableRow,
+  StyledDescriptionContainer,
 };
