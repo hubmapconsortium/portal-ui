@@ -233,10 +233,12 @@ def _format_dataset_title(entity):
     ... })
     'Sample Title'
     """
+    if (entity is None):
+        return 'unknown assay of unknown organ of unknown donor'
     if (entity.get('title') is not None):
         return entity["title"]
     else:
-        assay = entity.get('raw_dataset_type', 'Unknown assay')
+        assay = entity.get('raw_dataset_type', 'unknown assay')
         origin_organs = entity.get('origin_samples_unique_mapped_organs')
         if len(origin_organs) > 0:
             organ = origin_organs[0]
@@ -258,7 +260,7 @@ def _format_sample_title(entity):
     >>> _format_sample_title(None)
     'unknown sample type from unknown organ of unknown donor'
     >>> _format_sample_title({
-    ...     'mapped_sample_category': 'Section'
+    ...     'mapped_sample_category': 'Section',
     ...     'origin_samples_unique_mapped_organs': ['Kidney'],
     ...     'donor': {
     ...         'mapped_metadata': {
@@ -269,8 +271,10 @@ def _format_sample_title(entity):
     ...         }
     ...     }
     ... })
-    'Section from Kidney of 70 years old White Male
+    'Section from Kidney of 70 years old White Male'
     """
+    if (entity is None):
+        return 'unknown sample type from unknown organ of unknown donor'
     sample_category = entity.get('mapped_sample_category', 'Unknown sample type')
     origin_organs = entity.get('origin_samples_unique_mapped_organs')
     if len(origin_organs) > 0:
@@ -328,7 +332,8 @@ def _get_publication_data_types_and_organs(uuid: str):
     elasticsearch_url = current_app.config['ELASTICSEARCH_ENDPOINT'] + \
         current_app.config['PORTAL_INDEX_PATH']
 
-    # TODO: the search API client does not currently support aggs, so this is an inline definition for the time being.
+    # TODO: the search API client does not currently support aggs, so this is
+    # an inline definition for the time being.
     request = {
         "query": {
             "bool": {"must": [
