@@ -50,7 +50,7 @@ def organ_index_view():
         'base-pages/react-content.html',
         title='Organs | HuBMAP Datasets by Organ and Tissue Type',
         description='Explore HuBMAP organ pages featuring datasets grouped by tissue type. View 3D anatomical maps, cell type distributions, and molecular data insights.',
-        flask_data=flask_data
+        flask_data=flask_data,
         skip_title_suffix=True
     )
 
