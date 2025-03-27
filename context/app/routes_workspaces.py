@@ -42,7 +42,7 @@ def invitation_detail(invitation_id):
     return render_template(
         'base-pages/react-content.html',
         flask_data=flask_data,
-        title='Invitation'
+        title='Invitation to Collaborate on a Workspace'
     )
 
 

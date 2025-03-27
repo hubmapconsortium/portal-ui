@@ -279,9 +279,7 @@ export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
       <CenteredAlert severity="info" action={<Button href="/workspaces">View Invites</Button>} $marginBottom={10}>
         {`You have ${numPendingReceivedInvitations} pending workspace copy invitation${numPendingReceivedInvitations > 1 ? 's' : ''} to review and accept.`}
       </CenteredAlert>
-    ) : (
-      <span />
-    );
+    ) : null;
 
   return [
     {

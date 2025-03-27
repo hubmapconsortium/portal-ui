@@ -156,7 +156,7 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
       <Stack direction="row" justifyContent="end" alignItems="center">
         <IconDropdownMenu tooltip={tooltips.moreOptions} icon={MoreIcon} button={RotatedTooltipButton}>
           {options.map((props) => (
-            <IconDropdownMenuItem key={props.children} {...props} />
+            <IconDropdownMenuItem key={props.icon.muiName} {...props} />
           ))}
         </IconDropdownMenu>
       </Stack>

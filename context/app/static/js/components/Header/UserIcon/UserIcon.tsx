@@ -1,12 +1,11 @@
 import React from 'react';
 import Avatar from '@mui/material/Avatar';
 import Typography from '@mui/material/Typography';
+import Badge from '@mui/material/Badge';
 import PersonRounded from '@mui/icons-material/PersonRounded';
 
 import { useAppContext } from 'js/components/Contexts';
 import { useInvitationsList } from 'js/components/workspaces/hooks';
-import NotificationBell from 'js/shared-styles/alerts/NotificationBell';
-import { StyledContainer, StyledNotificationContainer } from './style';
 
 function Authenticated({ userEmail }: { userEmail: string }) {
   return <Typography variant="subtitle2">{userEmail[0].toUpperCase()}</Typography>;
@@ -24,7 +23,7 @@ export default function UserIcon() {
   const content = isAuthenticated ? <Authenticated userEmail={userEmail} /> : <Anonymous />;
 
   return (
-    <StyledContainer>
+    <Badge badgeContent={numPendingReceivedInvitations} color="warning">
       <Avatar
         sx={{
           width: '28px',
@@ -36,9 +35,6 @@ export default function UserIcon() {
       >
         {content}
       </Avatar>
-      <StyledNotificationContainer>
-        <NotificationBell numNotifications={numPendingReceivedInvitations} />
-      </StyledNotificationContainer>
-    </StyledContainer>
+    </Badge>
   );
 }
