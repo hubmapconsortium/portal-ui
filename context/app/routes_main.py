@@ -13,8 +13,9 @@ def index():
     return render_template(
         'base-pages/react-content.html',
         flask_data=flask_data,
-        title='HuBMAP Data Portal',
-        is_home_page=True
+        title='Human BioMolecular Atlas Program Data Portal | Human Tissue Atlas for Biomedical Research',
+        description='HuBMAP is a healthy human tissue atlas advancing biomedical research with single-cell, spatial, and molecular data. Explore datasets, tools, and visualizations.',
+        skip_title_suffix=True
     )
 
 
@@ -66,7 +67,7 @@ def search_redirect():
         url_for('routes_main.search', type=f'{entity_type}s'.lower()))
 
 
-@ blueprint.route('/dev-search')
+@blueprint.route('/dev-search')
 def dev_search():
     title = 'Dev Search'
     flask_data = {
@@ -80,7 +81,7 @@ def dev_search():
     )
 
 
-@ blueprint.route('/diversity')
+@blueprint.route('/diversity')
 def vis():
     title = 'Donor Diversity'
     flask_data = {
@@ -94,27 +95,30 @@ def vis():
     )
 
 
-@ blueprint.route('/collections')
+@blueprint.route('/collections')
 def collections():
     flask_data = {**get_default_flask_data()}
     return render_template(
         'base-pages/react-content.html',
-        title='Collections',
-        flask_data=flask_data
+        title='Collections | Curated HuBMAP Datasets for Tissue & Molecular Research',
+        flask_data=flask_data,
+        skip_title_suffix=True
     )
 
 
-@ blueprint.route('/publications')
+@blueprint.route('/publications')
 def publications():
     flask_data = {**get_default_flask_data()}
     return render_template(
         'base-pages/react-content.html',
-        title='Publications',
-        flask_data=flask_data
+        title='Publications | HuBMAP Peer-Reviewed Research and Preprints',
+        description='Explore publications using HuBMAP data in single-cell and spatial biology. Find peer-reviewed papers, preprints, referenced datasets, and applications in biomolecular research.',
+        flask_data=flask_data,
+        skip_title_suffix=True
     )
 
 
-@ blueprint.route('/my-lists')
+@blueprint.route('/my-lists')
 def my_lists():
     flask_data = {**get_default_flask_data()}
     return render_template(
@@ -124,7 +128,7 @@ def my_lists():
     )
 
 
-@ blueprint.route('/my-lists/<saved_list_uuid>')
+@blueprint.route('/my-lists/<saved_list_uuid>')
 def list_page(saved_list_uuid):
     flask_data = {
         **get_default_flask_data(),
@@ -137,7 +141,7 @@ def list_page(saved_list_uuid):
     )
 
 
-@ blueprint.route('/iframe/<path:path>')
+@blueprint.route('/iframe/<path:path>')
 def iframe_page(path):
     flask_data = {
         **get_default_flask_data(),
@@ -150,7 +154,7 @@ def iframe_page(path):
     )
 
 
-@ blueprint.route('/tutorials')
+@blueprint.route('/tutorials')
 def tutorials():
     flask_data = {
         **get_default_flask_data(),
@@ -162,7 +166,7 @@ def tutorials():
     )
 
 
-@ blueprint.route('/tutorials/<tutorial_name>')
+@blueprint.route('/tutorials/<tutorial_name>')
 def tutorial_detail(tutorial_name):
     flask_data = {
         **get_default_flask_data(),
@@ -175,7 +179,7 @@ def tutorial_detail(tutorial_name):
     )
 
 
-@ blueprint.route('/profile')
+@blueprint.route('/profile')
 def profile():
     flask_data = {**get_default_flask_data()}
     return render_template(
