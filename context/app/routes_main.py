@@ -13,8 +13,12 @@ def index():
     return render_template(
         'base-pages/react-content.html',
         flask_data=flask_data,
-        title='Human BioMolecular Atlas Program Data Portal | Human Tissue Atlas for Biomedical Research',
-        description='HuBMAP is a healthy human tissue atlas advancing biomedical research with single-cell, spatial, and molecular data. Explore datasets, tools, and visualizations.',
+        title='Human BioMolecular Atlas Program Data Portal \
+            | Human Tissue Atlas for Biomedical Research',
+        description='HuBMAP is a healthy human tissue atlas \
+            advancing biomedical research with single-cell, \
+                spatial, and molecular data. Explore datasets, \
+                    tools, and visualizations.',
         skip_title_suffix=True
     )
 
@@ -112,7 +116,9 @@ def publications():
     return render_template(
         'base-pages/react-content.html',
         title='Publications | HuBMAP Peer-Reviewed Research and Preprints',
-        description='Explore publications using HuBMAP data in single-cell and spatial biology. Find peer-reviewed papers, preprints, referenced datasets, and applications in biomolecular research.',
+        description='Explore publications using HuBMAP data in single-cell and spatial biology. \
+            Find peer-reviewed papers, preprints, referenced datasets, \
+                and applications in biomolecular research.',
         flask_data=flask_data,
         skip_title_suffix=True
     )

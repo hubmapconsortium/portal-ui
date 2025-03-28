@@ -123,7 +123,7 @@ def _get_cell_ids(app):
     # as separate options is unnecessary and confusing to the user
     labels_to_remove = []
     for label in all_labels:
-        duplicate_clids = [l for l in all_labels if l['CL_ID']
+        duplicate_clids = [lab for lab in all_labels if lab['CL_ID']
                            == label['CL_ID']]
         if len(duplicate_clids) > 1:
             duplicate_clids = sorted(

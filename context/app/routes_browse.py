@@ -338,7 +338,8 @@ def _get_publication_data_types_and_organs(uuid: str):
         "query": {
             "bool": {"must": [
                 {"bool": {"filter": [{"term": {"descendant_ids": uuid}}]}},
-                {"bool": {"must_not": [{"exists": {"field": "next_revision_uuid"}}, {"exists": {"field": "sub_status"}}]}}]}},
+                {"bool": {"must_not": [{"exists": {"field": "next_revision_uuid"}},
+                                       {"exists": {"field": "sub_status"}}]}}]}},
         "aggs": {
             "data_types": {"terms": {"field": "mapped_data_types.keyword", "size": 10000}},
             "organs": {"terms": {"field": "origin_samples.mapped_organ.keyword", "size": 10000}},
@@ -366,18 +367,24 @@ def _get_entity_description(entity):
     entity_type = entity.get('entity_type', '').lower()
     match entity_type:
         case 'dataset':
-            return f'Explore the {_format_dataset_title(entity)} dataset from HuBMAP. Access and download metadata, visualizations, and analysis tools for research.'
+            return f'Explore the {_format_dataset_title(entity)} dataset from HuBMAP. \
+                Access and download metadata, visualizations, and analysis tools for research.'
         case 'sample':
-            return f'Explore a {_format_sample_title(entity)}. View metadata and associated datasets for research.'
+            return f'Explore a {_format_sample_title(entity)}. \
+                View metadata and associated datasets for research.'
         case 'publication':
             title = entity.get('title', entity.get('hubmap_id'))
             data_types, organs = _get_publication_data_types_and_organs(entity.get('uuid'))
-            return f'Explore HuBMAP publication "{title}", featuring data from {", ".join(data_types)} from {", ".join(organs)}. Access referenced datasets and related visualizations.'
+            return f'Explore HuBMAP publication "{title}", \
+                featuring data from {", ".join(data_types)} from {", ".join(organs)}. \
+                Access referenced datasets and related visualizations.'
         case 'collection':
             title = entity.get('title', entity.get('hubmap_id'))
             return f'Explore {title} dataset collection. Browse referenced HuBMAP datasets.'
         case 'donor':
             donor_description = _format_donor_title(entity.get('mapped_metadata'))
-            return f'Explore {donor_description} HuBMAP donor. Browse metadata and associated datasets, and tissue samples for research applications.'
+            return f'Explore {donor_description} HuBMAP donor. \
+                Browse metadata and associated datasets, \
+                    and tissue samples for research applications.'
         case _:
             return f'{entity["hubmap_id"]} | {entity_type.title()}'
