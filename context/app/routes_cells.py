@@ -128,9 +128,9 @@ def _get_cell_ids(app):
         if len(duplicate_clids) > 1:
             duplicate_clids = sorted(
                 duplicate_clids, key=lambda x: len(x['Label']))
-            for l in duplicate_clids[1:]:
+            for lab in duplicate_clids[1:]:
                 # Azimuth ID's are unique, so we can use them to remove the duplicates
-                labels_to_remove.append(l["A_ID"])
+                labels_to_remove.append(lab["A_ID"])
     all_labels = [label for label in all_labels if label["A_ID"] not in labels_to_remove]
 
     return all_labels
