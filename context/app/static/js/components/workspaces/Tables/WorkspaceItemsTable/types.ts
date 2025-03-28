@@ -33,7 +33,7 @@ export interface WorkspaceItemsTableProps<T extends WorkspaceItem> {
   initialSortField: SortField;
   eventCategory: WorkspacesEventCategories;
   status?: InvitationType;
-  detailPageName?: string;
+  detailPageId?: number;
   toggleItem?: (itemId: string) => void;
   toggleAllItems?: (itemIds: string[]) => void;
   selectedItemIds?: Set<string>;

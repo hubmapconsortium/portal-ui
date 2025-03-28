@@ -206,17 +206,45 @@ function SortHeaderCell({
   label,
   sortField,
   setSortField,
+  eventCategory,
+  status,
+  detailPageId,
 }: {
   field: string;
   label: string;
   sortField: { direction: SortDirection; field: string };
   setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
+  eventCategory: WorkspacesEventCategories;
+  status?: string;
+  detailPageId?: number;
 }) {
   const isCurrentSortField = field === sortField.field;
 
   const handleClick = useEventCallback(() => {
     const newSortDirection = getSortOrder({ direction: sortField.direction, isCurrentSortField });
     setSortField({ direction: newSortDirection, field });
+
+    // Don't track the event if this is a workspaces table
+    if (!status) {
+      return;
+    }
+
+    if (eventCategory === WorkspacesEventCategories.WorkspaceLandingPage) {
+      const action = `Workspace Invitations / ${status} / Sort Table`;
+      trackEvent({
+        category: eventCategory,
+        action,
+        label,
+      });
+      return;
+    }
+
+    // eventCategory === WorkspaceDetailPage
+    trackEvent({
+      category: eventCategory,
+      action: 'Datasets / Sort Columns',
+      label: `${detailPageId} ${label}`,
+    });
   });
 
   return (
@@ -379,19 +407,19 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   );
 });
 
-const HeaderCells = React.memo(function HeaderCells({
-  tableFields,
-  sortField,
-  setSortField,
-}: {
+const HeaderCells = React.memo(function HeaderCells(props: {
   tableFields: TableField[];
   sortField: { direction: SortDirection; field: string };
   setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
+  eventCategory: WorkspacesEventCategories;
+  status?: string;
+  detailPageId?: number;
 }) {
+  const { tableFields, ...rest } = props;
   return (
     <>
       {tableFields.map(({ field, label }) => (
-        <SortHeaderCell key={field} field={field} label={label} sortField={sortField} setSortField={setSortField} />
+        <SortHeaderCell key={field} field={field} label={label} {...rest} />
       ))}
     </>
   );
@@ -463,7 +491,7 @@ function TableResults<T extends WorkspaceItem>({
 }
 
 function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
-  const { items, isLoading, itemType, tableFields, toggleItem, selectedItemIds, showSeeMoreOption } = props;
+  const { items, isLoading, itemType, tableFields, toggleItem, selectedItemIds, showSeeMoreOption, ...rest } = props;
 
   const {
     noFiltersSelected,
@@ -496,7 +524,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
               </StyledHeaderCell>
             )}
             <StyledTableCell width="0" />
-            <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
+            <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} {...rest} />
             <StyledTableCell />
           </StyledTableHead>
           <StyledTableBody>
@@ -522,7 +550,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
 }
 
 function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
-  const { filters, eventCategory, status, detailPageName, itemType } = props;
+  const { filters, eventCategory, status, detailPageId, itemType } = props;
 
   const handleClick = useEventCallback((label: string, setShow: React.Dispatch<React.SetStateAction<boolean>>) => {
     setShow((prev) => !prev);
@@ -541,7 +569,7 @@ function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTable
     trackEvent({
       category: eventCategory,
       action: 'Sent Invitations Status / Select Filter',
-      label: `${detailPageName} ${label}`,
+      label: `${detailPageId} ${label}`,
     });
   });
 

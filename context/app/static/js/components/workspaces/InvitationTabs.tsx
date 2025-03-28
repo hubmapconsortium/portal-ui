@@ -25,14 +25,14 @@ interface InvitationTabsProps {
   receivedInvitations?: WorkspaceInvitation[];
   isLoading?: boolean;
   eventCategory: WorkspacesEventCategories;
-  detailPageName?: string;
+  detailPageId?: number;
 }
 function InvitationTabs({
   sentInvitations,
   receivedInvitations,
   isLoading,
   eventCategory,
-  detailPageName,
+  detailPageId,
 }: InvitationTabsProps) {
   const { openTabIndex, handleTabChange } = useTabs();
   const [receivedIdx, sentIdx] = receivedInvitations ? [0, 1] : [1, 0];
@@ -61,7 +61,7 @@ function InvitationTabs({
             invitations={receivedInvitations}
             isLoading={isLoading}
             eventCategory={eventCategory}
-            detailPageName={detailPageName}
+            detailPageId={detailPageId}
           />
         )}
       </TabPanel>
@@ -71,7 +71,7 @@ function InvitationTabs({
           invitations={sentInvitations}
           isLoading={isLoading}
           eventCategory={eventCategory}
-          detailPageName={detailPageName}
+          detailPageId={detailPageId}
         />
       </TabPanel>
     </Box>

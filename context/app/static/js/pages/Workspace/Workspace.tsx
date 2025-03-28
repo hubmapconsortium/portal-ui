@@ -252,7 +252,7 @@ function SentInvitationsStatus({
           <InvitationTabs
             sentInvitations={sentInvitations}
             eventCategory={WorkspacesEventCategories.WorkspaceDetailPage}
-            detailPageName={workspace.name}
+            detailPageId={workspace.id}
           />
         </Stack>
       )}

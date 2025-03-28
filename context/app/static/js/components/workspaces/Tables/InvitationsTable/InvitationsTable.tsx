@@ -16,14 +16,14 @@ interface InvitationsTableProps {
   status: InvitationType;
   isLoading?: boolean;
   eventCategory: WorkspacesEventCategories;
-  detailPageName?: string;
+  detailPageId?: number;
 }
 const InvitationsTable = React.memo(function InvitationsTable({
   invitations,
   status,
   isLoading,
   eventCategory,
-  detailPageName,
+  detailPageId,
 }: InvitationsTableProps) {
   const { filteredInvitations, filters, tableFields } = useInvitationsTable({ invitations, status });
 
@@ -41,7 +41,7 @@ const InvitationsTable = React.memo(function InvitationsTable({
       initialSortField={initialSortField}
       eventCategory={eventCategory}
       status={status}
-      detailPageName={detailPageName}
+      detailPageId={detailPageId}
       showSeeMoreOption
     />
   );
