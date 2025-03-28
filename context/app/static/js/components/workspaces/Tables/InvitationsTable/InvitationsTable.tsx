@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { InvitationType, WorkspaceInvitation } from 'js/components/workspaces/types';
+import { InvitationType, WorkspaceInvitation, WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { SortField } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import WorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/WorkspaceItemsTable';
 import { Alert } from 'js/shared-styles/alerts/Alert';
@@ -15,11 +15,15 @@ interface InvitationsTableProps {
   invitations: WorkspaceInvitation[];
   status: InvitationType;
   isLoading?: boolean;
+  eventCategory: WorkspacesEventCategories;
+  detailPageName?: string;
 }
 const InvitationsTable = React.memo(function InvitationsTable({
   invitations,
   status,
   isLoading,
+  eventCategory,
+  detailPageName,
 }: InvitationsTableProps) {
   const { filteredInvitations, filters, tableFields } = useInvitationsTable({ invitations, status });
 
@@ -35,6 +39,9 @@ const InvitationsTable = React.memo(function InvitationsTable({
       filters={filters}
       tableFields={tableFields}
       initialSortField={initialSortField}
+      eventCategory={eventCategory}
+      status={status}
+      detailPageName={detailPageName}
       showSeeMoreOption
     />
   );

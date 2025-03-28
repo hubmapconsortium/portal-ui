@@ -109,7 +109,7 @@ function Templates({ invitationTemplates }: { invitationTemplates: TemplatesType
         <SectionDescription>{descriptions.templates}</SectionDescription>
         <TemplateGrid
           templates={invitationTemplates}
-          trackingInfo={{ category: WorkspacesEventCategories.WorkspacePreviewPage }}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPreviewPage }}
           openLinksInNewTab
         />
       </Stack>

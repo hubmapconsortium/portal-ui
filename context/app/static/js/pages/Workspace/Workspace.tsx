@@ -216,7 +216,13 @@ function Summary({
   );
 }
 
-function SentInvitationsStatus({ sentInvitations }: { sentInvitations: WorkspaceInvitation[] }) {
+function SentInvitationsStatus({
+  workspace,
+  sentInvitations,
+}: {
+  workspace: MergedWorkspace;
+  sentInvitations: WorkspaceInvitation[];
+}) {
   const { setDialogType } = useEditWorkspaceStore();
 
   return (
@@ -243,7 +249,11 @@ function SentInvitationsStatus({ sentInvitations }: { sentInvitations: Workspace
       ) : (
         <Stack spacing={1}>
           <SectionDescription>{descriptions.sentInvitationsPresent}</SectionDescription>
-          <InvitationTabs sentInvitations={sentInvitations} />
+          <InvitationTabs
+            sentInvitations={sentInvitations}
+            eventCategory={WorkspacesEventCategories.WorkspaceDetailPage}
+            detailPageName={workspace.name}
+          />
         </Stack>
       )}
     </CollapsibleDetailPageSection>
@@ -336,7 +346,7 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
             handleStopWorkspace={handleStopWorkspace}
             isStoppingWorkspace={isStoppingWorkspace}
           />
-          <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
+          <SentInvitationsStatus workspace={workspace} sentInvitations={workspaceSentInvitations} />
           <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
           <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
         </Stack>

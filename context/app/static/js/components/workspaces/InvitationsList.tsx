@@ -7,6 +7,7 @@ import { useInvitationsList } from 'js/components/workspaces/hooks';
 import InvitationTabs from 'js/components/workspaces/InvitationTabs';
 import Description from 'js/shared-styles/sections/Description';
 import NotificationBell from 'js/shared-styles/alerts/NotificationBell';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 function InvitationsList() {
   const { sentInvitations, receivedInvitations, invitationsLoading } = useInvitationsList();
@@ -28,6 +29,7 @@ function InvitationsList() {
         sentInvitations={sentInvitations}
         receivedInvitations={receivedInvitations}
         isLoading={invitationsLoading}
+        eventCategory={WorkspacesEventCategories.WorkspaceLandingPage}
       />
     </Stack>
   );

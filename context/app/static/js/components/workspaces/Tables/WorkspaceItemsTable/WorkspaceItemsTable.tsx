@@ -48,6 +48,8 @@ import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/
 import { workspaceStatusIconMap } from 'js/shared-styles/icons/workspaceStatusIconMap';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { CenteredAlert } from 'js/components/style';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
 import {
@@ -520,7 +522,28 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
 }
 
 function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
-  const { filters, ...rest } = props;
+  const { filters, eventCategory, status, detailPageName, itemType } = props;
+
+  const handleClick = useEventCallback((label: string, setShow: React.Dispatch<React.SetStateAction<boolean>>) => {
+    setShow((prev) => !prev);
+
+    if (eventCategory === WorkspacesEventCategories.WorkspaceLandingPage) {
+      const action = itemType === 'workspace' ? 'Select Filter' : `Workspace Invitations / ${status} / Select Filter`;
+      trackEvent({
+        category: eventCategory,
+        action,
+        label,
+      });
+      return;
+    }
+
+    // eventCategory === WorkspaceDetailPage
+    trackEvent({
+      category: eventCategory,
+      action: 'Sent Invitations Status / Select Filter',
+      label: `${detailPageName} ${label}`,
+    });
+  });
 
   return (
     <Box>
@@ -530,12 +553,12 @@ function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTable
             key={label}
             label={label}
             isSelected={show}
-            onClick={() => setShow((prev) => !prev)}
+            onClick={() => handleClick(label, setShow)}
             disabled={disabled}
           />
         ))}
       </ChipWrapper>
-      <TableContent filters={filters} {...rest} />
+      <TableContent {...props} />
     </Box>
   );
 }

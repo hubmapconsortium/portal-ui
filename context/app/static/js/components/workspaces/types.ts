@@ -184,12 +184,12 @@ type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
 export enum WorkspacesEventCategories {
   Workspaces = 'Workspaces',
-  WorkspaceDialog = 'Workspace Dialog',
   WorkspaceLandingPage = 'Workspace Landing Page',
-  WorkspaceDetailPage = 'Workspace Detail Page',
-  WorkspacePreviewPage = 'Workspace Preview Page',
+  WorkspaceDetailPreviewPage = 'Workspace Detail Preview Page',
+  WorkspaceDialog = 'Workspace Dialog',
   WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
   WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
+  WorkspaceDetailPage = 'Workspace Detail Page',
 }
 
 interface WorkspacesEventInfo {
