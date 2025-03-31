@@ -245,12 +245,7 @@ def _format_dataset_title(entity):
     else:
         assay = entity.get('raw_dataset_type', 'unknown assay')
         origin_organs = entity.get('origin_samples_unique_mapped_organs')
-        if len(origin_organs) > 0:
-            organ = origin_organs[0]
-        else:
-            organ = 'unknown organ'
-        if len(entity.get('origin_samples_unique_mapped_organs')) > 1:
-            organ = entity.get('origin_samples_unique_mapped_organs').join(', ')
+       organ = ', '.join(origin_organs) if origin_organs else 'unknown organ'
 
         donor = entity.get('donor')
         donor_description = _format_donor_title(
