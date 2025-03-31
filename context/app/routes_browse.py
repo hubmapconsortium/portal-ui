@@ -189,7 +189,7 @@ def _format_donor_title(metadata):
     Formats the donor title based on the metadata.
     <Age> <Age Unit> <Race> <Sex>
     >>> _format_donor_title(None)
-    'unknown age unknown race unknown sex'
+    ''
     >>> _format_donor_title({
     ...     'age_value': ['70'],
     ...     'age_unit': ['years old'],
@@ -198,9 +198,9 @@ def _format_donor_title(metadata):
     '70 years old White Male'
     """
 
-    age = 'unknown age'
-    race = 'unknown race'
-    sex = 'unknown sex'
+    age = ''
+    race = ''
+    sex = ''
     if metadata is not None:
         age_value = metadata.get('age_value')
         age_unit = metadata.get('age_unit')
@@ -211,7 +211,9 @@ def _format_donor_title(metadata):
         if metadata.get('sex') is not None:
             sex = metadata.get('sex')[0]
 
-    return f'{age} {race} {sex}'
+    components = [age, race, sex]
+
+    return ' '.join(c for c in components if c)  # Filter out empty strings
 
 
 def _format_dataset_title(entity):
@@ -245,12 +247,13 @@ def _format_dataset_title(entity):
     else:
         assay = entity.get('raw_dataset_type', 'unknown assay')
         origin_organs = entity.get('origin_samples_unique_mapped_organs')
-       organ = ', '.join(origin_organs) if origin_organs else 'unknown organ'
+        organ = ', '.join(origin_organs) if origin_organs else 'unknown organ'
 
         donor = entity.get('donor')
         donor_description = _format_donor_title(
             donor.get('mapped_metadata') if donor is not None else None)
-        return f'{assay} of {organ} of {donor_description}'
+        components = [assay, organ, donor_description]
+        return ' of '.join(c for c in components if c)  # Filter out empty strings
 
 
 def _format_sample_title(entity):
