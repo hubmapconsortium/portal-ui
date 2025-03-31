@@ -202,9 +202,14 @@ def _format_donor_title(metadata):
     race = 'unknown race'
     sex = 'unknown sex'
     if metadata is not None:
-        age = f'{metadata.get("age_value")[0]} {metadata.get("age_unit")[0]}'
-        race = metadata.get('race')[0]
-        sex = metadata.get('sex')[0]
+        age_value = metadata.get('age_value')
+        age_unit = metadata.get('age_unit')
+        if age_value is not None and age_unit is not None:
+            age = f'{age_value[0]} {age_unit[0]}'
+        if metadata.get('race') is not None:
+            race = metadata.get('race')[0]
+        if metadata.get('sex') is not None:
+            sex = metadata.get('sex')[0]
 
     return f'{age} {race} {sex}'
 
