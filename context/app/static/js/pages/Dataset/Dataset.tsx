@@ -144,7 +144,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
       <SelectedVersionStoreProvider initialVersionUUIDs={processedDatasets?.map((ds) => ds._id) ?? []}>
         <ExternalDatasetAlert isExternal={Boolean(mapped_external_group_name)} />
         {Boolean(is_component) && <ComponentAlert />}
-        <SnareSeq2Alert />
+        <SnareSeq2Alert isHeader />
         <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
           <Summary
             entityTypeDisplay="Dataset"
