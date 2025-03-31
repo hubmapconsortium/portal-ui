@@ -32,6 +32,7 @@ import {
   useDeleteInvitation,
   useShareInvitation,
   useAcceptInvitation,
+  useInvitation,
 } from './api';
 import {
   MergedWorkspace,
@@ -39,6 +40,7 @@ import {
   CreateTemplatesResponse,
   WorkspaceResourceOptions,
   WorkspaceInvitation,
+  WorkspaceFile,
 } from './types';
 
 interface UseWorkspacesListTypes<T> {
@@ -180,6 +182,8 @@ function useInvitationsActions({
     await mutate();
   }
 
+  const numPendingReceivedInvitations = receivedInvitations.filter((invitation) => !invitation.is_accepted).length;
+
   return {
     sentInvitations,
     receivedInvitations,
@@ -190,6 +194,7 @@ function useInvitationsActions({
     isAccepting,
     handleShareInvitations,
     isSharing,
+    numPendingReceivedInvitations,
   };
 }
 
@@ -238,9 +243,8 @@ function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, ne
   }, []);
 }
 
-function useMatchingWorkspaceTemplates(workspace: MergedWorkspace | Record<string, never> = {}) {
+function useMatchingWorkspaceTemplates(workspaceFiles: WorkspaceFile[] = []) {
   // TODO: Update to use template IDs once workspace API makes them available
-  const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();
 
   const matchingTemplates = workspaceFiles.reduce((acc, file) => {
@@ -266,12 +270,60 @@ function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
 
   const mergedWorkspace = workspacesList[0] ?? {};
 
-  const workspaceTemplates = useMatchingWorkspaceTemplates(mergedWorkspace);
+  const workspaceTemplates = useMatchingWorkspaceTemplates(
+    mergedWorkspace.workspace_details?.current_workspace_details?.files,
+  );
 
   return {
     workspace: mergedWorkspace,
     workspaceDatasets: getWorkspaceDatasetUUIDs(mergedWorkspace),
     workspaceTemplates,
+    ...rest,
+  };
+}
+
+function useInvitationDetail({ invitationId }: { invitationId: number }) {
+  const {
+    invitation,
+    sentInvitations,
+    receivedInvitations,
+    isLoading: invitationsLoading,
+  } = useInvitation(invitationId);
+  const invitationsActions = useInvitationsActions({
+    sentInvitations,
+    receivedInvitations,
+    invitationsLoading,
+  });
+
+  const workspaceDetails = invitation?.shared_workspace_id?.workspace_details;
+  const invitationTemplates = useMatchingWorkspaceTemplates(workspaceDetails?.current_workspace_details?.files);
+  const invitationDatasets: string[] =
+    workspaceDetails?.request_workspace_details?.symlinks?.flatMap((symlink) =>
+      symlink.dataset_uuid ? [symlink.dataset_uuid] : [],
+    ) ?? [];
+
+  return {
+    invitation,
+    invitationDatasets,
+    invitationTemplates,
+    ...invitationsActions,
+  };
+}
+
+function useInvitationWorkspaceDetails({ workspaceId }: { workspaceId: number }) {
+  const { workspace, ...rest } = useWorkspaceDetail({ workspaceId });
+  const { sentInvitations, receivedInvitations } = useInvitationsList();
+
+  const creatorInfo = receivedInvitations.find((invitation) => invitation.shared_workspace_id.id === workspaceId)
+    ?.original_workspace_id.user_id;
+  const workspaceSentInvitations = sentInvitations.filter(
+    (invitation) => invitation.original_workspace_id.id === workspaceId,
+  );
+
+  return {
+    workspace,
+    creatorInfo,
+    workspaceSentInvitations,
     ...rest,
   };
 }
@@ -510,6 +562,8 @@ export {
   useRunningWorkspace,
   useLaunchWorkspace,
   useWorkspaceDetail,
+  useInvitationDetail,
+  useInvitationWorkspaceDetails,
   useSessionWarning,
   useRefreshSession,
   useHandleUpdateWorkspace,

@@ -14,9 +14,11 @@ interface CellContentProps<SearchDoc> {
 function HubmapIDCell({
   hit: { uuid, hubmap_id },
   trackingInfo,
-}: CellContentProps<EntityDocument> & { trackingInfo: WorkspacesEventInfo }) {
+  openLinksInNewTab,
+}: CellContentProps<EntityDocument> & { trackingInfo: WorkspacesEventInfo; openLinksInNewTab?: boolean }) {
   return (
     <InternalLink
+      target={openLinksInNewTab ? '_blank' : '_self'}
       href={`/browse/dataset/${uuid}`}
       onClick={() => trackEvent({ ...trackingInfo, action: 'Navigate to Dataset from Table' })}
       variant="body2"
@@ -31,6 +33,13 @@ export const hubmapID = {
   label: 'HuBMAP ID',
   sort: 'hubmap_id.keyword',
   cellContent: HubmapIDCell,
+};
+
+export const hubmapIDWithLinksInNewTab = {
+  ...hubmapID,
+  cellContent: (props: CellContentProps<EntityDocument> & { trackingInfo: WorkspacesEventInfo }) => (
+    <HubmapIDCell {...props} openLinksInNewTab />
+  ),
 };
 
 function LastModifiedTimestampCell({ hit: { last_modified_timestamp } }: CellContentProps<EntityDocument>) {

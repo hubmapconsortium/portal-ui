@@ -1,5 +1,4 @@
 import React, { useMemo, useState } from 'react';
-
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useEventCallback } from '@mui/material/utils';
@@ -46,8 +45,9 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
   const description = useMemo(
     () => [
       <Typography key={0}>
-        {`Select recipients to share a copy of the selected workspaces: ${selectedWorkspaceNames}. Only users with the necessary workspace permissions will appear in the list. If someone lacks these permissions, they must contact the `}
-        <ContactUsLink>HuBMAP help desk</ContactUsLink> for assistance.
+        Select recipients to share a copy of the selected workspaces: {selectedWorkspaceNames}. Only users with the
+        necessary workspace permissions will appear in the list. If someone lacks these permissions, they must contact
+        the <ContactUsLink>HuBMAP help desk</ContactUsLink> for assistance.
       </Typography>,
       'You can search for recipients by first name, last name, or email address. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at it exists at the time of sharing. When sharing multiple workspaces or sharing to multiple recipients, each invitation is sent separately.',
     ],

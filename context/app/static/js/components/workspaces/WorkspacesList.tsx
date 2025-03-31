@@ -7,12 +7,12 @@ import ShareIcon from '@mui/icons-material/Share';
 import debounce from '@mui/material/utils/debounce';
 
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import WorkspaceButton from 'js/components/workspaces/WorkspaceButton';
 import NewWorkspaceDialogFromWorkspaceList from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';
 import WorkspacesTable from 'js/components/workspaces/Tables/WorkspacesTable';
 import WorkspacesAutocomplete from 'js/components/workspaces/WorkspacesAutocomplete';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { WorkspaceTooltipButton } from 'js/components/workspaces/WorkspaceButton/WorkspaceButton';
 import { useWorkspacesListWithSharerInfo } from './hooks';
 
 function WorkspacesList() {
@@ -37,8 +37,8 @@ function WorkspacesList() {
   }, [workspacesList, debouncedInput]);
 
   const disabled = !selectedItems.size || isDeleting;
-  const shareTooltip = disabled ? 'Select workspace to share a copy.' : 'Share copies of the selected workspaces.';
-  const deleteTooltip = disabled ? 'Select workspace to delete.' : 'Delete selected workspaces.';
+  const shareTooltip = disabled ? 'Select workspace to share a copy' : 'Share copies of the selected workspaces';
+  const deleteTooltip = disabled ? 'Select workspace to delete' : 'Delete selected workspaces';
 
   return (
     <>
@@ -51,21 +51,21 @@ function WorkspacesList() {
             setInputValue={setInputValue}
             filteredWorkspaces={filteredWorkspaces}
           />
-          <Stack display="flex" direction="row" spacing={2}>
-            <WorkspaceButton
+          <Stack display="flex" direction="row" spacing={1.5}>
+            <WorkspaceTooltipButton
               onClick={() => setDialogType('DELETE_WORKSPACE')}
               disabled={disabled}
               tooltip={deleteTooltip}
             >
               <DeleteRounded />
-            </WorkspaceButton>
-            <WorkspaceButton
+            </WorkspaceTooltipButton>
+            <WorkspaceTooltipButton
               onClick={() => setDialogType('SHARE_WORKSPACE')}
               disabled={disabled}
               tooltip={shareTooltip}
             >
               <ShareIcon />
-            </WorkspaceButton>
+            </WorkspaceTooltipButton>
             <NewWorkspaceDialogFromWorkspaceList />
           </Stack>
         </Stack>

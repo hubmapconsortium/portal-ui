@@ -1,11 +1,13 @@
 import React, { PropsWithChildren } from 'react';
+import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { FlexEnd, StyledTypography, StyledSvgIcon, SummaryDataHeader } from './style';
+import { FlexEnd, StyledTypography, StyledSvgIcon } from './style';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -36,12 +38,12 @@ function SummaryData({
   const LeftTextContainer = isPublication ? React.Fragment : 'div';
 
   return (
-    <>
+    <Stack spacing={1}>
       <SummaryTitle data-testid="entity-type">
-        <SummaryDataHeader>
+        <Stack direction="row" spacing={1.25} alignItems="center">
           <StyledSvgIcon as={entityIconMap[entity_type]} color="primary" />
-          {entityTypeDisplay ?? entity_type}
-        </SummaryDataHeader>
+          <Typography variant="subtitle1">{entityTypeDisplay ?? entity_type}</Typography>
+        </Stack>
       </SummaryTitle>
       <SpacedSectionButtonRow
         leftText={
@@ -53,7 +55,7 @@ function SummaryData({
           </LeftTextContainer>
         }
         buttons={
-          <FlexEnd>
+          <>
             {entitiesWithStatus.includes(entity_type) && (
               <>
                 <SummaryItem
@@ -66,10 +68,10 @@ function SummaryData({
               </>
             )}
             {otherButtons}
-          </FlexEnd>
+          </>
         }
       />
-    </>
+    </Stack>
   );
 }
 

@@ -1,5 +1,5 @@
 import { get } from 'js/helpers/nodash';
-import { generateCommaList } from 'js/helpers/functions';
+import { generateBoldCommaList } from 'js/helpers/functions';
 import { SelectedItems } from 'js/hooks/useSelectItems';
 import type { WorkspaceItem } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import {
@@ -417,6 +417,10 @@ function isWorkspace(item: WorkspaceItem): item is WorkspaceWithUserId {
   return 'id' in item;
 }
 
+function isSentInvitation(item: WorkspaceItem): item is WorkspaceInvitation {
+  return isInvitation(item) && item.original_workspace_id.user_id.email === userEmail;
+}
+
 function getSelectedWorkspaceNames({
   selectedWorkspaceIds,
   workspacesList,
@@ -425,8 +429,7 @@ function getSelectedWorkspaceNames({
   workspacesList: MergedWorkspace[];
 }) {
   const workspacesMap = new Map(workspacesList.map((workspace) => [workspace.id, workspace.name]));
-
-  return generateCommaList(Array.from(selectedWorkspaceIds).map((id) => workspacesMap.get(Number(id)) ?? ''));
+  return generateBoldCommaList(Array.from(selectedWorkspaceIds).map((id) => workspacesMap.get(Number(id)) ?? ''));
 }
 
 export {
@@ -453,5 +456,6 @@ export {
   getFieldValue,
   isInvitation,
   isWorkspace,
+  isSentInvitation,
   getSelectedWorkspaceNames,
 };

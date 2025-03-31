@@ -19,7 +19,9 @@ import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { contactUsUrl } from 'js/shared-styles/Links/ContactUsLink';
 import { DrawerTitle } from 'js/shared-styles/Drawer/styles';
+import NotificationBell from 'js/shared-styles/alerts/NotificationBell';
 import { buildSearchLink } from 'js/components/search/store';
+import { CenteredAlert } from 'js/components/style';
 import AuthButton from '../AuthButton';
 
 export const resourceLinks: DrawerSection[] = [
@@ -254,16 +256,31 @@ export const toolsAndAppsLinks: DrawerSection[] = [
   },
 ];
 
-export const userLinks: (isAuthenticated: boolean, isHubmapUser: boolean, userEmail: string) => DrawerSection[] = (
+interface userLinksProps {
+  isAuthenticated: boolean;
+  isHubmapUser: boolean;
+  userEmail: string;
+  numPendingReceivedInvitations: number;
+}
+export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
   isAuthenticated,
   isHubmapUser,
   userEmail,
-) => {
+  numPendingReceivedInvitations,
+}) => {
   const profileLabel = isAuthenticated ? userEmail : 'My Profile';
   const profileDescription = isHubmapUser
     ? 'Verified HuBMAP member. Find information about your profile.'
     : 'Find information about your profile.';
   const ProfileIcon = isHubmapUser ? VerifiedIcon : UserIcon;
+
+  const pendingInvitationsAlert =
+    numPendingReceivedInvitations > 0 ? (
+      <CenteredAlert severity="info" action={<Button href="/workspaces">View Invites</Button>} $marginBottom={10}>
+        {`You have ${numPendingReceivedInvitations} pending workspace copy invitation${numPendingReceivedInvitations > 1 ? 's' : ''} to review and accept.`}
+      </CenteredAlert>
+    ) : null;
+
   return [
     {
       title: 'Account',
@@ -279,6 +296,7 @@ export const userLinks: (isAuthenticated: boolean, isHubmapUser: boolean, userEm
     {
       title: 'Personal Space',
       items: [
+        pendingInvitationsAlert,
         {
           href: '/my-lists',
           label: 'My Lists',
@@ -290,6 +308,7 @@ export const userLinks: (isAuthenticated: boolean, isHubmapUser: boolean, userEm
           label: 'My Workspaces',
           description: 'Find your workspaces.',
           icon: <entityIconMap.Workspace color="primary" />,
+          endIcon: <NotificationBell numNotifications={numPendingReceivedInvitations} />,
         },
       ],
     },
