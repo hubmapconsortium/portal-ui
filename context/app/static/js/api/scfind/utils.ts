@@ -1,4 +1,5 @@
-export const SCFIND_BASE_STORYBOOK = 'http://scfind.hubmapconsortium.org';
+// NOTE: This is the dev endpoint. We can't use flaskdata to provide this in Storybook because it doesn't exist in the Storybook environment.
+export const SCFIND_BASE_STORYBOOK = 'https://scfind.dev.hubmapconsortium.org';
 
 /**
  * Helper method to form URLs for SCFind API requests
