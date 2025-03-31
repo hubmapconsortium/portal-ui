@@ -1,0 +1,1 @@
+- Update toggle color in dialogs for clarity.
