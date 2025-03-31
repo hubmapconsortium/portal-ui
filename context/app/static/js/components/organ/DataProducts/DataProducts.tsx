@@ -7,6 +7,7 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
+import { useEventCallback } from '@mui/material/utils';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
@@ -18,6 +19,7 @@ import { InternalLink } from 'js/shared-styles/Links';
 import { getFileName } from 'js/helpers/functions';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import { OrganDataProducts } from 'js/components/organ/types';
+import { trackEvent } from 'js/helpers/trackers';
 
 const description = [
   'Download HuBMAP-wide data products that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. You can also explore the datasets that contribute to each data product.',
@@ -41,10 +43,38 @@ const headerCells = [
 interface DataProductsProps {
   id: string;
   dataProducts: OrganDataProducts[];
+  organName: string;
+  isLateral?: boolean;
   isLoading?: boolean;
 }
 
-function DataProducts({ id, dataProducts, isLoading }: DataProductsProps) {
+function DataProducts({ id, organName, dataProducts, isLateral, isLoading }: DataProductsProps) {
+  const handleTrack = useEventCallback(
+    ({
+      action,
+      assayName,
+      tissueType,
+      fileName,
+    }: {
+      action: string;
+      assayName: string;
+      tissueType: string;
+      fileName?: string;
+    }) => {
+      const laterality = isLateral
+        ? ` Laterality: ${/\((left|right)\)/i.exec(tissueType)?.[1].toLowerCase() ?? ''}`
+        : '';
+      const assay = ` Assay: ${assayName}`;
+      const file = fileName ? ` File: ${fileName}` : '';
+
+      trackEvent({
+        category: 'Organ Detail Page: Data Products',
+        action: `Data Products / ${action}`,
+        label: `${organName}${laterality}${assay}${file}`,
+      });
+    },
+  );
+
   if (isLoading) {
     return (
       <CollapsibleDetailPageSection id={id} title="Data Products">
@@ -67,31 +97,63 @@ function DataProducts({ id, dataProducts, isLoading }: DataProductsProps) {
           <EntitiesTable
             headerCells={headerCells}
             tableRows={dataProducts.map(
-              ({ data_product_id, tissue, assay, download_raw, download, shiny_app, creation_time, datasetUUIDs }) => (
-                <TableRow key={data_product_id}>
-                  <TableCell>{tissue.tissuetype}</TableCell>
-                  <TableCell>{assay.assayName}</TableCell>
-                  <TableCell>
-                    <InternalLink href={download_raw} variant="body2">
-                      {getFileName(download_raw, 'none')}
-                    </InternalLink>
-                  </TableCell>
-                  <TableCell>
-                    <InternalLink href={download} variant="body2">
-                      {getFileName(download, 'none')}
-                    </InternalLink>
-                  </TableCell>
-                  <TableCell>
-                    <OutboundIconLink href={shiny_app} variant="body2">
-                      View
-                    </OutboundIconLink>
-                  </TableCell>
-                  <TableCell>{format(new Date(creation_time), 'yyyy-MM-dd')}</TableCell>
-                  <TableCell>
-                    <ViewEntitiesButton entityType="Dataset" filters={{ datasetUUIDs }} />
-                  </TableCell>
-                </TableRow>
-              ),
+              ({ data_product_id, tissue, assay, download_raw, download, shiny_app, creation_time, datasetUUIDs }) => {
+                const rawFileName = getFileName(download_raw, 'none');
+                const processedFileName = getFileName(download, 'none');
+                const { assayName } = assay;
+                const { tissuetype: tissueType } = tissue;
+
+                return (
+                  <TableRow key={data_product_id}>
+                    <TableCell>{tissue.tissuetype}</TableCell>
+                    <TableCell>{assayName}</TableCell>
+                    <TableCell>
+                      <InternalLink
+                        href={download_raw}
+                        onClick={() =>
+                          handleTrack({ action: 'Download Raw', assayName, fileName: rawFileName, tissueType })
+                        }
+                        variant="body2"
+                      >
+                        {rawFileName}
+                      </InternalLink>
+                    </TableCell>
+                    <TableCell>
+                      <InternalLink
+                        href={download}
+                        onClick={() =>
+                          handleTrack({
+                            action: 'Download Processed',
+                            assayName,
+                            fileName: processedFileName,
+                            tissueType,
+                          })
+                        }
+                        variant="body2"
+                      >
+                        {processedFileName}
+                      </InternalLink>
+                    </TableCell>
+                    <TableCell>
+                      <OutboundIconLink
+                        href={shiny_app}
+                        onClick={() => handleTrack({ action: 'View Shiny App', assayName, tissueType })}
+                        variant="body2"
+                      >
+                        View
+                      </OutboundIconLink>
+                    </TableCell>
+                    <TableCell>{format(new Date(creation_time), 'yyyy-MM-dd')}</TableCell>
+                    <TableCell>
+                      <ViewEntitiesButton
+                        entityType="Dataset"
+                        filters={{ datasetUUIDs }}
+                        onClick={() => handleTrack({ action: 'View Datasets', assayName, tissueType })}
+                      />
+                    </TableCell>
+                  </TableRow>
+                );
+              },
             )}
           />
         </Paper>

@@ -178,5 +178,5 @@ export function useDataProducts(organ: OrganFile) {
     datasetUUIDs: product.dataSets.map((dataset) => dataset.uuid),
   }));
 
-  return { dataProducts: dataProductsWithUUIDs, isLoading };
+  return { dataProducts: dataProductsWithUUIDs, isLoading, isLateral };
 }
