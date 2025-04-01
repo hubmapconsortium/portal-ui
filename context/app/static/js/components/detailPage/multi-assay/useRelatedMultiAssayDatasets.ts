@@ -4,6 +4,7 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Dataset, isDataset } from 'js/components/types';
 import { getEntityCreationInfo } from 'js/helpers/functions';
+import { useSiblingDatasets } from 'js/pages/Dataset/hooks';
 
 const source = [
   'uuid',
@@ -135,7 +136,6 @@ function buildRelatedDatasets({ entities }: { entities: MultiAssayEntity[] }) {
 
 function useRelatedMultiAssayDatasets() {
   const { entity } = useFlaskDataContext();
-
   const { uuid } = entity;
 
   const entityIsDataset = isDataset(entity);
@@ -150,6 +150,7 @@ function useRelatedMultiAssayDatasets() {
       shouldFetch: !isPrimary && entityIsDataset,
     },
   );
+  const { searchHits: siblingDatasets } = useSiblingDatasets();
 
   const primary = primaryHits?.[0]?._source ?? entity;
 
@@ -160,7 +161,11 @@ function useRelatedMultiAssayDatasets() {
     },
   );
 
-  const entities = [primary, ...(primaryDescendantHits ?? []).map((hit) => hit?._source)].filter(Boolean);
+  const entities = [
+    primary,
+    ...(primaryDescendantHits ?? []).map((hit) => hit?._source),
+    ...(siblingDatasets ?? []).map((hit) => hit?._source),
+  ].filter(Boolean);
 
   if (!entityIsDataset) {
     return {
