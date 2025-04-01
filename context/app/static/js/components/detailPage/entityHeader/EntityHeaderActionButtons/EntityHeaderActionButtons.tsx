@@ -18,6 +18,7 @@ import { useIsLargeDesktop } from 'js/hooks/media-queries';
 import ProcessedDataWorkspaceMenu from 'js/components/detailPage/ProcessedData/ProcessedDataWorkspaceMenu';
 import useSavedLists from 'js/components/savedLists/hooks';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
+import { useDatasetRelationships } from '../../DatasetRelationships/hooks';
 
 function ActionButton<E extends ElementType = IconButtonTypeMap['defaultComponent']>({
   icon: Icon,
@@ -114,15 +115,17 @@ function ViewSelectChip({
 
 const ProcessedDataIcon = sectionIconMap['processed-data'];
 
-function ViewSelectChips({
-  selectedView,
-  setView,
-  entity_type,
-}: {
+interface ViewSelectChipsProps {
   selectedView: SummaryViewsType;
   setView: (v: SummaryViewsType) => void;
-} & { entity_type: AllEntityTypes }) {
-  if (!['Donor', 'Sample', 'Dataset', 'Publication'].includes(entity_type)) {
+  entity_type: AllEntityTypes;
+  uuid: string;
+}
+
+function ViewSelectChips({ selectedView, setView, entity_type, uuid }: ViewSelectChipsProps) {
+  const { shouldDisplay } = useDatasetRelationships(uuid);
+
+  if (!shouldDisplay || !['Donor', 'Sample', 'Dataset', 'Publication'].includes(entity_type)) {
     return null;
   }
 
@@ -178,7 +181,9 @@ function EntityHeaderActionButtons({
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      {isLargeDesktop && <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} />}
+      {isLargeDesktop && (
+        <ViewSelectChips selectedView={view} setView={setView} entity_type={entity_type} uuid={uuid} />
+      )}
       <SaveEditEntityButton uuid={uuid} />
       <JSONButton entity_type={entity_type} uuid={uuid} />
       {isDataset && (

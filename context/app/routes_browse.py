@@ -7,7 +7,7 @@ from flask import (
     abort, request, redirect, url_for, Response)
 
 from .utils import (
-    get_default_flask_data, make_blueprint, get_client,
+    find_sibling_datasets, get_default_flask_data, make_blueprint, get_client,
     get_url_base_from_request, entity_types, find_raw_dataset_ancestor,
     should_redirect_entity)
 
@@ -77,12 +77,18 @@ def details(type, uuid):
 
     redirected = request.args.get('redirected') == 'True'
 
+    sibling_ids = []
+
+    if entity['entity_type'].lower() == 'dataset':
+        sibling_ids = find_sibling_datasets(client, entity)
+
     flask_data = {
         **get_default_flask_data(),
         'entity': entity,
         'redirected': redirected,
         'redirectedFromId': request.args.get('redirectedFromId'),
-        'redirectedFromPipeline': request.args.get('redirectedFromPipeline')
+        'redirectedFromPipeline': request.args.get('redirectedFromPipeline'),
+        'siblingIds': sibling_ids
     }
 
     if type == 'publication':
