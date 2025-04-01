@@ -9,6 +9,8 @@ import WorkspaceRelaunchAlert from 'js/components/workspaces/WorkspaceRelaunchAl
 import { TextItems } from 'js/components/workspaces/workspaceMessaging';
 
 import { LinkPrompt } from 'js/shared-styles/tutorials/Prompt';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 
 function WorkspacesTutorialPrompt() {
   return (
@@ -29,8 +31,10 @@ function Workspaces() {
       <WorkspacesTitle />
       <WorkspacesTutorialPrompt />
       <WorkspacesAuthGuard>
-        <TextItems textKey="workspacesUserOrLoggedOut" />
-        <WorkspacesAuthenticated />
+        <WorkspacesEventContextProvider currentEventCategory={WorkspacesEventCategories.WorkspaceLandingPage}>
+          <TextItems textKey="workspacesUserOrLoggedOut" />
+          <WorkspacesAuthenticated />
+        </WorkspacesEventContextProvider>
       </WorkspacesAuthGuard>
     </Stack>
   );

@@ -20,6 +20,7 @@ import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 
 import { StyledAlert } from './style';
 
@@ -74,13 +75,7 @@ function Summary({ invitation }: { invitation: WorkspaceInvitation }) {
   );
 }
 
-function Datasets({
-  invitation,
-  invitationDatasets,
-}: {
-  invitation: WorkspaceInvitation;
-  invitationDatasets: string[];
-}) {
+function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
   return (
     <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
       <Stack spacing={1}>
@@ -90,10 +85,6 @@ function Datasets({
         <WorkspaceDatasetsTable
           datasetsUUIDs={invitationDatasets}
           isSelectable={false}
-          trackingInfo={{
-            category: WorkspacesEventCategories.WorkspaceDetailPage,
-            label: invitation.shared_workspace_id.id.toString(),
-          }}
           hideTableIfEmpty
           openLinksInNewTab
         />
@@ -107,11 +98,7 @@ function Templates({ invitationTemplates }: { invitationTemplates: TemplatesType
     <CollapsibleDetailPageSection id="templates" title="Templates" icon={sectionIconMap.templates}>
       <Stack>
         <SectionDescription>{descriptions.templates}</SectionDescription>
-        <TemplateGrid
-          templates={invitationTemplates}
-          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPreviewPage }}
-          openLinksInNewTab
-        />
+        <TemplateGrid templates={invitationTemplates} openLinksInNewTab />
       </Stack>
     </CollapsibleDetailPageSection>
   );
@@ -152,27 +139,32 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
 
   return (
     <WorkspacesAuthGuard>
-      <WorkspacesListDialogs selectedWorkspaceIds={new Set([invitationId.toString()])} />
-      <DetailLayout sections={shouldDisplaySection}>
-        <StyledAlert
-          severity="info"
-          action={
-            <Stack direction="row" gap={1}>
-              <Button onClick={handleDecline}>Decline</Button>
-              <Button onClick={handleAccept} color="success">
-                Accept
-              </Button>
-            </Stack>
-          }
-        >
-          {descriptions.acceptInvite}
-        </StyledAlert>
-        <Stack gap={1} sx={{ marginBottom: 5 }}>
-          <Summary invitation={invitation} />
-          <Datasets invitation={invitation} invitationDatasets={invitationDatasets} />
-          <Templates invitationTemplates={invitationTemplates} />
-        </Stack>
-      </DetailLayout>
+      <WorkspacesEventContextProvider
+        currentWorkspaceItemId={invitationId}
+        currentEventCategory={WorkspacesEventCategories.WorkspaceDetailPreviewPage}
+      >
+        <WorkspacesListDialogs selectedWorkspaceIds={new Set([invitationId.toString()])} />
+        <DetailLayout sections={shouldDisplaySection}>
+          <StyledAlert
+            severity="info"
+            action={
+              <Stack direction="row" gap={1}>
+                <Button onClick={handleDecline}>Decline</Button>
+                <Button onClick={handleAccept} color="success">
+                  Accept
+                </Button>
+              </Stack>
+            }
+          >
+            {descriptions.acceptInvite}
+          </StyledAlert>
+          <Stack gap={1} sx={{ marginBottom: 5 }}>
+            <Summary invitation={invitation} />
+            <Datasets invitationDatasets={invitationDatasets} />
+            <Templates invitationTemplates={invitationTemplates} />
+          </Stack>
+        </DetailLayout>
+      </WorkspacesEventContextProvider>
     </WorkspacesAuthGuard>
   );
 }

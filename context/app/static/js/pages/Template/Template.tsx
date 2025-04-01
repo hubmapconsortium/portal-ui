@@ -24,6 +24,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { DEFAULT_JOB_TYPE } from 'js/components/workspaces/constants';
 import { useAppContext } from 'js/components/Contexts';
 import { buildSearchLink } from 'js/components/search/store';
+import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 const sampleWorkspacesDescription =
   'Sample workspaces are provided to help you get started with this template and to better understand the types of data that are compatible with it.';
@@ -32,6 +33,8 @@ interface SampleWorkspacesInfoBannerProps {
   hasSampleWorkspaces: boolean;
 }
 function SampleWorkspacesInfoBanner({ hasSampleWorkspaces }: SampleWorkspacesInfoBannerProps) {
+  const { currentEventCategory } = useWorkspacesEventContext();
+
   if (!hasSampleWorkspaces) {
     return <IconPanel status="info">No sample workspaces are currently available for this template.</IconPanel>;
   }
@@ -41,7 +44,7 @@ function SampleWorkspacesInfoBanner({ hasSampleWorkspaces }: SampleWorkspacesInf
   }
 
   return (
-    <LogInPanel trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage }}>
+    <LogInPanel trackingInfo={{ category: currentEventCategory }}>
       {sampleWorkspacesDescription} Please <InternalLink href="/login">log in</InternalLink> to explore a sample
       workspace.
     </LogInPanel>
@@ -58,6 +61,8 @@ interface ExampleAccordionProps {
 
 function ExampleAccordion({ example, templateKey, defaultExpanded, templateName, jobType }: ExampleAccordionProps) {
   const { title, description, assay_display_name, datasets, resource_options } = example;
+
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
     defaultName: title,
@@ -97,7 +102,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
               disabled={!isWorkspacesUser}
               onClick={() => {
                 trackEvent({
-                  category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
+                  category: currentEventCategory,
                   action: 'Open Try Sample Workspace Dialog',
                   label: templateName,
                 });
@@ -118,7 +123,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
                       <InternalLink
                         onClick={() => {
                           trackEvent({
-                            category: WorkspacesEventCategories.WorkspaceTemplateDetailPage,
+                            category: currentEventCategory,
                             action: 'Navigate to dataset search page from assay type',
                             value: { templateName, name },
                           });
@@ -146,7 +151,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
             <WorkspaceDatasetsTable
               datasetsUUIDs={[...datasets]}
               isSelectable={false}
-              trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateDetailPage, label: title }}
+              trackingInfo={{ category: currentEventCategory, label: title }}
             />
           </Stack>
         </AccordionDetails>
@@ -169,45 +174,47 @@ function Template({ templateKey }: TemplatePageProps) {
   }
 
   return (
-    <Stack spacing={4} marginBottom={5}>
-      <Stack spacing={2}>
-        <SummaryData title={template.title} entity_type="WorkspaceTemplate" entityTypeDisplay="Workspace Template" />
-        <Stack component={SummaryPaper} spacing={1}>
-          <LabelledSectionText label="Description">{template.description}</LabelledSectionText>
-          {template.tags.length > 0 && (
-            <LabelledSectionText label="Tags">
-              <Stack spacing={1} marginTop={1} direction="row">
-                {template.tags.map((tag) => (
-                  <StyledChip key={tag} label={tag} variant="outlined" />
-                ))}
-              </Stack>
-            </LabelledSectionText>
-          )}
-          {template?.last_modified_unix_timestamp && (
-            <LabelledSectionText
-              label="Last Modified"
-              iconTooltipText="Date when this template was last modified by its provider."
-            >
-              {format(template.last_modified_unix_timestamp * 1000, 'yyyy-MM-dd')}
-            </LabelledSectionText>
-          )}
+    <WorkspacesEventContextProvider currentEventCategory={WorkspacesEventCategories.WorkspaceTemplateDetailPage}>
+      <Stack spacing={4} marginBottom={5}>
+        <Stack spacing={2}>
+          <SummaryData title={template.title} entity_type="WorkspaceTemplate" entityTypeDisplay="Workspace Template" />
+          <Stack component={SummaryPaper} spacing={1}>
+            <LabelledSectionText label="Description">{template.description}</LabelledSectionText>
+            {template.tags.length > 0 && (
+              <LabelledSectionText label="Tags">
+                <Stack spacing={1} marginTop={1} direction="row">
+                  {template.tags.map((tag) => (
+                    <StyledChip key={tag} label={tag} variant="outlined" />
+                  ))}
+                </Stack>
+              </LabelledSectionText>
+            )}
+            {template?.last_modified_unix_timestamp && (
+              <LabelledSectionText
+                label="Last Modified"
+                iconTooltipText="Date when this template was last modified by its provider."
+              >
+                {format(template.last_modified_unix_timestamp * 1000, 'yyyy-MM-dd')}
+              </LabelledSectionText>
+            )}
+          </Stack>
+        </Stack>
+        <Stack spacing={1}>
+          <Typography variant="h4">Sample Workspaces</Typography>
+          <SampleWorkspacesInfoBanner hasSampleWorkspaces={template.examples?.length > 0} />
+          {template.examples?.map((example, idx) => (
+            <ExampleAccordion
+              key={example.title}
+              example={example}
+              templateKey={templateKey}
+              templateName={template.title}
+              jobType={template.job_types?.[0]}
+              defaultExpanded={idx === 0}
+            />
+          ))}
         </Stack>
       </Stack>
-      <Stack spacing={1}>
-        <Typography variant="h4">Sample Workspaces</Typography>
-        <SampleWorkspacesInfoBanner hasSampleWorkspaces={template.examples?.length > 0} />
-        {template.examples?.map((example, idx) => (
-          <ExampleAccordion
-            key={example.title}
-            example={example}
-            templateKey={templateKey}
-            templateName={template.title}
-            jobType={template.job_types?.[0]}
-            defaultExpanded={idx === 0}
-          />
-        ))}
-      </Stack>
-    </Stack>
+    </WorkspacesEventContextProvider>
   );
 }
 

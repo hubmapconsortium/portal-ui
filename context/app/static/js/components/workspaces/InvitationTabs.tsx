@@ -2,12 +2,13 @@ import React from 'react';
 import Box from '@mui/material/Box';
 
 import InvitationsTable from 'js/components/workspaces/Tables/InvitationsTable';
-import { WorkspaceInvitation, WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { WorkspaceInvitation } from 'js/components/workspaces/types';
 import { Tabs, Tab } from 'js/shared-styles/tables/TableTabs';
 import { useTabs, TabPanel } from 'js/shared-styles/tabs';
 import { ReceivedIcon, SentIcon } from 'js/shared-styles/icons';
 import { useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 interface InvitationTabProps {
   label: string;
@@ -24,23 +25,17 @@ interface InvitationTabsProps {
   sentInvitations: WorkspaceInvitation[];
   receivedInvitations?: WorkspaceInvitation[];
   isLoading?: boolean;
-  eventCategory: WorkspacesEventCategories;
-  detailPageId?: number;
 }
-function InvitationTabs({
-  sentInvitations,
-  receivedInvitations,
-  isLoading,
-  eventCategory,
-  detailPageId,
-}: InvitationTabsProps) {
+function InvitationTabs({ sentInvitations, receivedInvitations, isLoading }: InvitationTabsProps) {
   const { openTabIndex, handleTabChange } = useTabs();
   const [receivedIdx, sentIdx] = receivedInvitations ? [0, 1] : [1, 0];
+
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   const handleChange = useEventCallback((_event: React.SyntheticEvent<Element, Event>, newValue: number) => {
     handleTabChange(_event, newValue);
     trackEvent({
-      category: WorkspacesEventCategories.WorkspaceLandingPage,
+      category: currentEventCategory,
       action: 'Workspace Invitations / Received / Switch Tabs',
       label: newValue === receivedIdx ? 'Received' : 'Sent',
     });
@@ -56,23 +51,11 @@ function InvitationTabs({
       </Tabs>
       <TabPanel value={openTabIndex} index={receivedIdx} key={receivedIdx}>
         {receivedInvitations && (
-          <InvitationsTable
-            status="Received"
-            invitations={receivedInvitations}
-            isLoading={isLoading}
-            eventCategory={eventCategory}
-            detailPageId={detailPageId}
-          />
+          <InvitationsTable status="Received" invitations={receivedInvitations} isLoading={isLoading} />
         )}
       </TabPanel>
       <TabPanel value={openTabIndex} index={sentIdx} key={sentIdx}>
-        <InvitationsTable
-          status="Sent"
-          invitations={sentInvitations}
-          isLoading={isLoading}
-          eventCategory={eventCategory}
-          detailPageId={detailPageId}
-        />
+        <InvitationsTable status="Sent" invitations={sentInvitations} isLoading={isLoading} />
       </TabPanel>
     </Box>
   );

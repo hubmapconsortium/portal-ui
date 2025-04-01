@@ -50,6 +50,7 @@ import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { CenteredAlert } from 'js/components/style';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
 import {
@@ -206,18 +207,15 @@ function SortHeaderCell({
   label,
   sortField,
   setSortField,
-  eventCategory,
   status,
-  detailPageId,
 }: {
   field: string;
   label: string;
   sortField: { direction: SortDirection; field: string };
   setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
-  eventCategory: WorkspacesEventCategories;
   status?: string;
-  detailPageId?: number;
 }) {
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
   const isCurrentSortField = field === sortField.field;
 
   const handleClick = useEventCallback(() => {
@@ -229,22 +227,22 @@ function SortHeaderCell({
       return;
     }
 
-    if (eventCategory === WorkspacesEventCategories.WorkspaceLandingPage) {
+    if (currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage) {
       const action = `Workspace Invitations / ${status} / Sort Table`;
       trackEvent({
-        category: eventCategory,
+        category: currentEventCategory,
         action,
         label,
       });
-      return;
     }
 
-    // eventCategory === WorkspaceDetailPage
-    trackEvent({
-      category: eventCategory,
-      action: 'Datasets / Sort Columns',
-      label: `${detailPageId} ${label}`,
-    });
+    if (currentEventCategory === WorkspacesEventCategories.WorkspaceDetailPage) {
+      trackEvent({
+        category: currentEventCategory,
+        action: 'Datasets / Sort Columns',
+        label: `${currentWorkspaceItemId} ${label}`,
+      });
+    }
   });
 
   return (
@@ -357,6 +355,17 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   toggleItem,
 }: RowProps<T>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
+
+  const handleDescriptionClick = useEventCallback(() => {
+    setIsExpanded(!isExpanded);
+
+    trackEvent({
+      category: currentEventCategory,
+      action: 'Workspace Invitations / Description / Expand Row',
+      label: currentWorkspaceItemId,
+    });
+  });
 
   const prefix = getFieldPrefix(tableFields[0].field);
   const description = getFieldValue({ item, field: 'description', prefix });
@@ -377,7 +386,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
               tooltip={!isExpanded && tooltips.expandRow}
               aria-label="expand row"
               size="small"
-              onClick={() => setIsExpanded(!isExpanded)}
+              onClick={handleDescriptionClick}
             >
               {isExpanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
             </TooltipIconButton>
@@ -411,9 +420,7 @@ const HeaderCells = React.memo(function HeaderCells(props: {
   tableFields: TableField[];
   sortField: { direction: SortDirection; field: string };
   setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
-  eventCategory: WorkspacesEventCategories;
   status?: string;
-  detailPageId?: number;
 }) {
   const { tableFields, ...rest } = props;
   return (
@@ -550,27 +557,29 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
 }
 
 function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
-  const { filters, eventCategory, status, detailPageId, itemType } = props;
+  const { filters, status, itemType } = props;
+
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
 
   const handleClick = useEventCallback((label: string, setShow: React.Dispatch<React.SetStateAction<boolean>>) => {
     setShow((prev) => !prev);
 
-    if (eventCategory === WorkspacesEventCategories.WorkspaceLandingPage) {
+    if (currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage) {
       const action = itemType === 'workspace' ? 'Select Filter' : `Workspace Invitations / ${status} / Select Filter`;
       trackEvent({
-        category: eventCategory,
+        category: currentEventCategory,
         action,
         label,
       });
-      return;
     }
 
-    // eventCategory === WorkspaceDetailPage
-    trackEvent({
-      category: eventCategory,
-      action: 'Sent Invitations Status / Select Filter',
-      label: `${detailPageId} ${label}`,
-    });
+    if (currentEventCategory === WorkspacesEventCategories.WorkspaceDetailPage) {
+      trackEvent({
+        category: currentEventCategory,
+        action: 'Sent Invitations Status / Select Filter',
+        label: `${currentWorkspaceItemId} ${label}`,
+      });
+    }
   });
 
   return (

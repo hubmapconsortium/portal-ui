@@ -13,7 +13,6 @@ import WorkspacesAutocomplete from 'js/components/workspaces/WorkspacesAutocompl
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { WorkspaceTooltipButton } from 'js/components/workspaces/WorkspaceButton/WorkspaceButton';
-import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useWorkspacesListWithSharerInfo } from './hooks';
 
 function WorkspacesList() {
@@ -76,7 +75,6 @@ function WorkspacesList() {
           toggleItem={toggleItem}
           toggleAllItems={toggleAllItems}
           isLoading={isLoading}
-          eventCategory={WorkspacesEventCategories.WorkspaceLandingPage}
         />
       </Stack>
     </>

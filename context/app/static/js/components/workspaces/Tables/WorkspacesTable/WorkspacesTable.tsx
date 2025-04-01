@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
-import { WorkspaceWithUserId, WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { WorkspaceWithUserId } from 'js/components/workspaces/types';
 import Description from 'js/shared-styles/sections/Description';
 import WorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/WorkspaceItemsTable';
 import { SortField, TableField } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
@@ -37,14 +37,12 @@ export default function WorkspacesTable({
   isLoading,
   toggleItem,
   toggleAllItems,
-  eventCategory,
 }: {
   workspacesList: WorkspaceWithUserId[];
   selectedItems: Set<string>;
   isLoading: boolean;
   toggleItem: (item: string) => void;
   toggleAllItems: (items: string[]) => void;
-  eventCategory: WorkspacesEventCategories;
 }) {
   const { filteredWorkspaces, filters } = useWorkspacesTable(workspacesList);
 
@@ -65,7 +63,6 @@ export default function WorkspacesTable({
         selectedItemIds={selectedItems}
         toggleItem={toggleItem}
         toggleAllItems={toggleAllItems}
-        eventCategory={eventCategory}
       />
     </Stack>
   );

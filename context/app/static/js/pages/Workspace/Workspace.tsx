@@ -41,6 +41,7 @@ import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTa
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 
 const tooltips = {
   update: 'Edit workspace name or description',
@@ -216,13 +217,7 @@ function Summary({
   );
 }
 
-function SentInvitationsStatus({
-  workspace,
-  sentInvitations,
-}: {
-  workspace: MergedWorkspace;
-  sentInvitations: WorkspaceInvitation[];
-}) {
+function SentInvitationsStatus({ sentInvitations }: { sentInvitations: WorkspaceInvitation[] }) {
   const { setDialogType } = useEditWorkspaceStore();
 
   return (
@@ -249,11 +244,7 @@ function SentInvitationsStatus({
       ) : (
         <Stack spacing={1}>
           <SectionDescription>{descriptions.sentInvitationsPresent}</SectionDescription>
-          <InvitationTabs
-            sentInvitations={sentInvitations}
-            eventCategory={WorkspacesEventCategories.WorkspaceDetailPage}
-            detailPageId={workspace.id}
-          />
+          <InvitationTabs sentInvitations={sentInvitations} />
         </Stack>
       )}
     </CollapsibleDetailPageSection>
@@ -309,10 +300,7 @@ function Templates({
     >
       <Stack>
         <SectionDescription>{descriptions.templates}</SectionDescription>
-        <TemplateGrid
-          templates={workspaceTemplates}
-          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
-        />
+        <TemplateGrid templates={workspaceTemplates} />
       </Stack>
     </CollapsibleDetailPageSection>
   );
@@ -336,21 +324,26 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
 
   return (
     <WorkspacesAuthGuard>
-      <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
-      <DetailLayout sections={shouldDisplaySection}>
-        <Stack gap={1} sx={{ marginBottom: 5 }}>
-          <WorkspaceSessionWarning workspaces={[workspace]} />
-          <Summary
-            workspace={workspace}
-            creatorInfo={creatorInfo}
-            handleStopWorkspace={handleStopWorkspace}
-            isStoppingWorkspace={isStoppingWorkspace}
-          />
-          <SentInvitationsStatus workspace={workspace} sentInvitations={workspaceSentInvitations} />
-          <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
-          <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
-        </Stack>
-      </DetailLayout>
+      <WorkspacesEventContextProvider
+        currentWorkspaceItemId={workspaceId}
+        currentEventCategory={WorkspacesEventCategories.WorkspaceDetailPage}
+      >
+        <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
+        <DetailLayout sections={shouldDisplaySection}>
+          <Stack gap={1} sx={{ marginBottom: 5 }}>
+            <WorkspaceSessionWarning workspaces={[workspace]} />
+            <Summary
+              workspace={workspace}
+              creatorInfo={creatorInfo}
+              handleStopWorkspace={handleStopWorkspace}
+              isStoppingWorkspace={isStoppingWorkspace}
+            />
+            <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
+            <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
+            <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
+          </Stack>
+        </DetailLayout>
+      </WorkspacesEventContextProvider>
     </WorkspacesAuthGuard>
   );
 }
