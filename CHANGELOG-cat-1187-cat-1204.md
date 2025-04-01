@@ -1,0 +1,1 @@
+- Updated HTML titles and meta-descriptions for homepage, organ pages, dataset detail pages, donor detail pages, sample detail pages, collection pages, and publication pages.
