@@ -355,7 +355,8 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   toggleItem,
 }: RowProps<T>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
+  const { currentEventCategory } = useWorkspacesEventContext();
+  const itemId = isWorkspace(item) ? item.id.toString() : item.original_workspace_id.id.toString();
 
   const handleDescriptionClick = useEventCallback(() => {
     setIsExpanded(!isExpanded);
@@ -363,13 +364,12 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
     trackEvent({
       category: currentEventCategory,
       action: 'Workspace Invitations / Description / Expand Row',
-      label: currentWorkspaceItemId,
+      label: itemId,
     });
   });
 
   const prefix = getFieldPrefix(tableFields[0].field);
   const description = getFieldValue({ item, field: 'description', prefix });
-  const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
   const TableRowComponent: React.ElementType = description ? CompactTableRow : BorderedTableRow;
 
   return (

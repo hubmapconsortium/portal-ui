@@ -62,8 +62,6 @@ interface ExampleAccordionProps {
 function ExampleAccordion({ example, templateKey, defaultExpanded, templateName, jobType }: ExampleAccordionProps) {
   const { title, description, assay_display_name, datasets, resource_options } = example;
 
-  const { currentEventCategory } = useWorkspacesEventContext();
-
   const { setDialogIsOpen, ...rest } = useCreateWorkspaceForm({
     defaultName: title,
     defaultTemplate: templateKey,
@@ -86,6 +84,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
   }, [datasetTypeMap]);
 
   const { isWorkspacesUser } = useAppContext();
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   return (
     <>
@@ -125,7 +124,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
                           trackEvent({
                             category: currentEventCategory,
                             action: 'Navigate to dataset search page from assay type',
-                            value: { templateName, name },
+                            value: { template_name: templateName, dataset_type: name },
                           });
                         }}
                         href={buildSearchLink({
@@ -151,7 +150,7 @@ function ExampleAccordion({ example, templateKey, defaultExpanded, templateName,
             <WorkspaceDatasetsTable
               datasetsUUIDs={[...datasets]}
               isSelectable={false}
-              trackingInfo={{ category: currentEventCategory, label: title }}
+              trackingInfo={{ category: currentEventCategory, label: templateName }}
             />
           </Stack>
         </AccordionDetails>

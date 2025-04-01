@@ -30,12 +30,12 @@ function Workspaces() {
       <WorkspaceSessionWarning link />
       <WorkspacesTitle />
       <WorkspacesTutorialPrompt />
-      <WorkspacesAuthGuard>
-        <WorkspacesEventContextProvider currentEventCategory={WorkspacesEventCategories.WorkspaceLandingPage}>
+      <WorkspacesEventContextProvider currentEventCategory={WorkspacesEventCategories.WorkspaceLandingPage}>
+        <WorkspacesAuthGuard>
           <TextItems textKey="workspacesUserOrLoggedOut" />
           <WorkspacesAuthenticated />
-        </WorkspacesEventContextProvider>
-      </WorkspacesAuthGuard>
+        </WorkspacesAuthGuard>
+      </WorkspacesEventContextProvider>
     </Stack>
   );
 }

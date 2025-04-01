@@ -41,7 +41,7 @@ import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTa
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
-import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
+import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 const tooltips = {
   update: 'Edit workspace name or description',
@@ -252,6 +252,8 @@ function SentInvitationsStatus({ sentInvitations }: { sentInvitations: Workspace
 }
 
 function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace; workspaceDatasets: string[] }) {
+  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
+
   return (
     <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
       <Stack spacing={1}>
@@ -271,8 +273,8 @@ function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace
           addDatasets={workspace}
           copyDatasets
           trackingInfo={{
-            category: WorkspacesEventCategories.WorkspaceDetailPage,
-            label: workspace.name,
+            category: currentEventCategory,
+            label: currentWorkspaceItemName,
           }}
         />
       </Stack>
@@ -323,11 +325,12 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
   }
 
   return (
-    <WorkspacesAuthGuard>
-      <WorkspacesEventContextProvider
-        currentWorkspaceItemId={workspaceId}
-        currentEventCategory={WorkspacesEventCategories.WorkspaceDetailPage}
-      >
+    <WorkspacesEventContextProvider
+      currentEventCategory={WorkspacesEventCategories.WorkspaceDetailPage}
+      currentWorkspaceItemId={workspaceId}
+      currentWorkspaceItemName={workspace.name}
+    >
+      <WorkspacesAuthGuard>
         <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
         <DetailLayout sections={shouldDisplaySection}>
           <Stack gap={1} sx={{ marginBottom: 5 }}>
@@ -343,8 +346,8 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
             <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
           </Stack>
         </DetailLayout>
-      </WorkspacesEventContextProvider>
-    </WorkspacesAuthGuard>
+      </WorkspacesAuthGuard>
+    </WorkspacesEventContextProvider>
   );
 }
 

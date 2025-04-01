@@ -138,11 +138,12 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
   };
 
   return (
-    <WorkspacesAuthGuard>
-      <WorkspacesEventContextProvider
-        currentWorkspaceItemId={invitationId}
-        currentEventCategory={WorkspacesEventCategories.WorkspaceDetailPreviewPage}
-      >
+    <WorkspacesEventContextProvider
+      currentEventCategory={WorkspacesEventCategories.WorkspaceDetailPreviewPage}
+      currentWorkspaceItemId={invitationId}
+      currentWorkspaceItemName={invitation.shared_workspace_id.name}
+    >
+      <WorkspacesAuthGuard>
         <WorkspacesListDialogs selectedWorkspaceIds={new Set([invitationId.toString()])} />
         <DetailLayout sections={shouldDisplaySection}>
           <StyledAlert
@@ -164,8 +165,8 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
             <Templates invitationTemplates={invitationTemplates} />
           </Stack>
         </DetailLayout>
-      </WorkspacesEventContextProvider>
-    </WorkspacesAuthGuard>
+      </WorkspacesAuthGuard>
+    </WorkspacesEventContextProvider>
   );
 }
 

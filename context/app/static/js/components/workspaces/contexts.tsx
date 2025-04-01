@@ -4,6 +4,7 @@ import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 interface WorkspacesEventContextProps {
   currentEventCategory: WorkspacesEventCategories;
   currentWorkspaceItemId?: number;
+  currentWorkspaceItemName?: string;
 }
 
 export const WorkspacesEventContext = createContext<WorkspacesEventContextProps | null>(null);
