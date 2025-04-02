@@ -17,6 +17,7 @@ import { InternalLink } from 'js/shared-styles/Links';
 import {
   getFieldPrefix,
   getFieldValue,
+  getItemId,
   isInvitation,
   isSentInvitation,
   isWorkspace,
@@ -85,9 +86,11 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
   const { handleAcceptInvitation } = useInvitationsList();
   const { setDialogType, setInvitation } = useEditWorkspaceStore();
   const { toastErrorAcceptInvitation, toastSuccessAcceptInvitation } = useWorkspaceToasts();
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   const isSender = isSentInvitation(item);
   const isAccepted = getFieldValue({ item, field: 'is_accepted' });
+  const itemId = getItemId(item);
 
   const options = useMemo(
     () => [
@@ -108,9 +111,14 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
 
   const onAcceptInvite = useEventCallback(() => {
     if (isInvitation(item)) {
-      handleAcceptInvitation(item.shared_workspace_id.id)
+      handleAcceptInvitation(itemId)
         .then(() => {
           toastSuccessAcceptInvitation(item.shared_workspace_id.name);
+          trackEvent({
+            category: currentEventCategory,
+            action: 'Workspace Invitations / Received / Accept Invite',
+            label: itemId,
+          });
         })
         .catch((e) => {
           console.error(e);
@@ -121,7 +129,13 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
 
   const onPreviewInvite = useEventCallback(() => {
     if (isInvitation(item)) {
-      window.location.href = `/invitations/${item.shared_workspace_id.id}`;
+      trackEvent({
+        category: currentEventCategory,
+        action: 'Workspace Invitations / Received / Open Preview',
+        label: `${itemId} Preview Icon Button`,
+      });
+
+      window.location.href = `/invitations/${itemId}`;
     }
   });
 
@@ -287,15 +301,27 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
   const hasWorkspacePage = isWorkspace(item) || isSentInvitation(item) || getFieldValue({ item, field: 'is_accepted' });
+  const itemId = getFieldValue({ item, field: 'id', prefix });
+
+  const { currentEventCategory } = useWorkspacesEventContext();
+
+  const trackNameClick = useEventCallback(() => {
+    if (!hasWorkspacePage) {
+      trackEvent({
+        category: currentEventCategory,
+        action: 'Workspace Invitations / Received / Open Preview',
+        label: `${itemId} Select Workspace Name`,
+      });
+    }
+  });
 
   switch (field) {
     case `${prefix}name`: {
-      const itemId = getFieldValue({ item, field: 'id', prefix });
       const href = hasWorkspacePage ? `/workspaces/${itemId}` : `/invitations/${itemId}`;
 
       return (
         <Stack direction="row" spacing={1} alignItems="center">
-          <InternalLink href={href}>
+          <InternalLink href={href} onClick={trackNameClick}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
           <Box>{`(ID: ${itemId})`}</Box>
