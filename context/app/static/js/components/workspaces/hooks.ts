@@ -214,7 +214,7 @@ function useWorkspacesListWithSharerInfo() {
   const invitationMap = new Map(
     receivedInvitations.map((invitation) => [
       invitation.shared_workspace_id.id,
-      invitation.original_workspace_id.user_id,
+      invitation.original_workspace_id?.user_id, // TODO: see if original user ID can be made available in the API
     ]),
   );
 

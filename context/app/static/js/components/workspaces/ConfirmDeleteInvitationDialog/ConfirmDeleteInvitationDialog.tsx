@@ -5,11 +5,14 @@ import { useInvitationsList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
+import { trackEvent } from 'js/helpers/trackers';
 
 export default function ConfirmDeleteInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
   const { invitation, reset } = useEditWorkspaceStore();
   const { toastSuccessDeleteInvitation, toastErrorDeleteInvitation } = useWorkspaceToasts();
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   if (!invitation) {
     return null;
@@ -23,6 +26,12 @@ export default function ConfirmDeleteInvitationDialog() {
   } = invitation;
 
   const handleDeleteAndClose = () => {
+    trackEvent({
+      category: currentEventCategory,
+      action: `Workspace Invitations / Sent / Delete Invitation`,
+      label: id,
+    });
+
     handleDeleteInvitation(id)
       .then(() => {
         toastSuccessDeleteInvitation(name);

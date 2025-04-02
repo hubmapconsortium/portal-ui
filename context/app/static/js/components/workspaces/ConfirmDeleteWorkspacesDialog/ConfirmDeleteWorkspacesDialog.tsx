@@ -27,6 +27,10 @@ export default function ConfirmDeleteWorkspacesDialog({
       .then(() => {
         toastSuccessDeleteWorkspaces(selectedWorkspaceNames);
         selectedWorkspaceIds.clear();
+        // Redirect to the workspaces landing page if on a deleted workspace page
+        if (window.location.href.includes(`/workspaces/${workspaceIds[0]}`)) {
+          window.location.href = `/workspaces`;
+        }
       })
       .catch((e) => {
         toastErrorDeleteWorkspaces(selectedWorkspaceNames);

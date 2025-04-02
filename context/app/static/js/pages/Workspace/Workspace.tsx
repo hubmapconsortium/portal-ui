@@ -42,8 +42,10 @@ import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
 import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/components/workspaces/contexts';
+import WorkspacesDeleteButton from 'js/components/workspaces/WorkspacesDeleteButton';
 
 const tooltips = {
+  delete: 'Delete this workspace. This action is permanent.',
   update: 'Edit workspace name or description',
   lastLaunched: 'Date of the last launched session',
   lastModified: 'Date of the last modification to the content of the workspace',
@@ -115,6 +117,7 @@ function SummaryTitle({
       entity_type="Workspace"
       otherButtons={
         <Stack direction="row" alignItems="center" spacing={1}>
+          <WorkspacesDeleteButton workspaceIds={new Set([workspace.id.toString()])} tooltip={tooltips.delete} />
           <WorkspacesUpdateButton
             workspace={workspace}
             dialogType="UPDATE_NAME"
