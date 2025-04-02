@@ -107,35 +107,3 @@ export const contributorIsContact = (contributor: Contributor, contacts: Contact
       return false;
   }
 };
-
-/**
- * Given an array of contributors, sort them by contact status and then alphabetically by name.
- *   Ex sorted array: PI Contact C, PI Contact D, Contact, Contributor A, Contributor B
- * @author Austen Money
- * @param contributors an array of contributors to be sorted.
- * @param contacts an array of contacts to be used for sorting.
- * @returns a sorted array.
- */
-export const sortContributors = (contributors: Contributor[], contacts: Contact[]): Contributor[] =>
-  contributors.sort((a, b) => {
-    const aIsContact = contributorIsContact(a, contacts);
-    const bIsContact = contributorIsContact(b, contacts);
-
-    const aIsPIContact = aIsContact && a.isPrincipalInvestigator;
-    const bIsPIContact = bIsContact && b.isPrincipalInvestigator;
-
-    if (aIsPIContact && !bIsPIContact) {
-      return -1;
-    }
-    if (!aIsPIContact && bIsPIContact) {
-      return 1;
-    }
-    if (aIsContact && !bIsContact) {
-      return -1;
-    }
-    if (!aIsContact && bIsContact) {
-      return 1;
-    }
-
-    return a.name.localeCompare(b.name);
-  });
