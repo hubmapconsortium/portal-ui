@@ -1,1 +1,0 @@
-- Updated portal viz version to fix the scaling issue for Visium datasets spot layer.

@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.23.1 - 2025-04-02
+
+- Add event tracking for all data products sections on organ pages.
+- Update unified dataset detail page to improve clarity surrounding SnareSeq2 datasets.
+- Updated HTML titles and meta-descriptions for homepage, organ pages, dataset detail pages, donor detail pages, sample detail pages, collection pages, and publication pages.
+- List publication contributors in original author order.
+- Updated portal viz version to fix the scaling issue for Visium datasets spot layer.
+- Update toggle color in dialogs for clarity.
+
+
+
 ## v1.23.0 - 2025-03-24
 
 - Add support for additional deepcell annotations by updating to portal-visualization 0.4.2.

@@ -1,1 +1,0 @@
-- List publication contributors in original author order.
