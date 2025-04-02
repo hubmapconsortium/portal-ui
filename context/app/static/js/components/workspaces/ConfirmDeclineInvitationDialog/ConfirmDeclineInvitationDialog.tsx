@@ -5,11 +5,14 @@ import { useInvitationsList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
+import { trackEvent } from 'js/helpers/trackers';
 
 export default function ConfirmDeclineInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
   const { invitation, reset } = useEditWorkspaceStore();
   const { toastSuccessDeclineInvitation, toastErrorDeclineInvitation } = useWorkspaceToasts();
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   if (!invitation) {
     return null;
@@ -24,7 +27,21 @@ export default function ConfirmDeclineInvitationDialog() {
     },
   } = invitation;
 
+  const trackDialogEvent = (action: string) => {
+    trackEvent({
+      category: currentEventCategory,
+      action: `Workspace Invitations / Received / ${action}`,
+      label: id,
+    });
+  };
+
+  const handleClose = () => {
+    trackDialogEvent('Cancel Decline Invitation Dialog');
+    reset();
+  };
+
   const handleDeleteAndClose = () => {
+    trackDialogEvent('Decline Invite');
     handleDeleteInvitation(id)
       .then(() => {
         // Redirect to the workspaces landing page if on a deleted invitation detail page
@@ -43,7 +60,7 @@ export default function ConfirmDeclineInvitationDialog() {
   return (
     <ConfirmationDialog
       title="Decline Workspace Copy Invitation"
-      handleClose={reset}
+      handleClose={handleClose}
       handleConfirmAndClose={handleDeleteAndClose}
       buttonTitle="Decline"
     >

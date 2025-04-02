@@ -141,6 +141,12 @@ function EndButtons({ item }: { item: WorkspaceItem }) {
 
   const onDeclineInvite = useEventCallback(() => {
     if (isInvitation(item)) {
+      trackEvent({
+        category: currentEventCategory,
+        action: 'Workspace Invitations / Received / Open Decline Invite Dialog',
+        label: itemId,
+      });
+
       setInvitation(item);
       setDialogType('DECLINE_INVITATION');
     }
