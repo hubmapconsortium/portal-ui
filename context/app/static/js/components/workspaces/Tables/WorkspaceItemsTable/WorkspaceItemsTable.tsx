@@ -300,8 +300,10 @@ function InvitationStatusIcon({ item }: { item: WorkspaceItem }) {
 function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
+  const itemId = getItemId(item);
+  const email = getFieldValue({ item, field: 'user_id.email', prefix });
+
   const hasWorkspacePage = isWorkspace(item) || isSentInvitation(item) || getFieldValue({ item, field: 'is_accepted' });
-  const itemId = getFieldValue({ item, field: 'id', prefix });
 
   const { currentEventCategory } = useWorkspacesEventContext();
 
@@ -313,6 +315,16 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
         label: `${itemId} Select Workspace Name`,
       });
     }
+  });
+
+  const handleEmailClick = useEventCallback(() => {
+    window.location.href = `mailto:${email}`;
+
+    trackEvent({
+      category: currentEventCategory,
+      action: 'Workspace Invitations / Received / Open Email',
+      label: itemId,
+    });
   });
 
   switch (field) {
@@ -336,12 +348,11 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
 
       const firstName = getFieldValue({ item, field: 'user_id.first_name', prefix });
       const lastName = getFieldValue({ item, field: 'user_id.last_name', prefix });
-      const email = getFieldValue({ item, field: 'user_id.email', prefix });
 
       return (
         <Stack direction="row" alignItems="center">
           <Typography>{`${firstName} ${lastName}`}</Typography>
-          <TooltipButton href={`mailto:${email}`} sx={{ minWidth: 0 }} tooltip={`Mail to ${email}`}>
+          <TooltipButton sx={{ minWidth: 0 }} tooltip={`Mail to ${email}`} onClick={handleEmailClick}>
             <EmailIcon color="info" />
           </TooltipButton>
         </Stack>
@@ -469,12 +480,23 @@ function SeeMoreRows({
   setNumVisibleItems: React.Dispatch<React.SetStateAction<number>>;
   totalItems: number;
 }) {
+  const { currentEventCategory } = useWorkspacesEventContext();
+
+  const handleClick = useEventCallback(() => {
+    setNumVisibleItems((prev) => prev + 3);
+
+    trackEvent({
+      category: currentEventCategory,
+      action: 'Workspace Invitations / Received / See More',
+    });
+  });
+
   if (!showSeeMoreOption || numVisibleItems >= totalItems) {
     return null;
   }
 
   return (
-    <StyledButton variant="text" onClick={() => setNumVisibleItems((prev) => prev + 3)} fullWidth>
+    <StyledButton variant="text" onClick={handleClick} fullWidth>
       <Stack direction="row" spacing={1} marginY={0.5} alignItems="center">
         <Typography variant="button">See More</Typography>
         <DownIcon />
