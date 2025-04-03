@@ -14,7 +14,7 @@ const FixedHeightAppBar = styled(AppBar)({
 
 const FixedHeightBanner = styled(Paper)(({ theme }) => ({
   height: bannerHeight,
-  backgroundColor: theme.palette.info.main,
+  backgroundColor: theme.palette.info.dark,
   color: theme.palette.white.main,
   display: 'flex',
   position: 'sticky',

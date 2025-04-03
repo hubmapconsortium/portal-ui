@@ -10,19 +10,19 @@ import HeaderContent from '../HeaderContent';
 import { useEntityHeaderVisibility } from './hooks';
 
 function Header() {
-  const { shouldDisplayHeader, elevation, ...props } = useEntityHeaderVisibility();
+  const { shouldDisplayHeader, ...props } = useEntityHeaderVisibility();
 
   return (
     <>
       <FixedHeightBanner>
         <Stack direction="row" spacing={1} alignItems="center">
-          <InfoIcon fontSize="0.85rem" />
+          <InfoIcon />
           <Typography variant="button">
             This repository is under review for potential modification in compliance with Administration directives.
           </Typography>
         </Stack>
       </FixedHeightBanner>
-      <HeaderAppBar elevation={elevation} {...props}>
+      <HeaderAppBar {...props}>
         <HeaderContent />
       </HeaderAppBar>
       {shouldDisplayHeader && <EntityHeader />}
