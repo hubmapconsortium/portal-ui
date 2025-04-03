@@ -5,7 +5,7 @@ import { isRunningWorkspace } from 'js/components/workspaces/utils';
 import { WorkspaceTooltipButton } from 'js/components/workspaces/WorkspaceButton/WorkspaceButton';
 import { TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import { useWorkspacesList } from 'js/components/workspaces/hooks';
+import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/hooks';
 
 type WorkspacesDeleteButtonProps = {
   workspaceIds: Set<string>;
@@ -15,18 +15,27 @@ type WorkspacesDeleteButtonProps = {
 
 function WorkspacesDeleteButton({ workspaceIds, tooltip, disabled, ...rest }: WorkspacesDeleteButtonProps) {
   const { setDialogType } = useEditWorkspaceStore();
+  const { sentInvitations } = useInvitationsList();
   const { workspacesList } = useWorkspacesList();
   const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
 
+  const selectedWorkspaceHasPendingInvitations = sentInvitations.some(
+    (invitation) => !invitation.is_accepted && workspaceIds.has(invitation.original_workspace_id.id.toString()),
+  );
   const selectedWorkspaceIsRunning = workspaces.some(isRunningWorkspace);
-  const updatedTooltip = selectedWorkspaceIsRunning
-    ? 'Workspace cannot be deleted while it is running. Stop jobs before deleting.'
-    : tooltip;
+
+  let updatedTooltip = tooltip;
+
+  if (selectedWorkspaceHasPendingInvitations) {
+    updatedTooltip = 'Workspaces with pending sent invitations cannot be deleted. Cancel invitations before deleting.';
+  } else if (selectedWorkspaceIsRunning) {
+    updatedTooltip = 'Workspace cannot be deleted while it is running. Stop jobs before deleting.';
+  }
 
   return (
     <WorkspaceTooltipButton
       onClick={() => setDialogType('DELETE_WORKSPACE')}
-      disabled={selectedWorkspaceIsRunning || disabled}
+      disabled={selectedWorkspaceIsRunning || selectedWorkspaceHasPendingInvitations || disabled}
       tooltip={updatedTooltip}
       {...rest}
     >

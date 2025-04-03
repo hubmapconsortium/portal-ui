@@ -315,9 +315,9 @@ function useInvitationWorkspaceDetails({ workspaceId }: { workspaceId: number })
   const { sentInvitations, receivedInvitations } = useInvitationsList();
 
   const creatorInfo = receivedInvitations.find((invitation) => invitation.shared_workspace_id.id === workspaceId)
-    ?.original_workspace_id.user_id;
+    ?.original_workspace_id?.user_id;
   const workspaceSentInvitations = sentInvitations.filter(
-    (invitation) => invitation.original_workspace_id.id === workspaceId,
+    (invitation) => invitation.original_workspace_id?.id === workspaceId,
   );
 
   return {
