@@ -17,15 +17,14 @@ function WorkspacesDeleteButton({ workspaceIds, tooltip, disabled, ...rest }: Wo
   const { setDialogType } = useEditWorkspaceStore();
   const { sentInvitations } = useInvitationsList();
   const { workspacesList } = useWorkspacesList();
-  const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
 
   const selectedWorkspaceHasPendingInvitations = sentInvitations.some(
     (invitation) => !invitation.is_accepted && workspaceIds.has(invitation.original_workspace_id.id.toString()),
   );
+  const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
   const selectedWorkspaceIsRunning = workspaces.some(isRunningWorkspace);
 
   let updatedTooltip = tooltip;
-
   if (selectedWorkspaceHasPendingInvitations) {
     updatedTooltip = 'Workspaces with pending sent invitations cannot be deleted. Cancel invitations before deleting.';
   } else if (selectedWorkspaceIsRunning) {
