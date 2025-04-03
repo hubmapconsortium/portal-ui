@@ -2,6 +2,7 @@ import React from 'react';
 import { format } from 'date-fns/format';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
+import useEventCallback from '@mui/material/utils/useEventCallback';
 
 import { useInvitationDetail } from 'js/components/workspaces/hooks';
 import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
@@ -21,7 +22,7 @@ import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialog
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
-
+import { trackEvent } from 'js/helpers/trackers';
 import { StyledAlert } from './style';
 
 const descriptions = {
@@ -115,11 +116,20 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
   const { setDialogType, setInvitation } = useEditWorkspaceStore();
   const { toastSuccessAcceptInvitation, toastErrorAcceptInvitation } = useWorkspaceToasts();
 
+  const trackInvitationEvent = useEventCallback((action: string) => {
+    trackEvent({
+      category: WorkspacesEventCategories.WorkspaceDetailPreviewPage,
+      action,
+      label: invitationId,
+    });
+  });
+
   if (invitationsLoading || !invitation) {
     return null;
   }
 
   const handleAccept = () => {
+    trackInvitationEvent('Accept Workspace Invite');
     handleAcceptInvitation(invitationId)
       .then(() => {
         toastSuccessAcceptInvitation(invitation.shared_workspace_id.name);
@@ -133,6 +143,7 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
   };
 
   const handleDecline = () => {
+    trackInvitationEvent('Open Decline Workspace Invite Dialog');
     setInvitation(invitation);
     setDialogType('DECLINE_INVITATION');
   };

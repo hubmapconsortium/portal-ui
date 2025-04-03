@@ -5,10 +5,14 @@ import ExpandMore from '@mui/icons-material/ExpandMore';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { SvgIconComponent } from '@mui/icons-material';
+import useEventCallback from '@mui/material/utils/useEventCallback';
+
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
 import { sectionIconMap, sectionImageIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 import DetailPageSection from './DetailPageSection';
 import { DetailPageSectionAccordion, StyledExternalImageIconContainer, StyledSvgIcon } from './style';
 
@@ -19,6 +23,7 @@ export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<Rea
   variant?: TypographyProps['variant'];
   component?: TypographyProps['component'];
   iconTooltipText?: string;
+  trackingInfo?: WorkspacesEventInfo;
 }
 
 interface IconDisplayProps {
@@ -49,12 +54,23 @@ export default function CollapsibleDetailPageSection({
   component = 'h3',
   action,
   iconTooltipText,
+  trackingInfo,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
+  const trackAccordionEvent = useEventCallback(() => {
+    if (trackingInfo) {
+      trackEvent({
+        ...trackingInfo,
+        action: 'Expand Section',
+        label: title,
+      });
+    }
+  });
+
   return (
     <DetailPageSection {...rest}>
       <DetailPageSectionAccordion defaultExpanded disableGutters variant="unstyled">
-        <AccordionSummary expandIcon={<ExpandMore />}>
+        <AccordionSummary expandIcon={<ExpandMore />} onClick={trackAccordionEvent}>
           <IconDisplay icon={icon} id={rest.id!} />
           <Typography variant={variant} component={component}>
             {title}
