@@ -135,13 +135,15 @@ function DataProducts({ id, organName, dataProducts, isLateral, isLoading }: Dat
                       </InternalLink>
                     </TableCell>
                     <TableCell>
-                      <OutboundIconLink
-                        href={shiny_app}
-                        onClick={() => handleTrack({ action: 'View Shiny App', assayName, tissueType })}
-                        variant="body2"
-                      >
-                        View
-                      </OutboundIconLink>
+                      {shiny_app && (
+                        <OutboundIconLink
+                          href={shiny_app}
+                          onClick={() => handleTrack({ action: 'View Shiny App', assayName, tissueType })}
+                          variant="body2"
+                        >
+                          View
+                        </OutboundIconLink>
+                      )}
                     </TableCell>
                     <TableCell>{format(new Date(creation_time), 'yyyy-MM-dd')}</TableCell>
                     <TableCell>
