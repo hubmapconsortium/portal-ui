@@ -38,6 +38,7 @@ interface AppContextType {
   workspacesEndpoint: string;
   userTemplatesEndpoint: string;
   ubkgEndpoint: string;
+  scFindEndpoint: string;
   ukvEndpoint: string;
   dataProductsEndpoint: string;
   protocolsClientToken: string;
