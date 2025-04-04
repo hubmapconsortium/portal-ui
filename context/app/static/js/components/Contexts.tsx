@@ -38,8 +38,8 @@ interface AppContextType {
   workspacesEndpoint: string;
   userTemplatesEndpoint: string;
   ubkgEndpoint: string;
-  ukvEndpoint: string;
   scFindEndpoint: string;
+  ukvEndpoint: string;
   dataProductsEndpoint: string;
   protocolsClientToken: string;
   isAuthenticated: boolean;
