@@ -29,8 +29,7 @@ function SnareSeq2Alert({ isHeader }: SnareSeq2AlertProps) {
         },
       }}
     >
-      {descriptionText}
-      For a detailed understanding of dataset relationships, scroll down to the{' '}
+      {descriptionText} For a detailed understanding of dataset relationships, scroll to the{' '}
       <InternalLink href="#section-dataset-relationships">Dataset Relationship section</InternalLink> or explore the{' '}
       <InternalLink href="#provenance">provenance</InternalLink> graph.
     </DetailPageAlert>
