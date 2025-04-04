@@ -35,7 +35,9 @@ const meta: Meta = {
 type Story = StoryObj<typeof FindDatasetForCellTypeControl>;
 
 export const FindCellTypeSpecificities: Story = {
-  args: {},
+  args: {
+    cellType: 'kidney.B cell',
+  },
 };
 
 export default meta;
