@@ -1,13 +1,13 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 import { trackEvent } from 'js/helpers/trackers';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
+import { EventInfo } from 'js/components/types';
 import { Alert } from './Alert';
 
 interface LoginAlertProps {
   featureName: string;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 export default function LoginAlert({ featureName, trackingInfo }: LoginAlertProps) {
   return (

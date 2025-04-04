@@ -7,12 +7,13 @@ import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
 import { Alert } from 'js/shared-styles/alerts';
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
-import { MergedWorkspace, WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { MergedWorkspace } from 'js/components/workspaces/types';
 import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { StyledLaunchButton, StyledSvgIcon } from 'js/components/workspaces/style';
 import { trackEvent } from 'js/helpers/trackers';
 import { StartJobIcon, StopJobIcon } from 'js/shared-styles/icons';
+import { EventInfo } from 'js/components/types';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -22,7 +23,7 @@ interface WorkspaceButtonProps {
   showLaunch?: boolean;
   showStop?: boolean;
   showIcons?: boolean;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 function StopWorkspaceButton({

@@ -5,14 +5,15 @@ import { TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
 import { useEditWorkspaceStore, DialogType } from 'js/stores/useWorkspaceModalStore';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspaceTooltipButton } from 'js/components/workspaces/WorkspaceButton/WorkspaceButton';
-import { MergedWorkspace, WorkspacesEventInfo } from '../types';
+import { EventInfo } from 'js/components/types';
+import { MergedWorkspace } from '../types';
 
 type WorkspacesUpdateButtonProps = {
   workspace: MergedWorkspace;
   dialogType: DialogType;
   tooltip?: string;
   disabled?: boolean;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 } & Omit<TooltipButtonProps, 'tooltip'>;
 
 function WorkspacesUpdateButton({

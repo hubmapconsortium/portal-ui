@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMore from '@mui/icons-material/ExpandMore';
@@ -12,7 +12,7 @@ import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/st
 import { sectionIconMap, sectionImageIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { trackEvent } from 'js/helpers/trackers';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { EventInfo } from 'js/components/types';
 import DetailPageSection from './DetailPageSection';
 import { DetailPageSectionAccordion, StyledExternalImageIconContainer, StyledSvgIcon } from './style';
 
@@ -23,7 +23,7 @@ export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<Rea
   variant?: TypographyProps['variant'];
   component?: TypographyProps['component'];
   iconTooltipText?: string;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 interface IconDisplayProps {
@@ -57,20 +57,31 @@ export default function CollapsibleDetailPageSection({
   trackingInfo,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
-  const trackAccordionEvent = useEventCallback(() => {
+  // Handle expanded state manually in order to track the event
+  const [expanded, setExpanded] = useState(true);
+
+  const handleAccordionToggle = useEventCallback(() => {
+    const newExpandedState = !expanded;
+    setExpanded(newExpandedState);
+
     if (trackingInfo) {
       trackEvent({
-        ...trackingInfo,
-        action: 'Expand Section',
+        action: `${newExpandedState ? 'Expand' : 'Collapse'} Section`,
         label: title,
+        ...trackingInfo,
       });
     }
   });
 
   return (
     <DetailPageSection {...rest}>
-      <DetailPageSectionAccordion defaultExpanded disableGutters variant="unstyled">
-        <AccordionSummary expandIcon={<ExpandMore />} onClick={trackAccordionEvent}>
+      <DetailPageSectionAccordion
+        expanded={expanded}
+        onChange={handleAccordionToggle}
+        disableGutters
+        variant="unstyled"
+      >
+        <AccordionSummary expandIcon={<ExpandMore />}>
           <IconDisplay icon={icon} id={rest.id!} />
           <Typography variant={variant} component={component}>
             {title}

@@ -17,12 +17,13 @@ import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import { buildSearchLink } from 'js/components/search/store';
+import { EventInfo } from 'js/components/types';
 
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
 import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
-import { CreateTemplateNotebooksTypes, WorkspacesEventCategories, WorkspacesEventInfo } from '../types';
+import { CreateTemplateNotebooksTypes, WorkspacesEventCategories } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
@@ -103,7 +104,7 @@ interface NewWorkspaceDialogProps {
   workspaceDatasets: string[];
   allDatasets: string[];
   searchHits: SearchAheadHit[];
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 function NewWorkspaceDialog({

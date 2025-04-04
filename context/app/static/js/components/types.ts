@@ -192,3 +192,8 @@ export function isPublication(entity: EntityWithType): entity is Publication {
 export function isSupport(entity: EntityWithType): entity is Support {
   return checkEntityType(entity, 'Support');
 }
+export interface EventInfo {
+  category: string;
+  action?: string;
+  label?: string | number;
+}

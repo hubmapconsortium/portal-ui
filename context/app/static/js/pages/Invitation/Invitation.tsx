@@ -21,7 +21,7 @@ import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
-import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
+import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { trackEvent } from 'js/helpers/trackers';
 import { StyledAlert } from './style';
 
@@ -77,8 +77,18 @@ function Summary({ invitation }: { invitation: WorkspaceInvitation }) {
 }
 
 function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
+
   return (
-    <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
+    <CollapsibleDetailPageSection
+      id="datasets"
+      title="Datasets"
+      icon={sectionIconMap.datasets}
+      trackingInfo={{
+        category: currentEventCategory,
+        label: `${currentWorkspaceItemId} Datasets`,
+      }}
+    >
       <Stack spacing={1}>
         <SectionDescription>
           {invitationDatasets.length > 0 ? descriptions.datasetsPresent : descriptions.datasetsAbsent}
@@ -95,8 +105,18 @@ function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
 }
 
 function Templates({ invitationTemplates }: { invitationTemplates: TemplatesTypes }) {
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
+
   return (
-    <CollapsibleDetailPageSection id="templates" title="Templates" icon={sectionIconMap.templates}>
+    <CollapsibleDetailPageSection
+      id="templates"
+      title="Templates"
+      icon={sectionIconMap.templates}
+      trackingInfo={{
+        category: currentEventCategory,
+        label: `${currentWorkspaceItemId} Templates`,
+      }}
+    >
       <Stack>
         <SectionDescription>{descriptions.templates}</SectionDescription>
         <TemplateGrid templates={invitationTemplates} openLinksInNewTab />
@@ -156,7 +176,10 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
     >
       <WorkspacesAuthGuard>
         <WorkspacesListDialogs selectedWorkspaceIds={new Set([invitationId.toString()])} />
-        <DetailLayout sections={shouldDisplaySection}>
+        <DetailLayout
+          sections={shouldDisplaySection}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPreviewPage, label: invitationId }}
+        >
           <StyledAlert
             severity="info"
             action={

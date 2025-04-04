@@ -222,12 +222,17 @@ function Summary({
 
 function SentInvitationsStatus({ sentInvitations }: { sentInvitations: WorkspaceInvitation[] }) {
   const { setDialogType } = useEditWorkspaceStore();
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
 
   return (
     <CollapsibleDetailPageSection
       id="sent-invitations-status"
       title="Sent Invitations Status"
       icon={sectionIconMap['sent-invitations-status']}
+      trackingInfo={{
+        category: currentEventCategory,
+        label: `${currentWorkspaceItemId} Sent Invitations Status`,
+      }}
     >
       {sentInvitations.length === 0 ? (
         <Description>
@@ -255,10 +260,18 @@ function SentInvitationsStatus({ sentInvitations }: { sentInvitations: Workspace
 }
 
 function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace; workspaceDatasets: string[] }) {
-  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
+  const { currentEventCategory, currentWorkspaceItemName, currentWorkspaceItemId } = useWorkspacesEventContext();
 
   return (
-    <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
+    <CollapsibleDetailPageSection
+      id="datasets"
+      title="Datasets"
+      icon={sectionIconMap.datasets}
+      trackingInfo={{
+        category: currentEventCategory,
+        label: `${currentWorkspaceItemId} Datasets`,
+      }}
+    >
       <Stack spacing={1}>
         <SectionDescription>
           <Stack spacing={1}>
@@ -292,6 +305,8 @@ function Templates({
   workspace: MergedWorkspace;
   workspaceTemplates: TemplatesTypes;
 }) {
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
+
   return (
     <CollapsibleDetailPageSection
       id="templates"
@@ -302,6 +317,10 @@ function Templates({
           <AddIcon />
         </WorkspacesUpdateButton>
       }
+      trackingInfo={{
+        category: currentEventCategory,
+        label: `${currentWorkspaceItemId} Templates`,
+      }}
     >
       <Stack>
         <SectionDescription>{descriptions.templates}</SectionDescription>
@@ -335,7 +354,10 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
     >
       <WorkspacesAuthGuard>
         <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
-        <DetailLayout sections={shouldDisplaySection}>
+        <DetailLayout
+          sections={shouldDisplaySection}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage, label: workspace.name }}
+        >
           <Stack gap={1} sx={{ marginBottom: 5 }}>
             <WorkspaceSessionWarning workspaces={[workspace]} />
             <Summary

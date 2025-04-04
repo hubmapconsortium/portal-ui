@@ -1,3 +1,4 @@
+import { EventInfo } from 'js/components/types';
 import { JobStatus, JobStatusDisplayName, WorkspaceStatus } from './statusCodes';
 
 // Once workspaces API issues are resolved. We expect the workspaces API to consistently return an object.
@@ -192,12 +193,6 @@ export enum WorkspacesEventCategories {
   WorkspaceDetailPage = 'Workspace Detail Page',
 }
 
-interface WorkspacesEventInfo {
-  category: WorkspacesEventCategories;
-  action?: string;
-  label?: string;
-}
-
 interface CreateTemplateNotebooksTypes {
   templateKeys: string[];
   uuids: string[];
@@ -205,7 +200,7 @@ interface CreateTemplateNotebooksTypes {
   workspaceDescription: string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 export type {
@@ -220,5 +215,4 @@ export type {
   CreateTemplateNotebooksTypes,
   TemplateTags,
   TemplateTagsResponse,
-  WorkspacesEventInfo,
 };

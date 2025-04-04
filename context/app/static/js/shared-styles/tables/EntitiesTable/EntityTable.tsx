@@ -15,8 +15,8 @@ import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
+import { EventInfo } from 'js/components/types';
 import { Column, EntitiesTabTypes } from './types';
 
 interface EntityHeaderCellTypes<Doc> {
@@ -72,7 +72,7 @@ interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'c
   isSelectable: boolean;
   numSelected?: number;
   disabledIDs?: Set<string>;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 const headerRowHeight = 60;
