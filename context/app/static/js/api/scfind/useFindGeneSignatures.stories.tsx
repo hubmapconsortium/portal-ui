@@ -1,22 +1,14 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Typography, Stack } from '@mui/material';
 import { http, passthrough } from 'msw';
 import useFindGeneSignatures, { FindGeneSignaturesParams } from './useFindGeneSignatures';
 
 import { SCFIND_BASE_STORYBOOK } from './utils';
+import StoryControlTemplate from './StoryTemplate';
 
 function FindGeneSignaturesControl(params: FindGeneSignaturesParams) {
   const result = useFindGeneSignatures(params);
-  return (
-    <Stack>
-      <Typography variant="h6">Find Gene Signatures</Typography>
-      <Typography variant="body1">Params:</Typography>
-      <pre>{JSON.stringify(params, null, 2)}</pre>
-      <Typography variant="body1">Results:</Typography>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
-    </Stack>
-  );
+  return <StoryControlTemplate title="Find Gene Signatures" params={params} result={result} />;
 }
 
 const meta: Meta = {

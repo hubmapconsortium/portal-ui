@@ -1,22 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Typography, Stack, FormControl, TextField } from '@mui/material';
 import { http, passthrough } from 'msw';
 import useCellTypeMarkers, { CellTypeMarkersParams } from './useCellTypeMarkers';
 
 import { SCFIND_BASE_STORYBOOK } from './utils';
+import StoryControlTemplate from './StoryTemplate';
 
 function CellTypeMarkersControl(params: CellTypeMarkersParams) {
   const result = useCellTypeMarkers(params);
-  return (
-    <Stack>
-      <Typography variant="h6">Cell Type Markers</Typography>
-      <Typography variant="body1">Params:</Typography>
-      <pre>{JSON.stringify(params, null, 2)}</pre>
-      <Typography variant="body1">Results:</Typography>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
-    </Stack>
-  );
+  return <StoryControlTemplate title="Cell Type Markers" params={params} result={result} />;
 }
 
 const meta: Meta = {
