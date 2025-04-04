@@ -1,22 +1,14 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Typography, Stack } from '@mui/material';
 import { http, passthrough } from 'msw';
 import useEvaluateMarkers, { EvaluateMarkersParams } from './useEvaluateMarkers';
 
 import { SCFIND_BASE_STORYBOOK } from './utils';
+import StoryControlTemplate from './StoryTemplate';
 
 function EvaluateMarkersControl(params: EvaluateMarkersParams) {
   const result = useEvaluateMarkers(params);
-  return (
-    <Stack>
-      <Typography variant="h6">Evaluate Markers</Typography>
-      <Typography variant="body1">Params:</Typography>
-      <pre>{JSON.stringify(params, null, 2)}</pre>
-      <Typography variant="body1">Results:</Typography>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
-    </Stack>
-  );
+  return <StoryControlTemplate title="Evaluate Markers" params={params} result={result} />;
 }
 
 const meta: Meta = {
