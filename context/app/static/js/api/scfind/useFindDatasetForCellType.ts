@@ -17,12 +17,12 @@ export function createFindDatasetForCellTypeKey(
   scFindEndpoint: string,
   { cellType }: FindDatasetForCellTypeParams,
 ): EvaluateMarkersKey {
-  return createScFindKey(scFindEndpoint, 'findCellTypeSpecificities', {
+  return createScFindKey(scFindEndpoint, 'findDatasetForCellType', {
     cell_type: cellType,
   });
 }
 
-export default function useFindCellTypeSpecificities(params: FindDatasetForCellTypeParams) {
+export default function useFindDatasetForCellType(params: FindDatasetForCellTypeParams) {
   const { scFindEndpoint } = useAppContext();
   const key = createFindDatasetForCellTypeKey(scFindEndpoint, params);
   return useSWR<FindDatasetForCellTypeResponse, unknown, EvaluateMarkersKey>(key, (url) => fetcher({ url }));

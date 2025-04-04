@@ -8,7 +8,7 @@ import StoryControlTemplate from './StoryTemplate';
 
 function FindDatasetForCellTypeControl(params: FindDatasetForCellTypeParams) {
   const result = useFindDatasetForCellType(params);
-  return <StoryControlTemplate title="Find Dataset For Cell Type" params={params} result={result} />;
+  return <StoryControlTemplate title="Find Datasets For Cell Type" params={params} result={result} />;
 }
 
 const meta: Meta = {
