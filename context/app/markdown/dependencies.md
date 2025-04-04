@@ -7,7 +7,6 @@ The services the portal relies on are [listed separately](/services).
 ## Python packages
 
 `requirements.in`:
-
 ```
 # Update requirements.txt if this file changes:
 # pip install pip-tools
@@ -21,7 +20,7 @@ python-datauri>=2.2.0
 python-frontmatter>=1.1.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.18
-# As of 2023-08-24, this is the version of boto3 which is compatible with both the
+# As of 2023-08-24, this is the version of boto3 which is compatible with both the 
 # portal-visualization->vitessce->ome-zarr dependency on aiobotocore~=2.5
 # and the hubmap-commons dependency on boto3>=1.24.47
 boto3==1.28.17
