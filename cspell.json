@@ -6,12 +6,14 @@
   "dictionaryDefinitions": [],
   "dictionaries": [],
   "words": [
+    "Analyte",
     "asctb",
     "cellpop",
     "clid",
     "Darkmode",
     "pseudoelement",
-    "uberon"
+    "uberon",
+    "visx"
   ],
   "ignoreWords": [],
   "import": []

@@ -9,9 +9,12 @@ import {
   type QueryAggs,
 } from './queries';
 
-export type AggregatedDatum = {
-  organ: string | number; // Actually just a string, but the union with Record below is necessary for TS to infer the type correctly
-} & Record<string, number>;
+export interface AggregatedDatum {
+  organ: string;
+  // Used to display `Multiple` instead of specific categories in the legend
+  displayLabels: Record<string, string>;
+  data: Record<string, number>;
+}
 
 export type AggregatedData = AggregatedDatum[];
 
@@ -74,9 +77,9 @@ export function aggregateByOrgan<T extends object>(
         const categoryArray = Array.from(categories); // Convert Set to Array
         // More complicated category key generation: join categories with a comma
         // This leads to too many categories
-        // const categoryKey = Array.from(categories).sort().join(', '); // Sort to ensure consistent key order
+        const categoryKey = categoryArray.sort().join(', '); // Sort to ensure consistent key order
         // Simplified category key generation: if more than one category, label as 'Multiple', else use the single category
-        const categoryKey = categoryArray.length > 1 ? 'Multiple' : categoryArray[0]; // If more than one category, label as 'Multiple', else use the single category
+        // const categoryKey = categoryArray.length > 1 ? 'Multiple' : categoryArray[0]; // If more than one category, label as 'Multiple', else use the single category
         if (!aggregatedOrganData[categoryKey]) {
           aggregatedOrganData[categoryKey] = 0;
         }
@@ -84,9 +87,11 @@ export function aggregateByOrgan<T extends object>(
       });
 
       // Now merge this into the final aggregated data map
-      const existingOrganData = acc.get(organ) ?? ({ organ } as AggregatedDatum);
+      const existingOrganData = acc.get(organ) ?? ({ organ, data: {}, displayLabels: {} } satisfies AggregatedDatum);
       Object.entries(aggregatedOrganData).forEach(([key, count]) => {
-        existingOrganData[key] = count;
+        existingOrganData.data[key] = count;
+        const displayLabel = key.includes(', ') ? 'Multiple' : key; // If the key contains a comma, label as 'Multiple'
+        existingOrganData.displayLabels[key] = displayLabel; // Store the display label for the category
       });
 
       acc.set(organ, existingOrganData);
@@ -99,12 +104,13 @@ export function aggregateByOrgan<T extends object>(
   const bucketMap = buckets.reduce((acc, bucket) => {
     const { organ, ...otherKeys } = bucket.key;
 
-    const currentOrganData = acc.get(organ) ?? ({ organ } as AggregatedDatum);
+    const currentOrganData = acc.get(organ) ?? ({ organ, data: {}, displayLabels: {} } satisfies AggregatedDatum);
 
     const otherKeyValues = Object.values(otherKeys) as string[];
 
     otherKeyValues.forEach((value) => {
-      currentOrganData[value] = bucket.doc_count;
+      currentOrganData.data[value] = bucket.doc_count;
+      currentOrganData.displayLabels[value] = value; // Store the display label for the category
     });
 
     acc.set(organ, currentOrganData);
@@ -129,7 +135,7 @@ export function useAggregatedChartData<T extends object>(
 export function getKeysFromAggregatedData(aggregatedData: AggregatedData): string[] {
   return aggregatedData
     .reduce((acc, data) => {
-      const keys = Object.keys(data).filter((key) => key !== 'organ');
+      const keys = Object.keys(data.data);
       return [...acc, ...keys];
     }, [] as string[])
     .filter((key, index, self) => self.indexOf(key) === index);

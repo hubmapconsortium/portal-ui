@@ -37,9 +37,9 @@ import {
 } from './hooks';
 
 // Margins in figma are 32 pixels everywhere except the bottom
-const margin = { top: 32, right: 32, bottom: 64, left: 32 };
+const margin = { top: 32, right: 32, bottom: 32, left: 32 };
 
-const getOrgan = (d: AggregatedDatum) => d.organ as string;
+const getOrgan = (d: AggregatedDatum) => d.organ;
 
 function HuBMAPDatasetsChartTooltip({ tooltipData }: { tooltipData: TooltipData<AggregatedDatum> }) {
   if (!tooltipData.bar || !tooltipData.key) return null;
@@ -50,7 +50,7 @@ function HuBMAPDatasetsChartTooltip({ tooltipData }: { tooltipData: TooltipData<
       </Typography>
       <Typography>{tooltipData.key}</Typography>
       <Typography variant="h3" component="p" color="textPrimary">
-        {tooltipData.bar.data[tooltipData.key]}
+        {tooltipData.bar.data.data[tooltipData.key]}
       </Typography>
     </>
   );
@@ -104,7 +104,7 @@ function HuBMAPDatasetsChart() {
       getAriaLabel: (d) => {
         const organ = String(d?.bar?.data?.organ ?? '');
         const assay = d.key;
-        const count = d.key ? d?.bar?.data[d.key] : null;
+        const count = d.key ? d?.bar?.data?.data[d.key] : null;
         if (count) return `${count} ${organ} datasets with assay type ${assay}.`;
         return `${organ} datasets with assay type ${assay}.`;
       },
@@ -125,7 +125,7 @@ function HuBMAPDatasetsChart() {
       getAriaLabel: (d) => {
         const organ = String(d?.bar?.data?.organ ?? '');
         const donorSex = d.key;
-        const count = d.key ? d?.bar?.data[d.key] : null;
+        const count = d.key ? d?.bar?.data?.data[d.key] : null;
         if (count) return `${count} ${organ} datasets with donor sex ${donorSex}.`;
         return `${organ} datasets with donor sex ${donorSex}.`;
       },
@@ -146,7 +146,7 @@ function HuBMAPDatasetsChart() {
       getAriaLabel: (d) => {
         const organ = String(d?.bar?.data?.organ ?? '');
         const donorRace = d.key;
-        const count = d.key ? d?.bar?.data[d.key] : null;
+        const count = d.key ? d?.bar?.data?.data[d.key] : null;
         if (count) return `${count} ${organ} datasets with donor race ${donorRace}.`;
         return `${organ} datasets with donor race ${donorRace}.`;
       },
@@ -167,7 +167,7 @@ function HuBMAPDatasetsChart() {
       getAriaLabel: (d) => {
         const organ = String(d?.bar?.data?.organ ?? '');
         const analyteClass = d.key;
-        const count = d.key ? d?.bar?.data[d.key] : null;
+        const count = d.key ? d?.bar?.data?.data[d.key] : null;
         if (count) return `${count} ${organ} datasets with analyte class ${analyteClass}.`;
         return `${organ} datasets with analyte class ${analyteClass}.`;
       },
@@ -188,7 +188,7 @@ function HuBMAPDatasetsChart() {
       getAriaLabel: (d) => {
         const organ = String(d?.bar?.data?.organ ?? '');
         const processingStatus = d.key;
-        const count = d.key ? d?.bar?.data[d.key] : null;
+        const count = d.key ? d?.bar?.data?.data[d.key] : null;
         if (count) return `${count} ${organ} datasets with ${processingStatus} status.`;
         return `${organ} datasets with ${processingStatus} status.`;
       },
@@ -237,7 +237,10 @@ function HuBMAPDatasetsChart() {
           }
         >
           <HorizontalStackedBarChart<AggregatedDatum, typeof xScale, typeof yScale>
-            visxData={selectedColor.data}
+            visxData={selectedColor.data.map((d) => ({
+              ...d,
+              ...d.data,
+            }))}
             xScale={xScale}
             yScale={yScale}
             yAxisTickLabels={organOrder}
