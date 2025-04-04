@@ -48,8 +48,11 @@ def organ_index_view():
     }
     return render_template(
         'base-pages/react-content.html',
-        title='Organs',
-        flask_data=flask_data
+        title='Organs | HuBMAP Datasets by Organ and Tissue Type',
+        description='Explore HuBMAP organ pages featuring datasets grouped by tissue type. \
+            View 3D anatomical maps, cell type distributions, and molecular data insights.',
+        flask_data=flask_data,
+        skip_title_suffix=True
     )
 
 
@@ -70,10 +73,17 @@ def organ_details_view(name):
         **get_default_flask_data(),
         'organ': organ
     }
+    organ_name = organ.get('name')
+
     return render_template(
         'base-pages/react-content.html',
-        title=organ['name'],
-        flask_data=flask_data
+        title=f'{organ_name} | HuBMAP Organ & Tissue Data',
+        description=f'Explore the {organ_name} page in HuBMAP, \
+            featuring datasets grouped by tissue type. \
+            View anatomical maps, cell population plots, \
+            and molecular data insights for research.',
+        flask_data=flask_data,
+        skip_title_suffix=True
     )
 
 
