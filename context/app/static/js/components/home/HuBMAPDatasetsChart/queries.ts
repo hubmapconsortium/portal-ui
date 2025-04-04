@@ -2,14 +2,25 @@ import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import { useState } from 'react';
 
 import type { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
-import { getOrganTypesCompositeAggsQuery } from 'js/shared-styles/charts/HorizontalStackedBarChart/utils';
 
 // Query for looking up the list of organs for the Y axis
 const organTypesQuery = {
   size: 0,
   query: includeOnlyDatasetsClause,
   aggs: {
-    organ_types: { terms: { field: 'origin_samples.mapped_organ.keyword', size: 10000 } },
+    organ_types: {
+      terms: {
+        field: 'origin_samples.mapped_organ.keyword',
+        size: 10000,
+      },
+      aggs: {
+        unique_donor_count: {
+          cardinality: {
+            field: 'donor.uuid.keyword',
+          },
+        },
+      },
+    },
   },
 };
 
@@ -18,6 +29,9 @@ interface OrganTypesQueryAggs {
     buckets: {
       doc_count: number;
       key: string;
+      unique_donor_count: {
+        value: number;
+      };
     }[];
   };
 }
@@ -75,29 +89,65 @@ interface DatasetTypeMapQueryAggs {
     };
   };
 }
+function getOrganTypesCompositeAggs([field, key]: [string, string]): SearchRequest {
+  return {
+    size: 0,
+    aggs: {
+      organs: {
+        composite: {
+          sources: [
+            {
+              organ: {
+                terms: {
+                  field: 'origin_samples.mapped_organ.keyword',
+                },
+              },
+            },
+            {
+              [key]: {
+                terms: {
+                  field,
+                },
+              },
+            },
+          ],
+          size: 10000,
+        },
+        aggs: {
+          donor_uuids: {
+            terms: {
+              field: 'donor.uuid.keyword',
+              size: 10000,
+            },
+          },
+        },
+      },
+    },
+  };
+}
 
 // Queries for looking up aggregations for charts
 const assayTypeQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggsQuery('raw_dataset_type.keyword', 'assay_type'),
+  ...getOrganTypesCompositeAggs(['raw_dataset_type.keyword', 'assay_type']),
 };
 const donorSexQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggsQuery('donor.mapped_metadata.sex.keyword', 'donor_sex'),
+  ...getOrganTypesCompositeAggs(['donor.mapped_metadata.sex.keyword', 'donor_sex']),
 };
 
 const donorRaceQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggsQuery('donor.mapped_metadata.race.keyword', 'donor_race'),
+  ...getOrganTypesCompositeAggs(['donor.mapped_metadata.race.keyword', 'donor_race']),
 };
 
 const analyteClassQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggsQuery('analyte_class.keyword', 'analyte_class'),
+  ...getOrganTypesCompositeAggs(['analyte_class.keyword', 'analyte_class']),
 };
 const processingStatusQuery: SearchRequest = {
   query: includeOnlyDatasetsClause,
-  ...getOrganTypesCompositeAggsQuery('processing.keyword', 'processing_status'),
+  ...getOrganTypesCompositeAggs(['processing.keyword', 'processing_status']),
 };
 // const donorAgeQuery: SearchRequest = {
 //   query: includeOnlyDatasetsClause,
@@ -121,6 +171,12 @@ interface QueryAggs<T> {
     buckets: {
       doc_count: number;
       key: T & { organ: string };
+      donor_uuids: {
+        buckets: {
+          doc_count: number;
+          key: string;
+        }[];
+      };
     }[];
   };
 }

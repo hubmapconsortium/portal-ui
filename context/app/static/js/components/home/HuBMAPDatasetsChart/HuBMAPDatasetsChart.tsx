@@ -73,15 +73,18 @@ function HuBMAPDatasetsChart() {
 
   const { selectedEntityType, setSelectedEntityType } = useSelectedEntityType();
 
-  const assayBuckets = useAggregatedChartData<AssaysQueryKey>(assayTypeQuery);
-  const donorSexBuckets = useAggregatedChartData<DonorSexQueryKey>(donorSexQuery);
-  const donorRaceBuckets = useAggregatedChartData<DonorRaceQueryKey>(donorRaceQuery);
-  const analyteClassBuckets = useAggregatedChartData<AnalyteClassQueryKey>(analyteClassQuery);
-  const processingStatusBuckets = useAggregatedChartData<ProcessingStatusQueryKey>(processingStatusQuery);
+  const assayBuckets = useAggregatedChartData<AssaysQueryKey>(assayTypeQuery, selectedEntityType);
+  const donorSexBuckets = useAggregatedChartData<DonorSexQueryKey>(donorSexQuery, selectedEntityType);
+  const donorRaceBuckets = useAggregatedChartData<DonorRaceQueryKey>(donorRaceQuery, selectedEntityType);
+  const analyteClassBuckets = useAggregatedChartData<AnalyteClassQueryKey>(analyteClassQuery, selectedEntityType);
+  const processingStatusBuckets = useAggregatedChartData<ProcessingStatusQueryKey>(
+    processingStatusQuery,
+    selectedEntityType,
+  );
 
   const datasetTypeMap = useDatasetTypeMap();
 
-  const range = useSearchDataRange();
+  const range = useSearchDataRange(selectedEntityType);
 
   const colorOptions: ColorOption[] = [
     {

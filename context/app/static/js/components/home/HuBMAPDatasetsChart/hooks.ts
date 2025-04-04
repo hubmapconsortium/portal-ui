@@ -1,5 +1,6 @@
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 import useSearchData from 'js/hooks/useSearchData';
+import { ESEntityType } from 'js/components/types';
 import {
   DatasetTypeMapQueryAggs,
   datasetTypeMapQuery,
@@ -15,8 +16,85 @@ export type AggregatedDatum = {
 export type AggregatedData = AggregatedDatum[];
 
 // Categorizes the data by organ, showing a count for each paired key
-export function aggregateByOrgan<T extends object>(buckets: QueryAggs<T>['organs']['buckets'] | undefined) {
+export function aggregateByOrgan<T extends object>(
+  buckets: QueryAggs<T>['organs']['buckets'] | undefined,
+  aggregateByDonorCount?: boolean,
+) {
   if (!buckets?.length) return [] as AggregatedData;
+
+  // if we are aggregating by donor, we need to capture overlaps between donors that may have datasets that fit into multiple subcategories
+  // For example, a donor may have both a processed and raw dataset for the same organ.
+  if (aggregateByDonorCount) {
+    // Map the donor UUID to the category they should be counted under
+    const organDonorMap = new Map<string, Record<string, Set<string>>>();
+
+    buckets.forEach((bucket) => {
+      const { organ, ...otherKeys } = bucket.key;
+
+      const organKey = String(organ);
+      if (!organDonorMap.has(organKey)) {
+        organDonorMap.set(organKey, {});
+      }
+      const currentOrganDonors = organDonorMap.get(organKey)!;
+      Object.entries(otherKeys).forEach(([_, value]) => {
+        const key = value as string;
+        bucket.donor_uuids.buckets.forEach(({ key: donorId }) => {
+          if (!currentOrganDonors[donorId]) {
+            currentOrganDonors[donorId] = new Set<string>();
+          }
+          currentOrganDonors[donorId].add(key);
+        });
+      });
+    });
+
+    /**
+     * Resulting aggregated data in organDonorMap looks like this:
+     * {
+     *   'Heart': {
+     *    'abc123': ['processed', 'raw'], // donor abc123 has both processed and raw datasets for Heart
+     *    'def456': [''raw'], // donor abc123 has only raw datasets for heart
+     *   },
+     * }
+     * Now we need to convert this map into the final aggregated data format, where the combinations of categories are each their own keys within the
+     * organ object and the number of donors that belong to each unique combination is counted.
+     * Sample target output: {
+     *  'Heart': {
+     *    'processed, raw': 1, // 1 donor has both processed and raw datasets for Heart
+     *    'raw': 1, // 1 donor has only raw datasets for Heart
+     *  }
+     * }
+     */
+    const categoryDonorCounts = organDonorMap.entries().reduce((acc, currentOrganData) => {
+      const [organ, donors] = currentOrganData;
+      const aggregatedOrganData: Record<string, number> = {};
+
+      // Iterate over each donor's categories
+      Object.values(donors).forEach((categories) => {
+        if (categories.size === 0) return; // Safety check, skip if no categories are present - should never happen
+        const categoryArray = Array.from(categories); // Convert Set to Array
+        // More complicated category key generation: join categories with a comma
+        // This leads to too many categories
+        // const categoryKey = Array.from(categories).sort().join(', '); // Sort to ensure consistent key order
+        // Simplified category key generation: if more than one category, label as 'Multiple', else use the single category
+        const categoryKey = categoryArray.length > 1 ? 'Multiple' : categoryArray[0]; // If more than one category, label as 'Multiple', else use the single category
+        if (!aggregatedOrganData[categoryKey]) {
+          aggregatedOrganData[categoryKey] = 0;
+        }
+        aggregatedOrganData[categoryKey] += 1; // Increment the count for this category key
+      });
+
+      // Now merge this into the final aggregated data map
+      const existingOrganData = acc.get(organ) ?? ({ organ } as AggregatedDatum);
+      Object.entries(aggregatedOrganData).forEach(([key, count]) => {
+        existingOrganData[key] = count;
+      });
+
+      acc.set(organ, existingOrganData);
+      return acc;
+    }, new Map<string, AggregatedDatum>());
+
+    return Array.from(categoryDonorCounts.values());
+  }
 
   const bucketMap = buckets.reduce((acc, bucket) => {
     const { organ, ...otherKeys } = bucket.key;
@@ -28,6 +106,7 @@ export function aggregateByOrgan<T extends object>(buckets: QueryAggs<T>['organs
     otherKeyValues.forEach((value) => {
       currentOrganData[value] = bucket.doc_count;
     });
+
     acc.set(organ, currentOrganData);
 
     return acc;
@@ -35,11 +114,14 @@ export function aggregateByOrgan<T extends object>(buckets: QueryAggs<T>['organs
   return Array.from(bucketMap.values());
 }
 
-export function useAggregatedChartData<T extends object>(query: SearchRequest): AggregatedData {
+export function useAggregatedChartData<T extends object>(
+  query: SearchRequest,
+  selectedEntityType: ESEntityType,
+): AggregatedData {
   const {
     searchData: { aggregations },
   } = useSearchData<unknown, QueryAggs<T>>(query);
-  const aggregatedData = aggregateByOrgan(aggregations?.organs.buckets);
+  const aggregatedData = aggregateByOrgan(aggregations?.organs.buckets, selectedEntityType === 'Donor');
 
   return aggregatedData ?? [];
 }
@@ -63,7 +145,7 @@ export function useOrganOrder() {
   return { organOrder, ...rest };
 }
 
-export function useSearchDataRange() {
+export function useSearchDataRange(selectedEntityType: ESEntityType) {
   const { searchData: organData } = useSearchData<unknown, OrganTypesQueryAggs>(organTypesQuery);
 
   if (!organData?.aggregations) {
@@ -72,7 +154,12 @@ export function useSearchDataRange() {
 
   const { buckets } = organData.aggregations.organ_types;
 
-  const max = buckets.reduce((acc, bucket) => Math.max(acc, bucket.doc_count), 0);
+  const getDonorCount = selectedEntityType === 'Donor';
+
+  const max = buckets.reduce(
+    (acc, bucket) => Math.max(acc, getDonorCount ? bucket.unique_donor_count.value : bucket.doc_count),
+    0,
+  );
 
   return [0, max];
 }
