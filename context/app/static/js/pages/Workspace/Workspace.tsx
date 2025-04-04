@@ -21,8 +21,8 @@ import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateBut
 import {
   MergedWorkspace,
   TemplatesTypes,
+  WorkspaceCreatorInfo,
   WorkspaceInvitation,
-  WorkspaceUser,
   WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
 import { buildSearchLink } from 'js/components/search/store';
@@ -43,6 +43,7 @@ import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
 import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import WorkspacesDeleteButton from 'js/components/workspaces/WorkspacesDeleteButton';
+import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 
 const tooltips = {
   delete: 'Delete this workspace. This action is permanent.',
@@ -156,24 +157,35 @@ function SummaryTitle({
   );
 }
 
-function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; creatorInfo?: WorkspaceUser }) {
+function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; creatorInfo: WorkspaceCreatorInfo }) {
   const { description, datetime_created, datetime_last_job_launch, datetime_last_modified } = workspace;
+
+  // TODO: add component to invitation and landing page
+  let creatorInfoSection: React.ReactNode;
+  if (creatorInfo === 'Unknown') {
+    creatorInfoSection = (
+      <Stack direction="row" alignItems="center">
+        <Typography>Unknown</Typography>
+        <InfoTooltipIcon iconTooltipText="Original creator has deleted workspace" />
+      </Stack>
+    );
+  } else if (creatorInfo === 'Me') {
+    creatorInfoSection = <Typography>Me</Typography>;
+  } else {
+    creatorInfoSection = (
+      <NameAndEmailLink
+        first_name={creatorInfo.first_name}
+        last_name={creatorInfo.last_name}
+        email={creatorInfo.email}
+      />
+    );
+  }
 
   return (
     <SectionPaper>
       <Stack spacing={2}>
         <LabelledSectionText label="Description">{description}</LabelledSectionText>
-        <LabelledSectionText label="Created By">
-          {creatorInfo ? (
-            <NameAndEmailLink
-              first_name={creatorInfo.first_name}
-              last_name={creatorInfo.last_name}
-              email={creatorInfo.email}
-            />
-          ) : (
-            'Me'
-          )}
-        </LabelledSectionText>
+        <LabelledSectionText label="Created By">{creatorInfoSection}</LabelledSectionText>
         <Stack spacing={15} direction="row">
           <LabelledSectionText label="Creation Date">
             {format(new Date(datetime_created), 'yyyy-MM-dd')}
@@ -202,7 +214,7 @@ function Summary({
   isStoppingWorkspace,
 }: {
   workspace: MergedWorkspace;
-  creatorInfo?: WorkspaceUser;
+  creatorInfo: WorkspaceCreatorInfo;
   handleStopWorkspace: (id: number) => Promise<void>;
   isStoppingWorkspace: boolean;
 }) {

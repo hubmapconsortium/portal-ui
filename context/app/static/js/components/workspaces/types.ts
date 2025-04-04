@@ -96,6 +96,8 @@ export interface WorkspaceUser {
   email: string;
 }
 
+export type WorkspaceCreatorInfo = WorkspaceUser | 'Me' | 'Unknown';
+
 export interface WorkspaceWithUserId extends MergedWorkspace {
   user_id?: WorkspaceUser;
 }

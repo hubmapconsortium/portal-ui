@@ -41,6 +41,7 @@ import {
   WorkspaceResourceOptions,
   WorkspaceInvitation,
   WorkspaceFile,
+  WorkspaceCreatorInfo,
 } from './types';
 
 interface UseWorkspacesListTypes<T> {
@@ -314,8 +315,18 @@ function useInvitationWorkspaceDetails({ workspaceId }: { workspaceId: number })
   const { workspace, ...rest } = useWorkspaceDetail({ workspaceId });
   const { sentInvitations, receivedInvitations } = useInvitationsList();
 
-  const creatorInfo = receivedInvitations.find((invitation) => invitation.shared_workspace_id.id === workspaceId)
-    ?.original_workspace_id?.user_id;
+  let creatorInfo: WorkspaceCreatorInfo;
+
+  const sharedWorkspace = receivedInvitations.find((invitation) => invitation.shared_workspace_id.id === workspaceId);
+
+  if (!sharedWorkspace) {
+    creatorInfo = 'Me';
+  } else if (!sharedWorkspace.original_workspace_id) {
+    creatorInfo = 'Unknown';
+  } else {
+    creatorInfo = sharedWorkspace.original_workspace_id.user_id;
+  }
+
   const workspaceSentInvitations = sentInvitations.filter(
     (invitation) => invitation.original_workspace_id?.id === workspaceId,
   );
