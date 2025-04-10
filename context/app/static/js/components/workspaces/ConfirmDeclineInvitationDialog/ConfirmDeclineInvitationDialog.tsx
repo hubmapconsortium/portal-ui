@@ -7,6 +7,7 @@ import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 export default function ConfirmDeclineInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
@@ -27,10 +28,15 @@ export default function ConfirmDeclineInvitationDialog() {
     },
   } = invitation;
 
-  const trackDialogEvent = (action: string) => {
+  const trackDialogEvent = (actionSuffix: string) => {
+    const action =
+      currentEventCategory === WorkspacesEventCategories.WorkspaceDetailPreviewPage
+        ? actionSuffix
+        : `Workspace Invitations / Received / ${actionSuffix}`;
+
     trackEvent({
       category: currentEventCategory,
-      action: `Workspace Invitations / Received / ${action}`,
+      action,
       label: id,
     });
   };

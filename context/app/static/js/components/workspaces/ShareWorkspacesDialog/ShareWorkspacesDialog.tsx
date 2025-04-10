@@ -14,6 +14,7 @@ import { getSelectedWorkspaceNames } from 'js/components/workspaces/utils';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { trackEvent } from 'js/helpers/trackers';
+import { generateCommaList } from 'js/helpers/functions';
 
 interface ShareWorkspacesDialogProps {
   handleClose: () => void;
@@ -36,7 +37,7 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
     trackEvent({
       category: currentEventCategory,
       action: 'Share Workspace',
-      label: workspaceIds,
+      label: generateCommaList(workspaceIds),
     });
 
     handleShareInvitations({ workspaceIds, userIds })

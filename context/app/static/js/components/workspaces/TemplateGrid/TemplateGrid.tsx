@@ -27,7 +27,7 @@ function TemplateGrid({
   showJobTooltip,
   openLinksInNewTab,
 }: TemplateGridProps) {
-  const { currentEventCategory } = useWorkspacesEventContext();
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
 
   const getTooltip = (templateKey: string, job_types?: string[]) => {
     if (templateKey in disabledTemplates) {
@@ -54,8 +54,8 @@ function TemplateGrid({
                 onClick={() =>
                   trackEvent({
                     category: currentEventCategory,
-                    action: 'Click template card',
-                    label: title,
+                    action: 'Templates / Navigate to Template',
+                    label: currentWorkspaceItemId ? `${currentWorkspaceItemId} ${title}` : title,
                   })
                 }
                 data-testid="template-card"

@@ -44,6 +44,7 @@ import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
 import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import WorkspacesDeleteButton from 'js/components/workspaces/WorkspacesDeleteButton';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
+import { trackEvent } from 'js/helpers/trackers';
 
 const tooltips = {
   delete: 'Delete this workspace. This action is permanent.',
@@ -67,19 +68,29 @@ const descriptions = {
     'These are the templates that are in this workspace. You can add more templates to this workspace by using the add button.',
 };
 
-const datasetsPage = {
+const trackRelevantPage = (pageName: string, workspaceName: string) => {
+  trackEvent({
+    category: WorkspacesEventCategories.WorkspaceDetailPage,
+    action: 'Select Relevant Page Button',
+    label: `${workspaceName} ${pageName}`,
+  });
+};
+
+const datasetsPage = (workspaceName: string) => ({
   link: buildSearchLink({
     entity_type: 'Dataset',
   }),
   children: 'Dataset Search Page',
-};
+  onClick: () => trackRelevantPage('Dataset Search Page', workspaceName),
+});
 
-const pages = [
+const pages = (workspaceName: string) => [
   {
     link: '/workspaces',
     children: 'My Workspaces',
+    onClick: () => trackRelevantPage('My Workspaces', workspaceName),
   },
-  datasetsPage,
+  datasetsPage(workspaceName),
 ];
 
 const shouldDisplaySection = {
@@ -201,7 +212,7 @@ function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; c
             </LabelledSectionText>
           )}
         </Stack>
-        <RelevantPagesSection pages={pages} />
+        <RelevantPagesSection pages={pages(workspace.name)} />
       </Stack>
     </SectionPaper>
   );
@@ -291,7 +302,7 @@ function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace
               {workspaceDatasets.length > 0 ? descriptions.datasetsPresent : descriptions.datasetsAbsent}
             </Typography>
             <Box>
-              <OutlinedLinkButton key={datasetsPage.link} {...datasetsPage} />
+              <OutlinedLinkButton key={datasetsPage(workspace.name).link} {...datasetsPage(workspace.name)} />
             </Box>
           </Stack>
         </SectionDescription>
