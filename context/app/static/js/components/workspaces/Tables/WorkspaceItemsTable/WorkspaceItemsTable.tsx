@@ -45,6 +45,7 @@ import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
+import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 import { workspaceStatusIconMap } from 'js/shared-styles/icons/workspaceStatusIconMap';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
@@ -306,8 +307,7 @@ function InvitationStatusIcon({ item }: { item: WorkspaceItem }) {
 function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
-  const itemId = getItemId(item);
-  const email = getFieldValue({ item, field: 'user_id.email', prefix });
+  const itemId = getFieldValue({ item, field: 'id', prefix });
 
   const hasWorkspacePage = isWorkspace(item) || isSentInvitation(item) || getFieldValue({ item, field: 'is_accepted' });
 
@@ -323,7 +323,7 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
     }
   });
 
-  const handleEmailClick = useEventCallback(() => {
+  const handleEmailClick = useEventCallback((email: string) => {
     window.location.href = `mailto:${email}`;
 
     trackEvent({
@@ -347,18 +347,32 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
         </Stack>
       );
     }
-    case `${prefix}user_id.username`: {
-      if ('user_id' in item && !item.user_id) {
+    case `${prefix}user_id.username`:
+    case `${prefix}creatorInfo`: {
+      const isCreatorInfo = field === `${prefix}creatorInfo`;
+
+      if (fieldValue === 'Me') {
         return <Typography>Me</Typography>;
       }
 
-      const firstName = getFieldValue({ item, field: 'user_id.first_name', prefix });
-      const lastName = getFieldValue({ item, field: 'user_id.last_name', prefix });
+      if (fieldValue === 'Unknown') {
+        return (
+          <Stack direction="row" alignItems="center">
+            <Typography>Unknown</Typography>
+            <InfoTooltipIcon iconTooltipText="Original creator has deleted workspace" />
+          </Stack>
+        );
+      }
+
+      const baseField = isCreatorInfo ? 'creatorInfo' : 'user_id';
+      const firstName = getFieldValue({ item, field: `${baseField}.first_name`, prefix });
+      const lastName = getFieldValue({ item, field: `${baseField}.last_name`, prefix });
+      const email = getFieldValue({ item, field: `${baseField}.email`, prefix });
 
       return (
         <Stack direction="row" alignItems="center">
           <Typography>{`${firstName} ${lastName}`}</Typography>
-          <TooltipButton sx={{ minWidth: 0 }} tooltip={`Mail to ${email}`} onClick={handleEmailClick}>
+          <TooltipButton sx={{ minWidth: 0 }} tooltip={`Mail to ${email}`} onClick={() => handleEmailClick(email)}>
             <EmailIcon color="info" />
           </TooltipButton>
         </Stack>
