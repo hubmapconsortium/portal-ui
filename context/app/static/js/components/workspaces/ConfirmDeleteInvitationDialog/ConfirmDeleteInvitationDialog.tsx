@@ -7,12 +7,13 @@ import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 export default function ConfirmDeleteInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
   const { invitation, reset } = useEditWorkspaceStore();
   const { toastSuccessDeleteInvitation, toastErrorDeleteInvitation } = useWorkspaceToasts();
-  const { currentEventCategory } = useWorkspacesEventContext();
+  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
 
   if (!invitation) {
     return null;
@@ -25,11 +26,13 @@ export default function ConfirmDeleteInvitationDialog() {
     shared_workspace_id: { id, name },
   } = invitation;
 
+  const isFromLandingPage = currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage;
+
   const handleDeleteAndClose = () => {
     trackEvent({
       category: currentEventCategory,
-      action: `Workspace Invitations / Sent / Delete Invitation`,
-      label: id,
+      action: `${isFromLandingPage ? 'Workspace Invitations / Sent /' : 'Sent Invitations Status /'} Delete Invitation`,
+      label: isFromLandingPage ? id : `${currentWorkspaceItemName} ${id}`,
     });
 
     handleDeleteInvitation(id)

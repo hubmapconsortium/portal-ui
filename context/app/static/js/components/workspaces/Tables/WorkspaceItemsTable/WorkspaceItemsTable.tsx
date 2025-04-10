@@ -308,29 +308,33 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
   const prefix = getFieldPrefix(field);
   const fieldValue = getFieldValue({ item, field });
   const itemId = getFieldValue({ item, field: 'id', prefix });
-
   const hasWorkspacePage = isWorkspace(item) || isSentInvitation(item) || getFieldValue({ item, field: 'is_accepted' });
 
-  const { currentEventCategory } = useWorkspacesEventContext();
+  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
+  const isFromLandingPage = currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage;
+
+  const handleTrackEvent = useEventCallback((actionSuffix: string) => {
+    const action = isFromLandingPage
+      ? `Workspace Invitations / Received / ${actionSuffix}`
+      : `Sent Invitations Status / ${actionSuffix}`;
+    const label = isFromLandingPage ? itemId : `${currentWorkspaceItemName} ${itemId}`;
+
+    trackEvent({
+      category: currentEventCategory,
+      action,
+      label,
+    });
+  });
 
   const trackNameClick = useEventCallback(() => {
     if (!hasWorkspacePage) {
-      trackEvent({
-        category: currentEventCategory,
-        action: 'Workspace Invitations / Received / Open Preview',
-        label: `${itemId} Select Workspace Name`,
-      });
+      handleTrackEvent('Open Preview');
     }
   });
 
   const handleEmailClick = useEventCallback((email: string) => {
     window.location.href = `mailto:${email}`;
-
-    trackEvent({
-      category: currentEventCategory,
-      action: 'Workspace Invitations / Received / Open Email',
-      label: itemId,
-    });
+    handleTrackEvent('Open Email');
   });
 
   switch (field) {
@@ -342,7 +346,9 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
           <InternalLink href={href} onClick={trackNameClick}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
-          <Box>{`(ID: ${itemId})`}</Box>
+          {/* We retrieve the ID this way here because we want to show the shared IDs (which will be distinct)
+           for sent workspace invites, which can be shared multiple times. */}
+          <Box>{`(ID: ${getItemId(item)})`}</Box>
           <InvitationStatusIcon item={item} />
         </Stack>
       );
@@ -412,7 +418,8 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   toggleItem,
 }: RowProps<T>) {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const { currentEventCategory } = useWorkspacesEventContext();
+  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
+  const isFromLandingPage = currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage;
   const itemId = isWorkspace(item) ? item.id.toString() : item.original_workspace_id.id.toString();
 
   const handleDescriptionClick = useEventCallback(() => {
@@ -420,8 +427,8 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
 
     trackEvent({
       category: currentEventCategory,
-      action: 'Workspace Invitations / Description / Expand Row',
-      label: itemId,
+      action: `${isFromLandingPage ? 'Workspace Invitations / Description /' : 'Sent Invitations Status /'} Expand Row`,
+      label: isFromLandingPage ? itemId : `${currentWorkspaceItemName} ${itemId}`,
     });
   });
 
@@ -500,14 +507,16 @@ function SeeMoreRows({
   setNumVisibleItems: React.Dispatch<React.SetStateAction<number>>;
   totalItems: number;
 }) {
-  const { currentEventCategory } = useWorkspacesEventContext();
+  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
+  const isFromLandingPage = currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage;
 
   const handleClick = useEventCallback(() => {
     setNumVisibleItems((prev) => prev + 3);
 
     trackEvent({
       category: currentEventCategory,
-      action: 'Workspace Invitations / Received / See More',
+      action: `${isFromLandingPage ? 'Workspace Invitations / Received /' : 'Sent Invitations Status /'} See More`,
+      label: isFromLandingPage ? undefined : currentWorkspaceItemName,
     });
   });
 
