@@ -12,11 +12,13 @@ interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
 }
 
+const DEFAULT_GENE_QUERY_METHOD = 'crossModalityRNA';
+
 export default function MolecularDataQueryForm({ children, initialValues }: MolecularDataQueryFormProps) {
   const methods = useForm<MolecularDataQueryFormState>({
     defaultValues: {
       queryType: 'gene',
-      queryMethod: 'scFind',
+      queryMethod: DEFAULT_GENE_QUERY_METHOD,
       genes: [],
       ...initialValues,
     },
@@ -24,12 +26,6 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   const { setValue, watch } = methods;
 
   const { toastError } = useSnackbarActions();
-  const onError = useEventCallback((errors: FieldErrors<MolecularDataQueryFormState>) => {
-    const error = Object.values(errors)
-      .map((field) => field.message)
-      .join(' ');
-    toastError(error);
-  });
 
   const queryType = watch('queryType');
 
@@ -40,25 +36,51 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
     setValue('cellTypes', []);
     switch (queryType) {
       case 'gene':
-        setValue('queryMethod', 'scFind');
+        setValue('queryMethod', DEFAULT_GENE_QUERY_METHOD);
         break;
       case 'protein':
         setValue('queryMethod', 'crossModality');
         break;
+      case 'cell-type':
+        setValue('queryMethod', 'scFind');
+        break;
       default:
+        console.error('Unexpected query type:', queryType);
         break;
     }
   }, [queryType, setValue]);
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
-    methods.reset({}, { keepValues: true, keepDirty: false });
-    console.log(data);
+    methods.reset(data, { keepValues: true, keepDirty: false });
+  });
+
+  const onError = useEventCallback((errors: FieldErrors<MolecularDataQueryFormState>) => {
+    const error = Object.values(errors)
+      .map((field) => field.message)
+      .join(' ');
+    toastError(error);
+  });
+
+  const submit = useEventCallback((event: React.FormEvent<HTMLFormElement>) => {
+    methods
+      .handleSubmit(
+        onSubmit,
+        onError,
+      )(event)
+      .catch((error) => {
+        console.error('Error in form submission:', error);
+        toastError('An error occurred during form submission. Please try again.');
+      });
   });
 
   const id = `${useId()}-molecular-data-query`;
 
   const [formIsExpanded, setFormIsExpanded] = useState(true);
-  const [resultsAreExpanded, setResultsAreExpanded] = useState(false);
+  const [resultsAreExpanded] = useState(false);
+
+  const toggleParametersSection = useEventCallback(() => {
+    setFormIsExpanded((prev) => !prev);
+  });
 
   return (
     <FormProvider {...methods}>
@@ -67,15 +89,13 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         summaryHeading="Parameters"
         id={`${id}-parameters`}
         content={
-          // TODO fix eslint rule
-          // eslint-disable-next-line @typescript-eslint/no-misused-promises
-          <Stack component="form" onSubmit={methods.handleSubmit(onSubmit, onError)} gap={2}>
+          <Stack component="form" onSubmit={submit} gap={2}>
             {children}
             <SubmitButton />
           </Stack>
         }
         isExpanded={formIsExpanded || !methods.formState.isSubmitted}
-        onChange={() => setFormIsExpanded(!formIsExpanded)}
+        onChange={toggleParametersSection}
         noProvider
       />
       <IndependentStepAccordion

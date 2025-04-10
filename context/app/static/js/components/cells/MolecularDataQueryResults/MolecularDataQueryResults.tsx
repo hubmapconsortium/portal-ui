@@ -1,9 +1,9 @@
 import React from 'react';
 
-import CrossModalityCellTypeResults from '../CrossModalityResults';
+import { CrossModalityCellTypeResults, CrossModalityGeneOrProteinResults } from '../CrossModalityResults';
 import { useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks';
 import LoadingResults from './LoadingResults';
-import CrossModalityGeneOrProteinResults from '../CrossModalityResults/CrossModalityGeneOrProteinResults';
+import { SCFindCellTypeQueryResults } from '../SCFindResults';
 
 function CellsResults() {
   const {
@@ -32,7 +32,7 @@ function CellsResults() {
   switch (queryType) {
     case 'gene':
       if (queryMethod === 'scFind') {
-        return 'SCFIND GENE QUERY';
+        return 'TODO: SCFIND GENE QUERY RESULTS DISPLAY.';
       }
       return <CrossModalityGeneOrProteinResults />;
 
@@ -42,7 +42,7 @@ function CellsResults() {
       if (queryMethod === 'crossModality') {
         return <CrossModalityCellTypeResults />;
       }
-      return 'SCFIND CELL-TYPE QUERY';
+      return <SCFindCellTypeQueryResults />;
     default:
       return `Unknown query type/method: ${queryType as string} with ${queryMethod}`;
   }

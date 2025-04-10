@@ -51,4 +51,10 @@ export const HyperQueryCellTypes: Story = {
   },
 };
 
+export const HyperQueryCellTypesForSpecificDataset: Story = {
+  args: {
+    datasetName: 'HBM444.DXLZ.643',
+  },
+};
+
 export default meta;

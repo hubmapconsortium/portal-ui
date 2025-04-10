@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import { useController } from 'react-hook-form';
+import { useController, useWatch } from 'react-hook-form';
 import { useAutocompleteQuery } from './hooks';
 import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
@@ -37,7 +37,9 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
     defaultValue: createInitialValue(defaultValue),
   });
 
-  const { data: options = [], isLoading } = useAutocompleteQuery({ targetEntity, substring });
+  const queryMethod = useWatch({ control, name: 'queryMethod' });
+
+  const { data: options = [], isLoading } = useAutocompleteQuery({ targetEntity, substring, queryMethod });
 
   function handleChange({ target: { value } }: React.ChangeEvent<HTMLInputElement>) {
     setSubstring(value);
@@ -52,10 +54,11 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       isOptionEqualToValue={(option, value) => option.full === value.full}
       loading={isLoading}
       renderOption={(props, option) => (
-        <PreserveWhiteSpaceListItem {...props}>
+        <PreserveWhiteSpaceListItem {...props} key={option.full}>
           <span>{option.pre}</span>
           <b>{option.match}</b>
           <span>{option.post}</span>
+          {option.tag && <Chip label={option.tag} size="small" variant="outlined" sx={{ ml: 'auto' }} />}
         </PreserveWhiteSpaceListItem>
       )}
       renderTags={(value, getTagProps) =>

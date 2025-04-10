@@ -1,4 +1,4 @@
-import useSWR from 'swr';
+import useSWR from 'swr/immutable';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
 import { createScFindKey } from './utils';

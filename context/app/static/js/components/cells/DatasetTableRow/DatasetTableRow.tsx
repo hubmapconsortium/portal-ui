@@ -21,9 +21,17 @@ function MetadataCells({ donor: { mapped_metadata } }: Pick<Dataset, 'donor'>) {
   if (mapped_metadata) {
     return (
       <>
-        {(['age', 'body_mass_index'] as const).map((base) => (
-          <UnitValueCell value={mapped_metadata[`${base}_value`]!} unit={mapped_metadata[`${base}_unit`]!} key={base} />
-        ))}
+        {(['age', 'body_mass_index'] as const).map((base) =>
+          mapped_metadata[`${base}_value`] ? (
+            <UnitValueCell
+              value={mapped_metadata[`${base}_value`]!}
+              unit={mapped_metadata[`${base}_unit`]!}
+              key={base}
+            />
+          ) : (
+            <ExpandableRowCell key={base}>Unknown</ExpandableRowCell>
+          ),
+        )}
         <ExpandableRowCell>{mapped_metadata.sex}</ExpandableRowCell>
         <ExpandableRowCell>{mapped_metadata.race?.join(', ')}</ExpandableRowCell>
       </>

@@ -1,19 +1,19 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { http, passthrough } from 'msw';
-import useFindDatasetForCellType, { FindDatasetForCellTypeParams } from './useFindDatasetForCellType';
+import useFindDatasetForCellTypes, { FindDatasetForCellTypesParams } from './useFindDatasetForCellTypes';
 
 import { SCFIND_BASE_STORYBOOK } from './utils';
 import StoryControlTemplate from './StoryTemplate';
 
-function FindDatasetForCellTypeControl(params: FindDatasetForCellTypeParams) {
-  const result = useFindDatasetForCellType(params);
+function FindDatasetForCellTypesControl(params: FindDatasetForCellTypesParams) {
+  const result = useFindDatasetForCellTypes(params);
   return <StoryControlTemplate title="Find Datasets For Cell Type" params={params} result={result} />;
 }
 
 const meta: Meta = {
-  title: 'SCFind/FindDatasetForCellType',
-  component: FindDatasetForCellTypeControl,
+  title: 'SCFind/FindDatasetForCellTypes',
+  component: FindDatasetForCellTypesControl,
   parameters: {
     msw: {
       handlers: [
@@ -24,19 +24,19 @@ const meta: Meta = {
     },
   },
   argTypes: {
-    cellType: {
+    cellTypes: {
       control: {
-        type: 'text',
+        type: 'object',
       },
     },
   },
 };
 
-type Story = StoryObj<typeof FindDatasetForCellTypeControl>;
+type Story = StoryObj<typeof FindDatasetForCellTypesControl>;
 
-export const FindCellTypeSpecificities: Story = {
+export const FindDatasetForCellType: Story = {
   args: {
-    cellType: 'kidney.B cell',
+    cellTypes: ['kidney.B cell', 'lung.B cell'],
   },
 };
 
