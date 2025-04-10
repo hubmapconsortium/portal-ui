@@ -17,15 +17,17 @@ import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { EventInfo } from 'js/components/types';
+import { trackEvent } from 'js/helpers/trackers';
 import { Column, EntitiesTabTypes } from './types';
 
 interface EntityHeaderCellTypes<Doc> {
   column: Column<Doc>;
   setSort: (columnId: string) => void;
   sortState: SortState;
+  trackingInfo?: EventInfo;
 }
 
-function EntityHeaderCell<Doc>({ column, setSort, sortState }: EntityHeaderCellTypes<Doc>) {
+function EntityHeaderCell<Doc>({ column, setSort, sortState, trackingInfo }: EntityHeaderCellTypes<Doc>) {
   // This is a workaround to ensure the header cell control is accessible with consistent keyboard navigation
   // and appearance. The header cell contains a disabled, hidden button that is the full width of the cell. This
   // allows us to set the header cell to position: relative and create another button that is absolutely positioned
@@ -40,6 +42,13 @@ function EntityHeaderCell<Doc>({ column, setSort, sortState }: EntityHeaderCellT
         variant="text"
         onClick={() => {
           setSort(column.id);
+          if (trackingInfo) {
+            trackEvent({
+              ...trackingInfo,
+              action: 'Datasets / Sort Columns',
+              label: `${trackingInfo.label} ${column.label}`,
+            });
+          }
         }}
         disableTouchRipple
         sx={{
@@ -122,7 +131,13 @@ function EntityTable<Doc>({
               />
             )}
             {columns.map((column) => (
-              <EntityHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
+              <EntityHeaderCell
+                column={column}
+                setSort={setSort}
+                sortState={sortState}
+                trackingInfo={trackingInfo}
+                key={column.id}
+              />
             ))}
           </TableRow>
           <TableRow aria-hidden="true">

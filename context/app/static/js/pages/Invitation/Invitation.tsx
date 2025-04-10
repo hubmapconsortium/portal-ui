@@ -96,6 +96,11 @@ function Datasets({ invitationDatasets }: { invitationDatasets: string[] }) {
         <WorkspaceDatasetsTable
           datasetsUUIDs={invitationDatasets}
           isSelectable={false}
+          trackingInfo={{
+            category: currentEventCategory,
+            action: `Datasets / Navigate to Dataset`,
+            label: currentWorkspaceItemId,
+          }}
           hideTableIfEmpty
           openLinksInNewTab
         />

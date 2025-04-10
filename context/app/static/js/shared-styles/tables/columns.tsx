@@ -20,7 +20,13 @@ function HubmapIDCell({
     <InternalLink
       target={openLinksInNewTab ? '_blank' : '_self'}
       href={`/browse/dataset/${uuid}`}
-      onClick={() => trackEvent({ ...trackingInfo, action: 'Navigate to Dataset from Table' })}
+      onClick={() =>
+        trackEvent({
+          action: 'Navigate to Dataset from Table',
+          ...trackingInfo,
+          label: trackingInfo?.label ? `${trackingInfo.label} ${hubmap_id}` : undefined,
+        })
+      }
       variant="body2"
     >
       {hubmap_id}
