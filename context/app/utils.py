@@ -46,6 +46,7 @@ def get_default_flask_data():
             'softAssayEndpoint': current_app.config['SOFT_ASSAY_ENDPOINT'],
             'ukvEndpoint': current_app.config['UKV_ENDPOINT'],
             'dataProductsEndpoint': current_app.config['DATA_PRODUCTS_ENDPOINT'],
+            'scFindEndpoint': current_app.config['SCFIND_ENDPOINT'],
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }
