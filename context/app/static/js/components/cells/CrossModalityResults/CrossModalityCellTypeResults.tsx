@@ -13,7 +13,7 @@ import { DisambiguationTextbox } from './DisambiguationTextbox';
 import { useCellTypeOrgans, useCrossModalityResults } from './hooks';
 import { extractCLID } from './utils';
 import DatasetsTable from '../DatasetsTable';
-import CellTypesChart from '../CellsCharts/CellTypesCharts';
+import { CrossModalityCellTypesChart } from '../CellsCharts/CellTypesChart';
 import { useAugmentedResults } from '../MolecularDataQueryResults/hooks';
 
 function CellTypeResult({ cellType }: { cellType: string }) {
@@ -80,7 +80,7 @@ function CrossModalityCellTypeResults() {
       <Divider sx={{ my: 2 }} />
       <div>
         <Typography variant="h3">Relevant Datasets</Typography>
-        <DatasetsTable datasets={resultsList} expandedContent={CellTypesChart} />
+        <DatasetsTable datasets={resultsList} expandedContent={CrossModalityCellTypesChart} />
       </div>
     </div>
   );

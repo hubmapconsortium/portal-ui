@@ -9,9 +9,9 @@ import { animated } from '@react-spring/web';
 import DatasetTableRow from 'js/components/cells/DatasetTableRow';
 import { initialHeight } from 'js/components/cells/MolecularDataQueryResults/style';
 import { useExpandSpring } from 'js/hooks/useExpand';
+import { Dataset } from 'js/components/types';
 import { WrappedCellsResultsDataset } from '../types';
 import CellsCharts from '../CellsCharts';
-import { DatasetCellsChartsProps } from '../CellsCharts/types';
 
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
@@ -27,7 +27,7 @@ const columns = [
 
 interface DatasetsTableProps {
   datasets: WrappedCellsResultsDataset[];
-  expandedContent?: React.ComponentType<DatasetCellsChartsProps>;
+  expandedContent?: React.ComponentType<Dataset>;
 }
 
 function DatasetsTable({ datasets = [], expandedContent = CellsCharts }: DatasetsTableProps) {

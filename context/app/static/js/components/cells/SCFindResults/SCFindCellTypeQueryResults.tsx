@@ -1,16 +1,14 @@
 import React from 'react';
 import { useSCFindCellTypeResults } from './hooks';
 import { useAugmentedResults } from '../MolecularDataQueryResults/hooks';
-import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import DatasetsTable from '../DatasetsTable';
-import CellTypesChart from '../CellsCharts/CellTypesCharts';
+import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
 
 interface SCFindCellTypeQueryResultsProps {
   datasetIds: { hubmap_id: string }[];
 }
 
 function SCFindCellTypeQueryResults({ datasetIds }: SCFindCellTypeQueryResultsProps) {
-  const cellTypes = useCellVariableNames();
   const { hitsMap, isLoading, list } = useAugmentedResults(datasetIds);
 
   if (isLoading) {
@@ -21,7 +19,7 @@ function SCFindCellTypeQueryResults({ datasetIds }: SCFindCellTypeQueryResultsPr
     return <div>No datasets found</div>;
   }
 
-  return <DatasetsTable datasets={list} expandedContent={CellTypesChart} />;
+  return <DatasetsTable datasets={list} expandedContent={SCFindCellTypesChart} />;
 }
 
 function SCFindCellTypeQueryResultsLoader() {

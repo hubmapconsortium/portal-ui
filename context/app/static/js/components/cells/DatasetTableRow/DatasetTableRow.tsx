@@ -7,7 +7,6 @@ import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { getOriginSamplesOrgan } from 'js/helpers/functions';
 import { Dataset } from 'js/components/types';
 import { useStore } from '../store';
-import { DatasetCellsChartsProps } from '../CellsCharts/types';
 
 interface UnitValueCellProps {
   unit: string;
@@ -51,7 +50,7 @@ interface DatasetTableRowProps {
   datasetMetadata: Dataset;
   numCells: number;
   isExpandedToStart: boolean;
-  expandedContent: React.ComponentType<DatasetCellsChartsProps>;
+  expandedContent: React.ComponentType<Dataset>;
 }
 
 function useDatasetURL(uuid: string) {

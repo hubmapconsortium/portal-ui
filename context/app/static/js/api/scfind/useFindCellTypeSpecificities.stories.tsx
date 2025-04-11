@@ -26,17 +26,12 @@ const meta: Meta = {
   argTypes: {
     geneList: {
       control: {
-        type: 'text',
+        type: 'object',
       },
     },
     cellTypes: {
       control: {
-        type: 'text',
-      },
-    },
-    annotationNames: {
-      control: {
-        type: 'text',
+        type: 'object',
       },
     },
     backgroundCellTypes: {
