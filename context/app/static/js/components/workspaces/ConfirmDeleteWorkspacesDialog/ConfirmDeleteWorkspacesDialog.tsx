@@ -6,6 +6,8 @@ import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
 import { getSelectedWorkspaceNames } from 'js/components/workspaces/utils';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface ConfirmDeleteWorkspacesDialogProps {
   handleClose: () => void;
@@ -17,16 +19,27 @@ export default function ConfirmDeleteWorkspacesDialog({
 }: ConfirmDeleteWorkspacesDialogProps) {
   const { toastErrorDeleteWorkspaces, toastSuccessDeleteWorkspaces } = useWorkspaceToasts();
   const { workspacesList, handleDeleteWorkspace } = useWorkspacesList();
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   const selectedWorkspaceNames = getSelectedWorkspaceNames({ selectedWorkspaceIds, workspacesList });
 
   const handleDeleteAndClose = useEventCallback(() => {
     const workspaceIds = [...selectedWorkspaceIds];
 
+    trackEvent({
+      category: currentEventCategory,
+      action: 'Delete Workspace',
+      label: workspaceIds,
+    });
+
     Promise.all(workspaceIds.map((workspaceId) => handleDeleteWorkspace(Number(workspaceId))))
       .then(() => {
         toastSuccessDeleteWorkspaces(selectedWorkspaceNames);
         selectedWorkspaceIds.clear();
+        // Redirect to the workspaces landing page if on a deleted workspace page
+        if (window.location.href.includes(`/workspaces/${workspaceIds[0]}`)) {
+          window.location.href = `/workspaces`;
+        }
       })
       .catch((e) => {
         toastErrorDeleteWorkspaces(selectedWorkspaceNames);

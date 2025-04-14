@@ -15,6 +15,8 @@ import {
   useLaunchWorkspaceDialog,
   LaunchWorkspaceFormTypes,
 } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import WorkspaceEnvironmentDescription from '../WorkspaceEnvironmentDescription';
 
 const formId = 'launch-workspace-form';
@@ -90,44 +92,50 @@ function LaunchWorkspaceDialog() {
   );
 
   return (
-    <DialogModal
-      title={`Launch ${workspaceName}`}
-      maxWidth="md"
-      content={
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
-        <form id={formId} onSubmit={handleSubmit(onSubmit)}>
-          {newWorkspaceLaunch ? (
-            runningWorkspaceAlert
-          ) : (
-            <Stack direction="column" spacing={1}>
-              {runningWorkspaceAlert}
-              <Alert severity="info">{text.resources.alert}</Alert>
-              <SummaryPaper>
-                <Stack direction="column" spacing={2}>
-                  <StyledSubtitle1>{text.environment.title}</StyledSubtitle1>
-                  {text.environment.description}
-                  <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
-                </Stack>
-              </SummaryPaper>
-              <AdvancedConfigOptions control={control} description={text.resources.description} />
-            </Stack>
-          )}
-        </form>
-      }
-      isOpen={isOpen}
-      handleClose={handleClose}
-      actions={
-        <Stack direction="row" spacing={2} alignItems="end">
-          <Button type="button" onClick={handleClose} disabled={isSubmitting}>
-            Cancel
-          </Button>
-          <LoadingButton type="submit" variant="contained" form={formId} loading={isSubmitting}>
-            Launch Workspace
-          </LoadingButton>
-        </Stack>
-      }
-      withCloseButton
-    />
+    <WorkspacesEventContextProvider
+      currentEventCategory={WorkspacesEventCategories.WorkspaceDialog}
+      currentWorkspaceItemId={workspace?.id}
+      currentWorkspaceItemName={workspaceName}
+    >
+      <DialogModal
+        title={`Launch ${workspaceName}`}
+        maxWidth="md"
+        content={
+          // eslint-disable-next-line @typescript-eslint/no-misused-promises
+          <form id={formId} onSubmit={handleSubmit(onSubmit)}>
+            {newWorkspaceLaunch ? (
+              runningWorkspaceAlert
+            ) : (
+              <Stack direction="column" spacing={1}>
+                {runningWorkspaceAlert}
+                <Alert severity="info">{text.resources.alert}</Alert>
+                <SummaryPaper>
+                  <Stack direction="column" spacing={2}>
+                    <StyledSubtitle1>{text.environment.title}</StyledSubtitle1>
+                    {text.environment.description}
+                    <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+                  </Stack>
+                </SummaryPaper>
+                <AdvancedConfigOptions control={control} description={text.resources.description} />
+              </Stack>
+            )}
+          </form>
+        }
+        isOpen={isOpen}
+        handleClose={handleClose}
+        actions={
+          <Stack direction="row" spacing={2} alignItems="end">
+            <Button type="button" onClick={handleClose} disabled={isSubmitting}>
+              Cancel
+            </Button>
+            <LoadingButton type="submit" variant="contained" form={formId} loading={isSubmitting}>
+              Launch Workspace
+            </LoadingButton>
+          </Stack>
+        }
+        withCloseButton
+      />
+    </WorkspacesEventContextProvider>
   );
 }
 

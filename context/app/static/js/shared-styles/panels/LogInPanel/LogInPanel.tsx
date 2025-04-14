@@ -8,10 +8,10 @@ import Box from '@mui/material/Box';
 import { InfoIcon } from 'js/shared-styles/icons';
 import { LoginButton } from 'js/components/detailPage/BulkDataTransfer/style';
 import { trackEvent } from 'js/helpers/trackers';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { EventInfo } from 'js/components/types';
 
 interface LogInPanelProps extends PropsWithChildren {
-  trackingInfo: WorkspacesEventInfo;
+  trackingInfo: EventInfo;
 }
 
 function LogInPanel({ children, trackingInfo }: LogInPanelProps) {

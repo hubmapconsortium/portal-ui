@@ -41,6 +41,7 @@ import {
   WorkspaceResourceOptions,
   WorkspaceInvitation,
   WorkspaceFile,
+  WorkspaceCreatorInfo,
 } from './types';
 
 interface UseWorkspacesListTypes<T> {
@@ -207,25 +208,33 @@ function useInvitationsList() {
   });
 }
 
+function useGetCreatorInfo(receivedInvitations: WorkspaceInvitation[]) {
+  const creatorMap = receivedInvitations.reduce<Map<number, WorkspaceCreatorInfo>>((map, invitation) => {
+    const workspaceId = invitation.shared_workspace_id.id;
+    const original = invitation.original_workspace_id;
+
+    map.set(workspaceId, original ? original.user_id : 'Unknown');
+    return map;
+  }, new Map());
+
+  const getCreatorInfo = (workspaceId: number): WorkspaceCreatorInfo => creatorMap.get(workspaceId) ?? 'Me';
+
+  return { getCreatorInfo };
+}
+
 function useWorkspacesListWithSharerInfo() {
   const { workspacesList, isLoading: workspacesLoading, ...rest } = useWorkspacesList();
   const { receivedInvitations, invitationsLoading } = useInvitationsList();
 
-  const invitationMap = new Map(
-    receivedInvitations.map((invitation) => [
-      invitation.shared_workspace_id.id,
-      invitation.original_workspace_id.user_id,
-    ]),
-  );
+  const { getCreatorInfo } = useGetCreatorInfo(receivedInvitations);
 
-  // If the workspace was shared, find the user who shared it
-  const workspacesWithInvitationInfo = workspacesList.map((workspace) => ({
+  const workspacesWithCreatorInfo = workspacesList.map((workspace) => ({
     ...workspace,
-    user_id: invitationMap.get(workspace.id),
+    creatorInfo: getCreatorInfo(workspace.id),
   }));
 
   return {
-    workspacesList: workspacesWithInvitationInfo,
+    workspacesList: workspacesWithCreatorInfo,
     isLoading: workspacesLoading || invitationsLoading,
     ...rest,
   };
@@ -314,10 +323,11 @@ function useInvitationWorkspaceDetails({ workspaceId }: { workspaceId: number })
   const { workspace, ...rest } = useWorkspaceDetail({ workspaceId });
   const { sentInvitations, receivedInvitations } = useInvitationsList();
 
-  const creatorInfo = receivedInvitations.find((invitation) => invitation.shared_workspace_id.id === workspaceId)
-    ?.original_workspace_id.user_id;
+  const { getCreatorInfo } = useGetCreatorInfo(receivedInvitations);
+  const creatorInfo = getCreatorInfo(workspaceId);
+
   const workspaceSentInvitations = sentInvitations.filter(
-    (invitation) => invitation.original_workspace_id.id === workspaceId,
+    (invitation) => invitation.original_workspace_id?.id === workspaceId,
   );
 
   return {

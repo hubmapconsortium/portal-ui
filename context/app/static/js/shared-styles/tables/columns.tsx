@@ -5,7 +5,7 @@ import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from '
 import { InternalLink } from 'js/shared-styles/Links';
 import { getDonorAgeString } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { EventInfo } from 'js/components/types';
 
 interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
@@ -15,12 +15,18 @@ function HubmapIDCell({
   hit: { uuid, hubmap_id },
   trackingInfo,
   openLinksInNewTab,
-}: CellContentProps<EntityDocument> & { trackingInfo: WorkspacesEventInfo; openLinksInNewTab?: boolean }) {
+}: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
   return (
     <InternalLink
       target={openLinksInNewTab ? '_blank' : '_self'}
       href={`/browse/dataset/${uuid}`}
-      onClick={() => trackEvent({ ...trackingInfo, action: 'Navigate to Dataset from Table' })}
+      onClick={() =>
+        trackEvent({
+          action: 'Navigate to Dataset from Table',
+          ...trackingInfo,
+          label: trackingInfo?.label ? `${trackingInfo.label} ${hubmap_id}` : undefined,
+        })
+      }
       variant="body2"
     >
       {hubmap_id}
@@ -37,7 +43,7 @@ export const hubmapID = {
 
 export const hubmapIDWithLinksInNewTab = {
   ...hubmapID,
-  cellContent: (props: CellContentProps<EntityDocument> & { trackingInfo: WorkspacesEventInfo }) => (
+  cellContent: (props: CellContentProps<EntityDocument> & { trackingInfo: EventInfo }) => (
     <HubmapIDCell {...props} openLinksInNewTab />
   ),
 };

@@ -4,15 +4,15 @@ import SelectableCard from 'js/shared-styles/cards/SelectableCard/SelectableCard
 import { InternalLink } from 'js/shared-styles/Links';
 import { sortTemplates } from 'js/components/workspaces/utils';
 import { JUPYTER_LAB_R_JOB_TYPE } from 'js/components/workspaces/constants';
-import { TemplatesTypes, WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { TemplatesTypes } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 interface TemplateGridProps {
   templates: TemplatesTypes;
   selectItem?: (e: ChangeEvent<HTMLInputElement>) => void;
   selectedTemplates?: Set<string>;
   disabledTemplates?: TemplatesTypes;
-  trackingInfo: WorkspacesEventInfo;
   jobType?: string;
   showJobTooltip?: boolean;
   openLinksInNewTab?: boolean;
@@ -23,11 +23,12 @@ function TemplateGrid({
   selectItem,
   selectedTemplates = new Set([]),
   disabledTemplates = {},
-  trackingInfo,
   jobType,
   showJobTooltip,
   openLinksInNewTab,
 }: TemplateGridProps) {
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
+
   const getTooltip = (templateKey: string, job_types?: string[]) => {
     if (templateKey in disabledTemplates) {
       return 'This template is already in your workspace.';
@@ -52,9 +53,9 @@ function TemplateGrid({
                 target={openLinksInNewTab ? '_blank' : '_self'}
                 onClick={() =>
                   trackEvent({
-                    ...trackingInfo,
-                    action: 'Click template card',
-                    label: title,
+                    category: currentEventCategory,
+                    action: 'Templates / Navigate to Template',
+                    label: currentWorkspaceItemId ? `${currentWorkspaceItemId} ${title}` : title,
                   })
                 }
                 data-testid="template-card"

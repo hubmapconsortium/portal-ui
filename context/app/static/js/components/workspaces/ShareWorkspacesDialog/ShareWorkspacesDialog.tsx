@@ -12,6 +12,8 @@ import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { getSelectedWorkspaceNames } from 'js/components/workspaces/utils';
 import ConfirmationDialog from 'js/shared-styles/dialogs/ConfirmationDialog';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface ShareWorkspacesDialogProps {
   handleClose: () => void;
@@ -21,6 +23,7 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
   const { workspacesList } = useWorkspacesList();
   const { handleShareInvitations } = useInvitationsList();
   const { toastErrorShareInvitation, toastSuccessShareInvitation } = useWorkspaceToasts();
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   const [selectedUsers, setSelectedUsers] = useState<WorkspaceUser[]>([]);
 
@@ -29,6 +32,12 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
   const handleShareAndClose = useEventCallback(() => {
     const workspaceIds = [...selectedWorkspaceIds];
     const userIds = [...selectedUsers].map((user) => user.id);
+
+    trackEvent({
+      category: currentEventCategory,
+      action: 'Share Workspace',
+      label: workspaceIds,
+    });
 
     handleShareInvitations({ workspaceIds, userIds })
       .then(() => {

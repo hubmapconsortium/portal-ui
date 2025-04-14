@@ -5,11 +5,13 @@ import LoadingButton from '@mui/lab/LoadingButton';
 import { UseFormReturn, FormState, FieldValues } from 'react-hook-form';
 
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
-import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import EditWorkspaceTemplatesDialog from 'js/components/workspaces/EditWorkspaceTemplatesDialog';
 import EditWorkspaceNameDialog from 'js/components/workspaces/EditWorkspaceNameDialog';
 import AddDatasetsDialog from 'js/components/workspaces/AddDatasetsDialog';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
+import { Workspace, WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 const formId = 'edit-workspace-form';
 
@@ -92,9 +94,13 @@ function EditWorkspaceDialogContent<T extends FieldValues>({
   );
 }
 
-function EditWorkspaceDialog() {
-  const { workspace, dialogType } = useEditWorkspaceStore();
-
+function EditWorkspaceDialogOptions({
+  workspace,
+  dialogType,
+}: {
+  workspace: Workspace | null;
+  dialogType: DialogType;
+}) {
   if (!workspace) {
     return null;
   }
@@ -111,6 +117,20 @@ function EditWorkspaceDialog() {
   }
 
   return null;
+}
+
+function EditWorkspaceDialog() {
+  const { workspace, dialogType } = useEditWorkspaceStore();
+
+  return (
+    <WorkspacesEventContextProvider
+      currentEventCategory={WorkspacesEventCategories.WorkspaceDialog}
+      currentWorkspaceItemId={workspace?.id}
+      currentWorkspaceItemName={workspace?.name}
+    >
+      <EditWorkspaceDialogOptions workspace={workspace} dialogType={dialogType} />
+    </WorkspacesEventContextProvider>
+  );
 }
 
 export { EditWorkspaceDialogContent };

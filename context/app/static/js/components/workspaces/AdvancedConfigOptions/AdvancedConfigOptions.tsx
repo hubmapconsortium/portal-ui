@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import Button from '@mui/material/Button';
@@ -6,10 +6,13 @@ import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/system/Stack';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
+import useEventCallback from '@mui/material/utils/useEventCallback';
 
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { PrimarySwitch } from 'js/shared-styles/switches';
+import { trackEvent } from 'js/helpers/trackers';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { StyledAccordion } from './style';
 import { StyledSubtitle1, StyledSubtitle2 } from '../style';
 import {
@@ -123,6 +126,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
     control,
     rules: { required: true },
   });
+  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
 
   const isDefault =
     field.value.time_limit_minutes === DEFAULT_TIME_LIMIT_MINUTES &&
@@ -130,18 +134,26 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
     field.value.num_cpus === DEFAULT_NUM_CPUS &&
     field.value.gpu_enabled === DEFAULT_GPU_ENABLED;
 
-  const handleRestoreDefaults = useCallback(() => {
+  const handleRestoreDefaults = useEventCallback(() => {
     field.onChange({
       time_limit_minutes: DEFAULT_TIME_LIMIT_MINUTES,
       memory_mb: DEFAULT_MEMORY_MB,
       num_cpus: DEFAULT_NUM_CPUS,
       gpu_enabled: DEFAULT_GPU_ENABLED,
     });
-  }, [field]);
+  });
+
+  const handleTrackEvent = useEventCallback(() => {
+    trackEvent({
+      category: currentEventCategory,
+      action: 'Open Advanced Configurations Menu',
+      label: currentWorkspaceItemName ?? 'New Workspace',
+    });
+  });
 
   return (
     <StyledAccordion>
-      <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
+      <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />} onClick={handleTrackEvent}>
         <StyledSubtitle1>Advanced Configurations (Optional)</StyledSubtitle1>
       </AccordionSummary>
       <AccordionDetails>

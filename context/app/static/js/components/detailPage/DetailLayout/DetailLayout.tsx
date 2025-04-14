@@ -7,13 +7,23 @@ import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlert
 import TableOfContents from 'js/shared-styles/sections/TableOfContents';
 import { TableOfContentsItems } from 'js/shared-styles/sections/TableOfContents/types';
 import { SectionOrder, getSections } from 'js/shared-styles/sections/TableOfContents/utils';
+import { EventInfo } from 'js/components/types';
 
 interface DetailLayoutProps extends PropsWithChildren {
   sections: SectionOrder;
   isLoading?: boolean;
+  trackingInfo?: EventInfo;
 }
 
-function TableOfContentsPortal({ items, isLoading = false }: { items: TableOfContentsItems; isLoading: boolean }) {
+function TableOfContentsPortal({
+  items,
+  isLoading = false,
+  trackingInfo,
+}: {
+  items: TableOfContentsItems;
+  isLoading: boolean;
+  trackingInfo?: EventInfo;
+}) {
   const element = document.getElementById(leftRouteBoundaryID);
 
   if (!element) {
@@ -21,7 +31,7 @@ function TableOfContentsPortal({ items, isLoading = false }: { items: TableOfCon
   }
   return createPortal(
     <Stack alignItems="end" alignSelf="flex-start" height="100%">
-      <TableOfContents items={items} isLoading={isLoading} />
+      <TableOfContents items={items} isLoading={isLoading} trackingInfo={trackingInfo} />
     </Stack>,
     element,
   );
@@ -40,13 +50,13 @@ export function HelperPanelPortal({ children }: PropsWithChildren) {
   );
 }
 
-function DetailLayout({ sections, children, isLoading = false }: DetailLayoutProps) {
+function DetailLayout({ sections, children, isLoading = false, trackingInfo }: DetailLayoutProps) {
   const items = getSections(sections);
 
   return (
     <>
       <SavedListsSuccessAlert />
-      <TableOfContentsPortal items={items} isLoading={isLoading} />
+      <TableOfContentsPortal items={items} isLoading={isLoading} trackingInfo={trackingInfo} />
       {children}
     </>
   );

@@ -17,10 +17,11 @@ import {
 } from 'js/shared-styles/tables/columns';
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
 import { AddIcon } from 'js/shared-styles/icons';
+import { EventInfo } from 'js/components/types';
 
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
-import { MergedWorkspace, WorkspacesEventInfo } from '../types';
+import { MergedWorkspace } from '../types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
 const tooltips = {
@@ -40,7 +41,7 @@ interface WorkspaceDatasetsTableProps {
   additionalButtons?: ReactNode;
   hideTableIfEmpty?: boolean;
   isSelectable?: boolean;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
   openLinksInNewTab?: boolean;
 }
 

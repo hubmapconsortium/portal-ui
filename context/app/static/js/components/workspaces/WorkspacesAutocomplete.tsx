@@ -3,8 +3,12 @@ import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autoc
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
+import useEventCallback from '@mui/material/utils/useEventCallback';
+
 import { StyledSearchIcon, StyledTextField } from 'js/components/workspaces/style';
 import { WorkspaceWithUserId } from 'js/components/workspaces/types';
+import { trackEvent } from 'js/helpers/trackers';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 function WorkspaceOption(props: React.HTMLAttributes<HTMLLIElement>, option: WorkspaceWithUserId) {
   const { name, id } = option;
@@ -50,6 +54,17 @@ function WorkspacesAutocomplete({
   setInputValue: (value: string) => void;
   filteredWorkspaces: WorkspaceWithUserId[];
 }) {
+  const { currentEventCategory } = useWorkspacesEventContext();
+  const trackChange = useEventCallback((event: React.SyntheticEvent, newValue: string | WorkspaceWithUserId | null) => {
+    if (newValue && typeof newValue !== 'string') {
+      trackEvent({
+        category: currentEventCategory,
+        action: 'Search Workspace',
+        label: newValue.id,
+      });
+    }
+  });
+
   return (
     <Box flex={1} maxWidth="50%">
       <Autocomplete
@@ -58,6 +73,7 @@ function WorkspacesAutocomplete({
         onInputChange={(event, newInputValue) => {
           setInputValue(newInputValue);
         }}
+        onChange={trackChange}
         filterOptions={(x) => x}
         options={filteredWorkspaces}
         renderOption={WorkspaceOption}

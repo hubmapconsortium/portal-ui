@@ -13,6 +13,8 @@ import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntity
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialog';
 import { DialogType } from 'js/stores/useWorkspaceModalStore';
 import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
@@ -56,18 +58,20 @@ function ProcessedDataWorkspaceMenu({
   const openEditWorkspaceDialog = useOpenDialog(dialogType);
 
   const createWorkspace = useEventCallback(() => {
-    track({
-      action: 'Start Creating Workspace',
-      label: hubmap_id,
+    trackEvent({
+      category: WorkspacesEventCategories.WorkspaceDialog,
+      action: 'Open Create Workspace Dialog',
+      label: uuid,
     });
     setOpenCreateWorkspace(true);
     handleClose();
   });
 
   const addToWorkspace = useEventCallback(() => {
-    track({
-      action: 'Start Adding Dataset to Existing Workspace',
-      label: hubmap_id,
+    trackEvent({
+      category: WorkspacesEventCategories.WorkspaceDialog,
+      action: 'Open Add to Workspace Dialog',
+      label: uuid,
     });
     openEditWorkspaceDialog();
     handleClose();
