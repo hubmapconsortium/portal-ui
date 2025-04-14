@@ -68,7 +68,7 @@ export function useSeeMoreRows({
     trackEvent({
       category: currentEventCategory,
       action: `${isFromLandingPage ? 'Workspace Invitations / Received /' : 'Sent Invitations Status /'} See More`,
-      label: isFromLandingPage ? undefined : currentWorkspaceItemName,
+      label: isFromLandingPage ? null : currentWorkspaceItemName,
     });
   });
 
@@ -89,7 +89,7 @@ export function useResultRow<T extends WorkspaceItem>({ item, tableFields }: { i
 
     trackEvent({
       category: currentEventCategory,
-      action: `${isFromLandingPage ? 'Workspace Invitations / Description /' : 'Sent Invitations Status /'} Expand Row`,
+      action: `${isFromLandingPage ? 'Workspace Invitations / Received /' : 'Sent Invitations Status /'} Expand Row`,
       label: isFromLandingPage ? itemId : `${currentWorkspaceItemName} ${itemId}`,
     });
   });
