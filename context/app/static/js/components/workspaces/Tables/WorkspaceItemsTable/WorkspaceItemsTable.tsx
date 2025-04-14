@@ -395,7 +395,7 @@ function SeeMoreRows({
 function LoadingRows({ tableWidth }: { tableWidth: number }) {
   return Array.from({ length: 3 }, (i, rowIndex) => (
     <TableRow key={`row-${rowIndex}`}>
-      {Array.from({ length: tableWidth }, (j, cellIndex) => (
+      {Array.from({ length: tableWidth + 1 }, (j, cellIndex) => (
         <StyledTableCell key={`cell-${rowIndex}-${cellIndex}`}>
           <Skeleton variant="text" />
         </StyledTableCell>
