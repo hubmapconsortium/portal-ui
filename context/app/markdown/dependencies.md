@@ -26,7 +26,7 @@ hubmap-commons>=2.1.18
 boto3==1.28.17
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.3.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.2.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -105,7 +105,7 @@ lxml>=4.9.1
 "use-deep-compare-effect": "^1.8.1",
 "use-resize-observer": "^9.1.0",
 "uuid": "^9.0.1",
-"vitessce": "^3.4.5",
+"vitessce": "^3.5.10",
 "zod": "^3.22.4",
 "zustand": "^4.5.2"
 }
