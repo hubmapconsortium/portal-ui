@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.24.0 - 2025-04-14
+
+- Add admin banner to top of portal header.
+- Add SCFind API endpoint setup and relevant tests.
+- Fix text on SnareSeq2 info banners.
+- Hide links to Shiny apps in organ data products if unavailable.
+
+
+
 ## v1.23.1 - 2025-04-02
 
 - Add event tracking for all data products sections on organ pages.
