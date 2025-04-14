@@ -113,7 +113,7 @@ export interface SharedWorkspace {
 export type InvitationType = 'Sent' | 'Received';
 
 export interface WorkspaceInvitation {
-  original_workspace_id: SharedWorkspace;
+  original_workspace_id?: SharedWorkspace; // This will be null for accepted workspaces where the original workspace is later deleted
   shared_workspace_id: SharedWorkspace;
   last_resource_options: WorkspaceResourceOptions;
   last_job_type: string;

@@ -1,6 +1,12 @@
 import { ContributorAPIResponse, ContactAPIResponse } from './detailPage/ContributorsTable/utils';
 import { UnprocessedFile } from './detailPage/files/types';
 
+export interface EventInfo {
+  category: string;
+  action?: string;
+  label?: string | number;
+}
+
 export type DonorEntityType = 'Donor';
 export type SampleEntityType = 'Sample';
 export type DatasetEntityType = 'Dataset';
@@ -191,9 +197,4 @@ export function isPublication(entity: EntityWithType): entity is Publication {
 
 export function isSupport(entity: EntityWithType): entity is Support {
   return checkEntityType(entity, 'Support');
-}
-export interface EventInfo {
-  category: string;
-  action?: string;
-  label?: string | number;
 }

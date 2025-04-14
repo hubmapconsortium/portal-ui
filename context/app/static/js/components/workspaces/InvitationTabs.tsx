@@ -1,12 +1,12 @@
 import React from 'react';
 import Box from '@mui/material/Box';
+import useEventCallback from '@mui/material/utils/useEventCallback';
 
 import InvitationsTable from 'js/components/workspaces/Tables/InvitationsTable';
 import { WorkspaceInvitation } from 'js/components/workspaces/types';
 import { Tabs, Tab } from 'js/shared-styles/tables/TableTabs';
 import { useTabs, TabPanel } from 'js/shared-styles/tabs';
 import { ReceivedIcon, SentIcon } from 'js/shared-styles/icons';
-import { useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
 import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
@@ -33,12 +33,12 @@ function InvitationTabs({ sentInvitations, receivedInvitations, isLoading }: Inv
   const { currentEventCategory } = useWorkspacesEventContext();
 
   const handleChange = useEventCallback((_event: React.SyntheticEvent<Element, Event>, newValue: number) => {
-    handleTabChange(_event, newValue);
     trackEvent({
       category: currentEventCategory,
       action: 'Workspace Invitations / Received / Switch Tabs',
       label: newValue === receivedIdx ? 'Received' : 'Sent',
     });
+    handleTabChange(_event, newValue);
   });
 
   return (

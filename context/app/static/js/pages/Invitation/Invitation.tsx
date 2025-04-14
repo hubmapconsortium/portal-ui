@@ -22,6 +22,7 @@ import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialog
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/components/workspaces/contexts';
+import { getSharerInfo } from 'js/components/workspaces/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import { StyledAlert } from './style';
 
@@ -49,11 +50,10 @@ const shouldDisplaySection = {
 function Summary({ invitation }: { invitation: WorkspaceInvitation }) {
   const {
     shared_workspace_id: { name, description },
-    original_workspace_id: {
-      user_id: { first_name, last_name, email },
-    },
     datetime_share_created,
   } = invitation;
+
+  const { first_name, last_name, email } = getSharerInfo(invitation);
 
   return (
     <DetailPageSection id="summary">

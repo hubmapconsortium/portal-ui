@@ -6,11 +6,11 @@ import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/system/Stack';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
+import useEventCallback from '@mui/material/utils/useEventCallback';
 
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { PrimarySwitch } from 'js/shared-styles/switches';
-import { useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
 import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { StyledAccordion } from './style';

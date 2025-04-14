@@ -117,7 +117,6 @@ function useDatasetsAutocomplete({
         action: 'Add datasets via dropdown',
         label: uuid,
       });
-
       updateDatasetsFormState([...selectedDatasets, uuid]);
       resetAutocompleteState();
       toastSuccessAddDataset(newValue._source.hubmap_id);

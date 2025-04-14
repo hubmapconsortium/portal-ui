@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { format } from 'date-fns/format';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
@@ -8,23 +8,14 @@ import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/system/Stack';
 import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
-import { useEventCallback } from '@mui/material/utils';
 import SvgIcon from '@mui/material/SvgIcon';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { InternalLink } from 'js/shared-styles/Links';
-import {
-  getFieldPrefix,
-  getFieldValue,
-  getItemId,
-  isInvitation,
-  isSentInvitation,
-  isWorkspace,
-} from 'js/components/workspaces/utils';
+import { getFieldValue, getItemId, isWorkspace } from 'js/components/workspaces/utils';
 import {
   CheckIcon,
-  CloseFilledIcon,
   CloseIcon,
   DownIcon,
   EmailIcon,
@@ -37,22 +28,24 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
 import { TooltipButton, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import { LaunchStopButton } from 'js/components/workspaces/WorkspaceLaunchStopButtons/WorkspaceLaunchStopButtons';
-import useWorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
-import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import {
+  useEndButtons,
+  useWorkspaceItemsTableContent,
+  useWorkspaceItemsTable,
+  useSeeMoreRows,
+  useResultRow,
+  useSortHeaderCell,
+  useCellContent,
+} from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
+import { OrderIcon, SortDirection } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 import { workspaceStatusIconMap } from 'js/shared-styles/icons/workspaceStatusIconMap';
-import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { CenteredAlert } from 'js/components/style';
-import { trackEvent } from 'js/helpers/trackers';
-import { WorkspacesEventCategories } from 'js/components/workspaces/types';
-import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
 import {
@@ -83,75 +76,16 @@ const tooltips = {
 };
 
 function EndButtons({ item }: { item: WorkspaceItem }) {
-  const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
-  const { handleAcceptInvitation } = useInvitationsList();
-  const { setDialogType, setInvitation } = useEditWorkspaceStore();
-  const { toastErrorAcceptInvitation, toastSuccessAcceptInvitation } = useWorkspaceToasts();
-  const { currentEventCategory } = useWorkspacesEventContext();
-
-  const isSender = isSentInvitation(item);
-  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
-  const itemId = getItemId(item);
-
-  const options = useMemo(
-    () => [
-      {
-        children: `${isSender ? 'Delete' : 'Decline'} Invitation`,
-        onClick: () => {
-          const dialogType = isSender ? 'DELETE_INVITATION' : 'DECLINE_INVITATION';
-          if (isInvitation(item)) {
-            setInvitation(item);
-            setDialogType(dialogType);
-          }
-        },
-        icon: CloseFilledIcon,
-      },
-    ],
-    [isSender, item, setDialogType, setInvitation],
-  );
-
-  const onAcceptInvite = useEventCallback(() => {
-    if (isInvitation(item)) {
-      handleAcceptInvitation(itemId)
-        .then(() => {
-          toastSuccessAcceptInvitation(item.shared_workspace_id.name);
-          trackEvent({
-            category: currentEventCategory,
-            action: 'Workspace Invitations / Received / Accept Invite',
-            label: itemId,
-          });
-        })
-        .catch((e) => {
-          console.error(e);
-          toastErrorAcceptInvitation(item.shared_workspace_id.name);
-        });
-    }
-  });
-
-  const onPreviewInvite = useEventCallback(() => {
-    if (isInvitation(item)) {
-      trackEvent({
-        category: currentEventCategory,
-        action: 'Workspace Invitations / Received / Open Preview',
-        label: `${itemId} Preview Icon Button`,
-      });
-
-      window.location.href = `/invitations/${itemId}`;
-    }
-  });
-
-  const onDeclineInvite = useEventCallback(() => {
-    if (isInvitation(item)) {
-      trackEvent({
-        category: currentEventCategory,
-        action: 'Workspace Invitations / Received / Open Decline Invite Dialog',
-        label: itemId,
-      });
-
-      setInvitation(item);
-      setDialogType('DECLINE_INVITATION');
-    }
-  });
+  const {
+    isAccepted,
+    isSender,
+    options,
+    onAcceptInvite,
+    onPreviewInvite,
+    onDeclineInvite,
+    handleStopWorkspace,
+    isStoppingWorkspace,
+  } = useEndButtons(item);
 
   // If the item is a workspace
   if (isWorkspace(item)) {
@@ -236,34 +170,12 @@ function SortHeaderCell({
   setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
   status?: string;
 }) {
-  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
-  const isCurrentSortField = field === sortField.field;
-
-  const handleClick = useEventCallback(() => {
-    const newSortDirection = getSortOrder({ direction: sortField.direction, isCurrentSortField });
-    setSortField({ direction: newSortDirection, field });
-
-    // Don't track the event if this is a workspaces table
-    if (!status) {
-      return;
-    }
-
-    if (currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage) {
-      const action = `Workspace Invitations / ${status} / Sort Table`;
-      trackEvent({
-        category: currentEventCategory,
-        action,
-        label,
-      });
-    }
-
-    if (currentEventCategory === WorkspacesEventCategories.WorkspaceDetailPage) {
-      trackEvent({
-        category: currentEventCategory,
-        action: 'Datasets / Sort Columns',
-        label: `${currentWorkspaceItemId} ${label}`,
-      });
-    }
+  const { isCurrentSortField, handleClick } = useSortHeaderCell({
+    field,
+    label,
+    sortField,
+    setSortField,
+    status,
   });
 
   return (
@@ -305,37 +217,10 @@ function InvitationStatusIcon({ item }: { item: WorkspaceItem }) {
 }
 
 function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
-  const prefix = getFieldPrefix(field);
-  const fieldValue = getFieldValue({ item, field });
-  const itemId = getFieldValue({ item, field: 'id', prefix });
-  const hasWorkspacePage = isWorkspace(item) || isSentInvitation(item) || getFieldValue({ item, field: 'is_accepted' });
-
-  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
-  const isFromLandingPage = currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage;
-
-  const handleTrackEvent = useEventCallback((actionSuffix: string) => {
-    const action = isFromLandingPage
-      ? `Workspace Invitations / Received / ${actionSuffix}`
-      : `Sent Invitations Status / ${actionSuffix}`;
-    const label = isFromLandingPage ? itemId : `${currentWorkspaceItemName} ${itemId}`;
-
-    trackEvent({
-      category: currentEventCategory,
-      action,
-      label,
-    });
-  });
-
-  const trackNameClick = useEventCallback(() => {
-    if (!hasWorkspacePage) {
-      handleTrackEvent('Open Preview');
-    }
-  });
-
-  const handleEmailClick = useEventCallback((email: string) => {
-    window.location.href = `mailto:${email}`;
-    handleTrackEvent('Open Email');
-  });
+  const { prefix, fieldValue, itemId, hasWorkspacePage, trackNameClick, handleEmailClick } = useCellContent(
+    item,
+    field,
+  );
 
   switch (field) {
     case `${prefix}name`: {
@@ -417,23 +302,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   selectedItemIds,
   toggleItem,
 }: RowProps<T>) {
-  const [isExpanded, setIsExpanded] = React.useState(false);
-  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
-  const isFromLandingPage = currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage;
-  const itemId = isWorkspace(item) ? item.id.toString() : item.original_workspace_id.id.toString();
-
-  const handleDescriptionClick = useEventCallback(() => {
-    setIsExpanded(!isExpanded);
-
-    trackEvent({
-      category: currentEventCategory,
-      action: `${isFromLandingPage ? 'Workspace Invitations / Description /' : 'Sent Invitations Status /'} Expand Row`,
-      label: isFromLandingPage ? itemId : `${currentWorkspaceItemName} ${itemId}`,
-    });
-  });
-
-  const prefix = getFieldPrefix(tableFields[0].field);
-  const description = getFieldValue({ item, field: 'description', prefix });
+  const { isExpanded, handleDescriptionClick, description, itemId } = useResultRow({ item, tableFields });
   const TableRowComponent: React.ElementType = description ? CompactTableRow : BorderedTableRow;
 
   return (
@@ -507,25 +376,14 @@ function SeeMoreRows({
   setNumVisibleItems: React.Dispatch<React.SetStateAction<number>>;
   totalItems: number;
 }) {
-  const { currentEventCategory, currentWorkspaceItemName } = useWorkspacesEventContext();
-  const isFromLandingPage = currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage;
-
-  const handleClick = useEventCallback(() => {
-    setNumVisibleItems((prev) => prev + 3);
-
-    trackEvent({
-      category: currentEventCategory,
-      action: `${isFromLandingPage ? 'Workspace Invitations / Received /' : 'Sent Invitations Status /'} See More`,
-      label: isFromLandingPage ? undefined : currentWorkspaceItemName,
-    });
-  });
+  const { trackSeeMoreClick } = useSeeMoreRows({ setNumVisibleItems });
 
   if (!showSeeMoreOption || numVisibleItems >= totalItems) {
     return null;
   }
 
   return (
-    <StyledButton variant="text" onClick={handleClick} fullWidth>
+    <StyledButton variant="text" onClick={trackSeeMoreClick} fullWidth>
       <Stack direction="row" spacing={1} marginY={0.5} alignItems="center">
         <Typography variant="button">See More</Typography>
         <DownIcon />
@@ -585,7 +443,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
     numVisibleItems,
     setNumVisibleItems,
     onToggleAllItems,
-  } = useWorkspaceItemsTable<T>(props);
+  } = useWorkspaceItemsTableContent(props);
 
   if (!isLoading && noFiltersSelected) {
     return (
@@ -635,29 +493,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
 
 function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
   const { filters, status, itemType } = props;
-
-  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
-
-  const handleClick = useEventCallback((label: string, setShow: React.Dispatch<React.SetStateAction<boolean>>) => {
-    setShow((prev) => !prev);
-
-    if (currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage) {
-      const action = itemType === 'workspace' ? 'Select Filter' : `Workspace Invitations / ${status} / Select Filter`;
-      trackEvent({
-        category: currentEventCategory,
-        action,
-        label,
-      });
-    }
-
-    if (currentEventCategory === WorkspacesEventCategories.WorkspaceDetailPage) {
-      trackEvent({
-        category: currentEventCategory,
-        action: 'Sent Invitations Status / Select Filter',
-        label: `${currentWorkspaceItemId} ${label}`,
-      });
-    }
-  });
+  const { trackFilterClick } = useWorkspaceItemsTable({ itemType, status });
 
   return (
     <Box>
@@ -667,7 +503,7 @@ function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTable
             key={label}
             label={label}
             isSelected={show}
-            onClick={() => handleClick(label, setShow)}
+            onClick={() => trackFilterClick(label, setShow)}
             disabled={disabled}
           />
         ))}

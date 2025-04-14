@@ -18,9 +18,10 @@ function WorkspacesDeleteButton({ workspaceIds, tooltip, disabled, ...rest }: Wo
   const { sentInvitations } = useInvitationsList();
   const { workspacesList } = useWorkspacesList();
 
-  const selectedWorkspaceHasPendingInvitations = sentInvitations.some(
-    (invitation) => !invitation.is_accepted && workspaceIds.has(invitation.original_workspace_id.id.toString()),
-  );
+  const selectedWorkspaceHasPendingInvitations = sentInvitations.some((invitation) => {
+    const originalWorkspaceId = invitation.original_workspace_id?.id?.toString();
+    return !invitation.is_accepted && originalWorkspaceId && workspaceIds.has(originalWorkspaceId);
+  });
   const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
   const selectedWorkspaceIsRunning = workspaces.some(isRunningWorkspace);
 

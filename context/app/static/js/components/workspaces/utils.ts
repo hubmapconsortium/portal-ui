@@ -418,7 +418,7 @@ function isWorkspace(item: WorkspaceItem): item is WorkspaceWithUserId {
 }
 
 function isSentInvitation(item: WorkspaceItem): item is WorkspaceInvitation {
-  return isInvitation(item) && item.original_workspace_id.user_id.email === userEmail;
+  return isInvitation(item) && item.original_workspace_id?.user_id.email === userEmail;
 }
 
 function getItemId(item: WorkspaceItem) {
@@ -434,6 +434,16 @@ function getSelectedWorkspaceNames({
 }) {
   const workspacesMap = new Map(workspacesList.map((workspace) => [workspace.id, workspace.name]));
   return generateBoldCommaList(Array.from(selectedWorkspaceIds).map((id) => workspacesMap.get(Number(id)) ?? ''));
+}
+
+function getSharerInfo(invitation: WorkspaceInvitation) {
+  const user = invitation.original_workspace_id?.user_id;
+  const placeholder = 'Unknown';
+  return {
+    first_name: user?.first_name ?? placeholder,
+    last_name: user?.last_name ?? placeholder,
+    email: user?.email ?? placeholder,
+  };
 }
 
 export {
@@ -463,4 +473,5 @@ export {
   isSentInvitation,
   getItemId,
   getSelectedWorkspaceNames,
+  getSharerInfo,
 };
