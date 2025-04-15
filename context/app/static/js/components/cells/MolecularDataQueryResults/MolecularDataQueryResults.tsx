@@ -7,7 +7,7 @@ import { SCFindCellTypeQueryResults } from '../SCFindResults';
 
 function CellsResults() {
   const {
-    formState: { isLoading, isSubmitting, isSubmitted },
+    formState: { isLoading, isSubmitting, isSubmitted, isSubmitSuccessful },
     watch,
   } = useMolecularDataQueryFormState();
 
@@ -15,7 +15,7 @@ function CellsResults() {
   const queryMethod = watch('queryMethod');
 
   // If the form has not been submitted, do not show any results
-  if (!isSubmitted) {
+  if (!isSubmitted && !isSubmitSuccessful) {
     return null;
   }
 

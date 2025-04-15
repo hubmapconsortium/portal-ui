@@ -19,7 +19,7 @@ const queryTypes: Record<QueryType, QueryTypeObj> = {
     value: 'protein',
     measurement: 'Abundance',
     label: 'Protein',
-    fieldName: 'minimumAbundance',
+    fieldName: 'minimumExpressionLevel',
     entityFieldName: 'proteins',
   },
   'cell-type': {

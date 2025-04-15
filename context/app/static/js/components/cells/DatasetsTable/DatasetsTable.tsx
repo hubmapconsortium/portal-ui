@@ -16,12 +16,10 @@ import CellsCharts from '../CellsCharts';
 const columns = [
   { id: 'hubmap_id', label: 'HuBMAP ID' },
   { id: 'origin_samples_unique_mapped_organs', label: 'Organ' },
-  { id: 'dataset_type', label: 'Dataset Type' },
-  { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
-  { id: 'donor.mapped_metadata.body_mass_index_value', label: 'Donor BMI' },
-  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex' },
+  { id: 'dataset_type', label: 'Data Type' },
   { id: 'donor.mapped_metadata.race', label: 'Donor Race' },
-  { id: 'last_modified_timestamp', label: 'Last Modified' },
+  { id: 'donor.mapped_metadata.sex', label: 'Donor Sex' },
+  { id: 'donor.mapped_metadata.age_value', label: 'Donor Age' },
   { id: 'expand', label: '' },
 ];
 

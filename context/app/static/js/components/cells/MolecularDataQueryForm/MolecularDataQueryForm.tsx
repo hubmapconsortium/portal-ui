@@ -23,7 +23,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
       ...initialValues,
     },
   });
-  const { setValue, watch } = methods;
+  const { watch, reset } = methods;
 
   const { toastError } = useSnackbarActions();
 
@@ -31,24 +31,30 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
 
   // Reset selected options when query type changes
   useEffect(() => {
-    setValue('genes', []);
-    setValue('proteins', []);
-    setValue('cellTypes', []);
-    switch (queryType) {
-      case 'gene':
-        setValue('queryMethod', DEFAULT_GENE_QUERY_METHOD);
-        break;
-      case 'protein':
-        setValue('queryMethod', 'crossModality');
-        break;
-      case 'cell-type':
-        setValue('queryMethod', 'scFind');
-        break;
-      default:
-        console.error('Unexpected query type:', queryType);
-        break;
-    }
-  }, [queryType, setValue]);
+    const queryMethod = {
+      gene: DEFAULT_GENE_QUERY_METHOD,
+      protein: 'crossModality',
+      'cell-type': 'scFind',
+    }[queryType];
+
+    reset(
+      {
+        genes: [],
+        proteins: [],
+        cellTypes: [],
+        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
+        queryType,
+        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
+        queryMethod,
+        ...initialValues,
+      },
+      {
+        keepDirty: false,
+        keepIsSubmitSuccessful: false,
+        keepIsSubmitted: false,
+      },
+    );
+  }, [queryType, reset, initialValues]);
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
     methods.reset(data, { keepValues: true, keepDirty: false });
@@ -73,10 +79,25 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
       });
   });
 
+  const onChange = useEventCallback(() => {
+    // Reset the form state when the form is submitted
+    if (methods.formState.isSubmitted) {
+      methods.reset(
+        {},
+        {
+          keepDirtyValues: true,
+          keepIsSubmitted: false,
+          keepIsSubmitSuccessful: false,
+          keepIsValidating: false,
+          keepIsValid: false,
+        },
+      );
+    }
+  });
+
   const id = `${useId()}-molecular-data-query`;
 
-  const [formIsExpanded, setFormIsExpanded] = useState(true);
-  const [resultsAreExpanded] = useState(false);
+  const [formIsExpanded, setFormIsExpanded] = useState(false);
 
   const toggleParametersSection = useEventCallback(() => {
     setFormIsExpanded((prev) => !prev);
@@ -89,7 +110,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         summaryHeading="Parameters"
         id={`${id}-parameters`}
         content={
-          <Stack component="form" onSubmit={submit} gap={2}>
+          <Stack component="form" onSubmit={submit} gap={2} onChange={onChange}>
             {children}
             <SubmitButton />
           </Stack>
@@ -103,7 +124,14 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         summaryHeading="Results"
         id={`${id}-results`}
         content={<Results />}
-        isExpanded={resultsAreExpanded || methods.formState.isSubmitSuccessful}
+        isExpanded={methods.formState.isSubmitSuccessful}
+        onChange={() => {
+          if (methods.formState.isSubmitSuccessful) {
+            if (!formIsExpanded) {
+              setFormIsExpanded(false);
+            }
+          }
+        }}
         noProvider
         disabled={!methods.formState.isSubmitSuccessful}
       />

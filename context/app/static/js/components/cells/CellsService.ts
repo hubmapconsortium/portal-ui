@@ -14,8 +14,9 @@ interface SearchBySubstringProps {
 export interface GetDatasetsProps<T extends QueryType> {
   type: T;
   cellVariableNames: string[];
-  minExpression: string | number;
+  minExpression?: string | number;
   minCellPercentage: string | number;
+  minAbundance?: string | number;
   modality?: string;
 }
 
