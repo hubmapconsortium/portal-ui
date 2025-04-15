@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React from 'react';
 
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -10,16 +10,16 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { useOrganContext } from 'js/components/organ/contexts';
 import { OrganPageIds } from 'js/components/organ/types';
 
-function Description({ children }: PropsWithChildren) {
+function Description() {
   const {
-    organ: { uberon, uberon_short, asctb },
+    organ: { description, uberon, uberon_short, asctb },
   } = useOrganContext();
 
   return (
     <DetailPageSection id={OrganPageIds.summaryId}>
       <DetailSectionPaper>
         <Stack spacing={1}>
-          <Typography variant="body1">{children}</Typography>
+          <Typography variant="body1">{description}</Typography>
           <Typography variant="body1">
             Uberon: <OutboundIconLink href={uberon}>{uberon_short}</OutboundIconLink>
           </Typography>

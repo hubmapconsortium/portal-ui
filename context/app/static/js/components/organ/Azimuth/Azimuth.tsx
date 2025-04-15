@@ -3,11 +3,13 @@ import Stack from '@mui/material/Stack';
 
 import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper/VisualizationWrapper';
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { useOrganContext } from 'js/components/organ/contexts';
 import { OrganPageIds } from 'js/components/organ/types';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import ReferenceBasedAnalysis from './ReferenceBasedAnalysis';
+
+const title = 'Reference-Based Analysis';
 
 function Azimuth() {
   const {
@@ -19,9 +21,9 @@ function Azimuth() {
   }
 
   return (
-    <CollapsibleDetailPageSection
+    <OrganDetailSection
       id={OrganPageIds.referenceId}
-      title="Reference-Based Analysis"
+      title={title}
       iconTooltipText="Analysis provided by Azimuth that uses an annotated reference dataset to automate the processing, analysis and interpretation of a single-cell RNA-seq experiment."
       action={
         <OutboundLinkButton href={azimuth.applink} component="a">
@@ -33,7 +35,7 @@ function Azimuth() {
         <ReferenceBasedAnalysis {...azimuth} wrapped />
         <VisualizationWrapper vitData={azimuth.vitessce_conf} shouldDisplayHeader={false} />
       </Stack>
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

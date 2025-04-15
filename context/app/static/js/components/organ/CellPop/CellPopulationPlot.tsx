@@ -1,4 +1,3 @@
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import React from 'react';
 import { CellPopHuBMAPLoader } from 'cellpop';
@@ -8,6 +7,7 @@ import { ExpandableDiv } from 'js/components/detailPage/visualization/Visualizat
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import lightTheme, { darkTheme } from 'js/theme/theme';
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import { OrganPageIds } from 'js/components/organ/types';
 import CellPopDescription from './CellPopDescription';
 import CellPopActions from './CellPopActions';
@@ -33,7 +33,7 @@ function CellPopulationPlot({ uuids }: CellPopulationPlotProps) {
   const trackEvent = useTrackCellpop();
 
   return (
-    <CollapsibleDetailPageSection title="Cell Population Plot" id={cellpopId} icon={CellTypeIcon}>
+    <OrganDetailSection title="Cell Population Plot" id={cellpopId} icon={CellTypeIcon}>
       <CellPopDescription />
       <CellPopActions id={cellpopId} />
       <Paper>
@@ -76,7 +76,7 @@ function CellPopulationPlot({ uuids }: CellPopulationPlotProps) {
           <BodyExpandedCSS id={cellpopId} />
         </ExpandableDiv>
       </Paper>
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

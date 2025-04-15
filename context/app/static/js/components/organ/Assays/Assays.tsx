@@ -10,8 +10,8 @@ import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
 import { HeaderCell } from 'js/shared-styles/tables';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { OrganPageIds } from 'js/components/organ/types';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { getSearchURL } from '../utils';
 
@@ -24,7 +24,7 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
   const assayTypeMap = useDatasetTypeMap();
 
   return (
-    <CollapsibleDetailPageSection
+    <OrganDetailSection
       id={OrganPageIds.assaysId}
       title="Assays"
       iconTooltipText="Experiments related to this organ"
@@ -54,7 +54,7 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
         />
       </Paper>
       <DatasetsBarChart search={organTerms} />
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

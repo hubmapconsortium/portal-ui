@@ -49,7 +49,7 @@ function Organ({ organ }: OrganProps) {
         <Typography variant="h1" component="h2">
           {organ.name}
         </Typography>
-        <Description shouldDisplay={shouldDisplaySection[summaryId]}>{organ.description}</Description>
+        <Description shouldDisplay={shouldDisplaySection[summaryId]} />
         <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[humanReferenceAtlasId]} />
         <CellPopulationPlot uuids={labeledDatasetUuids} shouldDisplay={shouldDisplaySection[cellpopId]} />
         <Azimuth shouldDisplay={shouldDisplaySection[referenceId]} />

@@ -9,7 +9,6 @@ import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
 import { useEventCallback } from '@mui/material/utils';
 
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import Description from 'js/shared-styles/sections/Description';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
@@ -19,8 +18,9 @@ import { InternalLink } from 'js/shared-styles/Links';
 import { getFileName } from 'js/helpers/functions';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import { OrganDataProducts, OrganPageIds } from 'js/components/organ/types';
-import { trackEvent } from 'js/helpers/trackers';
 import { useOrganContext } from 'js/components/organ/contexts';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
+import { trackEvent } from 'js/helpers/trackers';
 
 const description = [
   'Download HuBMAP-wide data products that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. You can also explore the datasets that contribute to each data product.',
@@ -80,14 +80,14 @@ function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps)
 
   if (isLoading) {
     return (
-      <CollapsibleDetailPageSection id={OrganPageIds.dataProductsId} title="Data Products">
+      <OrganDetailSection id={OrganPageIds.dataProductsId} title="Data Products">
         <Skeleton variant="rectangular" height={400} />
-      </CollapsibleDetailPageSection>
+      </OrganDetailSection>
     );
   }
 
   return (
-    <CollapsibleDetailPageSection id={OrganPageIds.dataProductsId} title="Data Products">
+    <OrganDetailSection id={OrganPageIds.dataProductsId} title="Data Products">
       <Stack spacing={1}>
         <Description>
           <Stack spacing={1} direction="column">
@@ -163,7 +163,7 @@ function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps)
           />
         </Paper>
       </Stack>
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

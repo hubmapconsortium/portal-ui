@@ -13,10 +13,10 @@ import {
   parentDonorSex,
   parentDonorRace,
 } from 'js/shared-styles/tables/columns';
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { OrganPageIds } from 'js/components/organ/types';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 
 const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, createdTimestamp];
 
@@ -52,7 +52,7 @@ function Samples({ organTerms }: OrganSamplesProps) {
   );
 
   return (
-    <CollapsibleDetailPageSection
+    <OrganDetailSection
       id={OrganPageIds.samplesId}
       title="Samples"
       action={
@@ -63,7 +63,7 @@ function Samples({ organTerms }: OrganSamplesProps) {
       }
     >
       <EntitiesTables<SampleDocument> entities={[{ query, columns, entityType: 'Sample' }]} />
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

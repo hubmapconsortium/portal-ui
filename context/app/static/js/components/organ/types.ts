@@ -75,3 +75,7 @@ export enum OrganPageIds {
   samplesId = 'samples',
   cellpopId = 'cell-population-plot',
 }
+
+export enum OrganEventCategories {
+  OrganPage = 'Organ Page',
+}
