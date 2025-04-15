@@ -18,8 +18,9 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { InternalLink } from 'js/shared-styles/Links';
 import { getFileName } from 'js/helpers/functions';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
-import { OrganDataProducts } from 'js/components/organ/types';
+import { OrganDataProducts, OrganPageIds } from 'js/components/organ/types';
 import { trackEvent } from 'js/helpers/trackers';
+import { useOrganContext } from 'js/components/organ/contexts';
 
 const description = [
   'Download HuBMAP-wide data products that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. You can also explore the datasets that contribute to each data product.',
@@ -41,14 +42,16 @@ const headerCells = [
 ));
 
 interface DataProductsProps {
-  id: string;
   dataProducts: OrganDataProducts[];
-  organName: string;
   isLateral?: boolean;
   isLoading?: boolean;
 }
 
-function DataProducts({ id, organName, dataProducts, isLateral, isLoading }: DataProductsProps) {
+function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps) {
+  const {
+    organ: { name },
+  } = useOrganContext();
+
   const handleTrack = useEventCallback(
     ({
       action,
@@ -70,21 +73,21 @@ function DataProducts({ id, organName, dataProducts, isLateral, isLoading }: Dat
       trackEvent({
         category: 'Organ Detail Page: Data Products',
         action: `Data Products / ${action}`,
-        label: `${organName}${laterality}${assay}${file}`,
+        label: `${name}${laterality}${assay}${file}`,
       });
     },
   );
 
   if (isLoading) {
     return (
-      <CollapsibleDetailPageSection id={id} title="Data Products">
+      <CollapsibleDetailPageSection id={OrganPageIds.dataProductsId} title="Data Products">
         <Skeleton variant="rectangular" height={400} />
       </CollapsibleDetailPageSection>
     );
   }
 
   return (
-    <CollapsibleDetailPageSection id={id} title="Data Products">
+    <CollapsibleDetailPageSection id={OrganPageIds.dataProductsId} title="Data Products">
       <Stack spacing={1}>
         <Description>
           <Stack spacing={1} direction="column">

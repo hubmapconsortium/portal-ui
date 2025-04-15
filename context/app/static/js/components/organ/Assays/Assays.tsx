@@ -11,21 +11,21 @@ import { HeaderCell } from 'js/shared-styles/tables';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import { OrganPageIds } from 'js/components/organ/types';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { getSearchURL } from '../utils';
 
 interface AssaysProps {
   organTerms: string[];
   bucketData: { key: string; doc_count: number }[];
-  id: string;
 }
 
-function Assays({ organTerms, bucketData, id: sectionId }: AssaysProps) {
+function Assays({ organTerms, bucketData }: AssaysProps) {
   const assayTypeMap = useDatasetTypeMap();
 
   return (
     <CollapsibleDetailPageSection
-      id={sectionId}
+      id={OrganPageIds.assaysId}
       title="Assays"
       iconTooltipText="Experiments related to this organ"
       action={<ViewEntitiesButton entityType="Dataset" filters={{ organTerms }} />}

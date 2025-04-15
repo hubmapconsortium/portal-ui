@@ -16,15 +16,15 @@ import {
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { OrganPageIds } from 'js/components/organ/types';
 
 const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, createdTimestamp];
 
 interface OrganSamplesProps {
   organTerms: string[];
-  id: string;
 }
 
-function Samples({ organTerms, id }: OrganSamplesProps) {
+function Samples({ organTerms }: OrganSamplesProps) {
   const query = useMemo(
     () => ({
       post_filter: {
@@ -53,7 +53,7 @@ function Samples({ organTerms, id }: OrganSamplesProps) {
 
   return (
     <CollapsibleDetailPageSection
-      id={id}
+      id={OrganPageIds.samplesId}
       title="Samples"
       action={
         <Stack direction="row" spacing={1}>
