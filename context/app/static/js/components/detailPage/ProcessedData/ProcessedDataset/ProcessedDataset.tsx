@@ -182,6 +182,7 @@ function VisualizationAccordion() {
       </SectionDescription>
       <VisualizationWrapper
         vitData={conf}
+        trackingInfo={{ action: 'Vitessce' }}
         uuid={uuid}
         shouldDisplayHeader={false}
         hasBeenMounted={hasBeenSeen}

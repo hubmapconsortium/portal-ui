@@ -8,6 +8,10 @@ export interface EventInfo {
   value?: string | number;
 }
 
+export interface EventWithOptionalCategory extends Omit<EventInfo, 'category'> {
+  category?: string;
+}
+
 export type DonorEntityType = 'Donor';
 export type SampleEntityType = 'Sample';
 export type DatasetEntityType = 'Dataset';

@@ -18,6 +18,7 @@ import VisualizationShareButton from 'js/components/detailPage/visualization/Vis
 import VisualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationFooter from 'js/components/detailPage/visualization/VisualizationFooter';
 import VisualizationTracker from 'js/components/detailPage/visualization/VisualizationTracker';
+import { EventWithOptionalCategory } from 'js/components/types';
 
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
@@ -42,6 +43,7 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 
 interface VisualizationProps {
   vitData: object | object[];
+  trackingInfo: EventWithOptionalCategory;
   uuid?: string;
   hasNotebook: boolean;
   shouldDisplayHeader: boolean;
@@ -51,6 +53,7 @@ interface VisualizationProps {
 
 function Visualization({
   vitData,
+  trackingInfo,
   uuid,
   hasNotebook,
   shouldDisplayHeader,
@@ -147,8 +150,8 @@ function Visualization({
             <Stack direction="row" spacing={1}>
               {hasNotebook && <VisualizationWorkspaceButton />}
               <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
-              <VisualizationShareButton />
-              <VisualizationThemeSwitch trackingInfo={{ action: 'Vitessce' }} />
+              <VisualizationShareButton trackingInfo={trackingInfo} />
+              <VisualizationThemeSwitch trackingInfo={trackingInfo} />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
                 <ExpandButton size="small" onClick={expandVisualization} variant="contained">
                   <FullscreenRoundedIcon color="primary" />

@@ -30,6 +30,7 @@ export function AzimuthVisualization({ organ }: AzimuthVisualizationProps) {
       <ReferenceBasedAnalysis modalities={azimuth.modalities} nunit={azimuth.nunit} dataref={azimuth.dataref} />
       <VisualizationWrapper
         vitData={azimuth.vitessce_conf}
+        trackingInfo={{ action: 'Reference Based Analysis' }}
         uuid={azimuth.title}
         hasBeenMounted
         hasNotebook={false}

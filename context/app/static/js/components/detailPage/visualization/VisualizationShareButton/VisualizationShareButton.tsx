@@ -8,8 +8,9 @@ import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualiz
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
-
+import { EventInfo } from 'js/components/types';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
+
 import { createEmailWithUrl, getUrl } from './utils';
 import { DEFAULT_LONG_URL_WARNING } from './constants';
 
@@ -17,13 +18,17 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
   vitessceState: state.vitessceState,
 });
 
-function VisualizationShareButton() {
+function VisualizationShareButton({
+  trackingInfo,
+}: {
+  trackingInfo: Omit<EventInfo, 'category'> & { category?: string };
+}) {
   const { vitessceState } = useVisualizationStore(visualizationStoreSelector);
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const handleCopyClick = useHandleCopyClick();
 
   const copyLink = () => {
-    trackEntityPageEvent({ action: 'Vitessce / Share Visualization' });
+    trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
 
     let urlIsLong = false;
     const url = getUrl(vitessceState as object, () => {
@@ -43,6 +48,7 @@ function VisualizationShareButton() {
     {
       children: 'Email',
       onClick: () => {
+        trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Share Visualization` });
         createEmailWithUrl(vitessceState as object);
       },
       icon: EmailIcon,
