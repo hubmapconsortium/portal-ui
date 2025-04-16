@@ -148,7 +148,7 @@ function Visualization({
               {hasNotebook && <VisualizationWorkspaceButton />}
               <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
               <VisualizationShareButton />
-              <VisualizationThemeSwitch />
+              <VisualizationThemeSwitch trackingInfo={{ action: 'Vitessce' }} />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
                 <ExpandButton size="small" onClick={expandVisualization} variant="contained">
                   <FullscreenRoundedIcon color="primary" />

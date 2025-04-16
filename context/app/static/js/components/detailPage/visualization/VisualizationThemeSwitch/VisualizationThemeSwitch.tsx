@@ -5,6 +5,7 @@ import Brightness2Icon from '@mui/icons-material/Brightness2Rounded';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
+import { EventInfo } from 'js/components/types';
 import { StyledToggleButtonGroup } from './style';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
@@ -17,7 +18,11 @@ const buttonIcons = {
   light: WbSunnyIcon,
 };
 
-function VisualizationThemeSwitch() {
+function VisualizationThemeSwitch({
+  trackingInfo,
+}: {
+  trackingInfo: Omit<EventInfo, 'category'> & { category?: string };
+}) {
   const { vizTheme, setVizTheme } = useVisualizationStore(visualizationStoreSelector);
   const trackEntityPageEvent = useTrackEntityPageEvent();
 
@@ -30,10 +35,16 @@ function VisualizationThemeSwitch() {
       onChange={(_, theme: 'light' | 'dark') => {
         // No theme arg means the user clicked on the already active theme.
         if (!theme) {
-          trackEntityPageEvent({ action: 'Vitessce / Selected Already Active Theme' });
+          trackEntityPageEvent({
+            ...trackingInfo,
+            action: `${trackingInfo.action} / Selected Already Active Theme`,
+          });
           return;
         }
-        trackEntityPageEvent({ action: `Vitessce / Toggle ${theme} Theme` });
+        trackEntityPageEvent({
+          ...trackingInfo,
+          action: `${trackingInfo.action} / Toggle ${theme} Theme`,
+        });
         setVizTheme(theme);
       }}
       size="small"

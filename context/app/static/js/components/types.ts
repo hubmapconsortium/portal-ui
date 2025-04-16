@@ -5,6 +5,7 @@ export interface EventInfo {
   category: string;
   action?: string;
   label?: string | number;
+  value?: string | number;
 }
 
 export type DonorEntityType = 'Donor';
