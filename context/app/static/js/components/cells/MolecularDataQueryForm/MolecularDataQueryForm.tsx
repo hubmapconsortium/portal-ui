@@ -7,6 +7,8 @@ import IndependentStepAccordion from 'js/shared-styles/accordions/StepAccordion/
 import { MolecularDataQueryFormState } from './types';
 import SubmitButton from './SubmitButton';
 import Results from '../MolecularDataQueryResults';
+import CurrentQueryParametersDisplay from './CurrentQueryParametersDisplay';
+import CurrentQueryResultsDisplay from './CurrentQueryResultsDisplay';
 
 interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
@@ -28,6 +30,11 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   const { toastError } = useSnackbarActions();
 
   const queryType = watch('queryType');
+  const threshold = watch('minimumCellPercentage');
+  const expression = watch('minimumCellPercentage');
+  const genes = watch('genes');
+  const proteins = watch('proteins');
+  const cellTypes = watch('cellTypes');
 
   // Reset selected options when query type changes
   useEffect(() => {
@@ -79,21 +86,23 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
       });
   });
 
-  const onChange = useEventCallback(() => {
-    // Reset the form state when the form is submitted
-    if (methods.formState.isSubmitted) {
-      methods.reset(
-        {},
-        {
-          keepDirtyValues: true,
-          keepIsSubmitted: false,
-          keepIsSubmitSuccessful: false,
-          keepIsValidating: false,
-          keepIsValid: false,
-        },
-      );
-    }
-  });
+  useEffect(() => {
+    // Reset the form submission state when any query fields change
+    // This is to ensure that updating the parameters while the form is submitted
+    // does not immediately trigger a re-query for results
+    // Per the react-hook-form docs, it's recommended to do this reset
+    // in useEffect as execution order matters
+
+    // TODO: With this approach, the query still reruns and gets discarded after the first change since the
+    // form state is reset AFTER the swr hook gets new params. We should investigate if there is a way to
+    // prevent the query from running until the form is submitted again.
+    reset(undefined, {
+      keepIsSubmitted: false,
+      keepIsSubmitSuccessful: false,
+      keepValues: true,
+      keepDirty: false,
+    });
+  }, [threshold, expression, genes, proteins, cellTypes, reset]);
 
   const id = `${useId()}-molecular-data-query`;
 
@@ -110,7 +119,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         summaryHeading="Parameters"
         id={`${id}-parameters`}
         content={
-          <Stack component="form" onSubmit={submit} gap={2} onChange={onChange}>
+          <Stack component="form" onSubmit={submit} gap={2}>
             {children}
             <SubmitButton />
           </Stack>
@@ -118,6 +127,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         isExpanded={formIsExpanded || !methods.formState.isSubmitted}
         onChange={toggleParametersSection}
         noProvider
+        completedStepText={<CurrentQueryParametersDisplay />}
       />
       <IndependentStepAccordion
         index={1}
@@ -125,15 +135,9 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         id={`${id}-results`}
         content={<Results />}
         isExpanded={methods.formState.isSubmitSuccessful}
-        onChange={() => {
-          if (methods.formState.isSubmitSuccessful) {
-            if (!formIsExpanded) {
-              setFormIsExpanded(false);
-            }
-          }
-        }}
         noProvider
         disabled={!methods.formState.isSubmitSuccessful}
+        completedStepText={<CurrentQueryResultsDisplay />}
       />
     </FormProvider>
   );

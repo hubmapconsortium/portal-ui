@@ -6,7 +6,11 @@ import { useAugmentedResults } from '../MolecularDataQueryResults/hooks';
 export default function CrossModalityGeneOrProteinResults<T extends 'gene' | 'protein'>() {
   const { data } = useCrossModalityResults<T>();
 
-  const augmentedResults = useAugmentedResults(data?.list);
+  const { list, isLoading } = useAugmentedResults(data?.list);
 
-  return <DatasetsTable datasets={augmentedResults.list} />;
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  return <DatasetsTable datasets={list} />;
 }

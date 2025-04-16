@@ -12,7 +12,8 @@ export interface AutocompleteResult {
   full: string;
   pre: string;
   post: string;
-  tag?: string;
+  tags?: string[];
+  values?: string[];
 }
 
 export type AutocompleteQueryResponse = AutocompleteResult[];
