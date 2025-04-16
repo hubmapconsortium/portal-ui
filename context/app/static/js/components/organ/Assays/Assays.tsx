@@ -13,6 +13,7 @@ import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import { OrganPageIds } from 'js/components/organ/types';
 import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { useOrganContext } from 'js/components/organ/contexts';
 import { getSearchURL } from '../utils';
 
 interface AssaysProps {
@@ -22,13 +23,22 @@ interface AssaysProps {
 
 function Assays({ organTerms, bucketData }: AssaysProps) {
   const assayTypeMap = useDatasetTypeMap();
+  const {
+    organ: { name },
+  } = useOrganContext();
 
   return (
     <OrganDetailSection
       id={OrganPageIds.assaysId}
       title="Assays"
       iconTooltipText="Experiments related to this organ"
-      action={<ViewEntitiesButton entityType="Dataset" filters={{ organTerms }} />}
+      action={
+        <ViewEntitiesButton
+          entityType="Dataset"
+          filters={{ organTerms }}
+          trackingInfo={{ action: 'Assays', label: name }}
+        />
+      }
     >
       <Paper>
         <EntitiesTable

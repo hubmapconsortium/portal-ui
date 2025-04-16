@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 
 import { trackEvent } from 'js/helpers/trackers';
-import { EventInfo } from 'js/components/types';
+import { EventWithOptionalCategory } from 'js/components/types';
 import { useFlaskDataContext } from '../Contexts';
 
 function useTrackEntityPageEvent(pageType?: string) {
@@ -11,7 +11,7 @@ function useTrackEntityPageEvent(pageType?: string) {
   const category = pageType ?? (entity_type ? `${entity_type} Page` : 'Detail Page');
 
   return useCallback(
-    (event: Omit<EventInfo, 'category'> & { category?: string }) => {
+    (event: EventWithOptionalCategory) => {
       trackEvent(
         {
           category,

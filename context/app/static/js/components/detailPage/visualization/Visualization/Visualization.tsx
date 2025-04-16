@@ -118,8 +118,8 @@ function Visualization({
 
   const expandVisualization = useCallback(() => {
     expandViz(id);
-    trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
-  }, [expandViz, id, trackEntityPageEvent]);
+    trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Expand Full Screen` });
+  }, [expandViz, id, trackEntityPageEvent, trackingInfo]);
 
   const isMultiDataset = Array.isArray(vitessceConfig);
 
