@@ -71,7 +71,10 @@ function Samples({ organTerms }: OrganSamplesProps) {
         </Stack>
       }
     >
-      <EntitiesTables<SampleDocument> entities={[{ query, columns, entityType: 'Sample' }]} />
+      <EntitiesTables<SampleDocument>
+        entities={[{ query, columns, entityType: 'Sample' }]}
+        trackingInfo={{ category: 'Organ Page', action: 'Samples', label: name }}
+      />
     </OrganDetailSection>
   );
 }
