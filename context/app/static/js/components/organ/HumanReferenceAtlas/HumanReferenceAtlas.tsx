@@ -8,8 +8,6 @@ import { useOrganContext } from 'js/components/organ/contexts';
 import { OrganPageIds } from 'js/components/organ/types';
 import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 
-const title = 'Human Reference Atlas';
-
 function HumanReferenceAtlas() {
   const {
     organ: { uberon },
@@ -17,8 +15,8 @@ function HumanReferenceAtlas() {
 
   return (
     <OrganDetailSection
-      id={OrganPageIds.humanReferenceAtlasId}
-      title={title}
+      id={OrganPageIds.hraId}
+      title="Human Reference Atlas"
       iconTooltipText="Atlas provided by the Common Coordinate Framework (CCF)."
     >
       <Paper>

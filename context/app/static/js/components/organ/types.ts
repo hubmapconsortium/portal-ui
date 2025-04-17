@@ -68,14 +68,10 @@ export interface OrganDataProducts {
 
 export enum OrganPageIds {
   summaryId = 'summary',
-  humanReferenceAtlasId = 'human-reference-atlas',
+  hraId = 'human-reference-atlas',
   referenceId = 'reference-based-analysis',
   assaysId = 'assays',
   dataProductsId = 'data-products',
   samplesId = 'samples',
   cellpopId = 'cell-population-plot',
-}
-
-export enum OrganEventCategories {
-  OrganPage = 'Organ Page',
 }

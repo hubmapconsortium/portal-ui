@@ -8,7 +8,7 @@ import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualiz
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
-import { EventInfo } from 'js/components/types';
+import { EventWithOptionalCategory } from 'js/components/types';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 
 import { createEmailWithUrl, getUrl } from './utils';
@@ -18,11 +18,7 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
   vitessceState: state.vitessceState,
 });
 
-function VisualizationShareButton({
-  trackingInfo,
-}: {
-  trackingInfo: Omit<EventInfo, 'category'> & { category?: string };
-}) {
+function VisualizationShareButton({ trackingInfo }: { trackingInfo: EventWithOptionalCategory }) {
   const { vitessceState } = useVisualizationStore(visualizationStoreSelector);
   const trackEntityPageEvent = useTrackEntityPageEvent();
   const handleCopyClick = useHandleCopyClick();

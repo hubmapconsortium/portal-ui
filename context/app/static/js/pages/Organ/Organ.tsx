@@ -17,7 +17,7 @@ interface OrganProps {
   organ: OrganFile;
 }
 
-const { summaryId, humanReferenceAtlasId, cellpopId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
+const { summaryId, hraId, cellpopId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
 
 function Organ({ organ }: OrganProps) {
   const searchItems = useMemo(
@@ -32,7 +32,7 @@ function Organ({ organ }: OrganProps) {
 
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
-    [humanReferenceAtlasId]: Boolean(organ.has_iu_component),
+    [hraId]: Boolean(organ.has_iu_component),
     [cellpopId]: labeledDatasetUuids.length > 0,
     [referenceId]: Boolean(organ?.azimuth),
     [assaysId]: assayBuckets.length > 0,
@@ -50,7 +50,7 @@ function Organ({ organ }: OrganProps) {
           {organ.name}
         </Typography>
         <Description shouldDisplay={shouldDisplaySection[summaryId]} />
-        <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[humanReferenceAtlasId]} />
+        <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[hraId]} />
         <CellPopulationPlot uuids={labeledDatasetUuids} shouldDisplay={shouldDisplaySection[cellpopId]} />
         <Azimuth shouldDisplay={shouldDisplaySection[referenceId]} />
         <Assays organTerms={searchItems} bucketData={assayBuckets} shouldDisplay={shouldDisplaySection[assaysId]} />

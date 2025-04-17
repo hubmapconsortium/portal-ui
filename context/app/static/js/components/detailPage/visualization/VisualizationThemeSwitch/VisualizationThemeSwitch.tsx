@@ -5,7 +5,7 @@ import Brightness2Icon from '@mui/icons-material/Brightness2Rounded';
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { EventInfo } from 'js/components/types';
+import { EventWithOptionalCategory } from 'js/components/types';
 import { StyledToggleButtonGroup } from './style';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
@@ -18,11 +18,7 @@ const buttonIcons = {
   light: WbSunnyIcon,
 };
 
-function VisualizationThemeSwitch({
-  trackingInfo,
-}: {
-  trackingInfo: Omit<EventInfo, 'category'> & { category?: string };
-}) {
+function VisualizationThemeSwitch({ trackingInfo }: { trackingInfo: EventWithOptionalCategory }) {
   const { vizTheme, setVizTheme } = useVisualizationStore(visualizationStoreSelector);
   const trackEntityPageEvent = useTrackEntityPageEvent();
 

@@ -1,6 +1,7 @@
 import { ContributorAPIResponse, ContactAPIResponse } from './detailPage/ContributorsTable/utils';
 import { UnprocessedFile } from './detailPage/files/types';
 
+// Interface intended for use in tracking events via trackEvent, which requires a category.
 export interface EventInfo {
   category: string;
   action?: string;
@@ -8,6 +9,8 @@ export interface EventInfo {
   value?: string | number;
 }
 
+// Interface intended for use in tracking events via trackEntityPageEvent, which takes care of
+// adding the category to the event.
 export interface EventWithOptionalCategory extends Omit<EventInfo, 'category'> {
   category?: string;
 }

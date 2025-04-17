@@ -116,7 +116,6 @@ function formatEvent(event, id) {
 
 function trackEvent(event, id) {
   const formattedEvent = formatEvent(event, id);
-  // console.log(formattedEvent);
   tracker.trackEvent(formattedEvent);
   ReactGA.event(formattedEvent);
   const category = formattedEvent.category.replace(/ /g, '_');

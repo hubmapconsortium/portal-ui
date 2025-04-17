@@ -3,6 +3,7 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
+import useEventCallback from '@mui/material/utils/useEventCallback';
 
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { InternalLink } from 'js/shared-styles/Links';
@@ -14,7 +15,6 @@ import { OrganPageIds } from 'js/components/organ/types';
 import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { useOrganContext } from 'js/components/organ/contexts';
-import { useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
 import { getSearchURL } from '../utils';
 
@@ -29,7 +29,7 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
     organ: { name },
   } = useOrganContext();
 
-  const handleSelectTrack = useEventCallback((assay: string) => {
+  const trackClick = useEventCallback((assay: string) => {
     trackEvent({
       category: 'Organ Page',
       action: 'Assays / Select Assay From Table',
@@ -63,7 +63,7 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
               <TableCell>
                 <InternalLink
                   href={getSearchURL({ entityType: 'Dataset', organTerms, mappedAssay: bucket.key, assayTypeMap })}
-                  onClick={() => handleSelectTrack(bucket.key)}
+                  onClick={() => trackClick(bucket.key)}
                   variant="body2"
                 >
                   {bucket.key}
