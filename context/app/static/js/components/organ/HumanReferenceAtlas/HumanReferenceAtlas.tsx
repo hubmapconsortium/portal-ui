@@ -3,25 +3,26 @@ import React from 'react';
 import Paper from '@mui/material/Paper';
 
 import CCFOrganInfo from 'js/components/HRA/CCFOrganInfo';
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { useOrganContext } from 'js/components/organ/contexts';
+import { OrganPageIds } from 'js/components/organ/types';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 
-interface HumanReferenceAtlasProps {
-  uberonIri: string;
-  id: string;
-}
+function HumanReferenceAtlas() {
+  const {
+    organ: { uberon },
+  } = useOrganContext();
 
-function HumanReferenceAtlas({ uberonIri, id }: HumanReferenceAtlasProps) {
   return (
-    <CollapsibleDetailPageSection
-      id={id}
+    <OrganDetailSection
+      id={OrganPageIds.hraId}
       title="Human Reference Atlas"
       iconTooltipText="Atlas provided by the Common Coordinate Framework (CCF)."
     >
       <Paper>
-        <CCFOrganInfo uberonIri={uberonIri} />
+        <CCFOrganInfo uberonIri={uberon} />
       </Paper>
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

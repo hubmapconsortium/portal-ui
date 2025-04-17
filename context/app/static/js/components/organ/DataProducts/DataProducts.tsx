@@ -9,7 +9,6 @@ import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
 import { useEventCallback } from '@mui/material/utils';
 
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import Description from 'js/shared-styles/sections/Description';
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
@@ -18,7 +17,9 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import { InternalLink } from 'js/shared-styles/Links';
 import { getFileName } from 'js/helpers/functions';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
-import { OrganDataProducts } from 'js/components/organ/types';
+import { OrganDataProducts, OrganPageIds } from 'js/components/organ/types';
+import { useOrganContext } from 'js/components/organ/contexts';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import { trackEvent } from 'js/helpers/trackers';
 
 const description = [
@@ -41,14 +42,16 @@ const headerCells = [
 ));
 
 interface DataProductsProps {
-  id: string;
   dataProducts: OrganDataProducts[];
-  organName: string;
   isLateral?: boolean;
   isLoading?: boolean;
 }
 
-function DataProducts({ id, organName, dataProducts, isLateral, isLoading }: DataProductsProps) {
+function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps) {
+  const {
+    organ: { name },
+  } = useOrganContext();
+
   const handleTrack = useEventCallback(
     ({
       action,
@@ -70,21 +73,21 @@ function DataProducts({ id, organName, dataProducts, isLateral, isLoading }: Dat
       trackEvent({
         category: 'Organ Detail Page: Data Products',
         action: `Data Products / ${action}`,
-        label: `${organName}${laterality}${assay}${file}`,
+        label: `${name}${laterality}${assay}${file}`,
       });
     },
   );
 
   if (isLoading) {
     return (
-      <CollapsibleDetailPageSection id={id} title="Data Products">
+      <OrganDetailSection id={OrganPageIds.dataProductsId} title="Data Products">
         <Skeleton variant="rectangular" height={400} />
-      </CollapsibleDetailPageSection>
+      </OrganDetailSection>
     );
   }
 
   return (
-    <CollapsibleDetailPageSection id={id} title="Data Products">
+    <OrganDetailSection id={OrganPageIds.dataProductsId} title="Data Products">
       <Stack spacing={1}>
         <Description>
           <Stack spacing={1} direction="column">
@@ -160,7 +163,7 @@ function DataProducts({ id, organName, dataProducts, isLateral, isLoading }: Dat
           />
         </Paper>
       </Stack>
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

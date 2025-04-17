@@ -1,20 +1,17 @@
 import { useCallback } from 'react';
 
 import { trackEvent } from 'js/helpers/trackers';
+import { EventWithOptionalCategory } from 'js/components/types';
 import { useFlaskDataContext } from '../Contexts';
 
-interface TrackingEventType {
-  action: string;
-  label?: string;
-  value?: number;
-}
-
-function useTrackEntityPageEvent() {
+function useTrackEntityPageEvent(pageType?: string) {
   const { entity = { hubmap_id: undefined, entity_type: undefined } } = useFlaskDataContext();
   const { hubmap_id, entity_type } = entity;
+
+  const category = pageType ?? (entity_type ? `${entity_type} Page` : 'Detail Page');
+
   return useCallback(
-    (event: TrackingEventType) => {
-      const category = entity_type ? `${entity_type} Page` : 'Detail Page';
+    (event: EventWithOptionalCategory) => {
       trackEvent(
         {
           category,
@@ -23,7 +20,7 @@ function useTrackEntityPageEvent() {
         hubmap_id,
       );
     },
-    [hubmap_id, entity_type],
+    [hubmap_id, category],
   );
 }
 

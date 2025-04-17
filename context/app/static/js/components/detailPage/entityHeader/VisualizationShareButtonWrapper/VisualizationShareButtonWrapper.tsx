@@ -19,7 +19,7 @@ function ShareButtonFallback() {
 function VisualizationShareButtonWrapper() {
   return (
     <Suspense fallback={<ShareButtonFallback />}>
-      <VisualizationShareButton />
+      <VisualizationShareButton trackingInfo={{ action: 'Vitessce / Share Visualization' }} />
     </Suspense>
   );
 }

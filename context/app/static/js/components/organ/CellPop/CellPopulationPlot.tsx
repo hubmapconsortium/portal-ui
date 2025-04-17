@@ -1,4 +1,3 @@
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import React from 'react';
 import { CellPopHuBMAPLoader } from 'cellpop';
@@ -8,12 +7,13 @@ import { ExpandableDiv } from 'js/components/detailPage/visualization/Visualizat
 import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualizationStore';
 import lightTheme, { darkTheme } from 'js/theme/theme';
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
+import { OrganPageIds } from 'js/components/organ/types';
 import CellPopDescription from './CellPopDescription';
 import CellPopActions from './CellPopActions';
 import { useTrackCellpop } from './hooks';
 
 interface CellPopulationPlotProps {
-  id: string;
   uuids: string[];
 }
 
@@ -24,16 +24,18 @@ function visualizationSelector(store: VisualizationStore) {
   };
 }
 
-function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
+const { cellpopId } = OrganPageIds;
+
+function CellPopulationPlot({ uuids }: CellPopulationPlotProps) {
   const { fullscreenVizId, theme } = useVisualizationStore(visualizationSelector);
-  const vizIsFullscreen = fullscreenVizId === id;
+  const vizIsFullscreen = fullscreenVizId === cellpopId;
 
   const trackEvent = useTrackCellpop();
 
   return (
-    <CollapsibleDetailPageSection title="Cell Population Plot" id={id} icon={CellTypeIcon}>
+    <OrganDetailSection title="Cell Population Plot" id={cellpopId} icon={CellTypeIcon}>
       <CellPopDescription />
-      <CellPopActions id={id} />
+      <CellPopActions id={cellpopId} />
       <Paper>
         <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={theme} $nonExpandedHeight={1000}>
           <CellPopHuBMAPLoader
@@ -71,10 +73,10 @@ function CellPopulationPlot({ id, uuids }: CellPopulationPlotProps) {
             disabledControls={['theme']}
             trackEvent={trackEvent}
           />
-          <BodyExpandedCSS id={id} />
+          <BodyExpandedCSS id={cellpopId} />
         </ExpandableDiv>
       </Paper>
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

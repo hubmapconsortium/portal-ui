@@ -39,7 +39,7 @@ const propMap: Record<Direction, MappableProps> = {
   },
 };
 
-function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelText }: StackedBarProps) {
+function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelText, ...rest }: StackedBarProps) {
   const maxBarThickness = 65;
 
   const { length, thickness, discreteAxis, categoricalAxis } = propMap[direction];
@@ -52,7 +52,13 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
   };
 
   const rect = (
-    <StyledRect fill={bar.color} {...mappedProps} $showHover={Boolean(hoverProps) || Boolean(href)} {...hoverProps} />
+    <StyledRect
+      fill={bar.color}
+      {...mappedProps}
+      $showHover={Boolean(hoverProps) || Boolean(href)}
+      {...hoverProps}
+      {...rest}
+    />
   );
   if (href) {
     return (
