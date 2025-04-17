@@ -14,6 +14,8 @@ import { OrganPageIds } from 'js/components/organ/types';
 import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { useOrganContext } from 'js/components/organ/contexts';
+import { useEventCallback } from '@mui/material';
+import { trackEvent } from 'js/helpers/trackers';
 import { getSearchURL } from '../utils';
 
 interface AssaysProps {
@@ -26,6 +28,14 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
   const {
     organ: { name },
   } = useOrganContext();
+
+  const handleSelectTrack = useEventCallback((assay: string) => {
+    trackEvent({
+      category: 'Organ Page',
+      action: 'Assays / Select Assay From Table',
+      label: `${name} ${assay}`,
+    });
+  });
 
   return (
     <OrganDetailSection
@@ -53,6 +63,7 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
               <TableCell>
                 <InternalLink
                   href={getSearchURL({ entityType: 'Dataset', organTerms, mappedAssay: bucket.key, assayTypeMap })}
+                  onClick={() => handleSelectTrack(bucket.key)}
                   variant="body2"
                 >
                   {bucket.key}
