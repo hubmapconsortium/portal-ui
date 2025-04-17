@@ -1,9 +1,9 @@
 import React from 'react';
 import Button, { ButtonProps } from '@mui/material/Button';
+import { useEventCallback } from '@mui/material/utils';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import { SearchURLTypes, getSearchURL } from 'js/components/organ/utils';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
-import { useEventCallback } from '@mui/material';
 import { EventWithOptionalCategory } from 'js/components/types';
 
 interface ViewEntitiesButtonProps extends ButtonProps {
