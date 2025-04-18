@@ -27,6 +27,7 @@ function CellPercentageInput() {
       {...register('minimumCellPercentage')}
       min={0}
       max={10}
+      defaultValue={5}
     />
   );
 }
@@ -47,6 +48,7 @@ function ExpressionInput() {
       minLog={-4}
       maxLog={5}
       id="min-measurement"
+      defaultValue={1}
       {...register(fieldName)}
     />
   );

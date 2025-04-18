@@ -22,6 +22,8 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
       queryType: 'gene',
       queryMethod: DEFAULT_GENE_QUERY_METHOD,
       genes: [],
+      minimumCellPercentage: 5,
+      minimumExpressionLevel: 1,
       ...initialValues,
     },
   });
