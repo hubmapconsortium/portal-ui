@@ -1,13 +1,14 @@
 import React from 'react';
 import TableCell from '@mui/material/TableCell';
-import ClickableRow from './ClickableRow';
+import { StoryObj } from '@storybook/react';
+import ClickableRow, { ClickableRowProps } from './ClickableRow';
 
 export default {
   title: 'Tables/ClickableRow',
   component: ClickableRow,
 };
 
-function Template(args) {
+function Template(args: ClickableRowProps) {
   return (
     <ClickableRow {...args}>
       <TableCell>A</TableCell>
@@ -19,12 +20,17 @@ function Template(args) {
 
 const sharedArgs = { label: 'onClick label', onClick: () => {} };
 
-export const Default = Template.bind({});
-Default.args = sharedArgs;
+type Story = StoryObj<typeof Template>;
 
-export const Disabled = Template.bind({});
+export const Default: Story = {
+  render: Template,
+  args: sharedArgs,
+};
 
-Disabled.args = {
-  ...sharedArgs,
-  disabled: true,
+export const Disabled: Story = {
+  render: Template,
+  args: {
+    ...sharedArgs,
+    disabled: true,
+  },
 };

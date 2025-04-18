@@ -16,7 +16,10 @@ import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTabl
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
 import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { Entity } from 'js/components/types';
 import { Column, EntitiesTabTypes } from './types';
+import ExpandableRow from '../ExpandableRow';
+import ExpandableRowCell from '../ExpandableRowCell';
 
 interface EntityHeaderCellTypes<Doc> {
   column: Column<Doc>;
@@ -67,16 +70,32 @@ function TablePaddingRow({ padding }: { padding: number }) {
   );
 }
 
-interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns'> {
+interface EntityTableProps<Doc extends Entity>
+  extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns' | 'expandedContent'> {
   isSelectable: boolean;
   disabledIDs?: Set<string>;
   trackingInfo?: WorkspacesEventInfo;
+  disabledTooltipTitle?: string;
+  maxHeight?: number;
 }
 
 const headerRowHeight = 60;
 
-function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, trackingInfo }: EntityTableProps<Doc>) {
+function EntityTable<Doc extends Entity>({
+  query,
+  columns,
+  disabledIDs,
+  isSelectable = true,
+  trackingInfo,
+  expandedContent: ExpandedContent,
+  disabledTooltipTitle,
+  maxHeight,
+}: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
+  const isExpandable = Boolean(ExpandedContent);
+
+  const TableRowComponent = isExpandable ? ExpandableRow : TableRow;
+  const TableCellComponent = isExpandable ? ExpandableRowCell : TableCell;
 
   const {
     searchHits,
@@ -99,6 +118,7 @@ function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, tr
       component={Paper}
       ref={tableContainerRef}
       onScroll={(event) => fetchMoreOnBottomReached(event)}
+      maxHeight={maxHeight}
     >
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>
@@ -114,6 +134,7 @@ function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, tr
             {columns.map((column) => (
               <EntityHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
             ))}
+            {isExpandable && <TableCell />}
           </TableRow>
           <TableRow aria-hidden="true">
             <TableCell
@@ -139,14 +160,21 @@ function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, tr
             const hit = searchHits[virtualRow.index];
             if (hit) {
               return (
-                <TableRow sx={{ height: virtualRow.size }} key={hit?._id}>
+                <TableRowComponent
+                  sx={{ height: virtualRow.size }}
+                  numCells={columns.length + (isSelectable ? 1 : 0) + 1}
+                  key={hit?._id}
+                  // @ts-expect-error the expanded content's props should be the same as the hit's _source
+                  expandedContent={ExpandedContent ? <ExpandedContent {...hit?._source} /> : undefined}
+                  disabledTooltipTitle={disabledTooltipTitle}
+                >
                   {isSelectable && <SelectableRowCell rowKey={hit?._id} disabled={disabledIDs?.has(hit?._id)} />}
                   {columns.map(({ cellContent: CellContent, id }) => (
-                    <TableCell key={id}>
+                    <TableCellComponent key={id}>
                       <CellContent hit={hit._source} trackingInfo={trackingInfo} />
-                    </TableCell>
+                    </TableCellComponent>
                   ))}
-                </TableRow>
+                </TableRowComponent>
               );
             }
             return null;

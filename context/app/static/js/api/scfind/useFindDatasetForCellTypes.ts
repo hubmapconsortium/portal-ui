@@ -9,7 +9,7 @@ export interface FindDatasetForCellTypeParams {
 
 type FindDatasetForCellTypeKey = string;
 
-interface FindDatasetForCellTypeResponse {
+export interface FindDatasetForCellTypeResponse {
   datasets: string[];
 }
 

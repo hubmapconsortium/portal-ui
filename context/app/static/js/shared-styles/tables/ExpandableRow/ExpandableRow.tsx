@@ -4,14 +4,15 @@ import Collapse from '@mui/material/Collapse';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import ClickableRow from 'js/shared-styles/tables/ClickableRow';
+import { TableRowProps } from '@mui/material/TableRow';
 import { ExpandableRowProvider, useExpandableRowStore } from './store';
 import { ExpandedRow, ExpandedCell, StyledExpandCollapseIcon } from './style';
 
-interface ExpandableRowChildProps extends PropsWithChildren {
+interface ExpandableRowChildProps extends PropsWithChildren, TableRowProps {
   numCells: number;
   disabled?: boolean;
-  expandedContent: React.ReactElement;
-  disabledTooltipTitle: string;
+  expandedContent: React.ReactNode;
+  disabledTooltipTitle?: string;
 }
 
 function ExpandableRowChild({
@@ -20,12 +21,14 @@ function ExpandableRowChild({
   disabled,
   expandedContent,
   disabledTooltipTitle,
+  ...rest
 }: ExpandableRowChildProps) {
   const { isExpanded, toggleIsExpanded } = useExpandableRowStore();
 
+
   return (
     <>
-      <ClickableRow onClick={toggleIsExpanded} disabled={disabled} label="expand row">
+      <ClickableRow {...rest} onClick={toggleIsExpanded} disabled={disabled} label="expand row">
         {children}
         <ExpandableRowCell>
           <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : ''}>
@@ -38,9 +41,7 @@ function ExpandableRowChild({
       <ExpandedRow $isExpanded={isExpanded}>
         <ExpandedCell colSpan={numCells} $isExpanded={isExpanded}>
           <Collapse in={isExpanded} timeout="auto">
-            {React.cloneElement(expandedContent, {
-              isExpanded,
-            })}
+            {expandedContent}
           </Collapse>
         </ExpandedCell>
       </ExpandedRow>

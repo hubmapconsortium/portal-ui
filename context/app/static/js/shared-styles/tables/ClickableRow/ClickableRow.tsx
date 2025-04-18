@@ -1,8 +1,14 @@
 import React from 'react';
-import PropTypes from 'prop-types';
+import { TableRowProps } from '@mui/material/TableRow';
 import { StyledRow } from './style';
 
-function ClickableRow({ onClick, disabled, children, label, ...rest }) {
+export interface ClickableRowProps extends TableRowProps {
+  onClick: () => void;
+  disabled?: boolean;
+  label: string;
+}
+
+function ClickableRow({ onClick, disabled, children, label, ...rest }: ClickableRowProps) {
   return (
     <StyledRow
       onClick={onClick}
@@ -16,15 +22,5 @@ function ClickableRow({ onClick, disabled, children, label, ...rest }) {
     </StyledRow>
   );
 }
-
-ClickableRow.propTypes = {
-  onClick: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
-  disabled: PropTypes.bool,
-};
-
-ClickableRow.defaultProps = {
-  disabled: false,
-};
 
 export default ClickableRow;

@@ -13,13 +13,21 @@ export function useSCFindCellTypeResults() {
 
   const { data = [], ...rest } = datasetsWithCellTypes;
 
-  // deduplicate datasets
+  // Map datasets to the cell type they contain
   const datasets = useMemo(() => {
-    if (!data || data.length === 0) {
-      return [];
-    }
-    return [...new Set(data.map((dataset) => dataset.datasets).flat())];
-  }, [data]);
+    return cellVariableNames.reduce(
+      (acc, cellType, index) => {
+        const dataset = data[index];
+        if (dataset) {
+          acc[cellType] = dataset.datasets.map((d) => ({
+            hubmap_id: d,
+          }));
+        }
+        return acc;
+      },
+      {} as Record<string, { hubmap_id: string }[]>,
+    );
+  }, [data, cellVariableNames]);
 
   return { datasets, ...rest };
 }

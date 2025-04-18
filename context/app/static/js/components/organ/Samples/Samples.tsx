@@ -4,7 +4,6 @@ import Stack from '@mui/material/Stack';
 import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
-import { SampleDocument } from 'js/typings/search';
 import {
   datasetDescendants,
   hubmapID,
@@ -16,6 +15,7 @@ import {
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { Sample } from 'js/components/types';
 
 const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, createdTimestamp];
 
@@ -62,7 +62,7 @@ function Samples({ organTerms, id }: OrganSamplesProps) {
         </Stack>
       }
     >
-      <EntitiesTables<SampleDocument> entities={[{ query, columns, entityType: 'Sample' }]} />
+      <EntitiesTables<Sample> entities={[{ query, columns, entityType: 'Sample' }]} />
     </CollapsibleDetailPageSection>
   );
 }

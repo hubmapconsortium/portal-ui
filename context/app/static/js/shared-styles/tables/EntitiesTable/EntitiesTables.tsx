@@ -6,27 +6,30 @@ import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
 import SvgIcon from '@mui/material/SvgIcon';
 import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { Entity } from 'js/components/types';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
 import { StyledPaper } from './style';
 
-interface EntitiesTablesProps<Doc> {
+interface EntitiesTablesProps<Doc extends Entity> {
   isSelectable?: boolean;
   initialTabIndex?: number;
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
   emptyAlert?: React.ReactNode;
   trackingInfo?: WorkspacesEventInfo;
+  maxHeight?: number;
 }
 
-function EntitiesTables<Doc>({
+function EntitiesTables<Doc extends Entity>({
   isSelectable = true,
   initialTabIndex = 0,
   entities,
   disabledIDs,
   emptyAlert,
   trackingInfo,
+  maxHeight,
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
@@ -57,7 +60,7 @@ function EntitiesTables<Doc>({
       {tableIsEmpty ? (
         <StyledPaper sx={{ padding: '1rem' }}>{emptyAlert}</StyledPaper>
       ) : (
-        entities.map(({ query, columns, entityType }, i) => (
+        entities.map(({ query, columns, entityType, expandedContent }, i) => (
           <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
             <EntityTable<Doc>
               query={query}
@@ -65,6 +68,8 @@ function EntitiesTables<Doc>({
               isSelectable={isSelectable}
               disabledIDs={disabledIDs}
               trackingInfo={trackingInfo}
+              expandedContent={expandedContent}
+              maxHeight={maxHeight}
             />
           </TabPanel>
         ))

@@ -34,7 +34,7 @@ const meta: Meta = {
 
 type Story = StoryObj<typeof CellTypeCountsControl>;
 
-export const MarkerGenes: Story = {
+export const CellTypeCountForDataset: Story = {
   args: {
     dataset: 'HBM444.DXLZ.643',
   },
