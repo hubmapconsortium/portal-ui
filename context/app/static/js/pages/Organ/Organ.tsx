@@ -6,21 +6,18 @@ import Assays from 'js/components/organ/Assays';
 import Description from 'js/components/organ/Description';
 import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
-import { OrganFile } from 'js/components/organ/types';
+import { OrganFile, OrganPageIds } from 'js/components/organ/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import CellPopulationPlot from 'js/components/organ/CellPop';
-import { useAssayBucketsQuery, useHasSamplesQuery, useLabelledDatasetsQuery } from './hooks';
+import DataProducts from 'js/components/organ/DataProducts';
+import { OrganContextProvider } from 'js/components/organ/contexts';
+import { useAssayBucketsQuery, useDataProducts, useHasSamplesQuery, useLabelledDatasetsQuery } from './hooks';
 
 interface OrganProps {
   organ: OrganFile;
 }
 
-const summaryId = 'summary';
-const hraId = 'human-reference-atlas';
-const referenceId = 'reference-based-analysis';
-const assaysId = 'assays';
-const samplesId = 'samples';
-const cellpopId = 'cell-population-plot';
+const { summaryId, hraId, cellpopId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
 
 function Organ({ organ }: OrganProps) {
   const searchItems = useMemo(
@@ -31,6 +28,7 @@ function Organ({ organ }: OrganProps) {
   const assayBuckets = useAssayBucketsQuery(searchItems);
   const samplesHits = useHasSamplesQuery(searchItems);
   const labeledDatasetUuids = useLabelledDatasetsQuery(searchItems);
+  const { dataProducts, isLoading, isLateral } = useDataProducts(organ);
 
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
@@ -38,37 +36,33 @@ function Organ({ organ }: OrganProps) {
     [cellpopId]: labeledDatasetUuids.length > 0,
     [referenceId]: Boolean(organ?.azimuth),
     [assaysId]: assayBuckets.length > 0,
+    [dataProductsId]: dataProducts.length > 0,
     [samplesId]: samplesHits.length > 0,
   };
 
   return (
-    <DetailLayout sections={shouldDisplaySection}>
-      <Typography variant="subtitle1" component="h1" color="primary" data-testid="entity-title">
-        Organ
-      </Typography>
-      <Typography variant="h1" component="h2">
-        {organ.name}
-      </Typography>
-      <Description
-        id={summaryId}
-        uberonIri={organ.uberon}
-        uberonShort={organ.uberon_short}
-        asctbId={organ.asctb}
-        shouldDisplay={shouldDisplaySection[summaryId]}
-      >
-        {organ.description}
-      </Description>
-      <HumanReferenceAtlas id={hraId} uberonIri={organ.uberon} shouldDisplay={shouldDisplaySection[hraId]} />
-      <CellPopulationPlot id={cellpopId} uuids={labeledDatasetUuids} shouldDisplay={shouldDisplaySection[cellpopId]} />
-      <Azimuth id={referenceId} config={organ.azimuth!} shouldDisplay={shouldDisplaySection[referenceId]} />
-      <Assays
-        id={assaysId}
-        organTerms={searchItems}
-        bucketData={assayBuckets}
-        shouldDisplay={shouldDisplaySection[assaysId]}
-      />
-      <Samples id={samplesId} organTerms={searchItems} shouldDisplay={shouldDisplaySection[samplesId]} />
-    </DetailLayout>
+    <OrganContextProvider organ={organ}>
+      <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
+        <Typography variant="subtitle1" component="h1" color="primary" data-testid="entity-title">
+          Organ
+        </Typography>
+        <Typography variant="h1" component="h2">
+          {organ.name}
+        </Typography>
+        <Description shouldDisplay={shouldDisplaySection[summaryId]} />
+        <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[hraId]} />
+        <CellPopulationPlot uuids={labeledDatasetUuids} shouldDisplay={shouldDisplaySection[cellpopId]} />
+        <Azimuth shouldDisplay={shouldDisplaySection[referenceId]} />
+        <Assays organTerms={searchItems} bucketData={assayBuckets} shouldDisplay={shouldDisplaySection[assaysId]} />
+        <DataProducts
+          dataProducts={dataProducts}
+          isLateral={isLateral}
+          isLoading={isLoading}
+          shouldDisplay={shouldDisplaySection[dataProductsId]}
+        />
+        <Samples organTerms={searchItems} shouldDisplay={shouldDisplaySection[samplesId]} />
+      </DetailLayout>
+    </OrganContextProvider>
   );
 }
 

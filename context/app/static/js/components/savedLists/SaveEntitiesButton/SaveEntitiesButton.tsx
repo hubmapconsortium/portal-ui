@@ -1,6 +1,6 @@
 import React from 'react';
 import SvgIcon from '@mui/material/SvgIcon';
-import useEventCallback from '@mui/material/utils/useEventCallback';
+import { useEventCallback } from '@mui/material/utils';
 
 import { useAppContext, useFlaskDataContext } from 'js/components/Contexts';
 import useSavedLists from 'js/components/savedLists/hooks';

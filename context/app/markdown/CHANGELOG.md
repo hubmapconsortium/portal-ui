@@ -1,5 +1,54 @@
 # Changelog
 
+## v1.24.0 - 2025-04-14
+
+- Add admin banner to top of portal header.
+- Add SCFind API endpoint setup and relevant tests.
+- Fix text on SnareSeq2 info banners.
+- Hide links to Shiny apps in organ data products if unavailable.
+
+
+
+## v1.23.1 - 2025-04-02
+
+- Add event tracking for all data products sections on organ pages.
+- Update unified dataset detail page to improve clarity surrounding SnareSeq2 datasets.
+- Updated HTML titles and meta-descriptions for homepage, organ pages, dataset detail pages, donor detail pages, sample detail pages, collection pages, and publication pages.
+- List publication contributors in original author order.
+- Updated portal viz version to fix the scaling issue for Visium datasets spot layer.
+- Update toggle color in dialogs for clarity.
+
+
+
+## v1.23.0 - 2025-03-24
+
+- Add support for additional deepcell annotations by updating to portal-visualization 0.4.2.
+
+
+
+## v1.22.1 - 2025-03-10
+
+- Show data products on pages for organs with laterality.
+
+
+
+## v1.22.0 - 2025-03-07
+
+- Add data products section to Organ pages.
+- Update homepage timeline items to include SNARE-seq2, Cell Population Tool, and My Lists-related announcements.
+- Update description on My Lists page for non-HuBMAP users.
+- Update portal-viz version to address the scaling issue for EPIC segmentation masks.
+- Update Ubuntu version used by GitHub CI.
+
+
+
+## v1.21.1 - 2025-02-24
+
+- Fix casing of ABO blood group chart titles on diversity page.
+- Restrict "My Lists" feature to HuBMAP users only.
+
+
+
 ## v1.21.0 - 2025-02-20
 
 - Use new `abo_blood_group_system` field in donor charts.

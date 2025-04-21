@@ -56,6 +56,12 @@ interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, Y
       key: string;
     },
   ) => string;
+  onBarClick: (
+    d: Omit<BarGroupBar<string>, 'key' | 'value'> & {
+      bar: SeriesPoint<Datum>;
+      key: string;
+    },
+  ) => void;
   getAriaLabel?: (d: TooltipData<Datum>) => string;
 }
 
@@ -80,6 +86,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   // getTickValues,
   showTooltipAndHover = true,
   getBarHref,
+  onBarClick,
   getAriaLabel,
   srOnlyLabels,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
@@ -143,6 +150,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                         key={`${bar.key}-${bar.index}`}
                         direction="horizontal"
                         bar={bar}
+                        onClick={() => onBarClick(bar)}
                         href={getBarHref?.(bar)}
                         ariaLabelText={getAriaLabel?.(bar)}
                         hoverProps={

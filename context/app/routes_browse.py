@@ -1,12 +1,13 @@
+from functools import cache
 import json
 from urllib.parse import urlparse, quote
 
 from flask import (
-    render_template, jsonify,
+    current_app, render_template, jsonify,
     abort, request, redirect, url_for, Response)
 
 from .utils import (
-    get_default_flask_data, make_blueprint, get_client,
+    find_sibling_datasets, get_default_flask_data, make_blueprint, get_client,
     get_url_base_from_request, entity_types, find_raw_dataset_ancestor,
     should_redirect_entity)
 
@@ -76,12 +77,18 @@ def details(type, uuid):
 
     redirected = request.args.get('redirected') == 'True'
 
+    sibling_ids = []
+
+    if entity['entity_type'].lower() == 'dataset':
+        sibling_ids = find_sibling_datasets(client, entity)
+
     flask_data = {
         **get_default_flask_data(),
         'entity': entity,
         'redirected': redirected,
         'redirectedFromId': request.args.get('redirectedFromId'),
-        'redirectedFromPipeline': request.args.get('redirectedFromPipeline')
+        'redirectedFromPipeline': request.args.get('redirectedFromPipeline'),
+        'siblingIds': sibling_ids
     }
 
     if type == 'publication':
@@ -93,7 +100,8 @@ def details(type, uuid):
         template,
         type=type,
         uuid=uuid,
-        title=f'{entity["hubmap_id"]} | {type.title()}',
+        title=_get_entity_title(entity),
+        description=_get_entity_description(entity),
         flask_data=flask_data
     )
 
@@ -180,3 +188,212 @@ Disallow: {disallow}
 Sitemap: {get_url_base_from_request()}/sitemap.txt
 ''',
         mimetype='text/plain')
+
+
+def _format_donor_title(metadata):
+    """
+    Formats the donor title based on the metadata.
+    <Age> <Age Unit> <Race> <Sex>
+    >>> _format_donor_title(None)
+    ''
+    >>> _format_donor_title({
+    ...     'age_value': ['70'],
+    ...     'age_unit': ['years old'],
+    ...     'race': ['White'],
+    ...     'sex': ['Male']})
+    '70 years old White Male'
+    """
+
+    age = ''
+    race = ''
+    sex = ''
+    if metadata is not None:
+        age_value = metadata.get('age_value')
+        age_unit = metadata.get('age_unit')
+        if age_value is not None and age_unit is not None:
+            age = f'{age_value[0]} {age_unit[0]}'
+        if metadata.get('race') is not None:
+            race = metadata.get('race')[0]
+        if metadata.get('sex') is not None:
+            sex = metadata.get('sex')[0]
+
+    components = [age, race, sex]
+
+    return ' '.join(c for c in components if c)  # Filter out empty strings
+
+
+def _format_dataset_title(entity):
+    """
+    Returns a dataset's title, or formats a dataset title based on the metadata.
+    <Assay> of <Organ> of <Donor>
+    >>> _format_dataset_title(None)
+    'unknown assay of unknown organ of unknown donor'
+    >>> _format_dataset_title({
+    ...     'raw_dataset_type': 'Histology',
+    ...     'origin_samples_unique_mapped_organs': ['Kidney'],
+    ...     'donor': {
+    ...         'mapped_metadata': {
+    ...             'age_value': ['70'],
+    ...             'age_unit': ['years old'],
+    ...             'race': ['White'],
+    ...             'sex': ['Male']
+    ...         }
+    ...     }
+    ... })
+    'Histology of Kidney of 70 years old White Male'
+    >>> _format_dataset_title({
+    ...     'title': 'Sample Title'
+    ... })
+    'Sample Title'
+    """
+    if (entity is None):
+        return 'unknown assay of unknown organ of unknown donor'
+    if (entity.get('title') is not None):
+        return entity["title"]
+    else:
+        assay = entity.get('raw_dataset_type', 'unknown assay')
+        origin_organs = entity.get('origin_samples_unique_mapped_organs')
+        organ = ', '.join(origin_organs) if origin_organs else 'unknown organ'
+
+        donor = entity.get('donor')
+        donor_description = _format_donor_title(
+            donor.get('mapped_metadata') if donor is not None else None)
+        components = [assay, organ, donor_description]
+        return ' of '.join(c for c in components if c)  # Filter out empty strings
+
+
+def _format_sample_title(entity):
+    """
+    Formats a sample title based on the metadata.
+    <category> from <organ> of <donor>
+    >>> _format_sample_title(None)
+    'unknown sample type from unknown organ of unknown donor'
+    >>> _format_sample_title({
+    ...     'mapped_sample_category': 'Section',
+    ...     'origin_samples_unique_mapped_organs': ['Kidney'],
+    ...     'donor': {
+    ...         'mapped_metadata': {
+    ...             'age_value': ['70'],
+    ...             'age_unit': ['years old'],
+    ...             'race': ['White'],
+    ...             'sex': ['Male']
+    ...         }
+    ...     }
+    ... })
+    'Section from Kidney of 70 years old White Male'
+    """
+    if (entity is None):
+        return 'unknown sample type from unknown organ of unknown donor'
+    sample_category = entity.get('mapped_sample_category', 'Unknown sample type')
+    origin_organs = entity.get('origin_samples_unique_mapped_organs')
+    if len(origin_organs) > 0:
+        organ = origin_organs[0]
+    else:
+        organ = 'unknown organ'
+    donor = entity.get('donor')
+    donor_description = _format_donor_title(
+        donor.get('mapped_metadata') if donor is not None else None)
+    return f'{sample_category} from {organ} of {donor_description}'
+
+
+def _truncate_title(title):
+    """
+    Truncates the title to 50 characters and adds ellipsis if necessary.
+    >>> _truncate_title('This is a very long title that exceeds fifty characters')
+    'This is a very long title that exceeds fifty chara...'
+    """
+    if len(title) > 50:
+        title = title[0:50] + '...'
+    return title
+
+
+def _get_entity_title(entity):
+    """
+    Formats the meta title for entity detail pages.
+    """
+    entity_type = entity.get('entity_type', '').lower()
+    match entity_type:
+        case 'dataset':
+            return f'{_format_dataset_title(entity)} | Dataset'
+        case 'sample':
+            return f'{_format_sample_title(entity)} | Sample'
+        case 'publication':
+            title = _truncate_title(entity.get('title', entity.get('hubmap_id')))
+            return f'{title} | Publication'
+        case 'collection':
+            title = _truncate_title(entity.get('title', entity.get('hubmap_id')))
+            return f'{title} | Collection'
+        case 'donor':
+            title = _format_donor_title(entity.get("mapped_metadata"))
+            return f'{title} | Donor'
+        case _:
+            return f'{entity["hubmap_id"]} | {entity_type.title()}'
+
+
+@cache
+def _get_publication_data_types_and_organs(uuid: str):
+    """
+    Retrieves an aggregation of all data types and organs associated with the publication.
+    This is used to generate the meta description for the publication detail page.
+    """
+    client = get_client()
+
+    elasticsearch_url = current_app.config['ELASTICSEARCH_ENDPOINT'] + \
+        current_app.config['PORTAL_INDEX_PATH']
+
+    # TODO: the search API client does not currently support aggs, so this is
+    # an inline definition for the time being.
+    request = {
+        "query": {
+            "bool": {"must": [
+                {"bool": {"filter": [{"term": {"descendant_ids": uuid}}]}},
+                {"bool": {"must_not": [{"exists": {"field": "next_revision_uuid"}},
+                                       {"exists": {"field": "sub_status"}}]}}]}},
+        "aggs": {
+            "data_types": {"terms": {"field": "mapped_data_types.keyword", "size": 10000}},
+            "organs": {"terms": {"field": "origin_samples.mapped_organ.keyword", "size": 10000}},
+        },
+        "size": 0
+    }
+
+    data_types, organs = [[], []]
+    try:
+        response = client._request(elasticsearch_url, request)
+        aggregations = response.get('aggregations')
+        data_types = [bucket.get('key')
+                      for bucket in aggregations.get('data_types').get('buckets')]
+        organs = [bucket.get('key') for bucket in aggregations.get('organs').get('buckets')]
+    except Exception as e:
+        current_app.logger.error(f'Error retrieving publication data types and organs: {e}')
+    finally:
+        return data_types, organs
+
+
+def _get_entity_description(entity):
+    """
+    Formats the meta description for entity detail pages.
+    """
+    entity_type = entity.get('entity_type', '').lower()
+    match entity_type:
+        case 'dataset':
+            return f'Explore the {_format_dataset_title(entity)} dataset from HuBMAP. \
+                Access and download metadata, visualizations, and analysis tools for research.'
+        case 'sample':
+            return f'Explore a {_format_sample_title(entity)}. \
+                View metadata and associated datasets for research.'
+        case 'publication':
+            title = entity.get('title', entity.get('hubmap_id'))
+            data_types, organs = _get_publication_data_types_and_organs(entity.get('uuid'))
+            return f'Explore HuBMAP publication "{title}", \
+                featuring data from {", ".join(data_types)} from {", ".join(organs)}. \
+                Access referenced datasets and related visualizations.'
+        case 'collection':
+            title = entity.get('title', entity.get('hubmap_id'))
+            return f'Explore {title} dataset collection. Browse referenced HuBMAP datasets.'
+        case 'donor':
+            donor_description = _format_donor_title(entity.get('mapped_metadata'))
+            return f'Explore {donor_description} HuBMAP donor. \
+                Browse metadata and associated datasets, \
+                    and tissue samples for research applications.'
+        case _:
+            return f'{entity["hubmap_id"]} | {entity_type.title()}'

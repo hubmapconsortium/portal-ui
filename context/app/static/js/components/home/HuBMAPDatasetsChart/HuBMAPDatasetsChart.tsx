@@ -8,6 +8,7 @@ import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarCha
 import { ChartArea } from 'js/shared-styles/charts/HorizontalStackedBarChart/style';
 import { useBandScale, useLinearScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import Skeleton from '@mui/material/Skeleton';
+import { trackEvent } from 'js/helpers/trackers';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import Typography from '@mui/material/Typography';
 import { AnyD3Scale } from '@visx/scale';
@@ -228,6 +229,12 @@ function HuBMAPDatasetsChart() {
             getY={getOrgan}
             showTooltipAndHover
             TooltipContent={HuBMAPDatasetsChartTooltip}
+            onBarClick={() => {
+              trackEvent({
+                category: 'Homepage',
+                action: 'HuBMAP Datasets Graph/Bar Links',
+              });
+            }}
             getBarHref={selectedColor.getBarHref}
             getAriaLabel={selectedColor.getAriaLabel}
           />

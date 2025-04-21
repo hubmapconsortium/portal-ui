@@ -3,44 +3,51 @@ import React from 'react';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button';
+import { useEventCallback } from '@mui/material/utils';
 
 import EntitiesTable from 'js/shared-styles/tables/EntitiesTable';
 import { InternalLink } from 'js/shared-styles/Links';
 import DatasetsBarChart from 'js/components/organ/OrganDatasetsChart';
-
 import { HeaderCell } from 'js/shared-styles/tables';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
-
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
-import { DatasetIcon } from 'js/shared-styles/icons';
+import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
+import { OrganPageIds } from 'js/components/organ/types';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { useOrganContext } from 'js/components/organ/contexts';
+import { trackEvent } from 'js/helpers/trackers';
 import { getSearchURL } from '../utils';
 
 interface AssaysProps {
   organTerms: string[];
   bucketData: { key: string; doc_count: number }[];
-  id: string;
 }
 
-function Assays({ organTerms, bucketData, id: sectionId }: AssaysProps) {
+function Assays({ organTerms, bucketData }: AssaysProps) {
   const assayTypeMap = useDatasetTypeMap();
+  const {
+    organ: { name },
+  } = useOrganContext();
+
+  const trackClick = useEventCallback((assay: string) => {
+    trackEvent({
+      category: 'Organ Page',
+      action: 'Assays / Select Assay From Table',
+      label: `${name} ${assay}`,
+    });
+  });
 
   return (
-    <CollapsibleDetailPageSection
-      id={sectionId}
+    <OrganDetailSection
+      id={OrganPageIds.assaysId}
       title="Assays"
       iconTooltipText="Experiments related to this organ"
       action={
-        <Button
-          color="primary"
-          variant="contained"
-          component="a"
-          href={getSearchURL({ entityType: 'Dataset', organTerms })}
-          startIcon={<DatasetIcon />}
-        >
-          View All Datasets
-        </Button>
+        <ViewEntitiesButton
+          entityType="Dataset"
+          filters={{ organTerms }}
+          trackingInfo={{ action: 'Assays', label: name }}
+        />
       }
     >
       <Paper>
@@ -56,6 +63,7 @@ function Assays({ organTerms, bucketData, id: sectionId }: AssaysProps) {
               <TableCell>
                 <InternalLink
                   href={getSearchURL({ entityType: 'Dataset', organTerms, mappedAssay: bucket.key, assayTypeMap })}
+                  onClick={() => trackClick(bucket.key)}
                   variant="body2"
                 >
                   {bucket.key}
@@ -67,7 +75,7 @@ function Assays({ organTerms, bucketData, id: sectionId }: AssaysProps) {
         />
       </Paper>
       <DatasetsBarChart search={organTerms} />
-    </CollapsibleDetailPageSection>
+    </OrganDetailSection>
   );
 }
 

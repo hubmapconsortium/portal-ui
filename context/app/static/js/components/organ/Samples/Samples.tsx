@@ -1,5 +1,4 @@
 import React, { useMemo } from 'react';
-import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 
 import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
@@ -14,20 +13,19 @@ import {
   parentDonorSex,
   parentDonorRace,
 } from 'js/shared-styles/tables/columns';
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
+import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
-import { getSearchURL } from '../utils';
+import { OrganPageIds } from 'js/components/organ/types';
+import OrganDetailSection from 'js/components/organ/OrganDetailSection';
+import { useOrganContext } from 'js/components/organ/contexts';
 
 const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, createdTimestamp];
 
 interface OrganSamplesProps {
   organTerms: string[];
-  id: string;
 }
 
-function Samples({ organTerms, id }: OrganSamplesProps) {
-  const searchUrl = getSearchURL({ entityType: 'Sample', organTerms });
-
+function Samples({ organTerms }: OrganSamplesProps) {
   const query = useMemo(
     () => ({
       post_filter: {
@@ -54,21 +52,30 @@ function Samples({ organTerms, id }: OrganSamplesProps) {
     [organTerms],
   );
 
+  const {
+    organ: { name },
+  } = useOrganContext();
+
   return (
-    <CollapsibleDetailPageSection
-      id={id}
+    <OrganDetailSection
+      id={OrganPageIds.samplesId}
       title="Samples"
       action={
         <Stack direction="row" spacing={1}>
-          <Button color="primary" variant="outlined" component="a" href={searchUrl}>
-            View Data on Search Page
-          </Button>
+          <ViewEntitiesButton
+            entityType="Sample"
+            filters={{ organTerms }}
+            trackingInfo={{ action: 'Samples', label: name }}
+          />
           <SaveEntitiesButtonFromSearch entity_type="Sample" />
         </Stack>
       }
     >
-      <EntitiesTables<SampleDocument> entities={[{ query, columns, entityType: 'Sample' }]} />
-    </CollapsibleDetailPageSection>
+      <EntitiesTables<SampleDocument>
+        entities={[{ query, columns, entityType: 'Sample' }]}
+        trackingInfo={{ category: 'Organ Page', action: 'Samples', label: name }}
+      />
+    </OrganDetailSection>
   );
 }
 

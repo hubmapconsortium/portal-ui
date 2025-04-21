@@ -4,7 +4,7 @@ import { render, screen } from 'test-utils/functions';
 import VisualizationThemeSwitch from './VisualizationThemeSwitch';
 
 test('switch emits change from light to dark by click on dark label', () => {
-  render(<VisualizationThemeSwitch />);
+  render(<VisualizationThemeSwitch trackingInfo={{}} />);
   const lightLabel = screen.getByLabelText('Visualization light theme button');
   const darkLabel = screen.getByLabelText('Visualization dark theme button');
   fireEvent.click(darkLabel);

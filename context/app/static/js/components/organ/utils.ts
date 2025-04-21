@@ -1,8 +1,8 @@
 import { HierarchicalTermValues, buildSearchLink } from '../search/store';
 
-interface SearchURLTypes {
+export interface SearchURLTypes {
   entityType: 'Donor' | 'Dataset' | 'Sample';
-  organTerms: string[];
+  organTerms?: string[];
   assay?: string;
   mappedAssay?: string;
   assayTypeMap?: Record<string, string[]>;
@@ -10,6 +10,7 @@ interface SearchURLTypes {
   donorSex?: string;
   analyteClass?: string;
   processingStatus?: string;
+  datasetUUIDs?: string[];
 }
 
 function getAssayFilterLink({
@@ -61,6 +62,7 @@ function getSearchURL({
   donorSex,
   analyteClass,
   processingStatus,
+  datasetUUIDs,
 }: SearchURLTypes) {
   return buildSearchLink({
     entity_type: entityType,
@@ -94,6 +96,12 @@ function getSearchURL({
         analyte_class: {
           type: 'TERM',
           values: [analyteClass],
+        },
+      }),
+      ...(datasetUUIDs && {
+        uuid: {
+          type: 'TERM',
+          values: datasetUUIDs,
         },
       }),
       ...(assayTypeMap &&

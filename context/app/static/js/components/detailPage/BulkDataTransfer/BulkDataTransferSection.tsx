@@ -15,6 +15,7 @@ import { LINKS } from 'js/components/bulkDownload/constants';
 import BulkDownloadSuccessAlert from 'js/components/bulkDownload/BulkDownloadSuccessAlert';
 import BulkDataTransferPanels from './BulkDataTransferPanels';
 import { useProcessedDatasetTabs } from '../ProcessedData/ProcessedDataset/hooks';
+import SnareSeq2Alert from '../multi-assay/SnareSeq2Alert';
 
 const description = (
   <Typography>
@@ -27,7 +28,7 @@ const description = (
 );
 
 function BulkDataTransfer() {
-  const tabs = useProcessedDatasetTabs();
+  const tabs = useProcessedDatasetTabs(true, true);
   const uuids = new Set(tabs.map((tab) => tab.uuid));
 
   const [openTabIndex, setOpenTabIndex] = useState(0);
@@ -39,6 +40,7 @@ function BulkDataTransfer() {
       title="Bulk Data Transfer"
       icon={sectionIconMap['bulk-data-transfer']}
     >
+      <SnareSeq2Alert />
       <FilesContextProvider>
         <BulkDownloadSuccessAlert />
         <SectionDescription>
@@ -52,6 +54,8 @@ function BulkDataTransfer() {
           onChange={(_, newValue) => {
             setOpenTabIndex(newValue as number);
           }}
+          variant="scrollable"
+          scrollButtons="auto"
         >
           {tabs.map(({ label, icon: Icon }, index) => (
             <Tab key={label} label={label} index={index} icon={Icon ? <Icon /> : undefined} iconPosition="start" />

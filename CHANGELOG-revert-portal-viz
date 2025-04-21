@@ -1,0 +1,1 @@
+- Rolled back portal-viz version to address Visium scaling issue pending further clarification.

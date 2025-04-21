@@ -12,6 +12,7 @@ export interface FlaskDataContextType {
   redirected?: boolean;
   redirectedFromId?: string | null;
   redirectedFromPipeline?: string | null;
+  siblingIds?: string[];
 }
 
 export const FlaskDataContext = createContext<FlaskDataContextType>('FlaskDataContext');
@@ -37,7 +38,9 @@ interface AppContextType {
   workspacesEndpoint: string;
   userTemplatesEndpoint: string;
   ubkgEndpoint: string;
+  scFindEndpoint: string;
   ukvEndpoint: string;
+  dataProductsEndpoint: string;
   protocolsClientToken: string;
   isAuthenticated: boolean;
   isWorkspacesUser: boolean;

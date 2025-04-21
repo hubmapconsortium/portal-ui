@@ -240,7 +240,7 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
           <>
             {vizNotebookId && <VisualizationWorkspaceButton />}
             {isVitessce && <VisualizationShareButtonWrapper />}
-            <VisualizationThemeSwitch />
+            <VisualizationThemeSwitch trackingInfo={{ action: 'Vitessce' }} />
             <VisualizationCollapseButton />
           </>
         ) : (
