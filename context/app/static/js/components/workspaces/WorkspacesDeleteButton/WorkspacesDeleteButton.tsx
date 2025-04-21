@@ -25,12 +25,17 @@ function WorkspacesDeleteButton({ workspaceIds, tooltip, disabled, ...rest }: Wo
   const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
   const selectedWorkspaceIsRunning = workspaces.some(isRunningWorkspace);
 
-  let updatedTooltip = tooltip;
-  if (selectedWorkspaceHasPendingInvitations) {
-    updatedTooltip = 'Workspaces with pending sent invitations cannot be deleted. Cancel invitations before deleting.';
-  } else if (selectedWorkspaceIsRunning) {
-    updatedTooltip = 'Workspace cannot be deleted while it is running. Stop jobs before deleting.';
-  }
+  const updatedTooltip = (() => {
+    if (selectedWorkspaceHasPendingInvitations) {
+      return 'Workspaces with pending sent invitations cannot be deleted. Cancel invitations before deleting.';
+    }
+
+    if (selectedWorkspaceIsRunning) {
+      return 'Workspace cannot be deleted while it is running. Stop jobs before deleting.';
+    }
+
+    return tooltip;
+  })();
 
   return (
     <WorkspaceTooltipButton
