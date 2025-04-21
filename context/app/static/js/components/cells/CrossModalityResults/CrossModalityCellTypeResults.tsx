@@ -15,6 +15,7 @@ import { useCellTypeOrgans, useCrossModalityResults } from './hooks';
 import { extractCLID } from './utils';
 import { CrossModalityCellTypesChart } from '../CellsCharts/CellTypesChart';
 import { useAugmentedResults } from '../MolecularDataQueryResults/hooks';
+import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 
 function CellTypeResult({ cellType }: { cellType: string }) {
   const { organs = [], error } = useCellTypeOrgans(cellType);
@@ -82,7 +83,7 @@ function CrossModalityCellTypeResults() {
       </div>
       <Divider sx={{ my: 2 }} />
       <div>
-        <Typography variant="h3">Relevant Datasets</Typography>
+        <DatasetListHeader />
         <EntitiesTables
           isSelectable
           entities={[

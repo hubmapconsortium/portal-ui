@@ -12,6 +12,7 @@ import { Copy } from 'js/shared-styles/tables/actions';
 import { useSCFindCellTypeResults } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
+import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 
 interface SCFindCellTypeQueryResultsProps {
   datasetIds: { hubmap_id: string }[];
@@ -75,14 +76,7 @@ function SCFindCellTypeQueryResultsLoader() {
       </Tabs>
       {cellTypes.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx}>
-          <Stack direction="row" alignItems="center">
-            <Typography variant="subtitle1">Datasets</Typography>
-            <Stack ml="auto" direction="row" gap={1.5} alignItems="center">
-              <SaveEntitiesButton fromMolecularQuery entity_type="Dataset" uuids={selectedUuids} />
-              <Copy />
-              <BulkDownloadButtonFromSearch type="dataset" />
-            </Stack>
-          </Stack>
+          <DatasetListHeader />
           <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
         </TabPanel>
       ))}
