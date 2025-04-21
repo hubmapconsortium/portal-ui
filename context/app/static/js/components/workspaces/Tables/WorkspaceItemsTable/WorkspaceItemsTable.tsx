@@ -42,9 +42,9 @@ import {
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
-import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { OrderIcon, SortDirection } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 import { workspaceStatusIconMap } from 'js/shared-styles/icons/workspaceStatusIconMap';
+import NonLinkingCreatorInfo from 'js/shared-styles/Links/NonLinkingCreatorInfo';
 import { CenteredAlert } from 'js/components/style';
 
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
@@ -240,22 +240,11 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
     }
     case `${prefix}user_id.username`:
     case `${prefix}creatorInfo`: {
-      const isCreatorInfo = field === `${prefix}creatorInfo`;
-
-      if (fieldValue === 'Me') {
-        return <Typography>Me</Typography>;
+      if (fieldValue === 'Me' || fieldValue === 'Unknown') {
+        return <NonLinkingCreatorInfo creatorInfo={fieldValue} />;
       }
 
-      if (fieldValue === 'Unknown') {
-        return (
-          <Stack direction="row" alignItems="center">
-            <Typography>Unknown</Typography>
-            <InfoTooltipIcon iconTooltipText="Original creator has deleted workspace" />
-          </Stack>
-        );
-      }
-
-      const baseField = isCreatorInfo ? 'creatorInfo' : 'user_id';
+      const baseField = field === `${prefix}creatorInfo` ? 'creatorInfo' : 'user_id';
       const firstName = getFieldValue({ item, field: `${baseField}.first_name`, prefix });
       const lastName = getFieldValue({ item, field: `${baseField}.last_name`, prefix });
       const email = getFieldValue({ item, field: `${baseField}.email`, prefix });
