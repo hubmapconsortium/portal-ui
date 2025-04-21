@@ -56,7 +56,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       filterSelectedOptions
       getOptionLabel={(option) => option.full}
       isOptionEqualToValue={(option, value) =>
-        Boolean(option.full === value.full || value.values?.includes(option.full))
+        Boolean(option.full === value.full || option.values?.some((v) => v === value.full))
       }
       loading={isLoading}
       renderOption={(props, option) => (

@@ -134,7 +134,9 @@ function EntityTable<Doc extends Entity>({
             {columns.map((column) => (
               <EntityHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
             ))}
-            {isExpandable && <TableCell />}
+            {isExpandable && (
+              <HeaderCell aria-hidden sx={({ palette }) => ({ backgroundColor: palette.background.paper })} />
+            )}
           </TableRow>
           <TableRow aria-hidden="true">
             <TableCell
