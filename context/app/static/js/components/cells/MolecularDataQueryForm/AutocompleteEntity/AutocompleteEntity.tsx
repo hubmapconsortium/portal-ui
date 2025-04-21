@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
 import Chip from '@mui/material/Chip';
-import { useController } from 'react-hook-form';
+import { useController, useWatch } from 'react-hook-form';
+import Box from '@mui/material/Box';
+import { useCellTypeOrgansColorMap } from 'js/api/scfind/useCellTypeNames';
 import { useAutocompleteQuery } from './hooks';
 import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
@@ -37,7 +39,11 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
     defaultValue: createInitialValue(defaultValue),
   });
 
-  const { data: options = [], isLoading } = useAutocompleteQuery({ targetEntity, substring });
+  const queryMethod = useWatch({ control, name: 'queryMethod' });
+
+  const { data: options = [], isLoading } = useAutocompleteQuery({ targetEntity, substring, queryMethod });
+
+  const chipColors = useCellTypeOrgansColorMap();
 
   function handleChange({ target: { value } }: React.ChangeEvent<HTMLInputElement>) {
     setSubstring(value);
@@ -49,13 +55,28 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       multiple
       filterSelectedOptions
       getOptionLabel={(option) => option.full}
-      isOptionEqualToValue={(option, value) => option.full === value.full}
+      isOptionEqualToValue={(option, value) =>
+        Boolean(option.full === value.full || option.values?.some((v) => v === value.full))
+      }
       loading={isLoading}
       renderOption={(props, option) => (
-        <PreserveWhiteSpaceListItem {...props}>
+        <PreserveWhiteSpaceListItem {...props} key={option.full}>
           <span>{option.pre}</span>
           <b>{option.match}</b>
           <span>{option.post}</span>
+          {option?.tags && (
+            <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
+              {option?.tags?.map((tag) => (
+                <Chip
+                  key={tag}
+                  label={tag}
+                  size="small"
+                  variant="filled"
+                  sx={{ ml: 'auto', background: chipColors(tag) }}
+                />
+              ))}
+            </Box>
+          )}
         </PreserveWhiteSpaceListItem>
       )}
       renderTags={(value, getTagProps) =>
@@ -89,7 +110,22 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       )}
       {...field}
       onChange={(_, value: AutocompleteResult[]) => {
-        field.onChange(value);
+        // Handle selection of multi-value options by pulling out the values and formatting them to match the expected structure
+        const formattedValue = value.reduce((acc, curr) => {
+          if (curr.values) {
+            const values = curr.values.map((v) => ({
+              full: v,
+              pre: curr.pre,
+              match: curr.match,
+              post: curr.post,
+              tags: curr.tags,
+            }));
+            return [...acc, ...values];
+          }
+          return [...acc, curr];
+        }, [] as AutocompleteResult[]);
+
+        field.onChange(formattedValue);
       }}
     />
   );

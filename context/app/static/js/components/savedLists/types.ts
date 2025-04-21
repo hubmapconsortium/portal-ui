@@ -17,4 +17,5 @@ export const SavedListsEventCategories = {
   DetailPage: 'My Lists Detail Page',
   EntityDetailPage: (entity_type: string) => `${entity_type} Page`,
   EntitySearchPage: (entity_type: string) => `${entity_type} Search Page Interactions`,
+  MolecularDataQueryPage: 'Molecular Data Query Page',
 } as const;

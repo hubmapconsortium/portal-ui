@@ -1,24 +1,12 @@
-import MolecularDataQueryResults from 'js/components/cells/MolecularDataQueryResults';
-import QueryParameters from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
-import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
-import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
-import React, { useMemo } from 'react';
+import React from 'react';
+import MolecularDataQueryForm from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryForm';
+import QueryParametersFieldset from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
 import { biomarkerQuery } from '../constants';
+import { useGenePageContext } from '../GenePageContext';
 
 export default function BiomarkerQuery() {
-  const steps = useMemo(() => {
-    return [
-      {
-        heading: '1. Parameters',
-        content: <QueryParameters />,
-      },
-      {
-        heading: '2. Results',
-        content: <MolecularDataQueryResults />,
-      },
-    ];
-  }, []);
+  const { geneSymbol } = useGenePageContext();
 
   return (
     <CollapsibleDetailPageSection
@@ -26,9 +14,14 @@ export default function BiomarkerQuery() {
       title={biomarkerQuery.title}
       iconTooltipText={biomarkerQuery.tooltip}
     >
-      <AccordionStepsProvider stepsLength={steps.length}>
-        <AccordionSteps id="biomarker-query-steps" steps={steps} />
-      </AccordionStepsProvider>
+      <MolecularDataQueryForm
+        initialValues={{
+          queryType: 'gene',
+          genes: [{ full: geneSymbol, pre: '', match: geneSymbol, post: '' }],
+        }}
+      >
+        <QueryParametersFieldset defaultValue={geneSymbol} />
+      </MolecularDataQueryForm>
     </CollapsibleDetailPageSection>
   );
 }

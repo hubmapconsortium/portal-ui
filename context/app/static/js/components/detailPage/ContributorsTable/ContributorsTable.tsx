@@ -19,7 +19,7 @@ import { isValidEmail, validateAndFormatOrcidId } from 'js/helpers/functions';
 import IconPanel from 'js/shared-styles/panels/IconPanel';
 
 import { useNormalizedContacts, useNormalizedContributors } from './hooks';
-import { ContributorAPIResponse, sortContributors, contributorIsContact, ContactAPIResponse } from './utils';
+import { ContributorAPIResponse, contributorIsContact, ContactAPIResponse } from './utils';
 
 const contributorsIconPanelText =
   'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
@@ -76,8 +76,6 @@ function ContributorsTable({
     return null;
   }
 
-  const sortedContributors = sortContributors(normalizedContributors, normalizedContacts);
-
   const contents = (
     <Stack spacing={1}>
       {showIconPanel && <IconPanel status="info">{contributorsIconPanelText}</IconPanel>}
@@ -103,7 +101,7 @@ function ContributorsTable({
               </TableRow>
             </TableHead>
             <TableBody>
-              {sortedContributors.map((contributor) => {
+              {normalizedContributors.map((contributor) => {
                 const { affiliation, name, email, isPrincipalInvestigator, orcid } = contributor;
                 const validatedOrcidId = validateAndFormatOrcidId(orcid);
                 return (

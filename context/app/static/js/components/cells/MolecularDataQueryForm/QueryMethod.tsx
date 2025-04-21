@@ -8,13 +8,21 @@ import { FormFieldContainer, FormFieldSubtitle } from './FormField';
 
 const queryMethods = {
   gene: [
-    { value: 'scFind', label: 'scFind - RNAseq experiments (gene expression)' },
-    { value: 'crossModalityRNA', label: 'Cells Cross-Modality - RNAseq experiments (gene expression)' },
-    { value: 'crossModalityATAC', label: 'Cells Cross-Modality - ATACseq experiments (DNA accessibility)' },
+    {
+      value: 'crossModalityRNA',
+      label: 'Cells Cross-Modality - RNAseq experiments (gene expression)',
+      disabled: false,
+    },
+    {
+      value: 'crossModalityATAC',
+      label: 'Cells Cross-Modality - ATACseq experiments (DNA accessibility)',
+      disabled: false,
+    },
+    { value: 'scFind', label: 'scFind - RNAseq experiments (gene expression)', disabled: true },
   ],
   'cell-type': [
-    { value: 'scFind', label: 'scFind (RNASeq)' },
-    { value: 'crossModality', label: 'Cells Cross-Modality' },
+    { value: 'scFind', label: 'scFind (RNASeq)', disabled: false },
+    { value: 'crossModality', label: 'Cells Cross-Modality', disabled: false },
   ],
   protein: undefined,
 };
@@ -69,7 +77,6 @@ export default function QueryMethod() {
         fullWidth
         value={watch('queryMethod')}
         {...register('queryMethod')}
-        defaultValue=""
         slotProps={{
           select: {
             MenuProps: {
@@ -82,8 +89,8 @@ export default function QueryMethod() {
         }}
       >
         {queryMethods[queryType].map((method) => (
-          <MenuItem value={method.value} key={method.value}>
-            {method.label}
+          <MenuItem value={method.value} key={method.value} disabled={method.disabled}>
+            {method.label} {method.disabled && '(coming soon)'}
           </MenuItem>
         ))}
       </TextField>

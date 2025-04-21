@@ -6,15 +6,16 @@ import Divider from '@mui/material/Divider';
 
 import { CellTypeOrgansGraph } from 'js/components/cell-types/CellTypesVisualization';
 import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
-
+import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import { Tab, TabPanel, Tabs } from 'js/shared-styles/tables/TableTabs';
 import { useTabs } from 'js/shared-styles/tabs';
+import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { DisambiguationTextbox } from './DisambiguationTextbox';
 import { useCellTypeOrgans, useCrossModalityResults } from './hooks';
 import { extractCLID } from './utils';
-import DatasetsTable from '../DatasetsTable';
-import CellTypesChart from '../CellsCharts/CellTypesCharts';
+import { CrossModalityCellTypesChart } from '../CellsCharts/CellTypesChart';
 import { useAugmentedResults } from '../MolecularDataQueryResults/hooks';
+import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 
 function CellTypeResult({ cellType }: { cellType: string }) {
   const { organs = [], error } = useCellTypeOrgans(cellType);
@@ -44,6 +45,7 @@ function CellTypeResult({ cellType }: { cellType: string }) {
   );
 }
 
+const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 function CrossModalityCellTypeResults() {
   // For cell type queries, the results are displayed differently than for other queries.
   // The total number of datasets that match the query is displayed, out of all datasets.
@@ -63,6 +65,8 @@ function CrossModalityCellTypeResults() {
     return <Skeleton height={40} width="100%" />;
   }
 
+  const ids = resultsList.map((r) => r._source.uuid);
+
   return (
     <div>
       <div>
@@ -79,8 +83,30 @@ function CrossModalityCellTypeResults() {
       </div>
       <Divider sx={{ my: 2 }} />
       <div>
-        <Typography variant="h3">Relevant Datasets</Typography>
-        <DatasetsTable datasets={resultsList} expandedContent={CellTypesChart} />
+        <DatasetListHeader />
+        <EntitiesTables
+          isSelectable
+          entities={[
+            {
+              entityType: 'Dataset',
+              query: {
+                query: { ids: { values: ids } },
+                size: 10000,
+                _source: [
+                  'hubmap_id',
+                  'origin_samples_unique_mapped_organs',
+                  'mapped_status',
+                  'mapped_data_types',
+                  'mapped_data_access_level',
+                  'uuid',
+                  'last_modified_timestamp',
+                ],
+              },
+              columns,
+              expandedContent: CrossModalityCellTypesChart,
+            },
+          ]}
+        />
       </div>
     </div>
   );

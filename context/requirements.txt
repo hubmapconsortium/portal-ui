@@ -57,7 +57,7 @@ cloudpickle==2.2.1
     # via
     #   dask
     #   distributed
-colorama==0.4.6 ; platform_system == 'Windows'
+colorama==0.4.6 ; sys_platform == 'win32'
     # via
     #   click
     #   tqdm
@@ -258,7 +258,7 @@ pillow==11.0.0
     #   scikit-image
 platformdirs==2.5.1
     # via black
-portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.1.zip
+portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.3.zip
     # via -r context/requirements.in
 propcache==0.2.0
     # via yarl

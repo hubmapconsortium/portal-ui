@@ -4,12 +4,13 @@ import Skeleton from '@mui/material/Skeleton';
 import DatasetClusterChart from 'js/components/cells/DatasetClusterChart';
 import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
+import Box from '@mui/material/Box';
+import { Dataset } from 'js/components/types';
 import { useCellsChartsData } from './hooks';
-import { ChartWrapper, StyledTypography, PaddedDiv } from './style';
-import { DatasetCellsChartsProps } from './types';
+import { ChartWrapper, StyledTypography } from './style';
 import { useCellVariableNames, useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks';
 
-function CellsCharts({ uuid }: DatasetCellsChartsProps) {
+function CellsCharts({ uuid }: Dataset) {
   const { watch } = useMolecularDataQueryFormState();
   const minExpressionLog = watch('minimumExpressionLevel');
   const queryType = watch('queryType');
@@ -29,7 +30,7 @@ function CellsCharts({ uuid }: DatasetCellsChartsProps) {
   }
 
   return (
-    <PaddedDiv>
+    <Box padding={2} width="100%">
       <div>
         <ChartWrapper>
           <ChartLoader isLoading={isLoading}>
@@ -55,7 +56,7 @@ function CellsCharts({ uuid }: DatasetCellsChartsProps) {
           <Skeleton />
         )}
       </StyledTypography>
-    </PaddedDiv>
+    </Box>
   );
 }
 

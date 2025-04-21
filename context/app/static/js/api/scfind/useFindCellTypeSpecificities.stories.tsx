@@ -1,22 +1,14 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Typography, Stack } from '@mui/material';
 import { http, passthrough } from 'msw';
 import useFindCellTypeSpecificities, { FindCellTypeSpecificitiesParams } from './useFindCellTypeSpecificities';
 
 import { SCFIND_BASE_STORYBOOK } from './utils';
+import StoryControlTemplate from './StoryTemplate';
 
 function FindCellTypeSpecificitiesControl(params: FindCellTypeSpecificitiesParams) {
   const result = useFindCellTypeSpecificities(params);
-  return (
-    <Stack>
-      <Typography variant="h6">Find Cell Type Specificities</Typography>
-      <Typography variant="body1">Params:</Typography>
-      <pre>{JSON.stringify(params, null, 2)}</pre>
-      <Typography variant="body1">Results:</Typography>
-      <pre>{JSON.stringify(result, null, 2)}</pre>
-    </Stack>
-  );
+  return <StoryControlTemplate title="Find Cell Type Specificities" params={params} result={result} />;
 }
 
 const meta: Meta = {
@@ -34,17 +26,12 @@ const meta: Meta = {
   argTypes: {
     geneList: {
       control: {
-        type: 'text',
+        type: 'object',
       },
     },
     cellTypes: {
       control: {
-        type: 'text',
-      },
-    },
-    annotationNames: {
-      control: {
-        type: 'text',
+        type: 'object',
       },
     },
     backgroundCellTypes: {

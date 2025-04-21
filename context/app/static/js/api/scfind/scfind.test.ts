@@ -35,10 +35,10 @@ describe('createScfindKey', () => {
   ])('should filter out undefined passed params', ({ params, definedKeys, undefinedKeys }) => {
     const key = createScFindKey(scFindEndpoint, 'endpoint', params);
     definedKeys.forEach((k) => {
-      expect(key.includes(k));
+      expect(key.includes(k)).toBe(true);
     });
     undefinedKeys.forEach((k) => {
-      expect(!key.includes(k));
+      expect(key.includes(k)).toBe(false);
     });
     expectURLIsValid(key);
   });

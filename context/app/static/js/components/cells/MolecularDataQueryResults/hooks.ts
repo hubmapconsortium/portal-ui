@@ -14,14 +14,15 @@ function buildHitsMap<T>(hits: SearchHit<T>[]) {
   );
 }
 
-export function useAugmentedResults<T extends { uuid: string }>(inputResults: T[] = []) {
+export function useAugmentedResults<T extends { uuid: string } | { hubmap_id: string }>(inputResults: T[] = []) {
   const data = useSearchHits<Dataset>(getSearchQuery(inputResults), { shouldFetch: inputResults.length > 0 });
-
-  const hitsMap = buildHitsMap(data.searchHits);
+  const { searchHits, isLoading } = data;
+  const hitsMap = buildHitsMap(searchHits);
 
   return {
     hitsMap,
     length: data?.searchHits?.length ?? 0,
     list: Object.values(hitsMap) as Required<SearchHit<Dataset>>[],
+    isLoading,
   };
 }

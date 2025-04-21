@@ -39,10 +39,12 @@ export default function SaveEntitiesButton({
   entity_type,
   uuids,
   fromSelectableTable,
+  fromMolecularQuery,
 }: {
   entity_type: AllEntityTypes;
   uuids: Set<string>;
   fromSelectableTable?: boolean;
+  fromMolecularQuery?: boolean;
 }) {
   const { isHubmapUser } = useAppContext();
   const { savedEntities, handleSaveEntities } = useSavedLists();
@@ -61,10 +63,17 @@ export default function SaveEntitiesButton({
       return;
     }
 
+    let category;
+    if (fromSelectableTable) {
+      category = SavedListsEventCategories.EntitySearchPage(entity_type);
+    } else if (fromMolecularQuery) {
+      category = SavedListsEventCategories.MolecularDataQueryPage;
+    } else {
+      category = SavedListsEventCategories.EntityDetailPage(page_entity_type);
+    }
+
     trackEvent({
-      category: fromSelectableTable
-        ? SavedListsEventCategories.EntitySearchPage(entity_type)
-        : SavedListsEventCategories.EntityDetailPage(page_entity_type),
+      category,
       action: 'Save Entity to Items',
       label: generateCommaList(entityData.map((entity) => entity.hubmap_id)),
     });

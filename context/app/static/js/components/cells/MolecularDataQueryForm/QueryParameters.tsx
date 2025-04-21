@@ -27,6 +27,7 @@ function CellPercentageInput() {
       {...register('minimumCellPercentage')}
       min={0}
       max={10}
+      defaultValue={5}
     />
   );
 }
@@ -47,6 +48,7 @@ function ExpressionInput() {
       minLog={-4}
       maxLog={5}
       id="min-measurement"
+      defaultValue={1}
       {...register(fieldName)}
     />
   );
@@ -54,8 +56,7 @@ function ExpressionInput() {
 
 function ThresholdOptions() {
   const queryMethod = useMolecularDataQueryFormState().watch('queryMethod');
-  const queryType = useQueryType();
-  if (queryType.value === 'protein' && queryMethod === 'scFind') {
+  if (queryMethod === 'scFind') {
     return null;
   }
   return (
@@ -66,53 +67,57 @@ function ThresholdOptions() {
   );
 }
 
-function GeneParameters() {
+interface QueryParametersFieldsetProps {
+  defaultValue?: string;
+}
+
+function GeneParameters({ defaultValue }: QueryParametersFieldsetProps) {
   return (
     <>
       <QueryMethod />
       <FormFieldContainer title="Gene and Pathway Selection">
-        <AutocompleteEntity targetEntity="gene" />
+        <AutocompleteEntity targetEntity="gene" defaultValue={defaultValue} />
       </FormFieldContainer>
       <ThresholdOptions />
     </>
   );
 }
 
-function ProteinParameters() {
+function ProteinParameters({ defaultValue }: QueryParametersFieldsetProps) {
   return (
     <>
       <QueryMethod />
       <FormFieldContainer title="Protein Selection">
-        <AutocompleteEntity targetEntity="protein" />
+        <AutocompleteEntity targetEntity="protein" defaultValue={defaultValue} />
       </FormFieldContainer>
       <ThresholdOptions />
     </>
   );
 }
 
-function CellTypeParameters() {
+function CellTypeParameters({ defaultValue }: QueryParametersFieldsetProps) {
   return (
     <>
       <QueryMethod />
       <FormFieldContainer title="Cell Type Selection">
-        <AutocompleteEntity targetEntity="cell-type" />
+        <AutocompleteEntity defaultValue={defaultValue} targetEntity="cell-type" />
       </FormFieldContainer>
     </>
   );
 }
 
-function QueryParametersFieldset() {
+function QueryParametersFieldset({ defaultValue }: QueryParametersFieldsetProps) {
   const queryType = useQueryType();
 
   if (queryType.value === 'gene') {
-    return <GeneParameters />;
+    return <GeneParameters defaultValue={defaultValue} />;
   }
 
   if (queryType.value === 'protein') {
-    return <ProteinParameters />;
+    return <ProteinParameters defaultValue={defaultValue} />;
   }
 
-  return <CellTypeParameters />;
+  return <CellTypeParameters defaultValue={defaultValue} />;
 }
 
 export default QueryParametersFieldset;

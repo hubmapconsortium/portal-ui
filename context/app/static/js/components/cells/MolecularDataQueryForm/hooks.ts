@@ -60,3 +60,8 @@ export function useCrossModalityQueryParameters<T extends QueryType>(): GetDatas
   }
   return parameters;
 }
+
+export function useSCFindQueryParameters() {
+  const cellVariableNames = useCellVariableNames();
+  return cellVariableNames;
+}

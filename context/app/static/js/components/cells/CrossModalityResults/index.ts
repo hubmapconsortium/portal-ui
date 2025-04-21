@@ -1,3 +1,2 @@
-import CrossModalityCellTypeResults from './CrossModalityCellTypeResults';
-
-export default CrossModalityCellTypeResults;
+export { default as CrossModalityCellTypeResults } from './CrossModalityCellTypeResults';
+export { default as CrossModalityGeneOrProteinResults } from './CrossModalityGeneOrProteinResults';
