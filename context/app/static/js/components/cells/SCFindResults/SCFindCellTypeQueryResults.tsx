@@ -1,14 +1,8 @@
 import React from 'react';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
-import Typography from '@mui/material/Typography';
 import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { Dataset } from 'js/components/types';
-import Stack from '@mui/material/Stack';
-import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
-import SaveEntitiesButton from 'js/components/savedLists/SaveEntitiesButton';
-import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
-import { Copy } from 'js/shared-styles/tables/actions';
 import { useSCFindCellTypeResults } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
@@ -57,7 +51,6 @@ function SCFindCellTypeQueryResultsLoader() {
   const { datasets, isLoading } = useSCFindCellTypeResults();
   const cellTypes = useCellVariableNames();
   const { openTabIndex, handleTabChange } = useTabs();
-  const selectedUuids = useSelectableTableStore((state) => state.selectedRows);
 
   if (isLoading) {
     return <div>Loading...</div>;

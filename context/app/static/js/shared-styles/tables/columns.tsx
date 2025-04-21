@@ -59,7 +59,7 @@ function AssayTypesCell({ hit: { mapped_data_types } }: CellContentProps<Dataset
 
 export const assayTypes = {
   id: 'mapped_data_types',
-  label: 'AssayTypes',
+  label: 'Data Type',
   sort: 'mapped_data_types.keyword',
   cellContent: AssayTypesCell,
 };
