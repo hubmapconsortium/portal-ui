@@ -35,6 +35,7 @@ const WhiteBackgroundIconButton = styled(IconButton)<IconButtonProps>(({ theme, 
 }));
 
 const WhiteBackgroundIconDropdownMenuButton = styled(IconDropdownMenuButton)(({ theme }) => ({
+  ...whiteBackgroundCSS,
   ...border(theme),
 }));
 

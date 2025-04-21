@@ -1,3 +1,4 @@
+import { EventInfo } from 'js/components/types';
 import { JobStatus, JobStatusDisplayName, WorkspaceStatus } from './statusCodes';
 
 // Once workspaces API issues are resolved. We expect the workspaces API to consistently return an object.
@@ -95,6 +96,8 @@ export interface WorkspaceUser {
   email: string;
 }
 
+export type WorkspaceCreatorInfo = WorkspaceUser | 'Me' | 'Unknown';
+
 export interface WorkspaceWithUserId extends MergedWorkspace {
   user_id?: WorkspaceUser;
 }
@@ -110,7 +113,7 @@ export interface SharedWorkspace {
 export type InvitationType = 'Sent' | 'Received';
 
 export interface WorkspaceInvitation {
-  original_workspace_id: SharedWorkspace;
+  original_workspace_id?: SharedWorkspace; // This will be null for accepted workspaces where the original workspace is later deleted
   shared_workspace_id: SharedWorkspace;
   last_resource_options: WorkspaceResourceOptions;
   last_job_type: string;
@@ -184,18 +187,12 @@ type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
 export enum WorkspacesEventCategories {
   Workspaces = 'Workspaces',
-  WorkspaceDialog = 'Workspace Dialog',
   WorkspaceLandingPage = 'Workspace Landing Page',
-  WorkspaceDetailPage = 'Workspace Detail Page',
-  WorkspacePreviewPage = 'Workspace Preview Page',
+  WorkspaceDetailPreviewPage = 'Workspace Detail Preview Page',
+  WorkspaceDialog = 'Workspace Dialog',
   WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
   WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
-}
-
-interface WorkspacesEventInfo {
-  category: WorkspacesEventCategories;
-  action?: string;
-  label?: string;
+  WorkspaceDetailPage = 'Workspace Detail Page',
 }
 
 interface CreateTemplateNotebooksTypes {
@@ -205,7 +202,7 @@ interface CreateTemplateNotebooksTypes {
   workspaceDescription: string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 export type {
@@ -220,5 +217,4 @@ export type {
   CreateTemplateNotebooksTypes,
   TemplateTags,
   TemplateTagsResponse,
-  WorkspacesEventInfo,
 };

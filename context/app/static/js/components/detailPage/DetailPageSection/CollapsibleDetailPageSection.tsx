@@ -1,14 +1,18 @@
-import React, { PropsWithChildren } from 'react';
+import React, { PropsWithChildren, useState } from 'react';
 import AccordionDetails from '@mui/material/AccordionDetails';
 import AccordionSummary from '@mui/material/AccordionSummary';
 import ExpandMore from '@mui/icons-material/ExpandMore';
 import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { SvgIconComponent } from '@mui/icons-material';
+import useEventCallback from '@mui/material/utils/useEventCallback';
+
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
 import { sectionIconMap, sectionImageIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
+import { trackEvent } from 'js/helpers/trackers';
+import { EventInfo } from 'js/components/types';
 import DetailPageSection from './DetailPageSection';
 import { DetailPageSectionAccordion, StyledExternalImageIconContainer, StyledSvgIcon } from './style';
 
@@ -19,6 +23,7 @@ export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<Rea
   variant?: TypographyProps['variant'];
   component?: TypographyProps['component'];
   iconTooltipText?: string;
+  trackingInfo?: EventInfo;
 }
 
 interface IconDisplayProps {
@@ -49,11 +54,33 @@ export default function CollapsibleDetailPageSection({
   component = 'h3',
   action,
   iconTooltipText,
+  trackingInfo,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
+  // Handle expanded state manually in order to track the event
+  const [expanded, setExpanded] = useState(true);
+
+  const handleAccordionToggle = useEventCallback(() => {
+    const newExpandedState = !expanded;
+    setExpanded(newExpandedState);
+
+    if (trackingInfo) {
+      trackEvent({
+        action: `${newExpandedState ? 'Expand' : 'Collapse'} Section`,
+        label: title,
+        ...trackingInfo,
+      });
+    }
+  });
+
   return (
     <DetailPageSection {...rest}>
-      <DetailPageSectionAccordion defaultExpanded disableGutters variant="unstyled">
+      <DetailPageSectionAccordion
+        expanded={expanded}
+        onChange={handleAccordionToggle}
+        disableGutters
+        variant="unstyled"
+      >
         <AccordionSummary expandIcon={<ExpandMore />}>
           <IconDisplay icon={icon} id={rest.id!} />
           <Typography variant={variant} component={component}>

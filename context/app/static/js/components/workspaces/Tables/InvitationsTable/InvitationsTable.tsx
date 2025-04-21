@@ -35,6 +35,7 @@ const InvitationsTable = React.memo(function InvitationsTable({
       filters={filters}
       tableFields={tableFields}
       initialSortField={initialSortField}
+      status={status}
       showSeeMoreOption
     />
   );

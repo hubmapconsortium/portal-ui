@@ -1,8 +1,11 @@
-import { useState, SyntheticEvent, useCallback } from 'react';
+import { useState, SyntheticEvent } from 'react';
+import { useEventCallback } from '@mui/material/utils';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { Dataset } from 'js/components/types';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -92,34 +95,33 @@ function useDatasetsAutocomplete({
   const [autocompleteValue, setAutocompleteValue] = useState<SearchAheadHit | null>(null);
   const { toastSuccessAddDataset } = useWorkspaceToasts();
 
-  const removeDatasets = useCallback(
-    (uuids: string[]) => {
-      const updatedDatasets = selectedDatasets.filter((uuid) => !uuids.includes(uuid));
-      updateDatasetsFormState(updatedDatasets);
+  const removeDatasets = useEventCallback((uuids: string[]) => {
+    const updatedDatasets = selectedDatasets.filter((uuid) => !uuids.includes(uuid));
+    updateDatasetsFormState(updatedDatasets);
 
-      // Trigger a re-render to update the table results
-      setRefresh((prev) => !prev);
-    },
-    [selectedDatasets, updateDatasetsFormState],
-  );
+    // Trigger a re-render to update the table results
+    setRefresh((prev) => !prev);
+  });
 
-  const resetAutocompleteState = useCallback(() => {
+  const resetAutocompleteState = useEventCallback(() => {
     setInputValue('');
     setAutocompleteValue(null);
-  }, [setInputValue, setAutocompleteValue]);
+  });
 
-  const addDataset = useCallback(
-    (e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
-      const uuid = newValue?._source?.uuid;
+  const addDataset = useEventCallback((e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
+    const uuid = newValue?._source?.uuid;
 
-      if (uuid) {
-        updateDatasetsFormState([...selectedDatasets, uuid]);
-        resetAutocompleteState();
-        toastSuccessAddDataset(newValue._source.hubmap_id);
-      }
-    },
-    [selectedDatasets, updateDatasetsFormState, resetAutocompleteState, toastSuccessAddDataset],
-  );
+    if (uuid) {
+      trackEvent({
+        category: WorkspacesEventCategories.WorkspaceDialog,
+        action: 'Add datasets via dropdown',
+        label: uuid,
+      });
+      updateDatasetsFormState([...selectedDatasets, uuid]);
+      resetAutocompleteState();
+      toastSuccessAddDataset(newValue._source.hubmap_id);
+    }
+  });
 
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];
   const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });

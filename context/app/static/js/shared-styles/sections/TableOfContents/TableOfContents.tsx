@@ -8,10 +8,12 @@ import ListItem from '@mui/material/ListItem';
 import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
+import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
+import { EventInfo } from 'js/components/types';
+import { trackEvent } from 'js/helpers/trackers';
 
 import { animated } from '@react-spring/web';
 
-import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { StickyNav, TableTitle, StyledItemLink, StyledIconContainer } from './style';
 import { TableOfContentsItem, TableOfContentsItems, TableOfContentsItemWithNode } from './types';
 import { getItemsClient } from './utils';
@@ -21,7 +23,7 @@ const AnimatedNav = animated(StickyNav);
 
 interface LinkProps {
   currentSection: string;
-  handleClick: (hash: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
+  handleClick: (hash: string, text: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => void;
   isNested?: boolean;
 }
 
@@ -35,7 +37,7 @@ function ItemLink({ item, currentSection, handleClick, isNested = false }: LinkP
       gap={0.5}
       color={currentSection === item.hash ? 'textPrimary' : 'textSecondary'}
       href={`#${item.hash}`}
-      onClick={handleClick(item.hash)}
+      onClick={handleClick(item.hash, item.text)}
       $isCurrentSection={currentSection === item.hash}
       $isNested={isNested}
     >
@@ -107,7 +109,15 @@ function ItemSkeleton() {
   );
 }
 
-function TableOfContents({ items, isLoading = false }: { items: TableOfContentsItems; isLoading?: boolean }) {
+function TableOfContents({
+  items,
+  isLoading = false,
+  trackingInfo,
+}: {
+  items: TableOfContentsItems;
+  isLoading?: boolean;
+  trackingInfo?: EventInfo;
+}) {
   const [currentSection, setCurrentSection] = useState(items[0].hash);
 
   const itemsWithNodeRef = React.useRef<TableOfContentsItems<TableOfContentsItemWithNode>>([]);
@@ -124,7 +134,7 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
   useThrottledOnScroll(items.length > 0 ? findActiveIndex : null, 200);
 
   const handleClick = useCallback(
-    (hash: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+    (hash: string, text: string) => (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
       if (
         event.defaultPrevented ||
         event.button !== 0 ||
@@ -144,9 +154,16 @@ function TableOfContents({ items, isLoading = false }: { items: TableOfContentsI
 
       if (currentSection !== hash) {
         setCurrentSection(hash);
+        if (trackingInfo) {
+          trackEvent({
+            ...trackingInfo,
+            action: 'Navigate with Table of Contents',
+            label: `${trackingInfo.label} ${text}`,
+          });
+        }
       }
     },
-    [clickedRef, currentSection, setCurrentSection],
+    [clickedRef, currentSection, trackingInfo, setCurrentSection],
   );
 
   React.useEffect(() => {

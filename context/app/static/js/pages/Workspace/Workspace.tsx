@@ -21,8 +21,8 @@ import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateBut
 import {
   MergedWorkspace,
   TemplatesTypes,
+  WorkspaceCreatorInfo,
   WorkspaceInvitation,
-  WorkspaceUser,
   WorkspacesEventCategories,
 } from 'js/components/workspaces/types';
 import { buildSearchLink } from 'js/components/search/store';
@@ -41,8 +41,13 @@ import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTa
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import NameAndEmailLink from 'js/shared-styles/Links/NameAndEmailLink';
+import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/components/workspaces/contexts';
+import WorkspacesDeleteButton from 'js/components/workspaces/WorkspacesDeleteButton';
+import { trackEvent } from 'js/helpers/trackers';
+import NonLinkingCreatorInfo from 'js/shared-styles/Links/NonLinkingCreatorInfo';
 
 const tooltips = {
+  delete: 'Delete this workspace. This action is permanent.',
   update: 'Edit workspace name or description',
   lastLaunched: 'Date of the last launched session',
   lastModified: 'Date of the last modification to the content of the workspace',
@@ -63,19 +68,29 @@ const descriptions = {
     'These are the templates that are in this workspace. You can add more templates to this workspace by using the add button.',
 };
 
-const datasetsPage = {
+const trackRelevantPage = (pageName: string, workspaceName: string) => {
+  trackEvent({
+    category: WorkspacesEventCategories.WorkspaceDetailPage,
+    action: 'Select Relevant Page Button',
+    label: `${workspaceName} ${pageName}`,
+  });
+};
+
+const datasetsPage = (workspaceName: string) => ({
   link: buildSearchLink({
     entity_type: 'Dataset',
   }),
   children: 'Dataset Search Page',
-};
+  onClick: () => trackRelevantPage('Dataset Search Page', workspaceName),
+});
 
-const pages = [
+const pages = (workspaceName: string) => [
   {
     link: '/workspaces',
     children: 'My Workspaces',
+    onClick: () => trackRelevantPage('My Workspaces', workspaceName),
   },
-  datasetsPage,
+  datasetsPage(workspaceName),
 ];
 
 const shouldDisplaySection = {
@@ -114,6 +129,7 @@ function SummaryTitle({
       entity_type="Workspace"
       otherButtons={
         <Stack direction="row" alignItems="center" spacing={1}>
+          <WorkspacesDeleteButton workspaceIds={new Set([workspace.id.toString()])} tooltip={tooltips.delete} />
           <WorkspacesUpdateButton
             workspace={workspace}
             dialogType="UPDATE_NAME"
@@ -152,7 +168,7 @@ function SummaryTitle({
   );
 }
 
-function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; creatorInfo?: WorkspaceUser }) {
+function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; creatorInfo: WorkspaceCreatorInfo }) {
   const { description, datetime_created, datetime_last_job_launch, datetime_last_modified } = workspace;
 
   return (
@@ -160,14 +176,14 @@ function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; c
       <Stack spacing={2}>
         <LabelledSectionText label="Description">{description}</LabelledSectionText>
         <LabelledSectionText label="Created By">
-          {creatorInfo ? (
+          {typeof creatorInfo === 'string' ? (
+            <NonLinkingCreatorInfo creatorInfo={creatorInfo} />
+          ) : (
             <NameAndEmailLink
               first_name={creatorInfo.first_name}
               last_name={creatorInfo.last_name}
               email={creatorInfo.email}
             />
-          ) : (
-            'Me'
           )}
         </LabelledSectionText>
         <Stack spacing={15} direction="row">
@@ -185,7 +201,7 @@ function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; c
             </LabelledSectionText>
           )}
         </Stack>
-        <RelevantPagesSection pages={pages} />
+        <RelevantPagesSection pages={pages(workspace.name)} />
       </Stack>
     </SectionPaper>
   );
@@ -198,7 +214,7 @@ function Summary({
   isStoppingWorkspace,
 }: {
   workspace: MergedWorkspace;
-  creatorInfo?: WorkspaceUser;
+  creatorInfo: WorkspaceCreatorInfo;
   handleStopWorkspace: (id: number) => Promise<void>;
   isStoppingWorkspace: boolean;
 }) {
@@ -218,12 +234,17 @@ function Summary({
 
 function SentInvitationsStatus({ sentInvitations }: { sentInvitations: WorkspaceInvitation[] }) {
   const { setDialogType } = useEditWorkspaceStore();
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
 
   return (
     <CollapsibleDetailPageSection
       id="sent-invitations-status"
       title="Sent Invitations Status"
       icon={sectionIconMap['sent-invitations-status']}
+      trackingInfo={{
+        category: currentEventCategory,
+        label: `${currentWorkspaceItemId} Sent Invitations Status`,
+      }}
     >
       {sentInvitations.length === 0 ? (
         <Description>
@@ -251,8 +272,18 @@ function SentInvitationsStatus({ sentInvitations }: { sentInvitations: Workspace
 }
 
 function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace; workspaceDatasets: string[] }) {
+  const { currentEventCategory, currentWorkspaceItemName, currentWorkspaceItemId } = useWorkspacesEventContext();
+
   return (
-    <CollapsibleDetailPageSection id="datasets" title="Datasets" icon={sectionIconMap.datasets}>
+    <CollapsibleDetailPageSection
+      id="datasets"
+      title="Datasets"
+      icon={sectionIconMap.datasets}
+      trackingInfo={{
+        category: currentEventCategory,
+        label: `${currentWorkspaceItemId} Datasets`,
+      }}
+    >
       <Stack spacing={1}>
         <SectionDescription>
           <Stack spacing={1}>
@@ -260,7 +291,7 @@ function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace
               {workspaceDatasets.length > 0 ? descriptions.datasetsPresent : descriptions.datasetsAbsent}
             </Typography>
             <Box>
-              <OutlinedLinkButton key={datasetsPage.link} {...datasetsPage} />
+              <OutlinedLinkButton key={datasetsPage(workspace.name).link} {...datasetsPage(workspace.name)} />
             </Box>
           </Stack>
         </SectionDescription>
@@ -270,8 +301,8 @@ function Datasets({ workspace, workspaceDatasets }: { workspace: MergedWorkspace
           addDatasets={workspace}
           copyDatasets
           trackingInfo={{
-            category: WorkspacesEventCategories.WorkspaceDetailPage,
-            label: workspace.name,
+            category: currentEventCategory,
+            label: currentWorkspaceItemName,
           }}
         />
       </Stack>
@@ -286,6 +317,8 @@ function Templates({
   workspace: MergedWorkspace;
   workspaceTemplates: TemplatesTypes;
 }) {
+  const { currentEventCategory, currentWorkspaceItemId } = useWorkspacesEventContext();
+
   return (
     <CollapsibleDetailPageSection
       id="templates"
@@ -296,13 +329,14 @@ function Templates({
           <AddIcon />
         </WorkspacesUpdateButton>
       }
+      trackingInfo={{
+        category: currentEventCategory,
+        label: `${currentWorkspaceItemId} Templates`,
+      }}
     >
       <Stack>
         <SectionDescription>{descriptions.templates}</SectionDescription>
-        <TemplateGrid
-          templates={workspaceTemplates}
-          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage }}
-        />
+        <TemplateGrid templates={workspaceTemplates} />
       </Stack>
     </CollapsibleDetailPageSection>
   );
@@ -325,23 +359,32 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
   }
 
   return (
-    <WorkspacesAuthGuard>
-      <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
-      <DetailLayout sections={shouldDisplaySection}>
-        <Stack gap={1} sx={{ marginBottom: 5 }}>
-          <WorkspaceSessionWarning workspaces={[workspace]} />
-          <Summary
-            workspace={workspace}
-            creatorInfo={creatorInfo}
-            handleStopWorkspace={handleStopWorkspace}
-            isStoppingWorkspace={isStoppingWorkspace}
-          />
-          <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
-          <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
-          <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
-        </Stack>
-      </DetailLayout>
-    </WorkspacesAuthGuard>
+    <WorkspacesEventContextProvider
+      currentEventCategory={WorkspacesEventCategories.WorkspaceDetailPage}
+      currentWorkspaceItemId={workspaceId}
+      currentWorkspaceItemName={workspace.name}
+    >
+      <WorkspacesAuthGuard>
+        <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
+        <DetailLayout
+          sections={shouldDisplaySection}
+          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage, label: workspace.name }}
+        >
+          <Stack gap={1} sx={{ marginBottom: 5 }}>
+            <WorkspaceSessionWarning workspaces={[workspace]} />
+            <Summary
+              workspace={workspace}
+              creatorInfo={creatorInfo}
+              handleStopWorkspace={handleStopWorkspace}
+              isStoppingWorkspace={isStoppingWorkspace}
+            />
+            <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
+            <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
+            <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
+          </Stack>
+        </DetailLayout>
+      </WorkspacesAuthGuard>
+    </WorkspacesEventContextProvider>
   );
 }
 

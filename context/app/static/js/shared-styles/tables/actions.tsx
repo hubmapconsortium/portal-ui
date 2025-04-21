@@ -11,7 +11,7 @@ import { fetchSearchData } from 'js/hooks/useSearchData';
 import { getIDsQuery } from 'js/helpers/queries';
 import { DeleteIcon } from 'js/shared-styles/icons';
 import { trackEvent } from 'js/helpers/trackers';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { EventInfo } from 'js/components/types';
 import { useSnackbarActions } from '../snackbars';
 
 const TableIconButton = styled(TooltipIconButton)(({ theme }) => ({
@@ -25,7 +25,7 @@ const TableIconButton = styled(TooltipIconButton)(({ theme }) => ({
 }));
 
 interface CopyProps {
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 export function Copy({ trackingInfo }: CopyProps) {
