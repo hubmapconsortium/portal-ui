@@ -239,6 +239,7 @@ function Routes({ flaskData }) {
   }
 
   if (urlPath.startsWith('/invitations/')) {
+    console.log('Invitation URL:', urlPath);
     const invitationId = parseInt(urlPath.split('/').pop(), 10);
     return (
       <Route>

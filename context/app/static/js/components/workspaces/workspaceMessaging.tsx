@@ -198,4 +198,4 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
   );
 }
 
-export { WorkspacesLogInAlert, AccessAlert, TemplatePreviewSection, TextItems };
+export { WorkspacesLogInAlert, AccessAlert, ContactUsForAccess, TemplatePreviewSection, TextItems };

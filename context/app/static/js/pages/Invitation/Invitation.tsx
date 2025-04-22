@@ -5,7 +5,6 @@ import Button from '@mui/material/Button';
 import useEventCallback from '@mui/material/utils/useEventCallback';
 
 import { useInvitationDetail } from 'js/components/workspaces/hooks';
-import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import { TemplatesTypes, WorkspaceInvitation, WorkspacesEventCategories } from 'js/components/workspaces/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import { CollapsibleDetailPageSection, DetailPageSection } from 'js/components/detailPage/DetailPageSection';
@@ -17,6 +16,7 @@ import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import WorkspaceDetailAuthGuard from 'js/components/workspaces/WorkspaceDetailAuthGuard';
 import TemplateGrid from 'js/components/workspaces/TemplateGrid';
 import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialogs';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
@@ -133,7 +133,7 @@ function Templates({ invitationTemplates }: { invitationTemplates: TemplatesType
 interface InvitationPageProps {
   invitationId: number;
 }
-function InvitationPage({ invitationId }: InvitationPageProps) {
+function InvitationPageContent({ invitationId }: InvitationPageProps) {
   const { invitation, invitationDatasets, invitationTemplates, invitationsLoading, handleAcceptInvitation } =
     useInvitationDetail({
       invitationId,
@@ -179,33 +179,39 @@ function InvitationPage({ invitationId }: InvitationPageProps) {
       currentWorkspaceItemId={invitationId}
       currentWorkspaceItemName={invitation.shared_workspace_id.name}
     >
-      <WorkspacesAuthGuard>
-        <WorkspacesListDialogs selectedWorkspaceIds={new Set([invitationId.toString()])} />
-        <DetailLayout
-          sections={shouldDisplaySection}
-          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPreviewPage, label: invitationId }}
+      <WorkspacesListDialogs selectedWorkspaceIds={new Set([invitationId.toString()])} />
+      <DetailLayout
+        sections={shouldDisplaySection}
+        trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPreviewPage, label: invitationId }}
+      >
+        <StyledAlert
+          severity="info"
+          action={
+            <Stack direction="row" gap={1}>
+              <Button onClick={handleDecline}>Decline</Button>
+              <Button onClick={handleAccept} color="success">
+                Accept
+              </Button>
+            </Stack>
+          }
         >
-          <StyledAlert
-            severity="info"
-            action={
-              <Stack direction="row" gap={1}>
-                <Button onClick={handleDecline}>Decline</Button>
-                <Button onClick={handleAccept} color="success">
-                  Accept
-                </Button>
-              </Stack>
-            }
-          >
-            {descriptions.acceptInvite}
-          </StyledAlert>
-          <Stack gap={1} sx={{ marginBottom: 5 }}>
-            <Summary invitation={invitation} />
-            <Datasets invitationDatasets={invitationDatasets} />
-            <Templates invitationTemplates={invitationTemplates} />
-          </Stack>
-        </DetailLayout>
-      </WorkspacesAuthGuard>
+          {descriptions.acceptInvite}
+        </StyledAlert>
+        <Stack gap={1} sx={{ marginBottom: 5 }}>
+          <Summary invitation={invitation} />
+          <Datasets invitationDatasets={invitationDatasets} />
+          <Templates invitationTemplates={invitationTemplates} />
+        </Stack>
+      </DetailLayout>
     </WorkspacesEventContextProvider>
+  );
+}
+
+function InvitationPage({ invitationId }: InvitationPageProps) {
+  return (
+    <WorkspaceDetailAuthGuard>
+      <InvitationPageContent invitationId={invitationId} />
+    </WorkspaceDetailAuthGuard>
   );
 }
 

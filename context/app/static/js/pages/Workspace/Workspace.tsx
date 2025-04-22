@@ -14,7 +14,6 @@ import { condenseJobs } from 'js/components/workspaces/utils';
 import JobStatus from 'js/components/workspaces/JobStatus';
 import { useInvitationWorkspaceDetails } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
-import WorkspacesAuthGuard from 'js/components/workspaces/WorkspacesAuthGuard';
 import WorkspaceSessionWarning from 'js/components/workspaces/WorkspaceSessionWarning';
 import { AddIcon, EditIcon } from 'js/shared-styles/icons';
 import WorkspacesUpdateButton from 'js/components/workspaces/WorkspacesUpdateButton';
@@ -45,6 +44,7 @@ import { WorkspacesEventContextProvider, useWorkspacesEventContext } from 'js/co
 import WorkspacesDeleteButton from 'js/components/workspaces/WorkspacesDeleteButton';
 import { trackEvent } from 'js/helpers/trackers';
 import NonLinkingCreatorInfo from 'js/shared-styles/Links/NonLinkingCreatorInfo';
+import WorkspaceDetailAuthGuard from 'js/components/workspaces/WorkspaceDetailAuthGuard';
 
 const tooltips = {
   delete: 'Delete this workspace. This action is permanent.',
@@ -342,7 +342,7 @@ function Templates({
   );
 }
 
-function WorkspacePage({ workspaceId }: WorkspacePageProps) {
+function WorkspacePageContent({ workspaceId }: WorkspacePageProps) {
   const {
     workspace,
     creatorInfo,
@@ -364,27 +364,33 @@ function WorkspacePage({ workspaceId }: WorkspacePageProps) {
       currentWorkspaceItemId={workspaceId}
       currentWorkspaceItemName={workspace.name}
     >
-      <WorkspacesAuthGuard>
-        <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
-        <DetailLayout
-          sections={shouldDisplaySection}
-          trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage, label: workspace.name }}
-        >
-          <Stack gap={1} sx={{ marginBottom: 5 }}>
-            <WorkspaceSessionWarning workspaces={[workspace]} />
-            <Summary
-              workspace={workspace}
-              creatorInfo={creatorInfo}
-              handleStopWorkspace={handleStopWorkspace}
-              isStoppingWorkspace={isStoppingWorkspace}
-            />
-            <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
-            <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
-            <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
-          </Stack>
-        </DetailLayout>
-      </WorkspacesAuthGuard>
+      <WorkspacesListDialogs selectedWorkspaceIds={new Set([workspaceId.toString()])} />
+      <DetailLayout
+        sections={shouldDisplaySection}
+        trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage, label: workspace.name }}
+      >
+        <Stack gap={1} sx={{ marginBottom: 5 }}>
+          <WorkspaceSessionWarning workspaces={[workspace]} />
+          <Summary
+            workspace={workspace}
+            creatorInfo={creatorInfo}
+            handleStopWorkspace={handleStopWorkspace}
+            isStoppingWorkspace={isStoppingWorkspace}
+          />
+          <SentInvitationsStatus sentInvitations={workspaceSentInvitations} />
+          <Datasets workspace={workspace} workspaceDatasets={workspaceDatasets} />
+          <Templates workspace={workspace} workspaceTemplates={workspaceTemplates} />
+        </Stack>
+      </DetailLayout>
     </WorkspacesEventContextProvider>
+  );
+}
+
+function WorkspacePage({ workspaceId }: WorkspacePageProps) {
+  return (
+    <WorkspaceDetailAuthGuard>
+      <WorkspacePageContent workspaceId={workspaceId} />
+    </WorkspaceDetailAuthGuard>
   );
 }
 
