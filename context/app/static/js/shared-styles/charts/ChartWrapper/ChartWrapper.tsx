@@ -1,9 +1,11 @@
 import React, { PropsWithChildren } from 'react';
-import { LegendOrdinal } from '@visx/legend';
+import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import { TitleWrapper } from 'js/shared-styles/charts/style';
+import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
+import { Divider } from '@mui/material';
 import { OrdinalScale } from '../hooks';
 
 interface ChartWrapperProps extends PropsWithChildren {
@@ -17,6 +19,12 @@ interface ChartWrapperProps extends PropsWithChildren {
   allKeysScale?: OrdinalScale;
 }
 
+const pullUpMultiple = (a: string, b: string) => {
+  if (a === 'Multiple') return -1;
+  if (b === 'Multiple') return 1;
+  return a.localeCompare(b);
+};
+
 function ChartWrapper({
   children,
   chartTitle,
@@ -28,6 +36,8 @@ function ChartWrapper({
   additionalControls,
   allKeysScale,
 }: ChartWrapperProps) {
+  const domain = [...colorScale.domain()].sort(pullUpMultiple);
+  const allKeysDomain = [...(allKeysScale?.domain() ?? [])].sort(pullUpMultiple);
   return (
     <Box
       sx={{
@@ -55,21 +65,65 @@ function ChartWrapper({
       <Box sx={{ gridArea: 'legend', display: 'flex', flexDirection: 'column', maxHeight: '100%', overflow: 'none' }}>
         {dropdown && <Box sx={{ marginY: 1, minWidth: 0 }}>{dropdown}</Box>}
         <Box sx={{ flex: 1, overflowY: 'auto' }} tabIndex={0}>
-          <LegendOrdinal
-            scale={colorScale}
-            labelMargin="0 15px 0 0"
-            shapeStyle={() => ({
-              borderRadius: '4px',
-            })}
-          />
+          <LegendOrdinal scale={colorScale} domain={domain}>
+            {(labels) => (
+              <div style={{ display: 'flex', flexDirection: 'column' }}>
+                {labels.map((label) => {
+                  const isMultiple = label.text === 'Multiple';
+                  return (
+                    <>
+                      <LegendItem key={`legend-${label.text}`} margin="0 15px 0 0">
+                        <svg width="1em" height="1em" style={{ borderRadius: '4px' }}>
+                          {isMultiple && (
+                            <defs>
+                              <pattern
+                                id={`pattern-${label.text}`}
+                                patternUnits="userSpaceOnUse"
+                                width={domain.length}
+                                height="2.5"
+                                patternTransform="rotate(90)"
+                              >
+                                {domain.map((key, index) => (
+                                  <line
+                                    key={key}
+                                    x1={index + 0.5}
+                                    y1="0"
+                                    x2={index + 0.5}
+                                    y2="2.5"
+                                    stroke={colorScale(key)}
+                                    strokeWidth="1"
+                                  />
+                                ))}
+                              </pattern>
+                            </defs>
+                          )}
+                          <rect
+                            fill={!isMultiple ? colorScale(label.text) : `url(#pattern-${label.text})`}
+                            width="1em"
+                            height="1em"
+                          />
+                        </svg>
+                        <LegendLabel align="left" margin="0 0 0 4px">
+                          {isMultiple ? (
+                            <InfoTextTooltip tooltipTitle="This data has multiple categories">
+                              {label.text}
+                            </InfoTextTooltip>
+                          ) : (
+                            label.text
+                          )}
+                        </LegendLabel>
+                      </LegendItem>
+                      {isMultiple && <Divider sx={{ marginY: 1 }} />}
+                    </>
+                  );
+                })}
+              </div>
+            )}
+          </LegendOrdinal>
           {allKeysScale && (
-            /* This is used to prevent content shifts when toggling between different sets of data */
+            /* This is used to prevent content shift when toggling between different sets of data */
             <Box sx={{ height: 0, speak: 'none', overflow: 'hidden' }}>
-              <LegendOrdinal
-                scale={allKeysScale}
-                labelMargin="0 15px 0 0"
-                shapeStyle={() => ({ borderRadius: '3px' })}
-              />
+              <LegendOrdinal scale={allKeysScale} domain={allKeysDomain} />
             </Box>
           )}
         </Box>

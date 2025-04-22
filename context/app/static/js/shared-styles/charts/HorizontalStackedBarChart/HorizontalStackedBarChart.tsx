@@ -145,6 +145,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                       bar={bar}
                       href={getBarHref?.(bar)}
                       ariaLabelText={getAriaLabel?.(bar)}
+                      colorScale={colorScale}
                       hoverProps={
                         showTooltipAndHover
                           ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }

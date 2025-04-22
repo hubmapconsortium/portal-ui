@@ -1,4 +1,4 @@
-import React, { ComponentProps } from 'react';
+import React, { ComponentProps, useMemo } from 'react';
 import Paper from '@mui/material/Paper';
 
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
@@ -12,6 +12,7 @@ import { TooltipData } from 'js/shared-styles/charts/types';
 import Typography from '@mui/material/Typography';
 import { AnyD3Scale } from '@visx/scale';
 import { getSearchURL } from 'js/components/organ/utils';
+import { SelectChangeEvent } from '@mui/material';
 import ChartDropdown from '../HuBMAPDatasetsChartDropdown';
 import {
   assayTypeQuery,
@@ -86,126 +87,184 @@ function HuBMAPDatasetsChart() {
 
   const range = useSearchDataRange(selectedEntityType);
 
-  const colorOptions: ColorOption[] = [
-    {
-      key: 'assay_type',
-      data: assayBuckets,
-      dropdownLabel: 'Assay Type',
-      keys: getKeysFromAggregatedData(assayBuckets),
-      getBarHref: (d) => {
-        const organTerms = [String(d.bar.data.organ)];
-        return getSearchURL({
-          entityType: 'Dataset',
-          organTerms,
-          assay: d.key,
-          assayTypeMap: datasetTypeMap,
-        });
+  const colorOptions: ColorOption[] = useMemo(
+    () => [
+      {
+        key: 'assay_type',
+        data: assayBuckets,
+        dropdownLabel: 'Assay Type',
+        keys: getKeysFromAggregatedData(assayBuckets),
+        getBarHref:
+          selectedEntityType === 'Dataset'
+            ? (d) => {
+                const organTerms = [String(d.bar.data.organ)];
+                return getSearchURL({
+                  entityType: 'Dataset',
+                  organTerms,
+                  assay: d.key,
+                  assayTypeMap: datasetTypeMap,
+                });
+              }
+            : undefined,
+        getAriaLabel: (d) => {
+          const organ = String(d?.bar?.data?.organ ?? '');
+          const assay = d.key;
+          const count = d.key ? d?.bar?.data?.data[d.key] : null;
+          if (count) return `${count} ${organ} datasets with assay type ${assay}.`;
+          return `${organ} datasets with assay type ${assay}.`;
+        },
       },
-      getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ ?? '');
-        const assay = d.key;
-        const count = d.key ? d?.bar?.data?.data[d.key] : null;
-        if (count) return `${count} ${organ} datasets with assay type ${assay}.`;
-        return `${organ} datasets with assay type ${assay}.`;
+      {
+        key: 'donor_sex',
+        data: donorSexBuckets,
+        dropdownLabel: 'Donor Sex',
+        keys: getKeysFromAggregatedData(donorSexBuckets),
+        getBarHref:
+          selectedEntityType === 'Dataset'
+            ? (d) => {
+                const organTerms = [String(d.bar.data.organ)];
+                return getSearchURL({
+                  entityType: 'Dataset',
+                  organTerms,
+                  donorSex: d.key,
+                });
+              }
+            : undefined,
+        getAriaLabel: (d) => {
+          const organ = String(d?.bar?.data?.organ ?? '');
+          const donorSex = d.key;
+          const count = d.key ? d?.bar?.data?.data[d.key] : null;
+          if (count) return `${count} ${organ} datasets with donor sex ${donorSex}.`;
+          return `${organ} datasets with donor sex ${donorSex}.`;
+        },
       },
-    },
-    {
-      key: 'donor_sex',
-      data: donorSexBuckets,
-      dropdownLabel: 'Donor Sex',
-      keys: getKeysFromAggregatedData(donorSexBuckets),
-      getBarHref: (d) => {
-        const organTerms = [String(d.bar.data.organ)];
-        return getSearchURL({
-          entityType: 'Dataset',
-          organTerms,
-          donorSex: d.key,
-        });
+      {
+        key: 'donor_race',
+        data: donorRaceBuckets,
+        dropdownLabel: 'Donor Race',
+        keys: getKeysFromAggregatedData(donorRaceBuckets),
+        getBarHref:
+          selectedEntityType === 'Dataset'
+            ? (d) => {
+                const organTerms = [String(d.bar.data.organ)];
+                return getSearchURL({
+                  entityType: 'Dataset',
+                  organTerms,
+                  donorRace: d.key,
+                });
+              }
+            : undefined,
+        getAriaLabel: (d) => {
+          const organ = String(d?.bar?.data?.organ ?? '');
+          const donorRace = d.key;
+          const count = d.key ? d?.bar?.data?.data[d.key] : null;
+          if (count) return `${count} ${organ} datasets with donor race ${donorRace}.`;
+          return `${organ} datasets with donor race ${donorRace}.`;
+        },
       },
-      getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ ?? '');
-        const donorSex = d.key;
-        const count = d.key ? d?.bar?.data?.data[d.key] : null;
-        if (count) return `${count} ${organ} datasets with donor sex ${donorSex}.`;
-        return `${organ} datasets with donor sex ${donorSex}.`;
+      {
+        key: 'analyte_class',
+        data: analyteClassBuckets,
+        dropdownLabel: 'Analyte Class',
+        keys: getKeysFromAggregatedData(analyteClassBuckets),
+        getBarHref:
+          selectedEntityType === 'Dataset'
+            ? (d) => {
+                const organTerms = [String(d.bar.data.organ)];
+                return getSearchURL({
+                  entityType: 'Dataset',
+                  organTerms,
+                  analyteClass: d.key,
+                });
+              }
+            : undefined,
+        getAriaLabel: (d) => {
+          const organ = String(d?.bar?.data?.organ ?? '');
+          const analyteClass = d.key;
+          const count = d.key ? d?.bar?.data?.data[d.key] : null;
+          if (count) return `${count} ${organ} datasets with analyte class ${analyteClass}.`;
+          return `${organ} datasets with analyte class ${analyteClass}.`;
+        },
       },
-    },
-    {
-      key: 'donor_race',
-      data: donorRaceBuckets,
-      dropdownLabel: 'Donor Race',
-      keys: getKeysFromAggregatedData(donorRaceBuckets),
-      getBarHref: (d) => {
-        const organTerms = [String(d.bar.data.organ)];
-        return getSearchURL({
-          entityType: 'Dataset',
-          organTerms,
-          donorRace: d.key,
-        });
+      {
+        key: 'processing_status',
+        data: processingStatusBuckets,
+        dropdownLabel: 'Processing Status',
+        keys: getKeysFromAggregatedData(processingStatusBuckets),
+        getBarHref:
+          selectedEntityType === 'Dataset'
+            ? (d) => {
+                const organTerms = [String(d.bar.data.organ)];
+                return getSearchURL({
+                  entityType: 'Dataset',
+                  organTerms,
+                  processingStatus: d.key,
+                });
+              }
+            : undefined,
+        getAriaLabel: (d) => {
+          const organ = String(d?.bar?.data?.organ ?? '');
+          const processingStatus = d.key;
+          const count = d.key ? d?.bar?.data?.data[d.key] : null;
+          if (count) return `${count} ${organ} datasets with ${processingStatus} status.`;
+          return `${organ} datasets with ${processingStatus} status.`;
+        },
       },
-      getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ ?? '');
-        const donorRace = d.key;
-        const count = d.key ? d?.bar?.data?.data[d.key] : null;
-        if (count) return `${count} ${organ} datasets with donor race ${donorRace}.`;
-        return `${organ} datasets with donor race ${donorRace}.`;
-      },
-    },
-    {
-      key: 'analyte_class',
-      data: analyteClassBuckets,
-      dropdownLabel: 'Analyte Class',
-      keys: getKeysFromAggregatedData(analyteClassBuckets),
-      getBarHref: (d) => {
-        const organTerms = [String(d.bar.data.organ)];
-        return getSearchURL({
-          entityType: 'Dataset',
-          organTerms,
-          analyteClass: d.key,
-        });
-      },
-      getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ ?? '');
-        const analyteClass = d.key;
-        const count = d.key ? d?.bar?.data?.data[d.key] : null;
-        if (count) return `${count} ${organ} datasets with analyte class ${analyteClass}.`;
-        return `${organ} datasets with analyte class ${analyteClass}.`;
-      },
-    },
-    {
-      key: 'processing_status',
-      data: processingStatusBuckets,
-      dropdownLabel: 'Processing Status',
-      keys: getKeysFromAggregatedData(processingStatusBuckets),
-      getBarHref: (d) => {
-        const organTerms = [String(d.bar.data.organ)];
-        return getSearchURL({
-          entityType: 'Dataset',
-          organTerms,
-          processingStatus: d.key,
-        });
-      },
-      getAriaLabel: (d) => {
-        const organ = String(d?.bar?.data?.organ ?? '');
-        const processingStatus = d.key;
-        const count = d.key ? d?.bar?.data?.data[d.key] : null;
-        if (count) return `${count} ${organ} datasets with ${processingStatus} status.`;
-        return `${organ} datasets with ${processingStatus} status.`;
-      },
-    },
-  ];
+    ],
+    [
+      assayBuckets,
+      donorSexBuckets,
+      donorRaceBuckets,
+      analyteClassBuckets,
+      processingStatusBuckets,
+      datasetTypeMap,
+      selectedEntityType,
+    ],
+  );
 
   const selectedColor = colorOptions[selectedColorDataIndex];
 
-  const colorScale = useOrdinalScale(selectedColor.keys, { range: colors });
+  const colorDomain = useMemo(() => {
+    const editedDomain = [
+      ...colorOptions[selectedColorDataIndex].keys
+        .reduce((acc, curr) => {
+          if (curr.includes(', ')) {
+            const split = curr.split(', ');
+            acc.add('Multiple');
+            split.forEach((s) => {
+              acc.add(s);
+            });
+          } else {
+            acc.add(curr);
+          }
+          return acc;
+        }, new Set<string>())
+        .values(),
+    ].sort();
+    return editedDomain;
+  }, [selectedColorDataIndex, colorOptions]);
+
+  const colorScale = useOrdinalScale(colorDomain, { range: colors });
   const yScale = useBandScale(organOrder, { padding: 0.1 });
   const xScale = useLinearScale(range, { nice: true });
 
-  const allKeys = colorOptions.flatMap((option) => option.keys);
+  const allKeys = useMemo(
+    () =>
+      colorOptions
+        .flatMap((option) => option.keys)
+        .map((d) => {
+          if (d.includes(', ')) {
+            return 'Multiple';
+          }
+          return d;
+        })
+        .filter((d, idx, arr) => arr.indexOf(d) === idx)
+        .sort(),
+    [colorOptions],
+  );
   const allKeysScale = useOrdinalScale(allKeys, { range: colors });
 
   if (!selectedColor.data.length || !organOrder) return <Skeleton height="500px" />;
-
   return (
     <Paper sx={{ px: 2 }}>
       <ChartArea>
@@ -218,7 +277,7 @@ function HuBMAPDatasetsChart() {
               options={colorOptions.map((c) => c.dropdownLabel)}
               value={selectedColor.dropdownLabel}
               label="Compare by"
-              onChange={(e) =>
+              onChange={(e: SelectChangeEvent) =>
                 setSelectedColorDataIndex(colorOptions.findIndex((c) => c.dropdownLabel === e.target.value))
               }
               fullWidth
@@ -230,7 +289,7 @@ function HuBMAPDatasetsChart() {
               value={selectedEntityType}
               label="X-Axis"
               fullWidth
-              onChange={(e) => {
+              onChange={(e: SelectChangeEvent) => {
                 setSelectedEntityType(e.target.value as (typeof SELECTED_ENTITY_TYPES)[number]);
               }}
             />

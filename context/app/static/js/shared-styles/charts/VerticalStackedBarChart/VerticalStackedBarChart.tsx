@@ -130,6 +130,7 @@ function VerticalStackedBarChart<
                             onMouseEnter: handleMouseEnter(bar),
                             onMouseLeave: handleMouseLeave,
                           }}
+                          colorScale={colorScale}
                         />
                       ),
                   ),
