@@ -1,3 +1,0 @@
-- Update analytics for workspaces.
-- Add delete buttons to workspace detail pages.
-- Handle edge case of accepted workspaces whose originals are later deleted.
