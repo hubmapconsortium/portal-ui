@@ -1,7 +1,7 @@
-import { InvitationType, WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
+import { InvitationType, WorkspaceInvitation, WorkspaceWithCreatorInfo } from 'js/components/workspaces/types';
 import { SortDirection } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 
-export type WorkspaceItem = WorkspaceInvitation | WorkspaceWithUserId;
+export type WorkspaceItem = WorkspaceInvitation | WorkspaceWithCreatorInfo;
 
 export interface SortField {
   field: string;

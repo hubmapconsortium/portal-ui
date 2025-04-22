@@ -6,11 +6,11 @@ import Typography from '@mui/material/Typography';
 import useEventCallback from '@mui/material/utils/useEventCallback';
 
 import { StyledSearchIcon, StyledTextField } from 'js/components/workspaces/style';
-import { WorkspaceWithUserId } from 'js/components/workspaces/types';
+import { WorkspaceWithCreatorInfo } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
 import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
-function WorkspaceOption(props: React.HTMLAttributes<HTMLLIElement>, option: WorkspaceWithUserId) {
+function WorkspaceOption(props: React.HTMLAttributes<HTMLLIElement>, option: WorkspaceWithCreatorInfo) {
   const { name, id } = option;
 
   return (
@@ -52,18 +52,20 @@ function WorkspacesAutocomplete({
 }: {
   inputValue: string;
   setInputValue: (value: string) => void;
-  filteredWorkspaces: WorkspaceWithUserId[];
+  filteredWorkspaces: WorkspaceWithCreatorInfo[];
 }) {
   const { currentEventCategory } = useWorkspacesEventContext();
-  const trackChange = useEventCallback((event: React.SyntheticEvent, newValue: string | WorkspaceWithUserId | null) => {
-    if (newValue && typeof newValue !== 'string') {
-      trackEvent({
-        category: currentEventCategory,
-        action: 'Search Workspace',
-        label: newValue.id,
-      });
-    }
-  });
+  const trackChange = useEventCallback(
+    (event: React.SyntheticEvent, newValue: string | WorkspaceWithCreatorInfo | null) => {
+      if (newValue && typeof newValue !== 'string') {
+        trackEvent({
+          category: currentEventCategory,
+          action: 'Search Workspace',
+          label: newValue.id,
+        });
+      }
+    },
+  );
 
   return (
     <Box flex={1} maxWidth="50%">

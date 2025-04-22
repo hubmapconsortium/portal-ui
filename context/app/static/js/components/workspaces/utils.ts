@@ -33,7 +33,7 @@ import type {
   WorkspaceFile,
   TemplatesTypes,
   WorkspaceInvitation,
-  WorkspaceWithUserId,
+  WorkspaceWithCreatorInfo,
 } from './types';
 
 interface WorkspaceActionArgs {
@@ -413,7 +413,7 @@ function isInvitation(item: WorkspaceItem): item is WorkspaceInvitation {
   return 'shared_workspace_id' in item;
 }
 
-function isWorkspace(item: WorkspaceItem): item is WorkspaceWithUserId {
+function isWorkspace(item: WorkspaceItem): item is WorkspaceWithCreatorInfo {
   return 'id' in item;
 }
 

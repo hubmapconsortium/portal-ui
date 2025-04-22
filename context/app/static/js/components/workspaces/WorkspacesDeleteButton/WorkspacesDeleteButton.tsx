@@ -7,6 +7,23 @@ import { TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/hooks';
 
+const useDeleteWorkspaceTooltip = ({
+  hasPendingInvitations,
+  isRunning,
+  tooltip,
+}: {
+  hasPendingInvitations: boolean;
+  isRunning: boolean;
+  tooltip?: string;
+}) => {
+  if (hasPendingInvitations) {
+    return 'Workspaces with pending sent invitations cannot be deleted. Cancel invitations before deleting.';
+  }
+  if (isRunning) return 'Workspace cannot be deleted while it is running. Stop jobs before deleting.';
+
+  return tooltip;
+};
+
 type WorkspacesDeleteButtonProps = {
   workspaceIds: Set<string>;
   tooltip?: string;
@@ -18,29 +35,18 @@ function WorkspacesDeleteButton({ workspaceIds, tooltip, disabled, ...rest }: Wo
   const { sentInvitations } = useInvitationsList();
   const { workspacesList } = useWorkspacesList();
 
-  const selectedWorkspaceHasPendingInvitations = sentInvitations.some((invitation) => {
+  const hasPendingInvitations = sentInvitations.some((invitation) => {
     const originalWorkspaceId = invitation.original_workspace_id?.id?.toString();
     return !invitation.is_accepted && originalWorkspaceId && workspaceIds.has(originalWorkspaceId);
   });
   const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
-  const selectedWorkspaceIsRunning = workspaces.some(isRunningWorkspace);
-
-  const updatedTooltip = (() => {
-    if (selectedWorkspaceHasPendingInvitations) {
-      return 'Workspaces with pending sent invitations cannot be deleted. Cancel invitations before deleting.';
-    }
-
-    if (selectedWorkspaceIsRunning) {
-      return 'Workspace cannot be deleted while it is running. Stop jobs before deleting.';
-    }
-
-    return tooltip;
-  })();
+  const isRunning = workspaces.some(isRunningWorkspace);
+  const updatedTooltip = useDeleteWorkspaceTooltip({ hasPendingInvitations, isRunning, tooltip });
 
   return (
     <WorkspaceTooltipButton
       onClick={() => setDialogType('DELETE_WORKSPACE')}
-      disabled={selectedWorkspaceIsRunning || selectedWorkspaceHasPendingInvitations || disabled}
+      disabled={isRunning || hasPendingInvitations || disabled}
       tooltip={updatedTooltip}
       {...rest}
     >

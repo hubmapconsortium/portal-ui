@@ -11,7 +11,7 @@ import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalSt
 import { AddIcon } from 'js/shared-styles/icons';
 import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
-import { useEventCallback } from '@mui/material';
+import { ListItemIcon, useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
@@ -57,7 +57,9 @@ function AddToWorkspaceDialogFromSelections() {
 
   return (
     <MenuItem onClick={onClick}>
-      <AddIcon sx={{ mr: 1, fontSize: '1.25rem' }} color="primary" />
+      <ListItemIcon>
+        <AddIcon fontSize="1.25rem" color="primary" />
+      </ListItemIcon>
       Add to Existing Workspace
     </MenuItem>
   );

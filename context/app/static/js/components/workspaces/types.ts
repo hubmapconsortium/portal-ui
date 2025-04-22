@@ -98,7 +98,8 @@ export interface WorkspaceUser {
 
 export type WorkspaceCreatorInfo = WorkspaceUser | 'Me' | 'Unknown';
 
-export interface WorkspaceWithUserId extends MergedWorkspace {
+export interface WorkspaceWithCreatorInfo extends MergedWorkspace {
+  creatorInfo: WorkspaceCreatorInfo;
   user_id?: WorkspaceUser;
 }
 

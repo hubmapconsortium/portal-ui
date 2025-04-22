@@ -1,14 +1,14 @@
 import { useEffect, useMemo, useState } from 'react';
-import { WorkspaceWithUserId } from 'js/components/workspaces/types';
+import { WorkspaceWithCreatorInfo } from 'js/components/workspaces/types';
 import { TableFilter } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 
-function useWorkspacesTable(workspacesList: WorkspaceWithUserId[]) {
+function useWorkspacesTable(workspacesList: WorkspaceWithCreatorInfo[]) {
   const { ownWorkspaces, sharedWorkspaces } = useMemo(() => {
     const own = workspacesList.filter((workspace) => {
-      return !workspace.user_id;
+      return workspace.creatorInfo === 'Me';
     });
     const shared = workspacesList.filter((workspace) => {
-      return !!workspace.user_id;
+      return workspace.creatorInfo !== 'Me';
     });
     return { ownWorkspaces: own, sharedWorkspaces: shared };
   }, [workspacesList]);

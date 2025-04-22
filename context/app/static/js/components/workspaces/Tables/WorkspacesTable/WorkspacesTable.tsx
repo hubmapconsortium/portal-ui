@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@mui/material/Stack';
-import { WorkspaceWithUserId } from 'js/components/workspaces/types';
+import { WorkspaceWithCreatorInfo } from 'js/components/workspaces/types';
 import Description from 'js/shared-styles/sections/Description';
 import WorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/WorkspaceItemsTable';
 import { SortField, TableField } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
@@ -38,7 +38,7 @@ export default function WorkspacesTable({
   toggleItem,
   toggleAllItems,
 }: {
-  workspacesList: WorkspaceWithUserId[];
+  workspacesList: WorkspaceWithCreatorInfo[];
   selectedItems: Set<string>;
   isLoading: boolean;
   toggleItem: (item: string) => void;

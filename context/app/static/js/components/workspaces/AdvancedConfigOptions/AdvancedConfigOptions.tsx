@@ -6,7 +6,7 @@ import Slider from '@mui/material/Slider';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/system/Stack';
 import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
-import useEventCallback from '@mui/material/utils/useEventCallback';
+import { useEventCallback } from '@mui/material/utils';
 
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
