@@ -61,7 +61,7 @@ function Summary({ invitation }: { invitation: WorkspaceInvitation }) {
         <SummaryData title={name} entity_type="Workspace" />
         <SectionPaper>
           <Stack spacing={2}>
-            <LabelledSectionText label="Description">{description}</LabelledSectionText>
+            {description && <LabelledSectionText label="Description">{description}</LabelledSectionText>}
             <LabelledSectionText label="Shared By">
               <NameAndEmailLink first_name={first_name} last_name={last_name} email={email} />
             </LabelledSectionText>

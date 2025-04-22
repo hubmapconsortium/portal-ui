@@ -174,7 +174,7 @@ function SummaryBody({ workspace, creatorInfo }: { workspace: MergedWorkspace; c
   return (
     <SectionPaper>
       <Stack spacing={2}>
-        <LabelledSectionText label="Description">{description}</LabelledSectionText>
+        {description && <LabelledSectionText label="Description">{description}</LabelledSectionText>}
         <LabelledSectionText label="Created By">
           {typeof creatorInfo === 'string' ? (
             <NonLinkingCreatorInfo creatorInfo={creatorInfo} />
