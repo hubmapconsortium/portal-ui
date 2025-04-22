@@ -19,11 +19,16 @@ import ArrowDropDownRounded from '@mui/icons-material/ArrowDropDownRounded';
 import Step from 'js/shared-styles/surfaces/Step';
 import { WorkspaceNameField } from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
-import { CreateTemplateNotebooksTypes, TemplateExample } from 'js/components/workspaces/types';
+import {
+  CreateTemplateNotebooksTypes,
+  TemplateExample,
+  WorkspacesEventCategories,
+} from 'js/components/workspaces/types';
 import WorkspaceDatasetsTable from 'js/components/workspaces/WorkspaceDatasetsTable';
 import AdvancedConfigOptions from 'js/components/workspaces/AdvancedConfigOptions';
 import { StyledSubtitle1 } from 'js/components/workspaces/style';
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 
 const text = {
@@ -99,71 +104,73 @@ function NewWorkspaceDialogFromExample({
   );
 
   return (
-    <Dialog
-      open={dialogIsOpen && !isLaunchWorkspaceDialogOpen}
-      onClose={handleClose}
-      scroll="paper"
-      aria-labelledby="create-workspace-dialog-title"
-      maxWidth="lg"
-    >
-      <Box mb={2}>
-        <DialogTitle id="create-workspace-dialog-title" variant="h3">
-          {text.overview.title}
-        </DialogTitle>
-        <Box sx={{ px: 3 }}>
-          <Stack spacing={1} p={2} component={Paper}>
-            <Typography>{text.overview.description}</Typography>
-            <Typography variant="subtitle2">{example.title}</Typography>
-            <Typography>{example.description}</Typography>
-          </Stack>
+    <WorkspacesEventContextProvider currentEventCategory={WorkspacesEventCategories.WorkspaceDialog}>
+      <Dialog
+        open={dialogIsOpen && !isLaunchWorkspaceDialogOpen}
+        onClose={handleClose}
+        scroll="paper"
+        aria-labelledby="create-workspace-dialog-title"
+        maxWidth="lg"
+      >
+        <Box mb={2}>
+          <DialogTitle id="create-workspace-dialog-title" variant="h3">
+            {text.overview.title}
+          </DialogTitle>
+          <Box sx={{ px: 3 }}>
+            <Stack spacing={1} p={2} component={Paper}>
+              <Typography>{text.overview.description}</Typography>
+              <Typography variant="subtitle2">{example.title}</Typography>
+              <Typography>{example.description}</Typography>
+            </Stack>
+          </Box>
         </Box>
-      </Box>
-      <DialogContent dividers>
-        <Step title={text.datasets.title} index={0} hideRequiredText>
-          <WorkspaceDatasetsTable
-            datasetsUUIDs={allDatasets}
-            emptyAlert={<WorkspacesNoDatasetsAlert />}
-            isSelectable={false}
-          />
-        </Step>
-        <Step title={text.configure.title} index={1} isRequired>
-          <Stack
-            gap={2}
-            mt={1}
-            component="form"
-            id="create-workspace-form"
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onSubmit={handleSubmit(submit)}
+        <DialogContent dividers>
+          <Step title={text.datasets.title} index={0} hideRequiredText>
+            <WorkspaceDatasetsTable
+              datasetsUUIDs={allDatasets}
+              emptyAlert={<WorkspacesNoDatasetsAlert />}
+              isSelectable={false}
+            />
+          </Step>
+          <Step title={text.configure.title} index={1} isRequired>
+            <Stack
+              gap={2}
+              mt={1}
+              component="form"
+              id="create-workspace-form"
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onSubmit={handleSubmit(submit)}
+            >
+              <WorkspaceNameField control={control} name="workspace-name" />
+              <Accordion>
+                <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
+                  <StyledSubtitle1>{text.configure.selected.title}</StyledSubtitle1>
+                </AccordionSummary>
+                <AccordionDetails>
+                  <Stack spacing={1}>
+                    <Typography>{text.configure.selected.description}</Typography>
+                    <Typography variant="subtitle2">Environment</Typography>
+                    <Typography>{jobTypeName}</Typography>
+                  </Stack>
+                </AccordionDetails>
+              </Accordion>
+              <AdvancedConfigOptions control={control} description={text.configure.advanced.description} />
+            </Stack>
+          </Step>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <LoadingButton
+            loading={isSubmitting}
+            type="submit"
+            form="create-workspace-form"
+            disabled={Object.keys(errors).length > 0}
           >
-            <WorkspaceNameField control={control} name="workspace-name" />
-            <Accordion>
-              <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>
-                <StyledSubtitle1>{text.configure.selected.title}</StyledSubtitle1>
-              </AccordionSummary>
-              <AccordionDetails>
-                <Stack spacing={1}>
-                  <Typography>{text.configure.selected.description}</Typography>
-                  <Typography variant="subtitle2">Environment</Typography>
-                  <Typography>{jobTypeName}</Typography>
-                </Stack>
-              </AccordionDetails>
-            </Accordion>
-            <AdvancedConfigOptions control={control} description={text.configure.advanced.description} />
-          </Stack>
-        </Step>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <LoadingButton
-          loading={isSubmitting}
-          type="submit"
-          form="create-workspace-form"
-          disabled={Object.keys(errors).length > 0}
-        >
-          Launch Workspace
-        </LoadingButton>
-      </DialogActions>
-    </Dialog>
+            Launch Workspace
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
+    </WorkspacesEventContextProvider>
   );
 }
 

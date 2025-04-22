@@ -406,13 +406,11 @@ export function useStopWorkspace() {
 
   const stopWorkspace = useCallback(
     async (workspaceId: number) => {
-      trackEvent(
-        {
-          category: WorkspacesEventCategories.Workspaces,
-          action: 'Stop Workspace',
-        },
-        workspaceId,
-      );
+      trackEvent({
+        category: WorkspacesEventCategories.Workspaces,
+        action: 'Stop Workspace',
+        name: workspaceId,
+      });
       await Promise.all(
         jobs.filter((j) => j.workspace_id === workspaceId && isRunningJob(j)).map((j) => stopJob(j.id)),
       );
@@ -427,13 +425,11 @@ async function fetchDeleteWorkspace(
   _key: string,
   { arg: { workspaceId, headers, url } }: { arg: { headers: HeadersInit; workspaceId: number; url: string } },
 ) {
-  trackEvent(
-    {
-      category: WorkspacesEventCategories.Workspaces,
-      action: 'Delete Workspace',
-    },
-    workspaceId,
-  );
+  trackEvent({
+    category: WorkspacesEventCategories.Workspaces,
+    action: 'Delete Workspace',
+    name: workspaceId,
+  });
   const response = await fetch(url, {
     method: 'DELETE',
     headers,
@@ -490,13 +486,11 @@ async function startJob(
   _key: string,
   { arg: { workspaceId, jobDetails, jobType, resourceOptions, url, headers } }: { arg: WorkspaceActionArgs },
 ) {
-  trackEvent(
-    {
-      category: WorkspacesEventCategories.Workspaces,
-      action: 'Start Workspace',
-    },
-    workspaceId,
-  );
+  trackEvent({
+    category: WorkspacesEventCategories.Workspaces,
+    action: 'Start Workspace',
+    name: workspaceId,
+  });
 
   const result = fetch(url, {
     method: 'PUT',
@@ -632,18 +626,11 @@ async function updateWorkspaceFetcher(
   _key: string,
   { arg: { body, url, headers, workspaceId } }: { arg: UpdateWorkspaceArgs },
 ) {
-  trackEvent(
-    {
-      category: WorkspacesEventCategories.Workspaces,
-      action: 'Update Workspace',
-      value: {
-        name: body?.name,
-        files: body?.workspace_details?.files?.map((f) => f.name),
-        symlinks: body?.workspace_details?.symlinks?.map((s) => s.name),
-      },
-    },
-    workspaceId,
-  );
+  trackEvent({
+    category: WorkspacesEventCategories.Workspaces,
+    action: 'Update Workspace',
+    name: workspaceId,
+  });
   const response = await fetch(url, {
     method: 'PUT',
     body: JSON.stringify(body),

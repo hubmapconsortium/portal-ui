@@ -1,4 +1,4 @@
-import { WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
+import { InvitationType, WorkspaceInvitation, WorkspaceWithUserId } from 'js/components/workspaces/types';
 import { SortDirection } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 
 export type WorkspaceItem = WorkspaceInvitation | WorkspaceWithUserId;
@@ -26,6 +26,7 @@ export interface WorkspaceItemsTableProps<T extends WorkspaceItem> {
   filters: TableFilter[];
   tableFields: TableField[];
   initialSortField: SortField;
+  status?: InvitationType;
   toggleItem?: (itemId: string) => void;
   toggleAllItems?: (itemIds: string[]) => void;
   selectedItemIds?: Set<string>;

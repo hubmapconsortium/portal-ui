@@ -17,7 +17,7 @@ const tableFields: TableField[] = [
     label: 'Status',
   },
   {
-    field: 'user_id.username',
+    field: 'creatorInfo',
     label: 'Created By',
   },
   {

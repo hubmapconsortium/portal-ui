@@ -13,7 +13,8 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import { WorkspacesEventCategories, WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { trackEvent } from 'js/helpers/trackers';
 import { buildSearchLink } from '../search/store';
 import TemplateGrid from './TemplateGrid';
@@ -145,19 +146,16 @@ function AccessAlert() {
   );
 }
 
-interface TemplatePreviewSectionProps {
-  trackingInfo: WorkspacesEventInfo;
-}
-
-function TemplatePreviewSection({ trackingInfo }: TemplatePreviewSectionProps) {
+function TemplatePreviewSection() {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   return (
     <Stack spacing={3}>
       {!isAuthenticated && (
-        <LogInPanel trackingInfo={trackingInfo}>
+        <LogInPanel trackingInfo={{ category: currentEventCategory }}>
           Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
           your specific interests. Click on any template for detailed information.{' '}
           <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
@@ -169,9 +167,8 @@ function TemplatePreviewSection({ trackingInfo }: TemplatePreviewSectionProps) {
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}
-          trackingInfo={trackingInfo}
         />
-        <TemplateGrid templates={templates} trackingInfo={trackingInfo} />
+        <TemplateGrid templates={templates} />
       </Stack>
     </Stack>
   );
@@ -194,7 +191,7 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
       {!isAuthenticated && (
         <Stack pt={2} spacing={2}>
           <Typography variant="h4">Workspace Templates</Typography>
-          <TemplatePreviewSection trackingInfo={{ category: WorkspacesEventCategories.WorkspaceLandingPage }} />
+          <TemplatePreviewSection />
         </Stack>
       )}
     </Stack>

@@ -15,9 +15,9 @@ import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
-import { trackEvent } from 'js/helpers/trackers';
-import { EventInfo } from 'js/components/types';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
+import { EventInfo } from 'js/components/types';
+import { trackEvent } from 'js/helpers/trackers';
 import { Column, EntitiesTabTypes } from './types';
 
 interface EntityHeaderCellTypes<Doc> {

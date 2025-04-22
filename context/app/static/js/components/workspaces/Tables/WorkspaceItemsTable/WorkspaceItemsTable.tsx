@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { format } from 'date-fns/format';
 import TableRow from '@mui/material/TableRow';
 import IconButton from '@mui/material/IconButton';
@@ -8,22 +8,14 @@ import Checkbox from '@mui/material/Checkbox';
 import Stack from '@mui/system/Stack';
 import Collapse from '@mui/material/Collapse';
 import Typography from '@mui/material/Typography';
-import { useEventCallback } from '@mui/material/utils';
 import SvgIcon from '@mui/material/SvgIcon';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 import { InternalLink } from 'js/shared-styles/Links';
-import {
-  getFieldPrefix,
-  getFieldValue,
-  isInvitation,
-  isSentInvitation,
-  isWorkspace,
-} from 'js/components/workspaces/utils';
+import { getFieldValue, getItemId, isWorkspace } from 'js/components/workspaces/utils';
 import {
   CheckIcon,
-  CloseFilledIcon,
   CloseIcon,
   DownIcon,
   EmailIcon,
@@ -36,17 +28,23 @@ import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { LineClamp } from 'js/shared-styles/text';
 import { TooltipButton, TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
-import { useInvitationsList, useWorkspacesList } from 'js/components/workspaces/hooks';
 import WorkspaceLaunchStopButtons from 'js/components/workspaces/WorkspaceLaunchStopButtons';
 import { LaunchStopButton } from 'js/components/workspaces/WorkspaceLaunchStopButtons/WorkspaceLaunchStopButtons';
-import useWorkspaceItemsTable from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
-import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import {
+  useEndButtons,
+  useWorkspaceItemsTableContent,
+  useWorkspaceItemsTable,
+  useSeeMoreRows,
+  useResultRow,
+  useSortHeaderCell,
+  useCellContent,
+} from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
 import IconDropdownMenu from 'js/shared-styles/dropdowns/IconDropdownMenu';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 import { RotatedTooltipButton } from 'js/shared-styles/buttons';
-import { OrderIcon, SortDirection, getSortOrder } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
+import { OrderIcon, SortDirection } from 'js/shared-styles/tables/TableOrdering/TableOrdering';
 import { workspaceStatusIconMap } from 'js/shared-styles/icons/workspaceStatusIconMap';
-import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import NonLinkingCreatorInfo from 'js/shared-styles/Links/NonLinkingCreatorInfo';
 import { CenteredAlert } from 'js/components/style';
 
 import { TableField, WorkspaceItem, WorkspaceItemsTableProps } from './types';
@@ -78,56 +76,16 @@ const tooltips = {
 };
 
 function EndButtons({ item }: { item: WorkspaceItem }) {
-  const { handleStopWorkspace, isStoppingWorkspace } = useWorkspacesList();
-  const { handleAcceptInvitation } = useInvitationsList();
-  const { setDialogType, setInvitation } = useEditWorkspaceStore();
-  const { toastErrorAcceptInvitation, toastSuccessAcceptInvitation } = useWorkspaceToasts();
-
-  const isSender = isSentInvitation(item);
-  const isAccepted = getFieldValue({ item, field: 'is_accepted' });
-
-  const options = useMemo(
-    () => [
-      {
-        children: `${isSender ? 'Delete' : 'Decline'} Invitation`,
-        onClick: () => {
-          const dialogType = isSender ? 'DELETE_INVITATION' : 'DECLINE_INVITATION';
-          if (isInvitation(item)) {
-            setInvitation(item);
-            setDialogType(dialogType);
-          }
-        },
-        icon: CloseFilledIcon,
-      },
-    ],
-    [isSender, item, setDialogType, setInvitation],
-  );
-
-  const onAcceptInvite = useEventCallback(() => {
-    if (isInvitation(item)) {
-      handleAcceptInvitation(item.shared_workspace_id.id)
-        .then(() => {
-          toastSuccessAcceptInvitation(item.shared_workspace_id.name);
-        })
-        .catch((e) => {
-          console.error(e);
-          toastErrorAcceptInvitation(item.shared_workspace_id.name);
-        });
-    }
-  });
-
-  const onPreviewInvite = useEventCallback(() => {
-    if (isInvitation(item)) {
-      window.location.href = `/invitations/${item.shared_workspace_id.id}`;
-    }
-  });
-
-  const onDeclineInvite = useEventCallback(() => {
-    if (isInvitation(item)) {
-      setInvitation(item);
-      setDialogType('DECLINE_INVITATION');
-    }
-  });
+  const {
+    isAccepted,
+    isSender,
+    options,
+    onAcceptInvite,
+    onPreviewInvite,
+    onDeclineInvite,
+    handleStopWorkspace,
+    isStoppingWorkspace,
+  } = useEndButtons(item);
 
   // If the item is a workspace
   if (isWorkspace(item)) {
@@ -204,17 +162,20 @@ function SortHeaderCell({
   label,
   sortField,
   setSortField,
+  status,
 }: {
   field: string;
   label: string;
   sortField: { direction: SortDirection; field: string };
   setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
+  status?: string;
 }) {
-  const isCurrentSortField = field === sortField.field;
-
-  const handleClick = useEventCallback(() => {
-    const newSortDirection = getSortOrder({ direction: sortField.direction, isCurrentSortField });
-    setSortField({ direction: newSortDirection, field });
+  const { isCurrentSortField, handleClick } = useSortHeaderCell({
+    field,
+    label,
+    sortField,
+    setSortField,
+    status,
   });
 
   return (
@@ -256,38 +217,42 @@ function InvitationStatusIcon({ item }: { item: WorkspaceItem }) {
 }
 
 function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
-  const prefix = getFieldPrefix(field);
-  const fieldValue = getFieldValue({ item, field });
-  const hasWorkspacePage = isWorkspace(item) || isSentInvitation(item) || getFieldValue({ item, field: 'is_accepted' });
+  const { prefix, fieldValue, itemId, hasWorkspacePage, trackNameClick, handleEmailClick } = useCellContent(
+    item,
+    field,
+  );
 
   switch (field) {
     case `${prefix}name`: {
-      const itemId = getFieldValue({ item, field: 'id', prefix });
       const href = hasWorkspacePage ? `/workspaces/${itemId}` : `/invitations/${itemId}`;
 
       return (
         <Stack direction="row" spacing={1} alignItems="center">
-          <InternalLink href={href}>
+          <InternalLink href={href} onClick={trackNameClick}>
             <LineClamp lines={1}>{fieldValue}</LineClamp>
           </InternalLink>
-          <Box>{`(ID: ${itemId})`}</Box>
+          {/* We retrieve the ID this way here because we want to show the shared IDs (which will be distinct)
+           for sent workspace invites, which can be shared multiple times. */}
+          <Box>{`(ID: ${getItemId(item)})`}</Box>
           <InvitationStatusIcon item={item} />
         </Stack>
       );
     }
-    case `${prefix}user_id.username`: {
-      if ('user_id' in item && !item.user_id) {
-        return <Typography>Me</Typography>;
+    case `${prefix}user_id.username`:
+    case `${prefix}creatorInfo`: {
+      if (fieldValue === 'Me' || fieldValue === 'Unknown') {
+        return <NonLinkingCreatorInfo creatorInfo={fieldValue} />;
       }
 
-      const firstName = getFieldValue({ item, field: 'user_id.first_name', prefix });
-      const lastName = getFieldValue({ item, field: 'user_id.last_name', prefix });
-      const email = getFieldValue({ item, field: 'user_id.email', prefix });
+      const baseField = field === `${prefix}creatorInfo` ? 'creatorInfo' : 'user_id';
+      const firstName = getFieldValue({ item, field: `${baseField}.first_name`, prefix });
+      const lastName = getFieldValue({ item, field: `${baseField}.last_name`, prefix });
+      const email = getFieldValue({ item, field: `${baseField}.email`, prefix });
 
       return (
         <Stack direction="row" alignItems="center">
           <Typography>{`${firstName} ${lastName}`}</Typography>
-          <TooltipButton href={`mailto:${email}`} sx={{ minWidth: 0 }} tooltip={`Mail to ${email}`}>
+          <TooltipButton sx={{ minWidth: 0 }} tooltip={`Mail to ${email}`} onClick={() => handleEmailClick(email)}>
             <EmailIcon color="info" />
           </TooltipButton>
         </Stack>
@@ -326,11 +291,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   selectedItemIds,
   toggleItem,
 }: RowProps<T>) {
-  const [isExpanded, setIsExpanded] = React.useState(false);
-
-  const prefix = getFieldPrefix(tableFields[0].field);
-  const description = getFieldValue({ item, field: 'description', prefix });
-  const itemId = 'id' in item ? item.id.toString() : item.original_workspace_id.id.toString();
+  const { isExpanded, handleDescriptionClick, description, itemId } = useResultRow({ item, tableFields });
   const TableRowComponent: React.ElementType = description ? CompactTableRow : BorderedTableRow;
 
   return (
@@ -347,7 +308,7 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
               tooltip={!isExpanded && tooltips.expandRow}
               aria-label="expand row"
               size="small"
-              onClick={() => setIsExpanded(!isExpanded)}
+              onClick={handleDescriptionClick}
             >
               {isExpanded ? <ExpandLessIcon fontSize="small" /> : <ExpandMoreIcon fontSize="small" />}
             </TooltipIconButton>
@@ -377,19 +338,17 @@ const ResultRow = React.memo(function ResultRow<T extends WorkspaceItem>({
   );
 });
 
-const HeaderCells = React.memo(function HeaderCells({
-  tableFields,
-  sortField,
-  setSortField,
-}: {
+const HeaderCells = React.memo(function HeaderCells(props: {
   tableFields: TableField[];
   sortField: { direction: SortDirection; field: string };
   setSortField: React.Dispatch<React.SetStateAction<{ direction: SortDirection; field: string }>>;
+  status?: string;
 }) {
+  const { tableFields, ...rest } = props;
   return (
     <>
       {tableFields.map(({ field, label }) => (
-        <SortHeaderCell key={field} field={field} label={label} sortField={sortField} setSortField={setSortField} />
+        <SortHeaderCell key={field} field={field} label={label} {...rest} />
       ))}
     </>
   );
@@ -406,12 +365,14 @@ function SeeMoreRows({
   setNumVisibleItems: React.Dispatch<React.SetStateAction<number>>;
   totalItems: number;
 }) {
+  const { trackSeeMoreClick } = useSeeMoreRows({ setNumVisibleItems });
+
   if (!showSeeMoreOption || numVisibleItems >= totalItems) {
     return null;
   }
 
   return (
-    <StyledButton variant="text" onClick={() => setNumVisibleItems((prev) => prev + 3)} fullWidth>
+    <StyledButton variant="text" onClick={trackSeeMoreClick} fullWidth>
       <Stack direction="row" spacing={1} marginY={0.5} alignItems="center">
         <Typography variant="button">See More</Typography>
         <DownIcon />
@@ -423,7 +384,7 @@ function SeeMoreRows({
 function LoadingRows({ tableWidth }: { tableWidth: number }) {
   return Array.from({ length: 3 }, (i, rowIndex) => (
     <TableRow key={`row-${rowIndex}`}>
-      {Array.from({ length: tableWidth }, (j, cellIndex) => (
+      {Array.from({ length: tableWidth + 1 }, (j, cellIndex) => (
         <StyledTableCell key={`cell-${rowIndex}-${cellIndex}`}>
           <Skeleton variant="text" />
         </StyledTableCell>
@@ -461,7 +422,7 @@ function TableResults<T extends WorkspaceItem>({
 }
 
 function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
-  const { items, isLoading, itemType, tableFields, toggleItem, selectedItemIds, showSeeMoreOption } = props;
+  const { items, isLoading, itemType, tableFields, toggleItem, selectedItemIds, showSeeMoreOption, ...rest } = props;
 
   const {
     noFiltersSelected,
@@ -471,7 +432,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
     numVisibleItems,
     setNumVisibleItems,
     onToggleAllItems,
-  } = useWorkspaceItemsTable<T>(props);
+  } = useWorkspaceItemsTableContent(props);
 
   if (!isLoading && noFiltersSelected) {
     return (
@@ -494,7 +455,7 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
               </StyledHeaderCell>
             )}
             <StyledTableCell width="0" />
-            <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} />
+            <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} {...rest} />
             <StyledTableCell />
           </StyledTableHead>
           <StyledTableBody>
@@ -520,7 +481,8 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
 }
 
 function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T>) {
-  const { filters, ...rest } = props;
+  const { filters, status, itemType } = props;
+  const { trackFilterClick } = useWorkspaceItemsTable({ itemType, status });
 
   return (
     <Box>
@@ -530,12 +492,12 @@ function WorkspaceItemsTable<T extends WorkspaceItem>(props: WorkspaceItemsTable
             key={label}
             label={label}
             isSelected={show}
-            onClick={() => setShow((prev) => !prev)}
+            onClick={() => trackFilterClick(label, setShow)}
             disabled={disabled}
           />
         ))}
       </ChipWrapper>
-      <TableContent filters={filters} {...rest} />
+      <TableContent {...props} />
     </Box>
   );
 }

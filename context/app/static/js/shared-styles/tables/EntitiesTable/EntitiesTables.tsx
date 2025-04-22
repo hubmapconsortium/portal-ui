@@ -3,9 +3,9 @@ import React from 'react';
 import { useTabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { EventInfo } from 'js/components/types';
 
 import SvgIcon from '@mui/material/SvgIcon';
-import { EventInfo } from 'js/components/types';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
