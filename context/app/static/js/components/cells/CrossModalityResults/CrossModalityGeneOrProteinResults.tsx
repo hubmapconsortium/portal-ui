@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import Stack from '@mui/material/Stack';
@@ -6,12 +6,23 @@ import CellsCharts from '../CellsCharts';
 import { useAugmentedResults } from '../MolecularDataQueryResults/hooks';
 import { useCrossModalityResults } from './hooks';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
+import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 
 const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 export default function CrossModalityGeneOrProteinResults<T extends 'gene' | 'protein'>() {
-  const { data } = useCrossModalityResults<T>();
+  const { data, error } = useCrossModalityResults<T>();
 
   const { list, isLoading } = useAugmentedResults(data?.list);
+
+  const setResults = useResultsProvider((state) => state.setResults);
+
+  useEffect(() => {
+    if (list.length) {
+      setResults(list.length, isLoading, error?.message);
+    } else {
+      setResults(0, false, error?.message);
+    }
+  }, [setResults, data, isLoading, error, list.length]);
 
   const query = useMemo(() => {
     const ids = { values: list.map((r) => r._source.uuid) };

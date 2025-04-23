@@ -69,8 +69,8 @@ interface ClusterCellMatch {
 }
 
 class CellsService {
-  async fetchAndParse<T>(url: string): Promise<T> {
-    const response = await fetch(url, { method: 'POST' });
+  async fetchAndParse<T>(url: string, method = 'POST'): Promise<T> {
+    const response = await fetch(url, { method });
     const responseJson = (await response.json()) as { message?: string; results?: T };
     if ('message' in responseJson) {
       throw Error(responseJson.message);
@@ -171,6 +171,11 @@ class CellsService {
 
   async getAllNamesForCellType(cellType: string) {
     return this.fetchAndParse<string[]>(`/cells/all-names-for-cell-type.json?cell_type=${cellType}`);
+  }
+
+  async getIndexedDatasetCount() {
+    const results = await this.fetchAndParse<{ results: number }>(`/cells/total-datasets.json`, 'GET');
+    return results;
   }
 }
 

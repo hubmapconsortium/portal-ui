@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
@@ -7,6 +7,8 @@ import { useSCFindCellTypeResults } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
+import CellTypeDistributionChart from './CellTypeDistributionChart';
+import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 
 interface SCFindCellTypeQueryResultsProps {
   datasetIds: { hubmap_id: string }[];
@@ -48,9 +50,28 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindCellTypeQueryResul
 }
 
 function SCFindCellTypeQueryResultsLoader() {
-  const { datasets, isLoading } = useSCFindCellTypeResults();
+  const { datasets, isLoading, error } = useSCFindCellTypeResults();
   const cellTypes = useCellVariableNames();
   const { openTabIndex, handleTabChange } = useTabs();
+  const { setResults } = useResultsProvider();
+
+  useEffect(() => {
+    if (datasets) {
+      const deduplicatedResults = Object.values(datasets)
+        .flat()
+        .reduce((acc, dataset) => {
+          const { hubmap_id } = dataset;
+          if (!acc.has(hubmap_id)) {
+            acc.add(hubmap_id);
+          }
+          return acc;
+        }, new Set<string>());
+      const count = deduplicatedResults.size;
+      setResults(count, isLoading, String(error));
+    } else {
+      setResults(0, isLoading, String(error));
+    }
+  }, [datasets, isLoading, error, setResults]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -69,6 +90,7 @@ function SCFindCellTypeQueryResultsLoader() {
       </Tabs>
       {cellTypes.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx}>
+          <CellTypeDistributionChart cellType={cellType} />
           <DatasetListHeader />
           <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
         </TabPanel>

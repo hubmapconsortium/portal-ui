@@ -9,6 +9,7 @@ import SubmitButton from './SubmitButton';
 import Results from '../MolecularDataQueryResults';
 import CurrentQueryParametersDisplay from './CurrentQueryParametersDisplay';
 import CurrentQueryResultsDisplay from './CurrentQueryResultsDisplay';
+import { ResultsProvider } from './ResultsProvider';
 
 interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
@@ -131,16 +132,18 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         noProvider
         completedStepText={<CurrentQueryParametersDisplay />}
       />
-      <IndependentStepAccordion
-        index={1}
-        summaryHeading="Results"
-        id={`${id}-results`}
-        content={<Results />}
-        isExpanded={methods.formState.isSubmitSuccessful}
-        noProvider
-        disabled={!methods.formState.isSubmitSuccessful}
-        completedStepText={<CurrentQueryResultsDisplay />}
-      />
+      <ResultsProvider>
+        <IndependentStepAccordion
+          index={1}
+          summaryHeading="Results"
+          id={`${id}-results`}
+          content={<Results />}
+          isExpanded={methods.formState.isSubmitSuccessful}
+          noProvider
+          disabled={!methods.formState.isSubmitSuccessful}
+          completedStepText={<CurrentQueryResultsDisplay />}
+        />
+      </ResultsProvider>
     </FormProvider>
   );
 }

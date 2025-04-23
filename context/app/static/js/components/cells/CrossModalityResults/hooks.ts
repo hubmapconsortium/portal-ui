@@ -52,6 +52,6 @@ function unwrapResults<T extends QueryType>(
 
 export function useCrossModalityResults<T extends QueryType>() {
   const parameters = useCrossModalityQueryParameters<T>();
-  const swr = useSWR<GetDatasetsResponse<T>, unknown, GetDatasetsProps<T>>(parameters, fetchCrossModalityResults);
+  const swr = useSWR<GetDatasetsResponse<T>, Error, GetDatasetsProps<T>>(parameters, fetchCrossModalityResults);
   return { ...swr, parameters, data: unwrapResults(swr?.data) };
 }
