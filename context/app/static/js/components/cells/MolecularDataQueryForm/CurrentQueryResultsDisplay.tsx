@@ -60,7 +60,7 @@ export default function CurrentQueryResultsDisplay() {
   }
 
   if (error) {
-    return <>Error: {error}</>;
+    return <>Error: {(error as Error)?.message ?? 'No datasets found'}</>;
   }
 
   if (queryMethod === 'scFind') {

@@ -10,11 +10,13 @@ interface IndexedDatasetsResponse {
 }
 
 export function createIndexedDatasetsKey(scFindEndpoint: string): IndexedDatasetsKey {
-  return createScFindKey(scFindEndpoint, 'cellTypeNames', {});
+  return createScFindKey(scFindEndpoint, 'getDatasets', {});
 }
 
 export default function useIndexedDatasets() {
   const { scFindEndpoint } = useAppContext();
   const key = createIndexedDatasetsKey(scFindEndpoint);
-  return useSWR<IndexedDatasetsResponse, unknown, IndexedDatasetsKey>(key, (url) => fetcher({ url }));
+  const swr = useSWR<IndexedDatasetsResponse, unknown, IndexedDatasetsKey>(key, (url) => fetcher({ url }));
+
+  return swr;
 }

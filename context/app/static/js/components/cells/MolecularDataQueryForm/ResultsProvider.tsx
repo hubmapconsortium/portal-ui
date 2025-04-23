@@ -4,14 +4,14 @@ import { PropsWithChildren } from 'react';
 interface ResultsProviderValues {
   resultCount: number;
   isLoading: boolean;
-  error?: string | null;
+  error?: unknown;
 }
 
 interface ResultsProviderActions {
-  setResults: (count: number, loading: boolean, error?: string | null) => void;
+  setResults: (count: number, loading: boolean, error?: unknown) => void;
   setResultCount: (count: number) => void;
   setIsLoading: (loading: boolean) => void;
-  setError: (error: string | null) => void;
+  setError: (error: unknown) => void;
   reset: () => void;
 }
 

@@ -3,7 +3,7 @@ import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
 import { createScFindKey } from './utils';
 
-interface CellTypeCountForTissue {
+export interface CellTypeCountForTissue {
   cell_count: number;
   index: string;
 }

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
@@ -49,6 +49,34 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindCellTypeQueryResul
   );
 }
 
+function OrganCellTypeDistributionCharts() {
+  const { openTabIndex, handleTabChange } = useTabs();
+  const cellTypes = useCellVariableNames();
+  const tissues = useMemo(() => {
+    const uniqueTissues = new Set<string>();
+    cellTypes.forEach((cellType) => {
+      const tissue = cellType.split('.')[0];
+      uniqueTissues.add(tissue);
+    });
+    return Array.from(uniqueTissues);
+  }, [cellTypes]);
+
+  return (
+    <>
+      <Tabs onChange={handleTabChange} value={openTabIndex}>
+        {tissues.map((tissue, idx) => (
+          <Tab key={tissue} label={tissue} index={idx} />
+        ))}
+      </Tabs>
+      {tissues.map((tissue, idx) => (
+        <TabPanel key={tissue} value={openTabIndex} index={idx}>
+          <CellTypeDistributionChart tissue={tissue} />
+        </TabPanel>
+      ))}
+    </>
+  );
+}
+
 function SCFindCellTypeQueryResultsLoader() {
   const { datasets, isLoading, error } = useSCFindCellTypeResults();
   const cellTypes = useCellVariableNames();
@@ -67,9 +95,9 @@ function SCFindCellTypeQueryResultsLoader() {
           return acc;
         }, new Set<string>());
       const count = deduplicatedResults.size;
-      setResults(count, isLoading, String(error));
+      setResults(count, isLoading, error);
     } else {
-      setResults(0, isLoading, String(error));
+      setResults(0, isLoading, error);
     }
   }, [datasets, isLoading, error, setResults]);
 
@@ -83,15 +111,15 @@ function SCFindCellTypeQueryResultsLoader() {
 
   return (
     <>
+      <OrganCellTypeDistributionCharts />
       <Tabs onChange={handleTabChange} value={openTabIndex}>
         {cellTypes.map((cellType, idx) => (
           <Tab key={cellType} label={`${cellType} (${datasets[cellType].length})`} index={idx} />
         ))}
       </Tabs>
+      <DatasetListHeader />
       {cellTypes.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx}>
-          <CellTypeDistributionChart cellType={cellType} />
-          <DatasetListHeader />
           <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
         </TabPanel>
       ))}
