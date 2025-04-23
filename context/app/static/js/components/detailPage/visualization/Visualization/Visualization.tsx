@@ -18,6 +18,7 @@ import VisualizationShareButton from 'js/components/detailPage/visualization/Vis
 import VisualizationThemeSwitch from 'js/components/detailPage/visualization/VisualizationThemeSwitch';
 import VisualizationFooter from 'js/components/detailPage/visualization/VisualizationFooter';
 import VisualizationTracker from 'js/components/detailPage/visualization/VisualizationTracker';
+import { EventWithOptionalCategory } from 'js/components/types';
 
 import BodyExpandedCSS from 'js/components/detailPage/visualization/BodyExpandedCSS';
 import { useCanvasScrollFix, useCollapseViz, useFirefoxWarning, useVitessceConfig } from './hooks';
@@ -42,6 +43,7 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 
 interface VisualizationProps {
   vitData: object | object[];
+  trackingInfo: EventWithOptionalCategory;
   uuid?: string;
   hasNotebook: boolean;
   shouldDisplayHeader: boolean;
@@ -51,6 +53,7 @@ interface VisualizationProps {
 
 function Visualization({
   vitData,
+  trackingInfo,
   uuid,
   hasNotebook,
   shouldDisplayHeader,
@@ -115,8 +118,8 @@ function Visualization({
 
   const expandVisualization = useCallback(() => {
     expandViz(id);
-    trackEntityPageEvent({ action: 'Vitessce / Full Screen' });
-  }, [expandViz, id, trackEntityPageEvent]);
+    trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Full Screen` });
+  }, [expandViz, id, trackEntityPageEvent, trackingInfo]);
 
   const isMultiDataset = Array.isArray(vitessceConfig);
 
@@ -147,8 +150,8 @@ function Visualization({
             <Stack direction="row" spacing={1}>
               {hasNotebook && <VisualizationWorkspaceButton />}
               <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
-              <VisualizationShareButton />
-              <VisualizationThemeSwitch />
+              <VisualizationShareButton trackingInfo={trackingInfo} />
+              <VisualizationThemeSwitch trackingInfo={trackingInfo} />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
                 <ExpandButton size="small" onClick={expandVisualization} variant="contained">
                   <FullscreenRoundedIcon color="primary" />

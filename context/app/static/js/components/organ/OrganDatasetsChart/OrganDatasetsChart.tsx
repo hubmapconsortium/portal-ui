@@ -10,6 +10,8 @@ import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import { useBandScale, useLinearScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import { useDatasetTypeMap } from 'js/components/home/HuBMAPDatasetsChart/hooks';
 import { mustHaveOrganClause } from 'js/pages/Organ/queries';
+import { trackEvent } from 'js/helpers/trackers';
+import { useOrganContext } from 'js/components/organ/contexts';
 import { OrganFile } from '../types';
 import { datasetTypeForOrganTermsQuery, DatasetTypeOrganQueryAggs } from './queries';
 import { getSearchURL } from '../utils';
@@ -26,6 +28,9 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
   );
 
   const datasetTypeMap = useDatasetTypeMap();
+  const {
+    organ: { name },
+  } = useOrganContext();
 
   const { searchData: assayOrganTypeData } = useSearchData<unknown, DatasetTypeOrganQueryAggs>(updatedQuery);
 
@@ -80,6 +85,13 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
           assayTypeMap: datasetTypeMap,
         })
       }
+      onBarClick={(d) => {
+        trackEvent({
+          category: 'Organ Page',
+          action: 'Assays / Select Assay From Graphic',
+          label: `${name} ${d?.bar?.data?.datasetType}`,
+        });
+      }}
       getAriaLabel={(d) => {
         const organ = d?.key;
         const assay = d?.bar?.data.datasetType;

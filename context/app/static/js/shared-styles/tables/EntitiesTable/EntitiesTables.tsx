@@ -5,7 +5,7 @@ import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
 import SvgIcon from '@mui/material/SvgIcon';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { EventInfo } from 'js/components/types';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
@@ -17,7 +17,7 @@ interface EntitiesTablesProps<Doc> {
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
   emptyAlert?: React.ReactNode;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 function EntitiesTables<Doc>({

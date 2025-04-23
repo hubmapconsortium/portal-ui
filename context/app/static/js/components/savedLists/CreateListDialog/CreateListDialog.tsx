@@ -1,6 +1,6 @@
 import React, { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
-import useEventCallback from '@mui/material/utils/useEventCallback';
+import { useEventCallback } from '@mui/material/utils';
 import useSavedLists from 'js/components/savedLists/hooks';
 import OptDisabledButton from 'js/shared-styles/buttons/OptDisabledButton';
 import DialogModal from 'js/shared-styles/DialogModal';
