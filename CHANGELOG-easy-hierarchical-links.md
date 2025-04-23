@@ -1,0 +1,1 @@
+- Enable easy links to the search page with hierarchical facets selected.
