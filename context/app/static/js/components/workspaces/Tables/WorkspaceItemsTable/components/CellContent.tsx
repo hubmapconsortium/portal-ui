@@ -39,7 +39,7 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
     }
     case `${prefix}user_id.username`:
     case `${prefix}creatorInfo`: {
-      if (fieldValue === 'Me' || fieldValue === 'Unknown') {
+      if (!fieldValue || fieldValue === 'Me' || fieldValue === 'Unknown') {
         return <NonLinkingCreatorInfo creatorInfo={fieldValue} />;
       }
 
