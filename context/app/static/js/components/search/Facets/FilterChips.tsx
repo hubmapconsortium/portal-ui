@@ -51,23 +51,41 @@ function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () =>
     />
   );
 }
+
+interface HierarchicalChip {
+  parentField: string;
+  parentValue: string;
+  value: string;
+}
+
+const HierarchicalParentChip = React.memo(function HierarchicalTermChip({
+  parentField,
+  parentValue,
+  value,
+}: HierarchicalChip) {
+  const getFieldLabel = useGetFieldLabel();
+  const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
+
+  const onDelete = useCallback(
+    () => filterHierarchicalParentTerm({ term: parentField, value: parentValue, childValues: [] }),
+    [parentField, parentValue, filterHierarchicalParentTerm],
+  );
+
+  return <FilterChip label={`${getFieldLabel(parentField)}: ${value}`} key={value} onDelete={onDelete} />;
+});
+
 const HierarchichalTermChip = React.memo(function HierarchicalTermChip({
   parentField,
   parentValue,
   value,
-}: {
-  parentField: string;
-  parentValue: string;
-  value: string;
-}) {
-  const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
+}: HierarchicalChip) {
   const getFieldLabel = useGetFieldLabel();
-  const filter = useCallback(
+  const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
+  const onDelete = useCallback(
     () => filterHierarchicalChildTerm({ parentTerm: parentField, parentValue, value }),
     [parentField, value, parentValue, filterHierarchicalChildTerm],
   );
-
-  return <FilterChip label={`${getFieldLabel(parentField)}: ${value}`} key={value} onDelete={filter} />;
+  return <FilterChip label={`${getFieldLabel(parentField)}: ${value}`} key={value} onDelete={onDelete} />;
 });
 
 function ResetFiltersButton() {
@@ -135,11 +153,13 @@ function FilterChips() {
 
           if (isHierarchicalFilter(v) && isHierarchicalFacet(facetConfig)) {
             const parentValues = Object.entries(v.values);
-
             if (!parentValues.length) {
               return null;
             }
             return parentValues.map(([parent, children]) => {
+              if (!children?.size) {
+                return <HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />;
+              }
               return [...children].map((child) => (
                 <HierarchichalTermChip
                   key={`${parent}-${child}`}

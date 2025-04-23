@@ -124,7 +124,9 @@ export function buildQuery({
           const childValues = Object.values(filter.values)
             .map((v) => [...v])
             .flat();
-          draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
+          if (childValues.length) {
+            draft[childPortalField] = esb.termsQuery(childPortalField, childValues);
+          }
         }
       }
 
