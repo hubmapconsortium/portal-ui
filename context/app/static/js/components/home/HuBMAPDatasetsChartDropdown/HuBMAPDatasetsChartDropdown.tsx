@@ -1,7 +1,9 @@
 import React from 'react';
 
+import { useEventCallback } from '@mui/material/utils';
 import DropdownListbox from 'js/shared-styles/dropdowns/DropdownListbox';
 import DropdownListboxOption from 'js/shared-styles/dropdowns/DropdownListboxOption';
+import { trackEvent } from 'js/helpers/trackers';
 import { SelectionButton } from './style';
 
 interface DatasetsChartDropdownProps {
@@ -15,6 +17,15 @@ function HuBMAPDatasetsChartDropdown({
   selectedColorDataIndex,
   setSelectedColorDataIndex,
 }: DatasetsChartDropdownProps) {
+  const handleSelectOnClick = useEventCallback(({ option, i }: { option: string; i: number }) => {
+    trackEvent({
+      category: 'Homepage',
+      action: 'HubMAP Datasets Graph/Category Type',
+      label: option,
+    });
+    setSelectedColorDataIndex({ i });
+  });
+
   return (
     <DropdownListbox
       id="bar-fill-dropdown"
@@ -22,7 +33,7 @@ function HuBMAPDatasetsChartDropdown({
       optionComponent={DropdownListboxOption}
       selectedOptionIndex={selectedColorDataIndex}
       options={colorDataOptions}
-      selectOnClick={setSelectedColorDataIndex}
+      selectOnClick={handleSelectOnClick}
       getOptionLabel={(v) => v}
       buttonProps={{ variant: 'outlined', color: 'primary', fullWidth: true }}
     />
