@@ -7,6 +7,7 @@ import { useChartTooltip, useLinearScale, useOrdinalScale } from 'js/shared-styl
 import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import React, { useMemo } from 'react';
+import Description from 'js/shared-styles/sections/Description';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 
 interface FractionGraphProps extends WithParentSizeProvidedProps {
@@ -153,8 +154,10 @@ export default function CellTypeDistributionChart({ tissue }: CellTypeDistributi
 
   return (
     <div>
-      <Typography variant="subtitle1">Cell Type Distribution Chart</Typography>
-
+      <Description>
+        The bar below shows the distribution of cell types in the {tissue} tissue. The distribution is based on the
+        number of cells annotated in HuBMAP datasets and indexed by scFind.
+      </Description>
       {cellTypeMetadata.map(({ label, count, percentage }) => (
         <Typography variant="body2" color="textSecondary" key={label}>
           {label}: ({numFormat.format(count)} / {numFormat.format(totalCellCount)} total cells,{' '}

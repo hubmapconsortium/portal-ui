@@ -3,12 +3,14 @@ import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { Dataset } from 'js/components/types';
+import Typography from '@mui/material/Typography';
 import { useSCFindCellTypeResults } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import CellTypeDistributionChart from './CellTypeDistributionChart';
 import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
+import DatasetsOverview from './DatasetsOverview';
 
 interface SCFindCellTypeQueryResultsProps {
   datasetIds: { hubmap_id: string }[];
@@ -61,6 +63,24 @@ function OrganCellTypeDistributionCharts() {
     return Array.from(uniqueTissues);
   }, [cellTypes]);
 
+  const { datasets } = useSCFindCellTypeResults();
+
+  const datasetsByTissue = useMemo(() => {
+    const tissueMap: Record<string, string[]> = {};
+    tissues.forEach((tissue) => {
+      tissueMap[tissue] = [];
+    });
+
+    Object.entries(datasets).forEach(([cellType, datasetList]) => {
+      const tissue = cellType.split('.')[0];
+      if (tissueMap[tissue]) {
+        tissueMap[tissue].push(...datasetList.map((dataset) => dataset.hubmap_id));
+      }
+    });
+
+    return tissueMap;
+  }, [datasets, tissues]);
+
   return (
     <>
       <Tabs onChange={handleTabChange} value={openTabIndex}>
@@ -71,6 +91,10 @@ function OrganCellTypeDistributionCharts() {
       {tissues.map((tissue, idx) => (
         <TabPanel key={tissue} value={openTabIndex} index={idx}>
           <CellTypeDistributionChart tissue={tissue} />
+          <Typography variant="subtitle1" component="p">
+            Datasets Overview
+          </Typography>
+          <DatasetsOverview datasets={datasetsByTissue[tissue]} />
         </TabPanel>
       ))}
     </>
@@ -83,9 +107,9 @@ function SCFindCellTypeQueryResultsLoader() {
   const { openTabIndex, handleTabChange } = useTabs();
   const { setResults } = useResultsProvider();
 
-  useEffect(() => {
+  const deduplicatedResults = useMemo(() => {
     if (datasets) {
-      const deduplicatedResults = Object.values(datasets)
+      const uniqueResults = Object.values(datasets)
         .flat()
         .reduce((acc, dataset) => {
           const { hubmap_id } = dataset;
@@ -94,12 +118,15 @@ function SCFindCellTypeQueryResultsLoader() {
           }
           return acc;
         }, new Set<string>());
-      const count = deduplicatedResults.size;
-      setResults(count, isLoading, error);
-    } else {
-      setResults(0, isLoading, error);
+      return Array.from(uniqueResults);
     }
-  }, [datasets, isLoading, error, setResults]);
+    return [];
+  }, [datasets]);
+
+  // update the total dataset counter for the results display
+  useEffect(() => {
+    setResults(deduplicatedResults.length, isLoading, error);
+  }, [deduplicatedResults.length, isLoading, error, setResults]);
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -111,6 +138,7 @@ function SCFindCellTypeQueryResultsLoader() {
 
   return (
     <>
+      <Typography variant="subtitle1">Cell Type Distribution Across Organs</Typography>
       <OrganCellTypeDistributionCharts />
       <Tabs onChange={handleTabChange} value={openTabIndex}>
         {cellTypes.map((cellType, idx) => (

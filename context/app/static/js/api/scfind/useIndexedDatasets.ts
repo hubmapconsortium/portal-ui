@@ -16,7 +16,7 @@ export function createIndexedDatasetsKey(scFindEndpoint: string): IndexedDataset
 export default function useIndexedDatasets() {
   const { scFindEndpoint } = useAppContext();
   const key = createIndexedDatasetsKey(scFindEndpoint);
-  const swr = useSWR<IndexedDatasetsResponse, unknown, IndexedDatasetsKey>(key, (url) => fetcher({ url }));
+  const swr = useSWR<IndexedDatasetsResponse, Error, IndexedDatasetsKey>(key, (url) => fetcher({ url }));
 
   return swr;
 }
