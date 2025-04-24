@@ -1,14 +1,15 @@
 import React, { PropsWithChildren } from 'react';
-
+import { animated, useTransition } from '@react-spring/web';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid2';
+import Box from '@mui/material/Box';
+import { useEventCallback } from '@mui/material/utils';
 
-import { animated, useTransition } from '@react-spring/web';
-
+import { trackEvent } from 'js/helpers/trackers';
 import { useIsDesktop, useIsMobile } from 'js/hooks/media-queries';
-import { Box } from '@mui/material';
+
 import { useCardGridContext } from './CardGridContext';
 import { StyledImg } from './styles';
 
@@ -47,9 +48,18 @@ export function ToolsCard({ title, children: description, index, src, icon, alt 
   });
   const justifyContent = isDesktop ? getFlexAlignment(index, cardCount) : 'stretch';
 
+  const handleExpand = useEventCallback(() => {
+    trackEvent({
+      category: 'Homepage',
+      action: 'Explore Tools & Resources',
+      label: title,
+    });
+    setIsExpanded();
+  });
+
   return (
     <Grid overflow="none" display="flex" justifyContent={justifyContent}>
-      <Paper tabIndex={0} onFocus={setIsExpanded} onMouseOver={setIsExpanded} sx={{ overflow: 'hidden' }}>
+      <Paper tabIndex={0} onFocus={handleExpand} onMouseOver={handleExpand} sx={{ overflow: 'hidden' }}>
         <Stack direction={{ xs: 'column', sm: 'row' }}>
           <StyledImg src={src} alt={alt} width="auto" />
           {transition((style, isOpen) => {
