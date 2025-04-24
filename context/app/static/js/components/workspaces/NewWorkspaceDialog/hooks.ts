@@ -75,9 +75,10 @@ function useTemplateNotebooks() {
 
   const createTemplateNotebooks = useCallback(
     async ({
-      workspaceName,
       templateKeys,
       uuids,
+      workspaceName,
+      workspaceDescription,
       workspaceJobTypeId,
       workspaceResourceOptions,
       trackingInfo,
@@ -127,7 +128,7 @@ function useTemplateNotebooks() {
         templatePath,
         body: {
           name: workspaceName,
-          description: workspaceName,
+          description: workspaceDescription,
           default_job_type: workspaceJobTypeId,
           workspace_details: {
             globus_groups_token: groupsToken,

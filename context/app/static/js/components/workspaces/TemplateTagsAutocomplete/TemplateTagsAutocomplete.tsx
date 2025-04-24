@@ -10,14 +10,13 @@ import { SelectedItems } from 'js/hooks/useSelectItems';
 import { RECOMMENDED_TAGS } from 'js/components/workspaces/constants';
 import { useWorkspaceTemplateTags } from 'js/components/workspaces/NewWorkspaceDialog/hooks';
 import { trackEvent } from 'js/helpers/trackers';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 
 interface TemplateTagsAutocompleteProps {
   selectedTags: string[];
   toggleTag: (itemKey: string) => void;
   setSelectedTags: React.Dispatch<React.SetStateAction<string[]>>;
   selectedRecommendedTags: SelectedItems;
-  trackingInfo: WorkspacesEventInfo;
 }
 
 export interface TagTypes extends ChipProps {
@@ -33,9 +32,9 @@ function TemplateTagsAutocomplete({
   toggleTag,
   setSelectedTags,
   selectedRecommendedTags,
-  trackingInfo,
 }: TemplateTagsAutocompleteProps) {
   const { tags } = useWorkspaceTemplateTags();
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   return (
     <Stack spacing={1}>
@@ -53,7 +52,7 @@ function TemplateTagsAutocomplete({
 
           if (addedValue) {
             trackEvent({
-              ...trackingInfo,
+              category: currentEventCategory,
               action: 'Select Template Tag from Dropdown',
               label: addedValue,
             });
@@ -78,7 +77,7 @@ function TemplateTagsAutocomplete({
               label={tag}
               onClick={() => {
                 trackEvent({
-                  ...trackingInfo,
+                  category: currentEventCategory,
                   action: 'Select Recommended Template Tag',
                   label: tag,
                 });

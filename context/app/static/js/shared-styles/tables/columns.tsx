@@ -5,7 +5,7 @@ import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from '
 import { InternalLink } from 'js/shared-styles/Links';
 import { getDonorAgeString } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { EventInfo } from 'js/components/types';
 
 interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
@@ -14,9 +14,11 @@ interface CellContentProps<SearchDoc> {
 function HubmapIDCell({
   hit: { uuid, hubmap_id },
   trackingInfo,
-}: CellContentProps<EntityDocument> & { trackingInfo: WorkspacesEventInfo }) {
+  openLinksInNewTab,
+}: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
   return (
     <InternalLink
+      target={openLinksInNewTab ? '_blank' : '_self'}
       href={`/browse/dataset/${uuid}`}
       onClick={() =>
         trackingInfo &&
@@ -38,6 +40,13 @@ export const hubmapID = {
   label: 'HuBMAP ID',
   sort: 'hubmap_id.keyword',
   cellContent: HubmapIDCell,
+};
+
+export const hubmapIDWithLinksInNewTab = {
+  ...hubmapID,
+  cellContent: (props: CellContentProps<EntityDocument> & { trackingInfo: EventInfo }) => (
+    <HubmapIDCell {...props} openLinksInNewTab />
+  ),
 };
 
 function LastModifiedTimestampCell({ hit: { last_modified_timestamp } }: CellContentProps<EntityDocument>) {

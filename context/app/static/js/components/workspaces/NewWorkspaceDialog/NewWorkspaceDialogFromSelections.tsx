@@ -1,12 +1,15 @@
 import React from 'react';
 import Box from '@mui/material/Box';
 import MenuItem from '@mui/material/MenuItem';
-import SvgIcon from '@mui/material/SvgIcon';
+import { useEventCallback } from '@mui/material/utils';
+import ListItemIcon from '@mui/material/ListItemIcon';
 
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
-import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
+import { WorkspacesIcon } from 'js/shared-styles/icons';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateWorkspaceForm';
 import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
 
@@ -27,10 +30,21 @@ function NewWorkspaceDialogFromSelections() {
     initialSelectedDatasets: [...selectedRows],
   });
 
+  const handleClick = useEventCallback(() => {
+    trackEvent({
+      category: WorkspacesEventCategories.WorkspaceDialog,
+      action: 'Open Create Workspace Dialog',
+      label: selectedRows,
+    });
+    setDialogIsOpen(true);
+  });
+
   return (
     <>
-      <MenuItem onClick={() => setDialogIsOpen(true)}>
-        <SvgIcon component={WorkspacesIcon} sx={{ mr: 1, fontSize: '1.25rem' }} color="primary" />
+      <MenuItem onClick={handleClick}>
+        <ListItemIcon>
+          <WorkspacesIcon fontSize="1.25rem" color="primary" />
+        </ListItemIcon>
         Create New Workspace
       </MenuItem>
       <NewWorkspaceDialog
