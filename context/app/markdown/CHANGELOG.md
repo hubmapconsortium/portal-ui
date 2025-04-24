@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.24.2 - 2025-04-24
+
+- Update workspaces landing page with tables for workspace invitations and owned workspaces.
+- Add dialogs for new workspaces actions and update existing dialogs.
+- Update workspace detail pages and add detail pages for workspace invitations.
+- Update analytics for workspaces.
+
+
+
 ## v1.24.1 - 2025-04-23
 
 - Add analytics to organ pages.

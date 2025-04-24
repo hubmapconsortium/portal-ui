@@ -1,4 +1,0 @@
-- Update workspaces landing page with tables for workspace invitations and owned workspaces.
-- Add dialogs for new workspaces actions and update existing dialogs.
-- Update workspace detail pages and add detail pages for workspace invitations.
-- Update analytics for workspaces.
