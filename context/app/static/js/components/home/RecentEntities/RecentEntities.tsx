@@ -1,12 +1,14 @@
 import React from 'react';
 import Grid from '@mui/material/Grid';
+import { useEventCallback } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 import Panel from 'js/shared-styles/panels/Panel';
 import { useOrgan } from 'js/hooks/useOrgansApi';
 import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
-
 import { buildSearchLink } from 'js/components/search/store';
 import { getEntityCreationInfo } from 'js/helpers/functions';
 import { buildPublicationPanelProps } from 'js/components/publications/PublicationsPanelList/utils';
+
 import {
   useRecentDatasetsQuery,
   useRecentPublicationsQuery,
@@ -22,6 +24,13 @@ interface EntityPanelProps<T> {
 function DatasetPanel({ entity }: EntityPanelProps<RecentDataset>) {
   const { title, uuid, hubmap_id, group_name, origin_samples_unique_mapped_organs: organs } = entity;
   const { creationDate } = getEntityCreationInfo({ entity_type: 'Dataset', ...entity });
+  const handleTrack = useEventCallback(() => {
+    trackEvent({
+      category: 'Homepage',
+      action: 'Recent Datasets',
+      label: entity.hubmap_id,
+    });
+  });
 
   const organ = organs.length ? organs[0] : '';
   const data = useOrgan(organ);
@@ -30,6 +39,7 @@ function DatasetPanel({ entity }: EntityPanelProps<RecentDataset>) {
     <Panel
       title={title}
       href={`/browse/dataset/${uuid}`}
+      onClick={handleTrack}
       secondaryText={`${hubmap_id} | ${group_name} | ${creationDate}`}
       small
       icon={<URLSvgIcon iconURL={iconUrl} ariaLabel={`Dataset containing ${organ}`} display="inline-block" />}

@@ -8,6 +8,8 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import Stack from '@mui/material/Stack';
+import { useEventCallback } from '@mui/material';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface EntityListProps<T extends { uuid: string }> {
   entityName: string;
@@ -24,6 +26,15 @@ export function EntityList<T extends { uuid: string }>({
 }: EntityListProps<T>) {
   const pluralEntityName = `${entityName}s`;
   const Icon = entityIconMap[entityName as keyof typeof entityIconMap];
+
+  const handleTrack = useEventCallback(() => {
+    trackEvent({
+      category: 'Homepage',
+      action: `Recent ${pluralEntityName}`,
+      label: `View All ${pluralEntityName} Button`,
+    });
+  });
+
   return (
     <Grid item xs={12} md={6}>
       <Stack spacing={1} direction="row" alignItems="center" mb={1}>
@@ -46,6 +57,7 @@ export function EntityList<T extends { uuid: string }>({
             })}
             href={viewAllLink}
             startIcon={<Icon />}
+            onClick={handleTrack}
           >
             View All {pluralEntityName}
           </Button>

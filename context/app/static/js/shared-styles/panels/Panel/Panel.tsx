@@ -7,6 +7,7 @@ import { PanelBox, LeftTextWrapper, TruncatedLink, TruncatedText, RightTextWrapp
 interface BasicPanelProps {
   title: string;
   href: string;
+  onClick?: () => void;
   icon?: React.ReactNode;
   secondaryText?: React.ReactNode;
   rightText?: React.ReactNode;
