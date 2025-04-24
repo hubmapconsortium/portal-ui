@@ -7,6 +7,8 @@ import TimelineContent from '@mui/lab/TimelineContent';
 import TimelineOppositeContent, { timelineOppositeContentClasses } from '@mui/lab/TimelineOppositeContent';
 import TimelineDot from '@mui/lab/TimelineDot';
 import Typography from '@mui/material/Typography';
+import { useEventCallback } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 import { TimelineData } from './types';
 import { InternalLink } from '../Links';
 import { DownIcon } from '../icons';
@@ -19,6 +21,14 @@ interface TimelineProps {
 
 export default function Timeline({ data, expandable }: TimelineProps) {
   const { itemsToRender, isExpandable, isExpanded, handleExpand } = useExpandableItems(data, expandable);
+  const handleTrack = useEventCallback((linkTitle: string) => {
+    trackEvent({
+      category: 'Homepage',
+      action: "Hero / What's New",
+      label: linkTitle,
+    });
+  });
+
   return (
     <MuiTimeline
       position="right"
@@ -40,7 +50,7 @@ export default function Timeline({ data, expandable }: TimelineProps) {
             {idx < data.length - 1 && <TimelineConnector />}
           </TimelineSeparator>
           <TimelineContent>
-            <InternalLink href={item.titleHref} variant="subtitle2">
+            <InternalLink href={item.titleHref} onClick={() => handleTrack(item.title)} variant="subtitle2">
               {item.title}
             </InternalLink>
             <Typography variant="body2">{item.description}</Typography>
