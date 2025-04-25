@@ -8,9 +8,9 @@ import { useSCFindCellTypeResults } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
-import CellTypeDistributionChart from './CellTypeDistributionChart';
+import CellTypeDistributionChart from '../CellTypeDistributionChart/CellTypeDistributionChart';
 import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
-import DatasetsOverview from './DatasetsOverview';
+import DatasetsOverview from '../DatasetsOverview';
 
 interface SCFindCellTypeQueryResultsProps {
   datasetIds: { hubmap_id: string }[];
