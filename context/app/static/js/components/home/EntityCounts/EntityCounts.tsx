@@ -32,9 +32,10 @@ interface EntityCountsProps {
 
 function EntityCounts({ organsCount }: EntityCountsProps) {
   const entityCounts = useEntityCounts();
+  const inIframe = window.self !== window.top;
   const handleTrack = useEventCallback((type: string) => {
     trackEvent({
-      category: 'Homepage',
+      category: inIframe ? 'Consortium Site Iframe' : 'Homepage',
       action: 'Counts',
       label: `${type}s`,
     });

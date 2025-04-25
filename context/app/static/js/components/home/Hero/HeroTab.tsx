@@ -25,9 +25,7 @@ function HeroTabAction({ title, icon, tabTitle, onClick, href }: HeroTabActionPr
       label: `${title} Button`,
     });
 
-    if (onClick) {
-      onClick();
-    }
+    onClick?.();
   });
 
   const chip = (
