@@ -8,7 +8,6 @@ import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
-import { getSharerInfo } from 'js/components/workspaces/utils';
 
 export default function ConfirmDeleteInvitationDialog() {
   const { handleDeleteInvitation } = useInvitationsList();
@@ -21,10 +20,12 @@ export default function ConfirmDeleteInvitationDialog() {
   }
 
   const {
-    shared_workspace_id: { id, name },
+    shared_workspace_id: {
+      id,
+      name,
+      user_id: { first_name, last_name },
+    },
   } = invitation;
-
-  const { first_name, last_name } = getSharerInfo(invitation);
 
   const isFromLandingPage = currentEventCategory === WorkspacesEventCategories.WorkspaceLandingPage;
 
