@@ -1,5 +1,5 @@
 import React, { PropsWithChildren } from 'react';
-import { useEventCallback } from '@mui/material';
+import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 

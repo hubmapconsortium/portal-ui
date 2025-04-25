@@ -1,9 +1,9 @@
 import React from 'react';
+import { useEventCallback } from '@mui/material/utils';
 
 import EntityCount from 'js/components/home/EntityCount';
 import { DatasetIcon, SampleIcon, DonorIcon, CollectionIcon, OrganIcon } from 'js/shared-styles/icons';
 import { buildSearchLink } from 'js/components/search/store';
-import { useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
 import { useEntityCounts } from './hooks';
 import { Background, FlexContainer, StyledSvgIcon } from './style';
