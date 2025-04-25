@@ -1,5 +1,5 @@
-import { IconButton, IconButtonProps } from '@mui/material';
 import React, { PropsWithChildren } from 'react';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useTrackEntityPageEvent } from 'js/components/detailPage//useTrackEntityPageEvent';
 import { UnprocessedFile } from '../types';

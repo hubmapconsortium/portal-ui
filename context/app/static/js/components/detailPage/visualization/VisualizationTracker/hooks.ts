@@ -1,7 +1,7 @@
 import React, { useMemo, useRef } from 'react';
+import { useEventCallback } from '@mui/material/utils';
 import useTrackMount from 'js/hooks/useTrackMount';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
 import { formatEventCategoryAndLabel, getNearestIdentifier, modifierKeys, mouseButtonMap } from './utils';
 

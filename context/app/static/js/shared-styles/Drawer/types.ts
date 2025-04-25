@@ -1,4 +1,4 @@
-import { ListSubheaderProps } from '@mui/material';
+import { ListSubheaderProps } from '@mui/material/ListSubheader';
 import React from 'react';
 
 export interface DrawerItemProps {

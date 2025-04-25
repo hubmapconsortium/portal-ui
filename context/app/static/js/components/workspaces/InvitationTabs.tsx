@@ -1,6 +1,6 @@
 import React from 'react';
 import Box from '@mui/material/Box';
-import useEventCallback from '@mui/material/utils/useEventCallback';
+import { useEventCallback } from '@mui/material/utils';
 
 import InvitationsTable from 'js/components/workspaces/Tables/InvitationsTable';
 import { WorkspaceInvitation } from 'js/components/workspaces/types';

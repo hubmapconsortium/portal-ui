@@ -3,7 +3,7 @@ import { useShallow } from 'zustand/react/shallow';
 import ListRoundedIcon from '@mui/icons-material/ListRounded';
 import GridOnRoundedIcon from '@mui/icons-material/GridOnRounded';
 import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
-import { SvgIcon } from '@mui/material';
+import SvgIcon from '@mui/material/SvgIcon';
 
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';

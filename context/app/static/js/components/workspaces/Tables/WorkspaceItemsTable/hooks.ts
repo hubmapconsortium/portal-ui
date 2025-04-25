@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import useEventCallback from '@mui/material/utils/useEventCallback';
+import { useEventCallback } from '@mui/material/utils';
 import {
   SortField,
   TableField,

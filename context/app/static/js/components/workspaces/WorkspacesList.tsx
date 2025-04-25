@@ -3,7 +3,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import ShareIcon from '@mui/icons-material/Share';
-import debounce from '@mui/material/utils/debounce';
+import { debounce } from '@mui/material/utils';
 
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import NewWorkspaceDialogFromWorkspaceList from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialogFromWorkspaceList';

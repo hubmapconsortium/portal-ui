@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react';
-
-import { Stack } from '@mui/material';
+import Stack from '@mui/material/Stack';
 import EmailIconLink from 'js/shared-styles/Links/iconLinks/EmailIconLink';
 import { ContributorAPIResponse, ContactAPIResponse, normalizeContributor, normalizeContact } from './utils';
 
