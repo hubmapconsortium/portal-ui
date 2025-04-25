@@ -4,7 +4,7 @@ import ReferenceBasedAnalysis from 'js/components/organ/Azimuth/ReferenceBasedAn
 import Stack from '@mui/material/Stack';
 import { OrganFile } from 'js/components/organ/types';
 import { DetailPageAlert } from 'js/components/detailPage/style';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
 import { useGenePageContext } from '../hooks';
 

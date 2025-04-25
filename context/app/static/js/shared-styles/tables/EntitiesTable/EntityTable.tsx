@@ -7,7 +7,8 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import { LinearProgress, useEventCallback } from '@mui/material';
+import LinearProgress from '@mui/material/LinearProgress';
+import { useEventCallback } from '@mui/material/utils';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';

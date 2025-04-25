@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import Stack from '@mui/material/Stack';
-import styled from '@mui/material/styles/styled';
+import { styled } from '@mui/material/styles';
 import Button, { ButtonProps } from '@mui/material/Button';
 import Checkbox from '@mui/material/Checkbox';
 import Radio from '@mui/material/Radio';

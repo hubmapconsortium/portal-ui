@@ -1,6 +1,7 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Typography, Stack } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { http, passthrough } from 'msw';
 import useEvaluateMarkers, { EvaluateMarkersParams } from './useEvaluateMarkers';
 

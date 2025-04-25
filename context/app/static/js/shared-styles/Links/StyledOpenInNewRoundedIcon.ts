@@ -1,5 +1,5 @@
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
-import styled from '@mui/material/styles/styled';
+import { styled } from '@mui/material/styles';
 
 const StyledOpenInNewRoundedIcon = styled(OpenInNewRoundedIcon)(({ theme }) => ({
   fontSize: '1.1rem',

@@ -1,4 +1,4 @@
-import styled from '@mui/material/styles/styled';
+import { styled } from '@mui/material/styles';
 import SvgIcon from '@mui/material/SvgIcon';
 
 const HeaderIcon = styled(SvgIcon)(() => ({

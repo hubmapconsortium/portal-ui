@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
-import { Typography, Stack, FormControl, TextField } from '@mui/material';
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { http, passthrough } from 'msw';
 import useCellTypeMarkers, { CellTypeMarkersParams } from './useCellTypeMarkers';
 

@@ -1,6 +1,8 @@
 import React, { useCallback } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import SvgIcon from '@mui/material/SvgIcon';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import { useEventCallback } from '@mui/material/utils';
 
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
@@ -11,7 +13,6 @@ import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalSt
 import { AddIcon } from 'js/shared-styles/icons';
 import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
-import { ListItemIcon, useEventCallback } from '@mui/material';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';

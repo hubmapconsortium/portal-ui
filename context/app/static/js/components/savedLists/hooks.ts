@@ -19,7 +19,7 @@ import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/
 import { trackEvent } from 'js/helpers/trackers';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import { useEventCallback } from '@mui/material';
+import { useEventCallback } from '@mui/material/utils';
 
 function useGlobalMutateSavedList() {
   const { buildKey } = useBuildUkvSWRKey();

@@ -2,7 +2,7 @@ import React from 'react';
 import { format } from 'date-fns/format';
 import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
-import useEventCallback from '@mui/material/utils/useEventCallback';
+import { useEventCallback } from '@mui/material/utils';
 
 import { useInvitationDetail } from 'js/components/workspaces/hooks';
 import { TemplatesTypes, WorkspaceInvitation, WorkspacesEventCategories } from 'js/components/workspaces/types';

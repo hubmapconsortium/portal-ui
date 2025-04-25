@@ -1,4 +1,4 @@
-import styled from '@mui/material/styles/styled';
+import { styled } from '@mui/material/styles';
 import { Alert } from 'js/shared-styles/alerts';
 
 const StyledAlert = styled(Alert)(({ theme }) => ({

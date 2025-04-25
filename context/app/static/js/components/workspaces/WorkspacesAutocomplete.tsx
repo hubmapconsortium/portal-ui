@@ -3,7 +3,7 @@ import Autocomplete, { AutocompleteRenderInputParams } from '@mui/material/Autoc
 import Box from '@mui/material/Box';
 import InputAdornment from '@mui/material/InputAdornment';
 import Typography from '@mui/material/Typography';
-import useEventCallback from '@mui/material/utils/useEventCallback';
+import { useEventCallback } from '@mui/material/utils';
 
 import { StyledSearchIcon, StyledTextField } from 'js/components/workspaces/style';
 import { WorkspaceWithCreatorInfo } from 'js/components/workspaces/types';

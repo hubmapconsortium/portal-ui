@@ -4,11 +4,11 @@ import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Grid from '@mui/material/Grid2';
+import Box from '@mui/material/Box';
 
 import { animated, useTransition } from '@react-spring/web';
 
 import { useIsDesktop, useIsMobile } from 'js/hooks/media-queries';
-import { Box } from '@mui/material';
 import { useCardGridContext } from './CardGridContext';
 import { StyledImg } from './styles';
 
