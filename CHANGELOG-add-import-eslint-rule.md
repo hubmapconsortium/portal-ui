@@ -1,0 +1,1 @@
+- Add eslint rule for MUI imports.
