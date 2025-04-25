@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import Stack from '@mui/material/Stack';
-import { useEventCallback } from '@mui/material';
+import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 
 interface EntityListProps<T extends { uuid: string }> {

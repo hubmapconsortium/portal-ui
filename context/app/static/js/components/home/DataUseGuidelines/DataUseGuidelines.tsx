@@ -32,11 +32,11 @@ const paragraphs = [
     component: (
       <>
         All published HuBMAP data is licensed under a{' '}
-        <HomepageOutboundLink url="https://creativecommons.org/licenses/by/4.0/">
+        <HomepageOutboundLink href="https://creativecommons.org/licenses/by/4.0/">
           Creative Commons Attribution 4.0 International License (CC BY 4.0).
         </HomepageOutboundLink>{' '}
         Data is also governed by the{' '}
-        <HomepageOutboundLink url="https://hubmapconsortium.org/policies/external-data-sharing-policy/">
+        <HomepageOutboundLink href="https://hubmapconsortium.org/policies/external-data-sharing-policy/">
           External Data Sharing Policy
         </HomepageOutboundLink>
         .
@@ -49,7 +49,7 @@ const paragraphs = [
     component: (
       <>
         HuBMAP data is managed and published in the Data Portal and Human Reference Atlas according to{' '}
-        <HomepageOutboundLink url="https://www.go-fair.org/fair-principles/">FAIR Principles</HomepageOutboundLink>,
+        <HomepageOutboundLink href="https://www.go-fair.org/fair-principles/">FAIR Principles</HomepageOutboundLink>,
         including standardized processing with reproducible pipelines. HuBMAP data may also be processed by other
         methods in scientific results published by HuBMAP consortium collaborations.
       </>

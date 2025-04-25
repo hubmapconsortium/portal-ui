@@ -19,15 +19,15 @@ interface HeroTabActionProps {
 
 function HeroTabAction({ title, icon, tabTitle, onClick, href }: HeroTabActionProps) {
   const handleClick = useEventCallback(() => {
-    if (onClick) {
-      onClick();
-    }
-
     trackEvent({
       category: 'Homepage',
       action: `Hero / ${tabTitle}`,
       label: `${title} Button`,
     });
+
+    if (onClick) {
+      onClick();
+    }
   });
 
   const chip = (
