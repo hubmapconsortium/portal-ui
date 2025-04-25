@@ -15,6 +15,12 @@ const border = (theme: Theme) => ({
   border: `1px solid ${theme.palette.grey[300]}`,
 });
 
+const checkboxStyles = {
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+};
+
 const ChipWrapper = styled('div')(({ theme }) => ({
   ...border(theme),
   borderTop: 'none',
@@ -84,10 +90,13 @@ const StyledHeaderCell = styled(HeaderCell)({
   whiteSpace: 'nowrap',
 });
 
+const StyledCheckboxHeaderCell = styled(StyledHeaderCell)({
+  ...checkboxStyles,
+  borderBottom: 'none',
+});
+
 const StyledCheckboxCell = styled(StyledTableCell)(({ theme }) => ({
-  display: 'flex',
-  justifyContent: 'center',
-  alignItems: 'center',
+  ...checkboxStyles,
   paddingTop: theme.spacing(1.25),
 }));
 
@@ -138,4 +147,5 @@ export {
   StyledSvgIcon,
   BorderedTableRow,
   StyledDescriptionContainer,
+  StyledCheckboxHeaderCell,
 };

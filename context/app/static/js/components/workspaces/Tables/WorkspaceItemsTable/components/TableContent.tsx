@@ -2,7 +2,7 @@ import React from 'react';
 import { WorkspaceItem, WorkspaceItemsTableProps } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import { useWorkspaceItemsTableContent } from 'js/components/workspaces/Tables/WorkspaceItemsTable/hooks';
 import {
-  StyledHeaderCell,
+  StyledCheckboxHeaderCell,
   StyledTable,
   StyledTableBody,
   StyledTableCell,
@@ -44,9 +44,9 @@ function TableContent<T extends WorkspaceItem>(props: WorkspaceItemsTableProps<T
         <StyledTable>
           <StyledTableHead>
             {!!selectedItemIds && (
-              <StyledHeaderCell>
+              <StyledCheckboxHeaderCell>
                 <Checkbox checked={selectedItemIds?.size === items.length} onChange={onToggleAllItems} />
-              </StyledHeaderCell>
+              </StyledCheckboxHeaderCell>
             )}
             <StyledTableCell width="0" />
             <HeaderCells tableFields={tableFields} sortField={sortField} setSortField={setSortField} {...rest} />
