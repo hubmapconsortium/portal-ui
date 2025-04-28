@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.24.2 - 2025-04-24
+
+- Add sharing functionality to workspaces.
+
+
+
+## v1.24.1 - 2025-04-23
+
+- Add analytics to organ pages.
+- Enable easy links to the search page with hierarchical facets selected.
+
+
+
 ## v1.24.0 - 2025-04-14
 
 - Add admin banner to top of portal header.

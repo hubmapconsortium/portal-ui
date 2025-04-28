@@ -2,7 +2,7 @@ import React from 'react';
 
 import Stack from '@mui/material/Stack';
 import Divider from '@mui/material/Divider';
-import { IconButton } from '@mui/material';
+import IconButton from '@mui/material/IconButton';
 import CloseRounded from '@mui/icons-material/CloseRounded';
 import { DrawerSection, NavigationDrawerProps } from './types';
 import { DrawerTitle, StyledDrawer } from './styles';

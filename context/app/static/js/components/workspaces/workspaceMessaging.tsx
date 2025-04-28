@@ -8,12 +8,13 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import { Alert } from 'js/shared-styles/alerts';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
-import { InternalLink } from 'js/shared-styles/Links';
+import { InternalLink, OutboundLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import LogInPanel from 'js/shared-styles/panels/LogInPanel';
 import { useSelectItems } from 'js/hooks/useSelectItems';
-import { WorkspacesEventCategories, WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { trackEvent } from 'js/helpers/trackers';
 import { buildSearchLink } from '../search/store';
 import TemplateGrid from './TemplateGrid';
@@ -30,7 +31,7 @@ function ContactUsForAccess() {
 
 const workspacesDescription = {
   title: 'What are workspaces?',
-  body: 'Workspaces enable lightweight exploration of public HuBMAP data and user-provided data using Python and R in a Jupyter Lab environment hosted by HuBMAP at no cost to community members.',
+  body: 'Workspaces provides a lightweight exploration platform tailored for researchers to easily access HuBMAP data and perform analyses directly within the portal. Effortlessly upload dataset files to a Jupyter notebook using provided templates to get started on analyzing HuBMAP data.',
 };
 
 const trackRelevantPage = (pageName: string) => {
@@ -73,8 +74,9 @@ const workspacesQuestionsSuggestions = {
   body: (
     <>
       Please be aware that certain limitations currently exist on this platform due to its simplified exploration
-      design. If you have any questions or suggestions about workspaces, contact us through the{' '}
-      <ContactUsLink> HuBMAP Help Desk. </ContactUsLink>
+      design. If you have any questions or suggestions about workspaces, submit feedback at the HuBMAP{' '}
+      <OutboundLink href="https://hubmapconsortium.slack.com/archives/C056RMNB1C6">#workspaces-feedback</OutboundLink>{' '}
+      Slack channel, or contact us through the <ContactUsLink>help desk</ContactUsLink>.
     </>
   ),
 };
@@ -144,19 +146,16 @@ function AccessAlert() {
   );
 }
 
-interface TemplatePreviewSectionProps {
-  trackingInfo: WorkspacesEventInfo;
-}
-
-function TemplatePreviewSection({ trackingInfo }: TemplatePreviewSectionProps) {
+function TemplatePreviewSection() {
   const { selectedItems: selectedRecommendedTags, toggleItem: toggleTag } = useSelectItems([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
   const { templates } = useWorkspaceTemplates([...selectedTags, ...selectedRecommendedTags]);
+  const { currentEventCategory } = useWorkspacesEventContext();
 
   return (
     <Stack spacing={3}>
       {!isAuthenticated && (
-        <LogInPanel trackingInfo={trackingInfo}>
+        <LogInPanel trackingInfo={{ category: currentEventCategory }}>
           Explore workspace templates designed to help you start analyzing HuBMAP data. Use tags to filter templates by
           your specific interests. Click on any template for detailed information.{' '}
           <InternalLink href="/login">Log in</InternalLink> to begin working in a workspace.
@@ -168,9 +167,8 @@ function TemplatePreviewSection({ trackingInfo }: TemplatePreviewSectionProps) {
           toggleTag={toggleTag}
           setSelectedTags={setSelectedTags}
           selectedRecommendedTags={selectedRecommendedTags}
-          trackingInfo={trackingInfo}
         />
-        <TemplateGrid templates={templates} trackingInfo={trackingInfo} />
+        <TemplateGrid templates={templates} />
       </Stack>
     </Stack>
   );
@@ -193,11 +191,11 @@ function TextItems({ textKey, children }: PropsWithChildren<{ textKey: keyof typ
       {!isAuthenticated && (
         <Stack pt={2} spacing={2}>
           <Typography variant="h4">Workspace Templates</Typography>
-          <TemplatePreviewSection trackingInfo={{ category: WorkspacesEventCategories.WorkspaceLandingPage }} />
+          <TemplatePreviewSection />
         </Stack>
       )}
     </Stack>
   );
 }
 
-export { WorkspacesLogInAlert, AccessAlert, TemplatePreviewSection, TextItems };
+export { WorkspacesLogInAlert, AccessAlert, ContactUsForAccess, TemplatePreviewSection, TextItems };

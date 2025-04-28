@@ -136,6 +136,19 @@ export default [
           ignoreRestSiblings: true,
         },
       ],
+      'no-restricted-imports': [
+        'error',
+        {
+          paths: [
+            {
+              name: '@mui/material',
+              message:
+                'Please import directly from @mui/material/[Component], e.g. `import Box from "@mui/material/Box"` to avoid tree-shaking issues.',
+            },
+          ],
+          patterns: ['@mui/material/*/*'],
+        },
+      ],
     },
   },
   ...compat

@@ -15,11 +15,13 @@ export function SectionDescription({ addendum, children, subsection }: SectionDe
   const contents = (
     <Stack direction="column" gap={1} marginBottom={subsection ? 2 : 0}>
       <Stack direction="row" gap={1} alignItems="start">
-        {/* Align icon with the first line of text */}
-        <Box marginTop={0.4}>
+        <Box>
           <InfoIcon color="primary" fontSize={iconSize} />
         </Box>
-        <Typography variant="body1">{children}</Typography>
+        {/* Align icon with the first line of text */}
+        <Typography variant="body1" marginTop={0.5}>
+          {children}
+        </Typography>
       </Stack>
       {addendum}
     </Stack>

@@ -28,8 +28,21 @@ import {
   UpdateWorkspaceBody,
   useWorkspacesApiURLs,
   useBuildWorkspacesSWRKey,
+  useInvitations,
+  useDeleteInvitation,
+  useShareInvitation,
+  useAcceptInvitation,
+  useInvitation,
 } from './api';
-import { MergedWorkspace, Workspace, CreateTemplatesResponse, WorkspaceResourceOptions } from './types';
+import {
+  MergedWorkspace,
+  Workspace,
+  CreateTemplatesResponse,
+  WorkspaceResourceOptions,
+  WorkspaceInvitation,
+  WorkspaceFile,
+  WorkspaceCreatorInfo,
+} from './types';
 
 interface UseWorkspacesListTypes<T> {
   workspaces: Workspace[];
@@ -57,17 +70,18 @@ interface createAndLaunchWorkspaceProps {
 }
 
 /**
- * Returns a function that will mutate workspaces, jobs, and optionally a single workspace's details
+ * Returns a function that will mutate workspaces, jobs, invitations, and optionally a single workspace's details
  *
  * @param mutateWorkspace The mutate function for a single workspace
- * @returns A function that will revalidate workspaces, jobs, and optionally a workspace
+ * @returns A function that will revalidate workspaces, jobs, invitations, and optionally a workspace
  */
 function useMutateWorkspacesAndJobs<T>(mutateWorkspace?: KeyedMutator<T>) {
   const { mutate: mutateJobs } = useJobs();
   const { mutate: mutateWorkspaces } = useWorkspaces();
+  const { mutate: mutateInvitations } = useInvitations();
   const mutate = useCallback(async () => {
-    await Promise.all([mutateWorkspaces(), mutateJobs(), mutateWorkspace?.()]);
-  }, [mutateWorkspaces, mutateJobs, mutateWorkspace]);
+    await Promise.all([mutateWorkspaces(), mutateJobs(), mutateInvitations(), mutateWorkspace?.()]);
+  }, [mutateWorkspaces, mutateJobs, mutateInvitations, mutateWorkspace]);
 
   return mutate;
 }
@@ -128,10 +142,102 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
 
 function useWorkspacesList() {
   const { workspaces, isLoading: workspacesLoading } = useWorkspaces();
+
   return useWorkspacesActions({
     workspaces,
     workspacesLoading,
   });
+}
+
+function useInvitationsActions({
+  sentInvitations,
+  receivedInvitations,
+  invitationsLoading,
+}: {
+  sentInvitations: WorkspaceInvitation[];
+  receivedInvitations: WorkspaceInvitation[];
+  invitationsLoading: boolean;
+}) {
+  const mutate = useMutateWorkspacesAndJobs();
+
+  const { deleteInvitation, isDeleting } = useDeleteInvitation();
+  const { acceptInvitation, isAccepting } = useAcceptInvitation();
+  const { shareInvitation, isSharing } = useShareInvitation();
+
+  async function handleDeleteInvitation(invitationId: number) {
+    await deleteInvitation(invitationId);
+    await mutate();
+  }
+
+  async function handleAcceptInvitation(invitationId: number) {
+    await acceptInvitation(invitationId);
+    await mutate();
+  }
+
+  async function handleShareInvitations({ workspaceIds, userIds }: { workspaceIds: string[]; userIds: number[] }) {
+    await Promise.all(
+      workspaceIds.map((workspaceId) =>
+        shareInvitation({ original_workspace_id: workspaceId, shared_user_ids: userIds }),
+      ),
+    );
+    await mutate();
+  }
+
+  const numPendingReceivedInvitations = receivedInvitations.filter((invitation) => !invitation.is_accepted).length;
+
+  return {
+    sentInvitations,
+    receivedInvitations,
+    invitationsLoading,
+    handleDeleteInvitation,
+    isDeleting,
+    handleAcceptInvitation,
+    isAccepting,
+    handleShareInvitations,
+    isSharing,
+    numPendingReceivedInvitations,
+  };
+}
+
+function useInvitationsList() {
+  const { sentInvitations, receivedInvitations, isLoading: invitationsLoading } = useInvitations();
+  return useInvitationsActions({
+    sentInvitations,
+    receivedInvitations,
+    invitationsLoading,
+  });
+}
+
+function useGetCreatorInfo(receivedInvitations: WorkspaceInvitation[]) {
+  const creatorMap = receivedInvitations.reduce<Map<number, WorkspaceCreatorInfo>>((map, invitation) => {
+    const workspaceId = invitation.shared_workspace_id.id;
+    const original = invitation.original_workspace_id;
+
+    map.set(workspaceId, original ? original.user_id : 'Unknown');
+    return map;
+  }, new Map());
+
+  const getCreatorInfo = (workspaceId: number): WorkspaceCreatorInfo => creatorMap.get(workspaceId) ?? 'Me';
+
+  return { getCreatorInfo };
+}
+
+function useWorkspacesListWithSharerInfo() {
+  const { workspacesList, isLoading: workspacesLoading, ...rest } = useWorkspacesList();
+  const { receivedInvitations, invitationsLoading } = useInvitationsList();
+
+  const { getCreatorInfo } = useGetCreatorInfo(receivedInvitations);
+
+  const workspacesWithCreatorInfo = workspacesList.map((workspace) => ({
+    ...workspace,
+    creatorInfo: getCreatorInfo(workspace.id),
+  }));
+
+  return {
+    workspacesList: workspacesWithCreatorInfo,
+    isLoading: workspacesLoading || invitationsLoading,
+    ...rest,
+  };
 }
 
 function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, never> = {}) {
@@ -146,9 +252,8 @@ function getWorkspaceDatasetUUIDs(workspace: MergedWorkspace | Record<string, ne
   }, []);
 }
 
-function useMatchingWorkspaceTemplates(workspace: MergedWorkspace | Record<string, never> = {}) {
+function useMatchingWorkspaceTemplates(workspaceFiles: WorkspaceFile[] = []) {
   // TODO: Update to use template IDs once workspace API makes them available
-  const workspaceFiles = workspace?.workspace_details?.current_workspace_details?.files ?? [];
   const { templates } = useWorkspaceTemplates();
 
   const matchingTemplates = workspaceFiles.reduce((acc, file) => {
@@ -174,12 +279,61 @@ function useWorkspaceDetail({ workspaceId }: { workspaceId: number }) {
 
   const mergedWorkspace = workspacesList[0] ?? {};
 
-  const workspaceTemplates = useMatchingWorkspaceTemplates(mergedWorkspace);
+  const workspaceTemplates = useMatchingWorkspaceTemplates(
+    mergedWorkspace.workspace_details?.current_workspace_details?.files,
+  );
 
   return {
     workspace: mergedWorkspace,
     workspaceDatasets: getWorkspaceDatasetUUIDs(mergedWorkspace),
     workspaceTemplates,
+    ...rest,
+  };
+}
+
+function useInvitationDetail({ invitationId }: { invitationId: number }) {
+  const {
+    invitation,
+    sentInvitations,
+    receivedInvitations,
+    isLoading: invitationsLoading,
+  } = useInvitation(invitationId);
+  const invitationsActions = useInvitationsActions({
+    sentInvitations,
+    receivedInvitations,
+    invitationsLoading,
+  });
+
+  const workspaceDetails = invitation?.shared_workspace_id?.workspace_details;
+  const invitationTemplates = useMatchingWorkspaceTemplates(workspaceDetails?.current_workspace_details?.files);
+  const invitationDatasets: string[] =
+    workspaceDetails?.request_workspace_details?.symlinks?.flatMap((symlink) =>
+      symlink.dataset_uuid ? [symlink.dataset_uuid] : [],
+    ) ?? [];
+
+  return {
+    invitation,
+    invitationDatasets,
+    invitationTemplates,
+    ...invitationsActions,
+  };
+}
+
+function useInvitationWorkspaceDetails({ workspaceId }: { workspaceId: number }) {
+  const { workspace, ...rest } = useWorkspaceDetail({ workspaceId });
+  const { sentInvitations, receivedInvitations } = useInvitationsList();
+
+  const { getCreatorInfo } = useGetCreatorInfo(receivedInvitations);
+  const creatorInfo = getCreatorInfo(workspaceId);
+
+  const workspaceSentInvitations = sentInvitations.filter(
+    (invitation) => invitation.original_workspace_id?.id === workspaceId,
+  );
+
+  return {
+    workspace,
+    creatorInfo,
+    workspaceSentInvitations,
     ...rest,
   };
 }
@@ -413,13 +567,17 @@ function useUpdateWorkspaceDatasets({ workspaceId }: { workspaceId: number }) {
 
 export {
   useWorkspacesList,
+  useInvitationsList,
   useHasRunningWorkspace,
   useRunningWorkspace,
   useLaunchWorkspace,
   useWorkspaceDetail,
+  useInvitationDetail,
+  useInvitationWorkspaceDetails,
   useSessionWarning,
   useRefreshSession,
   useHandleUpdateWorkspace,
   useCreateTemplates,
   useUpdateWorkspaceDatasets,
+  useWorkspacesListWithSharerInfo,
 };

@@ -1,10 +1,10 @@
 import React from 'react';
+import Skeleton from '@mui/material/Skeleton';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import hasKey from 'js/helpers/hasKey';
 import { capitalizeString } from 'js/helpers/functions';
 
-import { Skeleton } from '@mui/material';
 import { useGeneOntology } from '../hooks';
 import { ReferenceList } from './styles';
 

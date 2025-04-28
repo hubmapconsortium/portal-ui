@@ -3,9 +3,9 @@ import React from 'react';
 import { useTabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { EventInfo } from 'js/components/types';
 
 import SvgIcon from '@mui/material/SvgIcon';
-import { EventInfo } from 'js/components/types';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
@@ -13,6 +13,7 @@ import { StyledPaper } from './style';
 
 interface EntitiesTablesProps<Doc> {
   isSelectable?: boolean;
+  numSelected?: number;
   initialTabIndex?: number;
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
@@ -22,6 +23,7 @@ interface EntitiesTablesProps<Doc> {
 
 function EntitiesTables<Doc>({
   isSelectable = true,
+  numSelected,
   initialTabIndex = 0,
   entities,
   disabledIDs,
@@ -63,6 +65,7 @@ function EntitiesTables<Doc>({
               query={query}
               columns={columns}
               isSelectable={isSelectable}
+              numSelected={numSelected}
               disabledIDs={disabledIDs}
               trackingInfo={trackingInfo}
             />

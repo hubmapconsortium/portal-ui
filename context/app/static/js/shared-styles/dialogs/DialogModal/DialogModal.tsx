@@ -6,9 +6,9 @@ import DialogContentText from '@mui/material/DialogContentText';
 import IconButton from '@mui/material/IconButton';
 import Stack from '@mui/system/Stack';
 
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
+import { CloseIcon } from 'js/shared-styles/icons';
 import { StyledDivider, StyledDialogTitle } from './style';
-import { CloseIcon } from '../icons';
-import ErrorOrWarningMessages from '../alerts/ErrorOrWarningMessages';
 
 interface DialogModalProps extends Omit<React.ComponentProps<typeof Dialog>, 'content' | 'open'> {
   title: string;

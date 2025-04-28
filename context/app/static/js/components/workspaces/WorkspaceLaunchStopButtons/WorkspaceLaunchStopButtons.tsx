@@ -7,10 +7,13 @@ import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
 import { Alert } from 'js/shared-styles/alerts';
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
-import { MergedWorkspace, WorkspacesEventInfo } from 'js/components/workspaces/types';
+import { MergedWorkspace } from 'js/components/workspaces/types';
 import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { StyledLaunchButton, StyledSvgIcon } from 'js/components/workspaces/style';
 import { trackEvent } from 'js/helpers/trackers';
+import { StartJobIcon, StopJobIcon } from 'js/shared-styles/icons';
+import { EventInfo } from 'js/components/types';
 
 interface WorkspaceButtonProps {
   workspace: MergedWorkspace;
@@ -19,7 +22,8 @@ interface WorkspaceButtonProps {
   isStoppingWorkspace: boolean;
   showLaunch?: boolean;
   showStop?: boolean;
-  trackingInfo?: WorkspacesEventInfo;
+  showIcons?: boolean;
+  trackingInfo?: EventInfo;
 }
 
 function StopWorkspaceButton({
@@ -27,6 +31,7 @@ function StopWorkspaceButton({
   handleStopWorkspace,
   button: ButtonComponent,
   isStoppingWorkspace,
+  showIcons,
 }: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
   const { toastErrorStopWorkspace } = useWorkspaceToasts();
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
@@ -39,15 +44,64 @@ function StopWorkspaceButton({
     <ButtonComponent
       type="button"
       disabled={isStoppingWorkspace}
+      variant="contained"
+      sx={{ border: 'none' }}
       onClick={() => {
         handleStopWorkspace(workspace.id).catch((err) => {
           toastErrorStopWorkspace(workspace.name);
           console.error(err);
         });
       }}
+      startIcon={showIcons ? <StyledSvgIcon as={StopJobIcon} /> : undefined}
     >
-      Stop Jobs
+      Stop
     </ButtonComponent>
+  );
+}
+
+function LaunchWorkspaceButton({
+  workspace,
+  trackingInfo,
+  button: ButtonComponent,
+  showIcons,
+}: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
+  const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
+
+  return (
+    <ButtonComponent
+      onClick={() => {
+        if (trackingInfo) {
+          trackEvent({
+            ...trackingInfo,
+            action: 'Launch Open Workspace Dialog',
+            label: workspace.name,
+          });
+        }
+        launchOrOpenDialog(workspace);
+      }}
+      startIcon={showIcons ? <StyledSvgIcon as={StartJobIcon} /> : undefined}
+    >
+      Launch
+    </ButtonComponent>
+  );
+}
+
+function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
+  const { workspace, button: ButtonComponent, showLaunch = false, showStop = false } = props;
+
+  if (workspace.status === 'deleting') {
+    return (
+      <ButtonComponent type="button" disabled size="small">
+        Deleting...
+      </ButtonComponent>
+    );
+  }
+
+  return (
+    <Stack direction="row" spacing={1}>
+      {showStop && <StopWorkspaceButton {...props} />}
+      {showLaunch && <LaunchWorkspaceButton {...props} />}
+    </Stack>
   );
 }
 
@@ -90,43 +144,9 @@ function StopWorkspaceAlert() {
   );
 }
 
-function WorkspaceLaunchStopButtons(props: WorkspaceButtonProps) {
-  const { workspace, button: ButtonComponent, trackingInfo, showLaunch = false, showStop = false } = props;
-  const { launchOrOpenDialog } = useLaunchWorkspaceDialog();
-
-  if (workspace.status === 'deleting') {
-    return (
-      <ButtonComponent type="button" disabled size="small">
-        Deleting...
-      </ButtonComponent>
-    );
-  }
-
-  return (
-    <Stack direction="row" spacing={2}>
-      {showStop && <StopWorkspaceButton {...props} />}
-      {showLaunch && (
-        <Button
-          type="button"
-          variant="contained"
-          color="primary"
-          onClick={() => {
-            if (trackingInfo) {
-              trackEvent({
-                ...trackingInfo,
-                action: 'Launch Open Workspace Dialog',
-                label: workspace.name,
-              });
-            }
-            launchOrOpenDialog(workspace);
-          }}
-        >
-          Launch Workspace
-        </Button>
-      )}
-    </Stack>
-  );
+function LaunchStopButton(props: ButtonProps) {
+  return <StyledLaunchButton {...props} />;
 }
 
-export { StopWorkspaceAlert };
+export { StopWorkspaceAlert, LaunchStopButton };
 export default WorkspaceLaunchStopButtons;

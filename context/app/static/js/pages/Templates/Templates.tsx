@@ -6,15 +6,18 @@ import { TemplatePreviewSection } from 'js/components/workspaces/workspaceMessag
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import IconPageTitle from 'js/shared-styles/pages/IconPageTitle';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 
 function Templates() {
   return (
-    <Stack spacing={3}>
-      <IconPageTitle icon={WorkspacesIcon} data-testid="templates-title">
-        Templates
-      </IconPageTitle>
-      <TemplatePreviewSection trackingInfo={{ category: WorkspacesEventCategories.WorkspaceTemplateLandingPage }} />
-    </Stack>
+    <WorkspacesEventContextProvider currentEventCategory={WorkspacesEventCategories.WorkspaceTemplateLandingPage}>
+      <Stack spacing={3}>
+        <IconPageTitle icon={WorkspacesIcon} data-testid="templates-title">
+          Templates
+        </IconPageTitle>
+        <TemplatePreviewSection />
+      </Stack>
+    </WorkspacesEventContextProvider>
   );
 }
 

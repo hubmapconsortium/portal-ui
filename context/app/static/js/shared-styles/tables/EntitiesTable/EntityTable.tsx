@@ -7,7 +7,8 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import { LinearProgress, useEventCallback } from '@mui/material';
+import LinearProgress from '@mui/material/LinearProgress';
+import { useEventCallback } from '@mui/material/utils';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
@@ -15,8 +16,9 @@ import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
-import { trackEvent } from 'js/helpers/trackers';
+import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { EventInfo } from 'js/components/types';
+import { trackEvent } from 'js/helpers/trackers';
 import { Column, EntitiesTabTypes } from './types';
 
 interface EntityHeaderCellTypes<Doc> {
@@ -80,13 +82,21 @@ function TablePaddingRow({ padding }: { padding: number }) {
 
 interface EntityTableProps<Doc> extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns'> {
   isSelectable: boolean;
+  numSelected?: number;
   disabledIDs?: Set<string>;
   trackingInfo?: EventInfo;
 }
 
 const headerRowHeight = 60;
 
-function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, trackingInfo }: EntityTableProps<Doc>) {
+function EntityTable<Doc>({
+  query,
+  columns,
+  disabledIDs,
+  isSelectable = true,
+  trackingInfo,
+  numSelected,
+}: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
 
   const {
@@ -111,6 +121,7 @@ function EntityTable<Doc>({ query, columns, disabledIDs, isSelectable = true, tr
       ref={tableContainerRef}
       onScroll={(event) => fetchMoreOnBottomReached(event)}
     >
+      {isSelectable && numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>
           <TableRow sx={{ height: headerRowHeight }}>

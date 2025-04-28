@@ -1,6 +1,8 @@
-import React, { PropsWithChildren, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import SvgIcon from '@mui/material/SvgIcon';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import { useEventCallback } from '@mui/material/utils';
 
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
@@ -11,6 +13,9 @@ import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalSt
 import { AddIcon } from 'js/shared-styles/icons';
 import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
 import WorkspacesIcon from 'assets/svg/workspaces.svg';
+import { trackEvent } from 'js/helpers/trackers';
+import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 
 const menuID = 'workspace-menu';
 
@@ -28,11 +33,6 @@ function WorkspaceSearchDialogs() {
   }
 }
 
-interface WorkspaceDropdownMenuItemProps extends PropsWithChildren {
-  dialogType: DialogType;
-  icon: typeof SvgIcon;
-}
-
 export function useOpenDialog(dialogType: DialogType) {
   const { open, setDialogType } = useEditWorkspaceStore();
 
@@ -43,21 +43,28 @@ export function useOpenDialog(dialogType: DialogType) {
   return onClick;
 }
 
-function WorkspaceDropdownMenuItem({ dialogType, children, icon: Icon }: WorkspaceDropdownMenuItemProps) {
-  const onClick = useOpenDialog(dialogType);
+function AddToWorkspaceDialogFromSelections() {
+  const openEditWorkspaceDialog = useOpenDialog(addDatasetsDialogType);
+  const { selectedRows } = useSelectableTableStore();
+
+  const onClick = useEventCallback(() => {
+    openEditWorkspaceDialog();
+    trackEvent({
+      category: WorkspacesEventCategories.WorkspaceDialog,
+      action: 'Open Add to Workspace dialog',
+      label: selectedRows,
+    });
+  });
+
   return (
     <MenuItem onClick={onClick}>
-      <Icon sx={{ mr: 1, fontSize: '1.25rem' }} color="primary" />
-      {children}
+      <ListItemIcon>
+        <AddIcon fontSize="1.25rem" color="primary" />
+      </ListItemIcon>
+      Add to Existing Workspace
     </MenuItem>
   );
 }
-
-const menuItems: {
-  label: string;
-  dialogType: DialogType;
-  icon: typeof SvgIcon;
-}[] = [{ label: 'Add to Existing Workspace', dialogType: addDatasetsDialogType, icon: AddIcon }];
 
 function WorkspaceDropdownMenu({ type }: MetadataMenuProps) {
   const { isWorkspacesUser } = useAppContext();
@@ -74,11 +81,7 @@ function WorkspaceDropdownMenu({ type }: MetadataMenuProps) {
       </StyledDropdownMenuButton>
       <DropdownMenu id={menuID}>
         <NewWorkspaceDialogFromSelections />
-        {menuItems.map(({ dialogType, label, icon }) => (
-          <WorkspaceDropdownMenuItem dialogType={dialogType} key={label} icon={icon}>
-            {label}
-          </WorkspaceDropdownMenuItem>
-        ))}
+        <AddToWorkspaceDialogFromSelections />
       </DropdownMenu>
     </>
   );

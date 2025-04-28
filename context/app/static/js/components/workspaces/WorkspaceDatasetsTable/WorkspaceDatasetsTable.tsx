@@ -7,16 +7,23 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { DatasetDocument } from 'js/typings/search';
 import { getIDsQuery } from 'js/helpers/queries';
-import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
+import {
+  lastModifiedTimestamp,
+  assayTypes,
+  status,
+  organ,
+  hubmapID,
+  hubmapIDWithLinksInNewTab,
+} from 'js/shared-styles/tables/columns';
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
 import { AddIcon } from 'js/shared-styles/icons';
+import { EventInfo } from 'js/components/types';
 
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
-import { MergedWorkspace, WorkspacesEventInfo } from '../types';
+import { MergedWorkspace } from '../types';
 import { MAX_NUMBER_OF_WORKSPACE_DATASETS } from '../api';
 
-const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 const tooltips = {
   add: 'Add datasets to this workspace.',
   delete: 'Remove selected datasets.',
@@ -34,7 +41,8 @@ interface WorkspaceDatasetsTableProps {
   additionalButtons?: ReactNode;
   hideTableIfEmpty?: boolean;
   isSelectable?: boolean;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
+  openLinksInNewTab?: boolean;
 }
 
 function WorkspaceDatasetsTable({
@@ -49,6 +57,7 @@ function WorkspaceDatasetsTable({
   hideTableIfEmpty,
   isSelectable = true,
   trackingInfo,
+  openLinksInNewTab,
 }: WorkspaceDatasetsTableProps) {
   const { selectedRows } = useSelectableTableStore();
   const query = useMemo(
@@ -68,6 +77,11 @@ function WorkspaceDatasetsTable({
       ],
     }),
     [datasetsUUIDs],
+  );
+
+  const columns = useMemo(
+    () => [openLinksInNewTab ? hubmapIDWithLinksInNewTab : hubmapID, organ, assayTypes, status, lastModifiedTimestamp],
+    [openLinksInNewTab],
   );
 
   const datasetsPresent = datasetsUUIDs.length > 0;
@@ -114,6 +128,7 @@ function WorkspaceDatasetsTable({
           disabledIDs={disabledIDs}
           emptyAlert={emptyAlert}
           isSelectable={isSelectable}
+          numSelected={selectedRows.size}
           trackingInfo={trackingInfo}
         />
       )}

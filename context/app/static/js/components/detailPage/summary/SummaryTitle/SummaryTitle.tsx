@@ -1,10 +1,10 @@
 import React, { PropsWithChildren, useEffect } from 'react';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { useInView } from 'react-intersection-observer';
 
 import useEntityStore, { EntityStore } from 'js/stores/useEntityStore';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { Stack } from '@mui/material';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 
 const entityStoreSelector = (state: EntityStore) => state.setSummaryComponentObserver;
