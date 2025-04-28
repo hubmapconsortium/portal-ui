@@ -22,6 +22,7 @@ import { DrawerTitle } from 'js/shared-styles/Drawer/styles';
 import NotificationBell from 'js/shared-styles/alerts/NotificationBell';
 import { buildSearchLink } from 'js/components/search/store';
 import { CenteredAlert } from 'js/components/style';
+import { trackEvent } from 'js/helpers/trackers';
 import AuthButton from '../AuthButton';
 
 export const resourceLinks: DrawerSection[] = [
@@ -94,6 +95,14 @@ export const resourceLinks: DrawerSection[] = [
     ],
   },
 ];
+
+function handleTrackButtonClick() {
+  trackEvent({
+    category: 'Header Navigation / Data',
+    action: 'Help',
+    label: 'Contact Support Button',
+  });
+}
 
 export const dataLinks: DrawerSection[] = [
   {
@@ -182,7 +191,14 @@ export const dataLinks: DrawerSection[] = [
     sectionTitle: "Can't find what you're looking for?",
     titleProps: { sx: { color: 'common.link' } },
     items: [
-      <Button key="contact-support" startIcon={<SupportIcon />} href={contactUsUrl} variant="outlined" fullWidth>
+      <Button
+        key="contact-support"
+        startIcon={<SupportIcon />}
+        href={contactUsUrl}
+        onClick={handleTrackButtonClick}
+        variant="outlined"
+        fullWidth
+      >
         Contact Support
       </Button>,
     ],
