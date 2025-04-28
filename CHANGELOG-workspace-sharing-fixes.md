@@ -1,2 +1,0 @@
-- Fix workspace sharing dialog text.
-- Fix checkbox header styling on workspace landing page.

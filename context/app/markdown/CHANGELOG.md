@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.25.0 - 2025-04-28
+
+- Add analytics to homepage.
+- Add eslint rule for MUI imports.
+- Fix workspace sharing dialog text.
+- Fix checkbox header styling on workspace landing page.
+
+
+
 ## v1.24.2 - 2025-04-24
 
 - Add sharing functionality to workspaces.
