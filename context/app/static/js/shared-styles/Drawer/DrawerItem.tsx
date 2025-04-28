@@ -1,6 +1,8 @@
 import React from 'react';
 import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
+import { useAppContext } from 'js/components/Contexts';
+import { profileTitle } from 'js/components/Header/HeaderNavigationDrawer/instances';
 import { DrawerListItem, DrawerListItemIcon, StyledListItemText } from './styles';
 import { InternalLink, OutboundLink } from '../Links';
 import { DrawerItemProps } from './types';
@@ -29,12 +31,20 @@ export default function DrawerItem({
   endIcon,
 }: DrawerItemProps & { sectionTitle: string; drawerTitle: string }) {
   const [primaryText, LinkComponent] = formatPrimaryText(label, href);
+  const { isAuthenticated } = useAppContext();
 
   const handleTrack = useEventCallback(() => {
+    const action =
+      drawerTitle === profileTitle
+        ? `${sectionTitle} / ${isAuthenticated ? 'Logged In' : 'Not Logged In'}`
+        : sectionTitle;
+
+    const eventLabel = sectionTitle === 'Account' ? 'My Profile' : label;
+
     trackEvent({
       category: `Header Navigation / ${drawerTitle}`,
-      action: sectionTitle,
-      label,
+      action,
+      label: eventLabel,
     });
   });
 
