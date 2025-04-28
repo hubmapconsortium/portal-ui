@@ -229,10 +229,11 @@ function HuBMAPDatasetsChart() {
             getY={getOrgan}
             showTooltipAndHover
             TooltipContent={HuBMAPDatasetsChartTooltip}
-            onBarClick={() => {
+            onBarClick={(d) => {
               trackEvent({
                 category: 'Homepage',
                 action: 'HuBMAP Datasets Graph/Bar Links',
+                label: `${d.bar.data.organ} ${d.key}`,
               });
             }}
             getBarHref={selectedColor.getBarHref}

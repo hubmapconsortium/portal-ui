@@ -1,23 +1,37 @@
+import React, { ComponentType, ReactElement } from 'react';
+import { useEventCallback } from '@mui/material/utils';
 import Chip from '@mui/material/Chip';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { InternalLink } from 'js/shared-styles/Links';
-import React, { ComponentType, ReactElement } from 'react';
 import Hidden from '@mui/material/Hidden';
+import { trackEvent } from 'js/helpers/trackers';
+import { InternalLink } from 'js/shared-styles/Links';
 import { HeroTabContainer } from './styles';
 import { useHeroTabContext } from './HeroTabsContext';
 
 interface HeroTabActionProps {
   title: string;
   icon: ReactElement;
+  tabTitle: string;
   onClick?: () => void;
   href?: string;
 }
 
-function HeroTabAction({ title, icon, onClick, href }: HeroTabActionProps) {
+function HeroTabAction({ title, icon, tabTitle, onClick, href }: HeroTabActionProps) {
+  const handleClick = useEventCallback(() => {
+    trackEvent({
+      category: 'Homepage',
+      action: `Hero / ${tabTitle}`,
+      label: `${title} Button`,
+    });
+
+    onClick?.();
+  });
+
   const chip = (
-    <Chip borderRadius="halfRound" sx={{ px: 1 }} variant="elevated" icon={icon} label={title} onClick={onClick} />
+    <Chip borderRadius="halfRound" sx={{ px: 1 }} variant="elevated" icon={icon} label={title} onClick={handleClick} />
   );
+
   if (href) {
     return (
       <InternalLink sx={{ maxWidth: 'fit-content' }} href={href}>
@@ -33,7 +47,7 @@ export interface HeroTabProps {
   icon: ReactElement;
   isCurrent?: boolean;
   bgColor?: string;
-  actions?: HeroTabActionProps[];
+  actions?: Omit<HeroTabActionProps, 'tabTitle'>[];
   index: number;
   content: ComponentType<Pick<HeroTabProps, 'title' | 'index'>>;
 }
@@ -73,7 +87,7 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
             <Typography variant="h5">{title}</Typography>
           </Stack>
           <Typography variant="body1">{description}</Typography>
-          {actions?.map((action) => <HeroTabAction key={action.title} {...action} />)}
+          {actions?.map((action) => <HeroTabAction key={action.title} tabTitle={title} {...action} />)}
         </Stack>
       </HeroTabContainer>
     </>

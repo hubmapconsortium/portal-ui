@@ -3,6 +3,7 @@ import {
   ContributorAPIResponse,
   normalizeContributor,
 } from 'js/components/detailPage/ContributorsTable/utils';
+import { trackEvent } from 'js/helpers/trackers';
 
 function buildAbbreviatedContributors(contributors: Contributor[]) {
   switch (contributors.length) {
@@ -41,9 +42,18 @@ function buildPublicationPanelProps(
   noRightText?: boolean,
 ) {
   const dateText = `${publication_status ? 'Published' : 'Preprint Date'}: ${publication_date}`;
+  const onClick = () => {
+    trackEvent({
+      category: 'Homepage',
+      action: 'Recent Publications',
+      label: title,
+    });
+  };
+
   return {
     key: uuid,
     href: `/browse/publication/${uuid}`,
+    onClick,
     title,
     secondaryText: buildSecondaryText(
       contributors.map(normalizeContributor),

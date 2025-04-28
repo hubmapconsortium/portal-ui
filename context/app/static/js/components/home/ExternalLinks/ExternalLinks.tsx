@@ -96,7 +96,7 @@ function LinkSectionContainer({ title, links }: LinkSectionContainerProps) {
       </SectionHeader>
       <Paper>
         {links.map(({ src, alt, ...rest }) => (
-          <ExternalLink key={src} img={<img src={src} alt={alt} height={56} width={56} />} {...rest} />
+          <ExternalLink key={src} img={<img src={src} alt={alt} height={56} width={56} />} title={title} {...rest} />
         ))}
       </Paper>
     </Stack>

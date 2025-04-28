@@ -1,24 +1,35 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
+import { useEventCallback } from '@mui/material/utils';
 
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import { trackEvent } from 'js/helpers/trackers';
 import { ExternalLinkContainer, ImageWrapper } from './style';
 
 interface ExternalLinkProps {
   img: React.ReactNode;
+  title: string;
   linkText: string;
   linkHref: string;
   description: string;
 }
 
-function ExternalLink({ img, linkText, linkHref, description }: ExternalLinkProps) {
+function ExternalLink({ img, title, linkText, linkHref, description }: ExternalLinkProps) {
+  const handleTrack = useEventCallback(() => {
+    trackEvent({
+      category: 'Homepage',
+      action: title,
+      label: linkHref,
+    });
+  });
+
   return (
     <ExternalLinkContainer alignItems="center" direction="row">
       <ImageWrapper justifyContent="center" flexShrink={0}>
         {img}
       </ImageWrapper>
       <div>
-        <OutboundIconLink href={linkHref} variant="subtitle1">
+        <OutboundIconLink onClick={handleTrack} href={linkHref} variant="subtitle1">
           {linkText}
         </OutboundIconLink>
         <Typography variant="body2">{description}</Typography>
