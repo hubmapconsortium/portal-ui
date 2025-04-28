@@ -2,7 +2,6 @@ import React from 'react';
 import { useEventCallback } from '@mui/material/utils';
 import NavigationDrawer, { DrawerSection, useDrawerState } from 'js/shared-styles/Drawer';
 import { CloseIcon } from 'js/shared-styles/icons';
-import { NavigationEventCategories } from 'js/components/Header/types';
 import { trackEvent } from 'js/helpers/trackers';
 import HeaderButton from '../HeaderButton/HeaderButton';
 
@@ -27,7 +26,7 @@ export default function HeaderNavigationDrawer({
 
   const handleClick = useEventCallback(() => {
     trackEvent({
-      category: NavigationEventCategories.Navigation,
+      category: 'Header Navigation',
       action: 'Open Drawer',
       label: title,
     });
