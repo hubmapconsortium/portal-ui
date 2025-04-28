@@ -1,4 +1,6 @@
 import React from 'react';
+import { useEventCallback } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 import { DrawerListItem, DrawerListItemIcon, StyledListItemText } from './styles';
 import { InternalLink, OutboundLink } from '../Links';
 import { DrawerItemProps } from './types';
@@ -17,10 +19,27 @@ function formatPrimaryText(label: string, href: string): [React.ReactNode, typeo
   return [primaryText, LinkComponent];
 }
 
-export default function DrawerItem({ href, label, description, icon, endIcon }: DrawerItemProps) {
+export default function DrawerItem({
+  href,
+  label,
+  description,
+  sectionTitle,
+  drawerTitle,
+  icon,
+  endIcon,
+}: DrawerItemProps & { sectionTitle: string; drawerTitle: string }) {
   const [primaryText, LinkComponent] = formatPrimaryText(label, href);
+
+  const handleTrack = useEventCallback(() => {
+    trackEvent({
+      category: `Header Navigation / ${drawerTitle}`,
+      action: sectionTitle,
+      label,
+    });
+  });
+
   return (
-    <LinkComponent href={href}>
+    <LinkComponent href={href} onClick={handleTrack}>
       <DrawerListItem disablePadding>
         <DrawerListItemIcon>{icon}</DrawerListItemIcon>
         <StyledListItemText primary={primaryText} secondary={description} />

@@ -10,7 +10,7 @@ export interface DrawerItemProps {
 }
 
 export interface DrawerSectionProps {
-  title: string;
+  sectionTitle: string;
   hideTitle?: boolean;
   titleProps?: Partial<ListSubheaderProps>;
   items: (DrawerItemProps | React.ReactNode)[];

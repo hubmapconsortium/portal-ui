@@ -26,7 +26,7 @@ import AuthButton from '../AuthButton';
 
 export const resourceLinks: DrawerSection[] = [
   {
-    title: 'User Guides',
+    sectionTitle: 'User Guides',
     items: [
       {
         label: 'Tutorials',
@@ -37,7 +37,7 @@ export const resourceLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Consortium Resources',
+    sectionTitle: 'Consortium Resources',
     items: [
       {
         label: 'Consortium FAQ',
@@ -54,7 +54,7 @@ export const resourceLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Developer Resources',
+    sectionTitle: 'Developer Resources',
     items: [
       {
         label: 'Technical Documentation',
@@ -65,7 +65,7 @@ export const resourceLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Previews',
+    sectionTitle: 'Previews',
     items: [
       {
         label: '3D Tissue Maps',
@@ -97,7 +97,7 @@ export const resourceLinks: DrawerSection[] = [
 
 export const dataLinks: DrawerSection[] = [
   {
-    title: 'Datasets',
+    sectionTitle: 'Datasets',
     items: [
       {
         label: 'Datasets',
@@ -116,7 +116,7 @@ export const dataLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Biological Knowledge References',
+    sectionTitle: 'Biological Knowledge References',
     items: [
       {
         label: 'Organs',
@@ -141,7 +141,7 @@ export const dataLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Curated Dataset Compilations',
+    sectionTitle: 'Curated Dataset Compilations',
     items: [
       {
         label: 'Collections',
@@ -158,7 +158,7 @@ export const dataLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Supplemental Queries by Source',
+    sectionTitle: 'Supplemental Queries by Source',
     items: [
       {
         label: 'Samples',
@@ -179,7 +179,7 @@ export const dataLinks: DrawerSection[] = [
     ],
   },
   {
-    title: "Can't find what you're looking for?",
+    sectionTitle: "Can't find what you're looking for?",
     titleProps: { sx: { color: 'common.link' } },
     items: [
       <Button key="contact-support" startIcon={<SupportIcon />} href={contactUsUrl} variant="outlined" fullWidth>
@@ -191,7 +191,7 @@ export const dataLinks: DrawerSection[] = [
 
 export const toolsAndAppsLinks: DrawerSection[] = [
   {
-    title: 'Data',
+    sectionTitle: 'Data',
     items: [
       {
         label: 'HuBMAP Data Portal',
@@ -203,7 +203,7 @@ export const toolsAndAppsLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Atlas',
+    sectionTitle: 'Atlas',
     items: [
       {
         label: 'Human Reference Atlas',
@@ -229,7 +229,7 @@ export const toolsAndAppsLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Analytical Tools',
+    sectionTitle: 'Analytical Tools',
     items: [
       {
         label: 'Azimuth',
@@ -283,7 +283,7 @@ export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
 
   return [
     {
-      title: 'Account',
+      sectionTitle: 'Account',
       items: [
         {
           href: '/profile',
@@ -294,7 +294,7 @@ export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
       ],
     },
     {
-      title: 'Personal Space',
+      sectionTitle: 'Personal Space',
       items: [
         pendingInvitationsAlert,
         {
