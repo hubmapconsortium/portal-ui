@@ -35,10 +35,9 @@ export default function DrawerItem({
 
   const handleTrack = useEventCallback(() => {
     const action =
-      drawerTitle === profileTitle
-        ? `${sectionTitle} / ${isAuthenticated ? 'Logged In' : 'Not Logged In'}`
-        : sectionTitle;
+      drawerTitle === profileTitle ? `${sectionTitle} / ${isAuthenticated ? '' : 'Not '}Logged In` : sectionTitle;
 
+    // Account section uses the user's email as the label, so we use a placeholder for tracking
     const eventLabel = sectionTitle === 'Account' ? 'My Profile' : label;
 
     trackEvent({
