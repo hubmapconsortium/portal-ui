@@ -1,0 +1,3 @@
+- Update collections landing page metadata description.
+- Update homepage description language.
+- Update tab styling in Bulk Data Transfer section.
