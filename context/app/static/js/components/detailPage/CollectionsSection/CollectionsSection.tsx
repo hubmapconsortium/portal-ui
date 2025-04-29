@@ -2,7 +2,7 @@ import React from 'react';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
-import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
+import { buildCollectionsPanelsProps } from 'js/components/collections/utils';
 import { useDatasetsCollectionsTabs } from 'js/hooks/useDatasetsCollections';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
 import { OutlinedAlert } from 'js/shared-styles/alerts/OutlinedAlert.stories';
@@ -12,7 +12,7 @@ import { useTabs } from 'js/shared-styles/tabs';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import Skeleton from '@mui/material/Skeleton';
-import { CollectionHit } from 'js/pages/Collections/types';
+import { CollectionHit } from 'js/components/collections/types';
 
 function CollectionPanel({
   index,
