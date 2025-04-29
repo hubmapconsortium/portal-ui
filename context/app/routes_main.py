@@ -105,6 +105,8 @@ def collections():
     return render_template(
         'base-pages/react-content.html',
         title='Collections | Curated HuBMAP Datasets for Tissue & Molecular Research',
+        description='Explore curated collections of HuBMAP datasets for single-cell and spatial biology. \
+            Find grouped datasets relevant to tissue and biomolecular research.',
         flask_data=flask_data,
         skip_title_suffix=True
     )
