@@ -1,62 +1,11 @@
 import React from 'react';
+import { format } from 'date-fns/format';
 
 import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import Stack, { StackProps } from '@mui/material/Stack';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
-import { format } from 'date-fns/format';
-
-const mobileStackProps: Partial<StackProps> = {
-  height: 'unset',
-  direction: 'column',
-  spacing: 2,
-  py: 2,
-};
-
-const desktopStackProps: Partial<StackProps> = {
-  height: 52,
-  direction: 'row',
-  spacing: 4,
-  py: 0,
-};
-
-function StackTemplate(props: React.ComponentProps<typeof Stack>) {
-  const isMobile = useIsMobile();
-  const responsiveProps = isMobile ? mobileStackProps : desktopStackProps;
-  return <Stack marginX={2} marginY={1} useFlexGap width="100%" {...responsiveProps} {...props} />;
-}
-
-function MobileLabel({ children }: { children: React.ReactNode }) {
-  const isMobile = useIsMobile();
-  if (!isMobile) {
-    return null;
-  }
-  return (
-    <Typography component="label" width="33%" flexShrink={0} pr={2}>
-      {children}
-    </Typography>
-  );
-}
-
-function BodyCell({ children, ...props }: React.ComponentProps<typeof Box>) {
-  const ariaLabel = props['aria-label'];
-  return (
-    <Box display="flex" alignItems="center" {...props}>
-      <MobileLabel>{ariaLabel}</MobileLabel>
-      {children}
-    </Box>
-  );
-}
-
-function HeaderCell({ children, ...props }: React.ComponentProps<typeof Box>) {
-  return (
-    <BodyCell {...props}>
-      <Typography variant="subtitle2">{children}</Typography>
-    </BodyCell>
-  );
-}
+import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
 
 const desktopConfig = {
   name: {
@@ -83,7 +32,7 @@ function CollectionHeaderPanel() {
     <StackTemplate spacing={1} position="sticky" top={0} zIndex={1}>
       <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
       <HeaderCell {...desktopConfig.numDatasets}># of Datasets</HeaderCell>
-      <HeaderCell {...desktopConfig.creationDate} marginRight={3}>
+      <HeaderCell {...desktopConfig.creationDate} marginRight={isMobile ? 0 : 3}>
         Creation Date
       </HeaderCell>
     </StackTemplate>
@@ -99,6 +48,8 @@ interface CollectionPanelItemProps {
 }
 
 function CollectionPanelItem({ name, hubmapId, numDatasets, creationDate, href }: CollectionPanelItemProps) {
+  const isMobile = useIsMobile();
+
   return (
     <StackTemplate>
       <BodyCell {...desktopConfig.name} aria-label="Name">
@@ -107,10 +58,14 @@ function CollectionPanelItem({ name, hubmapId, numDatasets, creationDate, href }
           {` (${hubmapId})`}
         </Typography>
       </BodyCell>
-      <BodyCell {...desktopConfig.numDatasets} aria-label="Number of Datasets" justifyContent="center">
+      <BodyCell
+        {...desktopConfig.numDatasets}
+        aria-label="Number of Datasets"
+        justifyContent={isMobile ? 'inherit' : 'center'}
+      >
         <Typography>{numDatasets}</Typography>
       </BodyCell>
-      <BodyCell {...desktopConfig.creationDate} aria-label="Creation Date" justifyContent="center">
+      <BodyCell {...desktopConfig.creationDate} aria-label="Creation Date">
         <Typography>{format(new Date(creationDate), 'yyyy-MM-dd')}</Typography>
       </BodyCell>
     </StackTemplate>
