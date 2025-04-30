@@ -1,7 +1,6 @@
 import React, { useMemo, useState } from 'react';
 import Description from 'js/shared-styles/sections/Description';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
-import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import ChartDropdown from 'js/components/home/HuBMAPDatasetsChartDropdown';
 import { SelectChangeEvent } from '@mui/material/Select';
 import Switch from '@mui/material/Switch';
@@ -12,7 +11,6 @@ import { GroupedBarStackChart } from 'js/shared-styles/charts/VerticalStackedBar
 import {
   ageBucketLabels,
   DatasetsOverviewDigest,
-  FormattedOverviewChartData,
   useAxisAndCompareBy,
   useFormattedOverviewChartData,
   X_AXIS_OPTIONS,
@@ -110,7 +108,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
   }, [xAxis, compareToAll, indexed, all]);
 
   const compareByColorKeys = useMemo(() => {
-    return compareByKeys.map((key) => [`${key} match`, `${key} unmatched`]).flat();
+    return compareByKeys.map((key) => [`${key} matched`, `${key} unmatched`]).flat();
   }, [compareByKeys]);
 
   const xScale = useBandScale(xAxisKeys, { padding: 0.1 });
@@ -119,16 +117,10 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
     range: [MALE_MATCH, MALE_NON_MATCH, FEMALE_MATCH, FEMALE_NON_MATCH],
   });
 
-  const compareByScale = useBandScale(compareByKeys, {
-    padding: 0.1,
-    domain: compareByKeys,
-    range: [0, xScale.range()[1] / compareByKeys.length],
-  });
-
   const yScale = useLinearScale([0, max], { nice: true });
 
   const xAxisTickLabels = useMemo(() => {
-    return data.map((d) => d.xAxisKey).filter((key, index, self) => self.indexOf(key) === index);
+    return data.map((d) => d.group);
   }, [data]);
 
   return (
@@ -215,16 +207,14 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
           yScale={yScale}
           colorScale={colorScale}
           getX={(d) => {
-            return d.xAxisKey;
+            return d.group;
           }}
-          compareByKeys={compareByKeys}
-          keys={['match', 'unmatched']}
+          keys={compareByColorKeys}
           margin={graphMargin}
           xAxisLabel="" // Labels are on the dropdowns
           yAxisLabel="" // Labels are on the dropdowns
           xAxisTickLabels={xAxisTickLabels}
           getTickValues={() => yScale.ticks(5)}
-          compareByField={compareBy.toLowerCase()}
         />
       </ChartWrapper>
     </div>

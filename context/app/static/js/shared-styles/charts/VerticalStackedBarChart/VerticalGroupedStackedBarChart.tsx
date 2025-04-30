@@ -3,7 +3,7 @@ import { scaleBand, AnyD3Scale } from '@visx/scale';
 import { AxisBottom, AxisLeft, AxisScale } from '@visx/axis';
 import { Group } from '@visx/group';
 import { BarGroup } from '@visx/shape';
-import { ScaleSVG, WithParentSizeProvidedProps } from '@visx/responsive';
+import { WithParentSizeProvidedProps } from '@visx/responsive';
 import { ScaleBand, ScaleOrdinal } from 'd3';
 import { AnyScaleBand } from '@visx/shape/lib/types';
 import Typography from '@mui/material/Typography';
@@ -14,18 +14,32 @@ import { TooltipData, tooltipHasBarData } from '../types';
 import VerticalChartGridRowsGroup from '../VerticalChartGridRowsGroup';
 import StackedBar from '../StackedBar';
 
-export type BarStackValues<T extends string> = Record<T, number>;
+/**
+ * @example const ex: BarStackValues<'a' |'b'| 'c'> = {a: 10, b: 20, c: 30}
+ */
+export type BarStackValues<T extends string> = Record<T, number> & {
+  group?: string;
+};
 
+/**
+ * @example const ex: BarStackGroup<'a' |'b'| 'c'> = {group: 'Group 1', stacks: [{a: 10, b: 20, c: 30}, {a: 15, b: 25, c: 35}]}
+ */
 export interface BarStackGroup<T extends string> {
   group: string;
   stacks: Partial<BarStackValues<T>>[];
 }
 
+/**
+ * @example {a: 10, b: 20, c: 30, group: 'Group 1'}
+ */
 export type BarStackData<T extends string> = BarStackValues<T> & {
   group: string;
 };
 
-export type StackBarFootprint = Record<number, number> & {
+/**
+ * @example {0: 20, 1: 30, 2: 30, group: 'Group 1'}
+ */
+type StackBarFootprint = Record<number, number> & {
   group: string;
 };
 
@@ -43,12 +57,26 @@ export const getStackTotal = <T extends string>(datum: Partial<BarStackValues<T>
 // Footprint represents the horizontal grouping, but doesn't represent the nature of the stacks within a group
 export const useBarGroupFootprint = <T extends string>(data: BarStackGroup<T>[], xScaleBandwidth: number) => {
   return React.useMemo(() => {
-    const mockKeys = data[0].stacks.map((_, i) => `${i}`);
+    if (!data || data.length === 0) {
+      return {
+        keys: [],
+        x1Scale: scaleBand<string>({
+          domain: [],
+          range: [0, xScaleBandwidth],
+          padding: 0.1,
+        }),
+        data: [],
+      };
+    }
+
+    const keys = data.flatMap((d) => d.stacks.map((g) => `${d.group} ${g.group}`));
+
+    console.log('keys', keys);
 
     return {
-      keys: mockKeys,
+      keys,
       x1Scale: scaleBand<string>({
-        domain: mockKeys,
+        domain: keys,
         range: [0, xScaleBandwidth],
         padding: 0.1,
       }),
@@ -56,7 +84,7 @@ export const useBarGroupFootprint = <T extends string>(data: BarStackGroup<T>[],
       color: () => 'grey',
       data: data.map((group) => {
         const result: StackBarFootprint = {
-          group: group.group,
+          group: `${group.group}`,
         };
 
         group.stacks.forEach((stack, index) => {
@@ -69,20 +97,20 @@ export const useBarGroupFootprint = <T extends string>(data: BarStackGroup<T>[],
   }, [data, xScaleBandwidth]);
 };
 
-interface GroupedBarStackProps<T extends string> {
+interface GroupedBarStackProps<Datum, DataKey extends Extract<keyof Datum, string>> {
   yScale: AnyD3Scale;
-  xScale: ScaleBand<T>;
+  xScale: ScaleBand<DataKey>;
   yMax: number;
-  data: BarStackGroup<T>[];
+  data: BarStackGroup<DataKey>[];
   keys: string[];
   barColorScale: ScaleOrdinal<string, string, never>;
   getX: (d: StackBarFootprint) => string;
-  getAriaLabel?: (d: TooltipData<T>) => string;
-  handleMouseEnter: (bar: TooltipData<T>) => (event: React.MouseEvent<SVGRectElement>) => void;
+  getAriaLabel?: (d: TooltipData<Datum>) => string;
+  handleMouseEnter: (bar: TooltipData<Datum>) => (event: React.MouseEvent<SVGRectElement>) => void;
   handleMouseLeave: () => void;
 }
 
-export function GroupedBarStacks<T extends string>({
+export function GroupedBarStacks<Datum, DataKey extends Extract<keyof Datum, string>>({
   data,
   xScale,
   yScale,
@@ -93,7 +121,7 @@ export function GroupedBarStacks<T extends string>({
   getAriaLabel,
   handleMouseEnter,
   handleMouseLeave,
-}: GroupedBarStackProps<T>) {
+}: GroupedBarStackProps<Datum, DataKey>) {
   const xScaleBandwidth = xScale.bandwidth();
 
   const barGroupFootprint = useBarGroupFootprint(data, xScaleBandwidth);
@@ -105,12 +133,12 @@ export function GroupedBarStacks<T extends string>({
       yScale={yScale}
       keys={barGroupFootprint.keys}
       data={barGroupFootprint.data}
-      color={barGroupFootprint.color}
+      color={barColorScale}
       height={yMax}
       x1Scale={barGroupFootprint.x1Scale}
     >
       {(barGroups) =>
-        barGroups.map((barGroup, dateIndex) => {
+        barGroups.map((barGroup, axisIndex) => {
           // const finalBar = barGroup.bars[barGroup.bars.length - 1];
           // const firstBar = barGroup.bars[0];
 
@@ -120,17 +148,27 @@ export function GroupedBarStacks<T extends string>({
           return (
             <Group left={barGroup.x0} key={`bar-group-${barGroup.index}-${barGroup.x0}`}>
               {barGroup.bars.map((bar, stackIndex) => {
-                const dateItem = data[dateIndex];
+                const dateItem = data[axisIndex];
                 const stackItem = dateItem.stacks[stackIndex];
                 const stacksShown = keys
-                  .filter((key) => stackItem[key] !== undefined && stackItem[key] !== 0)
-                  .map((key) => ({ value: stackItem[key] ?? 0, key }));
+                  .filter((key) => {
+                    if (!stackItem || !(key in stackItem)) {
+                      return false;
+                    }
+                    const safeKey = key as keyof typeof stackItem;
+                    return stackItem[safeKey] !== undefined && stackItem[safeKey] !== 0;
+                  })
+                  .map((key) => ({ value: stackItem[key as keyof typeof stackItem]! ?? 0, key }));
 
                 return stacksShown.map(({ key, value }, i) => {
                   const priorValues: number =
                     stacksShown.filter((_, j) => j < i).reduce((prev, curr) => curr.value + prev, 0) || 0;
                   const barY = yScale(priorValues) as number;
                   const barHeight = yMax - yScale(value);
+
+                  if (!value) {
+                    return null; // Skip rendering if the value is 0 or undefined
+                  }
 
                   return (
                     <StackedBar
@@ -141,7 +179,7 @@ export function GroupedBarStacks<T extends string>({
                       y={barY - barHeight}
                       height={barHeight}
                       width={bar.width}
-                      fill={barColorScale(key)}
+                      fill={barColorScale(`${bar?.key} ${key}`)}
                       ariaLabelText={getAriaLabel?.(bar)}
                       hoverProps={{
                         onMouseEnter: handleMouseEnter(bar),
@@ -160,13 +198,14 @@ export function GroupedBarStacks<T extends string>({
 }
 
 interface GroupedBarStackChartProps<
-  Datum extends Record<string, number>,
+  DataKey extends string,
+  Datum extends Record<DataKey, number>,
   XAxisKey extends string,
   YAxisKey extends string,
   XAxisScale extends AnyScaleBand,
   YAxisScale extends AnyD3Scale,
 > extends WithParentSizeProvidedProps {
-  data: Record<XAxisKey, BarStackGroup<string>[]>;
+  data: BarStackGroup<DataKey>[];
   xScale: XAxisScale;
   getXScaleRange?: (max: number) => [number, number];
   yScale: YAxisScale;
@@ -184,13 +223,14 @@ interface GroupedBarStackChartProps<
 }
 
 export function GroupedBarStackChart<
+  DataKey extends string,
   Datum extends Record<string, number>,
   XAxisKey extends string,
   YAxisKey extends string,
   XAxisScale extends AnyScaleBand,
   YAxisScale extends AnyD3Scale,
 >({
-  parentWidth = 0,
+  parentWidth = 500,
   parentHeight = 500,
   margin,
   xAxisTickLabels,
@@ -207,7 +247,14 @@ export function GroupedBarStackChart<
   getTickValues,
   getAriaLabel,
   data,
-}: GroupedBarStackChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
+}: GroupedBarStackChartProps<
+  DataKey extends keyof Datum ? DataKey : never,
+  Datum,
+  XAxisKey,
+  YAxisKey,
+  XAxisScale,
+  YAxisScale
+>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
     tickLabelSize: TICK_LABEL_SIZE,
@@ -227,7 +274,7 @@ export function GroupedBarStackChart<
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
 
-  const xMax = xWidth - margin.left - margin.right;
+  // const xMax = xWidth - margin.left - margin.right;
   const gridXMax = xWidth - margin.left - margin.right;
   const yMax = yHeight - margin.top - margin.bottom;
 
@@ -235,7 +282,7 @@ export function GroupedBarStackChart<
   xScale.range(getXScaleRange(xWidth));
 
   return (
-    <ScaleSVG width={parentWidth} height={parentHeight} innerRef={containerRef}>
+    <svg width={parentWidth} height={parentHeight} ref={containerRef}>
       <AxisLeft<AxisScale<number>>
         scale={yScale}
         top={margin.top}
@@ -296,6 +343,6 @@ export function GroupedBarStackChart<
           )}
         </TooltipInPortal>
       )}
-    </ScaleSVG>
+    </svg>
   );
 }

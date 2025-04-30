@@ -110,6 +110,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
         {...barProps}
         $showHover={Boolean(hoverProps) || Boolean(href)}
         {...hoverProps}
+        data-bar={JSON.stringify(bar)}
       />
       ;
     </>

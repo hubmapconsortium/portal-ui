@@ -306,6 +306,13 @@ const getAllSexes = (overview: DatasetsOverviewDigest) => {
   return overview.fullAggs?.donors_by_sex.buckets.map((bucket) => bucket.key) ?? [];
 };
 
+/**
+ * Extracts the donor or dataset count from the provided object based on the yAxis option.
+ * @param yAxis The yAxis option to determine whether to return the number of datasets or donors.
+ * @param item  An object containing the counts for datasets and donors.
+ * @returns The count of datasets or donors based on the yAxis option.
+ * If the item is undefined, it returns 0.
+ */
 const getYValue = (yAxis: YAxisOptions, item?: { doc_count: number; donor_count: { value: number } }) => {
   if (!item) {
     return 0;
@@ -313,12 +320,7 @@ const getYValue = (yAxis: YAxisOptions, item?: { doc_count: number; donor_count:
   return yAxis === 'Datasets' ? item.doc_count : item.donor_count.value;
 };
 
-export interface FormattedOverviewChartData {
-  match: number;
-  unmatched: number;
-  xAxisKey: string;
-  group: string | number;
-}
+export type FormattedOverviewChartData = BarStackGroup<`${string} matched` | `${string} unmatched`>;
 
 interface NestedBucket {
   buckets: {
@@ -334,8 +336,7 @@ const getFormattedDataFromBuckets = (
   matchBucket: NestedBucket | undefined,
   comparisonBucket: NestedBucket | undefined,
   yAxis: YAxisOptions,
-  axisKey: string,
-): FormattedOverviewChartData[] => {
+): FormattedOverviewChartData['stacks'] => {
   // If no comparison bucket is found, return an empty array
   if (!comparisonBucket) {
     return [];
@@ -343,25 +344,25 @@ const getFormattedDataFromBuckets = (
   // If no match bucket is found but a comparison bucket is present,
   // Then we still need to return the comparison bucket data.
 
-  const compareByKeys = new Set<string | number>();
-  matchBucket?.buckets.forEach((b) => compareByKeys.add(b.key));
-  comparisonBucket.buckets.forEach((b) => compareByKeys.add(b.key));
+  // Compile a list of values to compare across both match and comparison buckets
+  const compareByKeys = new Set<string>();
+  matchBucket?.buckets.forEach((b) => compareByKeys.add(String(b.key)));
+  comparisonBucket.buckets.forEach((b) => compareByKeys.add(String(b.key)));
 
-  return [...compareByKeys].map((key: string | number) => {
+  return [...compareByKeys].map((group) => {
     const matchCount = getYValue(
       yAxis,
-      matchBucket?.buckets.find((b) => b.key === key),
+      matchBucket?.buckets.find((b) => b.key === group),
     );
     const unmatchedCount = getYValue(
       yAxis,
-      comparisonBucket.buckets.find((b) => b.key === key),
+      comparisonBucket.buckets.find((b) => b.key === group),
     );
     return {
-      match: matchCount,
-      unmatched: unmatchedCount - matchCount,
-      axisKey,
-      group: key,
-    };
+      [`${group} matched`]: matchCount,
+      [`${group} unmatched`]: unmatchedCount - matchCount,
+      group,
+    } as FormattedOverviewChartData['stacks'][number];
   });
 };
 
@@ -370,10 +371,17 @@ const getFormattedDataFromBuckets = (
  * and the full set of datasets (either all indexed datasets or all datasets in HuBMAP)
  * @param matches The DatasetsOverviewType object containing the matched datasets
  * @param comparison The DatasetsOverviewType object containing the comparison datasets (either all indexed datasets or all datasets in HuBMAP)
- * @param xAxis The xAxis option to use for the chart (metadata such as age, sex, race)
+ * @param xAxis The xAxis option to use for the chart (metadata such as age, sex, race). Depending on which xAxis value is selected,
+ *               the data will be grouped by that metadata.
  * @param yAxis The yAxis option to use for the chart (number of datasets or number of donors)
- * @param compareBy The xAxis option to use for the comparison between different values on the x axis (metadata such as age, sex, or race)
- * @returns
+ *              If 'Datasets' is selected, the yAxis will represent the number of datasets in each bucket.
+ *              If 'Donors' is selected, the yAxis will represent the number of donors in each bucket.
+ * @param compareBy The xAxis option to use for the comparison between different values on the x axis (metadata such as age, sex, or race).
+ *                  Becomes the `group` in the returned data.
+ * @returns {
+ *  data: Record<string, BarStackGroup<FormattedOverviewChartData[]>>,
+ *  max: number - The maximum value across all buckets for the yAxis
+ * }
  */
 export function useFormattedOverviewChartData(
   matches: DatasetsOverviewDigest,
@@ -382,67 +390,76 @@ export function useFormattedOverviewChartData(
   yAxis: YAxisOptions,
   compareBy: XAxisOptions,
 ): {
-  data: Record<XAxisOptions, BarStackGroup<FormattedOverviewChartData[]>;
+  data: BarStackGroup<`${string} matched` | `${string} unmatched`>[];
   max: number;
 } {
   const [data, max] = useMemo(() => {
-    const formattedData: Record<XAxisOptions, FormattedOverviewChartData[]> = {
-      Age: [],
-      Sex: [],
-      Race: [],
-    };
+    const formattedData: FormattedOverviewChartData[] = [];
     let maxCount = 0;
 
     const compareByLowercase = compareBy.toLowerCase() as 'age' | 'race' | 'sex';
 
     if (matches.fullAggs && comparison.fullAggs) {
-      X_AXIS_OPTIONS.forEach((axis) => {
-        switch (axis) {
-          case 'Age':
-            ageBuckets.forEach((bucket) => {
-              const compareBySafe = compareByLowercase as 'race' | 'sex';
-              const matchBucket = matches.fullAggs!.donors_by_age.buckets.find(
-                (b) => Number(b.key) === Number(bucket),
-              )?.[compareBySafe];
-              const comparisonBucket = comparison.fullAggs!.donors_by_age.buckets.find(
-                (b) => Number(b.key) === Number(bucket),
-              )?.[compareBySafe];
-              formattedData[axis].push(
-                ...getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, labeledAgeBuckets[bucket]),
-              );
+      switch (xAxis) {
+        case 'Age':
+          ageBuckets.forEach((bucket) => {
+            // Use a type assertion to ensure the key is treated as a valid assignment for the current bucket type
+            const compareBySafe = compareByLowercase as 'race' | 'sex';
+            // Find the matching bucket in both match and comparison datasets
+            // and extract the relevant data for the specified compareBy
+            // If the bucket is not found, it will be undefined, which is handled in getFormattedDataFromBuckets
+            const matchBucket = matches.fullAggs!.donors_by_age.buckets.find(
+              // since the age buckets are numbers in the aggregation, we need to convert the bucket to a number during the comparison
+              // otherwise, this predicate always fails
+              (b) => Number(b.key) === Number(bucket),
+            )?.[compareBySafe];
+            const comparisonBucket = comparison.fullAggs!.donors_by_age.buckets.find(
+              (b) => Number(b.key) === Number(bucket),
+            )?.[compareBySafe];
+            formattedData.push({
+              group: labeledAgeBuckets[bucket],
+              stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis),
             });
-            maxCount = Math.max(...comparison.fullAggs!.donors_by_age.buckets.map((b) => b.doc_count), maxCount);
-            break;
+          });
+          maxCount = Math.max(...comparison.fullAggs.donors_by_age.buckets.map((b) => b.doc_count), maxCount);
+          break;
 
-          case 'Race':
-            getAllRaces(comparison).forEach((race) => {
-              const compareBySafe = compareByLowercase as 'age' | 'sex';
-              const matchBucket = matches.fullAggs!.donors_by_race.buckets.find((b) => b.key === race)?.[compareBySafe];
-              const comparisonBucket = comparison.fullAggs!.donors_by_race.buckets.find((b) => b.key === race)?.[
-                compareBySafe
-              ];
-              formattedData[axis].push(...getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, race));
+        case 'Race':
+          getAllRaces(comparison).forEach((race) => {
+            const compareBySafe = compareByLowercase as 'age' | 'sex';
+            const matchBucket = matches.fullAggs!.donors_by_race.buckets.find((b) => b.key === race)?.[compareBySafe];
+            const comparisonBucket = comparison.fullAggs!.donors_by_race.buckets.find((b) => b.key === race)?.[
+              compareBySafe
+            ];
+
+            formattedData.push({
+              group: race,
+              stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis),
             });
-            maxCount = Math.max(...comparison.fullAggs!.donors_by_race.buckets.map((b) => b.doc_count), maxCount);
-            break;
-          case 'Sex':
-            getAllSexes(comparison).forEach((sex) => {
-              const compareBySafe = compareByLowercase as 'age' | 'race';
-              const matchBucket = matches.fullAggs!.donors_by_sex.buckets.find((b) => b.key === sex)?.[compareBySafe];
-              const comparisonBucket = comparison.fullAggs!.donors_by_sex.buckets.find((b) => b.key === sex)?.[
-                compareBySafe
-              ];
-              formattedData[axis].push(...getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, sex));
+          });
+          maxCount = Math.max(...comparison.fullAggs.donors_by_race.buckets.map((b) => b.doc_count), maxCount);
+          break;
+        case 'Sex':
+          getAllSexes(comparison).forEach((sex) => {
+            const compareBySafe = compareByLowercase as 'age' | 'race';
+            const matchBucket = matches.fullAggs!.donors_by_sex.buckets.find((b) => b.key === sex)?.[compareBySafe];
+            const comparisonBucket = comparison.fullAggs!.donors_by_sex.buckets.find((b) => b.key === sex)?.[
+              compareBySafe
+            ];
+
+            formattedData.push({
+              group: sex,
+              stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis),
             });
-            maxCount = Math.max(...comparison.fullAggs!.donors_by_sex.buckets.map((b) => b.doc_count), maxCount);
-            break;
-          default:
-            break;
-        }
-      });
+          });
+          maxCount = Math.max(...comparison.fullAggs.donors_by_sex.buckets.map((b) => b.doc_count), maxCount);
+          break;
+        default:
+          break;
+      }
     }
     return [formattedData, maxCount];
-  }, [matches, comparison, yAxis, compareBy]);
+  }, [compareBy, matches.fullAggs, comparison, xAxis, yAxis]);
 
   return {
     data,
