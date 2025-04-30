@@ -1,6 +1,7 @@
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import React from 'react';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
+import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import DatasetsOverviewChart from './DatasetsOverviewChart';
@@ -27,14 +28,14 @@ export default function DatasetsOverview({ datasets }: DatasetsOverviewProps) {
   return (
     <>
       <Tabs value={openTabIndex} onChange={handleTabChange}>
-        <Tab label="Visualization" index={0} />
+        <Tab label="Visualization" index={0} icon={<VisualizationIcon />} iconPosition="start" />
         <Tab label="Table" index={1} />
       </Tabs>
       <TabPanel value={openTabIndex} index={0}>
-        <DatasetsOverviewTable indexed={indexed} all={all} matched={matched} />
+        <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} />
       </TabPanel>
       <TabPanel value={openTabIndex} index={1}>
-        <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} />
+        <DatasetsOverviewTable indexed={indexed} all={all} matched={matched} />
       </TabPanel>
     </>
   );

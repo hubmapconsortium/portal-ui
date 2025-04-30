@@ -3,16 +3,28 @@ import Description from 'js/shared-styles/sections/Description';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import ChartDropdown from 'js/components/home/HuBMAPDatasetsChartDropdown';
-import { X } from '@mui/icons-material';
 import { SelectChangeEvent } from '@mui/material/Select';
-import { FormControlLabel, Switch, ToggleButton } from '@mui/material';
-import { useOrdinalScale } from 'js/shared-styles/charts/hooks';
-import { DatasetsOverviewType } from './hooks';
+import Switch from '@mui/material/Switch';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Stack from '@mui/material/Stack';
+import { useBandScale, useLinearScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
+import { GroupedBarStackChart } from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalGroupedStackedBarChart';
+import {
+  ageBucketLabels,
+  DatasetsOverviewDigest,
+  FormattedOverviewChartData,
+  useAxisAndCompareBy,
+  useFormattedOverviewChartData,
+  X_AXIS_OPTIONS,
+  XAxisOptions,
+  Y_AXIS_OPTIONS,
+  YAxisOptions,
+} from './hooks';
 
 interface DatasetsOverviewChartProps {
-  matched: DatasetsOverviewType;
-  indexed: DatasetsOverviewType;
-  all: DatasetsOverviewType;
+  matched: DatasetsOverviewDigest;
+  indexed: DatasetsOverviewDigest;
+  all: DatasetsOverviewDigest;
 }
 
 const margin = {
@@ -22,21 +34,28 @@ const margin = {
   left: 0,
 };
 
+const graphMargin = {
+  ...margin,
+  top: 16,
+  left: 32,
+};
+
 const MALE_NON_MATCH = '#d1dac1';
 const MALE_MATCH = '#6c8938';
 const FEMALE_NON_MATCH = '#c5c7cf';
 const FEMALE_MATCH = '#444a65';
 
-const Y_AXIS_OPTIONS = ['datasets', 'donors'] as const;
-type YAxisOptions = (typeof Y_AXIS_OPTIONS)[number];
-
-const X_AXIS_OPTIONS = ['age', 'race', 'sex'] as const;
-type XAxisOptions = (typeof X_AXIS_OPTIONS)[number];
-
 export default function DatasetsOverviewChart({ matched, indexed, all }: DatasetsOverviewChartProps) {
-  const [yAxis, setYAxis] = useState<YAxisOptions>('datasets');
-  const [xAxis, setXAxis] = useState<XAxisOptions>('age');
-  const [compareBy, setCompareBy] = useState<XAxisOptions>('sex');
+  const [yAxis, setYAxis] = useState<YAxisOptions>('Datasets');
+
+  const {
+    axis: xAxis,
+    setAxis: setXAxis,
+    compareBy,
+    setCompareBy,
+    xAxisOptions,
+    compareByOptions,
+  } = useAxisAndCompareBy(X_AXIS_OPTIONS, 'Age', 'Sex');
 
   // If the user selects "Compare to All", the chart will show the distribution of matched datasets all datasets
   // Otherwise, it will show the distribution of matched datasets against the indexed datasets
@@ -46,25 +65,71 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
   // Otherwise, it will display the absolute number of matched datasets
   const [percentMode, setPercentMode] = useState(false);
 
-  const yAxisOptions: Record<YAxisOptions, string> = useMemo(() => {
+  // Given the selected settings, calculate the appropriate data for the chart
+  // and the maximum value for the Y axis
+  const { data, max } = useFormattedOverviewChartData(matched, compareToAll ? all : indexed, xAxis, yAxis, compareBy);
+
+  const yAxisOptionLabelMap: Record<YAxisOptions, string> = useMemo(() => {
     return {
-      datasets: `Datasets (${matched.totalDatasets})`,
-      donors: `Donors (${matched.totalDonors})`,
+      Datasets: `Datasets (${matched.totalDatasets})`,
+      Donors: `Donors (${matched.totalDonors})`,
     };
   }, [matched]);
 
-  const xAxisOptions = useMemo(() => {
-    return X_AXIS_OPTIONS.filter((option) => option !== compareBy);
-  }, [compareBy]);
+  const compareByKeys = useMemo(() => {
+    const comparison = compareToAll ? all : indexed;
+    const keys = (() => {
+      switch (compareBy) {
+        case 'Age':
+          return ageBucketLabels;
+        case 'Race':
+          return comparison.fullAggs?.donors_by_race.buckets.map((d) => d.key).sort() ?? [];
+        case 'Sex':
+          return comparison.fullAggs?.donors_by_sex.buckets.map((d) => d.key).sort() ?? [];
+        default:
+          console.error(`unknown comparison key type:`, compareBy);
+          return [];
+      }
+    })();
+    return keys;
+  }, [compareBy, compareToAll, indexed, all]);
 
-  const compareByOptions = useMemo(() => {
-    return X_AXIS_OPTIONS.filter((option) => option !== xAxis);
-  }, [xAxis]);
+  const xAxisKeys = useMemo(() => {
+    const comparison = compareToAll ? all : indexed;
+    switch (xAxis) {
+      case 'Age':
+        return ageBucketLabels;
+      case 'Race':
+        return comparison.fullAggs?.donors_by_race.buckets.map((d) => d.key).sort() ?? [];
+      case 'Sex':
+        return comparison.fullAggs?.donors_by_sex.buckets.map((d) => d.key).sort() ?? [];
+      default:
+        console.error(`unknown x axis key type:`, xAxis);
+        return [];
+    }
+  }, [xAxis, compareToAll, indexed, all]);
 
-  const colorScale = useOrdinalScale([], {
-    domain: [],
-    range: [],
+  const compareByColorKeys = useMemo(() => {
+    return compareByKeys.map((key) => [`${key} match`, `${key} unmatched`]).flat();
+  }, [compareByKeys]);
+
+  const xScale = useBandScale(xAxisKeys, { padding: 0.1 });
+  const colorScale = useOrdinalScale(compareByColorKeys, {
+    domain: compareByColorKeys,
+    range: [MALE_MATCH, MALE_NON_MATCH, FEMALE_MATCH, FEMALE_NON_MATCH],
   });
+
+  const compareByScale = useBandScale(compareByKeys, {
+    padding: 0.1,
+    domain: compareByKeys,
+    range: [0, xScale.range()[1] / compareByKeys.length],
+  });
+
+  const yScale = useLinearScale([0, max], { nice: true });
+
+  const xAxisTickLabels = useMemo(() => {
+    return data.map((d) => d.xAxisKey).filter((key, index, self) => self.indexOf(key) === index);
+  }, [data]);
 
   return (
     <div>
@@ -79,24 +144,32 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
           <>
             <FormControlLabel
               control={
-                <Switch
-                  value="comparisonMetric"
-                  checked={compareToAll}
-                  onChange={() => setCompareToAll((prev) => !prev)}
-                  color="success"
-                />
+                <Stack spacing={1} direction="row">
+                  <span>Indexed Datasets</span>
+                  <Switch
+                    value="comparisonMetric"
+                    checked={compareToAll}
+                    onChange={() => setCompareToAll((prev) => !prev)}
+                    color="success"
+                  />
+                  <span>Total HuBMAP Datasets</span>
+                </Stack>
               }
               label="Comparison Metric" // TODO: Add tooltip
               labelPlacement="top"
             />
             <FormControlLabel
               control={
-                <Switch
-                  value="percentMode"
-                  checked={percentMode}
-                  onChange={() => setPercentMode((prev) => !prev)}
-                  color="success"
-                />
+                <Stack spacing={1} direction="row">
+                  <span>Total Count</span>
+                  <Switch
+                    value="percentMode"
+                    checked={percentMode}
+                    onChange={() => setPercentMode((prev) => !prev)}
+                    color="success"
+                  />
+                  <span>Percentage</span>
+                </Stack>
               }
               label="Y-Axis" // TODO: Add tooltip
               labelPlacement="top"
@@ -125,7 +198,8 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
         }
         yAxisDropdown={
           <ChartDropdown
-            options={Y_AXIS_OPTIONS} // TODO: Add display of number of datasets/donors to option labels
+            options={Y_AXIS_OPTIONS}
+            displayLabels={yAxisOptionLabelMap}
             value={yAxis}
             label="Y-Axis"
             fullWidth
@@ -135,20 +209,23 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
           />
         }
       >
-        {/* <VerticalStackedBarChart
-          visxData={[]}
-          xScale={undefined}
-          yScale={undefined}
+        <GroupedBarStackChart
+          data={data}
+          xScale={xScale}
+          yScale={yScale}
           colorScale={colorScale}
-          getX={function (d: unknown): string {
-            throw new Error('Function not implemented.');
+          getX={(d) => {
+            return d.xAxisKey;
           }}
-          keys={[]}
-          margin={margin}
+          compareByKeys={compareByKeys}
+          keys={['match', 'unmatched']}
+          margin={graphMargin}
           xAxisLabel="" // Labels are on the dropdowns
           yAxisLabel="" // Labels are on the dropdowns
-          xAxisTickLabels={[]}
-        /> */}
+          xAxisTickLabels={xAxisTickLabels}
+          getTickValues={() => yScale.ticks(5)}
+          compareByField={compareBy.toLowerCase()}
+        />
       </ChartWrapper>
     </div>
   );

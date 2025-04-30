@@ -4,6 +4,7 @@ import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@m
 
 interface DatasetsChartDropdownProps<T extends string> {
   options: readonly T[];
+  displayLabels?: Record<T, string>;
   value: T;
   label: string;
   onChange: (e: SelectChangeEvent<T>) => void;
@@ -16,6 +17,7 @@ function ChartDropdown<T extends string>({
   onChange,
   label,
   fullWidth,
+  displayLabels = {} as Record<T, string>,
 }: DatasetsChartDropdownProps<T>) {
   const id = useId();
   const labelId = `${id}-label`;
@@ -25,7 +27,7 @@ function ChartDropdown<T extends string>({
       <Select id={id} label={label} labelId={labelId} value={value} onChange={onChange} fullWidth={fullWidth}>
         {options.map((option) => (
           <MenuItem key={option} value={option}>
-            {option}
+            {displayLabels[option] ?? option}
           </MenuItem>
         ))}
       </Select>

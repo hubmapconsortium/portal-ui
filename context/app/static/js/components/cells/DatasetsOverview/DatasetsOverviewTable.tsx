@@ -6,12 +6,12 @@ import TableRow from '@mui/material/TableRow';
 import React from 'react';
 import Description from 'js/shared-styles/sections/Description';
 import { decimal } from 'js/helpers/number-format';
-import { DatasetsOverviewType } from './hooks';
+import { DatasetsOverviewDigest } from './hooks';
 
 interface OverviewTableProps {
-  indexed: DatasetsOverviewType;
-  matched: DatasetsOverviewType;
-  all: DatasetsOverviewType;
+  indexed: DatasetsOverviewDigest;
+  matched: DatasetsOverviewDigest;
+  all: DatasetsOverviewDigest;
 }
 
 export default function DatasetsOverviewTable({ indexed, matched, all }: OverviewTableProps) {
