@@ -9,7 +9,7 @@ export default function CollectionsSearchBar() {
   const { setSearch } = useCollectionsSearchActions();
   return (
     <SearchBar
-      sx={{ mb: 2, width: '100%' }}
+      sx={{ mb: 2, width: '50%' }}
       placeholder={searchbarPlaceholder}
       value={search}
       onChange={(e) => setSearch(e.target.value)}

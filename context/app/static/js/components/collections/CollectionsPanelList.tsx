@@ -4,6 +4,7 @@ import Skeleton from '@mui/material/Skeleton';
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
 import { Collection } from 'js/components/collections/types';
+import { useFilteredCollections } from 'js/components/collections/hooks';
 import CollectionPanel from './CollectionsPanelItem';
 
 const skeletons: PanelProps[] = Array.from({ length: 10 }).map((_, index) => ({
@@ -18,8 +19,10 @@ export default function CollectionsPanelList({
   collections: Collection[];
   isLoading: boolean;
 }) {
+  const filteredCollections = useFilteredCollections(collections);
+
   const panelsProps: PanelProps[] = useMemo(() => {
-    if (!collections.length) {
+    if (!filteredCollections.length) {
       if (isLoading) return skeletons;
       return [
         {
@@ -34,7 +37,7 @@ export default function CollectionsPanelList({
         noPadding: true,
         children: <CollectionPanel.Header />,
       },
-      ...collections.map(({ uuid, title, hubmap_id, created_timestamp, datasets }) => ({
+      ...filteredCollections.map(({ uuid, title, hubmap_id, created_timestamp, datasets }) => ({
         key: uuid,
         noPadding: true,
         noHover: false,
@@ -50,7 +53,7 @@ export default function CollectionsPanelList({
       })),
     ];
     return propsList;
-  }, [collections, isLoading]);
+  }, [filteredCollections, isLoading]);
 
   return <PanelList panelsProps={panelsProps} />;
 }

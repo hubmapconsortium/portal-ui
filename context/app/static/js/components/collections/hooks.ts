@@ -1,24 +1,11 @@
-import { useGeneOntologyList } from 'js/hooks/useUBKG';
 import { getAllCollectionsQuery } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { Collection } from 'js/components/types';
+import { Collection } from 'js/components/collections/types';
 import { useCollectionsSearchState } from './CollectionsSearchContext';
 
-function useCurrentGenesList() {
+export function useFilteredCollections(collections: Collection[]) {
   const { search } = useCollectionsSearchState();
-  return useGeneOntologyList(search.toUpperCase());
-}
-
-export function useResultsList() {
-  const { data, ...rest } = useCurrentGenesList();
-
-  const genesList = data?.flatMap((page) => page.genes) ?? [];
-
-  const { pagination } = data?.at(-1) ?? {};
-
-  const hasMore = pagination?.page !== pagination?.total_pages;
-
-  return { genesList, hasMore, ...rest };
+  return collections.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
 }
 
 const query = {
