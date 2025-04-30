@@ -1,14 +1,10 @@
 import { styled } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
 
-const PanelScrollBox = styled(Paper)(({ theme }) => {
-  const media = `@media (min-width: ${theme.breakpoints.values.md}px)`;
-  return {
-    [media]: {
-      flexGrow: 1,
-      overflowY: 'scroll',
-    },
-  };
-});
+const PanelScrollBox = styled(Box)(({ theme }) => ({
+  flex: 1,
+  overflowY: 'auto',
+  paddingRight: theme.spacing(1),
+}));
 
 export { PanelScrollBox };

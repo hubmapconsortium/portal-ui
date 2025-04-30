@@ -25,7 +25,7 @@ const desktopStackProps: Partial<StackProps> = {
 function StackTemplate(props: React.ComponentProps<typeof Stack>) {
   const isMobile = useIsMobile();
   const responsiveProps = isMobile ? mobileStackProps : desktopStackProps;
-  return <Stack px={2} useFlexGap width="100%" {...responsiveProps} {...props} />;
+  return <Stack marginX={2} marginY={1} useFlexGap width="100%" {...responsiveProps} {...props} />;
 }
 
 function MobileLabel({ children }: { children: React.ReactNode }) {
@@ -80,7 +80,7 @@ function CollectionHeaderPanel() {
     return null;
   }
   return (
-    <StackTemplate spacing={1}>
+    <StackTemplate spacing={1} position="sticky" top={0} zIndex={1}>
       <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
       <HeaderCell {...desktopConfig.numDatasets}># of Datasets</HeaderCell>
       <HeaderCell {...desktopConfig.creationDate}>Creation Date</HeaderCell>
