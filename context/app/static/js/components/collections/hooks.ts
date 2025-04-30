@@ -26,10 +26,12 @@ export function useCollections() {
   const { search } = useCollectionsSearchState();
   const { toastError, toastSuccess } = useSnackbarActions();
 
-  const filteredCollections = collections.filter((item) => item.title.toLowerCase().includes(search.toLowerCase()));
+  const filteredCollections = collections
+    .filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => b.created_timestamp - a.created_timestamp);
 
   const downloadTable = useEventCallback(() => {
-    const header = 'Title\tDataset Count\tCreation Date';
+    const header = 'Title\tNumber of Datasets\tCreation Date';
     const rows = filteredCollections.map(({ title, datasets, created_timestamp }) => {
       const datasetCount = datasets.length;
       const creationDate = format(new Date(created_timestamp), 'yyyy-MM-dd');
@@ -37,7 +39,7 @@ export function useCollections() {
     });
 
     const tsvContent = [header, ...rows].join('\n');
-    const url = createDownloadUrl(tsvContent, 'text/tab-separated-values');
+    const url = createDownloadUrl(tsvContent, 'text/collections-table');
 
     checkAndDownloadFile({ url, fileName: 'collections.tsv' })
       .then(() => {

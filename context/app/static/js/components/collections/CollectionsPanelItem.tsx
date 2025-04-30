@@ -83,7 +83,9 @@ function CollectionHeaderPanel() {
     <StackTemplate spacing={1} position="sticky" top={0} zIndex={1}>
       <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
       <HeaderCell {...desktopConfig.numDatasets}># of Datasets</HeaderCell>
-      <HeaderCell {...desktopConfig.creationDate}>Creation Date</HeaderCell>
+      <HeaderCell {...desktopConfig.creationDate} marginRight={3}>
+        Creation Date
+      </HeaderCell>
     </StackTemplate>
   );
 }
@@ -105,10 +107,10 @@ function CollectionPanelItem({ name, hubmapId, numDatasets, creationDate, href }
           {` (${hubmapId})`}
         </Typography>
       </BodyCell>
-      <BodyCell {...desktopConfig.numDatasets} aria-label="Number of Datasets">
+      <BodyCell {...desktopConfig.numDatasets} aria-label="Number of Datasets" justifyContent="center">
         <Typography>{numDatasets}</Typography>
       </BodyCell>
-      <BodyCell {...desktopConfig.creationDate} aria-label="Creation Date">
+      <BodyCell {...desktopConfig.creationDate} aria-label="Creation Date" justifyContent="center">
         <Typography>{format(new Date(creationDate), 'yyyy-MM-dd')}</Typography>
       </BodyCell>
     </StackTemplate>
