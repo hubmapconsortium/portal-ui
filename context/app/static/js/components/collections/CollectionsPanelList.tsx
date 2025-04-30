@@ -3,8 +3,7 @@ import Skeleton from '@mui/material/Skeleton';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
-import { Collection } from 'js/components/collections/types';
-import { useFilteredCollections } from 'js/components/collections/hooks';
+import { useCollections } from 'js/components/collections/hooks';
 import CollectionPanel from './CollectionsPanelItem';
 
 const skeletons: PanelProps[] = Array.from({ length: 10 }).map((_, index) => ({
@@ -12,14 +11,8 @@ const skeletons: PanelProps[] = Array.from({ length: 10 }).map((_, index) => ({
   children: <Skeleton width="100%" height={32} variant="rounded" key={Math.random()} />,
 }));
 
-export default function CollectionsPanelList({
-  collections,
-  isLoading,
-}: {
-  collections: Collection[];
-  isLoading: boolean;
-}) {
-  const filteredCollections = useFilteredCollections(collections);
+export default function CollectionsPanelList() {
+  const { filteredCollections, isLoading } = useCollections();
 
   const panelsProps: PanelProps[] = useMemo(() => {
     if (!filteredCollections.length) {
