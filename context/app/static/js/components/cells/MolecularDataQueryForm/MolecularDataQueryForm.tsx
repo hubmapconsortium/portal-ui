@@ -1,6 +1,6 @@
 import React, { PropsWithChildren, useEffect, useId, useState } from 'react';
 import { useForm, FormProvider, FieldErrors } from 'react-hook-form';
-import { useEventCallback } from '@mui/material';
+import { useEventCallback } from '@mui/material/utils';
 import Stack from '@mui/material/Stack';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import IndependentStepAccordion from 'js/shared-styles/accordions/StepAccordion/IndependentStepAccordion';

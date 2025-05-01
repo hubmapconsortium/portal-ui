@@ -5,7 +5,7 @@ import Box from '@mui/material/Box';
 
 import { TitleWrapper } from 'js/shared-styles/charts/style';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
-import { Divider } from '@mui/material';
+import Divider from '@mui/material/Divider';
 import { OrdinalScale } from '../hooks';
 
 interface ChartWrapperProps extends PropsWithChildren {
