@@ -48,7 +48,7 @@ const IndependentStepAccordion = forwardRef(function IndependentStepAccordion(
         <CompletedStepText completedStepText={completedStepText} isExpanded={isExpanded} index={index} />
       </StyledAccordionSummary>
       <ContentWrapper index={index}>
-        <Box pt={1} px={2} pb={2}>
+        <Box pt={1} px={2} pb={2} display={isExpanded ? 'block' : 'none'}>
           {content}
         </Box>
       </ContentWrapper>

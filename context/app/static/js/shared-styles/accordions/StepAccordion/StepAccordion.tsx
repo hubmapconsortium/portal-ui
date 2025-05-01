@@ -33,6 +33,8 @@ const StepAccordion = forwardRef(function StepAccordion(
       onChange={onChange}
       isExpanded={isExpanded}
       disabled={disabled}
+      noProvider={false}
+      completedStepText={completedStepsText[index] || ''}
     />
   );
 });
