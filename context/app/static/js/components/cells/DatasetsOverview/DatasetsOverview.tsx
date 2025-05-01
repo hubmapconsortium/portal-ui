@@ -1,10 +1,8 @@
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import React from 'react';
-import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
-import { VisualizationIcon } from 'js/shared-styles/icons';
+import Skeleton from '@mui/material/Skeleton';
 import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
-import DatasetsOverviewChart from './DatasetsOverviewChart';
 
 interface DatasetsOverviewProps {
   datasets: string[];
@@ -16,27 +14,12 @@ export default function DatasetsOverview({ datasets }: DatasetsOverviewProps) {
   const all = useDatasetsOverview();
   const matched = useDatasetsOverview(datasets);
 
-  const { openTabIndex, handleTabChange } = useTabs();
-
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Skeleton variant="rectangular" width="100%" height={300} />;
   }
   if (error) {
     return <div>Error: {error?.message}</div>;
   }
 
-  return (
-    <>
-      <Tabs value={openTabIndex} onChange={handleTabChange}>
-        <Tab label="Visualization" index={0} icon={<VisualizationIcon />} iconPosition="start" />
-        <Tab label="Table" index={1} />
-      </Tabs>
-      <TabPanel value={openTabIndex} index={0}>
-        <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} />
-      </TabPanel>
-      <TabPanel value={openTabIndex} index={1}>
-        <DatasetsOverviewTable indexed={indexed} all={all} matched={matched} />
-      </TabPanel>
-    </>
-  );
+  return <DatasetsOverviewTable indexed={indexed} all={all} matched={matched} />;
 }
