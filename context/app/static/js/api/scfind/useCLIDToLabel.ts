@@ -22,7 +22,7 @@ export function createCellTypeMarkersKey(
   });
 }
 
-export default function useCellTypeMarkers(props: CellTypeLabelsForCLIDParams) {
+export default function useCLIDToLabel(props: CellTypeLabelsForCLIDParams) {
   const { scFindEndpoint } = useAppContext();
   const key = createCellTypeMarkersKey(scFindEndpoint, props);
   return useSWR<CellTypeLabelsForCLID, unknown, CellTypeCountForTissueKey>(key, (url) => fetcher({ url }));

@@ -27,7 +27,7 @@ export function createCellTypeMarkersKey(
   });
 }
 
-export default function useCellTypeMarkers(props: CellTypeCountForDatasetParams) {
+export default function useCellTypeCountForDataset(props: CellTypeCountForDatasetParams) {
   const { scFindEndpoint } = useAppContext();
   const key = createCellTypeMarkersKey(scFindEndpoint, props);
   return useSWR<CellTypeCountsForDataset, unknown, CellTypeCountForDatasetKey>(key, (url) => fetcher({ url }));

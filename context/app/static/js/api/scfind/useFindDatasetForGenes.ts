@@ -20,7 +20,7 @@ export function createCellTypeMarkersKey(
   });
 }
 
-export default function useCellTypeMarkers(props: DatasetsForGenesParams) {
+export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
   const { scFindEndpoint } = useAppContext();
   const key = createCellTypeMarkersKey(scFindEndpoint, props);
   return useSWR<DatasetsForGenesResponse, unknown, DatasetsForGenesKey>(key, (url) => fetcher({ url }));
