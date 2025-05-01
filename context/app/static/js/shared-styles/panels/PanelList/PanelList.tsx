@@ -16,7 +16,6 @@ function PanelList({ panelsProps }: PanelListProps) {
   return (
     <Stack
       component={Paper}
-      display="flex"
       flexDirection="column"
       sx={{
         flexGrow: 1,
