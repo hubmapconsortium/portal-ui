@@ -24,7 +24,7 @@ export default function NavigationDrawer({ title, direction, sections, onClose, 
         </DrawerTitle>
         {sectionsWithDividers.map((section) => {
           if (sectionIsProps(section)) {
-            return <DrawerSectionComponent key={getKeyFromSection(section)} {...section} />;
+            return <DrawerSectionComponent key={getKeyFromSection(section)} drawerTitle={title} {...section} />;
           }
           return section;
         })}
