@@ -4,6 +4,7 @@ import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/s
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { Dataset } from 'js/components/types';
 import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
 import { useSCFindCellTypeResults } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
@@ -137,7 +138,7 @@ function SCFindCellTypeQueryResultsLoader() {
   }
 
   return (
-    <>
+    <Stack spacing={1} py={2}>
       <Typography variant="subtitle1">Cell Type Distribution Across Organs</Typography>
       <OrganCellTypeDistributionCharts />
       <Tabs onChange={handleTabChange} value={openTabIndex}>
@@ -145,13 +146,15 @@ function SCFindCellTypeQueryResultsLoader() {
           <Tab key={cellType} label={`${cellType} (${datasets[cellType].length})`} index={idx} />
         ))}
       </Tabs>
-      <DatasetListHeader />
-      {cellTypes.map((cellType, idx) => (
-        <TabPanel key={cellType} value={openTabIndex} index={idx}>
-          <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
-        </TabPanel>
-      ))}
-    </>
+      <div>
+        <DatasetListHeader />
+        {cellTypes.map((cellType, idx) => (
+          <TabPanel key={cellType} value={openTabIndex} index={idx}>
+            <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
+          </TabPanel>
+        ))}
+      </div>
+    </Stack>
   );
 }
 
