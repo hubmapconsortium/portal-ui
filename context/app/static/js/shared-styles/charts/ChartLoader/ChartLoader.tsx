@@ -1,12 +1,16 @@
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
 
 import { StyledSkeleton } from './style';
 
-function ChartLoader({ isLoading, children }) {
+interface ChartLoaderProps extends PropsWithChildren {
+  isLoading: boolean;
+}
+
+function ChartLoader({ isLoading, children }: ChartLoaderProps) {
   if (isLoading) {
     return (
-      <StyledSkeleton variant="rect">
+      <StyledSkeleton variant="rectangular">
         <div>
           <Typography>Please wait while your data is being retrieved.</Typography>
         </div>

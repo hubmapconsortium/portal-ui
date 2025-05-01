@@ -59,14 +59,6 @@ function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames }: Ce
             />
           </ChartLoader>
         </TotalCellsContext.Provider>
-        {/* {cellTypeCounts &&
-        Object.entries(cellTypeCounts).map(([clid, count]) => (
-          <div key={clid}>
-            <h3>
-              {count.value || 0} {clid} ({((count.value / totalCells) * 100).toFixed(2)}%)
-            </h3>
-          </div>
-        ))} */}
       </Box>
     </Box>
   );

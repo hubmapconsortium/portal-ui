@@ -98,7 +98,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
 
     // TODO: With this approach, the query still reruns and gets discarded after the first change since the
     // form state is reset AFTER the swr hook gets new params. We should investigate if there is a way to
-    // prevent the query from running until the form is submitted again.
+    // prevent the query from running until the form is submitted again. Maybe switch to a mutation?
     reset(undefined, {
       keepIsSubmitted: false,
       keepIsSubmitSuccessful: false,
