@@ -45,7 +45,7 @@ const propMap: Record<Direction, MappableProps> = {
 
 function Fill({ bar, colorScale, id }: { bar: Bar; colorScale?: OrdinalScale; id: string }) {
   const barKey = bar.key;
-  const barKeys = barKey.split(', ');
+  const barKeys = String(barKey).split(', ');
 
   // If it's a single-key bar or a separate scale is not provided, the pattern should just reflect the color
   if (barKeys.length === 1 || !colorScale) {

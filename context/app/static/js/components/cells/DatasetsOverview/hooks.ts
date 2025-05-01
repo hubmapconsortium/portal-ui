@@ -361,7 +361,6 @@ const getFormattedDataFromBuckets = (
     return {
       [`${group} matched`]: matchCount,
       [`${group} unmatched`]: unmatchedCount - matchCount,
-      group,
     } as FormattedOverviewChartData['stacks'][number];
   });
 };
@@ -416,10 +415,11 @@ export function useFormattedOverviewChartData(
             const comparisonBucket = comparison.fullAggs!.donors_by_age.buckets.find(
               (b) => Number(b.key) === Number(bucket),
             )?.[compareBySafe];
-            formattedData.push({
+            const newData = {
               group: labeledAgeBuckets[bucket],
               stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis),
-            });
+            };
+            formattedData.push(newData);
           });
           maxCount = Math.max(...comparison.fullAggs.donors_by_age.buckets.map((b) => b.doc_count), maxCount);
           break;

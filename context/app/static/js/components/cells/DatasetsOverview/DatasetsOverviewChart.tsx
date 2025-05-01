@@ -7,7 +7,7 @@ import Switch from '@mui/material/Switch';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Stack from '@mui/material/Stack';
 import { useBandScale, useLinearScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
-import { GroupedBarStackChart } from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalGroupedStackedBarChart';
+import GroupedBarStackChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalGroupedStackedBarChart';
 import {
   ageBucketLabels,
   DatasetsOverviewDigest,
