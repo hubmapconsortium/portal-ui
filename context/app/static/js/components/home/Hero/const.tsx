@@ -1,11 +1,19 @@
 import React from 'react';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { SearchIcon, DonorIcon, DownloadIcon, ListsIcon } from 'js/shared-styles/icons';
+import {
+  SearchIcon,
+  DonorIcon,
+  DownloadIcon,
+  ListsIcon,
+  OrganIcon,
+  DatasetIcon,
+  WorkspacesIcon,
+} from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
-import { buildSearchLink } from 'js/components/search/store';
+import { buildSearchLink, createDatasetSearchLink } from 'js/components/search/store';
 import { InternalLink } from 'js/shared-styles/Links';
 
 const timelineIconProps = {
@@ -14,17 +22,58 @@ const timelineIconProps = {
   width: '1.5rem',
 } as const;
 
-const SNARE_SEQ2_LINK = buildSearchLink({
-  entity_type: 'Dataset',
-  filters: {
-    raw_dataset_type: {
-      type: 'HIERARCHICAL',
-      values: { 'SNARE-seq2': ['SNARE-seq2', 'SNARE-seq2 [Salmon + ArchR + Muon]'] },
-    },
-  },
+const DATASETS: Record<string, string[]> = {
+  'SNARE-seq2': ['SNARE-seq2', 'SNARE-seq2 [Salmon + ArchR + Muon]'],
+  'Cell DIVE': ['Cell DIVE', 'Cell DIVE [DeepCell + SPRM]'],
+  RNAseq: ['Bulk RNAseq', 'Bulk RNAseq [Salmon]'],
+  PhenoCycler: ['PhenoCycler'],
+};
+
+const SNARE_SEQ2_LINK = createDatasetSearchLink({ 'SNARE-seq2': DATASETS['SNARE-seq2'] });
+const CELL_DIVE_LINK = createDatasetSearchLink({ 'Cell DIVE': DATASETS['Cell DIVE'] });
+const BULK_RNA_SEQ_LINK = createDatasetSearchLink({ RNAseq: DATASETS.RNAseq });
+const PHENOCYCLER_LINK = createDatasetSearchLink({ PhenoCycler: DATASETS.PhenoCycler });
+
+const COMBINED_DATASET_LINK = createDatasetSearchLink({
+  'Cell DIVE': DATASETS['Cell DIVE'],
+  RNAseq: DATASETS.RNAseq,
+  PhenoCycler: DATASETS.PhenoCycler,
 });
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
+  {
+    title: 'Asynchronous Workspace Sharing Now Available',
+    titleHref: '/workspaces',
+    description: (
+      <>
+        <InternalLink href="/workspaces">Workspace</InternalLink> copies can now be shared with collaborators, enabling
+        more flexible team workflows and supporting independent contributions.
+      </>
+    ),
+    date: 'April 2025',
+    img: <WorkspacesIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'Global Data Products Now Available on Organ Pages',
+    titleHref: '/organ',
+    description:
+      'Download HuBMAP-wide data products for an organ of interest that contain consolidated data for datasets of a particular assay type and tissue, aggregated across multiple datasets. Both raw and processed data products may be available.',
+    date: 'March 2025',
+    img: <OrganIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'New Cell DIVE, Bulk RNAseq, and PhenoCycler Datasets Available',
+    titleHref: COMBINED_DATASET_LINK,
+    description: (
+      <>
+        Explore and download new <InternalLink href={CELL_DIVE_LINK}>Cell DIVE</InternalLink>,{' '}
+        <InternalLink href={BULK_RNA_SEQ_LINK}>Bulk RNAseq</InternalLink>, and{' '}
+        <InternalLink href={PHENOCYCLER_LINK}>PhenoCycler</InternalLink> datasets.
+      </>
+    ),
+    date: 'March 2025',
+    img: <DatasetIcon {...timelineIconProps} />,
+  },
   {
     title: 'My Lists Now Saved in Your User Profile',
     titleHref: '/my-lists',

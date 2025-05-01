@@ -284,6 +284,18 @@ export function buildSearchLink({
   return `/search/${entity_type.toLowerCase()}s${search}`;
 }
 
+export function createDatasetSearchLink(values: Record<string, string[]>) {
+  return buildSearchLink({
+    entity_type: 'Dataset',
+    filters: {
+      raw_dataset_type: {
+        type: 'HIERARCHICAL',
+        values,
+      },
+    },
+  });
+}
+
 function replaceURLSearchParams(state: SearchStoreState) {
   const { search, sortField, filters } = state;
 
