@@ -1,3 +1,7 @@
+import { get } from 'js/helpers/nodash';
+import { generateBoldCommaList } from 'js/helpers/functions';
+import { SelectedItems } from 'js/hooks/useSelectItems';
+import type { WorkspaceItem } from 'js/components/workspaces/Tables/WorkspaceItemsTable/types';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_JOB_TYPE,
@@ -28,6 +32,8 @@ import type {
   WorkspaceJob,
   WorkspaceFile,
   TemplatesTypes,
+  WorkspaceInvitation,
+  WorkspaceWithCreatorInfo,
 } from './types';
 
 interface WorkspaceActionArgs {
@@ -370,6 +376,76 @@ function unconvert(value: number, conversionFactor: number) {
   return value * conversionFactor;
 }
 
+/**
+ * Extract the prefix from a field if it is a workspace invitation.
+ * @param field The field to extract the prefix from.
+ * @returns 'original_workspace_id.' or 'shared_workspace_id.' if the field is a workspace invitation, else an empty string.
+ */
+function getFieldPrefix(field: string) {
+  // Get appropriate prefix if this is a workspace invitation
+  const regex = /^(original_workspace_id|shared_workspace_id)/;
+  const match = regex.exec(field);
+  const prefix = match ? `${match[0]}.` : '';
+
+  return prefix;
+}
+
+/**
+ * Get the value of a field from a workspace or workspace invitation.
+ * @param item The workspace or workspace invitation to get the field value from.
+ * @param field The field to get the value of.
+ * @param prefix The prefix to use if the field is a workspace invitation.
+ * @returns The value of the field.
+ */
+function getFieldValue({ item, field, prefix = '' }: { item: WorkspaceItem; field: string; prefix?: string }) {
+  // datetime_last_job_launch starts as null, so we fall back to datetime_created if the workspace has never been launched
+  if (field === 'datetime_last_job_launch') {
+    const launchDate = get(item, field, '');
+    const createdDate = get(item, `datetime_created`, '');
+
+    return launchDate || createdDate;
+  }
+
+  return get(item, `${prefix}${field}`, '');
+}
+
+function isInvitation(item: WorkspaceItem): item is WorkspaceInvitation {
+  return 'shared_workspace_id' in item;
+}
+
+function isWorkspace(item: WorkspaceItem): item is WorkspaceWithCreatorInfo {
+  return 'id' in item;
+}
+
+function isSentInvitation(item: WorkspaceItem): item is WorkspaceInvitation {
+  return isInvitation(item) && item.original_workspace_id?.user_id.email === userEmail;
+}
+
+function getItemId(item: WorkspaceItem) {
+  return isWorkspace(item) ? item.id : item.shared_workspace_id.id;
+}
+
+function getSelectedWorkspaceNames({
+  selectedWorkspaceIds,
+  workspacesList,
+}: {
+  selectedWorkspaceIds: SelectedItems;
+  workspacesList: MergedWorkspace[];
+}) {
+  const workspacesMap = new Map(workspacesList.map((workspace) => [workspace.id, workspace.name]));
+  return generateBoldCommaList(Array.from(selectedWorkspaceIds).map((id) => workspacesMap.get(Number(id)) ?? ''));
+}
+
+function getSharerInfo(invitation: WorkspaceInvitation) {
+  const user = invitation.original_workspace_id?.user_id;
+  const placeholder = 'Unknown';
+  return {
+    first_name: user?.first_name ?? placeholder,
+    last_name: user?.last_name ?? placeholder,
+    email: user?.email ?? placeholder,
+  };
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -390,4 +466,12 @@ export {
   getWorkspaceResourceOptions,
   convert,
   unconvert,
+  getFieldPrefix,
+  getFieldValue,
+  isInvitation,
+  isWorkspace,
+  isSentInvitation,
+  getItemId,
+  getSelectedWorkspaceNames,
+  getSharerInfo,
 };

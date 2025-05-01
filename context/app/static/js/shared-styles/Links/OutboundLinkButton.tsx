@@ -6,8 +6,16 @@ import StyledOpenInNewRoundedIcon from './StyledOpenInNewRoundedIcon';
 
 type OutboundLinkButtonProps = React.ComponentProps<typeof Button<'a'>>;
 
-function OutboundLinkButton({ children, ...props }: OutboundLinkButtonProps) {
-  const handleClick = useTrackOutboundLink();
+function OutboundLinkButton({ children, onClick, ...props }: OutboundLinkButtonProps) {
+  const trackClick = useTrackOutboundLink();
+
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    trackClick(e);
+    if (onClick) {
+      onClick(e);
+    }
+  };
+
   return (
     <Button
       {...props}

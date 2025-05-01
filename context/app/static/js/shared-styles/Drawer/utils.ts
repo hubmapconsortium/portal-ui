@@ -7,7 +7,7 @@ export function sectionIsProps(section: unknown): section is DrawerSectionProps 
 }
 
 export function itemIsProps(item: unknown): item is DrawerItemProps {
-  if (isValidElement(item)) return false;
+  if (!item || isValidElement(item)) return false;
   return true;
 }
 
@@ -18,6 +18,6 @@ export function getKeyFromReactNode(node: React.ReactNode): string {
 }
 
 export function getKeyFromSection(section: DrawerSection): string {
-  if (sectionIsProps(section)) return section.title;
+  if (sectionIsProps(section)) return section.sectionTitle;
   return getKeyFromReactNode(section);
 }

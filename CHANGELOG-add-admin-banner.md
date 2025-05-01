@@ -1,1 +1,0 @@
-- Add admin banner to top of portal header.

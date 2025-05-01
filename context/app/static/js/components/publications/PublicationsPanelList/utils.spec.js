@@ -24,6 +24,7 @@ const preprintPublicationHit = {
   _source: {
     uuid: 'abc123',
     title: 'Publication ABC',
+    onClick: () => {},
     contributors: [ash],
     publication_status: false,
     publication_venue,
@@ -35,6 +36,7 @@ const peerReviewedPublicationHit = {
   _source: {
     uuid: 'def234',
     title: 'Publication DEF',
+    onClick: () => {},
     contributors: [professorOak],
     publication_status: true,
     publication_venue,
@@ -80,6 +82,7 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(preprintPublicationHit)).toEqual({
       key: 'abc123',
       href: '/browse/publication/abc123',
+      onClick: expect.any(Function),
       title: 'Publication ABC',
       secondaryText: 'Ash Ketchum | Pallet Town Times',
       rightText: 'Preprint Date: 2022-03-02',
@@ -89,6 +92,7 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(peerReviewedPublicationHit)).toEqual({
       key: 'def234',
       href: '/browse/publication/def234',
+      onClick: expect.any(Function),
       title: 'Publication DEF',
       secondaryText: 'Professor Oak | Pallet Town Times',
       rightText: 'Published: 2022-03-02',

@@ -19,12 +19,15 @@ import ExternalImageIcon from 'js/shared-styles/icons/ExternalImageIcon';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import { contactUsUrl } from 'js/shared-styles/Links/ContactUsLink';
 import { DrawerTitle } from 'js/shared-styles/Drawer/styles';
+import NotificationBell from 'js/shared-styles/alerts/NotificationBell';
 import { buildSearchLink } from 'js/components/search/store';
+import { CenteredAlert } from 'js/components/style';
+import { trackEvent } from 'js/helpers/trackers';
 import AuthButton from '../AuthButton';
 
 export const resourceLinks: DrawerSection[] = [
   {
-    title: 'User Guides',
+    sectionTitle: 'User Guides',
     items: [
       {
         label: 'Tutorials',
@@ -35,7 +38,7 @@ export const resourceLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Consortium Resources',
+    sectionTitle: 'Consortium Resources',
     items: [
       {
         label: 'Consortium FAQ',
@@ -52,7 +55,7 @@ export const resourceLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Developer Resources',
+    sectionTitle: 'Developer Resources',
     items: [
       {
         label: 'Technical Documentation',
@@ -63,7 +66,7 @@ export const resourceLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Previews',
+    sectionTitle: 'Previews',
     items: [
       {
         label: '3D Tissue Maps',
@@ -93,9 +96,17 @@ export const resourceLinks: DrawerSection[] = [
   },
 ];
 
+function handleTrackButtonClick() {
+  trackEvent({
+    category: 'Header Navigation / Data',
+    action: 'Help',
+    label: 'Contact Support Button',
+  });
+}
+
 export const dataLinks: DrawerSection[] = [
   {
-    title: 'Datasets',
+    sectionTitle: 'Datasets',
     items: [
       {
         label: 'Datasets',
@@ -114,7 +125,7 @@ export const dataLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Biological Knowledge References',
+    sectionTitle: 'Biological Knowledge References',
     items: [
       {
         label: 'Organs',
@@ -139,7 +150,7 @@ export const dataLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Curated Dataset Compilations',
+    sectionTitle: 'Curated Dataset Compilations',
     items: [
       {
         label: 'Collections',
@@ -156,7 +167,7 @@ export const dataLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Supplemental Queries by Source',
+    sectionTitle: 'Supplemental Queries by Source',
     items: [
       {
         label: 'Samples',
@@ -177,10 +188,17 @@ export const dataLinks: DrawerSection[] = [
     ],
   },
   {
-    title: "Can't find what you're looking for?",
+    sectionTitle: "Can't find what you're looking for?",
     titleProps: { sx: { color: 'common.link' } },
     items: [
-      <Button key="contact-support" startIcon={<SupportIcon />} href={contactUsUrl} variant="outlined" fullWidth>
+      <Button
+        key="contact-support"
+        startIcon={<SupportIcon />}
+        href={contactUsUrl}
+        onClick={handleTrackButtonClick}
+        variant="outlined"
+        fullWidth
+      >
         Contact Support
       </Button>,
     ],
@@ -189,7 +207,7 @@ export const dataLinks: DrawerSection[] = [
 
 export const toolsAndAppsLinks: DrawerSection[] = [
   {
-    title: 'Data',
+    sectionTitle: 'Data',
     items: [
       {
         label: 'HuBMAP Data Portal',
@@ -201,7 +219,7 @@ export const toolsAndAppsLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Atlas',
+    sectionTitle: 'Atlas',
     items: [
       {
         label: 'Human Reference Atlas',
@@ -227,7 +245,7 @@ export const toolsAndAppsLinks: DrawerSection[] = [
     ],
   },
   {
-    title: 'Analytical Tools',
+    sectionTitle: 'Analytical Tools',
     items: [
       {
         label: 'Azimuth',
@@ -254,19 +272,34 @@ export const toolsAndAppsLinks: DrawerSection[] = [
   },
 ];
 
-export const userLinks: (isAuthenticated: boolean, isHubmapUser: boolean, userEmail: string) => DrawerSection[] = (
+interface userLinksProps {
+  isAuthenticated: boolean;
+  isHubmapUser: boolean;
+  userEmail: string;
+  numPendingReceivedInvitations: number;
+}
+export const userLinks: (props: userLinksProps) => DrawerSection[] = ({
   isAuthenticated,
   isHubmapUser,
   userEmail,
-) => {
+  numPendingReceivedInvitations,
+}) => {
   const profileLabel = isAuthenticated ? userEmail : 'My Profile';
   const profileDescription = isHubmapUser
     ? 'Verified HuBMAP member. Find information about your profile.'
     : 'Find information about your profile.';
   const ProfileIcon = isHubmapUser ? VerifiedIcon : UserIcon;
+
+  const pendingInvitationsAlert =
+    numPendingReceivedInvitations > 0 ? (
+      <CenteredAlert severity="info" action={<Button href="/workspaces">View Invites</Button>} $marginBottom={10}>
+        {`You have ${numPendingReceivedInvitations} pending workspace copy invitation${numPendingReceivedInvitations > 1 ? 's' : ''} to review and accept.`}
+      </CenteredAlert>
+    ) : null;
+
   return [
     {
-      title: 'Account',
+      sectionTitle: 'Account',
       items: [
         {
           href: '/profile',
@@ -277,8 +310,9 @@ export const userLinks: (isAuthenticated: boolean, isHubmapUser: boolean, userEm
       ],
     },
     {
-      title: 'Personal Space',
+      sectionTitle: 'Personal Space',
       items: [
+        pendingInvitationsAlert,
         {
           href: '/my-lists',
           label: 'My Lists',
@@ -290,6 +324,7 @@ export const userLinks: (isAuthenticated: boolean, isHubmapUser: boolean, userEm
           label: 'My Workspaces',
           description: 'Find your workspaces.',
           icon: <entityIconMap.Workspace color="primary" />,
+          endIcon: <NotificationBell numNotifications={numPendingReceivedInvitations} />,
         },
       ],
     },

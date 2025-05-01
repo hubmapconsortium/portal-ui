@@ -1,3 +1,4 @@
+import { EventInfo } from 'js/components/types';
 import { JobStatus, JobStatusDisplayName, WorkspaceStatus } from './statusCodes';
 
 // Once workspaces API issues are resolved. We expect the workspaces API to consistently return an object.
@@ -28,6 +29,8 @@ export interface Workspace {
   disk_space: number;
   default_job_type?: string;
   datetime_created: string;
+  datetime_last_modified?: string;
+  datetime_last_job_launch?: string;
   workspace_details: WorkspaceDetails;
 }
 
@@ -83,6 +86,45 @@ export interface WorkspaceJobWithDisplayStatus extends Omit<WorkspaceJob, 'statu
 export interface MergedWorkspace extends Workspace {
   jobs: WorkspaceJob[];
   path: string;
+}
+
+export interface WorkspaceUser {
+  id: number;
+  username: string;
+  first_name: string;
+  last_name: string;
+  email: string;
+}
+
+export type WorkspaceCreatorInfo = WorkspaceUser | 'Me' | 'Unknown';
+
+export interface WorkspaceWithCreatorInfo extends MergedWorkspace {
+  creatorInfo: WorkspaceCreatorInfo;
+  user_id?: WorkspaceUser;
+}
+
+export interface SharedWorkspace {
+  id: number;
+  name: string;
+  description: string;
+  workspace_details: WorkspaceDetails;
+  user_id: WorkspaceUser;
+}
+
+export type InvitationType = 'Sent' | 'Received';
+
+export interface WorkspaceInvitation {
+  original_workspace_id?: SharedWorkspace; // This will be null for accepted workspaces where the original workspace is later deleted
+  shared_workspace_id: SharedWorkspace;
+  last_resource_options: WorkspaceResourceOptions;
+  last_job_type: string;
+  is_accepted: boolean;
+  datetime_share_created: string;
+}
+
+export interface AllWorkspaceInvitations {
+  original_workspaces: WorkspaceInvitation[];
+  shared_workspaces: WorkspaceInvitation[];
 }
 
 interface WorkspaceAPIFailure {
@@ -146,26 +188,22 @@ type TemplateTagsResponse = WorkspaceAPIResponse<TemplateTags>;
 
 export enum WorkspacesEventCategories {
   Workspaces = 'Workspaces',
-  WorkspaceDialog = 'Workspace Dialog',
   WorkspaceLandingPage = 'Workspace Landing Page',
-  WorkspaceDetailPage = 'Workspace Detail Page',
+  WorkspaceDetailPreviewPage = 'Workspace Detail Preview Page',
+  WorkspaceDialog = 'Workspace Dialog',
   WorkspaceTemplateLandingPage = 'Workspace Template Landing Page',
   WorkspaceTemplateDetailPage = 'Workspace Template Detail Page',
-}
-
-interface WorkspacesEventInfo {
-  category: WorkspacesEventCategories;
-  action?: string;
-  label?: string;
+  WorkspaceDetailPage = 'Workspace Detail Page',
 }
 
 interface CreateTemplateNotebooksTypes {
   templateKeys: string[];
   uuids: string[];
   workspaceName: string;
+  workspaceDescription: string;
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 export type {
@@ -180,5 +218,4 @@ export type {
   CreateTemplateNotebooksTypes,
   TemplateTags,
   TemplateTagsResponse,
-  WorkspacesEventInfo,
 };

@@ -8,11 +8,12 @@ import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarCha
 import { ChartArea } from 'js/shared-styles/charts/HorizontalStackedBarChart/style';
 import { useBandScale, useLinearScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import Skeleton from '@mui/material/Skeleton';
+import { trackEvent } from 'js/helpers/trackers';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import Typography from '@mui/material/Typography';
 import { AnyD3Scale } from '@visx/scale';
 import { getSearchURL } from 'js/components/organ/utils';
-import { SelectChangeEvent } from '@mui/material';
+import { SelectChangeEvent } from '@mui/material/Select';
 import ChartDropdown from '../HuBMAPDatasetsChartDropdown';
 import {
   assayTypeQuery,
@@ -312,6 +313,13 @@ function HuBMAPDatasetsChart() {
             getY={getOrgan}
             showTooltipAndHover
             TooltipContent={HuBMAPDatasetsChartTooltip}
+            onBarClick={(d) => {
+              trackEvent({
+                category: 'Homepage',
+                action: 'HuBMAP Datasets Graph/Bar Links',
+                label: `${d.bar.data.organ} ${d.key}`,
+              });
+            }}
             getBarHref={selectedColor.getBarHref}
             getAriaLabel={selectedColor.getAriaLabel}
           />

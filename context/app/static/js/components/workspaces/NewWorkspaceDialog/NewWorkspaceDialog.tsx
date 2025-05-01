@@ -12,16 +12,18 @@ import Typography from '@mui/material/Typography';
 import Paper from '@mui/material/Paper';
 
 import Step, { StepDescription } from 'js/shared-styles/surfaces/Step';
-import WorkspaceField from 'js/components/workspaces/WorkspaceField';
+import { WorkspaceDescriptionField, WorkspaceNameField } from 'js/components/workspaces/WorkspaceField';
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import { buildSearchLink } from 'js/components/search/store';
+import { EventInfo } from 'js/components/types';
 
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
+import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
-import { CreateTemplateNotebooksTypes, WorkspacesEventInfo } from '../types';
+import { CreateTemplateNotebooksTypes, WorkspacesEventCategories } from '../types';
 import WorkspaceDatasetsTable from '../WorkspaceDatasetsTable';
 import TemplateSelectStep from '../TemplateSelectStep';
 import WorkspaceJobTypeField from '../WorkspaceJobTypeField';
@@ -102,7 +104,7 @@ interface NewWorkspaceDialogProps {
   workspaceDatasets: string[];
   allDatasets: string[];
   searchHits: SearchAheadHit[];
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
 }
 
 function NewWorkspaceDialog({
@@ -136,6 +138,7 @@ function NewWorkspaceDialog({
   const submit = useCallback(
     ({
       'workspace-name': workspaceName,
+      'workspace-description': workspaceDescription,
       templates: templateKeys,
       workspaceJobTypeId,
       datasets,
@@ -143,6 +146,7 @@ function NewWorkspaceDialog({
     }: CreateWorkspaceFormTypes) => {
       onSubmit({
         workspaceName,
+        workspaceDescription,
         templateKeys,
         uuids: datasets,
         workspaceJobTypeId,
@@ -154,105 +158,99 @@ function NewWorkspaceDialog({
   );
 
   return (
-    <Dialog
-      open={dialogIsOpen && !isLaunchWorkspaceDialogOpen}
-      onClose={handleClose}
-      scroll="paper"
-      aria-labelledby="create-workspace-dialog-title"
-      maxWidth="lg"
-    >
-      <Box mb={2}>
-        <DialogTitle id="create-workspace-dialog-title" variant="h3">
-          {text.overview.title}
-        </DialogTitle>
-        <Box sx={{ px: 3 }}>
-          <StepDescription blocks={text.overview.description} />
-        </Box>
-      </Box>
-      <DialogContent dividers>
-        <Step title={text.datasets.title} index={0}>
-          <Stack spacing={1}>
-            {children}
-            <StepDescription
-              blocks={[
-                ...(showDatasetsSearchBar ? [...text.datasets.description.searchBar] : []),
-                ...text.datasets.description.all,
-              ]}
-            />
-            {showDatasetsSearchBar && removeDatasets ? (
-              <AddDatasetsTable
-                inputValue={inputValue}
-                setInputValue={setInputValue}
-                autocompleteValue={autocompleteValue}
-                addDataset={addDataset}
-                removeDatasets={removeDatasets}
-                workspaceDatasets={workspaceDatasets}
-                allDatasets={allDatasets}
-                searchHits={searchHits}
-              />
-            ) : (
-              <WorkspaceDatasetsTable
-                datasetsUUIDs={allDatasets}
-                removeDatasets={removeDatasets}
-                emptyAlert={<WorkspacesNoDatasetsAlert />}
-                copyDatasets
-              />
-            )}
-          </Stack>
-        </Step>
-        <Step title={text.configure.title} isRequired index={1}>
-          <Box
-            id="create-workspace-form"
-            component="form"
-            sx={{
-              display: 'grid',
-              gap: 2,
-              marginTop: 1,
-            }}
-            // eslint-disable-next-line @typescript-eslint/no-misused-promises
-            onSubmit={handleSubmit(submit)}
-          >
-            <WorkspaceField
-              control={control}
-              name="workspace-name"
-              label="Workspace Name"
-              placeholder="Like “Spleen-Related Data” or “ATAC-seq Visualizations”"
-              autoFocus
-              onKeyDown={(e: React.KeyboardEvent<HTMLInputElement>) => {
-                e.stopPropagation();
-              }}
-            />
-            <Stack spacing={2} p={2} component={Paper} direction="column">
-              <StyledSubtitle1>Environment Selection</StyledSubtitle1>
-              {text.configure.description}
-              <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
-            </Stack>
-            <AdvancedConfigOptions control={control} description={text.configure.advancedDescription} />
+    <WorkspacesEventContextProvider currentEventCategory={WorkspacesEventCategories.WorkspaceDialog}>
+      <Dialog
+        open={dialogIsOpen && !isLaunchWorkspaceDialogOpen}
+        onClose={handleClose}
+        scroll="paper"
+        aria-labelledby="create-workspace-dialog-title"
+        maxWidth="lg"
+      >
+        <Box mb={2}>
+          <DialogTitle id="create-workspace-dialog-title" variant="h3">
+            {text.overview.title}
+          </DialogTitle>
+          <Box sx={{ px: 3 }}>
+            <StepDescription blocks={text.overview.description} />
           </Box>
-        </Step>
-        <TemplateSelectStep
-          title={text.templates.title}
-          stepIndex={2}
-          control={control}
-          toggleTag={toggleTag}
-          selectedRecommendedTags={selectedRecommendedTags}
-          selectedTags={selectedTags}
-          setSelectedTags={setSelectedTags}
-          templates={templates}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={handleClose}>Cancel</Button>
-        <LoadingButton
-          loading={isSubmitting}
-          type="submit"
-          form="create-workspace-form"
-          disabled={Object.keys(errors).length > 0 || errorMessages.length > 0}
-        >
-          Launch Workspace
-        </LoadingButton>
-      </DialogActions>
-    </Dialog>
+        </Box>
+        <DialogContent dividers>
+          <Step title={text.datasets.title} index={0}>
+            <Stack spacing={1}>
+              {children}
+              <StepDescription
+                blocks={[
+                  ...(showDatasetsSearchBar ? [...text.datasets.description.searchBar] : []),
+                  ...text.datasets.description.all,
+                ]}
+              />
+              {showDatasetsSearchBar && removeDatasets ? (
+                <AddDatasetsTable
+                  inputValue={inputValue}
+                  setInputValue={setInputValue}
+                  autocompleteValue={autocompleteValue}
+                  addDataset={addDataset}
+                  removeDatasets={removeDatasets}
+                  workspaceDatasets={workspaceDatasets}
+                  allDatasets={allDatasets}
+                  searchHits={searchHits}
+                />
+              ) : (
+                <WorkspaceDatasetsTable
+                  datasetsUUIDs={allDatasets}
+                  removeDatasets={removeDatasets}
+                  emptyAlert={<WorkspacesNoDatasetsAlert />}
+                  copyDatasets
+                />
+              )}
+            </Stack>
+          </Step>
+          <Step title={text.configure.title} isRequired index={1}>
+            <Box
+              id="create-workspace-form"
+              component="form"
+              sx={{
+                display: 'grid',
+                gap: 2,
+                marginTop: 1,
+              }}
+              // eslint-disable-next-line @typescript-eslint/no-misused-promises
+              onSubmit={handleSubmit(submit)}
+            >
+              <WorkspaceNameField control={control} name="workspace-name" />
+              <WorkspaceDescriptionField control={control} name="workspace-description" />
+              <Stack spacing={2} p={2} component={Paper} direction="column">
+                <StyledSubtitle1>Environment Selection</StyledSubtitle1>
+                {text.configure.description}
+                <WorkspaceJobTypeField control={control} name="workspaceJobTypeId" />
+              </Stack>
+              <AdvancedConfigOptions control={control} description={text.configure.advancedDescription} />
+            </Box>
+          </Step>
+          <TemplateSelectStep
+            title={text.templates.title}
+            stepIndex={2}
+            control={control}
+            toggleTag={toggleTag}
+            selectedRecommendedTags={selectedRecommendedTags}
+            selectedTags={selectedTags}
+            setSelectedTags={setSelectedTags}
+            templates={templates}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Cancel</Button>
+          <LoadingButton
+            loading={isSubmitting}
+            type="submit"
+            form="create-workspace-form"
+            disabled={Object.keys(errors).length > 0 || errorMessages.length > 0}
+          >
+            Launch Workspace
+          </LoadingButton>
+        </DialogActions>
+      </Dialog>
+    </WorkspacesEventContextProvider>
   );
 }
 

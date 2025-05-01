@@ -13,7 +13,7 @@ import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOpt
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
 import { DatasetAccessLevelHits } from 'js/hooks/useProtectedDatasets';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
-import DialogModal from 'js/shared-styles/DialogModal';
+import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import Step from 'js/shared-styles/surfaces/Step';
 import { OutboundLink } from 'js/shared-styles/Links';

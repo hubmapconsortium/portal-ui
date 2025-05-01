@@ -1,1 +1,0 @@
-- Fix text on SnareSeq2 info banners.

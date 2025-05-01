@@ -7,7 +7,8 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
-import { LinearProgress } from '@mui/material';
+import LinearProgress from '@mui/material/LinearProgress';
+import { useEventCallback } from '@mui/material/utils';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
@@ -15,8 +16,9 @@ import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
 import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
 import useScrollTable from 'js/hooks/useScrollTable';
 import { SortState } from 'js/hooks/useSortState';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
-import { Entity } from 'js/components/types';
+import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
+import { Entity, EventInfo } from 'js/components/types';
+import { trackEvent } from 'js/helpers/trackers';
 import { Column, EntitiesTabTypes } from './types';
 import ExpandableRow from '../ExpandableRow';
 import ExpandableRowCell from '../ExpandableRowCell';
@@ -25,9 +27,21 @@ interface EntityHeaderCellTypes<Doc> {
   column: Column<Doc>;
   setSort: (columnId: string) => void;
   sortState: SortState;
+  trackingInfo?: EventInfo;
 }
 
-function EntityHeaderCell<Doc>({ column, setSort, sortState }: EntityHeaderCellTypes<Doc>) {
+function EntityHeaderCell<Doc>({ column, setSort, sortState, trackingInfo }: EntityHeaderCellTypes<Doc>) {
+  const handleClick = useEventCallback(() => {
+    if (trackingInfo) {
+      trackEvent({
+        ...trackingInfo,
+        action: `${trackingInfo.action} / Sort Table`,
+        label: `${trackingInfo.label} ${column.label}`,
+      });
+    }
+    setSort(column.id);
+  });
+
   // This is a workaround to ensure the header cell control is accessible with consistent keyboard navigation
   // and appearance. The header cell contains a disabled, hidden button that is the full width of the cell. This
   // allows us to set the header cell to position: relative and create another button that is absolutely positioned
@@ -40,9 +54,7 @@ function EntityHeaderCell<Doc>({ column, setSort, sortState }: EntityHeaderCellT
       </Button>
       <Button
         variant="text"
-        onClick={() => {
-          setSort(column.id);
-        }}
+        onClick={handleClick}
         disableTouchRipple
         sx={{
           justifyContent: 'flex-start',
@@ -73,8 +85,9 @@ function TablePaddingRow({ padding }: { padding: number }) {
 interface EntityTableProps<Doc extends Entity>
   extends Pick<EntitiesTabTypes<Doc>, 'query' | 'columns' | 'expandedContent'> {
   isSelectable: boolean;
+  numSelected?: number;
   disabledIDs?: Set<string>;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
   disabledTooltipTitle?: string;
   maxHeight?: number;
 }
@@ -90,6 +103,7 @@ function EntityTable<Doc extends Entity>({
   expandedContent: ExpandedContent,
   disabledTooltipTitle,
   maxHeight,
+  numSelected,
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -120,6 +134,7 @@ function EntityTable<Doc extends Entity>({
       onScroll={(event) => fetchMoreOnBottomReached(event)}
       maxHeight={maxHeight}
     >
+      {isSelectable && numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>
           <TableRow sx={{ height: headerRowHeight }}>
@@ -132,7 +147,13 @@ function EntityTable<Doc extends Entity>({
               />
             )}
             {columns.map((column) => (
-              <EntityHeaderCell column={column} setSort={setSort} sortState={sortState} key={column.id} />
+              <EntityHeaderCell
+                column={column}
+                setSort={setSort}
+                sortState={sortState}
+                key={column.id}
+                trackingInfo={trackingInfo}
+              />
             ))}
             {isExpandable && (
               <HeaderCell aria-hidden sx={({ palette }) => ({ backgroundColor: palette.background.paper })} />

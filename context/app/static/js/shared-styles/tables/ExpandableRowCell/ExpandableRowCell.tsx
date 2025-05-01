@@ -1,7 +1,7 @@
 import React from 'react';
 
 import { useExpandableRowStore } from 'js/shared-styles/tables/ExpandableRow/store';
-import { TableCellProps } from '@mui/material';
+import { TableCellProps } from '@mui/material/TableCell';
 import { StyledTableCell } from './style';
 
 function ExpandableRowCell({ children, ...props }: TableCellProps) {

@@ -9,6 +9,7 @@ import AccountBalanceIcon from '@mui/icons-material/AccountBalanceRounded';
 import LaunchRoundedIcon from '@mui/icons-material/LaunchRounded';
 import InfoRoundedIcon from '@mui/icons-material/InfoRounded';
 import CheckCircleRoundedIcon from '@mui/icons-material/CheckCircleRounded';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import CheckRoundedIcon from '@mui/icons-material/CheckRounded';
 import InsertDriveFileRoundedIcon from '@mui/icons-material/InsertDriveFileRounded';
 import ErrorRoundedIcon from '@mui/icons-material/ErrorRounded';
@@ -40,6 +41,15 @@ import FactCheckRoundedIcon from '@mui/icons-material/FactCheckRounded';
 import BookmarkAddRounded from '@mui/icons-material/BookmarkAddRounded';
 import BookmarkAddedRounded from '@mui/icons-material/BookmarkAddedRounded';
 import BiotechRounded from '@mui/icons-material/BiotechRounded';
+import InboxRounded from '@mui/icons-material/InboxRounded';
+import SendIcon from '@mui/icons-material/Send';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import CancelIcon from '@mui/icons-material/Cancel';
+import PendingIcon from '@mui/icons-material/Pending';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import StopIcon from '@mui/icons-material/Stop';
+import NotificationsIcon from '@mui/icons-material/Notifications';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -80,6 +90,10 @@ const ExternalLinkIcon = withIconStyles(LaunchRoundedIcon);
 const InfoIcon = withIconStyles(InfoRoundedIcon);
 
 const SuccessIcon = withIconStyles(CheckCircleRoundedIcon);
+
+const SuccessRoundIcon = withIconStyles(CheckCircleIcon);
+
+const PendingRoundIcon = withIconStyles(PendingIcon);
 
 const FileIcon = withIconStyles(InsertDriveFileRoundedIcon);
 
@@ -134,6 +148,22 @@ const EditSavedEntityIcon = withIconStyles(BookmarkAddedRounded);
 const CheckIcon = withIconStyles(CheckRoundedIcon);
 
 const SampleCategoryIcon = withIconStyles(BiotechRounded);
+
+const ReceivedIcon = withIconStyles(InboxRounded);
+
+const SentIcon = withIconStyles(SendIcon);
+
+const EyeIcon = withIconStyles(VisibilityIcon);
+
+const DotMenuIcon = withIconStyles(MoreVertIcon);
+
+const CloseFilledIcon = withIconStyles(CancelIcon);
+
+const StartJobIcon = withIconStyles(PlayArrowIcon);
+
+const StopJobIcon = withIconStyles(StopIcon);
+
+const NotificationIcon = withIconStyles(NotificationsIcon);
 
 const SearchIcon = withIconStyles(createSvgIcon(<SearchIconSVG />, 'Search'));
 
@@ -194,4 +224,14 @@ export {
   EditSavedEntityIcon,
   CheckIcon,
   SampleCategoryIcon,
+  ReceivedIcon,
+  SentIcon,
+  EyeIcon,
+  DotMenuIcon,
+  CloseFilledIcon,
+  SuccessRoundIcon,
+  PendingRoundIcon,
+  StartJobIcon,
+  StopJobIcon,
+  NotificationIcon,
 };

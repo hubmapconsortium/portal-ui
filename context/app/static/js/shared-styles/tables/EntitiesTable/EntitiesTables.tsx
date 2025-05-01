@@ -3,10 +3,9 @@ import React from 'react';
 import { useTabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { EventInfo, Entity } from 'js/components/types';
 
 import SvgIcon from '@mui/material/SvgIcon';
-import { WorkspacesEventInfo } from 'js/components/workspaces/types';
-import { Entity } from 'js/components/types';
 import EntityTable from './EntityTable';
 import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
@@ -14,16 +13,18 @@ import { StyledPaper } from './style';
 
 interface EntitiesTablesProps<Doc extends Entity> {
   isSelectable?: boolean;
+  numSelected?: number;
   initialTabIndex?: number;
   entities: EntitiesTabTypes<Doc>[];
   disabledIDs?: Set<string>;
   emptyAlert?: React.ReactNode;
-  trackingInfo?: WorkspacesEventInfo;
+  trackingInfo?: EventInfo;
   maxHeight?: number;
 }
 
 function EntitiesTables<Doc extends Entity>({
   isSelectable = true,
+  numSelected,
   initialTabIndex = 0,
   entities,
   disabledIDs,
@@ -66,6 +67,7 @@ function EntitiesTables<Doc extends Entity>({
               query={query}
               columns={columns}
               isSelectable={isSelectable}
+              numSelected={numSelected}
               disabledIDs={disabledIDs}
               trackingInfo={trackingInfo}
               expandedContent={expandedContent}

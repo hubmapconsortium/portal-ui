@@ -65,3 +65,13 @@ export interface OrganDataProducts {
   processed_cell_type_counts: Record<string, number>;
   datasetUUIDs?: string[];
 }
+
+export enum OrganPageIds {
+  summaryId = 'summary',
+  hraId = 'human-reference-atlas',
+  referenceId = 'reference-based-analysis',
+  assaysId = 'assays',
+  dataProductsId = 'data-products',
+  samplesId = 'samples',
+  cellpopId = 'cell-population-plot',
+}

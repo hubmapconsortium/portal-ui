@@ -2,7 +2,7 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
-import DialogModal from 'js/shared-styles/DialogModal';
+import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 
 interface DeleteSavedEntitiesDialogProps {
   dialogIsOpen: boolean;

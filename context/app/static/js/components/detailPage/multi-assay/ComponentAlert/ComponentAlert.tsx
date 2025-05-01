@@ -3,10 +3,10 @@ import React from 'react';
 import Typography from '@mui/material/Typography';
 import Skeleton from '@mui/material/Skeleton';
 import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
 
 import { DetailPageAlert } from 'js/components/detailPage/style';
 import { InternalLink } from 'js/shared-styles/Links';
-import { Stack } from '@mui/material';
 import useRelatedMultiAssayDatasets from '../useRelatedMultiAssayDatasets';
 
 function ComponentAlert() {

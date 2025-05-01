@@ -1,6 +1,12 @@
 import React, { useId } from 'react';
 
-import { FormControl, InputLabel, MenuItem, Select, SelectChangeEvent } from '@mui/material';
+import FormControl from '@mui/material/FormControl';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+import { useEventCallback } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface DatasetsChartDropdownProps<T extends string> {
   options: readonly T[];
@@ -9,6 +15,8 @@ interface DatasetsChartDropdownProps<T extends string> {
   label: string;
   onChange: (e: SelectChangeEvent<T>) => void;
   fullWidth?: boolean;
+  category?: string;
+  action?: string;
 }
 
 function ChartDropdown<T extends string>({
@@ -18,13 +26,24 @@ function ChartDropdown<T extends string>({
   label,
   fullWidth,
   displayLabels = {} as Record<T, string>,
+  category = 'Homepage',
+  action = 'HubMAP Datasets Graph/Category Type',
 }: DatasetsChartDropdownProps<T>) {
   const id = useId();
   const labelId = `${id}-label`;
+  const handleOnChange = useEventCallback((e: SelectChangeEvent<T>) => {
+    const option = e.target.value as T;
+    trackEvent({
+      category,
+      action,
+      label: option,
+    });
+    onChange(e);
+  });
   return (
     <FormControl fullWidth={fullWidth}>
       <InputLabel id={labelId}>{label}</InputLabel>
-      <Select id={id} label={label} labelId={labelId} value={value} onChange={onChange} fullWidth={fullWidth}>
+      <Select id={id} label={label} labelId={labelId} value={value} onChange={handleOnChange} fullWidth={fullWidth}>
         {options.map((option) => (
           <MenuItem key={option} value={option}>
             {displayLabels[option] ?? option}

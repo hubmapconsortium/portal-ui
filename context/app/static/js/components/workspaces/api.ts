@@ -7,12 +7,15 @@ import { trackEvent } from 'js/helpers/trackers';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from '../Contexts';
 import {
+  AllWorkspaceInvitations,
   Workspace,
   WorkspaceAPIResponse,
   WorkspaceAPIResponseWithoutData,
+  WorkspaceInvitation,
   WorkspaceJob,
   WorkspaceJobType,
   WorkspaceResourceOptions,
+  WorkspaceUser,
   WorkspacesEventCategories,
 } from './types';
 import { getWorkspaceHeaders, isRunningJob } from './utils';
@@ -26,17 +29,19 @@ export const MAX_NUMBER_OF_WORKSPACE_DATASETS = 150;
  * @returns an API URL generator
  */
 export const apiUrls = (workspacesEndpoint: string) => ({
+  // Jobs
   get jobTypes(): string {
     return `${workspacesEndpoint}/job_types`;
-  },
-  get workspaces(): string {
-    return `${workspacesEndpoint}/workspaces`;
   },
   get jobs(): string {
     return `${workspacesEndpoint}/jobs`;
   },
-  createWorkspaceFromNotebookPath(path: string): string {
-    return `/notebooks/${path}`;
+  stopJob(jobId: number): string {
+    return `${workspacesEndpoint}/jobs/${jobId}/stop`;
+  },
+  // Workspaces
+  get workspaces(): string {
+    return `${workspacesEndpoint}/workspaces`;
   },
   get createWorkspaceFromTemplates(): string {
     return `${workspacesEndpoint}/workspaces/`;
@@ -47,8 +52,25 @@ export const apiUrls = (workspacesEndpoint: string) => ({
   startWorkspace(workspaceId: number): string {
     return `${workspacesEndpoint}/workspaces/${workspaceId}/start`;
   },
-  stopJob(jobId: number): string {
-    return `${workspacesEndpoint}/jobs/${jobId}/stop`;
+  createWorkspaceFromNotebookPath(path: string): string {
+    return `/notebooks/${path}`;
+  },
+  // Invitations
+  get invitations(): string {
+    return `${workspacesEndpoint}/shared_workspaces`;
+  },
+  get shareInvitations(): string {
+    return `${workspacesEndpoint}/shared_workspaces/`;
+  },
+  invitation(invitationId: number): string {
+    return `${workspacesEndpoint}/shared_workspaces/${invitationId}/`;
+  },
+  acceptInvitation(invitationId: number): string {
+    return `${workspacesEndpoint}/shared_workspaces/${invitationId}/accept/`;
+  },
+  // Users
+  users(query: string): string {
+    return `${workspacesEndpoint}/users?search=${query}`;
   },
 });
 
@@ -160,6 +182,188 @@ export function useWorkspaceJobs(workspaceId: number) {
   return { jobs: jobs.filter((j) => j.workspace_id === workspaceId), isLoading };
 }
 
+function useFetchUsers(query: string) {
+  const urls = useWorkspacesApiURLs();
+  const usersURL = urls.users(query);
+  const { buildKey, hasAccess } = useBuildWorkspacesSWRKey();
+
+  const { data, isLoading, ...rest } = useSWR(
+    buildKey({ url: usersURL }),
+    ([url, head]) =>
+      fetcher<WorkspaceAPIResponse<{ users: WorkspaceUser[] }>>({
+        url,
+        requestInit: { headers: head },
+        errorMessages: {
+          404: `No user matching query '${query}' found.`,
+        },
+      }),
+    { revalidateOnFocus: hasAccess },
+  );
+
+  const users = data?.data?.users ?? [];
+
+  return { users, isLoading, ...rest };
+}
+
+export function useAllWorkspaceUsers() {
+  return useFetchUsers('');
+}
+
+export function useWorkspaceUsers(query: string) {
+  const { users, ...rest } = useFetchUsers(query);
+  if (rest.error) {
+    throw rest.error;
+  }
+  return { users, ...rest };
+}
+
+function useFetchInvitations(invitationId?: number) {
+  const urls = useWorkspacesApiURLs();
+  const invitationUrl = invitationId ? urls.invitation(invitationId) : urls.invitations;
+  const { buildKey, hasAccess } = useBuildWorkspacesSWRKey();
+
+  const { data, isLoading, ...rest } = useSWR(
+    buildKey({ url: invitationUrl }),
+    ([url, head]) =>
+      fetcher<WorkspaceAPIResponse<AllWorkspaceInvitations>>({
+        url,
+        requestInit: { headers: head },
+        errorMessages: {
+          404: invitationId
+            ? `No workspace invitation with ID ${invitationId} found.`
+            : 'No workspace invitations found with specified parameters.',
+        },
+      }),
+    { revalidateOnFocus: hasAccess },
+  );
+
+  const sentInvitations = data?.data?.original_workspaces ?? [];
+  const receivedInvitations = data?.data?.shared_workspaces ?? [];
+
+  return { sentInvitations, receivedInvitations, isLoading, ...rest };
+}
+
+export function useInvitations() {
+  return useFetchInvitations();
+}
+
+export function useInvitation(invitationId: number) {
+  const { receivedInvitations, sentInvitations, ...rest } = useFetchInvitations(invitationId);
+  if (rest.error) {
+    throw rest.error;
+  }
+  const invitation = receivedInvitations[0] ?? sentInvitations[0] ?? undefined;
+  return { invitation, receivedInvitations, sentInvitations, ...rest };
+}
+
+async function fetchDeleteInvitation(
+  _key: string,
+  { arg: { invitationId, headers, url } }: { arg: { headers: HeadersInit; invitationId: number; url: string } },
+) {
+  const response = await fetch(url, {
+    method: 'DELETE',
+    headers,
+  });
+  if (!response.ok) {
+    throw Error(`Deletion for invitation #${invitationId} failed`);
+  }
+}
+
+export function useDeleteInvitation() {
+  const { trigger, isMutating } = useSWRMutation('delete-invitation', fetchDeleteInvitation);
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+
+  const deleteInvitation = useCallback(
+    async (invitationId: number) => {
+      await trigger({
+        invitationId,
+        url: api.invitation(invitationId),
+        headers,
+      });
+    },
+    [headers, api, trigger],
+  );
+
+  return { deleteInvitation, isDeleting: isMutating };
+}
+
+async function fetchAcceptInvitation(
+  _key: string,
+  { arg: { invitationId, headers, url } }: { arg: { headers: HeadersInit; invitationId: number; url: string } },
+) {
+  const response = await fetch(url, {
+    method: 'PUT',
+    headers,
+  });
+  if (!response.ok) {
+    throw Error(`Failed to accept invitation #${invitationId}`);
+  }
+}
+
+export function useAcceptInvitation() {
+  const { trigger, isMutating } = useSWRMutation('accept-invitation', fetchAcceptInvitation);
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+
+  const acceptInvitation = useCallback(
+    async (invitationId: number) => {
+      await trigger({
+        invitationId,
+        url: api.acceptInvitation(invitationId),
+        headers,
+      });
+    },
+    [headers, api, trigger],
+  );
+
+  return { acceptInvitation, isAccepting: isMutating };
+}
+
+export interface ShareInvitationBody {
+  original_workspace_id: string;
+  shared_user_ids: number[];
+}
+
+export interface ShareInvitationArgs extends APIAction {
+  body: ShareInvitationBody;
+}
+
+async function shareInvitationFetcher(_key: string, { arg: { body, url, headers } }: { arg: ShareInvitationArgs }) {
+  const response = await fetch(url, {
+    method: 'POST',
+    body: JSON.stringify(body),
+    headers,
+  });
+  if (!response.ok) {
+    console.error('Share workspace failed', response);
+  }
+  const responseJson = (await response.json()) as WorkspaceAPIResponse<{ invitation: WorkspaceInvitation }>;
+  if (!responseJson.success) {
+    throw new Error(`Failed to share workspace: ${responseJson.message}`);
+  }
+  return responseJson.data.invitation;
+}
+
+export function useShareInvitation() {
+  const api = useWorkspacesApiURLs();
+  const headers = useWorkspaceHeaders();
+  const { trigger, isMutating } = useSWRMutation('share-invitation', shareInvitationFetcher);
+
+  const shareInvitation = useCallback(
+    (body: ShareInvitationBody) => {
+      return trigger({
+        url: api.shareInvitations,
+        body,
+        headers,
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return { shareInvitation, isSharing: isMutating };
+}
+
 function useFetchWorkspaces(workspaceId?: number) {
   const urls = useWorkspacesApiURLs();
   const workspaceUrl = workspaceId ? urls.workspace(workspaceId) : urls.workspaces;
@@ -202,13 +406,11 @@ export function useStopWorkspace() {
 
   const stopWorkspace = useCallback(
     async (workspaceId: number) => {
-      trackEvent(
-        {
-          category: WorkspacesEventCategories.Workspaces,
-          action: 'Stop Workspace',
-        },
-        workspaceId,
-      );
+      trackEvent({
+        category: WorkspacesEventCategories.Workspaces,
+        action: 'Stop Workspace',
+        name: workspaceId,
+      });
       await Promise.all(
         jobs.filter((j) => j.workspace_id === workspaceId && isRunningJob(j)).map((j) => stopJob(j.id)),
       );
@@ -223,13 +425,11 @@ async function fetchDeleteWorkspace(
   _key: string,
   { arg: { workspaceId, headers, url } }: { arg: { headers: HeadersInit; workspaceId: number; url: string } },
 ) {
-  trackEvent(
-    {
-      category: WorkspacesEventCategories.Workspaces,
-      action: 'Delete Workspace',
-    },
-    workspaceId,
-  );
+  trackEvent({
+    category: WorkspacesEventCategories.Workspaces,
+    action: 'Delete Workspace',
+    name: workspaceId,
+  });
   const response = await fetch(url, {
     method: 'DELETE',
     headers,
@@ -286,13 +486,11 @@ async function startJob(
   _key: string,
   { arg: { workspaceId, jobDetails, jobType, resourceOptions, url, headers } }: { arg: WorkspaceActionArgs },
 ) {
-  trackEvent(
-    {
-      category: WorkspacesEventCategories.Workspaces,
-      action: 'Start Workspace',
-    },
-    workspaceId,
-  );
+  trackEvent({
+    category: WorkspacesEventCategories.Workspaces,
+    action: 'Start Workspace',
+    name: workspaceId,
+  });
 
   const result = fetch(url, {
     method: 'PUT',
@@ -428,18 +626,11 @@ async function updateWorkspaceFetcher(
   _key: string,
   { arg: { body, url, headers, workspaceId } }: { arg: UpdateWorkspaceArgs },
 ) {
-  trackEvent(
-    {
-      category: WorkspacesEventCategories.Workspaces,
-      action: 'Update Workspace',
-      value: {
-        name: body?.name,
-        files: body?.workspace_details?.files?.map((f) => f.name),
-        symlinks: body?.workspace_details?.symlinks?.map((s) => s.name),
-      },
-    },
-    workspaceId,
-  );
+  trackEvent({
+    category: WorkspacesEventCategories.Workspaces,
+    action: 'Update Workspace',
+    name: workspaceId,
+  });
   const response = await fetch(url, {
     method: 'PUT',
     body: JSON.stringify(body),

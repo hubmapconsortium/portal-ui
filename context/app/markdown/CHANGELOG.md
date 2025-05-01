@@ -1,5 +1,36 @@
 # Changelog
 
+## v1.25.0 - 2025-04-28
+
+- Add analytics to homepage.
+- Add eslint rule for MUI imports.
+- Fix workspace sharing dialog text.
+- Fix checkbox header styling on workspace landing page.
+
+
+
+## v1.24.2 - 2025-04-24
+
+- Add sharing functionality to workspaces.
+
+
+
+## v1.24.1 - 2025-04-23
+
+- Add analytics to organ pages.
+- Enable easy links to the search page with hierarchical facets selected.
+
+
+
+## v1.24.0 - 2025-04-14
+
+- Add admin banner to top of portal header.
+- Add SCFind API endpoint setup and relevant tests.
+- Fix text on SnareSeq2 info banners.
+- Hide links to Shiny apps in organ data products if unavailable.
+
+
+
 ## v1.23.1 - 2025-04-02
 
 - Add event tracking for all data products sections on organ pages.
