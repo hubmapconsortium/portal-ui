@@ -1,3 +1,3 @@
-import ChartDropdown from './HuBMAPDatasetsChartDropdown';
+import ChartDropdown from './ChartDropdown';
 
 export default ChartDropdown;

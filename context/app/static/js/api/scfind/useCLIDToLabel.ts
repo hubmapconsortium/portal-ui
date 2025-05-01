@@ -13,7 +13,7 @@ export interface CellTypeLabelsForCLIDParams {
 
 type CellTypeCountForTissueKey = string;
 
-export function createCellTypeMarkersKey(
+export function createCLIDtoLabelKey(
   scFindEndpoint: string,
   { clid }: CellTypeLabelsForCLIDParams,
 ): CellTypeCountForTissueKey {
@@ -24,6 +24,6 @@ export function createCellTypeMarkersKey(
 
 export default function useCLIDToLabel(props: CellTypeLabelsForCLIDParams) {
   const { scFindEndpoint } = useAppContext();
-  const key = createCellTypeMarkersKey(scFindEndpoint, props);
+  const key = createCLIDtoLabelKey(scFindEndpoint, props);
   return useSWR<CellTypeLabelsForCLID, unknown, CellTypeCountForTissueKey>(key, (url) => fetcher({ url }));
 }

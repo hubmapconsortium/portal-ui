@@ -11,7 +11,7 @@ export interface DatasetsForGenesParams {
 
 type DatasetsForGenesKey = string;
 
-export function createCellTypeMarkersKey(
+export function createFindDatasetForGenesKey(
   scFindEndpoint: string,
   { geneList }: DatasetsForGenesParams,
 ): DatasetsForGenesKey {
@@ -22,6 +22,6 @@ export function createCellTypeMarkersKey(
 
 export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
   const { scFindEndpoint } = useAppContext();
-  const key = createCellTypeMarkersKey(scFindEndpoint, props);
+  const key = createFindDatasetForGenesKey(scFindEndpoint, props);
   return useSWR<DatasetsForGenesResponse, unknown, DatasetsForGenesKey>(key, (url) => fetcher({ url }));
 }

@@ -14,7 +14,7 @@ import Typography from '@mui/material/Typography';
 import { AnyD3Scale } from '@visx/scale';
 import { getSearchURL } from 'js/components/organ/utils';
 import { SelectChangeEvent } from '@mui/material/Select';
-import ChartDropdown from '../HuBMAPDatasetsChartDropdown';
+import ChartDropdown from '../../../shared-styles/charts/ChartDropdown';
 import {
   assayTypeQuery,
   donorSexQuery,

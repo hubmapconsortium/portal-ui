@@ -18,7 +18,7 @@ export interface CellTypeCountForDatasetParams {
 
 type CellTypeCountForDatasetKey = string;
 
-export function createCellTypeMarkersKey(
+export function createCellTypeCountForDatasetKey(
   scFindEndpoint: string,
   { dataset }: CellTypeCountForDatasetParams,
 ): CellTypeCountForDatasetKey {
@@ -29,6 +29,6 @@ export function createCellTypeMarkersKey(
 
 export default function useCellTypeCountForDataset(props: CellTypeCountForDatasetParams) {
   const { scFindEndpoint } = useAppContext();
-  const key = createCellTypeMarkersKey(scFindEndpoint, props);
+  const key = createCellTypeCountForDatasetKey(scFindEndpoint, props);
   return useSWR<CellTypeCountsForDataset, unknown, CellTypeCountForDatasetKey>(key, (url) => fetcher({ url }));
 }
