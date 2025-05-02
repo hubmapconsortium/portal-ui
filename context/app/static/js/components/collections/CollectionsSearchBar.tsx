@@ -11,8 +11,8 @@ const text = {
 };
 
 export default function CollectionsSearchBar() {
-  const { search } = useCollectionsSearchState();
-  const { setSearch } = useCollectionsSearchActions();
+  const search = useCollectionsSearchState();
+  const setSearch = useCollectionsSearchActions();
   const { downloadTable } = useCollections();
 
   return (

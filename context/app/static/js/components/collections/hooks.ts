@@ -22,8 +22,8 @@ export function useCollectionHits() {
 }
 
 export function useCollections() {
+  const search = useCollectionsSearchState();
   const { collections, isLoading } = useCollectionHits();
-  const { search } = useCollectionsSearchState();
   const { toastError, toastSuccess } = useSnackbarActions();
 
   const filteredCollections = collections
