@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import BarChart from 'js/shared-styles/charts/BarChart';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader';
@@ -10,6 +10,7 @@ import { Dataset } from 'js/components/types';
 import { useCellTypesChartsData } from './hooks';
 import { extractLabel } from '../CrossModalityResults/utils';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
+import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 
 const TotalCellsContext = createContext<number>('Total Cells');
 const useTotalCells = () => useContext(TotalCellsContext);
@@ -114,6 +115,18 @@ export function CrossModalityCellTypesChart({ uuid }: Dataset) {
 }
 
 export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
+  const { track } = useMolecularDataQueryFormTracking();
+
+  useEffect(() => {
+    // Easier to use the mount event of this chart to track expand/collapse of the row
+    // Than to track the row itself
+    track('Results / Expand Row', hubmap_id);
+
+    return () => {
+      track('Results / Collapse Row', hubmap_id);
+    };
+  }, [hubmap_id, track]);
+
   const cellVariableNames = useCellVariableNames();
   const { data, isLoading } = useCellTypeCountForDataset({ dataset: hubmap_id });
   const cellNames = useMemo(() => {

@@ -11,6 +11,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { SavedListsEventCategories } from 'js/components/savedLists/types';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { generateCommaList } from 'js/helpers/functions';
+import { EventInfo } from 'js/components/types';
 
 function createTooltip({
   entity_type,
@@ -39,12 +40,12 @@ export default function SaveEntitiesButton({
   entity_type,
   uuids,
   fromSelectableTable,
-  fromMolecularQuery,
+  trackingInfo,
 }: {
   entity_type: AllEntityTypes;
   uuids: Set<string>;
   fromSelectableTable?: boolean;
-  fromMolecularQuery?: boolean;
+  trackingInfo?: EventInfo;
 }) {
   const { isHubmapUser } = useAppContext();
   const { savedEntities, handleSaveEntities } = useSavedLists();
@@ -63,14 +64,14 @@ export default function SaveEntitiesButton({
       return;
     }
 
-    let category;
-    if (fromSelectableTable) {
-      category = SavedListsEventCategories.EntitySearchPage(entity_type);
-    } else if (fromMolecularQuery) {
-      category = SavedListsEventCategories.MolecularDataQueryPage;
-    } else {
-      category = SavedListsEventCategories.EntityDetailPage(page_entity_type);
+    if (trackingInfo) {
+      trackEvent(trackingInfo);
+      return;
     }
+
+    const category = fromSelectableTable
+      ? SavedListsEventCategories.EntitySearchPage(entity_type)
+      : SavedListsEventCategories.EntityDetailPage(page_entity_type);
 
     trackEvent({
       category,

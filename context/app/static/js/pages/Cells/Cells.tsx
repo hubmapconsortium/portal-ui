@@ -8,6 +8,7 @@ import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import MolecularDataQueryForm from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryForm';
 import QueryType from 'js/components/cells/MolecularDataQueryForm/QueryType';
 import QueryParametersFieldset from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
+import MolecularDataQueryFormTrackingProvider from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 
 function Cells() {
   return (
@@ -31,10 +32,12 @@ function Cells() {
           <ContactUsLink>Contact us</ContactUsLink> with any questions and issues that may arise during your experience.
         </LabelledSectionText>
       </Stack>
-      <MolecularDataQueryForm>
-        <QueryType />
-        <QueryParametersFieldset />
-      </MolecularDataQueryForm>
+      <MolecularDataQueryFormTrackingProvider>
+        <MolecularDataQueryForm>
+          <QueryType />
+          <QueryParametersFieldset />
+        </MolecularDataQueryForm>
+      </MolecularDataQueryFormTrackingProvider>
     </>
   );
 }

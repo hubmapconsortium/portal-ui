@@ -12,6 +12,7 @@ import { createInitialValue } from './utils';
 import { QueryType, queryTypes } from '../../queryTypes';
 import { PreserveWhiteSpaceListItem } from './styles';
 import { useQueryType, useMolecularDataQueryFormState } from '../hooks';
+import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
 
 function buildHelperText(entity: string): string {
   return `Multiple ${entity} are allowed and only 'OR' queries are supported.`;
@@ -31,6 +32,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
   const [substring, setSubstring] = useState('');
 
   const { entityFieldName: fieldName } = useQueryType();
+  const { track } = useMolecularDataQueryFormTracking();
 
   const { control } = useMolecularDataQueryFormState();
   const { field } = useController({
@@ -124,6 +126,11 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           }
           return [...acc, curr];
         }, [] as AutocompleteResult[]);
+
+        track(
+          `Parameters / Select ${labelAndHelperTextProps[targetEntity].label as string}`,
+          formattedValue.map((f) => f.full).join(', '),
+        );
 
         field.onChange(formattedValue);
       }}

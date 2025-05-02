@@ -12,6 +12,7 @@ import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import CellTypeDistributionChart from '../CellTypeDistributionChart/CellTypeDistributionChart';
 import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 import DatasetsOverview from '../DatasetsOverview';
+import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 
 interface SCFindCellTypeQueryResultsProps {
   datasetIds: { hubmap_id: string }[];
@@ -20,6 +21,7 @@ interface SCFindCellTypeQueryResultsProps {
 const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 
 function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindCellTypeQueryResultsProps) {
+  const { track, sessionId } = useMolecularDataQueryFormTracking();
   return (
     <EntitiesTables<Dataset>
       maxHeight={800}
@@ -48,6 +50,23 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindCellTypeQueryResul
           expandedContent: SCFindCellTypesChart,
         },
       ]}
+      onSelectAllChange={(e) => {
+        const isSelected = e.target.checked;
+        if (isSelected) {
+          track('Results / Select All Datasets');
+        }
+      }}
+      onSelectChange={(e, id) => {
+        const isSelected = e.target.checked;
+        if (isSelected) {
+          track('Results / Select Dataset', id);
+        }
+      }}
+      trackingInfo={{
+        category: 'Molecular and Cellular Query',
+        action: 'Results',
+        label: sessionId,
+      }}
     />
   );
 }

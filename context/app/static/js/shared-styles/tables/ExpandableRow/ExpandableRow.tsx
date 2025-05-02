@@ -39,7 +39,7 @@ function ExpandableRowChild({
       </ClickableRow>
       <ExpandedRow $isExpanded={isExpanded}>
         <ExpandedCell colSpan={numCells} $isExpanded={isExpanded}>
-          <Collapse in={isExpanded} timeout="auto">
+          <Collapse in={isExpanded} timeout="auto" mountOnEnter>
             {expandedContent}
           </Collapse>
         </ExpandedCell>

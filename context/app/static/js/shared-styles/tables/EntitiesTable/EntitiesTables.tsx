@@ -20,6 +20,8 @@ interface EntitiesTablesProps<Doc extends Entity> {
   emptyAlert?: React.ReactNode;
   trackingInfo?: EventInfo;
   maxHeight?: number;
+  onSelectChange?: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function EntitiesTables<Doc extends Entity>({
@@ -31,6 +33,8 @@ function EntitiesTables<Doc extends Entity>({
   emptyAlert,
   trackingInfo,
   maxHeight,
+  onSelectAllChange,
+  onSelectChange,
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
@@ -72,6 +76,8 @@ function EntitiesTables<Doc extends Entity>({
               trackingInfo={trackingInfo}
               expandedContent={expandedContent}
               maxHeight={maxHeight}
+              onSelectAllChange={onSelectAllChange}
+              onSelectChange={onSelectChange}
             />
           </TabPanel>
         ))

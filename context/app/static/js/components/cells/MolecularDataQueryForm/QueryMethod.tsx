@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { ChangeEvent } from 'react';
 
 import MenuItem from '@mui/material/MenuItem';
 import TextField from '@mui/material/TextField';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useMolecularDataQueryFormState } from './hooks';
 import { FormFieldContainer, FormFieldSubtitle } from './FormField';
+import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
 
 const queryMethods = {
   gene: [
@@ -58,6 +59,8 @@ export default function QueryMethod() {
 
   const queryType = watch('queryType');
 
+  const { track } = useMolecularDataQueryFormTracking();
+
   if (queryType === 'protein') {
     return <ProteinQueryMethod />;
   }
@@ -76,7 +79,11 @@ export default function QueryMethod() {
         select
         fullWidth
         value={watch('queryMethod')}
-        {...register('queryMethod')}
+        {...register('queryMethod', {
+          onChange: (event: ChangeEvent<HTMLInputElement>) => {
+            track('Parameters Select Query Method', event.target.value);
+          },
+        })}
         slotProps={{
           select: {
             MenuProps: {

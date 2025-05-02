@@ -90,6 +90,8 @@ interface EntityTableProps<Doc extends Entity>
   trackingInfo?: EventInfo;
   disabledTooltipTitle?: string;
   maxHeight?: number;
+  onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onSelectChange?: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
 }
 
 const headerRowHeight = 60;
@@ -104,6 +106,8 @@ function EntityTable<Doc extends Entity>({
   disabledTooltipTitle,
   maxHeight,
   numSelected,
+  onSelectAllChange,
+  onSelectChange,
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -144,6 +148,7 @@ function EntityTable<Doc extends Entity>({
                 disabledTableRowKeys={disabledIDs}
                 disabled={false}
                 sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
+                onSelectAllChange={onSelectAllChange}
               />
             )}
             {columns.map((column) => (
@@ -191,7 +196,14 @@ function EntityTable<Doc extends Entity>({
                   expandedContent={ExpandedContent ? <ExpandedContent {...hit?._source} /> : undefined}
                   disabledTooltipTitle={disabledTooltipTitle}
                 >
-                  {isSelectable && <SelectableRowCell rowKey={hit?._id} disabled={disabledIDs?.has(hit?._id)} />}
+                  {isSelectable && (
+                    <SelectableRowCell
+                      rowKey={hit?._id}
+                      rowName={hit?._source?.hubmap_id}
+                      onSelectChange={onSelectChange}
+                      disabled={disabledIDs?.has(hit?._id)}
+                    />
+                  )}
                   {columns.map(({ cellContent: CellContent, id }) => (
                     <TableCellComponent key={id}>
                       <CellContent hit={hit._source} trackingInfo={trackingInfo} />

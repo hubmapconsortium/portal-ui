@@ -10,6 +10,8 @@ import Results from '../MolecularDataQueryResults';
 import CurrentQueryParametersDisplay from './CurrentQueryParametersDisplay';
 import CurrentQueryResultsDisplay from './CurrentQueryResultsDisplay';
 import { ResultsProvider } from './ResultsProvider';
+import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
+import { getCellVariableNames } from './hooks';
 
 interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
@@ -29,10 +31,12 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
     },
   });
   const { watch, reset } = methods;
+  const { track } = useMolecularDataQueryFormTracking();
 
   const { toastError } = useSnackbarActions();
 
   const queryType = watch('queryType');
+  const queryMethod = watch('queryMethod');
   const threshold = watch('minimumCellPercentage');
   const expression = watch('minimumCellPercentage');
   const genes = watch('genes');
@@ -41,7 +45,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
 
   // Reset selected options when query type changes
   useEffect(() => {
-    const queryMethod = {
+    const newQueryMethod = {
       gene: DEFAULT_GENE_QUERY_METHOD,
       protein: 'crossModality',
       'cell-type': 'scFind',
@@ -55,7 +59,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         // @ts-expect-error - some annoying conflicts between queryType and queryMethod
         queryType,
         // @ts-expect-error - some annoying conflicts between queryType and queryMethod
-        queryMethod,
+        queryMethod: newQueryMethod,
         ...initialValues,
       },
       {
@@ -67,6 +71,10 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   }, [queryType, reset, initialValues]);
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
+    const cellVariableNames = getCellVariableNames(queryType, genes, proteins, cellTypes);
+
+    // TODO: Once we add pathways, the pathway name should be present here too for gene queries
+    track('Parameters / Run Query', `${data.queryType} ${queryMethod} ${cellVariableNames.join(', ')}`);
     methods.reset(data, { keepValues: true, keepDirty: false });
   });
 

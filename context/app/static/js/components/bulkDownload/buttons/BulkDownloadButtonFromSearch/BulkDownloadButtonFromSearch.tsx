@@ -1,14 +1,16 @@
 import React from 'react';
 import BulkDownloadButton from 'js/components/bulkDownload/buttons/BulkDownloadButton/BulkDownloadButton';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
+import { EventInfo } from 'js/components/types';
 
 const tooltip = 'Bulk download files for selected datasets.';
 
 interface BulkDownloadButtonFromSearchProps {
   type: string;
+  trackingInfo?: EventInfo;
 }
 
-function BulkDownloadButtonFromSearch({ type }: BulkDownloadButtonFromSearchProps) {
+function BulkDownloadButtonFromSearch({ type, trackingInfo }: BulkDownloadButtonFromSearchProps) {
   const { selectedRows, deselectRows } = useSelectableTableStore();
 
   const disabled = selectedRows.size === 0;
@@ -24,6 +26,7 @@ function BulkDownloadButtonFromSearch({ type }: BulkDownloadButtonFromSearchProp
       deselectRows={deselectRows}
       uuids={selectedRows}
       disabled={disabled}
+      trackingInfo={trackingInfo}
     />
   );
 }

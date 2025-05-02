@@ -8,11 +8,24 @@ import { MolecularDataQueryFormState } from './types';
 import AutocompleteEntity from './AutocompleteEntity';
 import { useIsQueryType, useMolecularDataQueryFormState, useQueryType } from './hooks';
 import { FormFieldContainer } from './FormField';
+import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
 
 function CellPercentageInput() {
+  const { track } = useMolecularDataQueryFormTracking();
   const { register } = useFormContext<MolecularDataQueryFormState>();
   const { measurement } = useQueryType();
   const isCellType = useIsQueryType('cell-type');
+
+  const props = register('minimumCellPercentage', {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = parseFloat(event.target.value);
+      if (value < 0 || value > 10) {
+        event.preventDefault();
+        return;
+      }
+      track('Parameters / Select Minimum Cell Percentage', `${value}`);
+    },
+  });
 
   if (isCellType) {
     return null;
@@ -24,7 +37,7 @@ function CellPercentageInput() {
       helperText={`Set the minimum cell percentage for cells in the datasets to represent the minimum ${measurement.toLowerCase()}.`}
       marks={[0, 1, 2, 5, 10].map((m) => ({ value: m, label: m || '>0' }))}
       id="min-cell-percentage"
-      {...register('minimumCellPercentage')}
+      {...props}
       min={0}
       max={10}
       defaultValue={5}
@@ -34,22 +47,36 @@ function CellPercentageInput() {
 
 function ExpressionInput() {
   const { register } = useFormContext<MolecularDataQueryFormState>();
-
+  const { track } = useMolecularDataQueryFormTracking();
   const isCellType = useIsQueryType('cell-type');
   const { measurement, fieldName, value: queryType } = useQueryType();
+
+  const label = `Minimum ${measurement}`;
+
+  const props = register('minimumExpressionLevel', {
+    onChange: (event: React.ChangeEvent<HTMLInputElement>) => {
+      const value = parseFloat(event.target.value);
+      if (value < -4 || value > 5) {
+        event.preventDefault();
+        return;
+      }
+      track(`Parameters / Select ${label}`, `${value}`);
+    },
+  });
+
   if (isCellType || !fieldName) {
     return null;
   }
 
   return (
     <LogSlider
-      label={`Minimum ${measurement}`}
+      label={label}
       helperText={`Set the minimum ${queryType} ${measurement.toLowerCase()} to refine your dataset selections.`}
       minLog={-4}
       maxLog={5}
       id="min-measurement"
       defaultValue={1}
-      {...register(fieldName)}
+      {...props}
     />
   );
 }
