@@ -1,14 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@mui/material/Paper';
 
 import type { Entity } from 'js/components/types';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
-import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
 import { buildSearchLink } from 'js/components/search/store';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 
 import { useCollectionsDatasets } from './hooks';
 
@@ -24,6 +24,7 @@ function CollectionDatasetsTable({ datasets }: CollectionDatasetsTableProps) {
   } = useCollectionsDatasets({
     ids: datasets.map((d) => d.uuid),
   });
+  const [openIndex, setOpenIndex] = useState(0);
 
   return (
     <CollapsibleDetailPageSection
@@ -47,7 +48,20 @@ function CollectionDatasetsTable({ datasets }: CollectionDatasetsTableProps) {
     >
       <SectionDescription>This is the list of data that is in this collection.</SectionDescription>
       <Paper>
-        <RelatedEntitiesTable columns={columns} entities={data} entityType="dataset" />
+        <RelatedEntitiesTabs
+          entities={[
+            {
+              entityType: 'Dataset' as const,
+              tabLabel: 'Datasets',
+              data,
+              columns,
+            },
+          ]}
+          openIndex={openIndex}
+          setOpenIndex={setOpenIndex}
+          ariaLabel="Derived Data Tabs"
+          renderWarningMessage={(tableEntityType) => `No ${tableEntityType.toLowerCase()}s for this collection.`}
+        />
       </Paper>
     </CollapsibleDetailPageSection>
   );
