@@ -25,6 +25,7 @@ export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<Rea
   component?: TypographyProps['component'];
   iconTooltipText?: string;
   trackingInfo?: EventInfo;
+  buttons?: React.ReactNode;
 }
 
 interface IconDisplayProps {
@@ -56,6 +57,7 @@ export default function CollapsibleDetailPageSection({
   action,
   iconTooltipText,
   trackingInfo,
+  buttons,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
   // Handle expanded state manually in order to track the event
@@ -83,15 +85,20 @@ export default function CollapsibleDetailPageSection({
         variant="unstyled"
       >
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <IconDisplay icon={icon} id={rest.id!} />
-          <Typography variant={variant} component={component}>
-            {title}
-          </Typography>
-          {iconTooltipText && (
-            <SecondaryBackgroundTooltip title={iconTooltipText}>
-              <StyledInfoIcon color="primary" />
-            </SecondaryBackgroundTooltip>
-          )}
+          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
+            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+              <IconDisplay icon={icon} id={rest.id!} />
+              <Typography variant={variant} component={component}>
+                {title}
+              </Typography>
+              {iconTooltipText && (
+                <SecondaryBackgroundTooltip title={iconTooltipText}>
+                  <StyledInfoIcon color="primary" />
+                </SecondaryBackgroundTooltip>
+              )}
+            </Box>
+            <Box sx={{ marginLeft: 'auto' }}>{buttons}</Box>
+          </Box>
         </AccordionSummary>
         <AccordionDetails sx={{ padding: 0 }}>
           {action && (
