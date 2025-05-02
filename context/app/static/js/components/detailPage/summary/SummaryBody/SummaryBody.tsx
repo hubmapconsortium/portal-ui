@@ -15,21 +15,21 @@ import { StyledCreationDate } from './style';
 import PublicationSummaryBody from './PublicationSummaryBody';
 import SummaryDescription from './SummaryDescription';
 
-function CollectionName() {
+function CollectionId() {
   const { entity } = useFlaskDataContext();
 
   if (!isCollection(entity)) {
     return null;
   }
-  const { title } = entity;
+  const { hubmap_id } = entity;
 
-  if (!title) {
+  if (!hubmap_id) {
     return null;
   }
 
   return (
     <Typography variant="h6" component="h3">
-      {title}
+      {hubmap_id}
     </Typography>
   );
 }
@@ -147,14 +147,16 @@ function SummaryBodyContent({
   }
 
   return (
-    <Stack component={SummaryPaper} direction={direction} spacing={1} {...stackProps}>
-      <CollectionName />
-      <SummaryDescription description={description} clamp={isEntityHeader} />
-      <DatasetGroup />
-      <DatasetConsortium />
-      <DatasetCitation />
-      <CollectionCitation />
-      <StyledCreationDate label={creationLabel}>{creationDate}</StyledCreationDate>
+    <Stack spacing={1}>
+      <CollectionId />
+      <Stack component={SummaryPaper} direction={direction} spacing={1} {...stackProps}>
+        <SummaryDescription description={description} clamp={isEntityHeader} />
+        <DatasetGroup />
+        <DatasetConsortium />
+        <DatasetCitation />
+        <CollectionCitation />
+        <StyledCreationDate label={creationLabel}>{creationDate}</StyledCreationDate>
+      </Stack>
     </Stack>
   );
 }
