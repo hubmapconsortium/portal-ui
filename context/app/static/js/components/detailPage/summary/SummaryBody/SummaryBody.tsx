@@ -1,4 +1,5 @@
 import React from 'react';
+import { format } from 'date-fns/format';
 import Stack, { StackProps } from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -11,7 +12,6 @@ import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { getCollectionDOI } from 'js/pages/Collection/utils';
 import { getEntityCreationInfo } from 'js/helpers/functions';
-import { StyledCreationDate } from './style';
 import PublicationSummaryBody from './PublicationSummaryBody';
 import SummaryDescription from './SummaryDescription';
 
@@ -121,6 +121,7 @@ function SummaryBodyContent({
   description: propDescription,
   creationLabel: propCreationLabel,
   creationDate: propCreationDate,
+  dateLastModified,
   ...stackProps
 }: {
   isEntityHeader?: boolean;
@@ -155,13 +156,23 @@ function SummaryBodyContent({
         <DatasetConsortium />
         <DatasetCitation />
         <CollectionCitation />
-        <StyledCreationDate label={creationLabel}>{creationDate}</StyledCreationDate>
+        <Stack direction="row" spacing={10}>
+          <LabelledSectionText label={creationLabel}>{creationDate}</LabelledSectionText>
+          {dateLastModified && (
+            <LabelledSectionText label="Last Modified">
+              {format(new Date(dateLastModified), 'yyyy-MM-dd')}
+            </LabelledSectionText>
+          )}
+        </Stack>
       </Stack>
     </Stack>
   );
 }
 
-function SummaryBody({ isEntityHeader = false, ...stackProps }: { isEntityHeader?: boolean } & Partial<StackProps>) {
+function SummaryBody({
+  isEntityHeader = false,
+  ...stackProps
+}: { isEntityHeader?: boolean } & Partial<StackProps> & Partial<SavedEntitiesList>) {
   return <SummaryBodyContent isEntityHeader={isEntityHeader} {...stackProps} />;
 }
 

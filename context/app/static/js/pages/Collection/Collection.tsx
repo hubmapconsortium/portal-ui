@@ -20,13 +20,13 @@ const shouldDisplaySection = {
 
 function Summary({ title }: { title: string }) {
   const {
-    entity: { entity_type },
+    entity: { entity_type, last_modified_timestamp },
   } = useFlaskDataContext();
 
   return (
     <DetailPageSection id="summary">
       <SummaryData title={title} entity_type={entity_type} />
-      <SummaryBody />
+      <SummaryBody dateLastModified={last_modified_timestamp} />
     </DetailPageSection>
   );
 }
