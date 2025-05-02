@@ -130,7 +130,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         isExpanded={formIsExpanded || !methods.formState.isSubmitted}
         onChange={toggleParametersSection}
         noProvider
-        completedStepText={<CurrentQueryParametersDisplay />}
+        completedStepText={methods.formState.isSubmitted ? <CurrentQueryParametersDisplay /> : undefined}
       />
       <ResultsProvider>
         <IndependentStepAccordion
@@ -141,7 +141,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
           isExpanded={methods.formState.isSubmitSuccessful}
           noProvider
           disabled={!methods.formState.isSubmitSuccessful}
-          completedStepText={<CurrentQueryResultsDisplay />}
+          completedStepText={methods.formState.isSubmitSuccessful ? <CurrentQueryResultsDisplay /> : undefined}
         />
       </ResultsProvider>
     </FormProvider>
