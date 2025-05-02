@@ -2,15 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
-import Stack from '@mui/material/Stack';
 
 import type { Entity } from 'js/components/types';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import RelatedEntitiesTable from 'js/components/detailPage/related-entities/RelatedEntitiesTable';
-import BulkDownloadButton from 'js/components/bulkDownload/buttons/BulkDownloadButton';
-import SaveEntitiesButton from 'js/components/savedLists/SaveEntitiesButton';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
+import { buildSearchLink } from 'js/components/search/store';
 
 import { useCollectionsDatasets } from './hooks';
 
@@ -36,10 +35,18 @@ function CollectionDatasetsTable({ datasets }: CollectionDatasetsTableProps) {
           </Typography>
         }
         buttons={
-          <Stack direction="row" spacing={1}>
-            <SaveEntitiesButton uuids={uuids} entity_type="Dataset" />
-            <BulkDownloadButton uuids={uuids} tooltip="Bulk download files for datasets in this table." />
-          </Stack>
+          <RelatedEntitiesSectionActions
+            searchPageHref={buildSearchLink({
+              entity_type: 'Dataset',
+              filters: {
+                uuid: {
+                  type: 'TERM',
+                  values: Array.from(uuids),
+                },
+              },
+            })}
+            uuids={uuids}
+          />
         }
       />
       <Paper>
