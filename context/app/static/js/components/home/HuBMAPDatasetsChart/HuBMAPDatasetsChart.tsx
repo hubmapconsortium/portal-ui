@@ -293,6 +293,7 @@ function HuBMAPDatasetsChart() {
               onChange={(e: SelectChangeEvent) => {
                 setSelectedEntityType(e.target.value as (typeof SELECTED_ENTITY_TYPES)[number]);
               }}
+              action="HuBMAP Datasets Graph/X-Axis Selection"
             />
           }
         >

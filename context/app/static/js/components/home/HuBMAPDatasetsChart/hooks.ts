@@ -135,6 +135,7 @@ export function useAggregatedChartData<T extends object>(
 export function getKeysFromAggregatedData(aggregatedData: AggregatedData): string[] {
   return aggregatedData
     .reduce((acc, data) => {
+      if (!data.data) return acc;
       const keys = Object.keys(data.data);
       return [...acc, ...keys];
     }, [] as string[])
