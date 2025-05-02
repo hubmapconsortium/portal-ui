@@ -1,6 +1,5 @@
-import React from 'react';
+import React, { useState } from 'react';
 
-import CollectionDatasetsTable from 'js/components/detailPage/CollectionDatasetsTable';
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import useTrackID from 'js/hooks/useTrackID';
@@ -8,19 +7,96 @@ import { Collection, Dataset } from 'js/components/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import Stack from '@mui/material/Stack';
 import { useFlaskDataContext } from 'js/components/Contexts';
-import DetailPageSection from 'js/components/detailPage/DetailPageSection';
+import DetailPageSection, { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
 import SummaryBody from 'js/components/detailPage/summary/SummaryBody';
+import { ContactAPIResponse, ContributorAPIResponse } from 'js/components/detailPage/ContributorsTable/utils';
+import { useCollectionsDatasets } from 'js/pages/Collection/hooks';
+import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
+import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
+import { buildSearchLink } from 'js/components/search/store';
+import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
+import Paper from '@mui/material/Paper';
+import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
+
+const descriptions = {
+  contributors: 'This is the list of contributors affiliated with this collection.',
+  datasets: 'This is the list of data that is in this collection.',
+};
+
+function Contributors({
+  contributors,
+  contacts,
+}: {
+  contributors: ContributorAPIResponse[];
+  contacts: ContactAPIResponse[];
+}) {
+  if (!contributors?.length) {
+    return null;
+  }
+
+  return (
+    <ContributorsTable
+      iconPanelText={descriptions.contributors}
+      contributors={contributors}
+      contacts={contacts}
+      title="Contributors"
+    />
+  );
+}
 
 function Datasets({ datasets }: { datasets?: Dataset[] }) {
+  const {
+    datasets: data,
+    columns,
+    uuids,
+  } = useCollectionsDatasets({
+    ids: datasets?.map((d) => d.uuid) ?? [],
+  });
+  const [openIndex, setOpenIndex] = useState(0);
+
   if (!datasets?.length) {
     return null;
   }
 
   return (
-    <DetailPageSection id="datasets">
-      <CollectionDatasetsTable datasets={datasets} />
-    </DetailPageSection>
+    <CollapsibleDetailPageSection
+      title="Datasets"
+      id="datasets-table"
+      icon={sectionIconMap.datasets}
+      buttons={
+        <RelatedEntitiesSectionActions
+          searchPageHref={buildSearchLink({
+            entity_type: 'Dataset',
+            filters: {
+              uuid: {
+                type: 'TERM',
+                values: Array.from(uuids),
+              },
+            },
+          })}
+          uuids={uuids}
+        />
+      }
+    >
+      <SectionDescription>{descriptions.datasets}</SectionDescription>
+      <Paper>
+        <RelatedEntitiesTabs
+          entities={[
+            {
+              entityType: 'Dataset' as const,
+              tabLabel: 'Datasets',
+              data,
+              columns,
+            },
+          ]}
+          openIndex={openIndex}
+          setOpenIndex={setOpenIndex}
+          ariaLabel="Derived Data Tabs"
+          renderWarningMessage={(tableEntityType) => `No ${tableEntityType.toLowerCase()}s for this collection.`}
+        />
+      </Paper>
+    </CollapsibleDetailPageSection>
   );
 }
 
@@ -57,9 +133,7 @@ function CollectionDetail({ collection: collectionData }: { collection: Collecti
         <SavedListsSuccessAlert />
         <Summary title={title} />
         <Datasets datasets={datasets} />
-        {contributors && Boolean(contributors.length) && (
-          <ContributorsTable contributors={contributors} contacts={contacts} title="Contributors" />
-        )}
+        <Contributors contributors={contributors} contacts={contacts} />
       </Stack>
     </DetailLayout>
   );
