@@ -30,9 +30,11 @@ function CellTypesChartTooltip({ tooltipData }: { tooltipData: TooltipData<{ val
   );
 }
 
+type CellTypeCounts = Record<string, { value: number }>;
+
 interface CellTypesChartProps {
   totalCells: number;
-  cellTypeCounts: Record<string, { value: number }>;
+  cellTypeCounts: CellTypeCounts;
   isLoading: boolean;
   cellNames: string[];
 }
@@ -80,25 +82,22 @@ export function CrossModalityCellTypesChart({ uuid }: Dataset) {
     if (!expressionData) {
       return [{}, 0] as const;
     }
-    const counts = expressionData.results.reduce(
-      (acc, result) => {
-        const clid = result.cell_type;
-        if (!clid) {
-          return acc;
-        }
-        if (acc[clid]) {
-          acc[clid] = {
-            value: acc[clid].value + 1,
-          };
-        } else {
-          acc[clid] = {
-            value: 1,
-          };
-        }
+    const counts = expressionData.results.reduce((acc: CellTypeCounts, result) => {
+      const clid = result.cell_type;
+      if (!clid) {
         return acc;
-      },
-      {} as Record<string, { value: number }>,
-    );
+      }
+      if (acc[clid]) {
+        acc[clid] = {
+          value: acc[clid].value + 1,
+        };
+      } else {
+        acc[clid] = {
+          value: 1,
+        };
+      }
+      return acc;
+    }, {});
 
     const total = Object.values(counts).reduce((acc, count) => acc + count.value, 0);
     return [counts, total] as const;
@@ -137,19 +136,16 @@ export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
     if (!data) {
       return [{}, 0];
     }
-    const counts = data.cellTypeCounts.reduce(
-      (acc, result) => {
-        const label = result.index.split('.')[1];
-        if (!label) {
-          return acc;
-        }
-        acc[label] = {
-          value: result.count,
-        };
+    const counts = data.cellTypeCounts.reduce((acc: CellTypeCounts, result) => {
+      const label = result.index.split('.')[1];
+      if (!label) {
         return acc;
-      },
-      {} as Record<string, { value: number }>,
-    );
+      }
+      acc[label] = {
+        value: result.count,
+      };
+      return acc;
+    }, {});
     const total = data.cellTypeCounts.reduce((acc, result) => acc + result.count, 0);
     return [counts, total] as const;
   }, [data]);

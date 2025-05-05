@@ -28,17 +28,14 @@ export function useCellTypeNamesMap() {
     if (!data) {
       return {};
     }
-    return data.cellTypeNames.reduce(
-      (acc, organAndCellTypeName) => {
-        const [organ, cellTypeName] = organAndCellTypeName.split('.');
-        if (!acc[cellTypeName]) {
-          acc[cellTypeName] = [];
-        }
-        acc[cellTypeName].push(organ);
-        return acc;
-      },
-      {} as Record<string, string[]>,
-    );
+    return data.cellTypeNames.reduce((acc: Record<string, string[]>, organAndCellTypeName) => {
+      const [organ, cellTypeName] = organAndCellTypeName.split('.');
+      if (!acc[cellTypeName]) {
+        acc[cellTypeName] = [];
+      }
+      acc[cellTypeName].push(organ);
+      return acc;
+    }, {});
   }, [data]);
 }
 

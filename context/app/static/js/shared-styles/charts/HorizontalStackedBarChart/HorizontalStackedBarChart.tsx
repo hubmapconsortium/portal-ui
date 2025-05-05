@@ -159,6 +159,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                             ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
                             : undefined
                         }
+                        colorScale={colorScale}
                       />
                     ),
                 ),

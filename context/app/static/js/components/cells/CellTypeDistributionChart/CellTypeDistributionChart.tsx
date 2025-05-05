@@ -11,7 +11,7 @@ import React, { useMemo } from 'react';
 import Description from 'js/shared-styles/sections/Description';
 import { grey, blueGrey, teal } from '@mui/material/colors';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
-import { decimal } from 'js/helpers/number-format';
+import { decimal, percent } from 'js/helpers/number-format';
 import { capitalizeString } from 'js/helpers/functions';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 
@@ -37,6 +37,19 @@ const unselectedCellColors = [
   teal[600],
   teal[700],
 ];
+
+interface FractionGraphData {
+  counts: number[];
+  otherLabels: string[];
+  targetLabels: string[];
+  total: number;
+  countsMap: Record<string, number>;
+}
+
+interface XOffsets {
+  currentOffset: number;
+  offsets: number[];
+}
 
 function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
   const targetCellTypes = useCellVariableNames();
@@ -64,7 +77,7 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
       return diff;
     });
     const results = sorted.reduce(
-      ({ counts, otherLabels, targetLabels, total, countsMap }, { index: label, cell_count }) => {
+      ({ counts, otherLabels, targetLabels, total, countsMap }: FractionGraphData, { index: label, cell_count }) => {
         const newTotal = total + cell_count;
         counts.push(cell_count);
         countsMap[label] = cell_count;
@@ -82,11 +95,11 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
         };
       },
       {
-        counts: [] as number[],
-        otherLabels: [] as string[],
-        targetLabels: [] as string[],
+        counts: [],
+        otherLabels: [],
+        targetLabels: [],
         total: 0,
-        countsMap: {} as Record<string, number>,
+        countsMap: {},
       },
     );
     return {
@@ -102,14 +115,14 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
 
   const xOffsets = useMemo(() => {
     const results = cellCounts.reduce(
-      ({ currentOffset, offsets }, currentValue) => {
+      ({ currentOffset, offsets }: XOffsets, currentValue) => {
         offsets.push(currentOffset);
         const newOffset: number = currentOffset + (scale(currentValue) as number);
         return { currentOffset: newOffset, offsets };
       },
       {
         currentOffset: 0,
-        offsets: [] as number[],
+        offsets: [],
       },
     );
     return results.offsets;
@@ -137,38 +150,37 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
   } = useChartTooltip<TooltipData<CellTypeCountForTissue>>();
 
   const id = `cell-type-distribution-${tissue}`;
-
+  // TODO: This can probably be pulled out into a separate component, but this is good enough for now
+  const getRectProps = (label: string, index: number) => {
+    const isTargetedCellType = targetCellTypes.includes(label);
+    return {
+      width: scale(sortedData[index].cell_count) as number,
+      x: xOffsets[index],
+      height: isTargetedCellType ? 40 : 30,
+      y: isTargetedCellType ? 5 : 10,
+      fill: isTargetedCellType ? targetColorScale(label) : otherColorScale(label),
+      rx: isTargetedCellType ? 5 : 0,
+      ry: isTargetedCellType ? 5 : 0,
+      filter: label === tooltipData?.key ? 'brightness(120%) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.5))' : undefined,
+      style: { transition: 'filter 0.2s ease-in-out' },
+      onMouseEnter: handleMouseEnter({
+        key: label,
+        bar: { data: { cell_count: sortedData[index].cell_count, index: label } },
+      }),
+      onMouseLeave: handleMouseLeave,
+      'aria-label': `${label}: ${sortedData[index].cell_count} (${percent.format(
+        sortedData[index].cell_count / totalCellCount,
+      )}`,
+    };
+  };
   return (
     <>
       <Typography variant="subtitle2" component="label" color="primary" display="block" my={1} htmlFor={id}>
         Cell Type Distribution Across {capitalizeString(tissue)} Datasets
       </Typography>
       <svg direction="row" width={parentWidth} height="50" ref={containerRef} id={id}>
-        {sortedData.map(({ cell_count, index: label }, index) => {
-          const isTargetedCellType = targetCellTypes.includes(label);
-          return (
-            <rect
-              key={label}
-              width={scale(cell_count) as number}
-              x={xOffsets[index]}
-              height={isTargetedCellType ? 40 : 30}
-              y={isTargetedCellType ? 5 : 10}
-              fill={isTargetedCellType ? targetColorScale(label) : otherColorScale(label)}
-              // Highlight the bar if it is currently being hovered for the tooltip
-              filter={
-                label === tooltipData?.key ? 'brightness(120%) drop-shadow(0px 0px 5px rgba(0, 0, 0, 0.5))' : undefined
-              }
-              style={{ transition: 'filter 0.2s ease-in-out' }}
-              onMouseEnter={handleMouseEnter({
-                key: label,
-                bar: { data: { cell_count, index: label } },
-              })}
-              rx={isTargetedCellType ? 5 : 0}
-              ry={isTargetedCellType ? 5 : 0}
-              onMouseLeave={handleMouseLeave}
-              aria-label={`${label}: ${cell_count} (${((cell_count / totalCellCount) * 100).toFixed(2)}%)`}
-            />
-          );
+        {sortedData.map(({ index: label }, index) => {
+          return <rect key={label} {...getRectProps(label, index)} />;
         })}
       </svg>
       <Typography variant="body1" color="textSecondary" my={1}>
