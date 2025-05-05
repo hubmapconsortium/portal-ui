@@ -7,6 +7,7 @@ export interface Column<Doc> {
   id: string;
   sort?: string;
   cellContent: ComponentType<{ hit: SearchHit<Doc> }> | ElementType;
+  noSort?: boolean;
 }
 
 export interface EntitiesTabTypes<Doc extends Entity> {

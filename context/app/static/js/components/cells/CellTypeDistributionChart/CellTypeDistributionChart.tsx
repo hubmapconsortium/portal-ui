@@ -136,12 +136,14 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
     handleMouseLeave,
   } = useChartTooltip<TooltipData<CellTypeCountForTissue>>();
 
+  const id = `cell-type-distribution-${tissue}`;
+
   return (
     <>
-      <Typography variant="subtitle2" component="label" color="primary" mb={1}>
+      <Typography variant="subtitle2" component="label" color="primary" display="block" my={1} htmlFor={id}>
         Cell Type Distribution Across {capitalizeString(tissue)} Datasets
       </Typography>
-      <svg direction="row" width={parentWidth} height="50" ref={containerRef}>
+      <svg direction="row" width={parentWidth} height="50" ref={containerRef} id={id}>
         {sortedData.map(({ cell_count, index: label }, index) => {
           const isTargetedCellType = targetCellTypes.includes(label);
           return (

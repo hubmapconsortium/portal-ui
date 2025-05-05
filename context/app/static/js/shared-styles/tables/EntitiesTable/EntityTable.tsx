@@ -42,6 +42,14 @@ function EntityHeaderCell<Doc>({ column, setSort, sortState, trackingInfo }: Ent
     setSort(column.id);
   });
 
+  if (column.noSort) {
+    return (
+      <HeaderCell key={column.id} sx={({ palette }) => ({ backgroundColor: palette.background.paper })}>
+        {column.label}
+      </HeaderCell>
+    );
+  }
+
   // This is a workaround to ensure the header cell control is accessible with consistent keyboard navigation
   // and appearance. The header cell contains a disabled, hidden button that is the full width of the cell. This
   // allows us to set the header cell to position: relative and create another button that is absolutely positioned
