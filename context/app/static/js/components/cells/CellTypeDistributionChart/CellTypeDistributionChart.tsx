@@ -12,6 +12,7 @@ import Description from 'js/shared-styles/sections/Description';
 import { grey, blueGrey, teal } from '@mui/material/colors';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 import { decimal } from 'js/helpers/number-format';
+import { capitalizeString } from 'js/helpers/functions';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 
 interface FractionGraphProps extends WithParentSizeProvidedProps {
@@ -46,8 +47,23 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
     targetLabels: presentTargetCellTypes,
     total: totalCellCount,
     countsMap: mappedCellCounts,
+    sortedData,
   } = useMemo(() => {
-    return (data ?? []).reduce(
+    // Sort the data by cell count in descending order, hoisting target cell types to the top
+    const sorted = [...(data ?? [])].sort((a, b) => {
+      const aIsTarget = targetCellTypes.includes(a.index);
+      const bIsTarget = targetCellTypes.includes(b.index);
+      if (aIsTarget && !bIsTarget) return -1; // a is target, b is not -> a comes first
+      if (!aIsTarget && bIsTarget) return 1; // b is target, a is not -> b comes first
+      // If both are target or both are not, sort by cell count, falling back to alphabetical order
+      // if the counts are equal
+      const diff = b.cell_count - a.cell_count;
+      if (diff === 0) {
+        return a.index.localeCompare(b.index); // Sort by index if counts are equal
+      }
+      return diff;
+    });
+    const results = sorted.reduce(
       ({ counts, otherLabels, targetLabels, total, countsMap }, { index: label, cell_count }) => {
         const newTotal = total + cell_count;
         counts.push(cell_count);
@@ -73,6 +89,10 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
         countsMap: {} as Record<string, number>,
       },
     );
+    return {
+      ...results,
+      sortedData: sorted,
+    };
   }, [data, targetCellTypes]);
 
   const scale = useLinearScale(cellCounts, {
@@ -118,8 +138,11 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
 
   return (
     <>
+      <Typography variant="subtitle2" component="label" color="primary" mb={1}>
+        Cell Type Distribution Across {capitalizeString(tissue)} Datasets
+      </Typography>
       <svg direction="row" width={parentWidth} height="50" ref={containerRef}>
-        {data.map(({ cell_count, index: label }, index) => {
+        {sortedData.map(({ cell_count, index: label }, index) => {
           const isTargetedCellType = targetCellTypes.includes(label);
           return (
             <rect
