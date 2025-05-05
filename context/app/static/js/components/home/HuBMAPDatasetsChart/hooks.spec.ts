@@ -10,12 +10,37 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Bladder',
       },
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 16,
       key: {
         donor_sex: 'Male',
         organ: 'Bladder',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -24,6 +49,19 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Blood',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 7,
@@ -31,12 +69,38 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Brain',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 7,
       key: {
         donor_sex: 'Male',
         organ: 'Brain',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -45,12 +109,38 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Heart',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 45,
       key: {
         donor_sex: 'Male',
         organ: 'Heart',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -59,12 +149,38 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Kidney (Left)',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 198,
       key: {
         donor_sex: 'Male',
         organ: 'Kidney (Left)',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -73,12 +189,38 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Kidney (Right)',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 225,
       key: {
         donor_sex: 'Male',
         organ: 'Kidney (Right)',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -87,12 +229,38 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Knee (Left)',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 10,
       key: {
         donor_sex: 'Female',
         organ: 'Knee (Right)',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -101,12 +269,38 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Knee (Right)',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 162,
       key: {
         donor_sex: 'Female',
         organ: 'Large Intestine',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -115,12 +309,38 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Large Intestine',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 6,
       key: {
         donor_sex: 'Female',
         organ: 'Liver',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -129,12 +349,38 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Liver',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 2,
       key: {
         donor_sex: 'Female',
         organ: 'Lung (Right)',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -143,12 +389,38 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Lung (Right)',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 15,
       key: {
         donor_sex: 'Female',
         organ: 'Lymph Node',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -157,12 +429,38 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Lymph Node',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 3,
       key: {
         donor_sex: 'Female',
         organ: 'Pancreas',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -171,6 +469,19 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Pancreas',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 6,
@@ -178,12 +489,38 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Skin',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 6,
       key: {
         donor_sex: 'Male',
         organ: 'Skin',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -192,12 +529,38 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Small Intestine',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 199,
       key: {
         donor_sex: 'Male',
         organ: 'Small Intestine',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -206,12 +569,38 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Spleen',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 73,
       key: {
         donor_sex: 'Male',
         organ: 'Spleen',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
     {
@@ -220,6 +609,19 @@ const mockData = {
         donor_sex: 'Female',
         organ: 'Thymus',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 32,
@@ -227,12 +629,38 @@ const mockData = {
         donor_sex: 'Male',
         organ: 'Thymus',
       },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
+      },
     },
     {
       doc_count: 211,
       key: {
         donor_sex: 'Female',
         organ: 'Uterus',
+      },
+
+      donor_uuids: {
+        buckets: [
+          {
+            doc_count: 12,
+            key: 'uuid1',
+          },
+          {
+            doc_count: 4,
+            key: 'uuid2',
+          },
+        ],
       },
     },
   ],
@@ -243,92 +671,95 @@ const mockFormattedData: Record<string, AggregatedData> = {
   donorSex: [
     {
       organ: 'Bladder',
-      Female: 12,
-      Male: 16,
+      data: { Female: 12, Male: 16 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Blood',
-      Male: 1,
+      data: { Male: 1 },
+      displayLabels: { Male: 'Male' },
     },
     {
       organ: 'Brain',
-      Female: 7,
-      Male: 7,
+      data: { Female: 7, Male: 7 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Heart',
-      Female: 13,
-      Male: 45,
+      data: { Female: 13, Male: 45 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Kidney (Left)',
-      Female: 245,
-      Male: 198,
+      data: { Female: 245, Male: 198 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Kidney (Right)',
-      Female: 161,
-      Male: 225,
+      data: { Female: 161, Male: 225 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Knee (Left)',
-      Male: 4,
+      data: { Male: 4 },
+      displayLabels: { Male: 'Male' },
     },
     {
       organ: 'Knee (Right)',
-      Female: 10,
-      Male: 12,
+      data: { Female: 10, Male: 12 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Large Intestine',
-      Female: 162,
-      Male: 197,
+      data: { Female: 162, Male: 197 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Liver',
-      Female: 6,
-      Male: 10,
+      data: { Female: 6, Male: 10 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Lung (Right)',
-      Female: 2,
-      Male: 127,
+      data: { Female: 2, Male: 127 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Lymph Node',
-      Female: 15,
-      Male: 47,
+      data: { Female: 15, Male: 47 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Pancreas',
-      Female: 3,
-      Male: 2,
+      data: { Female: 3, Male: 2 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Skin',
-      Female: 6,
-      Male: 6,
+      data: { Female: 6, Male: 6 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Small Intestine',
-      Female: 168,
-      Male: 199,
+      data: { Female: 168, Male: 199 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Spleen',
-      Female: 30,
-      Male: 73,
+      data: { Female: 30, Male: 73 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Thymus',
-      Female: 10,
-      Male: 32,
+      data: { Female: 10, Male: 32 },
+      displayLabels: { Female: 'Female', Male: 'Male' },
     },
     {
       organ: 'Uterus',
-      Female: 211,
+      data: { Female: 211 },
+      displayLabels: { Female: 'Female' },
     },
-  ] as unknown as AggregatedData, // TS doesn't like organ not being a number here
+  ],
 };
 
 test('aggregateByOrgan', () => {

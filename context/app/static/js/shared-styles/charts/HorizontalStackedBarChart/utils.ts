@@ -54,35 +54,6 @@ function getAssayTypeBarChartData(rawData: AssayDataBucket[], colorKey: string) 
   return { formattedData, maxSumDocCount };
 }
 
-function getOrganTypesCompositeAggsQuery(esAggsKey: string, aggsKeyToReturn: string) {
-  return {
-    size: 0,
-    aggs: {
-      organs: {
-        composite: {
-          sources: [
-            {
-              organ: {
-                terms: {
-                  field: 'origin_samples.mapped_organ.keyword',
-                },
-              },
-            },
-            {
-              [aggsKeyToReturn]: {
-                terms: {
-                  field: esAggsKey,
-                },
-              },
-            },
-          ],
-          size: 10000,
-        },
-      },
-    },
-  };
-}
-
 function getDocCountScale(maxDocCount: number) {
   return scaleLinear({
     domain: [0, maxDocCount * 1.05],
@@ -108,7 +79,6 @@ export {
   addSumProperty,
   sortBySumAscending,
   getAssayTypeBarChartData,
-  getOrganTypesCompositeAggsQuery,
   getDocCountScale,
   getColorScale,
   getDataTypeScale,

@@ -6,32 +6,46 @@ import { InternalLink } from 'js/shared-styles/Links';
 import { getDonorAgeString } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
 import { EventInfo } from 'js/components/types';
+import Typography from '@mui/material/Typography';
+import { SecondaryBackgroundTooltip } from '../tooltips';
 
-interface CellContentProps<SearchDoc> {
+export interface CellContentProps<SearchDoc> {
   hit: SearchDoc;
 }
 
 function HubmapIDCell({
-  hit: { uuid, hubmap_id },
+  hit: { uuid, hubmap_id, mapped_status, mapped_data_access_level },
   trackingInfo,
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
+  const isNotPublic = mapped_status !== 'Published' || mapped_data_access_level !== 'Public';
   return (
-    <InternalLink
-      target={openLinksInNewTab ? '_blank' : '_self'}
-      href={`/browse/dataset/${uuid}`}
-      onClick={() =>
-        trackingInfo &&
-        trackEvent({
-          ...trackingInfo,
-          action: trackingInfo.action ? `${trackingInfo.action} / Select Sample` : 'Navigate to Dataset from Table',
-          label: `${trackingInfo.label} ${hubmap_id}`,
-        })
-      }
-      variant="body2"
-    >
-      {hubmap_id}
-    </InternalLink>
+    <>
+      <InternalLink
+        target={openLinksInNewTab ? '_blank' : '_self'}
+        href={`/browse/dataset/${uuid}`}
+        onClick={() =>
+          trackingInfo &&
+          trackEvent({
+            ...trackingInfo,
+            action: trackingInfo.action
+              ? `${trackingInfo.action} / Select ${trackingInfo.action}`
+              : 'Navigate to Dataset from Table',
+            label: `${trackingInfo.label} ${hubmap_id}`,
+          })
+        }
+        variant="body2"
+      >
+        {hubmap_id}
+      </InternalLink>
+      {isNotPublic && (
+        <SecondaryBackgroundTooltip title="Access to the raw data for this dataset is restricted to authorized HuBMAP Consortium members. The dataset may not be available for bulk download or in Workspaces.">
+          <Typography variant="caption" color="warning" sx={{ display: 'block', mt: 1 }}>
+            {mapped_status} ({mapped_data_access_level})
+          </Typography>
+        </SecondaryBackgroundTooltip>
+      )}
+    </>
   );
 }
 
@@ -75,7 +89,7 @@ function AssayTypesCell({ hit: { mapped_data_types } }: CellContentProps<Dataset
 
 export const assayTypes = {
   id: 'mapped_data_types',
-  label: 'AssayTypes',
+  label: 'Data Type',
   sort: 'mapped_data_types.keyword',
   cellContent: AssayTypesCell,
 };

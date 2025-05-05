@@ -1,0 +1,2 @@
+- Update molecular query and biomarker page layout.
+- Add scFind as cell type lookup option.

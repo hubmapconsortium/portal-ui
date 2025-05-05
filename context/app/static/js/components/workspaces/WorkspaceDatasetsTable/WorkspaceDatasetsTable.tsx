@@ -5,7 +5,6 @@ import Stack from '@mui/material/Stack';
 import { withSelectableTableProvider, useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
-import { DatasetDocument } from 'js/typings/search';
 import { getIDsQuery } from 'js/helpers/queries';
 import {
   lastModifiedTimestamp,
@@ -17,7 +16,7 @@ import {
 } from 'js/shared-styles/tables/columns';
 import { Copy, Delete } from 'js/shared-styles/tables/actions';
 import { AddIcon } from 'js/shared-styles/icons';
-import { EventInfo } from 'js/components/types';
+import { EventInfo, Dataset } from 'js/components/types';
 
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import WorkspacesUpdateButton from '../WorkspacesUpdateButton';
@@ -123,7 +122,7 @@ function WorkspaceDatasetsTable({
       {hideTable ? (
         emptyAlert
       ) : (
-        <EntitiesTables<DatasetDocument>
+        <EntitiesTables<Dataset>
           entities={[{ query, columns, entityType: 'Dataset' }]}
           disabledIDs={disabledIDs}
           emptyAlert={emptyAlert}

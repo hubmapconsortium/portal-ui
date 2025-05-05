@@ -130,8 +130,8 @@ function useLinearScale(data: number[], config: Omit<LinearScaleConfig, 'type'> 
   return useMemo(() => {
     const domain = [Math.min(...data, 0), Math.max(...data)];
     return scaleLinear({
-      ...config,
       domain,
+      ...config,
     });
   }, [data, config]);
 }

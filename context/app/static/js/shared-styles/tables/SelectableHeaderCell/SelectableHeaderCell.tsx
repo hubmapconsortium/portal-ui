@@ -24,6 +24,7 @@ interface SelectableHeaderCellProps extends TableCellProps {
   disabled: boolean;
   selectTooltip?: string;
   deselectTooltip?: string;
+  onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 function SelectableHeaderCell({
@@ -32,6 +33,7 @@ function SelectableHeaderCell({
   selectTooltip,
   deselectTooltip,
   disabled = false,
+  onSelectAllChange,
   ...rest
 }: SelectableHeaderCellProps) {
   const { toggleHeaderAndRows, setTotalNumRows, headerRowIsSelected, tableLabel } = useSelectableTableStore();
@@ -47,7 +49,10 @@ function SelectableHeaderCell({
       checked={headerRowIsSelected}
       inputProps={{ 'aria-label': `${tableLabel}-header-row-checkbox` }}
       disabled={disabled || filteredKeys.length === 0}
-      onChange={() => toggleHeaderAndRows(filteredKeys)}
+      onChange={(e) => {
+        onSelectAllChange?.(e);
+        toggleHeaderAndRows(filteredKeys);
+      }}
     />
   );
 

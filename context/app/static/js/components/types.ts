@@ -87,6 +87,7 @@ export interface Donor extends Entity {
     age_value: string;
     race: string[];
     body_mass_index_value: string;
+    body_mass_index_unit: string;
   }>;
   group_name: string;
   protocol_url: string;

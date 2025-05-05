@@ -70,6 +70,16 @@ export const includeOnlyDatasetsClause: QueryDslQueryContainer = {
   },
 };
 
+export const includeOnlyDonorsClause: QueryDslQueryContainer = {
+  bool: {
+    must: {
+      term: {
+        'entity_type.keyword': 'Donor',
+      },
+    },
+  },
+};
+
 export const includeOnlyCollectionsClause: QueryDslQueryContainer = {
   bool: {
     must: {
