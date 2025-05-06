@@ -115,6 +115,22 @@ function CollectionCitation() {
   );
 }
 
+function SummaryDates({ creationLabel, creationDate }: { creationLabel: string; creationDate: string }) {
+  const { entity } = useFlaskDataContext();
+  const { last_modified_timestamp } = entity;
+
+  return (
+    <Stack direction="row" spacing={10}>
+      <LabelledSectionText label={creationLabel}>{creationDate}</LabelledSectionText>
+      {isCollection(entity) && (
+        <LabelledSectionText label="Last Modified">
+          {format(new Date(last_modified_timestamp), 'yyyy-MM-dd')}
+        </LabelledSectionText>
+      )}
+    </Stack>
+  );
+}
+
 function SummaryBodyContent({
   isEntityHeader = false,
   direction = 'column',
@@ -156,14 +172,7 @@ function SummaryBodyContent({
         <DatasetConsortium />
         <DatasetCitation />
         <CollectionCitation />
-        <Stack direction="row" spacing={10}>
-          <LabelledSectionText label={creationLabel}>{creationDate}</LabelledSectionText>
-          {dateLastModified && (
-            <LabelledSectionText label="Last Modified">
-              {format(new Date(dateLastModified), 'yyyy-MM-dd')}
-            </LabelledSectionText>
-          )}
-        </Stack>
+        <SummaryDates creationDate={creationDate} creationLabel={creationLabel} />
       </Stack>
     </Stack>
   );

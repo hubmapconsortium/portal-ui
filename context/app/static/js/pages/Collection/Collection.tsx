@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
 
 import ContributorsTable from 'js/components/detailPage/ContributorsTable';
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import useTrackID from 'js/hooks/useTrackID';
 import { Collection, Dataset } from 'js/components/types';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import Stack from '@mui/material/Stack';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import DetailPageSection, { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SummaryData from 'js/components/detailPage/summary/SummaryData';
@@ -16,7 +17,6 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import RelatedEntitiesSectionActions from 'js/components/detailPage/related-entities/RelatedEntitiesSectionActions';
 import { buildSearchLink } from 'js/components/search/store';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
-import Paper from '@mui/material/Paper';
 import RelatedEntitiesTabs from 'js/components/detailPage/related-entities/RelatedEntitiesTabs';
 
 const descriptions = {
@@ -24,24 +24,16 @@ const descriptions = {
   datasets: 'This is the list of data that is in this collection.',
 };
 
-function Contributors({
-  contributors,
-  contacts,
-}: {
-  contributors: ContributorAPIResponse[];
-  contacts: ContactAPIResponse[];
-}) {
-  if (!contributors?.length) {
-    return null;
-  }
+function Summary({ title }: { title: string }) {
+  const {
+    entity: { entity_type },
+  } = useFlaskDataContext();
 
   return (
-    <ContributorsTable
-      iconPanelText={descriptions.contributors}
-      contributors={contributors}
-      contacts={contacts}
-      title="Contributors"
-    />
+    <DetailPageSection id="summary">
+      <SummaryData title={title} entity_type={entity_type} />
+      <SummaryBody />
+    </DetailPageSection>
   );
 }
 
@@ -55,6 +47,20 @@ function Datasets({ datasets }: { datasets?: Dataset[] }) {
   });
   const [openIndex, setOpenIndex] = useState(0);
 
+  const searchPageHref = useMemo(
+    () =>
+      buildSearchLink({
+        entity_type: 'Dataset',
+        filters: {
+          uuid: {
+            type: 'TERM',
+            values: Array.from(uuids),
+          },
+        },
+      }),
+    [uuids],
+  );
+
   if (!datasets?.length) {
     return null;
   }
@@ -64,20 +70,7 @@ function Datasets({ datasets }: { datasets?: Dataset[] }) {
       title="Datasets"
       id="datasets-table"
       icon={sectionIconMap.datasets}
-      buttons={
-        <RelatedEntitiesSectionActions
-          searchPageHref={buildSearchLink({
-            entity_type: 'Dataset',
-            filters: {
-              uuid: {
-                type: 'TERM',
-                values: Array.from(uuids),
-              },
-            },
-          })}
-          uuids={uuids}
-        />
-      }
+      buttons={<RelatedEntitiesSectionActions searchPageHref={searchPageHref} uuids={uuids} />}
     >
       <SectionDescription>{descriptions.datasets}</SectionDescription>
       <Paper>
@@ -100,16 +93,24 @@ function Datasets({ datasets }: { datasets?: Dataset[] }) {
   );
 }
 
-function Summary({ title }: { title: string }) {
-  const {
-    entity: { entity_type, last_modified_timestamp },
-  } = useFlaskDataContext();
+function Contributors({
+  contributors,
+  contacts,
+}: {
+  contributors: ContributorAPIResponse[];
+  contacts: ContactAPIResponse[];
+}) {
+  if (!contributors?.length) {
+    return null;
+  }
 
   return (
-    <DetailPageSection id="summary">
-      <SummaryData title={title} entity_type={entity_type} />
-      <SummaryBody dateLastModified={last_modified_timestamp} />
-    </DetailPageSection>
+    <ContributorsTable
+      iconPanelText={descriptions.contributors}
+      contributors={contributors}
+      contacts={contacts}
+      title="Contributors"
+    />
   );
 }
 
@@ -129,7 +130,7 @@ function CollectionDetail({ collection: collectionData }: { collection: Collecti
 
   return (
     <DetailLayout sections={shouldDisplaySection}>
-      <Stack gap={1} sx={{ marginBottom: 5 }}>
+      <Stack gap={1} marginBottom={5}>
         <SavedListsSuccessAlert />
         <Summary title={title} />
         <Datasets datasets={datasets} />
