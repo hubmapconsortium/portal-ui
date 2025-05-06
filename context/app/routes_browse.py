@@ -165,12 +165,13 @@ def details_rui_json(type, uuid):
 
 @blueprint.route('/sitemap.txt')
 def sitemap_txt():
+    template_keys = _get_all_template_keys()
+    organ_keys = list(get_organs().keys())
     dataset_uuids = _get_all_primary_dataset_uuids()
     sample_uuids = _get_all_sample_uuids()
     donor_uuids = _get_all_donor_uuids()
-    publication_uuids = _get_all_publication_uuids()
     collection_uuids = _get_all_collection_uuids()
-    organ_keys = list(get_organs().keys())
+    publication_uuids = _get_all_publication_uuids()
 
     url_base = get_url_base_from_request()
     return Response(
@@ -184,12 +185,13 @@ def sitemap_txt():
             f'{url_base}/workspaces',
             f'{url_base}/templates',
             f'{url_base}/tutorials',
+            *[f'{url_base}/templates/{key}' for key in template_keys],
             *[f'{url_base}/organ/{key}' for key in organ_keys],
+            *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
+            *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
+            *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],
             *[f'{url_base}/browse/collection/{uuid}' for uuid in collection_uuids],
             *[f'{url_base}/browse/publication/{uuid}' for uuid in publication_uuids],
-            *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],
-            *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
-            *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
         ]),
         mimetype='text/plain'
     )
@@ -473,6 +475,23 @@ def _get_all_collection_uuids():
     return get_uuids({
             "term": {"entity_type.keyword": "Collection"}
         })
+
+@cache
+def _get_all_template_keys():
+    """
+    Retrieves all keys for templates.
+    """
+
+    client = get_client()
+    templates_url = current_app.config['USER_TEMPLATES_ENDPOINT'] + '/templates/jupyter_lab'
+    response_json = {}
+
+    try:
+        response_json = client._request(templates_url)
+    except Exception as e:
+        current_app.logger.error(f'Error retrieving uuids: {e}')
+    finally:
+        return list(response_json["data"].keys())
 
 def _get_entity_description(entity):
     """
