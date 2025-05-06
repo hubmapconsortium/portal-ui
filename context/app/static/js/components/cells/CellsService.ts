@@ -3,7 +3,7 @@
 // it might cache results, or the API calls might be made from the JS instead of Python,
 // and then the instance would be initialized with the Cells API URL.
 
-import { AutocompleteQueryResponse } from './AutocompleteEntity/types';
+import { AutocompleteQueryResponse } from './MolecularDataQueryForm/AutocompleteEntity/types';
 import { QueryType } from './queryTypes';
 import { ResultCounts } from './store';
 
@@ -14,8 +14,9 @@ interface SearchBySubstringProps {
 export interface GetDatasetsProps<T extends QueryType> {
   type: T;
   cellVariableNames: string[];
-  minExpression: string | number;
+  minExpression?: string | number;
   minCellPercentage: string | number;
+  minAbundance?: string | number;
   modality?: string;
 }
 
@@ -36,16 +37,16 @@ interface GetClusterCellMatchesInDatasetProps {
   minExpression: string | number;
 }
 
-interface DatasetsSelectedByExpressionResponse {
+export interface DatasetsSelectedByExpressionResponse {
   uuid: string;
   // TODO: Add more fields if they exist
 }
 
-interface DatasetsSelectedByCellTypeResponse extends ResultCounts {
+export interface DatasetsSelectedByCellTypeResponse extends ResultCounts {
   list: DatasetsSelectedByExpressionResponse[];
 }
 
-type GetDatasetsResponse<T extends QueryType> = T extends 'cell-type'
+export type GetDatasetsResponse<T extends QueryType> = T extends 'cell-type'
   ? DatasetsSelectedByCellTypeResponse
   : DatasetsSelectedByExpressionResponse[];
 
@@ -68,8 +69,8 @@ interface ClusterCellMatch {
 }
 
 class CellsService {
-  async fetchAndParse<T>(url: string): Promise<T> {
-    const response = await fetch(url, { method: 'POST' });
+  async fetchAndParse<T>(url: string, method = 'POST'): Promise<T> {
+    const response = await fetch(url, { method });
     const responseJson = (await response.json()) as { message?: string; results?: T };
     if ('message' in responseJson) {
       throw Error(responseJson.message);
@@ -170,6 +171,11 @@ class CellsService {
 
   async getAllNamesForCellType(cellType: string) {
     return this.fetchAndParse<string[]>(`/cells/all-names-for-cell-type.json?cell_type=${cellType}`);
+  }
+
+  async getIndexedDatasetCount() {
+    const results = await this.fetchAndParse<{ results: number }>(`/cells/total-datasets.json`, 'GET');
+    return results;
   }
 }
 

@@ -11,6 +11,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { SavedListsEventCategories } from 'js/components/savedLists/types';
 import { useEntitiesData } from 'js/hooks/useEntityData';
 import { generateCommaList } from 'js/helpers/functions';
+import { EventInfo } from 'js/components/types';
 
 function createTooltip({
   entity_type,
@@ -39,10 +40,12 @@ export default function SaveEntitiesButton({
   entity_type,
   uuids,
   fromSelectableTable,
+  trackingInfo,
 }: {
   entity_type: AllEntityTypes;
   uuids: Set<string>;
   fromSelectableTable?: boolean;
+  trackingInfo?: EventInfo;
 }) {
   const { isHubmapUser } = useAppContext();
   const { savedEntities, handleSaveEntities } = useSavedLists();
@@ -61,10 +64,17 @@ export default function SaveEntitiesButton({
       return;
     }
 
+    if (trackingInfo) {
+      trackEvent(trackingInfo);
+      return;
+    }
+
+    const category = fromSelectableTable
+      ? SavedListsEventCategories.EntitySearchPage(entity_type)
+      : SavedListsEventCategories.EntityDetailPage(page_entity_type);
+
     trackEvent({
-      category: fromSelectableTable
-        ? SavedListsEventCategories.EntitySearchPage(entity_type)
-        : SavedListsEventCategories.EntityDetailPage(page_entity_type),
+      category,
       action: 'Save Entity to Items',
       label: generateCommaList(entityData.map((entity) => entity.hubmap_id)),
     });

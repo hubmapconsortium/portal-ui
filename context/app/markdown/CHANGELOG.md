@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.25.1 - 2025-05-05
+
+- Add analytics to main navigation.
+- Update collections landing page metadata description.
+- Update homepage description language.
+- Update tab styling in Bulk Data Transfer section.
+- Rolled back portal-viz version to address Visium scaling issue pending further clarification.
+- Update molecular query and biomarker page layout.
+- Add scFind as cell type lookup option.
+- Update "What's New" section of the homepage for March and April.
+
+
+
 ## v1.25.0 - 2025-04-28
 
 - Add analytics to homepage.

@@ -4,7 +4,6 @@ import Stack from '@mui/material/Stack';
 import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesButtonFromSearch';
 import { withSelectableTableProvider } from 'js/shared-styles/tables/SelectableTableProvider';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
-import { SampleDocument } from 'js/typings/search';
 import {
   datasetDescendants,
   hubmapID,
@@ -15,6 +14,7 @@ import {
 } from 'js/shared-styles/tables/columns';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import { Sample } from 'js/components/types';
 import { OrganPageIds } from 'js/components/organ/types';
 import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import { useOrganContext } from 'js/components/organ/contexts';
@@ -71,7 +71,7 @@ function Samples({ organTerms }: OrganSamplesProps) {
         </Stack>
       }
     >
-      <EntitiesTables<SampleDocument>
+      <EntitiesTables<Sample>
         entities={[{ query, columns, entityType: 'Sample' }]}
         trackingInfo={{ category: 'Organ Page', action: 'Samples', label: name }}
       />

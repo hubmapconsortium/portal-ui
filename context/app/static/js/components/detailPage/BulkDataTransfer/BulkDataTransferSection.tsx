@@ -54,7 +54,7 @@ function BulkDataTransfer() {
           onChange={(_, newValue) => {
             setOpenTabIndex(newValue as number);
           }}
-          variant="scrollable"
+          variant={tabs.length > 4 ? 'scrollable' : 'fullWidth'}
           scrollButtons="auto"
         >
           {tabs.map(({ label, icon: Icon }, index) => (

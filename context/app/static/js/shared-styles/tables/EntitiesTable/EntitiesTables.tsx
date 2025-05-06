@@ -3,7 +3,7 @@ import React from 'react';
 import { useTabs } from 'js/shared-styles/tabs';
 import { useSearchTotalHitsCounts } from 'js/hooks/useSearchData';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { EventInfo } from 'js/components/types';
+import { EventInfo, Entity } from 'js/components/types';
 
 import SvgIcon from '@mui/material/SvgIcon';
 import EntityTable from './EntityTable';
@@ -11,7 +11,7 @@ import { EntitiesTabTypes } from './types';
 import { Tabs, Tab, TabPanel } from '../TableTabs';
 import { StyledPaper } from './style';
 
-interface EntitiesTablesProps<Doc> {
+interface EntitiesTablesProps<Doc extends Entity> {
   isSelectable?: boolean;
   numSelected?: number;
   initialTabIndex?: number;
@@ -19,9 +19,12 @@ interface EntitiesTablesProps<Doc> {
   disabledIDs?: Set<string>;
   emptyAlert?: React.ReactNode;
   trackingInfo?: EventInfo;
+  maxHeight?: number;
+  onSelectChange?: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function EntitiesTables<Doc>({
+function EntitiesTables<Doc extends Entity>({
   isSelectable = true,
   numSelected,
   initialTabIndex = 0,
@@ -29,6 +32,9 @@ function EntitiesTables<Doc>({
   disabledIDs,
   emptyAlert,
   trackingInfo,
+  maxHeight,
+  onSelectAllChange,
+  onSelectChange,
 }: EntitiesTablesProps<Doc>) {
   const { openTabIndex, handleTabChange } = useTabs(initialTabIndex);
 
@@ -59,7 +65,7 @@ function EntitiesTables<Doc>({
       {tableIsEmpty ? (
         <StyledPaper sx={{ padding: '1rem' }}>{emptyAlert}</StyledPaper>
       ) : (
-        entities.map(({ query, columns, entityType }, i) => (
+        entities.map(({ query, columns, entityType, expandedContent }, i) => (
           <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
             <EntityTable<Doc>
               query={query}
@@ -68,6 +74,10 @@ function EntitiesTables<Doc>({
               numSelected={numSelected}
               disabledIDs={disabledIDs}
               trackingInfo={trackingInfo}
+              expandedContent={expandedContent}
+              maxHeight={maxHeight}
+              onSelectAllChange={onSelectAllChange}
+              onSelectChange={onSelectChange}
             />
           </TabPanel>
         ))
