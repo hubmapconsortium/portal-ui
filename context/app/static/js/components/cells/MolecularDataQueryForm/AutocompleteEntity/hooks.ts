@@ -21,7 +21,7 @@ const fetchEntityAutocomplete = async ({
   }
 
   // scfind does not provide a matching query, so we can do this locally
-  if (queryMethod === 'scFind') {
+  if (queryMethod === 'scFind' && targetEntity === 'cell-type') {
     const cellTypeNames = Object.keys(scFindCellTypeNames);
     const cellTypeNameMatches = cellTypeNames.filter((cellTypeName) =>
       cellTypeName.toLowerCase().includes(substring.toLowerCase()),

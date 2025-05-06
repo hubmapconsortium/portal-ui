@@ -48,9 +48,9 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
 
   const chipColors = useCellTypeOrgansColorMap();
 
-  function handleChange({ target: { value } }: React.ChangeEvent<HTMLInputElement>) {
+  const handleSubstringChange = useEventCallback(({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
     setSubstring(value);
-  }
+  });
 
   const onChange = useEventCallback((_event: React.SyntheticEvent, value: AutocompleteResult[]) => {
     // Handle selection of multi-value options by pulling out the values and formatting them to match the expected structure
@@ -128,7 +128,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           value={substring}
           name="substring"
           variant="outlined"
-          onChange={handleChange}
+          onChange={handleSubstringChange}
           {...params}
           slotProps={{
             inputLabel: { shrink: true, ...InputLabelProps },
