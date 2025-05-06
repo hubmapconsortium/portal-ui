@@ -1,6 +1,7 @@
 from functools import cache
 import json
 from urllib.parse import urlparse, quote
+from .utils import get_organs
 
 from flask import (
     current_app, render_template, jsonify,
@@ -167,6 +168,9 @@ def sitemap_txt():
     dataset_uuids = _get_all_primary_dataset_uuids()
     sample_uuids = _get_all_sample_uuids()
     donor_uuids = _get_all_donor_uuids()
+    publication_uuids = _get_all_publication_uuids()
+    collection_uuids = _get_all_collection_uuids()
+    organ_keys = list(get_organs().keys())
 
     url_base = get_url_base_from_request()
     return Response(
@@ -180,6 +184,9 @@ def sitemap_txt():
             f'{url_base}/workspaces',
             f'{url_base}/templates',
             f'{url_base}/tutorials',
+            *[f'{url_base}/organ/{key}' for key in organ_keys],
+            *[f'{url_base}/browse/collection/{uuid}' for uuid in collection_uuids],
+            *[f'{url_base}/browse/publication/{uuid}' for uuid in publication_uuids],
             *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],
             *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
             *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
@@ -403,7 +410,7 @@ def get_uuids(query):
     try:
         response_json = client._request(elasticsearch_url, request)
         uuids = [hit["_id"] for hit in response_json.get("hits", {}).get("hits", [])]
-        if len(uuids) == size:
+        if len(uuids) == 10000:
             raise Exception("At least 10k entities: need to make multiple requests")
     except Exception as e:
         current_app.logger.error(f'Error retrieving uuids: {e}')
@@ -445,6 +452,26 @@ def _get_all_donor_uuids():
 
     return get_uuids({
             "term": {"entity_type.keyword": "Donor"}
+        })
+
+@cache
+def _get_all_publication_uuids():
+    """
+    Retrieves all publication UUIDs.
+    """
+
+    return get_uuids({
+            "term": {"entity_type.keyword": "Publication"}
+        })
+
+@cache
+def _get_all_collection_uuids():
+    """
+    Retrieves all collection UUIDs.
+    """
+
+    return get_uuids({
+            "term": {"entity_type.keyword": "Collection"}
         })
 
 def _get_entity_description(entity):
