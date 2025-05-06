@@ -6,6 +6,7 @@ const StyledTextField = styled(TextField)(({ theme }) => ({
   '& > :first-child': {
     borderRadius: theme.spacing(0.5),
   },
+  backgroundColor: theme.palette.background.paper,
 }));
 
 export { StyledTextField };

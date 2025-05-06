@@ -4,6 +4,7 @@ interface Collection {
   uuid: string;
   title: string;
   hubmap_id: string;
+  created_timestamp: number;
   datasets: { hubmap_id: string; uuid: string }[];
 }
 

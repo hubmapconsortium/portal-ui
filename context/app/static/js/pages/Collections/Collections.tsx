@@ -1,24 +1,37 @@
 import React from 'react';
 
+import CollectionsSearchBar from 'js/components/collections/CollectionsSearchBar';
+import CollectionsPanelList from 'js/components/collections/CollectionsPanelList';
+import CollectionsSearchProvider from 'js/components/collections/CollectionsSearchContext';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
-import PanelList from 'js/shared-styles/panels/PanelList';
+import { useCollectionHits } from 'js/components/collections/hooks';
 
-import { useCollections } from './hooks';
-
-const description =
-  'Collections of HuBMAP datasets represent data from related experiments—such as assays performed on the same organ—or data that has been grouped for other reasons. In the future, it will be possible to reference collections through Document Object Identifiers (DOIs).';
+const text = {
+  title: 'Collections',
+  description:
+    'HuBMAP collections group datasets from related experiments, such as assays performed on the same organ or datasets with shared research relevance. Each collection is assigned a Document Object Identifier (DOI) for citation and reference.',
+  sectionTitle: 'Collections of HuBMAP Data',
+  sectionDescription:
+    'Explore collections of HuBMAP datasets. This table can be downloaded in TSV format. Collection pages provide context on why the datasets are grouped and include a list of the associated HuBMAP datasets.',
+};
 
 function Collections() {
-  const panelsProps = useCollections();
+  const { collections } = useCollectionHits();
+
   return (
-    <PanelListLandingPage
-      title="Collections"
-      subtitle={panelsProps.length > 0 ? `${panelsProps.length} Collections` : undefined}
-      description={description}
-      data-testid="collections-title"
-    >
-      <PanelList panelsProps={panelsProps} />
-    </PanelListLandingPage>
+    <CollectionsSearchProvider>
+      <PanelListLandingPage
+        title={text.title}
+        subtitle={collections.length > 0 ? `${collections.length} Collections` : undefined}
+        description={text.description}
+        sectionTitle={text.sectionTitle}
+        sectionDescription={text.sectionDescription}
+        data-testid="collections-title"
+      >
+        <CollectionsSearchBar />
+        <CollectionsPanelList />
+      </PanelListLandingPage>
+    </CollectionsSearchProvider>
   );
 }
 
