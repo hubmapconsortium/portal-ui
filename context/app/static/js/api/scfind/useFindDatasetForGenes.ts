@@ -3,7 +3,9 @@ import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
 import { createScFindKey } from './utils';
 
-type DatasetsForGenesResponse = Record<string, string[]>;
+interface DatasetsForGenesResponse {
+  findDatasets: Record<string, string[]>;
+}
 
 export interface DatasetsForGenesParams {
   geneList: string[];
