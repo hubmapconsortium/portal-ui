@@ -438,40 +438,24 @@ def _get_all_primary_dataset_uuids():
 
 @cache
 def _get_all_sample_uuids():
-    """
-    Retrieves all sample UUIDs.
-    """
-
     return get_uuids({
             "term": {"entity_type.keyword": "Sample"}
         })
 
 @cache
 def _get_all_donor_uuids():
-    """
-    Retrieves all donor UUIDs.
-    """
-
     return get_uuids({
             "term": {"entity_type.keyword": "Donor"}
         })
 
 @cache
 def _get_all_publication_uuids():
-    """
-    Retrieves all publication UUIDs.
-    """
-
     return get_uuids({
             "term": {"entity_type.keyword": "Publication"}
         })
 
 @cache
 def _get_all_collection_uuids():
-    """
-    Retrieves all collection UUIDs.
-    """
-
     return get_uuids({
             "term": {"entity_type.keyword": "Collection"}
         })
