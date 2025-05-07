@@ -194,7 +194,6 @@ def sitemap_txt():
     )
 
 
-
 @blueprint.route('/robots.txt')
 def robots_txt():
     allowed_hostname = 'portal.hubmapconsortium.org'
@@ -389,6 +388,7 @@ def _get_publication_data_types_and_organs(uuid: str):
     finally:
         return data_types, organs
 
+
 def get_uuids(query):
     """
     Retrieves UUIDs from the search API based on the given query.
@@ -416,46 +416,52 @@ def get_uuids(query):
     finally:
         return uuids
 
+
 @cache
 def _get_all_primary_dataset_uuids():
     """
     Retrieves all primary dataset UUIDs.
-    This is used to generate the sitemap for dataset detail pages (processed datasets are excluded here 
+    This is used to generate the sitemap for dataset detail pages (processed datasets are excluded here
     to avoid including redirects to the primary dataset).
     """
 
     return get_uuids({
-            "bool": {
-                "filter": [
-                    {"term": {"entity_type.keyword": "Dataset"}},
-                    {"term": {"processing.keyword": "raw"}}
-                ]
-            }
-        })
+        "bool": {
+            "filter": [
+                {"term": {"entity_type.keyword": "Dataset"}},
+                {"term": {"processing.keyword": "raw"}}
+            ]
+        }
+    })
+
 
 @cache
 def _get_all_sample_uuids():
     return get_uuids({
-            "term": {"entity_type.keyword": "Sample"}
-        })
+        "term": {"entity_type.keyword": "Sample"}
+    })
+
 
 @cache
 def _get_all_donor_uuids():
     return get_uuids({
-            "term": {"entity_type.keyword": "Donor"}
-        })
+        "term": {"entity_type.keyword": "Donor"}
+    })
+
 
 @cache
 def _get_all_publication_uuids():
     return get_uuids({
-            "term": {"entity_type.keyword": "Publication"}
-        })
+        "term": {"entity_type.keyword": "Publication"}
+    })
+
 
 @cache
 def _get_all_collection_uuids():
     return get_uuids({
-            "term": {"entity_type.keyword": "Collection"}
-        })
+        "term": {"entity_type.keyword": "Collection"}
+    })
+
 
 @cache
 def _get_all_template_keys():
@@ -473,6 +479,7 @@ def _get_all_template_keys():
         current_app.logger.error(f'Error retrieving uuids: {e}')
     finally:
         return list(response_json["data"].keys())
+
 
 def _get_entity_description(entity):
     """
