@@ -1,0 +1,1 @@
+- Update Collections detail pages.
