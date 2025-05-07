@@ -7,6 +7,7 @@ import { TooltipData } from 'js/shared-styles/charts/types';
 import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import { Dataset } from 'js/components/types';
+import Typography from '@mui/material/Typography';
 import { useCellTypesChartsData } from './hooks';
 import { extractLabel } from '../CrossModalityResults/utils';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
@@ -37,14 +38,16 @@ interface CellTypesChartProps {
   cellTypeCounts: CellTypeCounts;
   isLoading: boolean;
   cellNames: string[];
+  title?: string;
 }
 
-function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames }: CellTypesChartProps) {
+function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames, title }: CellTypesChartProps) {
   return (
     <Box p={2} width="100%">
       <Box height="600px">
         <TotalCellsContext.Provider value={totalCells}>
           <ChartLoader isLoading={isLoading}>
+            {title && <Typography variant="subtitle2">{title}</Typography>}
             <BarChart
               data={cellTypeCounts}
               highlightedKeys={cellNames}
@@ -152,6 +155,7 @@ export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
 
   return (
     <CellTypesChart
+      title="Cell Type Distribution Plot"
       totalCells={totalCells}
       cellTypeCounts={cellTypeCounts}
       isLoading={isLoading}

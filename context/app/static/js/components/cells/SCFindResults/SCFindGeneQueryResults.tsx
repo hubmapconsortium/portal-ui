@@ -20,6 +20,7 @@ import { useDeduplicatedResults, useSCFindGeneResults, useTableTrackingProps } f
 import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import SCFindGeneCharts from '../CellsCharts/SCFindGeneCharts';
+import { CurrentGeneContextProvider } from './CurrentGeneContext';
 
 const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex, lastModifiedTimestamp];
 
@@ -60,7 +61,7 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
 
 function DatasetListSection() {
   const { openTabIndex, handleTabChange } = useTabs();
-  const cellTypes = useCellVariableNames();
+  const genes = useCellVariableNames();
 
   const { data: { findDatasets: datasets } = { findDatasets: {} }, isLoading } = useSCFindGeneResults();
 
@@ -75,17 +76,16 @@ function DatasetListSection() {
   return (
     <>
       <Tabs onChange={handleTabChange} value={openTabIndex}>
-        {cellTypes.map((cellType, idx) => (
+        {genes.map((cellType, idx) => (
           <Tab key={cellType} label={`${cellType} (${datasets[cellType].length})`} index={idx} />
         ))}
       </Tabs>
       <DatasetListHeader />
-      {cellTypes.map((cellType, idx) => (
-        <TabPanel key={cellType} value={openTabIndex} index={idx}>
-          <SCFindGeneQueryDatasetList
-            key={cellType}
-            datasetIds={datasets[cellType].map((hubmap_id) => ({ hubmap_id }))}
-          />
+      {genes.map((gene, idx) => (
+        <TabPanel key={gene} value={openTabIndex} index={idx}>
+          <CurrentGeneContextProvider value={gene}>
+            <SCFindGeneQueryDatasetList key={gene} datasetIds={datasets[gene].map((hubmap_id) => ({ hubmap_id }))} />
+          </CurrentGeneContextProvider>
         </TabPanel>
       ))}
     </>
