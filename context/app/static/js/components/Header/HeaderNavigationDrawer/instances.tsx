@@ -30,18 +30,20 @@ export function ToolsAndApplicationLinks() {
   );
 }
 
+export const profileTitle = 'Your Profile';
+
 export function UserLinks() {
   const { isAuthenticated, isHubmapUser, userEmail } = useAppContext();
   const { numPendingReceivedInvitations } = useInvitationsList();
 
   return (
     <HeaderNavigationDrawer
-      title="Your Profile"
+      title={profileTitle}
       sections={userLinks({ isAuthenticated, isHubmapUser, userEmail, numPendingReceivedInvitations })}
       icon={<UserIcon />}
       direction="right"
       altOnlyTitle
-      tooltipText={isAuthenticated ? userEmail : 'Your Profile'}
+      tooltipText={isAuthenticated ? userEmail : profileTitle}
     />
   );
 }

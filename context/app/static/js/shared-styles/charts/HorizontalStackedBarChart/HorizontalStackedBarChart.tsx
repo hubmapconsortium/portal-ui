@@ -12,6 +12,7 @@ import { OrdinalScale, useChartTooltip, useHorizontalChart } from 'js/shared-sty
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import { TextProps } from '@visx/text';
+import Skeleton from '@mui/material/Skeleton';
 import { TICK_LABEL_SIZE } from '../constants';
 import { TooltipData, tooltipHasBarData } from '../types';
 
@@ -113,7 +114,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   } = useChartTooltip<TooltipData<Datum>>();
 
   if (visxData.length === 0) {
-    return null;
+    return <Skeleton variant="rectangular" width={parentWidth} height={parentHeight} />;
   }
 
   const axisLabelProps = srOnlyLabels ? srOnlyLabelStyles : undefined;
@@ -158,6 +159,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                             ? { onMouseEnter: handleMouseEnter(bar), onMouseLeave: handleMouseLeave }
                             : undefined
                         }
+                        colorScale={colorScale}
                       />
                     ),
                 ),

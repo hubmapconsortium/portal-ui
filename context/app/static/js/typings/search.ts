@@ -8,6 +8,8 @@ export interface EntityDocument {
   last_modified_timestamp: number;
   created_timestamp: number;
   descendant_counts: DescendantCounts;
+  mapped_status: string;
+  mapped_data_access_level: string;
 }
 
 export interface DonorMappedMetadata {

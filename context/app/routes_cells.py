@@ -506,3 +506,13 @@ def _get_all_names_for_clid(clid):
     labels = [cell['Label'] for cell in cell_ids if cell['CL_ID'] == clid]
     # Deduplicate any exact matches and sort alphabetically
     return tuple(sorted(list(set(labels))))
+
+
+@cache
+@blueprint.route('/cells/total-datasets.json', methods=['GET'])
+def total_datasets():
+    # Get the total number of datasets in the HuBMAP API
+    client = _get_client(current_app)
+    datasets = client.select_datasets()
+    # list() will call iterator behind the scenes.
+    return {'results': len(list(datasets.get_list()))}

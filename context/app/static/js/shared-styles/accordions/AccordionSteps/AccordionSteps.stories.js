@@ -1,7 +1,7 @@
 import React from 'react';
 import Button from '@mui/material/Button';
 
-import StepAccordion from 'js/shared-styles/accordions/StepAccordion';
+import StepAccordion, { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import AccordionStepsComponent from 'js/shared-styles/accordions/AccordionSteps';
 
@@ -24,7 +24,8 @@ export default {
   subcomponents: { StepAccordion },
 };
 
-function ExampleContent({ completeStep, stepNumber }) {
+function ExampleContent({ stepNumber }) {
+  const { completeStep } = useAccordionStep();
   return <Button onClick={() => completeStep(`Step ${stepNumber} Completed!`)}>Complete Step</Button>;
 }
 

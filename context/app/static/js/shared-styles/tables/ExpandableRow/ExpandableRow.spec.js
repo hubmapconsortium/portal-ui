@@ -16,7 +16,7 @@ test('should handle user expanding row', async () => {
   );
   cellsText.forEach((cellText) => expect(screen.getByText(cellText)).not.toHaveStyle('border-bottom: none'));
   expect(screen.getByTestId('down-arrow-icon')).toBeInTheDocument();
-  expect(screen.getByText('123')).not.toBeVisible();
+  expect(screen.queryByText('123')).not.toBeInTheDocument();
 
   fireEvent.click(screen.getByLabelText('expand row'));
 

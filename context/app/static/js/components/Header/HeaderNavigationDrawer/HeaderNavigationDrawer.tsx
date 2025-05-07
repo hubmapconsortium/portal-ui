@@ -1,6 +1,8 @@
-import NavigationDrawer, { DrawerSection, useDrawerState } from 'js/shared-styles/Drawer';
 import React from 'react';
+import { useEventCallback } from '@mui/material/utils';
+import NavigationDrawer, { DrawerSection, useDrawerState } from 'js/shared-styles/Drawer';
 import { CloseIcon } from 'js/shared-styles/icons';
+import { trackEvent } from 'js/helpers/trackers';
 import HeaderButton from '../HeaderButton/HeaderButton';
 
 interface HeaderNavigationDrawerProps {
@@ -21,13 +23,23 @@ export default function HeaderNavigationDrawer({
   tooltipText,
 }: HeaderNavigationDrawerProps) {
   const { open, toggle, onClose } = useDrawerState();
+
+  const handleClick = useEventCallback(() => {
+    trackEvent({
+      category: 'Header Navigation',
+      action: 'Open Drawer',
+      label: title,
+    });
+    toggle();
+  });
+
   return (
     <>
       <HeaderButton
         data-testid={`${encodeURI(title)}-dropdown`}
         title={title}
         altOnlyTitle={altOnlyTitle}
-        onClick={toggle}
+        onClick={handleClick}
         icon={open ? <CloseIcon fontSize="1.5rem" /> : icon}
         tooltip={tooltipText}
       />

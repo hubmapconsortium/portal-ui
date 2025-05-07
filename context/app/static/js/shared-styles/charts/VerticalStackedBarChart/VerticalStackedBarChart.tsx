@@ -130,6 +130,7 @@ function VerticalStackedBarChart<
                             onMouseEnter: handleMouseEnter(bar),
                             onMouseLeave: handleMouseLeave,
                           }}
+                          colorScale={colorScale}
                         />
                       ),
                   ),
@@ -137,7 +138,6 @@ function VerticalStackedBarChart<
               }}
             </BarStack>
             <AxisLeft
-              hideTicks
               scale={yScale}
               label={yAxisLabel}
               stroke="black"
@@ -161,7 +161,6 @@ function VerticalStackedBarChart<
               label={xAxisLabel}
               stroke="black"
               tickStroke="black"
-              numTicks={Object.keys(visxData).length}
               labelOffset={longestLabelSize}
               tickLabelProps={() => ({
                 fill: 'black',
