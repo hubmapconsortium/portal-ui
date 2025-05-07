@@ -6,22 +6,14 @@ import Box from '@mui/material/Box';
 import BarChart from 'js/shared-styles/charts/BarChart';
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import Typography from '@mui/material/Typography';
+import { TooltipData } from 'js/shared-styles/charts/types';
+import { decimal, percent } from 'js/helpers/number-format';
 import { useCurrentGeneContext } from '../SCFindResults/CurrentGeneContext';
 import { SCFindCellTypesChart } from './CellTypesChart';
 
-function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
-  const gene = useCurrentGeneContext();
-
-  const { data, isLoading: isLoadingCellExpression } = useCellTypeExpressionBins({
-    geneList: gene,
-    datasetName: hubmap_id,
-  });
-
-  const { data: { cellTypeCounts } = { cellTypeCounts: [] }, isLoading: loadingCellCount } = useCellTypeCountForDataset(
-    { dataset: hubmap_id },
-  );
-
-  const isLoading = isLoadingCellExpression || loadingCellCount;
+// TODO: Move this to a shared location
+const useTotalCells = (dataset: string) => {
+  const { data: { cellTypeCounts } = { cellTypeCounts: [] } } = useCellTypeCountForDataset({ dataset });
 
   const totalCells = useMemo(() => {
     if (!cellTypeCounts) {
@@ -31,6 +23,46 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
       return acc + cellType.count;
     }, 0);
   }, [cellTypeCounts]);
+
+  return totalCells;
+};
+
+const GeneExpressionTooltipWithDataset = (dataset: string) => {
+  return function GeneExpressionTooltip({
+    tooltipData: { bar, key },
+  }: {
+    tooltipData: TooltipData<{ value: number }>;
+  }) {
+    const totalCells = useTotalCells(dataset);
+    const gene = useCurrentGeneContext();
+    if (bar) {
+      if (key === '0') {
+        return (
+          <>
+            {decimal.format(bar.data.value)} cells ({percent.format(bar.data.value / totalCells)}) do not express {gene}
+          </>
+        );
+      }
+      const count = bar.data.value;
+      return (
+        <>
+          {key} ({decimal.format(count)} cells, {percent.format(count / totalCells)})
+        </>
+      );
+    }
+    return key;
+  };
+};
+
+function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
+  const gene = useCurrentGeneContext();
+
+  const { data, isLoading } = useCellTypeExpressionBins({
+    geneList: gene,
+    datasetName: hubmap_id,
+  });
+
+  const totalCells = useTotalCells(hubmap_id);
   const geneData: Record<string, { value: number }> = useMemo(() => {
     if (!data || !gene || !data[gene]) {
       return {};
@@ -38,7 +70,7 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
     const entries = Object.entries(data[gene]);
     const nonZeroValues = Object.fromEntries(
       entries.map(([key, value]) => {
-        return [key, { value }];
+        return [key, { value, key }];
       }),
     );
     const sum = entries.reduce((acc, [_, value]) => acc + value, 0);
@@ -47,6 +79,10 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
       ...nonZeroValues,
     };
   }, [data, gene, totalCells]);
+
+  const GeneExpressionTooltip = useMemo(() => {
+    return GeneExpressionTooltipWithDataset(hubmap_id);
+  }, [hubmap_id]);
 
   return (
     <Box p={2} width="100%">
@@ -65,6 +101,7 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
                 left: 80,
               } as const
             }
+            TooltipContent={GeneExpressionTooltip}
           />
         </ChartLoader>
       </Box>
@@ -74,9 +111,9 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
 
 export default function SCFindGeneCharts(dataset: Dataset) {
   return (
-    <div>
+    <Box py={2}>
       <SCFindGeneExpressionLevelDistributionPlot {...dataset} />
       <SCFindCellTypesChart {...dataset} />
-    </div>
+    </Box>
   );
 }

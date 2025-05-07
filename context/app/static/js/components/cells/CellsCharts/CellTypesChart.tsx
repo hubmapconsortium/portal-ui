@@ -8,6 +8,7 @@ import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import { Dataset } from 'js/components/types';
 import Typography from '@mui/material/Typography';
+import { decimal, percent } from 'js/helpers/number-format';
 import { useCellTypesChartsData } from './hooks';
 import { extractLabel } from '../CrossModalityResults/utils';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
@@ -26,7 +27,7 @@ function CellTypesChartTooltip({ tooltipData }: { tooltipData: TooltipData<{ val
   const count = tooltipData.bar.data.value;
   return (
     <>
-      {cellType} ({count} cells, {((count / totalCells) * 100).toFixed(2)}%)
+      {cellType} ({decimal.format(count)} cells, {percent.format(count / totalCells)})
     </>
   );
 }
