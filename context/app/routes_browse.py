@@ -180,15 +180,7 @@ def sitemap_txt():
             f'{url_base}/workspaces',
             f'{url_base}/tutorials',
             f'{url_base}/templates',
-            f'{url_base}/cells',
-            f'{url_base}/biomarkers',
-            # Search pages
             f'{url_base}/organ',
-            f'{url_base}/search/datasets',
-            f'{url_base}/search/samples',
-            f'{url_base}/search/donors',
-            f'{url_base}/collections',
-            f'{url_base}/publications',
             # Detail pages
             *[f'{url_base}/templates/{key}' for key in template_keys],
             *[f'{url_base}/organ/{key}' for key in organ_keys],
