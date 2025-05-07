@@ -94,6 +94,7 @@ describe('Summary', () => {
         hubmap_id: 'fakeTitle',
         entity_type: 'Collection',
         title: 'Fake Collection Name',
+        last_modified_timestamp: 1746631808,
       } as Collection,
     } as FlaskDataContextType;
 
@@ -112,6 +113,7 @@ describe('Summary', () => {
         uuid: 'fakeUUID',
         hubmap_id: 'fakeTitle',
         entity_type: 'Collection',
+        last_modified_timestamp: 1746631808,
       } as Collection,
     } as FlaskDataContextType;
 
