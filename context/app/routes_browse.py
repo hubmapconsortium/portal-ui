@@ -421,8 +421,8 @@ def get_uuids(query):
 def _get_all_primary_dataset_uuids():
     """
     Retrieves all primary dataset UUIDs.
-    This is used to generate the sitemap for dataset detail pages (processed datasets are excluded here
-    to avoid including redirects to the primary dataset).
+    This is used to generate the sitemap for dataset detail pages (processed datasets
+    are excluded here to avoid including redirects to the primary dataset).
     """
 
     return get_uuids({
