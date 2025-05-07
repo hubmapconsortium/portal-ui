@@ -68,7 +68,7 @@ function Datasets({ datasets }: { datasets?: Dataset[] }) {
   return (
     <CollapsibleDetailPageSection
       title="Datasets"
-      id="datasets-table"
+      id="datasets"
       icon={sectionIconMap.datasets}
       buttons={<RelatedEntitiesSectionActions searchPageHref={searchPageHref} uuids={uuids} />}
     >
