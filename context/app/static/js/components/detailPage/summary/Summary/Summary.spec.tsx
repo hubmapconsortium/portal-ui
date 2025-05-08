@@ -91,15 +91,15 @@ describe('Summary', () => {
     const flaskDataContext = {
       entity: {
         uuid: 'fakeUUID',
-        hubmap_id: 'fakeTitle',
+        hubmap_id: 'fakeHubmapID',
         entity_type: 'Collection',
-        title: 'Fake Collection Name',
+        last_modified_timestamp: 1746631808,
       } as Collection,
     } as FlaskDataContextType;
 
     render(
       <FlaskDataContext.Provider value={flaskDataContext}>
-        <Summary {...testStatusAndAccessLevel} />
+        <Summary title="Fake Collection Name" {...testStatusAndAccessLevel} />
       </FlaskDataContext.Provider>,
     );
 
@@ -110,8 +110,9 @@ describe('Summary', () => {
     const flaskDataContext = {
       entity: {
         uuid: 'fakeUUID',
-        hubmap_id: 'fakeTitle',
+        hubmap_id: 'fakeHubmapID',
         entity_type: 'Collection',
+        last_modified_timestamp: 1746631808,
       } as Collection,
     } as FlaskDataContextType;
 

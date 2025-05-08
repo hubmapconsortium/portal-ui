@@ -21,9 +21,6 @@ import IconPanel from 'js/shared-styles/panels/IconPanel';
 import { useNormalizedContacts, useNormalizedContributors } from './hooks';
 import { ContributorAPIResponse, contributorIsContact, ContactAPIResponse } from './utils';
 
-const contributorsIconPanelText =
-  'Below is the information for the individuals who provided this dataset. For questions for this dataset, reach out to the individuals listed as contacts, either via the email address listed in the table or contact information provided on their ORCID profile page.';
-
 interface ContactCellProps {
   isContact: boolean;
   email: string;
@@ -53,7 +50,7 @@ interface ContributorsTableProps {
   contributors: ContributorAPIResponse[];
   contacts?: ContactAPIResponse[];
   iconTooltipText?: string;
-  showIconPanel?: boolean;
+  iconPanelText?: string;
 }
 
 function ContributorsTable({
@@ -61,7 +58,7 @@ function ContributorsTable({
   contributors = [],
   contacts = [],
   iconTooltipText,
-  showIconPanel,
+  iconPanelText,
 }: ContributorsTableProps) {
   const columns = [
     { id: 'name', label: 'Name' },
@@ -78,7 +75,7 @@ function ContributorsTable({
 
   const contents = (
     <Stack spacing={1}>
-      {showIconPanel && <IconPanel status="info">{contributorsIconPanelText}</IconPanel>}
+      {iconPanelText && <IconPanel status="info">{iconPanelText}</IconPanel>}
       <Paper>
         <StyledTableContainer>
           <Table stickyHeader>
