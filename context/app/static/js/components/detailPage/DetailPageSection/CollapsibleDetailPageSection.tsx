@@ -6,6 +6,7 @@ import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { SvgIconComponent } from '@mui/icons-material';
 import { useEventCallback } from '@mui/material/utils';
+import Stack from '@mui/material/Stack';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
@@ -85,8 +86,8 @@ export default function CollapsibleDetailPageSection({
         variant="unstyled"
       >
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <Box sx={{ display: 'flex', alignItems: 'center', flexGrow: 1 }}>
-            <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+          <Stack direction="row" sx={{ alignItems: 'center', flexGrow: 1 }}>
+            <Stack direction="row" sx={{ alignItems: 'center', gap: 1 }}>
               <IconDisplay icon={icon} id={rest.id!} />
               <Typography variant={variant} component={component}>
                 {title}
@@ -96,9 +97,9 @@ export default function CollapsibleDetailPageSection({
                   <StyledInfoIcon color="primary" />
                 </SecondaryBackgroundTooltip>
               )}
-            </Box>
+            </Stack>
             <Box sx={{ marginLeft: 'auto' }}>{buttons}</Box>
-          </Box>
+          </Stack>
         </AccordionSummary>
         <AccordionDetails sx={{ padding: 0 }}>
           {action && (
