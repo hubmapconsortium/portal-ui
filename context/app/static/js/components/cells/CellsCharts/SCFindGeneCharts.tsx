@@ -4,29 +4,13 @@ import useCellTypeExpressionBins from 'js/api/scfind/useCellTypeExpression';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader';
 import Box from '@mui/material/Box';
 import BarChart from 'js/shared-styles/charts/BarChart';
-import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import Typography from '@mui/material/Typography';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { decimal, percent } from 'js/helpers/number-format';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { useCurrentGeneContext } from '../SCFindResults/CurrentGeneContext';
 import { SCFindCellTypesChart } from './CellTypesChart';
-
-// TODO: Move this to a shared location
-const useTotalCells = (dataset: string) => {
-  const { data: { cellTypeCounts } = { cellTypeCounts: [] } } = useCellTypeCountForDataset({ dataset });
-
-  const totalCells = useMemo(() => {
-    if (!cellTypeCounts) {
-      return 0;
-    }
-    return cellTypeCounts.reduce((acc, cellType) => {
-      return acc + cellType.count;
-    }, 0);
-  }, [cellTypeCounts]);
-
-  return totalCells;
-};
+import { useTotalCells } from './hooks';
 
 const GeneExpressionTooltipWithDataset = (dataset: string) => {
   return function GeneExpressionTooltip({

@@ -2,6 +2,8 @@ import CellsService, { CellExpressionInDataset } from 'js/components/cells/Cells
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useExpandableRowStore } from 'js/shared-styles/tables/ExpandableRow/store';
+import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
+import { useMemo } from 'react';
 import { extractCLID } from '../CrossModalityResults/utils';
 
 interface CellsChartsDataProps {
@@ -78,4 +80,19 @@ function useCellTypesChartsData({ uuid, cellVariableNames: cellNames }: UseCellT
   return { expressionData: data, ...rest };
 }
 
-export { useCellsChartsData, useCellTypesChartsData };
+const useTotalCells = (dataset: string) => {
+  const { data: { cellTypeCounts } = { cellTypeCounts: [] } } = useCellTypeCountForDataset({ dataset });
+
+  const totalCells = useMemo(() => {
+    if (!cellTypeCounts) {
+      return 0;
+    }
+    return cellTypeCounts.reduce((acc, cellType) => {
+      return acc + cellType.count;
+    }, 0);
+  }, [cellTypeCounts]);
+
+  return totalCells;
+};
+
+export { useCellsChartsData, useCellTypesChartsData, useTotalCells };
