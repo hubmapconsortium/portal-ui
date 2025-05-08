@@ -1,6 +1,7 @@
 from functools import cache
 import json
 from urllib.parse import urlparse, quote
+from .utils import get_organs
 
 from flask import (
     current_app, render_template, jsonify,
@@ -164,14 +165,33 @@ def details_rui_json(type, uuid):
 
 @blueprint.route('/sitemap.txt')
 def sitemap_txt():
-    client = get_client()
-    uuids = client.get_all_dataset_uuids()
+    template_keys = _get_all_template_keys()
+    organ_keys = list(get_organs().keys())
+    dataset_uuids = _get_all_primary_dataset_uuids()
+    sample_uuids = _get_all_sample_uuids()
+    donor_uuids = _get_all_donor_uuids()
+    collection_uuids = _get_all_collection_uuids()
+    publication_uuids = _get_all_publication_uuids()
+
     url_base = get_url_base_from_request()
     return Response(
-        '\n'.join(
-            f'{url_base}/browse/dataset/{uuid}' for uuid in uuids
-        ),
-        mimetype='text/plain')
+        '\n'.join([
+            # Landing pages
+            f'{url_base}/workspaces',
+            f'{url_base}/tutorials',
+            f'{url_base}/templates',
+            f'{url_base}/organ',
+            # Detail pages
+            *[f'{url_base}/templates/{key}' for key in template_keys],
+            *[f'{url_base}/organ/{key}' for key in organ_keys],
+            *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
+            *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
+            *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],
+            *[f'{url_base}/browse/collection/{uuid}' for uuid in collection_uuids],
+            *[f'{url_base}/browse/publication/{uuid}' for uuid in publication_uuids],
+        ]),
+        mimetype='text/plain'
+    )
 
 
 @blueprint.route('/robots.txt')
@@ -367,6 +387,98 @@ def _get_publication_data_types_and_organs(uuid: str):
         current_app.logger.error(f'Error retrieving publication data types and organs: {e}')
     finally:
         return data_types, organs
+
+
+def get_uuids(query):
+    """
+    Retrieves UUIDs from the search API based on the given query.
+    """
+    client = get_client()
+
+    elasticsearch_url = current_app.config['ELASTICSEARCH_ENDPOINT'] + \
+        current_app.config['PORTAL_INDEX_PATH']
+
+    request = {
+        "size": 10000,
+        "query": query,
+        "_source": False
+    }
+
+    uuids = []
+
+    try:
+        response_json = client._request(elasticsearch_url, request)
+        uuids = [hit["_id"] for hit in response_json.get("hits", {}).get("hits", [])]
+        if len(uuids) == 10000:
+            raise Exception("At least 10k entities: need to make multiple requests")
+    except Exception as e:
+        current_app.logger.error(f'Error retrieving uuids: {e}')
+    finally:
+        return uuids
+
+
+@cache
+def _get_all_primary_dataset_uuids():
+    """
+    Retrieves all primary dataset UUIDs.
+    This is used to generate the sitemap for dataset detail pages (processed datasets
+    are excluded here to avoid including redirects to the primary dataset).
+    """
+
+    return get_uuids({
+        "bool": {
+            "filter": [
+                {"term": {"entity_type.keyword": "Dataset"}},
+                {"term": {"processing.keyword": "raw"}}
+            ]
+        }
+    })
+
+
+@cache
+def _get_all_sample_uuids():
+    return get_uuids({
+        "term": {"entity_type.keyword": "Sample"}
+    })
+
+
+@cache
+def _get_all_donor_uuids():
+    return get_uuids({
+        "term": {"entity_type.keyword": "Donor"}
+    })
+
+
+@cache
+def _get_all_publication_uuids():
+    return get_uuids({
+        "term": {"entity_type.keyword": "Publication"}
+    })
+
+
+@cache
+def _get_all_collection_uuids():
+    return get_uuids({
+        "term": {"entity_type.keyword": "Collection"}
+    })
+
+
+@cache
+def _get_all_template_keys():
+    """
+    Retrieves all keys for templates.
+    """
+
+    client = get_client()
+    templates_url = current_app.config['USER_TEMPLATES_ENDPOINT'] + '/templates/jupyter_lab'
+    response_json = {}
+
+    try:
+        response_json = client._request(templates_url)
+    except Exception as e:
+        current_app.logger.error(f'Error retrieving uuids: {e}')
+    finally:
+        return list(response_json["data"].keys())
 
 
 def _get_entity_description(entity):

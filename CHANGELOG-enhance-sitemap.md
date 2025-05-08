@@ -1,0 +1,1 @@
+- Update portal sitemap to include all relevant landing and detail pages.
