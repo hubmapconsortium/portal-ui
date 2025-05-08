@@ -8,7 +8,7 @@ interface DatasetsForGenesResponse {
 }
 
 export interface DatasetsForGenesParams {
-  geneList: string[];
+  geneList: string | string[];
 }
 
 type DatasetsForGenesKey = string;
@@ -18,7 +18,7 @@ export function createFindDatasetForGenesKey(
   { geneList }: DatasetsForGenesParams,
 ): DatasetsForGenesKey {
   return createScFindKey(scFindEndpoint, 'findDatasets', {
-    gene_list: geneList.join(','),
+    gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
   });
 }
 

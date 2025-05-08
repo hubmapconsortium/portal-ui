@@ -9,6 +9,7 @@ import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset
 import { Dataset } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import { decimal, percent } from 'js/helpers/number-format';
+import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { useCellTypesChartsData } from './hooks';
 import { extractLabel } from '../CrossModalityResults/utils';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
@@ -39,7 +40,7 @@ interface CellTypesChartProps {
   cellTypeCounts: CellTypeCounts;
   isLoading: boolean;
   cellNames: string[];
-  title?: string;
+  title?: React.ReactNode;
 }
 
 function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames, title }: CellTypesChartProps) {
@@ -48,7 +49,11 @@ function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames, titl
       <Box height="600px">
         <TotalCellsContext.Provider value={totalCells}>
           <ChartLoader isLoading={isLoading}>
-            {title && <Typography variant="subtitle2">{title}</Typography>}
+            {title && (
+              <Typography variant="subtitle2" display="flex" alignItems="center">
+                {title}
+              </Typography>
+            )}
             <BarChart
               data={cellTypeCounts}
               highlightedKeys={cellNames}
@@ -156,7 +161,12 @@ export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
 
   return (
     <CellTypesChart
-      title="Cell Type Distribution Plot"
+      title={
+        <>
+          Cell Type Distribution Plot{' '}
+          <InfoTextTooltip tooltipTitle="Plot showing the distribution of cell types in the dataset, with any cell types of interest emphasized." />
+        </>
+      }
       totalCells={totalCells}
       cellTypeCounts={cellTypeCounts}
       isLoading={isLoading}

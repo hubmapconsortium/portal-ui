@@ -8,6 +8,7 @@ import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset
 import Typography from '@mui/material/Typography';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { decimal, percent } from 'js/helpers/number-format';
+import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { useCurrentGeneContext } from '../SCFindResults/CurrentGeneContext';
 import { SCFindCellTypesChart } from './CellTypesChart';
 
@@ -88,7 +89,10 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
     <Box p={2} width="100%">
       <Box height="600px">
         <ChartLoader isLoading={isLoading}>
-          <Typography variant="subtitle2">Gene Expression Level Distribution Plot</Typography>
+          <Typography variant="subtitle2" display="flex" alignItems="center">
+            Gene Expression Level Distribution Plot{' '}
+            <InfoTextTooltip tooltipTitle="This plot shows the distribution of gene expression levels within this dataset." />
+          </Typography>
           <BarChart
             data={geneData}
             yAxisLabel="Frequency"
