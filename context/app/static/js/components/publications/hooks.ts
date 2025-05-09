@@ -52,7 +52,7 @@ function usePublications() {
 
   const filteredPublications = publications
     .filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
-    .sort((a, b) => Number(b.publication_date) - Number(a.publication_date));
+    .sort((a, b) => new Date(b.publication_date).getTime() - new Date(a.publication_date).getTime());
 
   return {
     publications,

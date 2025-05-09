@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
@@ -23,7 +24,7 @@ export default function PublicationsPanelList({
       if (isLoading) return skeletons;
       return [
         {
-          children: <>No results found. Try searching for a different publication.</>,
+          children: <Typography>No results found. Try searching for a different publication.</Typography>,
           key: 'no-results',
         },
       ];
@@ -41,7 +42,7 @@ export default function PublicationsPanelList({
         children: (
           <PublicationPanel.Item
             title={title}
-            href={`/publication/${uuid}`}
+            href={`/browse/publication/${uuid}`}
             firstContributor={contributors[0] ? `${contributors[0].first_name} ${contributors[0].last_name}` : ''}
             publicationVenue={publication_venue}
             publishedDate={publication_date}

@@ -10,11 +10,11 @@ import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/Res
 
 const desktopConfig = {
   title: {
-    flexBasis: '75%',
+    flexBasis: '90%',
     flexGrow: 1,
   },
   publishedDate: {
-    flexBasis: '15%',
+    flexBasis: '10%',
     flexGrow: 1,
   },
 };
