@@ -174,7 +174,7 @@ class CellsService {
   }
 
   async getIndexedDatasetCount() {
-    const results = await this.fetchAndParse<{ results: number }>(`/cells/total-datasets.json`, 'GET');
+    const results = await this.fetchAndParse<number>(`/cells/total-datasets.json`, 'GET');
     return results;
   }
 }
