@@ -9,8 +9,8 @@ import PublicationsPanelList from 'js/components/publications/PublicationsPanelL
 function PublicationsTabs() {
   const { filteredPublications, isLoading } = usePublications();
 
-  const preprints = filteredPublications.filter((pub) => pub.status.toLowerCase() === 'preprint');
-  const reviewed = filteredPublications.filter((pub) => pub.status.toLowerCase() === 'published');
+  const preprints = filteredPublications.filter((pub) => !pub.publication_status);
+  const reviewed = filteredPublications.filter((pub) => pub.publication_status);
 
   const publicationsByStatus = [
     { status: 'Peer-Reviewed', relevantPublications: reviewed },

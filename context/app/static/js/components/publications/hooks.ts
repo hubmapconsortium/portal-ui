@@ -1,16 +1,15 @@
 import { ContributorAPIResponse } from 'js/components/detailPage/ContributorsTable/utils';
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useDownloadTable } from 'js/helpers/download';
-import { format } from 'date-fns/format';
 import { usePublicationsSearchState } from 'js/components/publications/PublicationsSearchContext';
 
 export interface Publication {
   uuid: string;
   title: string;
-  contributors: ContributorAPIResponse[];
-  status: string;
+  publication_status: string;
   publication_venue: string;
   publication_date: string;
+  contributors?: ContributorAPIResponse[];
 }
 
 const query = {
@@ -26,7 +25,7 @@ const query = {
     },
   },
   size: 10000,
-  _source: ['uuid', 'status', 'title', 'contributors', 'publication_venue', 'publication_date'],
+  _source: ['uuid', 'publication_status', 'title', 'contributors', 'publication_venue', 'publication_date'],
 };
 
 export function usePublicationHits() {
@@ -37,16 +36,17 @@ export function usePublicationHits() {
 }
 
 function usePublications() {
-  const { publications, isLoading } = usePublicationHits();
+  const { publications = [], isLoading } = usePublicationHits();
   const search = usePublicationsSearchState();
 
   const downloadTable = useDownloadTable({
     fileName: 'publications.tsv',
     columnNames: ['Title', 'Contributors', 'Publication Venue', 'Published Date'],
     rows: publications.map(({ title, contributors, publication_venue, publication_date }) => {
-      const contributorsList = contributors.map(({ first_name, last_name }) => `${first_name} ${last_name}`).join(', ');
-      const creationDate = format(new Date(publication_date), 'yyyy-MM-dd').toString();
-      return [title, contributorsList, publication_venue, creationDate];
+      const contributorsList = contributors
+        ? contributors.map(({ first_name, last_name }) => `${first_name} ${last_name}`).join(', ')
+        : '';
+      return [title, contributorsList, publication_venue, publication_date];
     }),
   });
 

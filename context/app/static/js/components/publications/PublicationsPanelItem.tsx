@@ -55,7 +55,7 @@ function PublicationPanelItem({
             <Typography>{title}</Typography>
           </InternalLink>
           <Typography>
-            {firstContributor}, et al. | {publicationVenue}
+            {firstContributor ? `${firstContributor}, et al. | ${publicationVenue}` : publicationVenue}
           </Typography>
         </Stack>
       </BodyCell>
