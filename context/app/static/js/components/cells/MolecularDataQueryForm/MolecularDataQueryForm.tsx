@@ -68,6 +68,16 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
     );
   }, [queryType, reset, initialValues]);
 
+  // Reset submission state when query method changes
+  useEffect(() => {
+    reset(undefined, {
+      keepValues: true,
+      keepDirty: false,
+      keepIsSubmitSuccessful: false,
+      keepIsSubmitted: false,
+    });
+  }, [queryMethod, reset]);
+
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
     const cellVariableNames = getCellVariableNames(queryType, genes, proteins, cellTypes);
 
