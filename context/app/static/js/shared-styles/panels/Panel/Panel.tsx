@@ -38,7 +38,7 @@ function Panel(props: PanelProps) {
   const titleTextVariant = small ? 'subtitle2' : 'subtitle1';
 
   return (
-    <PanelBox {...panelBoxProps}>
+    <PanelBox {...panelBoxProps} sx={{ position: 'relative', top: 0 }}>
       {icon && (
         <Box pr={2} flexShrink={0} my="auto">
           {icon}

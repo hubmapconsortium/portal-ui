@@ -1,10 +1,10 @@
 import React from 'react';
 
-import { buildCollectionsPanelsProps } from 'js/pages/Collections/utils';
+import { buildCollectionsPanelsProps } from 'js/components/collections/utils';
 import PanelList from 'js/shared-styles/panels/PanelList';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
-import { CollectionHit } from 'js/pages/Collections/types';
+import { CollectionHit } from 'js/components/collections/types';
 
 import { StyledSectionPaper } from './styles';
 

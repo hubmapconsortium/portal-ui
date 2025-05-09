@@ -2,9 +2,12 @@ import { styled } from '@mui/material/styles';
 import { TabPanel, Tabs } from 'js/shared-styles/tabs';
 
 const StyledTabPanel = styled(TabPanel)(({ index, value }) => ({
-  flexGrow: value === index ? 1 : 0,
-  display: 'flex',
-  minHeight: 0, // flex overflow fix
+  display: value === index ? 'flex' : 'none',
+  flexDirection: 'column',
+  flexGrow: 1,
+  overflow: 'auto',
+  minHeight: 0,
+  width: '100%',
 }));
 
 const StyledTabs = styled(Tabs)({

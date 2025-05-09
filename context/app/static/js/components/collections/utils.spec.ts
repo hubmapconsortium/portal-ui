@@ -8,6 +8,7 @@ test('should return the props require for the panel list', () => {
         uuid: 'abc123',
         title: 'Collection ABC',
         hubmap_id: 'HBM_ABC123',
+        created_timestamp: 1678901234567,
         datasets: [
           { hubmap_id: 'a', uuid: 'a123' },
           { hubmap_id: 'b', uuid: 'b234' },
