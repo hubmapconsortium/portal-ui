@@ -2,7 +2,7 @@ import React from 'react';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import PanelListLandingPage from 'js/shared-styles/panels/PanelListLandingPage';
-import { usePublications } from 'js/components/publications/hooks';
+import { usePublicationHits } from 'js/components/publications/hooks';
 import PublicationsSearchProvider from 'js/components/publications/PublicationsSearchContext';
 import PublicationsSearchBar from 'js/components/publications/PublicationsSearchBar';
 import PublicationsTabs from 'js/components/publications/PublicationsTabs';
@@ -22,7 +22,7 @@ const text = {
 };
 
 function Publications() {
-  const { publications, isLoading } = usePublications();
+  const { publications } = usePublicationHits();
 
   return (
     <PublicationsSearchProvider>
@@ -35,7 +35,7 @@ function Publications() {
         data-testid="publications-title"
       >
         <PublicationsSearchBar />
-        <PublicationsTabs publications={publications} isLoading={isLoading} />
+        <PublicationsTabs />
       </PanelListLandingPage>
     </PublicationsSearchProvider>
   );

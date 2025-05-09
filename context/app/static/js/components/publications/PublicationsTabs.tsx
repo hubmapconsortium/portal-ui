@@ -3,12 +3,14 @@ import Stack from '@mui/material/Stack';
 
 import { StyledTabPanel, StyledTabs } from 'js/components/publications/style';
 import Tab from 'js/shared-styles/tabs/Tab';
-import { Publication } from 'js/components/publications/hooks';
+import { usePublications } from 'js/components/publications/hooks';
 import PublicationsPanelList from 'js/components/publications/PublicationsPanelList';
 
-function PublicationsTabs({ publications, isLoading }: { publications: Publication[]; isLoading: boolean }) {
-  const preprints = publications.filter((pub) => pub.status.toLowerCase() === 'preprint');
-  const reviewed = publications.filter((pub) => pub.status.toLowerCase() === 'published');
+function PublicationsTabs() {
+  const { filteredPublications, isLoading } = usePublications();
+
+  const preprints = filteredPublications.filter((pub) => pub.status.toLowerCase() === 'preprint');
+  const reviewed = filteredPublications.filter((pub) => pub.status.toLowerCase() === 'published');
 
   const publicationsByStatus = [
     { status: 'Peer-Reviewed', relevantPublications: reviewed },
@@ -21,7 +23,7 @@ function PublicationsTabs({ publications, isLoading }: { publications: Publicati
   };
 
   return (
-    <Stack>
+    <Stack overflow="auto">
       <StyledTabs
         data-testid="publication-tabs"
         value={openTabIndex}

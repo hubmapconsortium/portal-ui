@@ -2,6 +2,7 @@ import { ContributorAPIResponse } from 'js/components/detailPage/ContributorsTab
 import { useSearchHits } from 'js/hooks/useSearchData';
 import { useDownloadTable } from 'js/helpers/download';
 import { format } from 'date-fns/format';
+import { usePublicationsSearchState } from 'js/components/publications/PublicationsSearchContext';
 
 export interface Publication {
   uuid: string;
@@ -37,6 +38,7 @@ export function usePublicationHits() {
 
 function usePublications() {
   const { publications, isLoading } = usePublicationHits();
+  const search = usePublicationsSearchState();
 
   const downloadTable = useDownloadTable({
     fileName: 'publications.tsv',
@@ -48,8 +50,13 @@ function usePublications() {
     }),
   });
 
+  const filteredPublications = publications
+    .filter((item) => item.title.toLowerCase().includes(search.toLowerCase()))
+    .sort((a, b) => Number(b.publication_date) - Number(a.publication_date));
+
   return {
     publications,
+    filteredPublications,
     isLoading,
     downloadTable,
   };
