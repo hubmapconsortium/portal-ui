@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Stack from '@mui/material/Stack';
 
 import { StyledTabPanel, StyledTabs } from 'js/components/publications/style';
@@ -7,27 +7,14 @@ import { usePublications } from 'js/components/publications/hooks';
 import PublicationsPanelList from 'js/components/publications/PublicationsPanelList';
 
 function PublicationsTabs() {
-  const { filteredPublications, isLoading } = usePublications();
-
-  const preprints = filteredPublications.filter((pub) => !pub.publication_status);
-  const reviewed = filteredPublications.filter((pub) => pub.publication_status);
-
-  const publicationsByStatus = [
-    { status: 'Peer-Reviewed', relevantPublications: reviewed },
-    { status: 'Preprint', relevantPublications: preprints },
-  ];
-
-  const [openTabIndex, setOpenTabIndex] = useState(0);
-  const handleChange = (_: Event, newIndex: number) => {
-    setOpenTabIndex(newIndex);
-  };
+  const { openTabIndex, handleTabChange, publicationsByStatus, isLoading } = usePublications();
 
   return (
     <Stack overflow="auto">
       <StyledTabs
         data-testid="publication-tabs"
         value={openTabIndex}
-        onChange={handleChange}
+        onChange={handleTabChange}
         aria-label="Published and preprint publications"
       >
         {publicationsByStatus.map(({ status, relevantPublications }, i) => {

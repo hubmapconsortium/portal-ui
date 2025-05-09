@@ -1,5 +1,4 @@
 import React from 'react';
-import { format } from 'date-fns/format';
 
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -60,7 +59,7 @@ function PublicationPanelItem({
         </Stack>
       </BodyCell>
       <BodyCell {...desktopConfig.publishedDate} aria-label="Publication Date">
-        <Typography>{format(new Date(publishedDate), 'yyyy-MM-dd')}</Typography>
+        <Typography>{publishedDate}</Typography>
       </BodyCell>
     </StackTemplate>
   );
