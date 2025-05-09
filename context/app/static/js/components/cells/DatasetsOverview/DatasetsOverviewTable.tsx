@@ -4,7 +4,7 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import React from 'react';
-import { decimal } from 'js/helpers/number-format';
+import { decimal, percent } from 'js/helpers/number-format';
 import Divider from '@mui/material/Divider';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { DatasetsOverviewDigest } from './hooks';
@@ -55,21 +55,21 @@ export default function DatasetsOverviewTable({ indexed, matched, all }: Overvie
           <TableCell>{matched.totalDatasets}</TableCell>
           <DividerCell />
           <TableCell>{indexed.totalDatasets}</TableCell>
-          <TableCell>{decimal.format((matched.totalDatasets / indexed.totalDatasets) * 100)}%</TableCell>
+          <TableCell>{percent.format(matched.totalDatasets / indexed.totalDatasets)}</TableCell>
           <DividerCell />
           <TableCell>{all.totalDatasets}</TableCell>
-          <TableCell>{decimal.format((matched.totalDatasets / all.totalDatasets) * 100)}%</TableCell>
+          <TableCell>{percent.format(matched.totalDatasets / all.totalDatasets)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Unique Donors</TableCell>
           <TableCell>{matched.totalDonors}</TableCell>
           <DividerCell />
           <TableCell>{indexed.totalDonors}</TableCell>
-          <TableCell>{decimal.format((matched.totalDonors / indexed.totalDonors) * 100)}%</TableCell>
+          <TableCell>{percent.format(matched.totalDonors / indexed.totalDonors)}</TableCell>
 
           <DividerCell />
           <TableCell>{all.totalDonors}</TableCell>
-          <TableCell>{decimal.format((matched.totalDonors / all.totalDonors) * 100)}%</TableCell>
+          <TableCell>{percent.format(matched.totalDonors / all.totalDonors)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Average Donor Age (Years)</TableCell>
@@ -86,20 +86,20 @@ export default function DatasetsOverviewTable({ indexed, matched, all }: Overvie
           <TableCell>{matched.maleDonors}</TableCell>
           <DividerCell />
           <TableCell>{indexed.maleDonors}</TableCell>
-          <TableCell>{decimal.format((matched.maleDonors / indexed.maleDonors) * 100)}%</TableCell>
+          <TableCell>{percent.format(matched.maleDonors / indexed.maleDonors)}</TableCell>
           <DividerCell />
           <TableCell>{all.maleDonors}</TableCell>
-          <TableCell>{decimal.format((matched.maleDonors / all.maleDonors) * 100)}%</TableCell>
+          <TableCell>{percent.format(matched.maleDonors / all.maleDonors)}</TableCell>
         </TableRow>
         <TableRow>
           <TableCell>Female Donors</TableCell>
           <TableCell>{matched.femaleDonors}</TableCell>
           <DividerCell />
           <TableCell>{indexed.femaleDonors}</TableCell>
-          <TableCell>{decimal.format((matched.femaleDonors / indexed.femaleDonors) * 100)}%</TableCell>
+          <TableCell>{percent.format(matched.femaleDonors / indexed.femaleDonors)}</TableCell>
           <DividerCell />
           <TableCell>{all.femaleDonors}</TableCell>
-          <TableCell>{decimal.format((matched.femaleDonors / all.femaleDonors) * 100)}%</TableCell>
+          <TableCell>{percent.format(matched.femaleDonors / all.femaleDonors)}</TableCell>
         </TableRow>
       </TableBody>
     </Table>
