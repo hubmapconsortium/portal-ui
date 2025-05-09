@@ -1,4 +1,4 @@
-import React, { ComponentType } from 'react';
+import React, { ComponentType, useMemo } from 'react';
 import { format } from 'date-fns/format';
 
 import { EntityDocument, DatasetDocument, SampleDocument, DonorDocument } from 'js/typings/search';
@@ -7,6 +7,7 @@ import { getDonorAgeString } from 'js/helpers/functions';
 import { trackEvent } from 'js/helpers/trackers';
 import { EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
+import { useOptionalGeneContext } from 'js/components/cells/SCFindResults/CurrentGeneContext';
 import { SecondaryBackgroundTooltip } from '../tooltips';
 
 export interface CellContentProps<SearchDoc> {
@@ -19,11 +20,21 @@ function HubmapIDCell({
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
   const isNotPublic = mapped_status !== 'Published' || mapped_data_access_level !== 'Public';
+  const markerGene = useOptionalGeneContext();
+
+  const href = useMemo(() => {
+    const url = new URL(`/browse/dataset/${uuid}`, window.location.origin);
+    if (markerGene) {
+      url.searchParams.set('marker', markerGene);
+    }
+    return url.toString();
+  }, [uuid, markerGene]);
+
   return (
     <>
       <InternalLink
         target={openLinksInNewTab ? '_blank' : '_self'}
-        href={`/browse/dataset/${uuid}`}
+        href={href}
         onClick={() =>
           trackingInfo &&
           trackEvent({

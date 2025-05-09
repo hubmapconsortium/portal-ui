@@ -18,10 +18,6 @@ export interface SCFindGeneQueryFormState {
   threshold: number;
 }
 
-export interface SCFindCellTypeQueryFormState {
-  cellTypes: AutocompleteResult[];
-}
-
 export interface CrossModalityGeneQueryFormState {
   queryType: 'gene';
   queryMethod: 'crossModalityRNA' | 'crossModalityATAC';
@@ -30,8 +26,11 @@ export interface CrossModalityGeneQueryFormState {
   genes: AutocompleteResult[];
 }
 
-export interface CrossModalityProteinQueryFormState {
+type GeneQueryFormState = SCFindGeneQueryFormState | CrossModalityGeneQueryFormState;
+
+export interface ProteinQueryFormState {
   queryType: 'protein';
+  queryMethod: 'crossModality';
   proteins: AutocompleteResult[];
   minimumAbundance: number;
   minimumCellPercentage: number;
@@ -43,13 +42,4 @@ export interface CellTypeQueryFormState {
   cellTypes: AutocompleteResult[];
 }
 
-export type MolecularDataQueryFormState = {
-  queryType: QueryType;
-  geneQueryMethod: GeneQueryMethod;
-} & (
-  | SCFindGeneQueryFormState
-  | SCFindCellTypeQueryFormState
-  | CrossModalityGeneQueryFormState
-  | CrossModalityProteinQueryFormState
-  | CellTypeQueryFormState
-);
+export type MolecularDataQueryFormState = GeneQueryFormState | ProteinQueryFormState | CellTypeQueryFormState;

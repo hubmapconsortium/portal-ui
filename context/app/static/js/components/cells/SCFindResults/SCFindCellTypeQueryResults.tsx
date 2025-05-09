@@ -1,96 +1,24 @@
 import React, { useEffect, useMemo } from 'react';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
-import { lastModifiedTimestamp, assayTypes, organ, hubmapID, CellContentProps } from 'js/shared-styles/tables/columns';
+import { lastModifiedTimestamp, assayTypes, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { Dataset } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
-import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
-import { DatasetDocument } from 'js/typings/search';
-import { decimal, percent } from 'js/helpers/number-format';
-import { useSCFindCellTypeResults } from './hooks';
+import Skeleton from '@mui/material/Skeleton';
+import { useDeduplicatedResults, useSCFindCellTypeResults, useTableTrackingProps } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import CellTypeDistributionChart from '../CellTypeDistributionChart/CellTypeDistributionChart';
 import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 import DatasetsOverview from '../DatasetsOverview';
-import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
-
-interface SCFindCellTypeQueryResultsProps {
-  datasetIds: { hubmap_id: string }[];
-}
-
-function TargetCellCountColumn({ hit: { hubmap_id } }: CellContentProps<DatasetDocument>) {
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: hubmap_id });
-  const cellTypes = useCellVariableNames();
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (!data) {
-    return <div>No data</div>;
-  }
-  const { cellTypeCounts } = data;
-  const cellTypeCountsMap = cellTypeCounts.reduce(
-    (acc, { index, count }) => {
-      acc[index] = count;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
-  const totalCells = cellTypeCounts.reduce((acc, { count }) => acc + count, 0);
-
-  return (
-    <div>
-      {Object.entries(cellTypeCountsMap).map(([cellType, count]) =>
-        cellTypes.includes(cellType) ? (
-          <Typography key={cellType} variant="body2" component="p">
-            {cellType.split('.')[1]}: {count} ({percent.format(count / totalCells)})
-          </Typography>
-        ) : null,
-      )}
-    </div>
-  );
-}
-
-function TotalCellCountColumn({ hit: { hubmap_id } }: CellContentProps<DatasetDocument>) {
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: hubmap_id });
-
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (!data) {
-    return <div>No data</div>;
-  }
-  const { cellTypeCounts } = data;
-  const totalCells = cellTypeCounts.reduce((acc, { count }) => acc + count, 0);
-
-  return (
-    <Typography variant="body2" component="p">
-      {decimal.format(totalCells)}
-    </Typography>
-  );
-}
-
-const targetCellCountColumn = {
-  id: 'cell_count',
-  label: 'Target Cell Count',
-  cellContent: TargetCellCountColumn,
-  noSort: true,
-};
-
-const totalCellCountColumn = {
-  id: 'total_cell_count',
-  label: 'Total Cell Count',
-  cellContent: TotalCellCountColumn,
-  noSort: true,
-};
+import { SCFindQueryResultsListProps } from './types';
+import { targetCellCountColumn, totalCellCountColumn } from './columns';
 
 const columns = [hubmapID, organ, assayTypes, targetCellCountColumn, totalCellCountColumn, lastModifiedTimestamp];
 
-function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindCellTypeQueryResultsProps) {
-  const { track, sessionId } = useMolecularDataQueryFormTracking();
+function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
   return (
     <EntitiesTables<Dataset>
       maxHeight={800}
@@ -119,23 +47,7 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindCellTypeQueryResul
           expandedContent: SCFindCellTypesChart,
         },
       ]}
-      onSelectAllChange={(e) => {
-        const isSelected = e.target.checked;
-        if (isSelected) {
-          track('Results / Select All Datasets');
-        }
-      }}
-      onSelectChange={(e, id) => {
-        const isSelected = e.target.checked;
-        if (isSelected) {
-          track('Results / Select Dataset', id);
-        }
-      }}
-      trackingInfo={{
-        category: 'Molecular and Cellular Query',
-        action: 'Results',
-        label: sessionId,
-      }}
+      {...useTableTrackingProps()}
     />
   );
 }
@@ -183,7 +95,42 @@ function OrganCellTypeDistributionCharts() {
           <Typography variant="subtitle1" component="p">
             Datasets Overview
           </Typography>
-          <DatasetsOverview datasets={datasetsByTissue[tissue]} />
+          <DatasetsOverview datasets={datasetsByTissue[tissue]}>
+            These results are derived from RNAseq datasets that were indexed by the scFind method. Not all HuBMAP
+            datasets are currently compatible with this method due to data modalities or the availability of cell
+            annotations. The table below summarizes the number of matched datasets and the proportions relative to
+            scFind-indexed datasets and total HuBMAP datasets.
+          </DatasetsOverview>
+        </TabPanel>
+      ))}
+    </>
+  );
+}
+
+function DatasetListSection() {
+  const { datasets, isLoading } = useSCFindCellTypeResults();
+  const { openTabIndex, handleTabChange } = useTabs();
+  const cellTypes = useCellVariableNames();
+
+  if (isLoading) {
+    return <Skeleton variant="rectangular" width="100%" height={800} />;
+  }
+
+  if (!datasets) {
+    return <div>No datasets found</div>;
+  }
+
+  return (
+    <>
+      <Tabs onChange={handleTabChange} value={openTabIndex}>
+        {cellTypes.map((cellType, idx) => (
+          <Tab key={cellType} label={`${cellType} (${datasets[cellType].length})`} index={idx} />
+        ))}
+      </Tabs>
+      <DatasetListHeader />
+      {cellTypes.map((cellType, idx) => (
+        <TabPanel key={cellType} value={openTabIndex} index={idx}>
+          <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
         </TabPanel>
       ))}
     </>
@@ -192,25 +139,9 @@ function OrganCellTypeDistributionCharts() {
 
 function SCFindCellTypeQueryResultsLoader() {
   const { datasets, isLoading, error } = useSCFindCellTypeResults();
-  const cellTypes = useCellVariableNames();
-  const { openTabIndex, handleTabChange } = useTabs();
   const { setResults } = useResultsProvider();
 
-  const deduplicatedResults = useMemo(() => {
-    if (datasets) {
-      const uniqueResults = Object.values(datasets)
-        .flat()
-        .reduce((acc, dataset) => {
-          const { hubmap_id } = dataset;
-          if (!acc.has(hubmap_id)) {
-            acc.add(hubmap_id);
-          }
-          return acc;
-        }, new Set<string>());
-      return Array.from(uniqueResults);
-    }
-    return [];
-  }, [datasets]);
+  const deduplicatedResults = useDeduplicatedResults(datasets);
 
   // update the total dataset counter for the results display
   useEffect(() => {
@@ -218,7 +149,7 @@ function SCFindCellTypeQueryResultsLoader() {
   }, [deduplicatedResults.length, isLoading, error, setResults]);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Skeleton variant="rectangular" width="100%" height={800} />;
   }
 
   if (!datasets) {
@@ -229,19 +160,7 @@ function SCFindCellTypeQueryResultsLoader() {
     <Stack spacing={1} py={2}>
       <Typography variant="subtitle1">Cell Type Distribution Across Organs</Typography>
       <OrganCellTypeDistributionCharts />
-      <Tabs onChange={handleTabChange} value={openTabIndex}>
-        {cellTypes.map((cellType, idx) => (
-          <Tab key={cellType} label={`${cellType} (${datasets[cellType].length})`} index={idx} />
-        ))}
-      </Tabs>
-      <div>
-        <DatasetListHeader />
-        {cellTypes.map((cellType, idx) => (
-          <TabPanel key={cellType} value={openTabIndex} index={idx}>
-            <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
-          </TabPanel>
-        ))}
-      </div>
+      <DatasetListSection />
     </Stack>
   );
 }

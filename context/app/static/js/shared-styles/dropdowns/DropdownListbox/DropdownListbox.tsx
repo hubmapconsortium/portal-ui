@@ -5,6 +5,7 @@ import ClickAwayListener from '@mui/material/ClickAwayListener';
 import MenuList from '@mui/material/MenuList';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
+import { useEventCallback } from '@mui/material/utils';
 import { StyledPopper, StyledPaper } from './style';
 
 interface DropdownListboxProps<T> {
@@ -31,10 +32,10 @@ function DropdownListbox<T>({
   const anchorRef = useRef(null);
   const [isOpen, setIsOpen] = useState(false);
 
-  function selectOption(selectedItem: { option: T; i: number }) {
+  const selectOption = useEventCallback((selectedItem: { option: T; i: number }) => {
     selectOnClick(selectedItem);
     setIsOpen(false);
-  }
+  });
 
   return (
     <>

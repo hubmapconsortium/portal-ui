@@ -5,6 +5,7 @@ import { CrossModalityCellTypeResults, CrossModalityGeneOrProteinResults } from 
 import { useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks';
 import LoadingResults from './LoadingResults';
 import { SCFindCellTypeQueryResults } from '../SCFindResults';
+import SCFindGeneQueryResultsLoader from '../SCFindResults/SCFindGeneQueryResults';
 
 function Results() {
   const { watch } = useMolecularDataQueryFormState();
@@ -12,20 +13,26 @@ function Results() {
   const queryType = watch('queryType');
   const queryMethod = watch('queryMethod');
 
-  if (queryType === 'cell-type' && queryMethod === 'crossModality') {
-    return <CrossModalityCellTypeResults />;
+  if (queryMethod === 'scFind') {
+    switch (queryType) {
+      case 'cell-type':
+        return <SCFindCellTypeQueryResults />;
+      case 'gene':
+        return <SCFindGeneQueryResultsLoader />;
+      default:
+        return null;
+    }
+  } else {
+    switch (queryType) {
+      case 'cell-type':
+        return <CrossModalityCellTypeResults />;
+      default:
+        return <CrossModalityGeneOrProteinResults />;
+    }
   }
-  if (queryType === 'cell-type' && queryMethod === 'scFind') {
-    return <SCFindCellTypeQueryResults />;
-  }
-  if (queryType === 'protein' || (queryType === 'gene' && queryMethod !== 'scFind')) {
-    return <CrossModalityGeneOrProteinResults />;
-  }
-  // TODO: Add support for SCFind Gene queries
-  return null;
 }
 
-function CellsResults() {
+function ResultsWithLoader() {
   const {
     formState: { isLoading, isSubmitting, isSubmitted, isSubmitSuccessful },
   } = useMolecularDataQueryFormState();
@@ -47,4 +54,4 @@ function CellsResults() {
   );
 }
 
-export default CellsResults;
+export default ResultsWithLoader;

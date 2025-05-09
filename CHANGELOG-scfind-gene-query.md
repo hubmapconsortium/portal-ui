@@ -1,0 +1,1 @@
+- Add support for querying for datasets by gene using scFind.

@@ -10,19 +10,21 @@ import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 
 const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
 export default function CrossModalityGeneOrProteinResults<T extends 'gene' | 'protein'>() {
-  const { data, error } = useCrossModalityResults<T>();
+  const { data, error, isLoading: isLoadingInitialResults } = useCrossModalityResults<T>();
 
-  const { list, isLoading } = useAugmentedResults(data?.list);
+  const { list, isLoading: isLoadingAugmentedResults } = useAugmentedResults(data?.list);
+
+  const isLoading = isLoadingInitialResults || isLoadingAugmentedResults;
 
   const setResults = useResultsProvider((state) => state.setResults);
 
   useEffect(() => {
-    if (list.length) {
-      setResults(list.length, isLoading, error?.message);
+    if (list.length > 0) {
+      setResults(list.length, false, null);
     } else {
-      setResults(0, false, error?.message);
+      setResults(0, isLoading, error);
     }
-  }, [setResults, data, isLoading, error, list.length]);
+  }, [setResults, data, isLoading, error, list]);
 
   const query = useMemo(() => {
     const ids = { values: list.map((r) => r._source.uuid) };

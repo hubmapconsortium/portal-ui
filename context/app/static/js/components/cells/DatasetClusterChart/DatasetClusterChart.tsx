@@ -10,9 +10,16 @@ import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarC
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 
+import { useEventCallback } from '@mui/material/utils';
 import { getOptionLabels, addMatchedAndUnmatched } from './utils';
+import { ClusterCellMatch } from '../CellsService';
 
-function DatasetClusterChart({ uuid, results }) {
+interface DatasetClusterChartProps {
+  uuid: string;
+  results: Record<string, ClusterCellMatch[]>;
+}
+
+function DatasetClusterChart({ uuid, results }: DatasetClusterChartProps) {
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
   const theme = useTheme();
 
@@ -20,7 +27,7 @@ function DatasetClusterChart({ uuid, results }) {
     top: 25,
     right: 50,
     left: 65,
-    bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
+    bottom: 20,
   };
 
   const selectedData = results[Object.keys(results)[selectedClusterTypeIndex]];
@@ -44,25 +51,29 @@ function DatasetClusterChart({ uuid, results }) {
 
   const optionLabels = getOptionLabels(Object.keys(results), uuid);
 
+  const selectOnClick = useEventCallback((selectedItem: { option: string; i: number }) => {
+    setSelectedClusterTypeIndex(selectedItem.i);
+  });
+
   return (
     <ChartWrapper
       chartTitle="Cluster Membership"
       margin={chartMargin}
       colorScale={colorScale}
       dropdown={
-        <div>
-          <Typography>Cluster Method</Typography>
+        <>
+          <Typography component="label">Cluster Method</Typography>
           <DropdownListbox
             id="bar-fill-dropdown"
             optionComponent={DropdownListboxOption}
             buttonComponent={Button}
             selectedOptionIndex={selectedClusterTypeIndex}
             options={Object.keys(results)}
-            selectOnClick={setSelectedClusterTypeIndex}
+            selectOnClick={selectOnClick}
             getOptionLabel={(option) => optionLabels[option]}
             buttonProps={{ variant: 'outlined' }}
           />
-        </div>
+        </>
       }
     >
       <VerticalStackedBarChart

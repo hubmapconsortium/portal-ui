@@ -17,18 +17,16 @@ interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
 }
 
-const DEFAULT_GENE_QUERY_METHOD = 'crossModalityRNA';
-
 export default function MolecularDataQueryForm({ children, initialValues }: MolecularDataQueryFormProps) {
   const methods = useForm<MolecularDataQueryFormState>({
     defaultValues: {
       queryType: 'gene',
-      queryMethod: DEFAULT_GENE_QUERY_METHOD,
+      queryMethod: 'scFind',
       genes: [],
       minimumCellPercentage: 5,
       minimumExpressionLevel: 1,
       ...initialValues,
-    },
+    } as Partial<MolecularDataQueryFormState>,
   });
   const { watch, reset } = methods;
   const { track } = useMolecularDataQueryFormTracking();
@@ -46,7 +44,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   // Reset selected options when query type changes
   useEffect(() => {
     const newQueryMethod = {
-      gene: DEFAULT_GENE_QUERY_METHOD,
+      gene: 'scFind',
       protein: 'crossModality',
       'cell-type': 'scFind',
     }[queryType];
@@ -69,6 +67,16 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
       },
     );
   }, [queryType, reset, initialValues]);
+
+  // Reset submission state when query method changes
+  useEffect(() => {
+    reset(undefined, {
+      keepValues: true,
+      keepDirty: false,
+      keepIsSubmitSuccessful: false,
+      keepIsSubmitted: false,
+    });
+  }, [queryMethod, reset]);
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
     const cellVariableNames = getCellVariableNames(queryType, genes, proteins, cellTypes);

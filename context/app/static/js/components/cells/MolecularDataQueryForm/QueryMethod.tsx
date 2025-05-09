@@ -9,6 +9,7 @@ import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrack
 
 const queryMethods = {
   gene: [
+    { value: 'scFind', label: 'scFind - RNAseq experiments (gene expression)', disabled: false },
     {
       value: 'crossModalityRNA',
       label: 'Cells Cross-Modality - RNAseq experiments (gene expression)',
@@ -19,7 +20,6 @@ const queryMethods = {
       label: 'Cells Cross-Modality - ATACseq experiments (DNA accessibility)',
       disabled: false,
     },
-    { value: 'scFind', label: 'scFind - RNAseq experiments (gene expression)', disabled: true },
   ],
   'cell-type': [
     { value: 'scFind', label: 'scFind (RNASeq)', disabled: false },
@@ -65,13 +65,16 @@ export default function QueryMethod() {
     return <ProteinQueryMethod />;
   }
 
-  if (!queryMethods[queryType] || !description[queryType]) {
+  const currentQueryMethods = queryMethods[queryType];
+  const currentDescription = description[queryType];
+
+  if (!currentQueryMethods || !currentDescription) {
     return null;
   }
 
   return (
     <FormFieldContainer title="Query Method">
-      <FormFieldSubtitle>{description[queryType]}</FormFieldSubtitle>
+      <FormFieldSubtitle>{currentDescription}</FormFieldSubtitle>
       <TextField
         id="query-method-select"
         label="Query Method"
@@ -95,7 +98,7 @@ export default function QueryMethod() {
           },
         }}
       >
-        {queryMethods[queryType].map((method) => (
+        {currentQueryMethods.map((method) => (
           <MenuItem value={method.value} key={method.value} disabled={method.disabled}>
             {method.label} {method.disabled && '(coming soon)'}
           </MenuItem>
