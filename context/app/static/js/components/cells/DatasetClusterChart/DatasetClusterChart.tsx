@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
@@ -19,18 +19,31 @@ interface DatasetClusterChartProps {
   results: Record<string, ClusterCellMatch[]>;
 }
 
+const useColorScale = () => {
+  const theme = useTheme();
+  return useMemo(
+    () =>
+      scaleOrdinal({
+        domain: ['matched', 'unmatched'],
+        range: [theme.palette.warning.dark, theme.palette.warning.light],
+      }),
+    [theme],
+  );
+};
+
+const chartMargin = {
+  top: 25,
+  right: 50,
+  left: 80,
+  bottom: 20,
+};
+
 function DatasetClusterChart({ uuid, results }: DatasetClusterChartProps) {
   const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
-  const theme = useTheme();
 
-  const chartMargin = {
-    top: 25,
-    right: 50,
-    left: 65,
-    bottom: 20,
-  };
-
-  const selectedData = results[Object.keys(results)[selectedClusterTypeIndex]];
+  const selectedData = useMemo(() => {
+    return results[Object.keys(results)[selectedClusterTypeIndex]];
+  }, [results, selectedClusterTypeIndex]);
 
   const yScale = scaleLinear({
     domain: [0, Math.max(...selectedData.map((result) => result.matched + result.unmatched))],
@@ -44,10 +57,7 @@ function DatasetClusterChart({ uuid, results }: DatasetClusterChartProps) {
     padding: 0.2,
   });
 
-  const colorScale = scaleOrdinal({
-    domain: ['matched', 'unmatched'],
-    range: [theme.palette.warning.dark, theme.palette.warning.light],
-  });
+  const colorScale = useColorScale();
 
   const optionLabels = getOptionLabels(Object.keys(results), uuid);
 
@@ -77,6 +87,7 @@ function DatasetClusterChart({ uuid, results }: DatasetClusterChartProps) {
       }
     >
       <VerticalStackedBarChart
+        parentHeight={350}
         visxData={selectedData}
         yScale={yScale}
         xScale={xScale}

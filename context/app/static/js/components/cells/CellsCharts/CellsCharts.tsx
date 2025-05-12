@@ -30,8 +30,8 @@ function CellsCharts({ uuid }: Dataset) {
   }
 
   return (
-    <Box padding={2} width="100%">
-      <div>
+    <Box py={2} width="100%">
+      <Box px={2}>
         <ChartWrapper>
           <ChartLoader isLoading={isLoading}>
             <CellExpressionHistogram
@@ -46,7 +46,7 @@ function CellsCharts({ uuid }: Dataset) {
             <DatasetClusterChart uuid={uuid} results={clusterData} />
           </ChartLoader>
         </ChartWrapper>
-      </div>
+      </Box>
       <StyledTypography>
         {diagnosticInfo ? (
           `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${

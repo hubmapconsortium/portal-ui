@@ -39,6 +39,13 @@ const GeneExpressionTooltipWithDataset = (dataset: string) => {
   };
 };
 
+const margin = {
+  top: 20,
+  right: 20,
+  bottom: 20,
+  left: 80,
+} as const;
+
 function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
   const gene = useCurrentGeneContext();
 
@@ -81,14 +88,7 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
             data={geneData}
             yAxisLabel="Frequency"
             xAxisLabel="Expression Level"
-            margin={
-              {
-                top: 20,
-                right: 20,
-                bottom: 20,
-                left: 80,
-              } as const
-            }
+            margin={margin}
             TooltipContent={GeneExpressionTooltip}
           />
         </ChartLoader>
