@@ -106,9 +106,10 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(preprintPublicationHit)).toEqual({
       key: 'abc123',
       href: '/browse/publication/abc123',
-      onClick: () => {},
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      onClick: expect.any(Function),
       title: 'Publication ABC',
-      secondaryText: 'Ash Ketchum | Pallet Town Times',
+      secondaryText: 'Team Rocket | Pallet Town Times',
       rightText: 'Preprint Date: 2022-03-02',
     });
   });
@@ -116,9 +117,10 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(peerReviewedPublicationHit)).toEqual({
       key: 'def234',
       href: '/browse/publication/def234',
-      onClick: () => {},
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+      onClick: expect.any(Function),
       title: 'Publication DEF',
-      secondaryText: 'Professor Oak | Pallet Town Times',
+      secondaryText: 'Team Rocket | Pallet Town Times',
       rightText: 'Published: 2022-03-02',
     });
   });

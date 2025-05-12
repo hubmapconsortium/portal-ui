@@ -20,7 +20,7 @@ function buildAbbreviatedContributors(contributors: Contributor[]) {
 
 function buildSecondaryText(publication_venue: string, contributors?: Contributor[], publication_date = '') {
   if (!contributors?.length) {
-    return '';
+    return publication_venue;
   }
 
   return [buildAbbreviatedContributors(contributors), publication_venue, publication_date]
