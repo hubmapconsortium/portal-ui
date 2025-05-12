@@ -6,6 +6,8 @@ import Stack from '@mui/material/Stack';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
+import { buildSecondaryText } from 'js/components/publications/utils';
+import { ContributorAPIResponse, normalizeContributor } from 'js/components/detailPage/ContributorsTable/utils';
 
 const desktopConfig = {
   title: {
@@ -34,17 +36,17 @@ function PublicationHeaderPanel() {
 interface PublicationPanelItemProps {
   title: string;
   publishedDate: string;
-  firstContributor: string;
   publicationVenue: string;
   href: string;
+  contributors?: ContributorAPIResponse[];
 }
 
 function PublicationPanelItem({
   title,
   publishedDate,
-  firstContributor,
   publicationVenue,
   href,
+  contributors,
 }: PublicationPanelItemProps) {
   return (
     <StackTemplate>
@@ -53,9 +55,7 @@ function PublicationPanelItem({
           <InternalLink href={href} data-testId="panel-title">
             <Typography>{title}</Typography>
           </InternalLink>
-          <Typography>
-            {firstContributor ? `${firstContributor}, et al. | ${publicationVenue}` : publicationVenue}
-          </Typography>
+          <Typography>{buildSecondaryText(publicationVenue, contributors?.map(normalizeContributor))}</Typography>
         </Stack>
       </BodyCell>
       <BodyCell {...desktopConfig.publishedDate} aria-label="Publication Date">

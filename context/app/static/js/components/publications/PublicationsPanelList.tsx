@@ -43,7 +43,7 @@ export default function PublicationsPanelList({
           <PublicationPanel.Item
             title={title}
             href={`/browse/publication/${uuid}`}
-            firstContributor={contributors?.[0] ? `${contributors[0].first_name} ${contributors[0].last_name}` : ''}
+            contributors={contributors}
             publicationVenue={publication_venue}
             publishedDate={publication_date}
           />

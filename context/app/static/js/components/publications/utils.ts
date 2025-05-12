@@ -18,7 +18,11 @@ function buildAbbreviatedContributors(contributors: Contributor[]) {
   }
 }
 
-function buildSecondaryText(contributors: Contributor[], publication_venue: string, publication_date = '') {
+function buildSecondaryText(publication_venue: string, contributors?: Contributor[], publication_date = '') {
+  if (!contributors?.length) {
+    return '';
+  }
+
   return [buildAbbreviatedContributors(contributors), publication_venue, publication_date]
     .filter((str) => str.length)
     .join(' | ');
@@ -56,12 +60,12 @@ function buildPublicationPanelProps(
     onClick,
     title,
     secondaryText: buildSecondaryText(
-      contributors.map(normalizeContributor),
       publication_venue,
+      contributors.map(normalizeContributor),
       noRightText ? dateText : undefined,
     ),
     rightText: noRightText ? undefined : dateText,
   };
 }
 
-export { buildAbbreviatedContributors, buildSecondaryText, buildPublicationPanelProps };
+export { buildPublicationPanelProps, buildAbbreviatedContributors, buildSecondaryText };
