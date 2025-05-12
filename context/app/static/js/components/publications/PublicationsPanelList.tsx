@@ -1,16 +1,11 @@
 import React, { useMemo } from 'react';
-import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
 import { Publication } from 'js/components/publications/hooks';
 import PublicationPanel from 'js/components/publications/PublicationsPanelItem';
-
-const skeletons: PanelProps[] = Array.from({ length: 10 }).map((_, index) => ({
-  key: `skeleton-${index}`,
-  children: <Skeleton width="100%" height={32} variant="rounded" key={Math.random()} />,
-}));
+import { skeletons } from 'js/shared-styles/panels/ResponsivePanelCells';
 
 export default function PublicationsPanelList({
   publications,

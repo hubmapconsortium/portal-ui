@@ -1,16 +1,11 @@
 import React, { useMemo } from 'react';
-import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
 import { useCollections } from 'js/components/collections/hooks';
+import { skeletons } from 'js/shared-styles/panels/ResponsivePanelCells';
 import CollectionPanel from './CollectionsPanelItem';
-
-const skeletons: PanelProps[] = Array.from({ length: 10 }).map((_, index) => ({
-  key: `skeleton-${index}`,
-  children: <Skeleton width="100%" height={32} variant="rounded" key={Math.random()} />,
-}));
 
 export default function CollectionsPanelList() {
   const { filteredCollections, isLoading } = useCollections();
