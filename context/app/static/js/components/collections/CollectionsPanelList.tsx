@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react';
 import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
 
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
@@ -19,7 +20,7 @@ export default function CollectionsPanelList() {
       if (isLoading) return skeletons;
       return [
         {
-          children: <>No results found. Try searching for a different collection.</>,
+          children: <Typography>No results found. Try searching for a different collection.</Typography>,
           key: 'no-results',
         },
       ];
