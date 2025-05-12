@@ -6,8 +6,9 @@ import CellExpressionHistogram from 'js/components/cells/CellExpressionHistogram
 import ChartLoader from 'js/shared-styles/charts/ChartLoader/ChartLoader';
 import Box from '@mui/material/Box';
 import { Dataset } from 'js/components/types';
+import Typography from '@mui/material/Typography';
 import { useCellsChartsData } from './hooks';
-import { ChartWrapper, StyledTypography } from './style';
+import { ChartWrapper } from './style';
 import { useCellVariableNames, useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks';
 
 function CellsCharts({ uuid }: Dataset) {
@@ -47,7 +48,7 @@ function CellsCharts({ uuid }: Dataset) {
           </ChartLoader>
         </ChartWrapper>
       </Box>
-      <StyledTypography>
+      <Typography mx={2}>
         {diagnosticInfo ? (
           `${diagnosticInfo.timeWaiting.toFixed(2)} seconds to receive an API response for ${
             diagnosticInfo.numCells
@@ -55,7 +56,7 @@ function CellsCharts({ uuid }: Dataset) {
         ) : (
           <Skeleton />
         )}
-      </StyledTypography>
+      </Typography>
     </Box>
   );
 }

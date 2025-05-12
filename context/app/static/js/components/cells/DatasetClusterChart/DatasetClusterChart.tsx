@@ -32,9 +32,9 @@ const useColorScale = () => {
 };
 
 const chartMargin = {
-  top: 25,
-  right: 50,
-  left: 80,
+  top: 20,
+  right: 20,
+  left: 20,
   bottom: 20,
 };
 
