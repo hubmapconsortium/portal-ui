@@ -68,7 +68,7 @@ function CollectionPanelItem({ name, hubmapId, numDatasets, creationDate, href }
         <Typography>{numDatasets}</Typography>
       </BodyCell>
       <BodyCell {...desktopConfig.creationDate} aria-label="Creation Date">
-        <Typography>{format(new Date(creationDate), 'yyyy-MM-dd')}</Typography>
+        <Typography>{creationDate && format(new Date(creationDate), 'yyyy-MM-dd')}</Typography>
       </BodyCell>
     </StackTemplate>
   );

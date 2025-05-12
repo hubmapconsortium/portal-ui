@@ -20,14 +20,14 @@ export function useCollectionHits() {
 
 export function useCollections() {
   const search = useCollectionsSearchState();
-  const { collections, isLoading } = useCollectionHits();
+  const { collections = [], isLoading } = useCollectionHits();
 
   const downloadTable = useDownloadTable({
     fileName: 'collections.tsv',
     columnNames: ['Title', 'Number of Datasets', 'Creation Date'],
     rows: collections.map(({ title, datasets, created_timestamp }) => {
       const datasetCount = datasets.length.toString();
-      const creationDate = format(new Date(created_timestamp), 'yyyy-MM-dd').toString();
+      const creationDate = created_timestamp ? format(new Date(created_timestamp), 'yyyy-MM-dd').toString() : '';
       return [title, datasetCount, creationDate];
     }),
   });
