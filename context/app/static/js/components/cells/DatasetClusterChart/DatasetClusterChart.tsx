@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { scaleLinear, scaleOrdinal, scaleBand } from '@visx/scale';
 import Button from '@mui/material/Button';
 import { useTheme } from '@mui/material/styles';
@@ -10,20 +10,40 @@ import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarC
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 
+import { useEventCallback } from '@mui/material/utils';
 import { getOptionLabels, addMatchedAndUnmatched } from './utils';
+import { ClusterCellMatch } from '../CellsService';
 
-function DatasetClusterChart({ uuid, results }) {
-  const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
+interface DatasetClusterChartProps {
+  uuid: string;
+  results: Record<string, ClusterCellMatch[]>;
+}
+
+const useColorScale = () => {
   const theme = useTheme();
+  return useMemo(
+    () =>
+      scaleOrdinal({
+        domain: ['matched', 'unmatched'],
+        range: [theme.palette.warning.dark, theme.palette.warning.light],
+      }),
+    [theme],
+  );
+};
 
-  const chartMargin = {
-    top: 25,
-    right: 50,
-    left: 65,
-    bottom: 100, // TODO: Fix height of chart and dropdown instead of compensating with extra bottom margin.
-  };
+const chartMargin = {
+  top: 20,
+  right: 20,
+  left: 20,
+  bottom: 20,
+};
 
-  const selectedData = results[Object.keys(results)[selectedClusterTypeIndex]];
+function DatasetClusterChart({ uuid, results }: DatasetClusterChartProps) {
+  const [selectedClusterTypeIndex, setSelectedClusterTypeIndex] = useSelectedDropdownIndex(0);
+
+  const selectedData = useMemo(() => {
+    return results[Object.keys(results)[selectedClusterTypeIndex]];
+  }, [results, selectedClusterTypeIndex]);
 
   const yScale = scaleLinear({
     domain: [0, Math.max(...selectedData.map((result) => result.matched + result.unmatched))],
@@ -37,12 +57,13 @@ function DatasetClusterChart({ uuid, results }) {
     padding: 0.2,
   });
 
-  const colorScale = scaleOrdinal({
-    domain: ['matched', 'unmatched'],
-    range: [theme.palette.warning.dark, theme.palette.warning.light],
-  });
+  const colorScale = useColorScale();
 
   const optionLabels = getOptionLabels(Object.keys(results), uuid);
+
+  const selectOnClick = useEventCallback((selectedItem: { option: string; i: number }) => {
+    setSelectedClusterTypeIndex(selectedItem.i);
+  });
 
   return (
     <ChartWrapper
@@ -50,22 +71,23 @@ function DatasetClusterChart({ uuid, results }) {
       margin={chartMargin}
       colorScale={colorScale}
       dropdown={
-        <div>
-          <Typography>Cluster Method</Typography>
+        <>
+          <Typography component="label">Cluster Method</Typography>
           <DropdownListbox
             id="bar-fill-dropdown"
             optionComponent={DropdownListboxOption}
             buttonComponent={Button}
             selectedOptionIndex={selectedClusterTypeIndex}
             options={Object.keys(results)}
-            selectOnClick={setSelectedClusterTypeIndex}
+            selectOnClick={selectOnClick}
             getOptionLabel={(option) => optionLabels[option]}
             buttonProps={{ variant: 'outlined' }}
           />
-        </div>
+        </>
       }
     >
       <VerticalStackedBarChart
+        parentHeight={350}
         visxData={selectedData}
         yScale={yScale}
         xScale={xScale}

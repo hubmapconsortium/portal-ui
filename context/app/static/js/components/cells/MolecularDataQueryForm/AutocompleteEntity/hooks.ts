@@ -21,8 +21,7 @@ const fetchEntityAutocomplete = async ({
   }
 
   // scfind does not provide a matching query, so we can do this locally
-  // TODO: move this logic up to the flask server and cache it there? (routes_cells)
-  if (queryMethod === 'scFind') {
+  if (queryMethod === 'scFind' && targetEntity === 'cell-type') {
     const cellTypeNames = Object.keys(scFindCellTypeNames);
     const cellTypeNameMatches = cellTypeNames.filter((cellTypeName) =>
       cellTypeName.toLowerCase().includes(substring.toLowerCase()),

@@ -1,4 +1,4 @@
-import React, { SVGProps, useId, useMemo } from 'react';
+import React, { FocusEventHandler, MouseEventHandler, SVGProps, useId, useMemo } from 'react';
 import { StyledRect } from './style';
 import { OrdinalScale } from '../hooks';
 
@@ -85,6 +85,27 @@ function Fill({ bar, colorScale, id }: { bar: Bar; colorScale?: OrdinalScale; id
   );
 }
 
+const useFormattedHoverProps: (hoverProps?: Record<string, unknown>) =>
+  | {
+      onMouseEnter: MouseEventHandler<HTMLOrSVGElement>;
+      onMouseLeave: MouseEventHandler<HTMLOrSVGElement>;
+      onFocusCapture: FocusEventHandler<HTMLOrSVGElement>;
+      onBlurCapture: FocusEventHandler<HTMLOrSVGElement>;
+    }
+  | undefined = (hoverProps?: Record<string, unknown>) => {
+  return useMemo(() => {
+    if (hoverProps?.onMouseEnter && hoverProps?.onMouseLeave) {
+      return {
+        onMouseEnter: hoverProps.onMouseEnter as MouseEventHandler<HTMLOrSVGElement>,
+        onMouseLeave: hoverProps.onMouseLeave as MouseEventHandler<HTMLOrSVGElement>,
+        onFocusCapture: hoverProps.onMouseEnter as FocusEventHandler<HTMLOrSVGElement>,
+        onBlurCapture: hoverProps.onMouseLeave as FocusEventHandler<HTMLOrSVGElement>,
+      };
+    }
+    return undefined;
+  }, [hoverProps]);
+};
+
 function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelText, colorScale }: StackedBarProps) {
   const maxBarThickness = 65;
 
@@ -102,6 +123,8 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
 
   const id = `stacked-bar-${useId()}`;
 
+  const hoverPropsWithFocus = useFormattedHoverProps(hoverProps);
+
   const rect = (
     <>
       <Fill bar={bar} colorScale={colorScale} id={id} />
@@ -109,7 +132,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
         fill={`url(#${id})`}
         {...barProps}
         $showHover={Boolean(hoverProps) || Boolean(href)}
-        {...hoverProps}
+        {...hoverPropsWithFocus}
         data-bar={JSON.stringify(bar)}
       />
     </>
@@ -117,7 +140,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
 
   if (href) {
     return (
-      <a href={href} target="_parent" aria-label={ariaLabelText}>
+      <a href={href} target="_parent" aria-label={ariaLabelText} {...hoverPropsWithFocus}>
         {rect}
       </a>
     );
