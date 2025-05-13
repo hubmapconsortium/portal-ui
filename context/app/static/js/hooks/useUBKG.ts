@@ -70,7 +70,10 @@ const useUbkg = () => {
         }
         return `${ubkgEndpoint}/pathways/with-genes?${queryParams.toString()}`;
       },
-      pathwayDetail(pathwayId: string, sabs?: string[], featureTypes?: string[]) {
+      pathwayDetail(pathwayId?: string, sabs?: string[], featureTypes?: string[]) {
+        if (!pathwayId) {
+          return null;
+        }
         const queryParams = new URLSearchParams();
         if (sabs) {
           const sabsString = sabs.join(',');
@@ -450,8 +453,8 @@ export const useGenePathways = (params: PathwayWithGenesParams) => {
   return { data, ...swr };
 };
 
-export const useGenePathwayParticipants = (pathwayId: string, sabs?: string[], featureTypes?: string[]) => {
-  const { data, error, ...swr } = useSWR<PathwayParticipantsResponse, SWRError, string>(
+export const useGenePathwayParticipants = (pathwayId?: string, sabs?: string[], featureTypes?: string[]) => {
+  const { data, error, ...swr } = useSWR<PathwayParticipantsResponse, SWRError, string | null>(
     useUbkg().pathwayDetail(pathwayId, sabs, featureTypes),
     (url: string) => fetcher({ url }),
   );

@@ -1,0 +1,72 @@
+import React, { useState } from 'react';
+
+import Autocomplete from '@mui/material/Autocomplete';
+
+import { useController } from 'react-hook-form';
+import TextField from '@mui/material/TextField';
+import { useEventCallback } from '@mui/material/utils';
+import Chip from '@mui/material/Chip';
+import Box from '@mui/material/Box';
+import { useMolecularDataQueryFormState } from '../hooks';
+import { usePathwayAutocompleteQuery, useSelectedPathwayParticipants } from './hooks';
+import { PreserveWhiteSpaceListItem } from './styles';
+import { AutocompleteResult } from './types';
+
+export default function GenePathwaysAutocomplete() {
+  const [substring, setSubstring] = useState('');
+  const { control } = useMolecularDataQueryFormState();
+  const { field } = useController({
+    name: 'pathway',
+    control,
+    defaultValue: undefined,
+  });
+
+  useSelectedPathwayParticipants();
+
+  const handleSubstringChange = useEventCallback(({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
+    setSubstring(value);
+  });
+
+  const handlePathwayChange = useEventCallback((_: React.SyntheticEvent, value: AutocompleteResult | null) => {
+    field.onChange(value);
+  });
+
+  const { options, isLoading } = usePathwayAutocompleteQuery(substring);
+
+  return (
+    <Autocomplete
+      title="pathway"
+      loading={isLoading}
+      getOptionLabel={(option) => `${option.full}`}
+      renderOption={(props, option) => (
+        <PreserveWhiteSpaceListItem {...props} key={option.full}>
+          <span>{option.pre}</span>
+          <b>{option.match}</b>
+          <span>{option.post}</span>
+          {option?.tags && (
+            <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
+              {option?.tags?.map((tag) => <Chip key={tag} label={tag} size="small" variant="filled" />)}
+            </Box>
+          )}
+        </PreserveWhiteSpaceListItem>
+      )}
+      renderInput={({ InputLabelProps, ...params }) => (
+        <TextField
+          placeholder="Find a pathway by name (e.g. DNA Damage)."
+          value={substring}
+          label="Pathways (Optional)"
+          helperText="Selecting a pathway will automatically populate the gene selection. Only one pathway can be selected."
+          variant="outlined"
+          onChange={handleSubstringChange}
+          {...params}
+          slotProps={{
+            inputLabel: { shrink: true, ...InputLabelProps },
+          }}
+        />
+      )}
+      {...field}
+      onChange={handlePathwayChange}
+      options={options}
+    />
+  );
+}

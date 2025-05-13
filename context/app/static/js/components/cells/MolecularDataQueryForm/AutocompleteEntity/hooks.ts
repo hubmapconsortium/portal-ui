@@ -1,8 +1,10 @@
 import useSWR from 'swr';
 import { useCellTypeNamesMap } from 'js/api/scfind/useCellTypeNames';
-import { useMemo } from 'react';
+import { useEffect, useMemo } from 'react';
+import { useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
 import CellsService from '../../CellsService';
-import type { AutocompleteQueryKey, AutocompleteQueryResponse } from './types';
+import type { AutocompleteQueryKey, AutocompleteQueryResponse, AutocompleteResult } from './types';
+import { useMolecularDataQueryFormState } from '../hooks';
 
 const cellsService = new CellsService();
 
@@ -55,4 +57,73 @@ export function useAutocompleteQuery(queryKey: AutocompleteQueryKey) {
   const key = useMemo(() => ({ ...queryKey, scFindCellTypeNames }), [queryKey, scFindCellTypeNames]);
 
   return useSWR(key, fetchEntityAutocomplete);
+}
+
+export function usePathwayAutocompleteQuery(substring: string) {
+  const { data: pathways, isLoading } = useGenePathways({
+    // Since the initial response contains all the pathways, filtering locally
+    // is more efficient than waiting for the server to filter them
+    // and then sending the filtered list back to the client.
+    // pathwayNameStartsWith: substring,
+  });
+
+  const options: AutocompleteResult[] = useMemo(() => {
+    if (!pathways) {
+      return [];
+    }
+    return pathways.events
+      .filter((pathway) => pathway.description.toLowerCase().includes(substring.toLowerCase()))
+      .sort((a, b) => a.description.localeCompare(b.description))
+      .map((pathway) => {
+        const matchIndex = pathway.description.toLowerCase().indexOf(substring.toLowerCase());
+        return {
+          full: `${pathway.description} (${pathway.code})`,
+          pre: pathway.description.slice(0, matchIndex),
+          match: pathway.description.slice(matchIndex, matchIndex + substring.length),
+          post: pathway.description.slice(matchIndex + substring.length),
+          tags: [pathway.code],
+          values: [pathway.code],
+        };
+      });
+  }, [pathways, substring]);
+
+  return { pathways, options, isLoading };
+}
+
+/**
+ * Retrieves the genes in a pathway and sets them in the form state in response to a selected pathway.
+ */
+export function useSelectedPathwayParticipants() {
+  const { watch, setValue } = useMolecularDataQueryFormState();
+
+  const selectedPathway = watch('pathway');
+  const { data: pathway, isLoading } = useGenePathwayParticipants(selectedPathway?.values?.[0]);
+
+  useEffect(() => {
+    console.log({ pathway, selectedPathway, isLoading });
+    if (selectedPathway && pathway) {
+      console.log('Present!');
+      const genes = pathway.events.flatMap((event) => {
+        // find the HUGO gene symbol sab in the event
+        const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC')!;
+        if (!hgncSab) {
+          return [];
+        }
+        return hgncSab.participants
+          .map((participant) => participant.symbol)
+          .filter((gene) => gene !== undefined)
+          .map((gene) => ({
+            full: gene,
+            pre: '',
+            match: gene,
+            post: '',
+            tags: [],
+          }));
+      });
+      console.log('genes', genes);
+      setValue('genes', genes);
+    }
+  }, [pathway, selectedPathway, setValue, isLoading]);
+
+  return { isLoading };
 }
