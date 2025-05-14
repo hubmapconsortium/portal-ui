@@ -75,16 +75,19 @@ function DatasetListSection() {
 
   return (
     <>
-      <Tabs onChange={handleTabChange} value={openTabIndex}>
-        {genes.map((cellType, idx) => (
-          <Tab key={cellType} label={`${cellType} (${datasets[cellType].length})`} index={idx} />
+      <Tabs onChange={handleTabChange} value={openTabIndex} variant={genes.length > 10 ? 'scrollable' : 'fullWidth'}>
+        {genes.map((gene, idx) => (
+          <Tab key={gene} label={`${gene} (${datasets[gene]?.length ?? 0})`} index={idx} />
         ))}
       </Tabs>
       <DatasetListHeader />
       {genes.map((gene, idx) => (
         <TabPanel key={gene} value={openTabIndex} index={idx}>
           <CurrentGeneContextProvider value={gene}>
-            <SCFindGeneQueryDatasetList key={gene} datasetIds={datasets[gene].map((hubmap_id) => ({ hubmap_id }))} />
+            <SCFindGeneQueryDatasetList
+              key={gene}
+              datasetIds={datasets[gene]?.map((hubmap_id) => ({ hubmap_id })) ?? []}
+            />
           </CurrentGeneContextProvider>
         </TabPanel>
       ))}

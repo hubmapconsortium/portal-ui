@@ -1,22 +1,33 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
-import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
+import useCellTypeCountForDataset, { CellTypeCountsForDataset } from 'js/api/scfind/useCellTypeCountForDataset';
 import { DatasetDocument } from 'js/typings/search';
 import { decimal, percent } from 'js/helpers/number-format';
 import { CellContentProps } from 'js/shared-styles/tables/columns';
+import Skeleton from '@mui/material/Skeleton';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 
-function TargetCellCountColumn({ hit: { hubmap_id } }: CellContentProps<DatasetDocument>) {
+interface CellCountColumnProps {
+  hit: DatasetDocument;
+  display: (props: CellTypeCountsForDataset) => React.ReactNode;
+}
+
+function CellCountColumn({ hit: { hubmap_id }, display }: CellCountColumnProps) {
   const { data, isLoading } = useCellTypeCountForDataset({ dataset: hubmap_id });
-  const cellTypes = useCellVariableNames();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Skeleton variant="text" width={100} />;
   }
   if (!data) {
-    return <div>No data</div>;
+    return <div>No cell count data found for {hubmap_id}.</div>;
   }
+
+  return display(data);
+}
+
+function TargetCellTypeDisplay(data: CellTypeCountsForDataset) {
   const { cellTypeCounts } = data;
+  const cellTypes = useCellVariableNames();
   const cellTypeCountsMap = cellTypeCounts.reduce(
     (acc, { index, count }) => {
       acc[index] = count;
@@ -25,9 +36,8 @@ function TargetCellCountColumn({ hit: { hubmap_id } }: CellContentProps<DatasetD
     {} as Record<string, number>,
   );
   const totalCells = cellTypeCounts.reduce((acc, { count }) => acc + count, 0);
-
   return (
-    <div>
+    <>
       {Object.entries(cellTypeCountsMap).map(([cellType, count]) =>
         cellTypes.includes(cellType) ? (
           <Typography key={cellType} variant="body2" component="p">
@@ -35,19 +45,15 @@ function TargetCellCountColumn({ hit: { hubmap_id } }: CellContentProps<DatasetD
           </Typography>
         ) : null,
       )}
-    </div>
+    </>
   );
 }
 
-function TotalCellCountColumn({ hit: { hubmap_id } }: CellContentProps<DatasetDocument>) {
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: hubmap_id });
+function TargetCellCountColumn({ hit }: CellContentProps<DatasetDocument>) {
+  return <CellCountColumn hit={hit} display={TargetCellTypeDisplay} />;
+}
 
-  if (isLoading) {
-    return <div>Loading...</div>;
-  }
-  if (!data) {
-    return <div>No data</div>;
-  }
+function TotalCellTypeDisplay(data: CellTypeCountsForDataset) {
   const { cellTypeCounts } = data;
   const totalCells = cellTypeCounts.reduce((acc, { count }) => acc + count, 0);
 
@@ -56,6 +62,10 @@ function TotalCellCountColumn({ hit: { hubmap_id } }: CellContentProps<DatasetDo
       {decimal.format(totalCells)}
     </Typography>
   );
+}
+
+function TotalCellCountColumn({ hit }: CellContentProps<DatasetDocument>) {
+  return <CellCountColumn hit={hit} display={TotalCellTypeDisplay} />;
 }
 
 export const targetCellCountColumn = {

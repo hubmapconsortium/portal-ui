@@ -85,22 +85,24 @@ function Fill({ bar, colorScale, id }: { bar: Bar; colorScale?: OrdinalScale; id
   );
 }
 
-const useFormattedHoverProps: (hoverProps?: Record<string, unknown>) =>
-  | {
-      onMouseEnter: MouseEventHandler<HTMLOrSVGElement>;
-      onMouseLeave: MouseEventHandler<HTMLOrSVGElement>;
-      onFocusCapture: FocusEventHandler<HTMLOrSVGElement>;
-      onBlurCapture: FocusEventHandler<HTMLOrSVGElement>;
-    }
-  | undefined = (hoverProps?: Record<string, unknown>) => {
+interface HoverPropsWithFocus {
+  onMouseEnter: MouseEventHandler<HTMLOrSVGElement>;
+  onMouseLeave: MouseEventHandler<HTMLOrSVGElement>;
+  onFocusCapture: FocusEventHandler<HTMLOrSVGElement>;
+  onBlurCapture: FocusEventHandler<HTMLOrSVGElement>;
+}
+
+const useHoverPropsWithFocus: (hoverProps?: Record<string, unknown>) => HoverPropsWithFocus | undefined = (
+  hoverProps?: Record<string, unknown>,
+) => {
   return useMemo(() => {
     if (hoverProps?.onMouseEnter && hoverProps?.onMouseLeave) {
       return {
-        onMouseEnter: hoverProps.onMouseEnter as MouseEventHandler<HTMLOrSVGElement>,
-        onMouseLeave: hoverProps.onMouseLeave as MouseEventHandler<HTMLOrSVGElement>,
-        onFocusCapture: hoverProps.onMouseEnter as FocusEventHandler<HTMLOrSVGElement>,
-        onBlurCapture: hoverProps.onMouseLeave as FocusEventHandler<HTMLOrSVGElement>,
-      };
+        onMouseEnter: hoverProps.onMouseEnter,
+        onMouseLeave: hoverProps.onMouseLeave,
+        onFocusCapture: hoverProps.onMouseEnter,
+        onBlurCapture: hoverProps.onMouseLeave,
+      } as HoverPropsWithFocus;
     }
     return undefined;
   }, [hoverProps]);
@@ -123,7 +125,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
 
   const id = `stacked-bar-${useId()}`;
 
-  const hoverPropsWithFocus = useFormattedHoverProps(hoverProps);
+  const hoverPropsWithFocus = useHoverPropsWithFocus(hoverProps);
 
   const rect = (
     <>
