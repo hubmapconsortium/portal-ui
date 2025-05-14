@@ -48,6 +48,9 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
     'descendant_counts.entity_type.Dataset': {
       label: `Show ${type}s Without Datasets`,
     },
+    'descendant_counts.entity_type.Publication': {
+      label: `Show Only ${type}s Linked to Publications`,
+    },
     descendant_ids: {
       label: 'Descendant ID',
     },
