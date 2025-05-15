@@ -1,5 +1,3 @@
-import Stack from '@mui/material/Stack';
-import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import { withParentSize, WithParentSizeProvidedProps } from '@visx/responsive';
 import { CellTypeCountForTissue } from 'js/api/scfind/useCellTypeCountForTissue';
@@ -8,13 +6,14 @@ import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarCha
 import { TooltipData } from 'js/shared-styles/charts/types';
 import React from 'react';
 import { grey, blueGrey, teal } from '@mui/material/colors';
-import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 import { decimal } from 'js/helpers/number-format';
 import { capitalizeString } from 'js/helpers/functions';
 import { ScaleLinear } from 'd3';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useProcessedData, useXOffsets } from './hooks';
 import FractionRect from './FractionGraphRect';
+import FractionGraphLegend from './FractionGraphLegend';
+import FractionGraphTooltip from './FractionGraphTooltip';
 
 interface FractionGraphProps extends WithParentSizeProvidedProps {
   data: CellTypeCountForTissue[];
@@ -112,62 +111,19 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
       <Typography variant="body1" color="textSecondary" my={1}>
         Indexed {tissue} datasets contain {decimal.format(totalCellCount)} cells in {data.length} cell types.
       </Typography>
-      <Stack direction="row" justifyContent="space-between" alignItems="flex-start" mt={1}>
-        <Stack>
-          <Typography variant="body2" color="textSecondary" my={1}>
-            Targeted Cell Types
-          </Typography>
-          <LegendOrdinal scale={targetColorScale} labelFormat={(label) => label.split('.').slice(1).join('.')}>
-            {(labels) => (
-              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {labels.map((label) => {
-                  if (!label.text) return null;
-                  return (
-                    <LegendItem key={`legend-${label.text}`} margin="0 1rem 0 0">
-                      <svg width="1em" height="1em" style={{ borderRadius: '0.25rem' }}>
-                        <rect fill={targetColorScale(label.datum)} width="1em" height="1em" />
-                      </svg>
-                      <LegendLabel align="left" margin="0 0 0 4px">
-                        {label.text} ({decimal.format(mappedCellCounts[label.datum])} cells,{' '}
-                        {decimal.format((mappedCellCounts[label.datum] / totalCellCount) * 100)}% of total)
-                      </LegendLabel>
-                    </LegendItem>
-                  );
-                })}
-              </div>
-            )}
-          </LegendOrdinal>
-        </Stack>
-        <Stack>
-          <Typography variant="body2" color="textSecondary" my={1}>
-            Other Cell Types
-          </Typography>
-          <Box maxHeight={300} overflow="auto">
-            <LegendOrdinal
-              scale={otherColorScale}
-              labelFormat={(label) => label.split('.').slice(1).join('.')}
-              shapeStyle={() => ({ borderRadius: '4px' })}
-            />
-          </Box>
-        </Stack>
-      </Stack>
-      {tooltipOpen && tooltipData && (
-        <TooltipInPortal left={tooltipLeft} top={tooltipTop} style={{ position: 'absolute', pointerEvents: 'none' }}>
-          {tooltipData?.bar?.data && (
-            <Box sx={{ background: 'white', padding: 2, borderRadius: 4, zIndex: 1000 }}>
-              <Typography variant="subtitle1" component="p" color="textPrimary">
-                {tooltipData.bar.data.index.split('.')[1]}
-              </Typography>
-              <Typography variant="body2" component="p" color="textSecondary">
-                Cell Count: {tooltipData.bar.data.cell_count}
-              </Typography>
-              <Typography variant="body2" component="p" color="textSecondary">
-                Percentage: {decimal.format((tooltipData.bar.data.cell_count / totalCellCount) * 100)}%
-              </Typography>
-            </Box>
-          )}
-        </TooltipInPortal>
-      )}
+      <FractionGraphLegend
+        otherColorScale={otherColorScale}
+        targetColorScale={targetColorScale}
+        mappedCellCounts={mappedCellCounts}
+        totalCellCount={totalCellCount}
+      />
+      <FractionGraphTooltip
+        tooltipOpen={tooltipOpen}
+        tooltipTop={tooltipTop ?? 0}
+        tooltipLeft={tooltipLeft ?? 0}
+        totalCellCount={totalCellCount}
+        TooltipInPortal={TooltipInPortal}
+      />
     </>
   );
 }
