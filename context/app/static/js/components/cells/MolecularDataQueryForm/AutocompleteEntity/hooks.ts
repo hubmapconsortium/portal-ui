@@ -97,12 +97,13 @@ export function useSelectedPathwayParticipants() {
   const { watch, setValue } = useMolecularDataQueryFormState();
 
   const selectedPathway = watch('pathway');
-  const { data: pathway, isLoading } = useGenePathwayParticipants(selectedPathway?.values?.[0]);
+
+  const value: string | undefined = selectedPathway?.values?.[0];
+
+  const { data: pathway, isLoading } = useGenePathwayParticipants(value);
 
   useEffect(() => {
-    console.log({ pathway, selectedPathway, isLoading });
     if (selectedPathway && pathway) {
-      console.log('Present!');
       const genes = pathway.events.flatMap((event) => {
         // find the HUGO gene symbol sab in the event
         const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC')!;
@@ -120,7 +121,6 @@ export function useSelectedPathwayParticipants() {
             tags: [],
           }));
       });
-      console.log('genes', genes);
       setValue('genes', genes);
     }
   }, [pathway, selectedPathway, setValue, isLoading]);
