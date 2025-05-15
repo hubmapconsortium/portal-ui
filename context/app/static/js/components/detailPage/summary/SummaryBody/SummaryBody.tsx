@@ -1,4 +1,5 @@
 import React from 'react';
+import { format } from 'date-fns/format';
 import Stack, { StackProps } from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -11,25 +12,24 @@ import { SavedEntitiesList } from 'js/components/savedLists/types';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { getCollectionDOI } from 'js/pages/Collection/utils';
 import { getEntityCreationInfo } from 'js/helpers/functions';
-import { StyledCreationDate } from './style';
 import PublicationSummaryBody from './PublicationSummaryBody';
 import SummaryDescription from './SummaryDescription';
 
-function CollectionName() {
+function CollectionId() {
   const { entity } = useFlaskDataContext();
 
   if (!isCollection(entity)) {
     return null;
   }
-  const { title } = entity;
+  const { hubmap_id } = entity;
 
-  if (!title) {
+  if (!hubmap_id) {
     return null;
   }
 
   return (
     <Typography variant="h6" component="h3">
-      {title}
+      {hubmap_id}
     </Typography>
   );
 }
@@ -115,12 +115,29 @@ function CollectionCitation() {
   );
 }
 
+function SummaryDates({ creationLabel, creationDate }: { creationLabel: string; creationDate: string }) {
+  const { entity } = useFlaskDataContext();
+  const { last_modified_timestamp } = entity;
+
+  return (
+    <Stack direction="row" spacing={10}>
+      <LabelledSectionText label={creationLabel}>{creationDate}</LabelledSectionText>
+      {isCollection(entity) && (
+        <LabelledSectionText label="Last Modified">
+          {format(new Date(last_modified_timestamp), 'yyyy-MM-dd')}
+        </LabelledSectionText>
+      )}
+    </Stack>
+  );
+}
+
 function SummaryBodyContent({
   isEntityHeader = false,
   direction = 'column',
   description: propDescription,
   creationLabel: propCreationLabel,
   creationDate: propCreationDate,
+  dateLastModified,
   ...stackProps
 }: {
   isEntityHeader?: boolean;
@@ -147,19 +164,24 @@ function SummaryBodyContent({
   }
 
   return (
-    <Stack component={SummaryPaper} direction={direction} spacing={1} {...stackProps}>
-      <CollectionName />
-      <SummaryDescription description={description} clamp={isEntityHeader} />
-      <DatasetGroup />
-      <DatasetConsortium />
-      <DatasetCitation />
-      <CollectionCitation />
-      <StyledCreationDate label={creationLabel}>{creationDate}</StyledCreationDate>
+    <Stack spacing={1}>
+      <CollectionId />
+      <Stack component={SummaryPaper} direction={direction} spacing={1} {...stackProps}>
+        <SummaryDescription description={description} clamp={isEntityHeader} />
+        <DatasetGroup />
+        <DatasetConsortium />
+        <DatasetCitation />
+        <CollectionCitation />
+        <SummaryDates creationDate={creationDate} creationLabel={creationLabel} />
+      </Stack>
     </Stack>
   );
 }
 
-function SummaryBody({ isEntityHeader = false, ...stackProps }: { isEntityHeader?: boolean } & Partial<StackProps>) {
+function SummaryBody({
+  isEntityHeader = false,
+  ...stackProps
+}: { isEntityHeader?: boolean } & Partial<StackProps> & Partial<SavedEntitiesList>) {
   return <SummaryBodyContent isEntityHeader={isEntityHeader} {...stackProps} />;
 }
 

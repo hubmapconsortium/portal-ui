@@ -6,6 +6,7 @@ import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import { SvgIconComponent } from '@mui/icons-material';
 import { useEventCallback } from '@mui/material/utils';
+import Stack from '@mui/material/Stack';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from 'js/shared-styles/sections/LabelledSectionText/style';
@@ -25,6 +26,7 @@ export interface CollapsibleDetailPageSectionProps extends PropsWithChildren<Rea
   component?: TypographyProps['component'];
   iconTooltipText?: string;
   trackingInfo?: EventInfo;
+  buttons?: React.ReactNode;
 }
 
 interface IconDisplayProps {
@@ -56,6 +58,7 @@ export default function CollapsibleDetailPageSection({
   action,
   iconTooltipText,
   trackingInfo,
+  buttons,
   ...rest
 }: CollapsibleDetailPageSectionProps) {
   // Handle expanded state manually in order to track the event
@@ -83,15 +86,20 @@ export default function CollapsibleDetailPageSection({
         variant="unstyled"
       >
         <AccordionSummary expandIcon={<ExpandMore />}>
-          <IconDisplay icon={icon} id={rest.id!} />
-          <Typography variant={variant} component={component}>
-            {title}
-          </Typography>
-          {iconTooltipText && (
-            <SecondaryBackgroundTooltip title={iconTooltipText}>
-              <StyledInfoIcon color="primary" />
-            </SecondaryBackgroundTooltip>
-          )}
+          <Stack direction="row" sx={{ alignItems: 'center', flexGrow: 1 }}>
+            <Stack direction="row" sx={{ alignItems: 'center', gap: 1 }}>
+              <IconDisplay icon={icon} id={rest.id!} />
+              <Typography variant={variant} component={component}>
+                {title}
+              </Typography>
+              {iconTooltipText && (
+                <SecondaryBackgroundTooltip title={iconTooltipText}>
+                  <StyledInfoIcon color="primary" />
+                </SecondaryBackgroundTooltip>
+              )}
+            </Stack>
+            <Box sx={{ marginLeft: 'auto' }}>{buttons}</Box>
+          </Stack>
         </AccordionSummary>
         <AccordionDetails sx={{ padding: 0 }}>
           {action && (
