@@ -1,4 +1,5 @@
 import { createDownloadUrl } from 'js/helpers/functions';
+import { useSnackbarActions } from 'js/shared-styles/snackbars/store';
 
 interface CheckAndDownloadFileProps {
   url: string;
@@ -70,4 +71,30 @@ export async function postAndDownloadFile({
     console.error('Download failed', error);
     throw error;
   });
+}
+
+export interface tableData {
+  columnNames: string[];
+  rows: string[][];
+  fileName?: string;
+}
+export function useDownloadTable({ columnNames, rows, fileName }: tableData) {
+  const { toastError, toastSuccess } = useSnackbarActions();
+
+  return function downloadTable() {
+    const formattedHeader = columnNames.join('\t');
+    const formattedRows = rows.map((row) => row.join('\t'));
+
+    const tsvContent = [formattedHeader, ...formattedRows].join('\n');
+    const url = createDownloadUrl(tsvContent, 'text/table');
+
+    checkAndDownloadFile({ url, fileName: fileName ?? 'table.tsv' })
+      .then(() => {
+        toastSuccess('Table downloaded successfully.');
+      })
+      .catch((e) => {
+        toastError('Error downloading table. Please try again.');
+        console.error(e);
+      });
+  };
 }

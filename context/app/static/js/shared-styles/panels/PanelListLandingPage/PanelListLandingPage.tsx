@@ -35,7 +35,9 @@ function PanelListLandingPage({
       </StyledDescription>
       {sectionTitle && sectionDescription && (
         <Stack spacing={2} marginBottom={2}>
-          <Typography variant="h4">{sectionTitle}</Typography>
+          <Typography variant="h4" component="h2">
+            {sectionTitle}
+          </Typography>
           <StyledDescription>{sectionDescription}</StyledDescription>
         </Stack>
       )}

@@ -1,19 +1,14 @@
 import React, { useCallback, useMemo } from 'react';
-import PanelList from 'js/shared-styles/panels/PanelList';
-
 import LoadingButton from '@mui/lab/LoadingButton';
-import Skeleton from '@mui/material/Skeleton';
 
+import PanelList from 'js/shared-styles/panels/PanelList';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { DownIcon } from 'js/shared-styles/icons';
+import { skeletons } from 'js/shared-styles/panels/ResponsivePanelCells';
+
 import { useResultsList, useViewMore } from './hooks';
 import BiomarkerPanel from './BiomarkersPanelItem';
-
-const skeletons: PanelProps[] = Array.from({ length: 10 }).map((_, index) => ({
-  key: `skeleton-${index}`,
-  children: <Skeleton width="100%" height={32} variant="rounded" key={Math.random()} />,
-}));
 
 function ViewMoreButton() {
   const { isLoading, isValidating, hasMore } = useResultsList();
