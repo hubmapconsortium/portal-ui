@@ -20,18 +20,18 @@ export interface GetDatasetsProps<T extends QueryType> {
   modality?: string;
 }
 
-interface GetCellPercentagesForDatasetsProps {
+export interface GetCellPercentagesForDatasetsProps {
   uuids: string[];
   geneName: string;
   minGeneExpression: string | number;
 }
 
-interface GetCellExpressionInDatasetProps {
+export interface GetCellExpressionInDatasetProps {
   uuid: string;
   cellVariableNames: string[];
 }
 
-interface GetClusterCellMatchesInDatasetProps {
+export interface GetClusterCellMatchesInDatasetProps {
   uuid: string;
   cellVariableName: string;
   minExpression: string | number;
@@ -60,7 +60,7 @@ export interface CellExpressionInDataset {
   values: Record<string, number>;
 }
 
-interface ClusterCellMatch {
+export interface ClusterCellMatch {
   cluster_name: string;
   cluster_number: string;
   matched: number;
@@ -166,7 +166,7 @@ class CellsService {
   }
 
   async getClusterCellMatchesInDataset(props: GetClusterCellMatchesInDatasetProps) {
-    return this.fetchAndParse<Record<string, ClusterCellMatch>>(this.getClusterCellMatchesInDatasetURL(props));
+    return this.fetchAndParse<Record<string, ClusterCellMatch[]>>(this.getClusterCellMatchesInDatasetURL(props));
   }
 
   async getAllNamesForCellType(cellType: string) {
@@ -174,7 +174,7 @@ class CellsService {
   }
 
   async getIndexedDatasetCount() {
-    const results = await this.fetchAndParse<{ results: number }>(`/cells/total-datasets.json`, 'GET');
+    const results = await this.fetchAndParse<number>(`/cells/total-datasets.json`, 'GET');
     return results;
   }
 }

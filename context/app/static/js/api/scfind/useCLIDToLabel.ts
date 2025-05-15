@@ -17,7 +17,7 @@ export function createCLIDtoLabelKey(
   scFindEndpoint: string,
   { clid }: CellTypeLabelsForCLIDParams,
 ): CellTypeCountForTissueKey {
-  return createScFindKey(scFindEndpoint, 'cellTypeCountForTissue', {
+  return createScFindKey(scFindEndpoint, 'CLID2CellType', {
     CLID_label: clid,
   });
 }

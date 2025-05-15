@@ -7,6 +7,9 @@ import { TooltipData } from 'js/shared-styles/charts/types';
 import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
 import { Dataset } from 'js/components/types';
+import Typography from '@mui/material/Typography';
+import { decimal, percent } from 'js/helpers/number-format';
+import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { useCellTypesChartsData } from './hooks';
 import { extractLabel } from '../CrossModalityResults/utils';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
@@ -25,7 +28,7 @@ function CellTypesChartTooltip({ tooltipData }: { tooltipData: TooltipData<{ val
   const count = tooltipData.bar.data.value;
   return (
     <>
-      {cellType} ({count} cells, {((count / totalCells) * 100).toFixed(2)}%)
+      {cellType} ({decimal.format(count)} cells, {percent.format(count / totalCells)})
     </>
   );
 }
@@ -37,14 +40,20 @@ interface CellTypesChartProps {
   cellTypeCounts: CellTypeCounts;
   isLoading: boolean;
   cellNames: string[];
+  title?: React.ReactNode;
 }
 
-function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames }: CellTypesChartProps) {
+function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames, title }: CellTypesChartProps) {
   return (
     <Box p={2} width="100%">
       <Box height="600px">
         <TotalCellsContext.Provider value={totalCells}>
           <ChartLoader isLoading={isLoading}>
+            {title && (
+              <Typography variant="subtitle2" display="flex" alignItems="center">
+                {title}
+              </Typography>
+            )}
             <BarChart
               data={cellTypeCounts}
               highlightedKeys={cellNames}
@@ -152,6 +161,12 @@ export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
 
   return (
     <CellTypesChart
+      title={
+        <>
+          Cell Type Distribution Plot{' '}
+          <InfoTextTooltip tooltipTitle="Plot showing the distribution of cell types in the dataset, with any cell types of interest emphasized." />
+        </>
+      }
       totalCells={totalCells}
       cellTypeCounts={cellTypeCounts}
       isLoading={isLoading}

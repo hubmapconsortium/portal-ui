@@ -18,12 +18,14 @@ function SCFindQueryResultsDisplay() {
   );
 }
 
+const fetchTotalDatasets = async () => {
+  const cellService = new CellsService();
+  const resultCount = await cellService.getIndexedDatasetCount();
+  return resultCount;
+};
+
 function CrossModalityQueryResultsDisplay() {
-  const results = useSWR<number, Error, string>('crossModalityIndexedDatasets', async () => {
-    const cellService = new CellsService();
-    const { results: resultCount } = await cellService.getIndexedDatasetCount();
-    return resultCount;
-  });
+  const results = useSWR<number, Error, string>('crossModalityIndexedDatasets', fetchTotalDatasets);
   const { data: totalDatasets, isLoading, error } = results;
   const resultCount = useResultsProvider((state) => state.resultCount);
   if (isLoading) {
@@ -60,7 +62,7 @@ export default function CurrentQueryResultsDisplay() {
   }
 
   if (error) {
-    return <>Error: {(error as Error)?.message ?? 'No datasets found'}</>;
+    return <>Error: {(error as Error)?.message ?? error ?? 'No datasets found'}</>;
   }
 
   if (queryMethod === 'scFind') {

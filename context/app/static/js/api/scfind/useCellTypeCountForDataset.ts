@@ -3,12 +3,12 @@ import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
 import { createScFindKey } from './utils';
 
-interface CellTypeCountForDataset {
+export interface CellTypeCountForDataset {
   count: number;
   index: string;
 }
 
-interface CellTypeCountsForDataset {
+export interface CellTypeCountsForDataset {
   cellTypeCounts: CellTypeCountForDataset[];
 }
 

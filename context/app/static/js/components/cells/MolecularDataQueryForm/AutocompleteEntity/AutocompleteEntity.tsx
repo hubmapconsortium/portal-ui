@@ -6,6 +6,7 @@ import Chip from '@mui/material/Chip';
 import { useController, useWatch } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import { useCellTypeOrgansColorMap } from 'js/api/scfind/useCellTypeNames';
+import { useEventCallback } from '@mui/material/utils';
 import { useAutocompleteQuery } from './hooks';
 import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
@@ -47,9 +48,33 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
 
   const chipColors = useCellTypeOrgansColorMap();
 
-  function handleChange({ target: { value } }: React.ChangeEvent<HTMLInputElement>) {
+  const handleSubstringChange = useEventCallback(({ target: { value } }: React.ChangeEvent<HTMLInputElement>) => {
     setSubstring(value);
-  }
+  });
+
+  const onChange = useEventCallback((_event: React.SyntheticEvent, value: AutocompleteResult[]) => {
+    // Handle selection of multi-value options by pulling out the values and formatting them to match the expected structure
+    const formattedValue = value.reduce((acc, curr) => {
+      if (curr.values) {
+        const values = curr.values.map((v) => ({
+          full: v,
+          pre: curr.pre,
+          match: curr.match,
+          post: curr.post,
+          tags: curr.tags,
+        }));
+        return [...acc, ...values];
+      }
+      return [...acc, curr];
+    }, [] as AutocompleteResult[]);
+
+    track(
+      `Parameters / Select ${labelAndHelperTextProps[targetEntity].label as string}`,
+      formattedValue.map((f) => f.full).join(', '),
+    );
+
+    field.onChange(formattedValue);
+  });
 
   return (
     <Autocomplete
@@ -103,7 +128,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           value={substring}
           name="substring"
           variant="outlined"
-          onChange={handleChange}
+          onChange={handleSubstringChange}
           {...params}
           slotProps={{
             inputLabel: { shrink: true, ...InputLabelProps },
@@ -111,29 +136,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
         />
       )}
       {...field}
-      onChange={(_, value: AutocompleteResult[]) => {
-        // Handle selection of multi-value options by pulling out the values and formatting them to match the expected structure
-        const formattedValue = value.reduce((acc, curr) => {
-          if (curr.values) {
-            const values = curr.values.map((v) => ({
-              full: v,
-              pre: curr.pre,
-              match: curr.match,
-              post: curr.post,
-              tags: curr.tags,
-            }));
-            return [...acc, ...values];
-          }
-          return [...acc, curr];
-        }, [] as AutocompleteResult[]);
-
-        track(
-          `Parameters / Select ${labelAndHelperTextProps[targetEntity].label as string}`,
-          formattedValue.map((f) => f.full).join(', '),
-        );
-
-        field.onChange(formattedValue);
-      }}
+      onChange={onChange}
     />
   );
 }

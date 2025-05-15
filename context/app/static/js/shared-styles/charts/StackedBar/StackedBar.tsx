@@ -1,4 +1,4 @@
-import React, { SVGProps, useId, useMemo } from 'react';
+import React, { FocusEventHandler, MouseEventHandler, SVGProps, useId, useMemo } from 'react';
 import { StyledRect } from './style';
 import { OrdinalScale } from '../hooks';
 
@@ -85,6 +85,29 @@ function Fill({ bar, colorScale, id }: { bar: Bar; colorScale?: OrdinalScale; id
   );
 }
 
+interface HoverPropsWithFocus {
+  onMouseEnter: MouseEventHandler<HTMLOrSVGElement>;
+  onMouseLeave: MouseEventHandler<HTMLOrSVGElement>;
+  onFocusCapture: FocusEventHandler<HTMLOrSVGElement>;
+  onBlurCapture: FocusEventHandler<HTMLOrSVGElement>;
+}
+
+const useHoverPropsWithFocus: (hoverProps?: Record<string, unknown>) => HoverPropsWithFocus | undefined = (
+  hoverProps?: Record<string, unknown>,
+) => {
+  return useMemo(() => {
+    if (hoverProps?.onMouseEnter && hoverProps?.onMouseLeave) {
+      return {
+        onMouseEnter: hoverProps.onMouseEnter,
+        onMouseLeave: hoverProps.onMouseLeave,
+        onFocusCapture: hoverProps.onMouseEnter,
+        onBlurCapture: hoverProps.onMouseLeave,
+      } as HoverPropsWithFocus;
+    }
+    return undefined;
+  }, [hoverProps]);
+};
+
 function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelText, colorScale }: StackedBarProps) {
   const maxBarThickness = 65;
 
@@ -102,6 +125,8 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
 
   const id = `stacked-bar-${useId()}`;
 
+  const hoverPropsWithFocus = useHoverPropsWithFocus(hoverProps);
+
   const rect = (
     <>
       <Fill bar={bar} colorScale={colorScale} id={id} />
@@ -109,7 +134,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
         fill={`url(#${id})`}
         {...barProps}
         $showHover={Boolean(hoverProps) || Boolean(href)}
-        {...hoverProps}
+        {...hoverPropsWithFocus}
         data-bar={JSON.stringify(bar)}
       />
     </>
@@ -117,7 +142,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
 
   if (href) {
     return (
-      <a href={href} target="_parent" aria-label={ariaLabelText}>
+      <a href={href} target="_parent" aria-label={ariaLabelText} {...hoverPropsWithFocus}>
         {rect}
       </a>
     );
