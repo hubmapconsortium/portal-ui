@@ -108,9 +108,8 @@ function OrganCellTypeDistributionCharts() {
 }
 
 function DatasetListSection() {
-  const { datasets, isLoading } = useSCFindCellTypeResults();
+  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults();
   const { openTabIndex, handleTabChange } = useTabs();
-  const cellTypes = useCellVariableNames();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
@@ -123,14 +122,14 @@ function DatasetListSection() {
   return (
     <>
       <Tabs onChange={handleTabChange} value={openTabIndex}>
-        {cellTypes.map((cellType, idx) => (
-          <Tab key={cellType} label={`${cellType} (${datasets[cellType].length})`} index={idx} />
+        {cellTypeCategories.map((cellType, idx) => (
+          <Tab key={cellType} label={`${cellType} (${datasets[cellType]?.length ?? 0})`} index={idx} />
         ))}
       </Tabs>
       <DatasetListHeader />
-      {cellTypes.map((cellType, idx) => (
+      {cellTypeCategories.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx}>
-          <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
+          <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType] ?? []} />
         </TabPanel>
       ))}
     </>

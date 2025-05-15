@@ -6,33 +6,75 @@ import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 
 export function useSCFindCellTypeResults() {
-  const cellVariableNames = useCellVariableNames();
+  const cellTypes = useCellVariableNames();
 
   // The index of the dataset results matches the index of the cell types
   // in the original cellVariableNames array.
   const datasetsWithCellTypes = useFindDatasetsForCellTypes({
-    cellTypes: cellVariableNames,
+    cellTypes,
   });
 
   const { data = [], ...rest } = datasetsWithCellTypes;
 
+  // Get the unique cell type categories
+  // if we have "Lung.B cells" and "Lung.T cells", `lung` should be a category
+  // if we have "Lung.B cells" and "Liver.B cells", `B cells` should be a category
+  // Each individual cell type should also be a category
+  const cellTypeCategories = useMemo(() => {
+    const uniqueCellTypeCategories = new Set<string>(cellTypes);
+    cellTypes.forEach((cellType, _, arr) => {
+      const cellTypeParts = cellType.split('.');
+      // This will add `Lung` and `B cells` to the unique cell type categories
+      // if there are multiple cell types for the same organ or cell type
+      cellTypeParts.forEach((part) => {
+        if (arr.filter((ct) => ct.includes(part)).length > 1) {
+          uniqueCellTypeCategories.add(part);
+        }
+      });
+    });
+    return Array.from(uniqueCellTypeCategories);
+  }, [cellTypes]);
+
   // Map datasets to the cell type they contain
   const datasets = useMemo(() => {
-    return cellVariableNames.reduce(
+    const datasetsForEachCategory = cellTypes.reduce(
       (acc, cellType, index) => {
-        const dataset = data[index];
-        if (dataset) {
-          acc[cellType] = dataset.datasets.map((d) => ({
-            hubmap_id: d,
-          }));
+        const cellTypeDatasets = data[index];
+        if (!cellTypeDatasets) {
+          return acc;
+        }
+
+        const [organCategory, cellTypeCategory] = cellType.split('.');
+        const keys = [cellType, organCategory, cellTypeCategory];
+
+        cellTypeDatasets.datasets.forEach((dataset) => {
+          keys.forEach((key) => {
+            acc[key] = acc[key] || new Set();
+            acc[key].add(dataset);
+          });
+        });
+        return acc;
+      },
+      {} as Record<string, Set<string>>,
+    );
+    // Convert the sets to arrays
+    return Object.entries(datasetsForEachCategory).reduce(
+      (acc, [key, value]) => {
+        if (cellTypeCategories.includes(key)) {
+          acc[key] = Array.from(value).map((hubmap_id) => ({ hubmap_id }));
         }
         return acc;
       },
-      {} as Record<string, { hubmap_id: string }[]>,
+      {} as Record<
+        string,
+        {
+          hubmap_id: string;
+        }[]
+      >,
     );
-  }, [data, cellVariableNames]);
+  }, [cellTypeCategories, cellTypes, data]);
 
-  return { datasets, ...rest };
+  return { datasets, cellTypeCategories, ...rest };
 }
 
 export function useSCFindGeneResults() {
