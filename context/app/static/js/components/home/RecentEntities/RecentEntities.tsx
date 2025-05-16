@@ -7,7 +7,7 @@ import { useOrgan } from 'js/hooks/useOrgansApi';
 import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
 import { buildSearchLink } from 'js/components/search/store';
 import { getEntityCreationInfo } from 'js/helpers/functions';
-import { buildPublicationPanelProps } from 'js/components/publications/PublicationsPanelList/utils';
+import { buildPublicationPanelProps } from 'js/components/publications/utils';
 
 import {
   useRecentDatasetsQuery,

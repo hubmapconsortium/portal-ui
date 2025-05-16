@@ -27,6 +27,13 @@ const publishedTimestampCol: Column = {
     getEntityCreationInfo({ entity_type, published_timestamp }).creationDate,
 };
 
+const lastModifiedTimestampCol: Column = {
+  id: 'last_modified_timestamp',
+  label: 'Last Modified',
+  renderColumnCell: ({ entity_type, last_modified_timestamp }) =>
+    getEntityCreationInfo({ entity_type, last_modified_timestamp }).creationDate,
+};
+
 const organCol: Column = {
   id: 'origin_samples_unique_mapped_organs',
   label: 'Organ',
@@ -64,6 +71,7 @@ export {
   derivedDatasetsColumns,
   createdTimestampCol,
   publishedTimestampCol,
+  lastModifiedTimestampCol,
   organCol,
   dataTypesCol,
   statusCol,

@@ -1,8 +1,10 @@
 import React from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
 import Stack, { StackProps } from '@mui/material/Stack';
 import { useIsMobile } from 'js/hooks/media-queries';
+import { PanelProps } from 'js/shared-styles/panels/Panel';
 
 const mobileStackProps: Partial<StackProps> = {
   height: 'unset',
@@ -53,3 +55,8 @@ export function HeaderCell({ children, ...props }: React.ComponentProps<typeof B
     </BodyCell>
   );
 }
+
+export const skeletons: PanelProps[] = Array.from({ length: 10 }).map((_, index) => ({
+  key: `skeleton-${index}`,
+  children: <Skeleton width="100%" height={32} variant="rounded" key={Math.random()} />,
+}));

@@ -1,21 +1,45 @@
+import { Contributor, ContributorAPIResponse } from 'js/components/detailPage/ContributorsTable/utils';
 import { buildSecondaryText, buildAbbreviatedContributors, buildPublicationPanelProps } from './utils';
 
-const ash = {
-  first_name: 'Ash',
-  last_name: 'Ketchum',
+const genericContributorDetails = {
+  affiliation: '',
+  middleNameOrInitial: '',
+  email: '',
+  isContact: false,
+  isOperator: false,
+  isPrincipalInvestigator: false,
+  orcid: '',
+};
+
+const ash: Contributor = {
+  firstName: 'Ash',
+  lastName: 'Ketchum',
   name: 'Ash Ketchum',
+  ...genericContributorDetails,
 };
 
-const professorOak = {
-  first_name: 'Professor',
-  last_name: 'Oak',
+const professorOak: Contributor = {
+  firstName: 'Professor',
+  lastName: 'Oak',
   name: 'Professor Oak',
+  ...genericContributorDetails,
 };
 
-const brock = {
-  first_name: 'Brock',
-  last_name: 'Harrison',
+const brock: Contributor = {
+  firstName: 'Brock',
+  lastName: 'Harrison',
   name: 'Brock Harrison',
+  ...genericContributorDetails,
+};
+
+const jessie: ContributorAPIResponse = {
+  first_name: 'Team',
+  last_name: 'Rocket',
+  name: 'Team Rocket',
+  orcid_id: '',
+  version: '0',
+  affiliation: '',
+  middle_name_or_initial: '',
 };
 
 const publication_venue = 'Pallet Town Times';
@@ -25,7 +49,7 @@ const preprintPublicationHit = {
     uuid: 'abc123',
     title: 'Publication ABC',
     onClick: () => {},
-    contributors: [ash],
+    contributors: [jessie],
     publication_status: false,
     publication_venue,
     publication_date: '2022-03-02',
@@ -37,7 +61,7 @@ const peerReviewedPublicationHit = {
     uuid: 'def234',
     title: 'Publication DEF',
     onClick: () => {},
-    contributors: [professorOak],
+    contributors: [jessie],
     publication_status: true,
     publication_venue,
     publication_date: '2022-03-02',
@@ -67,13 +91,13 @@ describe('buildSecondaryText', () => {
   test('should return the abbreviated contributors and publication venue separated by a pipe', () => {
     const contributors = [ash];
 
-    expect(buildSecondaryText(contributors, publication_venue)).toBe('Ash Ketchum | Pallet Town Times');
+    expect(buildSecondaryText(publication_venue, contributors)).toBe('Ash Ketchum | Pallet Town Times');
   });
 
   test('should just the publication venue if contributors list is empty', () => {
-    const contributors = [];
+    const contributors: Contributor[] = [];
 
-    expect(buildSecondaryText(contributors, publication_venue)).toBe('Pallet Town Times');
+    expect(buildSecondaryText(publication_venue, contributors)).toBe('Pallet Town Times');
   });
 });
 
@@ -82,9 +106,10 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(preprintPublicationHit)).toEqual({
       key: 'abc123',
       href: '/browse/publication/abc123',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       onClick: expect.any(Function),
       title: 'Publication ABC',
-      secondaryText: 'Ash Ketchum | Pallet Town Times',
+      secondaryText: 'Team Rocket | Pallet Town Times',
       rightText: 'Preprint Date: 2022-03-02',
     });
   });
@@ -92,9 +117,10 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(peerReviewedPublicationHit)).toEqual({
       key: 'def234',
       href: '/browse/publication/def234',
+      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
       onClick: expect.any(Function),
       title: 'Publication DEF',
-      secondaryText: 'Professor Oak | Pallet Town Times',
+      secondaryText: 'Team Rocket | Pallet Town Times',
       rightText: 'Published: 2022-03-02',
     });
   });
