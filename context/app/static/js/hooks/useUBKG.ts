@@ -6,6 +6,20 @@ import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
 
 /**
+ * Parameters for the pathways endpoint.
+ * @param eventTypes - The event types to filter by, e.g. "reaction"
+ * @param pathwayId - The ID of the pathway to filter by, e.g. R-HSA-8953897
+ * @param pathwayNameStartsWith - The name of the pathway to filter by, e.g. "Cell"
+ * @param geneIds - The gene IDs to filter by, e.g. ["EGFR", "MMRN1"]
+ */
+interface PathwayWithGenesParams {
+  eventTypes?: string[];
+  pathwayId?: string;
+  pathwayNameStartsWith?: string;
+  geneIds?: string[];
+}
+
+/**
  * Generates API URLs for the UBKG API.
  * @returns A set of functions that generate URLs for the UBKG API.
  */
@@ -36,6 +50,40 @@ const useUbkg = () => {
       },
       get fieldTypes() {
         return `${ubkgEndpoint}/field-types`;
+      },
+      pathways(params: PathwayWithGenesParams) {
+        const { eventTypes, pathwayId, pathwayNameStartsWith, geneIds } = params;
+        const queryParams = new URLSearchParams();
+        if (eventTypes) {
+          const eventTypesString = eventTypes.join(',');
+          queryParams.append('eventtypes', eventTypesString);
+        }
+        if (pathwayId) {
+          queryParams.append('pathwayid', pathwayId);
+        }
+        if (pathwayNameStartsWith) {
+          queryParams.append('pathwayname-startswith', pathwayNameStartsWith);
+        }
+        if (geneIds) {
+          const geneIdsString = geneIds.join(',');
+          queryParams.append('geneids', geneIdsString);
+        }
+        return `${ubkgEndpoint}/pathways/with-genes?${queryParams.toString()}`;
+      },
+      pathwayDetail(pathwayId?: string, sabs?: string[], featureTypes?: string[]) {
+        if (!pathwayId) {
+          return null;
+        }
+        const queryParams = new URLSearchParams();
+        if (sabs) {
+          const sabsString = sabs.join(',');
+          queryParams.append('sabs', sabsString);
+        }
+        if (featureTypes) {
+          const featureTypesString = featureTypes.join(',');
+          queryParams.append('featuretypes', featureTypesString);
+        }
+        return `${ubkgEndpoint}/pathways/${pathwayId}/participants?${queryParams.toString()}`;
       },
     }),
     [ubkgEndpoint],
@@ -356,4 +404,62 @@ export const useMetadataFieldDescriptions = () => {
   });
 
   return { data: data ?? {}, ...swr };
+};
+
+/**
+ * Response type for the pathway with genes (`/pathways/with-genes`) endpoint.
+ */
+interface PathwayWithGenesResponse {
+  count: number;
+  events: {
+    code: string;
+    description: string;
+    type: string;
+  }[];
+}
+
+/**
+ * Response type for the pathway participants (`/pathways/:pathwayId/participants`) endpoint.
+ * This endpoint returns the participants of a specific pathway.
+ * The response includes the count of participants and a list of events.
+ */
+interface PathwayParticipantsResponse {
+  count: number;
+  events: {
+    code: string;
+    name: string;
+    type: string;
+    sabs: {
+      SAB: string;
+      count: number;
+      participants: {
+        description: string;
+        featuretype: string;
+        id: string;
+        symbol: string;
+      }[];
+    }[];
+  }[];
+}
+
+export const useGenePathways = (params: PathwayWithGenesParams) => {
+  const { data, error, ...swr } = useSWR<PathwayWithGenesResponse, SWRError, string>(
+    useUbkg().pathways(params),
+    (url: string) => fetcher({ url }),
+  );
+  if (error) {
+    throw error;
+  }
+  return { data, ...swr };
+};
+
+export const useGenePathwayParticipants = (pathwayId?: string, sabs?: string[], featureTypes?: string[]) => {
+  const { data, error, ...swr } = useSWR<PathwayParticipantsResponse, SWRError, string | null>(
+    useUbkg().pathwayDetail(pathwayId, sabs, featureTypes),
+    (url: string) => fetcher({ url }),
+  );
+  if (error) {
+    throw error;
+  }
+  return { data, ...swr };
 };
