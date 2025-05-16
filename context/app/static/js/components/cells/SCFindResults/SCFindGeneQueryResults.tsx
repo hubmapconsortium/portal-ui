@@ -8,10 +8,10 @@ import {
   parentDonorRace,
   parentDonorSex,
 } from 'js/shared-styles/tables/columns';
-import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { Dataset } from 'js/components/types';
 import Skeleton from '@mui/material/Skeleton';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
+import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import DatasetsOverview from '../DatasetsOverview';
 
@@ -26,34 +26,29 @@ const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, p
 
 function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
   return (
-    <EntitiesTables<Dataset>
+    <EntityTable<Dataset>
       maxHeight={800}
       isSelectable
-      entities={[
-        {
-          entityType: 'Dataset',
-          columns,
-          query: {
-            query: {
-              terms: {
-                'hubmap_id.keyword': datasetIds.map(({ hubmap_id }) => hubmap_id),
-              },
-            },
-            size: 10000,
-            _source: [
-              'hubmap_id',
-              'origin_samples_unique_mapped_organs',
-              'mapped_status',
-              'mapped_data_types',
-              'mapped_data_access_level',
-              'uuid',
-              'last_modified_timestamp',
-              'donor',
-            ],
+      columns={columns}
+      query={{
+        query: {
+          terms: {
+            'hubmap_id.keyword': datasetIds.map(({ hubmap_id }) => hubmap_id),
           },
-          expandedContent: SCFindGeneCharts,
         },
-      ]}
+        size: 10000,
+        _source: [
+          'hubmap_id',
+          'origin_samples_unique_mapped_organs',
+          'mapped_status',
+          'mapped_data_types',
+          'mapped_data_access_level',
+          'uuid',
+          'last_modified_timestamp',
+          'donor',
+        ],
+      }}
+      expandedContent={SCFindGeneCharts}
       {...useTableTrackingProps()}
     />
   );

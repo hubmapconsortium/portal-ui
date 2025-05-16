@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
-import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
 import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import Stack from '@mui/material/Stack';
+import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import CellsCharts from '../CellsCharts';
 import { useAugmentedResults } from '../MolecularDataQueryResults/hooks';
 import { useCrossModalityResults } from './hooks';
@@ -50,18 +50,7 @@ export default function CrossModalityGeneOrProteinResults<T extends 'gene' | 'pr
   return (
     <Stack spacing={1.5} width="100%">
       <DatasetListHeader />
-      <EntitiesTables
-        maxHeight={800}
-        isSelectable
-        entities={[
-          {
-            entityType: 'Dataset',
-            query,
-            columns,
-            expandedContent: CellsCharts,
-          },
-        ]}
-      />
+      <EntityTable maxHeight={800} isSelectable query={query} columns={columns} expandedContent={CellsCharts} />
     </Stack>
   );
 }
