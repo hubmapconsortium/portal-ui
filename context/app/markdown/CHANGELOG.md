@@ -1,5 +1,15 @@
 # Changelog
 
+## v1.26.0 - 2025-05-16
+
+- Update portal sitemap to include all relevant landing and detail pages.
+- Add support for querying for datasets by gene using scFind.
+- Update Collections detail pages.
+- Update Collections landing page.
+- Update Publications landing page.
+
+
+
 ## v1.25.1 - 2025-05-05
 
 - Add analytics to main navigation.

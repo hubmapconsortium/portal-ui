@@ -1,1 +1,0 @@
-- Update Collections landing page.
