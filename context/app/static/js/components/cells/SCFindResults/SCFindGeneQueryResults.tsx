@@ -22,6 +22,7 @@ import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import SCFindGeneCharts from '../CellsCharts/SCFindGeneCharts';
 import { CurrentGeneContextProvider } from './CurrentGeneContext';
+import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 
 const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex, lastModifiedTimestamp];
 
@@ -57,6 +58,7 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
 
 function DatasetListSection() {
   const { openTabIndex, handleTabChange } = useTabs();
+  const genes = useCellVariableNames();
 
   const { order, categorizedResults, emptyResults, isLoading } = useSCFindGeneResults();
 
@@ -88,7 +90,7 @@ function DatasetListSection() {
       <DatasetListHeader />
       {order.map((gene, idx) => (
         <TabPanel key={gene} value={openTabIndex} index={idx}>
-          <CurrentGeneContextProvider value={gene}>
+          <CurrentGeneContextProvider value={genes.includes(gene) ? gene : undefined}>
             <SCFindGeneQueryDatasetList
               key={gene}
               datasetIds={categorizedResults[gene]?.map((hubmap_id) => ({ hubmap_id })) ?? []}
