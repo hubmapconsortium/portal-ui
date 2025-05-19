@@ -116,12 +116,12 @@ function DatasetListSection() {
 
   return (
     <>
+      <DatasetListHeader />
       <Tabs onChange={handleTabChange} value={openTabIndex}>
         {cellTypeCategories.map((cellType, idx) => (
           <Tab key={cellType} label={`${cellType} (${datasets[cellType]?.length ?? 0})`} index={idx} />
         ))}
       </Tabs>
-      <DatasetListHeader />
       {cellTypeCategories.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx}>
           <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType] ?? []} />

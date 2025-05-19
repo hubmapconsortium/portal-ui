@@ -7,6 +7,7 @@ import TextField from '@mui/material/TextField';
 import { useEventCallback } from '@mui/material/utils';
 import Chip from '@mui/material/Chip';
 import Box from '@mui/material/Box';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useMolecularDataQueryFormState } from '../hooks';
 import { usePathwayAutocompleteQuery, useSelectedPathwayParticipants } from './hooks';
 import { PreserveWhiteSpaceListItem } from './styles';
@@ -38,14 +39,16 @@ export default function GenePathwaysAutocomplete() {
       title="pathway"
       loading={isLoading}
       getOptionLabel={(option) => `${option.full}`}
-      renderOption={(props, option) => (
+      renderOption={(props, option: AutocompleteResult) => (
         <PreserveWhiteSpaceListItem {...props} key={option.full}>
           <span>{option.pre}</span>
           <b>{option.match}</b>
           <span>{option.post}</span>
-          {option?.tags && (
+          {'tags' in option && option?.tags && (
             <Box sx={{ display: 'flex', ml: 'auto', gap: 1 }}>
-              {option?.tags?.map((tag) => <Chip key={tag} label={tag} size="small" variant="filled" />)}
+              {option.tags.map((tag) => (
+                <Chip key={tag} label={tag} size="small" variant="filled" />
+              ))}
             </Box>
           )}
         </PreserveWhiteSpaceListItem>
@@ -55,7 +58,13 @@ export default function GenePathwaysAutocomplete() {
           placeholder="Find a pathway by name (e.g. DNA Damage)."
           value={substring}
           label="Pathways (Optional)"
-          helperText="Selecting a pathway will automatically populate the gene selection. Only one pathway can be selected."
+          helperText={
+            <>
+              Selecting a pathway will automatically populate the gene selection. Only one pathway can be selected. This
+              list of gene pathways is sourced from{' '}
+              <OutboundIconLink href="https://reactome.org/">Reactome</OutboundIconLink>.
+            </>
+          }
           variant="outlined"
           onChange={handleSubstringChange}
           {...params}

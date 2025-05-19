@@ -14,6 +14,7 @@ import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import Description from 'js/shared-styles/sections/Description';
 import Stack from '@mui/material/Stack';
+import Typography from '@mui/material/Typography';
 import DatasetsOverview from '../DatasetsOverview';
 
 import { SCFindQueryResultsListProps } from './types';
@@ -23,8 +24,19 @@ import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import SCFindGeneCharts from '../CellsCharts/SCFindGeneCharts';
 import { CurrentGeneContextProvider } from './CurrentGeneContext';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
+import { MatchingGeneContextProvider } from './MatchingGeneContext';
+import { matchingGeneColumn } from './columns';
 
-const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex, lastModifiedTimestamp];
+const columns = [
+  hubmapID,
+  organ,
+  assayTypes,
+  parentDonorAge,
+  parentDonorRace,
+  parentDonorSex,
+  matchingGeneColumn,
+  lastModifiedTimestamp,
+];
 
 function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
   return (
@@ -82,12 +94,12 @@ function DatasetListSection() {
           </>
         )}
       </Description>
+      <DatasetListHeader />
       <Tabs onChange={handleTabChange} value={openTabIndex} variant={order.length > 10 ? 'scrollable' : 'fullWidth'}>
         {order.map((gene, idx) => (
           <Tab key={gene} label={`${gene} (${categorizedResults[gene]?.length ?? 0})`} index={idx} />
         ))}
       </Tabs>
-      <DatasetListHeader />
       {order.map((gene, idx) => (
         <TabPanel key={gene} value={openTabIndex} index={idx}>
           <CurrentGeneContextProvider value={genes.includes(gene) ? gene : undefined}>
@@ -105,7 +117,7 @@ function DatasetListSection() {
 function SCFindGeneQueryResultsLoader() {
   const { setResults } = useResultsProvider();
 
-  const { datasets, isLoading, error } = useSCFindGeneResults();
+  const { datasets, isLoading, error, datasetToGeneMap } = useSCFindGeneResults();
 
   const deduplicatedResults = useDeduplicatedResults(datasets?.findDatasets);
 
@@ -119,14 +131,17 @@ function SCFindGeneQueryResultsLoader() {
   }
 
   return (
-    <>
+    <MatchingGeneContextProvider value={datasetToGeneMap}>
+      <Typography variant="subtitle1" component="p">
+        Datasets Overview
+      </Typography>
       <DatasetsOverview datasets={deduplicatedResults}>
         This overview provides a summary of the matched datasets and their proportions relative to both indexed datasets
         and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a tabular view.
         Both views can be downloaded, with the visualization available as a PNG and the table as a TSV file.
       </DatasetsOverview>
       <DatasetListSection />
-    </>
+    </MatchingGeneContextProvider>
   );
 }
 
