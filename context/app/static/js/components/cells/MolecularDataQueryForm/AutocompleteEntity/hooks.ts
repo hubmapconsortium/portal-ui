@@ -94,16 +94,25 @@ export function usePathwayAutocompleteQuery(substring: string) {
  * Retrieves the genes in a pathway and sets them in the form state in response to a selected pathway.
  */
 export function useSelectedPathwayParticipants() {
-  const { watch, setValue } = useMolecularDataQueryFormState();
+  const { watch, setValue, formState } = useMolecularDataQueryFormState();
 
   const selectedPathway = watch('pathway');
 
-  const value: string | undefined = selectedPathway?.values?.[0];
+  const name: string | undefined =
+    selectedPathway && typeof selectedPathway === 'object' && 'full' in selectedPathway
+      ? (selectedPathway as { full?: string }).full?.split(' (')[0] // Remove the R-HSA code
+      : undefined;
+
+  const value: string | undefined =
+    // eslint-disable-next-line @typescript-eslint/unbound-method
+    Array.isArray(selectedPathway?.values) && typeof selectedPathway.values[0] === 'string'
+      ? selectedPathway.values[0]
+      : undefined;
 
   const { data: pathway, isLoading } = useGenePathwayParticipants(value);
 
   useEffect(() => {
-    if (selectedPathway && pathway) {
+    if (selectedPathway && pathway && !formState.isSubmitted) {
       const genes = pathway.events.flatMap((event) => {
         // find the HUGO gene symbol sab in the event
         const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC')!;
@@ -123,7 +132,21 @@ export function useSelectedPathwayParticipants() {
       });
       setValue('genes', genes);
     }
-  }, [pathway, selectedPathway, setValue, isLoading]);
+  }, [pathway, selectedPathway, setValue, isLoading, formState.isSubmitted]);
 
-  return { isLoading };
+  const participants = useMemo(() => {
+    if (!pathway) {
+      return [];
+    }
+    return pathway.events.flatMap((event) => {
+      // find the HUGO gene symbol sab in the event
+      const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC')!;
+      if (!hgncSab) {
+        return [];
+      }
+      return hgncSab.participants.map((participant) => participant.symbol).filter((gene) => gene !== undefined);
+    });
+  }, [pathway]);
+
+  return { isLoading, name, participants };
 }

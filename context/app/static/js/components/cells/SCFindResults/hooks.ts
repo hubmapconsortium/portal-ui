@@ -4,6 +4,7 @@ import { Dataset } from 'js/components/types';
 import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
+import { useSelectedPathwayParticipants } from '../MolecularDataQueryForm/AutocompleteEntity/hooks';
 
 export function useSCFindCellTypeResults() {
   const cellTypes = useCellVariableNames();
@@ -80,13 +81,110 @@ export function useSCFindCellTypeResults() {
 export function useSCFindGeneResults() {
   const genes = useCellVariableNames();
 
-  return useFindDatasetForGenes({
+  const { participants, name, isLoading: isLoadingPathwayGenes } = useSelectedPathwayParticipants();
+
+  const { isLoading: isLoadingDatasets, ...results } = useFindDatasetForGenes({
     geneList: genes,
   });
+
+  // Gene query results have the following categories:
+  // - Each individual gene
+  // - Union of all results for genes in the same pathway, with pathway name as the key
+  // - If the intersection of the genes in the same pathway is not empty, it is also a category
+  // - Any genes that do not have a result are separately listed
+  const { categorizedResults, emptyResults, order } = useMemo(() => {
+    if (!results.data) {
+      return {
+        categorizedResults: {},
+        emptyResults: [],
+        order: [],
+      };
+    }
+    const { findDatasets: originalResults } = results.data;
+    const newResults: Record<string, string[]> = {};
+    const empty: string[] = [];
+    const keyOrder: string[] = [];
+    genes.forEach((gene) => {
+      const datasets = originalResults[gene] ?? [];
+      if (datasets.length > 0) {
+        newResults[gene] = datasets;
+      } else {
+        empty.push(gene);
+      }
+    });
+    // Handle pathway genes
+    if (name && participants.length > 0) {
+      const unionKey = `Any Genes in ${name}`;
+      // Add the union of all results for genes in the same pathway
+      // with the pathway name as the key
+      newResults[unionKey] = [];
+      participants.forEach((participant) => {
+        const datasets = originalResults[participant] ?? [];
+        if (datasets && datasets.length > 0) {
+          newResults[unionKey].push(...datasets);
+        }
+      });
+      // Deduplicate the union; if the result is empty, remove the key
+      newResults[unionKey] = Array.from(new Set(newResults[unionKey]));
+      if (newResults[unionKey].length === 0) {
+        delete newResults[unionKey];
+        empty.push(unionKey);
+      } else {
+        // If the union is not empty, add it to the key order
+        keyOrder.push(unionKey);
+        // Check for an intersection of the genes in the same pathway
+        // by checking if a dataset in the union is also in the original results for each gene
+        const intersectionKey = `All Genes in ${name}`;
+        newResults[intersectionKey] = [];
+        newResults[unionKey].forEach((dataset) => {
+          const isInAll = participants.every((participant) => {
+            const datasets = originalResults[participant] ?? [];
+            return datasets.includes(dataset);
+          });
+          if (isInAll) {
+            newResults[intersectionKey].push(dataset);
+          }
+        });
+        // If the intersection is empty, remove the key
+        // We don't need to add it to the empty results
+        if (newResults[intersectionKey].length === 0) {
+          delete newResults[intersectionKey];
+        } else {
+          // If the intersection is not empty, add it to the key order
+          keyOrder.push(intersectionKey);
+        }
+      }
+    }
+
+    // Add the individual genes to the key order
+    Object.keys(newResults).forEach((key) => {
+      if (!keyOrder.includes(key)) {
+        keyOrder.push(key);
+      }
+    });
+
+    return {
+      categorizedResults: newResults,
+      emptyResults: empty,
+      order: keyOrder,
+    };
+  }, [results.data, genes, name, participants]);
+
+  return {
+    datasets: results.data,
+    categorizedResults,
+    isLoading: isLoadingDatasets || isLoadingPathwayGenes,
+    emptyResults,
+    order,
+    ...results,
+  };
 }
 
-export function useDeduplicatedResults(datasets: Record<string, (Pick<Dataset, 'hubmap_id'> | string)[]>) {
+export function useDeduplicatedResults(datasets?: Record<string, (Pick<Dataset, 'hubmap_id'> | string)[]>) {
   return useMemo(() => {
+    if (!datasets) {
+      return [];
+    }
     const uniqueResults = Object.values(datasets)
       .flat()
       .reduce((acc, dataset) => {

@@ -12,7 +12,8 @@ import { Dataset } from 'js/components/types';
 import Skeleton from '@mui/material/Skeleton';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
-import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
+import Description from 'js/shared-styles/sections/Description';
+import Stack from '@mui/material/Stack';
 import DatasetsOverview from '../DatasetsOverview';
 
 import { SCFindQueryResultsListProps } from './types';
@@ -56,46 +57,50 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
 
 function DatasetListSection() {
   const { openTabIndex, handleTabChange } = useTabs();
-  const genes = useCellVariableNames();
 
-  const { data: { findDatasets: datasets } = { findDatasets: {} }, isLoading } = useSCFindGeneResults();
+  const { order, categorizedResults, emptyResults, isLoading } = useSCFindGeneResults();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
   }
 
-  if (!datasets) {
-    return <div>No datasets found</div>;
+  if (!order) {
+    return <div>No datasets found for any of the selected genes: {emptyResults.join(', ')}.</div>;
   }
 
   return (
-    <>
-      <Tabs onChange={handleTabChange} value={openTabIndex} variant={genes.length > 10 ? 'scrollable' : 'fullWidth'}>
-        {genes.map((gene, idx) => (
-          <Tab key={gene} label={`${gene} (${datasets[gene]?.length ?? 0})`} index={idx} />
+    <Stack spacing={1} pt={2}>
+      {emptyResults.length > 0 && (
+        <Description>
+          No datasets found for {emptyResults.length} of the selected genes: {emptyResults.join(', ')}.
+        </Description>
+      )}
+      <Tabs onChange={handleTabChange} value={openTabIndex} variant={order.length > 10 ? 'scrollable' : 'fullWidth'}>
+        {order.map((gene, idx) => (
+          <Tab key={gene} label={`${gene} (${categorizedResults[gene]?.length ?? 0})`} index={idx} />
         ))}
       </Tabs>
       <DatasetListHeader />
-      {genes.map((gene, idx) => (
+      {order.map((gene, idx) => (
         <TabPanel key={gene} value={openTabIndex} index={idx}>
           <CurrentGeneContextProvider value={gene}>
             <SCFindGeneQueryDatasetList
               key={gene}
-              datasetIds={datasets[gene]?.map((hubmap_id) => ({ hubmap_id })) ?? []}
+              datasetIds={categorizedResults[gene]?.map((hubmap_id) => ({ hubmap_id })) ?? []}
             />
           </CurrentGeneContextProvider>
         </TabPanel>
       ))}
-    </>
+    </Stack>
   );
 }
 
 function SCFindGeneQueryResultsLoader() {
   const { setResults } = useResultsProvider();
 
-  const { data: { findDatasets: datasets } = { findDatasets: {} }, isLoading, error } = useSCFindGeneResults();
+  const { datasets, isLoading, error } = useSCFindGeneResults();
 
-  const deduplicatedResults = useDeduplicatedResults(datasets);
+  const deduplicatedResults = useDeduplicatedResults(datasets?.findDatasets);
 
   // update the total dataset counter for the results display
   useEffect(() => {
