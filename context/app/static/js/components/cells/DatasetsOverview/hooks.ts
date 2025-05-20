@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react';
 import { AggregationsAggregationContainer, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import useSearchData from 'js/hooks/useSearchData';
+import { decimal, percent } from 'js/helpers/number-format';
 
 export const Y_AXIS_OPTIONS = ['Datasets', 'Donors'] as const;
 export type YAxisOptions = (typeof Y_AXIS_OPTIONS)[number];
@@ -296,3 +297,53 @@ export function useDatasetsOverview(hubmap_ids?: string[]): DatasetsOverviewDige
     isLoading,
   };
 }
+
+const createOverviewRow = (label: string, matched: number, indexed: number, all: number, noPercentage?: boolean) => {
+  return {
+    label,
+    matched: decimal.format(matched),
+    indexed: decimal.format(indexed),
+    matchedIndexed: noPercentage ? '\u2014' : percent.format(matched / indexed),
+    all: decimal.format(all),
+    matchedAll: noPercentage ? '\u2014' : percent.format(matched / all),
+  };
+};
+
+export const useFormattedRows = (
+  matched: DatasetsOverviewDigest,
+  indexed: DatasetsOverviewDigest,
+  all: DatasetsOverviewDigest,
+) => {
+  const rows = useMemo(() => {
+    return [
+      createOverviewRow('Datasets', matched.totalDatasets, indexed.totalDatasets, all.totalDatasets),
+      createOverviewRow('Unique Donors', matched.totalDonors, indexed.totalDonors, all.totalDonors),
+      createOverviewRow(
+        'Average Donor Age (Years)',
+        matched.averageDonorAge,
+        indexed.averageDonorAge,
+        all.averageDonorAge,
+        true,
+      ),
+      createOverviewRow('Male Donors', matched.maleDonors, indexed.maleDonors, all.maleDonors),
+      createOverviewRow('Female Donors', matched.femaleDonors, indexed.femaleDonors, all.femaleDonors),
+    ];
+  }, [indexed, matched, all]);
+
+  return rows;
+};
+
+export interface DatasetOverviewRow {
+  label: string;
+  matched: string;
+  indexed: string;
+  matchedIndexed: string;
+  all: string;
+  matchedAll: string;
+}
+
+export const useDownloadableRows = (rows: DatasetOverviewRow[]) => {
+  return rows.map((row) => {
+    return [row.label, row.matched, row.indexed, row.matchedIndexed, row.all, row.matchedAll];
+  });
+};
