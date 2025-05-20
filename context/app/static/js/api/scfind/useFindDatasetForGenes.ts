@@ -25,12 +25,17 @@ export function createFindDatasetForGenesKey(
 export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
   const { scFindEndpoint } = useAppContext();
   const key = createFindDatasetForGenesKey(scFindEndpoint, props);
-  return useSWR<DatasetsForGenesResponse, Error, DatasetsForGenesKey>(key, (url) =>
-    fetcher({
-      url,
-      errorMessages: {
-        400: `No results found for ${Array.isArray(props.geneList) ? props.geneList.join(', ') : props.geneList}`,
-      },
-    }),
+  return useSWR<DatasetsForGenesResponse, Error, DatasetsForGenesKey>(
+    key,
+    (url) =>
+      fetcher({
+        url,
+        errorMessages: {
+          400: `No results found for ${Array.isArray(props.geneList) ? props.geneList.join(', ') : props.geneList}`,
+        },
+      }),
+    {
+      shouldRetryOnError: false,
+    },
   );
 }

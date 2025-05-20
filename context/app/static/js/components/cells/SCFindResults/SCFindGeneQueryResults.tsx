@@ -27,7 +27,9 @@ import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { MatchingGeneContextProvider } from './MatchingGeneContext';
 import { matchingGeneColumn } from './columns';
 
-const columns = [
+const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex, lastModifiedTimestamp];
+
+const columnsWithMatchingGene = [
   hubmapID,
   organ,
   assayTypes,
@@ -39,11 +41,15 @@ const columns = [
 ];
 
 function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
+  const genes = useCellVariableNames();
+
+  const columnsToUse = genes.length > 1 ? columnsWithMatchingGene : columns;
+
   return (
     <EntityTable<Dataset>
       maxHeight={800}
       isSelectable
-      columns={columns}
+      columns={columnsToUse}
       query={{
         query: {
           terms: {
@@ -136,7 +142,7 @@ function SCFindGeneQueryResultsLoader() {
 
   return (
     <MatchingGeneContextProvider value={datasetToGeneMap}>
-      <Typography variant="subtitle1" component="p">
+      <Typography variant="subtitle1" component="p" gutterBottom>
         Datasets Overview
       </Typography>
       <DatasetsOverview datasets={deduplicatedResults}>
