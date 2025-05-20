@@ -72,14 +72,18 @@ function DatasetListSection() {
   const { openTabIndex, handleTabChange } = useTabs();
   const genes = useCellVariableNames();
 
-  const { order, categorizedResults, emptyResults, isLoading } = useSCFindGeneResults();
+  const { order, categorizedResults, emptyResults, isLoading, error } = useSCFindGeneResults();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
   }
 
-  if (!order) {
-    return <div>No datasets found for any of the selected genes: {emptyResults.join(', ')}.</div>;
+  if (error || !order) {
+    return (
+      <Stack spacing={1} pt={2}>
+        <Description>No datasets were found for any of the selected genes: {emptyResults.join(', ')}.</Description>
+      </Stack>
+    );
   }
 
   return (
