@@ -104,7 +104,6 @@ export function useSelectedPathwayParticipants() {
       : undefined;
 
   const value: string | undefined =
-    // eslint-disable-next-line @typescript-eslint/unbound-method
     Array.isArray(selectedPathway?.values) && typeof selectedPathway.values[0] === 'string'
       ? selectedPathway.values[0]
       : undefined;
@@ -115,7 +114,7 @@ export function useSelectedPathwayParticipants() {
     if (selectedPathway && pathway && !formState.isSubmitted) {
       const genes = pathway.events.flatMap((event) => {
         // find the HUGO gene symbol sab in the event
-        const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC')!;
+        const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC');
         if (!hgncSab) {
           return [];
         }
