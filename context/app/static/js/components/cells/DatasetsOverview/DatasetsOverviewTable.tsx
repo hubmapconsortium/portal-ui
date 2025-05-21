@@ -64,7 +64,7 @@ export default function DatasetsOverviewTable({ matched, indexed, all }: Overvie
             <TableCell>Matched/Indexed (%)</TableCell>
             <DividerCell />
             <TableCell>
-              <InfoTextTooltip tooltipTitle={tooltips.all}>Total Datasets</InfoTextTooltip>
+              <InfoTextTooltip tooltipTitle={tooltips.all}>Total Datasets in HuBMAP Data Portal</InfoTextTooltip>
             </TableCell>
             <TableCell>Matched/Total (%)</TableCell>
           </TableRow>
