@@ -33,6 +33,7 @@ function buildServiceStatus(args) {
 
 function ServiceStatusTable({
   elasticsearchEndpoint,
+  dataProductsEndpoint,
   assetsEndpoint,
   xmodalityEndpoint,
   entityEndpoint,
@@ -40,6 +41,7 @@ function ServiceStatusTable({
   workspacesEndpoint,
   ubkgEndpoint,
   softAssayEndpoint,
+  scFindEndpoint,
   ukvEndpoint,
 }) {
   const gatewayStatus = useGatewayStatus(`${gatewayEndpoint}/status.json`);
@@ -58,6 +60,12 @@ function ServiceStatusTable({
           endpointUrl: xmodalityEndpoint,
           response: gatewayStatus.cells_api,
           noteFunction: (api) => `Branch: ${api.branch}; Commit ${api.commit.slice(0, 12)}`,
+        }),
+        buildServiceStatus({
+          apiName: 'data-products',
+          githubUrl: 'https://github.com/hubmapconsortium/data-products-ui',
+          response: gatewayStatus.data_products_api,
+          endpointUrl: dataProductsEndpoint,
         }),
         buildServiceStatus({
           apiName: 'entity-api',
@@ -83,6 +91,12 @@ function ServiceStatusTable({
           apiVersion: packageInfo.version,
           isUp: true,
         },
+        buildServiceStatus({
+          apiName: 'scfind-api',
+          githubUrl: 'https://github.com/hemberg-lab/scfind',
+          endpointUrl: scFindEndpoint,
+          response: gatewayStatus.scFind_api,
+        }),
         buildServiceStatus({
           apiName: 'search-api',
           endpointUrl: elasticsearchEndpoint,
