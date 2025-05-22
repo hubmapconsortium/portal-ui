@@ -1,4 +1,4 @@
-import React, { ForwardedRef, forwardRef, useState } from 'react';
+import React, { ForwardedRef, forwardRef, useMemo, useState } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
@@ -17,6 +17,7 @@ import { QueryType, queryTypes } from '../../queryTypes';
 import { PreserveWhiteSpaceListItem } from './styles';
 import { useQueryType, useMolecularDataQueryFormState } from '../hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
+import { GeneChip } from './EntityChips';
 
 function buildHelperText(entity: string): string {
   return `Multiple ${entity} are allowed and only 'OR' queries are supported.`;
@@ -45,6 +46,19 @@ const ClearIndicator = forwardRef(function ClearIndicator(
     </SecondaryBackgroundTooltip>
   );
 });
+
+function LimitCount(count: number) {
+  const { entityFieldName: fieldName, label } = useQueryType();
+  const { getValues } = useMolecularDataQueryFormState();
+
+  const selectedValues = getValues(fieldName).map((value: AutocompleteResult) => value.full);
+
+  return (
+    <SecondaryBackgroundTooltip title={`Selected ${label.toLowerCase()}s: ${selectedValues.join(', ')}`}>
+      <span>{`+${count}`}</span>
+    </SecondaryBackgroundTooltip>
+  );
+}
 
 function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }: AutocompleteEntityProps<T>) {
   const [substring, setSubstring] = useState('');
@@ -93,6 +107,15 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
     field.onChange(formattedValue);
   });
 
+  const { ChipComponent, limitTags } = useMemo(() => {
+    switch (targetEntity) {
+      case 'gene':
+        return { ChipComponent: GeneChip, limitTags: 3 };
+      default:
+        return { ChipComponent: Chip, limitTags: 5 };
+    }
+  }, [targetEntity]);
+
   return (
     <Autocomplete
       options={options}
@@ -128,6 +151,8 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           component: ClearIndicator,
         },
       }}
+      limitTags={limitTags}
+      getLimitTagsText={LimitCount}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
           const tagProps = getTagProps({ index });
@@ -135,8 +160,8 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           const optionIsDefault = defaultValue && option.full === defaultValue;
           const onDelete = optionIsDefault ? undefined : tagProps.onDelete;
           return (
-            <Chip
-              label={option.full}
+            <ChipComponent
+              option={option}
               {...tagProps}
               onDelete={onDelete}
               key={option.full}

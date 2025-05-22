@@ -4,6 +4,7 @@ import { SWRError } from 'js/helpers/swr/errors';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
+import useSWRImmutable from 'swr/immutable';
 
 /**
  * Parameters for the pathways endpoint.
@@ -196,7 +197,7 @@ type GeneDetailResponse = [GeneDetail];
  * @returns The gene details, or an error if the gene is not found.
  */
 export const useGeneOntologyDetail = (geneSymbol: string) => {
-  const { data, error, ...swr } = useSWR<GeneDetailResponse, SWRError>(
+  const { data, error, ...swr } = useSWRImmutable<GeneDetailResponse, SWRError>(
     useUbkg().geneDetail(geneSymbol),
     (url: string) =>
       fetcher<GeneDetailResponse>({
@@ -205,11 +206,10 @@ export const useGeneOntologyDetail = (geneSymbol: string) => {
           404: `The gene ${geneSymbol} was not found.`,
         },
       }),
+    {
+      shouldRetryOnError: false,
+    },
   );
-  // Throw an error if the gene is not found
-  if (error) {
-    throw error;
-  }
   return { data: data?.[0], ...swr };
 };
 
@@ -387,7 +387,7 @@ async function fetchDescriptions(url: string) {
 
 // Since both flask and js depend on manipulated field descriptions, get them from flask for now in the hook below. Keeping this here for future use.
 export const useMFD = () => {
-  const { data, ...swr } = useSWR<Record<string, string> | Record<string, never>>(
+  const { data, ...swr } = useSWRImmutable<Record<string, string> | Record<string, never>>(
     useUbkg().fieldDescriptions,
     (url: string) => fetchDescriptions(url),
     {
@@ -399,9 +399,13 @@ export const useMFD = () => {
 };
 
 export const useMetadataFieldDescriptions = () => {
-  const { data, ...swr } = useSWR<Record<string, string>>('/metadata/descriptions', (url: string) => fetcher({ url }), {
-    fallbackData: {},
-  });
+  const { data, ...swr } = useSWRImmutable<Record<string, string>>(
+    '/metadata/descriptions',
+    (url: string) => fetcher({ url }),
+    {
+      fallbackData: {},
+    },
+  );
 
   return { data: data ?? {}, ...swr };
 };
@@ -443,7 +447,7 @@ interface PathwayParticipantsResponse {
 }
 
 export const useGenePathways = (params: PathwayWithGenesParams) => {
-  const { data, error, ...swr } = useSWR<PathwayWithGenesResponse, SWRError, string>(
+  const { data, error, ...swr } = useSWRImmutable<PathwayWithGenesResponse, SWRError, string>(
     useUbkg().pathways(params),
     (url: string) => fetcher({ url }),
   );
@@ -454,7 +458,7 @@ export const useGenePathways = (params: PathwayWithGenesParams) => {
 };
 
 export const useGenePathwayParticipants = (pathwayId?: string, sabs?: string[], featureTypes?: string[]) => {
-  const { data, error, ...swr } = useSWR<PathwayParticipantsResponse, SWRError, string | null>(
+  const { data, error, ...swr } = useSWRImmutable<PathwayParticipantsResponse, SWRError, string | null>(
     useUbkg().pathwayDetail(pathwayId, sabs, featureTypes),
     (url: string) => fetcher({ url }),
   );
