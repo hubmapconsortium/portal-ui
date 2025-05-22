@@ -70,6 +70,8 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
       }}
       expandedContent={SCFindGeneCharts}
       {...useTableTrackingProps()}
+      expandTooltip="View additional visualizations including gene expression levels and cell type distributions."
+      collapseTooltip="Collapse row."
     />
   );
 }

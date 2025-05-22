@@ -96,6 +96,8 @@ interface EntityTableProps<Doc extends Entity>
   numSelected?: number;
   disabledIDs?: Set<string>;
   trackingInfo?: EventInfo;
+  expandTooltip?: string;
+  collapseTooltip?: string;
   disabledTooltipTitle?: string;
   maxHeight?: number;
   onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -111,6 +113,8 @@ function EntityTable<Doc extends Entity>({
   isSelectable = true,
   trackingInfo,
   expandedContent: ExpandedContent,
+  expandTooltip,
+  collapseTooltip,
   disabledTooltipTitle,
   maxHeight,
   numSelected,
@@ -203,6 +207,8 @@ function EntityTable<Doc extends Entity>({
                   // @ts-expect-error the expanded content's props should be the same as the hit's _source
                   expandedContent={ExpandedContent ? <ExpandedContent {...hit?._source} /> : undefined}
                   isExpandedToStart={virtualRow.index === 0}
+                  expandTooltip={expandTooltip}
+                  collapseTooltip={collapseTooltip}
                   disabledTooltipTitle={disabledTooltipTitle}
                 >
                   {isSelectable && (

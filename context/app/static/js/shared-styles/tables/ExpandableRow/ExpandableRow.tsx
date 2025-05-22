@@ -12,6 +12,8 @@ interface ExpandableRowChildProps extends PropsWithChildren, TableRowProps {
   numCells: number;
   disabled?: boolean;
   expandedContent: React.ReactNode;
+  expandTooltip?: string;
+  collapseTooltip?: string;
   disabledTooltipTitle?: string;
 }
 
@@ -20,17 +22,21 @@ function ExpandableRowChild({
   numCells,
   disabled,
   expandedContent,
+  expandTooltip = '',
+  collapseTooltip = '',
   disabledTooltipTitle,
   ...rest
 }: ExpandableRowChildProps) {
   const { isExpanded, toggleIsExpanded } = useExpandableRowStore();
+
+  const tooltipTitle = isExpanded ? collapseTooltip : expandTooltip;
 
   return (
     <>
       <ClickableRow {...rest} onClick={toggleIsExpanded} disabled={disabled} label="expand row">
         {children}
         <ExpandableRowCell>
-          <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : ''}>
+          <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : tooltipTitle}>
             <span>
               <StyledExpandCollapseIcon isExpanded={isExpanded} color={disabled ? 'disabled' : 'primary'} />
             </span>
