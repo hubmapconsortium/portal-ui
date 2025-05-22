@@ -131,9 +131,16 @@ export function buildQuery({
       }
 
       if (isExistsFilter(filter) && isExistsFacet(facetConfig)) {
-        if (filterHasValues({ filter })) {
-          const existsClause = esb.existsQuery(field);
-          draft[portalField] = facetConfig.invert ? esb.boolQuery().mustNot(existsClause) : existsClause;
+        const hasValues = filterHasValues({ filter });
+        // handle new non-inverted facet use case
+        if (!facetConfig?.invert && hasValues) {
+          draft[portalField] = esb.existsQuery(field);
+        }
+        // preserve original logic for inverted facets
+        else if (facetConfig?.invert) {
+          if (!(hasValues && facetConfig?.invert)) {
+            draft[portalField] = esb.existsQuery(field);
+          }
         }
       }
     });
