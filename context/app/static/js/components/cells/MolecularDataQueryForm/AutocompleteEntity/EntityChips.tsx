@@ -1,20 +1,19 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { CloseFilledIcon } from 'js/shared-styles/icons';
 import { useGeneOntologyDetail } from 'js/hooks/useUBKG';
 import { AutocompleteResult } from './types';
+import { QueryType } from '../types';
 
-interface AdditionalChipProps extends ChipProps {
+interface InternalChipProps extends ChipProps {
   option: AutocompleteResult;
-  customLabel?: string;
 }
 
-function BaseChip({ option, customLabel, ...tagProps }: AdditionalChipProps) {
+function BaseChip({ option, ...tagProps }: InternalChipProps) {
   return (
     <Chip
       {...tagProps}
-      label={customLabel ?? option.full}
       deleteIcon={
         <SecondaryBackgroundTooltip title="Remove this selection.">
           <CloseFilledIcon />
@@ -24,10 +23,30 @@ function BaseChip({ option, customLabel, ...tagProps }: AdditionalChipProps) {
   );
 }
 
-export function GeneChip(props: AdditionalChipProps) {
+function GeneChip(props: InternalChipProps) {
   const { option } = props;
   const gene = useGeneOntologyDetail(option.full).data;
 
-  const customLabel = gene ? `${gene.approved_name} (${gene.approved_symbol})` : option.full;
-  return <BaseChip {...props} customLabel={customLabel} />;
+  const label = useMemo(() => {
+    if (gene) {
+      return `${gene.approved_name} (${gene.approved_symbol})`;
+    }
+    return option.full;
+  }, [gene, option]);
+
+  return <BaseChip {...props} label={label} />;
+}
+
+interface CustomChipProps extends InternalChipProps {
+  targetEntity: QueryType;
+}
+
+export function CustomChip({ targetEntity, ...props }: CustomChipProps) {
+  switch (targetEntity) {
+    case 'gene':
+      return <GeneChip {...props} />;
+    // Add other cases for different entities when needed, e.g. protein, cell-type, etc.
+    default:
+      return <BaseChip {...props} />;
+  }
 }

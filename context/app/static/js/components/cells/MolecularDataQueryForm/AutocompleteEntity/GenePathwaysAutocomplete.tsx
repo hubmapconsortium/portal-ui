@@ -19,7 +19,7 @@ export default function GenePathwaysAutocomplete() {
   const { field } = useController({
     name: 'pathway',
     control,
-    defaultValue: undefined,
+    defaultValue: null,
   });
 
   useSelectedPathwayParticipants();

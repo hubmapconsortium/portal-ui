@@ -196,9 +196,10 @@ type GeneDetailResponse = [GeneDetail];
  * @param geneSymbol The gene symbol to fetch details for.
  * @returns The gene details, or an error if the gene is not found.
  */
-export const useGeneOntologyDetail = (geneSymbol: string) => {
+export const useGeneOntologyDetail = (geneSymbol: string, shouldFetch = true) => {
+  const key = useUbkg().geneDetail(geneSymbol);
   const { data, error, ...swr } = useSWRImmutable<GeneDetailResponse, SWRError>(
-    useUbkg().geneDetail(geneSymbol),
+    shouldFetch ? key : null,
     (url: string) =>
       fetcher<GeneDetailResponse>({
         url,
@@ -427,7 +428,7 @@ interface PathwayWithGenesResponse {
  * This endpoint returns the participants of a specific pathway.
  * The response includes the count of participants and a list of events.
  */
-interface PathwayParticipantsResponse {
+export interface PathwayParticipantsResponse {
   count: number;
   events: {
     code: string;

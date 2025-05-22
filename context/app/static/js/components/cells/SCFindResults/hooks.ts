@@ -32,7 +32,7 @@ export function useSCFindCellTypeResults() {
 export function useSCFindGeneResults() {
   const genes = useCellVariableNames();
 
-  const { participants, name: pathwayName, isLoading: isLoadingPathwayGenes } = useSelectedPathwayParticipants();
+  const { participants, pathwayName, isLoading: isLoadingPathwayGenes } = useSelectedPathwayParticipants();
 
   const {
     isLoading: isLoadingDatasets,

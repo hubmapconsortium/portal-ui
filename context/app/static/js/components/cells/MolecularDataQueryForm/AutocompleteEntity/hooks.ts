@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { useCellTypeNamesMap } from 'js/api/scfind/useCellTypeNames';
-import { useEffect, useMemo } from 'react';
-import { useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
+import { useEffect, useMemo, useRef } from 'react';
+import { PathwayParticipantsResponse, useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
 import CellsService from '../../CellsService';
 import type { AutocompleteQueryKey, AutocompleteQueryResponse, AutocompleteResult } from './types';
 import { useMolecularDataQueryFormState } from '../hooks';
@@ -90,48 +90,69 @@ export function usePathwayAutocompleteQuery(substring: string) {
   return { pathways, options, isLoading };
 }
 
+function getParticipantsFromPathway(pathway?: PathwayParticipantsResponse): string[] {
+  if (!pathway) {
+    return [];
+  }
+  return pathway.events.flatMap((event) => {
+    const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC');
+    if (!hgncSab) {
+      return [];
+    }
+    return hgncSab.participants.map((participant) => participant.symbol).filter((gene) => gene !== undefined);
+  });
+}
+
 /**
  * Retrieves the genes in a pathway and sets them in the form state in response to a selected pathway.
  */
 export function useSelectedPathwayParticipants() {
-  const { watch, setValue, formState } = useMolecularDataQueryFormState();
+  const { watch, setValue, getValues, formState } = useMolecularDataQueryFormState();
 
   const selectedPathway = watch('pathway');
 
-  const name: string | undefined =
+  const pathwayName: string | undefined =
     selectedPathway && typeof selectedPathway === 'object' && 'full' in selectedPathway
       ? (selectedPathway as { full?: string }).full?.split(' (')[0] // Remove the R-HSA code
       : undefined;
 
-  const value: string | undefined =
+  // Extract the selected pathway code from the selected pathway object
+  const pathwayCode: string | undefined =
     Array.isArray(selectedPathway?.values) && typeof selectedPathway.values[0] === 'string'
       ? selectedPathway.values[0]
       : undefined;
 
-  const { data: pathway, isLoading } = useGenePathwayParticipants(value);
+  const { data: pathway, isLoading } = useGenePathwayParticipants(pathwayCode);
 
+  // Hold on to previous selected pathway to clear the genes when the pathway is removed
+  const previousSelectedPathway = useRef(pathway);
+
+  // Update the selected genes on pathway change
   useEffect(() => {
     if (selectedPathway && pathway && !formState.isSubmitted) {
-      const genes = pathway.events.flatMap((event) => {
-        // find the HUGO gene symbol sab in the event
-        const hgncSab = event.sabs.find((sab) => sab.SAB === 'HGNC');
-        if (!hgncSab) {
-          return [];
-        }
-        return hgncSab.participants
-          .map((participant) => participant.symbol)
-          .filter((gene) => gene !== undefined)
-          .map((gene) => ({
-            full: gene,
-            pre: '',
-            match: gene,
-            post: '',
-            tags: [],
-          }));
-      });
+      // If a new pathway is selected, set the genes to the new pathway.
+      previousSelectedPathway.current = pathway;
+      const genes = getParticipantsFromPathway(pathway).map((gene) => ({
+        full: gene,
+        pre: '',
+        match: gene,
+        post: '',
+        tags: [],
+      }));
       setValue('genes', genes);
+    } else {
+      // If the pathway was removed, clear the genes that were in that pathway.
+      const currentGenes = getValues('genes');
+      if (!currentGenes || !previousSelectedPathway.current) {
+        return;
+      }
+      const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
+      const filteredGenes = currentGenes.filter((gene) => {
+        return !previousParticipants.includes(gene.full);
+      });
+      setValue('genes', filteredGenes);
     }
-  }, [pathway, selectedPathway, setValue, isLoading, formState.isSubmitted]);
+  }, [pathway, selectedPathway, setValue, isLoading, formState.isSubmitted, getValues]);
 
   const participants = useMemo(() => {
     if (!pathway) {
@@ -147,5 +168,5 @@ export function useSelectedPathwayParticipants() {
     });
   }, [pathway]);
 
-  return { isLoading, name, participants };
+  return { isLoading, pathwayName, pathwayCode, participants };
 }
