@@ -131,8 +131,9 @@ export function buildQuery({
       }
 
       if (isExistsFilter(filter) && isExistsFacet(facetConfig)) {
-        if (!(filterHasValues({ filter }) && facetConfig?.invert)) {
-          draft[portalField] = esb.existsQuery(field);
+        if (filterHasValues({ filter })) {
+          const existsClause = esb.existsQuery(field);
+          draft[portalField] = facetConfig.invert ? esb.boolQuery().mustNot(existsClause) : existsClause;
         }
       }
     });

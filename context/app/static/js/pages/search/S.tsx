@@ -142,7 +142,12 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
         type: FACETS.term,
       },
       { field: 'mapped_status', childField: 'mapped_data_access_level', type: FACETS.hierarchical },
-      { field: 'descendant_counts.entity_type.Publication', type: FACETS.exists, invert: true, default: false },
+      {
+        field: 'descendant_counts.entity_type.Publication',
+        type: FACETS.exists,
+        invert: false,
+        default: false,
+      },
       { field: 'published_timestamp', type: FACETS.date },
       ...(isHubmapUser ? [{ field: 'last_modified_timestamp', type: FACETS.date }] : []),
     ],
