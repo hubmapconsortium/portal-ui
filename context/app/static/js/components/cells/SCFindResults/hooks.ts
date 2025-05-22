@@ -5,6 +5,7 @@ import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 import { useSelectedPathwayParticipants } from '../MolecularDataQueryForm/AutocompleteEntity/hooks';
+import { categorizeCellTypes } from './utils';
 
 type WrappedDatasetResults = Record<string, Pick<Dataset, 'hubmap_id'>[]>;
 type UnwrappedDatasetResults = Record<string, string[]>;
@@ -24,20 +25,7 @@ export function useSCFindCellTypeResults() {
   // if we have "Lung.B cells" and "Lung.T cells", `lung` should be a category
   // if we have "Lung.B cells" and "Liver.B cells", `B cells` should be a category
   // Each individual cell type should also be a category
-  const cellTypeCategories = useMemo(() => {
-    const uniqueCellTypeCategories = new Set<string>(cellTypes);
-    cellTypes.forEach((cellType) => {
-      const cellTypeParts = cellType.split('.');
-      // This will add `Lung` and `B cells` to the unique cell type categories
-      // if there are multiple cell types for the same organ or cell type
-      cellTypeParts.forEach((part) => {
-        if (cellTypes.filter((ct) => ct.includes(part)).length > 1) {
-          uniqueCellTypeCategories.add(part);
-        }
-      });
-    });
-    return Array.from(uniqueCellTypeCategories);
-  }, [cellTypes]);
+  const cellTypeCategories = useMemo(() => categorizeCellTypes(cellTypes), [cellTypes]);
 
   // Map datasets to the cell type they contain
   const datasets = useMemo(() => {
