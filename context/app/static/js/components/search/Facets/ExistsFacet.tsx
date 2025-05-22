@@ -10,7 +10,7 @@ function ExistsFacet({ filter, field }: { filter: ExistsValues; field: string })
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const filterExists = useSearchStore((state) => state.filterExists);
 
-  const active = Boolean(filter?.values);
+  const active = filter.values;
   const getFieldLabel = useGetFieldLabel();
   const fieldLabel = getFieldLabel(field);
 
