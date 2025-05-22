@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ForwardedRef, forwardRef, useState } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
@@ -7,6 +7,9 @@ import { useController, useWatch } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import { useCellTypeOrgansColorMap } from 'js/api/scfind/useCellTypeNames';
 import { useEventCallback } from '@mui/material/utils';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { CloseFilledIcon, CloseIcon } from 'js/shared-styles/icons';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { useAutocompleteQuery } from './hooks';
 import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
@@ -28,6 +31,20 @@ interface AutocompleteEntityProps<T extends QueryType> {
   targetEntity: T;
   defaultValue?: string;
 }
+
+// Custom wrapper for the clear indicator to add a tooltip
+const ClearIndicator = forwardRef(function ClearIndicator(
+  props: IconButtonProps,
+  ref: ForwardedRef<HTMLButtonElement>,
+) {
+  return (
+    <SecondaryBackgroundTooltip title="Clear all selections.">
+      <IconButton {...props} ref={ref}>
+        <CloseIcon />
+      </IconButton>
+    </SecondaryBackgroundTooltip>
+  );
+});
 
 function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }: AutocompleteEntityProps<T>) {
   const [substring, setSubstring] = useState('');
@@ -106,17 +123,28 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           )}
         </PreserveWhiteSpaceListItem>
       )}
+      slotProps={{
+        clearIndicator: {
+          component: ClearIndicator,
+        },
+      }}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
           const tagProps = getTagProps({ index });
           // Removing onDelete removes the delete icon
           const optionIsDefault = defaultValue && option.full === defaultValue;
+          const onDelete = optionIsDefault ? undefined : tagProps.onDelete;
           return (
             <Chip
               label={option.full}
               {...tagProps}
-              onDelete={optionIsDefault ? undefined : tagProps.onDelete}
+              onDelete={onDelete}
               key={option.full}
+              deleteIcon={
+                <SecondaryBackgroundTooltip title="Remove this selection.">
+                  <CloseFilledIcon />
+                </SecondaryBackgroundTooltip>
+              }
             />
           );
         })
