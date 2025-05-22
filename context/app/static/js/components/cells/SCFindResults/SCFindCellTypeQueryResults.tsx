@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, organ, hubmapID } from 'js/shared-styles/tables/columns';
-import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
+import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import { Dataset } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
@@ -20,33 +20,28 @@ const columns = [hubmapID, organ, assayTypes, targetCellCountColumn, totalCellCo
 
 function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
   return (
-    <EntitiesTables<Dataset>
+    <EntityTable<Dataset>
       maxHeight={800}
       isSelectable
-      entities={[
-        {
-          entityType: 'Dataset',
-          columns,
-          query: {
-            query: {
-              terms: {
-                'hubmap_id.keyword': datasetIds.map(({ hubmap_id }) => hubmap_id),
-              },
-            },
-            size: 10000,
-            _source: [
-              'hubmap_id',
-              'origin_samples_unique_mapped_organs',
-              'mapped_status',
-              'mapped_data_types',
-              'mapped_data_access_level',
-              'uuid',
-              'last_modified_timestamp',
-            ],
+      columns={columns}
+      query={{
+        query: {
+          terms: {
+            'hubmap_id.keyword': datasetIds.map(({ hubmap_id }) => hubmap_id),
           },
-          expandedContent: SCFindCellTypesChart,
         },
-      ]}
+        size: 10000,
+        _source: [
+          'hubmap_id',
+          'origin_samples_unique_mapped_organs',
+          'mapped_status',
+          'mapped_data_types',
+          'mapped_data_access_level',
+          'uuid',
+          'last_modified_timestamp',
+        ],
+      }}
+      expandedContent={SCFindCellTypesChart}
       {...useTableTrackingProps()}
     />
   );
@@ -108,9 +103,8 @@ function OrganCellTypeDistributionCharts() {
 }
 
 function DatasetListSection() {
-  const { datasets, isLoading } = useSCFindCellTypeResults();
+  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults();
   const { openTabIndex, handleTabChange } = useTabs();
-  const cellTypes = useCellVariableNames();
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
@@ -122,15 +116,15 @@ function DatasetListSection() {
 
   return (
     <>
+      <DatasetListHeader />
       <Tabs onChange={handleTabChange} value={openTabIndex}>
-        {cellTypes.map((cellType, idx) => (
-          <Tab key={cellType} label={`${cellType} (${datasets[cellType].length})`} index={idx} />
+        {cellTypeCategories.map((cellType, idx) => (
+          <Tab key={cellType} label={`${cellType} (${datasets[cellType]?.length ?? 0})`} index={idx} />
         ))}
       </Tabs>
-      <DatasetListHeader />
-      {cellTypes.map((cellType, idx) => (
+      {cellTypeCategories.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx}>
-          <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType]} />
+          <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType] ?? []} />
         </TabPanel>
       ))}
     </>

@@ -9,6 +9,7 @@ import AutocompleteEntity from './AutocompleteEntity';
 import { useIsQueryType, useMolecularDataQueryFormState, useQueryType } from './hooks';
 import { FormFieldContainer } from './FormField';
 import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
+import GenePathwaysAutocomplete from './AutocompleteEntity/GenePathwaysAutocomplete';
 
 function CellPercentageInput() {
   const { track } = useMolecularDataQueryFormTracking();
@@ -103,6 +104,7 @@ function GeneParameters({ defaultValue }: QueryParametersFieldsetProps) {
     <>
       <QueryMethod />
       <FormFieldContainer title="Gene and Pathway Selection">
+        <GenePathwaysAutocomplete />
         <AutocompleteEntity targetEntity="gene" defaultValue={defaultValue} />
       </FormFieldContainer>
       <ThresholdOptions />

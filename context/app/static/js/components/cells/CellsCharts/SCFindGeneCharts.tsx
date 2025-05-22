@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { decimal, percent } from 'js/helpers/number-format';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
-import { useCurrentGeneContext } from '../SCFindResults/CurrentGeneContext';
+import { useCurrentGeneContext, useOptionalGeneContext } from '../SCFindResults/CurrentGeneContext';
 import { SCFindCellTypesChart } from './CellTypesChart';
 import { useTotalCells } from './hooks';
 
@@ -47,7 +47,7 @@ const margin = {
 } as const;
 
 function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
-  const gene = useCurrentGeneContext();
+  const gene = useOptionalGeneContext();
 
   const { data, isLoading } = useCellTypeExpressionBins({
     geneList: gene,
@@ -55,6 +55,7 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
   });
 
   const totalCells = useTotalCells(hubmap_id);
+
   const geneData: Record<string, { value: number }> = useMemo(() => {
     if (!data || !gene || !data[gene]) {
       return {};
@@ -75,6 +76,12 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
   const GeneExpressionTooltip = useMemo(() => {
     return GeneExpressionTooltipWithDataset(hubmap_id);
   }, [hubmap_id]);
+
+  // If a gene is not defined, this chart should not be displayed
+  // This happens in pathway tabs.
+  if (!gene) {
+    return null;
+  }
 
   return (
     <Box p={2} width="100%">

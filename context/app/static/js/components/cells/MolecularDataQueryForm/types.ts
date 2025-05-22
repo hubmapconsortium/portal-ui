@@ -26,7 +26,9 @@ export interface CrossModalityGeneQueryFormState {
   genes: AutocompleteResult[];
 }
 
-type GeneQueryFormState = SCFindGeneQueryFormState | CrossModalityGeneQueryFormState;
+type GeneQueryFormState = {
+  pathway: AutocompleteResult | null;
+} & (SCFindGeneQueryFormState | CrossModalityGeneQueryFormState);
 
 export interface ProteinQueryFormState {
   queryType: 'protein';

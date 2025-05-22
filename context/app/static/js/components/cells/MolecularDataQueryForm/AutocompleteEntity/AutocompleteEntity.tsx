@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { ForwardedRef, forwardRef, useState } from 'react';
 
 import Autocomplete from '@mui/material/Autocomplete';
 import TextField, { TextFieldProps } from '@mui/material/TextField';
@@ -7,6 +7,9 @@ import { useController, useWatch } from 'react-hook-form';
 import Box from '@mui/material/Box';
 import { useCellTypeOrgansColorMap } from 'js/api/scfind/useCellTypeNames';
 import { useEventCallback } from '@mui/material/utils';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { CloseFilledIcon, CloseIcon } from 'js/shared-styles/icons';
+import IconButton, { IconButtonProps } from '@mui/material/IconButton';
 import { useAutocompleteQuery } from './hooks';
 import { AutocompleteResult } from './types';
 import { createInitialValue } from './utils';
@@ -14,6 +17,7 @@ import { QueryType, queryTypes } from '../../queryTypes';
 import { PreserveWhiteSpaceListItem } from './styles';
 import { useQueryType, useMolecularDataQueryFormState } from '../hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
+import { CustomChip } from './EntityChips';
 
 function buildHelperText(entity: string): string {
   return `Multiple ${entity} are allowed and only 'OR' queries are supported.`;
@@ -27,6 +31,35 @@ const labelAndHelperTextProps: Record<QueryType, Pick<TextFieldProps, 'label' | 
 interface AutocompleteEntityProps<T extends QueryType> {
   targetEntity: T;
   defaultValue?: string;
+}
+
+// Custom wrapper for the clear indicator to add a tooltip
+const ClearIndicator = forwardRef(function ClearIndicator(
+  props: IconButtonProps,
+  ref: ForwardedRef<HTMLButtonElement>,
+) {
+  return (
+    <SecondaryBackgroundTooltip title="Clear all selections.">
+      <IconButton {...props} ref={ref} title={undefined}>
+        <CloseIcon />
+      </IconButton>
+    </SecondaryBackgroundTooltip>
+  );
+});
+
+function LimitCount() {
+  const { entityFieldName: fieldName, label } = useQueryType();
+  const { getValues } = useMolecularDataQueryFormState();
+
+  const selectedValues = getValues(fieldName).map((value: AutocompleteResult) => value.full);
+
+  return function LimitCountInner(count: number) {
+    return (
+      <SecondaryBackgroundTooltip title={`Selected ${label.toLowerCase()}s: ${selectedValues.join(', ')}`}>
+        <span>{`+${count}`}</span>
+      </SecondaryBackgroundTooltip>
+    );
+  };
 }
 
 function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }: AutocompleteEntityProps<T>) {
@@ -76,6 +109,8 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
     field.onChange(formattedValue);
   });
 
+  const limitTags = targetEntity === 'gene' ? 3 : 5;
+
   return (
     <Autocomplete
       options={options}
@@ -106,17 +141,31 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
           )}
         </PreserveWhiteSpaceListItem>
       )}
+      slotProps={{
+        clearIndicator: {
+          component: ClearIndicator,
+        },
+      }}
+      limitTags={limitTags}
+      getLimitTagsText={LimitCount()}
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
           const tagProps = getTagProps({ index });
           // Removing onDelete removes the delete icon
           const optionIsDefault = defaultValue && option.full === defaultValue;
+          const onDelete = optionIsDefault ? undefined : tagProps.onDelete;
           return (
-            <Chip
-              label={option.full}
+            <CustomChip
+              targetEntity={targetEntity}
+              option={option}
               {...tagProps}
-              onDelete={optionIsDefault ? undefined : tagProps.onDelete}
+              onDelete={onDelete}
               key={option.full}
+              deleteIcon={
+                <SecondaryBackgroundTooltip title="Remove this selection.">
+                  <CloseFilledIcon />
+                </SecondaryBackgroundTooltip>
+              }
             />
           );
         })

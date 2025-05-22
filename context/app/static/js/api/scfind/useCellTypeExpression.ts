@@ -4,7 +4,7 @@ import { useAppContext } from 'js/components/Contexts';
 import { createScFindKey } from './utils';
 
 export interface GeneExpressionParams {
-  geneList: string | string[];
+  geneList?: string | string[];
   datasetName: string;
 }
 
@@ -17,13 +17,16 @@ interface GeneExpressionKeyParams extends GeneExpressionParams {
  */
 type GeneExpressionBinsResponse = Record<string, Record<string, number>>;
 
-type GeneExpressionBinKey = string;
+type GeneExpressionBinKey = string | null;
 
 export function createGeneExpressionBinKey(
   scFindEndpoint: string,
   { geneList, datasetName, bin }: GeneExpressionKeyParams,
 ): GeneExpressionBinKey {
   const base = bin ? 'getCellTypeExpressionBinData' : 'getCellTypeExpression';
+  if (!geneList) {
+    return null;
+  }
   return createScFindKey(scFindEndpoint, base, {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
     // this is weird but it is how the API works - e.g. `HBM762-RPDR-282.HBM762.RPDR.282`

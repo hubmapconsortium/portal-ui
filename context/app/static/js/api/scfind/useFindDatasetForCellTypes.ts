@@ -36,7 +36,17 @@ type FindDatasetForCellTypesKey = FindDatasetForCellTypeKey[];
 export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetForCellTypesParams) {
   const { scFindEndpoint } = useAppContext();
   const key = cellTypes.map((cellType) => createFindDatasetForCellTypeKey(scFindEndpoint, { cellType }));
-  return useSWR<FindDatasetForCellTypeResponse[], unknown, FindDatasetForCellTypesKey>(key, (urls) =>
-    multiFetcher({ urls }),
+  return useSWR<FindDatasetForCellTypeResponse[], unknown, FindDatasetForCellTypesKey>(
+    key,
+    (urls) =>
+      multiFetcher({
+        urls,
+        errorMessages: {
+          400: `No results found for ${Array.isArray(cellTypes) ? cellTypes.join(', ') : cellTypes}`,
+        },
+      }),
+    {
+      shouldRetryOnError: false,
+    },
   );
 }

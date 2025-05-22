@@ -4,60 +4,78 @@ import { Dataset } from 'js/components/types';
 import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
+import { useSelectedPathwayParticipants } from '../MolecularDataQueryForm/AutocompleteEntity/hooks';
+import { categorizeCellTypes, mapDatasetsToCellTypeCategories, processGeneQueryResults } from './utils';
+import { getUnwrappedResult } from './types';
 
 export function useSCFindCellTypeResults() {
-  const cellVariableNames = useCellVariableNames();
+  const cellTypes = useCellVariableNames();
 
   // The index of the dataset results matches the index of the cell types
   // in the original cellVariableNames array.
   const datasetsWithCellTypes = useFindDatasetsForCellTypes({
-    cellTypes: cellVariableNames,
+    cellTypes,
   });
 
   const { data = [], ...rest } = datasetsWithCellTypes;
 
-  // Map datasets to the cell type they contain
-  const datasets = useMemo(() => {
-    return cellVariableNames.reduce(
-      (acc, cellType, index) => {
-        const dataset = data[index];
-        if (dataset) {
-          acc[cellType] = dataset.datasets.map((d) => ({
-            hubmap_id: d,
-          }));
-        }
-        return acc;
-      },
-      {} as Record<string, { hubmap_id: string }[]>,
-    );
-  }, [data, cellVariableNames]);
+  const cellTypeCategories = useMemo(() => categorizeCellTypes(cellTypes), [cellTypes]);
 
-  return { datasets, ...rest };
+  const datasets = useMemo(
+    () => mapDatasetsToCellTypeCategories(cellTypeCategories, cellTypes, data),
+    [cellTypeCategories, cellTypes, data],
+  );
+
+  return { datasets, cellTypeCategories, ...rest };
 }
 
 export function useSCFindGeneResults() {
   const genes = useCellVariableNames();
 
-  return useFindDatasetForGenes({
+  const { participants, pathwayName, isLoading: isLoadingPathwayGenes } = useSelectedPathwayParticipants();
+
+  const {
+    isLoading: isLoadingDatasets,
+    data,
+    ...results
+  } = useFindDatasetForGenes({
     geneList: genes,
   });
+
+  // Gene query results have the following categories:
+  // - Each individual gene
+  // - Union of all results for genes in the same pathway, with pathway name as the key
+  // - If the intersection of the genes in the same pathway is not empty, it is also a category
+  // - Any genes that do not have a result are separately listed
+  const { categorizedResults, emptyResults, order, datasetToGeneMap } = useMemo(() => {
+    return processGeneQueryResults({
+      data,
+      genes,
+      participants,
+      pathwayName,
+    });
+  }, [data, genes, pathwayName, participants]);
+
+  return {
+    datasets: data,
+    categorizedResults,
+    datasetToGeneMap,
+    isLoading: isLoadingDatasets || isLoadingPathwayGenes,
+    emptyResults,
+    order,
+    ...results,
+  };
 }
 
-export function useDeduplicatedResults(datasets: Record<string, (Pick<Dataset, 'hubmap_id'> | string)[]>) {
+export function useDeduplicatedResults(datasets?: Record<string, (Pick<Dataset, 'hubmap_id'> | string)[]>) {
   return useMemo(() => {
+    if (!datasets) {
+      return [];
+    }
     const uniqueResults = Object.values(datasets)
       .flat()
       .reduce((acc, dataset) => {
-        if (typeof dataset === 'string') {
-          if (!acc.has(dataset)) {
-            acc.add(dataset);
-          }
-        } else {
-          const { hubmap_id } = dataset;
-          if (!acc.has(hubmap_id)) {
-            acc.add(hubmap_id);
-          }
-        }
+        acc.add(getUnwrappedResult(dataset));
         return acc;
       }, new Set<string>());
     return Array.from(uniqueResults);

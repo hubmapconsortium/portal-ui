@@ -4,6 +4,21 @@ import { SWRError } from 'js/helpers/swr/errors';
 import { useMemo } from 'react';
 import useSWR from 'swr';
 import useSWRInfinite from 'swr/infinite';
+import useSWRImmutable from 'swr/immutable';
+
+/**
+ * Parameters for the pathways endpoint.
+ * @param eventTypes - The event types to filter by, e.g. "reaction"
+ * @param pathwayId - The ID of the pathway to filter by, e.g. R-HSA-8953897
+ * @param pathwayNameStartsWith - The name of the pathway to filter by, e.g. "Cell"
+ * @param geneIds - The gene IDs to filter by, e.g. ["EGFR", "MMRN1"]
+ */
+interface PathwayWithGenesParams {
+  eventTypes?: string[];
+  pathwayId?: string;
+  pathwayNameStartsWith?: string;
+  geneIds?: string[];
+}
 
 /**
  * Generates API URLs for the UBKG API.
@@ -36,6 +51,40 @@ const useUbkg = () => {
       },
       get fieldTypes() {
         return `${ubkgEndpoint}/field-types`;
+      },
+      pathways(params: PathwayWithGenesParams) {
+        const { eventTypes, pathwayId, pathwayNameStartsWith, geneIds } = params;
+        const queryParams = new URLSearchParams();
+        if (eventTypes) {
+          const eventTypesString = eventTypes.join(',');
+          queryParams.append('eventtypes', eventTypesString);
+        }
+        if (pathwayId) {
+          queryParams.append('pathwayid', pathwayId);
+        }
+        if (pathwayNameStartsWith) {
+          queryParams.append('pathwayname-startswith', pathwayNameStartsWith);
+        }
+        if (geneIds) {
+          const geneIdsString = geneIds.join(',');
+          queryParams.append('geneids', geneIdsString);
+        }
+        return `${ubkgEndpoint}/pathways/with-genes?${queryParams.toString()}`;
+      },
+      pathwayDetail(pathwayId?: string, sabs?: string[], featureTypes?: string[]) {
+        if (!pathwayId) {
+          return null;
+        }
+        const queryParams = new URLSearchParams();
+        if (sabs) {
+          const sabsString = sabs.join(',');
+          queryParams.append('sabs', sabsString);
+        }
+        if (featureTypes) {
+          const featureTypesString = featureTypes.join(',');
+          queryParams.append('featuretypes', featureTypesString);
+        }
+        return `${ubkgEndpoint}/pathways/${pathwayId}/participants?${queryParams.toString()}`;
       },
     }),
     [ubkgEndpoint],
@@ -147,9 +196,10 @@ type GeneDetailResponse = [GeneDetail];
  * @param geneSymbol The gene symbol to fetch details for.
  * @returns The gene details, or an error if the gene is not found.
  */
-export const useGeneOntologyDetail = (geneSymbol: string) => {
-  const { data, error, ...swr } = useSWR<GeneDetailResponse, SWRError>(
-    useUbkg().geneDetail(geneSymbol),
+export const useGeneOntologyDetail = (geneSymbol: string, shouldFetch = true) => {
+  const key = useUbkg().geneDetail(geneSymbol);
+  const { data, error, ...swr } = useSWRImmutable<GeneDetailResponse, SWRError>(
+    shouldFetch ? key : null,
     (url: string) =>
       fetcher<GeneDetailResponse>({
         url,
@@ -157,11 +207,10 @@ export const useGeneOntologyDetail = (geneSymbol: string) => {
           404: `The gene ${geneSymbol} was not found.`,
         },
       }),
+    {
+      shouldRetryOnError: false,
+    },
   );
-  // Throw an error if the gene is not found
-  if (error) {
-    throw error;
-  }
   return { data: data?.[0], ...swr };
 };
 
@@ -339,7 +388,7 @@ async function fetchDescriptions(url: string) {
 
 // Since both flask and js depend on manipulated field descriptions, get them from flask for now in the hook below. Keeping this here for future use.
 export const useMFD = () => {
-  const { data, ...swr } = useSWR<Record<string, string> | Record<string, never>>(
+  const { data, ...swr } = useSWRImmutable<Record<string, string> | Record<string, never>>(
     useUbkg().fieldDescriptions,
     (url: string) => fetchDescriptions(url),
     {
@@ -351,9 +400,71 @@ export const useMFD = () => {
 };
 
 export const useMetadataFieldDescriptions = () => {
-  const { data, ...swr } = useSWR<Record<string, string>>('/metadata/descriptions', (url: string) => fetcher({ url }), {
-    fallbackData: {},
-  });
+  const { data, ...swr } = useSWRImmutable<Record<string, string>>(
+    '/metadata/descriptions',
+    (url: string) => fetcher({ url }),
+    {
+      fallbackData: {},
+    },
+  );
 
   return { data: data ?? {}, ...swr };
+};
+
+/**
+ * Response type for the pathway with genes (`/pathways/with-genes`) endpoint.
+ */
+interface PathwayWithGenesResponse {
+  count: number;
+  events: {
+    code: string;
+    description: string;
+    type: string;
+  }[];
+}
+
+/**
+ * Response type for the pathway participants (`/pathways/:pathwayId/participants`) endpoint.
+ * This endpoint returns the participants of a specific pathway.
+ * The response includes the count of participants and a list of events.
+ */
+export interface PathwayParticipantsResponse {
+  count: number;
+  events: {
+    code: string;
+    name: string;
+    type: string;
+    sabs: {
+      SAB: string;
+      count: number;
+      participants: {
+        description: string;
+        featuretype: string;
+        id: string;
+        symbol: string;
+      }[];
+    }[];
+  }[];
+}
+
+export const useGenePathways = (params: PathwayWithGenesParams) => {
+  const { data, error, ...swr } = useSWRImmutable<PathwayWithGenesResponse, SWRError, string>(
+    useUbkg().pathways(params),
+    (url: string) => fetcher({ url }),
+  );
+  if (error) {
+    throw error;
+  }
+  return { data, ...swr };
+};
+
+export const useGenePathwayParticipants = (pathwayId?: string, sabs?: string[], featureTypes?: string[]) => {
+  const { data, error, ...swr } = useSWRImmutable<PathwayParticipantsResponse, SWRError, string | null>(
+    useUbkg().pathwayDetail(pathwayId, sabs, featureTypes),
+    (url: string) => fetcher({ url }),
+  );
+  if (error) {
+    throw error;
+  }
+  return { data, ...swr };
 };

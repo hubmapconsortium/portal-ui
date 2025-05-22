@@ -85,7 +85,7 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
         Cell Type Distribution Across {capitalizeString(tissue)} Datasets
       </Typography>
       <svg direction="row" width={parentWidth} height="50" ref={containerRef} id={id}>
-        {sortedData.map(({ index: label }, index) => {
+        {sortedData.map(({ index: label, cell_count }, index) => {
           return (
             <FractionRect
               label={label}
@@ -97,7 +97,7 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
               xOffsets={xOffsets}
               onMouseEnter={handleMouseEnter({
                 key: label,
-                bar: { data: { cell_count: sortedData[index].cell_count, index: label } },
+                bar: { data: { cell_count, index: label } },
               })}
               onMouseLeave={handleMouseLeave}
               totalCellCount={totalCellCount}
@@ -118,9 +118,10 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
         totalCellCount={totalCellCount}
       />
       <FractionGraphTooltip
+        tooltipData={tooltipData}
         tooltipOpen={tooltipOpen}
-        tooltipTop={tooltipTop ?? 0}
-        tooltipLeft={tooltipLeft ?? 0}
+        tooltipTop={tooltipTop}
+        tooltipLeft={tooltipLeft}
         totalCellCount={totalCellCount}
         TooltipInPortal={TooltipInPortal}
       />

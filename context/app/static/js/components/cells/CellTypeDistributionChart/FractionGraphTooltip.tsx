@@ -9,8 +9,8 @@ import React from 'react';
 interface FractionGraphTooltipProps {
   tooltipOpen: boolean;
   tooltipData?: TooltipData<CellTypeCountForTissue>;
-  tooltipTop: number;
-  tooltipLeft: number;
+  tooltipTop?: number;
+  tooltipLeft?: number;
   totalCellCount: number;
   TooltipInPortal: React.FC<TooltipInPortalProps>;
 }

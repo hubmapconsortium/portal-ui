@@ -1,5 +1,5 @@
 import { CellTypeCountForTissue } from 'js/api/scfind/useCellTypeCountForTissue';
-import React, { MouseEventHandler } from 'react';
+import React, { FocusEventHandler, MouseEventHandler } from 'react';
 import { percent } from 'js/helpers/number-format';
 import { ScaleLinear } from 'd3';
 
@@ -45,6 +45,8 @@ export default function FractionRect({
       style={{ transition: 'filter 0.2s ease-in-out' }}
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
+      onFocus={onMouseEnter as unknown as FocusEventHandler<SVGRectElement>}
+      onBlur={onMouseLeave}
       aria-label={`${label}: ${sortedData[index].cell_count} (${percent.format(
         sortedData[index].cell_count / totalCellCount,
       )}`}
