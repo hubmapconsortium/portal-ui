@@ -202,6 +202,7 @@ function EntityTable<Doc extends Entity>({
                   key={hit?._id}
                   // @ts-expect-error the expanded content's props should be the same as the hit's _source
                   expandedContent={ExpandedContent ? <ExpandedContent {...hit?._source} /> : undefined}
+                  isExpandedToStart={virtualRow.index === 0}
                   disabledTooltipTitle={disabledTooltipTitle}
                 >
                   {isSelectable && (
