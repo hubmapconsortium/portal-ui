@@ -6,6 +6,9 @@ import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 import { useSelectedPathwayParticipants } from '../MolecularDataQueryForm/AutocompleteEntity/hooks';
 
+type WrappedDatasetResults = Record<string, Pick<Dataset, 'hubmap_id'>[]>;
+type UnwrappedDatasetResults = Record<string, string[]>;
+
 export function useSCFindCellTypeResults() {
   const cellTypes = useCellVariableNames();
 
@@ -23,12 +26,12 @@ export function useSCFindCellTypeResults() {
   // Each individual cell type should also be a category
   const cellTypeCategories = useMemo(() => {
     const uniqueCellTypeCategories = new Set<string>(cellTypes);
-    cellTypes.forEach((cellType, _, arr) => {
+    cellTypes.forEach((cellType) => {
       const cellTypeParts = cellType.split('.');
       // This will add `Lung` and `B cells` to the unique cell type categories
       // if there are multiple cell types for the same organ or cell type
       cellTypeParts.forEach((part) => {
-        if (arr.filter((ct) => ct.includes(part)).length > 1) {
+        if (cellTypes.filter((ct) => ct.includes(part)).length > 1) {
           uniqueCellTypeCategories.add(part);
         }
       });
@@ -38,41 +41,30 @@ export function useSCFindCellTypeResults() {
 
   // Map datasets to the cell type they contain
   const datasets = useMemo(() => {
-    const datasetsForEachCategory = cellTypes.reduce(
-      (acc, cellType, index) => {
-        const cellTypeDatasets = data[index];
-        if (!cellTypeDatasets) {
-          return acc;
-        }
+    const datasetsForEachCategory = cellTypes.reduce<Record<string, Set<string>>>((acc, cellType, index) => {
+      const cellTypeDatasets = data[index];
+      if (!cellTypeDatasets) {
+        return acc;
+      }
 
-        const [organCategory, cellTypeCategory] = cellType.split('.');
-        const keys = [cellType, organCategory, cellTypeCategory];
+      const [organCategory, cellTypeCategory] = cellType.split('.');
+      const keys = [cellType, organCategory, cellTypeCategory];
 
-        cellTypeDatasets.datasets.forEach((dataset) => {
-          keys.forEach((key) => {
-            acc[key] = acc[key] || new Set();
-            acc[key].add(dataset);
-          });
+      cellTypeDatasets.datasets.forEach((dataset) => {
+        keys.forEach((key) => {
+          acc[key] = acc[key] || new Set();
+          acc[key].add(dataset);
         });
-        return acc;
-      },
-      {} as Record<string, Set<string>>,
-    );
+      });
+      return acc;
+    }, {});
     // Convert the sets to arrays
-    return Object.entries(datasetsForEachCategory).reduce(
-      (acc, [key, value]) => {
-        if (cellTypeCategories.includes(key)) {
-          acc[key] = Array.from(value).map((hubmap_id) => ({ hubmap_id }));
-        }
-        return acc;
-      },
-      {} as Record<
-        string,
-        {
-          hubmap_id: string;
-        }[]
-      >,
-    );
+    return Object.entries(datasetsForEachCategory).reduce<WrappedDatasetResults>((acc, [key, value]) => {
+      if (cellTypeCategories.includes(key)) {
+        acc[key] = Array.from(value).map((hubmap_id) => ({ hubmap_id }));
+      }
+      return acc;
+    }, {});
   }, [cellTypeCategories, cellTypes, data]);
 
   return { datasets, cellTypeCategories, ...rest };
@@ -93,7 +85,7 @@ export function useSCFindGeneResults() {
   // - If the intersection of the genes in the same pathway is not empty, it is also a category
   // - Any genes that do not have a result are separately listed
   const { categorizedResults, emptyResults, order, datasetToGeneMap } = useMemo(() => {
-    const newResults: Record<string, string[]> = {};
+    const newResults: UnwrappedDatasetResults = {};
     const empty: string[] = [];
     const keyOrder: string[] = [];
     const datasetGeneMap: Record<string, Set<string>> = {};
