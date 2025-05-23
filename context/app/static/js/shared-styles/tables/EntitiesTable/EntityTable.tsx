@@ -200,16 +200,21 @@ function EntityTable<Doc extends Entity>({
             const hit = searchHits[virtualRow.index];
             if (hit) {
               return (
+                // @ts-expect-error `numCells` and the other props are only provided when `ExpandedContent` is defined
                 <TableRowComponent
                   sx={{ height: virtualRow.size }}
-                  numCells={columns.length + (isSelectable ? 1 : 0) + 1}
                   key={hit?._id}
-                  // @ts-expect-error the expanded content's props should be the same as the hit's _source
-                  expandedContent={ExpandedContent ? <ExpandedContent {...hit?._source} /> : undefined}
-                  isExpandedToStart={virtualRow.index === 0}
-                  expandTooltip={expandTooltip}
-                  collapseTooltip={collapseTooltip}
-                  disabledTooltipTitle={disabledTooltipTitle}
+                  {...(ExpandedContent
+                    ? {
+                        // @ts-expect-error the expanded content's props should be the same as the hit's _source
+                        expandedContent: <ExpandedContent {...hit?._source} />,
+                        isExpandedToStart: virtualRow.index === 0,
+                        numCells: columns.length + (isSelectable ? 2 : 1),
+                        expandTooltip,
+                        collapseTooltip,
+                        disabledTooltipTitle,
+                      }
+                    : {})}
                 >
                   {isSelectable && (
                     <SelectableRowCell

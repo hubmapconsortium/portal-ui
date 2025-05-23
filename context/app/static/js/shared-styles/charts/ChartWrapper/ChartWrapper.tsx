@@ -71,7 +71,7 @@ function ChartWrapper({
                 {labels.map((label) => {
                   const isMultiple = label.text === 'Multiple';
                   return (
-                    <>
+                    <React.Fragment key={label.text}>
                       <LegendItem key={`legend-${label.text}`} margin="0 15px 0 0">
                         <svg width="1em" height="1em" style={{ borderRadius: '4px' }}>
                           {isMultiple && (
@@ -114,7 +114,7 @@ function ChartWrapper({
                         </LegendLabel>
                       </LegendItem>
                       {isMultiple && <Divider sx={{ marginY: 1 }} />}
-                    </>
+                    </React.Fragment>
                   );
                 })}
               </div>

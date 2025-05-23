@@ -39,7 +39,7 @@ const Tutorials = lazy(() => import('js/pages/Tutorials'));
 const Tutorial = lazy(() => import('js/pages/Tutorial'));
 const Profile = lazy(() => import('js/pages/Profile'));
 
-function Routes({ flaskData }) {
+function Routes({ flaskData } = {}) {
   const {
     entity,
     vitessce_conf,
@@ -358,10 +358,6 @@ Routes.propTypes = {
     redirected: PropTypes.bool,
     type: PropTypes.string,
   }),
-};
-
-Routes.defaultProps = {
-  flaskData: {},
 };
 
 export default Routes;
