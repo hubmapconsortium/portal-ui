@@ -54,7 +54,7 @@ export default function CollapsibleDetailPageSection({
   icon,
   children,
   variant = 'h4',
-  component = 'h3',
+  component = 'h2',
   action,
   iconTooltipText,
   trackingInfo,
