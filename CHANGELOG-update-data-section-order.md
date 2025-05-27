@@ -1,0 +1,1 @@
+- Update ordering of data table tabs on Publication detail pages.
