@@ -74,4 +74,5 @@ export enum OrganPageIds {
   dataProductsId = 'data-products',
   samplesId = 'samples',
   cellpopId = 'cell-population-plot',
+  cellTypesId = 'cell-types',
 }

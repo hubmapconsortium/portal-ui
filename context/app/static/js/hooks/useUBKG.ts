@@ -40,7 +40,10 @@ const useUbkg = () => {
       get proteinList() {
         return `${ubkgEndpoint}/proteins-info`;
       },
-      cellTypeDetail(cellTypeId: string) {
+      cellTypeDetail(cellTypeId?: string) {
+        if (!cellTypeId) {
+          return null;
+        }
         return `${ubkgEndpoint}/celltypes/${cellTypeId.toUpperCase()}`;
       },
       get cellTypeList() {
@@ -251,8 +254,8 @@ export const useGeneOntologyList = (starts_with: string) => {
   });
 };
 
-export const useCellTypeOntologyDetail = (cellTypeId: string) => {
-  const { data, error, ...swr } = useSWR<[CellTypeDetail], SWRError>(
+export const useCellTypeOntologyDetail = (cellTypeId?: string) => {
+  const { data, ...swr } = useSWR<[CellTypeDetail], SWRError>(
     useUbkg().cellTypeDetail(cellTypeId),
     (url: string) =>
       fetcher<[CellTypeDetail]>({
@@ -265,10 +268,6 @@ export const useCellTypeOntologyDetail = (cellTypeId: string) => {
       revalidateOnFocus: false,
     },
   );
-  // Throw an error if the cell type is not found
-  if (error) {
-    throw error;
-  }
   return { data: data?.[0], ...swr };
 };
 interface Description {
