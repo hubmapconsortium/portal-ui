@@ -36,6 +36,12 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
     body_mass_index_value: {
       label: 'BMI',
     },
+    'calculated_metadata.annotation_tools': {
+      label: 'Annotation Tools',
+    },
+    'calculated_metadata.object_types': {
+      label: 'Annotations Available',
+    },
     created_by_user_displayname: {
       label: 'Registered By',
     },
