@@ -1,5 +1,4 @@
 import React from 'react';
-import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 
 import EntityHeader from 'js/components/detailPage/entityHeader/EntityHeader';
@@ -8,6 +7,7 @@ import { InfoIcon } from 'js/shared-styles/icons';
 import HeaderAppBar from '../HeaderAppBar';
 import HeaderContent from '../HeaderContent';
 import { useEntityHeaderVisibility } from './hooks';
+import { StyledTypography } from './style';
 
 function Header() {
   const { shouldDisplayHeader, ...props } = useEntityHeaderVisibility();
@@ -15,11 +15,11 @@ function Header() {
   return (
     <>
       <FixedHeightBanner>
-        <Stack direction="row" spacing={1} alignItems="center">
+        <Stack direction="row" spacing={1} marginX={1} alignItems="center">
           <InfoIcon />
-          <Typography variant="button">
+          <StyledTypography variant="button">
             This repository is under review for potential modification in compliance with Administration directives.
-          </Typography>
+          </StyledTypography>
         </Stack>
       </FixedHeightBanner>
       <HeaderAppBar {...props}>
