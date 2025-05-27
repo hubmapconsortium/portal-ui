@@ -87,19 +87,8 @@ export function useLabelledDatasetsQuery(searchItems: string[]) {
         bool: {
           must: [
             {
-              bool: {
-                should: [
-                  {
-                    terms: {
-                      'calculated_metadata.annotation_tools.keyword': ANNOTATION_TOOLS,
-                    },
-                  },
-                  {
-                    terms: {
-                      'ingest_metadata.calculated_metadata.annotation_tools.keyword': ANNOTATION_TOOLS,
-                    },
-                  },
-                ],
+              terms: {
+                'calculated_metadata.annotation_tools.keyword': ANNOTATION_TOOLS,
               },
             },
             {
