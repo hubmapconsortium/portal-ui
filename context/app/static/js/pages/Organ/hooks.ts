@@ -79,7 +79,6 @@ export function useAssayBucketsQuery(searchItems: string[]) {
   return assayBuckets;
 }
 
-const ANNOTATION_TOOLS = ['Azimuth'];
 export function useLabelledDatasetsQuery(searchItems: string[]) {
   const datasetsQuery = useMemo(
     () => ({
@@ -87,18 +86,23 @@ export function useLabelledDatasetsQuery(searchItems: string[]) {
         bool: {
           must: [
             {
-              terms: {
-                'calculated_metadata.annotation_tools.keyword': ANNOTATION_TOOLS,
+              term: {
+                'entity_type.keyword': 'Dataset',
+              },
+            },
+            {
+              term: {
+                'raw_dataset_type.keyword': 'RNAseq',
+              },
+            },
+            {
+              exists: {
+                field: 'calculated_metadata.annotation_tools',
               },
             },
             {
               terms: {
                 'origin_samples_unique_mapped_organs.keyword': searchItems,
-              },
-            },
-            {
-              term: {
-                'entity_type.keyword': 'Dataset',
               },
             },
           ],
