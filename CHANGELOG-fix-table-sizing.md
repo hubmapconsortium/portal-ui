@@ -1,1 +1,0 @@
-- Fix search table sizing issues on Publication and Collection pages.

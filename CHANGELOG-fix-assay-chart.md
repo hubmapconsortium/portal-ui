@@ -1,1 +1,0 @@
-- Fix for continuously expanding assay charts on Organ pages.

@@ -1,1 +1,0 @@
-- Make admin banner mobile friendly.

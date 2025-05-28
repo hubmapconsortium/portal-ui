@@ -1,1 +1,0 @@
-- Update publication header tags for SEO.
