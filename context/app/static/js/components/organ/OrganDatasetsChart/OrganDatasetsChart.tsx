@@ -4,7 +4,7 @@ import useSearchData from 'js/hooks/useSearchData';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import HorizontalStackedBarChart from 'js/shared-styles/charts/HorizontalStackedBarChart';
 import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
-import { ChartArea } from 'js/shared-styles/charts/HorizontalStackedBarChart/style';
+import { ConstrainedChartArea } from 'js/components/organ/OrganDatasetsChart/style';
 import { combineQueryClauses } from 'js/helpers/functions';
 import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import { useBandScale, useLinearScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
@@ -109,7 +109,7 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
     chart
   );
 
-  return <ChartArea>{wrappedChart}</ChartArea>;
+  return <ConstrainedChartArea>{wrappedChart}</ConstrainedChartArea>;
 }
 
 export default OrganDatasetsChart;
