@@ -1,17 +1,19 @@
-import { useCallback, useRef, useEffect } from 'react';
+import { useCallback, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useEventCallback } from '@mui/material/utils';
 import { z } from 'zod';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { workspaceJobTypeIdField, workspaceResourceOptionsField } from 'js/components/workspaces/workspaceFormFields';
-import { useLaunchWorkspace, useRunningWorkspace, useWorkspacesList } from 'js/components/workspaces/hooks';
+import { useLaunchWorkspace, useRunningWorkspace } from 'js/components/workspaces/hooks';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_JOB_TYPE,
   DEFAULT_MEMORY_MB,
   DEFAULT_NUM_CPUS,
   DEFAULT_TIME_LIMIT_MINUTES,
+  MAX_NUM_CONCURRENT_WORKSPACES,
 } from 'js/components/workspaces/constants';
 import { MergedWorkspace, WorkspaceResourceOptions } from 'js/components/workspaces/types';
 import { findBestJobType, getWorkspaceResourceOptions, isRunningWorkspace } from 'js/components/workspaces/utils';
@@ -62,16 +64,15 @@ function useLaunchWorkspaceForm() {
 }
 
 function useLaunchWorkspaceDialog() {
-  const runningWorkspace = useRunningWorkspace();
-  const runningWorkspaceExists = Boolean(runningWorkspace);
+  const runningWorkspaces = useRunningWorkspace();
+  const maxNumOfRunningWorkspacesReached = runningWorkspaces?.length >= MAX_NUM_CONCURRENT_WORKSPACES;
 
-  const { handleStopWorkspace } = useWorkspacesList();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
   const { isOpen, open, close, workspace, setWorkspace, dialogType, setDialogType } = useLaunchWorkspaceStore();
 
-  const runningWorkspaceIsCurrentWorkpace = runningWorkspace?.id === workspace?.id;
+  const currentWorkspaceIsRunning = runningWorkspaces?.some((ws) => ws.id === workspace?.id);
 
-  const { toastErrorStopWorkspace, toastErrorLaunchWorkspace } = useWorkspaceToasts();
+  const { toastErrorLaunchWorkspace } = useWorkspaceToasts();
 
   const { control, handleSubmit, isSubmitting, reset, setValue } = useLaunchWorkspaceForm();
 
@@ -82,39 +83,17 @@ function useLaunchWorkspaceDialog() {
     }
   }, [setValue, workspace]);
 
-  // Track the running workspace name to prevent layout shift between stopping the running workspace and starting the new one.
-  const runningWorkspaceName = useRef<string | undefined>('');
-  if (runningWorkspaceExists) {
-    runningWorkspaceName.current = runningWorkspace?.name;
-  } else {
-    runningWorkspaceName.current = '';
-  }
-
   const handleClose = useCallback(() => {
-    runningWorkspaceName.current = '';
     reset();
     close();
     setDialogType(null);
   }, [close, reset, setDialogType]);
 
-  const submit = useCallback(
+  const submit = useEventCallback(
     async ({ workspaceJobTypeId, workspaceResourceOptions }: LaunchWorkspaceFormTypes) => {
       if (!workspace) {
         console.error('No workspace to run found.');
         return;
-      }
-
-      if (
-        runningWorkspace &&
-        (!runningWorkspaceIsCurrentWorkpace || workspace?.default_job_type !== workspaceJobTypeId)
-      ) {
-        try {
-          await handleStopWorkspace(runningWorkspace.id);
-        } catch (e) {
-          toastErrorStopWorkspace();
-          console.error(e);
-          return;
-        }
       }
 
       await startAndOpenWorkspace({
@@ -123,39 +102,27 @@ function useLaunchWorkspaceDialog() {
         resourceOptions: workspaceResourceOptions,
       });
     },
-    [
-      workspace,
-      runningWorkspace,
-      startAndOpenWorkspace,
-      runningWorkspaceIsCurrentWorkpace,
-      handleStopWorkspace,
-      toastErrorStopWorkspace,
-    ],
   );
 
-  const launchOrOpenDialog = useCallback(
-    (newWorkspace: MergedWorkspace) => {
-      setWorkspace(newWorkspace);
-      const workspaceJobTypeId = findBestJobType(newWorkspace.jobs);
-      const workspaceResourceOptions = getWorkspaceResourceOptions(newWorkspace);
+  const launchOrOpenDialog = useEventCallback((newWorkspace: MergedWorkspace) => {
+    setWorkspace(newWorkspace);
+    const workspaceJobTypeId = findBestJobType(newWorkspace.jobs);
+    const workspaceResourceOptions = getWorkspaceResourceOptions(newWorkspace);
 
-      if (isRunningWorkspace(newWorkspace)) {
-        submit({ workspaceJobTypeId, workspaceResourceOptions }).catch((e) => {
-          toastErrorLaunchWorkspace();
-          console.error(e);
-        });
-      } else {
-        open();
-      }
-    },
-    [submit, toastErrorLaunchWorkspace, setWorkspace, open],
-  );
+    if (isRunningWorkspace(newWorkspace)) {
+      submit({ workspaceJobTypeId, workspaceResourceOptions }).catch((e) => {
+        toastErrorLaunchWorkspace();
+        console.error(e);
+      });
+    } else {
+      open();
+    }
+  });
 
   return {
-    runningWorkspaceExists,
-    runningWorkspaceName: runningWorkspaceName.current,
-    runningWorkspaceIsCurrentWorkpace,
-    runningWorkspace,
+    maxNumOfRunningWorkspacesReached,
+    currentWorkspaceIsRunning,
+    runningWorkspaces,
     control,
     isOpen,
     reset,

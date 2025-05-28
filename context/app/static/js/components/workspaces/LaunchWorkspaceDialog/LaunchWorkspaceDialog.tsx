@@ -17,6 +17,7 @@ import {
 } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { MAX_NUM_CONCURRENT_WORKSPACES } from 'js/components/workspaces/constants';
 import WorkspaceEnvironmentDescription from '../WorkspaceEnvironmentDescription';
 
 const formId = 'launch-workspace-form';
@@ -43,8 +44,8 @@ const text = {
 
 function LaunchWorkspaceDialog() {
   const {
-    runningWorkspaceName,
-    runningWorkspaceIsCurrentWorkpace,
+    currentWorkspaceIsRunning,
+    maxNumOfRunningWorkspacesReached,
     control,
     handleSubmit,
     submit,
@@ -59,9 +60,8 @@ function LaunchWorkspaceDialog() {
   const { toastErrorLaunchWorkspace } = useWorkspaceToasts();
 
   const newWorkspaceLaunch = dialogType === 'LAUNCH_NEW_WORKSPACE';
-  const isAnotherWorkspaceRunning = runningWorkspaceName && !runningWorkspaceIsCurrentWorkpace;
 
-  const runningWorkspaceAlert = isAnotherWorkspaceRunning && (
+  const tooManyWorkspacesAlert = maxNumOfRunningWorkspacesReached && !currentWorkspaceIsRunning && (
     <Alert
       severity="warning"
       sx={{
@@ -71,9 +71,8 @@ function LaunchWorkspaceDialog() {
         alignItems: 'center',
       }}
     >
-      {runningWorkspaceName} is currently running. You can only run one workspace at a time. To launch this workspace,
-      jobs in the workspace {runningWorkspaceName} will be stopped. Make sure to save all progress before launching this
-      workspace.
+      You can only run {MAX_NUM_CONCURRENT_WORKSPACES} workspaces at a time. Please stop at least one of your active
+      workspace jobs before launching this workspace.
     </Alert>
   );
 
@@ -104,10 +103,10 @@ function LaunchWorkspaceDialog() {
           // eslint-disable-next-line @typescript-eslint/no-misused-promises
           <form id={formId} onSubmit={handleSubmit(onSubmit)}>
             {newWorkspaceLaunch ? (
-              runningWorkspaceAlert
+              tooManyWorkspacesAlert
             ) : (
               <Stack direction="column" spacing={1}>
-                {runningWorkspaceAlert}
+                {tooManyWorkspacesAlert}
                 <Alert severity="info">{text.resources.alert}</Alert>
                 <SummaryPaper>
                   <Stack direction="column" spacing={2}>
@@ -128,7 +127,13 @@ function LaunchWorkspaceDialog() {
             <Button type="button" onClick={handleClose} disabled={isSubmitting}>
               Cancel
             </Button>
-            <LoadingButton type="submit" variant="contained" form={formId} loading={isSubmitting}>
+            <LoadingButton
+              type="submit"
+              variant="contained"
+              disabled={maxNumOfRunningWorkspacesReached}
+              form={formId}
+              loading={isSubmitting}
+            >
               Launch Workspace
             </LoadingButton>
           </Stack>

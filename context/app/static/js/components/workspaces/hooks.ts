@@ -1,5 +1,6 @@
 import { useCallback, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr';
+import { useEventCallback } from '@mui/material/utils';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { useAppContext } from 'js/components/Contexts';
@@ -340,7 +341,7 @@ function useInvitationWorkspaceDetails({ workspaceId }: { workspaceId: number })
 
 function useRunningWorkspace() {
   const { workspacesList } = useWorkspacesList();
-  return workspacesList.find((workspace) =>
+  return workspacesList.filter((workspace) =>
     workspace.jobs.some((job) => job.status === 'running' || job.status === 'pending'),
   );
 }
@@ -372,7 +373,7 @@ function useHandleUpdateWorkspace() {
 
 function useLaunchWorkspace() {
   const { startWorkspace } = useStartWorkspace();
-  const runningWorkspace = useRunningWorkspace();
+  const runningWorkspaces = useRunningWorkspace();
   const mutateWorkspacesAndJobs = useMutateWorkspacesAndJobs();
   const globalMutateWorkspace = useGlobalMutateWorkspace();
   const { open, setWorkspace, setDialogType } = useLaunchWorkspaceStore();
@@ -380,11 +381,12 @@ function useLaunchWorkspace() {
   const { handleUpdateWorkspace } = useHandleUpdateWorkspace();
   const { toastSuccessLaunchWorkspace, toastSuccessCreateWorkspace } = useWorkspaceToasts();
 
-  const startAndOpenWorkspace = useCallback(
+  const startAndOpenWorkspace = useEventCallback(
     async ({ workspace, jobTypeId, resourceOptions, templatePath }: startWorkspaceProps) => {
       const isNewJobType = workspace?.default_job_type !== jobTypeId;
+      const currentWorkspaceIsRunning = runningWorkspaces.find((ws) => ws.id === workspace.id);
 
-      if (runningWorkspace && workspace.id === runningWorkspace.id && !isNewJobType) {
+      if (runningWorkspaces && currentWorkspaceIsRunning && !isNewJobType) {
         window.open(getWorkspaceStartLink(workspace, templatePath), '_blank');
         return;
       }
@@ -400,19 +402,11 @@ function useLaunchWorkspace() {
 
       toastSuccessLaunchWorkspace(workspace.id);
     },
-    [
-      mutateWorkspacesAndJobs,
-      startWorkspace,
-      globalMutateWorkspace,
-      handleUpdateWorkspace,
-      runningWorkspace,
-      toastSuccessLaunchWorkspace,
-    ],
   );
 
-  const startNewWorkspace = useCallback(
+  const startNewWorkspace = useEventCallback(
     async ({ workspace, jobTypeId, resourceOptions, templatePath }: startWorkspaceProps) => {
-      if (runningWorkspace) {
+      if (runningWorkspaces) {
         open();
         setWorkspace(workspace);
         toastSuccessCreateWorkspace();
@@ -421,7 +415,6 @@ function useLaunchWorkspace() {
         setDialogType(null);
       }
     },
-    [open, runningWorkspace, setWorkspace, startAndOpenWorkspace, toastSuccessCreateWorkspace, setDialogType],
   );
 
   return { startNewWorkspace, startAndOpenWorkspace };
