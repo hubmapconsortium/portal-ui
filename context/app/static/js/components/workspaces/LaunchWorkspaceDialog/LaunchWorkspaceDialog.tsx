@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import LoadingButton from '@mui/lab/LoadingButton';
+import { useEventCallback } from '@mui/material/utils';
 
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
@@ -18,6 +19,7 @@ import {
 import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { MAX_NUM_CONCURRENT_WORKSPACES } from 'js/components/workspaces/constants';
+import { tooManyWorkspacesRunning } from 'js/components/workspaces/utils';
 import WorkspaceEnvironmentDescription from '../WorkspaceEnvironmentDescription';
 
 const formId = 'launch-workspace-form';
@@ -45,7 +47,7 @@ const text = {
 function LaunchWorkspaceDialog() {
   const {
     currentWorkspaceIsRunning,
-    maxNumOfRunningWorkspacesReached,
+    runningWorkspaces,
     control,
     handleSubmit,
     submit,
@@ -61,7 +63,7 @@ function LaunchWorkspaceDialog() {
 
   const newWorkspaceLaunch = dialogType === 'LAUNCH_NEW_WORKSPACE';
 
-  const tooManyWorkspacesAlert = maxNumOfRunningWorkspacesReached && !currentWorkspaceIsRunning && (
+  const tooManyWorkspacesAlert = tooManyWorkspacesRunning(runningWorkspaces) && !currentWorkspaceIsRunning && (
     <Alert
       severity="warning"
       sx={{
@@ -76,19 +78,22 @@ function LaunchWorkspaceDialog() {
     </Alert>
   );
 
-  const onSubmit = useCallback(
-    ({ workspaceJobTypeId, workspaceResourceOptions }: LaunchWorkspaceFormTypes) => {
-      submit({ workspaceJobTypeId, workspaceResourceOptions })
-        .then(() => {
-          handleClose();
-        })
-        .catch((e) => {
-          toastErrorLaunchWorkspace();
-          console.error(e);
-        });
-    },
-    [submit, handleClose, toastErrorLaunchWorkspace],
-  );
+  const onSubmit = useEventCallback(({ workspaceJobTypeId, workspaceResourceOptions }: LaunchWorkspaceFormTypes) => {
+    if (!workspace) {
+      toastErrorLaunchWorkspace();
+      console.error('No workspace to run found.');
+      return;
+    }
+
+    submit({ workspaceToLaunch: workspace, workspaceJobTypeId, workspaceResourceOptions })
+      .then(() => {
+        handleClose();
+      })
+      .catch((e) => {
+        toastErrorLaunchWorkspace();
+        console.error(e);
+      });
+  });
 
   return (
     <WorkspacesEventContextProvider
@@ -130,7 +135,7 @@ function LaunchWorkspaceDialog() {
             <LoadingButton
               type="submit"
               variant="contained"
-              disabled={maxNumOfRunningWorkspacesReached}
+              disabled={tooManyWorkspacesRunning(runningWorkspaces)}
               form={formId}
               loading={isSubmitting}
             >

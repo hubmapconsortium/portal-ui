@@ -15,6 +15,7 @@ import {
   buildDatasetSymlinks,
   getDefaultJobType,
   getWorkspaceResourceOptions,
+  tooManyWorkspacesRunning,
 } from './utils';
 import {
   useDeleteWorkspace,
@@ -406,7 +407,7 @@ function useLaunchWorkspace() {
 
   const startNewWorkspace = useEventCallback(
     async ({ workspace, jobTypeId, resourceOptions, templatePath }: startWorkspaceProps) => {
-      if (runningWorkspaces) {
+      if (tooManyWorkspacesRunning(runningWorkspaces)) {
         open();
         setWorkspace(workspace);
         toastSuccessCreateWorkspace();

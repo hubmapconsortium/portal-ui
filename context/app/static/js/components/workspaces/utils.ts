@@ -10,6 +10,7 @@ import {
   DEFAULT_PYTHON_TEMPLATE_KEY,
   DEFAULT_R_TEMPLATE_KEY,
   DEFAULT_TIME_LIMIT_MINUTES,
+  MAX_NUM_CONCURRENT_WORKSPACES,
 } from './constants';
 import {
   jobStatuses,
@@ -446,6 +447,10 @@ function getSharerInfo(invitation: WorkspaceInvitation) {
   };
 }
 
+function tooManyWorkspacesRunning(runningWorkspaces: MergedWorkspace[]) {
+  return runningWorkspaces.length >= MAX_NUM_CONCURRENT_WORKSPACES;
+}
+
 export {
   mergeJobsIntoWorkspaces,
   findBestJob,
@@ -474,4 +479,5 @@ export {
   getItemId,
   getSelectedWorkspaceNames,
   getSharerInfo,
+  tooManyWorkspacesRunning,
 };
