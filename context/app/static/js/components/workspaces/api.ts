@@ -400,25 +400,27 @@ export function useWorkspace(workspaceId: number) {
   return { workspace, ...rest };
 }
 
-export function useStopWorkspace() {
+export function useStopWorkspaces() {
   const { stopJob, isStoppingJob } = useStopJob();
   const { jobs } = useJobs();
 
-  const stopWorkspace = useCallback(
-    async (workspaceId: number) => {
-      trackEvent({
-        category: WorkspacesEventCategories.Workspaces,
-        action: 'Stop Workspace',
-        name: workspaceId,
+  const stopWorkspaces = useCallback(
+    async (workspaceIds: number[]) => {
+      workspaceIds.forEach((workspaceId) => {
+        trackEvent({
+          category: WorkspacesEventCategories.Workspaces,
+          action: 'Stop Workspace',
+          name: workspaceId,
+        });
       });
-      await Promise.all(
-        jobs.filter((j) => j.workspace_id === workspaceId && isRunningJob(j)).map((j) => stopJob(j.id)),
-      );
+
+      const runningJobsToStop = jobs.filter((j) => workspaceIds.includes(j.workspace_id) && isRunningJob(j));
+      await Promise.all(runningJobsToStop.map((j) => stopJob(j.id)));
     },
     [jobs, stopJob],
   );
 
-  return { stopWorkspace, isStoppingWorkspace: isStoppingJob };
+  return { stopWorkspaces, isStoppingWorkspace: isStoppingJob };
 }
 
 async function fetchDeleteWorkspace(

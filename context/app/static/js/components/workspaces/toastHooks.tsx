@@ -21,7 +21,8 @@ export const useWorkspaceToasts = () => {
   const toastErrorUpdateWorkspace = useCallback(() => toastError('Failed to update workspace.'), [toastError]);
 
   const toastErrorStopWorkspace = useCallback(
-    (workspaceName?: string) => toastError(`Failed to stop ${workspaceName ?? 'workspace'}. Please try again.`),
+    (workspaceName?: string | React.ReactElement) =>
+      toastError(<Typography>Failed to stop {workspaceName ?? 'workspace'}. Please try again.</Typography>),
     [toastError],
   );
 

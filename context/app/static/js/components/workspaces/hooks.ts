@@ -19,7 +19,6 @@ import {
 } from './utils';
 import {
   useDeleteWorkspace,
-  useStopWorkspace,
   useStartWorkspace,
   useWorkspaces,
   useJobs,
@@ -35,6 +34,7 @@ import {
   useShareInvitation,
   useAcceptInvitation,
   useInvitation,
+  useStopWorkspaces,
 } from './api';
 import {
   MergedWorkspace,
@@ -112,7 +112,7 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
   );
 
   const { deleteWorkspace, isDeleting } = useDeleteWorkspace();
-  const { stopWorkspace, isStoppingWorkspace } = useStopWorkspace();
+  const { stopWorkspaces, isStoppingWorkspace } = useStopWorkspaces();
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
 
   async function handleDeleteWorkspace(workspaceId: number) {
@@ -120,8 +120,13 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
     await mutate();
   }
 
+  async function handleStopWorkspaces(workspaceIds: number[]) {
+    await stopWorkspaces(workspaceIds);
+    await mutate();
+  }
+
   async function handleStopWorkspace(workspaceId: number) {
-    await stopWorkspace(workspaceId);
+    await stopWorkspaces([workspaceId]);
     await mutate();
   }
 
@@ -134,6 +139,7 @@ function useWorkspacesActions<T>({ workspaces, workspacesLoading, mutateWorkspac
     workspacesList,
     handleDeleteWorkspace,
     handleStopWorkspace,
+    handleStopWorkspaces,
     handleStartWorkspace,
     isLoading,
     isDeleting,
@@ -492,14 +498,14 @@ function useSessionWarning(workspaces: MergedWorkspace[]) {
 }
 
 function useRefreshSession(workspace: MergedWorkspace) {
-  const { stopWorkspace, isStoppingWorkspace } = useStopWorkspace();
+  const { stopWorkspaces, isStoppingWorkspace } = useStopWorkspaces();
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
   const { mutate: mutateWorkspace } = useWorkspace(workspace.id);
   const mutate = useMutateWorkspacesAndJobs(mutateWorkspace);
   const { toastSuccessRenewSession } = useWorkspaceToasts();
 
   const refreshSession = useCallback(async () => {
-    await stopWorkspace(workspace.id);
+    await stopWorkspaces([workspace.id]);
     await startWorkspace({
       workspaceId: workspace.id,
       jobTypeId: getDefaultJobType({ workspace }),
@@ -507,7 +513,7 @@ function useRefreshSession(workspace: MergedWorkspace) {
     });
     await mutate();
     toastSuccessRenewSession();
-  }, [mutate, startWorkspace, stopWorkspace, toastSuccessRenewSession, workspace]);
+  }, [mutate, startWorkspace, stopWorkspaces, toastSuccessRenewSession, workspace]);
 
   return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
 }
