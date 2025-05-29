@@ -5,108 +5,20 @@ import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
-import { InternalLink } from 'js/shared-styles/Links';
 import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 import Paper from '@mui/material/Paper';
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import { useCellTypeOntologyDetail } from 'js/hooks/useUBKG';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
-import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
-import { percent } from 'js/helpers/number-format';
-import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
-import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { useSortState } from 'js/hooks/useSortState';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
-import ViewEntitiesButton from '../ViewEntitiesButton';
-import { useCLID, useFormattedCellTypeNames, useUUIDsFromHubmapIds } from '../hooks';
-
-interface CellTypesTableProps {
-  cellTypes: string[];
-}
-
-interface CellTypeProps {
-  cellType: string;
-}
-
-function CellTypeLink({ cellType }: CellTypeProps) {
-  const clid = useCLID(cellType);
-
-  if (!clid) return cellType;
-
-  return <InternalLink href={`/cell-types/${clid}`}>{cellType}</InternalLink>;
-}
-
-// TODO: Remove this when the cell types detail page is ready
-const enableLinks = false;
-
-function CellTypeCell({ cellType }: CellTypeProps) {
-  if (!enableLinks) {
-    return cellType;
-  }
-
-  return <CellTypeLink cellType={cellType} />;
-}
-
-interface CellTypeRowProps {
-  cellType: string;
-  clid?: string;
-  matchedDatasets?: string[];
-  percentage?: string;
-  totalIndexedDatasets?: number;
-}
-interface CLIDCellProps {
-  clid: string | undefined;
-}
-
-function CLIDCell({ clid }: CLIDCellProps) {
-  if (!clid) return <Skeleton variant="text" width={100} />;
-  return (
-    <OutboundIconLink href={`https://www.ebi.ac.uk/ols4/search?q=${clid}&ontology=cl&exactMatch=true`}>
-      {clid}
-    </OutboundIconLink>
-  );
-}
-
-function useMatchedDatasets(cellTypes: string[]) {
-  const { data: matchedDatasets, isLoading } = useFindDatasetForCellTypes({
-    cellTypes,
-  });
-  const matchedDatasetsCounts = matchedDatasets?.map(({ datasets }) => datasets.length) ?? [];
-  return {
-    matchedDatasets,
-    matchedDatasetsCounts,
-    isLoading,
-  };
-}
-
-function MatchedDatasetsCell({
-  totalIndexedDatasets,
-  matchedDatasets,
-  percentage,
-}: Pick<CellTypeRowProps, 'matchedDatasets' | 'totalIndexedDatasets' | 'clid' | 'percentage'>) {
-  const matchedDatasetsCount = matchedDatasets?.length ?? 0;
-
-  if (!totalIndexedDatasets) {
-    return <Skeleton variant="text" width={150} />;
-  }
-
-  return `${matchedDatasetsCount}/${totalIndexedDatasets} (${percentage})`;
-}
-
-function ViewDatasetsCell({ matchedDatasets }: Pick<CellTypeRowProps, 'matchedDatasets'>) {
-  const { datasetUUIDs, isLoading } = useUUIDsFromHubmapIds(matchedDatasets ?? []);
-
-  if (isLoading) {
-    return <Skeleton variant="text" width={150} />;
-  }
-
-  return <ViewEntitiesButton entityType="Dataset" filters={{ datasetUUIDs }} />;
-}
+import { useCellTypeRows } from './hooks';
+import { CellTypeRowProps, CellTypesTableProps, CLIDCellProps } from './types';
+import { CellTypeCell, CLIDCell, MatchedDatasetsCell, ViewDatasetsCell } from './CellTypesTableCells';
 
 function CellTypeDescription({ clid }: CLIDCellProps) {
   const cellIdWithoutPrefix = clid ? clid.replace('CL:', '') : undefined;
@@ -153,36 +65,6 @@ function CellTypeRow({ cellType, clid, matchedDatasets, percentage, totalIndexed
       </ExpandableRowCell>
     </ExpandableRow>
   );
-}
-
-function useCellTypeRows(cellTypes: string[]) {
-  const formattedCellNames = useFormattedCellTypeNames(cellTypes);
-  const { data: clids, isLoading: isLoadingClids } = useLabelsToCLIDs(formattedCellNames);
-  const { matchedDatasets, isLoading: isLoadingMatchedDatasets } = useMatchedDatasets(formattedCellNames);
-  const { datasets: totalIndexedDatasets, isLoading: isLoadingTotalDatasets } = useIndexedDatasetsForOrgan();
-
-  const rows = useMemo(() => {
-    return cellTypes.map((cellType, index) => {
-      const matches = matchedDatasets?.[index]?.datasets ?? [];
-      const matchedDatasetsCount = matches.length;
-      const percentage = percent.format(matchedDatasetsCount / totalIndexedDatasets.length);
-
-      return {
-        cellType,
-        clid: clids?.[index].CLIDs?.[0],
-        matchedDatasets: matches,
-        totalIndexedDatasets: totalIndexedDatasets.length,
-        percentage,
-      };
-    });
-  }, [cellTypes, clids, matchedDatasets, totalIndexedDatasets.length]);
-
-  const isLoading = isLoadingClids || isLoadingMatchedDatasets || isLoadingTotalDatasets;
-
-  return {
-    rows,
-    isLoading,
-  };
 }
 
 function CellTypesTable({ cellTypes }: CellTypesTableProps) {
