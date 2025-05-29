@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.26.2 - 2025-05-29
+
+- Fix gene pathways effect causing molecular data queries to fail.
+
+
+
 ## v1.26.1 - 2025-05-28
 
 - Make admin banner mobile friendly.
