@@ -61,6 +61,26 @@ function usePublicationsRelatedEntities(uuid: string) {
 
   const entities = [
     {
+      entityType: 'Dataset' as const,
+      tabLabel: 'Datasets',
+      data: ancestorsSplitByEntityType.Dataset,
+      columns: [dataTypesCol, organCol, statusCol, publishedTimestampCol],
+    },
+    {
+      entityType: 'Sample' as const,
+      tabLabel: 'Samples',
+      data: ancestorsSplitByEntityType.Sample,
+      columns: [
+        organCol,
+        {
+          id: 'sample_category',
+          label: 'Sample Category',
+          renderColumnCell: ({ sample_category }: PartialEntity) => sample_category as string,
+        },
+        createdTimestampCol,
+      ],
+    },
+    {
       entityType: 'Donor' as const,
       tabLabel: 'Donors',
       data: ancestorsSplitByEntityType.Donor,
@@ -87,27 +107,6 @@ function usePublicationsRelatedEntities(uuid: string) {
         },
         createdTimestampCol,
       ],
-    },
-    {
-      entityType: 'Sample' as const,
-      tabLabel: 'Samples',
-      data: ancestorsSplitByEntityType.Sample,
-      columns: [
-        organCol,
-        {
-          id: 'sample_category',
-          label: 'Sample Category',
-          renderColumnCell: ({ sample_category }: PartialEntity) => sample_category as string,
-        },
-        createdTimestampCol,
-      ],
-    },
-
-    {
-      entityType: 'Dataset' as const,
-      tabLabel: 'Datasets',
-      data: ancestorsSplitByEntityType.Dataset,
-      columns: [dataTypesCol, organCol, statusCol, publishedTimestampCol],
     },
   ];
 

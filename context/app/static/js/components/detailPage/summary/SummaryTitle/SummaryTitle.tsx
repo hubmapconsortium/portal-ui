@@ -34,7 +34,7 @@ function SummaryTitle({ children, iconTooltipText, entityIcon }: SummaryTitlePro
   return (
     <Stack direction="row" alignItems="center" gap={1}>
       {Icon && <Icon color="primary" />}
-      <Typography variant="subtitle1" component="h1" color="primary" ref={ref}>
+      <Typography variant="subtitle1" color="primary" ref={ref}>
         {children}
       </Typography>
       <InfoTooltipIcon iconTooltipText={iconTooltipText} />
