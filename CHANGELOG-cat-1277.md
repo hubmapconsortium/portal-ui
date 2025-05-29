@@ -1,0 +1,1 @@
+- Fix gene pathways effect causing molecular data queries to fail.
