@@ -15,6 +15,7 @@ interface ExpandableRowChildProps extends PropsWithChildren, TableRowProps {
   expandTooltip?: string;
   collapseTooltip?: string;
   disabledTooltipTitle?: string;
+  reverse?: boolean;
 }
 
 function ExpandableRowChild({
@@ -25,23 +26,29 @@ function ExpandableRowChild({
   expandTooltip = '',
   collapseTooltip = '',
   disabledTooltipTitle,
+  reverse = false,
   ...rest
 }: ExpandableRowChildProps) {
   const { isExpanded, toggleIsExpanded } = useExpandableRowStore();
 
   const tooltipTitle = isExpanded ? collapseTooltip : expandTooltip;
 
+  const expandableCell = (
+    <ExpandableRowCell>
+      <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : tooltipTitle}>
+        <span>
+          <StyledExpandCollapseIcon isExpanded={isExpanded} color={disabled ? 'disabled' : 'primary'} />
+        </span>
+      </SecondaryBackgroundTooltip>
+    </ExpandableRowCell>
+  );
+
   return (
     <>
       <ClickableRow {...rest} onClick={toggleIsExpanded} disabled={disabled} label="expand row">
+        {reverse ? expandableCell : null}
         {children}
-        <ExpandableRowCell>
-          <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : tooltipTitle}>
-            <span>
-              <StyledExpandCollapseIcon isExpanded={isExpanded} color={disabled ? 'disabled' : 'primary'} />
-            </span>
-          </SecondaryBackgroundTooltip>
-        </ExpandableRowCell>
+        {reverse ? null : expandableCell}
       </ClickableRow>
       <ExpandedRow $isExpanded={isExpanded}>
         <ExpandedCell colSpan={numCells} $isExpanded={isExpanded}>

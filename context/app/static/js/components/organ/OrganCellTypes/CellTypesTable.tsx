@@ -20,6 +20,8 @@ import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes
 import { percent } from 'js/helpers/number-format';
 import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
+import { useSortState } from 'js/hooks/useSortState';
+import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import ViewEntitiesButton from '../ViewEntitiesButton';
 import { useCLID, useFormattedCellTypeNames, useUUIDsFromHubmapIds } from '../hooks';
 
@@ -89,6 +91,10 @@ function MatchedDatasetsCell({
 }: Pick<CellTypeRowProps, 'matchedDatasets' | 'totalIndexedDatasets' | 'clid' | 'percentage'>) {
   const matchedDatasetsCount = matchedDatasets?.length ?? 0;
 
+  if (!totalIndexedDatasets) {
+    return <Skeleton variant="text" width={150} />;
+  }
+
   return `${matchedDatasetsCount}/${totalIndexedDatasets} (${percentage})`;
 }
 
@@ -128,7 +134,7 @@ function CellTypeDescription({ clid }: CLIDCellProps) {
 
 function CellTypeRow({ cellType, clid, matchedDatasets, percentage, totalIndexedDatasets }: CellTypeRowProps) {
   return (
-    <ExpandableRow numCells={5} expandedContent={<CellTypeDescription clid={clid} />}>
+    <ExpandableRow numCells={5} expandedContent={<CellTypeDescription clid={clid} />} reverse>
       <ExpandableRowCell>
         <CellTypeCell cellType={cellType} />
       </ExpandableRowCell>
@@ -182,16 +188,71 @@ function useCellTypeRows(cellTypes: string[]) {
 function CellTypesTable({ cellTypes }: CellTypesTableProps) {
   const { rows } = useCellTypeRows(cellTypes);
 
+  const { sortState, setSort } = useSortState(
+    {
+      cellType: 'cellType',
+      clid: 'clid',
+      matchedDatasets: 'matchedDatasets',
+    },
+    {
+      columnId: 'cellType',
+      direction: 'asc',
+    },
+  );
+
+  const sortedRows = useMemo(() => {
+    return [...rows].sort((a, b) => {
+      switch (sortState.columnId) {
+        case 'cellType':
+          return a.cellType.localeCompare(b.cellType) * (sortState.direction === 'asc' ? 1 : -1);
+        case 'clid':
+          return (a.clid ?? '').localeCompare(b.clid ?? '') * (sortState.direction === 'asc' ? 1 : -1);
+        case 'matchedDatasets':
+          return (
+            (a.matchedDatasets?.length ?? 0) -
+            (b.matchedDatasets?.length ?? 0) * (sortState.direction === 'asc' ? 1 : -1)
+          );
+        default:
+          return 0; // No sorting applied
+      }
+    });
+  }, [rows, sortState]);
+
   return (
     <StyledTableContainer component={Paper}>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
-            {/* <TableCell>&nbsp; Expansion column </TableCell> */}
-            <TableCell>Cell Type</TableCell>
-            <TableCell>Cell Ontology ID</TableCell>
-            <TableCell>Matched Datasets</TableCell>
-            <TableCell colSpan={2}>
+            <TableCell sx={{ backgroundColor: 'background.paper' }}>&nbsp; {/* Expansion cell column */} </TableCell>
+            <EntityHeaderCell
+              column={{
+                id: 'cellType',
+                label: 'Cell Type',
+                cellContent: CellTypeCell,
+              }}
+              setSort={setSort}
+              sortState={sortState}
+            />
+
+            <EntityHeaderCell
+              column={{
+                id: 'clid',
+                label: 'Cell Ontology ID',
+                cellContent: CLIDCell,
+              }}
+              setSort={setSort}
+              sortState={sortState}
+            />
+            <EntityHeaderCell
+              column={{
+                id: 'matchedDatasets',
+                label: 'Matched Datasets',
+                cellContent: MatchedDatasetsCell,
+              }}
+              setSort={setSort}
+              sortState={sortState}
+            />
+            <TableCell sx={{ backgroundColor: 'background.paper' }}>
               <Stack alignItems="end">
                 <DownloadButton tooltip="Download table in TSV format." sx={{ right: 1 }} />
               </Stack>
@@ -199,7 +260,7 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => (
+          {sortedRows.map((row) => (
             <CellTypeRow key={row.cellType} {...row} />
           ))}
         </TableBody>
