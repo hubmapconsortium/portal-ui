@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -19,8 +19,9 @@ import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
 import { percent } from 'js/helpers/number-format';
 import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
+import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import ViewEntitiesButton from '../ViewEntitiesButton';
-import { useCLID, useFormattedCellTypeName, useUUIDsFromHubmapIds } from '../hooks';
+import { useCLID, useFormattedCellTypeNames, useUUIDsFromHubmapIds } from '../hooks';
 
 interface CellTypesTableProps {
   cellTypes: string[];
@@ -49,6 +50,13 @@ function CellTypeCell({ cellType }: CellTypeProps) {
   return <CellTypeLink cellType={cellType} />;
 }
 
+interface CellTypeRowProps {
+  cellType: string;
+  clid?: string;
+  matchedDatasets?: string[];
+  percentage?: string;
+  totalIndexedDatasets?: number;
+}
 interface CLIDCellProps {
   clid: string | undefined;
 }
@@ -62,35 +70,30 @@ function CLIDCell({ clid }: CLIDCellProps) {
   );
 }
 
-function MatchedDatasetsCell({ cellType }: CellTypeProps) {
-  const { datasets: indexedDatasets, isLoading: isLoadingAllIndexed } = useIndexedDatasetsForOrgan();
-  const formattedCellName = useFormattedCellTypeName(cellType);
-  const { data: datasetsCountWithCellType, isLoading: isLoadingCellType } = useFindDatasetForCellTypes({
-    cellTypes: [formattedCellName],
+function useMatchedDatasets(cellTypes: string[]) {
+  const { data: matchedDatasets, isLoading } = useFindDatasetForCellTypes({
+    cellTypes,
   });
-
-  const isLoading = isLoadingAllIndexed || isLoadingCellType;
-
-  if (isLoading) {
-    return <Skeleton variant="text" width={150} />;
-  }
-
-  const totalIndexedDatasets = indexedDatasets.length;
-  const matchedDatasetsCount = datasetsCountWithCellType?.[0]?.datasets?.length ?? 0;
-
-  return `${matchedDatasetsCount}/${totalIndexedDatasets} (${percent.format(matchedDatasetsCount / totalIndexedDatasets)})`;
+  const matchedDatasetsCounts = matchedDatasets?.map(({ datasets }) => datasets.length) ?? [];
+  return {
+    matchedDatasets,
+    matchedDatasetsCounts,
+    isLoading,
+  };
 }
 
-function ViewDatasetsCell({ cellType }: CellTypeProps) {
-  const formattedCellName = useFormattedCellTypeName(cellType);
-  const { data: [{ datasets: hubmapIds }] = [{ datasets: [] }], isLoading: isLoadingCellType } =
-    useFindDatasetForCellTypes({
-      cellTypes: [formattedCellName],
-    });
+function MatchedDatasetsCell({
+  totalIndexedDatasets,
+  matchedDatasets,
+  percentage,
+}: Pick<CellTypeRowProps, 'matchedDatasets' | 'totalIndexedDatasets' | 'clid' | 'percentage'>) {
+  const matchedDatasetsCount = matchedDatasets?.length ?? 0;
 
-  const { datasetUUIDs, isLoading: isLoadingUUIDs } = useUUIDsFromHubmapIds(hubmapIds);
+  return `${matchedDatasetsCount}/${totalIndexedDatasets} (${percentage})`;
+}
 
-  const isLoading = isLoadingCellType || isLoadingUUIDs;
+function ViewDatasetsCell({ matchedDatasets }: Pick<CellTypeRowProps, 'matchedDatasets'>) {
+  const { datasetUUIDs, isLoading } = useUUIDsFromHubmapIds(matchedDatasets ?? []);
 
   if (isLoading) {
     return <Skeleton variant="text" width={150} />;
@@ -101,7 +104,7 @@ function ViewDatasetsCell({ cellType }: CellTypeProps) {
 
 function CellTypeDescription({ clid }: CLIDCellProps) {
   const cellIdWithoutPrefix = clid ? clid.replace('CL:', '') : undefined;
-  const { data, error } = useCellTypeOntologyDetail(cellIdWithoutPrefix);
+  const { data, error, isLoading } = useCellTypeOntologyDetail(cellIdWithoutPrefix);
   const description = data?.cell_type.definition;
 
   if (error) {
@@ -112,15 +115,18 @@ function CellTypeDescription({ clid }: CLIDCellProps) {
     );
   }
 
+  if (isLoading) {
+    return <Skeleton variant="text" sx={{ p: 2 }} />;
+  }
+
   return (
     <Typography variant="body2" sx={{ p: 2 }}>
-      {description ?? <Skeleton variant="text" sx={{ p: 2 }} />}
+      {description ?? 'No description available for this cell type.'}
     </Typography>
   );
 }
 
-function CellTypeRow({ cellType }: CellTypeProps) {
-  const clid = useCLID(cellType);
+function CellTypeRow({ cellType, clid, matchedDatasets, percentage, totalIndexedDatasets }: CellTypeRowProps) {
   return (
     <ExpandableRow numCells={5} expandedContent={<CellTypeDescription clid={clid} />}>
       <ExpandableRowCell>
@@ -130,16 +136,52 @@ function CellTypeRow({ cellType }: CellTypeProps) {
         <CLIDCell clid={clid} />
       </ExpandableRowCell>
       <ExpandableRowCell>
-        <MatchedDatasetsCell cellType={cellType} />
+        <MatchedDatasetsCell
+          matchedDatasets={matchedDatasets}
+          totalIndexedDatasets={totalIndexedDatasets}
+          percentage={percentage}
+        />
       </ExpandableRowCell>
       <ExpandableRowCell>
-        <ViewDatasetsCell cellType={cellType} />
+        <ViewDatasetsCell matchedDatasets={matchedDatasets} />
       </ExpandableRowCell>
     </ExpandableRow>
   );
 }
 
+function useCellTypeRows(cellTypes: string[]) {
+  const formattedCellNames = useFormattedCellTypeNames(cellTypes);
+  const { data: clids, isLoading: isLoadingClids } = useLabelsToCLIDs(formattedCellNames);
+  const { matchedDatasets, isLoading: isLoadingMatchedDatasets } = useMatchedDatasets(formattedCellNames);
+  const { datasets: totalIndexedDatasets, isLoading: isLoadingTotalDatasets } = useIndexedDatasetsForOrgan();
+
+  const rows = useMemo(() => {
+    return cellTypes.map((cellType, index) => {
+      const matches = matchedDatasets?.[index]?.datasets ?? [];
+      const matchedDatasetsCount = matches.length;
+      const percentage = percent.format(matchedDatasetsCount / totalIndexedDatasets.length);
+
+      return {
+        cellType,
+        clid: clids?.[index].CLIDs?.[0],
+        matchedDatasets: matches,
+        totalIndexedDatasets: totalIndexedDatasets.length,
+        percentage,
+      };
+    });
+  }, [cellTypes, clids, matchedDatasets, totalIndexedDatasets.length]);
+
+  const isLoading = isLoadingClids || isLoadingMatchedDatasets || isLoadingTotalDatasets;
+
+  return {
+    rows,
+    isLoading,
+  };
+}
+
 function CellTypesTable({ cellTypes }: CellTypesTableProps) {
+  const { rows } = useCellTypeRows(cellTypes);
+
   return (
     <StyledTableContainer component={Paper}>
       <Table stickyHeader>
@@ -157,8 +199,8 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {cellTypes.map((cellType) => (
-            <CellTypeRow key={cellType} cellType={cellType} />
+          {rows.map((row) => (
+            <CellTypeRow key={row.cellType} {...row} />
           ))}
         </TableBody>
       </Table>

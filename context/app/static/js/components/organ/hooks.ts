@@ -28,6 +28,11 @@ export function useFormattedCellTypeName(cellType: string) {
   return `${organ.name.toLowerCase()}.${cellType}`;
 }
 
+export function useFormattedCellTypeNames(cellTypes: string[]) {
+  const { organ } = useOrganContext();
+  return cellTypes.map((cellType) => `${organ.name.toLowerCase()}.${cellType}`);
+}
+
 export function useCLID(cellType: string) {
   const { organ } = useOrganContext();
   const scFindKey = `${organ.name.toLowerCase()}.${cellType}`;
