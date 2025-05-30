@@ -63,7 +63,7 @@ const useUbkg = () => {
           queryParams.append('pathwayid', pathwayId);
         }
         if (pathwayNameStartsWith) {
-          queryParams.append('pathwayname-startswith', pathwayNameStartsWith);
+          queryParams.append('pathwaynamestartswith', pathwayNameStartsWith);
         }
         if (geneIds) {
           const geneIdsString = geneIds.join(',');
