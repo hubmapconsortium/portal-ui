@@ -16,9 +16,11 @@ import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { useSortState } from 'js/hooks/useSortState';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
+import { useDownloadTable } from 'js/helpers/download';
 import { useCellTypeRows } from './hooks';
 import { CellTypeRowProps, CellTypesTableProps, CLIDCellProps } from './types';
 import { CellTypeCell, CLIDCell, MatchedDatasetsCell, ViewDatasetsCell } from './CellTypesTableCells';
+import { useOrganContext } from '../contexts';
 
 function CellTypeDescription({ clid }: CLIDCellProps) {
   const cellIdWithoutPrefix = clid ? clid.replace('CL:', '') : undefined;
@@ -68,7 +70,9 @@ function CellTypeRow({ cellType, clid, matchedDatasets, percentage, totalIndexed
 }
 
 function CellTypesTable({ cellTypes }: CellTypesTableProps) {
-  const { rows } = useCellTypeRows(cellTypes);
+  const { rows, isLoading } = useCellTypeRows(cellTypes);
+
+  const { organ } = useOrganContext();
 
   const { sortState, setSort } = useSortState(
     {
@@ -99,6 +103,18 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
       }
     });
   }, [rows, sortState]);
+
+  const download = useDownloadTable({
+    fileName: `cell_types_${organ?.name ?? 'unknown'}.tsv`,
+    columnNames: ['Cell Type', 'Cell Ontology ID', 'Matched Datasets', 'Percentage', 'Total Indexed Datasets'],
+    rows: sortedRows.map((row) => [
+      row.cellType,
+      row.clid ?? '',
+      row.matchedDatasets?.length.toString() ?? '0',
+      row.percentage?.toString() ?? '0',
+      row.totalIndexedDatasets?.toString() ?? '0',
+    ]),
+  });
 
   return (
     <StyledTableContainer component={Paper}>
@@ -136,7 +152,12 @@ function CellTypesTable({ cellTypes }: CellTypesTableProps) {
             />
             <TableCell sx={{ backgroundColor: 'background.paper' }}>
               <Stack alignItems="end">
-                <DownloadButton tooltip="Download table in TSV format." sx={{ right: 1 }} />
+                <DownloadButton
+                  disabled={isLoading}
+                  tooltip="Download table in TSV format."
+                  sx={{ right: 1 }}
+                  onClick={download}
+                />
               </Stack>
             </TableCell>
           </TableRow>
