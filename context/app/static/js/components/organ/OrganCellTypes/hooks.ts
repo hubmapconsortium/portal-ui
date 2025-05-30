@@ -25,19 +25,24 @@ export function useCellTypeRows(cellTypes: string[]) {
   const { datasets: totalIndexedDatasets, isLoading: isLoadingTotalDatasets } = useIndexedDatasetsForOrgan();
 
   const rows = useMemo(() => {
-    return cellTypes.map((cellType, index) => {
-      const matches = matchedDatasets?.[index]?.datasets ?? [];
-      const matchedDatasetsCount = matches.length;
-      const percentage = percent.format(matchedDatasetsCount / totalIndexedDatasets.length);
+    return (
+      cellTypes
+        .map((cellType, index) => {
+          const matches = matchedDatasets?.[index]?.datasets ?? [];
+          const matchedDatasetsCount = matches.length;
+          const percentage = percent.format(matchedDatasetsCount / totalIndexedDatasets.length);
 
-      return {
-        cellType,
-        clid: clids?.[index].CLIDs?.[0],
-        matchedDatasets: matches,
-        totalIndexedDatasets: totalIndexedDatasets.length,
-        percentage,
-      };
-    });
+          return {
+            cellType,
+            clid: clids?.[index].CLIDs?.[0],
+            matchedDatasets: matches,
+            totalIndexedDatasets: totalIndexedDatasets.length,
+            percentage,
+          };
+        })
+        // Hide the "other" cell type annotation
+        .filter((row) => row.cellType.toLowerCase() !== 'other')
+    );
   }, [cellTypes, clids, matchedDatasets, totalIndexedDatasets.length]);
 
   const isLoading = isLoadingClids || isLoadingMatchedDatasets || isLoadingTotalDatasets;
