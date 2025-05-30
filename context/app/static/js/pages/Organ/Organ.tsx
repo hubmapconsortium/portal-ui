@@ -1,8 +1,9 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import Typography from '@mui/material/Typography';
 
 import Azimuth from 'js/components/organ/Azimuth';
 import Assays from 'js/components/organ/Assays';
+import CellTypes from 'js/components/organ/OrganCellTypes';
 import Description from 'js/components/organ/Description';
 import HumanReferenceAtlas from 'js/components/organ/HumanReferenceAtlas';
 import Samples from 'js/components/organ/Samples';
@@ -11,29 +12,34 @@ import DetailLayout from 'js/components/detailPage/DetailLayout';
 import CellPopulationPlot from 'js/components/organ/CellPop';
 import DataProducts from 'js/components/organ/DataProducts';
 import { OrganContextProvider } from 'js/components/organ/contexts';
-import { useAssayBucketsQuery, useDataProducts, useHasSamplesQuery, useLabelledDatasetsQuery } from './hooks';
+import {
+  useAssayBucketsQuery,
+  useDataProducts,
+  useHasSamplesQuery,
+  useLabelledDatasetsQuery,
+  useCellTypesOfOrgan,
+  useSearchItems,
+} from './hooks';
 
 interface OrganProps {
   organ: OrganFile;
 }
 
-const { summaryId, hraId, cellpopId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
+const { summaryId, hraId, cellpopId, cellTypesId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
 
 function Organ({ organ }: OrganProps) {
-  const searchItems = useMemo(
-    () => (organ.search.length > 0 ? organ.search : [organ.name]),
-    [organ.search, organ.name],
-  );
-
+  const searchItems = useSearchItems(organ);
   const assayBuckets = useAssayBucketsQuery(searchItems);
   const samplesHits = useHasSamplesQuery(searchItems);
   const labeledDatasetUuids = useLabelledDatasetsQuery(searchItems);
   const { dataProducts, isLoading, isLateral } = useDataProducts(organ);
+  const cellTypes = useCellTypesOfOrgan(organ.name);
 
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
     [hraId]: Boolean(organ.has_iu_component),
     [cellpopId]: labeledDatasetUuids.length > 0,
+    [cellTypesId]: cellTypes.length > 0,
     [referenceId]: Boolean(organ?.azimuth),
     [assaysId]: assayBuckets.length > 0,
     [dataProductsId]: dataProducts.length > 0,
@@ -52,6 +58,7 @@ function Organ({ organ }: OrganProps) {
         <Description shouldDisplay={shouldDisplaySection[summaryId]} />
         <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[hraId]} />
         <CellPopulationPlot uuids={labeledDatasetUuids} shouldDisplay={shouldDisplaySection[cellpopId]} />
+        <CellTypes shouldDisplay={shouldDisplaySection[cellTypesId]} cellTypes={cellTypes} />
         <Azimuth shouldDisplay={shouldDisplaySection[referenceId]} />
         <Assays organTerms={searchItems} bucketData={assayBuckets} shouldDisplay={shouldDisplaySection[assaysId]} />
         <DataProducts

@@ -49,6 +49,7 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   assays: DatasetIcon,
   samples: SampleIcon,
   'cell-population-plot': CellTypeIcon,
+  'cell-types': CellTypeIcon,
   'sent-invitations-status': SentIcon,
   templates: WorkspacesIcon,
 } as const;

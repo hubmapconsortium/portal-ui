@@ -5,82 +5,19 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import Button from '@mui/material/Button';
 import Paper from '@mui/material/Paper';
 import LinearProgress from '@mui/material/LinearProgress';
-import { useEventCallback } from '@mui/material/utils';
 
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import SelectableHeaderCell from 'js/shared-styles/tables/SelectableHeaderCell';
 import SelectableRowCell from 'js/shared-styles/tables/SelectableRowCell';
-import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTableHead';
 import useScrollTable from 'js/hooks/useScrollTable';
-import { SortState } from 'js/hooks/useSortState';
 import NumSelectedHeader from 'js/shared-styles/tables/NumSelectedHeader';
 import { Entity, EventInfo } from 'js/components/types';
-import { trackEvent } from 'js/helpers/trackers';
-import { Column, EntitiesTabTypes } from './types';
+import { EntitiesTabTypes } from './types';
 import ExpandableRow from '../ExpandableRow';
 import ExpandableRowCell from '../ExpandableRowCell';
-
-interface EntityHeaderCellTypes<Doc> {
-  column: Column<Doc>;
-  setSort: (columnId: string) => void;
-  sortState: SortState;
-  trackingInfo?: EventInfo;
-}
-
-function EntityHeaderCell<Doc>({ column, setSort, sortState, trackingInfo }: EntityHeaderCellTypes<Doc>) {
-  const handleClick = useEventCallback(() => {
-    if (trackingInfo) {
-      trackEvent({
-        ...trackingInfo,
-        action: `${trackingInfo.action} / Sort Table`,
-        label: `${trackingInfo.label} ${column.label}`,
-      });
-    }
-    setSort(column.id);
-  });
-
-  if (column.noSort) {
-    return (
-      <HeaderCell key={column.id} sx={({ palette }) => ({ backgroundColor: palette.background.paper })}>
-        {column.label}
-      </HeaderCell>
-    );
-  }
-
-  // This is a workaround to ensure the header cell control is accessible with consistent keyboard navigation
-  // and appearance. The header cell contains a disabled, hidden button that is the full width of the cell. This
-  // allows us to set the header cell to position: relative and create another button that is absolutely positioned
-  // within the cell. The absolute button is the one that is visible and clickable, and takes up the full width of
-  // the cell, which is guaranteed to be wide enough to contain the column label.
-  return (
-    <HeaderCell key={column.id} sx={({ palette }) => ({ backgroundColor: palette.background.paper })}>
-      <Button sx={{ visibility: 'hidden', whiteSpace: 'nowrap', py: 0 }} fullWidth disabled>
-        {column.label}
-      </Button>
-      <Button
-        variant="text"
-        onClick={handleClick}
-        disableTouchRipple
-        sx={{
-          justifyContent: 'flex-start',
-          whiteSpace: 'nowrap',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          width: '100%',
-          height: '100%',
-          pl: 2,
-        }}
-        endIcon={<OrderIcon order={sortState.columnId === column.id ? sortState.direction : undefined} />}
-      >
-        {column.label}
-      </Button>
-    </HeaderCell>
-  );
-}
+import EntityHeaderCell from './EntityTableHeaderCell';
 
 function TablePaddingRow({ padding }: { padding: number }) {
   return (
@@ -102,6 +39,7 @@ interface EntityTableProps<Doc extends Entity>
   maxHeight?: number;
   onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange?: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
+  reverseExpandIndicator?: boolean;
 }
 
 const headerRowHeight = 60;
@@ -120,6 +58,7 @@ function EntityTable<Doc extends Entity>({
   numSelected,
   onSelectAllChange,
   onSelectChange,
+  reverseExpandIndicator,
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -200,16 +139,22 @@ function EntityTable<Doc extends Entity>({
             const hit = searchHits[virtualRow.index];
             if (hit) {
               return (
+                // @ts-expect-error `numCells` and the other props are only provided when `ExpandedContent` is defined
                 <TableRowComponent
                   sx={{ height: virtualRow.size }}
-                  numCells={columns.length + (isSelectable ? 1 : 0) + 1}
                   key={hit?._id}
-                  // @ts-expect-error the expanded content's props should be the same as the hit's _source
-                  expandedContent={ExpandedContent ? <ExpandedContent {...hit?._source} /> : undefined}
-                  isExpandedToStart={virtualRow.index === 0}
-                  expandTooltip={expandTooltip}
-                  collapseTooltip={collapseTooltip}
-                  disabledTooltipTitle={disabledTooltipTitle}
+                  {...(ExpandedContent
+                    ? {
+                        // @ts-expect-error the expanded content's props should be the same as the hit's _source
+                        expandedContent: <ExpandedContent {...hit?._source} />,
+                        isExpandedToStart: virtualRow.index === 0,
+                        numCells: columns.length + (isSelectable ? 2 : 1),
+                        expandTooltip,
+                        collapseTooltip,
+                        disabledTooltipTitle,
+                        reverse: reverseExpandIndicator,
+                      }
+                    : {})}
                 >
                   {isSelectable && (
                     <SelectableRowCell
