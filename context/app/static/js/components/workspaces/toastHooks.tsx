@@ -105,6 +105,12 @@ export const useWorkspaceToasts = () => {
     [toastSuccess],
   );
 
+  const toastSuccessStopWorkspace = useCallback(
+    (names: string | React.ReactElement) =>
+      toastSuccess(<Typography>Successfully stopped workspaces: {names}</Typography>),
+    [toastSuccess],
+  );
+
   const toastSuccessShareInvitation = useCallback(
     (names: string | React.ReactElement) =>
       toastSuccess(<Typography>Successfully shared workspaces: {names}</Typography>),
@@ -142,6 +148,7 @@ export const useWorkspaceToasts = () => {
     toastSuccessDeleteWorkspaces,
     toastSuccessAddDataset,
     toastSuccessLaunchWorkspace,
+    toastSuccessStopWorkspace,
     toastSuccessShareInvitation,
     toastSuccessAcceptInvitation,
     toastSuccessDeclineInvitation,

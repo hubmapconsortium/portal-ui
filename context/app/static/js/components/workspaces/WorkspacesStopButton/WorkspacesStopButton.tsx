@@ -15,7 +15,7 @@ type WorkspacesStopButtonProps = {
 function WorkspacesStopButton({ workspaceIds, disabled, tooltip, ...rest }: WorkspacesStopButtonProps) {
   const { workspacesList } = useWorkspacesList();
   const { handleStopWorkspaces, isStoppingWorkspace } = useWorkspacesList();
-  const { toastErrorStopWorkspace } = useWorkspaceToasts();
+  const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
 
   const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
 
@@ -24,6 +24,7 @@ function WorkspacesStopButton({ workspaceIds, disabled, tooltip, ...rest }: Work
 
   const updatedTooltip = allSelectedWorkspacesAreRunning ? tooltip : 'Only running workspaces can be stopped';
   const workspaceIdArr = Array.from(workspaceIds).map(Number);
+  const workspaceNameList = generateBoldCommaList(workspaces.map((ws) => ws.name));
 
   if (noWorkspacesAreRunning) {
     return null;
@@ -32,10 +33,14 @@ function WorkspacesStopButton({ workspaceIds, disabled, tooltip, ...rest }: Work
   return (
     <WorkspaceTooltipButton
       onClick={() => {
-        handleStopWorkspaces(workspaceIdArr).catch((err) => {
-          toastErrorStopWorkspace(generateBoldCommaList(workspaces.map((ws) => ws.name)));
-          console.error(err);
-        });
+        handleStopWorkspaces(workspaceIdArr)
+          .then(() => {
+            toastSuccessStopWorkspace(workspaceNameList);
+          })
+          .catch((err) => {
+            toastErrorStopWorkspace(workspaceNameList);
+            console.error(err);
+          });
       }}
       disabled={!allSelectedWorkspacesAreRunning || isStoppingWorkspace || disabled}
       tooltip={updatedTooltip}
