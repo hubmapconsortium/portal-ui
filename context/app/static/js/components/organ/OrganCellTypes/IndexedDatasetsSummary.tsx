@@ -2,13 +2,13 @@ import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
-import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import { useUUIDsFromHubmapIds } from '../hooks';
 import { getSearchURL } from '../utils';
+import { StyledDetailsAccordion } from './styles';
 
 function IndexedDatasetsSummary() {
   const { datasets, isLoading: isLoadingSCFind, datasetTypes } = useIndexedDatasetsForOrgan();
@@ -18,7 +18,7 @@ function IndexedDatasetsSummary() {
 
   return (
     <Stack spacing={2} sx={{ marginTop: 2 }}>
-      <DetailsAccordion
+      <StyledDetailsAccordion
         summary={
           <Typography variant="subtitle1" component="span">
             Indexed Datasets Summary
@@ -30,16 +30,6 @@ function IndexedDatasetsSummary() {
             component: 'div',
           },
         }}
-        sx={{
-          '& .MuiAccordionSummary-root': {
-            flexDirection: 'row',
-            justifyContent: 'start',
-          },
-          '& .MuiAccordionDetails-root': {
-            padding: 0,
-            spacing: 2,
-          },
-        }}
       >
         <Typography variant="body2" component="div">
           These results are derived from RNAseq datasets that were indexed by the scFind method to identify the cell
@@ -47,7 +37,7 @@ function IndexedDatasetsSummary() {
           differences in data modalities or the availability of cell annotations. This section gives a summary of the
           datasets that are used to compute these results, and only datasets from this organ are included.
         </Typography>
-        <DetailsAccordion
+        <StyledDetailsAccordion
           summary={
             <Stack direction="row" spacing={1} alignItems="center">
               <DatasetIcon />
@@ -56,21 +46,9 @@ function IndexedDatasetsSummary() {
               </Typography>
             </Stack>
           }
-          summaryProps={{
-            sx: {
-              justifyContent: 'start',
-              flexDirection: 'row',
-              alignItems: 'center',
-            },
-          }}
           slotProps={{
             heading: {
               component: 'div',
-            },
-          }}
-          sx={{
-            '& .MuiAccordionSummary-root': {
-              flexDirection: 'row',
             },
           }}
           defaultExpanded
@@ -82,8 +60,8 @@ function IndexedDatasetsSummary() {
               </Typography>
             ))}
           </Stack>
-        </DetailsAccordion>
-      </DetailsAccordion>
+        </StyledDetailsAccordion>
+      </StyledDetailsAccordion>
       <Box>
         {isLoading ? (
           <Skeleton variant="rectangular" width={200} height={40} />
