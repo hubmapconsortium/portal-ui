@@ -129,7 +129,11 @@ export function useSelectedPathwayParticipants() {
 
   // Update the selected genes on pathway change
   useEffect(() => {
-    if (selectedPathway && pathway && !formState.isSubmitted) {
+    if (formState.isSubmitted) {
+      // If the form has been submitted, do not update the genes.
+      return;
+    }
+    if (selectedPathway && pathway) {
       // If a new pathway is selected, set the genes to the new pathway.
       previousSelectedPathway.current = pathway;
       const genes = getParticipantsFromPathway(pathway).map((gene) => ({

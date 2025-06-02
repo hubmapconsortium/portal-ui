@@ -19,7 +19,10 @@ function HubmapIDCell({
   trackingInfo,
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
-  const isNotPublic = mapped_status !== 'Published' || mapped_data_access_level !== 'Public';
+  const isNotPublic =
+    mapped_status &&
+    mapped_data_access_level &&
+    (mapped_status !== 'Published' || mapped_data_access_level !== 'Public');
   const markerGene = useOptionalGeneContext();
 
   const href = useMemo(() => {

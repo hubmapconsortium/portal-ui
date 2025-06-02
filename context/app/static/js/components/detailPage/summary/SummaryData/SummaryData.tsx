@@ -7,7 +7,7 @@ import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonR
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { FlexEnd, StyledTypography, StyledSvgIcon } from './style';
+import { FlexEnd, StyledSvgIcon } from './style';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -48,9 +48,9 @@ function SummaryData({
       <SpacedSectionButtonRow
         leftText={
           <LeftTextContainer>
-            <StyledTypography variant="h2" data-testid="entity-title">
+            <Typography component="h1" variant="h2" marginBottom={0.5} data-testid="entity-title">
               {title}
-            </StyledTypography>
+            </Typography>
             {children && <FlexEnd data-testid="summary-data-parent">{children}</FlexEnd>}
           </LeftTextContainer>
         }

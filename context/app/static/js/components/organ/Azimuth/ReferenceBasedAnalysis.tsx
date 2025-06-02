@@ -15,10 +15,10 @@ interface ReferenceBasedAnalysisProps {
 }
 
 function MarkdownParagraph({
-  key,
   children,
 }: ClassAttributes<HTMLParagraphElement> & HTMLAttributes<HTMLParagraphElement> & ExtraProps) {
-  return <React.Fragment key={key}>{children}</React.Fragment>;
+  // eslint-disable-next-line react/jsx-no-useless-fragment
+  return <>{children}</>;
 }
 
 export default function ReferenceBasedAnalysis({ modalities, nunit, dataref, wrapped }: ReferenceBasedAnalysisProps) {

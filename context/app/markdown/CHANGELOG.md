@@ -1,5 +1,23 @@
 # Changelog
 
+## v1.26.2 - 2025-05-29
+
+- Fix gene pathways effect causing molecular data queries to fail.
+
+
+
+## v1.26.1 - 2025-05-28
+
+- Make admin banner mobile friendly.
+- Added gene pathway selection to molecular data query page.
+- Fix for continuously expanding assay charts on Organ pages.
+- Fix search table sizing issues on Publication and Collection pages.
+- Add facet to dataset search page to filter datasets to only those linked to a publication.
+- Update ordering of data table tabs on Publication detail pages.
+- Update publication header tags for SEO.
+
+
+
 ## v1.26.0 - 2025-05-16
 
 - Update portal sitemap to include all relevant landing and detail pages.

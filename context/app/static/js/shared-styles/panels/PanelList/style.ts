@@ -7,6 +7,7 @@ const PanelScrollBox = styled(Paper)(({ theme }) => {
     [media]: {
       flexGrow: 1,
       overflowY: 'scroll',
+      maxHeight: '400px',
     },
   };
 });
