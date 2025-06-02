@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -7,19 +7,22 @@ import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
 import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import { StyledTableContainer } from 'js/shared-styles/tables';
-import { LineClamp } from 'js/shared-styles/text';
-import { InternalLink } from 'js/shared-styles/Links';
-import { cellTypes } from '../constants';
-import { useGeneEntities } from '../hooks';
-import ViewDatasets from './ViewDatasets';
-import { CellTypeInfo } from '../types';
+import useHyperQueryCellTypes, { GeneSignatureStats } from 'js/api/scfind/useHyperQueryCellTypes';
+import useLabelToCLID from 'js/api/scfind/useLabelToCLID';
+import { percent } from 'js/helpers/number-format';
+import { CLIDCell } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
+import { useEventCallback } from '@mui/material/utils';
+import { cellTypes as cellTypesSection } from '../constants';
+import { useGenePageContext } from '../hooks';
 
-const columnLabels = ['Cell Types', 'Description', 'Organs', ''];
+const columnLabels = ['Cell Type', 'Cell Ontology ID', 'Cells Hit / Total Cells (%)', 'p-value'];
 
 export function TableSkeleton({ numberOfCols = columnLabels.length }: { numberOfCols?: number }) {
   return (
@@ -29,54 +32,88 @@ export function TableSkeleton({ numberOfCols = columnLabels.length }: { numberOf
           <LinearProgress />
         </TableCell>
       </TableRow>
-      <LoadingTableRows numberOfRows={3} numberOfCols={numberOfCols} />
+      <LoadingTableRows numberOfRows={4} numberOfCols={numberOfCols} />
     </>
   );
 }
 
-function EmptyCellFallback() {
-  return <>&mdash;</>;
-}
-
-function OrgansCell({ organs }: { organs: { name: string }[] }) {
-  const contents = !organs ? (
-    <EmptyCellFallback />
-  ) : (
-    organs.map(({ name }, i) => (
-      <Fragment key={name}>
-        <InternalLink href={`/organ/${name}`}>{name}</InternalLink>
-        {i < organs.length - 1 && ', '}
-      </Fragment>
-    ))
-  );
-
-  return <TableCell sx={{ whiteSpace: 'nowrap' }}>{contents}</TableCell>;
-}
-
-function CellTypesRow({ cellType }: { cellType: CellTypeInfo }) {
+function CellTypesRow({ cellType }: { cellType: GeneSignatureStats }) {
+  const { data: clid } = useLabelToCLID({ cellType: cellType.cell_type });
+  const formattedCellName = cellType.cell_type.split('.').slice(1).join('.');
   return (
     <TableRow>
-      <TableCell>{cellType.name}</TableCell>
+      <TableCell>{formattedCellName}</TableCell>
       <TableCell>
-        <LineClamp lines={2}>{cellType.definition}</LineClamp>
+        <CLIDCell clid={clid?.CLIDs?.[0]} />
       </TableCell>
-      <OrgansCell organs={cellType.organs} />
       <TableCell>
-        <ViewDatasets id={cellType.id} name={cellType.name} />
+        {cellType.cell_hits} / {cellType.total_cells} ({percent.format(cellType.cell_hits / cellType.total_cells)}){' '}
       </TableCell>
+      <TableCell>{cellType['adj-pval']}</TableCell>
     </TableRow>
   );
 }
 
 function CellTypesTable() {
-  const { data, isLoading } = useGeneEntities();
+  const { geneSymbol } = useGenePageContext();
 
-  if (!isLoading && data?.cell_types.length === 0) {
+  const [selectedOrgan, setSelectedOrgan] = useState<string>('');
+  const handleOrganChange = useEventCallback((event: SelectChangeEvent<string>) => {
+    setSelectedOrgan(event.target.value);
+  });
+
+  const { data: allCellTypesForGene, isLoading: isLoadingAllCellTypes } = useHyperQueryCellTypes({
+    geneList: geneSymbol,
+    datasetName: undefined, // Fetch all datasets
+  });
+
+  const { data: cellTypes, isLoading: isLoadingCurrentCellTypes } = useHyperQueryCellTypes({
+    geneList: geneSymbol,
+    datasetName: selectedOrgan,
+  });
+
+  const cellTypeOrgans = useMemo(
+    () =>
+      Array.from(
+        new Set(
+          allCellTypesForGene?.findGeneSignatures
+            ? allCellTypesForGene.findGeneSignatures.map((ct) => ct.cell_type.split('.')[0])
+            : [],
+        ),
+      ),
+    [allCellTypesForGene],
+  );
+
+  const filteredCellTypes = useMemo(() => {
+    if (!selectedOrgan) {
+      return cellTypes?.findGeneSignatures ?? [];
+    }
+    return cellTypes?.findGeneSignatures?.filter((ct) => ct.cell_type.startsWith(`${selectedOrgan}.`)) ?? [];
+  }, [cellTypes, selectedOrgan]);
+
+  const isLoading = isLoadingAllCellTypes || isLoadingCurrentCellTypes;
+
+  if (!isLoading && !filteredCellTypes.length) {
     return 'No cell types found.';
   }
 
   return (
     <StyledTableContainer component={Paper}>
+      <Select
+        value={selectedOrgan}
+        label="Organ Sources"
+        onChange={handleOrganChange}
+        displayEmpty
+        fullWidth
+        variant="outlined"
+      >
+        <MenuItem value="">All Available Organs</MenuItem>
+        {Array.from(new Set(cellTypeOrgans)).map((organ) => (
+          <MenuItem key={organ} value={organ}>
+            {organ}
+          </MenuItem>
+        ))}
+      </Select>
       <Table stickyHeader>
         <TableHead>
           <TableRow>
@@ -86,11 +123,10 @@ function CellTypesTable() {
           </TableRow>
         </TableHead>
         <TableBody>
-          {isLoading ? (
-            <TableSkeleton />
-          ) : (
-            data?.cell_types.map((cellType) => <CellTypesRow key={cellType.id} cellType={cellType} />)
-          )}
+          {isLoading && <TableSkeleton />}
+          {filteredCellTypes.map((cellType) => (
+            <CellTypesRow key={cellType.cell_type} cellType={cellType} />
+          ))}
         </TableBody>
       </Table>
     </StyledTableContainer>
@@ -98,8 +134,9 @@ function CellTypesTable() {
 }
 
 export default function CellTypes() {
+  const { geneSymbolUpper } = useGenePageContext();
   return (
-    <CollapsibleDetailPageSection id={cellTypes.id} title={cellTypes.title} iconTooltipText={cellTypes.tooltip}>
+    <CollapsibleDetailPageSection id={cellTypesSection.id} title={`Cell Types with ${geneSymbolUpper} as Marker Gene`}>
       <CellTypesTable />
     </CollapsibleDetailPageSection>
   );
