@@ -5,6 +5,7 @@ import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 
 import Skeleton from '@mui/material/Skeleton';
 import useEntityStore from 'js/stores/useEntityStore';
+import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import { useGeneOntology } from '../hooks';
 import KnownReferences from './KnownReferences';
 
@@ -17,6 +18,17 @@ function SummarySkeleton() {
     </>
   );
 }
+
+const relevantPages = [
+  {
+    link: '/genes',
+    children: 'Biomarkers',
+  },
+  {
+    link: '/cells',
+    children: 'Molecular and Cellular Data Query',
+  },
+];
 
 function Summary() {
   const { data } = useGeneOntology();
@@ -47,6 +59,7 @@ function Summary() {
         >
           <KnownReferences />
         </LabelledSectionText>
+        <RelevantPagesSection pages={relevantPages} />
       </SummaryPaper>
     </DetailPageSection>
   );
