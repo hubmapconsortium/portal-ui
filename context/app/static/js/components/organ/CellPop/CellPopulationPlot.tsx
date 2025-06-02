@@ -15,6 +15,7 @@ import { useTrackCellpop } from './hooks';
 
 interface CellPopulationPlotProps {
   uuids: string[];
+  organ: string;
 }
 
 function visualizationSelector(store: VisualizationStore) {
@@ -26,7 +27,7 @@ function visualizationSelector(store: VisualizationStore) {
 
 const { cellpopId } = OrganPageIds;
 
-function CellPopulationPlot({ uuids }: CellPopulationPlotProps) {
+function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
   const { fullscreenVizId, theme } = useVisualizationStore(visualizationSelector);
   const vizIsFullscreen = fullscreenVizId === cellpopId;
 
@@ -34,7 +35,7 @@ function CellPopulationPlot({ uuids }: CellPopulationPlotProps) {
 
   return (
     <OrganDetailSection title="Cell Population Plot" id={cellpopId} icon={CellTypeIcon}>
-      <CellPopDescription />
+      <CellPopDescription organ={organ} />
       <CellPopActions id={cellpopId} />
       <Paper>
         <ExpandableDiv $isExpanded={vizIsFullscreen} $theme={theme} $nonExpandedHeight={1000}>
