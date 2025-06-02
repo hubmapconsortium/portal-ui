@@ -1,2 +1,2 @@
 - Add facets to filter datasets with annotations.
-- Replace hard coded list of annotated RNAseq datasets with search query.
+- Replace hard coded list of Azimuth annotated datasets with search query.
