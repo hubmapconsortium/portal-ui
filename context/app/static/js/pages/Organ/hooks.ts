@@ -109,7 +109,7 @@ export function useLabelledDatasetsQuery(searchItems: string[]) {
             },
             {
               term: {
-                'calculated_metadata.annotation_tools': 'Azimuth',
+                'calculated_metadata.annotation_tools.keyword': 'Azimuth',
               },
             },
             {
