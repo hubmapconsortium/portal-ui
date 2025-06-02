@@ -82,9 +82,9 @@ export function useAssayBucketsQuery(searchItems: string[]) {
 export function useLabelledDatasetsQuery(searchItems: string[]) {
   const datasetsQuery = useMemo(
     () => ({
-      filter: {
+      query: {
         bool: {
-          must: [
+          filter: [
             {
               term: {
                 'entity_type.keyword': 'Dataset',
