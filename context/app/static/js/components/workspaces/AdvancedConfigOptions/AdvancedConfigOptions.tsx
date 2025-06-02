@@ -10,7 +10,7 @@ import { useEventCallback } from '@mui/material/utils';
 
 import { ControllerRenderProps, FieldValues, Path, useController, UseControllerProps } from 'react-hook-form';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { PrimarySwitch } from 'js/shared-styles/switches';
+import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
 import { trackEvent } from 'js/helpers/trackers';
 import { useWorkspacesEventContext } from 'js/components/workspaces/contexts';
 import { StyledAccordion } from './style';
@@ -170,20 +170,16 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
           {configSliderOptions.map((props) => (
             <ConfigSlider key={props.id} field={field} {...props} />
           ))}
-          <StyledSubtitle2>Enable GPU</StyledSubtitle2>
-          <Stack direction="row" component="label" alignItems="center">
-            <Typography variant="caption">Disabled</Typography>
-            <PrimarySwitch
-              checked={field.value.gpu_enabled as boolean}
-              onChange={(e, value) =>
-                field.onChange({
-                  ...field.value,
-                  gpu_enabled: value,
-                })
-              }
-            />
-            <Typography variant="caption">Enabled</Typography>
-          </Stack>
+          <LabeledPrimarySwitch
+            label="Enable GPU"
+            checked={field.value.gpu_enabled as boolean}
+            onChange={(e, value) =>
+              field.onChange({
+                ...field.value,
+                gpu_enabled: value,
+              })
+            }
+          />
         </Stack>
       </AccordionDetails>
     </StyledAccordion>

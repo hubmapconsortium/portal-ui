@@ -1,3 +1,4 @@
 import PrimarySwitch from './PrimarySwitch';
+import LabeledPrimarySwitch from './LabeledPrimarySwitch';
 
-export { PrimarySwitch };
+export { PrimarySwitch, LabeledPrimarySwitch };
