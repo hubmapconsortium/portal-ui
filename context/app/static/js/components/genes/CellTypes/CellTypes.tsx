@@ -9,22 +9,69 @@ import LinearProgress from '@mui/material/LinearProgress';
 import Paper from '@mui/material/Paper';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
+import InputLabel from '@mui/material/InputLabel';
+import FormControl from '@mui/material/FormControl';
+import FormHelperText from '@mui/material/FormHelperText';
+import { useEventCallback } from '@mui/material/utils';
+import Skeleton from '@mui/material/Skeleton';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 
 import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 import useHyperQueryCellTypes, { GeneSignatureStats } from 'js/api/scfind/useHyperQueryCellTypes';
-import useLabelToCLID from 'js/api/scfind/useLabelToCLID';
+import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { percent } from 'js/helpers/number-format';
 import { CLIDCell } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
-import { useEventCallback } from '@mui/material/utils';
-import { cellTypes as cellTypesSection } from '../constants';
+import { useSortState } from 'js/hooks/useSortState';
+import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
+import { useDownloadTable } from 'js/helpers/download';
+import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
+import CellTypeDescription from 'js/components/organ/OrganCellTypes/CellTypeDescription';
+import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
+import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
+import IndexedDatasetsSummary from 'js/components/organ/OrganCellTypes/IndexedDatasetsSummary';
+import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
+import useSearchData from 'js/hooks/useSearchData';
+import Description from 'js/shared-styles/sections/Description';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import { useGenePageContext } from '../hooks';
+import { cellTypes as cellTypesSection } from '../constants';
 
-const columnLabels = ['Cell Type', 'Cell Ontology ID', 'Cells Hit / Total Cells (%)', 'p-value'];
+const downloadLabels = ['Cell Type', 'Cell Ontology ID', 'Cells Hit', 'Total Cells', 'Percentage', 'p-value'];
 
-export function TableSkeleton({ numberOfCols = columnLabels.length }: { numberOfCols?: number }) {
+const noop = () => null;
+
+const columns = {
+  cellType: {
+    id: 'cell_type',
+    label: 'Cell Type',
+    cellContent: noop,
+  },
+  clid: {
+    id: 'clid',
+    label: 'Cell Ontology ID',
+    cellContent: noop,
+  },
+  cellsHitPercent: {
+    id: 'cell_hits',
+    label: 'Cells Hit / Total Cells (%)',
+    cellContent: noop,
+    tooltipText:
+      'Proportion of the amount of cells of this type that significantly express this marker gene relative to the total count of this cell type.',
+  },
+  pval: {
+    id: 'adj-pval',
+    label: 'p-value',
+    cellContent: noop,
+    tooltipText: 'Statistical significance of gene expression for this cell type in the context of the selected organ.',
+  },
+};
+
+const columnIdMap = Object.fromEntries(Object.entries(columns).map(([key, value]) => [key, value.id]));
+const columnList = [columns.cellType, columns.clid, columns.cellsHitPercent, columns.pval];
+
+export function TableSkeleton({ numberOfCols = downloadLabels.length }: { numberOfCols?: number }) {
   return (
     <>
       <TableRow>
@@ -37,20 +84,49 @@ export function TableSkeleton({ numberOfCols = columnLabels.length }: { numberOf
   );
 }
 
-function CellTypesRow({ cellType }: { cellType: GeneSignatureStats }) {
-  const { data: clid } = useLabelToCLID({ cellType: cellType.cell_type });
+interface CellTypeRow {
+  cell_type: string;
+  clid: string | null;
+  cell_hits: number;
+  total_cells: number;
+  percentage: string;
+  'adj-pval': number;
+}
+
+const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
+  const { data: clids } = useLabelsToCLIDs(useMemo(() => cellTypes.map((ct) => ct.cell_type), [cellTypes]));
+
+  return useMemo(() => {
+    return cellTypes.map((cellType, idx) => ({
+      cell_type: cellType.cell_type,
+      clid: clids?.[idx]?.CLIDs?.[0] ?? null,
+      cell_hits: cellType.cell_hits,
+      total_cells: cellType.total_cells,
+      percentage: percent.format(cellType.cell_hits / cellType.total_cells),
+      'adj-pval': cellType['adj-pval'],
+    }));
+  }, [cellTypes, clids]);
+};
+
+function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
   const formattedCellName = cellType.cell_type.split('.').slice(1).join('.');
   return (
-    <TableRow>
-      <TableCell>{formattedCellName}</TableCell>
-      <TableCell>
-        <CLIDCell clid={clid?.CLIDs?.[0]} />
-      </TableCell>
-      <TableCell>
+    <ExpandableRow
+      numCells={6}
+      expandedContent={cellType.clid ? <CellTypeDescription clid={cellType.clid} /> : <Skeleton />}
+      reverse
+    >
+      <ExpandableRowCell>{formattedCellName}</ExpandableRowCell>
+      <ExpandableRowCell>
+        <CLIDCell clid={cellType.clid} />
+      </ExpandableRowCell>
+      <ExpandableRowCell>
         {cellType.cell_hits} / {cellType.total_cells} ({percent.format(cellType.cell_hits / cellType.total_cells)}){' '}
-      </TableCell>
-      <TableCell>{cellType['adj-pval']}</TableCell>
-    </TableRow>
+      </ExpandableRowCell>
+      <ExpandableRowCell>{cellType['adj-pval']}</ExpandableRowCell>
+      {/* Empty action column cell */}
+      <ExpandableRowCell />
+    </ExpandableRow>
   );
 }
 
@@ -60,6 +136,11 @@ function CellTypesTable() {
   const [selectedOrgan, setSelectedOrgan] = useState<string>('');
   const handleOrganChange = useEventCallback((event: SelectChangeEvent<string>) => {
     setSelectedOrgan(event.target.value);
+  });
+
+  const { sortState, setSort } = useSortState(columnIdMap, {
+    columnId: 'adj-pval',
+    direction: 'desc',
   });
 
   const { data: allCellTypesForGene, isLoading: isLoadingAllCellTypes } = useHyperQueryCellTypes({
@@ -84,59 +165,176 @@ function CellTypesTable() {
     [allCellTypesForGene],
   );
 
-  const filteredCellTypes = useMemo(() => {
-    if (!selectedOrgan) {
-      return cellTypes?.findGeneSignatures ?? [];
-    }
-    return cellTypes?.findGeneSignatures?.filter((ct) => ct.cell_type.startsWith(`${selectedOrgan}.`)) ?? [];
-  }, [cellTypes, selectedOrgan]);
+  const cellTypeRows = useCellTypeRows(cellTypes?.findGeneSignatures);
+
+  const filteredSortedCellTypes = useMemo(() => {
+    const sortedCellTypes = [...cellTypeRows].sort((a, b) => {
+      if (!sortState.columnId) {
+        return 0; // No sorting if no column is selected
+      }
+      const aValue = a[sortState.columnId as keyof CellTypeRow];
+      const bValue = b[sortState.columnId as keyof CellTypeRow];
+      if (aValue === bValue) return 0; // Equal values
+      if (typeof aValue === 'string' && typeof bValue === 'string') {
+        return aValue.localeCompare(bValue) * (sortState.direction === 'asc' ? 1 : -1);
+      }
+      if (typeof aValue === 'number' && typeof bValue === 'number') {
+        return (aValue - bValue) * (sortState.direction === 'asc' ? 1 : -1);
+      }
+      return 0;
+    });
+    return sortedCellTypes.filter((cellType) => {
+      if (!selectedOrgan) return true; // Show all if no organ is selected
+      return cellType.cell_type.startsWith(`${selectedOrgan}.`);
+    });
+  }, [cellTypeRows, selectedOrgan, sortState.columnId, sortState.direction]);
+
+  const download = useDownloadTable({
+    fileName: `cell_types_${geneSymbol ?? 'unknown'}_${selectedOrgan || 'all_organs'}.tsv`,
+    columnNames: downloadLabels,
+    rows: filteredSortedCellTypes.map((row) => [
+      row.cell_type,
+      row.clid ?? '',
+      row.cell_hits.toString(),
+      row.total_cells.toString(),
+      row.percentage,
+      row['adj-pval'].toString(),
+    ]),
+  });
 
   const isLoading = isLoadingAllCellTypes || isLoadingCurrentCellTypes;
 
-  if (!isLoading && !filteredCellTypes.length) {
+  if (!isLoading && !filteredSortedCellTypes.length) {
     return 'No cell types found.';
   }
 
   return (
-    <StyledTableContainer component={Paper}>
-      <Select
-        value={selectedOrgan}
-        label="Organ Sources"
-        onChange={handleOrganChange}
-        displayEmpty
-        fullWidth
-        variant="outlined"
-      >
-        <MenuItem value="">All Available Organs</MenuItem>
-        {Array.from(new Set(cellTypeOrgans)).map((organ) => (
-          <MenuItem key={organ} value={organ}>
-            {organ}
+    <Paper>
+      <FormControl fullWidth sx={{ px: 2 }}>
+        <InputLabel htmlFor="cell-types-organ-sources" variant="outlined" shrink sx={{ ml: 2 }}>
+          Organ Sources
+        </InputLabel>
+        <Select
+          id="cell-types-organ-sources"
+          value={selectedOrgan}
+          label="Organ Sources"
+          defaultValue=""
+          onChange={handleOrganChange}
+          fullWidth
+          displayEmpty
+          variant="outlined"
+        >
+          <MenuItem value="" aria-label="Display cell types from all organs">
+            All Available Organs
           </MenuItem>
-        ))}
-      </Select>
-      <Table stickyHeader>
-        <TableHead>
-          <TableRow>
-            {columnLabels.map((label) => (
-              <TableCell key={label}>{label}</TableCell>
-            ))}
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {isLoading && <TableSkeleton />}
-          {filteredCellTypes.map((cellType) => (
-            <CellTypesRow key={cellType.cell_type} cellType={cellType} />
+          {Array.from(new Set(cellTypeOrgans)).map((organ) => (
+            <MenuItem key={organ} value={organ}>
+              {organ}
+            </MenuItem>
           ))}
-        </TableBody>
-      </Table>
-    </StyledTableContainer>
+        </Select>
+        <FormHelperText>
+          Select organs from scFind indexed organs to identify cell types that express the marker gene. Selecting organs
+          will recalculate statistical values.
+        </FormHelperText>
+      </FormControl>
+
+      <StyledTableContainer>
+        <Table stickyHeader>
+          <TableHead>
+            <TableRow>
+              {/* Expand column */}
+              <TableCell sx={{ backgroundColor: 'background.paper' }} />
+              {columnList.map((column) => (
+                <EntityHeaderCell column={column} key={column.id} setSort={setSort} sortState={sortState} />
+              ))}
+              <TableCell sx={{ backgroundColor: 'background.paper' }} align="right">
+                <DownloadButton
+                  disabled={isLoading}
+                  tooltip="Download table in TSV format."
+                  sx={{ right: 1 }}
+                  onClick={download}
+                />
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {isLoading && <TableSkeleton />}
+            {filteredSortedCellTypes.map((cellType) => (
+              <CellTypesRow key={cellType.cell_type} cellType={cellType} />
+            ))}
+          </TableBody>
+        </Table>
+      </StyledTableContainer>
+    </Paper>
   );
 }
 
+interface DatasetGeneAggregations {
+  datasetTypes: {
+    buckets: {
+      key: string;
+      doc_count: number;
+    }[];
+  };
+}
+
+const useIndexedDatasetsForGene = () => {
+  const { geneSymbol } = useGenePageContext();
+  const { data: datasets, isLoading: isLoadingDatasets } = useFindDatasetForGenes({
+    geneList: geneSymbol,
+  });
+
+  const { searchData, isLoading: isLoadingDatasetTypes } = useSearchData<unknown, DatasetGeneAggregations>({
+    query: {
+      bool: {
+        must: [
+          {
+            terms: {
+              'hubmap_id.keyword': datasets?.findDatasets[geneSymbol] ?? [],
+            },
+          },
+        ],
+      },
+    },
+    aggs: {
+      datasetTypes: {
+        terms: {
+          field: 'raw_dataset_type.keyword',
+          order: {
+            _term: 'asc',
+          },
+          size: 10000,
+        },
+      },
+    },
+    size: 10000,
+    _source: ['hubmap_id'],
+  });
+
+  const datasetUUIDs = searchData?.hits?.hits.map((h) => h._id) ?? [];
+
+  const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
+
+  return {
+    datasets: datasetUUIDs,
+    datasetTypes,
+    isLoading: isLoadingDatasets || isLoadingDatasetTypes,
+  };
+};
+
 export default function CellTypes() {
   const { geneSymbolUpper } = useGenePageContext();
+  const indexedDatasetsInfo = useIndexedDatasetsForGene();
   return (
     <CollapsibleDetailPageSection id={cellTypesSection.id} title={`Cell Types with ${geneSymbolUpper} as Marker Gene`}>
+      <Description belowTheFold={<IndexedDatasetsSummary {...indexedDatasetsInfo} />}>
+        The table displays cell types expressing this marker gene as identified by the{' '}
+        <OutboundIconLink href="https://www.nature.com/articles/s41592-021-01076-9">scFind method</OutboundIconLink>. It
+        calculates cell count proportions and statistical metrics based on uniformly processed HuBMAP RNAseq datasets
+        with cell type annotations. The table can be filtered by organs and available for download for further analysis.
+        Filtering by organ will recompute the results and recalculate statistical values accordingly.
+      </Description>
       <CellTypesTable />
     </CollapsibleDetailPageSection>
   );

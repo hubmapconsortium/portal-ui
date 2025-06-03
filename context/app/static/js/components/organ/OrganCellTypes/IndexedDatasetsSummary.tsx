@@ -1,20 +1,29 @@
 import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
 import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import { DatasetIcon } from 'js/shared-styles/icons';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import { useUUIDsFromHubmapIds } from '../hooks';
 import { getSearchURL } from '../utils';
 import { StyledDetailsAccordion } from './styles';
 
-function IndexedDatasetsSummary() {
-  const { datasets, isLoading: isLoadingSCFind, datasetTypes } = useIndexedDatasetsForOrgan();
+interface IndexedDatasetsSummaryProps {
+  datasets: string[];
+  datasetTypes: { key: string; doc_count: number }[];
+  isLoadingDatasets?: boolean;
+}
+
+function IndexedDatasetsSummary({
+  datasets = [],
+  datasetTypes = [],
+  isLoadingDatasets = false,
+  children,
+}: PropsWithChildren<IndexedDatasetsSummaryProps>) {
   const { datasetUUIDs, isLoading: isLoadingUUIDs } = useUUIDsFromHubmapIds(datasets);
 
-  const isLoading = isLoadingSCFind || isLoadingUUIDs;
+  const isLoading = isLoadingDatasets || isLoadingUUIDs;
 
   return (
     <Stack spacing={2} sx={{ marginTop: 2 }}>
@@ -32,10 +41,7 @@ function IndexedDatasetsSummary() {
         }}
       >
         <Typography variant="body2" component="div">
-          These results are derived from RNAseq datasets that were indexed by the scFind method to identify the cell
-          types associated with this organ. Not all HuBMAP datasets are currently compatible with this method due to
-          differences in data modalities or the availability of cell annotations. This section gives a summary of the
-          datasets that are used to compute these results, and only datasets from this organ are included.
+          {children}
         </Typography>
         <StyledDetailsAccordion
           summary={
