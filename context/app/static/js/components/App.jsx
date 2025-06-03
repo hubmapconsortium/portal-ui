@@ -1,6 +1,7 @@
 import React, { StrictMode } from 'react';
 import { pdfjs } from 'react-pdf';
 import { enableMapSet } from 'immer';
+import OpenKeyNav from 'openkeynav';
 
 import StyledSnackbar from 'js/shared-styles/snackbars';
 
@@ -47,6 +48,10 @@ function App(props) {
   delete flaskData.globalAlertMd;
   const isHubmapUser = userGroups?.includes('HuBMAP');
   const isWorkspacesUser = userGroups?.includes('Workspaces') || workspacesUsers.includes(userEmail) || isHubmapUser;
+
+  // TODO: put this in a provider and hook up to the boolean value 'enableOpenKeyNav' from UKV user preferences object
+  const openKeyNav = new OpenKeyNav();
+  openKeyNav.init();
 
   return (
     <StrictMode>
