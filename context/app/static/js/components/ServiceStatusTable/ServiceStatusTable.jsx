@@ -95,7 +95,7 @@ function ServiceStatusTable({
           apiName: 'scfind-api',
           githubUrl: 'https://github.com/hemberg-lab/scfind',
           endpointUrl: scFindEndpoint,
-          response: gatewayStatus.scFind_api,
+          response: gatewayStatus.scfind_api,
         }),
         buildServiceStatus({
           apiName: 'search-api',
