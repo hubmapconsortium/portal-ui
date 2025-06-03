@@ -2,11 +2,18 @@ import { useCallback, useEffect, useMemo } from 'react';
 import { KeyedMutator, useSWRConfig } from 'swr/_internal';
 import { v4 as uuidv4 } from 'uuid';
 
-import { SavedEntitiesList, SavedEntity, SavedListsEventCategories } from 'js/components/savedLists/types';
 import {
+  SavedEntitiesList,
+  SavedEntity,
+  SavedListsEventCategories,
+  SavedPreferences,
+} from 'js/components/savedLists/types';
+import {
+  RESERVED_KEYS,
   SAVED_ENTITIES_DEFAULT,
   SAVED_ENTITIES_KEY,
   SAVED_ENTITIES_LOCAL_STORAGE_KEY,
+  SAVED_PREFERENCES_KEY,
 } from 'js/components/savedLists/constants';
 import {
   useBuildUkvSWRKey,
@@ -14,6 +21,7 @@ import {
   useFetchSavedListsAndEntities,
   useUkvApiURLs,
   useUpdateSavedList,
+  useUpdateSavedPreferences,
 } from 'js/components/savedLists/api';
 import { SavedListsSuccessAlertType, useSavedListsAlertsStore } from 'js/stores/useSavedListsAlertsStore';
 import { trackEvent } from 'js/helpers/trackers';
@@ -73,11 +81,11 @@ function useSetListsAndEntities() {
         },
       });
 
-      // Update each saved list
+      // Filter and update each saved list (excluding reserved keys)
       await Promise.all(
-        Object.entries(savedLists).map(([listUUID, list]) =>
-          handleUpdateSavedList({ body: list, listUUID }).catch((e) => console.error(e)),
-        ),
+        Object.entries(savedLists)
+          .filter(([key]) => !RESERVED_KEYS.includes(key))
+          .map(([listUUID, list]) => handleUpdateSavedList({ body: list, listUUID }).catch((e) => console.error(e))),
       );
     },
     [handleUpdateSavedList],
@@ -134,6 +142,10 @@ function useCheckForLocalSavedEntities() {
   });
 }
 
+type SavedListsAndEntitiesRecord = Record<string, SavedEntitiesList> & {
+  [SAVED_PREFERENCES_KEY]?: SavedPreferences;
+};
+
 function useListSavedListsAndEntities() {
   const checkForLocalSavedEntities = useCheckForLocalSavedEntities();
 
@@ -152,21 +164,51 @@ function useListSavedListsAndEntities() {
 
   // Convert savedListsAndEntities to a record
   const savedListsAndEntitiesRecord = useMemo(() => {
-    return savedListsAndEntities.reduce<Record<string, SavedEntitiesList>>((acc, item) => {
+    return savedListsAndEntities.reduce<SavedListsAndEntitiesRecord>((acc, item) => {
       acc[item.key] = item.value;
       return acc;
     }, {});
   }, [savedListsAndEntities]);
 
+  const savedPreferences = { ...(savedListsAndEntitiesRecord[SAVED_PREFERENCES_KEY] ?? {}) };
+
   const savedEntities = !isLoading
     ? savedListsAndEntitiesRecord.savedEntities || { ...SAVED_ENTITIES_DEFAULT }
     : { ...SAVED_ENTITIES_DEFAULT };
 
+  // Anything that is not a reserved key is a list key
   const savedLists = !isLoading
-    ? Object.fromEntries(Object.entries(savedListsAndEntitiesRecord).filter(([key]) => key !== 'savedEntities'))
+    ? (Object.fromEntries(
+        Object.entries(savedListsAndEntitiesRecord).filter(([key]) => !RESERVED_KEYS.includes(key)),
+      ) as Record<string, SavedEntitiesList>)
     : {};
 
-  return { savedLists, savedEntities, savedListsAndEntities: savedListsAndEntitiesRecord, isLoading, mutate };
+  return {
+    savedPreferences,
+    savedLists,
+    savedEntities,
+    savedListsAndEntities: savedListsAndEntitiesRecord,
+    isLoading,
+    mutate,
+  };
+}
+
+export function useUserPreferences() {
+  const { savedListsAndEntities, mutate } = useListSavedListsAndEntities();
+  const preferences = savedListsAndEntities.userPreferences ?? {};
+
+  const updatePreferences = async (newPrefs: Record<string, SavedPreferences>) => {
+    await fetch('/your/api/url/userPreferences', {
+      method: 'PUT',
+      body: JSON.stringify(newPrefs),
+    });
+    await mutate();
+  };
+
+  return {
+    preferences,
+    updatePreferences,
+  };
 }
 
 function useSavedListActions() {
@@ -385,6 +427,31 @@ function useHandleSaveEntity({ entityUUID }: { entityUUID: string }) {
   });
 
   return handleSaveEntity;
+}
+
+export function useSavedPreferences() {
+  const { isLoading, savedPreferences } = useListSavedListsAndEntities();
+
+  const { updateSavedPreferences } = useUpdateSavedPreferences();
+  const globalMutateSavedList = useGlobalMutateSavedList();
+
+  const handleUpdateSavedPreferences = useCallback(
+    async (body: SavedPreferences) => {
+      try {
+        await updateSavedPreferences(body);
+        await globalMutateSavedList(SAVED_PREFERENCES_KEY);
+      } catch (e) {
+        console.error(e);
+      }
+    },
+    [updateSavedPreferences, globalMutateSavedList],
+  );
+
+  return {
+    isLoading,
+    savedPreferences,
+    handleUpdateSavedPreferences,
+  };
 }
 
 export default function useSavedLists() {

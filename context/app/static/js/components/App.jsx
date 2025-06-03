@@ -1,7 +1,6 @@
-import React, { useEffect, StrictMode } from 'react';
+import React, { StrictMode } from 'react';
 import { pdfjs } from 'react-pdf';
 import { enableMapSet } from 'immer';
-import OpenKeyNav from 'openkeynav';
 
 import StyledSnackbar from 'js/shared-styles/snackbars';
 
@@ -48,11 +47,6 @@ function App(props) {
   delete flaskData.globalAlertMd;
   const isHubmapUser = userGroups?.includes('HuBMAP');
   const isWorkspacesUser = userGroups?.includes('Workspaces') || workspacesUsers.includes(userEmail) || isHubmapUser;
-
-  useEffect(() => {
-      const openKeyNav = new OpenKeyNav();
-      openKeyNav.init();
-  }, []);
 
   return (
     <StrictMode>
