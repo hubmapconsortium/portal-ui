@@ -8,7 +8,7 @@ import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import Datasets from 'js/components/genes/Datasets';
 
 import { pageSectionIDs } from 'js/components/genes/constants';
-import CellTypes from 'js/components/genes/CellTypes/CellTypes';
+import CellTypes from 'js/components/genes/CellTypes/GeneCellTypes';
 
 const { summary, datasets, cellTypes } = pageSectionIDs;
 

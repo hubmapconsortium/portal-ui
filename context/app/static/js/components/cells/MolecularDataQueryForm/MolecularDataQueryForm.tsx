@@ -36,7 +36,6 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   const queryType = watch('queryType');
   const queryMethod = watch('queryMethod');
   const threshold = watch('minimumCellPercentage');
-  const expression = watch('minimumCellPercentage');
   const genes = watch('genes');
   const proteins = watch('proteins');
   const cellTypes = watch('cellTypes');
@@ -121,7 +120,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
       keepValues: true,
       keepDirty: false,
     });
-  }, [threshold, expression, genes, proteins, cellTypes, reset]);
+  }, [threshold, genes, proteins, cellTypes, reset]);
 
   const id = `${useId()}-molecular-data-query`;
 

@@ -35,6 +35,7 @@ import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import useSearchData from 'js/hooks/useSearchData';
 import Description from 'js/shared-styles/sections/Description';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import Divider from '@mui/material/Divider';
 import { useGenePageContext } from '../hooks';
 import { cellTypes as cellTypesSection } from '../constants';
 
@@ -328,12 +329,23 @@ export default function CellTypes() {
   const indexedDatasetsInfo = useIndexedDatasetsForGene();
   return (
     <CollapsibleDetailPageSection id={cellTypesSection.id} title={`Cell Types with ${geneSymbolUpper} as Marker Gene`}>
-      <Description belowTheFold={<IndexedDatasetsSummary {...indexedDatasetsInfo} />}>
+      <Description
+        belowTheFold={
+          <IndexedDatasetsSummary {...indexedDatasetsInfo}>
+            These results are derived from RNAseq datasets that were indexed by the scFind method to identify cell types
+            expressing this gene. Not all HuBMAP datasets are currently compatible with this method due to data
+            modalities or the availability of cell annotations. This section gives a summary of the datasets that are
+            used to compute these results.
+          </IndexedDatasetsSummary>
+        }
+      >
         The table displays cell types expressing this marker gene as identified by the{' '}
         <OutboundIconLink href="https://www.nature.com/articles/s41592-021-01076-9">scFind method</OutboundIconLink>. It
         calculates cell count proportions and statistical metrics based on uniformly processed HuBMAP RNAseq datasets
-        with cell type annotations. The table can be filtered by organs and available for download for further analysis.
-        Filtering by organ will recompute the results and recalculate statistical values accordingly.
+        with cell type annotations.
+        <Divider sx={{ opacity: 0, my: 1 }} />
+        The table can be filtered by organs and available for download for further analysis. Filtering by organ will
+        recompute the results and recalculate statistical values accordingly.
       </Description>
       <CellTypesTable />
     </CollapsibleDetailPageSection>
