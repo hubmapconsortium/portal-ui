@@ -1,13 +1,10 @@
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import React, { PropsWithChildren } from 'react';
-import Skeleton from '@mui/material/Skeleton';
 import { useUUIDsFromHubmapIds } from '../hooks';
-import { getSearchURL } from '../utils';
 import { StyledDetailsAccordion } from './styles';
+import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
 
 interface IndexedDatasetsSummaryProps {
   datasets: string[];
@@ -68,20 +65,7 @@ function IndexedDatasetsSummary({
           </Stack>
         </StyledDetailsAccordion>
       </StyledDetailsAccordion>
-      <Box>
-        {isLoading ? (
-          <Skeleton variant="rectangular" width={200} height={40} />
-        ) : (
-          <OutlinedLinkButton
-            link={getSearchURL({
-              entityType: 'Dataset',
-              datasetUUIDs,
-            })}
-          >
-            View Indexed Datasets
-          </OutlinedLinkButton>
-        )}
-      </Box>
+      <ViewIndexedDatasetsButton datasetUUIDs={datasetUUIDs} isLoading={isLoading} />
     </Stack>
   );
 }

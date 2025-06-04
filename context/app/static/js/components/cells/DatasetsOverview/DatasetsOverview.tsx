@@ -7,9 +7,10 @@ import DatasetsOverviewTable from './DatasetsOverviewTable';
 
 interface DatasetsOverviewProps extends React.PropsWithChildren {
   datasets: string[];
+  belowTheFold?: React.ReactNode;
 }
 
-export default function DatasetsOverview({ datasets, children }: DatasetsOverviewProps) {
+export default function DatasetsOverview({ datasets, children, belowTheFold }: DatasetsOverviewProps) {
   const { data: indexedDatasets, isLoading, error } = useIndexedDatasets();
   const indexed = useDatasetsOverview(indexedDatasets?.datasets ?? []);
   const all = useDatasetsOverview();
@@ -24,7 +25,7 @@ export default function DatasetsOverview({ datasets, children }: DatasetsOvervie
 
   return (
     <>
-      <Description>{children}</Description>
+      <Description belowTheFold={belowTheFold}>{children}</Description>
       <DatasetsOverviewTable indexed={indexed} all={all} matched={matched} />
     </>
   );

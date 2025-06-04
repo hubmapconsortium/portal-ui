@@ -11,23 +11,14 @@ import CurrentQueryParametersDisplay from './CurrentQueryParametersDisplay';
 import CurrentQueryResultsDisplay from './CurrentQueryResultsDisplay';
 import { ResultsProvider } from './ResultsProvider';
 import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
-import { getCellVariableNames } from './hooks';
+import { getCellVariableNames, useMolecularDataQueryFormState } from './hooks';
 
 interface MolecularDataQueryFormProps extends PropsWithChildren {
   initialValues?: Partial<MolecularDataQueryFormState>;
 }
 
-export default function MolecularDataQueryForm({ children, initialValues }: MolecularDataQueryFormProps) {
-  const methods = useForm<MolecularDataQueryFormState>({
-    defaultValues: {
-      queryType: 'gene',
-      queryMethod: 'scFind',
-      genes: [],
-      minimumCellPercentage: 5,
-      minimumExpressionLevel: 1,
-      ...initialValues,
-    } as Partial<MolecularDataQueryFormState>,
-  });
+export function MolecularDataQueryForm({ children }: PropsWithChildren) {
+  const methods = useMolecularDataQueryFormState();
   const { watch, reset } = methods;
   const { track } = useMolecularDataQueryFormTracking();
 
@@ -39,43 +30,6 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   const genes = watch('genes');
   const proteins = watch('proteins');
   const cellTypes = watch('cellTypes');
-
-  // Reset selected options when query type changes
-  useEffect(() => {
-    const newQueryMethod = {
-      gene: 'scFind',
-      protein: 'crossModality',
-      'cell-type': 'scFind',
-    }[queryType];
-
-    reset(
-      {
-        genes: [],
-        proteins: [],
-        cellTypes: [],
-        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
-        queryType,
-        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
-        queryMethod: newQueryMethod,
-        ...initialValues,
-      },
-      {
-        keepDirty: false,
-        keepIsSubmitSuccessful: false,
-        keepIsSubmitted: false,
-      },
-    );
-  }, [queryType, reset, initialValues]);
-
-  // Reset submission state when query method changes
-  useEffect(() => {
-    reset(undefined, {
-      keepValues: true,
-      keepDirty: false,
-      keepIsSubmitSuccessful: false,
-      keepIsSubmitted: false,
-    });
-  }, [queryMethod, reset]);
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
     const cellVariableNames = getCellVariableNames(queryType, genes, proteins, cellTypes);
@@ -131,7 +85,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   });
 
   return (
-    <FormProvider {...methods}>
+    <>
       <IndependentStepAccordion
         index={0}
         summaryHeading="Parameters"
@@ -147,18 +101,106 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         noProvider
         completedStepText={methods.formState.isSubmitted ? <CurrentQueryParametersDisplay /> : undefined}
       />
-      <ResultsProvider>
-        <IndependentStepAccordion
-          index={1}
-          summaryHeading="Results"
-          id={`${id}-results`}
-          content={<Results />}
-          isExpanded={methods.formState.isSubmitSuccessful}
-          noProvider
-          disabled={!methods.formState.isSubmitSuccessful}
-          completedStepText={methods.formState.isSubmitSuccessful ? <CurrentQueryResultsDisplay /> : undefined}
-        />
-      </ResultsProvider>
+      <IndependentStepAccordion
+        index={1}
+        summaryHeading="Results"
+        id={`${id}-results`}
+        content={<Results />}
+        isExpanded={methods.formState.isSubmitSuccessful}
+        noProvider
+        disabled={!methods.formState.isSubmitSuccessful}
+        completedStepText={methods.formState.isSubmitSuccessful ? <CurrentQueryResultsDisplay /> : undefined}
+      />
+    </>
+  );
+}
+export function MolecularDataQueryFormProvider({ children, initialValues }: MolecularDataQueryFormProps) {
+  const methods = useForm<MolecularDataQueryFormState>({
+    defaultValues: {
+      queryType: 'gene',
+      queryMethod: 'scFind',
+      genes: [],
+      minimumCellPercentage: 5,
+      minimumExpressionLevel: 1,
+      ...initialValues,
+    } as Partial<MolecularDataQueryFormState>,
+  });
+
+  const { watch, reset } = methods;
+
+  const queryType = watch('queryType');
+  const queryMethod = watch('queryMethod');
+  const threshold = watch('minimumCellPercentage');
+  const genes = watch('genes');
+  const proteins = watch('proteins');
+  const cellTypes = watch('cellTypes');
+
+  // Reset selected options when query type changes
+  useEffect(() => {
+    const newQueryMethod = {
+      gene: 'scFind',
+      protein: 'crossModality',
+      'cell-type': 'scFind',
+    }[queryType];
+
+    reset(
+      {
+        genes: [],
+        proteins: [],
+        cellTypes: [],
+        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
+        queryType,
+        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
+        queryMethod: newQueryMethod,
+        ...initialValues,
+      },
+      {
+        keepDirty: false,
+        keepIsSubmitSuccessful: false,
+        keepIsSubmitted: false,
+      },
+    );
+  }, [queryType, reset, initialValues]);
+
+  // Reset submission state when query method changes
+  useEffect(() => {
+    reset(undefined, {
+      keepValues: true,
+      keepDirty: false,
+      keepIsSubmitSuccessful: false,
+      keepIsSubmitted: false,
+    });
+  }, [queryMethod, reset]);
+
+  useEffect(() => {
+    // Reset the form submission state when any query fields change
+    // This is to ensure that updating the parameters while the form is submitted
+    // does not immediately trigger a re-query for results
+    // Per the react-hook-form docs, it's recommended to do this reset
+    // in useEffect as execution order matters
+
+    // TODO: With this approach, the query still reruns and gets discarded after the first change since the
+    // form state is reset AFTER the swr hook gets new params. We should investigate if there is a way to
+    // prevent the query from running until the form is submitted again. Maybe switch to a mutation?
+    reset(undefined, {
+      keepIsSubmitted: false,
+      keepIsSubmitSuccessful: false,
+      keepValues: true,
+      keepDirty: false,
+    });
+  }, [threshold, genes, proteins, cellTypes, reset]);
+
+  return (
+    <FormProvider {...methods}>
+      <ResultsProvider>{children}</ResultsProvider>
     </FormProvider>
+  );
+}
+
+export default function MolecularDataQueryFormWrapper({ initialValues, children }: MolecularDataQueryFormProps) {
+  return (
+    <MolecularDataQueryFormProvider initialValues={initialValues}>
+      <MolecularDataQueryForm>{children}</MolecularDataQueryForm>
+    </MolecularDataQueryFormProvider>
   );
 }

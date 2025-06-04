@@ -15,6 +15,9 @@ import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import Description from 'js/shared-styles/sections/Description';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
+import ViewIndexedDatasetsButton from 'js/components/organ/OrganCellTypes/ViewIndexedDatasetsButton';
+import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
+import { useUUIDsFromHubmapIds } from 'js/components/organ/hooks';
 import DatasetsOverview from '../DatasetsOverview';
 
 import { SCFindQueryResultsListProps } from './types';
@@ -131,6 +134,10 @@ function SCFindGeneQueryResultsLoader() {
 
   const { datasets, isLoading, error, datasetToGeneMap } = useSCFindGeneResults();
 
+  const { data: indexedDatasets = { datasets: [] } } = useIndexedDatasets();
+
+  const indexedDatasetsButtonProps = useUUIDsFromHubmapIds(indexedDatasets.datasets);
+
   const deduplicatedResults = useDeduplicatedResults(datasets?.findDatasets);
 
   // update the total dataset counter for the results display
@@ -147,7 +154,10 @@ function SCFindGeneQueryResultsLoader() {
       <Typography variant="subtitle1" component="p" gutterBottom>
         Datasets Overview
       </Typography>
-      <DatasetsOverview datasets={deduplicatedResults}>
+      <DatasetsOverview
+        datasets={deduplicatedResults}
+        belowTheFold={<ViewIndexedDatasetsButton {...indexedDatasetsButtonProps} />}
+      >
         This overview provides a summary of the matched datasets and their proportions relative to both indexed datasets
         and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a tabular view.
         Both views can be downloaded, with the visualization available as a PNG and the table as a TSV file.

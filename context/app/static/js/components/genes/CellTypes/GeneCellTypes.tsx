@@ -34,8 +34,9 @@ import IndexedDatasetsSummary from 'js/components/organ/OrganCellTypes/IndexedDa
 import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import useSearchData from 'js/hooks/useSearchData';
 import Description from 'js/shared-styles/sections/Description';
-import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import Divider from '@mui/material/Divider';
+import SCFindLink from 'js/shared-styles/Links/SCFindLink';
+import ScientificNotationDisplay from './ScientificNotationDisplay';
 import { useGenePageContext } from '../hooks';
 import { cellTypes as cellTypesSection } from '../constants';
 
@@ -124,7 +125,9 @@ function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
       <ExpandableRowCell>
         {cellType.cell_hits} / {cellType.total_cells} ({percent.format(cellType.cell_hits / cellType.total_cells)}){' '}
       </ExpandableRowCell>
-      <ExpandableRowCell>{cellType['adj-pval']}</ExpandableRowCell>
+      <ExpandableRowCell>
+        <ScientificNotationDisplay value={cellType['adj-pval']} />
+      </ExpandableRowCell>
       {/* Empty action column cell */}
       <ExpandableRowCell />
     </ExpandableRow>
@@ -332,17 +335,16 @@ export default function CellTypes() {
       <Description
         belowTheFold={
           <IndexedDatasetsSummary {...indexedDatasetsInfo}>
-            These results are derived from RNAseq datasets that were indexed by the scFind method to identify cell types
-            expressing this gene. Not all HuBMAP datasets are currently compatible with this method due to data
+            These results are derived from RNAseq datasets that were indexed by the <SCFindLink /> to identify cell
+            types expressing this gene. Not all HuBMAP datasets are currently compatible with this method due to data
             modalities or the availability of cell annotations. This section gives a summary of the datasets that are
             used to compute these results.
           </IndexedDatasetsSummary>
         }
       >
-        The table displays cell types expressing this marker gene as identified by the{' '}
-        <OutboundIconLink href="https://www.nature.com/articles/s41592-021-01076-9">scFind method</OutboundIconLink>. It
-        calculates cell count proportions and statistical metrics based on uniformly processed HuBMAP RNAseq datasets
-        with cell type annotations.
+        The table displays cell types expressing this marker gene as identified by the <SCFindLink />. It calculates
+        cell count proportions and statistical metrics based on uniformly processed HuBMAP RNAseq datasets with cell
+        type annotations.
         <Divider sx={{ opacity: 0, my: 1 }} />
         The table can be filtered by organs and available for download for further analysis. Filtering by organ will
         recompute the results and recalculate statistical values accordingly.
