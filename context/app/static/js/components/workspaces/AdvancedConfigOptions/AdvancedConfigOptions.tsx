@@ -172,6 +172,7 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
           ))}
           <LabeledPrimarySwitch
             label="Enable GPU"
+            ariaLabel="Enable GPU"
             checked={field.value.gpu_enabled as boolean}
             onChange={(e, value) =>
               field.onChange({
