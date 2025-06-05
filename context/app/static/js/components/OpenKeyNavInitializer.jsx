@@ -13,6 +13,9 @@ function useInitializeOpenKeyNav() {
         menu: '/',
         modifierKey: 'metaKey',
       },
+      debug: {
+        keyboardAccessible: false,
+      },
     });
   }
 }
