@@ -6,6 +6,7 @@
     "@datapunt/matomo-tracker-js": "^0.5.1",
     "@elastic/elasticsearch": "^8.13.0",
     "@fontsource-variable/inter": "^5.0.17",
+    "@fontsource-variable/jetbrains-mono": "^5.2.5",
     "@grafana/faro-react": "^1.5.0",
     "@grafana/faro-web-sdk": "^1.5.0",
     "@grafana/faro-web-tracing": "^1.5.0",
