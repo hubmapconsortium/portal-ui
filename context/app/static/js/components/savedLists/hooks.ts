@@ -430,24 +430,24 @@ function useHandleSaveEntity({ entityUUID }: { entityUUID: string }) {
 }
 
 export function useSavedPreferences() {
-  const { isLoading, savedPreferences } = useListSavedListsAndEntities();
+  const { isLoading, savedPreferences, mutate } = useListSavedListsAndEntities();
 
   const { updateSavedPreferences } = useUpdateSavedPreferences();
-  const globalMutateSavedList = useGlobalMutateSavedList();
 
   const handleUpdateSavedPreferences = useCallback(
     async (body: SavedPreferences) => {
       try {
         await updateSavedPreferences(body);
-        await globalMutateSavedList(SAVED_PREFERENCES_KEY);
+        await mutate();
       } catch (e) {
         console.error(e);
       }
     },
-    [updateSavedPreferences, globalMutateSavedList],
+    [updateSavedPreferences, mutate],
   );
 
   return {
+    mutate,
     isLoading,
     savedPreferences,
     handleUpdateSavedPreferences,
