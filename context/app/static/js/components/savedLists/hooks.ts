@@ -193,24 +193,6 @@ function useListSavedListsAndEntities() {
   };
 }
 
-export function useUserPreferences() {
-  const { savedListsAndEntities, mutate } = useListSavedListsAndEntities();
-  const preferences = savedListsAndEntities.userPreferences ?? {};
-
-  const updatePreferences = async (newPrefs: Record<string, SavedPreferences>) => {
-    await fetch('/your/api/url/userPreferences', {
-      method: 'PUT',
-      body: JSON.stringify(newPrefs),
-    });
-    await mutate();
-  };
-
-  return {
-    preferences,
-    updatePreferences,
-  };
-}
-
 function useSavedListActions() {
   const { handleUpdateSavedList, isUpdating } = useHandleUpdateSavedList();
 
