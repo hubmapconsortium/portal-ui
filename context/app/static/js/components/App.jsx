@@ -1,7 +1,6 @@
 import React, { StrictMode } from 'react';
 import { pdfjs } from 'react-pdf';
 import { enableMapSet } from 'immer';
-import OpenKeyNav from 'openkeynav';
 
 import StyledSnackbar from 'js/shared-styles/snackbars';
 
@@ -15,6 +14,7 @@ import 'js/components/searchPage/Search.scss';
 import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
 import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
+import OpenKeyNavInitializer from './OpenKeyNavInitializer';
 
 // TODO: Delete this when workspaces are publicly released.
 // If we stay in limbo for a long time, this configuration could be moved out of code.
@@ -49,10 +49,6 @@ function App(props) {
   const isHubmapUser = userGroups?.includes('HuBMAP');
   const isWorkspacesUser = userGroups?.includes('Workspaces') || workspacesUsers.includes(userEmail) || isHubmapUser;
 
-  // TODO: put this in a provider and hook up to the boolean value 'enableOpenKeyNav' from UKV user preferences object
-  const openKeyNav = new OpenKeyNav();
-  openKeyNav.init();
-
   return (
     <StrictMode>
       <Providers
@@ -81,6 +77,7 @@ function App(props) {
             improved on by using a global modal stack with portals. */}
         <LaunchWorkspaceDialog />
         <EditWorkspaceDialog />
+        <OpenKeyNavInitializer />
       </Providers>
     </StrictMode>
   );
