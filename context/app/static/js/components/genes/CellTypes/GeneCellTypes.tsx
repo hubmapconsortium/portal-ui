@@ -23,7 +23,7 @@ import useHyperQueryCellTypes, { GeneSignatureStats } from 'js/api/scfind/useHyp
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { percent } from 'js/helpers/number-format';
 import { CLIDCell } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
-import { useSortState } from 'js/hooks/useSortState';
+import { SortState, useSortState } from 'js/hooks/useSortState';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
@@ -36,8 +36,9 @@ import useSearchData from 'js/hooks/useSearchData';
 import Description from 'js/shared-styles/sections/Description';
 import Divider from '@mui/material/Divider';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
+import { trackEvent } from 'js/helpers/trackers';
 import ScientificNotationDisplay from './ScientificNotationDisplay';
-import { useGenePageContext } from '../hooks';
+import { useGenePageContext, useGeneDetailPageTrackingInfo, useTrackGeneDetailPage } from '../hooks';
 import { cellTypes as cellTypesSection } from '../constants';
 
 const downloadLabels = ['Cell Type', 'Cell Ontology ID', 'Cells Hit', 'Total Cells', 'Percentage', 'p-value'];
@@ -68,7 +69,7 @@ const columns = {
     cellContent: noop,
     tooltipText: 'Statistical significance of gene expression for this cell type in the context of the selected organ.',
   },
-};
+} as const;
 
 const columnIdMap = Object.fromEntries(Object.entries(columns).map(([key, value]) => [key, value.id]));
 const columnList = [columns.cellType, columns.clid, columns.cellsHitPercent, columns.pval];
@@ -112,15 +113,31 @@ const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
 
 function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
   const formattedCellName = cellType.cell_type.split('.').slice(1).join('.');
+  const trackExpandRow = useTrackGeneDetailPage({
+    action: 'Cell Types / Expand Row',
+    label: formattedCellName,
+  });
+  const trackCollapseRow = useTrackGeneDetailPage({
+    action: 'Cell Types / Collapse Row',
+    label: formattedCellName,
+  });
+  const trackCLIDClick = useTrackGeneDetailPage({
+    action: 'Cell Types / Select CLID',
+    label: formattedCellName,
+  });
   return (
     <ExpandableRow
       numCells={6}
       expandedContent={cellType.clid ? <CellTypeDescription clid={cellType.clid} /> : <Skeleton />}
       reverse
+      onExpand={(isExpanded) => {
+        const track = isExpanded ? trackExpandRow : trackCollapseRow;
+        track();
+      }}
     >
       <ExpandableRowCell>{formattedCellName}</ExpandableRowCell>
       <ExpandableRowCell>
-        <CLIDCell clid={cellType.clid} />
+        <CLIDCell onClick={trackCLIDClick} clid={cellType.clid} />
       </ExpandableRowCell>
       <ExpandableRowCell>
         {cellType.cell_hits} / {cellType.total_cells} ({percent.format(cellType.cell_hits / cellType.total_cells)}){' '}
@@ -134,13 +151,44 @@ function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
   );
 }
 
+interface CellTypesTableHeaderProps {
+  isLoading: boolean;
+  handleTableDownload: () => void;
+  handleSortChange: (sort: string) => void;
+  sortState: SortState;
+}
+
+function CellTypesTableHeader({
+  isLoading,
+  handleTableDownload,
+  handleSortChange,
+  sortState,
+}: CellTypesTableHeaderProps) {
+  return (
+    <TableHead>
+      <TableRow>
+        {/* Expand column */}
+        <TableCell sx={{ backgroundColor: 'background.paper' }} />
+        {columnList.map((column) => (
+          <EntityHeaderCell column={column} key={column.id} setSort={handleSortChange} sortState={sortState} />
+        ))}
+        <TableCell sx={{ backgroundColor: 'background.paper' }} align="right">
+          <DownloadButton
+            disabled={isLoading}
+            tooltip="Download table in TSV format."
+            sx={{ right: 1 }}
+            onClick={handleTableDownload}
+          />
+        </TableCell>
+      </TableRow>
+    </TableHead>
+  );
+}
+
 function CellTypesTable() {
   const { geneSymbol } = useGenePageContext();
 
   const [selectedOrgan, setSelectedOrgan] = useState<string>('');
-  const handleOrganChange = useEventCallback((event: SelectChangeEvent<string>) => {
-    setSelectedOrgan(event.target.value);
-  });
 
   const { sortState, setSort } = useSortState(columnIdMap, {
     columnId: 'adj-pval',
@@ -208,6 +256,40 @@ function CellTypesTable() {
 
   const isLoading = isLoadingAllCellTypes || isLoadingCurrentCellTypes;
 
+  const trackDownloadTable = useTrackGeneDetailPage({
+    action: 'Cell Types / Download Table',
+  });
+
+  const trackChangeOrgan = useTrackGeneDetailPage({
+    action: 'Cell Types / Select Organ Sources',
+  });
+
+  const changeSortTrackingInfo = useGeneDetailPageTrackingInfo();
+
+  const handleOrganChange = useEventCallback((event: SelectChangeEvent<string>) => {
+    setSelectedOrgan(event.target.value);
+    trackChangeOrgan();
+  });
+
+  const handleTableDownload = useEventCallback(() => {
+    download();
+    trackDownloadTable();
+  });
+
+  const handleSortChange = useEventCallback((sort: string) => {
+    setSort(sort);
+
+    if (!sort) {
+      return;
+    }
+
+    trackEvent({
+      ...changeSortTrackingInfo,
+      action: 'Cell Types / Sort Cell Type Table',
+      label: columns[sort as keyof typeof columns]?.label ?? 'Unknown Column',
+    });
+  });
+
   if (!isLoading && !filteredSortedCellTypes.length) {
     return 'No cell types found.';
   }
@@ -242,26 +324,14 @@ function CellTypesTable() {
           will recalculate statistical values.
         </FormHelperText>
       </FormControl>
-
       <StyledTableContainer>
         <Table stickyHeader>
-          <TableHead>
-            <TableRow>
-              {/* Expand column */}
-              <TableCell sx={{ backgroundColor: 'background.paper' }} />
-              {columnList.map((column) => (
-                <EntityHeaderCell column={column} key={column.id} setSort={setSort} sortState={sortState} />
-              ))}
-              <TableCell sx={{ backgroundColor: 'background.paper' }} align="right">
-                <DownloadButton
-                  disabled={isLoading}
-                  tooltip="Download table in TSV format."
-                  sx={{ right: 1 }}
-                  onClick={download}
-                />
-              </TableCell>
-            </TableRow>
-          </TableHead>
+          <CellTypesTableHeader
+            isLoading={isLoading}
+            handleSortChange={handleSortChange}
+            handleTableDownload={handleTableDownload}
+            sortState={sortState}
+          />
           <TableBody>
             {isLoading && <TableSkeleton />}
             {filteredSortedCellTypes.map((cellType) => (
@@ -331,7 +401,11 @@ export default function CellTypes() {
   const { geneSymbolUpper } = useGenePageContext();
   const indexedDatasetsInfo = useIndexedDatasetsForGene();
   return (
-    <CollapsibleDetailPageSection id={cellTypesSection.id} title={`Cell Types with ${geneSymbolUpper} as Marker Gene`}>
+    <CollapsibleDetailPageSection
+      id={cellTypesSection.id}
+      title={`Cell Types with ${geneSymbolUpper} as Marker Gene`}
+      trackingInfo={useGeneDetailPageTrackingInfo()}
+    >
       <Description
         belowTheFold={
           <IndexedDatasetsSummary {...indexedDatasetsInfo}>

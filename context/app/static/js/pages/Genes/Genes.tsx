@@ -10,10 +10,9 @@ import Datasets from 'js/components/genes/Datasets';
 import { pageSectionIDs } from 'js/components/genes/constants';
 import CellTypes from 'js/components/genes/CellTypes/GeneCellTypes';
 
-const { summary, datasets, cellTypes } = pageSectionIDs;
+const { datasets, cellTypes } = pageSectionIDs;
 
 const shouldDisplaySection = {
-  [summary]: true,
   [cellTypes]: true,
   [datasets]: true,
 };
@@ -28,7 +27,7 @@ function GeneDetails({ geneSymbol }: Props) {
       <DetailLayout sections={shouldDisplaySection}>
         <SummaryTitle entityIcon="Gene">Gene</SummaryTitle>
         <GenePageTitle />
-        {shouldDisplaySection[summary] && <Summary />}
+        <Summary />
         {shouldDisplaySection[cellTypes] && <CellTypes />}
         {shouldDisplaySection[datasets] && <Datasets />}
       </DetailLayout>

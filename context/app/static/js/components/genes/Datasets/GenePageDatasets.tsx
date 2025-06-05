@@ -9,21 +9,31 @@ import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import Button from '@mui/material/Button';
 import Box from '@mui/material/Box';
 import { datasets } from '../constants';
-import { useGenePageContext } from '../GenePageContext';
+import { useGeneDetailPageTrackingInfo, useGeneSymbol, useTrackGeneDetailPage } from '../hooks';
 
 export default function Datasets() {
-  const { geneSymbol, geneSymbolUpper } = useGenePageContext();
+  const geneSymbol = useGeneSymbol();
+
+  const trackExploreWithMolecularAndCellularQueryTool = useTrackGeneDetailPage({
+    action: 'Datasets / Select "Explore with Molecular and Cellular Query" button',
+  });
 
   return (
     <CollapsibleDetailPageSection
       id={datasets.id}
-      title={`Datasets with ${geneSymbolUpper}`}
+      title={`Datasets with ${geneSymbol}`}
       iconTooltipText={datasets.tooltip}
+      trackingInfo={useGeneDetailPageTrackingInfo()}
     >
       <Description
         belowTheFold={
           <Box mt={2}>
-            <Button href="/cells" variant="contained" color="primary">
+            <Button
+              href="/cells"
+              variant="contained"
+              color="primary"
+              onClick={trackExploreWithMolecularAndCellularQueryTool}
+            >
               Explore with Molecular and Cellular Query Tool
             </Button>
           </Box>
@@ -42,7 +52,7 @@ export default function Datasets() {
             genes: [{ full: geneSymbol, pre: '', match: geneSymbol, post: '' }],
           }}
         >
-          <SelectableTableProvider tableLabel={`Datasets with ${geneSymbolUpper} - scFind Results`}>
+          <SelectableTableProvider tableLabel={`Datasets with ${geneSymbol} - scFind Results`}>
             <SCFindGeneQueryResults />
           </SelectableTableProvider>
         </MolecularDataQueryFormProvider>

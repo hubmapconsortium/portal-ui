@@ -2,6 +2,8 @@ import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import { DatasetIcon } from 'js/shared-styles/icons';
 import React, { PropsWithChildren } from 'react';
+import { EventInfo } from 'js/components/types';
+import { trackEvent } from 'js/helpers/trackers';
 import { useUUIDsFromHubmapIds } from '../hooks';
 import { StyledDetailsAccordion } from './styles';
 import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
@@ -10,6 +12,7 @@ interface IndexedDatasetsSummaryProps {
   datasets: string[];
   datasetTypes: { key: string; doc_count: number }[];
   isLoadingDatasets?: boolean;
+  trackingInfo?: EventInfo;
 }
 
 function IndexedDatasetsSummary({
@@ -17,6 +20,7 @@ function IndexedDatasetsSummary({
   datasetTypes = [],
   isLoadingDatasets = false,
   children,
+  trackingInfo,
 }: PropsWithChildren<IndexedDatasetsSummaryProps>) {
   const { datasetUUIDs, isLoading: isLoadingUUIDs } = useUUIDsFromHubmapIds(datasets);
 
@@ -35,6 +39,14 @@ function IndexedDatasetsSummary({
           heading: {
             component: 'div',
           },
+        }}
+        onChange={(_, expanded) => {
+          if (trackingInfo) {
+            trackEvent({
+              ...trackingInfo,
+              action: `${expanded ? 'Expand' : 'Collapse'} Indexed Datasets Summary`,
+            });
+          }
         }}
       >
         <Typography variant="body2" component="div">
@@ -65,7 +77,12 @@ function IndexedDatasetsSummary({
           </Stack>
         </StyledDetailsAccordion>
       </StyledDetailsAccordion>
-      <ViewIndexedDatasetsButton datasetUUIDs={datasetUUIDs} isLoading={isLoading} />
+      <ViewIndexedDatasetsButton
+        context="Cell Types"
+        datasetUUIDs={datasetUUIDs}
+        isLoading={isLoading}
+        trackingInfo={trackingInfo}
+      />
     </Stack>
   );
 }
