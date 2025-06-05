@@ -4,7 +4,8 @@ import useSWR from 'swr';
 
 import { fetcher } from 'js/helpers/swr/fetchers';
 import { useAppContext } from 'js/components/Contexts';
-import { SavedEntitiesList } from 'js/components/savedLists/types';
+import { SavedEntitiesList, SavedPreferences } from 'js/components/savedLists/types';
+import { SAVED_PREFERENCES_KEY } from 'js/components/savedLists/constants';
 
 /** **************************************************
  *                  UKV API Helpers                  *
@@ -164,4 +165,59 @@ function useDeleteList() {
   return { deleteList, isDeleting: isMutating };
 }
 
-export { useBuildUkvSWRKey, useUkvApiURLs, useFetchSavedListsAndEntities, useUpdateSavedList, useDeleteList };
+/** **************************************************
+ *            Saved Preferences Helpers              *
+ * ************************************************* */
+
+interface UpdateSavedPreferencesArgs {
+  url: string;
+  body: SavedPreferences;
+  method: 'PUT' | 'POST';
+  headers?: HeadersInit;
+}
+async function updateSavedPreferencesFetcher(
+  _key: string,
+  { arg: { body, url, headers, method } }: { arg: UpdateSavedPreferencesArgs },
+) {
+  const response = await fetch(url, {
+    method,
+    body: JSON.stringify(body),
+    headers,
+  });
+
+  if (!response.ok) {
+    console.error('Updating saved preferences failed', response);
+  }
+}
+
+function useUpdateSavedPreferences() {
+  const api = useUkvApiURLs();
+  const headers = useUkvHeaders();
+  const { trigger, isMutating } = useSWRMutation('update-preferences', updateSavedPreferencesFetcher);
+
+  const updateSavedPreferences = useCallback(
+    (body: SavedPreferences) => {
+      return trigger({
+        url: api.key(SAVED_PREFERENCES_KEY),
+        body,
+        headers,
+        method: 'PUT',
+      });
+    },
+    [trigger, api, headers],
+  );
+
+  return {
+    updateSavedPreferences,
+    isUpdating: isMutating,
+  };
+}
+
+export {
+  useBuildUkvSWRKey,
+  useUkvApiURLs,
+  useFetchSavedListsAndEntities,
+  useUpdateSavedList,
+  useDeleteList,
+  useUpdateSavedPreferences,
+};

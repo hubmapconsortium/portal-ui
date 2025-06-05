@@ -11,6 +11,10 @@ export interface SavedEntitiesList {
   savedEntities: Record<string, SavedEntity>;
 }
 
+export interface SavedPreferences {
+  enableOpenKeyNav?: boolean;
+}
+
 export const SavedListsEventCategories = {
   Functionality: 'My Lists Functionality',
   LandingPage: 'My Lists Landing Page',

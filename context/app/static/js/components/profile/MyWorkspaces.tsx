@@ -43,7 +43,7 @@ function MainView() {
 export function MyWorkspaces() {
   const { isWorkspacesUser } = useAppContext();
   return (
-    <CollapsibleDetailPageSection id="workspaces" title="My Workspaces" variant="h2">
+    <CollapsibleDetailPageSection id="my-workspaces" title="My Workspaces" variant="h2">
       <Stack spacing={1}>{isWorkspacesUser ? <MainView /> : <NonWorkspacesUserView />}</Stack>
     </CollapsibleDetailPageSection>
   );
