@@ -10,16 +10,16 @@ export interface FindCellTypeSpecificitiesParams {
   minFraction?: number;
 }
 
-type EvaluateMarkersKey = string;
+type CellTypeSpecificitiesKey = string;
 
 interface FindCellTypeSpecificitiesResponse {
-  evaluateMarkers: unknown;
+  cellTypeSpecificities: unknown;
 }
 
 export function createCellTypeSpecificitiesKey(
   scFindEndpoint: string,
   { geneList, datasets, minCells, minFraction }: FindCellTypeSpecificitiesParams,
-): EvaluateMarkersKey {
+): CellTypeSpecificitiesKey {
   return createScFindKey(scFindEndpoint, 'findCellTypeSpecificities', {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
     datasets: Array.isArray(datasets) ? datasets.join(',') : datasets,
@@ -31,5 +31,5 @@ export function createCellTypeSpecificitiesKey(
 export default function useFindCellTypeSpecificities(params: FindCellTypeSpecificitiesParams) {
   const { scFindEndpoint } = useAppContext();
   const key = createCellTypeSpecificitiesKey(scFindEndpoint, params);
-  return useSWR<FindCellTypeSpecificitiesResponse, unknown, EvaluateMarkersKey>(key, (url) => fetcher({ url }));
+  return useSWR<FindCellTypeSpecificitiesResponse, unknown, CellTypeSpecificitiesKey>(key, (url) => fetcher({ url }));
 }

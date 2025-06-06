@@ -7,9 +7,34 @@ import { Copy } from 'js/shared-styles/tables/actions';
 import BulkDownloadButtonFromSearch from 'js/components/bulkDownload/buttons/BulkDownloadButtonFromSearch';
 import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
 
+const categoryTrackingMapping = {
+  'Molecular and Cellular Query': {
+    save: 'Results / Save Datasets',
+    copy: 'Results / Copy HuBMAP IDs',
+    download: 'Results / Download Datasets',
+  },
+  'Gene Detail Page': {
+    save: 'Datasets / Results / Save Results to List',
+    copy: 'Datasets / Results / Copy Gene IDs',
+    download: 'Datasets / Results / Download Gene Details',
+  },
+};
+
+const useDatasetListHeaderTracking = () => {
+  const { category, label } = useMolecularDataQueryFormTracking();
+
+  return {
+    category,
+    save: categoryTrackingMapping[category]?.save || 'Results / Save Datasets',
+    copy: categoryTrackingMapping[category]?.copy || 'Results / Copy HuBMAP IDs',
+    download: categoryTrackingMapping[category]?.download || 'Results / Download Datasets',
+    label,
+  };
+};
+
 export default function DatasetListHeader() {
   const selectedUuids = useSelectableTableStore((state) => state.selectedRows);
-  const { sessionId } = useMolecularDataQueryFormTracking();
+  const { category, save, copy, download, label } = useDatasetListHeaderTracking();
   return (
     <Stack direction="row" alignItems="center">
       <Typography variant="subtitle1">Datasets</Typography>
@@ -18,24 +43,24 @@ export default function DatasetListHeader() {
           entity_type="Dataset"
           uuids={selectedUuids}
           trackingInfo={{
-            category: 'Molecular and Cellular Query',
-            action: 'Results / Save Datasets',
-            label: sessionId,
+            category,
+            action: save,
+            label,
           }}
         />
         <Copy
           trackingInfo={{
-            category: 'Molecular and Cellular Query',
-            action: 'Results / Copy HuBMAP IDs',
-            label: sessionId,
+            category,
+            action: copy,
+            label,
           }}
         />
         <BulkDownloadButtonFromSearch
           type="dataset"
           trackingInfo={{
-            category: 'Molecular and Cellular Query',
-            action: 'Results / Download Datasets',
-            label: sessionId,
+            category,
+            action: download,
+            label,
           }}
         />
       </Stack>

@@ -1,20 +1,30 @@
-import Box from '@mui/material/Box';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { useIndexedDatasetsForOrgan } from 'js/pages/Organ/hooks';
-import OutlinedLinkButton from 'js/shared-styles/buttons/OutlinedLinkButton';
 import { DatasetIcon } from 'js/shared-styles/icons';
-import React from 'react';
-import Skeleton from '@mui/material/Skeleton';
+import React, { PropsWithChildren } from 'react';
+import { EventInfo } from 'js/components/types';
+import { trackEvent } from 'js/helpers/trackers';
 import { useUUIDsFromHubmapIds } from '../hooks';
-import { getSearchURL } from '../utils';
 import { StyledDetailsAccordion } from './styles';
+import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
 
-function IndexedDatasetsSummary() {
-  const { datasets, isLoading: isLoadingSCFind, datasetTypes } = useIndexedDatasetsForOrgan();
+interface IndexedDatasetsSummaryProps {
+  datasets: string[];
+  datasetTypes: { key: string; doc_count: number }[];
+  isLoadingDatasets?: boolean;
+  trackingInfo?: EventInfo;
+}
+
+function IndexedDatasetsSummary({
+  datasets = [],
+  datasetTypes = [],
+  isLoadingDatasets = false,
+  children,
+  trackingInfo,
+}: PropsWithChildren<IndexedDatasetsSummaryProps>) {
   const { datasetUUIDs, isLoading: isLoadingUUIDs } = useUUIDsFromHubmapIds(datasets);
 
-  const isLoading = isLoadingSCFind || isLoadingUUIDs;
+  const isLoading = isLoadingDatasets || isLoadingUUIDs;
 
   return (
     <Stack spacing={2} sx={{ marginTop: 2 }}>
@@ -30,12 +40,17 @@ function IndexedDatasetsSummary() {
             component: 'div',
           },
         }}
+        onChange={(_, expanded) => {
+          if (trackingInfo) {
+            trackEvent({
+              ...trackingInfo,
+              action: `${expanded ? 'Expand' : 'Collapse'} Indexed Datasets Summary`,
+            });
+          }
+        }}
       >
         <Typography variant="body2" component="div">
-          These results are derived from RNAseq datasets that were indexed by the scFind method to identify the cell
-          types associated with this organ. Not all HuBMAP datasets are currently compatible with this method due to
-          differences in data modalities or the availability of cell annotations. This section gives a summary of the
-          datasets that are used to compute these results, and only datasets from this organ are included.
+          {children}
         </Typography>
         <StyledDetailsAccordion
           summary={
@@ -62,20 +77,12 @@ function IndexedDatasetsSummary() {
           </Stack>
         </StyledDetailsAccordion>
       </StyledDetailsAccordion>
-      <Box>
-        {isLoading ? (
-          <Skeleton variant="rectangular" width={200} height={40} />
-        ) : (
-          <OutlinedLinkButton
-            link={getSearchURL({
-              entityType: 'Dataset',
-              datasetUUIDs,
-            })}
-          >
-            View Indexed Datasets
-          </OutlinedLinkButton>
-        )}
-      </Box>
+      <ViewIndexedDatasetsButton
+        context="Cell Types"
+        datasetUUIDs={datasetUUIDs}
+        isLoading={isLoading}
+        trackingInfo={trackingInfo}
+      />
     </Stack>
   );
 }

@@ -4,7 +4,7 @@ export interface CellTypesTableProps {
 
 export interface CellTypeRowProps {
   cellType: string;
-  clid?: string;
+  clid?: string | null;
   matchedDatasets?: string[];
   percentage?: string;
   totalIndexedDatasets?: number;

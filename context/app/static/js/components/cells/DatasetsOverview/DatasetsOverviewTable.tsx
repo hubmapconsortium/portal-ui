@@ -7,6 +7,7 @@ import React from 'react';
 import Divider from '@mui/material/Divider';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
 import { DatasetOverviewRow, DatasetsOverviewDigest, useFormattedRows } from './hooks';
 import DownloadDatasetsOverview from './DownloadDatasetsOverview';
 
@@ -52,29 +53,31 @@ export default function DatasetsOverviewTable({ matched, indexed, all }: Overvie
       <Stack direction="row" justifyContent="end" width="100%" my={2}>
         <DownloadDatasetsOverview rows={rows} />
       </Stack>
-      <Table>
-        <TableHead>
-          <TableRow>
-            <TableCell>Metric</TableCell>
-            <TableCell>Matched</TableCell>
-            <DividerCell />
-            <TableCell>
-              <InfoTextTooltip tooltipTitle={tooltips.indexed}>Indexed Datasets</InfoTextTooltip>
-            </TableCell>
-            <TableCell>Matched/Indexed (%)</TableCell>
-            <DividerCell />
-            <TableCell>
-              <InfoTextTooltip tooltipTitle={tooltips.all}>Total Datasets in HuBMAP Data Portal</InfoTextTooltip>
-            </TableCell>
-            <TableCell>Matched/Total (%)</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {rows.map((row) => (
-            <OverviewTableRow key={row.label} {...row} />
-          ))}
-        </TableBody>
-      </Table>
+      <Paper>
+        <Table>
+          <TableHead>
+            <TableRow>
+              <TableCell>Metric</TableCell>
+              <TableCell>Matched</TableCell>
+              <DividerCell />
+              <TableCell>
+                <InfoTextTooltip tooltipTitle={tooltips.indexed}>Indexed Datasets</InfoTextTooltip>
+              </TableCell>
+              <TableCell>Matched/Indexed (%)</TableCell>
+              <DividerCell />
+              <TableCell>
+                <InfoTextTooltip tooltipTitle={tooltips.all}>Total Datasets in HuBMAP Data Portal</InfoTextTooltip>
+              </TableCell>
+              <TableCell>Matched/Total (%)</TableCell>
+            </TableRow>
+          </TableHead>
+          <TableBody>
+            {rows.map((row) => (
+              <OverviewTableRow key={row.label} {...row} />
+            ))}
+          </TableBody>
+        </Table>
+      </Paper>
     </>
   );
 }

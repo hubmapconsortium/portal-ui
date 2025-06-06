@@ -5,19 +5,16 @@ import Summary from 'js/components/genes/Summary';
 import GenePageProvider from 'js/components/genes/GenePageContext';
 import GenePageTitle from 'js/components/genes/GenePageTitle';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
-import BiomarkerQuery from 'js/components/genes/BiomarkerQuery';
-import Organs from 'js/components/genes/Organs';
+import Datasets from 'js/components/genes/Datasets';
 
 import { pageSectionIDs } from 'js/components/genes/constants';
-import CellTypes from 'js/components/genes/CellTypes/CellTypes';
+import CellTypes from 'js/components/genes/CellTypes/GeneCellTypes';
 
-const { summary, biomarkerQuery, organs, cellTypes } = pageSectionIDs;
+const { datasets, cellTypes } = pageSectionIDs;
 
 const shouldDisplaySection = {
-  [summary]: true,
-  [cellTypes]: false,
-  [organs]: true,
-  [biomarkerQuery]: true,
+  [cellTypes]: true,
+  [datasets]: true,
 };
 
 interface Props {
@@ -30,10 +27,9 @@ function GeneDetails({ geneSymbol }: Props) {
       <DetailLayout sections={shouldDisplaySection}>
         <SummaryTitle entityIcon="Gene">Gene</SummaryTitle>
         <GenePageTitle />
-        {shouldDisplaySection[summary] && <Summary />}
+        <Summary />
         {shouldDisplaySection[cellTypes] && <CellTypes />}
-        {shouldDisplaySection[organs] && <Organs />}
-        {shouldDisplaySection[biomarkerQuery] && <BiomarkerQuery />}
+        {shouldDisplaySection[datasets] && <Datasets />}
       </DetailLayout>
     </GenePageProvider>
   );

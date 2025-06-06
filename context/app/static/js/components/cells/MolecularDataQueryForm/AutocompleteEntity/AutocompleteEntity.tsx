@@ -158,6 +158,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
             <CustomChip
               targetEntity={targetEntity}
               option={option}
+              label={option.full}
               {...tagProps}
               onDelete={onDelete}
               key={option.full}

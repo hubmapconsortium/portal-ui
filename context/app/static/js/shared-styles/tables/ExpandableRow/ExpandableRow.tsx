@@ -5,6 +5,7 @@ import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import ClickableRow from 'js/shared-styles/tables/ClickableRow';
 import { TableRowProps } from '@mui/material/TableRow';
+import { useEventCallback } from '@mui/material/utils';
 import { ExpandableRowProvider, useExpandableRowStore } from './store';
 import { ExpandedRow, ExpandedCell, StyledExpandCollapseIcon } from './style';
 
@@ -16,6 +17,7 @@ interface ExpandableRowChildProps extends PropsWithChildren, TableRowProps {
   collapseTooltip?: string;
   disabledTooltipTitle?: string;
   reverse?: boolean;
+  onExpand?: (isExpanded: boolean) => void;
 }
 
 function ExpandableRowChild({
@@ -27,6 +29,7 @@ function ExpandableRowChild({
   collapseTooltip = '',
   disabledTooltipTitle,
   reverse = false,
+  onExpand,
   ...rest
 }: ExpandableRowChildProps) {
   const { isExpanded, toggleIsExpanded } = useExpandableRowStore();
@@ -43,9 +46,14 @@ function ExpandableRowChild({
     </ExpandableRowCell>
   );
 
+  const onClick = useEventCallback(() => {
+    toggleIsExpanded();
+    onExpand?.(!isExpanded);
+  });
+
   return (
     <>
-      <ClickableRow {...rest} onClick={toggleIsExpanded} disabled={disabled} label="expand row">
+      <ClickableRow {...rest} onClick={onClick} disabled={disabled} label="expand row">
         {reverse ? expandableCell : null}
         {children}
         {reverse ? null : expandableCell}

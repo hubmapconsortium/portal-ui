@@ -1,3 +1,3 @@
-import CellTypes from './CellTypes';
+import CellTypes from './GeneCellTypes';
 
 export default CellTypes;

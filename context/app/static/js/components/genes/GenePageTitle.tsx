@@ -1,34 +1,26 @@
 import React from 'react';
 
-import Skeleton from '@mui/material/Skeleton';
 import Stack from '@mui/material/Stack';
 
 import PageTitle from 'js/shared-styles/pages/PageTitle';
 
+import { capitalizeString } from 'js/helpers/functions';
 import { useGeneOntology, useGenePageContext } from './hooks';
 
-function GeneSymbol() {
+function GeneName() {
   const { geneSymbol } = useGenePageContext();
   const { data } = useGeneOntology();
   if (!data) {
     return geneSymbol.toUpperCase();
   }
-  return data.approved_symbol;
-}
-
-function GeneName() {
-  const { data } = useGeneOntology();
-  if (!data) {
-    return <Skeleton variant="rounded" width={160} sx={{ display: 'inline-block' }} />;
-  }
-  return data.approved_name;
+  return `${capitalizeString(data.approved_name)} (${data.approved_symbol})`;
 }
 
 function GenePageTitle() {
   return (
     <PageTitle>
       <Stack direction="row">
-        <GeneSymbol /> (<GeneName />)
+        <GeneName />
       </Stack>
     </PageTitle>
   );

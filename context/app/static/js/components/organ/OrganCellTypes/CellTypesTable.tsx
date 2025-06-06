@@ -9,42 +9,16 @@ import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import { StyledTableContainer } from 'js/shared-styles/tables';
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
-import Skeleton from '@mui/material/Skeleton';
-import Typography from '@mui/material/Typography';
-import { useCellTypeOntologyDetail } from 'js/hooks/useUBKG';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
 import { useSortState } from 'js/hooks/useSortState';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import { useDownloadTable } from 'js/helpers/download';
 import { useCellTypeRows } from './hooks';
-import { CellTypeRowProps, CellTypesTableProps, CLIDCellProps } from './types';
+import { CellTypeRowProps, CellTypesTableProps } from './types';
 import { CellTypeCell, CLIDCell, MatchedDatasetsCell, ViewDatasetsCell } from './CellTypesTableCells';
 import { useOrganContext } from '../contexts';
-
-function CellTypeDescription({ clid }: CLIDCellProps) {
-  const cellIdWithoutPrefix = clid ? clid.replace('CL:', '') : undefined;
-  const { data, error, isLoading } = useCellTypeOntologyDetail(cellIdWithoutPrefix);
-  const description = data?.cell_type.definition;
-
-  if (error) {
-    return (
-      <Typography variant="body2" sx={{ p: 2 }}>
-        Error loading description for cell type {clid}.
-      </Typography>
-    );
-  }
-
-  if (isLoading) {
-    return <Skeleton variant="text" sx={{ p: 2 }} />;
-  }
-
-  return (
-    <Typography variant="body2" sx={{ p: 2 }}>
-      {description ?? 'No description available for this cell type.'}
-    </Typography>
-  );
-}
+import CellTypeDescription from './CellTypeDescription';
 
 function CellTypeRow({ cellType, clid, matchedDatasets, percentage, totalIndexedDatasets }: CellTypeRowProps) {
   return (
