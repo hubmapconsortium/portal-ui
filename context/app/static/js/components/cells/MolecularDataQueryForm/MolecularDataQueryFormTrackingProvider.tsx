@@ -10,33 +10,48 @@ interface MolecularDataQueryFormTrackingProviderProps extends React.PropsWithChi
 interface MolecularDataQueryFormTrackingContext {
   track: (action: string, name?: string) => void;
   sessionId: string;
+  category: string;
+  isDefaultCategory: boolean;
 }
 
 const MolecularDataQueryFormTrackingContext = createContext<MolecularDataQueryFormTrackingContext>(
   'MolecularDataQueryFormTrackingContext',
 );
 
+const defaultCategory = 'Molecular and Cellular Query';
+
 export default function MolecularDataQueryFormTrackingProvider({
   children,
-  category = 'Molecular and Cellular Query',
+  category = defaultCategory,
 }: MolecularDataQueryFormTrackingProviderProps) {
   // This generates a unique session ID for each instance of the form
   // to track the session of the user filling out the form.
   const sessionId = useRef<string>(`{${v4()}}`);
 
+  const isDefaultCategory = category === defaultCategory;
+
   const track = useCallback(
     (action: string, name?: string) => {
       const id = sessionId.current;
+      const molecularQueryTrackingLabel = name ? `${id} ${name}` : id;
       trackEvent({
         category,
         action,
-        label: name ? `${id} ${name}` : id,
+        label: isDefaultCategory ? molecularQueryTrackingLabel : name,
       });
     },
-    [category],
+    [category, isDefaultCategory],
   );
 
-  const value = useMemo(() => ({ track, sessionId: sessionId.current }), [track]);
+  const value = useMemo(
+    () => ({
+      track,
+      sessionId: sessionId.current,
+      category,
+      isDefaultCategory,
+    }),
+    [category, isDefaultCategory, track],
+  );
 
   return (
     <MolecularDataQueryFormTrackingContext.Provider value={value}>

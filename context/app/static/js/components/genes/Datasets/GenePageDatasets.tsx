@@ -45,7 +45,7 @@ export default function Datasets() {
         multiple genes, use the molecular and cellular query tool.
       </Description>
       <Box py={1} />
-      <MolecularDataQueryFormTrackingProvider category={`Gene Detail Page ${geneSymbol}`}>
+      <MolecularDataQueryFormTrackingProvider category="Gene Detail Page">
         <MolecularDataQueryFormProvider
           initialValues={{
             queryType: 'gene',
