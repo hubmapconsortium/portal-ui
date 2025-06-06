@@ -57,7 +57,11 @@ function Organ({ organ }: OrganProps) {
         </Typography>
         <Description shouldDisplay={shouldDisplaySection[summaryId]} />
         <HumanReferenceAtlas shouldDisplay={shouldDisplaySection[hraId]} />
-        <CellPopulationPlot uuids={labeledDatasetUuids} shouldDisplay={shouldDisplaySection[cellpopId]} />
+        <CellPopulationPlot
+          uuids={labeledDatasetUuids}
+          shouldDisplay={shouldDisplaySection[cellpopId]}
+          organ={organ.name}
+        />
         <CellTypes shouldDisplay={shouldDisplaySection[cellTypesId]} cellTypes={cellTypes} />
         <Azimuth shouldDisplay={shouldDisplaySection[referenceId]} />
         <Assays organTerms={searchItems} bucketData={assayBuckets} shouldDisplay={shouldDisplaySection[assaysId]} />

@@ -1,0 +1,2 @@
+- Add facets to filter datasets with annotations.
+- Replace hard coded list of Azimuth annotated datasets with search query.
