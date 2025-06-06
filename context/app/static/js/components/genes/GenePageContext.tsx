@@ -1,4 +1,4 @@
-import React, { PropsWithChildren, useMemo } from 'react';
+import React, { PropsWithChildren, useMemo, useContext as useOptionalContext } from 'react';
 import { createContext, useContext } from 'js/helpers/context';
 
 interface GenePageContextProps {
@@ -16,3 +16,4 @@ export default function GenePageProvider({ children, geneSymbol }: PropsWithChil
 }
 
 export const useGenePageContext = () => useContext(GenePageContext);
+export const useOptionalGenePageContext = () => useOptionalContext(GenePageContext);
