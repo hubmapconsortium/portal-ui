@@ -2,13 +2,14 @@ import React from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import { MyLists, MyWorkspaces, ProfileSummary } from 'js/components/profile';
+import { MyLists, MyWorkspaces, MyPreferences, ProfileSummary } from 'js/components/profile';
 import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
 
 const shouldDisplaySection = {
   summary: true,
   'my-lists': true,
-  workspaces: true,
+  'my-workspaces': true,
+  'my-preferences': true,
 };
 
 function ProfilePage() {
@@ -23,6 +24,7 @@ function ProfilePage() {
       <ProfileSummary />
       <MyLists />
       <MyWorkspaces />
+      <MyPreferences />
     </DetailLayout>
   );
 }

@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.27.0 - 2025-06-05
+
+- Add table of indexed cell types found in a given organ to organ pages.
+- Integrate OpenKeyNav accessibility tool.
+- Add the data products and scfind APIs to the service status page.
+
+
+
 ## v1.26.2 - 2025-05-29
 
 - Fix gene pathways effect causing molecular data queries to fail.

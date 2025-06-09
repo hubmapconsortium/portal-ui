@@ -14,6 +14,7 @@ import 'js/components/searchPage/Search.scss';
 import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
 import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
+import OpenKeyNavInitializer from './OpenKeyNavInitializer';
 
 // TODO: Delete this when workspaces are publicly released.
 // If we stay in limbo for a long time, this configuration could be moved out of code.
@@ -76,6 +77,7 @@ function App(props) {
             improved on by using a global modal stack with portals. */}
         <LaunchWorkspaceDialog />
         <EditWorkspaceDialog />
+        <OpenKeyNavInitializer />
       </Providers>
     </StrictMode>
   );
