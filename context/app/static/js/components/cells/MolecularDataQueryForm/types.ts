@@ -1,3 +1,4 @@
+import { PropsWithChildren } from 'react';
 import { AutocompleteResult } from './AutocompleteEntity/types';
 
 export const QUERY_TYPES = ['gene', 'protein', 'cell-type'] as const;
@@ -45,3 +46,7 @@ export interface CellTypeQueryFormState {
 }
 
 export type MolecularDataQueryFormState = GeneQueryFormState | ProteinQueryFormState | CellTypeQueryFormState;
+
+export interface MolecularDataQueryFormProps extends PropsWithChildren {
+  initialValues?: Partial<MolecularDataQueryFormState>;
+}

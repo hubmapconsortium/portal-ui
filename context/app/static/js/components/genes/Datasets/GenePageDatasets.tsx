@@ -1,6 +1,6 @@
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import React from 'react';
-import { MolecularDataQueryFormProvider } from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryForm';
+import MolecularDataQueryFormProvider from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryFormProvider';
 import MolecularDataQueryFormTrackingProvider from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 import SCFindGeneQueryResults from 'js/components/cells/SCFindResults/SCFindGeneQueryResults';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
