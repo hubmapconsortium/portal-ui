@@ -1,12 +1,11 @@
 import React from 'react';
 import OpenKeyNav from 'openkeynav';
-
-import { useSavedPreferences } from 'js/components/savedLists/hooks';
+import useOpenKeyNavStore from 'js/stores/useOpenKeyNavStore';
 
 function useInitializeOpenKeyNav() {
-  const { savedPreferences } = useSavedPreferences();
+  const initialize = useOpenKeyNavStore((s) => s.initialize);
 
-  if (savedPreferences.enableOpenKeyNav) {
+  if (initialize) {
     const openKeyNav = new OpenKeyNav();
     openKeyNav.init({
       keys: {
@@ -16,7 +15,7 @@ function useInitializeOpenKeyNav() {
       debug: {
         keyboardAccessible: false,
       },
-    });
+    }).enable();
   }
 }
 

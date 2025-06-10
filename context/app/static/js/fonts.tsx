@@ -7,26 +7,22 @@ import JetbrainsMonoVariable from '@fontsource-variable/jetbrains-mono/files/jet
 export default function GlobalFonts() {
   return (
     <GlobalStyles
-      styles={{
-        '@supports (font-variation-settings: normal)': {
-          '@font-face': [
-            {
-              'font-family': 'Inter Variable',
-              src: `url(${InterVariable}) format('woff2')`,
-              'font-weight': '1 999',
-              'font-style': 'oblique 0deg 10deg',
-              'font-display': 'swap',
-            },
-            {
-              'font-family': 'JetBrains Mono Variable',
-              src: `url(${JetbrainsMonoVariable}) format('woff2')`,
-              'font-weight': '100 800',
-              'font-style': 'oblique 0deg 10deg',
-              'font-display': 'swap',
-            },
-          ],
-        },
-      }}
+      styles={`@supports (font-variation-settings: normal) {
+          @font-face {
+            font-family: 'Inter Variable';
+            src: url(${InterVariable}) format('woff2');
+            font-weight: 1 999;
+            font-style: 'oblique 0deg 10deg';
+            font-display: 'swap';
+          }
+          @font-face {
+            font-family: 'JetBrains Mono Variable';
+            src: url(${JetbrainsMonoVariable}) format('woff2');
+            font-weight: 100 800;
+            font-style: 'oblique 0deg 10deg';
+            font-display: 'swap';
+          }
+        }`}
     />
   );
 }

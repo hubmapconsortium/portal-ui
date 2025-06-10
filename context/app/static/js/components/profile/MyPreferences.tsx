@@ -3,14 +3,26 @@ import Typography from '@mui/material/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import Stack from '@mui/material/Stack';
-
+import useOpenKeyNavStore, { deleteOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
-import { useSavedPreferences } from 'js/components/savedLists/hooks';
+
+function buildOnCommand() {
+  const { userAgent } = window.navigator;
+  if (userAgent.includes('Mac')) {
+    return 'Command ⌘ + /';
+  }
+
+  if (userAgent.includes('Win')) {
+    return 'Windows ⊞ + /';
+  }
+
+  return 'Meta + /';
+}
 
 const openKeyNavCommands = [
-  { command: 'Shift + o', description: 'Turn OpenKeyNav on/off' },
+  { command: buildOnCommand(), description: 'Turn OpenKeyNav on/off' },
   { command: 'k', description: 'Enter click mode to click on clickable elements, such as links' },
   { command: 's', description: 'Focus on the next scrollable region' },
   { command: 'h', description: 'Focus on the next heading' },
@@ -18,15 +30,16 @@ const openKeyNavCommands = [
 ];
 
 function OpenKeyNavSection() {
-  const { savedPreferences, handleUpdateSavedPreferences } = useSavedPreferences();
+  const initialize = useOpenKeyNavStore((s) => s.initialize);
+  const setInitialize = useOpenKeyNavStore((s) => s.setInitialize);
+
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked;
-
-    handleUpdateSavedPreferences({ enableOpenKeyNav: newValue }).catch((error) => {
-      console.error('Failed to update preferences:', error);
-    });
+    setInitialize(!initialize);
+    if (e.target.checked === false) {
+      deleteOpenKeyNavCookie();
+    }
   };
 
   const handleToggleAccordion = useCallback(() => {
@@ -42,11 +55,7 @@ function OpenKeyNavSection() {
         <OutboundIconLink href="https://openkeynav.com/">OpenKeyNav</OutboundIconLink> or read the{' '}
         <OutboundIconLink href="https://osf.io/preprints/osf/3wjsa">research preprint</OutboundIconLink>.
       </Typography>
-      <LabeledPrimarySwitch
-        checked={Boolean(savedPreferences.enableOpenKeyNav)}
-        onChange={handleChange}
-        ariaLabel="OpenKeyNav"
-      />
+      <LabeledPrimarySwitch checked={initialize} onChange={handleChange} ariaLabel="OpenKeyNav" />
       <DetailsAccordion
         sx={{ '.MuiAccordionSummary-root': { flexDirection: 'row' } }}
         expanded={accordionIsOpen}
