@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import Stack from '@mui/material/Stack';
-import useOpenKeyNavStore from 'js/stores/useOpenKeyNavStore';
+import useOpenKeyNavStore, { deleteOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
@@ -22,8 +22,11 @@ function OpenKeyNavSection() {
 
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
 
-  const handleChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInitialize(!initialize);
+    if (e.target.checked === false) {
+      deleteOpenKeyNavCookie();
+    }
   };
 
   const handleToggleAccordion = useCallback(() => {

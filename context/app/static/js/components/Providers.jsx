@@ -8,7 +8,7 @@ import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import GlobalStyles from 'js/components/globalStyles';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import { EntityStoreProvider } from 'js/stores/useEntityStore';
-import { OpenKeyNavStoreProvider } from 'js/stores/useOpenKeyNavStore';
+import { OpenKeyNavStoreProvider, readOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
 
 import { InitialHashContextProvider } from 'js/hooks/useInitialHash';
 import theme from '../theme';
@@ -62,19 +62,6 @@ export default function Providers({
   const flaskDataWithDefaults = useMemo(() => ({ entity: {}, ...flaskData }), [flaskData]);
 
   const { springs } = useEntityHeaderSprings();
-
-  const OPEN_KEY_NAV_COOKIE_KEY = 'openKeyNav_enabled';
-
-function readOpenKeyNavCookie() {
-  const allCookies = document.cookie;
-  const enabled = allCookies
-    .split('; ')
-    .find((cookie) => cookie.startsWith(OPEN_KEY_NAV_COOKIE_KEY))
-    ?.split('=')?.[1];
-
-  return Boolean(enabled === 'true');
-}
-
 
   return (
     <SWRConfig value={swrConfig}>
