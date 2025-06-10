@@ -3,11 +3,10 @@ import Typography from '@mui/material/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import Stack from '@mui/material/Stack';
-
+import useOpenKeyNavStore from 'js/stores/useOpenKeyNavStore';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
-import { useSavedPreferences } from 'js/components/savedLists/hooks';
 
 const openKeyNavCommands = [
   { command: 'Shift + o', description: 'Turn OpenKeyNav on/off' },
@@ -18,15 +17,13 @@ const openKeyNavCommands = [
 ];
 
 function OpenKeyNavSection() {
-  const { savedPreferences, handleUpdateSavedPreferences } = useSavedPreferences();
+  const initialize = useOpenKeyNavStore((s) => s.initialize);
+  const setInitialize = useOpenKeyNavStore((s) => s.setInitialize);
+
   const [accordionIsOpen, setAccordionIsOpen] = useState(false);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const newValue = e.target.checked;
-
-    handleUpdateSavedPreferences({ enableOpenKeyNav: newValue }).catch((error) => {
-      console.error('Failed to update preferences:', error);
-    });
+  const handleChange = (_e: React.ChangeEvent<HTMLInputElement>) => {
+    setInitialize(!initialize);
   };
 
   const handleToggleAccordion = useCallback(() => {
@@ -42,11 +39,7 @@ function OpenKeyNavSection() {
         <OutboundIconLink href="https://openkeynav.com/">OpenKeyNav</OutboundIconLink> or read the{' '}
         <OutboundIconLink href="https://osf.io/preprints/osf/3wjsa">research preprint</OutboundIconLink>.
       </Typography>
-      <LabeledPrimarySwitch
-        checked={Boolean(savedPreferences.enableOpenKeyNav)}
-        onChange={handleChange}
-        ariaLabel="OpenKeyNav"
-      />
+      <LabeledPrimarySwitch checked={initialize} onChange={handleChange} ariaLabel="OpenKeyNav" />
       <DetailsAccordion
         sx={{ '.MuiAccordionSummary-root': { flexDirection: 'row' } }}
         expanded={accordionIsOpen}
