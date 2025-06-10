@@ -1,0 +1,1 @@
+- Updates portal-viz version to 0.4.7 to reflect support for visualizing zarr.zip files.
