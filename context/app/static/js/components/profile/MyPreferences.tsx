@@ -8,8 +8,21 @@ import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPag
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
 
+function buildOnCommand() {
+  const { userAgent } = window.navigator;
+  if (userAgent.includes('Mac')) {
+    return 'Command ⌘ + /';
+  }
+
+  if (userAgent.includes('Win')) {
+    return 'Windows ⊞ + /';
+  }
+
+  return 'Meta + /';
+}
+
 const openKeyNavCommands = [
-  { command: 'Shift + o', description: 'Turn OpenKeyNav on/off' },
+  { command: buildOnCommand(), description: 'Turn OpenKeyNav on/off' },
   { command: 'k', description: 'Enter click mode to click on clickable elements, such as links' },
   { command: 's', description: 'Focus on the next scrollable region' },
   { command: 'h', description: 'Focus on the next heading' },
