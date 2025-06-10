@@ -1,33 +1,20 @@
 import React, { PropsWithChildren, useEffect, useId, useState } from 'react';
-import { useForm, FormProvider, FieldErrors } from 'react-hook-form';
+import { FieldErrors } from 'react-hook-form';
 import { useEventCallback } from '@mui/material/utils';
 import Stack from '@mui/material/Stack';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import IndependentStepAccordion from 'js/shared-styles/accordions/StepAccordion/IndependentStepAccordion';
-import { MolecularDataQueryFormState } from './types';
+import { MolecularDataQueryFormProps, MolecularDataQueryFormState } from './types';
 import SubmitButton from './SubmitButton';
 import Results from '../MolecularDataQueryResults';
 import CurrentQueryParametersDisplay from './CurrentQueryParametersDisplay';
 import CurrentQueryResultsDisplay from './CurrentQueryResultsDisplay';
-import { ResultsProvider } from './ResultsProvider';
 import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
-import { getCellVariableNames } from './hooks';
+import { getCellVariableNames, useMolecularDataQueryFormState } from './hooks';
+import MolecularDataQueryFormProvider from './MolecularDataQueryFormProvider';
 
-interface MolecularDataQueryFormProps extends PropsWithChildren {
-  initialValues?: Partial<MolecularDataQueryFormState>;
-}
-
-export default function MolecularDataQueryForm({ children, initialValues }: MolecularDataQueryFormProps) {
-  const methods = useForm<MolecularDataQueryFormState>({
-    defaultValues: {
-      queryType: 'gene',
-      queryMethod: 'scFind',
-      genes: [],
-      minimumCellPercentage: 5,
-      minimumExpressionLevel: 1,
-      ...initialValues,
-    } as Partial<MolecularDataQueryFormState>,
-  });
+export function MolecularDataQueryForm({ children }: PropsWithChildren) {
+  const methods = useMolecularDataQueryFormState();
   const { watch, reset } = methods;
   const { track } = useMolecularDataQueryFormTracking();
 
@@ -36,47 +23,9 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   const queryType = watch('queryType');
   const queryMethod = watch('queryMethod');
   const threshold = watch('minimumCellPercentage');
-  const expression = watch('minimumCellPercentage');
   const genes = watch('genes');
   const proteins = watch('proteins');
   const cellTypes = watch('cellTypes');
-
-  // Reset selected options when query type changes
-  useEffect(() => {
-    const newQueryMethod = {
-      gene: 'scFind',
-      protein: 'crossModality',
-      'cell-type': 'scFind',
-    }[queryType];
-
-    reset(
-      {
-        genes: [],
-        proteins: [],
-        cellTypes: [],
-        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
-        queryType,
-        // @ts-expect-error - some annoying conflicts between queryType and queryMethod
-        queryMethod: newQueryMethod,
-        ...initialValues,
-      },
-      {
-        keepDirty: false,
-        keepIsSubmitSuccessful: false,
-        keepIsSubmitted: false,
-      },
-    );
-  }, [queryType, reset, initialValues]);
-
-  // Reset submission state when query method changes
-  useEffect(() => {
-    reset(undefined, {
-      keepValues: true,
-      keepDirty: false,
-      keepIsSubmitSuccessful: false,
-      keepIsSubmitted: false,
-    });
-  }, [queryMethod, reset]);
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
     const cellVariableNames = getCellVariableNames(queryType, genes, proteins, cellTypes);
@@ -121,7 +70,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
       keepValues: true,
       keepDirty: false,
     });
-  }, [threshold, expression, genes, proteins, cellTypes, reset]);
+  }, [threshold, genes, proteins, cellTypes, reset]);
 
   const id = `${useId()}-molecular-data-query`;
 
@@ -132,7 +81,7 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
   });
 
   return (
-    <FormProvider {...methods}>
+    <>
       <IndependentStepAccordion
         index={0}
         summaryHeading="Parameters"
@@ -148,18 +97,23 @@ export default function MolecularDataQueryForm({ children, initialValues }: Mole
         noProvider
         completedStepText={methods.formState.isSubmitted ? <CurrentQueryParametersDisplay /> : undefined}
       />
-      <ResultsProvider>
-        <IndependentStepAccordion
-          index={1}
-          summaryHeading="Results"
-          id={`${id}-results`}
-          content={<Results />}
-          isExpanded={methods.formState.isSubmitSuccessful}
-          noProvider
-          disabled={!methods.formState.isSubmitSuccessful}
-          completedStepText={methods.formState.isSubmitSuccessful ? <CurrentQueryResultsDisplay /> : undefined}
-        />
-      </ResultsProvider>
-    </FormProvider>
+      <IndependentStepAccordion
+        index={1}
+        summaryHeading="Results"
+        id={`${id}-results`}
+        content={<Results />}
+        isExpanded={methods.formState.isSubmitSuccessful}
+        noProvider
+        disabled={!methods.formState.isSubmitSuccessful}
+        completedStepText={methods.formState.isSubmitSuccessful ? <CurrentQueryResultsDisplay /> : undefined}
+      />
+    </>
+  );
+}
+export default function MolecularDataQueryFormWithProvider({ initialValues, children }: MolecularDataQueryFormProps) {
+  return (
+    <MolecularDataQueryFormProvider initialValues={initialValues}>
+      <MolecularDataQueryForm>{children}</MolecularDataQueryForm>
+    </MolecularDataQueryFormProvider>
   );
 }

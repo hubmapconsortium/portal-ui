@@ -12,10 +12,12 @@ import { useMolecularDataQueryFormState } from '../hooks';
 import { usePathwayAutocompleteQuery, useSelectedPathwayParticipants } from './hooks';
 import { PreserveWhiteSpaceListItem } from './styles';
 import { AutocompleteResult } from './types';
+import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryFormTrackingProvider';
 
 export default function GenePathwaysAutocomplete() {
   const [substring, setSubstring] = useState('');
   const { control } = useMolecularDataQueryFormState();
+  const { track } = useMolecularDataQueryFormTracking();
   const { field } = useController({
     name: 'pathway',
     control,
@@ -30,6 +32,9 @@ export default function GenePathwaysAutocomplete() {
 
   const handlePathwayChange = useEventCallback((_: React.SyntheticEvent, value: AutocompleteResult | null) => {
     field.onChange(value);
+    if (value) {
+      track('Parameters / Select Pathway', value?.full);
+    }
   });
 
   const { options, isLoading } = usePathwayAutocompleteQuery(substring);

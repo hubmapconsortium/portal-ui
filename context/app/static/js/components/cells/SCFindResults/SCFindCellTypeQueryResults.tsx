@@ -6,6 +6,7 @@ import { Dataset } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
+import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import { useDeduplicatedResults, useSCFindCellTypeResults, useTableTrackingProps } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
@@ -91,7 +92,7 @@ function OrganCellTypeDistributionCharts() {
             Datasets Overview
           </Typography>
           <DatasetsOverview datasets={datasetsByTissue[tissue]}>
-            These results are derived from RNAseq datasets that were indexed by the scFind method. Not all HuBMAP
+            These results are derived from RNAseq datasets that were indexed by the <SCFindLink />. Not all HuBMAP
             datasets are currently compatible with this method due to data modalities or the availability of cell
             annotations. The table below summarizes the number of matched datasets and the proportions relative to
             scFind-indexed datasets and total HuBMAP datasets.

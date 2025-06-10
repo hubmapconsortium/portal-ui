@@ -8,6 +8,7 @@ import { OrderIcon } from 'js/components/searchPage/SortingTableHead/SortingTabl
 import { SortState } from 'js/hooks/useSortState';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
+import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { Column } from './types';
 
 interface EntityHeaderCellTypes<Doc> {
@@ -18,7 +19,7 @@ interface EntityHeaderCellTypes<Doc> {
 }
 
 export default function EntityHeaderCell<Doc>({
-  column,
+  column: { tooltipText, ...column },
   setSort,
   sortState,
   trackingInfo,
@@ -34,10 +35,16 @@ export default function EntityHeaderCell<Doc>({
     setSort(column.id);
   });
 
+  const label = tooltipText ? (
+    <InfoTextTooltip tooltipTitle={tooltipText}>{column.label}</InfoTextTooltip>
+  ) : (
+    column.label
+  );
+
   if (column.noSort) {
     return (
-      <HeaderCell key={column.id} sx={({ palette }) => ({ backgroundColor: palette.background.paper })}>
-        {column.label}
+      <HeaderCell key={column.id} sx={{ backgroundColor: 'background.paper' }}>
+        {label}
       </HeaderCell>
     );
   }
@@ -48,7 +55,7 @@ export default function EntityHeaderCell<Doc>({
   // within the cell. The absolute button is the one that is visible and clickable, and takes up the full width of
   // the cell, which is guaranteed to be wide enough to contain the column label.
   return (
-    <HeaderCell key={column.id} sx={({ palette }) => ({ backgroundColor: palette.background.paper })}>
+    <HeaderCell key={column.id} sx={{ backgroundColor: 'background.paper' }}>
       <Button sx={{ visibility: 'hidden', whiteSpace: 'nowrap', py: 0 }} fullWidth disabled>
         {column.label}
       </Button>
@@ -68,7 +75,7 @@ export default function EntityHeaderCell<Doc>({
         }}
         endIcon={<OrderIcon order={sortState.columnId === column.id ? sortState.direction : undefined} />}
       >
-        {column.label}
+        {label}
       </Button>
     </HeaderCell>
   );

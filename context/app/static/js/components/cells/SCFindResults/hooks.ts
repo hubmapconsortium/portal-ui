@@ -83,29 +83,39 @@ export function useDeduplicatedResults(datasets?: Record<string, (Pick<Dataset, 
 }
 
 export function useTableTrackingProps() {
-  const { track, sessionId } = useMolecularDataQueryFormTracking();
+  const { track, label, category } = useMolecularDataQueryFormTracking();
   return useMemo(() => {
+    const prefix = {
+      'Molecular and Cellular Query': 'Results',
+      'Gene Detail Page': 'Datasets / Results',
+    }[category];
     const onSelectAllChange = (e: ChangeEvent<HTMLInputElement>) => {
       const isSelected = e.target.checked;
       if (isSelected) {
-        track('Results / Select All Datasets');
+        track(`${prefix} / Select All Datasets`);
       }
     };
     const onSelectChange = (e: ChangeEvent<HTMLInputElement>, id: string) => {
       const isSelected = e.target.checked;
       if (isSelected) {
-        track('Results / Select Dataset', id);
+        track(`${prefix} / Select Dataset`, id);
       }
     };
+    const onExpand = (id: string) => (isExpanded: boolean) => {
+      const action = isExpanded ? 'Expand' : 'Collapse';
+      track(`${prefix} / ${action} Dataset`, id);
+    };
+
     const trackingInfo = {
-      category: 'Molecular and Cellular Query',
-      action: 'Results',
-      label: sessionId,
+      category,
+      action: prefix,
+      label,
     };
     return {
       onSelectAllChange,
       onSelectChange,
+      onExpand,
       trackingInfo,
     };
-  }, [track, sessionId]);
+  }, [track, label, category]);
 }
