@@ -39,6 +39,7 @@ function OpenKeyNavSection() {
     setInitialize(!initialize);
     if (e.target.checked === false) {
       deleteOpenKeyNavCookie();
+      window.location.reload();
     }
   };
 
