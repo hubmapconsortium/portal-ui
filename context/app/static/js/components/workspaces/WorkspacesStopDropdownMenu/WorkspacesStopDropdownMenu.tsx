@@ -1,100 +1,105 @@
 import React from 'react';
 import MenuItem from '@mui/material/MenuItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
+import SvgIcon from '@mui/material/SvgIcon';
 
-import { isRunningWorkspace } from 'js/components/workspaces/utils';
-import { TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
 import { useRunningWorkspaces, useWorkspacesList } from 'js/components/workspaces/hooks';
-import { ChecklistIcon, StopAllIcon, StopJobIcon } from 'js/shared-styles/icons';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
+import { isRunningWorkspace } from 'js/components/workspaces/utils';
 import { generateBoldCommaList } from 'js/helpers/functions';
+import { StopAllIcon, StopJobIcon, ChecklistIcon } from 'js/shared-styles/icons';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu/DropdownMenu';
 import { StyledDropdownMenuButton } from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
-import SvgIcon from '@mui/material/SvgIcon';
+
+interface StopActionProps {
+  workspaces: { id: number; name: string }[];
+  label: string;
+  Icon: typeof SvgIcon;
+  disabled: boolean;
+  onStop: (ids: number[], names: JSX.Element | string) => void;
+}
+
+function StopMenuItem({ workspaces, label, Icon, disabled, onStop }: StopActionProps) {
+  const workspaceIds = workspaces.map((ws) => ws.id);
+  const workspaceNames = generateBoldCommaList(workspaces.map((ws) => ws.name));
+
+  return (
+    <MenuItem onClick={() => onStop(workspaceIds, workspaceNames)} disabled={disabled}>
+      <ListItemIcon>
+        <Icon fontSize="1.25rem" color="primary" />
+      </ListItemIcon>
+      {label}
+    </MenuItem>
+  );
+}
 
 function StopAllWorkspaces() {
   const runningWorkspaces = useRunningWorkspaces();
   const { handleStopWorkspaces, isStoppingWorkspace } = useWorkspacesList();
   const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
 
-  const disabled = runningWorkspaces.length === 0 || isStoppingWorkspace;
-
-  const workspaceIdArr = runningWorkspaces.map((workspace) => workspace.id);
-  const workspaceNameList = generateBoldCommaList(runningWorkspaces.map((ws) => ws.name));
+  const handleStop = (ids: number[], names: JSX.Element | string) => {
+    handleStopWorkspaces(ids)
+      .then(() => {
+        toastSuccessStopWorkspace(names);
+      })
+      .catch((err) => {
+        toastErrorStopWorkspace(names);
+        console.error(err);
+      });
+  };
 
   return (
-    <MenuItem
-      onClick={() => {
-        handleStopWorkspaces(workspaceIdArr)
-          .then(() => {
-            toastSuccessStopWorkspace(workspaceNameList);
-          })
-          .catch((err) => {
-            toastErrorStopWorkspace(workspaceNameList);
-            console.error(err);
-          });
-      }}
-      disabled={disabled}
-    >
-      <ListItemIcon>
-        <StopAllIcon fontSize="1.25rem" color="primary" />
-      </ListItemIcon>
-      Stop All Workspaces
-    </MenuItem>
+    <StopMenuItem
+      workspaces={runningWorkspaces}
+      label="Stop All Workspaces"
+      Icon={StopAllIcon}
+      disabled={runningWorkspaces.length === 0 || isStoppingWorkspace}
+      onStop={handleStop}
+    />
   );
 }
 
 function StopSelectedWorkspaces({ workspaceIds }: { workspaceIds: Set<string> }) {
-  const { handleStopWorkspaces, isStoppingWorkspace, workspacesList } = useWorkspacesList();
+  const { workspacesList, handleStopWorkspaces, isStoppingWorkspace } = useWorkspacesList();
   const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
 
-  const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
-  const disabled = workspaces.length === 0 || isStoppingWorkspace || !workspaces.every(isRunningWorkspace);
+  const selectedWorkspaces = workspacesList.filter((ws) => workspaceIds.has(ws.id.toString()));
+  const areAllRunning = selectedWorkspaces.every(isRunningWorkspace);
 
-  const workspaceIdArr = Array.from(workspaceIds).map(Number);
-  const workspaceNameList = generateBoldCommaList(workspaces.map((ws) => ws.name));
+  const handleStop = (ids: number[], names: JSX.Element | string) => {
+    handleStopWorkspaces(ids)
+      .then(() => {
+        toastSuccessStopWorkspace(names);
+      })
+      .catch((err) => {
+        toastErrorStopWorkspace(names);
+        console.error(err);
+      });
+  };
 
   return (
-    <MenuItem
-      onClick={() => {
-        handleStopWorkspaces(workspaceIdArr)
-          .then(() => {
-            toastSuccessStopWorkspace(workspaceNameList);
-          })
-          .catch((err) => {
-            toastErrorStopWorkspace(workspaceNameList);
-            console.error(err);
-          });
-      }}
-      disabled={disabled}
-    >
-      <ListItemIcon>
-        <ChecklistIcon fontSize="1.25rem" color="primary" />
-      </ListItemIcon>
-      Stop Selected Workspaces
-    </MenuItem>
+    <StopMenuItem
+      workspaces={selectedWorkspaces}
+      label="Stop Selected Workspaces"
+      Icon={ChecklistIcon}
+      disabled={selectedWorkspaces.length === 0 || isStoppingWorkspace || !areAllRunning}
+      onStop={handleStop}
+    />
   );
 }
 
 const menuID = 'workspaces-stop-menu';
 
-type WorkspacesStopDropdownMenuProps = {
+interface WorkspacesStopDropdownMenuProps {
   workspaceIds: Set<string>;
-} & TooltipButtonProps;
+}
 
-function WorkspacesStopDropdownMenu({ workspaceIds, disabled, tooltip, ...rest }: WorkspacesStopDropdownMenuProps) {
-  const { workspacesList } = useWorkspacesList();
-  const noWorkspacesAreRunning = !workspacesList.some(isRunningWorkspace);
-
-  if (noWorkspacesAreRunning) {
-    return null;
-  }
-
+function WorkspacesStopDropdownMenu({ workspaceIds }: WorkspacesStopDropdownMenuProps) {
   return (
     <>
-      {/* Custom styling needed to match height of medium tooltip buttons */}
-      <StyledDropdownMenuButton menuID={menuID} variant="outlined" sx={{ height: '2.65rem' }} {...rest}>
+      <StyledDropdownMenuButton menuID={menuID} variant="outlined" sx={{ height: '2.65rem' }}>
         <SvgIcon component={StopJobIcon} sx={{ mr: 1, fontSize: '1.25rem' }} />
         Stop Workspaces
       </StyledDropdownMenuButton>
