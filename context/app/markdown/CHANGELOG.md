@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.27.3 - 2025-06-11
+
+- Restore summary link to gene detail page table of contents.
+- Remove `other` cells from gene detail page.
+- Fix incorrect `biomarkers` link.
+
+
+
 ## v1.27.2 - 2025-06-11
 
 - Fix bug where disabling OpenKeyNav did not have an effect.

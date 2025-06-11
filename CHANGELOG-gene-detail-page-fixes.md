@@ -1,3 +1,0 @@
-- Restore summary link to gene detail page table of contents.
-- Remove `other` cells from gene detail page.
-- Fix incorrect `biomarkers` link.
