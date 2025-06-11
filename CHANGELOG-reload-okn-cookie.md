@@ -1,1 +1,0 @@
-- Fix bug where disabling OpenKeyNav did not have an effect.

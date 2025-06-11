@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.27.2 - 2025-06-11
+
+- Fix bug where disabling OpenKeyNav did not have an effect.
+
+
+
 ## v1.27.1 - 2025-06-10
 
 - Update gene detail page to display relevant cell types and molecular data query results.
