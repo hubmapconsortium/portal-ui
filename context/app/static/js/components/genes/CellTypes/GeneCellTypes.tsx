@@ -236,6 +236,7 @@ function CellTypesTable() {
       return 0;
     });
     return sortedCellTypes.filter((cellType) => {
+      if (cellType.cell_type.endsWith('other')) return false; // Hide 'other' cell types
       if (!selectedOrgan) return true; // Show all if no organ is selected
       return cellType.cell_type.startsWith(`${selectedOrgan}.`);
     });

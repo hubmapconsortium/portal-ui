@@ -9,6 +9,7 @@ export const cellTypes = {
 };
 
 export const pageSectionIDs = {
+  summary: 'summary',
   datasets: datasets.id,
   cellTypes: cellTypes.id,
 };
