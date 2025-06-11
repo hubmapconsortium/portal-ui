@@ -12,8 +12,8 @@ const nonHubmapUserHeader = {
   icon: undefined,
 };
 
-export function ProfileTitle() {
+export function ProfileTitle({ title }: { title?: string }) {
   const { isHubmapUser } = useAppContext();
   const { text, icon } = isHubmapUser ? hubmapUserHeader : nonHubmapUserHeader;
-  return <SummaryTitle entityIcon={icon}>{text}</SummaryTitle>;
+  return <SummaryTitle entityIcon={icon}>{title ?? text}</SummaryTitle>;
 }

@@ -1,5 +1,19 @@
 # Changelog
 
+## v1.27.2 - 2025-06-11
+
+- Fix bug where disabling OpenKeyNav did not have an effect.
+
+
+
+## v1.27.1 - 2025-06-10
+
+- Update gene detail page to display relevant cell types and molecular data query results.
+- Address bugs related to OpenKeyNav integration.
+- Updates portal-viz version to 0.4.7 to reflect support for visualizing zarr.zip files.
+
+
+
 ## v1.27.0 - 2025-06-05
 
 - Add table of indexed cell types found in a given organ to organ pages.
