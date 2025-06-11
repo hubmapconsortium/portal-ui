@@ -6,7 +6,7 @@ import { z } from 'zod';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { workspaceJobTypeIdField, workspaceResourceOptionsField } from 'js/components/workspaces/workspaceFormFields';
-import { useLaunchWorkspace, useRunningWorkspace } from 'js/components/workspaces/hooks';
+import { useLaunchWorkspace, useRunningWorkspaces } from 'js/components/workspaces/hooks';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_JOB_TYPE,
@@ -64,7 +64,7 @@ function useLaunchWorkspaceForm() {
 }
 
 function useLaunchWorkspaceDialog() {
-  const runningWorkspaces = useRunningWorkspace();
+  const runningWorkspaces = useRunningWorkspaces();
   const { startAndOpenWorkspace } = useLaunchWorkspace();
   const { isOpen, open, close, workspace, setWorkspace, dialogType, setDialogType } = useLaunchWorkspaceStore();
 

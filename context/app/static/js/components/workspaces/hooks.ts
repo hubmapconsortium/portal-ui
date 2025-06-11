@@ -346,7 +346,7 @@ function useInvitationWorkspaceDetails({ workspaceId }: { workspaceId: number })
   };
 }
 
-function useRunningWorkspace() {
+function useRunningWorkspaces() {
   const { workspacesList } = useWorkspacesList();
   return workspacesList.filter((workspace) =>
     workspace.jobs.some((job) => job.status === 'running' || job.status === 'pending'),
@@ -354,7 +354,7 @@ function useRunningWorkspace() {
 }
 
 function useHasRunningWorkspace() {
-  return Boolean(useRunningWorkspace());
+  return Boolean(useRunningWorkspaces());
 }
 
 function useHandleUpdateWorkspace() {
@@ -380,7 +380,7 @@ function useHandleUpdateWorkspace() {
 
 function useLaunchWorkspace() {
   const { startWorkspace } = useStartWorkspace();
-  const runningWorkspaces = useRunningWorkspace();
+  const runningWorkspaces = useRunningWorkspaces();
   const mutateWorkspacesAndJobs = useMutateWorkspacesAndJobs();
   const globalMutateWorkspace = useGlobalMutateWorkspace();
   const { open, setWorkspace, setDialogType } = useLaunchWorkspaceStore();
@@ -569,7 +569,7 @@ export {
   useWorkspacesList,
   useInvitationsList,
   useHasRunningWorkspace,
-  useRunningWorkspace,
+  useRunningWorkspaces,
   useLaunchWorkspace,
   useWorkspaceDetail,
   useInvitationDetail,

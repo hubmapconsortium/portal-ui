@@ -4,8 +4,8 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 
 import { isRunningWorkspace } from 'js/components/workspaces/utils';
 import { TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
-import { useWorkspacesList } from 'js/components/workspaces/hooks';
-import { StopJobIcon } from 'js/shared-styles/icons';
+import { useRunningWorkspaces, useWorkspacesList } from 'js/components/workspaces/hooks';
+import { ChecklistIcon, StopAllIcon, StopJobIcon } from 'js/shared-styles/icons';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { generateBoldCommaList } from 'js/helpers/functions';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu/DropdownMenu';
@@ -14,10 +14,31 @@ import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuPro
 import SvgIcon from '@mui/material/SvgIcon';
 
 function StopAllWorkspaces() {
+  const runningWorkspaces = useRunningWorkspaces();
+  const { handleStopWorkspaces, isStoppingWorkspace } = useWorkspacesList();
+  const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
+
+  const disabled = runningWorkspaces.length === 0 || isStoppingWorkspace;
+
+  const workspaceIdArr = runningWorkspaces.map((workspace) => workspace.id);
+  const workspaceNameList = generateBoldCommaList(runningWorkspaces.map((ws) => ws.name));
+
   return (
-    <MenuItem>
+    <MenuItem
+      onClick={() => {
+        handleStopWorkspaces(workspaceIdArr)
+          .then(() => {
+            toastSuccessStopWorkspace(workspaceNameList);
+          })
+          .catch((err) => {
+            toastErrorStopWorkspace(workspaceNameList);
+            console.error(err);
+          });
+      }}
+      disabled={disabled}
+    >
       <ListItemIcon>
-        <StopJobIcon fontSize="1.25rem" color="primary" />
+        <StopAllIcon fontSize="1.25rem" color="primary" />
       </ListItemIcon>
       Stop All Workspaces
     </MenuItem>
@@ -25,13 +46,11 @@ function StopAllWorkspaces() {
 }
 
 function StopSelectedWorkspaces({ workspaceIds }: { workspaceIds: Set<string> }) {
-  const { workspacesList } = useWorkspacesList();
-  const { handleStopWorkspaces, isStoppingWorkspace } = useWorkspacesList();
+  const { handleStopWorkspaces, isStoppingWorkspace, workspacesList } = useWorkspacesList();
   const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
 
   const workspaces = workspacesList.filter((workspace) => workspaceIds.has(workspace.id.toString()));
-
-  const allSelectedWorkspacesAreRunning = workspaces.every(isRunningWorkspace);
+  const disabled = workspaces.length === 0 || isStoppingWorkspace || !workspaces.every(isRunningWorkspace);
 
   const workspaceIdArr = Array.from(workspaceIds).map(Number);
   const workspaceNameList = generateBoldCommaList(workspaces.map((ws) => ws.name));
@@ -48,10 +67,10 @@ function StopSelectedWorkspaces({ workspaceIds }: { workspaceIds: Set<string> })
             console.error(err);
           });
       }}
-      disabled={!allSelectedWorkspacesAreRunning || isStoppingWorkspace}
+      disabled={disabled}
     >
       <ListItemIcon>
-        <StopJobIcon fontSize="1.25rem" color="primary" />
+        <ChecklistIcon fontSize="1.25rem" color="primary" />
       </ListItemIcon>
       Stop Selected Workspaces
     </MenuItem>
@@ -74,7 +93,8 @@ function WorkspacesStopDropdownMenu({ workspaceIds, disabled, tooltip, ...rest }
 
   return (
     <>
-      <StyledDropdownMenuButton menuID={menuID} variant="outlined" {...rest}>
+      {/* Custom styling needed to match height of medium tooltip buttons */}
+      <StyledDropdownMenuButton menuID={menuID} variant="outlined" sx={{ height: '2.65rem' }} {...rest}>
         <SvgIcon component={StopJobIcon} sx={{ mr: 1, fontSize: '1.25rem' }} />
         Stop Workspaces
       </StyledDropdownMenuButton>
