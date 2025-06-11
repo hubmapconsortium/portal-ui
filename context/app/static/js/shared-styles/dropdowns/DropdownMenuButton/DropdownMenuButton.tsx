@@ -1,4 +1,5 @@
 import React from 'react';
+import { styled } from '@mui/material/styles';
 import Button, { ButtonOwnProps } from '@mui/material/Button';
 
 import { useDropdownMenuStore } from 'js/shared-styles/dropdowns/DropdownMenuProvider';
@@ -28,5 +29,9 @@ function DropdownMenuButton({ children, menuID, variant = 'outlined', ...rest }:
     </Button>
   );
 }
+
+export const StyledDropdownMenuButton = styled(DropdownMenuButton)(({ theme }) => ({
+  height: theme.spacing(5),
+}));
 
 export default DropdownMenuButton;

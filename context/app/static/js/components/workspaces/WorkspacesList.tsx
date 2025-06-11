@@ -13,7 +13,7 @@ import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialog
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { WorkspaceTooltipButton } from 'js/components/workspaces/WorkspaceButton/WorkspaceButton';
 import WorkspacesDeleteButton from 'js/components/workspaces/WorkspacesDeleteButton';
-import WorkspacesStopButton from 'js/components/workspaces/WorkspacesStopButton';
+import WorkspacesStopDropdownMenu from 'js/components/workspaces/WorkspacesStopDropdownMenu';
 import { useWorkspacesListWithSharerInfo } from './hooks';
 
 function WorkspacesList() {
@@ -54,7 +54,6 @@ function WorkspacesList() {
             filteredWorkspaces={filteredWorkspaces}
           />
           <Stack display="flex" direction="row" spacing={1.5}>
-            <WorkspacesStopButton workspaceIds={selectedItems} disabled={disabled} tooltip={stopTooltip} />
             <WorkspacesDeleteButton workspaceIds={selectedItems} disabled={disabled} tooltip={deleteTooltip} />
             <WorkspaceTooltipButton
               onClick={() => setDialogType('SHARE_WORKSPACE')}
@@ -63,6 +62,7 @@ function WorkspacesList() {
             >
               <ShareIcon />
             </WorkspaceTooltipButton>
+            <WorkspacesStopDropdownMenu workspaceIds={selectedItems} disabled={disabled} tooltip={stopTooltip} />
             <NewWorkspaceDialogFromWorkspaceList />
           </Stack>
         </Stack>
