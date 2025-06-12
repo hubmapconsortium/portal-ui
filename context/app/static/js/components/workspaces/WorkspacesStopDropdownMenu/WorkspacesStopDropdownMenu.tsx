@@ -17,15 +17,28 @@ interface StopActionProps {
   label: string;
   Icon: typeof SvgIcon;
   disabled: boolean;
-  onStop: (ids: number[], names: JSX.Element | string) => void;
 }
 
-function StopMenuItem({ workspaces, label, Icon, disabled, onStop }: StopActionProps) {
+function StopMenuItem({ workspaces, label, Icon, disabled }: StopActionProps) {
+  const { handleStopWorkspaces } = useWorkspacesList();
+  const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
+
   const workspaceIds = workspaces.map((ws) => ws.id);
   const workspaceNames = generateBoldCommaList(workspaces.map((ws) => ws.name));
 
+  const handleStop = () => {
+    handleStopWorkspaces(workspaceIds)
+      .then(() => {
+        toastSuccessStopWorkspace(workspaceNames);
+      })
+      .catch((err) => {
+        toastErrorStopWorkspace(workspaceNames);
+        console.error(err);
+      });
+  };
+
   return (
-    <MenuItem onClick={() => onStop(workspaceIds, workspaceNames)} disabled={disabled}>
+    <MenuItem onClick={handleStop} disabled={disabled}>
       <ListItemIcon>
         <Icon fontSize="1.25rem" color="primary" />
       </ListItemIcon>
@@ -36,19 +49,7 @@ function StopMenuItem({ workspaces, label, Icon, disabled, onStop }: StopActionP
 
 function StopAllWorkspaces() {
   const runningWorkspaces = useRunningWorkspaces();
-  const { handleStopWorkspaces, isStoppingWorkspace } = useWorkspacesList();
-  const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
-
-  const handleStop = (ids: number[], names: JSX.Element | string) => {
-    handleStopWorkspaces(ids)
-      .then(() => {
-        toastSuccessStopWorkspace(names);
-      })
-      .catch((err) => {
-        toastErrorStopWorkspace(names);
-        console.error(err);
-      });
-  };
+  const { isStoppingWorkspace } = useWorkspacesList();
 
   return (
     <StopMenuItem
@@ -56,28 +57,15 @@ function StopAllWorkspaces() {
       label="Stop All Workspaces"
       Icon={StopAllIcon}
       disabled={runningWorkspaces.length === 0 || isStoppingWorkspace}
-      onStop={handleStop}
     />
   );
 }
 
 function StopSelectedWorkspaces({ workspaceIds }: { workspaceIds: Set<string> }) {
-  const { workspacesList, handleStopWorkspaces, isStoppingWorkspace } = useWorkspacesList();
-  const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
+  const { workspacesList, isStoppingWorkspace } = useWorkspacesList();
 
   const selectedWorkspaces = workspacesList.filter((ws) => workspaceIds.has(ws.id.toString()));
   const areAllRunning = selectedWorkspaces.every(isRunningWorkspace);
-
-  const handleStop = (ids: number[], names: JSX.Element | string) => {
-    handleStopWorkspaces(ids)
-      .then(() => {
-        toastSuccessStopWorkspace(names);
-      })
-      .catch((err) => {
-        toastErrorStopWorkspace(names);
-        console.error(err);
-      });
-  };
 
   return (
     <StopMenuItem
@@ -85,7 +73,6 @@ function StopSelectedWorkspaces({ workspaceIds }: { workspaceIds: Set<string> })
       label="Stop Selected Workspaces"
       Icon={ChecklistIcon}
       disabled={selectedWorkspaces.length === 0 || isStoppingWorkspace || !areAllRunning}
-      onStop={handleStop}
     />
   );
 }
