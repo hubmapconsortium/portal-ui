@@ -2,7 +2,7 @@ import React from 'react';
 
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
-import { StyledDropdownMenuButton } from './style';
+import { StyledDropdownMenuButton } from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
 import LineupMenuItem from './LineupMenuItem';
 import { DownloadTSVItem } from './DownloadTSVItem';
 

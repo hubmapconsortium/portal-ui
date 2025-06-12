@@ -13,6 +13,7 @@ import WorkspacesListDialogs from 'js/components/workspaces/WorkspacesListDialog
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { WorkspaceTooltipButton } from 'js/components/workspaces/WorkspaceButton/WorkspaceButton';
 import WorkspacesDeleteButton from 'js/components/workspaces/WorkspacesDeleteButton';
+import WorkspacesStopDropdownMenu from 'js/components/workspaces/WorkspacesStopDropdownMenu';
 import { useWorkspacesListWithSharerInfo } from './hooks';
 
 function WorkspacesList() {
@@ -60,6 +61,7 @@ function WorkspacesList() {
             >
               <ShareIcon />
             </WorkspaceTooltipButton>
+            <WorkspacesStopDropdownMenu workspaceIds={selectedItems} />
             <NewWorkspaceDialogFromWorkspaceList />
           </Stack>
         </Stack>

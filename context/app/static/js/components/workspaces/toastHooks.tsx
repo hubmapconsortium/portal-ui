@@ -21,7 +21,8 @@ export const useWorkspaceToasts = () => {
   const toastErrorUpdateWorkspace = useCallback(() => toastError('Failed to update workspace.'), [toastError]);
 
   const toastErrorStopWorkspace = useCallback(
-    (workspaceName?: string) => toastError(`Failed to stop ${workspaceName ?? 'workspace'}. Please try again.`),
+    (workspaceName?: string | React.ReactElement) =>
+      toastError(<Typography>Failed to stop {workspaceName ?? 'workspace'}. Please try again.</Typography>),
     [toastError],
   );
 
@@ -61,7 +62,7 @@ export const useWorkspaceToasts = () => {
    ********************************* */
 
   const toastSuccessRenewSession = useCallback(
-    () => toastSuccess('Session time for workspace successfully renewed.'),
+    () => toastSuccess('Session time for workspaces successfully renewed.'),
     [toastSuccess],
   );
 
@@ -104,6 +105,12 @@ export const useWorkspaceToasts = () => {
     [toastSuccess],
   );
 
+  const toastSuccessStopWorkspace = useCallback(
+    (names: string | React.ReactElement) =>
+      toastSuccess(<Typography>Successfully stopped workspaces: {names}</Typography>),
+    [toastSuccess],
+  );
+
   const toastSuccessShareInvitation = useCallback(
     (names: string | React.ReactElement) =>
       toastSuccess(<Typography>Successfully shared workspaces: {names}</Typography>),
@@ -141,6 +148,7 @@ export const useWorkspaceToasts = () => {
     toastSuccessDeleteWorkspaces,
     toastSuccessAddDataset,
     toastSuccessLaunchWorkspace,
+    toastSuccessStopWorkspace,
     toastSuccessShareInvitation,
     toastSuccessAcceptInvitation,
     toastSuccessDeclineInvitation,
