@@ -60,7 +60,7 @@ function OrganCellTypeDistributionCharts() {
     return Array.from(uniqueTissues);
   }, [cellTypes]);
 
-  const { datasets } = useSCFindCellTypeResults();
+  const { datasets } = useSCFindCellTypeResults(cellTypes);
 
   const datasetsByTissue = useMemo(() => {
     const tissueMap: Record<string, string[]> = {};
