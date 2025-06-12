@@ -472,50 +472,57 @@ function getWorkspaceTimeLeft(workspace: MergedWorkspace) {
   return findBestJob(workspace?.jobs ?? [])?.job_details?.current_job_details?.time_left;
 }
 
-type FoundPair = [MergedWorkspace, number];
-
 function useSessionWarning(workspaces: MergedWorkspace[]) {
-  const result = workspaces.reduce<FoundPair | undefined>((acc, ws) => {
-    if (acc) return acc; // Avoids extra calls to `getWorkspaceTimeLeft` after workspace has been found since we can't break a .reduce()
-    const time = getWorkspaceTimeLeft(ws);
-    return time ? [ws, time] : acc; // If a time is found, return the workspace with time, otherwise continue iteration
-  }, undefined);
+  const allWorkspacesAreRunning = workspaces.every((ws) =>
+    ws.jobs.some((job) => job.status === 'running' || job.status === 'pending'),
+  );
 
-  if (!result) {
+  if (!allWorkspacesAreRunning || workspaces.length === 0) {
     return false;
   }
 
-  const [matchedWorkspace, timeLeft] = result;
+  const multipleWorkspaces = workspaces.length > 1;
 
-  const warning = `is currently running. You have ${Math.floor(
-    timeLeft / 60,
-  )} minutes left in your session. Renewing your session time will stop all jobs running in your workspace.`;
+  const timeRemainingText = !multipleWorkspaces
+    ? (() => {
+        const timeLeft = getWorkspaceTimeLeft(workspaces[0]);
+        if (typeof timeLeft === 'number') {
+          const minutes = Math.floor(timeLeft / 60);
+          return ` You have ${minutes} minute${minutes !== 1 ? 's' : ''} left in your session.`;
+        }
+        return '';
+      })()
+    : '';
 
-  return {
-    warning,
-    matchedWorkspace,
-  };
+  return `${multipleWorkspaces ? 'are' : 'is'} currently running.${timeRemainingText} Renewing your session time${multipleWorkspaces ? 's' : ''} will stop all jobs running in your workspaces.`;
 }
 
-function useRefreshSession(workspace: MergedWorkspace) {
+function useRefreshSessions(workspaces: MergedWorkspace[]) {
   const { stopWorkspaces, isStoppingWorkspace } = useStopWorkspaces();
   const { startWorkspace, isStartingWorkspace } = useStartWorkspace();
-  const { mutate: mutateWorkspace } = useWorkspace(workspace.id);
-  const mutate = useMutateWorkspacesAndJobs(mutateWorkspace);
   const { toastSuccessRenewSession } = useWorkspaceToasts();
 
-  const refreshSession = useCallback(async () => {
-    await stopWorkspaces([workspace.id]);
-    await startWorkspace({
-      workspaceId: workspace.id,
-      jobTypeId: getDefaultJobType({ workspace }),
-      resourceOptions: getWorkspaceResourceOptions(workspace),
-    });
+  const mutate = useMutateWorkspacesAndJobs();
+  const workspaceIds = workspaces.map((workspace) => workspace.id);
+
+  const refreshSessions = useEventCallback(async () => {
+    await stopWorkspaces(workspaceIds);
+
+    await Promise.all(
+      workspaces.map((workspace) =>
+        startWorkspace({
+          workspaceId: workspace.id,
+          jobTypeId: getDefaultJobType({ workspace }),
+          resourceOptions: getWorkspaceResourceOptions(workspace),
+        }),
+      ),
+    );
+
     await mutate();
     toastSuccessRenewSession();
-  }, [mutate, startWorkspace, stopWorkspaces, toastSuccessRenewSession, workspace]);
+  });
 
-  return { refreshSession, isRefreshingSession: isStoppingWorkspace || isStartingWorkspace };
+  return { refreshSessions, isRefreshingSessions: isStoppingWorkspace || isStartingWorkspace };
 }
 
 function useCreateTemplates() {
@@ -575,7 +582,7 @@ export {
   useInvitationDetail,
   useInvitationWorkspaceDetails,
   useSessionWarning,
-  useRefreshSession,
+  useRefreshSessions,
   useHandleUpdateWorkspace,
   useCreateTemplates,
   useUpdateWorkspaceDatasets,

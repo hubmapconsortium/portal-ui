@@ -9,7 +9,7 @@ import { isRunningWorkspace } from 'js/components/workspaces/utils';
 import { generateBoldCommaList } from 'js/helpers/functions';
 import { StopAllIcon, StopJobIcon, ChecklistIcon } from 'js/shared-styles/icons';
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu/DropdownMenu';
-import { StyledDropdownMenuButton } from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
+import DropdownMenuButton from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
 import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuProvider/withDropdownMenuProvider';
 
 interface StopActionProps {
@@ -99,10 +99,10 @@ interface WorkspacesStopDropdownMenuProps {
 function WorkspacesStopDropdownMenu({ workspaceIds }: WorkspacesStopDropdownMenuProps) {
   return (
     <>
-      <StyledDropdownMenuButton menuID={menuID} variant="outlined" sx={{ height: '2.65rem' }}>
+      <DropdownMenuButton menuID={menuID} variant="outlined">
         <SvgIcon component={StopJobIcon} sx={{ mr: 1, fontSize: '1.25rem' }} />
         Stop Workspaces
-      </StyledDropdownMenuButton>
+      </DropdownMenuButton>
       <DropdownMenu id={menuID}>
         <StopAllWorkspaces />
         <StopSelectedWorkspaces workspaceIds={workspaceIds} />

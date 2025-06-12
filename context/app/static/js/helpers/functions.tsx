@@ -194,12 +194,26 @@ export function getOriginSamplesOrgan(entity: { origin_samples_unique_mapped_org
  * @param list an array of elements to be made into a single comma-separated string.
  * @returns a comma-separated string.
  */
-export function generateCommaList(list: string[]): string {
+export function generateCommaList(list: React.ReactNode[]): React.ReactNode[] {
   const { length } = list;
 
-  return length < 2
-    ? list.join('')
-    : `${list.slice(0, length - 1).join(', ')}${length < 3 ? ' and ' : ', and '}${list[length - 1]}`;
+  if (length === 0) return [];
+  if (length === 1) return [list[0]];
+  if (length === 2) return [list[0], ' and ', list[1]];
+
+  const result: React.ReactNode[] = [];
+
+  for (let i = 0; i < length; i += 1) {
+    result.push(list[i]);
+
+    if (i === length - 2) {
+      result.push(', and ');
+    } else if (i < length - 2) {
+      result.push(', ');
+    }
+  }
+
+  return result;
 }
 
 /**

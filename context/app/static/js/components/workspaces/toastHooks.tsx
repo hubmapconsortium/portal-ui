@@ -62,7 +62,7 @@ export const useWorkspaceToasts = () => {
    ********************************* */
 
   const toastSuccessRenewSession = useCallback(
-    () => toastSuccess('Session time for workspace successfully renewed.'),
+    () => toastSuccess('Session time for workspaces successfully renewed.'),
     [toastSuccess],
   );
 
