@@ -194,7 +194,25 @@ export function getOriginSamplesOrgan(entity: { origin_samples_unique_mapped_org
  * @param list an array of elements to be made into a single comma-separated string.
  * @returns a comma-separated string.
  */
-export function generateCommaList(list: React.ReactNode[]): React.ReactNode[] {
+export function generateCommaList(list: string[]): string {
+  const { length } = list;
+
+  return length < 2
+    ? list.join('')
+    : `${list.slice(0, length - 1).join(', ')}${length < 3 ? ' and ' : ', and '}${list[length - 1]}`;
+}
+
+/**
+ * Given an array of elements, create an array with comma separations that includes
+ * 'and' as well as an oxford comma.
+ *   Ex: ['apples'] => ['apples']
+ *   Ex: ['apples', 'bananas'] => ['apples', ' and ', 'bananas']
+ *   Ex: ['apples', 'bananas', <div>grapes</div>] => ['apples', ', ', 'bananas', ' and ', '<div>grapes</div']
+ * @author Austen Money
+ * @param list an array of elements to be made into a comma-separated list.
+ * @returns a comma-separated list.
+ */
+export function generateElementCommaList(list: React.ReactNode[]): React.ReactNode[] {
   const { length } = list;
 
   if (length === 0) return [];

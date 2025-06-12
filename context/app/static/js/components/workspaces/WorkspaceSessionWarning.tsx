@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import { CenteredAlert } from 'js/components/style';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { InternalLink } from 'js/shared-styles/Links';
-import { generateCommaList } from 'js/helpers/functions';
+import { generateElementCommaList } from 'js/helpers/functions';
 import { useRefreshSessions, useRunningWorkspaces, useSessionWarning } from './hooks';
 import { MergedWorkspace } from './types';
 
@@ -41,7 +41,7 @@ export default function WorkspaceSessionWarning({ link, workspace }: WorkspaceSe
 
   if (!sessionWarning) return null;
 
-  const formattedWorkspaceNames = generateCommaList(
+  const formattedWorkspaceNames = generateElementCommaList(
     workspaces.map((ws) =>
       link ? (
         <InternalLink key={ws.id} href={`/workspaces/${ws.id}`}>
