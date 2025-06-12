@@ -2,7 +2,6 @@ import { CellTypeCountForTissue } from 'js/api/scfind/useCellTypeCountForTissue'
 
 import { useMemo } from 'react';
 import { ScaleLinear } from 'd3';
-import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 
 interface FractionGraphData {
   counts: number[];
@@ -12,8 +11,7 @@ interface FractionGraphData {
   countsMap: Record<string, number>;
 }
 
-export function useProcessedData(data: CellTypeCountForTissue[]) {
-  const targetCellTypes = useCellVariableNames();
+export function useProcessedFractionData(data: CellTypeCountForTissue[], targetCellTypes: string[] = []) {
   return useMemo(() => {
     // Sort the data by cell count in descending order, hoisting target cell types to the top
     const sorted = [...(data ?? [])].sort((a, b) => {

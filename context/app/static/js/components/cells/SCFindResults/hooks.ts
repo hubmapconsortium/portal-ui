@@ -8,9 +8,7 @@ import { useSelectedPathwayParticipants } from '../MolecularDataQueryForm/Autoco
 import { categorizeCellTypes, mapDatasetsToCellTypeCategories, processGeneQueryResults } from './utils';
 import { getUnwrappedResult } from './types';
 
-export function useSCFindCellTypeResults() {
-  const cellTypes = useCellVariableNames();
-
+export function useSCFindCellTypeResults(cellTypes: string[] = []) {
   // The index of the dataset results matches the index of the cell types
   // in the original cellVariableNames array.
   const datasetsWithCellTypes = useFindDatasetsForCellTypes({
@@ -67,7 +65,7 @@ export function useSCFindGeneResults() {
   };
 }
 
-export function useDeduplicatedResults(datasets?: Record<string, (Pick<Dataset, 'hubmap_id'> | string)[]>) {
+export function useDeduplicatedResults(datasets?: Record<string, (Pick<Dataset, 'hubmap_id'> | string)[]>): string[] {
   return useMemo(() => {
     if (!datasets) {
       return [];
@@ -88,6 +86,7 @@ export function useTableTrackingProps() {
     const prefix = {
       'Molecular and Cellular Query': 'Results',
       'Gene Detail Page': 'Datasets / Results',
+      'Cell Type Detail Page': 'Datasets / Results',
     }[category];
     const onSelectAllChange = (e: ChangeEvent<HTMLInputElement>) => {
       const isSelected = e.target.checked;

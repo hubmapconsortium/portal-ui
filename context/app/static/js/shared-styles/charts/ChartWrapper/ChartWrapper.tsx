@@ -17,6 +17,7 @@ interface ChartWrapperProps extends PropsWithChildren {
   additionalControls?: React.ReactNode;
   dropdown?: React.ReactNode;
   allKeysScale?: OrdinalScale;
+  dividersInLegend?: boolean;
 }
 
 const pullUpMultiple = (a: string, b: string) => {
@@ -35,6 +36,7 @@ function ChartWrapper({
   yAxisDropdown,
   additionalControls,
   allKeysScale,
+  dividersInLegend,
 }: ChartWrapperProps) {
   const domain = [...colorScale.domain()].sort(pullUpMultiple);
   const allKeysDomain = [...(allKeysScale?.domain() ?? [])].sort(pullUpMultiple);
@@ -68,7 +70,7 @@ function ChartWrapper({
           <LegendOrdinal scale={colorScale} domain={domain}>
             {(labels) => (
               <div style={{ display: 'flex', flexDirection: 'column' }}>
-                {labels.map((label) => {
+                {labels.map((label, idx) => {
                   const isMultiple = label.text === 'Multiple';
                   return (
                     <React.Fragment key={label.text}>
@@ -113,7 +115,9 @@ function ChartWrapper({
                           )}
                         </LegendLabel>
                       </LegendItem>
-                      {isMultiple && <Divider sx={{ marginY: 1 }} />}
+                      {(isMultiple || (dividersInLegend && idx !== labels.length - 1)) && (
+                        <Divider sx={{ marginY: 1 }} />
+                      )}
                     </React.Fragment>
                   );
                 })}

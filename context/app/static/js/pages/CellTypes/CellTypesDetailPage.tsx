@@ -4,7 +4,7 @@ import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 
 import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
-import CellTypesVisualization from 'js/components/cell-types/CellTypeDistribution';
+import CellTypesVisualization from 'js/components/cell-types/CellTypesDistribution';
 import CellTypesSummary from 'js/components/cell-types/CellTypesSummary';
 import CellTypesEntitiesTables from 'js/components/cell-types/CellTypesEntitiesTables';
 import CellTypesBiomarkersTable from 'js/components/cell-types/CellTypesBiomarkersTable';
@@ -16,9 +16,9 @@ interface Props {
 
 const shouldDisplaySection = {
   summary: true,
-  'distribution-across-organs': true,
+  'cell-type-distribution': true,
   biomarkers: true,
-  organs: true,
+  datasets: true,
 };
 
 function CellTypes({ cellId }: Props) {
@@ -28,9 +28,9 @@ function CellTypes({ cellId }: Props) {
         <SummaryTitle entityIcon="CellType">Cell Type</SummaryTitle>
         <CellTypesTitle />
         <CellTypesSummary />
-        {/* {shouldDisplaySection['distribution-across-organs'] && <CellTypesVisualization />} */}
-        {/* {shouldDisplaySection.biomarkers && <CellTypesBiomarkersTable />} */}
-        {/* {shouldDisplaySection.organs && <CellTypesEntitiesTables />} */}
+        <CellTypesVisualization shouldDisplay={shouldDisplaySection['cell-type-distribution']} />
+        <CellTypesBiomarkersTable shouldDisplay={shouldDisplaySection.biomarkers} />
+        <CellTypesEntitiesTables shouldDisplay={shouldDisplaySection.datasets} />
       </DetailLayout>
     </CellTypesProvider>
   );

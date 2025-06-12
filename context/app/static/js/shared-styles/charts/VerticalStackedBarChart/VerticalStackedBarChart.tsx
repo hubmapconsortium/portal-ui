@@ -11,6 +11,7 @@ import { type OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGridRowsGroup';
 
+import { BarStackProps } from '@visx/shape/lib/shapes/BarStack';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
 import { type TooltipData, tooltipHasBarData } from '../types';
 import TickComponent from '../TickComponent';
@@ -43,6 +44,8 @@ interface VerticalStackedBarChartProps<
   y0?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
   getTickValues?: (yScale: YAxisScale) => number[];
   getAriaLabel?: (d: TooltipData<Datum>) => string;
+  order?: BarStackProps<Datum, YAxisKey, XAxisScale, YAxisScale>['order'];
+  valueAccessor?: (d: Datum, key: YAxisKey) => number;
 }
 
 function VerticalStackedBarChart<
@@ -71,6 +74,8 @@ function VerticalStackedBarChart<
   y1,
   getTickValues,
   getAriaLabel,
+  order,
+  valueAccessor,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
@@ -115,6 +120,8 @@ function VerticalStackedBarChart<
               color={colorScale}
               y1={y1}
               y0={y0}
+              order={order}
+              value={valueAccessor}
             >
               {(barStacks) => {
                 return barStacks.map((barStack) =>
@@ -141,6 +148,7 @@ function VerticalStackedBarChart<
               scale={yScale}
               label={yAxisLabel}
               stroke="black"
+              tickValues={getTickValues ? getTickValues(yScale) : undefined}
               tickLabelProps={() => ({
                 fill: 'black',
                 fontSize: 11,
@@ -152,6 +160,7 @@ function VerticalStackedBarChart<
                 color: 'black',
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',
+                dx: '-1em',
               }}
             />
             <AxisBottom

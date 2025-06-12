@@ -87,7 +87,7 @@ function OrganCellTypeDistributionCharts() {
       </Tabs>
       {tissues.map((tissue, idx) => (
         <TabPanel key={tissue} value={openTabIndex} index={idx}>
-          <CellTypeDistributionChart tissue={tissue} />
+          <CellTypeDistributionChart tissue={tissue} cellTypes={cellTypes} />
           <Typography variant="subtitle1" component="p">
             Datasets Overview
           </Typography>
@@ -133,7 +133,8 @@ function DatasetListSection() {
 }
 
 function SCFindCellTypeQueryResultsLoader() {
-  const { datasets, isLoading, error } = useSCFindCellTypeResults();
+  const cellTypes = useCellVariableNames();
+  const { datasets, isLoading, error } = useSCFindCellTypeResults(cellTypes);
   const { setResults } = useResultsProvider();
 
   const deduplicatedResults = useDeduplicatedResults(datasets);

@@ -1,5 +1,5 @@
 import useSWR from 'swr';
-import { fetcher } from 'js/helpers/swr';
+import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
 import { createScFindKey } from './utils';
 
@@ -31,4 +31,13 @@ export default function useCellTypeCountForTissue(props: CellTypeCountForTissueP
   const { scFindEndpoint } = useAppContext();
   const key = createCellTypeCountForTissueKey(scFindEndpoint, props);
   return useSWR<CellTypeCountsForTissue, unknown, CellTypeCountForTissueKey>(key, (url) => fetcher({ url }));
+}
+
+export function useCellTypeCountForTissues(tissues: string[]) {
+  const { scFindEndpoint } = useAppContext();
+  const keys = tissues.map((tissue) => createCellTypeCountForTissueKey(scFindEndpoint, { tissue }));
+
+  return useSWR<CellTypeCountsForTissue[], unknown, CellTypeCountForTissueKey[]>(keys, (urls: string[]) =>
+    multiFetcher({ urls }),
+  );
 }

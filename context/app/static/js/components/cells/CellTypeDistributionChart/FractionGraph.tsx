@@ -9,8 +9,7 @@ import { grey, blueGrey, teal } from '@mui/material/colors';
 import { decimal } from 'js/helpers/number-format';
 import { capitalizeString } from 'js/helpers/functions';
 import { ScaleLinear } from 'd3';
-import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
-import { useProcessedData, useXOffsets } from './hooks';
+import { useProcessedFractionData, useXOffsets } from './hooks';
 import FractionRect from './FractionGraphRect';
 import FractionGraphLegend from './FractionGraphLegend';
 import FractionGraphTooltip from './FractionGraphTooltip';
@@ -18,6 +17,7 @@ import FractionGraphTooltip from './FractionGraphTooltip';
 interface FractionGraphProps extends WithParentSizeProvidedProps {
   data: CellTypeCountForTissue[];
   tissue: string;
+  targetCellTypes: string[];
 }
 
 const unselectedCellColors = [
@@ -38,8 +38,7 @@ const unselectedCellColors = [
   teal[700],
 ];
 
-function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
-  const targetCellTypes = useCellVariableNames();
+function Fraction({ data, parentWidth, tissue, targetCellTypes }: FractionGraphProps) {
   const {
     counts: cellCounts,
     otherLabels: otherCellLabels,
@@ -47,7 +46,7 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
     total: totalCellCount,
     countsMap: mappedCellCounts,
     sortedData,
-  } = useProcessedData(data);
+  } = useProcessedFractionData(data, targetCellTypes);
 
   const scale = useLinearScale(cellCounts, {
     range: [0, parentWidth!], // range to normalize the values to percentages

@@ -6,6 +6,8 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { useCellTypeOntologyDetail, CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
 import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
 import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
+import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
+import useSearchData from 'js/hooks/useSearchData';
 import { useCellTypesContext } from './CellTypesContext';
 
 /**
@@ -28,6 +30,37 @@ export const useCellTypeInfo = () => {
   return useCellTypeOntologyDetail(clid);
 };
 
+export function extractCellTypeInfo(cellTypes: string[]) {
+  if (!cellTypes || cellTypes.length === 0) {
+    return {
+      name: '',
+      organs: [],
+      variants: {},
+    };
+  }
+  const cellTypeName = cellTypes[0].split(':')[0].split('.')[1];
+  const organs = cellTypes.map((cellType) => cellType.split('.')[0]);
+  const variants: Record<string, string[]> = {};
+  // ensure that each organ has an entry in the variants object
+  // and collect unique variants for each organ
+  cellTypes.forEach((cellType) => {
+    const [organ, typeWithVariant] = cellType.split('.');
+    const [, variant] = typeWithVariant.split(':');
+    if (!variants[organ]) {
+      variants[organ] = [];
+    }
+    if (variant && !variants[organ].includes(variant)) {
+      variants[organ].push(variant);
+    }
+  });
+
+  return {
+    name: cellTypeName,
+    organs: Array.from(new Set(organs)), // Ensure unique organs
+    variants,
+  };
+}
+
 /**
  * Extracts the cell type name from a list of cell types.
  * If the list is empty, it returns an empty string.
@@ -37,39 +70,10 @@ export const useCellTypeInfo = () => {
  * @param cellTypes
  * @returns {object} An object containing the cell type name, organs, and variants for each organ.
  */
-function useExtractedCellTypeInfo() {
+export function useExtractedCellTypeInfo() {
   const { cellId } = useCellTypesContext();
   const { data: { cell_types: cellTypes } = { cell_types: [] } } = useCLIDToLabel({ clid: cellId });
-  return useMemo(() => {
-    if (!cellTypes || cellTypes.length === 0) {
-      return {
-        name: '',
-        organs: [],
-        variants: {},
-      };
-    }
-    const cellTypeName = cellTypes[0].split(':')[0].split('.')[1];
-    const organs = cellTypes.map((cellType) => cellType.split('.')[0]);
-    const variants: Record<string, string[]> = {};
-    // ensure that each organ has an entry in the variants object
-    // and collect unique variants for each organ
-    cellTypes.forEach((cellType) => {
-      const [organ, typeWithVariant] = cellType.split('.');
-      const [, variant] = typeWithVariant.split(':');
-      if (!variants[organ]) {
-        variants[organ] = [];
-      }
-      if (variant && !variants[organ].includes(variant)) {
-        variants[organ].push(variant);
-      }
-    });
-
-    return {
-      name: cellTypeName,
-      organs: Array.from(new Set(organs)), // Ensure unique organs
-      variants,
-    };
-  }, [cellTypes]);
+  return useMemo(() => extractCellTypeInfo(cellTypes), [cellTypes]);
 }
 
 /**
@@ -132,3 +136,71 @@ export const useCellTypeBiomarkers = () => {
 
   return { genes, proteins, sources, selectedSource, handleSourceSelection };
 };
+
+interface IndexedDatasetsForCellTypeAggs {
+  datasetTypes: {
+    buckets: {
+      key: string;
+      doc_count: number;
+    }[];
+  };
+  organs: {
+    buckets: {
+      key: string;
+      doc_count: number;
+    }[];
+  };
+}
+
+export function useIndexedDatasetsForCellType() {
+  const { data = { datasets: [] }, isLoading: isLoadingIndexed, ...rest } = useIndexedDatasets();
+
+  const { searchData, isLoading: isLoadingDatasets } = useSearchData<unknown, IndexedDatasetsForCellTypeAggs>({
+    query: {
+      bool: {
+        must: [
+          {
+            terms: {
+              'hubmap_id.keyword': data.datasets ?? [],
+            },
+          },
+        ],
+      },
+    },
+    aggs: {
+      datasetTypes: {
+        terms: {
+          field: 'raw_dataset_type.keyword',
+          order: {
+            _term: 'asc',
+          },
+          size: 10000,
+        },
+      },
+      organs: {
+        terms: {
+          field: 'origin_samples_unique_mapped_organs.keyword',
+          order: {
+            _term: 'asc',
+          },
+          size: 10000,
+        },
+      },
+    },
+    size: 10000,
+    _source: ['hubmap_id'],
+  });
+
+  const datasetUUIDs = searchData?.hits?.hits.map((h) => h._id) ?? [];
+
+  const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
+  const organs = searchData?.aggregations?.organs?.buckets ?? [];
+
+  return {
+    datasets: datasetUUIDs,
+    isLoading: isLoadingIndexed || isLoadingDatasets,
+    organs,
+    datasetTypes,
+    ...rest,
+  };
+}
