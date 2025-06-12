@@ -16,12 +16,15 @@ export interface CellTypeCountForTissueParams {
   tissue: string;
 }
 
-type CellTypeCountForTissueKey = string;
+type CellTypeCountForTissueKey = string | null;
 
 export function createCellTypeCountForTissueKey(
   scFindEndpoint: string,
   { tissue }: CellTypeCountForTissueParams,
-): CellTypeCountForTissueKey {
+): CellTypeCountForTissueKey | null {
+  if (!tissue || tissue.length === 0) {
+    return null;
+  }
   return createScFindKey(scFindEndpoint, 'cellTypeCountForTissue', {
     tissue,
   });
@@ -35,9 +38,11 @@ export default function useCellTypeCountForTissue(props: CellTypeCountForTissueP
 
 export function useCellTypeCountForTissues(tissues: string[]) {
   const { scFindEndpoint } = useAppContext();
-  const keys = tissues.map((tissue) => createCellTypeCountForTissueKey(scFindEndpoint, { tissue }));
+  const keys = tissues
+    .map((tissue) => createCellTypeCountForTissueKey(scFindEndpoint, { tissue }))
+    .filter((key): key is string => key !== null);
 
-  return useSWR<CellTypeCountsForTissue[], unknown, CellTypeCountForTissueKey[]>(keys, (urls: string[]) =>
+  return useSWR<CellTypeCountsForTissue[], unknown, NonNullable<CellTypeCountForTissueKey>[]>(keys, (urls: string[]) =>
     multiFetcher({ urls }),
   );
 }

@@ -104,7 +104,8 @@ function OrganCellTypeDistributionCharts() {
 }
 
 function DatasetListSection() {
-  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults();
+  const cellTypes = useCellVariableNames();
+  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults(cellTypes);
   const { openTabIndex, handleTabChange } = useTabs();
 
   if (isLoading) {
@@ -134,6 +135,7 @@ function DatasetListSection() {
 
 function SCFindCellTypeQueryResultsLoader() {
   const cellTypes = useCellVariableNames();
+
   const { datasets, isLoading, error } = useSCFindCellTypeResults(cellTypes);
   const { setResults } = useResultsProvider();
 

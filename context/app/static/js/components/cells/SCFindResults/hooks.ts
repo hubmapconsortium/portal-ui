@@ -11,6 +11,7 @@ import { getUnwrappedResult } from './types';
 export function useSCFindCellTypeResults(cellTypes: string[] = []) {
   // The index of the dataset results matches the index of the cell types
   // in the original cellVariableNames array.
+
   const datasetsWithCellTypes = useFindDatasetsForCellTypes({
     cellTypes,
   });
