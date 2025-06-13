@@ -48,7 +48,7 @@ function PublicationsPanel({
 }
 
 const publicationsSectionDescription =
-  'Collections may contain references to either raw or processed datasets. If a processed dataset is not included in any collection, there will be no corresponding tabs in the table below.';
+  'Publications may contain references to either raw or processed datasets. If a processed dataset is not included in any publication, there will be no corresponding tabs in the table below.';
 
 function PublicationsSection() {
   const datasetPublicationsTabs = useDatasetsPublicationsTabs();
