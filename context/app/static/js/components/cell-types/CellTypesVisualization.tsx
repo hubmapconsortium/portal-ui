@@ -157,7 +157,7 @@ export default function CellTypesVisualization() {
   const { organs = [] } = useCellTypeDetails();
 
   return (
-    <CollapsibleDetailPageSection id="distribution-across-organs" title="Distribution Across Organs">
+    <CollapsibleDetailPageSection id="cell-type-distribution" title="Distribution Across Organs">
       <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
       <CellTypeOrgansGraph organs={organs} />
     </CollapsibleDetailPageSection>

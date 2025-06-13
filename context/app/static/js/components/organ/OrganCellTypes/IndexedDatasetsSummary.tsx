@@ -1,6 +1,6 @@
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { DatasetIcon } from 'js/shared-styles/icons';
+import { DatasetIcon, OrganIcon } from 'js/shared-styles/icons';
 import React, { PropsWithChildren } from 'react';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
@@ -11,6 +11,7 @@ import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
 interface IndexedDatasetsSummaryProps {
   datasets: string[];
   datasetTypes: { key: string; doc_count: number }[];
+  organs?: { key: string; doc_count: number }[];
   isLoadingDatasets?: boolean;
   trackingInfo?: EventInfo;
 }
@@ -18,6 +19,7 @@ interface IndexedDatasetsSummaryProps {
 function IndexedDatasetsSummary({
   datasets = [],
   datasetTypes = [],
+  organs = [],
   isLoadingDatasets = false,
   children,
   trackingInfo,
@@ -52,6 +54,32 @@ function IndexedDatasetsSummary({
         <Typography variant="body2" component="div">
           {children}
         </Typography>
+        {organs && organs.length > 0 && (
+          <StyledDetailsAccordion
+            summary={
+              <Stack direction="row" spacing={1} alignItems="center">
+                <OrganIcon />
+                <Typography variant="subtitle2" component="span">
+                  Organs
+                </Typography>
+              </Stack>
+            }
+            slotProps={{
+              heading: {
+                component: 'div',
+              },
+            }}
+            defaultExpanded
+          >
+            <Stack direction="row" spacing={1} alignItems="center">
+              {organs.map(({ key, doc_count }, idx) => (
+                <Typography variant="body2" component="span" key={key}>
+                  {key} ({doc_count}){idx < organs.length - 1 ? ', ' : ''}
+                </Typography>
+              ))}
+            </Stack>
+          </StyledDetailsAccordion>
+        )}
         <StyledDetailsAccordion
           summary={
             <Stack direction="row" spacing={1} alignItems="center">

@@ -21,3 +21,8 @@ export function createScFindKey(
   const fullUrl = new URL(`${scFindApiUrl}/api/${endpoint}?${urlParams.toString()}`);
   return fullUrl.toString();
 }
+
+export function formatCellTypeName(cellType: string): string {
+  // Remove the organ prefix from the cell type name
+  return cellType.split('.')[1];
+}

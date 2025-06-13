@@ -60,7 +60,7 @@ function OrganCellTypeDistributionCharts() {
     return Array.from(uniqueTissues);
   }, [cellTypes]);
 
-  const { datasets } = useSCFindCellTypeResults();
+  const { datasets } = useSCFindCellTypeResults(cellTypes);
 
   const datasetsByTissue = useMemo(() => {
     const tissueMap: Record<string, string[]> = {};
@@ -87,7 +87,7 @@ function OrganCellTypeDistributionCharts() {
       </Tabs>
       {tissues.map((tissue, idx) => (
         <TabPanel key={tissue} value={openTabIndex} index={idx}>
-          <CellTypeDistributionChart tissue={tissue} />
+          <CellTypeDistributionChart tissue={tissue} cellTypes={cellTypes} />
           <Typography variant="subtitle1" component="p">
             Datasets Overview
           </Typography>
@@ -104,7 +104,8 @@ function OrganCellTypeDistributionCharts() {
 }
 
 function DatasetListSection() {
-  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults();
+  const cellTypes = useCellVariableNames();
+  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults(cellTypes);
   const { openTabIndex, handleTabChange } = useTabs();
 
   if (isLoading) {
@@ -133,7 +134,9 @@ function DatasetListSection() {
 }
 
 function SCFindCellTypeQueryResultsLoader() {
-  const { datasets, isLoading, error } = useSCFindCellTypeResults();
+  const cellTypes = useCellVariableNames();
+
+  const { datasets, isLoading, error } = useSCFindCellTypeResults(cellTypes);
   const { setResults } = useResultsProvider();
 
   const deduplicatedResults = useDeduplicatedResults(datasets);
