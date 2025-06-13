@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useMemo, useContext as useOptionalContext } from 'react';
 import { createContext, useContext } from 'js/helpers/context';
 import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
-import { extractCellTypeInfo } from './hooks';
+import { extractCellTypesInfo } from './hooks';
 
 interface CellTypesContextProps {
   cellId: string;
@@ -19,7 +19,7 @@ const CellTypesContext = createContext<CellTypesContextType>('CellTypesContext')
 
 export default function CellTypesProvider({ children, cellId }: PropsWithChildren<CellTypesContextProps>) {
   const { data: { cell_types: cellTypes } = { cell_types: [] } } = useCLIDToLabel({ clid: cellId });
-  const { name, organs, variants } = extractCellTypeInfo(cellTypes);
+  const { name, organs, variants } = extractCellTypesInfo(cellTypes);
   const value = useMemo(
     () => ({
       cellId,

@@ -30,7 +30,13 @@ export const useCellTypeInfo = () => {
   return useCellTypeOntologyDetail(clid);
 };
 
-export function extractCellTypeInfo(cellTypes: string[]) {
+export function extractCellTypeInfo(cellType: string) {
+  const [organ, typeWithVariant] = cellType.split('.');
+  const [name, variant] = typeWithVariant.split(':');
+  return { organ, name, variant };
+}
+
+export function extractCellTypesInfo(cellTypes: string[]) {
   if (!cellTypes || cellTypes.length === 0) {
     return {
       name: '',
@@ -73,7 +79,7 @@ export function extractCellTypeInfo(cellTypes: string[]) {
 export function useExtractedCellTypeInfo() {
   const { cellId } = useCellTypesContext();
   const { data: { cell_types: cellTypes } = { cell_types: [] } } = useCLIDToLabel({ clid: cellId });
-  return useMemo(() => extractCellTypeInfo(cellTypes), [cellTypes]);
+  return useMemo(() => extractCellTypesInfo(cellTypes), [cellTypes]);
 }
 
 /**

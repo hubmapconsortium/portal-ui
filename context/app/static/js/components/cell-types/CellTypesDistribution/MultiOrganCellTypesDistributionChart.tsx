@@ -113,7 +113,7 @@ function TooltipContent({ tooltipData }: { tooltipData: TooltipData<ChartData> }
   const { bar } = tooltipData;
   const { showPercentages } = useCellTypesDistributionChartContext();
   if (!bar?.data) {
-    return null; // Return null if no data is available
+    return tooltipData.key;
   }
   const formatter = showPercentages ? percent : decimal;
   return (
@@ -151,7 +151,15 @@ function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCe
   // Using a symmetric log scale to handle large ranges and ensure visibility of smaller counts
   // The domain's max value should be adjusted to be nicer by rounding it up to the nearest power of 10
 
-  const totalCountsScale = useSymLogScale(
+  // const totalCountsScale = useSymLogScale(
+  //   fullCellTypeData.map((d) => d.count),
+  //   {
+  //     domain: [0, maxCellCount],
+  //     zero: true,
+  //   },
+  // );
+
+  const totalCountsScale = useLinearScale(
     fullCellTypeData.map((d) => d.count),
     {
       domain: [0, maxCellCount],
