@@ -12,6 +12,7 @@ import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import React, { useMemo } from 'react';
 import { formatCellTypeName } from 'js/api/scfind/utils';
+import { ScaleContinuousNumeric } from 'd3';
 import CellTypesDistributionChartContextProvider, {
   useCellTypesDistributionChartContext,
 } from './CellTypesDistributionChartContext';
@@ -78,12 +79,6 @@ function useCellTypeCountData(organs: string[], cellTypes: string[]) {
   }, [cellTypeCountsRecord]);
 
   const visxData = useMemo(() => {
-    // Transform the data into the format required by the VerticalStackedBarChart
-    // e.g. [{
-    //   organ: 'Heart',
-    //   Cardiomyocyte: 100,
-    //   'Other Cell Types': 100,
-    // }]
     const transformedData = fullCellTypeData.reduce((acc: ChartData[], curr: CellTypeCountWithPercentageAndOrgan) => {
       const existingOrgan = acc.find((d) => d.organ === curr.organ);
       if (existingOrgan) {
@@ -132,14 +127,77 @@ function TooltipContent({ tooltipData }: { tooltipData: TooltipData<ChartData> }
   );
 }
 
+/**
+ * Creates Y axis scales for the cell types distribution chart based on the provided data and maximum cell count.
+ * The appropriate scale is chosen based on the context settings for showing percentages and using symmetric log scale.
+ * @param data An array containing cell type counts and percentages.
+ * @param maxCellCount The maximum cell count across all organs, used to set the domain of the scale.
+ * @returns The Y axis scale for the chart.
+ */
+const useYScale = (data: CellTypeCountWithPercentageAndOrgan[], maxCellCount: number) => {
+  const { showPercentages, symLogScale } = useCellTypesDistributionChartContext();
+
+  const { counts, percentages } = useMemo(() => {
+    return { counts: data.map((d) => d.count), percentages: data.map((d) => d.percentage) };
+  }, [data]);
+
+  const totalCountsScaleSymLog = useSymLogScale(counts, {
+    domain: [0, maxCellCount],
+    zero: true,
+  });
+
+  const totalCountsScale = useLinearScale(counts, {
+    domain: [0, maxCellCount],
+    zero: true,
+  });
+
+  const percentageScale = useLinearScale(percentages, {
+    nice: true,
+    domain: [0, 100],
+    round: true,
+  });
+
+  if (showPercentages) {
+    return percentageScale;
+  }
+
+  if (symLogScale) {
+    return totalCountsScaleSymLog;
+  }
+
+  return totalCountsScale;
+};
+
+function getSymLogTickValues(y: ScaleContinuousNumeric<number, number, never>) {
+  // Find the highest power of 10 lower than the maximum cell count
+  const maxValue = y.domain()[1];
+  const maxLog = Math.floor(Math.log10(maxValue));
+  const tickValues = [];
+  // Get the max tick values based on the highest power of 10
+  for (let i = 0; i <= maxValue; i += 10 ** maxLog) {
+    tickValues.push(i);
+  }
+  // Add the powers of 10 down to 1
+  for (let j = maxLog - 1; j >= 1; j -= 1) {
+    tickValues.push(10 ** j);
+  }
+  return tickValues;
+}
+
 function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCellTypeDistributionChartProps) {
   const { fullCellTypeData, isLoading, cellTypeNameKeys, maxCellCount, visxData } = useCellTypeCountData(
     organs,
     cellTypes,
   );
 
-  const { showPercentages, setShowPercentages, showOtherCellTypes, setShowOtherCellTypes } =
-    useCellTypesDistributionChartContext();
+  const {
+    showPercentages,
+    setShowPercentages,
+    showOtherCellTypes,
+    setShowOtherCellTypes,
+    symLogScale,
+    setSymLogScale,
+  } = useCellTypesDistributionChartContext();
 
   const chartPalette = useChartPalette();
   const colorScale = useOrdinalScale(cellTypeNameKeys, {
@@ -147,42 +205,15 @@ function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCe
     range: chartPalette,
   });
 
-  // Domain of total counts scale should be from 0 to the maximum cell count across all organs
-  // Using a symmetric log scale to handle large ranges and ensure visibility of smaller counts
-  // The domain's max value should be adjusted to be nicer by rounding it up to the nearest power of 10
-
-  // const totalCountsScale = useSymLogScale(
-  //   fullCellTypeData.map((d) => d.count),
-  //   {
-  //     domain: [0, maxCellCount],
-  //     zero: true,
-  //   },
-  // );
-
-  const totalCountsScale = useLinearScale(
-    fullCellTypeData.map((d) => d.count),
-    {
-      domain: [0, maxCellCount],
-      zero: true,
-    },
-  );
-
-  const percentageScale = useLinearScale(
-    fullCellTypeData.map((d) => d.percentage),
-    {
-      nice: true,
-      domain: [0, 100],
-      round: true,
-    },
-  );
-
-  const yScale = showPercentages ? percentageScale : totalCountsScale;
+  const yScale = useYScale(fullCellTypeData, maxCellCount);
 
   const xScale = useBandScale(organs);
 
   if (isLoading) {
     return <Paper sx={{ px: 2 }}>Loading...</Paper>;
   }
+
+  const getTickValues = showPercentages || !symLogScale ? undefined : getSymLogTickValues;
 
   return (
     <Paper sx={{ px: 2, pb: 2 }}>
@@ -228,6 +259,23 @@ function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCe
               onChange={(e) => setShowOtherCellTypes(e.target.checked)}
               ariaLabel="Show Other Cell Types"
             />
+            {!showPercentages && (
+              <LabeledPrimarySwitch
+                label={
+                  <InfoTextTooltip
+                    tooltipTitle="Toggle between linear and symmetric log scale for the counts. Symmetric log scale is useful for visualizing data with a wide range of values."
+                    infoIconSize="large"
+                  >
+                    Counts Scale
+                  </InfoTextTooltip>
+                }
+                disabledLabel="Linear"
+                enabledLabel="Symmetric Log"
+                checked={symLogScale}
+                onChange={(e) => setSymLogScale(e.target.checked)}
+                ariaLabel="Use Symmetric Log Scale"
+              />
+            )}
           </Stack>
         }
       >
@@ -248,25 +296,8 @@ function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCe
           yAxisLabel="Cell Count"
           xAxisTickLabels={organs}
           TooltipContent={TooltipContent}
-          getTickValues={
-            showPercentages
-              ? undefined
-              : (y) => {
-                  // Find the highest power of 10 lower than the maximum cell count
-                  const maxValue = y.domain()[1];
-                  const maxLog = Math.floor(Math.log10(maxValue));
-                  const tickValues = [];
-                  // Get the max tick values based on the highest power of 10
-                  for (let i = 0; i <= maxValue; i += 10 ** maxLog) {
-                    tickValues.push(i);
-                  }
-                  // Add the powers of 10 down to 1
-                  for (let j = maxLog - 1; j >= 1; j -= 1) {
-                    tickValues.push(10 ** j);
-                  }
-                  return tickValues;
-                }
-          }
+          // @ts-expect-error Annoying type error with scale types
+          getTickValues={getTickValues}
         />
       </ChartWrapper>
     </Paper>
