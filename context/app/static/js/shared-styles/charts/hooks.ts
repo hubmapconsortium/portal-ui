@@ -142,8 +142,8 @@ function useSymLogScale(data: number[], config: Omit<SymlogScaleConfig<number>, 
   return useMemo(() => {
     const domain = [Math.min(...data, 0), Math.max(...data)];
     return scaleSymlog<number>({
-      ...config,
       domain,
+      ...config,
     });
   }, [data, config]);
 }
@@ -152,8 +152,8 @@ function useLogScale(data: number[], config: Omit<LogScaleConfig<number>, 'type'
   return useMemo(() => {
     const domain = [Math.min(...data, 1), Math.max(...data)];
     return scaleLog<number>({
-      ...config,
       domain,
+      ...config,
     });
   }, [data, config]);
 }

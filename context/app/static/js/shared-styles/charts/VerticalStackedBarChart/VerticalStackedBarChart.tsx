@@ -15,7 +15,7 @@ import { BarStackProps } from '@visx/shape/lib/shapes/BarStack';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
 import { type TooltipData, tooltipHasBarData } from '../types';
 import TickComponent from '../TickComponent';
-import { TICK_LABEL_SIZE } from '../constants';
+import { AXIS_LABEL_SIZE, TICK_LABEL_SIZE } from '../constants';
 
 interface VerticalStackedBarChartProps<
   Datum,
@@ -46,6 +46,7 @@ interface VerticalStackedBarChartProps<
   getAriaLabel?: (d: TooltipData<Datum>) => string;
   order?: BarStackProps<Datum, YAxisKey, XAxisScale, YAxisScale>['order'];
   valueAccessor?: (d: Datum, key: YAxisKey) => number;
+  yTickFormat?: (value: number) => string;
 }
 
 function VerticalStackedBarChart<
@@ -76,6 +77,7 @@ function VerticalStackedBarChart<
   getAriaLabel,
   order,
   valueAccessor,
+  yTickFormat = (value) => value.toString(),
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
@@ -162,6 +164,7 @@ function VerticalStackedBarChart<
                 fontFamily: 'Inter Variable',
                 dx: '-1em',
               }}
+              tickFormat={yTickFormat}
             />
             <AxisBottom
               hideTicks
@@ -176,10 +179,12 @@ function VerticalStackedBarChart<
                 fontSize: TICK_LABEL_SIZE,
                 textAnchor: 'end',
                 angle: -90,
+                fontWeight: 500,
+                fontFamily: 'Inter Variable',
               })}
               tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave })}
               labelProps={{
-                fontSize: 14,
+                fontSize: AXIS_LABEL_SIZE,
                 color: 'black',
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',

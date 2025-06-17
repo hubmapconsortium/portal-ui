@@ -36,15 +36,15 @@ export interface CellTypeCountWithPercentageAndOrgan {
   organ: string;
 }
 
-export function addPercentageToCellTypeCounts(
+export function addPercentageAndOrganToCellTypeCounts(
   cellTypeCounts: CellTypeCountForTissue[],
   totalCellCount: number,
   organ: string,
 ): CellTypeCountWithPercentageAndOrgan[] {
   return cellTypeCounts.map((count) => ({
-    name: count.index,
+    name: formatCellTypeName(count.index),
     count: count.cell_count,
     organ,
-    percentage: totalCellCount > 0 ? (count.cell_count / totalCellCount) * 100 : 0,
+    percentage: totalCellCount > 0 ? count.cell_count / totalCellCount : 0,
   }));
 }
