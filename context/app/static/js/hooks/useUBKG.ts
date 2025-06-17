@@ -1,5 +1,5 @@
 import { useAppContext } from 'js/components/Contexts';
-import { fetcher } from 'js/helpers/swr';
+import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { SWRError } from 'js/helpers/swr/errors';
 import { useMemo } from 'react';
 import useSWR from 'swr';
@@ -215,6 +215,19 @@ export const useGeneOntologyDetail = (geneSymbol: string, shouldFetch = true) =>
     },
   );
   return { data: data?.[0], ...swr };
+};
+
+export const useGeneOntologyDetails = (geneSymbols: string[]) => {
+  const apiUrls = useUbkg();
+  const queries = geneSymbols.map((geneSymbol) => apiUrls.geneDetail(geneSymbol));
+  return useSWRImmutable<(GeneDetail | Error)[]>(
+    queries,
+    (urls: string[]) =>
+      multiFetcher<GeneDetail | Error>({ urls, expectedStatusCodes: [200, 404] }).then((d) => d.flat()), // Use multiFetcher to fetch multiple URLs
+    {
+      shouldRetryOnError: false,
+    },
+  );
 };
 
 /**

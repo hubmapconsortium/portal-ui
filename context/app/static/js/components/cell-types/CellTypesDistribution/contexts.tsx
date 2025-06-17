@@ -1,5 +1,6 @@
 import { createContext, useContext } from 'js/helpers/context';
 import React, { useMemo, useState } from 'react';
+import { CellTypeCountWithPercentageAndOrgan } from './utils';
 
 export interface CellTypesDistributionChartContextType {
   showPercentages: boolean;
@@ -36,3 +37,13 @@ export default function CellTypesDistributionChartContextProvider({ children }: 
     <CellTypesDistributionChartContext.Provider value={value}>{children}</CellTypesDistributionChartContext.Provider>
   );
 }
+
+interface CellTypeDataContextType {
+  cellTypeCounts: Record<string, CellTypeCountWithPercentageAndOrgan[]>;
+  colorScale: (cellType: string) => string;
+}
+
+const CellTypeDataContext = createContext<CellTypeDataContextType>('CellTypeDataContext');
+
+export const CellTypeDataContextProvider = CellTypeDataContext.Provider;
+export const useCellTypeDataContext = () => useContext(CellTypeDataContext);

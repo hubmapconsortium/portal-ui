@@ -7,7 +7,7 @@ import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
 import CellTypesVisualization from 'js/components/cell-types/CellTypesDistribution';
 import CellTypesSummary from 'js/components/cell-types/CellTypesSummary';
 import CellTypesEntitiesTables from 'js/components/cell-types/CellTypesEntitiesTables';
-import CellTypesBiomarkersTable from 'js/components/cell-types/CellTypesBiomarkersTable';
+import CellTypesBiomarkersTableSection from 'js/components/cell-types/CellTypesBiomarkersTable';
 import CellTypesTitle from 'js/components/cell-types/CellTypesTitle';
 
 interface Props {
@@ -29,7 +29,7 @@ function CellTypes({ cellId }: Props) {
         <CellTypesTitle />
         <CellTypesSummary />
         <CellTypesVisualization shouldDisplay={shouldDisplaySection['cell-type-distribution']} />
-        <CellTypesBiomarkersTable shouldDisplay={shouldDisplaySection.biomarkers} />
+        <CellTypesBiomarkersTableSection shouldDisplay={shouldDisplaySection.biomarkers} />
         <CellTypesEntitiesTables shouldDisplay={shouldDisplaySection.datasets} />
       </DetailLayout>
     </CellTypesProvider>

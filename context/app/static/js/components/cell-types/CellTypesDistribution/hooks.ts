@@ -2,8 +2,7 @@ import { useCellTypeCountForTissues } from 'js/api/scfind/useCellTypeCountForTis
 import { useLinearScale, useSymLogScale } from 'js/shared-styles/charts/hooks';
 import { useMemo } from 'react';
 import { formatCellTypeName } from 'js/api/scfind/utils';
-import { createContext, useContext } from 'js/helpers/context';
-import { useCellTypesDistributionChartContext } from './CellTypesDistributionChartContext';
+import { useCellTypesDistributionChartContext } from './contexts';
 import { addPercentageAndOrganToCellTypeCounts, CellTypeCountWithPercentageAndOrgan } from './utils';
 import { ChartData } from './types';
 /**
@@ -47,11 +46,6 @@ export const useYScale = (data: CellTypeCountWithPercentageAndOrgan[], maxCellCo
 
   return totalCountsScale;
 };
-
-const CellTypeDataContext = createContext<Record<string, CellTypeCountWithPercentageAndOrgan[]>>('CellTypeDataContext');
-
-export const CellTypeDataContextProvider = CellTypeDataContext.Provider;
-export const useCellTypeDataContext = () => useContext(CellTypeDataContext);
 
 export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
   const { showOtherCellTypes, showPercentages } = useCellTypesDistributionChartContext();

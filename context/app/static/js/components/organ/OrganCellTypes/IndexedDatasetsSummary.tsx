@@ -29,63 +29,40 @@ function IndexedDatasetsSummary({
   const isLoading = isLoadingDatasets || isLoadingUUIDs;
 
   return (
-    <Stack spacing={2} sx={{ marginTop: 2 }}>
-      <StyledDetailsAccordion
-        summary={
-          <Typography variant="subtitle1" component="span">
-            Indexed Datasets Summary
-          </Typography>
-        }
-        defaultExpanded
-        slotProps={{
-          heading: {
-            component: 'div',
-          },
-        }}
-        onChange={(_, expanded) => {
-          if (trackingInfo) {
-            trackEvent({
-              ...trackingInfo,
-              action: `${expanded ? 'Expand' : 'Collapse'} Indexed Datasets Summary`,
-            });
-          }
-        }}
-      >
-        <Typography variant="body2" component="div">
-          {children}
+    <StyledDetailsAccordion
+      summary={
+        <Typography variant="subtitle1" component="span">
+          Indexed Datasets Summary
         </Typography>
-        {organs && organs.length > 0 && (
-          <StyledDetailsAccordion
-            summary={
-              <Stack direction="row" spacing={1} alignItems="center">
-                <OrganIcon />
-                <Typography variant="subtitle2" component="span">
-                  Organs
-                </Typography>
-              </Stack>
-            }
-            slotProps={{
-              heading: {
-                component: 'div',
-              },
-            }}
-            defaultExpanded
-          >
-            <Stack direction="row" spacing={1} alignItems="center">
-              {organs.map(({ key, doc_count }, idx) => (
-                <Typography variant="body2" component="span" key={key}>
-                  {key} ({doc_count}){idx < organs.length - 1 ? ', ' : ''}
-                </Typography>
-              ))}
-            </Stack>
-          </StyledDetailsAccordion>
-        )}
+      }
+      defaultExpanded
+      slotProps={{
+        heading: {
+          component: 'div',
+        },
+      }}
+      onChange={(_, expanded) => {
+        if (trackingInfo) {
+          trackEvent({
+            ...trackingInfo,
+            action: `${expanded ? 'Expand' : 'Collapse'} Indexed Datasets Summary`,
+          });
+        }
+      }}
+      sx={{
+        mt: 2,
+      }}
+    >
+      <Typography variant="body2" component="div">
+        {children}
+      </Typography>
+      {organs && organs.length > 0 && (
         <StyledDetailsAccordion
           summary={
             <Stack direction="row" spacing={1} alignItems="center">
-              <DatasetIcon />
+              <OrganIcon />
               <Typography variant="subtitle2" component="span">
-                Data Types
+                Organs
               </Typography>
             </Stack>
           }
@@ -97,21 +74,46 @@ function IndexedDatasetsSummary({
           defaultExpanded
         >
           <Stack direction="row" spacing={1} alignItems="center">
-            {datasetTypes.map(({ key, doc_count }, idx) => (
+            {organs.map(({ key, doc_count }, idx) => (
               <Typography variant="body2" component="span" key={key}>
-                {key} ({doc_count}){idx < datasetTypes.length - 1 ? ', ' : ''}
+                {key} ({doc_count}){idx < organs.length - 1 ? ', ' : ''}
               </Typography>
             ))}
           </Stack>
         </StyledDetailsAccordion>
+      )}
+      <StyledDetailsAccordion
+        summary={
+          <Stack direction="row" spacing={1} alignItems="center">
+            <DatasetIcon />
+            <Typography variant="subtitle2" component="span">
+              Data Types
+            </Typography>
+          </Stack>
+        }
+        slotProps={{
+          heading: {
+            component: 'div',
+          },
+        }}
+        defaultExpanded
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          {datasetTypes.map(({ key, doc_count }, idx) => (
+            <Typography variant="body2" component="span" key={key}>
+              {key} ({doc_count}){idx < datasetTypes.length - 1 ? ', ' : ''}
+            </Typography>
+          ))}
+        </Stack>
       </StyledDetailsAccordion>
       <ViewIndexedDatasetsButton
         context="Cell Types"
         datasetUUIDs={datasetUUIDs}
         isLoading={isLoading}
         trackingInfo={trackingInfo}
+        sx={{ mt: 2 }}
       />
-    </Stack>
+    </StyledDetailsAccordion>
   );
 }
 
