@@ -18,6 +18,7 @@ interface ChartWrapperProps extends PropsWithChildren {
   dropdown?: React.ReactNode;
   allKeysScale?: OrdinalScale;
   dividersInLegend?: boolean;
+  labelValueMap?: Record<string, string>;
 }
 
 const pullUpMultiple = (a: string, b: string) => {
@@ -37,6 +38,7 @@ function ChartWrapper({
   additionalControls,
   allKeysScale,
   dividersInLegend,
+  labelValueMap = {},
 }: ChartWrapperProps) {
   const domain = [...colorScale.domain()].sort(pullUpMultiple);
   const allKeysDomain = [...(allKeysScale?.domain() ?? [])].sort(pullUpMultiple);
@@ -112,6 +114,17 @@ function ChartWrapper({
                             </InfoTextTooltip>
                           ) : (
                             label.text
+                          )}
+                          {labelValueMap[label.text] && (
+                            <Typography
+                              component="span"
+                              variant="caption"
+                              color="textSecondary"
+                              display="inline-block"
+                              ml={1}
+                            >
+                              ({labelValueMap[label.text]})
+                            </Typography>
                           )}
                         </LegendLabel>
                       </LegendItem>

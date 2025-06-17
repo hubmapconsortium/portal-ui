@@ -6,8 +6,8 @@ import { SelectChangeEvent } from '@mui/material/Select';
 import { useCellTypeOntologyDetail, CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
 import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
 import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
-import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import useSearchData from 'js/hooks/useSearchData';
+import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
 import { useCellTypesContext } from './CellTypesContext';
 
 /**
@@ -159,15 +159,24 @@ interface IndexedDatasetsForCellTypeAggs {
 }
 
 export function useIndexedDatasetsForCellType() {
-  const { data = { datasets: [] }, isLoading: isLoadingIndexed, ...rest } = useIndexedDatasets();
+  const { cellTypes } = useCellTypesContext();
+  const {
+    data,
+    isLoading: isLoadingScFind,
+    ...rest
+  } = useFindDatasetForCellTypes({
+    cellTypes,
+  });
 
-  const { searchData, isLoading: isLoadingDatasets } = useSearchData<unknown, IndexedDatasetsForCellTypeAggs>({
+  const hubmapIds = data?.map((d) => d.datasets).flat() ?? [];
+
+  const { searchData, isLoading: isLoadingSearchApi } = useSearchData<unknown, IndexedDatasetsForCellTypeAggs>({
     query: {
       bool: {
         must: [
           {
             terms: {
-              'hubmap_id.keyword': data.datasets ?? [],
+              'hubmap_id.keyword': hubmapIds,
             },
           },
         ],
@@ -203,8 +212,9 @@ export function useIndexedDatasetsForCellType() {
   const organs = searchData?.aggregations?.organs?.buckets ?? [];
 
   return {
-    datasets: datasetUUIDs,
-    isLoading: isLoadingIndexed || isLoadingDatasets,
+    datasets: hubmapIds,
+    datasetUUIDs,
+    isLoading: isLoadingScFind || isLoadingSearchApi,
     organs,
     datasetTypes,
     ...rest,
