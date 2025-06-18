@@ -5,127 +5,23 @@ import { decimal, percent } from 'js/helpers/number-format';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import { useBandScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
 import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
-import { TooltipData } from 'js/shared-styles/charts/types';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import { ScaleContinuousNumeric } from 'd3';
 import Skeleton from '@mui/material/Skeleton';
 import { unselectedCellColors } from 'js/components/cells/CellTypeDistributionChart/utils';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableHead from '@mui/material/TableHead';
-import TableCell from '@mui/material/TableCell';
-import TableRow from '@mui/material/TableRow';
-import TableFooter from '@mui/material/TableFooter';
-import { formatCellTypeName } from 'js/api/scfind/utils';
-import { ChartData } from './types';
 import { useCellTypeCountData, useYScale } from './hooks';
 import CellTypesDistributionChartContextProvider, {
   useCellTypesDistributionChartContext,
   CellTypeDataContextProvider,
-  useCellTypeDataContext,
 } from './contexts';
-import { useCellTypesContext } from '../CellTypesContext';
-import { CellTypeCountWithPercentageAndOrgan } from './utils';
+import CellTypesDistributionChartTooltip from './CellTypesDistributionTooltip';
 
 interface MultiOrganCellTypeDistributionChartProps {
   cellTypes: string[];
   organs: string[];
-}
-
-interface TooltipTableProps {
-  organ: string;
-  cellTypes: string[];
-  cellTypeCounts: CellTypeCountWithPercentageAndOrgan[];
-}
-
-function TooltipTable({ organ, cellTypes, cellTypeCounts }: TooltipTableProps) {
-  const targetCellTypes = cellTypeCounts.filter((count) => cellTypes.includes(count.name));
-
-  const otherCellTypes = cellTypeCounts.filter((count) => !cellTypes.includes(count.name));
-
-  const totalOtherCount = otherCellTypes.reduce((acc, count) => acc + count.count, 0);
-
-  const totalCellsInOrgan = cellTypeCounts.reduce((acc, count) => acc + count.count, 0);
-
-  const { colorScale } = useCellTypeDataContext();
-
-  return (
-    <Stack direction="column" spacing={1}>
-      <Typography variant="body2" fontWeight="bold">
-        {organ}
-      </Typography>
-      <Table size="small">
-        <TableHead>
-          <TableRow>
-            <TableCell aria-hidden padding="checkbox" />
-            <TableCell>Cell Type</TableCell>
-            <TableCell>Count</TableCell>
-            <TableCell>Percentage</TableCell>
-          </TableRow>
-        </TableHead>
-        <TableBody>
-          {targetCellTypes.map(({ name, count }) => (
-            <TableRow key={name}>
-              <TableCell aria-hidden padding="checkbox">
-                <Stack direction="row" alignItems="center">
-                  <svg width="1em" height="1em" style={{ borderRadius: '0.25rem', marginRight: '-0.5rem' }}>
-                    <rect fill={colorScale(name)} width="1em" height="1em" />
-                  </svg>
-                </Stack>
-              </TableCell>
-              <TableCell> {name}</TableCell>
-              <TableCell>{decimal.format(count)}</TableCell>
-              <TableCell>{percent.format(count / totalCellsInOrgan)}</TableCell>
-            </TableRow>
-          ))}
-        </TableBody>
-        <TableFooter>
-          <TableRow>
-            <TableCell aria-hidden padding="checkbox" />
-            <TableCell>Other Cell Types</TableCell>
-            <TableCell>{decimal.format(totalOtherCount)}</TableCell>
-            <TableCell>{percent.format(totalOtherCount / totalCellsInOrgan)}</TableCell>
-          </TableRow>
-          <TableRow>
-            <TableCell aria-hidden padding="checkbox" />
-            <TableCell>Total</TableCell>
-            <TableCell colSpan={2}>{decimal.format(totalCellsInOrgan)}</TableCell>
-          </TableRow>
-        </TableFooter>
-      </Table>
-    </Stack>
-  );
-}
-
-function AxisLabelTooltip({ label }: { label: string }) {
-  const { cellTypeCounts } = useCellTypeDataContext();
-  const cellTypeCountsForOrgan = cellTypeCounts[label];
-  const { cellTypes } = useCellTypesContext();
-  const formattedCellTypes = cellTypes.map((type) => formatCellTypeName(type));
-  return <TooltipTable organ={label} cellTypes={formattedCellTypes} cellTypeCounts={cellTypeCountsForOrgan} />;
-}
-
-function TooltipContent({ tooltipData }: { tooltipData: TooltipData<ChartData> }) {
-  const { bar, key: tooltipKey } = tooltipData;
-  const { cellTypeCounts } = useCellTypeDataContext();
-  const { cellTypes } = useCellTypesContext();
-  if (!bar?.data) {
-    return <AxisLabelTooltip label={String(tooltipKey)} />;
-  }
-  const { organ } = bar.data;
-  const cellTypeName = String(tooltipKey);
-  const cellTypeCountsForOrgan = cellTypeCounts[bar.data.organ];
-  const formattedCellTypes = cellTypes.map((type) => formatCellTypeName(type));
-  return (
-    <TooltipTable
-      organ={organ}
-      cellTypes={[cellTypeName, ...formattedCellTypes]}
-      cellTypeCounts={cellTypeCountsForOrgan}
-    />
-  );
 }
 
 function ChartControls() {
@@ -196,10 +92,12 @@ function getSymLogTickValues(y: ScaleContinuousNumeric<number, number, never>) {
   const maxValue = y.domain()[1];
   const maxLog = Math.floor(Math.log10(maxValue));
   const tickValues = [];
+
   // Get the max tick values based on the highest power of 10
   for (let i = 0; i <= maxValue; i += 10 ** maxLog) {
     tickValues.push(i);
   }
+
   // Add the powers of 10 down to 1
   for (let j = maxLog - 1; j >= 1; j -= 1) {
     tickValues.push(10 ** j);
@@ -256,6 +154,17 @@ function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCe
 
   const getTickValues = useGetTickValues();
 
+  const yAxisLabel = showPercentages ? 'Cell Fraction' : 'Cell Count';
+  const yTickFormat = useCallback(
+    (value: number) => {
+      if (showPercentages) {
+        return percent.format(value);
+      }
+      return decimal.format(value);
+    },
+    [showPercentages],
+  );
+
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={500} />;
   }
@@ -289,13 +198,12 @@ function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCe
               left: 100,
             }}
             xAxisLabel="Organs"
-            yAxisLabel={showPercentages ? 'Cell Fraction' : 'Cell Count'}
+            yAxisLabel={yAxisLabel}
             xAxisTickLabels={organs}
-            TooltipContent={TooltipContent}
+            TooltipContent={CellTypesDistributionChartTooltip}
             // @ts-expect-error Annoying type error with scale types
             getTickValues={getTickValues}
-            // eslint-disable-next-line @typescript-eslint/unbound-method
-            yTickFormat={showPercentages ? percent.format : decimal.format}
+            yTickFormat={yTickFormat}
           />
         </ChartWrapper>
       </Paper>

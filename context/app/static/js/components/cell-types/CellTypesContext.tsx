@@ -1,7 +1,7 @@
 import React, { PropsWithChildren, useMemo, useContext as useOptionalContext } from 'react';
 import { createContext, useContext } from 'js/helpers/context';
 import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
-import { extractCellTypesInfo } from './hooks';
+import { extractCellTypesInfo } from './utils';
 
 interface CellTypesContextProps {
   cellId: string;

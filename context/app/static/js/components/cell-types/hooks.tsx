@@ -1,14 +1,18 @@
-import { useMemo, useState } from 'react';
+import React, { useMemo, useState } from 'react';
 
 import { useEventCallback } from '@mui/material/utils';
 import { SelectChangeEvent } from '@mui/material/Select';
 
-import { useCellTypeOntologyDetail, CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
+import { useCellTypeOntologyDetail, CellTypeBiomarkerInfo, useGeneOntologyDetails } from 'js/hooks/useUBKG';
 import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
 import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
 import useSearchData from 'js/hooks/useSearchData';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
+import useCellTypeMarkers from 'js/api/scfind/useCellTypeMarkers';
+import { objectIsError } from 'js/helpers/is-error';
+import Skeleton from '@mui/material/Skeleton';
 import { useCellTypesContext } from './CellTypesContext';
+import { extractCellTypesInfo } from './utils';
 
 /**
  * Helper function for fetching the current cell type's details from the cross-modality API.
@@ -29,43 +33,6 @@ export const useCellTypeInfo = () => {
   const { clid } = useCellTypesContext();
   return useCellTypeOntologyDetail(clid);
 };
-
-export function extractCellTypeInfo(cellType: string) {
-  const [organ, typeWithVariant] = cellType.split('.');
-  const [name, variant] = typeWithVariant.split(':');
-  return { organ, name, variant };
-}
-
-export function extractCellTypesInfo(cellTypes: string[]) {
-  if (!cellTypes || cellTypes.length === 0) {
-    return {
-      name: '',
-      organs: [],
-      variants: {},
-    };
-  }
-  const cellTypeName = cellTypes[0].split(':')[0].split('.')[1];
-  const organs = cellTypes.map((cellType) => cellType.split('.')[0]);
-  const variants: Record<string, string[]> = {};
-  // ensure that each organ has an entry in the variants object
-  // and collect unique variants for each organ
-  cellTypes.forEach((cellType) => {
-    const [organ, typeWithVariant] = cellType.split('.');
-    const [, variant] = typeWithVariant.split(':');
-    if (!variants[organ]) {
-      variants[organ] = [];
-    }
-    if (variant && !variants[organ].includes(variant)) {
-      variants[organ].push(variant);
-    }
-  });
-
-  return {
-    name: cellTypeName,
-    organs: Array.from(new Set(organs)), // Ensure unique organs
-    variants,
-  };
-}
 
 /**
  * Extracts the cell type name from a list of cell types.
@@ -219,4 +186,55 @@ export function useIndexedDatasetsForCellType() {
     datasetTypes,
     ...rest,
   };
+}
+
+export function useBiomarkersTableData() {
+  const { cellTypes } = useCellTypesContext();
+  const { data, isLoading } = useCellTypeMarkers({
+    cellTypes,
+  });
+
+  const geneIds = useMemo(() => {
+    if (!data?.findGeneSignatures) {
+      return [];
+    }
+    return data.findGeneSignatures.map(({ genes }) => genes);
+  }, [data]);
+
+  // Fetch gene descriptions for the gene IDs
+  const { data: descriptions, isLoading: isLoadingDescriptions } = useGeneOntologyDetails(geneIds);
+
+  const restructuredDescriptions = useMemo(() => {
+    if (!descriptions) {
+      return {};
+    }
+    const unwrappedDescriptions = descriptions.flat();
+    return unwrappedDescriptions.reduce<Record<string, string>>((acc, entry, idx) => {
+      if (objectIsError(entry)) {
+        return acc;
+      }
+      // Handle cases where approved_symbol or summary is missing (where gene description is not available)
+      if (!entry.approved_symbol || !entry.summary) {
+        return acc;
+      }
+      const { summary } = entry;
+      acc[geneIds[idx]] = summary;
+      return acc;
+    }, {});
+  }, [descriptions, geneIds]);
+
+  const rows = useMemo(() => {
+    if (!data?.findGeneSignatures) {
+      return [];
+    }
+    return data.findGeneSignatures.map(({ genes: geneName, precision, recall, f1 }) => ({
+      genes: geneName,
+      precision,
+      recall,
+      f1,
+      description:
+        restructuredDescriptions[geneName] ?? (isLoadingDescriptions ? <Skeleton /> : 'No description available.'),
+    }));
+  }, [data, isLoadingDescriptions, restructuredDescriptions]);
+  return { data, isLoading, isLoadingDescriptions, rows };
 }
