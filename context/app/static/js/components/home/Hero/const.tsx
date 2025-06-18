@@ -42,6 +42,41 @@ const COMBINED_DATASET_LINK = createDatasetSearchLink({
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   {
+    title: 'Workspaces Now Support Multiple Running Sessions and Updated Python Environments',
+    titleHref: '/workspaces',
+    description:
+      'Support for multiple simultaneous workspace sessions is now available. The Python environment and templates have also been updated for improved performance and compatibility.',
+    date: 'June 2025',
+    img: <WorkspacesIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'Organ Pages Now Show Identified Cell Types',
+    titleHref: '/organ/kidney',
+    description: (
+      <>
+        View cell types identified in HuBMAP datasets for an organ, now available for{' '}
+        <InternalLink href="/organ/kidney">kidney</InternalLink> and{' '}
+        <InternalLink href="/organ/lung">lung</InternalLink> organs.{' '}
+      </>
+    ),
+    date: 'June 2025',
+    img: <OrganIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'Improved Molecular & Cellular Data Query (Beta)',
+    titleHref: '/cells',
+    description: (
+      <>
+        Explore the improved <InternalLink href="/cells">Molecular & Cellular Data Query (Beta)</InternalLink> with a
+        new scFind-powered search method, gene pathway-based queries, and enhanced visualizations for gene and cell type
+        results.
+      </>
+    ),
+    date: 'May 2025',
+    img: <entityIconMap.Gene {...timelineIconProps} />,
+  },
+
+  {
     title: 'Asynchronous Workspace Sharing Now Available',
     titleHref: '/workspaces',
     description: (

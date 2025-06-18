@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import Stack from '@mui/material/Stack';
-import useOpenKeyNavStore, { deleteOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
+import useOpenKeyNavStore, { deleteOpenKeyNavCookie, readOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
@@ -30,16 +30,22 @@ const openKeyNavCommands = [
 ];
 
 function OpenKeyNavSection() {
+  const hasOpenKeyNavCookie = readOpenKeyNavCookie();
+
   const initialize = useOpenKeyNavStore((s) => s.initialize);
   const setInitialize = useOpenKeyNavStore((s) => s.setInitialize);
 
-  const [accordionIsOpen, setAccordionIsOpen] = useState(false);
+  const [accordionIsOpen, setAccordionIsOpen] = useState(hasOpenKeyNavCookie);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInitialize(!initialize);
     if (e.target.checked === false) {
       deleteOpenKeyNavCookie();
       window.location.reload();
+    }
+
+    if (e.target.checked && accordionIsOpen === false) {
+      setAccordionIsOpen(true);
     }
   };
 

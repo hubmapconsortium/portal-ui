@@ -1,0 +1,1 @@
+- Open OpenKeyNav commands description when OpenKeyNav is enabled.

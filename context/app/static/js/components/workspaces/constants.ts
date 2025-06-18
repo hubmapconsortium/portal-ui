@@ -30,3 +30,5 @@ export const MAX_MEMORY_MB = 131072;
 
 export const MIN_TIME_LIMIT_MINUTES = 60;
 export const MAX_TIME_LIMIT_MINUTES = 720;
+
+export const MAX_NUM_CONCURRENT_WORKSPACES = 1000;

@@ -3,14 +3,9 @@ import { styled } from '@mui/material/styles';
 import MenuItem, { MenuItemProps } from '@mui/material/MenuItem';
 
 import { InfoIcon } from 'js/shared-styles/icons';
-import DropdownMenuButton from 'js/shared-styles/dropdowns/DropdownMenuButton';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import LinearProgress from '@mui/material/LinearProgress';
 import Stack from '@mui/material/Stack';
-
-const StyledDropdownMenuButton = styled(DropdownMenuButton)(({ theme }) => ({
-  height: theme.spacing(5),
-}));
 
 const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({
   fontSize: '1rem',
@@ -44,4 +39,4 @@ const StyledMenuItem = styled(({ tooltip, isLoading, children, href, ...props }:
   color: 'black',
 });
 
-export { StyledDropdownMenuButton, StyledInfoIcon, StyledMenuItem };
+export { StyledInfoIcon, StyledMenuItem };

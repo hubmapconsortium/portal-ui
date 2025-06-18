@@ -9,6 +9,7 @@ import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection
 import { trackEvent } from 'js/helpers/trackers';
 import { useGeneOntology, useGenePageContext } from '../hooks';
 import KnownReferences from './KnownReferences';
+import { pageSectionIDs } from '../constants';
 
 function SummarySkeleton() {
   return (
@@ -30,7 +31,7 @@ const trackRelevantPageClick = (label: string) => {
 
 const relevantPages = [
   {
-    link: '/genes',
+    link: '/biomarkers',
     children: 'Biomarkers',
   },
   {
@@ -66,7 +67,7 @@ function Summary() {
   }, [data?.approved_symbol, geneSymbolUpper]);
 
   return (
-    <DetailPageSection id="summary">
+    <DetailPageSection id={pageSectionIDs.summary}>
       <SummaryPaper>
         <LabelledSectionText label="Description" bottomSpacing={1} iconTooltipText="Gene description from NCBI Gene.">
           {data?.summary ?? <SummarySkeleton />}

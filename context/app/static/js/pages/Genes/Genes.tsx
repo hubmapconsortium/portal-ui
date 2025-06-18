@@ -10,9 +10,10 @@ import Datasets from 'js/components/genes/Datasets';
 import { pageSectionIDs } from 'js/components/genes/constants';
 import CellTypes from 'js/components/genes/CellTypes/GeneCellTypes';
 
-const { datasets, cellTypes } = pageSectionIDs;
+const { datasets, cellTypes, summary } = pageSectionIDs;
 
 const shouldDisplaySection = {
+  [summary]: true,
   [cellTypes]: true,
   [datasets]: true,
 };

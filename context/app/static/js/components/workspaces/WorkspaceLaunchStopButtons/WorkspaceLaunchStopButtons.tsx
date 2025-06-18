@@ -6,7 +6,7 @@ import Typography from '@mui/material/Typography';
 import { useWorkspacesList } from 'js/components/workspaces/hooks';
 import { isRunningWorkspace, findRunningWorkspace } from 'js/components/workspaces/utils';
 import { Alert } from 'js/shared-styles/alerts';
-import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
+import { generateBoldCommaList, isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
 import { MergedWorkspace } from 'js/components/workspaces/types';
 import { useLaunchWorkspaceDialog } from 'js/components/workspaces/LaunchWorkspaceDialog/hooks';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
@@ -33,7 +33,7 @@ function StopWorkspaceButton({
   isStoppingWorkspace,
   showIcons,
 }: Omit<WorkspaceButtonProps, 'showLaunch' | 'showStop'>) {
-  const { toastErrorStopWorkspace } = useWorkspaceToasts();
+  const { toastErrorStopWorkspace, toastSuccessStopWorkspace } = useWorkspaceToasts();
   const currentWorkspaceIsRunning = isRunningWorkspace(workspace);
 
   if (!currentWorkspaceIsRunning) {
@@ -47,10 +47,14 @@ function StopWorkspaceButton({
       variant="contained"
       sx={{ border: 'none' }}
       onClick={() => {
-        handleStopWorkspace(workspace.id).catch((err) => {
-          toastErrorStopWorkspace(workspace.name);
-          console.error(err);
-        });
+        handleStopWorkspace(workspace.id)
+          .then(() => {
+            toastSuccessStopWorkspace(generateBoldCommaList([workspace.name]));
+          })
+          .catch((err) => {
+            toastErrorStopWorkspace(workspace.name);
+            console.error(err);
+          });
       }}
       startIcon={showIcons ? <StyledSvgIcon as={StopJobIcon} /> : undefined}
     >

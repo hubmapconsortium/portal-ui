@@ -10,6 +10,7 @@ import {
   NOT_CAPITALIZED_WORDS,
   shouldCapitalizeString,
   generateCommaList,
+  generateElementCommaList,
   isValidEmail,
   getEntityCreationInfo,
   validateAndFormatOrcidId,
@@ -88,6 +89,30 @@ test('generateCommaList', () => {
   expect(generateCommaList(['apples', 'bananas', 'oranges', 'grapes'])).toStrictEqual(
     'apples, bananas, oranges, and grapes',
   );
+});
+
+describe('generateElementCommaList', () => {
+  it('returns an empty array for empty input', () => {
+    expect(generateElementCommaList([])).toStrictEqual([]);
+  });
+
+  it('returns single element when one item is provided', () => {
+    expect(generateElementCommaList(['apples'])).toStrictEqual(['apples']);
+  });
+
+  it('returns "a and b" structure for two items', () => {
+    expect(generateElementCommaList(['apples', 'bananas'])).toStrictEqual(['apples', ' and ', 'bananas']);
+  });
+
+  it('returns comma-separated with "and" for three strings', () => {
+    expect(generateElementCommaList(['apples', 'bananas', 'oranges'])).toStrictEqual([
+      'apples',
+      ', ',
+      'bananas',
+      ', and ',
+      'oranges',
+    ]);
+  });
 });
 
 const validEmails = [

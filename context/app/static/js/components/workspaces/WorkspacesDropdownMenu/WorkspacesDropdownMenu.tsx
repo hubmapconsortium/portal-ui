@@ -8,7 +8,6 @@ import withDropdownMenuProvider from 'js/shared-styles/dropdowns/DropdownMenuPro
 import DropdownMenu from 'js/shared-styles/dropdowns/DropdownMenu';
 import { useAppContext } from 'js/components/Contexts';
 import { NewWorkspaceDialogFromSelections } from 'js/components/workspaces/NewWorkspaceDialog';
-import { StyledDropdownMenuButton } from 'js/components/searchPage/MetadataMenu/style';
 import { DialogType, useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
 import { AddIcon } from 'js/shared-styles/icons';
 import AddDatasetsFromSearchDialog from 'js/components/workspaces/AddDatasetsFromSearchDialog';
@@ -16,6 +15,7 @@ import WorkspacesIcon from 'assets/svg/workspaces.svg';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
+import { StyledDropdownMenuButton } from 'js/shared-styles/dropdowns/DropdownMenuButton/DropdownMenuButton';
 
 const menuID = 'workspace-menu';
 
