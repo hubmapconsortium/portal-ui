@@ -9,10 +9,10 @@ import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
 import useSearchData from 'js/hooks/useSearchData';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
 import useCellTypeMarkers from 'js/api/scfind/useCellTypeMarkers';
-import { objectIsError } from 'js/helpers/is-error';
+import { isError } from 'js/helpers/is-error';
 import Skeleton from '@mui/material/Skeleton';
+import { extractCellTypesInfo } from 'js/api/scfind/utils';
 import { useCellTypesContext } from './CellTypesContext';
-import { extractCellTypesInfo } from './utils';
 
 /**
  * Helper function for fetching the current cell type's details from the cross-modality API.
@@ -210,7 +210,7 @@ export function useBiomarkersTableData() {
     }
     const unwrappedDescriptions = descriptions.flat();
     return unwrappedDescriptions.reduce<Record<string, string>>((acc, entry, idx) => {
-      if (objectIsError(entry)) {
+      if (isError(entry)) {
         return acc;
       }
       // Handle cases where approved_symbol or summary is missing (where gene description is not available)

@@ -4,7 +4,7 @@ import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import Divider from '@mui/material/Divider';
 
-import { CellTypeOrgansGraph } from 'js/components/cell-types/CellTypesVisualization';
+import { CellTypeOrgansGraph } from 'js/components/cell-types/CrossModalityCellTypesVisualization';
 import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
 import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import { Tab, TabPanel, Tabs } from 'js/shared-styles/tables/TableTabs';

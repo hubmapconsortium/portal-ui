@@ -21,6 +21,7 @@ import { useSortState } from 'js/hooks/useSortState';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
+import { isError } from 'js/helpers/is-error';
 import IndexedDatasetsSummary from '../organ/OrganCellTypes/IndexedDatasetsSummary';
 import { useCellTypesContext } from './CellTypesContext';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
@@ -29,10 +30,6 @@ import { useIndexedDatasetsForCellType } from './hooks';
 
 function GeneDescription({ description }: { description: React.ReactNode }) {
   return <LineClamp lines={2}>{description ?? 'No description available.'}</LineClamp>;
-}
-
-function responseIsError(response: object): response is { message: string } {
-  return 'message' in response;
 }
 
 function useBiomarkersTableData() {
@@ -57,7 +54,7 @@ function useBiomarkersTableData() {
     }
     const unwrappedDescriptions = descriptions.flat();
     return unwrappedDescriptions.reduce<Record<string, string>>((acc, entry, idx) => {
-      if (responseIsError(entry)) {
+      if (isError(entry)) {
         return acc;
       }
       // Handle cases where approved_symbol or summary is missing (where gene description is not available)

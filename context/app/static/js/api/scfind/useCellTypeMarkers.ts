@@ -22,7 +22,7 @@ export interface CellTypeMarkersParams {
   includePrefix?: boolean;
 }
 
-type CellTypeMarkersKey = string;
+type CellTypeMarkersKey = string | null;
 
 interface CellTypeMarkersResponse {
   // This is the correct name for the property based on the API response, even though it doesn't
@@ -35,7 +35,7 @@ export function createCellTypeMarkersKey(
   { cellTypes, topK, backgroundCellTypes, sortField, includePrefix }: CellTypeMarkersParams,
 ): CellTypeMarkersKey {
   if (!cellTypes || cellTypes.length === 0) {
-    return '';
+    return null;
   }
   return createScFindKey(scFindEndpoint, 'cellTypeMarkers', {
     cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
