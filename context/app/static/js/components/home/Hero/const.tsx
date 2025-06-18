@@ -73,7 +73,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
       </>
     ),
     date: 'May 2025',
-    img: <entityIconMap.CellType {...timelineIconProps} />,
+    img: <entityIconMap.Gene {...timelineIconProps} />,
   },
 
   {
