@@ -11,10 +11,10 @@ import { getEntityCreationInfo } from 'js/helpers/functions';
 
 import ProcessedDataGroup from 'js/components/detailPage/ProcessedData/ProcessedDatasetGroup';
 import HelperPanel from 'js/shared-styles/HelperPanel';
-import StatusIcon from '../../StatusIcon';
-import { useCurrentDataset } from '../../utils';
-import { useTrackEntityPageEvent } from '../../useTrackEntityPageEvent';
-import ProcessedDataWorkspaceMenu from '../ProcessedDataWorkspaceMenu';
+import StatusIcon from '../StatusIcon';
+import { useCurrentDataset } from '../utils';
+import { useTrackEntityPageEvent } from '../useTrackEntityPageEvent';
+import ProcessedDataWorkspaceMenu from './ProcessedDataWorkspaceMenu';
 
 function Header() {
   const currentDataset = useCurrentDataset();
