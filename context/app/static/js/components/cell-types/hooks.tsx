@@ -12,14 +12,14 @@ import useCellTypeMarkers from 'js/api/scfind/useCellTypeMarkers';
 import { isError } from 'js/helpers/is-error';
 import Skeleton from '@mui/material/Skeleton';
 import { extractCellTypesInfo } from 'js/api/scfind/utils';
-import { useCellTypesContext } from './CellTypesContext';
+import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 
 /**
  * Helper function for fetching the current cell type's details from the cross-modality API.
  * @returns The datasets, samples, and organs available in HuBMAP for the current cell type.
  */
 export const useCellTypeDetails = () => {
-  const { cellId } = useCellTypesContext();
+  const { cellId } = useCellTypesDetailPageContext();
   const { data, ...rest } = useFeatureDetails('cell-types', cellId);
 
   return { ...data, ...rest };
@@ -30,7 +30,7 @@ export const useCellTypeDetails = () => {
  * @returns {CellTypeInfoResponse} The cell type info for the current page.
  */
 export const useCellTypeInfo = () => {
-  const { clid } = useCellTypesContext();
+  const { clid } = useCellTypesDetailPageContext();
   return useCellTypeOntologyDetail(clid);
 };
 
@@ -44,7 +44,7 @@ export const useCellTypeInfo = () => {
  * @returns {object} An object containing the cell type name, organs, and variants for each organ.
  */
 export function useExtractedCellTypeInfo() {
-  const { cellId } = useCellTypesContext();
+  const { cellId } = useCellTypesDetailPageContext();
   const { data: { cell_types: cellTypes } = { cell_types: [] } } = useCLIDToLabel({ clid: cellId });
   return useMemo(() => extractCellTypesInfo(cellTypes), [cellTypes]);
 }
@@ -126,7 +126,7 @@ interface IndexedDatasetsForCellTypeAggs {
 }
 
 export function useIndexedDatasetsForCellType() {
-  const { cellTypes } = useCellTypesContext();
+  const { cellTypes, trackingInfo } = useCellTypesDetailPageContext();
   const {
     data,
     isLoading: isLoadingScFind,
@@ -184,12 +184,13 @@ export function useIndexedDatasetsForCellType() {
     isLoading: isLoadingScFind || isLoadingSearchApi,
     organs,
     datasetTypes,
+    trackingInfo,
     ...rest,
   };
 }
 
 export function useBiomarkersTableData() {
-  const { cellTypes } = useCellTypesContext();
+  const { cellTypes } = useCellTypesDetailPageContext();
   const { data, isLoading } = useCellTypeMarkers({
     cellTypes,
   });

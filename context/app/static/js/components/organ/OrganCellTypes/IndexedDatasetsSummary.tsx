@@ -14,6 +14,7 @@ interface IndexedDatasetsSummaryProps {
   organs?: { key: string; doc_count: number }[];
   isLoadingDatasets?: boolean;
   trackingInfo?: EventInfo;
+  context?: string;
 }
 
 function IndexedDatasetsSummary({
@@ -23,6 +24,7 @@ function IndexedDatasetsSummary({
   isLoadingDatasets = false,
   children,
   trackingInfo,
+  context = 'Cell Types',
 }: PropsWithChildren<IndexedDatasetsSummaryProps>) {
   const { datasetUUIDs, isLoading: isLoadingUUIDs } = useUUIDsFromHubmapIds(datasets);
 
@@ -45,7 +47,7 @@ function IndexedDatasetsSummary({
         if (trackingInfo) {
           trackEvent({
             ...trackingInfo,
-            action: `${expanded ? 'Expand' : 'Collapse'} Indexed Datasets Summary`,
+            action: `${context} / ${expanded ? 'Expand' : 'Collapse'} Indexed Datasets Summary`,
           });
         }
       }}
@@ -107,7 +109,7 @@ function IndexedDatasetsSummary({
         </Stack>
       </StyledDetailsAccordion>
       <ViewIndexedDatasetsButton
-        context="Cell Types"
+        context={context}
         datasetUUIDs={datasetUUIDs}
         isLoading={isLoading}
         trackingInfo={trackingInfo}

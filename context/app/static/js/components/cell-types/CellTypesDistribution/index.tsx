@@ -5,7 +5,7 @@ import Description from 'js/shared-styles/sections/Description';
 import Paper from '@mui/material/Paper';
 import { CollapsibleDetailPageSection } from '../../detailPage/DetailPageSection';
 import IndexedDatasetsSummary from '../../organ/OrganCellTypes/IndexedDatasetsSummary';
-import { useCellTypesContext } from '../CellTypesContext';
+import { useCellTypesDetailPageContext } from '../CellTypesDetailPageContext';
 import CellTypeDistributionChart from '../../cells/CellTypeDistributionChart';
 import { useIndexedDatasetsForCellType } from '../hooks';
 import MultiOrganCellTypeDistributionChart from './MultiOrganCellTypesDistributionChart';
@@ -19,6 +19,7 @@ function CellTypesDistributionSummary() {
       trackingInfo={{
         category: 'Cell Type Detail Page',
       }}
+      context="Cell Type Distribution"
     >
       These results are derived from RNAseq datasets that were indexed by the scFind method to identify marker genes
       associated with the cell type. Not all HuBMAP datasets are currently compatible with this method due to
@@ -29,7 +30,7 @@ function CellTypesDistributionSummary() {
 }
 
 function Chart() {
-  const { organs, cellTypes } = useCellTypesContext();
+  const { organs, cellTypes } = useCellTypesDetailPageContext();
 
   if (organs.length > 1) {
     // Stacked bar chart
@@ -44,8 +45,13 @@ function Chart() {
 }
 
 function CellTypesDistribution() {
+  const { trackingInfo } = useCellTypesDetailPageContext();
   return (
-    <CollapsibleDetailPageSection title="Cell Type Distribution" id="cell-type-distribution">
+    <CollapsibleDetailPageSection
+      title="Cell Type Distribution"
+      id="cell-type-distribution"
+      trackingInfo={trackingInfo}
+    >
       <Description belowTheFold={<CellTypesDistributionSummary />}>
         This visualization displays the distribution of the cell type across the available organs, as identified by
         Azimuth and indexed by the <SCFindLink />. Only organs that contain at least one indexable dataset containing

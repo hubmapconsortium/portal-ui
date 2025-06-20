@@ -2,6 +2,7 @@ import React, { PropsWithChildren, useMemo, useContext as useOptionalContext } f
 import { createContext, useContext } from 'js/helpers/context';
 import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
 import { extractCellTypesInfo } from 'js/api/scfind/utils';
+import { trackEvent } from 'js/helpers/trackers';
 
 interface CellTypesContextProps {
   cellId: string;
@@ -13,6 +14,11 @@ interface CellTypesContextType extends CellTypesContextProps {
   name: string; // Name of the cell type
   organs: string[]; // List of organs associated with the cell type
   variants: Record<string, string[]>; // Variants associated with each organ
+  track: (action: string, label?: string) => void; // Function to track events related to cell types
+  trackingInfo: {
+    category: string; // Category for tracking events
+    label: string; // Label prefix for tracking events
+  };
 }
 
 const CellTypesContext = createContext<CellTypesContextType>('CellTypesContext');
@@ -28,11 +34,22 @@ export default function CellTypesProvider({ children, cellId }: PropsWithChildre
       name,
       organs,
       variants,
+      track: (action: string, label?: string) => {
+        trackEvent({
+          category: `Cell Type Detail Page`,
+          action,
+          label: label ? `{${name}} ${label}` : `${name}`,
+        });
+      },
+      trackingInfo: {
+        category: 'Cell Type Detail Page',
+        label: `${name}`,
+      },
     }),
     [cellId, cellTypes, name, organs, variants],
   );
   return <CellTypesContext.Provider value={value}>{children}</CellTypesContext.Provider>;
 }
 
-export const useCellTypesContext = () => useContext(CellTypesContext);
-export const useOptionalCellTypesContext = () => useOptionalContext(CellTypesContext);
+export const useCellTypesDetailPageContext = () => useContext(CellTypesContext);
+export const useOptionalCellTypesDetailPageContext = () => useOptionalContext(CellTypesContext);

@@ -18,6 +18,7 @@ import CellTypesDistributionChartContextProvider, {
   CellTypeDataContextProvider,
 } from './contexts';
 import CellTypesDistributionChartTooltip from './CellTypesDistributionTooltip';
+import { useOptionalCellTypesDetailPageContext } from '../CellTypesDetailPageContext';
 
 interface MultiOrganCellTypeDistributionChartProps {
   cellTypes: string[];
@@ -34,6 +35,10 @@ function ChartControls() {
     setSymLogScale,
   } = useCellTypesDistributionChartContext();
 
+  const cellTypeContext = useOptionalCellTypesDetailPageContext();
+
+  const track = cellTypeContext?.track;
+
   return (
     <Stack direction="row" spacing={2} alignItems="center">
       <LabeledPrimarySwitch
@@ -48,7 +53,10 @@ function ChartControls() {
         disabledLabel="Total Count"
         enabledLabel="Fraction"
         checked={showPercentages}
-        onChange={(e) => setShowPercentages(e.target.checked)}
+        onChange={(e) => {
+          setShowPercentages(e.target.checked);
+          track?.('Cell Type Distribution / Toggle Graph Type');
+        }}
         ariaLabel="Graph Type"
       />
       <LabeledPrimarySwitch
@@ -63,7 +71,10 @@ function ChartControls() {
         disabledLabel="Hide"
         enabledLabel="Show"
         checked={showOtherCellTypes}
-        onChange={(e) => setShowOtherCellTypes(e.target.checked)}
+        onChange={(e) => {
+          setShowOtherCellTypes(e.target.checked);
+          track?.('Cell Type Distribution / Toggle Other Cell Types');
+        }}
         ariaLabel="Show Other Cell Types"
       />
       {!showPercentages && (
@@ -79,7 +90,10 @@ function ChartControls() {
           disabledLabel="Linear"
           enabledLabel="Symmetric Log"
           checked={symLogScale}
-          onChange={(e) => setSymLogScale(e.target.checked)}
+          onChange={(e) => {
+            setSymLogScale(e.target.checked);
+            track?.('Cell Type Distribution / Toggle Scale Type');
+          }}
           ariaLabel="Use Symmetric Log Scale"
         />
       )}

@@ -3,7 +3,7 @@ import React from 'react';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 
-import CellTypesProvider from 'js/components/cell-types/CellTypesContext';
+import CellTypesProvider from 'js/components/cell-types/CellTypesDetailPageContext';
 import CellTypesVisualization from 'js/components/cell-types/CellTypesDistribution';
 import CellTypesSummary from 'js/components/cell-types/CellTypesSummary';
 import CellTypesEntitiesTables from 'js/components/cell-types/CellTypesEntitiesTables';

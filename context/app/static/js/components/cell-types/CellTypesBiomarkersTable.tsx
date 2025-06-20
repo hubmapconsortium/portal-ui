@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import useCellTypeMarkers from 'js/api/scfind/useCellTypeMarkers';
@@ -23,7 +23,7 @@ import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import { isError } from 'js/helpers/is-error';
 import IndexedDatasetsSummary from '../organ/OrganCellTypes/IndexedDatasetsSummary';
-import { useCellTypesContext } from './CellTypesContext';
+import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import { ScientificNotationDisplayCell } from '../genes/CellTypes/ScientificNotationDisplay';
 import { useIndexedDatasetsForCellType } from './hooks';
@@ -33,7 +33,7 @@ function GeneDescription({ description }: { description: React.ReactNode }) {
 }
 
 function useBiomarkersTableData() {
-  const { cellTypes } = useCellTypesContext();
+  const { cellTypes } = useCellTypesDetailPageContext();
   const { data, isLoading } = useCellTypeMarkers({
     cellTypes,
   });
@@ -97,7 +97,7 @@ const columns = [
 function BiomarkersTable() {
   const { isLoading, isLoadingDescriptions, rows } = useBiomarkersTableData();
 
-  const { name } = useCellTypesContext();
+  const { name, track } = useCellTypesDetailPageContext();
 
   const { sortState, setSort } = useSortState(
     {
@@ -145,6 +145,19 @@ function BiomarkersTable() {
     ]),
   });
 
+  const onDownload = useCallback(() => {
+    download();
+    track('Biomarkers / Download Table');
+  }, [download, track]);
+
+  const onSort = useCallback(
+    (columnId: string) => {
+      setSort(columnId);
+      track(`Biomarkers / Sort Table`, columns.find((column) => column.id === columnId)?.label ?? 'Unknown');
+    },
+    [setSort, track],
+  );
+
   return (
     <Paper>
       <StyledTableContainer>
@@ -152,14 +165,14 @@ function BiomarkersTable() {
           <TableHead sx={{ position: 'relative' }}>
             <TableRow>
               {columns.map((column) => (
-                <EntityHeaderCell key={column.id} column={column} setSort={setSort} sortState={sortState} />
+                <EntityHeaderCell key={column.id} column={column} setSort={onSort} sortState={sortState} />
               ))}
               <TableCell sx={{ backgroundColor: 'background.paper' }} align="right">
                 <DownloadButton
                   disabled={isLoading || isLoadingDescriptions}
                   tooltip="Download table in TSV format."
                   sx={{ right: 1 }}
-                  onClick={download}
+                  onClick={onDownload}
                 />
               </TableCell>
             </TableRow>
@@ -168,7 +181,9 @@ function BiomarkersTable() {
           {sortedRows.map(({ genes, precision, recall, f1, description }) => (
             <TableRow key={genes}>
               <TableCell>
-                <InternalLink href={`/genes/${genes}`}>{genes}</InternalLink>
+                <InternalLink href={`/genes/${genes}`} onClick={() => track('Biomarkers / Select Biomarker', genes)}>
+                  {genes}
+                </InternalLink>
               </TableCell>
               <TableCell>
                 <GeneDescription description={description} />
@@ -187,12 +202,13 @@ function BiomarkersTable() {
 
 function CellTypesBiomarkersTableSection() {
   const indexedDatasetsSummaryProps = useIndexedDatasetsForCellType();
+  const { trackingInfo } = useCellTypesDetailPageContext();
 
   return (
-    <CollapsibleDetailPageSection id="biomarkers" title="Biomarkers">
+    <CollapsibleDetailPageSection id="biomarkers" title="Biomarkers" trackingInfo={trackingInfo}>
       <Description
         belowTheFold={
-          <IndexedDatasetsSummary {...indexedDatasetsSummaryProps}>
+          <IndexedDatasetsSummary {...indexedDatasetsSummaryProps} context="Biomarkers">
             These results are derived from RNAseq datasets that were indexed by the scFind method to identify marker
             genes associated with the cell type. Not all HuBMAP datasets are currently compatible with this method due
             to differences in data modalities or the availability of cell annotations. This section gives a summary of

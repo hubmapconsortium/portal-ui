@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import Description from 'js/shared-styles/sections/Description';
 import Box from '@mui/material/Box';
@@ -9,19 +9,23 @@ import { capitalize } from '@mui/material/utils';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import MolecularDataQueryFormProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormProvider';
 import MolecularDataQueryFormTrackingProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
-import { useCellTypesContext } from './CellTypesContext';
+import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 import { SCFindCellTypeQueryResults } from '../cells/SCFindResults';
 
 function CellTypesEntitiesTables() {
-  const { cellTypes, name } = useCellTypesContext();
+  const { cellTypes, name, track, trackingInfo } = useCellTypesDetailPageContext();
   const formattedTitle = name
     ? `Datasets Containing ${name
         .split(' ')
         .map((word) => capitalize(word))
         .join(' ')}`
     : 'Datasets';
+
+  const trackExploreWithMolecularAndCellularQueryTool = useCallback(() => {
+    track('Datasets / Select "Explore with Molecular and Cellular Query" button');
+  }, [track]);
   return (
-    <CollapsibleDetailPageSection title={formattedTitle} id="datasets">
+    <CollapsibleDetailPageSection title={formattedTitle} id="datasets" trackingInfo={trackingInfo}>
       <Description
         belowTheFold={
           <Box mt={2}>
@@ -29,7 +33,7 @@ function CellTypesEntitiesTables() {
               href="/cells"
               variant="contained"
               color="primary"
-              // onClick={trackExploreWithMolecularAndCellularQueryTool}
+              onClick={trackExploreWithMolecularAndCellularQueryTool}
             >
               Explore with Molecular and Cellular Query Tool
             </Button>

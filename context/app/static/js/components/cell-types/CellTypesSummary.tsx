@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 
 import DetailPageSection from 'js/components/detailPage/DetailPageSection';
 
@@ -10,12 +10,20 @@ import useEntityStore from 'js/stores/useEntityStore';
 
 import Skeleton from '@mui/material/Skeleton';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
-import { useCellTypeInfo, useCellTypeName } from './hooks';
-import { useCellTypesContext } from './CellTypesContext';
+import { useCellTypeInfo } from './hooks';
+import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 
 function ReferenceLink({ cellId }: { cellId: string }) {
+  const { track } = useCellTypesDetailPageContext();
   return (
-    <OutboundIconLink href={`http://purl.obolibrary.org/obo/${cellId.replace(':', '_')}`}>{cellId}</OutboundIconLink>
+    <OutboundIconLink
+      onClick={() => {
+        track('Summary / Select "Known References"', 'OBO Reference Link');
+      }}
+      href={`http://purl.obolibrary.org/obo/${cellId.replace(':', '_')}`}
+    >
+      {cellId}
+    </OutboundIconLink>
   );
 }
 
@@ -46,19 +54,27 @@ export default function CellTypesSummary() {
   const { data } = useCellTypeInfo();
   const setAssayMetadata = useEntityStore((s) => s.setAssayMetadata);
 
-  const { cellId } = useCellTypesContext();
-  const cellName = useCellTypeName();
+  const { cellId, track, name } = useCellTypesDetailPageContext();
 
   useEffect(() => {
-    if (cellName) {
-      document.title = `${cellName} - Cell Type`;
+    if (name) {
+      document.title = `${name} - Cell Type`;
       setAssayMetadata({
-        name: cellName,
+        name,
         entity_type: 'CellType',
         reference_link: <ReferenceLink cellId={cellId} />,
       });
     }
-  }, [cellName, setAssayMetadata, cellId]);
+  }, [name, setAssayMetadata, cellId]);
+
+  const relevantPagesWithTracking = useMemo(() => {
+    return relevantPages.map((page) => ({
+      ...page,
+      onClick: () => {
+        track('Summary / Select Relevant Page Button', page.children);
+      },
+    }));
+  }, [track]);
 
   return (
     <DetailPageSection id="summary">
@@ -78,7 +94,7 @@ export default function CellTypesSummary() {
         >
           <ReferenceLink cellId={cellId} />
         </LabelledSectionText>
-        <RelevantPagesSection pages={relevantPages} />
+        <RelevantPagesSection pages={relevantPagesWithTracking} />
       </SummaryPaper>
     </DetailPageSection>
   );

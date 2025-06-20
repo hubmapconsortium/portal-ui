@@ -3,7 +3,7 @@ import { createContext, useContext } from 'js/helpers/context';
 import { trackEvent } from 'js/helpers/trackers';
 import { v4 } from 'uuid';
 import { useOptionalGenePageContext } from 'js/components/genes/GenePageContext';
-import { useOptionalCellTypesContext } from 'js/components/cell-types/CellTypesContext';
+import { useOptionalCellTypesDetailPageContext } from 'js/components/cell-types/CellTypesDetailPageContext';
 
 export type MolecularDataQueryFormTrackingCategory =
   | 'Molecular and Cellular Query'
@@ -43,7 +43,7 @@ export default function MolecularDataQueryFormTrackingProvider({
   // to track the session of the user filling out the form.
   const sessionId = useRef<string>(`{${v4()}}`);
   const genePageContext = useOptionalGenePageContext();
-  const cellTypePageContext = useOptionalCellTypesContext();
+  const cellTypePageContext = useOptionalCellTypesDetailPageContext();
 
   const track = useCallback(
     (action: string, name?: string) => {
