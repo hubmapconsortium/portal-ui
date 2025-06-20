@@ -96,3 +96,8 @@ export function extractCellTypesInfo(cellTypes: string[]) {
     variants,
   };
 }
+
+export function stringIsCellType(cellType: string): boolean {
+  // A cell type is a string that contains a dot (.) and optionally a colon (:)
+  return cellType.includes('.') || cellType.includes(':');
+}

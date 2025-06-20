@@ -11,8 +11,11 @@ import HelperPanel from 'js/shared-styles/HelperPanel';
 import { useInView } from 'react-intersection-observer';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { capitalize } from '@mui/material/utils';
-import { extractCellTypeInfo } from 'js/api/scfind/utils';
+import { extractCellTypeInfo, stringIsCellType } from 'js/api/scfind/utils';
 import Box from '@mui/material/Box';
+import { CellTypeIcon } from 'js/shared-styles/icons';
+import { decimal, percent } from 'js/helpers/number-format';
+import Divider from '@mui/material/Divider';
 import { useDeduplicatedResults, useSCFindCellTypeResults, useTableTrackingProps } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
@@ -22,6 +25,7 @@ import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 import DatasetsOverview from '../DatasetsOverview';
 import { SCFindQueryResultsListProps } from './types';
 import { targetCellCountColumn, totalCellCountColumn } from './columns';
+import useSCFindResultsStatisticsStore from './store';
 
 const columns = [hubmapID, organ, assayTypes, targetCellCountColumn, totalCellCountColumn, lastModifiedTimestamp];
 
@@ -51,6 +55,47 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListPr
       expandedContent={SCFindCellTypesChart}
       {...useTableTrackingProps()}
     />
+  );
+}
+
+interface HelperPanelProps {
+  shouldDisplay: boolean;
+  currentTissue: string;
+}
+
+function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) {
+  const { datasetStats, cellTypeStats } = useSCFindResultsStatisticsStore((state) => ({
+    datasetStats: state.datasetStats,
+    cellTypeStats: state.cellTypeStats,
+  }));
+  const cellTypes = useCellVariableNames();
+
+  return (
+    <HelperPanel shouldDisplay={shouldDisplay}>
+      <HelperPanel.Header gap={1}>
+        <OrganIcon organName={currentTissue} />
+        {currentTissue && capitalize(currentTissue)}
+      </HelperPanel.Header>
+      <HelperPanel.BodyItem label="Cell Type Distribution">
+        <div>
+          This chart shows the distribution of cell types across {currentTissue} for the selected tissue. These results
+          are derived from RNAseq datasets that were indexed by the <SCFindLink />.
+        </div>
+        {/* For some reason, `py: 1` leads to the divider being vertically misaligned; pt:1 and mb: 1 are a workaround */}
+        <Divider sx={{ pt: 1, mb: 1 }} />
+        <div>
+          Targeted cell types are highlighted in the chart, and are a total of {decimal.format(cellTypeStats.targeted)}{' '}
+          out of {decimal.format(cellTypeStats.total)} indexed {currentTissue} cells, making up{' '}
+          {percent.format(cellTypeStats.targeted / cellTypeStats.total)} of the total cell count.
+        </div>
+      </HelperPanel.BodyItem>
+      <HelperPanel.BodyItem label="Datasets Overview">
+        This table provides more details about the {decimal.format(datasetStats.datasets.matched)} matched{' '}
+        {currentTissue} datasets containing any of the {decimal.format(cellTypes.length)} requested cell types, and
+        their demographics relative to the {decimal.format(datasetStats.datasets.indexed)} datasets indexed in scFind
+        and {decimal.format(datasetStats.datasets.total)} total HuBMAP datasets.
+      </HelperPanel.BodyItem>
+    </HelperPanel>
   );
 }
 
@@ -117,19 +162,7 @@ function OrganCellTypeDistributionCharts() {
           </DatasetsOverview>
         </TabPanel>
       ))}
-      <HelperPanel shouldDisplay={displayHelper}>
-        <HelperPanel.Header gap={1}>
-          <OrganIcon organName={currentTissue} />
-          {currentTissue && capitalize(currentTissue)}
-        </HelperPanel.Header>
-        <HelperPanel.BodyItem label="Cell Type Distribution">
-          This chart shows the distribution of cell types across organs for the selected tissue.
-        </HelperPanel.BodyItem>
-        <HelperPanel.BodyItem label="Datasets Overview">
-          This table summarizes the number of matched {currentTissue} datasets containing the requested cell types and
-          the proportions relative to scFind-indexed datasets and total HuBMAP datasets.
-        </HelperPanel.BodyItem>
-      </HelperPanel>
+      <ResultsHelperPanel shouldDisplay={displayHelper} currentTissue={currentTissue} />
     </div>
   );
 }
@@ -150,19 +183,32 @@ function DatasetListSection() {
   return (
     <>
       <DatasetListHeader />
-      <Tabs onChange={handleTabChange} value={openTabIndex}>
-        {cellTypeCategories.map((cellType, idx) => {
-          const { organ: tissue, name, variant } = extractCellTypeInfo(cellType);
+      <Tabs
+        variant={cellTypeCategories.length >= 5 ? 'scrollable' : 'fullWidth'}
+        onChange={handleTabChange}
+        value={openTabIndex}
+      >
+        {cellTypeCategories.map((cellTypeCategory, idx) => {
+          const { organ: tissue, name, variant } = extractCellTypeInfo(cellTypeCategory);
           const formattedVariant = variant ? ` (${variant})` : '';
+          const formattedLabel = `${name} ${formattedVariant} in ${capitalize(tissue)}`;
+          const isCellType = stringIsCellType(cellTypeCategory);
+          const isOrgan = cellTypes.find((ct) => ct.startsWith(`${tissue}.`));
+          const label = isCellType ? formattedLabel : cellTypeCategory;
+
+          const shouldDisplayOrganIcon = isCellType || isOrgan;
+          const organIconKey = isOrgan ? tissue : cellTypeCategory;
           return (
             <Tab
-              key={cellType}
+              key={cellTypeCategory}
               label={
                 <Stack direction="row" alignItems="center" gap={1}>
-                  <OrganIcon organName={tissue} aria-label={tissue} />
+                  <Box flexShrink={0}>
+                    {shouldDisplayOrganIcon && <OrganIcon organName={organIconKey} aria-label={organIconKey} />}
+                    {!shouldDisplayOrganIcon && <CellTypeIcon />}
+                  </Box>
                   <Box component="span" sx={{ textTransform: 'capitalize' }}>
-                    {name}
-                    {formattedVariant} in {capitalize(tissue)} ({datasets[cellType]?.length ?? 0})
+                    {label} ({datasets[cellTypeCategory]?.length ?? 0})
                   </Box>
                 </Stack>
               }
