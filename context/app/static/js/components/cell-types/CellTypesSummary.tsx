@@ -11,14 +11,14 @@ import useEntityStore from 'js/stores/useEntityStore';
 import Skeleton from '@mui/material/Skeleton';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import { useCellTypeInfo } from './hooks';
-import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
+import { useCellTypesDetailPageContext, useOptionalCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 
 function ReferenceLink({ cellId }: { cellId: string }) {
-  const { track } = useCellTypesDetailPageContext();
+  const track = useOptionalCellTypesDetailPageContext()?.track;
   return (
     <OutboundIconLink
       onClick={() => {
-        track('Summary / Select "Known References"', 'OBO Reference Link');
+        track?.('Summary / Select "Known References"', 'OBO Reference Link');
       }}
       href={`http://purl.obolibrary.org/obo/${cellId.replace(':', '_')}`}
     >
