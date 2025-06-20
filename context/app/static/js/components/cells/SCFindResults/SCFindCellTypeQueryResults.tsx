@@ -7,6 +7,12 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
+import HelperPanel from 'js/shared-styles/HelperPanel';
+import { useInView } from 'react-intersection-observer';
+import OrganIcon from 'js/shared-styles/icons/OrganIcon';
+import { capitalize } from '@mui/material/utils';
+import { extractCellTypeInfo } from 'js/api/scfind/utils';
+import Box from '@mui/material/Box';
 import { useDeduplicatedResults, useSCFindCellTypeResults, useTableTrackingProps } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
@@ -78,8 +84,20 @@ function OrganCellTypeDistributionCharts() {
     return tissueMap;
   }, [datasets, tissues]);
 
+  const [displayHelper, setDisplayHelper] = React.useState(false);
+
+  const currentTissue = tissues[openTabIndex] || tissues[0];
+
+  const { ref: intersectionRef } = useInView({
+    threshold: 0.5,
+    initialInView: false,
+    onChange: (inView) => {
+      setDisplayHelper(inView);
+    },
+  });
+
   return (
-    <>
+    <div ref={intersectionRef}>
       <Tabs onChange={handleTabChange} value={openTabIndex}>
         {tissues.map((tissue, idx) => (
           <Tab key={tissue} label={tissue} index={idx} />
@@ -99,7 +117,20 @@ function OrganCellTypeDistributionCharts() {
           </DatasetsOverview>
         </TabPanel>
       ))}
-    </>
+      <HelperPanel shouldDisplay={displayHelper}>
+        <HelperPanel.Header gap={1}>
+          <OrganIcon organName={currentTissue} />
+          {currentTissue && capitalize(currentTissue)}
+        </HelperPanel.Header>
+        <HelperPanel.BodyItem label="Cell Type Distribution">
+          This chart shows the distribution of cell types across organs for the selected tissue.
+        </HelperPanel.BodyItem>
+        <HelperPanel.BodyItem label="Datasets Overview">
+          This table summarizes the number of matched {currentTissue} datasets containing the requested cell types and
+          the proportions relative to scFind-indexed datasets and total HuBMAP datasets.
+        </HelperPanel.BodyItem>
+      </HelperPanel>
+    </div>
   );
 }
 
@@ -120,9 +151,25 @@ function DatasetListSection() {
     <>
       <DatasetListHeader />
       <Tabs onChange={handleTabChange} value={openTabIndex}>
-        {cellTypeCategories.map((cellType, idx) => (
-          <Tab key={cellType} label={`${cellType} (${datasets[cellType]?.length ?? 0})`} index={idx} />
-        ))}
+        {cellTypeCategories.map((cellType, idx) => {
+          const { organ: tissue, name, variant } = extractCellTypeInfo(cellType);
+          const formattedVariant = variant ? ` (${variant})` : '';
+          return (
+            <Tab
+              key={cellType}
+              label={
+                <Stack direction="row" alignItems="center" gap={1}>
+                  <OrganIcon organName={tissue} aria-label={tissue} />
+                  <Box component="span" sx={{ textTransform: 'capitalize' }}>
+                    {name}
+                    {formattedVariant} in {capitalize(tissue)} ({datasets[cellType]?.length ?? 0})
+                  </Box>
+                </Stack>
+              }
+              index={idx}
+            />
+          );
+        })}
       </Tabs>
       {cellTypeCategories.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx}>

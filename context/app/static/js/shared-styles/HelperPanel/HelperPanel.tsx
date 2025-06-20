@@ -1,7 +1,7 @@
 import React, { PropsWithChildren } from 'react';
 import { animated } from '@react-spring/web';
 import Stack from '@mui/material/Stack';
-import Typography from '@mui/material/Typography';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 import Fade from '@mui/material/Fade';
 
 import { useIsLargeDesktop } from 'js/hooks/media-queries';
@@ -10,9 +10,9 @@ import { LineClampWithTooltip } from 'js/shared-styles/text';
 
 import { HelperPanelPortal } from 'js/components/detailPage/DetailLayout/DetailLayout';
 
-export function HelperPanelHeader({ children }: PropsWithChildren) {
+export function HelperPanelHeader({ children, ...rest }: TypographyProps) {
   return (
-    <Typography variant="subtitle2" display="flex" alignItems="center" gap={0.5} whiteSpace="nowrap">
+    <Typography variant="subtitle2" display="flex" alignItems="center" gap={0.5} whiteSpace="nowrap" {...rest}>
       {children}
     </Typography>
   );
@@ -39,7 +39,7 @@ interface HelperPanelProps extends PropsWithChildren {
   shouldDisplay?: boolean;
 }
 
-export default function HelperPanel({ shouldDisplay, children }: HelperPanelProps) {
+export default function HelperPanelBase({ shouldDisplay, children }: HelperPanelProps) {
   const isDesktop = useIsLargeDesktop();
   const style = useAnimatedSidebarPosition();
 
