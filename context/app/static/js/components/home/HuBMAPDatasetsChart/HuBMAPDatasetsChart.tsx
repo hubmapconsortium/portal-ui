@@ -323,6 +323,7 @@ function HuBMAPDatasetsChart() {
             }}
             getBarHref={selectedColor.getBarHref}
             getAriaLabel={selectedColor.getAriaLabel}
+            canBeMultipleKeys
           />
         </ChartWrapper>
       </ChartArea>

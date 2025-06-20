@@ -5,7 +5,7 @@ import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import ProcessedDataset from './ProcessedDataset';
-import HelperPanel from './HelperPanel';
+import HelperPanel from './ProcessedDataHelperPanel';
 import { useAnalysesCountInfo, useSortedSearchHits } from './hooks';
 import CollapsibleDetailPageSection from '../DetailPageSection/CollapsibleDetailPageSection';
 

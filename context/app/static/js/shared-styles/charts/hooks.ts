@@ -11,6 +11,8 @@ import {
   scaleLinear,
   scaleLog,
   scaleOrdinal,
+  scaleSymlog,
+  SymlogScaleConfig,
 } from '@visx/scale';
 import { useTheme } from '@mui/material/styles';
 
@@ -136,12 +138,22 @@ function useLinearScale(data: number[], config: Omit<LinearScaleConfig, 'type'> 
   }, [data, config]);
 }
 
+function useSymLogScale(data: number[], config: Omit<SymlogScaleConfig<number>, 'type'> = {}) {
+  return useMemo(() => {
+    const domain = [Math.min(...data, 0), Math.max(...data)];
+    return scaleSymlog<number>({
+      domain,
+      ...config,
+    });
+  }, [data, config]);
+}
+
 function useLogScale(data: number[], config: Omit<LogScaleConfig<number>, 'type'> = {}) {
   return useMemo(() => {
     const domain = [Math.min(...data, 1), Math.max(...data)];
     return scaleLog<number>({
-      ...config,
       domain,
+      ...config,
     });
   }, [data, config]);
 }
@@ -162,6 +174,7 @@ export {
   useVerticalChart,
   useHorizontalChart,
   useLinearScale,
+  useSymLogScale,
   useLogScale,
   useBandScale,
   useOrdinalScale,

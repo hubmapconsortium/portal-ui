@@ -11,13 +11,15 @@ function SecondaryBackgroundTooltip({ disabled, children, ...rest }: SecondaryBa
   }
   return (
     <Tooltip
-      PopperProps={{
-        sx: (theme) => ({
-          '& .MuiTooltip-tooltip': {
-            borderRadius: theme.spacing(1),
-            backgroundColor: theme.palette.secondary.main,
-          },
-        }),
+      slotProps={{
+        popper: {
+          sx: (theme) => ({
+            '& .MuiTooltip-tooltip': {
+              borderRadius: theme.spacing(1),
+              backgroundColor: theme.palette.secondary.main,
+            },
+          }),
+        },
       }}
       {...rest}
       arrow

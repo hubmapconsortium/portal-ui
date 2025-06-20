@@ -19,6 +19,7 @@ interface StackedBarProps extends SVGProps<SVGRectElement> {
   href?: string;
   ariaLabelText?: string;
   colorScale?: OrdinalScale;
+  canBeMultipleKeys?: boolean;
 }
 
 interface MappableProps {
@@ -43,12 +44,22 @@ const propMap: Record<Direction, MappableProps> = {
   },
 };
 
-function Fill({ bar, colorScale, id }: { bar: Bar; colorScale?: OrdinalScale; id: string }) {
+function Fill({
+  bar,
+  colorScale,
+  id,
+  canBeMultipleKeys,
+}: {
+  bar: Bar;
+  colorScale?: OrdinalScale;
+  id: string;
+  canBeMultipleKeys?: boolean;
+}) {
   const barKey = bar.key;
   const barKeys = String(barKey).split(', ');
 
   // If it's a single-key bar or a separate scale is not provided, the pattern should just reflect the color
-  if (barKeys.length === 1 || !colorScale) {
+  if (barKeys.length === 1 || !colorScale || !canBeMultipleKeys) {
     return (
       <defs>
         <pattern id={id} patternUnits="userSpaceOnUse" width="1.5" height="1.5" patternTransform="rotate(90)">
@@ -108,7 +119,15 @@ const useHoverPropsWithFocus: (hoverProps?: Record<string, unknown>) => HoverPro
   }, [hoverProps]);
 };
 
-function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelText, colorScale }: StackedBarProps) {
+function StackedBar({
+  direction = 'vertical',
+  bar,
+  hoverProps,
+  href,
+  ariaLabelText,
+  colorScale,
+  canBeMultipleKeys,
+}: StackedBarProps) {
   const maxBarThickness = 65;
 
   const { length, thickness, discreteAxis, categoricalAxis } = propMap[direction];
@@ -129,7 +148,7 @@ function StackedBar({ direction = 'vertical', bar, hoverProps, href, ariaLabelTe
 
   const rect = (
     <>
-      <Fill bar={bar} colorScale={colorScale} id={id} />
+      <Fill bar={bar} colorScale={colorScale} id={id} canBeMultipleKeys={canBeMultipleKeys} />
       <StyledRect
         fill={`url(#${id})`}
         {...barProps}

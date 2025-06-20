@@ -4,19 +4,28 @@ import Stack from '@mui/material/Stack';
 import PrimarySwitch from 'js/shared-styles/switches/PrimarySwitch';
 
 interface LabeledPrimarySwitchProps {
-  label?: string;
+  label?: React.ReactNode;
   checked?: boolean;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>, checked: boolean) => void;
   ariaLabel: string;
+  disabledLabel?: string;
+  enabledLabel?: string;
 }
-export default function LabeledPrimarySwitch({ label, checked, onChange, ariaLabel }: LabeledPrimarySwitchProps) {
+export default function LabeledPrimarySwitch({
+  label,
+  checked,
+  onChange,
+  ariaLabel,
+  disabledLabel = 'Disabled',
+  enabledLabel = 'Enabled',
+}: LabeledPrimarySwitchProps) {
   return (
     <Stack spacing={1} alignItems="start">
       {label && <Typography variant="subtitle2">{label}</Typography>}
       <Stack direction="row" component="label" alignItems="center">
-        <Typography>Disabled</Typography>
+        <Typography>{disabledLabel}</Typography>
         <PrimarySwitch checked={checked} onChange={onChange} inputProps={{ 'aria-label': ariaLabel }} />
-        <Typography>Enabled</Typography>
+        <Typography>{enabledLabel}</Typography>
       </Stack>
     </Stack>
   );

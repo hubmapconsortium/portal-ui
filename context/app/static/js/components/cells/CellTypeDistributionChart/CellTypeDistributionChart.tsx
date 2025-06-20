@@ -7,9 +7,15 @@ import FractionGraph from './FractionGraph';
 
 interface CellTypeDistributionChartProps {
   tissue: string;
+  cellTypes: string[];
+  skipDescription?: boolean;
 }
 
-export default function CellTypeDistributionChart({ tissue }: CellTypeDistributionChartProps) {
+export default function CellTypeDistributionChart({
+  tissue,
+  cellTypes,
+  skipDescription,
+}: CellTypeDistributionChartProps) {
   const { data, isLoading } = useCellTypeCountForTissue({ tissue });
 
   if (isLoading) {
@@ -20,13 +26,19 @@ export default function CellTypeDistributionChart({ tissue }: CellTypeDistributi
     return <div>No cell type distribution data available</div>;
   }
 
+  const graph = <FractionGraph data={data.cellTypeCounts} tissue={tissue} targetCellTypes={cellTypes} />;
+
+  if (skipDescription) {
+    return graph;
+  }
+
   return (
     <div>
       <Description>
         The bar below shows the distribution of cell types in the {tissue} tissue. The distribution is based on the
         number of cells annotated in HuBMAP datasets and indexed by scFind.
       </Description>
-      <FractionGraph data={data.cellTypeCounts} tissue={tissue} />
+      {graph}
     </div>
   );
 }

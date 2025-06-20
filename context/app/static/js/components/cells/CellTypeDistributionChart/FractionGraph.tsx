@@ -5,41 +5,22 @@ import { useChartTooltip, useLinearScale, useOrdinalScale } from 'js/shared-styl
 import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import React from 'react';
-import { grey, blueGrey, teal } from '@mui/material/colors';
 import { decimal } from 'js/helpers/number-format';
 import { capitalizeString } from 'js/helpers/functions';
 import { ScaleLinear } from 'd3';
-import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
-import { useProcessedData, useXOffsets } from './hooks';
+import { useProcessedFractionData, useXOffsets } from './hooks';
 import FractionRect from './FractionGraphRect';
 import FractionGraphLegend from './FractionGraphLegend';
 import FractionGraphTooltip from './FractionGraphTooltip';
+import { unselectedCellColors } from './utils';
 
 interface FractionGraphProps extends WithParentSizeProvidedProps {
   data: CellTypeCountForTissue[];
   tissue: string;
+  targetCellTypes: string[];
 }
 
-const unselectedCellColors = [
-  grey[300],
-  grey[400],
-  grey[500],
-  grey[600],
-  grey[700],
-  blueGrey[300],
-  blueGrey[400],
-  blueGrey[500],
-  blueGrey[600],
-  blueGrey[700],
-  teal[300],
-  teal[400],
-  teal[500],
-  teal[600],
-  teal[700],
-];
-
-function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
-  const targetCellTypes = useCellVariableNames();
+function Fraction({ data, parentWidth, tissue, targetCellTypes }: FractionGraphProps) {
   const {
     counts: cellCounts,
     otherLabels: otherCellLabels,
@@ -47,7 +28,7 @@ function Fraction({ data, parentWidth, tissue }: FractionGraphProps) {
     total: totalCellCount,
     countsMap: mappedCellCounts,
     sortedData,
-  } = useProcessedData(data);
+  } = useProcessedFractionData(data, targetCellTypes);
 
   const scale = useLinearScale(cellCounts, {
     range: [0, parentWidth!], // range to normalize the values to percentages
