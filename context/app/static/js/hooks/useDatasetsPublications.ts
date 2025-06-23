@@ -24,7 +24,16 @@ export function buildPublicationsWithDatasetQuery(datasetUUIDs: string[]): Searc
         ],
       },
     },
-    _source: ['uuid', 'title', 'hubmap_id', 'entity_type', 'ancestor_ids', 'publication_status'],
+    _source: [
+      'uuid',
+      'title',
+      'publication_date',
+      'publication_venue',
+      'contributors',
+      'entity_type',
+      'ancestor_ids',
+      'publication_status',
+    ],
   };
 }
 
