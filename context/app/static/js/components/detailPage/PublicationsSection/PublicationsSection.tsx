@@ -64,7 +64,7 @@ function PublicationsSection() {
 
   if (isLoading) {
     return (
-      <CollapsibleDetailPageSection id="publications" title="Publications" icon={sectionIconMap.collections}>
+      <CollapsibleDetailPageSection id="publications" title="Publications" icon={sectionIconMap.publications}>
         <SectionDescription>{publicationsSectionDescription}</SectionDescription>
         <Skeleton variant="rectangular" height={200} />
       </CollapsibleDetailPageSection>

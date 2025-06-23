@@ -103,17 +103,3 @@ export function getAncestorsQuery(descendantUUID: string): QueryDslQueryContaine
     },
   };
 }
-
-export function getDescendantsQuery(ancestorUUID: string): QueryDslQueryContainer {
-  return {
-    bool: {
-      filter: [
-        {
-          term: {
-            ancestor_ids: ancestorUUID,
-          },
-        },
-      ],
-    },
-  };
-}
