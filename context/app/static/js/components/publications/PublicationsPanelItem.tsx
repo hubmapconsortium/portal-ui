@@ -28,7 +28,7 @@ function PublicationHeaderPanel() {
   return (
     <StackTemplate spacing={1} position="sticky" top={0} zIndex={1}>
       <HeaderCell {...desktopConfig.title}>Title</HeaderCell>
-      <HeaderCell {...desktopConfig.publishedDate}>Pubished Date</HeaderCell>
+      <HeaderCell {...desktopConfig.publishedDate}>Published Date</HeaderCell>
     </StackTemplate>
   );
 }

@@ -1,5 +1,8 @@
 import React from 'react';
 
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
+
 import PanelList from 'js/shared-styles/panels/PanelList';
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
@@ -9,7 +12,6 @@ import { sectionIconMap } from 'js/shared-styles/icons/sectionIconMap';
 import { useTabs } from 'js/shared-styles/tabs';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
-import Skeleton from '@mui/material/Skeleton';
 import { useDatasetsPublicationsTabs } from 'js/hooks/useDatasetsPublications';
 
 export interface PublicationHit {
@@ -101,9 +103,11 @@ function PublicationsSection() {
           />
         ))}
       </Tabs>
-      {datasetPublicationsTabs.map(({ uuid, publications }, index) => (
-        <PublicationsPanel key={uuid} index={index} value={openTabIndex} publications={publications} />
-      ))}
+      <Stack maxHeight={400}>
+        {datasetPublicationsTabs.map(({ uuid, publications }, index) => (
+          <PublicationsPanel key={uuid} index={index} value={openTabIndex} publications={publications} />
+        ))}
+      </Stack>
     </CollapsibleDetailPageSection>
   );
 }
