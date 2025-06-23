@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.27.4 - 2025-06-13
+
+- Allow multiple workspaces to run concurrently.
+- Update eui import parameters to support 2.3 update.
+
+
+
 ## v1.27.3 - 2025-06-11
 
 - Restore summary link to gene detail page table of contents.
