@@ -4,7 +4,7 @@ import { useMemo } from 'react';
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { useProcessedDatasetTabs } from 'js/components/detailPage/ProcessedData/ProcessedDataset/hooks';
 import { Publication } from 'js/components/types';
-import { PublicationHit } from 'js/components/publications/utils';
+import { PublicationHit } from 'js/components/detailPage/PublicationsSection/PublicationsSection';
 
 export function buildPublicationsWithDatasetQuery(datasetUUIDs: string[]): SearchRequest {
   return {
@@ -56,13 +56,7 @@ function useDatasetsPublicationsTabs() {
             return ancestor_ids.some((id) => id === datasetUUID);
           });
           if (publicationsContainingDataset.length > 0 || datasetUUID === primaryDatasetId) {
-            acc[datasetUUID] = publicationsContainingDataset.map((hit) => ({
-              ...hit,
-              _source: {
-                ...hit._source,
-                publication_status: false,
-              },
-            }));
+            acc[datasetUUID] = publicationsContainingDataset;
           }
           return acc;
         },

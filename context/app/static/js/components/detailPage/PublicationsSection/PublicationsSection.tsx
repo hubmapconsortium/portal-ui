@@ -10,14 +10,22 @@ import { useTabs } from 'js/shared-styles/tabs';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
 import { useProcessedDatasets } from 'js/pages/Dataset/hooks';
 import Skeleton from '@mui/material/Skeleton';
-import { PublicationHit } from 'js/components/publications/utils';
 import { useDatasetsPublicationsTabs } from 'js/hooks/useDatasetsPublications';
 
+export interface PublicationHit {
+  _source: {
+    uuid: string;
+    title: string;
+    hubmap_id: string;
+  };
+}
+
 function buildPublicationsPanelsProps(publications: PublicationHit[]) {
-  return publications.map(({ _source: { uuid, title } }) => ({
+  return publications.map(({ _source: { uuid, title, hubmap_id } }) => ({
     key: uuid,
     href: `/browse/collection/${uuid}`,
     title,
+    secondaryText: hubmap_id,
   }));
 }
 
