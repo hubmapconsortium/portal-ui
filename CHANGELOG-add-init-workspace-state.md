@@ -1,0 +1,1 @@
+- Add support for new "initializing" workspace state.
