@@ -6,6 +6,7 @@ import Button from '@mui/material/Button';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { capitalize } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import MolecularDataQueryFormProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormProvider';
 import MolecularDataQueryFormTrackingProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
@@ -13,7 +14,7 @@ import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 import { SCFindCellTypeQueryResults } from '../cells/SCFindResults';
 
 function CellTypesEntitiesTables() {
-  const { cellTypes, name, track, trackingInfo } = useCellTypesDetailPageContext();
+  const { cellTypes, name, trackingInfo } = useCellTypesDetailPageContext();
   const formattedTitle = name
     ? `Datasets Containing ${name
         .split(' ')
@@ -22,8 +23,12 @@ function CellTypesEntitiesTables() {
     : 'Datasets';
 
   const trackExploreWithMolecularAndCellularQueryTool = useCallback(() => {
-    track('Datasets / Select "Explore with Molecular and Cellular Query" button');
-  }, [track]);
+    trackEvent({
+      ...trackingInfo,
+      action: 'Datasets / Select "Explore with Molecular and Cellular Query" button',
+    });
+  }, [trackingInfo]);
+
   return (
     <CollapsibleDetailPageSection title={formattedTitle} id="datasets" trackingInfo={trackingInfo}>
       <Description

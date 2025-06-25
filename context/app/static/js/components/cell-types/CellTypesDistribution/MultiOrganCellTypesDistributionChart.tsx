@@ -12,6 +12,7 @@ import React, { useCallback, useMemo } from 'react';
 import { ScaleContinuousNumeric } from 'd3';
 import Skeleton from '@mui/material/Skeleton';
 import { unselectedCellColors } from 'js/components/cells/CellTypeDistributionChart/utils';
+import { trackEvent } from 'js/helpers/trackers';
 import { useCellTypeCountData, useYScale } from './hooks';
 import CellTypesDistributionChartContextProvider, {
   useCellTypesDistributionChartContext,
@@ -37,7 +38,7 @@ function ChartControls() {
 
   const cellTypeContext = useOptionalCellTypesDetailPageContext();
 
-  const track = cellTypeContext?.track;
+  const trackingInfo = cellTypeContext?.trackingInfo;
 
   return (
     <Stack direction="row" spacing={2} alignItems="center">
@@ -55,7 +56,12 @@ function ChartControls() {
         checked={showPercentages}
         onChange={(e) => {
           setShowPercentages(e.target.checked);
-          track?.('Cell Type Distribution / Toggle Graph Type');
+          if (trackingInfo) {
+            trackEvent({
+              ...trackingInfo,
+              action: 'Cell Type Distribution / Toggle Graph Type',
+            });
+          }
         }}
         ariaLabel="Graph Type"
       />
@@ -73,7 +79,12 @@ function ChartControls() {
         checked={showOtherCellTypes}
         onChange={(e) => {
           setShowOtherCellTypes(e.target.checked);
-          track?.('Cell Type Distribution / Toggle Other Cell Types');
+          if (trackingInfo) {
+            trackEvent({
+              ...trackingInfo,
+              action: 'Cell Type Distribution / Toggle Other Cell Types',
+            });
+          }
         }}
         ariaLabel="Show Other Cell Types"
       />
@@ -92,7 +103,12 @@ function ChartControls() {
           checked={symLogScale}
           onChange={(e) => {
             setSymLogScale(e.target.checked);
-            track?.('Cell Type Distribution / Toggle Scale Type');
+            if (trackingInfo) {
+              trackEvent({
+                ...trackingInfo,
+                action: 'Cell Type Distribution / Toggle Scale Type',
+              });
+            }
           }}
           ariaLabel="Use Symmetric Log Scale"
         />

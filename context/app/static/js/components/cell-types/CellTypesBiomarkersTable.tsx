@@ -22,6 +22,7 @@ import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableH
 import { useDownloadTable } from 'js/helpers/download';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import { isError } from 'js/helpers/is-error';
+import { trackEvent } from 'js/helpers/trackers';
 import IndexedDatasetsSummary from '../organ/OrganCellTypes/IndexedDatasetsSummary';
 import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
@@ -97,7 +98,7 @@ const columns = [
 function BiomarkersTable() {
   const { isLoading, isLoadingDescriptions, rows } = useBiomarkersTableData();
 
-  const { name, track } = useCellTypesDetailPageContext();
+  const { name, trackingInfo } = useCellTypesDetailPageContext();
 
   const { sortState, setSort } = useSortState(
     {
@@ -147,15 +148,22 @@ function BiomarkersTable() {
 
   const onDownload = useCallback(() => {
     download();
-    track('Biomarkers / Download Table');
-  }, [download, track]);
+    trackEvent({
+      ...trackingInfo,
+      action: 'Biomarkers / Download Table',
+    });
+  }, [download, trackingInfo]);
 
   const onSort = useCallback(
     (columnId: string) => {
       setSort(columnId);
-      track(`Biomarkers / Sort Table`, columns.find((column) => column.id === columnId)?.label ?? 'Unknown');
+      trackEvent({
+        ...trackingInfo,
+        action: 'Biomarkers / Sort Table',
+        label: `${trackingInfo.label} / ${columns.find((column) => column.id === columnId)?.label ?? columnId}`,
+      });
     },
-    [setSort, track],
+    [setSort, trackingInfo],
   );
 
   return (
@@ -181,7 +189,10 @@ function BiomarkersTable() {
           {sortedRows.map(({ genes, precision, recall, f1, description }) => (
             <TableRow key={genes}>
               <TableCell>
-                <InternalLink href={`/genes/${genes}`} onClick={() => track('Biomarkers / Select Biomarker', genes)}>
+                <InternalLink
+                  href={`/genes/${genes}`}
+                  onClick={() => trackEvent('Biomarkers / Select Biomarker', genes)}
+                >
                   {genes}
                 </InternalLink>
               </TableCell>

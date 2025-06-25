@@ -10,18 +10,14 @@ import useEntityStore from 'js/stores/useEntityStore';
 
 import Skeleton from '@mui/material/Skeleton';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
+import { trackEvent } from 'js/helpers/trackers';
+import { useEventCallback } from '@mui/material/utils';
 import { useCellTypeInfo } from './hooks';
-import { useCellTypesDetailPageContext, useOptionalCellTypesDetailPageContext } from './CellTypesDetailPageContext';
+import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 
-function ReferenceLink({ cellId }: { cellId: string }) {
-  const track = useOptionalCellTypesDetailPageContext()?.track;
+function ReferenceLink({ cellId, onClick }: { cellId: string; onClick?: () => void }) {
   return (
-    <OutboundIconLink
-      onClick={() => {
-        track?.('Summary / Select "Known References"', 'OBO Reference Link');
-      }}
-      href={`http://purl.obolibrary.org/obo/${cellId.replace(':', '_')}`}
-    >
+    <OutboundIconLink onClick={onClick} href={`http://purl.obolibrary.org/obo/${cellId.replace(':', '_')}`}>
       {cellId}
     </OutboundIconLink>
   );
@@ -54,7 +50,14 @@ export default function CellTypesSummary() {
   const { data } = useCellTypeInfo();
   const setAssayMetadata = useEntityStore((s) => s.setAssayMetadata);
 
-  const { cellId, track, name } = useCellTypesDetailPageContext();
+  const { cellId, trackingInfo, name } = useCellTypesDetailPageContext();
+
+  const trackReferenceLink = useEventCallback(() => {
+    trackEvent({
+      action: 'Summary / Select "Known Reference',
+      label: `${trackingInfo.label} OBO Reference Link`,
+    });
+  });
 
   useEffect(() => {
     if (name) {
@@ -62,19 +65,22 @@ export default function CellTypesSummary() {
       setAssayMetadata({
         name,
         entity_type: 'CellType',
-        reference_link: <ReferenceLink cellId={cellId} />,
+        reference_link: <ReferenceLink cellId={cellId} onClick={trackReferenceLink} />,
       });
     }
-  }, [name, setAssayMetadata, cellId]);
+  }, [name, setAssayMetadata, cellId, trackReferenceLink]);
 
   const relevantPagesWithTracking = useMemo(() => {
     return relevantPages.map((page) => ({
       ...page,
       onClick: () => {
-        track('Summary / Select Relevant Page Button', page.children);
+        trackEvent({
+          action: 'Summary / Select Relevant Page Button',
+          label: `${trackingInfo.label} ${page.children}`,
+        });
       },
     }));
-  }, [track]);
+  }, [trackingInfo]);
 
   return (
     <DetailPageSection id="summary">
@@ -92,7 +98,7 @@ export default function CellTypesSummary() {
           childContainerComponent="div"
           iconTooltipText="References from established databases."
         >
-          <ReferenceLink cellId={cellId} />
+          <ReferenceLink cellId={cellId} onClick={trackReferenceLink} />
         </LabelledSectionText>
         <RelevantPagesSection pages={relevantPagesWithTracking} />
       </SummaryPaper>
