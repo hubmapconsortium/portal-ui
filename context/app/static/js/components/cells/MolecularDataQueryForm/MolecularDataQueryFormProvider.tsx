@@ -37,11 +37,11 @@ export default function MolecularDataQueryFormProvider({ children, initialValues
         genes: [],
         proteins: [],
         cellTypes: [],
+        ...initialValues,
         // @ts-expect-error - some annoying conflicts between queryType and queryMethod
         queryType,
         // @ts-expect-error - some annoying conflicts between queryType and queryMethod
         queryMethod: newQueryMethod,
-        ...initialValues,
       },
       {
         keepDirty: false,

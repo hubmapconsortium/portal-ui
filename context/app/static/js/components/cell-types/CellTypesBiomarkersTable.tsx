@@ -1,121 +1,239 @@
-import React from 'react';
-import Select from '@mui/material/Select';
-import MenuItem from '@mui/material/MenuItem';
-import Stack from '@mui/material/Stack';
+import React, { useCallback, useMemo } from 'react';
+
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
+import useCellTypeMarkers from 'js/api/scfind/useCellTypeMarkers';
+import Description from 'js/shared-styles/sections/Description';
+
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
-import FormControl from '@mui/material/FormControl';
-import InputLabel from '@mui/material/InputLabel';
-import Paper from '@mui/material/Paper';
-import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import { capitalize } from '@mui/material/utils';
 
-import Description from 'js/shared-styles/sections/Description';
-import { useTabs } from 'js/shared-styles/tabs';
-import { Tab, Tabs, TabPanel } from 'js/shared-styles/tables/TableTabs';
+import LoadingTableRows from 'js/shared-styles/tables/LoadingTableRows';
+
 import { StyledTableContainer } from 'js/shared-styles/tables';
+import Paper from '@mui/material/Paper';
 import { InternalLink } from 'js/shared-styles/Links';
-import { CellTypeBiomarkerInfo } from 'js/hooks/useUBKG';
-
+import { useGeneOntologyDetails } from 'js/hooks/useUBKG';
+import Skeleton from '@mui/material/Skeleton';
+import { LineClamp } from 'js/shared-styles/text';
+import { useSortState } from 'js/hooks/useSortState';
+import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
+import { useDownloadTable } from 'js/helpers/download';
+import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
+import { isError } from 'js/helpers/is-error';
+import { trackEvent } from 'js/helpers/trackers';
+import IndexedDatasetsSummary from '../organ/OrganCellTypes/IndexedDatasetsSummary';
+import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
-import { useCellTypeBiomarkers } from './hooks';
+import { ScientificNotationDisplayCell } from '../genes/CellTypes/ScientificNotationDisplay';
+import { useIndexedDatasetsForCellType } from './hooks';
 
-const tableKeys = ['genes', 'proteins'] as const;
-type TableKey = (typeof tableKeys)[number];
-interface BiomarkerTableProps {
-  tableKey: TableKey;
+function GeneDescription({ description }: { description: React.ReactNode }) {
+  return <LineClamp lines={2}>{description ?? 'No description available.'}</LineClamp>;
 }
 
-function otherTableKey(tableKey: TableKey): TableKey {
-  const otherKey = tableKeys.find((key) => key !== tableKey);
-  if (!otherKey) {
-    throw new Error(`Could not find other table key for ${tableKey}. This should never happen.`);
-  }
-  return otherKey;
+function useBiomarkersTableData() {
+  const { cellTypes } = useCellTypesDetailPageContext();
+  const { data, isLoading } = useCellTypeMarkers({
+    cellTypes,
+  });
+
+  const geneIds = useMemo(() => {
+    if (!data?.findGeneSignatures) {
+      return [];
+    }
+    return data.findGeneSignatures.map(({ genes }) => genes);
+  }, [data]);
+
+  // Fetch gene descriptions for the gene IDs
+  const { data: descriptions, isLoading: isLoadingDescriptions } = useGeneOntologyDetails(geneIds);
+
+  const restructuredDescriptions = useMemo(() => {
+    if (!descriptions) {
+      return {};
+    }
+    const unwrappedDescriptions = descriptions.flat();
+    return unwrappedDescriptions.reduce<Record<string, string>>((acc, entry, idx) => {
+      if (isError(entry)) {
+        return acc;
+      }
+      // Handle cases where approved_symbol or summary is missing (where gene description is not available)
+      if (!entry.approved_symbol || !entry.summary) {
+        return acc;
+      }
+      const { summary } = entry;
+      acc[geneIds[idx]] = summary;
+      return acc;
+    }, {});
+  }, [descriptions, geneIds]);
+
+  const rows = useMemo(() => {
+    if (!data?.findGeneSignatures) {
+      return [];
+    }
+    return data.findGeneSignatures.map(({ genes: geneName, precision, recall, f1 }) => ({
+      genes: geneName,
+      precision,
+      recall,
+      f1,
+      description:
+        restructuredDescriptions[geneName] ?? (isLoadingDescriptions ? <Skeleton /> : 'No description available.'),
+    }));
+  }, [data, isLoadingDescriptions, restructuredDescriptions]);
+  return { data, isLoading, isLoadingDescriptions, rows };
 }
 
-function BiomarkerTableRow({ biomarker, type }: { biomarker: CellTypeBiomarkerInfo; type: TableKey }) {
-  const { entry } = biomarker;
+// noop for convenience
+const cellContent = () => null;
+
+const columns = [
+  { id: 'name', label: 'Name', sort: 'name', cellContent },
+  { id: 'description', label: 'Description', sort: 'description', cellContent },
+  { id: 'precision', label: 'Precision', sort: 'precision', cellContent },
+  { id: 'recall', label: 'Recall', sort: 'recall', cellContent },
+  { id: 'f1', label: 'F1 Score', sort: 'f1', cellContent },
+];
+
+function BiomarkersTable() {
+  const { isLoading, isLoadingDescriptions, rows } = useBiomarkersTableData();
+
+  const { name, trackingInfo } = useCellTypesDetailPageContext();
+
+  const { sortState, setSort } = useSortState(
+    {
+      name: 'name',
+      description: 'description',
+      precision: 'precision',
+      recall: 'recall',
+      f1: 'f1',
+    },
+    {
+      columnId: 'f1',
+      direction: 'desc',
+    },
+  );
+
+  const sortedRows = useMemo(() => {
+    return [...rows].sort((a, b) => {
+      const multiplier = sortState.direction === 'asc' ? 1 : -1;
+      switch (sortState.columnId) {
+        case 'name':
+          return (a.genes ?? '').localeCompare(b.genes ?? '') * multiplier;
+        case 'description':
+          return (a.description ?? '').localeCompare(b.description ?? '') * multiplier;
+        case 'precision':
+          return (Number(a.precision ?? 0) - Number(b.precision ?? 0)) * multiplier;
+        case 'recall':
+          return (Number(a.recall ?? 0) - Number(b.recall ?? 0)) * multiplier;
+        case 'f1':
+          return (Number(a.f1 ?? 0) - Number(b.f1 ?? 0)) * multiplier;
+        default:
+          return 0; // No sorting applied
+      }
+    });
+  }, [rows, sortState]);
+
+  const download = useDownloadTable({
+    fileName: `biomarkers_for_${name ?? 'unknown'}.tsv`,
+    columnNames: columns.map((column) => column.label),
+    rows: sortedRows.map((row) => [
+      row.genes,
+      row.description,
+      row.precision?.toString() ?? '',
+      row.recall?.toString() ?? '',
+      row.f1?.toString() ?? '',
+    ]),
+  });
+
+  const onDownload = useCallback(() => {
+    download();
+    trackEvent({
+      ...trackingInfo,
+      action: 'Biomarkers / Download Table',
+    });
+  }, [download, trackingInfo]);
+
+  const onSort = useCallback(
+    (columnId: string) => {
+      setSort(columnId);
+      trackEvent({
+        ...trackingInfo,
+        action: 'Biomarkers / Sort Table',
+        label: `${trackingInfo.label} / ${columns.find((column) => column.id === columnId)?.label ?? columnId}`,
+      });
+    },
+    [setSort, trackingInfo],
+  );
+
   return (
-    <TableRow>
-      <TableCell>
-        <InternalLink href={`/${type}/${entry.symbol}`}>
-          {entry.name} ({entry.symbol})
-        </InternalLink>
-      </TableCell>
-      <TableCell>TODO</TableCell>
-      <TableCell>{type}</TableCell>
-      <TableCell>view datasets</TableCell>
-    </TableRow>
+    <Paper>
+      <StyledTableContainer>
+        <Table stickyHeader>
+          <TableHead sx={{ position: 'relative' }}>
+            <TableRow>
+              {columns.map((column) => (
+                <EntityHeaderCell key={column.id} column={column} setSort={onSort} sortState={sortState} />
+              ))}
+              <TableCell sx={{ backgroundColor: 'background.paper' }} align="right">
+                <DownloadButton
+                  disabled={isLoading || isLoadingDescriptions}
+                  tooltip="Download table in TSV format."
+                  sx={{ right: 1 }}
+                  onClick={onDownload}
+                />
+              </TableCell>
+            </TableRow>
+          </TableHead>
+          {isLoading && <LoadingTableRows numberOfCols={5} numberOfRows={3} />}
+          {sortedRows.map(({ genes, precision, recall, f1, description }) => (
+            <TableRow key={genes}>
+              <TableCell>
+                <InternalLink
+                  href={`/genes/${genes}`}
+                  onClick={() => trackEvent('Biomarkers / Select Biomarker', genes)}
+                >
+                  {genes}
+                </InternalLink>
+              </TableCell>
+              <TableCell>
+                <GeneDescription description={description} />
+              </TableCell>
+              <ScientificNotationDisplayCell value={precision} />
+              <ScientificNotationDisplayCell value={recall} />
+              <ScientificNotationDisplayCell value={f1} />
+              <TableCell />
+            </TableRow>
+          ))}
+        </Table>
+      </StyledTableContainer>
+    </Paper>
   );
 }
 
-function BiomarkerTable({ tableKey }: BiomarkerTableProps) {
-  const data = useCellTypeBiomarkers()[tableKey];
-  return (
-    <StyledTableContainer component={Paper}>
-      <Table stickyHeader>
-        <TableHead>
-          <TableCell>Name</TableCell>
-          <TableCell>Description</TableCell>
-          <TableCell>Type</TableCell>
-          <TableCell aria-label="View Datasets" />
-        </TableHead>
-        <TableBody>
-          {data.map((biomarker) => (
-            <BiomarkerTableRow biomarker={biomarker} type={tableKey} key={biomarker.entry.id} />
-          ))}
-        </TableBody>
-      </Table>
-    </StyledTableContainer>
-  );
-}
-
-export default function CellTypesBiomarkersTable() {
-  const { sources, selectedSource, handleSourceSelection, ...biomarkers } = useCellTypeBiomarkers();
-
-  const { openTabIndex, handleTabChange } = useTabs();
+function CellTypesBiomarkersTableSection() {
+  const indexedDatasetsSummaryProps = useIndexedDatasetsForCellType();
+  const { trackingInfo } = useCellTypesDetailPageContext();
 
   return (
-    <CollapsibleDetailPageSection id="biomarkers" title="Biomarkers">
-      <Stack direction="column" spacing={2}>
-        <Description>
-          This is a list of identified biomarkers that are validated from the listed source. Explore other sources in
-          dropdown menu below, if available.
-        </Description>
-        <FormControl fullWidth>
-          <InputLabel id="source-select-label" htmlFor="biomarker-source-select">
-            Source
-          </InputLabel>
-          <Select label="Source" id="biomarker-source-select" value={selectedSource} onChange={handleSourceSelection}>
-            {sources.map((source) => (
-              <MenuItem key={source} value={source}>
-                {source}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-        <div>
-          <Tabs value={openTabIndex} onChange={handleTabChange}>
-            {tableKeys.map((key, index) => (
-              <Tab
-                label={`${capitalize(key)} (${biomarkers[key].length})`}
-                index={index}
-                key={key}
-                disabled={biomarkers[key].length === 0}
-                isSingleTab={biomarkers[otherTableKey(key)].length === 0}
-              />
-            ))}
-          </Tabs>
-          {tableKeys.map((key, index) => (
-            <TabPanel value={openTabIndex} index={index} key={key}>
-              <BiomarkerTable tableKey={key} />
-            </TabPanel>
-          ))}
-        </div>
-      </Stack>
+    <CollapsibleDetailPageSection id="biomarkers" title="Biomarkers" trackingInfo={trackingInfo}>
+      <Description
+        belowTheFold={
+          <IndexedDatasetsSummary {...indexedDatasetsSummaryProps} context="Biomarkers">
+            These results are derived from RNAseq datasets that were indexed by the scFind method to identify marker
+            genes associated with the cell type. Not all HuBMAP datasets are currently compatible with this method due
+            to differences in data modalities or the availability of cell annotations. This section gives a summary of
+            the datasets that are used to compute these results.
+          </IndexedDatasetsSummary>
+        }
+      >
+        Explore marker genes associated with the cell type and its statistical metrics as computed by the scFind method.
+        It calculates statistical metrics based on uniformly processed HuBMAP RNAseq datasets with cell type
+        annotations. The table can be downloaded in TSV format for further analysis.
+      </Description>
+      <BiomarkersTable />
     </CollapsibleDetailPageSection>
   );
 }
+
+export default withShouldDisplay(CellTypesBiomarkersTableSection);

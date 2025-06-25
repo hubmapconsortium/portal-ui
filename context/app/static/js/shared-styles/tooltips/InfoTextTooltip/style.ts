@@ -12,9 +12,9 @@ const StyledInnerStack = styled(Stack)(({ theme }) => ({
   justifyContent: 'center',
 }));
 
-const StyledInfoIcon = styled(InfoIcon)(({ theme }) => ({
+const StyledInfoIcon = styled(InfoIcon)(({ theme, fontSize = '0.75rem' }) => ({
   color: theme.palette.primary.main,
-  fontSize: '0.75rem',
+  fontSize,
 }));
 
 export { StyledOuterStack, StyledInnerStack, StyledInfoIcon };
