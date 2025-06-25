@@ -22,13 +22,29 @@ interface TooltipTableProps {
 }
 
 function TooltipTable({ organ, cellTypes, cellTypeCounts }: TooltipTableProps) {
-  const targetCellTypes = cellTypeCounts.filter((count) => cellTypes.includes(count.name));
-
-  const otherCellTypes = cellTypeCounts.filter((count) => !cellTypes.includes(count.name));
-
-  const totalOtherCount = otherCellTypes.reduce((acc, count) => acc + count.count, 0);
-
-  const totalCellsInOrgan = cellTypeCounts.reduce((acc, count) => acc + count.count, 0);
+  const { targetCellTypes, totalOtherCount, totalCellsInOrgan } = cellTypeCounts.reduce<{
+    targetCellTypes: CellTypeCountWithPercentageAndOrgan[];
+    otherCellTypes: CellTypeCountWithPercentageAndOrgan[];
+    totalOtherCount: number;
+    totalCellsInOrgan: number;
+  }>(
+    (acc, count) => {
+      if (cellTypes.includes(count.name)) {
+        acc.targetCellTypes.push(count);
+      } else {
+        acc.otherCellTypes.push(count);
+        acc.totalOtherCount += count.count;
+      }
+      acc.totalCellsInOrgan += count.count;
+      return acc;
+    },
+    {
+      targetCellTypes: [],
+      otherCellTypes: [],
+      totalOtherCount: 0,
+      totalCellsInOrgan: 0,
+    },
+  );
 
   const { colorScale } = useCellTypeDataContext();
 
