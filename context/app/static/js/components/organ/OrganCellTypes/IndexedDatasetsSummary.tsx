@@ -4,6 +4,7 @@ import { DatasetIcon, OrganIcon } from 'js/shared-styles/icons';
 import React, { PropsWithChildren } from 'react';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
+import { useEventCallback } from '@mui/material/utils';
 import { useUUIDsFromHubmapIds } from '../hooks';
 import { StyledDetailsAccordion } from './styles';
 import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
@@ -30,6 +31,15 @@ function IndexedDatasetsSummary({
 
   const isLoading = isLoadingDatasets || isLoadingUUIDs;
 
+  const trackExpandChange = useEventCallback((_, expanded: boolean) => {
+    if (trackingInfo) {
+      trackEvent({
+        ...trackingInfo,
+        action: `${context} / ${expanded ? 'Expand' : 'Collapse'} Indexed Datasets Summary`,
+      });
+    }
+  });
+
   return (
     <StyledDetailsAccordion
       summary={
@@ -43,14 +53,7 @@ function IndexedDatasetsSummary({
           component: 'div',
         },
       }}
-      onChange={(_, expanded) => {
-        if (trackingInfo) {
-          trackEvent({
-            ...trackingInfo,
-            action: `${context} / ${expanded ? 'Expand' : 'Collapse'} Indexed Datasets Summary`,
-          });
-        }
-      }}
+      onChange={trackExpandChange}
       sx={{
         mt: 2,
       }}
