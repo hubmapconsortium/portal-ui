@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
+import React, { forwardRef, useEffect, useMemo } from 'react';
+import { Tab, TabPanel, TabProps, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import { Dataset } from 'js/components/types';
@@ -167,6 +167,37 @@ function OrganCellTypeDistributionCharts() {
   );
 }
 
+interface CellTypeCategoryTabProps extends TabProps {
+  cellTypeCategory: string;
+  datasetCount: number;
+}
+
+const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
+  { cellTypeCategory, datasetCount, ...rest }: CellTypeCategoryTabProps,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) {
+  const { organ: tissue, name, variant } = extractCellTypeInfo(cellTypeCategory);
+  const formattedVariant = variant ? ` (${variant})` : '';
+  const isCellType = stringIsCellType(cellTypeCategory);
+  const label = isCellType ? `${name}${formattedVariant} in ${capitalize(tissue)}` : cellTypeCategory;
+  const icon = isCellType ? <CellTypeIcon /> : <OrganIcon organName={cellTypeCategory} aria-label={cellTypeCategory} />;
+
+  return (
+    <Tab
+      ref={ref}
+      label={
+        <Stack direction="row" alignItems="center" gap={1}>
+          <Box flexShrink={0}>{icon}</Box>
+          <Box component="span" sx={{ textTransform: 'capitalize' }}>
+            {label} ({datasetCount})
+          </Box>
+        </Stack>
+      }
+      {...rest}
+    />
+  );
+});
+
 function DatasetListSection() {
   const cellTypes = useCellVariableNames();
   const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults(cellTypes);
@@ -188,34 +219,14 @@ function DatasetListSection() {
         onChange={handleTabChange}
         value={openTabIndex}
       >
-        {cellTypeCategories.map((cellTypeCategory, idx) => {
-          const { organ: tissue, name, variant } = extractCellTypeInfo(cellTypeCategory);
-          const formattedVariant = variant ? ` (${variant})` : '';
-          const formattedLabel = `${name} ${formattedVariant} in ${capitalize(tissue)}`;
-          const isCellType = stringIsCellType(cellTypeCategory);
-          const isOrgan = cellTypes.find((ct) => ct.startsWith(`${tissue}.`));
-          const label = isCellType ? formattedLabel : cellTypeCategory;
-
-          const shouldDisplayOrganIcon = isCellType || isOrgan;
-          const organIconKey = isOrgan ? tissue : cellTypeCategory;
-          return (
-            <Tab
-              key={cellTypeCategory}
-              label={
-                <Stack direction="row" alignItems="center" gap={1}>
-                  <Box flexShrink={0}>
-                    {shouldDisplayOrganIcon && <OrganIcon organName={organIconKey} aria-label={organIconKey} />}
-                    {!shouldDisplayOrganIcon && <CellTypeIcon />}
-                  </Box>
-                  <Box component="span" sx={{ textTransform: 'capitalize' }}>
-                    {label} ({datasets[cellTypeCategory]?.length ?? 0})
-                  </Box>
-                </Stack>
-              }
-              index={idx}
-            />
-          );
-        })}
+        {cellTypeCategories.map((cellTypeCategory, idx) => (
+          <CellTypeCategoryTab
+            cellTypeCategory={cellTypeCategory}
+            index={idx}
+            datasetCount={datasets[cellTypeCategory]?.length ?? 0}
+            key={cellTypeCategory}
+          />
+        ))}
       </Tabs>
       {cellTypeCategories.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx}>
