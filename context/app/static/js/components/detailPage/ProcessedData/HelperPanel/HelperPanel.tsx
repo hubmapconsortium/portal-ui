@@ -95,11 +95,12 @@ function HelperPanelBody() {
 function HelperPanelActions() {
   const currentDataset = useCurrentDataset();
   const track = useTrackEntityPageEvent();
+
   if (!currentDataset) {
     return null;
   }
 
-  const { hubmap_id, uuid, status, mapped_data_access_level } = currentDataset;
+  const { hubmap_id, uuid } = currentDataset;
 
   return (
     <>
@@ -109,7 +110,8 @@ function HelperPanelActions() {
             <HelperPanelButton startIcon={<WorkspacesIcon color="primary" />}>Workspace</HelperPanelButton>
           </SecondaryBackgroundTooltip>
         }
-        datasetDetails={{ hubmap_id, uuid, status, mapped_data_access_level }}
+        hubmap_id={hubmap_id}
+        uuid={uuid}
         dialogType="ADD_DATASETS_FROM_HELPER_PANEL"
       />
       <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">

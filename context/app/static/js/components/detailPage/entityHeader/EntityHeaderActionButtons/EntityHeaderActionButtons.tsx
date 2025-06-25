@@ -129,8 +129,6 @@ function ViewSelectChips({ selectedView, setView, entity_type, uuid }: ViewSelec
     return null;
   }
 
-  const isDataset = entity_type === 'Dataset';
-
   return (
     <>
       <ViewSelectChip
@@ -139,7 +137,7 @@ function ViewSelectChips({ selectedView, setView, entity_type, uuid }: ViewSelec
         setView={setView}
         selectedView={selectedView}
       />
-      {isDataset && (
+      {entity_type === 'Dataset' && (
         <ViewSelectChip
           startIcon={<ProcessedDataIcon />}
           view="diagram"
@@ -169,7 +167,7 @@ function EntityHeaderActionButtons({
   const isLargeDesktop = useIsLargeDesktop();
 
   const {
-    entity: { mapped_data_access_level, uuid, hubmap_id, status },
+    entity: { uuid, hubmap_id },
   } = useFlaskDataContext();
 
   if (!(entity_type && uuid)) {
@@ -177,7 +175,6 @@ function EntityHeaderActionButtons({
   }
 
   const isDataset = entity_type === 'Dataset';
-  const disabled = mapped_data_access_level === 'Protected';
 
   return (
     <Stack direction="row" spacing={1} alignItems="center">
@@ -191,15 +188,11 @@ function EntityHeaderActionButtons({
           button={
             <ActionButton
               icon={WorkspaceSVGIcon}
-              tooltip={
-                disabled
-                  ? 'Protected datasets are not available in workspaces.'
-                  : 'Launch new workspace or add dataset to an existing workspace.'
-              }
-              disabled={disabled}
+              tooltip="Launch new workspace or add dataset to an existing workspace."
             />
           }
-          datasetDetails={{ hubmap_id, uuid, status, mapped_data_access_level }}
+          hubmap_id={hubmap_id}
+          uuid={uuid}
           dialogType="ADD_DATASETS_FROM_HEADER"
         />
       )}

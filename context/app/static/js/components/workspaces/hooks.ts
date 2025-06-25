@@ -472,6 +472,17 @@ function getWorkspaceTimeLeft(workspace: MergedWorkspace) {
   return findBestJob(workspace?.jobs ?? [])?.job_details?.current_job_details?.time_left;
 }
 
+/**
+ * Returns true if the user can access the given dataset in a workspace, false if they cannot.
+ * @param datasetUUID The UUID of the dataset to check access for
+ */
+function useCheckWorkspaceAccessToDataset(datasetUUID?: string) {
+  const { isWorkspacesUser } = useAppContext();
+
+  // TODO: update this once workspaces API makes access checks available
+  return isWorkspacesUser && Boolean(datasetUUID);
+}
+
 function useSessionWarning(workspaces: MergedWorkspace[]) {
   const allWorkspacesAreRunning = workspaces.every((ws) =>
     ws.jobs.some((job) => job.status === 'running' || job.status === 'pending'),
@@ -587,4 +598,5 @@ export {
   useCreateTemplates,
   useUpdateWorkspaceDatasets,
   useWorkspacesListWithSharerInfo,
+  useCheckWorkspaceAccessToDataset,
 };
