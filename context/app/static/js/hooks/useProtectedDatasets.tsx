@@ -91,7 +91,7 @@ function useProtectedDatasetsForm({
     }
   }
 
-  if (protectedRows.length === 0) {
+  if (protectedRows.length > 0) {
     warningMessages.push(protectedDatasetsWarningMessage(protectedRows));
   }
 
