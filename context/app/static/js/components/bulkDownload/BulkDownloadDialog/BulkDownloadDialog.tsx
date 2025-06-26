@@ -8,10 +8,8 @@ import Typography from '@mui/material/Typography';
 
 import { LINKS, PAGES } from 'js/components/bulkDownload/constants';
 import { BulkDownloadFormTypes, useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
-import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemoveProtectedDatasetsFormField';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
-import { DatasetAccessLevelHits } from 'js/hooks/useProtectedDatasets';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
@@ -20,7 +18,6 @@ import { OutboundLink } from 'js/shared-styles/Links';
 import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Alert } from 'js/shared-styles/alerts';
-import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 
 function DownloadDescription() {
   return (
@@ -44,37 +41,6 @@ function DownloadDescription() {
         <RelevantPagesSection pages={PAGES} />
       </Stack>
     </SectionDescription>
-  );
-}
-
-interface ProtectedDatasetsSectionProps {
-  control: Control<BulkDownloadFormTypes>;
-  errorMessages: string[];
-  protectedHubmapIds: string;
-  protectedRows: DatasetAccessLevelHits;
-  removeProtectedDatasets: () => void;
-}
-function ProtectedDatasetsSection({
-  control,
-  errorMessages,
-  protectedHubmapIds,
-  protectedRows,
-  removeProtectedDatasets,
-}: ProtectedDatasetsSectionProps) {
-  if (errorMessages.length === 0) {
-    return null;
-  }
-
-  return (
-    <Stack paddingY={1}>
-      <ErrorOrWarningMessages errorMessages={errorMessages} />
-      <RemoveProtectedDatasetsFormField
-        control={control}
-        protectedHubmapIds={protectedHubmapIds}
-        removeProtectedDatasets={removeProtectedDatasets}
-        protectedRows={protectedRows}
-      />
-    </Stack>
   );
 }
 
@@ -105,20 +71,9 @@ interface DownloadOptionsSectionProps {
     label: string;
   }[];
   isLoading: boolean;
-  errorMessages: string[];
-  protectedHubmapIds: string;
-  protectedRows: DatasetAccessLevelHits;
-  removeProtectedDatasets: () => void;
 }
-function DownloadOptionsSection({
-  control,
-  downloadOptions,
-  isLoading,
-  errorMessages,
-  protectedHubmapIds,
-  protectedRows,
-  removeProtectedDatasets,
-}: DownloadOptionsSectionProps) {
+
+function DownloadOptionsSection({ control, downloadOptions, isLoading }: DownloadOptionsSectionProps) {
   if (isLoading) {
     return (
       <>
@@ -140,13 +95,6 @@ function DownloadOptionsSection({
   return (
     <Box>
       <Step title="Download Options" hideRequiredText>
-        <ProtectedDatasetsSection
-          control={control}
-          errorMessages={errorMessages}
-          protectedHubmapIds={protectedHubmapIds}
-          protectedRows={protectedRows}
-          removeProtectedDatasets={removeProtectedDatasets}
-        />
         <DownloadOptionsDescription />
         <SummaryPaper>
           <Stack direction="column" spacing={2}>
@@ -161,22 +109,9 @@ function DownloadOptionsSection({
 
 const formId = 'bulk-download-form';
 
-interface BulkDownloadDialogProps {
-  deselectRows?: (uuids: string[]) => void;
-}
-function BulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
-  const {
-    handleSubmit,
-    onSubmit,
-    handleClose,
-    isOpen,
-    errors,
-    control,
-    isLoading,
-    downloadOptions,
-    errorMessages,
-    ...rest
-  } = useBulkDownloadDialog(deselectRows);
+function BulkDownloadDialog() {
+  const { handleSubmit, onSubmit, handleClose, isOpen, errors, control, isLoading, downloadOptions, ...rest } =
+    useBulkDownloadDialog();
 
   return (
     <DialogModal
@@ -191,7 +126,6 @@ function BulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
               control={control}
               downloadOptions={downloadOptions}
               isLoading={isLoading}
-              errorMessages={errorMessages}
               {...rest}
             />
           </Stack>
@@ -204,12 +138,7 @@ function BulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
           <Button type="button" onClick={handleClose}>
             Cancel
           </Button>
-          <Button
-            type="submit"
-            variant="contained"
-            form={formId}
-            disabled={Object.keys(errors).length > 0 || errorMessages.length > 0}
-          >
+          <Button type="submit" variant="contained" form={formId} disabled={Object.keys(errors).length > 0}>
             Generate Download Manifest
           </Button>
         </Stack>

@@ -8,10 +8,8 @@ import useBulkDownloadToasts from 'js/components/bulkDownload/toastHooks';
 import { ALL_BULK_DOWNLOAD_OPTIONS } from 'js/components/bulkDownload/constants';
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
-import { trackEvent } from 'js/helpers/trackers';
 import { getIDsQuery } from 'js/helpers/queries';
 
 const schema = z
@@ -54,7 +52,7 @@ function useBulkDownloadForm() {
   };
 }
 
-function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
+function useBulkDownloadDialog() {
   const { isOpen, uuids, open, close, setUuids, setDownloadSuccess } = useBulkDownloadStore();
   const { control, handleSubmit, errors, reset, trigger } = useBulkDownloadForm();
   const { toastErrorDownloadFile, toastSuccessDownloadFile } = useBulkDownloadToasts();
@@ -82,31 +80,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
       }).filter((option) => option.count > 0),
     [datasets],
   );
-
-  // Remove selected uuids from the list and deselect them in the table if needed
-  const removeUuidsOrRows = useCallback(
-    (uuidsToRemove: string[]) => {
-      if (deselectRows) {
-        deselectRows(uuidsToRemove);
-      }
-      setUuids(new Set([...uuids].filter((uuid) => !uuidsToRemove.includes(uuid))));
-    },
-    [deselectRows, setUuids, uuids],
-  );
-
-  const protectedDatasetsFields = useProtectedDatasetsForm({
-    selectedRows: new Set(uuids),
-    deselectRows: removeUuidsOrRows,
-    protectedDatasetsErrorMessage: (protectedDatasets) =>
-      `You have selected ${protectedDatasets.length} protected datasets.`,
-    trackEventHelper: (numProtectedDatasets) => {
-      trackEvent({
-        category: 'Bulk Download',
-        action: 'Protected datasets selected',
-        value: numProtectedDatasets,
-      });
-    },
-  });
 
   const downloadMetadata = useCallback(
     (datasetsToDownload: BulkDownloadDataset[]) => {
@@ -195,7 +168,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     openDialog,
     downloadManifest,
     downloadMetadata,
-    ...protectedDatasetsFields,
   };
 }
 

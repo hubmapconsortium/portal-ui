@@ -11,7 +11,7 @@ interface BulkDownloadButtonFromSearchProps {
 }
 
 function BulkDownloadButtonFromSearch({ type, trackingInfo }: BulkDownloadButtonFromSearchProps) {
-  const { selectedRows, deselectRows } = useSelectableTableStore();
+  const { selectedRows } = useSelectableTableStore();
 
   const disabled = selectedRows.size === 0;
   const isDatasetSearch = type.toLowerCase() === 'dataset';
@@ -23,7 +23,6 @@ function BulkDownloadButtonFromSearch({ type, trackingInfo }: BulkDownloadButton
   return (
     <BulkDownloadButton
       tooltip={disabled ? 'Select datasets for download.' : tooltip}
-      deselectRows={deselectRows}
       uuids={selectedRows}
       disabled={disabled}
       trackingInfo={trackingInfo}
