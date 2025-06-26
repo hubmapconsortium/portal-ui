@@ -10,10 +10,10 @@ const errorHelper = {
     `You have selected over ${EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS} datasets, which may extend launch time. Workspace will still launch, but reduce your selection for a quicker launch.`,
   maxDatasets: (workspaceDatasets: number) =>
     `You have selected ${workspaceDatasets} datasets. The dataset limit for workspaces is ${MAX_NUMBER_OF_WORKSPACE_DATASETS} datasets. Please reduce your selection.`,
-  inaccessibleDataset: (inaccessibleHubmapId: string) =>
-    `You have selected a protected dataset (${inaccessibleHubmapId}). Workspaces currently only supports published public datasets. To remove the protected dataset from workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove this dataset.`,
+  inaccessibleDataset: () =>
+    `You have selected a protected dataset that cannot be accessed with your current permissions in workspaces. To proceed, click “Remove Protected Datasets” below, or go back to the previous screen to remove it manually.`,
   inaccessibleDatasets: (inaccessibleHubmapIds: string[]) =>
-    `You have selected ${inaccessibleHubmapIds.length} protected datasets. Workspaces currently only supports published public datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
+    `You have selected ${inaccessibleHubmapIds.length} protected datasets that cannot be accessed with your current permissions in workspaces. To proceed, click “Remove Protected Datasets” below, or go back to the previous screen to remove them manually.`,
 };
 
 const warningHelper = {
@@ -36,7 +36,7 @@ function useWorkspacesProtectedDatasetsForm() {
 
   const inaccessibleDatasetsErrorMessage = useCallback((inaccessibleHubmapIds: string[]) => {
     if (inaccessibleHubmapIds.length === 1) {
-      return errorHelper.inaccessibleDataset(inaccessibleHubmapIds[0]);
+      return errorHelper.inaccessibleDataset();
     }
     return errorHelper.inaccessibleDatasets(inaccessibleHubmapIds);
   }, []);
