@@ -1,0 +1,1 @@
+- Fix flipped 'up' and 'down' icons across the portal.
