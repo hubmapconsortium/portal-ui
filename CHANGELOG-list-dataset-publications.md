@@ -1,1 +1,0 @@
-- List associated publications on dataset detail pages.
