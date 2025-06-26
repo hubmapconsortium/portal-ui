@@ -11,7 +11,6 @@ import { BulkDownloadFormTypes, useBulkDownloadDialog } from 'js/components/bulk
 import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemoveProtectedDatasetsFormField';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
-import { DatasetAccessLevelHits } from 'js/hooks/useProtectedDatasets';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
@@ -51,15 +50,15 @@ interface ProtectedDatasetsSectionProps {
   control: Control<BulkDownloadFormTypes>;
   errorMessages: string[];
   protectedHubmapIds: string;
-  protectedRows: DatasetAccessLevelHits;
-  removeProtectedDatasets: () => void;
+  protectedRows: string[];
+  removeInaccessibleDatasets: () => void;
 }
 function ProtectedDatasetsSection({
   control,
   errorMessages,
   protectedHubmapIds,
   protectedRows,
-  removeProtectedDatasets,
+  removeInaccessibleDatasets,
 }: ProtectedDatasetsSectionProps) {
   if (errorMessages.length === 0) {
     return null;
@@ -71,7 +70,7 @@ function ProtectedDatasetsSection({
       <RemoveProtectedDatasetsFormField
         control={control}
         protectedHubmapIds={protectedHubmapIds}
-        removeProtectedDatasets={removeProtectedDatasets}
+        removeInaccessibleDatasets={removeInaccessibleDatasets}
         protectedRows={protectedRows}
       />
     </Stack>
@@ -107,8 +106,8 @@ interface DownloadOptionsSectionProps {
   isLoading: boolean;
   errorMessages: string[];
   protectedHubmapIds: string;
-  protectedRows: DatasetAccessLevelHits;
-  removeProtectedDatasets: () => void;
+  protectedRows: string[];
+  removeInaccessibleDatasets: () => void;
 }
 function DownloadOptionsSection({
   control,
@@ -117,7 +116,7 @@ function DownloadOptionsSection({
   errorMessages,
   protectedHubmapIds,
   protectedRows,
-  removeProtectedDatasets,
+  removeInaccessibleDatasets,
 }: DownloadOptionsSectionProps) {
   if (isLoading) {
     return (
@@ -145,7 +144,7 @@ function DownloadOptionsSection({
           errorMessages={errorMessages}
           protectedHubmapIds={protectedHubmapIds}
           protectedRows={protectedRows}
-          removeProtectedDatasets={removeProtectedDatasets}
+          removeInaccessibleDatasets={removeInaccessibleDatasets}
         />
         <DownloadOptionsDescription />
         <SummaryPaper>

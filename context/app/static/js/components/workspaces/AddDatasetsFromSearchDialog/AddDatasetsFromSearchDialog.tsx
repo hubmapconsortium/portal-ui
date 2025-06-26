@@ -101,7 +101,7 @@ function AddDatasetsStep({
   control,
   protectedHubmapIds,
   protectedRows,
-  removeProtectedDatasets,
+  removeInaccessibleDatasets,
   datasetsErrorMessages,
   datasetsWarningMessages,
   ...rest
@@ -110,7 +110,7 @@ function AddDatasetsStep({
   | 'control'
   | 'protectedHubmapIds'
   | 'protectedRows'
-  | 'removeProtectedDatasets'
+  | 'removeInaccessibleDatasets'
   | 'datasetsErrorMessages'
   | 'datasetsWarningMessages'
   | 'inputValue'
@@ -132,7 +132,7 @@ function AddDatasetsStep({
       <RemoveProtectedDatasetsFormField
         control={control}
         protectedHubmapIds={protectedHubmapIds}
-        removeProtectedDatasets={removeProtectedDatasets}
+        removeInaccessibleDatasets={removeInaccessibleDatasets}
         protectedRows={protectedRows}
       />
       <AddDatasetsTable {...rest} />

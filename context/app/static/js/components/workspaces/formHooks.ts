@@ -3,17 +3,24 @@ import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTable
 import { trackEvent } from 'js/helpers/trackers';
 import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
-import { DatasetAccessLevelHits, useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
+import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
 
 const errorHelper = {
   excessiveDatasets: () =>
     `You have selected over ${EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS} datasets, which may extend launch time. Workspace will still launch, but reduce your selection for a quicker launch.`,
   maxDatasets: (workspaceDatasets: number) =>
     `You have selected ${workspaceDatasets} datasets. The dataset limit for workspaces is ${MAX_NUMBER_OF_WORKSPACE_DATASETS} datasets. Please reduce your selection.`,
-  protectedDataset: (protectedRows: DatasetAccessLevelHits) =>
-    `You have selected a protected dataset (${protectedRows[0]?._source?.hubmap_id}). Workspaces currently only supports published public datasets. To remove the protected dataset from workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove this dataset.`,
-  protectedDatasets: (protectedRows: DatasetAccessLevelHits) =>
-    `You have selected ${protectedRows.length} protected datasets. Workspaces currently only supports published public datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
+  inaccessibleDataset: (inaccessibleHubmapId: string) =>
+    `You have selected a protected dataset (${inaccessibleHubmapId}). Workspaces currently only supports published public datasets. To remove the protected dataset from workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove this dataset.`,
+  inaccessibleDatasets: (inaccessibleHubmapIds: string[]) =>
+    `You have selected ${inaccessibleHubmapIds.length} protected datasets. Workspaces currently only supports published public datasets. To remove protected datasets from this workspace creation, click the “Remove Protected Datasets” button below or return to the previous screen to manually remove those datasets.`,
+};
+
+const warningHelper = {
+  protectedDataset: (protectedHubmapId: string) =>
+    `You have selected a protected dataset (${protectedHubmapId}). Depending on your access level, you may not be able to access this dataset in the workspace. If you do not have access, this dataset will not be linked correctly to your workspace.`,
+  protectedDatasets: (protectedHubmapIds: string[]) =>
+    `You have selected ${protectedHubmapIds.length} protected datasets. Depending on your access level, you may not be able to access these datasets in the workspace. If you do not have access, these datasets will not be linked correctly to your workspace.`,
 };
 
 function useWorkspacesProtectedDatasetsForm() {
@@ -27,17 +34,25 @@ function useWorkspacesProtectedDatasetsForm() {
     });
   }, []);
 
-  const protectedDatasetsErrorMessage = useCallback((protectedRows: DatasetAccessLevelHits) => {
-    if (protectedRows.length === 1) {
-      return errorHelper.protectedDataset(protectedRows);
+  const inaccessibleDatasetsErrorMessage = useCallback((inaccessibleHubmapIds: string[]) => {
+    if (inaccessibleHubmapIds.length === 1) {
+      return errorHelper.inaccessibleDataset(inaccessibleHubmapIds[0]);
     }
-    return errorHelper.protectedDatasets(protectedRows);
+    return errorHelper.inaccessibleDatasets(inaccessibleHubmapIds);
+  }, []);
+
+  const protectedDatasetsWarningMessage = useCallback((protectedHubmapIds: string[]) => {
+    if (protectedHubmapIds.length === 1) {
+      return warningHelper.protectedDataset(protectedHubmapIds[0]);
+    }
+    return warningHelper.protectedDatasets(protectedHubmapIds);
   }, []);
 
   return useProtectedDatasetsForm({
     selectedRows,
     deselectRows,
-    protectedDatasetsErrorMessage,
+    inaccessibleDatasetsErrorMessage,
+    protectedDatasetsWarningMessage,
     trackEventHelper,
   });
 }

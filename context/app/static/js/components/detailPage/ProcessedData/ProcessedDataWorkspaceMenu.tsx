@@ -14,7 +14,7 @@ import { DialogType } from 'js/stores/useWorkspaceModalStore';
 import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
-import { useCheckWorkspaceAccessToDataset } from 'js/components/workspaces/hooks';
+import { useCheckDatasetAccess } from 'js/hooks/useProtectedDatasets';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
@@ -27,7 +27,7 @@ function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: Pro
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const track = useTrackEntityPageEvent();
-  const hasWorkspaceAccess = useCheckWorkspaceAccessToDataset(uuid);
+  const hasWorkspaceAccess = useCheckDatasetAccess();
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     track({

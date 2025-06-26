@@ -14,12 +14,12 @@ type Props<FormType extends FieldValues> = {
   control: Control<FormType>;
 } & Pick<
   ReturnType<typeof useWorkspacesProtectedDatasetsForm>,
-  'protectedHubmapIds' | 'removeProtectedDatasets' | 'protectedRows'
+  'protectedHubmapIds' | 'removeInaccessibleDatasets' | 'protectedRows'
 >;
 function RemoveProtectedDatasetsFormField<FormType extends FieldValues>({
   control,
   protectedHubmapIds,
-  removeProtectedDatasets,
+  removeInaccessibleDatasets,
   protectedRows,
 }: Props<FormType>) {
   const handleCopyClick = useHandleCopyClick();
@@ -44,7 +44,7 @@ function RemoveProtectedDatasetsFormField<FormType extends FieldValues>({
             readOnly: true,
           }}
         />
-        <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
+        <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeInaccessibleDatasets}>
           Remove Protected Datasets ({protectedRows.length})
         </Button>
       </Box>

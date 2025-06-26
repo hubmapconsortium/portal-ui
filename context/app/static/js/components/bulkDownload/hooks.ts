@@ -97,7 +97,9 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   const protectedDatasetsFields = useProtectedDatasetsForm({
     selectedRows: new Set(uuids),
     deselectRows: removeUuidsOrRows,
-    protectedDatasetsErrorMessage: (protectedDatasets) =>
+    protectedDatasetsWarningMessage: (protectedDatasets) =>
+      `You have selected ${protectedDatasets.length} protected datasets.`,
+    inaccessibleDatasetsErrorMessage: (protectedDatasets) =>
       `You have selected ${protectedDatasets.length} protected datasets.`,
     trackEventHelper: (numProtectedDatasets) => {
       trackEvent({

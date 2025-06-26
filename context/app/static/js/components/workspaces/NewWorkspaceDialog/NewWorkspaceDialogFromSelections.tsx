@@ -20,7 +20,7 @@ function NewWorkspaceDialogFromSelections() {
     selectedRows,
     protectedRows,
     protectedHubmapIds,
-    removeProtectedDatasets,
+    removeInaccessibleDatasets,
     ...restWorkspaceDatasets
   } = useCreateWorkspaceDatasets();
   const { deselectRows } = useSelectableTableStore();
@@ -62,9 +62,9 @@ function NewWorkspaceDialogFromSelections() {
           <RemoveProtectedDatasetsFormField
             control={control}
             protectedHubmapIds={protectedHubmapIds}
-            removeProtectedDatasets={() => {
-              removeProtectedDatasets();
-              removeDatasets(protectedRows.map((r) => r._id));
+            removeInaccessibleDatasets={() => {
+              removeInaccessibleDatasets();
+              removeDatasets(protectedRows);
             }}
             protectedRows={protectedRows}
             {...restWorkspaceDatasets}

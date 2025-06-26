@@ -190,13 +190,18 @@ function useCreateWorkspaceForm({
 }
 
 function useCreateWorkspaceDatasets() {
-  const { errorMessages: protectedDatasetsErrorMessages, selectedRows, ...rest } = useWorkspacesProtectedDatasetsForm();
+  const {
+    errorMessages: protectedDatasetsErrorMessages,
+    warningMessages: protectedDatasetsWarningMessages,
+    selectedRows,
+    ...rest
+  } = useWorkspacesProtectedDatasetsForm();
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({ numWorkspaceDatasets: selectedRows.size });
   const tooManyDatasetsWarningMessages = useTooManyDatasetsWarnings({ numWorkspaceDatasets: selectedRows.size });
 
   return {
     errorMessages: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
-    warningMessages: [...tooManyDatasetsWarningMessages],
+    warningMessages: [...protectedDatasetsWarningMessages, ...tooManyDatasetsWarningMessages],
     selectedRows,
     ...rest,
   };

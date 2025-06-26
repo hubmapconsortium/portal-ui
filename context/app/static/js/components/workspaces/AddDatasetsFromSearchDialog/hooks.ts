@@ -80,7 +80,7 @@ function useAddDatasetsFromSearchDialog() {
     selectedRows,
     errorMessages: protectedDatasetsErrorMessages,
     protectedHubmapIds,
-    removeProtectedDatasets: removeProtectedDatasetsFromSearchSelections,
+    removeInaccessibleDatasets: removeProtectedDatasetsFromSearchSelections,
     protectedRows,
     ...restProtectedDatasets
   } = useWorkspacesProtectedDatasetsForm();
@@ -122,8 +122,8 @@ function useAddDatasetsFromSearchDialog() {
 
   const updateWorkspaceDatasets = useUpdateWorkspaceDatasets({ workspaceId: workspaceIdField.value });
 
-  const removeProtectedDatasets = useCallback(() => {
-    const protectedUUIDs = protectedRows.map((d) => d?._source?.uuid).filter((uuid): uuid is string => Boolean(uuid));
+  const removeInaccessibleDatasets = useCallback(() => {
+    const protectedUUIDs = protectedRows.filter((uuid): uuid is string => Boolean(uuid));
     removeProtectedDatasetsFromSearchSelections();
     removeDatasets(protectedUUIDs);
   }, [removeProtectedDatasetsFromSearchSelections, removeDatasets, protectedRows]);
@@ -199,7 +199,7 @@ function useAddDatasetsFromSearchDialog() {
     selectWorkspace,
     protectedHubmapIds,
     protectedRows,
-    removeProtectedDatasets,
+    removeInaccessibleDatasets,
     ...restProtectedDatasets,
   };
 }

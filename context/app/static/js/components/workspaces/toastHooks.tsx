@@ -66,7 +66,7 @@ export const useWorkspaceToasts = () => {
     [toastSuccess],
   );
 
-  const toastSuccessRemoveProtectedDatasets = useCallback(
+  const toastSuccessRemoveInaccessibleDatasets = useCallback(
     () => toastSuccess('Protected datasets successfully removed from selection.'),
     [toastSuccess],
   );
@@ -142,7 +142,7 @@ export const useWorkspaceToasts = () => {
     toastErrorDeclineInvitation,
     toastErrorDeleteInvitation,
     toastSuccessRenewSession,
-    toastSuccessRemoveProtectedDatasets,
+    toastSuccessRemoveInaccessibleDatasets,
     toastSuccessUpdateWorkspace,
     toastSuccessCreateWorkspace,
     toastSuccessDeleteWorkspaces,
