@@ -1,17 +1,27 @@
 import { createContext, useContext } from 'js/helpers/context';
-import React, { PropsWithChildren, useMemo, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
 interface CellTypesSearchState {
   search: string;
   organs: string[];
 }
 
+interface CellTypesSearchDerivedState {
+  organCount: number;
+  organIsSelected: (organ: string) => boolean;
+}
+
 interface CellTypesSearchActions {
   setSearch: (search: string) => void;
   setOrgans: (organs: string[]) => void;
+  deselectAllOrgans: () => void;
+  resetToInitialOrgans: () => void;
+  toggleOrgan: (organ: string) => void;
 }
 
-const CellTypesSearchStateContext = createContext<CellTypesSearchState>('CellTypesSearchStateContext');
+const CellTypesSearchStateContext = createContext<CellTypesSearchState & CellTypesSearchDerivedState>(
+  'CellTypesSearchStateContext',
+);
 const CellTypesSearchActionsContext = createContext<CellTypesSearchActions>('CellTypesSearchActionsContext');
 
 export function useCellTypesSearchState() {
@@ -36,14 +46,34 @@ export default function CellTypesSearchProvider({
   const [search, setSearch] = useState(initialState.search);
   const [organs, setOrgans] = useState(initialState.organs);
 
-  const state = useMemo(() => ({ search, organs }), [search, organs]);
+  useEffect(() => {
+    // Reset organs when initialState changes
+    setOrgans(initialState.organs);
+  }, [initialState.organs]);
+
+  const state = useMemo(
+    () => ({
+      search,
+      organs,
+      organIsSelected: (organ: string) => organs.includes(organ),
+      organCount: organs.length,
+    }),
+    [search, organs],
+  );
 
   const actions = useMemo(
     () => ({
       setSearch,
       setOrgans,
+      deselectAllOrgans: () => setOrgans([]),
+      resetToInitialOrgans: () => setOrgans(initialState.organs),
+      toggleOrgan: (organ: string) => {
+        setOrgans((prevOrgans) =>
+          prevOrgans.includes(organ) ? prevOrgans.filter((o) => o !== organ) : [...prevOrgans, organ],
+        );
+      },
     }),
-    [],
+    [initialState.organs],
   );
 
   return (

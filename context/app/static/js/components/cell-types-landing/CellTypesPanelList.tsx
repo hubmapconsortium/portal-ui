@@ -36,7 +36,9 @@ export default function CellTypesPanelList() {
       ...cellTypes
         .filter(({ label, organs: cellTypeOrgans, clid }) => {
           const matchesSearch =
-            label.toLowerCase().includes(search.toLowerCase()) || clid?.toLowerCase().includes(search.toLowerCase());
+            search.length === 0 ||
+            label.toLowerCase().includes(search.toLowerCase()) ||
+            clid?.toLowerCase().includes(search.toLowerCase());
           const matchesOrgans = organs.length === 0 || cellTypeOrgans.some((organ) => organs.includes(organ));
           return matchesSearch && matchesOrgans;
         })

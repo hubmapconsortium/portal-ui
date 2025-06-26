@@ -27,11 +27,12 @@ export function ViewDatasetsButton({
   return (
     <Box sx={sx}>
       {isLoading ? (
-        <Skeleton variant="rectangular" width={200} height={40} />
+        <Skeleton variant="rectangular" width={156} height={36} />
       ) : (
         <OutlinedButton
           color="primary"
           startIcon={<entityIconMap.Dataset />}
+          disabled={datasetUUIDs.length === 0}
           href={getSearchURL({
             entityType: 'Dataset',
             datasetUUIDs,
