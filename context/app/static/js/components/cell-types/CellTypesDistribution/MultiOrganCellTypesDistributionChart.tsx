@@ -24,6 +24,7 @@ import { useOptionalCellTypesDetailPageContext } from '../CellTypesDetailPageCon
 interface MultiOrganCellTypeDistributionChartProps {
   cellTypes: string[];
   organs: string[];
+  hideLegend?: boolean;
 }
 
 function ChartControls() {
@@ -65,29 +66,32 @@ function ChartControls() {
         }}
         ariaLabel="Graph Type"
       />
-      <LabeledPrimarySwitch
-        label={
-          <InfoTextTooltip
-            tooltipTitle="Toggle between displaying or hiding the other cell types in the organs cell type appears in."
-            infoIconSize="large"
-          >
-            Show Other Cell Types
-          </InfoTextTooltip>
-        }
-        disabledLabel="Hide"
-        enabledLabel="Show"
-        checked={showOtherCellTypes}
-        onChange={(e) => {
-          setShowOtherCellTypes(e.target.checked);
-          if (trackingInfo) {
-            trackEvent({
-              ...trackingInfo,
-              action: 'Cell Type Distribution / Toggle Other Cell Types',
-            });
+      {cellTypeContext && (
+        <LabeledPrimarySwitch
+          label={
+            <InfoTextTooltip
+              tooltipTitle="Toggle between displaying or hiding the other cell types in the organs cell type appears in."
+              infoIconSize="large"
+            >
+              Show Other Cell Types
+            </InfoTextTooltip>
           }
-        }}
-        ariaLabel="Show Other Cell Types"
-      />
+          disabledLabel="Hide"
+          enabledLabel="Show"
+          checked={showOtherCellTypes}
+          onChange={(e) => {
+            setShowOtherCellTypes(e.target.checked);
+            if (trackingInfo) {
+              trackEvent({
+                ...trackingInfo,
+                action: 'Cell Type Distribution / Toggle Other Cell Types',
+              });
+            }
+          }}
+          ariaLabel="Show Other Cell Types"
+        />
+      )}
+
       {!showPercentages && (
         <LabeledPrimarySwitch
           label={
@@ -144,7 +148,11 @@ function useGetTickValues() {
   return getSymLogTickValues;
 }
 
-function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCellTypeDistributionChartProps) {
+function MultiOrganCellTypeDistributionChart({
+  cellTypes,
+  organs,
+  hideLegend,
+}: MultiOrganCellTypeDistributionChartProps) {
   const {
     cellTypeCountsRecord,
     fullCellTypeData,
@@ -203,7 +211,7 @@ function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCe
     <CellTypeDataContextProvider value={{ cellTypeCounts: cellTypeCountsRecord, colorScale: combinedColorScale }}>
       <Paper sx={{ px: 2, pb: 2 }}>
         <ChartWrapper
-          colorScale={targetColorScale}
+          colorScale={hideLegend ? undefined : targetColorScale}
           dividersInLegend
           margin={{
             top: 20,
@@ -211,7 +219,7 @@ function MultiOrganCellTypeDistributionChart({ cellTypes, organs }: MultiOrganCe
             bottom: 50,
             left: 100,
           }}
-          dropdown={<Typography variant="body1">Cell Types</Typography>}
+          dropdown={hideLegend ? undefined : <Typography variant="body1">Cell Types</Typography>}
           additionalControls={<ChartControls />}
         >
           <VerticalStackedBarChart
