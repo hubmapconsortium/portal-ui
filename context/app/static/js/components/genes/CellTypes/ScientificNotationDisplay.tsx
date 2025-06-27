@@ -1,3 +1,5 @@
+import TableCell from '@mui/material/TableCell';
+import Box from '@mui/material/Box';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import React from 'react';
 
@@ -14,9 +16,17 @@ export default function ScientificNotationDisplay({ value }: { value: number }) 
 
   return (
     <SecondaryBackgroundTooltip title={value}>
-      <span>
+      <Box sx={{ whitespace: 'nowrap' }}>
         {formattedBase} &times; 10<sup>{formattedPower}</sup>
-      </span>
+      </Box>
     </SecondaryBackgroundTooltip>
+  );
+}
+
+export function ScientificNotationDisplayCell({ value }: { value: number }) {
+  return (
+    <TableCell align="right" sx={{ whiteSpace: 'nowrap' }}>
+      <ScientificNotationDisplay value={value} />
+    </TableCell>
   );
 }

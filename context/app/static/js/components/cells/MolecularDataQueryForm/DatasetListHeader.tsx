@@ -15,8 +15,13 @@ const categoryTrackingMapping = {
   },
   'Gene Detail Page': {
     save: 'Datasets / Results / Save Results to List',
-    copy: 'Datasets / Results / Copy Gene IDs',
-    download: 'Datasets / Results / Download Gene Details',
+    copy: 'Datasets / Results / Copy HuBMAP IDs',
+    download: 'Datasets / Results / Download Datasets',
+  },
+  'Cell Type Detail Page': {
+    save: 'Datasets / Results / Save Results to List',
+    copy: 'Datasets / Results / Copy HuBMAP IDs',
+    download: 'Datasets / Results / Download Datasets',
   },
 };
 

@@ -5,14 +5,13 @@ import Box from '@mui/material/Box';
 import Skeleton from '@mui/material/Skeleton';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 
-import Description from 'js/shared-styles/sections/Description';
-
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { useBandScale, useLogScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
-import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { CellTypeOrgan } from 'js/hooks/useCrossModalityApi';
-import { useCellTypeDetails, useCellTypeName } from './hooks';
+import { useCellTypeName } from './hooks';
+
+// NOTE: We are currently only using this in the cross modality results.
 
 // Define the keys for the stack
 // TODO: Based on Nils's feedback, we are currently not including `other_cells`
@@ -150,16 +149,5 @@ export function CellTypeOrgansGraph({ organs }: CellTypesGraphProps) {
     <Box height={defaultHeight} maxHeight={defaultHeight} width="100%">
       {chart}
     </Box>
-  );
-}
-
-export default function CellTypesVisualization() {
-  const { organs = [] } = useCellTypeDetails();
-
-  return (
-    <CollapsibleDetailPageSection id="distribution-across-organs" title="Distribution Across Organs">
-      <Description>Cell counts in this visualization are dependent on the data available within HuBMAP.</Description>
-      <CellTypeOrgansGraph organs={organs} />
-    </CollapsibleDetailPageSection>
   );
 }

@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.28.1 - 2025-06-27
+
+- Fix flipped 'up' and 'down' icons across the portal.
+
+
+
+## v1.28.0 - 2025-06-26
+
+Fix typo on Workspaces Sharing dialog.
+- Add support for new "initializing" workspace state.
+- Update gene detail page to display relevant cell types and molecular data query results.
+- List associated publications on dataset detail pages.
+- Update homepage news items as of June 2025.
+- Open OpenKeyNav commands description when OpenKeyNav is enabled.
+
+
+
 ## v1.27.4 - 2025-06-13
 
 - Allow multiple workspaces to run concurrently.
