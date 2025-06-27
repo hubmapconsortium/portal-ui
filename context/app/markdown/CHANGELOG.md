@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.28.1 - 2025-06-27
+
+- Fix flipped 'up' and 'down' icons across the portal.
+
+
+
 ## v1.28.0 - 2025-06-26
 
 Fix typo on Workspaces Sharing dialog.
