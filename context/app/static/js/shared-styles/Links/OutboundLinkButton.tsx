@@ -18,13 +18,13 @@ function OutboundLinkButton({ children, onClick, ...props }: OutboundLinkButtonP
 
   return (
     <Button
-      {...props}
       color="primary"
       variant="contained"
-      component="a"
       target="_blank"
       rel="noopener noreferrer"
       onClick={handleClick}
+      {...props}
+      component="a"
     >
       {children} <StyledOpenInNewRoundedIcon />
     </Button>

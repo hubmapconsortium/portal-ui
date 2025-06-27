@@ -132,7 +132,7 @@ function WorkflowStep({
       <ExpandableRowCell>
         {cwlUrl.endsWith('cwl') ? (
           <Box>
-            <OutboundLinkButton href={cwlUrl} component="a" variant="outlined">
+            <OutboundLinkButton href={cwlUrl} component="a" variant="outlined" color="info">
               Open CWL Viewer
             </OutboundLinkButton>
           </Box>
