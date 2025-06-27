@@ -1,1 +1,0 @@
-- Update homepage news items as of June 2025.

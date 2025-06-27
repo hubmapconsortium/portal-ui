@@ -13,6 +13,7 @@ import {
   OrganIcon,
   ProcessedDataIcon,
   ProvenanceIcon,
+  PublicationIcon,
   SampleIcon,
   SentIcon,
   SummaryIcon,
@@ -52,6 +53,7 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   'cell-types': CellTypeIcon,
   'sent-invitations-status': SentIcon,
   templates: WorkspacesIcon,
+  publications: PublicationIcon,
 } as const;
 
 export const sectionImageIconMap: Record<string, keyof typeof externalIconMap> = {

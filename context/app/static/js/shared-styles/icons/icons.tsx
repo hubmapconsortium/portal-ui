@@ -111,9 +111,9 @@ const EmailIcon = withIconStyles(EmailRoundedIcon);
 
 const ListsIcon = withIconStyles(ListAltRoundedIcon);
 
-const DownIcon = withIconStyles(ExpandLess);
+const DownIcon = withIconStyles(ExpandMore);
 
-const UpIcon = withIconStyles(ExpandMore);
+const UpIcon = withIconStyles(ExpandLess);
 
 const AddIcon = withIconStyles(AddRoundedIcon);
 
