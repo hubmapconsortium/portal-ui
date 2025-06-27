@@ -24,7 +24,7 @@ import Files from 'js/components/detailPage/files/Files';
 import DataProducts from 'js/components/detailPage/files/DataProducts';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import AnalysisDetails from 'js/components/detailPage/AnalysisDetails';
-import Protocol from 'js/components/detailPage/Protocol';
+// import Protocol from 'js/components/detailPage/Protocol';
 import { useSelectedVersionStore } from 'js/components/detailPage/VersionSelect/SelectedVersionStore';
 import { useVersions } from 'js/components/detailPage/VersionSelect/hooks';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
@@ -192,6 +192,7 @@ function VisualizationAccordion() {
   );
 }
 
+// TODO: Revisit broken protocols
 function AnalysisDetailsAccordion() {
   const { dataset } = useProcessedDatasetContext();
 
@@ -201,7 +202,11 @@ function AnalysisDetailsAccordion() {
 
   if (!dataset.ingest_metadata) {
     return (
-      <Subsection title="Protocols & Workflow Details" idTitleOverride="analysis" icon={<FactCheckRounded />}>
+      <Subsection
+        title="Protocols & Workflow Details"
+        idTitleOverride="protocols-&-workflow-details"
+        icon={<FactCheckRounded />}
+      >
         <SectionDescription subsection>
           Analysis details and protocols are not available for this dataset.
         </SectionDescription>
@@ -211,12 +216,16 @@ function AnalysisDetailsAccordion() {
 
   const {
     ingest_metadata: { dag_provenance_list, workflow_description, workflow_version },
-    protocol_url,
+    // protocol_url,
   } = dataset;
 
   return (
-    <Subsection title="Protocols & Workflow Details" idTitleOverride="analysis" icon={<FactCheckRounded />}>
-      {Boolean(protocol_url) && <Protocol protocol_url={protocol_url} />}
+    <Subsection
+      title="Protocols & Workflow Details"
+      idTitleOverride="protocols-&-workflow-details"
+      icon={<FactCheckRounded />}
+    >
+      {/* Boolean(protocol_url) && <Protocol protocol_url={protocol_url} /> */}
       <AnalysisDetails
         dagListData={dag_provenance_list}
         workflow_description={workflow_description}
