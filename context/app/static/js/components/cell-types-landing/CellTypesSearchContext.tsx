@@ -1,9 +1,11 @@
 import { createContext, useContext } from 'js/helpers/context';
+import { SortState, useSortState } from 'js/hooks/useSortState';
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
 interface CellTypesSearchState {
   search: string;
   organs: string[];
+  sortState: SortState;
 }
 
 interface CellTypesSearchDerivedState {
@@ -11,17 +13,18 @@ interface CellTypesSearchDerivedState {
   organIsSelected: (organ: string) => boolean;
 }
 
+type CellTypeSearchStateContextType = CellTypesSearchState & CellTypesSearchDerivedState;
+
 interface CellTypesSearchActions {
   setSearch: (search: string) => void;
   setOrgans: (organs: string[]) => void;
   deselectAllOrgans: () => void;
   resetToInitialOrgans: () => void;
   toggleOrgan: (organ: string) => void;
+  setSort: (columnId: string) => void;
 }
 
-const CellTypesSearchStateContext = createContext<CellTypesSearchState & CellTypesSearchDerivedState>(
-  'CellTypesSearchStateContext',
-);
+const CellTypesSearchStateContext = createContext<CellTypeSearchStateContextType>('CellTypesSearchStateContext');
 const CellTypesSearchActionsContext = createContext<CellTypesSearchActions>('CellTypesSearchActionsContext');
 
 export function useCellTypesSearchState() {
@@ -33,32 +36,47 @@ export function useCellTypesSearchActions() {
 }
 
 interface CellTypesSearchProviderProps extends PropsWithChildren {
-  initialState?: CellTypesSearchState;
+  initialState?: Partial<CellTypesSearchState>;
 }
+
+const defaultInitialState: CellTypesSearchState = {
+  search: '',
+  organs: [],
+  sortState: {
+    columnId: 'name',
+    direction: 'desc',
+  },
+};
 
 export default function CellTypesSearchProvider({
   children,
-  initialState = {
-    search: '',
-    organs: [],
-  },
+  initialState = defaultInitialState,
 }: CellTypesSearchProviderProps) {
-  const [search, setSearch] = useState(initialState.search);
-  const [organs, setOrgans] = useState(initialState.organs);
+  const [search, setSearch] = useState(initialState.search ?? defaultInitialState.search);
+  const [organs, setOrgans] = useState(initialState.organs ?? (defaultInitialState.organs || []));
+
+  const { sortState, setSort } = useSortState(
+    {
+      name: 'label',
+      clid: 'clid',
+    },
+    initialState.sortState ?? defaultInitialState.sortState,
+  );
 
   useEffect(() => {
     // Reset organs when initialState changes
-    setOrgans(initialState.organs);
-  }, [initialState.organs]);
+    setOrgans(initialState?.organs ?? defaultInitialState.organs);
+  }, [initialState?.organs]);
 
-  const state = useMemo(
+  const state: CellTypeSearchStateContextType = useMemo(
     () => ({
       search,
       organs,
       organIsSelected: (organ: string) => organs.includes(organ),
       organCount: organs.length,
+      sortState,
     }),
-    [search, organs],
+    [search, organs, sortState],
   );
 
   const actions = useMemo(
@@ -66,14 +84,15 @@ export default function CellTypesSearchProvider({
       setSearch,
       setOrgans,
       deselectAllOrgans: () => setOrgans([]),
-      resetToInitialOrgans: () => setOrgans(initialState.organs),
+      resetToInitialOrgans: () => setOrgans(initialState?.organs ?? defaultInitialState.organs),
       toggleOrgan: (organ: string) => {
         setOrgans((prevOrgans) =>
           prevOrgans.includes(organ) ? prevOrgans.filter((o) => o !== organ) : [...prevOrgans, organ],
         );
       },
+      setSort,
     }),
-    [initialState.organs],
+    [initialState.organs, setSort],
   );
 
   return (

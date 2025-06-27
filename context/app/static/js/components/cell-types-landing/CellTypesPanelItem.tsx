@@ -23,6 +23,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
+import TableSortLabel from '@mui/material/TableSortLabel';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import { useIndexedDatasetsForCellType } from '../cell-types/hooks';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
@@ -53,16 +54,34 @@ const desktopConfig = {
 
 function CellTypesHeaderPanel() {
   const isMobile = useIsMobile();
+  const { sortState } = useCellTypesSearchState();
+  const { setSort } = useCellTypesSearchActions();
   if (isMobile) {
     return null;
   }
   return (
     <StackTemplate spacing={4}>
       <HeaderCell {...desktopConfig.name} pl={3}>
-        Cell Type
+        <TableSortLabel
+          active={sortState.columnId === 'name'}
+          direction={sortState.direction}
+          onClick={() => setSort('name')}
+          sx={{ width: '100%' }}
+          data-testid="cell-types-header-name"
+        >
+          Cell Type
+        </TableSortLabel>
       </HeaderCell>
       <HeaderCell {...desktopConfig.clid} pl={2}>
-        CLID
+        <TableSortLabel
+          active={sortState.columnId === 'clid'}
+          direction={sortState.direction}
+          onClick={() => setSort('clid')}
+          sx={{ width: '100%' }}
+          data-testid="cell-types-header-clid"
+        >
+          CLID
+        </TableSortLabel>
       </HeaderCell>
       <HeaderCell {...desktopConfig.organs} pl={2}>
         Organs

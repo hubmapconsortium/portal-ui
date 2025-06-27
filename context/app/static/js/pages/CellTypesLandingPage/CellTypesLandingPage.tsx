@@ -17,7 +17,6 @@ export default function CellTypesLandingPage() {
   return (
     <CellTypesSearchProvider
       initialState={{
-        search: '',
         organs: cellTypeOrgans,
       }}
     >
