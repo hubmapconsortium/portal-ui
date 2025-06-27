@@ -15,7 +15,6 @@ import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import { OutboundLink } from 'js/shared-styles/Links';
-import { buildGithubURL } from './AnalysisDetailsLink';
 
 interface AnalysisDetails {
   dagListData: DagProvenanceType[];
@@ -48,6 +47,11 @@ function WorkflowParameters({ input_parameters }: Required<Pick<Pipeline, 'input
       </Stack>
     </Stack>
   );
+}
+
+function buildGithubURL(data: DagProvenanceType) {
+  const trimmedOrigin = data.origin.replace(/\.git$/, '');
+  return 'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;
 }
 
 function WorkflowStep({ pipeline, i }: { pipeline: Pipeline; i: number }) {
