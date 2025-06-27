@@ -39,7 +39,7 @@ function useCheckDatasetAccess() {
 
   // TODO: update this once workspaces API makes access checks available
   const checkDatasetAccess = useCallback(
-    (datasetUUID: string) => isWorkspacesUser && Boolean(datasetUUID),
+    (datasetUUID: string) => isWorkspacesUser && datasetUUID !== '',
     [isWorkspacesUser],
   );
 
@@ -60,7 +60,7 @@ function useGetInaccessibleDatasets(datasetUUIDs: Set<string>) {
 
 interface useProtectedDatasetsFormProps {
   selectedRows: Set<string>;
-  deselectRows: (uuids: string[]) => void;
+  deselectRows?: (uuids: string[]) => void;
   inaccessibleDatasetsErrorMessage: (protectedRows: string[]) => string;
   protectedDatasetsWarningMessage: (protectedRows: string[]) => string;
   trackEventHelper: (numProtectedDatasets: number) => void;
@@ -99,7 +99,7 @@ function useProtectedDatasetsForm({
   const protectedHubmapIds = hubmapIds.join(', ');
 
   const removeInaccessibleDatasets = useCallback(() => {
-    deselectRows(inaccessibleRows);
+    deselectRows?.(inaccessibleRows);
     toastSuccessRemoveInaccessibleDatasets();
   }, [deselectRows, inaccessibleRows, toastSuccessRemoveInaccessibleDatasets]);
 

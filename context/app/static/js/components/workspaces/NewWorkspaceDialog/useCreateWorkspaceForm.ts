@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useLaunchWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { CreateTemplateNotebooksTypes, WorkspaceResourceOptions } from '../types';
 import { useTemplateNotebooks } from './hooks';
 import {
@@ -190,12 +191,15 @@ function useCreateWorkspaceForm({
 }
 
 function useCreateWorkspaceDatasets() {
+  const { selectedRows, deselectRows } = useSelectableTableStore();
   const {
     errorMessages: protectedDatasetsErrorMessages,
     warningMessages: protectedDatasetsWarningMessages,
-    selectedRows,
     ...rest
-  } = useWorkspacesProtectedDatasetsForm();
+  } = useWorkspacesProtectedDatasetsForm({
+    selectedRows,
+    deselectRows,
+  });
 
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({ numWorkspaceDatasets: selectedRows.size });
   const tooManyDatasetsWarningMessages = useTooManyDatasetsWarnings({ numWorkspaceDatasets: selectedRows.size });
@@ -203,7 +207,6 @@ function useCreateWorkspaceDatasets() {
   return {
     errorMessages: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
     warningMessages: [...protectedDatasetsWarningMessages, ...tooManyDatasetsWarningMessages],
-    selectedRows,
     ...rest,
   };
 }

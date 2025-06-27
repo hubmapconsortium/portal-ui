@@ -4,6 +4,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { useUpdateWorkspaceDatasets, useWorkspaceDetail } from '../hooks';
 import {
   datasetsField as datasetsFieldSchema,
@@ -76,14 +77,17 @@ function useAddWorkspaceDatasetsFromSearchForm({
 }
 
 function useAddDatasetsFromSearchDialog() {
+  const { selectedRows, deselectRows } = useSelectableTableStore();
   const {
-    selectedRows,
     errorMessages: protectedDatasetsErrorMessages,
     protectedHubmapIds,
     removeInaccessibleDatasets: removeProtectedDatasetsFromSearchSelections,
     protectedRows,
     ...restProtectedDatasets
-  } = useWorkspacesProtectedDatasetsForm();
+  } = useWorkspacesProtectedDatasetsForm({
+    selectedRows,
+    deselectRows,
+  });
 
   const datasetsFromSearch = useMemo(() => [...selectedRows], [selectedRows]);
 

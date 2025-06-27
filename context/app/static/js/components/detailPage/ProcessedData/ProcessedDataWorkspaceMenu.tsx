@@ -15,6 +15,7 @@ import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFro
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
 import { useCheckDatasetAccess } from 'js/hooks/useProtectedDatasets';
+import { useWorkspacesProtectedDatasetsForm } from 'js/components/workspaces/formHooks';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
@@ -28,6 +29,10 @@ function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: Pro
   const open = Boolean(anchorEl);
   const track = useTrackEntityPageEvent();
   const hasWorkspaceAccess = useCheckDatasetAccess();
+
+  const { warningMessages } = useWorkspacesProtectedDatasetsForm({
+    selectedRows: new Set([uuid]),
+  });
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     track({
@@ -95,7 +100,7 @@ function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: Pro
     },
   ];
 
-  if (!hasWorkspaceAccess) {
+  if (!hasWorkspaceAccess(uuid)) {
     return null;
   }
 
@@ -120,7 +125,13 @@ function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: Pro
         ))}
       </Menu>
       <AddDatasetsFromDetailDialog uuid={uuid} dialogType={dialogType} />
-      <NewWorkspaceDialog dialogIsOpen={createWorkspaceIsOpen} control={control} errors={errors} {...rest} />
+      <NewWorkspaceDialog
+        dialogIsOpen={createWorkspaceIsOpen}
+        control={control}
+        errors={errors}
+        warningMessages={warningMessages}
+        {...rest}
+      />
     </>
   );
 }

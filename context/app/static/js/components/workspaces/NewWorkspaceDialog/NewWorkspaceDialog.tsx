@@ -18,9 +18,10 @@ import { useSelectItems } from 'js/hooks/useSelectItems';
 import InternalLink from 'js/shared-styles/Links/InternalLink';
 import { buildSearchLink } from 'js/components/search/store';
 import { EventInfo } from 'js/components/types';
-
 import WorkspacesNoDatasetsAlert from 'js/components/workspaces/WorkspacesNoDatasetsAlert';
 import { WorkspacesEventContextProvider } from 'js/components/workspaces/contexts';
+import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
+
 import { useWorkspaceTemplates } from './hooks';
 import { CreateWorkspaceFormTypes } from './useCreateWorkspaceForm';
 import { CreateTemplateNotebooksTypes, WorkspacesEventCategories } from '../types';
@@ -91,6 +92,7 @@ type ReactHookFormProps = Pick<UseFormReturn<CreateWorkspaceFormTypes>, 'handleS
 
 interface NewWorkspaceDialogProps {
   errorMessages?: string[];
+  warningMessages?: string[];
   dialogIsOpen: boolean;
   handleClose: () => void;
   removeDatasets?: (uuids: string[]) => void;
@@ -109,6 +111,7 @@ interface NewWorkspaceDialogProps {
 
 function NewWorkspaceDialog({
   errorMessages = [],
+  warningMessages = [],
   dialogIsOpen,
   handleClose,
   handleSubmit,
@@ -177,6 +180,9 @@ function NewWorkspaceDialog({
         <DialogContent dividers>
           <Step title={text.datasets.title} index={0}>
             <Stack spacing={1}>
+              <Box>
+                <ErrorOrWarningMessages errorMessages={errorMessages} warningMessages={warningMessages} />
+              </Box>
               {children}
               <StepDescription
                 blocks={[
