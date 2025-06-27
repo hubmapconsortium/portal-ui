@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useState, Dispatch, SetStateAction } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import InfoIcon from '@mui/icons-material/Info';
@@ -53,7 +53,7 @@ function WorkflowParameters({ input_parameters }: Required<Pick<Pipeline, 'input
   }, [input_parameters, copyText]);
 
   return (
-    <Stack spacing={1} pl={4}>
+    <Stack spacing={1} pl={4} mb={1}>
       <Stack direction="row" spacing="1" alignItems="center">
         <Typography variant="subtitle2">Input Parameters</Typography>
         <Box>
@@ -80,12 +80,29 @@ function buildGithubURL(data: DagProvenanceType) {
   return 'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;
 }
 
-function WorkflowStep({ pipeline, i }: { pipeline: Pipeline; i: number }) {
+function WorkflowStep({
+  pipeline,
+  i,
+  setRowIsExpanded,
+}: {
+  pipeline: Pipeline;
+  i: number;
+  setRowIsExpanded: Dispatch<SetStateAction<boolean>>;
+}) {
   const { name, origin, input_parameters, documentation_url, hash, version } = pipeline;
   const pipelineName = name ?? origin.split('/').pop();
 
   const githubUrl = buildGithubURL(pipeline);
   const cwlUrl = `https://view.commonwl.org/workflows/${githubUrl.replace(/^http(s?):\/\//i, '')}`;
+
+  const onExpand = useCallback(
+    (isExpanded: boolean) => {
+      if (isExpanded) {
+        setRowIsExpanded(true);
+      }
+    },
+    [setRowIsExpanded],
+  );
 
   return (
     <ExpandableRow
@@ -93,6 +110,7 @@ function WorkflowStep({ pipeline, i }: { pipeline: Pipeline; i: number }) {
       expandedContent={input_parameters ? <WorkflowParameters input_parameters={input_parameters} /> : null}
       reverse
       disabled={!input_parameters?.length}
+      onExpand={onExpand}
     >
       <ExpandableRowCell>{i + 1}</ExpandableRowCell>
       <ExpandableRowCell>
@@ -126,7 +144,13 @@ function WorkflowStep({ pipeline, i }: { pipeline: Pipeline; i: number }) {
 
 const cols = ['Step', 'Tool', 'Origin Link', 'Git Commit', 'Documentation Link', null];
 
-function WorkflowSteps({ steps }: { steps: Pipeline[] }) {
+function WorkflowSteps({
+  steps,
+  setRowIsExpanded,
+}: {
+  steps: Pipeline[];
+  setRowIsExpanded: Dispatch<SetStateAction<boolean>>;
+}) {
   return (
     <Table>
       <TableHead>
@@ -144,6 +168,7 @@ function WorkflowSteps({ steps }: { steps: Pipeline[] }) {
           <WorkflowStep
             pipeline={pipeline}
             i={i}
+            setRowIsExpanded={setRowIsExpanded}
             key={pipeline.name + pipeline.origin + pipeline.hash + pipeline.version}
           />
         ))}
@@ -171,12 +196,20 @@ function dedupeSteps(steps: Pipeline[]) {
 function AnalysisDetails({ dagListData, workflow_description, workflow_version }: AnalysisDetails) {
   const dedupedSteps = dedupeSteps(dagListData);
 
+  // Change the key of the workflow steps component to get around localized expandable row contexts.
+  const [resetExpandedKey, setResetExpandedKey] = useState(false);
+  const [rowIsExpanded, setRowIsExpanded] = useState(false);
+  const collapseSteps = useCallback(() => {
+    setRowIsExpanded((prev) => !prev);
+    setResetExpandedKey((prev) => !prev);
+  }, [setResetExpandedKey, setRowIsExpanded]);
+
   return (
     <Stack spacing={1}>
       <Typography variant="subtitle2">Workflow (v{workflow_version})</Typography>
       <Typography>{workflow_description}</Typography>
       <Box>
-        <Button variant="outlined">
+        <Button variant="outlined" onClick={collapseSteps} disabled={!rowIsExpanded}>
           <VisibilityOffRoundedIcon sx={{ marginRight: 1, fontSize: '1.125rem' }} />
           Collapse Steps ({dedupedSteps.length})
         </Button>
@@ -185,7 +218,11 @@ function AnalysisDetails({ dagListData, workflow_description, workflow_version }
         <InfoIcon sx={{ fontSize: '1rem' }} color="primary" />
         <Typography>These are the steps executed in the workflow to produce the processed dataset.</Typography>
       </Stack>
-      <WorkflowSteps steps={dedupedSteps} />
+      <WorkflowSteps
+        steps={dedupedSteps}
+        setRowIsExpanded={setRowIsExpanded}
+        key={['workflow-steps', resetExpandedKey.toString()].join('-')}
+      />
     </Stack>
   );
 }
