@@ -50,6 +50,8 @@ export function useProcessedDatasetDetails(uuid: string) {
       'published_timestamp',
       'last_modified_timestamp',
       'ingest_metadata.dag_provenance_list',
+      'ingest_metadata.workflow_description',
+      'ingest_metadata.workflow_version',
       'metadata',
       'protocol_url',
       'dataset_type',
