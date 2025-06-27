@@ -1,5 +1,6 @@
 import React from 'react';
 import SearchBar from 'js/shared-styles/inputs/SearchBar';
+import { trackEvent } from 'js/helpers/trackers';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
 
 // Once protein search is implemented, this should be changed to:
@@ -17,6 +18,13 @@ export default function CellTypesSearchBar() {
       placeholder={searchbarPlaceholder}
       value={search}
       onChange={(e) => setSearch(e.target.value)}
+      onBlur={() => {
+        trackEvent({
+          category: 'Cell Type Landing Page',
+          action: 'Search Bar',
+          label: search,
+        });
+      }}
     />
   );
 }

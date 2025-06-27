@@ -1,4 +1,5 @@
 import { createContext, useContext } from 'js/helpers/context';
+import { trackEvent } from 'js/helpers/trackers';
 import { SortState, useSortState } from 'js/hooks/useSortState';
 import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
 
@@ -86,9 +87,17 @@ export default function CellTypesSearchProvider({
       deselectAllOrgans: () => setOrgans([]),
       resetToInitialOrgans: () => setOrgans(initialState?.organs ?? defaultInitialState.organs),
       toggleOrgan: (organ: string) => {
-        setOrgans((prevOrgans) =>
-          prevOrgans.includes(organ) ? prevOrgans.filter((o) => o !== organ) : [...prevOrgans, organ],
-        );
+        setOrgans((prevOrgans) => {
+          const includesOrgan = prevOrgans.includes(organ);
+          const newValue = includesOrgan ? prevOrgans.filter((o) => o !== organ) : [...prevOrgans, organ];
+          trackEvent({
+            category: 'Cell Type Landing Page',
+            action: 'Select Table Filter',
+            label: `Organ: ${[...newValue].sort().join(', ')}`,
+            value: includesOrgan ? -1 : 1,
+          });
+          return newValue;
+        });
       },
       setSort,
     }),
