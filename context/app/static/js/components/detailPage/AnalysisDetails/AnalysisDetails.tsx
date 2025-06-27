@@ -12,6 +12,7 @@ import TableRow from '@mui/material/TableRow';
 import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
 import IconButton from '@mui/material/IconButton';
 import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
+import Paper from '@mui/material/Paper';
 
 import { DagProvenanceType } from 'js/components/types';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
@@ -21,6 +22,7 @@ import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import { OutboundLink } from 'js/shared-styles/Links';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { StyledTableContainer } from 'js/shared-styles/tables';
 
 interface AnalysisDetails {
   dagListData: DagProvenanceType[];
@@ -152,28 +154,30 @@ function WorkflowSteps({
   setRowIsExpanded: Dispatch<SetStateAction<boolean>>;
 }) {
   return (
-    <Table>
-      <TableHead>
-        <TableRow>
-          <TableCell sx={{ backgroundColor: 'background.paper' }}>&nbsp; {/* Expansion cell column */} </TableCell>
-          {cols.map((col) => (
-            <TableCell sx={{ backgroundColor: 'background.paper' }} key={col}>
-              {col}
-            </TableCell>
+    <StyledTableContainer component={Paper} maxHeight={550}>
+      <Table stickyHeader>
+        <TableHead>
+          <TableRow>
+            <TableCell sx={{ backgroundColor: 'background.paper' }}>&nbsp; {/* Expansion cell column */} </TableCell>
+            {cols.map((col) => (
+              <TableCell sx={{ backgroundColor: 'background.paper' }} key={col}>
+                {col}
+              </TableCell>
+            ))}
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {steps.map((pipeline, i) => (
+            <WorkflowStep
+              pipeline={pipeline}
+              i={i}
+              setRowIsExpanded={setRowIsExpanded}
+              key={pipeline.name + pipeline.origin + pipeline.hash + pipeline.version}
+            />
           ))}
-        </TableRow>
-      </TableHead>
-      <TableBody>
-        {steps.map((pipeline, i) => (
-          <WorkflowStep
-            pipeline={pipeline}
-            i={i}
-            setRowIsExpanded={setRowIsExpanded}
-            key={pipeline.name + pipeline.origin + pipeline.hash + pipeline.version}
-          />
-        ))}
-      </TableBody>
-    </Table>
+        </TableBody>
+      </Table>
+    </StyledTableContainer>
   );
 }
 
