@@ -27,7 +27,7 @@ import IndexedDatasetsSummary from '../organ/OrganCellTypes/IndexedDatasetsSumma
 import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
 import { ScientificNotationDisplayCell } from '../genes/CellTypes/ScientificNotationDisplay';
-import { useIndexedDatasetsForCellType } from './hooks';
+import { useIndexedDatasetsForCellTypePage } from './hooks';
 
 function GeneDescription({ description }: { description: React.ReactNode }) {
   return <LineClamp lines={2}>{description ?? 'No description available.'}</LineClamp>;
@@ -212,7 +212,7 @@ function BiomarkersTable() {
 }
 
 function CellTypesBiomarkersTableSection() {
-  const indexedDatasetsSummaryProps = useIndexedDatasetsForCellType();
+  const indexedDatasetsSummaryProps = useIndexedDatasetsForCellTypePage();
   const { trackingInfo } = useCellTypesDetailPageContext();
 
   return (

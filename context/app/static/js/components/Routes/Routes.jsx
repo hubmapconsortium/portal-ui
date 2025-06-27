@@ -35,6 +35,7 @@ const Template = lazy(() => import('js/pages/Template'));
 const GeneDetails = lazy(() => import('js/pages/Genes'));
 const Biomarkers = lazy(() => import('js/pages/Biomarkers'));
 const CellTypes = lazy(() => import('js/pages/CellTypes'));
+const CellTypesLandingPage = lazy(() => import('js/pages/CellTypesLandingPage'));
 const Tutorials = lazy(() => import('js/pages/Tutorials'));
 const Tutorial = lazy(() => import('js/pages/Tutorial'));
 const Profile = lazy(() => import('js/pages/Profile'));
@@ -284,7 +285,12 @@ function Routes({ flaskData } = {}) {
     throw Error('Intentional client-side-error');
   }
 
-  if (urlPath.startsWith('/cell-types/')) {
+  if (urlPath.startsWith('/cell-types')) {
+    if (cellId === undefined) {
+      return (<Route>
+        <CellTypesLandingPage />
+      </Route>)
+    }
     return (
       <Route>
         <CellTypes cellId={cellId} />

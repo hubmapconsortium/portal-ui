@@ -7,11 +7,11 @@ import { CollapsibleDetailPageSection } from '../../detailPage/DetailPageSection
 import IndexedDatasetsSummary from '../../organ/OrganCellTypes/IndexedDatasetsSummary';
 import { useCellTypesDetailPageContext } from '../CellTypesDetailPageContext';
 import CellTypeDistributionChart from '../../cells/CellTypeDistributionChart';
-import { useIndexedDatasetsForCellType } from '../hooks';
+import { useIndexedDatasetsForCellTypePage } from '../hooks';
 import MultiOrganCellTypeDistributionChart from './MultiOrganCellTypesDistributionChart';
 
 function CellTypesDistributionSummary() {
-  const indexedDatasetsProps = useIndexedDatasetsForCellType();
+  const indexedDatasetsProps = useIndexedDatasetsForCellTypePage();
 
   return (
     <IndexedDatasetsSummary

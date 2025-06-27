@@ -125,8 +125,13 @@ interface IndexedDatasetsForCellTypeAggs {
   };
 }
 
-export function useIndexedDatasetsForCellType() {
-  const { cellTypes, trackingInfo } = useCellTypesDetailPageContext();
+export function useIndexedDatasetsForCellType({
+  cellTypes,
+  trackingInfo,
+}: {
+  cellTypes: string[];
+  trackingInfo?: { category: string; label: string };
+}) {
   const {
     data,
     isLoading: isLoadingScFind,
@@ -187,6 +192,11 @@ export function useIndexedDatasetsForCellType() {
     trackingInfo,
     ...rest,
   };
+}
+
+export function useIndexedDatasetsForCellTypePage() {
+  const { cellTypes, trackingInfo } = useCellTypesDetailPageContext();
+  return useIndexedDatasetsForCellType({ cellTypes, trackingInfo });
 }
 
 export function useBiomarkersTableData() {

@@ -12,7 +12,7 @@ import TableFooter from '@mui/material/TableFooter';
 import { formatCellTypeName } from 'js/api/scfind/utils';
 import { ChartData } from './types';
 import { useCellTypeDataContext } from './contexts';
-import { useCellTypesDetailPageContext } from '../CellTypesDetailPageContext';
+import { useOptionalCellTypesDetailPageContext } from '../CellTypesDetailPageContext';
 import { CellTypeCountWithPercentageAndOrgan } from './utils';
 
 interface TooltipTableProps {
@@ -99,7 +99,8 @@ function TooltipTable({ organ, cellTypes, cellTypeCounts }: TooltipTableProps) {
 function AxisLabelTooltip({ label }: { label: string }) {
   const { cellTypeCounts } = useCellTypeDataContext();
   const cellTypeCountsForOrgan = cellTypeCounts[label];
-  const { cellTypes } = useCellTypesDetailPageContext();
+  const context = useOptionalCellTypesDetailPageContext();
+  const { cellTypes } = context ?? { cellTypes: [] };
   const formattedCellTypes = cellTypes.map((type) => formatCellTypeName(type));
   return <TooltipTable organ={label} cellTypes={formattedCellTypes} cellTypeCounts={cellTypeCountsForOrgan} />;
 }
@@ -107,7 +108,8 @@ function AxisLabelTooltip({ label }: { label: string }) {
 export default function CellTypesDistributionChartTooltip({ tooltipData }: { tooltipData: TooltipData<ChartData> }) {
   const { bar, key: tooltipKey } = tooltipData;
   const { cellTypeCounts } = useCellTypeDataContext();
-  const { cellTypes } = useCellTypesDetailPageContext();
+  const context = useOptionalCellTypesDetailPageContext();
+  const { cellTypes } = context ?? { cellTypes: [] };
   if (!bar?.data) {
     return <AxisLabelTooltip label={String(tooltipKey)} />;
   }

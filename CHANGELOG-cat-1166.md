@@ -1,0 +1,1 @@
+- Update gene detail page to display relevant cell types and molecular data query results.

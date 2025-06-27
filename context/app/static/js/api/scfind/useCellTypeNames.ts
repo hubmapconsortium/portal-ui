@@ -3,7 +3,7 @@ import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
 import { useMemo } from 'react';
 import { scaleOrdinal } from '@visx/scale';
-import { createScFindKey } from './utils';
+import { createScFindKey, formatCellTypeName } from './utils';
 
 type CellTypeNamesKey = string;
 
@@ -18,7 +18,18 @@ export function createCellTypeNamesKey(scFindEndpoint: string): CellTypeNamesKey
 export default function useCellTypeNames() {
   const { scFindEndpoint } = useAppContext();
   const key = createCellTypeNamesKey(scFindEndpoint);
-  return useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
+  const { data, ...rest } = useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
+
+  const filteredData = useMemo(() => {
+    if (!data) {
+      return data;
+    }
+    // Filter out `other`
+    const filteredCellTypeNames = data.cellTypeNames.filter((name) => formatCellTypeName(name) !== 'other');
+    return { cellTypeNames: filteredCellTypeNames };
+  }, [data]);
+
+  return { data: filteredData, ...rest };
 }
 
 // Returns a map of cell type names to the organs that contain them

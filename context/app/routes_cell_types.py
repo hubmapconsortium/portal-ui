@@ -27,6 +27,14 @@ celltype_eval_url = f'{cells_url}/celltypeevaluation/'
 blueprint = make_blueprint(__name__)
 
 
+@blueprint.route('/cell-types')
+def cell_types_view():
+    return render_template(
+        'base-pages/react-content.html',
+        title='Cell Types',
+        flask_data=get_default_flask_data())
+
+
 @blueprint.route('/cell-types/<cl_id>')
 def cell_types_detail_view(cl_id):
     return render_template(

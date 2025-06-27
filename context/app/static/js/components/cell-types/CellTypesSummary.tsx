@@ -35,11 +35,10 @@ function DescriptionFallback() {
 }
 
 const relevantPages = [
-  // TODO: Uncomment when the cell types landing page is ready
-  // {
-  //   children: 'Cell Types',
-  //   link: '/cell-types',
-  // },
+  {
+    children: 'Cell Types',
+    link: '/cell-types',
+  },
   {
     children: 'Molecular & Cellular Data Query',
     link: '/cells',

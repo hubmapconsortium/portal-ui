@@ -44,6 +44,10 @@ const useUbkg = () => {
         if (!cellTypeId) {
           return null;
         }
+        if (cellTypeId.toUpperCase().startsWith('CL:') || cellTypeId.toUpperCase().startsWith('CL_')) {
+          const formattedId = cellTypeId.toUpperCase().replace('CL:', '').replace('CL_', '');
+          return `${ubkgEndpoint}/celltypes/${formattedId}`;
+        }
         return `${ubkgEndpoint}/celltypes/${cellTypeId.toUpperCase()}`;
       },
       get cellTypeList() {
@@ -279,6 +283,7 @@ export const useCellTypeOntologyDetail = (cellTypeId?: string) => {
       }),
     {
       revalidateOnFocus: false,
+      shouldRetryOnError: false,
     },
   );
   return { data: data?.[0], ...swr };
