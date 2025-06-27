@@ -1,33 +1,27 @@
 import React from 'react';
 
 import { DagProvenanceType } from 'js/components/types';
-import { CwlIcon, FlexOutboundLink, PrimaryTextDivider, StyledListItem } from './style';
+import { CwlIcon, FlexOutboundLink, StyledListItem } from './style';
 
 interface ProvAnalysisDetailsLinkProps {
   data: DagProvenanceType;
 }
 
-function ProvAnalysisDetailsLink({ data }: ProvAnalysisDetailsLinkProps) {
+function buildGithubURL(data: DagProvenanceType) {
   const trimmedOrigin = data.origin.replace(/\.git$/, '');
-  const githubUrl =
-    'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;
-  const cwlUrl = `https://view.commonwl.org/workflows/${githubUrl.replace(/^http(s?):\/\//i, '')}`;
+  return 'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;
+}
+
+function ProvAnalysisDetailsLink({ data }: ProvAnalysisDetailsLinkProps) {
+  const githubUrl = buildGithubURL(data);
   return (
     <StyledListItem>
-      <FlexOutboundLink href={githubUrl} variant="body1">
+      <FlexOutboundLink href={githubUrl}>
         {githubUrl} <CwlIcon />
       </FlexOutboundLink>
-      {'name' in data && (
-        <>
-          <PrimaryTextDivider orientation="vertical" />
-          <FlexOutboundLink href={cwlUrl} variant="body1">
-            Open in CWL Viewer
-            <CwlIcon />
-          </FlexOutboundLink>
-        </>
-      )}
     </StyledListItem>
   );
 }
 
+export { buildGithubURL };
 export default ProvAnalysisDetailsLink;

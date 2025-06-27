@@ -201,7 +201,7 @@ function AnalysisDetailsAccordion() {
 
   if (!dataset.ingest_metadata) {
     return (
-      <Subsection title="Analysis Details & Protocols" idTitleOverride="analysis" icon={<FactCheckRounded />}>
+      <Subsection title="Protocols & Workflow Details" idTitleOverride="analysis" icon={<FactCheckRounded />}>
         <SectionDescription subsection>
           Analysis details and protocols are not available for this dataset.
         </SectionDescription>
@@ -210,14 +210,18 @@ function AnalysisDetailsAccordion() {
   }
 
   const {
-    ingest_metadata: { dag_provenance_list },
+    ingest_metadata: { dag_provenance_list, workflow_description, workflow_version },
     protocol_url,
   } = dataset;
 
   return (
-    <Subsection title="Analysis Details & Protocols" idTitleOverride="analysis" icon={<FactCheckRounded />}>
-      <AnalysisDetails dagListData={dag_provenance_list} />
+    <Subsection title="Protocols & Workflow Details" idTitleOverride="analysis" icon={<FactCheckRounded />}>
       {Boolean(protocol_url) && <Protocol protocol_url={protocol_url} />}
+      <AnalysisDetails
+        dagListData={dag_provenance_list}
+        workflow_description={workflow_description}
+        workflow_version={workflow_version}
+      />
     </Subsection>
   );
 }
