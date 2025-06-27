@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import InfoIcon from '@mui/icons-material/Info';
 import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
+import VisibilityOffRoundedIcon from '@mui/icons-material/VisibilityOffRounded';
+import IconButton from '@mui/material/IconButton';
+import ContentCopyIcon from '@mui/icons-material/ContentCopyRounded';
 
 import { DagProvenanceType } from 'js/components/types';
 import ExpandableRowCell from 'js/shared-styles/tables/ExpandableRowCell';
@@ -15,6 +19,8 @@ import ExpandableRow from 'js/shared-styles/tables/ExpandableRow';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
 import OutboundLinkButton from 'js/shared-styles/Links/OutboundLinkButton';
 import { OutboundLink } from 'js/shared-styles/Links';
+import { useHandleCopyClick } from 'js/hooks/useCopyText';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 interface AnalysisDetails {
   dagListData: DagProvenanceType[];
@@ -35,9 +41,29 @@ interface Pipeline {
 }
 
 function WorkflowParameters({ input_parameters }: Required<Pick<Pipeline, 'input_parameters'>>) {
+  const copyText = useHandleCopyClick();
+
+  const copyParametersText = useCallback(() => {
+    const text = input_parameters.reduce<string>((acc, { parameter_name, value }) => {
+      const param = [parameter_name, value].join(' ');
+
+      return [acc, param].join('\n');
+    }, '');
+    copyText(text);
+  }, [input_parameters, copyText]);
+
   return (
     <Stack spacing={1} pl={4}>
-      <Typography variant="subtitle2">Input Parameters</Typography>
+      <Stack direction="row" spacing="1" alignItems="center">
+        <Typography variant="subtitle2">Input Parameters</Typography>
+        <Box>
+          <SecondaryBackgroundTooltip title="Copy input parameters to clipboard.">
+            <IconButton onClick={copyParametersText}>
+              <ContentCopyIcon color="primary" sx={{ fontSize: '1rem' }} />
+            </IconButton>
+          </SecondaryBackgroundTooltip>
+        </Box>
+      </Stack>
       <Stack spacing={1}>
         {input_parameters.map(({ parameter_name, value }) => (
           <Typography variant="parameters" key={parameter_name} color="secondary">
@@ -115,23 +141,51 @@ function WorkflowSteps({ steps }: { steps: Pipeline[] }) {
       </TableHead>
       <TableBody>
         {steps.map((pipeline, i) => (
-          <WorkflowStep pipeline={pipeline} i={i} key={pipeline.origin + pipeline.hash + pipeline.version} />
+          <WorkflowStep
+            pipeline={pipeline}
+            i={i}
+            key={pipeline.name + pipeline.origin + pipeline.hash + pipeline.version}
+          />
         ))}
       </TableBody>
     </Table>
   );
 }
 
+function dedupeSteps(steps: Pipeline[]) {
+  const stepMap = steps.reduce<Record<string, Pipeline>>((acc, curr) => {
+    const { name, hash, origin, version } = curr;
+
+    const key = [name, hash, origin, version].join();
+
+    if (!(key in acc)) {
+      acc[key] = curr;
+    }
+
+    return acc;
+  }, {});
+
+  return Object.values(stepMap);
+}
+
 function AnalysisDetails({ dagListData, workflow_description, workflow_version }: AnalysisDetails) {
+  const dedupedSteps = dedupeSteps(dagListData);
+
   return (
     <Stack spacing={1}>
       <Typography variant="subtitle2">Workflow (v{workflow_version})</Typography>
       <Typography>{workflow_description}</Typography>
+      <Box>
+        <Button variant="outlined">
+          <VisibilityOffRoundedIcon sx={{ marginRight: 1, fontSize: '1.125rem' }} />
+          Collapse Steps ({dedupedSteps.length})
+        </Button>
+      </Box>
       <Stack direction="row" alignItems="center" spacing={1}>
         <InfoIcon sx={{ fontSize: '1rem' }} color="primary" />
         <Typography>These are the steps executed in the workflow to produce the processed dataset.</Typography>
       </Stack>
-      <WorkflowSteps steps={dagListData} />
+      <WorkflowSteps steps={dedupedSteps} />
     </Stack>
   );
 }
