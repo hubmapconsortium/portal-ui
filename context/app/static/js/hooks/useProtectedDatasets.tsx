@@ -17,14 +17,14 @@ function useGetProtectedDatasets(ids: string[]) {
         must_not: [getTermClause('mapped_data_access_level.keyword', 'Public')],
       },
     },
-    _source: ['hubmap_id'],
+    _source: ['uuid'],
     size: ids.length,
   };
 
   const { searchHits } = useSearchHits(query) as { searchHits: DatasetAccessLevelHits };
 
   const protectedHubmapIds = searchHits
-    .map((hit) => hit._source?.hubmap_id)
+    .map((hit) => hit._source?.uuid)
     .filter((id): id is string => typeof id === 'string');
 
   return protectedHubmapIds;
