@@ -75,8 +75,8 @@ function useProtectedDatasetsForm({
   const { toastSuccessRemoveInaccessibleDatasets } = useWorkspaceToasts();
   // Inaccessible rows are those that the current user does not have access to in a workspace or bulk download.
   const inaccessibleRows = useGetInaccessibleDatasets(selectedRows);
-  // Protected rows are those that have a mapped data access level other than 'Public' (which any user might
-  // not have access to depending on their group permissions).
+  // Protected rows are those that have a mapped data access level other than 'Public' (which any user may or
+  // may not have access to depending on their group permissions).
   const protectedRows = useGetProtectedDatasets(selectedRows.size > 0 ? [...selectedRows] : []);
 
   const reportedInaccessibleRows = useRef(false);
