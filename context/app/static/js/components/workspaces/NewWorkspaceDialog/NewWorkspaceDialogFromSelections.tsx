@@ -5,7 +5,6 @@ import { useEventCallback } from '@mui/material/utils';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
-import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { trackEvent } from 'js/helpers/trackers';
@@ -57,7 +56,6 @@ function NewWorkspaceDialogFromSelections() {
         {...rest}
       >
         <Box>
-          <ErrorOrWarningMessages errorMessages={errorMessages} warningMessages={warningMessages} />
           <RemoveProtectedDatasetsFormField
             control={control}
             protectedHubmapIds={protectedHubmapIds}
