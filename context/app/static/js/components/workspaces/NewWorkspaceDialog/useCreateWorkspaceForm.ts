@@ -169,6 +169,11 @@ function useCreateWorkspaceForm({
     }
   }, [dialogIsOpen, trigger]);
 
+  const { errorMessages, warningMessages } = useWorkspacesProtectedDatasetsForm({
+    selectedRows: new Set(allDatasets),
+    deselectRows: (uuids) => removeDatasets(uuids),
+  });
+
   return {
     dialogIsOpen,
     setDialogIsOpen,
@@ -176,6 +181,8 @@ function useCreateWorkspaceForm({
     handleSubmit,
     control,
     errors,
+    errorMessages,
+    warningMessages,
     onSubmit,
     isSubmitting: isSubmitting || isSubmitSuccessful,
     inputValue,

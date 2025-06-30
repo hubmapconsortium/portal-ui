@@ -34,13 +34,6 @@ function buildIDPrefixQuery({ value, valuePrefix = '', uuidsToExclude = [] }: Bu
             },
           },
           {
-            term: {
-              mapped_data_access_level: {
-                value: 'public',
-              },
-            },
-          },
-          {
             bool: {
               must_not: [
                 {
