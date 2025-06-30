@@ -8,6 +8,8 @@ import { FlaskDataContext, AppContext } from 'js/components/Contexts';
 import GlobalStyles from 'js/components/globalStyles';
 import { ProtocolAPIContext } from 'js/components/detailPage/Protocol/ProtocolAPIContext';
 import { EntityStoreProvider } from 'js/stores/useEntityStore';
+import { OpenKeyNavStoreProvider, readOpenKeyNavCookie } from 'js/stores/useOpenKeyNavStore';
+
 import { InitialHashContextProvider } from 'js/hooks/useInitialHash';
 import theme from '../theme';
 import GlobalFonts from '../fonts';
@@ -69,11 +71,13 @@ export default function Providers({
           <AppContext.Provider value={appContext}>
             <FlaskDataContext.Provider value={flaskDataWithDefaults}>
               <EntityStoreProvider springs={springs} assayMetadata={flaskData?.entity ?? {}}>
+                <OpenKeyNavStoreProvider initialize={readOpenKeyNavCookie()}>
                 <ProtocolAPIContext.Provider value={protocolsContext}>
                   <CssBaseline />
                   <GlobalStyles />
                   {children}
                 </ProtocolAPIContext.Provider>
+                </OpenKeyNavStoreProvider>
               </EntityStoreProvider>
             </FlaskDataContext.Provider>
           </AppContext.Provider>

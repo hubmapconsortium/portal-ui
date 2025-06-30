@@ -96,6 +96,23 @@ declare module '@mui/material/styles' {
   export interface DefaultTheme extends Theme {}
 }
 
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    parameters: React.CSSProperties;
+  }
+
+  // allow configuration using `createTheme()`
+  interface TypographyVariantsOptions {
+    parameters?: React.CSSProperties;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    parameters: true;
+  }
+}
+
 declare module '@mui/material/SvgIcon' {
   // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
   export interface SvgIconPropsSizeOverrides {
@@ -260,6 +277,13 @@ const theme = createTheme({
       fontWeight: 500,
       fontSize: '0.875rem',
       textTransform: 'capitalize',
+    },
+    parameters: {
+      fontFamily: 'JetBrains Mono Variable, monospace',
+      fontSize: '0.825rem',
+      fontWeight: 400,
+      lineHeight: '150%',
+      letterSpacing: '0.026px',
     },
   },
   shape: {

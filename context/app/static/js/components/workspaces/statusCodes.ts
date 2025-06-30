@@ -1,12 +1,15 @@
 // Workspaces:
 
-export type WorkspaceStatus = 'active' | 'idle' | 'deleting' | 'error';
+export type WorkspaceStatus = 'active' | 'idle' | 'initializing' | 'deleting' | 'error';
 
 const workspaceStatuses: Record<WorkspaceStatus, { isDone: boolean }> = {
   active: {
     isDone: false,
   },
   idle: {
+    isDone: false,
+  },
+  initializing: {
     isDone: false,
   },
   deleting: {

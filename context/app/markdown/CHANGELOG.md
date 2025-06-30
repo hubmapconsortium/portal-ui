@@ -1,5 +1,59 @@
 # Changelog
 
+## v1.28.1 - 2025-06-27
+
+- Fix flipped 'up' and 'down' icons across the portal.
+
+
+
+## v1.28.0 - 2025-06-26
+
+Fix typo on Workspaces Sharing dialog.
+- Add support for new "initializing" workspace state.
+- Update gene detail page to display relevant cell types and molecular data query results.
+- List associated publications on dataset detail pages.
+- Update homepage news items as of June 2025.
+- Open OpenKeyNav commands description when OpenKeyNav is enabled.
+
+
+
+## v1.27.4 - 2025-06-13
+
+- Allow multiple workspaces to run concurrently.
+- Update eui import parameters to support 2.3 update.
+
+
+
+## v1.27.3 - 2025-06-11
+
+- Restore summary link to gene detail page table of contents.
+- Remove `other` cells from gene detail page.
+- Fix incorrect `biomarkers` link.
+
+
+
+## v1.27.2 - 2025-06-11
+
+- Fix bug where disabling OpenKeyNav did not have an effect.
+
+
+
+## v1.27.1 - 2025-06-10
+
+- Update gene detail page to display relevant cell types and molecular data query results.
+- Address bugs related to OpenKeyNav integration.
+- Updates portal-viz version to 0.4.7 to reflect support for visualizing zarr.zip files.
+
+
+
+## v1.27.0 - 2025-06-05
+
+- Add table of indexed cell types found in a given organ to organ pages.
+- Integrate OpenKeyNav accessibility tool.
+- Add the data products and scfind APIs to the service status page.
+
+
+
 ## v1.26.2 - 2025-05-29
 
 - Fix gene pathways effect causing molecular data queries to fail.

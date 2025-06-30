@@ -40,6 +40,7 @@ interface EntityTableProps<Doc extends Entity>
   onSelectAllChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSelectChange?: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
   reverseExpandIndicator?: boolean;
+  onExpand?: (id: string) => (isExpanded: boolean) => void;
 }
 
 const headerRowHeight = 60;
@@ -59,6 +60,7 @@ function EntityTable<Doc extends Entity>({
   onSelectAllChange,
   onSelectChange,
   reverseExpandIndicator,
+  onExpand,
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -153,6 +155,7 @@ function EntityTable<Doc extends Entity>({
                         collapseTooltip,
                         disabledTooltipTitle,
                         reverse: reverseExpandIndicator,
+                        onExpand: onExpand ? onExpand(hit?._source?.hubmap_id ?? hit._id) : undefined,
                       }
                     : {})}
                 >

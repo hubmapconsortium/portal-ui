@@ -5,22 +5,31 @@ import { createScFindKey } from './utils';
 
 export interface HyperQueryCellTypesParams {
   geneList: string | string[];
-  datasetName: string | string[];
-  includePrefix: boolean;
+  datasetName?: string | string[];
+  includePrefix?: boolean;
+}
+
+export interface GeneSignatureStats {
+  'adj-pval': number;
+  cell_hits: number;
+  cell_type: string;
+  pval: number;
+  total_cells: number;
 }
 
 interface CellTypeNamesResponse {
-  cellTypeNames: string[];
+  findGeneSignatures: GeneSignatureStats[];
 }
 
 type HyperQueryCellTypesKey = string;
 
 export function createCellTypeNamesKey(
   scFindEndpoint: string,
-  { geneList, includePrefix }: HyperQueryCellTypesParams,
+  { geneList, datasetName, includePrefix }: HyperQueryCellTypesParams,
 ): HyperQueryCellTypesKey {
   return createScFindKey(scFindEndpoint, 'hyperQueryCellTypes', {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+    dataset_name: Array.isArray(datasetName) ? datasetName.join(',') : datasetName,
     include_prefix: includePrefix ? 'true' : 'false',
   });
 }

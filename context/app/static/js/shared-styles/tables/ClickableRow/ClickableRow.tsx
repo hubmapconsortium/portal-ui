@@ -3,7 +3,6 @@ import { TableRowProps } from '@mui/material/TableRow';
 import { StyledRow } from './style';
 
 export interface ClickableRowProps extends TableRowProps {
-  onClick: () => void;
   disabled?: boolean;
   label: string;
 }

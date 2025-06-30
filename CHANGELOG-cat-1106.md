@@ -1,1 +1,0 @@
-- Add table of indexed cell types found in a given organ to organ pages.

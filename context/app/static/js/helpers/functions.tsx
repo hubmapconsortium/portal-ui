@@ -203,6 +203,38 @@ export function generateCommaList(list: string[]): string {
 }
 
 /**
+ * Given an array of elements, create an array with comma separations that includes
+ * 'and' as well as an oxford comma.
+ *   Ex: ['apples'] => ['apples']
+ *   Ex: ['apples', 'bananas'] => ['apples', ' and ', 'bananas']
+ *   Ex: ['apples', 'bananas', <div>grapes</div>] => ['apples', ', ', 'bananas', ' and ', '<div>grapes</div']
+ * @author Austen Money
+ * @param list an array of elements to be made into a comma-separated list.
+ * @returns a comma-separated list.
+ */
+export function generateElementCommaList(list: React.ReactNode[]): React.ReactNode[] {
+  const { length } = list;
+
+  if (length === 0) return [];
+  if (length === 1) return [list[0]];
+  if (length === 2) return [list[0], ' and ', list[1]];
+
+  const result: React.ReactNode[] = [];
+
+  for (let i = 0; i < length; i += 1) {
+    result.push(list[i]);
+
+    if (i === length - 2) {
+      result.push(', and ');
+    } else if (i < length - 2) {
+      result.push(', ');
+    }
+  }
+
+  return result;
+}
+
+/**
  * Given an array of strings, create a single comma-separated string that includes
  * 'and' as well as an oxford comma. All list items are wrapped in a <strong> tag.
  * @author Austen Money

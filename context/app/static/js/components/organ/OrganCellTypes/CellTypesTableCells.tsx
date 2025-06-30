@@ -26,10 +26,17 @@ export function CellTypeCell({ cellType }: CellTypeProps) {
   return <CellTypeLink cellType={cellType} />;
 }
 
-export function CLIDCell({ clid }: CLIDCellProps) {
+interface CLIDCellPropsWithTracking extends CLIDCellProps {
+  onClick?: () => void;
+}
+
+export function CLIDCell({ clid, onClick }: CLIDCellPropsWithTracking) {
   if (!clid) return <Skeleton variant="text" width={100} />;
   return (
-    <OutboundIconLink href={`https://www.ebi.ac.uk/ols4/search?q=${clid}&ontology=cl&exactMatch=true`}>
+    <OutboundIconLink
+      onClick={onClick}
+      href={`https://www.ebi.ac.uk/ols4/search?q=${clid}&ontology=cl&exactMatch=true`}
+    >
       {clid}
     </OutboundIconLink>
   );

@@ -11,10 +11,11 @@ import { type OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-
 import StackedBar from 'js/shared-styles/charts/StackedBar';
 import VerticalChartGridRowsGroup from 'js/shared-styles/charts/VerticalChartGridRowsGroup';
 
+import { BarStackProps } from '@visx/shape/lib/shapes/BarStack';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
 import { type TooltipData, tooltipHasBarData } from '../types';
 import TickComponent from '../TickComponent';
-import { TICK_LABEL_SIZE } from '../constants';
+import { AXIS_LABEL_SIZE, TICK_LABEL_SIZE } from '../constants';
 
 interface VerticalStackedBarChartProps<
   Datum,
@@ -43,6 +44,9 @@ interface VerticalStackedBarChartProps<
   y0?: Accessor<SeriesPoint<Datum>, ScaleInput<YAxisScale>>;
   getTickValues?: (yScale: YAxisScale) => number[];
   getAriaLabel?: (d: TooltipData<Datum>) => string;
+  order?: BarStackProps<Datum, YAxisKey, XAxisScale, YAxisScale>['order'];
+  valueAccessor?: (d: Datum, key: YAxisKey) => number;
+  yTickFormat?: (value: number) => string;
 }
 
 function VerticalStackedBarChart<
@@ -71,6 +75,9 @@ function VerticalStackedBarChart<
   y1,
   getTickValues,
   getAriaLabel,
+  order,
+  valueAccessor,
+  yTickFormat = (value) => value.toString(),
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
@@ -115,6 +122,8 @@ function VerticalStackedBarChart<
               color={colorScale}
               y1={y1}
               y0={y0}
+              order={order}
+              value={valueAccessor}
             >
               {(barStacks) => {
                 return barStacks.map((barStack) =>
@@ -141,6 +150,7 @@ function VerticalStackedBarChart<
               scale={yScale}
               label={yAxisLabel}
               stroke="black"
+              tickValues={getTickValues ? getTickValues(yScale) : undefined}
               tickLabelProps={() => ({
                 fill: 'black',
                 fontSize: 11,
@@ -152,7 +162,9 @@ function VerticalStackedBarChart<
                 color: 'black',
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',
+                dx: '-1em',
               }}
+              tickFormat={yTickFormat}
             />
             <AxisBottom
               hideTicks
@@ -167,10 +179,12 @@ function VerticalStackedBarChart<
                 fontSize: TICK_LABEL_SIZE,
                 textAnchor: 'end',
                 angle: -90,
+                fontWeight: 500,
+                fontFamily: 'Inter Variable',
               })}
               tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave })}
               labelProps={{
-                fontSize: 14,
+                fontSize: AXIS_LABEL_SIZE,
                 color: 'black',
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',

@@ -32,6 +32,8 @@ import { useEntitiesData } from 'js/hooks/useEntityData';
 import { hasMetadata } from 'js/helpers/metadata';
 import SnareSeq2Alert from 'js/components/detailPage/multi-assay/SnareSeq2Alert';
 import MultiAssayRelationship from 'js/components/detailPage/multi-assay/MultiAssayRelationship';
+import PublicationsSection from 'js/components/detailPage/PublicationsSection';
+import { useDatasetsPublications } from 'js/hooks/useDatasetsPublications';
 import { useProcessedDatasets, useProcessedDatasetsSections, useRedirectAlert } from './hooks';
 
 interface SummaryDataChildrenProps {
@@ -117,6 +119,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
 
   // Top level request for collections data to determine if there are any collections for any of the datasets
   const collectionsData = useDatasetsCollections([uuid, ...processedDatasets.map((ds) => ds._id)]);
+  const publicationsData = useDatasetsPublications([uuid, ...processedDatasets.map((ds) => ds._id)]);
 
   const shouldDisplaySection = {
     summary: true,
@@ -126,6 +129,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
     provenance: true,
     protocols: Boolean(protocol_url),
     collections: Boolean(collectionsData.length),
+    publications: Boolean(publicationsData.length),
     attribution: true,
   };
 
@@ -169,6 +173,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
           <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
           <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
+          <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>
             <ContributorsTable contributors={contributors} contacts={contacts} />
           </Attribution>

@@ -370,7 +370,7 @@ function WorkspacePageContent({ workspaceId }: WorkspacePageProps) {
         trackingInfo={{ category: WorkspacesEventCategories.WorkspaceDetailPage, label: workspace.name }}
       >
         <Stack gap={1} sx={{ marginBottom: 5 }}>
-          <WorkspaceSessionWarning workspaces={[workspace]} />
+          <WorkspaceSessionWarning workspace={workspace} />
           <Summary
             workspace={workspace}
             creatorInfo={creatorInfo}

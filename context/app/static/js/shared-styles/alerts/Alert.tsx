@@ -9,7 +9,6 @@ import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 function OutlinedAlert(props: AlertProps) {
   return (
     <Alert
-      {...props}
       variant="outlined"
       iconMapping={{
         error: <ErrorRoundedIcon />,
@@ -17,6 +16,7 @@ function OutlinedAlert(props: AlertProps) {
         success: <CheckCircleRoundedIcon />,
         warning: <WarningRoundedIcon />,
       }}
+      {...props}
     />
   );
 }
@@ -27,17 +27,18 @@ interface StyledAlertProps extends AlertProps {
   $width?: string;
 }
 
-// TODO: Figure out why `sx` doesn't work with this component. https://hms-dbmi.atlassian.net/browse/CAT-650
-const StyledAlert = styled(OutlinedAlert)<StyledAlertProps>(({ theme, $marginBottom, $marginTop, $width }) => ({
-  '> &:not(svg)': {
-    color: theme.palette.text.primary,
-  },
-  '& .MuiAlert-action': {
-    padding: 0,
-  },
-  marginBottom: $marginBottom ?? 0,
-  marginTop: $marginTop ?? 0,
-  width: $width ?? 'auto',
-})) as React.ComponentType<StyledAlertProps>;
+const StyledAlert = styled(OutlinedAlert, { shouldForwardProp: () => true })<StyledAlertProps>(
+  ({ theme, $marginBottom, $marginTop, $width }) => ({
+    '> &:not(svg)': {
+      color: theme.palette.text.primary,
+    },
+    '& .MuiAlert-action': {
+      padding: 0,
+    },
+    marginBottom: $marginBottom ?? 0,
+    marginTop: $marginTop ?? 0,
+    width: $width ?? 'auto',
+  }),
+) as React.ComponentType<StyledAlertProps>;
 
 export { StyledAlert as Alert };

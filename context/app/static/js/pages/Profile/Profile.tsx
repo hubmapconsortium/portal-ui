@@ -2,27 +2,44 @@ import React from 'react';
 
 import { useAppContext } from 'js/components/Contexts';
 import DetailLayout from 'js/components/detailPage/DetailLayout';
-import { MyLists, MyWorkspaces, ProfileSummary } from 'js/components/profile';
-import LoginAlert from 'js/shared-styles/alerts/LoginAlert';
+import {
+  MyLists,
+  MyWorkspaces,
+  MyPreferences,
+  ProfileSummary,
+  ProfileSummaryUnauthenticated,
+} from 'js/components/profile';
 
-const shouldDisplaySection = {
+const shouldDisplaySectionAuthenticated = {
   summary: true,
   'my-lists': true,
-  workspaces: true,
+  'my-workspaces': true,
+  'my-preferences': true,
+};
+
+const shouldDisplaySectionUnauthenticated = {
+  summary: true,
+  'my-preferences': true,
 };
 
 function ProfilePage() {
   const { isAuthenticated } = useAppContext();
 
   if (!isAuthenticated) {
-    return <LoginAlert featureName="profile pages" />;
+    return (
+      <DetailLayout sections={shouldDisplaySectionUnauthenticated}>
+        <ProfileSummaryUnauthenticated />
+        <MyPreferences />
+      </DetailLayout>
+    );
   }
 
   return (
-    <DetailLayout sections={shouldDisplaySection}>
+    <DetailLayout sections={shouldDisplaySectionAuthenticated}>
       <ProfileSummary />
       <MyLists />
       <MyWorkspaces />
+      <MyPreferences />
     </DetailLayout>
   );
 }

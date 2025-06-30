@@ -5,7 +5,8 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 import hasKey from 'js/helpers/hasKey';
 import { capitalizeString } from 'js/helpers/functions';
 
-import { useGeneOntology } from '../hooks';
+import { trackEvent } from 'js/helpers/trackers';
+import { useGeneOntology, useGenePageContext } from '../hooks';
 import { ReferenceList } from './styles';
 
 // Map reference sources to display names
@@ -25,6 +26,15 @@ const referenceMap = new Proxy<Record<string, string>>(
 
 function ReferenceListContents() {
   const { data } = useGeneOntology();
+  const { geneSymbolUpper } = useGenePageContext();
+
+  const trackReferenceLinkClick = (source: string) => () => {
+    trackEvent({
+      category: 'Gene Detail Page',
+      action: 'Summary / Select Known References',
+      label: `${data?.approved_symbol ?? geneSymbolUpper} ${source}`,
+    });
+  };
   if (!data) {
     return (
       <>
@@ -34,11 +44,14 @@ function ReferenceListContents() {
       </>
     );
   }
+
   return (
     <>
       {data.references.map(({ url, source }) => (
         <li key={source}>
-          <OutboundIconLink href={url}>{referenceMap[source]}</OutboundIconLink>
+          <OutboundIconLink onClick={trackReferenceLinkClick(referenceMap[source])} href={url}>
+            {referenceMap[source]}
+          </OutboundIconLink>
         </li>
       ))}
     </>

@@ -1,74 +1,76 @@
-import React, { Fragment } from 'react';
+import React, { useCallback } from 'react';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import Description from 'js/shared-styles/sections/Description';
-import { useTabs } from 'js/shared-styles/tabs';
-import { StyledTableContainer } from 'js/shared-styles/tables';
-import { Tabs, Tab, TabPanel } from 'js/shared-styles/tables/TableTabs';
-import TableBody from '@mui/material/TableBody';
-import Table from '@mui/material/Table';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import { format } from 'date-fns/format';
-import { InternalLink } from 'js/shared-styles/Links';
-import Paper from '@mui/material/Paper';
-import Stack from '@mui/material/Stack';
+import Box from '@mui/material/Box';
+import Button from '@mui/material/Button';
+import SCFindLink from 'js/shared-styles/Links/SCFindLink';
+import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
+import { capitalize } from '@mui/material/utils';
+import { trackEvent } from 'js/helpers/trackers';
 import { CollapsibleDetailPageSection } from '../detailPage/DetailPageSection';
-import { useCellTypeDetails } from './hooks';
+import MolecularDataQueryFormProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormProvider';
+import MolecularDataQueryFormTrackingProvider from '../cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
+import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
+import { SCFindCellTypeQueryResults } from '../cells/SCFindResults';
 
-export default function CellTypesEntitiesTables() {
-  const { datasets, samples, organs } = useCellTypeDetails();
+function CellTypesEntitiesTables() {
+  const { cellTypes, name, trackingInfo } = useCellTypesDetailPageContext();
+  const formattedTitle = name
+    ? `Datasets Containing ${name
+        .split(' ')
+        .map((word) => capitalize(word))
+        .join(' ')}`
+    : 'Datasets';
 
-  const { openTabIndex, handleTabChange } = useTabs();
+  const trackExploreWithMolecularAndCellularQueryTool = useCallback(() => {
+    trackEvent({
+      ...trackingInfo,
+      action: 'Datasets / Select "Explore with Molecular and Cellular Query" button',
+    });
+  }, [trackingInfo]);
+
   return (
-    <CollapsibleDetailPageSection title="Organs" id="organs">
-      <Description>
-        This is the list of organs and its associated data that is dependent on the data available within HuBMAP. To
-        filter the list of data in the table below by organ, select organ(s) from the list below. Multiple organs can be
-        selected.
+    <CollapsibleDetailPageSection title={formattedTitle} id="datasets" trackingInfo={trackingInfo}>
+      <Description
+        belowTheFold={
+          <Box mt={2}>
+            <Button
+              href="/cells"
+              variant="contained"
+              color="primary"
+              onClick={trackExploreWithMolecularAndCellularQueryTool}
+            >
+              Explore with Molecular and Cellular Query Tool
+            </Button>
+          </Box>
+        }
+      >
+        These are datasets that contain this cell type as identified by Azimuth and indexed by the <SCFindLink /> with
+        uniformly processed HuBMAP RNAseq datasets that contain cell type annotations. The datasets overview plot
+        displays an overview of the datasets metadata compared to either the indexed datasets or all the HuBMAP datasets
+        available. The table is available for download in TSV format for further analysis.
       </Description>
-      <Stack direction="row" spacing={2} useFlexGap>
-        {organs?.map(({ organ }) => organ).join(',')}
-      </Stack>
-      <Tabs value={openTabIndex} onChange={handleTabChange}>
-        <Tab index={0} label={`Samples (${samples?.length ?? 0})`} />
-        <Tab index={1} label={`Datasets (${datasets?.length ?? 0})`} />
-      </Tabs>
-      <TabPanel index={0} value={openTabIndex}>
-        <StyledTableContainer component={Paper}>
-          <Table stickyHeader>
-            <TableHead>
-              <TableRow>
-                <TableCell>HuBMAP ID</TableCell>
-                <TableCell>Organ</TableCell>
-                <TableCell>Sample Category</TableCell>
-                <TableCell>Last Modified</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {samples?.map((sample) => (
-                <TableRow key={sample.hubmap_id}>
-                  <TableCell>
-                    <InternalLink href={`/browse/${sample.hubmap_id}`}>{sample.hubmap_id}</InternalLink>
-                  </TableCell>
-                  <TableCell>{sample.organ}</TableCell>
-                  <TableCell>{sample.sample_category}</TableCell>
-                  <TableCell>{format(sample.last_modified_timestamp, 'yyyy-MM-dd')}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </StyledTableContainer>
-      </TabPanel>
-      <TabPanel index={1} value={openTabIndex}>
-        <StyledTableContainer component={Paper}>
-          {datasets?.map((dataset, idx) => (
-            <Fragment key={dataset}>
-              <InternalLink href={`/browse/dataset/${dataset}`}>{dataset}</InternalLink>
-              {idx !== datasets.length - 1 && <br />}
-            </Fragment>
-          ))}
-        </StyledTableContainer>
-      </TabPanel>
+      <Box py={1} />
+      <MolecularDataQueryFormTrackingProvider category="Cell Type Detail Page">
+        <MolecularDataQueryFormProvider
+          initialValues={{
+            queryType: 'cell-type',
+            queryMethod: 'scFind',
+            cellTypes: cellTypes.map((cellType) => ({
+              full: cellType,
+              pre: '',
+              match: cellType,
+              post: '',
+            })),
+          }}
+        >
+          <SelectableTableProvider tableLabel={`Datasets with ${name} - scFind Results`}>
+            <SCFindCellTypeQueryResults />
+          </SelectableTableProvider>
+        </MolecularDataQueryFormProvider>
+      </MolecularDataQueryFormTrackingProvider>
     </CollapsibleDetailPageSection>
   );
 }
+
+export default withShouldDisplay(CellTypesEntitiesTables);

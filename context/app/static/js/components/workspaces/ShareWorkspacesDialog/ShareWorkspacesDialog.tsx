@@ -58,7 +58,7 @@ export default function ShareWorkspacesDialog({ handleClose, selectedWorkspaceId
         necessary workspace permissions will appear in the list. If someone lacks these permissions, they must contact
         the <ContactUsLink>HuBMAP help desk</ContactUsLink> for assistance.
       </Typography>,
-      'You can search for recipients by first name, last name, or email address. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace at it exists at the time of sharing. When sharing multiple workspaces or sharing to multiple recipients, each invitation is sent separately.',
+      'You can search for recipients by first name, last name, or email address. This is not a synchronous sharing feature, so recipients will receive a copy of the workspace as it exists at the time of sharing. When sharing multiple workspaces or sharing to multiple recipients, each invitation is sent separately.',
     ],
     [selectedWorkspaceNames],
   );
