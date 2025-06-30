@@ -144,6 +144,10 @@ function WorkflowStep({
   );
 }
 
+function createPipelineKey({ name, hash, origin, version }: Pipeline) {
+  return [name, hash, origin, version].join();
+}
+
 const cols = ['Step', 'Tool', 'Origin Link', 'Git Commit', 'Documentation Link', null];
 
 function WorkflowSteps({
@@ -172,7 +176,12 @@ function WorkflowSteps({
               pipeline={pipeline}
               i={i}
               setRowIsExpanded={setRowIsExpanded}
-              key={pipeline.name + pipeline.origin + pipeline.hash + pipeline.version}
+              key={createPipelineKey({
+                name: pipeline.name,
+                origin: pipeline.origin,
+                hash: pipeline.hash,
+                version: pipeline.version,
+              })}
             />
           ))}
         </TableBody>
@@ -185,7 +194,7 @@ function dedupeSteps(steps: Pipeline[]) {
   const stepMap = steps.reduce<Record<string, Pipeline>>((acc, curr) => {
     const { name, hash, origin, version } = curr;
 
-    const key = [name, hash, origin, version].join();
+    const key = createPipelineKey({ name, hash, origin, version });
 
     if (!(key in acc)) {
       acc[key] = curr;
