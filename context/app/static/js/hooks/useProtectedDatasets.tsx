@@ -108,6 +108,7 @@ function useProtectedDatasetsForm({
     warningMessages,
     protectedHubmapIds,
     removeInaccessibleDatasets,
+    inaccessibleRows,
     protectedRows,
     selectedRows,
   };

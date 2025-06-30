@@ -100,7 +100,7 @@ function SelectWorkspaceStep({
 function AddDatasetsStep({
   control,
   protectedHubmapIds,
-  protectedRows,
+  inaccessibleRows,
   removeInaccessibleDatasets,
   datasetsErrorMessages,
   datasetsWarningMessages,
@@ -109,7 +109,7 @@ function AddDatasetsStep({
   ReturnType<typeof useAddDatasetsFromSearchDialog>,
   | 'control'
   | 'protectedHubmapIds'
-  | 'protectedRows'
+  | 'inaccessibleRows'
   | 'removeInaccessibleDatasets'
   | 'datasetsErrorMessages'
   | 'datasetsWarningMessages'
@@ -133,7 +133,7 @@ function AddDatasetsStep({
         control={control}
         protectedHubmapIds={protectedHubmapIds}
         removeInaccessibleDatasets={removeInaccessibleDatasets}
-        protectedRows={protectedRows}
+        protectedRows={inaccessibleRows}
       />
       <AddDatasetsTable {...rest} />
     </Stack>
