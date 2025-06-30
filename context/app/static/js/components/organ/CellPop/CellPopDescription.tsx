@@ -39,9 +39,10 @@ export default function CellPopDescription({ organ }: { organ: string }) {
         </LabelledSectionText>,
       ]}
     >
-      The cell population plot includes all {organ.toLowerCase()} datasets that contain cell type annotations. Cell type
-      annotations are from <OutboundIconLink href="https://azimuth.hubmapconsortium.org/">Azimuth</OutboundIconLink>.
-      Key features are highlighted below and a tutorial is available.
+      The cell population plot includes all RNAseq {organ.toLowerCase()} datasets that contain cell type annotations.
+      Cell type annotations are from{' '}
+      <OutboundIconLink href="https://azimuth.hubmapconsortium.org/">Azimuth</OutboundIconLink>. Key features are
+      highlighted below and a tutorial is available.
     </SectionDescription>
   );
 }
