@@ -23,7 +23,7 @@ import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink'
 //   );
 // }
 
-export default function CellPopDescription() {
+export default function CellPopDescription({ organ }: { organ: string }) {
   return (
     <SectionDescription
       addendum={[
@@ -39,7 +39,8 @@ export default function CellPopDescription() {
         </LabelledSectionText>,
       ]}
     >
-      This interactive heatmap visualizes cell populations in datasets from this organ. Cell type annotations are from{' '}
+      The cell population plot includes all RNAseq {organ.toLowerCase()} datasets that contain cell type annotations.
+      Cell type annotations are from{' '}
       <OutboundIconLink href="https://azimuth.hubmapconsortium.org/">Azimuth</OutboundIconLink>. Key features are
       highlighted below and a tutorial is available.
     </SectionDescription>
