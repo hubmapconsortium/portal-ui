@@ -1,0 +1,1 @@
+- Allow users to generate bulk download manifests for the HuBMAP CLT which include protected datasets.

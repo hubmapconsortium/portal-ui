@@ -11,10 +11,9 @@ import { trackEvent } from 'js/helpers/trackers';
 interface BulkDownloadButtonProps extends ButtonProps {
   tooltip: string;
   uuids: Set<string>;
-  deselectRows?: (uuids: string[]) => void;
   trackingInfo?: EventInfo;
 }
-function BulkDownloadButton({ uuids, deselectRows, disabled, trackingInfo, ...rest }: BulkDownloadButtonProps) {
+function BulkDownloadButton({ uuids, disabled, trackingInfo, ...rest }: BulkDownloadButtonProps) {
   const { openDialog, isOpen } = useBulkDownloadDialog();
 
   return (
@@ -31,7 +30,7 @@ function BulkDownloadButton({ uuids, deselectRows, disabled, trackingInfo, ...re
       >
         <SvgIcon color={disabled ? 'disabled' : 'primary'} component={Download} />
       </DownloadButton>
-      {isOpen && <BulkDownloadDialog deselectRows={deselectRows} />}
+      {isOpen && <BulkDownloadDialog />}
     </>
   );
 }
