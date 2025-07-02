@@ -49,6 +49,7 @@ function DownloadDescription() {
 interface ProtectedDatasetsSectionProps {
   control: Control<BulkDownloadFormTypes>;
   errorMessages: string[];
+  warningMessages: string[];
   protectedHubmapIds: string;
   protectedRows: string[];
   removeInaccessibleDatasets: () => void;
@@ -56,17 +57,18 @@ interface ProtectedDatasetsSectionProps {
 function ProtectedDatasetsSection({
   control,
   errorMessages,
+  warningMessages,
   protectedHubmapIds,
   protectedRows,
   removeInaccessibleDatasets,
 }: ProtectedDatasetsSectionProps) {
-  if (errorMessages.length === 0) {
+  if (errorMessages.length === 0 && warningMessages.length === 0) {
     return null;
   }
 
   return (
     <Stack paddingY={1}>
-      <ErrorOrWarningMessages errorMessages={errorMessages} />
+      <ErrorOrWarningMessages warningMessages={warningMessages} errorMessages={errorMessages} />
       <RemoveProtectedDatasetsFormField
         control={control}
         protectedHubmapIds={protectedHubmapIds}
@@ -105,6 +107,7 @@ interface DownloadOptionsSectionProps {
   }[];
   isLoading: boolean;
   errorMessages: string[];
+  warningMessages: string[];
   protectedHubmapIds: string;
   protectedRows: string[];
   removeInaccessibleDatasets: () => void;
@@ -114,6 +117,7 @@ function DownloadOptionsSection({
   downloadOptions,
   isLoading,
   errorMessages,
+  warningMessages,
   protectedHubmapIds,
   protectedRows,
   removeInaccessibleDatasets,
@@ -142,6 +146,7 @@ function DownloadOptionsSection({
         <ProtectedDatasetsSection
           control={control}
           errorMessages={errorMessages}
+          warningMessages={warningMessages}
           protectedHubmapIds={protectedHubmapIds}
           protectedRows={protectedRows}
           removeInaccessibleDatasets={removeInaccessibleDatasets}

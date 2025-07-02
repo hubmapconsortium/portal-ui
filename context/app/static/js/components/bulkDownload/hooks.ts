@@ -13,6 +13,10 @@ import { createDownloadUrl } from 'js/helpers/functions';
 import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
 import { trackEvent } from 'js/helpers/trackers';
 import { getIDsQuery } from 'js/helpers/queries';
+import {
+  inaccessibleDatasetsErrorMessage,
+  protectedDatasetsWarningMessage,
+} from 'js/components/bulkDownload/bulkDownloadDatasetMessaging';
 
 const schema = z
   .object({
@@ -97,10 +101,8 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   const protectedDatasetsFields = useProtectedDatasetsForm({
     selectedRows: new Set(uuids),
     deselectRows: removeUuidsOrRows,
-    protectedDatasetsWarningMessage: (protectedDatasets) =>
-      `You have selected ${protectedDatasets.length} protected datasets.`,
-    inaccessibleDatasetsErrorMessage: (protectedDatasets) =>
-      `You have selected ${protectedDatasets.length} protected datasets.`,
+    protectedDatasetsWarningMessage,
+    inaccessibleDatasetsErrorMessage,
     trackEventHelper: (numProtectedDatasets) => {
       trackEvent({
         category: 'Bulk Download',
