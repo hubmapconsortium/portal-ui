@@ -50,7 +50,7 @@ interface ProtectedDatasetsSectionProps {
   control: Control<BulkDownloadFormTypes>;
   errorMessages: string[];
   warningMessages: string[];
-  protectedHubmapIds: string;
+  inaccessibleHubmapIds: string[];
   inaccessibleRows: string[];
   removeInaccessibleDatasets: () => void;
 }
@@ -58,7 +58,7 @@ function ProtectedDatasetsSection({
   control,
   errorMessages,
   warningMessages,
-  protectedHubmapIds,
+  inaccessibleHubmapIds,
   inaccessibleRows,
   removeInaccessibleDatasets,
 }: ProtectedDatasetsSectionProps) {
@@ -71,7 +71,7 @@ function ProtectedDatasetsSection({
       <ErrorOrWarningMessages warningMessages={warningMessages} errorMessages={errorMessages} />
       <RemoveProtectedDatasetsFormField
         control={control}
-        protectedHubmapIds={protectedHubmapIds}
+        inaccessibleHubmapIds={inaccessibleHubmapIds}
         removeInaccessibleDatasets={removeInaccessibleDatasets}
         inaccessibleRows={inaccessibleRows}
       />
@@ -108,7 +108,7 @@ interface DownloadOptionsSectionProps {
   isLoading: boolean;
   errorMessages: string[];
   warningMessages: string[];
-  protectedHubmapIds: string;
+  inaccessibleHubmapIds: string[];
   inaccessibleRows: string[];
   removeInaccessibleDatasets: () => void;
 }
@@ -118,7 +118,7 @@ function DownloadOptionsSection({
   isLoading,
   errorMessages,
   warningMessages,
-  protectedHubmapIds,
+  inaccessibleHubmapIds,
   inaccessibleRows,
   removeInaccessibleDatasets,
 }: DownloadOptionsSectionProps) {
@@ -147,7 +147,7 @@ function DownloadOptionsSection({
           control={control}
           errorMessages={errorMessages}
           warningMessages={warningMessages}
-          protectedHubmapIds={protectedHubmapIds}
+          inaccessibleHubmapIds={inaccessibleHubmapIds}
           inaccessibleRows={inaccessibleRows}
           removeInaccessibleDatasets={removeInaccessibleDatasets}
         />

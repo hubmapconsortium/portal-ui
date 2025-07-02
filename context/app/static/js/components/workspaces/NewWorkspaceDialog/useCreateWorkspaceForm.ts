@@ -33,7 +33,7 @@ export interface FormWithTemplates {
 interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
   'workspace-description': string;
-  'protected-datasets': string;
+  'protected-datasets': string[];
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
   datasets: string[];
@@ -45,7 +45,7 @@ interface UseCreateWorkspaceTypes {
   defaultTemplate?: string;
   defaultJobType?: string;
   defaultResourceOptions?: Partial<WorkspaceResourceOptions>;
-  initialProtectedDatasets?: string;
+  initialProtectedDatasets?: string[];
   initialSelectedDatasets?: string[];
 }
 
@@ -68,7 +68,7 @@ function useCreateWorkspaceForm({
   defaultTemplate = DEFAULT_PYTHON_TEMPLATE_KEY,
   defaultJobType = DEFAULT_JOB_TYPE,
   defaultResourceOptions = {},
-  initialProtectedDatasets,
+  initialProtectedDatasets = [],
   initialSelectedDatasets = [],
 }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -76,7 +76,7 @@ function useCreateWorkspaceForm({
 
   const { setDialogType } = useLaunchWorkspaceStore();
   const checkedWorkspaceName = defaultName ?? '';
-  const checkedProtectedDatasets = initialProtectedDatasets ?? '';
+  const checkedProtectedDatasets = initialProtectedDatasets ?? [];
 
   const initialResourceOptions = {
     num_cpus: DEFAULT_NUM_CPUS,
@@ -152,7 +152,7 @@ function useCreateWorkspaceForm({
   }
 
   useEffect(() => {
-    if (initialProtectedDatasets && initialProtectedDatasets !== '') {
+    if (initialProtectedDatasets && initialProtectedDatasets.length !== 0) {
       setValue('protected-datasets', initialProtectedDatasets);
     }
     // Necessary to update dialog state between different processed datasets on detail pages

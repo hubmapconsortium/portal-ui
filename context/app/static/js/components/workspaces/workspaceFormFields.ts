@@ -11,7 +11,7 @@ const workspaceDescriptionField = {
   'workspace-description': z.string(),
 };
 
-const protectedDatasetsField = { 'protected-datasets': z.string() };
+const protectedDatasetsField = { 'protected-datasets': z.array(z.string()) };
 
 const templatesField = {
   templates: z

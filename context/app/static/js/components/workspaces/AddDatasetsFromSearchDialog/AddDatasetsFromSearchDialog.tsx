@@ -99,7 +99,7 @@ function SelectWorkspaceStep({
 
 function AddDatasetsStep({
   control,
-  protectedHubmapIds,
+  inaccessibleHubmapIds,
   inaccessibleRows,
   removeInaccessibleDatasets,
   datasetsErrorMessages,
@@ -108,7 +108,7 @@ function AddDatasetsStep({
 }: Pick<
   ReturnType<typeof useAddDatasetsFromSearchDialog>,
   | 'control'
-  | 'protectedHubmapIds'
+  | 'inaccessibleHubmapIds'
   | 'inaccessibleRows'
   | 'removeInaccessibleDatasets'
   | 'datasetsErrorMessages'
@@ -131,7 +131,7 @@ function AddDatasetsStep({
       <ErrorOrWarningMessages errorMessages={datasetsErrorMessages} warningMessages={datasetsWarningMessages} />
       <RemoveProtectedDatasetsFormField
         control={control}
-        protectedHubmapIds={protectedHubmapIds}
+        inaccessibleHubmapIds={inaccessibleHubmapIds}
         removeInaccessibleDatasets={removeInaccessibleDatasets}
         inaccessibleRows={inaccessibleRows}
       />

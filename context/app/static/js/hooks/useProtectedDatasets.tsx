@@ -4,7 +4,6 @@ import { Dataset } from 'js/components/types';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { getIDsQuery, getTermClause } from 'js/helpers/queries';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { useAppContext } from 'js/components/Contexts';
 import useHubmapIds from 'js/hooks/useHubmapIds';
 
 export type DatasetAccessLevelHits = SearchHit<Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>>[];
@@ -17,31 +16,30 @@ function useGetProtectedDatasets(ids: string[]) {
         must_not: [getTermClause('mapped_data_access_level.keyword', 'Public')],
       },
     },
-    _source: ['uuid'],
+    _source: ['uuid', 'hubmap_id'],
     size: ids.length,
   };
 
   const { searchHits } = useSearchHits(query) as { searchHits: DatasetAccessLevelHits };
 
   const protectedHubmapIds = searchHits
-    .map((hit) => hit._source?.uuid)
+    .map((hit) => hit._source?.hubmap_id)
     .filter((id): id is string => typeof id === 'string');
 
-  return protectedHubmapIds;
+  const protectedRows = searchHits
+    .map((hit) => hit._source?.uuid)
+    .filter((uuid): uuid is string => typeof uuid === 'string');
+
+  return { protectedHubmapIds, protectedRows };
 }
 
 /**
- * Returns true if the user can access the given dataset in a workspace, false if they cannot.
+ * Returns true if the user can access the given dataset for workspaces and bulk data downloads, false if they cannot.
  * @param datasetUUID The UUID of the dataset to check access for
  */
 function useCheckDatasetAccess() {
-  const { isWorkspacesUser } = useAppContext();
-
-  // TODO: update this once workspaces API makes access checks available
-  const checkDatasetAccess = useCallback(
-    (datasetUUID: string) => isWorkspacesUser && datasetUUID === '',
-    [isWorkspacesUser],
-  );
+  // TODO: this logic is a placeholder. Update this once workspaces API makes access checks available.
+  const checkDatasetAccess = (datasetUUID: string) => datasetUUID !== '';
 
   return checkDatasetAccess;
 }
@@ -77,26 +75,24 @@ function useProtectedDatasetsForm({
   const inaccessibleRows = useGetInaccessibleDatasets(selectedRows);
   // Protected rows are those that have a mapped data access level other than 'Public' (which any user may or
   // may not have access to depending on their group permissions).
-  const protectedRows = useGetProtectedDatasets(selectedRows.size > 0 ? [...selectedRows] : []);
+  const { protectedHubmapIds, protectedRows } = useGetProtectedDatasets(selectedRows.size > 0 ? [...selectedRows] : []);
+  const { hubmapIds: inaccessibleHubmapIds } = useHubmapIds(inaccessibleRows);
 
   const reportedInaccessibleRows = useRef(false);
   const errorMessages = [];
   const warningMessages = [];
 
-  if (inaccessibleRows.length > 0) {
-    errorMessages.push(inaccessibleDatasetsErrorMessage(inaccessibleRows));
+  if (inaccessibleHubmapIds.length > 0) {
+    errorMessages.push(inaccessibleDatasetsErrorMessage(inaccessibleHubmapIds));
     if (!reportedInaccessibleRows.current) {
       reportedInaccessibleRows.current = true;
-      trackEventHelper(protectedRows.length);
+      trackEventHelper(inaccessibleHubmapIds.length);
     }
   }
 
   if (protectedRows.length > 0) {
-    warningMessages.push(protectedDatasetsWarningMessage(protectedRows));
+    warningMessages.push(protectedDatasetsWarningMessage(protectedHubmapIds));
   }
-
-  const { hubmapIds } = useHubmapIds(inaccessibleRows);
-  const protectedHubmapIds = hubmapIds.join(', ');
 
   const removeInaccessibleDatasets = useCallback(() => {
     deselectRows?.(inaccessibleRows);
@@ -106,7 +102,7 @@ function useProtectedDatasetsForm({
   return {
     errorMessages,
     warningMessages,
-    protectedHubmapIds,
+    inaccessibleHubmapIds,
     removeInaccessibleDatasets,
     inaccessibleRows,
     protectedRows,
