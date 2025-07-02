@@ -65,7 +65,7 @@ function NewWorkspaceDialogFromSelections() {
               removeInaccessibleDatasets();
               removeDatasets(inaccessibleRows);
             }}
-            protectedRows={inaccessibleRows}
+            inaccessibleRows={inaccessibleRows}
             {...restWorkspaceDatasets}
           />
         </Box>

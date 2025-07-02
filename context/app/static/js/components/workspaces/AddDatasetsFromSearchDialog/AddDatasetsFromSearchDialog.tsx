@@ -133,7 +133,7 @@ function AddDatasetsStep({
         control={control}
         protectedHubmapIds={protectedHubmapIds}
         removeInaccessibleDatasets={removeInaccessibleDatasets}
-        protectedRows={inaccessibleRows}
+        inaccessibleRows={inaccessibleRows}
       />
       <AddDatasetsTable {...rest} />
     </Stack>
