@@ -152,7 +152,7 @@ function useAddDatasetsFromSearchDialog() {
   // react-hook-form's defaultValues are cached and must be set upon open. https://react-hook-form.com/docs/useform#defaultValues
   useEffect(() => {
     setValue('datasets', datasetsFromSearch);
-  }, [datasetsFromSearch, setValue, restrictedHubmapIds, isOpen]);
+  }, [datasetsFromSearch, setValue, isOpen]);
 
   const selectWorkspace = useCallback(
     (workspaceId: number) => {

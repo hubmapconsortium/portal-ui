@@ -9,9 +9,9 @@ const errorHelper = {
 
 const warningHelper = {
   protectedDataset: (protectedHubmapId: string) =>
-    `You have selected a protected dataset (${protectedHubmapId}). Access to this dataset depends on your user permissions. If you do not have access, it will not be downloaded correctly from the provided manifest.`,
+    `You have selected a protected dataset (${protectedHubmapId}). Access to this dataset depends on your user permissions. If you do not have access, it cannot be downloaded correctly using the provided manifest.`,
   protectedDatasets: (protectedHubmapIds: string[]) =>
-    `You have selected ${protectedHubmapIds.length} protected datasets (${generateCommaList(protectedHubmapIds)}). Access to these datasets depends on your user permissions. If you do not have access, they will not be downloaded correctly from the provided manifest.`,
+    `You have selected ${protectedHubmapIds.length} protected datasets (${generateCommaList(protectedHubmapIds)}). Access to these datasets depends on your user permissions. If you do not have access, they cannot be downloaded correctly using the provided manifest.`,
 };
 
 export const restrictedDatasetsErrorMessage = (restrictedHubmapIds: string[]) => {
