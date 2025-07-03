@@ -80,7 +80,7 @@ function useCreateWorkspaceForm({
 
   const { setDialogType } = useLaunchWorkspaceStore();
   const checkedWorkspaceName = defaultName ?? '';
-  const checkedProtectedDatasets = initialRestrictedDatasets ?? [];
+  const checkedRestrictedDatasets = initialRestrictedDatasets ?? [];
 
   const initialResourceOptions = {
     num_cpus: DEFAULT_NUM_CPUS,
@@ -101,7 +101,7 @@ function useCreateWorkspaceForm({
     defaultValues: {
       'workspace-name': checkedWorkspaceName,
       'workspace-description': defaultDescription,
-      'restricted-datasets': checkedProtectedDatasets,
+      'restricted-datasets': checkedRestrictedDatasets,
       templates: [defaultTemplate],
       workspaceJobTypeId: defaultJobType,
       workspaceResourceOptions: initialResourceOptions,
@@ -204,7 +204,7 @@ function useCreateWorkspaceForm({
 function useCreateWorkspaceDatasets() {
   const { selectedRows, deselectRows } = useSelectableTableStore();
   const {
-    errorMessages: protectedDatasetsErrorMessages,
+    errorMessages: restrictedDatasetsErrorMessages,
     warningMessages: protectedDatasetsWarningMessages,
     ...rest
   } = useWorkspacesRestrictedDatasetsForm({
@@ -216,7 +216,7 @@ function useCreateWorkspaceDatasets() {
   const tooManyDatasetsWarningMessages = useTooManyDatasetsWarnings({ numWorkspaceDatasets: selectedRows.size });
 
   return {
-    errorMessages: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
+    errorMessages: [...restrictedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
     warningMessages: [...protectedDatasetsWarningMessages, ...tooManyDatasetsWarningMessages],
     ...rest,
   };

@@ -8,7 +8,7 @@ import Typography from '@mui/material/Typography';
 
 import { LINKS, PAGES } from 'js/components/bulkDownload/constants';
 import { BulkDownloadFormTypes, useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
-import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemoveRestrictedDatasetsFormField';
+import RemoveRestrictedDatasetsFormField from 'js/components/workspaces/RemoveRestrictedDatasetsFormField';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
@@ -46,7 +46,7 @@ function DownloadDescription() {
   );
 }
 
-interface ProtectedDatasetsSectionProps {
+interface RestrictedDatasetsSectionProps {
   control: Control<BulkDownloadFormTypes>;
   errorMessages: string[];
   warningMessages: string[];
@@ -54,14 +54,14 @@ interface ProtectedDatasetsSectionProps {
   restrictedRows: string[];
   removeRestrictedDatasets: () => void;
 }
-function ProtectedDatasetsSection({
+function RestrictedDatasetsSection({
   control,
   errorMessages,
   warningMessages,
   restrictedHubmapIds,
   restrictedRows,
   removeRestrictedDatasets,
-}: ProtectedDatasetsSectionProps) {
+}: RestrictedDatasetsSectionProps) {
   if (errorMessages.length === 0 && warningMessages.length === 0) {
     return null;
   }
@@ -69,7 +69,7 @@ function ProtectedDatasetsSection({
   return (
     <Stack paddingY={1}>
       <ErrorOrWarningMessages warningMessages={warningMessages} errorMessages={errorMessages} />
-      <RemoveProtectedDatasetsFormField
+      <RemoveRestrictedDatasetsFormField
         control={control}
         restrictedHubmapIds={restrictedHubmapIds}
         removeRestrictedDatasets={removeRestrictedDatasets}
@@ -143,7 +143,7 @@ function DownloadOptionsSection({
   return (
     <Box>
       <Step title="Download Options" hideRequiredText>
-        <ProtectedDatasetsSection
+        <RestrictedDatasetsSection
           control={control}
           errorMessages={errorMessages}
           warningMessages={warningMessages}

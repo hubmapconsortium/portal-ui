@@ -98,16 +98,16 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     [deselectRows, setUuids, uuids],
   );
 
-  const protectedDatasetsFields = useRestrictedDatasetsForm({
+  const restrictedDatasetsFields = useRestrictedDatasetsForm({
     selectedRows: new Set(uuids),
     deselectRows: removeUuidsOrRows,
     protectedDatasetsWarningMessage,
     restrictedDatasetsErrorMessage,
-    trackEventHelper: (numProtectedDatasets) => {
+    trackEventHelper: (numRestrictedDatasets) => {
       trackEvent({
         category: 'Bulk Download',
         action: 'Protected datasets selected',
-        value: numProtectedDatasets,
+        value: numRestrictedDatasets,
       });
     },
   });
@@ -199,7 +199,7 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     openDialog,
     downloadManifest,
     downloadMetadata,
-    ...protectedDatasetsFields,
+    ...restrictedDatasetsFields,
   };
 }
 

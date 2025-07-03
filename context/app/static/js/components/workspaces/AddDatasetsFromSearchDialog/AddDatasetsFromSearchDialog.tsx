@@ -17,7 +17,7 @@ import { useAddDatasetsFromSearchDialog } from './hooks';
 import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
-import RemoveProtectedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
+import RemoveRestrictedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
 import { MergedWorkspace } from '../types';
 
 function SearchDialogWorkspaceListItem({
@@ -69,7 +69,7 @@ function SelectWorkspaceStep({
         <ErrorOrWarningMessages errorMessages={workspaceIdErrorMessages} />
       </Stack>
       <Stack spacing={3} component={Paper}>
-        <Box sx={{ maxHeight: 500, overflowY: 'auto' }}>
+        <Box sx={{ maxHeight: 400, overflowY: 'auto' }}>
           {workspacesList.map((workspace) => (
             <SearchDialogWorkspaceListItem
               key={workspace.id}
@@ -129,7 +129,7 @@ function AddDatasetsStep({
         for deletion.
       </Alert>
       <ErrorOrWarningMessages errorMessages={datasetsErrorMessages} warningMessages={datasetsWarningMessages} />
-      <RemoveProtectedDatasetsFormField
+      <RemoveRestrictedDatasetsFormField
         control={control}
         restrictedHubmapIds={restrictedHubmapIds}
         removeRestrictedDatasets={removeRestrictedDatasets}

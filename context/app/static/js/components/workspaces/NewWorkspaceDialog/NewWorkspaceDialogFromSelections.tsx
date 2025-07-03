@@ -10,7 +10,7 @@ import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateWorkspaceForm';
-import RemoveProtectedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
+import RemoveRestrictedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
 
 function NewWorkspaceDialogFromSelections() {
   const {
@@ -58,7 +58,7 @@ function NewWorkspaceDialogFromSelections() {
         {...rest}
       >
         <Box>
-          <RemoveProtectedDatasetsFormField
+          <RemoveRestrictedDatasetsFormField
             control={control}
             restrictedHubmapIds={restrictedHubmapIds}
             removeRestrictedDatasets={() => {
