@@ -39,7 +39,7 @@ function useGetProtectedDatasets(ids: string[]) {
  */
 function useCheckDatasetAccess() {
   // TODO: this logic is a placeholder. Update this once workspaces API makes access checks available.
-  const checkDatasetAccess = (datasetUUID: string) => datasetUUID === '';
+  const checkDatasetAccess = (datasetUUID: string) => datasetUUID !== '';
 
   return checkDatasetAccess;
 }

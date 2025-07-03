@@ -32,7 +32,7 @@ function RemoveRestrictedDatasetsFormField<FormType extends FieldValues>({
         <WorkspaceField
           control={control}
           name={'restricted-datasets' as Path<FormType>}
-          label="restricted Datasets"
+          label="Restricted Datasets"
           value={restrictedHubmapIds as PathValue<FormType, Path<FormType>>}
           error
           hideCharCount
