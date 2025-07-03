@@ -15,6 +15,7 @@ import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFro
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
 import { useCheckDatasetAccess } from 'js/hooks/useRestrictedDatasets';
+import { useAppContext } from 'js/components/Contexts';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
@@ -95,7 +96,9 @@ function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: Pro
     },
   ];
 
-  if (!hasWorkspaceAccess(uuid)) {
+  const { isWorkspacesUser } = useAppContext();
+
+  if (!isWorkspacesUser || !hasWorkspaceAccess(uuid)) {
     return null;
   }
 

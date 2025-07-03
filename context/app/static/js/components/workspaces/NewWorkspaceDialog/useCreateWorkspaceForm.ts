@@ -67,7 +67,7 @@ const schema = z
   .required({ 'workspace-name': true, templates: true });
 
 function useCreateWorkspaceForm({
-  defaultName,
+  defaultName = '',
   defaultDescription = '',
   defaultTemplate = DEFAULT_PYTHON_TEMPLATE_KEY,
   defaultJobType = DEFAULT_JOB_TYPE,
@@ -77,10 +77,7 @@ function useCreateWorkspaceForm({
 }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   const createTemplateNotebooks = useTemplateNotebooks();
-
   const { setDialogType } = useLaunchWorkspaceStore();
-  const checkedWorkspaceName = defaultName ?? '';
-  const checkedRestrictedDatasets = initialRestrictedDatasets ?? [];
 
   const initialResourceOptions = {
     num_cpus: DEFAULT_NUM_CPUS,
@@ -99,9 +96,9 @@ function useCreateWorkspaceForm({
     trigger,
   } = useForm({
     defaultValues: {
-      'workspace-name': checkedWorkspaceName,
+      'workspace-name': defaultName,
       'workspace-description': defaultDescription,
-      'restricted-datasets': checkedRestrictedDatasets,
+      'restricted-datasets': initialRestrictedDatasets,
       templates: [defaultTemplate],
       workspaceJobTypeId: defaultJobType,
       workspaceResourceOptions: initialResourceOptions,

@@ -48,7 +48,7 @@ function RemoveRestrictedDatasetsFormField<FormType extends FieldValues>({
           }}
         />
         <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeRestrictedDatasets}>
-          Remove restricted Datasets ({restrictedRows.length})
+          Remove Restricted Datasets ({restrictedRows.length})
         </Button>
       </Box>
     )

@@ -22,13 +22,18 @@ function useGetProtectedDatasets(ids: string[]) {
 
   const { searchHits } = useSearchHits(query) as { searchHits: DatasetAccessLevelHits };
 
-  const protectedHubmapIds = searchHits
-    .map((hit) => hit._source?.hubmap_id)
-    .filter((id): id is string => typeof id === 'string');
-
-  const protectedRows = searchHits
-    .map((hit) => hit._source?.uuid)
-    .filter((uuid): uuid is string => typeof uuid === 'string');
+  const { protectedHubmapIds, protectedRows } = searchHits.reduce(
+    (acc, { _source }) => {
+      if (typeof _source?.hubmap_id === 'string') {
+        acc.protectedHubmapIds.push(_source.hubmap_id);
+      }
+      if (typeof _source?.uuid === 'string') {
+        acc.protectedRows.push(_source.uuid);
+      }
+      return acc;
+    },
+    { protectedHubmapIds: [] as string[], protectedRows: [] as string[] },
+  );
 
   return { protectedHubmapIds, protectedRows };
 }
@@ -71,21 +76,21 @@ function useRestrictedDatasetsForm({
   trackEventHelper,
 }: useRestrictedDatasetsFormProps) {
   const { toastSuccessRemoveRestrictedDatasets } = useWorkspaceToasts();
-  // restricted rows are those that the current user does not have access to in a workspace or bulk download.
+  // Restricted rows are those that the current user does not have access to in a workspace or bulk download.
   const restrictedRows = useGetRestrictedDatasets(selectedRows);
   // Protected rows are those that have a mapped data access level other than 'Public' (which any user may or
   // may not have access to depending on their group permissions).
   const { protectedHubmapIds, protectedRows } = useGetProtectedDatasets(selectedRows.size > 0 ? [...selectedRows] : []);
   const { hubmapIds: restrictedHubmapIds } = useHubmapIds(restrictedRows);
 
-  const reportedrestrictedRows = useRef(false);
+  const reportedRestrictedRows = useRef(false);
   const errorMessages = [];
   const warningMessages = [];
 
   if (restrictedHubmapIds.length > 0) {
     errorMessages.push(restrictedDatasetsErrorMessage(restrictedHubmapIds));
-    if (!reportedrestrictedRows.current) {
-      reportedrestrictedRows.current = true;
+    if (!reportedRestrictedRows.current) {
+      reportedRestrictedRows.current = true;
       trackEventHelper(restrictedHubmapIds.length);
     }
   }
