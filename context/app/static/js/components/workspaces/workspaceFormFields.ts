@@ -11,7 +11,7 @@ const workspaceDescriptionField = {
   'workspace-description': z.string(),
 };
 
-const protectedDatasetsField = { 'protected-datasets': z.array(z.string()) };
+const restrictedDatasetsField = { 'restricted-datasets': z.array(z.string()) };
 
 const templatesField = {
   templates: z
@@ -53,7 +53,7 @@ const workspaceResourceOptionsField = {
 export {
   workspaceNameField,
   workspaceDescriptionField,
-  protectedDatasetsField,
+  restrictedDatasetsField,
   templatesField,
   datasetsField,
   workspaceIdField,

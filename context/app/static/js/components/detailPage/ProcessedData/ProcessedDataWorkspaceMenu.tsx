@@ -14,7 +14,7 @@ import { DialogType } from 'js/stores/useWorkspaceModalStore';
 import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
-import { useCheckDatasetAccess } from 'js/hooks/useProtectedDatasets';
+import { useCheckDatasetAccess } from 'js/hooks/useRestrictedDatasets';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;

@@ -5,24 +5,24 @@ export const errorHelper = {
     `You have selected over ${EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS} datasets, which may extend launch time. Workspace will still launch, but reduce your selection for a quicker launch.`,
   maxDatasets: (workspaceDatasets: number) =>
     `You have selected ${workspaceDatasets} datasets. The dataset limit for workspaces is ${MAX_NUMBER_OF_WORKSPACE_DATASETS} datasets. Please reduce your selection.`,
-  inaccessibleDataset: (inaccessibleHubmapId: string) =>
-    `You have selected a protected dataset (${inaccessibleHubmapId}) that cannot be accessed with your current permissions in workspaces. To proceed, click “Remove Protected Datasets” below, or go back to the previous screen to remove it manually.`,
-  inaccessibleDatasets: (inaccessibleHubmapIds: string[]) =>
-    `You have selected ${inaccessibleHubmapIds.length} protected datasets that cannot be accessed with your current permissions in workspaces. To proceed, click “Remove Protected Datasets” below, or go back to the previous screen to remove them manually.`,
+  restrictedDataset: (restrictedHubmapId: string) =>
+    `You have selected a protected dataset (${restrictedHubmapId}) that cannot be accessed with your current permissions. To continue, click "Remove Restricted Datasets" below, or return to the previous screen to remove it manually.`,
+  restrictedDatasets: (restrictedHubmapIds: string[]) =>
+    `You have selected ${restrictedHubmapIds.length} protected datasets that cannot be accessed with your current permissions. To continue, click "Remove Restricted Datasets" below, or return to the previous screen to remove them manually.`,
 };
 
 export const warningHelper = {
   protectedDataset: (protectedHubmapId: string) =>
-    `You have selected a protected dataset (${protectedHubmapId}). Depending on your access level, you may not be able to access this dataset in the workspace. If you do not have access, this dataset will not be linked correctly to your workspace.`,
+    `You have selected a protected dataset (${protectedHubmapId}). Access to this dataset depends on your user permissions. If you do not have access, it will not be linked properly in your workspace.`,
   protectedDatasets: (protectedHubmapIds: string[]) =>
-    `You have selected ${protectedHubmapIds.length} protected datasets. Depending on your access level, you may not be able to access these datasets in the workspace. If you do not have access, these datasets will not be linked correctly to your workspace.`,
+    `You have selected ${protectedHubmapIds.length} protected datasets. Access to these datasets depends on your user permissions. If you do not have access, they will not be linked properly in your workspace.`,
 };
 
-export const inaccessibleDatasetsErrorMessage = (inaccessibleHubmapIds: string[]) => {
-  if (inaccessibleHubmapIds.length === 1) {
-    return errorHelper.inaccessibleDataset(inaccessibleHubmapIds[0]);
+export const restrictedDatasetsErrorMessage = (restrictedHubmapIds: string[]) => {
+  if (restrictedHubmapIds.length === 1) {
+    return errorHelper.restrictedDataset(restrictedHubmapIds[0]);
   }
-  return errorHelper.inaccessibleDatasets(inaccessibleHubmapIds);
+  return errorHelper.restrictedDatasets(restrictedHubmapIds);
 };
 
 export const protectedDatasetsWarningMessage = (protectedHubmapIds: string[]) => {

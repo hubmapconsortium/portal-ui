@@ -17,7 +17,7 @@ import { useAddDatasetsFromSearchDialog } from './hooks';
 import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
-import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
+import RemoveProtectedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
 import { MergedWorkspace } from '../types';
 
 function SearchDialogWorkspaceListItem({
@@ -99,18 +99,18 @@ function SelectWorkspaceStep({
 
 function AddDatasetsStep({
   control,
-  inaccessibleHubmapIds,
-  inaccessibleRows,
-  removeInaccessibleDatasets,
+  restrictedHubmapIds,
+  restrictedRows,
+  removeRestrictedDatasets,
   datasetsErrorMessages,
   datasetsWarningMessages,
   ...rest
 }: Pick<
   ReturnType<typeof useAddDatasetsFromSearchDialog>,
   | 'control'
-  | 'inaccessibleHubmapIds'
-  | 'inaccessibleRows'
-  | 'removeInaccessibleDatasets'
+  | 'restrictedHubmapIds'
+  | 'restrictedRows'
+  | 'removeRestrictedDatasets'
   | 'datasetsErrorMessages'
   | 'datasetsWarningMessages'
   | 'inputValue'
@@ -131,9 +131,9 @@ function AddDatasetsStep({
       <ErrorOrWarningMessages errorMessages={datasetsErrorMessages} warningMessages={datasetsWarningMessages} />
       <RemoveProtectedDatasetsFormField
         control={control}
-        inaccessibleHubmapIds={inaccessibleHubmapIds}
-        removeInaccessibleDatasets={removeInaccessibleDatasets}
-        inaccessibleRows={inaccessibleRows}
+        restrictedHubmapIds={restrictedHubmapIds}
+        removeRestrictedDatasets={removeRestrictedDatasets}
+        restrictedRows={restrictedRows}
       />
       <AddDatasetsTable {...rest} />
     </Stack>

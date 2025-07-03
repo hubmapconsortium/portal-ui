@@ -9,14 +9,18 @@ import { CreateTemplateNotebooksTypes, WorkspaceResourceOptions } from '../types
 import { useTemplateNotebooks } from './hooks';
 import {
   workspaceNameField,
-  protectedDatasetsField,
+  restrictedDatasetsField,
   templatesField,
   workspaceJobTypeIdField,
   workspaceResourceOptionsField,
   datasetsField,
   workspaceDescriptionField,
 } from '../workspaceFormFields';
-import { useWorkspacesProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
+import {
+  useWorkspacesRestrictedDatasetsForm,
+  useTooManyDatasetsErrors,
+  useTooManyDatasetsWarnings,
+} from '../formHooks';
 import {
   DEFAULT_GPU_ENABLED,
   DEFAULT_JOB_TYPE,
@@ -33,7 +37,7 @@ export interface FormWithTemplates {
 interface CreateWorkspaceFormTypes extends FormWithTemplates {
   'workspace-name': string;
   'workspace-description': string;
-  'protected-datasets': string[];
+  'restricted-datasets': string[];
   workspaceJobTypeId: string;
   workspaceResourceOptions: WorkspaceResourceOptions;
   datasets: string[];
@@ -45,7 +49,7 @@ interface UseCreateWorkspaceTypes {
   defaultTemplate?: string;
   defaultJobType?: string;
   defaultResourceOptions?: Partial<WorkspaceResourceOptions>;
-  initialProtectedDatasets?: string[];
+  initialRestrictedDatasets?: string[];
   initialSelectedDatasets?: string[];
 }
 
@@ -53,7 +57,7 @@ const schema = z
   .object({
     ...workspaceNameField,
     ...workspaceDescriptionField,
-    ...protectedDatasetsField,
+    ...restrictedDatasetsField,
     ...templatesField,
     ...workspaceJobTypeIdField,
     ...workspaceResourceOptionsField,
@@ -68,7 +72,7 @@ function useCreateWorkspaceForm({
   defaultTemplate = DEFAULT_PYTHON_TEMPLATE_KEY,
   defaultJobType = DEFAULT_JOB_TYPE,
   defaultResourceOptions = {},
-  initialProtectedDatasets = [],
+  initialRestrictedDatasets = [],
   initialSelectedDatasets = [],
 }: UseCreateWorkspaceTypes) {
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
@@ -76,7 +80,7 @@ function useCreateWorkspaceForm({
 
   const { setDialogType } = useLaunchWorkspaceStore();
   const checkedWorkspaceName = defaultName ?? '';
-  const checkedProtectedDatasets = initialProtectedDatasets ?? [];
+  const checkedProtectedDatasets = initialRestrictedDatasets ?? [];
 
   const initialResourceOptions = {
     num_cpus: DEFAULT_NUM_CPUS,
@@ -97,7 +101,7 @@ function useCreateWorkspaceForm({
     defaultValues: {
       'workspace-name': checkedWorkspaceName,
       'workspace-description': defaultDescription,
-      'protected-datasets': checkedProtectedDatasets,
+      'restricted-datasets': checkedProtectedDatasets,
       templates: [defaultTemplate],
       workspaceJobTypeId: defaultJobType,
       workspaceResourceOptions: initialResourceOptions,
@@ -152,14 +156,14 @@ function useCreateWorkspaceForm({
   }
 
   useEffect(() => {
-    if (initialProtectedDatasets && initialProtectedDatasets.length !== 0) {
-      setValue('protected-datasets', initialProtectedDatasets);
+    if (initialRestrictedDatasets && initialRestrictedDatasets.length !== 0) {
+      setValue('restricted-datasets', initialRestrictedDatasets);
     }
     // Necessary to update dialog state between different processed datasets on detail pages
     if (initialSelectedDatasets && initialSelectedDatasets.length !== 0) {
       setValue('datasets', initialSelectedDatasets);
     }
-  }, [initialProtectedDatasets, initialSelectedDatasets, setValue]);
+  }, [initialRestrictedDatasets, initialSelectedDatasets, setValue]);
 
   useEffect(() => {
     if (dialogIsOpen) {
@@ -169,7 +173,7 @@ function useCreateWorkspaceForm({
     }
   }, [dialogIsOpen, trigger]);
 
-  const { errorMessages, warningMessages } = useWorkspacesProtectedDatasetsForm({
+  const { errorMessages, warningMessages } = useWorkspacesRestrictedDatasetsForm({
     selectedRows: new Set(allDatasets),
     deselectRows: (uuids) => removeDatasets(uuids),
   });
@@ -203,7 +207,7 @@ function useCreateWorkspaceDatasets() {
     errorMessages: protectedDatasetsErrorMessages,
     warningMessages: protectedDatasetsWarningMessages,
     ...rest
-  } = useWorkspacesProtectedDatasetsForm({
+  } = useWorkspacesRestrictedDatasetsForm({
     selectedRows,
     deselectRows,
   });

@@ -2,14 +2,14 @@ import { useCallback, useRef } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
-import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
+import { useRestrictedDatasetsForm } from 'js/hooks/useRestrictedDatasets';
 import {
   errorHelper,
-  inaccessibleDatasetsErrorMessage,
+  restrictedDatasetsErrorMessage,
   protectedDatasetsWarningMessage,
 } from 'js/components/workspaces/workspaceDatasetMessaging';
 
-function useWorkspacesProtectedDatasetsForm({
+function useWorkspacesRestrictedDatasetsForm({
   selectedRows,
   deselectRows,
 }: {
@@ -24,10 +24,10 @@ function useWorkspacesProtectedDatasetsForm({
     });
   }, []);
 
-  return useProtectedDatasetsForm({
+  return useRestrictedDatasetsForm({
     selectedRows,
     deselectRows,
-    inaccessibleDatasetsErrorMessage,
+    restrictedDatasetsErrorMessage,
     protectedDatasetsWarningMessage,
     trackEventHelper,
   });
@@ -60,4 +60,4 @@ function useTooManyDatasetsWarnings({ numWorkspaceDatasets }: { numWorkspaceData
   return warningMessages;
 }
 
-export { useWorkspacesProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings };
+export { useWorkspacesRestrictedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings };

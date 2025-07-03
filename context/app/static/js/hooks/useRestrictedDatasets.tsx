@@ -39,7 +39,7 @@ function useGetProtectedDatasets(ids: string[]) {
  */
 function useCheckDatasetAccess() {
   // TODO: this logic is a placeholder. Update this once workspaces API makes access checks available.
-  const checkDatasetAccess = (datasetUUID: string) => datasetUUID !== '';
+  const checkDatasetAccess = (datasetUUID: string) => datasetUUID === '';
 
   return checkDatasetAccess;
 }
@@ -47,46 +47,46 @@ function useCheckDatasetAccess() {
 /**
  * Returns a list of dataset UUIDs that the user does not have access to for workspaces or bulk download.
  * @param datasetUUIDs The UUIDs of the datasets to check access for
- * @returns A list of inaccessible dataset UUIDs
+ * @returns A list of restricted dataset UUIDs
  */
-function useGetInaccessibleDatasets(datasetUUIDs: Set<string>) {
+function useGetRestrictedDatasets(datasetUUIDs: Set<string>) {
   const checkDatasetAccess = useCheckDatasetAccess();
   const protectedDatasetUUIDs = [...datasetUUIDs].filter((uuid) => !checkDatasetAccess(uuid));
 
   return protectedDatasetUUIDs;
 }
 
-interface useProtectedDatasetsFormProps {
+interface useRestrictedDatasetsFormProps {
   selectedRows: Set<string>;
   deselectRows?: (uuids: string[]) => void;
-  inaccessibleDatasetsErrorMessage: (inaccessibleRows: string[]) => string;
+  restrictedDatasetsErrorMessage: (restrictedRows: string[]) => string;
   protectedDatasetsWarningMessage: (protectedRows: string[]) => string;
   trackEventHelper: (numProtectedDatasets: number) => void;
 }
-function useProtectedDatasetsForm({
+function useRestrictedDatasetsForm({
   selectedRows,
   deselectRows,
-  inaccessibleDatasetsErrorMessage,
+  restrictedDatasetsErrorMessage,
   protectedDatasetsWarningMessage,
   trackEventHelper,
-}: useProtectedDatasetsFormProps) {
-  const { toastSuccessRemoveInaccessibleDatasets } = useWorkspaceToasts();
-  // Inaccessible rows are those that the current user does not have access to in a workspace or bulk download.
-  const inaccessibleRows = useGetInaccessibleDatasets(selectedRows);
+}: useRestrictedDatasetsFormProps) {
+  const { toastSuccessRemoveRestrictedDatasets } = useWorkspaceToasts();
+  // restricted rows are those that the current user does not have access to in a workspace or bulk download.
+  const restrictedRows = useGetRestrictedDatasets(selectedRows);
   // Protected rows are those that have a mapped data access level other than 'Public' (which any user may or
   // may not have access to depending on their group permissions).
   const { protectedHubmapIds, protectedRows } = useGetProtectedDatasets(selectedRows.size > 0 ? [...selectedRows] : []);
-  const { hubmapIds: inaccessibleHubmapIds } = useHubmapIds(inaccessibleRows);
+  const { hubmapIds: restrictedHubmapIds } = useHubmapIds(restrictedRows);
 
-  const reportedInaccessibleRows = useRef(false);
+  const reportedrestrictedRows = useRef(false);
   const errorMessages = [];
   const warningMessages = [];
 
-  if (inaccessibleHubmapIds.length > 0) {
-    errorMessages.push(inaccessibleDatasetsErrorMessage(inaccessibleHubmapIds));
-    if (!reportedInaccessibleRows.current) {
-      reportedInaccessibleRows.current = true;
-      trackEventHelper(inaccessibleHubmapIds.length);
+  if (restrictedHubmapIds.length > 0) {
+    errorMessages.push(restrictedDatasetsErrorMessage(restrictedHubmapIds));
+    if (!reportedrestrictedRows.current) {
+      reportedrestrictedRows.current = true;
+      trackEventHelper(restrictedHubmapIds.length);
     }
   }
 
@@ -94,20 +94,20 @@ function useProtectedDatasetsForm({
     warningMessages.push(protectedDatasetsWarningMessage(protectedHubmapIds));
   }
 
-  const removeInaccessibleDatasets = useCallback(() => {
-    deselectRows?.(inaccessibleRows);
-    toastSuccessRemoveInaccessibleDatasets();
-  }, [deselectRows, inaccessibleRows, toastSuccessRemoveInaccessibleDatasets]);
+  const removeRestrictedDatasets = useCallback(() => {
+    deselectRows?.(restrictedRows);
+    toastSuccessRemoveRestrictedDatasets();
+  }, [deselectRows, restrictedRows, toastSuccessRemoveRestrictedDatasets]);
 
   return {
     errorMessages,
     warningMessages,
-    inaccessibleHubmapIds,
-    removeInaccessibleDatasets,
-    inaccessibleRows,
+    restrictedHubmapIds,
+    removeRestrictedDatasets,
+    restrictedRows,
     protectedRows,
     selectedRows,
   };
 }
 
-export { useProtectedDatasetsForm, useCheckDatasetAccess };
+export { useRestrictedDatasetsForm, useCheckDatasetAccess };

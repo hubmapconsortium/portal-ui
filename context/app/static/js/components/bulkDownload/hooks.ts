@@ -8,13 +8,13 @@ import useBulkDownloadToasts from 'js/components/bulkDownload/toastHooks';
 import { ALL_BULK_DOWNLOAD_OPTIONS } from 'js/components/bulkDownload/constants';
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
+import { useRestrictedDatasetsForm } from 'js/hooks/useRestrictedDatasets';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
 import { trackEvent } from 'js/helpers/trackers';
 import { getIDsQuery } from 'js/helpers/queries';
 import {
-  inaccessibleDatasetsErrorMessage,
+  restrictedDatasetsErrorMessage,
   protectedDatasetsWarningMessage,
 } from 'js/components/bulkDownload/bulkDownloadDatasetMessaging';
 
@@ -98,11 +98,11 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     [deselectRows, setUuids, uuids],
   );
 
-  const protectedDatasetsFields = useProtectedDatasetsForm({
+  const protectedDatasetsFields = useRestrictedDatasetsForm({
     selectedRows: new Set(uuids),
     deselectRows: removeUuidsOrRows,
     protectedDatasetsWarningMessage,
-    inaccessibleDatasetsErrorMessage,
+    restrictedDatasetsErrorMessage,
     trackEventHelper: (numProtectedDatasets) => {
       trackEvent({
         category: 'Bulk Download',

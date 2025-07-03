@@ -9,15 +9,19 @@ import { useUpdateWorkspaceDatasets, useWorkspaceDetail } from '../hooks';
 import {
   datasetsField as datasetsFieldSchema,
   workspaceIdField as workspaceIdFieldSchema,
-  protectedDatasetsField,
+  restrictedDatasetsField,
 } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
-import { useWorkspacesProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
+import {
+  useWorkspacesRestrictedDatasetsForm,
+  useTooManyDatasetsErrors,
+  useTooManyDatasetsWarnings,
+} from '../formHooks';
 
 export interface AddDatasetsFromSearchFormTypes {
   datasets: string[];
   workspaceId: number;
-  'protected-datasets': string[];
+  'restricted-datasets': string[];
 }
 
 function buildErrorMessages({
@@ -39,16 +43,16 @@ const schema = z
   .object({
     ...datasetsFieldSchema,
     ...workspaceIdFieldSchema,
-    ...protectedDatasetsField,
+    ...restrictedDatasetsField,
   })
   .required({ datasets: true, workspaceId: true });
 
 function useAddWorkspaceDatasetsFromSearchForm({
   initialDatasetUUIDs,
-  initialProtectedDatasets,
+  initialRestrictedDatasets,
 }: {
   initialDatasetUUIDs: string[];
-  initialProtectedDatasets: string[];
+  initialRestrictedDatasets: string[];
 }) {
   const {
     handleSubmit,
@@ -60,7 +64,7 @@ function useAddWorkspaceDatasetsFromSearchForm({
     defaultValues: {
       datasets: initialDatasetUUIDs,
       workspaceId: undefined,
-      'protected-datasets': initialProtectedDatasets,
+      'restricted-datasets': initialRestrictedDatasets,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -81,11 +85,11 @@ function useAddDatasetsFromSearchDialog() {
   const {
     errorMessages: protectedDatasetsErrorMessages,
     warningMessages: protectedDatasetsWarningMessages,
-    inaccessibleHubmapIds,
-    removeInaccessibleDatasets: removeProtectedDatasetsFromSearchSelections,
+    restrictedHubmapIds,
+    removeRestrictedDatasets: removeProtectedDatasetsFromSearchSelections,
     protectedRows,
     ...restProtectedDatasets
-  } = useWorkspacesProtectedDatasetsForm({
+  } = useWorkspacesRestrictedDatasetsForm({
     selectedRows,
     deselectRows,
   });
@@ -94,7 +98,7 @@ function useAddDatasetsFromSearchDialog() {
 
   const { handleSubmit, isSubmitting, control, errors, reset, setValue } = useAddWorkspaceDatasetsFromSearchForm({
     initialDatasetUUIDs: datasetsFromSearch,
-    initialProtectedDatasets: inaccessibleHubmapIds,
+    initialRestrictedDatasets: restrictedHubmapIds,
   });
 
   const { field: datasetsField, fieldState: datasetsFieldState } = useController({
@@ -127,7 +131,7 @@ function useAddDatasetsFromSearchDialog() {
 
   const updateWorkspaceDatasets = useUpdateWorkspaceDatasets({ workspaceId: workspaceIdField.value });
 
-  const removeInaccessibleDatasets = useCallback(() => {
+  const removeRestrictedDatasets = useCallback(() => {
     const protectedUUIDs = protectedRows.filter((uuid): uuid is string => Boolean(uuid));
     removeProtectedDatasetsFromSearchSelections();
     removeDatasets(protectedUUIDs);
@@ -148,16 +152,16 @@ function useAddDatasetsFromSearchDialog() {
   // react-hook-form's defaultValues are cached and must be set upon open. https://react-hook-form.com/docs/useform#defaultValues
   useEffect(() => {
     setValue('datasets', datasetsFromSearch);
-  }, [datasetsFromSearch, setValue, inaccessibleHubmapIds, isOpen]);
+  }, [datasetsFromSearch, setValue, restrictedHubmapIds, isOpen]);
 
   const selectWorkspace = useCallback(
     (workspaceId: number) => {
       workspaceIdField.onChange(workspaceId);
       const selectedDatasetsSet = new Set([...datasetsField.value, ...datasetsFromSearch]);
       setValue('datasets', [...selectedDatasetsSet]);
-      setValue('protected-datasets', inaccessibleHubmapIds);
+      setValue('restricted-datasets', restrictedHubmapIds);
     },
-    [setValue, datasetsField.value, inaccessibleHubmapIds, datasetsFromSearch, workspaceIdField],
+    [setValue, datasetsField.value, restrictedHubmapIds, datasetsFromSearch, workspaceIdField],
   );
 
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({
@@ -202,9 +206,9 @@ function useAddDatasetsFromSearchDialog() {
     datasetsWarningMessages,
     workspaceIdErrorMessages,
     selectWorkspace,
-    inaccessibleHubmapIds,
+    restrictedHubmapIds,
     protectedRows,
-    removeInaccessibleDatasets,
+    removeRestrictedDatasets,
     ...restProtectedDatasets,
   };
 }

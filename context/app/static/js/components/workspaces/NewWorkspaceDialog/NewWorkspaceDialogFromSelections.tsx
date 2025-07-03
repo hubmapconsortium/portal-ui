@@ -10,7 +10,7 @@ import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateWorkspaceForm';
-import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
+import RemoveProtectedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
 
 function NewWorkspaceDialogFromSelections() {
   const {
@@ -18,16 +18,16 @@ function NewWorkspaceDialogFromSelections() {
     warningMessages,
     selectedRows,
     protectedRows,
-    inaccessibleRows,
-    inaccessibleHubmapIds,
-    removeInaccessibleDatasets,
+    restrictedRows,
+    restrictedHubmapIds,
+    removeRestrictedDatasets,
     ...restWorkspaceDatasets
   } = useCreateWorkspaceDatasets();
 
   const { deselectRows } = useSelectableTableStore();
 
   const { control, errors, setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
-    initialProtectedDatasets: [...inaccessibleHubmapIds],
+    initialRestrictedDatasets: [...restrictedHubmapIds],
     initialSelectedDatasets: [...selectedRows],
   });
 
@@ -60,12 +60,12 @@ function NewWorkspaceDialogFromSelections() {
         <Box>
           <RemoveProtectedDatasetsFormField
             control={control}
-            inaccessibleHubmapIds={inaccessibleHubmapIds}
-            removeInaccessibleDatasets={() => {
-              removeInaccessibleDatasets();
-              removeDatasets(inaccessibleRows);
+            restrictedHubmapIds={restrictedHubmapIds}
+            removeRestrictedDatasets={() => {
+              removeRestrictedDatasets();
+              removeDatasets(restrictedRows);
             }}
-            inaccessibleRows={inaccessibleRows}
+            restrictedRows={restrictedRows}
             {...restWorkspaceDatasets}
           />
         </Box>
