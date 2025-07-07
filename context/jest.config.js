@@ -6,7 +6,7 @@ const config = {
   restoreMocks: true,
   testPathIgnorePatterns: ['jest.config.js', '/cypress/'],
   setupFilesAfterEnv: ['<rootDir>/test-utils/setupTests.js'],
-  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx'],
+  moduleFileExtensions: ['js', 'jsx', 'ts', 'tsx', 'mjs', 'mts'],
   moduleNameMapper: {
     '\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$':
       '<rootDir>/test-utils/__mocks__/file.js',
@@ -16,7 +16,7 @@ const config = {
     '@mui/styled-engine': '@mui/styled-engine-sc',
   },
   transformIgnorePatterns: [
-    'node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes|uuid|chart-js|history)/)',
+    'node_modules/(?!(lodash-es|@mui/material|@mui/system|@mui/styled-engine-sc|@babel|pretty-bytes|uuid|chart-js|history|pdfjs-dist)/)',
   ],
   transform: {
     '^.+\\.(t|j)sx?$': [
@@ -26,6 +26,29 @@ const config = {
           parser: {
             syntax: 'typescript',
             tsx: true,
+            decorators: false,
+          },
+          experimental: {
+            plugins: [
+              [
+                '@swc/plugin-styled-components',
+                {
+                  displayName: true,
+                  ssr: false,
+                },
+              ],
+            ],
+          },
+        },
+      },
+    ],
+    '^.+\\.(mjs|mts)$': [
+      '@swc/jest',
+      {
+        jsc: {
+          parser: {
+            syntax: 'typescript',
+            tsx: false,
             decorators: false,
           },
           experimental: {
