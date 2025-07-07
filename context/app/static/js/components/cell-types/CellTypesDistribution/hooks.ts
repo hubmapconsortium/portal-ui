@@ -1,7 +1,7 @@
 import { useCellTypeCountForTissues } from 'js/api/scfind/useCellTypeCountForTissue';
 import { useLinearScale, useSymLogScale } from 'js/shared-styles/charts/hooks';
 import { useMemo } from 'react';
-import { formatCellTypeName } from 'js/api/scfind/utils';
+import { extractCellTypeInfo, formatCellTypeName } from 'js/api/scfind/utils';
 import { useCellTypesDistributionChartContext } from './contexts';
 import { addPercentageAndOrganToCellTypeCounts, CellTypeCountWithPercentageAndOrgan } from './utils';
 import { ChartData } from './types';
@@ -72,18 +72,26 @@ export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
   const cellTypeCountsRecord = useMemo(() => {
     // The order of the cell type counts is determined by the order of the `organ` array
     const record: Record<string, CellTypeCountWithPercentageAndOrgan[]> = {};
+    const totalCountsForOrgan: Record<string, number> = {};
+
+    // Calculate the total cell counts for each organ
+    data?.forEach((item) => {
+      item.cellTypeCounts.forEach((count) => {
+        const { organ } = extractCellTypeInfo(count.index);
+        if (!totalCountsForOrgan[organ]) {
+          totalCountsForOrgan[organ] = 0;
+        }
+        totalCountsForOrgan[organ] += count.cell_count;
+      });
+    });
+
     data?.forEach((item, idx) => {
       const organ = organs[idx];
-      const totalCellCountForOrgan = item.cellTypeCounts.reduce((sum, count) => {
-        if (!showOtherCellTypes && !cellTypes.includes(count.index)) {
-          return sum; // Skip counts for cell types not in the target list if showOtherCellTypes is false
-        }
-        return sum + count.cell_count;
-      }, 0);
+      const totalCellCountForOrgan = totalCountsForOrgan[organ] || 0;
       record[organ] = addPercentageAndOrganToCellTypeCounts(item.cellTypeCounts, totalCellCountForOrgan, organ);
     });
     return record;
-  }, [data, organs, showOtherCellTypes, cellTypes]);
+  }, [data, organs]);
 
   const maxCellCount = useMemo(() => {
     // Find the maximum cell count across all organs
