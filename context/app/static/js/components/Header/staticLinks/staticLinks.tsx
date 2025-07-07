@@ -140,13 +140,13 @@ export const dataLinks: DrawerSection[] = [
         href: '/biomarkers',
         icon: <entityIconMap.Gene color="primary" />,
       },
-      // {
-      //   label: 'Cell Types',
-      //   description:
-      //     'Explore cell types and discover information on associated organs, defining biomarkers and datasets with annotated cell types.',
-      //   href: '/cell-types',
-      //   icon: <entityIconMap.CellType color="primary" />,
-      // },
+      {
+        label: 'Cell Types',
+        description:
+          'Explore cell types and discover information on associated organs, defining biomarkers and datasets with annotated cell types.',
+        href: '/cell-types',
+        icon: <entityIconMap.CellType color="primary" />,
+      },
     ],
   },
   {
