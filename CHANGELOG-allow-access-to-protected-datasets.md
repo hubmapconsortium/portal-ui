@@ -1,0 +1,1 @@
+- Update workspace and bulk data transfer dialogs to allow access to protected datasets.

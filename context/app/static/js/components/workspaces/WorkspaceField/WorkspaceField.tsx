@@ -10,6 +10,7 @@ interface WorkspaceFieldProps<FormType extends FieldValues>
   label: string;
   value?: PathValue<FormType, Path<FormType>> | undefined;
   maxLength?: number;
+  hideCharCount?: boolean;
 }
 
 function WorkspaceField<FormType extends FieldValues>({
@@ -18,6 +19,7 @@ function WorkspaceField<FormType extends FieldValues>({
   label,
   value,
   maxLength = 2000,
+  hideCharCount,
   ...rest
 }: WorkspaceFieldProps<FormType>) {
   const { field, fieldState } = useController({
@@ -47,9 +49,11 @@ function WorkspaceField<FormType extends FieldValues>({
           htmlInput: { maxLength },
         }}
       />
-      <Typography variant="caption" color="textSecondary" align="right" marginTop={0.5} marginRight={2}>
-        {charCount}/{maxLength} Characters
-      </Typography>
+      {!hideCharCount && (
+        <Typography variant="caption" color="textSecondary" align="right" marginTop={0.5} marginRight={2}>
+          {charCount}/{maxLength} Characters
+        </Typography>
+      )}
     </Box>
   );
 }

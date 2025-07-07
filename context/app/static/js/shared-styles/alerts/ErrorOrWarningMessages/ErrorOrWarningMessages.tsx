@@ -1,6 +1,6 @@
 import React from 'react';
 import Stack from '@mui/system/Stack';
-import { Alert } from 'js/shared-styles/alerts';
+import { CenteredAlert } from 'js/components/style';
 
 interface ErrorOrWarningMessagesProps {
   errorMessages?: string[];
@@ -31,9 +31,9 @@ function ErrorOrWarningMessages({ errorMessages = [], warningMessages = [] }: Er
     <Stack spacing={2} marginBottom={2}>
       {content.messages.map((message) => {
         return (
-          <Alert key={message} severity={content.severity}>
+          <CenteredAlert key={message} severity={content.severity}>
             {message}
-          </Alert>
+          </CenteredAlert>
         );
       })}
     </Stack>

@@ -5,13 +5,12 @@ import { useEventCallback } from '@mui/material/utils';
 import ListItemIcon from '@mui/material/ListItemIcon';
 
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog';
-import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
 import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useCreateWorkspaceDatasets, useCreateWorkspaceForm } from './useCreateWorkspaceForm';
-import RemoveProtectedDatasetsFormField from '../RemoveProtectedDatasetsFormField';
+import RemoveRestrictedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
 
 function NewWorkspaceDialogFromSelections() {
   const {
@@ -19,14 +18,16 @@ function NewWorkspaceDialogFromSelections() {
     warningMessages,
     selectedRows,
     protectedRows,
-    protectedHubmapIds,
-    removeProtectedDatasets,
+    restrictedRows,
+    restrictedHubmapIds,
+    removeRestrictedDatasets,
     ...restWorkspaceDatasets
   } = useCreateWorkspaceDatasets();
+
   const { deselectRows } = useSelectableTableStore();
 
   const { control, errors, setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
-    initialProtectedDatasets: protectedHubmapIds,
+    initialRestrictedDatasets: [...restrictedHubmapIds],
     initialSelectedDatasets: [...selectedRows],
   });
 
@@ -50,7 +51,6 @@ function NewWorkspaceDialogFromSelections() {
       <NewWorkspaceDialog
         control={control}
         errors={errors}
-        errorMessages={errorMessages}
         removeDatasets={(uuids: string[]) => {
           removeDatasets(uuids);
           deselectRows(uuids);
@@ -58,15 +58,14 @@ function NewWorkspaceDialogFromSelections() {
         {...rest}
       >
         <Box>
-          <ErrorOrWarningMessages errorMessages={errorMessages} warningMessages={warningMessages} />
-          <RemoveProtectedDatasetsFormField
+          <RemoveRestrictedDatasetsFormField
             control={control}
-            protectedHubmapIds={protectedHubmapIds}
-            removeProtectedDatasets={() => {
-              removeProtectedDatasets();
-              removeDatasets(protectedRows.map((r) => r._id));
+            restrictedHubmapIds={restrictedHubmapIds}
+            removeRestrictedDatasets={() => {
+              removeRestrictedDatasets();
+              removeDatasets(restrictedRows);
             }}
-            protectedRows={protectedRows}
+            restrictedRows={restrictedRows}
             {...restWorkspaceDatasets}
           />
         </Box>

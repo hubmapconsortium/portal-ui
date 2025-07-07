@@ -4,19 +4,24 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
 import { useEditWorkspaceStore } from 'js/stores/useWorkspaceModalStore';
+import { useSelectableTableStore } from 'js/shared-styles/tables/SelectableTableProvider';
 import { useUpdateWorkspaceDatasets, useWorkspaceDetail } from '../hooks';
 import {
   datasetsField as datasetsFieldSchema,
   workspaceIdField as workspaceIdFieldSchema,
-  protectedDatasetsField,
+  restrictedDatasetsField,
 } from '../workspaceFormFields';
 import { useDatasetsAutocomplete } from '../AddDatasetsTable';
-import { useWorkspacesProtectedDatasetsForm, useTooManyDatasetsErrors, useTooManyDatasetsWarnings } from '../formHooks';
+import {
+  useWorkspacesRestrictedDatasetsForm,
+  useTooManyDatasetsErrors,
+  useTooManyDatasetsWarnings,
+} from '../formHooks';
 
 export interface AddDatasetsFromSearchFormTypes {
   datasets: string[];
   workspaceId: number;
-  'protected-datasets': string;
+  'restricted-datasets': string[];
 }
 
 function buildErrorMessages({
@@ -38,16 +43,16 @@ const schema = z
   .object({
     ...datasetsFieldSchema,
     ...workspaceIdFieldSchema,
-    ...protectedDatasetsField,
+    ...restrictedDatasetsField,
   })
   .required({ datasets: true, workspaceId: true });
 
 function useAddWorkspaceDatasetsFromSearchForm({
   initialDatasetUUIDs,
-  initialProtectedDatasets,
+  initialRestrictedDatasets,
 }: {
   initialDatasetUUIDs: string[];
-  initialProtectedDatasets: string;
+  initialRestrictedDatasets: string[];
 }) {
   const {
     handleSubmit,
@@ -59,7 +64,7 @@ function useAddWorkspaceDatasetsFromSearchForm({
     defaultValues: {
       datasets: initialDatasetUUIDs,
       workspaceId: undefined,
-      'protected-datasets': initialProtectedDatasets,
+      'restricted-datasets': initialRestrictedDatasets,
     },
     mode: 'onChange',
     resolver: zodResolver(schema),
@@ -76,20 +81,24 @@ function useAddWorkspaceDatasetsFromSearchForm({
 }
 
 function useAddDatasetsFromSearchDialog() {
+  const { selectedRows, deselectRows } = useSelectableTableStore();
   const {
-    selectedRows,
-    errorMessages: protectedDatasetsErrorMessages,
-    protectedHubmapIds,
-    removeProtectedDatasets: removeProtectedDatasetsFromSearchSelections,
+    errorMessages: restrictedDatasetsErrorMessages,
+    warningMessages: protectedDatasetsWarningMessages,
+    restrictedHubmapIds,
+    removeRestrictedDatasets: removeRestrictedDatasetsFromSearchSelections,
     protectedRows,
-    ...restProtectedDatasets
-  } = useWorkspacesProtectedDatasetsForm();
+    ...restRestrictedDatasets
+  } = useWorkspacesRestrictedDatasetsForm({
+    selectedRows,
+    deselectRows,
+  });
 
   const datasetsFromSearch = useMemo(() => [...selectedRows], [selectedRows]);
 
   const { handleSubmit, isSubmitting, control, errors, reset, setValue } = useAddWorkspaceDatasetsFromSearchForm({
     initialDatasetUUIDs: datasetsFromSearch,
-    initialProtectedDatasets: protectedHubmapIds,
+    initialRestrictedDatasets: restrictedHubmapIds,
   });
 
   const { field: datasetsField, fieldState: datasetsFieldState } = useController({
@@ -122,11 +131,11 @@ function useAddDatasetsFromSearchDialog() {
 
   const updateWorkspaceDatasets = useUpdateWorkspaceDatasets({ workspaceId: workspaceIdField.value });
 
-  const removeProtectedDatasets = useCallback(() => {
-    const protectedUUIDs = protectedRows.map((d) => d?._source?.uuid).filter((uuid): uuid is string => Boolean(uuid));
-    removeProtectedDatasetsFromSearchSelections();
+  const removeRestrictedDatasets = useCallback(() => {
+    const protectedUUIDs = protectedRows.filter((uuid): uuid is string => Boolean(uuid));
+    removeRestrictedDatasetsFromSearchSelections();
     removeDatasets(protectedUUIDs);
-  }, [removeProtectedDatasetsFromSearchSelections, removeDatasets, protectedRows]);
+  }, [removeRestrictedDatasetsFromSearchSelections, removeDatasets, protectedRows]);
 
   const submit = useCallback(
     async ({ datasets }: { datasets: string[] }) => {
@@ -143,16 +152,16 @@ function useAddDatasetsFromSearchDialog() {
   // react-hook-form's defaultValues are cached and must be set upon open. https://react-hook-form.com/docs/useform#defaultValues
   useEffect(() => {
     setValue('datasets', datasetsFromSearch);
-  }, [datasetsFromSearch, setValue, protectedHubmapIds, isOpen]);
+  }, [datasetsFromSearch, setValue, isOpen]);
 
   const selectWorkspace = useCallback(
     (workspaceId: number) => {
       workspaceIdField.onChange(workspaceId);
       const selectedDatasetsSet = new Set([...datasetsField.value, ...datasetsFromSearch]);
       setValue('datasets', [...selectedDatasetsSet]);
-      setValue('protected-datasets', protectedHubmapIds);
+      setValue('restricted-datasets', restrictedHubmapIds);
     },
-    [setValue, datasetsField.value, protectedHubmapIds, datasetsFromSearch, workspaceIdField],
+    [setValue, datasetsField.value, restrictedHubmapIds, datasetsFromSearch, workspaceIdField],
   );
 
   const tooManyDatasetsErrorMessages = useTooManyDatasetsErrors({
@@ -165,12 +174,12 @@ function useAddDatasetsFromSearchDialog() {
 
   const datasetsErrorMessages = buildErrorMessages({
     fieldState: datasetsFieldState,
-    otherErrors: [...protectedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
+    otherErrors: [...restrictedDatasetsErrorMessages, ...tooManyDatasetsErrorMessages],
   });
 
   const datasetsWarningMessages = buildErrorMessages({
     fieldState: datasetsFieldState,
-    otherErrors: [...tooManyDatasetsWarningMessages],
+    otherErrors: [...protectedDatasetsWarningMessages, ...tooManyDatasetsWarningMessages],
   });
 
   const workspaceIdErrorMessages = buildErrorMessages({
@@ -197,10 +206,10 @@ function useAddDatasetsFromSearchDialog() {
     datasetsWarningMessages,
     workspaceIdErrorMessages,
     selectWorkspace,
-    protectedHubmapIds,
+    restrictedHubmapIds,
     protectedRows,
-    removeProtectedDatasets,
-    ...restProtectedDatasets,
+    removeRestrictedDatasets,
+    ...restRestrictedDatasets,
   };
 }
 

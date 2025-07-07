@@ -8,10 +8,9 @@ import Typography from '@mui/material/Typography';
 
 import { LINKS, PAGES } from 'js/components/bulkDownload/constants';
 import { BulkDownloadFormTypes, useBulkDownloadDialog } from 'js/components/bulkDownload/hooks';
-import RemoveProtectedDatasetsFormField from 'js/components/workspaces/RemoveProtectedDatasetsFormField';
+import RemoveRestrictedDatasetsFormField from 'js/components/workspaces/RemoveRestrictedDatasetsFormField';
 import BulkDownloadOptionsField from 'js/components/bulkDownload/BulkDownloadOptionsField';
 import BulkDownloadMetadataField from 'js/components/bulkDownload/BulkDownloadMetadataField';
-import { DatasetAccessLevelHits } from 'js/hooks/useProtectedDatasets';
 import SummaryPaper from 'js/shared-styles/sections/SectionPaper';
 import DialogModal from 'js/shared-styles/dialogs/DialogModal';
 import { SectionDescription } from 'js/shared-styles/sections/SectionDescription';
@@ -47,32 +46,34 @@ function DownloadDescription() {
   );
 }
 
-interface ProtectedDatasetsSectionProps {
+interface RestrictedDatasetsSectionProps {
   control: Control<BulkDownloadFormTypes>;
   errorMessages: string[];
-  protectedHubmapIds: string;
-  protectedRows: DatasetAccessLevelHits;
-  removeProtectedDatasets: () => void;
+  warningMessages: string[];
+  restrictedHubmapIds: string[];
+  restrictedRows: string[];
+  removeRestrictedDatasets: () => void;
 }
-function ProtectedDatasetsSection({
+function RestrictedDatasetsSection({
   control,
   errorMessages,
-  protectedHubmapIds,
-  protectedRows,
-  removeProtectedDatasets,
-}: ProtectedDatasetsSectionProps) {
-  if (errorMessages.length === 0) {
+  warningMessages,
+  restrictedHubmapIds,
+  restrictedRows,
+  removeRestrictedDatasets,
+}: RestrictedDatasetsSectionProps) {
+  if (errorMessages.length === 0 && warningMessages.length === 0) {
     return null;
   }
 
   return (
     <Stack paddingY={1}>
-      <ErrorOrWarningMessages errorMessages={errorMessages} />
-      <RemoveProtectedDatasetsFormField
+      <ErrorOrWarningMessages warningMessages={warningMessages} errorMessages={errorMessages} />
+      <RemoveRestrictedDatasetsFormField
         control={control}
-        protectedHubmapIds={protectedHubmapIds}
-        removeProtectedDatasets={removeProtectedDatasets}
-        protectedRows={protectedRows}
+        restrictedHubmapIds={restrictedHubmapIds}
+        removeRestrictedDatasets={removeRestrictedDatasets}
+        restrictedRows={restrictedRows}
       />
     </Stack>
   );
@@ -106,18 +107,20 @@ interface DownloadOptionsSectionProps {
   }[];
   isLoading: boolean;
   errorMessages: string[];
-  protectedHubmapIds: string;
-  protectedRows: DatasetAccessLevelHits;
-  removeProtectedDatasets: () => void;
+  warningMessages: string[];
+  restrictedHubmapIds: string[];
+  restrictedRows: string[];
+  removeRestrictedDatasets: () => void;
 }
 function DownloadOptionsSection({
   control,
   downloadOptions,
   isLoading,
   errorMessages,
-  protectedHubmapIds,
-  protectedRows,
-  removeProtectedDatasets,
+  warningMessages,
+  restrictedHubmapIds,
+  restrictedRows,
+  removeRestrictedDatasets,
 }: DownloadOptionsSectionProps) {
   if (isLoading) {
     return (
@@ -140,12 +143,13 @@ function DownloadOptionsSection({
   return (
     <Box>
       <Step title="Download Options" hideRequiredText>
-        <ProtectedDatasetsSection
+        <RestrictedDatasetsSection
           control={control}
           errorMessages={errorMessages}
-          protectedHubmapIds={protectedHubmapIds}
-          protectedRows={protectedRows}
-          removeProtectedDatasets={removeProtectedDatasets}
+          warningMessages={warningMessages}
+          restrictedHubmapIds={restrictedHubmapIds}
+          restrictedRows={restrictedRows}
+          removeRestrictedDatasets={removeRestrictedDatasets}
         />
         <DownloadOptionsDescription />
         <SummaryPaper>

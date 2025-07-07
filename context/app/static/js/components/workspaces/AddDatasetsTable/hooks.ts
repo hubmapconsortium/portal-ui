@@ -6,6 +6,7 @@ import { Dataset } from 'js/components/types';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
+import { useCheckDatasetAccess } from 'js/hooks/useRestrictedDatasets';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -30,13 +31,6 @@ function buildIDPrefixQuery({ value, valuePrefix = '', uuidsToExclude = [] }: Bu
             term: {
               entity_type: {
                 value: 'dataset',
-              },
-            },
-          },
-          {
-            term: {
-              mapped_data_access_level: {
-                value: 'public',
               },
             },
           },
@@ -124,7 +118,17 @@ function useDatasetsAutocomplete({
   });
 
   const allDatasets = [...workspaceDatasets, ...selectedDatasets];
-  const { searchHits } = useSearchAhead({ value: inputValue, valuePrefix: 'HBM', uuidsToExclude: allDatasets });
+  const { searchHits: unfilteredSearchHits } = useSearchAhead({
+    value: inputValue,
+    valuePrefix: 'HBM',
+    uuidsToExclude: allDatasets,
+  });
+
+  const checkDatasetAccess = useCheckDatasetAccess();
+  const searchHits = unfilteredSearchHits.filter((hit) => {
+    const uuid = hit._source?.uuid;
+    return uuid && checkDatasetAccess(uuid);
+  });
 
   return {
     inputValue,

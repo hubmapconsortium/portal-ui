@@ -8,29 +8,27 @@ import AddRounded from '@mui/icons-material/AddRounded';
 import { WorkspacesIcon } from 'js/shared-styles/icons';
 import { useOpenDialog } from 'js/components/workspaces/WorkspacesDropdownMenu/WorkspacesDropdownMenu';
 import { useCreateWorkspaceForm } from 'js/components/workspaces/NewWorkspaceDialog/useCreateWorkspaceForm';
-import { useAppContext } from 'js/components/Contexts';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import NewWorkspaceDialog from 'js/components/workspaces/NewWorkspaceDialog/NewWorkspaceDialog';
 import { DialogType } from 'js/stores/useWorkspaceModalStore';
 import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
+import { useCheckDatasetAccess } from 'js/hooks/useRestrictedDatasets';
+import { useAppContext } from 'js/components/Contexts';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
-  datasetDetails: { hubmap_id: string; uuid: string; status: string; mapped_data_access_level: string };
+  hubmap_id: string;
+  uuid: string;
   dialogType: DialogType;
 }
 
-function ProcessedDataWorkspaceMenu({
-  button,
-  datasetDetails: { hubmap_id, uuid, status, mapped_data_access_level },
-  dialogType,
-}: ProcessedDataWorkspaceMenuProps) {
-  const { isWorkspacesUser } = useAppContext();
+function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: ProcessedDataWorkspaceMenuProps) {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const track = useTrackEntityPageEvent();
+  const hasWorkspaceAccess = useCheckDatasetAccess();
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     track({
@@ -85,10 +83,6 @@ function ProcessedDataWorkspaceMenu({
     'aria-expanded': open ? 'true' : undefined,
   });
 
-  if (!isWorkspacesUser || !hubmap_id || mapped_data_access_level !== 'Public' || status !== 'Published') {
-    return null;
-  }
-
   const options = [
     {
       children: 'Launch New Workspace',
@@ -101,6 +95,12 @@ function ProcessedDataWorkspaceMenu({
       icon: <AddRounded color="primary" />,
     },
   ];
+
+  const { isWorkspacesUser } = useAppContext();
+
+  if (!isWorkspacesUser || !hasWorkspaceAccess(uuid)) {
+    return null;
+  }
 
   // The selectable table provider is used here since a lot of the workspace logic relies on the selected rows
   return (
