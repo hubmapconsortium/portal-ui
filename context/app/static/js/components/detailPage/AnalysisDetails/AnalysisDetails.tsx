@@ -176,12 +176,7 @@ function WorkflowSteps({
               pipeline={pipeline}
               i={i}
               setRowIsExpanded={setRowIsExpanded}
-              key={createPipelineKey({
-                name: pipeline.name,
-                origin: pipeline.origin,
-                hash: pipeline.hash,
-                version: pipeline.version,
-              })}
+              key={createPipelineKey(pipeline)}
             />
           ))}
         </TableBody>
