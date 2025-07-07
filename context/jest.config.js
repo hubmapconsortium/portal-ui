@@ -1,3 +1,16 @@
+// Shared config for Jest with SWC and Styled Components plugin
+const experimental = {
+  plugins: [
+    [
+      '@swc/plugin-styled-components',
+      {
+        displayName: true,
+        ssr: false,
+      },
+    ],
+  ],
+};
+
 /** @type {import('jest').Config} */
 const config = {
   globals: {
@@ -28,17 +41,7 @@ const config = {
             tsx: true,
             decorators: false,
           },
-          experimental: {
-            plugins: [
-              [
-                '@swc/plugin-styled-components',
-                {
-                  displayName: true,
-                  ssr: false,
-                },
-              ],
-            ],
-          },
+          experimental,
         },
       },
     ],
@@ -51,17 +54,7 @@ const config = {
             tsx: false,
             decorators: false,
           },
-          experimental: {
-            plugins: [
-              [
-                '@swc/plugin-styled-components',
-                {
-                  displayName: true,
-                  ssr: false,
-                },
-              ],
-            ],
-          },
+          experimental,
         },
       },
     ],
