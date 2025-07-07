@@ -44,7 +44,7 @@ export const sectionIconMap: Record<string, typeof SvgIcon> = {
   'derived-data': ProcessedDataIcon, // Donors/Samples use this key
   'biomarker-query': DatasetIcon, // Genes use this key
   datasets: DatasetIcon, // Collections use this key
-  'distribution-across-organs': VisualizationIcon, // Cell Types use this key
+  'cell-type-distribution': VisualizationIcon, // Cell Types use this key
   biomarkers: GeneIcon, // Cell Types use this key
   'reference-based-analysis': VisualizationIcon,
   assays: DatasetIcon,

@@ -19,8 +19,6 @@ import EditRoundedIcon from '@mui/icons-material/EditRounded';
 import CollectionsBookmarkRoundedIcon from '@mui/icons-material/CollectionsBookmarkRounded';
 import EmailRoundedIcon from '@mui/icons-material/EmailRounded';
 import ListAltRoundedIcon from '@mui/icons-material/ListAltRounded';
-import ArrowDropDownRoundedIcon from '@mui/icons-material/ArrowDropDownRounded';
-import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import AddRoundedIcon from '@mui/icons-material/AddRounded';
 import DescriptionRoundedIcon from '@mui/icons-material/DescriptionRounded';
 import ContactSupportIcon from '@mui/icons-material/ContactSupportRounded';
@@ -52,6 +50,8 @@ import StopIcon from '@mui/icons-material/Stop';
 import NotificationsIcon from '@mui/icons-material/Notifications';
 import CancelPresentationRoundedIcon from '@mui/icons-material/CancelPresentationRounded';
 import ChecklistRoundedIcon from '@mui/icons-material/ChecklistRounded';
+import ExpandLess from '@mui/icons-material/ExpandLess';
+import ExpandMore from '@mui/icons-material/ExpandMore';
 
 import { createSvgIcon } from '@mui/material/utils';
 import DatabaseIconSVG from 'assets/svg/database.svg';
@@ -111,9 +111,9 @@ const EmailIcon = withIconStyles(EmailRoundedIcon);
 
 const ListsIcon = withIconStyles(ListAltRoundedIcon);
 
-const DownIcon = withIconStyles(ArrowDropDownRoundedIcon);
+const DownIcon = withIconStyles(ExpandMore);
 
-const UpIcon = withIconStyles(ArrowDropUpRoundedIcon);
+const UpIcon = withIconStyles(ExpandLess);
 
 const AddIcon = withIconStyles(AddRoundedIcon);
 

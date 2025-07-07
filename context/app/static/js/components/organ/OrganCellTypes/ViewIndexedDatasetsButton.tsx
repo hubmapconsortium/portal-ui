@@ -4,6 +4,7 @@ import React from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
+import { SxProps } from '@mui/material/styles';
 import { getSearchURL } from '../utils';
 
 interface ViewIndexedDatasetsButtonProps {
@@ -11,6 +12,7 @@ interface ViewIndexedDatasetsButtonProps {
   isLoading: boolean;
   trackingInfo?: EventInfo;
   context?: string;
+  sx?: SxProps;
 }
 
 export default function ViewIndexedDatasetsButton({
@@ -18,9 +20,10 @@ export default function ViewIndexedDatasetsButton({
   isLoading,
   trackingInfo,
   context = 'Datasets',
+  sx,
 }: ViewIndexedDatasetsButtonProps) {
   return (
-    <Box>
+    <Box sx={sx}>
       {isLoading ? (
         <Skeleton variant="rectangular" width={200} height={40} />
       ) : (

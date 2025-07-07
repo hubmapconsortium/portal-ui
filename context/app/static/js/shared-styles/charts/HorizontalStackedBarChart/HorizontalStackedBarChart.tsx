@@ -64,6 +64,7 @@ interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, Y
     },
   ) => void;
   getAriaLabel?: (d: TooltipData<Datum>) => string;
+  canBeMultipleKeys?: boolean;
 }
 
 function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>({
@@ -90,6 +91,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   onBarClick,
   getAriaLabel,
   srOnlyLabels,
+  canBeMultipleKeys = false,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
     margin,
@@ -160,6 +162,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                             : undefined
                         }
                         colorScale={colorScale}
+                        canBeMultipleKeys={canBeMultipleKeys}
                       />
                     ),
                 ),

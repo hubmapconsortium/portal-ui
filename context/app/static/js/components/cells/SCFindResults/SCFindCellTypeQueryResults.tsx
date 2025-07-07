@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo } from 'react';
-import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
+import React, { forwardRef, useEffect, useMemo } from 'react';
+import { Tab, TabPanel, TabProps, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import { Dataset } from 'js/components/types';
@@ -7,6 +7,15 @@ import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
+import HelperPanel from 'js/shared-styles/HelperPanel';
+import { useInView } from 'react-intersection-observer';
+import OrganIcon from 'js/shared-styles/icons/OrganIcon';
+import { capitalize } from '@mui/material/utils';
+import { extractCellTypeInfo, stringIsCellType } from 'js/api/scfind/utils';
+import Box from '@mui/material/Box';
+import { CellTypeIcon } from 'js/shared-styles/icons';
+import { decimal, percent } from 'js/helpers/number-format';
+import Divider from '@mui/material/Divider';
 import { useDeduplicatedResults, useSCFindCellTypeResults, useTableTrackingProps } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
@@ -16,6 +25,7 @@ import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 import DatasetsOverview from '../DatasetsOverview';
 import { SCFindQueryResultsListProps } from './types';
 import { targetCellCountColumn, totalCellCountColumn } from './columns';
+import useSCFindResultsStatisticsStore from './store';
 
 const columns = [hubmapID, organ, assayTypes, targetCellCountColumn, totalCellCountColumn, lastModifiedTimestamp];
 
@@ -48,6 +58,47 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListPr
   );
 }
 
+interface HelperPanelProps {
+  shouldDisplay: boolean;
+  currentTissue: string;
+}
+
+function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) {
+  const { datasetStats, cellTypeStats } = useSCFindResultsStatisticsStore((state) => ({
+    datasetStats: state.datasetStats,
+    cellTypeStats: state.cellTypeStats,
+  }));
+  const cellTypes = useCellVariableNames();
+
+  return (
+    <HelperPanel shouldDisplay={shouldDisplay}>
+      <HelperPanel.Header gap={1}>
+        <OrganIcon organName={currentTissue} />
+        {currentTissue && capitalize(currentTissue)}
+      </HelperPanel.Header>
+      <HelperPanel.BodyItem label="Cell Type Distribution">
+        <div>
+          This chart shows the distribution of cell types across {currentTissue} for the selected tissue. These results
+          are derived from RNAseq datasets that were indexed by the <SCFindLink />.
+        </div>
+        {/* For some reason, `py: 1` leads to the divider being vertically misaligned; pt:1 and mb: 1 are a workaround */}
+        <Divider sx={{ pt: 1, mb: 1 }} />
+        <div>
+          Targeted cell types are highlighted in the chart, and are a total of {decimal.format(cellTypeStats.targeted)}{' '}
+          out of {decimal.format(cellTypeStats.total)} indexed {currentTissue} cells, making up{' '}
+          {percent.format(cellTypeStats.targeted / cellTypeStats.total)} of the total cell count.
+        </div>
+      </HelperPanel.BodyItem>
+      <HelperPanel.BodyItem label="Datasets Overview">
+        This table provides more details about the {decimal.format(datasetStats.datasets.matched)} matched{' '}
+        {currentTissue} datasets containing any of the {decimal.format(cellTypes.length)} requested cell types, and
+        their demographics relative to the {decimal.format(datasetStats.datasets.indexed)} datasets indexed in scFind
+        and {decimal.format(datasetStats.datasets.total)} total HuBMAP datasets.
+      </HelperPanel.BodyItem>
+    </HelperPanel>
+  );
+}
+
 function OrganCellTypeDistributionCharts() {
   const { openTabIndex, handleTabChange } = useTabs();
   const cellTypes = useCellVariableNames();
@@ -60,7 +111,7 @@ function OrganCellTypeDistributionCharts() {
     return Array.from(uniqueTissues);
   }, [cellTypes]);
 
-  const { datasets } = useSCFindCellTypeResults();
+  const { datasets } = useSCFindCellTypeResults(cellTypes);
 
   const datasetsByTissue = useMemo(() => {
     const tissueMap: Record<string, string[]> = {};
@@ -78,8 +129,20 @@ function OrganCellTypeDistributionCharts() {
     return tissueMap;
   }, [datasets, tissues]);
 
+  const [displayHelper, setDisplayHelper] = React.useState(false);
+
+  const currentTissue = tissues[openTabIndex] || tissues[0];
+
+  const { ref: intersectionRef } = useInView({
+    threshold: 0.5,
+    initialInView: false,
+    onChange: (inView) => {
+      setDisplayHelper(inView);
+    },
+  });
+
   return (
-    <>
+    <div ref={intersectionRef}>
       <Tabs onChange={handleTabChange} value={openTabIndex}>
         {tissues.map((tissue, idx) => (
           <Tab key={tissue} label={tissue} index={idx} />
@@ -87,7 +150,7 @@ function OrganCellTypeDistributionCharts() {
       </Tabs>
       {tissues.map((tissue, idx) => (
         <TabPanel key={tissue} value={openTabIndex} index={idx}>
-          <CellTypeDistributionChart tissue={tissue} />
+          <CellTypeDistributionChart tissue={tissue} cellTypes={cellTypes} />
           <Typography variant="subtitle1" component="p">
             Datasets Overview
           </Typography>
@@ -99,12 +162,45 @@ function OrganCellTypeDistributionCharts() {
           </DatasetsOverview>
         </TabPanel>
       ))}
-    </>
+      <ResultsHelperPanel shouldDisplay={displayHelper} currentTissue={currentTissue} />
+    </div>
   );
 }
 
+interface CellTypeCategoryTabProps extends TabProps {
+  cellTypeCategory: string;
+  datasetCount: number;
+}
+
+const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
+  { cellTypeCategory, datasetCount, ...rest }: CellTypeCategoryTabProps,
+  ref: React.ForwardedRef<HTMLDivElement>,
+) {
+  const { organ: tissue, name, variant } = extractCellTypeInfo(cellTypeCategory);
+  const formattedVariant = variant ? ` (${variant})` : '';
+  const isCellType = stringIsCellType(cellTypeCategory);
+  const label = isCellType ? `${name}${formattedVariant} in ${capitalize(tissue)}` : cellTypeCategory;
+  const icon = isCellType ? <CellTypeIcon /> : <OrganIcon organName={cellTypeCategory} aria-label={cellTypeCategory} />;
+
+  return (
+    <Tab
+      ref={ref}
+      label={
+        <Stack direction="row" alignItems="center" gap={1}>
+          <Box flexShrink={0}>{icon}</Box>
+          <Box component="span" sx={{ textTransform: 'capitalize' }}>
+            {label} ({datasetCount})
+          </Box>
+        </Stack>
+      }
+      {...rest}
+    />
+  );
+});
+
 function DatasetListSection() {
-  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults();
+  const cellTypes = useCellVariableNames();
+  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults(cellTypes);
   const { openTabIndex, handleTabChange } = useTabs();
 
   if (isLoading) {
@@ -118,9 +214,18 @@ function DatasetListSection() {
   return (
     <>
       <DatasetListHeader />
-      <Tabs onChange={handleTabChange} value={openTabIndex}>
-        {cellTypeCategories.map((cellType, idx) => (
-          <Tab key={cellType} label={`${cellType} (${datasets[cellType]?.length ?? 0})`} index={idx} />
+      <Tabs
+        variant={cellTypeCategories.length >= 5 ? 'scrollable' : 'fullWidth'}
+        onChange={handleTabChange}
+        value={openTabIndex}
+      >
+        {cellTypeCategories.map((cellTypeCategory, idx) => (
+          <CellTypeCategoryTab
+            cellTypeCategory={cellTypeCategory}
+            index={idx}
+            datasetCount={datasets[cellTypeCategory]?.length ?? 0}
+            key={cellTypeCategory}
+          />
         ))}
       </Tabs>
       {cellTypeCategories.map((cellType, idx) => (
@@ -133,7 +238,9 @@ function DatasetListSection() {
 }
 
 function SCFindCellTypeQueryResultsLoader() {
-  const { datasets, isLoading, error } = useSCFindCellTypeResults();
+  const cellTypes = useCellVariableNames();
+
+  const { datasets, isLoading, error } = useSCFindCellTypeResults(cellTypes);
   const { setResults } = useResultsProvider();
 
   const deduplicatedResults = useDeduplicatedResults(datasets);
