@@ -17,4 +17,4 @@ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.7
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
-lxml>=4.9.1
+lxml>=6.0.0

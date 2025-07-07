@@ -151,7 +151,7 @@ locket==1.0.0
     # via
     #   distributed
     #   partd
-lxml==4.9.1
+lxml==6.0.0
     # via
     #   -r context/requirements.in
     #   prov
