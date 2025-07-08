@@ -1,8 +1,5 @@
 name: 🐍 Python CI
 
-env:
-  UV_SYSTEM_PYTHON: 1
-
 on:
   push:
     branches: [main]
@@ -23,7 +20,7 @@ jobs:
         uses: astral-sh/setup-uv@v5
         with:
           enable-cache: true
-          cache-dependency-glob: "context/requirements**.txt"
+          cache-dependency-glob: "context/requirements*.txt"
 
       - name: Set up Python
         uses: actions/setup-python@v5
@@ -39,6 +36,3 @@ jobs:
 
       - name: Run test script
         run: etc/test/test-python.sh
-
-      - name: Minimize uv cache
-        run: uv cache prune --ci
