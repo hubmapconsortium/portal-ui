@@ -109,7 +109,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
     - [Install `uv`](https://docs.astral.sh/uv/getting-started/installation/) using any supported installation method.
     - Create a `uv` virtual environment with the appropriate python version via `uv venv --python $(cat .python-version)`.
     - Activate the environment with `source .venv/bin/activate`.
-    - Install locked requirements with `uv pip sync context/requirements.txt` and `uv pip sync context/requirements-dev.txt`.
+    - Install locked requirements with `uv pip sync context/requirements.txt` and `uv pip install -r context/requirements-dev.txt`.
   - MiniConda:
     - [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands): `conda create -n portal python=$(cat .python-version)`
   - pyenv:

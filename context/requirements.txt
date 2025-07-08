@@ -92,7 +92,6 @@ globus-sdk==3.59.0
     #   hubmap-commons
 h5py==3.14.0
     # via
-    #   -c context/constraints.txt
     #   anndata
     #   scanpy
 hubmap-api-py-client==0.0.11
@@ -196,7 +195,7 @@ numcodecs==0.12.1
     # via
     #   vitessce
     #   zarr
-numpy==2.2.6
+numpy==1.26.4
     # via
     #   -c context/constraints.txt
     #   anndata
@@ -232,7 +231,7 @@ packaging==23.1
     #   scanpy
     #   scikit-image
     #   statsmodels
-pandas==2.3.1
+pandas==1.5.3
     # via
     #   -c context/constraints.txt
     #   anndata
@@ -320,9 +319,7 @@ s3transfer==0.13.0
 scanpy==1.10.4
     # via vitessce
 scikit-image==0.25.2
-    # via
-    #   -c context/constraints.txt
-    #   ome-zarr
+    # via ome-zarr
 scikit-learn==1.5.0
     # via
     #   pynndescent
@@ -382,8 +379,6 @@ traitlets==5.1.1
     #   nbformat
 typing-extensions==4.1.1
     # via python-datauri
-tzdata==2024.2
-    # via pandas
 umap-learn==0.5.3
     # via scanpy
 urllib3==1.26.17
