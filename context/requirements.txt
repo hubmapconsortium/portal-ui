@@ -90,8 +90,9 @@ globus-sdk==3.59.0
     # via
     #   -r context/requirements.in
     #   hubmap-commons
-h5py==3.9.0
+h5py==3.14.0
     # via
+    #   -c context/constraints.txt
     #   anndata
     #   scanpy
 hubmap-api-py-client==0.0.11

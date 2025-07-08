@@ -2,9 +2,9 @@
 # Frozenlist keeps getting resolved to v1.3.0 which fails to build on python 3.12
 frozenlist>=1.4.1
 
-# Numpy/scikit-image subdependencies needs to be new enough to support python 3.12
-numpy>=1.26.4
-pywavelets>=1.6.0
+# Numpy needs to be new enough to support python 3.12
+numpy>=2.0
 # pandas 2.1/scikit-image 0.21 throw build errors complaining about missing Python.h on pip sync
 pandas>=2.2
 scikit-image>=0.22.0
+h5py>=3.10.0
