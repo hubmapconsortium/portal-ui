@@ -28,10 +28,6 @@ jobs:
           python-version-file: ".python-version"
           architecture: "x64"
 
-        # libhdf5-dev is required for h5py
-      # - name: Install system dependencies
-      #   run: sudo apt-get update && sudo apt-get install -y libhdf5-dev
-
       - name: Install python main dependencies
         run: uv pip sync context/requirements.txt
 
