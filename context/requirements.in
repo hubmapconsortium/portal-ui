@@ -10,7 +10,7 @@ python-frontmatter>=1.1.0
 hubmap-api-py-client>=0.0.11
 hubmap-commons>=2.1.20
 # As of 2025-07-07, this version should be compatible with the hubmap-commons constraint of boto3>=1.24.47
-boto3>=1.38.28
+boto3>=1.39.3
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
 https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.7.zip
