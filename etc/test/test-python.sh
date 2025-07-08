@@ -19,7 +19,6 @@ end flake8
 
 start pytest
 cd context
-# vitessce_conf_builder is tested in its own repo.
-pytest app --ignore app/api/vitessce_conf_builder
+pytest app
 cd -
 end pytest
