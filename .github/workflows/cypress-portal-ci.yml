@@ -33,3 +33,10 @@ jobs:
         env:
           GH_ACTIONS_BRANCH: ${{ github.ref }}
           GH_ACTIONS: true
+
+      - - name: Upload screenshots
+          uses: actions/upload-artifact@v3
+          if: failure()
+          with:
+            name: cypress-screenshots
+            path: cypress/screenshots
