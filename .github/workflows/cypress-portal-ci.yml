@@ -28,9 +28,6 @@ jobs:
       - name: Install node dependencies
         run: npm ci --prefix end-to-end
 
-      - name: Set up git config to make dev-start.sh happy
-        run: git config --global submodule.recurse true
-
       - name: Run test script
         run: etc/test/test-cypress.sh portal
         env:
