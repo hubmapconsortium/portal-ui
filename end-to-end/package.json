@@ -4,13 +4,14 @@
   "description": "This segregates the test-only dependencies from those required for the build.",
   "main": "index.js",
   "devDependencies": {
-    "@testing-library/cypress": "^10.0.2",
+    "@testing-library/cypress": "^10.0.3",
     "artillery": "^1.6.1",
-    "cypress": "^13.11.0"
+    "cypress": "^14.5.1"
   },
   "scripts": {
     "cypress:open": "cypress open",
-    "cypress:run": "cypress run"
+    "cypress:run": "cypress run",
+    "cypress:run:headless": "cypress run --headless"
   },
   "repository": {
     "type": "git",
