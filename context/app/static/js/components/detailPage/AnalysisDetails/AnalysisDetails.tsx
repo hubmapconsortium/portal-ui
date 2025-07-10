@@ -84,11 +84,11 @@ function buildGithubURL(data: DagProvenanceType) {
 
 function WorkflowStep({
   pipeline,
-  i,
+  stepNumber,
   setRowIsExpanded,
 }: {
   pipeline: Pipeline;
-  i: number;
+  stepNumber: number;
   setRowIsExpanded: Dispatch<SetStateAction<boolean>>;
 }) {
   const { name, origin, input_parameters, documentation_url, hash, version } = pipeline;
@@ -114,7 +114,7 @@ function WorkflowStep({
       disabled={!input_parameters?.length}
       onExpand={onExpand}
     >
-      <ExpandableRowCell>{i + 1}</ExpandableRowCell>
+      <ExpandableRowCell>{stepNumber}</ExpandableRowCell>
       <ExpandableRowCell>
         {pipelineName} {Boolean(version) && `(${version})`}
       </ExpandableRowCell>
@@ -174,7 +174,7 @@ function WorkflowSteps({
           {steps.map((pipeline, i) => (
             <WorkflowStep
               pipeline={pipeline}
-              i={i}
+              stepNumber={i + 1}
               setRowIsExpanded={setRowIsExpanded}
               key={createPipelineKey(pipeline)}
             />
