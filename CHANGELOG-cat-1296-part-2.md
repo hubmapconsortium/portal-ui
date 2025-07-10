@@ -1,0 +1,1 @@
+- Update Python dependencies to eliminate reported vulnerabilities.

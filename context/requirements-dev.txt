@@ -60,10 +60,14 @@ python-dateutil==2.8.2
 s3transfer==0.13.0
     # via boto3
 setuptools==80.9.0
-    # via pip-tools
+    # via
+    #   -c context/constraints.txt
+    #   pip-tools
 six==1.16.0
     # via python-dateutil
-urllib3==1.26.17
-    # via botocore
+urllib3==2.5.0
+    # via
+    #   -c context/constraints.txt
+    #   botocore
 wheel==0.38.1
     # via pip-tools

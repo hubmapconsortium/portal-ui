@@ -1,6 +1,6 @@
 # Update requirements.txt if this file changes:
 # pip install pip-tools
-# uv pip compile context/requirements.in --universal --output-file context/requirements.txt
+# uv pip compile context/requirements.in --universal --python-version 3.12.8 --constraints context/constraints.txt --output-file context/requirements.txt
 Flask>=3.1.1
 Flask[async]>=3.1.1
 globus-sdk>=3.59.0

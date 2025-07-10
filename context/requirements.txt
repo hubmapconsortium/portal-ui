@@ -33,8 +33,10 @@ botocore==1.39.3
     #   boto3
     #   s3fs
     #   s3transfer
-certifi==2023.7.22
-    # via requests
+certifi==2025.7.9
+    # via
+    #   -c context/constraints.txt
+    #   requests
 cffi==1.15.0 ; platform_python_implementation != 'PyPy'
     # via cryptography
 charset-normalizer==2.0.12
@@ -55,8 +57,9 @@ colorama==0.4.6 ; platform_system == 'Windows'
     #   tqdm
 contourpy==1.1.0
     # via matplotlib
-cryptography==43.0.1
+cryptography==45.0.5
     # via
+    #   -c context/constraints.txt
     #   globus-sdk
     #   pyjwt
 cycler==0.11.0
@@ -114,8 +117,9 @@ isodate==0.6.1
     # via rdflib
 itsdangerous==2.2.0
     # via flask
-jinja2==3.1.4
+jinja2==3.1.6
     # via
+    #   -c context/constraints.txt
     #   distributed
     #   flask
 jmespath==1.0.1
@@ -339,8 +343,10 @@ seaborn==0.13.2
     # via scanpy
 session-info==1.0.0
     # via scanpy
-setuptools==75.6.0
-    # via rdflib
+setuptools==80.9.0
+    # via
+    #   -c context/constraints.txt
+    #   rdflib
 six==1.16.0
     # via
     #   isodate
@@ -366,10 +372,13 @@ toolz==0.12.0
     #   distributed
     #   ome-zarr
     #   partd
-tornado==6.4.2
-    # via distributed
-tqdm==4.66.1
+tornado==6.5.1
     # via
+    #   -c context/constraints.txt
+    #   distributed
+tqdm==4.67.1
+    # via
+    #   -c context/constraints.txt
     #   scanpy
     #   umap-learn
     #   vitessce
@@ -381,8 +390,9 @@ typing-extensions==4.1.1
     # via python-datauri
 umap-learn==0.5.3
     # via scanpy
-urllib3==1.26.17
+urllib3==2.5.0
     # via
+    #   -c context/constraints.txt
     #   botocore
     #   distributed
     #   requests
