@@ -120,10 +120,10 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
     - `` pyenv virtualenv `cat .python-version` portal ``
     - `pyenv activate portal`
 - `nodejs/npm`: Suggest installing a node version manager and then using it to install the appropriate node version:
-  - (`nvm`)[https://github.com/nvm-sh/nvm#installing-and-updating]
+  - [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating)
     - `` nvm install `cat .nvmrc`  ``
     - `` nvm use `cat .nvmrc`  ``
-  - (`n`)[https://github.com/tj/n#installation]
+  - [`n`](https://github.com/tj/n#installation)
     - `` n `cat .nvmrc` ``
 
 Optional:
