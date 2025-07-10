@@ -124,7 +124,7 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
     - `` nvm install `cat .nvmrc`  ``
     - `` nvm use `cat .nvmrc`  ``
   - (`n`)[https://github.com/tj/n#installation]
-    - `` n `cat.nvmrc` ``
+    - `` n `cat .nvmrc` ``
 
 Optional:
 
