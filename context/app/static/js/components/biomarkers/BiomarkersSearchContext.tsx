@@ -1,5 +1,6 @@
 import React, { Dispatch, PropsWithChildren, useMemo, useState } from 'react';
 import { createContext, useContext } from 'js/helpers/context';
+import { useTrackBiomarkerLandingPage } from './hooks';
 
 type FilterType = 'gene' | 'protein';
 
@@ -21,6 +22,8 @@ function BiomarkersSearchProvider({ children }: PropsWithChildren) {
   const [search, setSearch] = useState('');
   const [filterType, setFilterType] = useState<FilterType>();
 
+  const track = useTrackBiomarkerLandingPage();
+
   const searchState = useMemo(
     () => ({
       search,
@@ -32,10 +35,22 @@ function BiomarkersSearchProvider({ children }: PropsWithChildren) {
   const searchActions = useMemo(
     () => ({
       setSearch,
-      toggleFilterByGenes: () => setFilterType((c) => (c === 'gene' ? undefined : 'gene')),
-      toggleFilterByProteins: () => setFilterType((c) => (c === 'protein' ? undefined : 'protein')),
+      toggleFilterByGenes: () => {
+        setFilterType((c) => (c === 'gene' ? undefined : 'gene'));
+        track({
+          action: 'Select Table Filter',
+          label: 'Filter by Genes',
+        });
+      },
+      toggleFilterByProteins: () => {
+        setFilterType((c) => (c === 'protein' ? undefined : 'protein'));
+        track({
+          action: 'Select Table Filter',
+          label: 'Filter by Proteins',
+        });
+      },
     }),
-    [],
+    [track],
   );
 
   return (

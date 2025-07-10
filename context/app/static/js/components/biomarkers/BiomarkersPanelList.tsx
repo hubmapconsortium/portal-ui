@@ -7,7 +7,7 @@ import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { DownIcon } from 'js/shared-styles/icons';
 import { skeletons } from 'js/shared-styles/panels/ResponsivePanelCells';
 
-import { useResultsList, useViewMore } from './hooks';
+import { useResultsList, useTrackBiomarkerLandingPage, useViewMore } from './hooks';
 import BiomarkerPanel from './BiomarkersPanelItem';
 
 function ViewMoreButton() {
@@ -15,12 +15,18 @@ function ViewMoreButton() {
   const viewMore = useViewMore();
   const { toastError } = useSnackbarActions();
 
+  const track = useTrackBiomarkerLandingPage();
+
   const handleViewMore = useCallback(() => {
+    track({
+      action: 'Select Table "View More"',
+      label: 'Biomarkers',
+    });
     viewMore().catch((error: unknown) => {
       console.error(error);
       toastError('Failed to load more biomarkers.');
     });
-  }, [toastError, viewMore]);
+  }, [toastError, viewMore, track]);
 
   return (
     <LoadingButton
