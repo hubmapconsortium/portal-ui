@@ -6,3 +6,25 @@ frozenlist>=1.4.1
 # still compatible with python 3.12
 numpy==1.26.4
 pandas==1.5.3
+
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/318
+tornado>=6.5
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/317
+setuptools>=78.1.1
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/327
+urllib3>=2.5.0
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/294
+Jinja2>=3.1.6
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/290
+certifi>=2024.7.4
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/289
+cryptography>=44.0.1
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/231
+tqdm>=4.66.3
