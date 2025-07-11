@@ -6,8 +6,6 @@ import { useMemo } from 'react';
 export function useCellTypesList() {
   const { data, isLoading: isLoadingLabels, isValidating: isValidatingLabels } = useCellTypeNames();
 
-  const cellTypeLabels = useMemo(() => data?.cellTypeNames ?? [], [data]);
-
   const cellTypesMap = useCellTypeNamesMap();
 
   const {
@@ -20,22 +18,21 @@ export function useCellTypesList() {
     if (!cellTypeCLIDs) {
       return [];
     }
-    const formattedLabelsAndCLIDs = cellTypeCLIDs
-      .map((clids, idx) => ({
-        label: formatCellTypeName(cellTypeLabels[idx]),
-        clid: clids.CLIDs?.[0],
-      }))
-      // Filter any duplicate labels (keep first)
-      .filter((item, index, self) => index === self.findIndex((t) => t.label === item.label));
-
-    return formattedLabelsAndCLIDs.map(({ label, clid }) => {
-      return {
-        label,
-        organs: cellTypesMap[label] ?? [],
-        clid,
-      };
-    });
-  }, [cellTypeCLIDs, cellTypeLabels, cellTypesMap]);
+    const cellTypeLabels = data?.cellTypeNames ?? [];
+    return (
+      cellTypeCLIDs
+        .map((clids, idx) => {
+          const label = formatCellTypeName(cellTypeLabels[idx]);
+          return {
+            label,
+            clid: clids.CLIDs?.[0],
+            organs: cellTypesMap[label] ?? [],
+          };
+        })
+        // Filter any duplicate labels (keep first)
+        .filter((item, index, self) => index === self.findIndex((t) => t.label === item.label))
+    );
+  }, [cellTypeCLIDs, data?.cellTypeNames, cellTypesMap]);
 
   return {
     cellTypes,

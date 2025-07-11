@@ -44,11 +44,11 @@ const useUbkg = () => {
         if (!cellTypeId) {
           return null;
         }
-        if (cellTypeId.toUpperCase().startsWith('CL:') || cellTypeId.toUpperCase().startsWith('CL_')) {
-          const formattedId = cellTypeId.toUpperCase().replace('CL:', '').replace('CL_', '');
-          return `${ubkgEndpoint}/celltypes/${formattedId}`;
-        }
-        return `${ubkgEndpoint}/celltypes/${cellTypeId.toUpperCase()}`;
+        // Remove any non-digit characters from the cell type ID
+        // This is to ensure that the ID is in the correct format for the API,
+        // which expects a CL ID without any prefixes or suffixes.
+        const formattedClid = cellTypeId.replace(/\D/g, '');
+        return `${ubkgEndpoint}/celltypes/${formattedClid}`;
       },
       get cellTypeList() {
         return `${ubkgEndpoint}/celltypes-info`;

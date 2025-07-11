@@ -49,15 +49,14 @@ export const useYScale = (data: CellTypeCountWithPercentageAndOrgan[], maxCellCo
 
 export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
   const { showOtherCellTypes, showPercentages } = useCellTypesDistributionChartContext();
-  const { data, isLoading } = useCellTypeCountForTissues(organs);
+  const { data = [], isLoading } = useCellTypeCountForTissues(organs);
 
   const [targetCellTypeKeys, otherCellTypeKeys, allCellTypeKeys] = useMemo(() => {
     const formattedCellTypes = cellTypes.map((name) => formatCellTypeName(name));
-    const allOtherCellTypes = (
-      data?.flatMap((item) =>
+    const allOtherCellTypes = data
+      .flatMap((item) =>
         item.cellTypeCounts.filter((count) => !cellTypes.includes(count.index)).map((count) => count.index),
-      ) ?? []
-    )
+      )
       .map((name) => formatCellTypeName(name))
       .filter((name, idx, arr) => name && arr.indexOf(name) === idx);
 
@@ -72,20 +71,15 @@ export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
   const cellTypeCountsRecord = useMemo(() => {
     // The order of the cell type counts is determined by the order of the `organ` array
     const record: Record<string, CellTypeCountWithPercentageAndOrgan[]> = {};
-    const totalCountsForOrgan: Record<string, number> = {};
-
-    // Calculate the total cell counts for each organ
-    data?.forEach((item) => {
+    const totalCountsForOrgan: Record<string, number> = data.reduce<Record<string, number>>((acc, item) => {
       item.cellTypeCounts.forEach((count) => {
         const { organ } = extractCellTypeInfo(count.index);
-        if (!totalCountsForOrgan[organ]) {
-          totalCountsForOrgan[organ] = 0;
-        }
-        totalCountsForOrgan[organ] += count.cell_count;
+        acc[organ] = (acc[organ] || 0) + count.cell_count;
       });
-    });
+      return acc;
+    }, {});
 
-    data?.forEach((item, idx) => {
+    data.forEach((item, idx) => {
       const organ = organs[idx];
       const totalCellCountForOrgan = totalCountsForOrgan[organ] || 0;
       record[organ] = addPercentageAndOrganToCellTypeCounts(item.cellTypeCounts, totalCellCountForOrgan, organ);
