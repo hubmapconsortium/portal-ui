@@ -7,7 +7,7 @@ import { useIsMobile } from 'js/hooks/media-queries';
 import { PanelProps } from 'js/shared-styles/panels/Panel';
 
 const mobileStackProps: Partial<StackProps> = {
-  height: 'unset',
+  height: '100%',
   direction: 'column',
   spacing: 2,
   py: 2,

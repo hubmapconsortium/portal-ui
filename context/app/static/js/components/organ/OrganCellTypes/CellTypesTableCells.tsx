@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { MouseEventHandler } from 'react';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
@@ -7,27 +7,29 @@ import ViewEntitiesButton from '../ViewEntitiesButton';
 import { useCLID, useUUIDsFromHubmapIds } from '../hooks';
 import { CellTypeProps, CellTypeRowProps, CLIDCellProps } from './types';
 
-function CellTypeLink({ cellType }: CellTypeProps) {
+interface CellTypeLinkProps {
+  clid: string;
+  cellType: string;
+  onClick?: MouseEventHandler;
+}
+
+export function CellTypeLink({ clid, cellType, onClick }: CellTypeLinkProps) {
+  return (
+    <InternalLink href={`/cell-types/${clid}`} onClick={onClick}>
+      {cellType}
+    </InternalLink>
+  );
+}
+
+export function OrganCellTypeCell({ cellType }: CellTypeProps) {
   const clid = useCLID(cellType);
 
   if (!clid) return cellType;
-
-  return <InternalLink href={`/cell-types/${clid}`}>{cellType}</InternalLink>;
-}
-
-// TODO: Remove this when the cell types detail page is ready
-const enableLinks = false;
-
-export function CellTypeCell({ cellType }: CellTypeProps) {
-  if (!enableLinks) {
-    return cellType;
-  }
-
-  return <CellTypeLink cellType={cellType} />;
+  return <CellTypeLink clid={clid} cellType={cellType} />;
 }
 
 interface CLIDCellPropsWithTracking extends CLIDCellProps {
-  onClick?: () => void;
+  onClick?: MouseEventHandler;
 }
 
 export function CLIDCell({ clid, onClick }: CLIDCellPropsWithTracking) {

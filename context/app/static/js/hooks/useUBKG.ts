@@ -44,7 +44,11 @@ const useUbkg = () => {
         if (!cellTypeId) {
           return null;
         }
-        return `${ubkgEndpoint}/celltypes/${cellTypeId.toUpperCase()}`;
+        // Remove any non-digit characters from the cell type ID
+        // This is to ensure that the ID is in the correct format for the API,
+        // which expects a CL ID without any prefixes or suffixes.
+        const formattedClid = cellTypeId.replace(/\D/g, '');
+        return `${ubkgEndpoint}/celltypes/${formattedClid}`;
       },
       get cellTypeList() {
         return `${ubkgEndpoint}/celltypes-info`;
@@ -279,6 +283,7 @@ export const useCellTypeOntologyDetail = (cellTypeId?: string) => {
       }),
     {
       revalidateOnFocus: false,
+      shouldRetryOnError: false,
     },
   );
   return { data: data?.[0], ...swr };

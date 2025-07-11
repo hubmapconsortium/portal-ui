@@ -22,7 +22,7 @@ import { StyledTableContainer } from 'js/shared-styles/tables';
 import useHyperQueryCellTypes, { GeneSignatureStats } from 'js/api/scfind/useHyperQueryCellTypes';
 import { useLabelsToCLIDs } from 'js/api/scfind/useLabelToCLID';
 import { percent } from 'js/helpers/number-format';
-import { CLIDCell } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
+import { CellTypeLink, CLIDCell } from 'js/components/organ/OrganCellTypes/CellTypesTableCells';
 import { SortState, useSortState } from 'js/hooks/useSortState';
 import EntityHeaderCell from 'js/shared-styles/tables/EntitiesTable/EntityTableHeaderCell';
 import { useDownloadTable } from 'js/helpers/download';
@@ -112,7 +112,7 @@ const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
 };
 
 function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
-  const formattedCellName = cellType.cell_type.split('.').slice(1).join('.');
+  const formattedCellName = useMemo(() => cellType.cell_type.split('.').slice(1).join('.'), [cellType.cell_type]);
   const trackExpandRow = useTrackGeneDetailPage({
     action: 'Cell Types / Expand Row',
     label: formattedCellName,
@@ -125,6 +125,10 @@ function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
     action: 'Cell Types / Select CLID',
     label: formattedCellName,
   });
+  const trackCellTypeClick = useTrackGeneDetailPage({
+    action: 'Cell Types / Select Cell Type',
+    label: formattedCellName,
+  });
   return (
     <ExpandableRow
       numCells={6}
@@ -135,7 +139,13 @@ function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
         track();
       }}
     >
-      <ExpandableRowCell>{formattedCellName}</ExpandableRowCell>
+      <ExpandableRowCell>
+        {cellType.clid ? (
+          <CellTypeLink cellType={formattedCellName} clid={cellType.clid} onClick={trackCellTypeClick} />
+        ) : (
+          formattedCellName
+        )}
+      </ExpandableRowCell>
       <ExpandableRowCell>
         <CLIDCell onClick={trackCLIDClick} clid={cellType.clid} />
       </ExpandableRowCell>
