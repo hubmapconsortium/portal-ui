@@ -1,1 +1,0 @@
-- Implement Cell Types landing page.

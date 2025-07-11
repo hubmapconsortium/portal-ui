@@ -1,5 +1,22 @@
 # Changelog
 
+## v1.29.0 - 2025-07-11
+
+- Update workspace and bulk data transfer dialogs to allow access to protected datasets.
+- Update processed dataset analysis sections with more detailed workflow information.
+- Update gene detail page to display relevant cell types and molecular data query results.
+- Add tracking to biomarker landing page.
+- Update Python dependencies to eliminate reported vulnerabilities.
+- Update to Python 3.12.
+- Update to NodeJS 22.
+- Update outdated dependencies where possible to address security concerns.
+- Implement Cell Types landing page.
+- Add facets to filter datasets with annotations.
+- Replace hard coded list of Azimuth annotated datasets with search query.
+- Update Vitessce to v3.6.4.
+
+
+
 ## v1.28.1 - 2025-06-27
 
 - Fix flipped 'up' and 'down' icons across the portal.

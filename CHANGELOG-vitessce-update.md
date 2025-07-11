@@ -1,1 +1,0 @@
-- Update Vitessce to v3.6.4.
