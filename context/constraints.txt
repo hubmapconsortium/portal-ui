@@ -1,6 +1,30 @@
-# Use a constraints file to force pip to use cython<3 at build time to address:
-# "AttributeError: cython_sources" with Cython 3.0.0a10 #601 (comment)
-# https://stackoverflow.com/questions/77490435/attributeerror-cython-sources
-# May be removed after upgrading to PyYaml 6
-# https://github.com/yaml/pyyaml/issues/724
-cython<3
+
+# Frozenlist resolves to v1.3.0 otherwise, which fails to build on python 3.12
+frozenlist>=1.4.1
+
+# Last versions of pandas/numpy before the big breaking changes that came with with numpy 2.0,
+# still compatible with python 3.12
+numpy==1.26.4
+pandas==1.5.3
+
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/318
+tornado>=6.5
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/317
+setuptools>=78.1.1
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/327
+urllib3>=2.5.0
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/294
+Jinja2>=3.1.6
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/290
+certifi>=2024.7.4
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/289
+cryptography>=44.0.1
+
+# https://github.com/hubmapconsortium/portal-ui/security/dependabot/231
+tqdm>=4.66.3

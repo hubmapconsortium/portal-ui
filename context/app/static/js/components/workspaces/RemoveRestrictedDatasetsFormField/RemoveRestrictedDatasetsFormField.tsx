@@ -8,35 +8,38 @@ import { Control, FieldValues, Path, PathValue } from 'react-hook-form';
 
 import WorkspaceField from 'js/components/workspaces/WorkspaceField';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
-import { useWorkspacesProtectedDatasetsForm } from '../formHooks';
+import { generateCommaList } from 'js/helpers/functions';
+import { useWorkspacesRestrictedDatasetsForm } from '../formHooks';
 
 type Props<FormType extends FieldValues> = {
   control: Control<FormType>;
 } & Pick<
-  ReturnType<typeof useWorkspacesProtectedDatasetsForm>,
-  'protectedHubmapIds' | 'removeProtectedDatasets' | 'protectedRows'
+  ReturnType<typeof useWorkspacesRestrictedDatasetsForm>,
+  'restrictedHubmapIds' | 'removeRestrictedDatasets' | 'restrictedRows'
 >;
-function RemoveProtectedDatasetsFormField<FormType extends FieldValues>({
+function RemoveRestrictedDatasetsFormField<FormType extends FieldValues>({
   control,
-  protectedHubmapIds,
-  removeProtectedDatasets,
-  protectedRows,
+  restrictedHubmapIds,
+  removeRestrictedDatasets,
+  restrictedRows,
 }: Props<FormType>) {
   const handleCopyClick = useHandleCopyClick();
+  const hubmapIdsString = generateCommaList(restrictedHubmapIds);
 
   return (
-    protectedHubmapIds.length > 0 && (
+    restrictedHubmapIds.length > 0 && (
       <Box>
         <WorkspaceField
           control={control}
-          name={'protected-datasets' as Path<FormType>}
-          label="Protected Datasets"
-          value={protectedHubmapIds as PathValue<FormType, Path<FormType>>}
+          name={'restricted-datasets' as Path<FormType>}
+          label="Restricted Datasets"
+          value={restrictedHubmapIds as PathValue<FormType, Path<FormType>>}
           error
+          hideCharCount
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => handleCopyClick(protectedHubmapIds)}>
+                <IconButton onClick={() => handleCopyClick(hubmapIdsString)}>
                   <ContentCopyIcon />
                 </IconButton>
               </InputAdornment>
@@ -44,12 +47,12 @@ function RemoveProtectedDatasetsFormField<FormType extends FieldValues>({
             readOnly: true,
           }}
         />
-        <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeProtectedDatasets}>
-          Remove Protected Datasets ({protectedRows.length})
+        <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeRestrictedDatasets}>
+          Remove Restricted Datasets ({restrictedRows.length})
         </Button>
       </Box>
     )
   );
 }
 
-export default RemoveProtectedDatasetsFormField;
+export default RemoveRestrictedDatasetsFormField;

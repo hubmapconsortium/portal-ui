@@ -1,6 +1,8 @@
 import { useCallback } from 'react';
 import { useGeneOntologyList } from 'js/hooks/useUBKG';
+import { trackEvent } from 'js/helpers/trackers';
 import { useBiomarkersSearchState } from './BiomarkersSearchContext';
+import { EventInfo } from '../types';
 
 function useCurrentGenesList() {
   const { search } = useBiomarkersSearchState();
@@ -27,4 +29,13 @@ export function useViewMore() {
     if (isLoading || isValidating) return;
     await setSize(size + 1);
   }, [isLoading, isValidating, setSize, size]);
+}
+
+export function useTrackBiomarkerLandingPage() {
+  return useCallback((event: Partial<EventInfo>) => {
+    trackEvent({
+      ...event,
+      category: 'Biomarker Landing Page',
+    });
+  }, []);
 }

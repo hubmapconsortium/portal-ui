@@ -62,7 +62,7 @@ describe("Entity detail page all load", () => {
     pages.forEach((page) => {
       it(`loads a ${page.name} detail page`, () => {
         cy.visit(page.url);
-        cy.findAllByTestId(page.testId).first().click();
+        cy.findAllByTestId(page.testId, { timeout: 10000 }).first().click();
         cy.findByTestId("entity-title").should("exist").and("be.visible");
       });
     });

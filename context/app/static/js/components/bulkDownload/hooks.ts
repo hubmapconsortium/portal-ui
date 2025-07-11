@@ -8,11 +8,15 @@ import useBulkDownloadToasts from 'js/components/bulkDownload/toastHooks';
 import { ALL_BULK_DOWNLOAD_OPTIONS } from 'js/components/bulkDownload/constants';
 import { BulkDownloadDataset, useBulkDownloadStore } from 'js/stores/useBulkDownloadStore';
 import { useSearchHits } from 'js/hooks/useSearchData';
-import { useProtectedDatasetsForm } from 'js/hooks/useProtectedDatasets';
+import { useRestrictedDatasetsForm } from 'js/hooks/useRestrictedDatasets';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
 import { trackEvent } from 'js/helpers/trackers';
 import { getIDsQuery } from 'js/helpers/queries';
+import {
+  restrictedDatasetsErrorMessage,
+  protectedDatasetsWarningMessage,
+} from 'js/components/bulkDownload/bulkDownloadDatasetMessaging';
 
 const schema = z
   .object({
@@ -94,16 +98,16 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     [deselectRows, setUuids, uuids],
   );
 
-  const protectedDatasetsFields = useProtectedDatasetsForm({
+  const restrictedDatasetsFields = useRestrictedDatasetsForm({
     selectedRows: new Set(uuids),
     deselectRows: removeUuidsOrRows,
-    protectedDatasetsErrorMessage: (protectedDatasets) =>
-      `You have selected ${protectedDatasets.length} protected datasets.`,
-    trackEventHelper: (numProtectedDatasets) => {
+    protectedDatasetsWarningMessage,
+    restrictedDatasetsErrorMessage,
+    trackEventHelper: (numRestrictedDatasets) => {
       trackEvent({
         category: 'Bulk Download',
         action: 'Protected datasets selected',
-        value: numProtectedDatasets,
+        value: numRestrictedDatasets,
       });
     },
   });
@@ -195,7 +199,7 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     openDialog,
     downloadManifest,
     downloadMetadata,
-    ...protectedDatasetsFields,
+    ...restrictedDatasetsFields,
   };
 }
 

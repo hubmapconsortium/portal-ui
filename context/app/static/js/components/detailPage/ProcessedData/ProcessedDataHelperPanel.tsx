@@ -78,7 +78,7 @@ function Actions() {
     return null;
   }
 
-  const { hubmap_id, uuid, status, mapped_data_access_level } = currentDataset;
+  const { hubmap_id, uuid } = currentDataset;
 
   return (
     <>
@@ -88,7 +88,8 @@ function Actions() {
             <HelperPanel.Button startIcon={<WorkspacesIcon color="primary" />}>Workspace</HelperPanel.Button>
           </SecondaryBackgroundTooltip>
         }
-        datasetDetails={{ hubmap_id, uuid, status, mapped_data_access_level }}
+        hubmap_id={hubmap_id}
+        uuid={uuid}
         dialogType="ADD_DATASETS_FROM_HELPER_PANEL"
       />
       <SecondaryBackgroundTooltip title="Scroll down to the Bulk Data Transfer Section.">

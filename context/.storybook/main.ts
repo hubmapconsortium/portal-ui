@@ -13,7 +13,6 @@ const config: StorybookConfig = {
     '@storybook/addon-links',
     '@storybook/addon-essentials',
     'storybook-addon-swc',
-    '@chromatic-com/storybook',
     '@storybook/addon-webpack5-compiler-swc',
   ],
   staticDirs: ['../app/static/assets', '../app/static/storybook-public'],
@@ -26,7 +25,7 @@ const config: StorybookConfig = {
         rule != null &&
         'test' in rule &&
         rule.test instanceof RegExp &&
-        // Here's the actual check
+        // Here's the actual checks
         rule.test.test('.svg')
       ) {
         rule.exclude = /\.svg$/;

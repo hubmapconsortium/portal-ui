@@ -1,0 +1,3 @@
+- Update to Python 3.12.
+- Update to NodeJS 22.
+- Update outdated dependencies where possible to address security concerns.

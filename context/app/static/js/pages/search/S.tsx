@@ -172,6 +172,16 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
         field: 'assay_modality',
         type: FACETS.term,
       },
+      {
+        field: 'calculated_metadata.object_types',
+        type: FACETS.exists,
+        invert: false,
+        default: false,
+      },
+      {
+        field: 'calculated_metadata.annotation_tools',
+        type: FACETS.term,
+      },
     ],
     'Donor Metadata': makeDonorMetadataFilters({ entity_type: 'Dataset' }),
     Affiliation: [{ field: 'mapped_consortium', type: FACETS.term }, ...sharedAffiliationFilters],

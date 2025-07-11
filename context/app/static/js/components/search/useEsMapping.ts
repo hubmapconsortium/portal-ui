@@ -29,7 +29,13 @@ export function getESField({ mappings, field }: { mappings: Mappings; field: str
   const fieldPaths = field.split('.');
   const mappingsPath = ['mappings', ...fieldPaths].join('.properties.');
 
-  const { fields }: FieldMapping = get(mappings, mappingsPath);
+  const fieldMapping: FieldMapping = get(mappings, mappingsPath);
+
+  if (!fieldMapping) {
+    return field;
+  }
+
+  const { fields } = fieldMapping;
 
   if (fields?.keyword && fields?.keyword?.type === 'keyword') {
     return `${field}.keyword`;

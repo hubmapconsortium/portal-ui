@@ -8,6 +8,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import { useOptionalGeneContext } from 'js/components/cells/SCFindResults/CurrentGeneContext';
+import { useCheckDatasetAccess } from 'js/hooks/useRestrictedDatasets';
 import { SecondaryBackgroundTooltip } from '../tooltips';
 
 export interface CellContentProps<SearchDoc> {
@@ -19,10 +20,14 @@ function HubmapIDCell({
   trackingInfo,
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
+  const checkDatasetAccess = useCheckDatasetAccess();
+  const isRestricted = !checkDatasetAccess(uuid);
+
   const isNotPublic =
     mapped_status &&
     mapped_data_access_level &&
     (mapped_status !== 'Published' || mapped_data_access_level !== 'Public');
+
   const markerGene = useOptionalGeneContext();
 
   const href = useMemo(() => {
@@ -32,6 +37,14 @@ function HubmapIDCell({
     }
     return url.toString();
   }, [uuid, markerGene]);
+
+  const accessTooltip = useMemo(
+    () =>
+      isRestricted
+        ? 'This is a protected dataset that cannot be accessed with your current permissions.'
+        : 'This is a protected dataset. Access to this dataset depends on your user permissions.',
+    [isRestricted],
+  );
 
   return (
     <>
@@ -52,9 +65,9 @@ function HubmapIDCell({
       >
         {hubmap_id}
       </InternalLink>
-      {isNotPublic && (
-        <SecondaryBackgroundTooltip title="Access to the raw data for this dataset is restricted to authorized HuBMAP Consortium members. The dataset may not be available for bulk download or in Workspaces.">
-          <Typography variant="caption" color="warning" sx={{ display: 'block', mt: 1 }}>
+      {(isNotPublic || isRestricted) && (
+        <SecondaryBackgroundTooltip title={accessTooltip}>
+          <Typography variant="caption" color={isRestricted ? 'error' : 'warning'} sx={{ display: 'block', mt: 1 }}>
             {mapped_status} ({mapped_data_access_level})
           </Typography>
         </SecondaryBackgroundTooltip>

@@ -61,6 +61,8 @@ export interface Entity {
   descendant_ids: string[];
   ingest_metadata: {
     dag_provenance_list: DagProvenanceType[];
+    workflow_description?: string;
+    workflow_version?: string;
     [key: string]: unknown;
   };
   metadata: Record<string, unknown>;

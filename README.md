@@ -104,12 +104,12 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
 ### Prerequisites
 
 - `git`: Suggest [installing Apple XCode](https://developer.apple.com/xcode/).
-- `python 3.10`
+- `python 3.12`
   - `uv` (Recommended):
     - [Install `uv`](https://docs.astral.sh/uv/getting-started/installation/) using any supported installation method.
     - Create a `uv` virtual environment with the appropriate python version via `uv venv --python $(cat .python-version)`.
     - Activate the environment with `source .venv/bin/activate`.
-    - Install locked requirements with `uv pip sync context/requirements.txt` and `uv pip sync context/requirements-dev.txt`.
+    - Install locked requirements with `uv pip sync context/requirements.txt` and `uv pip install -r context/requirements-dev.txt`.
   - MiniConda:
     - [installing miniconda](https://docs.conda.io/en/latest/miniconda.html#macosx-installers) and [creating a new conda environment](https://docs.conda.io/projects/conda/en/latest/user-guide/tasks/manage-environments.html#creating-an-environment-with-commands): `conda create -n portal python=$(cat .python-version)`
   - pyenv:
@@ -119,9 +119,12 @@ All designs are in [Figma](https://www.figma.com/files/team/834568130405102661/H
     - `` pyenv install `cat .python-version`  ``
     - `` pyenv virtualenv `cat .python-version` portal ``
     - `pyenv activate portal`
-- `nodejs/npm`: Suggest [installing nvm](https://github.com/nvm-sh/nvm#installing-and-updating) and then using it to install the appropriate node version: `nvm install`.
-  - `` nvm install `cat .nvmrc`  ``
-  - `` nvm use `cat .nvmrc`  ``
+- `nodejs/npm`: Suggest installing a node version manager and then using it to install the appropriate node version:
+  - [`nvm`](https://github.com/nvm-sh/nvm#installing-and-updating)
+    - `` nvm install `cat .nvmrc`  ``
+    - `` nvm use `cat .nvmrc`  ``
+  - [`n`](https://github.com/tj/n#installation)
+    - `` n `cat .nvmrc` ``
 
 Optional:
 
@@ -134,7 +137,7 @@ Optional:
 
 ### Development
 
-After checking out the project, cd-ing into it, and setting up a Python 3.9 virtual environment,
+After checking out the project, cd-ing into it, and setting up a Python 3.12 virtual environment,
 
 - Get `app.conf` from [Confluence](https://hms-dbmi.atlassian.net/wiki/spaces/GL/pages/3045457929/app.conf) or from another developer and place it at `context/instance/app.conf`.
 - Run `etc/dev/dev-start.sh` to start the webpack dev and flask servers and then visit [localhost:5001](http://localhost:5001).
@@ -143,7 +146,7 @@ After checking out the project, cd-ing into it, and setting up a Python 3.9 virt
 The webpack dev server serves all files within the public directory and provides hot module replacement for the react application;
 The webpack dev server proxies all requests outside of those for files in the public directory to the flask server.
 
-Note: Searchkit, our interface to Elasticsearch, has changed significantly in the latest release. Documentation for version 2.0 can be found [here](https://github.com/searchkit/searchkit/tree/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs).
+Note: Searchkit, our interface to Elasticsearch for the dev-search page, has changed significantly in recent releases. Documentation for version 2.0 can be found [here](https://github.com/searchkit/searchkit/tree/6f3786657c8afa6990a41acb9f2371c28b2e0986/packages/searchkit-docs).
 
 ### Changelog files
 

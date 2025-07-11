@@ -10,25 +10,29 @@ jobs:
     # Available versions:
     # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     runs-on: ubuntu-24.04
+    env:
+      UV_SYSTEM_PYTHON: 1
 
     steps:
       - uses: actions/checkout@v4
+
+      - name: Install uv
+        uses: astral-sh/setup-uv@v5
         with:
-          submodules: "recursive"
+          enable-cache: true
+          cache-dependency-glob: "context/requirements*.txt"
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version-file: ".python-version"
           architecture: "x64"
-          cache: "pip"
-          cache-dependency-path: "context/requirements*.txt"
 
       - name: Install python main dependencies
-        run: pip install -r context/requirements.txt --constraint=context/constraints.txt
+        run: uv pip sync context/requirements.txt
 
       - name: Install python dev dependencies
-        run: pip install -r context/requirements-dev.txt --constraint=context/constraints.txt
+        run: uv pip install -r context/requirements-dev.txt
 
       - name: Run test script
         run: etc/test/test-python.sh

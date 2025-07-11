@@ -9,16 +9,6 @@ console.warn = (...args) => {
   }
 };
 
-// TODO: Hitting validation errors.
-// describe('Prov fixtures', () => {
-//   Object.entries(fixtures).forEach(([k, v]) => {
-//     it(`converts ${k} W3C JSON to 4DN CWL`, () => {
-//       const cwl = new ProvData(v.prov, v.getNameForActivity, v.getNameForEntity).toCwl();
-//       expect(cwl).toEqual(v.cwl, `Mismatch (full after diff):\n${JSON.stringify(cwl, null, 2)}`);
-//     });
-//   });
-// });
-
 const expectedErrorMessage = `
 Received invalid provenance data. The following categories of errors were found:
 Invalid input: 'prefix'
@@ -57,29 +47,6 @@ describe('ProvData methods', () => {
     expect(prov.getChildActivityNames('hubmap:ent-1')).toEqual(['hubmap:act-1', 'hubmap:act-2', 'hubmap:act-4']);
   });
 });
-
-// No such function: Maybe version mismatch?
-//
-// describe('PROV expansion', () => {
-//   it('should expand prefixes', () => {
-//     expect(
-//       expand(
-//         {
-//           'do:C': { 're:D': 'mi:E' },
-//           're:D': { 're:D': 'not-expanded' },
-//         },
-//         {
-//           do: 'deer#',
-//           re: 'drop-of-golden-sun#',
-//           mi: 'name-i-call-myself#',
-//         },
-//       ),
-//     ).toEqual({
-//       'deer#C': { 'drop-of-golden-sun#D': 'name-i-call-myself#E' },
-//       'drop-of-golden-sun#D': { 'drop-of-golden-sun#D': 'not-expanded' },
-//     });
-//   });
-// });
 
 describe('CWL utils', () => {
   it('makeCwlInput reference', () => {
