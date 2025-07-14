@@ -51,7 +51,7 @@ cloudpickle==2.2.1
     # via
     #   dask
     #   distributed
-colorama==0.4.6 ; platform_system == 'Windows'
+colorama==0.4.6 ; sys_platform == 'win32'
     # via
     #   click
     #   tqdm
@@ -163,13 +163,13 @@ markupsafe==2.1.1
     #   flask
     #   jinja2
     #   werkzeug
-matplotlib==3.7.2
+matplotlib==3.8.4
     # via
     #   scanpy
     #   seaborn
 msgpack==1.0.8
     # via distributed
-multidict==6.0.2
+multidict==6.6.3
     # via
     #   aiohttp
     #   yarl
