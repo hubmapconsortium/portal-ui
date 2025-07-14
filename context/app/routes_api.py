@@ -78,7 +78,7 @@ def entities_tsv(entity_type):
 
     return make_response(tsv)
 
-# This endpoint is the UDI demo site - produces plain TSV without descriptions and removes CORS block.
+# This endpoint is for the UDI demo site - produces plain TSV without descriptions and removes CORS block.
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
     if request.method == 'GET':
@@ -92,8 +92,8 @@ def entities_plain_tsv(entity_type):
             return _get_api_json_error(400, 'POST only accepts uuids in JSON body.')
         constraints = {}
         uuids = body.get('uuids')
-    entities = _get_entities(entity_type, constraints, uuids)
 
+    entities = _get_entities(entity_type, constraints, uuids)
     tsv = _dicts_to_tsv(entities, _first_fields)
 
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
