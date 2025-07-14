@@ -89,7 +89,9 @@ def generate_tsv_response(
     response.headers['Content-Disposition'] = f'attachment; filename={filename}'
 
     if cors_origin:
-        response.headers['Access-Control-Allow-Origin'] = cors_origin
+        origin = request.headers.get('Origin')
+        if origin == cors_origin:
+            response.headers['Access-Control-Allow-Origin'] = origin
 
     return response
 
