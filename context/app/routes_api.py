@@ -100,7 +100,7 @@ def entities_tsv(entity_type):
 # This endpoint is for the UDI demo site - produces plain TSV without descriptions and removes CORS block.
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
-    return generate_tsv_response(entity_type, with_descriptions=False, cors_origin='http://localhost:9000')
+    return generate_tsv_response(entity_type, with_descriptions=False, cors_origin='https://hms-dbmi.github.io')
 
 
 @blueprint.route('/lineup/<entity_type>')
