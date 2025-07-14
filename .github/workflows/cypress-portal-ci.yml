@@ -28,11 +28,15 @@ jobs:
       - name: Install node dependencies
         run: npm ci --prefix end-to-end
 
-      - name: Set up git config to make dev-start.sh happy
-        run: git config --global submodule.recurse true
-
       - name: Run test script
         run: etc/test/test-cypress.sh portal
         env:
           GH_ACTIONS_BRANCH: ${{ github.ref }}
           GH_ACTIONS: true
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: end-to-end/cypress/screenshots
