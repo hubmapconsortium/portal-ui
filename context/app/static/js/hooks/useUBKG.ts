@@ -243,7 +243,7 @@ export const useGeneOntologyList = (starts_with: string) => {
   const apiUrls = useUbkg();
   const query = useMemo(
     () => ({
-      genesperpage: '10',
+      genes_per_page: '10',
       starts_with,
     }),
     [starts_with],
