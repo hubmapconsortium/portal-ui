@@ -56,7 +56,11 @@ def metadata_descriptions():
     return {d['name']: _get_recent_description(d['descriptions']) for d in field_descriptions}
 
 
-def generate_tsv_response(entity_type: str, with_descriptions: bool = True, cors_origin: Optional[str] = None):
+def generate_tsv_response(
+    entity_type: str,
+    with_descriptions: bool = True,
+    cors_origin: Optional[str] = None
+):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
         uuids, constraints = _extract_uuids_and_constraints(all_args, use_list=True)
@@ -97,10 +101,15 @@ def entities_tsv(entity_type):
     return generate_tsv_response(entity_type, with_descriptions=True)
 
 
-# This endpoint is for the UDI demo site - produces plain TSV without descriptions and removes CORS block.
+# This endpoint is for the UDI demo site - produces plain TSV without descriptions and
+# removes CORS block.
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
-    return generate_tsv_response(entity_type, with_descriptions=False, cors_origin='https://hms-dbmi.github.io')
+    return generate_tsv_response(
+        entity_type,
+        with_descriptions=False,
+        cors_origin='https://hms-dbmi.github.io'
+    )
 
 
 @blueprint.route('/lineup/<entity_type>')
