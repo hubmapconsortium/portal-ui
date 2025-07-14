@@ -2,6 +2,7 @@ from functools import cache
 from io import StringIO
 from csv import DictWriter
 from datetime import datetime
+from typing import Optional
 
 import requests
 
@@ -55,32 +56,7 @@ def metadata_descriptions():
     return {d['name']: _get_recent_description(d['descriptions']) for d in field_descriptions}
 
 
-@blueprint.route('/metadata/v0/<entity_type>.tsv', methods=['GET', 'POST'])
-def entities_tsv(entity_type):
-    if request.method == 'GET':
-        all_args = request.args.to_dict(flat=False)
-        uuids, constraints = _extract_uuids_and_constraints(all_args, use_list=True)
-    else:
-        if request.args:
-            return _get_api_json_error(400, 'POST only accepts a JSON body.')
-        body = request.get_json()
-        if _drop_dict_keys(body, ['uuids']):
-            return _get_api_json_error(400, 'POST only accepts uuids in JSON body.')
-        constraints = {}
-        uuids = body.get('uuids')
-    entities = _get_entities(entity_type, constraints, uuids)
-
-    descriptions_dict = metadata_descriptions()
-    tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
-
-    timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
-    filename = f'hubmap-{entity_type}-metadata-{timestamp}.tsv'
-
-    return make_response(tsv)
-
-# This endpoint is for the UDI demo site - produces plain TSV without descriptions and removes CORS block.
-@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
-def entities_plain_tsv(entity_type):
+def generate_tsv_response(entity_type: str, with_descriptions: bool = True, cors_origin: Optional[str] = None):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
         uuids, constraints = _extract_uuids_and_constraints(all_args, use_list=True)
@@ -94,7 +70,12 @@ def entities_plain_tsv(entity_type):
         uuids = body.get('uuids')
 
     entities = _get_entities(entity_type, constraints, uuids)
-    tsv = _dicts_to_tsv(entities, _first_fields)
+
+    if with_descriptions:
+        descriptions_dict = metadata_descriptions()
+        tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
+    else:
+        tsv = _dicts_to_tsv(entities, _first_fields)
 
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     filename = f'hubmap-{entity_type}-metadata-{timestamp}.tsv'
@@ -102,9 +83,24 @@ def entities_plain_tsv(entity_type):
     response = make_response(tsv)
     response.headers['Content-Type'] = 'text/tab-separated-values'
     response.headers['Content-Disposition'] = f'attachment; filename={filename}'
-    response.headers['Access-Control-Allow-Origin'] = 'https://hms-dbmi.github.io'
+
+    if cors_origin:
+        origin = request.headers.get('Origin')
+        if origin == cors_origin:
+            response.headers['Access-Control-Allow-Origin'] = origin
 
     return response
+
+
+@blueprint.route('/metadata/v0/<entity_type>.tsv', methods=['GET', 'POST'])
+def entities_tsv(entity_type):
+    return generate_tsv_response(entity_type, with_descriptions=True)
+
+
+# This endpoint is for the UDI demo site - produces plain TSV without descriptions and removes CORS block.
+@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
+def entities_plain_tsv(entity_type):
+    return generate_tsv_response(entity_type, with_descriptions=False, cors_origin='http://localhost:9000')
 
 
 @blueprint.route('/lineup/<entity_type>')
