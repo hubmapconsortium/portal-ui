@@ -78,8 +78,8 @@ def entities_tsv(entity_type):
 
     return make_response(tsv)
 
-# This endpoint is for plain TSV without descriptions - also removes CORS block for UDI demo site.
-@blueprint.route('/metadata/v0/plain/<entity_type>.tsv', methods=['GET', 'POST'])
+# This endpoint is the UDI demo site - produces plain TSV without descriptions and removes CORS block.
+@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
@@ -102,7 +102,8 @@ def entities_plain_tsv(entity_type):
     response = make_response(tsv)
     response.headers['Content-Type'] = 'text/tab-separated-values'
     response.headers['Content-Disposition'] = f'attachment; filename={filename}'
-    response.headers['Access-Control-Allow-Origin'] = 'http://localhost:9000'
+    response.headers['Access-Control-Allow-Origin'] = 'https://hms-dbmi.github.io'
+
     return response
 
 
