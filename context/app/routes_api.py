@@ -85,7 +85,7 @@ def generate_tsv_response(
     filename = f'hubmap-{entity_type}-metadata-{timestamp}.tsv'
 
     response = make_response(tsv)
-    response.headers['Content-Type'] = 'text/tab-separated-values'
+    response.headers['Content-Type'] = 'text/tab-separated-values; charset=utf-8'
     response.headers['Content-Disposition'] = f'attachment; filename={filename}'
     response.headers['Access-Control-Allow-Origin'] = cors_origin
 
