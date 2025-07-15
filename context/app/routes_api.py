@@ -230,7 +230,7 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
         tsv_lines = tsv.split('\n')
         tsv_lines[1] = '#' + tsv_lines[1]
         return '\n'.join(tsv_lines)
-    else: 
+    else:
         writer.writerows(data_dicts)
         return output.getvalue()
 
