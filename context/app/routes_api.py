@@ -87,11 +87,7 @@ def generate_tsv_response(
     response = make_response(tsv)
     response.headers['Content-Type'] = 'text/tab-separated-values'
     response.headers['Content-Disposition'] = f'attachment; filename={filename}'
-
-    if cors_origin:
-        origin = request.headers.get('Origin')
-        if origin == cors_origin:
-            response.headers['Access-Control-Allow-Origin'] = origin
+    response.headers['Access-Control-Allow-Origin'] = cors_origin
 
     return response
 
@@ -108,7 +104,7 @@ def entities_plain_tsv(entity_type):
     return generate_tsv_response(
         entity_type,
         with_descriptions=False,
-        cors_origin='https://hms-dbmi.github.io'
+        cors_origin='http://localhost:9000'
     )
 
 
@@ -192,8 +188,11 @@ def _make_tsv_response(tsv_content, filename):
 def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
     '''
     >>> data_dicts = [
+    ...   # explicit subtitle
     ...   {'title': 'Star Wars', 'subtitle': 'A New Hope', 'date': '1977'},
+    ...   # empty subtitle
     ...   {'title': 'The Empire Strikes Back', 'subtitle': '', 'date': '1980'},
+    ...   # N/A subtitle
     ...   {'title': 'Return of the Jedi', 'date': '1983'}
     ... ]
     >>> descriptions_dict = {
@@ -201,19 +200,19 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
     ...   'date': 'date released',
     ...   'extra': 'should be ignored'
     ... }
-    >>> lines = _dicts_to_tsv(data_dicts, ['title'], descriptions_dict).split('\\n')
+    >>> lines = _dicts_to_tsv(data_dicts, ['title'], descriptions_dict).split('\\r\\n')
     >>> for line in lines:
     ...   print('| ' + ' | '.join(line.split('\\t')) + ' |')
     | title | date | subtitle |
-    | #main title | date released |  |
-    | Star Wars | 1977 | A New Hope |
+    | #main title | #date released | #
+    Star Wars | 1977 | A New Hope |
     | The Empire Strikes Back | 1980 |  |
     | Return of the Jedi | 1983 | N/A |
+    |  |
     '''
     body_fields = sorted(
         set().union(*[d.keys() for d in data_dicts]) - set(first_fields)
     )
-
     for dd in data_dicts:
         for field in body_fields:
             if field not in dd:
