@@ -104,7 +104,7 @@ def entities_plain_tsv(entity_type):
     return generate_tsv_response(
         entity_type,
         with_descriptions=False,
-        cors_origin='http://localhost:9000'
+        cors_origin='https://hms-dbmi.github.io'
     )
 
 
@@ -204,8 +204,8 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
     >>> for line in lines:
     ...   print('| ' + ' | '.join(line.split('\\t')) + ' |')
     | title | date | subtitle |
-    | #main title | #date released | #
-    Star Wars | 1977 | A New Hope |
+    | #main title | date released |  |
+    | Star Wars | 1977 | A New Hope |
     | The Empire Strikes Back | 1980 |  |
     | Return of the Jedi | 1983 | N/A |
     |  |
@@ -222,16 +222,17 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
     fieldnames = first_fields + body_fields
     writer = DictWriter(output, fieldnames, delimiter='\t', extrasaction='ignore')
     writer.writeheader()
-    writer.writerows(data_dicts)
-
-    tsv_lines = output.getvalue().split('\n')
 
     # Conditionally add descriptions row
     if descriptions_dict:
-        desc_row = ['#' + descriptions_dict.get(f, '') for f in fieldnames]
-        tsv_lines.insert(1, '\t'.join(desc_row))
-
-    return '\n'.join(tsv_lines)
+        writer.writerows([descriptions_dict] + data_dicts)
+        tsv = output.getvalue()
+        tsv_lines = tsv.split('\n')
+        tsv_lines[1] = '#' + tsv_lines[1]
+        return '\n'.join(tsv_lines)
+    else: 
+        writer.writerows(data_dicts)
+        return output.getvalue()
 
 
 @cache
