@@ -10,7 +10,7 @@ The services the portal relies on are [listed separately](/services).
 ```
 # Update requirements.txt if this file changes:
 # pip install pip-tools
-# uv pip compile context/requirements.in --universal --python-version 3.12.8 --constraints context/constraints.txt --output-file context/requirements.txt
+# uv pip compile context/requirements.in --universal --python-version 3.12.8 --constraint context/constraints.txt --output-file context/requirements.txt
 Flask>=3.1.1
 Flask[async]>=3.1.1
 globus-sdk>=3.59.0
@@ -23,7 +23,7 @@ hubmap-commons>=2.1.20
 boto3>=1.39.3
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.7.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.8.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
