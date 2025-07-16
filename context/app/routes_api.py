@@ -2,10 +2,11 @@ from functools import cache
 from io import StringIO
 from csv import DictWriter
 from datetime import datetime
+from typing import Optional
 
 import requests
 
-from flask import Response, abort, request, render_template, jsonify, current_app
+from flask import Response, abort, request, render_template, jsonify, current_app, make_response
 
 from .utils import make_blueprint, get_client, get_default_flask_data
 
@@ -55,8 +56,11 @@ def metadata_descriptions():
     return {d['name']: _get_recent_description(d['descriptions']) for d in field_descriptions}
 
 
-@blueprint.route('/metadata/v0/<entity_type>.tsv', methods=['GET', 'POST'])
-def entities_tsv(entity_type):
+def _generate_tsv_response(
+    entity_type: str,
+    with_descriptions: bool = True,
+    cors_origin: Optional[str] = None
+):
     if request.method == 'GET':
         all_args = request.args.to_dict(flat=False)
         uuids, constraints = _extract_uuids_and_constraints(all_args, use_list=True)
@@ -68,15 +72,42 @@ def entities_tsv(entity_type):
             return _get_api_json_error(400, 'POST only accepts uuids in JSON body.')
         constraints = {}
         uuids = body.get('uuids')
+
     entities = _get_entities(entity_type, constraints, uuids)
 
-    descriptions_dict = metadata_descriptions()
-    tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
+    if with_descriptions:
+        descriptions_dict = metadata_descriptions()
+        tsv = _dicts_to_tsv(entities, _first_fields, descriptions_dict)
+    else:
+        tsv = _dicts_to_tsv(entities, _first_fields)
 
     timestamp = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
     filename = f'hubmap-{entity_type}-metadata-{timestamp}.tsv'
 
-    return _make_tsv_response(tsv, filename)
+    response = make_response(tsv)
+    response.headers['Content-Type'] = 'text/tab-separated-values; charset=utf-8'
+    response.headers['Content-Disposition'] = f'attachment; filename={filename}'
+
+    if cors_origin:
+        response.headers['Access-Control-Allow-Origin'] = cors_origin
+
+    return response
+
+
+@blueprint.route('/metadata/v0/<entity_type>.tsv', methods=['GET', 'POST'])
+def entities_tsv(entity_type):
+    return _generate_tsv_response(entity_type, with_descriptions=True)
+
+
+# This endpoint is for the UDI demo site - produces plain TSV without descriptions and
+# removes CORS block.
+@blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
+def entities_plain_tsv(entity_type):
+    return _generate_tsv_response(
+        entity_type,
+        with_descriptions=False,
+        cors_origin='https://hms-dbmi.github.io'
+    )
 
 
 @blueprint.route('/lineup/<entity_type>')
@@ -156,7 +187,7 @@ def _make_tsv_response(tsv_content, filename):
     )
 
 
-def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
+def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
     '''
     >>> data_dicts = [
     ...   # explicit subtitle
@@ -181,23 +212,29 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict):
     | Return of the Jedi | 1983 | N/A |
     |  |
     '''
-    # wrap in default dicts that return 'n/a'
     body_fields = sorted(
-        set().union(*[d.keys() for d in data_dicts])
-        - set(first_fields)
+        set().union(*[d.keys() for d in data_dicts]) - set(first_fields)
     )
     for dd in data_dicts:
         for field in body_fields:
             if field not in dd:
                 dd[field] = 'N/A'
+
     output = StringIO()
-    writer = DictWriter(output, first_fields + body_fields, delimiter='\t', extrasaction='ignore')
+    field_names = first_fields + body_fields
+    writer = DictWriter(output, field_names, delimiter='\t', extrasaction='ignore')
     writer.writeheader()
-    writer.writerows([descriptions_dict] + data_dicts)
-    tsv = output.getvalue()
-    tsv_lines = tsv.split('\n')
-    tsv_lines[1] = '#' + tsv_lines[1]
-    return '\n'.join(tsv_lines)
+
+    # Conditionally add descriptions row
+    if descriptions_dict:
+        writer.writerows([descriptions_dict] + data_dicts)
+        tsv = output.getvalue()
+        tsv_lines = tsv.split('\n')
+        tsv_lines[1] = '#' + tsv_lines[1]
+        return '\n'.join(tsv_lines)
+    else:
+        writer.writerows(data_dicts)
+        return output.getvalue()
 
 
 @cache
