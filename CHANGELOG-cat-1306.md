@@ -1,1 +1,0 @@
-- Fix genes-info endpoint parameters.

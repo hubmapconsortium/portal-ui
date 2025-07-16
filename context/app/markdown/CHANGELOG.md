@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.29.1 - 2025-07-16
+
+- Fix genes-info endpoint parameters.
+- Add metadata endpoint for UDI demo site.
+- Update portal-visualization version to fix the multiomic datasets' visualizations.
+
+
+
 ## v1.29.0 - 2025-07-11
 
 - Update workspace and bulk data transfer dialogs to allow access to protected datasets.
