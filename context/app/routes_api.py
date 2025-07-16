@@ -56,7 +56,7 @@ def metadata_descriptions():
     return {d['name']: _get_recent_description(d['descriptions']) for d in field_descriptions}
 
 
-def generate_tsv_response(
+def _generate_tsv_response(
     entity_type: str,
     with_descriptions: bool = True,
     cors_origin: Optional[str] = None
@@ -87,21 +87,23 @@ def generate_tsv_response(
     response = make_response(tsv)
     response.headers['Content-Type'] = 'text/tab-separated-values; charset=utf-8'
     response.headers['Content-Disposition'] = f'attachment; filename={filename}'
-    response.headers['Access-Control-Allow-Origin'] = cors_origin
+
+    if cors_origin:
+        response.headers['Access-Control-Allow-Origin'] = cors_origin
 
     return response
 
 
 @blueprint.route('/metadata/v0/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_tsv(entity_type):
-    return generate_tsv_response(entity_type, with_descriptions=True)
+    return _generate_tsv_response(entity_type, with_descriptions=True)
 
 
 # This endpoint is for the UDI demo site - produces plain TSV without descriptions and
 # removes CORS block.
 @blueprint.route('/metadata/v0/udi/<entity_type>.tsv', methods=['GET', 'POST'])
 def entities_plain_tsv(entity_type):
-    return generate_tsv_response(
+    return _generate_tsv_response(
         entity_type,
         with_descriptions=False,
         cors_origin='https://hms-dbmi.github.io'
@@ -219,8 +221,8 @@ def _dicts_to_tsv(data_dicts, first_fields, descriptions_dict=None):
                 dd[field] = 'N/A'
 
     output = StringIO()
-    fieldnames = first_fields + body_fields
-    writer = DictWriter(output, fieldnames, delimiter='\t', extrasaction='ignore')
+    field_names = first_fields + body_fields
+    writer = DictWriter(output, field_names, delimiter='\t', extrasaction='ignore')
     writer.writeheader()
 
     # Conditionally add descriptions row
