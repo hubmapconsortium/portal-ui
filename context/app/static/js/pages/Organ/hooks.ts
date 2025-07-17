@@ -141,7 +141,7 @@ export function useDataProducts(organ: OrganFile) {
   const isLateral = search?.length > 1;
 
   const possibleNames = isLateral ? [`${name} (Right)`, `${name} (Left)`] : [name];
-  const urls = possibleNames.map((n) => `${dataProductsEndpoint}/api/data_products/${n}`);
+  const urls = possibleNames.map((n) => `${dataProductsEndpoint}/api/data_products/tissue/${n}`);
 
   const { data, isLoading } = useSWR<OrganDataProducts[]>(urls, (u: string[]) => multiFetcher({ urls: u }), {
     fallbackData: [],
