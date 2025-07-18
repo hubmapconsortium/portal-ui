@@ -95,8 +95,9 @@ function WorkflowCells({
   pipelineName,
   githubUrl,
   cwlUrl,
+  origin,
   cellComponent: CellComponent,
-}: Pick<Pipeline, 'version' | 'hash' | 'documentation_url'> & {
+}: Pick<Pipeline, 'origin' | 'version' | 'hash' | 'documentation_url'> & {
   cellComponent: typeof TableCell | typeof ExpandableRowCell;
   stepNumber: number;
   pipelineName?: string;
@@ -174,6 +175,7 @@ function WorkflowStep({
         onExpand={onExpand}
       >
         <WorkflowCells
+          origin={origin}
           cellComponent={ExpandableRowCell}
           stepNumber={stepNumber}
           version={version}
@@ -191,6 +193,7 @@ function WorkflowStep({
     <TableRow>
       <TableCell />
       <WorkflowCells
+        origin={origin}
         cellComponent={TableCell}
         stepNumber={stepNumber}
         version={version}
