@@ -12,6 +12,10 @@ import {
 } from 'js/shared-styles/charts/hooks';
 import GroupedBarStackChart from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalGroupedStackedBarChart';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
+import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
+import { useEventCallback } from '@mui/material/utils';
+import { TooltipData } from 'js/shared-styles/charts/types';
+import { decimal, percent } from 'js/helpers/number-format';
 import {
   ageBucketLabels,
   DatasetsOverviewDigest,
@@ -42,13 +46,41 @@ const graphMargin = {
   left: 48,
 };
 
-const MALE_NON_MATCH = '#d1dac1';
-const MALE_MATCH = '#6c8938';
-const FEMALE_NON_MATCH = '#c5c7cf';
-const FEMALE_MATCH = '#444a65';
+function DatasetsOverviewChartTooltip({
+  tooltipData,
+}: {
+  tooltipData: TooltipData<{ matched: number; unmatched: number; group: string }>;
+}) {
+  const matched = tooltipData.bar?.data.matched ?? 0;
+  const unmatched = tooltipData.bar?.data.unmatched ?? 0;
+  const sum = matched + unmatched;
+  const isPercentage = sum === 1;
+
+  const formattedMatched = isPercentage ? percent.format(matched) : decimal.format(matched);
+  const formattedUnmatched = isPercentage ? percent.format(unmatched) : decimal.format(unmatched);
+
+  const group = tooltipData.bar?.data.group;
+
+  const groupLabel = `${group} (${tooltipData.key})`;
+
+  return (
+    <Stack spacing={1}>
+      <div>
+        <strong>{groupLabel}</strong>
+      </div>
+      <div>
+        <strong>Matched:</strong> {formattedMatched}
+      </div>
+      <div>
+        <strong>Unmatched:</strong> {formattedUnmatched}
+      </div>
+    </Stack>
+  );
+}
 
 export default function DatasetsOverviewChart({ matched, indexed, all }: DatasetsOverviewChartProps) {
   const [yAxis, setYAxis] = useState<YAxisOptions>('Datasets');
+  const colors = useChartPalette();
 
   const {
     axis: xAxis,
@@ -62,10 +94,16 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
   // If the user selects "Compare to All", the chart will show the distribution of matched datasets all datasets
   // Otherwise, it will show the distribution of matched datasets against the indexed datasets
   const [compareToAll, setCompareToAll] = useState(false);
+  const toggleCompareToAll = useEventCallback(() => {
+    setCompareToAll((prev) => !prev);
+  });
 
   // If the user selects "Percentage" for the Y axis, the chart will display the percentage of matched datasets within the category
   // Otherwise, it will display the absolute number of matched datasets
   const [percentMode, setPercentMode] = useState(false);
+  const togglePercentMode = useEventCallback(() => {
+    setPercentMode((prev) => !prev);
+  });
 
   const comparisonData = compareToAll ? all : indexed;
 
@@ -120,7 +158,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
   const xScale = useBandScale(xAxisKeys, { padding: 0.1 });
   const colorScale = useOrdinalScale(compareByColorKeys, {
     domain: compareByColorKeys,
-    range: [MALE_MATCH, MALE_NON_MATCH, FEMALE_MATCH, FEMALE_NON_MATCH],
+    range: colors,
   });
 
   const yScaleDomain = useMemo(() => {
@@ -147,12 +185,13 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
       <ChartWrapper
         margin={margin}
         colorScale={colorScale}
+        dividersInLegend={compareBy === 'Race'}
         additionalControls={
           <Stack direction="row" spacing={2} alignItems="center">
             <LabeledPrimarySwitch
               label="Comparison Metric"
               checked={compareToAll}
-              onChange={() => setCompareToAll((prev) => !prev)}
+              onChange={toggleCompareToAll}
               color="success"
               disabledLabel="Indexed Datasets"
               enabledLabel="All Datasets"
@@ -162,7 +201,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
               label="Y-Axis Mode"
               value="percentMode"
               checked={percentMode}
-              onChange={() => setPercentMode((prev) => !prev)}
+              onChange={togglePercentMode}
               color="success"
               ariaLabel="Toggle Percentage Mode"
               disabledLabel="Total Count"
@@ -210,13 +249,16 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
           colorScale={colorScale}
           getX={(d) => d.group}
           margin={graphMargin}
-          xAxisLabel="" // Labels are on the dropdowns
-          yAxisLabel="" // Labels are on the dropdowns
+          // X and Y axis labels are not needed as they are present on the dropdowns
+          xAxisLabel=""
+          yAxisLabel=""
           xAxisTickLabels={xAxisTickLabels}
           getTickValues={() => yScale.ticks(5)}
           compareByKeys={compareByKeys}
           stackMemberKeys={['matched', 'unmatched']}
           yTickFormat={yScaleFormat}
+          // @ts-expect-error - Need to improve the types for GroupedBarStackChart
+          TooltipContent={DatasetsOverviewChartTooltip}
         />
       </ChartWrapper>
     </div>

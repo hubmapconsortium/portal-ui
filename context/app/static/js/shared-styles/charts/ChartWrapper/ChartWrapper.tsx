@@ -54,7 +54,7 @@ function ChartWrapper({
           "x-axis       x-axis       x-axis       legend"
         `,
         overflow: 'none',
-        gridTemplateColumns: 'auto auto auto fit-content(175px)',
+        gridTemplateColumns: 'auto auto auto minmax(175px, fit-content)',
         gridTemplateRows: 'auto auto minmax(0, auto) 500px minmax(0, auto)',
       }}
     >

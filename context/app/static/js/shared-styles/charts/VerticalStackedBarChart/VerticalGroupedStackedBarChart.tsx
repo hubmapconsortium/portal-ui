@@ -7,7 +7,6 @@ import { withParentSize, WithParentSizeProvidedProps } from '@visx/responsive';
 import { ScaleBand, ScaleOrdinal } from 'd3';
 import { AnyScaleBand } from '@visx/shape/lib/types';
 import Typography from '@mui/material/Typography';
-import { capitalize } from '@mui/material/utils';
 import { OrdinalScale, useChartTooltip, useVerticalChart } from '../hooks';
 import { TICK_LABEL_SIZE } from '../constants';
 import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
@@ -153,6 +152,8 @@ export function GroupedBarStacks<Datum>({
           // const firstBar = barGroup.bars[0];
           // const groupWidth = finalBar.x + finalBar.width - firstBar.x;
           const barGroupKey = `bar-group-${barGroup.index}`;
+          const actualBarGroup = xScale.domain()[barGroup.index];
+
           return (
             <Group left={barGroup.x0} key={barGroupKey}>
               {barGroup.bars.map((bar) => {
@@ -199,9 +200,8 @@ export function GroupedBarStacks<Datum>({
                                   bar: {
                                     // @ts-expect-error Ignore this for now, should be revisited.
                                     data: {
-                                      [key]: Object.entries(barValue)
-                                        .map(([k, v]) => `${capitalize(k)}: ${v}`)
-                                        .join(', '),
+                                      ...barValue,
+                                      group: actualBarGroup,
                                     },
                                     key,
                                   },
