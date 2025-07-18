@@ -77,59 +77,50 @@ function WorkflowParameters({ input_parameters }: Required<Pick<Pipeline, 'input
   );
 }
 
-function buildGithubURL(data: DagProvenanceType) {
+function buildGithubAndCwlURL(data: DagProvenanceType) {
   const trimmedOrigin = data.origin.replace(/\.git$/, '');
-  return 'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;
-}
 
-function WorkflowStep({
-  pipeline,
-  stepNumber,
-  setRowIsExpanded,
-}: {
-  pipeline: Pipeline;
-  stepNumber: number;
-  setRowIsExpanded: Dispatch<SetStateAction<boolean>>;
-}) {
-  const { name, origin, input_parameters, documentation_url, hash, version } = pipeline;
-  const pipelineName = name ?? origin.split('/').pop();
-
-  const githubUrl = buildGithubURL(pipeline);
+  const githubUrl =
+    'name' in data ? `${trimmedOrigin}/blob/${data.hash}/${data.name}` : `${trimmedOrigin}/tree/${data.hash}`;
   const cwlUrl = `https://view.commonwl.org/workflows/${githubUrl.replace(/^http(s?):\/\//i, '')}`;
 
-  const onExpand = useCallback(
-    (isExpanded: boolean) => {
-      if (isExpanded) {
-        setRowIsExpanded(true);
-      }
-    },
-    [setRowIsExpanded],
-  );
+  return { githubUrl, cwlUrl };
+}
 
+function WorkflowCells({
+  stepNumber,
+  version,
+  hash,
+  documentation_url,
+  pipelineName,
+  githubUrl,
+  cwlUrl,
+  cellComponent: CellComponent,
+}: Pick<Pipeline, 'version' | 'hash' | 'documentation_url'> & {
+  cellComponent: typeof TableCell | typeof ExpandableRowCell;
+  stepNumber: number;
+  pipelineName?: string;
+  githubUrl: string;
+  cwlUrl: string;
+}) {
   return (
-    <ExpandableRow
-      numCells={7}
-      expandedContent={input_parameters ? <WorkflowParameters input_parameters={input_parameters} /> : null}
-      reverse
-      disabled={!input_parameters?.length}
-      onExpand={onExpand}
-    >
-      <ExpandableRowCell>{stepNumber}</ExpandableRowCell>
-      <ExpandableRowCell>
+    <>
+      <CellComponent>{stepNumber}</CellComponent>
+      <CellComponent>
         {pipelineName} {Boolean(version) && `(${version})`}
-      </ExpandableRowCell>
-      <ExpandableRowCell>
+      </CellComponent>
+      <CellComponent>
         <OutboundIconLink href={origin}>{origin}</OutboundIconLink>
-      </ExpandableRowCell>
-      <ExpandableRowCell>
+      </CellComponent>
+      <CellComponent>
         <Box>
           <OutboundIconLink href={githubUrl}>{hash}</OutboundIconLink>
         </Box>
-      </ExpandableRowCell>
-      <ExpandableRowCell>
+      </CellComponent>
+      <CellComponent>
         {documentation_url ? <OutboundLink href={documentation_url}>{documentation_url}</OutboundLink> : '-'}
-      </ExpandableRowCell>
-      <ExpandableRowCell>
+      </CellComponent>
+      <CellComponent>
         {cwlUrl.endsWith('cwl') ? (
           <Box>
             <OutboundLinkButton href={cwlUrl} component="a" variant="outlined" color="info">
@@ -139,8 +130,77 @@ function WorkflowStep({
         ) : (
           '-'
         )}
-      </ExpandableRowCell>
-    </ExpandableRow>
+      </CellComponent>
+    </>
+  );
+}
+
+function WorkflowStep({
+  pipelineKey,
+  pipeline,
+  stepNumber,
+  setExpandedRows,
+}: {
+  pipelineKey: string;
+  pipeline: Pipeline;
+  stepNumber: number;
+  setExpandedRows: Dispatch<SetStateAction<Record<string, boolean>>>;
+}) {
+  const { name, origin, input_parameters, documentation_url, hash, version } = pipeline;
+  const pipelineName = name ?? origin.split('/').pop();
+  const { githubUrl, cwlUrl } = buildGithubAndCwlURL(pipeline);
+
+  const onExpand = useCallback(
+    (isExpanded: boolean) => {
+      if (isExpanded) {
+        setExpandedRows((prev) => ({ [pipelineKey]: true, ...prev }));
+      } else {
+        setExpandedRows((prev) => {
+          const previousState = prev;
+          delete previousState[pipelineKey];
+          return { ...previousState };
+        });
+      }
+    },
+    [setExpandedRows, pipelineKey],
+  );
+
+  if (input_parameters?.length) {
+    return (
+      <ExpandableRow
+        numCells={7}
+        expandedContent={input_parameters ? <WorkflowParameters input_parameters={input_parameters} /> : null}
+        reverse
+        onExpand={onExpand}
+      >
+        <WorkflowCells
+          cellComponent={ExpandableRowCell}
+          stepNumber={stepNumber}
+          version={version}
+          hash={hash}
+          documentation_url={documentation_url}
+          pipelineName={pipelineName}
+          githubUrl={githubUrl}
+          cwlUrl={cwlUrl}
+        />
+      </ExpandableRow>
+    );
+  }
+
+  return (
+    <TableRow>
+      <TableCell />
+      <WorkflowCells
+        cellComponent={TableCell}
+        stepNumber={stepNumber}
+        version={version}
+        hash={hash}
+        documentation_url={documentation_url}
+        pipelineName={pipelineName}
+        githubUrl={githubUrl}
+        cwlUrl={cwlUrl}
+      />
+    </TableRow>
   );
 }
 
@@ -152,10 +212,10 @@ const cols = ['Step', 'Tool', 'Origin Link', 'Git Commit', 'Documentation Link',
 
 function WorkflowSteps({
   steps,
-  setRowIsExpanded,
+  setExpandedRows,
 }: {
   steps: Pipeline[];
-  setRowIsExpanded: Dispatch<SetStateAction<boolean>>;
+  setExpandedRows: Dispatch<SetStateAction<Record<string, boolean>>>;
 }) {
   return (
     <StyledTableContainer component={Paper} maxHeight={550}>
@@ -171,14 +231,19 @@ function WorkflowSteps({
           </TableRow>
         </TableHead>
         <TableBody>
-          {steps.map((pipeline, i) => (
-            <WorkflowStep
-              pipeline={pipeline}
-              stepNumber={i + 1}
-              setRowIsExpanded={setRowIsExpanded}
-              key={createPipelineKey(pipeline)}
-            />
-          ))}
+          {steps.map((pipeline, i) => {
+            const pipelineKey = createPipelineKey(pipeline);
+
+            return (
+              <WorkflowStep
+                pipeline={pipeline}
+                stepNumber={i + 1}
+                setExpandedRows={setExpandedRows}
+                key={pipelineKey}
+                pipelineKey={pipelineKey}
+              />
+            );
+          })}
         </TableBody>
       </Table>
     </StyledTableContainer>
@@ -186,49 +251,58 @@ function WorkflowSteps({
 }
 
 function dedupeSteps(steps: Pipeline[]) {
-  const stepMap = steps.reduce<Record<string, Pipeline>>((acc, curr) => {
-    const { name, hash, origin, version } = curr;
+  const reducedSteps = steps.reduce<{ uniqueSteps: Record<string, Pipeline>; hasInputParameters: boolean }>(
+    (acc, curr) => {
+      const { name, hash, origin, version, input_parameters } = curr;
 
-    const key = createPipelineKey({ name, hash, origin, version });
+      const key = createPipelineKey({ name, hash, origin, version });
 
-    if (!(key in acc)) {
-      acc[key] = curr;
-    }
+      if (!(key in acc.uniqueSteps)) {
+        acc.uniqueSteps[key] = curr;
+      }
 
-    return acc;
-  }, {});
+      if (input_parameters) {
+        acc.hasInputParameters = true;
+      }
 
-  return Object.values(stepMap);
+      return acc;
+    },
+    { uniqueSteps: {}, hasInputParameters: false },
+  );
+
+  return { dedupedSteps: Object.values(reducedSteps.uniqueSteps), hasInputParameters: reducedSteps.hasInputParameters };
 }
 
 function AnalysisDetails({ dagListData, workflow_description, workflow_version }: AnalysisDetails) {
-  const dedupedSteps = dedupeSteps(dagListData);
+  const { dedupedSteps, hasInputParameters } = dedupeSteps(dagListData);
 
   // Change the key of the workflow steps component to get around localized expandable row contexts.
   const [resetExpandedKey, setResetExpandedKey] = useState(false);
-  const [rowIsExpanded, setRowIsExpanded] = useState(false);
+  const [expandedRows, setExpandedRows] = useState<Record<string, boolean>>({});
   const collapseSteps = useCallback(() => {
-    setRowIsExpanded((prev) => !prev);
+    setExpandedRows({});
     setResetExpandedKey((prev) => !prev);
-  }, [setResetExpandedKey, setRowIsExpanded]);
+  }, [setResetExpandedKey, setExpandedRows]);
 
   return (
     <Stack spacing={1}>
-      <Typography variant="subtitle2">Workflow (v{workflow_version})</Typography>
-      <Typography>{workflow_description}</Typography>
-      <Box>
-        <Button variant="outlined" onClick={collapseSteps} disabled={!rowIsExpanded}>
-          <VisibilityOffRoundedIcon sx={{ marginRight: 1, fontSize: '1.125rem' }} />
-          Collapse Steps ({dedupedSteps.length})
-        </Button>
-      </Box>
+      {workflow_version && <Typography variant="subtitle2">Workflow (v{workflow_version})</Typography>}
+      {workflow_description && <Typography>{workflow_description}</Typography>}
+      {hasInputParameters && (
+        <Box>
+          <Button variant="outlined" onClick={collapseSteps} disabled={Object.keys(expandedRows).length === 0}>
+            <VisibilityOffRoundedIcon sx={{ marginRight: 1, fontSize: '1.125rem' }} />
+            Collapse Steps ({dedupedSteps.length})
+          </Button>
+        </Box>
+      )}
       <Stack direction="row" alignItems="center" spacing={1}>
         <InfoIcon sx={{ fontSize: '1rem' }} color="primary" />
         <Typography>These are the steps executed in the workflow to produce the processed dataset.</Typography>
       </Stack>
       <WorkflowSteps
         steps={dedupedSteps}
-        setRowIsExpanded={setRowIsExpanded}
+        setExpandedRows={setExpandedRows}
         key={['workflow-steps', resetExpandedKey.toString()].join('-')}
       />
     </Stack>
