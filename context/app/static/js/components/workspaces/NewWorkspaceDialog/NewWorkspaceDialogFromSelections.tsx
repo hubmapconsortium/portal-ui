@@ -17,7 +17,6 @@ function NewWorkspaceDialogFromSelections() {
     errorMessages,
     warningMessages,
     selectedRows,
-    protectedRows,
     restrictedRows,
     restrictedHubmapIds,
     removeRestrictedDatasets,

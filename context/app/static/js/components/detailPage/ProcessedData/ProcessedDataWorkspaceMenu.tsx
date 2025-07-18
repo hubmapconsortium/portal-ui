@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useEventCallback } from '@mui/material/utils';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -14,8 +14,8 @@ import { DialogType } from 'js/stores/useWorkspaceModalStore';
 import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
-import { useCheckDatasetAccess } from 'js/hooks/useRestrictedDatasets';
 import { useAppContext } from 'js/components/Contexts';
+import { useDatasetAccess } from 'js/hooks/useDatasetPermissions';
 
 interface ProcessedDataWorkspaceMenuProps {
   button: React.ReactNode;
@@ -25,10 +25,10 @@ interface ProcessedDataWorkspaceMenuProps {
 }
 
 function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: ProcessedDataWorkspaceMenuProps) {
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
   const open = Boolean(anchorEl);
   const track = useTrackEntityPageEvent();
-  const hasWorkspaceAccess = useCheckDatasetAccess();
 
   const handleOpen = (event: React.MouseEvent<HTMLButtonElement>) => {
     track({
@@ -97,8 +97,9 @@ function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: Pro
   ];
 
   const { isWorkspacesUser } = useAppContext();
+  const { accessAllowed, isLoading } = useDatasetAccess(uuid);
 
-  if (!isWorkspacesUser || !hasWorkspaceAccess(uuid)) {
+  if (!isWorkspacesUser || !accessAllowed || isLoading) {
     return null;
   }
 

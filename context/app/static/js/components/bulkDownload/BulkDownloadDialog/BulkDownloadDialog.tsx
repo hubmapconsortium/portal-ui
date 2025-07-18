@@ -49,7 +49,6 @@ function DownloadDescription() {
 interface RestrictedDatasetsSectionProps {
   control: Control<BulkDownloadFormTypes>;
   errorMessages: string[];
-  warningMessages: string[];
   restrictedHubmapIds: string[];
   restrictedRows: string[];
   removeRestrictedDatasets: () => void;
@@ -57,18 +56,17 @@ interface RestrictedDatasetsSectionProps {
 function RestrictedDatasetsSection({
   control,
   errorMessages,
-  warningMessages,
   restrictedHubmapIds,
   restrictedRows,
   removeRestrictedDatasets,
 }: RestrictedDatasetsSectionProps) {
-  if (errorMessages.length === 0 && warningMessages.length === 0) {
+  if (errorMessages.length === 0) {
     return null;
   }
 
   return (
     <Stack paddingY={1}>
-      <ErrorOrWarningMessages warningMessages={warningMessages} errorMessages={errorMessages} />
+      <ErrorOrWarningMessages errorMessages={errorMessages} />
       <RemoveRestrictedDatasetsFormField
         control={control}
         restrictedHubmapIds={restrictedHubmapIds}
@@ -107,7 +105,6 @@ interface DownloadOptionsSectionProps {
   }[];
   isLoading: boolean;
   errorMessages: string[];
-  warningMessages: string[];
   restrictedHubmapIds: string[];
   restrictedRows: string[];
   removeRestrictedDatasets: () => void;
@@ -117,7 +114,6 @@ function DownloadOptionsSection({
   downloadOptions,
   isLoading,
   errorMessages,
-  warningMessages,
   restrictedHubmapIds,
   restrictedRows,
   removeRestrictedDatasets,
@@ -146,7 +142,6 @@ function DownloadOptionsSection({
         <RestrictedDatasetsSection
           control={control}
           errorMessages={errorMessages}
-          warningMessages={warningMessages}
           restrictedHubmapIds={restrictedHubmapIds}
           restrictedRows={restrictedRows}
           removeRestrictedDatasets={removeRestrictedDatasets}
