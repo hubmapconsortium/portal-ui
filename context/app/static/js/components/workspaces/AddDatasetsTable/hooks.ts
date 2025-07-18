@@ -124,7 +124,10 @@ function useDatasetsAutocomplete({
     uuidsToExclude: allDatasets,
   });
 
-  const uuids = unfilteredSearchHits.map((hit) => hit._source?.uuid).filter(Boolean);
+  const uuids = useMemo(
+    () => unfilteredSearchHits.map((hit) => hit._source?.uuid).filter(Boolean),
+    [unfilteredSearchHits],
+  );
   const { accessibleDatasets, isLoading } = useDatasetsAccess(uuids);
 
   const searchHits = useMemo(() => {

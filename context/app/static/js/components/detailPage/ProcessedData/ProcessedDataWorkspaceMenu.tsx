@@ -14,7 +14,6 @@ import { DialogType } from 'js/stores/useWorkspaceModalStore';
 import AddDatasetsFromDetailDialog from 'js/components/workspaces/AddDatasetsFromDetailDialog';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { trackEvent } from 'js/helpers/trackers';
-import { useAppContext } from 'js/components/Contexts';
 import { useDatasetAccess } from 'js/hooks/useDatasetPermissions';
 
 interface ProcessedDataWorkspaceMenuProps {
@@ -96,10 +95,9 @@ function ProcessedDataWorkspaceMenu({ button, hubmap_id, uuid, dialogType }: Pro
     },
   ];
 
-  const { isWorkspacesUser } = useAppContext();
   const { accessAllowed, isLoading } = useDatasetAccess(uuid);
 
-  if (!isWorkspacesUser || !accessAllowed || isLoading) {
+  if (!accessAllowed || isLoading) {
     return null;
   }
 
