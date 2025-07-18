@@ -1,6 +1,5 @@
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
-import { useCallback } from 'react';
 import useSWR from 'swr';
 
 interface DatasetPermissionsRequest {
@@ -34,12 +33,12 @@ export async function fetchDatasetPermissions({ url, data, groupsToken }: Datase
   });
 }
 
-export function useDatasetsAccess(uuids: string[]) {
+function useDatasetAccessInternal(uuids: string[]) {
   const { groupsToken, softAssayEndpoint } = useAppContext();
 
-  const shouldFetch = Boolean(uuids && softAssayEndpoint && groupsToken);
+  const shouldFetch = Boolean(uuids.length && softAssayEndpoint && groupsToken);
 
-  const { data, isLoading } = useSWR(shouldFetch ? ['dataset-access', uuids, groupsToken] : null, () =>
+  const { data, isLoading } = useSWR(shouldFetch ? ['dataset-access', uuids.sort(), groupsToken] : null, () =>
     fetchDatasetPermissions({
       url: softAssayEndpoint,
       data: uuids,
@@ -53,38 +52,20 @@ export function useDatasetsAccess(uuids: string[]) {
   };
 }
 
-export function useDatasetAccess(uuid: string) {
-  const { groupsToken, softAssayEndpoint } = useAppContext();
-
-  const shouldFetch = Boolean(uuid && softAssayEndpoint && groupsToken);
-
-  const { data, isLoading } = useSWR(shouldFetch ? ['dataset-access', uuid, groupsToken] : null, () =>
-    fetchDatasetPermissions({
-      url: softAssayEndpoint,
-      data: [uuid],
-      groupsToken,
-    }),
-  );
+export function useDatasetsAccess(uuids: string[]) {
+  const { accessibleDatasets, isLoading } = useDatasetAccessInternal(uuids);
 
   return {
-    accessAllowed: data?.[uuid]?.access_allowed ?? false,
+    accessibleDatasets,
     isLoading,
   };
 }
 
-export function useCheckDatasetPermissions() {
-  const { groupsToken, softAssayEndpoint } = useAppContext();
+export function useDatasetAccess(uuid: string) {
+  const { accessibleDatasets, isLoading } = useDatasetAccessInternal([uuid]);
 
-  const checkPermissions = useCallback(
-    async (datasetIds: string[]): Promise<DatasetPermissionsResponse> => {
-      return fetchDatasetPermissions({
-        url: softAssayEndpoint,
-        data: datasetIds,
-        groupsToken,
-      });
-    },
-    [groupsToken, softAssayEndpoint],
-  );
-
-  return checkPermissions;
+  return {
+    accessAllowed: accessibleDatasets[uuid]?.access_allowed ?? false,
+    isLoading,
+  };
 }
