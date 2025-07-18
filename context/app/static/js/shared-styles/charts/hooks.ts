@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo } from 'react';
+import { MouseEvent, useCallback, useMemo } from 'react';
 import { useTooltip, useTooltipInPortal } from '@visx/tooltip';
 import { localPoint } from '@visx/event';
 import { getStringWidth } from '@visx/text';
@@ -17,6 +17,8 @@ import {
 import { useTheme } from '@mui/material/styles';
 
 import { getChartDimensions, trimStringWithMiddleEllipsis } from 'js/shared-styles/charts/utils';
+import { useEventCallback } from '@mui/material/utils';
+import { decimal, percent } from 'js/helpers/number-format';
 
 function useChartTooltip<T>() {
   const { tooltipData, tooltipLeft, tooltipTop, tooltipOpen, showTooltip, hideTooltip } = useTooltip<T>();
@@ -27,7 +29,7 @@ function useChartTooltip<T>() {
     debounce: 100,
   });
 
-  const handleMouseEnter = (d: T) => (event: MouseEvent) => {
+  const handleMouseEnter = useEventCallback((d: T) => (event: MouseEvent) => {
     const element = event.target as SVGElement;
     const owner = element.ownerSVGElement;
     if (!owner) {
@@ -40,11 +42,11 @@ function useChartTooltip<T>() {
       tooltipTop: coords.y,
       tooltipData: d,
     });
-  };
+  });
 
-  function handleMouseLeave() {
+  const handleMouseLeave = useEventCallback(() => {
     hideTooltip();
-  }
+  });
 
   return {
     tooltipData,
@@ -167,6 +169,19 @@ function useOrdinalScale(domain: string[], config: Omit<OrdinalScaleConfig<strin
 }
 
 export type OrdinalScale = ReturnType<typeof useOrdinalScale>;
+
+export const usePercentageYScaleFormat = (showPercentages: boolean) => {
+  const yTickFormat = useCallback(
+    (value: number) => {
+      if (showPercentages) {
+        return percent.format(value);
+      }
+      return decimal.format(value);
+    },
+    [showPercentages],
+  );
+  return yTickFormat;
+};
 
 export {
   useChartTooltip,

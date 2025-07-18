@@ -1,14 +1,13 @@
 import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
-import { decimal, percent } from 'js/helpers/number-format';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
-import { useBandScale, useOrdinalScale } from 'js/shared-styles/charts/hooks';
+import { useBandScale, useOrdinalScale, usePercentageYScaleFormat } from 'js/shared-styles/charts/hooks';
 import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
 import VerticalStackedBarChart from 'js/shared-styles/charts/VerticalStackedBarChart';
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
-import React, { useCallback, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { ScaleContinuousNumeric } from 'd3';
 import Skeleton from '@mui/material/Skeleton';
 import { unselectedCellColors } from 'js/components/cells/CellTypeDistributionChart/utils';
@@ -193,15 +192,7 @@ function MultiOrganCellTypeDistributionChart({
   const getTickValues = useGetTickValues();
 
   const yAxisLabel = showPercentages ? 'Cell Fraction' : 'Cell Count';
-  const yTickFormat = useCallback(
-    (value: number) => {
-      if (showPercentages) {
-        return percent.format(value);
-      }
-      return decimal.format(value);
-    },
-    [showPercentages],
-  );
+  const yTickFormat = usePercentageYScaleFormat(showPercentages);
 
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={500} />;

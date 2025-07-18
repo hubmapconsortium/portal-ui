@@ -2,9 +2,17 @@ import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import React, { useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
 import Description from 'js/shared-styles/sections/Description';
+import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
+import { VisualizationIcon } from 'js/shared-styles/icons';
 import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import useSCFindResultsStatisticsStore from '../SCFindResults/store';
+import DatasetsOverviewChart from './DatasetsOverviewChart';
+
+interface DatasetsOverviewProps extends React.PropsWithChildren {
+  datasets: string[];
+  belowTheFold?: React.ReactNode;
+}
 
 interface DatasetsOverviewProps extends React.PropsWithChildren {
   datasets: string[];
@@ -35,6 +43,8 @@ export default function DatasetsOverview({ datasets, children, belowTheFold }: D
     }
   }, [indexed, all, matched, setDatasetStats]);
 
+  const { openTabIndex, handleTabChange } = useTabs();
+
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={300} />;
   }
@@ -45,7 +55,16 @@ export default function DatasetsOverview({ datasets, children, belowTheFold }: D
   return (
     <>
       <Description belowTheFold={belowTheFold}>{children}</Description>
-      <DatasetsOverviewTable indexed={indexed} all={all} matched={matched} />
+      <Tabs value={openTabIndex} onChange={handleTabChange} aria-label="Datasets Overview Tabs">
+        <Tab label="Visualization" index={0} icon={<VisualizationIcon />} iconPosition="start" />
+        <Tab label="Table" index={1} />
+      </Tabs>
+      <TabPanel value={openTabIndex} index={0}>
+        <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} />
+      </TabPanel>
+      <TabPanel value={openTabIndex} index={1}>
+        <DatasetsOverviewTable matched={matched} indexed={indexed} all={all} />
+      </TabPanel>
     </>
   );
 }
