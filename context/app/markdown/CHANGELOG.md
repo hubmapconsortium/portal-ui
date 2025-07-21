@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.29.2 - 2025-07-21
+
+- Update data products endpoint.
+- Fix bug where links in dataset workflow details could not be clicked.
+
+
+
 ## v1.29.1 - 2025-07-16
 
 - Fix genes-info endpoint parameters.
