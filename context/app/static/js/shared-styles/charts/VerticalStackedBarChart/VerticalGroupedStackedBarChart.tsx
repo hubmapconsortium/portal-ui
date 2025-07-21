@@ -116,6 +116,7 @@ interface GroupedBarStackProps<Datum> {
   getX: (d: StackBarFootprint) => string;
   handleMouseEnter: (bar: TooltipData<Datum>) => (event: React.MouseEvent<SVGRectElement>) => void;
   handleMouseLeave: () => void;
+  xAxisTickLabels: string[];
 }
 
 export function GroupedBarStacks<Datum>({
@@ -129,6 +130,7 @@ export function GroupedBarStacks<Datum>({
   handleMouseEnter,
   handleMouseLeave,
   stackGroupKeys,
+  xAxisTickLabels,
 }: GroupedBarStackProps<Datum>) {
   const xScaleBandwidth = xScale.bandwidth();
 
@@ -147,12 +149,8 @@ export function GroupedBarStacks<Datum>({
         // Every bar group contains a column for each of the stackGroupKeys
         // e.g. if compareBy is sex, there are columns for "Male" and "Female".
         return barGroups.map((barGroup) => {
-          // If needed for other calculations, this is the width of the group:
-          // const finalBar = barGroup.bars[barGroup.bars.length - 1];
-          // const firstBar = barGroup.bars[0];
-          // const groupWidth = finalBar.x + finalBar.width - firstBar.x;
           const barGroupKey = `bar-group-${barGroup.index}`;
-          const actualBarGroup = xScale.domain()[barGroup.index];
+          const actualBarGroup = xAxisTickLabels[barGroup.index];
 
           return (
             <Group left={barGroup.x0} key={barGroupKey}>
@@ -335,6 +333,7 @@ function GroupedBarStackChart<
           handleMouseLeave={handleMouseLeave}
           stackGroupKeys={compareByKeys}
           stackMemberKeys={stackMemberKeys}
+          xAxisTickLabels={xAxisTickLabels}
         />
       </VerticalChartGridRowsGroup>
       <AxisBottom
