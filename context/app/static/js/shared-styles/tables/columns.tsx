@@ -21,12 +21,6 @@ function HubmapIDCell({
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
   const { accessAllowed } = useDatasetAccess(uuid);
-
-  const isNotPublic =
-    mapped_status &&
-    mapped_data_access_level &&
-    (mapped_status !== 'Published' || mapped_data_access_level !== 'Public');
-
   const markerGene = useOptionalGeneContext();
 
   const href = useMemo(() => {
@@ -36,14 +30,6 @@ function HubmapIDCell({
     }
     return url.toString();
   }, [uuid, markerGene]);
-
-  const accessTooltip = useMemo(
-    () =>
-      !accessAllowed
-        ? 'This is a protected dataset that cannot be accessed with your current permissions.'
-        : 'This is a protected dataset. Access to this dataset depends on your user permissions.',
-    [accessAllowed],
-  );
 
   return (
     <>
@@ -64,8 +50,8 @@ function HubmapIDCell({
       >
         {hubmap_id}
       </InternalLink>
-      {(isNotPublic || !accessAllowed) && (
-        <SecondaryBackgroundTooltip title={accessTooltip}>
+      {!accessAllowed && (
+        <SecondaryBackgroundTooltip title="This is a protected dataset that cannot be accessed with your current permissions.">
           <Typography variant="caption" color={!accessAllowed ? 'error' : 'warning'} sx={{ display: 'block', mt: 1 }}>
             {mapped_status} ({mapped_data_access_level})
           </Typography>
