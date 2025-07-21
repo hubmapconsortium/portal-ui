@@ -1,1 +1,0 @@
-- Fix bug where links in dataset workflow details could not be clicked.
