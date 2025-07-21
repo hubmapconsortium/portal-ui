@@ -267,91 +267,93 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
   }, [data]);
 
   return (
-    <Paper>
+    <>
       <Description>
         The chart below shows the distribution of HuBMAP datasets that are compatible with the scFind method. The
         distribution is based on the number of unique donors and the average age of donors in each dataset.
       </Description>
-      <ChartWrapper
-        ref={chartRef}
-        margin={margin}
-        colorScale={colorScale}
-        dividersInLegend={compareBy === 'Race'}
-        additionalControls={
-          <Stack direction="row" spacing={2} px={1} alignItems="center" useFlexGap>
-            <LabeledPrimarySwitch
-              label="Comparison Metric"
-              checked={compareToAll}
-              onChange={toggleCompareToAll}
-              color="success"
-              disabledLabel="Indexed Datasets"
-              enabledLabel="All Datasets"
-              ariaLabel="Compare to All Datasets"
-              tooltip="Toggle to compare matched datasets to scFind-indexed datasets or all datasets published in HuBMAP"
-            />
-            <LabeledPrimarySwitch
-              label="Graph Type"
-              value="percentMode"
-              checked={percentMode}
-              onChange={togglePercentMode}
-              color="success"
-              ariaLabel="Toggle Percentage Mode"
-              disabledLabel="Total Count"
-              enabledLabel="Percentage"
-              tooltip="Toggle between displaying data as raw counts or fractions."
-            />
-            <Box ml="auto">
-              <DownloadButton
-                onClick={downloadImage}
-                tooltip="Download chart as PNG"
-                aria-label="Download Chart as PNG"
-              />
-            </Box>
-          </Stack>
-        }
-        dropdown={
-          <ChartDropdown
-            options={compareByOptions}
-            value={compareBy}
-            label="Compare by"
-            onChange={onChangeCompareBy}
-            fullWidth
-          />
-        }
-        xAxisDropdown={
-          <ChartDropdown options={xAxisOptions} value={xAxis} label="X-Axis" fullWidth onChange={onChangeXAxis} />
-        }
-        yAxisDropdown={
-          <ChartDropdown
-            options={Y_AXIS_OPTIONS}
-            displayLabels={yAxisOptionLabelMap}
-            value={yAxis}
-            label="Y-Axis"
-            fullWidth
-            onChange={onChangeYAxis}
-          />
-        }
-      >
-        <GroupedBarStackChart
-          data={data}
-          xScale={xScale}
-          yScale={yScale}
+      <Paper>
+        <ChartWrapper
+          ref={chartRef}
+          margin={margin}
           colorScale={colorScale}
-          getX={(d) => d.group}
-          margin={graphMargin}
-          // X and Y axis labels are not needed as they are present on the dropdowns
-          xAxisLabel=""
-          yAxisLabel=""
-          xAxisTickLabels={xAxisTickLabels}
-          // Filter out any decimal values from the Y axis ticks if percentMode is disabled
-          getTickValues={() => yScale.ticks(5).filter((d) => (percentMode ? d : Math.floor(d)) === d)}
-          compareByKeys={compareByKeys}
-          stackMemberKeys={['matched', 'unmatched']}
-          yTickFormat={yScaleFormat}
-          // @ts-expect-error - Need to improve the types for GroupedBarStackChart
-          TooltipContent={OverviewChartTooltip(percentMode)}
-        />
-      </ChartWrapper>
-    </Paper>
+          dividersInLegend={compareBy === 'Race'}
+          additionalControls={
+            <Stack direction="row" spacing={2} px={1} pt={1} alignItems="center" useFlexGap>
+              <LabeledPrimarySwitch
+                label="Comparison Metric"
+                checked={compareToAll}
+                onChange={toggleCompareToAll}
+                color="success"
+                disabledLabel="Indexed Datasets"
+                enabledLabel="All Datasets"
+                ariaLabel="Compare to All Datasets"
+                tooltip="Toggle to compare matched datasets to scFind-indexed datasets or all datasets published in HuBMAP"
+              />
+              <LabeledPrimarySwitch
+                label="Graph Type"
+                value="percentMode"
+                checked={percentMode}
+                onChange={togglePercentMode}
+                color="success"
+                ariaLabel="Toggle Percentage Mode"
+                disabledLabel="Total Count"
+                enabledLabel="Percentage"
+                tooltip="Toggle between displaying data as raw counts or fractions."
+              />
+              <Box ml="auto">
+                <DownloadButton
+                  onClick={downloadImage}
+                  tooltip="Download chart as PNG"
+                  aria-label="Download Chart as PNG"
+                />
+              </Box>
+            </Stack>
+          }
+          dropdown={
+            <ChartDropdown
+              options={compareByOptions}
+              value={compareBy}
+              label="Compare by"
+              onChange={onChangeCompareBy}
+              fullWidth
+            />
+          }
+          xAxisDropdown={
+            <ChartDropdown options={xAxisOptions} value={xAxis} label="X-Axis" fullWidth onChange={onChangeXAxis} />
+          }
+          yAxisDropdown={
+            <ChartDropdown
+              options={Y_AXIS_OPTIONS}
+              displayLabels={yAxisOptionLabelMap}
+              value={yAxis}
+              label="Y-Axis"
+              fullWidth
+              onChange={onChangeYAxis}
+            />
+          }
+        >
+          <GroupedBarStackChart
+            data={data}
+            xScale={xScale}
+            yScale={yScale}
+            colorScale={colorScale}
+            getX={(d) => d.group}
+            margin={graphMargin}
+            // X and Y axis labels are not needed as they are present on the dropdowns
+            xAxisLabel=""
+            yAxisLabel=""
+            xAxisTickLabels={xAxisTickLabels}
+            // Filter out any decimal values from the Y axis ticks if percentMode is disabled
+            getTickValues={() => yScale.ticks(5).filter((d) => (percentMode ? d : Math.floor(d)) === d)}
+            compareByKeys={compareByKeys}
+            stackMemberKeys={['matched', 'unmatched']}
+            yTickFormat={yScaleFormat}
+            // @ts-expect-error - Need to improve the types for GroupedBarStackChart
+            TooltipContent={OverviewChartTooltip(percentMode)}
+          />
+        </ChartWrapper>
+      </Paper>
+    </>
   );
 }

@@ -200,7 +200,7 @@ function MultiOrganCellTypeDistributionChart({
 
   return (
     <CellTypeDataContextProvider value={{ cellTypeCounts: cellTypeCountsRecord, colorScale: combinedColorScale }}>
-      <Paper sx={{ px: 2, pb: 2 }}>
+      <Paper sx={{ p: 2 }}>
         <ChartWrapper
           colorScale={hideLegend ? undefined : targetColorScale}
           dividersInLegend
