@@ -8,7 +8,7 @@ import {
   parentDonorRace,
   parentDonorSex,
 } from 'js/shared-styles/tables/columns';
-import { Dataset } from 'js/components/types';
+import { Dataset, EventInfo } from 'js/components/types';
 import Skeleton from '@mui/material/Skeleton';
 import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
@@ -129,7 +129,11 @@ function DatasetListSection() {
   );
 }
 
-function SCFindGeneQueryResultsLoader() {
+interface SCFindGeneQueryResultsLoaderProps {
+  trackingInfo?: EventInfo;
+}
+
+function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLoaderProps) {
   const { setResults } = useResultsProvider();
 
   const { datasets, isLoading, error, datasetToGeneMap } = useSCFindGeneResults();
@@ -157,6 +161,7 @@ function SCFindGeneQueryResultsLoader() {
       <DatasetsOverview
         datasets={deduplicatedResults}
         belowTheFold={<ViewIndexedDatasetsButton {...indexedDatasetsButtonProps} />}
+        trackingInfo={trackingInfo}
       >
         This overview provides a summary of the matched datasets and their proportions relative to both indexed datasets
         and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a tabular view.

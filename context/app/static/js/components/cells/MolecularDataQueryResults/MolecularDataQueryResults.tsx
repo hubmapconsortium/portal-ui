@@ -6,9 +6,11 @@ import { useMolecularDataQueryFormState } from '../MolecularDataQueryForm/hooks'
 import LoadingResults from './LoadingResults';
 import { SCFindCellTypeQueryResults } from '../SCFindResults';
 import SCFindGeneQueryResultsLoader from '../SCFindResults/SCFindGeneQueryResults';
+import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 
 function Results() {
   const { watch } = useMolecularDataQueryFormState();
+  const { sessionId } = useMolecularDataQueryFormTracking();
 
   const queryType = watch('queryType');
   const queryMethod = watch('queryMethod');
@@ -16,9 +18,25 @@ function Results() {
   if (queryMethod === 'scFind') {
     switch (queryType) {
       case 'cell-type':
-        return <SCFindCellTypeQueryResults />;
+        return (
+          <SCFindCellTypeQueryResults
+            trackingInfo={{
+              action: 'Results',
+              label: sessionId,
+              category: 'Molecular and Cellular Query',
+            }}
+          />
+        );
       case 'gene':
-        return <SCFindGeneQueryResultsLoader />;
+        return (
+          <SCFindGeneQueryResultsLoader
+            trackingInfo={{
+              action: 'Results',
+              label: sessionId,
+              category: 'Molecular and Cellular Query',
+            }}
+          />
+        );
       default:
         return null;
     }

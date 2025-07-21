@@ -14,8 +14,8 @@ import GroupedBarStackChart from 'js/shared-styles/charts/VerticalStackedBarChar
 import { LabeledPrimarySwitch } from 'js/shared-styles/switches';
 import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarChart/hooks';
 import { useEventCallback } from '@mui/material/utils';
-import { TooltipData } from 'js/shared-styles/charts/types';
-import { decimal, percent } from 'js/helpers/number-format';
+import { EventInfo } from 'js/components/types';
+import { trackEvent } from 'js/helpers/trackers';
 import {
   ageBucketLabels,
   DatasetsOverviewDigest,
@@ -26,11 +26,13 @@ import {
   Y_AXIS_OPTIONS,
   YAxisOptions,
 } from './hooks';
+import { OverviewChartTooltip } from './DatasetsOverviewChartTooltip';
 
 interface DatasetsOverviewChartProps {
   matched: DatasetsOverviewDigest;
   indexed: DatasetsOverviewDigest;
   all: DatasetsOverviewDigest;
+  trackingInfo?: EventInfo;
 }
 
 const margin = {
@@ -46,41 +48,22 @@ const graphMargin = {
   left: 48,
 };
 
-function DatasetsOverviewChartTooltip({
-  tooltipData,
-}: {
-  tooltipData: TooltipData<{ matched: number; unmatched: number; group: string }>;
-}) {
-  const matched = tooltipData.bar?.data.matched ?? 0;
-  const unmatched = tooltipData.bar?.data.unmatched ?? 0;
-  const sum = matched + unmatched;
-  const isPercentage = sum === 1;
-
-  const formattedMatched = isPercentage ? percent.format(matched) : decimal.format(matched);
-  const formattedUnmatched = isPercentage ? percent.format(unmatched) : decimal.format(unmatched);
-
-  const group = tooltipData.bar?.data.group;
-
-  const groupLabel = `${group} (${tooltipData.key})`;
-
-  return (
-    <Stack spacing={1}>
-      <div>
-        <strong>{groupLabel}</strong>
-      </div>
-      <div>
-        <strong>Matched:</strong> {formattedMatched}
-      </div>
-      <div>
-        <strong>Unmatched:</strong> {formattedUnmatched}
-      </div>
-    </Stack>
-  );
-}
-
-export default function DatasetsOverviewChart({ matched, indexed, all }: DatasetsOverviewChartProps) {
+const useDatasetsOverviewChartState = (trackingInfo?: EventInfo) => {
   const [yAxis, setYAxis] = useState<YAxisOptions>('Datasets');
-  const colors = useChartPalette();
+
+  const onChangeYAxis = useEventCallback((e: SelectChangeEvent) => {
+    setYAxis(e.target.value as YAxisOptions);
+    if (trackingInfo) {
+      const yAxisLabel = e.target.value as YAxisOptions;
+      const actionName = 'Datasets Overview / Select Y-Axis';
+      const actionlabel = `${yAxisLabel}`;
+      trackEvent({
+        ...trackingInfo,
+        action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
+        label: trackingInfo.label ? `${trackingInfo.label} ${actionlabel}` : actionlabel,
+      } as EventInfo);
+    }
+  });
 
   const {
     axis: xAxis,
@@ -91,19 +74,105 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
     compareByOptions,
   } = useAxisAndCompareBy(X_AXIS_OPTIONS, 'Age', 'Sex');
 
+  const onChangeXAxis = useEventCallback((e: SelectChangeEvent) => {
+    setXAxis(e.target.value as XAxisOptions);
+    if (trackingInfo) {
+      const xAxisLabel = e.target.value as XAxisOptions;
+      const actionName = 'Datasets Overview / Select X-Axis';
+      const actionlabel = `${xAxisLabel}`;
+      trackEvent({
+        ...trackingInfo,
+        action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
+        label: trackingInfo.label ? `${trackingInfo.label} ${actionlabel}` : actionlabel,
+      } as EventInfo);
+    }
+  });
+
+  const onChangeCompareBy = useEventCallback((e: SelectChangeEvent) => {
+    setCompareBy(e.target.value as XAxisOptions);
+    if (trackingInfo) {
+      const compareByLabel = e.target.value as XAxisOptions;
+      const actionName = 'Datasets Overview / Select Grouping';
+      const actionlabel = `${compareByLabel}`;
+      trackEvent({
+        ...trackingInfo,
+        action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
+        label: trackingInfo.label ? `${trackingInfo.label} ${actionlabel}` : actionlabel,
+      } as EventInfo);
+    }
+  });
+
   // If the user selects "Compare to All", the chart will show the distribution of matched datasets all datasets
   // Otherwise, it will show the distribution of matched datasets against the indexed datasets
   const [compareToAll, setCompareToAll] = useState(false);
   const toggleCompareToAll = useEventCallback(() => {
-    setCompareToAll((prev) => !prev);
+    setCompareToAll((prev) => {
+      if (trackingInfo) {
+        const label = prev ? 'Indexed Datasets' : 'All Datasets';
+        const actionName = 'Datasets Overview / Toggle Comparison Metric';
+        trackEvent({
+          ...trackingInfo,
+          action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
+          label: trackingInfo.label ? `${trackingInfo.label} ${label}` : label,
+        } as EventInfo);
+      }
+      return !prev;
+    });
   });
 
   // If the user selects "Percentage" for the Y axis, the chart will display the percentage of matched datasets within the category
   // Otherwise, it will display the absolute number of matched datasets
   const [percentMode, setPercentMode] = useState(false);
   const togglePercentMode = useEventCallback(() => {
-    setPercentMode((prev) => !prev);
+    setPercentMode((prev) => {
+      if (trackingInfo) {
+        const label = prev ? 'Total Count' : 'Percentage';
+        const actionName = 'Datasets Overview / Toggle Graph Type';
+        trackEvent({
+          ...trackingInfo,
+          action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
+          label: trackingInfo.label ? `${trackingInfo.label} ${label}` : label,
+        } as EventInfo);
+      }
+      return !prev;
+    });
   });
+
+  return {
+    yAxis,
+    onChangeYAxis,
+    xAxis,
+    setXAxis,
+    onChangeXAxis,
+    compareBy,
+    setCompareBy,
+    xAxisOptions,
+    compareByOptions,
+    compareToAll,
+    toggleCompareToAll,
+    percentMode,
+    togglePercentMode,
+    onChangeCompareBy,
+  };
+};
+
+export default function DatasetsOverviewChart({ matched, indexed, all, trackingInfo }: DatasetsOverviewChartProps) {
+  const colors = useChartPalette();
+
+  const {
+    yAxis,
+    xAxis,
+    compareBy,
+    onChangeCompareBy,
+    xAxisOptions,
+    compareByOptions,
+    compareToAll,
+    toggleCompareToAll,
+    percentMode,
+    togglePercentMode,
+    onChangeYAxis,
+    onChangeXAxis,
+  } = useDatasetsOverviewChartState(trackingInfo);
 
   const comparisonData = compareToAll ? all : indexed;
 
@@ -214,20 +283,12 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
             options={compareByOptions}
             value={compareBy}
             label="Compare by"
-            onChange={(e: SelectChangeEvent) => setCompareBy(e.target.value as XAxisOptions)}
+            onChange={onChangeCompareBy}
             fullWidth
           />
         }
         xAxisDropdown={
-          <ChartDropdown
-            options={xAxisOptions}
-            value={xAxis}
-            label="X-Axis"
-            fullWidth
-            onChange={(e: SelectChangeEvent) => {
-              setXAxis(e.target.value as XAxisOptions);
-            }}
-          />
+          <ChartDropdown options={xAxisOptions} value={xAxis} label="X-Axis" fullWidth onChange={onChangeXAxis} />
         }
         yAxisDropdown={
           <ChartDropdown
@@ -236,9 +297,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
             value={yAxis}
             label="Y-Axis"
             fullWidth
-            onChange={(e: SelectChangeEvent) => {
-              setYAxis(e.target.value as YAxisOptions);
-            }}
+            onChange={onChangeYAxis}
           />
         }
       >
@@ -253,12 +312,13 @@ export default function DatasetsOverviewChart({ matched, indexed, all }: Dataset
           xAxisLabel=""
           yAxisLabel=""
           xAxisTickLabels={xAxisTickLabels}
-          getTickValues={() => yScale.ticks(5)}
+          // Filter out any decimal values from the Y axis ticks if percentMode is disabled
+          getTickValues={() => yScale.ticks(5).filter((d) => (percentMode ? d : Math.floor(d)) === d)}
           compareByKeys={compareByKeys}
           stackMemberKeys={['matched', 'unmatched']}
           yTickFormat={yScaleFormat}
           // @ts-expect-error - Need to improve the types for GroupedBarStackChart
-          TooltipContent={DatasetsOverviewChartTooltip}
+          TooltipContent={OverviewChartTooltip(percentMode)}
         />
       </ChartWrapper>
     </div>
