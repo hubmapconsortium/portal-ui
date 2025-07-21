@@ -6,7 +6,7 @@ import { Dataset } from 'js/components/types';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import { trackEvent } from 'js/helpers/trackers';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
-import { useCheckDatasetAccess } from 'js/hooks/useRestrictedDatasets';
+import { useDatasetsAccess } from 'js/hooks/useDatasetPermissions';
 
 interface BuildIDPrefixQueryType {
   value: string;
@@ -124,11 +124,16 @@ function useDatasetsAutocomplete({
     uuidsToExclude: allDatasets,
   });
 
-  const checkDatasetAccess = useCheckDatasetAccess();
-  const searchHits = unfilteredSearchHits.filter((hit) => {
-    const uuid = hit._source?.uuid;
-    return uuid && checkDatasetAccess(uuid);
-  });
+  const uuids = unfilteredSearchHits.map((hit) => hit._source?.uuid).filter(Boolean);
+  const { accessibleDatasets, isLoading } = useDatasetsAccess(uuids);
+
+  const searchHits =
+    isLoading || !accessibleDatasets
+      ? []
+      : unfilteredSearchHits.filter((hit) => {
+          const uuid = hit._source?.uuid;
+          return uuid && accessibleDatasets[uuid]?.access_allowed;
+        });
 
   return {
     inputValue,

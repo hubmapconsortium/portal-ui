@@ -84,10 +84,8 @@ function useAddDatasetsFromSearchDialog() {
   const { selectedRows, deselectRows } = useSelectableTableStore();
   const {
     errorMessages: restrictedDatasetsErrorMessages,
-    warningMessages: protectedDatasetsWarningMessages,
     restrictedHubmapIds,
     removeRestrictedDatasets: removeRestrictedDatasetsFromSearchSelections,
-    protectedRows,
     ...restRestrictedDatasets
   } = useWorkspacesRestrictedDatasetsForm({
     selectedRows,
@@ -131,12 +129,6 @@ function useAddDatasetsFromSearchDialog() {
 
   const updateWorkspaceDatasets = useUpdateWorkspaceDatasets({ workspaceId: workspaceIdField.value });
 
-  const removeRestrictedDatasets = useCallback(() => {
-    const protectedUUIDs = protectedRows.filter((uuid): uuid is string => Boolean(uuid));
-    removeRestrictedDatasetsFromSearchSelections();
-    removeDatasets(protectedUUIDs);
-  }, [removeRestrictedDatasetsFromSearchSelections, removeDatasets, protectedRows]);
-
   const submit = useCallback(
     async ({ datasets }: { datasets: string[] }) => {
       const workspaceDatasetsSet = new Set(workspaceDatasets);
@@ -179,7 +171,7 @@ function useAddDatasetsFromSearchDialog() {
 
   const datasetsWarningMessages = buildErrorMessages({
     fieldState: datasetsFieldState,
-    otherErrors: [...protectedDatasetsWarningMessages, ...tooManyDatasetsWarningMessages],
+    otherErrors: [...tooManyDatasetsWarningMessages],
   });
 
   const workspaceIdErrorMessages = buildErrorMessages({
@@ -207,8 +199,7 @@ function useAddDatasetsFromSearchDialog() {
     workspaceIdErrorMessages,
     selectWorkspace,
     restrictedHubmapIds,
-    protectedRows,
-    removeRestrictedDatasets,
+    removeRestrictedDatasets: removeRestrictedDatasetsFromSearchSelections,
     ...restRestrictedDatasets,
   };
 }

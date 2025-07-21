@@ -3,11 +3,7 @@ import { trackEvent } from 'js/helpers/trackers';
 import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
 import { useRestrictedDatasetsForm } from 'js/hooks/useRestrictedDatasets';
-import {
-  errorHelper,
-  restrictedDatasetsErrorMessage,
-  protectedDatasetsWarningMessage,
-} from 'js/components/workspaces/workspaceDatasetMessaging';
+import { errorHelper, restrictedDatasetsErrorMessage } from 'js/components/workspaces/workspaceDatasetMessaging';
 
 function useWorkspacesRestrictedDatasetsForm({
   selectedRows,
@@ -28,7 +24,6 @@ function useWorkspacesRestrictedDatasetsForm({
     selectedRows,
     deselectRows,
     restrictedDatasetsErrorMessage,
-    protectedDatasetsWarningMessage,
     trackEventHelper,
   });
 }

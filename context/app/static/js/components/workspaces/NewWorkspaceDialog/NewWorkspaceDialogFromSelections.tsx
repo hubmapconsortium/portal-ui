@@ -14,10 +14,9 @@ import RemoveRestrictedDatasetsFormField from '../RemoveRestrictedDatasetsFormFi
 
 function NewWorkspaceDialogFromSelections() {
   const {
-    errorMessages,
-    warningMessages,
+    errorMessages: datasetsErrorMessages,
+    warningMessages: datasetsWarningMessages,
     selectedRows,
-    protectedRows,
     restrictedRows,
     restrictedHubmapIds,
     removeRestrictedDatasets,
@@ -26,7 +25,7 @@ function NewWorkspaceDialogFromSelections() {
 
   const { deselectRows } = useSelectableTableStore();
 
-  const { control, errors, setDialogIsOpen, removeDatasets, ...rest } = useCreateWorkspaceForm({
+  const { control, errors, setDialogIsOpen, removeDatasets, errorMessages, ...rest } = useCreateWorkspaceForm({
     initialRestrictedDatasets: [...restrictedHubmapIds],
     initialSelectedDatasets: [...selectedRows],
   });
@@ -49,6 +48,8 @@ function NewWorkspaceDialogFromSelections() {
         Create New Workspace
       </MenuItem>
       <NewWorkspaceDialog
+        errorMessages={datasetsErrorMessages}
+        warningMessages={datasetsWarningMessages}
         control={control}
         errors={errors}
         removeDatasets={(uuids: string[]) => {
