@@ -4,7 +4,9 @@ import { withCustomMessage } from 'js/helpers/zod/withCustomMessage';
 const workspaceNameField = {
   'workspace-name': z
     .string({ errorMap: withCustomMessage('A workspace name is required. Please enter a workspace name.') })
-    .min(1),
+    .refine((val) => val.trim().length > 0, {
+      message: 'A workspace name is required. Please enter a workspace name.',
+    }),
 };
 
 const workspaceDescriptionField = {
