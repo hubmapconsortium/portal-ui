@@ -64,7 +64,7 @@ function EditListDialog({ dialogIsOpen, setDialogIsOpen, listDescription, listTi
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <OptDisabledButton onClick={handleSubmit} color="primary" disabled={title.length === 0}>
+          <OptDisabledButton onClick={handleSubmit} color="primary" disabled={title.trim().length === 0}>
             Save
           </OptDisabledButton>
         </>
