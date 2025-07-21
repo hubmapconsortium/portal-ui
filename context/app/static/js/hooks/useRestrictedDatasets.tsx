@@ -38,15 +38,17 @@ function useRestrictedDatasetsForm({
   const { hubmapIds: restrictedHubmapIds } = useHubmapIds(restrictedRows);
 
   const reportedRestrictedRows = useRef(false);
-  const errorMessages = [];
 
-  if (restrictedHubmapIds.length > 0) {
-    errorMessages.push(restrictedDatasetsErrorMessage(restrictedHubmapIds));
+  const errorMessages = useMemo(() => {
+    if (restrictedHubmapIds.length === 0) return [];
+
     if (!reportedRestrictedRows.current) {
       reportedRestrictedRows.current = true;
       trackEventHelper(restrictedHubmapIds.length);
     }
-  }
+
+    return [restrictedDatasetsErrorMessage(restrictedHubmapIds)];
+  }, [restrictedHubmapIds, restrictedDatasetsErrorMessage, trackEventHelper]);
 
   const removeRestrictedDatasets = useCallback(() => {
     deselectRows?.(restrictedRows);
