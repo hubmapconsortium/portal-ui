@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { RefObject, useMemo, useRef, useState } from 'react';
 import Description from 'js/shared-styles/sections/Description';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import ChartDropdown from 'js/shared-styles/charts/ChartDropdown';
@@ -16,6 +16,10 @@ import { useChartPalette } from 'js/shared-styles/charts/HorizontalStackedBarCha
 import { useEventCallback } from '@mui/material/utils';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
+import Paper from '@mui/material/Paper';
+import { useDownloadImage } from 'js/hooks/useDownloadImage';
+import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
+import Box from '@mui/material/Box';
 import {
   ageBucketLabels,
   DatasetsOverviewDigest,
@@ -48,7 +52,7 @@ const graphMargin = {
   left: 48,
 };
 
-const useDatasetsOverviewChartState = (trackingInfo?: EventInfo) => {
+const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackingInfo?: EventInfo) => {
   const [yAxis, setYAxis] = useState<YAxisOptions>('Datasets');
 
   const onChangeYAxis = useEventCallback((e: SelectChangeEvent) => {
@@ -138,6 +142,19 @@ const useDatasetsOverviewChartState = (trackingInfo?: EventInfo) => {
     });
   });
 
+  const download = useDownloadImage(chartRef, `${xAxis} vs ${compareBy} - Datasets Overview`);
+
+  const downloadImage = useEventCallback(() => {
+    download();
+    if (trackingInfo) {
+      const actionName = 'Datasets Overview / Download Visualization';
+      trackEvent({
+        ...trackingInfo,
+        action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
+      } as EventInfo);
+    }
+  });
+
   return {
     yAxis,
     onChangeYAxis,
@@ -153,11 +170,14 @@ const useDatasetsOverviewChartState = (trackingInfo?: EventInfo) => {
     percentMode,
     togglePercentMode,
     onChangeCompareBy,
+    downloadImage,
   };
 };
 
 export default function DatasetsOverviewChart({ matched, indexed, all, trackingInfo }: DatasetsOverviewChartProps) {
   const colors = useChartPalette();
+
+  const chartRef = useRef<HTMLDivElement>(null);
 
   const {
     yAxis,
@@ -172,7 +192,8 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
     togglePercentMode,
     onChangeYAxis,
     onChangeXAxis,
-  } = useDatasetsOverviewChartState(trackingInfo);
+    downloadImage,
+  } = useDatasetsOverviewChartState(chartRef, trackingInfo);
 
   const comparisonData = compareToAll ? all : indexed;
 
@@ -246,17 +267,18 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
   }, [data]);
 
   return (
-    <div>
+    <Paper>
       <Description>
         The chart below shows the distribution of HuBMAP datasets that are compatible with the scFind method. The
         distribution is based on the number of unique donors and the average age of donors in each dataset.
       </Description>
       <ChartWrapper
+        ref={chartRef}
         margin={margin}
         colorScale={colorScale}
         dividersInLegend={compareBy === 'Race'}
         additionalControls={
-          <Stack direction="row" spacing={2} alignItems="center">
+          <Stack direction="row" spacing={2} px={1} alignItems="center" useFlexGap>
             <LabeledPrimarySwitch
               label="Comparison Metric"
               checked={compareToAll}
@@ -278,6 +300,13 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
               enabledLabel="Percentage"
               tooltip="Toggle between displaying data as raw counts or fractions."
             />
+            <Box ml="auto">
+              <DownloadButton
+                onClick={downloadImage}
+                tooltip="Download chart as PNG"
+                aria-label="Download Chart as PNG"
+              />
+            </Box>
           </Stack>
         }
         dropdown={
@@ -323,6 +352,6 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
           TooltipContent={OverviewChartTooltip(percentMode)}
         />
       </ChartWrapper>
-    </div>
+    </Paper>
   );
 }

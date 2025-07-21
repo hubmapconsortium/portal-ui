@@ -1,4 +1,4 @@
-import React, { PropsWithChildren } from 'react';
+import React, { forwardRef, PropsWithChildren } from 'react';
 import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
@@ -27,19 +27,22 @@ const pullUpMultiple = (a: string, b: string) => {
   return a.localeCompare(b);
 };
 
-function ChartWrapper({
-  children,
-  chartTitle,
-  margin,
-  colorScale,
-  dropdown,
-  xAxisDropdown,
-  yAxisDropdown,
-  additionalControls,
-  allKeysScale,
-  dividersInLegend,
-  labelValueMap = {},
-}: ChartWrapperProps) {
+function ChartWrapper(
+  {
+    children,
+    chartTitle,
+    margin,
+    colorScale,
+    dropdown,
+    xAxisDropdown,
+    yAxisDropdown,
+    additionalControls,
+    allKeysScale,
+    dividersInLegend,
+    labelValueMap = {},
+  }: ChartWrapperProps,
+  ref: React.Ref<HTMLDivElement>,
+) {
   const domain = [...(colorScale?.domain() ?? [])].sort(pullUpMultiple);
   const allKeysDomain = [...(allKeysScale?.domain() ?? [])].sort(pullUpMultiple);
   return (
@@ -57,6 +60,7 @@ function ChartWrapper({
         gridTemplateColumns: 'auto auto auto minmax(175px, fit-content)',
         gridTemplateRows: 'auto auto minmax(0, auto) 500px minmax(0, auto)',
       }}
+      ref={ref}
     >
       {chartTitle && (
         <TitleWrapper $leftOffset={margin.left - margin.right} sx={{ gridArea: 'title' }}>
@@ -152,4 +156,4 @@ function ChartWrapper({
   );
 }
 
-export default ChartWrapper;
+export default forwardRef(ChartWrapper);
