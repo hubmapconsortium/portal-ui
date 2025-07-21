@@ -9,13 +9,11 @@ import { useDatasetsAccess } from 'js/hooks/useDatasetPermissions';
  * @returns A list of restricted dataset UUIDs
  */
 function useGetRestrictedDatasets(datasetUUIDs: Set<string>) {
-  const uuidsArray = useMemo(() => Array.from(datasetUUIDs), [datasetUUIDs]);
+  const uuidsArray = Array.from(datasetUUIDs);
   const { accessibleDatasets, isLoading } = useDatasetsAccess(uuidsArray);
 
-  const protectedDatasetUUIDs = useMemo(() => {
-    if (isLoading || !accessibleDatasets) return [];
-    return uuidsArray.filter((uuid) => !accessibleDatasets[uuid]?.access_allowed);
-  }, [accessibleDatasets, isLoading, uuidsArray]);
+  const protectedDatasetUUIDs =
+    isLoading || !accessibleDatasets ? [] : uuidsArray.filter((uuid) => !accessibleDatasets[uuid]?.access_allowed);
 
   return protectedDatasetUUIDs;
 }

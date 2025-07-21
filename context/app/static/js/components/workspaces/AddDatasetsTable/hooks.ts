@@ -1,4 +1,4 @@
-import { useState, SyntheticEvent, useMemo } from 'react';
+import { useState, SyntheticEvent } from 'react';
 import { useEventCallback } from '@mui/material/utils';
 
 import { useSearchHits } from 'js/hooks/useSearchData';
@@ -124,20 +124,16 @@ function useDatasetsAutocomplete({
     uuidsToExclude: allDatasets,
   });
 
-  const uuids = useMemo(
-    () => unfilteredSearchHits.map((hit) => hit._source?.uuid).filter(Boolean),
-    [unfilteredSearchHits],
-  );
+  const uuids = unfilteredSearchHits.map((hit) => hit._source?.uuid).filter(Boolean);
   const { accessibleDatasets, isLoading } = useDatasetsAccess(uuids);
 
-  const searchHits = useMemo(() => {
-    if (isLoading || !accessibleDatasets) return [];
-
-    return unfilteredSearchHits.filter((hit) => {
-      const uuid = hit._source?.uuid;
-      return uuid && accessibleDatasets[uuid]?.access_allowed;
-    });
-  }, [unfilteredSearchHits, accessibleDatasets, isLoading]);
+  const searchHits =
+    isLoading || !accessibleDatasets
+      ? []
+      : unfilteredSearchHits.filter((hit) => {
+          const uuid = hit._source?.uuid;
+          return uuid && accessibleDatasets[uuid]?.access_allowed;
+        });
 
   return {
     inputValue,
