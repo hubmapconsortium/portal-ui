@@ -265,9 +265,10 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
               disabledLabel="Indexed Datasets"
               enabledLabel="All Datasets"
               ariaLabel="Compare to All Datasets"
+              tooltip="Toggle to compare matched datasets to scFind-indexed datasets or all datasets published in HuBMAP"
             />
             <LabeledPrimarySwitch
-              label="Y-Axis Mode"
+              label="Graph Type"
               value="percentMode"
               checked={percentMode}
               onChange={togglePercentMode}
@@ -275,6 +276,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
               ariaLabel="Toggle Percentage Mode"
               disabledLabel="Total Count"
               enabledLabel="Percentage"
+              tooltip="Toggle between displaying data as raw counts or fractions."
             />
           </Stack>
         }
