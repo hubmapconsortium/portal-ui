@@ -5,12 +5,14 @@ import { decimal, percent } from 'js/helpers/number-format';
 
 interface DatasetOverviewTooltipDisplayProps {
   groupLabel: string;
+  barKey: string;
   formattedMatched: string;
   formattedUnmatched: string;
 }
 
 function DatasetOverviewTooltipDisplay({
   groupLabel,
+  barKey,
   formattedMatched,
   formattedUnmatched,
 }: DatasetOverviewTooltipDisplayProps) {
@@ -18,6 +20,9 @@ function DatasetOverviewTooltipDisplay({
     <Stack spacing={1}>
       <div>
         <strong>{groupLabel}</strong>
+      </div>
+      <div>
+        <strong>{barKey}</strong>
       </div>
       <div>
         <strong>Matched:</strong> {formattedMatched}
@@ -34,19 +39,24 @@ function TotalCountModeOverviewChartTooltip({
 }: {
   tooltipData: TooltipData<{ matched: number; unmatched: number; group: string }>;
 }) {
-  const matched = tooltipData.bar?.data.matched ?? 0;
-  const unmatched = tooltipData.bar?.data.unmatched ?? 0;
+  if (!tooltipData.key) {
+    return null;
+  }
+  if (!tooltipData.bar) {
+    return <strong>{tooltipData.key}</strong>;
+  }
+
+  const { matched, unmatched } = tooltipData.bar.data;
 
   const formattedMatched = decimal.format(matched);
   const formattedUnmatched = decimal.format(unmatched);
 
-  const group = tooltipData.bar?.data.group;
-
-  const groupLabel = `${group} (${tooltipData.key})`;
+  const { group } = tooltipData.bar.data;
 
   return (
     <DatasetOverviewTooltipDisplay
-      groupLabel={groupLabel}
+      groupLabel={group}
+      barKey={tooltipData.key}
       formattedMatched={formattedMatched}
       formattedUnmatched={formattedUnmatched}
     />
@@ -58,19 +68,24 @@ function PercentModeOverviewChartTooltip({
 }: {
   tooltipData: TooltipData<{ matched: number; unmatched: number; group: string }>;
 }) {
-  const matched = tooltipData.bar?.data.matched ?? 0;
-  const unmatched = tooltipData.bar?.data.unmatched ?? 0;
+  if (!tooltipData.key) {
+    return null;
+  }
+  if (!tooltipData.bar) {
+    return <strong>{tooltipData.key}</strong>;
+  }
+
+  const { matched, unmatched } = tooltipData.bar.data;
 
   const formattedMatched = percent.format(matched);
   const formattedUnmatched = percent.format(unmatched);
 
   const group = tooltipData.bar?.data.group;
 
-  const groupLabel = `${group} (${tooltipData.key})`;
-
   return (
     <DatasetOverviewTooltipDisplay
-      groupLabel={groupLabel}
+      groupLabel={group}
+      barKey={tooltipData.key}
       formattedMatched={formattedMatched}
       formattedUnmatched={formattedUnmatched}
     />

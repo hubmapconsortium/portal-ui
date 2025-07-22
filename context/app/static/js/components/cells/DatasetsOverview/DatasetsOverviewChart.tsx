@@ -52,6 +52,8 @@ const graphMargin = {
   left: 48,
 };
 
+type StackKeys = 'matched' | 'unmatched';
+
 const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackingInfo?: EventInfo) => {
   const [yAxis, setYAxis] = useState<YAxisOptions>('Datasets');
 
@@ -338,23 +340,19 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
             />
           }
         >
-          <GroupedBarStackChart
+          <GroupedBarStackChart<StackKeys, string, string>
             data={data}
             xScale={xScale}
             yScale={yScale}
             colorScale={colorScale}
             getX={(d) => d.group}
             margin={graphMargin}
-            // X and Y axis labels are not needed as they are present on the dropdowns
-            xAxisLabel=""
-            yAxisLabel=""
             xAxisTickLabels={xAxisTickLabels}
             // Filter out any decimal values from the Y axis ticks if percentMode is disabled
             getTickValues={() => yScale.ticks(5).filter((d) => (percentMode ? d : Math.floor(d)) === d)}
             compareByKeys={compareByKeys}
-            stackMemberKeys={['matched', 'unmatched']}
+            stackKeys={['matched', 'unmatched'] as const}
             yTickFormat={yScaleFormat}
-            // @ts-expect-error - Need to improve the types for GroupedBarStackChart
             TooltipContent={OverviewChartTooltip(percentMode)}
           />
         </ChartWrapper>

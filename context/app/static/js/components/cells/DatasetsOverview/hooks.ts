@@ -420,7 +420,7 @@ const getYValue = (yAxis: YAxisOptions, item?: CountBucket) => {
   return yAxis === 'Datasets' ? item.doc_count : item.donor_count.value;
 };
 
-export type FormattedOverviewChartData = BarStackGroup<'matched' | 'unmatched'>;
+export type FormattedOverviewChartData = BarStackGroup<'matched' | 'unmatched', string, string>;
 
 interface NestedBucket {
   buckets: {
