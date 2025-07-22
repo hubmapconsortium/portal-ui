@@ -8,7 +8,7 @@ import { BarStackGroup } from 'js/shared-styles/charts/VerticalStackedBarChart/V
 export const Y_AXIS_OPTIONS = ['Datasets', 'Donors'] as const;
 export type YAxisOptions = (typeof Y_AXIS_OPTIONS)[number];
 
-export const X_AXIS_OPTIONS = ['Age', 'Race', 'Sex'] as const;
+export const X_AXIS_OPTIONS = ['Age', 'Race', 'Sex', 'Organ'] as const;
 export type XAxisOptions = (typeof X_AXIS_OPTIONS)[number];
 
 /**
@@ -58,7 +58,6 @@ const labeledAgeBuckets: Record<AgeBucket, string> = {
 
 export const ageBuckets = Object.keys(labeledAgeBuckets) as AgeBuckets;
 export const ageBucketLabels = Object.values(labeledAgeBuckets);
-
 interface NestedDonorBuckets {
   key: string;
   doc_count: number;
@@ -95,6 +94,15 @@ interface NestedDonorBuckets {
       };
     }[];
   };
+  organ: {
+    buckets: {
+      key: string;
+      doc_count: number;
+      donor_count: {
+        value: number;
+      };
+    }[];
+  };
 }
 
 interface DatasetsOverviewAggs {
@@ -115,6 +123,9 @@ interface DatasetsOverviewAggs {
   };
   donors_by_race: {
     buckets: Omit<NestedDonorBuckets, 'race'>[];
+  };
+  donors_by_organ: {
+    buckets: Omit<NestedDonorBuckets, 'organ'>[];
   };
 }
 
@@ -169,6 +180,19 @@ const sexesAgg: AggregationsAggregationContainer = {
   },
 };
 
+const organsAgg: AggregationsAggregationContainer = {
+  terms: {
+    field: 'origin_samples_unique_mapped_organs.keyword',
+  },
+  aggs: {
+    donor_count: {
+      cardinality: {
+        field: 'donor.uuid.keyword',
+      },
+    },
+  },
+};
+
 const commonAggs: Record<string, AggregationsAggregationContainer> = {
   dataset_count: {
     cardinality: {
@@ -204,6 +228,7 @@ const aggs: Record<string, AggregationsAggregationContainer> = {
     },
     aggs: {
       ...commonAggs,
+      organ: organsAgg,
       age: agesAgg,
       race: racesAgg,
     },
@@ -216,6 +241,7 @@ const aggs: Record<string, AggregationsAggregationContainer> = {
     },
     aggs: {
       ...commonAggs,
+      organ: organsAgg,
       race: racesAgg,
       sex: sexesAgg,
     },
@@ -226,8 +252,20 @@ const aggs: Record<string, AggregationsAggregationContainer> = {
     },
     aggs: {
       ...commonAggs,
+      organ: organsAgg,
       age: agesAgg,
       sex: sexesAgg,
+    },
+  },
+  donors_by_organ: {
+    terms: {
+      field: 'origin_samples_unique_mapped_organs.keyword',
+    },
+    aggs: {
+      ...commonAggs,
+      race: racesAgg,
+      sex: sexesAgg,
+      age: agesAgg,
     },
   },
 };
@@ -357,6 +395,10 @@ const getAllSexes = (overview: DatasetsOverviewDigest) => {
   return overview.fullAggs?.donors_by_sex.buckets.map((bucket) => bucket.key) ?? [];
 };
 
+const getAllOrgans = (overview: DatasetsOverviewDigest) => {
+  return overview.fullAggs?.donors_by_organ.buckets.map((bucket) => bucket.key) ?? [];
+};
+
 interface CountBucket {
   doc_count: number;
   donor_count: {
@@ -457,7 +499,7 @@ interface OverviewChartData {
   data: FormattedOverviewChartData[];
 }
 
-type LowercaseXAxisOptions = 'age' | 'race' | 'sex';
+type LowercaseXAxisOptions = 'age' | 'race' | 'sex' | 'organ';
 
 /**
  * Function for formatting the scFind result data to enable comparison between a subset of matched datasets
@@ -524,7 +566,7 @@ export function useFormattedOverviewChartData(
 
       case 'Race':
         getAllRaces(comparison).forEach((race) => {
-          const compareBySafe = compareByLowercase as 'age' | 'sex';
+          const compareBySafe = compareByLowercase as 'age' | 'sex' | 'organ';
           const findRaceBucket = (b: NestedBucket['buckets'][number]) => b.key === race;
           const matchBucket = matchAggs.donors_by_race.buckets.find(findRaceBucket)?.[compareBySafe];
           const comparisonBucket = comparisonAggs.donors_by_race.buckets.find(findRaceBucket)?.[compareBySafe];
@@ -537,13 +579,25 @@ export function useFormattedOverviewChartData(
         break;
       case 'Sex':
         getAllSexes(comparison).forEach((sex) => {
-          const compareBySafe = compareByLowercase as 'age' | 'race';
+          const compareBySafe = compareByLowercase as 'age' | 'race' | 'organ';
           const findSexBucket = (b: NestedBucket['buckets'][number]) => b.key === sex;
           const matchBucket = matchAggs.donors_by_sex.buckets.find(findSexBucket)?.[compareBySafe];
           const comparisonBucket = comparisonAggs.donors_by_sex.buckets.find(findSexBucket)?.[compareBySafe];
 
           formattedData.push({
             group: sex,
+            stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, compareByIsAge, isPercentage),
+          });
+        });
+        break;
+      case 'Organ':
+        getAllOrgans(comparison).forEach((organ) => {
+          const compareBySafe = compareByLowercase as 'age' | 'race' | 'sex';
+          const findOrganBucket = (b: NestedBucket['buckets'][number]) => b.key === organ;
+          const matchBucket = matchAggs.donors_by_organ.buckets.find(findOrganBucket)?.[compareBySafe];
+          const comparisonBucket = comparisonAggs.donors_by_organ.buckets.find(findOrganBucket)?.[compareBySafe];
+          formattedData.push({
+            group: organ,
             stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, compareByIsAge, isPercentage),
           });
         });
@@ -565,6 +619,12 @@ export function useFormattedOverviewChartData(
         const sexBucket = b as { sex: NestedBucket };
         return sexBucket.sex.buckets;
       }
+
+      if (xAxisLowercase === 'organ' && 'organ' in b) {
+        const organBucket = b as { organ: NestedBucket };
+        return organBucket.organ.buckets;
+      }
+
       return [];
     });
     const maxCount = Math.max(...compareByAggs.map(findMax));
@@ -576,6 +636,7 @@ export function useFormattedOverviewChartData(
         allStackKeys.add(key);
       });
     });
+
     const normalizedData = formattedData.map((d) => {
       d.stacks = Object.fromEntries(
         Array.from(allStackKeys).map((key) => {
@@ -590,6 +651,7 @@ export function useFormattedOverviewChartData(
       // Return the normalized data with the stacks
       return { ...d, stacks };
     });
+
     return [normalizedData, maxCount];
   }, [xAxis, compareBy, matches.fullAggs, comparison, yAxis, isPercentage]);
 

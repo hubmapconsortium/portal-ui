@@ -94,7 +94,10 @@ export const useBarGroupFootprint = <T extends string>(
 
         stackKeys.forEach((key) => {
           // If group.stacks[key] is undefined, set to 0
-          result[key] = group.stacks[key] ?? 0;
+          result[key] = group.stacks[key] ?? {
+            matched: 0,
+            unmatched: 0,
+          };
         });
 
         return result;

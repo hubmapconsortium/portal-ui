@@ -218,6 +218,8 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
           return comparison.fullAggs?.donors_by_race.buckets.map((d) => d.key).sort() ?? [];
         case 'Sex':
           return comparison.fullAggs?.donors_by_sex.buckets.map((d) => d.key).sort() ?? [];
+        case 'Organ':
+          return comparison.fullAggs?.donors_by_organ.buckets.map((d) => d.key).sort() ?? [];
         default:
           console.error(`unknown comparison key type:`, compareBy);
           return [];
@@ -235,6 +237,8 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
         return comparison.fullAggs?.donors_by_race.buckets.map((d) => d.key).sort() ?? [];
       case 'Sex':
         return comparison.fullAggs?.donors_by_sex.buckets.map((d) => d.key).sort() ?? [];
+      case 'Organ':
+        return comparison.fullAggs?.donors_by_organ.buckets.map((d) => d.key).sort() ?? [];
       default:
         console.error(`unknown x axis key type:`, xAxis);
         return [];
