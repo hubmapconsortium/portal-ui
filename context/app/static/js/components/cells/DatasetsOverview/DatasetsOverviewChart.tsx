@@ -321,6 +321,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
               label="Compare by"
               onChange={onChangeCompareBy}
               fullWidth
+              sx={{ minWidth: 'min(fit-content, 175px)', pr: 1 }}
             />
           }
           xAxisDropdown={
