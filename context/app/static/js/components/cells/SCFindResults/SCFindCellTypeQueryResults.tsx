@@ -2,7 +2,7 @@ import React, { forwardRef, useEffect, useMemo } from 'react';
 import { Tab, TabPanel, TabProps, Tabs, useTabs } from 'js/shared-styles/tabs';
 import { lastModifiedTimestamp, assayTypes, organ, hubmapID } from 'js/shared-styles/tables/columns';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
-import { Dataset } from 'js/components/types';
+import { Dataset, EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import Skeleton from '@mui/material/Skeleton';
@@ -99,7 +99,7 @@ function ResultsHelperPanel({ shouldDisplay, currentTissue }: HelperPanelProps) 
   );
 }
 
-function OrganCellTypeDistributionCharts() {
+function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: EventInfo }) {
   const { openTabIndex, handleTabChange } = useTabs();
   const cellTypes = useCellVariableNames();
   const tissues = useMemo(() => {
@@ -154,7 +154,7 @@ function OrganCellTypeDistributionCharts() {
           <Typography variant="subtitle1" component="p">
             Datasets Overview
           </Typography>
-          <DatasetsOverview datasets={datasetsByTissue[tissue]}>
+          <DatasetsOverview datasets={datasetsByTissue[tissue]} trackingInfo={trackingInfo}>
             These results are derived from RNAseq datasets that were indexed by the <SCFindLink />. Not all HuBMAP
             datasets are currently compatible with this method due to data modalities or the availability of cell
             annotations. The table below summarizes the number of matched datasets and the proportions relative to
@@ -237,7 +237,11 @@ function DatasetListSection() {
   );
 }
 
-function SCFindCellTypeQueryResultsLoader() {
+interface SCFindCellTypeQueryResultsLoaderProps {
+  trackingInfo?: EventInfo;
+}
+
+function SCFindCellTypeQueryResultsLoader({ trackingInfo }: SCFindCellTypeQueryResultsLoaderProps) {
   const cellTypes = useCellVariableNames();
 
   const { datasets, isLoading, error } = useSCFindCellTypeResults(cellTypes);
@@ -261,7 +265,7 @@ function SCFindCellTypeQueryResultsLoader() {
   return (
     <Stack spacing={1} py={2}>
       <Typography variant="subtitle1">Cell Type Distribution Across Organs</Typography>
-      <OrganCellTypeDistributionCharts />
+      <OrganCellTypeDistributionCharts trackingInfo={trackingInfo} />
       <DatasetListSection />
     </Stack>
   );

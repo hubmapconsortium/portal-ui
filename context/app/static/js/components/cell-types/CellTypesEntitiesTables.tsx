@@ -65,7 +65,12 @@ function CellTypesEntitiesTables() {
           }}
         >
           <SelectableTableProvider tableLabel={`Datasets with ${name} - scFind Results`}>
-            <SCFindCellTypeQueryResults />
+            <SCFindCellTypeQueryResults
+              trackingInfo={{
+                ...trackingInfo,
+                action: 'Datasets',
+              }}
+            />
           </SelectableTableProvider>
         </MolecularDataQueryFormProvider>
       </MolecularDataQueryFormTrackingProvider>
