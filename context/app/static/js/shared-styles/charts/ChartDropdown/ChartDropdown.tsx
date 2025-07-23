@@ -4,6 +4,7 @@ import FormControl from '@mui/material/FormControl';
 import InputLabel from '@mui/material/InputLabel';
 import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
+import { SxProps } from '@mui/system';
 
 import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
@@ -17,6 +18,7 @@ interface DatasetsChartDropdownProps<T extends string> {
   fullWidth?: boolean;
   category?: string;
   action?: string;
+  sx?: SxProps;
 }
 
 function ChartDropdown<T extends string>({
@@ -28,6 +30,7 @@ function ChartDropdown<T extends string>({
   displayLabels = {} as Record<T, string>,
   category = 'Homepage',
   action = 'HubMAP Datasets Graph/Category Type',
+  sx,
 }: DatasetsChartDropdownProps<T>) {
   const id = useId();
   const labelId = `${id}-label`;
@@ -41,7 +44,7 @@ function ChartDropdown<T extends string>({
     onChange(e);
   });
   return (
-    <FormControl fullWidth={fullWidth}>
+    <FormControl fullWidth={fullWidth} sx={sx}>
       <InputLabel id={labelId}>{label}</InputLabel>
       <Select id={id} label={label} labelId={labelId} value={value} onChange={handleOnChange} fullWidth={fullWidth}>
         {options.map((option) => (

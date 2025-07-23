@@ -45,7 +45,7 @@ const defaultInitialState: CellTypesSearchState = {
   organs: [],
   sortState: {
     columnId: 'name',
-    direction: 'desc',
+    direction: 'asc',
   },
 };
 

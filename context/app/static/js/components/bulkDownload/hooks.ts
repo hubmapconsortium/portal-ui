@@ -13,10 +13,7 @@ import { createDownloadUrl } from 'js/helpers/functions';
 import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
 import { trackEvent } from 'js/helpers/trackers';
 import { getIDsQuery } from 'js/helpers/queries';
-import {
-  restrictedDatasetsErrorMessage,
-  protectedDatasetsWarningMessage,
-} from 'js/components/bulkDownload/bulkDownloadDatasetMessaging';
+import { restrictedDatasetsErrorMessage } from 'js/components/bulkDownload/bulkDownloadDatasetMessaging';
 
 const schema = z
   .object({
@@ -101,7 +98,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
   const restrictedDatasetsFields = useRestrictedDatasetsForm({
     selectedRows: new Set(uuids),
     deselectRows: removeUuidsOrRows,
-    protectedDatasetsWarningMessage,
     restrictedDatasetsErrorMessage,
     trackEventHelper: (numRestrictedDatasets) => {
       trackEvent({
