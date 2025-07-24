@@ -1,4 +1,0 @@
-- Add grouped stacked bar charts to dataset overviews on molecular data query, cell type detail, and gene detail apges.
-- Move expand icon in gene dataset table to left side.
-- Fix initial sort for cell type landing page.
-- Add whitespace to top of cell type landing page graph.

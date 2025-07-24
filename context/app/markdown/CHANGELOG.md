@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.29.3 - 2025-07-24
+
+- Check user's access to specific datasets for workspace and bulk download operations using new access endpoint.
+- Prevent workspaces and lists from being named with only whitespace, which breaks links.
+- Add grouped stacked bar charts to dataset overviews on molecular data query, cell type detail, and gene detail apges.
+- Move expand icon in gene dataset table to left side.
+- Fix initial sort for cell type landing page.
+- Add whitespace to top of cell type landing page graph.
+
+
+
 ## v1.29.2 - 2025-07-21
 
 - Update data products endpoint.

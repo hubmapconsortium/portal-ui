@@ -1,1 +1,0 @@
-- Prevent workspaces and lists from being named with only whitespace, which breaks links.
