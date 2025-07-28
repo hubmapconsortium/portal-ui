@@ -72,7 +72,7 @@ function ChartWrapper(
       <Box sx={{ gridArea: 'x-axis', p: xAxisDropdown ? 1 : 0 }}>{xAxisDropdown}</Box>
       <Box sx={{ gridArea: 'legend', display: 'flex', flexDirection: 'column', maxHeight: '100%', overflow: 'none' }}>
         {dropdown && <Box sx={{ marginY: 1, minWidth: 0 }}>{dropdown}</Box>}
-        <Box sx={{ flex: 1, overflowY: 'auto' }} tabIndex={0}>
+        <Box sx={{ flex: 1, overflowY: 'auto', gridArea: 'legend' }} tabIndex={0}>
           {colorScale && (
             <LegendOrdinal scale={colorScale} domain={domain}>
               {(labels) => (

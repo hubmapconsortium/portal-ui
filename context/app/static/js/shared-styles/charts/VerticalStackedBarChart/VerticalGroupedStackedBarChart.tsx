@@ -9,7 +9,7 @@ import { AnyScaleBand } from '@visx/shape/lib/types';
 import Typography from '@mui/material/Typography';
 import { OrdinalScale, useChartTooltip, useVerticalChart } from '../hooks';
 import { TICK_LABEL_SIZE } from '../constants';
-import { defaultXScaleRange, defaultYScaleRange, trimStringWithMiddleEllipsis } from '../utils';
+import { defaultXScaleRange, defaultYScaleRange } from '../utils';
 import { TooltipData, tooltipHasBarData } from '../types';
 import VerticalChartGridRowsGroup from '../VerticalChartGridRowsGroup';
 import StackedBar from '../StackedBar';
@@ -305,10 +305,10 @@ function GroupedBarStackChart<
   stackKeys,
   yTickFormat,
 }: GroupedBarStackChartProps<StackKey, CompareByKey, XAxisKey, XAxisScale, YAxisScale>) {
-  const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
+  const { xWidth, yHeight, updatedMargin } = useVerticalChart({
     margin,
     tickLabelSize: TICK_LABEL_SIZE,
-    xAxisTickLabels: xAxisTickLabels.map((label) => trimStringWithMiddleEllipsis(label)),
+    xAxisTickLabels: [],
     parentWidth,
     parentHeight,
   });
@@ -373,8 +373,7 @@ function GroupedBarStackChart<
         scale={xScale}
         label={xAxisLabel}
         hideTicks
-        rangePadding={updatedMargin.left - updatedMargin.left}
-        labelOffset={longestLabelSize}
+        labelOffset={24}
       />
       {tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
