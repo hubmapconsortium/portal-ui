@@ -1,0 +1,3 @@
+- Fix misalignment visible in expandable tables.
+- Fix export of grouped stacked bar chart with long x axis labels.
+- Fix orientation of cell types landing page expand icons.
