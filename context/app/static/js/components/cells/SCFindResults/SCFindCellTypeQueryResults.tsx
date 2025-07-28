@@ -53,6 +53,7 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListPr
         ],
       }}
       expandedContent={SCFindCellTypesChart}
+      reverseExpandIndicator
       {...useTableTrackingProps()}
     />
   );
