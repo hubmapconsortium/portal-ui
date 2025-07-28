@@ -122,7 +122,7 @@ interface CellTypeDescriptionButtonProps {
 function CellTypeDescriptionButton({ isExpanded, onClick }: CellTypeDescriptionButtonProps) {
   return (
     <TooltipIconButton tooltip={!isExpanded && 'Show description'} aria-label="Show description" onClick={onClick}>
-      {isExpanded ? <DownIcon fontSize="small" /> : <UpIcon fontSize="small" />}
+      {isExpanded ? <UpIcon fontSize="small" /> : <DownIcon fontSize="small" />}
     </TooltipIconButton>
   );
 }
