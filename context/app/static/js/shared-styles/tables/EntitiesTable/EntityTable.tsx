@@ -84,6 +84,10 @@ function EntityTable<Doc extends Entity>({
     initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
   });
 
+  const expandableHeaderCell = (
+    <HeaderCell aria-hidden sx={({ palette }) => ({ backgroundColor: palette.background.paper })} />
+  );
+
   return (
     <StyledTableContainer
       component={Paper}
@@ -95,12 +99,15 @@ function EntityTable<Doc extends Entity>({
       <Table stickyHeader>
         <TableHead sx={{ position: 'relative' }}>
           <TableRow sx={{ height: headerRowHeight }}>
+            {isExpandable && reverseExpandIndicator && expandableHeaderCell}
             {isSelectable && (
               <SelectableHeaderCell
                 allTableRowKeys={allSearchIDs}
                 disabledTableRowKeys={disabledIDs}
                 disabled={false}
-                sx={({ palette }) => ({ backgroundColor: palette.background.paper })}
+                sx={({ palette }) => ({
+                  backgroundColor: palette.background.paper,
+                })}
                 onSelectAllChange={onSelectAllChange}
               />
             )}
@@ -113,9 +120,7 @@ function EntityTable<Doc extends Entity>({
                 trackingInfo={trackingInfo}
               />
             ))}
-            {isExpandable && (
-              <HeaderCell aria-hidden sx={({ palette }) => ({ backgroundColor: palette.background.paper })} />
-            )}
+            {isExpandable && !reverseExpandIndicator && expandableHeaderCell}
           </TableRow>
           <TableRow aria-hidden="true">
             <TableCell
@@ -165,6 +170,7 @@ function EntityTable<Doc extends Entity>({
                       rowName={hit?._source?.hubmap_id}
                       onSelectChange={onSelectChange}
                       disabled={disabledIDs?.has(hit?._id)}
+                      cellComponent={TableCellComponent}
                     />
                   )}
                   {columns.map(({ cellContent: CellContent, id }) => (

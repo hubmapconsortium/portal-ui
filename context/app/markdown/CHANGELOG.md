@@ -8,23 +8,18 @@
 - Move expand icon in gene dataset table to left side.
 - Fix initial sort for cell type landing page.
 - Add whitespace to top of cell type landing page graph.
-
-
+- Update portal-visualization to support vitessce configuation building for Xenium Assays.
 
 ## v1.29.2 - 2025-07-21
 
 - Update data products endpoint.
 - Fix bug where links in dataset workflow details could not be clicked.
 
-
-
 ## v1.29.1 - 2025-07-16
 
 - Fix genes-info endpoint parameters.
 - Add metadata endpoint for UDI demo site.
 - Update portal-visualization version to fix the multiomic datasets' visualizations.
-
-
 
 ## v1.29.0 - 2025-07-11
 
@@ -41,31 +36,24 @@
 - Replace hard coded list of Azimuth annotated datasets with search query.
 - Update Vitessce to v3.6.4.
 
-
-
 ## v1.28.1 - 2025-06-27
 
 - Fix flipped 'up' and 'down' icons across the portal.
 
-
-
 ## v1.28.0 - 2025-06-26
 
 Fix typo on Workspaces Sharing dialog.
+
 - Add support for new "initializing" workspace state.
 - Update gene detail page to display relevant cell types and molecular data query results.
 - List associated publications on dataset detail pages.
 - Update homepage news items as of June 2025.
 - Open OpenKeyNav commands description when OpenKeyNav is enabled.
 
-
-
 ## v1.27.4 - 2025-06-13
 
 - Allow multiple workspaces to run concurrently.
 - Update eui import parameters to support 2.3 update.
-
-
 
 ## v1.27.3 - 2025-06-11
 
@@ -73,13 +61,9 @@ Fix typo on Workspaces Sharing dialog.
 - Remove `other` cells from gene detail page.
 - Fix incorrect `biomarkers` link.
 
-
-
 ## v1.27.2 - 2025-06-11
 
 - Fix bug where disabling OpenKeyNav did not have an effect.
-
-
 
 ## v1.27.1 - 2025-06-10
 
@@ -87,21 +71,15 @@ Fix typo on Workspaces Sharing dialog.
 - Address bugs related to OpenKeyNav integration.
 - Updates portal-viz version to 0.4.7 to reflect support for visualizing zarr.zip files.
 
-
-
 ## v1.27.0 - 2025-06-05
 
 - Add table of indexed cell types found in a given organ to organ pages.
 - Integrate OpenKeyNav accessibility tool.
 - Add the data products and scfind APIs to the service status page.
 
-
-
 ## v1.26.2 - 2025-05-29
 
 - Fix gene pathways effect causing molecular data queries to fail.
-
-
 
 ## v1.26.1 - 2025-05-28
 
@@ -113,8 +91,6 @@ Fix typo on Workspaces Sharing dialog.
 - Update ordering of data table tabs on Publication detail pages.
 - Update publication header tags for SEO.
 
-
-
 ## v1.26.0 - 2025-05-16
 
 - Update portal sitemap to include all relevant landing and detail pages.
@@ -122,8 +98,6 @@ Fix typo on Workspaces Sharing dialog.
 - Update Collections detail pages.
 - Update Collections landing page.
 - Update Publications landing page.
-
-
 
 ## v1.25.1 - 2025-05-05
 
@@ -136,8 +110,6 @@ Fix typo on Workspaces Sharing dialog.
 - Add scFind as cell type lookup option.
 - Update "What's New" section of the homepage for March and April.
 
-
-
 ## v1.25.0 - 2025-04-28
 
 - Add analytics to homepage.
@@ -145,20 +117,14 @@ Fix typo on Workspaces Sharing dialog.
 - Fix workspace sharing dialog text.
 - Fix checkbox header styling on workspace landing page.
 
-
-
 ## v1.24.2 - 2025-04-24
 
 - Add sharing functionality to workspaces.
-
-
 
 ## v1.24.1 - 2025-04-23
 
 - Add analytics to organ pages.
 - Enable easy links to the search page with hierarchical facets selected.
-
-
 
 ## v1.24.0 - 2025-04-14
 
@@ -166,8 +132,6 @@ Fix typo on Workspaces Sharing dialog.
 - Add SCFind API endpoint setup and relevant tests.
 - Fix text on SnareSeq2 info banners.
 - Hide links to Shiny apps in organ data products if unavailable.
-
-
 
 ## v1.23.1 - 2025-04-02
 
@@ -178,19 +142,13 @@ Fix typo on Workspaces Sharing dialog.
 - Updated portal viz version to fix the scaling issue for Visium datasets spot layer.
 - Update toggle color in dialogs for clarity.
 
-
-
 ## v1.23.0 - 2025-03-24
 
 - Add support for additional deepcell annotations by updating to portal-visualization 0.4.2.
 
-
-
 ## v1.22.1 - 2025-03-10
 
 - Show data products on pages for organs with laterality.
-
-
 
 ## v1.22.0 - 2025-03-07
 
@@ -200,14 +158,10 @@ Fix typo on Workspaces Sharing dialog.
 - Update portal-viz version to address the scaling issue for EPIC segmentation masks.
 - Update Ubuntu version used by GitHub CI.
 
-
-
 ## v1.21.1 - 2025-02-24
 
 - Fix casing of ABO blood group chart titles on diversity page.
 - Restrict "My Lists" feature to HuBMAP users only.
-
-
 
 ## v1.21.0 - 2025-02-20
 
@@ -215,16 +169,12 @@ Fix typo on Workspaces Sharing dialog.
 - Fix bug on search pages where range filter was not applied if the min value is zero.
 - Update search page menu styles.
 
-
-
 ## v1.20.3 - 2025-02-13
 
 - Add metrics for the "My Lists" feature.
 - Update "My Lists" feature to persist across devices for logged-in users.
 - Update "My Lists" UI and messaging.
 - Update services page to include new UKV endpoint.
-
-
 
 ## v1.20.2 - 2025-02-12
 
@@ -238,8 +188,6 @@ Fix typo on Workspaces Sharing dialog.
 - Sort "Recent Publications" on home page by publication date.
 - Update processed dataset files section with link to Bulk Data Transfer section.
 
-
-
 ## v1.20.1 - 2025-02-06
 
 - Fix cell population plot controls drawer positioning and scroll issues.
@@ -248,16 +196,12 @@ Fix typo on Workspaces Sharing dialog.
 - Updated Vitessce to fix the infinite loops happening for EPIC segmentation mask.
 - Fix bug causing workspace title field in new workspace dialog to be cleared.
 
-
-
 ## v1.20.0 - 2025-02-05
 
 - Fix overlap between expanded rows and violins when there are few datasets in cellpop visualization.
 - Fix cellpop control position breaking on scroll.
 - Fix cellpop expanded rows handling when data is being normalized.
 - Updated portal-viz version to address the scaling issue on kaggle datasets visualizations.
-
-
 
 ## v1.19.5 - 2025-02-04
 
@@ -268,40 +212,28 @@ Fix typo on Workspaces Sharing dialog.
 - Fix overlapping between violins in Cellpop visualizations.
 - Add checks before trying to access a workspace's symlinked files (resolves 2023 workspaces API bug).
 
-
-
 ## v1.19.4 - 2025-01-31
 
 - Fix Cell Population Plot table of contents title.
 - Improve Cell Population Plot padding.
 - Fix Cell Population Plot violin graph behavior.
 
-
-
 ## v1.19.3 - 2025-01-29
 
 - Add scalable cell population plots to organ pages with compatible labeled datasets.
-
-
 
 ## v1.19.2 - 2025-01-27
 
 - Fixes logic to provide parent uuid to the config builder.
 
-
-
 ## v1.19.1 - 2025-01-23
 
 - Fix publications page crashing when supporting json data is completely missing.
-
-
 
 ## v1.19.0 - 2025-01-22
 
 - Improve handling of empty vignette lists so that the publication page does not crash if an empty list is provided.
 - Updated logic to access the builder for EPIC Segmentation masks using the epic vitessce-hint.
-
-
 
 ## v1.18.4 - 2025-01-15
 
@@ -310,37 +242,27 @@ Fix typo on Workspaces Sharing dialog.
 - Upgrade to Python 3.10.
 - Introduce `uv` for python package management.
 
-
-
 ## v1.18.3 - 2025-01-10
 
 - Fix provenance graph for datasets without descendants.
-
-
 
 ## v1.18.2 - 2025-01-07
 
 - Fix metadata filter on dev-search.
 - Only request workspaces token for workspaces users during auth routine.
 
-
-
 ## v1.18.1 - 2025-01-07
 
 - Resolve accessibility issues related to arias and interactive controls throughout the portal.
 - Update processed dataset files and analysis sections to match updated ingest metadata.
 - Fix issue in push script where if the number of days since the last release is 0 the script returns early.
- - Addressed accessibility issue on home page to ensure elements with scrollable content are accessible by keyboard.
- - Addressed accessibility issue to ensure elements with scrollable content are accessible by keyboard.
-
-
+- Addressed accessibility issue on home page to ensure elements with scrollable content are accessible by keyboard.
+- Addressed accessibility issue to ensure elements with scrollable content are accessible by keyboard.
 
 ## v1.18.0 - 2025-01-06
 
 - Added informative alert upon successful bulk download manifest download.
 - Update portal to account for refactored metadata from search api.
-
-
 
 ## v1.17.0 - 2024-12-19
 
@@ -350,13 +272,9 @@ Fix typo on Workspaces Sharing dialog.
 - Fixed accessibility issue regarding html element having a lang attribute.
 - Bump portal-visualization version to 0.3.6 to resolve regression with vis-lifting image pyramid assays.
 
-
-
 ## v1.16.3 - 2024-12-13
 
 - Fix a regression in portal-visualization which broke Vitessce view config generation.
-
-
 
 ## v1.16.2 - 2024-12-12
 
@@ -385,19 +303,13 @@ Fix typo on Workspaces Sharing dialog.
 - Updated black to v24.3.0.
 - Update portal-visualization to 0.3.3 which replaces calls to ingest-api with calls to search-api.
 
-
-
 ## v1.16.1 - 2024-12-06
 
 - Fix bug where you could not scroll to deeper search pages.
 
-
-
 ## v1.16.0 - 2024-12-05
 
 - Fix date picker bug on search page that prevented the user from selecting a year.
-
-
 
 ## v1.15.2 - 2024-12-02
 
@@ -405,8 +317,6 @@ Fix typo on Workspaces Sharing dialog.
 - Get dataset pipeline info from search-api not the soft assay endpoint.
 - Update Workspaces feature access instructions.
 - Add discernible text to buttons to support accessibility.
-
-
 
 ## v1.15.1 - 2024-11-26
 
@@ -419,8 +329,6 @@ Fix typo on Workspaces Sharing dialog.
 - Improve date picker styles.
 - Fix order of search menus.
 
-
-
 ## v1.15.0 - 2024-11-20
 
 - Fix spacing between organ icon and name on detail pages.
@@ -430,16 +338,12 @@ Fix typo on Workspaces Sharing dialog.
 - Remove invalid ORCID IDs from Attribution tables.
 - Replace searchkit.
 
-
-
 ## v1.14.1 - 2024-11-13
 
 - Fix minor graphical issues in homepage hero section.
 - Use `Image Pyramid` pipeline name as a heuristic for whether a visualization link should be present in unified dataset table of contents.
 - Update portal-viz hash to reflect the view adjustment for EPIC segmentation mask.
-- Updated support for EPIC segmentation masks visualization. 
-
-
+- Updated support for EPIC segmentation masks visualization.
 
 ## v1.14.0 - 2024-11-06
 
@@ -455,8 +359,6 @@ Fix typo on Workspaces Sharing dialog.
 - Remove workspace menu button from publication pages.
 - Fix styling for provenance graph to avoid tall, difficult to read graphs.
 
-
-
 ## v1.13.1 - 2024-10-31
 
 - Fix parent UUID handling for multi-vitessce conf datasets.
@@ -470,16 +372,12 @@ Fix typo on Workspaces Sharing dialog.
 - Update language in processed dataset sections from "pipeline" to "analysis".
 - Display EPIC datasets as being generated via external processing in dataset relationship diagrams.
 
-
-
 ## v1.13.0 - 2024-10-23
 
 - Add end-to-end tests that check whether all page types load successfully.
 - Fix bug where expanding a processed dataset section leads to a shaking viewport.
 - If a title or description in a processed dataset helper panel is truncated, show the full text on hover in a tooltip.
 - Updated HRA EUI and organ-info web components to latest version
-
-
 
 ## v1.12.2 - 2024-10-17
 
@@ -496,8 +394,6 @@ Fix typo on Workspaces Sharing dialog.
 - Update the metadata table component to show unique labels for each tab and to be scrollable when many tabs are present.
 - Fix issue of Workspaces button being available for protected datasets in the Visualization section.
 
-
-
 ## v1.12.1 - 2024-10-10
 
 - Prevent collections without a DOI from being counted on the homepage.
@@ -511,37 +407,32 @@ Fix typo on Workspaces Sharing dialog.
 - Update Unified View redirect toast to be more informative.
 - Update group for HIVE-processed datasets to be 'HIVE'.
 
-
 ## v1.12.0 - 2024-10-07
 
-- Fix bug on dataset detail page for workspace dialogs opened in succession for different processed datasets. 
+- Fix bug on dataset detail page for workspace dialogs opened in succession for different processed datasets.
 - Remove "Contact" and "Last Modified" columns from the Datasets table on Collections pages.
 - Delete STAGE environment and spin up new portal instance on TEST
-
 
 ## v1.11.0 - 2024-10-02
 
 - Add messaging where donors with ages > 89 are displayed on search and detail pages.
 - Fix "Add to workspace" bug on dataset detail pages.
-- Fix positioning of dropdown order menu on the tile view of the search page. 
+- Fix positioning of dropdown order menu on the tile view of the search page.
 - Fix tabs moving around in bulk data transfer section on detail pages.
 - Update unified datasets link in "What’s New" section on homepage to point to an example dataset detail page.
 - Adjust size of "summary" view in entity headers dynamically based on the length of the content.
 - Remove "Contact" section and add Attribution table with contributors for EPICs and Lab Processed datasets.
-
 
 ## v1.10.0 - 2024-09-25
 
 - Only allow Globus group members to access sample workspaces.
 - Fix bug where template examples with default resource options would not launch.
 
-
 ## v1.9.0 - 2024-09-24
 
 - Fix bug where donor pages for donors without metadata do not display.
-- Remove extra files accordion from processed datasets summary sections. 
+- Remove extra files accordion from processed datasets summary sections.
 - Allow Jupyter notebooks for dataset visualizations to be downloaded by all users.
-
 
 ## v1.8.0 - 2024-09-19
 
@@ -550,12 +441,10 @@ Fix typo on Workspaces Sharing dialog.
 - Fix "Copy to Clipboard" error when copying dataset IDs.
 - Rely on template job type, not example job type (which is not always present).
 
-
 ## v1.7.0 - 2024-09-18
 
 - Increase maximum resource options for workspace jobs from 2 CPUs to 16, 32GB of memory to 128GB and session length from 6 hours to 12.
 - Add last modified date to template detail pages.
-
 
 ## v1.6.0 - 2024-09-17
 
@@ -566,13 +455,11 @@ Fix typo on Workspaces Sharing dialog.
 - Update Launch Workspace dialogs to account for new R template.
 - Add templates landing page and template detail pages.
 
-
 ## v1.5.0 - 2024-09-10
 
 - Hide HuBMAP ID's for non-entity nodes in provenance graph.
 - Improve combined provenance logic to safeguard against duplicate nodes/edges.
 - Update menu choices for the workspace buttons in unified views dataset detail pages.
-
 
 ## v1.4.0 - 2024-09-06
 
@@ -582,12 +469,10 @@ Fix typo on Workspaces Sharing dialog.
 - Update workspace success toast to indicate whether the workspace has launched in a new tab or just been created.
 - Centralize toast messages for workspaces into a single file.
 
-
 ## v1.3.0 - 2024-09-05
 
 - Improve handling of loading/potentially undefined data in dataset relationship diagram.
 - Ensure data product and file URLs use relevant dataset IDs when constructing.
-
 
 ## v1.2.0 - 2024-09-04
 
@@ -596,13 +481,11 @@ Fix typo on Workspaces Sharing dialog.
 - Make dataset relationship node behavior clearer by adding explanatory toast, tooltip, and using appropriate cursor.
 - Expand processed datasets if navigated to via table of contents or dataset relationships node link.
 
-
 ## v1.1.0 - 2024-09-03
 
 - Fix color of alerts' icons.
 - Fix regression in 303 redirect.
 - Fix descendants lookup query so it looks for either dataset descendants or image pyramid support descendants.
-
 
 ## v1.0.1 - 2024-08-28
 
@@ -628,7 +511,6 @@ Fix typo on Workspaces Sharing dialog.
 - Update language and add an action button to toasts for successful workspace creation.
 - Enable access to workspaces for users in HuBMAP Read or HuBMAP Workspaces globus groups.
 
-
 ## v1.0.0 - 2024-08-23
 
 - Extend provenance table logic to handle missing entities.
@@ -643,13 +525,11 @@ Fix typo on Workspaces Sharing dialog.
 - Update raw dataset detail pages to include processed dataset information.
 - Update table of contents design.
 
-
 ## v0.103.1 - 2024-08-19
 
 - Fix bug preventing visualization notebooks from being downloaded on dataset detail pages.
 - Fix bug that prevented protected dataset ids from being displayed in "Launch New Workspace" dialog.
 - Change banner above "Contributors" and "Attribution" sections from an alert to a styled paper component.
-
 
 ## v0.103.0 - 2024-08-15
 
@@ -661,29 +541,24 @@ Fix typo on Workspaces Sharing dialog.
 - Update download button on Visualization section of detail pages to a Workspaces dropdown menu button.
 - Update "What's New?" homepage listing with June 2024 user facing updates.
 
-
 ## v0.102.5 - 2024-08-06
 
 - Add a check for "Contacts" data to display in the Contributors table of the detail pages of datasets, collections, and publications.
-
 
 ## v0.102.4 - 2024-08-02
 
 - Update attribution and contributors sections for processed datasets.
 - Updated the font color for the selected and unselected tabular tabs.
 
-
 ## v0.102.3 - 2024-08-01
 
-- Fix issue of "Launch Workspace" button not appearing in workspace detail pages. 
-
+- Fix issue of "Launch Workspace" button not appearing in workspace detail pages.
 
 ## v0.102.2 - 2024-08-01
 
 - Fix query to determine whether samples should be shown on organ pages.
 - Prevent header from being clipped when the template selection grid is scrolled.
-- Order templates alphabetically with the default template first. 
-
+- Order templates alphabetically with the default template first.
 
 ## v0.102.1 - 2024-07-31
 
@@ -693,12 +568,10 @@ Fix typo on Workspaces Sharing dialog.
 - Select blank template by default in "Create New Workspace" dialog.
 - Updated query for recent datasets to avoid filtering based on presence of visualization.
 
-
 ## v0.102.0 - 2024-07-26
 
 - Removed overlapping tooltip from current dataset in multi-assay relationships.
 - Updated `vitessce-data` and `vitessce-data-v2` S3 bucket URLs to point to `data-1.vitessce.io` and `data-2.vitessce.io` subdomains, respectively.
-
 
 ## v0.101.4 - 2024-07-25
 
@@ -711,28 +584,24 @@ Fix typo on Workspaces Sharing dialog.
 - Move API client to `portal-visualization` package to reduce code duplication between portal code and workspace templates.
 - Add pull request templates to ease future PR reviews.
 
-
 ## v0.101.3 - 2024-07-20
 
 - Fix changelog formatting for v0.101.1 entries.
-
 
 ## v0.101.1 - 2024-07-19
 
 - Updated the status icons and colors with the provided mui icons.
 - Update messaging on My Workspace landing page for users who are not logged in.
 
-
 ## v0.101.0 - 2024-07-17
 
 - Updated back-end dependencies.
 - Display dbGaP link to logged in users if one is available and logged in user does not have access to Globus.
 - Fix incorrect URL structure in gene search results.
-Fix headers on support entity detail pages.
-Fix styling on related entities table tabs.
+  Fix headers on support entity detail pages.
+  Fix styling on related entities table tabs.
 - Fixed the count in the Samples table header
 - Removed twitter link from the footer.
-
 
 ## v0.100.1 - 2024-07-10
 
@@ -740,11 +609,9 @@ Fix styling on related entities table tabs.
 - Convert dataset detail page to TypeScript.
 - Fix pip install issues in dev environments.
 
-
 ## v0.100.0 - 2024-07-08
 
 - Fix minor nav issues found during QA.
-
 
 ## v0.99.2 - 2024-06-27
 
@@ -753,18 +620,14 @@ Fix styling on related entities table tabs.
 - Fix icon colors in tools section.
 - Fix broken entity tiles.
 
-
 ## v0.99.1 - 2024-06-20
 
 - Implement homepage tools section.
 - Implement homepage redesign.
 
-
 ## v0.99.0 - 2024-06-20
 
 - HuBMAP documentation site URL changed from https://software.docs.hubmapconsortium.org to https://docs.hubmapconsortium.org.
-
-
 
 ## v0.98.0 - 2024-06-12
 
@@ -775,12 +638,10 @@ Fix styling on related entities table tabs.
 - Restore Donor Diversity chart legends.
 - Remove YAML-loading dependencies and remaining references to IVT submodule.
 
-
 ## v0.97.1 - 2024-05-30
 
 - Replace dependencies on ingest-validation-tools yaml files with data from ontology api.
 - Remove ingest-validation-tools as a git submodule.
-
 
 ## v0.97.0 - 2024-05-23
 
@@ -791,11 +652,9 @@ Fix styling on related entities table tabs.
 - Update vitessce tracker to report scrolling and zooming appropriately based on the target component.
 - Update vitessce tracker to appropriately report theme selection actions.
 
-
 ## v0.96.6 - 2024-05-14
 
 - Fix undefined source in searchkit initial request.
-
 
 ## v0.96.5 - 2024-05-10
 
@@ -804,16 +663,13 @@ Fix styling on related entities table tabs.
 - Fix bug where workspaces FAQ was erroneously displayed on workspace detail page.
 - Sort workspaces when displayed as a list. The active workspace is first followed by the remaining workspaces sorted by name.
 
-
 ## v0.96.4 - 2024-05-09
 
 - Bump Vitessce to v3.4.5.
 
-
 ## v0.96.3 - 2024-05-09
 
 - Implemented iterations to 3D tissue maps preview page.
-
 
 ## v0.96.2 - 2024-05-09
 
@@ -824,12 +680,10 @@ Fix styling on related entities table tabs.
 - Update alerts displayed on workspace loading page. Add logic to return users to workspace landing page in the case of unexpectedly long wait times.
 - Update workspace access to allow users in HuBMAP Read globus group to access workspace features while in consortium beta.
 
-
 ## v0.96.1 - 2024-05-08
 
 - Update to portal-visualization v0.2.3.
 - Update language on workspaces landing page.
-
 
 ## v0.96.0 - 2024-05-06
 
@@ -838,11 +692,9 @@ Fix styling on related entities table tabs.
 - Add dialog on the search page to add datasets to the workspace.
 - Add job type support, including R, for workspaces.
 
-
 ## v0.95.0 - 2024-05-01
 
 - Updated the HRA Organ Info web component options in CCFOrganInfo.tsx to improve performance
-
 
 ## v0.94.2 - 2024-04-18
 
@@ -853,19 +705,16 @@ Fix styling on related entities table tabs.
 - Update various front-end dependencies.
 - Migrate husky configuration to v9.
 
-
 ## v0.94.1 - 2024-04-10
 
 - Remove extra "s" on provenance tables.
 
-
 ## v0.94.0 - 2024-04-10
 
 - Add optional parameter to dev docker.sh to allow for alternate image name.
--  
+-
 - Correct a typo which caused the metadata table to not display.
 - Document Production deployment instructions.
-
 
 ## v0.93.1 - 2024-03-22
 
@@ -882,20 +731,17 @@ Fix styling on related entities table tabs.
 - Use cython<3 at build time to address: "AttributeError: cython_sources".
 - Explicitly set container architecture to amd64.
 
-
 ## v0.92.0 - 2024-03-08
 
 - Fix tile view of search pages.
 - Support display of legacy contact information which does not have `version` field available.
 - Point genes page cells API client at same environment as the rest of the application.
 
-
 ## v0.91.2 - 2024-03-07
 
 - Add support for new contributors schema to contributors table.
 - Fix hierarchical facets on dev search.
 - Fix size and order of hierarchical search facets.
-
 
 ## v0.91.1 - 2024-03-06
 
@@ -904,7 +750,6 @@ Fix styling on related entities table tabs.
 - Revise Vitessce event tracking categories to indicate where the config is.
 - Add assay related facets to dataset search page to improve navigation.
 
-
 ## v0.91.0 - 2024-03-04
 
 - Add support for Visium datasets.
@@ -912,26 +757,22 @@ Fix styling on related entities table tabs.
 - Add detail page for cell types present in HuBMAP.
 - Show Globus link for datasets regardless of their status.
 
-
 ## v0.90.0 - 2024-02-15
 
 - Fix bug in which new datasets without deprecated `data_types` field were not displaying visualizations correctly.
 - Update bulk data transfer message for consortium members who do not have protected data access who are attempting to access protected data.
 - Determine support entity to 'viz-lift' by presence of `is_support` in `vitessce-hints`.
 
-
 ## v0.89.1 - 2024-02-07
 
 - Fix entity page event tracker to handle undefined entity in flask context.
 - Fix create workspace button from dataset detail pages.
-
 
 ## v0.89.0 - 2024-02-05
 
 - Add IDs to tracking event labels where applicable.
 - Stringify objects sent in Matomo events.
 - Remove web vitals tracking in Matomo.
-
 
 ## v0.88.1 - 2024-01-25
 
@@ -940,12 +781,10 @@ Fix styling on related entities table tabs.
 - Fix matomo event tracking to provide name field where applicable.
 - Track entity page visits by HuBMAP ID not UUID.
 
-
 ## v0.88.0 - 2024-01-22
 
 - Add fusion slide to homepage carousel and enable carousel autoplay until a user navigates the slides.
 - Fix alignment of icon links.
-
 
 ## v0.87.1 - 2024-01-09
 
@@ -953,7 +792,6 @@ Fix styling on related entities table tabs.
 - Fix consistency of external link icon logic.
 - Add logging to troubleshoot soft assay lookups.
 - Revise soft assay URL logic to be consistent with other suffixed API endpoints.
-
 
 ## v0.87.0 - 2024-01-04
 
@@ -963,7 +801,6 @@ Fix styling on related entities table tabs.
 - Add support for dynamic maintenance messages.
 - Update Node version used in GitHub Actions workflow.
 
-
 ## v0.85.3 - 2023-12-14
 
 - Restore disabled cypress tests.
@@ -972,18 +809,15 @@ Fix styling on related entities table tabs.
 - Add utm_source query param to FUSION link for tracking.
 - Updated target publication for cypress tests.
 
-
 ## v0.85.2 - 2023-12-06
 
 - Adjust biomarker search input to ensure gene symbols are matched against.
 - Make lexicographically sorted search facets display in case insensitive alphabetical order.
 
-
 ## v0.85.1 - 2023-12-04
 
 - Add tutorials landing page.
 - Add workspaces tutorial.
-
 
 ## v0.85.0 - 2023-12-01
 
@@ -992,11 +826,9 @@ Fix styling on related entities table tabs.
 - Fix matomo user group tracking.
 - Add dialogs to workspace detail page to update workspace name and templates.
 
-
 ## v0.84.2 - 2023-11-21
 
 - Fix workspace launch error message display logic.
-
 
 ## v0.84.1 - 2023-11-21
 
@@ -1005,7 +837,6 @@ Fix styling on related entities table tabs.
 - Fix bug with workspace creation locking after unsuccessful submit.
 - Fix errors launching workspace when another workspace is running.
 
-
 ## v0.84.0 - 2023-11-20
 
 - Prevent duplicate workspace creation via rapid submission of launch new workspace form.
@@ -1013,7 +844,6 @@ Fix styling on related entities table tabs.
 - Do not display workspace templates with designated `is_hidden` bool.
 - Add a prompt to renew workspace sessions to the top of the workspaces screen.
 - Handle workspace files which can be either strings or objects.
-
 
 ## v0.83.1 - 2023-11-16
 
@@ -1028,7 +858,6 @@ Fix styling on related entities table tabs.
 - Add workspace detail page.
 - Increase gap between templates in template grid.
 - Remove tsc-files from our pre-commit type checks as it was not using the project's tsconfig.
-
 
 ## v0.83.0 - 2023-11-13
 
@@ -1053,7 +882,6 @@ Fix styling on related entities table tabs.
 - Create a reusable table with updated design.
 - Add table to show selected datasets in create workspace dialogs.
 
-
 ## v0.82.3 - 2023-10-31
 
 - Implement workspace usability metric tracking.
@@ -1074,7 +902,6 @@ Fix styling on related entities table tabs.
 - Only show collections with DOIs to non-HuBMAP users on collections landing page.
 - Fix bug in header navigation menu items requiring you to click on the item's text.
 
-
 ## v0.82.0 - 2023-10-23
 
 - Upgrade to Zustand v4.
@@ -1083,7 +910,6 @@ Fix styling on related entities table tabs.
 - Restore magnifying glass icon to search bars.
 - Added selection and workspace launching to main search page for users with Workspaces access.
 - Update `cryptography` package to 41.0.4.
-
 
 ## v0.80.0 - 2023-09-27
 
@@ -1095,14 +921,13 @@ Fix styling on related entities table tabs.
 - Remove `marked` in favor of `react-markdown`.
 - Upgrade to Node 20.7.0.
 
-
 ## v0.79.4 - 2023-09-19
 
 - Add handling to prevent users from attempting to launch workspaces with more than 10 datasets.
 - Add handling to prevent users from attempting to launch workspaces with protected datasets.
 - Add button in workspace dialog to deselect protected datasets.
- - Improve Matomo tracking specificity.
- 
+- Improve Matomo tracking specificity.
+
 - Prevent already-selected options from being suggested by autocomplete component.
 - Update linting packages to be compatible with Typescript 5.1+.
 - Enable linting of JSON/Markdown/YAML files.
@@ -1118,7 +943,6 @@ Fix styling on related entities table tabs.
 - Fix some TypeScript issues in the SWR helpers.
 - Fix bug referencing vitessce version when downloading visualization notebooks.
 
-
 ## v0.79.3 - 2023-09-08
 
 - Revert matomo changes.
@@ -1133,12 +957,11 @@ Fix styling on related entities table tabs.
 
 ## v0.79.0 - 2023-09-08
 
- - Improve Matomo tracking specificity.
- 
+- Improve Matomo tracking specificity.
+
 - Change email links to contact form links.
 - Use legacy pip installer to fix docker build.
 - Update lint scripts to include typescript files.
-
 
 ## v0.78.0 - 2023-09-01
 
