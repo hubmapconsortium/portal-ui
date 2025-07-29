@@ -1,5 +1,13 @@
 # Changelog
 
+## v1.30.0 - 2025-07-29
+
+- Fix misalignment visible in expandable tables.
+- Fix export of grouped stacked bar chart with long x axis labels.
+- Fix orientation of cell types landing page expand icons.
+
+
+
 ## v1.29.3 - 2025-07-24
 
 - Check user's access to specific datasets for workspace and bulk download operations using new access endpoint.
