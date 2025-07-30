@@ -1,1 +1,2 @@
 - Add links to cell type landing page graph.
+- Add tooltips to Biomarkers table columns on Cell Type Detail pages.
