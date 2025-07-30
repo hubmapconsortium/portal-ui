@@ -31,3 +31,21 @@ export function useLabelsToCLIDs(cellTypes: string[]) {
 
   return useSWR<CellTypeToCLID[], unknown, CellTypeToCLIDKey[]>(keys, (urls) => multiFetcher({ urls }));
 }
+
+export function useLabelToCLIDMap(cellTypes: string[]) {
+  const { data, error } = useLabelsToCLIDs(cellTypes);
+  const isLoading = !data && !error;
+
+  const labelToCLIDMap: Record<string, string[]> = {};
+  if (data) {
+    data.forEach((item, idx) => {
+      labelToCLIDMap[cellTypes[idx]] = item.CLIDs;
+    });
+  }
+
+  return {
+    labelToCLIDMap,
+    isLoading,
+    error,
+  };
+}

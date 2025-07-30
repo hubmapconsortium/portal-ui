@@ -5,7 +5,7 @@ import { withParentSize } from '@visx/responsive';
 import Typography from '@mui/material/Typography';
 import type { WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
 import type { AnyD3Scale, ScaleInput } from '@visx/scale';
-import type { Accessor, SeriesPoint } from '@visx/shape/lib/types';
+import type { Accessor, BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
 
 import { type OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
@@ -47,6 +47,12 @@ interface VerticalStackedBarChartProps<
   order?: BarStackProps<Datum, YAxisKey, XAxisScale, YAxisScale>['order'];
   valueAccessor?: (d: Datum, key: YAxisKey) => number;
   yTickFormat?: (value: number) => string;
+  getBarHref?: (
+    d: Omit<BarGroupBar<string>, 'key' | 'value'> & {
+      bar: SeriesPoint<Datum>;
+      key: string;
+    },
+  ) => string | undefined;
 }
 
 function VerticalStackedBarChart<
@@ -78,6 +84,7 @@ function VerticalStackedBarChart<
   order,
   valueAccessor,
   yTickFormat = (value) => value.toString(),
+  getBarHref,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
@@ -134,6 +141,7 @@ function VerticalStackedBarChart<
                           key={`${bar.key}-${bar.index}`}
                           direction="vertical"
                           bar={bar}
+                          href={getBarHref?.(bar)}
                           ariaLabelText={getAriaLabel?.(bar)}
                           hoverProps={{
                             onMouseEnter: handleMouseEnter(bar),
