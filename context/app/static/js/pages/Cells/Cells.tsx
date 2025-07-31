@@ -14,7 +14,7 @@ function Cells() {
   return (
     <>
       <PageTitle data-testid="molecular-data-queries-title" color="primary">
-        Molecular and Cellular Data Query (BETA)
+        Molecular and Cellular Data Query
       </PageTitle>
       <Stack component={SectionPaper} direction="column" spacing={2}>
         <LabelledSectionText label="What is the molecular and cellular data query?">

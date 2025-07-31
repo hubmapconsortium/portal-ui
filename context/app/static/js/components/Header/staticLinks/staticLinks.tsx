@@ -117,7 +117,7 @@ export const dataLinks: DrawerSection[] = [
         icon: <entityIconMap.Dataset color="primary" />,
       },
       {
-        label: 'Biomarker & Cell Type Search (Beta)',
+        label: 'Biomarker & Cell Type Search',
         description: 'Find datasets by biomarker abundance or cell types.',
         href: '/cells',
         icon: <SearchIcon color="primary" />,
@@ -135,7 +135,7 @@ export const dataLinks: DrawerSection[] = [
         icon: <OrganIcon color="primary" />,
       },
       {
-        label: 'Biomarkers (Beta)',
+        label: 'Biomarkers',
         description: 'Explore biomarkers and find detailed information on associated organs, cell types, and datasets.',
         href: '/biomarkers',
         icon: <entityIconMap.Gene color="primary" />,
