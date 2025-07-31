@@ -70,11 +70,12 @@ function Summary() {
     <DetailPageSection id={pageSectionIDs.summary}>
       <SummaryPaper>
         <LabelledSectionText label="Description" bottomSpacing={1} iconTooltipText="Gene description from NCBI Gene.">
-          {(data?.summary ?? isLoading) ? (
-            <SummarySkeleton />
-          ) : (
-            'No description available. Please view additional information in the Known References section.'
-          )}
+          {data?.summary ??
+            (isLoading ? (
+              <SummarySkeleton />
+            ) : (
+              'No description available. Please view additional information in the Known References section.'
+            ))}
         </LabelledSectionText>
         <LabelledSectionText
           label="Known References"
