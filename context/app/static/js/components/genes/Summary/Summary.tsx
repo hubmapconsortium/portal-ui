@@ -41,7 +41,7 @@ const relevantPages = [
 ];
 
 function Summary() {
-  const { data } = useGeneOntology();
+  const { data, isLoading } = useGeneOntology();
   const { geneSymbolUpper } = useGenePageContext();
 
   const setAssayMetadata = useEntityStore((s) => s.setAssayMetadata);
@@ -70,7 +70,11 @@ function Summary() {
     <DetailPageSection id={pageSectionIDs.summary}>
       <SummaryPaper>
         <LabelledSectionText label="Description" bottomSpacing={1} iconTooltipText="Gene description from NCBI Gene.">
-          {data?.summary ?? <SummarySkeleton />}
+          {(data?.summary ?? isLoading) ? (
+            <SummarySkeleton />
+          ) : (
+            'No description available. Please view additional information in the Known References section.'
+          )}
         </LabelledSectionText>
         <LabelledSectionText
           label="Known References"
