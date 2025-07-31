@@ -52,16 +52,18 @@ export default function EntityHeaderCell<Doc>({
     );
   }
 
+  const active = sortState.columnId === id;
+
   return (
     <HeaderCell key={id} sx={{ backgroundColor: 'background.paper' }}>
       <TableSortLabel
-        active={sortState.columnId === id}
-        direction={sortState.direction}
+        active={active}
+        direction={active ? sortState.direction : undefined}
         onClick={handleClick}
         sx={{
           whiteSpace: 'nowrap',
-          '& .MuiTableSortLabel-icon': {
-            opacity: 0.5,
+          '> .MuiTableSortLabel-icon': {
+            opacity: 0.25,
           },
         }}
       >
