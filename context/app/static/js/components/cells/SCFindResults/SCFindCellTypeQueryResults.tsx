@@ -155,11 +155,19 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
           <Typography variant="subtitle1" component="p">
             Datasets Overview
           </Typography>
-          <DatasetsOverview datasets={datasetsByTissue[tissue]} trackingInfo={trackingInfo}>
+          <DatasetsOverview
+            datasets={datasetsByTissue[tissue]}
+            trackingInfo={trackingInfo}
+            tableTabDescription={
+              <>
+                The table below summarizes the number of matched datasets and the proportions relative to scFind-indexed
+                datasets and total HuBMAP datasets.
+              </>
+            }
+          >
             These results are derived from RNAseq datasets that were indexed by the <SCFindLink />. Not all HuBMAP
             datasets are currently compatible with this method due to data modalities or the availability of cell
-            annotations. The table below summarizes the number of matched datasets and the proportions relative to
-            scFind-indexed datasets and total HuBMAP datasets.
+            annotations.
           </DatasetsOverview>
         </TabPanel>
       ))}
