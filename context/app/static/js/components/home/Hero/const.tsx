@@ -63,12 +63,12 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     img: <OrganIcon {...timelineIconProps} />,
   },
   {
-    title: 'Improved Molecular & Cellular Data Query (Beta)',
+    title: 'Improved Molecular & Cellular Data Query',
     titleHref: '/cells',
     description: (
       <>
-        Explore the improved <InternalLink href="/cells">Molecular & Cellular Data Query (Beta)</InternalLink> with a
-        new scFind-powered search method, gene pathway-based queries, and enhanced visualizations for gene and cell type
+        Explore the improved <InternalLink href="/cells">Molecular & Cellular Data Query</InternalLink> with a new
+        scFind-powered search method, gene pathway-based queries, and enhanced visualizations for gene and cell type
         results.
       </>
     ),

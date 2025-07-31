@@ -12,6 +12,7 @@ import { ScaleContinuousNumeric } from 'd3';
 import Skeleton from '@mui/material/Skeleton';
 import { unselectedCellColors } from 'js/components/cells/CellTypeDistributionChart/utils';
 import { trackEvent } from 'js/helpers/trackers';
+import { useLabelToCLIDMap } from 'js/api/scfind/useLabelToCLID';
 import { useCellTypeCountData, useYScale } from './hooks';
 import CellTypesDistributionChartContextProvider, {
   useCellTypesDistributionChartContext,
@@ -24,6 +25,7 @@ interface MultiOrganCellTypeDistributionChartProps {
   cellTypes: string[];
   organs: string[];
   hideLegend?: boolean;
+  hideLinks?: boolean;
 }
 
 function ChartControls() {
@@ -151,6 +153,7 @@ function MultiOrganCellTypeDistributionChart({
   cellTypes,
   organs,
   hideLegend,
+  hideLinks = false,
 }: MultiOrganCellTypeDistributionChartProps) {
   const {
     cellTypeCountsRecord,
@@ -194,6 +197,8 @@ function MultiOrganCellTypeDistributionChart({
   const yAxisLabel = showPercentages ? 'Cell Fraction' : 'Cell Count';
   const yTickFormat = usePercentageYScaleFormat(showPercentages);
 
+  const { labelToCLIDMap } = useLabelToCLIDMap(cellTypes);
+
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={500} />;
   }
@@ -233,6 +238,18 @@ function MultiOrganCellTypeDistributionChart({
             // @ts-expect-error Annoying type error with scale types
             getTickValues={getTickValues}
             yTickFormat={yTickFormat}
+            getBarHref={(d) => {
+              if (hideLinks) {
+                return undefined;
+              }
+              const { key, bar } = d;
+              const fullKey = `${bar.data.organ}.${key}`;
+              if (labelToCLIDMap[fullKey]) {
+                return `/cell-types/${labelToCLIDMap[fullKey][0]}`;
+              }
+              return undefined;
+            }}
+            order="ascending"
           />
         </ChartWrapper>
       </Paper>

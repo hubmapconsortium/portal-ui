@@ -27,7 +27,7 @@ export default function Biomarkers() {
               pages={[
                 {
                   link: '/cells',
-                  children: 'Molecular & Cellular Data Query (BETA)',
+                  children: 'Molecular & Cellular Data Query',
                   external: false,
                   onClick: () => {
                     track({ action: 'Select Relevant Page button', label: 'Molecular & Cellular Data Query' });

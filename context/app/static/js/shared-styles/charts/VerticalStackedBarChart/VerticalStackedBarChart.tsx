@@ -5,7 +5,7 @@ import { withParentSize } from '@visx/responsive';
 import Typography from '@mui/material/Typography';
 import type { WithParentSizeProvidedProps } from '@visx/responsive/lib/enhancers/withParentSize';
 import type { AnyD3Scale, ScaleInput } from '@visx/scale';
-import type { Accessor, SeriesPoint } from '@visx/shape/lib/types';
+import type { Accessor, BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
 
 import { type OrdinalScale, useChartTooltip, useVerticalChart } from 'js/shared-styles/charts/hooks';
 import StackedBar from 'js/shared-styles/charts/StackedBar';
@@ -45,8 +45,22 @@ interface VerticalStackedBarChartProps<
   getTickValues?: (yScale: YAxisScale) => number[];
   getAriaLabel?: (d: TooltipData<Datum>) => string;
   order?: BarStackProps<Datum, YAxisKey, XAxisScale, YAxisScale>['order'];
-  valueAccessor?: (d: Datum, key: YAxisKey) => number;
   yTickFormat?: (value: number) => string;
+  /**
+   * A function to generate a URL for a given bar in the chart.
+   *
+   * @param d - An object representing the bar, including its data point (`bar`) and key (`key`).
+   * @returns A string representing the URL for the bar, or `undefined` if no URL is applicable.
+   *
+   * This function is called for each bar in the chart to determine its associated hyperlink.
+   * The returned URL can be used to navigate to a detailed view or related resource for the bar.
+   */
+  getBarHref?: (
+    d: Omit<BarGroupBar<string>, 'key' | 'value'> & {
+      bar: SeriesPoint<Datum>;
+      key: string;
+    },
+  ) => string | undefined;
 }
 
 function VerticalStackedBarChart<
@@ -76,8 +90,8 @@ function VerticalStackedBarChart<
   getTickValues,
   getAriaLabel,
   order,
-  valueAccessor,
   yTickFormat = (value) => value.toString(),
+  getBarHref,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useVerticalChart({
     margin,
@@ -123,7 +137,6 @@ function VerticalStackedBarChart<
               y1={y1}
               y0={y0}
               order={order}
-              value={valueAccessor}
             >
               {(barStacks) => {
                 return barStacks.map((barStack) =>
@@ -134,6 +147,7 @@ function VerticalStackedBarChart<
                           key={`${bar.key}-${bar.index}`}
                           direction="vertical"
                           bar={bar}
+                          href={getBarHref?.(bar)}
                           ariaLabelText={getAriaLabel?.(bar)}
                           hoverProps={{
                             onMouseEnter: handleMouseEnter(bar),

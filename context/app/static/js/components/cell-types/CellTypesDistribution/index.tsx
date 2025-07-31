@@ -34,7 +34,7 @@ function Chart() {
 
   if (organs.length > 1) {
     // Stacked bar chart
-    return <MultiOrganCellTypeDistributionChart organs={organs} cellTypes={cellTypes} />;
+    return <MultiOrganCellTypeDistributionChart organs={organs} cellTypes={cellTypes} hideLinks />;
   }
   // fraction chart
   return (

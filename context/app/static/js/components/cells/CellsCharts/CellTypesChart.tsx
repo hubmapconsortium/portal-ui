@@ -43,6 +43,13 @@ interface CellTypesChartProps {
   title?: React.ReactNode;
 }
 
+const margin = {
+  top: 20,
+  right: 20,
+  bottom: 220,
+  left: 80,
+} as const;
+
 function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames, title }: CellTypesChartProps) {
   return (
     <Box p={2} width="100%">
@@ -59,14 +66,7 @@ function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames, titl
               highlightedKeys={cellNames}
               yAxisLabel="Count"
               xAxisLabel="Cell Type"
-              margin={
-                {
-                  top: 20,
-                  right: 20,
-                  bottom: 20,
-                  left: 80,
-                } as const
-              }
+              margin={margin}
               TooltipContent={CellTypesChartTooltip}
             />
           </ChartLoader>
