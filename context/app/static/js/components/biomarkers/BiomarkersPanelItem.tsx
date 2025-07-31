@@ -1,16 +1,12 @@
 import React from 'react';
 
-import Stack from '@mui/material/Stack';
 import Chip from '@mui/material/Chip';
 import { styled } from '@mui/material/styles';
 
 import LineClamp from 'js/shared-styles/text/LineClamp';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
-import SelectableChip from 'js/shared-styles/chips/SelectableChip';
-import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
-import { useBiomarkersSearchActions, useBiomarkersSearchState } from './BiomarkersSearchContext';
 
 const desktopConfig = {
   name: {
@@ -72,37 +68,9 @@ function BiomarkerPanelItem({ name, href, description, type }: BiomarkerPanelIte
   );
 }
 
-const UnroundedFilterChip = styled(SelectableChip)(({ theme }) => ({
-  borderRadius: theme.spacing(1),
-  '&.MuiChip-outlined': {
-    borderRadius: theme.spacing(1),
-  },
-}));
-
-function BiomarkerPanelFilters() {
-  const { toggleFilterByGenes, toggleFilterByProteins } = useBiomarkersSearchActions();
-  const { filterType } = useBiomarkersSearchState();
-  return (
-    <Stack direction="row" spacing={1}>
-      <UnroundedFilterChip label="Filter by Genes" isSelected={filterType === 'gene'} onClick={toggleFilterByGenes} />
-      <SecondaryBackgroundTooltip title="Coming soon">
-        <span>
-          <UnroundedFilterChip
-            label="Filter by Proteins"
-            isSelected={filterType === 'protein'}
-            onClick={toggleFilterByProteins}
-            disabled
-          />
-        </span>
-      </SecondaryBackgroundTooltip>
-    </Stack>
-  );
-}
-
 const BiomarkerPanel = {
   Header: BiomarkerHeaderPanel,
   Item: BiomarkerPanelItem,
-  Filters: BiomarkerPanelFilters,
 };
 
 export default BiomarkerPanel;
