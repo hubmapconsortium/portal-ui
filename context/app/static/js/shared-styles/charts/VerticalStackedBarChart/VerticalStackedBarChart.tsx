@@ -48,10 +48,10 @@ interface VerticalStackedBarChartProps<
   yTickFormat?: (value: number) => string;
   /**
    * A function to generate a URL for a given bar in the chart.
-   * 
+   *
    * @param d - An object representing the bar, including its data point (`bar`) and key (`key`).
    * @returns A string representing the URL for the bar, or `undefined` if no URL is applicable.
-   * 
+   *
    * This function is called for each bar in the chart to determine its associated hyperlink.
    * The returned URL can be used to navigate to a detailed view or related resource for the bar.
    */
