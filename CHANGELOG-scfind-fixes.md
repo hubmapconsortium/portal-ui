@@ -1,3 +1,4 @@
 - Add links to cell type landing page graph.
 - Add tooltips to Biomarkers table columns on Cell Type Detail pages.
 - Increase bottom margin of cell type chart in cell type search results to avoid clipping of axis and tick labels.
+- Fix icons in cell type search result tabs.

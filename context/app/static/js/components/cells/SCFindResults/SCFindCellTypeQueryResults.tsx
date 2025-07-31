@@ -181,7 +181,7 @@ const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
   const formattedVariant = variant ? ` (${variant})` : '';
   const isCellType = stringIsCellType(cellTypeCategory);
   const label = isCellType ? `${name}${formattedVariant} in ${capitalize(tissue)}` : cellTypeCategory;
-  const icon = isCellType ? <CellTypeIcon /> : <OrganIcon organName={cellTypeCategory} aria-label={cellTypeCategory} />;
+  const icon = isCellType ? <OrganIcon organName={tissue} aria-label={tissue} /> : <CellTypeIcon />;
 
   return (
     <Tab
