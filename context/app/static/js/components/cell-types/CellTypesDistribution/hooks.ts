@@ -52,7 +52,9 @@ export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
   const { data = [], isLoading } = useCellTypeCountForTissues(organs);
 
   const [targetCellTypeKeys, otherCellTypeKeys, allCellTypeKeys] = useMemo(() => {
-    const formattedCellTypes = cellTypes.map((name) => formatCellTypeName(name));
+    const formattedCellTypes = cellTypes
+      .map((name) => formatCellTypeName(name))
+      .filter((name, idx, arr) => name && arr.indexOf(name) === idx);
     const allOtherCellTypes = data
       .flatMap((item) =>
         item.cellTypeCounts.filter((count) => !cellTypes.includes(count.index)).map((count) => count.index),

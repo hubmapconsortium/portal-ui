@@ -25,6 +25,7 @@ interface MultiOrganCellTypeDistributionChartProps {
   cellTypes: string[];
   organs: string[];
   hideLegend?: boolean;
+  hideLinks?: boolean;
 }
 
 function ChartControls() {
@@ -152,6 +153,7 @@ function MultiOrganCellTypeDistributionChart({
   cellTypes,
   organs,
   hideLegend,
+  hideLinks = false,
 }: MultiOrganCellTypeDistributionChartProps) {
   const {
     cellTypeCountsRecord,
@@ -237,6 +239,9 @@ function MultiOrganCellTypeDistributionChart({
             getTickValues={getTickValues}
             yTickFormat={yTickFormat}
             getBarHref={(d) => {
+              if (hideLinks) {
+                return undefined;
+              }
               const { key, bar } = d;
               const fullKey = `${bar.data.organ}.${key}`;
               if (labelToCLIDMap[fullKey]) {
@@ -244,6 +249,7 @@ function MultiOrganCellTypeDistributionChart({
               }
               return undefined;
             }}
+            order="ascending"
           />
         </ChartWrapper>
       </Paper>

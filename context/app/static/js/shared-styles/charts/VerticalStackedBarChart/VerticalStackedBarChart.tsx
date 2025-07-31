@@ -45,7 +45,6 @@ interface VerticalStackedBarChartProps<
   getTickValues?: (yScale: YAxisScale) => number[];
   getAriaLabel?: (d: TooltipData<Datum>) => string;
   order?: BarStackProps<Datum, YAxisKey, XAxisScale, YAxisScale>['order'];
-  valueAccessor?: (d: Datum, key: YAxisKey) => number;
   yTickFormat?: (value: number) => string;
   getBarHref?: (
     d: Omit<BarGroupBar<string>, 'key' | 'value'> & {
@@ -82,7 +81,6 @@ function VerticalStackedBarChart<
   getTickValues,
   getAriaLabel,
   order,
-  valueAccessor,
   yTickFormat = (value) => value.toString(),
   getBarHref,
 }: VerticalStackedBarChartProps<Datum, XAxisKey, YAxisKey, XAxisScale, YAxisScale>) {
@@ -130,7 +128,6 @@ function VerticalStackedBarChart<
               y1={y1}
               y0={y0}
               order={order}
-              value={valueAccessor}
             >
               {(barStacks) => {
                 return barStacks.map((barStack) =>
