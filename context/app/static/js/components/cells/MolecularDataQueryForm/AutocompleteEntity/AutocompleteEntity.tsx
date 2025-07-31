@@ -148,6 +148,9 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       }}
       limitTags={limitTags}
       getLimitTagsText={LimitCount()}
+      noOptionsText={
+        substring ? 'No results found' : `Start typing to search for ${queryTypes[targetEntity].label.toLowerCase()}s.`
+      }
       renderTags={(value, getTagProps) =>
         value.map((option, index) => {
           const tagProps = getTagProps({ index });
