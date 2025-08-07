@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
+import { useMemo } from 'react';
 import { createScFindKey } from './utils';
 
 interface CellTypeToCLID {
@@ -30,4 +31,24 @@ export function useLabelsToCLIDs(cellTypes: string[]) {
   const keys = cellTypes.map((cellType) => createCLIDtoLabelKey(scFindEndpoint, { cellType }));
 
   return useSWR<CellTypeToCLID[], unknown, CellTypeToCLIDKey[]>(keys, (urls) => multiFetcher({ urls }));
+}
+
+export function useLabelToCLIDMap(cellTypes: string[]) {
+  const { data, error, isLoading } = useLabelsToCLIDs(cellTypes);
+
+  return useMemo(() => {
+    const labelToCLIDMap: Record<string, string[]> = {};
+
+    if (isLoading || error) {
+      return { labelToCLIDMap, isLoading, error };
+    }
+
+    if (data) {
+      data.reduce((acc, item, idx) => {
+        acc[cellTypes[idx]] = item.CLIDs;
+        return acc;
+      }, labelToCLIDMap);
+    }
+    return { labelToCLIDMap, isLoading, error };
+  }, [isLoading, error, data, cellTypes]);
 }

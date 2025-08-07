@@ -52,17 +52,18 @@ export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
   const { data = [], isLoading } = useCellTypeCountForTissues(organs);
 
   const [targetCellTypeKeys, otherCellTypeKeys, allCellTypeKeys] = useMemo(() => {
-    const formattedCellTypes = cellTypes.map((name) => formatCellTypeName(name));
-    const allOtherCellTypes = data
-      .flatMap((item) =>
-        item.cellTypeCounts.filter((count) => !cellTypes.includes(count.index)).map((count) => count.index),
-      )
-      .map((name) => formatCellTypeName(name))
-      .filter((name, idx, arr) => name && arr.indexOf(name) === idx);
-
-    const allCellTypes = [...formattedCellTypes, ...allOtherCellTypes].filter(
-      (name, idx, arr) => name && arr.indexOf(name) === idx,
+    const formattedCellTypes = Array.from(new Set(cellTypes.map((name) => formatCellTypeName(name))));
+    const allOtherCellTypes = Array.from(
+      new Set(
+        data.flatMap((item) =>
+          item.cellTypeCounts
+            .filter((count) => !cellTypes.includes(count.index))
+            .map((count) => formatCellTypeName(count.index)),
+        ),
+      ),
     );
+
+    const allCellTypes = Array.from(new Set([...formattedCellTypes, ...allOtherCellTypes]));
 
     return [formattedCellTypes, allOtherCellTypes, allCellTypes];
   }, [cellTypes, data]);

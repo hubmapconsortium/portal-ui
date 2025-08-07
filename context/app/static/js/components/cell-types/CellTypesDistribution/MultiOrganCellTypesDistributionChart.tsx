@@ -12,6 +12,9 @@ import { ScaleContinuousNumeric } from 'd3';
 import Skeleton from '@mui/material/Skeleton';
 import { unselectedCellColors } from 'js/components/cells/CellTypeDistributionChart/utils';
 import { trackEvent } from 'js/helpers/trackers';
+import { useLabelToCLIDMap } from 'js/api/scfind/useLabelToCLID';
+import { useEventCallback } from '@mui/material/utils';
+import { BarGroupBar, SeriesPoint } from '@visx/shape/lib/types';
 import { useCellTypeCountData, useYScale } from './hooks';
 import CellTypesDistributionChartContextProvider, {
   useCellTypesDistributionChartContext,
@@ -19,11 +22,13 @@ import CellTypesDistributionChartContextProvider, {
 } from './contexts';
 import CellTypesDistributionChartTooltip from './CellTypesDistributionTooltip';
 import { useOptionalCellTypesDetailPageContext } from '../CellTypesDetailPageContext';
+import { ChartData } from './types';
 
 interface MultiOrganCellTypeDistributionChartProps {
   cellTypes: string[];
   organs: string[];
   hideLegend?: boolean;
+  hideLinks?: boolean;
 }
 
 function ChartControls() {
@@ -147,10 +152,18 @@ function useGetTickValues() {
   return getSymLogTickValues;
 }
 
+const margin = {
+  top: 20,
+  right: 20,
+  bottom: 50,
+  left: 100,
+};
+
 function MultiOrganCellTypeDistributionChart({
   cellTypes,
   organs,
   hideLegend,
+  hideLinks = false,
 }: MultiOrganCellTypeDistributionChartProps) {
   const {
     cellTypeCountsRecord,
@@ -194,6 +207,25 @@ function MultiOrganCellTypeDistributionChart({
   const yAxisLabel = showPercentages ? 'Cell Fraction' : 'Cell Count';
   const yTickFormat = usePercentageYScaleFormat(showPercentages);
 
+  const { labelToCLIDMap } = useLabelToCLIDMap(cellTypes);
+
+  const getBarHref: (
+    d: Omit<BarGroupBar<string>, 'value' | 'key'> & {
+      bar: SeriesPoint<ChartData>;
+      key: string;
+    },
+  ) => string | undefined = useEventCallback((d) => {
+    if (hideLinks) {
+      return undefined;
+    }
+    const { key, bar } = d;
+    const fullKey = `${bar.data.organ}.${key}`;
+    if (labelToCLIDMap[fullKey]) {
+      return `/cell-types/${labelToCLIDMap[fullKey][0]}`;
+    }
+    return undefined;
+  });
+
   if (isLoading) {
     return <Skeleton variant="rectangular" width="100%" height={500} />;
   }
@@ -204,12 +236,7 @@ function MultiOrganCellTypeDistributionChart({
         <ChartWrapper
           colorScale={hideLegend ? undefined : targetColorScale}
           dividersInLegend
-          margin={{
-            top: 20,
-            right: 20,
-            bottom: 50,
-            left: 100,
-          }}
+          margin={margin}
           dropdown={hideLegend ? undefined : <Typography variant="body1">Cell Types</Typography>}
           additionalControls={<ChartControls />}
         >
@@ -220,12 +247,7 @@ function MultiOrganCellTypeDistributionChart({
             xScale={xScale}
             getX={(d) => d.organ}
             keys={showOtherCellTypes ? allCellTypeKeys : targetCellTypeKeys}
-            margin={{
-              top: 20,
-              right: 20,
-              bottom: 50,
-              left: 100,
-            }}
+            margin={margin}
             xAxisLabel="Organs"
             yAxisLabel={yAxisLabel}
             xAxisTickLabels={organs}
@@ -233,6 +255,8 @@ function MultiOrganCellTypeDistributionChart({
             // @ts-expect-error Annoying type error with scale types
             getTickValues={getTickValues}
             yTickFormat={yTickFormat}
+            getBarHref={getBarHref}
+            order="ascending"
           />
         </ChartWrapper>
       </Paper>

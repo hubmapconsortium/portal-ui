@@ -90,9 +90,29 @@ const cellContent = () => null;
 const columns = [
   { id: 'name', label: 'Name', sort: 'name', cellContent },
   { id: 'description', label: 'Description', sort: 'description', cellContent },
-  { id: 'precision', label: 'Precision', sort: 'precision', cellContent },
-  { id: 'recall', label: 'Recall', sort: 'recall', cellContent },
-  { id: 'f1', label: 'F1 Score', sort: 'f1', cellContent },
+  {
+    id: 'precision',
+    label: 'Precision',
+    sort: 'precision',
+    cellContent,
+    tooltipText:
+      'Statistical metric measuring the proportion of correctly identified positive cases and predicted positive cases. Higher precision indicates fewer false positives.',
+  },
+  {
+    id: 'recall',
+    label: 'Recall',
+    sort: 'recall',
+    cellContent,
+    tooltipText:
+      'Statistical metric measuring the proportion of actual positive cases and true positives. Higher recall indicates fewer false negatives.',
+  },
+  {
+    id: 'f1',
+    label: 'F1 Score',
+    sort: 'f1',
+    cellContent,
+    tooltipText: 'Statistical metric balancing precision and recall. A higher F1 score indicates better performance.',
+  },
 ];
 
 function BiomarkersTable() {
