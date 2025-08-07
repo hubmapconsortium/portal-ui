@@ -1,0 +1,1 @@
+- Fix disparities with displaying all organs' data in organ pages.

@@ -74,7 +74,9 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
           ))}
         />
       </Paper>
-      <DatasetsBarChart search={organTerms} />
+      <Paper sx={{ mt: 2 }}>
+        <DatasetsBarChart search={organTerms} />
+      </Paper>
     </OrganDetailSection>
   );
 }

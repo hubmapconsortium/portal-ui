@@ -16,7 +16,7 @@ import { OrganFile } from '../types';
 import { datasetTypeForOrganTermsQuery, DatasetTypeOrganQueryAggs } from './queries';
 import { getSearchURL } from '../utils';
 
-const margin = { top: 40, right: 10, bottom: 100, left: 10 };
+const margin = { top: 40, right: 10, bottom: 40, left: 10 };
 
 function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
   const updatedQuery = useMemo(
