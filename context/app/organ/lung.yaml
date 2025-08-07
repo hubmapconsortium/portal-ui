@@ -8,7 +8,8 @@ description: Respiration organ that develops as an outpocketing of the esophagus
 icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
 has_iu_component: true
 search:
-- Lung (Right)
+  - Lung (Right)
+  - Lung (Left)
 azimuth:
   title: Human - Lung v1
   uberon_iri: http://purl.obolibrary.org/obo/UBERON_0002048
@@ -35,10 +36,10 @@ azimuth:
 
     '
   annotations:
-  - name: annotation.l1
-    file: lung_l1.csv
-  - name: annotation.l2
-    file: lung_l2.csv
+    - name: annotation.l1
+      file: lung_l1.csv
+    - name: annotation.l2
+      file: lung_l2.csv
   mapped:
     unit: Cells
     nunit: 916,876
@@ -60,35 +61,35 @@ azimuth:
     version: 1.0.0
     name: Human Lung
     datasets:
-    - uid: human-lung
-      name: Human Lung
-      files:
-      - type: cells
-        fileType: anndata-cells.zarr
-        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
-        options:
-          mappings:
-            UMAP:
-              key: obsm/X_umap
-              dims:
-              - 0
-              - 1
-          factors:
-          - obs/annotation.l1
-          - obs/annotation.l2
-      - type: cell-sets
-        fileType: anndata-cell-sets.zarr
-        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
-        options:
-        - groupName: annotation.l1
-          setName: obs/annotation.l1
-        - groupName: annotation.l2
-          setName: obs/annotation.l2
-      - type: expression-matrix
-        fileType: anndata-expression-matrix.zarr
-        url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
-        options:
-          matrix: X
+      - uid: human-lung
+        name: Human Lung
+        files:
+          - type: cells
+            fileType: anndata-cells.zarr
+            url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
+            options:
+              mappings:
+                UMAP:
+                  key: obsm/X_umap
+                  dims:
+                    - 0
+                    - 1
+              factors:
+                - obs/annotation.l1
+                - obs/annotation.l2
+          - type: cell-sets
+            fileType: anndata-cell-sets.zarr
+            url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
+            options:
+              - groupName: annotation.l1
+                setName: obs/annotation.l1
+              - groupName: annotation.l2
+                setName: obs/annotation.l2
+          - type: expression-matrix
+            fileType: anndata-expression-matrix.zarr
+            url: https://azimuth-vitessce.s3.us-west-2.amazonaws.com/human-lung/vitessce_ref.zarr
+            options:
+              matrix: X
     initStrategy: auto
     coordinationSpace:
       embeddingType:
@@ -100,25 +101,25 @@ azimuth:
       embeddingCellSetLabelSize:
         UMAP: 10
     layout:
-    - component: cellSets
-      h: 3
-      w: 3
-      x: 9
-      y: 0
-      coordinationScopes: {}
-    - component: genes
-      h: 3
-      w: 3
-      x: 9
-      y: 3
-      coordinationScopes: {}
-    - component: scatterplot
-      h: 6
-      w: 9
-      x: 0
-      y: 0
-      coordinationScopes:
-        embeddingType: UMAP
-        embeddingCellRadius: UMAP
-        embeddingCellSetLabelsVisible: UMAP
-        embeddingCellSetLabelSize: UMAP
+      - component: cellSets
+        h: 3
+        w: 3
+        x: 9
+        y: 0
+        coordinationScopes: {}
+      - component: genes
+        h: 3
+        w: 3
+        x: 9
+        y: 3
+        coordinationScopes: {}
+      - component: scatterplot
+        h: 6
+        w: 9
+        x: 0
+        y: 0
+        coordinationScopes:
+          embeddingType: UMAP
+          embeddingCellRadius: UMAP
+          embeddingCellSetLabelsVisible: UMAP
+          embeddingCellSetLabelSize: UMAP

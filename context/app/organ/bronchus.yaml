@@ -7,4 +7,6 @@ asctb: Lung-v1.2
 description: The upper conducting airways of the lung; these airways arise from the
   terminus of the trachea.
 icon: https://cdn.jsdelivr.net/gh/cns-iu/md-icons@main/other-icons/organs/ico-organs-lung.svg
-search: []
+search:
+  - Bronchus (Left)
+  - Bronchus (Right)
