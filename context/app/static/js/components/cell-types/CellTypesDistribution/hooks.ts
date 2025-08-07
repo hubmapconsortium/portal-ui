@@ -55,11 +55,11 @@ export function useCellTypeCountData(organs: string[], cellTypes: string[]) {
     const formattedCellTypes = Array.from(new Set(cellTypes.map((name) => formatCellTypeName(name))));
     const allOtherCellTypes = Array.from(
       new Set(
-        data
-          .flatMap((item) =>
-            item.cellTypeCounts.filter((count) => !cellTypes.includes(count.index)).map((count) => count.index),
-          )
-          .map((name) => formatCellTypeName(name)),
+        data.flatMap((item) =>
+          item.cellTypeCounts
+            .filter((count) => !cellTypes.includes(count.index))
+            .map((count) => formatCellTypeName(count.index)),
+        ),
       ),
     );
 

@@ -44,9 +44,10 @@ export function useLabelToCLIDMap(cellTypes: string[]) {
     }
 
     if (data) {
-      data.forEach((item, idx) => {
-        labelToCLIDMap[cellTypes[idx]] = item.CLIDs;
-      });
+      data.reduce((acc, item, idx) => {
+        acc[cellTypes[idx]] = item.CLIDs;
+        return acc;
+      }, labelToCLIDMap);
     }
     return { labelToCLIDMap, isLoading, error };
   }, [isLoading, error, data, cellTypes]);
