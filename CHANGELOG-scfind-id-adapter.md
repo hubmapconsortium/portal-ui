@@ -1,1 +1,1 @@
-- Support scFind results with both UUID and HBM ID inputs/outputs.
+- Support scFind results with both UUID and HBM ID outputs.

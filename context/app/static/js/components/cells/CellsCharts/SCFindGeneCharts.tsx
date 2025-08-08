@@ -46,6 +46,9 @@ const margin = {
   left: 80,
 } as const;
 
+// TODO: Once we are able to switch between index versions, the dataset input will have to be updated accordingly
+// to handle the first version of the index using HBM IDs and subsequent versions using UUIDs
+// https://hms-dbmi.atlassian.net/browse/CAT-1339
 function SCFindGeneExpressionLevelDistributionPlot({ uuid }: Dataset) {
   const gene = useOptionalGeneContext();
 
