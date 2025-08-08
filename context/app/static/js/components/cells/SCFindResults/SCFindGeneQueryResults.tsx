@@ -18,6 +18,7 @@ import Typography from '@mui/material/Typography';
 import ViewIndexedDatasetsButton from 'js/components/organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import { useUUIDsFromHubmapIds } from 'js/components/organ/hooks';
+import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import DatasetsOverview from '../DatasetsOverview';
 
 import { SCFindQueryResultsListProps } from './types';
@@ -48,6 +49,8 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
 
   const columnsToUse = genes.length > 1 ? columnsWithMatchingGene : columns;
 
+  const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+
   return (
     <EntityTable<Dataset>
       maxHeight={800}
@@ -55,8 +58,12 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
       columns={columnsToUse}
       query={{
         query: {
-          terms: {
-            'hubmap_id.keyword': datasetIds.map(({ hubmap_id }) => hubmap_id),
+          bool: {
+            must: {
+              ids: {
+                values: ids,
+              },
+            },
           },
         },
         size: 10000,

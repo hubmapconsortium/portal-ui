@@ -4,6 +4,7 @@ import { includeOnlyDatasetsClause } from 'js/helpers/queries';
 import useSearchData from 'js/hooks/useSearchData';
 import { decimal, percent } from 'js/helpers/number-format';
 import { BarStackGroup } from 'js/shared-styles/charts/VerticalStackedBarChart/VerticalGroupedStackedBarChart';
+import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 
 export const Y_AXIS_OPTIONS = ['Datasets', 'Donors'] as const;
 export type YAxisOptions = (typeof Y_AXIS_OPTIONS)[number];
@@ -273,22 +274,24 @@ const aggs: Record<string, AggregationsAggregationContainer> = {
 /**
  * Retrieves the number of unique donors, average donor age, and total datasets for the specified datasets.
  * If no datasets are provided, it retrieves the same information for all datasets.
- * @param hubmap_ids - An array of HuBMAP IDs for the datasets to retrieve information for.
+ * @param scFindIds - An array of IDs returned by scFind for the datasets to retrieve information for.
  * If not provided, retrieves information for all datasets.
  * @returns An object containing the number of unique donors, average donor age, total datasets, and loading state.
  */
-export function useDatasetsOverview(hubmap_ids?: string[]): DatasetsOverviewDigest {
+export function useDatasetsOverview(scFindIds?: string[]): DatasetsOverviewDigest {
+  const ids = useSCFindIDAdapter(scFindIds);
+
   const query: SearchRequest = useMemo(() => {
-    if (hubmap_ids) {
+    if (ids && ids.length > 0) {
       return {
         size: 0,
         query: {
           bool: {
             ...includeOnlyDatasetsClause.bool,
-            filter: [
+            must: [
               {
-                terms: {
-                  'hubmap_id.keyword': hubmap_ids,
+                ids: {
+                  values: ids,
                 },
               },
             ],
@@ -302,7 +305,7 @@ export function useDatasetsOverview(hubmap_ids?: string[]): DatasetsOverviewDige
       query: includeOnlyDatasetsClause,
       aggs,
     };
-  }, [hubmap_ids]);
+  }, [ids]);
 
   const { searchData, isLoading } = useSearchData<unknown, DatasetsOverviewAggs>(query);
 

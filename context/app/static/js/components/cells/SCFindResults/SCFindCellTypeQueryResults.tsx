@@ -16,6 +16,7 @@ import Box from '@mui/material/Box';
 import { CellTypeIcon } from 'js/shared-styles/icons';
 import { decimal, percent } from 'js/helpers/number-format';
 import Divider from '@mui/material/Divider';
+import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import { useDeduplicatedResults, useSCFindCellTypeResults, useTableTrackingProps } from './hooks';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { SCFindCellTypesChart } from '../CellsCharts/CellTypesChart';
@@ -30,6 +31,7 @@ import useSCFindResultsStatisticsStore from './store';
 const columns = [hubmapID, organ, assayTypes, targetCellCountColumn, totalCellCountColumn, lastModifiedTimestamp];
 
 function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
+  const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
   return (
     <EntityTable<Dataset>
       maxHeight={800}
@@ -37,8 +39,12 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListPr
       columns={columns}
       query={{
         query: {
-          terms: {
-            'hubmap_id.keyword': datasetIds.map(({ hubmap_id }) => hubmap_id),
+          bool: {
+            must: {
+              ids: {
+                values: ids,
+              },
+            },
           },
         },
         size: 10000,

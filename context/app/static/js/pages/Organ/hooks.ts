@@ -8,6 +8,7 @@ import { OrganDataProducts, OrganFile } from 'js/components/organ/types';
 import useCellTypeNames from 'js/api/scfind/useCellTypeNames';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import { useOrganContext } from 'js/components/organ/contexts';
+import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import { mustHaveOrganClause } from './queries';
 
 export function useSearchItems(organ: OrganFile) {
@@ -191,13 +192,15 @@ export function useIndexedDatasetsForOrgan() {
   const searchItems = useSearchItemsFromContext();
   const { data = { datasets: [] }, isLoading: isLoadingIndexed, ...rest } = useIndexedDatasets();
 
+  const ids = useSCFindIDAdapter(data?.datasets);
+
   const { searchData, isLoading: isLoadingDatasets } = useSearchData<unknown, IndexedDatasetsForOrganAggs>({
     query: {
       bool: {
         must: [
           {
-            terms: {
-              'hubmap_id.keyword': data.datasets ?? [],
+            ids: {
+              values: ids,
             },
           },
           {

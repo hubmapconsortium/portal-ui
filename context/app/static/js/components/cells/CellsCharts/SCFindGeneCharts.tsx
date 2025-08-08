@@ -46,15 +46,18 @@ const margin = {
   left: 80,
 } as const;
 
-function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
+// TODO: Once we are able to switch between index versions, the dataset input will have to be updated accordingly
+// to handle the first version of the index using HBM IDs and subsequent versions using UUIDs
+// https://hms-dbmi.atlassian.net/browse/CAT-1339
+function SCFindGeneExpressionLevelDistributionPlot({ uuid }: Dataset) {
   const gene = useOptionalGeneContext();
 
   const { data, isLoading } = useCellTypeExpressionBins({
     geneList: gene,
-    datasetName: hubmap_id,
+    datasetName: uuid,
   });
 
-  const totalCells = useTotalCells(hubmap_id);
+  const totalCells = useTotalCells(uuid);
 
   const geneData: Record<string, { value: number }> = useMemo(() => {
     if (!data || !gene || !data[gene]) {
@@ -74,8 +77,8 @@ function SCFindGeneExpressionLevelDistributionPlot({ hubmap_id }: Dataset) {
   }, [data, gene, totalCells]);
 
   const GeneExpressionTooltip = useMemo(() => {
-    return GeneExpressionTooltipWithDataset(hubmap_id);
-  }, [hubmap_id]);
+    return GeneExpressionTooltipWithDataset(uuid);
+  }, [uuid]);
 
   // If a gene is not defined, this chart should not be displayed
   // This happens in pathway tabs.

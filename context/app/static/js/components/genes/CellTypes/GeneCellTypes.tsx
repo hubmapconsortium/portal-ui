@@ -37,6 +37,7 @@ import Description from 'js/shared-styles/sections/Description';
 import Divider from '@mui/material/Divider';
 import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import { trackEvent } from 'js/helpers/trackers';
+import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import ScientificNotationDisplay from './ScientificNotationDisplay';
 import { useGenePageContext, useGeneDetailPageTrackingInfo, useTrackGeneDetailPage } from '../hooks';
 import { cellTypes as cellTypesSection } from '../constants';
@@ -370,18 +371,25 @@ const useIndexedDatasetsForGene = () => {
     geneList: geneSymbol,
   });
 
-  const { searchData, isLoading: isLoadingDatasetTypes } = useSearchData<unknown, DatasetGeneAggregations>({
-    query: {
-      bool: {
-        must: [
-          {
-            terms: {
-              'hubmap_id.keyword': datasets?.findDatasets[geneSymbol] ?? [],
-            },
+  const ids = useSCFindIDAdapter(datasets?.findDatasets[geneSymbol] ?? []);
+
+  const query =
+    ids.length > 0
+      ? {
+          bool: {
+            must: [
+              {
+                ids: {
+                  values: ids,
+                },
+              },
+            ],
           },
-        ],
-      },
-    },
+        }
+      : undefined;
+
+  const { searchData, isLoading: isLoadingDatasetTypes } = useSearchData<unknown, DatasetGeneAggregations>({
+    query,
     aggs: {
       datasetTypes: {
         terms: {

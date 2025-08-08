@@ -122,7 +122,7 @@ export function CrossModalityCellTypesChart({ uuid }: Dataset) {
   );
 }
 
-export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
+export function SCFindCellTypesChart({ hubmap_id, uuid }: Dataset) {
   const { track } = useMolecularDataQueryFormTracking();
 
   useEffect(() => {
@@ -136,7 +136,11 @@ export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
   }, [hubmap_id, track]);
 
   const cellVariableNames = useCellVariableNames();
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: hubmap_id });
+
+  // TODO: Once we are able to switch between index versions, the dataset input will have to be updated accordingly
+  // to handle the first version of the index using HBM IDs and subsequent versions using UUIDs
+  // https://hms-dbmi.atlassian.net/browse/CAT-1339
+  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
   const cellNames = useMemo(() => {
     return cellVariableNames.map((cellTypeName) => cellTypeName.split('.')[1]).filter(Boolean);
   }, [cellVariableNames]);
