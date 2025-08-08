@@ -146,16 +146,23 @@ export function useIndexedDatasetsForCellType({
 
   const ids = useSCFindIDAdapter(scFindIds);
 
-  const { searchData, isLoading: isLoadingSearchApi } = useSearchData<Entity, IndexedDatasetsForCellTypeAggs>({
-    query: {
-      bool: {
-        must: {
-          ids: {
-            values: ids,
+  const query =
+    ids.length > 0
+      ? {
+          bool: {
+            must: [
+              {
+                ids: {
+                  values: ids,
+                },
+              },
+            ],
           },
-        },
-      },
-    },
+        }
+      : undefined;
+
+  const { searchData, isLoading: isLoadingSearchApi } = useSearchData<Entity, IndexedDatasetsForCellTypeAggs>({
+    query,
     aggs: {
       datasetTypes: {
         terms: {

@@ -373,16 +373,23 @@ const useIndexedDatasetsForGene = () => {
 
   const ids = useSCFindIDAdapter(datasets?.findDatasets[geneSymbol] ?? []);
 
-  const { searchData, isLoading: isLoadingDatasetTypes } = useSearchData<unknown, DatasetGeneAggregations>({
-    query: {
-      bool: {
-        must: {
-          ids: {
-            values: ids,
+  const query =
+    ids.length > 0
+      ? {
+          bool: {
+            must: [
+              {
+                ids: {
+                  values: ids,
+                },
+              },
+            ],
           },
-        },
-      },
-    },
+        }
+      : undefined;
+
+  const { searchData, isLoading: isLoadingDatasetTypes } = useSearchData<unknown, DatasetGeneAggregations>({
+    query,
     aggs: {
       datasetTypes: {
         terms: {

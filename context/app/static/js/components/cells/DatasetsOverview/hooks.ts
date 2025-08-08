@@ -282,17 +282,19 @@ export function useDatasetsOverview(scFindIds?: string[]): DatasetsOverviewDiges
   const ids = useSCFindIDAdapter(scFindIds);
 
   const query: SearchRequest = useMemo(() => {
-    if (ids) {
+    if (ids && ids.length > 0) {
       return {
         size: 0,
         query: {
           bool: {
             ...includeOnlyDatasetsClause.bool,
-            must: {
-              ids: {
-                values: ids,
+            must: [
+              {
+                ids: {
+                  values: ids,
+                },
               },
-            },
+            ],
           },
         },
         aggs,
