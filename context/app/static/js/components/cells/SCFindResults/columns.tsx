@@ -14,8 +14,8 @@ interface CellCountColumnProps {
   renderDisplay: (props: CellTypeCountsForDataset) => React.ReactNode;
 }
 
-function CellCountColumn({ hit: { hubmap_id }, renderDisplay: Display }: CellCountColumnProps) {
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: hubmap_id });
+function CellCountColumn({ hit: { hubmap_id, uuid }, renderDisplay: Display }: CellCountColumnProps) {
+  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
 
   if (isLoading) {
     return <Skeleton variant="text" width={100} />;

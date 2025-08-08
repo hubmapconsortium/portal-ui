@@ -122,7 +122,7 @@ export function CrossModalityCellTypesChart({ uuid }: Dataset) {
   );
 }
 
-export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
+export function SCFindCellTypesChart({ hubmap_id, uuid }: Dataset) {
   const { track } = useMolecularDataQueryFormTracking();
 
   useEffect(() => {
@@ -136,7 +136,7 @@ export function SCFindCellTypesChart({ hubmap_id }: Dataset) {
   }, [hubmap_id, track]);
 
   const cellVariableNames = useCellVariableNames();
-  const { data, isLoading } = useCellTypeCountForDataset({ dataset: hubmap_id });
+  const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
   const cellNames = useMemo(() => {
     return cellVariableNames.map((cellTypeName) => cellTypeName.split('.')[1]).filter(Boolean);
   }, [cellVariableNames]);

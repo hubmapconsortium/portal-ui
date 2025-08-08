@@ -10,7 +10,7 @@ import { StyledDetailsAccordion } from './styles';
 import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
 
 interface IndexedDatasetsSummaryProps {
-  datasets: string[];
+  datasets?: string[];
   datasetTypes: { key: string; doc_count: number }[];
   organs?: { key: string; doc_count: number }[];
   isLoadingDatasets?: boolean;

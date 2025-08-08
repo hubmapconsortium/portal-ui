@@ -12,7 +12,9 @@ import useCellTypeMarkers from 'js/api/scfind/useCellTypeMarkers';
 import { isError } from 'js/helpers/is-error';
 import Skeleton from '@mui/material/Skeleton';
 import { extractCellTypesInfo } from 'js/api/scfind/utils';
+import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
+import { Entity } from '../types';
 
 /**
  * Helper function for fetching the current cell type's details from the cross-modality API.
@@ -140,18 +142,18 @@ export function useIndexedDatasetsForCellType({
     cellTypes,
   });
 
-  const hubmapIds = data?.map((d) => d.datasets).flat() ?? [];
+  const scFindIds = data?.map((d) => d.datasets).flat() ?? [];
 
-  const { searchData, isLoading: isLoadingSearchApi } = useSearchData<unknown, IndexedDatasetsForCellTypeAggs>({
+  const ids = useSCFindIDAdapter(scFindIds);
+
+  const { searchData, isLoading: isLoadingSearchApi } = useSearchData<Entity, IndexedDatasetsForCellTypeAggs>({
     query: {
       bool: {
-        must: [
-          {
-            terms: {
-              'hubmap_id.keyword': hubmapIds,
-            },
+        must: {
+          ids: {
+            values: ids,
           },
-        ],
+        },
       },
     },
     aggs: {
@@ -174,11 +176,13 @@ export function useIndexedDatasetsForCellType({
         },
       },
     },
+
     size: 10000,
     _source: ['hubmap_id'],
   });
 
   const datasetUUIDs = searchData?.hits?.hits.map((h) => h._id) ?? [];
+  const hubmapIds = searchData?.hits?.hits.map((h) => h._source!.hubmap_id) ?? [];
 
   const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
   const organs = searchData?.aggregations?.organs?.buckets ?? [];
