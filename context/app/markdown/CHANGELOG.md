@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.30.2 - 2025-08-08
+
+- Support scFind results with both UUID and HBM ID outputs.
+- Update portal viz to support granular annotations in Vitessce from Pan-Azimuth pipeline.
+
+
+
 ## v1.30.1 - 2025-08-07
 
 - Fix disparities with displaying all organs' data in organ pages.

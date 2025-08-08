@@ -1,1 +1,0 @@
-- Update portal viz to support granular annotations in Vitessce from Pan-Azimuth pipeline.
