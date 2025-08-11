@@ -10,6 +10,7 @@ export interface EntityDocument {
   descendant_counts: DescendantCounts;
   mapped_status: string;
   mapped_data_access_level: string;
+  entity_type: string;
 }
 
 export interface DonorMappedMetadata {
@@ -21,6 +22,7 @@ export interface DonorMappedMetadata {
 
 export interface DonorDocument extends EntityDocument {
   mapped_metadata: DonorMappedMetadata;
+  entity_type: 'Donor';
 }
 
 interface SampleDatasetSharedFields {
@@ -31,6 +33,7 @@ interface SampleDatasetSharedFields {
 export interface SampleDocument extends EntityDocument, SampleDatasetSharedFields {
   donor: DonorDocument;
   origin_samples: Omit<SampleDocument, 'descendant_counts' | 'origin_samples'>;
+  entity_type: 'Sample';
 }
 
 export interface DatasetDocument extends EntityDocument, SampleDatasetSharedFields {
@@ -38,4 +41,5 @@ export interface DatasetDocument extends EntityDocument, SampleDatasetSharedFiel
   mapped_data_types: string[];
   mapped_status: string;
   origin_samples: Omit<SampleDocument, 'descendant_counts' | 'origin_samples'>;
+  entity_type: 'Dataset';
 }

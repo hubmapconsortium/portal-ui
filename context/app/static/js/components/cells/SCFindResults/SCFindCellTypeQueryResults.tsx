@@ -56,6 +56,7 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListPr
           'mapped_data_access_level',
           'uuid',
           'last_modified_timestamp',
+          'entity_type',
         ],
       }}
       expandedContent={SCFindCellTypesChart}

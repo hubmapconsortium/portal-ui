@@ -39,6 +39,7 @@ export default function CrossModalityGeneOrProteinResults<T extends 'gene' | 'pr
         'mapped_data_access_level',
         'uuid',
         'last_modified_timestamp',
+        'entity_type',
       ],
     };
   }, [list]);

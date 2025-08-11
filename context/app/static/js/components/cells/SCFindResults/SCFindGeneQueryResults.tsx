@@ -76,6 +76,7 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
           'uuid',
           'last_modified_timestamp',
           'donor',
+          'entity_type',
         ],
       }}
       expandedContent={SCFindGeneCharts}
