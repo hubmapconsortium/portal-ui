@@ -4,6 +4,7 @@ import { createStoreImmer, createStoreContext } from 'js/helpers/zustand';
 import history from 'history/browser';
 import { SWRConfiguration } from 'swr';
 import { z } from 'zod';
+import { SCFindParams } from '../organ/utils';
 
 export interface SortField {
   field: string;
@@ -114,6 +115,7 @@ export interface SearchState<V> {
   swrConfig?: SWRConfiguration;
   type: 'Donor' | 'Sample' | 'Dataset';
   analyticsCategory: string;
+  scFindParams?: SCFindParams;
 }
 
 // Used to validate URL Search
@@ -164,6 +166,13 @@ const searchURLStateSchema = z
     search: z.string(),
     sortField: sortFieldSchema,
     filters: filtersSchema,
+    scFindParams: z
+      .object({
+        Gene: z.array(z.string()).optional(),
+        'Cell Type': z.array(z.string()).optional(),
+        scFindOnly: z.boolean().optional(),
+      })
+      .optional(),
   })
   .partial();
 
@@ -276,11 +285,17 @@ export function filterHasValues({ filter }: { filter: Filter }) {
 export function buildSearchLink({
   entity_type,
   filters,
+  scFindParams = {},
 }: {
   entity_type: 'Donor' | 'Dataset' | 'Sample';
   filters?: FiltersType<string[]>;
+  scFindParams?: SCFindParams;
 }) {
-  const search = filters ? `?${LZString.compressToEncodedURIComponent(JSON.stringify({ filters }))}` : '';
+  const search =
+    filters || scFindParams
+      ? `?${LZString.compressToEncodedURIComponent(JSON.stringify({ filters, scFindParams }))}`
+      : '';
+
   return `/search/${entity_type.toLowerCase()}s${search}`;
 }
 

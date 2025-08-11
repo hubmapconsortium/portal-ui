@@ -21,6 +21,7 @@ import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesB
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { Alert } from 'js/shared-styles/alerts';
 import {
   SearchStoreProvider,
   useSearchStore,
@@ -201,11 +202,43 @@ function Body({ facetGroups }: { facetGroups: FacetGroups }) {
   );
 }
 
+function SCFindAlert() {
+  const { scFindParams } = useSearchStore();
+
+  if (!scFindParams) {
+    return null;
+  }
+
+  if (scFindParams.scFindOnly) {
+    return <Alert severity="info">Displaying all entities indexed in scFind.</Alert>;
+  }
+
+  if (scFindParams.genes) {
+    return (
+      <Alert severity="info">
+        Displaying all entities indexed in scFind for genes: {scFindParams.genes.join(', ')}.
+      </Alert>
+    );
+  }
+
+  if (scFindParams.cellTypes) {
+    return (
+      <Alert severity="info">
+        Displaying all entities indexed in scFind for cell types: {scFindParams.cellTypes.join(', ')}.
+      </Alert>
+    );
+  }
+
+  console.warn('Reached end of scFind alert with following params:', scFindParams);
+  return null;
+}
+
 const Search = React.memo(function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
   return (
     <Stack spacing={2} mb={4}>
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
+      <SCFindAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <Box>

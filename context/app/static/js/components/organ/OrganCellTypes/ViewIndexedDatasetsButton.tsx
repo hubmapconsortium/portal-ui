@@ -7,10 +7,10 @@ import { trackEvent } from 'js/helpers/trackers';
 import { SxProps } from '@mui/material/styles';
 import OutlinedButton from 'js/shared-styles/buttons/OutlinedButton';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
-import { getSearchURL } from '../utils';
+import { getSearchURL, SCFindParams } from '../utils';
 
 interface ViewIndexedDatasetsButtonProps {
-  datasetUUIDs: string[];
+  scFindParams: SCFindParams;
   isLoading: boolean;
   trackingInfo?: EventInfo;
   context?: string;
@@ -18,7 +18,7 @@ interface ViewIndexedDatasetsButtonProps {
 }
 
 export function ViewDatasetsButton({
-  datasetUUIDs,
+  scFindParams,
   isLoading,
   trackingInfo,
   context = 'Datasets',
@@ -32,10 +32,9 @@ export function ViewDatasetsButton({
         <OutlinedButton
           color="primary"
           startIcon={<entityIconMap.Dataset />}
-          disabled={datasetUUIDs.length === 0}
           href={getSearchURL({
             entityType: 'Dataset',
-            datasetUUIDs,
+            scFindParams,
           })}
           onClick={() => {
             if (trackingInfo) {
@@ -54,11 +53,11 @@ export function ViewDatasetsButton({
 }
 
 export default function ViewIndexedDatasetsButton({
-  datasetUUIDs,
   isLoading,
   trackingInfo,
   context = 'Datasets',
   sx,
+  scFindParams,
 }: ViewIndexedDatasetsButtonProps) {
   return (
     <Box sx={sx}>
@@ -68,7 +67,7 @@ export default function ViewIndexedDatasetsButton({
         <OutlinedLinkButton
           link={getSearchURL({
             entityType: 'Dataset',
-            datasetUUIDs,
+            scFindParams,
           })}
           onClick={() => {
             if (trackingInfo) {

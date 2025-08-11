@@ -412,6 +412,9 @@ const useIndexedDatasetsForGene = () => {
   return {
     datasets: datasetUUIDs,
     datasetTypes,
+    scFindParams: {
+      genes: [geneSymbol],
+    },
     isLoading: isLoadingDatasets || isLoadingDatasetTypes,
   };
 };

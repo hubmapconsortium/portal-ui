@@ -89,7 +89,7 @@ function CellTypesHeaderPanel() {
       <HeaderCell {...desktopConfig.datasets}>
         {/* Hidden button for layout purposes */}
         <Box visibility="hidden">
-          <ViewDatasetsButton datasetUUIDs={[]} isLoading={false} />
+          <ViewDatasetsButton scFindParams={{}} isLoading={false} />
         </Box>
       </HeaderCell>
     </StackTemplate>
@@ -195,8 +195,9 @@ function OrgansCell({ organs }: { organs: string[] }) {
 }
 
 function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps) {
+  const cellTypes = organs.map((o) => `${o.toLowerCase()}.${name}`);
   const { datasetUUIDs, isLoading: isLoadingDatasets } = useIndexedDatasetsForCellType({
-    cellTypes: organs.map((o) => `${o.toLowerCase()}.${name}`),
+    cellTypes,
   });
   const [isExpanded, setIsExpanded] = useState(false);
 
@@ -225,7 +226,7 @@ function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps
           disabled={!datasetUUIDs || datasetUUIDs.length === 0 || isLoadingDatasets}
           title={`View ${datasetUUIDs.length} datasets containing ${name}.`}
         >
-          <ViewDatasetsButton datasetUUIDs={datasetUUIDs} isLoading={isLoadingDatasets} />
+          <ViewDatasetsButton scFindParams={{ cellTypes }} isLoading={isLoadingDatasets} />
         </SecondaryBackgroundTooltip>
       </BodyCell>
       <MobileCellTypeDescriptionButton isExpanded={isExpanded} clid={clid} onClick={toggleExpanded} />

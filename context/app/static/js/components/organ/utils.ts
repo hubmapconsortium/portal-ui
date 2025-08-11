@@ -1,5 +1,14 @@
 import { HierarchicalTermValues, buildSearchLink } from '../search/store';
 
+/**
+ * Additional parameters used to apply scFind results to search page results.
+ */
+export interface SCFindParams {
+  scFindOnly?: boolean;
+  genes?: string[];
+  cellTypes?: string[];
+}
+
 export interface SearchURLTypes {
   entityType: 'Donor' | 'Dataset' | 'Sample';
   organTerms?: string[];
@@ -11,6 +20,7 @@ export interface SearchURLTypes {
   analyteClass?: string;
   processingStatus?: string;
   datasetUUIDs?: string[];
+  scFindParams?: SCFindParams;
 }
 
 function getAssayFilterLink({
@@ -63,6 +73,7 @@ function getSearchURL({
   analyteClass,
   processingStatus,
   datasetUUIDs,
+  scFindParams,
 }: SearchURLTypes) {
   return buildSearchLink({
     entity_type: entityType,
@@ -108,6 +119,7 @@ function getSearchURL({
         Object.keys(assayTypeMap).length > 0 &&
         getAssayFilterLink({ assay, mappedAssay, assayTypeMap })),
     },
+    scFindParams,
   });
 }
 
