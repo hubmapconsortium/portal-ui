@@ -46,7 +46,7 @@ function Samples({ organTerms }: OrganSamplesProps) {
           ],
         },
       },
-      _source: [...columns.map((column) => column.id), 'uuid', 'donor.mapped_metadata.age_unit'],
+      _source: [...columns.map((column) => column.id), 'uuid', 'donor.mapped_metadata.age_unit', 'entity_type'],
       size: 500,
     }),
     [organTerms],

@@ -16,10 +16,11 @@ export interface CellContentProps<SearchDoc> {
 }
 
 function HubmapIDCell({
-  hit: { uuid, hubmap_id, mapped_status, mapped_data_access_level },
+  hit: { uuid, hubmap_id, mapped_status, mapped_data_access_level, entity_type },
   trackingInfo,
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
+  const isDataset = entity_type === 'Dataset';
   const { accessAllowed } = useDatasetAccess(uuid);
   const markerGene = useOptionalGeneContext();
 
@@ -50,7 +51,7 @@ function HubmapIDCell({
       >
         {hubmap_id}
       </InternalLink>
-      {!accessAllowed && (
+      {isDataset && !accessAllowed && (
         <SecondaryBackgroundTooltip title="This is a protected dataset that cannot be accessed with your current permissions.">
           <Typography variant="caption" color={!accessAllowed ? 'error' : 'warning'} sx={{ display: 'block', mt: 1 }}>
             {mapped_status} ({mapped_data_access_level})

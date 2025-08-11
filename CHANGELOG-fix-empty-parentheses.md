@@ -1,0 +1,1 @@
+- Prevent empty parentheses from showing up in Samples tables.
