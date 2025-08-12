@@ -114,9 +114,9 @@ function formatEvent(event, id) {
   return { ...safeEvent, ...buildLabelFields(safeEvent, id) };
 }
 
-function trackEvent(event, id) {
+function trackEvent(event, id, matomo = true) {
   const formattedEvent = formatEvent(event, id);
-  tracker.trackEvent(formattedEvent);
+  if (matomo) tracker.trackEvent(formattedEvent);
   ReactGA.event(formattedEvent);
   const category = formattedEvent.category.replace(/ /g, '_');
   faro.api.pushEvent(category, formattedEvent);
