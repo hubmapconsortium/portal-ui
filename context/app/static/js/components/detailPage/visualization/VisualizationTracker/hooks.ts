@@ -40,7 +40,7 @@ export function useVisualizationTracker() {
   useTrackMount(category, 'Vitessce Mounted', label);
   const trackVitessceAction = useEventCallback((action) => {
     const event = { category, action, label };
-    trackEvent(event);
+    trackEvent(event, undefined, false);
   });
 
   // This set is used to track which targets have been hovered over
