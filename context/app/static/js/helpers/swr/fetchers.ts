@@ -12,7 +12,7 @@ export type SingleFetchOptionsType = FetchOptionsType & {
 };
 
 export type MultiFetchOptionsType = FetchOptionsType & {
-  urls: string[];
+  urls: (string | null)[];
   requestInits?: RequestInit[];
 };
 
@@ -79,7 +79,7 @@ export async function multiFetcher<T>({
   return Promise.all(
     urls.map((url, i) =>
       f({
-        url,
+        url: url!,
         requestInit: requestInits.length === 1 ? requestInits[0] : requestInits[i],
         expectedStatusCodes,
         errorMessages,

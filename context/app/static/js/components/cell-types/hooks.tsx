@@ -202,7 +202,7 @@ export function useIndexedDatasetsForCellType({
     datasetTypes,
     trackingInfo,
     scFindParams: {
-      cellTypes,
+      scFindOnly: true,
     },
     ...rest,
   };

@@ -195,7 +195,8 @@ function OrgansCell({ organs }: { organs: string[] }) {
 }
 
 function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps) {
-  const cellTypes = organs.map((o) => `${o.toLowerCase()}.${name}`);
+  // New index version does not lowercase the organ names
+  const cellTypes = organs.map((o) => `${o}.${name}`);
   const { datasetUUIDs, isLoading: isLoadingDatasets } = useIndexedDatasetsForCellType({
     cellTypes,
   });

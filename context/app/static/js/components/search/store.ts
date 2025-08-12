@@ -168,8 +168,8 @@ const searchURLStateSchema = z
     filters: filtersSchema,
     scFindParams: z
       .object({
-        Gene: z.array(z.string()).optional(),
-        'Cell Type': z.array(z.string()).optional(),
+        genes: z.array(z.string()).optional(),
+        cellTypes: z.array(z.string()).optional(),
         scFindOnly: z.boolean().optional(),
       })
       .optional(),
