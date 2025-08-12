@@ -63,9 +63,10 @@ interface MultiValueFilterChipProps {
   field: string;
   values: string[];
   onDeleteValue: (value: string) => void;
+  onDeleteValues: (value: string[]) => void;
 }
 
-function MultiValueFilterChip({ field, values, onDeleteValue }: MultiValueFilterChipProps) {
+function MultiValueFilterChip({ field, values, onDeleteValue, onDeleteValues }: MultiValueFilterChipProps) {
   const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
   const getFieldLabel = useGetFieldLabel();
   const getTransformedFieldValue = useGetTransformedFieldValue();
@@ -103,14 +104,14 @@ function MultiValueFilterChip({ field, values, onDeleteValue }: MultiValueFilter
   );
 
   const handleDeleteAll = useCallback(() => {
-    values.forEach((value) => onDeleteValue(value));
+    onDeleteValues(values);
     trackEvent({
       category: analyticsCategory,
       action: 'Unselect Facet Chip',
       label: chipLabel,
     });
     setMenuOpen(false);
-  }, [onDeleteValue, values, analyticsCategory, chipLabel]);
+  }, [onDeleteValues, values, analyticsCategory, chipLabel]);
 
   // For single values, behave like a regular chip
   if (values.length === 1) {
@@ -358,6 +359,7 @@ function FilterChips() {
   const filters = useSearchStore((state) => state.filters);
   const facets = useSearchStore((state) => state.facets);
   const filterTerm = useSearchStore((state) => state.filterTerm);
+  const filterTerms = useSearchStore((state) => state.filterTerms);
   const filterRange = useSearchStore((state) => state.filterRange);
   const filterDate = useSearchStore((state) => state.filterDate);
   const filterExists = useSearchStore((state) => state.filterExists);
@@ -377,6 +379,7 @@ function FilterChips() {
                 field={field}
                 values={values}
                 onDeleteValue={(value) => filterTerm({ term: field, value })}
+                onDeleteValues={(vals) => filterTerms({ term: field, values: vals })}
               />
             );
           }

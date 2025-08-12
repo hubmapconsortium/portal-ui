@@ -194,6 +194,7 @@ export interface SearchStoreActions {
   setView: (view: string) => void;
   setSortField: (sortField: SortField) => void;
   filterTerm: ({ term, value }: { term: string; value: string }) => void;
+  filterTerms: ({ term, values }: { term: string; values: string[] }) => void;
   filterHierarchicalParentTerm: ({
     term,
     value,
@@ -373,6 +374,26 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         } else {
           values.add(value);
         }
+        replaceURLSearchParams(state);
+      });
+    },
+    filterTerms: ({ term, values }) => {
+      set((state) => {
+        const filter = state?.filters?.[term];
+
+        if (!isTermFilter(filter)) {
+          return;
+        }
+        const { values: existingValues } = filter;
+
+        values.forEach((value) => {
+          if (existingValues.has(value)) {
+            existingValues.delete(value);
+          } else {
+            existingValues.add(value);
+          }
+        });
+
         replaceURLSearchParams(state);
       });
     },
