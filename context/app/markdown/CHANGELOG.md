@@ -1,5 +1,16 @@
 # Changelog
 
+## v1.31.0 - 2025-08-12
+
+- Remove Matomo tracking for Vitessce and Cellpop, use only Google Analytics.
+- Prevent empty parentheses from showing up in Samples tables.
+- Add support for updated scFind index format.
+- Improve "view dataset" links to handle arbitrary scFind queries.
+- Add multi-value filter chips to search page.
+- Add "view datasets" links to biomarkers landing page.
+
+
+
 ## v1.30.2 - 2025-08-08
 
 - Support scFind results with both UUID and HBM ID outputs.
