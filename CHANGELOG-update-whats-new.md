@@ -1,0 +1,1 @@
+- Update What's New homepage section with July changes.
