@@ -113,7 +113,7 @@ export interface SearchState<V> {
   size: number;
   endpoint: string;
   swrConfig?: SWRConfiguration;
-  type: 'Donor' | 'Sample' | 'Dataset';
+  type: 'Donor' | 'Sample' | 'Dataset' | 'Dev Search';
   analyticsCategory: string;
   scFindParams?: SCFindParams;
 }

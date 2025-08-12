@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   AggregationsTermsAggregateBase,
   AggregationsSingleMetricAggregateBase,
@@ -25,6 +25,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
+import { ListsIcon } from 'js/shared-styles/icons';
 import {
   SearchStoreProvider,
   useSearchStore,
@@ -164,15 +165,26 @@ const EntityIcon = styled(SvgIcon)<SvgIconProps>({
 });
 
 interface TypeProps {
-  type: keyof Pick<typeof entityIconMap, 'Dataset' | 'Donor' | 'Sample'>;
+  type: keyof Pick<typeof entityIconMap, 'Dataset' | 'Donor' | 'Sample'> | 'Dev Search';
+}
+
+function isDevSearch(type: TypeProps['type']): type is 'Dev Search' {
+  return type === 'Dev Search';
 }
 
 function Header({ type }: TypeProps) {
+  const [text, icon] = useMemo(() => {
+    if (isDevSearch(type)) {
+      return [type, ListsIcon];
+    }
+    return [`${type}s`, entityIconMap[type as keyof typeof entityIconMap]];
+  }, [type]);
+
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      <EntityIcon component={entityIconMap[type]} color="primary" />
+      <EntityIcon component={icon} color="primary" />
       <Typography component="h1" variant="h2" data-testid="search-header">
-        {type}s
+        {text}
       </Typography>
     </Stack>
   );
@@ -188,8 +200,12 @@ function Bar({ type }: TypeProps) {
       <MetadataMenu type={type} />
       <WorkspacesDropdownMenu type={type} />
       {view === 'tile' && <TilesSortSelect />}
-      {view === 'table' && <SaveEntitiesButtonFromSearch entity_type={type} />}
-      {view === 'table' && <BulkDownloadButtonFromSearch type={type} />}
+      {!isDevSearch(type) && view === 'table' && (
+        <>
+          <SaveEntitiesButtonFromSearch entity_type={type} />
+          <BulkDownloadButtonFromSearch type={type} />
+        </>
+      )}
       <DefaultSearchViewSwitch />
     </Stack>
   );
