@@ -4,6 +4,7 @@ import { useOrganContext } from './contexts';
 
 export function useUUIDsFromHubmapIds(hubmapIds: string[]) {
   const { searchHits: datasets, isLoading } = useSearchHits({
+    size: 10000,
     query: {
       bool: {
         must: [

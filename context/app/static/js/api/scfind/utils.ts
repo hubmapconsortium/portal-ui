@@ -18,6 +18,9 @@ export function createScFindKey(
   Object.entries(params)
     .filter(([, value]) => value)
     .forEach(([key, value]) => urlParams.append(key, value!));
+
+  // TODO: Once we add switching between index versions, update this to be dynamically set
+  urlParams.append('index_version', '2025-08-07');
   const fullUrl = new URL(`${scFindApiUrl}/api/${endpoint}?${urlParams.toString()}`);
   return fullUrl.toString();
 }

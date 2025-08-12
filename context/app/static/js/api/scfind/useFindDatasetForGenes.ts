@@ -11,12 +11,17 @@ export interface DatasetsForGenesParams {
   geneList: string | string[];
 }
 
-type DatasetsForGenesKey = string;
+type DatasetsForGenesKey = string | null;
 
 export function createFindDatasetForGenesKey(
   scFindEndpoint: string,
   { geneList }: DatasetsForGenesParams,
 ): DatasetsForGenesKey {
+  if (
+    (Array.isArray(geneList) && geneList.length === 0) ||
+    (typeof geneList === 'string' && geneList.trim().length === 0)
+  )
+    return null;
   return createScFindKey(scFindEndpoint, 'findDatasets', {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
   });

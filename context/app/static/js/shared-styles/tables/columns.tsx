@@ -8,7 +8,6 @@ import { trackEvent } from 'js/helpers/trackers';
 import { EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
 import { useOptionalGeneContext } from 'js/components/cells/SCFindResults/CurrentGeneContext';
-import { useDatasetAccess } from 'js/hooks/useDatasetPermissions';
 import { SecondaryBackgroundTooltip } from '../tooltips';
 
 export interface CellContentProps<SearchDoc> {
@@ -21,8 +20,12 @@ function HubmapIDCell({
   openLinksInNewTab,
 }: CellContentProps<EntityDocument> & { trackingInfo: EventInfo; openLinksInNewTab?: boolean }) {
   const isDataset = entity_type === 'Dataset';
-  const { accessAllowed } = useDatasetAccess(uuid);
   const markerGene = useOptionalGeneContext();
+
+  const isPublished = mapped_status.toLowerCase() === 'published';
+  const isPublic = mapped_data_access_level.toLowerCase() === 'public';
+
+  const accessAllowed = isPublished && isPublic;
 
   const href = useMemo(() => {
     const url = new URL(`/browse/dataset/${uuid}`, window.location.origin);
@@ -53,7 +56,7 @@ function HubmapIDCell({
       </InternalLink>
       {isDataset && !accessAllowed && (
         <SecondaryBackgroundTooltip title="This is a protected dataset that cannot be accessed with your current permissions.">
-          <Typography variant="caption" color={!accessAllowed ? 'error' : 'warning'} sx={{ display: 'block', mt: 1 }}>
+          <Typography variant="caption" color="error" sx={{ display: 'block', mt: 1 }}>
             {mapped_status} ({mapped_data_access_level})
           </Typography>
         </SecondaryBackgroundTooltip>

@@ -1,0 +1,4 @@
+- Add support for updated scFind index format.
+- Improve "view dataset" links to handle arbitrary scFind queries.
+- Add multi-value filter chips to search page.
+- Add "view datasets" links to biomarkers landing page.

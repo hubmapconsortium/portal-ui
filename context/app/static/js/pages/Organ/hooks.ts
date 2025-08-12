@@ -234,6 +234,12 @@ export function useIndexedDatasetsForOrgan() {
     datasets: datasetUUIDs,
     isLoading: isLoadingIndexed || isLoadingDatasets,
     datasetTypes,
+    filters: {
+      organTerms: searchItems,
+    },
+    scFindParams: {
+      scFindOnly: true,
+    },
     ...rest,
   };
 }

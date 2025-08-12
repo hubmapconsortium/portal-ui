@@ -71,7 +71,7 @@ export default function BiomarkersPanelList() {
             name={`${approved_name} (${approved_symbol})`}
             description={summary || 'No description available.'}
             href={`/genes/${approved_symbol}`}
-            type="Gene"
+            geneName={approved_symbol}
           />
         ),
       })),

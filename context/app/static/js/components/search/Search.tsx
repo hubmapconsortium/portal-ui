@@ -21,6 +21,10 @@ import SaveEntitiesButtonFromSearch from 'js/components/savedLists/SaveEntitiesB
 import { SavedListsSuccessAlert } from 'js/components/savedLists/SavedListsAlerts';
 import SelectableTableProvider from 'js/shared-styles/tables/SelectableTableProvider';
 import { entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { Alert } from 'js/shared-styles/alerts';
+import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
+import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
+import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
 import {
   SearchStoreProvider,
   useSearchStore,
@@ -47,6 +51,7 @@ import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import { TilesSortSelect } from './Results/ResultsTiles';
 import MetadataMenu from '../searchPage/MetadataMenu';
 import SearchNote from './SearchNote';
+import { SCFindParams } from '../organ/utils';
 
 interface OuterBucket {
   doc_count: number;
@@ -201,11 +206,42 @@ function Body({ facetGroups }: { facetGroups: FacetGroups }) {
   );
 }
 
+function SCFindAlert() {
+  const { scFindParams } = useSearchStore();
+
+  if (!scFindParams) {
+    return null;
+  }
+
+  if (scFindParams.scFindOnly) {
+    return <Alert severity="info">Displaying all entities indexed in scFind.</Alert>;
+  }
+
+  if (scFindParams.genes) {
+    return (
+      <Alert severity="info">
+        Displaying all entities indexed in scFind for genes: {scFindParams.genes.join(', ')}.
+      </Alert>
+    );
+  }
+
+  if (scFindParams.cellTypes) {
+    return (
+      <Alert severity="info">
+        Displaying all entities indexed in scFind for cell types: {scFindParams.cellTypes.join(', ')}.
+      </Alert>
+    );
+  }
+
+  return null;
+}
+
 const Search = React.memo(function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
   return (
     <Stack spacing={2} mb={4}>
       <SavedListsSuccessAlert />
       <BulkDownloadSuccessAlert />
+      <SCFindAlert />
       <Header type={type} />
       <Stack direction="column" spacing={1} mb={2}>
         <Box>
@@ -287,16 +323,102 @@ function useInitialURLState() {
   const [hasLoadedURLState, setHasLoadedURLState] = useState(false);
   const [initialUrlState, setInitialUrlState] = useState<Partial<SearchURLState>>({ filters: {} });
 
+  // scFind hooks are conditionally enabled based on URL parameters
+  const [scFindParams, setScFindParams] = useState<SCFindParams | null>(null);
+
+  const shouldCallIndexedDatasets = Boolean(scFindParams?.scFindOnly);
+  const shouldCallGeneDatasets = Boolean(scFindParams?.genes?.length);
+  const shouldCallCellTypeDatasets = Boolean(scFindParams?.cellTypes?.length);
+
+  const indexedDatasets = useIndexedDatasets();
+  const geneDatasets = useFindDatasetForGenes({
+    geneList: shouldCallGeneDatasets ? (scFindParams?.genes ?? []) : [],
+  });
+  const cellTypeDatasets = useFindDatasetForCellTypes({
+    cellTypes: shouldCallCellTypeDatasets ? (scFindParams?.cellTypes ?? []) : [],
+  });
+
   useEffect(() => {
     const searchParams = history?.location?.search
       ? parseURLState(LZString.decompressFromEncodedURIComponent(history?.location?.search?.slice(1)))
       : {};
 
+    let isDoneLoading = true;
+
     if (Object.keys(searchParams).length) {
+      // Check if scFind parameters exist in the parsed state
+      const parsedScFindParams = searchParams.scFindParams;
+      if (parsedScFindParams) {
+        isDoneLoading = false;
+        setScFindParams({
+          scFindOnly: parsedScFindParams.scFindOnly,
+          genes: parsedScFindParams.genes,
+          cellTypes: parsedScFindParams.cellTypes,
+        });
+      }
+
       setInitialUrlState({ filters: {}, ...searchParams });
     }
-    setHasLoadedURLState(true);
+    setHasLoadedURLState(isDoneLoading);
   }, []);
+
+  // Effect to update the initial URL state with UUID filters based on scFind results
+  useEffect(() => {
+    if (!scFindParams) {
+      return;
+    }
+
+    let datasetUUIDs: string[] = [];
+    let isDataReady = false;
+
+    if (scFindParams.scFindOnly && shouldCallIndexedDatasets) {
+      if (indexedDatasets.data) {
+        datasetUUIDs = indexedDatasets.data.datasets;
+        isDataReady = true;
+      }
+    } else if (scFindParams.genes && shouldCallGeneDatasets) {
+      if (geneDatasets.data) {
+        // Extract datasets from gene search results
+        const allDatasets = Object.values(geneDatasets.data.findDatasets).flat();
+        datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
+        isDataReady = true;
+      }
+    } else if (scFindParams.cellTypes && shouldCallCellTypeDatasets) {
+      if (cellTypeDatasets.data) {
+        // Extract datasets from cell type search results
+        const allDatasets = cellTypeDatasets.data.flatMap((response) => response.datasets);
+        datasetUUIDs = [...new Set(allDatasets)]; // Remove duplicates
+        isDataReady = true;
+      }
+    } else {
+      // No scFind params that require data fetching
+      isDataReady = true;
+    }
+
+    if (isDataReady) {
+      if (datasetUUIDs.length > 0) {
+        setInitialUrlState((prevState) => ({
+          ...prevState,
+          filters: {
+            ...prevState.filters,
+            uuid: {
+              type: FACETS.term,
+              values: datasetUUIDs,
+            },
+          },
+        }));
+      }
+      setHasLoadedURLState(true);
+    }
+  }, [
+    scFindParams,
+    indexedDatasets.data,
+    geneDatasets.data,
+    cellTypeDatasets.data,
+    shouldCallIndexedDatasets,
+    shouldCallGeneDatasets,
+    shouldCallCellTypeDatasets,
+  ]);
 
   return { initialUrlState, hasLoadedURLState };
 }

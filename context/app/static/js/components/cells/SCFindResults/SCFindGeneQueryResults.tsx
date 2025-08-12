@@ -16,8 +16,6 @@ import Description from 'js/shared-styles/sections/Description';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 import ViewIndexedDatasetsButton from 'js/components/organ/OrganCellTypes/ViewIndexedDatasetsButton';
-import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
-import { useUUIDsFromHubmapIds } from 'js/components/organ/hooks';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import DatasetsOverview from '../DatasetsOverview';
 
@@ -147,10 +145,6 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
 
   const { datasets, isLoading, error, datasetToGeneMap } = useSCFindGeneResults();
 
-  const { data: indexedDatasets = { datasets: [] } } = useIndexedDatasets();
-
-  const indexedDatasetsButtonProps = useUUIDsFromHubmapIds(indexedDatasets.datasets);
-
   const deduplicatedResults = useDeduplicatedResults(datasets?.findDatasets);
 
   // update the total dataset counter for the results display
@@ -169,7 +163,14 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
       </Typography>
       <DatasetsOverview
         datasets={deduplicatedResults}
-        belowTheFold={<ViewIndexedDatasetsButton {...indexedDatasetsButtonProps} />}
+        belowTheFold={
+          <ViewIndexedDatasetsButton
+            scFindParams={{
+              scFindOnly: true,
+            }}
+            isLoading={false}
+          />
+        }
         trackingInfo={trackingInfo}
       >
         This overview provides a summary of the matched datasets and their proportions relative to both indexed datasets

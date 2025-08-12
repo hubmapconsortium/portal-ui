@@ -7,7 +7,7 @@ export interface FindDatasetForCellTypeParams {
   cellType: string;
 }
 
-type FindDatasetForCellTypeKey = string;
+type FindDatasetForCellTypeKey = string | null;
 
 export interface FindDatasetForCellTypeResponse {
   datasets: string[];
@@ -17,6 +17,7 @@ export function createFindDatasetForCellTypeKey(
   scFindEndpoint: string,
   { cellType }: FindDatasetForCellTypeParams,
 ): FindDatasetForCellTypeKey {
+  if (typeof cellType !== 'string' || cellType.length === 0) return null;
   return createScFindKey(scFindEndpoint, 'findDatasetForCellType', {
     cell_type: cellType,
   });

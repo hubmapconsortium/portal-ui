@@ -201,6 +201,9 @@ export function useIndexedDatasetsForCellType({
     organs,
     datasetTypes,
     trackingInfo,
+    scFindParams: {
+      scFindOnly: true,
+    },
     ...rest,
   };
 }

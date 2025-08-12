@@ -5,12 +5,12 @@ import React, { PropsWithChildren } from 'react';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
 import { useEventCallback } from '@mui/material/utils';
-import { useUUIDsFromHubmapIds } from '../hooks';
 import { StyledDetailsAccordion } from './styles';
 import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
+import { SCFindParams } from '../utils';
 
 interface IndexedDatasetsSummaryProps {
-  datasets?: string[];
+  scFindParams: SCFindParams;
   datasetTypes: { key: string; doc_count: number }[];
   organs?: { key: string; doc_count: number }[];
   isLoadingDatasets?: boolean;
@@ -19,18 +19,14 @@ interface IndexedDatasetsSummaryProps {
 }
 
 function IndexedDatasetsSummary({
-  datasets = [],
   datasetTypes = [],
   organs = [],
   isLoadingDatasets = false,
   children,
   trackingInfo,
   context = 'Cell Types',
+  scFindParams = {},
 }: PropsWithChildren<IndexedDatasetsSummaryProps>) {
-  const { datasetUUIDs, isLoading: isLoadingUUIDs } = useUUIDsFromHubmapIds(datasets);
-
-  const isLoading = isLoadingDatasets || isLoadingUUIDs;
-
   const trackExpandChange = useEventCallback((_, expanded: boolean) => {
     if (trackingInfo) {
       trackEvent({
@@ -113,9 +109,9 @@ function IndexedDatasetsSummary({
       </StyledDetailsAccordion>
       <ViewIndexedDatasetsButton
         context={context}
-        datasetUUIDs={datasetUUIDs}
-        isLoading={isLoading}
+        isLoading={isLoadingDatasets}
         trackingInfo={trackingInfo}
+        scFindParams={scFindParams}
         sx={{ mt: 2 }}
       />
     </StyledDetailsAccordion>

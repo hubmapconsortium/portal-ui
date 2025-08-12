@@ -4,6 +4,7 @@ import { createStoreImmer, createStoreContext } from 'js/helpers/zustand';
 import history from 'history/browser';
 import { SWRConfiguration } from 'swr';
 import { z } from 'zod';
+import { SCFindParams } from '../organ/utils';
 
 export interface SortField {
   field: string;
@@ -114,6 +115,7 @@ export interface SearchState<V> {
   swrConfig?: SWRConfiguration;
   type: 'Donor' | 'Sample' | 'Dataset';
   analyticsCategory: string;
+  scFindParams?: SCFindParams;
 }
 
 // Used to validate URL Search
@@ -164,6 +166,13 @@ const searchURLStateSchema = z
     search: z.string(),
     sortField: sortFieldSchema,
     filters: filtersSchema,
+    scFindParams: z
+      .object({
+        genes: z.array(z.string()).optional(),
+        cellTypes: z.array(z.string()).optional(),
+        scFindOnly: z.boolean().optional(),
+      })
+      .optional(),
   })
   .partial();
 
@@ -185,6 +194,7 @@ export interface SearchStoreActions {
   setView: (view: string) => void;
   setSortField: (sortField: SortField) => void;
   filterTerm: ({ term, value }: { term: string; value: string }) => void;
+  filterTerms: ({ term, values }: { term: string; values: string[] }) => void;
   filterHierarchicalParentTerm: ({
     term,
     value,
@@ -276,11 +286,17 @@ export function filterHasValues({ filter }: { filter: Filter }) {
 export function buildSearchLink({
   entity_type,
   filters,
+  scFindParams = {},
 }: {
   entity_type: 'Donor' | 'Dataset' | 'Sample';
   filters?: FiltersType<string[]>;
+  scFindParams?: SCFindParams;
 }) {
-  const search = filters ? `?${LZString.compressToEncodedURIComponent(JSON.stringify({ filters }))}` : '';
+  const search =
+    filters || scFindParams
+      ? `?${LZString.compressToEncodedURIComponent(JSON.stringify({ filters, scFindParams }))}`
+      : '';
+
   return `/search/${entity_type.toLowerCase()}s${search}`;
 }
 
@@ -358,6 +374,26 @@ export const createStore = ({ initialState }: { initialState: SearchStoreState }
         } else {
           values.add(value);
         }
+        replaceURLSearchParams(state);
+      });
+    },
+    filterTerms: ({ term, values }) => {
+      set((state) => {
+        const filter = state?.filters?.[term];
+
+        if (!isTermFilter(filter)) {
+          return;
+        }
+        const { values: existingValues } = filter;
+
+        values.forEach((value) => {
+          if (existingValues.has(value)) {
+            existingValues.delete(value);
+          } else {
+            existingValues.add(value);
+          }
+        });
+
         replaceURLSearchParams(state);
       });
     },
