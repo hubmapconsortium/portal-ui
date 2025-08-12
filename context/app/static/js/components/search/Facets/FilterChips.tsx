@@ -113,12 +113,6 @@ function MultiValueFilterChip({ field, values, onDeleteValue, onDeleteValues }: 
     setMenuOpen(false);
   }, [onDeleteValues, values, analyticsCategory, chipLabel]);
 
-  // For single values, behave like a regular chip
-  if (values.length === 1) {
-    return <FilterChip label={chipLabel} onDelete={() => handleDeleteValue(values[0])} />;
-  }
-
-  // For multiple values, show a clickable chip with dropdown
   return (
     <>
       <div ref={anchorEl}>
@@ -247,12 +241,6 @@ function MultiValueHierarchicalFilterChip({
     setMenuOpen(false);
   }, [onDeleteParent, analyticsCategory, chipLabel]);
 
-  // For single child values, behave like a regular chip
-  if (childValues.length === 1) {
-    return <FilterChip label={chipLabel} onDelete={() => handleDeleteChild(childValues[0])} />;
-  }
-
-  // For multiple child values, show a clickable chip with dropdown
   return (
     <>
       <div ref={anchorEl}>
@@ -373,6 +361,15 @@ function FilterChips() {
         ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues]) => {
           if (isTermFilter(v) && v.values.size) {
             const values = Array.from(v.values);
+            if (values.length === 1) {
+              return (
+                <FilterChip
+                  key={field}
+                  label={`${getFieldLabel(field)}: ${values[0]}`}
+                  onDelete={() => filterTerm({ term: field, value: values[0] })}
+                />
+              );
+            }
             return (
               <MultiValueFilterChip
                 key={field}
@@ -422,6 +419,19 @@ function FilterChips() {
                 return <HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />;
               }
               const childValues = Array.from(children);
+
+              if (childValues.length === 1) {
+                return (
+                  <FilterChip
+                    key={childValues[0]}
+                    label={`${getFieldLabel(field)}: ${childValues[0]}`}
+                    onDelete={() =>
+                      filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValues[0] })
+                    }
+                  />
+                );
+              }
+
               return (
                 <MultiValueHierarchicalFilterChip
                   key={parent}
