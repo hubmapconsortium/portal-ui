@@ -1,8 +1,13 @@
-import React, { ReactElement, useCallback } from 'react';
+import React, { ReactElement, useCallback, useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 import Chip, { ChipProps } from '@mui/material/Chip';
 import Button from '@mui/material/Button';
 import Stack from '@mui/material/Stack';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+import Typography from '@mui/material/Typography';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
 import { format } from 'date-fns/format';
 
 import { trackEvent } from 'js/helpers/trackers';
@@ -49,6 +54,125 @@ function FilterChip({ onDelete, label, ...props }: ChipProps & { onDelete: () =>
       })}
       {...props}
     />
+  );
+}
+
+interface MultiValueFilterChipProps {
+  field: string;
+  values: string[];
+  onDeleteValue: (value: string) => void;
+}
+
+function MultiValueFilterChip({ field, values, onDeleteValue }: MultiValueFilterChipProps) {
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
+  const getFieldLabel = useGetFieldLabel();
+  const getTransformedFieldValue = useGetTransformedFieldValue();
+  const anchorEl = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const fieldLabel = getFieldLabel(field);
+  const chipLabel =
+    values.length === 1
+      ? `${fieldLabel}: ${getTransformedFieldValue({ field, value: values[0] })}`
+      : `${fieldLabel} (${values.length})`;
+
+  const handleChipClick = useCallback(() => {
+    if (values.length > 1) {
+      setMenuOpen(true);
+    }
+  }, [values.length]);
+
+  const handleMenuClose = useCallback(() => {
+    setMenuOpen(false);
+  }, []);
+
+  const handleDeleteValue = useCallback(
+    (value: string) => {
+      onDeleteValue(value);
+      trackEvent({
+        category: analyticsCategory,
+        action: 'Unselect Facet Chip',
+        label: `${fieldLabel}: ${getTransformedFieldValue({ field, value })}`,
+      });
+      // Close menu if this was the last value
+      if (values.length === 1) {
+        setMenuOpen(false);
+      }
+    },
+    [onDeleteValue, analyticsCategory, fieldLabel, field, getTransformedFieldValue, values.length],
+  );
+
+  const handleDeleteAll = useCallback(() => {
+    values.forEach((value) => onDeleteValue(value));
+    trackEvent({
+      category: analyticsCategory,
+      action: 'Unselect Facet Chip',
+      label: chipLabel,
+    });
+    setMenuOpen(false);
+  }, [onDeleteValue, values, analyticsCategory, chipLabel]);
+
+  // For single values, behave like a regular chip
+  if (values.length === 1) {
+    return <FilterChip label={chipLabel} onDelete={() => handleDeleteValue(values[0])} />;
+  }
+
+  // For multiple values, show a clickable chip with dropdown
+  return (
+    <>
+      <div ref={anchorEl}>
+        <Chip
+          variant="outlined"
+          color="primary"
+          label={chipLabel}
+          onClick={handleChipClick}
+          onDelete={handleDeleteAll}
+          sx={(theme) => ({
+            borderColor: theme.palette.primary.main,
+            cursor: 'pointer',
+          })}
+        />
+      </div>
+      <Menu
+        anchorEl={anchorEl.current}
+        open={menuOpen}
+        onClose={handleMenuClose}
+        slotProps={{
+          paper: {
+            sx: {
+              maxHeight: 300,
+              width: 'auto',
+              minWidth: 200,
+            },
+          },
+        }}
+      >
+        {values.map((value) => (
+          <MenuItem
+            key={value}
+            sx={{
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              minHeight: 36,
+            }}
+          >
+            <Typography variant="body2" sx={{ flexGrow: 1, pr: 1 }}>
+              {getTransformedFieldValue({ field, value })}
+            </Typography>
+            <IconButton
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteValue(value);
+              }}
+              sx={{ ml: 1, p: 0.5 }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
   );
 }
 
@@ -107,20 +231,21 @@ function FilterChips() {
   const filterDate = useSearchStore((state) => state.filterDate);
   const filterExists = useSearchStore((state) => state.filterExists);
   const getFieldLabel = useGetFieldLabel();
-  const getTransformedFieldValue = useGetTransformedFieldValue();
 
   const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
     <>
       {Object.entries(filters).map(
         ([field, v]: [string, RangeValues | HierarchicalTermValues | TermValues | DateValues | ExistsValues]) => {
           if (isTermFilter(v) && v.values.size) {
-            return [...v.values].map((val) => (
-              <FilterChip
-                label={`${getFieldLabel(field)}: ${getTransformedFieldValue({ field, value: val })}`}
-                key={val}
-                onDelete={() => filterTerm({ term: field, value: val })}
+            const values = Array.from(v.values);
+            return (
+              <MultiValueFilterChip
+                key={field}
+                field={field}
+                values={values}
+                onDeleteValue={(value) => filterTerm({ term: field, value })}
               />
-            ));
+            );
           }
           const facetConfig = facets[field];
 
