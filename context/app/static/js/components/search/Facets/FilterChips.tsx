@@ -8,9 +8,11 @@ import MenuItem from '@mui/material/MenuItem';
 import Typography from '@mui/material/Typography';
 import IconButton from '@mui/material/IconButton';
 import CloseIcon from '@mui/icons-material/Close';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import { format } from 'date-fns/format';
 
 import { trackEvent } from 'js/helpers/trackers';
+import Divider from '@mui/material/Divider';
 import {
   DateValues,
   ExistsValues,
@@ -72,9 +74,7 @@ function MultiValueFilterChip({ field, values, onDeleteValue }: MultiValueFilter
 
   const fieldLabel = getFieldLabel(field);
   const chipLabel =
-    values.length === 1
-      ? `${fieldLabel}: ${getTransformedFieldValue({ field, value: values[0] })}`
-      : `${fieldLabel} (${values.length})`;
+    values.length === 1 ? `${fieldLabel}: ${getTransformedFieldValue({ field, value: values[0] })}` : fieldLabel;
 
   const handleChipClick = useCallback(() => {
     if (values.length > 1) {
@@ -126,7 +126,12 @@ function MultiValueFilterChip({ field, values, onDeleteValue }: MultiValueFilter
           color="primary"
           label={chipLabel}
           onClick={handleChipClick}
-          onDelete={handleDeleteAll}
+          deleteIcon={
+            <ExpandMoreIcon
+              sx={{ transform: menuOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: '0.3s cubic-bezier' }}
+            />
+          }
+          onDelete={handleChipClick}
           sx={(theme) => ({
             borderColor: theme.palette.primary.main,
             cursor: 'pointer',
@@ -147,6 +152,12 @@ function MultiValueFilterChip({ field, values, onDeleteValue }: MultiValueFilter
           },
         }}
       >
+        <MenuItem onClick={handleDeleteAll}>
+          <Typography variant="body2" color="error">
+            Remove all ({values.length})
+          </Typography>
+        </MenuItem>
+        <Divider />
         {values.map((value) => (
           <MenuItem
             key={value}
@@ -164,6 +175,140 @@ function MultiValueFilterChip({ field, values, onDeleteValue }: MultiValueFilter
               onClick={(e) => {
                 e.stopPropagation();
                 handleDeleteValue(value);
+              }}
+              sx={{ ml: 1, p: 0.5 }}
+            >
+              <CloseIcon fontSize="small" />
+            </IconButton>
+          </MenuItem>
+        ))}
+      </Menu>
+    </>
+  );
+}
+
+interface MultiValueHierarchicalFilterChipProps {
+  field: string;
+  parentValue: string;
+  childValues: string[];
+  onDeleteChild: (childValue: string) => void;
+  onDeleteParent: () => void;
+}
+
+function MultiValueHierarchicalFilterChip({
+  field,
+  parentValue,
+  childValues,
+  onDeleteChild,
+  onDeleteParent,
+}: MultiValueHierarchicalFilterChipProps) {
+  const analyticsCategory = useSearchStore((state) => state.analyticsCategory);
+  const getFieldLabel = useGetFieldLabel();
+  const anchorEl = useRef<HTMLDivElement>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+
+  const fieldLabel = getFieldLabel(field);
+  const chipLabel = childValues.length === 1 ? `${fieldLabel}: ${childValues[0]}` : parentValue;
+
+  const handleChipClick = useCallback(() => {
+    if (childValues.length > 1) {
+      setMenuOpen(true);
+    }
+  }, [childValues.length]);
+
+  const handleMenuClose = useCallback(() => {
+    setMenuOpen(false);
+  }, []);
+
+  const handleDeleteChild = useCallback(
+    (childValue: string) => {
+      onDeleteChild(childValue);
+      trackEvent({
+        category: analyticsCategory,
+        action: 'Unselect Facet Chip',
+        label: `${fieldLabel}: ${childValue}`,
+      });
+      // Close menu if this was the last child
+      if (childValues.length === 1) {
+        setMenuOpen(false);
+      }
+    },
+    [onDeleteChild, analyticsCategory, fieldLabel, childValues.length],
+  );
+
+  const handleDeleteAll = useCallback(() => {
+    onDeleteParent();
+    trackEvent({
+      category: analyticsCategory,
+      action: 'Unselect Facet Chip',
+      label: chipLabel,
+    });
+    setMenuOpen(false);
+  }, [onDeleteParent, analyticsCategory, chipLabel]);
+
+  // For single child values, behave like a regular chip
+  if (childValues.length === 1) {
+    return <FilterChip label={chipLabel} onDelete={() => handleDeleteChild(childValues[0])} />;
+  }
+
+  // For multiple child values, show a clickable chip with dropdown
+  return (
+    <>
+      <div ref={anchorEl}>
+        <Chip
+          variant="outlined"
+          color="primary"
+          label={chipLabel}
+          onClick={handleChipClick}
+          deleteIcon={
+            <ExpandMoreIcon
+              sx={{ transform: menuOpen ? 'rotate(180deg)' : 'rotate(0deg)', transition: '0.3s cubic-bezier' }}
+            />
+          }
+          onDelete={handleChipClick}
+          sx={(theme) => ({
+            borderColor: theme.palette.primary.main,
+            cursor: 'pointer',
+          })}
+        />
+      </div>
+      <Menu
+        anchorEl={anchorEl.current}
+        open={menuOpen}
+        onClose={handleMenuClose}
+        slotProps={{
+          paper: {
+            sx: {
+              maxHeight: 300,
+              width: 'auto',
+              minWidth: 200,
+            },
+          },
+        }}
+      >
+        <MenuItem onClick={handleDeleteAll}>
+          <Typography variant="body2" color="error">
+            Remove all ({childValues.length})
+          </Typography>
+        </MenuItem>
+        <Divider />
+        {childValues.map((childValue) => (
+          <MenuItem
+            key={childValue}
+            sx={{
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              minHeight: 36,
+            }}
+          >
+            <Typography variant="body2" sx={{ flexGrow: 1, pr: 1 }}>
+              {childValue}
+            </Typography>
+            <IconButton
+              size="small"
+              onClick={(e) => {
+                e.stopPropagation();
+                handleDeleteChild(childValue);
               }}
               sx={{ ml: 1, p: 0.5 }}
             >
@@ -198,20 +343,6 @@ const HierarchicalParentChip = React.memo(function HierarchicalTermChip({
   return <FilterChip label={`${getFieldLabel(parentField)}: ${value}`} key={value} onDelete={onDelete} />;
 });
 
-const HierarchichalTermChip = React.memo(function HierarchicalTermChip({
-  parentField,
-  parentValue,
-  value,
-}: HierarchicalChip) {
-  const getFieldLabel = useGetFieldLabel();
-  const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
-  const onDelete = useCallback(
-    () => filterHierarchicalChildTerm({ parentTerm: parentField, parentValue, value }),
-    [parentField, value, parentValue, filterHierarchicalChildTerm],
-  );
-  return <FilterChip label={`${getFieldLabel(parentField)}: ${value}`} key={value} onDelete={onDelete} />;
-});
-
 function ResetFiltersButton() {
   const resetFilters = useSearchStore((state) => state.resetFilters);
   return (
@@ -230,6 +361,8 @@ function FilterChips() {
   const filterRange = useSearchStore((state) => state.filterRange);
   const filterDate = useSearchStore((state) => state.filterDate);
   const filterExists = useSearchStore((state) => state.filterExists);
+  const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
+  const filterHierarchicalChildTerm = useSearchStore((state) => state.filterHierarchicalChildTerm);
   const getFieldLabel = useGetFieldLabel();
 
   const chips: ReactElement<{ children: (ReactElement | null)[] }> = (
@@ -285,14 +418,19 @@ function FilterChips() {
               if (!children?.size) {
                 return <HierarchicalParentChip key={parent} parentField={field} value={parent} parentValue={parent} />;
               }
-              return [...children].map((child) => (
-                <HierarchichalTermChip
-                  key={`${parent}-${child}`}
-                  parentField={field}
-                  value={child}
+              const childValues = Array.from(children);
+              return (
+                <MultiValueHierarchicalFilterChip
+                  key={parent}
+                  field={field}
                   parentValue={parent}
+                  childValues={childValues}
+                  onDeleteChild={(childValue) =>
+                    filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue })
+                  }
+                  onDeleteParent={() => filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] })}
                 />
-              ));
+              );
             });
           }
 
