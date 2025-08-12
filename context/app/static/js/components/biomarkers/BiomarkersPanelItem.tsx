@@ -4,21 +4,24 @@ import LineClamp from 'js/shared-styles/text/LineClamp';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
+import Box from '@mui/material/Box';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
 
 const desktopConfig = {
   name: {
-    flexBasis: '30%',
+    flexBasis: '25%',
     flexGrow: 1,
+    flexShrink: 0,
   },
   description: {
-    flexBasis: '40%',
+    flexBasis: '45%',
     flexGrow: 1,
   },
   type: {
     flexBasis: 'fit-content',
     flexShrink: 0,
-    flexGrow: 1,
+    flexGrow: 0,
+    pr: 2,
   },
 };
 
@@ -31,7 +34,12 @@ function BiomarkerHeaderPanel() {
     <StackTemplate spacing={1}>
       <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
       <HeaderCell {...desktopConfig.description}>Description</HeaderCell>
-      <HeaderCell {...desktopConfig.type}>Datasets</HeaderCell>
+      <HeaderCell {...desktopConfig.type}>
+        Datasets
+        <Box visibility="hidden" height={0}>
+          <ViewDatasetsButton scFindParams={{}} isLoading={false} />
+        </Box>
+      </HeaderCell>
     </StackTemplate>
   );
 }
