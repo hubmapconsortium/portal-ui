@@ -19,9 +19,8 @@ export default function Biomarkers() {
         description={
           <Stack gap={1}>
             <Box>
-              Gene and protein information are available in HuBMAP data. To look up information about a specific gene or
-              protein, use the search bar below. Launch the <InternalLink href="/cells">Molecular Query</InternalLink>{' '}
-              to find datasets for a specific biomarker.
+              Explore gene biomarker information in HuBMAP data. Search for a gene by entering its symbol below, or use
+              the <InternalLink href="/cells">Molecular Query</InternalLink> for advanced biomarker search options.
             </Box>
             <RelevantPagesSection
               pages={[

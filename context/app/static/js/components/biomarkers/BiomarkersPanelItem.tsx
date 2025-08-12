@@ -1,12 +1,10 @@
 import React from 'react';
 
-import Chip from '@mui/material/Chip';
-import { styled } from '@mui/material/styles';
-
 import LineClamp from 'js/shared-styles/text/LineClamp';
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
+import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
 
 const desktopConfig = {
   name: {
@@ -33,7 +31,7 @@ function BiomarkerHeaderPanel() {
     <StackTemplate spacing={1}>
       <HeaderCell {...desktopConfig.name}>Name</HeaderCell>
       <HeaderCell {...desktopConfig.description}>Description</HeaderCell>
-      <HeaderCell {...desktopConfig.type}>Type</HeaderCell>
+      <HeaderCell {...desktopConfig.type}>Datasets</HeaderCell>
     </StackTemplate>
   );
 }
@@ -42,17 +40,10 @@ interface BiomarkerPanelItemProps {
   name: string;
   href?: string;
   description: string;
-  type: string;
+  geneName: string;
 }
 
-const UnroundedChip = styled(Chip)(({ theme }) => ({
-  borderRadius: theme.spacing(1),
-  '&.MuiChip-outlined': {
-    borderRadius: theme.spacing(1),
-  },
-}));
-
-function BiomarkerPanelItem({ name, href, description, type }: BiomarkerPanelItemProps) {
+function BiomarkerPanelItem({ name, href, description, geneName }: BiomarkerPanelItemProps) {
   return (
     <StackTemplate>
       <BodyCell {...desktopConfig.name} aria-label="Name">
@@ -62,7 +53,15 @@ function BiomarkerPanelItem({ name, href, description, type }: BiomarkerPanelIte
         <LineClamp lines={2}>{description}</LineClamp>
       </BodyCell>
       <BodyCell {...desktopConfig.type} aria-label="Type">
-        <UnroundedChip variant="outlined" label={type} />
+        <ViewDatasetsButton
+          scFindParams={{ genes: [geneName] }}
+          trackingInfo={{
+            category: 'Biomarker Landing Page',
+            action: 'View Datasets',
+            label: name,
+          }}
+          isLoading={false}
+        />
       </BodyCell>
     </StackTemplate>
   );
