@@ -32,6 +32,7 @@ const columns = [hubmapID, organ, assayTypes, targetCellCountColumn, totalCellCo
 
 function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+
   return (
     <EntityTable<Dataset>
       maxHeight={800}
