@@ -233,7 +233,6 @@ function SCFindAlert() {
     );
   }
 
-  console.warn('Reached end of scFind alert with following params:', scFindParams);
   return null;
 }
 

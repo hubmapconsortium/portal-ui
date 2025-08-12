@@ -17,7 +17,11 @@ export function createFindDatasetForGenesKey(
   scFindEndpoint: string,
   { geneList }: DatasetsForGenesParams,
 ): DatasetsForGenesKey {
-  if (geneList.length === 0) return null;
+  if (
+    (Array.isArray(geneList) && geneList.length === 0) ||
+    (typeof geneList === 'string' && geneList.trim().length === 0)
+  )
+    return null;
   return createScFindKey(scFindEndpoint, 'findDatasets', {
     gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
   });

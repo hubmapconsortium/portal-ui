@@ -17,7 +17,7 @@ export function createFindDatasetForCellTypeKey(
   scFindEndpoint: string,
   { cellType }: FindDatasetForCellTypeParams,
 ): FindDatasetForCellTypeKey {
-  if (cellType.length === 0) return null;
+  if (typeof cellType !== 'string' || cellType.length === 0) return null;
   return createScFindKey(scFindEndpoint, 'findDatasetForCellType', {
     cell_type: cellType,
   });

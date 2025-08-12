@@ -76,11 +76,26 @@ export async function multiFetcher<T>({
   if (urls.length === 0) {
     return Promise.resolve([] as T[]);
   }
+
+  const filteredData = urls.reduce<{ urls: string[]; requestInits: RequestInit[] }>(
+    (acc, url, i) => {
+      if (url) {
+        acc.urls.push(url);
+        acc.requestInits.push(requestInits.length === 1 ? requestInits[0] : requestInits[i]);
+      }
+      return acc;
+    },
+    { urls: [], requestInits: [] },
+  );
+
+  const filteredUrls = filteredData.urls;
+  const filteredRequestInits = filteredData.requestInits;
+
   return Promise.all(
-    urls.map((url, i) =>
+    filteredUrls.map((url, i) =>
       f({
-        url: url!,
-        requestInit: requestInits.length === 1 ? requestInits[0] : requestInits[i],
+        url,
+        requestInit: filteredRequestInits.length === 1 ? filteredRequestInits[0] : filteredRequestInits[i],
         expectedStatusCodes,
         errorMessages,
         returnResponse,
