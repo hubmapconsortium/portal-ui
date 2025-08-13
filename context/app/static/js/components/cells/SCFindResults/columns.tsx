@@ -88,7 +88,7 @@ export const totalCellCountColumn = {
 };
 
 function MatchingGeneColumn({ hit }: CellContentProps<DatasetDocument>) {
-  const matchingGenes = useMatchingGeneContext()[hit.hubmap_id] ?? new Set<string>();
+  const matchingGenes = useMatchingGeneContext()[hit.uuid] ?? new Set<string>();
   const numberOfMatchingGenes = matchingGenes.size;
 
   const allGenes = useCellVariableNames();

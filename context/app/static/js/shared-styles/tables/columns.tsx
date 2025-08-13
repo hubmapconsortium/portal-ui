@@ -22,8 +22,8 @@ function HubmapIDCell({
   const isDataset = entity_type === 'Dataset';
   const markerGene = useOptionalGeneContext();
 
-  const isPublished = mapped_status.toLowerCase() === 'published';
-  const isPublic = mapped_data_access_level.toLowerCase() === 'public';
+  const isPublished = mapped_status && mapped_status.toLowerCase() === 'published';
+  const isPublic = mapped_data_access_level && mapped_data_access_level.toLowerCase() === 'public';
 
   const accessAllowed = isPublished && isPublic;
 
