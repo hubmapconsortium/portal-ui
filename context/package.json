@@ -134,7 +134,6 @@
     "msw-storybook-addon": "^2.0.4",
     "prettier": "^3.4.2",
     "react-test-renderer": "^18.3.1",
-    "sass-loader": "^16.0.4",
     "storybook": "^8.6.11",
     "storybook-addon-swc": "^1.2.0",
     "style-loader": "^4.0.0",
