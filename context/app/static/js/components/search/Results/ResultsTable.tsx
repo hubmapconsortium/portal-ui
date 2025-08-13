@@ -26,7 +26,7 @@ import { useSearch } from '../Search';
 import { useSearchStore } from '../store';
 import { useGetFieldLabel } from '../fieldConfigurations';
 import ViewMoreResults from './ViewMoreResults';
-import { buildQuery } from '../utils';
+import { buildQuery, isDevSearch } from '../utils';
 import useESmapping from '../useEsMapping';
 
 function SortHeaderCell({ field, label }: { field: string; label: string }) {
@@ -201,11 +201,15 @@ function SelectableHeaderCells() {
 
   const { allSearchIDs, isLoading } = useAllSearchIDs(query);
 
+  const devSearch = isDevSearch(type);
+
+  const selectTooltip = devSearch ? 'Select all entities in results.' : `Select all ${type.toLowerCase()}s in results.`;
+
   return (
     <SelectableHeaderCell
       allTableRowKeys={allSearchIDs}
       disabled={isLoading}
-      selectTooltip={`Select all ${type.toLowerCase()}s in results.`}
+      selectTooltip={selectTooltip}
       deselectTooltip="Reset all selections."
     />
   );

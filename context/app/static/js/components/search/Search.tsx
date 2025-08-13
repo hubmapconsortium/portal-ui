@@ -53,6 +53,7 @@ import { TilesSortSelect } from './Results/ResultsTiles';
 import MetadataMenu from '../searchPage/MetadataMenu';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
+import { isDevSearch, TypeProps } from './utils';
 
 interface OuterBucket {
   doc_count: number;
@@ -164,14 +165,6 @@ const EntityIcon = styled(SvgIcon)<SvgIconProps>({
   fontSize: '2.5rem',
 });
 
-interface TypeProps {
-  type: keyof Pick<typeof entityIconMap, 'Dataset' | 'Donor' | 'Sample'> | 'Dev Search';
-}
-
-function isDevSearch(type: TypeProps['type']): type is 'Dev Search' {
-  return type === 'Dev Search';
-}
-
 function Header({ type }: TypeProps) {
   const [text, icon] = useMemo(() => {
     if (isDevSearch(type)) {
@@ -197,16 +190,20 @@ function Bar({ type }: TypeProps) {
       <Box flexGrow={1}>
         <SearchBar type={type} />
       </Box>
-      <MetadataMenu type={type} />
-      <WorkspacesDropdownMenu type={type} />
-      {view === 'tile' && <TilesSortSelect />}
-      {!isDevSearch(type) && view === 'table' && (
+      {!isDevSearch(type) && (
         <>
-          <SaveEntitiesButtonFromSearch entity_type={type} />
-          <BulkDownloadButtonFromSearch type={type} />
+          <MetadataMenu type={type} />
+          <WorkspacesDropdownMenu type={type} />
+          {view === 'tile' && <TilesSortSelect />}
+          {view === 'table' && (
+            <>
+              <SaveEntitiesButtonFromSearch entity_type={type} />
+              <BulkDownloadButtonFromSearch type={type} />
+            </>
+          )}
+          <DefaultSearchViewSwitch />
         </>
       )}
-      <DefaultSearchViewSwitch />
     </Stack>
   );
 }
