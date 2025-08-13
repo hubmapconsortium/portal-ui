@@ -8,6 +8,8 @@ import {
   OrganIcon,
   DatasetIcon,
   WorkspacesIcon,
+  GeneIcon,
+  CellTypeIcon,
 } from 'js/shared-styles/icons';
 import { TimelineData } from 'js/shared-styles/Timeline/types';
 import ContactUsLink from 'js/shared-styles/Links/ContactUsLink';
@@ -41,6 +43,22 @@ const COMBINED_DATASET_LINK = createDatasetSearchLink({
 });
 
 export const HOME_TIMELINE_ITEMS: TimelineData[] = [
+  {
+    title: 'New Cell Type Pages',
+    titleHref: '/cell-types',
+    description:
+      'Explore cell type pages with organ-level distribution visualizations, list of marker genes of statistical significance, relevant datasets and cell type distribution visualizations for each of those datasets.',
+    date: 'July 2025',
+    img: <CellTypeIcon {...timelineIconProps} />,
+  },
+  {
+    title: 'New Gene Pages',
+    titleHref: '/biomarkers',
+    description:
+      'View gene pages featuring known external references like HUGO, identified cell types, relevant datasets and visualizations of expression level for those datasets.',
+    date: 'July 2025',
+    img: <GeneIcon {...timelineIconProps} />,
+  },
   {
     title: 'Workspaces Now Support Multiple Running Sessions and Updated Python Environments',
     titleHref: '/workspaces',
