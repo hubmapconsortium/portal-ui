@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useRef } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import { EXCESSIVE_NUMBER_OF_WORKSPACE_DATASETS, MAX_NUMBER_OF_WORKSPACE_DATASETS } from 'js/components/workspaces/api';
 import { WorkspacesEventCategories } from 'js/components/workspaces/types';
@@ -12,19 +12,10 @@ function useWorkspacesRestrictedDatasetsForm({
   selectedRows: Set<string>;
   deselectRows?: (rowKeys: string[]) => void;
 }) {
-  const trackEventHelper = useCallback((numProtectedRows: number) => {
-    trackEvent({
-      category: WorkspacesEventCategories.Workspaces,
-      action: 'Create Workspace / Protected datasets selected',
-      value: numProtectedRows,
-    });
-  }, []);
-
   return useRestrictedDatasetsForm({
     selectedRows,
     deselectRows,
     restrictedDatasetsErrorMessage,
-    trackEventHelper,
   });
 }
 

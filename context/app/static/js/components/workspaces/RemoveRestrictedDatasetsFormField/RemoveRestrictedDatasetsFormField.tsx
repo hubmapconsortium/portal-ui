@@ -16,9 +16,10 @@ const trackedSignatures = new Set<string>();
 
 type Props<FormType extends FieldValues> = {
   control: Control<FormType>;
+  trackEventHelper: (numRestrictedDatasets: number) => void;
 } & Pick<
   ReturnType<typeof useWorkspacesRestrictedDatasetsForm>,
-  'restrictedHubmapIds' | 'removeRestrictedDatasets' | 'restrictedRows' | 'trackEventHelper'
+  'restrictedHubmapIds' | 'removeRestrictedDatasets' | 'restrictedRows'
 >;
 function RemoveRestrictedDatasetsFormField<FormType extends FieldValues>({
   control,

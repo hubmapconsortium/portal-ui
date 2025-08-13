@@ -22,13 +22,11 @@ interface useRestrictedDatasetsFormProps {
   selectedRows: Set<string>;
   deselectRows?: (uuids: string[]) => void;
   restrictedDatasetsErrorMessage: (restrictedRows: string[]) => string;
-  trackEventHelper: (numProtectedDatasets: number) => void;
 }
 function useRestrictedDatasetsForm({
   selectedRows,
   deselectRows,
   restrictedDatasetsErrorMessage,
-  trackEventHelper,
 }: useRestrictedDatasetsFormProps) {
   const { toastSuccessRemoveRestrictedDatasets } = useWorkspaceToasts();
   // Restricted rows are those that the current user does not have access to in a workspace or bulk download.
@@ -52,7 +50,6 @@ function useRestrictedDatasetsForm({
     removeRestrictedDatasets,
     restrictedRows,
     selectedRows,
-    trackEventHelper,
   };
 }
 

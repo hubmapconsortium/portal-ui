@@ -11,7 +11,6 @@ import { useSearchHits } from 'js/hooks/useSearchData';
 import { useRestrictedDatasetsForm } from 'js/hooks/useRestrictedDatasets';
 import { createDownloadUrl } from 'js/helpers/functions';
 import { checkAndDownloadFile, postAndDownloadFile } from 'js/helpers/download';
-import { trackEvent } from 'js/helpers/trackers';
 import { getIDsQuery } from 'js/helpers/queries';
 import { restrictedDatasetsErrorMessage } from 'js/components/bulkDownload/bulkDownloadDatasetMessaging';
 
@@ -99,13 +98,6 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
     selectedRows: new Set(uuids),
     deselectRows: removeUuidsOrRows,
     restrictedDatasetsErrorMessage,
-    trackEventHelper: (numRestrictedDatasets) => {
-      trackEvent({
-        category: 'Bulk Download',
-        action: 'Protected datasets selected',
-        value: numRestrictedDatasets,
-      });
-    },
   });
 
   const downloadMetadata = useCallback(
