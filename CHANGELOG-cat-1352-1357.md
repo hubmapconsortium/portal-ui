@@ -1,2 +1,0 @@
-- Fix missing "matching gene" information.
-- Fix crashes on organ pages.

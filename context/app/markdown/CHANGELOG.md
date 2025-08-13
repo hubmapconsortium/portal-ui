@@ -1,5 +1,14 @@
 # Changelog
 
+## v1.31.1 - 2025-08-13
+
+- Fix missing "matching gene" information.
+- Fix crashes on organ pages.
+- Fix protected datasets analytics tracking bug.
+- Update What's New homepage section with July changes.
+
+
+
 ## v1.31.0 - 2025-08-12
 
 - Remove Matomo tracking for Vitessce and Cellpop, use only Google Analytics.
