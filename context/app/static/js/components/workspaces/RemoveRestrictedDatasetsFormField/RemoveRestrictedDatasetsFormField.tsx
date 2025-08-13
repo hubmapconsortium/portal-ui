@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
@@ -15,15 +15,27 @@ type Props<FormType extends FieldValues> = {
   control: Control<FormType>;
 } & Pick<
   ReturnType<typeof useWorkspacesRestrictedDatasetsForm>,
-  'restrictedHubmapIds' | 'removeRestrictedDatasets' | 'restrictedRows'
+  'restrictedHubmapIds' | 'removeRestrictedDatasets' | 'restrictedRows' | 'trackEventHelper'
 >;
 function RemoveRestrictedDatasetsFormField<FormType extends FieldValues>({
   control,
   restrictedHubmapIds,
   removeRestrictedDatasets,
   restrictedRows,
+  trackEventHelper,
 }: Props<FormType>) {
   const handleCopyClick = useHandleCopyClick();
+  const reportedRestrictedRows = useRef(false);
+
+  if (restrictedHubmapIds.length < 1) {
+    return null;
+  }
+
+  if (!reportedRestrictedRows.current) {
+    reportedRestrictedRows.current = true;
+    trackEventHelper(restrictedHubmapIds.length);
+  }
+
   const hubmapIdsString = generateCommaList(restrictedHubmapIds);
 
   return (

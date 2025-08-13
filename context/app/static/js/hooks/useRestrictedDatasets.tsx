@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import useHubmapIds from 'js/hooks/useHubmapIds';
 import { useDatasetsAccess } from 'js/hooks/useDatasetPermissions';
@@ -35,18 +35,11 @@ function useRestrictedDatasetsForm({
   const restrictedRows = useGetRestrictedDatasets(selectedRows);
   const { hubmapIds: restrictedHubmapIds } = useHubmapIds(restrictedRows);
 
-  const reportedRestrictedRows = useRef(false);
-
   const errorMessages = useMemo(() => {
     if (restrictedHubmapIds.length === 0) return [];
 
-    if (!reportedRestrictedRows.current) {
-      reportedRestrictedRows.current = true;
-      trackEventHelper(restrictedHubmapIds.length);
-    }
-
     return [restrictedDatasetsErrorMessage(restrictedHubmapIds)];
-  }, [restrictedHubmapIds, restrictedDatasetsErrorMessage, trackEventHelper]);
+  }, [restrictedHubmapIds, restrictedDatasetsErrorMessage]);
 
   const removeRestrictedDatasets = useCallback(() => {
     deselectRows?.(restrictedRows);
@@ -59,6 +52,7 @@ function useRestrictedDatasetsForm({
     removeRestrictedDatasets,
     restrictedRows,
     selectedRows,
+    trackEventHelper,
   };
 }
 

@@ -11,6 +11,7 @@ import AccordionSteps from 'js/shared-styles/accordions/AccordionSteps';
 import { useAccordionStep } from 'js/shared-styles/accordions/StepAccordion';
 import { AccordionStepsProvider } from 'js/shared-styles/accordions/AccordionSteps/store';
 import { isWorkspaceAtDatasetLimit } from 'js/helpers/functions';
+import { trackEvent } from 'js/helpers/trackers';
 import { EditWorkspaceDialogContent } from '../EditWorkspaceDialog';
 import AddDatasetsTable from '../AddDatasetsTable';
 import { useAddDatasetsFromSearchDialog } from './hooks';
@@ -18,7 +19,7 @@ import { useWorkspacesList } from '../hooks';
 import WorkspaceListItem from '../WorkspaceListItem';
 import { StopWorkspaceAlert } from '../WorkspaceLaunchStopButtons';
 import RemoveRestrictedDatasetsFormField from '../RemoveRestrictedDatasetsFormField';
-import { MergedWorkspace } from '../types';
+import { MergedWorkspace, WorkspacesEventCategories } from '../types';
 
 function SearchDialogWorkspaceListItem({
   workspace,
@@ -134,6 +135,13 @@ function AddDatasetsStep({
         restrictedHubmapIds={restrictedHubmapIds}
         removeRestrictedDatasets={removeRestrictedDatasets}
         restrictedRows={restrictedRows}
+        trackEventHelper={(numProtectedRows: number) => {
+          trackEvent({
+            category: WorkspacesEventCategories.Workspaces,
+            action: 'Create Workspace / Protected datasets selected',
+            value: numProtectedRows,
+          });
+        }}
       />
       <AddDatasetsTable {...rest} />
     </Stack>
