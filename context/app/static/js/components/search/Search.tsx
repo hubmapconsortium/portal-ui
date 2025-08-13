@@ -50,7 +50,7 @@ import FilterChips from './Facets/FilterChips';
 import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import { TilesSortSelect } from './Results/ResultsTiles';
-import MetadataMenu from '../searchPage/MetadataMenu';
+import MetadataMenu from './MetadataMenu';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
 import { isDevSearch, TypeProps } from './utils';

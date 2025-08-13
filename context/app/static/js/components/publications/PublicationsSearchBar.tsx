@@ -16,9 +16,9 @@ export default function PublicationsSearchBar() {
   const { downloadTable } = usePublications();
 
   return (
-    <Stack direction="row" justifyContent="space-between">
+    <Stack direction="row" justifyContent="space-between" mb={2} gap={2} useFlexGap>
       <SearchBar
-        sx={{ mb: 2, width: '50%' }}
+        sx={{ flexGrow: 1 }}
         placeholder={text.placeholder}
         value={search}
         onChange={(e) => setSearch(e.target.value)}
