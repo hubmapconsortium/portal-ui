@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useWorkspaceToasts } from 'js/components/workspaces/toastHooks';
 import useHubmapIds from 'js/hooks/useHubmapIds';
 import { useDatasetsAccess } from 'js/hooks/useDatasetPermissions';
@@ -22,31 +22,22 @@ interface useRestrictedDatasetsFormProps {
   selectedRows: Set<string>;
   deselectRows?: (uuids: string[]) => void;
   restrictedDatasetsErrorMessage: (restrictedRows: string[]) => string;
-  trackEventHelper: (numProtectedDatasets: number) => void;
 }
 function useRestrictedDatasetsForm({
   selectedRows,
   deselectRows,
   restrictedDatasetsErrorMessage,
-  trackEventHelper,
 }: useRestrictedDatasetsFormProps) {
   const { toastSuccessRemoveRestrictedDatasets } = useWorkspaceToasts();
   // Restricted rows are those that the current user does not have access to in a workspace or bulk download.
   const restrictedRows = useGetRestrictedDatasets(selectedRows);
   const { hubmapIds: restrictedHubmapIds } = useHubmapIds(restrictedRows);
 
-  const reportedRestrictedRows = useRef(false);
-
   const errorMessages = useMemo(() => {
     if (restrictedHubmapIds.length === 0) return [];
 
-    if (!reportedRestrictedRows.current) {
-      reportedRestrictedRows.current = true;
-      trackEventHelper(restrictedHubmapIds.length);
-    }
-
     return [restrictedDatasetsErrorMessage(restrictedHubmapIds)];
-  }, [restrictedHubmapIds, restrictedDatasetsErrorMessage, trackEventHelper]);
+  }, [restrictedHubmapIds, restrictedDatasetsErrorMessage]);
 
   const removeRestrictedDatasets = useCallback(() => {
     deselectRows?.(restrictedRows);
