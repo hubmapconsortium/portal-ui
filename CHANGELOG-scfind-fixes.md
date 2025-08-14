@@ -2,3 +2,4 @@
 - Fix visibility for X axis labels in vertical bar charts.
 - Highlight missing genes, do not display dataset overview when no results are available for genes query.
 - Add gene pathway name to scFind parameters display when viewing results of molecular query.
+- Fix Cell Ontology ID column name on cell types landing page for consistency.
