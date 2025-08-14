@@ -55,7 +55,16 @@ export default function EntityHeaderCell<Doc>({
   const active = sortState.columnId === id;
 
   return (
-    <HeaderCell key={id} sx={{ backgroundColor: 'background.paper' }}>
+    <HeaderCell
+      key={id}
+      sx={{
+        backgroundColor: 'background.paper',
+        width: {
+          sx: 'auto',
+          lg: column.width ?? 'auto',
+        },
+      }}
+    >
       <TableSortLabel
         active={active}
         direction={active ? sortState.direction : undefined}
