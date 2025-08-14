@@ -46,7 +46,7 @@ export function useSCFindGeneResults() {
   // - Union of all results for genes in the same pathway, with pathway name as the key
   // - If the intersection of the genes in the same pathway is not empty, it is also a category
   // - Any genes that do not have a result are separately listed
-  const { categorizedResults, emptyResults, order, datasetToGeneMap } = useMemo(() => {
+  const { categorizedResults, emptyResults, order, datasetToGeneMap, noResults } = useMemo(() => {
     return processGeneQueryResults({
       data,
       genes,
@@ -62,6 +62,7 @@ export function useSCFindGeneResults() {
     isLoading: isLoadingDatasets || isLoadingPathwayGenes,
     emptyResults,
     order,
+    noResults,
     ...results,
   };
 }
