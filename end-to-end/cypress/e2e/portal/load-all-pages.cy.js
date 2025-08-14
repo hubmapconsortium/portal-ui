@@ -14,7 +14,7 @@ describe("Landing pages all load", () => {
     { name: "Biomarkers", url: "/biomarkers", testId: "biomarkers-title" },
     { name: "Collections", url: "/collections", testId: "collections-title" },
     { name: "Datasets", url: "/search/datasets", testId: "search-header" },
-    { name: "Dev Search", url: "/dev-search", testId: "dev-search-title" },
+    { name: "Dev Search", url: "/dev-search", testId: "search-header" },
     { name: "Donor Diversity", url: "/diversity", testId: "diversity-title" },
     { name: "Donors", url: "/search/donors", testId: "search-header" },
     { name: "Home", url: "/", testId: "home-page-title" },

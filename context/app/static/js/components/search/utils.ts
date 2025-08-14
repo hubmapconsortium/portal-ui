@@ -230,3 +230,11 @@ export function buildQuery({
 
   return query.toJSON();
 }
+
+export interface TypeProps {
+  type: 'Dataset' | 'Donor' | 'Sample' | 'Dev Search';
+}
+
+export function isDevSearch(type: TypeProps['type']): type is 'Dev Search' {
+  return type === 'Dev Search';
+}

@@ -9,30 +9,11 @@ import Routes from './Routes';
 import Footer from './Footer';
 import Header from './Header';
 import { StyledAlert, FlexContainer } from './style';
-// Importing Search styles here so the CSS import order is correct.
-import 'js/components/searchPage/Search.scss';
 import LaunchWorkspaceDialog from './workspaces/LaunchWorkspaceDialog/LaunchWorkspaceDialog';
 import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
 import OpenKeyNavInitializer from './OpenKeyNavInitializer';
 
-// TODO: Delete this when workspaces are publicly released.
-// If we stay in limbo for a long time, this configuration could be moved out of code.
-const workspacesUsers = [
-  'nils@hms.harvard.edu',
-  'john_conroy@hms.harvard.edu',
-  'tiffany_liaw@hms.harvard.edu',
-  'tony_hsiao@hms.harvard.edu',
-  'morgan_turner@hms.harvard.edu',
-  'lisa_choy@hms.harvard.edu',
-  'tsmits@hms.harvard.edu',
-  'pdblood@andrew.cmu.edu',
-  'blood@psc.edu',
-  'jpuerto@andrew.cmu.edu',
-  'gphillip@andrew.cmu.edu',
-  'ivlachos@bidmc.harvard.edu',
-  'geremy.clair@pnnl.gov',
-];
 
 // Enable use of Map and Set in immer
 enableMapSet();
@@ -48,7 +29,7 @@ function App(props) {
   delete flaskData.endpoints;
   delete flaskData.globalAlertMd;
   const isHubmapUser = userGroups?.includes('HuBMAP');
-  const isWorkspacesUser = userGroups?.includes('Workspaces') || workspacesUsers.includes(userEmail) || isHubmapUser;
+  const isWorkspacesUser = userGroups?.includes('Workspaces') || isHubmapUser;
 
   return (
     <StrictMode>

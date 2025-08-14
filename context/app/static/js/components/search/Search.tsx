@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import {
   AggregationsTermsAggregateBase,
   AggregationsSingleMetricAggregateBase,
@@ -25,6 +25,7 @@ import { Alert } from 'js/shared-styles/alerts';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import useFindDatasetForGenes from 'js/api/scfind/useFindDatasetForGenes';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
+import { ListsIcon } from 'js/shared-styles/icons';
 import {
   SearchStoreProvider,
   useSearchStore,
@@ -49,9 +50,10 @@ import FilterChips from './Facets/FilterChips';
 import { Entity } from '../types';
 import { DefaultSearchViewSwitch } from './SearchViewSwitch';
 import { TilesSortSelect } from './Results/ResultsTiles';
-import MetadataMenu from '../searchPage/MetadataMenu';
+import MetadataMenu from './MetadataMenu';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
+import { isDevSearch, TypeProps } from './utils';
 
 interface OuterBucket {
   doc_count: number;
@@ -163,16 +165,19 @@ const EntityIcon = styled(SvgIcon)<SvgIconProps>({
   fontSize: '2.5rem',
 });
 
-interface TypeProps {
-  type: keyof Pick<typeof entityIconMap, 'Dataset' | 'Donor' | 'Sample'>;
-}
-
 function Header({ type }: TypeProps) {
+  const [text, icon] = useMemo(() => {
+    if (isDevSearch(type)) {
+      return [type, ListsIcon];
+    }
+    return [`${type}s`, entityIconMap[type as keyof typeof entityIconMap]];
+  }, [type]);
+
   return (
     <Stack direction="row" spacing={1} alignItems="center">
-      <EntityIcon component={entityIconMap[type]} color="primary" />
+      <EntityIcon component={icon} color="primary" />
       <Typography component="h1" variant="h2" data-testid="search-header">
-        {type}s
+        {text}
       </Typography>
     </Stack>
   );
@@ -185,12 +190,20 @@ function Bar({ type }: TypeProps) {
       <Box flexGrow={1}>
         <SearchBar type={type} />
       </Box>
-      <MetadataMenu type={type} />
-      <WorkspacesDropdownMenu type={type} />
-      {view === 'tile' && <TilesSortSelect />}
-      {view === 'table' && <SaveEntitiesButtonFromSearch entity_type={type} />}
-      {view === 'table' && <BulkDownloadButtonFromSearch type={type} />}
-      <DefaultSearchViewSwitch />
+      {!isDevSearch(type) && (
+        <>
+          <MetadataMenu type={type} />
+          <WorkspacesDropdownMenu type={type} />
+          {view === 'tile' && <TilesSortSelect />}
+          {view === 'table' && (
+            <>
+              <SaveEntitiesButtonFromSearch entity_type={type} />
+              <BulkDownloadButtonFromSearch type={type} />
+            </>
+          )}
+          <DefaultSearchViewSwitch />
+        </>
+      )}
     </Stack>
   );
 }
