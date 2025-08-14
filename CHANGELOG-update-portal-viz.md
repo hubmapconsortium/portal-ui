@@ -1,1 +1,2 @@
-- Update portal-visualization to support Xenium assay visualization using SpatialData object.
+- Updated portal-visualization (0.4.11) to support Xenium assay visualization using SpatialData object.
+- Updated Vitessce (JS) package to the latest version - 3.6.16.
