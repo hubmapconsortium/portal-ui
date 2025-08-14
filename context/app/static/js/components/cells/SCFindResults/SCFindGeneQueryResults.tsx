@@ -106,6 +106,7 @@ function DatasetListSection() {
 
   return (
     <Stack spacing={1} pt={2}>
+      <DatasetListHeader />
       <Description>
         Datasets expressing each selected gene are listed below. The number of datasets for each gene is shown in
         parentheses.
@@ -116,7 +117,6 @@ function DatasetListSection() {
           </>
         )}
       </Description>
-      <DatasetListHeader />
       <Tabs onChange={handleTabChange} value={openTabIndex} variant={order.length > 10 ? 'scrollable' : 'fullWidth'}>
         {order.map((gene, idx) => (
           <Tab key={gene} label={`${gene} (${categorizedResults[gene]?.length ?? 0})`} index={idx} />
