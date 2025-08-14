@@ -8,6 +8,7 @@ export default function CurrentQueryParametersDisplay() {
   const cellVariableNames = useCellVariableNames();
   const expressionLevel = watch('minimumExpressionLevel');
   const threshold = watch('minimumCellPercentage');
+  const pathway = watch('pathway');
 
   if (!formState.isSubmitted || !formState.isSubmitSuccessful || formState.isLoading) {
     return null;
@@ -18,8 +19,9 @@ export default function CurrentQueryParametersDisplay() {
   switch (queryType) {
     case 'gene':
       if (queryMethod === 'scFind') {
-        // TODO: Once we add pathways, the pathway name should be present here too
-        // return `${queryMethod} | ${pathway} | ${variables}`;
+        if (pathway) {
+          return `${queryMethod} | ${pathway.full} | ${variables}`;
+        }
         return `${queryMethod} | ${variables}`;
       }
       return (
