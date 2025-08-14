@@ -58,7 +58,7 @@ function ChartWrapper(
           "x-axis       x-axis       x-axis       legend"
         `,
         overflow: 'none',
-        gridTemplateColumns: 'auto auto auto minmax(175px, fit-content)',
+        gridTemplateColumns: 'auto auto auto minmax(175px, max-content)',
         gridTemplateRows: 'auto auto minmax(0, auto) 500px minmax(0, auto)',
       }}
       ref={ref}
@@ -73,7 +73,7 @@ function ChartWrapper(
       <Box sx={{ gridArea: 'x-axis', p: xAxisDropdown ? 1 : 0 }}>{xAxisDropdown}</Box>
       <Box sx={{ gridArea: 'legend', display: 'grid', maxHeight: '100%', overflow: 'none' }}>
         <Stack direction="column" pl={1}>
-          {dropdown && <Box sx={{ marginY: 1, minWidth: 0 }}>{dropdown}</Box>}
+          {dropdown && <Box sx={{ marginY: 1, width: '100%', minWidth: 'fit-content' }}>{dropdown}</Box>}
           <Box sx={{ flex: 1, overflowY: 'auto', gridArea: 'legend', mt: dropdown ? 0 : 2 }} tabIndex={0}>
             {colorScale && (
               <LegendOrdinal scale={colorScale} domain={domain}>
