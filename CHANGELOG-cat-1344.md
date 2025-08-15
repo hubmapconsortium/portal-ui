@@ -1,0 +1,2 @@
+- Display grouped stacked bar charts with stripes to indicate matched values.
+- Improve legend width consistency.
