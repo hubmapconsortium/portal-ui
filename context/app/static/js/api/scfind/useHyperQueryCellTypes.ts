@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey, stringOrArrayToString } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface HyperQueryCellTypesParams {
   geneList: string | string[];
@@ -41,7 +40,7 @@ export function createCellTypeNamesKey(
 }
 
 export default function useHyperQueryCellTypes(params: HyperQueryCellTypesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCellTypeNamesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<CellTypeNamesResponse, unknown, HyperQueryCellTypesKey>(key, (url) => fetcher({ url }));
 }

@@ -1,3 +1,5 @@
+import { useAppContext } from 'js/components/Contexts';
+
 // NOTE: This is the dev endpoint. We can't use flaskdata to provide this in Storybook because it doesn't exist in the Storybook environment.
 export const SCFIND_BASE_STORYBOOK = 'https://scfind.dev.hubmapconsortium.org';
 
@@ -117,4 +119,13 @@ export function stringOrArrayToString(input: string | string[]): string {
     return input.join(',');
   }
   return input;
+}
+
+/**
+ * Convenience function for accessing SCFind API keys from context.
+ * @returns An object containing the SCFind API endpoint and index version.
+ */
+export function useScFindKey() {
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  return { scFindEndpoint, scFindIndexVersion };
 }

@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey, stringOrArrayToString } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface GeneExpressionParams {
   geneList?: string | string[];
@@ -42,14 +41,14 @@ export function createGeneExpressionBinKey(
 }
 
 export function useCellTypeExpression(params: GeneExpressionParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createGeneExpressionBinKey(scFindEndpoint, params, scFindIndexVersion);
   // TODO: Update with correct response type once the API is fixed
   return useSWR<GeneExpressionBinsResponse, unknown, GeneExpressionBinKey>(key, (url) => fetcher({ url }));
 }
 
 export default function useCellTypeExpressionBins(params: GeneExpressionParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createGeneExpressionBinKey(scFindEndpoint, { ...params, bin: true }, scFindIndexVersion);
   return useSWR<GeneExpressionBinsResponse, unknown, GeneExpressionBinKey>(key, (url) => fetcher({ url }));
 }

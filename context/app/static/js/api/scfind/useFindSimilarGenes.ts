@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey, stringOrArrayToString } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface FindSimilarGenesParams {
   geneList: string | string[];
@@ -33,7 +32,7 @@ export function createFindSimilarGenesKey(
 }
 
 export default function useFindSimilarGenes(params: FindSimilarGenesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createFindSimilarGenesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<FindSimilarGenesResponse, unknown, FindSimilarGenesKey>(key, (url) => fetcher({ url }));
 }

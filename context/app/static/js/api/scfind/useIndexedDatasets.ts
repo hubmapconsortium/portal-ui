@@ -1,7 +1,6 @@
 import useSWR from 'swr/immutable';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, useScFindKey } from './utils';
 
 type IndexedDatasetsKey = string;
 
@@ -14,7 +13,7 @@ export function createIndexedDatasetsKey(scFindEndpoint: string, scFindIndexVers
 }
 
 export default function useIndexedDatasets() {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createIndexedDatasetsKey(scFindEndpoint, scFindIndexVersion);
   const swr = useSWR<IndexedDatasetsResponse, Error, IndexedDatasetsKey>(key, (url) => fetcher({ url }));
 

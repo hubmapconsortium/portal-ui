@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey, stringOrArrayToString } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface EvaluateMarkersParams {
   geneList: string | string[];
@@ -37,7 +36,7 @@ export function createCellTypeMarkersKey(
 }
 
 export default function useEvaluateMarkers(params: EvaluateMarkersParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCellTypeMarkersKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<EvaluateMarkersResponse, unknown, EvaluateMarkersKey>(key, (url) => fetcher({ url }));
 }

@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey, stringOrArrayToString } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface FindHouseKeepingGenesParams {
   cellTypes?: string | string[];
@@ -33,7 +32,7 @@ export function createFindHouseKeepingGenesKey(
 }
 
 export default function useFindHouseKeepingGenes(params: FindHouseKeepingGenesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createFindHouseKeepingGenesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<FindHouseKeepingGenesResponse, unknown, FindHouseKeepingGenesKey>(key, (url) => fetcher({ url }));
 }

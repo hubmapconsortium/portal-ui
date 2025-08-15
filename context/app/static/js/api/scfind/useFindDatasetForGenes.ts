@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey, stringOrArrayToString } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface DatasetsForGenesResponse {
   findDatasets: Record<string, string[]>;
@@ -34,7 +33,7 @@ export function createFindDatasetForGenesKey(
 }
 
 export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createFindDatasetForGenesKey(scFindEndpoint, props, scFindIndexVersion);
   return useSWR<DatasetsForGenesResponse, Error, DatasetsForGenesKey>(
     key,

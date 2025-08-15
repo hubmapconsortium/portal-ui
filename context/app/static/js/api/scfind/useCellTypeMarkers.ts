@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey, stringOrArrayToString } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 interface CellTypeMarkerInfo {
   cellType: string;
@@ -58,7 +57,7 @@ export default function useCellTypeMarkers({
   includePrefix = true,
   ...params
 }: CellTypeMarkersParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCellTypeMarkersKey(
     scFindEndpoint,
     { topK, sortField, includePrefix, ...params },

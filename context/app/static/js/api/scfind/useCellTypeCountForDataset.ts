@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, useScFindKey } from './utils';
 
 export interface CellTypeCountForDataset {
   count: number;
@@ -34,7 +33,7 @@ export function createCellTypeCountForDatasetKey(
 }
 
 export default function useCellTypeCountForDataset(props: CellTypeCountForDatasetParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCellTypeCountForDatasetKey(scFindEndpoint, props, scFindIndexVersion);
   return useSWR<CellTypeCountsForDataset, unknown, CellTypeCountForDatasetKey>(key, (url) => fetcher({ url }));
 }

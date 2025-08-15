@@ -1,8 +1,7 @@
 import useSWR from 'swr';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
 import { useMemo } from 'react';
-import { createScFindKey } from './utils';
+import { createScFindKey, useScFindKey } from './utils';
 
 interface CellTypeToCLID {
   CLIDs: string[];
@@ -30,13 +29,13 @@ export function createCLIDtoLabelKey(
 }
 
 export default function useLabelToCLID(props: CellTypeToCLIDParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCLIDtoLabelKey(scFindEndpoint, props, scFindIndexVersion);
   return useSWR<CellTypeToCLID, unknown, CellTypeToCLIDKey>(key, (url) => fetcher({ url }));
 }
 
 export function useLabelsToCLIDs(cellTypes: string[]) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const keys = cellTypes.map((cellType) => createCLIDtoLabelKey(scFindEndpoint, { cellType }, scFindIndexVersion));
 
   return useSWR<CellTypeToCLID[], unknown, CellTypeToCLIDKey[]>(keys, (urls) => multiFetcher({ urls }));

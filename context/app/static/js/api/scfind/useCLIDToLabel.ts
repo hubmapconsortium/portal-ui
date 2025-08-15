@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, useScFindKey } from './utils';
 
 interface CellTypeLabelsForCLID {
   cell_types: string[];
@@ -29,7 +28,7 @@ export function createCLIDtoLabelKey(
 }
 
 export default function useCLIDToLabel(props: CellTypeLabelsForCLIDParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCLIDtoLabelKey(scFindEndpoint, props, scFindIndexVersion);
   return useSWR<CellTypeLabelsForCLID, unknown, CellTypeCountForTissueKey>(key, (url) => fetcher({ url }));
 }
