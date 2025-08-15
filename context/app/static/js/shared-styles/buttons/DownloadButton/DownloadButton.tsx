@@ -7,7 +7,9 @@ import { TooltipButtonProps } from 'js/shared-styles/buttons/TooltipButton';
 function DownloadButton({ disabled, ...rest }: TooltipButtonProps) {
   return (
     <WhiteBackgroundIconTooltipButton disabled={disabled} {...rest}>
-      <SvgIcon color={disabled ? 'disabled' : 'primary'} component={Download} />
+      <span>
+        <SvgIcon color={disabled ? 'disabled' : 'primary'} component={Download} />
+      </span>
     </WhiteBackgroundIconTooltipButton>
   );
 }

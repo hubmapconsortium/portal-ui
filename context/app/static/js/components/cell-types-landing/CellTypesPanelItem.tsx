@@ -80,7 +80,7 @@ function CellTypesHeaderPanel() {
           sx={{ width: '100%' }}
           data-testid="cell-types-header-clid"
         >
-          CLID
+          Cell Ontology ID
         </TableSortLabel>
       </HeaderCell>
       <HeaderCell {...desktopConfig.organs} pl={2}>

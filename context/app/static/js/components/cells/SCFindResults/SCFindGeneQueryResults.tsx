@@ -86,6 +86,20 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
   );
 }
 
+function NoMatchesText({ emptyResults }: { emptyResults: string[] }) {
+  return (
+    <Stack spacing={1} pt={2}>
+      <Description>
+        No datasets were found for the selected genes:{' '}
+        <Typography component="span" color="warning">
+          {emptyResults.join(', ')}
+        </Typography>
+        .
+      </Description>
+    </Stack>
+  );
+}
+
 function DatasetListSection() {
   const { openTabIndex, handleTabChange } = useTabs();
   const genes = useCellVariableNames();
@@ -96,27 +110,30 @@ function DatasetListSection() {
     return <Skeleton variant="rectangular" width="100%" height={800} />;
   }
 
-  if (error || !order) {
-    return (
-      <Stack spacing={1} pt={2}>
-        <Description>No datasets were found for any of the selected genes: {emptyResults.join(', ')}.</Description>
-      </Stack>
-    );
+  if (error || !order || emptyResults.length === order.length) {
+    return <NoMatchesText emptyResults={genes} />;
   }
 
   return (
     <Stack spacing={1} pt={2}>
+      <DatasetListHeader />
       <Description>
         Datasets expressing each selected gene are listed below. The number of datasets for each gene is shown in
         parentheses.
         {emptyResults.length > 0 && (
-          <>
-            <br />
-            No datasets were found for {emptyResults.length} of the selected genes: {emptyResults.join(', ')}.
-          </>
+          <div>
+            No datasets were found for{' '}
+            <Typography component="span" color="warning">
+              {emptyResults.length}
+            </Typography>{' '}
+            of the selected genes:{' '}
+            <Typography component="span" color="warning">
+              {emptyResults.join(', ')}
+            </Typography>
+            .
+          </div>
         )}
       </Description>
-      <DatasetListHeader />
       <Tabs onChange={handleTabChange} value={openTabIndex} variant={order.length > 10 ? 'scrollable' : 'fullWidth'}>
         {order.map((gene, idx) => (
           <Tab key={gene} label={`${gene} (${categorizedResults[gene]?.length ?? 0})`} index={idx} />
@@ -143,7 +160,7 @@ interface SCFindGeneQueryResultsLoaderProps {
 function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLoaderProps) {
   const { setResults } = useResultsProvider();
 
-  const { datasets, isLoading, error, datasetToGeneMap } = useSCFindGeneResults();
+  const { datasets, isLoading, error, datasetToGeneMap, noResults } = useSCFindGeneResults();
 
   const deduplicatedResults = useDeduplicatedResults(datasets?.findDatasets);
 
@@ -158,25 +175,30 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
 
   return (
     <MatchingGeneContextProvider value={datasetToGeneMap}>
-      <Typography variant="subtitle1" component="p" gutterBottom>
-        Datasets Overview
-      </Typography>
-      <DatasetsOverview
-        datasets={deduplicatedResults}
-        belowTheFold={
-          <ViewIndexedDatasetsButton
-            scFindParams={{
-              scFindOnly: true,
-            }}
-            isLoading={false}
-          />
-        }
-        trackingInfo={trackingInfo}
-      >
-        This overview provides a summary of the matched datasets and their proportions relative to both indexed datasets
-        and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a tabular view.
-        Both views can be downloaded, with the visualization available as a PNG and the table as a TSV file.
-      </DatasetsOverview>
+      {!noResults && (
+        <>
+          <Typography variant="subtitle1" component="p" gutterBottom>
+            Datasets Overview
+          </Typography>
+          <DatasetsOverview
+            datasets={deduplicatedResults}
+            belowTheFold={
+              <ViewIndexedDatasetsButton
+                scFindParams={{
+                  scFindOnly: true,
+                }}
+                isLoading={false}
+              />
+            }
+            trackingInfo={trackingInfo}
+          >
+            This overview provides a summary of the matched datasets and their proportions relative to both indexed
+            datasets and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a
+            tabular view. Both views can be downloaded, with the visualization available as a PNG and the table as a TSV
+            file.
+          </DatasetsOverview>
+        </>
+      )}
       <DatasetListSection />
     </MatchingGeneContextProvider>
   );
