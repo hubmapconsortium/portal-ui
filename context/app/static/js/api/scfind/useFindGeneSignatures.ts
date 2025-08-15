@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface FindGeneSignaturesParams {
   cellTypes?: string | string[];
@@ -24,7 +24,7 @@ export function createFindGeneSignaturesKey(
     scFindEndpoint,
     'findGeneSignatures',
     {
-      cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
+      cell_types: cellTypes ? stringOrArrayToString(cellTypes) : undefined,
       min_cells: minCells ? String(minCells) : undefined,
       min_fraction: minFraction ? String(minFraction) : undefined,
     },

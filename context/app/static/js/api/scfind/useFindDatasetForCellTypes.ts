@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { multiFetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface FindDatasetForCellTypeParams {
   cellType: string;
@@ -51,7 +51,7 @@ export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetFor
       multiFetcher({
         urls,
         errorMessages: {
-          400: `No results found for ${Array.isArray(cellTypes) ? cellTypes.join(', ') : cellTypes}`,
+          400: `No results found for ${stringOrArrayToString(cellTypes)}`,
         },
       }),
     {

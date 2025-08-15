@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface DatasetsForGenesResponse {
   findDatasets: Record<string, string[]>;
@@ -27,7 +27,7 @@ export function createFindDatasetForGenesKey(
     scFindEndpoint,
     'findDatasets',
     {
-      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+      gene_list: stringOrArrayToString(geneList) || undefined, // Convert to string or return undefined if empty
     },
     scFindIndexVersion,
   );

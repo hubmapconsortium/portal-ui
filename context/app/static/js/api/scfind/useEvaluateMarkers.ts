@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface EvaluateMarkersParams {
   geneList: string | string[];
@@ -26,9 +26,9 @@ export function createCellTypeMarkersKey(
     scFindEndpoint,
     'evaluateMarkers',
     {
-      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-      cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
-      background_cell_types: Array.isArray(backgroundCellTypes) ? backgroundCellTypes.join(',') : backgroundCellTypes,
+      gene_list: stringOrArrayToString(geneList),
+      cell_types: stringOrArrayToString(cellTypes),
+      background_cell_types: backgroundCellTypes ? stringOrArrayToString(backgroundCellTypes) : undefined,
       sort_field: sortField,
       include_prefix: includePrefix !== undefined ? String(includePrefix) : undefined,
     },

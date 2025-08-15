@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface GeneExpressionParams {
   geneList?: string | string[];
@@ -32,7 +32,7 @@ export function createGeneExpressionBinKey(
     scFindEndpoint,
     base,
     {
-      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+      gene_list: stringOrArrayToString(geneList),
       // this is weird but it is how the API works - e.g. `HBM762-RPDR-282.HBM762.RPDR.282`
       cell_type: `${datasetName.replaceAll('.', '-')}.${datasetName}`,
       ...(bin ? { bin_length: '1' } : {}),

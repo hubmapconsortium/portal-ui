@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface FindHouseKeepingGenesParams {
   cellTypes?: string | string[];
@@ -24,7 +24,7 @@ export function createFindHouseKeepingGenesKey(
     scFindEndpoint,
     'findHouseKeepingGenes',
     {
-      cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
+      cell_types: cellTypes ? stringOrArrayToString(cellTypes) : undefined,
       min_recall: minRecall ? String(minRecall) : undefined,
       max_genes: maxGenes ? String(maxGenes) : undefined,
     },

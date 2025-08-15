@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface FindTissueSpecificitiesParams {
   geneList?: string | string[];
@@ -23,7 +23,7 @@ export function FindTissueSpecificitiesKey(
     scFindEndpoint,
     'findTissueSpecificities',
     {
-      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+      gene_list: geneList ? stringOrArrayToString(geneList) : undefined,
       min_cells: minCells ? String(minCells) : undefined,
     },
     scFindIndexVersion,

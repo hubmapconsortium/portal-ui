@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 type MarkerGenesKey = string;
 
@@ -21,7 +21,7 @@ function createMarkerGenesKey(
     scFindApiUrl,
     'marker_genes',
     {
-      marker_genes: Array.isArray(markerGenes) ? markerGenes.join(',') : markerGenes,
+      marker_genes: stringOrArrayToString(markerGenes),
       dataset_name: datasetName,
     },
     scFindIndexVersion,

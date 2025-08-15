@@ -106,3 +106,15 @@ export function stringIsCellType(cellType: string): boolean {
   // A cell type is a string that contains a dot (.) and optionally a colon (:)
   return cellType.includes('.') || cellType.includes(':');
 }
+
+/**
+ * Converts a string or an array of strings to a single string.
+ * @param input - The input string or array of strings.
+ * @returns The resulting string.
+ */
+export function stringOrArrayToString(input: string | string[]): string {
+  if (Array.isArray(input)) {
+    return input.join(',');
+  }
+  return input;
+}

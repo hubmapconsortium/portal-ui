@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface FindCellTypeSpecificitiesParams {
   geneList?: string | string[];
@@ -25,8 +25,8 @@ export function createCellTypeSpecificitiesKey(
     scFindEndpoint,
     'findCellTypeSpecificities',
     {
-      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-      datasets: Array.isArray(datasets) ? datasets.join(',') : datasets,
+      gene_list: geneList ? stringOrArrayToString(geneList) : undefined,
+      datasets: datasets ? stringOrArrayToString(datasets) : undefined,
       min_cells: minCells ? String(minCells) : undefined,
       min_fraction: minFraction ? String(minFraction) : undefined,
     },

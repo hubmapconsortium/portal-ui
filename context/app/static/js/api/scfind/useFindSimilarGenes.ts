@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface FindSimilarGenesParams {
   geneList: string | string[];
@@ -24,8 +24,8 @@ export function createFindSimilarGenesKey(
     scFindEndpoint,
     'findSimilarGenes',
     {
-      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-      dataset_name: Array.isArray(datasetName) ? datasetName.join(',') : datasetName,
+      gene_list: stringOrArrayToString(geneList),
+      dataset_name: stringOrArrayToString(datasetName),
       top_k: topK ? topK.toString() : undefined,
     },
     scFindIndexVersion,

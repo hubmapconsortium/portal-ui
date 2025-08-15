@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString } from './utils';
 
 export interface HyperQueryCellTypesParams {
   geneList: string | string[];
@@ -32,8 +32,8 @@ export function createCellTypeNamesKey(
     scFindEndpoint,
     'hyperQueryCellTypes',
     {
-      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-      dataset_name: Array.isArray(datasetName) ? datasetName.join(',') : datasetName,
+      gene_list: stringOrArrayToString(geneList),
+      dataset_name: datasetName ? stringOrArrayToString(datasetName) : undefined,
       include_prefix: includePrefix ? 'true' : 'false',
     },
     scFindIndexVersion,
