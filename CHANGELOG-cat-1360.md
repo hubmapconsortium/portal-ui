@@ -1,0 +1,1 @@
+- Add support for configuring SCFind index version as an environment variable.

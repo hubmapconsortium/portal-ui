@@ -1,9 +1,8 @@
 import useSWR from 'swr/immutable';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
 import { useMemo } from 'react';
 import { scaleOrdinal } from '@visx/scale';
-import { createScFindKey, formatCellTypeName } from './utils';
+import { createScFindKey, formatCellTypeName, useScFindKey } from './utils';
 
 type CellTypeNamesKey = string;
 
@@ -11,13 +10,13 @@ interface CellTypeNamesResponse {
   cellTypeNames: string[];
 }
 
-export function createCellTypeNamesKey(scFindEndpoint: string): CellTypeNamesKey {
-  return createScFindKey(scFindEndpoint, 'cellTypeNames', {});
+export function createCellTypeNamesKey(scFindEndpoint: string, scFindIndexVersion?: string): CellTypeNamesKey {
+  return createScFindKey(scFindEndpoint, 'cellTypeNames', {}, scFindIndexVersion);
 }
 
 export default function useCellTypeNames() {
-  const { scFindEndpoint } = useAppContext();
-  const key = createCellTypeNamesKey(scFindEndpoint);
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
+  const key = createCellTypeNamesKey(scFindEndpoint, scFindIndexVersion);
   const { data, ...rest } = useSWR<CellTypeNamesResponse, unknown, CellTypeNamesKey>(key, (url) => fetcher({ url }));
 
   const filteredData = useMemo(() => {

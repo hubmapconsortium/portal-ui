@@ -47,6 +47,7 @@ def get_default_flask_data():
             'ukvEndpoint': current_app.config['UKV_ENDPOINT'],
             'dataProductsEndpoint': current_app.config['DATA_PRODUCTS_ENDPOINT'],
             'scFindEndpoint': current_app.config['SCFIND_ENDPOINT'],
+            'scFindIndexVersion': current_app.config['SCFIND_DEFAULT_INDEX_VERSION']
         },
         'globalAlertMd': current_app.config.get('GLOBAL_ALERT_MD')
     }

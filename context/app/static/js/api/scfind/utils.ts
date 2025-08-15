@@ -1,3 +1,5 @@
+import { useAppContext } from 'js/components/Contexts';
+
 // NOTE: This is the dev endpoint. We can't use flaskdata to provide this in Storybook because it doesn't exist in the Storybook environment.
 export const SCFIND_BASE_STORYBOOK = 'https://scfind.dev.hubmapconsortium.org';
 
@@ -12,6 +14,7 @@ export function createScFindKey(
   scFindApiUrl: string,
   endpoint: string,
   params: Record<string, string | undefined>,
+  indexVersion?: string,
 ): string {
   const urlParams = new URLSearchParams();
   // Filter out undefined values from url params
@@ -19,8 +22,9 @@ export function createScFindKey(
     .filter(([, value]) => value)
     .forEach(([key, value]) => urlParams.append(key, value!));
 
-  // TODO: Once we add switching between index versions, update this to be dynamically set
-  urlParams.append('index_version', '2025-08-07');
+  if (indexVersion) {
+    urlParams.append('index_version', indexVersion);
+  }
   const fullUrl = new URL(`${scFindApiUrl}/api/${endpoint}?${urlParams.toString()}`);
   return fullUrl.toString();
 }
@@ -103,4 +107,25 @@ export function extractCellTypesInfo(cellTypes: string[]) {
 export function stringIsCellType(cellType: string): boolean {
   // A cell type is a string that contains a dot (.) and optionally a colon (:)
   return cellType.includes('.') || cellType.includes(':');
+}
+
+/**
+ * Converts a string or an array of strings to a single string.
+ * @param input - The input string or array of strings.
+ * @returns The resulting string.
+ */
+export function stringOrArrayToString(input: string | string[]): string {
+  if (Array.isArray(input)) {
+    return input.join(',');
+  }
+  return input;
+}
+
+/**
+ * Convenience function for accessing SCFind API keys from context.
+ * @returns An object containing the SCFind API endpoint and index version.
+ */
+export function useScFindKey() {
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  return { scFindEndpoint, scFindIndexVersion };
 }

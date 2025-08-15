@@ -1,8 +1,7 @@
 import useSWR from 'swr';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
 import { useMemo } from 'react';
-import { createScFindKey } from './utils';
+import { createScFindKey, useScFindKey } from './utils';
 
 interface CellTypeToCLID {
   CLIDs: string[];
@@ -14,21 +13,30 @@ export interface CellTypeToCLIDParams {
 
 type CellTypeToCLIDKey = string;
 
-export function createCLIDtoLabelKey(scFindEndpoint: string, { cellType }: CellTypeToCLIDParams): CellTypeToCLIDKey {
-  return createScFindKey(scFindEndpoint, 'CellType2CLID', {
-    cell_type: cellType,
-  });
+export function createCLIDtoLabelKey(
+  scFindEndpoint: string,
+  { cellType }: CellTypeToCLIDParams,
+  scFindIndexVersion?: string,
+): CellTypeToCLIDKey {
+  return createScFindKey(
+    scFindEndpoint,
+    'CellType2CLID',
+    {
+      cell_type: cellType,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useLabelToCLID(props: CellTypeToCLIDParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createCLIDtoLabelKey(scFindEndpoint, props);
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
+  const key = createCLIDtoLabelKey(scFindEndpoint, props, scFindIndexVersion);
   return useSWR<CellTypeToCLID, unknown, CellTypeToCLIDKey>(key, (url) => fetcher({ url }));
 }
 
 export function useLabelsToCLIDs(cellTypes: string[]) {
-  const { scFindEndpoint } = useAppContext();
-  const keys = cellTypes.map((cellType) => createCLIDtoLabelKey(scFindEndpoint, { cellType }));
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
+  const keys = cellTypes.map((cellType) => createCLIDtoLabelKey(scFindEndpoint, { cellType }, scFindIndexVersion));
 
   return useSWR<CellTypeToCLID[], unknown, CellTypeToCLIDKey[]>(keys, (urls) => multiFetcher({ urls }));
 }
