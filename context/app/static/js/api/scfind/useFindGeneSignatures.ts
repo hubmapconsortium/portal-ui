@@ -18,16 +18,22 @@ interface FindGeneSignaturesResponse {
 export function createFindGeneSignaturesKey(
   scFindEndpoint: string,
   { cellTypes, minCells, minFraction }: FindGeneSignaturesParams,
+  scFindIndexVersion?: string,
 ): FindGeneSignaturesKey {
-  return createScFindKey(scFindEndpoint, 'findGeneSignatures', {
-    cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
-    min_cells: minCells ? String(minCells) : undefined,
-    min_fraction: minFraction ? String(minFraction) : undefined,
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    'findGeneSignatures',
+    {
+      cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
+      min_cells: minCells ? String(minCells) : undefined,
+      min_fraction: minFraction ? String(minFraction) : undefined,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useFindGeneSignatures(params: FindGeneSignaturesParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createFindGeneSignaturesKey(scFindEndpoint, params);
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const key = createFindGeneSignaturesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<FindGeneSignaturesResponse, unknown, FindGeneSignaturesKey>(key, (url) => fetcher({ url }));
 }

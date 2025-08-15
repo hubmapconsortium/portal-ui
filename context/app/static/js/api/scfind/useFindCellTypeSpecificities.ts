@@ -19,17 +19,23 @@ interface FindCellTypeSpecificitiesResponse {
 export function createCellTypeSpecificitiesKey(
   scFindEndpoint: string,
   { geneList, datasets, minCells, minFraction }: FindCellTypeSpecificitiesParams,
+  scFindIndexVersion?: string,
 ): CellTypeSpecificitiesKey {
-  return createScFindKey(scFindEndpoint, 'findCellTypeSpecificities', {
-    gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-    datasets: Array.isArray(datasets) ? datasets.join(',') : datasets,
-    min_cells: minCells ? String(minCells) : undefined,
-    min_fraction: minFraction ? String(minFraction) : undefined,
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    'findCellTypeSpecificities',
+    {
+      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+      datasets: Array.isArray(datasets) ? datasets.join(',') : datasets,
+      min_cells: minCells ? String(minCells) : undefined,
+      min_fraction: minFraction ? String(minFraction) : undefined,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useFindCellTypeSpecificities(params: FindCellTypeSpecificitiesParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createCellTypeSpecificitiesKey(scFindEndpoint, params);
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const key = createCellTypeSpecificitiesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<FindCellTypeSpecificitiesResponse, unknown, CellTypeSpecificitiesKey>(key, (url) => fetcher({ url }));
 }

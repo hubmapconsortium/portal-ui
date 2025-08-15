@@ -16,20 +16,26 @@ type DatasetsForGenesKey = string | null;
 export function createFindDatasetForGenesKey(
   scFindEndpoint: string,
   { geneList }: DatasetsForGenesParams,
+  scFindIndexVersion?: string,
 ): DatasetsForGenesKey {
   if (
     (Array.isArray(geneList) && geneList.length === 0) ||
     (typeof geneList === 'string' && geneList.trim().length === 0)
   )
     return null;
-  return createScFindKey(scFindEndpoint, 'findDatasets', {
-    gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    'findDatasets',
+    {
+      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useFindDatasetForGenes(props: DatasetsForGenesParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createFindDatasetForGenesKey(scFindEndpoint, props);
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const key = createFindDatasetForGenesKey(scFindEndpoint, props, scFindIndexVersion);
   return useSWR<DatasetsForGenesResponse, Error, DatasetsForGenesKey>(
     key,
     (url) =>

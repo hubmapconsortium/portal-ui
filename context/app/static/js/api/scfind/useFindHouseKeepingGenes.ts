@@ -18,16 +18,22 @@ interface FindHouseKeepingGenesResponse {
 export function createFindHouseKeepingGenesKey(
   scFindEndpoint: string,
   { cellTypes, minRecall, maxGenes }: FindHouseKeepingGenesParams,
+  scFindIndexVersion?: string,
 ): FindHouseKeepingGenesKey {
-  return createScFindKey(scFindEndpoint, 'findHouseKeepingGenes', {
-    cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
-    min_recall: minRecall ? String(minRecall) : undefined,
-    max_genes: maxGenes ? String(maxGenes) : undefined,
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    'findHouseKeepingGenes',
+    {
+      cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
+      min_recall: minRecall ? String(minRecall) : undefined,
+      max_genes: maxGenes ? String(maxGenes) : undefined,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useFindHouseKeepingGenes(params: FindHouseKeepingGenesParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createFindHouseKeepingGenesKey(scFindEndpoint, params);
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const key = createFindHouseKeepingGenesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<FindHouseKeepingGenesResponse, unknown, FindHouseKeepingGenesKey>(key, (url) => fetcher({ url }));
 }

@@ -26,16 +26,22 @@ type HyperQueryCellTypesKey = string;
 export function createCellTypeNamesKey(
   scFindEndpoint: string,
   { geneList, datasetName, includePrefix }: HyperQueryCellTypesParams,
+  scFindIndexVersion?: string,
 ): HyperQueryCellTypesKey {
-  return createScFindKey(scFindEndpoint, 'hyperQueryCellTypes', {
-    gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-    dataset_name: Array.isArray(datasetName) ? datasetName.join(',') : datasetName,
-    include_prefix: includePrefix ? 'true' : 'false',
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    'hyperQueryCellTypes',
+    {
+      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+      dataset_name: Array.isArray(datasetName) ? datasetName.join(',') : datasetName,
+      include_prefix: includePrefix ? 'true' : 'false',
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useHyperQueryCellTypes(params: HyperQueryCellTypesParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createCellTypeNamesKey(scFindEndpoint, params);
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const key = createCellTypeNamesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<CellTypeNamesResponse, unknown, HyperQueryCellTypesKey>(key, (url) => fetcher({ url }));
 }

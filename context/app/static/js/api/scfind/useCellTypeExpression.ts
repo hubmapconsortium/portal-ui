@@ -22,28 +22,34 @@ type GeneExpressionBinKey = string | null;
 export function createGeneExpressionBinKey(
   scFindEndpoint: string,
   { geneList, datasetName, bin }: GeneExpressionKeyParams,
+  scFindIndexVersion?: string,
 ): GeneExpressionBinKey {
   const base = bin ? 'getCellTypeExpressionBinData' : 'getCellTypeExpression';
   if (!geneList) {
     return null;
   }
-  return createScFindKey(scFindEndpoint, base, {
-    gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
-    // this is weird but it is how the API works - e.g. `HBM762-RPDR-282.HBM762.RPDR.282`
-    cell_type: `${datasetName.replaceAll('.', '-')}.${datasetName}`,
-    ...(bin ? { bin_length: '1' } : {}),
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    base,
+    {
+      gene_list: Array.isArray(geneList) ? geneList.join(',') : geneList,
+      // this is weird but it is how the API works - e.g. `HBM762-RPDR-282.HBM762.RPDR.282`
+      cell_type: `${datasetName.replaceAll('.', '-')}.${datasetName}`,
+      ...(bin ? { bin_length: '1' } : {}),
+    },
+    scFindIndexVersion,
+  );
 }
 
 export function useCellTypeExpression(params: GeneExpressionParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createGeneExpressionBinKey(scFindEndpoint, params);
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const key = createGeneExpressionBinKey(scFindEndpoint, params, scFindIndexVersion);
   // TODO: Update with correct response type once the API is fixed
   return useSWR<GeneExpressionBinsResponse, unknown, GeneExpressionBinKey>(key, (url) => fetcher({ url }));
 }
 
 export default function useCellTypeExpressionBins(params: GeneExpressionParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createGeneExpressionBinKey(scFindEndpoint, { ...params, bin: true });
+  const { scFindEndpoint, scFindIndexVersion } = useAppContext();
+  const key = createGeneExpressionBinKey(scFindEndpoint, { ...params, bin: true }, scFindIndexVersion);
   return useSWR<GeneExpressionBinsResponse, unknown, GeneExpressionBinKey>(key, (url) => fetcher({ url }));
 }

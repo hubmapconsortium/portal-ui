@@ -12,6 +12,7 @@ export function createScFindKey(
   scFindApiUrl: string,
   endpoint: string,
   params: Record<string, string | undefined>,
+  indexVersion?: string,
 ): string {
   const urlParams = new URLSearchParams();
   // Filter out undefined values from url params
@@ -19,8 +20,9 @@ export function createScFindKey(
     .filter(([, value]) => value)
     .forEach(([key, value]) => urlParams.append(key, value!));
 
-  // TODO: Once we add switching between index versions, update this to be dynamically set
-  urlParams.append('index_version', '2025-08-07');
+  if (indexVersion) {
+    urlParams.append('index_version', indexVersion);
+  }
   const fullUrl = new URL(`${scFindApiUrl}/api/${endpoint}?${urlParams.toString()}`);
   return fullUrl.toString();
 }
