@@ -1,1 +1,0 @@
-- Set fixed widths for columns in large viewports to prevent jittering on scroll.

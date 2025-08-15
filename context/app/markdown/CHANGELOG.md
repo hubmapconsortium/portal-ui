@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.31.2 - 2025-08-15
+
+- Display grouped stacked bar charts with stripes to indicate matched values.
+- Improve legend width consistency.
+- Set fixed widths for columns in large viewports to prevent jittering on scroll.
+- Add support for configuring SCFind index version as an environment variable.
+- Move the description below the "datasets" header in the scFind gene query results.
+- Fix visibility for X axis labels in vertical bar charts.
+- Highlight missing genes, do not display dataset overview when no results are available for genes query.
+- Add gene pathway name to scFind parameters display when viewing results of molecular query.
+- Fix Cell Ontology ID column name on cell types landing page for consistency.
+- Updated portal-visualization (0.4.11) to support Xenium assay visualization using SpatialData object.
+- Updated Vitessce (JS) package to the latest version - 3.6.16.
+
+
+
 ## v1.31.1 - 2025-08-13
 
 - Fix missing "matching gene" information.
