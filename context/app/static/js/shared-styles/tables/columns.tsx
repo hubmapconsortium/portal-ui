@@ -70,6 +70,7 @@ export const hubmapID = {
   label: 'HuBMAP ID',
   sort: 'hubmap_id.keyword',
   cellContent: HubmapIDCell,
+  width: 180,
 };
 
 export const hubmapIDWithLinksInNewTab = {
@@ -87,6 +88,7 @@ export const lastModifiedTimestamp = {
   id: 'last_modified_timestamp',
   label: 'Last Modified',
   cellContent: LastModifiedTimestampCell,
+  width: 150,
 };
 
 function CreatedTimestampCell({ hit: { created_timestamp } }: CellContentProps<EntityDocument>) {
@@ -108,6 +110,7 @@ export const assayTypes = {
   label: 'Data Type',
   sort: 'mapped_data_types.keyword',
   cellContent: AssayTypesCell,
+  width: 270,
 };
 
 function StatusCell({ hit: { mapped_status, mapped_data_access_level } }: CellContentProps<DatasetDocument>) {
@@ -132,6 +135,7 @@ export const organ = {
   label: 'Organ',
   sort: 'origin_samples.mapped_organ.keyword',
   cellContent: OrganCell,
+  width: 180,
 };
 
 function withParentDonor(Component: ComponentType<{ hit: DonorDocument }>) {
@@ -149,6 +153,7 @@ export const parentDonorAge = {
   label: 'Donor Age',
   sort: 'donor.mapped_metadata.age_value',
   cellContent: withParentDonor(DonorAge),
+  width: 150,
 };
 
 function DonorSex({ hit }: CellContentProps<DonorDocument>) {
@@ -160,6 +165,7 @@ export const parentDonorSex = {
   label: 'Donor Sex',
   sort: 'donor.mapped_metadata.sex.keyword',
   cellContent: withParentDonor(DonorSex),
+  width: 150,
 };
 
 function DonorRace({ hit }: CellContentProps<DonorDocument>) {
@@ -171,6 +177,7 @@ export const parentDonorRace = {
   label: 'Donor Race',
   sort: 'donor.mapped_metadata.race.keyword',
   cellContent: withParentDonor(DonorRace),
+  width: 150,
 };
 
 export const datasetDescendants = {
@@ -178,4 +185,16 @@ export const datasetDescendants = {
   label: 'Derived Dataset Count',
   cellContent: ({ hit: { descendant_counts } }: CellContentProps<EntityDocument>) =>
     descendant_counts?.entity_type?.Dataset ?? 0,
+  width: 150,
+};
+
+export const anatomy = {
+  id: 'anatomy_2',
+  label: 'Anatomy',
+  sort: 'anatomy_2.keyword',
+  cellContent: ({ hit: { anatomy_2, anatomy_1 } }: CellContentProps<SampleDocument>) =>
+    (Array.isArray(anatomy_2) ? anatomy_2.join(', ') : anatomy_2) ||
+    (Array.isArray(anatomy_1) ? anatomy_1.join(', ') : anatomy_1) ||
+    '—',
+  width: 150,
 };

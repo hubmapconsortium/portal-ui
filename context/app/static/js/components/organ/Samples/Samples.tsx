@@ -11,6 +11,7 @@ import {
   parentDonorAge,
   parentDonorSex,
   parentDonorRace,
+  anatomy,
 } from 'js/shared-styles/tables/columns';
 import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
@@ -19,7 +20,15 @@ import { OrganPageIds } from 'js/components/organ/types';
 import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import { useOrganContext } from 'js/components/organ/contexts';
 
-const columns = [hubmapID, parentDonorAge, parentDonorSex, parentDonorRace, datasetDescendants, createdTimestamp];
+const columns = [
+  hubmapID,
+  anatomy,
+  parentDonorAge,
+  parentDonorSex,
+  parentDonorRace,
+  datasetDescendants,
+  createdTimestamp,
+];
 
 interface OrganSamplesProps {
   organTerms: string[];

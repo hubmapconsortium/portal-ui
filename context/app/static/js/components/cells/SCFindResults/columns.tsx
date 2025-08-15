@@ -78,6 +78,7 @@ export const targetCellCountColumn = {
   label: 'Target Cell Count',
   cellContent: TargetCellCountColumn,
   noSort: true,
+  width: 150,
 };
 
 export const totalCellCountColumn = {
@@ -85,6 +86,7 @@ export const totalCellCountColumn = {
   label: 'Total Cell Count',
   cellContent: TotalCellCountColumn,
   noSort: true,
+  width: 150,
 };
 
 function MatchingGeneColumn({ hit }: CellContentProps<DatasetDocument>) {
@@ -113,4 +115,5 @@ export const matchingGeneColumn = {
   label: 'Matching Genes',
   cellContent: MatchingGeneColumn,
   noSort: true,
+  width: 150,
 };

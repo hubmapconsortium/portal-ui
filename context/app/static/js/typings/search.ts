@@ -34,6 +34,8 @@ export interface SampleDocument extends EntityDocument, SampleDatasetSharedField
   donor: DonorDocument;
   origin_samples: Omit<SampleDocument, 'descendant_counts' | 'origin_samples'>;
   entity_type: 'Sample';
+  anatomy_1: string | string[];
+  anatomy_2: string | string[];
 }
 
 export interface DatasetDocument extends EntityDocument, SampleDatasetSharedFields {
