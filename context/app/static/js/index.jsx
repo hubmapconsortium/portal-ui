@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import ReactDOM from 'react-dom/client';
 
 import App from './components/App';
 import Iframe from './pages/Iframe';
@@ -15,7 +15,8 @@ import { setJsonLD } from './schema.org';
 
 initTrackers();
 
-ReactDOM.render(
+const root = ReactDOM.createRoot(document.getElementById('react-content'));
+root.render(
   window.location.pathname.startsWith('/iframe/') ? (
     <Iframe flaskData={flaskData} />
   ) : (
@@ -28,7 +29,6 @@ ReactDOM.render(
       userGroups={userGroups}
     />
   ),
-  document.getElementById('react-content'),
 );
 
 if (flaskData?.entity?.entity_type === 'Dataset') {

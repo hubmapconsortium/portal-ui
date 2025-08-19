@@ -133,6 +133,70 @@ function buildFieldConfigurations(type: SearchStoreState['type']): FieldConfigur
       label: 'Visualization Available',
       valueTransformations: [capitalizeString],
     },
+    // Dev Search Fields
+    'mapper_metadata.size': {
+      label: 'Doc Size',
+    },
+    mapped_last_modified_timestamp: {
+      label: 'Last Modified',
+    },
+    'mapper_metadata.version': {
+      label: 'Mapper Version',
+    },
+    index_version: {
+      label: 'Index Version',
+    },
+    anatomy_1: {
+      label: 'Anatomy',
+    },
+    data_types: {
+      label: 'Data Types',
+    },
+    'metadata.assay_type': {
+      label: 'Assay Type',
+    },
+    'metadata.assay_category': {
+      label: 'Assay Category',
+    },
+    'files.description': {
+      label: 'File Description',
+    },
+    mapped_data_types: {
+      label: 'Mapped Data Types',
+    },
+    sub_status: {
+      label: 'Has Substatus',
+    },
+    'metadata.living_donor_data': {
+      label: 'Has Living Donor Metadata',
+    },
+    'metadata.organ_donor_data': {
+      label: 'Has Organ Donor Data',
+    },
+    metadata: {
+      label: 'Has Metadata',
+    },
+    files: {
+      label: 'Has Files',
+    },
+    rui_location: {
+      label: 'Has RUI Location',
+    },
+    'mapper_metadata.validation_errors': {
+      label: 'Has Mapper Validation Errors',
+    },
+    'mapper_metadata.validation_errors.absolute_path': {
+      label: 'Mapper Validation Errors Absolute Path',
+    },
+    'mapper_metadata.validation_errors.absolute_schema_path': {
+      label: 'Mapper Validation Errors Absolute Schema Path',
+    },
+    next_revision_uuid: {
+      label: 'Has Next Revision',
+    },
+    previous_revision_uuid: {
+      label: 'Has Previous Revision',
+    },
   };
 }
 

@@ -4,8 +4,9 @@ import { useShallow } from 'zustand/react/shallow';
 import { trackSiteSearch, trackEvent } from 'js/helpers/trackers';
 import SearchBarComponent from 'js/shared-styles/inputs/SearchBar';
 import { useSearchStore } from './store';
+import { isDevSearch, SearchTypeProps } from './utils';
 
-function SearchBar({ type }: { type: string }) {
+function SearchBar({ type }: SearchTypeProps) {
   const { setSearch, search, analyticsCategory } = useSearchStore(
     useShallow((state) => ({
       setSearch: state.setSearch,
@@ -22,13 +23,13 @@ function SearchBar({ type }: { type: string }) {
 
       setSearch(/^\s*HBM\S+\s*$/i.exec(input) ? `"${input}"` : input);
 
-      const category = 'Free Text Search';
+      const action = 'Free Text Search';
 
       if (input) {
-        trackSiteSearch(input, category);
+        trackSiteSearch(input, action);
         trackEvent({
           category: analyticsCategory,
-          action: category,
+          action,
           label: input,
         });
       }
@@ -36,12 +37,14 @@ function SearchBar({ type }: { type: string }) {
     [analyticsCategory, input, setSearch],
   );
 
+  const placeholder = isDevSearch(type) ? 'Search entities' : `Search ${type.toLowerCase()}s`;
+
   return (
     <form onSubmit={handleSubmit}>
       <SearchBarComponent
         id="free-text-search"
         fullWidth
-        placeholder={`Search ${type.toLowerCase()}s`}
+        placeholder={placeholder}
         value={input}
         onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
           setInput(event.target.value);
