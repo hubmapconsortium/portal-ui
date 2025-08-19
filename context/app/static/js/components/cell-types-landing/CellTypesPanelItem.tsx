@@ -2,7 +2,6 @@ import React, { useMemo, useState } from 'react';
 
 import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { capitalize, useEventCallback } from '@mui/material/utils';
@@ -27,6 +26,7 @@ import Badge from '@mui/material/Badge';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import { useIndexedDatasetsForCellType } from '../cell-types/hooks';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
+import { CellTypeDescriptionSkeleton } from '../organ/OrganCellTypes/CellTypeDescription';
 
 const desktopConfig = {
   name: {
@@ -190,20 +190,7 @@ function CellTypeDescription({ clid, name }: CellTypeDescriptionProps) {
   const { data, isLoading } = useCellTypeOntologyDetail(clid);
 
   if (isLoading) {
-    return (
-      <Skeleton
-        width="100%"
-        height={48}
-        variant="rounded"
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      >
-        Loading description for {name}...
-      </Skeleton>
-    );
+    return <CellTypeDescriptionSkeleton cellType={name} />;
   }
 
   return (

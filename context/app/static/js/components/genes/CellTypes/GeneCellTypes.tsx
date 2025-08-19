@@ -133,7 +133,9 @@ function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
   return (
     <ExpandableRow
       numCells={6}
-      expandedContent={cellType.clid ? <CellTypeDescription clid={cellType.clid} /> : <Skeleton />}
+      expandedContent={
+        cellType.clid ? <CellTypeDescription clid={cellType.clid} cellType={cellType.cell_type} /> : <Skeleton />
+      }
       reverse
       onExpand={(isExpanded) => {
         const track = isExpanded ? trackExpandRow : trackCollapseRow;
@@ -148,7 +150,7 @@ function CellTypesRow({ cellType }: { cellType: CellTypeRow }) {
         )}
       </ExpandableRowCell>
       <ExpandableRowCell>
-        <CLIDCell onClick={trackCLIDClick} clid={cellType.clid} />
+        <CLIDCell onClick={trackCLIDClick} clid={cellType.clid} cellType={cellType.cell_type} />
       </ExpandableRowCell>
       <ExpandableRowCell>
         {cellType.cell_hits} / {cellType.total_cells} ({percent.format(cellType.cell_hits / cellType.total_cells)}){' '}
