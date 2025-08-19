@@ -80,6 +80,7 @@ interface ProcessedGeneQueryResults {
   emptyResults: string[];
   order: string[];
   datasetToGeneMap: Record<string, Set<string>>;
+  noResults: boolean;
 }
 
 /**
@@ -180,6 +181,7 @@ const noDataResults: ProcessedGeneQueryResults = {
   emptyResults: [],
   order: [],
   datasetToGeneMap: {},
+  noResults: true,
 };
 
 /**
@@ -221,10 +223,13 @@ export function processGeneQueryResults({
     }
   });
 
+  const noResults = emptyResults.length === genes.length;
+
   return {
     categorizedResults,
     emptyResults,
     order,
     datasetToGeneMap,
+    noResults,
   };
 }

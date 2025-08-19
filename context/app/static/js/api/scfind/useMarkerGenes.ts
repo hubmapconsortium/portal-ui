@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 type MarkerGenesKey = string;
 
@@ -12,15 +11,24 @@ export interface MarkerGenesParams {
   datasetName?: string;
 }
 
-function createMarkerGenesKey(scFindApiUrl: string, { markerGenes, datasetName }: MarkerGenesParams): MarkerGenesKey {
-  return createScFindKey(scFindApiUrl, 'marker_genes', {
-    marker_genes: Array.isArray(markerGenes) ? markerGenes.join(',') : markerGenes,
-    dataset_name: datasetName,
-  });
+function createMarkerGenesKey(
+  scFindApiUrl: string,
+  { markerGenes, datasetName }: MarkerGenesParams,
+  scFindIndexVersion?: string,
+): MarkerGenesKey {
+  return createScFindKey(
+    scFindApiUrl,
+    'marker_genes',
+    {
+      marker_genes: stringOrArrayToString(markerGenes),
+      dataset_name: datasetName,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useMarkerGenes(params: MarkerGenesParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createMarkerGenesKey(scFindEndpoint, params);
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
+  const key = createMarkerGenesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<MarkerGenesResponse, unknown, MarkerGenesKey>(key, (url) => fetcher({ url }));
 }

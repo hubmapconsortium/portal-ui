@@ -43,6 +43,7 @@ class DefaultConfig(object):
     SOFT_ASSAY_ENDPOINT = 'should-be-overridden'
     UKV_ENDPOINT = 'should-be-overridden'
     SCFIND_ENDPOINT = 'should-be-overridden'
+    SCFIND_DEFAULT_INDEX_VERSION = ''
     DATA_PRODUCTS_ENDPOINT = 'should-be-overridden'
 
     SECRET_KEY = 'should-be-overridden'

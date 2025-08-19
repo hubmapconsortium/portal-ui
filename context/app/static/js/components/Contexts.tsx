@@ -39,6 +39,7 @@ interface AppContextType {
   userTemplatesEndpoint: string;
   ubkgEndpoint: string;
   scFindEndpoint: string;
+  scFindIndexVersion?: string;
   ukvEndpoint: string;
   dataProductsEndpoint: string;
   protocolsClientToken: string;

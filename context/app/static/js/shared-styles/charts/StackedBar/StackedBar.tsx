@@ -58,8 +58,23 @@ function Fill({
   const barKey = bar.key;
   const barKeys = String(barKey).split(', ');
 
+  // Check if this is a "matched" element that should have stripes
+  const isMatched = String(barKey).includes('matched') && !String(barKey).includes('unmatched');
+
   // If it's a single-key bar or a separate scale is not provided, the pattern should just reflect the color
   if (barKeys.length === 1 || !colorScale || !canBeMultipleKeys) {
+    if (isMatched) {
+      // Create diagonal stripes for matched elements
+      return (
+        <defs>
+          <pattern id={id} patternUnits="userSpaceOnUse" width="8" height="8" patternTransform="rotate(45)">
+            <rect width="100%" height="100%" fill={bar.color} />
+            <rect width="4" height="8" fill={bar.color} fillOpacity="0.7" />
+            <rect x="4" width="4" height="8" fill="black" fillOpacity="0.3" />
+          </pattern>
+        </defs>
+      );
+    }
     return (
       <defs>
         <pattern id={id} patternUnits="userSpaceOnUse" width="1.5" height="1.5" patternTransform="rotate(90)">

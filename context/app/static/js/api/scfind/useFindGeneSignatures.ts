@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface FindGeneSignaturesParams {
   cellTypes?: string | string[];
@@ -18,16 +17,22 @@ interface FindGeneSignaturesResponse {
 export function createFindGeneSignaturesKey(
   scFindEndpoint: string,
   { cellTypes, minCells, minFraction }: FindGeneSignaturesParams,
+  scFindIndexVersion?: string,
 ): FindGeneSignaturesKey {
-  return createScFindKey(scFindEndpoint, 'findGeneSignatures', {
-    cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
-    min_cells: minCells ? String(minCells) : undefined,
-    min_fraction: minFraction ? String(minFraction) : undefined,
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    'findGeneSignatures',
+    {
+      cell_types: cellTypes ? stringOrArrayToString(cellTypes) : undefined,
+      min_cells: minCells ? String(minCells) : undefined,
+      min_fraction: minFraction ? String(minFraction) : undefined,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useFindGeneSignatures(params: FindGeneSignaturesParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createFindGeneSignaturesKey(scFindEndpoint, params);
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
+  const key = createFindGeneSignaturesKey(scFindEndpoint, params, scFindIndexVersion);
   return useSWR<FindGeneSignaturesResponse, unknown, FindGeneSignaturesKey>(key, (url) => fetcher({ url }));
 }

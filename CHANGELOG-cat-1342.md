@@ -1,1 +1,0 @@
-- Remove Matomo tracking for Vitessce and Cellpop, use only Google Analytics.

@@ -1,6 +1,6 @@
 {
   "name": "portal-ui",
-  "version": "1.30.2",
+  "version": "1.31.2",
   "dependencies": {
     "@dagrejs/dagre": "^1.1.3",
     "@datapunt/matomo-tracker-js": "^0.5.1",
@@ -70,7 +70,7 @@
     "use-deep-compare-effect": "^1.8.1",
     "use-resize-observer": "^9.1.0",
     "uuid": "^9.0.1",
-    "vitessce": "^3.6.14",
+    "vitessce": "^3.6.16",
     "zod": "^3.22.4",
     "zustand": "^4.5.2"
   },

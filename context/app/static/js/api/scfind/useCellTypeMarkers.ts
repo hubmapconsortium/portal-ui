@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { fetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 interface CellTypeMarkerInfo {
   cellType: string;
@@ -33,17 +32,23 @@ interface CellTypeMarkersResponse {
 export function createCellTypeMarkersKey(
   scFindEndpoint: string,
   { cellTypes, topK, backgroundCellTypes, sortField, includePrefix }: CellTypeMarkersParams,
+  scFindIndexVersion?: string,
 ): CellTypeMarkersKey {
   if (!cellTypes || cellTypes.length === 0) {
     return null;
   }
-  return createScFindKey(scFindEndpoint, 'cellTypeMarkers', {
-    cell_types: Array.isArray(cellTypes) ? cellTypes.join(',') : cellTypes,
-    background_cell_types: Array.isArray(backgroundCellTypes) ? backgroundCellTypes.join(',') : backgroundCellTypes,
-    top_k: topK ? topK.toString() : undefined,
-    include_prefix: includePrefix ? String(includePrefix) : undefined,
-    sort_field: sortField,
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    'cellTypeMarkers',
+    {
+      cell_types: stringOrArrayToString(cellTypes),
+      background_cell_types: backgroundCellTypes ? stringOrArrayToString(backgroundCellTypes) : undefined,
+      top_k: topK ? topK.toString() : undefined,
+      include_prefix: includePrefix ? String(includePrefix) : undefined,
+      sort_field: sortField,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export default function useCellTypeMarkers({
@@ -52,7 +57,11 @@ export default function useCellTypeMarkers({
   includePrefix = true,
   ...params
 }: CellTypeMarkersParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = createCellTypeMarkersKey(scFindEndpoint, { topK, sortField, includePrefix, ...params });
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
+  const key = createCellTypeMarkersKey(
+    scFindEndpoint,
+    { topK, sortField, includePrefix, ...params },
+    scFindIndexVersion,
+  );
   return useSWR<CellTypeMarkersResponse, unknown, CellTypeMarkersKey>(key, (url) => fetcher({ url }));
 }

@@ -20,7 +20,6 @@ function NewWorkspaceDialogFromSelections() {
     restrictedRows,
     restrictedHubmapIds,
     removeRestrictedDatasets,
-    ...restWorkspaceDatasets
   } = useCreateWorkspaceDatasets();
 
   const { deselectRows } = useSelectableTableStore();
@@ -67,7 +66,13 @@ function NewWorkspaceDialogFromSelections() {
               removeDatasets(restrictedRows);
             }}
             restrictedRows={restrictedRows}
-            {...restWorkspaceDatasets}
+            trackEventHelper={(numProtectedRows: number) => {
+              trackEvent({
+                category: WorkspacesEventCategories.Workspaces,
+                action: 'Create Workspace / Protected datasets selected',
+                value: numProtectedRows,
+              });
+            }}
           />
         </Box>
       </NewWorkspaceDialog>

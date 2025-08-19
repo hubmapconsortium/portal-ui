@@ -20,6 +20,7 @@ import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection
 import LabelledSectionText from 'js/shared-styles/sections/LabelledSectionText';
 import { Alert } from 'js/shared-styles/alerts';
 import ErrorOrWarningMessages from 'js/shared-styles/alerts/ErrorOrWarningMessages';
+import { trackEvent } from 'js/helpers/trackers';
 
 function DownloadDescription() {
   return (
@@ -72,6 +73,13 @@ function RestrictedDatasetsSection({
         restrictedHubmapIds={restrictedHubmapIds}
         removeRestrictedDatasets={removeRestrictedDatasets}
         restrictedRows={restrictedRows}
+        trackEventHelper={(numRestrictedDatasets) => {
+          trackEvent({
+            category: 'Bulk Download',
+            action: 'Protected datasets selected',
+            value: numRestrictedDatasets,
+          });
+        }}
       />
     </Stack>
   );

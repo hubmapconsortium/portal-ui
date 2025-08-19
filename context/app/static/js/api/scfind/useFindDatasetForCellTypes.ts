@@ -1,7 +1,6 @@
 import useSWR from 'swr';
 import { multiFetcher } from 'js/helpers/swr';
-import { useAppContext } from 'js/components/Contexts';
-import { createScFindKey } from './utils';
+import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface FindDatasetForCellTypeParams {
   cellType: string;
@@ -16,11 +15,17 @@ export interface FindDatasetForCellTypeResponse {
 export function createFindDatasetForCellTypeKey(
   scFindEndpoint: string,
   { cellType }: FindDatasetForCellTypeParams,
+  scFindIndexVersion?: string,
 ): FindDatasetForCellTypeKey {
   if (typeof cellType !== 'string' || cellType.length === 0) return null;
-  return createScFindKey(scFindEndpoint, 'findDatasetForCellType', {
-    cell_type: cellType,
-  });
+  return createScFindKey(
+    scFindEndpoint,
+    'findDatasetForCellType',
+    {
+      cell_type: cellType,
+    },
+    scFindIndexVersion,
+  );
 }
 
 export interface FindDatasetForCellTypesParams {
@@ -35,15 +40,17 @@ type FindDatasetForCellTypesKey = FindDatasetForCellTypeKey[];
  * @returns A list of HBM dataset IDs that contain the given cell types.
  */
 export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetForCellTypesParams) {
-  const { scFindEndpoint } = useAppContext();
-  const key = cellTypes.map((cellType) => createFindDatasetForCellTypeKey(scFindEndpoint, { cellType }));
+  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
+  const key = cellTypes.map((cellType) =>
+    createFindDatasetForCellTypeKey(scFindEndpoint, { cellType }, scFindIndexVersion),
+  );
   return useSWR<FindDatasetForCellTypeResponse[], unknown, FindDatasetForCellTypesKey>(
     key,
     (urls) =>
       multiFetcher({
         urls,
         errorMessages: {
-          400: `No results found for ${Array.isArray(cellTypes) ? cellTypes.join(', ') : cellTypes}`,
+          400: `No results found for ${stringOrArrayToString(cellTypes)}`,
         },
       }),
     {

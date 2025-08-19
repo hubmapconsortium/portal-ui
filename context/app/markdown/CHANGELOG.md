@@ -1,5 +1,41 @@
 # Changelog
 
+## v1.31.2 - 2025-08-15
+
+- Display grouped stacked bar charts with stripes to indicate matched values.
+- Improve legend width consistency.
+- Set fixed widths for columns in large viewports to prevent jittering on scroll.
+- Add support for configuring SCFind index version as an environment variable.
+- Move the description below the "datasets" header in the scFind gene query results.
+- Fix visibility for X axis labels in vertical bar charts.
+- Highlight missing genes, do not display dataset overview when no results are available for genes query.
+- Add gene pathway name to scFind parameters display when viewing results of molecular query.
+- Fix Cell Ontology ID column name on cell types landing page for consistency.
+- Updated portal-visualization (0.4.11) to support Xenium assay visualization using SpatialData object.
+- Updated Vitessce (JS) package to the latest version - 3.6.16.
+
+
+
+## v1.31.1 - 2025-08-13
+
+- Fix missing "matching gene" information.
+- Fix crashes on organ pages.
+- Fix protected datasets analytics tracking bug.
+- Update What's New homepage section with July changes.
+
+
+
+## v1.31.0 - 2025-08-12
+
+- Remove Matomo tracking for Vitessce and Cellpop, use only Google Analytics.
+- Prevent empty parentheses from showing up in Samples tables.
+- Add support for updated scFind index format.
+- Improve "view dataset" links to handle arbitrary scFind queries.
+- Add multi-value filter chips to search page.
+- Add "view datasets" links to biomarkers landing page.
+
+
+
 ## v1.30.2 - 2025-08-08
 
 - Support scFind results with both UUID and HBM ID outputs.

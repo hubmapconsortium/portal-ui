@@ -173,8 +173,16 @@ function EntityTable<Doc extends Entity>({
                       cellComponent={TableCellComponent}
                     />
                   )}
-                  {columns.map(({ cellContent: CellContent, id }) => (
-                    <TableCellComponent key={id}>
+                  {columns.map(({ cellContent: CellContent, id, width }) => (
+                    <TableCellComponent
+                      key={id}
+                      sx={{
+                        width: {
+                          xs: 'auto',
+                          lg: width ?? 'auto',
+                        },
+                      }}
+                    >
                       <CellContent hit={hit._source} trackingInfo={trackingInfo} />
                     </TableCellComponent>
                   ))}

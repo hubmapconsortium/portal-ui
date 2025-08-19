@@ -247,14 +247,27 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
     }
   }, [xAxis, compareToAll, indexed, all]);
 
+  // Create color keys for both matched and unmatched, but map them to the same base colors
   const compareByColorKeys = useMemo(() => {
     return compareByKeys.map((key) => [`${key} matched`, `${key} unmatched`]).flat();
   }, [compareByKeys]);
 
+  // Create color values that repeat the base colors for matched/unmatched pairs
+  const colorValues = useMemo(() => {
+    const baseColors = colors.slice(0, compareByKeys.length);
+    return compareByKeys.map((_, index) => [baseColors[index], baseColors[index]]).flat();
+  }, [compareByKeys, colors]);
+
   const xScale = useBandScale(xAxisKeys, { padding: 0.1 });
   const colorScale = useOrdinalScale(compareByColorKeys, {
     domain: compareByColorKeys,
-    range: colors,
+    range: colorValues,
+  });
+
+  // Create a separate legend scale that only shows the base categories
+  const legendColorScale = useOrdinalScale(compareByKeys, {
+    domain: compareByKeys,
+    range: colors.slice(0, compareByKeys.length),
   });
 
   const yScaleDomain = useMemo(() => {
@@ -276,13 +289,14 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
     <>
       <Description>
         The chart below shows the distribution of HuBMAP datasets that are compatible with the scFind method. The
-        distribution is based on the number of unique donors and the average age of donors in each dataset.
+        distribution is based on the number of unique donors and the average age of donors in each dataset. Striped
+        segments represent matched datasets, while solid segments represent unmatched datasets.
       </Description>
       <Paper>
         <ChartWrapper
           ref={chartRef}
           margin={margin}
-          colorScale={colorScale}
+          colorScale={legendColorScale}
           dividersInLegend={compareBy === 'Race'}
           additionalControls={
             <Stack direction="row" spacing={2} px={1} pt={1} alignItems="center" useFlexGap>
@@ -323,7 +337,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
               label="Compare by"
               onChange={onChangeCompareBy}
               fullWidth
-              sx={{ minWidth: 'min(fit-content, 175px)', pr: 1 }}
+              sx={{ minWidth: 'max(fit-content, 175px)', pr: 1 }}
             />
           }
           xAxisDropdown={
