@@ -55,7 +55,7 @@ const desktopConfig = {
 function CellTypesHeaderPanel() {
   const isMobile = useIsMobile();
   const { sortState, organIsSelected, organs: organsState } = useCellTypesSearchState();
-  const { setSort, deselectAllOrgans, toggleOrgan } = useCellTypesSearchActions();
+  const { setSort, deselectAllOrgans, selectAllOrgans, toggleOrgan } = useCellTypesSearchActions();
 
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
@@ -116,13 +116,9 @@ function CellTypesHeaderPanel() {
           }}
           data-testid="cell-types-header-organs"
           endIcon={
-            organSelectionIsNotDefault ? (
-              <Badge badgeContent={organsState.length} color="success">
-                <Filter />
-              </Badge>
-            ) : (
+            <Badge badgeContent={organSelectionIsNotDefault ? organsState.length : null} color="success">
               <Filter />
-            )
+            </Badge>
           }
         >
           Organs
@@ -144,6 +140,9 @@ function CellTypesHeaderPanel() {
         >
           <MenuItem onClick={deselectAllOrgans} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
             <ListItemText>Deselect All Organs</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={selectAllOrgans} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <ListItemText>Select All Organs</ListItemText>
           </MenuItem>
           <Divider />
           {organs.map((organ) => {
@@ -264,17 +263,20 @@ interface CellTypePanelItemProps {
 }
 
 function OrgansCell({ organs }: { organs: string[] }) {
-  const { organIsSelected } = useCellTypesSearchState();
+  const { organIsSelected, filterIsInactive } = useCellTypesSearchState();
 
   const sortedOrgans = useMemo(() => {
     return organs.sort((a, b) => {
       const aIsSelected = organIsSelected(a);
       const bIsSelected = organIsSelected(b);
+      if (filterIsInactive || (aIsSelected && bIsSelected)) {
+        return a.localeCompare(b);
+      }
       if (aIsSelected && !bIsSelected) return -1; // a is selected, b is not
       if (!aIsSelected && bIsSelected) return 1; // b is selected, a is not
       return a.localeCompare(b); // both are either selected or not, sort alphabetically
     });
-  }, [organs, organIsSelected]);
+  }, [organs, organIsSelected, filterIsInactive]);
 
   return (
     <>
