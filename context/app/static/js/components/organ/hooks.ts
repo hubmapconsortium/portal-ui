@@ -27,7 +27,7 @@ export function useUUIDsFromHubmapIds(hubmapIds: string[]) {
 
 export function useFormattedCellTypeName(cellType: string) {
   const { organ } = useOrganContext();
-  return `${organ.name.toLowerCase()}.${cellType}`;
+  return `${capitalize(organ.name)}.${cellType}`;
 }
 
 export function useFormattedCellTypeNames(cellTypes: string[]) {
@@ -36,8 +36,7 @@ export function useFormattedCellTypeNames(cellTypes: string[]) {
 }
 
 export function useCLID(cellType: string) {
-  const { organ } = useOrganContext();
-  const scFindKey = `${capitalize(organ.name)}.${cellType}`;
+  const scFindKey = useFormattedCellTypeName(cellType);
 
   const { data } = useLabelToCLID({ cellType: scFindKey });
 
