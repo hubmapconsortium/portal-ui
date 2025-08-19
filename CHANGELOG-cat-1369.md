@@ -1,0 +1,7 @@
+- Fix issues with cell type tables not loading on organ pages.
+- Add x/y labels to the grouped stacked bar chart.
+- Move the X/Y axis selection onto the same row above the graph.
+- Add filtering by organ to the scFind gene lookup results.
+- Add filtering for all Entity Tables, with infinite scrolling on a per-column basis.
+- Move the filter by organ functionality to the organ column label on the cell types landing page.
+- Add a "description is loading" message to cell type rows with expandable descriptions.
