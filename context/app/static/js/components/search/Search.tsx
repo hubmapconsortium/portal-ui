@@ -53,7 +53,7 @@ import { TilesSortSelect } from './Results/ResultsTiles';
 import MetadataMenu from './MetadataMenu';
 import SearchNote from './SearchNote';
 import { SCFindParams } from '../organ/utils';
-import { isDevSearch, TypeProps } from './utils';
+import { isDevSearch, SearchTypeProps } from './utils';
 
 interface OuterBucket {
   doc_count: number;
@@ -165,7 +165,7 @@ const EntityIcon = styled(SvgIcon)<SvgIconProps>({
   fontSize: '2.5rem',
 });
 
-function Header({ type }: TypeProps) {
+function Header({ type }: SearchTypeProps) {
   const [text, icon] = useMemo(() => {
     if (isDevSearch(type)) {
       return [type, ListsIcon];
@@ -183,7 +183,7 @@ function Header({ type }: TypeProps) {
   );
 }
 
-function Bar({ type }: TypeProps) {
+function Bar({ type }: SearchTypeProps) {
   const view = useSearchStore((state) => state.view);
   return (
     <Stack direction="row" spacing={1}>
@@ -249,7 +249,7 @@ function SCFindAlert() {
   return null;
 }
 
-const Search = React.memo(function Search({ type, facetGroups }: TypeProps & { facetGroups: FacetGroups }) {
+const Search = React.memo(function Search({ type, facetGroups }: SearchTypeProps & { facetGroups: FacetGroups }) {
   return (
     <Stack spacing={2} mb={4}>
       <SavedListsSuccessAlert />

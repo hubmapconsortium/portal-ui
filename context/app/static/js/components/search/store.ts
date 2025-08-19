@@ -5,6 +5,7 @@ import history from 'history/browser';
 import { SWRConfiguration } from 'swr';
 import { z } from 'zod';
 import { SCFindParams } from '../organ/utils';
+import { SearchTypeProps } from './utils';
 
 export interface SortField {
   field: string;
@@ -113,7 +114,7 @@ export interface SearchState<V> {
   size: number;
   endpoint: string;
   swrConfig?: SWRConfiguration;
-  type: 'Donor' | 'Sample' | 'Dataset' | 'Dev Search';
+  type: SearchTypeProps['type'];
   analyticsCategory: string;
   scFindParams?: SCFindParams;
 }
