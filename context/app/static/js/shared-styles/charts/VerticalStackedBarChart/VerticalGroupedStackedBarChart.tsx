@@ -308,7 +308,7 @@ function GroupedBarStackChart<
   const { xWidth, yHeight, updatedMargin } = useVerticalChart({
     margin,
     tickLabelSize: TICK_LABEL_SIZE,
-    xAxisTickLabels: [],
+    xAxisTickLabels,
     parentWidth,
     parentHeight,
   });
@@ -337,6 +337,7 @@ function GroupedBarStackChart<
         hideTicks
         hideAxisLine
         label={yAxisLabel}
+        labelOffset={24}
         tickValues={getTickValues?.(yScale)}
         tickLabelProps={() => ({
           fill: 'black',
@@ -372,6 +373,12 @@ function GroupedBarStackChart<
         left={updatedMargin.left}
         scale={xScale}
         label={xAxisLabel}
+        labelProps={{
+          fontSize: 14,
+          color: 'black',
+          fontWeight: 500,
+          fontFamily: 'Inter Variable',
+        }}
         hideTicks
         labelOffset={24}
       />

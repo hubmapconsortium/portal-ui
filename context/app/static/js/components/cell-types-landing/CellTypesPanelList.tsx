@@ -46,11 +46,6 @@ export default function CellTypesPanelList() {
     }
     const propsList: PanelProps[] = [
       {
-        key: 'filters',
-        noHover: true,
-        children: <CellTypesPanel.Filters />,
-      },
-      {
         key: 'header',
         noPadding: true,
         children: <CellTypesPanel.Header />,

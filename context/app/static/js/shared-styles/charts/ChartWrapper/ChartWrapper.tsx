@@ -46,16 +46,17 @@ function ChartWrapper(
 ) {
   const domain = [...(colorScale?.domain() ?? [])].sort(pullUpMultiple);
   const allKeysDomain = [...(allKeysScale?.domain() ?? [])].sort(pullUpMultiple);
+  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+  const hasAxisDropdown = Boolean(xAxisDropdown || yAxisDropdown);
   return (
     <Box
       sx={{
         display: 'grid',
         gridTemplateAreas: `
-          "title        title        title        buttons"
-          "top-controls top-controls top-controls top-controls"
-          "y-axis       y-axis       y-axis       legend"
-          "chart        chart        chart        legend"
-          "x-axis       x-axis       x-axis       legend"
+          "title          title         title          buttons"
+          "top-controls   top-controls  top-controls   top-controls"
+          "axis-controls  axis-controls axis-controls  legend"
+          "chart          chart         chart          legend"
         `,
         overflow: 'none',
         gridTemplateColumns: 'auto auto auto minmax(175px, max-content)',
@@ -68,9 +69,11 @@ function ChartWrapper(
           {chartTitle && <Typography>{chartTitle}</Typography>}
         </TitleWrapper>
       )}
-      <Box sx={{ gridArea: 'y-axis', p: yAxisDropdown ? 1 : 0 }}>{yAxisDropdown}</Box>
+      <Stack direction="row" gap={1} sx={{ gridArea: 'axis-controls', p: hasAxisDropdown ? 1 : 0 }}>
+        {xAxisDropdown}
+        {yAxisDropdown}
+      </Stack>
       <Box sx={{ gridArea: 'chart' }}>{children}</Box>
-      <Box sx={{ gridArea: 'x-axis', p: xAxisDropdown ? 1 : 0 }}>{xAxisDropdown}</Box>
       <Box sx={{ gridArea: 'legend', display: 'grid', maxHeight: '100%', overflow: 'none' }}>
         <Stack direction="column" pl={1}>
           {dropdown && <Box sx={{ marginY: 1, width: '100%', minWidth: 'fit-content' }}>{dropdown}</Box>}

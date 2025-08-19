@@ -4,15 +4,18 @@ import { SearchHit, SearchRequest } from '@elastic/elasticsearch/lib/api/types';
 
 import { useSortState, ColumnNameMapping, SortState } from 'js/hooks/useSortState';
 import { useScrollSearchHits, useAllSearchIDs } from 'js/hooks/useSearchData';
+import { useColumnFilters } from 'js/hooks/useColumnFilters';
+import { Column } from 'js/shared-styles/tables/EntitiesTable/types';
 
 interface AllSearchIDsTypes {
   allSearchIDs: string[];
 }
 
-interface ScrollTableTypes {
+interface ScrollTableTypes<Doc> {
   query: SearchRequest;
   columnNameMapping: ColumnNameMapping;
   initialSortState: SortState;
+  columns: Column<Doc>[];
 }
 
 interface UseScrollSearchHitsTypes<Document> {
@@ -22,15 +25,31 @@ interface UseScrollSearchHitsTypes<Document> {
   totalHitsCount: number;
 }
 
-function useScrollTable<Document>({ query, columnNameMapping, initialSortState }: ScrollTableTypes) {
+function useScrollTable<Document>({ query, columnNameMapping, initialSortState, columns }: ScrollTableTypes<Document>) {
   const { allSearchIDs } = useAllSearchIDs(query) as AllSearchIDsTypes;
 
   const { sortState, setSort, sort } = useSortState(columnNameMapping, initialSortState);
 
   const queryWithSort = { ...query, sort } as SearchRequest;
 
+  // Initialize column filters
+  const {
+    filteredQuery,
+    aggregationsLoading,
+    setColumnFilter,
+    clearColumnFilter,
+    clearAllFilters,
+    toggleFilterValue,
+    getColumnValues,
+    getColumnSelectedValues,
+  } = useColumnFilters({
+    columns,
+    baseQuery: queryWithSort,
+    enabled: true,
+  });
+
   const { searchHits, isLoading, loadMore, totalHitsCount } = useScrollSearchHits(
-    queryWithSort,
+    filteredQuery,
     {},
   ) as UseScrollSearchHitsTypes<Document>;
 
@@ -74,6 +93,14 @@ function useScrollTable<Document>({ query, columnNameMapping, initialSortState }
     virtualRows,
     tableBodyPadding,
     tableContainerRef,
+    // Column filter functionality
+    aggregationsLoading,
+    setColumnFilter,
+    clearColumnFilter,
+    clearAllFilters,
+    toggleFilterValue,
+    getColumnValues,
+    getColumnSelectedValues,
   };
 }
 

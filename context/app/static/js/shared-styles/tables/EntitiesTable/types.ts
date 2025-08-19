@@ -10,6 +10,7 @@ export interface Column<Doc> {
   noSort?: boolean;
   tooltipText?: string;
   width?: number;
+  filterable?: boolean;
 }
 
 export interface EntitiesTabTypes<Doc extends Entity> {
