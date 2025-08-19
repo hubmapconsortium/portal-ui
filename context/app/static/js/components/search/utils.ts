@@ -231,10 +231,10 @@ export function buildQuery({
   return query.toJSON();
 }
 
-export interface TypeProps {
+export interface SearchTypeProps {
   type: 'Dataset' | 'Donor' | 'Sample' | 'Dev Search';
 }
 
-export function isDevSearch(type: TypeProps['type']): type is 'Dev Search' {
+export function isDevSearch(type: SearchTypeProps['type']): type is 'Dev Search' {
   return type === 'Dev Search';
 }

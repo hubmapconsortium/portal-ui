@@ -4,9 +4,9 @@ import { useShallow } from 'zustand/react/shallow';
 import { trackSiteSearch, trackEvent } from 'js/helpers/trackers';
 import SearchBarComponent from 'js/shared-styles/inputs/SearchBar';
 import { useSearchStore } from './store';
-import { isDevSearch, TypeProps } from './utils';
+import { isDevSearch, SearchTypeProps } from './utils';
 
-function SearchBar({ type }: TypeProps) {
+function SearchBar({ type }: SearchTypeProps) {
   const { setSearch, search, analyticsCategory } = useSearchStore(
     useShallow((state) => ({
       setSearch: state.setSearch,
