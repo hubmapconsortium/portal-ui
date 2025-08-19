@@ -1,5 +1,6 @@
 import { useSearchHits } from 'js/hooks/useSearchData';
 import useLabelToCLID from 'js/api/scfind/useLabelToCLID';
+import { capitalize } from '@mui/material/utils';
 import { useOrganContext } from './contexts';
 
 export function useUUIDsFromHubmapIds(hubmapIds: string[]) {
@@ -31,12 +32,12 @@ export function useFormattedCellTypeName(cellType: string) {
 
 export function useFormattedCellTypeNames(cellTypes: string[]) {
   const { organ } = useOrganContext();
-  return cellTypes.map((cellType) => `${organ.name.toLowerCase()}.${cellType}`);
+  return cellTypes.map((cellType) => `${capitalize(organ.name)}.${cellType}`);
 }
 
 export function useCLID(cellType: string) {
   const { organ } = useOrganContext();
-  const scFindKey = `${organ.name.toLowerCase()}.${cellType}`;
+  const scFindKey = `${capitalize(organ.name)}.${cellType}`;
 
   const { data } = useLabelToCLID({ cellType: scFindKey });
 
