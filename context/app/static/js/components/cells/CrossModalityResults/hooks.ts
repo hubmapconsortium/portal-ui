@@ -2,6 +2,7 @@ import useSWRImmutable from 'swr/immutable';
 import useSWR from 'swr';
 import { SWRError } from 'js/helpers/swr/errors';
 import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
+import { useEffect } from 'react';
 import CellsService, {
   DatasetsSelectedByExpressionResponse,
   GetDatasetsProps,
@@ -10,6 +11,7 @@ import CellsService, {
 import { extractCLID } from './utils';
 import { useCrossModalityQueryParameters } from '../MolecularDataQueryForm/hooks';
 import { QueryType } from '../queryTypes';
+import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 
 const fetchCellTypeNames = async (cellName: string) => {
   return new CellsService().getAllNamesForCellType(cellName);
@@ -52,6 +54,18 @@ function unwrapResults<T extends QueryType>(
 
 export function useCrossModalityResults<T extends QueryType>() {
   const parameters = useCrossModalityQueryParameters<T>();
-  const swr = useSWR<GetDatasetsResponse<T>, Error, GetDatasetsProps<T>>(parameters, fetchCrossModalityResults);
-  return { ...swr, parameters, data: unwrapResults(swr?.data) };
+  const { data, isLoading, error, ...swr } = useSWR<GetDatasetsResponse<T>, Error, GetDatasetsProps<T>>(
+    parameters,
+    fetchCrossModalityResults,
+  );
+
+  const unwrappedResults = unwrapResults(data);
+
+  const { setResults } = useResultsProvider();
+
+  useEffect(() => {
+    setResults(unwrappedResults.length, isLoading, error);
+  }, [unwrappedResults, setResults, isLoading, error]);
+
+  return { ...swr, parameters, data: unwrappedResults, isLoading, error };
 }
