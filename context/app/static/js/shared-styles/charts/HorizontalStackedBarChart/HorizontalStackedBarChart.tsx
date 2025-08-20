@@ -65,6 +65,8 @@ interface HorizontalStackedBarChartProps<Datum, XAxisScale extends AnyD3Scale, Y
   ) => void;
   getAriaLabel?: (d: TooltipData<Datum>) => string;
   canBeMultipleKeys?: boolean;
+  xTickFormat?: (value: number) => string;
+  xTickValues?: number[];
 }
 
 function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisScale extends AnyD3Scale>({
@@ -92,6 +94,8 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
   getAriaLabel,
   srOnlyLabels,
   canBeMultipleKeys = false,
+  xTickFormat,
+  xTickValues,
 }: HorizontalStackedBarChartProps<Datum, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin, longestLabelSize } = useHorizontalChart({
     margin,
@@ -191,6 +195,8 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
             stroke="black"
             tickStroke="black"
             label={xAxisLabel}
+            tickValues={xTickValues}
+            tickFormat={xTickFormat}
             labelProps={axisLabelProps}
             tickLabelProps={() => ({
               fill: 'black',
