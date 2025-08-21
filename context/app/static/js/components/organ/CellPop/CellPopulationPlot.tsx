@@ -11,6 +11,7 @@ import OrganDetailSection from 'js/components/organ/OrganDetailSection';
 import { OrganPageIds } from 'js/components/organ/types';
 import { useCellTypeCountForDatasets } from 'js/api/scfind/useCellTypeCountForDataset';
 import { formatCellTypeName } from 'js/api/scfind/utils';
+import { useLabelToCLIDMap } from 'js/api/scfind/useLabelToCLID';
 import CellPopDescription from './CellPopDescription';
 import CellPopActions from './CellPopActions';
 import { useTrackCellpop } from './hooks';
@@ -34,6 +35,28 @@ type CellPopData = ComponentProps<typeof CellPop>['data'];
 const useCellPopData = (datasets: string[] | undefined = []): CellPopData => {
   const { data } = useCellTypeCountForDatasets({ datasets });
 
+  // Get all unique cell type names first
+  const [allCellTypeNames, formattedCellTypeNames] = useMemo(() => {
+    if (!data || Object.keys(data).length === 0) {
+      return [[], []];
+    }
+
+    const allCellTypes = new Set<string>();
+    Object.values(data).forEach((cellTypeCounts) => {
+      cellTypeCounts.forEach((cellType) => {
+        allCellTypes.add(cellType.index);
+      });
+    });
+    const allNames = Array.from(allCellTypes);
+    const formattedNames = allNames.map(formatCellTypeName);
+    return [allNames, formattedNames] as const;
+  }, [data]);
+
+  // Get cell type to ontology ID mappings
+  const { labelToCLIDMap } = useLabelToCLIDMap(allCellTypeNames, {
+    formatCellTypeNames: true,
+  });
+
   // Format data for CellPop component
   const formattedData = useMemo(() => {
     if (!data || Object.keys(data).length === 0) {
@@ -44,13 +67,7 @@ const useCellPopData = (datasets: string[] | undefined = []): CellPopData => {
     const rowNames = Object.keys(data);
 
     // Column names are all unique cell type indices across all datasets
-    const allCellTypes = new Set<string>();
-    Object.values(data).forEach((cellTypeCounts) => {
-      cellTypeCounts.forEach((cellType) => {
-        allCellTypes.add(formatCellTypeName(cellType.index));
-      });
-    });
-    const colNames = Array.from(allCellTypes);
+    const colNames = formattedCellTypeNames;
 
     // Counts matrix: array of [dataset UUID, cell type index, count] tuples
     const countsMatrix: [string, string, number][] = [];
@@ -70,17 +87,67 @@ const useCellPopData = (datasets: string[] | undefined = []): CellPopData => {
       });
     });
 
+    // Create metadata with cell type ontology IDs
+    const colsMetadata: Record<string, Record<string, string | number>> = {};
+    colNames.forEach((cellTypeName) => {
+      const clids = labelToCLIDMap[cellTypeName];
+      if (clids && clids.length > 0) {
+        colsMetadata[cellTypeName] = {
+          'Cell Ontology Label': cellTypeName,
+          CLID: clids[0], // Use the first CLID if multiple exist
+        };
+      } else {
+        colsMetadata[cellTypeName] = {
+          'Cell Ontology Label': cellTypeName,
+        };
+      }
+    });
+
     return {
       rowNames,
       colNames,
       countsMatrixOrder: ['row', 'col', 'value'],
       countsMatrix,
-      metadata: {}, // Empty object for now, will be filled in later
+      metadata: {
+        cols: colsMetadata,
+      },
     };
-  }, [data]);
+  }, [data, formattedCellTypeNames, labelToCLIDMap]);
 
   return formattedData;
 };
+
+const yAxisConfig = {
+  label: 'Dataset',
+  createHref: (row: string) => `https://portal.hubmapconsortium.org/browse/${row}`,
+  createSubtitle: (_: string, metadataValues: Record<string, string | number> | undefined) => {
+    const assay = metadataValues?.assay;
+    const anatomy = metadataValues?.anatomy ?? 'Unknown';
+    return `${anatomy} | ${assay}`;
+  },
+  icon: <DatasetIcon />,
+};
+
+const xAxisConfig = {
+  label: 'Cell Type',
+  createHref: (col: string) => `https://www.ebi.ac.uk/ols4/search?q=${col}&ontology=cl`,
+  createSubtitle: (_: string, metadataValues: Record<string, string | number> | undefined) => {
+    if (metadataValues && 'Cell Ontology Label' in metadataValues) {
+      return metadataValues['Cell Ontology Label'] as string;
+    }
+    return '';
+  },
+  icon: <CellTypeIcon />,
+};
+
+const initialProportions: ComponentProps<typeof CellPop>['initialProportions'] = [
+  [0.4, 0.5, 0.1],
+  [0.3, 0.6, 0.1],
+];
+
+const tooltipFields: ComponentProps<typeof CellPop>['tooltipFields'] = ['Cell Ontology Label', 'CLID'];
+
+const disabledControls: ComponentProps<typeof CellPop>['disabledControls'] = ['theme'];
 
 function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
   const { fullscreenVizId, theme } = useVisualizationStore(visualizationSelector);
@@ -101,34 +168,12 @@ function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
           <CellPop
             data={data}
             theme={theme}
-            yAxis={{
-              label: 'Dataset',
-              createHref: (row) => `https://portal.hubmapconsortium.org/browse/${row}`,
-              createSubtitle: (_, metadataValues) => {
-                const assay = metadataValues?.assay;
-                const anatomy = metadataValues?.anatomy ?? 'Unknown';
-                return `${anatomy} | ${assay}`;
-              },
-              icon: <DatasetIcon />,
-            }}
-            tooltipFields={['Cell Ontology Label']}
-            xAxis={{
-              label: 'Cell Type',
-              createHref: (col) => `https://www.ebi.ac.uk/ols4/search?q=${col}&ontology=cl`,
-              createSubtitle: (_, metadataValues) => {
-                if (metadataValues && 'Cell Ontology Label' in metadataValues) {
-                  return metadataValues['Cell Ontology Label'] as string;
-                }
-                return '';
-              },
-              icon: <CellTypeIcon />,
-            }}
-            initialProportions={[
-              [0.4, 0.5, 0.1],
-              [0.3, 0.6, 0.1],
-            ]}
+            yAxis={yAxisConfig}
+            tooltipFields={tooltipFields}
+            xAxis={xAxisConfig}
+            initialProportions={initialProportions}
             customTheme={theme === 'dark' ? darkTheme : lightTheme}
-            disabledControls={['theme']}
+            disabledControls={disabledControls}
             trackEvent={trackEvent}
           />
           <BodyExpandedCSS id={cellpopId} />
