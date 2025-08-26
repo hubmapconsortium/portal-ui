@@ -1,0 +1,1 @@
+- Update portal-viz to version 0.4.12 that fixes a bug with GeoMx configuration filepaths.
