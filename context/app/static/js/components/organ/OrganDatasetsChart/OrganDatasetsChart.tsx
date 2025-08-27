@@ -77,6 +77,9 @@ function OrganDatasetsChart({ search }: Pick<OrganFile, 'search'>) {
       xAxisLabel="Number of Datasets"
       srOnlyLabels
       showTooltipAndHover={hasMultipleSearchTerms}
+      // Only display integers - there is no such thing as half of a dataset
+      xTickValues={xScale.ticks(10).filter((d) => d % 1 === 0)}
+      xTickFormat={(value) => value.toString()}
       getBarHref={(d) =>
         getSearchURL({
           entityType: 'Dataset',
