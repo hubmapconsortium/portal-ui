@@ -33,9 +33,9 @@ export default function InlineFigures() {
   const base = '/static/assets/svg/figure';
 
   return (
-    <Grid container>
+    <Grid sx={{ bgcolor: 'background.paper' }} spacing={1} container>
       {/* Left column: 1/3 */}
-      <Grid size={{ xs: 12, md: 4 }}>
+      <Grid size={{ xs: 12, md: 4.5 }}>
         <Stack spacing={2}>
           <HtmlEmbed path={`${base}/figure_1a.html`} />
           <FIGURE_1C style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -43,11 +43,11 @@ export default function InlineFigures() {
       </Grid>
 
       {/* Right column: 2/3 */}
-      <Grid size={{ xs: 12, md: 8 }}>
+      <Grid size={{ xs: 12, md: 7.5 }}>
         <Stack>
           <Stack direction="row">
-            <FIGURE_1B_1 style={{ width: '100%', height: 'auto', display: 'block' }} />
             <FIGURE_1B_2 style={{ width: '100%', height: 'auto', display: 'block' }} />
+            <FIGURE_1B_1 style={{ width: '100%', height: 'auto', display: 'block' }} />
           </Stack>
           <FIGURE_1D style={{ width: '100%', height: 'auto', display: 'block' }} />
           <FIGURE_1E style={{ width: '100%', height: 'auto', display: 'block' }} />

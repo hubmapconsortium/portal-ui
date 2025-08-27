@@ -1,5 +1,5 @@
 {
-  "generated_at": 1756319458,
+  "generated_at": 1756324582,
   "items": [
     {
       "file": "figure_1b_1.svg",
@@ -25,11 +25,6 @@
       "file": "figure_1e.svg",
       "title": "Figure 1E",
       "type": "svg"
-    },
-    {
-      "file": "entity_summary.html",
-      "title": "Entity Summary",
-      "type": "html"
     },
     {
       "file": "figure_1a.html",

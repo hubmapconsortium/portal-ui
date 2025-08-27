@@ -1,32 +1,33 @@
 
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <style>
-      :root {
+    :root {
         --bg: #fff;
         --fg: #111;
         --muted: #666;
         --card-bg: #f8f8f8;
         --accent: #1f77b4;
         --radius: 16px;
-      }
-      body {
+    }
+    .hubmap-figure {
         background: var(--bg);
         color: var(--fg);
-      }
-      .title {
-        font-size: 22px;
-        font-weight: 600;
+        padding: 16px;
+    }
+    .title {
+        font-size: 14px;
+        font-weight: 700;
         margin: 12px 0 20px;
         text-align: center;
         color: var(--fg);
-      }
-      .entity-grid {
+    }
+    .entity-grid {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
         gap: 16px;
         margin: 8px 0 12px;
-      }
-      .card {
+    }
+    .card {
         background: var(--card-bg);
         border-radius: var(--radius);
         padding: 16px;
@@ -34,42 +35,33 @@
         grid-template-columns: 64px 1fr;
         grid-template-rows: auto auto;
         grid-template-areas:
-          "icon count"
-          "icon label";
+        "icon count"
+        "icon label";
         align-items: center;
         border: 1px solid rgba(0,0,0,0.06);
-      }
-      .material-icons.icon {
+    }
+    .material-icons.icon {
         grid-area: icon;
         font-size: 48px;
         color: var(--accent);
-      }
-      .count {
+    }
+    .count {
         grid-area: count;
         font-weight: 800;
         font-size: 24px;
         line-height: 1;
-      }
-      .label {
+    }
+    .label {
         grid-area: label;
         margin-top: 6px;
         font-size: 14px;
         color: var(--muted);
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #0b0b0d;
-          --fg: #f3f3f3;
-          --muted: #c5c5c7;
-          --card-bg: #151518;
-          --accent: #4aa3ff;
-        }
-        .card { border-color: rgba(255,255,255,0.08); }
-      }
+    }
     </style>
+    <div class="hubmap-figure">
     <div class="title">HuBMAP Data Overview</div>
     <div class="entity-grid">
-      
+        
         <div class="card">
           <span class="material-icons icon">collections_bookmark</span>
           <div class="count">23</div>
@@ -118,5 +110,6 @@
           <div class="label">Assays</div>
         </div>
         
+    </div>
     </div>
     
