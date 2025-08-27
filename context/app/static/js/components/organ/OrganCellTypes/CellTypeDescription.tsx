@@ -4,9 +4,28 @@ import Skeleton from '@mui/material/Skeleton';
 import Typography from '@mui/material/Typography';
 import { useCellTypeOntologyDetail } from 'js/hooks/useUBKG';
 
+import { formatCellTypeName } from 'js/api/scfind/utils';
 import { CLIDCellProps } from './types';
 
-export default function CellTypeDescription({ clid }: CLIDCellProps) {
+export function CellTypeDescriptionSkeleton({ cellType }: { cellType: string }) {
+  const cellTypeName = formatCellTypeName(cellType);
+  return (
+    <Skeleton
+      width="100%"
+      height={48}
+      variant="rounded"
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      Loading description for {cellTypeName}...
+    </Skeleton>
+  );
+}
+
+export default function CellTypeDescription({ clid, cellType }: CLIDCellProps) {
   const cellIdWithoutPrefix = clid ? clid.replace('CL:', '') : undefined;
   const { data, error, isLoading } = useCellTypeOntologyDetail(cellIdWithoutPrefix);
   const description = data?.cell_type.definition;
@@ -20,7 +39,7 @@ export default function CellTypeDescription({ clid }: CLIDCellProps) {
   }
 
   if (isLoading) {
-    return <Skeleton variant="text" sx={{ p: 2 }} />;
+    return <CellTypeDescriptionSkeleton cellType={cellType} />;
   }
 
   return (

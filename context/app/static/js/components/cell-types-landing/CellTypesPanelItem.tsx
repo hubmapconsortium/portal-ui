@@ -1,16 +1,13 @@
 import React, { useMemo, useState } from 'react';
 
 import Stack from '@mui/material/Stack';
-import { styled } from '@mui/material/styles';
 import Box from '@mui/material/Box';
-import Skeleton from '@mui/material/Skeleton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { capitalize, useEventCallback } from '@mui/material/utils';
 
 import { InternalLink } from 'js/shared-styles/Links';
 import { useIsMobile } from 'js/hooks/media-queries';
-import SelectableChip from 'js/shared-styles/chips/SelectableChip';
 import { BodyCell, HeaderCell, StackTemplate } from 'js/shared-styles/panels/ResponsivePanelCells';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { useCellTypeOntologyDetail } from 'js/hooks/useUBKG';
@@ -24,9 +21,12 @@ import ListItemText from '@mui/material/ListItemText';
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import TableSortLabel from '@mui/material/TableSortLabel';
+import Filter from '@mui/icons-material/FilterListRounded';
+import Badge from '@mui/material/Badge';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
 import { useIndexedDatasetsForCellType } from '../cell-types/hooks';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
+import { CellTypeDescriptionSkeleton } from '../organ/OrganCellTypes/CellTypeDescription';
 
 const desktopConfig = {
   name: {
@@ -54,14 +54,29 @@ const desktopConfig = {
 
 function CellTypesHeaderPanel() {
   const isMobile = useIsMobile();
-  const { sortState } = useCellTypesSearchState();
-  const { setSort } = useCellTypesSearchActions();
+  const { sortState, organIsSelected, organs: organsState } = useCellTypesSearchState();
+  const { setSort, deselectAllOrgans, selectAllOrgans, toggleOrgan } = useCellTypesSearchActions();
+
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+
+  const handleOpen = useEventCallback((event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  });
+  const handleClose = useEventCallback(() => {
+    setAnchorEl(null);
+  });
+
+  const organs = useCellTypeOrgans();
+
+  const organSelectionIsNotDefault = organsState.length !== organs.length;
+
   if (isMobile) {
     return null;
   }
   return (
     <StackTemplate spacing={4}>
-      <HeaderCell {...desktopConfig.name} pl={3}>
+      <HeaderCell {...desktopConfig.name} pl={4}>
         <TableSortLabel
           active={sortState.columnId === 'name'}
           direction={sortState.direction}
@@ -72,7 +87,7 @@ function CellTypesHeaderPanel() {
           Cell Type
         </TableSortLabel>
       </HeaderCell>
-      <HeaderCell {...desktopConfig.clid} pl={2}>
+      <HeaderCell {...desktopConfig.clid} pl={1}>
         <TableSortLabel
           active={sortState.columnId === 'clid'}
           direction={sortState.direction}
@@ -83,8 +98,78 @@ function CellTypesHeaderPanel() {
           Cell Ontology ID
         </TableSortLabel>
       </HeaderCell>
-      <HeaderCell {...desktopConfig.organs} pl={2}>
-        Organs
+      <HeaderCell {...desktopConfig.organs} pl={1.5}>
+        <Button
+          onClick={handleOpen}
+          sx={{
+            textTransform: 'none',
+            fontWeight: 500,
+            fontSize: '0.875rem',
+            color: 'inherit',
+            justifyContent: 'flex-start',
+            minWidth: 'auto',
+            p: 0,
+            '&:hover': {
+              backgroundColor: 'transparent',
+              textDecoration: 'underline',
+            },
+          }}
+          data-testid="cell-types-header-organs"
+          endIcon={
+            <Badge badgeContent={organSelectionIsNotDefault ? organsState.length : null} color="success">
+              <Filter />
+            </Badge>
+          }
+        >
+          Organs
+        </Button>
+        <Menu
+          id="organ-filters-menu"
+          anchorEl={anchorEl}
+          open={open}
+          onClose={handleClose}
+          MenuListProps={{
+            'aria-labelledby': 'organ-filters-button',
+          }}
+          sx={{
+            width: {
+              xs: '100%',
+              sm: '300px',
+            },
+          }}
+        >
+          <MenuItem onClick={deselectAllOrgans} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <ListItemText>Deselect All Organs</ListItemText>
+          </MenuItem>
+          <MenuItem onClick={selectAllOrgans} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <ListItemText>Select All Organs</ListItemText>
+          </MenuItem>
+          <Divider />
+          {organs.map((organ) => {
+            const isSelected = organIsSelected(organ);
+            return (
+              <MenuItem
+                key={organ}
+                onClick={() => toggleOrgan(organ)}
+                sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
+              >
+                <ListItemIcon>
+                  <OrganIcon organName={organ} />
+                </ListItemIcon>
+                <ListItemText>{capitalize(organ)}</ListItemText>
+                <Box sx={{ ml: 'auto' }}>
+                  {isSelected ? <CheckIcon color="primary" /> : <Box sx={{ width: 24, height: 24 }} />}
+                </Box>
+              </MenuItem>
+            );
+          })}
+        </Menu>
+        <Box visibility="hidden" width={0} height={0}>
+          {/* Prefetch organ icons so they don't have to load on first menu open */}
+          {organs.map((organ) => (
+            <OrganIcon key={organ} organName={organ} />
+          ))}
+        </Box>
       </HeaderCell>
       <HeaderCell {...desktopConfig.datasets}>
         {/* Hidden button for layout purposes */}
@@ -98,13 +183,14 @@ function CellTypesHeaderPanel() {
 
 interface CellTypeDescriptionProps {
   clid?: string;
+  name: string;
 }
 
-function CellTypeDescription({ clid }: CellTypeDescriptionProps) {
+function CellTypeDescription({ clid, name }: CellTypeDescriptionProps) {
   const { data, isLoading } = useCellTypeOntologyDetail(clid);
 
   if (isLoading) {
-    return <Skeleton width="100%" />;
+    return <CellTypeDescriptionSkeleton cellType={name} />;
   }
 
   return (
@@ -121,7 +207,11 @@ interface CellTypeDescriptionButtonProps {
 
 function CellTypeDescriptionButton({ isExpanded, onClick }: CellTypeDescriptionButtonProps) {
   return (
-    <TooltipIconButton tooltip={!isExpanded && 'Show description'} aria-label="Show description" onClick={onClick}>
+    <TooltipIconButton
+      tooltip={isExpanded ? 'Hide description.' : 'Show description.'}
+      aria-label={isExpanded ? 'Hide description.' : 'Show description.'}
+      onClick={onClick}
+    >
       {isExpanded ? <UpIcon fontSize="small" /> : <DownIcon fontSize="small" />}
     </TooltipIconButton>
   );
@@ -130,6 +220,7 @@ function CellTypeDescriptionButton({ isExpanded, onClick }: CellTypeDescriptionB
 function MobileCellTypeDescriptionButton({
   isExpanded,
   clid,
+  name,
   onClick,
 }: CellTypeDescriptionButtonProps & CellTypeDescriptionProps) {
   const isMobile = useIsMobile();
@@ -141,7 +232,7 @@ function MobileCellTypeDescriptionButton({
   return (
     <BodyCell aria-label="Description" flexBasis="50%" flexShrink={0} flexGrow={1}>
       {isExpanded ? (
-        <CellTypeDescription clid={clid} />
+        <CellTypeDescription clid={clid} name={name} />
       ) : (
         <Button size="small" onClick={onClick} variant="text">
           Show Description
@@ -159,17 +250,20 @@ interface CellTypePanelItemProps {
 }
 
 function OrgansCell({ organs }: { organs: string[] }) {
-  const { organIsSelected } = useCellTypesSearchState();
+  const { organIsSelected, filterIsInactive } = useCellTypesSearchState();
 
   const sortedOrgans = useMemo(() => {
     return organs.sort((a, b) => {
       const aIsSelected = organIsSelected(a);
       const bIsSelected = organIsSelected(b);
+      if (filterIsInactive || (aIsSelected && bIsSelected)) {
+        return a.localeCompare(b);
+      }
       if (aIsSelected && !bIsSelected) return -1; // a is selected, b is not
       if (!aIsSelected && bIsSelected) return 1; // b is selected, a is not
       return a.localeCompare(b); // both are either selected or not, sort alphabetically
     });
-  }, [organs, organIsSelected]);
+  }, [organs, organIsSelected, filterIsInactive]);
 
   return (
     <>
@@ -230,7 +324,7 @@ function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps
           <ViewDatasetsButton scFindParams={{ cellTypes }} isLoading={isLoadingDatasets} />
         </SecondaryBackgroundTooltip>
       </BodyCell>
-      <MobileCellTypeDescriptionButton isExpanded={isExpanded} clid={clid} onClick={toggleExpanded} />
+      <MobileCellTypeDescriptionButton isExpanded={isExpanded} name={name} clid={clid} onClick={toggleExpanded} />
     </StackTemplate>
   );
 
@@ -244,91 +338,16 @@ function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps
       {row}
       {isExpanded && !isMobile && (
         <BodyCell width="100%" p={2} pr={0} aria-label="Description">
-          <CellTypeDescription clid={clid} />
+          <CellTypeDescription clid={clid} name={name} />
         </BodyCell>
       )}
     </Stack>
   );
 }
 
-const UnroundedFilterChip = styled(SelectableChip)(({ theme }) => ({
-  borderRadius: theme.spacing(1),
-  '&.MuiChip-outlined': {
-    borderRadius: theme.spacing(1),
-  },
-}));
-
-function CellTypesPanelFilters() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleOpen = useEventCallback((event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  });
-  const handleClose = useEventCallback(() => {
-    setAnchorEl(null);
-  });
-
-  const organs = useCellTypeOrgans();
-
-  const { organIsSelected } = useCellTypesSearchState();
-  const { deselectAllOrgans, toggleOrgan } = useCellTypesSearchActions();
-
-  return (
-    <>
-      <UnroundedFilterChip label="Filter by Organ" isSelected={open} onClick={handleOpen} />
-      <Menu
-        id="organ-filters-menu"
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose}
-        MenuListProps={{
-          'aria-labelledby': 'organ-filters-button',
-        }}
-        sx={{
-          width: {
-            xs: '100%',
-            sm: '300px',
-          },
-        }}
-      >
-        <MenuItem onClick={deselectAllOrgans} sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
-          <ListItemText>Deselect All Organs</ListItemText>
-        </MenuItem>
-        <Divider />
-        {organs.map((organ) => {
-          const isSelected = organIsSelected(organ);
-          return (
-            <MenuItem
-              key={organ}
-              onClick={() => toggleOrgan(organ)}
-              sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-            >
-              <ListItemIcon>
-                <OrganIcon organName={organ} />
-              </ListItemIcon>
-              <ListItemText>{capitalize(organ)}</ListItemText>
-              <Box sx={{ ml: 'auto' }}>
-                {isSelected ? <CheckIcon color="primary" /> : <Box sx={{ width: 24, height: 24 }} />}
-              </Box>
-            </MenuItem>
-          );
-        })}
-      </Menu>
-      <Box visibility="hidden" width={0} height={0}>
-        {/* Prefetch organ icons so they don't have to load on first menu open */}
-        {organs.map((organ) => (
-          <OrganIcon key={organ} organName={organ} />
-        ))}
-      </Box>
-    </>
-  );
-}
-
 const CellTypesPanel = {
   Header: CellTypesHeaderPanel,
   Item: CellTypesPanelItem,
-  Filters: CellTypesPanelFilters,
 };
 
 export default CellTypesPanel;
