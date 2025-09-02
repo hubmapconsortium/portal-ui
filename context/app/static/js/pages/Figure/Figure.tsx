@@ -33,16 +33,16 @@ export default function InlineFigures() {
   const base = '/static/assets/svg/figure';
 
   return (
-    <Stack direction="row" spacing={2} sx={{ bgcolor: 'background.paper' }}>
-      {/* Left column: a, b, c */}
-      <Stack sx={{ flex: 0.8, minWidth: 0 }} spacing={2}>
+    <Stack sx={{ bgcolor: 'background.paper' }}>
+      {/* Row 1: a and b (b is stacked b2 over b1) */}
+      <Stack direction="row" spacing={2} sx={{ flex: 1, minWidth: 0 }}>
         {/* a */}
-        <Box sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ flex: 0.4, minWidth: 0 }}>
           <HtmlEmbed path={`${base}/figure_1a.html`} sx={{ height: '100%' }} />
         </Box>
 
-        {/* b (stacked b2 over b1) */}
-        <Stack sx={{ flex: 1, minWidth: 0 }} spacing={2}>
+        {/* b */}
+        <Stack sx={{ flex: 1, minWidth: 0 }} spacing={2} direction="row">
           <Box sx={{ flex: 1, minWidth: 0 }}>
             <FIGURE_1B_2 style={{ width: '100%', height: 'auto', display: 'block' }} />
           </Box>
@@ -50,26 +50,23 @@ export default function InlineFigures() {
             <FIGURE_1B_1 style={{ width: '100%', height: 'auto', display: 'block' }} />
           </Box>
         </Stack>
+      </Stack>
 
-        {/* c */}
+      {/* Row 2: d_2 and c */}
+      <Stack direction="row" spacing={2} sx={{ flex: 1, minWidth: 0 }}>
         <Box sx={{ flex: 1, minWidth: 0 }}>
+          <FIGURE_1D_2 style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </Box>
+        <Box sx={{ flex: 0.8, minWidth: 0 }}>
           <FIGURE_1C style={{ width: '100%', height: 'auto', display: 'block' }} />
         </Box>
       </Stack>
 
-      {/* Right column: d, e */}
-      <Stack sx={{ flex: 1, minWidth: 0 }} spacing={2}>
-        {/* d */}
-        <Stack spacing={2} sx={{ flex: 1, minWidth: 0 }}>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <FIGURE_1D_1 style={{ width: '100%', height: 'auto', display: 'block' }} />
-          </Box>
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <FIGURE_1D_2 style={{ width: '100%', height: 'auto', display: 'block' }} />
-          </Box>
-        </Stack>
-
-        {/* e */}
+      {/* Row 3: d_1 and e */}
+      <Stack direction="row" sx={{ flex: 1, minWidth: 0 }}>
+        <Box sx={{ flex: 0.78, minWidth: 0 }}>
+          <FIGURE_1D_1 style={{ width: '100%', height: 'auto', display: 'block' }} />
+        </Box>
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <FIGURE_1E style={{ width: '100%', height: 'auto', display: 'block' }} />
         </Box>
