@@ -1,6 +1,16 @@
 {
-  "generated_at": 1756326191,
+  "generated_at": 1756486524,
   "items": [
+    {
+      "file": "datasets_by_assay.svg",
+      "title": "Datasets By Assay",
+      "type": "svg"
+    },
+    {
+      "file": "datasets_by_organ.svg",
+      "title": "Datasets By Organ",
+      "type": "svg"
+    },
     {
       "file": "figure_1b_1.svg",
       "title": "Figure 1B 1",
@@ -19,6 +29,16 @@
     {
       "file": "figure_1d.svg",
       "title": "Figure 1D",
+      "type": "svg"
+    },
+    {
+      "file": "figure_1d_1.svg",
+      "title": "Figure 1D 1",
+      "type": "svg"
+    },
+    {
+      "file": "figure_1d_2.svg",
+      "title": "Figure 1D 2",
       "type": "svg"
     },
     {

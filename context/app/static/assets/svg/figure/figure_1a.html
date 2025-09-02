@@ -1,125 +1,158 @@
 
-        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-        <style>
-        :root {
-            --bg: #fff;
-            --fg: #111;
-            --muted: #666;
-            --card-bg: #f8f8f8;
-            --accent: #1f77b4;
-            --radius: 16px;
-        }
-        .hubmap-figure {
-            background: var(--bg);
-            color: var(--fg);
-            padding: 16px;
-            position: relative;   /* allow absolutely positioned children */
-        }
-        .panel-label {
-            position: absolute;
-            top: 0px;
-            left: 8px;
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--fg);
-        }
-        .title {
-            font-size: 14px;
-            font-weight: 700;
-            margin: 12px 0 20px;
-            text-align: center;
-            color: var(--fg);
-        }
-        .entity-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-            gap: 16px;
-            margin: 8px 0 12px;
-        }
-        .card {
-            background: var(--card-bg);
-            border-radius: var(--radius);
-            padding: 16px;
-            display: grid;
-            grid-template-columns: 64px 1fr;
-            grid-template-rows: auto auto;
-            grid-template-areas:
-            "icon count"
-            "icon label";
-            align-items: center;
-            border: 1px solid rgba(0,0,0,0.06);
-        }
-        .material-icons.icon {
-            grid-area: icon;
-            font-size: 48px;
-            color: var(--accent);
-        }
-        .count {
-            grid-area: count;
-            font-weight: 800;
-            font-size: 24px;
-            line-height: 1;
-        }
-        .label {
-            grid-area: label;
-            margin-top: 6px;
-            font-size: 14px;
-            color: var(--muted);
-        }
-        </style>
-        <div class="hubmap-figure">
-        <div class="panel-label">a</div>
-        <div class="title">HuBMAP Data Overview</div>
-        <div class="entity-grid">
-            
-        <div class="card">
-          <span class="material-icons icon">collections_bookmark</span>
-          <div class="count">23</div>
-          <div class="label">Collections</div>
-        </div>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <style>
+      :root {
+        --bg: #fff;
+        --fg: #111;
+        --muted: #666;
+        --card-bg: #f8f8f8;
+        --accent: #1f77b4;
+        --radius: 16px;
+        --border: rgba(0,0,0,0.08);
+      }
+      .hubmap-figure {
+        background: var(--bg);
+        color: var(--fg);
+        padding: 16px 16px 8px 16px;
+        position: relative;
+        font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+      }
+      .panel-label {
+        position: absolute;
+        top: 0px;
+        left: 8px;
+        font-weight: 400;
+        font-size: 20px;
+        color: var(--fg);
+      }
+      .title {
+        font-size: 16px;
+        font-weight: 500;
+        margin: 12px 0 16px;
+        text-align: center;
+      }
+      table.entity-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+      }
+      table.entity-table colgroup col:first-child { width: 70%; }
+      table.entity-table colgroup col:last-child  { width: 30%; }
+      thead th {
+        text-align: left;
+        font-weight: 500;
+        font-size: 16px;
+        border-bottom: 1px solid var(--border);
+        padding: 8px 10px;
+      }
+      tbody td {
+        padding: 10px;
+        border-bottom: 1px solid var(--border);
+        vertical-align: middle;
+        font-size: 14px;
+      }
+      tbody tr:last-child td { border-bottom: none; }
+      .entity-cell {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+      }
+      .entity-icon {
+        font-size: 20px;
+        color: var(--accent);
+        line-height: 1;
+      }
+      .entity-label {
+        color: var(--fg);
+        font-weight: 500;
+      }
+      .count-cell {
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+        font-weight: 500;
+      }
+      /* subtle zebra for readability */
+      tbody tr:nth-child(odd) { background: rgba(0,0,0,0.015); }
+    </style>
+
+    <div class="hubmap-figure">
+      <div class="panel-label">a</div>
+      <div class="title">HuBMAP Data Overview</div>
+      <table class="entity-table">
+        <colgroup><col/><col/></colgroup>
+        <thead>
+          <tr>
+            <th>Entity</th>
+            <th style="text-align:right;">Count</th>
+          </tr>
+        </thead>
+        <tbody>
+          
+          <tr>
+            <td class="entity-cell">
+              <span class="material-icons entity-icon">table_chart</span>
+              <span class="entity-label">Datasets</span>
+            </td>
+            <td class="count-cell">5,032</td>
+          </tr>
         
-        <div class="card">
-          <span class="material-icons icon">table_chart</span>
-          <div class="count">5,032</div>
-          <div class="label">Datasets</div>
-        </div>
+          <tr>
+            <td class="entity-cell">
+              <span class="material-icons entity-icon">bubble_chart</span>
+              <span class="entity-label">Samples</span>
+            </td>
+            <td class="count-cell">3,126</td>
+          </tr>
         
-        <div class="card">
-          <span class="material-icons icon">person</span>
-          <div class="count">310</div>
-          <div class="label">Donors</div>
-        </div>
+          <tr>
+            <td class="entity-cell">
+              <span class="material-icons entity-icon">insert_chart</span>
+              <span class="entity-label">Visualizations</span>
+            </td>
+            <td class="count-cell">1,571</td>
+          </tr>
         
-        <div class="card">
-          <span class="material-icons icon">menu_book</span>
-          <div class="count">12</div>
-          <div class="label">Publications</div>
-        </div>
+          <tr>
+            <td class="entity-cell">
+              <span class="material-icons entity-icon">person</span>
+              <span class="entity-label">Donors</span>
+            </td>
+            <td class="count-cell">310</td>
+          </tr>
         
-        <div class="card">
-          <span class="material-icons icon">bubble_chart</span>
-          <div class="count">3,126</div>
-          <div class="label">Samples</div>
-        </div>
+          <tr>
+            <td class="entity-cell">
+              <span class="material-icons entity-icon">biotech</span>
+              <span class="entity-label">Organs</span>
+            </td>
+            <td class="count-cell">27</td>
+          </tr>
         
-        <div class="card">
-          <span class="material-icons icon">biotech</span>
-          <div class="count">27</div>
-          <div class="label">Organs</div>
-        </div>
+          <tr>
+            <td class="entity-cell">
+              <span class="material-icons entity-icon">collections_bookmark</span>
+              <span class="entity-label">Collections</span>
+            </td>
+            <td class="count-cell">23</td>
+          </tr>
         
-        <div class="card">
-          <span class="material-icons icon">insert_chart</span>
-          <div class="count">1,571</div>
-          <div class="label">Visualizations</div>
-        </div>
+          <tr>
+            <td class="entity-cell">
+              <span class="material-icons entity-icon">route</span>
+              <span class="entity-label">Assays</span>
+            </td>
+            <td class="count-cell">22</td>
+          </tr>
         
-        <div class="card">
-          <span class="material-icons icon">route</span>
-          <div class="count">22</div>
-          <div class="label">Assays</div>
-        </div>
+          <tr>
+            <td class="entity-cell">
+              <span class="material-icons entity-icon">menu_book</span>
+              <span class="entity-label">Publications</span>
+            </td>
+            <td class="count-cell">12</td>
+          </tr>
         
-        </div>
-        </div>
-        
+        </tbody>
+      </table>
+    </div>
+    
