@@ -17,8 +17,24 @@ const fetchCellTypeNames = async (cellName: string) => {
   return new CellsService().getAllNamesForCellType(cellName);
 };
 
+interface UnwrappedResponse {
+  list: DatasetsSelectedByExpressionResponse[];
+  length: number;
+}
+
+function unwrapResults<T extends QueryType>(results: GetDatasetsResponse<T> | undefined): UnwrappedResponse {
+  if (!results) {
+    return { list: [], length: 0 };
+  }
+  if ('list' in results) {
+    return { ...results, length: results.list.length };
+  }
+  return { list: results, length: results.length };
+}
+
 const fetchCrossModalityResults = async <T extends QueryType>(params: GetDatasetsProps<T>) => {
-  return new CellsService().getDatasets(params);
+  const results = await new CellsService().getDatasets(params);
+  return unwrapResults(results);
 };
 
 export function useAllCellTypeNames(cellName: string) {
@@ -37,35 +53,18 @@ export function useCellTypeOrgans(cellName: string) {
   return { organs: results.data?.organs, ...results };
 }
 
-function unwrapResults<T extends QueryType>(
-  results: GetDatasetsResponse<T> | undefined,
-): {
-  list: DatasetsSelectedByExpressionResponse[];
-  length: number;
-} {
-  if (!results) {
-    return { list: [], length: 0 };
-  }
-  if ('list' in results) {
-    return { ...results, length: results.list.length };
-  }
-  return { list: results, length: results.length };
-}
-
 export function useCrossModalityResults<T extends QueryType>() {
   const parameters = useCrossModalityQueryParameters<T>();
-  const { data, isLoading, error, ...swr } = useSWR<GetDatasetsResponse<T>, Error, GetDatasetsProps<T>>(
+  const { data, isLoading, error, ...swr } = useSWR<UnwrappedResponse, Error, GetDatasetsProps<T>>(
     parameters,
     fetchCrossModalityResults,
   );
 
-  const unwrappedResults = unwrapResults(data);
-
   const { setResults } = useResultsProvider();
 
   useEffect(() => {
-    setResults(unwrappedResults.length, isLoading, error);
-  }, [unwrappedResults, setResults, isLoading, error]);
+    setResults(data?.length ?? 0, isLoading, error);
+  }, [data, setResults, isLoading, error]);
 
-  return { ...swr, parameters, data: unwrappedResults, isLoading, error };
+  return { ...swr, parameters, data, isLoading, error };
 }
