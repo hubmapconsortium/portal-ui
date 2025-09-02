@@ -1,5 +1,6 @@
 import { useState, useCallback, useMemo } from 'react';
 import { SearchRequest } from '@elastic/elasticsearch/lib/api/types';
+import esb from 'elastic-builder';
 
 import { Column } from 'js/shared-styles/tables/EntitiesTable/types';
 import useSearchData from './useSearchData';
@@ -41,30 +42,35 @@ export function useColumnFilters<Doc>({ columns, baseQuery, enabled = true }: Us
       return null;
     }
 
-    const queryWithFilters = { ...baseQuery };
-
-    // Apply post_filter constraints to the query section for aggregations
-    // This ensures aggregations are computed on the same subset of data as the main results
-    if (baseQuery.post_filter) {
-      if (queryWithFilters.query) {
-        queryWithFilters.query = {
-          bool: {
-            must: [queryWithFilters.query, baseQuery.post_filter],
-          },
-        };
-      } else {
-        queryWithFilters.query = baseQuery.post_filter;
-      }
-    }
-
-    // Use the filtered query structure and add aggregations
+    // Start with a base query structure
     const query: SearchRequest = {
-      ...queryWithFilters,
       size: 0, // We only want aggregations, not hits
-      // Remove post_filter from aggregations query since we've moved it to the query section
-      post_filter: undefined,
       aggs: {},
     };
+
+    // Build the base query including post_filter constraints
+    // Apply post_filter constraints to the query section for aggregations
+    // This ensures aggregations are computed on the same subset of data as the main results
+    const queryClauses = [];
+    if (baseQuery.query) {
+      queryClauses.push(baseQuery.query);
+    }
+    if (baseQuery.post_filter) {
+      queryClauses.push(baseQuery.post_filter);
+    }
+
+    if (queryClauses.length > 1) {
+      query.query = {
+        bool: {
+          must: queryClauses,
+        },
+      };
+    } else if (queryClauses.length === 1) {
+      const [firstQuery] = queryClauses;
+      query.query = firstQuery;
+    } else {
+      query.query = { match_all: {} };
+    }
 
     // Add aggregations for each filterable column with per-column filtering
     filterableColumns.forEach((column) => {
@@ -77,22 +83,17 @@ export function useColumnFilters<Doc>({ columns, baseQuery, enabled = true }: Us
             const filterColumn = filterableColumns.find((col) => col.id === columnId);
             if (!filterColumn?.sort) return null;
 
-            return {
-              terms: {
-                [filterColumn.sort]: Array.from(values),
-              },
-            };
+            return esb.termsQuery(filterColumn.sort, Array.from(values)).toJSON();
           })
           .filter((clause): clause is NonNullable<typeof clause> => clause !== null);
 
         if (otherColumnFilters.length > 0) {
           // Create a filtered aggregation that excludes the current column's filters
+          const filterQuery =
+            otherColumnFilters.length > 1 ? { bool: { must: otherColumnFilters } } : otherColumnFilters[0];
+
           query.aggs[column.id] = {
-            filter: {
-              bool: {
-                must: otherColumnFilters,
-              },
-            },
+            filter: filterQuery,
             aggs: {
               values: {
                 terms: {
@@ -140,11 +141,7 @@ export function useColumnFilters<Doc>({ columns, baseQuery, enabled = true }: Us
         const column = filterableColumns.find((col) => col.id === columnId);
         if (!column?.sort) return null;
 
-        return {
-          terms: {
-            [column.sort]: Array.from(values),
-          },
-        };
+        return esb.termsQuery(column.sort, Array.from(values)).toJSON();
       })
       .filter((clause): clause is NonNullable<typeof clause> => clause !== null);
 
@@ -154,18 +151,27 @@ export function useColumnFilters<Doc>({ columns, baseQuery, enabled = true }: Us
 
     // Create a new query combining existing query with filters
     const newQuery = { ...baseQuery };
+
     if (baseQuery.query) {
+      // Combine existing query with filter clauses
+      const allClauses = [baseQuery.query, ...filterClauses];
       newQuery.query = {
         bool: {
-          must: [baseQuery.query, ...filterClauses],
+          must: allClauses,
         },
       };
     } else {
-      newQuery.query = {
-        bool: {
-          must: filterClauses,
-        },
-      };
+      // No existing query, just use the filters
+      const [firstFilter, ...restFilters] = filterClauses;
+      if (restFilters.length === 0) {
+        newQuery.query = firstFilter;
+      } else {
+        newQuery.query = {
+          bool: {
+            must: filterClauses,
+          },
+        };
+      }
     }
 
     return newQuery;

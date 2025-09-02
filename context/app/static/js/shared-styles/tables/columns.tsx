@@ -199,7 +199,6 @@ export const anatomy = {
   label: 'Anatomy',
   sort: 'anatomy_2.keyword',
   cellContent: ({ hit: { anatomy_2, anatomy_1 } }: CellContentProps<SampleDocument>) =>
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     (Array.isArray(anatomy_2) ? anatomy_2.join(', ') : anatomy_2) ||
     (Array.isArray(anatomy_1) ? anatomy_1.join(', ') : anatomy_1) ||
     '—',
