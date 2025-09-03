@@ -1,7 +1,7 @@
 import { createContext, useContext } from 'js/helpers/context';
 import { trackEvent } from 'js/helpers/trackers';
 import { SortState, useSortState } from 'js/hooks/useSortState';
-import React, { PropsWithChildren, useEffect, useMemo, useState } from 'react';
+import React, { PropsWithChildren, useMemo, useState } from 'react';
 
 interface CellTypesSearchState {
   search: string;
@@ -12,6 +12,7 @@ interface CellTypesSearchState {
 interface CellTypesSearchDerivedState {
   organCount: number;
   organIsSelected: (organ: string) => boolean;
+  filterIsInactive: boolean;
 }
 
 type CellTypeSearchStateContextType = CellTypesSearchState & CellTypesSearchDerivedState;
@@ -20,7 +21,7 @@ interface CellTypesSearchActions {
   setSearch: (search: string) => void;
   setOrgans: (organs: string[]) => void;
   deselectAllOrgans: () => void;
-  resetToInitialOrgans: () => void;
+  selectAllOrgans: () => void;
   toggleOrgan: (organ: string) => void;
   setSort: (columnId: string) => void;
 }
@@ -64,18 +65,16 @@ export default function CellTypesSearchProvider({
     initialState.sortState ?? defaultInitialState.sortState,
   );
 
-  useEffect(() => {
-    // Reset organs when initialState changes
-    setOrgans(initialState?.organs ?? defaultInitialState.organs);
-  }, [initialState?.organs]);
-
   const state: CellTypeSearchStateContextType = useMemo(
     () => ({
       search,
       organs,
-      organIsSelected: (organ: string) => organs.includes(organ),
+      organIsSelected: (organ: string) => organs.length === 0 || organs.includes(organ),
       organCount: organs.length,
       sortState,
+      get filterIsInactive() {
+        return organs.length === 0;
+      },
     }),
     [search, organs, sortState],
   );
@@ -85,7 +84,7 @@ export default function CellTypesSearchProvider({
       setSearch,
       setOrgans,
       deselectAllOrgans: () => setOrgans([]),
-      resetToInitialOrgans: () => setOrgans(initialState?.organs ?? defaultInitialState.organs),
+      selectAllOrgans: () => setOrgans(initialState?.organs ?? defaultInitialState.organs),
       toggleOrgan: (organ: string) => {
         setOrgans((prevOrgans) => {
           const includesOrgan = prevOrgans.includes(organ);
