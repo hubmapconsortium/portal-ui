@@ -33,7 +33,7 @@ export default function InlineFigures() {
 
   return (
     <Stack sx={{ bgcolor: 'background.paper' }}>
-      {/* Row 1: a and b */}
+      {/* Row 1: a, b, and c */}
       <Stack direction="row" spacing={2} sx={{ flex: 1, minWidth: 0 }}>
         <Box sx={{ flex: 0.7, minWidth: 0, pt: 1 }}>
           <HtmlEmbed path={`${base}/figure_1a.html`} sx={{ height: '100%' }} />
@@ -48,7 +48,7 @@ export default function InlineFigures() {
         </Stack>
       </Stack>
 
-      {/* Row 2: d_2 and c */}
+      {/* Row 2: d, e, f, and g */}
       <Stack direction="row" alignItems="flex-start" sx={{ flex: 1, minWidth: 0, mt: -3 }}>
         <Box sx={{ flex: 1, minWidth: 0 }}>
           <FIGURE_1D style={{ width: '100%', height: 'auto', display: 'block' }} />
@@ -58,7 +58,7 @@ export default function InlineFigures() {
         </Box>
       </Stack>
 
-      {/* Row 3: d_1 and e */}
+      {/* Row 3: h and i */}
       <Stack direction="row" sx={{ flex: 1, minWidth: 0, mt: 2 }} spacing={1}>
         <Box sx={{ flex: 0.75, minWidth: 0, pt: 1.8 }}>
           <FIGURE_1H style={{ width: '100%', height: 'auto', display: 'block' }} />
