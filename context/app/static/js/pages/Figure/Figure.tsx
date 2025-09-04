@@ -25,46 +25,83 @@ function HtmlEmbed({ path, sx, ...boxProps }: { path: string } & BoxProps) {
     };
   }, [path]);
 
-  return <Box {...boxProps} sx={{ width: '100%', ...(sx ?? {}) }} dangerouslySetInnerHTML={{ __html: html }} />;
+  return (
+    <Box
+      {...boxProps}
+      sx={{
+        width: '100%',
+        height: '100%',
+        lineHeight: 0,
+        '& svg, & img, & iframe': { height: '100%', width: 'auto', display: 'block' },
+        ...(sx ?? {}),
+      }}
+      dangerouslySetInnerHTML={{ __html: html }}
+    />
+  );
 }
 
 export default function InlineFigures() {
   const base = '/static/assets/svg/figure';
 
   return (
-    <Stack sx={{ bgcolor: 'background.paper' }}>
-      {/* Row 1: a, b, and c */}
-      <Stack direction="row" spacing={2} sx={{ flex: 1, minWidth: 0 }}>
-        <Box sx={{ flex: 0.6, minWidth: 0, pt: 1 }}>
-          <HtmlEmbed path={`${base}/figure_1a.html`} sx={{ height: '100%' }} />
+    <Stack sx={{ bgcolor: 'background.paper', gap: 1 }}>
+      {/* Row 1: a, b, c */}
+      <Stack direction="row" sx={{ alignItems: 'stretch', gap: 1, height: 400, lineHeight: 0 }}>
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 34%' }}>
+          <HtmlEmbed
+            path={`${base}/figure_1a.html`}
+            sx={{
+              width: '100%',
+              height: '100%',
+              lineHeight: 0,
+              '& svg, & img, & iframe': { height: '100%', width: 'auto', display: 'block' },
+            }}
+          />
         </Box>
-        <Stack sx={{ flex: 1, minWidth: 0 }} spacing={1} direction="row" alignItems="stretch">
-          <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
-            <FIGURE_1B style={{ height: '100%', width: 'auto', display: 'block' }} />
-          </Box>
-          <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
-            <FIGURE_1C style={{ height: '100%', width: 'auto', display: 'block' }} />
-          </Box>
-        </Stack>
+
+        {/* B — anchor artwork to top-left */}
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 31%' }}>
+          <FIGURE_1B preserveAspectRatio="xMinYMin meet" style={{ height: '100%', width: 'auto', display: 'block' }} />
+        </Box>
+
+        {/* C — anchor artwork to top-left */}
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 31%' }}>
+          <FIGURE_1C preserveAspectRatio="xMinYMin meet" style={{ height: '100%', width: 'auto', display: 'block' }} />
+        </Box>
       </Stack>
 
-      {/* Row 2: d, e, f, and g */}
-      <Stack sx={{ flex: 1, minWidth: 0 }} spacing={1} direction="row" alignItems="stretch">
-        <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
+      {/* Row 2: d, efg */}
+      <Stack
+        direction="row"
+        marginTop={-23}
+        marginRight={3}
+        sx={{ justifyContent: 'flex-end', alignItems: 'stretch', gap: 1, height: 400, lineHeight: 0 }}
+      >
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 auto' }}>
           <FIGURE_1D style={{ height: '100%', width: 'auto', display: 'block' }} />
         </Box>
-        <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 auto' }}>
           <FIGURE_1EFG style={{ height: '100%', width: 'auto', display: 'block' }} />
         </Box>
       </Stack>
 
-      {/* Row 3: h and i */}
-      <Stack direction="row" sx={{ flex: 1, minWidth: 0, mt: 2 }} spacing={1}>
-        <Box sx={{ flex: 0.75, minWidth: 0, pt: 1.8 }}>
-          <FIGURE_1H style={{ width: '100%', height: 'auto', display: 'block' }} />
+      {/* Row 3: h, i */}
+      <Stack
+        direction="row"
+        sx={{
+          justifyContent: 'flex-end',
+          alignItems: 'stretch',
+          gap: 1,
+          height: 360,
+          lineHeight: 0,
+          pr: 3,
+        }}
+      >
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 1 auto', flexShrink: 1, maxWidth: '50%' }}>
+          <FIGURE_1H style={{ height: '100%', width: 'auto', maxWidth: '100%', display: 'block' }} />
         </Box>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <FIGURE_1I style={{ width: '100%', height: 'auto', display: 'block' }} />
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 1 auto', flexShrink: 1, maxWidth: '50%' }}>
+          <FIGURE_1I style={{ height: '100%', width: 'auto', maxWidth: '100%', display: 'block' }} />
         </Box>
       </Stack>
     </Stack>
