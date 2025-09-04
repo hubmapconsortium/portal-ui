@@ -1,19 +1,9 @@
 {
-  "generated_at": 1757004953,
+  "generated_at": 1757008606,
   "items": [
     {
       "file": "figure_1b.svg",
       "title": "Figure 1B",
-      "type": "svg"
-    },
-    {
-      "file": "figure_1b_1.svg",
-      "title": "Figure 1B 1",
-      "type": "svg"
-    },
-    {
-      "file": "figure_1b_2.svg",
-      "title": "Figure 1B 2",
       "type": "svg"
     },
     {
@@ -22,28 +12,8 @@
       "type": "svg"
     },
     {
-      "file": "figure_1c_block.svg",
-      "title": "Figure 1C Block",
-      "type": "svg"
-    },
-    {
       "file": "figure_1d.svg",
       "title": "Figure 1D",
-      "type": "svg"
-    },
-    {
-      "file": "figure_1d_1.svg",
-      "title": "Figure 1D 1",
-      "type": "svg"
-    },
-    {
-      "file": "figure_1d_2.svg",
-      "title": "Figure 1D 2",
-      "type": "svg"
-    },
-    {
-      "file": "figure_1e.svg",
-      "title": "Figure 1E",
       "type": "svg"
     },
     {
