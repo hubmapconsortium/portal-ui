@@ -1,12 +1,11 @@
-import json, os, time, pathlib
+import json
+import time
+import pathlib
 import papermill as pm
-from nbconvert import HTMLExporter
-from nbclient import NotebookClient
-import nbformat as nbf
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
 NB_IN  = ROOT / "figure" / "figure.ipynb"
-OUTDIR = ROOT / "static" / "assets" / "svg" / "figure" 
+OUTDIR = ROOT / "static" / "assets" / "svg" / "figure"
 MANIFEST = OUTDIR / "manifest.json"
 
 OUTDIR.mkdir(parents=True, exist_ok=True)
