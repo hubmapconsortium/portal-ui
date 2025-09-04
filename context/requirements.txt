@@ -38,7 +38,7 @@ click==8.1.7
     # via
     #   black
     #   flask
-colorama==0.4.6 ; platform_system == 'Windows'
+colorama==0.4.6 ; sys_platform == 'win32'
     # via click
 cryptography==45.0.5
     # via
