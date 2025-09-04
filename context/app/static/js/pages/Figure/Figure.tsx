@@ -35,26 +35,26 @@ export default function InlineFigures() {
     <Stack sx={{ bgcolor: 'background.paper' }}>
       {/* Row 1: a, b, and c */}
       <Stack direction="row" spacing={2} sx={{ flex: 1, minWidth: 0 }}>
-        <Box sx={{ flex: 0.7, minWidth: 0, pt: 1 }}>
+        <Box sx={{ flex: 0.6, minWidth: 0, pt: 1 }}>
           <HtmlEmbed path={`${base}/figure_1a.html`} sx={{ height: '100%' }} />
         </Box>
-        <Stack sx={{ flex: 1, minWidth: 0 }} spacing={1} direction="row">
-          <Box sx={{ flex: 1, minWidth: 0 }}>
-            <FIGURE_1B style={{ width: '100%', height: 'auto', display: 'block' }} />
+        <Stack sx={{ flex: 1, minWidth: 0 }} spacing={1} direction="row" alignItems="stretch">
+          <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
+            <FIGURE_1B style={{ height: '100%', width: 'auto', display: 'block' }} />
           </Box>
-          <Box sx={{ flex: 1, minWidth: 0, display: 'flex', alignItems: 'flex-start' }}>
-            <FIGURE_1C style={{ width: '100%', height: 'auto', display: 'block' }} />
+          <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
+            <FIGURE_1C style={{ height: '100%', width: 'auto', display: 'block' }} />
           </Box>
         </Stack>
       </Stack>
 
       {/* Row 2: d, e, f, and g */}
-      <Stack direction="row" alignItems="flex-start" sx={{ flex: 1, minWidth: 0, mt: -3 }}>
-        <Box sx={{ flex: 1, minWidth: 0 }}>
-          <FIGURE_1D style={{ width: '100%', height: 'auto', display: 'block' }} />
+      <Stack sx={{ flex: 1, minWidth: 0 }} spacing={1} direction="row" alignItems="stretch">
+        <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
+          <FIGURE_1D style={{ height: '100%', width: 'auto', display: 'block' }} />
         </Box>
-        <Box sx={{ flex: 0.85, minWidth: 0, mt: 5 }}>
-          <FIGURE_1EFG style={{ width: '100%', height: 'auto', display: 'block' }} />
+        <Box sx={{ flex: 1, minWidth: 0, display: 'flex' }}>
+          <FIGURE_1EFG style={{ height: '100%', width: 'auto', display: 'block' }} />
         </Box>
       </Stack>
 

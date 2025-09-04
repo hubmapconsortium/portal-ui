@@ -4,7 +4,7 @@ import pathlib
 import papermill as pm
 
 ROOT = pathlib.Path(__file__).resolve().parents[1]
-NB_IN  = ROOT / "figure" / "figure.ipynb"
+NB_IN = ROOT / "figure" / "figure.ipynb"
 OUTDIR = ROOT / "static" / "assets" / "svg" / "figure"
 MANIFEST = OUTDIR / "manifest.json"
 
