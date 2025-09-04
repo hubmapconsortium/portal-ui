@@ -9,6 +9,7 @@ NB_IN = ROOT / "figure" / "figure.ipynb"
 OUTDIR = ROOT / "static" / "assets" / "svg" / "figure"
 MANIFEST = OUTDIR / "manifest.json"
 
+
 def execute_notebook(nb_in=NB_IN, outdir=OUTDIR):
     outdir.mkdir(parents=True, exist_ok=True)
     executed_nb_path = outdir / "viz_executed.ipynb"
@@ -19,6 +20,7 @@ def execute_notebook(nb_in=NB_IN, outdir=OUTDIR):
         # allow override; fall back to letting papermill pick default
         kernel_name=os.environ.get("PM_KERNEL") or None,
     )
+
 
 def write_manifest(outdir=OUTDIR, manifest=MANIFEST):
     items = []
@@ -33,9 +35,11 @@ def write_manifest(outdir=OUTDIR, manifest=MANIFEST):
         json.dump({"generated_at": int(time.time()), "items": items}, f, indent=2)
     print(f"Wrote {len(items)} items and manifest.")
 
+
 def build_all():
     execute_notebook()
     write_manifest()
+
 
 if __name__ == "__main__":
     build_all()
