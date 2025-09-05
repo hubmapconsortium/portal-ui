@@ -23,7 +23,7 @@ hubmap-commons>=2.1.20
 boto3>=1.39.3
 
 # Plain "git+https://github.com/..." references can't be hashed, so we point to a release zip instead.
-https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.11.zip
+https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.12.zip
 
 # Security warning for older versions;
 # Can be removed when commons drops prov dependency.
@@ -52,8 +52,6 @@ lxml>=6.0.0
 "@mui/system": "^6.4.3",
 "@mui/x-date-pickers": "^7.22.2",
 "@react-spring/web": "^9.7.3",
-"@searchkit/client": "^3.0.0-canary.53",
-"@searchkit/sdk": "^3.0.0-canary.53",
 "@tanstack/react-virtual": "^3.2.0",
 "@visx/axis": "^3.10.1",
 "@visx/event": "^3.3.0",
@@ -97,7 +95,6 @@ lxml>=6.0.0
 "reactify-wc": "^4.0.0",
 "rehype-raw": "^7.0.0",
 "sass": "^1.72.0",
-"searchkit": "^2.4.1-alpha.4",
 "styled-components": "^6.1.12",
 "swr": "^2.2.5",
 "universal-cookie": "^7.1.2",
