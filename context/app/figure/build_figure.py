@@ -10,6 +10,7 @@ NB_IN = (APP_DIR / "figure" / "figure.ipynb").resolve()
 OUTDIR = (APP_DIR / "static" / "assets" / "svg" / "figure").resolve()
 MANIFEST = (OUTDIR / "manifest.json").resolve()
 
+
 def execute_notebook(nb_in: pathlib.Path = NB_IN, outdir: pathlib.Path = OUTDIR):
     nb_in = pathlib.Path(nb_in).resolve()
     outdir = pathlib.Path(outdir).resolve()
