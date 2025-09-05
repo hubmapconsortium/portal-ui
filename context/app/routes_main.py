@@ -197,7 +197,7 @@ def profile():
     )
 
 
-@blueprint.route('/figure')
+@blueprint.route('/data-overview')
 def figure():
     flask_data = {**get_default_flask_data()}
     return render_template(

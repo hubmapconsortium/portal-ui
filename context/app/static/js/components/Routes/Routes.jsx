@@ -274,7 +274,7 @@ function Routes({ flaskData } = {}) {
     );
   }
 
-  if (urlPath === '/figure') {
+  if (urlPath === '/data-overview') {
     return (
       <Route>
         <Figure />
