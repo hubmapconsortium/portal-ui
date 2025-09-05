@@ -1,0 +1,1 @@
+- Add page for HuBMAP Portal paper figures.

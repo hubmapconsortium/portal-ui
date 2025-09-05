@@ -55,7 +55,6 @@ export interface Entity {
   /** @deprecated Use `ancestor_ids` and `useEntitiesData` instead */
   ancestors: Entity[];
   ancestor_ids: string[];
-
   donor: Donor;
   descendant_counts: { entity_type: Record<string, number> };
   descendant_ids: string[];

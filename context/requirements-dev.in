@@ -6,3 +6,5 @@ pytest-mock>=3.14.1
 autopep8>=2.3.2
 pip-tools>=7.4.1
 boto3>=1.39.3
+papermill>=2.6.0
+matplotlib>=3.10.5

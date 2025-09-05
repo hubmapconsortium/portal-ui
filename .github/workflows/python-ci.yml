@@ -7,11 +7,11 @@ on:
 
 jobs:
   build:
-    # Available versions:
-    # https://docs.github.com/en/free-pro-team@latest/actions/reference/workflow-syntax-for-github-actions#jobsjob_idruns-on
     runs-on: ubuntu-24.04
     env:
       UV_SYSTEM_PYTHON: 1
+      PM_KERNEL: python3
+      JUPYTER_PLATFORM_DIRS: "1"
 
     steps:
       - uses: actions/checkout@v4
@@ -34,5 +34,29 @@ jobs:
       - name: Install python dev dependencies
         run: uv pip install -r context/requirements-dev.txt
 
+      - name: Install and register Jupyter kernel
+        run: |
+          uv pip install ipykernel
+          python -m ipykernel install --user --name python3
+          python - <<'PY'
+          import json, subprocess
+          try:
+              out = subprocess.check_output(["jupyter", "kernelspec", "list", "--json"])
+              specs = json.loads(out.decode())["kernelspecs"].keys()
+              print("Kernelspecs:", ", ".join(specs))
+          except Exception as e:
+              print("Could not list kernelspecs:", e)
+          PY
+
       - name: Run test script
         run: etc/test/test-python.sh
+
+      - name: Generate figure SVGs
+        run: python context/app/figure/build_figure.py
+
+      - name: Upload figure SVGs
+        uses: actions/upload-artifact@v4
+        with:
+          name: figure-assets
+          path: context/app/static/assets/svg/figure/**
+          if-no-files-found: error
