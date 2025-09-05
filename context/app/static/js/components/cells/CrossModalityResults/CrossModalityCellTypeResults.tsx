@@ -57,7 +57,7 @@ function CrossModalityCellTypeResults() {
     parameters: { cellVariableNames },
   } = useCrossModalityResults();
 
-  const { list: resultsList, length: resultCounts } = useAugmentedResults(results.list);
+  const { list: resultsList, length: resultCounts } = useAugmentedResults(results?.list);
 
   const { openTabIndex, handleTabChange } = useTabs();
 

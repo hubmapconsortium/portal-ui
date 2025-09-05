@@ -111,6 +111,7 @@ export const assayTypes = {
   sort: 'mapped_data_types.keyword',
   cellContent: AssayTypesCell,
   width: 270,
+  filterable: true,
 };
 
 function StatusCell({ hit: { mapped_status, mapped_data_access_level } }: CellContentProps<DatasetDocument>) {
@@ -122,6 +123,7 @@ export const status = {
   label: 'Status',
   sort: 'mapped_status.keyword',
   cellContent: StatusCell,
+  filterable: true,
 };
 
 function OrganCell({
@@ -136,6 +138,7 @@ export const organ = {
   sort: 'origin_samples.mapped_organ.keyword',
   cellContent: OrganCell,
   width: 180,
+  filterable: true,
 };
 
 function withParentDonor(Component: ComponentType<{ hit: DonorDocument }>) {
@@ -154,6 +157,7 @@ export const parentDonorAge = {
   sort: 'donor.mapped_metadata.age_value',
   cellContent: withParentDonor(DonorAge),
   width: 150,
+  filterable: true,
 };
 
 function DonorSex({ hit }: CellContentProps<DonorDocument>) {
@@ -166,6 +170,7 @@ export const parentDonorSex = {
   sort: 'donor.mapped_metadata.sex.keyword',
   cellContent: withParentDonor(DonorSex),
   width: 150,
+  filterable: true,
 };
 
 function DonorRace({ hit }: CellContentProps<DonorDocument>) {
@@ -178,6 +183,7 @@ export const parentDonorRace = {
   sort: 'donor.mapped_metadata.race.keyword',
   cellContent: withParentDonor(DonorRace),
   width: 150,
+  filterable: true,
 };
 
 export const datasetDescendants = {
