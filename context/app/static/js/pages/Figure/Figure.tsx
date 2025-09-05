@@ -60,12 +60,12 @@ export default function InlineFigures() {
         </Box>
 
         {/* B — anchor artwork to top-left */}
-        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 31%' }}>
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 31.2%' }}>
           <FIGURE_1B preserveAspectRatio="xMinYMin meet" style={{ height: '100%', width: 'auto', display: 'block' }} />
         </Box>
 
         {/* C — anchor artwork to top-left */}
-        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 31%' }}>
+        <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 31.2%' }}>
           <FIGURE_1C preserveAspectRatio="xMinYMin meet" style={{ height: '100%', width: 'auto', display: 'block' }} />
         </Box>
       </Stack>
@@ -74,8 +74,7 @@ export default function InlineFigures() {
       <Stack
         direction="row"
         marginTop={-23}
-        marginRight={3}
-        sx={{ justifyContent: 'flex-end', alignItems: 'stretch', gap: 1, height: 400, lineHeight: 0 }}
+        sx={{ justifyContent: 'flex-start', alignItems: 'stretch', gap: 1, height: 400, lineHeight: 0 }}
       >
         <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 0 auto' }}>
           <FIGURE_1D style={{ height: '100%', width: 'auto', display: 'block' }} />
