@@ -10,19 +10,16 @@ import Box, { BoxProps } from '@mui/material/Box';
 
 function HtmlEmbed({ path, sx, ...boxProps }: { path: string } & BoxProps) {
   const [html, setHtml] = React.useState<string>('');
+
   React.useEffect(() => {
-    let mounted = true;
     fetch(path)
       .then((r) => r.text())
       .then((t) => {
-        if (mounted) setHtml(t);
+        setHtml(t);
       })
       .catch(() => {
-        if (mounted) setHtml('<div>Failed to load HTML figure.</div>');
+        setHtml('<div>Failed to load HTML figure.</div>');
       });
-    return () => {
-      mounted = false;
-    };
   }, [path]);
 
   return (
@@ -94,6 +91,7 @@ export default function InlineFigures() {
           height: 360,
           lineHeight: 0,
           pr: 3,
+          pl: 3,
         }}
       >
         <Box sx={{ display: 'flex', height: '100%', minWidth: 0, flex: '0 1 auto', flexShrink: 1, maxWidth: '50%' }}>
