@@ -12,10 +12,8 @@ MANIFEST = (OUTDIR / "manifest.json").resolve()
 
 
 def execute_notebook(nb_in: pathlib.Path = NB_IN, outdir: pathlib.Path = OUTDIR):
-    nb_in = pathlib.Path(nb_in).resolve()
     outdir = pathlib.Path(outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
-
     executed_nb_path = outdir / "viz_executed.ipynb"
 
     pm.execute_notebook(
@@ -23,14 +21,11 @@ def execute_notebook(nb_in: pathlib.Path = NB_IN, outdir: pathlib.Path = OUTDIR)
         output_path=str(executed_nb_path),
         parameters={"SAVE_DIR": str(outdir)},
         kernel_name=os.environ.get("PM_KERNEL") or None,
-        cwd=str(nb_in.parent),
     )
 
 
-def write_manifest(outdir: pathlib.Path = OUTDIR, manifest: pathlib.Path | None = None):
+def write_manifest(outdir: pathlib.Path = OUTDIR, manifest: pathlib.Path = MANIFEST):
     outdir = pathlib.Path(outdir).resolve()
-    manifest = pathlib.Path(manifest).resolve() if manifest else (outdir / "manifest.json")
-
     items = []
     for p in sorted(outdir.glob("*.svg")):
         title = p.stem.replace("_", " ").replace("-", " ").title()
@@ -38,10 +33,10 @@ def write_manifest(outdir: pathlib.Path = OUTDIR, manifest: pathlib.Path | None 
     for p in sorted(outdir.glob("*.html")):
         title = p.stem.replace("_", " ").replace("-", " ").title()
         items.append({"file": p.name, "title": title, "type": "html"})
-
     manifest.parent.mkdir(parents=True, exist_ok=True)
     with open(manifest, "w") as f:
         json.dump({"generated_at": int(time.time()), "items": items}, f, indent=2)
+    print(f"[build_figure] SAVE_DIR={outdir}")
     print(f"[build_figure] Wrote {len(items)} items -> {manifest}")
 
 
