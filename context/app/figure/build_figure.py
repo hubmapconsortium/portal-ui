@@ -4,25 +4,32 @@ import pathlib
 import os
 import papermill as pm
 
-ROOT = pathlib.Path(__file__).resolve().parents[1]
-NB_IN = ROOT / "figure" / "figure.ipynb"
-OUTDIR = ROOT / "static" / "assets" / "svg" / "figure"
-MANIFEST = OUTDIR / "manifest.json"
+FILE = pathlib.Path(__file__).resolve()
+APP_DIR = FILE.parent.parent
+NB_IN = (APP_DIR / "figure" / "figure.ipynb").resolve()
+OUTDIR = (APP_DIR / "static" / "assets" / "svg" / "figure").resolve()
+MANIFEST = (OUTDIR / "manifest.json").resolve()
 
-
-def execute_notebook(nb_in=NB_IN, outdir=OUTDIR):
+def execute_notebook(nb_in: pathlib.Path = NB_IN, outdir: pathlib.Path = OUTDIR):
+    nb_in = pathlib.Path(nb_in).resolve()
+    outdir = pathlib.Path(outdir).resolve()
     outdir.mkdir(parents=True, exist_ok=True)
+
     executed_nb_path = outdir / "viz_executed.ipynb"
+
     pm.execute_notebook(
         input_path=str(nb_in),
         output_path=str(executed_nb_path),
         parameters={"SAVE_DIR": str(outdir)},
-        # allow override; fall back to letting papermill pick default
         kernel_name=os.environ.get("PM_KERNEL") or None,
+        cwd=str(nb_in.parent),
     )
 
 
-def write_manifest(outdir=OUTDIR, manifest=MANIFEST):
+def write_manifest(outdir: pathlib.Path = OUTDIR, manifest: pathlib.Path | None = None):
+    outdir = pathlib.Path(outdir).resolve()
+    manifest = pathlib.Path(manifest).resolve() if manifest else (outdir / "manifest.json")
+
     items = []
     for p in sorted(outdir.glob("*.svg")):
         title = p.stem.replace("_", " ").replace("-", " ").title()
@@ -30,10 +37,11 @@ def write_manifest(outdir=OUTDIR, manifest=MANIFEST):
     for p in sorted(outdir.glob("*.html")):
         title = p.stem.replace("_", " ").replace("-", " ").title()
         items.append({"file": p.name, "title": title, "type": "html"})
+
     manifest.parent.mkdir(parents=True, exist_ok=True)
     with open(manifest, "w") as f:
         json.dump({"generated_at": int(time.time()), "items": items}, f, indent=2)
-    print(f"Wrote {len(items)} items and manifest.")
+    print(f"[build_figure] Wrote {len(items)} items -> {manifest}")
 
 
 def build_all():
