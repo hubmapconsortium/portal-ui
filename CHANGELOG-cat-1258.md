@@ -1,1 +1,0 @@
-- Fix results summary for molecular/cellular data queries using the Cells API.

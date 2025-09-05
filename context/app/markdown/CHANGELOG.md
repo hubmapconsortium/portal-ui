@@ -1,5 +1,21 @@
 # Changelog
 
+## v1.32.0 - 2025-09-05
+
+- Fix results summary for molecular/cellular data queries using the Cells API.
+- Fix organ assay chart ticks displaying fractions of datasets.
+- Fix issues with cell type tables not loading on organ pages.
+- Add x/y labels to the grouped stacked bar chart.
+- Move the X/Y axis selection onto the same row above the graph.
+- Add filtering by organ to the scFind gene lookup results.
+- Add filtering for all Entity Tables, with infinite scrolling on a per-column basis.
+- Move the filter by organ functionality to the organ column label on the cell types landing page.
+- Add a "description is loading" message to cell type rows with expandable descriptions.
+- Removed searchkit and related dependencies.
+- Update portal-viz to version 0.4.12 that fixes a bug with GeoMx configuration filepaths.
+
+
+
 ## v1.31.2 - 2025-08-15
 
 - Display grouped stacked bar charts with stripes to indicate matched values.
