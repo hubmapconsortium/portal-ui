@@ -1,2 +1,2 @@
-- Rename `'Molecular & Cellular Query'` to `'Biomarker and Celltypes Search'`.
-- Move Biomarker and Celltypes search from `'/cells'` to `'/search/biomarkers-celltypes'`.
+- Rename `'Molecular & Cellular Query'` to `'Biomarker and Cell Type Search'`.
+- Move Biomarker and Cell Type search from `'/cells'` to `'/search/biomarkers-celltypes'`.
