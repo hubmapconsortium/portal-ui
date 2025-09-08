@@ -1,6 +1,5 @@
 import useSWR from 'swr';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
-import { useMemo } from 'react';
 import { createScFindKey, useScFindKey } from './utils';
 
 export interface CellTypeCountForDataset {
@@ -69,11 +68,11 @@ export function createCellTypeCountForDatasetsKey(
 export function useCellTypeCountForDatasets(props: CellTypeCountForDatasetsParams = { datasets: [] }) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCellTypeCountForDatasetsKey(scFindEndpoint, props, scFindIndexVersion);
-  const { data, ...rest } = useSWR<CellTypeCountsForDataset[], unknown, CellTypeCountForDatasetsKey>(key, (urls) =>
-    multiFetcher({ urls }),
-  );
-  const formattedData: Record<string, CellTypeCountForDataset[]> = useMemo(() => {
+
+  const cellTypeCountForDatasetsFetcher = async (urls: string[]) => {
+    const data = await multiFetcher<CellTypeCountsForDataset>({ urls });
     const formatted: Record<string, CellTypeCountForDataset[]> = {};
+
     if (!data || !props.datasets) {
       return formatted;
     }
@@ -87,7 +86,10 @@ export function useCellTypeCountForDatasets(props: CellTypeCountForDatasetsParam
     }, formatted);
 
     return formatted;
-  }, [data, props.datasets]);
+  };
 
-  return { data: formattedData, ...rest };
+  return useSWR<Record<string, CellTypeCountForDataset[]>, unknown, CellTypeCountForDatasetsKey>(
+    key,
+    cellTypeCountForDatasetsFetcher,
+  );
 }

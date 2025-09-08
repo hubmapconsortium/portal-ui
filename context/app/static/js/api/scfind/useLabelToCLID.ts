@@ -71,7 +71,9 @@ export function useLabelToCLIDMap(cellTypes: string[], config: UseLabelToClidCon
       Object.keys(labelToCLIDMap).forEach((key) => {
         const formattedKey = formatCellTypeName(key);
         labelToCLIDMap[formattedKey] = labelToCLIDMap[key];
-        delete labelToCLIDMap[key];
+        if (formattedKey !== key) {
+          delete labelToCLIDMap[key];
+        }
       });
     }
 
