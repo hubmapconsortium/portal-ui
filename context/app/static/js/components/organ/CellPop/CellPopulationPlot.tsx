@@ -270,6 +270,8 @@ function CellPopulationPlot({ uuids, organ }: CellPopulationPlotProps) {
   const trackEvent = useTrackCellpop();
 
   // Extra "isLoading" workaround is necessary to ensure that all data is loaded before being provided to Cellpop
+  // Currently, if the component is mounted before all of the metadata is loaded, Cellpop receives incomplete data
+  // and does not update it when the data changes
   const { data, isLoading } = useCellPopDataForOrgan(uuids);
 
   return (
