@@ -1,5 +1,5 @@
 import withShouldDisplay from 'js/helpers/withShouldDisplay';
-import React, { ComponentProps, useMemo } from 'react';
+import React, { ComponentProps, useId, useMemo } from 'react';
 import { CellPop } from 'cellpop';
 import { CellTypeIcon, DatasetIcon } from 'js/shared-styles/icons';
 import Paper from '@mui/material/Paper';
@@ -247,6 +247,7 @@ const tooltipFields: ComponentProps<typeof CellPop>['tooltipFields'] = [
 const disabledControls: ComponentProps<typeof CellPop>['disabledControls'] = ['theme'];
 
 function CellPopSkeleton() {
+  const id = useId();
   return (
     <div
       style={{
@@ -257,7 +258,7 @@ function CellPopSkeleton() {
         padding: '16px',
       }}
     >
-      {Array.from({ length: 9 }, (_, index) => `skeleton-${Math.random()}-${index}`).map((key) => (
+      {Array.from({ length: 9 }, (_, index) => `skeleton-${id}-${index}`).map((key) => (
         <Skeleton key={key} variant="rectangular" width="100%" height={300} />
       ))}
     </div>
