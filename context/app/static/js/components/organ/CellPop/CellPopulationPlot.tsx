@@ -174,11 +174,12 @@ const useCellPopDataForOrgan = (
     // Create metadata with cell type ontology IDs
     const colsMetadata: Record<string, Record<string, string | number>> = {};
     colNames.forEach((cellTypeName) => {
+      // TODO: Consider whether there are any other useful cell type metadata fields to include
       if (Object.keys(labelToCLIDMap).length > 0) {
         const clids = labelToCLIDMap[cellTypeName];
         if (clids && clids.length > 0) {
           colsMetadata[cellTypeName] = {
-            'Cell Ontology ID': clids[0], // Use the first CLID if multiple exist
+            'Cell Ontology ID': getFirstValue(clids),
           };
         } else {
           colsMetadata[cellTypeName] = {};
