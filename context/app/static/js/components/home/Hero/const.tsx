@@ -81,11 +81,12 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
     img: <OrganIcon {...timelineIconProps} />,
   },
   {
-    title: 'Improved Molecular & Cellular Data Query',
-    titleHref: '/cells',
+    title: 'Improved Biomarker and Cell Type Search Tool',
+    titleHref: '/search/biomarkers-celltypes',
     description: (
       <>
-        Explore the improved <InternalLink href="/cells">Molecular & Cellular Data Query</InternalLink> with a new
+        Explore the improved{' '}
+        <InternalLink href="/search/biomarkers-celltypes">Biomarker and Cell Type Search</InternalLink> with a new
         scFind-powered search method, gene pathway-based queries, and enhanced visualizations for gene and cell type
         results.
       </>
@@ -239,7 +240,7 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   },
   {
     title: 'Molecular & Cellular Query Updated',
-    titleHref: '/cells',
+    titleHref: '/search/biomarkers-celltypes',
     description: 'Search datasets by cell type name or Cell Ontology ID.',
     date: 'May 2024',
     img: <entityIconMap.CellType {...timelineIconProps} />,

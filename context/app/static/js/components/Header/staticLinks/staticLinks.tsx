@@ -119,7 +119,7 @@ export const dataLinks: DrawerSection[] = [
       {
         label: 'Biomarker & Cell Type Search',
         description: 'Find datasets by biomarker abundance or cell types.',
-        href: '/cells',
+        href: '/search/biomarkers-celltypes',
         icon: <SearchIcon color="primary" />,
       },
     ],

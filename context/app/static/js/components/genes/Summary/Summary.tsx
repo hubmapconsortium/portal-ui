@@ -35,8 +35,8 @@ const relevantPages = [
     children: 'Biomarkers',
   },
   {
-    link: '/cells',
-    children: 'Molecular and Cellular Data Query',
+    link: '/search/biomarkers-celltypes',
+    children: 'Biomarker and Cell Type Search',
   },
 ];
 

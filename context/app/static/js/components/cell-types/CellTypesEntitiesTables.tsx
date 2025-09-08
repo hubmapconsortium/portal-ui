@@ -35,12 +35,12 @@ function CellTypesEntitiesTables() {
         belowTheFold={
           <Box mt={2}>
             <Button
-              href="/cells"
+              href="/search/biomarkers-celltypes"
               variant="contained"
               color="primary"
               onClick={trackExploreWithMolecularAndCellularQueryTool}
             >
-              Explore with Molecular and Cellular Query Tool
+              Explore with Biomarker and Cell Type Search Tool
             </Button>
           </Box>
         }
