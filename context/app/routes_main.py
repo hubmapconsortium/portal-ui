@@ -195,3 +195,13 @@ def profile():
         title='Profile',
         flask_data=flask_data
     )
+
+
+@blueprint.route('/data-overview')
+def figure():
+    flask_data = {**get_default_flask_data()}
+    return render_template(
+        'base-pages/react-content.html',
+        title='Data Overview',
+        flask_data=flask_data
+    )

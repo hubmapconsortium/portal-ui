@@ -39,6 +39,7 @@ const CellTypesLandingPage = lazy(() => import('js/pages/CellTypesLandingPage'))
 const Tutorials = lazy(() => import('js/pages/Tutorials'));
 const Tutorial = lazy(() => import('js/pages/Tutorial'));
 const Profile = lazy(() => import('js/pages/Profile'));
+const Figure = lazy(() => import('js/pages/Figure'));
 
 function Routes({ flaskData } = {}) {
   const {
@@ -269,6 +270,14 @@ function Routes({ flaskData } = {}) {
     return (
       <Route>
         <Profile />
+      </Route>
+    );
+  }
+
+  if (urlPath === '/data-overview') {
+    return (
+      <Route>
+        <Figure />
       </Route>
     );
   }
