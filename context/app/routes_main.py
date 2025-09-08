@@ -202,6 +202,6 @@ def figure():
     flask_data = {**get_default_flask_data()}
     return render_template(
         'base-pages/react-content.html',
-        title='Figure',
+        title='Data Overview',
         flask_data=flask_data
     )
