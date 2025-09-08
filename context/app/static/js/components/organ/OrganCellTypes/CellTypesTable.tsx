@@ -22,12 +22,12 @@ import CellTypeDescription from './CellTypeDescription';
 
 function CellTypeRow({ cellType, clid, matchedDatasets, percentage, totalIndexedDatasets }: CellTypeRowProps) {
   return (
-    <ExpandableRow numCells={5} expandedContent={<CellTypeDescription clid={clid} />} reverse>
+    <ExpandableRow numCells={5} expandedContent={<CellTypeDescription cellType={cellType} clid={clid} />} reverse>
       <ExpandableRowCell>
         <OrganCellTypeCell cellType={cellType} />
       </ExpandableRowCell>
       <ExpandableRowCell>
-        <CLIDCell clid={clid} />
+        <CLIDCell clid={clid} cellType={cellType} />
       </ExpandableRowCell>
       <ExpandableRowCell>
         <MatchedDatasetsCell

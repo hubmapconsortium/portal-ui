@@ -78,10 +78,16 @@ function EntityTable<Doc extends Entity>({
     virtualRows,
     tableBodyPadding,
     tableContainerRef,
+    aggregationsLoading,
+    toggleFilterValue,
+    getColumnValues,
+    getColumnSelectedValues,
+    clearColumnFilter,
   } = useScrollTable<Doc>({
     query,
     columnNameMapping,
     initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
+    columns,
   });
 
   const expandableHeaderCell = (
@@ -118,6 +124,12 @@ function EntityTable<Doc extends Entity>({
                 sortState={sortState}
                 key={column.id}
                 trackingInfo={trackingInfo}
+                // Filter props
+                filterValues={getColumnValues(column.id)}
+                selectedFilterValues={getColumnSelectedValues(column.id)}
+                isFilterLoading={aggregationsLoading}
+                onToggleFilterValue={(value) => toggleFilterValue(column.id, value)}
+                onClearFilter={() => clearColumnFilter(column.id)}
               />
             ))}
             {isExpandable && !reverseExpandIndicator && expandableHeaderCell}

@@ -1,1 +1,0 @@
-- Removed searchkit and related dependencies.

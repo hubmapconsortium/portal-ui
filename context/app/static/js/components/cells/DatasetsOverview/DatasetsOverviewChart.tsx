@@ -43,7 +43,7 @@ const margin = {
   top: 0,
   right: 0,
   bottom: 48,
-  left: 0,
+  left: 24,
 };
 
 const graphMargin = {
@@ -368,6 +368,8 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
             stackKeys={['matched', 'unmatched'] as const}
             yTickFormat={yScaleFormat}
             TooltipContent={OverviewChartTooltip(percentMode)}
+            yAxisLabel={yAxisOptionLabelMap[yAxis]}
+            xAxisLabel={xAxis}
           />
         </ChartWrapper>
       </Paper>
