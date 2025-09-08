@@ -6,6 +6,8 @@ import CellTypesSearchProvider from 'js/components/cell-types-landing/CellTypesS
 import CellTypesPanelList from 'js/components/cell-types-landing/CellTypesPanelList';
 import CellTypesSearchBar from 'js/components/cell-types-landing/CellTypesSearchBar';
 import MultiOrganCellTypeDistributionChartWithProvider from 'js/components/cell-types/CellTypesDistribution/MultiOrganCellTypesDistributionChart';
+import RelevantPagesSection from 'js/shared-styles/sections/RelevantPagesSection';
+import { trackEvent } from 'js/helpers/trackers';
 
 export default function CellTypesLandingPage() {
   const cellTypesMap = useCellTypeNamesMap();
@@ -29,6 +31,22 @@ export default function CellTypesLandingPage() {
             Explore annotated cell types across HuBMAP datasets, with insights into their anatomical distribution and
             associated biomarkers. Visualize and compare cell type distribution across organs using interactive plots,
             and find datasets relevant to the cell type.
+            <RelevantPagesSection
+              pages={[
+                {
+                  link: '/search/biomarkers-celltypes',
+                  children: 'Biomarker and Cell Type Search',
+                  external: false,
+                  onClick: () => {
+                    trackEvent({
+                      action: 'Select Relevant Page button',
+                      label: 'Molecular & Cellular Data Query',
+                      category: 'Cell Types Landing Page',
+                    });
+                  },
+                },
+              ]}
+            />
           </>
         }
         data-testid="cell-types-title"
