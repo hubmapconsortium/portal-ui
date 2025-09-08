@@ -1,5 +1,11 @@
 # Changelog
 
+## v1.32.1 - 2025-09-08
+
+- Add page for HuBMAP Portal paper figures.
+
+
+
 ## v1.32.0 - 2025-09-05
 
 - Fix results summary for molecular/cellular data queries using the Cells API.
