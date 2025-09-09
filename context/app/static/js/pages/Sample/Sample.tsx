@@ -75,7 +75,7 @@ function SampleDetail() {
       <DetailLayout sections={shouldDisplaySection}>
         <Summary>
           <SummaryItem>
-            <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
+            <InternalLink variant="h6" href={`/organs/${mapped_organ}`} underline="none">
               {mapped_organ}
             </InternalLink>
           </SummaryItem>

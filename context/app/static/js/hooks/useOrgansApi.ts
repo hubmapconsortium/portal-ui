@@ -5,7 +5,7 @@ import useSWR from 'swr/immutable';
 
 export const useOrganApiLinks = () => ({
   organDetails(organName: string) {
-    return `/organ/${organName}.json`;
+    return `/organs/${organName}.json`;
   },
   get organList() {
     return `/organs.json`;

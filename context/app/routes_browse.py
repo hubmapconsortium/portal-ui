@@ -180,10 +180,10 @@ def sitemap_txt():
             f'{url_base}/workspaces',
             f'{url_base}/tutorials',
             f'{url_base}/templates',
-            f'{url_base}/organ',
+            f'{url_base}/organs',
             # Detail pages
             *[f'{url_base}/templates/{key}' for key in template_keys],
-            *[f'{url_base}/organ/{key}' for key in organ_keys],
+            *[f'{url_base}/organs/{key}' for key in organ_keys],
             *[f'{url_base}/browse/dataset/{uuid}' for uuid in dataset_uuids],
             *[f'{url_base}/browse/sample/{uuid}' for uuid in sample_uuids],
             *[f'{url_base}/browse/donor/{uuid}' for uuid in donor_uuids],

@@ -19,7 +19,7 @@ interface OrganTileProps {
 function OrganTile({ organ: { name, uberon_short, icon, descendantCounts }, path, onClick, selected }: OrganTileProps) {
   return (
     <Tile
-      href={path ? `/organ/${path}` : undefined}
+      href={path ? `/organs/${path}` : undefined}
       onClick={onClick}
       ariaLabelText={`Tile representing organ ${path}`}
       icon={

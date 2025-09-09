@@ -156,7 +156,7 @@ def iframe_page(path):
         'organs_count': len(get_organs())
     }
     return render_template(
-        'special-pages/organ.html' if path == 'organ' else 'base-pages/react-content.html',
+        'special-pages/organ.html' if path == 'organs' else 'base-pages/react-content.html',
         title=f'{path} iframe',
         flask_data=flask_data
     )

@@ -1,7 +1,7 @@
 import useVisualizationStore from 'js/stores/useVisualizationStore';
 import useEntityStore from 'js/stores/useEntityStore';
 
-const pathsWithEntityHeader = ['/browse', '/cell-types', '/genes', '/organ/'];
+const pathsWithEntityHeader = ['/browse', '/cell-types', '/genes', '/organs/'];
 
 const exceptionPaths = ['/browse/collection'];
 

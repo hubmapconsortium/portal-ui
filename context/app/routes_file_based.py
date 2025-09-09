@@ -37,7 +37,7 @@ def preview_details_view(name):
     )
 
 
-@blueprint.route('/organ')
+@blueprint.route('/organs')
 def organ_index_view():
     organs = get_organs()
     redirected_from = request.args.get('redirected_from') or None
@@ -64,7 +64,7 @@ def redirect_to_organ_from_search(name, organs):
     return redirect(url_for('routes_file_based.organ_index_view', redirected_from=name), code=308)
 
 
-@blueprint.route('/organ/<name>')
+@blueprint.route('/organs/<name>')
 def organ_details_view(name):
     organ = get_organ_details(name)
     if (organ.keys().__len__() == 0):
@@ -87,7 +87,7 @@ def organ_details_view(name):
     )
 
 
-@blueprint.route('/organ/<name>.json')
+@blueprint.route('/organs/<name>.json')
 def get_organ_details(name):
     organs = get_organs()
     organ_names = get_organ_name_mapping()
@@ -107,6 +107,22 @@ def get_organ_details(name):
 def get_organ_list():
     organs_to_get = request.json.get('organs')
     return _get_organ_list(organs_to_get)
+
+
+# Redirect routes for old /organ URLs
+@blueprint.route('/organ')
+def organ_index_redirect():
+    return redirect(url_for('routes_file_based.organ_index_view'), code=301)
+
+
+@blueprint.route('/organ/<name>')
+def organ_details_redirect(name):
+    return redirect(url_for('routes_file_based.organ_details_view', name=name), code=301)
+
+
+@blueprint.route('/organ/<name>.json')
+def organ_details_json_redirect(name):
+    return redirect(url_for('routes_file_based.get_organ_details', name=name), code=301)
 
 
 def _get_organ_list(organs_to_get):

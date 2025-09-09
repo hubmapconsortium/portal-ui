@@ -158,7 +158,7 @@ function Routes({ flaskData } = {}) {
     );
   }
 
-  if (urlPath === '/organ') {
+  if (urlPath === '/organs') {
     return (
       <Route>
         <Organs organs={organs} />
@@ -166,7 +166,7 @@ function Routes({ flaskData } = {}) {
     );
   }
 
-  if (urlPath.startsWith('/organ/')) {
+  if (urlPath.startsWith('/organs/')) {
     return (
       <Route>
         <Organ organ={organ} />
