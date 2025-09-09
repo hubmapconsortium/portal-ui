@@ -45,15 +45,15 @@ const useCellTypeNames = (data: Record<string, CellTypeCountForDataset[]> | unde
 
     // Use a set to get all unique cell type names - these include the organ name as a prefix
     const allCellTypesWithOrgan = new Set<string>();
+    const formattedCellTypes = new Set<string>();
     Object.values(data).forEach((datasetCellTypeCount) => {
       datasetCellTypeCount.forEach(({ index }) => {
         allCellTypesWithOrgan.add(index);
+        formattedCellTypes.add(formatCellTypeName(index));
       });
     });
-    // Extract cell type names with organ prefix
     const allNamesWithOrgan = Array.from(allCellTypesWithOrgan);
-    // Remove the prefix
-    const formattedNames = allNamesWithOrgan.map(formatCellTypeName);
+    const formattedNames = Array.from(formattedCellTypes);
     return [allNamesWithOrgan, formattedNames] as const;
   }, [data]);
 };
