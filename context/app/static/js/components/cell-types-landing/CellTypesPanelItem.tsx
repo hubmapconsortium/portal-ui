@@ -272,7 +272,10 @@ function OrgansCell({ organs }: { organs: string[] }) {
           <React.Fragment key={organ}>
             <Typography
               variant="body2"
-              sx={{ display: 'inline-block', color: organIsSelected(organ) ? 'text.primary' : 'text.secondary' }}
+              sx={{
+                display: 'inline-block',
+                color: organIsSelected(organ) || filterIsInactive ? 'text.primary' : 'text.disabled',
+              }}
             >
               {capitalize(organ)}
             </Typography>
