@@ -207,7 +207,7 @@ const useCellPopDataForOrgan = (
 
 const yAxisConfig: CellPopProps['yAxis'] = {
   label: 'Dataset',
-  createHref: (row: string) => `https://portal.hubmapconsortium.org/browse/${row}`,
+  createHref: (row: string) => `/browse/${row}`,
   createSubtitle: (_: string, metadataValues: Record<string, string | number> | undefined) => {
     const assay = metadataValues?.assay;
     const anatomy = metadataValues?.anatomy ?? 'Unknown';
