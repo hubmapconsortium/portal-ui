@@ -25,7 +25,7 @@ def client():
      ('   PlAcEntA    ', '200 OK')]
 )
 def test_organ(client, name, status):
-    response = client.get(f'/organ/{name}')
+    response = client.get(f'/organs/{name}')
     assert response.status == status
 
 
@@ -38,7 +38,7 @@ def test_organ(client, name, status):
      ('blah', None)]
 )
 def test_get_organ_details(client, name, expected):
-    response = client.get(f'/organ/{name}.json')
+    response = client.get(f'/organs/{name}.json')
     if expected is not None:
         assert response.json.get('name') == expected
     else:
