@@ -78,7 +78,7 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
         ],
       }}
       expandedContent={SCFindGeneCharts}
-      estimatedExpandedRowHeight={664 /* Chart = 600, padding = 64 */}
+      estimatedExpandedRowHeight={1264 /* Chart 1 = 600px, Chart 2 = 600px, padding = 64px */}
       {...useTableTrackingProps()}
       expandTooltip="View additional visualizations including gene expression levels and cell type distributions."
       collapseTooltip="Collapse row."
