@@ -69,12 +69,12 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   },
   {
     title: 'Organ Pages Now Show Identified Cell Types',
-    titleHref: '/organ/kidney',
+    titleHref: '/organs/kidney',
     description: (
       <>
         View cell types identified in HuBMAP datasets for an organ, now available for{' '}
-        <InternalLink href="/organ/kidney">kidney</InternalLink> and{' '}
-        <InternalLink href="/organ/lung">lung</InternalLink> organs.{' '}
+        <InternalLink href="/organs/kidney">kidney</InternalLink> and{' '}
+        <InternalLink href="/organs/lung">lung</InternalLink> organs.{' '}
       </>
     ),
     date: 'June 2025',
@@ -143,12 +143,12 @@ export const HOME_TIMELINE_ITEMS: TimelineData[] = [
   },
   {
     title: 'New Cell Population Plot Visualization Tool',
-    titleHref: '/organ/kidney',
+    titleHref: '/organs/kidney',
     description: (
       <>
         Visualize cell populations of the datasets in an organ using the new interactive cell population plot
-        visualization tool, now available on <InternalLink href="/organ/kidney">kidney</InternalLink> and{' '}
-        <InternalLink href="/organ/heart">heart</InternalLink> pages.
+        visualization tool, now available on <InternalLink href="/organs/kidney">kidney</InternalLink> and{' '}
+        <InternalLink href="/organs/heart">heart</InternalLink> pages.
       </>
     ),
     date: 'February 2025',

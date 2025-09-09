@@ -56,7 +56,7 @@ function SummaryDataChildren({ mapped_data_types, mapped_organ }: SummaryDataChi
         </InternalLink>
       </SummaryItem>
       <SummaryItem showDivider={false}>
-        <InternalLink href={`/organ/${mapped_organ}`} underline="none">
+        <InternalLink href={`/organs/${mapped_organ}`} underline="none">
           <Stack direction="row" spacing={0.5} alignItems="center">
             <OrganIcon organName={mapped_organ} />
             <Typography fontSize="inherit">{mapped_organ}</Typography>

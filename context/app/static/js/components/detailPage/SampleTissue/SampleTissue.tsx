@@ -23,7 +23,7 @@ function SampleTissue() {
     <CollapsibleDetailPageSection title="Tissue" id="tissue">
       <FlexPaper>
         <SectionItem label="Organ Type" flexBasis="25%">
-          <InternalLink variant="h6" href={`/organ/${mapped_organ}`} underline="none">
+          <InternalLink variant="h6" href={`/organs/${mapped_organ}`} underline="none">
             {mapped_organ || 'Organ Type not defined'}
           </InternalLink>
         </SectionItem>

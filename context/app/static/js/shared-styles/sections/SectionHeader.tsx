@@ -1,11 +1,9 @@
-import React, { ComponentProps, PropsWithChildren } from 'react';
-import Typography from '@mui/material/Typography';
+import React, { PropsWithChildren } from 'react';
+import Typography, { TypographyProps } from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { StyledInfoIcon } from './LabelledSectionText/style';
-
-type TypographyProps = ComponentProps<typeof Typography<'h2'>>;
 
 type SectionHeaderProps = PropsWithChildren<
   Partial<TypographyProps> & {
