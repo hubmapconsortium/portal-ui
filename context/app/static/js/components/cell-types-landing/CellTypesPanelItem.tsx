@@ -274,7 +274,7 @@ function OrgansCell({ organs }: { organs: string[] }) {
               variant="body2"
               sx={{
                 display: 'inline-block',
-                color: organIsSelected(organ) || filterIsInactive ? 'text.primary' : 'text.secondary',
+                color: organIsSelected(organ) || filterIsInactive ? 'text.primary' : 'text.disabled',
               }}
             >
               {capitalize(organ)}
