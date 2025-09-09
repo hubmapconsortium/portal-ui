@@ -65,7 +65,7 @@ function EntitiesTables<Doc extends Entity>({
       {tableIsEmpty ? (
         <StyledPaper sx={{ padding: '1rem' }}>{emptyAlert}</StyledPaper>
       ) : (
-        entities.map(({ query, columns, entityType, expandedContent }, i) => (
+        entities.map(({ query, columns, entityType, expandedContent, estimatedExpandedRowHeight }, i) => (
           <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
             <EntityTable<Doc>
               query={query}
@@ -78,6 +78,7 @@ function EntitiesTables<Doc extends Entity>({
               maxHeight={maxHeight}
               onSelectAllChange={onSelectAllChange}
               onSelectChange={onSelectChange}
+              estimatedExpandedRowHeight={estimatedExpandedRowHeight}
             />
           </TabPanel>
         ))

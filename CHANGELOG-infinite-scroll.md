@@ -1,0 +1,1 @@
+- Improve infinite scroll table row measurements to improve infinite scroll behavior.
