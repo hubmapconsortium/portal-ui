@@ -7,12 +7,24 @@ import { useScrollSearchHits, useAllSearchIDs } from 'js/hooks/useSearchData';
 import { useColumnFilters } from 'js/hooks/useColumnFilters';
 import { Column } from 'js/shared-styles/tables/EntitiesTable/types';
 
+// Constants for row height calculation
+
+const LONG_FIELDS = ['description', 'summary', 'title', 'name', 'data_types', 'status', 'group_name', 'anatomy'];
+const DEFAULT_CHARACTERS_PER_LINE = 15;
+const BASE_ROW_HEIGHT = 53; // MUI default row height
+const DEFAULT_LINE_HEIGHT = 20; // Approximate height per line of text
+const DEFAULT_MAX_LINES = 4; // Maximum lines to consider for height estimation
+
 /**
  * Utility function to create a content height estimator based on specific fields
  */
-function createContentHeightEstimator<T>(fields: string[], charactersPerLine = 15, lineHeight = 20, maxLines = 4) {
+function createContentHeightEstimator<T>(
+  fields = LONG_FIELDS,
+  charactersPerLine = DEFAULT_CHARACTERS_PER_LINE,
+  lineHeight = DEFAULT_LINE_HEIGHT,
+  maxLines = DEFAULT_MAX_LINES,
+) {
   return (hit: SearchHit<T>, _isExpanded: boolean): number => {
-    const baseHeight = 53; // MUI default row height
     let additionalHeight = 0;
 
     const source = hit._source as Record<string, unknown>;
@@ -27,7 +39,7 @@ function createContentHeightEstimator<T>(fields: string[], charactersPerLine = 1
       }
     });
 
-    return baseHeight + Math.min(additionalHeight, lineHeight * maxLines);
+    return BASE_ROW_HEIGHT + Math.min(additionalHeight, lineHeight * maxLines);
   };
 }
 
@@ -52,10 +64,6 @@ interface UseScrollSearchHitsTypes<Document> {
   loadMore: () => void;
   totalHitsCount: number;
 }
-
-// Constants for row height calculation - defined outside callback for performance
-const baseRowHeight = 53; // normal MUI table row, since we don't use dense rows
-const lineHeight = 20; // Approximate height per line of text
 
 function useScrollTable<Document>({
   query,
@@ -151,7 +159,7 @@ function useScrollTable<Document>({
   const estimateSize = useCallback(
     (index: number) => {
       if (!searchHits[index]) {
-        return baseRowHeight;
+        return BASE_ROW_HEIGHT;
       }
 
       const hit = searchHits[index];
@@ -162,19 +170,19 @@ function useScrollTable<Document>({
 
       // For expandable tables, handle expanded state
       if (isExpandable && isExpanded) {
-        const expandedHeight = baseRowHeight + estimatedExpandedRowHeight;
+        const expandedHeight = BASE_ROW_HEIGHT + estimatedExpandedRowHeight;
 
         // Also account for content in the base row
         const contentHeight = estimator(hit, isExpanded);
-        return Math.max(expandedHeight, baseRowHeight + contentHeight + estimatedExpandedRowHeight);
+        return Math.max(expandedHeight, BASE_ROW_HEIGHT + contentHeight + estimatedExpandedRowHeight);
       }
 
       // For non-expanded rows, estimate based on content (but more conservatively)
       const contentHeight = estimator(hit, isExpanded);
       // For non-expanded rows, limit the content height to avoid extremely tall rows
-      const maxContentHeightForNonExpanded = lineHeight * 2; // Allow up to 2 extra lines
+      const maxContentHeightForNonExpanded = DEFAULT_LINE_HEIGHT * 2; // Allow up to 2 extra lines
       const limitedContentHeight = Math.min(contentHeight, maxContentHeightForNonExpanded);
-      return baseRowHeight + limitedContentHeight;
+      return BASE_ROW_HEIGHT + limitedContentHeight;
     },
     [searchHits, expandedRows, isExpandable, estimatedExpandedRowHeight, estimator],
   );

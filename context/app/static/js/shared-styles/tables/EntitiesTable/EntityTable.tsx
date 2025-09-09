@@ -177,11 +177,14 @@ function EntityTable<Doc extends Entity>({
               const rowId = hit?._source?.hubmap_id ?? hit._id;
               const isCurrentlyExpanded = isRowExpanded(rowId);
 
+              // Include expansion state in key to force remount
+              const key = rowId + (isCurrentlyExpanded ? '-expanded' : '');
+
               return (
                 // @ts-expect-error `numCells` and the other props are only needed when `ExpandedContent` is defined
                 // since this indicates that the row is expandable
                 <TableRowComponent
-                  key={`${hit?._id}-${isCurrentlyExpanded}`} // Include expansion state in key to force remount
+                  key={key}
                   {...(ExpandedContent
                     ? {
                         // @ts-expect-error the expanded content's props should be the same as the hit's _source
