@@ -41,7 +41,7 @@ const relevantPages = [
   },
   {
     children: 'Biomarker and Cell Type Search',
-    link: '/search/biomarkers-celltypes',
+    link: '/search/biomarkers-cell-types',
   },
 ];
 

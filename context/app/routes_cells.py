@@ -24,7 +24,7 @@ from csv import DictReader
 blueprint = make_blueprint(__name__)
 
 
-@blueprint.route('/search/biomarkers-celltypes')
+@blueprint.route('/search/biomarkers-cell-types')
 def cells_ui():
     return render_template(
         'base-pages/react-content.html',

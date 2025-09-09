@@ -34,7 +34,7 @@ export default function CellTypesLandingPage() {
             <RelevantPagesSection
               pages={[
                 {
-                  link: '/search/biomarkers-celltypes',
+                  link: '/search/biomarkers-cell-types',
                   children: 'Biomarker and Cell Type Search',
                   external: false,
                   onClick: () => {

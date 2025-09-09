@@ -118,7 +118,7 @@ function Routes({ flaskData } = {}) {
     );
   }
   
-  if (urlPath.startsWith('/search/biomarkers-celltypes')) {
+  if (urlPath.startsWith('/search/biomarkers-cell-types')) {
     return (
       <Route>
         <BiomarkerAndCellTypeSearch />

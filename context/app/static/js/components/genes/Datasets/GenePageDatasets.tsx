@@ -29,7 +29,7 @@ export default function Datasets() {
         belowTheFold={
           <Box mt={2}>
             <Button
-              href="/search/biomarkers-celltypes"
+              href="/search/biomarkers-cell-types"
               variant="contained"
               color="primary"
               onClick={trackExploreWithBiomarkerAndCellTypeSearchTool}

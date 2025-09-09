@@ -30,7 +30,7 @@ const heroTabs = [
       {
         title: 'Explore molecules/cell types',
         icon: <entityIconMap.Gene {...fontSize} />,
-        href: '/search/biomarkers-celltypes',
+        href: '/search/biomarkers-cell-types',
       },
     ],
     bgColor: '#F0F3EB', // success-90 in figma

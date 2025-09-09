@@ -35,7 +35,7 @@ const relevantPages = [
     children: 'Biomarkers',
   },
   {
-    link: '/search/biomarkers-celltypes',
+    link: '/search/biomarkers-cell-types',
     children: 'Biomarker and Cell Type Search',
   },
 ];
