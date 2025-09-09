@@ -69,7 +69,7 @@ export default function CellTypesSearchProvider({
     () => ({
       search,
       organs,
-      organIsSelected: (organ: string) => organs.length === 0 || organs.includes(organ),
+      organIsSelected: (organ: string) => organs.includes(organ),
       organCount: organs.length,
       sortState,
       get filterIsInactive() {
