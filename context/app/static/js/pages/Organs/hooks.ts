@@ -32,7 +32,7 @@ function addSearchTermsCount(search: string[], organToCountMap: Record<string, n
 
 function addDatasetCountToOrgan(organ: OrganFile, organToCountMap: Record<string, number>) {
   const { name, search } = organ;
-  const searchWithName = Array.from(new Set([...search, name]);
+  const searchWithName = Array.from(new Set([...search, name]));
   return {
     ...organ,
     descendantCounts: { Dataset: addSearchTermsCount(searchWithName, organToCountMap) },
