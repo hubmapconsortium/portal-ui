@@ -2,7 +2,7 @@ from itertools import islice, groupby
 from posixpath import dirname
 import time
 
-from flask import render_template, current_app, request
+from flask import render_template, current_app, request, redirect, url_for
 # from asyncio import gather, to_thread
 
 from hubmap_api_py_client import Client
@@ -24,13 +24,18 @@ from csv import DictReader
 blueprint = make_blueprint(__name__)
 
 
-@blueprint.route('/cells')
+@blueprint.route('/search/biomarkers-cell-types')
 def cells_ui():
     return render_template(
         'base-pages/react-content.html',
-        title='Datasets: Molecular Data Queries',
+        title='Biomarker and Cell Type Search',
         flask_data={**get_default_flask_data()}
     )
+
+
+@blueprint.route('/cells')
+def cells_redirect():
+    return redirect(url_for('routes_cells.cells_ui'), code=301)
 
 
 @blueprint.route('/biomarkers')

@@ -50,7 +50,7 @@ const cards = [
     subtitle: 'Discover new insights about genes, proteins or cell type related to HuBMAP data.',
     checklistItems: ['Transcriptomic', 'Epigenomic', 'Proteomic', 'Cell Types'],
     ctaText: 'Advanced Query',
-    ctaLink: '/cells',
+    ctaLink: '/search/biomarkers-cell-types',
   },
 ];
 

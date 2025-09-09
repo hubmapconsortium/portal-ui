@@ -19,7 +19,7 @@ const Publications = lazy(() => import('js/pages/Publications'));
 const Publication = lazy(() => import('js/pages/Publication'));
 const Services = lazy(() => import('js/pages/Services'));
 const Collections = lazy(() => import('js/pages/Collections'));
-const Cells = lazy(() => import('js/pages/Cells'));
+const BiomarkerAndCellTypeSearch = lazy(() => import('js/pages/BiomarkerAndCellTypeSearch'));
 const Markdown = lazy(() => import('js/components/Markdown'));
 const SavedLists = lazy(() => import('js/pages/SavedLists'));
 const SavedList = lazy(() => import('js/pages/SavedList'));
@@ -117,6 +117,14 @@ function Routes({ flaskData } = {}) {
       </Route>
     );
   }
+  
+  if (urlPath.startsWith('/search/biomarkers-cell-types')) {
+    return (
+      <Route>
+        <BiomarkerAndCellTypeSearch />
+      </Route>
+    );
+  }
 
   if (urlPath.startsWith('/search')) {
     return (
@@ -190,13 +198,6 @@ function Routes({ flaskData } = {}) {
     );
   }
 
-  if (urlPath === '/cells') {
-    return (
-      <Route>
-        <Cells />
-      </Route>
-    );
-  }
 
   if (urlPath === '/my-lists') {
     return (

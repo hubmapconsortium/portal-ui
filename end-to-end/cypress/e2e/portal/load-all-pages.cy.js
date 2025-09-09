@@ -20,7 +20,7 @@ describe("Landing pages all load", () => {
     { name: "Home", url: "/", testId: "home-page-title" },
     { name: "My Lists", url: "/my-lists", testId: "my-lists-title" },
     { name: "My Workspaces", url: "/workspaces", testId: "my-workspaces-title" },
-    { name: "Molecular Data Queries", url: "/cells", testId: "molecular-data-queries-title" },
+    { name: "Biomarker and Cell Type Search", url: "/search/biomarkers-cell-types", testId: "molecular-data-queries-title" },
     { name: "Organs", url: "/organ", testId: "organs-title" },
     { name: "Profile", url: "/profile", testId: "login-alert" },
     { name: "Publications", url: "/publications", testId: "publications-title" },

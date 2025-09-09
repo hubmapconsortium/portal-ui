@@ -20,13 +20,14 @@ export default function Biomarkers() {
           <Stack gap={1}>
             <Box>
               Explore gene biomarker information in HuBMAP data. Search for a gene by entering its symbol below, or use
-              the <InternalLink href="/cells">Molecular Query</InternalLink> for advanced biomarker search options.
+              the <InternalLink href="/search/biomarkers-cell-types">Biomarker and Cell Type Search</InternalLink> for
+              advanced biomarker search options.
             </Box>
             <RelevantPagesSection
               pages={[
                 {
-                  link: '/cells',
-                  children: 'Molecular & Cellular Data Query',
+                  link: '/search/biomarkers-cell-types',
+                  children: 'Biomarker and Cell Type Search',
                   external: false,
                   onClick: () => {
                     track({ action: 'Select Relevant Page button', label: 'Molecular & Cellular Data Query' });

@@ -14,7 +14,7 @@ import { useGeneDetailPageTrackingInfo, useGeneSymbol, useTrackGeneDetailPage } 
 export default function Datasets() {
   const geneSymbol = useGeneSymbol();
 
-  const trackExploreWithMolecularAndCellularQueryTool = useTrackGeneDetailPage({
+  const trackExploreWithBiomarkerAndCellTypeSearchTool = useTrackGeneDetailPage({
     action: 'Datasets / Select "Explore with Molecular and Cellular Query" button',
   });
 
@@ -29,12 +29,12 @@ export default function Datasets() {
         belowTheFold={
           <Box mt={2}>
             <Button
-              href="/cells"
+              href="/search/biomarkers-cell-types"
               variant="contained"
               color="primary"
-              onClick={trackExploreWithMolecularAndCellularQueryTool}
+              onClick={trackExploreWithBiomarkerAndCellTypeSearchTool}
             >
-              Explore with Molecular and Cellular Query Tool
+              Explore with Biomarker and Cell Type Search Tool
             </Button>
           </Box>
         }
@@ -42,7 +42,7 @@ export default function Datasets() {
         These are datasets that contain this gene as identified by the <SCFindLink /> with uniformly processed HuBMAP
         RNAseq datasets. Not all HuBMAP datasets are currently compatible with this method due to data modalities or the
         availability of cell annotations. To find datasets with additional parameters such as finding datasets with
-        multiple genes, use the molecular and cellular query tool.
+        multiple genes, use the Biomarker and Cell Type Search tool.
       </Description>
       <Box py={1} />
       <MolecularDataQueryFormTrackingProvider category="Gene Detail Page">

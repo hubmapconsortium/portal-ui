@@ -10,14 +10,14 @@ import QueryType from 'js/components/cells/MolecularDataQueryForm/QueryType';
 import QueryParametersFieldset from 'js/components/cells/MolecularDataQueryForm/QueryParameters';
 import MolecularDataQueryFormTrackingProvider from 'js/components/cells/MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 
-function Cells() {
+function BiomarkerAndCellTypeSearch() {
   return (
     <>
       <PageTitle data-testid="molecular-data-queries-title" color="primary">
-        Molecular and Cellular Data Query
+        Biomarker and Cell Type Search
       </PageTitle>
       <Stack component={SectionPaper} direction="column" spacing={2}>
-        <LabelledSectionText label="What is the molecular and cellular data query?">
+        <LabelledSectionText label="What is the biomarker and cell type search?">
           Retrieve datasets based on the abundance of transcriptomic, epigenomic, and proteomic biomarkers across cells,
           or cell types across organs/datasets. For example, you can retrieve a list of datasets where normalized
           transcript abundance for the UMOD (uromodulin) gene is above a user-defined cut off, e.g., 1, in at least 5%
@@ -42,4 +42,4 @@ function Cells() {
   );
 }
 
-export default Cells;
+export default BiomarkerAndCellTypeSearch;
