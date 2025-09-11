@@ -10,7 +10,6 @@ function MuiGlobalStyles() {
           '--header-height': '64px',
         },
         body: {
-          left: '20px',
           '-webkit-font-smoothing': 'antialiased',
           '-moz-osx-font-smoothing': 'grayscale',
           display: 'flex',

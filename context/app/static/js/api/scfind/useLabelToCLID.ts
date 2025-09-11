@@ -1,7 +1,7 @@
 import useSWR from 'swr';
 import { fetcher, multiFetcher } from 'js/helpers/swr';
 import { useMemo } from 'react';
-import { createScFindKey, useScFindKey } from './utils';
+import { createScFindKey, formatCellTypeName, useScFindKey } from './utils';
 
 interface CellTypeToCLID {
   CLIDs: string[];
@@ -41,7 +41,15 @@ export function useLabelsToCLIDs(cellTypes: string[]) {
   return useSWR<CellTypeToCLID[], unknown, CellTypeToCLIDKey[]>(keys, (urls) => multiFetcher({ urls }));
 }
 
-export function useLabelToCLIDMap(cellTypes: string[]) {
+interface UseLabelToClidConfig {
+  formatCellTypeNames?: boolean;
+}
+
+const defaultConfig: UseLabelToClidConfig = {
+  formatCellTypeNames: false,
+};
+
+export function useLabelToCLIDMap(cellTypes: string[], config: UseLabelToClidConfig = defaultConfig) {
   const { data, error, isLoading } = useLabelsToCLIDs(cellTypes);
 
   return useMemo(() => {
@@ -57,6 +65,18 @@ export function useLabelToCLIDMap(cellTypes: string[]) {
         return acc;
       }, labelToCLIDMap);
     }
+
+    if (config.formatCellTypeNames) {
+      // run all of the keys through formatCellTypeName
+      Object.keys(labelToCLIDMap).forEach((key) => {
+        const formattedKey = formatCellTypeName(key);
+        labelToCLIDMap[formattedKey] = labelToCLIDMap[key];
+        if (formattedKey !== key) {
+          delete labelToCLIDMap[key];
+        }
+      });
+    }
+
     return { labelToCLIDMap, isLoading, error };
-  }, [isLoading, error, data, cellTypes]);
+  }, [isLoading, error, data, config.formatCellTypeNames, cellTypes]);
 }
