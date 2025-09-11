@@ -1,1 +1,0 @@
-- Update `/organ` page urls to `/organs` for consistency with other entities.
