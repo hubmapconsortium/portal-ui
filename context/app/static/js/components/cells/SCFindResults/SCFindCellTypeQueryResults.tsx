@@ -61,6 +61,7 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListPr
         ],
       }}
       expandedContent={SCFindCellTypesChart}
+      estimatedExpandedRowHeight={664 /* Chart = 600, padding = 64 */}
       reverseExpandIndicator
       {...useTableTrackingProps()}
     />

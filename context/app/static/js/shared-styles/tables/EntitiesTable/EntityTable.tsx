@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 
 import Table from '@mui/material/Table';
 import TableHead from '@mui/material/TableHead';
@@ -41,6 +41,7 @@ interface EntityTableProps<Doc extends Entity>
   onSelectChange?: (event: React.ChangeEvent<HTMLInputElement>, id: string) => void;
   reverseExpandIndicator?: boolean;
   onExpand?: (id: string) => (isExpanded: boolean) => void;
+  estimatedExpandedRowHeight?: number;
 }
 
 const headerRowHeight = 60;
@@ -61,6 +62,7 @@ function EntityTable<Doc extends Entity>({
   onSelectChange,
   reverseExpandIndicator,
   onExpand,
+  estimatedExpandedRowHeight,
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -83,15 +85,30 @@ function EntityTable<Doc extends Entity>({
     getColumnValues,
     getColumnSelectedValues,
     clearColumnFilter,
+    toggleRowExpansion,
+    isRowExpanded,
   } = useScrollTable<Doc>({
     query,
     columnNameMapping,
     initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
     columns,
+    isExpandable,
+    estimatedExpandedRowHeight,
   });
 
   const expandableHeaderCell = (
     <HeaderCell aria-hidden sx={({ palette }) => ({ backgroundColor: palette.background.paper })} />
+  );
+
+  // Create a combined onExpand handler that tracks expansion state and calls the external callback
+  const handleRowExpansion = useCallback(
+    (id: string) => (isExpanded: boolean) => {
+      // Update internal expansion tracking
+      toggleRowExpansion(id, isExpanded);
+      // Call external callback if provided
+      onExpand?.(id)(isExpanded);
+    },
+    [toggleRowExpansion, onExpand],
   );
 
   return (
@@ -157,22 +174,28 @@ function EntityTable<Doc extends Entity>({
           {virtualRows.map((virtualRow) => {
             const hit = searchHits[virtualRow.index];
             if (hit) {
+              const rowId = hit?._source?.hubmap_id ?? hit._id;
+              const isCurrentlyExpanded = isRowExpanded(rowId);
+
+              // Include expansion state in key to force remount
+              const key = rowId + (isCurrentlyExpanded ? '-expanded' : '');
+
               return (
-                // @ts-expect-error `numCells` and the other props are only provided when `ExpandedContent` is defined
+                // @ts-expect-error `numCells` and the other props are only needed when `ExpandedContent` is defined
+                // since this indicates that the row is expandable
                 <TableRowComponent
-                  sx={{ height: virtualRow.size }}
-                  key={hit?._id}
+                  key={key}
                   {...(ExpandedContent
                     ? {
                         // @ts-expect-error the expanded content's props should be the same as the hit's _source
                         expandedContent: <ExpandedContent {...hit?._source} />,
-                        isExpandedToStart: virtualRow.index === 0,
+                        isExpandedToStart: isCurrentlyExpanded,
                         numCells: columns.length + (isSelectable ? 2 : 1),
                         expandTooltip,
                         collapseTooltip,
                         disabledTooltipTitle,
                         reverse: reverseExpandIndicator,
-                        onExpand: onExpand ? onExpand(hit?._source?.hubmap_id ?? hit._id) : undefined,
+                        onExpand: handleRowExpansion(rowId),
                       }
                     : {})}
                 >
