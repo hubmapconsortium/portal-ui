@@ -176,28 +176,23 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
   return (
     <MatchingGeneContextProvider value={datasetToGeneMap}>
       {!noResults && (
-        <>
-          <Typography variant="subtitle1" component="p" gutterBottom>
-            Datasets Overview
-          </Typography>
-          <DatasetsOverview
-            datasets={deduplicatedResults}
-            belowTheFold={
-              <ViewIndexedDatasetsButton
-                scFindParams={{
-                  scFindOnly: true,
-                }}
-                isLoading={false}
-              />
-            }
-            trackingInfo={trackingInfo}
-          >
-            This overview provides a summary of the matched datasets and their proportions relative to both indexed
-            datasets and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a
-            tabular view. Both views can be downloaded, with the visualization available as a PNG and the table as a TSV
-            file.
-          </DatasetsOverview>
-        </>
+        <DatasetsOverview
+          datasets={deduplicatedResults}
+          belowTheFold={
+            <ViewIndexedDatasetsButton
+              scFindParams={{
+                scFindOnly: true,
+              }}
+              isLoading={false}
+            />
+          }
+          trackingInfo={trackingInfo}
+        >
+          This overview provides a summary of the matched datasets and their proportions relative to both indexed
+          datasets and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a
+          tabular view. Both views can be downloaded, with the visualization available as a PNG and the table as a TSV
+          file.
+        </DatasetsOverview>
       )}
       <DatasetListSection />
     </MatchingGeneContextProvider>
