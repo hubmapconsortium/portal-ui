@@ -62,7 +62,7 @@ function EntityCounts({ organsCount }: EntityCountsProps) {
           icon={<StyledSvgIcon as={OrganIcon} color="primary" aria-label="Number of unique organs" />}
           count={organsCount}
           label="Organs"
-          href="/organ"
+          href="/organs"
           onClick={() => handleTrack('Organ')}
         />
         <EntityCount

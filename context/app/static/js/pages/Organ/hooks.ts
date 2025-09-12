@@ -110,11 +110,6 @@ export function useLabelledDatasetsQuery(searchItems: string[]) {
             },
             {
               term: {
-                'raw_dataset_type.keyword': 'RNAseq',
-              },
-            },
-            {
-              term: {
                 'calculated_metadata.annotation_tools.keyword': 'Azimuth',
               },
             },

@@ -18,4 +18,5 @@ export interface EntitiesTabTypes<Doc extends Entity> {
   columns: Column<Doc>[];
   entityType: 'Donor' | 'Sample' | 'Dataset';
   expandedContent?: React.ComponentType<Doc>;
+  estimatedExpandedRowHeight?: number;
 }

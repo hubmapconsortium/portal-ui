@@ -21,7 +21,7 @@ describe("Landing pages all load", () => {
     { name: "My Lists", url: "/my-lists", testId: "my-lists-title" },
     { name: "My Workspaces", url: "/workspaces", testId: "my-workspaces-title" },
     { name: "Biomarker and Cell Type Search", url: "/search/biomarkers-cell-types", testId: "molecular-data-queries-title" },
-    { name: "Organs", url: "/organ", testId: "organs-title" },
+    { name: "Organs", url: "/organs", testId: "organs-title" },
     { name: "Profile", url: "/profile", testId: "login-alert" },
     { name: "Publications", url: "/publications", testId: "publications-title" },
     { name: "Samples", url: "/search/samples", testId: "search-header" },
@@ -49,7 +49,7 @@ describe("Entity detail page all load", () => {
     { name: "Collection", url: "/collections", testId: "panel-title" },
     { name: "Dataset", url: "/search/datasets", testId: "hubmap-id-link" },
     { name: "Donor", url: "/search/donors", testId: "hubmap-id-link" },
-    { name: "Organ", url: "/organ", testId: "organ-tile" },
+    { name: "Organ", url: "/organs", testId: "organ-tile" },
     { name: "Publication", url: "/publications", testId: "panel-title" },
     { name: "Sample", url: "/search/samples", testId: "hubmap-id-link" },
   ];  
