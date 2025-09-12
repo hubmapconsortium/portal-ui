@@ -8,7 +8,7 @@ import { VisualizationSuspenseFallback } from './VisualizationSuspenseFallback';
 const Visualization = React.lazy(() => import('../Visualization'));
 
 interface VisualizationWrapperProps {
-  vitData: object | object[];
+  vitData: object | object[] | undefined;
   trackingInfo: EventWithOptionalCategory;
   uuid?: string;
   hasNotebook?: boolean;

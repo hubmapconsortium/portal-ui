@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import {
-  lastModifiedTimestamp,
   assayTypes,
   organ,
   hubmapID,
@@ -29,7 +28,7 @@ import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { MatchingGeneContextProvider } from './MatchingGeneContext';
 import { matchingGeneColumn } from './columns';
 
-const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex, lastModifiedTimestamp];
+const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
 const columnsWithMatchingGene = [
   hubmapID,
@@ -39,7 +38,6 @@ const columnsWithMatchingGene = [
   parentDonorRace,
   parentDonorSex,
   matchingGeneColumn,
-  lastModifiedTimestamp,
 ];
 
 function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
@@ -78,7 +76,7 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
         ],
       }}
       expandedContent={SCFindGeneCharts}
-      estimatedExpandedRowHeight={1264 /* Chart 1 = 600px, Chart 2 = 600px, padding = 64px */}
+      estimatedExpandedRowHeight={1364 /* Chart 1 = 700px, Chart 2 = 600px, padding = 64px */}
       {...useTableTrackingProps()}
       expandTooltip="View additional visualizations including gene expression levels and cell type distributions."
       collapseTooltip="Collapse row."

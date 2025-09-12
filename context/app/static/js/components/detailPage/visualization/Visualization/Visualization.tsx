@@ -42,7 +42,7 @@ const visualizationStoreSelector = (state: VisualizationStore) => ({
 });
 
 interface VisualizationProps {
-  vitData: object | object[];
+  vitData?: object | object[];
   trackingInfo: EventWithOptionalCategory;
   uuid?: string;
   hasNotebook: boolean;
@@ -125,6 +125,9 @@ function Visualization({
 
   // Find parent UUID for the visualization if present
   const parentUuid: string | undefined = useMemo(() => {
+    if (!vitData) {
+      return undefined;
+    }
     if (Array.isArray(vitData)) {
       const vitDataArray = vitData as object[];
       const found = vitDataArray.find((data) => 'parentUuid' in data) as { parentUuid: string } | undefined;
