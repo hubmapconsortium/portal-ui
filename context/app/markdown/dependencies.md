@@ -64,7 +64,7 @@ lxml>=6.0.0
 "@visx/text": "^3.3.0",
 "@visx/tooltip": "^3.3.0",
 "@xyflow/react": "^12.0.3",
-"cellpop": "^0.0.14",
+"cellpop": "^0.0.15",
 "chart.js": "^4.4.2",
 "d3": "^7.9.0",
 "d3-array": "^3.2.4",
