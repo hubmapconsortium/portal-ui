@@ -18,7 +18,7 @@ interface DatasetsOverviewProps extends React.PropsWithChildren {
   datasets: string[];
   belowTheFold?: React.ReactNode;
   trackingInfo?: EventInfo;
-  tableTabDescription?: React.ReactNode;
+  tableDescription?: React.ReactNode;
 }
 
 export default function DatasetsOverview({
@@ -26,7 +26,7 @@ export default function DatasetsOverview({
   children,
   belowTheFold,
   trackingInfo,
-  tableTabDescription: tableDescription,
+  tableDescription,
 }: DatasetsOverviewProps) {
   const { data: indexedDatasets, isLoading, error } = useIndexedDatasets();
   const indexed = useDatasetsOverview(indexedDatasets?.datasets ?? []);

@@ -163,7 +163,21 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
     <div ref={intersectionRef}>
       <Tabs onChange={handleTabChange} value={openTabIndex}>
         {tissues.map((tissue, idx) => (
-          <Tab key={tissue} label={tissue} index={idx} />
+          <Tab
+            key={tissue}
+            label={
+              <Stack direction="row" alignItems="center" gap={1}>
+                <Box flexShrink={0}>
+                  <OrganIcon organName={tissue} />
+                </Box>
+                <Box component="span" sx={{ textTransform: 'capitalize' }}>
+                  {tissue}
+                </Box>
+              </Stack>
+            }
+            index={idx}
+            iconPosition="start"
+          />
         ))}
       </Tabs>
       {tissues.map((tissue, idx) => (
@@ -174,10 +188,10 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
       <DatasetsOverview
         datasets={allDatasets}
         trackingInfo={trackingInfo}
-        tableTabDescription={
+        tableDescription={
           <>
-            The table below summarizes the number of matched datasets and the proportions relative to scFind-indexed
-            datasets and total HuBMAP datasets.
+            This table summarizes the number of matched datasets and the proportions relative to scFind-indexed datasets
+            and total HuBMAP datasets.
           </>
         }
       >
