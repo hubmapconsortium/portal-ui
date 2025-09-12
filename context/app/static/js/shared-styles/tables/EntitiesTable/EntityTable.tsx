@@ -153,7 +153,7 @@ function EntityTable<Doc extends Entity>({
           </TableRow>
           <TableRow aria-hidden="true">
             <TableCell
-              colSpan={columns.length + (isSelectable ? 1 : 0)}
+              colSpan={columns.length + (isSelectable ? 1 : 0) + (isExpandable ? 1 : 0)}
               sx={{ top: headerRowHeight, border: 'none' }}
               padding="none"
               component="td"

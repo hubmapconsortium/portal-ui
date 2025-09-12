@@ -141,7 +141,7 @@ function DatasetListSection() {
         ))}
       </Tabs>
       {order.map((gene, idx) => (
-        <TabPanel key={gene} value={openTabIndex} index={idx}>
+        <TabPanel key={gene} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
           <CurrentGeneContextProvider value={genes.includes(gene) ? gene : undefined}>
             <SCFindGeneQueryDatasetList
               key={gene}

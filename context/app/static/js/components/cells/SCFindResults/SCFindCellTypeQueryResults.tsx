@@ -139,6 +139,14 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
     return tissueMap;
   }, [datasets, tissues]);
 
+  const allDatasets = useMemo(() => {
+    const datasetSet = new Set<string>();
+    Object.values(datasetsByTissue).forEach((datasetList) => {
+      datasetList.forEach((datasetId) => datasetSet.add(datasetId));
+    });
+    return Array.from(datasetSet);
+  }, [datasetsByTissue]);
+
   const [displayHelper, setDisplayHelper] = React.useState(false);
 
   const currentTissue = tissues[openTabIndex] || tissues[0];
@@ -161,22 +169,21 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
       {tissues.map((tissue, idx) => (
         <TabPanel key={tissue} value={openTabIndex} index={idx}>
           <CellTypeDistributionChart tissue={tissue} cellTypes={cellTypes} />
-          <DatasetsOverview
-            datasets={datasetsByTissue[tissue]}
-            trackingInfo={trackingInfo}
-            tableTabDescription={
-              <>
-                The table below summarizes the number of matched datasets and the proportions relative to scFind-indexed
-                datasets and total HuBMAP datasets.
-              </>
-            }
-          >
-            These results are derived from RNAseq datasets that were indexed by the <SCFindLink />. Not all HuBMAP
-            datasets are currently compatible with this method due to data modalities or the availability of cell
-            annotations.
-          </DatasetsOverview>
         </TabPanel>
       ))}
+      <DatasetsOverview
+        datasets={allDatasets}
+        trackingInfo={trackingInfo}
+        tableTabDescription={
+          <>
+            The table below summarizes the number of matched datasets and the proportions relative to scFind-indexed
+            datasets and total HuBMAP datasets.
+          </>
+        }
+      >
+        These results are derived from RNAseq datasets that were indexed by the <SCFindLink />. Not all HuBMAP datasets
+        are currently compatible with this method due to data modalities or the availability of cell annotations.
+      </DatasetsOverview>
       <ResultsHelperPanel shouldDisplay={displayHelper} currentTissue={currentTissue} />
     </div>
   );
@@ -227,7 +234,7 @@ function DatasetListSection() {
   }
 
   return (
-    <>
+    <div>
       <DatasetListHeader />
       <Tabs
         variant={cellTypeCategories.length >= 5 ? 'scrollable' : 'fullWidth'}
@@ -244,11 +251,11 @@ function DatasetListSection() {
         ))}
       </Tabs>
       {cellTypeCategories.map((cellType, idx) => (
-        <TabPanel key={cellType} value={openTabIndex} index={idx}>
+        <TabPanel key={cellType} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
           <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType] ?? []} />
         </TabPanel>
       ))}
-    </>
+    </div>
   );
 }
 
