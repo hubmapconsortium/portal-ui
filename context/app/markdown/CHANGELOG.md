@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.32.2 - 2025-09-11
+
+- Rename `'Molecular & Cellular Query'` to `'Biomarker and Cell Type Search'`.
+- Move Biomarker and Cell Type search from `'/cells'` to `'/search/biomarkers-cell-types'`.
+- Update `/organ` page urls to `/organs` for consistency with other entities.
+- Improve clarity of deslect all organs/select all organs.
+- Update Cell Population plots to improve performance, use cell type names for labels, and display all indexed annotations.
+- Improve infinite scroll table row measurements to improve infinite scroll behavior.
+- Add object by analyte visualization builder.
+- Update multiomic builder to support pan-azimuth annotations.
+
+
+
 ## v1.32.1 - 2025-09-08
 
 - Add page for HuBMAP Portal paper figures.
