@@ -131,7 +131,7 @@ export const dataLinks: DrawerSection[] = [
         label: 'Organs',
         description:
           'Explore an organ through spatial visualizations, reference-based analysis and other relevant data.',
-        href: '/organ',
+        href: '/organs',
         icon: <OrganIcon color="primary" />,
       },
       {
