@@ -1,2 +1,0 @@
-- Fix outdated `/organ` links.
-- Fix broken cell type distribution charts.

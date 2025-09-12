@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.32.3 - 2025-09-12
+
+- Fix outdated `/organ` links.
+- Fix broken cell type distribution charts.
+
+
+
 ## v1.32.2 - 2025-09-11
 
 - Rename `'Molecular & Cellular Query'` to `'Biomarker and Cell Type Search'`.
