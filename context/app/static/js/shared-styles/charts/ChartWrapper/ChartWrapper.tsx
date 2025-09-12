@@ -20,6 +20,7 @@ interface ChartWrapperProps extends PropsWithChildren {
   allKeysScale?: OrdinalScale;
   dividersInLegend?: boolean;
   labelValueMap?: Record<string, string>;
+  caption?: React.ReactNode;
 }
 
 const pullUpMultiple = (a: string, b: string) => {
@@ -41,6 +42,7 @@ function ChartWrapper(
     allKeysScale,
     dividersInLegend,
     labelValueMap = {},
+    caption,
   }: ChartWrapperProps,
   ref: React.Ref<HTMLDivElement>,
 ) {
@@ -57,6 +59,7 @@ function ChartWrapper(
           "top-controls   top-controls  top-controls   top-controls"
           "axis-controls  axis-controls axis-controls  legend"
           "chart          chart         chart          legend"
+          "caption        caption       caption        caption"
         `,
         overflow: 'none',
         gridTemplateColumns: 'auto auto auto minmax(175px, max-content)',
@@ -158,6 +161,11 @@ function ChartWrapper(
         </Stack>
       </Box>
       <Box sx={{ gridArea: 'top-controls' }}>{additionalControls}</Box>
+      <Box sx={{ gridArea: 'caption', p: 1 }}>
+        <Typography variant="caption" color="textSecondary">
+          {caption}
+        </Typography>
+      </Box>
     </Box>
   );
 }

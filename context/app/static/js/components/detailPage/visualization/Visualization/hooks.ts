@@ -25,7 +25,7 @@ function handleMarkerGene(vData: object, markerGene?: string) {
 }
 
 interface UseVitessceConfigProps {
-  vitData: object | object[];
+  vitData?: object | object[];
   setVitessceState: (v: object) => void;
   markerGene?: string;
 }

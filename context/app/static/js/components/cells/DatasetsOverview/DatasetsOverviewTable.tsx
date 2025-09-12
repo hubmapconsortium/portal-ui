@@ -3,15 +3,16 @@ import TableHead from '@mui/material/TableHead';
 import TableBody from '@mui/material/TableBody';
 import TableCell from '@mui/material/TableCell';
 import TableRow from '@mui/material/TableRow';
-import React from 'react';
+import React, { PropsWithChildren } from 'react';
 import Divider from '@mui/material/Divider';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import Stack from '@mui/material/Stack';
 import Paper from '@mui/material/Paper';
+import TableContainer from '@mui/material/TableContainer';
 import { DatasetOverviewRow, DatasetsOverviewDigest, useFormattedRows } from './hooks';
 import DownloadDatasetsOverview from './DownloadDatasetsOverview';
 
-interface OverviewTableProps {
+interface OverviewTableProps extends PropsWithChildren {
   indexed: DatasetsOverviewDigest;
   matched: DatasetsOverviewDigest;
   all: DatasetsOverviewDigest;
@@ -35,7 +36,7 @@ function OverviewTableRow({ label, matched, indexed, matchedIndexed, all, matche
       <TableCell>{matchedIndexed}</TableCell>
       <DividerCell />
       <TableCell>{all}</TableCell>
-      <TableCell>{matchedAll}</TableCell>
+      <TableCell colSpan={2}>{matchedAll}</TableCell>
     </TableRow>
   );
 }
@@ -45,39 +46,40 @@ const tooltips = {
   all: 'The total datasets in HuBMAP, including those not indexed by scFind.',
 };
 
-export default function DatasetsOverviewTable({ matched, indexed, all }: OverviewTableProps) {
+export default function DatasetsOverviewTable({ matched, indexed, all, children }: OverviewTableProps) {
   const rows = useFormattedRows(matched, indexed, all);
 
   return (
-    <>
-      <Stack direction="row" justifyContent="end" width="100%" my={2}>
-        <DownloadDatasetsOverview rows={rows} />
-      </Stack>
-      <Paper>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell>Metric</TableCell>
-              <TableCell>Matched</TableCell>
-              <DividerCell />
-              <TableCell>
-                <InfoTextTooltip tooltipTitle={tooltips.indexed}>Indexed Datasets</InfoTextTooltip>
-              </TableCell>
-              <TableCell>Matched/Indexed (%)</TableCell>
-              <DividerCell />
-              <TableCell>
-                <InfoTextTooltip tooltipTitle={tooltips.all}>Total Datasets in HuBMAP Data Portal</InfoTextTooltip>
-              </TableCell>
-              <TableCell>Matched/Total (%)</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {rows.map((row) => (
-              <OverviewTableRow key={row.label} {...row} />
-            ))}
-          </TableBody>
-        </Table>
-      </Paper>
-    </>
+    <TableContainer component={Paper}>
+      <Table>
+        {children && <caption>{children}</caption>}
+        <TableHead>
+          <TableRow>
+            <TableCell>Metric</TableCell>
+            <TableCell>Matched</TableCell>
+            <DividerCell />
+            <TableCell>
+              <InfoTextTooltip tooltipTitle={tooltips.indexed}>Indexed Datasets</InfoTextTooltip>
+            </TableCell>
+            <TableCell>Matched/Indexed (%)</TableCell>
+            <DividerCell />
+            <TableCell>
+              <InfoTextTooltip tooltipTitle={tooltips.all}>Total Datasets in HuBMAP Data Portal</InfoTextTooltip>
+            </TableCell>
+            <TableCell colSpan={2}>
+              <Stack direction="row" alignItems="center" gap={1} useFlexGap>
+                Matched/Total (%)
+                <DownloadDatasetsOverview rows={rows} />
+              </Stack>
+            </TableCell>
+          </TableRow>
+        </TableHead>
+        <TableBody>
+          {rows.map((row) => (
+            <OverviewTableRow key={row.label} {...row} />
+          ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   );
 }

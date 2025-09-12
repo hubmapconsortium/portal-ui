@@ -16,16 +16,12 @@ function CellTypes({ cellTypes }: CellTypesProps) {
   const indexedDatasetsInfo = useIndexedDatasetsForOrgan();
   return (
     <OrganDetailSection title="Cell Types" id="cell-types">
-      <Description
-        belowTheFold={
-          <IndexedDatasetsSummary {...indexedDatasetsInfo}>
-            These results are derived from RNAseq datasets that were indexed by the <SCFindLink /> to identify the cell
-            types associated with this organ. Not all HuBMAP datasets are currently compatible with this method due to
-            differences in data modalities or the availability of cell annotations. This section gives a summary of the
-            datasets that are used to compute these results, and only datasets from this organ are included.
-          </IndexedDatasetsSummary>
-        }
-      />
+      <Description belowTheFold={<IndexedDatasetsSummary {...indexedDatasetsInfo} />}>
+        These results are derived from RNAseq datasets that were indexed by the <SCFindLink /> to identify the cell
+        types associated with this organ. Not all HuBMAP datasets are currently compatible with this method due to
+        differences in data modalities or the availability of cell annotations. This section gives a summary of the
+        datasets that are used to compute these results, and only datasets from this organ are included.
+      </Description>
       <CellTypesTable cellTypes={cellTypes} />
     </OrganDetailSection>
   );

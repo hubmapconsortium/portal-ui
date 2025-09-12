@@ -93,7 +93,7 @@ export default function EntityHeaderCell<Doc>({
         backgroundColor: 'background.paper',
         width: {
           sx: 'auto',
-          lg: column.width ?? 'auto',
+          lg: column.width ?? 'max-content',
         },
       }}
     >
@@ -103,7 +103,6 @@ export default function EntityHeaderCell<Doc>({
           direction={active ? sortState.direction : undefined}
           onClick={handleClick}
           sx={{
-            whiteSpace: 'nowrap',
             '> .MuiTableSortLabel-icon': {
               opacity: 0.25,
             },

@@ -1,5 +1,6 @@
 import { FindDatasetForCellTypeResponse } from 'js/api/scfind/useFindDatasetForCellTypes';
 import { DatasetsForGenesResponse } from 'js/api/scfind/useFindDatasetForGenes';
+import { formatCellTypeName } from 'js/api/scfind/utils';
 import { UnwrappedDatasetResults, WrappedDatasetResults } from './types';
 
 /**
@@ -25,9 +26,23 @@ export function categorizeCellTypes(cellTypes: string[]) {
     });
   });
   // Remove categories with a weight of 1 (i.e. those that are not shared between cell types)
-  return Object.entries(cellTypeCategories)
+  const filteredCategories = Object.entries(cellTypeCategories)
     .filter(([, weight]) => weight > 1)
     .map(([cellType]) => cellType);
+
+  const formattedCellTypes = cellTypes.map((c) => formatCellTypeName(c));
+
+  // Sort the individual cell types to the front of the list, followed by the "cell type in organ" categories alphabetically
+  filteredCategories.sort((a, b) => {
+    const aIsIndividual = formattedCellTypes.includes(a) ? 0 : 1;
+    const bIsIndividual = formattedCellTypes.includes(b) ? 0 : 1;
+    if (aIsIndividual !== bIsIndividual) {
+      return aIsIndividual - bIsIndividual;
+    }
+    return a.localeCompare(b);
+  });
+
+  return filteredCategories;
 }
 
 /**

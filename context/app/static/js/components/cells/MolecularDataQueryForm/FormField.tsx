@@ -1,5 +1,4 @@
 import React, { PropsWithChildren } from 'react';
-import Paper from '@mui/material/Paper';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
@@ -9,8 +8,8 @@ interface FormFieldContainerProps extends PropsWithChildren {
 
 export function FormFieldContainer({ title, children }: FormFieldContainerProps) {
   return (
-    <Stack gap={2} p={2} component={Paper}>
-      <Typography variant="subtitle1">{title}</Typography>
+    <Stack gap={2} py={2}>
+      <Typography variant="subtitle2">{title}</Typography>
       {children}
     </Stack>
   );

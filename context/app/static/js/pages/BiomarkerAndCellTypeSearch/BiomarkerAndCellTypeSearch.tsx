@@ -16,7 +16,7 @@ function BiomarkerAndCellTypeSearch() {
       <PageTitle data-testid="molecular-data-queries-title" color="primary">
         Biomarker and Cell Type Search
       </PageTitle>
-      <Stack component={SectionPaper} direction="column" spacing={2}>
+      <Stack component={SectionPaper} direction="column" spacing={2} mb={2}>
         <LabelledSectionText label="What is the biomarker and cell type search?">
           Retrieve datasets based on the abundance of transcriptomic, epigenomic, and proteomic biomarkers across cells,
           or cell types across organs/datasets. For example, you can retrieve a list of datasets where normalized

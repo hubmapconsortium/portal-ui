@@ -67,22 +67,25 @@ const ProcessedDatasetInfoSource = [
 type VitessceConf = object | undefined;
 
 // Helper function to access the result in the cache.
-function getVitessceConfKey(uuid: string, groupsToken: string) {
-  return `vitessce-conf-${uuid}-${groupsToken}`;
+function getVitessceConfKey(uuid: string, groupsToken: string, markerGene?: string) {
+  return `vitessce-conf-${uuid}-${groupsToken}-${markerGene}`;
 }
 
-export function useVitessceConfLink(uuid: string, parentUuid?: string) {
+export function useVitessceConfLink(uuid: string, parentUuid?: string, markerGene?: string) {
   const base = `/browse/dataset/${uuid}.vitessce.json`;
   const urlParams = new URLSearchParams(window.location.search);
   if (parentUuid) {
     urlParams.set('parent', parentUuid);
   }
+  if (markerGene) {
+    urlParams.set('marker', markerGene);
+  }
   return `${base}?${urlParams.toString()}`;
 }
 
-export function useVitessceConf(uuid: string, parentUuid?: string) {
+export function useVitessceConf(uuid: string, parentUuid?: string, markerGene?: string) {
   const { groupsToken } = useAppContext();
-  const url = useVitessceConfLink(uuid, parentUuid);
+  const url = useVitessceConfLink(uuid, parentUuid, markerGene);
   const swr = useSWR<VitessceConf | VitessceConf[]>(getVitessceConfKey(uuid, groupsToken), (_key: unknown) =>
     fetcher({ url, requestInit: { headers: getAuthHeader(groupsToken) } }),
   );

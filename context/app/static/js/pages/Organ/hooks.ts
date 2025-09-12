@@ -225,9 +225,13 @@ export function useIndexedDatasetsForOrgan() {
 
   const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
 
+  const { organ } = useOrganContext();
+
+  const isLoading = isLoadingIndexed || isLoadingDatasets;
+
   return {
     datasets: datasetUUIDs,
-    isLoading: isLoadingIndexed || isLoadingDatasets,
+    isLoading,
     datasetTypes,
     filters: {
       organTerms: searchItems,
@@ -235,6 +239,7 @@ export function useIndexedDatasetsForOrgan() {
     scFindParams: {
       scFindOnly: true,
     },
+    organs: !isLoading ? [{ key: organ.name, doc_count: datasetUUIDs.length }] : [],
     ...rest,
   };
 }

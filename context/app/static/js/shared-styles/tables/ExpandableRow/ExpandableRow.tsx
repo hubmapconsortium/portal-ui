@@ -37,7 +37,7 @@ function ExpandableRowChild({
   const tooltipTitle = isExpanded ? collapseTooltip : expandTooltip;
 
   const expandableCell = (
-    <ExpandableRowCell>
+    <ExpandableRowCell padding="checkbox">
       <SecondaryBackgroundTooltip title={disabled ? disabledTooltipTitle : tooltipTitle}>
         <span>
           <StyledExpandCollapseIcon isExpanded={isExpanded} color={disabled ? 'disabled' : 'primary'} />
