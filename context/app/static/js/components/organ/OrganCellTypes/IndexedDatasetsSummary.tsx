@@ -5,6 +5,7 @@ import React, { PropsWithChildren } from 'react';
 import { EventInfo } from 'js/components/types';
 import { trackEvent } from 'js/helpers/trackers';
 import { useEventCallback } from '@mui/material/utils';
+import Skeleton from '@mui/material/Skeleton';
 import { StyledDetailsAccordion } from './styles';
 import ViewIndexedDatasetsButton from './ViewIndexedDatasetsButton';
 import { SCFindParams } from '../utils';
@@ -17,6 +18,13 @@ interface IndexedDatasetsSummaryProps {
   trackingInfo?: EventInfo;
   context?: string;
 }
+
+const loadingSkeleton = (
+  <Stack direction="row" spacing={1} alignItems="center">
+    <Skeleton variant="rectangular" width={120} height={20} />
+    <Skeleton variant="rectangular" width={100} height={20} />
+  </Stack>
+);
 
 function IndexedDatasetsSummary({
   datasetTypes = [],
@@ -57,32 +65,32 @@ function IndexedDatasetsSummary({
       <Typography variant="body2" component="div">
         {children}
       </Typography>
-      {organs && organs.length > 0 && (
-        <StyledDetailsAccordion
-          summary={
-            <Stack direction="row" spacing={1} alignItems="center">
-              <OrganIcon />
-              <Typography variant="subtitle2" component="span">
-                Organs
-              </Typography>
-            </Stack>
-          }
-          slotProps={{
-            heading: {
-              component: 'div',
-            },
-          }}
-          defaultExpanded
-        >
+      <StyledDetailsAccordion
+        summary={
           <Stack direction="row" spacing={1} alignItems="center">
-            {organs.map(({ key, doc_count }, idx) => (
-              <Typography variant="body2" component="span" key={key}>
-                {key} ({doc_count}){idx < organs.length - 1 ? ', ' : ''}
-              </Typography>
-            ))}
+            <OrganIcon />
+            <Typography variant="subtitle2" component="span">
+              Organs
+            </Typography>
           </Stack>
-        </StyledDetailsAccordion>
-      )}
+        }
+        slotProps={{
+          heading: {
+            component: 'div',
+          },
+        }}
+        defaultExpanded
+      >
+        <Stack direction="row" spacing={1} alignItems="center">
+          {isLoadingDatasets
+            ? loadingSkeleton
+            : organs.map(({ key, doc_count }, idx) => (
+                <Typography variant="body2" component="span" key={key}>
+                  {key} ({doc_count}){idx < organs.length - 1 ? ', ' : ''}
+                </Typography>
+              ))}
+        </Stack>
+      </StyledDetailsAccordion>
       <StyledDetailsAccordion
         summary={
           <Stack direction="row" spacing={1} alignItems="center">
@@ -100,11 +108,13 @@ function IndexedDatasetsSummary({
         defaultExpanded
       >
         <Stack direction="row" spacing={1} alignItems="center">
-          {datasetTypes.map(({ key, doc_count }, idx) => (
-            <Typography variant="body2" component="span" key={key}>
-              {key} ({doc_count}){idx < datasetTypes.length - 1 ? ', ' : ''}
-            </Typography>
-          ))}
+          {isLoadingDatasets
+            ? loadingSkeleton
+            : datasetTypes.map(({ key, doc_count }, idx) => (
+                <Typography variant="body2" component="span" key={key}>
+                  {key} ({doc_count}){idx < datasetTypes.length - 1 ? ', ' : ''}
+                </Typography>
+              ))}
         </Stack>
       </StyledDetailsAccordion>
       <ViewIndexedDatasetsButton
