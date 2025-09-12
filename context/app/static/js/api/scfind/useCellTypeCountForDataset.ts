@@ -37,7 +37,6 @@ export default function useCellTypeCountForDataset(props: CellTypeCountForDatase
   const key = createCellTypeCountForDatasetKey(scFindEndpoint, props, scFindIndexVersion);
   return useSWR<CellTypeCountsForDataset, unknown, CellTypeCountForDatasetKey>(key, (url) => fetcher({ url }), {
     revalidateOnFocus: false,
-    revalidateOnMount: false,
   });
 }
 
