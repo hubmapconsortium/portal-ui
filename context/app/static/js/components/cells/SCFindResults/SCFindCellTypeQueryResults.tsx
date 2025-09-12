@@ -161,9 +161,6 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
       {tissues.map((tissue, idx) => (
         <TabPanel key={tissue} value={openTabIndex} index={idx}>
           <CellTypeDistributionChart tissue={tissue} cellTypes={cellTypes} />
-          <Typography variant="subtitle1" component="p">
-            Datasets Overview
-          </Typography>
           <DatasetsOverview
             datasets={datasetsByTissue[tissue]}
             trackingInfo={trackingInfo}

@@ -8,6 +8,7 @@ import { EventInfo } from 'js/components/types';
 import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
 import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import useSCFindResultsStatisticsStore from '../SCFindResults/store';
@@ -69,18 +70,27 @@ export default function DatasetsOverview({
   }
 
   return (
-    <DetailsAccordion
-      summary={<Typography variant="subtitle1">Datasets Overview</Typography>}
-      onChange={onAccordionChange}
-      defaultExpanded
-    >
-      <Stack spacing={3}>
-        <Description belowTheFold={belowTheFold}>{children}</Description>
-        <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} trackingInfo={trackingInfo} />
-        <DatasetsOverviewTable matched={matched} indexed={indexed} all={all}>
-          {tableDescription}
-        </DatasetsOverviewTable>
-      </Stack>
-    </DetailsAccordion>
+    <Box>
+      <DetailsAccordion
+        summary={<Typography variant="subtitle1">Datasets Overview</Typography>}
+        onChange={onAccordionChange}
+        defaultExpanded
+        summaryProps={{
+          sx: {
+            '.MuiAccordionSummary-content': {
+              mr: 'auto',
+            },
+          },
+        }}
+      >
+        <Stack spacing={3}>
+          <Description belowTheFold={belowTheFold}>{children}</Description>
+          <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} trackingInfo={trackingInfo} />
+          <DatasetsOverviewTable matched={matched} indexed={indexed} all={all}>
+            {tableDescription}
+          </DatasetsOverviewTable>
+        </Stack>
+      </DetailsAccordion>
+    </Box>
   );
 }
