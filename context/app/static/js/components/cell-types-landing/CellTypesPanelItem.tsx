@@ -24,7 +24,6 @@ import TableSortLabel from '@mui/material/TableSortLabel';
 import Filter from '@mui/icons-material/FilterListRounded';
 import Badge from '@mui/material/Badge';
 import { ViewDatasetsButton } from '../organ/OrganCellTypes/ViewIndexedDatasetsButton';
-import { useIndexedDatasetsForCellType } from '../cell-types/hooks';
 import { useCellTypesSearchActions, useCellTypesSearchState } from './CellTypesSearchContext';
 import { CellTypeDescriptionSkeleton } from '../organ/OrganCellTypes/CellTypeDescription';
 
@@ -294,9 +293,6 @@ function OrgansCell({ organs }: { organs: string[] }) {
 function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps) {
   // New index version does not lowercase the organ names
   const cellTypes = organs.map((o) => `${o}.${name}`);
-  const { datasetUUIDs, isLoading: isLoadingDatasets } = useIndexedDatasetsForCellType({
-    cellTypes,
-  });
   const [isExpanded, setIsExpanded] = useState(false);
 
   const toggleExpanded = useEventCallback(() => {
@@ -320,11 +316,8 @@ function CellTypesPanelItem({ name, href, organs, clid }: CellTypePanelItemProps
         <OrgansCell organs={organs} />
       </BodyCell>
       <BodyCell {...desktopConfig.datasets} aria-label="Datasets">
-        <SecondaryBackgroundTooltip
-          disabled={!datasetUUIDs || datasetUUIDs.length === 0 || isLoadingDatasets}
-          title={`View ${datasetUUIDs.length} datasets containing ${name}.`}
-        >
-          <ViewDatasetsButton scFindParams={{ cellTypes }} isLoading={isLoadingDatasets} />
+        <SecondaryBackgroundTooltip title={`View datasets containing ${name}.`}>
+          <ViewDatasetsButton scFindParams={{ cellTypes }} />
         </SecondaryBackgroundTooltip>
       </BodyCell>
       <MobileCellTypeDescriptionButton isExpanded={isExpanded} name={name} clid={clid} onClick={toggleExpanded} />

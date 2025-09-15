@@ -8,11 +8,7 @@ export function useCellTypesList() {
 
   const cellTypesMap = useCellTypeNamesMap();
 
-  const {
-    data: cellTypeCLIDs,
-    isLoading: isLoadingCLIDs,
-    isValidating: isValidatingCLIDs,
-  } = useLabelsToCLIDs(data?.cellTypeNames ?? []);
+  const { data: cellTypeCLIDs, isLoading: isLoadingCLIDs } = useLabelsToCLIDs(data?.cellTypeNames ?? []);
 
   const cellTypes = useMemo(() => {
     if (!cellTypeCLIDs) {
@@ -37,6 +33,6 @@ export function useCellTypesList() {
   return {
     cellTypes,
     isLoading: isLoadingCLIDs || isLoadingLabels,
-    isValidating: isValidatingCLIDs || isValidatingLabels,
+    isValidating: isValidatingLabels,
   };
 }

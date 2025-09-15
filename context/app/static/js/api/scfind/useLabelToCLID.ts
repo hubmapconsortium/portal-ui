@@ -1,7 +1,7 @@
 import useSWR from 'swr';
-import { fetcher, multiFetcher } from 'js/helpers/swr';
+import { fetcher } from 'js/helpers/swr';
 import { useMemo } from 'react';
-import { createScFindKey, formatCellTypeName, useScFindKey } from './utils';
+import { createScFindKey, formatCellTypeName } from './utils';
 
 interface CellTypeToCLID {
   CLIDs: string[];
@@ -13,6 +13,13 @@ export interface CellTypeToCLIDParams {
 
 type CellTypeToCLIDKey = string;
 
+// Hook to get the complete label-to-CLID mapping from our Flask route
+export function useLabelToCLIDMapping() {
+  const url = '/scfind/label-to-clid-map.json';
+  return useSWR<Record<string, string[]>, unknown, string>(url, (endpoint) => fetcher({ url: endpoint }));
+}
+
+// Legacy function for direct SCFIND API calls - kept for backward compatibility
 export function createCLIDtoLabelKey(
   scFindEndpoint: string,
   { cellType }: CellTypeToCLIDParams,
@@ -29,16 +36,40 @@ export function createCLIDtoLabelKey(
 }
 
 export default function useLabelToCLID(props: CellTypeToCLIDParams) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const key = createCLIDtoLabelKey(scFindEndpoint, props, scFindIndexVersion);
-  return useSWR<CellTypeToCLID, unknown, CellTypeToCLIDKey>(key, (url) => fetcher({ url }));
+  const { data: fullMapping, error, isLoading } = useLabelToCLIDMapping();
+
+  return useMemo(() => {
+    if (isLoading || error || !fullMapping) {
+      return { data: undefined, error, isLoading };
+    }
+
+    const clids = fullMapping[props.cellType] || [];
+    return {
+      data: { CLIDs: clids } as CellTypeToCLID,
+      error: undefined,
+      isLoading: false,
+    };
+  }, [fullMapping, props.cellType, error, isLoading]);
 }
 
 export function useLabelsToCLIDs(cellTypes: string[]) {
-  const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
-  const keys = cellTypes.map((cellType) => createCLIDtoLabelKey(scFindEndpoint, { cellType }, scFindIndexVersion));
+  const { data: fullMapping, error, isLoading } = useLabelToCLIDMapping();
 
-  return useSWR<CellTypeToCLID[], unknown, CellTypeToCLIDKey[]>(keys, (urls) => multiFetcher({ urls }));
+  return useMemo(() => {
+    if (isLoading || error || !fullMapping) {
+      return { data: undefined, error, isLoading };
+    }
+
+    const results = cellTypes.map((cellType) => ({
+      CLIDs: fullMapping[cellType] || [],
+    }));
+
+    return {
+      data: results as CellTypeToCLID[],
+      error: undefined,
+      isLoading: false,
+    };
+  }, [fullMapping, cellTypes, error, isLoading]);
 }
 
 interface UseLabelToClidConfig {
@@ -50,7 +81,7 @@ const defaultConfig: UseLabelToClidConfig = {
 };
 
 export function useLabelToCLIDMap(cellTypes: string[], config: UseLabelToClidConfig = defaultConfig) {
-  const { data, error, isLoading } = useLabelsToCLIDs(cellTypes);
+  const { data: fullMapping, error, isLoading } = useLabelToCLIDMapping();
 
   return useMemo(() => {
     const labelToCLIDMap: Record<string, string[]> = {};
@@ -59,11 +90,16 @@ export function useLabelToCLIDMap(cellTypes: string[], config: UseLabelToClidCon
       return { labelToCLIDMap, isLoading, error };
     }
 
-    if (data) {
-      data.reduce((acc, item, idx) => {
-        acc[cellTypes[idx]] = item.CLIDs;
-        return acc;
-      }, labelToCLIDMap);
+    if (fullMapping) {
+      // Extract only the requested cell types from the full mapping
+      cellTypes.forEach((cellType) => {
+        const clids = fullMapping[cellType];
+        if (clids) {
+          labelToCLIDMap[cellType] = clids;
+        } else {
+          labelToCLIDMap[cellType] = [];
+        }
+      });
     }
 
     if (config.formatCellTypeNames) {
@@ -78,5 +114,5 @@ export function useLabelToCLIDMap(cellTypes: string[], config: UseLabelToClidCon
     }
 
     return { labelToCLIDMap, isLoading, error };
-  }, [isLoading, error, data, config.formatCellTypeNames, cellTypes]);
+  }, [isLoading, error, fullMapping, config.formatCellTypeNames, cellTypes]);
 }
