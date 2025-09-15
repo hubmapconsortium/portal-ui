@@ -11,24 +11,22 @@ function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
   const { data: vitessceConf, isLoading } = useVitessceConf(uuid, undefined, gene, true);
 
   return (
-    <Box p={2} width="100%">
-      <Box height="700px">
-        <ChartLoader isLoading={isLoading || !vitessceConf}>
-          <VisualizationWrapper
-            vitData={vitessceConf}
-            trackingInfo={{
-              action: 'Datasets',
-            }}
-            uuid={uuid}
-            hasNotebook={false}
-            hasBeenMounted
-            markerGene={gene}
-            hideTheme
-            hideShare
-            title={`${gene} Expression Preview`}
-          />
-        </ChartLoader>
-      </Box>
+    <Box p={2} width="100%" height="700px">
+      <ChartLoader isLoading={isLoading || !vitessceConf}>
+        <VisualizationWrapper
+          vitData={vitessceConf}
+          trackingInfo={{
+            action: 'Datasets',
+          }}
+          uuid={uuid}
+          hasNotebook={false}
+          hasBeenMounted
+          markerGene={gene}
+          hideTheme
+          hideShare
+          title={`${gene} Expression Preview`}
+        />
+      </ChartLoader>
     </Box>
   );
 }
