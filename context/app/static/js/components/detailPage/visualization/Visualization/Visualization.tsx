@@ -49,6 +49,9 @@ interface VisualizationProps {
   shouldDisplayHeader: boolean;
   shouldMountVitessce?: boolean;
   markerGene?: string;
+  hideTheme?: boolean;
+  hideShare?: boolean;
+  title?: React.ReactNode;
 }
 
 function Visualization({
@@ -59,6 +62,9 @@ function Visualization({
   shouldDisplayHeader,
   shouldMountVitessce = true,
   markerGene,
+  hideTheme = false,
+  hideShare = false,
+  title = 'Visualization',
 }: VisualizationProps) {
   const { fullscreenVizId, expandViz, vizTheme, setVitessceState, setVitessceStateDebounced, setVizNotebookId } =
     useVisualizationStore(visualizationStoreSelector);
@@ -148,13 +154,13 @@ function Visualization({
     (!isMultiDataset || Number.isInteger(vitessceSelection)) && (
       <StyledDetailPageSection id="visualization" $vizIsFullscreen={vizIsFullscreen}>
         <SpacedSectionButtonRow
-          leftText={shouldDisplayHeader ? <StyledSectionHeader>Visualization</StyledSectionHeader> : undefined}
+          leftText={shouldDisplayHeader ? <StyledSectionHeader>{title}</StyledSectionHeader> : undefined}
           buttons={
             <Stack direction="row" spacing={1}>
               {hasNotebook && <VisualizationWorkspaceButton />}
               <VisualizationDownloadButton uuid={uuid} hasNotebook={hasNotebook} parentUuid={parentUuid} />
-              <VisualizationShareButton trackingInfo={trackingInfo} />
-              <VisualizationThemeSwitch trackingInfo={trackingInfo} />
+              <VisualizationShareButton trackingInfo={trackingInfo} shouldDisplay={!hideShare} />
+              <VisualizationThemeSwitch trackingInfo={trackingInfo} shouldDisplay={!hideTheme} />
               <SecondaryBackgroundTooltip title="Switch to Fullscreen">
                 <ExpandButton size="small" onClick={expandVisualization} variant="contained">
                   <FullscreenRoundedIcon color="primary" />

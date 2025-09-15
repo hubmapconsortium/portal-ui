@@ -8,7 +8,7 @@ import { useOptionalGeneContext } from '../SCFindResults/CurrentGeneContext';
 import { SCFindCellTypesChart } from './CellTypesChart';
 
 function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
-  const { data: vitessceConf, isLoading } = useVitessceConf(uuid, undefined, gene);
+  const { data: vitessceConf, isLoading } = useVitessceConf(uuid, undefined, gene, true);
 
   return (
     <Box p={2} width="100%">
@@ -19,12 +19,13 @@ function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
             trackingInfo={{
               action: 'Datasets',
             }}
-            isPublicationPage
             uuid={uuid}
             hasNotebook={false}
-            shouldDisplayHeader={false}
             hasBeenMounted
             markerGene={gene}
+            hideTheme
+            hideShare
+            title={`${gene} Expression Preview`}
           />
         </ChartLoader>
       </Box>

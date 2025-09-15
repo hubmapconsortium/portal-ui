@@ -6,6 +6,7 @@ import useVisualizationStore, { VisualizationStore } from 'js/stores/useVisualiz
 import { TooltipToggleButton } from 'js/shared-styles/buttons';
 import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import { EventWithOptionalCategory } from 'js/components/types';
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { StyledToggleButtonGroup } from './style';
 
 const visualizationStoreSelector = (state: VisualizationStore) => ({
@@ -64,4 +65,4 @@ function VisualizationThemeSwitch({ trackingInfo }: { trackingInfo: EventWithOpt
   );
 }
 
-export default VisualizationThemeSwitch;
+export default withShouldDisplay(VisualizationThemeSwitch);

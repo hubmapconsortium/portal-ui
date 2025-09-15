@@ -16,6 +16,9 @@ interface VisualizationWrapperProps {
   hasBeenMounted?: boolean;
   isPublicationPage?: boolean;
   markerGene?: string;
+  hideTheme?: boolean;
+  hideShare?: boolean;
+  title?: React.ReactNode;
 }
 
 function VisualizationWrapper({
@@ -27,6 +30,9 @@ function VisualizationWrapper({
   hasBeenMounted,
   isPublicationPage = false,
   markerGene,
+  hideTheme = false,
+  hideShare = false,
+  title,
 }: VisualizationWrapperProps) {
   const containerStyles = useMemo(
     () => ({
@@ -49,6 +55,9 @@ function VisualizationWrapper({
             shouldMountVitessce={hasBeenMounted}
             markerGene={markerGene}
             trackingInfo={trackingInfo}
+            hideTheme={hideTheme}
+            hideShare={hideShare}
+            title={title}
           />
         </Suspense>
       </VisualizationErrorBoundary>
