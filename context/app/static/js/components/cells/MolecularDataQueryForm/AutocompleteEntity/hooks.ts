@@ -254,21 +254,6 @@ export function useSelectedPathwayParticipants() {
 
               pathwayGenes = validGenes;
               setInvalidGenes(newInvalidGenes);
-
-              const originalCount = getParticipantsFromPathway(pathway).length;
-              const filteredCount = validGenes.length;
-
-              if (originalCount !== filteredCount) {
-                // eslint-disable-next-line no-console
-                console.info(
-                  `Pathway genes filtered for ${queryMethod} compatibility: ${originalCount} → ${filteredCount} genes`,
-                  {
-                    pathway: pathwayName,
-                    filtered: originalCount - filteredCount,
-                    invalidGenes: newInvalidGenes,
-                  },
-                );
-              }
             } catch (error) {
               // If the request was aborted, don't update the loading state or show errors
               if (error instanceof Error && error.name === 'AbortError') {

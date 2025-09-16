@@ -119,7 +119,8 @@ def _build_label_to_clid_map():
 
     # Use ThreadPoolExecutor to make parallel requests
     # Limit concurrent connections to avoid overwhelming the API
-    max_workers = min(20, len(cell_types))
+    max_workers_config = current_app.config.get('SCFIND_MAX_WORKERS', 20)
+    max_workers = min(max_workers_config, len(cell_types))
 
     with ThreadPoolExecutor(max_workers=max_workers) as executor:
         # Submit all tasks
