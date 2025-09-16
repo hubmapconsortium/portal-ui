@@ -435,6 +435,13 @@ interface NestedBucket {
   }[];
 }
 
+const calculateUnmatched = (matched: number, total: number, showComparison: boolean) => {
+  if (total === 0 || !showComparison) {
+    return 0;
+  }
+  return total - matched;
+};
+
 const getFormattedDataFromBuckets = (
   matchBucket: NestedBucket | undefined,
   comparisonBucket: NestedBucket | undefined,
@@ -472,13 +479,13 @@ const getFormattedDataFromBuckets = (
       } else {
         acc[group] = {
           matched: matched / unmatched,
-          unmatched: showComparison ? (unmatched - matched) / unmatched : 0,
+          unmatched: calculateUnmatched(unmatched, matched, showComparison),
         };
       }
     } else {
       acc[group] = {
         matched,
-        unmatched: showComparison ? unmatched - matched : 0,
+        unmatched: calculateUnmatched(unmatched, matched, showComparison),
       };
     }
 
