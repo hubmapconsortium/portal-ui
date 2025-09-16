@@ -497,34 +497,35 @@ def genes_validate():
                             # and matches strict gene name validation
                             if (problematic_gene in batch_genes) and re.fullmatch(
                                 r"^[A-Za-z0-9_.\-]+$", problematic_gene):
-                                handle_invalid(problematic_gene, modality)
+                                    handle_invalid(problematic_gene, modality)
 
-                                # Retry with remaining genes
-                                remaining_genes = [g for g in batch_genes if g != problematic_gene]
-                                if remaining_genes:
-                                    try:
-                                        client.select_datasets(
-                                            where="gene",
-                                            has=[f'{gene} > 0' for gene in remaining_genes],
-                                            genomic_modality=modality,
-                                            min_cell_percentage=0.01
-                                        )
-                                        # If retry succeeds, all remaining genes are valid
-                                        valid_genes.extend(remaining_genes)
-                                    except ClientError:
-                                        # If retry still fails, fall back to individual testing
-                                        for gene in remaining_genes:
-                                            try:
-                                                client.select_datasets(
-                                                    where="gene",
-                                                    has=[f'{gene} > 0'],
-                                                    genomic_modality=modality,
-                                                    min_cell_percentage=0.01
-                                                )
-                                                valid_genes.append(gene)
-                                            except ClientError:
-                                                handle_invalid(gene, modality)
-                            else:
+                                    # Retry with remaining genes
+                                    remaining_genes = [
+                                        g for g in batch_genes if g != problematic_gene]
+                                    if remaining_genes:
+                                        try:
+                                            client.select_datasets(
+                                                where="gene",
+                                                has=[f'{gene} > 0' for gene in remaining_genes],
+                                                genomic_modality=modality,
+                                                min_cell_percentage=0.01
+                                            )
+                                            # If retry succeeds, all remaining genes are valid
+                                            valid_genes.extend(remaining_genes)
+                                        except ClientError:
+                                            # If retry still fails, fall back to individual testing
+                                            for gene in remaining_genes:
+                                                try:
+                                                    client.select_datasets(
+                                                        where="gene",
+                                                        has=[f'{gene} > 0'],
+                                                        genomic_modality=modality,
+                                                        min_cell_percentage=0.01
+                                                    )
+                                                    valid_genes.append(gene)
+                                                except ClientError:
+                                                    handle_invalid(gene, modality)
+                                else:
                                 # Problematic gene not in our batch, fall back to individual
                                 for gene in batch_genes:
                                     try:
