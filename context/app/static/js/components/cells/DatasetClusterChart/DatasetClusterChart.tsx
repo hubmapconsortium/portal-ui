@@ -11,6 +11,7 @@ import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import DatasetClusterTooltip from 'js/components/cells/DatasetClusterTooltip';
 
 import { useEventCallback } from '@mui/material/utils';
+import Stack from '@mui/material/Stack';
 import { getOptionLabels, addMatchedAndUnmatched } from './utils';
 import { ClusterCellMatch } from '../CellsService';
 
@@ -71,7 +72,7 @@ function DatasetClusterChart({ uuid, results }: DatasetClusterChartProps) {
       margin={chartMargin}
       colorScale={colorScale}
       dropdown={
-        <>
+        <Stack direction="column">
           <Typography component="label">Cluster Method</Typography>
           <DropdownListbox
             id="bar-fill-dropdown"
@@ -83,7 +84,7 @@ function DatasetClusterChart({ uuid, results }: DatasetClusterChartProps) {
             getOptionLabel={(option) => optionLabels[option]}
             buttonProps={{ variant: 'outlined' }}
           />
-        </>
+        </Stack>
       }
     >
       <VerticalStackedBarChart
