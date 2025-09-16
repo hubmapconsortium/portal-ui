@@ -492,7 +492,8 @@ def genes_validate():
 
                     if match and len(batch_genes) > 1:
                         problematic_gene = match.group(1)
-                        if problematic_gene in batch_genes:
+                        # Only allow problematic_gene if it's in the batch and matches strict gene name validation
+                        if (problematic_gene in batch_genes) and re.fullmatch(r"^[A-Za-z0-9_\-\.]+$", problematic_gene):
                             handle_invalid(problematic_gene, modality)
 
                             # Retry with remaining genes
@@ -557,7 +558,7 @@ def genes_validate():
             'total_valid': len(valid_genes)
         }
     except Exception as e:
-        current_app.logger.error(f"Error in gene validation: {e}")
+        current_app.logger.error(f"Error in gene validation: {e}", exc_info=True)
         return {'error': 'Failed to validate genes'}, 500
 
 
