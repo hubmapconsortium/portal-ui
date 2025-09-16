@@ -3,7 +3,6 @@ from posixpath import dirname
 import time
 
 from flask import render_template, current_app, request, redirect, url_for
-from html import escape
 
 # from asyncio import gather, to_thread
 
@@ -556,10 +555,8 @@ def genes_validate():
         invalid_genes = missing_genes + modality_missing_genes
 
         return {
-            'valid_genes': [escape(valid_genes) if isinstance(valid_genes, str)
-                            else valid_genes],
-            'invalid_genes': [escape(invalid_genes) if isinstance(invalid_genes, str)
-                              else invalid_genes],
+            'valid_genes': valid_genes,
+            'invalid_genes': invalid_genes,
             'total_provided': len(provided_genes),
             'total_valid': len(valid_genes)
         }
