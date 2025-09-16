@@ -78,6 +78,7 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
   });
 
   const queryMethod = useWatch({ control, name: 'queryMethod' });
+  const isCellsAPI = queryMethod !== 'scFind';
 
   const { data: options = [], isLoading } = useAutocompleteQuery({ targetEntity, substring, queryMethod });
 
@@ -224,8 +225,9 @@ function AutocompleteEntity<T extends QueryType>({ targetEntity, defaultValue }:
       />
       {targetEntity === 'gene' && invalidGenes.length > 0 && (
         <Alert severity="info" sx={{ mt: 1 }}>
-          The following genes from the selected pathway have not been indexed by the scFind Query Method and were
-          excluded: <strong>{invalidGenes.join(', ')}</strong>
+          The following genes from the selected pathway are available in the{' '}
+          {isCellsAPI ? 'selected modality in the Cells API' : 'scFind'} Query Method and were excluded:{' '}
+          <strong>{invalidGenes.join(', ')}</strong>
         </Alert>
       )}
     </Box>

@@ -112,23 +112,38 @@ function getParticipantsFromPathway(pathway?: PathwayParticipantsResponse): stri
 }
 
 /**
- * Validates genes against SCFIND to check if they exist.
- * This is used to filter pathway genes when scFind is the selected query method,
- * ensuring only genes that are indexed in SCFIND are included.
+ * Validates genes against the selected data source (SCFIND or Cells API) to check if they exist.
+ * This is used to filter pathway genes when a pathway is selected,
+ * ensuring only genes that are indexed in the selected data source are included.
  * @param genes Array of gene symbols to validate
+ * @param queryMethod The selected query method ('scFind' or other)
  * @returns Promise that resolves to an object with valid and invalid gene arrays
  */
-async function validateGenesWithScFind(genes: string[]): Promise<{
+async function validateGenesWithDataSource(
+  genes: string[],
+  queryMethod: string,
+): Promise<{
   validGenes: string[];
   invalidGenes: string[];
 }> {
   try {
-    const response = await fetch('/scfind/genes/validate', {
+    // Use the appropriate validation endpoint based on query method
+    const endpoint = queryMethod === 'scFind' ? '/scfind/genes/validate' : '/cells/genes/validate';
+
+    const requestBody: { genes: string[]; modality?: string } = { genes };
+
+    // Include modality for Cells API validation
+    if (queryMethod !== 'scFind') {
+      const modality = queryMethod === 'crossModalityATAC' ? 'atac' : 'rna';
+      requestBody.modality = modality;
+    }
+
+    const response = await fetch(endpoint, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ genes }),
+      body: JSON.stringify(requestBody),
     });
 
     if (!response.ok) {
@@ -152,7 +167,7 @@ async function validateGenesWithScFind(genes: string[]): Promise<{
       invalidGenes: result.invalid_genes,
     };
   } catch (error) {
-    console.warn('Failed to validate genes with SCFIND:', error);
+    console.warn(`Failed to validate genes with ${queryMethod}:`, error);
     // Return all genes as valid if validation fails to avoid breaking the user experience
     return {
       validGenes: genes,
@@ -173,6 +188,7 @@ export function useSelectedPathwayParticipants() {
 
   const selectedPathway = watch('pathway');
   const queryMethod = watch('queryMethod'); // Watch the query method
+  const queryType = watch('queryType'); // Watch the query type
 
   const pathwayName: string | undefined =
     selectedPathway && typeof selectedPathway === 'object' && 'full' in selectedPathway
@@ -206,11 +222,14 @@ export function useSelectedPathwayParticipants() {
         // Clear previous invalid genes when starting a new pathway
         setInvalidGenes([]);
 
-        // Filter genes through SCFIND validation if scFind is the selected query method
-        if (queryMethod === 'scFind' && pathwayGenes.length > 0) {
+        // Filter genes through validation only if query type is "gene" and we have genes
+        if (queryType === 'gene' && pathwayGenes.length > 0) {
           setIsLoadingPathwayGenes(true);
           try {
-            const { validGenes, invalidGenes: newInvalidGenes } = await validateGenesWithScFind(pathwayGenes);
+            const { validGenes, invalidGenes: newInvalidGenes } = await validateGenesWithDataSource(
+              pathwayGenes,
+              queryMethod,
+            );
             pathwayGenes = validGenes;
             setInvalidGenes(newInvalidGenes);
 
@@ -220,7 +239,7 @@ export function useSelectedPathwayParticipants() {
             if (originalCount !== filteredCount) {
               // eslint-disable-next-line no-console
               console.info(
-                `Pathway genes filtered for SCFIND compatibility: ${originalCount} → ${filteredCount} genes`,
+                `Pathway genes filtered for ${queryMethod} compatibility: ${originalCount} → ${filteredCount} genes`,
                 {
                   pathway: pathwayName,
                   filtered: originalCount - filteredCount,
@@ -240,19 +259,25 @@ export function useSelectedPathwayParticipants() {
           post: '',
           tags: [],
         }));
-        setValue('genes', genes);
+        // Only set genes when the query type is "gene"
+        if (queryType === 'gene') {
+          setValue('genes', genes);
+        }
       } else {
         // If the pathway was removed, clear the genes that were in that pathway.
         setInvalidGenes([]);
-        const currentGenes = getValues('genes');
-        if (!currentGenes || !previousSelectedPathway.current) {
-          return;
+        // Only manage genes when the query type is "gene"
+        if (queryType === 'gene') {
+          const currentGenes = getValues('genes');
+          if (!currentGenes || !previousSelectedPathway.current) {
+            return;
+          }
+          const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
+          const filteredGenes = currentGenes.filter((gene) => {
+            return !previousParticipants.includes(gene.full);
+          });
+          setValue('genes', filteredGenes);
         }
-        const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
-        const filteredGenes = currentGenes.filter((gene) => {
-          return !previousParticipants.includes(gene.full);
-        });
-        setValue('genes', filteredGenes);
       }
     };
 
@@ -260,7 +285,17 @@ export function useSelectedPathwayParticipants() {
       console.error('Failed to update genes from pathway:', error);
       setIsLoadingPathwayGenes(false);
     });
-  }, [pathway, selectedPathway, setValue, isLoading, formState.isSubmitted, getValues, queryMethod, pathwayName]);
+  }, [
+    pathway,
+    selectedPathway,
+    setValue,
+    isLoading,
+    formState.isSubmitted,
+    getValues,
+    queryMethod,
+    pathwayName,
+    queryType,
+  ]);
 
   const participants = useMemo(() => {
     if (!pathway) {
@@ -282,6 +317,6 @@ export function useSelectedPathwayParticipants() {
     pathwayCode,
     participants,
     isLoadingPathwayGenes,
-    invalidGenes: queryMethod === 'scFind' ? invalidGenes : [],
+    invalidGenes,
   };
 }
