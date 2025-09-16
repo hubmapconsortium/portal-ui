@@ -1,5 +1,4 @@
 import useSWR from 'swr';
-import { useCellTypeNamesMap } from 'js/api/scfind/useCellTypeNames';
 import { useEffect, useMemo, useRef } from 'react';
 import { PathwayParticipantsResponse, useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
 import CellsService from '../../CellsService';
@@ -8,55 +7,64 @@ import { useMolecularDataQueryFormState } from '../hooks';
 
 const cellsService = new CellsService();
 
-interface AutocompleteQueryKeyExtended extends AutocompleteQueryKey {
-  scFindCellTypeNames: Record<string, string[]>;
+interface ScFindGenesAutocompleteResponse {
+  results?: AutocompleteResult[];
+  error?: string;
+}
+
+interface ScFindCellTypesAutocompleteResponse {
+  results?: AutocompleteResult[];
+  error?: string;
 }
 
 const fetchEntityAutocomplete = async ({
   targetEntity,
   substring,
   queryMethod,
-  scFindCellTypeNames,
-}: AutocompleteQueryKeyExtended): Promise<AutocompleteQueryResponse> => {
+}: AutocompleteQueryKey): Promise<AutocompleteQueryResponse> => {
   if (!substring) {
     return [];
   }
 
-  // scfind does not provide a matching query, so we can do this locally
-  if (queryMethod === 'scFind' && targetEntity === 'cell-type') {
-    const cellTypeNames = Object.keys(scFindCellTypeNames);
-    const cellTypeNameMatches = cellTypeNames.filter((cellTypeName) =>
-      cellTypeName.toLowerCase().includes(substring.toLowerCase()),
-    );
+  // Use SCFIND endpoints for genes and cell types when scFind query method is selected
+  if (queryMethod === 'scFind' && targetEntity === 'gene') {
+    const urlParams = new URLSearchParams();
+    urlParams.append('q', substring);
+    urlParams.append('limit', '10');
 
-    return cellTypeNameMatches.map((cellTypeName) => {
-      const tags = scFindCellTypeNames[cellTypeName];
+    const response = await fetch(`/scfind/genes/autocomplete?${urlParams.toString()}`);
+    const responseJson = (await response.json()) as ScFindGenesAutocompleteResponse;
 
-      const matchIndex = cellTypeName.toLowerCase().indexOf(substring.toLowerCase());
-      const pre = cellTypeName.slice(0, matchIndex);
-      const match = cellTypeName.slice(matchIndex, matchIndex + substring.length);
-      const post = cellTypeName.slice(matchIndex + substring.length);
+    if ('error' in responseJson && responseJson.error) {
+      throw new Error(responseJson.error);
+    }
 
-      return {
-        full: cellTypeName,
-        pre,
-        match,
-        post,
-        tags,
-        values: tags.map((tag) => `${tag}.${cellTypeName}`),
-      };
-    });
+    return responseJson.results ?? [];
   }
 
+  // Use SCFIND cell types autocomplete endpoint when scFind query method is selected
+  if (queryMethod === 'scFind' && targetEntity === 'cell-type') {
+    const urlParams = new URLSearchParams();
+    urlParams.append('q', substring);
+    urlParams.append('limit', '10');
+
+    const response = await fetch(`/scfind/cell-types/autocomplete?${urlParams.toString()}`);
+    const responseJson = (await response.json()) as ScFindCellTypesAutocompleteResponse;
+
+    if ('error' in responseJson && responseJson.error) {
+      throw new Error(responseJson.error);
+    }
+
+    // Return results as-is since the backend now handles organ grouping and tags
+    return responseJson.results ?? [];
+  }
+
+  // For non-scFind queries, use the traditional cell service
   return cellsService.searchBySubstring({ targetEntity, substring });
 };
 
 export function useAutocompleteQuery(queryKey: AutocompleteQueryKey) {
-  const scFindCellTypeNames = useCellTypeNamesMap();
-
-  const key = useMemo(() => ({ ...queryKey, scFindCellTypeNames }), [queryKey, scFindCellTypeNames]);
-
-  return useSWR(key, fetchEntityAutocomplete);
+  return useSWR(queryKey, fetchEntityAutocomplete);
 }
 
 export function usePathwayAutocompleteQuery(substring: string) {

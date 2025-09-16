@@ -1,3 +1,4 @@
+from itertools import islice
 from urllib.parse import urlparse
 from flask import (current_app, request, session, Blueprint)
 
@@ -204,3 +205,21 @@ def find_sibling_datasets(client, dataset):
                    for sibling in siblings if sibling.get("uuid") != main_raw_dataset_uuid]
 
     return sibling_ids
+
+
+def first_n_matches(strings, substring, n):
+    """
+    Find the first n strings that contain the substring and format them with highlighting.
+
+    Returns a list of dictionaries with 'full', 'pre', 'match', and 'post' keys
+    to show the matching portion.
+    """
+    substring_lower = substring.lower()
+    first_n = list(islice((s for s in strings if substring_lower in s.lower()), n))
+    offsets = [s.lower().find(substring_lower) for s in first_n]
+    return [{
+        'full': s,
+        'pre': s[:offset],
+        'match': s[offset:offset + len(substring)],
+        'post': s[offset + len(substring):]
+    } for s, offset in zip(first_n, offsets)]

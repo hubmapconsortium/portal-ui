@@ -14,6 +14,7 @@ export interface AutocompleteResult {
   post: string;
   tags?: string[];
   values?: string[];
+  organs?: string[]; // For cell types: list of organs where this cell type appears
 }
 
 export type AutocompleteQueryResponse = AutocompleteResult[];

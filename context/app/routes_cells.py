@@ -1,4 +1,4 @@
-from itertools import islice, groupby
+from itertools import groupby
 from posixpath import dirname
 import time
 
@@ -8,7 +8,7 @@ from flask import render_template, current_app, request, redirect, url_for
 from hubmap_api_py_client import Client
 from hubmap_api_py_client.errors import ClientError
 
-from .utils import get_default_flask_data, make_blueprint
+from .utils import first_n_matches, get_default_flask_data, make_blueprint
 
 from operator import itemgetter
 
@@ -139,27 +139,6 @@ def _get_cell_ids(app):
     all_labels = [label for label in all_labels if label["A_ID"] not in labels_to_remove]
 
     return all_labels
-
-
-@timeit
-def _first_n_matches(strings, substring, n):
-    '''
-    >>> strings = [f'fake{n}' for n in range(200)]
-    >>> first_n = _first_n_matches(strings, 'e1', 10)
-    >>> first_n[0]
-    {'full': 'fake1', 'pre': 'fak', 'match': 'e1', 'post': ''}
-    >>> first_n[-1]
-    {'full': 'fake18', 'pre': 'fak', 'match': 'e1', 'post': '8'}
-    '''
-    substring_lower = substring.lower()
-    first_n = list(islice((s for s in strings if substring_lower in s.lower()), n))
-    offsets = [s.lower().find(substring_lower) for s in first_n]
-    return [{
-        'full': s,
-        'pre': s[:offset],
-        'match': s[offset:offset + len(substring)],
-        'post': s[offset + len(substring):]
-    } for s, offset in zip(first_n, offsets)]
 
 
 @dataclass
@@ -339,14 +318,14 @@ def _get_matched_cell_counts_per_cluster(cells):
 @blueprint.route('/cells/genes-by-substring.json', methods=['POST'])
 def genes_by_substring():
     substring = request.args.get('substring')
-    return {'results': _first_n_matches(_get_gene_symbols(current_app), substring, 10)}
+    return {'results': first_n_matches(_get_gene_symbols(current_app), substring, 10)}
 
 
 @timeit
 @blueprint.route('/cells/proteins-by-substring.json', methods=['POST'])
 def proteins_by_substring():
     substring = request.args.get('substring')
-    return {'results': _first_n_matches(_get_protein_ids(current_app), substring, 10)}
+    return {'results': first_n_matches(_get_protein_ids(current_app), substring, 10)}
 
 
 @timeit
@@ -354,7 +333,7 @@ def proteins_by_substring():
 def cell_types_by_substring():
     substring = request.args.get('substring')
     cell_types = _get_cell_ids(current_app)
-    results = _first_n_matches([cell['Lookup_Label'] for cell in cell_types], substring, 10)
+    results = first_n_matches([cell['Lookup_Label'] for cell in cell_types], substring, 10)
     return {'results': results}
 
 
