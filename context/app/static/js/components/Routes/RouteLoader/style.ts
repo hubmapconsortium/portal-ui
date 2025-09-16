@@ -4,7 +4,7 @@ const LoadingWrapper = styled('div')({
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  height: '100lvh',
+  height: '100vh',
   width: '100%',
 });
 

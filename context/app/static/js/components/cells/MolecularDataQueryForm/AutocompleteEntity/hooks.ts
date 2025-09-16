@@ -117,11 +117,13 @@ function getParticipantsFromPathway(pathway?: PathwayParticipantsResponse): stri
  * ensuring only genes that are indexed in the selected data source are included.
  * @param genes Array of gene symbols to validate
  * @param queryMethod The selected query method ('scFind' or other)
+ * @param abortSignal Optional AbortSignal to cancel the request
  * @returns Promise that resolves to an object with valid and invalid gene arrays
  */
 async function validateGenesWithDataSource(
   genes: string[],
   queryMethod: string,
+  abortSignal?: AbortSignal,
 ): Promise<{
   validGenes: string[];
   invalidGenes: string[];
@@ -144,6 +146,7 @@ async function validateGenesWithDataSource(
         'Content-Type': 'application/json',
       },
       body: JSON.stringify(requestBody),
+      signal: abortSignal,
     });
 
     if (!response.ok) {
@@ -167,6 +170,10 @@ async function validateGenesWithDataSource(
       invalidGenes: result.invalid_genes,
     };
   } catch (error) {
+    // Check if the request was aborted
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw error; // Re-throw abort errors so they can be handled appropriately
+    }
     console.warn(`Failed to validate genes with ${queryMethod}:`, error);
     // Return all genes as valid if validation fails to avoid breaking the user experience
     return {
@@ -205,86 +212,120 @@ export function useSelectedPathwayParticipants() {
 
   // Hold on to previous selected pathway to clear the genes when the pathway is removed
   const previousSelectedPathway = useRef(pathway);
+  // Hold a ref to the current AbortController for canceling validation requests
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Update the selected genes on pathway change
   useEffect(() => {
-    if (formState.isSubmitted) {
-      // If the form has been submitted, do not update the genes.
-      return;
-    }
+    if (!formState.isSubmitted) {
+      // Abort any ongoing validation request when pathway changes
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
 
-    const updateGenes = async () => {
-      if (selectedPathway && pathway) {
-        // If a new pathway is selected, set the genes to the new pathway.
-        previousSelectedPathway.current = pathway;
-        let pathwayGenes = getParticipantsFromPathway(pathway);
+      const updateGenes = async () => {
+        if (selectedPathway && pathway) {
+          // If a new pathway is selected, set the genes to the new pathway.
+          previousSelectedPathway.current = pathway;
+          let pathwayGenes = getParticipantsFromPathway(pathway);
 
-        // Clear previous invalid genes when starting a new pathway
-        setInvalidGenes([]);
+          // Clear previous invalid genes when starting a new pathway
+          setInvalidGenes([]);
 
-        // Filter genes through validation only if query type is "gene" and we have genes
-        if (queryType === 'gene' && pathwayGenes.length > 0) {
-          setIsLoadingPathwayGenes(true);
-          try {
-            const { validGenes, invalidGenes: newInvalidGenes } = await validateGenesWithDataSource(
-              pathwayGenes,
-              queryMethod,
-            );
-            pathwayGenes = validGenes;
-            setInvalidGenes(newInvalidGenes);
+          // Filter genes through validation only if query type is "gene" and we have genes
+          if (queryType === 'gene' && pathwayGenes.length > 0) {
+            setIsLoadingPathwayGenes(true);
+            // Create a new AbortController for this validation request
+            const abortController = new AbortController();
+            abortControllerRef.current = abortController;
 
-            const originalCount = getParticipantsFromPathway(pathway).length;
-            const filteredCount = validGenes.length;
-
-            if (originalCount !== filteredCount) {
-              // eslint-disable-next-line no-console
-              console.info(
-                `Pathway genes filtered for ${queryMethod} compatibility: ${originalCount} → ${filteredCount} genes`,
-                {
-                  pathway: pathwayName,
-                  filtered: originalCount - filteredCount,
-                  invalidGenes: newInvalidGenes,
-                },
+            try {
+              const { validGenes, invalidGenes: newInvalidGenes } = await validateGenesWithDataSource(
+                pathwayGenes,
+                queryMethod,
+                abortController.signal,
               );
-            }
-          } finally {
-            setIsLoadingPathwayGenes(false);
-          }
-        }
 
-        const genes = pathwayGenes.map((gene) => ({
-          full: gene,
-          pre: '',
-          match: gene,
-          post: '',
-          tags: [],
-        }));
-        // Only set genes when the query type is "gene"
-        if (queryType === 'gene') {
-          setValue('genes', genes);
-        }
-      } else {
-        // If the pathway was removed, clear the genes that were in that pathway.
-        setInvalidGenes([]);
-        // Only manage genes when the query type is "gene"
-        if (queryType === 'gene') {
-          const currentGenes = getValues('genes');
-          if (!currentGenes || !previousSelectedPathway.current) {
-            return;
+              // Check if the request was aborted before updating state
+              if (abortController.signal.aborted) {
+                return;
+              }
+
+              pathwayGenes = validGenes;
+              setInvalidGenes(newInvalidGenes);
+
+              const originalCount = getParticipantsFromPathway(pathway).length;
+              const filteredCount = validGenes.length;
+
+              if (originalCount !== filteredCount) {
+                // eslint-disable-next-line no-console
+                console.info(
+                  `Pathway genes filtered for ${queryMethod} compatibility: ${originalCount} → ${filteredCount} genes`,
+                  {
+                    pathway: pathwayName,
+                    filtered: originalCount - filteredCount,
+                    invalidGenes: newInvalidGenes,
+                  },
+                );
+              }
+            } catch (error) {
+              // If the request was aborted, don't update the loading state or show errors
+              if (error instanceof Error && error.name === 'AbortError') {
+                return;
+              }
+              console.error('Failed to validate pathway genes:', error);
+            } finally {
+              // Only clear loading state if the request wasn't aborted
+              if (!abortController.signal.aborted) {
+                setIsLoadingPathwayGenes(false);
+                abortControllerRef.current = null;
+              }
+            }
           }
-          const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
-          const filteredGenes = currentGenes.filter((gene) => {
-            return !previousParticipants.includes(gene.full);
-          });
-          setValue('genes', filteredGenes);
+
+          const genes = pathwayGenes.map((gene) => ({
+            full: gene,
+            pre: '',
+            match: gene,
+            post: '',
+            tags: [],
+          }));
+          // Only set genes when the query type is "gene"
+          if (queryType === 'gene') {
+            setValue('genes', genes);
+          }
+        } else {
+          // If the pathway was removed, clear the genes that were in that pathway.
+          setInvalidGenes([]);
+          setIsLoadingPathwayGenes(false);
+          // Only manage genes when the query type is "gene"
+          if (queryType === 'gene') {
+            const currentGenes = getValues('genes');
+            if (!currentGenes || !previousSelectedPathway.current) {
+              return;
+            }
+            const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
+            const filteredGenes = currentGenes.filter((gene) => {
+              return !previousParticipants.includes(gene.full);
+            });
+            setValue('genes', filteredGenes);
+          }
         }
+      };
+
+      updateGenes().catch((error) => {
+        console.error('Failed to update genes from pathway:', error);
+        setIsLoadingPathwayGenes(false);
+      });
+    }
+    // Cleanup function to abort validation if component unmounts or pathway changes
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
       }
     };
-
-    updateGenes().catch((error) => {
-      console.error('Failed to update genes from pathway:', error);
-      setIsLoadingPathwayGenes(false);
-    });
   }, [
     pathway,
     selectedPathway,
