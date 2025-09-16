@@ -2,7 +2,9 @@ from itertools import groupby
 from posixpath import dirname
 import time
 
-from flask import render_template, current_app, request, redirect, url_for, escape
+from flask import render_template, current_app, request, redirect, url_for
+from html import escape
+
 # from asyncio import gather, to_thread
 
 from hubmap_api_py_client import Client
