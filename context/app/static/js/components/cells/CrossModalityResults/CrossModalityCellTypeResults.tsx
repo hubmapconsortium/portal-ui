@@ -105,6 +105,7 @@ function CrossModalityCellTypeResults() {
               },
               columns,
               expandedContent: CrossModalityCellTypesChart,
+              estimatedExpandedRowHeight: 664,
             },
           ]}
         />

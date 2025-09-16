@@ -79,6 +79,7 @@ function EntitiesTables<Doc extends Entity>({
               onSelectAllChange={onSelectAllChange}
               onSelectChange={onSelectChange}
               estimatedExpandedRowHeight={estimatedExpandedRowHeight}
+              reverseExpandIndicator
             />
           </TabPanel>
         ))
