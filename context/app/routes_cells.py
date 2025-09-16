@@ -496,7 +496,7 @@ def genes_validate():
                             # Only allow problematic_gene if it's in the batch
                             # and matches strict gene name validation
                             if (problematic_gene in batch_genes) and re.fullmatch(
-                                    r"^[A-Za-z0-9_\-\.]+$", problematic_gene):
+                                r"^[A-Za-z0-9_.\-]+$", problematic_gene):
                                 handle_invalid(problematic_gene, modality)
 
                                 # Retry with remaining genes
