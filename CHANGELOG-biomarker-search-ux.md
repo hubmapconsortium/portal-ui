@@ -5,7 +5,7 @@
 - Improve gene querying for scFind to use the appropriate indexed values as their source.
 - Prevent genes that do not exist in a given query method's index from being selected/added by a gene pathway selection.
 - Cache label to CLID mapping on the server side to decrease load on scFind servers.
-- Fix position of route loader on application start.
+- Fix position of route loader during page load.
 - Greatly improve load speed of cell type search page.
 - Display dataset overview graph and table sequentially inside shared accordion.
 - Include all results of current query in dataset overview graph/table results instead of only first tab.
