@@ -215,7 +215,8 @@ def first_n_matches(strings, substring, n):
     to show the matching portion.
 
     >>> first_n_matches(['apple', 'banana', 'grape', 'pineapple'], 'app', 2)
-    [{'full': 'apple', 'pre': '', 'match': 'app', 'post': 'le'}, {'full': 'pineapple', 'pre': 'pine', 'match': 'app', 'post': 'le'}]
+    [{'full': 'apple', 'pre': '', 'match': 'app', 'post': 'le'},
+    {'full': 'pineapple', 'pre': 'pine', 'match': 'app', 'post': 'le'}]
 
     >>> first_n_matches(['hello', 'world'], 'xyz', 1)
     []
