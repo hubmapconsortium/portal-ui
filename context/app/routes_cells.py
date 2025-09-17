@@ -1,6 +1,7 @@
 from itertools import groupby
 from posixpath import dirname
 import time
+import re
 
 from flask import render_template, current_app, request, redirect, url_for
 
@@ -488,7 +489,6 @@ def genes_validate():
 
                         # Try to extract the problematic gene from error message
                         # Look for patterns like "GENE_NAME not present in rna index"
-                        import re
                         match = re.search(r'(\w+) not present in \w+ index', error_message)
 
                         if match and len(batch_genes) > 1:

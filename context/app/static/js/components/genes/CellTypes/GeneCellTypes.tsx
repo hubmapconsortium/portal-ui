@@ -98,7 +98,7 @@ interface CellTypeRow {
 }
 
 const useCellTypeRows = (cellTypes: GeneSignatureStats[] = []) => {
-  const { data: clids } = useLabelsToCLIDs(useMemo(() => cellTypes.map((ct) => ct.cell_type), [cellTypes]));
+  const { results: clids } = useLabelsToCLIDs(useMemo(() => cellTypes.map((ct) => ct.cell_type), [cellTypes]));
 
   return useMemo(() => {
     return cellTypes.map((cellType, idx) => ({

@@ -22,7 +22,7 @@ interface CellTypesContextType extends CellTypesContextProps {
 const CellTypesContext = createContext<CellTypesContextType>('CellTypesContext');
 
 export default function CellTypesProvider({ children, cellId }: PropsWithChildren<CellTypesContextProps>) {
-  const { data: { cell_types: cellTypes } = { cell_types: [] } } = useCLIDToLabel({ clid: cellId });
+  const { data: cellTypes = [] } = useCLIDToLabel({ clid: cellId });
   const { name, organs, variants } = extractCellTypesInfo(cellTypes);
   const value = useMemo(
     () => ({

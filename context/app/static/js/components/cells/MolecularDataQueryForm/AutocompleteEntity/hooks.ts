@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { PathwayParticipantsResponse, useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
+import { fetcher } from 'js/helpers/swr';
 import CellsService from '../../CellsService';
 import type { AutocompleteQueryKey, AutocompleteQueryResponse, AutocompleteResult } from './types';
 import { useMolecularDataQueryFormState } from '../hooks';
@@ -32,12 +33,9 @@ const fetchEntityAutocomplete = async ({
     urlParams.append('q', substring);
     urlParams.append('limit', '10');
 
-    const response = await fetch(`/scfind/genes/autocomplete?${urlParams.toString()}`);
-    const responseJson = (await response.json()) as ScFindGenesAutocompleteResponse;
-
-    if ('error' in responseJson && responseJson.error) {
-      throw new Error(responseJson.error);
-    }
+    const responseJson = await fetcher<ScFindGenesAutocompleteResponse>({
+      url: `/scfind/genes/autocomplete?${urlParams.toString()}`,
+    });
 
     return responseJson.results ?? [];
   }
@@ -48,12 +46,9 @@ const fetchEntityAutocomplete = async ({
     urlParams.append('q', substring);
     urlParams.append('limit', '10');
 
-    const response = await fetch(`/scfind/cell-types/autocomplete?${urlParams.toString()}`);
-    const responseJson = (await response.json()) as ScFindCellTypesAutocompleteResponse;
-
-    if ('error' in responseJson && responseJson.error) {
-      throw new Error(responseJson.error);
-    }
+    const responseJson = await fetcher<ScFindCellTypesAutocompleteResponse>({
+      url: `/scfind/cell-types/autocomplete?${urlParams.toString()}`,
+    });
 
     // Return results as-is since the backend now handles organ grouping and tags
     return responseJson.results ?? [];
@@ -140,26 +135,25 @@ async function validateGenesWithDataSource(
       requestBody.modality = modality;
     }
 
-    const response = await fetch(endpoint, {
+    const requestInit: RequestInit = {
       method: 'POST',
+      body: JSON.stringify(requestBody),
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(requestBody),
       signal: abortSignal,
-    });
+    };
 
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`);
-    }
-
-    const result = (await response.json()) as {
+    const result = await fetcher<{
       valid_genes: string[];
       invalid_genes: string[];
       total_provided: number;
       total_valid: number;
       error?: string;
-    };
+    }>({
+      url: endpoint,
+      requestInit,
+    });
 
     if (result.error) {
       throw new Error(result.error);

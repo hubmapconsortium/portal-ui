@@ -8,15 +8,15 @@ export function useCellTypesList() {
 
   const cellTypesMap = useCellTypeNamesMap();
 
-  const { data: cellTypeCLIDs, isLoading: isLoadingCLIDs } = useLabelsToCLIDs(data?.cellTypeNames ?? []);
+  const { results, isLoading: isLoadingCLIDs } = useLabelsToCLIDs(data?.cellTypeNames ?? []);
 
   const cellTypes = useMemo(() => {
-    if (!cellTypeCLIDs) {
+    if (!results) {
       return [];
     }
     const cellTypeLabels = data?.cellTypeNames ?? [];
     return (
-      cellTypeCLIDs
+      results
         .map((clids, idx) => {
           const label = formatCellTypeName(cellTypeLabels[idx]);
           return {
@@ -28,7 +28,7 @@ export function useCellTypesList() {
         // Filter any duplicate labels (keep first)
         .filter((item, index, self) => index === self.findIndex((t) => t.label === item.label))
     );
-  }, [cellTypeCLIDs, data?.cellTypeNames, cellTypesMap]);
+  }, [results, data?.cellTypeNames, cellTypesMap]);
 
   return {
     cellTypes,

@@ -59,7 +59,7 @@ function ChartWrapper(
           "top-controls   top-controls  top-controls   top-controls"
           "axis-controls  axis-controls axis-controls  legend"
           "chart          chart         chart          legend"
-          "caption"
+          "caption        caption       caption        caption"
         `,
         overflow: 'none',
         gridTemplateColumns: 'auto auto auto minmax(175px, max-content)',

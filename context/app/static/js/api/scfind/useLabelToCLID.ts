@@ -15,8 +15,8 @@ type CellTypeToCLIDKey = string;
 
 // Hook to get the complete label-to-CLID mapping from our Flask route
 export function useLabelToCLIDMapping() {
-  const url = '/scfind/label-to-clid-map.json';
-  return useSWR<Record<string, string[]>, unknown, string>(url, (endpoint) => fetcher({ url: endpoint }));
+  const path = '/scfind/label-to-clid-map.json';
+  return useSWR<Record<string, string[]>, unknown, string>(path, (endpoint) => fetcher({ url: endpoint }));
 }
 
 // Legacy function for direct SCFIND API calls - kept for backward compatibility
@@ -55,21 +55,17 @@ export default function useLabelToCLID(props: CellTypeToCLIDParams) {
 export function useLabelsToCLIDs(cellTypes: string[]) {
   const { data: fullMapping, error, isLoading } = useLabelToCLIDMapping();
 
-  return useMemo(() => {
+  const results = useMemo(() => {
     if (isLoading || error || !fullMapping) {
-      return { data: undefined, error, isLoading };
+      return undefined;
     }
 
-    const results = cellTypes.map((cellType) => ({
+    return cellTypes.map((cellType) => ({
       CLIDs: fullMapping[cellType] || [],
     }));
-
-    return {
-      data: results as CellTypeToCLID[],
-      error: undefined,
-      isLoading: false,
-    };
   }, [fullMapping, cellTypes, error, isLoading]);
+
+  return { results, error, isLoading };
 }
 
 interface UseLabelToClidConfig {

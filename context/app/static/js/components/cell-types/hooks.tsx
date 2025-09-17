@@ -35,7 +35,7 @@ export const useCellTypeInfo = () => {
  */
 export function useExtractedCellTypeInfo() {
   const { cellId } = useCellTypesDetailPageContext();
-  const { data: { cell_types: cellTypes } = { cell_types: [] } } = useCLIDToLabel({ clid: cellId });
+  const { data: cellTypes = [] } = useCLIDToLabel({ clid: cellId });
   return useMemo(() => extractCellTypesInfo(cellTypes), [cellTypes]);
 }
 

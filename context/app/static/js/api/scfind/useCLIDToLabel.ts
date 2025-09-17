@@ -3,10 +3,6 @@ import { fetcher } from 'js/helpers/swr';
 import { useMemo } from 'react';
 import { createScFindKey } from './utils';
 
-interface CellTypeLabelsForCLID {
-  cell_types: string[];
-}
-
 export interface CellTypeLabelsForCLIDParams {
   clid: string;
 }
@@ -15,8 +11,8 @@ type CellTypeCountForTissueKey = string;
 
 // Hook to get the complete CLID-to-label mapping from our Flask route
 export function useCLIDToLabelMapping() {
-  const url = '/scfind/clid-to-label-map.json';
-  return useSWR<Record<string, string[]>, unknown, string>(url, (endpoint) => fetcher({ url: endpoint }));
+  const path = '/scfind/clid-to-label-map.json';
+  return useSWR<Record<string, string[]>, unknown, string>(path, (endpoint) => fetcher({ url: endpoint }));
 }
 
 // Legacy function for direct SCFIND API calls - kept for backward compatibility
@@ -36,18 +32,15 @@ export function createCLIDtoLabelKey(
 }
 
 export default function useCLIDToLabel(props: CellTypeLabelsForCLIDParams) {
-  const { data: fullMapping, error, isLoading } = useCLIDToLabelMapping();
+  const { data: fullMapping, error, isLoading, ...rest } = useCLIDToLabelMapping();
 
-  return useMemo(() => {
+  const cellTypes = useMemo(() => {
     if (isLoading || error || !fullMapping) {
-      return { data: undefined, error, isLoading };
+      return undefined;
     }
 
-    const cellTypes = fullMapping[props.clid] || [];
-    return {
-      data: { cell_types: cellTypes } as CellTypeLabelsForCLID,
-      error: undefined,
-      isLoading: false,
-    };
+    return fullMapping[props.clid] || [];
   }, [fullMapping, props.clid, error, isLoading]);
+
+  return { data: cellTypes, error, isLoading, ...rest };
 }
