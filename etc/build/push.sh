@@ -113,19 +113,16 @@ if [[ "$DRY_RUN" == "true" ]]; then
   echo "DRY RUN: Would build and push Docker images:"
   echo "  - $VERSION_IMAGE_NAME"
   echo "  - $LATEST_IMAGE_NAME"
-else
-  etc/build/build.sh $VERSION_IMAGE_NAME
-  docker tag $VERSION_IMAGE_NAME $LATEST_IMAGE_NAME
-  docker push $VERSION_IMAGE_NAME
-  docker push $LATEST_IMAGE_NAME
-fi
-
-if [[ "$DRY_RUN" == "true" ]]; then
   echo "DRY RUN: Would create git tag and push:"
   echo "  - git tag $VERSION"
   echo "  - git push origin --tags"
   echo "  - git push origin"
 else
+  etc/build/build.sh $VERSION_IMAGE_NAME
+  docker tag $VERSION_IMAGE_NAME $LATEST_IMAGE_NAME
+  docker push $VERSION_IMAGE_NAME
+  docker push $LATEST_IMAGE_NAME
+  
   git tag $VERSION
   git push origin --tags
   git push origin
