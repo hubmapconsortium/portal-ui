@@ -214,7 +214,7 @@ def first_n_matches(strings, substring, n):
     Returns a list of dictionaries with 'full', 'pre', 'match', and 'post' keys
     to show the matching portion.
 
-    >>> first_n_matches(['apple', 'banana', 'grape', 'pineapple', 'application], 'app', 2)
+    >>> first_n_matches(['apple', 'banana', 'grape', 'pineapple', 'application'], 'app', 2)
     [{'full': 'apple', 'pre': '', 'match': 'app', 'post': 'le'}, {'full': 'pineapple', 'pre': 'pine', 'match': 'app', 'post': 'le'}] # noqa E501
 
     >>> first_n_matches(['hello', 'world'], 'xyz', 1)
