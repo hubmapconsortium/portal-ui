@@ -1,17 +1,20 @@
-import React, { PropsWithChildren, useEffect, useId, useState } from 'react';
+import React, { PropsWithChildren, useEffect, useState } from 'react';
 import { FieldErrors } from 'react-hook-form';
 import { useEventCallback } from '@mui/material/utils';
 import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepContent from '@mui/material/StepContent';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
-import IndependentStepAccordion from 'js/shared-styles/accordions/StepAccordion/IndependentStepAccordion';
 import { MolecularDataQueryFormProps, MolecularDataQueryFormState } from './types';
 import SubmitButton from './SubmitButton';
 import Results from '../MolecularDataQueryResults';
-import CurrentQueryParametersDisplay from './CurrentQueryParametersDisplay';
-import CurrentQueryResultsDisplay from './CurrentQueryResultsDisplay';
 import { useMolecularDataQueryFormTracking } from './MolecularDataQueryFormTrackingProvider';
 import { getCellVariableNames, useMolecularDataQueryFormState } from './hooks';
 import MolecularDataQueryFormProvider from './MolecularDataQueryFormProvider';
+import QueryParametersLabel from './QueryParametersLabel';
+import QueryResultsLabel from './QueryResultsLabel';
 
 export function MolecularDataQueryForm({ children }: PropsWithChildren) {
   const methods = useMolecularDataQueryFormState();
@@ -26,6 +29,15 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
   const genes = watch('genes');
   const proteins = watch('proteins');
   const cellTypes = watch('cellTypes');
+
+  const [activeStep, setActiveStep] = useState(0);
+
+  // Move to results step when form is successfully submitted
+  useEffect(() => {
+    if (methods.formState.isSubmitSuccessful) {
+      setActiveStep(1);
+    }
+  }, [methods.formState.isSubmitSuccessful]);
 
   const onSubmit = useEventCallback((data: MolecularDataQueryFormState) => {
     const cellVariableNames = getCellVariableNames(queryType, genes, proteins, cellTypes);
@@ -70,44 +82,35 @@ export function MolecularDataQueryForm({ children }: PropsWithChildren) {
       keepValues: true,
       keepDirty: false,
     });
+
+    // Reset to parameters step when form parameters change
+    setActiveStep(0);
   }, [threshold, genes, proteins, cellTypes, reset]);
 
-  const id = `${useId()}-molecular-data-query`;
-
-  const [formIsExpanded, setFormIsExpanded] = useState(false);
-
-  const toggleParametersSection = useEventCallback(() => {
-    setFormIsExpanded((prev) => !prev);
+  const handleBackToParameters = useEventCallback(() => {
+    setActiveStep(0);
   });
 
   return (
-    <>
-      <IndependentStepAccordion
-        index={0}
-        summaryHeading="Parameters"
-        id={`${id}-parameters`}
-        content={
-          <Stack component="form" onSubmit={submit} gap={2}>
-            {children}
-            <SubmitButton />
-          </Stack>
-        }
-        isExpanded={formIsExpanded || !methods.formState.isSubmitted}
-        onChange={toggleParametersSection}
-        noProvider
-        completedStepText={methods.formState.isSubmitted ? <CurrentQueryParametersDisplay /> : undefined}
-      />
-      <IndependentStepAccordion
-        index={1}
-        summaryHeading="Results"
-        id={`${id}-results`}
-        content={<Results />}
-        isExpanded={methods.formState.isSubmitSuccessful}
-        noProvider
-        disabled={!methods.formState.isSubmitSuccessful}
-        completedStepText={methods.formState.isSubmitSuccessful ? <CurrentQueryResultsDisplay /> : undefined}
-      />
-    </>
+    <Paper sx={{ p: 2 }}>
+      <Stepper activeStep={activeStep} orientation="vertical">
+        <Step index={0}>
+          <QueryParametersLabel activeStep={activeStep} handleBackToParameters={handleBackToParameters} />
+          <StepContent>
+            <Stack component="form" onSubmit={submit} gap={2}>
+              {children}
+              <SubmitButton />
+            </Stack>
+          </StepContent>
+        </Step>
+        <Step index={1} completed={activeStep === 1} last>
+          <QueryResultsLabel activeStep={activeStep} />
+          <StepContent>
+            <Results />
+          </StepContent>
+        </Step>
+      </Stepper>
+    </Paper>
   );
 }
 export default function MolecularDataQueryFormWithProvider({ initialValues, children }: MolecularDataQueryFormProps) {

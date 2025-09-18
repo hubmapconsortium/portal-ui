@@ -1,12 +1,14 @@
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 import React, { useEffect } from 'react';
 import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
 import Description from 'js/shared-styles/sections/Description';
-import { Tab, TabPanel, Tabs, useTabs } from 'js/shared-styles/tabs';
-import { VisualizationIcon } from 'js/shared-styles/icons';
+import DetailsAccordion from 'js/shared-styles/accordions/DetailsAccordion';
 import { EventInfo } from 'js/components/types';
 import { useEventCallback } from '@mui/material/utils';
 import { trackEvent } from 'js/helpers/trackers';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
 import { useDatasetsOverview } from './hooks';
 import DatasetsOverviewTable from './DatasetsOverviewTable';
 import useSCFindResultsStatisticsStore from '../SCFindResults/store';
@@ -16,7 +18,7 @@ interface DatasetsOverviewProps extends React.PropsWithChildren {
   datasets: string[];
   belowTheFold?: React.ReactNode;
   trackingInfo?: EventInfo;
-  tableTabDescription?: React.ReactNode;
+  tableDescription?: React.ReactNode;
 }
 
 export default function DatasetsOverview({
@@ -24,7 +26,7 @@ export default function DatasetsOverview({
   children,
   belowTheFold,
   trackingInfo,
-  tableTabDescription,
+  tableDescription,
 }: DatasetsOverviewProps) {
   const { data: indexedDatasets, isLoading, error } = useIndexedDatasets();
   const indexed = useDatasetsOverview(indexedDatasets?.datasets ?? []);
@@ -49,17 +51,13 @@ export default function DatasetsOverview({
     }
   }, [indexed, all, matched, setDatasetStats]);
 
-  const { openTabIndex, handleTabChange } = useTabs();
-
-  const onTabChange = useEventCallback((event: React.SyntheticEvent, newValue: number) => {
-    handleTabChange(event, newValue);
-    if (trackingInfo) {
-      const actionName = 'Datasets Overview / Toggle Tab';
-      const actionlabel = newValue === 0 ? 'Visualization' : 'Table';
+  const onAccordionChange = useEventCallback((event: React.SyntheticEvent, isExpanded: boolean) => {
+    if (trackingInfo && isExpanded) {
+      const actionName = 'Datasets Overview / Toggle Accordion';
       trackEvent({
         ...trackingInfo,
         action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
-        label: trackingInfo.label ? `${trackingInfo.label} ${actionlabel}` : actionlabel,
+        label: trackingInfo.label ? `${trackingInfo.label} Expand` : 'Expand',
       } as EventInfo);
     }
   });
@@ -72,19 +70,27 @@ export default function DatasetsOverview({
   }
 
   return (
-    <>
-      <Description belowTheFold={belowTheFold}>{children}</Description>
-      <Tabs value={openTabIndex} onChange={onTabChange} aria-label="Datasets Overview Tabs">
-        <Tab label="Visualization" index={0} icon={<VisualizationIcon />} iconPosition="start" />
-        <Tab label="Table" index={1} />
-      </Tabs>
-      <TabPanel value={openTabIndex} index={0}>
-        <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} trackingInfo={trackingInfo} />
-      </TabPanel>
-      <TabPanel value={openTabIndex} index={1}>
-        {tableTabDescription && <Description>{tableTabDescription}</Description>}
-        <DatasetsOverviewTable matched={matched} indexed={indexed} all={all} />
-      </TabPanel>
-    </>
+    <Box>
+      <DetailsAccordion
+        summary={<Typography variant="subtitle1">Datasets Overview</Typography>}
+        onChange={onAccordionChange}
+        defaultExpanded
+        summaryProps={{
+          sx: {
+            '.MuiAccordionSummary-content': {
+              mr: 'auto',
+            },
+          },
+        }}
+      >
+        <Stack spacing={3}>
+          <Description belowTheFold={belowTheFold}>{children}</Description>
+          <DatasetsOverviewChart matched={matched} indexed={indexed} all={all} trackingInfo={trackingInfo} />
+          <DatasetsOverviewTable matched={matched} indexed={indexed} all={all}>
+            {tableDescription}
+          </DatasetsOverviewTable>
+        </Stack>
+      </DetailsAccordion>
+    </Box>
   );
 }

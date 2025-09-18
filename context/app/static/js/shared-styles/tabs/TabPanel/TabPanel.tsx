@@ -1,7 +1,7 @@
-import React, { PropsWithChildren } from 'react';
+import React, { ComponentProps } from 'react';
 import { PaddedBox } from './style';
 
-interface TabPanelProps extends PropsWithChildren {
+interface TabPanelProps extends ComponentProps<typeof PaddedBox> {
   value: number;
   index: number;
   pad?: boolean;

@@ -12,6 +12,7 @@ import { WhiteBackgroundIconDropdownMenuButton } from 'js/shared-styles/buttons'
 import { EventWithOptionalCategory } from 'js/components/types';
 import { IconDropdownMenuItem } from 'js/shared-styles/dropdowns/IconDropdownMenu/IconDropdownMenu';
 
+import withShouldDisplay from 'js/helpers/withShouldDisplay';
 import { createEmailWithUrl, getUrl } from './utils';
 import { DEFAULT_LONG_URL_WARNING } from './constants';
 
@@ -61,4 +62,4 @@ function VisualizationShareButton({ trackingInfo }: { trackingInfo: EventWithOpt
   );
 }
 
-export default VisualizationShareButton;
+export default withShouldDisplay(VisualizationShareButton);

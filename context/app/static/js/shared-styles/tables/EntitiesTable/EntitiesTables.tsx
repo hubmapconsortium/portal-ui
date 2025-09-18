@@ -65,23 +65,26 @@ function EntitiesTables<Doc extends Entity>({
       {tableIsEmpty ? (
         <StyledPaper sx={{ padding: '1rem' }}>{emptyAlert}</StyledPaper>
       ) : (
-        entities.map(({ query, columns, entityType, expandedContent, estimatedExpandedRowHeight }, i) => (
-          <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
-            <EntityTable<Doc>
-              query={query}
-              columns={columns}
-              isSelectable={isSelectable}
-              numSelected={numSelected}
-              disabledIDs={disabledIDs}
-              trackingInfo={trackingInfo}
-              expandedContent={expandedContent}
-              maxHeight={maxHeight}
-              onSelectAllChange={onSelectAllChange}
-              onSelectChange={onSelectChange}
-              estimatedExpandedRowHeight={estimatedExpandedRowHeight}
-            />
-          </TabPanel>
-        ))
+        entities.map(
+          ({ query, columns, entityType, expandedContent, estimatedExpandedRowHeight, reverseExpandIndicator }, i) => (
+            <TabPanel value={openTabIndex} index={i} key={`${entityType}-table`}>
+              <EntityTable<Doc>
+                query={query}
+                columns={columns}
+                isSelectable={isSelectable}
+                numSelected={numSelected}
+                disabledIDs={disabledIDs}
+                trackingInfo={trackingInfo}
+                expandedContent={expandedContent}
+                maxHeight={maxHeight}
+                onSelectAllChange={onSelectAllChange}
+                onSelectChange={onSelectChange}
+                estimatedExpandedRowHeight={estimatedExpandedRowHeight}
+                reverseExpandIndicator={reverseExpandIndicator}
+              />
+            </TabPanel>
+          ),
+        )
       )}
     </>
   );

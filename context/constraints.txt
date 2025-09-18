@@ -2,12 +2,6 @@
 # Frozenlist resolves to v1.3.0 otherwise, which fails to build on python 3.12
 frozenlist>=1.4.1
 
-# Last versions of pandas/numpy before the big breaking changes that came with with numpy 2.0,
-# still compatible with python 3.12
-numpy==1.26.4
-pandas==1.5.3
-
-
 # https://github.com/hubmapconsortium/portal-ui/security/dependabot/318
 tornado>=6.5
 

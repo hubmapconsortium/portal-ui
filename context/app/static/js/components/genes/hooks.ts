@@ -1,5 +1,4 @@
 import { useGeneOntologyDetail } from 'js/hooks/useUBKG';
-import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
 import { useCallback } from 'react';
 import { trackEvent } from 'js/helpers/trackers';
 import { useGenePageContext } from './GenePageContext';
@@ -8,11 +7,6 @@ import { EventInfo } from '../types';
 const useGeneOntology = () => {
   const { geneSymbol } = useGenePageContext();
   return useGeneOntologyDetail(geneSymbol);
-};
-
-const useGeneEntities = () => {
-  const { geneSymbol } = useGenePageContext();
-  return useFeatureDetails('genes', geneSymbol);
 };
 
 const useGeneSymbol = () => {
@@ -47,11 +41,4 @@ const useTrackGeneDetailPage = (eventInfo?: Partial<EventInfo> | (() => Partial<
   }, [eventInfo, geneSymbol]);
 };
 
-export {
-  useGeneOntology,
-  useGeneEntities,
-  useGenePageContext,
-  useGeneDetailPageTrackingInfo,
-  useTrackGeneDetailPage,
-  useGeneSymbol,
-};
+export { useGeneOntology, useGenePageContext, useGeneDetailPageTrackingInfo, useTrackGeneDetailPage, useGeneSymbol };

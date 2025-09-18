@@ -20,7 +20,7 @@ export function useMatchedDatasets(cellTypes: string[]) {
 
 export function useCellTypeRows(cellTypes: string[]) {
   const formattedCellNames = useFormattedCellTypeNames(cellTypes);
-  const { data: clids, isLoading: isLoadingClids } = useLabelsToCLIDs(formattedCellNames);
+  const { results: clids, isLoading: isLoadingClids } = useLabelsToCLIDs(formattedCellNames);
   const { matchedDatasets, isLoading: isLoadingMatchedDatasets } = useMatchedDatasets(formattedCellNames);
   const { datasets: totalIndexedDatasets, isLoading: isLoadingTotalDatasets } = useIndexedDatasetsForOrgan();
 

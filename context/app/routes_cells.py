@@ -1,14 +1,16 @@
-from itertools import islice, groupby
+from itertools import groupby
 from posixpath import dirname
 import time
+import re
 
 from flask import render_template, current_app, request, redirect, url_for
+
 # from asyncio import gather, to_thread
 
 from hubmap_api_py_client import Client
 from hubmap_api_py_client.errors import ClientError
 
-from .utils import get_default_flask_data, make_blueprint
+from .utils import first_n_matches, get_default_flask_data, make_blueprint
 
 from operator import itemgetter
 
@@ -22,6 +24,51 @@ from csv import DictReader
 
 
 blueprint = make_blueprint(__name__)
+
+# Cache for genes that are known to be invalid for specific modalities
+# Structure: {modality: {gene1, gene2, ...}}
+_INVALID_GENES_CACHE = defaultdict(set)
+
+
+def _add_invalid_gene_to_cache(gene, modality):
+    """Add a gene to the invalid genes cache for a specific modality."""
+    _INVALID_GENES_CACHE[modality].add(gene)
+
+
+def _is_gene_cached_as_invalid(gene, modality):
+    """Check if a gene is already known to be invalid for a specific modality."""
+    return gene in _INVALID_GENES_CACHE[modality]
+
+
+def _filter_genes_by_cache(genes, modality):
+    """
+    Filter genes based on cache, returning (genes_to_test, known_invalid_genes).
+
+    Args:
+        genes: List of genes to filter
+        modality: The modality to check against
+
+    Returns:
+        tuple: (genes_to_test, known_invalid_genes)
+    """
+    genes_to_test = []
+    known_invalid_genes = []
+
+    for gene in genes:
+        if _is_gene_cached_as_invalid(gene, modality):
+            known_invalid_genes.append(gene)
+        else:
+            genes_to_test.append(gene)
+
+    return genes_to_test, known_invalid_genes
+
+
+def _get_cache_stats():
+    """Get statistics about the invalid genes cache for debugging."""
+    stats = {}
+    for modality, genes in _INVALID_GENES_CACHE.items():
+        stats[modality] = len(genes)
+    return stats
 
 
 @blueprint.route('/search/biomarkers-cell-types')
@@ -139,27 +186,6 @@ def _get_cell_ids(app):
     all_labels = [label for label in all_labels if label["A_ID"] not in labels_to_remove]
 
     return all_labels
-
-
-@timeit
-def _first_n_matches(strings, substring, n):
-    '''
-    >>> strings = [f'fake{n}' for n in range(200)]
-    >>> first_n = _first_n_matches(strings, 'e1', 10)
-    >>> first_n[0]
-    {'full': 'fake1', 'pre': 'fak', 'match': 'e1', 'post': ''}
-    >>> first_n[-1]
-    {'full': 'fake18', 'pre': 'fak', 'match': 'e1', 'post': '8'}
-    '''
-    substring_lower = substring.lower()
-    first_n = list(islice((s for s in strings if substring_lower in s.lower()), n))
-    offsets = [s.lower().find(substring_lower) for s in first_n]
-    return [{
-        'full': s,
-        'pre': s[:offset],
-        'match': s[offset:offset + len(substring)],
-        'post': s[offset + len(substring):]
-    } for s, offset in zip(first_n, offsets)]
 
 
 @dataclass
@@ -339,14 +365,14 @@ def _get_matched_cell_counts_per_cluster(cells):
 @blueprint.route('/cells/genes-by-substring.json', methods=['POST'])
 def genes_by_substring():
     substring = request.args.get('substring')
-    return {'results': _first_n_matches(_get_gene_symbols(current_app), substring, 10)}
+    return {'results': first_n_matches(_get_gene_symbols(current_app), substring, 10)}
 
 
 @timeit
 @blueprint.route('/cells/proteins-by-substring.json', methods=['POST'])
 def proteins_by_substring():
     substring = request.args.get('substring')
-    return {'results': _first_n_matches(_get_protein_ids(current_app), substring, 10)}
+    return {'results': first_n_matches(_get_protein_ids(current_app), substring, 10)}
 
 
 @timeit
@@ -354,8 +380,190 @@ def proteins_by_substring():
 def cell_types_by_substring():
     substring = request.args.get('substring')
     cell_types = _get_cell_ids(current_app)
-    results = _first_n_matches([cell['Lookup_Label'] for cell in cell_types], substring, 10)
+    results = first_n_matches([cell['Lookup_Label'] for cell in cell_types], substring, 10)
     return {'results': results}
+
+
+@timeit
+@blueprint.route('/cells/genes/validate', methods=['POST'])
+def genes_validate():
+    """
+    Endpoint to validate which genes from a provided list exist in the Cells API
+    and are indexed for the specified modality.
+
+    Expects JSON body:
+        {
+            "genes": ["GENE1", "GENE2", "UNKNOWN_GENE", ...],
+            "modality": "rna" (optional, defaults to "rna")
+        }
+
+    Returns:
+        JSON object with validation results:
+        {
+            "valid_genes": ["GENE1", ...],
+            "invalid_genes": ["UNKNOWN_GENE", ...],
+            "total_provided": 10,
+            "total_valid": 8
+        }
+    """
+    try:
+        if not request.is_json:
+            return {'error': 'Request must be JSON'}, 400
+
+        data = request.get_json()
+        if not data or 'genes' not in data:
+            return {'error': 'Missing "genes" array in request body'}, 400
+
+        provided_genes = data['genes']
+        if not isinstance(provided_genes, list):
+            return {'error': '"genes" must be an array'}, 400
+
+        # Get modality from request, default to 'rna'
+        modality = data.get('modality', 'rna')
+
+        # Get all valid genes from the Cells API
+        all_genes = _get_gene_symbols(current_app)
+        all_genes_set = set(all_genes)
+
+        # First filter: check if genes exist in gene symbols
+        existing_genes = []
+        missing_genes = []
+
+        for gene in provided_genes:
+            if isinstance(gene, str) and gene in all_genes_set:
+                existing_genes.append(gene)
+            else:
+                missing_genes.append(gene)
+
+        # Second filter: check if existing genes are indexed for the specified modality
+        valid_genes = []
+        modality_missing_genes = []
+
+        # Helper function to add problematic genes to invalid list / cache
+        def handle_invalid(gene, modality):
+            modality_missing_genes.append(gene)
+            _add_invalid_gene_to_cache(gene, modality)
+            current_app.logger.info(
+                f"Gene '{gene}' not indexed for modality '{modality}'"
+            )
+
+        if existing_genes:
+            # Use cache to filter out genes we already know are invalid for this modality
+            genes_to_test, known_invalid_genes = _filter_genes_by_cache(existing_genes, modality)
+            modality_missing_genes.extend(known_invalid_genes)
+
+            if known_invalid_genes:
+                current_app.logger.info(
+                    f"Found {len(known_invalid_genes)} genes in invalid cache for "
+                    f"modality '{modality}': {known_invalid_genes}"
+                )
+
+            if genes_to_test:
+                client = _get_client(current_app)
+
+                # Test genes in batches to avoid overwhelming the API
+                batch_size = 10
+                for i in range(0, len(genes_to_test), batch_size):
+                    batch_genes = genes_to_test[i:i + batch_size]
+
+                    try:
+                        # Try to query the genes with the specified modality
+                        # This will raise an exception if any gene is not indexed for this modality
+                        client.select_datasets(
+                            where="gene",
+                            has=[f'{gene} > 0' for gene in batch_genes],
+                            genomic_modality=modality,
+                            min_cell_percentage=0.01  # Very low threshold just to test indexing
+                        )
+
+                        # If the query succeeds, all genes in this batch are valid
+                        valid_genes.extend(batch_genes)
+
+                    except ClientError as e:
+                        # If the batch query fails, try to parse which gene is problematic
+                        # from the error message and retry with remaining genes
+                        error_message = str(e)
+                        current_app.logger.info(
+                            f"Batch query failed for {batch_genes}: {error_message}"
+                        )
+
+                        # Try to extract the problematic gene from error message
+                        # Look for patterns like "GENE_NAME not present in rna index"
+                        match = re.search(r'(\w+) not present in \w+ index', error_message)
+
+                        if match and len(batch_genes) > 1:
+                            problematic_gene = match.group(1)
+                            # Only allow problematic_gene if it's in the batch
+                            # and matches strict gene name validation
+                            if (problematic_gene in batch_genes) and re.fullmatch(
+                                    r"^[A-Za-z0-9_.\-]+$", problematic_gene):
+                                handle_invalid(problematic_gene, modality)
+
+                                # Retry with remaining genes
+                                remaining_genes = [
+                                    g for g in batch_genes if g != problematic_gene]
+                                if remaining_genes:
+                                    try:
+                                        client.select_datasets(
+                                            where="gene",
+                                            has=[f'{gene} > 0' for gene in remaining_genes],
+                                            genomic_modality=modality,
+                                            min_cell_percentage=0.01
+                                        )
+                                        # If retry succeeds, all remaining genes are valid
+                                        valid_genes.extend(remaining_genes)
+                                    except ClientError:
+                                        # If retry still fails, fall back to individual testing
+                                        for gene in remaining_genes:
+                                            try:
+                                                client.select_datasets(
+                                                    where="gene",
+                                                    has=[f'{gene} > 0'],
+                                                    genomic_modality=modality,
+                                                    min_cell_percentage=0.01
+                                                )
+                                                valid_genes.append(gene)
+                                            except ClientError:
+                                                handle_invalid(gene, modality)
+                                else:
+                                    # Problematic gene not in our batch, fall back to individual
+                                    for gene in batch_genes:
+                                        try:
+                                            client.select_datasets(
+                                                where="gene",
+                                                has=[f'{gene} > 0'],
+                                                genomic_modality=modality,
+                                                min_cell_percentage=0.01
+                                            )
+                                            valid_genes.append(gene)
+                                        except ClientError:
+                                            handle_invalid(gene, modality)
+                        else:
+                            # Can't parse error or single gene batch, test individually
+                            for gene in batch_genes:
+                                try:
+                                    client.select_datasets(
+                                        where="gene",
+                                        has=[f'{gene} > 0'],
+                                        genomic_modality=modality,
+                                        min_cell_percentage=0.01
+                                    )
+                                    valid_genes.append(gene)
+                                except ClientError:
+                                    handle_invalid(gene, modality)
+
+        # Combine all invalid genes
+        invalid_genes = missing_genes + modality_missing_genes
+
+        return {
+            'valid_genes': valid_genes,
+            'invalid_genes': invalid_genes,
+            'total_provided': len(provided_genes),
+            'total_valid': len(valid_genes)
+        }
+    except Exception as e:
+        current_app.logger.error(f"Error in gene validation: {e}", exc_info=True)
+        return {'error': 'Failed to validate genes'}, 500
 
 
 @timeit

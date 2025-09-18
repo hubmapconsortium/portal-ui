@@ -124,6 +124,7 @@ def details_vitessce(type, uuid):
     entity = client.get_entity(uuid)
     parent_uuid = request.args.get('parent') or None
     marker = request.args.get('marker') or None
+    minimal = request.args.get('minimal') == 'True'
     parent = client.get_entity(parent_uuid) if parent_uuid else None
     epic_uuid = None
     if 'segmentation_mask' in entity.get('vitessce-hints') and entity.get(
@@ -140,6 +141,7 @@ def details_vitessce(type, uuid):
         marker=marker,
         parent=parent,
         epic_uuid=epic_uuid,
+        minimal=minimal
     ).vitessce_conf
     # Returns a JSON null if there is no visualization.
     response = jsonify(vitessce_conf.conf)

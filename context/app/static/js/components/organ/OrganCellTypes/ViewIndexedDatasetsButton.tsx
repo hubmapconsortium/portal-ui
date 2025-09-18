@@ -11,7 +11,7 @@ import { getSearchURL, SCFindParams } from '../utils';
 
 interface ViewIndexedDatasetsButtonProps {
   scFindParams: SCFindParams;
-  isLoading: boolean;
+  isLoading?: boolean;
   trackingInfo?: EventInfo;
   context?: string;
   sx?: SxProps;
@@ -19,7 +19,7 @@ interface ViewIndexedDatasetsButtonProps {
 
 export function ViewDatasetsButton({
   scFindParams,
-  isLoading,
+  isLoading = false,
   trackingInfo,
   context = 'Datasets',
   sx,
@@ -53,7 +53,7 @@ export function ViewDatasetsButton({
 }
 
 export default function ViewIndexedDatasetsButton({
-  isLoading,
+  isLoading = false,
   trackingInfo,
   context = 'Datasets',
   sx,

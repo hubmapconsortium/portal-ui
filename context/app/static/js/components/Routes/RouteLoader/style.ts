@@ -5,6 +5,7 @@ const LoadingWrapper = styled('div')({
   alignItems: 'center',
   justifyContent: 'center',
   height: '100vh',
+  width: '100%',
 });
 
 export { LoadingWrapper };

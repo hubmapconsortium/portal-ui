@@ -435,12 +435,20 @@ interface NestedBucket {
   }[];
 }
 
+const calculateUnmatched = (matched: number, total: number, showComparison: boolean) => {
+  if (total === 0 || !showComparison) {
+    return 0;
+  }
+  return total - matched;
+};
+
 const getFormattedDataFromBuckets = (
   matchBucket: NestedBucket | undefined,
   comparisonBucket: NestedBucket | undefined,
   yAxis: YAxisOptions,
   isAge = false,
   isPercentage = false,
+  showComparison = true,
 ): FormattedOverviewChartData['stacks'] => {
   // If no comparison bucket is found, return an empty array
   if (!comparisonBucket) {
@@ -471,13 +479,13 @@ const getFormattedDataFromBuckets = (
       } else {
         acc[group] = {
           matched: matched / unmatched,
-          unmatched: (unmatched - matched) / unmatched,
+          unmatched: calculateUnmatched(unmatched, matched, showComparison),
         };
       }
     } else {
       acc[group] = {
         matched,
-        unmatched: unmatched - matched,
+        unmatched: calculateUnmatched(unmatched, matched, showComparison),
       };
     }
 
@@ -516,6 +524,8 @@ type LowercaseXAxisOptions = 'age' | 'race' | 'sex' | 'organ';
  *              If 'Donors' is selected, the yAxis will represent the number of donors in each bucket.
  * @param compareBy The xAxis option to use for the comparison between different values on the x axis (metadata such as age, sex, or race).
  *                  Becomes the `group` in the returned data.
+ * @param isPercentage Whether to display the data as percentages or raw counts.
+ * @param showComparison Whether to show comparison data (unmatched datasets) or only matched datasets.
  * @returns {
  *  data: Record<string, BarStackGroup<FormattedOverviewChartData[]>>,
  *  max: number - The maximum value across all buckets for the yAxis
@@ -528,6 +538,7 @@ export function useFormattedOverviewChartData(
   yAxis: YAxisOptions,
   compareBy: XAxisOptions,
   isPercentage = false,
+  showComparison = true,
 ): OverviewChartData {
   const [data, max] = useMemo(() => {
     const formattedData: FormattedOverviewChartData[] = [];
@@ -561,7 +572,14 @@ export function useFormattedOverviewChartData(
           const comparisonBucket = comparisonAggs.donors_by_age.buckets.find(findAgeBucket)?.[compareBySafe];
           const newData = {
             group: labeledAgeBuckets[bucket],
-            stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, compareByIsAge, isPercentage),
+            stacks: getFormattedDataFromBuckets(
+              matchBucket,
+              comparisonBucket,
+              yAxis,
+              compareByIsAge,
+              isPercentage,
+              showComparison,
+            ),
           };
           formattedData.push(newData);
         });
@@ -576,7 +594,14 @@ export function useFormattedOverviewChartData(
 
           formattedData.push({
             group: race,
-            stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, compareByIsAge, isPercentage),
+            stacks: getFormattedDataFromBuckets(
+              matchBucket,
+              comparisonBucket,
+              yAxis,
+              compareByIsAge,
+              isPercentage,
+              showComparison,
+            ),
           });
         });
         break;
@@ -589,7 +614,14 @@ export function useFormattedOverviewChartData(
 
           formattedData.push({
             group: sex,
-            stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, compareByIsAge, isPercentage),
+            stacks: getFormattedDataFromBuckets(
+              matchBucket,
+              comparisonBucket,
+              yAxis,
+              compareByIsAge,
+              isPercentage,
+              showComparison,
+            ),
           });
         });
         break;
@@ -601,7 +633,14 @@ export function useFormattedOverviewChartData(
           const comparisonBucket = comparisonAggs.donors_by_organ.buckets.find(findOrganBucket)?.[compareBySafe];
           formattedData.push({
             group: organ,
-            stacks: getFormattedDataFromBuckets(matchBucket, comparisonBucket, yAxis, compareByIsAge, isPercentage),
+            stacks: getFormattedDataFromBuckets(
+              matchBucket,
+              comparisonBucket,
+              yAxis,
+              compareByIsAge,
+              isPercentage,
+              showComparison,
+            ),
           });
         });
         break;
@@ -609,28 +648,58 @@ export function useFormattedOverviewChartData(
         break;
     }
 
-    const compareByAggs = (comparison.fullAggs?.[`donors_by_${compareByLowercase}`]?.buckets ?? []).flatMap((b) => {
-      if (xAxisLowercase === 'age' && 'age' in b) {
-        const ageBucket = b as { age: NestedBucket };
-        return ageBucket.age.buckets;
-      }
-      if (xAxisLowercase === 'race' && 'race' in b) {
-        const raceBucket = b as { race: NestedBucket };
-        return raceBucket.race.buckets;
-      }
-      if (xAxisLowercase === 'sex' && 'sex' in b) {
-        const sexBucket = b as { sex: NestedBucket };
-        return sexBucket.sex.buckets;
-      }
+    // Calculate the maximum count based on whether we're showing comparison or just matched data
+    let maxCount = 0;
 
-      if (xAxisLowercase === 'organ' && 'organ' in b) {
-        const organBucket = b as { organ: NestedBucket };
-        return organBucket.organ.buckets;
-      }
+    if (showComparison) {
+      // When showing comparison, use the comparison data to determine max scale
+      const compareByAggs = (comparison.fullAggs?.[`donors_by_${compareByLowercase}`]?.buckets ?? []).flatMap((b) => {
+        if (xAxisLowercase === 'age' && 'age' in b) {
+          const ageBucket = b as { age: NestedBucket };
+          return ageBucket.age.buckets;
+        }
+        if (xAxisLowercase === 'race' && 'race' in b) {
+          const raceBucket = b as { race: NestedBucket };
+          return raceBucket.race.buckets;
+        }
+        if (xAxisLowercase === 'sex' && 'sex' in b) {
+          const sexBucket = b as { sex: NestedBucket };
+          return sexBucket.sex.buckets;
+        }
 
-      return [];
-    });
-    const maxCount = Math.max(...compareByAggs.map(findMax));
+        if (xAxisLowercase === 'organ' && 'organ' in b) {
+          const organBucket = b as { organ: NestedBucket };
+          return organBucket.organ.buckets;
+        }
+
+        return [];
+      });
+      maxCount = Math.max(...compareByAggs.map(findMax));
+    } else {
+      // When only showing matched data, use the matched data to determine max scale
+      const matchedAggs = (matchAggs[`donors_by_${compareByLowercase}`]?.buckets ?? []).flatMap((b) => {
+        if (xAxisLowercase === 'age' && 'age' in b) {
+          const ageBucket = b as { age: NestedBucket };
+          return ageBucket.age.buckets;
+        }
+        if (xAxisLowercase === 'race' && 'race' in b) {
+          const raceBucket = b as { race: NestedBucket };
+          return raceBucket.race.buckets;
+        }
+        if (xAxisLowercase === 'sex' && 'sex' in b) {
+          const sexBucket = b as { sex: NestedBucket };
+          return sexBucket.sex.buckets;
+        }
+
+        if (xAxisLowercase === 'organ' && 'organ' in b) {
+          const organBucket = b as { organ: NestedBucket };
+          return organBucket.organ.buckets;
+        }
+
+        return [];
+      });
+      maxCount = Math.max(...matchedAggs.map(findMax));
+    }
 
     // Every entry in `stacks` must have the same keys
     const allStackKeys = new Set<string>();
@@ -656,7 +725,7 @@ export function useFormattedOverviewChartData(
     });
 
     return [normalizedData, maxCount];
-  }, [xAxis, compareBy, matches.fullAggs, comparison, yAxis, isPercentage]);
+  }, [xAxis, compareBy, matches.fullAggs, comparison, yAxis, isPercentage, showComparison]);
 
   return {
     data,

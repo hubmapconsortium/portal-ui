@@ -121,7 +121,6 @@ numcodecs==0.12.1
     #   zarr
 numpy==1.26.4
     # via
-    #   -c context/constraints.txt
     #   numcodecs
     #   pandas
     #   scipy
@@ -130,14 +129,12 @@ numpy==1.26.4
 packaging==23.1
     # via black
 pandas==1.5.3
-    # via
-    #   -c context/constraints.txt
-    #   vitessce
+    # via vitessce
 pathspec==0.9.0
     # via black
 platformdirs==2.5.1
     # via black
-portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.13.zip
+portal-visualization @ https://github.com/hubmapconsortium/portal-visualization/archive/refs/tags/0.4.15.zip
     # via -r context/requirements.in
 propcache==0.2.0
     # via yarl

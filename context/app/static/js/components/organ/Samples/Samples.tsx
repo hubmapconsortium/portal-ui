@@ -83,6 +83,7 @@ function Samples({ organTerms }: OrganSamplesProps) {
       <EntitiesTables<Sample>
         entities={[{ query, columns, entityType: 'Sample' }]}
         trackingInfo={{ category: 'Organ Page', action: 'Samples', label: name }}
+        maxHeight={800}
       />
     </OrganDetailSection>
   );

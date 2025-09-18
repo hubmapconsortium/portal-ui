@@ -51,7 +51,15 @@ export default function CrossModalityGeneOrProteinResults<T extends 'gene' | 'pr
   return (
     <Stack spacing={1.5} width="100%">
       <DatasetListHeader />
-      <EntityTable maxHeight={800} isSelectable query={query} columns={columns} expandedContent={CellsCharts} />
+      <EntityTable
+        maxHeight={800}
+        isSelectable
+        query={query}
+        columns={columns}
+        expandedContent={CellsCharts}
+        estimatedExpandedRowHeight={1200}
+        reverseExpandIndicator
+      />
     </Stack>
   );
 }

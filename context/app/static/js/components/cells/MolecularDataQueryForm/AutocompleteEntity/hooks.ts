@@ -1,62 +1,65 @@
 import useSWR from 'swr';
-import { useCellTypeNamesMap } from 'js/api/scfind/useCellTypeNames';
-import { useEffect, useMemo, useRef } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { PathwayParticipantsResponse, useGenePathwayParticipants, useGenePathways } from 'js/hooks/useUBKG';
+import { fetcher } from 'js/helpers/swr';
 import CellsService from '../../CellsService';
 import type { AutocompleteQueryKey, AutocompleteQueryResponse, AutocompleteResult } from './types';
 import { useMolecularDataQueryFormState } from '../hooks';
 
 const cellsService = new CellsService();
 
-interface AutocompleteQueryKeyExtended extends AutocompleteQueryKey {
-  scFindCellTypeNames: Record<string, string[]>;
+interface ScFindGenesAutocompleteResponse {
+  results?: AutocompleteResult[];
+  error?: string;
+}
+
+interface ScFindCellTypesAutocompleteResponse {
+  results?: AutocompleteResult[];
+  error?: string;
 }
 
 const fetchEntityAutocomplete = async ({
   targetEntity,
   substring,
   queryMethod,
-  scFindCellTypeNames,
-}: AutocompleteQueryKeyExtended): Promise<AutocompleteQueryResponse> => {
+}: AutocompleteQueryKey): Promise<AutocompleteQueryResponse> => {
   if (!substring) {
     return [];
   }
 
-  // scfind does not provide a matching query, so we can do this locally
-  if (queryMethod === 'scFind' && targetEntity === 'cell-type') {
-    const cellTypeNames = Object.keys(scFindCellTypeNames);
-    const cellTypeNameMatches = cellTypeNames.filter((cellTypeName) =>
-      cellTypeName.toLowerCase().includes(substring.toLowerCase()),
-    );
+  // Use SCFIND endpoints for genes and cell types when scFind query method is selected
+  if (queryMethod === 'scFind' && targetEntity === 'gene') {
+    const urlParams = new URLSearchParams();
+    urlParams.append('q', substring);
+    urlParams.append('limit', '10');
 
-    return cellTypeNameMatches.map((cellTypeName) => {
-      const tags = scFindCellTypeNames[cellTypeName];
-
-      const matchIndex = cellTypeName.toLowerCase().indexOf(substring.toLowerCase());
-      const pre = cellTypeName.slice(0, matchIndex);
-      const match = cellTypeName.slice(matchIndex, matchIndex + substring.length);
-      const post = cellTypeName.slice(matchIndex + substring.length);
-
-      return {
-        full: cellTypeName,
-        pre,
-        match,
-        post,
-        tags,
-        values: tags.map((tag) => `${tag}.${cellTypeName}`),
-      };
+    const responseJson = await fetcher<ScFindGenesAutocompleteResponse>({
+      url: `/scfind/genes/autocomplete?${urlParams.toString()}`,
     });
+
+    return responseJson.results ?? [];
   }
 
+  // Use SCFIND cell types autocomplete endpoint when scFind query method is selected
+  if (queryMethod === 'scFind' && targetEntity === 'cell-type') {
+    const urlParams = new URLSearchParams();
+    urlParams.append('q', substring);
+    urlParams.append('limit', '10');
+
+    const responseJson = await fetcher<ScFindCellTypesAutocompleteResponse>({
+      url: `/scfind/cell-types/autocomplete?${urlParams.toString()}`,
+    });
+
+    // Return results as-is since the backend now handles organ grouping and tags
+    return responseJson.results ?? [];
+  }
+
+  // For non-scFind queries, use the traditional cell service
   return cellsService.searchBySubstring({ targetEntity, substring });
 };
 
 export function useAutocompleteQuery(queryKey: AutocompleteQueryKey) {
-  const scFindCellTypeNames = useCellTypeNamesMap();
-
-  const key = useMemo(() => ({ ...queryKey, scFindCellTypeNames }), [queryKey, scFindCellTypeNames]);
-
-  return useSWR(key, fetchEntityAutocomplete);
+  return useSWR(queryKey, fetchEntityAutocomplete);
 }
 
 export function usePathwayAutocompleteQuery(substring: string) {
@@ -104,12 +107,89 @@ function getParticipantsFromPathway(pathway?: PathwayParticipantsResponse): stri
 }
 
 /**
+ * Validates genes against the selected data source (SCFIND or Cells API) to check if they exist.
+ * This is used to filter pathway genes when a pathway is selected,
+ * ensuring only genes that are indexed in the selected data source are included.
+ * @param genes Array of gene symbols to validate
+ * @param queryMethod The selected query method ('scFind' or other)
+ * @param abortSignal Optional AbortSignal to cancel the request
+ * @returns Promise that resolves to an object with valid and invalid gene arrays
+ */
+async function validateGenesWithDataSource(
+  genes: string[],
+  queryMethod: string,
+  abortSignal?: AbortSignal,
+): Promise<{
+  validGenes: string[];
+  invalidGenes: string[];
+}> {
+  try {
+    // Use the appropriate validation endpoint based on query method
+    const endpoint = queryMethod === 'scFind' ? '/scfind/genes/validate' : '/cells/genes/validate';
+
+    const requestBody: { genes: string[]; modality?: string } = { genes };
+
+    // Include modality for Cells API validation
+    if (queryMethod !== 'scFind') {
+      const modality = queryMethod === 'crossModalityATAC' ? 'atac' : 'rna';
+      requestBody.modality = modality;
+    }
+
+    const requestInit: RequestInit = {
+      method: 'POST',
+      body: JSON.stringify(requestBody),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      signal: abortSignal,
+    };
+
+    const result = await fetcher<{
+      valid_genes: string[];
+      invalid_genes: string[];
+      total_provided: number;
+      total_valid: number;
+      error?: string;
+    }>({
+      url: endpoint,
+      requestInit,
+    });
+
+    if (result.error) {
+      throw new Error(result.error);
+    }
+
+    return {
+      validGenes: result.valid_genes,
+      invalidGenes: result.invalid_genes,
+    };
+  } catch (error) {
+    // Check if the request was aborted
+    if (error instanceof Error && error.name === 'AbortError') {
+      throw error; // Re-throw abort errors so they can be handled appropriately
+    }
+    console.warn(`Failed to validate genes with ${queryMethod}:`, error);
+    // Return all genes as valid if validation fails to avoid breaking the user experience
+    return {
+      validGenes: genes,
+      invalidGenes: [],
+    };
+  }
+}
+
+/**
  * Retrieves the genes in a pathway and sets them in the form state in response to a selected pathway.
+ * When scFind is the selected query method, genes that don't exist in SCFIND are automatically
+ * filtered out to ensure compatibility with the selected data source.
  */
 export function useSelectedPathwayParticipants() {
   const { watch, setValue, getValues, formState } = useMolecularDataQueryFormState();
+  const [isLoadingPathwayGenes, setIsLoadingPathwayGenes] = useState(false);
+  const [invalidGenes, setInvalidGenes] = useState<string[]>([]);
 
   const selectedPathway = watch('pathway');
+  const queryMethod = watch('queryMethod'); // Watch the query method
+  const queryType = watch('queryType'); // Watch the query type
 
   const pathwayName: string | undefined =
     selectedPathway && typeof selectedPathway === 'object' && 'full' in selectedPathway
@@ -126,37 +206,116 @@ export function useSelectedPathwayParticipants() {
 
   // Hold on to previous selected pathway to clear the genes when the pathway is removed
   const previousSelectedPathway = useRef(pathway);
+  // Hold a ref to the current AbortController for canceling validation requests
+  const abortControllerRef = useRef<AbortController | null>(null);
 
   // Update the selected genes on pathway change
   useEffect(() => {
-    if (formState.isSubmitted) {
-      // If the form has been submitted, do not update the genes.
-      return;
-    }
-    if (selectedPathway && pathway) {
-      // If a new pathway is selected, set the genes to the new pathway.
-      previousSelectedPathway.current = pathway;
-      const genes = getParticipantsFromPathway(pathway).map((gene) => ({
-        full: gene,
-        pre: '',
-        match: gene,
-        post: '',
-        tags: [],
-      }));
-      setValue('genes', genes);
-    } else {
-      // If the pathway was removed, clear the genes that were in that pathway.
-      const currentGenes = getValues('genes');
-      if (!currentGenes || !previousSelectedPathway.current) {
-        return;
+    if (!formState.isSubmitted) {
+      // Abort any ongoing validation request when pathway changes
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
       }
-      const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
-      const filteredGenes = currentGenes.filter((gene) => {
-        return !previousParticipants.includes(gene.full);
+
+      const updateGenes = async () => {
+        if (selectedPathway && pathway) {
+          // If a new pathway is selected, set the genes to the new pathway.
+          previousSelectedPathway.current = pathway;
+          let pathwayGenes = getParticipantsFromPathway(pathway);
+
+          // Clear previous invalid genes when starting a new pathway
+          setInvalidGenes([]);
+
+          // Filter genes through validation only if query type is "gene" and we have genes
+          if (queryType === 'gene' && pathwayGenes.length > 0) {
+            setIsLoadingPathwayGenes(true);
+            // Create a new AbortController for this validation request
+            const abortController = new AbortController();
+            abortControllerRef.current = abortController;
+
+            try {
+              const { validGenes, invalidGenes: newInvalidGenes } = await validateGenesWithDataSource(
+                pathwayGenes,
+                queryMethod,
+                abortController.signal,
+              );
+
+              // Check if the request was aborted before updating state
+              if (abortController.signal.aborted) {
+                return;
+              }
+
+              pathwayGenes = validGenes;
+              setInvalidGenes(newInvalidGenes);
+            } catch (error) {
+              // If the request was aborted, don't update the loading state or show errors
+              if (error instanceof Error && error.name === 'AbortError') {
+                return;
+              }
+              console.error('Failed to validate pathway genes:', error);
+            } finally {
+              // Only clear loading state if the request wasn't aborted
+              if (!abortController.signal.aborted) {
+                setIsLoadingPathwayGenes(false);
+                abortControllerRef.current = null;
+              }
+            }
+          }
+
+          const genes = pathwayGenes.map((gene) => ({
+            full: gene,
+            pre: '',
+            match: gene,
+            post: '',
+            tags: [],
+          }));
+          // Only set genes when the query type is "gene"
+          if (queryType === 'gene') {
+            setValue('genes', genes);
+          }
+        } else {
+          // If the pathway was removed, clear the genes that were in that pathway.
+          setInvalidGenes([]);
+          setIsLoadingPathwayGenes(false);
+          // Only manage genes when the query type is "gene"
+          if (queryType === 'gene') {
+            const currentGenes = getValues('genes');
+            if (!currentGenes || !previousSelectedPathway.current) {
+              return;
+            }
+            const previousParticipants = getParticipantsFromPathway(previousSelectedPathway.current);
+            const filteredGenes = currentGenes.filter((gene) => {
+              return !previousParticipants.includes(gene.full);
+            });
+            setValue('genes', filteredGenes);
+          }
+        }
+      };
+
+      updateGenes().catch((error) => {
+        console.error('Failed to update genes from pathway:', error);
+        setIsLoadingPathwayGenes(false);
       });
-      setValue('genes', filteredGenes);
     }
-  }, [pathway, selectedPathway, setValue, isLoading, formState.isSubmitted, getValues]);
+    // Cleanup function to abort validation if component unmounts or pathway changes
+    return () => {
+      if (abortControllerRef.current) {
+        abortControllerRef.current.abort();
+        abortControllerRef.current = null;
+      }
+    };
+  }, [
+    pathway,
+    selectedPathway,
+    setValue,
+    isLoading,
+    formState.isSubmitted,
+    getValues,
+    queryMethod,
+    pathwayName,
+    queryType,
+  ]);
 
   const participants = useMemo(() => {
     if (!pathway) {
@@ -172,5 +331,12 @@ export function useSelectedPathwayParticipants() {
     });
   }, [pathway]);
 
-  return { isLoading, pathwayName, pathwayCode, participants };
+  return {
+    isLoading,
+    pathwayName,
+    pathwayCode,
+    participants,
+    isLoadingPathwayGenes,
+    invalidGenes,
+  };
 }

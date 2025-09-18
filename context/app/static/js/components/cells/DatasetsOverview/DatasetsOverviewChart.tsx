@@ -1,5 +1,4 @@
 import React, { RefObject, useMemo, useRef, useState } from 'react';
-import Description from 'js/shared-styles/sections/Description';
 import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
 import ChartDropdown from 'js/shared-styles/charts/ChartDropdown';
 import { SelectChangeEvent } from '@mui/material/Select';
@@ -20,6 +19,7 @@ import Paper from '@mui/material/Paper';
 import { useDownloadImage } from 'js/hooks/useDownloadImage';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import Box from '@mui/material/Box';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import {
   ageBucketLabels,
   DatasetsOverviewDigest,
@@ -43,7 +43,7 @@ const margin = {
   top: 0,
   right: 0,
   bottom: 48,
-  left: 24,
+  left: 36,
 };
 
 const graphMargin = {
@@ -144,6 +144,29 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
     });
   });
 
+  // If "Show Comparison" is unchecked, the chart will only display matched datasets
+  // Otherwise, it will show both matched and unmatched datasets
+  const [showComparison, setShowComparison] = useState(false);
+  const toggleShowComparison = useEventCallback(() => {
+    setShowComparison((prev) => {
+      if (trackingInfo) {
+        const label = prev ? 'Hide Comparison' : 'Show Comparison';
+        const actionName = 'Datasets Overview / Toggle Show Comparison';
+        trackEvent({
+          ...trackingInfo,
+          action: trackingInfo.action ? `${trackingInfo.action} / ${actionName}` : actionName,
+          label: trackingInfo.label ? `${trackingInfo.label} ${label}` : label,
+        } as EventInfo);
+      }
+      return !prev;
+    });
+    // On disable of comparison, reset percentMode and compareToAll
+    if (showComparison) {
+      setPercentMode(false);
+      setCompareToAll(false);
+    }
+  });
+
   const download = useDownloadImage(chartRef, `${xAxis} vs ${compareBy} - Datasets Overview`);
 
   const downloadImage = useEventCallback(() => {
@@ -171,6 +194,8 @@ const useDatasetsOverviewChartState = (chartRef: RefObject<HTMLElement>, trackin
     toggleCompareToAll,
     percentMode,
     togglePercentMode,
+    showComparison,
+    toggleShowComparison,
     onChangeCompareBy,
     downloadImage,
   };
@@ -192,6 +217,8 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
     toggleCompareToAll,
     percentMode,
     togglePercentMode,
+    showComparison,
+    toggleShowComparison,
     onChangeYAxis,
     onChangeXAxis,
     downloadImage,
@@ -201,14 +228,34 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
 
   // Given the selected settings, calculate the appropriate data for the chart
   // and the maximum value for the Y axis
-  const { data, max } = useFormattedOverviewChartData(matched, comparisonData, xAxis, yAxis, compareBy, percentMode);
+  const { data, max } = useFormattedOverviewChartData(
+    matched,
+    comparisonData,
+    xAxis,
+    yAxis,
+    compareBy,
+    percentMode,
+    showComparison,
+  );
 
   const yAxisOptionLabelMap: Record<YAxisOptions, string> = useMemo(() => {
+    if (!showComparison) {
+      return {
+        Datasets: `Datasets (${matched.totalDatasets})`,
+        Donors: `Donors (${matched.totalDonors})`,
+      };
+    }
     return {
-      Datasets: `Datasets (${matched.totalDatasets})`,
-      Donors: `Donors (${matched.totalDonors})`,
+      Datasets: `Datasets (${matched.totalDatasets} matched, ${comparisonData.totalDatasets} total)`,
+      Donors: `Donors (${matched.totalDonors} matched, ${comparisonData.totalDonors} total)`,
     };
-  }, [matched]);
+  }, [
+    showComparison,
+    matched.totalDatasets,
+    matched.totalDonors,
+    comparisonData.totalDatasets,
+    comparisonData.totalDonors,
+  ]);
 
   const compareByKeys = useMemo(() => {
     const comparison = compareToAll ? all : indexed;
@@ -286,93 +333,113 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
   }, [data]);
 
   return (
-    <>
-      <Description>
-        The chart below shows the distribution of HuBMAP datasets that are compatible with the scFind method. The
-        distribution is based on the number of unique donors and the average age of donors in each dataset. Striped
-        segments represent matched datasets, while solid segments represent unmatched datasets.
-      </Description>
-      <Paper>
-        <ChartWrapper
-          ref={chartRef}
-          margin={margin}
-          colorScale={legendColorScale}
-          dividersInLegend={compareBy === 'Race'}
-          additionalControls={
-            <Stack direction="row" spacing={2} px={1} pt={1} alignItems="center" useFlexGap>
-              <LabeledPrimarySwitch
-                label="Comparison Metric"
-                checked={compareToAll}
-                onChange={toggleCompareToAll}
-                color="success"
-                disabledLabel="Indexed Datasets"
-                enabledLabel="All Datasets"
-                ariaLabel="Compare to All Datasets"
-                tooltip="Toggle to compare matched datasets to scFind-indexed datasets or all datasets published in HuBMAP"
-              />
-              <LabeledPrimarySwitch
-                label="Graph Type"
-                value="percentMode"
-                checked={percentMode}
-                onChange={togglePercentMode}
-                color="success"
-                ariaLabel="Toggle Percentage Mode"
-                disabledLabel="Total Count"
-                enabledLabel="Percentage"
-                tooltip="Toggle between displaying data as raw counts or fractions."
-              />
-              <Box ml="auto">
-                <DownloadButton
-                  onClick={downloadImage}
-                  tooltip="Download chart as PNG"
-                  aria-label="Download Chart as PNG"
+    <Paper>
+      <ChartWrapper
+        ref={chartRef}
+        margin={margin}
+        colorScale={legendColorScale}
+        dividersInLegend={compareBy === 'Race'}
+        caption={
+          <>
+            This chart shows the distribution of HuBMAP datasets that are compatible with the scFind method. The
+            distribution is based on the number of unique donors and the average age of donors in each dataset.
+            {showComparison && (
+              <> Striped segments represent matched datasets, while solid segments represent unmatched datasets.</>
+            )}
+          </>
+        }
+        additionalControls={
+          <Stack direction="row" spacing={2} px={1} pt={1} alignItems="center" useFlexGap>
+            <LabeledPrimarySwitch
+              label="Plot Type"
+              checked={showComparison}
+              onChange={toggleShowComparison}
+              color="success"
+              disabledLabel="Matched Only"
+              enabledLabel="With Comparison"
+              ariaLabel="Show Comparison"
+              tooltip="Toggle to show only matched datasets or include comparison with unmatched datasets"
+            />
+            <SecondaryBackgroundTooltip
+              title={showComparison ? undefined : 'Set "Plot Type" to "With Comparison" to toggle these options'}
+            >
+              <Stack direction="row" spacing={2} alignItems="center" useFlexGap>
+                <LabeledPrimarySwitch
+                  label="Comparison Group"
+                  checked={compareToAll}
+                  onChange={toggleCompareToAll}
+                  color={showComparison ? 'secondary' : 'success'}
+                  disabledLabel="Indexed Data"
+                  enabledLabel="All Data"
+                  ariaLabel="Compare to All Data"
+                  tooltip="Toggle to compare matched data to scFind-indexed data or all data in HuBMAP"
+                  disabled={!showComparison}
                 />
-              </Box>
-            </Stack>
-          }
-          dropdown={
-            <ChartDropdown
-              options={compareByOptions}
-              value={compareBy}
-              label="Compare by"
-              onChange={onChangeCompareBy}
-              fullWidth
-              sx={{ minWidth: 'max(fit-content, 175px)', pr: 1 }}
-            />
-          }
-          xAxisDropdown={
-            <ChartDropdown options={xAxisOptions} value={xAxis} label="X-Axis" fullWidth onChange={onChangeXAxis} />
-          }
-          yAxisDropdown={
-            <ChartDropdown
-              options={Y_AXIS_OPTIONS}
-              displayLabels={yAxisOptionLabelMap}
-              value={yAxis}
-              label="Y-Axis"
-              fullWidth
-              onChange={onChangeYAxis}
-            />
-          }
-        >
-          <GroupedBarStackChart<StackKeys, string, string>
-            data={data}
-            xScale={xScale}
-            yScale={yScale}
-            colorScale={colorScale}
-            getX={(d) => d.group}
-            margin={graphMargin}
-            xAxisTickLabels={xAxisTickLabels}
-            // Filter out any decimal values from the Y axis ticks if percentMode is disabled
-            getTickValues={() => yScale.ticks(5).filter((d) => (percentMode ? d : Math.floor(d)) === d)}
-            compareByKeys={compareByKeys}
-            stackKeys={['matched', 'unmatched'] as const}
-            yTickFormat={yScaleFormat}
-            TooltipContent={OverviewChartTooltip(percentMode)}
-            yAxisLabel={yAxisOptionLabelMap[yAxis]}
-            xAxisLabel={xAxis}
+                <LabeledPrimarySwitch
+                  label="Display As"
+                  value="percentMode"
+                  checked={percentMode}
+                  onChange={togglePercentMode}
+                  color={showComparison ? 'secondary' : 'success'}
+                  ariaLabel="Toggle display as raw counts or percentage"
+                  disabledLabel="Raw Counts"
+                  enabledLabel="Compare Across Groups"
+                  tooltip="Toggle between displaying data as raw counts or fractions."
+                  disabled={!showComparison}
+                />
+              </Stack>
+            </SecondaryBackgroundTooltip>
+            <Box ml="auto">
+              <DownloadButton
+                onClick={downloadImage}
+                tooltip="Download chart as PNG"
+                aria-label="Download Chart as PNG"
+              />
+            </Box>
+          </Stack>
+        }
+        dropdown={
+          <ChartDropdown
+            options={compareByOptions}
+            value={compareBy}
+            label="Compare by"
+            onChange={onChangeCompareBy}
+            fullWidth
+            sx={{ minWidth: 'max(fit-content, 175px)', pr: 1 }}
           />
-        </ChartWrapper>
-      </Paper>
-    </>
+        }
+        xAxisDropdown={
+          <ChartDropdown options={xAxisOptions} value={xAxis} label="X-Axis" fullWidth onChange={onChangeXAxis} />
+        }
+        yAxisDropdown={
+          <ChartDropdown
+            options={Y_AXIS_OPTIONS}
+            displayLabels={yAxisOptionLabelMap}
+            value={yAxis}
+            label="Y-Axis"
+            fullWidth
+            onChange={onChangeYAxis}
+          />
+        }
+      >
+        <GroupedBarStackChart<StackKeys, string, string>
+          data={data}
+          xScale={xScale}
+          yScale={yScale}
+          colorScale={colorScale}
+          getX={(d) => d.group}
+          margin={graphMargin}
+          xAxisTickLabels={xAxisTickLabels}
+          // Filter out any decimal values from the Y axis ticks if percentMode is disabled
+          getTickValues={() => yScale.ticks(5).filter((d) => (percentMode ? d : Math.floor(d)) === d)}
+          compareByKeys={compareByKeys}
+          stackKeys={['matched', 'unmatched'] as const}
+          yTickFormat={yScaleFormat}
+          TooltipContent={OverviewChartTooltip(percentMode)}
+          yAxisLabel={yAxisOptionLabelMap[yAxis]}
+          xAxisLabel={xAxis}
+        />
+      </ChartWrapper>
+    </Paper>
   );
 }

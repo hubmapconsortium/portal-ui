@@ -4,7 +4,6 @@ import { useEventCallback } from '@mui/material/utils';
 import { SelectChangeEvent } from '@mui/material/Select';
 
 import { useCellTypeOntologyDetail, CellTypeBiomarkerInfo, useGeneOntologyDetails } from 'js/hooks/useUBKG';
-import { useFeatureDetails } from 'js/hooks/useCrossModalityApi';
 import useCLIDToLabel from 'js/api/scfind/useCLIDToLabel';
 import useSearchData from 'js/hooks/useSearchData';
 import useFindDatasetForCellTypes from 'js/api/scfind/useFindDatasetForCellTypes';
@@ -15,17 +14,6 @@ import { extractCellTypesInfo } from 'js/api/scfind/utils';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
 import { useCellTypesDetailPageContext } from './CellTypesDetailPageContext';
 import { Entity } from '../types';
-
-/**
- * Helper function for fetching the current cell type's details from the cross-modality API.
- * @returns The datasets, samples, and organs available in HuBMAP for the current cell type.
- */
-export const useCellTypeDetails = () => {
-  const { cellId } = useCellTypesDetailPageContext();
-  const { data, ...rest } = useFeatureDetails('cell-types', cellId);
-
-  return { ...data, ...rest };
-};
 
 /**
  * Helper function for fetching the current page's cell type info from the UBKG.
@@ -47,7 +35,7 @@ export const useCellTypeInfo = () => {
  */
 export function useExtractedCellTypeInfo() {
   const { cellId } = useCellTypesDetailPageContext();
-  const { data: { cell_types: cellTypes } = { cell_types: [] } } = useCLIDToLabel({ clid: cellId });
+  const { data: cellTypes = [] } = useCLIDToLabel({ clid: cellId });
   return useMemo(() => extractCellTypesInfo(cellTypes), [cellTypes]);
 }
 

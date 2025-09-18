@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import {
-  lastModifiedTimestamp,
   assayTypes,
   organ,
   hubmapID,
@@ -29,7 +28,7 @@ import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { MatchingGeneContextProvider } from './MatchingGeneContext';
 import { matchingGeneColumn } from './columns';
 
-const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex, lastModifiedTimestamp];
+const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
 const columnsWithMatchingGene = [
   hubmapID,
@@ -39,7 +38,6 @@ const columnsWithMatchingGene = [
   parentDonorRace,
   parentDonorSex,
   matchingGeneColumn,
-  lastModifiedTimestamp,
 ];
 
 function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
@@ -78,7 +76,7 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
         ],
       }}
       expandedContent={SCFindGeneCharts}
-      estimatedExpandedRowHeight={1264 /* Chart 1 = 600px, Chart 2 = 600px, padding = 64px */}
+      estimatedExpandedRowHeight={1364 /* Chart 1 = 700px, Chart 2 = 600px, padding = 64px */}
       {...useTableTrackingProps()}
       expandTooltip="View additional visualizations including gene expression levels and cell type distributions."
       collapseTooltip="Collapse row."
@@ -141,7 +139,7 @@ function DatasetListSection() {
         ))}
       </Tabs>
       {order.map((gene, idx) => (
-        <TabPanel key={gene} value={openTabIndex} index={idx}>
+        <TabPanel key={gene} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
           <CurrentGeneContextProvider value={genes.includes(gene) ? gene : undefined}>
             <SCFindGeneQueryDatasetList
               key={gene}
@@ -177,28 +175,23 @@ function SCFindGeneQueryResultsLoader({ trackingInfo }: SCFindGeneQueryResultsLo
   return (
     <MatchingGeneContextProvider value={datasetToGeneMap}>
       {!noResults && (
-        <>
-          <Typography variant="subtitle1" component="p" gutterBottom>
-            Datasets Overview
-          </Typography>
-          <DatasetsOverview
-            datasets={deduplicatedResults}
-            belowTheFold={
-              <ViewIndexedDatasetsButton
-                scFindParams={{
-                  scFindOnly: true,
-                }}
-                isLoading={false}
-              />
-            }
-            trackingInfo={trackingInfo}
-          >
-            This overview provides a summary of the matched datasets and their proportions relative to both indexed
-            datasets and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a
-            tabular view. Both views can be downloaded, with the visualization available as a PNG and the table as a TSV
-            file.
-          </DatasetsOverview>
-        </>
+        <DatasetsOverview
+          datasets={deduplicatedResults}
+          belowTheFold={
+            <ViewIndexedDatasetsButton
+              scFindParams={{
+                scFindOnly: true,
+              }}
+              isLoading={false}
+            />
+          }
+          trackingInfo={trackingInfo}
+        >
+          This overview provides a summary of the matched datasets and their proportions relative to both indexed
+          datasets and the total HuBMAP datasets. The summary is available in two formats: a visualization view and a
+          tabular view. Both views can be downloaded, with the visualization available as a PNG and the table as a TSV
+          file.
+        </DatasetsOverview>
       )}
       <DatasetListSection />
     </MatchingGeneContextProvider>
