@@ -3,13 +3,42 @@ set -o errexit
 
 die() { set +v; echo "$*" 1>&2 ; exit 1; }
 
-docker info >/dev/null 2>&1 || die 'Docker daemon is not running.'
+usage() {
+  echo "Usage: $0 [--dry-run] [major]"
+  echo "  --dry-run: Skip Docker build/push and git push operations"
+  echo "  major: Force a major version bump (otherwise automatic based on 2-week cycle)"
+  exit 1
+}
+
+# Parse arguments
+DRY_RUN=false
+MAJOR=""
+
+while [[ $# -gt 0 ]]; do
+  case $1 in
+    --dry-run)
+      DRY_RUN=true
+      shift
+      ;;
+    --help|-h)
+      usage
+      ;;
+    *)
+      MAJOR=$1
+      shift
+      ;;
+  esac
+done
+
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "DRY RUN MODE: No pushes will be performed"
+else
+  docker info >/dev/null 2>&1 || die 'Docker daemon is not running.'
+fi
 
 git diff --quiet || die 'Uncommitted changes: Stash or commit'
 git checkout main
 git pull
-
-MAJOR=$1
 
 if [[ -z "$MAJOR" ]]; then
   NOW_EPOCH_DAY=`expr $(date +%s) / 86400`
@@ -20,8 +49,14 @@ if [[ -z "$MAJOR" ]]; then
       echo "Last minor tag: $TAG"
       # Strip timezone info (last 6 characters)
       DATE=${DATE%??????}
-      # Convert to epoch day
-      REF_EPOCH_DAY=`expr $(date -j -f "%a %b %d %H:%M:%S %Y" "$DATE" "+%s") / 86400`
+      # Convert to epoch day - support both macOS and Linux date commands
+      if [[ "$OSTYPE" == "darwin"* ]]; then
+        # macOS date command
+        REF_EPOCH_DAY=`expr $(date -j -f "%a %b %d %H:%M:%S %Y" "$DATE" "+%s") / 86400`
+      else
+        # Linux date command
+        REF_EPOCH_DAY=`expr $(date -d "$DATE" "+%s") / 86400`
+      fi
       echo "Reference epoch day: $REF_EPOCH_DAY"
       break
     fi
@@ -74,11 +109,24 @@ fi
 VERSION_IMAGE_NAME=hubmap/portal-ui:$VERSION
 LATEST_IMAGE_NAME=hubmap/portal-ui:latest
 
-etc/build/build.sh $VERSION_IMAGE_NAME
-docker tag $VERSION_IMAGE_NAME $LATEST_IMAGE_NAME
-docker push $VERSION_IMAGE_NAME
-docker push $LATEST_IMAGE_NAME
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "DRY RUN: Would build and push Docker images:"
+  echo "  - $VERSION_IMAGE_NAME"
+  echo "  - $LATEST_IMAGE_NAME"
+else
+  etc/build/build.sh $VERSION_IMAGE_NAME
+  docker tag $VERSION_IMAGE_NAME $LATEST_IMAGE_NAME
+  docker push $VERSION_IMAGE_NAME
+  docker push $LATEST_IMAGE_NAME
+fi
 
-git tag $VERSION
-git push origin --tags
-git push origin
+if [[ "$DRY_RUN" == "true" ]]; then
+  echo "DRY RUN: Would create git tag and push:"
+  echo "  - git tag $VERSION"
+  echo "  - git push origin --tags"
+  echo "  - git push origin"
+else
+  git tag $VERSION
+  git push origin --tags
+  git push origin
+fi
