@@ -4,16 +4,15 @@ import { alias } from '../build-utils/alias';
 import { HuBMAPGlobals } from '../build-utils/webpack.plugins';
 import path from 'path';
 
-const prodConfigPath = path.resolve(__dirname, '../build-utils/webpack.prod.js');
 
 const config: StorybookConfig = {
   framework: '@storybook/react-webpack5',
   stories: ['../app/static/js/**/*.stories.@(js|jsx|ts|tsx)'],
   addons: [
     '@storybook/addon-links',
-    '@storybook/addon-essentials',
     'storybook-addon-swc',
     '@storybook/addon-webpack5-compiler-swc',
+    '@storybook/addon-docs'
   ],
   staticDirs: ['../app/static/assets', '../app/static/storybook-public'],
   webpackFinal: async (config) => {
