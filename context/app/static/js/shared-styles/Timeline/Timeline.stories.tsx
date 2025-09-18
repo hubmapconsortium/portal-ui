@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { HOME_TIMELINE_ITEMS } from 'js/components/home/Hero';
 import Timeline from 'js/shared-styles/Timeline';

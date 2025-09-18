@@ -1,5 +1,5 @@
 import React from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 import { http, HttpResponse } from 'msw';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import { getArrayRange } from 'js/helpers/functions';
