@@ -1,1 +1,0 @@
-- Remove remaining references to legacy `/organ` route in favor of `/organs`.
