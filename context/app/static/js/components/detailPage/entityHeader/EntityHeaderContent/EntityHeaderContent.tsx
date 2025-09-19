@@ -231,7 +231,7 @@ function OrganItem({ organ }: { organ: OrganFile }) {
       {organ.uberon && (
         <EntityHeaderItem>
           <OutboundIconLink href={organ.uberon} onClick={handleUberonClick} underline="none" variant="body2">
-            Uberon Ontology
+            {organ.uberon_short}
           </OutboundIconLink>
         </EntityHeaderItem>
       )}
