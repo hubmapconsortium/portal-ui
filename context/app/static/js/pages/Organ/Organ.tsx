@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
 import Azimuth from 'js/components/organ/Azimuth';
@@ -12,6 +12,8 @@ import DetailLayout from 'js/components/detailPage/DetailLayout';
 import CellPopulationPlot from 'js/components/organ/CellPop';
 import DataProducts from 'js/components/organ/DataProducts';
 import { OrganContextProvider } from 'js/components/organ/contexts';
+import useEntityStore from 'js/stores/useEntityStore';
+import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import {
   useAssayBucketsQuery,
   useDataProducts,
@@ -28,12 +30,24 @@ interface OrganProps {
 const { summaryId, hraId, cellpopId, cellTypesId, referenceId, assaysId, dataProductsId, samplesId } = OrganPageIds;
 
 function Organ({ organ }: OrganProps) {
+  const setOrganFile = useEntityStore((state) => state.setOrganFile);
+
   const searchItems = useSearchItems(organ);
   const assayBuckets = useAssayBucketsQuery(searchItems);
   const samplesHits = useHasSamplesQuery(searchItems);
   const labeledDatasetUuids = useLabelledDatasetsQuery(searchItems);
   const { dataProducts, isLoading, isLateral } = useDataProducts(organ);
   const cellTypes = useCellTypesOfOrgan(organ.name);
+
+  // Set the organ file in the entity store for the header
+  useEffect(() => {
+    setOrganFile(organ);
+
+    // Clean up when component unmounts
+    return () => {
+      setOrganFile(null);
+    };
+  }, [organ, setOrganFile]);
 
   const shouldDisplaySection: Record<string, boolean> = {
     [summaryId]: Boolean(organ?.description),
@@ -49,9 +63,7 @@ function Organ({ organ }: OrganProps) {
   return (
     <OrganContextProvider organ={organ}>
       <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-        <Typography variant="subtitle1" component="h1" color="primary" data-testid="entity-title">
-          Organ
-        </Typography>
+        <SummaryTitle organIcon={organ.name}>Organ</SummaryTitle>
         <Typography variant="h1" component="h2">
           {organ.name}
         </Typography>
