@@ -2,12 +2,12 @@ import React, { PropsWithChildren } from 'react';
 import Stack from '@mui/material/Stack';
 import Typography from '@mui/material/Typography';
 
-import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
+import { AllEntityTypes } from 'js/shared-styles/icons/entityIconMap';
 import { SpacedSectionButtonRow } from 'js/shared-styles/sections/SectionButtonRow';
 import SummaryTitle from 'js/components/detailPage/summary/SummaryTitle';
 import SummaryItem from 'js/components/detailPage/summary/SummaryItem';
 import StatusIcon from 'js/components/detailPage/StatusIcon';
-import { FlexEnd, StyledSvgIcon } from './style';
+import { FlexEnd } from './style';
 
 const datasetEntityTypes = ['Dataset', 'Support', 'Publication', 'Preprint'];
 const publicationEntityTypes = ['Publication', 'Preprint'];
@@ -39,11 +39,8 @@ function SummaryData({
 
   return (
     <Stack spacing={1}>
-      <SummaryTitle data-testid="entity-type">
-        <Stack direction="row" spacing={1.25} alignItems="center">
-          <StyledSvgIcon as={entityIconMap[entity_type]} color="primary" />
-          <Typography variant="subtitle1">{entityTypeDisplay ?? entity_type}</Typography>
-        </Stack>
+      <SummaryTitle data-testid="entity-type" entityIcon={entity_type}>
+        {entityTypeDisplay ?? entity_type}
       </SummaryTitle>
       <SpacedSectionButtonRow
         leftText={

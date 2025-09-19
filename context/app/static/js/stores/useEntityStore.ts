@@ -3,6 +3,7 @@ import { useSprings } from '@react-spring/web';
 
 import { createStoreContext } from 'js/helpers/zustand';
 import { AssayMetadata } from 'js/components/detailPage/entityHeader/EntityHeaderContent/EntityHeaderContent';
+import { OrganFile } from 'js/components/organ/types';
 
 export type SummaryViewsType = 'narrow' | 'summary' | 'diagram';
 
@@ -12,6 +13,7 @@ interface EntityStoreState {
     summaryEntry: IntersectionObserverEntry | undefined;
   };
   assayMetadata: Partial<AssayMetadata>;
+  organFile: OrganFile | null;
   summaryHeight: number;
   view: SummaryViewsType;
   springs: ReturnType<typeof useSprings>;
@@ -20,6 +22,7 @@ interface EntityStoreState {
 interface EntityStoreActions {
   setSummaryComponentObserver: (inView: boolean, entry: IntersectionObserverEntry) => void;
   setAssayMetadata: (val: Partial<AssayMetadata>) => void;
+  setOrganFile: (val: OrganFile | null) => void;
   setSummaryHeight: (val: number) => void;
   setView: (val: SummaryViewsType) => void;
 }
@@ -46,6 +49,8 @@ export const createEntityStore = ({ springs }: { springs: ReturnType<typeof useS
     springs,
     assayMetadata: {},
     setAssayMetadata: (val) => set({ assayMetadata: val }),
+    organFile: null,
+    setOrganFile: (val: OrganFile | null) => set({ organFile: val }),
   }));
 
 const [EntityStoreProvider, useEntityStore, EntityStoreContext] = createStoreContext(createEntityStore, 'Entity Store');
