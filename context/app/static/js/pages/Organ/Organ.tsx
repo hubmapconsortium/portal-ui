@@ -66,7 +66,7 @@ function Organ({ organ }: OrganProps) {
         <SummaryTitle organIcon={organ.name} data-testid="organs-title">
           Organ
         </SummaryTitle>
-        <Typography variant="h1" component="h2">
+        <Typography variant="h1" component="h2" data-testid="entity-title">
           {organ.name}
         </Typography>
         <Description shouldDisplay={shouldDisplaySection[summaryId]} />
