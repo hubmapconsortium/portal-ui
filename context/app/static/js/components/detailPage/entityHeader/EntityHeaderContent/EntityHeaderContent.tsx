@@ -18,7 +18,6 @@ import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVis
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
 import EntityIcon from 'js/shared-styles/icons/EntityIcon';
-import { useTrackEntityPageEvent } from 'js/components/detailPage/useTrackEntityPageEvent';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { OrganFile } from 'js/components/organ/types';
 import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
@@ -199,38 +198,19 @@ const visualizationSelector = (state: VisualizationStore) => ({
 });
 
 function OrganItem({ organ }: { organ: OrganFile }) {
-  const trackEntityPageEvent = useTrackEntityPageEvent('Organ Detail Page');
-  const handleASCTBClick = () => {
-    if (organ?.name) {
-      trackEntityPageEvent({
-        action: 'ASCT+B Reporter Navigation',
-        label: organ.name,
-      });
-    }
-  };
-
-  const handleUberonClick = () => {
-    if (organ?.name) {
-      trackEntityPageEvent({
-        action: 'Uberon Ontology Navigation',
-        label: organ.name,
-      });
-    }
-  };
-
   return (
     <>
       <EntityHeaderItem startIcon={<OrganIcon organName={organ.name} />}>{organ.name}</EntityHeaderItem>
       {organ.asctb && (
         <EntityHeaderItem>
-          <OutboundIconLink href={organ.asctb} onClick={handleASCTBClick} underline="none" variant="body2">
+          <OutboundIconLink href={organ.asctb} underline="none" variant="body2">
             ASCT+B Reporter
           </OutboundIconLink>
         </EntityHeaderItem>
       )}
       {organ.uberon && (
         <EntityHeaderItem>
-          <OutboundIconLink href={organ.uberon} onClick={handleUberonClick} underline="none" variant="body2">
+          <OutboundIconLink href={organ.uberon} underline="none" variant="body2">
             {organ.uberon_short}
           </OutboundIconLink>
         </EntityHeaderItem>
