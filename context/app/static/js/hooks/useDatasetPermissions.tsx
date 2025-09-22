@@ -1,6 +1,31 @@
+import useSWR from 'swr';
+
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
-import useSWR from 'swr';
+import { getIDsQuery, getTermClause } from 'js/helpers/queries';
+import { Dataset } from 'js/components/types';
+import { useSearchHits } from './useSearchData';
+
+type DatasetAccessLevelHit = Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>;
+
+function useGetProtectedDatasets(ids: string[]) {
+  const query = {
+    query: {
+      bool: {
+        must: [getIDsQuery(ids)],
+        must_not: [getTermClause('mapped_data_access_level.keyword', 'Public')],
+      },
+    },
+    _source: ['uuid', 'hubmap_id'],
+    size: ids.length,
+  };
+
+  const { searchHits } = useSearchHits<DatasetAccessLevelHit>(query);
+
+  const protectedUUIDs = searchHits.map((s) => s._source.uuid);
+
+  return protectedUUIDs;
+}
 
 interface DatasetPermissionsRequest {
   url: string;
@@ -36,18 +61,26 @@ export async function fetchDatasetPermissions({ url, data, groupsToken }: Datase
 function useDatasetAccessInternal(uuids: string[]) {
   const { groupsToken, softAssayEndpoint } = useAppContext();
 
-  const shouldFetch = Boolean(uuids.length && softAssayEndpoint && groupsToken);
+  const protectedUUIDs = useGetProtectedDatasets(uuids);
 
-  const { data, isLoading } = useSWR(shouldFetch ? ['dataset-access', uuids.sort(), groupsToken] : null, () =>
-    fetchDatasetPermissions({
-      url: softAssayEndpoint,
-      data: uuids,
-      groupsToken,
-    }),
+  const shouldFetch = Boolean(protectedUUIDs.length && softAssayEndpoint && groupsToken);
+
+  const { data, isLoading } = useSWR(
+    shouldFetch ? ['dataset-access', [...protectedUUIDs].sort(), groupsToken] : null,
+    () =>
+      fetchDatasetPermissions({
+        url: softAssayEndpoint,
+        data: protectedUUIDs,
+        groupsToken,
+      }),
   );
 
   return {
-    accessibleDatasets: data ?? {},
+    accessibleDatasets: shouldFetch
+      ? (data ?? {})
+      : Object.fromEntries(
+          uuids.map((uuid) => [uuid, { access_allowed: !protectedUUIDs.includes(uuid), valid_id: true, uuid }]),
+        ),
     isLoading,
   };
 }
