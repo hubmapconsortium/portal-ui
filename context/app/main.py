@@ -5,6 +5,7 @@ from . import (
     routes_auth, routes_cells, routes_markdown, routes_notebooks,
     routes_workspaces, routes_cell_types, routes_scfind, default_config)
 from .flask_static_digest import FlaskStaticDigest
+
 flask_static_digest = FlaskStaticDigest()
 
 
@@ -114,13 +115,24 @@ def create_app(testing=False):
                 workspaces_token='',
                 user_groups=[])
 
-    # TODO: This breaks cypress tests; the caching will still occur on first lookup
-    # TODO: Investigate how to work around the cypress issue.
-    # Preload the cells api data for the molecular data queries on server start
-    # @app.before_request
-    # def preload_cells():
-    #     if not testing:
-    #         routes_cells.preload_cells_api(app)
+    # Preload the cells api data in a background thread on server start
+    if not testing:
+        import threading
+        import time
+
+        def preload_in_background():
+            with app.app_context():
+                try:
+                    start = time.time()
+                    routes_cells.preload_cells_api(app)
+                    end = time.time()
+                    app.logger.info(
+                        "Successfully preloaded cells API data in %.2f seconds", end - start)
+                except Exception as e:
+                    app.logger.error(f"Failed to preload cells API data: {e}")
+
+        thread = threading.Thread(target=preload_in_background, daemon=True)
+        thread.start()
 
     return app
 
