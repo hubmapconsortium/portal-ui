@@ -20,6 +20,7 @@ import { useDownloadImage } from 'js/hooks/useDownloadImage';
 import DownloadButton from 'js/shared-styles/buttons/DownloadButton';
 import Box from '@mui/material/Box';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import SCFindLink from 'js/shared-styles/Links/SCFindLink';
 import {
   ageBucketLabels,
   DatasetsOverviewDigest,
@@ -341,7 +342,7 @@ export default function DatasetsOverviewChart({ matched, indexed, all, trackingI
         dividersInLegend={compareBy === 'Race'}
         caption={
           <>
-            This chart shows the distribution of HuBMAP datasets that are compatible with the scFind method. The
+            This chart shows the distribution of HuBMAP datasets that are compatible with the <SCFindLink />. The
             distribution is based on the number of unique donors and the average age of donors in each dataset.
             {showComparison && (
               <> Striped segments represent matched datasets, while solid segments represent unmatched datasets.</>
