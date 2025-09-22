@@ -10,6 +10,7 @@ import VisualizationCollapseButton from 'js/components/detailPage/visualization/
 import VisualizationWorkspaceButton from 'js/components/detailPage/visualization/VisualizationWorkspaceButton';
 import { AllEntityTypes, entityIconMap } from 'js/shared-styles/icons/entityIconMap';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
+import { SampleCategoryIcon } from 'js/shared-styles/icons';
 import { useHandleCopyClick } from 'js/hooks/useCopyText';
 import { TooltipIconButton } from 'js/shared-styles/buttons/TooltipButton';
 import useEntityStore, { type EntityStore, SummaryViewsType } from 'js/stores/useEntityStore';
@@ -17,8 +18,10 @@ import { useVisualizationStore, type VisualizationStore } from 'js/stores/useVis
 import { useFlaskDataContext } from 'js/components/Contexts';
 import { Entity, isDataset, isDonor, isPublication, isSample } from 'js/components/types';
 import EntityIcon from 'js/shared-styles/icons/EntityIcon';
-import { SampleCategoryIcon } from 'js/shared-styles/icons';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
+import { OrganFile } from 'js/components/organ/types';
+import OutboundIconLink from 'js/shared-styles/Links/iconLinks/OutboundIconLink';
+import ViewEntitiesButton from 'js/components/organ/ViewEntitiesButton';
 import { getDonorMetadata, getOriginSampleAndMappedOrgan } from '../../utils';
 import EntityHeaderItem from '../EntityHeaderItem';
 
@@ -185,6 +188,7 @@ function HuBMAPIDItem({ title, entityTypeIcon }: { title: string } & { entityTyp
 const entityStoreSelector = (state: EntityStore) => ({
   assayMetadata: state.assayMetadata,
   summaryComponentObserver: state.summaryComponentObserver,
+  organFile: state.organFile,
 });
 
 const visualizationSelector = (state: VisualizationStore) => ({
@@ -193,14 +197,56 @@ const visualizationSelector = (state: VisualizationStore) => ({
   isVitessce: Boolean(state.vitessceVisualization),
 });
 
+function OrganItem({ organ }: { organ: OrganFile }) {
+  return (
+    <>
+      <EntityHeaderItem startIcon={<OrganIcon organName={organ.name} />}>{organ.name}</EntityHeaderItem>
+      {organ.asctb && (
+        <EntityHeaderItem>
+          <OutboundIconLink href={organ.asctb} underline="none" variant="body2">
+            ASCT+B Reporter
+          </OutboundIconLink>
+        </EntityHeaderItem>
+      )}
+      {organ.uberon && (
+        <EntityHeaderItem>
+          <OutboundIconLink href={organ.uberon} underline="none" variant="body2">
+            {organ.uberon_short}
+          </OutboundIconLink>
+        </EntityHeaderItem>
+      )}
+    </>
+  );
+}
+
+function OrganButtons({ organ }: { organ: OrganFile }) {
+  return (
+    <Stack direction="row" spacing={1}>
+      <ViewEntitiesButton
+        entityType="Dataset"
+        filters={{ organTerms: organ.search }}
+        trackingInfo={{ action: 'View Datasets', label: organ.name }}
+      />
+      <ViewEntitiesButton
+        entityType="Sample"
+        filters={{ organTerms: organ.search }}
+        trackingInfo={{ action: 'View Samples', label: organ.name }}
+      />
+    </Stack>
+  );
+}
+
 function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setView: (v: SummaryViewsType) => void }) {
   const {
     assayMetadata,
     summaryComponentObserver: { summaryInView },
+    organFile: organ,
   } = useEntityStore(entityStoreSelector);
 
   const { entity } = useFlaskDataContext();
   const { hubmap_id, entity_type } = entity;
+
+  const isOrganPage = Boolean(organ);
 
   const { vizIsFullscreen, vizNotebookId, isVitessce } = useVisualizationStore(visualizationSelector);
 
@@ -211,8 +257,8 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
     },
   });
 
-  const title = hubmap_id ?? assayMetadata?.name;
-  const type = entity_type ?? assayMetadata?.entity_type;
+  const title = isOrganPage ? organ?.name : (hubmap_id ?? assayMetadata?.name);
+  const type = isOrganPage ? 'Organ' : (entity_type ?? assayMetadata?.entity_type);
 
   return (
     <Stack
@@ -223,29 +269,38 @@ function EntityHeaderContent({ view, setView }: { view: SummaryViewsType; setVie
       py={0.5}
       sx={(theme) => ({ ...(view !== 'narrow' && { borderBottom: `1px solid ${theme.palette.primary.lowEmphasis}` }) })}
     >
-      {entityTypeHasIcon(type) && (
-        <AnimatedStack
-          style={styles}
-          direction="row"
-          alignItems="center"
-          spacing={2}
-          divider={<Divider orientation="vertical" flexItem />}
-        >
-          {title && <HuBMAPIDItem title={title} entityTypeIcon={<StyledSvgIcon as={entityIconMap[type]} />} />}
-          <EntityHeaderItems type={type} data={{ assayMetadata, entity }} />
-        </AnimatedStack>
-      )}
+      <AnimatedStack
+        style={styles}
+        direction="row"
+        alignItems="center"
+        spacing={2}
+        useFlexGap
+        divider={<Divider orientation="vertical" flexItem />}
+      >
+        {isOrganPage && organ ? (
+          <OrganItem organ={organ} />
+        ) : (
+          entityTypeHasIcon(type) && (
+            <>
+              {title && <HuBMAPIDItem title={title} entityTypeIcon={<StyledSvgIcon as={entityIconMap[type]} />} />}
+              <EntityHeaderItems type={type} data={{ assayMetadata, entity }} />
+            </>
+          )
+        )}
+      </AnimatedStack>
       <RightDiv>
-        {vizIsFullscreen ? (
+        {vizIsFullscreen && (
           <>
             {vizNotebookId && <VisualizationWorkspaceButton />}
             {isVitessce && <VisualizationShareButtonWrapper />}
             <VisualizationThemeSwitch trackingInfo={{ action: 'Vitessce' }} />
             <VisualizationCollapseButton />
           </>
-        ) : (
+        )}
+        {!vizIsFullscreen && !isOrganPage && entityTypeHasIcon(type) && (
           <EntityHeaderActionButtons view={view} setView={setView} entity_type={type} />
         )}
+        {!vizIsFullscreen && isOrganPage && organ && <OrganButtons organ={organ} />}
       </RightDiv>
     </Stack>
   );
