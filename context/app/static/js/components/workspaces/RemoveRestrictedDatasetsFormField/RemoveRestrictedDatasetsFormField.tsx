@@ -58,18 +58,20 @@ function RemoveRestrictedDatasetsFormField<FormType extends FieldValues>({
         control={control}
         name={'restricted-datasets' as Path<FormType>}
         label="Restricted Datasets"
-        value={restrictedHubmapIds as PathValue<FormType, Path<FormType>>}
+        value={restrictedHubmapIds.join(', ') as PathValue<FormType, Path<FormType>>}
         error
         hideCharCount
-        InputProps={{
-          endAdornment: (
-            <InputAdornment position="end">
-              <IconButton onClick={() => handleCopyClick(hubmapIdsString)}>
-                <ContentCopyIcon />
-              </IconButton>
-            </InputAdornment>
-          ),
-          readOnly: true,
+        slotProps={{
+          input: {
+            endAdornment: (
+              <InputAdornment position="end">
+                <IconButton onClick={() => handleCopyClick(hubmapIdsString)}>
+                  <ContentCopyIcon />
+                </IconButton>
+              </InputAdornment>
+            ),
+            readOnly: true,
+          },
         }}
       />
       <Button sx={{ mt: 1 }} variant="contained" color="primary" onClick={removeRestrictedDatasets}>

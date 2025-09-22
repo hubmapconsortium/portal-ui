@@ -8,7 +8,7 @@ import { useSearchHits } from './useSearchData';
 
 type DatasetAccessLevelHit = Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>;
 
-function useGetProtectedDatasets(ids: string[]) {
+function useGetNonPublicDatasets(ids: string[]) {
   const query = {
     query: {
       bool: {
@@ -16,13 +16,13 @@ function useGetProtectedDatasets(ids: string[]) {
         must_not: [getTermClause('mapped_data_access_level.keyword', 'Public')],
       },
     },
-    _source: ['uuid', 'hubmap_id'],
+    _source: false,
     size: ids.length,
   };
 
   const { searchHits } = useSearchHits<DatasetAccessLevelHit>(query);
 
-  const protectedUUIDs = searchHits.map((s) => s._source.uuid);
+  const protectedUUIDs = searchHits.map((s) => s._id);
 
   return protectedUUIDs;
 }
@@ -58,29 +58,49 @@ export async function fetchDatasetPermissions({ url, data, groupsToken }: Datase
   });
 }
 
-function useDatasetAccessInternal(uuids: string[]) {
+interface UseDatasetAccessReturn {
+  accessibleDatasets: DatasetPermissionsResponse;
+  isLoading: boolean;
+}
+
+function useDatasetAccessInternal(uuids: string[]): UseDatasetAccessReturn {
   const { groupsToken, softAssayEndpoint } = useAppContext();
 
-  const protectedUUIDs = useGetProtectedDatasets(uuids);
+  const nonPublicUUIDs = useGetNonPublicDatasets(uuids);
 
-  const shouldFetch = Boolean(protectedUUIDs.length && softAssayEndpoint && groupsToken);
+  const shouldFetch = Boolean(nonPublicUUIDs.length && softAssayEndpoint && groupsToken);
 
   const { data, isLoading } = useSWR(
-    shouldFetch ? ['dataset-access', [...protectedUUIDs].sort(), groupsToken] : null,
+    shouldFetch ? ['dataset-access', [...nonPublicUUIDs].sort(), groupsToken] : null,
     () =>
       fetchDatasetPermissions({
         url: softAssayEndpoint,
-        data: protectedUUIDs,
+        data: nonPublicUUIDs,
         groupsToken,
       }),
   );
 
+  if (shouldFetch) {
+    return {
+      accessibleDatasets: data ?? {},
+      isLoading,
+    };
+  }
+
   return {
-    accessibleDatasets: shouldFetch
-      ? (data ?? {})
-      : Object.fromEntries(
-          uuids.map((uuid) => [uuid, { access_allowed: !protectedUUIDs.includes(uuid), valid_id: true, uuid }]),
-        ),
+    accessibleDatasets: Object.fromEntries(
+      uuids.map((uuid) => [
+        uuid,
+        {
+          access_allowed: !nonPublicUUIDs.includes(uuid),
+          valid_id: true,
+          uuid,
+          hubmap_id: '',
+          entity_type: 'dataset',
+          file_system_path: '',
+        },
+      ]),
+    ),
     isLoading,
   };
 }
