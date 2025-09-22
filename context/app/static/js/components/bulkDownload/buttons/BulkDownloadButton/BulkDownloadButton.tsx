@@ -20,6 +20,7 @@ function BulkDownloadButton({ uuids, deselectRows, disabled, trackingInfo, ...re
   return (
     <>
       <DownloadButton
+        aria-label="Bulk Download selected datasets"
         onClick={() => {
           if (trackingInfo) {
             trackEvent(trackingInfo);

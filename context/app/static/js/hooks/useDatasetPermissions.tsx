@@ -1,6 +1,31 @@
+import useSWR from 'swr';
+
 import { useAppContext } from 'js/components/Contexts';
 import { fetcher } from 'js/helpers/swr';
-import useSWR from 'swr';
+import { getIDsQuery, getTermClause } from 'js/helpers/queries';
+import { Dataset } from 'js/components/types';
+import { useSearchHits } from './useSearchData';
+
+type DatasetAccessLevelHit = Pick<Dataset, 'hubmap_id' | 'mapped_dataset_access_level' | 'uuid'>;
+
+function useGetNonPublicDatasets(ids: string[]) {
+  const query = {
+    query: {
+      bool: {
+        must: [getIDsQuery(ids)],
+        must_not: [getTermClause('mapped_data_access_level.keyword', 'Public')],
+      },
+    },
+    _source: false,
+    size: ids.length,
+  };
+
+  const { searchHits } = useSearchHits<DatasetAccessLevelHit>(query);
+
+  const protectedUUIDs = searchHits.map((s) => s._id);
+
+  return protectedUUIDs;
+}
 
 interface DatasetPermissionsRequest {
   url: string;
@@ -33,21 +58,49 @@ export async function fetchDatasetPermissions({ url, data, groupsToken }: Datase
   });
 }
 
-function useDatasetAccessInternal(uuids: string[]) {
+interface UseDatasetAccessReturn {
+  accessibleDatasets: DatasetPermissionsResponse;
+  isLoading: boolean;
+}
+
+function useDatasetAccessInternal(uuids: string[]): UseDatasetAccessReturn {
   const { groupsToken, softAssayEndpoint } = useAppContext();
 
-  const shouldFetch = Boolean(uuids.length && softAssayEndpoint && groupsToken);
+  const nonPublicUUIDs = useGetNonPublicDatasets(uuids);
 
-  const { data, isLoading } = useSWR(shouldFetch ? ['dataset-access', uuids.sort(), groupsToken] : null, () =>
-    fetchDatasetPermissions({
-      url: softAssayEndpoint,
-      data: uuids,
-      groupsToken,
-    }),
+  const shouldFetch = Boolean(nonPublicUUIDs.length && softAssayEndpoint && groupsToken);
+
+  const { data, isLoading } = useSWR(
+    shouldFetch ? ['dataset-access', [...nonPublicUUIDs].sort(), groupsToken] : null,
+    () =>
+      fetchDatasetPermissions({
+        url: softAssayEndpoint,
+        data: nonPublicUUIDs,
+        groupsToken,
+      }),
   );
 
+  if (shouldFetch) {
+    return {
+      accessibleDatasets: data ?? {},
+      isLoading,
+    };
+  }
+
   return {
-    accessibleDatasets: data ?? {},
+    accessibleDatasets: Object.fromEntries(
+      uuids.map((uuid) => [
+        uuid,
+        {
+          access_allowed: !nonPublicUUIDs.includes(uuid),
+          valid_id: true,
+          uuid,
+          hubmap_id: '',
+          entity_type: 'dataset',
+          file_system_path: '',
+        },
+      ]),
+    ),
     isLoading,
   };
 }
