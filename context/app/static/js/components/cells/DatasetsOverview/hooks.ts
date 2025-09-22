@@ -468,24 +468,25 @@ const getFormattedDataFromBuckets = (
       yAxis,
       matchBucket?.buckets.find((b) => String(b.key) === String(group)),
     );
-    const unmatched = getYValue(
+    const total = getYValue(
       yAxis,
       comparisonBucket.buckets.find((b) => String(b.key) === String(group)),
     );
 
     if (isPercentage) {
-      if (unmatched === 0) {
+      if (total === 0) {
         acc[group] = { matched: 0, unmatched: 0 }; // Avoid division by zero
       } else {
+        const unmatchedCount = calculateUnmatched(matched, total, showComparison);
         acc[group] = {
-          matched: matched / unmatched,
-          unmatched: calculateUnmatched(unmatched, matched, showComparison),
+          matched: matched / total,
+          unmatched: unmatchedCount / total,
         };
       }
     } else {
       acc[group] = {
         matched,
-        unmatched: calculateUnmatched(unmatched, matched, showComparison),
+        unmatched: calculateUnmatched(matched, total, showComparison),
       };
     }
 
