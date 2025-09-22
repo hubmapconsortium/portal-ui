@@ -1,5 +1,5 @@
 const geneSymbol = "MMRN1";
-const geneName = "Multimerin 1"
+const geneName = "Multimerin 1";
 const genePath = `/genes/${geneSymbol}`;
 
 describe("Gene Detail Page", () => {
