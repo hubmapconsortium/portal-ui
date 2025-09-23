@@ -128,7 +128,7 @@ def create_app(testing=False):
         app.logger.info("Skipping preload of cells API data (testing=%s, CI=%s)",
                         testing, is_ci)
     else:
-        print("Starting background thread to preload cells API data...")
+        app.logger.info("Starting background thread to preload cells API data...")
         import threading
         import time
 
