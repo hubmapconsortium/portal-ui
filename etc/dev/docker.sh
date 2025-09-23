@@ -23,10 +23,22 @@ fi
 docker rm -f $CONTAINER_NAME || echo "$CONTAINER_NAME is not yet running."
 
 etc/build/build.sh $IMAGE_NAME
+# Pass CI environment variables to Docker container if they exist
+# Otherwise, preloading cells API data on server start will be attempted,
+# which will cause the build to hang and eventually time out.
+CI_ENV_ARGS=""
+if [ ! -z "$CI" ]; then
+    CI_ENV_ARGS="$CI_ENV_ARGS -e CI=$CI"
+fi
+if [ ! -z "$GH_ACTIONS" ]; then
+    CI_ENV_ARGS="$CI_ENV_ARGS -e GH_ACTIONS=$GH_ACTIONS"
+fi
+
 docker run -d \
   --name $CONTAINER_NAME \
   -p $PORT:80 \
   --mount type=bind,source="$(pwd)"/"$CONF_PATH",target=/app/instance/app.conf \
+  $CI_ENV_ARGS \
   $IMAGE_NAME
 
 green=`tput setaf 2 || echo ''`

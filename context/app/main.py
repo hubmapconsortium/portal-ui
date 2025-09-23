@@ -118,7 +118,12 @@ def create_app(testing=False):
                 user_groups=[])
 
     # Preload the cells api data in a background thread on server start
-    is_ci = env.get('CI', False) or env.get('GH_ACTIONS', False)
+    # Check for various CI environment indicators
+    is_ci = (env.get('CI', False)
+             or env.get('GH_ACTIONS', False)
+             or env.get('GITHUB_ACTIONS', False)
+             or env.get('CONTINUOUS_INTEGRATION', False))
+
     if testing or is_ci:
         app.logger.info("Skipping preload of cells API data (testing=%s, CI=%s)",
                         testing, is_ci)
