@@ -6,6 +6,8 @@ from . import (
     routes_workspaces, routes_cell_types, routes_scfind, default_config)
 from .flask_static_digest import FlaskStaticDigest
 
+from os import environ as env
+
 flask_static_digest = FlaskStaticDigest()
 
 
@@ -116,8 +118,12 @@ def create_app(testing=False):
                 user_groups=[])
 
     # Preload the cells api data in a background thread on server start
-    is_ci = app.config.get('GH_ACTIONS', False)
-    if not testing and not is_ci:
+    is_ci = env.get('CI', False) or env.get('GH_ACTIONS', False)
+    if testing or is_ci:
+        app.logger.info("Skipping preload of cells API data (testing=%s, CI=%s)",
+                        testing, is_ci)
+    else:
+        print("Starting background thread to preload cells API data...")
         import threading
         import time
 
