@@ -119,8 +119,14 @@ def create_app(testing=False):
     if not testing:
         import threading
         import time
+        import os
 
         def preload_in_background():
+            # Skip preloading in CI environments to avoid hanging
+            if os.environ.get('CI') or os.environ.get('GITHUB_ACTIONS'):
+                app.logger.info("Skipping cells API preloading in CI environment")
+                return
+
             with app.app_context():
                 try:
                     start = time.time()
