@@ -115,30 +115,31 @@ def create_app(testing=False):
                 workspaces_token='',
                 user_groups=[])
 
+    # Currently disabled to troubleshoot if this is why CI is hanging after docker build
     # Preload the cells api data in a background thread on server start
-    if not testing:
-        import threading
-        import time
-        import os
+    # if not testing:
+    #     import threading
+    #     import time
+    #     import os
 
-        def preload_in_background():
-            # Skip preloading in CI environments to avoid hanging
-            if os.environ.get('CI') or os.environ.get('GITHUB_ACTIONS'):
-                app.logger.info("Skipping cells API preloading in CI environment")
-                return
+    #     def preload_in_background():
+    #         # Skip preloading in CI environments to avoid hanging
+    #         if os.environ.get('CI') or os.environ.get('GITHUB_ACTIONS'):
+    #             app.logger.info("Skipping cells API preloading in CI environment")
+    #             return
 
-            with app.app_context():
-                try:
-                    start = time.time()
-                    routes_cells.preload_cells_api(app)
-                    end = time.time()
-                    app.logger.info(
-                        "Successfully preloaded cells API data in %.2f seconds", end - start)
-                except Exception as e:
-                    app.logger.error(f"Failed to preload cells API data: {e}")
+    #         with app.app_context():
+    #             try:
+    #                 start = time.time()
+    #                 routes_cells.preload_cells_api(app)
+    #                 end = time.time()
+    #                 app.logger.info(
+    #                     "Successfully preloaded cells API data in %.2f seconds", end - start)
+    #             except Exception as e:
+    #                 app.logger.error(f"Failed to preload cells API data: {e}")
 
-        thread = threading.Thread(target=preload_in_background, daemon=True)
-        thread.start()
+    #     thread = threading.Thread(target=preload_in_background, daemon=True)
+    #     thread.start()
 
     return app
 
