@@ -22,12 +22,15 @@ case $1 in
 
   portal)
     CYPRESS_ARGS='--spec ./cypress/e2e/portal/*.cy.js'
+    echo "Starting portal server in docker..."
     etc/dev/docker.sh 5001  # Needs to match port in cypress.json.
+    echo "Waiting for server to start up..."
     server_up 5001  # Without this, Cypress gets an undefined content-type and immediately fails.
+    echo "Server is up."
     ;;
 
   *)
-    die "Unexpected argument: $1"
+    die "Unexpected argument: $1. Must be 'portal' or 'maintenance'."
     ;;
 esac
 
