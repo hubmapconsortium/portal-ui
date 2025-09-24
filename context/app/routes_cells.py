@@ -404,7 +404,7 @@ def genes_validate():
         elif modality == 'atac':
             valid_gene_set = set(_get_atac_genes(current_app))
         else:
-            return {'error': f'Unsupported modality provided.'}, 400
+            return {'error': 'Unsupported modality provided.'}, 400
 
         # Validate genes against the modality-specific gene list
         valid_genes = []
