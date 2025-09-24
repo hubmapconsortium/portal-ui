@@ -1,5 +1,5 @@
 import React, { ComponentProps, PropsWithChildren, useMemo } from 'react';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-webpack5';
 
 import { FlaskDataContext, FlaskDataContextType } from 'js/components/Contexts';
 import { Citation } from 'js/components/detailPage/Citation/Citation.stories';

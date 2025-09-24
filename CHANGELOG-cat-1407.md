@@ -1,0 +1,1 @@
+- Fix dataset permission checks for public datasets failing for users who have not logged in.

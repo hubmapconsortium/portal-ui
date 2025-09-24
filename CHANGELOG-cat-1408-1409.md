@@ -1,0 +1,2 @@
+- Add scFind documentation link to dataset overview chart caption.
+- Fix Dataset Overview Graph comparison toggle.

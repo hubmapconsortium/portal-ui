@@ -365,6 +365,12 @@ interface DatasetGeneAggregations {
       doc_count: number;
     }[];
   };
+  organs: {
+    buckets: {
+      key: string;
+      doc_count: number;
+    }[];
+  };
 }
 
 const useIndexedDatasetsForGene = () => {
@@ -402,6 +408,11 @@ const useIndexedDatasetsForGene = () => {
           size: 10000,
         },
       },
+      organs: {
+        terms: {
+          field: 'origin_samples_unique_mapped_organs.keyword',
+        },
+      },
     },
     size: 10000,
     _source: ['hubmap_id'],
@@ -411,12 +422,15 @@ const useIndexedDatasetsForGene = () => {
 
   const datasetTypes = searchData?.aggregations?.datasetTypes?.buckets ?? [];
 
+  const organs = searchData?.aggregations?.organs?.buckets ?? [];
+
   return {
     datasets: datasetUUIDs,
     datasetTypes,
     scFindParams: {
       genes: [geneSymbol],
     },
+    organs,
     isLoading: isLoadingDatasets || isLoadingDatasetTypes,
   };
 };
