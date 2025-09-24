@@ -110,7 +110,7 @@ export const dataLinks: DrawerSection[] = [
     items: [
       {
         label: 'Datasets',
-        description: 'Find datasets by dataset type, organs, pipelines and other metadata.',
+        description: 'Find datasets by dataset type, organs, pipelines, and other metadata.',
         href: buildSearchLink({
           entity_type: 'Dataset',
         }),
@@ -130,7 +130,7 @@ export const dataLinks: DrawerSection[] = [
       {
         label: 'Organs',
         description:
-          'Explore an organ through spatial visualizations, reference-based analysis and other relevant data.',
+          'Explore organs through spatial visualizations, reference-based analyses, and other relevant data.',
         href: '/organs',
         icon: <OrganIcon color="primary" />,
       },

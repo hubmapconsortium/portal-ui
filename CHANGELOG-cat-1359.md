@@ -1,0 +1,1 @@
+- Ensure oxford comma consistency in navigation links.
