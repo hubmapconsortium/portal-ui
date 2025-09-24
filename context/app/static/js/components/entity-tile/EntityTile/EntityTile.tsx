@@ -71,7 +71,7 @@ function ErrorTile({ entity_type, id }: Pick<EntityTileProps, 'id' | 'entity_typ
   return (
     <Paper
       sx={(theme) => ({
-        bgcolor: '#fbebf3',
+        bgcolor: theme.palette.accent.primary90,
         width: tileWidth,
         padding: theme.spacing(1),
         borderRadius: theme.spacing(0.5),

@@ -1,0 +1,1 @@
+- Add reused accent colors to MUI theme and replace hard coded values.

@@ -2,6 +2,7 @@ import useSWR from 'swr/immutable';
 import { fetcher } from 'js/helpers/swr';
 import { useMemo } from 'react';
 import { scaleOrdinal } from '@visx/scale';
+import { useTheme } from '@mui/material/styles';
 import { createScFindKey, formatCellTypeName, useScFindKey } from './utils';
 
 type CellTypeNamesKey = string;
@@ -66,16 +67,16 @@ export function useCellTypeOrgans() {
 }
 
 // Returns a map of organs to the colors that are used to represent them in the UI
-const ORGAN_COLORS = [
-  '#F0F3EB', // success-90 in figma
-  '#FBEBF3', // primary-90 in figma
-  '#EAF0F8', // info-90 in figma
-  '#FBEEEB', // warning-90 in figma
-];
 export function useCellTypeOrgansColorMap() {
   const organs = useCellTypeOrgans();
+  const theme = useTheme();
   return scaleOrdinal({
     domain: organs,
-    range: ORGAN_COLORS,
+    range: [
+      theme.palette.accent.success90,
+      theme.palette.accent.primary90,
+      theme.palette.accent.info90,
+      theme.palette.accent.warning90,
+    ],
   });
 }
