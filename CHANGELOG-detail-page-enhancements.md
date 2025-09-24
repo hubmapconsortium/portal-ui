@@ -1,2 +1,0 @@
-- Added entity header to organ detail pages.
-- Added breadcrumb links from detail pages to their respective landing pages.

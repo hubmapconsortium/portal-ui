@@ -1,5 +1,18 @@
 # Changelog
 
+## v1.33.0 - 2025-09-24
+
+- Ensure oxford comma consistency in navigation links.
+- Fix dataset permission checks for public datasets failing for users who have not logged in.
+- Add scFind documentation link to dataset overview chart caption.
+- Fix Dataset Overview Graph comparison toggle.
+- Update numpy and pandas past 2.0.
+- Update Storybook and swc.
+- Added entity header to organ detail pages.
+- Added breadcrumb links from detail pages to their respective landing pages.
+
+
+
 ## v1.32.4 - 2025-09-18
 
 - Revise biomarker and cell type search page to use a more explicit stepper to improve clarity of user flow.
