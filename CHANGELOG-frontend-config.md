@@ -1,0 +1,1 @@
+- Adjust specificity of TypeScript config to improve developer experience.
