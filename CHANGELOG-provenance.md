@@ -1,0 +1,1 @@
+- Disable display of provenance on publication pages with excessive ancestors.

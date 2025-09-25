@@ -10,8 +10,16 @@ import Files from 'js/components/detailPage/files/Files';
 import { DetailContext } from 'js/components/detailPage/DetailContext';
 import useTrackID from 'js/hooks/useTrackID';
 import PublicationBulkDataTransfer from 'js/components/detailPage/BulkDataTransfer/PublicationBulkDataTransfer';
+import { Publication as PublicationType } from 'js/components/types';
 
-function Publication({ publication, vignette_json }) {
+interface PublicationProps {
+  publication: PublicationType;
+  vignette_json: {
+    vignettes: { name: string; directory_name: string }[];
+  };
+}
+
+function Publication({ publication, vignette_json }: PublicationProps) {
   const {
     uuid,
     entity_type,
@@ -27,6 +35,8 @@ function Publication({ publication, vignette_json }) {
 
   const associatedCollectionUUID = associated_collection?.uuid;
 
+  const shouldDisplayProvenance = !associatedCollectionUUID && ancestor_ids?.length < 400;
+
   const shouldDisplaySection = {
     summary: true,
     data: true,
@@ -34,7 +44,7 @@ function Publication({ publication, vignette_json }) {
     files: Boolean(files?.length),
     'bulk-data-transfer': true,
     authors: true,
-    provenance: !associatedCollectionUUID,
+    provenance: shouldDisplayProvenance,
   };
 
   const detailContext = useMemo(
@@ -62,7 +72,7 @@ function Publication({ publication, vignette_json }) {
         {shouldDisplaySection.files && <Files files={files} includeAccordion />}
         {shouldDisplaySection['bulk-data-transfer'] && <PublicationBulkDataTransfer uuid={uuid} label={hubmap_id} />}
         <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
-        {shouldDisplaySection.provenance && <ProvSection uuid={uuid} assayMetadata={publication} />}
+        {shouldDisplaySection.provenance && <ProvSection />}
       </DetailLayout>
     </DetailContext.Provider>
   );

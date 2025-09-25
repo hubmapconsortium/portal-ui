@@ -164,6 +164,7 @@ export interface Publication extends Entity {
   status: string;
   sub_status: string;
   title: string;
+  files: UnprocessedFile[];
 }
 
 export interface Support extends Entity {
