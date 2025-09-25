@@ -28,9 +28,6 @@ def client():
         if hasattr(routes_cells._get_all_names_for_clid, 'cache_clear'):
             routes_cells._get_all_names_for_clid.cache_clear()
 
-        # Clear the invalid genes cache
-        routes_cells._INVALID_GENES_CACHE.clear()
-
         yield client
 
 
@@ -206,13 +203,9 @@ class TestGenesValidate:
 
     def test_genes_validate_success(self, client, mocker):
         """Test successful gene validation."""
-        # Mock the gene symbols function
-        mocker.patch('app.routes_cells._get_gene_symbols',
-                     return_value=mock_gene_symbols)
-
-        # Mock the client and its methods
-        mock_client = create_mock_client()
-        mocker.patch('app.routes_cells._get_client', return_value=mock_client)
+        # Mock the RNA genes function to return a subset of genes
+        mocker.patch('app.routes_cells._get_rna_genes',
+                     return_value=['ACTB', 'GAPDH', 'TP53'])
 
         test_genes = ['ACTB', 'GAPDH', 'INVALID_GENE', 'TP53']
         response = client.post('/cells/genes/validate',
@@ -225,14 +218,17 @@ class TestGenesValidate:
         assert 'total_provided' in data
         assert 'total_valid' in data
         assert data['total_provided'] == len(test_genes)
+        assert 'ACTB' in data['valid_genes']
+        assert 'GAPDH' in data['valid_genes']
+        assert 'TP53' in data['valid_genes']
+        assert 'INVALID_GENE' in data['invalid_genes']
+        assert data['total_valid'] == 3
 
     def test_genes_validate_default_modality(self, client, mocker):
         """Test gene validation with default modality."""
-        mocker.patch('app.routes_cells._get_gene_symbols',
-                     return_value=mock_gene_symbols)
-
-        mock_client = create_mock_client()
-        mocker.patch('app.routes_cells._get_client', return_value=mock_client)
+        # Mock the RNA genes function (default modality is 'rna')
+        mocker.patch('app.routes_cells._get_rna_genes',
+                     return_value=['ACTB', 'GAPDH'])
 
         test_genes = ['ACTB', 'GAPDH']
         response = client.post('/cells/genes/validate',
@@ -241,25 +237,51 @@ class TestGenesValidate:
         assert response.status_code == 200
         data = response.get_json()
         assert data['total_provided'] == 2
+        assert data['total_valid'] == 2
 
-    def test_genes_validate_client_error(self, client, mocker):
-        """Test gene validation with client error."""
-        mocker.patch('app.routes_cells._get_gene_symbols',
-                     return_value=mock_gene_symbols)
+    def test_genes_validate_atac_modality(self, client, mocker):
+        """Test gene validation with ATAC modality."""
+        # Mock the ATAC genes function
+        mocker.patch('app.routes_cells._get_atac_genes',
+                     return_value=['ACTB', 'TP53'])
 
-        # Mock client that raises ClientError
-        mock_client = Mock()
-        mock_client.select_datasets.side_effect = ClientError("Gene not found in index")
-        mocker.patch('app.routes_cells._get_client', return_value=mock_client)
-
-        test_genes = ['INVALID_GENE']
+        test_genes = ['ACTB', 'GAPDH', 'TP53']
         response = client.post('/cells/genes/validate',
-                               json={'genes': test_genes, 'modality': 'rna'})
+                               json={'genes': test_genes, 'modality': 'atac'})
 
         assert response.status_code == 200
         data = response.get_json()
-        assert 'invalid_genes' in data
-        assert 'INVALID_GENE' in data['invalid_genes']
+        assert data['total_provided'] == 3
+        assert data['total_valid'] == 2
+        assert 'ACTB' in data['valid_genes']
+        assert 'TP53' in data['valid_genes']
+        assert 'GAPDH' in data['invalid_genes']
+
+    def test_genes_validate_unsupported_modality(self, client):
+        """Test gene validation with unsupported modality."""
+        test_genes = ['ACTB']
+        response = client.post('/cells/genes/validate',
+                               json={'genes': test_genes, 'modality': 'unsupported'})
+
+        assert response.status_code == 400
+        data = response.get_json()
+        assert 'error' in data
+        assert 'Unsupported modality' in data['error']
+
+    def test_genes_validate_client_error(self, client, mocker):
+        """Test gene validation with RNA genes function error."""
+        # Mock _get_rna_genes to raise an exception
+        mocker.patch('app.routes_cells._get_rna_genes',
+                     side_effect=Exception("RNA genes API error"))
+
+        test_genes = ['ACTB']
+        response = client.post('/cells/genes/validate',
+                               json={'genes': test_genes, 'modality': 'rna'})
+
+        assert response.status_code == 500
+        data = response.get_json()
+        assert 'error' in data
+        assert data['error'] == 'Failed to validate genes'
 
     def test_genes_validate_missing_json(self, client):
         """Test gene validation without JSON content type."""
@@ -473,29 +495,6 @@ class TestUtilityFunctions:
         cluster_data = result['cluster-method-a'][0]
         assert cluster_data['matched'] == 1
         assert cluster_data['unmatched'] == 1
-
-    def test_invalid_genes_cache_functions(self):
-        """Test invalid genes cache utility functions."""
-        # Clear cache
-        routes_cells._INVALID_GENES_CACHE.clear()
-
-        # Test adding and checking
-        routes_cells._add_invalid_gene_to_cache('INVALID_GENE', 'rna')
-        assert routes_cells._is_gene_cached_as_invalid('INVALID_GENE', 'rna')
-        assert not routes_cells._is_gene_cached_as_invalid('VALID_GENE', 'rna')
-
-        # Test filtering
-        genes = ['VALID_GENE', 'INVALID_GENE', 'ANOTHER_GENE']
-        to_test, invalid = routes_cells._filter_genes_by_cache(genes, 'rna')
-
-        assert 'INVALID_GENE' in invalid
-        assert 'VALID_GENE' in to_test
-        assert 'ANOTHER_GENE' in to_test
-
-        # Test cache stats
-        stats = routes_cells._get_cache_stats()
-        assert 'rna' in stats
-        assert stats['rna'] == 1
 
 
 class TestTranslationFunctions:
