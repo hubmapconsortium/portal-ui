@@ -61,9 +61,7 @@ export function createStoreContext<T, CreateStoreArgs>(
   function Provider({ children, ...props }: PropsWithChildren<CreateStoreArgs>) {
     // Keep the store in a ref so it is only created once per instance of the provider
     const store = useRef<StoreType>();
-    if (!store.current) {
-      store.current = createStore(props as CreateStoreArgs);
-    }
+    store.current ??= createStore(props as CreateStoreArgs);
     return <StoreContext.Provider value={store.current}>{children}</StoreContext.Provider>;
   }
   // Create a provider component which creates the store and passes it to the context
@@ -95,9 +93,7 @@ export function createStoreContextWithRef<T, CreateStoreArgs, RefType>(
     // Keep the store in a ref so it is only created once per instance of the provider
     const store = useRef<StoreType>();
     const ref = useRef<RefType>(null);
-    if (!store.current) {
-      store.current = createStore(props as CreateStoreArgs, ref);
-    }
+    store.current ??= createStore(props as CreateStoreArgs, ref);
     return <StoreContext.Provider value={store.current}>{children}</StoreContext.Provider>;
   }
   return [Provider, hook, StoreContext] as CreateStoreContext<StoreApi<T>, CreateStoreArgs>;

@@ -7,7 +7,14 @@ import { useTheme } from '@mui/material/styles';
 import OutboundLink from 'js/shared-styles/Links/OutboundLink';
 import useSearchData from 'js/hooks/useSearchData';
 import { ChartPaper, ChartTitle, DescriptionPaper } from './style';
-import { getKeyValues, getAgeLabels, makeCompositeQuery, makeHistogramSource, makeTermSource, getBloodTypeLabels } from './utils';
+import {
+  getKeyValues,
+  getAgeLabels,
+  makeCompositeQuery,
+  makeHistogramSource,
+  makeTermSource,
+  getBloodTypeLabels,
+} from './utils';
 
 ChartJS.register(LinearScale, CategoryScale, BarElement);
 defaults.font.size = 18;
@@ -37,9 +44,9 @@ function BloodTypeDescription() {
 }
 
 const labelsMap = {
-  "mapped_metadata.age" : getAgeLabels,
-  "mapped_metadata.abo_blood_group_system": getBloodTypeLabels,
-}
+  'mapped_metadata.age': getAgeLabels,
+  'mapped_metadata.abo_blood_group_system': getBloodTypeLabels,
+};
 
 function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, description, xAxisLabel }) {
   const { palette } = useTheme();
@@ -107,8 +114,8 @@ function LowLevelDonorChart({ title, donorQuery, xKey, yKey, colorKeys, descript
 }
 
 const xAxisLabelMap = {
-  'mapped_metadata.abo_blood_group_system' : 'ABO Blood Group'
-}
+  'mapped_metadata.abo_blood_group_system': 'ABO Blood Group',
+};
 
 function DonorChart({ xAxis, groups }) {
   const xSource = xAxis === 'age' ? makeHistogramSource(xAxis) : makeTermSource(xAxis);

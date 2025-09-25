@@ -117,7 +117,7 @@ function Routes({ flaskData } = {}) {
       </Route>
     );
   }
-  
+
   if (urlPath.startsWith('/search/biomarkers-cell-types')) {
     return (
       <Route>
@@ -197,7 +197,6 @@ function Routes({ flaskData } = {}) {
       </Route>
     );
   }
-
 
   if (urlPath === '/my-lists') {
     return (
@@ -297,9 +296,11 @@ function Routes({ flaskData } = {}) {
 
   if (urlPath.startsWith('/cell-types')) {
     if (cellId === undefined) {
-      return (<Route>
-        <CellTypesLandingPage />
-      </Route>)
+      return (
+        <Route>
+          <CellTypesLandingPage />
+        </Route>
+      );
     }
     return (
       <Route>

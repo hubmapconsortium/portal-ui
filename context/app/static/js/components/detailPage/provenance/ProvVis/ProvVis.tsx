@@ -1,18 +1,18 @@
-import React, { ComponentProps, ReactNode, useEffect } from 'react';
-// @ts-expect-error - We have our own type definitions for now
-import Graph, { GraphParser } from '@hms-dbmi-bgm/react-workflow-viz';
-// Upstream issue: https://github.com/4dn-dcic/react-workflow-viz/issues/43
+import React, { ReactNode, useEffect } from 'react';
+
+import Sigma from 'sigma';
 
 import useProvenanceStore, { ProvenanceStore } from 'js/stores/useProvenanceStore';
 import ProvData from './ProvData';
 import { ProvData as ProvDataType, ProvNode } from '../types';
-import NodeElement from '../NodeElement';
+// import NodeElement from '../NodeElement';
+import { parseOpenProvToGraph } from './OpenProvParser';
 
 const useProvenanceStoreSelector = (state: ProvenanceStore) => ({ steps: state.steps, setSteps: state.setSteps });
 
-function renderNodeElement(node: ProvNode, props: ComponentProps<typeof Graph>) {
-  return <NodeElement {...props} node={node} />;
-}
+// function renderNodeElement(node: ProvNode, props: ComponentProps<typeof Graph>) {
+//   return <NodeElement {...props} node={node} />;
+// }
 
 interface ProvVisProps {
   provData: ProvDataType;
@@ -26,34 +26,30 @@ export default function ProvVis({
   provData,
   getNameForActivity,
   getNameForEntity,
-  renderDetailPane,
+  // renderDetailPane,
   entity_type,
 }: ProvVisProps) {
-  const { steps, setSteps } = useProvenanceStore(useProvenanceStoreSelector);
+  const { /*steps,*/ setSteps } = useProvenanceStore(useProvenanceStoreSelector);
 
   useEffect(() => {
     setSteps(new ProvData({ prov: provData, entity_type, getNameForActivity, getNameForEntity }).toCwl());
   }, [provData, getNameForActivity, getNameForEntity, setSteps, entity_type]);
-  return (
-    <GraphParser
-      parsingOptions={{
-        parseBasicIO: false,
-        showIndirectFiles: true,
-        showParameters: false,
-        showReferenceFiles: true,
-      }}
-      parentItem={{ name: 'Is this used?' }}
-      steps={steps}
-    >
-      <Graph
-        /* The library makes nodes and edges required props, and that's outside our control. */
-        nodes={[]}
-        edges={[]}
-        rowSpacingType="compact"
-        minimumHeight={300}
-        renderDetailPane={renderDetailPane}
-        renderNodeElement={renderNodeElement}
-      />
-    </GraphParser>
-  );
+
+  const ref = React.useRef<HTMLDivElement | null>(null);
+  const sigmaRef = React.useRef<Sigma | null>(null);
+  useEffect(() => {
+    if (ref.current && !sigmaRef.current && provData) {
+      const parsed = parseOpenProvToGraph(provData, { getNameForActivity, getNameForEntity });
+      sigmaRef.current = new Sigma(parsed, ref.current, {
+        renderEdgeLabels: false,
+      });
+    }
+    return () => {
+      if (sigmaRef.current && sigmaRef.current !== null) {
+        sigmaRef.current = null;
+      }
+    };
+  }, [provData, getNameForActivity, getNameForEntity]);
+
+  return <div style={{ width: '100%', height: '600px' }} ref={ref} />;
 }

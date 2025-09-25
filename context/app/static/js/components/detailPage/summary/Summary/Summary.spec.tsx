@@ -11,7 +11,7 @@ const testStatusAndAccessLevel = {
 
 describe('Summary', () => {
   let location: Location;
-  const mockLocation: Location = new URL('https://example.com') as unknown as Location;
+  const mockLocation = new URL('https://example.com') as unknown as Location;
 
   beforeEach(() => {
     location = window.location;
@@ -22,10 +22,12 @@ describe('Summary', () => {
     mockLocation.hash = 'mockHash';
     // @ts-expect-error - This is setting up test mocks.
     delete window.location;
+    // @ts-expect-error - This is setting up test mocks.
     window.location = mockLocation;
   });
 
   afterEach(() => {
+    // @ts-expect-error - This is setting up test mocks.
     window.location = location;
   });
 

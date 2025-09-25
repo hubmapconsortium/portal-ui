@@ -48,7 +48,7 @@ export function replaceUnderscore(s: string) {
 export function readCookie(name: string) {
   const nameEQ = `${name}=`;
   const ca = document.cookie.split(';');
-  // eslint-disable-next-line no-plusplus
+
   for (let i = 0; i !== ca.length; i++) {
     let c = ca[i];
     while (c.startsWith(' ')) c = c.substring(1, c.length);

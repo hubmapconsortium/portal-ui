@@ -46,7 +46,6 @@ function getCustomDimensions() {
 
 const tracker = new MatomoTracker({
   urlBase: 'https://hubmap.matomo.cloud/',
-  // eslint-disable-next-line no-restricted-globals
   siteId: getSiteId(location),
   // userId: 'UID76903202', // optional, default value: `undefined`.
   // trackerUrl: 'https://hubmap.matomo.cloud/tracking.php', // optional, default value: `${urlBase}matomo.php`

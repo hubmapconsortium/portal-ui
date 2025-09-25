@@ -48,8 +48,8 @@ function ChartWrapper(
 ) {
   const domain = [...(colorScale?.domain() ?? [])].sort(pullUpMultiple);
   const allKeysDomain = [...(allKeysScale?.domain() ?? [])].sort(pullUpMultiple);
-  // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-  const hasAxisDropdown = Boolean(xAxisDropdown || yAxisDropdown);
+
+  const hasAxisDropdown = Boolean(xAxisDropdown ?? yAxisDropdown);
   return (
     <Box
       sx={{

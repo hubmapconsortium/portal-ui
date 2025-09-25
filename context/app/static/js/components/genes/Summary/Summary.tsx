@@ -40,6 +40,18 @@ const relevantPages = [
   },
 ];
 
+function SummaryDisplay({ data, isLoading }: Pick<ReturnType<typeof useGeneOntology>, 'data' | 'isLoading'>) {
+  if (isLoading) {
+    return <SummarySkeleton />;
+  }
+
+  if (!data?.summary) {
+    return 'No description available. Please view additional information in the Known References section.';
+  }
+
+  return data.summary;
+}
+
 function Summary() {
   const { data, isLoading } = useGeneOntology();
   const { geneSymbolUpper } = useGenePageContext();
@@ -70,16 +82,7 @@ function Summary() {
     <DetailPageSection id={pageSectionIDs.summary}>
       <SummaryPaper>
         <LabelledSectionText label="Description" bottomSpacing={1} iconTooltipText="Gene description from NCBI Gene.">
-          {
-            // Since summary can be an empty string, prefer this to nullish coalescing
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-            data?.summary ||
-              (isLoading ? (
-                <SummarySkeleton />
-              ) : (
-                'No description available. Please view additional information in the Known References section.'
-              ))
-          }
+          <SummaryDisplay data={data} isLoading={isLoading} />
         </LabelledSectionText>
         <LabelledSectionText
           label="Known References"

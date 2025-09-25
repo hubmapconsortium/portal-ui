@@ -55,9 +55,6 @@ const datasetArgs = {
 
     origin_samples: [{ mapped_organ: 'Organ Type' }, { mapped_organ: 'Organ Type 2' }],
     mapped_data_types: ['Data Type 1', 'Data Type 2'],
-    thumbnail_file: {
-      file_uuid: 'ffff0185e2163e03da79489140fee0d1',
-    },
   },
   descendantCounts: { Dataset: 2 },
 };
@@ -73,6 +70,7 @@ const overflowEntityData = {
   mapped_data_types: ['Data Type 1', 'Data Type 2', 'Data Type 3', 'Data Type 4', 'Data Type 5'],
 };
 
+// eslint-disable-next-line no-unused-vars
 const { thumbnail_file, ...entityDataWithoutImage } = overflowEntityData;
 export const Overflow = Template.bind({});
 Overflow.args = {

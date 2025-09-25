@@ -7,6 +7,11 @@ import { OffsetSection } from '../style';
 function DetailPageSection({ children, ...rest }: PropsWithChildren<React.HTMLAttributes<HTMLDivElement>>) {
   const offset = useTotalHeaderOffset();
 
+  const offsetRef = useRef(offset);
+  useEffect(() => {
+    offsetRef.current = offset;
+  }, [offset]);
+
   const sectionRef = useRef<HTMLElement>(null);
   const initialHash = useInitialHashContext();
 
@@ -17,7 +22,7 @@ function DetailPageSection({ children, ...rest }: PropsWithChildren<React.HTMLAt
         setTimeout(() => {
           // Manually scroll to section and account for header offset
           const sectionTop = sectionRef.current?.getBoundingClientRect().top ?? 0;
-          const scrollPosition = window.scrollY + sectionTop - offset;
+          const scrollPosition = window.scrollY + sectionTop - offsetRef.current;
 
           window.scrollTo({
             top: Math.max(scrollPosition, 0),
@@ -27,7 +32,6 @@ function DetailPageSection({ children, ...rest }: PropsWithChildren<React.HTMLAt
       }
     }
     // We do not want to re-scroll down to the section if the header view changes (aka offset changes)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [initialHash, rest.id]);
 
   return (

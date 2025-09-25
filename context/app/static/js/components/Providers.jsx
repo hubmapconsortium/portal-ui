@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { SWRConfig } from 'swr';
 import { faro } from '@grafana/faro-web-sdk';
-import MuiThemeProvider from '@mui/material/styles/ThemeProvider';
+import { ThemeProvider as MuiThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 
 import { FlaskDataContext, AppContext } from 'js/components/Contexts';
@@ -72,11 +72,11 @@ export default function Providers({
             <FlaskDataContext.Provider value={flaskDataWithDefaults}>
               <EntityStoreProvider springs={springs} assayMetadata={flaskData?.entity ?? {}}>
                 <OpenKeyNavStoreProvider initialize={readOpenKeyNavCookie()}>
-                <ProtocolAPIContext.Provider value={protocolsContext}>
-                  <CssBaseline />
-                  <GlobalStyles />
-                  {children}
-                </ProtocolAPIContext.Provider>
+                  <ProtocolAPIContext.Provider value={protocolsContext}>
+                    <CssBaseline />
+                    <GlobalStyles />
+                    {children}
+                  </ProtocolAPIContext.Provider>
                 </OpenKeyNavStoreProvider>
               </EntityStoreProvider>
             </FlaskDataContext.Provider>
