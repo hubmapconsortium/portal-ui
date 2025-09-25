@@ -149,7 +149,7 @@ function buildDatasetFacetGroups(isHubmapUser: boolean) {
         default: false,
       },
       { field: 'published_timestamp', type: FACETS.date },
-      ...(isHubmapUser ? [{ field: 'last_modified_timestamp', type: FACETS.date }] : []),
+      { field: 'last_modified_timestamp', type: FACETS.date, visible: isHubmapUser },
     ],
     'Dataset Processing': [
       {

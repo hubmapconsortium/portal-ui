@@ -114,7 +114,9 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
           label: field,
         });
 
-        const newMin = value.getTime();
+        // Set to first moment of the month
+        const startOfMonth = new Date(value.getFullYear(), value.getMonth(), 1);
+        const newMin = startOfMonth.getTime();
         setValues([newMin, values[1]]);
         if (newMin <= values[1]) {
           filterDate({ field, min: newMin, max });
@@ -133,7 +135,10 @@ function DateRangeFacet({ field, min, max }: DateRangeFacetProps & { min: number
           label: field,
         });
 
-        const newMax = value.getTime();
+        // Set to last moment of the month, but not in the future
+        const endOfMonth = new Date(value.getFullYear(), value.getMonth() + 1, 0, 23, 59, 59, 999);
+        const now = new Date();
+        const newMax = Math.min(endOfMonth.getTime(), now.getTime());
         setValues([values[0], newMax]);
         if (newMax >= values[0]) {
           filterDate({ field, min, max: newMax });

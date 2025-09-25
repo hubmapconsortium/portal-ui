@@ -34,6 +34,9 @@ export function Facets({ facetGroups }: { facetGroups: FacetGroups }) {
               isLast={i === Object.keys(facetGroups).length - 1}
             >
               {v.map((f) => {
+                if ('visible' in f && !f.visible) {
+                  return null;
+                }
                 if (isHierarchicalFacet(f)) {
                   return <HierarchicalTermFacet {...f} key={f.field} />;
                 }

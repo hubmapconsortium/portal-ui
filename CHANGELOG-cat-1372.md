@@ -1,0 +1,2 @@
+- Adjust date range facets to correctly set start/end of month for start/end dates.
+- Ensure search links sent by authenticated users work for unauthenticated users.
