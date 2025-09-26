@@ -20,6 +20,7 @@
     "@mui/system": "^6.4.3",
     "@mui/x-date-pickers": "^7.22.2",
     "@react-spring/web": "^9.7.3",
+    "@sigma/node-square": "^3.0.0",
     "@tanstack/react-virtual": "^3.2.0",
     "@visx/axis": "^3.10.1",
     "@visx/event": "^3.3.0",

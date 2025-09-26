@@ -1,4 +1,5 @@
-import { DirectedGraph } from 'graphology';
+import { MultiDirectedGraph } from 'graphology';
+import { graphlib, layout } from '@dagrejs/dagre';
 import type { ProvData, ProvEdge as ProvDataEdge } from '../types';
 
 export interface ProvNode {
@@ -107,6 +108,53 @@ export class OpenProvParser {
   }
 
   /**
+   * Get visual properties for a node based on its type and subtype
+   */
+  private static getNodeVisualProperties(node: ProvNode): {
+    color: string;
+    size: number;
+    nodeType: string;
+  } {
+    if (node.type === 'entity') {
+      const entityType = (node.data['hubmap:entity_type'] as string) || '';
+
+      if (entityType === 'Donor') {
+        return {
+          color: '#cdc5f3', // Light purple for Donors
+          size: 15,
+          nodeType: 'square',
+        };
+      } else {
+        // Sample/Dataset
+        return {
+          color: '#d5eac3', // Light green for Samples/Datasets
+          size: 15,
+          nodeType: 'square',
+        };
+      }
+    } else if (node.type === 'activity') {
+      return {
+        color: '#b0c4da', // Light blue for Activities
+        size: 12,
+        nodeType: 'circle',
+      };
+    } else if (node.type === 'agent') {
+      return {
+        color: '#ffd1dc', // Light pink for Agents
+        size: 10,
+        nodeType: 'circle',
+      };
+    }
+
+    // Fallback
+    return {
+      color: '#cccccc',
+      size: 10,
+      nodeType: 'circle',
+    };
+  }
+
+  /**
    * Create nodes for entities
    */
   private createEntityNodes(): ProvNode[] {
@@ -151,8 +199,8 @@ export class OpenProvParser {
   private createUsedEdges(): ProvEdge[] {
     return Object.entries(this.prov.used || {}).map(([edgeId, edgeData]) => ({
       id: edgeId,
-      source: edgeData['prov:activity'],
-      target: edgeData['prov:entity'],
+      target: edgeData['prov:activity'],
+      source: edgeData['prov:entity'],
       type: 'used' as const,
       data: edgeData,
     }));
@@ -164,8 +212,8 @@ export class OpenProvParser {
   private createWasGeneratedByEdges(): ProvEdge[] {
     return Object.entries(this.prov.wasGeneratedBy || {}).map(([edgeId, edgeData]) => ({
       id: edgeId,
-      source: edgeData['prov:entity'],
-      target: edgeData['prov:activity'],
+      target: edgeData['prov:entity'],
+      source: edgeData['prov:activity'],
       type: 'wasGeneratedBy' as const,
       data: edgeData,
     }));
@@ -177,42 +225,94 @@ export class OpenProvParser {
   private createActedOnBehalfOfEdges(): ProvEdge[] {
     return Object.entries(this.prov.actedOnBehalfOf || {}).map(([edgeId, edgeData]) => ({
       id: edgeId,
-      source: edgeData['prov:delegate'],
-      target: edgeData['prov:responsible'],
+      target: edgeData['prov:delegate'],
+      source: edgeData['prov:responsible'],
       type: 'actedOnBehalfOf' as const,
       data: edgeData,
     }));
   }
 
   /**
+   * Apply dagre layout to calculate node positions
+   * Arranges nodes hierarchically with outputs on the right
+   */
+  private applyDagreLayout(graph: MultiDirectedGraph): void {
+    // Create a new dagre graph
+    const dagreGraph = new graphlib.Graph();
+    dagreGraph.setGraph({
+      rankdir: 'LR',
+      nodesep: 20_000,
+      ranksep: 1_000_000,
+      marginx: 500,
+      marginy: 500,
+    });
+    dagreGraph.setDefaultEdgeLabel(() => ({}));
+
+    // Add nodes to dagre graph with larger dimensions to account for visual size
+    graph.forEachNode((nodeId, nodeData) => {
+      dagreGraph.setNode(nodeId, {
+        width: 100,
+        height: 100,
+      });
+    });
+
+    // Add edges to dagre graph
+    graph.forEachEdge((edgeId, _edgeData, source, target) => {
+      dagreGraph.setEdge(source, target);
+    });
+
+    // Apply layout
+    layout(dagreGraph);
+
+    // Update graph nodes with calculated positions
+    graph.forEachNode((nodeId) => {
+      const dagreNode = dagreGraph.node(nodeId);
+      if (dagreNode) {
+        graph.setNodeAttribute(nodeId, 'x', dagreNode.x);
+        graph.setNodeAttribute(nodeId, 'y', dagreNode.y);
+        graph.setNodeAttribute(nodeId, 'width', dagreNode.width);
+        graph.setNodeAttribute(nodeId, 'height', dagreNode.height);
+      }
+    });
+  }
+
+  /**
    * Convert OpenProvenance data to a Graphology graph
    */
-  public toGraph(): DirectedGraph {
-    const graph = new DirectedGraph();
+  public toGraph(): MultiDirectedGraph {
+    const graph = new MultiDirectedGraph();
 
-    // Create all nodes
+    // Create all nodes (excluding agents)
     const entityNodes = this.createEntityNodes();
     const activityNodes = this.createActivityNodes();
-    const agentNodes = this.createAgentNodes();
-    const allNodes = [...entityNodes, ...activityNodes, ...agentNodes];
+    // Note: We don't include agentNodes to hide them from visualization
+    const allNodes = [...entityNodes, ...activityNodes];
 
     // Add nodes to graph
     allNodes.forEach((node) => {
+      const visualProps = OpenProvParser.getNodeVisualProperties(node);
+
       graph.addNode(node.id, {
         label: node.label,
         type: node.type,
         subtype: node.subtype,
         data: node.data,
+        // Sigma.js visual properties
+        color: visualProps.color,
+        size: visualProps.size,
+        // Store the original prov type for potential custom rendering
+        provType: visualProps.nodeType,
       });
     });
 
-    // Create all edges
+    // Create edges (excluding actedOnBehalfOf since agents are not displayed)
     const usedEdges = this.createUsedEdges();
     const wasGeneratedByEdges = this.createWasGeneratedByEdges();
-    const actedOnBehalfOfEdges = this.createActedOnBehalfOfEdges();
-    const allEdges = [...usedEdges, ...wasGeneratedByEdges, ...actedOnBehalfOfEdges];
+    // Note: We exclude actedOnBehalfOfEdges since they typically connect to agents
+    const allEdges = [...usedEdges, ...wasGeneratedByEdges];
 
     // Add edges to graph (only if both source and target nodes exist)
+    // This automatically filters out any edges connecting to agents since agents aren't in the graph
     allEdges.forEach((edge) => {
       if (graph.hasNode(edge.source) && graph.hasNode(edge.target)) {
         try {
@@ -230,11 +330,15 @@ export class OpenProvParser {
       }
     });
 
+    // Apply dagre layout to position nodes
+    this.applyDagreLayout(graph);
+
     return graph;
   }
 
   /**
    * Get summary statistics about the parsed graph
+   * Note: Agents and actedOnBehalfOf edges are excluded from the visualization
    */
   public getStats() {
     const entityCount = Object.keys(this.prov.entity || {}).length;
@@ -248,13 +352,17 @@ export class OpenProvParser {
       nodes: {
         entities: entityCount,
         activities: activityCount,
-        agents: agentCount,
+        agents: agentCount, // Still reported but not displayed
+        // Only entities and activities are displayed in the graph
+        displayed: entityCount + activityCount,
         total: entityCount + activityCount + agentCount,
       },
       edges: {
         used: usedCount,
         wasGeneratedBy: wasGeneratedByCount,
-        actedOnBehalfOf: actedOnBehalfOfCount,
+        actedOnBehalfOf: actedOnBehalfOfCount, // Still reported but not displayed
+        // Only used and wasGeneratedBy edges are displayed in the graph
+        displayed: usedCount + wasGeneratedByCount,
         total: usedCount + wasGeneratedByCount + actedOnBehalfOfCount,
       },
     };
@@ -262,7 +370,7 @@ export class OpenProvParser {
 }
 
 /**
- * Convenience function to parse OpenProvenance data to a Graphology graph
+ * Convenience function to parse OpenProvenance data to a Graphology graph with dagre layout
  */
 export function parseOpenProvToGraph(
   prov: ProvData,
@@ -270,7 +378,7 @@ export function parseOpenProvToGraph(
     getNameForEntity?: (id: string, prov?: ProvData) => string;
     getNameForActivity?: (id: string, prov?: ProvData) => string;
   } = {},
-): DirectedGraph {
+): MultiDirectedGraph {
   const parser = new OpenProvParser(prov, options);
   return parser.toGraph();
 }

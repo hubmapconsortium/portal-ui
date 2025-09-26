@@ -35,7 +35,7 @@ function Publication({ publication, vignette_json }: PublicationProps) {
 
   const associatedCollectionUUID = associated_collection?.uuid;
 
-  const shouldDisplayProvenance = !associatedCollectionUUID && ancestor_ids?.length < 400;
+  const shouldDisplayProvenance = !associatedCollectionUUID; // && ancestor_ids?.length < 400;
 
   const shouldDisplaySection = {
     summary: true,
@@ -60,7 +60,8 @@ function Publication({ publication, vignette_json }: PublicationProps) {
   return (
     <DetailContext.Provider value={detailContext}>
       <DetailLayout sections={shouldDisplaySection}>
-        <PublicationSummary />
+        {/* TODO: Uncomment */}
+        {/* <PublicationSummary />
         <PublicationsDataSection
           uuid={uuid}
           datasetUUIDs={ancestor_ids}
@@ -71,7 +72,7 @@ function Publication({ publication, vignette_json }: PublicationProps) {
         )}
         {shouldDisplaySection.files && <Files files={files} includeAccordion />}
         {shouldDisplaySection['bulk-data-transfer'] && <PublicationBulkDataTransfer uuid={uuid} label={hubmap_id} />}
-        <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" />
+        <ContributorsTable contributors={contributors} contacts={contacts} title="Authors" /> */}
         {shouldDisplaySection.provenance && <ProvSection />}
       </DetailLayout>
     </DetailContext.Provider>
