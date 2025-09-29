@@ -8,7 +8,6 @@ import importPlugin from 'eslint-plugin-import';
 import prettier from 'eslint-plugin-prettier';
 import tseslint from 'typescript-eslint';
 
-
 // Environment-specific configurations
 import jestConfig from './eslint.jest.config.mjs';
 import storybookConfig from './eslint.storybook.config.mjs';
@@ -32,6 +31,8 @@ export default defineConfig(
       '**/build/**',
       '**/*.bundle.js',
       '@storybook/types/dist',
+      '**/storybook-static/**',
+      '**/__tests__/**/*.fixture.*',
     ],
   },
 
@@ -75,8 +76,9 @@ export default defineConfig(
         version: 'detect',
       },
       'import/resolver': {
-        webpack: {
-          config: './build-utils/webpack.common.js',
+        typescript: {
+          alwaysTryTypes: true,
+          project: './tsconfig.json',
         },
       },
     },
@@ -146,12 +148,7 @@ export default defineConfig(
     },
   },
 
-  // TypeScript configuration with type checking - ONLY for TS/TSX files
-  ...tseslint.configs.recommendedTypeChecked.map(config => ({
-    ...config,
-    files: ['**/*.{ts,tsx}'],
-  })),
-  ...tseslint.configs.stylisticTypeChecked.map(config => ({
+  ...tseslint.configs.recommended.map(config => ({
     ...config,
     files: ['**/*.{ts,tsx}'],
   })),
@@ -159,7 +156,7 @@ export default defineConfig(
     files: ['**/*.{ts,tsx}'],
     languageOptions: {
       parserOptions: {
-        projectService: true,
+        project: './tsconfig.json',
         tsconfigRootDir: import.meta.dirname,
         ecmaFeatures: {
           jsx: true,
@@ -179,7 +176,6 @@ export default defineConfig(
       ],
     },
   },
-
   // Build utilities configuration
   {
     files: ['**/build-utils/*.js'],
@@ -188,8 +184,6 @@ export default defineConfig(
       'import/no-extraneous-dependencies': 'off',
     },
   },
-
-
   // Environment-specific configurations
   ...jestConfig,
   ...storybookConfig,

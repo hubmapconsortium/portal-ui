@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const { resolve } = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const { alias } = require('./alias');

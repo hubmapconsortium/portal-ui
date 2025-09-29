@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const { merge } = require('webpack-merge');
 const WebpackBundleAnalyzer = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const Visualizer = require('webpack-visualizer-plugin2');

@@ -383,7 +383,7 @@ export function useScrollSearchHits(
   const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<SearchResponseBody, SWRError>(
     getKey,
     // TODO: revisit to fix types/make keys more type-safe
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-argument
+
     (args) => fetcher(...args),
     {
       fallbackData: [],

@@ -220,7 +220,6 @@ function NewWorkspaceDialog({
                 gap: 2,
                 marginTop: 1,
               }}
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
               onSubmit={handleSubmit(submit)}
             >
               <WorkspaceNameField control={control} name="workspace-name" />

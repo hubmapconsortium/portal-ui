@@ -186,7 +186,6 @@ function Visualization({
             {shouldMountVitessce && (
               <VisualizationTracker>
                 <Vitessce
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
                   config={isMultiDataset ? vitessceConfig[vitessceSelection!] : vitessceConfig}
                   theme={vizTheme}
                   onConfigChange={setVitessceStateDebounced}

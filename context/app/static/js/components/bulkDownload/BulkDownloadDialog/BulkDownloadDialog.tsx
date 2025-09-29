@@ -190,7 +190,6 @@ function BulkDownloadDialog({ deselectRows }: BulkDownloadDialogProps) {
       title="Bulk Download Files"
       maxWidth="lg"
       content={
-        // eslint-disable-next-line @typescript-eslint/no-misused-promises
         <form id={formId} onSubmit={handleSubmit(onSubmit)}>
           <Stack spacing={2}>
             <DownloadDescription />

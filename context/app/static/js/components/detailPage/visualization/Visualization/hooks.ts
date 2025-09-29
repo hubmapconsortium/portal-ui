@@ -15,7 +15,7 @@ function handleMarkerGene(vData: object, markerGene?: string) {
     const vc = VitessceConfig.fromJSON(vData);
     const [featureSelection, obsColorEncoding] = vc.addCoordination(FEATURE_SELECTION, OBS_COLOR_ENCODING);
     // @ts-expect-error VitessceConfig's layout property is not properly typed, so treat this section as JS
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-call
+
     vc.config.layout.forEach((v) => v.useCoordination(featureSelection, obsColorEncoding));
     featureSelection.setValue([markerGene]);
     obsColorEncoding.setValue('geneSelection');

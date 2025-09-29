@@ -106,7 +106,7 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(preprintPublicationHit)).toEqual({
       key: 'abc123',
       href: '/browse/publication/abc123',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       onClick: expect.any(Function),
       title: 'Publication ABC',
       secondaryText: 'Team Rocket | Pallet Town Times',
@@ -117,7 +117,7 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(peerReviewedPublicationHit)).toEqual({
       key: 'def234',
       href: '/browse/publication/def234',
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+
       onClick: expect.any(Function),
       title: 'Publication DEF',
       secondaryText: 'Team Rocket | Pallet Town Times',

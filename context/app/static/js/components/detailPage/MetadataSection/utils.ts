@@ -20,7 +20,7 @@ function buildTableData(
       .map((entry) => ({
         ...extraValues,
         key: entry[0],
-        // eslint-disable-next-line @typescript-eslint/no-base-to-string
+
         value: Array.isArray(entry[1]) ? entry[1].join(', ') : entry[1].toString(),
         description: metadataFieldDescriptions?.[entry[0]],
       }))
