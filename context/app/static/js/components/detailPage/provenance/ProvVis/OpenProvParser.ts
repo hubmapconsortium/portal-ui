@@ -121,22 +121,22 @@ export class OpenProvParser {
       if (entityType === 'Donor') {
         return {
           color: '#cdc5f3', // Light purple for Donors
-          size: 15,
-          nodeType: 'square',
+          size: 20, // Moderate size that works well with zoom scaling
+          nodeType: 'rectangle',
         };
       } else {
-        // Sample/Dataset
+        // Sample/Dataset/Publication
         return {
           color: '#d5eac3', // Light green for Samples/Datasets
-          size: 15,
-          nodeType: 'square',
+          size: 20, // Moderate size that works well with zoom scaling
+          nodeType: 'rectangle',
         };
       }
     } else if (node.type === 'activity') {
       return {
         color: '#b0c4da', // Light blue for Activities
-        size: 12,
-        nodeType: 'circle',
+        size: 16, // Slightly smaller for activities
+        nodeType: 'rectangle', // Changed to rectangle for better label accommodation
       };
     } else if (node.type === 'agent') {
       return {
@@ -241,18 +241,22 @@ export class OpenProvParser {
     const dagreGraph = new graphlib.Graph();
     dagreGraph.setGraph({
       rankdir: 'LR',
-      nodesep: 20_000,
-      ranksep: 1_000_000,
+      nodesep: 40_000, // Reduced spacing for moderate node sizes
+      ranksep: 1_200_000, // Reduced spacing between ranks
       marginx: 500,
       marginy: 500,
     });
     dagreGraph.setDefaultEdgeLabel(() => ({}));
 
-    // Add nodes to dagre graph with larger dimensions to account for visual size
+    // Add nodes to dagre graph with dimensions based on label length
     graph.forEachNode((nodeId, nodeData) => {
+      // Calculate width based on label length for better spacing
+      const labelLength = nodeData.label ? (nodeData.label as string).length : 10;
+      const width = Math.max(labelLength * 8 + 20, 80); // Reduced scaling and minimum width
+
       dagreGraph.setNode(nodeId, {
-        width: 100,
-        height: 100,
+        width,
+        height: 40, // Reduced height for smaller nodes
       });
     });
 

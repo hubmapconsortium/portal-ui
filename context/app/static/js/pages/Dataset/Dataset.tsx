@@ -150,7 +150,7 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
         {Boolean(is_component) && <ComponentAlert />}
         <SnareSeq2Alert isHeader />
         <DetailLayout sections={shouldDisplaySection} isLoading={isLoading}>
-          <Summary
+          {/* <Summary
             entityTypeDisplay="Dataset"
             status={combinedStatus}
             mapped_data_access_level={mapped_data_access_level}
@@ -170,13 +170,13 @@ function DatasetDetail({ assayMetadata }: EntityDetailProps<Dataset>) {
           </Summary>
           <MetadataSection entities={entitiesWithMetadata} shouldDisplay={shouldDisplaySection.metadata} />
           <ProcessedDataSection shouldDisplay={Boolean(shouldDisplaySection['processed-data'])} />
-          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} />
+          <BulkDataTransfer shouldDisplay={Boolean(shouldDisplaySection['bulk-data-transfer'])} /> */}
           <ProvSection shouldDisplay={shouldDisplaySection.provenance} />
-          <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
+          {/* <CollectionsSection shouldDisplay={shouldDisplaySection.collections} />
           <PublicationsSection shouldDisplay={shouldDisplaySection.publications} />
           <Attribution>
             <ContributorsTable contributors={contributors} contacts={contacts} />
-          </Attribution>
+          </Attribution> */}
         </DetailLayout>
       </SelectedVersionStoreProvider>
     </DetailContextProvider>
