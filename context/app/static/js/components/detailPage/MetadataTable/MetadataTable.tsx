@@ -10,6 +10,7 @@ import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
 import { defaultColumns } from '../MetadataSection/columns';
+import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 
 interface MetadataTableRow {
   key: string;
@@ -37,7 +38,7 @@ function MetadataTable({ tableRows = [] as MetadataTableRow[], columns = default
                   {row.key.endsWith('age_value') ? (
                     <DonorAgeTooltip donorAge={row.value}>{row.value}</DonorAgeTooltip>
                   ) : (
-                    row.value || '—'
+                    row.value || <SecondaryBackgroundTooltip title='No data available'><span>—</span></SecondaryBackgroundTooltip>
                   )}
                 </TableCell>
               </TableRow>
