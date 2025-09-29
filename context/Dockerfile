@@ -13,6 +13,8 @@ COPY package.json .
 COPY package-lock.json .
 COPY .npmrc .
 
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+
 RUN npm ci
 
 COPY tsconfig.json tsconfig.json
@@ -21,7 +23,6 @@ COPY build-utils build-utils
 COPY app app
 # portal-visualization is python-only, and not needed for the npm build.
 
-ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V} AS backend
