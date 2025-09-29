@@ -38,7 +38,7 @@ function MetadataTable({ tableRows = [] as MetadataTableRow[], columns = default
                   {row.key.endsWith('age_value') ? (
                     <DonorAgeTooltip donorAge={row.value}>{row.value}</DonorAgeTooltip>
                   ) : (
-                    row.value || <SecondaryBackgroundTooltip title='No data available'><span>—</span></SecondaryBackgroundTooltip>
+                    row.value || <SecondaryBackgroundTooltip title="No data available"><span aria-label="No data available.">—</span></SecondaryBackgroundTooltip>
                   )}
                 </TableCell>
               </TableRow>
