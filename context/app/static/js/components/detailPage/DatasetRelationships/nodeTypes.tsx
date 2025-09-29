@@ -49,7 +49,7 @@ export function useNodeColors() {
   return {
     primaryDataset: theme.palette.accent.success90,
     processedDataset: theme.palette.accent.info90,
-    pipeline: '#EFEFEF',
+    pipeline: theme.palette.accent.primary90,
     componentDataset: theme.palette.accent.warning90,
   };
 }
