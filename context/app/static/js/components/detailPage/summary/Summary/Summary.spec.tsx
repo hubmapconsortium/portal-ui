@@ -11,7 +11,7 @@ const testStatusAndAccessLevel = {
 
 describe('Summary', () => {
   let location: Location;
-  const mockLocation: Location = new URL('https://example.com') as unknown as Location;
+  const mockLocation = new URL('https://example.com') as unknown as Location;
 
   beforeEach(() => {
     location = window.location;
@@ -20,13 +20,13 @@ describe('Summary', () => {
     mockLocation.reload = jest.fn();
     mockLocation.search = 'mockSearch';
     mockLocation.hash = 'mockHash';
-    // @ts-expect-error - This is setting up test mocks.
+    // @ts-expect-error - This for a test mock.
     delete window.location;
-    window.location = mockLocation;
+    window.location = mockLocation as unknown as string & Location;
   });
 
   afterEach(() => {
-    window.location = location;
+    window.location = location as unknown as string & Location;
   });
 
   test('displays correctly with required props', () => {

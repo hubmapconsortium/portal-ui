@@ -11,9 +11,9 @@ import { ProvData } from '../types';
 
 interface DetailPanelProps {
   prov: Record<string, string>;
-  // eslint-disable-next-line react/no-unused-prop-types
+
   timeKey: string;
-  // eslint-disable-next-line react/no-unused-prop-types
+
   uuid: string;
   typeKey: string;
   idKey: string;

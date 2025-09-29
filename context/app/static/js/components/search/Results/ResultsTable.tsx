@@ -127,7 +127,6 @@ function LoadingRows() {
   const { table: tableFields } = sourceFields;
 
   return Array.from({ length: size }).map((_, i) => (
-    // eslint-disable-next-line react/no-array-index-key
     <TableRow key={i}>
       <SelectableRowCell rowKey="" disabled cellComponent={StyledTableCell} />
       {tableFields.map((field) => (

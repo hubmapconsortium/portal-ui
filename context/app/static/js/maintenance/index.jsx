@@ -7,4 +7,4 @@ import App from './App';
 
 initTrackers();
 
-ReactDOM.render(<App />, document.getElementById('react-content'));
+ReactDOM.createRoot(document.getElementById('react-content')).render(<App />);

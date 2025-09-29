@@ -73,6 +73,7 @@ const overflowEntityData = {
   mapped_data_types: ['Data Type 1', 'Data Type 2', 'Data Type 3', 'Data Type 4', 'Data Type 5'],
 };
 
+// eslint-disable-next-line no-unused-vars
 const { thumbnail_file, ...entityDataWithoutImage } = overflowEntityData;
 export const Overflow = Template.bind({});
 Overflow.args = {

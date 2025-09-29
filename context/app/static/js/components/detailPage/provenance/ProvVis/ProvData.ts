@@ -33,7 +33,7 @@ export function makeCwlInput(name: string, steps: unknown[], extras: unknown, is
       file: [{ '@id': id }],
     },
     meta: getCwlMeta(isReference),
-    prov: extras || {}, // TODO: real-prov has unmatched ID: https://github.com/hubmapconsortium/prov-vis/issues/15
+    prov: extras ?? {}, // TODO: real-prov has unmatched ID: https://github.com/hubmapconsortium/prov-vis/issues/15
   };
 }
 
