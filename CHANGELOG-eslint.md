@@ -1,0 +1,1 @@
+- Refresh front-end linting rules to finalize ESLint v8->v9 update, drop legacy rules, and remove compatibility layers.
