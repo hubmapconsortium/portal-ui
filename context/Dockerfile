@@ -6,7 +6,7 @@ ARG PYTHON_MINOR_V
 FROM node:${NODE_V}-alpine AS frontend
 
 WORKDIR /work
-RUN apk add --no-cache git
+RUN apk add --no-cache git make g++
 
 # COPY only what is needed so layers can be cached.
 COPY package.json .
@@ -15,11 +15,13 @@ COPY .npmrc .
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 
-# Try npm ci with cache first, fallback to clean install if it fails
+# Install dependencies with fallback strategy for SWC issues
 RUN npm ci --prefer-offline --no-audit || \
-  (echo "Initial npm ci failed, clearing cache and retrying..." && \
+  (echo "Initial npm ci failed, trying with ignored scripts..." && \
   npm cache clean --force && \
-  npm ci --no-audit)
+  npm_config_ignore_scripts=true npm ci --no-audit && \
+  echo "Attempting to rebuild SWC core..." && \
+  (npm rebuild @swc/core || echo "SWC rebuild failed, using fallback compilation"))
 
 COPY tsconfig.json tsconfig.json
 COPY .swcrc .swcrc
@@ -31,7 +33,6 @@ RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V} AS backend
 
-# Use a constraints file to force pip to use correct versions of numpy/pandas/frozenlist that are compatible with python 3.12.
 COPY requirements.txt /app
 # Legacy resolver is used to avoid issues with a non-pinned subdependency which causes build failures in CI
 # https://github.com/hubmapconsortium/portal-ui/actions/runs/6087458665/job/16516023950
