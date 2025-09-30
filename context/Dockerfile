@@ -14,8 +14,13 @@ COPY package-lock.json .
 COPY .npmrc .
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
+# Skip postinstall scripts to avoid SWC segfaults in emulated environments
+ENV npm_config_ignore_scripts=true
 
 RUN npm ci
+
+# Manually rebuild native modules if needed
+RUN npm rebuild @swc/core 2>/dev/null || echo "SWC rebuild failed, continuing..."
 
 COPY tsconfig.json tsconfig.json
 COPY .swcrc .swcrc
@@ -36,7 +41,7 @@ RUN PIP_CONSTRAINT=/tmp/constraints.txt pip install -r /app/requirements.txt --u
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path
-ENV STATIC_PATH /app/app/static
+ENV STATIC_PATH=/app/app/static
 
 # Additional NGINX config that can't be handled with envvars.
 # Be sure not to clobber nginx.conf from base image!
