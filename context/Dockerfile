@@ -14,13 +14,12 @@ COPY package-lock.json .
 COPY .npmrc .
 
 ENV NODE_OPTIONS="--max-old-space-size=4096"
-# Skip postinstall scripts to avoid SWC segfaults in emulated environments
-ENV npm_config_ignore_scripts=true
 
-RUN npm ci
-
-# Manually rebuild native modules if needed
-RUN npm rebuild @swc/core 2>/dev/null || echo "SWC rebuild failed, continuing..."
+# Try npm ci with cache first, fallback to clean install if it fails
+RUN npm ci --prefer-offline --no-audit || \
+  (echo "Initial npm ci failed, clearing cache and retrying..." && \
+  npm cache clean --force && \
+  npm ci --no-audit)
 
 COPY tsconfig.json tsconfig.json
 COPY .swcrc .swcrc
