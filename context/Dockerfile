@@ -6,22 +6,24 @@ ARG PYTHON_MINOR_V
 FROM node:${NODE_V}-alpine AS frontend
 
 WORKDIR /work
-RUN apk add --no-cache git make g++
+
+# Install system dependencies and increase virtual memory
+RUN apk add --no-cache git make g++ \
+  && echo 'vm.max_map_count=262144' >> /etc/sysctl.conf
+
+# Set memory optimization environment variables
+ENV NODE_OPTIONS="--max-old-space-size=4096"
+ENV NPM_CONFIG_PROGRESS=false
+ENV NPM_CONFIG_LOGLEVEL=warn
 
 # COPY only what is needed so layers can be cached.
 COPY package.json .
 COPY package-lock.json .
 COPY .npmrc .
 
-ENV NODE_OPTIONS="--max-old-space-size=4096"
-
-# Install dependencies with fallback strategy for SWC issues
-RUN npm ci --prefer-offline --no-audit || \
-  (echo "Initial npm ci failed, trying with ignored scripts..." && \
-  npm cache clean --force && \
-  npm_config_ignore_scripts=true npm ci --no-audit && \
-  echo "Attempting to rebuild SWC core..." && \
-  (npm rebuild @swc/core || echo "SWC rebuild failed, using fallback compilation"))
+# Install dependencies with retry and memory optimizations
+RUN npm ci --no-audit --no-fund --prefer-offline || \
+  (npm cache clean --force && npm ci --no-audit --no-fund)
 
 COPY tsconfig.json tsconfig.json
 COPY .swcrc .swcrc
@@ -29,10 +31,12 @@ COPY build-utils build-utils
 COPY app app
 # portal-visualization is python-only, and not needed for the npm build.
 
+ENV NODE_OPTIONS="--max-old-space-size=4096"
 RUN npm run build
 
 FROM tiangolo/uwsgi-nginx-flask:python${PYTHON_MINOR_V} AS backend
 
+# Use a constraints file to force pip to use correct versions of numpy/pandas/frozenlist that are compatible with python 3.12.
 COPY requirements.txt /app
 # Legacy resolver is used to avoid issues with a non-pinned subdependency which causes build failures in CI
 # https://github.com/hubmapconsortium/portal-ui/actions/runs/6087458665/job/16516023950
@@ -41,7 +45,7 @@ RUN PIP_CONSTRAINT=/tmp/constraints.txt pip install -r /app/requirements.txt --u
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path
-ENV STATIC_PATH=/app/app/static
+ENV STATIC_PATH /app/app/static
 
 # Additional NGINX config that can't be handled with envvars.
 # Be sure not to clobber nginx.conf from base image!
