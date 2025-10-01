@@ -9,8 +9,8 @@ import TableRow from '@mui/material/TableRow';
 import { StyledTableContainer, HeaderCell } from 'js/shared-styles/tables';
 import IconTooltipCell from 'js/shared-styles/tables/IconTooltipCell';
 import DonorAgeTooltip from 'js/shared-styles/tooltips/DonorAgeTooltip';
-import { defaultColumns } from '../MetadataSection/columns';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
+import { defaultColumns } from '../MetadataSection/columns';
 
 interface MetadataTableRow {
   key: string;
