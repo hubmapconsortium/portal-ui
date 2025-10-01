@@ -9,7 +9,10 @@ jest.mock('./utils', () => ({
   getErrorTitleAndSubtitle: jest.fn(),
 }));
 
-const mockGetErrorTitleAndSubtitle = jest.requireMock('./utils').getErrorTitleAndSubtitle;
+// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+const mockGetErrorTitleAndSubtitle = jest.requireMock('./utils').getErrorTitleAndSubtitle as jest.MockedFunction<
+  typeof import('./utils').getErrorTitleAndSubtitle
+>;
 
 describe('Error page', () => {
   test.each([

@@ -105,7 +105,7 @@ function LaunchWorkspaceDialog() {
         title={`Launch ${workspaceName}`}
         maxWidth="md"
         content={
-          <form id={formId} onSubmit={handleSubmit(onSubmit)}>
+          <form id={formId} onSubmit={void handleSubmit(onSubmit)}>
             {newWorkspaceLaunch ? (
               tooManyWorkspacesAlert
             ) : (

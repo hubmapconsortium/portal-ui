@@ -17,7 +17,9 @@ export default function CellTypesSearchBar() {
       sx={{ mb: 2, width: '100%' }}
       placeholder={searchbarPlaceholder}
       value={search}
-      onChange={(e) => setSearch(e.target.value)}
+      onChange={(e) => {
+        setSearch(e.target.value);
+      }}
       onBlur={() => {
         trackEvent({
           category: 'Cell Type Landing Page',

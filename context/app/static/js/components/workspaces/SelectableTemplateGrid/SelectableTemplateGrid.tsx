@@ -95,13 +95,21 @@ function SelectableTemplateGrid<FormType extends FormWithTemplates>({
         leftText={<Typography variant="subtitle1">{selectedTemplates.size} Templates Selected</Typography>}
         buttons={
           <>
-            <Button disabled={selectedTemplates.size === 0} sx={{ mr: 1 }} onClick={() => updateTemplates([])}>
+            <Button
+              disabled={selectedTemplates.size === 0}
+              sx={{ mr: 1 }}
+              onClick={() => {
+                updateTemplates([]);
+              }}
+            >
               Deselect All
             </Button>
             <Button
               color="primary"
               variant="contained"
-              onClick={() => updateTemplates(getActiveTemplates({ templates, disabledTemplates }))}
+              onClick={() => {
+                updateTemplates(getActiveTemplates({ templates, disabledTemplates }));
+              }}
             >
               Select All
             </Button>

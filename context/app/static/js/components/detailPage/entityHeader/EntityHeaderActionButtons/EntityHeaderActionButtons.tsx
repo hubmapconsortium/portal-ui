@@ -38,7 +38,9 @@ function JSONButton({ entity_type, uuid }: Pick<Entity, 'uuid'> & { entity_type:
       tooltip="View JSON"
       href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
       target="_blank"
-      onClick={() => trackEntityPageEvent({ action: 'View JSON' })}
+      onClick={() => {
+        trackEntityPageEvent({ action: 'View JSON' });
+      }}
       icon={FileIcon}
     />
   );
@@ -93,7 +95,9 @@ function ViewSelectChip({
   selectedView: SummaryViewsType;
   setView: (v: SummaryViewsType) => void;
 } & Pick<ButtonProps, 'startIcon'>) {
-  const handleClick = useCallback(() => setView(view), [setView, view]);
+  const handleClick = useCallback(() => {
+    setView(view);
+  }, [setView, view]);
 
   const isSelectedView = view === selectedView;
   return (

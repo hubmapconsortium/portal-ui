@@ -61,7 +61,9 @@ function WorkspaceJobTypeField<FormType extends FieldValues>({ control, name }: 
         aria-labelledby="workspace-environment"
         name="workspace-environment-radio-buttons"
         value={field.value}
-        onChange={(e, value) => field.onChange(value)}
+        onChange={(e, value) => {
+          field.onChange(value);
+        }}
       >
         {Object.values(data).map(({ id, name: jobTypeName }) => {
           return (

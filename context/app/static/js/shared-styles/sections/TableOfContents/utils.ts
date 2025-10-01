@@ -19,7 +19,7 @@ function getSectionFromString(s: string, hash: string = formatSectionHash(s)): T
 export type SectionOrder = Record<string, boolean | TableOfContentsItem>;
 
 function getSections(sectionOrder: SectionOrder) {
-  const sectionsToDisplay = Object.entries(sectionOrder).filter(([_k, v]) => Boolean(v) === true);
+  const sectionsToDisplay = Object.entries(sectionOrder).filter(([_k, v]) => Boolean(v));
   // Array order reflects order of table of contents.
   return sectionsToDisplay.map(([s, v]) => {
     if (typeof v === 'object' && v !== null) {

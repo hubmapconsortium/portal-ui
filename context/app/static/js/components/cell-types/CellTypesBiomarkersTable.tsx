@@ -211,7 +211,9 @@ function BiomarkersTable() {
               <TableCell>
                 <InternalLink
                   href={`/genes/${genes}`}
-                  onClick={() => trackEvent('Biomarkers / Select Biomarker', genes)}
+                  onClick={() => {
+                    trackEvent('Biomarkers / Select Biomarker', genes);
+                  }}
                 >
                   {genes}
                 </InternalLink>

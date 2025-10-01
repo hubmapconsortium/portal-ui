@@ -85,7 +85,11 @@ function useSetListsAndEntities() {
       await Promise.all(
         Object.entries(savedLists)
           .filter(([key]) => !RESERVED_KEYS.includes(key))
-          .map(([listUUID, list]) => handleUpdateSavedList({ body: list, listUUID }).catch((e) => console.error(e))),
+          .map(([listUUID, list]) =>
+            handleUpdateSavedList({ body: list, listUUID }).catch((e) => {
+              console.error(e);
+            }),
+          ),
       );
     },
     [handleUpdateSavedList],
@@ -134,7 +138,9 @@ function useCheckForLocalSavedEntities() {
               });
             }
           })
-          .catch((e) => console.error(e));
+          .catch((e) => {
+            console.error(e);
+          });
       }
     } catch (error) {
       console.error('Failed to parse saved_entities from local storage:', error);

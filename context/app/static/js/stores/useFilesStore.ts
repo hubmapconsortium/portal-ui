@@ -10,14 +10,16 @@ export interface FilesStore {
 
 const useFilesStore = create<FilesStore>((set) => ({
   filesToDisplay: 'all',
-  toggleDisplayOnlyQaQc: () =>
+  toggleDisplayOnlyQaQc: () => {
     set((state) => ({
       filesToDisplay: state.filesToDisplay !== 'qa/qc' ? 'qa/qc' : 'all',
-    })),
-  toggleDisplayOnlyDataProducts: () =>
+    }));
+  },
+  toggleDisplayOnlyDataProducts: () => {
     set((state) => ({
       filesToDisplay: state.filesToDisplay !== 'data products' ? 'data products' : 'all',
-    })),
+    }));
+  },
 }));
 
 export default useFilesStore;

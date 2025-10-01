@@ -22,12 +22,12 @@ export function Subsection({ title, idTitleOverride, icon, children }: Subsectio
     <DetailPageSection id={datasetSectionId(sectionDataset, idTitleOverride ?? title)}>
       <StyledSubsectionAccordion
         defaultExpanded
-        onChange={(_, expanded) =>
+        onChange={(_, expanded) => {
           track({
             action: `${expanded ? 'Expand' : 'Collapse'} ${title} Section`,
             label: dataset.hubmap_id,
-          })
-        }
+          });
+        }}
       >
         <AccordionSummary expandIcon={<ExpandMore />}>
           {icon}

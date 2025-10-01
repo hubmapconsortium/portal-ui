@@ -6,7 +6,9 @@ import SampleTissue from './SampleTissue';
 function expectLabelsPresent() {
   expect(screen.getByText('Tissue')).toBeInTheDocument();
   const labelsToTest = ['Organ Type', 'Sample Category'];
-  labelsToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  labelsToTest.forEach((text) => {
+    expect(screen.getByText(text)).toBeInTheDocument();
+  });
 }
 
 jest.mock('js/components/detailPage/DetailPageSection', () => ({
@@ -40,7 +42,9 @@ describe('SampleTissue', () => {
     expect(screen.getByText('Tissue Location')).toBeInTheDocument();
 
     const valuesToTest = ['Fake Organ', 'Fake Sample Category'];
-    valuesToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+    valuesToTest.forEach((text) => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    });
   });
 
   test('displays label not defined when values are undefined', () => {
@@ -64,6 +68,8 @@ describe('SampleTissue', () => {
     expect(screen.queryByText('Tissue Location')).not.toBeInTheDocument();
 
     const valuesToTest = ['Organ Type not defined', 'Sample Category not defined'];
-    valuesToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+    valuesToTest.forEach((text) => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    });
   });
 });

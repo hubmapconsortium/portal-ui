@@ -33,13 +33,10 @@ function CellCountColumn({ hit: { hubmap_id, uuid }, renderDisplay: Display }: C
 function TargetCellTypeDisplay(data: CellTypeCountsForDataset) {
   const { cellTypeCounts } = data;
   const cellTypes = useCellVariableNames();
-  const cellTypeCountsMap = cellTypeCounts.reduce(
-    (acc, { index, count }) => {
-      acc[index] = count;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
+  const cellTypeCountsMap = cellTypeCounts.reduce<Record<string, number>>((acc, { index, count }) => {
+    acc[index] = count;
+    return acc;
+  }, {});
   const totalCells = cellTypeCounts.reduce((acc, { count }) => acc + count, 0);
   return (
     <>

@@ -15,7 +15,14 @@ function AddItemsToListDialog({ itemsToAddUUIDS, onSaveCallback, ...rest }: AddI
   const [dialogIsOpen, setDialogIsOpen] = useState(false);
   return (
     <>
-      <LeftMarginButton color="primary" onClick={() => setDialogIsOpen(true)} variant="contained" {...rest}>
+      <LeftMarginButton
+        color="primary"
+        onClick={() => {
+          setDialogIsOpen(true);
+        }}
+        variant="contained"
+        {...rest}
+      >
         <StyledListsIcon /> {prompt}
       </LeftMarginButton>
       <SaveToListDialog

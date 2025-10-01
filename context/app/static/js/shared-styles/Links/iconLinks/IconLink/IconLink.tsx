@@ -5,7 +5,7 @@ import { LinkProps } from '@mui/material/Link';
 import OutboundLink from '../../OutboundLink';
 import InternalLink from '../../InternalLink';
 
-interface IconLinkProps extends LinkProps<'a'> {
+interface IconLinkProps extends LinkProps {
   children: React.ReactNode;
   icon: React.ReactNode;
   iconOnLeft?: boolean;

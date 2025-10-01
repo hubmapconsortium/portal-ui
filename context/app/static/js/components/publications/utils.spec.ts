@@ -106,8 +106,7 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(preprintPublicationHit)).toEqual({
       key: 'abc123',
       href: '/browse/publication/abc123',
-
-      onClick: expect.any(Function),
+      onClick: expect.any(Function) as unknown,
       title: 'Publication ABC',
       secondaryText: 'Team Rocket | Pallet Town Times',
       rightText: 'Preprint Date: 2022-03-02',
@@ -117,8 +116,7 @@ describe('buildPublicationsPanelProps', () => {
     expect(buildPublicationPanelProps(peerReviewedPublicationHit)).toEqual({
       key: 'def234',
       href: '/browse/publication/def234',
-
-      onClick: expect.any(Function),
+      onClick: expect.any(Function) as unknown,
       title: 'Publication DEF',
       secondaryText: 'Team Rocket | Pallet Town Times',
       rightText: 'Published: 2022-03-02',

@@ -13,7 +13,13 @@ function BulkDownloadTextButton({ uuids, ...rest }: BulkDownloadTextButtonProps)
 
   return (
     <Box>
-      <OutlinedButton color="primary" onClick={() => openDialog(uuids)} {...rest}>
+      <OutlinedButton
+        color="primary"
+        onClick={() => {
+          openDialog(uuids);
+        }}
+        {...rest}
+      >
         Download Files with HuBMAP CLT
       </OutlinedButton>
       {isOpen && <BulkDownloadDialog />}

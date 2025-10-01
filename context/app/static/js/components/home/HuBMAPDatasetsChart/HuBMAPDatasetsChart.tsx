@@ -278,9 +278,9 @@ function HuBMAPDatasetsChart() {
               options={colorOptions.map((c) => c.dropdownLabel)}
               value={selectedColor.dropdownLabel}
               label="Compare by"
-              onChange={(e: SelectChangeEvent) =>
-                setSelectedColorDataIndex(colorOptions.findIndex((c) => c.dropdownLabel === e.target.value))
-              }
+              onChange={(e: SelectChangeEvent) => {
+                setSelectedColorDataIndex(colorOptions.findIndex((c) => c.dropdownLabel === e.target.value));
+              }}
               fullWidth
             />
           }

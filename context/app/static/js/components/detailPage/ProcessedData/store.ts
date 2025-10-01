@@ -29,18 +29,19 @@ export type ProcessedDataStore = ProcessedDataStoreState & ProcessedDataStoreAct
 
 export const useProcessedDataStore = create<ProcessedDataStore>((set, get) => ({
   ...defaultState,
-  addDataset: (hubmapId) =>
+  addDataset: (hubmapId) => {
     set((state) => ({
       seenDatasets: new Set([...state.seenDatasets, hubmapId]),
       currentlyVisibleDatasets: new Set([...state.currentlyVisibleDatasets, hubmapId]),
-    })),
+    }));
+  },
   setCurrentDataset: (dataset) => {
     const { addDataset } = get();
     addDataset(dataset.hubmap_id);
     set({ currentDataset: dataset });
   },
   hasBeenSeen: (hubmapId) => Boolean(get().seenDatasets.has(hubmapId)),
-  removeFromVisibleDatasets: (hubmapId) =>
+  removeFromVisibleDatasets: (hubmapId) => {
     set((state) => {
       const { currentlyVisibleDatasets } = state;
       currentlyVisibleDatasets.delete(hubmapId);
@@ -48,6 +49,7 @@ export const useProcessedDataStore = create<ProcessedDataStore>((set, get) => ({
         return { currentlyVisibleDatasets: new Set<string>(), currentDataset: null };
       }
       return { currentlyVisibleDatasets: new Set(state.currentlyVisibleDatasets) };
-    }),
+    });
+  },
 }));
 export default useProcessedDataStore;

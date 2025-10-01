@@ -17,7 +17,9 @@ export default function HeroTimelineSlide({ index }: HeroTimelineProps) {
   const { activeTab, setActiveTab } = useHeroTabContext();
   const ref = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
-  const onFocus = () => setActiveTab(index);
+  const onFocus = () => {
+    setActiveTab(index);
+  };
   const isMobile = useIsMobile();
 
   // Reset scroll position when switching tabs

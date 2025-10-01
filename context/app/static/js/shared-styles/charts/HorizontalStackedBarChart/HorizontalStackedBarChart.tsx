@@ -157,7 +157,9 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
                         key={`${bar.key}-${bar.index}`}
                         direction="horizontal"
                         bar={bar}
-                        onClick={() => onBarClick(bar)}
+                        onClick={() => {
+                          onBarClick(bar);
+                        }}
                         href={getBarHref?.(bar)}
                         ariaLabelText={getAriaLabel?.(bar)}
                         hoverProps={

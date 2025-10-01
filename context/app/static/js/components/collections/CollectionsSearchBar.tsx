@@ -21,7 +21,9 @@ export default function CollectionsSearchBar() {
         sx={{ mb: 2, width: '50%' }}
         placeholder={text.placeholder}
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
       />
       <DownloadButton tooltip={text.tooltip} onClick={downloadTable} />
     </Stack>

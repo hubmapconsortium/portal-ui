@@ -26,14 +26,21 @@ function DUADownloadButton({ file, children }: PropsWithChildren<DownloadFileBut
         {...sharedProps}
         download
         href={link}
-        onClick={() => trackEntityPageEvent({ action: 'Data Products / Download File Button', label: file.rel_path })}
+        onClick={() => {
+          trackEntityPageEvent({ action: 'Data Products / Download File Button', label: file.rel_path });
+        }}
       >
         {children}
       </IconButton>
     );
   }
   return (
-    <IconButton {...sharedProps} onClick={() => openDUA(link)}>
+    <IconButton
+      {...sharedProps}
+      onClick={() => {
+        openDUA(link);
+      }}
+    >
       {children}
     </IconButton>
   );

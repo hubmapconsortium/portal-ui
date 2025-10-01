@@ -8,7 +8,7 @@ interface FractionRectProps {
   index: number;
   isTargetedCellType: boolean;
   isHoveredCellType: boolean;
-  scale: ScaleLinear<number, number, never>;
+  scale: ScaleLinear<number, number>;
   xOffsets: number[];
   onMouseEnter: MouseEventHandler<SVGRectElement>;
   onMouseLeave: () => void;

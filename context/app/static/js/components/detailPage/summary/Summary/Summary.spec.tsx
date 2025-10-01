@@ -44,7 +44,9 @@ describe('Summary', () => {
       </FlaskDataContext.Provider>,
     );
     const textToTest = ['fakeTitle', 'Publication'];
-    textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+    textToTest.forEach((text) => {
+      expect(screen.getByText(text)).toBeInTheDocument();
+    });
   });
 
   test('publication preferred to creation, if available', () => {

@@ -28,7 +28,12 @@ function VisualizationWorkspaceButton() {
   return (
     <>
       <NewWorkspaceDialog {...rest} />
-      <WhiteBackgroundIconTooltipButton tooltip={tooltip} onClick={() => setDialogIsOpen(true)}>
+      <WhiteBackgroundIconTooltipButton
+        tooltip={tooltip}
+        onClick={() => {
+          setDialogIsOpen(true);
+        }}
+      >
         <SvgIcon color="primary" component={WorkspacesIcon} />
       </WhiteBackgroundIconTooltipButton>
     </>

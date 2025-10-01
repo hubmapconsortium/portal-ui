@@ -57,7 +57,9 @@ function MetadataWrapper({ allTableRows, tsvColumns = defaultTSVColumns, childre
           <a href={downloadUrl} download={`${hubmap_id}.tsv`}>
             <WhiteBackgroundIconButton
               aria-label="Download TSV of selected items' metadata"
-              onClick={() => trackEntityPageEvent({ action: `Metadata / Download Metadata` })}
+              onClick={() => {
+                trackEntityPageEvent({ action: `Metadata / Download Metadata` });
+              }}
             >
               <DownloadIcon color="primary" />
             </WhiteBackgroundIconButton>

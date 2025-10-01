@@ -25,7 +25,9 @@ function ProvTableDerivedLink({ uuid, type }: ProvTableDerivedLinkProps) {
             },
           },
         })}
-        onClick={() => trackEntityPageEvent({ action: `Provenance / Table / View Derived ${type}s`, label: uuid })}
+        onClick={() => {
+          trackEntityPageEvent({ action: `Provenance / Table / View Derived ${type}s`, label: uuid });
+        }}
       >
         View Derived {type}s
       </LinkButton>

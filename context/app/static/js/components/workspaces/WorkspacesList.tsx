@@ -24,7 +24,9 @@ function WorkspacesList() {
   const [debouncedInput, setDebouncedInput] = useState<string>(inputValue);
 
   useEffect(() => {
-    const handler = debounce((value: string) => setDebouncedInput(value), 100);
+    const handler = debounce((value: string) => {
+      setDebouncedInput(value);
+    }, 100);
     handler(inputValue);
   }, [inputValue]);
 
@@ -55,7 +57,9 @@ function WorkspacesList() {
           <Stack display="flex" direction="row" spacing={1.5}>
             <WorkspacesDeleteButton workspaceIds={selectedItems} disabled={disabled} tooltip={deleteTooltip} />
             <WorkspaceTooltipButton
-              onClick={() => setDialogType('SHARE_WORKSPACE')}
+              onClick={() => {
+                setDialogType('SHARE_WORKSPACE');
+              }}
               disabled={disabled}
               tooltip={shareTooltip}
             >

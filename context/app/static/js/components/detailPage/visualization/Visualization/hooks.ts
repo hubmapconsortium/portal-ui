@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { decodeURLParamsToConf, VitessceConfig } from 'vitessce';
 
 import { useSnackbarActions, useSnackbarStore } from 'js/shared-styles/snackbars';
@@ -16,6 +16,7 @@ function handleMarkerGene(vData: object, markerGene?: string) {
     const [featureSelection, obsColorEncoding] = vc.addCoordination(FEATURE_SELECTION, OBS_COLOR_ENCODING);
     // @ts-expect-error VitessceConfig's layout property is not properly typed, so treat this section as JS
 
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-return
     vc.config.layout.forEach((v) => v.useCoordination(featureSelection, obsColorEncoding));
     featureSelection.setValue([markerGene]);
     obsColorEncoding.setValue('geneSelection');
@@ -31,12 +32,30 @@ interface UseVitessceConfigProps {
 }
 
 export function useVitessceConfig({ vitData, setVitessceState, markerGene }: UseVitessceConfigProps) {
-  const [vitessceSelection, setVitessceSelection] = useState<number | null>(null);
+  const [vitessceSelection, setVitessceSelection] = useState<number>(0);
   const [vitessceConfig, setVitessceConfig] = useState<object | null>(null);
 
   const { toastError } = useSnackbarStore((store) => ({
     toastError: store.toastError,
   }));
+
+  const isMultiDataset = Array.isArray(vitData);
+
+  // Find parent UUID for the visualization if present
+  const parentUuid: string | undefined = useMemo(() => {
+    if (!vitData) {
+      return undefined;
+    }
+    if (isMultiDataset) {
+      const vitDataArray = vitData as VitessceConfig[];
+      const found = vitDataArray.find((data) => 'parentUuid' in data) as { parentUuid: string } | undefined;
+      return found?.parentUuid;
+    }
+    if ('parentUuid' in vitData) {
+      return (vitData as { parentUuid: string }).parentUuid;
+    }
+    return undefined;
+  }, [vitData, isMultiDataset]);
 
   useEffect(() => {
     function setVitessceDefaults(vData: object | object[]) {
@@ -90,7 +109,15 @@ export function useVitessceConfig({ vitData, setVitessceState, markerGene }: Use
       setVitessceConfig(initializedVitDataFromUrl);
     }
   }, [setVitessceState, vitData, toastError, markerGene]);
-  return { vitessceConfig, vitessceSelection, setVitessceSelection };
+
+  const currentConfig = useMemo(() => {
+    if (isMultiDataset && Array.isArray(vitessceConfig) && Number.isInteger(vitessceSelection)) {
+      return vitessceConfig[vitessceSelection] as VitessceConfig;
+    }
+    return vitessceConfig as VitessceConfig;
+  }, [isMultiDataset, vitessceConfig, vitessceSelection]);
+
+  return { vitessceConfig, vitessceSelection, setVitessceSelection, isMultiDataset, parentUuid, currentConfig };
 }
 
 // Collapse the visualization when the user presses the escape key.

@@ -24,7 +24,7 @@ function SearchViewSwitch({ views }: { views: { label: string; icon: typeof SvgI
       trackEvent({
         category: analyticsCategory,
         action: `Switch Search View`,
-        label: `${v}`,
+        label: v,
       });
       setView(v);
     },

@@ -324,10 +324,9 @@ const HierarchicalParentChip = React.memo(function HierarchicalTermChip({
   const getFieldLabel = useGetFieldLabel();
   const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
 
-  const onDelete = useCallback(
-    () => filterHierarchicalParentTerm({ term: parentField, value: parentValue, childValues: [] }),
-    [parentField, parentValue, filterHierarchicalParentTerm],
-  );
+  const onDelete = useCallback(() => {
+    filterHierarchicalParentTerm({ term: parentField, value: parentValue, childValues: [] });
+  }, [parentField, parentValue, filterHierarchicalParentTerm]);
 
   return <FilterChip label={`${getFieldLabel(parentField)}: ${value}`} key={value} onDelete={onDelete} />;
 });
@@ -366,7 +365,9 @@ function FilterChips() {
                 <FilterChip
                   key={field}
                   label={`${getFieldLabel(field)}: ${values[0]}`}
-                  onDelete={() => filterTerm({ term: field, value: values[0] })}
+                  onDelete={() => {
+                    filterTerm({ term: field, value: values[0] });
+                  }}
                 />
               );
             }
@@ -375,8 +376,12 @@ function FilterChips() {
                 key={field}
                 field={field}
                 values={values}
-                onDeleteValue={(value) => filterTerm({ term: field, value })}
-                onDeleteValues={(vals) => filterTerms({ term: field, values: vals })}
+                onDeleteValue={(value) => {
+                  filterTerm({ term: field, value });
+                }}
+                onDeleteValues={(vals) => {
+                  filterTerms({ term: field, values: vals });
+                }}
               />
             );
           }
@@ -390,7 +395,9 @@ function FilterChips() {
               <FilterChip
                 label={`${getFieldLabel(field)}: ${v.values.min} - ${v.values.max}`}
                 key={field}
-                onDelete={() => filterRange({ field, min: undefined, max: undefined })}
+                onDelete={() => {
+                  filterRange({ field, min: undefined, max: undefined });
+                }}
               />
             );
           }
@@ -404,7 +411,9 @@ function FilterChips() {
               <FilterChip
                 label={`${getFieldLabel(field)}: ${format(v.values.min, 'yyyy-MM')} - ${format(v.values.max, 'yyyy-MM')}`}
                 key={field}
-                onDelete={() => filterDate({ field, min: undefined, max: undefined })}
+                onDelete={() => {
+                  filterDate({ field, min: undefined, max: undefined });
+                }}
               />
             );
           }
@@ -425,9 +434,9 @@ function FilterChips() {
                   <FilterChip
                     key={childValues[0]}
                     label={`${getFieldLabel(field)}: ${childValues[0]}`}
-                    onDelete={() =>
-                      filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValues[0] })
-                    }
+                    onDelete={() => {
+                      filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValues[0] });
+                    }}
                   />
                 );
               }
@@ -438,10 +447,12 @@ function FilterChips() {
                   field={field}
                   parentValue={parent}
                   childValues={childValues}
-                  onDeleteChild={(childValue) =>
-                    filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue })
-                  }
-                  onDeleteParent={() => filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] })}
+                  onDeleteChild={(childValue) => {
+                    filterHierarchicalChildTerm({ parentTerm: field, parentValue: parent, value: childValue });
+                  }}
+                  onDeleteParent={() => {
+                    filterHierarchicalParentTerm({ term: field, value: parent, childValues: [] });
+                  }}
                 />
               );
             });
@@ -454,7 +465,9 @@ function FilterChips() {
               <FilterChip
                 label={`${getFieldLabel(field)}: ${v.values}`}
                 key={field}
-                onDelete={() => filterExists({ field })}
+                onDelete={() => {
+                  filterExists({ field });
+                }}
               />
             );
           }

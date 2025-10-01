@@ -20,9 +20,15 @@ const server = setupServer(
   }),
 );
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+beforeAll(() => {
+  server.listen();
+});
+afterEach(() => {
+  server.resetHandlers();
+});
+afterAll(() => {
+  server.close();
+});
 
 test('dataset displays properly', () => {
   render(<SummaryData entity_type="Dataset" status="QA" mapped_data_access_level="Public" />);
@@ -46,7 +52,9 @@ test('children display when provided', () => {
   expect(screen.getByTestId('summary-data-parent')).not.toBeEmptyDOMElement();
 
   const textToTest = ['child 1', 'child 2'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  textToTest.forEach((text) => {
+    expect(screen.getByText(text)).toBeInTheDocument();
+  });
 });
 
 test('children do not display when undefined', () => {

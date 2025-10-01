@@ -69,7 +69,9 @@ function useStartViewChangeSpring() {
           }),
         );
       }
-      startSprings().catch((e) => console.error(e));
+      startSprings().catch((e) => {
+        console.error(e);
+      });
     },
     [springAPIs, summaryHeight],
   );

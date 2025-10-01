@@ -46,13 +46,10 @@ export function useSortedSearchHits(datasets: ReturnType<typeof useProcessedData
  */
 export function useAnalysesCountInfo(datasets: Pick<ProcessedDatasetInfo, 'pipeline' | 'assay_display_name'>[]) {
   const analyses = datasets.map((dataset) => dataset.pipeline ?? dataset.assay_display_name[0]);
-  const analysesCount = analyses.reduce(
-    (acc, analysis) => {
-      acc[analysis] = (acc[analysis] || 0) + 1;
-      return acc;
-    },
-    {} as Record<string, number>,
-  );
+  const analysesCount = analyses.reduce<Record<string, number>>((acc, analysis) => {
+    acc[analysis] = (acc[analysis] || 0) + 1;
+    return acc;
+  }, {});
   const analysesText = `Analyses (${Object.keys(analysesCount).length})`;
   const analysesCountText = generateCommaList(
     Object.entries(analysesCount).map(([analysis, count]) => (count > 1 ? `${analysis} (${count})` : analysis)),

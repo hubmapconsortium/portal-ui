@@ -110,7 +110,9 @@ function WorkspaceDatasetsTable({
               )}
               {removeDatasets && datasetsPresent && (
                 <Delete
-                  onClick={() => removeDatasets([...selectedRows])}
+                  onClick={() => {
+                    removeDatasets([...selectedRows]);
+                  }}
                   tooltip={tooltips.delete}
                   disabled={selectedRows.size === 0}
                 />

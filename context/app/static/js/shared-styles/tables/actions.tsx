@@ -53,7 +53,9 @@ export function Copy({ trackingInfo }: CopyProps) {
     }
 
     fetchIDs()
-      .then((searchHits) => handleCopyClick(searchHits.map(({ _source }) => _source?.hubmap_id ?? '').join(', ')))
+      .then((searchHits) => {
+        handleCopyClick(searchHits.map(({ _source }) => _source?.hubmap_id ?? '').join(', '));
+      })
       .catch((e) => {
         toastError('Failed to copy to clipboard.');
         console.error(e);

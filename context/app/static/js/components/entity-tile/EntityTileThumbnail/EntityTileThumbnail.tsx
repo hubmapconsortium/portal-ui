@@ -19,7 +19,9 @@ function EntityTileThumbnail({ thumbnail_file, entity_type, id, thumbnailDimensi
     <LetterboxedThumbnail
       src={`${assetsEndpoint}/${thumbnail_file.file_uuid}/thumbnail.jpg`}
       alt={`${entity_type} ${id} thumbnail`}
-      onLoad={() => setImageLoaded(true)}
+      onLoad={() => {
+        setImageLoaded(true);
+      }}
       $shouldDisplayImage={imageLoaded}
       $thumbnailDimension={thumbnailDimension}
     />

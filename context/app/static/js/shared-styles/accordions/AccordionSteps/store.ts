@@ -67,12 +67,21 @@ const createAccordionStepsStore = ({
     stepsLength,
     ...defaultState,
     ...initialState,
-    setOpenStepIndex: (stepIndex) => set({ openStepIndex: stepIndex }),
-    expandStep: (stepIndex) => set((state) => handleExpand(state.openStepIndex, stepIndex)),
-    setCompletedStepsText: (completedStepsText) => set({ completedStepsText }),
-    completeStep: (stepIndex, completedStepText) =>
-      set((state) => handleCompleteStep({ payload: { stepIndex, completedStepText }, state })),
-    resetStore: () => set(defaultState),
+    setOpenStepIndex: (stepIndex) => {
+      set({ openStepIndex: stepIndex });
+    },
+    expandStep: (stepIndex) => {
+      set((state) => handleExpand(state.openStepIndex, stepIndex));
+    },
+    setCompletedStepsText: (completedStepsText) => {
+      set({ completedStepsText });
+    },
+    completeStep: (stepIndex, completedStepText) => {
+      set((state) => handleCompleteStep({ payload: { stepIndex, completedStepText }, state }));
+    },
+    resetStore: () => {
+      set(defaultState);
+    },
   }));
 
 const [AccordionStepsProvider, useAccordionStepsStore, AccordionStepsContext] = createStoreContext(

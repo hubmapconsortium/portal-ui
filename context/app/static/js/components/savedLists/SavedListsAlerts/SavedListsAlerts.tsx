@@ -35,7 +35,9 @@ function SavedListsSuccessAlert({ fromSavedLists }: { fromSavedLists?: boolean }
   return (
     <StyledAlert
       severity="success"
-      onClose={() => setSuccessAlert(undefined)}
+      onClose={() => {
+        setSuccessAlert(undefined);
+      }}
       action={!fromSavedLists && <Button href="/my-lists">My Lists</Button>}
     >
       Successfully {messages[successAlert]}.{' '}
@@ -54,7 +56,12 @@ function SavedListsTransferAlert() {
   if (!transferredToProfileAlert) return null;
 
   return (
-    <StyledAlert severity="info" onClose={() => setTransferredToProfileAlert(false)}>
+    <StyledAlert
+      severity="info"
+      onClose={() => {
+        setTransferredToProfileAlert(false);
+      }}
+    >
       Your local lists have been transferred to your profile.
     </StyledAlert>
   );

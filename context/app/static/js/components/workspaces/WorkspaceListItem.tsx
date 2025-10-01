@@ -66,7 +66,9 @@ function WorkspaceListItem({
                 'aria-label': `Select ${workspace.name}.`,
               }}
               checked={selected}
-              onChange={() => toggleItem(workspace.id)}
+              onChange={() => {
+                toggleItem(workspace.id);
+              }}
               disabled={isRunning || disabled}
             />
           </span>

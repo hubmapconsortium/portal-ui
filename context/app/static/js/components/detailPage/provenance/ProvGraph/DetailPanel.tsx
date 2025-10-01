@@ -37,7 +37,9 @@ function ID({ prov, idKey, typeKey }: Pick<DetailPanelProps, 'prov' | 'idKey' | 
     <SectionItem label="ID" ml>
       <InternalLink
         href={`/browse/${prov[typeKey].toLowerCase()}/${prov['hubmap:uuid']}`}
-        onClick={() => trackEntityPageEvent({ action: 'Provenance / Graph / Link', label: prov[idKey] })}
+        onClick={() => {
+          trackEntityPageEvent({ action: 'Provenance / Graph / Link', label: prov[idKey] });
+        }}
       >
         {prov[idKey]}
       </InternalLink>

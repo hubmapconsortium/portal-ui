@@ -24,9 +24,15 @@ const globusHandler: RequestHandler = http.get<PathParams, DefaultBodyType, { ur
 
 const server = setupServer(globusHandler);
 
-beforeAll(() => server.listen());
-afterEach(() => server.resetHandlers());
-afterAll(() => server.close());
+beforeAll(() => {
+  server.listen();
+});
+afterEach(() => {
+  server.resetHandlers();
+});
+afterAll(() => {
+  server.close();
+});
 
 function TestFiles({ files = testFiles }) {
   return (

@@ -382,9 +382,7 @@ export function useScrollSearchHits(
 
   const { data, error, isLoading, isValidating, size, setSize } = useSWRInfinite<SearchResponseBody, SWRError>(
     getKey,
-    // TODO: revisit to fix types/make keys more type-safe
-
-    (args) => fetcher(...args),
+    (args: [SearchRequest, string, string, boolean, number]) => fetcher(...args) as Promise<SearchResponseBody>,
     {
       fallbackData: [],
       revalidateAll: false,

@@ -21,7 +21,12 @@ function SelectableRowCell({
   const { toggleRow, selectedRows, tableLabel } = useSelectableTableStore();
 
   return (
-    <CellComponent padding="checkbox" onClick={(e) => e.stopPropagation()}>
+    <CellComponent
+      padding="checkbox"
+      onClick={(e) => {
+        e.stopPropagation();
+      }}
+    >
       <Checkbox
         color="secondary"
         checked={selectedRows.has(rowKey)}

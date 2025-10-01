@@ -24,14 +24,27 @@ function DeleteSavedEntitiesDialog({
       content={<Typography variant="body1">Are you sure you want to delete these from your saved items?</Typography>}
       actions={
         <>
-          <Button onClick={() => setDialogIsOpen(false)} color="primary">
+          <Button
+            onClick={() => {
+              setDialogIsOpen(false);
+            }}
+            color="primary"
+          >
             Cancel
           </Button>
-          <Button onClick={() => handleDelete()}>Delete</Button>
+          <Button
+            onClick={() => {
+              handleDelete();
+            }}
+          >
+            Delete
+          </Button>
         </>
       }
       isOpen={dialogIsOpen}
-      handleClose={() => setDialogIsOpen(false)}
+      handleClose={() => {
+        setDialogIsOpen(false);
+      }}
     />
   );
 }

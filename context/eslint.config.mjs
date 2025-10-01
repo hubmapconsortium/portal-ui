@@ -36,8 +36,10 @@ export default defineConfig(
     ],
   },
 
-  // Base ESLint recommended rules
-  eslint.configs.recommended,
+  // Base ESLint recommended rules without conflicting with TypeScript rules
+  tseslint.configs.eslintRecommended,
+
+  jsxA11y.flatConfigs.recommended,
   
   // Shared configuration for all JS/JSX/TS/TSX files
   {
@@ -45,7 +47,6 @@ export default defineConfig(
     plugins: {
       react,
       'react-hooks': reactHooks,
-      'jsx-a11y': jsxA11y,
       import: importPlugin,
       prettier,
     },
@@ -95,6 +96,7 @@ export default defineConfig(
       'react/require-default-props': 'off',
       'react/jsx-props-no-spreading': 'off',
       'react/jsx-no-bind': 'off',
+      'jsx-a11y/no-autofocus': 'off', // Disabled as it doesn't account for MUI's autofocus prop
 
       // Import rules
       'import/extensions': 'off',
@@ -148,7 +150,7 @@ export default defineConfig(
     },
   },
 
-  ...tseslint.configs.recommended.map(config => ({
+  ...tseslint.configs.recommendedTypeChecked.map(config => ({
     ...config,
     files: ['**/*.{ts,tsx}'],
   })),

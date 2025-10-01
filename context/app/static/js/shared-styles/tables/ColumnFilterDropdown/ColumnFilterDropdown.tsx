@@ -127,7 +127,13 @@ function ColumnFilterDropdown({
               values.map(({ value, count }) => {
                 const isSelected = selectedValues.has(value);
                 return (
-                  <MenuItem key={value} onClick={() => handleToggleValue(value)} dense>
+                  <MenuItem
+                    key={value}
+                    onClick={() => {
+                      handleToggleValue(value);
+                    }}
+                    dense
+                  >
                     <Checkbox checked={isSelected} size="small" sx={{ mr: 1, p: 0 }} tabIndex={-1} disableRipple />
                     <ListItemText
                       primary={

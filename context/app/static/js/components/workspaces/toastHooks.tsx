@@ -14,83 +14,100 @@ export const useWorkspaceToasts = () => {
    ********************************** */
 
   const toastErrorDeleteWorkspaces = useCallback(
-    (names: string | React.ReactElement) => toastError(<Typography>Error deleting workspaces: {names}</Typography>),
+    (names: string | React.ReactElement) => {
+      toastError(<Typography>Error deleting workspaces: {names}</Typography>);
+    },
     [toastError],
   );
 
-  const toastErrorUpdateWorkspace = useCallback(() => toastError('Failed to update workspace.'), [toastError]);
+  const toastErrorUpdateWorkspace = useCallback(() => {
+    toastError('Failed to update workspace.');
+  }, [toastError]);
 
   const toastErrorStopWorkspace = useCallback(
-    (workspaceName?: string | React.ReactElement) =>
-      toastError(<Typography>Failed to stop {workspaceName ?? 'workspace'}. Please try again.</Typography>),
+    (workspaceName?: string | React.ReactElement) => {
+      toastError(<Typography>Failed to stop {workspaceName ?? 'workspace'}. Please try again.</Typography>);
+    },
     [toastError],
   );
 
-  const toastErrorLaunchWorkspace = useCallback(
-    () => toastError('Failed to launch workspace. Please try again.'),
-    [toastError],
-  );
+  const toastErrorLaunchWorkspace = useCallback(() => {
+    toastError('Failed to launch workspace. Please try again.');
+  }, [toastError]);
 
-  const toastErrorCreateWorkspace = useCallback(() => toastError('Failed to create workspace.'), [toastError]);
+  const toastErrorCreateWorkspace = useCallback(() => {
+    toastError('Failed to create workspace.');
+  }, [toastError]);
 
   const toastErrorWorkspaceTemplate = useCallback(
-    (templateTitle?: string) =>
+    (templateTitle?: string) => {
       toastError(
         `There are issues with creating ${templateTitle ?? 'the selected template'}. Failed to create workspace.`,
-      ),
+      );
+    },
     [toastError],
   );
 
   const toastErrorShareInvitation = useCallback(
-    (workspaceName?: React.ReactElement | string) =>
-      toastError(<Typography>Failed to share {workspaceName ?? 'workspace'}. Please try again.</Typography>),
+    (workspaceName?: React.ReactElement | string) => {
+      toastError(<Typography>Failed to share {workspaceName ?? 'workspace'}. Please try again.</Typography>);
+    },
     [toastError],
   );
 
   const toastErrorInvitation = useCallback(
-    (action: 'accept' | 'decline' | 'delete', workspaceName?: string) =>
-      toastError(`Failed to ${action} ${workspaceName ?? 'this'} workspace copy invitation. Please try again.`),
+    (action: 'accept' | 'decline' | 'delete', workspaceName?: string) => {
+      toastError(`Failed to ${action} ${workspaceName ?? 'this'} workspace copy invitation. Please try again.`);
+    },
     [toastError],
   );
 
-  const toastErrorAcceptInvitation = (workspaceName?: string) => toastErrorInvitation('accept', workspaceName);
-  const toastErrorDeclineInvitation = (workspaceName?: string) => toastErrorInvitation('decline', workspaceName);
-  const toastErrorDeleteInvitation = (workspaceName?: string) => toastErrorInvitation('delete', workspaceName);
+  const toastErrorAcceptInvitation = (workspaceName?: string) => {
+    toastErrorInvitation('accept', workspaceName);
+  };
+  const toastErrorDeclineInvitation = (workspaceName?: string) => {
+    toastErrorInvitation('decline', workspaceName);
+  };
+  const toastErrorDeleteInvitation = (workspaceName?: string) => {
+    toastErrorInvitation('delete', workspaceName);
+  };
 
   /** *********************************
    *          Success Toasts         *
    ********************************* */
 
-  const toastSuccessRenewSession = useCallback(
-    () => toastSuccess('Session time for workspaces successfully renewed.'),
-    [toastSuccess],
-  );
+  const toastSuccessRenewSession = useCallback(() => {
+    toastSuccess('Session time for workspaces successfully renewed.');
+  }, [toastSuccess]);
 
-  const toastSuccessRemoveRestrictedDatasets = useCallback(
-    () => toastSuccess('Restricted datasets successfully removed from selection.'),
-    [toastSuccess],
-  );
+  const toastSuccessRemoveRestrictedDatasets = useCallback(() => {
+    toastSuccess('Restricted datasets successfully removed from selection.');
+  }, [toastSuccess]);
 
-  const toastSuccessUpdateWorkspace = useCallback(
-    () => toastSuccess('Workspace successfully updated.'),
-    [toastSuccess],
-  );
+  const toastSuccessUpdateWorkspace = useCallback(() => {
+    toastSuccess('Workspace successfully updated.');
+  }, [toastSuccess]);
 
-  const toastSuccessCreateWorkspace = useCallback(
-    () => toastSuccess('Workspace successfully created.'),
-    [toastSuccess],
-  );
+  const toastSuccessCreateWorkspace = useCallback(() => {
+    toastSuccess('Workspace successfully created.');
+  }, [toastSuccess]);
 
   const toastSuccessDeleteWorkspaces = useCallback(
-    (names: string | React.ReactElement) =>
-      toastSuccess(<Typography>Successfully deleted workspaces: {names}</Typography>),
+    (names: string | React.ReactElement) => {
+      toastSuccess(<Typography>Successfully deleted workspaces: {names}</Typography>);
+    },
     [toastSuccess],
   );
 
-  const toastSuccessAddDataset = useCallback((id: idType) => toastSuccess(`${id} successfully added.`), [toastSuccess]);
+  const toastSuccessAddDataset = useCallback(
+    (id: idType) => {
+      toastSuccess(`${id} successfully added.`);
+    },
+    [toastSuccess],
+  );
 
   const toastSuccessLaunchWorkspace = useCallback(
-    (id: idType) =>
+    (id: idType) => {
       toastSuccess(
         <Stack spacing={1} maxWidth="22rem">
           <Typography>
@@ -101,34 +118,45 @@ export const useWorkspaceToasts = () => {
             View Workspace Detail Page
           </Button>
         </Stack>,
-      ),
+      );
+    },
     [toastSuccess],
   );
 
   const toastSuccessStopWorkspace = useCallback(
-    (names: string | React.ReactElement) =>
-      toastSuccess(<Typography>Successfully stopped workspaces: {names}</Typography>),
+    (names: string | React.ReactElement) => {
+      toastSuccess(<Typography>Successfully stopped workspaces: {names}</Typography>);
+    },
     [toastSuccess],
   );
 
   const toastSuccessShareInvitation = useCallback(
-    (names: string | React.ReactElement) =>
-      toastSuccess(<Typography>Successfully shared workspaces: {names}</Typography>),
+    (names: string | React.ReactElement) => {
+      toastSuccess(<Typography>Successfully shared workspaces: {names}</Typography>);
+    },
     [toastSuccess],
   );
 
   const toastSuccessAcceptInvitation = useCallback(
-    (workspaceName: string) => toastSuccess(`${workspaceName} copy created.`),
+    (workspaceName: string) => {
+      toastSuccess(`${workspaceName} copy created.`);
+    },
     [toastSuccess],
   );
 
   const toastSuccessInvitation = useCallback(
-    (action: 'declined' | 'deleted', workspaceName: string) => toastSuccess(`${workspaceName} invite ${action}.`),
+    (action: 'declined' | 'deleted', workspaceName: string) => {
+      toastSuccess(`${workspaceName} invite ${action}.`);
+    },
     [toastSuccess],
   );
 
-  const toastSuccessDeclineInvitation = (workspaceName: string) => toastSuccessInvitation('declined', workspaceName);
-  const toastSuccessDeleteInvitation = (workspaceName: string) => toastSuccessInvitation('deleted', workspaceName);
+  const toastSuccessDeclineInvitation = (workspaceName: string) => {
+    toastSuccessInvitation('declined', workspaceName);
+  };
+  const toastSuccessDeleteInvitation = (workspaceName: string) => {
+    toastSuccessInvitation('deleted', workspaceName);
+  };
 
   return {
     toastErrorDeleteWorkspaces,

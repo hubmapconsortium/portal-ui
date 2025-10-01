@@ -46,7 +46,9 @@ function DropdownListbox<T>({
         aria-haspopup="listbox"
         disableElevation
         variant="contained"
-        onClick={() => setIsOpen(true)}
+        onClick={() => {
+          setIsOpen(true);
+        }}
         {...buttonProps}
       >
         <Stack direction="row" alignItems="center" justifyContent="flex-end">
@@ -58,11 +60,21 @@ function DropdownListbox<T>({
       </SelectionButton>
       <StyledPopper open={isOpen} anchorEl={anchorRef.current} placement="bottom-start">
         <StyledPaper>
-          <ClickAwayListener onClickAway={() => setIsOpen(false)}>
+          <ClickAwayListener
+            onClickAway={() => {
+              setIsOpen(false);
+            }}
+          >
             <MenuList role="listbox" id={`${id}-options`}>
               {options.map((option, i) => (
                 <Option
-                  onClick={selectedOptionIndex === i ? undefined : () => selectOption({ option, i })}
+                  onClick={
+                    selectedOptionIndex === i
+                      ? undefined
+                      : () => {
+                          selectOption({ option, i });
+                        }
+                  }
                   key={getOptionLabel(option)}
                   autoFocus={selectedOptionIndex === i}
                   selected={selectedOptionIndex === i}

@@ -35,7 +35,7 @@ function useDatasetsCollectionsTabs() {
 
   const collectionsMap = useMemo(
     () =>
-      datasetUUIDs.reduce(
+      datasetUUIDs.reduce<Record<string, CollectionHit[]>>(
         (acc, datasetUUID) => {
           const collectionsContainingDataset = collections.filter((collection) => {
             const { datasets } = collection._source;
@@ -49,7 +49,7 @@ function useDatasetsCollectionsTabs() {
           }
           return acc;
         },
-        { [primaryDatasetId]: [] } as Record<string, CollectionHit[]>,
+        { [primaryDatasetId]: [] },
       ),
     [collections, datasetUUIDs, primaryDatasetId],
   );
