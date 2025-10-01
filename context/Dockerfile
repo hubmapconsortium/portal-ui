@@ -15,22 +15,13 @@ RUN apk add --no-cache git make g++ python3 \
 ENV NODE_OPTIONS="--max-old-space-size=4096"
 ENV NPM_CONFIG_PROGRESS=false
 ENV NPM_CONFIG_LOGLEVEL=warn
-ENV DISABLE_OPENCOLLECTIVE=1
 
 # COPY only what is needed so layers can be cached.
 COPY package.json .
 COPY package-lock.json .
 COPY .npmrc .
 
-# Multi-stage npm install with specific handling for SWC
-# First, try normal installation
-RUN npm ci --no-audit --no-fund --prefer-offline --ignore-scripts && npm rebuild @swc/core || \
-  # If that fails, clean cache and try again with scripts enabled
-  (npm cache clean --force && \
-  npm ci --no-audit --no-fund --prefer-offline || \
-  # If still failing, install everything except SWC, then install SWC separately
-  (npm install --ignore-scripts --no-audit --no-fund && \
-  npm install @swc/core --no-save --ignore-scripts))
+RUN npm ci
 
 COPY tsconfig.json tsconfig.json
 COPY .swcrc .swcrc
