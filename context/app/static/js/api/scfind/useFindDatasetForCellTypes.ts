@@ -1,6 +1,7 @@
 import useSWR from 'swr';
 import { multiFetcher } from 'js/helpers/swr';
 import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
+import { useMemo } from 'react';
 
 export interface FindDatasetForCellTypeParams {
   cellType: string;
@@ -9,6 +10,7 @@ export interface FindDatasetForCellTypeParams {
 type FindDatasetForCellTypeKey = string | null;
 
 export interface FindDatasetForCellTypeResponse {
+  counts: number[];
   datasets: string[];
 }
 
@@ -44,7 +46,7 @@ export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetFor
   const key = cellTypes.map((cellType) =>
     createFindDatasetForCellTypeKey(scFindEndpoint, { cellType }, scFindIndexVersion),
   );
-  return useSWR<FindDatasetForCellTypeResponse[], unknown, FindDatasetForCellTypesKey>(
+  const { data, ...rest } = useSWR<FindDatasetForCellTypeResponse[], unknown, FindDatasetForCellTypesKey>(
     key,
     (urls) =>
       multiFetcher({
@@ -57,4 +59,18 @@ export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetFor
       shouldRetryOnError: false,
     },
   );
+
+  const countsMaps: Record<string, number>[] = useMemo(() => {
+    if (!data) return [];
+    return data.map((result) => {
+      const map: Record<string, number> = {};
+      result.counts.forEach((count, index) => {
+        const datasetId = result.datasets[index];
+        map[datasetId] = count;
+      });
+      return map;
+    });
+  }, [data]);
+
+  return { data, countsMaps, ...rest };
 }

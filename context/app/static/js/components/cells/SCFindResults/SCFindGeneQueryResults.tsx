@@ -23,7 +23,7 @@ import { useDeduplicatedResults, useSCFindGeneResults, useTableTrackingProps } f
 import { useResultsProvider } from '../MolecularDataQueryForm/ResultsProvider';
 import DatasetListHeader from '../MolecularDataQueryForm/DatasetListHeader';
 import SCFindGeneCharts from '../CellsCharts/SCFindGeneCharts';
-import { CurrentGeneContextProvider } from './CurrentGeneContext';
+import { CurrentGeneContextProvider, useOptionalGeneContext } from './CurrentGeneContext';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { MatchingGeneContextProvider } from './MatchingGeneContext';
 import { matchingGeneColumn } from './columns';
@@ -46,6 +46,9 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
   const columnsToUse = genes.length > 1 ? columnsWithMatchingGene : columns;
 
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+  const gene = useOptionalGeneContext();
+
+  const estimatedExpandedRowHeight = gene ? 1365 : 665; // Chart 1 = 700px, Chart 2 = 600px, padding = 64px, border = 1px
 
   return (
     <EntityTable<Dataset>
@@ -76,7 +79,7 @@ function SCFindGeneQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps)
         ],
       }}
       expandedContent={SCFindGeneCharts}
-      estimatedExpandedRowHeight={1364 /* Chart 1 = 700px, Chart 2 = 600px, padding = 64px */}
+      estimatedExpandedRowHeight={estimatedExpandedRowHeight}
       {...useTableTrackingProps()}
       expandTooltip="View additional visualizations including gene expression levels and cell type distributions."
       collapseTooltip="Collapse row."
