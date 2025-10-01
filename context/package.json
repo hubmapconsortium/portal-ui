@@ -81,7 +81,7 @@
     "@storybook/addon-webpack5-compiler-swc": "^4.0.1",
     "@storybook/react-webpack5": "^9.1.8",
     "@svgr/webpack": "^8.1.0",
-    "@swc/core": "^1.13.20",
+    "@swc/core": "1.13.13",
     "@swc/helpers": "^0.5.17",
     "@swc/jest": "^0.2.39",
     "@swc/plugin-styled-components": "^9.1.0",
