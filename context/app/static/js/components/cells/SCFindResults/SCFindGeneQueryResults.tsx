@@ -27,15 +27,21 @@ import { CurrentGeneContextProvider, useOptionalGeneContext } from './CurrentGen
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { MatchingGeneContextProvider } from './MatchingGeneContext';
 import { GeneCountsContextProvider } from './GeneCountsContext';
-import { matchingGeneColumn, matchingGenesColumn } from './columns';
+import { matchingGeneColumn, matchingGenesColumn, totalCellCountColumn } from './columns';
+import { useIndexedDatasetsCounts } from 'js/api/scfind/useIndexedDatasets';
 
 const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
 const columnsWithMatchingGene = (
   hasIndividualGene: boolean,
   countsMap?: Record<string, number | string>,
+  allCountsMap?: Record<string, number | string>,
   geneCountMap?: Record<string, number>,
-) => [...columns, hasIndividualGene ? matchingGeneColumn(countsMap) : matchingGenesColumn(geneCountMap)];
+) => [
+  ...columns,
+  totalCellCountColumn(allCountsMap),
+  hasIndividualGene ? matchingGeneColumn(countsMap) : matchingGenesColumn(geneCountMap),
+];
 
 interface SCFindGeneQueryDatasetListProps extends SCFindQueryResultsListProps {
   geneCountMap?: Record<string, number>;
@@ -46,13 +52,15 @@ function SCFindGeneQueryDatasetList({ datasetIds, countsMap, geneCountMap }: SCF
   const gene = useOptionalGeneContext();
   const hasIndividualGene = Boolean(gene);
 
+  const { data: allCountsMap } = useIndexedDatasetsCounts();
+
   const estimatedExpandedRowHeight = gene ? 1365 : 665; // Chart 1 = 700px, Chart 2 = 600px, padding = 64px, border = 1px
 
   return (
     <EntityTable<Dataset>
       maxHeight={800}
       isSelectable
-      columns={columnsWithMatchingGene(hasIndividualGene, countsMap, geneCountMap)}
+      columns={columnsWithMatchingGene(hasIndividualGene, countsMap, allCountsMap, geneCountMap)}
       query={{
         query: {
           bool: {

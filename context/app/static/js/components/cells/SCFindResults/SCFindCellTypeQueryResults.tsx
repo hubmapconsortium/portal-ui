@@ -27,9 +27,12 @@ import DatasetsOverview from '../DatasetsOverview';
 import { SCFindQueryResultsListProps } from './types';
 import { targetCellCountColumn, totalCellCountColumn } from './columns';
 import useSCFindResultsStatisticsStore from './store';
+import { useIndexedDatasetsCounts } from 'js/api/scfind/useIndexedDatasets';
 
 function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryResultsListProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+
+  const { data: allCountsMap } = useIndexedDatasetsCounts();
 
   const columns = useMemo(() => {
     return [
@@ -37,10 +40,10 @@ function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryRe
       organ,
       assayTypes,
       targetCellCountColumn(countsMap),
-      totalCellCountColumn(), //(countsMap), // currently disabled until we have total cell counts for all datasets working upstream
+      totalCellCountColumn(allCountsMap),
       lastModifiedTimestamp,
     ];
-  }, [countsMap]);
+  }, [countsMap, allCountsMap]);
 
   return (
     <EntityTable<Dataset>
