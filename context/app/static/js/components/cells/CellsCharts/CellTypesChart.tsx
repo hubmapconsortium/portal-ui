@@ -13,7 +13,9 @@ import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { useCellTypesChartsData } from './hooks';
 import { extractLabel } from '../CrossModalityResults/utils';
 import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
-
+import { GeneSignatureStats } from 'js/api/scfind/useHyperQueryCellTypes';
+import Stack from '@mui/material/Stack';
+import Chip from '@mui/material/Chip';
 const TotalCellsContext = createContext<number>('Total Cells');
 const useTotalCells = () => useContext(TotalCellsContext);
 
@@ -34,12 +36,21 @@ function CellTypesChartTooltip({ tooltipData }: { tooltipData: TooltipData<{ val
 
 type CellTypeCounts = Record<string, { value: number }>;
 
+// Enhanced interface to support gene-specific highlighting
+interface GeneHighlightInfo {
+  gene: string;
+  color: string;
+  cellTypes: string[];
+}
+
 interface CellTypesChartProps {
   totalCells: number;
   cellTypeCounts: CellTypeCounts;
   isLoading: boolean;
   cellNames: string[];
   title?: React.ReactNode;
+  geneHighlights?: GeneHighlightInfo[];
+  showLegend?: boolean;
 }
 
 const margin = {
@@ -49,9 +60,43 @@ const margin = {
   left: 80,
 } as const;
 
-function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames, title }: CellTypesChartProps) {
+function CellTypesChart({
+  totalCells,
+  cellTypeCounts,
+  isLoading,
+  cellNames: _cellNames,
+  title,
+  geneHighlights = [],
+  showLegend = false,
+}: CellTypesChartProps) {
+  // Get all highlighted cell types
+  const highlightedCellTypes = useMemo(() => {
+    return geneHighlights.flatMap(({ cellTypes }) => cellTypes);
+  }, [geneHighlights]);
+
   return (
     <Box p={2} width="100%">
+      {showLegend && geneHighlights.length > 0 && (
+        <Box mb={2}>
+          <Typography variant="subtitle2" gutterBottom>
+            Gene-Associated Cell Types:
+          </Typography>
+          <Stack direction="row" spacing={1} flexWrap="wrap">
+            {geneHighlights.map(({ gene, color }) => (
+              <Chip
+                key={gene}
+                label={gene}
+                size="small"
+                sx={{
+                  backgroundColor: color,
+                  color: 'white',
+                  '& .MuiChip-label': { fontWeight: 600 },
+                }}
+              />
+            ))}
+          </Stack>
+        </Box>
+      )}
       <Box height="600px">
         <TotalCellsContext.Provider value={totalCells}>
           <ChartLoader isLoading={isLoading}>
@@ -62,7 +107,7 @@ function CellTypesChart({ totalCells, cellTypeCounts, isLoading, cellNames, titl
             )}
             <BarChart
               data={cellTypeCounts}
-              highlightedKeys={cellNames}
+              highlightedKeys={highlightedCellTypes}
               yAxisLabel="Count"
               xAxisLabel="Cell Type"
               margin={margin}
@@ -121,16 +166,78 @@ export function CrossModalityCellTypesChart({ uuid }: Dataset) {
   );
 }
 
-export function SCFindCellTypesChart({ uuid }: Dataset) {
+export function SCFindCellTypesChart({
+  uuid,
+  hyperQueryData,
+  hyperQueryLoading,
+  currentGene,
+  queriedGenes = [],
+}: Dataset & {
+  hyperQueryData?: { findGeneSignatures: GeneSignatureStats[] };
+  hyperQueryLoading?: boolean;
+  currentGene?: string;
+  queriedGenes?: string[];
+}) {
   const cellVariableNames = useCellVariableNames();
-
-  // TODO: Once we are able to switch between index versions, the dataset input will have to be updated accordingly
-  // to handle the first version of the index using HBM IDs and subsequent versions using UUIDs
-  // https://hms-dbmi.atlassian.net/browse/CAT-1339
   const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
   const cellNames = useMemo(() => {
     return cellVariableNames.map((cellTypeName) => cellTypeName.split('.')[1]).filter(Boolean);
   }, [cellVariableNames]);
+
+  // Process hyperquery data to create gene highlights
+  const geneHighlights = useMemo(() => {
+    if (!hyperQueryData?.findGeneSignatures) {
+      return [];
+    }
+
+    const highlights: GeneHighlightInfo[] = [];
+
+    // Define colors for different genes
+    const geneColors = [
+      '#4B5F27', // Primary green highlight color
+      '#7B68EE', // Medium slate blue
+      '#FF6B6B', // Light red
+      '#4ECDC4', // Teal
+      '#FFE66D', // Yellow
+      '#FF8B94', // Pink
+      '#95E1D3', // Mint
+      '#C7CEEA', // Lavender
+    ];
+
+    if (currentGene) {
+      // Single gene mode: use primary color for the current gene
+      const relevantSignatures = hyperQueryData.findGeneSignatures.filter(
+        (sig) => sig.pval < 0.05, // Only include statistically significant results
+      );
+
+      if (relevantSignatures.length > 0) {
+        highlights.push({
+          gene: currentGene,
+          color: geneColors[0],
+          cellTypes: relevantSignatures.map((sig) => sig.cell_type.split('.')[1]).filter(Boolean),
+        });
+      }
+    } else {
+      // Multi-gene mode: assign different colors to each gene
+      // Group signatures by gene (we need to deduce which gene each signature belongs to)
+      // Since the hyperquery includes all genes, we'll use the query order to assign colors
+      queriedGenes.forEach((gene, index) => {
+        const relevantSignatures = hyperQueryData.findGeneSignatures.filter(
+          (sig) => sig.pval < 0.05, // Only include statistically significant results
+        );
+
+        if (relevantSignatures.length > 0) {
+          highlights.push({
+            gene,
+            color: geneColors[index % geneColors.length],
+            cellTypes: relevantSignatures.map((sig) => sig.cell_type.split('.')[1]).filter(Boolean),
+          });
+        }
+      });
+    }
+
+    return highlights;
+  }, [hyperQueryData, currentGene, queriedGenes]);
 
   const [cellTypeCounts, totalCells] = useMemo(() => {
     if (!data) {
@@ -160,8 +267,10 @@ export function SCFindCellTypesChart({ uuid }: Dataset) {
       }
       totalCells={totalCells}
       cellTypeCounts={cellTypeCounts}
-      isLoading={isLoading}
+      isLoading={isLoading || Boolean(hyperQueryLoading)}
       cellNames={cellNames}
+      geneHighlights={geneHighlights}
+      showLegend={geneHighlights.length >= 1}
     />
   );
 }

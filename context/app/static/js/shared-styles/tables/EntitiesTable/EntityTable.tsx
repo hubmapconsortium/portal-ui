@@ -42,6 +42,7 @@ interface EntityTableProps<Doc extends Entity>
   reverseExpandIndicator?: boolean;
   onExpand?: (id: string) => (isExpanded: boolean) => void;
   estimatedExpandedRowHeight?: number;
+  initialSortState?: { columnId: string; direction: 'asc' | 'desc' };
 }
 
 const headerRowHeight = 60;
@@ -63,6 +64,7 @@ function EntityTable<Doc extends Entity>({
   reverseExpandIndicator,
   onExpand,
   estimatedExpandedRowHeight,
+  initialSortState = { columnId: 'last_modified_timestamp', direction: 'desc' },
 }: EntityTableProps<Doc>) {
   const columnNameMapping = columns.reduce((acc, column) => ({ ...acc, [column.id]: column.sort }), {});
   const isExpandable = Boolean(ExpandedContent);
@@ -90,7 +92,7 @@ function EntityTable<Doc extends Entity>({
   } = useScrollTable<Doc>({
     query,
     columnNameMapping,
-    initialSortState: { columnId: 'last_modified_timestamp', direction: 'desc' },
+    initialSortState,
     columns,
     isExpandable,
     estimatedExpandedRowHeight,

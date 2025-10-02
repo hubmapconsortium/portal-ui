@@ -16,7 +16,7 @@ export function useSCFindCellTypeResults(cellTypes: string[] = []) {
     cellTypes,
   });
 
-  const { data = [], ...rest } = datasetsWithCellTypes;
+  const { data = [], countsMaps, ...rest } = datasetsWithCellTypes;
 
   const cellTypeCategories = useMemo(() => categorizeCellTypes(cellTypes), [cellTypes]);
 
@@ -25,7 +25,43 @@ export function useSCFindCellTypeResults(cellTypes: string[] = []) {
     [cellTypeCategories, cellTypes, data],
   );
 
-  return { datasets, cellTypeCategories, ...rest };
+  // Create count maps for each category by aggregating counts from individual cell types
+  const categorizedCountsMaps = useMemo(() => {
+    if (!countsMaps || Object.keys(countsMaps).length === 0) {
+      return {};
+    }
+
+    const categoryMaps: Record<string, Record<string, number>> = {};
+
+    // Initialize maps for all categories
+    cellTypeCategories.forEach((category) => {
+      categoryMaps[category] = {};
+    });
+
+    // For each cell type, aggregate its counts into the appropriate categories
+    cellTypes.forEach((cellType) => {
+      const cellTypeCounts = countsMaps[cellType];
+      if (!cellTypeCounts) return;
+
+      const [organCategory, cellTypeCategory] = cellType.split('.');
+      const categories = [cellType, organCategory, cellTypeCategory].filter((cat) => cellTypeCategories.includes(cat));
+
+      // Add counts to each relevant category
+      Object.entries(cellTypeCounts).forEach(([datasetId, count]) => {
+        categories.forEach((category) => {
+          if (categoryMaps[category]) {
+            // For categories that aggregate multiple cell types, sum the counts
+            // For individual cell types, use the count directly
+            categoryMaps[category][datasetId] = (categoryMaps[category][datasetId] || 0) + count;
+          }
+        });
+      });
+    });
+
+    return categoryMaps;
+  }, [countsMaps, cellTypes, cellTypeCategories]);
+
+  return { datasets, cellTypeCategories, countsMaps: categorizedCountsMaps, ...rest };
 }
 
 export function useSCFindGeneResults() {
@@ -36,6 +72,7 @@ export function useSCFindGeneResults() {
   const {
     isLoading: isLoadingDatasets,
     data,
+    countsMaps,
     ...results
   } = useFindDatasetForGenes({
     geneList: genes,
@@ -55,10 +92,88 @@ export function useSCFindGeneResults() {
     });
   }, [data, genes, pathwayName, participants]);
 
+  // Create count maps for each category by aggregating counts from individual genes
+  const categorizedCountsMaps = useMemo(() => {
+    if (!countsMaps || Object.keys(countsMaps).length === 0 || !order) {
+      return {};
+    }
+
+    const categoryMaps: Record<string, Record<string, number>> = {};
+
+    // Initialize maps for all categories (order contains the categories)
+    order.forEach((category) => {
+      categoryMaps[category] = {};
+    });
+
+    // For individual genes, use their counts directly
+    genes.forEach((gene) => {
+      if (countsMaps[gene] && order.includes(gene)) {
+        categoryMaps[gene] = { ...countsMaps[gene] };
+      }
+    });
+
+    // For pathway categories, aggregate counts from genes in that pathway
+    if (pathwayName && participants.length > 0) {
+      // Union of all genes in pathway
+      if (order.includes(pathwayName)) {
+        const pathwayDatasets = new Set<string>();
+        participants.forEach((gene) => {
+          if (countsMaps[gene]) {
+            Object.keys(countsMaps[gene]).forEach((datasetId) => {
+              pathwayDatasets.add(datasetId);
+            });
+          }
+        });
+
+        pathwayDatasets.forEach((datasetId) => {
+          // Sum counts for all genes in this dataset for this pathway
+          let totalCount = 0;
+          participants.forEach((gene) => {
+            if (countsMaps[gene] && countsMaps[gene][datasetId]) {
+              totalCount += countsMaps[gene][datasetId];
+            }
+          });
+          if (totalCount > 0) {
+            categoryMaps[pathwayName][datasetId] = totalCount;
+          }
+        });
+      }
+
+      // Intersection category (if it exists)
+      const intersectionKey = `${pathwayName} (intersection)`;
+      if (order.includes(intersectionKey)) {
+        // Find datasets that have all genes in the pathway
+        const allPathwayDatasets = participants.map((gene) => (countsMaps[gene] ? Object.keys(countsMaps[gene]) : []));
+
+        if (allPathwayDatasets.length > 0) {
+          const intersectionDatasets = allPathwayDatasets.reduce((acc, datasets) =>
+            acc.filter((datasetId) => datasets.includes(datasetId)),
+          );
+
+          intersectionDatasets.forEach((datasetId) => {
+            // For intersection, use the minimum count among all genes
+            let minCount = Infinity;
+            participants.forEach((gene) => {
+              if (countsMaps[gene] && countsMaps[gene][datasetId]) {
+                minCount = Math.min(minCount, countsMaps[gene][datasetId]);
+              }
+            });
+            if (minCount !== Infinity && minCount > 0) {
+              categoryMaps[intersectionKey][datasetId] = minCount;
+            }
+          });
+        }
+      }
+    }
+
+    return categoryMaps;
+  }, [countsMaps, genes, order, pathwayName, participants]);
+
   return {
     datasets: data,
     categorizedResults,
     datasetToGeneMap,
+    countsMaps: categorizedCountsMaps,
     isLoading: isLoadingDatasets || isLoadingPathwayGenes,
     emptyResults,
     order,

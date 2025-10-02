@@ -11,6 +11,8 @@ export interface Column<Doc> {
   tooltipText?: string;
   width?: number;
   filterable?: boolean;
+  /** Map of entity ID to custom sort value for client-side sorting */
+  customSortValues?: Record<string, number | string>;
 }
 
 export interface EntitiesTabTypes<Doc extends Entity> {

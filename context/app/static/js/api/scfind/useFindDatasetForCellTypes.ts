@@ -60,17 +60,24 @@ export default function useFindDatasetForCellTypes({ cellTypes }: FindDatasetFor
     },
   );
 
-  const countsMaps: Record<string, number>[] = useMemo(() => {
-    if (!data) return [];
-    return data.map((result) => {
+  const countsMaps: Record<string, Record<string, number>> = useMemo(() => {
+    if (!data) return {};
+    const maps: Record<string, Record<string, number>> = {};
+
+    data.forEach((result, index) => {
+      const cellType = cellTypes[index];
       const map: Record<string, number> = {};
-      result.counts.forEach((count, index) => {
-        const datasetId = result.datasets[index];
-        map[datasetId] = count;
+      result.counts.forEach((count, datasetIndex) => {
+        const datasetId = result.datasets[datasetIndex];
+        if (datasetId) {
+          map[datasetId] = count;
+        }
       });
-      return map;
+      maps[cellType] = map;
     });
-  }, [data]);
+
+    return maps;
+  }, [data, cellTypes]);
 
   return { data, countsMaps, ...rest };
 }

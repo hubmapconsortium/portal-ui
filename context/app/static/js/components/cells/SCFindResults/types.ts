@@ -3,6 +3,7 @@ import { Dataset } from 'js/components/types';
 type WrappedDatasetResult = Pick<Dataset, 'hubmap_id'>;
 export interface SCFindQueryResultsListProps {
   datasetIds: { hubmap_id: string }[];
+  countsMap?: Record<string, number>;
 }
 
 export type WrappedDatasetResults = Record<string, WrappedDatasetResult[]>;

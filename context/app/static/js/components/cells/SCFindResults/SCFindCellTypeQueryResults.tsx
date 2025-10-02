@@ -28,10 +28,19 @@ import { SCFindQueryResultsListProps } from './types';
 import { targetCellCountColumn, totalCellCountColumn } from './columns';
 import useSCFindResultsStatisticsStore from './store';
 
-const columns = [hubmapID, organ, assayTypes, targetCellCountColumn, totalCellCountColumn, lastModifiedTimestamp];
-
-function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListProps) {
+function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryResultsListProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
+
+  const columns = useMemo(() => {
+    return [
+      hubmapID,
+      organ,
+      assayTypes,
+      targetCellCountColumn(countsMap),
+      totalCellCountColumn(), //(countsMap), // currently disabled until we have total cell counts for all datasets working upstream
+      lastModifiedTimestamp,
+    ];
+  }, [countsMap]);
 
   return (
     <EntityTable<Dataset>
@@ -61,8 +70,9 @@ function SCFindCellTypeQueryDatasetList({ datasetIds }: SCFindQueryResultsListPr
         ],
       }}
       expandedContent={SCFindCellTypesChart}
-      estimatedExpandedRowHeight={664 /* Chart = 600, padding = 64 */}
+      estimatedExpandedRowHeight={665 /* Chart = 600, padding = 64, divider = 1 */}
       reverseExpandIndicator
+      initialSortState={{ columnId: 'target_cell_count', direction: 'desc' }}
       {...useTableTrackingProps()}
     />
   );
@@ -236,7 +246,7 @@ const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
 
 function DatasetListSection() {
   const cellTypes = useCellVariableNames();
-  const { datasets, cellTypeCategories, isLoading } = useSCFindCellTypeResults(cellTypes);
+  const { datasets, cellTypeCategories, isLoading, countsMaps } = useSCFindCellTypeResults(cellTypes);
   const { openTabIndex, handleTabChange } = useTabs();
 
   if (isLoading) {
@@ -266,7 +276,11 @@ function DatasetListSection() {
       </Tabs>
       {cellTypeCategories.map((cellType, idx) => (
         <TabPanel key={cellType} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
-          <SCFindCellTypeQueryDatasetList key={cellType} datasetIds={datasets[cellType] ?? []} />
+          <SCFindCellTypeQueryDatasetList
+            key={cellType}
+            countsMap={countsMaps[cellType]}
+            datasetIds={datasets[cellType] ?? []}
+          />
         </TabPanel>
       ))}
     </div>

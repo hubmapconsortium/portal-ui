@@ -6,6 +6,8 @@ import { useVitessceConf } from 'js/pages/Dataset/hooks';
 import VisualizationWrapper from 'js/components/detailPage/visualization/VisualizationWrapper';
 import { useOptionalGeneContext } from '../SCFindResults/CurrentGeneContext';
 import { SCFindCellTypesChart } from './CellTypesChart';
+import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
+import useHyperQueryCellTypes from 'js/api/scfind/useHyperQueryCellTypes';
 
 function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
   const { data: vitessceConf, isLoading } = useVitessceConf(uuid, undefined, gene, true);
@@ -33,10 +35,30 @@ function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
 
 export default function SCFindGeneCharts(dataset: Dataset) {
   const gene = useOptionalGeneContext();
+  const allGenes = useCellVariableNames();
+
+  // For individual gene context, use only that gene; otherwise use all queried genes
+  const genesToQuery = gene ? [gene] : allGenes;
+
+  // Extract organ name for hyperquery, remove laterality
+  const organName = dataset.origin_samples_unique_mapped_organs?.[0].split(' (')[0];
+
+  // Fetch relevant cell types for the current genes
+  const { data: hyperQueryData, isLoading: hyperQueryLoading } = useHyperQueryCellTypes({
+    geneList: genesToQuery,
+    organName,
+  });
+
   return (
     <Box py={2}>
       {gene && <SCFindVitesscePreview {...dataset} gene={gene} />}
-      <SCFindCellTypesChart {...dataset} />
+      <SCFindCellTypesChart
+        {...dataset}
+        hyperQueryData={hyperQueryData}
+        hyperQueryLoading={hyperQueryLoading}
+        currentGene={gene}
+        queriedGenes={allGenes}
+      />
     </Box>
   );
 }

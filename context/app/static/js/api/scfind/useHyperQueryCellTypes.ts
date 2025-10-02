@@ -1,10 +1,10 @@
-import useSWR from 'swr';
+import useSWR, { SWRConfiguration } from 'swr';
 import { fetcher } from 'js/helpers/swr';
 import { createScFindKey, stringOrArrayToString, useScFindKey } from './utils';
 
 export interface HyperQueryCellTypesParams {
   geneList: string | string[];
-  datasetName?: string | string[];
+  organName?: string | string[];
   includePrefix?: boolean;
 }
 
@@ -24,7 +24,7 @@ type HyperQueryCellTypesKey = string;
 
 export function createCellTypeNamesKey(
   scFindEndpoint: string,
-  { geneList, datasetName, includePrefix }: HyperQueryCellTypesParams,
+  { geneList, organName, includePrefix }: HyperQueryCellTypesParams,
   scFindIndexVersion?: string,
 ): HyperQueryCellTypesKey {
   return createScFindKey(
@@ -32,15 +32,17 @@ export function createCellTypeNamesKey(
     'hyperQueryCellTypes',
     {
       gene_list: stringOrArrayToString(geneList),
-      dataset_name: datasetName ? stringOrArrayToString(datasetName) : undefined,
+      // The API parameter is `dataset_name` but the actual expected values are organ names
+      // because these calculations are run either across all datasets, or all datasets of a specific organ.
+      dataset_name: organName ? stringOrArrayToString(organName) : undefined,
       include_prefix: includePrefix ? 'true' : 'false',
     },
     scFindIndexVersion,
   );
 }
 
-export default function useHyperQueryCellTypes(params: HyperQueryCellTypesParams) {
+export default function useHyperQueryCellTypes(params: HyperQueryCellTypesParams, swrConfig?: SWRConfiguration) {
   const { scFindEndpoint, scFindIndexVersion } = useScFindKey();
   const key = createCellTypeNamesKey(scFindEndpoint, params, scFindIndexVersion);
-  return useSWR<CellTypeNamesResponse, unknown, HyperQueryCellTypesKey>(key, (url) => fetcher({ url }));
+  return useSWR<CellTypeNamesResponse, unknown, HyperQueryCellTypesKey>(key, (url) => fetcher({ url }), swrConfig);
 }
