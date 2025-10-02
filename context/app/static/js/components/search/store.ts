@@ -23,6 +23,7 @@ export const FACETS = {
 
 export interface FacetConfig {
   field: string;
+  visible?: boolean;
 }
 
 interface AggregationOrder {
