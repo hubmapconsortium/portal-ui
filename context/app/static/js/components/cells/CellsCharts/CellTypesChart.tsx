@@ -2,7 +2,6 @@ import React, { useMemo } from 'react';
 
 import BarChart from 'js/shared-styles/charts/BarChart';
 import ChartLoader from 'js/shared-styles/charts/ChartLoader';
-import Box from '@mui/material/Box';
 import { TooltipData } from 'js/shared-styles/charts/types';
 import { createContext, useContext } from 'js/helpers/context';
 import useCellTypeCountForDataset from 'js/api/scfind/useCellTypeCountForDataset';
@@ -12,10 +11,12 @@ import { decimal, percent } from 'js/helpers/number-format';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import { useCellTypesChartsData } from './hooks';
 import { extractLabel } from '../CrossModalityResults/utils';
-import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
-import { GeneSignatureStats } from 'js/api/scfind/useHyperQueryCellTypes';
+import { useCellVariableNames, useIsQueryType } from '../MolecularDataQueryForm/hooks';
 import Stack from '@mui/material/Stack';
-import Chip from '@mui/material/Chip';
+import { scaleOrdinal } from '@visx/scale';
+import { useTheme } from '@mui/material/styles';
+import ChartWrapper from 'js/shared-styles/charts/ChartWrapper';
+import { extractCellTypeInfo } from 'js/api/scfind/utils';
 const TotalCellsContext = createContext<number>('Total Cells');
 const useTotalCells = () => useContext(TotalCellsContext);
 
@@ -34,6 +35,47 @@ function CellTypesChartTooltip({ tooltipData }: { tooltipData: TooltipData<{ val
   );
 }
 
+function GeneTooltipContent({
+  tooltipData,
+  cellTypeGeneAssociations = [],
+}: {
+  tooltipData: TooltipData<{ value: number }>;
+  cellTypeGeneAssociations?: CellTypeGeneAssociation[];
+}) {
+  const totalCells = useTotalCells();
+
+  if (!tooltipData.bar) {
+    return tooltipData.key;
+  }
+
+  const cellType = tooltipData.key;
+  const count = tooltipData.bar.data.value;
+
+  // Find gene associations for this cell type
+  const geneAssociation = cellTypeGeneAssociations.find((association) => association.cellType === cellType);
+
+  return (
+    <>
+      <Typography variant="body2" fontWeight="bold">
+        {cellType}
+      </Typography>
+      <Typography variant="body2">
+        {decimal.format(count)} cells ({percent.format(count / totalCells)})
+      </Typography>
+      {geneAssociation && geneAssociation.genes.length > 0 && (
+        <>
+          <Typography variant="body2" sx={{ mt: 1, fontWeight: 'medium' }}>
+            Associated genes:
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {geneAssociation.genes.join(', ')}
+          </Typography>
+        </>
+      )}
+    </>
+  );
+}
+
 type CellTypeCounts = Record<string, { value: number }>;
 
 // Enhanced interface to support gene-specific highlighting
@@ -43,6 +85,12 @@ interface GeneHighlightInfo {
   cellTypes: string[];
 }
 
+interface CellTypeGeneAssociation {
+  cellType: string;
+  genes: string[];
+  colors: string[];
+}
+
 interface CellTypesChartProps {
   totalCells: number;
   cellTypeCounts: CellTypeCounts;
@@ -50,13 +98,13 @@ interface CellTypesChartProps {
   cellNames: string[];
   title?: React.ReactNode;
   geneHighlights?: GeneHighlightInfo[];
-  showLegend?: boolean;
+  cellTypeGeneAssociations?: CellTypeGeneAssociation[];
 }
 
 const margin = {
   top: 20,
   right: 20,
-  bottom: 220,
+  bottom: 300,
   left: 80,
 } as const;
 
@@ -64,59 +112,84 @@ function CellTypesChart({
   totalCells,
   cellTypeCounts,
   isLoading,
-  cellNames: _cellNames,
+  cellNames,
   title,
   geneHighlights = [],
-  showLegend = false,
+  cellTypeGeneAssociations = [],
 }: CellTypesChartProps) {
+  const isGeneQuery = geneHighlights.length > 0;
   // Get all highlighted cell types
   const highlightedCellTypes = useMemo(() => {
-    return geneHighlights.flatMap(({ cellTypes }) => cellTypes);
-  }, [geneHighlights]);
+    if (isGeneQuery) {
+      return geneHighlights.flatMap(({ cellTypes }) => cellTypes);
+    }
+    return cellNames.map((name) => extractCellTypeInfo(name).name).filter(Boolean);
+  }, [geneHighlights, cellNames, isGeneQuery]);
+
+  const theme = useTheme();
+
+  const legendScale = useMemo(() => {
+    if (geneHighlights.length === 0) {
+      return undefined;
+    }
+    return scaleOrdinal<string, string>({
+      domain: ['Unmatched', ...geneHighlights.map(({ gene }) => gene), 'Multiple'],
+      range: [theme.palette.graphs.unmatched, ...geneHighlights.map(({ color }) => color), 'placeholder'],
+    });
+  }, [geneHighlights, theme]);
+
+  // Create tooltip component that shows gene associations if available
+  const TooltipComponent = useMemo(() => {
+    if (cellTypeGeneAssociations.length > 0) {
+      const GeneTooltipWrapper = (props: { tooltipData: TooltipData<{ value: number }> }) => (
+        <GeneTooltipContent {...props} cellTypeGeneAssociations={cellTypeGeneAssociations} />
+      );
+      GeneTooltipWrapper.displayName = 'GeneTooltipWrapper';
+      return GeneTooltipWrapper;
+    }
+    return CellTypesChartTooltip;
+  }, [cellTypeGeneAssociations]);
 
   return (
-    <Box p={2} width="100%">
-      {showLegend && geneHighlights.length > 0 && (
-        <Box mb={2}>
-          <Typography variant="subtitle2" gutterBottom>
-            Gene-Associated Cell Types:
-          </Typography>
-          <Stack direction="row" spacing={1} flexWrap="wrap">
-            {geneHighlights.map(({ gene, color }) => (
-              <Chip
-                key={gene}
-                label={gene}
-                size="small"
-                sx={{
-                  backgroundColor: color,
-                  color: 'white',
-                  '& .MuiChip-label': { fontWeight: 600 },
-                }}
-              />
-            ))}
-          </Stack>
-        </Box>
-      )}
-      <Box height="600px">
-        <TotalCellsContext.Provider value={totalCells}>
-          <ChartLoader isLoading={isLoading}>
-            {title && (
-              <Typography variant="subtitle2" display="flex" alignItems="center">
-                {title}
-              </Typography>
-            )}
+    <ChartWrapper
+      sx={{
+        p: 2,
+        width: '100%',
+      }}
+      margin={margin}
+      colorScale={legendScale}
+      dropdown={
+        legendScale && (
+          <InfoTextTooltip tooltipTitle="These cell types are associated with specific gene signatures.">
+            <Typography variant="subtitle2" gutterBottom>
+              Gene-Associated Cell&nbsp;Types
+            </Typography>
+          </InfoTextTooltip>
+        )
+      }
+      fullWidthGraph={!legendScale}
+    >
+      <TotalCellsContext.Provider value={totalCells}>
+        <ChartLoader isLoading={isLoading}>
+          {title && (
+            <Typography variant="subtitle2" display="flex" alignItems="center">
+              {title}
+            </Typography>
+          )}
+          <Stack direction="row" spacing={1} alignItems="center" height="600px" pl={2}>
             <BarChart
               data={cellTypeCounts}
               highlightedKeys={highlightedCellTypes}
               yAxisLabel="Count"
               xAxisLabel="Cell Type"
               margin={margin}
-              TooltipContent={CellTypesChartTooltip}
+              TooltipContent={TooltipComponent}
+              multiGeneAssociations={cellTypeGeneAssociations}
             />
-          </ChartLoader>
-        </TotalCellsContext.Provider>
-      </Box>
-    </Box>
+          </Stack>
+        </ChartLoader>
+      </TotalCellsContext.Provider>
+    </ChartWrapper>
   );
 }
 
@@ -168,76 +241,22 @@ export function CrossModalityCellTypesChart({ uuid }: Dataset) {
 
 export function SCFindCellTypesChart({
   uuid,
-  hyperQueryData,
   hyperQueryLoading,
-  currentGene,
-  queriedGenes = [],
+  geneHighlights = [],
+  cellTypeGeneAssociations = [],
 }: Dataset & {
-  hyperQueryData?: { findGeneSignatures: GeneSignatureStats[] };
-  hyperQueryLoading?: boolean;
-  currentGene?: string;
-  queriedGenes?: string[];
+  geneHighlights?: GeneHighlightInfo[];
+  cellTypeGeneAssociations?: CellTypeGeneAssociation[];
 }) {
   const cellVariableNames = useCellVariableNames();
   const { data, isLoading } = useCellTypeCountForDataset({ dataset: uuid });
+  const isCellTypesQuery = useIsQueryType('cell-type');
   const cellNames = useMemo(() => {
-    return cellVariableNames.map((cellTypeName) => cellTypeName.split('.')[1]).filter(Boolean);
-  }, [cellVariableNames]);
-
-  // Process hyperquery data to create gene highlights
-  const geneHighlights = useMemo(() => {
-    if (!hyperQueryData?.findGeneSignatures) {
-      return [];
+    if (isCellTypesQuery) {
+      return cellVariableNames.map((cellTypeName) => extractLabel(cellTypeName)).filter(Boolean);
     }
-
-    const highlights: GeneHighlightInfo[] = [];
-
-    // Define colors for different genes
-    const geneColors = [
-      '#4B5F27', // Primary green highlight color
-      '#7B68EE', // Medium slate blue
-      '#FF6B6B', // Light red
-      '#4ECDC4', // Teal
-      '#FFE66D', // Yellow
-      '#FF8B94', // Pink
-      '#95E1D3', // Mint
-      '#C7CEEA', // Lavender
-    ];
-
-    if (currentGene) {
-      // Single gene mode: use primary color for the current gene
-      const relevantSignatures = hyperQueryData.findGeneSignatures.filter(
-        (sig) => sig.pval < 0.05, // Only include statistically significant results
-      );
-
-      if (relevantSignatures.length > 0) {
-        highlights.push({
-          gene: currentGene,
-          color: geneColors[0],
-          cellTypes: relevantSignatures.map((sig) => sig.cell_type.split('.')[1]).filter(Boolean),
-        });
-      }
-    } else {
-      // Multi-gene mode: assign different colors to each gene
-      // Group signatures by gene (we need to deduce which gene each signature belongs to)
-      // Since the hyperquery includes all genes, we'll use the query order to assign colors
-      queriedGenes.forEach((gene, index) => {
-        const relevantSignatures = hyperQueryData.findGeneSignatures.filter(
-          (sig) => sig.pval < 0.05, // Only include statistically significant results
-        );
-
-        if (relevantSignatures.length > 0) {
-          highlights.push({
-            gene,
-            color: geneColors[index % geneColors.length],
-            cellTypes: relevantSignatures.map((sig) => sig.cell_type.split('.')[1]).filter(Boolean),
-          });
-        }
-      });
-    }
-
-    return highlights;
-  }, [hyperQueryData, currentGene, queriedGenes]);
+    return [];
+  }, [cellVariableNames, isCellTypesQuery]);
 
   const [cellTypeCounts, totalCells] = useMemo(() => {
     if (!data) {
@@ -260,17 +279,16 @@ export function SCFindCellTypesChart({
   return (
     <CellTypesChart
       title={
-        <>
-          Cell Type Distribution Plot{' '}
-          <InfoTextTooltip tooltipTitle="Plot showing the distribution of cell types in the dataset, with any cell types of interest emphasized." />
-        </>
+        <InfoTextTooltip tooltipTitle="Plot showing the distribution of cell types in the dataset, with any cell types of interest emphasized.">
+          Cell Type Distribution Plot
+        </InfoTextTooltip>
       }
       totalCells={totalCells}
       cellTypeCounts={cellTypeCounts}
       isLoading={isLoading || Boolean(hyperQueryLoading)}
       cellNames={cellNames}
       geneHighlights={geneHighlights}
-      showLegend={geneHighlights.length >= 1}
+      cellTypeGeneAssociations={cellTypeGeneAssociations}
     />
   );
 }
