@@ -35,7 +35,7 @@ RUN PIP_CONSTRAINT=/tmp/constraints.txt pip install -r /app/requirements.txt --u
 
 # NGINX should serve static content directly.
 # https://github.com/tiangolo/uwsgi-nginx-flask-docker#custom-static-path
-ENV STATIC_PATH /app/app/static
+ENV STATIC_PATH=/app/app/static
 
 # Additional NGINX config that can't be handled with envvars.
 # Be sure not to clobber nginx.conf from base image!

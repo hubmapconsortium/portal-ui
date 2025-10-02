@@ -1,0 +1,1 @@
+- Improve Cells API validation efficiency.
