@@ -50,7 +50,13 @@ export default function Timeline({ data, expandable }: TimelineProps) {
             {idx < data.length - 1 && <TimelineConnector />}
           </TimelineSeparator>
           <TimelineContent>
-            <InternalLink href={item.titleHref} onClick={() => handleTrack(item.title)} variant="subtitle2">
+            <InternalLink
+              href={item.titleHref}
+              onClick={() => {
+                handleTrack(item.title);
+              }}
+              variant="subtitle2"
+            >
               {item.title}
             </InternalLink>
             <Typography variant="body2">{item.description}</Typography>
@@ -60,7 +66,11 @@ export default function Timeline({ data, expandable }: TimelineProps) {
       {isExpandable && !isExpanded && (
         <TimelineItem
           onClick={handleExpand}
-          onKeyDown={(e) => (e.key === 'Enter' ? handleExpand() : undefined)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleExpand();
+            }
+          }}
           sx={{ cursor: 'pointer', flexDirection: 'row', alignItems: 'center', minHeight: 0 }}
           tabIndex={0}
         >

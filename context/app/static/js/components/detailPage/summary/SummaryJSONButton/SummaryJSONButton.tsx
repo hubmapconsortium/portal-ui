@@ -17,7 +17,9 @@ function SummaryJSONButton({ entity_type, uuid }: Props) {
       tooltip="View JSON"
       href={`/browse/${entity_type.toLowerCase()}/${uuid}.json`}
       target="_blank"
-      onClick={() => trackEntityPageEvent({ action: 'View JSON' })}
+      onClick={() => {
+        trackEntityPageEvent({ action: 'View JSON' });
+      }}
     >
       <FileIcon color="primary" />
     </WhiteRectangularTooltipIconButton>

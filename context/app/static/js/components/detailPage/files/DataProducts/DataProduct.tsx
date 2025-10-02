@@ -38,16 +38,18 @@ export function DataProduct({ file }: DataProductProps) {
           <Box display="flex" justifyContent="space-between" alignItems="center" mb={0.5}>
             <div>
               <FilesConditionalLink
-                openDUA={() => openDUA(link)}
+                openDUA={() => {
+                  openDUA(link);
+                }}
                 hasAgreedToDUA={hasAgreedToDUA}
                 href={link}
                 underline="none"
                 download
                 variant="subtitle1"
                 fileName={file.rel_path}
-                onClick={() =>
-                  trackEntityPageEvent({ action: 'Data Products / Download File Link', label: file.rel_path })
-                }
+                onClick={() => {
+                  trackEntityPageEvent({ action: 'Data Products / Download File Link', label: file.rel_path });
+                }}
               />
               <FileSize size={file.size} />
             </div>

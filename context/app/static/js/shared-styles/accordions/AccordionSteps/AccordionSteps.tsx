@@ -14,8 +14,7 @@ function AccordionSteps({ steps, id }: AccordionStepsProps) {
   return steps.map(({ heading, content, ref }, i) => (
     <StepAccordion
       id={`${id}-${i}`}
-      // eslint-disable-next-line @typescript-eslint/no-base-to-string
-      key={String(heading)}
+      key={typeof heading === 'string' ? heading : `step-${i}`}
       index={i}
       summaryHeading={heading}
       content={content}

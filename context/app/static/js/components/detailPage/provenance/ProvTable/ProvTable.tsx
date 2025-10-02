@@ -92,7 +92,9 @@ function ProvEntityColumnContent({
                 <Button
                   key={item.uuid}
                   variant="contained"
-                  onClick={() => setIsExpanded((s) => ({ ...s, [item.sample_category as string]: true }))}
+                  onClick={() => {
+                    setIsExpanded((s) => ({ ...s, [item.sample_category as string]: true }));
+                  }}
                 >
                   View More in Category ({numberOfSiblings})
                 </Button>
@@ -109,7 +111,9 @@ function ProvEntityColumnContent({
                 isSampleSibling={isSampleSibling}
                 isFirstTile={j === 0}
                 isLastTile={j === type.length - 1}
-                onClick={() => handleCardSelect(item.hubmap_id)}
+                onClick={() => {
+                  handleCardSelect(item.hubmap_id);
+                }}
                 entityData={item}
               />
             );
@@ -162,7 +166,7 @@ function ProvTable() {
 
   const missingAncestors = ancestorAndSelfIds.filter((id) => !ancestorsAndSelf.find((entity) => entity.uuid === id));
 
-  const ancestorsAndSelfByType = ancestorsAndSelf.reduce(
+  const ancestorsAndSelfByType = ancestorsAndSelf.reduce<Record<ProvEntityType, Entity[]>>(
     (acc, entity) => {
       const entityType: ESEntityType = entity.entity_type;
       if (isProvEntityType(entityType)) {
@@ -170,7 +174,7 @@ function ProvTable() {
       }
       return acc;
     },
-    { Donor: [], Sample: [], Dataset: [] } as Record<ProvEntityType, Entity[]>,
+    { Donor: [], Sample: [], Dataset: [] },
   );
 
   const descendantEntityCounts = assayMetadata.descendant_counts.entity_type || {};

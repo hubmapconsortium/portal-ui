@@ -66,7 +66,12 @@ function SaveToListDialog({
       }
       actions={
         <>
-          <Button onClick={() => setDialogIsOpen(false)} color="primary">
+          <Button
+            onClick={() => {
+              setDialogIsOpen(false);
+            }}
+            color="primary"
+          >
             Cancel
           </Button>
           <OptDisabledButton onClick={handleSubmit} color="primary" disabled={selectedLists.size === 0}>
@@ -75,7 +80,9 @@ function SaveToListDialog({
         </>
       }
       isOpen={dialogIsOpen}
-      handleClose={() => setDialogIsOpen(false)}
+      handleClose={() => {
+        setDialogIsOpen(false);
+      }}
     />
   ) : (
     <CreateListDialog

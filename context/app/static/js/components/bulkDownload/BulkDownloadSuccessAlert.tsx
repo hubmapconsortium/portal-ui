@@ -12,7 +12,12 @@ function BulkDownloadSuccessAlert() {
   }
 
   return (
-    <Alert onClose={() => setDownloadSuccess(false)} $marginBottom={10}>
+    <Alert
+      onClose={() => {
+        setDownloadSuccess(false);
+      }}
+      $marginBottom={10}
+    >
       Download successful. In order to download the files that are in the manifest file,{' '}
       <OutboundLink href={LINKS.installation}>install</OutboundLink> the HuBMAP CLT and follow{' '}
       <OutboundLink href={LINKS.documentation}>instructions</OutboundLink> for how to use it with the manifest file.

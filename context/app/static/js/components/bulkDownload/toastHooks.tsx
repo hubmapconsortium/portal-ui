@@ -14,7 +14,7 @@ const useBulkDownloadToasts = () => {
    ********************************** */
 
   const toastErrorDownloadFile = useCallback(
-    (type: fileType, retry: () => void) =>
+    (type: fileType, retry: () => void) => {
       toastError(
         <Stack spacing={3} direction="row" alignItems="center">
           <Typography>{type} file failed to download.</Typography>
@@ -22,7 +22,8 @@ const useBulkDownloadToasts = () => {
             Try Again
           </Button>
         </Stack>,
-      ),
+      );
+    },
     [toastError],
   );
 
@@ -31,7 +32,9 @@ const useBulkDownloadToasts = () => {
    ********************************* */
 
   const toastSuccessDownloadFile = useCallback(
-    (type: fileType) => toastSuccess(`${type} file successfully downloaded.`),
+    (type: fileType) => {
+      toastSuccess(`${type} file successfully downloaded.`);
+    },
     [toastSuccess],
   );
 

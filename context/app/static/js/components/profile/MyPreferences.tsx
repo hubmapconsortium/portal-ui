@@ -39,12 +39,12 @@ function OpenKeyNavSection() {
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInitialize(!initialize);
-    if (e.target.checked === false) {
+    if (!e.target.checked) {
       deleteOpenKeyNavCookie();
       window.location.reload();
     }
 
-    if (e.target.checked && accordionIsOpen === false) {
+    if (e.target.checked && !accordionIsOpen) {
       setAccordionIsOpen(true);
     }
   };

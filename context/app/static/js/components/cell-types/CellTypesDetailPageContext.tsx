@@ -34,7 +34,7 @@ export default function CellTypesProvider({ children, cellId }: PropsWithChildre
       variants,
       trackingInfo: {
         category: 'Cell Type Detail Page',
-        label: `${name}`,
+        label: name,
       },
     }),
     [cellId, cellTypes, name, organs, variants],

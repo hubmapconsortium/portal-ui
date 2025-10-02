@@ -79,7 +79,9 @@ function CellTypesHeaderPanel() {
         <TableSortLabel
           active={sortState.columnId === 'name'}
           direction={sortState.direction}
-          onClick={() => setSort('name')}
+          onClick={() => {
+            setSort('name');
+          }}
           sx={{ width: '100%' }}
           data-testid="cell-types-header-name"
         >
@@ -90,7 +92,9 @@ function CellTypesHeaderPanel() {
         <TableSortLabel
           active={sortState.columnId === 'clid'}
           direction={sortState.direction}
-          onClick={() => setSort('clid')}
+          onClick={() => {
+            setSort('clid');
+          }}
           sx={{ width: '100%' }}
           data-testid="cell-types-header-clid"
         >
@@ -149,7 +153,9 @@ function CellTypesHeaderPanel() {
             return (
               <MenuItem
                 key={organ}
-                onClick={() => toggleOrgan(organ)}
+                onClick={() => {
+                  toggleOrgan(organ);
+                }}
                 sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
               >
                 <ListItemIcon>

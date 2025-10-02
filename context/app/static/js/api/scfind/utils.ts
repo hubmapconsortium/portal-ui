@@ -20,7 +20,9 @@ export function createScFindKey(
   // Filter out undefined values from url params
   Object.entries(params)
     .filter(([, value]) => value)
-    .forEach(([key, value]) => urlParams.append(key, value!));
+    .forEach(([key, value]) => {
+      urlParams.append(key, value!);
+    });
 
   if (indexVersion) {
     urlParams.append('index_version', indexVersion);

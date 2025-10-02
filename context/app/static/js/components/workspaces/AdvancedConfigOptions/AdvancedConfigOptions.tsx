@@ -72,12 +72,12 @@ function ConfigSlider<FormType extends FieldValues>({
       <Stack padding={1}>
         <Slider
           value={convert(field.value[id] as number, conversionFactor)}
-          onChange={(e, value) =>
+          onChange={(e, value) => {
             field.onChange({
               ...field.value,
               [id]: unconvert(value as number, conversionFactor),
-            })
-          }
+            });
+          }}
           valueLabelDisplay="auto"
           marks={marks}
           min={convertedMin}
@@ -174,12 +174,12 @@ function AdvancedConfigOptions<FormType extends FieldValues>({
             label="Enable GPU"
             ariaLabel="Enable GPU"
             checked={field.value.gpu_enabled as boolean}
-            onChange={(e, value) =>
+            onChange={(e, value) => {
               field.onChange({
                 ...field.value,
                 gpu_enabled: value,
-              })
-            }
+              });
+            }}
           />
         </Stack>
       </AccordionDetails>

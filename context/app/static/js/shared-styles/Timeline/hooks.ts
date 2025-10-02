@@ -2,7 +2,9 @@ import { useState } from 'react';
 
 export function useExpandableItems<T>(items: T[], expandable = false) {
   const [expanded, setExpanded] = useState<boolean>(false);
-  const handleExpand = () => setExpanded(true);
+  const handleExpand = () => {
+    setExpanded(true);
+  };
   // if the list is less than 3 items, show all items
   const listIsShort = items.length <= 3;
   // if the user has expanded the list or the list is not expandable, show all items

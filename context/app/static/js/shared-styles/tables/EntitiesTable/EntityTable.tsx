@@ -115,7 +115,9 @@ function EntityTable<Doc extends Entity>({
     <StyledTableContainer
       component={Paper}
       ref={tableContainerRef}
-      onScroll={(event) => fetchMoreOnBottomReached(event)}
+      onScroll={(event) => {
+        fetchMoreOnBottomReached(event);
+      }}
       maxHeight={maxHeight}
     >
       {isSelectable && numSelected !== undefined && <NumSelectedHeader numSelected={numSelected} />}
@@ -145,8 +147,12 @@ function EntityTable<Doc extends Entity>({
                 filterValues={getColumnValues(column.id)}
                 selectedFilterValues={getColumnSelectedValues(column.id)}
                 isFilterLoading={aggregationsLoading}
-                onToggleFilterValue={(value) => toggleFilterValue(column.id, value)}
-                onClearFilter={() => clearColumnFilter(column.id)}
+                onToggleFilterValue={(value) => {
+                  toggleFilterValue(column.id, value);
+                }}
+                onClearFilter={() => {
+                  clearColumnFilter(column.id);
+                }}
               />
             ))}
             {isExpandable && !reverseExpandIndicator && expandableHeaderCell}

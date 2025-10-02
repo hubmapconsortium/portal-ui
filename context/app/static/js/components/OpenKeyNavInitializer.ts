@@ -1,4 +1,3 @@
-import React from 'react';
 import OpenKeyNav from 'openkeynav';
 import useOpenKeyNavStore from 'js/stores/useOpenKeyNavStore';
 
@@ -7,15 +6,17 @@ function useInitializeOpenKeyNav() {
 
   if (initialize) {
     const openKeyNav = new OpenKeyNav();
-    openKeyNav.init({
-      keys: {
-        menu: '/',
-        modifierKey: 'metaKey',
-      },
-      debug: {
-        keyboardAccessible: false,
-      },
-    }).enable();
+    openKeyNav
+      .init({
+        keys: {
+          menu: '/',
+          modifierKey: 'metaKey',
+        },
+        debug: {
+          keyboardAccessible: false,
+        },
+      })
+      .enable();
   }
 }
 

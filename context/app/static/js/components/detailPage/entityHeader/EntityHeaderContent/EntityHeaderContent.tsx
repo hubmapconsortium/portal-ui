@@ -174,7 +174,12 @@ function HuBMAPIDItem({ title, entityTypeIcon }: { title: string } & { entityTyp
   return (
     <EntityHeaderItem
       endIcon={
-        <TooltipIconButton onClick={() => handleCopyClick(title)} tooltip="Copy ID">
+        <TooltipIconButton
+          onClick={() => {
+            handleCopyClick(title);
+          }}
+          tooltip="Copy ID"
+        >
           <ContentCopyIcon sx={(theme) => ({ color: theme.palette.common.link, fontSize: '1.25rem' })} />
         </TooltipIconButton>
       }

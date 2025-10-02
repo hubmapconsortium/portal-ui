@@ -40,12 +40,28 @@ export interface CellsSearchStore extends CellsSearchState, CellsSearchActions {
 
 export const useStore = create<CellsSearchStore>((set) => ({
   ...defaultState,
-  setResults: (results: WrappedCellsResultsDataset[]) => set({ results }),
-  setResultCounts: (resultCounts: ResultCounts | undefined) => set({ resultCounts }),
-  setIsLoading: (isLoading: boolean) => set({ isLoading }),
-  setMinExpressionLog: (minExpressionLog: number) => set({ minExpressionLog }),
-  setMinCellPercentage: (minCellPercentage: number) => set({ minCellPercentage }),
-  setCellVariableNames: (cellVariableNames: string[]) => set({ cellVariableNames }),
-  setQueryType: (queryType) => set({ queryType }),
-  resetStore: () => set({ ...defaultState }),
+  setResults: (results: WrappedCellsResultsDataset[]) => {
+    set({ results });
+  },
+  setResultCounts: (resultCounts: ResultCounts | undefined) => {
+    set({ resultCounts });
+  },
+  setIsLoading: (isLoading: boolean) => {
+    set({ isLoading });
+  },
+  setMinExpressionLog: (minExpressionLog: number) => {
+    set({ minExpressionLog });
+  },
+  setMinCellPercentage: (minCellPercentage: number) => {
+    set({ minCellPercentage });
+  },
+  setCellVariableNames: (cellVariableNames: string[]) => {
+    set({ cellVariableNames });
+  },
+  setQueryType: (queryType) => {
+    set({ queryType });
+  },
+  resetStore: () => {
+    set({ ...defaultState });
+  },
 }));

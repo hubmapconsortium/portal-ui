@@ -19,7 +19,9 @@ interface ExpandableRowStoreInput {
 const createStore = ({ isExpandedToStart }: ExpandableRowStoreInput) =>
   createZustandStore<ExpandableRowStore>((set) => ({
     isExpanded: Boolean(isExpandedToStart),
-    toggleIsExpanded: () => set((state) => ({ isExpanded: !state.isExpanded })),
+    toggleIsExpanded: () => {
+      set((state) => ({ isExpanded: !state.isExpanded }));
+    },
   }));
 
 const [ExpandableRowProvider, useExpandableRowStore] = createStoreContext<ExpandableRowStore, ExpandableRowStoreInput>(

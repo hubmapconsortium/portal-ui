@@ -1,4 +1,3 @@
-/* eslint-disable class-methods-use-this */
 // Right now, the object doesn't have any state, but down the road,
 // it might cache results, or the API calls might be made from the JS instead of Python,
 // and then the instance would be initialized with the Cells API URL.

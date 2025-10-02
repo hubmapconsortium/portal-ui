@@ -87,7 +87,9 @@ export default function HeroTab({ content: Content, ...props }: HeroTabProps) {
             <Typography variant="h5">{title}</Typography>
           </Stack>
           <Typography variant="body1">{description}</Typography>
-          {actions?.map((action) => <HeroTabAction key={action.title} tabTitle={title} {...action} />)}
+          {actions?.map((action) => (
+            <HeroTabAction key={action.title} tabTitle={title} {...action} />
+          ))}
         </Stack>
       </HeroTabContainer>
     </>

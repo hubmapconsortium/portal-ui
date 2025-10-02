@@ -35,22 +35,31 @@ export const createEntityStore = ({ springs }: { springs: ReturnType<typeof useS
       summaryInView: true,
       summaryEntry: undefined,
     },
-    setSummaryComponentObserver: (inView, entry) =>
+    setSummaryComponentObserver: (inView, entry) => {
       set({
         summaryComponentObserver: {
           summaryInView: inView,
           summaryEntry: entry,
         },
-      }),
+      });
+    },
     summaryHeight: 0,
-    setSummaryHeight: (val: number) => set({ summaryHeight: val }),
+    setSummaryHeight: (val: number) => {
+      set({ summaryHeight: val });
+    },
     view: 'narrow' as const,
-    setView: (val) => set({ view: val }),
+    setView: (val) => {
+      set({ view: val });
+    },
     springs,
     assayMetadata: {},
-    setAssayMetadata: (val) => set({ assayMetadata: val }),
+    setAssayMetadata: (val) => {
+      set({ assayMetadata: val });
+    },
     organFile: null,
-    setOrganFile: (val: OrganFile | null) => set({ organFile: val }),
+    setOrganFile: (val: OrganFile | null) => {
+      set({ organFile: val });
+    },
   }));
 
 const [EntityStoreProvider, useEntityStore, EntityStoreContext] = createStoreContext(createEntityStore, 'Entity Store');

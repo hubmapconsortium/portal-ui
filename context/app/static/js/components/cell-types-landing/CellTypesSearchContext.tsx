@@ -83,8 +83,12 @@ export default function CellTypesSearchProvider({
     () => ({
       setSearch,
       setOrgans,
-      deselectAllOrgans: () => setOrgans([]),
-      selectAllOrgans: () => setOrgans(initialState?.organs ?? defaultInitialState.organs),
+      deselectAllOrgans: () => {
+        setOrgans([]);
+      },
+      selectAllOrgans: () => {
+        setOrgans(initialState?.organs ?? defaultInitialState.organs);
+      },
       toggleOrgan: (organ: string) => {
         setOrgans((prevOrgans) => {
           const includesOrgan = prevOrgans.includes(organ);

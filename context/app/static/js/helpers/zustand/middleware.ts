@@ -12,8 +12,7 @@ import { immer } from 'zustand/middleware/immer';
  * @param initializer Immer-compatible Zustand initializer function
  * @returns Zustand React `useStore` hook
  */
-export const createImmer = <T>(initializer: StateCreator<T, [['zustand/immer', never]], []>) =>
-  create(immer(initializer));
+export const createImmer = <T>(initializer: StateCreator<T, [['zustand/immer', never]]>) => create(immer(initializer));
 
 /**
  * Creates a Zustand React store using `persist` middleware
@@ -22,7 +21,7 @@ export const createImmer = <T>(initializer: StateCreator<T, [['zustand/immer', n
  * @returns Zustand React `useStore` hook
  */
 export const createPersist = <T>(
-  initializer: StateCreator<T, [['zustand/persist', unknown]], []>,
+  initializer: StateCreator<T, [['zustand/persist', unknown]]>,
   options: PersistOptions<T, T>,
 ) => create(persist(initializer, options));
 
@@ -33,7 +32,7 @@ export const createPersist = <T>(
  * @returns Zustand React `useStore` hook
  */
 export const createImmerPersist = <T>(
-  initializer: StateCreator<T, [['zustand/immer', never], ['zustand/persist', unknown]], []>,
+  initializer: StateCreator<T, [['zustand/immer', never], ['zustand/persist', unknown]]>,
   options: PersistOptions<T, T>,
 ) => create(immer(persist(initializer, options)));
 
@@ -42,7 +41,7 @@ export const createImmerPersist = <T>(
  * @param initializer Immer-compatible Zustand initializer function
  * @returns Zustand vanilla store
  */
-export const createStoreImmer = <T>(initializer: StateCreator<T, [['zustand/immer', never]], []>) =>
+export const createStoreImmer = <T>(initializer: StateCreator<T, [['zustand/immer', never]]>) =>
   createStore(immer(initializer));
 
 /**
@@ -52,7 +51,7 @@ export const createStoreImmer = <T>(initializer: StateCreator<T, [['zustand/imme
  * @returns Zustand React `useStore` hook
  */
 export const createStorePersist = <T>(
-  initializer: StateCreator<T, [['zustand/persist', unknown]], []>,
+  initializer: StateCreator<T, [['zustand/persist', unknown]]>,
   options: PersistOptions<T, T>,
 ) => createStore(persist(initializer, options));
 
@@ -63,6 +62,6 @@ export const createStorePersist = <T>(
  * @returns Zustand React `useStore` hook
  */
 export const createStoreImmerPersist = <T>(
-  initializer: StateCreator<T, [['zustand/immer', never], ['zustand/persist', unknown]], []>,
+  initializer: StateCreator<T, [['zustand/immer', never], ['zustand/persist', unknown]]>,
   options: PersistOptions<T, T>,
 ) => createStore(immer(persist(initializer, options)));

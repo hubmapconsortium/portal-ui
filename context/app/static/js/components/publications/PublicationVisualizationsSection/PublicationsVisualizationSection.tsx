@@ -30,7 +30,9 @@ function PublicationsVisualizationSection({
   }, [vignettes]);
 
   const handleChange = useCallback(
-    (i: number) => (_: unknown, isExpanded: boolean) => setExpandedIndex(isExpanded ? i : false),
+    (i: number) => (_: unknown, isExpanded: boolean) => {
+      setExpandedIndex(isExpanded ? i : false);
+    },
     [],
   );
 
@@ -41,7 +43,13 @@ function PublicationsVisualizationSection({
           <Accordion
             key={vignette.name}
             expanded={i === expandedIndex}
-            slotProps={{ transition: { onEntered: () => setDisplayedVignettes((prev) => ({ ...prev, [i]: true })) } }}
+            slotProps={{
+              transition: {
+                onEntered: () => {
+                  setDisplayedVignettes((prev) => ({ ...prev, [i]: true }));
+                },
+              },
+            }}
             onChange={handleChange(i)}
             data-testid="vignette"
           >

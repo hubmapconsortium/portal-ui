@@ -59,7 +59,9 @@ export default function ExploreTools() {
 
   const gridTemplateColumns = makeGridTemplateColumns(cards, expandedCardIndex);
 
-  const resetExpandedCardIndex = () => setExpandedCardIndex(null);
+  const resetExpandedCardIndex = () => {
+    setExpandedCardIndex(null);
+  };
   return (
     <CardGridContextProvider
       expandedCardIndex={expandedCardIndex}

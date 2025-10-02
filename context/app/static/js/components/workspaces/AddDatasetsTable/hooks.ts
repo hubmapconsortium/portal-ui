@@ -102,7 +102,7 @@ function useDatasetsAutocomplete({
     setAutocompleteValue(null);
   });
 
-  const addDataset = useEventCallback((e: SyntheticEvent<Element, Event>, newValue: SearchAheadHit | null) => {
+  const addDataset = useEventCallback((e: SyntheticEvent, newValue: SearchAheadHit | null) => {
     const uuid = newValue?._source?.uuid;
 
     if (uuid) {

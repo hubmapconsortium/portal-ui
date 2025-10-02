@@ -130,7 +130,6 @@ export function convertProvDataToNodesAndEdges(primaryDatasetUuid: string, provD
       const currentEntityUUID = queuedEntities.shift()!;
       const currentEntity = entity[currentEntityUUID];
       if (!currentEntity || datasetTypeIsForbidden(currentEntity[generatePrefix('dataset_type')])) {
-        // eslint-disable-next-line no-continue
         continue;
       }
       // Find all activities that used this entity

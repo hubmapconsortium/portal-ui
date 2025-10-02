@@ -2,8 +2,6 @@ import type { StorybookConfig } from '@storybook/react-webpack5';
 import { merge } from 'webpack-merge';
 import { alias } from '../build-utils/alias';
 import { HuBMAPGlobals } from '../build-utils/webpack.plugins';
-import path from 'path';
-
 
 const config: StorybookConfig = {
   framework: '@storybook/react-webpack5',
@@ -12,12 +10,12 @@ const config: StorybookConfig = {
     '@storybook/addon-links',
     'storybook-addon-swc',
     '@storybook/addon-webpack5-compiler-swc',
-    '@storybook/addon-docs'
+    '@storybook/addon-docs',
   ],
   staticDirs: ['../app/static/assets', '../app/static/storybook-public'],
-  webpackFinal: async (config) => {
+  webpackFinal: async (webpackConfig) => {
     // exclude svgs from the default file loader
-    config.module?.rules?.forEach((rule) => {
+    webpackConfig.module?.rules?.forEach((rule) => {
       if (
         // Typescript really wants us to make sure rule is an object
         typeof rule === 'object' &&
@@ -32,7 +30,7 @@ const config: StorybookConfig = {
     });
 
     // add aliases and svgr loader
-    return merge(config, {
+    return merge(webpackConfig, {
       module: {
         rules: [
           {
@@ -57,4 +55,5 @@ const config: StorybookConfig = {
     reactDocgen: 'react-docgen',
   },
 };
+
 export default config;

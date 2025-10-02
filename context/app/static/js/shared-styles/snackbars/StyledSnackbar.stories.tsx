@@ -9,7 +9,13 @@ import StyledSnackbar from './StyledSnackbar';
 function SnackbarStory({ message, severity }: SnackbarMessage) {
   const { openSnackbar } = useSnackbarStore();
   return (
-    <Button variant="contained" color="primary" onClick={() => openSnackbar(message, severity)}>
+    <Button
+      variant="contained"
+      color="primary"
+      onClick={() => {
+        openSnackbar(message, severity);
+      }}
+    >
       Open snackbar
     </Button>
   );

@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const { merge } = require('webpack-merge');
 const { WebpackManifestPlugin } = require('webpack-manifest-plugin');
 const CompressionPlugin = require('compression-webpack-plugin');

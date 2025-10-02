@@ -26,7 +26,9 @@ export default function BiomarkersSearchBar() {
       sx={{ mb: 2, width: '100%' }}
       placeholder={searchbarPlaceholder}
       value={search}
-      onChange={(e) => setSearch(e.target.value)}
+      onChange={(e) => {
+        setSearch(e.target.value);
+      }}
       onBlur={onBlur}
     />
   );

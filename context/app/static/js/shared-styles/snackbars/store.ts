@@ -42,10 +42,18 @@ const useStore = create<SnackbarProviderState>((set, get) => ({
       message: undefined,
     });
   },
-  toastInfo: (message, key) => get().openSnackbar(message, 'info', key),
-  toastSuccess: (message, key) => get().openSnackbar(message, 'success', key),
-  toastError: (message, key) => get().openSnackbar(message, 'error', key),
-  toastWarning: (message, key) => get().openSnackbar(message, 'warning', key),
+  toastInfo: (message, key) => {
+    get().openSnackbar(message, 'info', key);
+  },
+  toastSuccess: (message, key) => {
+    get().openSnackbar(message, 'success', key);
+  },
+  toastError: (message, key) => {
+    get().openSnackbar(message, 'error', key);
+  },
+  toastWarning: (message, key) => {
+    get().openSnackbar(message, 'warning', key);
+  },
 }));
 
 const useSnackbarActions = () => {

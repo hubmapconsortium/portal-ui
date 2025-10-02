@@ -93,7 +93,7 @@ export const useCellTypeBiomarkers = () => {
     return [genesForSource, proteinsForSource];
   }, [data?.biomarkers, selectedSource]);
 
-  const handleSourceSelection = useEventCallback((event: SelectChangeEvent<string>) => {
+  const handleSourceSelection = useEventCallback((event: SelectChangeEvent) => {
     setSelectedSource(event.target.value);
   });
 

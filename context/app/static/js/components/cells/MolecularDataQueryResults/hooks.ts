@@ -5,13 +5,10 @@ import { Dataset } from 'js/components/types';
 import { getSearchQuery } from './utils';
 
 function buildHitsMap<T>(hits: SearchHit<T>[]) {
-  return hits.reduce(
-    (acc, hit) => {
-      acc[hit._id] = hit;
-      return acc;
-    },
-    {} as Record<string, SearchHit<T>>,
-  );
+  return hits.reduce<Record<string, SearchHit<T>>>((acc, hit) => {
+    acc[hit._id] = hit;
+    return acc;
+  }, {});
 }
 
 export function useAugmentedResults<T extends { uuid: string } | { hubmap_id: string }>(inputResults: T[] = []) {

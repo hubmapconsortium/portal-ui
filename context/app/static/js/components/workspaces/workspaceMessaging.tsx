@@ -47,7 +47,12 @@ const workspacesUsage = {
   body: (
     <>
       Explore more about this platform through our{' '}
-      <InternalLink href="/tutorials/workspaces" onClick={() => trackRelevantPage('Tutorials')}>
+      <InternalLink
+        href="/tutorials/workspaces"
+        onClick={() => {
+          trackRelevantPage('Tutorials');
+        }}
+      >
         workspace tutorials
       </InternalLink>{' '}
       to optimize your experience with workspaces. To begin a new workspace, find datasets on our{' '}
@@ -108,17 +113,23 @@ const text = {
 
 const pages = [
   {
-    onClick: () => trackRelevantPage('Tutorials'),
+    onClick: () => {
+      trackRelevantPage('Tutorials');
+    },
     link: '/tutorials/workspaces',
     children: 'Tutorials',
   },
   {
-    onClick: () => trackRelevantPage('Templates'),
+    onClick: () => {
+      trackRelevantPage('Templates');
+    },
     link: '/templates',
     children: 'Templates',
   },
   {
-    onClick: () => trackRelevantPage('Dataset Search Page'),
+    onClick: () => {
+      trackRelevantPage('Dataset Search Page');
+    },
     link: buildSearchLink({
       entity_type: 'Dataset',
     }),

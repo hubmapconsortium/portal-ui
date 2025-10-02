@@ -17,7 +17,11 @@ function EditListButton({ listDescription, listTitle, listUUID }: EditListButton
   return (
     <>
       <SecondaryBackgroundTooltip title="Edit List">
-        <StyledEditButton onClick={() => setDialogIsOpen(true)}>
+        <StyledEditButton
+          onClick={() => {
+            setDialogIsOpen(true);
+          }}
+        >
           <EditIcon color="primary" />
         </StyledEditButton>
       </SecondaryBackgroundTooltip>

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import SectionPaper from 'js/shared-styles/sections/SectionPaper';
-import { Typography } from '@mui/material';
+import Typography from '@mui/material/Typography';
 
 function HuBMAPDescription() {
   return (

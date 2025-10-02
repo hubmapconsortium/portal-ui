@@ -134,11 +134,11 @@ export function useAggregatedChartData<T extends object>(
 
 export function getKeysFromAggregatedData(aggregatedData: AggregatedData): string[] {
   return aggregatedData
-    .reduce((acc, data) => {
+    .reduce<string[]>((acc, data) => {
       if (!data.data) return acc;
       const keys = Object.keys(data.data);
       return [...acc, ...keys];
-    }, [] as string[])
+    }, [])
     .filter((key, index, self) => self.indexOf(key) === index);
 }
 
@@ -178,13 +178,10 @@ export function useDatasetTypeMap() {
   }
   const { dataset_type_map } = datasetTypeMapData.aggregations;
   const { buckets: rawDatasetTypes } = dataset_type_map.raw_dataset_type;
-  const datasetTypeMap = rawDatasetTypes.reduce(
-    (acc, bucket) => {
-      const assayDisplayNames = bucket.assay_display_name.buckets.map((b) => b.key);
-      acc[bucket.key] = assayDisplayNames;
-      return acc;
-    },
-    {} as Record<string, string[]>,
-  );
+  const datasetTypeMap = rawDatasetTypes.reduce<Record<string, string[]>>((acc, bucket) => {
+    const assayDisplayNames = bucket.assay_display_name.buckets.map((b) => b.key);
+    acc[bucket.key] = assayDisplayNames;
+    return acc;
+  }, {});
   return datasetTypeMap;
 }

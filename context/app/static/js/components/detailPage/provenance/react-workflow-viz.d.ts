@@ -1,6 +1,3 @@
-/* eslint-disable max-classes-per-file */
-/* eslint-disable react/prefer-stateless-function */
-
 import { ProvNode } from './types';
 
 declare module '@hms-dbmi-bgm/react-workflow-viz' {

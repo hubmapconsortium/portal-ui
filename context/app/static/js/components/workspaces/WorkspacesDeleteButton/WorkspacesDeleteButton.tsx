@@ -45,7 +45,9 @@ function WorkspacesDeleteButton({ workspaceIds, tooltip, disabled, ...rest }: Wo
 
   return (
     <WorkspaceTooltipButton
-      onClick={() => setDialogType('DELETE_WORKSPACE')}
+      onClick={() => {
+        setDialogType('DELETE_WORKSPACE');
+      }}
       disabled={isRunning || hasPendingInvitations || disabled}
       tooltip={updatedTooltip}
       {...rest}

@@ -1,7 +1,7 @@
 import React from 'react';
 
 import Providers from '../app/static/js/components/Providers';
-import { initialize,  mswLoader } from 'msw-storybook-addon';
+import { initialize, mswLoader } from 'msw-storybook-addon';
 import { enableMapSet } from 'immer';
 import { SCFIND_BASE_STORYBOOK } from '../app/static/js/api/scfind/utils';
 
@@ -12,11 +12,11 @@ enableMapSet();
 initialize({
   serviceWorker: {
     options: {
-      updateViaCache: 'none'
-    }
-  }
+      updateViaCache: 'none',
+    },
+  },
 });
-export const loaders = [mswLoader]
+export const loaders = [mswLoader];
 
 export const parameters = {
   controls: {
@@ -27,22 +27,35 @@ export const parameters = {
   },
 };
 
-export const mockEndpoints = { assetsEndpoint: 'https://assets.hubmapconsortium.org', softAssayEndpoint: '/soft-assay-endpoint', elasticsearchEndpoint: '/search', scFindEndpoint: SCFIND_BASE_STORYBOOK };
+export const mockEndpoints = {
+  assetsEndpoint: 'https://assets.hubmapconsortium.org',
+  softAssayEndpoint: '/soft-assay-endpoint',
+  elasticsearchEndpoint: '/search',
+  scFindEndpoint: SCFIND_BASE_STORYBOOK,
+};
 export const mockGroupsToken = '';
 export const decorators = [
-  (Story) => (
-    <Providers endpoints={mockEndpoints} groupsToken={mockGroupsToken} isAuthenticated={false} userEmail={'undefined'} workspacesToken={'undefined'} isWorkspacesUser={false} isHubmapUser={false} flaskData={{}}>
+  (Story: React.FC) => (
+    <Providers
+      endpoints={mockEndpoints}
+      groupsToken={mockGroupsToken}
+      isAuthenticated={false}
+      userEmail={'undefined'}
+      workspacesToken={'undefined'}
+      isWorkspacesUser={false}
+      isHubmapUser={false}
+      flaskData={{}}
+    >
       <Story />
     </Providers>
   ),
 ];
 export const tags = ['autodocs'];
 
-
 const preview = {
   parameters,
   loaders,
   decorators,
-}
+};
 
-export default preview
+export default preview;

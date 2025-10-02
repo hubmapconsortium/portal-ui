@@ -10,9 +10,9 @@ import DrawerSectionComponent from './DrawerSection';
 import { getKeyFromSection, sectionIsProps } from './utils';
 
 export default function NavigationDrawer({ title, direction, sections, onClose, open }: NavigationDrawerProps) {
-  const sectionsWithDividers = sections.reduce((acc, section) => {
+  const sectionsWithDividers = sections.reduce<DrawerSection[]>((acc, section) => {
     return [...acc, <Divider key={`divider-${getKeyFromSection(section)}`} />, section];
-  }, [] as DrawerSection[]);
+  }, []);
   return (
     <StyledDrawer open={open} anchor={direction} onClose={onClose}>
       <Stack gap={1} useFlexGap>

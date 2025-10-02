@@ -280,7 +280,7 @@ function CellTypesTable() {
 
   const changeSortTrackingInfo = useGeneDetailPageTrackingInfo();
 
-  const handleOrganChange = useEventCallback((event: SelectChangeEvent<string>) => {
+  const handleOrganChange = useEventCallback((event: SelectChangeEvent) => {
     setSelectedOrgan(event.target.value);
     trackChangeOrgan();
   });

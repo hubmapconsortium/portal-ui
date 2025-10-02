@@ -27,12 +27,12 @@ export function RelatedEntitiesSectionActions({ searchPageHref, uuids }: Related
         color="primary"
         component="a"
         href={searchPageHref}
-        onClick={() =>
+        onClick={() => {
           track({
             action: `Derived Datasets Navigation / Navigate to Derived Datasets Search Page`,
             label: uuid,
-          })
-        }
+          });
+        }}
         data-testid="view-related-data-button"
       >
         View Data on Search Page

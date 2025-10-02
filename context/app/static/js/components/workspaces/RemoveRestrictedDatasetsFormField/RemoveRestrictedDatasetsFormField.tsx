@@ -65,7 +65,11 @@ function RemoveRestrictedDatasetsFormField<FormType extends FieldValues>({
           input: {
             endAdornment: (
               <InputAdornment position="end">
-                <IconButton onClick={() => handleCopyClick(hubmapIdsString)}>
+                <IconButton
+                  onClick={() => {
+                    handleCopyClick(hubmapIdsString);
+                  }}
+                >
                   <ContentCopyIcon />
                 </IconButton>
               </InputAdornment>

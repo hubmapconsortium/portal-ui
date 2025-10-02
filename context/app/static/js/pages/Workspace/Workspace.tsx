@@ -81,14 +81,18 @@ const datasetsPage = (workspaceName: string) => ({
     entity_type: 'Dataset',
   }),
   children: 'Dataset Search Page',
-  onClick: () => trackRelevantPage('Dataset Search Page', workspaceName),
+  onClick: () => {
+    trackRelevantPage('Dataset Search Page', workspaceName);
+  },
 });
 
 const pages = (workspaceName: string) => [
   {
     link: '/workspaces',
     children: 'My Workspaces',
-    onClick: () => trackRelevantPage('My Workspaces', workspaceName),
+    onClick: () => {
+      trackRelevantPage('My Workspaces', workspaceName);
+    },
   },
   datasetsPage(workspaceName),
 ];
@@ -105,7 +109,7 @@ interface WorkspacePageProps {
 }
 
 function LaunchStopButton(props: ButtonProps) {
-  // eslint-disable-next-line @typescript-eslint/no-base-to-string -- this is a valid use case
+  // eslint-disable-next-line @typescript-eslint/no-base-to-string
   const variant = props?.children?.toString() === 'Stop Jobs' ? 'outlined' : 'contained';
   return <Button {...props} variant={variant} />;
 }
@@ -143,7 +147,9 @@ function SummaryTitle({
             <EditIcon />
           </WorkspacesUpdateButton>
           <WorkspaceButton
-            onClick={() => setDialogType('SHARE_WORKSPACE')}
+            onClick={() => {
+              setDialogType('SHARE_WORKSPACE');
+            }}
             startIcon={<StyledSvgIcon as={ShareIcon} />}
           >
             Share
@@ -252,7 +258,9 @@ function SentInvitationsStatus({ sentInvitations }: { sentInvitations: Workspace
             <Typography>{descriptions.sentInvitationsAbsent}</Typography>
             <Box>
               <Button
-                onClick={() => setDialogType('SHARE_WORKSPACE')}
+                onClick={() => {
+                  setDialogType('SHARE_WORKSPACE');
+                }}
                 startIcon={<StyledSvgIcon as={ShareIcon} />}
                 variant="contained"
               >

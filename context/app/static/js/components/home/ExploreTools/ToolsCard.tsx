@@ -39,7 +39,9 @@ export function ToolsCard({ title, children: description, index, src, icon, alt 
   const isMobile = useIsMobile();
   const isTablet = !isDesktop && !isMobile;
   const isExpanded = expandedCardIndex === index || isTablet;
-  const setIsExpanded = () => setExpandedCardIndex(index);
+  const setIsExpanded = () => {
+    setExpandedCardIndex(index);
+  };
   const transition = useTransition(isExpanded && !isMobile, {
     duration: 200,
     from: { maxHeight: 0, opacity: 0, width: 0 },

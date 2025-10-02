@@ -26,3 +26,21 @@ declare namespace JSX {
 declare module 'package' {
   export const dependencies: Record<string, string>;
 }
+
+declare module 'openkeynav' {
+  interface OpenKeyNavOptions {
+    keys: {
+      menu: string;
+      modifierKey: 'metaKey' | 'ctrlKey' | 'altKey' | 'shiftKey';
+    };
+    debug: {
+      keyboardAccessible: boolean;
+    };
+  }
+
+  export default class OpenKeyNav {
+    init(options: OpenKeyNavOptions): OpenKeyNav;
+    enable(): void;
+    disable(): void;
+  }
+}

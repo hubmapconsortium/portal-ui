@@ -72,7 +72,7 @@ function Summary() {
         <LabelledSectionText label="Description" bottomSpacing={1} iconTooltipText="Gene description from NCBI Gene.">
           {
             // Since summary can be an empty string, prefer this to nullish coalescing
-            // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+
             data?.summary ||
               (isLoading ? (
                 <SummarySkeleton />

@@ -33,7 +33,7 @@ export function makeCwlInput(name: string, steps: unknown[], extras: unknown, is
       file: [{ '@id': id }],
     },
     meta: getCwlMeta(isReference),
-    prov: extras || {}, // TODO: real-prov has unmatched ID: https://github.com/hubmapconsortium/prov-vis/issues/15
+    prov: extras ?? {}, // TODO: real-prov has unmatched ID: https://github.com/hubmapconsortium/prov-vis/issues/15
   };
 }
 
@@ -88,7 +88,7 @@ export default class ProvData {
         error: { issues },
       } = result;
 
-      const categorizedErrors = issues.reduce(
+      const categorizedErrors = issues.reduce<Record<string, (string | number)[][]>>(
         (acc, { path, message: category }) => {
           if (!acc[category]) {
             acc[category] = [];
@@ -96,7 +96,7 @@ export default class ProvData {
           acc[category].push(path);
           return acc;
         },
-        {} as Record<string, (string | number)[][]>,
+        {},
       );
 
       const formattedCategorizedErrors = Object.entries(categorizedErrors).reduce(
@@ -173,7 +173,7 @@ export default class ProvData {
   }
 
   toCwl() {
-    return Object.entries(this.prov.activity).reduce((acc, [activityId, activity]) => {
+    return Object.entries(this.prov.activity).reduce<Step[]>((acc, [activityId, activity]) => {
       if (
         // activity names currently vary across environments
         // TODO reduce to single value once apis are consistent
@@ -185,6 +185,6 @@ export default class ProvData {
         acc.push(this.makeCwlStep(activityId));
       }
       return acc;
-    }, [] as Step[]);
+    }, []);
   }
 }

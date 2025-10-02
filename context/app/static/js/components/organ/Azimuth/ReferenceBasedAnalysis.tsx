@@ -17,7 +17,6 @@ interface ReferenceBasedAnalysisProps {
 function MarkdownParagraph({
   children,
 }: ClassAttributes<HTMLParagraphElement> & HTMLAttributes<HTMLParagraphElement> & ExtraProps) {
-  // eslint-disable-next-line react/jsx-no-useless-fragment
   return <>{children}</>;
 }
 

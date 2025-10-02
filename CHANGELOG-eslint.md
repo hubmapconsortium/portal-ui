@@ -1,0 +1,2 @@
+- Refresh front-end linting rules to finalize ESLint v8->v9 update, drop legacy rules, and remove compatibility layers.
+- Update Vitessce to resolve issues loading cell sets from zipped zarr stores.

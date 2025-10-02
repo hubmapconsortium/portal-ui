@@ -1,4 +1,3 @@
-/* eslint-disable react/no-array-index-key */
 import React, { PropsWithChildren } from 'react';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';

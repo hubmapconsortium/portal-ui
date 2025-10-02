@@ -133,14 +133,7 @@ function NewWorkspaceDialogFromExample({
             />
           </Step>
           <Step title={text.configure.title} index={1} isRequired>
-            <Stack
-              gap={2}
-              mt={1}
-              component="form"
-              id="create-workspace-form"
-              // eslint-disable-next-line @typescript-eslint/no-misused-promises
-              onSubmit={handleSubmit(submit)}
-            >
+            <Stack gap={2} mt={1} component="form" id="create-workspace-form" onSubmit={void handleSubmit(submit)}>
               <WorkspaceNameField control={control} name="workspace-name" />
               <Accordion>
                 <AccordionSummary expandIcon={<ArrowDropDownRounded color="primary" />}>

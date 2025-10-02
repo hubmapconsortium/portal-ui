@@ -51,7 +51,13 @@ function CellContent({ item, field }: { field: string; item: WorkspaceItem }) {
       return (
         <Stack direction="row" alignItems="center">
           <Typography>{`${firstName} ${lastName}`}</Typography>
-          <TooltipButton sx={{ minWidth: 0 }} tooltip={`Mail to ${email}`} onClick={() => handleEmailClick(email)}>
+          <TooltipButton
+            sx={{ minWidth: 0 }}
+            tooltip={`Mail to ${email}`}
+            onClick={() => {
+              handleEmailClick(email);
+            }}
+          >
             <EmailIcon color="info" />
           </TooltipButton>
         </Stack>

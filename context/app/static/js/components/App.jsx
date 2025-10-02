@@ -14,13 +14,11 @@ import EditWorkspaceDialog from './workspaces/EditWorkspaceDialog';
 import MarkdownRenderer from './Markdown/MarkdownRenderer';
 import OpenKeyNavInitializer from './OpenKeyNavInitializer';
 
-
 // Enable use of Map and Set in immer
 enableMapSet();
 
 // Set up worker for react-pdf
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-
 
 function App(props) {
   const { flaskData, groupsToken, isAuthenticated, userEmail, workspacesToken, userGroups = [] } = props;

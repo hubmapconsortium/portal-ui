@@ -33,7 +33,7 @@ function Fraction({ data, parentWidth, tissue, targetCellTypes }: FractionGraphP
   const scale = useLinearScale(cellCounts, {
     range: [0, parentWidth!], // range to normalize the values to percentages
     domain: [0, totalCellCount],
-  }) as ScaleLinear<number, number, never>;
+  }) as ScaleLinear<number, number>;
 
   const xOffsets = useXOffsets(cellCounts, scale);
 

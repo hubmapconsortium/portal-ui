@@ -186,10 +186,9 @@ function buildExpandTooltip({ expanded, disabled }: { expanded: boolean; disable
 export function HierarchicalFacetParent({ childValues, field, label, ...rest }: TermFacet & { childValues: string[] }) {
   const filterHierarchicalParentTerm = useSearchStore((state) => state.filterHierarchicalParentTerm);
 
-  const f = useCallback(
-    () => filterHierarchicalParentTerm({ term: field, value: label, childValues }),
-    [field, label, childValues, filterHierarchicalParentTerm],
-  );
+  const f = useCallback(() => {
+    filterHierarchicalParentTerm({ term: field, value: label, childValues });
+  }, [field, label, childValues, filterHierarchicalParentTerm]);
   return <CheckboxFilterItem onClick={f} label={label} field={field} {...rest} />;
 }
 
@@ -198,7 +197,9 @@ export function HierarchicalFacetChild({ parentValue, field, label, ...rest }: T
 
   return (
     <CheckboxFilterItem
-      onClick={() => filterHierarchicalChildTerm({ parentTerm: field, value: label, parentValue })}
+      onClick={() => {
+        filterHierarchicalChildTerm({ parentTerm: field, value: label, parentValue });
+      }}
       label={label}
       field={field}
       {...rest}

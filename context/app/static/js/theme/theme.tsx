@@ -114,7 +114,6 @@ declare module '@mui/material/Typography' {
 }
 
 declare module '@mui/material/SvgIcon' {
-  // eslint-disable-next-line @typescript-eslint/consistent-indexed-object-style
   export interface SvgIconPropsSizeOverrides {
     [key: `${number}rem`]: true;
   }

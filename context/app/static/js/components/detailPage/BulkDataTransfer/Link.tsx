@@ -21,7 +21,9 @@ interface BulkDataTransferLinkProps {
 
 function Link({ href, title, description, tooltip, documentationLink }: BulkDataTransferLinkProps) {
   const trackEntityPageEvent = useTrackEntityPageEvent();
-  const onClick = () => trackEntityPageEvent({ action: 'Bulk Data Transfer / Panel Link', label: title });
+  const onClick = () => {
+    trackEntityPageEvent({ action: 'Bulk Data Transfer / Panel Link', label: title });
+  };
   return (
     <>
       <Divider />

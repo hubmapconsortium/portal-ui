@@ -43,7 +43,7 @@ export default function GenePathwaysAutocomplete() {
     <Autocomplete
       title="pathway"
       loading={isLoading}
-      getOptionLabel={(option) => `${option.full}`}
+      getOptionLabel={(option) => option.full}
       renderOption={(props, option: AutocompleteResult) => (
         <PreserveWhiteSpaceListItem {...props} key={option.full}>
           <span>{option.pre}</span>

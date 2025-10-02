@@ -48,7 +48,9 @@ function FileBrowserDirectory({ dirName, children, depth }: FileBrowserDirectory
   return (
     <>
       <StyledTableRow
-        onClick={() => setIsExpanded(!isExpanded)}
+        onClick={() => {
+          setIsExpanded(!isExpanded);
+        }}
         onKeyDown={onKeyDownHandler}
         role="button"
         tabIndex={0}

@@ -13,7 +13,7 @@ function getTileDescendantCounts(source: object | undefined, type: string) {
   const defaultDescendantCounts: Record<string, number> = ['Donor', 'Sample'].includes(type)
     ? { Sample: 0, Dataset: 0 }
     : { Dataset: 0 };
-  if (!source || 'descendant_counts' in source === false) return defaultDescendantCounts;
+  if (!source || !('descendant_counts' in source)) return defaultDescendantCounts;
   const counts = source.descendant_counts as DescendantCounts;
   return { ...defaultDescendantCounts, ...filterDescendantCountsByType(counts.entity_type, type) };
 }

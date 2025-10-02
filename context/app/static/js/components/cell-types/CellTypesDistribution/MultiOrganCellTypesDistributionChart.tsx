@@ -125,7 +125,7 @@ function ChartControls() {
   );
 }
 
-function getSymLogTickValues(y: ScaleContinuousNumeric<number, number, never>) {
+function getSymLogTickValues(y: ScaleContinuousNumeric<number, number>) {
   // Find the highest power of 10 lower than the maximum cell count
   const maxValue = y.domain()[1];
   const maxLog = Math.floor(Math.log10(maxValue));

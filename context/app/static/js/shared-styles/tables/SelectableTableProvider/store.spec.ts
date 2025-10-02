@@ -30,7 +30,9 @@ test('should select row', () => {
   const keyToSelect = 'apple';
   const store = setupStore();
   const { selectRow } = getState(store);
-  act(() => selectRow(keyToSelect));
+  act(() => {
+    selectRow(keyToSelect);
+  });
   expect(getState(store).selectedRows).toEqual(new Set([keyToSelect]));
 });
 
@@ -38,7 +40,9 @@ test('should deselect row', () => {
   const keyToDeselect = 'apple';
   const store = setupStore(selectedState);
   const { deselectRow } = getState(store);
-  act(() => deselectRow(keyToDeselect));
+  act(() => {
+    deselectRow(keyToDeselect);
+  });
   expect(getState(store).selectedRows).toEqual(new Set(['pear']));
 });
 
@@ -46,9 +50,13 @@ test('should toggle row', () => {
   const keyToToggle = 'apple';
   const store = setupStore(selectedState);
   const { toggleRow } = getState(store);
-  act(() => toggleRow(keyToToggle));
+  act(() => {
+    toggleRow(keyToToggle);
+  });
   expect(getState(store).selectedRows).toEqual(new Set(['pear']));
-  act(() => toggleRow(keyToToggle));
+  act(() => {
+    toggleRow(keyToToggle);
+  });
   expect(getState(store).selectedRows).toEqual(selectedState.selectedRows);
 });
 
@@ -56,14 +64,18 @@ test('should set selected rows', () => {
   const keysToSet = ['apple', 'pear'];
   const store = setupStore(selectedState);
   const { setSelectedRows } = getState(store);
-  act(() => setSelectedRows(keysToSet));
+  act(() => {
+    setSelectedRows(keysToSet);
+  });
   expect(getState(store).selectedRows).toEqual(new Set(keysToSet));
 });
 
 test('should deselect all rows', () => {
   const store = setupStore(selectedState);
   const { deselectAllRows } = getState(store);
-  act(() => deselectAllRows());
+  act(() => {
+    deselectAllRows();
+  });
   expect(getState(store).selectedRows).toEqual(new Set([]));
 });
 
@@ -71,7 +83,9 @@ test('should select header and rows', () => {
   const keysToSet = ['apple', 'pear', 'lime'];
   const store = setupStore({ ...defaultState, totalNumRows: keysToSet.length });
   const { selectHeaderAndRows } = getState(store);
-  act(() => selectHeaderAndRows(keysToSet));
+  act(() => {
+    selectHeaderAndRows(keysToSet);
+  });
   expect(getState(store).selectedRows).toEqual(new Set(keysToSet));
   expect(getState(store).headerRowIsSelected).toEqual(true);
 });
@@ -79,7 +93,9 @@ test('should select header and rows', () => {
 test('should deselect header and rows', () => {
   const store = setupStore({ ...selectedState, headerRowIsSelected: true });
   const { deselectHeaderAndRows } = getState(store);
-  act(() => deselectHeaderAndRows());
+  act(() => {
+    deselectHeaderAndRows();
+  });
   expect(getState(store).selectedRows).toEqual(new Set([]));
   expect(getState(store).headerRowIsSelected).toEqual(false);
 });
@@ -88,10 +104,14 @@ test('should toggle rows and header', () => {
   const keysToToggle = ['apple', 'pear', 'lime'];
   const store = setupStore({ ...defaultState, totalNumRows: keysToToggle.length });
   const { toggleHeaderAndRows } = getState(store);
-  act(() => toggleHeaderAndRows(keysToToggle));
+  act(() => {
+    toggleHeaderAndRows(keysToToggle);
+  });
   expect(getState(store).selectedRows).toEqual(new Set(keysToToggle));
   expect(getState(store).headerRowIsSelected).toEqual(true);
-  act(() => toggleHeaderAndRows(keysToToggle));
+  act(() => {
+    toggleHeaderAndRows(keysToToggle);
+  });
   expect(getState(store).selectedRows).toEqual(new Set([]));
   expect(getState(store).headerRowIsSelected).toEqual(false);
 });

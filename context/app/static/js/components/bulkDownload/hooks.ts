@@ -111,7 +111,9 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
           toastSuccessDownloadFile('Metadata');
         })
         .catch((e) => {
-          toastErrorDownloadFile('Metadata', () => downloadMetadata(datasetsToDownload));
+          toastErrorDownloadFile('Metadata', () => {
+            downloadMetadata(datasetsToDownload);
+          });
           console.error(e);
         });
     },
@@ -130,7 +132,9 @@ function useBulkDownloadDialog(deselectRows?: (uuids: string[]) => void) {
           setDownloadSuccess(true);
         })
         .catch((e) => {
-          toastErrorDownloadFile('Manifest', () => downloadManifest(datasetsToDownload));
+          toastErrorDownloadFile('Manifest', () => {
+            downloadManifest(datasetsToDownload);
+          });
           console.error(e);
         });
     },

@@ -33,12 +33,24 @@ const storeDefinition = (set: StoreApi<WorkspaceStore>['setState']) => ({
   workspace: null,
   invitation: null,
   dialogType: null,
-  open: () => set({ isOpen: true }),
-  close: () => set({ isOpen: false }),
-  reset: () => set({ isOpen: false, workspace: null, invitation: null, dialogType: null }),
-  setWorkspace: (workspace: Workspace) => set({ workspace }),
-  setInvitation: (invitation: WorkspaceInvitation) => set({ invitation }),
-  setDialogType: (dialogType: DialogType) => set({ dialogType }),
+  open: () => {
+    set({ isOpen: true });
+  },
+  close: () => {
+    set({ isOpen: false });
+  },
+  reset: () => {
+    set({ isOpen: false, workspace: null, invitation: null, dialogType: null });
+  },
+  setWorkspace: (workspace: Workspace) => {
+    set({ workspace });
+  },
+  setInvitation: (invitation: WorkspaceInvitation) => {
+    set({ invitation });
+  },
+  setDialogType: (dialogType: DialogType) => {
+    set({ dialogType });
+  },
 });
 
 export const useLaunchWorkspaceStore = create<WorkspaceStore>(storeDefinition);

@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useCallback, useId } from 'react';
+import React, { useEffect, useCallback, useId } from 'react';
 import { Vitessce } from 'vitessce';
 
 import Paper from '@mui/material/Paper';
@@ -109,11 +109,12 @@ function Visualization({
   }, [vizIsFullscreen, toastInfo]);
 
   // Get the vitessce configuration from the url if available and set the selection if it is a multi-dataset.
-  const { vitessceConfig, vitessceSelection, setVitessceSelection } = useVitessceConfig({
-    vitData,
-    setVitessceState,
-    markerGene,
-  });
+  const { vitessceConfig, vitessceSelection, setVitessceSelection, isMultiDataset, parentUuid, currentConfig } =
+    useVitessceConfig({
+      vitData,
+      setVitessceState,
+      markerGene,
+    });
 
   const setSelectionAndClearErrors = useCallback(
     ({ i }: { i: number }) => {
@@ -126,24 +127,6 @@ function Visualization({
     expandViz(id);
     trackEntityPageEvent({ ...trackingInfo, action: `${trackingInfo.action} / Full Screen` });
   }, [expandViz, id, trackEntityPageEvent, trackingInfo]);
-
-  const isMultiDataset = Array.isArray(vitessceConfig);
-
-  // Find parent UUID for the visualization if present
-  const parentUuid: string | undefined = useMemo(() => {
-    if (!vitData) {
-      return undefined;
-    }
-    if (Array.isArray(vitData)) {
-      const vitDataArray = vitData as object[];
-      const found = vitDataArray.find((data) => 'parentUuid' in data) as { parentUuid: string } | undefined;
-      return found?.parentUuid;
-    }
-    if ('parentUuid' in vitData) {
-      return (vitData as { parentUuid: string }).parentUuid;
-    }
-    return undefined;
-  }, [vitData]);
 
   if (!vitessceConfig) {
     return null;
@@ -186,8 +169,7 @@ function Visualization({
             {shouldMountVitessce && (
               <VisualizationTracker>
                 <Vitessce
-                  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-                  config={isMultiDataset ? vitessceConfig[vitessceSelection!] : vitessceConfig}
+                  config={currentConfig}
                   theme={vizTheme}
                   onConfigChange={setVitessceStateDebounced}
                   height={vizIsFullscreen ? null : vitessceFixedHeight}

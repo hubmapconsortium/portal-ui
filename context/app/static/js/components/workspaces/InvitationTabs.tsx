@@ -32,7 +32,7 @@ function InvitationTabs({ sentInvitations, receivedInvitations, isLoading }: Inv
 
   const { currentEventCategory } = useWorkspacesEventContext();
 
-  const handleChange = useEventCallback((_event: React.SyntheticEvent<Element, Event>, newValue: number) => {
+  const handleChange = useEventCallback((_event: React.SyntheticEvent, newValue: number) => {
     trackEvent({
       category: currentEventCategory,
       action: 'Workspace Invitations / Received / Switch Tabs',

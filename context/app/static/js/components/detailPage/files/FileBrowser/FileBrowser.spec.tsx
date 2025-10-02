@@ -11,10 +11,16 @@ import { detailContext, filesContext, flaskDataContext, testFiles } from '../fil
 import { ProcessedDatasetContextProvider } from '../../ProcessedData/ProcessedDataset/ProcessedDatasetContext';
 import { ProcessedDatasetDetails } from '../../ProcessedData/ProcessedDataset/hooks';
 
-const expectArrayOfStringsToExist = (arr: string[]) =>
-  arr.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
-const expectArrayOfStringsToNotExist = (arr: string[]) =>
-  arr.forEach((text) => expect(screen.queryByText(text)).not.toBeInTheDocument());
+const expectArrayOfStringsToExist = (arr: string[]) => {
+  arr.forEach((text) => {
+    expect(screen.getByText(text)).toBeInTheDocument();
+  });
+};
+const expectArrayOfStringsToNotExist = (arr: string[]) => {
+  arr.forEach((text) => {
+    expect(screen.queryByText(text)).not.toBeInTheDocument();
+  });
+};
 
 function FilesBrowserTest() {
   return (

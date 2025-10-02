@@ -21,7 +21,9 @@ export default function PublicationsSearchBar() {
         sx={{ flexGrow: 1 }}
         placeholder={text.placeholder}
         value={search}
-        onChange={(e) => setSearch(e.target.value)}
+        onChange={(e) => {
+          setSearch(e.target.value);
+        }}
       />
       <DownloadButton tooltip={text.tooltip} onClick={downloadTable} />
     </Stack>

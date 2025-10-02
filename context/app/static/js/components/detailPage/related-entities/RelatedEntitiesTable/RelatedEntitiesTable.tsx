@@ -31,9 +31,9 @@ function HubmapIDCell({ hubmap_id, entity_type, uuid }: ColumnCellProps) {
   return (
     <InternalLink
       href={`/browse/${entity_type.toLowerCase()}/${uuid}`}
-      onClick={() =>
-        trackEntityPageEvent({ label: uuid, action: `Derived ${entity_type} Navigation / Selected ${entity_type}` })
-      }
+      onClick={() => {
+        trackEntityPageEvent({ label: uuid, action: `Derived ${entity_type} Navigation / Selected ${entity_type}` });
+      }}
       variant="body2"
     >
       {hubmap_id}

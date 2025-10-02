@@ -1,4 +1,3 @@
-/* eslint-disable import/no-extraneous-dependencies */
 const { join } = require('path');
 const { merge } = require('webpack-merge');
 const common = require('./webpack.common');
@@ -26,8 +25,8 @@ const envConfig = {
       {
         context: ['**', '!/static/public/**'],
         target: 'http://localhost:5000/',
-      }
-    ]
+      },
+    ],
   },
 };
 

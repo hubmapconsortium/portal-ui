@@ -76,7 +76,9 @@ function BulkDownloadOptionsField<FormType extends FieldValues>({
                 <Checkbox
                   size="small"
                   checked={(field.value as string[]).includes(key)}
-                  onChange={(e) => handleSelectOne(e, key)}
+                  onChange={(e) => {
+                    handleSelectOne(e, key);
+                  }}
                 />
               }
               label={`Select all ${label} files. (${count} Relevant Datasets)`}

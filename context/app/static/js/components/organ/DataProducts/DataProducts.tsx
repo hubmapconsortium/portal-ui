@@ -113,9 +113,9 @@ function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps)
                     <TableCell>
                       <InternalLink
                         href={download_raw}
-                        onClick={() =>
-                          handleTrack({ action: 'Download Raw', assayName, fileName: rawFileName, tissueType })
-                        }
+                        onClick={() => {
+                          handleTrack({ action: 'Download Raw', assayName, fileName: rawFileName, tissueType });
+                        }}
                         variant="body2"
                       >
                         {rawFileName}
@@ -124,14 +124,14 @@ function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps)
                     <TableCell>
                       <InternalLink
                         href={download}
-                        onClick={() =>
+                        onClick={() => {
                           handleTrack({
                             action: 'Download Processed',
                             assayName,
                             fileName: processedFileName,
                             tissueType,
-                          })
-                        }
+                          });
+                        }}
                         variant="body2"
                       >
                         {processedFileName}
@@ -141,7 +141,9 @@ function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps)
                       {shiny_app && (
                         <OutboundIconLink
                           href={shiny_app}
-                          onClick={() => handleTrack({ action: 'View Shiny App', assayName, tissueType })}
+                          onClick={() => {
+                            handleTrack({ action: 'View Shiny App', assayName, tissueType });
+                          }}
                           variant="body2"
                         >
                           View
@@ -153,7 +155,9 @@ function DataProducts({ dataProducts, isLateral, isLoading }: DataProductsProps)
                       <ViewEntitiesButton
                         entityType="Dataset"
                         filters={{ datasetUUIDs }}
-                        onClick={() => handleTrack({ action: 'View Datasets', assayName, tissueType })}
+                        onClick={() => {
+                          handleTrack({ action: 'View Datasets', assayName, tissueType });
+                        }}
                       />
                     </TableCell>
                   </TableRow>

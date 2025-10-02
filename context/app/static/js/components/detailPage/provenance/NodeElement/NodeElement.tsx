@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-/* eslint-disable jsx-a11y/click-events-have-key-events */
 import React, { useEffect } from 'react';
 import Typography from '@mui/material/Typography';
 
@@ -46,11 +44,16 @@ function NodeElement({ node, title, columnWidth }: NodeElementProps) {
 
   return (
     <SecondaryBackgroundTooltip title={displayTitle}>
+      {/* eslint-disable-next-line jsx-a11y/click-events-have-key-events */}
       <div
         data-testid={displayTitle}
         className="node-visible-element"
         style={style}
-        onClick={() => trackEntityPageEvent({ action: 'Provenance / Graph / Select Node', label: displayTitle })}
+        role="button"
+        tabIndex={0}
+        onClick={() => {
+          trackEntityPageEvent({ action: 'Provenance / Graph / Select Node', label: displayTitle });
+        }}
       >
         <Typography className="node-name">{displayTitle}</Typography>
         {uuid === node.meta.prov['hubmap:uuid'] && <AsteriskWrapper aria-label="">*</AsteriskWrapper>}

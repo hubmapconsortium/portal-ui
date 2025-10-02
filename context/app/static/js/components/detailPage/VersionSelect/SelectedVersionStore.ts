@@ -25,12 +25,13 @@ export const createSelectedVersionStore = ({ initialVersionUUIDs }: SelectedVers
     selectedVersions: new Map(),
     initialVersionUUIDs,
     currentSelectedUUIDs: initialVersionUUIDs,
-    setVersions: (uuid, versions) =>
+    setVersions: (uuid, versions) => {
       set((state) => {
         state.versions.set(uuid, versions);
         state.selectedVersions.set(uuid, versions.find((v) => v.uuid === uuid) ?? null);
-      }),
-    setSelectedVersion: (uuid, newVersion) =>
+      });
+    },
+    setSelectedVersion: (uuid, newVersion) => {
       set((state) => {
         const versionObject =
           typeof newVersion === 'string' ? state.versions.get(uuid)?.find((v) => v.uuid === newVersion) : newVersion;
@@ -39,7 +40,8 @@ export const createSelectedVersionStore = ({ initialVersionUUIDs }: SelectedVers
         state.currentSelectedUUIDs = [...state.selectedVersions.values()].map(
           (v, idx) => v?.uuid ?? state.initialVersionUUIDs[idx],
         );
-      }),
+      });
+    },
   }));
 
 const [SelectedVersionStoreProvider, useSelectedVersionStore] = createStoreContext<

@@ -24,7 +24,11 @@ function AddToListItem({
   const handleClick = isSelected ? removeFromSelectedLists : addToSelectedLists;
 
   return (
-    <ListItem onClick={() => handleClick(listUUID)}>
+    <ListItem
+      onClick={() => {
+        handleClick(listUUID);
+      }}
+    >
       <ListItemIcon>
         <Checkbox
           color="secondary"

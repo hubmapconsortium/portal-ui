@@ -29,7 +29,9 @@ export const useVisualizationStore = create<VisualizationStore>((set) => ({
   fullscreenVizId: null,
   vitessceVisualization: false,
   vizEscSnackbarIsOpen: false,
-  setVizEscSnackbarIsOpen: (val) => set({ vizEscSnackbarIsOpen: val }),
+  setVizEscSnackbarIsOpen: (val) => {
+    set({ vizEscSnackbarIsOpen: val });
+  },
   expandViz: (vizId: string, isVitessce) => {
     set({ fullscreenVizId: vizId, vizEscSnackbarIsOpen: true, vitessceVisualization: isVitessce });
     document.onkeydown = function preventDefault(evt) {
@@ -48,12 +50,20 @@ export const useVisualizationStore = create<VisualizationStore>((set) => ({
     set({ vizTheme: theme });
   },
   vitessceState: null,
-  setVitessceState: (val) => set({ vitessceState: val }),
-  setVitessceStateDebounced: debounce((val) => set({ vitessceState: val }), 250),
+  setVitessceState: (val) => {
+    set({ vitessceState: val });
+  },
+  setVitessceStateDebounced: debounce((val) => {
+    set({ vitessceState: val });
+  }, 250),
   onCopyUrlWarning: '',
-  setOnCopyUrlWarning: (val) => set({ onCopyUrlWarning: val }),
+  setOnCopyUrlWarning: (val) => {
+    set({ onCopyUrlWarning: val });
+  },
   vizNotebookId: null,
-  setVizNotebookId: (val) => set({ vizNotebookId: val }),
+  setVizNotebookId: (val) => {
+    set({ vizNotebookId: val });
+  },
 }));
 
 export default useVisualizationStore;

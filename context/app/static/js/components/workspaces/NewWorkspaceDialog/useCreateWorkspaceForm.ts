@@ -120,7 +120,9 @@ function useCreateWorkspaceForm({
     resetAutocompleteState,
   } = useDatasetsAutocomplete({
     selectedDatasets: getValues('datasets'),
-    updateDatasetsFormState: (newDatasets) => setValue('datasets', newDatasets),
+    updateDatasetsFormState: (newDatasets) => {
+      setValue('datasets', newDatasets);
+    },
   });
 
   function handleClose() {
@@ -172,7 +174,9 @@ function useCreateWorkspaceForm({
 
   const { errorMessages } = useWorkspacesRestrictedDatasetsForm({
     selectedRows: new Set(allDatasets),
-    deselectRows: (uuids) => removeDatasets(uuids),
+    deselectRows: (uuids) => {
+      removeDatasets(uuids);
+    },
   });
 
   return {

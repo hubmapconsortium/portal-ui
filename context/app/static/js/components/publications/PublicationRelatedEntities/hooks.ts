@@ -41,7 +41,7 @@ function useAncestorSearchHits(descendantUUID: string) {
 function usePublicationsRelatedEntities(uuid: string) {
   const { searchHits: ancestorHits, isLoading } = useAncestorSearchHits(uuid);
 
-  const ancestorsSplitByEntityType = ancestorHits.reduce(
+  const ancestorsSplitByEntityType = ancestorHits.reduce<Record<string, Required<SearchHit<PartialEntity>>[]>>(
     (acc, ancestor) => {
       const {
         _source: { entity_type },
@@ -54,7 +54,7 @@ function usePublicationsRelatedEntities(uuid: string) {
       acc[entity_type].push(ancestor);
       return acc;
     },
-    { Donor: [], Sample: [], Dataset: [] } as Record<string, Required<SearchHit<PartialEntity>>[]>,
+    { Donor: [], Sample: [], Dataset: [] },
   );
 
   const datasetUuids = new Set(ancestorsSplitByEntityType.Dataset.map((hit) => hit._source.uuid));

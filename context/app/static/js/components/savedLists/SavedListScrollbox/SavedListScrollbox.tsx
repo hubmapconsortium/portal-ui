@@ -29,7 +29,13 @@ function SavedListScrollbox({ savedLists }: SavedListScrollboxProps) {
           </Typography>
         </div>
         <FlexBottom>
-          <Button variant="contained" color="primary" onClick={() => setDialogIsOpen(true)}>
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => {
+              setDialogIsOpen(true);
+            }}
+          >
             Create New List
           </Button>
           <CreateListDialog dialogIsOpen={dialogIsOpen} setDialogIsOpen={setDialogIsOpen} />

@@ -22,25 +22,28 @@ const useProvenanceStore = createImmer<ProvenanceStore>((set, get) => ({
   uuid: '',
   hasRendered: false,
   setHasRendered: () => {
-    if (get().hasRendered === false) {
+    if (!get().hasRendered) {
       set((state) => {
         state.hasRendered = true;
       });
     }
   },
-  setUUID: (uuid) =>
+  setUUID: (uuid) => {
     set((state) => {
       state.uuid = uuid;
-    }),
+    });
+  },
   steps: [],
-  setSteps: (steps) =>
+  setSteps: (steps) => {
     set((state) => {
       state.steps = steps;
-    }),
-  addSteps: (steps) =>
+    });
+  },
+  addSteps: (steps) => {
     set((state) => {
       state.steps = [...state.steps, ...steps];
-    }),
+    });
+  },
   stitchEntityDescendantSteps: (descendantSteps) => {
     // check new steps inputs to see if they exist in current steps
     descendantSteps.forEach((descendantStep) => {

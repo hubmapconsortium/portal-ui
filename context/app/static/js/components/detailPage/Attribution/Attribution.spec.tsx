@@ -20,5 +20,7 @@ test('text displays properly', () => {
     </FlaskDataContext.Provider>,
   );
   const textToTest = ['Attribution', 'Group', 'Fake TMC', 'Registered by', 'Fake Name', 'fake@fake.com'];
-  textToTest.forEach((text) => expect(screen.getByText(text)).toBeInTheDocument());
+  textToTest.forEach((text) => {
+    expect(screen.getByText(text)).toBeInTheDocument();
+  });
 });

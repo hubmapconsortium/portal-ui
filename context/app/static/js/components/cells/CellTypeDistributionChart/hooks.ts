@@ -72,7 +72,7 @@ export function useProcessedFractionData(data: CellTypeCountForTissue[], targetC
   return processed;
 }
 
-export function useXOffsets(cellCounts: number[], scale: ScaleLinear<number, number, never>) {
+export function useXOffsets(cellCounts: number[], scale: ScaleLinear<number, number>) {
   return useMemo(() => {
     const results = cellCounts.reduce(
       ({ currentOffset, offsets }: { currentOffset: number; offsets: number[] }, currentValue) => {

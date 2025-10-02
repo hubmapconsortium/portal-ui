@@ -139,7 +139,7 @@ interface GroupedBarStackProps<StackKey extends string, CompareByKey extends str
   data: BarStackGroup<StackKey, CompareByKey, XAxisKey>[];
   stackKeys: StackKey[];
   compareByKeys: CompareByKey[];
-  barColorScale: ScaleOrdinal<string, string, never>;
+  barColorScale: ScaleOrdinal<string, string>;
   getX: (d: StackBarFootprint) => string;
   handleMouseEnter: (
     bar: TooltipData<BarStackValues<StackKey> & { group: string }>,

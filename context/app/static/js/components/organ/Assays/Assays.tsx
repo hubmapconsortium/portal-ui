@@ -63,7 +63,9 @@ function Assays({ organTerms, bucketData }: AssaysProps) {
               <TableCell>
                 <InternalLink
                   href={getSearchURL({ entityType: 'Dataset', organTerms, mappedAssay: bucket.key, assayTypeMap })}
-                  onClick={() => trackClick(bucket.key)}
+                  onClick={() => {
+                    trackClick(bucket.key);
+                  }}
                   variant="body2"
                 >
                   {bucket.key}

@@ -72,7 +72,11 @@ function SavedEntitiesTable({ savedEntities, deleteCallback, isSavedListPage = f
             <div>
               <DeselectAllRowsButton />
               <SecondaryBackgroundTooltip title="Delete Items">
-                <LeftMarginIconButton onClick={() => setDeleteDialogIsOpen(true)}>
+                <LeftMarginIconButton
+                  onClick={() => {
+                    setDeleteDialogIsOpen(true);
+                  }}
+                >
                   <DeleteRoundedIcon color="primary" />
                 </LeftMarginIconButton>
               </SecondaryBackgroundTooltip>

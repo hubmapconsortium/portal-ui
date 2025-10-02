@@ -17,10 +17,18 @@ const storeDefinition = (set: StoreApi<BulkDownloadStore>['setState']) => ({
   downloadSuccess: false,
   isOpen: false,
   uuids: new Set<string>(),
-  setDownloadSuccess: (downloadSuccess: boolean) => set({ downloadSuccess }),
-  open: () => set({ isOpen: true }),
-  close: () => set({ isOpen: false }),
-  setUuids: (uuids: Set<string>) => set({ uuids }),
+  setDownloadSuccess: (downloadSuccess: boolean) => {
+    set({ downloadSuccess });
+  },
+  open: () => {
+    set({ isOpen: true });
+  },
+  close: () => {
+    set({ isOpen: false });
+  },
+  setUuids: (uuids: Set<string>) => {
+    set({ uuids });
+  },
 });
 
 export const useBulkDownloadStore = create<BulkDownloadStore>(storeDefinition);

@@ -40,16 +40,17 @@ function HubmapIDCell({
       <InternalLink
         target={openLinksInNewTab ? '_blank' : '_self'}
         href={href}
-        onClick={() =>
-          trackingInfo &&
-          trackEvent({
-            ...trackingInfo,
-            action: trackingInfo.action
-              ? `${trackingInfo.action} / Select ${trackingInfo.action}`
-              : 'Navigate to Dataset from Table',
-            label: `${trackingInfo.label} ${hubmap_id}`,
-          })
-        }
+        onClick={() => {
+          if (trackingInfo) {
+            trackEvent({
+              ...trackingInfo,
+              action: trackingInfo.action
+                ? `${trackingInfo.action} / Select ${trackingInfo.action}`
+                : 'Navigate to Dataset from Table',
+              label: `${trackingInfo.label} ${hubmap_id}`,
+            });
+          }
+        }}
         variant="body2"
       >
         {hubmap_id}
