@@ -3,15 +3,16 @@ import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 import Stack from '@mui/material/Stack';
 import InfoTooltipIcon from 'js/shared-styles/icons/TooltipIcon';
-import { nodeIcons, nodeColors } from './nodeTypes';
+import { nodeIcons, useNodeColors } from './nodeTypes';
 import StatusIcon from '../StatusIcon';
 
 interface NodeLegendItemProps {
   name: string;
   nodeKey: keyof typeof nodeIcons;
+  bgColor: string;
 }
 
-function NodeLegendItem({ name, nodeKey }: NodeLegendItemProps) {
+function NodeLegendItem({ name, nodeKey, bgColor }: NodeLegendItemProps) {
   const Icon = nodeIcons[nodeKey];
   const borderRadius = nodeKey === 'pipeline' ? 0 : 4;
   return (
@@ -20,7 +21,7 @@ function NodeLegendItem({ name, nodeKey }: NodeLegendItemProps) {
         width={32}
         height={16}
         borderRadius={borderRadius}
-        bgcolor={nodeColors[nodeKey]}
+        bgcolor={bgColor}
         display="inline-flex"
         alignItems="center"
         justifyContent="center"
@@ -58,12 +59,13 @@ function Legend({ children, title, tooltip }: PropsWithChildren<LegendProps>) {
 }
 
 export function NodeLegend({ nodeTypes }: { nodeTypes: string[] }) {
+  const nodeColors = useNodeColors();
   return (
     <Legend title="Nodes Legend">
       {nodeTypesList
         .filter(([, key]) => nodeTypes.includes(key))
         .map(([name, key]) => (
-          <NodeLegendItem name={name} key={key} nodeKey={key} />
+          <NodeLegendItem name={name} key={key} nodeKey={key} bgColor={nodeColors[key]} />
         ))}
     </Legend>
   );

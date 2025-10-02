@@ -6,6 +6,7 @@ import Typography from '@mui/material/Typography';
 import { AccountTreeRounded, ExtensionRounded, SvgIconComponent } from '@mui/icons-material';
 import Skeleton from '@mui/material/Skeleton';
 import { Box } from '@mui/system';
+import { useTheme } from '@mui/material/styles';
 import { useHash } from 'js/hooks/useHash';
 import { useSnackbarActions } from 'js/shared-styles/snackbars';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
@@ -43,12 +44,15 @@ interface NodeTemplateProps extends PropsWithChildren, CommonNodeInfo {
   tooltipText?: string;
 }
 
-export const nodeColors = {
-  primaryDataset: '#F0F3EB',
-  processedDataset: '#EAF0F8',
-  pipeline: '#EFEFEF',
-  componentDataset: '#FBEEEB',
-};
+export function useNodeColors() {
+  const theme = useTheme();
+  return {
+    primaryDataset: theme.palette.accent.success90,
+    processedDataset: theme.palette.accent.info90,
+    pipeline: theme.palette.accent.primary90,
+    componentDataset: theme.palette.accent.warning90,
+  };
+}
 
 export const nodeIcons = {
   primaryDataset: DatasetIcon,
@@ -134,8 +138,9 @@ function NodeTemplate({
 type PrimaryDatasetNodeProps = Node<DatasetNodeInfo, 'primaryDataset'>;
 
 function PrimaryDatasetNode({ data }: NodeProps<PrimaryDatasetNodeProps>) {
+  const colors = useNodeColors();
   return (
-    <NodeTemplate source rounded icon={nodeIcons.primaryDataset} {...data} bgColor={nodeColors.primaryDataset}>
+    <NodeTemplate source rounded icon={nodeIcons.primaryDataset} {...data} bgColor={colors.primaryDataset}>
       {data.datasetType}
     </NodeTemplate>
   );
@@ -147,11 +152,12 @@ function PipelineNode({
   data: { childDatasets, singleAssay, name, description: _description },
 }: NodeProps<PipelineNodeProps>) {
   const { pipelineInfo = name, isLoading } = usePipelineInfo(childDatasets);
+  const colors = useNodeColors();
   const [selectedName, description] = singleAssay
     ? [pipelineInfo, _description]
     : ['Multi Assay Pipeline', 'Create component datasets'];
   return (
-    <NodeTemplate source target name={selectedName} isLoading={isLoading} bgColor={nodeColors.pipeline}>
+    <NodeTemplate source target name={selectedName} isLoading={isLoading} bgColor={colors.pipeline}>
       {description}
     </NodeTemplate>
   );
@@ -161,13 +167,14 @@ type ProcessedDatasetNodeProps = Node<DatasetNodeInfo, 'processedDataset'>;
 
 function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
   const { datasetDetails, isLoading } = useProcessedDatasetDetails(data.uuid);
+  const colors = useNodeColors();
   return (
     <NodeTemplate
       rounded
       target
       href={makeNodeHref(datasetDetails)}
       icon={nodeIcons.processedDataset}
-      bgColor={nodeColors.processedDataset}
+      bgColor={colors.processedDataset}
       isLoading={isLoading}
       toastText={`Scrolled to ${datasetDetails?.pipeline}`}
       tooltipText={`Scroll to ${datasetDetails?.pipeline}`}
@@ -181,12 +188,13 @@ function ProcessedDatasetNode({ data }: NodeProps<ProcessedDatasetNodeProps>) {
 type ComponentDatasetNodeProps = Node<DatasetNodeInfo, 'componentDataset'>;
 
 function ComponentDatasetNode({ data }: NodeProps<ComponentDatasetNodeProps>) {
+  const colors = useNodeColors();
   return (
     <NodeTemplate
       rounded
       target
       icon={nodeIcons.componentDataset}
-      bgColor={nodeColors.componentDataset}
+      bgColor={colors.componentDataset}
       isLoading={false}
       {...data}
     >
