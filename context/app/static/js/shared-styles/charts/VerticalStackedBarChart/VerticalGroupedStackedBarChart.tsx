@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { scaleBand, AnyD3Scale } from '@visx/scale';
 import { AxisBottom, AxisLeft, AxisScale } from '@visx/axis';
 import { Group } from '@visx/group';
@@ -13,6 +13,7 @@ import { defaultXScaleRange, defaultYScaleRange } from '../utils';
 import { TooltipData, tooltipHasBarData } from '../types';
 import VerticalChartGridRowsGroup from '../VerticalChartGridRowsGroup';
 import StackedBar from '../StackedBar';
+import TickComponent from '../TickComponent';
 
 /**
  * @example const ex: BarStackValues<'a' |'b'| 'c'> = {a: 10, b: 20, c: 30}
@@ -327,6 +328,35 @@ function GroupedBarStackChart<
   yScale.range(getYScaleRange(yHeight));
   xScale.range(getXScaleRange(xWidth));
 
+  // Create summarized data for tick component tooltips
+  const tickComponentData = useMemo(() => {
+    const summaryData: Record<string, BarStackValues<StackKey> & { group: string }> = {};
+
+    data.forEach((group) => {
+      // Aggregate all stack values across all compareBy categories for this group
+      const aggregatedStacks = {} as BarStackValues<StackKey>;
+
+      // Initialize all stack keys to 0
+      stackKeys.forEach((stackKey) => {
+        aggregatedStacks[stackKey] = 0;
+      });
+
+      // Sum up values from all compareBy categories
+      compareByKeys.forEach((compareByKey) => {
+        const stackData = group.stacks[compareByKey];
+        if (stackData) {
+          stackKeys.forEach((stackKey) => {
+            aggregatedStacks[stackKey] += stackData[stackKey] || 0;
+          });
+        }
+      });
+
+      summaryData[group.group as string] = aggregatedStacks as BarStackValues<StackKey> & { group: string };
+    });
+
+    return summaryData;
+  }, [data, stackKeys, compareByKeys]);
+
   return (
     <svg width={parentWidth} height={parentHeight} ref={containerRef}>
       <AxisLeft<AxisScale<number>>
@@ -379,6 +409,7 @@ function GroupedBarStackChart<
           fontWeight: 500,
           fontFamily: 'Inter Variable',
         }}
+        tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data: tickComponentData })}
         hideTicks
         labelOffset={24}
       />

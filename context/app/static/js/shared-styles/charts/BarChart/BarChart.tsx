@@ -208,7 +208,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
               textAnchor: 'end',
               angle: -90,
             })}
-            tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave })}
+            tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data })}
             labelProps={{
               fontSize: 14,
               color: 'black',

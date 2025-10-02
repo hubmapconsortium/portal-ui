@@ -37,6 +37,8 @@ import {
   useOrganOrder,
   useSearchDataRange,
 } from './hooks';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
 
 // Margins in figma are 32 pixels everywhere except the bottom
 const margin = { top: 32, right: 32, bottom: 32, left: 32 };
@@ -45,15 +47,36 @@ const getOrgan = (d: AggregatedDatum) => d.organ;
 
 function HuBMAPDatasetsChartTooltip({ tooltipData }: { tooltipData: TooltipData<AggregatedDatum> }) {
   if (!tooltipData.bar || !tooltipData.key) return null;
+
+  // Hovering a bar segment
+  if (tooltipData.bar.data.data[tooltipData.key]) {
+    return (
+      <>
+        <Typography variant="subtitle2" color="secondary">
+          {tooltipData.bar.data.organ}
+        </Typography>
+        <Typography>{tooltipData.key}</Typography>
+        <Typography variant="h3" component="p" color="textPrimary">
+          {tooltipData.bar.data.data[tooltipData.key]}
+        </Typography>
+      </>
+    );
+  }
+
+  const entries = Object.entries(tooltipData.bar.data.data);
+
   return (
     <>
       <Typography variant="subtitle2" color="secondary">
         {tooltipData.bar.data.organ}
       </Typography>
-      <Typography>{tooltipData.key}</Typography>
-      <Typography variant="h3" component="p" color="textPrimary">
-        {tooltipData.bar.data.data[tooltipData.key]}
-      </Typography>
+      <List dense disablePadding>
+        {entries.map(([key, value]) => (
+          <ListItem key={key} disablePadding>
+            {key}: {value}
+          </ListItem>
+        ))}
+      </List>
     </>
   );
 }
