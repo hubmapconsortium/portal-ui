@@ -47,7 +47,7 @@ export default function SCFindGeneCharts(dataset: Dataset) {
   const chartColors = useChartPalette();
 
   // Fetch relevant cell types for each gene separately
-  const { geneResults, isLoading: hyperQueryLoading } = useMultiGeneHyperQueryCellTypes({
+  const { data: geneResults = {}, isLoading: hyperQueryLoading } = useMultiGeneHyperQueryCellTypes({
     genes: genesToQuery,
     organName,
   });
