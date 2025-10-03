@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import Typography from '@mui/material/Typography';
 import { BarStackHorizontal } from '@visx/shape';
 import { Group } from '@visx/group';
@@ -15,6 +15,7 @@ import { TextProps } from '@visx/text';
 import Skeleton from '@mui/material/Skeleton';
 import { TICK_LABEL_SIZE } from '../constants';
 import { TooltipData, tooltipHasBarData } from '../types';
+import TickComponent from '../TickComponent';
 
 const srOnlyLabelStyles: Partial<TextProps> = {
   style: {
@@ -119,6 +120,15 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
 
+  const tickComponentData = useMemo(() => {
+    const dataMap: Record<string, Datum> = {};
+    visxData.forEach((d) => {
+      const key = getY(d);
+      dataMap[key] = d;
+    });
+    return dataMap;
+  }, [visxData, getY]);
+
   if (visxData.length === 0) {
     return <Skeleton variant="rectangular" width={parentWidth} height={parentHeight} />;
   }
@@ -189,6 +199,7 @@ function HorizontalStackedBarChart<Datum, XAxisScale extends AnyD3Scale, YAxisSc
               textAnchor: 'end',
               dy: '0.33em',
             })}
+            tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data: tickComponentData })}
           />
           <AxisTop
             hideTicks

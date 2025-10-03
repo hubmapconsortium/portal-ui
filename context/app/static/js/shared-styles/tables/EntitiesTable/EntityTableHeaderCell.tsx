@@ -61,9 +61,12 @@ export default function EntityHeaderCell<Doc>({
     column.label
   );
 
-  const isFilterable = column.filterable && column.sort && !column.noSort;
+  // Allow sorting if column has either Elasticsearch sort field or custom sort values
+  const isSortable = Boolean(column.sort || column.customSortValues);
 
-  if (column.noSort) {
+  const isFilterable = column.filterable && isSortable;
+
+  if (!isSortable) {
     return (
       <HeaderCell key={id} sx={{ backgroundColor: 'background.paper' }}>
         <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>

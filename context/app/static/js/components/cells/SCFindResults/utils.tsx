@@ -1,7 +1,10 @@
 import { FindDatasetForCellTypeResponse } from 'js/api/scfind/useFindDatasetForCellTypes';
 import { DatasetsForGenesResponse } from 'js/api/scfind/useFindDatasetForGenes';
-import { formatCellTypeName } from 'js/api/scfind/utils';
-import { UnwrappedDatasetResults, WrappedDatasetResults } from './types';
+import { extractCellTypeInfo, formatCellTypeName } from 'js/api/scfind/utils';
+import { UnwrappedDatasetResults, WrappedDatasetResults, CellTypeCategory } from './types';
+import { CellTypeIcon } from 'js/shared-styles/icons';
+import OrganIcon from 'js/shared-styles/icons/OrganIcon';
+import React from 'react';
 
 /**
  * Get the unique cell type categories
@@ -9,9 +12,9 @@ import { UnwrappedDatasetResults, WrappedDatasetResults } from './types';
  * if we have "Lung.B cells" and "Liver.B cells", `B cells` should be a category
  * Each individual cell type should also be a category
  * @param cellTypes
- * @returns {string[]}
+ * @returns {CellTypeCategory[]}
  */
-export function categorizeCellTypes(cellTypes: string[]) {
+export function categorizeCellTypes(cellTypes: string[]): CellTypeCategory[] {
   const cellTypeCategories: Record<string, number> = {};
   cellTypes.forEach((cellType) => {
     // Add the cell type itself to the categories with a weight of 2 to ensure it is included
@@ -42,18 +45,43 @@ export function categorizeCellTypes(cellTypes: string[]) {
     return a.localeCompare(b);
   });
 
-  return filteredCategories;
+  // Convert strings to CellTypeCategory objects
+  return filteredCategories.map((category): CellTypeCategory => {
+    // Check if it's a complete cell type (contains a dot)
+    if (category.includes('.')) {
+      const { organ, name } = extractCellTypeInfo(category);
+      return {
+        label: category,
+        icon: <OrganIcon organName={organ} aria-label={organ} />,
+        formattedLabel: `${name} in ${organ}`,
+      };
+    }
+
+    // Check if it's one of the original cell types (formatted)
+    if (formattedCellTypes.includes(category)) {
+      return {
+        label: category,
+        icon: <CellTypeIcon />,
+      };
+    }
+
+    // Otherwise it's a tissue/organ category
+    return {
+      label: category,
+      icon: <OrganIcon organName={category} aria-label={category} />,
+    };
+  });
 }
 
 /**
  * Map datasets to the categories they belong in order to display the target cell type counts in the UI
- * @param cellTypeCategories The unique cell type categories (e.g. [`lung`, `kidney`, `B cell`, `T cell`, `kidney.B Cell`, `kidney.T cell`, `lung.B cell`, `lung.T cell`])
+ * @param cellTypeCategories The unique cell type categories (e.g. objects with labels like `lung`, `kidney`, `B cell`, `T cell`, `kidney.B Cell`, `kidney.T cell`, `lung.B cell`, `lung.T cell`)
  * @param cellTypes The cell types to map (e.g. [`lung.B cell`, `lung.T cell`, `kidney.B cell`, `kidney.T cell`])
  * @param data The original dataset results from the API
- * @returns {WrappedDatasetResults} A mapping of cell type categories to datasets
+ * @returns {WrappedDatasetResults} A mapping of cell type category labels to datasets
  */
 export function mapDatasetsToCellTypeCategories(
-  cellTypeCategories: string[],
+  cellTypeCategories: CellTypeCategory[],
   cellTypes: string[],
   data: FindDatasetForCellTypeResponse[],
 ): WrappedDatasetResults {
@@ -74,9 +102,11 @@ export function mapDatasetsToCellTypeCategories(
     });
     return acc;
   }, {});
-  // Convert the sets to arrays
+
+  // Convert the sets to arrays, using category labels as keys
+  const categoryLabels = cellTypeCategories.map((cat) => cat.label);
   return Object.entries(datasetsForEachCategory).reduce<WrappedDatasetResults>((acc, [key, value]) => {
-    if (cellTypeCategories.includes(key)) {
+    if (categoryLabels.includes(key)) {
       acc[key] = Array.from(value).map((hubmap_id) => ({ hubmap_id }));
     }
     return acc;

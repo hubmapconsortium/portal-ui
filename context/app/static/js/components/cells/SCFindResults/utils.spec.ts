@@ -13,7 +13,7 @@ describe('SCFindResults utils', () => {
 
     const result = categorizeCellTypes(cellTypes);
 
-    const expected = [
+    const expectedLabels = [
       'Lung.B cells',
       'Lung.T cells',
       'Liver.B cells',
@@ -26,8 +26,9 @@ describe('SCFindResults utils', () => {
       'T cells',
     ];
 
-    expected.forEach((item) => {
-      expect(result).toContain(item);
+    // Check that all expected labels are present
+    expectedLabels.forEach((expectedLabel) => {
+      expect(result.some((category) => category.label === expectedLabel)).toBe(true);
     });
   });
 
@@ -57,6 +58,10 @@ describe('SCFindResults utils', () => {
       findDatasets: {
         BCL2: datasets,
         BCL2L1: datasets,
+      },
+      counts: {
+        BCL2: Array.from({ length: datasets.length }, () => 1),
+        BCL2L1: Array.from({ length: datasets.length }, () => 2),
       },
     };
     const genes = ['BBC3', 'BCL2', 'BCL2L1', 'PMAIP1'];

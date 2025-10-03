@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { BarStack } from '@visx/shape';
 import { AxisBottom, AxisLeft } from '@visx/axis';
 import { withParentSize } from '@visx/responsive';
@@ -115,6 +115,15 @@ function VerticalStackedBarChart<
     handleMouseLeave,
   } = useChartTooltip<TooltipData<Datum>>();
 
+  const tickComponentData = useMemo(() => {
+    const dataMap: Record<string, Datum> = {};
+    visxData.forEach((d) => {
+      const key = String(getX(d));
+      dataMap[key] = d;
+    });
+    return dataMap;
+  }, [visxData, getX]);
+
   return (
     <>
       <svg width={parentWidth} height={parentHeight} ref={containerRef}>
@@ -196,7 +205,7 @@ function VerticalStackedBarChart<
                 fontWeight: 500,
                 fontFamily: 'Inter Variable',
               })}
-              tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave })}
+              tickComponent={TickComponent({ handleMouseEnter, handleMouseLeave, data: tickComponentData })}
               labelProps={{
                 fontSize: AXIS_LABEL_SIZE,
                 color: 'black',

@@ -47,13 +47,7 @@ type Story = StoryObj<typeof HyperQueryCellTypesControl>;
 export const HyperQueryCellTypes: Story = {
   args: {
     geneList: 'UMOD',
-    datasetName: 'kidney',
-  },
-};
-
-export const HyperQueryCellTypesForSpecificDataset: Story = {
-  args: {
-    datasetName: 'HBM444.DXLZ.643',
+    organName: 'Kidney',
   },
 };
 

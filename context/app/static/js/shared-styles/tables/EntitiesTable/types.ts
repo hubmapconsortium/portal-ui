@@ -7,10 +7,11 @@ export interface Column<Doc> {
   id: string;
   sort?: string;
   cellContent: ComponentType<{ hit: SearchHit<Doc> }> | ElementType;
-  noSort?: boolean;
   tooltipText?: string;
   width?: number;
   filterable?: boolean;
+  /** Map of entity ID to custom sort value for client-side sorting */
+  customSortValues?: Record<string, number | string>;
 }
 
 export interface EntitiesTabTypes<Doc extends Entity> {

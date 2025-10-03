@@ -8,6 +8,7 @@ import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
 import { OrdinalScale } from '../hooks';
+import { BoxProps } from '@mui/system';
 
 interface ChartWrapperProps extends PropsWithChildren {
   chartTitle?: string;
@@ -21,6 +22,8 @@ interface ChartWrapperProps extends PropsWithChildren {
   dividersInLegend?: boolean;
   labelValueMap?: Record<string, string>;
   caption?: React.ReactNode;
+  sx?: BoxProps['sx'];
+  fullWidthGraph?: boolean;
 }
 
 const pullUpMultiple = (a: string, b: string) => {
@@ -28,6 +31,22 @@ const pullUpMultiple = (a: string, b: string) => {
   if (b === 'Multiple') return 1;
   return a.localeCompare(b);
 };
+
+const defaultGridTemplateAreas = `
+  "title          title         title          buttons"
+  "top-controls   top-controls  top-controls   top-controls"
+  "axis-controls  axis-controls axis-controls  legend"
+  "chart          chart         chart          legend"
+  "caption        caption       caption        caption"
+`;
+
+const fullWidthGraphTemplateAreas = `
+  "title          title         title          buttons"
+  "top-controls   top-controls  top-controls   top-controls"
+  "axis-controls  axis-controls axis-controls  axis-controls"
+  "chart          chart         chart          chart"
+  "caption        caption       caption        caption"
+`;
 
 function ChartWrapper(
   {
@@ -43,6 +62,8 @@ function ChartWrapper(
     dividersInLegend,
     labelValueMap = {},
     caption,
+    sx,
+    fullWidthGraph = false,
   }: ChartWrapperProps,
   ref: React.Ref<HTMLDivElement>,
 ) {
@@ -54,16 +75,11 @@ function ChartWrapper(
     <Box
       sx={{
         display: 'grid',
-        gridTemplateAreas: `
-          "title          title         title          buttons"
-          "top-controls   top-controls  top-controls   top-controls"
-          "axis-controls  axis-controls axis-controls  legend"
-          "chart          chart         chart          legend"
-          "caption        caption       caption        caption"
-        `,
+        gridTemplateAreas: fullWidthGraph ? fullWidthGraphTemplateAreas : defaultGridTemplateAreas,
         overflow: 'none',
         gridTemplateColumns: 'auto auto auto minmax(175px, max-content)',
         gridTemplateRows: 'auto auto minmax(0, auto) 500px minmax(0, auto)',
+        ...sx,
       }}
       ref={ref}
     >
