@@ -15,6 +15,8 @@ const StyledTableContainer = styled(TableContainer)<StyledTableContainerProps>((
   },
 })) as typeof TableContainer & ComponentType<StyledTableContainerProps>;
 
-const HeaderCell = TableCell;
+const HeaderCell = styled(TableCell)({
+  zIndex: 100,
+});
 
 export { StyledTableContainer, HeaderCell };
