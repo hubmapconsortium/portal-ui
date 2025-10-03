@@ -60,8 +60,8 @@ describe('SCFindResults utils', () => {
         BCL2L1: datasets,
       },
       counts: {
-        BCL2: new Array(datasets.length).fill(1),
-        BCL2L1: new Array(datasets.length).fill(2),
+        BCL2: Array.from({ length: datasets.length }, () => 1),
+        BCL2L1: Array.from({ length: datasets.length }, () => 2),
       },
     };
     const genes = ['BBC3', 'BCL2', 'BCL2L1', 'PMAIP1'];

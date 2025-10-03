@@ -64,28 +64,7 @@ export default function EntityHeaderCell<Doc>({
   // Allow sorting if column has either Elasticsearch sort field or custom sort values
   const isSortable = Boolean(column.sort || column.customSortValues);
 
-  const isFilterable = column.filterable && isSortable && !column.noSort;
-
-  if (column.noSort) {
-    return (
-      <HeaderCell key={id} sx={{ backgroundColor: 'background.paper' }}>
-        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          {label}
-          {isFilterable && onToggleFilterValue && onClearFilter && (
-            <ColumnFilterDropdown
-              columnId={column.id}
-              columnLabel={column.label}
-              values={filterValues}
-              selectedValues={selectedFilterValues}
-              isLoading={isFilterLoading}
-              onToggleValue={onToggleFilterValue}
-              onClearFilter={onClearFilter}
-            />
-          )}
-        </Box>
-      </HeaderCell>
-    );
-  }
+  const isFilterable = column.filterable && isSortable;
 
   if (!isSortable) {
     return (

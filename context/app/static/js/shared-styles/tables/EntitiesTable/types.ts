@@ -7,7 +7,6 @@ export interface Column<Doc> {
   id: string;
   sort?: string;
   cellContent: ComponentType<{ hit: SearchHit<Doc> }> | ElementType;
-  noSort?: boolean;
   tooltipText?: string;
   width?: number;
   filterable?: boolean;

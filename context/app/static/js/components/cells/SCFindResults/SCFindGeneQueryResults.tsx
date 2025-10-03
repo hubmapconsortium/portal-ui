@@ -123,15 +123,11 @@ function DatasetListSection() {
     const geneCountMap: Record<string, number> = {};
     // Only proceed if there's no error and datasetToGeneMap exists
     if (!error && datasetToGeneMap) {
-      try {
-        Object.entries(datasetToGeneMap).forEach(([datasetUuid, geneSet]) => {
-          if (geneSet && typeof geneSet.size === 'number') {
-            geneCountMap[datasetUuid] = geneSet.size;
-          }
-        });
-      } catch (e) {
-        console.warn('Error processing dataset to gene map:', e);
-      }
+      Object.entries(datasetToGeneMap).forEach(([datasetUuid, geneSet]) => {
+        if (geneSet && typeof geneSet.size === 'number') {
+          geneCountMap[datasetUuid] = geneSet.size;
+        }
+      });
     }
     return geneCountMap;
   }, [datasetToGeneMap, error]);

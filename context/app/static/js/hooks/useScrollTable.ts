@@ -65,6 +65,8 @@ interface UseScrollSearchHitsTypes<Document> {
   totalHitsCount: number;
 }
 
+const noOp = () => {};
+
 function useScrollTable<Document>({
   query,
   columnNameMapping,
@@ -147,7 +149,8 @@ function useScrollTable<Document>({
   // Use the appropriate data source
   const searchHits = isCustomSort ? sortedSearchHits : scrollData.searchHits;
   const isLoading = isCustomSort ? allDataLoading : scrollData.isLoading;
-  const loadMore = useMemo(() => (isCustomSort ? () => {} : scrollData.loadMore), [isCustomSort, scrollData.loadMore]); // No pagination for custom sort
+  // Pagination is disabled for custom sort because custom sort needs all results' values to be known to ensure correctness
+  const loadMore = useMemo(() => (isCustomSort ? noOp : scrollData.loadMore), [isCustomSort, scrollData.loadMore]); // No pagination for custom sort
   const totalHitsCount = isCustomSort ? searchHits.length : scrollData.totalHitsCount;
 
   // Track which rows are expanded for accurate size estimation

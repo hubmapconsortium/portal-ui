@@ -351,7 +351,9 @@ function GroupedBarStackChart<
         }
       });
 
-      summaryData[group.group as string] = aggregatedStacks as BarStackValues<StackKey> & { group: string };
+      // @ts-expect-error Adding the group key here causes duplication in the tick label tooltip,
+      // so we can just ignore the error.
+      summaryData[group.group] = aggregatedStacks;
     });
 
     return summaryData;

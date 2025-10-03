@@ -27,6 +27,11 @@ interface BarChartProps<T extends { value: number }, K extends string, D extends
   multiGeneAssociations?: MultiGeneAssociation[];
 }
 
+// Function to create HTML-safe IDs for SVG patterns, guaranteeing validity
+const createSafeId = <K extends string>(key: K) => {
+  return `pattern-${String(key).replace(/[^a-zA-Z0-9-_]/g, '_')}`;
+};
+
 /**
  * This component creates a Bar Chart from a passed record of string keys to number values.
  *
@@ -82,11 +87,6 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
     });
     return map;
   }, [multiGeneAssociations]);
-
-  // Function to create HTML-safe IDs for SVG patterns
-  const createSafeId = (key: K) => {
-    return `pattern-${String(key).replace(/[^a-zA-Z0-9-_]/g, '_')}`;
-  };
 
   // Function to create patterns for multi-gene associations similar to StackedBar
   const createPattern = (key: K, id: string) => {
