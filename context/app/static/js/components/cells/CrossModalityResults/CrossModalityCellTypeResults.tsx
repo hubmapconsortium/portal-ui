@@ -6,7 +6,7 @@ import Divider from '@mui/material/Divider';
 
 import { CellTypeOrgansGraph } from 'js/components/cell-types/CrossModalityCellTypesVisualization';
 import CellTypesProvider from 'js/components/cell-types/CellTypesDetailPageContext';
-import { lastModifiedTimestamp, assayTypes, status, organ, hubmapID } from 'js/shared-styles/tables/columns';
+import { lastModifiedTimestamp, assayTypes, status, organCol, hubmapID } from 'js/shared-styles/tables/columns';
 import { Tab, TabPanel, Tabs } from 'js/shared-styles/tables/TableTabs';
 import { useTabs } from 'js/shared-styles/tabs';
 import EntitiesTables from 'js/shared-styles/tables/EntitiesTable/EntitiesTables';
@@ -45,7 +45,7 @@ function CellTypeResult({ cellType }: { cellType: string }) {
   );
 }
 
-const columns = [hubmapID, organ, assayTypes, status, lastModifiedTimestamp];
+const columns = [hubmapID, organCol, assayTypes, status, lastModifiedTimestamp];
 function CrossModalityCellTypeResults() {
   // For cell type queries, the results are displayed differently than for other queries.
   // The total number of datasets that match the query is displayed, out of all datasets.

@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo } from 'react';
 import {
   assayTypes,
-  organ,
+  organCol,
   hubmapID,
   parentDonorAge,
   parentDonorRace,
@@ -30,7 +30,7 @@ import { GeneCountsContextProvider } from './GeneCountsContext';
 import { matchingGeneColumn, matchingGenesColumn, totalCellCountColumn } from './columns';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 
-const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
+const columns = [hubmapID, organCol, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
 const columnsWithMatchingGene = (
   hasIndividualGene: boolean,

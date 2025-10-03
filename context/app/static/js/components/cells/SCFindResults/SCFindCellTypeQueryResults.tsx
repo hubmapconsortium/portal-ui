@@ -1,6 +1,6 @@
 import React, { forwardRef, useEffect, useMemo } from 'react';
 import { Tab, TabPanel, TabProps, Tabs, useTabs } from 'js/shared-styles/tabs';
-import { lastModifiedTimestamp, assayTypes, organ, hubmapID } from 'js/shared-styles/tables/columns';
+import { lastModifiedTimestamp, assayTypes, organCol, hubmapID } from 'js/shared-styles/tables/columns';
 import EntityTable from 'js/shared-styles/tables/EntitiesTable/EntityTable';
 import { Dataset, EventInfo } from 'js/components/types';
 import Typography from '@mui/material/Typography';
@@ -11,9 +11,7 @@ import HelperPanel from 'js/shared-styles/HelperPanel';
 import { useInView } from 'react-intersection-observer';
 import OrganIcon from 'js/shared-styles/icons/OrganIcon';
 import { capitalize } from '@mui/material/utils';
-import { extractCellTypeInfo, stringIsCellType } from 'js/api/scfind/utils';
 import Box from '@mui/material/Box';
-import { CellTypeIcon } from 'js/shared-styles/icons';
 import { decimal, percent } from 'js/helpers/number-format';
 import Divider from '@mui/material/Divider';
 import useSCFindIDAdapter from 'js/api/scfind/useSCFindIDAdapter';
@@ -28,6 +26,7 @@ import { SCFindQueryResultsListProps } from './types';
 import { targetCellCountColumn, totalCellCountColumn } from './columns';
 import useSCFindResultsStatisticsStore from './store';
 import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
+import { CellTypeCategory } from './types';
 
 function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryResultsListProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
@@ -39,7 +38,7 @@ function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryRe
   const columns = useMemo(() => {
     return [
       hubmapID,
-      organ,
+      organCol,
       assayTypes,
       targetCellCountColumn(countsMap),
       totalCellCountColumn(allCountsMap),
@@ -219,7 +218,7 @@ function OrganCellTypeDistributionCharts({ trackingInfo }: { trackingInfo?: Even
 }
 
 interface CellTypeCategoryTabProps extends TabProps {
-  cellTypeCategory: string;
+  cellTypeCategory: CellTypeCategory;
   datasetCount: number;
 }
 
@@ -227,11 +226,7 @@ const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
   { cellTypeCategory, datasetCount, ...rest }: CellTypeCategoryTabProps,
   ref: React.ForwardedRef<HTMLDivElement>,
 ) {
-  const { organ: tissue, name, variant } = extractCellTypeInfo(cellTypeCategory);
-  const formattedVariant = variant ? ` (${variant})` : '';
-  const isCellType = stringIsCellType(cellTypeCategory);
-  const label = isCellType ? `${name}${formattedVariant} in ${capitalize(tissue)}` : cellTypeCategory;
-  const icon = isCellType ? <OrganIcon organName={tissue} aria-label={tissue} /> : <CellTypeIcon />;
+  const { formattedLabel, label, icon } = cellTypeCategory;
 
   return (
     <Tab
@@ -240,7 +235,7 @@ const CellTypeCategoryTab = forwardRef(function CellTypeCategoryTab(
         <Stack direction="row" alignItems="center" gap={1}>
           <Box flexShrink={0}>{icon}</Box>
           <Box component="span" sx={{ textTransform: 'capitalize' }}>
-            {label} ({datasetCount})
+            {formattedLabel ?? label} ({datasetCount})
           </Box>
         </Stack>
       }
@@ -274,17 +269,17 @@ function DatasetListSection() {
           <CellTypeCategoryTab
             cellTypeCategory={cellTypeCategory}
             index={idx}
-            datasetCount={datasets[cellTypeCategory]?.length ?? 0}
-            key={cellTypeCategory}
+            datasetCount={datasets[cellTypeCategory.label]?.length ?? 0}
+            key={cellTypeCategory.label}
           />
         ))}
       </Tabs>
       {cellTypeCategories.map((cellType, idx) => (
-        <TabPanel key={cellType} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
+        <TabPanel key={cellType.label} value={openTabIndex} index={idx} sx={{ mt: 0, height: 800 }}>
           <SCFindCellTypeQueryDatasetList
-            key={cellType}
-            countsMap={countsMaps[cellType]}
-            datasetIds={datasets[cellType] ?? []}
+            key={cellType.label}
+            countsMap={countsMaps[cellType.label]}
+            datasetIds={datasets[cellType.label] ?? []}
           />
         </TabPanel>
       ))}

@@ -6,7 +6,7 @@ import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { useMolecularDataQueryFormTracking } from '../MolecularDataQueryForm/MolecularDataQueryFormTrackingProvider';
 import { useSelectedPathwayParticipants } from '../MolecularDataQueryForm/AutocompleteEntity/hooks';
 import { categorizeCellTypes, mapDatasetsToCellTypeCategories, processGeneQueryResults } from './utils';
-import { getUnwrappedResult } from './types';
+import { getUnwrappedResult, CellTypeCategory } from './types';
 
 export function useSCFindCellTypeResults(cellTypes: string[] = []) {
   // The index of the dataset results matches the index of the cell types
@@ -18,7 +18,7 @@ export function useSCFindCellTypeResults(cellTypes: string[] = []) {
 
   const { data = [], countsMaps, ...rest } = datasetsWithCellTypes;
 
-  const cellTypeCategories = useMemo(() => categorizeCellTypes(cellTypes), [cellTypes]);
+  const cellTypeCategories: CellTypeCategory[] = useMemo(() => categorizeCellTypes(cellTypes), [cellTypes]);
 
   const datasets = useMemo(
     () => mapDatasetsToCellTypeCategories(cellTypeCategories, cellTypes, data),
@@ -35,7 +35,7 @@ export function useSCFindCellTypeResults(cellTypes: string[] = []) {
 
     // Initialize maps for all categories
     cellTypeCategories.forEach((category) => {
-      categoryMaps[category] = {};
+      categoryMaps[category.label] = {};
     });
 
     // For each cell type, aggregate its counts into the appropriate categories
@@ -44,7 +44,8 @@ export function useSCFindCellTypeResults(cellTypes: string[] = []) {
       if (!cellTypeCounts) return;
 
       const [organCategory, cellTypeCategory] = cellType.split('.');
-      const categories = [cellType, organCategory, cellTypeCategory].filter((cat) => cellTypeCategories.includes(cat));
+      const categoryLabels = cellTypeCategories.map((cat) => cat.label);
+      const categories = [cellType, organCategory, cellTypeCategory].filter((cat) => categoryLabels.includes(cat));
 
       // Add counts to each relevant category
       Object.entries(cellTypeCounts).forEach(([datasetId, count]) => {
