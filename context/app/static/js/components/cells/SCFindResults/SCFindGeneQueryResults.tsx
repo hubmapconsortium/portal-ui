@@ -28,7 +28,7 @@ import { useCellVariableNames } from '../MolecularDataQueryForm/hooks';
 import { MatchingGeneContextProvider } from './MatchingGeneContext';
 import { GeneCountsContextProvider } from './GeneCountsContext';
 import { matchingGeneColumn, matchingGenesColumn, totalCellCountColumn } from './columns';
-import { useIndexedDatasetsCounts } from 'js/api/scfind/useIndexedDatasets';
+import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 
 const columns = [hubmapID, organ, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
@@ -52,7 +52,9 @@ function SCFindGeneQueryDatasetList({ datasetIds, countsMap, geneCountMap }: SCF
   const gene = useOptionalGeneContext();
   const hasIndividualGene = Boolean(gene);
 
-  const { data: allCountsMap } = useIndexedDatasetsCounts();
+  const { data } = useIndexedDatasets();
+
+  const allCountsMap = data?.countsMap;
 
   const estimatedExpandedRowHeight = gene ? 1365 : 665; // Chart 1 = 700px, Chart 2 = 600px, padding = 64px, border = 1px
 

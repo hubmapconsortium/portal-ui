@@ -27,12 +27,14 @@ import DatasetsOverview from '../DatasetsOverview';
 import { SCFindQueryResultsListProps } from './types';
 import { targetCellCountColumn, totalCellCountColumn } from './columns';
 import useSCFindResultsStatisticsStore from './store';
-import { useIndexedDatasetsCounts } from 'js/api/scfind/useIndexedDatasets';
+import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 
 function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryResultsListProps) {
   const ids = useSCFindIDAdapter(datasetIds.map(({ hubmap_id }) => hubmap_id));
 
-  const { data: allCountsMap } = useIndexedDatasetsCounts();
+  const { data } = useIndexedDatasets();
+
+  const allCountsMap = data?.countsMap;
 
   const columns = useMemo(() => {
     return [
