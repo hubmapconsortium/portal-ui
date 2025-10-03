@@ -44,8 +44,6 @@ export default function SCFindGeneCharts(dataset: Dataset) {
   // Extract organ name for hyperquery, remove laterality
   const organName = dataset.origin_samples_unique_mapped_organs?.[0].split(' (')[0];
 
-  const chartColors = useChartPalette();
-
   // Fetch relevant cell types for each gene separately
   const { data: geneResults = {}, isLoading: hyperQueryLoading } = useMultiGeneHyperQueryCellTypes({
     genes: genesToQuery,
@@ -53,6 +51,7 @@ export default function SCFindGeneCharts(dataset: Dataset) {
   });
 
   // Process results to create gene highlights and cell type associations
+  const chartColors = useChartPalette();
   const { geneHighlights, cellTypeGeneAssociations } = useMemo(() => {
     const highlights: Array<{ gene: string; color: string; cellTypes: string[] }> = [];
     const associations: Array<{ cellType: string; genes: string[]; colors: string[] }> = [];
