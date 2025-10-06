@@ -128,14 +128,17 @@ function CellTypesChart({
 
   const theme = useTheme();
 
-  const legendScale = useMemo(() => {
+  const [showLegend, legendScale] = useMemo(() => {
     if (geneHighlights.length === 0) {
-      return undefined;
+      return [false, undefined];
     }
-    return scaleOrdinal<string, string>({
-      domain: ['Unmatched', ...geneHighlights.map(({ gene }) => gene), 'Multiple'],
-      range: [theme.palette.graphs.unmatched, ...geneHighlights.map(({ color }) => color), 'placeholder'],
-    });
+    return [
+      true,
+      scaleOrdinal<string, string>({
+        domain: ['Unmatched', ...geneHighlights.map(({ gene }) => gene), 'Multiple'],
+        range: [theme.palette.graphs.unmatched, ...geneHighlights.map(({ color }) => color), 'placeholder'],
+      }),
+    ];
   }, [geneHighlights, theme]);
 
   // Create tooltip component that shows gene associations if available
@@ -159,7 +162,7 @@ function CellTypesChart({
       margin={margin}
       colorScale={legendScale}
       dropdown={
-        legendScale && (
+        showLegend && (
           <InfoTextTooltip tooltipTitle="These cell types are associated with specific gene signatures.">
             <Typography variant="subtitle2" gutterBottom>
               Gene-Associated Cell&nbsp;Types
@@ -167,7 +170,7 @@ function CellTypesChart({
           </InfoTextTooltip>
         )
       }
-      fullWidthGraph={!legendScale}
+      fullWidthGraph={!showLegend}
     >
       <TotalCellsContext.Provider value={totalCells}>
         <ChartLoader isLoading={isLoading}>
