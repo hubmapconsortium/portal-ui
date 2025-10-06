@@ -66,16 +66,32 @@ function TargetCellTypeDisplay(data: CellTypeCountsForDataset) {
 function TargetCellCountColumn({
   hit,
   customSortValues,
-}: CellContentProps<DatasetDocument> & { customSortValues?: Record<string, number | string> }) {
+  totalCountsMap,
+}: CellContentProps<DatasetDocument> & {
+  customSortValues?: Record<string, number | string>;
+  totalCountsMap?: Record<string, number | string>;
+}) {
   // If we have custom sort values, use them directly instead of fetching from API
-  if (customSortValues) {
-    const cellCount = customSortValues[hit.uuid];
-    if (cellCount !== undefined) {
+  if (customSortValues && totalCountsMap) {
+    const targetCount = customSortValues[hit.uuid];
+    const totalCount = totalCountsMap[hit.uuid];
+
+    if (
+      targetCount !== undefined &&
+      totalCount !== undefined &&
+      typeof targetCount === 'number' &&
+      typeof totalCount === 'number'
+    ) {
+      const percentage = totalCount > 0 ? targetCount / totalCount : 0;
+
       // For categorized data, show breakdown in tooltip
       const tooltipContent = (
         <div>
           <Typography variant="body2" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
             Target Cell Types in {hit.hubmap_id}:
+          </Typography>
+          <Typography variant="body2" component="div" sx={{ mb: 1 }}>
+            Total: {decimal.format(targetCount)} / {decimal.format(totalCount)}
           </Typography>
           <CellCountColumn hit={hit} renderDisplay={TargetCellTypeDisplay} />
         </div>
@@ -84,7 +100,7 @@ function TargetCellCountColumn({
       return (
         <SecondaryBackgroundTooltip title={tooltipContent}>
           <Typography variant="body2" component="p">
-            {typeof cellCount === 'number' ? decimal.format(cellCount) : cellCount}
+            {percent.format(percentage)}
           </Typography>
         </SecondaryBackgroundTooltip>
       );
@@ -133,14 +149,28 @@ function TotalCellCountColumn({
   return <CellCountColumn hit={hit} renderDisplay={TotalCellTypeDisplay} />;
 }
 
-export const targetCellCountColumn = (customSortValues?: Record<string, number | string>) => ({
+export const targetCellCountColumn = (
+  customSortValues?: Record<string, number | string>,
+  totalCountsMap?: Record<string, number | string>,
+) => ({
   id: 'target_cell_count',
-  label: 'Target Cell Count',
+  label: 'Target Cell %',
   cellContent: (props: CellContentProps<DatasetDocument>) => (
-    <TargetCellCountColumn {...props} customSortValues={customSortValues} />
+    <TargetCellCountColumn {...props} customSortValues={customSortValues} totalCountsMap={totalCountsMap} />
   ),
   width: 150,
-  customSortValues,
+  customSortValues:
+    totalCountsMap && customSortValues
+      ? Object.fromEntries(
+          Object.entries(customSortValues).map(([uuid, targetCount]) => {
+            const totalCount = totalCountsMap[uuid];
+            if (typeof targetCount === 'number' && typeof totalCount === 'number' && totalCount > 0) {
+              return [uuid, targetCount / totalCount];
+            }
+            return [uuid, 0];
+          }),
+        )
+      : customSortValues,
 });
 
 export const totalCellCountColumn = (customSortValues?: Record<string, number | string>) => ({
@@ -178,9 +208,14 @@ const useMatchingGenesTooltipText = (genesWithCounts: GeneWithCount[]) => {
 
 /**
  * Displays column content for a single matching gene in a dataset.
- * Shows the cell count for that specific gene.
+ * Shows the percentage of cells expressing that specific gene.
  */
-function MatchingGeneColumn({ hit }: CellContentProps<DatasetDocument>) {
+function MatchingGeneColumn({
+  hit,
+  totalCountsMap,
+}: CellContentProps<DatasetDocument> & {
+  totalCountsMap?: Record<string, number | string>;
+}) {
   const individualGene = useOptionalGeneContext();
   const geneCountsData = useGeneCountsContext();
 
@@ -188,14 +223,31 @@ function MatchingGeneColumn({ hit }: CellContentProps<DatasetDocument>) {
     return null;
   }
 
-  const count = Number(
+  const geneCount = Number(
     geneCountsData[individualGene]?.[hit.hubmap_id] || geneCountsData[individualGene]?.[hit.uuid] || 0,
   );
 
+  const totalCount = totalCountsMap ? Number(totalCountsMap[hit.uuid] || 0) : 0;
+  const percentage = totalCount > 0 ? geneCount / totalCount : 0;
+
+  // Show percentage with raw counts in tooltip
+  const tooltipContent = (
+    <div>
+      <Typography variant="body2" component="div" sx={{ fontWeight: 'bold', mb: 1 }}>
+        {individualGene} Expression in {hit.hubmap_id}:
+      </Typography>
+      <Typography variant="body2" component="div">
+        {decimal.format(geneCount)} cells expressing {individualGene} out of {decimal.format(totalCount)} total cells
+      </Typography>
+    </div>
+  );
+
   return (
-    <Typography variant="body2" component="p">
-      {decimal.format(count)}
-    </Typography>
+    <SecondaryBackgroundTooltip title={tooltipContent}>
+      <Typography variant="body2" component="p">
+        {percent.format(percentage)}
+      </Typography>
+    </SecondaryBackgroundTooltip>
   );
 }
 
@@ -233,12 +285,28 @@ function MatchingGenesColumn({ hit }: CellContentProps<DatasetDocument>) {
   );
 }
 
-export const matchingGeneColumn = (countsMap?: Record<string, number | string>) => ({
+export const matchingGeneColumn = (
+  countsMap?: Record<string, number | string>,
+  totalCountsMap?: Record<string, number | string>,
+) => ({
   id: 'matching_gene',
-  label: 'Matching Gene Cell Count',
-  cellContent: MatchingGeneColumn,
+  label: 'Matching Gene %',
+  cellContent: (props: CellContentProps<DatasetDocument>) => (
+    <MatchingGeneColumn {...props} totalCountsMap={totalCountsMap} />
+  ),
   width: 150,
-  customSortValues: countsMap,
+  customSortValues:
+    totalCountsMap && countsMap
+      ? Object.fromEntries(
+          Object.entries(countsMap).map(([uuid, geneCount]) => {
+            const totalCount = totalCountsMap[uuid];
+            if (typeof geneCount === 'number' && typeof totalCount === 'number' && totalCount > 0) {
+              return [uuid, geneCount / totalCount];
+            }
+            return [uuid, 0];
+          }),
+        )
+      : countsMap,
 });
 
 export const matchingGenesColumn = (countsMap?: Record<string, number | string>) => ({

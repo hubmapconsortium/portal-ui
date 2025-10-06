@@ -32,16 +32,21 @@ import useIndexedDatasets from 'js/api/scfind/useIndexedDatasets';
 
 const columns = [hubmapID, organCol, assayTypes, parentDonorAge, parentDonorRace, parentDonorSex];
 
-const columnsWithMatchingGene = (
+const useColumnsWithMatchingGene = (
   hasIndividualGene: boolean,
   countsMap?: Record<string, number | string>,
   allCountsMap?: Record<string, number | string>,
   geneCountMap?: Record<string, number>,
-) => [
-  ...columns,
-  totalCellCountColumn(allCountsMap),
-  hasIndividualGene ? matchingGeneColumn(countsMap) : matchingGenesColumn(geneCountMap),
-];
+) => {
+  return useMemo(
+    () => [
+      ...columns,
+      totalCellCountColumn(allCountsMap),
+      hasIndividualGene ? matchingGeneColumn(countsMap, allCountsMap) : matchingGenesColumn(geneCountMap),
+    ],
+    [hasIndividualGene, countsMap, allCountsMap, geneCountMap],
+  );
+};
 
 interface SCFindGeneQueryDatasetListProps extends SCFindQueryResultsListProps {
   geneCountMap?: Record<string, number>;
@@ -62,7 +67,7 @@ function SCFindGeneQueryDatasetList({ datasetIds, countsMap, geneCountMap }: SCF
     <EntityTable<Dataset>
       maxHeight={800}
       isSelectable
-      columns={columnsWithMatchingGene(hasIndividualGene, countsMap, allCountsMap, geneCountMap)}
+      columns={useColumnsWithMatchingGene(hasIndividualGene, countsMap, allCountsMap, geneCountMap)}
       query={{
         query: {
           bool: {

@@ -40,7 +40,7 @@ function SCFindCellTypeQueryDatasetList({ datasetIds, countsMap }: SCFindQueryRe
       hubmapID,
       organCol,
       assayTypes,
-      targetCellCountColumn(countsMap),
+      targetCellCountColumn(countsMap, allCountsMap),
       totalCellCountColumn(allCountsMap),
       lastModifiedTimestamp,
     ];
