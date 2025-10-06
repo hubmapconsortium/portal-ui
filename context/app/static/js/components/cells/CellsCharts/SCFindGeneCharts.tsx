@@ -25,7 +25,6 @@ function SCFindVitesscePreview({ uuid, gene }: Dataset & { gene: string }) {
           hasNotebook={false}
           hasBeenMounted
           markerGene={gene}
-          hideTheme
           hideShare
           title={`${gene} Expression Preview`}
         />
