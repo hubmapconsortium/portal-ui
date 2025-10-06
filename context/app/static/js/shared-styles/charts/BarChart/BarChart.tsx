@@ -1,13 +1,13 @@
 import { WithParentSizeProvidedProps, withParentSize } from '@visx/responsive';
 import React, { useMemo } from 'react';
 import { AxisBottom, AxisLeft, AxisScale } from '@visx/axis';
-import Typography from '@mui/material/Typography';
 import { useBandScale, useChartTooltip, useLinearScale, useOrdinalScale, useVerticalChart } from '../hooks';
 import TickComponent from '../TickComponent';
 import VerticalChartGridRowsGroup from '../VerticalChartGridRowsGroup';
-import { TooltipComponentType, TooltipData, tooltipHasBarData } from '../types';
+import { TooltipComponentType, TooltipData } from '../types';
 import { ScaleOrdinal } from 'd3';
 import { useTheme } from '@mui/material/styles';
+import ChartTooltip from '../ChartTooltip';
 
 interface MultiGeneAssociation {
   cellType: string;
@@ -25,6 +25,7 @@ interface BarChartProps<T extends { value: number }, K extends string, D extends
   TooltipContent?: TooltipComponentType<T>;
   colorScale?: ScaleOrdinal<string, string>;
   multiGeneAssociations?: MultiGeneAssociation[];
+  excludedKeys?: string[];
 }
 
 // Function to create HTML-safe IDs for SVG patterns, guaranteeing validity
@@ -47,6 +48,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
   TooltipContent,
   colorScale: externalColorScale,
   multiGeneAssociations = [],
+  excludedKeys,
 }: BarChartProps<T, K, D>) {
   const keys: K[] = (Object.entries(data) as [K, T][])
     .sort(([aKey, aValue], [bKey, bValue]) => {
@@ -221,18 +223,7 @@ function BarChart<T extends { value: number }, K extends string, D extends Recor
 
       {tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          {TooltipContent ? (
-            <TooltipContent tooltipData={tooltipData} />
-          ) : (
-            <>
-              <Typography>{tooltipData.key}</Typography>
-              {tooltipHasBarData(tooltipData) && (
-                <Typography variant="h6" component="p" color="textPrimary">
-                  {tooltipData.bar.data[tooltipData.key]}
-                </Typography>
-              )}
-            </>
-          )}
+          <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={excludedKeys} />
         </TooltipInPortal>
       )}
     </>

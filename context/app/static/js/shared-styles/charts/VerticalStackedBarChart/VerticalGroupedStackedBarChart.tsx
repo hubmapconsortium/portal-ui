@@ -6,14 +6,14 @@ import { BarGroup, BarStack } from '@visx/shape';
 import { withParentSize, WithParentSizeProvidedProps } from '@visx/responsive';
 import { ScaleBand, ScaleOrdinal } from 'd3';
 import { AnyScaleBand } from '@visx/shape/lib/types';
-import Typography from '@mui/material/Typography';
 import { OrdinalScale, useChartTooltip, useVerticalChart } from '../hooks';
 import { TICK_LABEL_SIZE } from '../constants';
 import { defaultXScaleRange, defaultYScaleRange } from '../utils';
-import { TooltipData, tooltipHasBarData } from '../types';
+import { TooltipData } from '../types';
 import VerticalChartGridRowsGroup from '../VerticalChartGridRowsGroup';
 import StackedBar from '../StackedBar';
 import TickComponent from '../TickComponent';
+import ChartTooltip from '../ChartTooltip';
 
 /**
  * @example const ex: BarStackValues<'a' |'b'| 'c'> = {a: 10, b: 20, c: 30}
@@ -23,7 +23,7 @@ export type BarStackValues<StackKey extends string> = Record<StackKey, number>;
 
 /**
  * @example const ex: BarStackGroup<'matched' | 'unmatched'> = {group: 'Group 1', stacks: {a: {matched: 0, unmatched: 0}, b: {matched: 10, unmatched: 20}, c: {matched: 30, unmatched: 40}}}
- * In this case, StackKey is 'matched' | 'unmatched', comparebykey is 'a' | 'b' | 'c', and GroupKey is 'Group 1'.
+ * In this case, StackKey is 'matched' | 'unmatched', compareByKey is 'a' | 'b' | 'c', and GroupKey is 'Group 1'.
  */
 export interface BarStackGroup<
   StackKey extends string = string,
@@ -278,6 +278,7 @@ interface GroupedBarStackChartProps<
   compareByKeys: CompareByKey[];
   stackKeys: StackKey[];
   yTickFormat?: (value: number) => string;
+  excludedKeys?: string[];
 }
 
 function GroupedBarStackChart<
@@ -305,6 +306,7 @@ function GroupedBarStackChart<
   compareByKeys,
   stackKeys,
   yTickFormat,
+  excludedKeys,
 }: GroupedBarStackChartProps<StackKey, CompareByKey, XAxisKey, XAxisScale, YAxisScale>) {
   const { xWidth, yHeight, updatedMargin } = useVerticalChart({
     margin,
@@ -417,18 +419,7 @@ function GroupedBarStackChart<
       />
       {tooltipOpen && tooltipData && (
         <TooltipInPortal top={tooltipTop} left={tooltipLeft}>
-          {TooltipContent ? (
-            <TooltipContent tooltipData={tooltipData} />
-          ) : (
-            <>
-              <Typography>{tooltipData.key}</Typography>
-              {tooltipHasBarData(tooltipData) && (
-                <Typography variant="h6" component="p" color="textPrimary">
-                  {tooltipData.bar.data[tooltipData.key]}
-                </Typography>
-              )}
-            </>
-          )}
+          <ChartTooltip tooltipData={tooltipData} TooltipContent={TooltipContent} excludedKeys={excludedKeys} />
         </TooltipInPortal>
       )}
     </svg>
