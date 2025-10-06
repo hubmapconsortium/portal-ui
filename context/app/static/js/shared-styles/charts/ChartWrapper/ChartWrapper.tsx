@@ -3,7 +3,6 @@ import { LegendItem, LegendLabel, LegendOrdinal } from '@visx/legend';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
-import { TitleWrapper } from 'js/shared-styles/charts/style';
 import InfoTextTooltip from 'js/shared-styles/tooltips/InfoTextTooltip';
 import Divider from '@mui/material/Divider';
 import Stack from '@mui/material/Stack';
@@ -11,7 +10,7 @@ import { OrdinalScale } from '../hooks';
 import { BoxProps } from '@mui/system';
 
 interface ChartWrapperProps extends PropsWithChildren {
-  chartTitle?: string;
+  chartTitle?: React.ReactNode;
   margin: Record<'top' | 'right' | 'bottom' | 'left', number>;
   colorScale?: OrdinalScale;
   xAxisDropdown?: React.ReactNode;
@@ -84,9 +83,14 @@ function ChartWrapper(
       ref={ref}
     >
       {chartTitle && (
-        <TitleWrapper $leftOffset={margin.left - margin.right} sx={{ gridArea: 'title' }}>
-          {chartTitle && <Typography>{chartTitle}</Typography>}
-        </TitleWrapper>
+        // aligns the title with the left edge of the chart area
+        <Box sx={{ gridArea: 'title', paddingLeft: `${margin.left + 16}px` }}>
+          {chartTitle && (
+            <Typography variant="subtitle2" display="flex" alignItems="center" justifyContent="start">
+              {chartTitle}
+            </Typography>
+          )}
+        </Box>
       )}
       <Stack direction="row" gap={1} sx={{ gridArea: 'axis-controls', p: hasAxisDropdown ? 1 : 0 }}>
         {xAxisDropdown}

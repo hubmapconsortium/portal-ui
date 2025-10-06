@@ -170,15 +170,11 @@ function CellTypesChart({
           </InfoTextTooltip>
         )
       }
+      chartTitle={title}
       fullWidthGraph={!showLegend}
     >
       <TotalCellsContext.Provider value={totalCells}>
         <ChartLoader isLoading={isLoading}>
-          {title && (
-            <Typography variant="subtitle2" display="flex" alignItems="center">
-              {title}
-            </Typography>
-          )}
           <Stack direction="row" spacing={1} alignItems="center" height="600px" pl={2}>
             <BarChart
               data={cellTypeCounts}
