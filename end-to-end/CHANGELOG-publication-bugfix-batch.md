@@ -1,0 +1,2 @@
+- Fix incorrect icon being displayed for Visualizations section of publication pages.
+- Fix publication accordions not displaying titles when expanded.

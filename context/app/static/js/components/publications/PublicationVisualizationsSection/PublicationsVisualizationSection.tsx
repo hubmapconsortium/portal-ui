@@ -1,12 +1,25 @@
 import Accordion from '@mui/material/Accordion';
-import Typography from '@mui/material/Typography';
+import AccordionSummary from '@mui/material/AccordionSummary';
 import ArrowDropUpRoundedIcon from '@mui/icons-material/ArrowDropUpRounded';
 import React, { useCallback, useMemo, useState } from 'react';
+import { styled } from '@mui/material/styles';
 
 import { CollapsibleDetailPageSection } from 'js/components/detailPage/DetailPageSection';
 import PublicationVignette from 'js/components/publications/PublicationVignette';
-import PrimaryColorAccordionSummary from 'js/shared-styles/accordions/PrimaryColorAccordionSummary';
 import { StyledAccordionDetails } from './style';
+
+const StyledAccordion = styled(Accordion)<{ $isExpanded: boolean }>(({ theme, $isExpanded }) => ({
+  '& .MuiAccordionSummary-root': {
+    backgroundColor: $isExpanded ? theme.palette.primary.main : '#fff',
+    '& > .MuiAccordionSummary-content': {
+      ...theme.typography.subtitle1,
+      color: $isExpanded ? theme.palette.primary.contrastText : theme.palette.text.primary,
+    },
+    '& .MuiSvgIcon-root': {
+      color: $isExpanded ? theme.palette.primary.contrastText : theme.palette.text.primary,
+    },
+  },
+}));
 
 interface PublicationsVisualizationSectionProps {
   vignette_json: {
@@ -39,10 +52,12 @@ function PublicationsVisualizationSection({
   return (
     <CollapsibleDetailPageSection id="visualizations" data-testid="vignettes" title="Visualizations">
       {sortedVignettes.map((vignette, i) => {
+        const isExpanded = i === expandedIndex;
         return (
-          <Accordion
+          <StyledAccordion
             key={vignette.name}
-            expanded={i === expandedIndex}
+            expanded={isExpanded}
+            $isExpanded={isExpanded}
             slotProps={{
               transition: {
                 onEntered: () => {
@@ -53,13 +68,9 @@ function PublicationsVisualizationSection({
             onChange={handleChange(i)}
             data-testid="vignette"
           >
-            <PrimaryColorAccordionSummary
-              $isExpanded={i === expandedIndex}
-              expandIcon={<ArrowDropUpRoundedIcon />}
-              data-testid={`vignette-${i}-button`}
-            >
-              <Typography variant="subtitle1">{`Vignette ${i + 1}: ${vignette.name}`}</Typography>
-            </PrimaryColorAccordionSummary>
+            <AccordionSummary expandIcon={<ArrowDropUpRoundedIcon />} data-testid={`vignette-${i}-button`}>
+              {`Vignette ${i + 1}: ${vignette.name}`}
+            </AccordionSummary>
             <StyledAccordionDetails data-testid={`vignette-${i}-content`}>
               <PublicationVignette
                 vignette={vignette}
@@ -68,7 +79,7 @@ function PublicationsVisualizationSection({
                 mounted={displayedVignettes[i]}
               />
             </StyledAccordionDetails>
-          </Accordion>
+          </StyledAccordion>
         );
       })}
     </CollapsibleDetailPageSection>
