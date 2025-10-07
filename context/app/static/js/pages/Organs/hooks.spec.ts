@@ -1,10 +1,5 @@
 import { OrganFile } from 'js/components/organ/types';
-import {
-  buildOrganToCountMap,
-  addSearchTermsCount,
-  addDatasetCountsToOrgans,
-  organNotFoundMessageTemplate,
-} from './hooks';
+import { buildOrganToCountMap, addSearchTermsCount, addCountsToOrgans, organNotFoundMessageTemplate } from './hooks';
 
 interface TermsBucket {
   key: string;
@@ -49,7 +44,7 @@ test('should add dataset counts to organ objects', () => {
     },
   };
 
-  expect(addDatasetCountsToOrgans(mockOrgans, mockAggsBuckets)).toEqual({
+  expect(addCountsToOrgans(mockOrgans, mockAggsBuckets, mockAggsBuckets)).toEqual({
     A: {
       search: ['A1', 'A2'],
       asctb: '',
@@ -59,7 +54,7 @@ test('should add dataset counts to organ objects', () => {
       name: 'A',
       uberon: '',
       uberon_short: '',
-      descendantCounts: { Dataset: 12 },
+      descendantCounts: { Dataset: 12, Sample: 12 },
     },
     B: {
       search: ['B'],
@@ -70,7 +65,7 @@ test('should add dataset counts to organ objects', () => {
       name: 'B',
       uberon: '',
       uberon_short: '',
-      descendantCounts: { Dataset: 10 },
+      descendantCounts: { Dataset: 10, Sample: 10 },
     },
   });
 });

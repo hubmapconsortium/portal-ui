@@ -38,11 +38,15 @@ export function MobileLabel({ children }: { children: React.ReactNode }) {
   );
 }
 
-export function BodyCell({ children, ...props }: React.ComponentProps<typeof Box>) {
+interface BodyCellProps extends React.ComponentProps<typeof Box> {
+  hideMobileLabel?: boolean;
+}
+
+export function BodyCell({ children, hideMobileLabel, ...props }: BodyCellProps) {
   const ariaLabel = props['aria-label'];
   return (
     <Box display="flex" alignItems="center" {...props}>
-      <MobileLabel>{ariaLabel}</MobileLabel>
+      {!hideMobileLabel && <MobileLabel>{ariaLabel}</MobileLabel>}
       {children}
     </Box>
   );
