@@ -1,7 +1,6 @@
 from itertools import groupby
 from posixpath import dirname
 import time
-import re
 
 from flask import render_template, current_app, request, redirect, url_for
 
@@ -21,54 +20,10 @@ from dataclasses import dataclass
 from functools import cache
 
 from csv import DictReader
+from concurrent.futures import ThreadPoolExecutor
 
 
 blueprint = make_blueprint(__name__)
-
-# Cache for genes that are known to be invalid for specific modalities
-# Structure: {modality: {gene1, gene2, ...}}
-_INVALID_GENES_CACHE = defaultdict(set)
-
-
-def _add_invalid_gene_to_cache(gene, modality):
-    """Add a gene to the invalid genes cache for a specific modality."""
-    _INVALID_GENES_CACHE[modality].add(gene)
-
-
-def _is_gene_cached_as_invalid(gene, modality):
-    """Check if a gene is already known to be invalid for a specific modality."""
-    return gene in _INVALID_GENES_CACHE[modality]
-
-
-def _filter_genes_by_cache(genes, modality):
-    """
-    Filter genes based on cache, returning (genes_to_test, known_invalid_genes).
-
-    Args:
-        genes: List of genes to filter
-        modality: The modality to check against
-
-    Returns:
-        tuple: (genes_to_test, known_invalid_genes)
-    """
-    genes_to_test = []
-    known_invalid_genes = []
-
-    for gene in genes:
-        if _is_gene_cached_as_invalid(gene, modality):
-            known_invalid_genes.append(gene)
-        else:
-            genes_to_test.append(gene)
-
-    return genes_to_test, known_invalid_genes
-
-
-def _get_cache_stats():
-    """Get statistics about the invalid genes cache for debugging."""
-    stats = {}
-    for modality, genes in _INVALID_GENES_CACHE.items():
-        stats[modality] = len(genes)
-    return stats
 
 
 @blueprint.route('/search/biomarkers-cell-types')
@@ -119,18 +74,26 @@ def timeit(f):
     return timed
 
 
-@timeit
+@cache
 def preload_cells_api(app):
     # Preload the gene symbols, protein IDs, and cell IDs on server startup
     # so that they are immediately available when the user starts typing.
 
-    funcs = [_get_gene_symbols, _get_protein_ids, _get_cell_ids]
+    def run_in_thread(func, app):
+        return func(app)
 
-    for func in funcs:
-        func(app)
+    # Run all functions in parallel using ThreadPoolExecutor
+    with ThreadPoolExecutor() as executor:
+        funcs = [
+            _get_gene_symbols, _get_protein_ids, _get_cell_ids,
+            _get_rna_genes, _get_atac_genes
+        ]
+        futures = [executor.submit(run_in_thread, func, app) for func in funcs]
+        # Wait for all to complete
+        for future in futures:
+            future.result()
 
 
-@timeit
 @cache
 def _get_gene_symbols(app):
     client = _get_client(app)
@@ -138,7 +101,22 @@ def _get_gene_symbols(app):
     return gene_symbols
 
 
-@timeit
+@cache
+def _get_rna_genes(app):
+    client = _get_client(app)
+    gene_symbols = tuple([gene["gene_symbol"] for gene in client.select_genes(
+        where="modality", has=["rna"]).get_list()])
+    return gene_symbols
+
+
+@cache
+def _get_atac_genes(app):
+    client = _get_client(app)
+    gene_symbols = tuple([gene["gene_symbol"] for gene in client.select_genes(
+        where="modality", has=["atac"]).get_list()])
+    return gene_symbols
+
+
 @cache
 def _get_protein_ids(app):
     client = _get_client(app)
@@ -158,7 +136,6 @@ def _get_all_labels():
     return all_labels
 
 
-@timeit
 @cache
 def _get_cell_ids(app):
     client = _get_client(app)
@@ -421,139 +398,23 @@ def genes_validate():
         # Get modality from request, default to 'rna'
         modality = data.get('modality', 'rna')
 
-        # Get all valid genes from the Cells API
-        all_genes = _get_gene_symbols(current_app)
-        all_genes_set = set(all_genes)
+        # Get the appropriate gene list based on modality
+        if modality == 'rna':
+            valid_gene_set = set(_get_rna_genes(current_app))
+        elif modality == 'atac':
+            valid_gene_set = set(_get_atac_genes(current_app))
+        else:
+            return {'error': 'Unsupported modality provided.'}, 400
 
-        # First filter: check if genes exist in gene symbols
-        existing_genes = []
-        missing_genes = []
+        # Validate genes against the modality-specific gene list
+        valid_genes = []
+        invalid_genes = []
 
         for gene in provided_genes:
-            if isinstance(gene, str) and gene in all_genes_set:
-                existing_genes.append(gene)
+            if isinstance(gene, str) and gene in valid_gene_set:
+                valid_genes.append(gene)
             else:
-                missing_genes.append(gene)
-
-        # Second filter: check if existing genes are indexed for the specified modality
-        valid_genes = []
-        modality_missing_genes = []
-
-        # Helper function to add problematic genes to invalid list / cache
-        def handle_invalid(gene, modality):
-            modality_missing_genes.append(gene)
-            _add_invalid_gene_to_cache(gene, modality)
-            current_app.logger.info(
-                f"Gene '{gene}' not indexed for modality '{modality}'"
-            )
-
-        if existing_genes:
-            # Use cache to filter out genes we already know are invalid for this modality
-            genes_to_test, known_invalid_genes = _filter_genes_by_cache(existing_genes, modality)
-            modality_missing_genes.extend(known_invalid_genes)
-
-            if known_invalid_genes:
-                current_app.logger.info(
-                    f"Found {len(known_invalid_genes)} genes in invalid cache for "
-                    f"modality '{modality}': {known_invalid_genes}"
-                )
-
-            if genes_to_test:
-                client = _get_client(current_app)
-
-                # Test genes in batches to avoid overwhelming the API
-                batch_size = 10
-                for i in range(0, len(genes_to_test), batch_size):
-                    batch_genes = genes_to_test[i:i + batch_size]
-
-                    try:
-                        # Try to query the genes with the specified modality
-                        # This will raise an exception if any gene is not indexed for this modality
-                        client.select_datasets(
-                            where="gene",
-                            has=[f'{gene} > 0' for gene in batch_genes],
-                            genomic_modality=modality,
-                            min_cell_percentage=0.01  # Very low threshold just to test indexing
-                        )
-
-                        # If the query succeeds, all genes in this batch are valid
-                        valid_genes.extend(batch_genes)
-
-                    except ClientError as e:
-                        # If the batch query fails, try to parse which gene is problematic
-                        # from the error message and retry with remaining genes
-                        error_message = str(e)
-                        current_app.logger.info(
-                            f"Batch query failed for {batch_genes}: {error_message}"
-                        )
-
-                        # Try to extract the problematic gene from error message
-                        # Look for patterns like "GENE_NAME not present in rna index"
-                        match = re.search(r'(\w+) not present in \w+ index', error_message)
-
-                        if match and len(batch_genes) > 1:
-                            problematic_gene = match.group(1)
-                            # Only allow problematic_gene if it's in the batch
-                            # and matches strict gene name validation
-                            if (problematic_gene in batch_genes) and re.fullmatch(
-                                    r"^[A-Za-z0-9_.\-]+$", problematic_gene):
-                                handle_invalid(problematic_gene, modality)
-
-                                # Retry with remaining genes
-                                remaining_genes = [
-                                    g for g in batch_genes if g != problematic_gene]
-                                if remaining_genes:
-                                    try:
-                                        client.select_datasets(
-                                            where="gene",
-                                            has=[f'{gene} > 0' for gene in remaining_genes],
-                                            genomic_modality=modality,
-                                            min_cell_percentage=0.01
-                                        )
-                                        # If retry succeeds, all remaining genes are valid
-                                        valid_genes.extend(remaining_genes)
-                                    except ClientError:
-                                        # If retry still fails, fall back to individual testing
-                                        for gene in remaining_genes:
-                                            try:
-                                                client.select_datasets(
-                                                    where="gene",
-                                                    has=[f'{gene} > 0'],
-                                                    genomic_modality=modality,
-                                                    min_cell_percentage=0.01
-                                                )
-                                                valid_genes.append(gene)
-                                            except ClientError:
-                                                handle_invalid(gene, modality)
-                                else:
-                                    # Problematic gene not in our batch, fall back to individual
-                                    for gene in batch_genes:
-                                        try:
-                                            client.select_datasets(
-                                                where="gene",
-                                                has=[f'{gene} > 0'],
-                                                genomic_modality=modality,
-                                                min_cell_percentage=0.01
-                                            )
-                                            valid_genes.append(gene)
-                                        except ClientError:
-                                            handle_invalid(gene, modality)
-                        else:
-                            # Can't parse error or single gene batch, test individually
-                            for gene in batch_genes:
-                                try:
-                                    client.select_datasets(
-                                        where="gene",
-                                        has=[f'{gene} > 0'],
-                                        genomic_modality=modality,
-                                        min_cell_percentage=0.01
-                                    )
-                                    valid_genes.append(gene)
-                                except ClientError:
-                                    handle_invalid(gene, modality)
-
-        # Combine all invalid genes
-        invalid_genes = missing_genes + modality_missing_genes
+                invalid_genes.append(gene)
 
         return {
             'valid_genes': valid_genes,
