@@ -100,8 +100,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
         dropdownLabel: 'Assay Type',
         keys: getKeysFromAggregatedData(assayBuckets),
         getBarHref:
-          getBarHrefOverride ??
-          (selectedEntityType === 'Dataset'
+          selectedEntityType === 'Dataset'
             ? (d) => {
                 const organTerms = [String(d.bar.data.organ)];
                 return getSearchURL({
@@ -111,7 +110,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
                   assayTypeMap: datasetTypeMap,
                 });
               }
-            : undefined),
+            : undefined,
         getAriaLabel: (d) => {
           const organ = String(d?.bar?.data?.organ ?? '');
           const assay = d.key;
@@ -126,8 +125,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
         dropdownLabel: 'Donor Sex',
         keys: getKeysFromAggregatedData(donorSexBuckets),
         getBarHref:
-          getBarHrefOverride ??
-          (selectedEntityType === 'Dataset'
+          selectedEntityType === 'Dataset'
             ? (d) => {
                 const organTerms = [String(d.bar.data.organ)];
                 return getSearchURL({
@@ -136,7 +134,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
                   donorSex: d.key,
                 });
               }
-            : undefined),
+            : undefined,
         getAriaLabel: (d) => {
           const organ = String(d?.bar?.data?.organ ?? '');
           const donorSex = d.key;
@@ -151,8 +149,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
         dropdownLabel: 'Donor Race',
         keys: getKeysFromAggregatedData(donorRaceBuckets),
         getBarHref:
-          getBarHrefOverride ??
-          (selectedEntityType === 'Dataset'
+          selectedEntityType === 'Dataset'
             ? (d) => {
                 const organTerms = [String(d.bar.data.organ)];
                 return getSearchURL({
@@ -161,7 +158,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
                   donorRace: d.key,
                 });
               }
-            : undefined),
+            : undefined,
         getAriaLabel: (d) => {
           const organ = String(d?.bar?.data?.organ ?? '');
           const donorRace = d.key;
@@ -176,8 +173,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
         dropdownLabel: 'Analyte Class',
         keys: getKeysFromAggregatedData(analyteClassBuckets),
         getBarHref:
-          getBarHrefOverride ??
-          (selectedEntityType === 'Dataset'
+          selectedEntityType === 'Dataset'
             ? (d) => {
                 const organTerms = [String(d.bar.data.organ)];
                 return getSearchURL({
@@ -186,7 +182,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
                   analyteClass: d.key,
                 });
               }
-            : undefined),
+            : undefined,
         getAriaLabel: (d) => {
           const organ = String(d?.bar?.data?.organ ?? '');
           const analyteClass = d.key;
@@ -201,8 +197,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
         dropdownLabel: 'Processing Status',
         keys: getKeysFromAggregatedData(processingStatusBuckets),
         getBarHref:
-          getBarHrefOverride ??
-          (selectedEntityType === 'Dataset'
+          selectedEntityType === 'Dataset'
             ? (d) => {
                 const organTerms = [String(d.bar.data.organ)];
                 return getSearchURL({
@@ -211,7 +206,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
                   processingStatus: d.key,
                 });
               }
-            : undefined),
+            : undefined,
         getAriaLabel: (d) => {
           const organ = String(d?.bar?.data?.organ ?? '');
           const processingStatus = d.key;
@@ -223,7 +218,6 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
     ],
     [
       assayBuckets,
-      getBarHrefOverride,
       selectedEntityType,
       donorSexBuckets,
       donorRaceBuckets,
@@ -331,7 +325,7 @@ function HuBMAPDatasetsChart({ getBarHrefOverride }: HuBMAPDatasetsChartProps) {
                 label: `${d.bar.data.organ} ${d.key}`,
               });
             }}
-            getBarHref={selectedColor.getBarHref}
+            getBarHref={getBarHrefOverride ?? selectedColor.getBarHref}
             getAriaLabel={selectedColor.getAriaLabel}
             canBeMultipleKeys
           />

@@ -15,6 +15,7 @@ import ViewEntitiesButton from './ViewEntitiesButton';
 import URLSvgIcon from 'js/shared-styles/icons/URLSvgIcon';
 import { SecondaryBackgroundTooltip } from 'js/shared-styles/tooltips';
 import { CellTypeIcon } from 'js/shared-styles/icons';
+import { useEventCallback } from '@mui/material/utils';
 
 const desktopConfig = {
   name: {
@@ -39,10 +40,34 @@ const desktopConfig = {
   },
 };
 
-function OrgansHeaderPanel() {
-  const isMobile = useIsMobile();
+interface TableSortLabelTemplateProps extends React.ComponentProps<typeof TableSortLabel> {
+  columnId: string;
+  label: string;
+}
+
+function TableSortLabelTemplate({ columnId, label }: TableSortLabelTemplateProps) {
   const { sortState } = useOrgansSearchState();
   const { setSort } = useOrgansSearchActions();
+
+  const onClick = useEventCallback(() => {
+    setSort(columnId);
+  });
+
+  return (
+    <TableSortLabel
+      active={sortState.columnId === columnId}
+      direction={sortState.direction}
+      onClick={onClick}
+      sx={{ width: '100%' }}
+      data-testid={`organs-header-${columnId}`}
+    >
+      {label}
+    </TableSortLabel>
+  );
+}
+
+function OrgansHeaderPanel() {
+  const isMobile = useIsMobile();
 
   if (isMobile) {
     return null;
@@ -51,56 +76,16 @@ function OrgansHeaderPanel() {
   return (
     <StackTemplate spacing={4}>
       <HeaderCell {...desktopConfig.name} pl={4}>
-        <TableSortLabel
-          active={sortState.columnId === 'name'}
-          direction={sortState.direction}
-          onClick={() => {
-            setSort('name');
-          }}
-          sx={{ width: '100%' }}
-          data-testid="organs-header-name"
-        >
-          Organ
-        </TableSortLabel>
+        <TableSortLabelTemplate columnId="name" label="Organ" />
       </HeaderCell>
       <HeaderCell {...desktopConfig.description}>
-        <TableSortLabel
-          active={sortState.columnId === 'description'}
-          direction={sortState.direction}
-          onClick={() => {
-            setSort('description');
-          }}
-          sx={{ width: '100%' }}
-          data-testid="organs-header-description"
-        >
-          Description
-        </TableSortLabel>
+        <TableSortLabelTemplate columnId="description" label="Description" />
       </HeaderCell>
       <HeaderCell {...desktopConfig.datasets}>
-        <TableSortLabel
-          active={sortState.columnId === 'datasets'}
-          direction={sortState.direction}
-          onClick={() => {
-            setSort('datasets');
-          }}
-          sx={{ width: '100%' }}
-          data-testid="organs-header-datasets"
-        >
-          Datasets
-        </TableSortLabel>
+        <TableSortLabelTemplate columnId="datasets" label="Datasets" />
       </HeaderCell>
       <HeaderCell {...desktopConfig.samples}>
-        <TableSortLabel
-          active={sortState.columnId === 'samples'}
-          direction={sortState.direction}
-          onClick={() => {
-            setSort('samples');
-          }}
-          sx={{ width: '100%' }}
-          data-testid="organs-header-samples"
-        >
-          Samples
-        </TableSortLabel>
+        <TableSortLabelTemplate columnId="samples" label="Samples" />
       </HeaderCell>
     </StackTemplate>
   );
