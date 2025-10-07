@@ -88,7 +88,7 @@ export default function OrgansPanelList({ organs, isLoading = false }: OrgansPan
         key: organ.name,
         noPadding: true,
         noHover: false,
-        children: <OrgansPanel.Item organ={organ} href={`/organ/${encodeURIComponent(organ.name.toLowerCase())}`} />,
+        children: <OrgansPanel.Item organ={organ} href={`/organs/${encodeURIComponent(organ.name.toLowerCase())}`} />,
       })),
     ];
     return propsList;
