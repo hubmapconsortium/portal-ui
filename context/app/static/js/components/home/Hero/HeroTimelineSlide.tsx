@@ -3,6 +3,7 @@ import React, { useEffect, useRef } from 'react';
 import Timeline from 'js/shared-styles/Timeline';
 
 import Typography from '@mui/material/Typography';
+import { useTheme } from '@mui/material/styles';
 
 import { useIsDesktop, useIsMobile } from 'js/hooks/media-queries';
 import { HOME_TIMELINE_ITEMS } from './const';
@@ -17,6 +18,7 @@ export default function HeroTimelineSlide({ index }: HeroTimelineProps) {
   const { activeTab, setActiveTab } = useHeroTabContext();
   const ref = useRef<HTMLDivElement>(null);
   const isDesktop = useIsDesktop();
+  const theme = useTheme();
   const onFocus = () => {
     setActiveTab(index);
   };
@@ -41,7 +43,15 @@ export default function HeroTimelineSlide({ index }: HeroTimelineProps) {
         background: 'white',
       }}
     >
-      <Typography variant="h4" px={2} py={1} zIndex={2} bgcolor="#FBEEEB" position="sticky" top={0}>
+      <Typography
+        variant="h4"
+        px={2}
+        py={1}
+        zIndex={2}
+        bgcolor={theme.palette.accent.warning90}
+        position="sticky"
+        top={0}
+      >
         Latest Changes
       </Typography>
       <Timeline data={HOME_TIMELINE_ITEMS} expandable={isMobile} />

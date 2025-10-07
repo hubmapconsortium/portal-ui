@@ -1,5 +1,12 @@
 # Changelog
 
+## v1.33.1 - 2025-10-02
+
+- Adjust specificity of TypeScript config to improve developer experience.
+- Disable display of provenance on publication pages with excessive ancestors.
+
+
+
 ## v1.33.0 - 2025-09-24
 
 - Ensure oxford comma consistency in navigation links.

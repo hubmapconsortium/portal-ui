@@ -40,6 +40,13 @@ interface ContainerColors {
   secondaryContrastText?: string; // used for unselected Tab in Tabs
 }
 
+interface AccentColors {
+  success90: string;
+  primary90: string;
+  info90: string;
+  warning90: string;
+}
+
 declare module '@mui/material/styles' {
   export interface ZIndex {
     tutorial: number;
@@ -72,6 +79,7 @@ declare module '@mui/material/styles' {
       matched: string;
       unmatched: string;
     };
+    accent: AccentColors;
   }
   export interface PaletteOptions {
     black?: BlackVariants;
@@ -84,6 +92,7 @@ declare module '@mui/material/styles' {
       matched: string;
       unmatched: string;
     };
+    accent?: AccentColors;
   }
 
   export interface PaletteColor {
@@ -234,6 +243,11 @@ const theme = createTheme({
     graphs: {
       matched: '#4B5F27',
       unmatched: '#D1DAC1',
+    accent: {
+      success90: '#F0F3EB', // success-90 in figma
+      primary90: '#FBEBF3', // primary-90 in figma
+      info90: '#EAF0F8', // info-90 in figma
+      warning90: '#FBEEEB', // warning-90 in figma
     },
   },
   typography: {
